@@ -1,8 +1,10 @@
+import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import React, { useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getLiveBetSlippage, getTicketPayment, removeFromTicket } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
+import { Coins } from 'thales-utils';
 import { TicketMarket } from 'types/markets';
 import { formatMarketOdds, isWithinSlippage } from 'utils/markets';
 import {
@@ -10,6 +12,7 @@ import {
     getPositionTextV2,
     getTitleText,
     isSameMarket,
+    sportMarketAsSerializable,
     ticketMarketAsTicketPosition,
 } from 'utils/marketsV2';
 import { getNetworkId } from '../../redux/modules/wallet';
@@ -43,6 +46,7 @@ type MatchInfoProps = {
     setAcceptOdds?: (accept: boolean) => void;
     isLive?: boolean;
     applyPayoutMultiplier: boolean;
+    useThalesCollateral?: boolean;
 };
 
 const MatchInfo: React.FC<MatchInfoProps> = ({
@@ -54,6 +58,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
     setAcceptOdds,
     isLive,
     applyPayoutMultiplier,
+    useThalesCollateral,
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -137,7 +142,8 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
                         <CloseIcon
                             className="icon icon--close"
                             onClick={() => {
-                                dispatch(removeFromTicket(market));
+                                const serializableMarket = sportMarketAsSerializable(market);
+                                dispatch(removeFromTicket(serializableMarket));
                             }}
                         />
                     )}
@@ -152,7 +158,12 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
                         <OddChangeDown id="odd-change-down" />
                         {formatMarketOdds(
                             selectedOddsType,
-                            applyPayoutMultiplier ? getAddedPayoutOdds(selectedCollateral, market.odd) : market.odd
+                            applyPayoutMultiplier
+                                ? getAddedPayoutOdds(
+                                      useThalesCollateral ? (CRYPTO_CURRENCY_MAP.THALES as Coins) : selectedCollateral,
+                                      market.odd
+                                  )
+                                : market.odd
                         )}
                     </Odd>
                 </PositionInfo>

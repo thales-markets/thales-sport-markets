@@ -12,7 +12,13 @@ import { getTicket, removeFromTicket, updateTicket } from 'redux/modules/ticket'
 import { getOddsType } from 'redux/modules/ui';
 import { SportMarket, TicketPosition } from 'types/markets';
 import { formatMarketOdds, getPositionOrder } from 'utils/markets';
-import { getMatchLabel, getOddTooltipTextV2, getPositionTextV2, isSameMarket } from 'utils/marketsV2';
+import {
+    getMatchLabel,
+    getOddTooltipTextV2,
+    getPositionTextV2,
+    isSameMarket,
+    sportMarketAsSerializable,
+} from 'utils/marketsV2';
 import {
     Container,
     Odd,
@@ -77,7 +83,8 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isM
             onClick={() => {
                 if (disabledPosition) return;
                 if (isAddedToTicket) {
-                    dispatch(removeFromTicket(market));
+                    const serializableMarket = sportMarketAsSerializable(market);
+                    dispatch(removeFromTicket(serializableMarket));
                 } else {
                     const ticketPosition: TicketPosition = {
                         gameId: market.gameId,

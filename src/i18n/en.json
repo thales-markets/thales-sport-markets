@@ -103,6 +103,7 @@
             "to-label": "To",
             "balance-label": "Balance: {{amount}}",
             "swap-label": "Swap",
+            "approve": "Approve swap",
             "swap-progress-label": "Swapping in progress..."
         },
         "enable-wallet-access": {
@@ -135,7 +136,8 @@
             "enter-percentage": "Enter percentage",
             "single-amm-paused": "AMM Paused",
             "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}",
-            "invalid-amount-max": "The amount cannot be higher than {{max}}"
+            "invalid-amount-max": "The amount cannot be higher than {{max}}",
+            "swap-quote-low": "Swap quote is too low (receive: {{quote}}, min receive {{minQuote}})! Please try again..."
         },
         "time-remaining": {
             "ended": "ended",
@@ -162,6 +164,7 @@
         "dapp": "dapp",
         "launch-dapp": "launch dapp",
         "cancel": "Cancel",
+        "try-again": "Try again",
         "select-date": "Select date...",
         "tags-placeholder": "Search tags...",
         "remove-tag-tooltip": "Click to remove tag",
@@ -731,6 +734,8 @@
             "persist-games": "Keep selection after submit",
             "keep-selection-tooltip": "By default, the parlay builder is reset after successful submission. Tick this if you want to keep current context after submission.",
             "thales-bonus-tooltip": "Users placing trades with THALES will get 2% extra payouts for each game they have in their ticket (already calculated in Total quote and Payout).",
+            "swap-thales": "Use THALES for better odds",
+            "swap-thales-tooltip": "<bold>Boost your winnings with THALES!</bold> With just a simple click, you can automatically swap to THALES and enjoy improved betting quotes instantly! Payout is in THALES.",
             "clear": "Clear all",
             "buy-in": "Buy-in",
             "parlay-fee": "Parlay fee",
@@ -802,6 +807,7 @@
             },
             "slippage": {
                 "slippage": "Slippage",
+                "swap-thales": "Swap slippage",
                 "label": "Accept trade if odds drop by:",
                 "enter-value": "Enter value",
                 "invalid-value": "Invalid value",
@@ -827,6 +833,12 @@
                     "promo-boost": "Certain sports games carry additional XP boosts.",
                     "base-xp": "The base XP is calculated via the following formula:\n\nBase XP = Buy In Amount * (2 - Normalized Odds). \n\nThis means that your bet accrues more base XP the higher your buy-in and the higher your bet odds are."
                 }
+            },
+            "buy-steps": {
+                "approve-swap": "Approve swap {{src}} to {{dst}}",
+                "swap": "Swap {{src}} to {{dst}}",
+                "approve-buy": "Approve buy with {{currencyKey}}",
+                "buy": "Buy with {{currencyKey}}"
             }
         },
         "zero-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",

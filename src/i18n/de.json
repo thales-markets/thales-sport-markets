@@ -76,7 +76,8 @@
             "to-label": "Zu",
             "balance-label": "Guthaben: {{amount}}",
             "swap-label": "Tauschen",
-            "swap-progress-label": "Tausch wird fertig gestellt..."
+            "swap-progress-label": "Tausch wird fertig gestellt...",
+            "approve": "Tausch genehmigen"
         },
         "enable-wallet-access": {
             "approve-label": "{{currencyKey}} genehmigen",
@@ -108,7 +109,8 @@
             "enter-percentage": "Enter percentage",
             "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}",
             "single-amm-paused": "AMM angehalten",
-            "invalid-amount-max": "Der Betrag darf nicht höher sein als {{max}}"
+            "invalid-amount-max": "Der Betrag darf nicht höher sein als {{max}}",
+            "swap-quote-low": "Swap-Kurs ist zu niedrig (Empfang: {{quote}}, Mindestempfang {{minQuote}})! Bitte versuchen Sie es erneut..."
         },
         "time-remaining": {
             "ended": "zu Ende",
@@ -196,7 +198,8 @@
         "wrap-and-buy": "ETH verpacken und kaufen",
         "wrap-eth-tooltip": "Ihr ETH wird zuerst in WETH verpackt und dann an den Vertrag übergeben",
         "election-tooltip": "Die Entscheidungsquellen sind Associated Press, Fox News und NBC. Diese Märkte werden entschieden, sobald alle drei Quellen den gleichen Kandidaten zum Rennen ausrufen. Wenn bis zum 11. November nicht alle drei Quellen den gleichen Kandidaten zum Rennen ausrufen, werden alle Wetten ungültig.",
-        "submit": "Einreichen"
+        "submit": "Einreichen",
+        "try-again": "Versuchen Sie es erneut"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALLE RECHTE VORBEHALTEN.",
@@ -280,13 +283,14 @@
                 "fighting": "Kampfsport",
                 "golf": "Golf",
                 "live": "Live",
-                "politics": "Politik",
-                "olympicgames": "Olympische Spiele",
-                "handball": "Handball",
-                "volleyball": "Volleyball",
+                "waterpolo": "Wasser Polo",
                 "rugby": "Rugby",
+                "volleyball": "Volleyball",
+                "handball": "Handball",
                 "tabletennis": "Tischtennis",
-                "waterpolo": "Wasser Polo"
+                "olympicgames": "Olympische Spiele",
+                "politics": "Politik",
+                "boosted": "Promo-Spiele"
             },
             "all": "Alle",
             "datepicker": {
@@ -562,8 +566,8 @@
             "end-of-fight": "Ende des Kampfes",
             "fighters-introduction": "Kämpfer Einführung",
             "end-of-round": "Ende der Runde",
-            "suspended": "Ausgesetzt",
-            "not-available-for-trading": "Nicht zum Handel verfügbar"
+            "not-available-for-trading": "Nicht zum Handel verfügbar",
+            "suspended": "Ausgesetzt"
         },
         "market-details": {
             "price": "Preis",
@@ -673,7 +677,8 @@
                 "label": "Akzeptieren Sie den Handel, wenn die Quoten um Folgendes sinken:",
                 "slippage": "Schlupf",
                 "enter-value": "Wert eingeben",
-                "tooltip": "Die Überweisung wird nicht durchgeführt, wenn sich der Überbrückungszinssatz zum Zeitpunkt der Ausführung der Überweisung um mehr als diesen Prozentsatz ungünstig verändert."
+                "tooltip": "Die Überweisung wird nicht durchgeführt, wenn sich der Überbrückungszinssatz zum Zeitpunkt der Ausführung der Überweisung um mehr als diesen Prozentsatz ungünstig verändert.",
+                "swap-thales": "Swap-Slippage"
             },
             "accept-odds-changes": "Quotenänderungen akzeptieren",
             "thales-bonus-tooltip": "Benutzer, die mit THALES handeln, erhalten 2 % zusätzliche Auszahlungen für jedes Spiel auf ihrem Ticket (bereits im Gesamtangebot und der Auszahlung berechnet).",
@@ -687,10 +692,31 @@
                 "total-xp-boost": "Gesamt-XP-Boost",
                 "overdrop-xp": "Überfall-XP",
                 "active-boost": "Aktiver Boost",
-                "base-xp": "Basis-XP"
+                "base-xp": "Basis-XP",
+                "tooltip": {
+                    "promo-boost": "Bestimmte Sportspiele bieten zusätzliche XP-Boosts.",
+                    "loyalty-boost": "Der Loyalitäts-XP-Boost gibt Ihnen je nach XP-Level einen permanenten Boost von bis zu 25 % auf alle Ihre allgemeinen XP-Einnahmen. Beginnend mit einem Boost von 5 % auf Level 1 erhalten Sie beim Erreichen jedes fünften Levels einen weiteren Boost von +5 %.",
+                    "weekly-boost": "Je mehr Wochen hintereinander Sie wetten, desto höher ist Ihr XP-Boost. Erhöhen Sie sich jede Woche um +5 % bis zu einem Maximum von +20 %. Wenn Sie eine Woche verpassen, wird dieser Boost auf 0 % zurückgesetzt",
+                    "daily-boost": "Je mehr Tage hintereinander Sie wetten, desto höher ist Ihr XP-Boost. Erhöhen Sie sich für jeden Tag um +5 % bis zu einem Maximum von +35 %. Wenn Sie einen Tag verpassen, wird dieser Boost auf 0 % zurückgesetzt",
+                    "parlay-boost": "Abhängig davon, wie viele einzelne Spiele in Ihrer Kombiwette enthalten sind, erhalten Sie einen zusätzlichen XP-Boost für diese Kombiwette. Das Maximum beträgt +290 % XP-Boost bei 15 Spielen in der Kombiwette.",
+                    "base-xp": "Die Basis-XP werden nach folgender Formel berechnet:\n\nBasis-XP = Buy-In-Betrag * (2 - Normalisierte Quoten). \n\nDas bedeutet, dass Ihre Wette mehr Basis-XP ansammelt, je höher Ihr Buy-In und je höher Ihre Wettquote ist.",
+                    "thales-boost": "Alle mit THALES als Sicherheit ausgeführten Wetten gewähren einen Bonus von +10 % auf die Basis-XP-Ansammlung für die jeweilige Wette!",
+                    "twitter-boost": "Wenn Sie Ihre Overtime-Wette in Form einer Flex Card auf Twitter teilen, aktivieren Sie einen 3-tägigen Twitter Flex Boost von +10 %."
+                },
+                "odds-xp": "Quotenmultiplikator",
+                "buy-in-xp": "Kaufen in XP"
             },
             "use-free-bet": "Gratiswette nutzen",
-            "disable-free-bet": "Kostenlose Wettguthaben deaktivieren"
+            "disable-free-bet": "Kostenlose Wettguthaben deaktivieren",
+            "swap-thales-receive": "Mindestempfang",
+            "swap-thales": "Wechseln Sie zu THALES für ein besseres Angebot",
+            "buy-steps": {
+                "approve-swap": "Tausch zu {{currencyKey}} genehmigen",
+                "approve-buy": "Kauf mit {{currencyKey}} genehmigen",
+                "buy": "Kaufen mit {{currencyKey}}",
+                "swap": "Wechseln zu {{currencyKey}}"
+            },
+            "swap-thales-tooltip": "<bold>Steigern Sie Ihre Gewinne mit THALES!</bold> Mit nur einem Klick können Sie automatisch zu THALES wechseln und sofort von verbesserten Wettquoten profitieren! Die Auszahlung erfolgt in THALES."
         },
         "discounted-per": "Ermäßigt gem",
         "nav-menu": {
@@ -728,8 +754,8 @@
         "incentivized-tooltip-nhl": "Für den Rest der NHL-Saison, einschließlich der Playoffs, wird eine satte Summe von {{rewards}} verteilt. Für die Prämien wird nur das Volumen im Arbitrum-Netzwerk angerechnet! Weitere Details finden Sie <detailsLink>hier</detailsLink>.",
         "incentivized-tooltip-nhl-mlb": "Für den Rest der {{league}}-Saison, einschließlich der Playoffs, wird eine satte Summe von {{rewards}} ausgeschüttet. Nur das Volumen im Arbitrum-Netzwerk wird für die Belohnungen angerechnet! Weitere Details finden Sie <detailsLink>hier</detailsLink>.",
         "incentivized-tooltip-euro-copa": "Für die EM 2024 und die Copa America werden satte {{rewards}} vergeben. Weitere Details finden Sie <detailsLink>hier</detailsLink>.",
-        "incentivized-tooltip-wimbledon": "Kämpfen Sie während Wimbledon 2024 in den Verlängerungen V1 und V2 um {{rewards}}. Weitere Einzelheiten finden Sie <detailsLink>hier</detailsLink>.",
-        "incentivized-tooltip-olympics": "Verdienen Sie während der Olympischen Spiele {{rewards}} in volumenbasierten Prämien. Weitere Einzelheiten finden Sie <detailsLink>hier</detailsLink>."
+        "incentivized-tooltip-olympics": "Verdienen Sie während der Olympischen Spiele {{rewards}} in volumenbasierten Prämien. Weitere Einzelheiten finden Sie <detailsLink>hier</detailsLink>.",
+        "incentivized-tooltip-wimbledon": "Kämpfen Sie während Wimbledon 2024 in den Verlängerungen V1 und V2 um {{rewards}}. Weitere Einzelheiten finden Sie <detailsLink>hier</detailsLink>."
     },
     "rewards": {
         "header": "Preise",
@@ -1254,7 +1280,9 @@
             "daily-streak": "Täglicher Streak-XP-Boost",
             "twitter-xp-boost-resets": "Twitter XP-Boost wird zurückgesetzt in",
             "current-rewards": "Aktuell geschätzte Belohnungen",
-            "loyalty-boost": "Treueschub"
+            "loyalty-boost": "Treueschub",
+            "rank-tooltip": "Ihr aktueller Rang in der Overdrop League. Weitere Informationen finden Sie auf der Registerkarte „Bestenliste“.",
+            "rank": "Rang"
         },
         "leveling-tree": {
             "explainer": {
@@ -1269,7 +1297,15 @@
                 "position-thales-content": "Verwenden Sie <bold>THALES</bold> als Sicherheit und Sie <bold>erhalten einen Bonus von 10 % pro BASIS-XP pro $</bold> für diesen bestimmten Handel",
                 "daily-bonus": "Täglicher Bonus",
                 "base-xp-content": "<bold>1 Basis-XP = 1 $</bold> des Volumens<br/><br/> Nach<bold> 28 Tage</bold> in einer Reihe von<bold> Volumen &gt;10$</bold> du hast erreicht<bold> MAXIMALER Basismultiplikator</bold><br/><br/> Jeder verpasste Tag mit einem Volumen unter 10 $ senkt Ihre Basis<bold> XP um -0,1</bold>",
-                "xp-explained-content": "Saisonlange Kampagne, bei der Benutzer bis zum Ende der Sportsaison XP sammeln, indem sie fahren<bold> Lautstärke bei Overtime</bold> mit<bold> Multiplikatoren</bold> basierend auf verschiedenen dynamischen Metriken und Zielen.<br/><br/> Nach Ende der Kampagne teilen alle Benutzer<highlight> 100.000 OP</highlight> Und<highlight> 150.000 ARB</highlight> anteilig basierend auf XP<br><br> Während der Kampagne erhalten Benutzer einmalige Belohnungen für bestimmte XP-Levels."
+                "xp-explained-content": "Saisonlange Kampagne, bei der Benutzer bis zum Ende der Sportsaison XP sammeln, indem sie fahren<bold> Lautstärke bei Overtime</bold> mit<bold> Multiplikatoren</bold> basierend auf verschiedenen dynamischen Metriken und Zielen.<br/><br/> Nach Ende der Kampagne teilen alle Benutzer<highlight> 100.000 OP</highlight> Und<highlight> 150.000 ARB</highlight> anteilig basierend auf XP<br><br> Während der Kampagne erhalten Benutzer einmalige Belohnungen für bestimmte XP-Levels.",
+                "weekly-boost": "Wöchentlicher Streak-Boost",
+                "loyalty-boost": "Treueschub",
+                "days-content": "Die Bedingungen für die Aktivierung des Daily Streak Boost für den laufenden Tag sind ein beliebiges Wettvolumen zwischen 00:00 UTC und 23:59 UTC für den laufenden Tag. Je mehr Tage hintereinander diese Bedingung erfüllt ist, desto höher ist der <bold>Daily Streak Boost</bold> auf Ihre Basis-XP-Ansammlung! \n\n<bold>Daily Streak Boost</bold> wird auf alle Wetten angewendet, die getätigt werden, während der Boost aktiv ist. \n\nWenn Sie Ihren Streak unterbrechen und es an einem Tag nicht schaffen, das Volumen zu steigern, <bold>wird Ihr Daily Streak Boost auf +0 % zurückgesetzt.</bold>",
+                "xp-boost": "XP-Boosts",
+                "parlay-content": "Abhängig von der Anzahl der Einzelspiele in Ihrer Kombiwette erhalten Sie einen zusätzlichen Bonus für Ihre XP-Ansammlung für diese Kombiwette!",
+                "loyalty-boost-content": "Der Loyalty XP Boost gibt Ihnen je nach Level einen permanenten Boost von bis zu 25 % auf alle Ihre allgemeinen XP-Ansammlungen. Beginnend mit einem Boost von 5 % auf Level 1 erhalten Sie weitere +5 % bei Erreichen jedes fünften Levels. Sie erreichen den maximalen Loyalty XP Boost von 25 %, wenn Sie Level 20 (GOAT) erreichen und 5.000.000 XP-Punkte gesammelt haben. Sie können die Aufschlüsselung der XP-Level auf der Seite LEVELING TREE sehen.",
+                "xp-boost-content": "Es gibt verschiedene Möglichkeiten, den Betrag Ihrer XP-Ansammlung pro Wette weiter zu steigern, indem Sie Steigerungen durch <bold>tägliche Wettserien, wöchentliche Wettserien, die Anzahl der Spiele in Parlay-Wetten, die Verwendung von THALES-Token als Sicherheit, das Platzieren Ihrer Wetten auf Twitter und das Erreichen von XP-Levels für Treuesteigerungen erhalten!</bold>",
+                "weekly-boost-content": "Die Bedingungen für die Aktivierung des wöchentlichen Streak-Boosts für die laufende Woche sind ein beliebiges Wettvolumen zwischen Montag 00:00 UTC und Sonntag 23:59 UTC für die laufende Woche. Je mehr Wochen hintereinander diese Bedingung erfüllt ist, desto höher ist der <bold>Weekly Streak Boost</bold> auf Ihre Basis-XP-Ansammlung!\n\nDer <bold>Weekly Streak Boost</bold> wird auf alle Wetten angewendet, die getätigt werden, während der Boost aktiv ist.\n\nWenn Sie Ihren Streak unterbrechen und es an einem Tag nicht schaffen, das Volumen zu steigern, wird Ihr <bold>Weekly Streak Boost</bold> auf +0 % zurückgesetzt."
             },
             "heading": "Die Overdrop-Farming-Liga"
         },
@@ -1287,7 +1323,9 @@
             "twitter-multiplier": "Twitter-Multiplikator",
             "active-xp-bonus": "Aktiver XP-Bonus",
             "no-results": "Keine Ergebnisse",
-            "loyalty-multiplier": "Treuemultiplikator"
+            "loyalty-multiplier": "Treuemultiplikator",
+            "weeks-in-row": "Wochen in Folge",
+            "loyalty-boost": "Treueschub"
         },
         "leaderboard": {
             "table": {
@@ -1298,6 +1336,18 @@
                 "address": "Adresse",
                 "rank": "Rang"
             }
+        },
+        "modal": {
+            "check-out": "Kasse<br/> Overdrop-Liga!",
+            "day-streak": "<bold>{{ days }}</bold><br/> Tagesserie!",
+            "gain-xp-label": "Gewinne XP, steige im Level auf, verdiene Belohnungen und farme den Airdrop!",
+            "congratulation": "Herzlichen Glückwunsch!",
+            "active-daily-streak": "Aktiver täglicher Streak-XP-Boost",
+            "you-are-rocking": "Du rockst es!",
+            "reached-level": "Sie haben LEVEL {{ level }} erreicht und {{ amount }} THALES-Gratiswette gewonnen!",
+            "unlocked-level": "Du hast LEVEL {{ level }} freigeschaltet!",
+            "dont-show-this": "Nicht mehr anzeigen",
+            "go-to-overdrop": "Gehe zu Overdrop"
         }
     }
 }

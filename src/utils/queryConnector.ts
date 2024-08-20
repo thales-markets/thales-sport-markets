@@ -21,6 +21,10 @@ export const refetchBalances = (walletAddress: string, networkId: Network) => {
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.MultipleCollateral(walletAddress, networkId));
 };
 
+export const refetchFreeBetBalance = (walletAddress: string, networkId: Network) => {
+    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.FreeBetBalance(walletAddress, networkId));
+};
+
 export const refetchAfterClaim = (walletAddress: string, networkId: Network) => {
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.ParlayMarkets(networkId, walletAddress));
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.AccountPositions(walletAddress, networkId));
@@ -41,5 +45,7 @@ export const refetchLiquidityPoolData = (walletAddress: string, networkId: Netwo
 export const refetchOverdropMultipliers = (walletAddress: string) => {
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Overdrop.UserMultipliers(walletAddress));
 };
+export const refetchCoingeckoRates = () =>
+    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Rates.CoingeckoRates());
 
 export default queryConnector;

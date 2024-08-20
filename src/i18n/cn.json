@@ -76,7 +76,8 @@
             "to-label": "目标",
             "balance-label": "钱包余额: {{amount}}",
             "swap-label": "兑换",
-            "swap-progress-label": "兑换进行中..."
+            "swap-progress-label": "兑换进行中...",
+            "approve": "同意掉期"
         },
         "enable-wallet-access": {
             "approve-label": "批准 {{currencyKey}}",
@@ -108,7 +109,8 @@
             "enter-percentage": "Enter percentage",
             "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}",
             "single-amm-paused": "AMM 已暂停",
-            "invalid-amount-max": "金额不能高于{{max}}"
+            "invalid-amount-max": "金额不能高于{{max}}",
+            "swap-quote-low": "掉期报价太低（收到：{{quote}}，最低收到 {{minQuote}}）！请重试..."
         },
         "time-remaining": {
             "ended": "ended",
@@ -196,7 +198,8 @@
         "wrap-and-buy": "包装 ETH 并购买",
         "wrap-eth-tooltip": "你的 ETH 首先被包装成 WETH，然后传递给合约",
         "election-tooltip": "解决来源将是美联社、福克斯新闻和 NBC。一旦所有三个来源都宣布同一位候选人获胜，这些市场就会解决。如果所有三个来源在 11 月 11 日之前都没有宣布同一位候选人获胜，则所有投注将作废。",
-        "submit": "提交"
+        "submit": "提交",
+        "try-again": "再试一次"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV 保留所有权利.",
@@ -280,13 +283,14 @@
                 "boxing": "拳击",
                 "golf": "高尔夫球",
                 "live": "居住",
-                "rugby": "橄榄球",
-                "handball": "手球",
-                "waterpolo": "水球",
-                "tabletennis": "乒乓球",
                 "volleyball": "排球",
+                "handball": "手球",
+                "rugby": "橄榄球",
+                "waterpolo": "水球",
                 "olympicgames": "奥运会",
-                "politics": "政治"
+                "tabletennis": "乒乓球",
+                "politics": "政治",
+                "boosted": "促销游戏"
             },
             "all": "所有",
             "datepicker": {
@@ -673,7 +677,8 @@
                 "invalid-value": "无效值",
                 "enter-value": "输入值",
                 "label": "如果赔率下降则接受交易：",
-                "tooltip": "如果在执行转移时桥接利率的不利变化超过该百分比，转移将不会通过。"
+                "tooltip": "如果在执行转移时桥接利率的不利变化超过该百分比，转移将不会通过。",
+                "swap-thales": "掉期滑点"
             },
             "odds-changed-description": "赔率已更改。请接受更改才能购买。",
             "odds-changed-error": "订单执行过程中赔率发生变化。请尝试增加滑点。",
@@ -687,10 +692,31 @@
                 "total-xp-boost": "总经验值提升",
                 "overdrop-xp": "过量掉落 XP",
                 "active-boost": "主动提升",
-                "base-xp": "基础经验值"
+                "base-xp": "基础经验值",
+                "tooltip": {
+                    "loyalty-boost": "忠诚 XP 提升可为您的所有常规 XP 收入提供高达 25% 的永久提升，具体取决于您的 XP 级别。从第 1 级的 5% 提升开始，每达到 5 级，您都会获得另外 +5% 的提升。",
+                    "thales-boost": "所有以 THALES 作为抵押的投注都将获得该特定投注基本 XP 累积 +10% 的奖金！",
+                    "weekly-boost": "您连续下注的周数越多，您的 XP 提升就越高。每周增加 +5%，最高可达 +20%。如果您错过一周，此提升将重置为 0%",
+                    "twitter-boost": "如果您以 Flex Card 的形式在 Twitter 上分享您的加时投注，您将激活为期 3 天的 +10% Twitter Flex Boost。",
+                    "promo-boost": "某些体育游戏有额外的 XP 提升。",
+                    "base-xp": "基本 XP 通过以下公式计算：\n\n基本 XP = 买入金额 * (2 - 标准化赔率)。\n\n这意味着您的买入金额越高，您的投注赔率越高，您的投注累积的基本 XP 就越多。",
+                    "parlay-boost": "根据您联注中的单场比赛数量，您将获得该联注的额外 XP 累积提升。15 场联注比赛的最高 XP 提升为 +290%。",
+                    "daily-boost": "连续下注的天数越多，XP 提升越高。每天增加 +5%，最高可达 +35%。如果您错过一天，此提升将重置为 0%"
+                },
+                "odds-xp": "赔率倍数",
+                "buy-in-xp": "购买 XP"
             },
             "use-free-bet": "使用免费投注",
-            "disable-free-bet": "禁用免费投注余额"
+            "swap-thales-tooltip": "全部",
+            "disable-free-bet": "禁用免费投注余额",
+            "swap-thales-receive": "最低接收",
+            "buy-steps": {
+                "buy": "使用 {{currencyKey}} 购买",
+                "approve-swap": "批准兑换为 {{currencyKey}}",
+                "swap": "兑换为 {{currencyKey}}",
+                "approve-buy": "使用 {{currencyKey}} 批准购买"
+            },
+            "swap-thales": "使用 THALES 获得更好的赔率"
         },
         "discounted-per": "折扣按",
         "nav-menu": {
@@ -728,8 +754,8 @@
         "incentivized-tooltip-mm": "在疯狂三月期间赢得 45,000 ARB + 50,000 THALES。更多详细信息<detailsLink>此处</detailsLink>。",
         "incentivized-tooltip-nhl-mlb": "总计高达 {{rewards}} 的奖励将分发给 {{league}} 赛季的剩余比赛，包括季后赛。只有 Arbitrum 网络上的交易量才会计入奖励！查看<detailsLink>此处</detailsLink>了解更多详情。",
         "incentivized-tooltip-euro-copa": "2024 年欧洲杯和美洲杯比赛将发放总计高达 {{rewards}} 的奖励。查看<detailsLink>此处</detailsLink>了解更多详情。",
-        "incentivized-tooltip-olympics": "奥运会期间，可获得 {{rewards}} 的基于数量的奖励。查看<detailsLink>此处</detailsLink>的更多详细信息。",
-        "incentivized-tooltip-wimbledon": "在 2024 年温布尔登网球公开赛加时赛 V1 和 V2 期间争夺 {{rewards}}。查看<detailsLink>此处</detailsLink>的更多详细信息。"
+        "incentivized-tooltip-wimbledon": "在 2024 年温布尔登网球公开赛加时赛 V1 和 V2 期间争夺 {{rewards}}。查看<detailsLink>此处</detailsLink>的更多详细信息。",
+        "incentivized-tooltip-olympics": "奥运会期间，可获得 {{rewards}} 的基于数量的奖励。查看<detailsLink>此处</detailsLink>的更多详细信息。"
     },
     "rewards": {
         "header": "奖励",
@@ -1250,7 +1276,9 @@
             "twitter-share": "Twitter 分享经验值提升",
             "social-multiplier": "社交经验值乘数",
             "twitter-xp-boost-resets": "Twitter xp boost 重置于",
-            "loyalty-boost": "提高忠诚度"
+            "loyalty-boost": "提高忠诚度",
+            "rank": "秩",
+            "rank-tooltip": "您当前在 Overdrop League 中的排名。查看排行榜标签以了解更多信息。"
         },
         "leveling-tree": {
             "explainer": {
@@ -1265,7 +1293,15 @@
                 "twitter-content": "在 Twitter 上分享您今天投注的加班<bold>弹性卡</bold>：当天剩余时间内每 BASE XP 每 $</bold> 可获得 10% 的奖励",
                 "position-thales-content": "使用 <bold>THALES</bold> 作为抵押品，您将在该特定交易中获得 <bold>每 BASE XP 每 $ 10% 的奖励</bold>",
                 "xp-explained-content": "整个赛季的活动期间，用户可以通过驾驶汽车在赛季结束前积累 XP<bold>加班量</bold>和<bold>乘数</bold>基于各种动态指标和目标。<br/><br/>活动结束后，所有用户将共享<highlight>10 万 OP</highlight>和<highlight>150k 平均收益</highlight>根据 XP 按比例<br><br>活动期间，用户将获得特定 XP 等级的一次性奖励",
-                "base-xp-content": "<bold>1 基本 XP = 1 美元</bold>体积<br/><br/>后<bold>28天</bold>连续<bold>交易量&gt;10$</bold>你已经达到<bold>最大基数乘数</bold><br/><br/>每错过一天低于 10 美元的交易量，你的基础就会下降<bold>经验值 -0.1</bold>"
+                "base-xp-content": "<bold>1 基本 XP = 1 美元</bold>体积<br/><br/>后<bold>28天</bold>连续<bold>交易量&gt;10$</bold>你已经达到<bold>最大基数乘数</bold><br/><br/>每错过一天低于 10 美元的交易量，你的基础就会下降<bold>经验值 -0.1</bold>",
+                "loyalty-boost": "提高忠诚度",
+                "xp-boost-content": "有多种方法可以进一步提高每次投注所累积的 XP 数量，例如通过<bold>每日投注连续性、每周投注连续性、联注游戏数量、使用 THALES 代币作为抵押品、在 Twitter 上展示您的投注以及达到 XP 级别来提高忠诚度！</bold>",
+                "parlay-content": "根据您的累积赌注中包含的单个游戏数量，您将获得该累积赌注的 XP 额外提升！",
+                "weekly-boost-content": "激活当前周的每周连胜提升的条件是，当前周的周一 00:00UTC 至周日 23:59UTC 之间有任何投注量。连续满足此条件的周数越多，您的基本 XP 累积的<bold>每周连胜提升</bold>就越高！\n\n<bold>每周连胜提升</bold>适用于提升期间进行的所有投注。\n\n如果您中断连胜并错过了一天的投注量提升，您的<bold>每周连胜提升</bold>将重置为 +0%。",
+                "loyalty-boost-content": "忠诚 XP 提升可为您的所有常规 XP 累积提供高达 25% 的永久提升，具体取决于您的级别。从第 1 级的 5% 提升开始，每升至第 5 级，您都会获得 +5% 的提升。当您达到第 20 级 (GOAT) 并累积 5,000,000 XP 点数时，您的忠诚 XP 提升将达到最高 25%。您可以在升级树页面上查看 XP 级别细分。",
+                "days-content": "激活当前日的每日连胜提升的条件是，当前日的投注量必须在 00:00UTC 和 23:59UTC 之间。连续满足此条件的天数越多，您的基本 XP 累积的<bold>每日连胜提升</bold>就越高！\n\n<bold>每日连胜提升</bold>适用于提升期间进行的所有投注。\n\n如果您在某一天中断连胜并错过了提升量的机会，<bold>您的每日连胜提升将重置为 +0%。</bold>",
+                "weekly-boost": "每周连续提升",
+                "xp-boost": "经验值提升"
             },
             "heading": "过度投放农业联盟"
         },
@@ -1283,7 +1319,9 @@
             "tx-link": "TX 链接",
             "days-in-row": "在连续几天",
             "no-results": "没有结果",
-            "loyalty-multiplier": "忠诚度倍增器"
+            "loyalty-multiplier": "忠诚度倍增器",
+            "weeks-in-row": "连续几周",
+            "loyalty-boost": "忠诚度提升"
         },
         "leaderboard": {
             "table": {
@@ -1294,6 +1332,18 @@
                 "total-xp": "总 XP 点数",
                 "level": "等级"
             }
+        },
+        "modal": {
+            "you-are-rocking": "你太棒了！",
+            "congratulation": "恭喜！",
+            "gain-xp-label": "获取 XP、升级、赢取奖励并收集空投！",
+            "go-to-overdrop": "前往超额投放",
+            "reached-level": "您已达到 {{ level }} 级别并赢得 {{ amount }} THALES 免费投注！",
+            "check-out": "查看<br/>超降联赛！",
+            "active-daily-streak": "活跃每日连续经验值提升",
+            "dont-show-this": "不再显示此内容",
+            "unlocked-level": "您已解锁级别 {{ level }}！",
+            "day-streak": "<bold>{{ days }}</bold><br/>连胜！"
         }
     }
 }
