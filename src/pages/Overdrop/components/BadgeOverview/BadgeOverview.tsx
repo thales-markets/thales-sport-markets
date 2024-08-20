@@ -69,6 +69,12 @@ const BadgeOverview: React.FC = () => {
         onSwipedLeft: () => handleOnNext(),
     });
 
+    const progressLevel = getProgressLevel(
+        userData?.points ?? 0,
+        0,
+        nextThalesRewardLevel?.minimumPoints ?? OVERDROP_LEVELS[1].minimumPoints
+    );
+
     return (
         <Wrapper>
             <BadgeWrapper {...handlers}>
@@ -134,18 +140,17 @@ const BadgeOverview: React.FC = () => {
                                 : ''}
                         </ValueSecondary>
                     </ValueWrapper>
-                    {userData?.points && levelItem && nextThalesRewardLevel && (
-                        <ProgressContainer>
-                            <Progress
-                                progress={getProgressLevel(userData?.points, 0, nextThalesRewardLevel?.minimumPoints)}
-                                width="100%"
-                                height="18px"
-                                textBelow={`${formatPoints(userData?.points)} / ${formatPoints(
-                                    nextThalesRewardLevel?.minimumPoints
-                                )}`}
-                            />
-                        </ProgressContainer>
-                    )}
+
+                    <ProgressContainer>
+                        <Progress
+                            progress={isNaN(progressLevel) ? 0 : progressLevel}
+                            width="100%"
+                            height="18px"
+                            textBelow={`${formatPoints(userData?.points ?? 0)} / ${formatPoints(
+                                nextThalesRewardLevel?.minimumPoints ?? OVERDROP_LEVELS[1].minimumPoints
+                            )}`}
+                        />
+                    </ProgressContainer>
                 </ItemContainer>
             </DetailsWrapper>
         </Wrapper>
