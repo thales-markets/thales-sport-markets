@@ -29,6 +29,12 @@ const StyledLogo = styled(LogoIcon)`
     fill: ${(props) => props.theme.textColor.primary};
     cursor: pointer;
     height: 35px;
+    @media (max-width: 400px) {
+        width: 130px;
+    }
+    @media (max-width: 375px) {
+        width: 115px;
+    }
 `;
 
 export default Logo;
