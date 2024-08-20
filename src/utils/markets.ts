@@ -115,7 +115,12 @@ export const isPeriod2Market = (marketType: MarketType) => {
         (marketType >= MarketType.FIRST_PERIOD_WINNER2 && marketType <= MarketType.NINTH_PERIOD_WINNER2) ||
         (marketType >= MarketType.FIRST_PERIOD_TOTAL2 && marketType <= MarketType.NINTH_PERIOD_TOTAL2) ||
         (marketType >= MarketType.FIRST_PERIOD_SPREAD2 && marketType <= MarketType.NINTH_PERIOD_SPREAD2) ||
-        (marketType >= MarketType.FIRST_PERIOD_TOTAL2_ODD_EVEN && marketType <= MarketType.NINTH_PERIOD_TOTAL2_ODD_EVEN)
+        (marketType >= MarketType.FIRST_PERIOD_TOTAL2_ODD_EVEN &&
+            marketType <= MarketType.NINTH_PERIOD_TOTAL2_ODD_EVEN) ||
+        (marketType >= MarketType.FIRST_PERIOD_TOTAL2_HOME_TEAM &&
+            marketType <= MarketType.FIRST_PERIOD_TOTAL2_AWAY_TEAM) ||
+        (marketType >= MarketType.SECOND_PERIOD_TOTAL2_HOME_TEAM &&
+            marketType <= MarketType.SECOND_PERIOD_TOTAL2_AWAY_TEAM)
     );
 };
 

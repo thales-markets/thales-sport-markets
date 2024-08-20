@@ -407,6 +407,27 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         key: 'secondPeriodTotalAwayTeam',
         name: 'Total 2nd',
     },
+    // Total per team period - half for basketball
+    [MarketType.FIRST_PERIOD_TOTAL2_HOME_TEAM]: {
+        id: MarketType.FIRST_PERIOD_TOTAL2_HOME_TEAM,
+        key: 'firstPeriodTotal2HomeTeam',
+        name: 'Total 1st',
+    },
+    [MarketType.FIRST_PERIOD_TOTAL2_AWAY_TEAM]: {
+        id: MarketType.FIRST_PERIOD_TOTAL2_AWAY_TEAM,
+        key: 'firstPeriodTotal2AwayTeam',
+        name: 'Total 1st',
+    },
+    [MarketType.SECOND_PERIOD_TOTAL2_HOME_TEAM]: {
+        id: MarketType.SECOND_PERIOD_TOTAL2_HOME_TEAM,
+        key: 'secondPeriodTotal2HomeTeam',
+        name: 'Total 2nd',
+    },
+    [MarketType.SECOND_PERIOD_TOTAL2_AWAY_TEAM]: {
+        id: MarketType.SECOND_PERIOD_TOTAL2_AWAY_TEAM,
+        key: 'secondPeriodTotal2AwayTeam',
+        name: 'Total 2nd',
+    },
 
     // Total odd/even
     [MarketType.TOTAL_ODD_EVEN]: {
@@ -936,6 +957,10 @@ export const TOTAL_MARKET_TYPES = [
     MarketType.FIRST_PERIOD_TOTAL_AWAY_TEAM,
     MarketType.SECOND_PERIOD_TOTAL_HOME_TEAM,
     MarketType.SECOND_PERIOD_TOTAL_AWAY_TEAM,
+    MarketType.FIRST_PERIOD_TOTAL2_HOME_TEAM,
+    MarketType.FIRST_PERIOD_TOTAL2_AWAY_TEAM,
+    MarketType.SECOND_PERIOD_TOTAL2_HOME_TEAM,
+    MarketType.SECOND_PERIOD_TOTAL2_AWAY_TEAM,
 ];
 
 export const TOTAL_ODD_EVEN_MARKET_TYPES = [
@@ -1055,6 +1080,8 @@ const FIRST_PERIOD_MARKET_TYPES = [
     MarketType.FIRST_PERIOD_DOUBLE_CHANCE,
     MarketType.FIRST_PERIOD_TOTAL_HOME_TEAM,
     MarketType.FIRST_PERIOD_TOTAL_AWAY_TEAM,
+    MarketType.FIRST_PERIOD_TOTAL2_HOME_TEAM,
+    MarketType.FIRST_PERIOD_TOTAL2_AWAY_TEAM,
     MarketType.FIRST_PERIOD_BOTH_TEAMS_TO_SCORE,
     MarketType.FIRST_PERIOD_DRAW_NO_BET,
     MarketType.FIRST_PERIOD_TOTAL_EXACT_HOME_TEAM,
@@ -1069,6 +1096,8 @@ const SECOND_PERIOD_MARKET_TYPES = [
     MarketType.SECOND_PERIOD_DOUBLE_CHANCE,
     MarketType.SECOND_PERIOD_TOTAL_HOME_TEAM,
     MarketType.SECOND_PERIOD_TOTAL_AWAY_TEAM,
+    MarketType.SECOND_PERIOD_TOTAL2_HOME_TEAM,
+    MarketType.SECOND_PERIOD_TOTAL2_AWAY_TEAM,
     MarketType.SECOND_PERIOD_BOTH_TEAMS_TO_SCORE,
     MarketType.SECOND_PERIOD_DRAW_NO_BET,
     MarketType.SECOND_PERIOD_TOTAL_EXACT_HOME_TEAM,
@@ -1144,6 +1173,8 @@ export const HOME_TEAM_MARKET_TYPES = [
     MarketType.TOTAL_HOME_TEAM,
     MarketType.FIRST_PERIOD_TOTAL_HOME_TEAM,
     MarketType.SECOND_PERIOD_TOTAL_HOME_TEAM,
+    MarketType.FIRST_PERIOD_TOTAL2_HOME_TEAM,
+    MarketType.SECOND_PERIOD_TOTAL2_HOME_TEAM,
     MarketType.CLEAN_SHEET_HOME_TEAM,
     MarketType.TOTAL_EXACT_HOME_TEAM,
     MarketType.FIRST_PERIOD_TOTAL_EXACT_HOME_TEAM,
@@ -1154,6 +1185,8 @@ export const AWAY_TEAM_MARKET_TYPES = [
     MarketType.TOTAL_AWAY_TEAM,
     MarketType.FIRST_PERIOD_TOTAL_AWAY_TEAM,
     MarketType.SECOND_PERIOD_TOTAL_AWAY_TEAM,
+    MarketType.FIRST_PERIOD_TOTAL2_AWAY_TEAM,
+    MarketType.SECOND_PERIOD_TOTAL2_AWAY_TEAM,
     MarketType.CLEAN_SHEET_AWAY_TEAM,
     MarketType.TOTAL_EXACT_AWAY_TEAM,
     MarketType.FIRST_PERIOD_TOTAL_EXACT_AWAY_TEAM,
