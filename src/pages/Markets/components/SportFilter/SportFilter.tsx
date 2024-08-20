@@ -4,7 +4,7 @@ import Lottie from 'lottie-react';
 import React, { CSSProperties } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivSpaceBetween } from 'styles/common';
 
 type SportFilterProps = {
@@ -18,6 +18,8 @@ type SportFilterProps = {
 const SportFilterDetails: React.FC<SportFilterProps> = ({ selected, sport, onClick, count, children, open }) => {
     const isMobile = useSelector(getIsMobile);
 
+    const theme = useTheme();
+
     return (
         <Container className={selected ? 'selected' : ''} onClick={onClick}>
             <LeftContainer>
@@ -29,7 +31,7 @@ const SportFilterDetails: React.FC<SportFilterProps> = ({ selected, sport, onCli
                         style={isMobile ? liveBlinkStyleMobile : liveBlinkStyle}
                     />
                 ) : sport == SportFilter.Boosted ? (
-                    <SportIcon className={`icon icon--fire`} />
+                    <SportIcon color={theme.overdrop.textColor.primary} className={`icon icon--fire`} />
                 ) : (
                     <SportIcon className={`icon icon--${sport == SportFilter.All ? 'logo' : sport.toLowerCase()}`} />
                 )}
