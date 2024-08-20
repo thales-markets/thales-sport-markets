@@ -39,6 +39,7 @@ const Wrapper = styled(FlexDivColumn)`
     justify-content: center;
     padding: 15px 20px 30px 20px;
     @media (max-width: 767px) {
+        width: 95%;
     }
 `;
 
@@ -48,6 +49,10 @@ const TextWrapper = styled(FlexDivColumn)`
     align-items: center;
     justify-content: center;
     text-align: center;
+    @media (max-width: 767px) {
+        margin-top: 30px;
+        margin-bottom: 80px;
+    }
 `;
 
 const Header = styled.span`
@@ -56,12 +61,18 @@ const Header = styled.span`
     font-weight: 900;
     text-transform: uppercase;
     line-height: 130%;
+    @media (max-width: 767px) {
+        font-size: 22px;
+    }
 `;
 
 const SubHeader = styled.span`
     color: ${(props) => props.theme.textColor.primary};
     font-size: 15px;
     font-weight: 600;
+    @media (max-width: 767px) {
+        font-size: 12px;
+    }
 `;
 
 const Button = styled(FlexDiv)`
@@ -72,6 +83,10 @@ const Button = styled(FlexDiv)`
     font-size: 18px;
     font-weight: 700;
     cursor: pointer;
+    text-align: center;
+    @media (max-width: 767px) {
+        font-size: 14px;
+    }
 `;
 
 export default WelcomeModal;
