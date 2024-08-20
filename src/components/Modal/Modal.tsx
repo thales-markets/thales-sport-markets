@@ -8,7 +8,6 @@ type ModalProps = {
     title: string;
     shouldCloseOnOverlayClick?: boolean;
     customStyle?: ReactModal.Styles;
-    removeWrapperBackground?: boolean;
     mobileStyle?: {
         container?: CSSProperties;
         header?: CSSProperties;
@@ -27,7 +26,7 @@ const defaultCustomStyles = {
         marginRight: '-48%',
         transform: 'translate(-50%, -50%)',
         padding: '0px',
-        // background: 'transparent',
+        background: 'transparent',
         border: 'none',
         overflow: 'auto',
     },
@@ -42,7 +41,6 @@ const Modal: React.FC<ModalProps> = ({
     onClose,
     children,
     shouldCloseOnOverlayClick,
-    removeWrapperBackground,
     customStyle,
     mobileStyle,
 }) => {
@@ -60,7 +58,7 @@ const Modal: React.FC<ModalProps> = ({
             shouldCloseOnOverlayClick={shouldCloseOnOverlayClick}
             style={customStylesOverride}
         >
-            <Container mobileStyle={mobileStyle?.container} removeBackground={removeWrapperBackground}>
+            <Container mobileStyle={mobileStyle?.container}>
                 <Header mobileStyle={mobileStyle?.header}>
                     <Title>{title}</Title>
                     <FlexDivRow>{<CloseIcon onClick={onClose} />}</FlexDivRow>
@@ -71,9 +69,9 @@ const Modal: React.FC<ModalProps> = ({
     );
 };
 
-const Container = styled.div<{ mobileStyle?: CSSProperties; removeBackground?: boolean }>`
+const Container = styled.div<{ mobileStyle?: CSSProperties }>`
     border: 1px solid ${(props) => props.theme.borderColor.primary};
-    background: ${(props) => (props.removeBackground ? 'transparent' : props.theme.background.primary)};
+    background: ${(props) => props.theme.background.primary};
     padding: 25px 30px 35px 30px;
     border-radius: 23px;
     @media (max-width: 575px) {
