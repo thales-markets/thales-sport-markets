@@ -496,6 +496,7 @@ const Home: React.FC = () => {
                 .filter(
                     (filterItem: any) =>
                         (showActive && filterItem !== SportFilter.Live && openMarketsCountPerSport[filterItem] > 0) ||
+                        (showActive && filterItem === SportFilter.Boosted && boostedMarketsCount > 0) ||
                         (showActive && filterItem === SportFilter.Live && liveMarketsCountPerSport[filterItem] > 0) ||
                         !showActive ||
                         openSportMarketsQuery.isLoading ||
