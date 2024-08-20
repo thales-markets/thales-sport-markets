@@ -2,6 +2,17 @@ import { Circle } from 'pages/Overdrop/components/styled-components';
 import styled, { CSSProperties } from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivStart } from 'styles/common';
 
+export const OverdropGradientBorder = styled.div<{
+    isOverdrop: boolean;
+}>`
+    ${(props) =>
+        props.isOverdrop
+            ? ` border-radius: 6px;
+                background: ${props.theme.overdrop.borderColor.secondary};
+                padding: 1px;`
+            : ``}
+`;
+
 export const Wrapper = styled(FlexDivColumn)<{
     hideGame: boolean;
     isResolved: boolean;
@@ -11,7 +22,6 @@ export const Wrapper = styled(FlexDivColumn)<{
     width: 100%;
     display: ${(props) => (props.hideGame ? 'none' : '')};
     border-radius: 5px;
-    margin-bottom: 10px;
     background-color: ${(props) =>
         props.selected
             ? props.theme.background.quaternary
