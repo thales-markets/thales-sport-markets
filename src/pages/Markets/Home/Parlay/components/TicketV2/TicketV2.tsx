@@ -1130,7 +1130,9 @@ const Ticket: React.FC<TicketProps> = ({
                                 additionalSlippage,
                                 isAA,
                                 false,
-                                undefined
+                                undefined,
+                                isStakedThales,
+                                stakingThalesBettingProxyWithSigner
                             );
                         }
                     } else {
@@ -1144,7 +1146,9 @@ const Ticket: React.FC<TicketProps> = ({
                             additionalSlippage,
                             isAA,
                             isFreeBetActive,
-                            freeBetContractWithSigner
+                            freeBetContractWithSigner,
+                            isStakedThales,
+                            stakingThalesBettingProxyWithSigner
                         );
                     }
                 } else {
@@ -1222,6 +1226,8 @@ const Ticket: React.FC<TicketProps> = ({
                         const requestId = txResult.events.find((event: any) =>
                             isFreeBetActive
                                 ? event.event == 'FreeBetLiveTradeRequested'
+                                : isStakedThales
+                                ? event.event == 'StakingTokensLiveTradeRequested'
                                 : event.event === 'LiveTradeRequested'
                         ).args[2];
                         const startTime = Date.now();
@@ -1267,9 +1273,16 @@ const Ticket: React.FC<TicketProps> = ({
                                 console.log('filfill end time:', new Date(Date.now()));
                                 console.log('fulfill duration', (Date.now() - startTime) / 1000, 'seconds');
                                 refetchBalances(walletAddress, networkId);
-                                if (sportsAMMDataContract && sportsAMMV2ManagerContract && freeBetHolderContract) {
+                                if (
+                                    sportsAMMDataContract &&
+                                    sportsAMMV2ManagerContract &&
+                                    freeBetHolderContract &&
+                                    stakingThalesBettingProxy
+                                ) {
                                     const numOfActiveTicketsPerUser = isFreeBetActive
                                         ? await freeBetHolderContract.numOfActiveTicketsPerUser(walletAddress)
+                                        : isStakedThales
+                                        ? await stakingThalesBettingProxy.numOfActiveTicketsPerUser(walletAddress)
                                         : await sportsAMMV2ManagerContract.numOfActiveTicketsPerUser(walletAddress);
                                     const userTickets = await sportsAMMDataContract.getActiveTicketsDataPerUser(
                                         walletAddress.toLowerCase(),
@@ -1278,6 +1291,8 @@ const Ticket: React.FC<TicketProps> = ({
                                     );
                                     const lastTicket = isFreeBetActive
                                         ? userTickets.freeBetsData[userTickets.freeBetsData.length - 1]
+                                        : isStakedThales
+                                        ? userTickets.stakingBettingProxyData[userTickets.freeBetsData.length - 1]
                                         : userTickets.ticketsData[userTickets.ticketsData.length - 1];
                                     const lastTicketPaid =
                                         !collateralHasLp || (isDefaultCollateral && !swapToThales)
