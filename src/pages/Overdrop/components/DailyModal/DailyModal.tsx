@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import Checkbox from 'components/fields/Checkbox';
 import { Trans, useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { getOverdropPreventShowingModal, setPreventOverdropModalValue } from 'redux/modules/ui';
+import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn } from 'styles/common';
 import { ModalTypes } from 'types/overdrop';
@@ -16,8 +19,9 @@ type DailyModalProps = {
 
 const DailyModal: React.FC<DailyModalProps> = ({ dayStreak, percentage, onClose }) => {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
 
-    const [preventShowingModal, setPreventShowingModal] = useState<boolean>(false);
+    const preventShowingModal = useSelector((state: RootState) => getOverdropPreventShowingModal(state));
 
     return (
         <BaseModal onClose={() => onClose()} type={ModalTypes.DAILY_STREAK}>
@@ -49,7 +53,9 @@ const DailyModal: React.FC<DailyModalProps> = ({ dayStreak, percentage, onClose 
                             disabled={false}
                             checked={preventShowingModal}
                             value={preventShowingModal.toString()}
-                            onChange={(e: any) => setPreventShowingModal(e.target.checked || false)}
+                            onChange={(e: any) =>
+                                dispatch(setPreventOverdropModalValue({ preventFlag: e.target.checked || false }))
+                            }
                             label={t('overdrop.modal.dont-show-this')}
                             labelFontSize="10px"
                         />
@@ -65,6 +71,9 @@ const Wrapper = styled(FlexDivColumn)`
     align-items: center;
     justify-content: center;
     padding: 15px 20px 30px 20px;
+    @media (max-width: 767px) {
+        width: 95%;
+    }
 `;
 
 const TextWrapper = styled(FlexDivColumn)`

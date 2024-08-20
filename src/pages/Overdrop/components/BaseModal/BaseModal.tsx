@@ -75,6 +75,7 @@ const Container = styled.div<{ mobileStyle?: CSSProperties; removeBackground?: b
     ${(props) => (props.type == ModalTypes.WELCOME ? `background-image: url(${WelcomeModalBackground});` : '')}
     ${(props) => (props.type == ModalTypes.WELCOME ? `background-color: none;` : '')}
     background-size: cover;
+    background-position: center center;
     background-repeat: no-repeat;
     ${(props) => (props.type == ModalTypes.LEVEL_UP ? `` : '')}
     ${(props) => (props.type == ModalTypes.LEVEL_UP ? `` : '')}
