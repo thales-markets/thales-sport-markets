@@ -68,6 +68,9 @@ const Wrapper = styled(FlexDivColumn)<{ active?: boolean; highlight?: boolean }>
     position: relative;
     padding: 70px 0px 10px 0px;
     flex: 1 0 18%;
+    @media (max-width: 767px) {
+        min-width: 90px;
+    }
 `;
 
 const BadgeImage = styled.img<{ active?: boolean }>`
@@ -76,6 +79,10 @@ const BadgeImage = styled.img<{ active?: boolean }>`
     width: 100px;
     height: 100px;
     opacity: ${(props) => (props.active ? '1' : '0.4')};
+    /* @media (max-width: 767px) {
+        width: 50px;
+        height: 50px;
+    } */
 `;
 
 const LockWrapper = styled(FlexDivColumn)`
