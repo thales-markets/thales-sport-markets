@@ -1292,7 +1292,9 @@ const Ticket: React.FC<TicketProps> = ({
                                     const lastTicket = isFreeBetActive
                                         ? userTickets.freeBetsData[userTickets.freeBetsData.length - 1]
                                         : isStakedThales
-                                        ? userTickets.stakingBettingProxyData[userTickets.freeBetsData.length - 1]
+                                        ? userTickets.stakingBettingProxyData[
+                                              userTickets.stakingBettingProxyData.length - 1
+                                          ]
                                         : userTickets.ticketsData[userTickets.ticketsData.length - 1];
                                     const lastTicketPaid =
                                         !collateralHasLp || (isDefaultCollateral && !swapToThales)
