@@ -437,8 +437,8 @@ export const LeftLevel = styled.div`
     bottom: -33px;
 `;
 
-export const RightLevel = styled.div`
-    color: ${(props) => props.theme.textColor.septenary};
+export const RightLevel = styled.div<{ highlight: boolean }>`
+    color: ${(props) => (props.highlight ? props.theme.overdrop.textColor.senary : props.theme.textColor.septenary)};
     font-size: 13px;
     display: flex;
     align-items: center;

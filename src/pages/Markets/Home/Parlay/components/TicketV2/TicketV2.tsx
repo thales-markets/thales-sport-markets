@@ -94,6 +94,7 @@ import {
     getCurrentLevelByPoints,
     getMultiplierIcon,
     getMultiplierLabel,
+    getNextLevelItemByPoints,
     getParlayMultiplier,
     getTooltipKey,
 } from 'utils/overdrop';
@@ -1676,7 +1677,14 @@ const Ticket: React.FC<TicketProps> = ({
                                 showNumbersOnly
                             />
                         </CurrentLevelProgressLineContainer>
-                        <RightLevel>LVL {levelItem.level + 1}</RightLevel>
+                        <RightLevel
+                            highlight={
+                                overdropTotalXP + (userData?.points ?? 0) >
+                                getNextLevelItemByPoints(userData?.points).minimumPoints
+                            }
+                        >
+                            LVL {levelItem.level + 1}
+                        </RightLevel>
                     </OverdropProgressWrapper>
                 </OverdropSummary>
             )}
