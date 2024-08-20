@@ -168,7 +168,7 @@ const BoxWrapper = styled(FlexDivColumn)`
 const GradientBorder = styled.div`
     border-radius: 6px;
     background: ${(props) => props.theme.overdrop.borderColor.secondary};
-    padding: 2px;
+    padding: 1px;
 `;
 
 const Box = styled(FlexDivColumn)`

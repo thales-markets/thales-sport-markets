@@ -10,6 +10,8 @@ const XPDetails: React.FC = () => {
     const { t } = useTranslation();
     return (
         <>
+            <Heading>{t('markets.parlay.overdrop.base-xp')}</Heading>
+            <Paragraph>{t(`markets.parlay.overdrop.tooltip.base-xp`)}</Paragraph>
             <Heading>{t('overdrop.xp-details.active-xp-bonus')}</Heading>
             <Paragraph>{t('overdrop.xp-details.paragraph')}</Paragraph>
             <CalculationWrapper>
@@ -36,6 +38,7 @@ const Paragraph = styled.p`
     font-size: 13.5px;
     font-weight: 300;
     color: ${(props) => props.theme.textColor.primary};
+    margin-bottom: 12px;
 `;
 
 export default XPDetails;

@@ -156,7 +156,7 @@ const Wrapper = styled(FlexDivColumn)`
     position: relative;
     min-width: 30%;
     padding: 6px 16px;
-    border: 3px solid transparent;
+    border: 1px solid transparent;
     margin-bottom: 20px;
     border-radius: 6px;
     background: linear-gradient(${(props) => props.theme.overdrop.background.active} 0 0) padding-box,
@@ -167,7 +167,7 @@ const Wrapper = styled(FlexDivColumn)`
 `;
 
 const Content = styled.p`
-    font-family: ${(props) => props.theme.fontFamily.secondary};
+    font-family: ${(props) => props.theme.fontFamily.primary};
     font-size: 13px;
     line-height: 16px;
     font-weight: 200;
