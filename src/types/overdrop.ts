@@ -5,6 +5,7 @@ export type OverdropMultiplier = {
     name: string;
     label?: string;
     icon?: JSX.Element;
+    tooltip?: string;
 };
 
 export type OverdropUserData = {

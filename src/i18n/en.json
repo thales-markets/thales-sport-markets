@@ -263,7 +263,7 @@
                 "tooltip": "Markets resolved more than 7 days ago"
             },
             "sport": {
-                "boosted": "Overdrop boosted",
+                "boosted": "Promo games",
                 "live": "Live",
                 "all": "All sports",
                 "favourites": "Favourites",
@@ -814,7 +814,16 @@
                 "active-boost": "Active boost",
                 "bonus-applied": "Boost applied",
                 "total-xp-boost": "Total XP Boost",
-                "total-xp-earned": "Total XP Earned"
+                "total-xp-earned": "Total XP Earned",
+                "tooltip": {
+                    "daily-boost": "For every day in a row you get 5% boost",
+                    "weekly-boost": "For every week in a row you get 5% boost",
+                    "parlay-boost": "Every game in parlay will boost up your xp",
+                    "thales-boost": "Using thales as collateral will boost your xp by 10%",
+                    "twitter-boost": "If you share your ticket you get additional 10%",
+                    "loyalty-boost": "Check out leveling tree",
+                    "promo-boost": "Game of the week boost"
+                }
             }
         },
         "zero-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",
@@ -1240,12 +1249,12 @@
                 "base-xp-content": "The base calculation for how much XP your bet gains you is calculated via the following formula: \n\n <highlight>Base XP = Buy In Amount * (2 - Normalized Odds )</highlight> \n\n - <bold>Buy In Amount:</bold> the amount of $ that you placed as a Buy In on the respective bet.\n\n - <bold>Normalized Odds:</bold> Odds of your bet shown in the format of Normalized Probability between 0 and 1. For example, Decimal Odds of 1.60 is 0.625 in  Normalized Odds format.\n\nThis means that your bet accrues more base XP the higher your buy-in and the higher your bet odds are.",
                 "xp-boost": "XP Boosts",
                 "xp-boost-content": "There are several ways to further boost the amount of your XP accrual per bet by having boosts from <bold>daily bet streaks, weekly bet streaks, amount of games in parlay, using THALES token as collateral,  flexing your bets on twitter and reaching XP levels for loyalty boosts!</bold>",
-                "daily-bonus": "Daily boost",
-                "weekly-boost": "Weekly boost",
+                "daily-bonus": "Daily streak boost",
+                "weekly-boost": "Weekly streak boost",
                 "weekly-boost-content": "The conditions for the weekly streak boost to be activated for the ongoing week is to have any betting volume between Monday 00:00UTC and Sunday 23:59UTC for the ongoing week. The more weeks in a row this condition is met, the higher the <bold>Weekly Streak Boost</bold> on your baseline XP accrual!\n\n<bold>Weekly Streak Boost</bold> is applied to all bets made while the boost is active.\n\nIf you break your streak and miss out to drive volume one day, your <bold>Weekly Streak Boost</bold> is reset to +0%.",
-                "parlay-xp": "PARLAY XP BOOST (one off per parlay)",
+                "parlay-xp": "PARLAY BOOST",
                 "parlay-content": "Depending on how many individual games are within your parlay, you will get an additional boost on your XP accrual for that parlay!",
-                "positions-thales": "Position WITH THALES BOOST (one off per bet)",
+                "positions-thales": "THALES BOOST",
                 "days": "days",
                 "days-content": "The conditions for the daily streak boost to be activated for the ongoing day is to have any betting volume between 00:00UTC and 23:59UTC for the ongoing day. The more days in a row this condition is met, the higher the <bold>Daily Streak Boost</bold> on your baseline XP accrual ! \n\n<bold>Daily Streak Boost</bold> is applied to all bets made while the boost is active. \n\nIf you break your streak and miss out to drive volume one day, <bold>your Daily Streak Boost is reset to +0%.</bold>",
                 "games-in-parlay": "games in parlay",

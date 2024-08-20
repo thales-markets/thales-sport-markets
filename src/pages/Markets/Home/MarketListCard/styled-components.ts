@@ -244,9 +244,10 @@ export const ResultLabel = styled.span<{ isColumnView: boolean; isMarketSelected
 `;
 
 export const OverdropCircleContainer = styled(FlexDiv)`
+    margin: auto;
+    padding-top: 10px;
     color: ${(props) => props.theme.overdrop.textColor.primary};
     align-items: center;
-    position: absolute;
     font-size: 11px;
     text-transform: uppercase;
     top: 10px;

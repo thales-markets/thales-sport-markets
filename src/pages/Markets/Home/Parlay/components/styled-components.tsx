@@ -326,6 +326,10 @@ export const OverdropLabel = styled.span<{ color?: string }>`
     letter-spacing: 0.025em;
     text-transform: uppercase;
     color: ${(props) => props.color || props.theme.overdrop.textColor.primary};
+    i {
+        color: ${(props) => props.theme.textColor.septenary};
+        font-size: 14px;
+    }
     @media (max-width: 950px) {
         line-height: 24px;
     }
