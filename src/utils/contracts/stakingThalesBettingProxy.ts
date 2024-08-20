@@ -28,25 +28,6 @@ const stakingThalesBettingProxy = {
         },
         {
             anonymous: false,
-            inputs: [
-                { indexed: false, internalType: 'address', name: 'collateral', type: 'address' },
-                { indexed: false, internalType: 'bool', name: 'supported', type: 'bool' },
-            ],
-            name: 'CollateralSupportChanged',
-            type: 'event',
-        },
-        {
-            anonymous: false,
-            inputs: [
-                { indexed: false, internalType: 'address', name: 'user', type: 'address' },
-                { indexed: false, internalType: 'uint256', name: 'buyInAmount', type: 'uint256' },
-                { indexed: false, internalType: 'bytes32', name: 'requestId', type: 'bytes32' },
-            ],
-            name: 'FreeBetLiveTradeRequested',
-            type: 'event',
-        },
-        {
-            anonymous: false,
             inputs: [{ indexed: false, internalType: 'uint64', name: 'version', type: 'uint64' }],
             name: 'Initialized',
             type: 'event',
@@ -103,6 +84,16 @@ const stakingThalesBettingProxy = {
                 { indexed: false, internalType: 'uint256', name: 'amount', type: 'uint256' },
             ],
             name: 'StakingAmountApprovedForTrading',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                { indexed: false, internalType: 'address', name: 'user', type: 'address' },
+                { indexed: false, internalType: 'uint256', name: 'buyInAmount', type: 'uint256' },
+                { indexed: false, internalType: 'bytes32', name: 'requestId', type: 'bytes32' },
+            ],
+            name: 'StakingTokensLiveTradeRequested',
             type: 'event',
         },
         {

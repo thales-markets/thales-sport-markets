@@ -5,7 +5,7 @@ const liquidityPoolDataContract = {
         [Network.OptimismMainnet]: '0x3b834149f21b9a6c2ddc9f6ce97f2fd1097f8eab',
         [Network.Arbitrum]: '0x3b250d77b982Fd3eb67ddEa5191cE0115cC226a7',
         [Network.Base]: '',
-        [Network.OptimismSepolia]: '0xe36e722479e423a4d3fbbb617ded66936f304cfa',
+        [Network.OptimismSepolia]: '0x01546a60C30CaCAe105210381a11449F430489Cf',
     },
     abi: [
         {
@@ -123,6 +123,12 @@ const liquidityPoolDataContract = {
             anonymous: false,
             inputs: [{ indexed: false, internalType: 'uint256', name: '_maxAllowedExecutionDelay', type: 'uint256' }],
             name: 'SetMaxAllowedExecutionDelay',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [{ indexed: false, internalType: 'address', name: '_stakingThalesBettingProxy', type: 'address' }],
+            name: 'SetStakingThalesBettingProxy',
             type: 'event',
         },
         {
@@ -291,9 +297,23 @@ const liquidityPoolDataContract = {
             type: 'function',
         },
         {
+            inputs: [{ internalType: 'address', name: '_stakingThalesBettingProxy', type: 'address' }],
+            name: 'setStakingThalesBettingProxy',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
             inputs: [],
             name: 'sportsAMM',
             outputs: [{ internalType: 'contract ISportsAMMV2', name: '', type: 'address' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'stakingThalesBettingProxy',
+            outputs: [{ internalType: 'address', name: '', type: 'address' }],
             stateMutability: 'view',
             type: 'function',
         },
