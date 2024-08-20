@@ -90,6 +90,7 @@ import {
     getMaxCollateralDollarValue,
     isLpSupported,
     isStableCurrency,
+    isThalesCurrency,
     mapMultiCollateralBalances,
 } from 'utils/collaterals';
 import multipleCollateral from 'utils/contracts/multipleCollateralContract';
@@ -233,7 +234,8 @@ const Ticket: React.FC<TicketProps> = ({
         [swapToThales, selectedCollateral]
     );
     const isEth = selectedCollateral === CRYPTO_CURRENCY_MAP.ETH;
-    const isThales = selectedCollateral === CRYPTO_CURRENCY_MAP.THALES;
+    const isThales = isThalesCurrency(selectedCollateral);
+    const isStakedThales = selectedCollateral === CRYPTO_CURRENCY_MAP.sTHALES;
     const collateralAddress = useMemo(
         () =>
             getCollateralAddress(
@@ -701,10 +703,6 @@ const Ticket: React.FC<TicketProps> = ({
     useEffect(() => {
         const { sportsAMMV2Contract, sUSDContract, signer, multipleCollateral } = networkConnector;
 
-        if (isFreeBetActive && isWalletConnected) {
-            setHasAllowance(true);
-            return;
-        }
         if (sportsAMMV2Contract && multipleCollateral && signer) {
             const collateralToAllow = swapToThales
                 ? (CRYPTO_CURRENCY_MAP.THALES as Coins)
@@ -737,7 +735,9 @@ const Ticket: React.FC<TicketProps> = ({
                 }
             };
             if (isWalletConnected && buyInAmount) {
-                isEth && !isLiveTicket && !swapToThales ? setHasAllowance(true) : getAllowance();
+                (isEth && !isLiveTicket && !swapToThales) || isFreeBetActive || isStakedThales
+                    ? setHasAllowance(true)
+                    : getAllowance();
             }
         }
     }, [
@@ -756,6 +756,7 @@ const Ticket: React.FC<TicketProps> = ({
         swapToThales,
         swappedThalesToReceive,
         isBuying,
+        isStakedThales,
     ]);
 
     const isValidProfit: boolean = useMemo(() => {
@@ -1037,11 +1038,14 @@ const Ticket: React.FC<TicketProps> = ({
             sportsAMMV2ManagerContract,
             multipleCollateral,
             freeBetHolderContract,
+            stakingThalesBettingProxy,
         } = networkConnector;
 
         // TODO: separate logic for regular and live markets
         if (
-            ((sportsAMMV2Contract && !markets[0].live) || (liveTradingProcessorContract && markets[0].live)) &&
+            ((sportsAMMV2Contract && !markets[0].live) ||
+                (liveTradingProcessorContract && markets[0].live) ||
+                (stakingThalesBettingProxy && isStakedThales)) &&
             signer
         ) {
             setIsBuying(true);
@@ -1084,6 +1088,7 @@ const Ticket: React.FC<TicketProps> = ({
                 ? liveTradingProcessorContract?.connect(signer)
                 : sportsAMMV2Contract?.connect(signer);
             const freeBetContractWithSigner = freeBetHolderContract?.connect(signer);
+            const stakingThalesBettingProxyWithSigner = stakingThalesBettingProxy?.connect(signer);
 
             try {
                 const referralId =
@@ -1156,7 +1161,9 @@ const Ticket: React.FC<TicketProps> = ({
                         referralId,
                         additionalSlippage,
                         isAA,
-                        isFreeBetActive
+                        isFreeBetActive,
+                        isStakedThales,
+                        stakingThalesBettingProxyWithSigner
                     );
                 }
 

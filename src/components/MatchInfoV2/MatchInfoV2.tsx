@@ -4,8 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getLiveBetSlippage, getTicketPayment, removeFromTicket } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
-import { Coins } from 'thales-utils';
+import { getNetworkId } from 'redux/modules/wallet';
 import { TicketMarket } from 'types/markets';
+import { Coins } from 'types/tokens';
+import { getCollateral } from 'utils/collaterals';
 import { formatMarketOdds, isWithinSlippage } from 'utils/markets';
 import {
     getMatchLabel,
@@ -15,9 +17,7 @@ import {
     sportMarketAsSerializable,
     ticketMarketAsTicketPosition,
 } from 'utils/marketsV2';
-import { getNetworkId } from '../../redux/modules/wallet';
-import { getCollateral } from '../../utils/collaterals';
-import { getAddedPayoutOdds } from '../../utils/tickets';
+import { getAddedPayoutOdds } from 'utils/tickets';
 import MatchLogosV2 from '../MatchLogosV2';
 import {
     Canceled,

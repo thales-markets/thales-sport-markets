@@ -38,6 +38,7 @@ const useExchangeRatesQuery = (networkId: Network, options?: UseQueryOptions<Rat
                 });
                 exchangeRates[THALES_CONTRACT_RATE_KEY] = exchangeRates['THALES'];
                 exchangeRates['THALES'] = Number(thalesPriceResponse.data);
+                exchangeRates['sTHALES'] = Number(thalesPriceResponse.data);
             }
 
             return exchangeRates;

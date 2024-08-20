@@ -2,7 +2,7 @@ import { MarketTypeMap } from 'constants/marketTypes';
 import { MarketType } from 'enums/marketTypes';
 import { OddsType } from 'enums/markets';
 import { t } from 'i18next';
-import { Coins, bigNumberFormatter, coinFormatter, formatDateWithTime } from 'thales-utils';
+import { bigNumberFormatter, coinFormatter, formatDateWithTime } from 'thales-utils';
 import { CombinedPosition, Team, Ticket, TicketMarket } from 'types/markets';
 import { SupportedNetwork } from 'types/network';
 import positionNamesMap from '../assets/json/positionNamesMap.json';
@@ -10,8 +10,10 @@ import { CRYPTO_CURRENCY_MAP } from '../constants/currency';
 import { THALES_ADDED_PAYOUT_PERCENTAGE } from '../constants/markets';
 import { League } from '../enums/sports';
 import { TicketMarketStatus } from '../enums/tickets';
+import { Coins } from '../types/tokens';
 import { getCollateralByAddress } from './collaterals';
 import freeBetHolder from './contracts/freeBetHolder';
+import stakingThalesBettingProxy from './contracts/stakingThalesBettingProxy';
 import {
     formatMarketOdds,
     isOneSideMarket,
@@ -28,7 +30,13 @@ export const mapTicket = (
     playersInfo: any,
     liveScores: any
 ): Ticket => {
-    const collateral = getCollateralByAddress(ticket.collateral, networkId);
+    let collateral = getCollateralByAddress(ticket.collateral, networkId);
+    collateral =
+        collateral === CRYPTO_CURRENCY_MAP.sTHALES &&
+        ticket.ticketOwner.toLowerCase() !==
+            stakingThalesBettingProxy.addresses[networkId as SupportedNetwork].toLowerCase()
+            ? (CRYPTO_CURRENCY_MAP.THALES as Coins)
+            : collateral;
     const mappedTicket: Ticket = {
         id: ticket.id,
         txHash: '',
@@ -183,6 +191,6 @@ export const formatTicketOdds = (oddsType: OddsType, paid: number, payout: numbe
 export const getTicketMarketOdd = (market: TicketMarket) => (market.isCancelled ? 1 : market.odd);
 
 export const getAddedPayoutOdds = (currencyKey: Coins, odds: number) =>
-    currencyKey === CRYPTO_CURRENCY_MAP.THALES
+    currencyKey === CRYPTO_CURRENCY_MAP.THALES || currencyKey === CRYPTO_CURRENCY_MAP.sTHALES
         ? odds / (1 + THALES_ADDED_PAYOUT_PERCENTAGE - THALES_ADDED_PAYOUT_PERCENTAGE * odds)
         : odds;

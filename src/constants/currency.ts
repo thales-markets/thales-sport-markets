@@ -5,7 +5,20 @@ import { Coins } from 'types/tokens';
 
 export const USD_SIGN = '$';
 
-const CRYPTO_CURRENCY = ['sUSD', 'DAI', 'USDCe', 'USDC', 'USDT', 'OP', 'WETH', 'ETH', 'ARB', 'USDbC', 'THALES'];
+const CRYPTO_CURRENCY = [
+    'sUSD',
+    'DAI',
+    'USDCe',
+    'USDC',
+    'USDT',
+    'OP',
+    'WETH',
+    'ETH',
+    'ARB',
+    'USDbC',
+    'THALES',
+    'sTHALES',
+];
 
 export const CRYPTO_CURRENCY_MAP = keyBy(CRYPTO_CURRENCY);
 
@@ -49,6 +62,7 @@ export const COLLATERALS: Record<SupportedNetwork, Coins[]> = {
     [Network.OptimismSepolia]: [
         CRYPTO_CURRENCY_MAP.USDC as Coins,
         CRYPTO_CURRENCY_MAP.THALES as Coins,
+        CRYPTO_CURRENCY_MAP.sTHALES as Coins,
         CRYPTO_CURRENCY_MAP.USDT as Coins,
         CRYPTO_CURRENCY_MAP.WETH as Coins,
         CRYPTO_CURRENCY_MAP.ETH as Coins,
@@ -126,6 +140,7 @@ export const COLLATERAL_DECIMALS: Record<Coins, number> = {
     ETH: 18,
     ARB: 18,
     THALES: 18,
+    sTHALES: 18,
 };
 
 export const COLLATERAL_ICONS_CLASS_NAMES: Record<Coins, string> = {
@@ -140,4 +155,5 @@ export const COLLATERAL_ICONS_CLASS_NAMES: Record<Coins, string> = {
     ETH: 'currency-icon currency-icon--eth',
     ARB: 'currency-icon currency-icon--arb',
     THALES: 'currency-icon currency-icon--thales',
+    sTHALES: 'currency-icon currency-icon--thales',
 };

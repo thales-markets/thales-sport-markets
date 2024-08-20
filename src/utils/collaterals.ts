@@ -39,13 +39,16 @@ export const isStableCurrency = (currencyKey: Coins) => {
     return STABLE_COINS.includes(currencyKey);
 };
 
-// TODO: for OP Sepolia, add generic logic per network
+export const isThalesCurrency = (currencyKey: Coins) => {
+    return currencyKey === CRYPTO_CURRENCY_MAP.THALES || currencyKey === CRYPTO_CURRENCY_MAP.sTHALES;
+};
+
 export const isLpSupported = (currencyKey: Coins) => {
     return (
         currencyKey === CRYPTO_CURRENCY_MAP.USDC ||
         currencyKey === CRYPTO_CURRENCY_MAP.WETH ||
         currencyKey === CRYPTO_CURRENCY_MAP.ETH ||
-        currencyKey === CRYPTO_CURRENCY_MAP.THALES
+        isThalesCurrency(currencyKey)
     );
 };
 

@@ -215,6 +215,7 @@ const Label = styled.span`
 
 const SubLabel = styled(Label)`
     font-weight: 400;
+    text-transform: none;
 `;
 
 const Value = styled.span`
