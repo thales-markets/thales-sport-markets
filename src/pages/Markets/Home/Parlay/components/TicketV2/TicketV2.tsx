@@ -623,6 +623,11 @@ const Ticket: React.FC<TicketProps> = ({
         return basePoints * (1 + totalMultiplier / 100);
     }, [overdropMultipliers, buyInAmountInDefaultCollateral, totalQuote]);
 
+    const overdropSummaryOpen = useMemo(() => isOverdropSummaryOpen && !isFreeBetActive, [
+        isOverdropSummaryOpen,
+        isFreeBetActive,
+    ]);
+
     const gameMultipliersQuery = useGameMultipliersQuery({
         enabled: isAppReady,
     });
@@ -2088,7 +2093,7 @@ const Ticket: React.FC<TicketProps> = ({
                     </CheckboxContainer>
                 </RowContainer>
             </RowSummary>
-            <OverdropRowSummary margin={isOverdropSummaryOpen ? '5px 0' : '5px 0 0 0'}>
+            <OverdropRowSummary margin={overdropSummaryOpen ? '5px 0' : '5px 0 0 0'}>
                 <OverdropRowSummary
                     isClickable={!isFreeBetActive}
                     onClick={() => {
@@ -2101,16 +2106,14 @@ const Ticket: React.FC<TicketProps> = ({
                     <OverdropValue color={theme.overdrop.textColor.senary}>
                         {!isOverdropSummaryOpen &&
                             (isFreeBetActive ? `Free bets not eligible` : `${formatPoints(overdropTotalXP)}`)}
-                        {!isOverdropSummaryOpen && <OverdropValue>{` (${overdropTotalBoost}% boost)`}</OverdropValue>}
+                        {!overdropSummaryOpen && <OverdropValue>{` (${overdropTotalBoost}% boost)`}</OverdropValue>}
                         {!isFreeBetActive && (
-                            <Arrow
-                                className={!isOverdropSummaryOpen ? 'icon icon--caret-down' : 'icon icon--caret-up'}
-                            />
+                            <Arrow className={!overdropSummaryOpen ? 'icon icon--caret-down' : 'icon icon--caret-up'} />
                         )}
                     </OverdropValue>
                 </OverdropRowSummary>
             </OverdropRowSummary>
-            {isOverdropSummaryOpen && (
+            {overdropSummaryOpen && (
                 <OverdropSummary>
                     <OverdropRowSummary>
                         <OverdropLabel>{t('markets.parlay.overdrop.buy-in-xp')}</OverdropLabel>
