@@ -34,6 +34,9 @@ import {
     ClubLogo,
     CurrentResultContainer,
     ExternalArrow,
+    Fire,
+    FireContainer,
+    FireText,
     LiveIndicatorContainer,
     MainContainer,
     MarketsCountWrapper,
@@ -369,6 +372,13 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                             dispatch(setSelectedMarket({ gameId: market.gameId, sport: market.sport }))
                                         }
                                     >
+                                        {!!overdropGameMultiplier && (
+                                            <FireContainer gap={2}>
+                                                <Fire className={'icon icon--fire'} />
+                                                <FireText>{`+${overdropGameMultiplier.multiplier}% XP`}</FireText>
+                                            </FireContainer>
+                                        )}
+
                                         {`+${marketsCount}`}
                                         {!isMobile && <Arrow className={'icon icon--arrow-down'} />}
                                     </MarketsCountWrapper>
