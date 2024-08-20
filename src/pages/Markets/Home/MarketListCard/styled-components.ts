@@ -5,11 +5,33 @@ import { FlexDiv, FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivStart
 export const OverdropGradientBorder = styled.div<{
     isOverdrop: boolean;
 }>`
+    @keyframes bgRotate {
+        100% {
+            transform: rotate(1turn);
+        }
+    }
     ${(props) =>
         props.isOverdrop
-            ? ` border-radius: 6px;
-                background: ${props.theme.overdrop.borderColor.secondary};
-                padding: 1px;`
+            ? `
+            border-radius: 6px;
+            padding: 1px;
+            position: relative;
+            overflow: hidden;
+            &:before {
+                content: "";
+                background: ${props.theme.overdrop.borderColor.tertiary};
+                animation: bgRotate 4s linear infinite;
+                position: absolute;
+                width: 120%;
+                height: 0;
+                padding-bottom: 120%;
+                margin: -1px;
+                z-index: 0;
+                left: -10%;
+                top: -400px;
+            }
+
+                `
             : ``}
 `;
 
@@ -19,6 +41,8 @@ export const Wrapper = styled(FlexDivColumn)<{
     selected: boolean;
     isMarketSelected: boolean;
 }>`
+    position: relative;
+    z-index: 1;
     width: 100%;
     display: ${(props) => (props.hideGame ? 'none' : '')};
     border-radius: 5px;
