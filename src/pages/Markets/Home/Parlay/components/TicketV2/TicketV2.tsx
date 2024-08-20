@@ -1607,7 +1607,22 @@ const Ticket: React.FC<TicketProps> = ({
             {isOverdropSummaryOpen && (
                 <OverdropSummary>
                     <OverdropRowSummary>
-                        <OverdropLabel>{t('markets.parlay.overdrop.base-xp')}</OverdropLabel>
+                        <OverdropLabel>{t('markets.parlay.overdrop.buy-in-xp')}</OverdropLabel>
+                        <OverdropValue>{`${formatCurrency(buyInAmountInDefaultCollateral)} XP`}</OverdropValue>
+                    </OverdropRowSummary>
+                    <OverdropRowSummary>
+                        <OverdropLabel>{t('markets.parlay.overdrop.odds-xp')}</OverdropLabel>
+                        <OverdropValue>{`${formatCurrency(2 - totalQuote, 2)}x`}</OverdropValue>
+                    </OverdropRowSummary>
+                    <OverdropRowSummary>
+                        <OverdropLabel>
+                            {t('markets.parlay.overdrop.base-xp')}{' '}
+                            <Tooltip
+                                overlay={<>{t(`markets.parlay.overdrop.tooltip.base-xp`)}</>}
+                                iconFontSize={14}
+                                marginLeft={3}
+                            />
+                        </OverdropLabel>
                         <OverdropValue>{`${formatCurrency(
                             buyInAmountInDefaultCollateral * (2 - totalQuote)
                         )} XP`}</OverdropValue>

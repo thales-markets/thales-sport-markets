@@ -811,6 +811,8 @@
                 "overdrop-xp": "Overdrop XP",
                 "overdrop-xp-overview": "Overdrop XP overview",
                 "base-xp": "Base XP",
+                "buy-in-xp": "Buy in XP",
+                "odds-xp": "Odds multiplier",
                 "active-boost": "Active boost",
                 "bonus-applied": "Boost applied",
                 "total-xp-boost": "Total XP Boost",
@@ -822,7 +824,8 @@
                     "thales-boost": "All bets executed with THALES as collateral will have +10% bonus on baseline XP accrual for that specific bet!",
                     "twitter-boost": "If you share your Overtime bet on Twitter in the form of a Flex Card, you will activate a 3 day long Twitter Flex Boost of +10%.",
                     "loyalty-boost": "The Loyalty XP Boost gives you up to 25% permanent boost on all your general XP earning, depending on your XP level. Starting at 5% boost on Level 1, you gain another +5% increase on reaching every fifth level.",
-                    "promo-boost": "Certain sports games carry additional XP boosts."
+                    "promo-boost": "Certain sports games carry additional XP boosts.",
+                    "base-xp": "The base XP is calculated via the following formula:\n\nBase XP = Buy In Amount * (2 - Normalized Odds)\n\nThis means that your bet accrues more base XP the higher your buy-in and the higher your bet odds are."
                 }
             }
         },
