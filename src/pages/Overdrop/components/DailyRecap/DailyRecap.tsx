@@ -11,7 +11,7 @@ import { MultiplierType } from 'types/overdrop';
 import { getMultiplierValueFromQuery } from 'utils/overdrop';
 import LevelCircles from '../LevelCircles';
 import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
-import { intervalToDuration } from 'date-fns';
+import { hoursToMilliseconds, intervalToDuration } from 'date-fns';
 import { formattedDurationFull } from 'utils/formatters/date';
 import { t } from 'i18next';
 
@@ -47,7 +47,7 @@ const DailyRecap: React.FC = () => {
             }
             const resetsIn = intervalToDuration({
                 start: Date.now(),
-                end: userData.lastTwitterActivity + 3 * 24 * 60 * 60 * 1000,
+                end: userData.lastTwitterActivity + hoursToMilliseconds(72),
             });
 
             return formattedDurationFull(resetsIn, dateTimeTranslationMap);
