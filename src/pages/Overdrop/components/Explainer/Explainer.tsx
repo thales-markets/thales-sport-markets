@@ -11,10 +11,13 @@ const Explainer: React.FC = () => {
     const [showMore, setShowMore] = useState<boolean>(false);
 
     return (
-        <Wrapper onClick={() => setShowMore(!showMore)}>
+        <Wrapper onClick={() => (!showMore ? setShowMore(true) : '')}>
             <Label>{t('overdrop.leveling-tree.explainer.xp-explained')}</Label>
 
-            <Arrow className={`icon ${showMore ? 'icon--arrow-up' : 'icon--arrow-down'}`} />
+            <Arrow
+                onClick={() => setShowMore(!showMore)}
+                className={`icon ${showMore ? 'icon--arrow-up' : 'icon--arrow-down'}`}
+            />
 
             {showMore && (
                 <>
@@ -151,7 +154,6 @@ const Explainer: React.FC = () => {
 };
 
 const Wrapper = styled(FlexDivColumn)`
-    cursor: pointer;
     flex: none;
     position: relative;
     min-width: 30%;
@@ -203,6 +205,7 @@ const Arrow = styled.i`
     right: 15px;
     font-size: 12px;
     color: ${(props) => props.theme.textColor.septenary};
+    cursor: pointer;
 `;
 
 export default Explainer;
