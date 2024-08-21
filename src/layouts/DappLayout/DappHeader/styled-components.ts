@@ -1,4 +1,5 @@
 import burger from 'assets/images/burger.svg';
+import overdrop from 'assets/images/overdrop/overdrop-nav.png';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 
@@ -65,6 +66,16 @@ export const MenuIcon = styled.img.attrs({ src: burger })`
     filter: invert(39%) sepia(9%) saturate(1318%) hue-rotate(199deg) brightness(71%) contrast(88%);
 `;
 
+export const OverdropIcon = styled.img.attrs({ src: overdrop })`
+    height: 75px;
+    cursor: pointer;
+    margin-right: 20px;
+    @media (max-width: 576px) {
+        height: 70px;
+        margin-right: 0;
+    }
+`;
+
 export const WrapperMobile = styled(FlexDivRow)`
     width: 100%;
     align-items: center;
@@ -91,6 +102,8 @@ export const LogoContainer = styled.div`
     width: 100%;
     display: flex;
     justify-content: center;
+    align-items: center;
+    gap: 12px;
 `;
 
 export const IconWrapper = styled.div`

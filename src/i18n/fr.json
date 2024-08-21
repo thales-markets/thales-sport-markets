@@ -197,8 +197,9 @@
         "status": "Statut",
         "wrap-and-buy": "Enveloppez l’ETH et achetez",
         "wrap-eth-tooltip": "Votre ETH est d'abord enveloppé dans WETH puis transmis au contrat",
-        "try-again": "Essayer à nouveau",
-        "election-tooltip": "La source de résolution sera Associated Press, Fox News et NBC. Ces marchés se résoudront une fois que les trois sources auront annoncé la course pour le même candidat. Si les trois sources n’ont pas annoncé la course pour le même candidat avant le 11 novembre, tous les paris seront annulés."
+        "election-tooltip": "La source de résolution sera Associated Press, Fox News et NBC. Ces marchés se résoudront une fois que les trois sources auront annoncé la course pour le même candidat. Si les trois sources n’ont pas annoncé la course pour le même candidat avant le 11 novembre, tous les paris seront annulés.",
+        "submit": "Soumettre",
+        "try-again": "Essayer à nouveau"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} Overtime - TOUS DROITS RÉSERVÉS.",
@@ -287,7 +288,8 @@
                 "volleyball": "Volley-ball",
                 "olympicgames": "Jeux olympiques",
                 "tabletennis": "Tennis de table",
-                "politics": "Politique"
+                "politics": "Politique",
+                "boosted": "Jeux promotionnels"
             },
             "all": "Tous",
             "datepicker": {
@@ -649,7 +651,11 @@
                 "potential-payout": "Paiement potentiel",
                 "referral": "Lien de référence",
                 "header": "Web 3 Sport commercialise sur",
-                "positions": "Nombre de postes"
+                "positions": "Nombre de postes",
+                "label": "Bonus Partager pour Twitter",
+                "submit-url": "Soumettez l'URL de votre tweet pour bénéficier du boost Overdrop",
+                "network-error": "Erreur réseau, consultez la console du navigateur pour plus d'informations",
+                "verifying-tweet": "Vérification du tweet"
             },
             "buy-in": "Adhésion",
             "total-bonus": "Prime totale",
@@ -678,18 +684,38 @@
             "thales-bonus-info": "Utilisez THALES et obtenez 2% de bonus pour chaque partie.",
             "odds-changed-description": "Les chances ont changé. Acceptez les modifications pour acheter.",
             "odds-changed-error": "Les chances ont changé lors de l'exécution de la commande. Essayez d'augmenter le glissement.",
-            "thales-bonus-tooltip": "Les utilisateurs effectuant des transactions avec THALES recevront 2 % de paiements supplémentaires pour chaque jeu qu'ils ont dans leur ticket (déjà calculé dans le devis total et le paiement).",
-            "swap-thales-tooltip": "TOUS",
-            "use-free-bet": "Utiliser le pari gratuit",
-            "swap-thales": "Échangez chez THALES pour un meilleur devis",
-            "swap-thales-receive": "Réception minimale",
+            "thales-bonus-tooltip": "Les utilisateurs effectuant des transactions avec THALES recevront 1 % de paiements supplémentaires pour chaque jeu qu'ils ont dans leur ticket (déjà calculé dans le devis total et le paiement).",
+            "overdrop": {
+                "total-xp-boost": "Augmentation totale de l'XP",
+                "bonus-applied": "Bonus appliqué",
+                "active-boost": "Boost actif",
+                "total-xp-earned": "XP total gagné",
+                "overdrop-xp-overview": "Présentation d'Overdrop XP",
+                "overdrop-xp": "XP de dépassement",
+                "base-xp": "XP de base",
+                "tooltip": {
+                    "daily-boost": "Plus vous pariez de jours d'affilée, plus votre bonus d'XP est élevé. Augmentez de +5 % pour chaque jour jusqu'à un maximum de +35 %. Si vous manquez un jour, ce bonus revient à 0 %",
+                    "parlay-boost": "En fonction du nombre de parties individuelles comprises dans votre pari combiné, vous obtiendrez un bonus supplémentaire sur votre accumulation d'XP pour ce pari combiné. Le bonus maximum est de +290 % d'XP sur 15 parties en pari combiné.",
+                    "twitter-boost": "Si vous partagez votre pari Overtime sur Twitter sous la forme d'une Flex Card, vous activerez un Twitter Flex Boost de 3 jours de +10 %.",
+                    "promo-boost": "Certains jeux de sport offrent des bonus d'XP supplémentaires.",
+                    "loyalty-boost": "Le bonus XP de fidélité vous donne jusqu'à 25 % de bonus permanent sur tous vos gains XP généraux, en fonction de votre niveau XP. À partir de 5 % de bonus au niveau 1, vous obtenez une augmentation supplémentaire de +5 % tous les cinq niveaux.",
+                    "thales-boost": "Tous les paris exécutés avec THALES comme garantie bénéficieront d'un bonus de +10 % sur l'accumulation d'XP de base pour ce pari spécifique !",
+                    "weekly-boost": "Plus vous pariez de semaines d'affilée, plus votre bonus d'XP est élevé. Augmentez de +5 % pour chaque semaine jusqu'à un maximum de +20 %. Si vous manquez une semaine, ce bonus revient à 0 %",
+                    "base-xp": "L'XP de base est calculé selon la formule suivante :\n\nXP de base = Montant du buy-in * (2 - Cotes normalisées).\n\nCela signifie que votre pari accumule plus d'XP de base plus votre buy-in est élevé et plus vos cotes de pari sont élevées."
+                },
+                "odds-xp": "Multiplicateur de cotes",
+                "buy-in-xp": "Acheter en XP"
+            },
             "disable-free-bet": "Désactiver les soldes de paris gratuits",
             "buy-steps": {
                 "swap": "Passer à {{currencyKey}}",
                 "approve-buy": "Approuver l'achat avec {{currencyKey}}",
                 "buy": "Achetez avec {{currencyKey}}",
                 "approve-swap": "Approuver l'échange vers {{currencyKey}}"
-            }
+            },
+            "swap-thales-tooltip": "<bold>Boostez vos gains avec THALES !</bold> D'un simple clic, vous pouvez automatiquement passer à THALES et profiter instantanément de cotes de paris améliorées ! Le paiement est effectué en THALES.",
+            "use-free-bet": "Utiliser le pari gratuit",
+            "swap-thales": "Utilisez THALES pour de meilleures chances"
         },
         "discounted-per": "Remise selon",
         "nav-menu": {
@@ -879,24 +905,24 @@
             "claim-btn": "Le montant de la réclamation sera réduit du montant du buy-in, qui sera transféré sur votre solde de pari gratuit."
         },
         "free-bet-modal": {
-            "enter-wallet-address": "Entrez l'adresse du portefeuille",
-            "funding": "Financement...",
-            "invalid-amount": "Montant invalide",
-            "invalid-wallet-address": "Adresse de portefeuille invalide",
-            "fund-successful": "Fonds réussi",
-            "fund": "Envoyer un pari gratuit",
-            "title": "Envoyer un pari gratuit",
-            "approve-success": "Approuvé avec succès",
-            "transaction-pending": "Transaction en attente",
-            "enter-amount": "Entrer le montant",
-            "no-funds": "Veuillez vous assurer que votre portefeuille dispose de suffisamment de fonds",
             "insufficient-balance": "Solde insuffisant",
+            "fund-successful": "Fonds réussi",
+            "invalid-amount": "Montant invalide",
+            "enter-amount": "Entrer le montant",
+            "enter-wallet-address": "Entrez l'adresse du portefeuille",
+            "invalid-wallet-address": "Adresse de portefeuille invalide",
+            "approve-success": "Approuvé avec succès",
+            "funding": "Financement...",
+            "fund": "Envoyer un pari gratuit",
+            "transaction-pending": "Transaction en attente",
+            "no-funds": "Veuillez vous assurer que votre portefeuille dispose de suffisamment de fonds",
+            "title": "Envoyer un pari gratuit",
+            "fund-batch": "Financer plusieurs adresses",
+            "enter-amount-per-user": "Entrez le montant par utilisateur",
             "enter-wallet-addresses": "Entrez les adresses de portefeuille",
             "one-or-more-address-invalid": "Une ou plusieurs adresses de portefeuille saisies ne sont pas valides",
-            "enter-amount-per-user": "Entrez le montant par utilisateur",
-            "fund-batch": "Financer plusieurs adresses",
-            "duplicate": "Adresses de portefeuille en double détectées",
-            "total-amount-batch": "Le montant total sera de {{ amount }} multiple de {{ count }} adresse(s) de portefeuille."
+            "total-amount-batch": "Le montant total sera de {{ amount }} multiple de {{ count }} adresse(s) de portefeuille.",
+            "duplicate": "Adresses de portefeuille en double détectées"
         },
         "send-free-bet": "Envoyer un pari gratuit"
     },
@@ -1228,5 +1254,95 @@
         "starts-in": "commence dans",
         "to-label": "à",
         "no-promotions": "Oops! Il semble qu’aucune promotion ne soit disponible pour le moment pour un filtre donné."
+    },
+    "overdrop": {
+        "navigation-menu": {
+            "home": "Maison en trop",
+            "leveling-tree": "Arbre de nivellement",
+            "xp-calculation": "Calcul d'XP",
+            "leaderboard": "Classement"
+        },
+        "overdrop-home": {
+            "next-level": "Niveau suivant",
+            "total-xp-multiplier": "Multiplicateur d'XP total",
+            "my-total-xp": "Mon XP total",
+            "twitter-xp-boost-resets": "Twitter XP Boost se réinitialise dans",
+            "level": "Niveau",
+            "daily-streak": "Boost d'XP par séquence quotidienne",
+            "next-thales-rewards-at": "Prochaines récompenses Thales à",
+            "twitter-share": "Twitter partage XP boost",
+            "current-rewards": "Récompenses estimées actuelles",
+            "social-multiplier": "Multiplicateur d'XP social",
+            "weekly-streak": "Boost d'XP par séquence hebdomadaire",
+            "xp": "xp",
+            "loyalty-boost": "Augmentation de la fidélité",
+            "rank": "Rang",
+            "rank-tooltip": "Votre rang actuel dans la Ligue Overdrop. Consultez l'onglet classement pour plus d'informations."
+        },
+        "leveling-tree": {
+            "explainer": {
+                "days": "jours",
+                "xp-explained": "XP expliqué",
+                "daily-bonus": "Bonus quotidien",
+                "xp-explained-content": "Campagne d&#39;une saison où les utilisateurs accumulent de l&#39;XP jusqu&#39;à la fin de la saison sportive en conduisant<bold> volume sur les heures supplémentaires</bold> avec<bold> multiplicateurs</bold> basé sur diverses mesures et objectifs dynamiques.<br/><br/> Une fois la campagne terminée, tous les utilisateurs partageront<highlight> 100 000 PO</highlight> et<highlight> 150 000 $AR</highlight> au prorata basé sur XP<br><br> Pendant la durée de la campagne, les utilisateurs recevront des récompenses uniques sur des NIVEAUX XP spécifiques.",
+                "base-xp-accrual": "Accumulation d'XP de base",
+                "twitter-share-bonus": "bonus de partage Twitter (une fois par jour)",
+                "twitter-content": "Partagez votre <bold>Flex Card</bold> d'heures supplémentaires du pari d'aujourd'hui <bold>sur Twitter : bonus de 10 % par BASE XP par $</bold> pour le reste de la journée",
+                "base-xp-content": "<bold>1 XP de base = 1 $</bold> de volumes<br/><br/> Après<bold> 28 jours</bold> dans une rangée de<bold> volume &gt;10$</bold> vous avez atteint<bold> Multiplicateur de base MAX</bold><br/><br/> Chaque jour manqué de volume inférieur à 10$ fait baisser votre base<bold> XP de -0,1</bold>",
+                "parlay-xp": "BONUS PARLAY XP (une réduction par parlay)",
+                "positions-thales": "Position AVEC BONUS THALES (une réduction par pari)",
+                "games-in-parlay": "jeux en parlay",
+                "position-thales-content": "Utilisez <bold>THALES</bold> comme garantie et vous <bold>obtiendrez un bonus de 10 % par BASE XP par $</bold> pour cette transaction spécifique",
+                "xp-boost": "Augmentations d'XP",
+                "xp-boost-content": "Il existe plusieurs façons d'augmenter encore le montant de votre accumulation d'XP par pari en bénéficiant de boosts provenant de <bold>séries de paris quotidiennes, de séries de paris hebdomadaires, du nombre de jeux en pari combiné, en utilisant le jeton THALES comme garantie, en faisant jouer vos paris sur Twitter et en atteignant des niveaux d'XP pour des boosts de fidélité !</bold>",
+                "loyalty-boost-content": "Le bonus XP de fidélité vous donne jusqu'à 25 % de bonus permanent sur toutes vos XP accumulées en général, en fonction de votre niveau. À partir d'un bonus de 5 % au niveau 1, vous obtenez une autre augmentation de +5 % en atteignant tous les cinq niveaux. Vous atteignez le bonus XP de fidélité maximum de 25 % lorsque vous atteignez le niveau 20 (GOAT) avec 5 000 000 de points XP accumulés. Vous pouvez voir la répartition des niveaux XP sur la page ARBRE DE NIVEAUX.",
+                "days-content": "Les conditions pour que le boost de séquence quotidienne soit activé pour la journée en cours sont d'avoir un volume de paris compris entre 00h00 UTC et 23h59 UTC pour la journée en cours. Plus cette condition est remplie de jours consécutifs, plus le <bold>boost de séquence quotidienne</bold> sur votre cumul d'XP de base est élevé ! \n\nLe <bold>boost de séquence quotidienne</bold> est appliqué à tous les paris effectués pendant que le boost est actif. \n\nSi vous interrompez votre séquence et que vous ne parvenez pas à augmenter le volume un jour, <bold>votre boost de séquence quotidienne est réinitialisé à +0 %.</bold>",
+                "weekly-boost-content": "Pour que le boost de séquence hebdomadaire soit activé pour la semaine en cours, il faut avoir un volume de paris entre le lundi 00h00 UTC et le dimanche 23h59 UTC pour la semaine en cours. Plus cette condition est remplie pendant des semaines consécutives, plus le <bold>Boost de séquence hebdomadaire</bold> sur votre cumul d'XP de base est élevé !\n\nLe <bold>Boost de séquence hebdomadaire</bold> est appliqué à tous les paris effectués pendant que le boost est actif.\n\nSi vous interrompez votre séquence et que vous ne parvenez pas à augmenter le volume un jour, votre <bold>Boost de séquence hebdomadaire</bold> est réinitialisé à +0 %.",
+                "parlay-content": "En fonction du nombre de jeux individuels dans votre pari combiné, vous obtiendrez un bonus supplémentaire sur votre accumulation d'XP pour ce pari combiné !",
+                "weekly-boost": "Boost de séquence hebdomadaire",
+                "loyalty-boost": "Augmentation de la fidélité"
+            },
+            "heading": "La ligue agricole overdrop"
+        },
+        "xp-details": {
+            "weekly-multiplier": "Multiplicateur hebdomadaire",
+            "shared-flex": "Carte flexible partagée",
+            "no-results": "Aucun résultat",
+            "daily-multiplier": "Multiplicateur quotidien",
+            "total-bonus": "Bonus total",
+            "twitter-multiplier": "Multiplicateur Twitter",
+            "xp-history": "Historique XP",
+            "date-time": "Dates | Temps",
+            "active-xp-bonus": "Bonus d'XP actif",
+            "days-in-row": "Jours d'affilée",
+            "received": "Reçu",
+            "paragraph": "Utilisez THALES comme garantie pour un bonus supplémentaire de 10 %, créez des parlays jusqu'à 100 % de bonus et recherchez des jeux promotionnels spéciaux.",
+            "tx-link": "Lien TX",
+            "loyalty-multiplier": "Multiplicateur de fidélité",
+            "weeks-in-row": "Des semaines d'affilée",
+            "loyalty-boost": "Augmentation de la fidélité"
+        },
+        "leaderboard": {
+            "table": {
+                "address": "Adresse",
+                "total-volume": "Volume total",
+                "rank": "Rang",
+                "level": "Niveau",
+                "total-xp": "Total de points d'XP",
+                "rewards": "Montant de la récompense"
+            }
+        },
+        "modal": {
+            "check-out": "Vérifier<br/> Ligue Overdrop !",
+            "you-are-rocking": "Tu es en train de tout déchirer !",
+            "go-to-overdrop": "Aller à Overdrop",
+            "gain-xp-label": "Gagnez de l'XP, montez de niveau, gagnez des récompenses et cultivez le largage aérien !",
+            "day-streak": "<bold>{{ days }}</bold><br/> séquence de la journée!",
+            "active-daily-streak": "Boost d'XP de séquence quotidienne active",
+            "dont-show-this": "Ne plus afficher ceci",
+            "unlocked-level": "Vous avez débloqué le NIVEAU {{ level }} !",
+            "congratulation": "Félicitations !",
+            "reached-level": "Vous avez atteint le NIVEAU {{ level }} et avez gagné {{ amount }} pari gratuit THALES !"
+        }
     }
 }
