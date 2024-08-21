@@ -33,7 +33,6 @@ const WelcomeModal: React.FC<WelcomeModalProps> = ({ onClose }) => {
 };
 
 const Wrapper = styled(FlexDivColumn)`
-    font-family: 'Roboto' !important;
     width: 500px;
     align-items: center;
     justify-content: center;

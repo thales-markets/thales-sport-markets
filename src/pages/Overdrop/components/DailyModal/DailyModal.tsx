@@ -67,7 +67,6 @@ const DailyModal: React.FC<DailyModalProps> = ({ dayStreak, percentage, onClose 
 };
 
 const Wrapper = styled(FlexDivColumn)`
-    font-family: 'Roboto' !important;
     align-items: center;
     justify-content: center;
     padding: 15px 20px 30px 20px;

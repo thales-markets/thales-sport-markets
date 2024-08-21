@@ -72,7 +72,6 @@ const LevelUpModal: React.FC<LevelUpModalProps> = ({ currentLevel, onClose }) =>
 };
 
 const Wrapper = styled(FlexDivColumn)`
-    font-family: 'Roboto' !important;
     align-items: center;
     justify-content: center;
     padding: 20px;
