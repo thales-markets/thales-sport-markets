@@ -4,10 +4,10 @@ import { OVERDROP_LEVELS } from 'constants/overdrop';
 import { Trans, useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
-import { ModalTypes } from 'types/overdrop';
 import { OverdropLevel } from 'types/ui';
 import BaseModal from '../BaseModal';
 import LargeBadge from '../LargeBadge';
+import { ModalTypes } from 'enums/overdrop';
 
 type LevelUpModalProps = {
     currentLevel: number;

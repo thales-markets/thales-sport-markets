@@ -1,3 +1,4 @@
+import { MultiplierType } from 'enums/overdrop';
 import useUserMultipliersQuery from 'queries/overdrop/useUserMultipliersQuery';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -7,7 +8,6 @@ import { getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
-import { MultiplierType } from 'types/overdrop';
 import { getMultiplierValueFromQuery } from 'utils/overdrop';
 
 const XPCalculation: React.FC = () => {

@@ -7,13 +7,13 @@ import { getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered } from 'styles/common';
-import { MultiplierType } from 'types/overdrop';
 import { getMultiplierValueFromQuery } from 'utils/overdrop';
 import LevelCircles from '../LevelCircles';
 import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
 import { hoursToMilliseconds, intervalToDuration } from 'date-fns';
 import { formattedDurationFull } from 'utils/formatters/date';
 import { t } from 'i18next';
+import { MultiplierType } from 'enums/overdrop';
 
 const dateTimeTranslationMap = {
     'days-short': t('common.time-remaining.days-short'),

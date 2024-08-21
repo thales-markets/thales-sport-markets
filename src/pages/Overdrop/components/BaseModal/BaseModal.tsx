@@ -1,6 +1,7 @@
 import ModalBackground from 'assets/images/overdrop/modal-background.png';
 import Trophy from 'assets/images/overdrop/trophy.webp';
 import WelcomeModalBackground from 'assets/images/overdrop/welcome-modal-background.png';
+import { ModalTypes } from 'enums/overdrop';
 import React from 'react';
 import ReactModal from 'react-modal';
 import { useSelector } from 'react-redux';
@@ -9,7 +10,6 @@ import { RootState } from 'redux/rootReducer';
 import styled, { CSSProperties } from 'styled-components';
 import { FlexDivRow } from 'styles/common';
 import { convertCssToStyledProperties } from 'thales-utils';
-import { ModalTypes } from 'types/overdrop';
 
 type ModalProps = {
     type: ModalTypes;

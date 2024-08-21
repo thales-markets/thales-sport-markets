@@ -7,9 +7,9 @@ import { getOverdropPreventShowingModal, setPreventOverdropModalValue } from 're
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn } from 'styles/common';
-import { ModalTypes } from 'types/overdrop';
 import BaseModal from '../BaseModal';
 import LevelCircles from '../LevelCircles';
+import { ModalTypes } from 'enums/overdrop';
 
 type DailyModalProps = {
     dayStreak: number;

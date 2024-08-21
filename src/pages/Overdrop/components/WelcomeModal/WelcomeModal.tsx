@@ -5,8 +5,8 @@ import ROUTES from 'constants/routes';
 import { Trans, useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn } from 'styles/common';
-import { ModalTypes } from 'types/overdrop';
 import BaseModal from '../BaseModal';
+import { ModalTypes } from 'enums/overdrop';
 
 type WelcomeModalProps = {
     onClose: () => void;

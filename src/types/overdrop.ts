@@ -1,4 +1,5 @@
 import { Network } from 'enums/network';
+import { GameMultiplierType } from 'enums/overdrop';
 
 export type OverdropMultiplier = {
     multiplier: number;
@@ -34,24 +35,6 @@ export type LeaderboardRow = OverdropUserData & {
         arb: number;
     };
 };
-
-export enum MultiplierType {
-    DAILY = 'dailyMultiplier',
-    WEEKLY = 'weeklyMultiplier',
-    TWITTER = 'twitterMultiplier',
-    LOYALTY = 'loyaltyMultiplier',
-    GAME = 'gameMultiplier',
-}
-
-export enum ModalTypes {
-    WELCOME,
-    LEVEL_UP,
-    DAILY_STREAK,
-}
-export enum GameMultiplierType {
-    DAILY = 'daily',
-    WEEKLY = 'weekly',
-}
 
 export type GameMultiplier = {
     gameId: `0x${string}`;

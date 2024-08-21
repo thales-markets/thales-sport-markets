@@ -13,11 +13,12 @@ import {
 } from 'redux/modules/ui';
 import { getIsWalletConnected, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import { MultiplierType, OverdropUIState, OverdropUserData } from 'types/overdrop';
+import { OverdropUIState, OverdropUserData } from 'types/overdrop';
 import { getCurrentLevelByPoints, getMultiplierValueFromQuery } from 'utils/overdrop';
 import DailyModal from '../DailyModal';
 import LevelUpModal from '../LevelUpModal';
 import WelcomeModal from '../WelcomeModal';
+import { MultiplierType } from 'enums/overdrop';
 
 const ModalWrapper: React.FC = () => {
     const dispatch = useDispatch();
