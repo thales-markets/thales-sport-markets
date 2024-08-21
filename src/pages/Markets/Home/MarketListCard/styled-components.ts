@@ -90,6 +90,21 @@ export const MatchInfo = styled(FlexDivStart)<{
     }
 `;
 
+export const GameOfLabel = styled.span`
+    color: ${(props) => props.theme.overdrop.textColor.primary};
+    font-size: 10px;
+    position: absolute;
+    top: 6px;
+    left: 12px;
+    text-transform: uppercase;
+    @media (max-width: 600px) {
+        top: 10px;
+        text-align: center;
+        left: 0;
+        right: 0;
+    }
+`;
+
 export const MatchInfoLabel = styled.label`
     font-size: 12px;
     font-weight: 600;

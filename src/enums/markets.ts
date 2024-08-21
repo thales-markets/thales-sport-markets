@@ -13,7 +13,7 @@ export enum SortDirection {
 }
 
 export enum SportFilter {
-    Boosted = 'Boosted',
+    Boosted = 'Promo',
     Live = 'Live',
     Favourites = 'Favourites',
     All = 'All',

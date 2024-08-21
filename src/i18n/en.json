@@ -266,7 +266,7 @@
                 "tooltip": "Markets resolved more than 7 days ago"
             },
             "sport": {
-                "boosted": "Promo games",
+                "promo": "Promo games",
                 "live": "Live",
                 "all": "All sports",
                 "favourites": "Favourites",
