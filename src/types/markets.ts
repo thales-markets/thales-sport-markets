@@ -18,13 +18,6 @@ export type ParlayPayment = {
     forceChangeCollateral: boolean;
 };
 
-export type LeaderboardPoints = {
-    basicPoints: number;
-    points: number;
-    buyinBonus: number;
-    numberOfGamesBonus: number;
-};
-
 type PlayerProps = {
     playerId: number;
     playerName: string;

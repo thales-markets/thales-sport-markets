@@ -62,12 +62,6 @@ const QUERY_KEYS = {
     ClaimableCountV2: (walletAddress: string, networkId: Network) => ['claimable', 'countV2', walletAddress, networkId],
     AccountPositions: (walletAddress: string, networkId: Network) => ['accountPosition', walletAddress, networkId],
     Wallet: {
-        GetsUSDWalletBalance: (walletAddress: string, networkId: Network) => [
-            'sUsd',
-            'balance',
-            walletAddress,
-            networkId,
-        ],
         TokenBalance: (token: string, walletAddress: string, networkId: Network) => [
             'wallet',
             'tokenBalance',

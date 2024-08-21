@@ -25,12 +25,6 @@ export const buildDepositOrWithdrawLink = (language: string, page: string, coinI
     }?lang=${language}&coin-index=${coinIndex}`;
 };
 
-export const buildReffererLink = (reffererID: string) => {
-    return `${window.location.origin}${ifIpfsDeployment ? '/#' : ''}${
-        ROUTES.Markets.Home
-    }?referrerId=${encodeURIComponent(reffererID)}`;
-};
-
 export const getMetaRouteItem = (pathName: string) => {
     if (pathName.includes(ROUTES.Markets.Home + '/')) return MetaRoutes.SingleMarket;
     if (pathName.includes(ROUTES.Markets.Home)) return MetaRoutes.Markets;
