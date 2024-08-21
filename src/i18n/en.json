@@ -847,32 +847,6 @@
             "rank": "Rank"
         }
     },
-    "landing-page": {
-        "best-odds": "Join the Web3 sports markets revolution",
-        "try-now": "Try it now",
-        "powered-by": "Powered by",
-        "no-kyc": "No registration needed to participate",
-        "launch-dapp": "Launch dapp",
-        "leagues": "Leagues",
-        "info-text-title-1": "No sign-up required",
-        "info-text-title-2": "Everything is on-chain",
-        "info-text-title-3": "Non-custodial markets",
-        "info-text-title-4": "Data provided by Chainlink",
-        "info-text-title-5": "Fast & low-cost transactions",
-        "info-text-1": "You don’t need to create an user. We don't gather any kind of personal information either.",
-        "info-text-2": "When centralized entities are falling, transparency is key. All our code is public and the smart contracts can be reviewed by anyone",
-        "info-text-3": "There’s no one holding your collateral. Your keys, your tokens.",
-        "info-text-4": "Industry-leader provides tamper-proof odds and sport matches result in a decentralized way.",
-        "info-text-5": "Every interaction with Overtime sports AMM is done on Optimism network, leader in scalability.",
-        "browse-markets": "Browse sport markets",
-        "web3-positioning": "Web3 sport positioning",
-        "learn-more": "Wanna learn more?",
-        "documentation": "Check our documentation",
-        "jump-in": "Ready to jump in?",
-        "open-overtime": "Open Overtime markets",
-        "join-discord": "Need any help? Join our discord",
-        "read-now": "Read now"
-    },
     "deposit": {
         "deposit-crypto": "Deposit crypto",
         "description": "To trade on Overtime you have to fund your account. Carefully follow the steps below and deposit the selected cryptocurrency into the generated address.",
