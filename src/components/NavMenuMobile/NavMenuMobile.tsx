@@ -15,6 +15,7 @@ import {
     NAV_MENU_THIRD_SECTION,
 } from 'constants/ui';
 import { ProfileIconWidget } from 'layouts/DappLayout/DappHeader/components/ProfileItem/ProfileItem';
+import { LogoContainer, OverdropIcon } from 'layouts/DappLayout/DappHeader/styled-components';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import OutsideClickHandler from 'react-outside-click-handler';
@@ -34,7 +35,6 @@ import {
     HeaderContainer,
     ItemContainer,
     ItemsContainer,
-    LogoContainer,
     NavIcon,
     NavLabel,
     Network,
@@ -63,7 +63,14 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
             <Wrapper show={visibility}>
                 <HeaderContainer>
                     <LogoContainer>
-                        <Logo />
+                        <Logo width={150} />
+                        <SPAAnchor
+                            onClick={() => setNavMenuVisibility(false)}
+                            style={{ display: 'flex' }}
+                            href={buildHref(ROUTES.Overdrop)}
+                        >
+                            <OverdropIcon />
+                        </SPAAnchor>
                     </LogoContainer>
 
                     <FlexDivCentered>

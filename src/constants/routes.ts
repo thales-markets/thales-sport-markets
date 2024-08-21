@@ -20,6 +20,7 @@ const ROUTES = {
         Promotion: '/promotions/:promotionId',
     },
     Ticket: '/tickets/:ticketAddress',
+    Overdrop: '/overdrop',
 };
 
 export const PAGE_NAME_TO_META_DATA_KEYS: {

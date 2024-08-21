@@ -145,6 +145,14 @@ const QUERY_KEYS = {
         CoingeckoRates: () => ['rates', 'coingeckoRates'],
     },
     Promotions: (branchName: string) => [branchName, 'promotions'],
+    Overdrop: {
+        Leaderboard: () => ['leaderboard'],
+        UserMultipliers: (walletAddress: string) => ['userMultipliers', walletAddress],
+        UserData: (walletAddress: string) => ['userData', walletAddress],
+        UserXPHistory: (walletAddress: string) => ['userXPHistory', walletAddress],
+        GameMultipliers: () => ['gameMultipliers'],
+        Price: () => ['price'],
+    },
 };
 
 export default QUERY_KEYS;

@@ -51,6 +51,7 @@ import {
     MiddleContainer,
     MobileButtonWrapper,
     NotificationCount,
+    OverdropIcon,
     RightContainer,
     SearchContainer,
     SearchIcon,
@@ -177,6 +178,9 @@ const DappHeader: React.FC = () => {
                         </div>
                         {isMarketsPage && <TimeFilters />}
                         <FlexDiv>
+                            <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
+                                <OverdropIcon />
+                            </SPAAnchor>
                             {isWalletConnected && <ProfileItem />}
                             <SettingsContainer
                                 onClick={() => {
@@ -278,7 +282,10 @@ const DappHeader: React.FC = () => {
                 <>
                     <WrapperMobile>
                         <LogoContainer>
-                            <Logo />
+                            <Logo width={150} />
+                            <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
+                                <OverdropIcon />
+                            </SPAAnchor>
                         </LogoContainer>
                         <SearchIconContainer>
                             <IconWrapper>

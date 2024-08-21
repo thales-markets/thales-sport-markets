@@ -1217,6 +1217,7 @@ export const UFC_SPECIFIC_MARKET_TYPES = [
 ];
 
 export const MarketTypesBySportFilter: Record<SportFilter, MarketType[]> = {
+    [SportFilter.Boosted]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.Live]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.Favourites]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.All]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
