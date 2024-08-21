@@ -62,13 +62,6 @@ const QUERY_KEYS = {
     ClaimableCountV2: (walletAddress: string, networkId: Network) => ['claimable', 'countV2', walletAddress, networkId],
     AccountPositions: (walletAddress: string, networkId: Network) => ['accountPosition', walletAddress, networkId],
     Wallet: {
-        TokenBalance: (token: string, walletAddress: string, networkId: Network) => [
-            'wallet',
-            'tokenBalance',
-            token,
-            walletAddress,
-            networkId,
-        ],
         MultipleCollateral: (walletAddress: string, networkId: Network) => [
             'multipleCollateral',
             walletAddress,
@@ -85,9 +78,6 @@ const QUERY_KEYS = {
         ],
     },
     FavoriteTeam: (walletAddress: string, networkId: Network) => ['favoriteTeam', walletAddress, networkId],
-    Bungee: {
-        Tokens: () => ['bungee', 'tokens'],
-    },
     Banners: (networkId: Network) => ['banners', networkId],
     LiquidityPool: {
         Data: (address: string, networkId: Network) => ['liquidityPool', 'data', address, networkId],

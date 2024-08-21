@@ -216,8 +216,6 @@ const App = () => {
                                 <Route exact path={ROUTES.Wizard}>
                                     <DappLayout>
                                         <GetStarted />
-                                        {/* {isConnectedViaParticle && <GetStarted />}
-                                        {!isConnectedViaParticle && <Wizard />} */}
                                     </DappLayout>
                                 </Route>
                                 {isRouteAvailableForNetwork(ROUTES.LiquidityPool, networkId) && (

@@ -2,8 +2,6 @@ import MetaMaskIcon from 'assets/images/wallets/metamask.svg';
 import WalletConnectIcon from 'assets/images/wallets/wallet_connect.svg';
 import { HostedWallets, ParticalTypes } from 'enums/wallet';
 
-export const BALANCE_THRESHOLD = 0.00000001;
-
 export const SUPPORTED_PARTICAL_CONNECTORS: ParticalTypes[] = [
     ParticalTypes.GOOGLE,
     ParticalTypes.TWITTER,

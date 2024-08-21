@@ -162,11 +162,7 @@ const DappHeader: React.FC = () => {
                     </LeftContainer>
 
                     <MiddleContainer>
-                        <div>
-                            {location.pathname !== ROUTES.Wizard &&
-                                (isConnectedViaParticle || !isWalletConnected) &&
-                                getGetStartedButton()}
-                        </div>
+                        <div>{(isConnectedViaParticle || !isWalletConnected) && getGetStartedButton()}</div>
                         {isMarketsPage && <TimeFilters />}
                         <FlexDiv>
                             <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
