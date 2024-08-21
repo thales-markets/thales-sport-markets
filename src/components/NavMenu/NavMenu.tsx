@@ -101,7 +101,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                                     onClick={() => setNavMenuVisibility(null)}
                                 >
                                     {isWalletConnected ? (
-                                        <ProfileIconWidget avatarSize={25} iconColor={theme.textColor.primary} />
+                                        <ProfileIconWidget isNav />
                                     ) : (
                                         <NavIcon className={item.iconClass} active={location.pathname === item.route} />
                                     )}

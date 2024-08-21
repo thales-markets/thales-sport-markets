@@ -96,7 +96,7 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                                     onClick={() => setNavMenuVisibility(false)}
                                 >
                                     {isWalletConnected ? (
-                                        <ProfileIconWidget avatarSize={25} iconColor={theme.textColor.primary} />
+                                        <ProfileIconWidget isNav />
                                     ) : (
                                         <NavIcon className={item.iconClass} active={location.pathname === item.route} />
                                     )}

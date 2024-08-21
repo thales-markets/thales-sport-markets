@@ -5,6 +5,7 @@ export const ProfileContainer = styled(FlexDivRow)`
     align-items: center;
     cursor: pointer;
     margin-right: 20px;
+    gap: 4px;
 `;
 export const ProfileLabel = styled.span`
     font-weight: 600;
@@ -18,6 +19,18 @@ export const ProfileIconContainer = styled.div`
     align-items: center;
     position: relative;
     margin-right: 5px;
+    max-width: 30px;
+`;
+
+export const Badge = styled.img<{ isNav?: boolean }>`
+    width: 35px;
+    height: 35px;
+    position: relative;
+    left: ${(props) => (props.isNav ? '-5px' : '0')};
+    @media (max-width: 767px) {
+        width: 30px;
+        height: 30px;
+    }
 `;
 
 export const ProfileIcon = styled.i.attrs({ className: 'icon icon--profile2' })<{
