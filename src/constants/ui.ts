@@ -38,16 +38,6 @@ export const NAV_MENU_SECOND_SECTION: NavMenuItem[] = [
 
 export const NAV_MENU_THIRD_SECTION: NavMenuItem[] = [
     {
-        i18label: 'markets.nav-menu.items.leaderboard',
-        iconClass: 'icon icon--competition',
-        name: 'parlay-competition',
-        route: ROUTES.Leaderboard,
-        supportedNetworks: [Network.OptimismMainnet],
-    },
-];
-
-export const NAV_MENU_FOURTH_SECTION: NavMenuItem[] = [
-    {
         i18label: 'markets.nav-menu.items.promotions',
         iconClass: 'icon icon--promotions',
         name: 'promotions',
@@ -56,7 +46,7 @@ export const NAV_MENU_FOURTH_SECTION: NavMenuItem[] = [
     },
 ];
 
-export const NAV_MENU_FIFTH_SECTION: NavMenuItem[] = [
+export const NAV_MENU_FOURTH_SECTION: NavMenuItem[] = [
     {
         i18label: 'markets.nav-menu.items.speed-markets',
         iconClass: 'sidebar-icon sidebar-icon--speed-markets',
@@ -78,7 +68,6 @@ export const NAV_MENU: NavMenuItem[] = [
     NAV_MENU_SECOND_SECTION,
     NAV_MENU_THIRD_SECTION,
     NAV_MENU_FOURTH_SECTION,
-    NAV_MENU_FIFTH_SECTION,
 ].flat();
 
 export const PROMOTION_SANITIZE_PROPS = {

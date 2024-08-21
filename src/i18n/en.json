@@ -679,10 +679,6 @@
                 "markets": "Markets",
                 "profile": "Profile",
                 "history": "History",
-                "fifa-campaign": "Zebro FIFA campaign",
-                "sports-trivia": "Sports trivia",
-                "leaderboard": "Parlay leaderboard",
-                "fee-rebates": "Fee rebates",
                 "liquidity-pool": "Provide Liquidity",
                 "promotions": "Promotions",
                 "speed-markets": "Speed markets",
@@ -930,46 +926,6 @@
                 "sign-up": "Sign up",
                 "trade": "Trade on Overtime"
             }
-        }
-    },
-    "parlay-leaderboard": {
-        "title": "Parlay Incentives Leaderboard",
-        "description": "A total of <bold>{{amount}}</bold> will be distributed to the best winning parlays on a <bold>weekly basis</bold>. The tickets will be ranked based on a points system. The points are calculated by taking the odds of the parlay, multiplying it with the square root of the buy-in and adding 10% bonus for each game on the ticket.",
-        "info": "Points = parlayOdds * √buyin * (1+0.1*numberOfGames).",
-        "distribution-note": "Rewards will be distributed to the <bold>TOP 20 parlays every week</bold>!",
-        "no-parlays": "No winning parlays registered in the period yet.",
-        "warning": "*Overtime team holds the right to disqualify wallets we suspect of gaming the system.",
-        "warning2": "Users that have covered 50% or more of potential combinations of their winning tickets will be disqualified.",
-        "sidebar": {
-            "title-parlay": "Parlay",
-            "title-leaderboard": "Leaderboard",
-            "wallet": "Wallet",
-            "quote": "Quote",
-            "paid": "Paid",
-            "won": "Won",
-            "reward": "Reward",
-            "total-quote": "Total Quote",
-            "total-amount": "Total Amount",
-            "positions": "Positions",
-            "points": "Points"
-        },
-        "periods": {
-            "period-end-label": "The period ends in",
-            "period-ended-label": "Period ended",
-            "weekly-period": "Weekly period"
-        },
-        "ticket-info": {
-            "title": "Parlay leaderboard",
-            "points-label": "Points",
-            "points-tooltip": "Calculated total points with bonuses for parlay leaderboard. Points are derived by multiplying the total odds of the parlay with square root of the buy-in and then adding 10% bonus for each game on the ticket.",
-            "rank-label": "Rank",
-            "rank-tooltip": "Tentative ranking based on current state of the leaderboard. Final ranking are known at round's end. Rounds are weekly Wednesday to Wednesday.",
-            "rewards-label": "Rewards",
-            "rewards-tooltip": "Potential rewards if your parlay assumes the rank above at round's end.",
-            "basic-points-label": "Basic points",
-            "buy-in-bonus-label": "Buy-in bonus",
-            "number-of-games-bonus-label": "Number of games bonus",
-            "total-points-label": "Total points"
         }
     },
     "liquidity-pool": {
