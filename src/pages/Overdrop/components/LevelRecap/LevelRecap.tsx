@@ -13,6 +13,8 @@ import { OverdropLevel } from 'types/ui';
 import { getCurrentLevelByPoints } from 'utils/overdrop';
 import LargeBadge from '../LargeBadge';
 
+const LOYALTY_BOOST = ['5%', '10%', '15%', '20%', '25%'];
+
 const LevelRecap: React.FC = () => {
     const { t } = useTranslation();
 
@@ -41,7 +43,9 @@ const LevelRecap: React.FC = () => {
         <Wrapper>
             <Heading>{t('overdrop.leveling-tree.heading')}</Heading>
             <BadgeContainer>
-                <LoyaltyBoost>5% Loyalty Boost</LoyaltyBoost>
+                <LoyaltyBoost>
+                    {LOYALTY_BOOST[0]} {t('overdrop.leveling-tree.explainer.loyalty-boost')}
+                </LoyaltyBoost>
                 <BadgeWrapper>
                     {OVERDROP_LEVELS.slice(1, 6).map((item, index) => {
                         return (
@@ -58,7 +62,9 @@ const LevelRecap: React.FC = () => {
                 </BadgeWrapper>
             </BadgeContainer>
             <BadgeContainer>
-                <LoyaltyBoost>10% Loyalty Boost</LoyaltyBoost>
+                <LoyaltyBoost>
+                    {LOYALTY_BOOST[1]} {t('overdrop.leveling-tree.explainer.loyalty-boost')}
+                </LoyaltyBoost>
                 <BadgeWrapper>
                     {OVERDROP_LEVELS.slice(6, 11).map((item, index) => {
                         return (
@@ -75,7 +81,9 @@ const LevelRecap: React.FC = () => {
                 </BadgeWrapper>
             </BadgeContainer>
             <BadgeContainer>
-                <LoyaltyBoost>15% Loyalty Boost</LoyaltyBoost>
+                <LoyaltyBoost>
+                    {LOYALTY_BOOST[2]} {t('overdrop.leveling-tree.explainer.loyalty-boost')}
+                </LoyaltyBoost>
                 <BadgeWrapper>
                     {OVERDROP_LEVELS.slice(11, 16).map((item, index) => {
                         return (
@@ -94,7 +102,9 @@ const LevelRecap: React.FC = () => {
 
             <LastRowWrapper>
                 <LastContainer>
-                    <LoyaltyBoost>20% Loyalty Boost</LoyaltyBoost>
+                    <LoyaltyBoost>
+                        {LOYALTY_BOOST[3]} {t('overdrop.leveling-tree.explainer.loyalty-boost')}
+                    </LoyaltyBoost>
                     <BadgeWrapper fullWidth>
                         {OVERDROP_LEVELS.slice(16, 20).map((item, index) => {
                             return (
@@ -111,7 +121,9 @@ const LevelRecap: React.FC = () => {
                     </BadgeWrapper>
                 </LastContainer>
                 <LastContainer>
-                    <LoyaltyBoost>25% Loyalty Boost</LoyaltyBoost>
+                    <LoyaltyBoost>
+                        {LOYALTY_BOOST[4]} {t('overdrop.leveling-tree.explainer.loyalty-boost')}
+                    </LoyaltyBoost>
 
                     <BadgeWrapper>
                         {OVERDROP_LEVELS.slice(20).map((item, index) => {
