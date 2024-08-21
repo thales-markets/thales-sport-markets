@@ -193,8 +193,9 @@ export const FireContainer = styled(FlexDivColumnCentered)`
     position: absolute;
     top: 7px;
     @media (max-width: 600px) {
-        top: 20px;
-        right: 35px;
+        flex-direction: row;
+        top: 9px;
+        right: 44px;
     }
 `;
 
