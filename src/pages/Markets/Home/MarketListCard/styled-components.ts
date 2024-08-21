@@ -90,8 +90,8 @@ export const MatchInfo = styled(FlexDivStart)<{
     }
 `;
 
-export const GameOfLabel = styled.span`
-    color: ${(props) => props.theme.overdrop.textColor.primary};
+export const GameOfLabel = styled.span<{ selected?: boolean }>`
+    color: ${(props) => (props.selected ? 'inherit' : props.theme.overdrop.textColor.primary)};
     font-size: 10px;
     position: absolute;
     top: 6px;
