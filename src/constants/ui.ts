@@ -44,13 +44,6 @@ export const NAV_MENU_THIRD_SECTION: NavMenuItem[] = [
         route: ROUTES.Leaderboard,
         supportedNetworks: [Network.OptimismMainnet],
     },
-    {
-        i18label: 'markets.nav-menu.items.become-affiliate',
-        iconClass: 'icon icon--affiliate',
-        name: 'become-affiliate',
-        route: ROUTES.Referral,
-        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.OptimismSepolia],
-    },
 ];
 
 export const NAV_MENU_FOURTH_SECTION: NavMenuItem[] = [

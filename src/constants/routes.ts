@@ -7,7 +7,6 @@ const ROUTES = {
         Market: '/markets/:marketAddress',
     },
     Profile: '/profile',
-    Referral: '/referral',
     Wizard: '/wizard',
     Leaderboard: '/parlay-leaderboard',
     LiquidityPool: '/liquidity-pool',
@@ -33,10 +32,6 @@ export const PAGE_NAME_TO_META_DATA_KEYS: {
     [MetaRoutes.Markets]: {
         title: 'seo.markets.title',
         description: 'seo.markets.description',
-    },
-    [MetaRoutes.Referral]: {
-        title: 'seo.referral.title',
-        description: 'seo.referral.description',
     },
     [MetaRoutes.Profile]: {
         title: 'seo.profile.title',

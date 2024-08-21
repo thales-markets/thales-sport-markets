@@ -8,7 +8,6 @@ import { ethers } from 'ethers';
 import DappLayout from 'layouts/DappLayout';
 import Theme from 'layouts/Theme';
 import Profile from 'pages/Profile';
-import Referral from 'pages/Referral';
 import { Suspense, lazy, useEffect } from 'react';
 import { QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
@@ -31,7 +30,6 @@ import { buildHref, history } from 'utils/routes';
 import { mainnet, useAccount, useDisconnect, useNetwork, useProvider, useSigner } from 'wagmi';
 import RouterProvider from './Provider/RouterProvider/RouterProvider';
 
-// const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));
 const Market = lazy(() => import('pages/Markets/Market'));
 const Ticket = lazy(() => import('pages/Ticket'));
@@ -66,7 +64,6 @@ const App = () => {
     const dispatch = useDispatch();
     const networkId = useSelector((state) => getNetworkId(state));
     const switchedToNetworkId = useSelector((state) => getSwitchToNetworkId(state));
-    // const isConnectedViaParticle = useSelector((state) => getIsConnectedViaParticle(state));
 
     const { address } = useAccount();
     const provider = useProvider(!address && { chainId: switchedToNetworkId }); // when wallet not connected force chain
@@ -203,13 +200,6 @@ const App = () => {
                                         </DappLayout>
                                     </Route>
                                 }
-                                {isRouteAvailableForNetwork(ROUTES.Referral, networkId) && (
-                                    <Route exact path={ROUTES.Referral}>
-                                        <DappLayout>
-                                            <Referral />
-                                        </DappLayout>
-                                    </Route>
-                                )}
 
                                 <Route exact path={ROUTES.Deposit}>
                                     <DappLayout>
