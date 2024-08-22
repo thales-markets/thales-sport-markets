@@ -8,7 +8,7 @@
         "displayCountdown": true,
         "promotionId": "overdrop",
         "promotionUrl": "/promotions/overdrop",
-        "backgroundImageUrl": "/promotions/overdrop_small.webp",
+        "backgroundImageUrl": "/promotions/overdrop_small_new.webp",
         "callToActionButton": "Learn more",
         "availableOnNetworks": [10, 42161],
         "article": {
