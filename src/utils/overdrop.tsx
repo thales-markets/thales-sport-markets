@@ -103,22 +103,6 @@ export const getMultiplierValueFromQuery = (data: OverdropMultiplier[] | undefin
     return multiplierItem?.multiplier ? multiplierItem.multiplier : 0;
 };
 
-export const getLoyaltyBoost = (points: number) => {
-    switch (true) {
-        case points < 200:
-            return 0;
-        case points < 10000:
-            return 5;
-        case points < 400000:
-            return 10;
-        case points < 2000000:
-            return 15;
-        case points < 5000000:
-            return 20;
-    }
-    return 25;
-};
-
 export const getNextThalesRewardLevel = (points?: number) => {
     const levelItemsWithVoucher = OVERDROP_LEVELS.filter((item) => item.voucherAmount);
 
