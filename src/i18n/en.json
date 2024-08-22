@@ -79,33 +79,6 @@
                 }
             }
         },
-        "referral": {
-            "header-label": "Refer & earn",
-            "link-copied": "Referral link copied!",
-            "button": {
-                "label": "Refer and earn",
-                "disbled-tooltip": "Connect wallet to generate a referral link.",
-                "enabled-tooltip": "Invite people to trade on overtime to earn fees from each trade they make."
-            },
-            "id-exists": "Referral ID already exists",
-            "id-create-success": "Successfully set referral ID",
-            "modal": {
-                "title": "Referral ID",
-                "description": "Choose your Referral ID",
-                "submit-button": "Submit",
-                "copy-button": "Copy Referral link"
-            },
-            "your-referral-id": "Your Referral ID"
-        },
-        "swap": {
-            "title": "Get USD",
-            "from-label": "From",
-            "to-label": "To",
-            "balance-label": "Balance: {{amount}}",
-            "swap-label": "Swap",
-            "approve": "Approve swap",
-            "swap-progress-label": "Swapping in progress..."
-        },
         "enable-wallet-access": {
             "approve": "Approve",
             "approve-progress": "Approving...",
@@ -705,13 +678,7 @@
             "items": {
                 "markets": "Markets",
                 "profile": "Profile",
-                "onboarding-wizard": "Get started",
                 "history": "History",
-                "fifa-campaign": "Zebro FIFA campaign",
-                "sports-trivia": "Sports trivia",
-                "leaderboard": "Parlay leaderboard",
-                "fee-rebates": "Fee rebates",
-                "become-affiliate": "Become affiliate",
                 "liquidity-pool": "Provide Liquidity",
                 "promotions": "Promotions",
                 "speed-markets": "Speed markets",
@@ -787,7 +754,6 @@
                 "potential-payout": "Potential payout",
                 "total-quote": "Total quote",
                 "positions": "Number of Positions",
-                "referral": "Referral link",
                 "share": "Share",
                 "winner": "Winner",
                 "loser": "Loser",
@@ -877,60 +843,6 @@
             "rank": "Rank"
         }
     },
-    "landing-page": {
-        "best-odds": "Join the Web3 sports markets revolution",
-        "try-now": "Try it now",
-        "powered-by": "Powered by",
-        "no-kyc": "No registration needed to participate",
-        "launch-dapp": "Launch dapp",
-        "leagues": "Leagues",
-        "info-text-title-1": "No sign-up required",
-        "info-text-title-2": "Everything is on-chain",
-        "info-text-title-3": "Non-custodial markets",
-        "info-text-title-4": "Data provided by Chainlink",
-        "info-text-title-5": "Fast & low-cost transactions",
-        "info-text-1": "You don’t need to create an user. We don't gather any kind of personal information either.",
-        "info-text-2": "When centralized entities are falling, transparency is key. All our code is public and the smart contracts can be reviewed by anyone",
-        "info-text-3": "There’s no one holding your collateral. Your keys, your tokens.",
-        "info-text-4": "Industry-leader provides tamper-proof odds and sport matches result in a decentralized way.",
-        "info-text-5": "Every interaction with Overtime sports AMM is done on Optimism network, leader in scalability.",
-        "browse-markets": "Browse sport markets",
-        "web3-positioning": "Web3 sport positioning",
-        "learn-more": "Wanna learn more?",
-        "documentation": "Check our documentation",
-        "jump-in": "Ready to jump in?",
-        "open-overtime": "Open Overtime markets",
-        "join-discord": "Need any help? Join our discord",
-        "read-now": "Read now"
-    },
-    "referral": {
-        "generate-link": "Generate link",
-        "copy-link": "Copy link",
-        "trades": "Trades",
-        "total-volume": "Total volume",
-        "total-earned": "Total earned",
-        "total-trading-fees": "Total trading fees",
-        "affiliate-leaderboard-table": {
-            "address": "Referral ID",
-            "number-of-trades": "Trades",
-            "total-volume": "Total volume",
-            "first-transaction": "First transaction",
-            "total-earned": "Total earned",
-            "amount": "Amount",
-            "volume": "Volume",
-            "type": "Type",
-            "timestamp": "Date/Time"
-        },
-        "no-result": "There are no results for this table",
-        "earned": "Earned",
-        "header": "Create referral links",
-        "paragraph": "<bold>Overtime Referrals Program is an on-chain incentivized user acquisition and onboarding tool.</bold>The program allows anyone to <bold>generate a Referral Link</bold> and share it with users they are trying to onboard.<br /><br /> When sharing your personal Referral Link, you earn <bold>0.5% of all {{ collateralKey }} volume your referred users produce!</bold> There are no manual claims needed, the {{ collateralKey }} is auto-accruing in your wallet in form of simple {{ collateralKey }} transfers.",
-        "nav-items": {
-            "all-transactions": "All transactions",
-            "see-result-by-trader": "See result by trader",
-            "affiliate-leaderboard": "Affiliate Leaderboard"
-        }
-    },
     "deposit": {
         "deposit-crypto": "Deposit crypto",
         "description": "To trade on Overtime you have to fund your account. Carefully follow the steps below and deposit the selected cryptocurrency into the generated address.",
@@ -1014,81 +926,6 @@
                 "sign-up": "Sign up",
                 "trade": "Trade on Overtime"
             }
-        }
-    },
-    "wizard": {
-        "title": "Get Started!",
-        "steps": {
-            "title": {
-                "connect-wallet": "Connect Wallet",
-                "fund": "Fund with ETH",
-                "exchange": "Get Crypto USD",
-                "trade": "Overtime Markets"
-            },
-            "description": {
-                "connect-wallet": "If you don't have {{network}} connected Wallet installed, you will be routed to install a wallet of choice before being able to connect it.",
-                "fund": "Before you can use Overtime, first you need to get ETH on your {{network}} connected wallet. After clicking on the Fund button, choose one of the available options to continue.",
-                "exchange": "Overtime uses popular stablecoins (Crypto USD) to execute trades. By clicking on Exchange to {{collateral}} button, seamlessly swap ETH to a desired amount of stablecoins.",
-                "trade": "Now you are funded and ready to use Overtime Markets. Good luck!"
-            },
-            "action": {
-                "connect-wallet": "Connect Wallet",
-                "connected": "Connected",
-                "fund": "Fund with ETH",
-                "exchange": "Exchange to USD",
-                "trade": "Trade on Overtime"
-            }
-        },
-        "fund-modal": {
-            "title": "Fund, Bridge & Send",
-            "buy": "Fund with card",
-            "buy-banxa": "Fund with Banxa",
-            "buy-mt-pelerin": "Fund with Mt Pelerin",
-            "bridge": "Bridge to {{network}}",
-            "exchange": "Send from exchange",
-            "copy-address": "Copy address",
-            "copied": "Copied!",
-            "address": "Your address QR code"
-        }
-    },
-    "parlay-leaderboard": {
-        "title": "Parlay Incentives Leaderboard",
-        "description": "A total of <bold>{{amount}}</bold> will be distributed to the best winning parlays on a <bold>weekly basis</bold>. The tickets will be ranked based on a points system. The points are calculated by taking the odds of the parlay, multiplying it with the square root of the buy-in and adding 10% bonus for each game on the ticket.",
-        "info": "Points = parlayOdds * √buyin * (1+0.1*numberOfGames).",
-        "distribution-note": "Rewards will be distributed to the <bold>TOP 20 parlays every week</bold>!",
-        "no-parlays": "No winning parlays registered in the period yet.",
-        "warning": "*Overtime team holds the right to disqualify wallets we suspect of gaming the system.",
-        "warning2": "Users that have covered 50% or more of potential combinations of their winning tickets will be disqualified.",
-        "sidebar": {
-            "title-parlay": "Parlay",
-            "title-leaderboard": "Leaderboard",
-            "wallet": "Wallet",
-            "quote": "Quote",
-            "paid": "Paid",
-            "won": "Won",
-            "reward": "Reward",
-            "total-quote": "Total Quote",
-            "total-amount": "Total Amount",
-            "positions": "Positions",
-            "points": "Points"
-        },
-        "periods": {
-            "period-end-label": "The period ends in",
-            "period-ended-label": "Period ended",
-            "weekly-period": "Weekly period"
-        },
-        "ticket-info": {
-            "title": "Parlay leaderboard",
-            "points-label": "Points",
-            "points-tooltip": "Calculated total points with bonuses for parlay leaderboard. Points are derived by multiplying the total odds of the parlay with square root of the buy-in and then adding 10% bonus for each game on the ticket.",
-            "rank-label": "Rank",
-            "rank-tooltip": "Tentative ranking based on current state of the leaderboard. Final ranking are known at round's end. Rounds are weekly Wednesday to Wednesday.",
-            "rewards-label": "Rewards",
-            "rewards-tooltip": "Potential rewards if your parlay assumes the rank above at round's end.",
-            "basic-points-label": "Basic points",
-            "buy-in-bonus-label": "Buy-in bonus",
-            "number-of-games-bonus-label": "Number of games bonus",
-            "total-points-label": "Total points"
         }
     },
     "liquidity-pool": {
@@ -1194,10 +1031,6 @@
         "parlay-leaderboard": {
             "title": "Overtime Markets: Earn Parlay Rewards Every 2 Weeks",
             "description": "Overtime Markets is a web3 sportsbook with the best biweekly bonuses on the market for parlay players! Check out the leaderboard and if you qualified here."
-        },
-        "referral": {
-            "title": "Overtime Markets: Earn Referral Fees",
-            "description": "Refer a friend to Overtime Markets and get a percentage from each trade of the person you refer, paid in USD collateral instantly and directly into your wallet."
         },
         "profile": {
             "title": "Overtime Market: User Profile",

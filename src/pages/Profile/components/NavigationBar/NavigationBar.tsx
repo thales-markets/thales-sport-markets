@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { Count, Icon, Item, ItemWrapper, NotificationCount, Wrapper } from './styled-components';
 
-export const navItems = [
+const navItems = [
     {
         id: ProfileTab.OPEN_CLAIMABLE,
         i18Label: 'profile.open-claimable',

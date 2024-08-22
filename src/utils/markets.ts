@@ -62,7 +62,7 @@ export const isWinnerMarket = (marketType: MarketType) => {
     return WINNER_MARKET_TYPES.includes(marketType);
 };
 
-export const isDrawAvailableMarket = (marketType: MarketType) => {
+const isDrawAvailableMarket = (marketType: MarketType) => {
     return WINNER_MARKET_TYPES.includes(marketType) || SCORE_MARKET_TYPES.includes(marketType);
 };
 

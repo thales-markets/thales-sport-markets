@@ -1,6 +1,5 @@
-import { Circle } from 'pages/Overdrop/components/styled-components';
 import styled, { CSSProperties } from 'styled-components';
-import { FlexDiv, FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivStart } from 'styles/common';
+import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivStart } from 'styles/common';
 
 export const OverdropGradientBorder = styled.div<{
     isOverdrop: boolean;
@@ -311,24 +310,4 @@ export const ResultLabel = styled.span<{ isColumnView: boolean; isMarketSelected
     white-space: nowrap;
     overflow: hidden;
     width: fit-content;
-`;
-
-export const OverdropCircleContainer = styled(FlexDiv)`
-    margin: auto;
-    padding-top: 10px;
-    color: ${(props) => props.theme.overdrop.textColor.primary};
-    align-items: center;
-    font-size: 11px;
-    text-transform: uppercase;
-    top: 10px;
-    right: 30px;
-    span {
-        padding-top: 1px;
-    }
-`;
-
-export const OverdropCircle = styled(Circle)`
-    width: 12px;
-    min-height: 12px;
-    margin-right: 3px;
 `;

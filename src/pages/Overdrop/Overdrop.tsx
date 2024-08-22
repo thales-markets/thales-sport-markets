@@ -8,7 +8,7 @@ import Navigation from './components/Navigation';
 import Leaderboard from './pages/Leaderboard';
 import LevelingTree from './pages/LevelingTree';
 import OverdropHome from './pages/OverdropHome';
-import XPDetails from './pages/XPDetails/XPDetails';
+import XPDetails from './pages/XPDetails';
 import useQueryParam from 'utils/useQueryParams';
 
 const Overdrop: React.FC = () => {
