@@ -293,6 +293,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
 const Container = styled(FlexDivColumnCentered)`
     width: 386px;
     // max-height: 600px;
+    background: linear-gradient(180deg, #303656 0%, #1a1c2b 100%);
     padding: 15px;
     flex: none;
     border-radius: 10px;
