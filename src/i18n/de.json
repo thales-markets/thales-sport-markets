@@ -290,7 +290,8 @@
                 "tabletennis": "Tischtennis",
                 "olympicgames": "Olympische Spiele",
                 "politics": "Politik",
-                "boosted": "Promo-Spiele"
+                "boosted": "Promo-Spiele",
+                "promo": "Promo-Spiele"
             },
             "all": "Alle",
             "datepicker": {
