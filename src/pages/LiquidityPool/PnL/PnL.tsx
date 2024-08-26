@@ -39,7 +39,10 @@ const PnL: React.FC<PnlProps> = ({ lifetimePnl, type, liquidityPoolAddress }) =>
 
     // TODO temp disable THALES PnL
     const liquidityPoolPnlsQuery = useLiquidityPoolPnlsQuery(networkId, liquidityPoolAddress, {
-        enabled: isAppReady && liquidityPoolAddress !== '0xE59206b08cC96Da0818522C75eE3Fd4EBB7c0A47',
+        enabled:
+            isAppReady &&
+            liquidityPoolAddress !== '0xE59206b08cC96Da0818522C75eE3Fd4EBB7c0A47' &&
+            liquidityPoolAddress !== '0x9733AB157f5A89f0AD7460d08F869956aE2018dA',
     });
 
     useEffect(() => {
@@ -97,7 +100,8 @@ const PnL: React.FC<PnlProps> = ({ lifetimePnl, type, liquidityPoolAddress }) =>
                 <Title>{t(`liquidity-pool.pnl.${type}.title`)}</Title>
                 {type === LiquidityPoolPnlType.CUMULATIVE_PNL &&
                     // TODO temp disable THALES PnL
-                    liquidityPoolAddress !== '0xE59206b08cC96Da0818522C75eE3Fd4EBB7c0A47' && (
+                    liquidityPoolAddress !== '0xE59206b08cC96Da0818522C75eE3Fd4EBB7c0A47' &&
+                    liquidityPoolAddress !== '0x9733AB157f5A89f0AD7460d08F869956aE2018dA' && (
                         <LifetimePnlContainer>
                             <LifetimePnlLabel>{t('liquidity-pool.pnl.lifetime-pnl')}:</LifetimePnlLabel>
                             <LifetimePnl
