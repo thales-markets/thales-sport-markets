@@ -69,6 +69,10 @@
     content: '\003D';
 }
 
+.icon--swag::before {
+    content: '\003e';
+}
+
 .icon--golf::before {
     content: '\003F';
 }
@@ -293,6 +297,10 @@
     content: '\0081';
 }
 
+.icon--thales-logo::before {
+    content: '\0083';
+}
+
 .icon--brackets::before {
     content: '\0086';
 }
@@ -467,4 +475,28 @@
 
 .icon--tabletennis:before {
     content: '\0101';
+}
+
+.icon--lock:before {
+    content: '\0121';
+}
+
+.icon--controller:before {
+    content: '\011D';
+}
+
+.icon--calculator:before {
+    content: '\0120';
+}
+
+.icon--book:before {
+    content: '\011E';
+}
+
+.icon--x-twitter:before {
+    content: '\011F';
+}
+
+.icon--fire:before {
+    content: '\002C';
 }

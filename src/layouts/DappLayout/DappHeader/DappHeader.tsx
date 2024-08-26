@@ -51,6 +51,7 @@ import {
     MiddleContainer,
     MobileButtonWrapper,
     NotificationCount,
+    OverdropIcon,
     RightContainer,
     SearchContainer,
     SearchIcon,
@@ -161,22 +162,12 @@ const DappHeader: React.FC = () => {
                     </LeftContainer>
 
                     <MiddleContainer>
-                        {/* <SPAAnchor href={buildHref(ROUTES.Referral)}>
-                            <ReferAndEarn>{t('common.referral.header-label')}</ReferAndEarn>
-                        </SPAAnchor> */}
-                        {/* {isWalletConnected && isMarketsPage && (
-                            <SPAAnchor href={buildHref(ROUTES.Wizard)}>
-                                <HeaderIcon className="icon icon--tour" />
-                                <HeaderLabel>{t('get-started.start-tour')}</HeaderLabel>
-                            </SPAAnchor>
-                        )} */}
-                        <div>
-                            {location.pathname !== ROUTES.Wizard &&
-                                (isConnectedViaParticle || !isWalletConnected) &&
-                                getGetStartedButton()}
-                        </div>
+                        <div>{(isConnectedViaParticle || !isWalletConnected) && getGetStartedButton()}</div>
                         {isMarketsPage && <TimeFilters />}
                         <FlexDiv>
+                            <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
+                                <OverdropIcon />
+                            </SPAAnchor>
                             {isWalletConnected && <ProfileItem />}
                             <SettingsContainer
                                 onClick={() => {
@@ -278,7 +269,10 @@ const DappHeader: React.FC = () => {
                 <>
                     <WrapperMobile>
                         <LogoContainer>
-                            <Logo />
+                            <Logo width={150} />
+                            <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
+                                <OverdropIcon />
+                            </SPAAnchor>
                         </LogoContainer>
                         <SearchIconContainer>
                             <IconWrapper>

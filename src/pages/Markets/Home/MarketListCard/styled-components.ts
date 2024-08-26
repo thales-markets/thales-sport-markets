@@ -1,16 +1,53 @@
 import styled, { CSSProperties } from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivStart } from 'styles/common';
 
+export const OverdropGradientBorder = styled.div<{
+    isOverdrop: boolean;
+}>`
+    @keyframes bgRotate {
+        100% {
+            transform: rotate(1turn);
+        }
+    }
+    ${(props) =>
+        props.isOverdrop
+            ? `
+            border-radius: 6px;
+            padding: 1px;
+            position: relative;
+            overflow: hidden;
+            &:before {
+                content: "";
+                background: ${props.theme.overdrop.borderColor.tertiary};
+                animation: bgRotate 4s linear infinite;
+                position: absolute;
+                width: 120%;
+                height: 0;
+                padding-bottom: 120%;
+                margin: -1px;
+                z-index: 0;
+                left: -10%;
+                top: -400px;
+                @media (max-width: 600px) {
+                    top: -200px;
+                }
+            }
+
+                `
+            : ``}
+`;
+
 export const Wrapper = styled(FlexDivColumn)<{
     hideGame: boolean;
     isResolved: boolean;
     selected: boolean;
     isMarketSelected: boolean;
 }>`
+    position: relative;
+    z-index: 1;
     width: 100%;
     display: ${(props) => (props.hideGame ? 'none' : '')};
     border-radius: 5px;
-    margin-bottom: 10px;
     background-color: ${(props) =>
         props.selected
             ? props.theme.background.quaternary
@@ -19,15 +56,12 @@ export const Wrapper = styled(FlexDivColumn)<{
             : props.theme.background.quinary};
     color: ${(props) =>
         props.selected ? props.theme.oddsContainerBackground.tertiary : props.theme.textColor.primary};
-    @media (max-width: 575px) {
-        margin-bottom: 5px;
-    }
 `;
 
-export const MainContainer = styled(FlexDivRow)<{ isGameOpen: boolean }>`
+export const MainContainer = styled(FlexDivRow)<{ isGameOpen: boolean; isBoosted?: boolean }>`
     position: relative;
     width: 100%;
-    padding: 10px 12px;
+    padding: ${(props) => (props.isBoosted ? '20px 12px 10px 12px' : '10px 12px')};
     cursor: ${(props) => (props.isGameOpen ? 'default' : 'pointer')};
     @media (max-width: 950px) {
         flex-direction: ${(props) => (props.isGameOpen ? 'column' : 'row')};
@@ -52,6 +86,21 @@ export const MatchInfo = styled(FlexDivStart)<{
     i {
         color: ${(props) =>
             props.selected ? props.theme.oddsContainerBackground.tertiary : props.theme.textColor.quinary};
+    }
+`;
+
+export const GameOfLabel = styled.span<{ selected?: boolean }>`
+    color: ${(props) => (props.selected ? 'inherit' : props.theme.overdrop.textColor.primary)};
+    font-size: 10px;
+    position: absolute;
+    top: 6px;
+    left: 12px;
+    text-transform: uppercase;
+    @media (max-width: 600px) {
+        top: 10px;
+        text-align: center;
+        left: 0;
+        right: 0;
     }
 `;
 
@@ -154,21 +203,43 @@ export const Arrow = styled.i`
     cursor: pointer;
 `;
 
+export const FireContainer = styled(FlexDivColumnCentered)`
+    position: absolute;
+    top: 7px;
+    @media (max-width: 600px) {
+        flex-direction: row;
+        top: 9px;
+        right: 44px;
+    }
+`;
+
+export const Fire = styled.i`
+    color: ${(props) => props.theme.overdrop.textColor.primary};
+    font-size: 20px;
+`;
+
+export const FireText = styled.span`
+    color: ${(props) => props.theme.overdrop.textColor.primary};
+    white-space: pre;
+    font-size: 9px;
+`;
+
 export const liveBlinkStyle: CSSProperties = {
     width: 25,
     height: 25,
     position: 'absolute',
-    top: 4,
+    top: -5,
 };
 
 export const liveBlinkStyleMobile: CSSProperties = {
     width: 23,
     height: 23,
     position: 'absolute',
-    top: 3,
+    top: -5,
 };
 
 export const LiveIndicatorContainer = styled(FlexDivStart)`
+    position: relative;
     align-items: flex-start;
     color: ${(props) => props.theme.textColor.primary};
     margin-right: 10px;

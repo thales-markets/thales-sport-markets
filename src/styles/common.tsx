@@ -84,4 +84,14 @@ export const Colors = {
 
     TORY_BLUE: '#3C498A',
     TORY_BLUE_LIGHT: '#4E5FB1',
+
+    // Overdrop
+    YELLOW: '#F1BA20',
+    LIGHTNING_YELLOW: '#F8C914',
+    METALIC_YELLOW: '#FBCD0F',
+    CHINESE_BLUE: '#5764A3',
+    JONQUIL: '#F8C913',
+    METALIC_BLUE: '#3D467F',
+    SMOKEY_TOPAZ: '#7C3810',
+    OVERDROP_GREEN: '#82EB9F',
 };
