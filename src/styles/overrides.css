@@ -9,6 +9,10 @@
 .ReactModal__Body--open {
     overflow-y: hidden;
 }
+.ReactModal__Overlay {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
 
 .MuiMenu-paper {
     background: #303656 !important;
