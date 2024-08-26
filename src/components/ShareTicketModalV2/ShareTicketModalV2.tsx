@@ -66,17 +66,16 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
 
     const customStyles = {
         content: {
-            top: isMobile ? '41%' : '50%',
+            top: isMobile ? '35px' : '40%',
             left: '50%',
             right: 'auto',
             bottom: 'auto',
-            marginRight: '-48%',
-            transform: 'translate(-50%, -50%)',
+            transform: isMobile ? 'translateX(-50%)' : 'translate(-50%, -50%)',
             padding: '0px',
             background: 'transparent',
             border: 'none',
-            borderRadius: '20px',
-            overflow: 'visibile',
+            overflow: isMobile ? 'visible scroll' : 'visible',
+            height: isMobile ? 'calc(100vh - 84px)' : 'unset',
         },
         overlay: {
             backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -309,6 +308,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
 
 // Aspect ratio is important for Twitter: horizontal (Simple View) 2:1 and vertical min 3:4
 const Container = styled(FlexDivColumnCentered)`
+    position: relative;
     width: 386px;
     // max-height: 600px;
     padding: 15px;
