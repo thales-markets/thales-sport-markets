@@ -16,7 +16,6 @@ import MyTicket from './components/MyTicket';
 import { Input } from 'components/fields/common';
 import Button from 'components/Button';
 import { getWalletAddress } from 'redux/modules/wallet';
-
 import axios from 'axios';
 import { generalConfig } from 'config/general';
 import { refetchOverdropMultipliers } from 'utils/queryConnector';

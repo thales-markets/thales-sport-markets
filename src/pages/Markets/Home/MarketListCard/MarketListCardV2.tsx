@@ -165,7 +165,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
 
     const getMainContainerContent = () => (
         <>
-            <MainContainer isGameOpen={isGameOpen || isGameLive}>
+            <MainContainer isBoosted={!!overdropGameMultiplier} isGameOpen={isGameOpen || isGameLive}>
                 <MatchInfoContainer
                     isGameLive={isGameLive}
                     onClick={() => {

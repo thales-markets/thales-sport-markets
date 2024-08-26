@@ -13,7 +13,7 @@ import { FlexDiv, FlexDivColumn, FlexDivRow } from 'styles/common';
 import { formatCurrencyWithKey, formatCurrencyWithSign } from 'thales-utils';
 import { OverdropUserData } from 'types/overdrop';
 import { formatPoints, getCurrentLevelByPoints, getNextThalesRewardLevel, getProgressLevel } from 'utils/overdrop';
-import SmallBadge from '../SmallBadge/SmallBadge';
+import SmallBadge from '../SmallBadge';
 import { useSwipeable } from 'react-swipeable';
 import useOpAndArbPriceQuery from 'queries/overdrop/useOpAndArbPriceQuery';
 

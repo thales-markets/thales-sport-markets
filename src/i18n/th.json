@@ -290,7 +290,8 @@
                 "politics": "การเมือง",
                 "olympicgames": "กีฬาโอลิมปิก",
                 "tabletennis": "ปิงปอง",
-                "boosted": "เกมโปรโมชั่น"
+                "boosted": "เกมโปรโมชั่น",
+                "promo": "เกมโปรโมชั่น"
             },
             "datepicker": {
                 "games": "{{numberOfGames}} เกม"

@@ -1064,7 +1064,7 @@ export const DOUBLE_CHANCE_MARKET_TYPES = [
     MarketType.SECOND_PERIOD_DOUBLE_CHANCE,
 ];
 
-export const DRAW_NO_BET_MARKET_TYPES = [
+const DRAW_NO_BET_MARKET_TYPES = [
     MarketType.DRAW_NO_BET,
     MarketType.FIRST_PERIOD_DRAW_NO_BET,
     MarketType.SECOND_PERIOD_DRAW_NO_BET,

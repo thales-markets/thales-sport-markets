@@ -128,7 +128,7 @@ export const CloseIcon = styled.i`
     margin-left: 5px;
 `;
 
-export const Icon = styled.i`
+const Icon = styled.i`
     font-size: 12px;
     position: absolute;
     top: 12px;

@@ -13,6 +13,5 @@ export const LINKS = {
         Reddit: 'https://www.reddit.com/r/overtimemarkets',
     },
     ThalesTip142: 'https://github.com/thales-markets/thales-improvement-proposals/blob/main/TIPs/TIP-142.md',
-    ParlayLeaderboardV1: 'https://v1.overtimemarkets.xyz/parlay-leaderboard',
     SpeedMarkets: 'https://speedmarkets.xyz',
 };

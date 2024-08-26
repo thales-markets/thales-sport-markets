@@ -162,20 +162,7 @@ const DappHeader: React.FC = () => {
                     </LeftContainer>
 
                     <MiddleContainer>
-                        {/* <SPAAnchor href={buildHref(ROUTES.Referral)}>
-                            <ReferAndEarn>{t('common.referral.header-label')}</ReferAndEarn>
-                        </SPAAnchor> */}
-                        {/* {isWalletConnected && isMarketsPage && (
-                            <SPAAnchor href={buildHref(ROUTES.Wizard)}>
-                                <HeaderIcon className="icon icon--tour" />
-                                <HeaderLabel>{t('get-started.start-tour')}</HeaderLabel>
-                            </SPAAnchor>
-                        )} */}
-                        <div>
-                            {location.pathname !== ROUTES.Wizard &&
-                                (isConnectedViaParticle || !isWalletConnected) &&
-                                getGetStartedButton()}
-                        </div>
+                        <div>{(isConnectedViaParticle || !isWalletConnected) && getGetStartedButton()}</div>
                         {isMarketsPage && <TimeFilters />}
                         <FlexDiv>
                             <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>

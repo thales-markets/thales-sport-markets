@@ -137,13 +137,6 @@ export const CloseIcon = styled.i.attrs({ className: 'icon icon--arrow-up' })`
     cursor: pointer;
 `;
 
-export const LogoContainer = styled.div`
-    position: relative;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-`;
-
 export const WalletWrapper = styled(FlexDiv)`
     width: max-content;
     align-self: center;

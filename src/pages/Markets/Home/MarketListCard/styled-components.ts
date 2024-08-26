@@ -1,6 +1,5 @@
-import { Circle } from 'pages/Overdrop/components/styled-components';
 import styled, { CSSProperties } from 'styled-components';
-import { FlexDiv, FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivStart } from 'styles/common';
+import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivStart } from 'styles/common';
 
 export const OverdropGradientBorder = styled.div<{
     isOverdrop: boolean;
@@ -59,10 +58,10 @@ export const Wrapper = styled(FlexDivColumn)<{
         props.selected ? props.theme.oddsContainerBackground.tertiary : props.theme.textColor.primary};
 `;
 
-export const MainContainer = styled(FlexDivRow)<{ isGameOpen: boolean }>`
+export const MainContainer = styled(FlexDivRow)<{ isGameOpen: boolean; isBoosted?: boolean }>`
     position: relative;
     width: 100%;
-    padding: 20px 12px 10px 12px;
+    padding: ${(props) => (props.isBoosted ? '20px 12px 10px 12px' : '10px 12px')};
     cursor: ${(props) => (props.isGameOpen ? 'default' : 'pointer')};
     @media (max-width: 950px) {
         flex-direction: ${(props) => (props.isGameOpen ? 'column' : 'row')};
@@ -229,17 +228,18 @@ export const liveBlinkStyle: CSSProperties = {
     width: 25,
     height: 25,
     position: 'absolute',
-    top: 4,
+    top: -5,
 };
 
 export const liveBlinkStyleMobile: CSSProperties = {
     width: 23,
     height: 23,
     position: 'absolute',
-    top: 3,
+    top: -5,
 };
 
 export const LiveIndicatorContainer = styled(FlexDivStart)`
+    position: relative;
     align-items: flex-start;
     color: ${(props) => props.theme.textColor.primary};
     margin-right: 10px;
@@ -311,24 +311,4 @@ export const ResultLabel = styled.span<{ isColumnView: boolean; isMarketSelected
     white-space: nowrap;
     overflow: hidden;
     width: fit-content;
-`;
-
-export const OverdropCircleContainer = styled(FlexDiv)`
-    margin: auto;
-    padding-top: 10px;
-    color: ${(props) => props.theme.overdrop.textColor.primary};
-    align-items: center;
-    font-size: 11px;
-    text-transform: uppercase;
-    top: 10px;
-    right: 30px;
-    span {
-        padding-top: 1px;
-    }
-`;
-
-export const OverdropCircle = styled(Circle)`
-    width: 12px;
-    min-height: 12px;
-    margin-right: 3px;
 `;

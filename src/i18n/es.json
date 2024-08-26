@@ -290,7 +290,8 @@
                 "tabletennis": "Tenis de mesa",
                 "politics": "Política",
                 "olympicgames": "Juegos olímpicos",
-                "boosted": "Juegos promocionales"
+                "boosted": "Juegos promocionales",
+                "promo": "Juegos promocionales"
             },
             "all": "Todo",
             "datepicker": {

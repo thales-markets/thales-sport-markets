@@ -126,11 +126,3 @@ export enum PeriodType {
     SET = 'set',
     EMPTY = '',
 }
-
-export enum Provider {
-    RUNDOWN = 'rundown',
-    ENETPULSE = 'enetpulse',
-    JSONODDS = 'jsonOdds',
-    OPTICODDS = 'opticOdds',
-    EMPTY = '',
-}

@@ -17,7 +17,7 @@
         "@particle-network/rainbowkit-ext": "1.2.0",
         "@rainbow-me/rainbowkit": "^0.12.16",
         "@reduxjs/toolkit": "^1.7.2",
-        "@socket.tech/plugin": "^1.2.4",
+        "axios": "^1.7.4",
         "bytes32": "^0.0.3",
         "date-fns": "^2.28.0",
         "dompurify": "^3.0.8",

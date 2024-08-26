@@ -5,10 +5,8 @@ import Logo from 'components/Logo';
 import { Separator } from 'components/NavMenu/styled-components';
 import SPAAnchor from 'components/SPAAnchor';
 import WalletInfo from 'components/WalletInfo';
-import { LINKS } from 'constants/links';
 import ROUTES from 'constants/routes';
 import {
-    NAV_MENU_FIFTH_SECTION,
     NAV_MENU_FIRST_SECTION,
     NAV_MENU_FOURTH_SECTION,
     NAV_MENU_SECOND_SECTION,
@@ -125,29 +123,6 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                     {NAV_MENU_THIRD_SECTION.map((item, index) => {
                         if (!item.supportedNetworks.includes(networkId)) return;
                         return (
-                            <SPAAnchor
-                                key={index}
-                                href={
-                                    item.route === ROUTES.Leaderboard
-                                        ? LINKS.ParlayLeaderboardV1
-                                        : buildHref(item.route)
-                                }
-                            >
-                                <ItemContainer
-                                    key={index}
-                                    active={location.pathname === item.route}
-                                    onClick={() => setNavMenuVisibility(false)}
-                                >
-                                    <NavIcon className={item.iconClass} active={location.pathname === item.route} />
-                                    <NavLabel>{t(item.i18label)}</NavLabel>
-                                </ItemContainer>
-                            </SPAAnchor>
-                        );
-                    })}
-                    <Separator />
-                    {NAV_MENU_FOURTH_SECTION.map((item, index) => {
-                        if (!item.supportedNetworks.includes(networkId)) return;
-                        return (
                             <SPAAnchor key={index} href={buildHref(item.route)}>
                                 <ItemContainer
                                     key={index}
@@ -161,7 +136,7 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                         );
                     })}
                     <Separator />
-                    {NAV_MENU_FIFTH_SECTION.map((item, index) => {
+                    {NAV_MENU_FOURTH_SECTION.map((item, index) => {
                         if (!item.supportedNetworks.includes(networkId)) return;
                         return (
                             <SPAAnchor key={index} href={buildHref(item.route)}>

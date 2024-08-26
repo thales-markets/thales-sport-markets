@@ -61,29 +61,7 @@ const QUERY_KEYS = {
     ClaimableCount: (walletAddress: string, networkId: Network) => ['claimable', 'count', walletAddress, networkId],
     ClaimableCountV2: (walletAddress: string, networkId: Network) => ['claimable', 'countV2', walletAddress, networkId],
     AccountPositions: (walletAddress: string, networkId: Network) => ['accountPosition', walletAddress, networkId],
-    ReferralTransaction: (walletAddress: string, networkId: Network) => [
-        'referralTransaction',
-        walletAddress,
-        networkId,
-    ],
-    ReferrerID: (walletAddress: string) => ['referrerId', walletAddress],
-    Referrers: (networkId: Network) => ['referrers', networkId],
-    ReferredTraders: (walletAddress: string, networkId: Network) => ['referredTraders', walletAddress, networkId],
-    ReferralOverview: (walletAddress: string, networkId: Network) => ['referralOverview', walletAddress, networkId],
     Wallet: {
-        GetsUSDWalletBalance: (walletAddress: string, networkId: Network) => [
-            'sUsd',
-            'balance',
-            walletAddress,
-            networkId,
-        ],
-        TokenBalance: (token: string, walletAddress: string, networkId: Network) => [
-            'wallet',
-            'tokenBalance',
-            token,
-            walletAddress,
-            networkId,
-        ],
         MultipleCollateral: (walletAddress: string, networkId: Network) => [
             'multipleCollateral',
             walletAddress,
@@ -100,9 +78,6 @@ const QUERY_KEYS = {
         ],
     },
     FavoriteTeam: (walletAddress: string, networkId: Network) => ['favoriteTeam', walletAddress, networkId],
-    Bungee: {
-        Tokens: () => ['bungee', 'tokens'],
-    },
     Banners: (networkId: Network) => ['banners', networkId],
     LiquidityPool: {
         Data: (address: string, networkId: Network) => ['liquidityPool', 'data', address, networkId],

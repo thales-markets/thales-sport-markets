@@ -62,10 +62,13 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
         }
     }, [dispatch, sportsAmmDataQuery.isSuccess, sportsAmmDataQuery.data]);
 
+    // Reset states when empty ticket
     useEffect(() => {
         if (!ticket.length) {
             setOddsChanged(false);
             setNotOpenedMarkets([]);
+            setOutOfLiquidityMarkets([]);
+            setUseThalesCollateral(false);
         }
     }, [ticket]);
 

@@ -1,12 +1,13 @@
 import Scroll from 'components/Scroll';
 import { BOXING_LEAGUES, LeagueMap } from 'constants/sports';
+import { SportFilter } from 'enums/markets';
 import { League, Sport } from 'enums/sports';
 import i18n from 'i18n';
 import { groupBy } from 'lodash';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { getIsMarketSelected } from 'redux/modules/market';
+import { getIsMarketSelected, getSportFilter } from 'redux/modules/market';
 import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
@@ -23,6 +24,7 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
     const favouriteLeagues = useSelector(getFavouriteLeagues);
     const isMarketSelected = useSelector(getIsMarketSelected);
     const isMobile = useSelector(getIsMobile);
+    const sportFilter = useSelector(getSportFilter);
 
     const marketsMap: Record<number, SportMarket[]> = groupBy(markets, (market) => Number(market.leagueId));
     const unifiedMarketsMap = unifyBoxingMarkets(marketsMap);
@@ -34,15 +36,55 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
 
     const finalOrderKeys = groupBySortedMarketsKeys(marketsKeys);
 
-    const getContainerContent = () => (
-        <ListContainer isMarketSelected={isMarketSelected}>
-            {finalOrderKeys.map((leagueId: number, index: number) => {
-                return (
-                    <MarketsListV2 key={index} league={leagueId} markets={marketsMap[leagueId]} language={language} />
-                );
-            })}
-        </ListContainer>
-    );
+    const getContainerContent = () => {
+        if (sportFilter === SportFilter.Boosted) {
+            const content: React.ReactElement[] = [];
+            let sortedMarketsByLeague: SportMarket[] = [];
+            let previousMarketLeagueId: League;
+            markets.forEach((market: SportMarket, index: number) => {
+                if (!previousMarketLeagueId || market.leagueId === previousMarketLeagueId) {
+                    sortedMarketsByLeague.push(market);
+                } else {
+                    content.push(
+                        <MarketsListV2
+                            key={index}
+                            league={previousMarketLeagueId}
+                            markets={sortedMarketsByLeague}
+                            language={language}
+                        />
+                    );
+                    sortedMarketsByLeague = [market];
+                }
+                previousMarketLeagueId = market.leagueId;
+                if (markets.length - 1 === index && sortedMarketsByLeague.length) {
+                    content.push(
+                        <MarketsListV2
+                            key={sortedMarketsByLeague.length}
+                            league={previousMarketLeagueId as League}
+                            markets={sortedMarketsByLeague}
+                            language={language}
+                        />
+                    );
+                }
+            });
+            return content;
+        }
+
+        return (
+            <ListContainer isMarketSelected={isMarketSelected}>
+                {finalOrderKeys.map((leagueId: number, index: number) => {
+                    return (
+                        <MarketsListV2
+                            key={index}
+                            league={leagueId}
+                            markets={marketsMap[leagueId]}
+                            language={language}
+                        />
+                    );
+                })}
+            </ListContainer>
+        );
+    };
 
     return (
         <Container isMarketSelected={isMarketSelected}>
