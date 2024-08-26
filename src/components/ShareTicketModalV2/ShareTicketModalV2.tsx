@@ -3,7 +3,6 @@ import { LINKS } from 'constants/links';
 import { toPng } from 'html-to-image';
 import { t } from 'i18next';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import ReactModal from 'react-modal';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
@@ -19,6 +18,7 @@ import { getWalletAddress } from 'redux/modules/wallet';
 import axios from 'axios';
 import { generalConfig } from 'config/general';
 import { refetchOverdropMultipliers } from 'utils/queryConnector';
+import Modal from 'components/Modal';
 
 export type ShareTicketModalProps = {
     markets: TicketMarket[];
@@ -65,19 +65,6 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
     const ref = useRef<HTMLDivElement>(null);
 
     const customStyles = {
-        content: {
-            top: isMobile ? '41%' : '50%',
-            left: '50%',
-            right: 'auto',
-            bottom: 'auto',
-            marginRight: '-48%',
-            transform: 'translate(-50%, -50%)',
-            padding: '0px',
-            background: 'transparent',
-            border: 'none',
-            borderRadius: '20px',
-            overflow: 'visibile',
-        },
         overlay: {
             backgroundColor: 'rgba(0, 0, 0, 0.5)',
             backdropFilter: 'blur(10px)',
@@ -260,20 +247,15 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
     }, [walletAddress, tweetUrl, onClose]);
 
     return (
-        <ReactModal
-            isOpen
-            onRequestClose={onModalClose}
+        <Modal
+            title=""
+            containerStyle={{ padding: '20px', background: 'linear-gradient(180deg, #303656 0%, #1a1c2b 100%)' }}
+            headerStyle={{ marginBottom: '0px' }}
+            customStyle={customStyles}
+            onClose={onModalClose}
             shouldCloseOnOverlayClick={true}
-            style={customStyles}
-            contentElement={(props, children) => (
-                <>
-                    <div {...props}>{children}</div>
-                    {isMobile && <CloseIcon className={`icon icon--close`} onClick={onClose} />}
-                </>
-            )}
         >
             <Container ref={ref}>
-                {!isMobile && <CloseIcon className={`icon icon--close`} onClick={onClose} />}
                 <MyTicket
                     markets={markets}
                     multiSingle={multiSingle}
@@ -284,26 +266,26 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                     isLive={isLive}
                     applyPayoutMultiplier={applyPayoutMultiplier}
                 />
-
-                <TwitterShare disabled={isLoading} onClick={onTwitterShareClick}>
-                    <TwitterIcon disabled={isLoading} fontSize={'22px'} />
-                    <TwitterShareLabel>{t('markets.parlay.share-ticket.share')}</TwitterShareLabel>
-                </TwitterShare>
-
-                <ShareWrapper>
-                    <SubmitLabel>{t('markets.parlay.share-ticket.submit-url')}</SubmitLabel>
-                    <Input
-                        height="32px"
-                        disabled={isLoading}
-                        value={tweetUrl}
-                        onChange={(e) => setTweetUrl(e.target.value)}
-                    />
-                    <Button height="32px" disabled={isLoading} margin="8px 0" onClick={onSubmit}>
-                        {t('common.submit')}
-                    </Button>
-                </ShareWrapper>
             </Container>
-        </ReactModal>
+
+            <TwitterShare disabled={isLoading} onClick={onTwitterShareClick}>
+                <TwitterIcon disabled={isLoading} fontSize={'22px'} />
+                <TwitterShareLabel>{t('markets.parlay.share-ticket.share')}</TwitterShareLabel>
+            </TwitterShare>
+
+            <ShareWrapper>
+                <SubmitLabel>{t('markets.parlay.share-ticket.submit-url')}</SubmitLabel>
+                <Input
+                    height="32px"
+                    disabled={isLoading}
+                    value={tweetUrl}
+                    onChange={(e) => setTweetUrl(e.target.value)}
+                />
+                <Button height="32px" disabled={isLoading} margin="8px 0" onClick={onSubmit}>
+                    {t('common.submit')}
+                </Button>
+            </ShareWrapper>
+        </Modal>
     );
 };
 
@@ -313,7 +295,6 @@ const Container = styled(FlexDivColumnCentered)`
     // max-height: 600px;
     padding: 15px;
     flex: none;
-    background: linear-gradient(180deg, #303656 0%, #1a1c2b 100%);
     border-radius: 10px;
     @media (max-width: 950px) {
         width: 357px;
@@ -321,31 +302,14 @@ const Container = styled(FlexDivColumnCentered)`
     }
 `;
 
-const CloseIcon = styled.i`
-    position: absolute;
-    top: -20px;
-    right: -20px;
-    font-size: 20px;
-    cursor: pointer;
-    color: ${(props) => props.theme.textColor.primary};
-    @media (max-width: 950px) {
-        top: 10px;
-        right: 10px;
-    }
-`;
-
 const TwitterShare = styled(FlexDivRowCentered)<{ disabled?: boolean }>`
     align-items: center;
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -46px;
-    height: 32px;
     border-radius: 5px;
     background: ${(props) => props.theme.button.background.primary};
     cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
     opacity: ${(props) => (props.disabled ? '0.4' : '1')};
     justify-content: center;
+    margin-top: 6px;
 `;
 
 const TwitterShareLabel = styled.span`
@@ -371,13 +335,7 @@ const TwitterIcon = styled.i<{ disabled?: boolean; fontSize?: string; padding?: 
     }
 `;
 
-const ShareWrapper = styled(FlexDivColumn)`
-    position: absolute;
-    left: 0;
-    right: 0;
-    height: 0px;
-    bottom: -60px;
-`;
+const ShareWrapper = styled(FlexDivColumn)``;
 
 const SubmitLabel = styled.span`
     font-weight: 400;
