@@ -12,6 +12,8 @@ type ModalProps = {
         container?: CSSProperties;
         header?: CSSProperties;
     };
+    containerStyle?: CSSProperties;
+    headerStyle?: CSSProperties;
     onClose: () => void;
 };
 
@@ -43,6 +45,8 @@ const Modal: React.FC<ModalProps> = ({
     shouldCloseOnOverlayClick,
     customStyle,
     mobileStyle,
+    containerStyle,
+    headerStyle,
 }) => {
     const customStylesOverride = customStyle
         ? {
@@ -58,8 +62,8 @@ const Modal: React.FC<ModalProps> = ({
             shouldCloseOnOverlayClick={shouldCloseOnOverlayClick}
             style={customStylesOverride}
         >
-            <Container mobileStyle={mobileStyle?.container}>
-                <Header mobileStyle={mobileStyle?.header}>
+            <Container containerStyle={containerStyle} mobileStyle={mobileStyle?.container}>
+                <Header headerStyle={headerStyle} mobileStyle={mobileStyle?.header}>
                     <Title>{title}</Title>
                     <FlexDivRow>{<CloseIcon onClick={onClose} />}</FlexDivRow>
                 </Header>
@@ -69,24 +73,28 @@ const Modal: React.FC<ModalProps> = ({
     );
 };
 
-const Container = styled.div<{ mobileStyle?: CSSProperties }>`
+const Container = styled.div<{ mobileStyle?: CSSProperties; containerStyle?: CSSProperties }>`
     border: 1px solid ${(props) => props.theme.borderColor.primary};
     background: ${(props) => props.theme.background.primary};
     padding: 25px 30px 35px 30px;
     border-radius: 23px;
     @media (max-width: 575px) {
+        border: 0;
+        border-radius: 0;
         ${(props) =>
             props.mobileStyle ? convertCssToStyledProperties(props.mobileStyle) : 'padding: 20px 15px 30px 15px;'}
     }
     max-height: 100vh;
     height: fit-content;
+    ${(props) => (props.containerStyle ? convertCssToStyledProperties(props.containerStyle) : '')}
 `;
 
-const Header = styled(FlexDivRow)<{ mobileStyle?: CSSProperties }>`
+const Header = styled(FlexDivRow)<{ mobileStyle?: CSSProperties; headerStyle?: CSSProperties }>`
     margin-bottom: 20px;
     @media (max-width: 575px) {
         ${(props) => props.mobileStyle && convertCssToStyledProperties(props.mobileStyle)}
     }
+    ${(props) => (props.headerStyle ? convertCssToStyledProperties(props.headerStyle) : '')}
 `;
 
 const Title = styled(FlexDiv)`
