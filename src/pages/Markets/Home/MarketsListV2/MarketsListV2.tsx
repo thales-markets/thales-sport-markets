@@ -108,7 +108,9 @@ const LeagueInfo = styled.div`
 `;
 
 const GamesContainer = styled.div<{ hidden?: boolean }>`
-    display: ${(props) => (props.hidden ? 'none' : '')};
+    display: ${(props) => (props.hidden ? 'none' : 'flex')};
+    flex-direction: column;
+    gap: 10px;
     margin-bottom: 10px;
 `;
 

@@ -25,4 +25,9 @@ export const LOCAL_STORAGE_KEYS = {
     IS_THREE_WAY_VIEW: 'isThreeWayView',
     LIVE_BET_SLIPPAGE: 'liveBetSlippage',
     COLLATERAL_CHANGED: 'collateralChanged',
+    OVERDROP_DAILY_MULTIPLIER: 'overdropDailyMultiplier',
+    OVERDROP_CURRENT_LEVEL: 'overdropCurrentLevel',
+    OVERDROP_WELCOME_MODAL_FLAG: 'overdropWelcomeModalFlag',
+    OVERDROP_PREVENT_DAILY_MODAL: 'overdropPreventDailyModal',
+    OVERDROP_STATE: 'overdropState',
 };

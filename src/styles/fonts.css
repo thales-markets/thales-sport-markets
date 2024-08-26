@@ -1,14 +1,4 @@
 @font-face {
-    font-family: 'Roboto';
-    src: local('Roboto'), url(../assets/fonts/Roboto/Roboto.ttf) format('truetype');
-}
-
-@font-face {
-    font-family: 'RobotoThin';
-    src: local('RobotoThin'), url(../assets/fonts/Roboto/RobotoThin.ttf) format('truetype');
-}
-
-@font-face {
     font-family: 'Jost';
     src: local('Jost'), url(../assets/fonts/Jost/Jost.ttf) format('truetype');
 }
