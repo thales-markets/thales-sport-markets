@@ -290,7 +290,8 @@
                 "olympicgames": "奥运会",
                 "tabletennis": "乒乓球",
                 "politics": "政治",
-                "boosted": "促销游戏"
+                "boosted": "促销游戏",
+                "promo": "促销游戏"
             },
             "all": "所有",
             "datepicker": {

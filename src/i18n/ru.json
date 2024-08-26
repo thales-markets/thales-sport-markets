@@ -290,7 +290,8 @@
                 "olympicgames": "Олимпийские игры",
                 "politics": "Политика",
                 "tabletennis": "Настольный теннис",
-                "boosted": "Промо игры"
+                "boosted": "Промо игры",
+                "promo": "Промо игры"
             },
             "all": "All",
             "datepicker": {

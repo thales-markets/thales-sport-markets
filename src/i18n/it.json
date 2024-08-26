@@ -290,7 +290,8 @@
                 "olympicgames": "Giochi Olimpici",
                 "tabletennis": "Ping-pong",
                 "politics": "Politica",
-                "boosted": "Giochi promozionali"
+                "boosted": "Giochi promozionali",
+                "promo": "Giochi promozionali"
             },
             "all": "All",
             "datepicker": {
