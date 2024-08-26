@@ -9,7 +9,7 @@
 .ReactModal__Body--open {
     overflow-y: hidden;
 }
-.ReactModal__Overlay {
+.ReactModal__Overlay--after-open {
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 }
