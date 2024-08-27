@@ -199,7 +199,7 @@ const DappHeader: React.FC = () => {
                                     </OutsideClickHandler>
                                 )}
                             </SettingsContainer>
-                            <TopUp />
+                            {isConnectedViaParticle && <TopUp />}
                         </FlexDiv>
                     </MiddleContainer>
 
