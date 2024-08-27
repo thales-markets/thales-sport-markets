@@ -24,8 +24,8 @@ ReactModal.setAppElement('#root');
 
 const defaultStyle = {
     content: {
-        top: '50%',
-        left: '50%',
+        top: '0',
+        left: '0',
         right: 'auto',
         bottom: 'auto',
         padding: '25px',
@@ -33,8 +33,6 @@ const defaultStyle = {
         border: `1px solid #7983A9`,
         width: '720px',
         borderRadius: '15px',
-        marginRight: '-48%',
-        transform: 'translate(-50%, -50%)',
         overflow: 'auto',
         height: 'auto',
     },
