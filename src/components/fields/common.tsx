@@ -69,6 +69,7 @@ export const Input = styled.input<{
     textAlign?: string;
     width?: string;
     height?: string;
+    minHeight?: string;
     borderColor?: string;
 }>`
     background: ${(props) => props.theme.input.background.tertiary};
@@ -76,6 +77,7 @@ export const Input = styled.input<{
     box-sizing: border-box;
     mix-blend-mode: normal;
     border-radius: 5px;
+    ${(props) => (props.minHeight ? `min-height: ${props.minHeight};` : '')}
     height: ${(props) => props.height || '30px'};
     width: ${(props) => props.width || '100%'};
     padding: 5px 10px;
