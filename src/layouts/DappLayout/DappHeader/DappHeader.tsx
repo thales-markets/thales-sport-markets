@@ -76,6 +76,9 @@ const customModalStyles = {
     },
     overlay: {
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        backdropFilter: 'unset',
+        WebkitBackdropFilter: 'unset',
+        webkitBackdropFilter: 'unset',
         zIndex: '5',
     },
 };
