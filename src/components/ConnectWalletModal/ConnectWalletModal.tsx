@@ -1,46 +1,46 @@
-import React, { useEffect, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
-import ReactModal from 'react-modal';
-import styled from 'styled-components';
-import { FlexDiv, FlexDivCentered, FlexDivRow } from 'styles/common';
-
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 import disclaimer from 'assets/docs/overtime-markets-disclaimer.pdf';
 import termsOfUse from 'assets/docs/thales-terms-of-use.pdf';
-
-import { useConnectModal } from '@rainbow-me/rainbowkit';
 import SimpleLoader from 'components/SimpleLoader';
 import Checkbox from 'components/fields/Checkbox';
 import ROUTES from 'constants/routes';
 import { SUPPORTED_PARTICAL_CONNECTORS } from 'constants/wallet';
+import React, { useEffect, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
+import ReactModal from 'react-modal';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import { getNetworkId, getWalletConnectModalOrigin } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
+import styled from 'styled-components';
+import { FlexDiv, FlexDivCentered, FlexDivRow } from 'styles/common';
 import { getClassNameForParticalLogin, getSpecificConnectorFromConnectorsArray } from 'utils/biconomy';
 import { navigateTo } from 'utils/routes';
 import { Connector, useConnect } from 'wagmi';
 
 ReactModal.setAppElement('#root');
 
-const defaultStyle = {
+const getDefaultStyle = (isMobile: boolean) => ({
     content: {
-        top: '0',
-        left: '0',
+        top: isMobile ? '0' : '50%',
+        left: isMobile ? '0' : '50%',
         right: 'auto',
         bottom: 'auto',
-        padding: '25px',
+        padding: isMobile ? '20px 5px' : '25px',
         backgroundColor: '#151B36',
         border: `1px solid #7983A9`,
-        width: '720px',
+        width: isMobile ? '100%' : '720px',
         borderRadius: '15px',
+        marginRight: isMobile ? 'unset' : '-48%',
+        transform: isMobile ? 'unset' : 'translate(-50%, -50%)',
         overflow: 'auto',
-        height: 'auto',
+        height: isMobile ? '100%' : 'auto',
     },
     overlay: {
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         zIndex: 2000,
     },
-};
+});
 
 type ConnectWalletModalProps = {
     isOpen: boolean;
@@ -61,18 +61,6 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
 
     const modalOrigin = useSelector((state: RootState) => getWalletConnectModalOrigin(state));
 
-    useEffect(() => {
-        if (isMobile) {
-            defaultStyle.content.width = '100%';
-            defaultStyle.content.padding = '20px 5px';
-            defaultStyle.content.height = '100%';
-        } else {
-            defaultStyle.content.width = '720px';
-            defaultStyle.content.padding = '25px';
-            defaultStyle.content.height = 'auto';
-        }
-    }, [isMobile]);
-
     const handleConnect = (connector: Connector) => {
         try {
             connect({ connector });
@@ -90,7 +78,12 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
     }, [isSuccess, isPartical, modalOrigin, onClose]);
 
     return (
-        <ReactModal isOpen={isOpen} onRequestClose={onClose} shouldCloseOnOverlayClick={true} style={defaultStyle}>
+        <ReactModal
+            isOpen={isOpen}
+            onRequestClose={onClose}
+            shouldCloseOnOverlayClick={true}
+            style={getDefaultStyle(isMobile)}
+        >
             <CloseIconContainer>
                 <CloseIcon onClick={onClose} />
             </CloseIconContainer>
