@@ -89,10 +89,9 @@ const getCustomModalStyles = (theme: ThemeInterface) => ({
     content: {
         top: '0',
         overflow: 'auto',
-        left: '50%',
+        left: '0',
         right: 'auto',
         bottom: 'auto',
-        marginRight: '-48%',
         padding: '0px',
         background: 'transparent',
         border: 'none',

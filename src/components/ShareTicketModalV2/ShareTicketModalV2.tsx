@@ -291,6 +291,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
 
 // Aspect ratio is important for Twitter: horizontal (Simple View) 2:1 and vertical min 3:4
 const Container = styled(FlexDivColumnCentered)`
+    position: relative;
     width: 386px;
     // max-height: 600px;
     background: linear-gradient(180deg, #303656 0%, #1a1c2b 100%);
