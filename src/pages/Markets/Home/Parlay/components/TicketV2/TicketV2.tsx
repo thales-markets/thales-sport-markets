@@ -2215,8 +2215,8 @@ const Ticket: React.FC<TicketProps> = ({
             )}
             {!oddsChanged && <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>}
             <ShareWrapper disabled={twitterShareDisabled} onClick={onTwitterIconClick}>
-                <SummaryLabel>{t('markets.parlay.share-ticket.label')}</SummaryLabel>
-                <TwitterIcon />
+                <SummaryLabel disabled={twitterShareDisabled}>{t('markets.parlay.share-ticket.label')}</SummaryLabel>
+                <TwitterIcon disabled={twitterShareDisabled} />
             </ShareWrapper>
             {showShareTicketModal && shareTicketModalData && (
                 <ShareTicketModalV2
