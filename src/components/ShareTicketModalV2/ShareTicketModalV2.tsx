@@ -293,6 +293,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                     <SubmitLabel>{t('markets.parlay.share-ticket.submit-url')}</SubmitLabel>
                     <Input
                         height="32px"
+                        minHeight="32px" // fix for iOS
                         disabled={isLoading}
                         value={tweetUrl}
                         onChange={(e) => setTweetUrl(e.target.value)}
