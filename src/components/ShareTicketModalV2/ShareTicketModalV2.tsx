@@ -312,6 +312,8 @@ const TwitterShare = styled(FlexDivRowCentered)<{ disabled?: boolean }>`
     opacity: ${(props) => (props.disabled ? '0.4' : '1')};
     justify-content: center;
     margin-top: 6px;
+    margin-bottom: 6px;
+    min-height: 32px;
 `;
 
 const TwitterShareLabel = styled.span`
