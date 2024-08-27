@@ -27,7 +27,6 @@ const TopUp: React.FC = () => {
 
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
-        refetchInterval: 5000,
     });
 
     const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
