@@ -1,32 +1,33 @@
+import Button from 'components/Button';
 import SPAAnchor from 'components/SPAAnchor';
-import i18n from 'i18n';
+import ROUTES from 'constants/routes';
+import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 import useLiquidityPoolUserDataQuery from 'queries/liquidityPool/useLiquidityPoolUserDataQuery';
-import useParlayLiquidityPoolUserDataQuery from 'queries/liquidityPool/useParlayLiquidityPoolUserDataQuery';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
-import { buildLpLink } from 'utils/routes';
-import Button from 'components/Button';
+import { formatCurrency } from 'thales-utils';
+import { LiquidityPool } from 'types/liquidityPool';
 import { ThemeInterface } from 'types/ui';
+import { buildHref } from 'utils/routes';
 
-const UserLP: React.FC = () => {
+type UserLPProps = {
+    lp: LiquidityPool;
+};
+
+const UserLP: React.FC<UserLPProps> = ({ lp }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const [lastValidData, setLastValidData] = useState<number>(0);
-    const [parlayLPData, setParlayLPData] = useState<number>(0);
-    const language = i18n.language;
+    const lpCollateral = lp.collateral.toLowerCase() as LiquidityPoolCollateral;
 
-    const userLpQuery = useLiquidityPoolUserDataQuery(walletAddress, networkId, {
-        enabled: isWalletConnected,
-    });
-
-    const parlayLpQuery = useParlayLiquidityPoolUserDataQuery(walletAddress, networkId, {
+    const userLpQuery = useLiquidityPoolUserDataQuery(lp.address, lp.collateral, walletAddress, networkId, {
         enabled: isWalletConnected,
     });
 
@@ -36,25 +37,19 @@ const UserLP: React.FC = () => {
         }
     }, [userLpQuery.isSuccess, userLpQuery.data]);
 
-    useEffect(() => {
-        if (parlayLpQuery.isSuccess && parlayLpQuery.data) {
-            setParlayLPData(parlayLpQuery.data?.balanceTotal);
-        }
-    }, [parlayLpQuery.isSuccess, parlayLpQuery.data]);
-
     return (
         <>
-            <SPAAnchor href={buildLpLink(language, 'single')}>
-                <VaultCard>
+            <SPAAnchor href={`${buildHref(ROUTES.LiquidityPool)}?collateral=${lpCollateral}`}>
+                <LiquidityPoolCard>
                     <TitleWrapper>
                         <Icon className={`icon icon--liquidity-pool`} />
-                        <Title> {t(`profile.single-lp-title`)}</Title>
+                        <Title>{lp.name}</Title>
                     </TitleWrapper>
                     <ContentWrapper>
                         <TextWrapper>
                             <PreLabel>{t('profile.in-lp')}</PreLabel>
-                            <Value>{lastValidData?.toFixed(2)}</Value>
-                            <PostLabel>USD</PostLabel>
+                            <Value>{formatCurrency(lastValidData)}</Value>
+                            <PostLabel>{lp.collateral}</PostLabel>
                         </TextWrapper>
                         <Button
                             backgroundColor={theme.button.background.quaternary}
@@ -64,46 +59,21 @@ const UserLP: React.FC = () => {
                             padding="1px 2px"
                             height="20px"
                         >
-                            {t('profile.go-to-single-lp')}
+                            {`${t('profile.go-to')} ${lp.name}`}
                         </Button>
                     </ContentWrapper>
-                </VaultCard>
-            </SPAAnchor>
-            <SPAAnchor href={buildLpLink(language, 'parlay')}>
-                <VaultCard>
-                    <TitleWrapper>
-                        <Icon className={`icon icon--liquidity-pool`} />
-                        <Title> {t(`profile.parlay-lp-title`)}</Title>
-                    </TitleWrapper>
-                    <ContentWrapper>
-                        <TextWrapper>
-                            <PreLabel>{t('profile.in-lp')}</PreLabel>
-                            <Value>{parlayLPData?.toFixed(2)}</Value>
-                            <PostLabel>USD</PostLabel>
-                        </TextWrapper>
-                        <Button
-                            backgroundColor={theme.button.background.quaternary}
-                            borderColor={theme.button.borderColor.secondary}
-                            width="136px"
-                            fontSize="14px"
-                            padding="1px 2px"
-                            height="20px"
-                        >
-                            {t('profile.go-to-parlay-lp')}
-                        </Button>
-                    </ContentWrapper>
-                </VaultCard>
+                </LiquidityPoolCard>
             </SPAAnchor>
         </>
     );
 };
 
-const VaultCard = styled.div`
+const LiquidityPoolCard = styled.div`
     width: 100%;
     max-width: 220px;
     min-width: 220px;
     height: 200px;
-    background: linear-gradient(180deg, #303656 41.5%, #1a1c2b 100%);
+    background: ${(props) => props.theme.background.secondary};
     border-radius: 5px;
     cursor: pointer;
     &:hover {
@@ -126,9 +96,7 @@ const TitleWrapper = styled.div`
 `;
 
 const Title = styled.span`
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 800;
+    font-weight: 600;
     font-size: 16px;
     line-height: 19px;
     color: ${(props) => props.theme.textColor.primary};
@@ -155,27 +123,20 @@ const TextWrapper = styled.div`
 `;
 
 const PreLabel = styled.span`
-    font-family: 'Roboto';
-    font-style: normal;
     font-weight: 400;
     font-size: 12px;
-    line-height: 14px;
+    margin-bottom: 5px;
 `;
 const Value = styled.span`
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 700;
+    font-weight: 600;
     font-size: 20px;
-    line-height: 23px;
     text-align: center;
+    margin-bottom: 5px;
     color: ${(props) => props.theme.textColor.quaternary};
 `;
 const PostLabel = styled.span`
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 700;
+    font-weight: 600;
     font-size: 14px;
-    line-height: 23px;
     text-align: center;
 `;
 

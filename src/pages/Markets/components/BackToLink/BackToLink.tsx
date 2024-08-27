@@ -7,10 +7,9 @@ type BackToLinkProps = {
     link: string;
     text: string;
     customStylingContainer?: CSSProperties;
-    useArrow?: boolean;
 };
 
-const BackToLink: React.FC<BackToLinkProps> = ({ link, text, customStylingContainer, useArrow }) => {
+const BackToLink: React.FC<BackToLinkProps> = ({ link, text, customStylingContainer }) => {
     return (
         <Container style={customStylingContainer}>
             <SPAAnchor href={link}>
@@ -18,7 +17,7 @@ const BackToLink: React.FC<BackToLinkProps> = ({ link, text, customStylingContai
                     fontFamily={customStylingContainer?.fontFamily}
                     lineHeight={customStylingContainer?.lineHeight?.toString()}
                 >
-                    {useArrow ? <LeftArrow /> : <LeftIcon />}
+                    {<LeftIcon />}
                     {text}
                 </Link>
             </SPAAnchor>
@@ -45,25 +44,13 @@ const Link = styled(FlexDivCentered)<{ fontFamily?: string; lineHeight?: string 
 `;
 
 const LeftIcon = styled.i`
-    font-size: 20px;
-    margin-right: 4px;
+    font-size: 28px;
+    margin-right: 0px;
     margin-top: -2px;
     &:before {
-        font-family: ExoticIcons !important;
-        content: '\\0041';
+        font-family: HomepageIconsV2 !important;
+        content: '\\0028';
         color: ${(props) => props.theme.textColor.primary};
-    }
-`;
-
-const LeftArrow = styled.i`
-    font-size: 14px;
-    margin-right: 8px;
-    text-transform: none;
-    transform: rotate(225deg);
-    font-weight: 400;
-    &:before {
-        font-family: OvertimeIcons !important;
-        content: '\\006C';
     }
 `;
 

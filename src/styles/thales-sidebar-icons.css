@@ -1,0 +1,164 @@
+.sidebar-icon {
+    display: inline-block;
+    font-family: ThalesSidebarIcons !important;
+    vertical-align: middle;
+    font-size: 32px;
+    color: #ffffff;
+}
+
+.sidebar-icon--speed-markets:before {
+    content: '\003D';
+}
+
+.sidebar-icon--nav-menu:before {
+    content: '\0040';
+}
+
+.sidebar-icon--token:before {
+    content: '\0043';
+}
+
+.sidebar-icon--swap:before {
+    content: '\0044';
+}
+
+.sidebar-icon--competition:before {
+    content: '\0045';
+}
+
+.sidebar-icon--first-place:before {
+    content: '\0047';
+}
+
+.sidebar-icon--second-place:before {
+    content: '\0048';
+}
+
+.sidebar-icon--third-place:before {
+    content: '\0049';
+}
+
+.sidebar-icon--ethereum-icon:before {
+    content: '\0050';
+}
+
+.sidebar-icon--dark-mode:before {
+    content: '\0052';
+}
+
+.sidebar-icon--light-mode:before {
+    content: '\0053';
+}
+
+.sidebar-icon--profile:before {
+    content: '\0054';
+}
+
+.sidebar-icon--create-market:before {
+    content: '\0057';
+}
+
+.sidebar-icon--trading:before {
+    content: '\0058';
+}
+
+.sidebar-icon--markets:before {
+    content: '\0059';
+}
+
+.sidebar-icon--thales-royale:before {
+    content: '\005A';
+}
+
+.sidebar-icon--liquidity-pool::before {
+    content: '\005B';
+}
+
+.sidebar-icon--game:before {
+    content: '\0061';
+}
+
+.sidebar-icon--wallet:before {
+    content: '\0063';
+}
+
+.sidebar-icon--card-menu:before {
+    content: '\0064';
+}
+
+.sidebar-icon--ethereum:before {
+    content: '\0065';
+}
+
+.sidebar-icon--ru-flag:before {
+    content: '\006D';
+}
+
+.sidebar-icon--gb-flag:before {
+    content: '\006E';
+}
+
+.sidebar-icon--cn-flag:before {
+    content: '\006F';
+}
+
+.sidebar-icon--optimism:before {
+    content: '\0067';
+}
+
+.sidebar-icon--exotic-markets:before {
+    content: '\0070';
+}
+
+.sidebar-icon--governance:before {
+    content: '\0071';
+}
+
+.sidebar-icon--ranged-markets:before {
+    content: '\0072';
+}
+
+.sidebar-icon--referral-page:before {
+    content: '\0073';
+}
+
+.sidebar-icon--wizard:before {
+    content: '\0075';
+}
+
+.sidebar-icon--wizard {
+    width: 32px;
+    font-size: 44px;
+}
+
+.sidebar-icon--overtime-markets:before {
+    content: '\0076';
+}
+
+.sidebar-icon--degen-discount-vault::before {
+    content: '\0077';
+}
+
+.sidebar-icon--discount-vault::before {
+    content: '\0078';
+}
+
+.sidebar-icon--risks::before {
+    content: '\007A';
+}
+
+.sidebar-icon--safu-discount-vault::before {
+    content: '\007B';
+}
+
+.sidebar-icon--vaults::before {
+    content: '\007C';
+}
+
+.sidebar-icon--strategy::before {
+    content: '\007D';
+}
+
+.sidebar-icon--share::before {
+    content: '\007E';
+}

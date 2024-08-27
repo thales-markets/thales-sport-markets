@@ -55,7 +55,7 @@
 }
 .rc-tooltip {
     position: absolute;
-    z-index: 1070;
+    z-index: 1501;
     display: block;
     visibility: visible;
 }
@@ -90,8 +90,8 @@
     line-height: 13px;
     text-align: start;
     text-decoration: none;
-    background-color: #5f6180;
-    border-radius: 0px;
+    background-color: #3c498a;
+    border-radius: 5px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
     max-width: 300px;
     min-width: 50px;
@@ -116,7 +116,7 @@
     bottom: 0px;
     margin-left: -5px;
     border-width: 5px 5px 0;
-    border-top-color: #5f6180;
+    border-top-color: #3c498a;
 }
 .rc-tooltip-placement-top .rc-tooltip-arrow {
     left: 50%;

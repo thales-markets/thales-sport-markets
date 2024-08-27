@@ -1,9 +1,4 @@
 @font-face {
-    font-family: 'Roboto';
-    src: local('Roboto'), url(../assets/fonts/Roboto/Roboto.ttf) format('truetype');
-}
-
-@font-face {
     font-family: 'Jost';
     src: local('Jost'), url(../assets/fonts/Jost/Jost.ttf) format('truetype');
 }
@@ -22,38 +17,59 @@
     font-family: 'NunitoExtraBold';
     src: local('NunitoExtraBold'), url(../assets/fonts/Nunito/Nunito-ExtraBold.ttf) format('truetype');
 }
-
 @font-face {
-    font-family: 'ExoticIcons';
-    src: local('ExoticIcons'), url(../assets/fonts/ExoticIcons/ExoticIcons.ttf) format('truetype');
+    font-family: 'Atma';
+    src: local('Atma'), url(../assets/fonts/Atma/Atma-Regular.ttf) format('truetype');
 }
 
 @font-face {
-    font-family: 'OvertimeIcons';
-    src: local('OvertimeIcons'), url(../assets/fonts/OvertimeIcons/OvertimeIcons.ttf) format('truetype');
+    font-family: 'AtmaBold';
+    src: local('AtmaBold'), url(../assets/fonts/Atma/Atma-Bold.ttf) format('truetype');
 }
 
 @font-face {
-    font-family: 'HomepageIcons';
-    src: local('HomepageIcons'), url(../assets/fonts/HomepageIcons/homepage.ttf) format('truetype');
+    font-family: 'Oswald';
+    src: local('Oswald'), url(../assets/fonts/Oswald/Oswald-Regular.ttf) format('truetype');
 }
 
 @font-face {
-    font-family: 'LeagueIcons';
-    src: local('LeagueIcons'), url(../assets/fonts/LeagueIcons/LeagueIcons.ttf) format('truetype');
+    font-family: 'OswaldBold';
+    src: local('OswaldBold'), url(../assets/fonts/Oswald/Oswald-Bold.ttf) format('truetype');
 }
 
 @font-face {
-    font-family: 'ThalesIcons';
-    src: local('ThalesIcons'), url(../assets/fonts/ThalesIcons/ThalesIcons.ttf) format('truetype');
+    font-family: 'Geogrotesque';
+    src: local('Geogrotesque'), url(../assets/fonts/Geogrotesque/Geogrotesque.ttf) format('truetype');
 }
 
 @font-face {
-    font-family: 'Currencies';
-    src: local('Currencies'), url(../assets/fonts/Currencies/currencies.ttf) format('truetype');
+    font-family: 'GeogrotesqueReg';
+    src: local('GeogrotesqueReg'), url(../assets/fonts/Geogrotesque/GeogrotesqueCyr-Regular.ttf) format('truetype');
 }
 
 @font-face {
-    font-family: 'SocialIcons';
-    src: local('SocialIcons'), url(../assets/fonts/SocialLogin/SocialIcons.ttf) format('truetype');
+    font-family: 'HomepageIconsV2';
+    src: local('HomepageIconsV2'), url(../assets/fonts/HomepageIconsV2/HomepageIconsV2.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'OvertimeIconsV2';
+    src: local('OvertimeIconsV2'), url(../assets/fonts/OvertimeIconsV2/OvertimeIconsV2.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: local('Montserrat'), url(../assets/fonts/Montserrat/Montserrat-VariableFont_wght.ttf) format('truetype');
+    font-weight: 100 900;
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: local('Inter'), url(../assets/fonts/Inter/Inter-VariableFont_slntwght.ttf) format('truetype');
+    font-weight: 100 900;
+}
+
+@font-face {
+    font-family: 'ThalesSidebarIcons';
+    src: local('ThalesSidebarIcons'), url(../assets/fonts/ThalesSidebarIcons/ThalesSidebarIcons.ttf) format('truetype');
 }

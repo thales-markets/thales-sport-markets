@@ -7,13 +7,7 @@ const ROUTES = {
         Market: '/markets/:marketAddress',
     },
     Profile: '/profile',
-    Referral: '/referral',
-    Quiz: '/trivia',
-    QuizLeaderboard: '/trivia/leaderboard',
     Wizard: '/wizard',
-    Vaults: '/vaults',
-    Vault: '/vaults/:vaultId',
-    Leaderboard: '/parlay-leaderboard',
     LiquidityPool: '/liquidity-pool',
     SingleLiquidityPool: '/liquidity-pool?pool-type=single',
     ParlayLiquidityPool: '/liquidity-pool?pool-type=parlay',
@@ -23,6 +17,8 @@ const ROUTES = {
         Home: '/promotions',
         Promotion: '/promotions/:promotionId',
     },
+    Ticket: '/tickets/:ticketAddress',
+    Overdrop: '/overdrop',
 };
 
 export const PAGE_NAME_TO_META_DATA_KEYS: {
@@ -35,18 +31,6 @@ export const PAGE_NAME_TO_META_DATA_KEYS: {
     [MetaRoutes.Markets]: {
         title: 'seo.markets.title',
         description: 'seo.markets.description',
-    },
-    [MetaRoutes.Vaults]: {
-        title: 'seo.vaults.title',
-        description: 'seo.vaults.description',
-    },
-    [MetaRoutes.ParlayLeaderboard]: {
-        title: 'seo.parlay-leaderboard.title',
-        description: 'seo.parlay-leaderboard.description',
-    },
-    [MetaRoutes.Referral]: {
-        title: 'seo.referral.title',
-        description: 'seo.referral.description',
     },
     [MetaRoutes.Profile]: {
         title: 'seo.profile.title',

@@ -3,14 +3,14 @@ import { GetStartedStep } from 'enums/wizard';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { getIsMobile } from 'redux/modules/app';
 import { getIsWalletConnected, getNetworkId, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
+import { getDefaultCollateral } from 'utils/collaterals';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import { buildHref, navigateTo } from 'utils/routes';
-import { getIsMobile } from 'redux/modules/app';
-import { getDefaultCollateral } from 'utils/collaterals';
 
 type StepProps = {
     stepNumber: number;
@@ -83,7 +83,7 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
         let transKey = 'get-started.steps.action';
         switch (stepType) {
             case GetStartedStep.LOG_IN:
-                className = 'social-icon icon--logged-in';
+                className = 'icon icon--logged-in';
                 transKey += isWalletConnected ? '.logged-in' : '.sign-up';
                 break;
             case GetStartedStep.DEPOSIT:
@@ -194,7 +194,7 @@ const StepAction = styled.div`
 `;
 
 const StepTitle = styled.span<{ completed?: boolean }>`
-    font-weight: 700;
+    font-weight: 600;
     font-size: 20px;
     line-height: 27px;
     color: ${(props) => (props.completed ? props.theme.background.quaternary : '')};
@@ -229,7 +229,7 @@ const StepNumberWrapper = styled.div<{ isActive: boolean; isDisabled?: boolean; 
 `;
 
 const StepNumber = styled.span<{ isActive: boolean }>`
-    font-weight: 700;
+    font-weight: 600;
     font-size: 29px;
     @media (max-width: 600px) {
         font-size: 20px;

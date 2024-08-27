@@ -60,7 +60,7 @@ const Text = styled.span`
     color: ${(props) => props.theme.textColor.primary};
     font-size: 28px;
     font-style: normal;
-    font-weight: 700;
+    font-weight: 600;
     line-height: 100%; /* 28px */
 `;
 
@@ -73,7 +73,7 @@ const FooterText = styled.span`
     color: ${(props) => props.theme.textColor.primary};
     font-size: 14px;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
 
     text-align: center;
     text-align: center;

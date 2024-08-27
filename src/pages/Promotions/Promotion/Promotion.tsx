@@ -146,8 +146,7 @@ const BackContainer = styled(FlexDiv)`
 `;
 
 const Back = styled.span`
-    font-family: 'Roboto';
-    font-weight: 700;
+    font-weight: 600;
     cursor: pointer;
     font-size: 14px;
     text-transform: uppercase;
@@ -155,7 +154,7 @@ const Back = styled.span`
 
 const HeaderContainer = styled(FlexDiv)`
     font-family: 'Nunito' !important;
-    font-weight: 900;
+    font-weight: 600;
     text-align: center !important;
     align-items: center;
     width: 100%;
@@ -165,20 +164,20 @@ const HeaderContainer = styled(FlexDiv)`
     h1 {
         font-family: 'Nunito' !important;
         font-size: 30px;
-        font-weight: 900;
+        font-weight: 600;
         line-height: 36px;
         width: 100%;
     }
     h2 {
         font-size: 20px;
-        font-weight: 700;
+        font-weight: 600;
         line-height: 26px;
         margin: 10px 0px;
         margin: 15px 0px;
     }
     h3 {
         font-size: 14px;
-        font-weight: 700;
+        font-weight: 600;
         margin: 15px 0px;
         color: ${(props) => props.theme.textColor.quaternary};
     }
@@ -186,10 +185,10 @@ const HeaderContainer = styled(FlexDiv)`
         padding: 10px 0px;
     }
     strong {
-        font-weight: 700;
+        font-weight: 600;
     }
     a {
-        font-weight: 700;
+        font-weight: 600;
         text-decoration: none;
         color: ${(props) => props.theme.textColor.quaternary};
         :active {
@@ -222,26 +221,25 @@ const CTAContainer = styled(FlexDiv)`
 
 const CTAContent = styled(FlexDiv)`
     color: ${(props) => props.theme.textColor.primary};
-    font-weight: 500;
+    font-weight: 400;
     font-size: 14px;
     line-height: 18px;
     margin-bottom: 20px;
-    font-family: 'Roboto';
     h1 {
         font-size: 30px;
-        font-weight: 900;
+        font-weight: 600;
         line-height: 36px;
     }
     h2 {
         font-size: 20px;
-        font-weight: 700;
+        font-weight: 600;
         line-height: 26px;
         margin: 10px 0px;
         margin: 15px 0px;
     }
     h3 {
         font-size: 14px;
-        font-weight: 700;
+        font-weight: 600;
         margin: 15px 0px;
         color: ${(props) => props.theme.textColor.quaternary};
     }
@@ -249,10 +247,10 @@ const CTAContent = styled(FlexDiv)`
         padding: 10px 0px;
     }
     strong {
-        font-weight: 700;
+        font-weight: 600;
     }
     a {
-        font-weight: 700;
+        font-weight: 600;
         text-decoration: none;
         color: ${(props) => props.theme.textColor.quaternary};
         :active {
@@ -278,7 +276,6 @@ const MainContent = styled(FlexDiv)`
     color: ${(props) => props.theme.textColor.primary};
     font-size: 14px;
     line-height: 18px;
-    font-family: 'Roboto';
     font-weight: 400;
     flex-direction: column;
     ul {
@@ -288,19 +285,19 @@ const MainContent = styled(FlexDiv)`
     }
     h1 {
         font-size: 30px;
-        font-weight: 900;
+        font-weight: 600;
         line-height: 36px;
     }
     h2 {
         font-size: 20px;
-        font-weight: 700;
+        font-weight: 600;
         line-height: 26px;
         margin: 10px 0px;
         margin: 15px 0px;
     }
     h3 {
         font-size: 14px;
-        font-weight: 700;
+        font-weight: 600;
         margin: 15px 0px;
         color: ${(props) => props.theme.textColor.quaternary};
     }
@@ -308,10 +305,10 @@ const MainContent = styled(FlexDiv)`
         padding: 10px 0px;
     }
     strong {
-        font-weight: 700;
+        font-weight: 600;
     }
     a {
-        font-weight: 700;
+        font-weight: 600;
         text-decoration: none;
         color: ${(props) => props.theme.textColor.quaternary};
         :active {

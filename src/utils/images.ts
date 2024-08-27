@@ -1,57 +1,64 @@
 import { SupportedLanguages } from 'enums/languages';
-import { TAGS_FLAGS } from 'enums/tags';
-import { TAGS_LIST } from '../constants/tags';
+import { League } from 'enums/sports';
+import { LeagueMap } from '../constants/sports';
 import { fixOneSideMarketCompetitorName } from './formatters/string';
-import { isInternationalGame } from './markets';
+import { getLeagueLabel, isInternationalLeague } from './sports';
 
-export const getTeamImageSource = (team: string, leagueTag: number) =>
-    leagueTag == 9153 || leagueTag == 9156
+export const getTeamImageSource = (team: string, league: League) => {
+    const leagueLabel = getLeagueLabel(league);
+    return league == League.TENNIS_GS || league == League.TENNIS_MASTERS || league == League.SUMMER_OLYMPICS_TENNIS
         ? `/logos/Tennis/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : leagueTag == 9445 || leagueTag == 9497
-        ? `/logos/${TAGS_LIST.find((t) => t.id == leagueTag)?.label}/${fixOneSideMarketCompetitorName(team)
-              .replaceAll(' ', '-')
-              .toLowerCase()}.webp`
-        : leagueTag == 109021
+        : league == League.FORMULA1 || league == League.MOTOGP
+        ? `/logos/${leagueLabel}/${fixOneSideMarketCompetitorName(team).replaceAll(' ', '-').toLowerCase()}.webp`
+        : league == League.GOLF_H2H
         ? `/logos/PGA/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : leagueTag == 109121
+        : league == League.GOLF_WINNER
         ? `/logos/PGA/${fixOneSideMarketCompetitorName(team).replaceAll(' ', '-').toLowerCase()}.webp`
-        : leagueTag == 9268
+        : league == League.BRAZIL_1
         ? `/logos/Brazil-Serie-A/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : isInternationalGame(Number(leagueTag))
-        ? `/logos/Countries/${team.trim().replaceAll(' ', '-').toLowerCase()}.svg`
-        : leagueTag == 9132
-        ? `/logos/EPL/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : leagueTag == 9134
-        ? `/logos/Ligue 1/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : leagueTag == 9138
-        ? `/logos/La Liga/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : leagueTag == 9141
-        ? `/logos/Serie A/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : leagueTag == 9209
-        ? `/logos/Bundesliga/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : `/logos/${TAGS_LIST.find((t) => t.id == leagueTag)?.label}/${team
+        : isInternationalLeague(Number(league))
+        ? `/logos/Countries/${team
               .trim()
+              .replaceAll(' 7s', '')
+              .replaceAll(' U23', '')
+              .replaceAll(' 3x3', '')
               .replaceAll(' ', '-')
-              .toLowerCase()}.webp`;
+              .toLowerCase()}.svg`
+        : league == League.ENGLAND_CUP
+        ? `/logos/EPL/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : league == League.FRANCE_CUP
+        ? `/logos/Ligue 1/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : league == League.SPAIN_CUP
+        ? `/logos/La Liga/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : league == League.ITALY_CUP
+        ? `/logos/Serie A/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : league == League.GERMANY_CUP
+        ? `/logos/Bundesliga/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : league == League.BRAZIL_CUP
+        ? `/logos/Brazil-Serie-A/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : league == League.US_ELECTION
+        ? `/logos/Countries/united-states-of-america.svg`
+        : `/logos/${leagueLabel}/${team.trim().replaceAll(' ', '-').replaceAll('/', '-').toLowerCase()}.webp`;
+};
 
 const OVERTIME_LOGO = '/logos/overtime-logo.png';
 const OVERTIME_LOGO_DARK = '/logos/overtime-logo-dark.svg';
 const PROFILE_SILHOUETTE = '/profile-silhouette.svg';
 
-export const getOnImageError = (setSrc: (src: string) => void, leagueTag: number | string, isDark = false) => () => {
-    setSrc(TAGS_LIST.find((t) => t.id === Number(leagueTag))?.logo || (isDark ? OVERTIME_LOGO_DARK : OVERTIME_LOGO));
+export const getOnImageError = (setSrc: (src: string) => void, league: League, isDark = false) => () => {
+    setSrc(LeagueMap[league]?.logo || (isDark ? OVERTIME_LOGO_DARK : OVERTIME_LOGO));
 };
 
 export const getOnPlayerImageError = (setSrc: (src: string) => void) => () => {
     setSrc(PROFILE_SILHOUETTE);
 };
 
-export const getErrorImage = (leagueTag: number | string) => {
-    return TAGS_LIST.find((t) => t.id === Number(leagueTag))?.logo || OVERTIME_LOGO;
+export const getErrorImage = (league: League) => {
+    return LeagueMap[league]?.logo || OVERTIME_LOGO;
 };
 
-export const getLeagueLogoClass = (leagueTag: number) => {
-    return TAGS_LIST.find((t) => t.id === Number(leagueTag))?.logoClass || 'league league--overtime';
+export const getLeagueLogoClass = (league: League) => {
+    return LeagueMap[league]?.logoClass || 'icon-homepage league--overtime';
 };
 
 export const getLanguageFlagSource = (language: SupportedLanguages | any) => {
@@ -75,70 +82,95 @@ export const getLanguageFlagSource = (language: SupportedLanguages | any) => {
 
 export const getLeagueFlagSource = (tagId: number | any) => {
     switch (tagId) {
-        case TAGS_FLAGS.NCAA_FOOTBALL:
+        case League.NCAAF:
             return `/logos/Countries/united-states-of-america.svg`;
-        case TAGS_FLAGS.NFL:
+        case League.NFL:
             return `/logos/Countries/united-states-of-america.svg`;
-        case TAGS_FLAGS.MLB:
+        case League.MLB:
             return `/logos/Countries/united-states-of-america.svg`;
-        case TAGS_FLAGS.NBA:
+        case League.NBA:
             return `/logos/Countries/united-states-of-america.svg`;
-        case TAGS_FLAGS.NCAA_BASKETBALL:
+        case League.NCAAB:
             return `/logos/Countries/united-states-of-america.svg`;
-        case TAGS_FLAGS.NHL:
+        case League.NHL:
             return `/logos/Countries/united-states-of-america.svg`;
-        case TAGS_FLAGS.WNBA:
+        case League.WNBA:
             return `/logos/Countries/united-states-of-america.svg`;
-        case TAGS_FLAGS.MLS:
+        case League.MLS:
             return `/logos/Countries/united-states-of-america.svg`;
-        case TAGS_FLAGS.EPL:
+        case League.US_ELECTION:
+            return `/logos/Countries/united-states-of-america.svg`;
+        case League.EPL:
+        case League.ENGLAND_CHAMPIONSHIP:
             return `/logos/Countries/england.svg`;
-        case TAGS_FLAGS.LIGUE_ONE:
+        case League.LIGUE_ONE:
             return `/logos/Countries/france.svg`;
-        case TAGS_FLAGS.BUNDESLIGA:
+        case League.BUNDESLIGA:
             return `/logos/Countries/germany.svg`;
-        case TAGS_FLAGS.LA_LIGA:
+        case League.LA_LIGA:
             return `/logos/Countries/spain.svg`;
-        case TAGS_FLAGS.SERIE_A:
+        case League.SERIE_A:
             return `/logos/Countries/italy.svg`;
-        case TAGS_FLAGS.J1_LEAGUE:
+        case League.J1_LEAGUE:
             return `/logos/Countries/japan.svg`;
-        case TAGS_FLAGS.IPL:
+        case League.IPL:
             return `/logos/Countries/india.svg`;
-        case TAGS_FLAGS.EREDIVISIE:
+        case League.EREDIVISIE:
             return `/logos/Countries/netherlands.svg`;
-        case TAGS_FLAGS.PRIMEIRA_LIGA:
+        case League.PRIMEIRA_LIGA:
             return `/logos/Countries/portugal.svg`;
-        case TAGS_FLAGS.T20_BLAST:
+        case League.T20_BLAST:
             return `/logos/Countries/united-kingdom.svg`;
-        case TAGS_FLAGS.SAUDI_PROFESSIONAL_LEAGUE:
+        case League.SAUDI_PROFESSIONAL_LEAGUE:
             return `/logos/Countries/saudi-arabia.svg`;
-        case TAGS_FLAGS.BRAZIL_1:
+        case League.BRAZIL_1:
+        case League.BRAZIL_CUP:
             return `/logos/Countries/brazil.svg`;
-        case TAGS_FLAGS.UEFA_CL:
+        case League.LIGA_MX:
+            return `/logos/Countries/mexico.svg`;
+        case League.UEFA_CL:
+        case League.UEFA_EL:
+        case League.UEFA_EURO:
+        case League.UEFA_EURO_U21:
+        case League.UEFA_NATIONS_LEAGUE:
+        case League.UEFA_CONFERENCE_LEAGUE:
+        case League.UEFA_CHAMPIONS_LEAGUE_QUALIFICATION:
+        case League.UEFA_EUROPA_LEAGUE_QUALIFICATION:
+        case League.UEFA_CONFERENCE_LEAGUE_QUALIFICATION:
+        case League.UEFA_SUPER_CUP:
             return `/logos/Countries/europe.svg`;
-        case TAGS_FLAGS.UEFA_EL:
+        case League.EUROLEAGUE:
             return `/logos/Countries/europe.svg`;
-        case TAGS_FLAGS.UEFA_EURO:
-            return `/logos/Countries/europe.svg`;
-        case TAGS_FLAGS.UEFA_EURO_U21:
-            return `/logos/Countries/europe.svg`;
-        case TAGS_FLAGS.UEFA_NATIONS_LEAGUE:
-            return `/logos/Countries/europe.svg`;
-        case TAGS_FLAGS.UEFA_CONFERENCE_LEAGUE:
-            return `/logos/Countries/europe.svg`;
-        case TAGS_FLAGS.EUROLEAGUE:
-            return `/logos/Countries/europe.svg`;
-        case TAGS_FLAGS.ENGLAND_CUP:
+        case League.ENGLAND_CUP:
             return `/logos/Countries/england.svg`;
-        case TAGS_FLAGS.FRANCE_CUP:
+        case League.FRANCE_CUP:
             return `/logos/Countries/france.svg`;
-        case TAGS_FLAGS.SPAIN_CUP:
+        case League.SPAIN_CUP:
             return `/logos/Countries/spain.svg`;
-        case TAGS_FLAGS.GERMANY_CUP:
+        case League.GERMANY_CUP:
             return `/logos/Countries/germany.svg`;
-        case TAGS_FLAGS.ITALY_CUP:
+        case League.ITALY_CUP:
             return `/logos/Countries/italy.svg`;
+        case League.SUMMER_OLYMPICS_BASKETBALL:
+        case League.SUMMER_OLYMPICS_BASKETBALL_WOMEN:
+        case League.SUMMER_OLYMPICS_BASKETBALL_3X3:
+        case League.SUMMER_OLYMPICS_BASKETBALL_3X3_WOMEN:
+        case League.SUMMER_OLYMPICS_SOCCER:
+        case League.SUMMER_OLYMPICS_SOCCER_WOMEN:
+        case League.SUMMER_OLYMPICS_RUGBY:
+        case League.SUMMER_OLYMPICS_RUGBY_WOMEN:
+        case League.SUMMER_OLYMPICS_VOLEYBALL:
+        case League.SUMMER_OLYMPICS_VOLEYBALL_WOMEN:
+        case League.SUMMER_OLYMPICS_HANDBALL:
+        case League.SUMMER_OLYMPICS_HANDBALL_WOMEN:
+        case League.SUMMER_OLYMPICS_WATERPOLO:
+        case League.SUMMER_OLYMPICS_BEACH_VOLEYBALL:
+        case League.SUMMER_OLYMPICS_BEACH_VOLEYBALL_WOMEN:
+        case League.SUMMER_OLYMPICS_HOCKEY:
+        case League.SUMMER_OLYMPICS_HOCKEY_WOMEN:
+        case League.SUMMER_OLYMPICS_TENNIS:
+        case League.SUMMER_OLYMPICS_TABLE_TENNIS:
+            return `/logos/Countries/paris2024.png`;
         default:
             return `/logos/Countries/world.svg`;
     }

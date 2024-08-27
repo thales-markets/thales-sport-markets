@@ -58,7 +58,8 @@
             },
             "id-exists": "Идентификатор реферала уже существует",
             "id-create-success": "Идентификатор реферала установлен успешно",
-            "your-referral-id": "Ваш реферальный идентификатор"
+            "your-referral-id": "Ваш реферальный идентификатор",
+            "header-label": "Приглашайте и зарабатывайте"
         },
         "swap": {
             "title": "Get USD",
@@ -66,7 +67,8 @@
             "to-label": "To",
             "balance-label": "Balance: {{amount}}",
             "swap-label": "Swap",
-            "swap-progress-label": "Swapping in progress..."
+            "swap-progress-label": "Swapping in progress...",
+            "approve": "Одобрить обмен"
         },
         "enable-wallet-access": {
             "approve-label": "Approve {{currencyKey}}",
@@ -98,7 +100,8 @@
             "enter-percentage": "Enter percentage",
             "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}",
             "single-amm-paused": "АММ приостановлено",
-            "invalid-amount-max": "Сумма не может превышать {{max}}"
+            "invalid-amount-max": "Сумма не может превышать {{max}}",
+            "swap-quote-low": "Котировка свопа слишком низкая (получите: {{quote}}, мин. получите {{minQuote}})! Пожалуйста, попробуйте еще раз..."
         },
         "time-remaining": {
             "ended": "ended",
@@ -188,7 +191,15 @@
             "description": "Как бы вы хотели отображать шансы?",
             "info": "*Вы всегда можете изменить тип коэффициента в фильтрах над списком игр.",
             "title": "Добро пожаловать на рынки сверхурочной работы"
-        }
+        },
+        "settings": "Настройки",
+        "filters": "Фильтры",
+        "status": "Положение дел",
+        "wrap-and-buy": "Заверните ETH и купите",
+        "wrap-eth-tooltip": "Ваш ETH сначала оборачивается в WETH, а затем передается в контракт.",
+        "election-tooltip": "Источником резолюции будут Associated Press, Fox News и NBC. Эти рынки исчезнут, как только все три источника объявят гонку за одного и того же кандидата. Если все три источника не объявят гонку за одного и того же кандидата до 11 ноября, все ставки будут аннулированы.",
+        "submit": "Представлять на рассмотрение",
+        "try-again": "Попробуйте еще раз"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
@@ -233,7 +244,9 @@
             "click-open-twitter": "Нажмите здесь, чтобы открыть Twitter",
             "save-image-cancel": "Сохранение изображения отменено!",
             "metamask-not-supported": "Браузер Metamask не поддерживает загрузку изображений! Пожалуйста, используйте другой браузер, чтобы поделиться изображением",
-            "save-image": "Сохранение изображения в буфер обмена. Пожалуйста подождите..."
+            "save-image": "Сохранение изображения в буфер обмена. Пожалуйста подождите...",
+            "live-trade-requested": "Запрошена живая торговля",
+            "fulfilling-live-trade": "Осуществление живой торговли"
         },
         "filter-label": {
             "global": {
@@ -246,7 +259,10 @@
                 "canceled": "Cancelled",
                 "archivedmarkets": "Archived markets",
                 "tooltip": "Markets resolved more than 7 days ago",
-                "pendingmarkets": "Непрерывный"
+                "pendingmarkets": "Непрерывный",
+                "pausedmarkets": "Приостановлено",
+                "cancelledmarkets": "Отменено",
+                "ongoingmarkets": "Непрерывный"
             },
             "sport": {
                 "all": "All sports",
@@ -263,9 +279,19 @@
                 "favourites": "Избранное",
                 "esports": "Киберспорт",
                 "cricket": "Крикет",
-                "mma": "ХОРОШИЙ",
+                "fighting": "ХОРОШИЙ",
                 "boxing": "Заниматься боксом",
-                "golf": "Гольф"
+                "golf": "Гольф",
+                "live": "Жить",
+                "volleyball": "Волейбол",
+                "handball": "Гандбол",
+                "rugby": "Регби",
+                "waterpolo": "Водное поло",
+                "olympicgames": "Олимпийские игры",
+                "politics": "Политика",
+                "tabletennis": "Настольный теннис",
+                "boosted": "Промо игры",
+                "promo": "Промо игры"
             },
             "all": "All",
             "datepicker": {
@@ -302,7 +328,8 @@
             "game-col": "игра",
             "result-col": "результат",
             "single-title": "Недавнее одиночное действие",
-            "parlay-title": "Недавние экспресс-активности"
+            "parlay-title": "Недавние экспресс-активности",
+            "ticket-title": "Недавняя активность билетов"
         },
         "tooltip": {
             "amount-exceeded": "Amount exceeded the amount available on AMM",
@@ -314,7 +341,7 @@
         "back": "Назад",
         "apply-filters": "Применить фильтры",
         "incentivized-market": "СТИМУЛИРОВАННЫЙ РЫНОК",
-        "number-of-rounds": "Общее количество раундов"
+        "number-of-rounds": "Круглый"
     },
     "markets": {
         "market-card": {
@@ -336,8 +363,8 @@
                 "winner": "Winner",
                 "spread": "Handicap",
                 "total": "Total",
-                "double-chance": "Double chance",
-                "combined-positions": "Комбинированные позиции",
+                "double chance": "Double chance",
+                "combined positions": "Комбинированные позиции",
                 "receiving yards": "Приемные дворы",
                 "home runs": "Хоумраны",
                 "strikeouts": "Вычеркивания",
@@ -451,7 +478,97 @@
             "toggle": {
                 "hide-paused-markets": "Скрыть приостановленные рынки",
                 "show-paused-markets": "Показать приостановленные рынки"
-            }
+            },
+            "odd-tooltip-v2": {
+                "scoring": {
+                    "goals": "цели",
+                    "sets": "наборы",
+                    "rounds": "раунды",
+                    "points": "точки"
+                },
+                "match-resolve": {
+                    "regular": "в обычное время",
+                    "overtime": "включая возможные сверхурочные"
+                },
+                "lastTouchdown-0": "{{team}} забьет последний тачдаун в игре",
+                "bonus": "{{bonus}} добавлен бонус за победу!",
+                "touchdowns-0": "{{team}} забьет тачдаун в игре",
+                "shots-1": "У {{team}} будет меньше бросков, чем у {{line}}",
+                "tripleDouble-0": "{{team}} забьет трипл-дабл",
+                "pitcherHitsAllowed-0": "У {{team}} будет разрешено больше попаданий, чем у {{line}}",
+                "strikeouts-0": "У {{team}} будет больше аутов, чем у {{line}}",
+                "rushingYards-1": "У {{team}} будет меньше ярдов, чем у {{line}}",
+                "race-winner": "{{team}} выиграет гонку {{matchResolve}}",
+                "pitcherHitsAllowed-1": "У {{team}} будет меньше разрешенных попаданий, чем у {{line}}",
+                "passingTouchdowns-0": "У команды {{team}} будет больше тачдаунов в пас, чем у команды {{line}}.",
+                "doubleChance-2": "{{team}} выиграет матч или матч завершится вничью {{matchResolve}}",
+                "homeruns-0": "У команды {{team}} будет больше хоум-ранов, чем у команды {{line}}.",
+                "assists-1": "У команды {{team}} будет меньше результативных передач, чем у команды {{line}}",
+                "tripleDouble-1": "{{team}} не забьет трипл-дабл",
+                "hitsRecorded-0": "У {{team}} будет записано больше обращений, чем у {{line}}",
+                "firstTouchdown-0": "{{team}} забьет первый тачдаун в игре",
+                "receivingYards-0": "У {{team}} будет больше приемных ярдов, чем у {{line}}",
+                "moneyline-0": "{{team}} выиграет матч {{matchResolve}}",
+                "points-0": "{{team}} наберет больше очков, чем {{line}}",
+                "points-1": "У команды {{team}} меньше очков, чем у команды {{line}}.",
+                "total-0": "Общее количество {{scoring}} в матче {{matchResolve}} будет больше {{line}}",
+                "rushingYards-0": "У команды {{team}} будет больше ярдов, чем у команды {{line}}.",
+                "rebounds-0": "У команды {{team}} будет больше подборов, чем у команды {{line}}.",
+                "doubleChance-0": "{{team}} выиграет матч или матч завершится вничью {{matchResolve}}",
+                "spread-1": "{{team}} выиграет матч или проиграет с разницей меньше, чем {{line}} {{scoring}} {{matchResolve}}",
+                "homeruns-1": "У {{team}} будет меньше хоум-ранов, чем у {{line}}",
+                "hitsRecorded-1": "У {{team}} будет записано меньше обращений, чем у {{line}}.",
+                "and": "и",
+                "assists-0": "У команды {{team}} будет больше передач, чем у команды {{line}}.",
+                "doubleDouble-1": "{{team}} не забьет дабл-дабл",
+                "goals-0": "{{team}} забьет гол в игре",
+                "moneyline-2": "Матч завершится вничью {{matchResolve}}",
+                "passingTouchdowns-1": "У {{team}} будет меньше тачдаунов в пас, чем у {{line}}",
+                "fieldGoalsMade-0": "{{team}} забьет больше мячей с игры, чем {{line}}",
+                "passingYards-1": "У {{team}} будет меньше пасовых ярдов, чем у {{line}}",
+                "tournament-winner": "{{team}} выиграет турнир {{matchResolve}}",
+                "doubleChance-1": "{{team}} или {{team2}} выиграет матч {{matchResolve}}",
+                "spread-0": "{{team}} выиграет матч с разницей более чем {{line}} {{scoring}} {{matchResolve}}",
+                "moneyline-1": "{{team}} выиграет матч {{matchResolve}}",
+                "receptions-0": "У {{team}} будет больше приёмов, чем у {{line}}",
+                "shots-0": "У команды {{team}} будет больше бросков, чем у команды {{line}}.",
+                "receptions-1": "У {{team}} будет меньше приёмов, чем у {{line}}",
+                "rebounds-1": "У {{team}} будет меньше подборов, чем у {{line}}",
+                "total-1": "Общее количество {{scoring}} в матче {{matchResolve}} будет меньше {{line}}",
+                "fieldGoalsMade-1": "У команды {{team}} будет меньше голов с игры, чем у команды {{line}}.",
+                "doubleDouble-0": "{{team}} забьет дабл-дабл",
+                "passingYards-0": "У {{team}} будет больше пасовых ярдов, чем у {{line}}",
+                "receivingYards-1": "У {{team}} будет меньше приемных ярдов, чем у {{line}}",
+                "strikeouts-1": "У {{team}} будет меньше аутов, чем у {{line}}",
+                "winner-2": "Матч завершится вничью {{matchResolve}}",
+                "winner-0": "{{team}} выиграет матч {{matchResolve}}",
+                "winner-1": "{{team}} выиграет матч {{matchResolve}}"
+            },
+            "type-tooltip": {
+                "11055": "Прием, рывок, возврат панта, ответный удар, тачдауны защиты и перехвата засчитываются в результат.",
+                "touchdowns": "Прием, рывок, возврат панта, ответный удар, тачдауны защиты и перехвата засчитываются в результат."
+            },
+            "odds-live-limitation-message": "Позиции в реальном времени разрешены только в одиночном разряде.",
+            "live": "Жить",
+            "time": "Время",
+            "set": "Набор",
+            "abandoned": "Заброшенный",
+            "interrupted": "Прерванный",
+            "delayed": "Отложенный",
+            "postponed": "Перенесенный",
+            "rain-delay": "Задержка дождя",
+            "loss": "Потеря",
+            "open": "Открыть",
+            "won": "Выиграл",
+            "live-trading-paused": "Реальная торговля приостановлена",
+            "fighters-walking": "Истребители идут",
+            "scheduled": "Запланированное",
+            "end-of-round": "Конец раунда",
+            "pre-fight": "Перед боем",
+            "fighters-introduction": "Представление бойцов",
+            "end-of-fight": "Конец боя",
+            "suspended": "Приостановленный",
+            "not-available-for-trading": "Не доступен для торговли"
         },
         "market-details": {
             "price": "Price",
@@ -474,7 +591,7 @@
             "positions": "Позиции",
             "odds": "Шансы"
         },
-        "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity.",
+        "zero-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",
         "parlay": {
             "skew": "перекос",
             "total-quote": "Общая котировка",
@@ -503,7 +620,10 @@
                 "same-event-participant": "Поддерживается только один участник на событие. Невозможно добавить {{addedParticipant}}, поскольку {{existingParticipant}} уже находится в Parlay",
                 "same-game-different-player-props": "Не поддерживается объединение различных категорий реквизита игрока.",
                 "already-added-combined-positions": "Невозможно объединить позиции с одного рынка с помощью комбинированных позиций.",
-                "player-props-and-other-positions": "Не поддерживается объединение позиций реквизита игрока с другими позициями с того же рынка."
+                "player-props-and-other-positions": "Не поддерживается объединение позиций реквизита игрока с другими позициями с того же рынка.",
+                "other-types-with-player-props": "Не поддерживается объединение реквизита игрока с другими типами из той же игры.",
+                "same-player-different-types": "Не поддерживается объединение разных категорий для одного и того же игрока ({{player}}).",
+                "player-props-combining-not-enabled": "Объединение реквизитов игроков для {{league}} не поддерживается."
             },
             "empty-title": "Нет позиций",
             "empty-description": "Добавьте позицию, выберите рынок и сделайте свой выбор.",
@@ -532,7 +652,11 @@
                 "header": "Web 3 Спортивные рынки на",
                 "referral": "Реферальная ссылка",
                 "potential-payout": "Возможная выплата",
-                "positions": "Количество позиций"
+                "positions": "Количество позиций",
+                "label": "Поделиться на Twitter и получить бонус",
+                "submit-url": "Отправьте URL вашего твита для повышения Overdrop",
+                "verifying-tweet": "Проверка твита",
+                "network-error": "Ошибка сети, проверьте консоль браузера для получения дополнительной информации"
             },
             "buy-in": "Купить в",
             "total-bonus": "Общий бонус",
@@ -546,7 +670,54 @@
             "total-gas": "Плата за газ (ОЦЕНОЧНАЯ)",
             "gas-tooltip": "Текущая комиссия за газ, требуемая блокчейном для проведения транзакции",
             "persist-games": "Сохранить выбор после отправки",
-            "keep-selection-tooltip": "По умолчанию построитель экспрессов сбрасывается после успешной отправки. Установите этот флажок, если хотите сохранить текущий контекст после отправки."
+            "keep-selection-tooltip": "По умолчанию построитель экспрессов сбрасывается после успешной отправки. Установите этот флажок, если хотите сохранить текущий контекст после отправки.",
+            "liquidity": "Ликвидность",
+            "ticket-slip": "Билетный билет",
+            "slippage": {
+                "invalid-value": "Неверное значение",
+                "slippage": "проскальзывание",
+                "enter-value": "Введите значение",
+                "label": "Примите обмен, если коэффициенты упадут на:",
+                "tooltip": "Перевод не состоится, если при выполнении перевода ставка моста изменится в неблагоприятную сторону более чем на этот процент.",
+                "swap-thales": "Проскальзывание свопа"
+            },
+            "accept-odds-changes": "Принять изменения коэффициентов",
+            "odds-changed-description": "Коэффициенты изменились. Примите изменения, чтобы купить.",
+            "odds-changed-error": "Коэффициенты менялись при выполнении заказа. Попробуйте увеличить проскальзывание.",
+            "thales-bonus-tooltip": "Пользователи, совершающие сделки с THALES, получат дополнительные выплаты в размере 1 % за каждую игру, указанную в их билете (уже рассчитано в разделе «Общая котировка» и «Выплата»).",
+            "thales-bonus-info": "Используйте THALES и получайте бонус 1% за каждую игру.",
+            "overdrop": {
+                "overdrop-xp-overview": "Обзор Overdrop XP",
+                "base-xp": "Базовый опыт",
+                "active-boost": "Активное усиление",
+                "total-xp-boost": "Общий прирост опыта",
+                "total-xp-earned": "Всего заработанного опыта",
+                "bonus-applied": "Бонус применен",
+                "overdrop-xp": "Опыт перегрузки",
+                "tooltip": {
+                    "weekly-boost": "Чем больше недель подряд вы делаете ставку, тем выше ваш бонус XP. Увеличивайте на +5% за каждую неделю до максимума +20%. Если вы пропустите одну неделю, этот бонус сбрасывается до 0%",
+                    "parlay-boost": "В зависимости от того, сколько отдельных игр в вашем экспрессе, вы получите дополнительный бонус к накоплению XP за этот экспресс. Максимум +290% бонуса XP за 15 игр в экспрессе.",
+                    "loyalty-boost": "Loyalty XP Boost дает вам до 25% постоянного увеличения на все ваши общие заработки XP, в зависимости от вашего уровня XP. Начиная с 5% увеличения на уровне 1, вы получаете еще +5% при достижении каждого пятого уровня.",
+                    "daily-boost": "Чем больше дней подряд вы делаете ставку, тем выше ваш бонус к опыту. Увеличьте +5% за каждый день до максимума +35%. Если вы пропустите один день, этот бонус сбрасывается до 0%",
+                    "twitter-boost": "Если вы поделитесь своей ставкой на дополнительное время в Twitter в форме Flex Card, вы активируете 3-дневный бонус Twitter Flex Boost в размере +10%.",
+                    "promo-boost": "В некоторых спортивных играх есть дополнительные бонусы к опыту.",
+                    "thales-boost": "Все ставки, сделанные с THALES в качестве обеспечения, будут иметь бонус +10% к базовому накоплению XP для этой конкретной ставки!",
+                    "base-xp": "Базовый XP рассчитывается по следующей формуле:\n\nБазовый XP = Сумма бай-ина * (2 - Нормализованные коэффициенты). \n\nЭто означает, что ваша ставка приносит больше базового XP, чем выше ваш бай-ин и чем выше коэффициенты вашей ставки."
+                },
+                "buy-in-xp": "Купить в XP",
+                "odds-xp": "Множитель шансов"
+            },
+            "swap-thales-tooltip": "ВСЕ",
+            "use-free-bet": "Используйте бесплатную ставку",
+            "swap-thales": "Поменяйтесь на THALES, чтобы получить лучшее предложение.",
+            "swap-thales-receive": "Минимальное получение",
+            "disable-free-bet": "Отключить баланс бесплатных ставок",
+            "buy-steps": {
+                "approve-buy": "Одобрить покупку с помощью {{currencyKey}}",
+                "swap": "Обмен на {{currencyKey}}",
+                "approve-swap": "Одобрить обмен на {{currencyKey}}",
+                "buy": "Купить с помощью {{currencyKey}}"
+            }
         },
         "discounted-per": "Со скидкой согласно",
         "nav-menu": {
@@ -560,13 +731,15 @@
                 "markets": "Рынки",
                 "fee-rebates": "Комиссионные скидки",
                 "fifa-campaign": "Кампания Зебро ФИФА",
-                "vaults": "Хранилища",
                 "liquidity-pool": "Обеспечить ликвидность",
-                "promotions": "Акции"
+                "promotions": "Акции",
+                "speed-markets": "Торгуйте криптовалютой",
+                "digital-options": "Цифровые опции"
             },
             "buttons": {
                 "disconnect": "Отключить",
-                "switch": "Выключатель"
+                "switch": "Выключатель",
+                "particle-wallet": "Кошелек частиц"
             },
             "labels": {
                 "language": "Язык"
@@ -580,7 +753,10 @@
         "incentivized-tooltip-uefa": "На соревнованиях УЕФА будет распределена колоссальная сумма {{rewards}}. В вознаграждение будет засчитываться только объем в сети Arbitrum! Более подробную информацию можно найти <detailsLink>здесь</detailsLink>.",
         "incentivized-tooltip-nhl": "Огромная сумма {{rewards}} будет распределена до конца сезона НХЛ, включая плей-офф. В вознаграждение будет засчитываться только объем в сети Arbitrum! Более подробную информацию можно найти <detailsLink>здесь</detailsLink>.",
         "incentivized-tooltip-mm": "Выиграйте 45 000 ARB + 50 000 THALES в ходе «Мартовского безумия». Подробнее <detailsLink>здесь</detailsLink>.",
-        "incentivized-tooltip-nhl-mlb": "Огромная сумма {{rewards}} будет распределена до конца сезона {{league}}, включая плей-офф. В вознаграждение будет засчитываться только объем в сети Arbitrum! Более подробную информацию можно найти <detailsLink>здесь</detailsLink>."
+        "incentivized-tooltip-nhl-mlb": "Огромная сумма {{rewards}} будет распределена до конца сезона {{league}}, включая плей-офф. В вознаграждение будет засчитываться только объем в сети Arbitrum! Более подробную информацию можно найти <detailsLink>здесь</detailsLink>.",
+        "incentivized-tooltip-euro-copa": "Огромная сумма {{rewards}} будет распределена на соревнованиях Евро-2024 и Кубка Америки. Более подробную информацию можно найти <detailsLink>здесь</detailsLink>.",
+        "incentivized-tooltip-olympics": "Заработайте {{rewards}} в виде наград за объем во время Олимпийских игр. Более подробную информацию можно найти <detailsLink>здесь</detailsLink>.",
+        "incentivized-tooltip-wimbledon": "Соревнуйтесь за {{rewards}} во время Уимблдона 2024 года в сверхурочных версиях V1 и V2. Более подробную информацию можно найти <detailsLink>здесь</detailsLink>."
     },
     "rewards": {
         "header": "Rewards",
@@ -604,64 +780,6 @@
         "twap": "TWAP на неделю",
         "total-global-rebates": "Всего скидок к оплате",
         "parlay-link": "<div>Для ежемесячного конкурса OP<parlayLink> кликните сюда</ parlayLink> .</div>"
-    },
-    "quiz": {
-        "title": "Sports Trivia competition",
-        "start-quiz-description": "<p>Hey sports fans! Ready to test your knowledge and beat the field?</p><p>Overtime has launched a sports trivia competition where weekly winners will receive NFT Vouchers that can be used instead of sUSD to participate in any sports market you like.</p><p>Read all the information about this trivia in our <blogPost>blog post</blogPost>.</p><p>How to participate? The trivia is available to everyone to test their knowledge and compete, but to be eligible for rewards you need to retweet this <quizRetweetLink>tweet</quizRetweetLink> and follow <twitter>Overtime's Twitter</twitter>.</p><p>Connect your wallet and enter your Twitter handle to start the trivia! If you win rewards, we will ask you to confirm your address via Twitter DM. Discord ID is optional if you want to receive a Discord role as a potential trivia winner.</p><p>For any questions please join our <discord>Discord</discord>.</p>",
-        "twitter-handle-label": "Twitter handle",
-        "twitter-handle-placeholder": "Enter your Twitter handle",
-        "twitter-handle-validation": "Invalid Twitter handle. Try again.",
-        "discord-label": "Discord ID (optional)",
-        "discord-placeholder": "Enter your Discord ID",
-        "current-question-label": "Current question: {{currentQuestion}}/{{numberOfQuestions}}",
-        "time-reamining-label": "Time remaining: <0/>",
-        "question-weight-label": "Question weight: {{points}}",
-        "point-label": "point",
-        "points-label": "points",
-        "quiz-finished-label": "Trivia finished!",
-        "your-score-label": "Your score: {{score}}/{{max}} points",
-        "button": {
-            "start-quiz-label": "Start trivia",
-            "next-question-label": "Next question",
-            "previous-question-label": "Previous question",
-            "finish-quiz-label": "Finish trivia",
-            "try-again-label": "Try again",
-            "see-leaderboard-label": "See leaderboard"
-        },
-        "leaderboard": {
-            "title": "Trivia Leaderboard",
-            "description": "<p>This is the trivia leaderboard where you can see how are you faring against the competition for any given week.</p><p>All the details about how to participate for NFT sUSD vouchers that can be used on any sports market available <blogPost>here</blogPost>.</p><p>You can take the trivia as many times as you like <sportsTrivia>here</sportsTrivia>.</p>",
-            "back-to-quiz": "Back to trivia",
-            "search-placeholder": "Search...",
-            "table": {
-                "rank-col": "Rank",
-                "wallet-address-col": "Wallet address",
-                "twitter-col": "Twitter",
-                "points-col": "Points",
-                "time-col": "Time",
-                "rewards-col": "Rewards",
-                "no-data-available": "No data available"
-            },
-            "period-end-label": "The period ends in",
-            "period-ended-label": "Period ended",
-            "week-label": "Week",
-            "overtime-voucher": "Overtime voucher",
-            "all-time-leaderboard-label": "Таблица лидеров всех времен"
-        },
-        "help-us-improve-label": "Help us improve",
-        "help-us-improve-tooltip": "Help us improve sports trivia by adding new questions to the questions database.",
-        "finish-messages": {
-            "your-best-result": "Your best result: {{points}} {{pointsLabel}}",
-            "rank-info": "With {{points}} {{pointsLabel}} you are ranked {{rank}} out of {{totalParticipants}} participants."
-        },
-        "difficulty-label": "Difficulty",
-        "difficulty": {
-            "1": "Trivial",
-            "2": "Easy",
-            "3": "Moderate",
-            "4": "Challenging",
-            "5": "Hard"
-        }
     },
     "landing-page": {
         "open-overtime": "Открытые рынки сверхурочной работы",
@@ -713,7 +831,10 @@
             "claim-all": "Требовать все",
             "approve-swap-tooltip": "Чтобы получить выплату в {{currencyKey}}, вам необходимо одобрить обмен с {{defaultCurrency}} на {{currencyKey}}.",
             "payout-in": "Выплата в",
-            "claim-progress": "Утверждение..."
+            "claim-progress": "Утверждение...",
+            "win": "Победить",
+            "payout": "Выплата",
+            "live": "Жить"
         },
         "messages": {
             "no-claimable": "У вас нет требуемых должностей",
@@ -723,7 +844,8 @@
             "canceled-tooltip": "Отмененные рынки можно запросить через 2 часа после разрешения рынка.",
             "transaction-pending": "Ожидание транзакции",
             "voucher-claim-success": "Ваучер успешно востребован",
-            "no-vouchers": "У вас нет ваучера для получения"
+            "no-vouchers": "У вас нет ваучера для получения",
+            "no-lp-transactions": "У вас нет транзакций LP."
         },
         "table": {
             "games": "Игры",
@@ -734,7 +856,20 @@
             "position": "Должность",
             "status": "Статус",
             "total-amount": "Итого",
-            "total-quote": "Общая котировка"
+            "total-quote": "Общая котировка",
+            "payout": "Выплата",
+            "round-label": "Круглый",
+            "claim": "Заявление о снятии средств",
+            "single-lp": "Сингл LP",
+            "type-col": "тип",
+            "date-time-col": "дата | время",
+            "deposit": "Депозит",
+            "parlay-lp": "Экспресс ЛП",
+            "tx-status-col": "статус передачи",
+            "amount-col": "количество",
+            "name-col": "имя",
+            "withdrawalRequest": "Запрос на вывод средств",
+            "round-col": "круглый"
         },
         "winnings-are-forfeit": "*Выигрыши, не запрошенные в течение {{amount}} дней после решения рынка, аннулируются.",
         "search-field": "Поиск кошелька",
@@ -743,12 +878,11 @@
             "trades": "Trades",
             "highest-win": "Highest win",
             "lifetime-wins": "Lifetime wins",
-            "in-vaults": "In vaults"
+            "profile-data": "Данные профиля",
+            "free-bet": "Бесплатная ставка",
+            "wallet": "Кошелек"
         },
-        "vaults": "Хранилища/LP",
         "lp-title": "Пул ликвидности",
-        "go-to-vault": "Перейти в хранилище",
-        "in-vault": "В хранилище",
         "in-lp": "Предоставляемая ликвидность",
         "go-to-lp": "Перейти на LP",
         "claiming-voucher": "Заявка...",
@@ -765,7 +899,34 @@
         "wrapper-nav": {
             "my-tickets": "Мои билеты",
             "my-portfolio": "Мое Портфолио"
-        }
+        },
+        "lp": "LP",
+        "back": "Назад",
+        "go-to": "Идти к",
+        "free-bet": {
+            "claim-btn": "Сумма претензии будет уменьшена на сумму бай-ина, которая будет переведена на ваш баланс бесплатных ставок."
+        },
+        "free-bet-modal": {
+            "approve-success": "Успешно одобрено",
+            "invalid-amount": "Недопустимая сумма",
+            "fund-successful": "Фонд успешен",
+            "enter-amount": "Введите сумму",
+            "enter-wallet-address": "Введите адрес кошелька",
+            "insufficient-balance": "Недостаточный баланс",
+            "invalid-wallet-address": "Неверный адрес кошелька",
+            "title": "Отправить бесплатную ставку",
+            "transaction-pending": "Транзакция ожидает рассмотрения",
+            "funding": "Финансирование...",
+            "no-funds": "Пожалуйста, убедитесь, что в вашем кошельке достаточно средств",
+            "fund": "Отправить бесплатную ставку",
+            "total-amount-batch": "Общая сумма будет равна {{ amount }}, умноженной на {{ count }} адрес(а) кошелька.",
+            "fund-batch": "Финансируйте несколько адресов",
+            "one-or-more-address-invalid": "Один или несколько введенных адресов кошелька недействительны.",
+            "duplicate": "Обнаружены повторяющиеся адреса кошельков",
+            "enter-amount-per-user": "Введите сумму на пользователя",
+            "enter-wallet-addresses": "Введите адреса кошельков"
+        },
+        "send-free-bet": "Отправить бесплатную ставку"
     },
     "referral": {
         "nav-items": {
@@ -794,123 +955,6 @@
         "no-result": "Для этой таблицы нет результатов",
         "total-earned": "Всего заработано",
         "paragraph": "<bold>Программа сверхурочных рефералов — это сетевой инструмент для стимулирования привлечения и адаптации пользователей.</bold> Программа позволяет любому<bold> создать реферальную ссылку</bold> и поделитесь им с пользователями, которых они пытаются подключить.<br /><br /> Делясь своей личной реферальной ссылкой, вы зарабатываете<bold> 0,5% от всего объема sUSD, произведенного вашими привлеченными пользователями!</bold> Нет необходимости в ручных требованиях, sUSD автоматически накапливается в вашем кошельке в виде простых переводов sUSD."
-    },
-    "vaults": {
-        "title": "Спортивные своды",
-        "risks-label": "Риски хранилища",
-        "strategy-label": "Стратегия хранилища"
-    },
-    "vault": {
-        "discount-vault": {
-            "risks": "<p>Хранилище имеет коэффициент использования {{utilizationRate}}, который гарантирует, что риску подвергается не более {{utilizationRate}} депонированных в раунде средств. Кроме того, из этих {{utilizationRate}} максимум {{allocationLimitsPerMarketPerRound}} может быть потрачено на одном рынке, что диверсифицирует риск на несколько рынков с коэффициентами более {{odds}}.</p>",
-            "description": "<p>Покупает позиции, которые имеют шансы более {{odds}} и доступны со скидкой, превышающей {{discount}}.</p>",
-            "title": "Хранилище скидок"
-        },
-        "degen-discount-vault": {
-            "title": "Хранилище скидок Дегена",
-            "risks": "<p>Хранилище имеет коэффициент использования {{utilizationRate}}, который гарантирует, что риску подвергается не более {{utilizationRate}} депонированных в раунде средств. Кроме того, из этих {{utilizationRate}} максимум {{allocationLimitsPerMarketPerRound}} может быть потрачено на одном рынке.</p>",
-            "description": "<p>Покупает позиции с любым коэффициентом, доступным со скидкой более {{discount}}.</p>"
-        },
-        "safu-discount-vault": {
-            "risks": "<p>Хранилище имеет коэффициент использования {{utilizationRate}}, который гарантирует, что риску подвергается не более {{utilizationRate}} депонированных в раунде средств. Кроме того, из этих {{utilizationRate}} максимум {{allocationLimitsPerMarketPerRound}} может быть потрачено на одном рынке, что диверсифицирует риск на несколько рынков с коэффициентами более {{odds}}.</p>",
-            "description": "<p>Покупает позиции с коэффициентами более {{odds}}, доступные с любой скидкой.</p>",
-            "title": "Хранилище скидок на столбцы"
-        },
-        "upsettoor-vault": {
-            "risks": "<p>Хранилище имеет коэффициент использования {{utilizationRate}}, который гарантирует, что риску подвергается не более {{utilizationRate}} депонированных в раунде средств. Кроме того, из этих {{utilizationRate}} максимум {{allocationLimitsPerMarketPerRound}} может быть потрачено на одном рынке, что диверсифицирует риск на несколько рынков с коэффициентами более {{odds}}.</p>",
-            "description": "<p>Покупает позиции, которые имеют шансы меньше {{odds}} и доступны со скидкой, превышающей {{discount}}.</p>",
-            "title": "Upsettoor Vault"
-        },
-        "tabs": {
-            "claim": "Требовать",
-            "withdraw": "Отзывать",
-            "deposit": "Депозит"
-        },
-        "button": {
-            "deposit-progress-label": "Депозит в процессе...",
-            "withdraw-progress-label": "Вывод средств...",
-            "close-round-confirmation-message": "Раунд успешно закрыт",
-            "withdraw-label": "Отзывать",
-            "deposit-label": "Депозит",
-            "request-withdrawal-confirmation-message": "Запрос на вывод успешно отправлен",
-            "close-round-progress-label": "Идет заключительный раунд...",
-            "request-withdrawal-label": "Запросить вывод",
-            "request-withdrawal-progress-label": "Запрос выполняется...",
-            "withdraw-confirmation-message": "Средства успешно выведены",
-            "close-round-label": "Закрыть раунд",
-            "deposit-confirmation-message": "Депозит успешно размещен"
-        },
-        "trades-history": {
-            "no-trades": "Нет сделок, связанных с этим хранилищем в выбранном раунде.",
-            "round-label": "Круглый",
-            "title": "История сделок в хранилище"
-        },
-        "pnl": {
-            "no-data": "Нет данных PnL за предыдущие раунды.",
-            "title": "PnL за раунд",
-            "lifetime-pnl": "Пожизненный PnL",
-            "ongoing-pnl": "Ongoing PnL"
-        },
-        "vault-not-started-message": "Хранилище не запущено",
-        "withdrawal-message": "Вы можете запросить вывод средств, и ваши средства будут отправлены вам автоматически в конце раунда, когда раунд будет закрыт.",
-        "available-trading-label": "Доступно для торговли",
-        "variables": "<p>Переменные:</p><ul><li> Коэффициент использования: {{utilizationRate}}</li><li> Нижний предел цены: {{priceLowerLimit}}</li><li> Верхний предел цены: {{priceUpperLimit}}</li><li> Максимальное влияние перекоса: {{skewImpactLimit}}</li><li> Максимальное распределение на одном рынке: {{allocationLimitsPerMarketPerRound}}</li><li> Максимальный общий депозит: {{maxAllowedDeposit}}</li><li> Максимальное количество пользователей в хранилище: {{maxAllowedUsers}}</li><li> Минимальная сумма для одной сделки: {{minTradeAmount}}</li><li> Минимальный депозит: {{minDepositAmount}}</li></ul>",
-        "withdrawal-deposit-warning": "Вы не можете снять, так как вы уже внесли депозит для следующего раунда.",
-        "deposit-vault-cap-reached-warning": "Ограничение хранилища достигнуто, вы не можете внести депозит.",
-        "deposit-amount-placeholder": "Введите сумму",
-        "vault-paused-message": "Хранилище приостановлено",
-        "withdraw-round-end-label": "Раунд заканчивается через: <counter />",
-        "estimated-amount-tooltip": "Это ориентировочная сумма. Фактическая сумма будет рассчитана при закрытии текущего раунда на основе PnL раунда.",
-        "round-end-label": "Раунд заканчивается через",
-        "nothing-to-withdraw-label": "Нечего снимать.",
-        "your-next-round-allocation-label": "Ваше распределение на следующий раунд: <bold>{{amount}}</bold>",
-        "deposit-vault-cap-error": "Сумма депозита превышает лимит хранилища",
-        "vault-filled-label": "Хранилище заполнено: {{amount}} / {{max}}",
-        "withdrawal-requested-message": "Вы запросили вывод средств <bold>{{amount}}</bold><tooltip />. Ваши средства будут отправлены вам автоматически в конце раунда, когда раунд закрывается.",
-        "round-allocation-label": "Общий круглый депозит",
-        "deposit-amount-label": "Сумма вклада",
-        "your-round-allocation-label": "Ваше распределение на раунд: <bold>{{amount}}</bold>",
-        "back-to-vaults": "Назад к хранилищам",
-        "withdrawal-request-label": "Запрос на вывод средств: <bold>{{amount}}</bold>",
-        "next-round-start-label": "Следующий раунд начнется через: <counter />",
-        "deposit-withdrawal-warning": "Запрошен вывод средств, вы не можете внести депозит.",
-        "deposit-message": "Внесите средства в хранилище для следующего раунда.",
-        "round-ended-label": "Раунд завершен",
-        "spent-trading-label": "Потрачено на торговлю",
-        "deposit-max-amount-of-users-warning": "Достигнуто максимальное количество пользователей в хранилище, вы не можете внести депозит.",
-        "deposit-min-amount-error": "Минимальная сумма депозита: {{amount}}",
-        "available-to-withdraw-label": "Доступно для снятия: <bold>{{amount}}</bold>",
-        "users-in-vault-label": "Пользователи в хранилище: {{number}} / {{max}}",
-        "first-deposit-withdrawal-message": "Вы внесли депозит для следующего раунда, и вы можете вывести эти средства в конце следующего раунда.",
-        "user-transactions": {
-            "type": {
-                "deposit": "Депозит",
-                "withdrawalRequest": "Запрос на вывод средств",
-                "claim": "Заявление о снятии средств"
-            },
-            "no-transactions": "Нет пользовательских транзакций, связанных с этим хранилищем в выбранном раунде.",
-            "title": "Пользовательские транзакции",
-            "name": "Имя"
-        },
-        "parlay-discount-vault": {
-            "title": "Экспресс хранилище скидок",
-            "description": "<p>Покупает экспресс-билеты, каждая отдельная позиция в которых имеет скидку не менее {{discount}}.</p>",
-            "risks": "<p>Хранилище имеет коэффициент использования {{utilizationRate}}, который гарантирует, что риску подвергается не более {{utilizationRate}} депонированных в раунде средств. Кроме того, из этих {{utilizationRate}} максимум {{allocationLimitsPerMarketPerRound}} может быть потрачено на один экспресс-билет за раунд, что диверсифицирует риск на несколько экспресс-билетов со скидкой, превышающей {{odds}}.</p>"
-        },
-        "gamified-staking-message": "<p>Все депозиты, входящие в раунд, засчитываются в счет геймифицированного объема ставок.</p>",
-        "LP": {
-            "title": "LP",
-            "parlay-lp": "Парлай ЛП",
-            "single-lp": "Одиночный LP"
-        },
-        "variables-parlay": "<p>Переменные:</p><ul><li> Коэффициент использования: {{utilizationRate}}</li><li> Нижний предел цены: {{priceLowerLimit}}</li><li> Верхний предел цены: {{priceUpperLimit}}</li><li> Максимальное влияние перекоса: {{skewImpactLimit}}</li><li> Максимальное распределение на один экспресс: {{allocationLimitsPerMarketPerRound}}</li><li> Максимальный общий депозит: {{maxAllowedDeposit}}</li><li> Максимальное количество пользователей в хранилище: {{maxAllowedUsers}}</li><li> Минимальная сумма для одной сделки: {{minTradeAmount}}</li><li> Минимальный депозит: {{minDepositAmount}}</li><li> Продолжительность раунда: {{roundLength}} дней</li></ul>",
-        "single-lp": {
-            "title": "Одиночный LP"
-        },
-        "parlay-lp": {
-            "title": "Парлай ЛП"
-        },
-        "deprecated-info": "Устарело, пожалуйста, выведите свои средства!"
     },
     "parlay-leaderboard": {
         "title": "Parlay Incentives Leaderboard",
@@ -1087,10 +1131,6 @@
             "description": "Присоединяйтесь к лучшей букмекерской конторе Web3 на рынке. Закрепите позиции в ведущих лигах, таких как НФЛ, НБА, UCL, EPL и других.",
             "title": "Рынки сверхурочных: рынки букмекерских контор Web3 для более чем 40 лиг"
         },
-        "vaults": {
-            "title": "Хранилища сверхурочных рынков: автоматическая торговля",
-            "description": "Внесите активы в хранилище Overtime Markets и позвольте нашему автоматическому торговому механизму применить выбранную вами стратегию."
-        },
         "parlay-leaderboard": {
             "description": "Overtime Markets — это букмекерская контора Web3 с лучшими на рынке бонусами, которые раздаются раз в две недели для игроков с экспресс-ставками! Проверьте таблицу лидеров и проверьте, прошли ли вы квалификацию здесь.",
             "title": "Рынки сверхурочной работы: получайте вознаграждения за экспресс каждые 2 недели"
@@ -1194,10 +1234,12 @@
         "sign-up": "Зарегистрироваться",
         "title": "Начнём со сверхурочной работы",
         "get-started": "Начать",
-        "log-in": "Авторизоваться"
+        "log-in": "Авторизоваться",
+        "start-tour": "Начать тур"
     },
     "banner": {
-        "arb-distribution-message": "Распространение ARB началось. Зарабатывайте токены ARB, используя сверхурочную работу. Подробности уточняйте здесь."
+        "arb-distribution-message": "Распространение ARB началось. Зарабатывайте токены ARB, используя сверхурочную работу. Подробности уточняйте здесь.",
+        "v1-text": "<highlight>V2</highlight>: This is the V2 version of Overtime. To switch back to deprecated V1, <highlight>click here</highlight>."
     },
     "promotions": {
         "nav-items": {
@@ -1214,5 +1256,95 @@
         "from-label": "От",
         "no-promotions": "Упс! Похоже, на данный момент для данного фильтра нет доступных рекламных акций.",
         "back": "Назад"
+    },
+    "overdrop": {
+        "navigation-menu": {
+            "home": "Перебросить дом",
+            "leveling-tree": "Дерево прокачки",
+            "xp-calculation": "Расчет опыта",
+            "leaderboard": "Таблица лидеров"
+        },
+        "overdrop-home": {
+            "weekly-streak": "Еженедельное повышение опыта",
+            "twitter-xp-boost-resets": "Повышение опыта в Твиттере сбрасывается",
+            "total-xp-multiplier": "Общий множитель опыта",
+            "my-total-xp": "Мой общий опыт",
+            "next-level": "Следующий уровень",
+            "twitter-share": "Поделиться в Твиттере повышением опыта",
+            "social-multiplier": "Множитель социального опыта",
+            "level": "Уровень",
+            "daily-streak": "Ежедневное повышение опыта",
+            "xp": "опыт",
+            "next-thales-rewards-at": "Следующие награды Thales на",
+            "current-rewards": "Текущее предполагаемое вознаграждение",
+            "loyalty-boost": "Повышение лояльности",
+            "rank-tooltip": "Ваш текущий рейтинг в Overdrop League. Проверьте вкладку таблицы лидеров для получения дополнительной информации.",
+            "rank": "Классифицировать"
+        },
+        "leveling-tree": {
+            "explainer": {
+                "base-xp-content": "<bold>1 базовый опыт = 1$</bold> объема<br/><br/> После<bold> 28 дней</bold> в ряду<bold> объем &gt;10$</bold> вы достигли<bold> МАКС. базовый множитель</bold><br/><br/> Каждый пропущенный день с объемом ниже 10$ снижает вашу базу.<bold> Опыт на -0,1</bold>",
+                "xp-explained": "Объяснение XP",
+                "daily-bonus": "Ежедневный бонус",
+                "position-thales-content": "Используйте <bold>THALES</bold> в качестве залога, и вы <bold>получите бонус 10 % за БАЗОВЫЙ опыт за доллар</bold> для этой конкретной сделки.",
+                "xp-explained-content": "Сезонная кампания, в ходе которой пользователи получают опыт до конца спортивного сезона, управляя автомобилем<bold> объем сверхурочных</bold> с<bold> множители</bold> на основе различных динамических показателей и целей.<br/><br/> После окончания кампании все пользователи поделятся<highlight> 100к ОП</highlight> и<highlight> 150 тыс. АРБ</highlight> пропорционально на основе XP<br><br> Пока длится кампания, пользователи будут получать разовые награды на определенных УРОВНЯХ XP.",
+                "twitter-content": "Поделитесь своей сверхурочной <bold>Flex Card</bold> по сегодняшней ставке <bold>в Твиттере: бонус 10 % за BASE XP за каждый доллар</bold> до конца дня",
+                "days": "дней",
+                "games-in-parlay": "игры в экспрессе",
+                "positions-thales": "Позиция С БОНУСОМ THALES (одна скидка на ставку)",
+                "parlay-xp": "БОНУС PARLAY XP (один раз за экспресс)",
+                "twitter-share-bonus": "бонус за репост в Твиттере (один раз в день)",
+                "base-xp-accrual": "Базовое начисление опыта",
+                "xp-boost-content": "Есть несколько способов еще больше увеличить сумму накопленного опыта за ставку, получая бонусы от <bold>ежедневных серий ставок, еженедельных серий ставок, количества игр в экспрессе, используя токены THALES в качестве залога, делая ставки в Twitter и достигая уровней опыта для повышения лояльности!</bold>",
+                "loyalty-boost-content": "Loyalty XP Boost дает вам до 25% постоянного усиления на все ваши общие накопления XP, в зависимости от вашего уровня. Начиная с 5% усиления на уровне 1, вы получаете еще +5% при достижении каждого пятого уровня. Вы достигаете максимального усиления Loyalty XP в 25%, когда достигаете уровня 20 (GOAT) с накоплением 5 000 000 очков XP. Вы можете увидеть распределение уровней XP на странице ДЕРЕВА УРОВНЕЙ.",
+                "weekly-boost": "Еженедельное усиление серии",
+                "days-content": "Условия активации ежедневного усиления серии для текущего дня — это любой объем ставок между 00:00UTC и 23:59UTC для текущего дня. Чем больше дней подряд выполняется это условие, тем выше <bold>Ежедневное усиление серии</bold> для вашего базового накопления XP! \n\n<bold>Ежедневное усиление серии</bold> применяется ко всем ставкам, сделанным во время действия усиления. \n\nЕсли вы прервете свою серию и пропустите объем в один день, <bold>ваше ежедневное усиление серии сбрасывается до +0%.</bold>",
+                "parlay-content": "В зависимости от того, сколько отдельных игр входит в вашу экспресс-ставку, вы получите дополнительный бонус к накоплению опыта за эту экспресс-ставку!",
+                "weekly-boost-content": "Условия активации еженедельного усиления серии для текущей недели — это любой объем ставок между понедельником 00:00UTC и воскресеньем 23:59UTC для текущей недели. Чем больше недель подряд выполняется это условие, тем выше <bold>Weekly Streak Boost</bold> для вашего базового накопления XP!\n\n<bold>Weekly Streak Boost</bold> применяется ко всем ставкам, сделанным во время действия усиления.\n\nЕсли вы прервете свою серию и пропустите объем в один день, ваш <bold>Weekly Streak Boost</bold> сбрасывается до +0%.",
+                "xp-boost": "Увеличение опыта",
+                "loyalty-boost": "Повышение лояльности"
+            },
+            "heading": "Лига овердроп-фермерства"
+        },
+        "xp-details": {
+            "paragraph": "Используйте THALES в качестве залога для получения дополнительного бонуса 10%, создавайте экспрессы с бонусом до 100% и проверяйте наличие специальных рекламных игр.",
+            "total-bonus": "Общий бонус",
+            "xp-history": "История XP",
+            "received": "Полученный",
+            "days-in-row": "Дни подряд",
+            "twitter-multiplier": "Множитель Твиттера",
+            "shared-flex": "Общая гибкая карта",
+            "daily-multiplier": "Дневной множитель",
+            "no-results": "Без результатов",
+            "date-time": "Дата | Время",
+            "active-xp-bonus": "Активный бонус опыта",
+            "weekly-multiplier": "Еженедельный множитель",
+            "tx-link": "Ссылка на Техас",
+            "loyalty-multiplier": "Множитель лояльности",
+            "weeks-in-row": "Недели подряд",
+            "loyalty-boost": "Повышение лояльности"
+        },
+        "leaderboard": {
+            "table": {
+                "total-volume": "Общий объем",
+                "level": "Уровень",
+                "address": "Адрес",
+                "rank": "Классифицировать",
+                "total-xp": "Всего очков опыта",
+                "rewards": "Сумма вознаграждения"
+            }
+        },
+        "modal": {
+            "unlocked-level": "Вы разблокировали УРОВЕНЬ {{ level }}!",
+            "go-to-overdrop": "Перейти к овердропу",
+            "you-are-rocking": "Вы зажигаете!",
+            "day-streak": "<bold>{{ days }}</bold><br/> дневная серия!",
+            "reached-level": "Вы достигли УРОВНЯ {{ level }} и выиграли {{ amount }} бесплатную ставку THALES!",
+            "dont-show-this": "Больше не показывать",
+            "active-daily-streak": "Активный ежедневный бонус к опыту",
+            "congratulation": "Поздравляю!",
+            "check-out": "Проверить<br/> лига овердропов!",
+            "gain-xp-label": "Получайте опыт, повышайте уровень, получайте награды и собирайте предметы из аирдропа!"
+        }
     }
 }

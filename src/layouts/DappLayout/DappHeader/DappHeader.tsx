@@ -1,4 +1,3 @@
-import burger from 'assets/images/burger.svg';
 import Button from 'components/Button';
 import Logo from 'components/Logo';
 import NavMenu from 'components/NavMenu';
@@ -9,28 +8,57 @@ import Search from 'components/Search';
 import WalletInfo from 'components/WalletInfo';
 import ROUTES from 'constants/routes';
 import useInterval from 'hooks/useInterval';
-import useClaimablePositionCountQuery from 'queries/markets/useClaimablePositionCountQuery';
-import React, { useRef, useState } from 'react';
+import useClaimablePositionCountV2Query from 'queries/markets/useClaimablePositionCountV2Query';
+import React, { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
+import OutsideClickHandler from 'react-outside-click-handler';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { getIsMobile } from 'redux/modules/app';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
-import { getStopPulsing, setStopPulsing } from 'redux/modules/ui';
+import { getStopPulsing, setOddsType, setStopPulsing } from 'redux/modules/ui';
 import {
+    getIsConnectedViaParticle,
     getIsWalletConnected,
     getNetworkId,
     getWalletAddress,
     setWalletConnectModalVisibility,
 } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
-import styled, { useTheme } from 'styled-components';
-import { FlexDivCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
+import { useTheme } from 'styled-components';
+import { FlexDiv, FlexDivCentered, FlexDivEnd } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
 import { buildHref } from 'utils/routes';
+import { ODDS_TYPES } from '../../../constants/markets';
+import { OddsType } from '../../../enums/markets';
 import ProfileItem from './components/ProfileItem';
+import TimeFilters from './components/TimeFilters';
 import TopUp from './components/TopUp';
+import {
+    Container,
+    Count,
+    DropDown,
+    DropDownItem,
+    DropdownContainer,
+    HeaderIcon,
+    HeaderLabel,
+    IconWrapper,
+    Label,
+    LeftContainer,
+    LogoContainer,
+    MenuIcon,
+    MenuIconContainer,
+    MiddleContainer,
+    MobileButtonWrapper,
+    NotificationCount,
+    OverdropIcon,
+    RightContainer,
+    SearchContainer,
+    SearchIcon,
+    SearchIconContainer,
+    SettingsContainer,
+    WrapperMobile,
+} from './styled-components';
 
 const PULSING_COUNT = 10;
 
@@ -61,22 +89,22 @@ const DappHeader: React.FC = () => {
     const location = useLocation();
     const theme: ThemeInterface = useTheme();
 
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
-    const stopPulsing = useSelector((state: RootState) => getStopPulsing(state));
-    const isMobile = useSelector((state: RootState) => getIsMobile(state));
+    const networkId = useSelector(getNetworkId);
+    const isWalletConnected = useSelector(getIsWalletConnected);
+    const walletAddress = useSelector(getWalletAddress) || '';
+    const isConnectedViaParticle = useSelector(getIsConnectedViaParticle);
+    const marketSearch = useSelector(getMarketSearch);
+    const stopPulsing = useSelector(getStopPulsing);
+    const isMobile = useSelector(getIsMobile);
 
     const [currentPulsingCount, setCurrentPulsingCount] = useState<number>(0);
     const [navMenuVisibility, setNavMenuVisibility] = useState<boolean | null>(null);
     const [showSearcHModal, setShowSearchModal] = useState<boolean>(false);
+    const [dropdownIsOpen, setDropdownIsOpen] = useState<boolean>(false);
 
-    const marketSearch = useSelector((state: RootState) => getMarketSearch(state));
+    const isMarketsPage = location.pathname === ROUTES.Home || location.pathname === ROUTES.Markets.Home;
 
-    const isMarketsPage = location.pathname.includes('/markets') && !location.pathname.includes('/markets/');
-
-    const claimablePositionsCountQuery = useClaimablePositionCountQuery(walletAddress, networkId, {
+    const claimablePositionsCountQuery = useClaimablePositionCountV2Query(walletAddress, networkId, {
         enabled: isWalletConnected,
     });
 
@@ -84,6 +112,13 @@ const DappHeader: React.FC = () => {
         claimablePositionsCountQuery.isSuccess && claimablePositionsCountQuery.data
             ? claimablePositionsCountQuery.data
             : null;
+
+    const setSelectedOddsType = useCallback(
+        (oddsType: OddsType) => {
+            return dispatch(setOddsType(oddsType));
+        },
+        [dispatch]
+    );
 
     useInterval(async () => {
         if (!stopPulsing) {
@@ -97,7 +132,7 @@ const DappHeader: React.FC = () => {
     const menuImageRef = useRef<HTMLImageElement>(null);
 
     const getGetStartedButton = () => (
-        <SPAAnchor style={{ width: '100%', marginTop: '10px' }} href={buildHref(ROUTES.Wizard)}>
+        <SPAAnchor style={{ width: isMobile ? '100%' : 'fit-content' }} href={buildHref(ROUTES.Wizard)}>
             <Button
                 backgroundColor={theme.background.primary}
                 textColor={theme.button.textColor.quaternary}
@@ -106,9 +141,10 @@ const DappHeader: React.FC = () => {
                 fontWeight="400"
                 additionalStyles={{
                     borderRadius: '20px',
-                    fontWeight: '700',
-                    fontSize: '14px',
+                    fontWeight: '600',
+                    fontSize: isMobile ? '12px' : '14px',
                     textTransform: 'capitalize',
+                    whiteSpace: 'nowrap',
                 }}
                 height="28px"
             >
@@ -123,39 +159,60 @@ const DappHeader: React.FC = () => {
                 <Container>
                     <LeftContainer>
                         <Logo />
-                        {isWalletConnected && isMarketsPage && (
-                            <SPAAnchor style={{ marginRight: '15px' }} href={buildHref(ROUTES.Wizard)}>
-                                <Button
-                                    backgroundColor={theme.background.primary}
-                                    textColor={theme.button.textColor.quaternary}
-                                    borderColor={theme.button.borderColor.secondary}
-                                    width="150px"
-                                    fontWeight="400"
-                                    additionalStyles={{
-                                        borderRadius: '20px',
-                                        fontWeight: '700',
-                                        fontSize: '14px',
-                                        textTransform: 'capitalize',
-                                        marginLeft: '20px',
-                                    }}
-                                    height="28px"
-                                >
-                                    {t('get-started.get-started')}
-                                </Button>
-                            </SPAAnchor>
-                        )}
                     </LeftContainer>
+
+                    <MiddleContainer>
+                        <div>{(isConnectedViaParticle || !isWalletConnected) && getGetStartedButton()}</div>
+                        {isMarketsPage && <TimeFilters />}
+                        <FlexDiv>
+                            <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
+                                <OverdropIcon />
+                            </SPAAnchor>
+                            {isWalletConnected && <ProfileItem />}
+                            <SettingsContainer
+                                onClick={() => {
+                                    setDropdownIsOpen(!dropdownIsOpen);
+                                }}
+                            >
+                                <HeaderIcon className="icon icon--settings" />
+                                <HeaderLabel>{t('common.settings')}</HeaderLabel>
+                                {dropdownIsOpen && (
+                                    <OutsideClickHandler onOutsideClick={() => setDropdownIsOpen(false)}>
+                                        <DropdownContainer>
+                                            <DropDown>
+                                                {ODDS_TYPES.map((item: any, index: number) => (
+                                                    <DropDownItem
+                                                        key={index}
+                                                        onClick={() => {
+                                                            setSelectedOddsType(item);
+                                                            setDropdownIsOpen(false);
+                                                        }}
+                                                    >
+                                                        <FlexDivCentered>
+                                                            <Label> {t(`common.odds.${item}`)}</Label>
+                                                        </FlexDivCentered>
+                                                    </DropDownItem>
+                                                ))}
+                                            </DropDown>
+                                        </DropdownContainer>
+                                    </OutsideClickHandler>
+                                )}
+                            </SettingsContainer>
+                            <TopUp />
+                        </FlexDiv>
+                    </MiddleContainer>
+
                     <RightContainer>
                         {!isWalletConnected && (
                             <Button
                                 backgroundColor={'transparent'}
-                                textColor={theme.button.textColor.quaternary}
-                                borderColor={theme.button.borderColor.secondary}
+                                textColor={theme.button.borderColor.quaternary}
+                                borderColor={theme.button.borderColor.quaternary}
                                 width="150px"
                                 fontWeight="400"
                                 additionalStyles={{
                                     borderRadius: '15.5px',
-                                    fontWeight: '800',
+                                    fontWeight: '600',
                                     fontSize: '14px',
                                     marginRight: '10px',
                                 }}
@@ -173,15 +230,16 @@ const DappHeader: React.FC = () => {
                         )}
                         {!isWalletConnected && (
                             <Button
-                                backgroundColor={theme.button.background.quaternary}
+                                backgroundColor={theme.button.background.tertiary}
                                 textColor={theme.button.textColor.primary}
-                                borderColor={theme.button.borderColor.secondary}
+                                borderColor={theme.button.borderColor.quinary}
                                 fontWeight="400"
                                 additionalStyles={{
                                     borderRadius: '15.5px',
-                                    fontWeight: '700',
+                                    fontWeight: '600',
                                     fontSize: '14px',
                                     marginRight: '5px',
+                                    padding: '3px 20px',
                                 }}
                                 width="150px"
                                 height="28px"
@@ -197,9 +255,7 @@ const DappHeader: React.FC = () => {
                                 {t('get-started.sign-up')}
                             </Button>
                         )}
-                        <TopUp />
                         <WalletInfo />
-                        {isWalletConnected && <ProfileItem />}
                         <MenuIcon ref={menuImageRef} onClick={() => setNavMenuVisibility(true)} />
                         <NavMenu
                             visibility={navMenuVisibility}
@@ -213,7 +269,10 @@ const DappHeader: React.FC = () => {
                 <>
                     <WrapperMobile>
                         <LogoContainer>
-                            <Logo />
+                            <Logo width={150} />
+                            <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
+                                <OverdropIcon />
+                            </SPAAnchor>
                         </LogoContainer>
                         <SearchIconContainer>
                             <IconWrapper>
@@ -233,7 +292,6 @@ const DappHeader: React.FC = () => {
                                         handleChange={(value) => {
                                             dispatch(setMarketSearch(value));
                                         }}
-                                        isModal
                                     />
                                 </SearchContainer>
                             </ReactModal>
@@ -269,9 +327,10 @@ const DappHeader: React.FC = () => {
                                 additionalStyles={{
                                     maxWidth: 400,
                                     borderRadius: '15.5px',
-                                    fontWeight: '800',
-                                    fontSize: '14px',
+                                    fontWeight: '600',
+                                    fontSize: '12px',
                                     textTransform: 'capitalize',
+                                    whiteSpace: 'nowrap',
                                 }}
                                 height="28px"
                                 onClick={() =>
@@ -293,9 +352,10 @@ const DappHeader: React.FC = () => {
                                 additionalStyles={{
                                     maxWidth: 400,
                                     borderRadius: '15.5px',
-                                    fontWeight: '700',
-                                    fontSize: '14px',
+                                    fontWeight: '600',
+                                    fontSize: '12px',
                                     textTransform: 'capitalize',
+                                    whiteSpace: 'nowrap',
                                 }}
                                 width="100%"
                                 height="28px"
@@ -310,156 +370,22 @@ const DappHeader: React.FC = () => {
                                 {t('get-started.sign-up')}
                             </Button>
                             {location.pathname !== ROUTES.Wizard && getGetStartedButton()}
-                            <NetworkSwitcher />
+                            <FlexDivEnd>
+                                <NetworkSwitcher />
+                            </FlexDivEnd>
                         </MobileButtonWrapper>
                     ) : (
-                        <MobileButtonWrapper>
-                            {location.pathname !== ROUTES.Wizard && getGetStartedButton()}
-                            <TopUp />
-                        </MobileButtonWrapper>
+                        isConnectedViaParticle && (
+                            <MobileButtonWrapper>
+                                {location.pathname !== ROUTES.Wizard && getGetStartedButton()}
+                                <TopUp />
+                            </MobileButtonWrapper>
+                        )
                     )}
                 </>
             )}
         </>
     );
 };
-
-const Container = styled(FlexDivRowCentered)`
-    width: 100%;
-    @media (max-width: 767px) {
-        flex-direction: column;
-    }
-    @keyframes pulsing {
-        0% {
-            transform: scale(1);
-            opacity: 1;
-        }
-        50% {
-            transform: scale(1.2);
-            @media (max-width: 767px) {
-                transform: scale(1.1);
-            }
-
-            opacity: 1;
-        }
-        100% {
-            transform: scale(1);
-            opacity: 1;
-        }
-    }
-`;
-
-const LeftContainer = styled(FlexDivRowCentered)``;
-
-const RightContainer = styled(FlexDivRowCentered)`
-    @media (max-width: 767px) {
-        flex-direction: column;
-    }
-    > div {
-        :not(:last-child) {
-            margin-right: 20px;
-            @media (max-width: 767px) {
-                margin-right: 0px;
-                margin-bottom: 10px;
-            }
-        }
-    }
-`;
-
-const MenuIcon = styled.img.attrs({ src: burger })`
-    cursor: pointer;
-    height: 25px;
-    width: 35px;
-    filter: invert(39%) sepia(9%) saturate(1318%) hue-rotate(199deg) brightness(71%) contrast(88%);
-`;
-
-const WrapperMobile = styled(FlexDivRow)`
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-`;
-
-const SearchIconContainer = styled.div`
-    width: 50%;
-    display: flex;
-    justify-content: end;
-    position: absolute;
-    right: 12px;
-`;
-
-const MenuIconContainer = styled.div`
-    width: 50%;
-    display: flex;
-    justify-content: start;
-    position: absolute;
-    left: 12px;
-`;
-
-const LogoContainer = styled.div`
-    width: 100%;
-    display: flex;
-    justify-content: center;
-`;
-
-const IconWrapper = styled.div`
-    border-radius: 30px;
-    background: ${(props) => props.theme.background.tertiary};
-    width: 32px;
-    height: 32px;
-    position: absolute;
-    top: -15px;
-`;
-
-const SearchIcon = styled.i`
-    font-size: 40px;
-    cursor: pointer;
-    margin-bottom: 3px;
-    position: absolute;
-    top: -7px;
-    left: -6px;
-    &:before {
-        font-family: ExoticIcons !important;
-        content: '\\0042';
-        color: ${(props) => props.theme.background.primary};
-    }
-`;
-
-const SearchContainer = styled.div`
-    background: ${(props) => props.theme.background.secondary};
-    height: 100%;
-    text-align: center;
-    margin-right: 2px;
-`;
-
-const NotificationCount = styled.div`
-    position: absolute;
-    border-radius: 50%;
-    bottom: -8px;
-    left: 24px;
-    display: flex;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-    height: 16px;
-    width: 16px;
-    background-color: ${(props) => props.theme.background.quaternary};
-    box-shadow: ${(props) => props.theme.shadow.notification};
-`;
-
-const Count = styled.span`
-    color: ${(props) => props.theme.button.textColor.primary};
-    font-weight: 800;
-    font-size: 12px;
-`;
-
-const MobileButtonWrapper = styled(FlexDivRowCentered)`
-    width: 100%;
-    margin-top: 10px;
-    gap: 20px;
-    min-height: 32px;
-    @media (max-width: 767px) {
-        min-height: 28px;
-    }
-`;
 
 export default DappHeader;

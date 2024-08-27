@@ -58,7 +58,8 @@
             },
             "id-exists": "ID ผู้อ้างอิงมีอยู่แล้ว",
             "id-create-success": "กำหนด ID ผู้อ้างอิงสำเร็จ",
-            "your-referral-id": "ID ผู้อ้างอิงของคุณ"
+            "your-referral-id": "ID ผู้อ้างอิงของคุณ",
+            "header-label": "อ้างอิงและรับ"
         },
         "swap": {
             "title": "รับ USD",
@@ -66,7 +67,8 @@
             "to-label": "ถึง",
             "balance-label": "ยอดเงิน: {{amount}}",
             "swap-label": "แลกเปลี่ยน",
-            "swap-progress-label": "กำลังดำเนินการแลกเปลี่ยน…"
+            "swap-progress-label": "กำลังดำเนินการแลกเปลี่ยน…",
+            "approve": "อนุมัติการแลกเปลี่ยน"
         },
         "enable-wallet-access": {
             "approve-label": "อนุมัติ {{currencyKey}}",
@@ -98,7 +100,8 @@
             "enter-percentage": "Enter percentage",
             "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}",
             "single-amm-paused": "AMM หยุดชั่วคราว",
-            "invalid-amount-max": "จำนวนเงินต้องไม่เกิน {{max}}"
+            "invalid-amount-max": "จำนวนเงินต้องไม่เกิน {{max}}",
+            "swap-quote-low": "ราคา Swap ต่ำเกินไป (รับ: {{quote}}, ขั้นต่ำรับ {{minQuote}})! กรุณาลองอีกครั้ง..."
         },
         "time-remaining": {
             "ended": "เสร็จสิ้น",
@@ -188,7 +191,15 @@
             "info": "*คุณสามารถเปลี่ยนประเภทอัตราต่อรองในตัวกรองด้านบนรายการเกมได้ตลอดเวลา",
             "description": "เลือกรูปแบบการแสดงอัตราต่อรอง",
             "title": "ยินดีต้อนรับสู่ตลาดล่วงเวลา"
-        }
+        },
+        "settings": "การตั้งค่า",
+        "filters": "ตัวกรอง",
+        "status": "สถานะ",
+        "wrap-and-buy": "ห่อ ETH แล้วซื้อ",
+        "wrap-eth-tooltip": "ETH ของคุณจะถูกรวมเข้ากับ WETH ก่อนแล้วจึงส่งต่อไปยังสัญญา",
+        "election-tooltip": "แหล่งที่มาของการแก้ปัญหาคือ Associated Press, Fox News และ NBC ตลาดเหล่านี้จะคลี่คลายเมื่อแหล่งข่าวทั้งสามแหล่งเรียกร้องให้มีการแข่งขันสำหรับผู้สมัครคนเดียวกัน หากแหล่งข้อมูลทั้งสามแห่งไม่เรียกการแข่งขันสำหรับผู้สมัครคนเดียวกันภายในวันที่ 11 พฤศจิกายน การเดิมพันทั้งหมดจะเป็นโมฆะ",
+        "submit": "ส่ง",
+        "try-again": "ลองอีกครั้ง"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
@@ -233,7 +244,9 @@
             "ios-not-supported": "ไม่รองรับการแชร์รูปภาพบนอุปกรณ์ iOS หากคุณต้องการแชร์รูปภาพ โปรดใช้เวอร์ชันเดสก์ท็อป",
             "save-image-cancel": "ยกเลิกการบันทึกภาพแล้ว!",
             "save-image": "บันทึกภาพไปยังคลิปบอร์ด โปรดรอ...",
-            "download-image": "กำลังดาวน์โหลดรูปภาพ โปรดรอ..."
+            "download-image": "กำลังดาวน์โหลดรูปภาพ โปรดรอ...",
+            "fulfilling-live-trade": "เติมเต็มการซื้อขายสด",
+            "live-trade-requested": "ร้องขอการค้าสด"
         },
         "filter-label": {
             "global": {
@@ -246,7 +259,10 @@
                 "canceled": "ถูกยกเลิก",
                 "archivedmarkets": "ตลาดที่ถูกซ่อน",
                 "tooltip": "ตลาดสิ้นสุดมามากกว่า 7 วันแล้ว",
-                "pendingmarkets": "กำลังดำเนินการ"
+                "pendingmarkets": "กำลังดำเนินการ",
+                "ongoingmarkets": "กำลังดำเนินการอยู่",
+                "pausedmarkets": "หยุดชั่วคราว",
+                "cancelledmarkets": "ยกเลิก"
             },
             "sport": {
                 "all": "กีฬาทั้งหมด",
@@ -263,9 +279,19 @@
                 "favourites": "รายการโปรด",
                 "esports": "อีสปอร์ต",
                 "cricket": "คริกเก็ต",
-                "mma": "ดกีฬาต่อสู้",
+                "fighting": "ดกีฬาต่อสู้",
                 "boxing": "มวย",
-                "golf": "กอล์ฟ"
+                "golf": "กอล์ฟ",
+                "live": "สด",
+                "handball": "แฮนด์บอล",
+                "volleyball": "วอลเลย์บอล",
+                "rugby": "รักบี้",
+                "waterpolo": "โปโลน้ำ",
+                "politics": "การเมือง",
+                "olympicgames": "กีฬาโอลิมปิก",
+                "tabletennis": "ปิงปอง",
+                "boosted": "เกมโปรโมชั่น",
+                "promo": "เกมโปรโมชั่น"
             },
             "datepicker": {
                 "games": "{{numberOfGames}} เกม"
@@ -302,7 +328,8 @@
             "usd-value-col": "มูลค่า",
             "result-col": "ผลลัพธ์",
             "single-title": "กิจกรรมเดี่ยวล่าสุด",
-            "parlay-title": "กิจกรรมพาร์เลย์ล่าสุด"
+            "parlay-title": "กิจกรรมพาร์เลย์ล่าสุด",
+            "ticket-title": "กิจกรรมตั๋วล่าสุด"
         },
         "tooltip": {
             "amount-exceeded": "จำนวนเงินเกินจำนวนที่มีอยู่ใน AMM",
@@ -314,7 +341,7 @@
         "back": "กลับ",
         "apply-filters": "ใช้ตัวกรอง",
         "incentivized-market": "ตลาดที่มีแรงจูงใจ",
-        "number-of-rounds": "จำนวนรอบทั้งหมด"
+        "number-of-rounds": "กลม"
     },
     "markets": {
         "market-card": {
@@ -336,7 +363,7 @@
                 "winner": "Winner",
                 "spread": "Handicap",
                 "total": "Total",
-                "double-chance": "Double chance",
+                "double chance": "Double chance",
                 "combined-positions": "ตำแหน่งรวมกัน",
                 "strikeouts": "ขีดฆ่า",
                 "receiving yards": "ระยะรับ",
@@ -359,7 +386,8 @@
                 "last touchdown": "ใครจะเป็นผู้ทำทัชดาวน์ครั้งสุดท้ายในเกม?",
                 "first touchdown": "ใครจะเป็นผู้ทำทัชดาวน์แรกในเกม? (รวมโอที)",
                 "3pts made": "ได้ 3 แต้มแล้ว",
-                "3-points made": "ได้ 3 แต้มแล้ว"
+                "3-points made": "ได้ 3 แต้มแล้ว",
+                "combined positions": "รวมตำแหน่ง"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -451,7 +479,97 @@
             "toggle": {
                 "hide-paused-markets": "ซ่อนตลาดที่หยุดชั่วคราว",
                 "show-paused-markets": "แสดงตลาดที่หยุดชั่วคราว"
-            }
+            },
+            "odd-tooltip-v2": {
+                "scoring": {
+                    "goals": "เป้าหมาย",
+                    "points": "คะแนน",
+                    "sets": "ชุด",
+                    "rounds": "รอบ"
+                },
+                "match-resolve": {
+                    "regular": "ในเวลาปกติ",
+                    "overtime": "รวมถึงการทำงานล่วงเวลาที่เป็นไปได้"
+                },
+                "hitsRecorded-0": "{{team}} จะมีการบันทึกการเข้าชมมากกว่า {{line}}",
+                "receivingYards-1": "{{team}} จะมีระยะรับน้อยกว่า {{line}}",
+                "lastTouchdown-0": "{{team}} จะทำคะแนนทัชดาวน์สุดท้ายของเกม",
+                "rushingYards-0": "{{team}} จะมีระยะวิ่งมากกว่า {{line}}",
+                "total-0": "จำนวน {{scoring}} ทั้งหมดในการแข่งขัน {{matchResolve}} จะมากกว่า {{line}}",
+                "homeruns-1": "{{team}} จะมีโฮมรันน้อยกว่า {{line}}",
+                "total-1": "จำนวน {{scoring}} ทั้งหมดในการแข่งขัน {{matchResolve}} จะน้อยกว่า {{line}}",
+                "pitcherHitsAllowed-0": "{{team}} จะได้รับอนุญาตให้เข้าชมมากกว่า {{line}}",
+                "tripleDouble-1": "{{team}} จะไม่ทำแต้มทริปเปิล-ดับเบิ้ล",
+                "passingTouchdowns-0": "{{team}} จะมีการส่งทัชดาวน์มากกว่า {{line}}",
+                "shots-1": "{{team}} จะมีโอกาสยิงน้อยกว่า {{line}}",
+                "passingYards-1": "{{team}} จะมีระยะส่งบอลน้อยกว่า {{line}}",
+                "moneyline-2": "การแข่งขันจะจบลงด้วยผลเสมอ {{matchResolve}}",
+                "tournament-winner": "{{team}} จะชนะการแข่งขัน {{matchResolve}}",
+                "and": "และ",
+                "strikeouts-1": "{{team}} จะมีขีดฆ่าน้อยกว่า {{line}}",
+                "doubleDouble-0": "{{team}} จะทำแต้มดับเบิ้ล-ดับเบิ้ล",
+                "spread-0": "{{team}} จะชนะการแข่งขันด้วยผลต่างมากกว่า {{line}} {{scoring}} {{matchResolve}}",
+                "receptions-1": "{{team}} จะมีการรับน้อยกว่า {{line}}",
+                "doubleChance-0": "{{team}} จะชนะการแข่งขัน หรือการแข่งขันจะจบลงด้วยผลเสมอ {{matchResolve}}",
+                "receptions-0": "{{team}} จะมีการรับมากกว่า {{line}}",
+                "moneyline-0": "{{team}} จะชนะการแข่งขัน {{matchResolve}}",
+                "doubleChance-1": "{{team}} หรือ {{team2}} จะชนะการแข่งขัน {{matchResolve}}",
+                "rushingYards-1": "{{team}} จะมีระยะวิ่งน้อยกว่า {{line}}",
+                "receivingYards-0": "{{team}} จะมีระยะรับมากกว่า {{line}}",
+                "fieldGoalsMade-0": "{{team}} จะมีการยิงประตูมากกว่า {{line}}",
+                "race-winner": "{{team}} จะชนะการแข่งขัน {{matchResolve}}",
+                "rebounds-1": "{{team}} จะมีรีบาวด์น้อยกว่า {{line}}",
+                "doubleDouble-1": "{{team}} จะไม่ทำคะแนนดับเบิ้ล-ดับเบิ้ล",
+                "bonus": "โบนัสเพิ่ม {{bonus}} เมื่อชนะ!",
+                "points-1": "{{team}} จะมีแต้มน้อยกว่า {{line}}",
+                "hitsRecorded-1": "{{team}} จะมีการบันทึกการเข้าชมน้อยกว่า {{line}}",
+                "passingTouchdowns-1": "{{team}} จะมีการส่งทัชดาวน์น้อยกว่า {{line}}",
+                "fieldGoalsMade-1": "{{team}} จะมีการยิงประตูน้อยกว่า {{line}}",
+                "spread-1": "{{team}} จะชนะการแข่งขัน หรือแพ้น้อยกว่า {{line}} {{scoring}} {{matchResolve}}",
+                "homeruns-0": "{{team}} จะมีโฮมรันมากกว่า {{line}}",
+                "touchdowns-0": "{{team}} จะทำคะแนนทัชดาวน์ในเกม",
+                "rebounds-0": "{{team}} จะมีการรีบาวด์มากกว่า {{line}}",
+                "doubleChance-2": "{{team}} จะชนะการแข่งขัน หรือการแข่งขันจะจบลงด้วยผลเสมอ {{matchResolve}}",
+                "firstTouchdown-0": "{{team}} จะทำทัชดาวน์แรกในเกม",
+                "points-0": "{{team}} จะมีแต้มมากกว่า {{line}}",
+                "goals-0": "{{team}} จะทำประตูในเกม",
+                "strikeouts-0": "{{team}} จะมีขีดฆ่ามากกว่า {{line}}",
+                "shots-0": "{{team}} จะมีโอกาสยิงมากกว่า {{line}}",
+                "passingYards-0": "{{team}} จะมีระยะส่งบอลมากกว่า {{line}}",
+                "tripleDouble-0": "{{team}} จะทำแต้มทริปเปิล-ดับเบิ้ล",
+                "moneyline-1": "{{team}} จะชนะการแข่งขัน {{matchResolve}}",
+                "assists-0": "{{team}} จะมีแอสซิสต์มากกว่า {{line}}",
+                "pitcherHitsAllowed-1": "{{team}} จะมีโอกาสโจมตีน้อยกว่า {{line}}",
+                "assists-1": "{{team}} จะมีแอสซิสต์น้อยกว่า {{line}}",
+                "winner-2": "การแข่งขันจะจบลงด้วยผลเสมอ {{matchResolve}}",
+                "winner-0": "{{team}} จะชนะการแข่งขัน {{matchResolve}}",
+                "winner-1": "{{team}} จะชนะการแข่งขัน {{matchResolve}}"
+            },
+            "type-tooltip": {
+                "11055": "การรับ การวิ่ง การเตะเตะกลับ ทัชดาวน์การป้องกันและการสกัดกั้นจะถูกนับรวมในผลการแข่งขัน",
+                "touchdowns": "การรับ การวิ่ง การเตะเตะกลับ ทัชดาวน์การป้องกันและการสกัดกั้นจะถูกนับรวมในผลการแข่งขัน"
+            },
+            "odds-live-limitation-message": "ตำแหน่งสดอนุญาตเฉพาะคนโสดเท่านั้น",
+            "live": "สด",
+            "time": "เวลา",
+            "set": "ชุด",
+            "rain-delay": "ฝนตกล่าช้า",
+            "postponed": "เลื่อนออกไป",
+            "abandoned": "ถูกทอดทิ้ง",
+            "delayed": "ล่าช้า",
+            "interrupted": "ขัดจังหวะ",
+            "open": "เปิด",
+            "won": "วอน",
+            "loss": "การสูญเสีย",
+            "live-trading-paused": "การซื้อขายสดหยุดชั่วคราว",
+            "pre-fight": "ก่อนการต่อสู้",
+            "scheduled": "กำหนดเวลาแล้ว",
+            "end-of-round": "จบรอบ",
+            "fighters-introduction": "การแนะนำนักสู้",
+            "fighters-walking": "นักสู้เดิน",
+            "end-of-fight": "สิ้นสุดการต่อสู้",
+            "not-available-for-trading": "ไม่สามารถซื้อขายได้",
+            "suspended": "ถูกระงับ"
         },
         "market-details": {
             "price": "ราคา",
@@ -474,7 +592,7 @@
             "positions": "ตำแหน่ง",
             "odds": "อัตราต่อรอง"
         },
-        "zero-odds-tooltip": "Sports AMM จะเสนอสภาพคล่องในช่วงราคา $0.05 ถึง $0.95 เท่านั้น หมายความว่าหากอัตราต่อรองสำหรับโพสิชั่นนั้นน้อยกว่า 5% หรือมากกว่า 95% โพสิชั่นนั้นจะไม่มีสภาพคล่อง",
+        "zero-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",
         "discounted-per": "ลดราคาตาม",
         "parlay": {
             "validation": {
@@ -499,7 +617,10 @@
                 "same-event-participant": "รองรับผู้เข้าร่วมเพียงหนึ่งคนต่อเหตุการณ์ ไม่สามารถเพิ่ม {{addedParticipant}} ได้ เนื่องจาก {{existingParticipant}} อยู่ใน Parlay แล้ว",
                 "already-added-combined-positions": "ไม่สามารถรวมตำแหน่งจากตลาดเดียวกันกับตำแหน่งรวมได้",
                 "same-game-different-player-props": "ไม่รองรับการรวมอุปกรณ์ประกอบฉากของผู้เล่นประเภทต่างๆ",
-                "player-props-and-other-positions": "ไม่รองรับการรวมตำแหน่งอุปกรณ์ประกอบฉากของผู้เล่นกับตำแหน่งอื่นจากตลาดเดียวกัน"
+                "player-props-and-other-positions": "ไม่รองรับการรวมตำแหน่งอุปกรณ์ประกอบฉากของผู้เล่นกับตำแหน่งอื่นจากตลาดเดียวกัน",
+                "other-types-with-player-props": "ไม่รองรับการรวมอุปกรณ์ประกอบฉากของผู้เล่นเข้ากับอุปกรณ์ประเภทอื่นจากเกมเดียวกัน",
+                "same-player-different-types": "ไม่รองรับการรวมหมวดหมู่ที่แตกต่างกันสำหรับผู้เล่นคนเดียวกัน ({{player}})",
+                "player-props-combining-not-enabled": "ไม่รองรับการรวมอุปกรณ์ประกอบฉากผู้เล่นสำหรับ {{league}}"
             },
             "skew": "ลาด",
             "payout": "การจ่ายเงิน",
@@ -533,7 +654,11 @@
                 "total-quote": "ใบเสนอราคาทั้งหมด",
                 "referral": "ลิงค์อ้างอิง",
                 "winner": "ผู้ชนะ",
-                "positions": "จำนวนตำแหน่ง"
+                "positions": "จำนวนตำแหน่ง",
+                "submit-url": "ส่ง URL ทวีตของคุณเพื่อรับการสนับสนุนจาก Overdrop",
+                "verifying-tweet": "การตรวจสอบทวีต",
+                "label": "โบนัสแบ่งปันสำหรับ Twitter",
+                "network-error": "ข้อผิดพลาดของเครือข่าย ตรวจสอบคอนโซลเบราว์เซอร์เพื่อดูข้อมูลเพิ่มเติม"
             },
             "buy-in": "ซื้อใน",
             "total-bonus": "โบนัสรวม",
@@ -547,7 +672,54 @@
             "gas-tooltip": "ค่าธรรมเนียมก๊าซปัจจุบันที่ blockchain ต้องการเพื่อชำระธุรกรรม",
             "total-gas": "ค่าน้ำมัน(โดยประมาณ)",
             "keep-selection-tooltip": "ตามค่าเริ่มต้น ตัวสร้างพาร์เลย์จะถูกรีเซ็ตหลังจากส่งสำเร็จ ทำเครื่องหมายนี้หากคุณต้องการคงบริบทปัจจุบันไว้หลังจากส่ง",
-            "persist-games": "เก็บการเลือกไว้หลังจากส่ง"
+            "persist-games": "เก็บการเลือกไว้หลังจากส่ง",
+            "liquidity": "สภาพคล่อง",
+            "ticket-slip": "สลิปตั๋ว",
+            "slippage": {
+                "slippage": "เลื่อนหลุด",
+                "label": "ยอมรับการซื้อขายหากอัตราต่อรองลดลงโดย:",
+                "enter-value": "ป้อนค่า",
+                "invalid-value": "ค่าไม่ถูกต้อง",
+                "tooltip": "การถ่ายโอนจะไม่เกิดขึ้นหากอัตราบริดจ์เคลื่อนที่อย่างไม่น่าพึงพอใจมากกว่าเปอร์เซ็นต์นี้เมื่อดำเนินการถ่ายโอน",
+                "swap-thales": "สลับการเลื่อนหลุด"
+            },
+            "thales-bonus-info": "ใช้ THALES และรับโบนัส 2% สำหรับแต่ละเกม",
+            "odds-changed-description": "อัตราต่อรองเปลี่ยนไป ยอมรับการเปลี่ยนแปลงเพื่อซื้อ",
+            "odds-changed-error": "อัตราต่อรองเปลี่ยนแปลงขณะดำเนินการตามคำสั่งซื้อ ลองเพิ่มความคลาดเคลื่อน",
+            "thales-bonus-tooltip": "ผู้ใช้ที่ทำการซื้อขายกับ THALES จะได้รับการจ่ายเงินเพิ่ม 2% สำหรับแต่ละเกมที่พวกเขามีอยู่ในตั๋ว (คำนวณแล้วในใบเสนอราคารวมและการจ่ายเงิน)",
+            "accept-odds-changes": "ยอมรับการเปลี่ยนแปลงอัตราต่อรอง",
+            "overdrop": {
+                "overdrop-xp-overview": "ภาพรวม Overdrop XP",
+                "total-xp-boost": "เพิ่ม XP ทั้งหมด",
+                "overdrop-xp": "โอเวอร์ดรอป XP",
+                "base-xp": "ฐาน XP",
+                "total-xp-earned": "XP ทั้งหมดที่ได้รับ",
+                "active-boost": "บูสต์ที่ใช้งานอยู่",
+                "bonus-applied": "ใช้โบนัสแล้ว",
+                "tooltip": {
+                    "thales-boost": "การเดิมพันทั้งหมดที่ดำเนินการโดยใช้ THALES เป็นหลักประกันจะได้รับโบนัส +10% จากการสะสม XP พื้นฐานสำหรับการเดิมพันนั้นๆ!",
+                    "promo-boost": "เกมกีฬาบางเกมจะมี XP เพิ่มพิเศษ",
+                    "daily-boost": "ยิ่งคุณเดิมพันติดต่อกันหลายวัน ค่า XP ของคุณก็จะยิ่งเพิ่มขึ้น เพิ่ม +5% สำหรับแต่ละวัน สูงสุด +35% หากคุณพลาดไปหนึ่งวัน ค่า XP นี้จะรีเซ็ตเป็น 0%",
+                    "loyalty-boost": "การเพิ่มค่า XP ความภักดีจะช่วยเพิ่มค่า XP ทั่วไปสูงสุด 25% ให้คุณถาวร โดยขึ้นอยู่กับระดับ XP ของคุณ โดยเริ่มจากการเพิ่มค่า XP 5% ในเลเวล 1 จากนั้นคุณจะได้รับค่า XP เพิ่มขึ้นอีก 5% เมื่อถึงเลเวลที่ 5",
+                    "base-xp": "XP ฐานจะคำนวณโดยใช้สูตรต่อไปนี้:\n\nXP ฐาน = จำนวนเงินซื้อเข้า * (2 - อัตราต่อรองปกติ) \n\nซึ่งหมายความว่าการเดิมพันของคุณจะเพิ่ม XP ฐานมากขึ้นตามจำนวนเงินซื้อเข้าที่สูงขึ้นและอัตราต่อรองการเดิมพันของคุณก็จะสูงขึ้น",
+                    "weekly-boost": "ยิ่งคุณเดิมพันติดต่อกันหลายสัปดาห์ การเพิ่มค่า XP ของคุณก็จะยิ่งสูงขึ้น เพิ่ม +5% สำหรับแต่ละสัปดาห์ สูงสุด +20% หากคุณพลาดสัปดาห์ใดสัปดาห์หนึ่ง ค่า XP นี้จะรีเซ็ตเป็น 0%",
+                    "twitter-boost": "หากคุณแชร์เดิมพันช่วงต่อเวลาของคุณบน Twitter ในรูปแบบของ Flex Card คุณจะเปิดใช้งาน Twitter Flex Boost เป็นเวลา 3 วันด้วย +10%",
+                    "parlay-boost": "คุณจะได้รับค่า XP เพิ่มเติมจากการเดิมพันแบบพาร์เลย์นั้น ขึ้นอยู่กับจำนวนเกมที่เดิมพันแบบพาร์เลย์ของคุณ ค่า XP สูงสุดคือ +290% สำหรับการเดิมพันแบบพาร์เลย์ 15 เกม"
+                },
+                "odds-xp": "ตัวคูณอัตราต่อรอง",
+                "buy-in-xp": "ซื้อใน XP"
+            },
+            "use-free-bet": "ใช้เดิมพันฟรี",
+            "swap-thales-tooltip": "ทั้งหมด",
+            "swap-thales": "สลับไปที่ THALES เพื่อการเสนอราคาที่ดีกว่า",
+            "disable-free-bet": "ปิดการใช้งานยอดเดิมพันฟรี",
+            "swap-thales-receive": "รับขั้นต่ำ",
+            "buy-steps": {
+                "approve-swap": "อนุมัติการแลกเปลี่ยนเป็น {{currencyKey}}",
+                "approve-buy": "อนุมัติการซื้อด้วย {{currencyKey}}",
+                "swap": "สลับเป็น {{currencyKey}}",
+                "buy": "ซื้อด้วย {{currencyKey}}"
+            }
         },
         "nav-menu": {
             "items": {
@@ -560,13 +732,15 @@
                 "onboarding-wizard": "วิซาร์ดการเริ่มต้นใช้งาน",
                 "fee-rebates": "ส่วนลดค่าธรรมเนียม",
                 "fifa-campaign": "แคมเปญ Zebro FIFA",
-                "vaults": "ห้องใต้ดิน",
                 "liquidity-pool": "ให้สภาพคล่อง",
-                "promotions": "โปรโมชั่น"
+                "promotions": "โปรโมชั่น",
+                "speed-markets": "ซื้อขายสกุลเงินดิจิตอล",
+                "digital-options": "ตัวเลือกดิจิตอล"
             },
             "buttons": {
                 "switch": "สวิตช์",
-                "disconnect": "ตัดการเชื่อมต่อ"
+                "disconnect": "ตัดการเชื่อมต่อ",
+                "particle-wallet": "กระเป๋าเงินอนุภาค"
             },
             "labels": {
                 "language": "ภาษา"
@@ -579,7 +753,10 @@
         "superbowl-incentive": "10,000 ARB เป็นสิ่งจูงใจ",
         "incentivized-tooltip-uefa": "ยอดรวมจำนวน {{rewards}} จะถูกแจกจ่ายสำหรับการแข่งขันยูฟ่า เฉพาะปริมาณบนเครือข่าย Arbitrum เท่านั้นที่จะถูกคำนวณเพื่อรับรางวัล! ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>",
         "incentivized-tooltip-nhl": "ยอดรวมจำนวน {{rewards}} จะถูกแจกจ่ายในช่วงที่เหลือของฤดูกาล NHL รวมถึงรอบตัดเชือกด้วย เฉพาะปริมาณบนเครือข่าย Arbitrum เท่านั้นที่จะถูกคำนวณเพื่อรับรางวัล! ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>",
-        "incentivized-tooltip-nhl-mlb": "ยอดรวมจำนวน {{rewards}} จะถูกแจกจ่ายให้กับช่วงที่เหลือของฤดูกาล {{league}} รวมถึงรอบตัดเชือกด้วย เฉพาะปริมาณบนเครือข่าย Arbitrum เท่านั้นที่จะถูกคำนวณเพื่อรับรางวัล! ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>"
+        "incentivized-tooltip-nhl-mlb": "ยอดรวมจำนวน {{rewards}} จะถูกแจกจ่ายให้กับช่วงที่เหลือของฤดูกาล {{league}} รวมถึงรอบตัดเชือกด้วย เฉพาะปริมาณบนเครือข่าย Arbitrum เท่านั้นที่จะถูกคำนวณเพื่อรับรางวัล! ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>",
+        "incentivized-tooltip-euro-copa": "ยอดรวมจำนวน {{rewards}} จะถูกแจกจ่ายสำหรับการแข่งขันยูโร 2024 และโคปาอเมริกา ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>",
+        "incentivized-tooltip-wimbledon": "แข่งขันเพื่อชิง {{rewards}} ระหว่างวิมเบิลดัน 2024 ในช่วงต่อเวลา V1 และ V2 ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>",
+        "incentivized-tooltip-olympics": "รับ {{rewards}} เป็นรางวัลตามปริมาณระหว่างการแข่งขันกีฬาโอลิมปิก ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>"
     },
     "rewards": {
         "header": "รางวัล",
@@ -603,64 +780,6 @@
         "twap": "หนึ่งสัปดาห์ TWAP",
         "total-global-rebates": "รวมเงินคืนที่ต้องจ่าย",
         "parlay-link": "<div>สำหรับการแข่งขันพาร์เลย์ OP ประจำเดือน<parlayLink> คลิกที่นี่</ parlayLink> .</div>"
-    },
-    "quiz": {
-        "title": "การแข่งขันเกร็ดความรู้ด้านกีฬา",
-        "start-quiz-description": "<p>Hey sports fans! Ready to test your knowledge and beat the field?</p><p>Overtime has launched a sports trivia competition. The trivia is available to everyone to test their knowledge and compete.</p><p>Connect your wallet and enter your Twitter handle to start the trivia! For any questions please join our <discord>Discord</discord>.</p>",
-        "twitter-handle-label": "ชื่อบัญชี Twitter",
-        "twitter-handle-placeholder": "ระบุชื่อบัญชี Twitter",
-        "twitter-handle-validation": "ชื่อบัญชี Twitter ไม่ถูกต้อง โปรดลองใหม่อีกครั้ง",
-        "discord-label": "Discord ID (optional)",
-        "discord-placeholder": "ระบุ Discord ID",
-        "current-question-label": "คำถามปัจจุบัน: {{currentQuestion}}/{{numberOfQuestions}}",
-        "time-reamining-label": "เวลาที่เหลืออยู่: <0/>",
-        "question-weight-label": "น้ำหนักคำถาม: {{points}}",
-        "point-label": "คะแนน",
-        "points-label": "คะแนน",
-        "quiz-finished-label": "สิ้นสุดการแข่งขันตอบคำถาม!",
-        "your-score-label": "คะแนนของคุณ: {{score}}/{{max}} คะแนน",
-        "button": {
-            "start-quiz-label": "เริ่มแข่งขันตอบคำถาม",
-            "next-question-label": "คำถามถัดไป",
-            "previous-question-label": "คำถามก่อนหน้า",
-            "finish-quiz-label": "สิ้นสุดการตอบคำถาม",
-            "try-again-label": "ลองใหม่อีกครั้ง",
-            "see-leaderboard-label": "ดู leaderboard"
-        },
-        "leaderboard": {
-            "title": "Trivia Leaderboard",
-            "description": "<p>This is the trivia leaderboard where you can see how are you faring against the competition.</p><p>You can take the trivia as many times as you like <sportsTrivia>here</sportsTrivia>.</p>",
-            "back-to-quiz": "กลับไปที่การทดสอบ",
-            "search-placeholder": "ค้นหา...",
-            "table": {
-                "rank-col": "อันดับ",
-                "wallet-address-col": "หมายเลขกระเป๋าเงิน",
-                "twitter-col": "Twitter",
-                "points-col": "คะแนน",
-                "time-col": "เวลา",
-                "rewards-col": "รางวัล",
-                "no-data-available": "ไม่พบข้อมูล"
-            },
-            "period-end-label": "การแข่งขันรอบนี้จะสิ้นสุดใน",
-            "period-ended-label": "การแข่งขันสิ้นสุด",
-            "week-label": "สัปดาห์ที่",
-            "overtime-voucher": "บัตรกำนัล Overtime",
-            "all-time-leaderboard-label": "All time leaderboard"
-        },
-        "help-us-improve-label": "ช่วยเราพัฒนา",
-        "help-us-improve-tooltip": "ช่วยเราพัฒนาการแข่งขันการตอบคำถามด้านกีฬาโดยการช่วยเราเพิ่มคำถามลงใน database",
-        "finish-messages": {
-            "your-best-result": "คะแนนที่ดีที่สุดของคุณ: {{points}} {{pointsLabel}}",
-            "rank-info": "ด้วย {{points}} {{pointsLabel}} คุณอยู่อันดับที่ {{rank}} จากผู้เข้าแข่งขันทั้งหมด {{totalParticipants}} คน"
-        },
-        "difficulty-label": "ระดับความยาก",
-        "difficulty": {
-            "1": "Trivial",
-            "2": "Easy",
-            "3": "Moderate",
-            "4": "Challenging",
-            "5": "Hard"
-        }
     },
     "landing-page": {
         "best-odds": "อัตราต่อรองที่ดีที่สุดในอุตสาหกรรม",
@@ -712,7 +831,10 @@
             "claim-all": "อ้างสิทธิ์ทั้งหมด",
             "claim-progress": "กำลังอ้างสิทธิ์...",
             "payout-in": "จ่ายเงินเข้า.",
-            "approve-swap-tooltip": "หากต้องการรับการจ่ายเงินเป็น {{currencyKey}} คุณต้องอนุมัติการแลกเปลี่ยนจาก {{defaultCurrency}} เป็น {{currencyKey}}"
+            "approve-swap-tooltip": "หากต้องการรับการจ่ายเงินเป็น {{currencyKey}} คุณต้องอนุมัติการแลกเปลี่ยนจาก {{defaultCurrency}} เป็น {{currencyKey}}",
+            "win": "ชนะ",
+            "payout": "การจ่ายเงิน",
+            "live": "สด"
         },
         "messages": {
             "no-open": "คุณไม่มีตำแหน่งที่เปิดอยู่",
@@ -722,7 +844,8 @@
             "canceled-tooltip": "ตลาดที่ยกเลิกสามารถอ้างสิทธิ์ได้ 2 ชั่วโมงหลังจากตลาดได้รับการแก้ไข",
             "transaction-pending": "การทำธุรกรรมที่รอดำเนินการ",
             "voucher-claim-success": "แลกรับบัตรกำนัลสำเร็จแล้ว",
-            "no-vouchers": "คุณไม่มีบัตรกำนัลที่จะเรียกร้อง"
+            "no-vouchers": "คุณไม่มีบัตรกำนัลที่จะเรียกร้อง",
+            "no-lp-transactions": "คุณไม่มีธุรกรรม LP"
         },
         "table": {
             "games": "เกม",
@@ -733,7 +856,20 @@
             "id": "ไอดี",
             "status": "สถานะ",
             "total-quote": "ใบเสนอราคาทั้งหมด",
-            "total-amount": "จำนวนเงินทั้งหมด"
+            "total-amount": "จำนวนเงินทั้งหมด",
+            "payout": "การจ่ายเงิน",
+            "date-time-col": "วันที่ | เวลา",
+            "name-col": "ชื่อ",
+            "deposit": "เงินฝาก",
+            "amount-col": "จำนวน",
+            "round-label": "กลม",
+            "withdrawalRequest": "คำขอถอนเงิน",
+            "parlay-lp": "หจก.พาร์เลย์",
+            "round-col": "กลม",
+            "claim": "การเรียกร้องการถอนเงิน",
+            "type-col": "พิมพ์",
+            "tx-status-col": "สถานะเท็กซัส",
+            "single-lp": "หจก. ซิงเกิล"
         },
         "winnings-are-forfeit": "*การชนะที่ไม่ได้อ้างสิทธิ์ภายใน {{amount}} วันของตลาดที่ได้รับการแก้ไขจะถือว่าสละสิทธิ์",
         "search-field": "ค้นหากระเป๋าสตางค์",
@@ -742,12 +878,11 @@
             "trades": "Trades",
             "highest-win": "Highest win",
             "lifetime-wins": "Lifetime wins",
-            "in-vaults": "In vaults"
+            "profile-data": "ข้อมูลโปรไฟล์",
+            "wallet": "กระเป๋าสตางค์",
+            "free-bet": "เดิมพันฟรี"
         },
-        "vaults": "ห้องนิรภัย/LP",
         "lp-title": "สระว่ายน้ำสภาพคล่อง",
-        "in-vault": "ในห้องนิรภัย",
-        "go-to-vault": "ไปที่ห้องนิรภัย",
         "go-to-lp": "ไปที่หจก",
         "in-lp": "มีสภาพคล่อง",
         "claiming-voucher": "การอ้างสิทธิ์...",
@@ -764,7 +899,34 @@
         "wrapper-nav": {
             "my-portfolio": "ผลงานของฉัน",
             "my-tickets": "ตั๋วของฉัน"
-        }
+        },
+        "lp": "ห้างหุ้นส่วนจำกัด",
+        "back": "กลับ",
+        "go-to": "ไปที่",
+        "free-bet": {
+            "claim-btn": "จำนวนเงินที่เรียกร้องจะลดลงตามจำนวนการซื้อ ซึ่งจะโอนไปยังยอดเดิมพันฟรีของคุณ"
+        },
+        "free-bet-modal": {
+            "fund": "ส่งเดิมพันฟรี",
+            "title": "ส่งเดิมพันฟรี",
+            "fund-successful": "กองทุนสำเร็จแล้ว",
+            "invalid-wallet-address": "ที่อยู่กระเป๋าเงินไม่ถูกต้อง",
+            "approve-success": "อนุมัติเรียบร้อยแล้ว",
+            "enter-amount": "ใส่จำนวนเงิน",
+            "insufficient-balance": "ยอดคงเหลือไม่เพียงพอ",
+            "no-funds": "โปรดตรวจสอบว่ากระเป๋าเงินของคุณมีเงินเพียงพอ",
+            "invalid-amount": "จำนวนเงินไม่ถูกต้อง",
+            "transaction-pending": "การทำธุรกรรมที่รอดำเนินการ",
+            "enter-wallet-address": "ป้อนที่อยู่กระเป๋าสตางค์",
+            "funding": "การระดมทุน...",
+            "one-or-more-address-invalid": "ที่อยู่กระเป๋าเงินที่ป้อนอย่างน้อยหนึ่งรายการไม่ถูกต้อง",
+            "enter-wallet-addresses": "ป้อนที่อยู่กระเป๋าเงิน",
+            "fund-batch": "กองทุนที่อยู่หลายแห่ง",
+            "enter-amount-per-user": "ป้อนจำนวนเงินต่อผู้ใช้",
+            "duplicate": "ตรวจพบที่อยู่กระเป๋าเงินที่ซ้ำกัน",
+            "total-amount-batch": "จำนวนเงินทั้งหมดจะเท่ากับ {{ amount }} คูณด้วยที่อยู่กระเป๋าสตางค์ {{ count }} รายการ"
+        },
+        "send-free-bet": "ส่งเดิมพันฟรี"
     },
     "referral": {
         "generate-link": "สร้างลิงค์",
@@ -793,123 +955,6 @@
             "see-result-by-trader": "ดูผลลัพธ์โดยเทรดเดอร์",
             "affiliate-leaderboard": "กระดานผู้นำ"
         }
-    },
-    "vaults": {
-        "title": "Sport Vaults",
-        "strategy-label": "กลยุทธ์ของ Vault",
-        "risks-label": "ความเสี่ยงของ Vault"
-    },
-    "vault": {
-        "discount-vault": {
-            "title": "Discount Vault",
-            "description": "<p>ซื้อโพสิชั่นที่มี odds มากกว่า {{odds}} และมีส่วนลดมากกว่า {{discount}}.</p>",
-            "risks": "<p>Vault มี utilization rate อยู่ที่ {{utilizationRate}} เพื่อเป็นการให้แน่ใจว่าไม่เกิน {{utilizationRate}} ของยอดฝากจะอยู่ในความเสี่ยง ยิ่งไปกว่านั้นจากยอดทั้งหมดไม่เกิน {{utilizationRate}} จะมียอดไม่เกิน {{allocationLimitsPerMarketPerRound}} ที่สามารถนำไปใช้ได้ต่อการแข่งขันหนึ่งเกม จากที่กล่าวมาจึงเป็นการกระจายความเสี่ยงไปยังหลายตลาดที่มีอัตราต่อรองมากกว่า {{odds}}</p>"
-        },
-        "degen-discount-vault": {
-            "title": "Degen Discount Vault",
-            "description": "<p>ซื้อโพสิชั่นที่ odds ใดๆ ที่มีส่วนลดมากกว่า {{discount}}</p>",
-            "risks": "<p>Vault มี utilization rate อยู่ที่ {{utilizationRate}} เพื่อเป็นการให้แน่ใจว่าไม่เกิน {{utilizationRate}} ของยอดฝากจะอยู่ในความเสี่ยง ยิ่งไปกว่านั้นจากยอด {{utilizationRate}} จะมีเพียงมากที่สุด {{allocationLimitsPerMarketPerRound}} เท่านั้นที่สามารถใช้กับเกมการแข่งขั้นหนึ่งเกม</p>"
-        },
-        "safu-discount-vault": {
-            "title": "Safu Discount Vault",
-            "description": "<p>ซื้อโพสิชั่นที่มี odds มากกว่า {{odds}} และ มีส่วนลดใดๆ </p>",
-            "risks": "<p>Vault มี utilization rate อยู่ที่ {{utilizationRate}} เพื่อเป็นการให้แน่ใจว่าไม่เกิน {{utilizationRate}} ของยอดฝากจะอยู่ในความเสี่ยง ยิ่งไปกว่านั้นจากยอดทั้งหมดไม่เกิน {{utilizationRate}} จะมียอดไม่เกิน {{allocationLimitsPerMarketPerRound}} ที่สามารถนำไปใช้ได้ต่อการแข่งขันหนึ่งเกม จากที่กล่าวมาจึงเป็นการกระจายความเสี่ยงไปยังหลายตลาดที่มีอัตราต่อรองมากกว่า {{odds}}</p>"
-        },
-        "upsettoor-vault": {
-            "title": "Upsettoor Vault",
-            "description": "<p>ซื้อตำแหน่งที่มีอัตราต่อรองน้อยกว่า {{odds}} และมีส่วนลดมากกว่า {{discount}}.</p>",
-            "risks": "<p>Vault มี utilization rate อยู่ที่ {{utilizationRate}} เพื่อเป็นการให้แน่ใจว่าไม่เกิน {{utilizationRate}} ของยอดฝากจะอยู่ในความเสี่ยง ยิ่งไปกว่านั้นจากยอดทั้งหมดไม่เกิน {{utilizationRate}} จะมียอดไม่เกิน {{allocationLimitsPerMarketPerRound}} ที่สามารถนำไปใช้ได้ต่อการแข่งขันหนึ่งเกม จากที่กล่าวมาจึงเป็นการกระจายความเสี่ยงไปยังหลายตลาดที่มีอัตราต่อรองมากกว่า {{odds}}</p>"
-        },
-        "variables": "<p>Variables:</p><ul><li>Utilization rate: {{utilizationRate}}</li><li>Price lower limit: {{priceLowerLimit}}</li><li>Price upper limit: {{priceUpperLimit}}</li><li>Max Skew impact: {{skewImpactLimit}}</li><li>Max allocation on a single market: {{allocationLimitsPerMarketPerRound}}</li><li>Max total deposit: {{maxAllowedDeposit}}</li><li>Max users in the vault: {{maxAllowedUsers}}</li><li>Minimum amount on a single trade: {{minTradeAmount}}</li><li>Minimum deposit: {{minDepositAmount}}</li><li>Round duration: {{roundLength}} days</li></ul>",
-        "back-to-vaults": "กลับไปที่ Vaults",
-        "vault-not-started-message": "Vault ยังไม่เริ่ม",
-        "vault-paused-message": "Vault ถูกหยุดทำงาน",
-        "round-allocation-label": "ยอดการฝากทั้งหมด",
-        "spent-trading-label": "ยอดที่ถูกนำไปเทรด",
-        "available-trading-label": "ยอดฝากที่สามารถนำไปเทรดได้",
-        "round-end-label": "รอบนี้จะจบใน",
-        "your-round-allocation-label": "เงินฝากของคุณในรอบนี้: <bold>{{amount}}</bold>",
-        "your-next-round-allocation-label": "เงินฝากของคุณในรอบถัดไป: <bold>{{amount}}</bold>",
-        "estimated-amount-tooltip": "จำนวนนี้เป็นเพียงการประมาณ จำนวนที่แท้จริงจะถูกคำนวณหลังจากจบรอบโดยจะนำ PnL มาคิด",
-        "next-round-start-label": "รอบต่อไปจะเริ่มใน: <counter />",
-        "users-in-vault-label": "จำนวนผู้ใช้งานใน Vault : {{number}} / {{max}}",
-        "vault-filled-label": "จำนวนเงินฝากใน Vault: {{amount}} / {{max}}",
-        "deposit-message": "ฝากเงินเข้าสู่ Vault เพื่อเข้าร่วมรอบต่อไป",
-        "deposit-amount-label": "จำนวนเงินฝาก",
-        "deposit-amount-placeholder": "ระบุจำนวน",
-        "available-to-withdraw-label": "จำนวนเงินฝากที่สามารถถอนได้: <bold>{{amount}}</bold>",
-        "nothing-to-withdraw-label": "ไม่มีสิ่งที่จะสามารถถอนได้",
-        "withdrawal-message": "คุณสามารถขอถอนเงินและเงินของคุณจะถูกส่งถึงคุณโดยอัตโนมัติเมื่อสิ้นสุดรอบเมื่อรอบปิด",
-        "withdraw-round-end-label": "รอบนี้จะสิ้นสุดใน: <counter />",
-        "withdrawal-requested-message": "คุณขอถอนเงินเป็นจำนวน <bold>{{amount}}</bold><tooltip />. เงินของคุณจะถูกส่งถึงคุณโดยอัตโนมัติเมื่อสิ้นสุดรอบเมื่อปิดรอบ",
-        "withdrawal-request-label": "ขอถอน: <bold>{{amount}}</bold>",
-        "first-deposit-withdrawal-message": "คุณฝากเงินในรอบถัดไป และคุณสามารถถอนเงินเหล่านี้ได้เมื่อสิ้นสุดรอบถัดไป",
-        "round-ended-label": "จบรอบ",
-        "deposit-withdrawal-warning": "มีการร้องขอการถอน คุณไม่สามารถฝากได้",
-        "deposit-max-amount-of-users-warning": "ถึงจำนวนผู้ใช้สูงสุดของ Vault แล้ว คุณไม่สามารถฝากเงินได้",
-        "deposit-vault-cap-reached-warning": "ถึงจำนวนฝากสูงสุดของ Vault แล้ว คุณไม่สามารถฝากเงินได้",
-        "deposit-vault-cap-error": "จำนวนเงินฝากเกินขีดจำกัดของ Vault",
-        "deposit-min-amount-error": "จำนวนเงินขั้นต่ำสำหรับการฝากคือ {{amount}}",
-        "withdrawal-deposit-warning": "คุณไม่สามารถถอนได้เนื่องจากคุณฝากไว้แล้วสำหรับรอบถัดไป",
-        "tabs": {
-            "deposit": "ฝาก",
-            "claim": "รับ",
-            "withdraw": "ถอน"
-        },
-        "button": {
-            "deposit-label": "ฝาก",
-            "deposit-progress-label": "กำลังทำการฝาก...",
-            "deposit-confirmation-message": "การฝากสำเร็จ",
-            "request-withdrawal-label": "ขอถอนเงิน",
-            "request-withdrawal-progress-label": "กำลังทำคำร้อง...",
-            "request-withdrawal-confirmation-message": "ส่งคำขอถอนสำเร็จแล้ว",
-            "withdraw-label": "ถอน",
-            "withdraw-progress-label": "กำลังดำเนินการถอนเงิน…",
-            "withdraw-confirmation-message": "ถอนเงินสำเร็จ",
-            "close-round-label": "ปิดรอบ",
-            "close-round-progress-label": "กำลังดำเนินการปิดรอบ…",
-            "close-round-confirmation-message": "ปิดรอบสำเร็จ"
-        },
-        "trades-history": {
-            "title": "ประวัติการเทรดของ Vault",
-            "no-trades": "ไม่มีการเทรดที่เกี่ยวข้องกับ Vault นี้ในรอบที่เลือก",
-            "round-label": "รอบ"
-        },
-        "pnl": {
-            "title": "PnL ต่อรอบ",
-            "no-data": "ไม่มีข้อมูล PnL สำหรับรอบก่อนหน้า",
-            "lifetime-pnl": "Lifetime PnL",
-            "ongoing-pnl": "Ongoing PnL"
-        },
-        "user-transactions": {
-            "type": {
-                "deposit": "เงินฝาก",
-                "claim": "การเรียกร้องการถอน",
-                "withdrawalRequest": "คำขอถอนเงิน"
-            },
-            "title": "การทำธุรกรรมของผู้ใช้",
-            "no-transactions": "ไม่มีธุรกรรมของผู้ใช้ที่เกี่ยวข้องกับห้องนิรภัยนี้ในรอบที่เลือก",
-            "name": "ชื่อ"
-        },
-        "parlay-discount-vault": {
-            "description": "<p>ซื้อตั๋วพาร์เลย์โดยแต่ละตำแหน่งในตั๋วมีส่วนลดอย่างน้อย {{discount}}</p>",
-            "risks": "<p>ห้องนิรภัยมีอัตราการใช้งาน {{utilizationRate}} ซึ่งรับรองว่าไม่เกิน {{utilizationRate}} ของเงินฝากในแต่ละรอบที่มีความเสี่ยง นอกจากนี้ จาก {{utilizationRate}} เหล่านั้น คุณสามารถใช้จ่ายได้สูงสุด {{allocationLimitsPerMarketPerRound}} กับตั๋วพาร์เลย์ใบเดียวต่อรอบ ดังนั้นจึงเป็นการกระจายความเสี่ยงไปสู่ตั๋วพาร์เลย์หลายใบที่มีส่วนลดมากกว่า {{odds}}</p>",
-            "title": "ห้องเก็บส่วนลด Parlay"
-        },
-        "gamified-staking-message": "<p>เงินฝากทั้งหมดที่เข้าสู่รอบจะนับรวมกับปริมาณการเดิมพันแบบเกม</p>",
-        "LP": {
-            "title": "หจก",
-            "parlay-lp": "หจก.พาร์เลย์",
-            "single-lp": "หจก.เดียว"
-        },
-        "variables-parlay": "<p>ตัวแปร:</p><ul><li> อัตราการใช้: {{utilizationRate}}</li><li> ขีดจำกัดล่างของราคา: {{priceLowerLimit}}</li><li> ขีดจำกัดสูงสุดของราคา: {{priceUpperLimit}}</li><li> ผลกระทบเอียงสูงสุด: {{skewImpactLimit}}</li><li> การจัดสรรสูงสุดในพาร์เลย์เดียว: {{allocationLimitsPerMarketPerRound}}</li><li> เงินฝากทั้งหมดสูงสุด: {{maxAllowedDeposit}}</li><li> ผู้ใช้สูงสุดในห้องนิรภัย: {{maxAllowedUsers}}</li><li> จำนวนเงินขั้นต่ำในการซื้อขายครั้งเดียว: {{minTradeAmount}}</li><li> เงินฝากขั้นต่ำ: {{minDepositAmount}}</li><li> ระยะเวลาของรอบ: {{roundLength}} วัน</li></ul>",
-        "single-lp": {
-            "title": "หจก.เดียว"
-        },
-        "parlay-lp": {
-            "title": "หจก.พาร์เลย์"
-        },
-        "deprecated-info": "เลิกใช้แล้ว โปรดถอนเงินของคุณ!"
     },
     "parlay-leaderboard": {
         "title": "Parlay Incentives Leaderboard",
@@ -1086,10 +1131,6 @@
             "description": "เข้าร่วมเว็บสปอร์ตบุ๊ค web3 ที่ดีที่สุดในตลาด รักษาตำแหน่งในลีกชั้นนำเช่น NFL, NBA, UCL, EPL และอีกมากมาย",
             "title": "ตลาดต่อเวลา: ตลาดหนังสือกีฬา Web3 สำหรับลีกมากกว่า 40 ลีก"
         },
-        "vaults": {
-            "title": "ห้องนิรภัยตลาดล่วงเวลา: การซื้อขายอัตโนมัติ",
-            "description": "ฝากสินทรัพย์ไว้ในห้องนิรภัยของตลาดล่วงเวลา และปล่อยให้กลไกการซื้อขายอัตโนมัติของเราปรับใช้กลยุทธ์ที่คุณเลือก"
-        },
         "parlay-leaderboard": {
             "title": "ตลาดต่อเวลา: รับรางวัลพาร์เลย์ทุกๆ 2 สัปดาห์",
             "description": "ตลาดล่วงเวลาเป็นเว็บสปอร์ตบุ๊ค web3 ที่มีโบนัสรายปักษ์ที่ดีที่สุดในตลาดสำหรับผู้เล่นพาร์เลย์! ตรวจสอบกระดานผู้นำและหากคุณผ่านเข้ารอบที่นี่"
@@ -1193,10 +1234,12 @@
         "sign-up": "ลงชื่อ",
         "log-in": "เข้าสู่ระบบ",
         "get-started": "เริ่ม",
-        "title": "เริ่มต้นการทำงานล่วงเวลา"
+        "title": "เริ่มต้นการทำงานล่วงเวลา",
+        "start-tour": "เริ่มทัวร์"
     },
     "banner": {
-        "arb-distribution-message": "การกระจาย ARB ได้เริ่มต้นแล้ว รับโทเค็น ARB โดยใช้การต่อเวลา ชำระเงินรายละเอียดได้ที่นี่"
+        "arb-distribution-message": "การกระจาย ARB ได้เริ่มต้นแล้ว รับโทเค็น ARB โดยใช้การต่อเวลา ชำระเงินรายละเอียดได้ที่นี่",
+        "v1-text": "<highlight>V2</highlight>: This is the V2 version of Overtime. To switch back to deprecated V1, <highlight>click here</highlight>."
     },
     "promotions": {
         "nav-items": {
@@ -1213,5 +1256,95 @@
         "to-label": "ถึง",
         "starts-in": "เริ่มใน",
         "no-promotions": "อ๊ะ! ดูเหมือนว่าไม่มีโปรโมชั่นสำหรับตัวกรองที่ระบุในขณะนี้"
+    },
+    "overdrop": {
+        "navigation-menu": {
+            "home": "โอเวอร์ดรอปบ้าน",
+            "leaderboard": "ลีดเดอร์บอร์ด",
+            "leveling-tree": "การปรับระดับต้นไม้",
+            "xp-calculation": "การคำนวณ XP"
+        },
+        "overdrop-home": {
+            "next-thales-rewards-at": "Next Thales รับรางวัลที่",
+            "daily-streak": "เพิ่ม xp ต่อเนื่องรายวัน",
+            "total-xp-multiplier": "ตัวคูณ XP ทั้งหมด",
+            "level": "ระดับ",
+            "next-level": "ระดับถัดไป",
+            "twitter-xp-boost-resets": "บูสต์ XP ของ Twitter จะรีเซ็ตใน",
+            "xp": "เอ็กซ์พี",
+            "my-total-xp": "XP ทั้งหมดของฉัน",
+            "weekly-streak": "เพิ่ม XP ต่อเนื่องรายสัปดาห์",
+            "current-rewards": "รางวัลโดยประมาณในปัจจุบัน",
+            "twitter-share": "Twitter แชร์ XP เพิ่ม",
+            "social-multiplier": "ตัวคูณ XP ทางสังคม",
+            "loyalty-boost": "เพิ่มความภักดี",
+            "rank": "อันดับ",
+            "rank-tooltip": "อันดับปัจจุบันของคุณใน Overdrop League ตรวจสอบแท็บกระดานผู้นำเพื่อดูข้อมูลเพิ่มเติม"
+        },
+        "leveling-tree": {
+            "explainer": {
+                "daily-bonus": "โบนัสประจำวัน",
+                "base-xp-content": "<bold>1 XP ฐาน = 1 $</bold> ของปริมาณ<br/><br/> หลังจาก<bold> 28 วัน</bold> ในแถวของ<bold> ปริมาณ &gt;10$</bold> คุณมาถึงแล้ว<bold> ตัวคูณฐาน MAX</bold><br/><br/> ทุกวันที่พลาดไปของปริมาณที่ต่ำกว่า 10$ จะทำให้ฐานของคุณลดลง<bold> XP คูณ -0.1</bold>",
+                "positions-thales": "ตำแหน่งพร้อมโบนัส Thales (หนึ่งครั้งต่อการเดิมพัน)",
+                "games-in-parlay": "เกมในพาร์เลย์",
+                "parlay-xp": "โบนัส PARLAY XP (หนึ่งครั้งต่อพาร์เลย์)",
+                "days": "วัน",
+                "base-xp-accrual": "การสะสม XP พื้นฐาน",
+                "xp-explained-content": "แคมเปญระยะยาวที่ผู้ใช้สะสม XP จนกระทั่งสิ้นสุดฤดูกาลกีฬาด้วยการขับรถ<bold> ปริมาณการต่อเวลา</bold> กับ<bold> ตัวคูณ</bold> ขึ้นอยู่กับตัวชี้วัดและเป้าหมายแบบไดนามิกต่างๆ<br/><br/> หลังจากสิ้นสุดแคมเปญ ผู้ใช้ทุกคนจะแชร์<highlight> 100,000 โอพี</highlight> และ<highlight> 150,000 ARB</highlight> สัดส่วนขึ้นอยู่กับ XP<br><br> ในขณะที่แคมเปญคงอยู่ ผู้ใช้จะได้รับรางวัลหนึ่งรางวัลในระดับ XP ที่กำหนด",
+                "twitter-share-bonus": "โบนัสการแชร์ทวิตเตอร์ (ครั้งเดียวต่อวัน)",
+                "position-thales-content": "ใช้ <bold>THALES</bold> เป็นหลักประกัน และคุณ <bold>ได้รับโบนัส 10% ต่อ BASE XP ต่อ $</bold> สำหรับการซื้อขายนั้น ๆ",
+                "xp-explained": "XP อธิบายแล้ว",
+                "twitter-content": "แบ่งปันค่าล่วงเวลาของคุณ <bold>Flex Card</bold> จากการเดิมพันวันนี้ <bold>บน Twitter: โบนัส 10% ต่อ BASE XP ต่อ $</bold> ในช่วงที่เหลือของวัน",
+                "weekly-boost": "บูสต์รายสัปดาห์",
+                "xp-boost": "เพิ่ม XP",
+                "loyalty-boost": "เพิ่มความภักดี",
+                "weekly-boost-content": "เงื่อนไขสำหรับการเปิดใช้งาน Weekly Streak Boost สำหรับสัปดาห์ปัจจุบันคือต้องมีปริมาณการเดิมพันระหว่างวันจันทร์ 00:00 UTC ถึงวันอาทิตย์ 23:59 UTC สำหรับสัปดาห์ปัจจุบัน ยิ่งเป็นไปตามเงื่อนไขนี้ติดต่อกันมากเท่าไร <bold>Weekly Streak Boost</bold> ก็ยิ่งมีค่า XP พื้นฐานเพิ่มขึ้นเท่านั้น!\n\n<bold>Weekly Streak Boost</bold> จะถูกนำไปใช้กับการเดิมพันทั้งหมดที่ทำในขณะที่เปิดใช้งาน Boost\n\nหากคุณทำลายสตรีคและพลาดการเพิ่มปริมาณในวันหนึ่ง <bold>Weekly Streak Boost</bold> ของคุณจะถูกรีเซ็ตเป็น +0%",
+                "parlay-content": "คุณจะได้รับการเพิ่มค่า XP เพิ่มเติมสำหรับพาร์เลย์นั้นๆ โดยขึ้นอยู่กับว่ามีเกมแต่ละเกมอยู่ในพาร์เลย์ของคุณกี่เกม!",
+                "loyalty-boost-content": "การเพิ่มค่า XP ความภักดีจะช่วยเพิ่มค่า XP ทั่วไปของคุณได้ถึง 25% ถาวร ขึ้นอยู่กับระดับของคุณ โดยเริ่มจากการเพิ่มค่า XP 5% ในเลเวล 1 จากนั้นคุณจะได้รับค่า XP เพิ่มขึ้นอีก 5% เมื่อถึงเลเวลที่ 5 คุณจะได้รับค่า XP ความภักดีสูงสุด 25% เมื่อถึงเลเวล 20 (GOAT) โดยมีคะแนน XP 5,000,000 คะแนน คุณสามารถดูรายละเอียดระดับ XP ได้ที่หน้าแผนผังเลเวล",
+                "xp-boost-content": "มีหลายวิธีในการเพิ่มจำนวน XP ที่เกิดขึ้นต่อการเดิมพันของคุณให้มากขึ้น เช่น การเดิมพันต่อเนื่องรายวัน การเดิมพันต่อเนื่องรายสัปดาห์ จำนวนเกมในรูปแบบพาร์เลย์ การใช้โทเค็น THALES เป็นหลักประกัน การเดิมพันของคุณบน Twitter และการบรรลุระดับ XP เพื่อรับการเพิ่มความภักดี!",
+                "days-content": "เงื่อนไขสำหรับการเปิดใช้งาน Daily Streak Boost สำหรับวันปัจจุบันคือต้องมีปริมาณการเดิมพันระหว่าง 00:00UTC และ 23:59UTC สำหรับวันปัจจุบัน ยิ่งตรงตามเงื่อนไขนี้หลายวันติดต่อกันมากเท่าใด <bold>Daily Streak Boost</bold> ก็ยิ่งเพิ่มค่า XP พื้นฐานของคุณมากขึ้นเท่านั้น! \n\n<bold>Daily Streak Boost</bold> จะถูกนำไปใช้กับการเดิมพันทั้งหมดที่ทำในขณะที่เปิดใช้งาน Boost \n\nหากคุณทำลายสตรีคและพลาดการเพิ่มปริมาณในวันหนึ่ง <bold>Daily Streak Boost ของคุณจะถูกรีเซ็ตเป็น +0%</bold>"
+            },
+            "heading": "ลีกเกษตรกรรมโอเวอร์ดรอป"
+        },
+        "xp-details": {
+            "total-bonus": "โบนัสรวม",
+            "paragraph": "ใช้ THALES เป็นหลักประกันเพื่อรับโบนัสเพิ่มเติม 10% สร้างพาร์เลย์เพื่อรับโบนัสสูงถึง 100% และตรวจสอบเกมโปรโมชั่นพิเศษ",
+            "no-results": "ไม่มีผลลัพธ์",
+            "weekly-multiplier": "ตัวคูณรายสัปดาห์",
+            "date-time": "วันที่ | เวลา",
+            "xp-history": "ประวัติประสบการณ์",
+            "active-xp-bonus": "โบนัส xp ที่ใช้งานอยู่",
+            "received": "ได้รับ",
+            "shared-flex": "บัตรเฟล็กซ์แบบแชร์",
+            "daily-multiplier": "ตัวคูณรายวัน",
+            "days-in-row": "วันติดต่อกัน",
+            "twitter-multiplier": "ตัวคูณทวิตเตอร์",
+            "tx-link": "ลิงค์เท็กซัส",
+            "loyalty-multiplier": "ตัวคูณความภักดี",
+            "weeks-in-row": "ติดต่อกันเป็นสัปดาห์",
+            "loyalty-boost": "เพิ่มความภักดี"
+        },
+        "leaderboard": {
+            "table": {
+                "rewards": "จำนวนรางวัล",
+                "rank": "อันดับ",
+                "level": "ระดับ",
+                "address": "ที่อยู่",
+                "total-volume": "ปริมาณรวม",
+                "total-xp": "คะแนน XP ทั้งหมด"
+            }
+        },
+        "modal": {
+            "go-to-overdrop": "ไปที่โอเวอร์ดรอป",
+            "check-out": "เช็คเอาท์<br/> โอเวอร์ดรอปลีก!",
+            "unlocked-level": "คุณปลดล็อคระดับ {{ level }} แล้ว!",
+            "day-streak": "<bold>{{ days }}</bold><br/> สตรีควัน!",
+            "reached-level": "คุณไปถึงระดับ {{ level }} และได้รับชัยชนะ {{ amount }} เดิมพันฟรี THALES!",
+            "you-are-rocking": "คุณกำลังทำมันได้ดีมาก!",
+            "active-daily-streak": "เพิ่ม XP สตรีครายวันที่ใช้งานอยู่",
+            "gain-xp-label": "รับ XP, เพิ่มเลเวล, รับรางวัล และฟาร์มไอเทมจากเครื่องบิน!",
+            "congratulation": "ขอแสดงความยินดี!",
+            "dont-show-this": "อย่าแสดงสิ่งนี้อีก"
+        }
     }
 }

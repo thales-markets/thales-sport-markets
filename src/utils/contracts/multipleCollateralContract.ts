@@ -1,6 +1,160 @@
 import { ZERO_ADDRESS } from 'constants/network';
 import { Network } from 'enums/network';
 
+const WETHabi = [
+    {
+        anonymous: false,
+        inputs: [
+            { indexed: true, internalType: 'address', name: 'src', type: 'address' },
+            { indexed: true, internalType: 'address', name: 'guy', type: 'address' },
+            { indexed: false, internalType: 'uint256', name: 'wad', type: 'uint256' },
+        ],
+        name: 'Approval',
+        type: 'event',
+    },
+    {
+        anonymous: false,
+        inputs: [
+            { indexed: true, internalType: 'address', name: 'dst', type: 'address' },
+            { indexed: false, internalType: 'uint256', name: 'wad', type: 'uint256' },
+        ],
+        name: 'Deposit',
+        type: 'event',
+    },
+    {
+        anonymous: false,
+        inputs: [
+            { indexed: true, internalType: 'address', name: 'src', type: 'address' },
+            { indexed: true, internalType: 'address', name: 'dst', type: 'address' },
+            { indexed: false, internalType: 'uint256', name: 'wad', type: 'uint256' },
+        ],
+        name: 'Transfer',
+        type: 'event',
+    },
+    {
+        anonymous: false,
+        inputs: [
+            { indexed: true, internalType: 'address', name: 'src', type: 'address' },
+            { indexed: false, internalType: 'uint256', name: 'wad', type: 'uint256' },
+        ],
+        name: 'Withdrawal',
+        type: 'event',
+    },
+    { payable: true, stateMutability: 'payable', type: 'fallback' },
+    {
+        constant: true,
+        inputs: [
+            { internalType: 'address', name: '', type: 'address' },
+            { internalType: 'address', name: '', type: 'address' },
+        ],
+        name: 'allowance',
+        outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+        payable: false,
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        constant: false,
+        inputs: [
+            { internalType: 'address', name: 'guy', type: 'address' },
+            { internalType: 'uint256', name: 'wad', type: 'uint256' },
+        ],
+        name: 'approve',
+        outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+        payable: false,
+        stateMutability: 'nonpayable',
+        type: 'function',
+    },
+    {
+        constant: true,
+        inputs: [{ internalType: 'address', name: '', type: 'address' }],
+        name: 'balanceOf',
+        outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+        payable: false,
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        constant: true,
+        inputs: [],
+        name: 'decimals',
+        outputs: [{ internalType: 'uint8', name: '', type: 'uint8' }],
+        payable: false,
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        constant: false,
+        inputs: [],
+        name: 'deposit',
+        outputs: [],
+        payable: true,
+        stateMutability: 'payable',
+        type: 'function',
+    },
+    {
+        constant: true,
+        inputs: [],
+        name: 'name',
+        outputs: [{ internalType: 'string', name: '', type: 'string' }],
+        payable: false,
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        constant: true,
+        inputs: [],
+        name: 'symbol',
+        outputs: [{ internalType: 'string', name: '', type: 'string' }],
+        payable: false,
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        constant: true,
+        inputs: [],
+        name: 'totalSupply',
+        outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+        payable: false,
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        constant: false,
+        inputs: [
+            { internalType: 'address', name: 'dst', type: 'address' },
+            { internalType: 'uint256', name: 'wad', type: 'uint256' },
+        ],
+        name: 'transfer',
+        outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+        payable: false,
+        stateMutability: 'nonpayable',
+        type: 'function',
+    },
+    {
+        constant: false,
+        inputs: [
+            { internalType: 'address', name: 'src', type: 'address' },
+            { internalType: 'address', name: 'dst', type: 'address' },
+            { internalType: 'uint256', name: 'wad', type: 'uint256' },
+        ],
+        name: 'transferFrom',
+        outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+        payable: false,
+        stateMutability: 'nonpayable',
+        type: 'function',
+    },
+    {
+        constant: false,
+        inputs: [{ internalType: 'uint256', name: 'wad', type: 'uint256' }],
+        name: 'withdraw',
+        outputs: [],
+        payable: false,
+        stateMutability: 'nonpayable',
+        type: 'function',
+    },
+];
+
 const abi = [
     { inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
     {
@@ -604,90 +758,99 @@ const multipleCollateral = {
     sUSD: {
         addresses: {
             [Network.OptimismMainnet]: '0x8c6f28f2F1A3C87F0f938b96d27520d9751ec8d9', // sUSD
-            [Network.OptimismGoerli]: '0xE1ceaa829525a08C1d39A5CEBe4b42aF58d77198', // exoticSUSD
             [Network.Arbitrum]: '',
             [Network.Base]: '',
+            [Network.OptimismSepolia]: '',
         },
         abi,
     },
     DAI: {
         addresses: {
             [Network.OptimismMainnet]: '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1',
-            [Network.OptimismGoerli]: '',
             [Network.Arbitrum]: '0xda10009cbd5d07dd0cecc66161fc93d7c9000da1',
             [Network.Base]: '',
+            [Network.OptimismSepolia]: '',
         },
         abi,
     },
     USDCe: {
         addresses: {
-            [Network.OptimismMainnet]: '',
-            [Network.OptimismGoerli]: '',
+            [Network.OptimismMainnet]: '0x7F5c764cBc14f9669B88837ca1490cCa17c31607',
             [Network.Arbitrum]: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
             [Network.Base]: '',
+            [Network.OptimismSepolia]: '',
         },
         abi,
     },
     USDC: {
         addresses: {
-            [Network.OptimismMainnet]: '0x7F5c764cBc14f9669B88837ca1490cCa17c31607',
-            [Network.OptimismGoerli]: '',
+            [Network.OptimismMainnet]: '0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85',
             [Network.Arbitrum]: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831',
             [Network.Base]: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
+            [Network.OptimismSepolia]: '0xff6535c1F971245435429A915aB9eB1713beC1C1', // exoticUSDC
         },
         abi,
     },
     USDT: {
         addresses: {
             [Network.OptimismMainnet]: '0x94b008aA00579c1307B0EF2c499aD98a8ce58e58',
-            [Network.OptimismGoerli]: '',
             [Network.Arbitrum]: '0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9',
             [Network.Base]: '',
+            [Network.OptimismSepolia]: '0x6DbE2E4C68EB80b76a1c0F7b5bA9564C72280cB3',
         },
         abi,
     },
     OP: {
         addresses: {
             [Network.OptimismMainnet]: '0x4200000000000000000000000000000000000042',
-            [Network.OptimismGoerli]: '',
             [Network.Arbitrum]: '',
             [Network.Base]: '',
+            [Network.OptimismSepolia]: '',
         },
         abi,
     },
     ARB: {
         addresses: {
             [Network.OptimismMainnet]: '',
-            [Network.OptimismGoerli]: '',
             [Network.Arbitrum]: '0x912CE59144191C1204E64559FE8253a0e49E6548',
             [Network.Base]: '',
+            [Network.OptimismSepolia]: '',
         },
         abi,
     },
     WETH: {
         addresses: {
             [Network.OptimismMainnet]: '0x4200000000000000000000000000000000000006',
-            [Network.OptimismGoerli]: '',
             [Network.Arbitrum]: '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1',
             [Network.Base]: '0x4200000000000000000000000000000000000006',
+            [Network.OptimismSepolia]: '0xF9b8b43530A3CF8D29cb0D657867347958edf63F',
         },
-        abi,
+        abi: WETHabi,
     },
     ETH: {
         addresses: {
             [Network.OptimismMainnet]: ZERO_ADDRESS,
-            [Network.OptimismGoerli]: ZERO_ADDRESS,
             [Network.Arbitrum]: ZERO_ADDRESS,
             [Network.Base]: ZERO_ADDRESS,
+            [Network.OptimismSepolia]: ZERO_ADDRESS,
         },
         abi,
     },
     USDbC: {
         addresses: {
             [Network.OptimismMainnet]: '',
-            [Network.OptimismGoerli]: '',
             [Network.Arbitrum]: '',
             [Network.Base]: '0xd9aAEc86B65D86f6A7B5B1b0c42FFA531710b6CA',
+            [Network.OptimismSepolia]: '',
+        },
+        abi,
+    },
+    THALES: {
+        addresses: {
+            [Network.OptimismMainnet]: '0x217d47011b23bb961eb6d93ca9945b7501a5bb11',
+            [Network.Arbitrum]: '0xe85b662fe97e8562f4099d8a1d5a92d4b453bf30',
+            [Network.Base]: '0xf34e0cff046e154cafcae502c7541b9e5fd8c249',
+            [Network.OptimismSepolia]: '0xeC60249ee888FFdE5Ee09920C9644A904D4f49de',
         },
         abi,
     },

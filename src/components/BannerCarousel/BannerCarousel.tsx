@@ -1,11 +1,11 @@
-import React, { useMemo } from 'react';
-import styled from 'styled-components';
-import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import { Carousel } from 'react-responsive-carousel';
 import { Banner, useBannersQuery } from 'queries/banners/useBannersQuery';
+import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from 'redux/rootReducer';
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { getNetworkId } from 'redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
+import styled from 'styled-components';
 
 const BannerCarousel: React.FC = () => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
@@ -46,22 +46,22 @@ const BannerCarousel: React.FC = () => {
 const Container = styled.div`
     position: relative;
     z-index: 0;
-    width: 1700px;
-    height: 165px;
+    width: 263px;
+    height: 263px;
     border-radius: 11px;
     overflow: hidden;
-    margin-top: 6px;
-    margin-bottom: 12px;
+    margin: 0 0 15px 0;
     max-width: 100%;
-    @media (max-width: 768px) {
-        display: none;
+    margin-right: 15px;
+    @media (max-width: 1199px) {
+        margin-right: 5px;
     }
 `;
 
 const StyledDiv = styled.div<{ image: string; hasHref: boolean }>`
     max-width: 100%;
-    width: 1700px;
-    height: 165px;
+    width: 263px;
+    height: 263px;
     background-image: ${(props) => `url(${props.image})`};
     cursor: ${(props) => (props.hasHref ? 'pointer' : 'default')};
     background-position: center;

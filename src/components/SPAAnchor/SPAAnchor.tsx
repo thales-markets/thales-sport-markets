@@ -16,7 +16,7 @@ const SPAAnchor: React.FC<FieldValidationMessageProps> = ({ onClick, children, h
     return (
         <>
             {ifIpfsDeployment ? (
-                <Anchor className={className} style={style} href={href}>
+                <Anchor hasHref={!!href} className={className} style={style} href={href}>
                     {children}
                 </Anchor>
             ) : (

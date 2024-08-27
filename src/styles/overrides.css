@@ -1,13 +1,17 @@
 /* react-toastify notifications */
 #root {
-    --toastify-text-color-light: #5f6180;
-    --toastify-spinner-color: #5f6180;
-    --toastify-spinner-color-empty-area: #e1d9e7;
+    --toastify-text-color-light: #3c498a;
+    --toastify-spinner-color: #3c498a;
+    --toastify-spinner-color-empty-area: #9fa1ba;
 }
 
 /* react-modal */
 .ReactModal__Body--open {
     overflow-y: hidden;
+}
+.ReactModal__Overlay--after-open {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .MuiMenu-paper {
@@ -27,6 +31,18 @@
     background-color: #1e2134 !important;
 }
 
+.MuiMenuItem-root {
+    font-size: 14px !important;
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+    min-height: auto !important;
+}
+
+.MuiListItem-gutters {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+}
+
 @media (max-width: 512px) {
     .MuiDialog-paper {
         margin: 10px !important;
@@ -35,10 +51,24 @@
 
 .odd-toast {
     color: #ffffff !important;
-    background-color: #5f6180 !important;
+    background-color: #3c498a !important;
 }
 
 .odd-toast-body {
     color: #ffffff !important;
-    background-color: #5f6180 !important;
+    background-color: #3c498a !important;
+}
+
+.small-checkbox {
+    span {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+.small-checkbox span::after {
+    left: 4px;
+    top: -1px;
+    width: 2px;
+    height: 10px;
 }

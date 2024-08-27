@@ -1,17 +1,13 @@
 import { ParticleNetwork } from '@particle-network/auth';
 import { ParticleProvider } from '@particle-network/provider';
-import BannerCarousel from 'components/BannerCarousel';
 import Loader from 'components/Loader';
 import { SUPPORTED_NETWORKS_NAMES } from 'constants/network';
 import ROUTES from 'constants/routes';
 import { Network } from 'enums/network';
 import { ethers } from 'ethers';
 import DappLayout from 'layouts/DappLayout';
-import LandingPageLayout from 'layouts/LandingPageLayout';
 import Theme from 'layouts/Theme';
 import Profile from 'pages/Profile';
-import Referral from 'pages/Referral';
-import Wizard from 'pages/Wizard';
 import { Suspense, lazy, useEffect } from 'react';
 import { QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
@@ -19,7 +15,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Route, Router, Switch } from 'react-router-dom';
 import { setAppReady, setMobileState } from 'redux/modules/app';
 import {
-    getIsConnectedViaParticle,
     getNetworkId,
     getSwitchToNetworkId,
     switchToNetworkId,
@@ -35,20 +30,16 @@ import { buildHref, history } from 'utils/routes';
 import { mainnet, useAccount, useDisconnect, useNetwork, useProvider, useSigner } from 'wagmi';
 import RouterProvider from './Provider/RouterProvider/RouterProvider';
 
-const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));
 const Market = lazy(() => import('pages/Markets/Market'));
-const Quiz = lazy(() => import('pages/Quiz'));
-const QuizLeaderboard = lazy(() => import('pages/Quiz/Leaderboard'));
-const Vaults = lazy(() => import('pages/Vaults'));
-const Vault = lazy(() => import('pages/Vault'));
-const ParlayLeaderboard = lazy(() => import('pages/ParlayLeaderboard'));
+const Ticket = lazy(() => import('pages/Ticket'));
 const LiquidityPool = lazy(() => import('pages/LiquidityPool'));
 const Deposit = lazy(() => import('pages/AARelatedPages/Deposit'));
 const Withdraw = lazy(() => import('pages/AARelatedPages/Withdraw'));
 const GetStarted = lazy(() => import('pages/AARelatedPages/GetStarted'));
 const Promotions = lazy(() => import('pages/Promotions/Home'));
 const Promotion = lazy(() => import('pages/Promotions/Promotion'));
+const Overdrop = lazy(() => import('pages/Overdrop'));
 
 const particle = new ParticleNetwork({
     projectId: process.env.REACT_APP_PARTICLE_PROJECT_ID,
@@ -64,7 +55,6 @@ const particle = new ParticleNetwork({
             { id: Network.OptimismMainnet, name: 'optimism' },
             { id: Network.Arbitrum, name: 'arbitrum' },
             { id: Network.Base, name: 'base' },
-            { id: Network.OptimismGoerli, name: 'optimism' },
         ], // optional: web wallet support chains.
         customStyle: {}, //optional: custom wallet style
     },
@@ -74,7 +64,6 @@ const App = () => {
     const dispatch = useDispatch();
     const networkId = useSelector((state) => getNetworkId(state));
     const switchedToNetworkId = useSelector((state) => getSwitchToNetworkId(state));
-    const isConnectedViaParticle = useSelector((state) => getIsConnectedViaParticle(state));
 
     const { address } = useAccount();
     const provider = useProvider(!address && { chainId: switchedToNetworkId }); // when wallet not connected force chain
@@ -148,7 +137,7 @@ const App = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        if (window.ethereum) {
+        if (window.ethereum && window.ethereum.on) {
             window.ethereum.on('chainChanged', (chainIdParam) => {
                 const chainId = Number.isInteger(chainIdParam) ? chainIdParam : parseInt(chainIdParam, 16);
 
@@ -176,6 +165,15 @@ const App = () => {
                             <Switch>
                                 <Route
                                     exact
+                                    path={ROUTES.Ticket}
+                                    render={(routeProps) => (
+                                        <DappLayout>
+                                            <Ticket {...routeProps} />
+                                        </DappLayout>
+                                    )}
+                                />
+                                <Route
+                                    exact
                                     path={ROUTES.Markets.Market}
                                     render={(routeProps) => (
                                         <DappLayout>
@@ -185,17 +183,9 @@ const App = () => {
                                 />
                                 <Route exact path={ROUTES.Markets.Home}>
                                     <DappLayout>
-                                        <BannerCarousel />
                                         <Markets />
                                     </DappLayout>
                                 </Route>
-                                {isRouteAvailableForNetwork(ROUTES.Leaderboard, networkId) && (
-                                    <Route exact path={ROUTES.Leaderboard}>
-                                        <DappLayout>
-                                            <ParlayLeaderboard />
-                                        </DappLayout>
-                                    </Route>
-                                )}
                                 {isRouteAvailableForNetwork(ROUTES.Profile, networkId) && (
                                     <Route exact path={ROUTES.Profile}>
                                         <DappLayout>
@@ -203,13 +193,13 @@ const App = () => {
                                         </DappLayout>
                                     </Route>
                                 )}
-                                {isRouteAvailableForNetwork(ROUTES.Referral, networkId) && (
-                                    <Route exact path={ROUTES.Referral}>
+                                {
+                                    <Route exact path={ROUTES.Overdrop}>
                                         <DappLayout>
-                                            <Referral />
+                                            <Overdrop />
                                         </DappLayout>
                                     </Route>
-                                )}
+                                }
 
                                 <Route exact path={ROUTES.Deposit}>
                                     <DappLayout>
@@ -225,45 +215,9 @@ const App = () => {
 
                                 <Route exact path={ROUTES.Wizard}>
                                     <DappLayout>
-                                        {isConnectedViaParticle && <GetStarted />}
-                                        {!isConnectedViaParticle && <Wizard />}
+                                        <GetStarted />
                                     </DappLayout>
                                 </Route>
-                                {isRouteAvailableForNetwork(ROUTES.Quiz, networkId) && (
-                                    <Route exact path={ROUTES.Quiz}>
-                                        <DappLayout>
-                                            <Quiz />
-                                        </DappLayout>
-                                    </Route>
-                                )}
-                                {isRouteAvailableForNetwork(ROUTES.Vaults, networkId) && (
-                                    <Route exact path={ROUTES.Vaults}>
-                                        <DappLayout>
-                                            <Vaults />
-                                        </DappLayout>
-                                    </Route>
-                                )}
-
-                                {isRouteAvailableForNetwork(ROUTES.Vaults, networkId) && (
-                                    <Route
-                                        exact
-                                        path={ROUTES.Vault}
-                                        render={(routeProps) => (
-                                            <DappLayout>
-                                                <Vault {...routeProps} />
-                                            </DappLayout>
-                                        )}
-                                    />
-                                )}
-
-                                {isRouteAvailableForNetwork(ROUTES.QuizLeaderboard, networkId) && (
-                                    <Route exact path={ROUTES.QuizLeaderboard}>
-                                        <DappLayout>
-                                            <QuizLeaderboard />
-                                        </DappLayout>
-                                    </Route>
-                                )}
-
                                 {isRouteAvailableForNetwork(ROUTES.LiquidityPool, networkId) && (
                                     <Route exact path={ROUTES.LiquidityPool}>
                                         <DappLayout>
@@ -286,14 +240,13 @@ const App = () => {
                                     )}
                                 />
                                 <Route exact path={ROUTES.Home}>
-                                    <LandingPageLayout>
-                                        <LandingPage />
-                                    </LandingPageLayout>
+                                    <DappLayout>
+                                        <Markets />
+                                    </DappLayout>
                                 </Route>
                                 <Route>
                                     <Redirect to={ROUTES.Markets.Home} />
                                     <DappLayout>
-                                        <BannerCarousel />
                                         <Markets />
                                     </DappLayout>
                                 </Route>

@@ -2,8 +2,7 @@ import SPAAnchor from 'components/SPAAnchor';
 import ROUTES from 'constants/routes';
 import { countries } from 'constants/worldCup';
 import useFavoriteTeamDataQuery from 'queries/favoriteTeam/useFavoriteTeamDataQuery';
-import useClaimablePositionCountQuery from 'queries/markets/useClaimablePositionCountQuery';
-import useOvertimeVoucherEscrowQuery from 'queries/wallet/useOvertimeVoucherEscrowQuery';
+import useClaimablePositionCountV2Query from 'queries/markets/useClaimablePositionCountV2Query';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -29,7 +28,7 @@ type ProfileItemProperties = {
 const ProfileItem: React.FC<ProfileItemProperties> = ({ labelHidden, avatarSize }) => {
     const { t } = useTranslation();
     return (
-        <SPAAnchor href={buildHref(ROUTES.Profile)}>
+        <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Profile)}>
             <ProfileContainer>
                 <ProfileIconWidget avatarSize={avatarSize} />
                 {!labelHidden && <ProfileLabel>{t('markets.nav-menu.items.profile')}</ProfileLabel>}
@@ -47,7 +46,7 @@ export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({ avatarSize,
     const favoriteTeamData =
         favoriteTeamDataQuery.isSuccess && favoriteTeamDataQuery.data ? favoriteTeamDataQuery.data : null;
 
-    const claimablePositionsCountQuery = useClaimablePositionCountQuery(walletAddress, networkId, {
+    const claimablePositionsCountQuery = useClaimablePositionCountV2Query(walletAddress, networkId, {
         enabled: isWalletConnected,
     });
     const claimablePositionCount =
@@ -55,16 +54,16 @@ export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({ avatarSize,
             ? claimablePositionsCountQuery.data
             : null;
 
-    const overtimeVoucherEscrowQuery = useOvertimeVoucherEscrowQuery(walletAddress, networkId, {
-        enabled: isWalletConnected,
-    });
-    const overtimeVoucherEscrowData = overtimeVoucherEscrowQuery.isSuccess ? overtimeVoucherEscrowQuery.data : null;
-
-    const notificationsCount = (claimablePositionCount || 0) + (overtimeVoucherEscrowData?.isClaimable ? 1 : 0);
+    const notificationsCount = claimablePositionCount || 0;
 
     return (
         <>
             <ProfileIconContainer>
+                {!!notificationsCount && (
+                    <NotificationCount>
+                        <Count>{notificationsCount}</Count>
+                    </NotificationCount>
+                )}
                 {favoriteTeamData?.favoriteTeam ? (
                     <TeamImage
                         avatarSize={avatarSize}
@@ -77,12 +76,6 @@ export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({ avatarSize,
                     />
                 ) : (
                     <ProfileIcon avatarSize={avatarSize} iconColor={iconColor} />
-                )}
-
-                {!!notificationsCount && (
-                    <NotificationCount>
-                        <Count>{notificationsCount}</Count>
-                    </NotificationCount>
                 )}
             </ProfileIconContainer>
         </>

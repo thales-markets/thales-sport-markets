@@ -2,12 +2,12 @@ import { Slider } from '@material-ui/core';
 import React from 'react';
 import styled from 'styled-components';
 import {
+    FlexDiv,
     FlexDivCentered,
     FlexDivColumn,
     FlexDivColumnCentered,
-    FlexDivStart,
     FlexDivRow,
-    FlexDiv,
+    FlexDivStart,
 } from 'styles/common';
 
 export const Wrapper = styled(FlexDivColumn)`
@@ -24,7 +24,7 @@ export const Container = styled(FlexDivRow)`
     @media (max-width: 1199px) {
         width: 80%;
     }
-    @media (max-width: 991px) {
+    @media (max-width: 950px) {
         width: 100%;
         padding: 0;
     }
@@ -71,7 +71,7 @@ export const MainContentContainer = styled(ContentContainer)`
 
 export const MainContainer = styled(Container)`
     width: 100%;
-    background: linear-gradient(180deg, #303656 0%, #1a1c2b 100%);
+    background: ${(props) => props.theme.background.quinary};
     border-radius: 10px;
     padding: 0 10px;
 `;
@@ -99,7 +99,10 @@ export const RoundEndContainer = styled(FlexDivColumn)`
 
 export const RoundEndLabel = styled.p``;
 
-export const RoundEnd = styled.p`
+export const RoundEnd = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     font-weight: 600;
     font-size: 25px;
     color: ${(props) => props.theme.textColor.quaternary};
@@ -126,7 +129,7 @@ export const CopyContainer = styled(Container)`
     @media (max-width: 1199px) {
         width: 90%;
     }
-    @media (max-width: 991px) {
+    @media (max-width: 950px) {
         width: 100%;
         padding: 0;
     }
@@ -142,7 +145,7 @@ export const Description = styled.div`
         width: 90%;
     }
     :last-child {
-        width: 30%;
+        width: 32%;
     }
     h1 {
         font-size: 15px;
@@ -151,6 +154,7 @@ export const Description = styled.div`
     }
     p {
         margin-bottom: 10px;
+        text-align: start;
     }
     ul {
         list-style: initial;
@@ -158,6 +162,7 @@ export const Description = styled.div`
     }
     li {
         margin-bottom: 4px;
+        text-align: start;
     }
     @media (max-width: 767px) {
         padding: 0 5px;
@@ -234,7 +239,7 @@ export const ExternalButton = styled.a`
     margin-top: 5px;
     border-radius: 5px;
     font-size: 16px;
-    font-weight: 700;
+    font-weight: 600;
     line-height: 20px;
     color: ${(props) => props.theme.button.textColor.primary};
     width: 100%;
@@ -281,7 +286,7 @@ export const LiquidityPoolInfoContainer = styled(FlexDivStart)`
 export const LiquidityPoolInfoLabel = styled.span`
     white-space: nowrap;
     margin-right: 6px;
-    width: 122px;
+    width: 135px;
 `;
 
 export const LiquidityPoolReturnlabel = styled(LiquidityPoolInfoLabel)`
@@ -303,7 +308,7 @@ export const LiquidityPoolInfoGraphic = styled(FlexDivStart)<{ background: strin
     @media (max-width: 1199px) {
         width: ${(props) => 150 * props.widthPercentage}px;
     }
-    @media (max-width: 991px) {
+    @media (max-width: 950px) {
         width: ${(props) => 120 * props.widthPercentage}px;
     }
     @media (max-width: 767px) {
@@ -375,6 +380,8 @@ export const SliderContainer = styled.div`
 export const InputButtonContainer = styled.div`
     max-width: 350px;
     width: 100%;
+    display: flex;
+    flex-direction: column;
 `;
 
 export const StyledSlider = styled((props) => (
@@ -443,3 +450,23 @@ export const SliderRange = styled.div`
 export const defaultButtonProps = {
     width: '100%',
 };
+
+export const NavigationContainer = styled(FlexDivRow)`
+    margin-top: 20px;
+    margin-bottom: 20px;
+    gap: 30px;
+    font-size: 20px;
+    font-weight: 600;
+`;
+
+export const NavigationItem = styled(FlexDivRow)`
+    color: ${(props) => props.theme.textColor.primary};
+    &.selected {
+        transition: 0.2s;
+        color: ${(props) => props.theme.textColor.quaternary};
+    }
+    &:hover:not(.selected) {
+        cursor: pointer;
+        color: ${(props) => props.theme.textColor.secondary};
+    }
+`;

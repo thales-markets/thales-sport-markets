@@ -133,14 +133,13 @@ const Heading = styled.h1`
     margin: 30px 0px;
     font-size: 36px;
     line-height: 43px;
-    font-weight: 900;
+    font-weight: 600;
     font-family: Nunito;
     color: ${(props) => props.theme.textColor.primary};
 `;
 
 const Description = styled.p`
     font-size: 14px;
-    font-family: Roboto;
     font-weight: 400;
 `;
 

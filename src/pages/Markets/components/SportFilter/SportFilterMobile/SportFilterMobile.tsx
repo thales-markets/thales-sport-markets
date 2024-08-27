@@ -1,119 +1,124 @@
-import { SPORTS_TAGS_MAP } from 'constants/tags';
-import { SportFilterEnum } from 'enums/markets';
-import { DIRECTION_HORIZONTAL } from 'hammerjs';
-import React, { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react';
-import styled from 'styled-components';
-import { FlexDivRowCentered } from 'styles/common';
+import liveAnimationData from 'assets/lotties/live-markets-filter.json';
+import { SportFilter } from 'enums/markets';
+import { Sport } from 'enums/sports';
+import Lottie from 'lottie-react';
+import React, { CSSProperties, Dispatch, SetStateAction, useContext } from 'react';
+import { ScrollMenu, VisibilityContext, publicApiType } from 'react-horizontal-scrolling-menu';
+import 'react-horizontal-scrolling-menu/dist/styles.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { getSportFilter, setSportFilter, setTagFilter } from 'redux/modules/market';
+import styled, { useTheme } from 'styled-components';
+import { FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
 import { TagInfo, Tags } from 'types/markets';
+import { getSportLeagueIds } from 'utils/sports';
+import useQueryParam from '../../../../../utils/useQueryParams';
 
 type SportFilterMobileProps = {
-    sportFilter: string;
     tagsList: Tags;
-    setSportFilter: (value: SportFilterEnum) => void;
-    setSportParam: (val: string) => void;
-    setTagFilter: (value: Tags) => void;
-    setTagParam: (val: string) => void;
     setAvailableTags: Dispatch<SetStateAction<Tags>>;
 };
 
-const SportFilterMobile: React.FC<SportFilterMobileProps> = ({
-    sportFilter,
-    tagsList,
-    setSportFilter,
-    setSportParam,
-    setTagFilter,
-    setTagParam,
-    setAvailableTags,
-}) => {
-    const [leftIndex, setLeftIndex] = useState(0);
-    const [hammerManager, setHammerManager] = useState<any>();
-    const SPORTS_TO_SHOW = 6;
-
-    const moveLeft = useCallback(() => {
-        if (leftIndex > 0) setLeftIndex(leftIndex - 1);
-    }, [leftIndex]);
-
-    const moveRight = useCallback(() => {
-        setLeftIndex(leftIndex + SPORTS_TO_SHOW < Object.values(SportFilterEnum).length ? leftIndex + 1 : leftIndex);
-    }, [leftIndex]);
-
-    const slicedSports = useMemo(() => {
-        if (Object.values(SportFilterEnum).length) {
-            const wrapper = document.getElementById('wrapper-cards');
-            if (wrapper) {
-                const hammer = new Hammer.Manager(wrapper);
-                if (!hammerManager) {
-                    setHammerManager(hammer);
-                } else {
-                    hammerManager.destroy();
-                    setHammerManager(hammer);
-                }
-
-                if (window.innerWidth <= 1250) {
-                    const swipe = new Hammer.Swipe({ direction: DIRECTION_HORIZONTAL });
-                    hammer.add(swipe);
-                    hammer.on('swipeleft', moveRight);
-                    hammer.on('swiperight', moveLeft);
-                }
-            }
-        }
-
-        return Object.values(SportFilterEnum).slice(
-            leftIndex,
-            leftIndex === 0 ? SPORTS_TO_SHOW : leftIndex + SPORTS_TO_SHOW
-        );
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [leftIndex, moveRight, moveLeft]);
+const LeftArrow: React.FC = () => {
+    const visibility = useContext<publicApiType>(VisibilityContext);
+    const isFirstItemVisible = visibility.useIsVisible('first', true);
 
     return (
-        <Container id="wrapper-cards">
-            <LeftIcon onClick={() => (leftIndex !== 0 ? moveLeft() : '')} disabled={leftIndex == 0} />
-            {slicedSports.map((filterItem: any, index) => {
-                return (
-                    <LabelContainer
-                        key={index}
-                        className={`${filterItem == sportFilter ? 'selected' : ''}`}
-                        onClick={() => {
-                            if (filterItem !== sportFilter) {
-                                setSportFilter(filterItem);
-                                setSportParam(filterItem);
-                                setTagFilter([]);
-                                setTagParam('');
-                                if (filterItem === SportFilterEnum.All) {
-                                    setAvailableTags(tagsList);
-                                } else {
-                                    const tagsPerSport = SPORTS_TAGS_MAP[filterItem];
-                                    if (tagsPerSport) {
-                                        const filteredTags = tagsList.filter((tag: TagInfo) =>
-                                            tagsPerSport.includes(tag.id)
-                                        );
-                                        setAvailableTags(filteredTags);
-                                    } else {
-                                        setAvailableTags([]);
-                                    }
-                                }
-                            } else {
-                                setSportFilter(SportFilterEnum.All);
-                                setSportParam(SportFilterEnum.All);
-                                setTagFilter([]);
-                                setTagParam('');
-                                setAvailableTags(tagsList);
-                            }
-                        }}
-                    >
-                        <SportIcon
-                            className={`icon icon--${
-                                filterItem.toLowerCase() == 'all' ? 'logo' : filterItem.toLowerCase()
-                            }`}
-                        />
-                    </LabelContainer>
-                );
-            })}
+        <ArrowIcon
+            onClick={() => visibility.scrollPrev()}
+            className="icon icon--arrow-down"
+            hide={isFirstItemVisible}
+            isLeft
+        ></ArrowIcon>
+    );
+};
 
-            <RightIcon
-                onClick={() => (leftIndex + SPORTS_TO_SHOW < Object.values(SportFilterEnum).length ? moveRight() : '')}
-                disabled={leftIndex + SPORTS_TO_SHOW >= Object.values(SportFilterEnum).length}
-            />
+const RightArrow: React.FC = () => {
+    const visibility = useContext<publicApiType>(VisibilityContext);
+    const isLastItemVisible = visibility.useIsVisible('last', false);
+
+    return (
+        <ArrowIcon
+            className="icon icon--arrow-down"
+            onClick={() => visibility.scrollNext()}
+            hide={isLastItemVisible}
+        ></ArrowIcon>
+    );
+};
+
+const SportFilterMobile: React.FC<SportFilterMobileProps> = ({ tagsList, setAvailableTags }) => {
+    const dispatch = useDispatch();
+    const sportFilter = useSelector(getSportFilter);
+    const [, setSportParam] = useQueryParam('sport', '');
+    const [, setTagParam] = useQueryParam('tag', '');
+
+    const theme = useTheme();
+
+    return (
+        <Container>
+            <NoScrollbarContainer>
+                <ScrollMenu LeftArrow={LeftArrow} RightArrow={RightArrow}>
+                    {Object.values(SportFilter).map((filterItem: any, index) => {
+                        return (
+                            <LabelContainer
+                                key={index}
+                                itemID={`${filterItem}`}
+                                className={`${filterItem == sportFilter ? 'selected' : ''}`}
+                                onClick={() => {
+                                    if (filterItem !== sportFilter) {
+                                        dispatch(setSportFilter(filterItem));
+                                        setSportParam(filterItem);
+                                        dispatch(setTagFilter([]));
+                                        setTagParam('');
+                                        if (filterItem === SportFilter.All) {
+                                            setAvailableTags(tagsList);
+                                        } else {
+                                            const tagsPerSport = getSportLeagueIds(filterItem as Sport);
+                                            if (tagsPerSport) {
+                                                const filteredTags = tagsList.filter((tag: TagInfo) =>
+                                                    tagsPerSport.includes(tag.id)
+                                                );
+                                                setAvailableTags(filteredTags);
+                                            } else {
+                                                setAvailableTags([]);
+                                            }
+                                        }
+                                    } else {
+                                        dispatch(setSportFilter(SportFilter.All));
+                                        setSportParam(SportFilter.All);
+                                        dispatch(setTagFilter([]));
+                                        setTagParam('');
+                                        setAvailableTags(tagsList);
+                                    }
+                                }}
+                            >
+                                {filterItem == SportFilter.Live ? (
+                                    <Lottie
+                                        autoplay={true}
+                                        animationData={liveAnimationData}
+                                        loop={true}
+                                        style={liveBlinkStyleMobile}
+                                    />
+                                ) : filterItem == SportFilter.Boosted ? (
+                                    <FlexDivColumnCentered>
+                                        <SportIcon
+                                            color={theme.overdrop.textColor.primary}
+                                            className={`icon icon--fire`}
+                                        />
+                                    </FlexDivColumnCentered>
+                                ) : (
+                                    <FlexDivColumnCentered>
+                                        <SportIcon
+                                            className={`icon icon--${
+                                                filterItem == SportFilter.All ? 'logo' : filterItem.toLowerCase()
+                                            }`}
+                                        />
+                                    </FlexDivColumnCentered>
+                                )}
+                            </LabelContainer>
+                        );
+                    })}
+                </ScrollMenu>
+            </NoScrollbarContainer>
         </Container>
     );
 };
@@ -124,7 +129,6 @@ const Container = styled(FlexDivRowCentered)`
     font-size: 12px;
     line-height: 13px;
     letter-spacing: 0.035em;
-    text-transform: uppercase;
     cursor: pointer;
     height: 36px;
     position: relative;
@@ -134,46 +138,58 @@ const Container = styled(FlexDivRowCentered)`
     width: 100%;
 `;
 
-const LabelContainer = styled(FlexDivRowCentered)`
+const LabelContainer = styled(FlexDivColumn)`
     &.selected,
-    &:hover:not(.disabled) {
+    &:hover {
         color: ${(props) => props.theme.textColor.quaternary};
     }
-    &.disabled {
-        cursor: default;
-        opacity: 0.4;
-    }
-    height: 30px;
+    height: 36px;
+    width: 30px;
+    margin: 0 10px;
 `;
 
-const SportIcon = styled.i`
+const SportIcon = styled.i<{ color?: string }>`
     font-size: 30px;
-`;
-
-const LeftIcon = styled.i<{ disabled?: boolean }>`
-    font-size: 30px;
-    font-weight: 700;
-    cursor: ${(props) => (props?.disabled ? 'not-allowed' : 'pointer')};
-    &:before {
-        font-family: ExoticIcons !important;
-        content: '\\0041';
-        color: ${(props) => props.theme.textColor.secondary};
-        opacity: ${(props) => (props?.disabled ? '0.3' : '')};
-        cursor: ${(props) => (props?.disabled ? 'not-allowed' : 'pointer')};
+    ::before {
+        color: ${(props) => props.color || 'ingerit'};
     }
 `;
 
-const RightIcon = styled.i<{ disabled?: boolean }>`
-    font-size: 30px;
-    font-weight: 700;
-    cursor: ${(props) => (props?.disabled ? 'not-allowed' : 'pointer')};
-    &:before {
-        font-family: ExoticIcons !important;
-        content: '\\004B';
-        color: ${(props) => props.theme.textColor.secondary};
-        opacity: ${(props) => (props?.disabled ? '0.3' : '')};
-        cursor: ${(props) => (props?.disabled ? 'not-allowed' : 'pointer')};
+const NoScrollbarContainer = styled.div`
+    width: 100%;
+    overflow: hidden;
+    & .react-horizontal-scrolling-menu--scroll-container {
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    }
+    & .react-horizontal-scrolling-menu--scroll-container {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    .react-horizontal-scrolling-menu--inner-wrapper {
+        align-items: center;
+    }
+    .react-horizontal-scrolling-menu--item {
+        min-width: 16.66%;
+        justify-content: center;
+        display: flex;
     }
 `;
+
+const ArrowIcon = styled.i<{ hide: boolean; isLeft?: boolean }>`
+    cursor: pointer;
+    font-size: 20px;
+    transform: ${(props) => (props.isLeft ? 'rotate(90deg)' : 'rotate(270deg)')};
+    color: ${(props) => props.theme.textColor.secondary};
+    opacity: ${(props) => (props.hide ? '0.2' : '1')};
+    padding: 0px 10px;
+`;
+
+const liveBlinkStyleMobile: CSSProperties = {
+    width: 38,
+    marginTop: '-2px',
+    marginLeft: '-6px',
+};
 
 export default SportFilterMobile;

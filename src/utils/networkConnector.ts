@@ -2,22 +2,17 @@ import { Network } from 'enums/network';
 import { ethers, Signer } from 'ethers';
 import { NetworkSettings } from 'types/network';
 import { Coins } from 'types/tokens';
-import liquidityPoolContract from 'utils/contracts/liquidityPoolContract';
-import liquidityPoolDataContract from 'utils/contracts/liquidityPoolDataContract';
-import parlayAMMLiquidityPoolContract from 'utils/contracts/parlayAMMLiquidityPoolContract';
-import parlayAMMLiquidityPoolDataContract from 'utils/contracts/parlayAMMLiquidityPoolDataContract';
-import parlayMarketDataContract from 'utils/contracts/parlayMarketDataContract';
-import sportPositionalMarketDataContract from 'utils/contracts/sportPositionalMarketDataContract';
-import sportMarketManagerContract from 'utils/contracts/sportPositionalMarketManagerContract';
-import sportsAMMContract from 'utils/contracts/sportsAMMContract';
-import sportVaultDataContract from 'utils/contracts/sportVaultDataContract';
+import liquidityPoolDataContract from 'utils/contracts/liquidityPoolDataContractV2';
+import sportsAMMDataContract from 'utils/contracts/sportsAMMDataContract';
+import sportsAMMV2Contract from 'utils/contracts/sportsAMMV2Contract';
+import sportsAMMV2ManagerContract from 'utils/contracts/sportsAMMV2ManagerContract';
+import sportsAMMV2RiskManagerContract from 'utils/contracts/sportsAMMV2RiskManagerContract';
 import sUSDContract from 'utils/contracts/sUSDContract';
 import { FIFAFavoriteTeam } from './contracts/FIFAFavoriteTeam';
+import freeBetHolder from './contracts/freeBetHolder';
+import liveTradingProcessorContract from './contracts/liveTradingProcessorContract';
 import multiCollateralOnOffRampContract from './contracts/multiCollateralOnOffRampContract';
 import multipleCollateral from './contracts/multipleCollateralContract';
-import overtimeVoucherContract from './contracts/overtimeVoucherContract';
-import { overtimeVoucherEscrowContract } from './contracts/overtimeVoucherEscrowContract';
-import parlayMarketsAMMContract from './contracts/parlayMarketsAMMContract';
 import priceFeedContract from './contracts/priceFeedContract';
 
 type NetworkConnector = {
@@ -29,23 +24,18 @@ type NetworkConnector = {
     multipleCollateral?: Record<Coins, ethers.Contract | undefined>;
     marketManagerContract?: ethers.Contract;
     marketDataContract?: ethers.Contract;
-    sportPositionalMarketDataContract?: ethers.Contract;
-    sportMarketManagerContract?: ethers.Contract;
-    sportsAMMContract?: ethers.Contract;
     exoticUsdContract?: ethers.Contract;
     sUSDContract?: ethers.Contract;
-    overtimeVoucherContract?: ethers.Contract;
-    overtimeVoucherEscrowContract?: ethers.Contract;
-    parlayMarketsAMMContract?: ethers.Contract;
     favoriteTeamContract?: ethers.Contract;
-    liquidityPoolContract?: ethers.Contract;
-    sportVaultDataContract?: ethers.Contract;
     liquidityPoolDataContract?: ethers.Contract;
-    parlayMarketDataContract?: ethers.Contract;
-    parlayAMMLiquidityPoolContract?: ethers.Contract;
-    parlayAMMLiquidityPoolDataContract?: ethers.Contract;
     priceFeedContract?: ethers.Contract;
     multiCollateralOnOffRampContract?: ethers.Contract;
+    sportsAMMDataContract?: ethers.Contract;
+    sportsAMMV2Contract?: ethers.Contract;
+    sportsAMMV2RiskManagerContract?: ethers.Contract;
+    liveTradingProcessorContract?: ethers.Contract;
+    freeBetHolderContract?: ethers.Contract;
+    sportsAMMV2ManagerContract?: ethers.Contract;
 };
 
 // @ts-ignore
@@ -55,23 +45,9 @@ const networkConnector: NetworkConnector = {
         this.initialized = true;
         this.signer = networkSettings.signer;
         this.provider = networkSettings.provider;
-        this.sportPositionalMarketDataContract = initializeContract(sportPositionalMarketDataContract, networkSettings);
-        this.sportMarketManagerContract = initializeContract(sportMarketManagerContract, networkSettings);
-        this.sportsAMMContract = initializeContract(sportsAMMContract, networkSettings);
         this.sUSDContract = initializeContract(sUSDContract, networkSettings);
-        this.overtimeVoucherContract = initializeContract(overtimeVoucherContract, networkSettings);
-        this.overtimeVoucherEscrowContract = initializeContract(overtimeVoucherEscrowContract, networkSettings);
-        this.parlayMarketsAMMContract = initializeContract(parlayMarketsAMMContract, networkSettings);
         this.favoriteTeamContract = initializeContract(FIFAFavoriteTeam, networkSettings);
-        this.liquidityPoolContract = initializeContract(liquidityPoolContract, networkSettings);
-        this.sportVaultDataContract = initializeContract(sportVaultDataContract, networkSettings);
         this.liquidityPoolDataContract = initializeContract(liquidityPoolDataContract, networkSettings);
-        this.parlayMarketDataContract = initializeContract(parlayMarketDataContract, networkSettings);
-        this.parlayAMMLiquidityPoolContract = initializeContract(parlayAMMLiquidityPoolContract, networkSettings);
-        this.parlayAMMLiquidityPoolDataContract = initializeContract(
-            parlayAMMLiquidityPoolDataContract,
-            networkSettings
-        );
         this.priceFeedContract = initializeContract(priceFeedContract, networkSettings);
         this.multiCollateralOnOffRampContract = initializeContract(multiCollateralOnOffRampContract, networkSettings);
 
@@ -86,7 +62,14 @@ const networkConnector: NetworkConnector = {
             ETH: initializeContract(multipleCollateral.ETH, networkSettings),
             ARB: initializeContract(multipleCollateral.ARB, networkSettings),
             USDbC: initializeContract(multipleCollateral.USDbC, networkSettings),
+            THALES: initializeContract(multipleCollateral.THALES, networkSettings),
         };
+        this.sportsAMMDataContract = initializeContract(sportsAMMDataContract, networkSettings);
+        this.sportsAMMV2Contract = initializeContract(sportsAMMV2Contract, networkSettings);
+        this.liveTradingProcessorContract = initializeContract(liveTradingProcessorContract, networkSettings);
+        this.sportsAMMV2RiskManagerContract = initializeContract(sportsAMMV2RiskManagerContract, networkSettings);
+        this.freeBetHolderContract = initializeContract(freeBetHolder, networkSettings);
+        this.sportsAMMV2ManagerContract = initializeContract(sportsAMMV2ManagerContract, networkSettings);
     },
 };
 

@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 
-export const FlexDiv = styled.div`
+export const FlexDiv = styled.div<{ gap?: number }>`
     display: flex;
+    gap: ${(props) => (props.gap ? `${props.gap}px` : '0')};
 `;
 
 export const FlexDivCentered = styled(FlexDiv)`
@@ -43,6 +44,10 @@ export const FlexDivColumnCentered = styled(FlexDivColumn)`
     justify-content: center;
 `;
 
+export const BoldContent = styled.span`
+    font-weight: 600;
+`;
+
 export const Colors = {
     GRAY: '#303656',
     GRAY_LIGHT: '#5F6180',
@@ -57,15 +62,36 @@ export const Colors = {
 
     WHITE: '#FFFFFF',
 
+    BLACK: '#000000',
+
     GREEN: '#5FC694',
 
-    BLUE: '#3FD1FF',
+    BLUE: '#3FFFFF',
 
     RED: '#e26a78',
+    RED_DARK: '#ca4c53',
 
     ORANGE: '#FAC439',
 
     PURPLE: '#8884d8',
-};
+    PURPLE_LIGHT: '#9A9AFF',
 
-export const QuizQuestionDifficultyMap = ['#4673BD', '#50CE99', '#F4CF73', '#FA9E2F', '#C3244A'];
+    NAVY_BLUE: '#1F274D',
+    NAVY_BLUE_LIGHT: '#7983A9',
+    NAVY_BLUE_EXTRA_LIGHT: '#9FA1BA',
+    NAVY_BLUE_DARK: '#151B36',
+    NAVY_BLUE_EXTRA_DARK: '#111325',
+
+    TORY_BLUE: '#3C498A',
+    TORY_BLUE_LIGHT: '#4E5FB1',
+
+    // Overdrop
+    YELLOW: '#F1BA20',
+    LIGHTNING_YELLOW: '#F8C914',
+    METALIC_YELLOW: '#FBCD0F',
+    CHINESE_BLUE: '#5764A3',
+    JONQUIL: '#F8C913',
+    METALIC_BLUE: '#3D467F',
+    SMOKEY_TOPAZ: '#7C3810',
+    OVERDROP_GREEN: '#82EB9F',
+};

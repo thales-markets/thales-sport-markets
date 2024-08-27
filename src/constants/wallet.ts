@@ -1,8 +1,6 @@
-import { HostedWallets, ParticalTypes } from 'enums/wallet';
 import MetaMaskIcon from 'assets/images/wallets/metamask.svg';
 import WalletConnectIcon from 'assets/images/wallets/wallet_connect.svg';
-
-export const BALANCE_THRESHOLD = 0.00000001;
+import { HostedWallets, ParticalTypes } from 'enums/wallet';
 
 export const SUPPORTED_PARTICAL_CONNECTORS: ParticalTypes[] = [
     ParticalTypes.GOOGLE,
@@ -47,22 +45,22 @@ export const HOSTED_WALLETS_LABELS: { walletId: HostedWallets; labelKey: string 
 export const PARTICAL_LOGINS_CLASSNAMES: { socialId: ParticalTypes; className: string }[] = [
     {
         socialId: ParticalTypes.APPLE,
-        className: 'social-icon icon--apple',
+        className: 'icon icon--apple',
     },
     {
         socialId: ParticalTypes.DISCORD,
-        className: 'social-icon icon--discord',
+        className: 'icon icon--discord',
     },
     {
         socialId: ParticalTypes.GITHUB,
-        className: 'social-icon icon--github',
+        className: 'icon icon--github',
     },
     {
         socialId: ParticalTypes.GOOGLE,
-        className: 'social-icon icon--google',
+        className: 'icon icon--google',
     },
     {
         socialId: ParticalTypes.TWITTER,
-        className: 'social-icon icon--x',
+        className: 'icon-homepage icon--x',
     },
 ];

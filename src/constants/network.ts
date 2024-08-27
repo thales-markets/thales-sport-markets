@@ -3,19 +3,18 @@ import { Chain } from 'wagmi';
 import { NetworkParams, SupportedNetwork } from '../types/network';
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
+export const NATIVE_TOKEN_ADDRES = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 
 export const SUPPORTED_NETWORKS: Record<SupportedNetwork, string> = {
     [Network.OptimismMainnet]: 'OPTIMISTIC',
-    [Network.OptimismGoerli]: 'GOERLI-OPTIMISM',
     [Network.Arbitrum]: 'ARBITRUM-ONE',
-    [Network.Base]: 'BASE',
+    [Network.OptimismSepolia]: 'SEPOLIA-OPTIMISM',
 };
 
 export const SUPPORTED_NETWORKS_NAMES: Record<SupportedNetwork, string> = {
     [Network.OptimismMainnet]: 'OPTIMISM MAINNET',
-    [Network.OptimismGoerli]: 'OPTIMISM GOERLI',
     [Network.Arbitrum]: 'ARBITRUM ONE',
-    [Network.Base]: 'BASE',
+    [Network.OptimismSepolia]: 'OPTIMISM SEPOLIA',
 };
 
 export const DEFAULT_NETWORK: { name: string; networkId: SupportedNetwork } = {
@@ -54,57 +53,35 @@ export const SUPPORTED_NETWORKS_PARAMS: Record<number, NetworkParams> = {
         },
         order: 2,
     },
-    [Network.Base]: {
-        chainId: '0x2105',
-        chainName: 'Base Mainnet',
-        shortChainName: 'Base',
-        chainKey: 'base_mainnet',
-        iconClassName: 'icon icon--base',
-        rpcUrls: ['https://mainnet.base.org'],
-        blockExplorerUrls: ['https://basescan.org/'],
-        iconUrls: ['https://optimism.io/images/metamask_icon.svg', 'https://optimism.io/images/metamask_icon.png'],
-        nativeCurrency: {
-            symbol: 'ETH',
-            decimals: 18,
-        },
-        order: 3,
-    },
 };
 
 export const GAS_ESTIMATION_BUFFER = 1.2; // Adding 20% on gas estimation as a buffer. Used only on Optimisme
 
 // configuration for wagmi
-export const base = {
-    id: 8453,
-    network: 'base',
-    name: 'Base',
-    nativeCurrency: { name: 'Base', symbol: 'ETH', decimals: 18 },
+export const optimismSepolia = {
+    id: 11155420,
+    network: 'OP Sepolia',
+    name: 'OP Sepolia',
+    nativeCurrency: { name: 'Sepolia Ether', symbol: 'ETH', decimals: 18 },
     rpcUrls: {
         default: {
-            http: ['https://mainnet.base.org'],
+            http: ['https://sepolia.optimism.io'],
         },
         public: {
-            http: ['https://mainnet.base.org'],
+            http: ['https://sepolia.optimism.io'],
         },
     },
     blockExplorers: {
-        blockscout: {
-            name: 'Basescout',
-            url: 'https://base.blockscout.com',
-        },
         default: {
-            name: 'Basescan',
-            url: 'https://basescan.org',
-        },
-        etherscan: {
-            name: 'Basescan',
-            url: 'https://basescan.org',
+            name: 'Blockscout',
+            url: 'https://optimism-sepolia.blockscout.com',
+            apiUrl: 'https://optimism-sepolia.blockscout.com/api',
         },
     },
     contracts: {
         multicall3: {
             address: '0xca11bde05977b3631167028862be2a173976ca11',
-            blockCreated: 5022,
+            blockCreated: 1620204,
         },
     },
 } as Chain;

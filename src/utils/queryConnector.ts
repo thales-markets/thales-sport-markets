@@ -1,7 +1,6 @@
 import QUERY_KEYS from 'constants/queryKeys';
-import { QueryClient } from 'react-query';
-import { LiquidityPoolType } from 'types/liquidityPool';
 import { Network } from 'enums/network';
+import { QueryClient } from 'react-query';
 
 type QueryConnector = {
     queryClient: QueryClient;
@@ -18,9 +17,11 @@ const queryConnector: QueryConnector = {
 };
 
 export const refetchBalances = (walletAddress: string, networkId: Network) => {
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.GetsUSDWalletBalance(walletAddress, networkId));
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.MultipleCollateral(walletAddress, networkId));
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.OvertimeVoucher(walletAddress, networkId));
+};
+
+export const refetchFreeBetBalance = (walletAddress: string, networkId: Network) => {
+    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.FreeBetBalance(walletAddress, networkId));
 };
 
 export const refetchAfterClaim = (walletAddress: string, networkId: Network) => {
@@ -29,31 +30,21 @@ export const refetchAfterClaim = (walletAddress: string, networkId: Network) => 
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.ClaimableCount(walletAddress, networkId));
 };
 
-export const refetchAfterVoucherClaim = (walletAddress: string, networkId: Network) => {
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.OvertimeVoucherEscrow(walletAddress, networkId));
-};
-
-export const refetchVaultData = (vaultAddress: string, walletAddress: string, networkId: Network) => {
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Vault.Data(vaultAddress, networkId));
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Vault.UserData(vaultAddress, walletAddress, networkId));
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Vault.PnL(vaultAddress, networkId));
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Vault.Trades(vaultAddress, networkId));
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Vault.UserTransactions(vaultAddress, networkId));
-};
-
-export const refetchLiquidityPoolData = (
-    walletAddress: string,
-    networkId: Network,
-    liquidityPoolType: LiquidityPoolType
-) => {
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.LiquidityPool.Data(networkId));
+export const refetchLiquidityPoolData = (walletAddress: string, networkId: Network, liquidityPoolAddress: string) => {
+    // queryConnector.queryClient.invalidateQueries(QUERY_KEYS.LiquidityPool.Data(networkId));
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.LiquidityPool.ParlayData(networkId));
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.LiquidityPool.ParlayUserData(walletAddress, networkId));
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.LiquidityPool.UserData(walletAddress, networkId));
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.LiquidityPool.PnL(networkId, liquidityPoolType));
+    // queryConnector.queryClient.invalidateQueries(QUERY_KEYS.LiquidityPool.UserData(walletAddress, networkId));
+    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.LiquidityPool.PnL(networkId, liquidityPoolAddress));
     queryConnector.queryClient.invalidateQueries(
-        QUERY_KEYS.LiquidityPool.UserTransactions(networkId, liquidityPoolType)
+        QUERY_KEYS.LiquidityPool.UserTransactions(networkId, liquidityPoolAddress)
     );
 };
+
+export const refetchOverdropMultipliers = (walletAddress: string) => {
+    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Overdrop.UserMultipliers(walletAddress));
+};
+export const refetchCoingeckoRates = () =>
+    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Rates.CoingeckoRates());
 
 export default queryConnector;

@@ -51,7 +51,7 @@ export const Wrapper = styled.div<{ show?: boolean | null }>`
     ${({ show }) => show === false && animationClose};
     background-color: ${(props) => props.theme.background.secondary};
     justify-content: space-between;
-    z-index: 300;
+    z-index: 3000;
     ${(props) => (props.show == true ? `-webkit-box-shadow: ${props.theme.shadow.navBar};` : '')}
     ${(props) => (props.show == true ? `-moz-box-shadow: ${props.theme.shadow.navBar};` : '')}
     padding: 20px 10px;
@@ -67,7 +67,7 @@ export const ItemsContainer = styled.div`
 export const LanguageLabel = styled.label`
     font-family: 'Nunito' !important;
     font-style: normal;
-    font-weight: 700;
+    font-weight: 600;
     font-size: 14px;
     line-height: 20px;
     text-transform: uppercase;
@@ -112,9 +112,9 @@ export const NavIcon = styled.i<{ active?: boolean }>`
     color: ${(props) => (props.active ? `${props.theme.textColor.quaternary}` : `${props.theme.textColor.primary}`)};
 `;
 
-export const FooterContainer = styled(FlexDivRow)`
+export const FooterContainer = styled(FlexDivColumnNative)`
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
 `;
 
 export const Network = styled(FlexDivRow)`

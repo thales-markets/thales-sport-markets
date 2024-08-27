@@ -67,7 +67,8 @@
             },
             "id-create-success": "成功设置推荐人ID",
             "id-exists": "推荐 ID 已存在",
-            "your-referral-id": "您的推荐 ID"
+            "your-referral-id": "您的推荐 ID",
+            "header-label": "推荐并赚取"
         },
         "swap": {
             "title": "获取 美元",
@@ -75,7 +76,8 @@
             "to-label": "目标",
             "balance-label": "钱包余额: {{amount}}",
             "swap-label": "兑换",
-            "swap-progress-label": "兑换进行中..."
+            "swap-progress-label": "兑换进行中...",
+            "approve": "同意掉期"
         },
         "enable-wallet-access": {
             "approve-label": "批准 {{currencyKey}}",
@@ -107,7 +109,8 @@
             "enter-percentage": "Enter percentage",
             "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}",
             "single-amm-paused": "AMM 已暂停",
-            "invalid-amount-max": "金额不能高于{{max}}"
+            "invalid-amount-max": "金额不能高于{{max}}",
+            "swap-quote-low": "掉期报价太低（收到：{{quote}}，最低收到 {{minQuote}}）！请重试..."
         },
         "time-remaining": {
             "ended": "ended",
@@ -188,7 +191,15 @@
             "info": "*您可以随时更改游戏列表上方过滤器中的赔率类型",
             "description": "选择赔率显示格式",
             "title": "欢迎来到 Overtime Markets"
-        }
+        },
+        "settings": "设置",
+        "filters": "筛选器",
+        "status": "地位",
+        "wrap-and-buy": "包装 ETH 并购买",
+        "wrap-eth-tooltip": "你的 ETH 首先被包装成 WETH，然后传递给合约",
+        "election-tooltip": "解决来源将是美联社、福克斯新闻和 NBC。一旦所有三个来源都宣布同一位候选人获胜，这些市场就会解决。如果所有三个来源在 11 月 11 日之前都没有宣布同一位候选人获胜，则所有投注将作废。",
+        "submit": "提交",
+        "try-again": "再试一次"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV 保留所有权利.",
@@ -233,7 +244,9 @@
             "click-open-twitter": "点击此处打开推特",
             "save-image-error": "图片保存失败！再试一次",
             "save-image": "将图像保存到剪贴板。请稍等...",
-            "open-twitter": "打开推特..."
+            "open-twitter": "打开推特...",
+            "fulfilling-live-trade": "实现实时交易",
+            "live-trade-requested": "请求实时交易"
         },
         "filter-label": {
             "global": {
@@ -246,7 +259,10 @@
                 "canceled": "已取消",
                 "archivedmarkets": "已存档的比赛",
                 "tooltip": "已结束超过7天的比赛",
-                "pendingmarkets": "进行中"
+                "pendingmarkets": "进行中",
+                "ongoingmarkets": "正在进行",
+                "pausedmarkets": "已暂停",
+                "cancelledmarkets": "取消"
             },
             "sport": {
                 "all": "所有运动",
@@ -263,9 +279,19 @@
                 "favourites": "收藏夹",
                 "esports": "电子竞技",
                 "cricket": "蟋蟀",
-                "mma": "格斗运动",
+                "fighting": "格斗运动",
                 "boxing": "拳击",
-                "golf": "高尔夫球"
+                "golf": "高尔夫球",
+                "live": "居住",
+                "volleyball": "排球",
+                "handball": "手球",
+                "rugby": "橄榄球",
+                "waterpolo": "水球",
+                "olympicgames": "奥运会",
+                "tabletennis": "乒乓球",
+                "politics": "政治",
+                "boosted": "促销游戏",
+                "promo": "促销游戏"
             },
             "all": "所有",
             "datepicker": {
@@ -302,7 +328,8 @@
             "usd-value-col": "美元价值",
             "result-col": "结果",
             "parlay-title": "最近的连本带利活动",
-            "single-title": "近期单一活动"
+            "single-title": "近期单一活动",
+            "ticket-title": "近期票务活动"
         },
         "tooltip": {
             "amount-exceeded": "金额超过AMM的余额。",
@@ -314,7 +341,7 @@
         "back": "后退",
         "apply-filters": "应用过滤器",
         "incentivized-market": "激励市场",
-        "number-of-rounds": "总轮数"
+        "number-of-rounds": "圆形的"
     },
     "markets": {
         "market-card": {
@@ -336,8 +363,8 @@
                 "winner": "Winner",
                 "spread": "Handicap",
                 "total": "Total",
-                "double-chance": "Double chance",
-                "combined-positions": "合并职位",
+                "double chance": "Double chance",
+                "combined positions": "合并职位",
                 "home runs": "本垒打",
                 "receiving yards": "接收码数",
                 "passing yards": "传球码数",
@@ -451,7 +478,97 @@
             "toggle": {
                 "hide-paused-markets": "隐藏暂停的市场",
                 "show-paused-markets": "显示暂停的市场"
-            }
+            },
+            "odd-tooltip-v2": {
+                "scoring": {
+                    "sets": "套",
+                    "goals": "目标",
+                    "points": "点",
+                    "rounds": "发子弹"
+                },
+                "match-resolve": {
+                    "overtime": "包括可能的加班",
+                    "regular": "在常规时间内"
+                },
+                "assists-0": "{{team}} 的助攻数将高于 {{line}}",
+                "and": "和",
+                "homeruns-0": "{{team}} 的本垒打数将比 {{line}} 多",
+                "hitsRecorded-0": "{{team}} 的点击量将高于 {{line}}",
+                "passingTouchdowns-0": "{{team}} 的传球达阵次数将超过 {{line}}",
+                "moneyline-2": "比赛将以平局结束 {{matchResolve}}",
+                "total-0": "比赛 {{matchResolve}} 中的 {{scoring}} 总人数将超过 {{line}}",
+                "strikeouts-1": "{{team}}的三振出局数将少于 {{line}}",
+                "doubleDouble-0": "{{team}} 将获得两双",
+                "rebounds-0": "{{team}} 的篮板数将比 {{line}} 多",
+                "rebounds-1": "{{team}} 的篮板数将少于 {{line}}",
+                "moneyline-0": "{{team}} 将赢得比赛 {{matchResolve}}",
+                "points-0": "{{team}} 的得分将高于 {{line}}",
+                "bonus": "获胜后将获得 {{bonus}} 额外奖励！",
+                "moneyline-1": "{{team}} 将赢得比赛 {{matchResolve}}",
+                "passingYards-1": "{{team}} 的传球码数将少于 {{line}}",
+                "doubleChance-2": "{{team}} 将赢得比赛或比赛将以平局结束 {{matchResolve}}",
+                "doubleChance-0": "{{team}} 将赢得比赛或比赛将以平局结束 {{matchResolve}}",
+                "shots-0": "{{team}} 的射门次数将超过 {{line}}",
+                "receivingYards-0": "{{team}} 的接球码数将比 {{line}} 多",
+                "tripleDouble-1": "{{team}} 不会拿下三双",
+                "assists-1": "{{team}} 的助攻数将少于 {{line}}",
+                "pitcherHitsAllowed-0": "{{team}} 允许的点击次数将超过 {{line}}",
+                "goals-0": "{{team}} 将在比赛中进球",
+                "doubleDouble-1": "{{team}} 不会获得两双",
+                "receivingYards-1": "{{team}} 的接球码数将少于 {{line}}",
+                "race-winner": "{{team}} 将赢得比赛 {{matchResolve}}",
+                "strikeouts-0": "{{team}} 的三振出局数将比 {{line}} 多",
+                "shots-1": "{{team}} 的射门次数将少于 {{line}}",
+                "fieldGoalsMade-1": "{{team}}的射门得分少于 {{line}}",
+                "fieldGoalsMade-0": "{{team}} 的射门得分将比 {{line}} 多",
+                "passingTouchdowns-1": "{{team}} 的传球达阵数将少于 {{line}}",
+                "doubleChance-1": "{{team}} 或 {{team2}} 将赢得比赛 {{matchResolve}}",
+                "total-1": "比赛 {{matchResolve}} 中的 {{scoring}} 总数将少于 {{line}}",
+                "firstTouchdown-0": "{{team}} 将在比赛中率先得分",
+                "tripleDouble-0": "{{team}} 将获得三双",
+                "pitcherHitsAllowed-1": "{{team}} 允许的点击次数少于 {{line}}",
+                "tournament-winner": "{{team}} 将赢得比赛 {{matchResolve}}",
+                "spread-1": "{{team}} 将赢得比赛，或输掉的分数少于 {{line}} {{scoring}} {{matchResolve}}",
+                "rushingYards-0": "{{team}} 的冲球码数将超过 {{line}}",
+                "points-1": "{{team}} 的得分将低于 {{line}}",
+                "touchdowns-0": "{{team}} 将在比赛中达阵",
+                "receptions-1": "{{team}} 的接球次数将少于 {{line}}",
+                "receptions-0": "{{team}} 的接球次数将超过 {{line}}",
+                "homeruns-1": "{{team}} 的本垒打数将少于 {{line}}",
+                "hitsRecorded-1": "{{team}} 的点击量将低于 {{line}}",
+                "spread-0": "{{team}} 将以超过 {{line}} {{scoring}} {{matchResolve}} 的差距赢得比赛",
+                "rushingYards-1": "{{team}} 的冲球码数将少于 {{line}}",
+                "passingYards-0": "{{team}} 的传球码数将比 {{line}} 多",
+                "lastTouchdown-0": "{{team}} 将在比赛中取得最后一次达阵",
+                "winner-2": "比赛将以平局结束 {{matchResolve}}",
+                "winner-1": "{{team}} 将赢得比赛 {{matchResolve}}",
+                "winner-0": "{{team}} 将赢得比赛 {{matchResolve}}"
+            },
+            "type-tooltip": {
+                "11055": "接球、冲球、弃踢回攻、踢球回攻、防守和拦截达阵均计入结果",
+                "touchdowns": "接球、冲球、弃踢回攻、踢球回攻、防守和拦截达阵均计入结果"
+            },
+            "odds-live-limitation-message": "直播位置仅允许单打",
+            "live": "居住",
+            "time": "时间",
+            "set": "放",
+            "delayed": "延迟",
+            "rain-delay": "大雨延迟",
+            "interrupted": "中断",
+            "abandoned": "弃",
+            "postponed": "延期",
+            "loss": "损失",
+            "won": "韩元",
+            "open": "打开",
+            "live-trading-paused": "实时交易暂停",
+            "scheduled": "已安排",
+            "end-of-round": "回合结束",
+            "pre-fight": "战前",
+            "fighters-introduction": "戰士介绍",
+            "end-of-fight": "戰鬥結束",
+            "fighters-walking": "战士行走",
+            "not-available-for-trading": "不可交易",
+            "suspended": "暂停"
         },
         "market-details": {
             "price": "价格",
@@ -474,7 +591,7 @@
             "positions": "职位",
             "odds": "赔率"
         },
-        "zero-odds-tooltip": "Sports AMM 仅提供0.05美元至0.95美元价格范围内的流动性，这意味着，如果一个投注选择的赔率低于5%或者高于95%，该选择就不会有流动性。",
+        "zero-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",
         "parlay": {
             "total-quote": "总报价",
             "skew": "偏斜",
@@ -503,7 +620,10 @@
                 "same-event-participant": "每个活动仅支持一名参与者。无法添加 {{addedParticipant}}，因为 {{existingParticipant}} 已在连本带利中",
                 "same-game-different-player-props": "不支持组合不同类别的玩家道具",
                 "player-props-and-other-positions": "不支持将玩家道具位置与同一市场的其他位置组合起来",
-                "already-added-combined-positions": "不能将同一市场的头寸与合并头寸合并"
+                "already-added-combined-positions": "不能将同一市场的头寸与合并头寸合并",
+                "same-player-different-types": "不支持对同一个播放器（{{player}}）合并不同的类别",
+                "player-props-combining-not-enabled": "不支持合并 {{league}} 的球员道具",
+                "other-types-with-player-props": "不支持将玩家道具与同一游戏中的其他类型道具组合"
             },
             "empty-description": "添加头寸，选择市场并做出选择。",
             "payout": "收到的总数",
@@ -532,7 +652,11 @@
                 "winner": "优胜者",
                 "potential-payout": "潜在支出",
                 "total-quote": "总报价",
-                "positions": "职位数量"
+                "positions": "职位数量",
+                "label": "分享 Twitter 奖励",
+                "verifying-tweet": "验证推文",
+                "submit-url": "提交你的推文 URL 以获得 Overdrop 奖励",
+                "network-error": "网络错误，请检查浏览器控制台以获取更多信息"
             },
             "buy-in": "买入",
             "total-bonus": "总奖金",
@@ -546,7 +670,54 @@
             "total-gas": "汽油费（预估）",
             "gas-tooltip": "区块链结算交易所需的当前 Gas 费",
             "persist-games": "提交后保留选择",
-            "keep-selection-tooltip": "默认情况下，成功提交后会重置连赢构建器。如果您想在提交后保留当前上下文，请勾选此选项。"
+            "keep-selection-tooltip": "默认情况下，成功提交后会重置连赢构建器。如果您想在提交后保留当前上下文，请勾选此选项。",
+            "liquidity": "流动性",
+            "ticket-slip": "票单",
+            "slippage": {
+                "slippage": "滑移",
+                "invalid-value": "无效值",
+                "enter-value": "输入值",
+                "label": "如果赔率下降则接受交易：",
+                "tooltip": "如果在执行转移时桥接利率的不利变化超过该百分比，转移将不会通过。",
+                "swap-thales": "掉期滑点"
+            },
+            "odds-changed-description": "赔率已更改。请接受更改才能购买。",
+            "odds-changed-error": "订单执行过程中赔率发生变化。请尝试增加滑点。",
+            "thales-bonus-info": "使用 THALES，每场游戏可获得 2% 的奖励。",
+            "accept-odds-changes": "接受赔率变化",
+            "thales-bonus-tooltip": "与 THALES 进行交易的用户将为其票中的每场游戏获得 1% 的额外支出（已在总报价和支出中计算）。",
+            "overdrop": {
+                "bonus-applied": "奖金已应用",
+                "overdrop-xp-overview": "Overdrop XP 概述",
+                "total-xp-earned": "获得的总 XP",
+                "total-xp-boost": "总经验值提升",
+                "overdrop-xp": "过量掉落 XP",
+                "active-boost": "主动提升",
+                "base-xp": "基础经验值",
+                "tooltip": {
+                    "loyalty-boost": "忠诚 XP 提升可为您的所有常规 XP 收入提供高达 25% 的永久提升，具体取决于您的 XP 级别。从第 1 级的 5% 提升开始，每达到 5 级，您都会获得另外 +5% 的提升。",
+                    "thales-boost": "所有以 THALES 作为抵押的投注都将获得该特定投注基本 XP 累积 +10% 的奖金！",
+                    "weekly-boost": "您连续下注的周数越多，您的 XP 提升就越高。每周增加 +5%，最高可达 +20%。如果您错过一周，此提升将重置为 0%",
+                    "twitter-boost": "如果您以 Flex Card 的形式在 Twitter 上分享您的加时投注，您将激活为期 3 天的 +10% Twitter Flex Boost。",
+                    "promo-boost": "某些体育游戏有额外的 XP 提升。",
+                    "base-xp": "基本 XP 通过以下公式计算：\n\n基本 XP = 买入金额 * (2 - 标准化赔率)。\n\n这意味着您的买入金额越高，您的投注赔率越高，您的投注累积的基本 XP 就越多。",
+                    "parlay-boost": "根据您联注中的单场比赛数量，您将获得该联注的额外 XP 累积提升。15 场联注比赛的最高 XP 提升为 +290%。",
+                    "daily-boost": "连续下注的天数越多，XP 提升越高。每天增加 +5%，最高可达 +35%。如果您错过一天，此提升将重置为 0%"
+                },
+                "odds-xp": "赔率倍数",
+                "buy-in-xp": "购买 XP"
+            },
+            "use-free-bet": "使用免费投注",
+            "swap-thales-tooltip": "全部",
+            "disable-free-bet": "禁用免费投注余额",
+            "swap-thales-receive": "最低接收",
+            "buy-steps": {
+                "buy": "使用 {{currencyKey}} 购买",
+                "approve-swap": "批准兑换为 {{currencyKey}}",
+                "swap": "兑换为 {{currencyKey}}",
+                "approve-buy": "使用 {{currencyKey}} 批准购买"
+            },
+            "swap-thales": "使用 THALES 获得更好的赔率"
         },
         "discounted-per": "折扣按",
         "nav-menu": {
@@ -560,13 +731,15 @@
                 "history": "历史",
                 "fifa-campaign": "斑马FIFA活动",
                 "fee-rebates": "费用回扣",
-                "vaults": "金库",
                 "liquidity-pool": "提供流动性",
-                "promotions": "促销活动"
+                "promotions": "促销活动",
+                "speed-markets": "交易加密货币",
+                "digital-options": "数字选项"
             },
             "buttons": {
                 "disconnect": "断开",
-                "switch": "转变"
+                "switch": "转变",
+                "particle-wallet": "粒子钱包"
             },
             "labels": {
                 "language": "语言"
@@ -580,7 +753,10 @@
         "incentivized-tooltip-uefa": "欧足联比赛将发放总计高达 {{rewards}} 的奖金。只有 Arbitrum 网络上的交易量才会计算奖励！查看更多详细信息<detailsLink>此处</detailsLink>。",
         "incentivized-tooltip-nhl": "NHL 赛季剩余时间（包括季后赛）将发放总计高达 {{rewards}} 的奖励。只有 Arbitrum 网络上的交易量才会计算奖励！查看更多详细信息<detailsLink>此处</detailsLink>。",
         "incentivized-tooltip-mm": "在疯狂三月期间赢得 45,000 ARB + 50,000 THALES。更多详细信息<detailsLink>此处</detailsLink>。",
-        "incentivized-tooltip-nhl-mlb": "总计高达 {{rewards}} 的奖励将分发给 {{league}} 赛季的剩余比赛，包括季后赛。只有 Arbitrum 网络上的交易量才会计入奖励！查看<detailsLink>此处</detailsLink>了解更多详情。"
+        "incentivized-tooltip-nhl-mlb": "总计高达 {{rewards}} 的奖励将分发给 {{league}} 赛季的剩余比赛，包括季后赛。只有 Arbitrum 网络上的交易量才会计入奖励！查看<detailsLink>此处</detailsLink>了解更多详情。",
+        "incentivized-tooltip-euro-copa": "2024 年欧洲杯和美洲杯比赛将发放总计高达 {{rewards}} 的奖励。查看<detailsLink>此处</detailsLink>了解更多详情。",
+        "incentivized-tooltip-wimbledon": "在 2024 年温布尔登网球公开赛加时赛 V1 和 V2 期间争夺 {{rewards}}。查看<detailsLink>此处</detailsLink>的更多详细信息。",
+        "incentivized-tooltip-olympics": "奥运会期间，可获得 {{rewards}} 的基于数量的奖励。查看<detailsLink>此处</detailsLink>的更多详细信息。"
     },
     "rewards": {
         "header": "奖励",
@@ -604,64 +780,6 @@
         "twap": "一周TWAP",
         "total-global-rebates": "要支付的总回扣",
         "parlay-link": "<div>对于 OP 月度 parlay 比赛<parlayLink>点击这里</ parlayLink>.</div>"
-    },
-    "quiz": {
-        "title": "体育百科竞赛",
-        "start-quiz-description": "<p>Hey sports fans! Ready to test your knowledge and beat the field?</p><p>Overtime has launched a sports trivia competition. The trivia is available to everyone to test their knowledge and compete.</p><p>Connect your wallet and enter your Twitter handle to start the trivia! For any questions please join our <discord>Discord</discord>.</p>",
-        "twitter-handle-label": "推特账号",
-        "twitter-handle-placeholder": "请输入您的推特账号",
-        "twitter-handle-validation": "无效的推特账号，请重新输入",
-        "discord-label": "Discord 账号 (可选)",
-        "discord-placeholder": "请输入您的Discord 账号",
-        "current-question-label": "当前问题: {{currentQuestion}}/{{numberOfQuestions}}",
-        "time-reamining-label": "剩余时间: <0/>",
-        "question-weight-label": "问题分数: {{points}}",
-        "point-label": "分",
-        "points-label": "分",
-        "quiz-finished-label": "问答完成!",
-        "your-score-label": "您的得分: {{score}}/{{max}} 分",
-        "button": {
-            "start-quiz-label": "开始测试",
-            "next-question-label": "下一个问题",
-            "previous-question-label": "上一个问题",
-            "finish-quiz-label": "完成测试",
-            "try-again-label": "再次测试",
-            "see-leaderboard-label": "查看排行榜"
-        },
-        "leaderboard": {
-            "title": "体育百科竞赛排行榜",
-            "description": "<p>This is the trivia leaderboard where you can see how are you faring against the competition.</p><p>You can take the trivia as many times as you like <sportsTrivia>here</sportsTrivia>.</p>",
-            "back-to-quiz": "返回测试",
-            "search-placeholder": "搜索...",
-            "table": {
-                "rank-col": "排名",
-                "wallet-address-col": "钱包地址",
-                "twitter-col": "推特",
-                "points-col": "得分",
-                "time-col": "时间",
-                "rewards-col": "奖励",
-                "no-data-available": "无法获取数据"
-            },
-            "period-end-label": "期间结束于",
-            "period-ended-label": "期间结束",
-            "week-label": "星期",
-            "overtime-voucher": "Overtime 代金券",
-            "all-time-leaderboard-label": "All time leaderboard"
-        },
-        "help-us-improve-label": "帮助我们提高",
-        "help-us-improve-tooltip": "帮助我们的体育百科添加新的问题",
-        "finish-messages": {
-            "your-best-result": "你的最好成绩: {{points}} {{pointsLabel}}",
-            "rank-info": "你目前的成绩 {{points}} {{pointsLabel}} 在所有 {{totalParticipants}} 名参赛者中排名第 {{rank}} 。"
-        },
-        "difficulty-label": "难度",
-        "difficulty": {
-            "1": "极容易",
-            "2": "容易",
-            "3": "中等",
-            "4": "困难",
-            "5": "极困难"
-        }
     },
     "landing-page": {
         "best-odds": "市场最佳赔率",
@@ -713,7 +831,10 @@
             "claim-all": "索取全部",
             "approve-swap-tooltip": "要以 {{currencyKey}} 付款，您需要批准从 {{defaultCurrency}} 兑换为 {{currencyKey}}。",
             "payout-in": "付款于",
-            "claim-progress": "声称..."
+            "claim-progress": "声称...",
+            "payout": "付款",
+            "win": "赢",
+            "live": "居住"
         },
         "messages": {
             "no-claimable": "您没有任何可申请的职位",
@@ -723,7 +844,8 @@
             "canceled-tooltip": "已取消的盘口可在盘口解决后 2 小时内提出索赔。",
             "transaction-pending": "待处理交易",
             "voucher-claim-success": "代金券领取成功",
-            "no-vouchers": "您没有任何凭证可以领取"
+            "no-vouchers": "您没有任何凭证可以领取",
+            "no-lp-transactions": "您没有任何 LP 交易"
         },
         "table": {
             "position": "位置",
@@ -734,7 +856,20 @@
             "time": "时间",
             "status": "地位",
             "total-amount": "总金额",
-            "total-quote": "总报价"
+            "total-quote": "总报价",
+            "payout": "付款",
+            "single-lp": "单曲 LP",
+            "date-time-col": "日期 | 时间",
+            "type-col": "类型",
+            "amount-col": "数量",
+            "round-col": "圆形的",
+            "withdrawalRequest": "提款申请",
+            "claim": "提款申索",
+            "round-label": "圆形的",
+            "parlay-lp": "连赢 LP",
+            "deposit": "订金",
+            "name-col": "姓名",
+            "tx-status-col": "发送状态"
         },
         "winnings-are-forfeit": "*在盘口解决后的 {{amount}} 天内未领取的奖金将被没收。",
         "search-field": "搜索钱包",
@@ -743,13 +878,12 @@
             "trades": "Trades",
             "highest-win": "Highest win",
             "lifetime-wins": "Lifetime wins",
-            "in-vaults": "In vaults"
+            "profile-data": "个人资料",
+            "wallet": "钱包",
+            "free-bet": "免费投注"
         },
-        "in-vault": "在保险库中",
         "lp-title": "流动资金池",
         "go-to-lp": "去LP",
-        "go-to-vault": "去金库",
-        "vaults": "金库/LP",
         "in-lp": "提供流动资金",
         "voucher": "代金券",
         "gift-voucher": "礼品券",
@@ -765,7 +899,34 @@
         "wrapper-nav": {
             "my-tickets": "我的门票",
             "my-portfolio": "我的投资组合"
-        }
+        },
+        "lp": "LP",
+        "back": "后退",
+        "go-to": "去",
+        "free-bet": {
+            "claim-btn": "索赔金额将减少买入金额，并转入您的免费投注余额。"
+        },
+        "free-bet-modal": {
+            "insufficient-balance": "余额不足",
+            "title": "发送免费投注",
+            "enter-amount": "输入金额",
+            "invalid-wallet-address": "钱包地址无效",
+            "invalid-amount": "金额无效",
+            "fund": "发送免费投注",
+            "no-funds": "请确保你的钱包有足够的资金",
+            "fund-successful": "基金成功",
+            "enter-wallet-address": "输入钱包地址",
+            "approve-success": "成功批准",
+            "transaction-pending": "交易待处理",
+            "funding": "资金...",
+            "duplicate": "检测到重复的钱包地址",
+            "enter-wallet-addresses": "输入钱包地址",
+            "fund-batch": "资助多个地址",
+            "enter-amount-per-user": "输入每个用户的金额",
+            "total-amount-batch": "总金额将是 {{ amount }} 乘以 {{ count }} 个钱包地址。",
+            "one-or-more-address-invalid": "输入的一个或多个钱包地址无效"
+        },
+        "send-free-bet": "发送免费投注"
     },
     "referral": {
         "generate-link": "生成链接",
@@ -794,123 +955,6 @@
             "see-result-by-trader": "按交易者查看结果",
             "affiliate-leaderboard": "推广激励排行榜"
         }
-    },
-    "vaults": {
-        "title": "体育竞赛金库",
-        "strategy-label": "金库策略",
-        "risks-label": "金库风险"
-    },
-    "vault": {
-        "discount-vault": {
-            "title": "折扣金库",
-            "description": "<p>买入超过{{odds}}的赔率且折扣大于{{discount}}的头寸。</p>",
-            "risks": "<p>金库的利用率为{{utilizationRate}}，确保每轮风险敞口的资金不超过{{utilizationRate}}。 此外，{{utilizationRate}}的资金最多有 {{allocationLimitsPerMarketPerRound}}可以投入单一市场，从而将风险分散到赔率高于{{odds}}的多个市场。</p>"
-        },
-        "degen-discount-vault": {
-            "title": "激进折扣金库",
-            "description": "<p>买入超过{{discount}}折扣的任何赔率头寸。</p>",
-            "risks": "<p>金库的利用率为{{utilizationRate}}，确保每轮风险敞口的资金不超过{{utilizationRate}}。此外，{{utilizationRate}}的资金最多有 {{allocationLimitsPerMarketPerRound}}可以投入单一市场。</p>"
-        },
-        "safu-discount-vault": {
-            "title": "保守折扣金库",
-            "description": "<p>买入超过{{odds}}赔率且有任何折扣的仓位。</p>",
-            "risks": "<p>金库的利用率为{{utilizationRate}}，确保每轮风险敞口的资金不超过{{utilizationRate}}。此外,{{utilizationRate}}的资金最多有 {{allocationLimitsPerMarketPerRound}}可以投入单一市场，从而将风险分散到赔率高于{{odds}}的多个市场。</p>"
-        },
-        "upsettoor-vault": {
-            "title": "Upsettoor Vault",
-            "description": "<p>购买赔率低于{{odds}}的赔率且折扣大于{{discount}}的头寸。</p>",
-            "risks": "<p>金库的利用率为{{utilizationRate}}，确保每轮风险敞口的资金不超过{{utilizationRate}}。 此外，{{utilizationRate}}的资金最多有 {{allocationLimitsPerMarketPerRound}}可以投入单一市场，从而将风险分散到赔率高于{{odds}}的多个市场。</p>"
-        },
-        "variables": "<p>金库参数</p><ul><li>金库利用率：{{utilizationRate}}</li><li>价格下限：{{priceLowerLimit}}</li><li>价格上限：{{priceUpperLimit}}</li><li>最大偏度影响：{{skewImpactLimit}}</li><li>单一市场投入上限：{{allocationLimitsPerMarketPerRound}}</li><li>存款上限：{{maxAllowedDeposit}}</li><li>金库最大用户：{{maxAllowedUsers}}</li><li>Minimum amount on a single trade：{{minTradeAmount}}</li><li>Minimum deposit：{{minDepositAmount}}</li><li>本轮时间: {{roundLength}} 天</li></ul>",
-        "back-to-vaults": "返回金库选择页面",
-        "vault-not-started-message": "金库尚未启动",
-        "vault-paused-message": "金库已暂停",
-        "round-allocation-label": "本轮存款总量",
-        "spent-trading-label": "已交易量",
-        "available-trading-label": "允许交易量",
-        "round-end-label": "本轮剩余时间",
-        "your-round-allocation-label": "本轮分配的数量：<bold>{{amount}}</bold>",
-        "your-next-round-allocation-label": "下轮分配的数量：<bold>{{amount}}</bold>",
-        "estimated-amount-tooltip": "这是一个估计金额。实际金额将在本轮结束时根据实际盈亏计算。",
-        "next-round-start-label": "下一轮比赛将于开始：<counter />",
-        "users-in-vault-label": "参与金库用户: {{number}} / {{max}}",
-        "vault-filled-label": "金库存款: {{amount}} / {{max}}",
-        "deposit-message": "将资金存入金库，用于下一轮。",
-        "deposit-amount-label": "存款金额",
-        "deposit-amount-placeholder": "输入存款金额",
-        "available-to-withdraw-label": "允许提款金额：<bold>{{amount}}</bold>",
-        "nothing-to-withdraw-label": "无可提款金额。",
-        "withdrawal-message": "你可以申请提款，本轮结束时存款会自动发送至你的钱包。",
-        "withdraw-round-end-label": "本轮结束于：<counter />",
-        "withdrawal-requested-message": "你要求取款<bold>{{amount}}</bold><tooltip />。本轮结束时存款会自动发送至你的钱包。",
-        "withdrawal-request-label": "取款请求：<bold>{{amount}}</bold>",
-        "first-deposit-withdrawal-message": "你已经为下一轮存款，可以在下一轮结束时提取资金。",
-        "round-ended-label": "本轮结束",
-        "deposit-withdrawal-warning": "已提交取款请求，所以不能存款",
-        "deposit-max-amount-of-users-warning": "金库已达到存款用户上限，不再接受新存款。",
-        "deposit-vault-cap-reached-warning": "金库已达到存款上限，不再接受新存款。",
-        "deposit-vault-cap-error": "存款达到存款上限",
-        "deposit-min-amount-error": "存款的最低金额为{{amount}}",
-        "withdrawal-deposit-warning": "你现在不能取款，因为已经决定参与下一轮存款",
-        "tabs": {
-            "deposit": "存款",
-            "claim": "领取",
-            "withdraw": "提款"
-        },
-        "button": {
-            "deposit-label": "存款",
-            "deposit-progress-label": "存款中...",
-            "deposit-confirmation-message": "存款成功入账",
-            "request-withdrawal-label": "申请取款",
-            "request-withdrawal-progress-label": "申请中...",
-            "request-withdrawal-confirmation-message": "申请已发送",
-            "withdraw-label": "取款",
-            "withdraw-progress-label": "取款中...",
-            "withdraw-confirmation-message": "取款已成功",
-            "close-round-label": "结束本轮",
-            "close-round-progress-label": "结束本轮中...",
-            "close-round-confirmation-message": "本轮成功完成"
-        },
-        "trades-history": {
-            "title": "金库交易历史",
-            "no-trades": "在选定的轮次中，没有与本金库相关的交易。",
-            "round-label": "轮次"
-        },
-        "pnl": {
-            "title": "每轮盈亏",
-            "no-data": "无上一轮盈亏数据",
-            "lifetime-pnl": "总盈亏",
-            "ongoing-pnl": "Ongoing PnL"
-        },
-        "user-transactions": {
-            "type": {
-                "deposit": "订金",
-                "withdrawalRequest": "提款请求",
-                "claim": "提款申请"
-            },
-            "title": "用户交易",
-            "no-transactions": "在选定的回合中没有与此保管库关联的用户交易。",
-            "name": "姓名"
-        },
-        "parlay-discount-vault": {
-            "title": "Parlay 折扣金库",
-            "description": "<p>购买 parlay 彩票，其中彩票中的每个单独位置至少有 {{discount}} 折扣。</p>",
-            "risks": "<p>金库的利用率为 {{utilizationRate}}，确保不超过 {{utilizationRate}} 的存入一轮风险。此外，在这些 {{utilizationRate}} 中，每轮最多可以将 {{allocationLimitsPerMarketPerRound}} 花在一张连赢彩票上，从而将风险分散到折扣大于 {{odds}} 的多张连赢彩票上。</p>"
-        },
-        "gamified-staking-message": "<p>进入一轮的所有存款都计入游戏化的质押量。</p>",
-        "LP": {
-            "title": "唱片",
-            "parlay-lp": "连本带利LP",
-            "single-lp": "单张唱片"
-        },
-        "variables-parlay": "<p>变量：</p><ul><li>利用率：{{utilizationRate}}</li><li>价格下限：{{priceLowerLimit}}</li><li>价格上限：{{priceUpperLimit}}</li><li>最大偏斜影响：{{skewImpactLimit}}</li><li>单个 parlay 的最大分配：{{allocationLimitsPerMarketPerRound}}</li><li>最大总存款：{{maxAllowedDeposit}}</li><li>保险库中的最大用户数：{{maxAllowedUsers}}</li><li>单笔交易的最低金额：{{minTradeAmount}}</li><li>最低存款：{{minDepositAmount}}</li><li>回合持续时间：{{roundLength}} 天</li></ul>",
-        "single-lp": {
-            "title": "单张唱片"
-        },
-        "parlay-lp": {
-            "title": "连本带利LP"
-        },
-        "deprecated-info": "已弃用，请撤回资金！"
     },
     "parlay-leaderboard": {
         "title": "Parlay Incentives Leaderboard",
@@ -1087,10 +1131,6 @@
             "description": "加入市场上最好的 web3 体育博彩。确保在 NFL、NBA、UCL、EPL 等顶级联赛中的位置。",
             "title": "加时赛市场： 40 多个联赛的 Web3 体育博彩市场"
         },
-        "vaults": {
-            "title": "加班市场金库：自动交易",
-            "description": "将资产存入 Overtime Markets 金库，让我们的自动交易机制部署您选择的策略。"
-        },
         "parlay-leaderboard": {
             "title": "加班市场：每两周赚取过关奖励",
             "description": "Overtime Markets 是一家 web3 体育博彩网站，为连赢彩玩家提供市场上最好的双周奖金！在这里查看排行榜以及您是否符合资格。"
@@ -1194,10 +1234,12 @@
         "sign-out": "登出",
         "sign-up": "报名",
         "log-in": "登录",
-        "title": "开始加班"
+        "title": "开始加班",
+        "start-tour": "开始游览"
     },
     "banner": {
-        "arb-distribution-message": "ARB 分发已开始。通过加班赚取 ARB 代币。从这里获得更多信息。"
+        "arb-distribution-message": "ARB 分发已开始。通过加班赚取 ARB 代币。从这里获得更多信息。",
+        "v1-text": "<highlight>V2</highlight>: This is the V2 version of Overtime. To switch back to deprecated V1, <highlight>click here</highlight>."
     },
     "promotions": {
         "nav-items": {
@@ -1214,5 +1256,95 @@
         "to-label": "到",
         "description": "Overtime Markets 定期为您提供各种类型的回扣、奖励以及类似的 Optimism、Arbitrum 和 Base 激励措施。您可以使用此页面来跟踪正在进行的促销活动，并了解如何有资格获得这些促销活动。祝你好运！",
         "no-promotions": "哎呀！看起来给定的过滤器目前没有可用的促销活动。"
+    },
+    "overdrop": {
+        "navigation-menu": {
+            "leveling-tree": "升级树",
+            "xp-calculation": "XP 计算",
+            "leaderboard": "排行榜",
+            "home": "过载回家"
+        },
+        "overdrop-home": {
+            "weekly-streak": "每周连续经验值提升",
+            "xp": "经验",
+            "current-rewards": "目前预计的奖励",
+            "next-level": "下一级",
+            "next-thales-rewards-at": "泰雷兹的下一轮奖励",
+            "daily-streak": "每日连续经验值提升",
+            "level": "等级",
+            "my-total-xp": "我的总经验值",
+            "total-xp-multiplier": "总 XP 倍数",
+            "twitter-share": "Twitter 分享经验值提升",
+            "social-multiplier": "社交经验值乘数",
+            "twitter-xp-boost-resets": "Twitter xp boost 重置于",
+            "loyalty-boost": "提高忠诚度",
+            "rank": "秩",
+            "rank-tooltip": "您当前在 Overdrop League 中的排名。查看排行榜标签以了解更多信息。"
+        },
+        "leveling-tree": {
+            "explainer": {
+                "games-in-parlay": "过关游戏",
+                "days": "天",
+                "parlay-xp": "PARLAY XP BONUS（每场 parlay 可得一次）",
+                "daily-bonus": "每日奖金",
+                "positions-thales": "泰雷兹奖金 (每注一次)",
+                "xp-explained": "XP 解释",
+                "twitter-share-bonus": "Twitter 分享奖励（每天一次）",
+                "base-xp-accrual": "基本 XP 累积",
+                "twitter-content": "在 Twitter 上分享您今天投注的加班<bold>弹性卡</bold>：当天剩余时间内每 BASE XP 每 $</bold> 可获得 10% 的奖励",
+                "position-thales-content": "使用 <bold>THALES</bold> 作为抵押品，您将在该特定交易中获得 <bold>每 BASE XP 每 $ 10% 的奖励</bold>",
+                "xp-explained-content": "整个赛季的活动期间，用户可以通过驾驶汽车在赛季结束前积累 XP<bold>加班量</bold>和<bold>乘数</bold>基于各种动态指标和目标。<br/><br/>活动结束后，所有用户将共享<highlight>10 万 OP</highlight>和<highlight>150k 平均收益</highlight>根据 XP 按比例<br><br>活动期间，用户将获得特定 XP 等级的一次性奖励",
+                "base-xp-content": "<bold>1 基本 XP = 1 美元</bold>体积<br/><br/>后<bold>28天</bold>连续<bold>交易量&gt;10$</bold>你已经达到<bold>最大基数乘数</bold><br/><br/>每错过一天低于 10 美元的交易量，你的基础就会下降<bold>经验值 -0.1</bold>",
+                "loyalty-boost": "提高忠诚度",
+                "xp-boost-content": "有多种方法可以进一步提高每次投注所累积的 XP 数量，例如通过<bold>每日投注连续性、每周投注连续性、联注游戏数量、使用 THALES 代币作为抵押品、在 Twitter 上展示您的投注以及达到 XP 级别来提高忠诚度！</bold>",
+                "parlay-content": "根据您的累积赌注中包含的单个游戏数量，您将获得该累积赌注的 XP 额外提升！",
+                "weekly-boost-content": "激活当前周的每周连胜提升的条件是，当前周的周一 00:00UTC 至周日 23:59UTC 之间有任何投注量。连续满足此条件的周数越多，您的基本 XP 累积的<bold>每周连胜提升</bold>就越高！\n\n<bold>每周连胜提升</bold>适用于提升期间进行的所有投注。\n\n如果您中断连胜并错过了一天的投注量提升，您的<bold>每周连胜提升</bold>将重置为 +0%。",
+                "loyalty-boost-content": "忠诚 XP 提升可为您的所有常规 XP 累积提供高达 25% 的永久提升，具体取决于您的级别。从第 1 级的 5% 提升开始，每升至第 5 级，您都会获得 +5% 的提升。当您达到第 20 级 (GOAT) 并累积 5,000,000 XP 点数时，您的忠诚 XP 提升将达到最高 25%。您可以在升级树页面上查看 XP 级别细分。",
+                "days-content": "激活当前日的每日连胜提升的条件是，当前日的投注量必须在 00:00UTC 和 23:59UTC 之间。连续满足此条件的天数越多，您的基本 XP 累积的<bold>每日连胜提升</bold>就越高！\n\n<bold>每日连胜提升</bold>适用于提升期间进行的所有投注。\n\n如果您在某一天中断连胜并错过了提升量的机会，<bold>您的每日连胜提升将重置为 +0%。</bold>",
+                "weekly-boost": "每周连续提升",
+                "xp-boost": "经验值提升"
+            },
+            "heading": "过度投放农业联盟"
+        },
+        "xp-details": {
+            "active-xp-bonus": "主动经验值奖励",
+            "received": "已收到",
+            "date-time": "日期 | 时间",
+            "total-bonus": "总奖金",
+            "paragraph": "使用 THALES 作为抵押可获得额外的 10% 奖金，创建高达 100% 奖金的联注，并查看特别促销游戏。",
+            "weekly-multiplier": "每周乘数",
+            "xp-history": "XP 历史",
+            "daily-multiplier": "每日乘数",
+            "shared-flex": "共享弹性卡",
+            "twitter-multiplier": "Twitter 倍增器",
+            "tx-link": "TX 链接",
+            "days-in-row": "在连续几天",
+            "no-results": "没有结果",
+            "loyalty-multiplier": "忠诚度倍增器",
+            "weeks-in-row": "连续几周",
+            "loyalty-boost": "忠诚度提升"
+        },
+        "leaderboard": {
+            "table": {
+                "rewards": "奖励金额",
+                "rank": "秩",
+                "address": "地址",
+                "total-volume": "总容积",
+                "total-xp": "总 XP 点数",
+                "level": "等级"
+            }
+        },
+        "modal": {
+            "you-are-rocking": "你太棒了！",
+            "congratulation": "恭喜！",
+            "gain-xp-label": "获取 XP、升级、赢取奖励并收集空投！",
+            "go-to-overdrop": "前往超额投放",
+            "reached-level": "您已达到 {{ level }} 级别并赢得 {{ amount }} THALES 免费投注！",
+            "check-out": "查看<br/>超降联赛！",
+            "active-daily-streak": "活跃每日连续经验值提升",
+            "dont-show-this": "不再显示此内容",
+            "unlocked-level": "您已解锁级别 {{ level }}！",
+            "day-streak": "<bold>{{ days }}</bold><br/>连胜！"
+        }
     }
 }

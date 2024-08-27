@@ -1,11 +1,11 @@
-import { DEFAULT_NETWORK, SUPPORTED_NETWORKS, SUPPORTED_NETWORKS_PARAMS } from 'constants/network';
-import { BigNumber } from 'ethers';
-import { Network } from 'enums/network';
-import { getNavItemFromRoute } from './ui';
+import { SUPPORTED_NETWORKS, SUPPORTED_NETWORKS_PARAMS } from 'constants/network';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import { Network } from 'enums/network';
+import { BigNumber } from 'ethers';
 import { localStore } from 'thales-utils';
 import { SupportedNetwork } from '../types/network';
 import { getCollaterals } from './collaterals';
+import { getNavItemFromRoute } from './ui';
 
 export const isNetworkSupported = (networkId: SupportedNetwork): boolean => {
     return !!SUPPORTED_NETWORKS[networkId];
@@ -30,17 +30,6 @@ export const getNetworkIconClassNameByNetworkId = (networkId: Network): string =
 export const getNetworkNameByNetworkId = (networkId: Network, shortName = false): string | undefined => {
     const network = SUPPORTED_NETWORKS_PARAMS[networkId];
     return shortName ? network?.shortChainName : network?.chainName;
-};
-
-export const getDefaultNetworkName = (shortName = false): string => {
-    // find should always return Object for default network ID
-    const network = SUPPORTED_NETWORKS_PARAMS[DEFAULT_NETWORK.networkId];
-    return shortName ? network?.shortChainName : network?.chainName;
-};
-
-export const getNetworkKeyByNetworkId = (networkId: Network): string => {
-    const network = SUPPORTED_NETWORKS_PARAMS[networkId];
-    return network?.chainKey || 'optimism_mainnet';
 };
 
 export const isRouteAvailableForNetwork = (route: string, networkId: Network): boolean => {

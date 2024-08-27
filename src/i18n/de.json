@@ -67,7 +67,8 @@
             },
             "id-create-success": "Empfehlungs-ID erfolgreich festgelegt",
             "id-exists": "Empfehlungs-ID existiert bereits",
-            "your-referral-id": "Ihre Empfehlungs-ID"
+            "your-referral-id": "Ihre Empfehlungs-ID",
+            "header-label": "Empfehlen & verdienen"
         },
         "swap": {
             "title": "USD erhalten",
@@ -75,7 +76,8 @@
             "to-label": "Zu",
             "balance-label": "Guthaben: {{amount}}",
             "swap-label": "Tauschen",
-            "swap-progress-label": "Tausch wird fertig gestellt..."
+            "swap-progress-label": "Tausch wird fertig gestellt...",
+            "approve": "Tausch genehmigen"
         },
         "enable-wallet-access": {
             "approve-label": "{{currencyKey}} genehmigen",
@@ -107,7 +109,8 @@
             "enter-percentage": "Enter percentage",
             "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}",
             "single-amm-paused": "AMM angehalten",
-            "invalid-amount-max": "Der Betrag darf nicht höher sein als {{max}}"
+            "invalid-amount-max": "Der Betrag darf nicht höher sein als {{max}}",
+            "swap-quote-low": "Swap-Kurs ist zu niedrig (Empfang: {{quote}}, Mindestempfang {{minQuote}})! Bitte versuchen Sie es erneut..."
         },
         "time-remaining": {
             "ended": "zu Ende",
@@ -188,7 +191,15 @@
             "description": "Wählen Sie das Anzeigeformat für die Quoten",
             "info": "*Sie können den Quotentyp jederzeit in den Filtern über der Spieleliste ändern",
             "title": "Willkommen zu Overtime Markets"
-        }
+        },
+        "settings": "Einstellungen",
+        "filters": "Filter",
+        "status": "Status",
+        "wrap-and-buy": "ETH verpacken und kaufen",
+        "wrap-eth-tooltip": "Ihr ETH wird zuerst in WETH verpackt und dann an den Vertrag übergeben",
+        "election-tooltip": "Die Entscheidungsquellen sind Associated Press, Fox News und NBC. Diese Märkte werden entschieden, sobald alle drei Quellen den gleichen Kandidaten zum Rennen ausrufen. Wenn bis zum 11. November nicht alle drei Quellen den gleichen Kandidaten zum Rennen ausrufen, werden alle Wetten ungültig.",
+        "submit": "Einreichen",
+        "try-again": "Versuchen Sie es erneut"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALLE RECHTE VORBEHALTEN.",
@@ -233,7 +244,9 @@
             "download-image": "Bild herunterladen. Warten Sie mal...",
             "save-image": "Bild in Zwischenablage speichern. Warten Sie mal...",
             "open-twitter": "Twitter öffnen...",
-            "ios-not-supported": "Das Teilen von Bildern wird auf iOS-Geräten nicht unterstützt. Wenn Sie das Bild teilen möchten, verwenden Sie bitte die Desktop-Version"
+            "ios-not-supported": "Das Teilen von Bildern wird auf iOS-Geräten nicht unterstützt. Wenn Sie das Bild teilen möchten, verwenden Sie bitte die Desktop-Version",
+            "live-trade-requested": "Live-Handel erwünscht",
+            "fulfilling-live-trade": "Erfüllung des Live-Handels"
         },
         "filter-label": {
             "global": {
@@ -246,7 +259,10 @@
                 "allmarkets": "Alle",
                 "openmarkets": "Offen",
                 "canceled": "Angehalten / Abgebrochen",
-                "pendingmarkets": "Laufend"
+                "pendingmarkets": "Laufend",
+                "ongoingmarkets": "Laufend",
+                "cancelledmarkets": "Abgesagt",
+                "pausedmarkets": "Angehalten"
             },
             "sport": {
                 "all": "alle Sportarten",
@@ -264,8 +280,18 @@
                 "esports": "Sport",
                 "cricket": "Kricket",
                 "boxing": "Boxen",
-                "mma": "Kampfsport",
-                "golf": "Golf"
+                "fighting": "Kampfsport",
+                "golf": "Golf",
+                "live": "Live",
+                "waterpolo": "Wasser Polo",
+                "rugby": "Rugby",
+                "volleyball": "Volleyball",
+                "handball": "Handball",
+                "tabletennis": "Tischtennis",
+                "olympicgames": "Olympische Spiele",
+                "politics": "Politik",
+                "boosted": "Promo-Spiele",
+                "promo": "Promo-Spiele"
             },
             "all": "Alle",
             "datepicker": {
@@ -302,7 +328,8 @@
             "usd-value-col": "USD-Wert",
             "game-col": "Spiel",
             "parlay-title": "Aktuelle Parlay-Aktivität",
-            "single-title": "Letzte Einzelaktivität"
+            "single-title": "Letzte Einzelaktivität",
+            "ticket-title": "Letzte Ticketaktivität"
         },
         "tooltip": {
             "amount-exceeded": "Der Betrag überstieg den auf der AMM verfügbaren Betrag",
@@ -314,7 +341,7 @@
         "back": "Der Rücken",
         "apply-filters": "Filter anwenden",
         "incentivized-market": "INCENTIVISIERTER MARKT",
-        "number-of-rounds": "Gesamtzahl der Runden"
+        "number-of-rounds": "Runden"
     },
     "markets": {
         "market-card": {
@@ -336,8 +363,8 @@
                 "winner": "Gewinner",
                 "spread": "Handicap",
                 "total": "Gesamt",
-                "double-chance": "Doppelte Chance",
-                "combined-positions": "Kombinierte Positionen",
+                "double chance": "Doppelte Chance",
+                "combined positions": "Kombinierte Positionen",
                 "passing touchdowns": "Passende Touchdowns",
                 "rushing yards": "Rauschende Meter",
                 "receiving yards": "Empfangshöfe",
@@ -451,7 +478,97 @@
             "toggle": {
                 "hide-paused-markets": "Pausierte Märkte ausblenden",
                 "show-paused-markets": "Pausierte Märkte anzeigen"
-            }
+            },
+            "odd-tooltip-v2": {
+                "scoring": {
+                    "rounds": "Runden",
+                    "sets": "Sätze",
+                    "points": "Punkte",
+                    "goals": "Ziele"
+                },
+                "match-resolve": {
+                    "regular": "in der regulären Spielzeit",
+                    "overtime": "inklusive eventueller Überstunden"
+                },
+                "pitcherHitsAllowed-1": "{{team}} hat weniger zulässige Treffer als {{line}}",
+                "bonus": "{{bonus}} zusätzlicher Bonus bei Gewinn!",
+                "doubleDouble-1": "{{team}} wird kein Double-Double erzielen",
+                "passingTouchdowns-0": "{{team}} wird mehr Pass-Touchdowns haben als {{line}}",
+                "rushingYards-0": "{{team}} wird mehr Rushing Yards haben als {{line}}",
+                "goals-0": "{{team}} wird im Spiel ein Tor erzielen",
+                "receptions-0": "{{team}} wird mehr Empfänge haben als {{line}}",
+                "doubleDouble-0": "{{team}} erzielt ein Double-Double",
+                "tripleDouble-0": "{{team}} erzielt ein Triple-Double",
+                "total-0": "Die Gesamtzahl der {{scoring}} im Spiel {{matchResolve}} wird höher sein als {{line}}",
+                "hitsRecorded-0": "{{team}} wird mehr Treffer verzeichnen als {{line}}",
+                "fieldGoalsMade-0": "{{team}} erzielt mehr Field Goals als {{line}}",
+                "race-winner": "{{team}} wird das Rennen gewinnen {{matchResolve}}",
+                "receptions-1": "{{team}} hat weniger Empfänge als {{line}}",
+                "fieldGoalsMade-1": "{{team}} erzielt weniger Field Goals als {{line}}",
+                "doubleChance-2": "{{team}} gewinnt das Spiel oder das Spiel endet unentschieden {{matchResolve}}",
+                "and": "Und",
+                "receivingYards-1": "{{team}} hat weniger Receiving Yards als {{line}}",
+                "touchdowns-0": "{{team}} wird im Spiel einen Touchdown erzielen",
+                "lastTouchdown-0": "{{team}} erzielt den letzten Touchdown im Spiel",
+                "strikeouts-1": "{{team}} wird weniger Strikeouts haben als {{line}}",
+                "tripleDouble-1": "{{team}} wird kein Triple-Double erzielen",
+                "assists-1": "{{team}} hat weniger Assists als {{line}}",
+                "strikeouts-0": "{{team}} wird mehr Strikeouts haben als {{line}}",
+                "moneyline-1": "{{team}} wird das Spiel gewinnen {{matchResolve}}",
+                "passingTouchdowns-1": "{{team}} wird weniger Pass-Touchdowns haben als {{line}}",
+                "pitcherHitsAllowed-0": "{{team}} hat mehr zulässige Treffer als {{line}}",
+                "shots-1": "{{team}} hat weniger Schüsse als {{line}}",
+                "total-1": "Die Gesamtzahl von {{scoring}} im Spiel {{matchResolve}} wird kleiner sein als {{line}}",
+                "firstTouchdown-0": "{{team}} erzielt den ersten Touchdown im Spiel",
+                "points-0": "{{team}} wird mehr Punkte haben als {{line}}",
+                "assists-0": "{{team}} hat mehr Assists als {{line}}",
+                "rushingYards-1": "{{team}} wird weniger Rushing Yards haben als {{line}}",
+                "rebounds-1": "{{team}} wird weniger Rebounds haben als {{line}}",
+                "passingYards-1": "{{team}} hat weniger Passing Yards als {{line}}",
+                "moneyline-0": "{{team}} wird das Spiel gewinnen {{matchResolve}}",
+                "receivingYards-0": "{{team}} wird mehr Receiving Yards haben als {{line}}",
+                "homeruns-1": "{{team}} wird weniger Homeruns haben als {{line}}",
+                "rebounds-0": "{{team}} wird mehr Rebounds haben als {{line}}",
+                "spread-1": "{{team}} wird das Spiel gewinnen oder mit weniger als {{line}} verlieren {{scoring}} {{matchResolve}}",
+                "spread-0": "{{team}} gewinnt das Spiel mit einem Unterschied von mehr als {{line}} {{scoring}} {{matchResolve}}",
+                "moneyline-2": "Das Spiel endet unentschieden {{matchResolve}}",
+                "homeruns-0": "{{team}} wird mehr Homeruns haben als {{line}}",
+                "points-1": "{{team}} hat weniger Punkte als {{line}}",
+                "hitsRecorded-1": "{{team}} hat weniger Treffer als {{line}}",
+                "doubleChance-1": "{{team}} oder {{team2}} gewinnen das Spiel {{matchResolve}}",
+                "passingYards-0": "{{team}} wird mehr Passing Yards haben als {{line}}",
+                "tournament-winner": "{{team}} wird das Turnier gewinnen {{matchResolve}}",
+                "doubleChance-0": "{{team}} gewinnt das Spiel oder das Spiel endet unentschieden {{matchResolve}}",
+                "shots-0": "{{team}} hat mehr Schüsse als {{line}}",
+                "winner-2": "Das Spiel endet unentschieden {{matchResolve}}",
+                "winner-1": "{{team}} wird das Spiel gewinnen {{matchResolve}}",
+                "winner-0": "{{team}} wird das Spiel gewinnen {{matchResolve}}"
+            },
+            "type-tooltip": {
+                "11055": "Touchdowns beim Empfangen, Rushen, Punt Return, Kick Return, Defensiv- und Interception-Pass werden zum Ergebnis gezählt.",
+                "touchdowns": "Touchdowns beim Empfangen, Rushen, Punt Return, Kick Return, Defensiv- und Interception-Pass werden zum Ergebnis gezählt."
+            },
+            "odds-live-limitation-message": "Live-Positionen nur als Singles erlaubt",
+            "live": "Live",
+            "time": "Zeit",
+            "set": "Satz",
+            "delayed": "Verzögert",
+            "interrupted": "Unterbrochen",
+            "abandoned": "Verlassen",
+            "postponed": "Verschoben",
+            "rain-delay": "Regenverzögerung",
+            "loss": "Verlust",
+            "open": "Offen",
+            "won": "Gewonnen",
+            "live-trading-paused": "Live-Handel pausiert",
+            "scheduled": "Geplant",
+            "fighters-walking": "Kämpfer zu Fuß",
+            "pre-fight": "Vor dem Kampf",
+            "end-of-fight": "Ende des Kampfes",
+            "fighters-introduction": "Kämpfer Einführung",
+            "end-of-round": "Ende der Runde",
+            "not-available-for-trading": "Nicht zum Handel verfügbar",
+            "suspended": "Ausgesetzt"
         },
         "market-details": {
             "price": "Preis",
@@ -474,7 +591,7 @@
             "positions": "Positionen",
             "odds": "Chancen"
         },
-        "zero-odds-tooltip": "Sports AMM bietet nur Liquidität in der Preisspanne von $0,05 bis $0,95. Dies bedeutet, dass wenn die Quoten für eine Position weniger als 5% oder mehr als 95% betragen, diese Position keine Liquidität hat.",
+        "zero-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",
         "parlay": {
             "available": "Verfügbar",
             "total-quote": "Gesamtangebot",
@@ -503,7 +620,10 @@
                 "same-event-participant": "Es wird nur ein Teilnehmer pro Veranstaltung unterstützt. {{addedParticipant}} kann nicht hinzugefügt werden, da {{existingParticipant}} bereits in Parlay ist",
                 "already-added-combined-positions": "Positionen aus demselben Markt können nicht mit kombinierten Positionen kombiniert werden",
                 "player-props-and-other-positions": "Das Kombinieren von Spieler-Requisitenpositionen mit anderen Positionen aus demselben Markt wird nicht unterstützt",
-                "same-game-different-player-props": "Die Kombination verschiedener Kategorien von Spieler-Requisiten wird nicht unterstützt"
+                "same-game-different-player-props": "Die Kombination verschiedener Kategorien von Spieler-Requisiten wird nicht unterstützt",
+                "player-props-combining-not-enabled": "Das Kombinieren von Spielereigenschaften für {{league}} wird nicht unterstützt",
+                "same-player-different-types": "Das Kombinieren verschiedener Kategorien für denselben Spieler ({{player}}) wird nicht unterstützt.",
+                "other-types-with-player-props": "Es wird nicht unterstützt, Spieler-Requisiten mit anderen Typen aus demselben Spiel zu kombinieren."
             },
             "empty-description": "Position hinzufügen, Markt auswählen und Auswahl treffen.",
             "payout": "Insgesamt erhalten",
@@ -532,7 +652,11 @@
                 "total-quote": "Gesamtangebot",
                 "header": "Web 3 Sportmärkte auf",
                 "potential-payout": "Mögliche Auszahlung",
-                "positions": "Anzahl der Positionen"
+                "positions": "Anzahl der Positionen",
+                "network-error": "Netzwerkfehler. Weitere Informationen finden Sie in der Browserkonsole.",
+                "label": "Teilen für Twitter-Bonus",
+                "verifying-tweet": "Tweet wird verifiziert",
+                "submit-url": "Senden Sie Ihre Tweet-URL für den Overdrop-Boost"
             },
             "buy-in": "Kaufen",
             "total-bonus": "Gesamtbonus",
@@ -546,7 +670,54 @@
             "gas-tooltip": "Aktuelle Gasgebühr, die von der Blockchain zur Abwicklung der Transaktion benötigt wird",
             "total-gas": "Gasgebühr (GESCHÄTZT)",
             "persist-games": "Auswahl nach dem Absenden beibehalten",
-            "keep-selection-tooltip": "Standardmäßig wird der Parlay Builder nach erfolgreicher Übermittlung zurückgesetzt. Aktivieren Sie diese Option, wenn Sie den aktuellen Kontext nach der Übermittlung beibehalten möchten."
+            "keep-selection-tooltip": "Standardmäßig wird der Parlay Builder nach erfolgreicher Übermittlung zurückgesetzt. Aktivieren Sie diese Option, wenn Sie den aktuellen Kontext nach der Übermittlung beibehalten möchten.",
+            "liquidity": "Liquidität",
+            "ticket-slip": "Fahrschein",
+            "slippage": {
+                "invalid-value": "Ungültiger Wert",
+                "label": "Akzeptieren Sie den Handel, wenn die Quoten um Folgendes sinken:",
+                "slippage": "Schlupf",
+                "enter-value": "Wert eingeben",
+                "tooltip": "Die Überweisung wird nicht durchgeführt, wenn sich der Überbrückungszinssatz zum Zeitpunkt der Ausführung der Überweisung um mehr als diesen Prozentsatz ungünstig verändert.",
+                "swap-thales": "Swap-Slippage"
+            },
+            "accept-odds-changes": "Quotenänderungen akzeptieren",
+            "thales-bonus-tooltip": "Benutzer, die mit THALES handeln, erhalten 2 % zusätzliche Auszahlungen für jedes Spiel auf ihrem Ticket (bereits im Gesamtangebot und der Auszahlung berechnet).",
+            "thales-bonus-info": "Nutzen Sie THALES und erhalten Sie 2 % Bonus für jedes Spiel.",
+            "odds-changed-error": "Die Quoten haben sich während der Auftragserfüllung geändert. Versuchen Sie, den Slippage zu erhöhen.",
+            "odds-changed-description": "Quoten haben sich geändert. Akzeptieren Sie die Änderungen, um zu kaufen.",
+            "overdrop": {
+                "bonus-applied": "Bonus angewendet",
+                "overdrop-xp-overview": "Overdrop XP-Übersicht",
+                "total-xp-earned": "Insgesamt verdiente XP",
+                "total-xp-boost": "Gesamt-XP-Boost",
+                "overdrop-xp": "Überfall-XP",
+                "active-boost": "Aktiver Boost",
+                "base-xp": "Basis-XP",
+                "tooltip": {
+                    "promo-boost": "Bestimmte Sportspiele bieten zusätzliche XP-Boosts.",
+                    "loyalty-boost": "Der Loyalitäts-XP-Boost gibt Ihnen je nach XP-Level einen permanenten Boost von bis zu 25 % auf alle Ihre allgemeinen XP-Einnahmen. Beginnend mit einem Boost von 5 % auf Level 1 erhalten Sie beim Erreichen jedes fünften Levels einen weiteren Boost von +5 %.",
+                    "weekly-boost": "Je mehr Wochen hintereinander Sie wetten, desto höher ist Ihr XP-Boost. Erhöhen Sie sich jede Woche um +5 % bis zu einem Maximum von +20 %. Wenn Sie eine Woche verpassen, wird dieser Boost auf 0 % zurückgesetzt",
+                    "daily-boost": "Je mehr Tage hintereinander Sie wetten, desto höher ist Ihr XP-Boost. Erhöhen Sie sich für jeden Tag um +5 % bis zu einem Maximum von +35 %. Wenn Sie einen Tag verpassen, wird dieser Boost auf 0 % zurückgesetzt",
+                    "parlay-boost": "Abhängig davon, wie viele einzelne Spiele in Ihrer Kombiwette enthalten sind, erhalten Sie einen zusätzlichen XP-Boost für diese Kombiwette. Das Maximum beträgt +290 % XP-Boost bei 15 Spielen in der Kombiwette.",
+                    "base-xp": "Die Basis-XP werden nach folgender Formel berechnet:\n\nBasis-XP = Buy-In-Betrag * (2 - Normalisierte Quoten). \n\nDas bedeutet, dass Ihre Wette mehr Basis-XP ansammelt, je höher Ihr Buy-In und je höher Ihre Wettquote ist.",
+                    "thales-boost": "Alle mit THALES als Sicherheit ausgeführten Wetten gewähren einen Bonus von +10 % auf die Basis-XP-Ansammlung für die jeweilige Wette!",
+                    "twitter-boost": "Wenn Sie Ihre Overtime-Wette in Form einer Flex Card auf Twitter teilen, aktivieren Sie einen 3-tägigen Twitter Flex Boost von +10 %."
+                },
+                "odds-xp": "Quotenmultiplikator",
+                "buy-in-xp": "Kaufen in XP"
+            },
+            "use-free-bet": "Gratiswette nutzen",
+            "disable-free-bet": "Kostenlose Wettguthaben deaktivieren",
+            "swap-thales-receive": "Mindestempfang",
+            "swap-thales": "Wechseln Sie zu THALES für ein besseres Angebot",
+            "buy-steps": {
+                "approve-swap": "Tausch zu {{currencyKey}} genehmigen",
+                "approve-buy": "Kauf mit {{currencyKey}} genehmigen",
+                "buy": "Kaufen mit {{currencyKey}}",
+                "swap": "Wechseln zu {{currencyKey}}"
+            },
+            "swap-thales-tooltip": "<bold>Steigern Sie Ihre Gewinne mit THALES!</bold> Mit nur einem Klick können Sie automatisch zu THALES wechseln und sofort von verbesserten Wettquoten profitieren! Die Auszahlung erfolgt in THALES."
         },
         "discounted-per": "Ermäßigt gem",
         "nav-menu": {
@@ -562,11 +733,14 @@
                 "fifa-campaign": "Zebro FIFA-Kampagne",
                 "vaults": "Gewölbe",
                 "liquidity-pool": "Liquidität bereitstellen",
-                "promotions": "Werbeaktionen"
+                "promotions": "Werbeaktionen",
+                "speed-markets": "Krypto handeln",
+                "digital-options": "Digitale Optionen"
             },
             "buttons": {
                 "switch": "Schalter",
-                "disconnect": "Trennen"
+                "disconnect": "Trennen",
+                "particle-wallet": "Partikel-Geldbörse"
             },
             "labels": {
                 "language": "Sprache"
@@ -579,7 +753,10 @@
         "superbowl-incentive": "10.000 ARB an Anreizen",
         "incentivized-tooltip-uefa": "Für die UEFA-Wettbewerbe wird eine satte Summe von {{rewards}} verteilt. Für die Prämien wird nur das Volumen im Arbitrum-Netzwerk angerechnet! Weitere Details finden Sie <detailsLink>hier</detailsLink>.",
         "incentivized-tooltip-nhl": "Für den Rest der NHL-Saison, einschließlich der Playoffs, wird eine satte Summe von {{rewards}} verteilt. Für die Prämien wird nur das Volumen im Arbitrum-Netzwerk angerechnet! Weitere Details finden Sie <detailsLink>hier</detailsLink>.",
-        "incentivized-tooltip-nhl-mlb": "Für den Rest der {{league}}-Saison, einschließlich der Playoffs, wird eine satte Summe von {{rewards}} ausgeschüttet. Nur das Volumen im Arbitrum-Netzwerk wird für die Belohnungen angerechnet! Weitere Details finden Sie <detailsLink>hier</detailsLink>."
+        "incentivized-tooltip-nhl-mlb": "Für den Rest der {{league}}-Saison, einschließlich der Playoffs, wird eine satte Summe von {{rewards}} ausgeschüttet. Nur das Volumen im Arbitrum-Netzwerk wird für die Belohnungen angerechnet! Weitere Details finden Sie <detailsLink>hier</detailsLink>.",
+        "incentivized-tooltip-euro-copa": "Für die EM 2024 und die Copa America werden satte {{rewards}} vergeben. Weitere Details finden Sie <detailsLink>hier</detailsLink>.",
+        "incentivized-tooltip-olympics": "Verdienen Sie während der Olympischen Spiele {{rewards}} in volumenbasierten Prämien. Weitere Einzelheiten finden Sie <detailsLink>hier</detailsLink>.",
+        "incentivized-tooltip-wimbledon": "Kämpfen Sie während Wimbledon 2024 in den Verlängerungen V1 und V2 um {{rewards}}. Weitere Einzelheiten finden Sie <detailsLink>hier</detailsLink>."
     },
     "rewards": {
         "header": "Preise",
@@ -603,64 +780,6 @@
         "twap": "Eine Woche TWAP",
         "total-global-rebates": "Gesamtrabatte zu zahlen",
         "parlay-link": "<div>Für den monatlichen Parlay-Wettbewerb des OP<parlayLink> klicken Sie hier</ parlayLink> .</div>"
-    },
-    "quiz": {
-        "title": "Sport Trivia Wettbewerb",
-        "start-quiz-description": "<p>Hallo Sportfans! Bist du bereit, dein Wissen zu testen?</p><p>Overtime hat einen Sport-Trivia-Quiz-Wettbewerb ins Leben gerufen. Das Quiz steht jedem zur Verfügung, um sein Wissen zu testen und sich mit anderen zu messen.</p><p>Verbinden dein Wallet und gib deinen Twitter-Handle ein, um das Quiz zu starten! Für Fragen kannst du unserem <discord>Discord</discord> beitreten.</p>",
-        "twitter-handle-label": "Twitter Handle",
-        "twitter-handle-placeholder": "Geben dein Twitter-Handle ein",
-        "twitter-handle-validation": "Ungültiger Twitter-Handle. Versuche es erneut.",
-        "discord-label": "Discord ID (optional)",
-        "discord-placeholder": "Gib deine Discord ID ein",
-        "current-question-label": "Aktuelle Frage: {{currentQuestion}}/{{numberOfQuestions}}",
-        "time-reamining-label": "Verbleibende Zeit <0/>",
-        "question-weight-label": "Schwierigkeit der Frage: {{points}}",
-        "point-label": "Punkt",
-        "points-label": "Punkte",
-        "quiz-finished-label": "Quiz fertig!",
-        "your-score-label": "Dein Ergebnis: {{score}}/{{max}} Punkte",
-        "button": {
-            "start-quiz-label": "Quiz startet",
-            "next-question-label": "Nächste Frage",
-            "previous-question-label": "Vorherige Frage",
-            "finish-quiz-label": "Quiz beenden",
-            "try-again-label": "Erneut versuchen",
-            "see-leaderboard-label": "Siehe Rangliste"
-        },
-        "leaderboard": {
-            "title": "Quiz Rangliste",
-            "description": "<p>Dies ist die Quiz-Rangliste, in der du sehen kannst, wie du im Vergleich zur Konkurrenz stehst.</p><p>Du kannst das Quiz <sportsTrivia>hier</sportsTrivia> so oft wiederholen, wie du willst.</p>",
-            "back-to-quiz": "Zurück zum Quiz",
-            "search-placeholder": "Suchen...",
-            "table": {
-                "rank-col": "Rang",
-                "wallet-address-col": "Wallet Addresse",
-                "twitter-col": "Twitter",
-                "points-col": "Punkte",
-                "time-col": "Zeit",
-                "rewards-col": "Preise",
-                "no-data-available": "Keine Daten verfügbar"
-            },
-            "period-end-label": "Die Frist endet in",
-            "period-ended-label": "Zeitraum beendet",
-            "week-label": "Woche",
-            "overtime-voucher": "Overtime Gutschein",
-            "all-time-leaderboard-label": "All time leaderboard"
-        },
-        "help-us-improve-label": "Hilf uns das Quiz zu verbessern",
-        "help-us-improve-tooltip": "Hilf uns das Sport-Quiz zu verbessern, indem du neue Fragen in die Fragen-Datenbank einträgst.",
-        "finish-messages": {
-            "your-best-result": "Dein bestes Resultat: {{points}} {{pointsLabel}}",
-            "rank-info": "Mit {{points}} {{pointsLabel}} bist du auf der Rangliste {{rank}} von {{totalParticipants}} Teilnehmern."
-        },
-        "difficulty-label": "Schwierigkeitsgrad",
-        "difficulty": {
-            "1": "Trivial",
-            "2": "Leicht",
-            "3": "Moderat",
-            "4": "Herausfordernd",
-            "5": "Schwer"
-        }
     },
     "landing-page": {
         "best-odds": "Beste Quoten in der Branche",
@@ -712,7 +831,10 @@
             "claim-all": "Alle beanspruchen",
             "claim-progress": "Behauptung...",
             "payout-in": "Auszahlung in",
-            "approve-swap-tooltip": "Um eine Auszahlung in {{currencyKey}} zu erhalten, müssen Sie den Umtausch von {{defaultCurrency}} in {{currencyKey}} genehmigen."
+            "approve-swap-tooltip": "Um eine Auszahlung in {{currencyKey}} zu erhalten, müssen Sie den Umtausch von {{defaultCurrency}} in {{currencyKey}} genehmigen.",
+            "payout": "Auszahlung",
+            "win": "Gewinnen",
+            "live": "Live"
         },
         "messages": {
             "no-open": "Sie haben keine offene Stelle",
@@ -722,7 +844,8 @@
             "canceled-tooltip": "Abgebrochene Märkte können 2 Stunden nach Auflösung des Marktes beansprucht werden.",
             "voucher-claim-success": "Gutschein erfolgreich beansprucht",
             "transaction-pending": "Transaktion ausstehend",
-            "no-vouchers": "Sie haben keinen Gutschein zu beanspruchen"
+            "no-vouchers": "Sie haben keinen Gutschein zu beanspruchen",
+            "no-lp-transactions": "Sie haben keine LP-Transaktionen"
         },
         "table": {
             "games": "Spiele",
@@ -733,7 +856,20 @@
             "position": "Position",
             "status": "Status",
             "total-amount": "Gesamtsumme",
-            "total-quote": "Gesamtangebot"
+            "total-quote": "Gesamtangebot",
+            "payout": "Auszahlung",
+            "amount-col": "Menge",
+            "withdrawalRequest": "Auszahlungsantrag",
+            "name-col": "Name",
+            "type-col": "Typ",
+            "round-label": "Runden",
+            "claim": "Rücktrittsanspruch",
+            "single-lp": "Einzelne LP",
+            "deposit": "Kaution",
+            "date-time-col": "Datum | Uhrzeit",
+            "tx-status-col": "TX-Status",
+            "parlay-lp": "Parlay LP",
+            "round-col": "runden"
         },
         "winnings-are-forfeit": "*Gewinne, die nicht innerhalb von {{amount}} Tagen nach Auflösung eines Marktes beansprucht werden, verfallen.",
         "search-field": "Brieftasche suchen",
@@ -742,7 +878,10 @@
             "trades": "Trades",
             "highest-win": "Höchster Gewinn",
             "lifetime-wins": "Lebenslange Gewinne",
-            "in-vaults": "In Vaults"
+            "in-vaults": "In Vaults",
+            "profile-data": "Profildaten",
+            "wallet": "Geldbörse",
+            "free-bet": "Kostenlose Wette"
         },
         "lp-title": "Liquiditätspool",
         "in-lp": "Liquidität bereitgestellt",
@@ -764,7 +903,34 @@
         "wrapper-nav": {
             "my-tickets": "Meine Tickets",
             "my-portfolio": "Mein Portfolio"
-        }
+        },
+        "lp": "LP",
+        "back": "Zurück",
+        "go-to": "Gehe zu",
+        "free-bet": {
+            "claim-btn": "Der Anspruchsbetrag wird um den Buy-In-Betrag reduziert, der auf Ihr Gratiswettenguthaben übertragen wird."
+        },
+        "free-bet-modal": {
+            "invalid-wallet-address": "Ungültige Wallet-Adresse",
+            "funding": "Finanzierung...",
+            "approve-success": "Erfolgreich genehmigt",
+            "transaction-pending": "Transaktion ausstehend",
+            "enter-amount": "Menge eingeben",
+            "enter-wallet-address": "Wallet-Adresse eingeben",
+            "invalid-amount": "ungültige Menge",
+            "fund-successful": "Fonds erfolgreich",
+            "title": "Gratiswette senden",
+            "insufficient-balance": "Mangelhaftes Gleichgewicht",
+            "no-funds": "Bitte stellen Sie sicher, dass Ihr Wallet über ausreichend Guthaben verfügt",
+            "fund": "Gratiswette senden",
+            "enter-amount-per-user": "Geben Sie den Betrag pro Benutzer ein",
+            "duplicate": "Doppelte Wallet-Adressen erkannt",
+            "enter-wallet-addresses": "Wallet-Adressen eingeben",
+            "one-or-more-address-invalid": "Eine oder mehrere eingegebene Wallet-Adressen sind ungültig",
+            "fund-batch": "Mehrere Adressen finanzieren",
+            "total-amount-batch": "Der Gesamtbetrag beträgt {{ amount }} multipliziert mit {{ count }} Wallet-Adresse(n)."
+        },
+        "send-free-bet": "Gratiswette senden"
     },
     "referral": {
         "generate-link": "Link generieren",
@@ -793,123 +959,6 @@
             "see-result-by-trader": "Siehe Ergebnis nach Trader",
             "affiliate-leaderboard": "Affiliate-Rangliste"
         }
-    },
-    "vaults": {
-        "title": "Sport Vaults",
-        "strategy-label": "Vault-Strategie",
-        "risks-label": "Vault-Risiken"
-    },
-    "vault": {
-        "discount-vault": {
-            "title": "Rabatt Vault",
-            "description": "<p>Kauft Positionen, die eine höhere Quote als {{odds}} haben und mit einem größeren Rabatt als {{discount}} erhältlich sind.</p>",
-            "risks": "<p>Die Vault hat eine Nutzungsrate von {{UtilizationRate}}, die sicherstellt, dass nicht mehr als {{UtilizationRate}} der für eine Runde eingezahlten Mittel dem Risiko ausgesetzt werden. Darüber hinaus kann von diesen {{UtilizationRate}} maximal {{allocationLimitsPerMarketPerRound}} für einen einzigen Markt ausgegeben werden, wodurch das Risiko auf mehrere Märkte verteilt wird, die Quoten von mehr als {{odds}} haben.</p>"
-        },
-        "degen-discount-vault": {
-            "title": "Degen Rabatt Vault",
-            "description": "<p>Kauft Positionen zu allen Quoten, die für mehr als {{Rabatt}} Rabatt verfügbar sind.</p>",
-            "risks": "<p>Die Vault hat eine Nutzungsrate von {{utilizationRate}}, die sicherstellt, dass nicht mehr als {{utilizationRate}} der in einer Runde eingezahlten Mittel riskiert wird. Außerdem kann von diesen {{UtilizationRate}} maximal {{allocationLimitsPerMarketPerRound}} für einen einzelnen Markt ausgegeben werden.</p>"
-        },
-        "safu-discount-vault": {
-            "title": "Safu Rabatt Vault",
-            "description": "<p>Kauft Positionen, die mehr als {{odds}} Quoten haben und mit einem beliebigen Rabatt verfügbar sind.</p>",
-            "risks": "<p>Die Vault hat eine Nutzungsrate von {{utilizationRate}}, die sicherstellt, dass nicht mehr als {{utilizationRate}} des eingezahlten Geldes pro Runde riskiert wird. Darüber hinaus kann von diesen {{UtilizationRate}} maximal {{allocationLimitsPerMarketPerRound}} für einen einzelnen Markt ausgegeben werden, wodurch das Risiko auf mehrere Märkte verteilt wird, die Quoten von mehr als {{odds}} haben.</p>"
-        },
-        "upsettoor-vault": {
-            "title": "Upsettoor Vault",
-            "description": "<p>Kauft Positionen, mit geringeren Quoten als {{odds}} haben und mit einem größeren Rabatt als {{discount}} erhältlich sind.</p>",
-            "risks": "<p>Die Vault hat eine Nutzungsrate von {{UtilizationRate}}, die sicherstellt, dass nicht mehr als {{UtilizationRate}} der für eine Runde eingezahlten Mittel dem Risiko ausgesetzt werden. Darüber hinaus kann von diesen {{UtilizationRate}} maximal {{allocationLimitsPerMarketPerRound}} für einen einzigen Markt ausgegeben werden, wodurch das Risiko auf mehrere Märkte verteilt wird, die Quoten von mehr als {{odds}} haben.</p>"
-        },
-        "variables": "<p>Variablen:</p><ul><li>Nutzungsrate: {{utilizationRate}}</li><li>Preis-Untergrenze: {{priceLowerLimit}}</li><li>Preis-Obergrenze: {{priceUpperLimit}}</li><li>Max Skew Impact: {{skewImpactLimit}}</li><li>Maximale Allokation auf einem einzelnen Markt:  {{allocationLimitsPerMarketPerRound}}</li><li>Maximale Gesamteinlage: {{maxAllowedDeposit}}</li><li>Maximum Benutzer im Tresor: {{maxAllowedUsers}}</li><li>Mindestbetrag für ein einzelnes Trade: {{minTradeAmount}}</li><li>Mindesteinzahlung: {{minDepositAmount}}</li><li>Dauer der Runde: {{roundLength}} Tage</li></ul>",
-        "back-to-vaults": "Zurück zu den Vaults",
-        "vault-not-started-message": "Die Vault wurde nicht gestartet",
-        "vault-paused-message": "Die Vault ist pausiert",
-        "round-allocation-label": "Gesamteinlage für die Runde",
-        "spent-trading-label": "Für Trades aufgewendet",
-        "available-trading-label": "Für Trades verfügbar",
-        "round-end-label": "Die Runde endet in",
-        "your-round-allocation-label": "Ihre Zuteilung für diese Runde: <bold>{{Betrag}}</bold>",
-        "your-next-round-allocation-label": "Ihre Zuteilung für die nächste Runde: <bold>{{Betrag}}</bold>",
-        "estimated-amount-tooltip": "Dies ist ein geschätzter Betrag. Der tatsächliche Betrag wird nach Abschluss der aktuellen Runde auf der Grundlage der Runden-PnL berechnet.",
-        "next-round-start-label": "Die nächste Runde beginnt in: <counter />",
-        "users-in-vault-label": "Benutzer in Vault: {{number}} / {{max}}",
-        "vault-filled-label": "Vault gefüllt: {{amount}} / {{max}}",
-        "deposit-message": "Mittel in die Vault für die nächste Runde einzahlen.",
-        "deposit-amount-label": "Mittel einzahlen",
-        "deposit-amount-placeholder": "Betrag eingeben",
-        "available-to-withdraw-label": "Verfügbar zum Abheben: <bold>{{amount}}</bold>",
-        "nothing-to-withdraw-label": "Nichts zum Abheben.",
-        "withdrawal-message": "Du kannst eine Auszahlung beantragen, und dein Geld wird dir am Ende der Runde automatisch zugeschickt, wenn die Runde beendet ist.",
-        "withdraw-round-end-label": "Die Runde endet in <counter />",
-        "withdrawal-requested-message": "Du hast beantragt, <bold>{{Betrag}}</bold><tooltip /> abzuheben. Dein Geld wird dir automatisch am Ende der Runde überwiesen, wenn die Runde abgeschlossen ist.",
-        "withdrawal-request-label": "Antrag auf Aufhebung: <bold>{{amount}}</bold>",
-        "first-deposit-withdrawal-message": "Du hast für die nächste Runde eingezahlt und kannst diese Mittel am Ende der nächsten Runde abheben.",
-        "round-ended-label": "Runde beendet",
-        "deposit-withdrawal-warning": "Die Abhebung wird beantragt, Einzahlung ist nicht möglich.",
-        "deposit-max-amount-of-users-warning": "Die maximale Anzahl der Benutzer für die Vault ist erreicht, du kannst nicht einzahlen.",
-        "deposit-vault-cap-reached-warning": "Die Obergrenze der Vault ist erreicht, eine Einzahlung ist nicht möglich.",
-        "deposit-vault-cap-error": "Einzahlungsbetrag überschreitet Tresorobergrenze",
-        "deposit-min-amount-error": "Der Mindestbetrag für die Einzahlung beträgt {{amount}}",
-        "withdrawal-deposit-warning": "Du kannst dich nicht zurückziehen, da du bereits für die nächste Runde eingezahlt hast.",
-        "tabs": {
-            "deposit": "Einzahlung",
-            "claim": "Beanspruchen",
-            "withdraw": "Rückzug"
-        },
-        "button": {
-            "deposit-label": "Einzahlung",
-            "deposit-progress-label": "Einzahlung in Arbeit...",
-            "deposit-confirmation-message": "Einzahlung erfolgreich platziert",
-            "request-withdrawal-label": "Antrag auf Abhebung",
-            "request-withdrawal-progress-label": "Anfrage in Bearbeitung...",
-            "request-withdrawal-confirmation-message": "Abhebungsantrag erfolgreich gesendet",
-            "withdraw-label": "Abheben",
-            "withdraw-progress-label": "Abhebung in Arbeit...",
-            "withdraw-confirmation-message": "Mittel erfolgreich abgehoben",
-            "close-round-label": "Runde schließen",
-            "close-round-progress-label": "Abschlussrunde im Gange...",
-            "close-round-confirmation-message": "Runde erfolgreich abgeschlossen"
-        },
-        "trades-history": {
-            "title": "Historie der Vault",
-            "no-trades": "Mit der Vault sind in der ausgewählten Runde keine Trades verbunden.",
-            "round-label": "Runde"
-        },
-        "pnl": {
-            "title": "PnL per Runde",
-            "no-data": "Keine PnL-Daten für frühere Runden.",
-            "lifetime-pnl": "Lifetime PnL",
-            "ongoing-pnl": "Ongoing PnL"
-        },
-        "user-transactions": {
-            "type": {
-                "deposit": "Kaution",
-                "withdrawalRequest": "Auszahlungsantrag",
-                "claim": "Rücktrittsanspruch"
-            },
-            "title": "Benutzertransaktionen",
-            "no-transactions": "Mit diesem Tresor sind in der ausgewählten Runde keine Benutzertransaktionen verbunden.",
-            "name": "Name"
-        },
-        "parlay-discount-vault": {
-            "title": "Parlay-Rabatttresor",
-            "risks": "<p>Der Tresor hat eine Auslastungsrate von {{utilizationRate}}, was sicherstellt, dass nicht mehr als {{utilizationRate}} pro Runde eingezahlt werden. Darüber hinaus können von diesen {{utilizationRate}} maximal {{allocationLimitsPerMarketPerRound}} für ein einzelnes Parlay-Ticket pro Runde ausgegeben werden, wodurch das Risiko auf mehrere Parlay-Tickets verteilt wird, die einen Rabatt von mehr als {{odds}} haben.</p>",
-            "description": "<p>Kauft Parlay-Tickets, bei denen jede einzelne Position im Ticket mindestens einen Rabatt von {{discount}} hat.</p>"
-        },
-        "gamified-staking-message": "<p>Alle Einzahlungen, die in eine Runde eingehen, zählen zum gamifizierten Staking-Volumen.</p>",
-        "LP": {
-            "title": "LP",
-            "single-lp": "Einzel-LP",
-            "parlay-lp": "Parlay-LP"
-        },
-        "variables-parlay": "<p>Variablen:</p><ul><li> Nutzungsrate: {{utilizationRate}}</li><li> Preisuntergrenze: {{priceLowerLimit}}</li><li> Preisobergrenze: {{priceUpperLimit}}</li><li> Max. Skew-Auswirkung: {{skewImpactLimit}}</li><li> Maximale Zuweisung für eine einzelne Parlay: {{allocationLimitsPerMarketPerRound}}</li><li> Maximale Gesamteinzahlung: {{maxAllowedDeposit}}</li><li> Max. Benutzer im Tresor: {{maxAllowedUsers}}</li><li> Mindestbetrag für einen einzelnen Trade: {{minTradeAmount}}</li><li> Mindesteinzahlung: {{minDepositAmount}}</li><li> Rundendauer: {{roundLength}} Tage</li></ul>",
-        "single-lp": {
-            "title": "Einzel-LP"
-        },
-        "parlay-lp": {
-            "title": "Parlay-LP"
-        },
-        "deprecated-info": "Veraltet, bitte heben Sie Ihr Geld ab!"
     },
     "parlay-leaderboard": {
         "title": "Parlay Incentives Leaderboard",
@@ -1086,10 +1135,6 @@
             "description": "Treten Sie dem besten Web3-Sportwettenanbieter auf dem Markt bei. Sichern Sie sich Positionen in den Top-Ligen wie NFL, NBA, UCL, EPL und mehr.",
             "title": "Overtime-Märkte: Web3-Sportwettenmärkte für über 40 Ligen"
         },
-        "vaults": {
-            "title": "Overtime Markets Vaults: Automatisierter Handel",
-            "description": "Zahlen Sie Vermögenswerte in den Tresor von Overtime Markets ein und lassen Sie unseren automatisierten Handelsmechanismus eine von Ihnen gewählte Strategie anwenden."
-        },
         "parlay-leaderboard": {
             "title": "Überstundenmärkte: Verdienen Sie alle 2 Wochen Parlay-Belohnungen",
             "description": "Overtime Markets ist ein Web3-Sportwettenanbieter mit den besten zweiwöchentlichen Boni auf dem Markt für Parlay-Spieler! Schauen Sie sich hier die Bestenliste an und ob Sie sich qualifiziert haben."
@@ -1193,10 +1238,12 @@
         "title": "Beginnen Sie mit Überstunden",
         "log-in": "Anmeldung",
         "get-started": "Loslegen",
-        "sign-out": "Abmelden"
+        "sign-out": "Abmelden",
+        "start-tour": "Tour starten"
     },
     "banner": {
-        "arb-distribution-message": "Die ARB-Verteilung hat begonnen. Verdienen Sie ARB-Tokens, indem Sie Überstunden nutzen. Schauen Sie sich die Details hier an."
+        "arb-distribution-message": "Die ARB-Verteilung hat begonnen. Verdienen Sie ARB-Tokens, indem Sie Überstunden nutzen. Schauen Sie sich die Details hier an.",
+        "v1-text": "<highlight>V2</highlight>: This is the V2 version of Overtime. To switch back to deprecated V1, <highlight>click here</highlight>."
     },
     "promotions": {
         "nav-items": {
@@ -1213,5 +1260,95 @@
         "from-label": "Aus",
         "back": "Zurück",
         "description": "Overtime Markets bietet Ihnen regelmäßig verschiedene Arten von Rückschlägen, Belohnungen und ähnlichen Anreizen für Optimism, Arbitrum und Base. Auf dieser Seite können Sie den Überblick über laufende Werbeaktionen behalten und sehen, wie Sie sich dafür qualifizieren können. Viel Glück!"
+    },
+    "overdrop": {
+        "navigation-menu": {
+            "leaderboard": "Bestenliste",
+            "leveling-tree": "Levelbaum",
+            "xp-calculation": "XP-Berechnung",
+            "home": "Überfall nach Hause"
+        },
+        "overdrop-home": {
+            "next-thales-rewards-at": "Nächste Thales-Belohnungen bei",
+            "weekly-streak": "Wöchentlicher Streak-XP-Boost",
+            "level": "Ebene",
+            "total-xp-multiplier": "Gesamt-XP-Multiplikator",
+            "twitter-share": "XP-Boost beim Teilen auf Twitter",
+            "next-level": "Nächste Ebene",
+            "my-total-xp": "Meine gesamten XP",
+            "social-multiplier": "Sozialer XP-Multiplikator",
+            "xp": "XP",
+            "daily-streak": "Täglicher Streak-XP-Boost",
+            "twitter-xp-boost-resets": "Twitter XP-Boost wird zurückgesetzt in",
+            "current-rewards": "Aktuell geschätzte Belohnungen",
+            "loyalty-boost": "Treueschub",
+            "rank-tooltip": "Ihr aktueller Rang in der Overdrop League. Weitere Informationen finden Sie auf der Registerkarte „Bestenliste“.",
+            "rank": "Rang"
+        },
+        "leveling-tree": {
+            "explainer": {
+                "days": "Tage",
+                "games-in-parlay": "Spiele im Parlay",
+                "xp-explained": "XP erklärt",
+                "twitter-share-bonus": "Twitter-Share-Bonus (einmal pro Tag)",
+                "positions-thales": "Position MIT THALES BONUS (einmalig pro Wette)",
+                "base-xp-accrual": "Basis-XP-Ansammlung",
+                "twitter-content": "Teilen Sie Ihre Overtime <bold>Flex Card</bold> aus der heutigen Wette <bold>auf Twitter: Bonus 10 % pro BASE XP pro $</bold> für den Rest des Tages",
+                "parlay-xp": "PARLAY XP BONUS (einmalig pro Parlay)",
+                "position-thales-content": "Verwenden Sie <bold>THALES</bold> als Sicherheit und Sie <bold>erhalten einen Bonus von 10 % pro BASIS-XP pro $</bold> für diesen bestimmten Handel",
+                "daily-bonus": "Täglicher Bonus",
+                "base-xp-content": "<bold>1 Basis-XP = 1 $</bold> des Volumens<br/><br/> Nach<bold> 28 Tage</bold> in einer Reihe von<bold> Volumen &gt;10$</bold> du hast erreicht<bold> MAXIMALER Basismultiplikator</bold><br/><br/> Jeder verpasste Tag mit einem Volumen unter 10 $ senkt Ihre Basis<bold> XP um -0,1</bold>",
+                "xp-explained-content": "Saisonlange Kampagne, bei der Benutzer bis zum Ende der Sportsaison XP sammeln, indem sie fahren<bold> Lautstärke bei Overtime</bold> mit<bold> Multiplikatoren</bold> basierend auf verschiedenen dynamischen Metriken und Zielen.<br/><br/> Nach Ende der Kampagne teilen alle Benutzer<highlight> 100.000 OP</highlight> Und<highlight> 150.000 ARB</highlight> anteilig basierend auf XP<br><br> Während der Kampagne erhalten Benutzer einmalige Belohnungen für bestimmte XP-Levels.",
+                "weekly-boost": "Wöchentlicher Streak-Boost",
+                "loyalty-boost": "Treueschub",
+                "days-content": "Die Bedingungen für die Aktivierung des Daily Streak Boost für den laufenden Tag sind ein beliebiges Wettvolumen zwischen 00:00 UTC und 23:59 UTC für den laufenden Tag. Je mehr Tage hintereinander diese Bedingung erfüllt ist, desto höher ist der <bold>Daily Streak Boost</bold> auf Ihre Basis-XP-Ansammlung! \n\n<bold>Daily Streak Boost</bold> wird auf alle Wetten angewendet, die getätigt werden, während der Boost aktiv ist. \n\nWenn Sie Ihren Streak unterbrechen und es an einem Tag nicht schaffen, das Volumen zu steigern, <bold>wird Ihr Daily Streak Boost auf +0 % zurückgesetzt.</bold>",
+                "xp-boost": "XP-Boosts",
+                "parlay-content": "Abhängig von der Anzahl der Einzelspiele in Ihrer Kombiwette erhalten Sie einen zusätzlichen Bonus für Ihre XP-Ansammlung für diese Kombiwette!",
+                "loyalty-boost-content": "Der Loyalty XP Boost gibt Ihnen je nach Level einen permanenten Boost von bis zu 25 % auf alle Ihre allgemeinen XP-Ansammlungen. Beginnend mit einem Boost von 5 % auf Level 1 erhalten Sie weitere +5 % bei Erreichen jedes fünften Levels. Sie erreichen den maximalen Loyalty XP Boost von 25 %, wenn Sie Level 20 (GOAT) erreichen und 5.000.000 XP-Punkte gesammelt haben. Sie können die Aufschlüsselung der XP-Level auf der Seite LEVELING TREE sehen.",
+                "xp-boost-content": "Es gibt verschiedene Möglichkeiten, den Betrag Ihrer XP-Ansammlung pro Wette weiter zu steigern, indem Sie Steigerungen durch <bold>tägliche Wettserien, wöchentliche Wettserien, die Anzahl der Spiele in Parlay-Wetten, die Verwendung von THALES-Token als Sicherheit, das Platzieren Ihrer Wetten auf Twitter und das Erreichen von XP-Levels für Treuesteigerungen erhalten!</bold>",
+                "weekly-boost-content": "Die Bedingungen für die Aktivierung des wöchentlichen Streak-Boosts für die laufende Woche sind ein beliebiges Wettvolumen zwischen Montag 00:00 UTC und Sonntag 23:59 UTC für die laufende Woche. Je mehr Wochen hintereinander diese Bedingung erfüllt ist, desto höher ist der <bold>Weekly Streak Boost</bold> auf Ihre Basis-XP-Ansammlung!\n\nDer <bold>Weekly Streak Boost</bold> wird auf alle Wetten angewendet, die getätigt werden, während der Boost aktiv ist.\n\nWenn Sie Ihren Streak unterbrechen und es an einem Tag nicht schaffen, das Volumen zu steigern, wird Ihr <bold>Weekly Streak Boost</bold> auf +0 % zurückgesetzt."
+            },
+            "heading": "Die Overdrop-Farming-Liga"
+        },
+        "xp-details": {
+            "daily-multiplier": "Täglicher Multiplikator",
+            "received": "Erhalten",
+            "shared-flex": "Gemeinsam genutzte Flexkarte",
+            "days-in-row": "Tage hintereinander",
+            "xp-history": "XP-Verlauf",
+            "date-time": "Datum | Uhrzeit",
+            "weekly-multiplier": "Wöchentlicher Multiplikator",
+            "tx-link": "TX-Link",
+            "total-bonus": "Gesamtbonus",
+            "paragraph": "Verwenden Sie THALES als Sicherheit für zusätzliche 10 % Bonus, erstellen Sie Kombiwetten für bis zu 100 % Bonus und achten Sie auf spezielle Aktionsspiele.",
+            "twitter-multiplier": "Twitter-Multiplikator",
+            "active-xp-bonus": "Aktiver XP-Bonus",
+            "no-results": "Keine Ergebnisse",
+            "loyalty-multiplier": "Treuemultiplikator",
+            "weeks-in-row": "Wochen in Folge",
+            "loyalty-boost": "Treueschub"
+        },
+        "leaderboard": {
+            "table": {
+                "total-volume": "Volle Lautstärke",
+                "rewards": "Belohnungsbetrag",
+                "total-xp": "Gesamtanzahl XP-Punkte",
+                "level": "Ebene",
+                "address": "Adresse",
+                "rank": "Rang"
+            }
+        },
+        "modal": {
+            "check-out": "Kasse<br/> Overdrop-Liga!",
+            "day-streak": "<bold>{{ days }}</bold><br/> Tagesserie!",
+            "gain-xp-label": "Gewinne XP, steige im Level auf, verdiene Belohnungen und farme den Airdrop!",
+            "congratulation": "Herzlichen Glückwunsch!",
+            "active-daily-streak": "Aktiver täglicher Streak-XP-Boost",
+            "you-are-rocking": "Du rockst es!",
+            "reached-level": "Sie haben LEVEL {{ level }} erreicht und {{ amount }} THALES-Gratiswette gewonnen!",
+            "unlocked-level": "Du hast LEVEL {{ level }} freigeschaltet!",
+            "dont-show-this": "Nicht mehr anzeigen",
+            "go-to-overdrop": "Gehe zu Overdrop"
+        }
     }
 }

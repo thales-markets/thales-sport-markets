@@ -1,46 +1,55 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import SPAAnchor from '../SPAAnchor';
 
 const Banner: React.FC = () => {
-    const { t } = useTranslation();
     return (
-        <SPAAnchor href={'https://www.overtimemarkets.xyz/promotions'}>
+        <SPAAnchor href={'https://v1.overtimemarkets.xyz/'}>
             <Container>
-                <Label>{t('banner.arb-distribution-message')}</Label>
+                <Label>
+                    <Trans
+                        i18nKey={'banner.v1-text'}
+                        components={{
+                            highlight: <HightlightLabel />,
+                        }}
+                    />
+                </Label>
             </Container>
         </SPAAnchor>
     );
 };
 
 const Container = styled(FlexDiv)`
-    position: relative;
     width: 100%;
     align-items: center;
     justify-content: center;
-    color: ${(props) => props.theme.button.textColor.primary};
-    background-color: ${(props) => props.theme.background.quaternary};
-    min-height: 32px;
+    color: ${(props) => props.theme.textColor.quinary};
+    background-color: ${(props) => props.theme.background.secondary};
+    min-height: 25px;
     z-index: 102;
     cursor: pointer;
     text-align: center;
-    @media screen and (max-width: 767px) {
-        display: none;
+    padding: 2px 5px;
+    @media (max-width: 767px) {
+        min-height: 20px;
     }
 `;
 
 const Label = styled.span`
-    color: ${(props) => props.theme.textColor.tertiary};
-    font-size: 18px;
-    padding: 7px 0px;
-    font-style: normal;
-    font-weight: 800;
-    text-transform: uppercase;
-    @media (max-width: 1260px) {
-        font-size: 16px;
+    font-size: 14px;
+    line-height: 16px;
+    font-weight: 500;
+    @media (max-width: 767px) {
+        font-size: 12px;
+        line-height: 14px;
     }
+`;
+
+const HightlightLabel = styled.span`
+    color: ${(props) => props.theme.link.textColor.primary};
+    font-weight: 700;
 `;
 
 export default Banner;

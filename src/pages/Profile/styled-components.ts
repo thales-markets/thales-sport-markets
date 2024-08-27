@@ -1,16 +1,11 @@
 import styled from 'styled-components';
-import { FlexDivColumn, FlexDivRow } from 'styles/common';
+import { FlexDivColumnCentered } from 'styles/common';
 
-export const Container = styled(FlexDivColumn)`
-    min-width: 780px;
-    @media (max-width: 768px) {
-        width: 100%;
-        min-width: auto;
-    }
-`;
-
-export const NavigationWrapper = styled(FlexDivRow)`
-    @media (max-width: 575px) {
-        flex-direction: column;
+export const Container = styled(FlexDivColumnCentered)`
+    width: 100%;
+    margin-top: 15px;
+    justify-content: start;
+    @media (max-width: 767px) {
+        margin-top: 20px;
     }
 `;

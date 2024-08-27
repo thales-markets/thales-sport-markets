@@ -138,19 +138,16 @@ table {
 
 @import './fonts.css';
 @import './icons.css';
-@import './exotic-icons.css';
 @import './homepage-icons.css';
-@import './league-icons.css';
-@import './thales-icons.css';
 @import './currencies.css';
-@import './social-icons.css';
+@import './thales-sidebar-icons.css';
 
 * {
     box-sizing: border-box;
-    font-family: 'Roboto' !important;
+    font-family: 'Inter' !important;
     font-style: normal;
     -webkit-tap-highlight-color: transparent;
-    scrollbar-color: #ffffff #5f6180;
+    scrollbar-color: #3c498a #1f274d;
     scrollbar-width: thin;
 }
 
@@ -159,12 +156,12 @@ table {
     width: 10px;
 }
 *::-webkit-scrollbar-track {
-    background: #5f6180;
+    background: #1f274d;
     border-radius: 8px;
 }
 *::-webkit-scrollbar-thumb {
     border-radius: 8px;
-    background: #ffffff;
+    background: #3c498a;
 }
 
 input::-webkit-outer-spin-button,
@@ -243,4 +240,8 @@ a {
 
 .green:after {
     border-right-color: #5fc694;
+}
+
+.invisible {
+    visibility: hidden;
 }

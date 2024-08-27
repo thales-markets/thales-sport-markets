@@ -1,6 +1,6 @@
 import Button from 'components/Button';
+import FreeBetFundModal from 'components/FreeBetFundModal';
 import LanguageSelector from 'components/LanguageSelector';
-import MintVoucher from 'components/MintVoucher';
 import SPAAnchor from 'components/SPAAnchor';
 import {
     NAV_MENU_FIRST_SECTION,
@@ -9,7 +9,7 @@ import {
     NAV_MENU_THIRD_SECTION,
 } from 'constants/ui';
 import { ProfileIconWidget } from 'layouts/DappLayout/DappHeader/components/ProfileItem/ProfileItem';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { useSelector } from 'react-redux';
@@ -20,7 +20,6 @@ import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
 import { getNetworkIconClassNameByNetworkId, getNetworkNameByNetworkId } from 'utils/network';
 import { buildHref } from 'utils/routes';
-import { useDisconnect } from 'wagmi';
 import {
     CloseIcon,
     FooterContainer,
@@ -43,15 +42,18 @@ type NavMenuProps = {
     skipOutsideClickOnElement?: React.RefObject<HTMLImageElement>;
 };
 
+const PARTICLE_WALLET = 'https://wallet.particle.network/';
+
 const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, skipOutsideClickOnElement }) => {
     const { t } = useTranslation();
     const location = useLocation();
     const theme: ThemeInterface = useTheme();
-    const { disconnect } = useDisconnect();
 
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
+
+    const [openFreeBetModal, setOpenFreeBetModal] = useState<boolean>(false);
 
     useEffect(() => {
         // Discord Widget bot: move with nav menu
@@ -155,26 +157,36 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                     })}
                 </ItemsContainer>
                 <FooterContainer>
-                    {!isConnectedViaParticle && <MintVoucher style={{ width: '100%' }} />}
+                    <Button
+                        borderColor={theme.button.borderColor.secondary}
+                        backgroundColor="transparent"
+                        textColor={theme.button.textColor.quaternary}
+                        width="100%"
+                        margin={isConnectedViaParticle ? '0 0 5px 0' : ''}
+                        onClick={() => setOpenFreeBetModal(!openFreeBetModal)}
+                    >
+                        {t('profile.send-free-bet')}
+                    </Button>
+                    {openFreeBetModal && <FreeBetFundModal onClose={() => setOpenFreeBetModal(false)} />}
                     {isConnectedViaParticle && (
                         <Button
                             backgroundColor={theme.button.background.quaternary}
                             textColor={theme.button.textColor.primary}
                             borderColor={theme.button.borderColor.secondary}
-                            width="140px"
                             fontWeight="400"
+                            width="100%"
                             additionalStyles={{
                                 borderRadius: '5px',
                                 fontSize: '14px',
                                 textTransform: 'capitalize',
+                                padding: '3px 20px',
                             }}
                             height="28px"
                             onClick={() => {
-                                disconnect();
-                                setNavMenuVisibility(false);
+                                window.open(PARTICLE_WALLET, '_blank');
                             }}
                         >
-                            {t('get-started.sign-out')}
+                            {t('markets.nav-menu.buttons.particle-wallet')}
                         </Button>
                     )}
                 </FooterContainer>

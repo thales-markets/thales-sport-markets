@@ -29,18 +29,18 @@ const defaultStyle = {
         right: 'auto',
         bottom: 'auto',
         padding: '25px',
-        backgroundColor: '#1A1C2B',
-        border: '1px solid #5F6180',
+        backgroundColor: '#151B36',
+        border: `1px solid #7983A9`,
         width: '720px',
         borderRadius: '15px',
         marginRight: '-48%',
         transform: 'translate(-50%, -50%)',
-        overflow: 'none',
+        overflow: 'auto',
         height: 'auto',
     },
     overlay: {
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        zIndex: 2,
+        zIndex: 2000,
     },
 };
 
@@ -149,7 +149,7 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                             <SocialButtonsWrapper>
                                 {SUPPORTED_PARTICAL_CONNECTORS.map((item, index) => {
                                     const connector = getSpecificConnectorFromConnectorsArray(connectors, item, true);
-                                    console.log(connector, connector?.ready, index);
+
                                     if (index > 4 && index < 7 && connector && connector?.ready) {
                                         return (
                                             <Button key={index} onClick={() => handleConnect(connector)}>
@@ -169,7 +169,7 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                                     openConnectModal?.();
                                 }}
                             >
-                                <WalletIcon className={'social-icon icon--wallet'} />
+                                <WalletIcon className={'icon-homepage icon--wallet'} />
                                 <WalletName>{t('common.wallet.connect-with-wallet')}</WalletName>
                             </WalletIconContainer>
                         </WalletIconsWrapper>
@@ -219,8 +219,8 @@ const CloseIcon = styled.i`
     margin-top: 1px;
     cursor: pointer;
     &:before {
-        font-family: ExoticIcons !important;
-        content: '\\004F';
+        font-family: OvertimeIconsV2 !important;
+        content: '\\0031';
         color: ${(props) => props.theme.textColor.primary};
     }
     @media (max-width: 575px) {
@@ -260,8 +260,7 @@ const FooterContainer = styled(FlexDivCentered)<{ disabled: boolean }>`
         margin: 0px 40px;
         margin-top: 28px;
     }
-
-    border-top: ${(props) => (props.disabled ? `1px ${props.theme.borderColor.quaternary} solid` : '')};
+    border-top: 1px solid ${(props) => (props.disabled ? props.theme.borderColor.quaternary : 'transparent')};
 `;
 const WalletIconsWrapper = styled(FlexDivCentered)`
     justify-content: center;
@@ -336,6 +335,8 @@ const SocialButtonsWrapper = styled(FlexDivRow)`
 const SocialIcon = styled.i`
     font-size: 22px;
     margin-right: 7px;
+    font-weight: 400;
+    text-transform: none;
 `;
 
 const Button = styled(FlexDivCentered)<{ oneButtoninRow?: boolean; active?: boolean }>`
@@ -358,9 +359,8 @@ const Button = styled(FlexDivCentered)<{ oneButtoninRow?: boolean; active?: bool
 `;
 
 const LoaderContainer = styled.div`
-    height: 180px !important;
-    width: 80px;
-    overflow: none;
+    position: relative;
+    min-height: 200px;
 `;
 
 export default ConnectWalletModal;

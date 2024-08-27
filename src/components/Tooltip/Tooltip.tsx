@@ -1,5 +1,5 @@
-import React, { CSSProperties } from 'react';
 import ReactTooltip from 'rc-tooltip';
+import React, { CSSProperties } from 'react';
 import styled from 'styled-components';
 import 'styles/tooltip.css';
 
@@ -49,16 +49,17 @@ const Tooltip: React.FC<TooltipProps> = ({
 };
 
 const InfoIcon = styled.i<{ iconFontSize?: number; marginLeft?: number; top?: number; color?: string }>`
-    font-size: ${(props) => props.iconFontSize || 17}px;
-    font-weight: normal;
+    font-size: ${(props) => props.iconFontSize || 18}px;
+    font-weight: 400;
     cursor: pointer;
     position: relative;
     margin-left: ${(props) => props.marginLeft || 0}px;
-    top: ${(props) => props.top || -1}px;
+    top: ${(props) => (props.top !== undefined ? props.top : -1)}px;
     color: ${(props) => props.color || 'white'};
+    text-transform: none;
     &:before {
-        font-family: ExoticIcons !important;
-        content: '\\0044';
+        font-family: OvertimeIconsV2 !important;
+        content: '\\011B';
     }
 `;
 

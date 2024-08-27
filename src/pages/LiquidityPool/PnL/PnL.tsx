@@ -1,45 +1,48 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { useSelector } from 'react-redux';
-import { RootState } from 'redux/rootReducer';
-import { getNetworkId } from 'redux/modules/wallet';
-import { useTranslation } from 'react-i18next';
-import { getIsAppReady } from 'redux/modules/app';
-import { LiquidityPoolPnls, LiquidityPoolType } from 'types/liquidityPool';
+import { LiquidityPoolPnlType } from 'enums/liquidityPool';
 import useLiquidityPoolPnlsQuery from 'queries/liquidityPool/useLiquidityPoolPnlsQuery';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import {
-    BarChart,
     Bar,
+    BarChart,
+    CartesianGrid,
+    Cell,
+    Line,
+    LineChart,
+    ResponsiveContainer,
+    Tooltip,
     XAxis,
     YAxis,
-    CartesianGrid,
-    Tooltip,
-    ResponsiveContainer,
-    Cell,
-    LineChart,
-    Line,
 } from 'recharts';
+import { getIsAppReady } from 'redux/modules/app';
+import { getNetworkId } from 'redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
+import styled, { useTheme } from 'styled-components';
 import { Colors, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { formatPercentageWithSign } from 'thales-utils';
-import { LiquidityPoolPnlType } from 'enums/liquidityPool';
+import { LiquidityPoolPnls } from 'types/liquidityPool';
 import { ThemeInterface } from 'types/ui';
-import { useTheme } from 'styled-components';
 
 type PnlProps = {
     lifetimePnl: number;
     type: LiquidityPoolPnlType;
-    liquidityPoolType: LiquidityPoolType;
+    liquidityPoolAddress: string;
 };
 
-const PnL: React.FC<PnlProps> = ({ lifetimePnl, type, liquidityPoolType }) => {
+const PnL: React.FC<PnlProps> = ({ lifetimePnl, type, liquidityPoolAddress }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const [liquidityPoolPnls, setLiquidityPoolPnls] = useState<LiquidityPoolPnls>([]);
 
-    const liquidityPoolPnlsQuery = useLiquidityPoolPnlsQuery(networkId, liquidityPoolType, {
-        enabled: isAppReady,
+    // TODO temp disable THALES PnL
+    const liquidityPoolPnlsQuery = useLiquidityPoolPnlsQuery(networkId, liquidityPoolAddress, {
+        enabled:
+            isAppReady &&
+            liquidityPoolAddress !== '0xE59206b08cC96Da0818522C75eE3Fd4EBB7c0A47' &&
+            liquidityPoolAddress !== '0x9733AB157f5A89f0AD7460d08F869956aE2018dA',
     });
 
     useEffect(() => {
@@ -95,22 +98,25 @@ const PnL: React.FC<PnlProps> = ({ lifetimePnl, type, liquidityPoolType }) => {
         <Container>
             <Header noData={noData}>
                 <Title>{t(`liquidity-pool.pnl.${type}.title`)}</Title>
-                {type === LiquidityPoolPnlType.CUMULATIVE_PNL && (
-                    <LifetimePnlContainer>
-                        <LifetimePnlLabel>{t('liquidity-pool.pnl.lifetime-pnl')}:</LifetimePnlLabel>
-                        <LifetimePnl
-                            color={
-                                lifetimePnl === 0
-                                    ? theme.status.open
-                                    : lifetimePnl > 0
-                                    ? theme.status.win
-                                    : theme.status.loss
-                            }
-                        >
-                            {formatPercentageWithSign(lifetimePnl)}
-                        </LifetimePnl>
-                    </LifetimePnlContainer>
-                )}
+                {type === LiquidityPoolPnlType.CUMULATIVE_PNL &&
+                    // TODO temp disable THALES PnL
+                    liquidityPoolAddress !== '0xE59206b08cC96Da0818522C75eE3Fd4EBB7c0A47' &&
+                    liquidityPoolAddress !== '0x9733AB157f5A89f0AD7460d08F869956aE2018dA' && (
+                        <LifetimePnlContainer>
+                            <LifetimePnlLabel>{t('liquidity-pool.pnl.lifetime-pnl')}:</LifetimePnlLabel>
+                            <LifetimePnl
+                                color={
+                                    lifetimePnl === 0
+                                        ? theme.status.open
+                                        : lifetimePnl > 0
+                                        ? theme.status.win
+                                        : theme.status.loss
+                                }
+                            >
+                                {formatPercentageWithSign(lifetimePnl)}
+                            </LifetimePnl>
+                        </LifetimePnlContainer>
+                    )}
             </Header>
             {!noData ? (
                 <ChartContainer>

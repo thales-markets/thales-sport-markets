@@ -4,6 +4,7 @@ import MetaData from 'components/MetaData';
 import { generalConfig } from 'config/general';
 import { Theme } from 'enums/ui';
 import useWidgetBotScript from 'hooks/useWidgetBotScript';
+import ModalWrapper from 'pages/Overdrop/components/ModalWrapper';
 import queryString from 'query-string';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,8 +19,7 @@ import { FlexDivColumn } from 'styles/common';
 import { isAndroid, isMetamask } from 'thales-utils';
 import { isMobile } from 'utils/device';
 import { setReferralId } from 'utils/referral';
-import BannerV2 from '../../components/BannerV2';
-import V2Modal from '../../components/V2Modal';
+import Banner from '../../components/Banner';
 import DappFooter from './DappFooter';
 import DappHeader from './DappHeader';
 
@@ -74,8 +74,8 @@ const DappLayout: React.FC = ({ children }) => {
         <>
             {isAppReady ? (
                 <Background>
-                    <BannerV2 />
-                    {/* <Banner /> */}
+                    <ModalWrapper />
+                    <Banner />
                     <Wrapper>
                         <MetaData />
                         <DappHeader />
@@ -83,7 +83,6 @@ const DappLayout: React.FC = ({ children }) => {
                         <DappFooter />
                     </Wrapper>
                     <ToastContainer theme={'colored'} />
-                    <V2Modal />
                 </Background>
             ) : (
                 <Loader />
@@ -104,15 +103,15 @@ const Wrapper = styled(FlexDivColumn)`
     width: 99%;
     margin-left: auto;
     margin-right: auto;
-    padding: 7px 0 20px 0;
-    max-width: 1350px;
+    padding: 10px 15px;
+    max-width: 1512px;
     min-height: 100vh;
     justify-content: space-between;
-    @media (max-width: 1260px) {
-        padding: 10px 20px;
+    @media (max-width: 1499px) {
+        padding: 10px 10px;
     }
     @media (max-width: 767px) {
-        padding: 0px 10px;
+        padding: 0px 3px;
     }
 `;
 

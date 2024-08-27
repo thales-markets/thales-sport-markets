@@ -1,14 +1,24 @@
-import { USD_SIGN } from 'constants/currency';
-import { ALTCOIN_CONVERSION_BUFFER_PERCENTAGE } from 'constants/markets';
+import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
+import {
+    ALTCOIN_CONVERSION_BUFFER_PERCENTAGE,
+    SUSD_CONVERSION_BUFFER_PERCENTAGE,
+    THALES_CONTRACT_RATE_KEY,
+} from 'constants/markets';
 import { Rates } from 'queries/rates/useExchangeRatesQuery';
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
-import { COLLATERAL_DECIMALS, formatCurrencyWithKey } from 'thales-utils';
-import { getCollateral, isStableCurrency } from 'utils/collaterals';
+import {
+    COLLATERAL_DECIMALS,
+    DEFAULT_CURRENCY_DECIMALS,
+    LONG_CURRENCY_DECIMALS,
+    ceilNumberToDecimals,
+    formatCurrencyWithKey,
+} from 'thales-utils';
+import { getCollateral, getDefaultCollateral, isStableCurrency } from 'utils/collaterals';
 
 const AMOUNTS = [3, 10, 20, 50, 100];
 
@@ -17,6 +27,7 @@ type SuggestedAmountProps = {
     changeAmount: (value: number | string) => void;
     exchangeRates: Rates | null;
     insertedAmount: number | string;
+    minAmount?: number;
 };
 
 const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
@@ -24,31 +35,45 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
     changeAmount,
     exchangeRates,
     insertedAmount,
+    minAmount,
 }) => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
-    const collateral = getCollateral(networkId, collateralIndex);
+    const collateral = useMemo(() => getCollateral(networkId, collateralIndex), [networkId, collateralIndex]);
+    const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
+    const isStableCollateral = isStableCurrency(collateral);
+    const decimals = isStableCollateral ? DEFAULT_CURRENCY_DECIMALS : LONG_CURRENCY_DECIMALS;
+    const isThales = collateral === CRYPTO_CURRENCY_MAP.THALES;
 
     const convertFromStable = useCallback(
         (value: number) => {
-            const rate = exchangeRates?.[collateral];
-            if (isStableCurrency(collateral)) {
+            const rate = exchangeRates?.[isThales ? THALES_CONTRACT_RATE_KEY : collateral];
+
+            if (collateral == defaultCollateral) {
                 return value;
             } else {
-                const priceFeedBuffer = 1 - ALTCOIN_CONVERSION_BUFFER_PERCENTAGE;
+                const priceFeedBuffer =
+                    1 -
+                    (collateral === CRYPTO_CURRENCY_MAP.sUSD
+                        ? SUSD_CONVERSION_BUFFER_PERCENTAGE
+                        : ALTCOIN_CONVERSION_BUFFER_PERCENTAGE);
                 return rate
-                    ? Math.ceil((value / (rate * priceFeedBuffer)) * 10 ** COLLATERAL_DECIMALS[collateral]) /
-                          10 ** COLLATERAL_DECIMALS[collateral]
+                    ? ceilNumberToDecimals(
+                          Math.ceil((value / (rate * priceFeedBuffer)) * 10 ** COLLATERAL_DECIMALS[collateral]) /
+                              10 ** COLLATERAL_DECIMALS[collateral],
+                          decimals
+                      )
                     : 0;
             }
         },
-        [collateral, exchangeRates]
+        [collateral, decimals, defaultCollateral, exchangeRates, isThales]
     );
 
     return (
         <Container>
             {AMOUNTS.map((amount, index) => {
-                const buyAmount = convertFromStable(amount);
+                const convertedAmount = convertFromStable(amount);
+                const buyAmount = minAmount && index === 0 && minAmount > convertedAmount ? minAmount : convertedAmount;
 
                 return (
                     <AmountContainer
@@ -71,24 +96,22 @@ const Container = styled(FlexDiv)`
     flex-direction: row;
     justify-content: space-between;
     margin: 8px 0px;
+    gap: 13px;
 `;
 
 const AmountContainer = styled(FlexDiv)<{ active?: boolean }>`
     align-items: center;
     justify-content: center;
-    margin: 0 2px;
-    font-size: 14px;
-    font-weight: 700;
+    font-size: 13px;
+    font-weight: 600;
     text-transform: capitalize;
     border-radius: 5px;
-    color: ${(props) =>
-        props?.active ? props.theme.button.textColor.quinary : props.theme.button.textColor.quaternary};
+    color: ${(props) => (props.active ? props.theme.button.textColor.quinary : props.theme.button.textColor.secondary)};
     background-color: ${(props) =>
-        props?.active ? props.theme.button.background.quaternary : props.theme.button.background.secondary};
-    border: ${(props) => `1px ${props.theme.button.borderColor.secondary} solid`};
+        props.active ? props.theme.button.background.quaternary : props.theme.button.background.senary};
     cursor: pointer;
-    padding: 3px 0px;
-    width: 20%;
+    height: 25px;
+    width: 100%;
 `;
 
 export default SuggestedAmount;

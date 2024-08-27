@@ -1,11 +1,10 @@
-import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
+import { useQuery, UseQueryOptions } from 'react-query';
 import networkConnector from 'utils/networkConnector';
 
 type AMMContractsPausedData = {
-    parlayAMM: boolean;
-    singleAMM: boolean;
+    sportsAMM: boolean;
 };
 
 const useAMMContractsPausedQuery = (networkId: Network, options?: UseQueryOptions<AMMContractsPausedData>) => {
@@ -13,29 +12,23 @@ const useAMMContractsPausedQuery = (networkId: Network, options?: UseQueryOption
         QUERY_KEYS.CheckPausedAMM(networkId),
         async () => {
             try {
-                const { parlayMarketsAMMContract, sportsAMMContract } = networkConnector;
+                const { sportsAMMV2Contract } = networkConnector;
 
-                if (parlayMarketsAMMContract && sportsAMMContract) {
-                    const [isSportsAMMPaused, isParlayAMMPaused] = await Promise.all([
-                        sportsAMMContract?.paused(),
-                        parlayMarketsAMMContract?.paused(),
-                    ]);
+                if (sportsAMMV2Contract) {
+                    const [isSportsAMMPaused] = await Promise.all([sportsAMMV2Contract.paused()]);
 
                     return {
-                        parlayAMM: isParlayAMMPaused,
-                        singleAMM: isSportsAMMPaused,
+                        sportsAMM: isSportsAMMPaused,
                     };
                 }
 
                 return {
-                    parlayAMM: false,
-                    singleAMM: false,
+                    sportsAMM: false,
                 };
             } catch (e) {
                 console.log(e);
                 return {
-                    parlayAMM: false,
-                    singleAMM: false,
+                    sportsAMM: false,
                 };
             }
         },

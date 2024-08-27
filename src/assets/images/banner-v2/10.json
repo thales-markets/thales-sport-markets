@@ -1,14 +1,14 @@
 [
     {
-        "image": "side-banner-oly.png",
-        "url": "https://dune.com/leifu/overtime-v2-olympic-games-paris-2024"
+        "image": "overdrop-small-banner.png",
+        "url": "https://overtimemarkets.xyz/overdrop"
     },
     {
         "image": "elections.png",
-        "url": "https://v2.overtimemarkets.xyz/?sport=Politics&status=OpenMarkets&showActive=true&tag=US+Election+2024"
+        "url": "https://overtimemarkets.xyz/?sport=Politics&status=OpenMarkets&showActive=true&tag=US+Election+2024"
     },
     {
         "image": "v2.jpg",
-        "url": "https://v2.overtimemarkets.xyz/"
+        "url": ""
     }
 ]

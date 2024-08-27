@@ -2,10 +2,10 @@ import { Network } from 'enums/network';
 
 const erc20Contract = {
     addresses: {
-        [Network.OptimismMainnet]: '0x8c6f28f2F1A3C87F0f938b96d27520d9751ec8d9',
-        [Network.OptimismGoerli]: '0xE1ceaa829525a08C1d39A5CEBe4b42aF58d77198',
-        [Network.Arbitrum]: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
+        [Network.OptimismMainnet]: '0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85',
+        [Network.Arbitrum]: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831',
         [Network.Base]: '0xd9aAEc86B65D86f6A7B5B1b0c42FFA531710b6CA',
+        [Network.OptimismSepolia]: '0xff6535c1F971245435429A915aB9eB1713beC1C1',
     },
     abi: [
         { inputs: [], stateMutability: 'nonpayable', type: 'constructor' },

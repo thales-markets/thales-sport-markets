@@ -10,7 +10,6 @@ import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getIsConnectedViaParticle, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
-import { FlexDiv } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
 import { buildHref } from 'utils/routes';
 
@@ -67,20 +66,26 @@ const TopUp: React.FC = () => {
                     <>
                         {showLowBalanceAlert && (
                             <TopUpButtonContainer>
-                                <SPAAnchor style={{ marginRight: '5px' }} href={buildHref(ROUTES.Deposit)}>
+                                <SPAAnchor
+                                    style={{ marginRight: '5px', display: 'flex', alignItems: 'center' }}
+                                    href={buildHref(ROUTES.Deposit)}
+                                >
                                     <TopUpButton>{t('my-portfolio.top-up-eth')}</TopUpButton>
                                 </SPAAnchor>
                             </TopUpButtonContainer>
                         )}
                         {!showLowBalanceAlert && (
-                            <SPAAnchor style={{ marginRight: '15px' }} href={buildHref(ROUTES.Deposit)}>
+                            <SPAAnchor
+                                style={{ marginRight: '5px', display: 'flex', alignItems: 'center' }}
+                                href={buildHref(ROUTES.Deposit)}
+                            >
                                 <Button
                                     backgroundColor={theme.button.background.quaternary}
                                     textColor={theme.button.textColor.primary}
                                     borderColor={theme.button.borderColor.secondary}
-                                    width="150px"
+                                    width="120px"
                                     fontWeight="400"
-                                    additionalStyles={{ borderRadius: '15.5px', fontWeight: '800', fontSize: '14px' }}
+                                    additionalStyles={{ borderRadius: '15.5px', fontWeight: '600', fontSize: '14px' }}
                                     height="28px"
                                 >
                                     {t('my-portfolio.deposit')}
@@ -96,7 +101,10 @@ const TopUp: React.FC = () => {
                             </SPAAnchor>
                         )}
                         {!showLowBalanceAlert && (
-                            <SPAAnchor style={{ width: '100%' }} href={buildHref(ROUTES.Deposit)}>
+                            <SPAAnchor
+                                style={{ width: '100%', display: 'flex', alignItems: 'center' }}
+                                href={buildHref(ROUTES.Deposit)}
+                            >
                                 <Button
                                     backgroundColor={theme.button.background.quaternary}
                                     textColor={theme.button.textColor.primary}
@@ -106,7 +114,7 @@ const TopUp: React.FC = () => {
                                     additionalStyles={{
                                         maxWidth: 400,
                                         borderRadius: '15.5px',
-                                        fontWeight: '800',
+                                        fontWeight: '600',
                                         fontSize: '14px',
                                     }}
                                     height="28px"
@@ -121,7 +129,8 @@ const TopUp: React.FC = () => {
     );
 };
 
-const TopUpButtonContainer = styled(FlexDiv)`
+const TopUpButtonContainer = styled.span`
+    display: flex;
     align-items: center;
     justify-content: center;
 `;
@@ -131,15 +140,13 @@ const TopUpButton = styled.button`
     color: ${(props) => props.theme.error.textColor.primary};
     border: 1px solid ${(props) => props.theme.error.borderColor.primary};
     border-radius: 15px;
-    padding: 6px 30px;
-    min-width: 140px;
+    min-width: 120px;
     width: 100%;
     max-width: 400px;
-    font-family: Roboto;
     font-size: 14px;
-    font-style: normal;
-    font-weight: 800;
-    line-height: normal;
+    font-weight: 600;
+    line-height: 14px;
+    height: 28px;
     filter: drop-shadow(0px 0px 14px rgba(191, 73, 81, 0.7));
     animation: pulse 2s infinite;
     cursor: pointer;

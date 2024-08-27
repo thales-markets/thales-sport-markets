@@ -1,1 +1,1 @@
-export { default } from './UserVaults';
+export { default } from './UserLiquidityPools';

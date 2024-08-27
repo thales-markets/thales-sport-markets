@@ -94,7 +94,6 @@ const Wrapper = styled(FlexDiv)`
     width: 100%;
     background-color: ${(props) => props.theme.oddsContainerBackground.secondary};
     padding: 20px 27px;
-    margin-top: 10px;
 `;
 
 const Divider = styled.hr`
@@ -103,7 +102,7 @@ const Divider = styled.hr`
 `;
 
 const Heading = styled.h2`
-    font-weight: 700;
+    font-weight: 600;
     font-size: 12px;
     text-transform: capitalize;
     letter-spacing: 3.5px;
@@ -111,7 +110,7 @@ const Heading = styled.h2`
 
 const BalanceAmount = styled.span`
     font-size: 32px;
-    font-weight: 700;
+    font-weight: 600;
     line-height: 33.54px;
     margin: 5px 0px;
 `;
@@ -143,7 +142,7 @@ const TokenIcon = styled.i`
 
 const TokenBalance = styled(FlexDiv)`
     font-size: 12px;
-    font-weight: 700;
+    font-weight: 600;
     width: 25%;
     text-align: right;
     justify-content: flex-end;
@@ -156,7 +155,7 @@ const Deposit = styled.span`
     color: ${(props) => props.theme.textColor.quaternary};
     font-size: 12px;
     text-transform: uppercase;
-    font-weight: 700;
+    font-weight: 600;
     cursor: pointer;
     @media (max-width: 575px) {
         font-size: 10px;

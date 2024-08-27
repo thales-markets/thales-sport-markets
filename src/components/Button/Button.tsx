@@ -33,6 +33,7 @@ const Button: React.FC<ButtonProps> = ({
     fontWeight,
     lineHeight,
     children,
+    ...rest
 }) => {
     return (
         <Wrapper
@@ -49,6 +50,7 @@ const Button: React.FC<ButtonProps> = ({
             fontWeight={fontWeight}
             lineHeight={lineHeight}
             style={additionalStyles}
+            {...rest}
         >
             {children}
         </Wrapper>
@@ -76,7 +78,7 @@ const Wrapper = styled.button<{
     border: 1px solid ${(props) => props.borderColor || props.theme.button.borderColor.primary};
     border-radius: 5px;
     ${(props) => (props.style?.fontFamily ? `font-family: ${props.style?.fontFamily};` : '')}
-    font-weight: ${(props) => props.fontWeight || '700'};
+    font-weight: ${(props) => props.fontWeight || '600'};
     font-size: ${(props) => props.fontSize || '15px'};
     line-height: ${(props) => props.lineHeight || 'initial'};
     cursor: pointer;

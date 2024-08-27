@@ -2,7 +2,9 @@ import SimpleLoader from 'components/SimpleLoader';
 import { SortDirection } from 'enums/markets';
 import React, { CSSProperties, DependencyList, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { Cell, Column, Row, usePagination, useSortBy, useTable } from 'react-table';
+import { getIsMobile } from 'redux/modules/app';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivCentered } from 'styles/common';
 
@@ -34,9 +36,8 @@ type TableProps = {
     rowsPerPage?: number;
     tableHeight?: string;
     expandedRow?: (row: Row<any>) => JSX.Element;
-    hideExpandedRow?: (row: Row<any>) => boolean;
     stickyRow?: JSX.Element;
-    additionalCell?: (row: Row<any>) => JSX.Element;
+    mobileCards?: boolean;
 };
 
 const Table: React.FC<TableProps> = ({
@@ -57,12 +58,14 @@ const Table: React.FC<TableProps> = ({
     currentPage,
     rowsPerPage,
     expandedRow,
-    hideExpandedRow,
     stickyRow,
     tableHeight,
-    additionalCell,
+    mobileCards,
 }) => {
     const { t } = useTranslation();
+
+    const isMobile = useSelector(getIsMobile);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const memoizedColumns = useMemo(() => columns, [...columnsDeps, t]);
     const {
@@ -82,6 +85,7 @@ const Table: React.FC<TableProps> = ({
             ...options,
             initialState,
             autoResetSortBy: false,
+            autoResetPage: false,
         },
         useSortBy,
         usePagination
@@ -106,55 +110,60 @@ const Table: React.FC<TableProps> = ({
 
     return (
         <>
-            {headerGroups.map((headerGroup, headerGroupIndex: any) => (
-                <TableRowHead style={tableRowHeadStyles} {...headerGroup.getHeaderGroupProps()} key={headerGroupIndex}>
-                    {headerGroup.headers.map((column: any, headerIndex: any) => (
-                        <TableCellHead
-                            {...column.getHeaderProps(column.sortable ? column.getSortByToggleProps() : undefined)}
-                            cssProp={column.headStyle}
-                            key={headerIndex}
-                            style={
-                                column.sortable
-                                    ? { cursor: 'pointer', ...tableHeadCellStyles }
-                                    : { ...tableHeadCellStyles }
-                            }
-                            width={column.width}
-                            id={column.id}
-                        >
-                            <HeaderTitle cssProp={column.headTitleStyle}>{column.render('Header')}</HeaderTitle>
-                            {column.sortable && (
-                                <SortIconContainer>
-                                    {column.isSorted ? (
-                                        column.isSortedDesc ? (
-                                            <SortIcon selected sortDirection={SortDirection.DESC} />
+            {!(isMobile && mobileCards) &&
+                headerGroups.map((headerGroup, headerGroupIndex: any) => (
+                    <TableRowHead
+                        style={tableRowHeadStyles}
+                        {...headerGroup.getHeaderGroupProps()}
+                        key={headerGroupIndex}
+                    >
+                        {headerGroup.headers.map((column: any, headerIndex: any) => (
+                            <TableCellHead
+                                {...column.getHeaderProps(column.sortable ? column.getSortByToggleProps() : undefined)}
+                                cssProp={column.headStyle}
+                                key={headerIndex}
+                                style={
+                                    column.sortable
+                                        ? { cursor: 'pointer', ...tableHeadCellStyles }
+                                        : { ...tableHeadCellStyles }
+                                }
+                                width={column.width}
+                                id={column.id}
+                            >
+                                <HeaderTitle cssProp={column.headTitleStyle}>{column.render('Header')}</HeaderTitle>
+                                {column.sortable && (
+                                    <SortIconContainer>
+                                        {column.isSorted ? (
+                                            column.isSortedDesc ? (
+                                                <SortIcon selected sortDirection={SortDirection.DESC} />
+                                            ) : (
+                                                <SortIcon selected sortDirection={SortDirection.ASC} />
+                                            )
                                         ) : (
-                                            <SortIcon selected sortDirection={SortDirection.ASC} />
-                                        )
-                                    ) : (
-                                        <SortIcon selected={false} sortDirection={SortDirection.NONE} />
-                                    )}
-                                </SortIconContainer>
-                            )}
-                        </TableCellHead>
-                    ))}
-                </TableRowHead>
-            ))}
+                                            <SortIcon selected={false} sortDirection={SortDirection.NONE} />
+                                        )}
+                                    </SortIconContainer>
+                                )}
+                            </TableCellHead>
+                        ))}
+                    </TableRowHead>
+                ))}
             <ReactTable height={tableHeight} {...getTableProps()}>
                 {isLoading ? (
                     <LoaderContainer>
                         <SimpleLoader />
                     </LoaderContainer>
-                ) : noResultsMessage != null && !data?.length ? (
+                ) : noResultsMessage != null && !data?.length && !stickyRow ? (
                     <NoResultContainer>{noResultsMessage}</NoResultContainer>
                 ) : (
-                    <TableBody {...getTableBodyProps()}>
+                    <TableBody height={tableHeight} {...getTableBodyProps()}>
                         {stickyRow ?? <></>}
                         {(currentPage !== undefined ? page : rows).map((row, rowIndex: any) => {
                             prepareRow(row);
 
                             return (
                                 <ExpandableRow key={rowIndex}>
-                                    {expandedRow && !(hideExpandedRow && hideExpandedRow(row)) ? (
+                                    {expandedRow ? (
                                         <ExpandableRowReact
                                             row={row}
                                             tableRowCellStyles={tableRowCellStyles}
@@ -165,13 +174,30 @@ const Table: React.FC<TableProps> = ({
                                         </ExpandableRowReact>
                                     ) : (
                                         <TableRow
+                                            isCard={isMobile && mobileCards}
                                             style={tableRowStyles}
                                             {...row.getRowProps()}
                                             cursorPointer={!!onTableRowClick}
                                             onClick={onTableRowClick ? () => onTableRowClick(row) : undefined}
                                         >
                                             {row.cells.map((cell, cellIndex: any) => {
-                                                return (
+                                                return isMobile && mobileCards ? (
+                                                    <TableRowMobile key={`mrm${rowIndex}${cellIndex}`}>
+                                                        <TableCell
+                                                            id={cell.column.id + 'Header'}
+                                                            {...cell.getCellProps()}
+                                                        >
+                                                            {cell.render('Header')}
+                                                        </TableCell>
+                                                        <TableCell
+                                                            isCard={mobileCards}
+                                                            id={cell.column.id}
+                                                            {...cell.getCellProps()}
+                                                        >
+                                                            {cell.render('Cell')}
+                                                        </TableCell>
+                                                    </TableRowMobile>
+                                                ) : (
                                                     <TableCell
                                                         style={tableRowCellStyles}
                                                         {...cell.getCellProps()}
@@ -189,7 +215,6 @@ const Table: React.FC<TableProps> = ({
                                                     </TableCell>
                                                 );
                                             })}
-                                            {additionalCell && additionalCell(row)}
                                         </TableRow>
                                     )}
                                 </ExpandableRow>
@@ -213,7 +238,7 @@ const ExpandableRowReact: React.FC<{
     return (
         <>
             <TableRow
-                style={{ ...tableRowStyles, borderBottom: hidden ? '' : 'none' }}
+                style={{ ...tableRowStyles, borderBottom: hidden ? '' : '2px dashed transparent' }}
                 {...row.getRowProps()}
                 cursorPointer={true}
                 onClick={setHidden.bind(this, !hidden)}
@@ -245,32 +270,48 @@ const ReactTable = styled.div<{ height?: string }>`
     display: flex;
 `;
 
-const TableBody = styled.div`
+const TableBody = styled.div<{ height?: string }>`
     display: flex;
     overflow: auto;
     flex-direction: column;
     width: 100%;
+    padding-right: ${(props) => (props.height ? '10px' : '0')};
+    @media (max-width: 767px) {
+        padding-right: ${(props) => (props.height ? '5px' : '0')};
+    }
 `;
 
-const TableRow = styled(FlexDiv)<{ cursorPointer?: boolean }>`
+export const TableRow = styled(FlexDiv)<{ cursorPointer?: boolean; isCard?: boolean }>`
+    flex-direction: ${(props) => (props.isCard ? 'column' : '')};
     cursor: ${(props) => (props.cursorPointer ? 'pointer' : 'default')};
     min-height: 38px;
     font-weight: 600;
-    font-size: 14px;
+    font-size: 12px;
     line-height: 100%;
     letter-spacing: 0.25px;
-    border-bottom: 2px dotted ${(props) => props.theme.borderColor.primary};
+    border-bottom: 2px dashed ${(props) => !props.isCard && props.theme.borderColor.senary};
+    ${(props) =>
+        props.isCard &&
+        `border: 1px solid #7983a9; border-radius: 8px; & > div:last-child {justify-content: flex-end;}`};
 `;
 
 const TableRowHead = styled(TableRow)`
-    min-height: 40px;
+    min-height: 31px;
+    border-radius: 5px;
+    background-color: ${(props) => props.theme.background.secondary};
+    border-bottom: none;
 `;
 
-const TableCell = styled(FlexDivCentered)<{ width?: number | string; id: string; minWidth?: number }>`
+export const TableCell = styled(FlexDivCentered)<{
+    width?: number | string;
+    id: string;
+    minWidth?: number;
+    isCard?: boolean;
+}>`
     flex: 1;
     max-width: ${(props) => (props.width ? props.width : 'initial')};
     min-width: ${(props) => (props.minWidth ? `${props.minWidth}px` : '0px')};
-    justify-content: ${(props) => CellAlignment[props.id] || 'left'};
+    justify-content: ${(props) => (props.isCard ? 'right' : CellAlignment[props.id] || 'left')};
     &:first-child {
         padding-left: 18px;
     }
@@ -287,7 +328,7 @@ const TableCell = styled(FlexDivCentered)<{ width?: number | string; id: string;
             padding-right: 6px;
         }
     }
-    @media (max-width: 512px) {
+    @media (max-width: 575px) {
         font-size: 10px;
         &:first-child {
             padding-left: 6px;
@@ -300,16 +341,16 @@ const TableCell = styled(FlexDivCentered)<{ width?: number | string; id: string;
 
 const TableCellHead = styled(TableCell)<{ cssProp?: CSSPropertiesWithMedia }>`
     font-weight: 600;
-    font-size: 15px;
+    font-size: 11px;
     letter-spacing: 0.5px;
     @media (max-width: 767px) {
-        font-size: 13px;
+        font-size: 10px;
     }
     @media (max-width: ${(props) => (props.cssProp ? props.cssProp.mediaMaxWidth : '600px')}) {
         ${(props) => (props.cssProp ? { ...props.cssProp.cssProperties } : '')}
     }
-    @media (max-width: 512px) {
-        font-size: 10px;
+    @media (max-width: 575px) {
+        font-size: 9px;
     }
     user-select: none;
 `;
@@ -342,20 +383,22 @@ const NoResultContainer = styled(TableRow)`
 `;
 
 const SortIcon = styled.i<{ selected: boolean; sortDirection: SortDirection }>`
-    font-size: ${(props) => (props.selected && props.sortDirection !== SortDirection.NONE ? 22 : 19)}px;
+    text-transform: none;
+    font-weight: ${(props) => (props.selected && props.sortDirection !== SortDirection.NONE ? 400 : 600)};
+    font-size: 13px;
     &:before {
-        font-family: ExoticIcons !important;
+        font-family: OvertimeIconsV2 !important;
         content: ${(props) =>
             props.selected
                 ? props.sortDirection === SortDirection.ASC
-                    ? "'\\0046'"
+                    ? "'\\00EA'"
                     : props.sortDirection === SortDirection.DESC
-                    ? "'\\0047'"
-                    : "'\\0045'"
-                : "'\\0045'"};
+                    ? "'\\00D5'"
+                    : "'\\00D6'"
+                : "'\\00D6'"};
     }
-    @media (max-width: 512px) {
-        font-size: ${(props) => (props.selected && props.sortDirection !== SortDirection.NONE ? 17 : 14)}px;
+    @media (max-width: 575px) {
+        font-size: 10px;
     }
 `;
 
@@ -374,7 +417,27 @@ const ArrowIcon = styled.i`
     font-size: 9px;
     display: flex;
     align-items: center;
-    margin-right: 6px;
+    margin-right: 5px;
+`;
+
+export const TableRowMobile = styled.div<{ isSticky?: boolean }>`
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    padding: 0 10px;
+
+    ${TableCell} {
+        height: auto;
+        margin: 6px 0px;
+        width: 100%;
+        :first-child {
+            justify-content: flex-start;
+            color: ${(props) =>
+                props.isSticky ? props.theme.overdrop.textColor.tertiary : props.theme.overdrop.textColor.tertiary};
+            text-transform: uppercase;
+        }
+    }
 `;
 
 export default Table;

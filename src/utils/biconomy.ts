@@ -9,15 +9,14 @@ import { HOSTED_WALLETS_ICONS, HOSTED_WALLETS_LABELS, PARTICAL_LOGINS_CLASSNAMES
 import { HostedWallets, ParticalTypes } from 'enums/wallet';
 import { Contract, ethers } from 'ethers';
 import { defaultAbiCoder } from 'ethers/lib/utils.js';
+import { SupportedNetwork } from 'types/network';
 import { Connector } from 'wagmi';
 import biconomyConnector from './biconomyWallet';
 import { getCollaterals } from './collaterals';
-import parlayMarketsAMMContract from './contracts/parlayMarketsAMMContract';
 import erc20Contract from './contracts/sUSDContract';
-import sportsAMMContract from './contracts/sportsAMMContract';
+import sportsAMMV2Contract from './contracts/sportsAMMV2Contract';
 import { checkAllowance, getNetworkNameByNetworkId } from './network';
 import networkConnector from './networkConnector';
-import { SupportedNetwork } from 'types/network';
 
 // const ERC20SVM = '0x000000D50C68705bd6897B2d17c7de32FB519fDA'; // session validation module for erc20 transfers
 const OVERTIMEVM = process.env.REACT_APP_OVERTIME_VALIDATION_MODULE; // overtime session validation module on Optimism
@@ -232,7 +231,7 @@ export const createSession = async (scwAddress: string, collateralAddress: strin
                 [
                     sessionKeyEOA,
                     collateralAddress, // erc20 token address
-                    sportsAMMContract.addresses[networkId], // receiver address, SportsAMM and ParlayAMM
+                    sportsAMMV2Contract.addresses[networkId], // receiver address, SportsAMM and ParlayAMM
                     ethers.utils.parseUnits('50'.toString(), 6).toHexString(), // 50 usdc amount
                 ]
             );
@@ -290,18 +289,12 @@ export const createSession = async (scwAddress: string, collateralAddress: strin
                 biconomyConnector.wallet?.provider
             );
 
-            const [sportsAMMAllowance, parlayAMMAllowance] = await Promise.all([
+            const [sportsAMMAllowance] = await Promise.all([
                 checkAllowance(
                     ethers.constants.MaxUint256,
                     collateralContract,
                     scwAddress,
-                    sportsAMMContract.addresses[networkId]
-                ),
-                checkAllowance(
-                    ethers.constants.MaxUint256,
-                    collateralContract,
-                    scwAddress,
-                    parlayMarketsAMMContract.addresses[networkId]
+                    sportsAMMV2Contract.addresses[networkId]
                 ),
             ]);
             const { signer } = networkConnector;
@@ -310,7 +303,7 @@ export const createSession = async (scwAddress: string, collateralAddress: strin
                 const collateralContractWithSigner = collateralContract.connect(signer);
                 if (!sportsAMMAllowance) {
                     const populatedTx = await collateralContractWithSigner.populateTransaction.approve(
-                        sportsAMMContract.addresses[networkId],
+                        sportsAMMV2Contract.addresses[networkId],
                         ethers.constants.MaxUint256
                     );
                     const transaction = {
@@ -319,17 +312,17 @@ export const createSession = async (scwAddress: string, collateralAddress: strin
                     };
                     transactionArray.push(transaction);
                 }
-                if (!parlayAMMAllowance) {
-                    const populatedTx = await collateralContractWithSigner.populateTransaction.approve(
-                        parlayMarketsAMMContract.addresses[networkId],
-                        ethers.constants.MaxUint256
-                    );
-                    const transaction = {
-                        to: collateralContractWithSigner.address,
-                        data: populatedTx.data,
-                    };
-                    transactionArray.push(transaction);
-                }
+                // if (!parlayAMMAllowance) {
+                //     const populatedTx = await collateralContractWithSigner.populateTransaction.approve(
+                //         parlayMarketsAMMContract.addresses[networkId],
+                //         ethers.constants.MaxUint256
+                //     );
+                //     const transaction = {
+                //         to: collateralContractWithSigner.address,
+                //         data: populatedTx.data,
+                //     };
+                //     transactionArray.push(transaction);
+                // }
             }
 
             const partialUserOp = await biconomySmartAccount.buildUserOp(transactionArray);

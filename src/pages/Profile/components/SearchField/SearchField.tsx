@@ -29,24 +29,24 @@ const SearchField: React.FC<SearchProps> = ({ text, customPlaceholder, handleCha
 
 const Wrapper = styled.div`
     display: flex;
-    margin: 10px 0px 10px 5px;
+    margin-left: 5px;
     flex-direction: row;
     position: relative;
+    height: 30px;
     @media (max-width: 575px) {
-        margin: 0px;
         width: 100%;
     }
 `;
 
 const Input = styled.input`
-    border: 1px solid ${(props) => props.theme.background.secondary};
+    border: 1px solid ${(props) => props.theme.borderColor.primary};
     border-radius: 5px;
-    padding: 5px 50px 5px 30px;
+    padding: 5px 10px 5px 30px;
     color: ${(props) => props.theme.textColor.primary};
     background: ${(props) => props.theme.background.primary};
     outline: none;
     &::placeholder {
-        color: ${(props) => props.theme.textColor.tertiary};
+        color: ${(props) => props.theme.textColor.secondary};
     }
     &:focus {
         border: 1px solid ${(props) => props.theme.borderColor.quaternary} !important;
@@ -62,23 +62,22 @@ const Input = styled.input`
 
 const IconWrapper = styled.div`
     border-radius: 30px;
-    background: ${(props) => props.theme.textColor.secondary};
     position: absolute;
-    width: 15px;
-    height: 15px;
+    width: 17px;
+    height: 17px;
     top: 7px;
     left: 6px;
 `;
 
 const SearchIcon = styled.i`
-    font-size: 20px;
+    font-size: 15px;
     position: absolute;
-    top: -4px;
-    left: -3px;
+    top: 0px;
+    left: 0px;
     &:before {
-        font-family: ExoticIcons !important;
-        content: '\\0042';
-        color: ${(props) => props.theme.background.primary};
+        font-family: OvertimeIconsV2 !important;
+        content: '\\00E5';
+        color: ${(props) => props.theme.textColor.secondary};
     }
 `;
 

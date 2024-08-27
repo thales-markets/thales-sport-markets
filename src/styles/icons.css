@@ -1,8 +1,12 @@
 .icon {
     display: inline-block;
-    font-family: OvertimeIcons !important;
+    font-family: OvertimeIconsV2 !important;
     vertical-align: middle;
     font-size: 20px;
+}
+
+.icon--politics:before {
+    content: '\002E';
 }
 
 .icon--stats:before {
@@ -65,8 +69,8 @@
     content: '\003D';
 }
 
-.icon--upsettoor-vault::before {
-    content: '\003E';
+.icon--swag::before {
+    content: '\003e';
 }
 
 .icon--golf::before {
@@ -109,7 +113,7 @@
     content: '\0048';
 }
 
-.icon--mma:before {
+.icon--fighting:before {
     content: '\0049';
 }
 
@@ -177,10 +181,6 @@
     content: '\005C';
 }
 
-.icon--arrow:before {
-    content: '\005D';
-}
-
 .icon--stake-thales::before {
     content: '\005F';
 }
@@ -245,20 +245,8 @@
     content: '\006F';
 }
 
-.icon--discount-vault::before {
-    content: '\0070';
-}
-
 .icon--risks::before {
     content: '\0071';
-}
-
-.icon--degen-discount-vault::before {
-    content: '\0072';
-}
-
-.icon--safu-discount-vault::before {
-    content: '\0073';
 }
 
 .icon--strategy::before {
@@ -271,10 +259,6 @@
 
 .icon--fifa-world-cup::before {
     content: '\0076';
-}
-
-.icon--vaults::before {
-    content: '\0077';
 }
 
 .icon--lost::before {
@@ -313,6 +297,10 @@
     content: '\0081';
 }
 
+.icon--thales-logo::before {
+    content: '\0083';
+}
+
 .icon--brackets::before {
     content: '\0086';
 }
@@ -331,4 +319,184 @@
 
 .icon--base:before {
     content: '\00C0';
+}
+
+.icon--clear:before {
+    content: '\00D4';
+}
+
+.icon--caret-down:before {
+    content: '\00D5';
+}
+
+.icon--filters2::before {
+    content: '\00D7';
+}
+
+.icon--double-check:before {
+    content: '\00D8';
+}
+
+.icon--sports:before {
+    content: '\00D9';
+}
+
+.icon--history:before {
+    content: '\00DA';
+}
+
+.icon--ticket-loss:before {
+    content: '\00DC';
+}
+
+.icon--ongoing:before {
+    content: '\00DE';
+}
+
+.icon--ticket-open:before {
+    content: '\00DF';
+}
+
+.icon--pause:before {
+    content: '\00E0';
+}
+
+.icon--ticket-horizontal:before {
+    content: '\00E1';
+}
+
+.icon--profile2:before {
+    content: '\00E2';
+}
+
+.icon--caret-right:before {
+    content: '\00E4';
+}
+
+.icon--search:before {
+    content: '\00E5';
+}
+
+.icon--settings:before {
+    content: '\00E6';
+}
+
+.icon--ticket:before {
+    content: '\00E8';
+}
+
+.icon--tour:before {
+    content: '\00E9';
+}
+
+.icon--caret-up:before {
+    content: '\00EA';
+}
+
+.icon--ticket-win:before {
+    content: '\00ED';
+}
+
+.icon--yield:before {
+    content: '\00EE';
+}
+
+.icon--open-ticket:before {
+    content: '\00EF';
+}
+
+.icon--three-column:before {
+    content: '\00F0';
+}
+
+.icon--copy:before {
+    content: '\00F1';
+}
+
+.icon--qr-code:before {
+    content: '\00F3';
+}
+
+.icon--claimable-ticket:before {
+    content: '\00F5';
+}
+
+.icon--logged-in:before {
+    content: '\00F6';
+}
+
+.icon--clock:before {
+    content: '\00F7';
+}
+
+.icon--wallet2:before {
+    content: '\00FA';
+}
+
+.icon--gift:before {
+    content: '\00FB';
+}
+
+.icon--profile3:before {
+    content: '\00FC';
+}
+
+.icon--apple:before {
+    content: '\010E';
+}
+
+.icon--discord:before {
+    content: '\0110';
+}
+
+.icon--github:before {
+    content: '\0112';
+}
+
+.icon--google:before {
+    content: '\011A';
+}
+
+.icon--gift:before {
+    content: '\00FB';
+}
+
+.icon--waterpolo:before {
+    content: '\00FD';
+}
+
+.icon--handball:before {
+    content: '\00FF';
+}
+
+.icon--rugby:before {
+    content: '\0100';
+}
+
+.icon--tabletennis:before {
+    content: '\0101';
+}
+
+.icon--lock:before {
+    content: '\0121';
+}
+
+.icon--controller:before {
+    content: '\011D';
+}
+
+.icon--calculator:before {
+    content: '\0120';
+}
+
+.icon--book:before {
+    content: '\011E';
+}
+
+.icon--x-twitter:before {
+    content: '\011F';
+}
+
+.icon--fire:before {
+    content: '\002C';
 }

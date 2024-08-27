@@ -37,9 +37,7 @@ Copy the `.env.local.example` file in this directory to `.env.local` (which will
 Then, open `.env.local` and add the missing environment variables:
 
 -   `REACT_APP_INFURA_PROJECT_ID` - Infura project id (get it from [infura.io](https://infura.io/)).
--   `REACT_APP_CHAINNODE_PROJECT_ID` - Chainnodes project id (get it from [chainnodes.org](https://app.chainnodes.org/)).
 -   `REACT_APP_IPFS_DEPLOYMENT` - Is dApp in the mode for deployment on IPFS. Set to `false`.
--   `REACT_APP_BUNGEE_API_KEY` - Bungee API key.
 -   `REACT_APP_WALLET_CONNECT_PROJECT_ID` - WalletConnect project id (get it from [WalletConnect Cloud](https://cloud.walletconnect.com/)).
 
 ### Set up Google Translate API

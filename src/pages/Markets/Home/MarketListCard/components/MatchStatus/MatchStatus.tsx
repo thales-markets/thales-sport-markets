@@ -1,89 +1,126 @@
-import { SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
-import { GAME_STATUS } from 'constants/ui';
+import { GameStatusKey } from 'constants/markets';
+import { GameStatus } from 'enums/markets';
+import { League, Sport } from 'enums/sports';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { useSelector } from 'react-redux';
+import { getIsMobile } from 'redux/modules/app';
+import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
-import { SportMarketLiveResult } from 'types/markets';
-import { getOrdinalNumberLabel } from 'utils/ui';
+import { SportMarket, SportMarketScore } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
-import { useTheme } from 'styled-components';
+import { showGameScore, showLiveInfo } from 'utils/marketsV2';
+import { getLeaguePeriodType, getLeagueSport } from 'utils/sports';
+import { getOrdinalNumberLabel } from 'utils/ui';
 
 type MatchStatusProps = {
-    isPendingResolution: boolean;
-    isCanceled: boolean;
-    isPaused: boolean;
-    liveResultInfo: SportMarketLiveResult | undefined;
-    isEnetpulseSport: boolean;
-    isJsonOddsSport: boolean;
+    market: SportMarket;
 };
 
-const MatchStatus: React.FC<MatchStatusProps> = ({
-    isPendingResolution,
-    isCanceled,
-    isPaused,
-    liveResultInfo,
-    isEnetpulseSport,
-    isJsonOddsSport,
-}) => {
+const MatchStatus: React.FC<MatchStatusProps> = ({ market }) => {
     const { t } = useTranslation();
+    const isMobile = useSelector(getIsMobile);
     const theme: ThemeInterface = useTheme();
-    const displayClockTime = liveResultInfo?.displayClock.replaceAll("'", '');
+
+    const isGameStarted = market.maturityDate < new Date();
+    const isGameResolved = market.isResolved || market.isCancelled;
+    const isPendingResolution = isGameStarted && !isGameResolved;
+    const liveScore = market.liveScore;
+
+    const leagueSport = getLeagueSport(market.leagueId);
+
+    const getScoreComponent = (scoreData: SportMarket | SportMarketScore) =>
+        showGameScore(scoreData.gameStatus) || !scoreData.gameStatus ? (
+            <FlexDivRow>
+                {((market.leagueId === League.UFC && market.isGameFinished) || market.leagueId !== League.UFC) && (
+                    <ScoreContainer>
+                        <TeamScoreLabel isResolved={market.isResolved}>
+                            {market.leagueId == League.UFC
+                                ? Number(scoreData.homeScore) > 0
+                                    ? 'W'
+                                    : 'L'
+                                : scoreData.homeScore}
+                        </TeamScoreLabel>
+                        <TeamScoreLabel isResolved={market.isResolved}>
+                            {market.leagueId == League.UFC
+                                ? Number(scoreData.awayScore) > 0
+                                    ? 'W'
+                                    : 'L'
+                                : scoreData.awayScore}
+                        </TeamScoreLabel>
+                    </ScoreContainer>
+                )}
+                {market.leagueId === League.UFC && market.isGameFinished && (
+                    <ScoreContainer>
+                        <TeamScoreLabel className="period" isResolved={market.isResolved}>
+                            {`(R${Number(scoreData.homeScore) > 0 ? scoreData.homeScore : scoreData.awayScore})`}
+                        </TeamScoreLabel>
+                    </ScoreContainer>
+                )}
+                {leagueSport !== Sport.CRICKET &&
+                    market.leagueId !== League.UFC &&
+                    scoreData.homeScoreByPeriod.map((_, index) => {
+                        if (leagueSport === Sport.SOCCER && index === 1) {
+                            return null;
+                        }
+                        return (
+                            <ScoreContainer key={`${market.gameId}-${index}`}>
+                                <TeamScoreLabel className="period" isResolved={market.isResolved}>
+                                    {scoreData.homeScoreByPeriod[index]}
+                                </TeamScoreLabel>
+                                <TeamScoreLabel className="period" isResolved={market.isResolved}>
+                                    {scoreData.awayScoreByPeriod[index]}
+                                </TeamScoreLabel>
+                            </ScoreContainer>
+                        );
+                    })}
+            </FlexDivRow>
+        ) : (
+            <Status color={theme.status.started}>
+                {t(`markets.market-card.${GameStatusKey[scoreData.gameStatus]}`)}
+            </Status>
+        );
 
     return (
-        <Container bottomAlign={isPendingResolution}>
-            {isPendingResolution ? (
-                isEnetpulseSport || isJsonOddsSport ? (
-                    <Status color={theme.status.started}>{t('markets.market-card.pending')}</Status>
-                ) : (
-                    <FlexDivRow>
-                        {liveResultInfo?.status != GAME_STATUS.FINAL &&
-                            liveResultInfo?.status != GAME_STATUS.FULL_TIME &&
-                            !isEnetpulseSport &&
-                            !isJsonOddsSport && (
-                                <MatchPeriodContainer>
-                                    <MatchPeriodLabel>{`${getOrdinalNumberLabel(Number(liveResultInfo?.period))} ${t(
-                                        `markets.market-card.${SPORT_PERIODS_MAP[Number(liveResultInfo?.sportId)]}`
-                                    )}`}</MatchPeriodLabel>
-                                    <FlexDivCentered>
-                                        <MatchPeriodLabel className="red">
-                                            {displayClockTime}
-                                            <MatchPeriodLabel className="blink">&prime;</MatchPeriodLabel>
-                                        </MatchPeriodLabel>
-                                    </FlexDivCentered>
-                                </MatchPeriodContainer>
-                            )}
-
-                        <ScoreContainer>
-                            <TeamScoreLabel>{liveResultInfo?.homeScore}</TeamScoreLabel>
-                            <TeamScoreLabel>{liveResultInfo?.awayScore}</TeamScoreLabel>
-                        </ScoreContainer>
-                        {SPORTS_TAGS_MAP['Soccer'].includes(Number(liveResultInfo?.sportId))
-                            ? liveResultInfo?.period == 2 && (
-                                  <ScoreContainer>
-                                      <TeamScoreLabel className="period">
-                                          {liveResultInfo?.scoreHomeByPeriod[0]}
-                                      </TeamScoreLabel>
-                                      <TeamScoreLabel className="period">
-                                          {liveResultInfo?.scoreAwayByPeriod[0]}
-                                      </TeamScoreLabel>
-                                  </ScoreContainer>
-                              )
-                            : liveResultInfo?.scoreHomeByPeriod.map((homePeriodResult, index) => {
-                                  return (
-                                      <ScoreContainer key={index}>
-                                          <TeamScoreLabel className="period">{homePeriodResult}</TeamScoreLabel>
-                                          <TeamScoreLabel className="period">
-                                              {liveResultInfo.scoreAwayByPeriod[index]}
-                                          </TeamScoreLabel>
-                                      </ScoreContainer>
-                                  );
-                              })}
-                    </FlexDivRow>
-                )
-            ) : isCanceled ? (
+        <Container>
+            {market.isCancelled ? (
                 <Status color={theme.status.canceled}>{t('markets.market-card.canceled')}</Status>
-            ) : isPaused ? (
+            ) : // TODO check logic because of 0:0 results when isResolved == true, but isGameFinished == false
+            market.isResolved || market.isGameFinished ? (
+                <>{getScoreComponent(market)}</>
+            ) : isPendingResolution ? (
+                liveScore ? (
+                    <>
+                        {showLiveInfo(liveScore.gameStatus, liveScore.period) && (
+                            <MatchScoreContainer>
+                                {liveScore.gameStatus == GameStatus.RUNDOWN_HALF_TIME ||
+                                liveScore.gameStatus == GameStatus.OPTICODDS_HALF ? (
+                                    <Status color={theme.status.started} marginBottom="12px" marginRight="10px">
+                                        {t('markets.market-card.half-time')}
+                                    </Status>
+                                ) : (
+                                    <MatchPeriodContainer>
+                                        <MatchPeriodLabel>{`${getOrdinalNumberLabel(Number(liveScore.period))}${
+                                            isMobile
+                                                ? ''
+                                                : ` ${t(`markets.market-card.${getLeaguePeriodType(market.leagueId)}`)}`
+                                        }`}</MatchPeriodLabel>
+                                        <FlexDivCentered>
+                                            <MatchPeriodLabel className="red">
+                                                {liveScore.displayClock?.replaceAll("'", '')}
+                                                <MatchPeriodLabel className="blink">&prime;</MatchPeriodLabel>
+                                            </MatchPeriodLabel>
+                                        </FlexDivCentered>
+                                    </MatchPeriodContainer>
+                                )}
+                            </MatchScoreContainer>
+                        )}
+                        {getScoreComponent(liveScore)}
+                    </>
+                ) : (
+                    <Status color={theme.status.started}>{t('markets.market-card.pending')}</Status>
+                )
+            ) : market.isPaused ? (
                 <Status color={theme.status.paused}>{t('markets.market-card.paused')}</Status>
             ) : (
                 <></>
@@ -92,22 +129,31 @@ const MatchStatus: React.FC<MatchStatusProps> = ({
     );
 };
 
-const Container = styled(FlexDiv)<{ bottomAlign: boolean }>`
+const Container = styled(FlexDiv)`
     justify-content: center;
-    align-items: ${(props) => (props.bottomAlign ? 'flex-end' : 'center')};
+    align-items: flex-end;
 `;
 
-export const Status = styled.span<{ color: string }>`
+const Status = styled.span<{ color: string; marginBottom?: string; marginRight?: string }>`
     font-size: 12px;
     text-transform: uppercase;
     color: ${(props) => props.color};
     align-self: center;
     justify-content: space-evenly;
+    margin-bottom: ${(props) => props.marginBottom || ''};
+    margin-right: ${(props) => props.marginRight || ''};
+`;
+
+const MatchScoreContainer = styled(FlexDivRow)`
+    align-items: center;
 `;
 
 const MatchPeriodContainer = styled(FlexDivColumnCentered)`
     align-items: center;
     margin-right: 20px;
+    @media (max-width: 575px) {
+        margin-right: 10px;
+    }
 `;
 
 const MatchPeriodLabel = styled.span`
@@ -119,7 +165,7 @@ const MatchPeriodLabel = styled.span`
     &.blink {
         color: ${(props) => props.theme.status.loss};
         animation: blinker 1.5s step-start infinite;
-        font-weight: 700;
+        font-weight: 600;
     }
 
     @keyframes blinker {
@@ -134,15 +180,17 @@ const MatchPeriodLabel = styled.span`
 `;
 
 const ScoreContainer = styled(FlexDivColumn)`
-    margin: 0px 5px;
+    margin-left: 5px;
+    justify-content: center;
 `;
 
-const TeamScoreLabel = styled.span`
-    font-weight: 400;
+const TeamScoreLabel = styled.span<{ isResolved?: boolean }>`
+    font-weight: ${(props) => (props.isResolved ? 600 : 400)};
     font-size: 12px;
     line-height: 18px;
     text-transform: uppercase;
     white-space: nowrap;
+    text-align: end;
     color: ${(props) => props.theme.textColor.primary};
     &.period {
         color: ${(props) => props.theme.textColor.secondary};

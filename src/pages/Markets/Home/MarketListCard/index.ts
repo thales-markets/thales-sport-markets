@@ -1,1 +1,1 @@
-export { default } from './MarketListCard';
+export { default } from './MarketListCardV2';

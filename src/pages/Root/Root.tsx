@@ -15,7 +15,7 @@ import {
 } from '@rainbow-me/rainbowkit/wallets';
 import WalletDisclaimer from 'components/WalletDisclaimer';
 import { PLAUSIBLE } from 'constants/analytics';
-import { base } from 'constants/network';
+import { optimismSepolia } from 'constants/network';
 import { ThemeMap } from 'constants/ui';
 import dotenv from 'dotenv';
 import { Network } from 'enums/network';
@@ -26,7 +26,7 @@ import { Provider } from 'react-redux';
 import { Store } from 'redux';
 import { getDefaultTheme } from 'redux/modules/ui';
 import { WagmiConfig, configureChains, createClient } from 'wagmi';
-import { arbitrum, optimism, optimismGoerli } from 'wagmi/dist/chains';
+import { arbitrum, optimism } from 'wagmi/dist/chains';
 import { infuraProvider } from 'wagmi/dist/providers/infura';
 import { jsonRpcProvider } from 'wagmi/dist/providers/jsonRpc';
 import { publicProvider } from 'wagmi/dist/providers/public';
@@ -36,50 +36,30 @@ type RootProps = {
     store: Store;
 };
 
-type RpcProvider = {
-    ankr: string;
-    chainnode: string;
-    blast: string;
-};
-
 const STALL_TIMEOUT = 2000;
 const projectId = process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID || '';
-
-const CHAIN_TO_RPC_PROVIDER_NETWORK_NAME: Record<number, RpcProvider> = {
-    [Network.OptimismMainnet]: {
-        ankr: 'optimism',
-        chainnode: 'optimism-mainnet',
-        blast: 'optimism-mainnet',
-    },
-    [Network.OptimismGoerli]: { ankr: 'optimism_testnet', chainnode: 'optimism-goerli', blast: 'optimism-goerli' },
-    [Network.Arbitrum]: { ankr: 'arbitrum', chainnode: 'arbitrum-one', blast: 'arbitrum-one' },
-    [Network.Base]: { ankr: 'base', chainnode: 'base-mainnet', blast: '' },
-};
 
 const CHAIN_TO_RPC_PROVIDER_URL: Record<number, string | undefined> = {
     [Network.OptimismMainnet]: process.env.REACT_APP_OPTIMISM_RPC_URL,
     [Network.Arbitrum]: process.env.REACT_APP_ARBITRUM_RPC_URL,
     [Network.Base]: process.env.REACT_APP_BASE_RPC_URL,
 };
+const isRpcProviderSet = Object.values(CHAIN_TO_RPC_PROVIDER_URL).filter((url) => url && url !== '').length;
 
 const theme = getDefaultTheme();
 const customTheme = merge(darkTheme(), { colors: { modalBackground: ThemeMap[theme].background.primary } });
 
 const { chains, provider } = configureChains(
-    [optimism, optimismGoerli, arbitrum, base],
+    [optimism, arbitrum, optimismSepolia],
     [
         jsonRpcProvider({
             rpc: (chain) => {
-                const chainnodeNetworkName = CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id]?.chainnode;
                 const rpcProvider = CHAIN_TO_RPC_PROVIDER_URL[chain.id];
                 return {
                     http: rpcProvider
                         ? rpcProvider
-                        : process.env.REACT_APP_PRIMARY_PROVIDER_ID === 'INFURA' && chain.id === Network.Base
-                        ? // For Base use Ankr when Infura is primary as Infura doesn't support it
-                          `https://rpc.ankr.com/base/${process.env.REACT_APP_ANKR_PROJECT_ID}`
-                        : !!chainnodeNetworkName
-                        ? `https://${chainnodeNetworkName}.chainnodes.org/${process.env.REACT_APP_CHAINNODE_PROJECT_ID}`
+                        : chain.id === Network.OptimismSepolia
+                        ? `https://optimism-sepolia.blastapi.io/${process.env.REACT_APP_BLAST_PROJECT_ID}`
                         : chain.rpcUrls.default.http[0],
                 };
             },
@@ -89,7 +69,7 @@ const { chains, provider } = configureChains(
         infuraProvider({
             apiKey: process.env.REACT_APP_INFURA_PROJECT_ID || '',
             stallTimeout: STALL_TIMEOUT,
-            priority: process.env.REACT_APP_PRIMARY_PROVIDER_ID === 'INFURA' ? 0 : 2,
+            priority: process.env.REACT_APP_PRIMARY_PROVIDER_ID === 'INFURA' && !isRpcProviderSet ? 0 : 2,
         }),
         publicProvider({ stallTimeout: STALL_TIMEOUT, priority: 5 }),
     ]

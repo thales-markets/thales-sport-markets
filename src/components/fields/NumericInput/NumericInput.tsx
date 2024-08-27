@@ -1,12 +1,12 @@
+import MuiTooltip from '@material-ui/core/Tooltip';
+import { ReactComponent as BalanceIcon } from 'assets/images/balance-icon.svg';
 import Tooltip from 'components/Tooltip';
 import { DEFAULT_TOKEN_DECIMALS } from 'constants/defaults';
 import React, { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { FieldContainer, FieldLabel, Input } from '../common';
-import MuiTooltip from '@material-ui/core/Tooltip';
 import { FlexDivCentered } from 'styles/common';
-import { ReactComponent as BalanceIcon } from 'assets/images/balance-icon.svg';
+import { FieldContainer, FieldLabel, Input } from '../common';
 
 type NumericInputProps = {
     value: string | number;
@@ -38,6 +38,7 @@ type NumericInputProps = {
     validationPlacement?: string;
     borderColor?: string;
     containerWidth?: string;
+    validationTooltipZIndex?: number;
 };
 
 const INVALID_CHARS = ['-', '+', 'e'];
@@ -72,6 +73,7 @@ const NumericInput: React.FC<NumericInputProps> = ({
     validationPlacement,
     borderColor,
     containerWidth,
+    validationTooltipZIndex,
     ...rest
 }) => {
     const { t } = useTranslation();
@@ -114,6 +116,7 @@ const NumericInput: React.FC<NumericInputProps> = ({
                 title={showValidation ? validationMessage || '' : ''}
                 placement={validationPlacement || 'top'}
                 arrow={true}
+                PopperProps={{ style: { zIndex: validationTooltipZIndex ? validationTooltipZIndex : '' } }}
             >
                 <StyledInput
                     readOnly={readonly}
@@ -186,7 +189,7 @@ const CurrencyLabel = styled.label<{ hasSeparator?: boolean }>`
     border-left: ${(props) => (props.hasSeparator ? `2px solid ${props.theme.input.borderColor.tertiary}` : 'none')};
     font-size: 15px;
     line-height: 20px;
-    color: ${(props) => props.theme.input.textColor.primary};
+    color: ${(props) => props.theme.input.textColor.tertiary};
     padding-left: 8px;
     pointer-events: none;
     &.disabled {
@@ -197,7 +200,7 @@ const CurrencyLabel = styled.label<{ hasSeparator?: boolean }>`
 const MaxButton = styled.button`
     background: ${(props) => props.theme.button.background.quaternary};
     border: none;
-    font-weight: 700;
+    font-weight: 600;
     font-size: 10px;
     text-transform: uppercase;
     cursor: pointer;

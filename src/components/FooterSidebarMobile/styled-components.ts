@@ -7,20 +7,24 @@ export const Container = styled(FlexDiv)`
     width: 90%;
     left: 50%;
     transform: translateX(-50%);
-    height: 43px;
+    height: 40px;
     color: ${(props) => props.theme.background.primary};
-    background: linear-gradient(101.62deg, #64d9fe 14.92%, #a38cff 94.73%);
+    background: ${(props) => props.theme.background.septenary};
     border-radius: 40px;
     justify-content: space-around;
+    z-index: 11;
 `;
 
 export const ItemContainer = styled(FlexDiv)`
     justify-content: center;
     align-self: center;
+    position: relative;
 `;
 
-export const ItemIcon = styled.i<{ parlay?: boolean; iteration?: number }>`
-    font-size: 33px;
+export const ItemIcon = styled.i<{ parlay?: boolean; iteration?: number; fontSize?: number }>`
+    font-size: ${(props) => props.fontSize || 33}px;
+    font-weight: 400;
+    text-transform: none;
     color: ${(props) => props.theme.background.primary};
 
     &.pulse {
@@ -78,7 +82,7 @@ export const DropDownItem = styled(FlexDiv)`
 `;
 
 export const Label = styled.div`
-    font-weight: 500;
+    font-weight: 400;
     font-size: 12px;
     line-height: 14px;
     color: white;
@@ -87,12 +91,15 @@ export const Label = styled.div`
 `;
 
 export const ParlayNumber = styled.span`
-    font-weight: 800;
+    font-weight: 600;
     font-size: 14px;
     line-height: 14px;
     color: ${(props) => props.theme.background.primary};
     display: block;
     text-transform: capitalize;
     position: absolute;
-    bottom: 9px;
+    bottom: 11px;
+    left: 8px;
+    background: ${(props) => props.theme.background.septenary};
+    padding: 0 2px;
 `;

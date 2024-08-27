@@ -1,22 +1,22 @@
-import { useQuery, UseQueryOptions } from 'react-query';
-import thalesData from 'thales-data';
 import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
-import { LiquidityPoolPnls, LiquidityPoolType } from 'types/liquidityPool';
 import { orderBy } from 'lodash';
+import { useQuery, UseQueryOptions } from 'react-query';
+import thalesData from 'thales-data';
+import { LiquidityPoolPnls } from 'types/liquidityPool';
 
 const useLiquidityPoolPnlsQuery = (
     networkId: Network,
-    liquidityPoolType: LiquidityPoolType,
+    liquidityPoolAddress: string,
     options?: UseQueryOptions<LiquidityPoolPnls>
 ) => {
     return useQuery<LiquidityPoolPnls>(
-        QUERY_KEYS.LiquidityPool.PnL(networkId, liquidityPoolType),
+        QUERY_KEYS.LiquidityPool.PnL(networkId, liquidityPoolAddress),
         async () => {
             try {
-                const liquidityPoolPnls = await thalesData.sportMarkets.liquidityPoolPnls({
+                const liquidityPoolPnls = await thalesData.sportMarketsV2.liquidityPoolPnls({
                     network: networkId,
-                    liquidityPoolType: liquidityPoolType,
+                    liquidityPool: liquidityPoolAddress,
                 });
 
                 let cumulativePnl = 1;

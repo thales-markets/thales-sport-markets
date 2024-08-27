@@ -34,6 +34,15 @@ export const getInfoToastOptions = (message: string | React.ReactNode, options?:
     };
 };
 
+export const getLoadingToastOptions = (message: string | React.ReactNode, options?: UpdateOptions) => {
+    return {
+        ...options,
+        isLoading: true,
+        render: message,
+        type: 'default' as TypeOptions,
+    };
+};
+
 export const oddToastOptions = {
     ...defaultToastOptions,
     autoClose: 3000,

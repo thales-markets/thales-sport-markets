@@ -1,6 +1,5 @@
-import { GlobalFiltersEnum, Position } from 'enums/markets';
+import { Position, StatusFilter } from 'enums/markets';
 import { Network } from 'enums/network';
-import { LiquidityPoolType } from 'types/liquidityPool';
 
 const QUERY_KEYS = {
     ParlayMarkets: (networkId: Network, account: string, minTimestamp?: number, maxTimestamp?: number) => [
@@ -11,18 +10,27 @@ const QUERY_KEYS = {
         maxTimestamp,
     ],
     MarketParlays: (networkId: Network, marketAddress: string) => ['marketParlays', networkId, marketAddress],
-    ParlayLeaderboard: (networkId: Network, period: number) => ['parlayLeaderboard', period, networkId],
-    SportMarkets: (globalFilter: GlobalFiltersEnum, networkId: Network) => ['sportMarkets', globalFilter, networkId],
+    Ticket: (networkId: Network, ticketAddress: string) => ['gameTickets', networkId, ticketAddress],
+    GameTickets: (networkId: Network, gameId: string) => ['gameTickets', networkId, gameId],
+    UserTickets: (networkId: Network, user: string) => ['userTickets', networkId, user],
+    SportMarkets: (statusFilter: StatusFilter, networkId: Network) => ['sportMarkets', statusFilter, networkId],
+    SportMarketsV2: (statusFilter: StatusFilter, networkId: Network) => ['sportMarketsV2', statusFilter, networkId],
+    LiveSportMarkets: (networkId: Network) => ['liveSportMarkets', networkId],
     SportMarket: (address: string, networkId: Network) => ['sportMarket', address, networkId],
+    SportMarketV2: (address: string, networkId: Network) => ['sportMarketV2', address, networkId],
     ParlayAmmData: (networkId: Network) => ['parlayAmmData', networkId],
-    LiveResult: (marketId: string) => ['liveResult', marketId],
-    EnetpulseLiveResult: (marketId: string, gameDate: string, sportTag: number) => [
-        'enetpulseLiveResult',
-        marketId,
-        gameDate,
-        sportTag,
-    ],
-    JsonOddsData: (marketId: string, sportTag: number) => ['jsonOddsData', marketId, sportTag],
+    SportsAmmData: (networkId: Network) => ['sportsAmmData', networkId],
+    TicketLiquidity: (
+        gameIds: string,
+        typeIds: string,
+        playerIds: string,
+        lines: string,
+        positions: string,
+        lives: string,
+        networkId: Network
+    ) => ['ticketLiquidity', gameIds, typeIds, playerIds, lines, positions, lives, networkId],
+    LiveTradingProcessorData: (networkId: Network) => ['liveTradingProcessorData', networkId],
+    LiveScore: (gameId: string) => ['liveScore', gameId],
     PositionDetails: (
         marketAddress: string,
         position: Position,
@@ -51,112 +59,75 @@ const QUERY_KEYS = {
     WinningInfo: (walletAddress: string, networkId: Network) => ['user', 'winningInfo', walletAddress, networkId],
     ClaimTx: (market: string, networkId: Network) => ['claim', 'transactions', market, networkId],
     ClaimableCount: (walletAddress: string, networkId: Network) => ['claimable', 'count', walletAddress, networkId],
+    ClaimableCountV2: (walletAddress: string, networkId: Network) => ['claimable', 'countV2', walletAddress, networkId],
     AccountPositions: (walletAddress: string, networkId: Network) => ['accountPosition', walletAddress, networkId],
-    ReferralTransaction: (walletAddress: string, networkId: Network) => [
-        'referralTransaction',
-        walletAddress,
-        networkId,
-    ],
-    ReferrerID: (walletAddress: string) => ['referrerId', walletAddress],
-    Referrers: (networkId: Network) => ['referrers', networkId],
-    ReferredTraders: (walletAddress: string, networkId: Network) => ['referredTraders', walletAddress, networkId],
-    ReferralOverview: (walletAddress: string, networkId: Network) => ['referralOverview', walletAddress, networkId],
     Wallet: {
-        GetsUSDWalletBalance: (walletAddress: string, networkId: Network) => [
-            'sUsd',
-            'balance',
-            walletAddress,
-            networkId,
-        ],
-        TokenBalance: (token: string, walletAddress: string, networkId: Network) => [
-            'wallet',
-            'tokenBalance',
-            token,
-            walletAddress,
-            networkId,
-        ],
         MultipleCollateral: (walletAddress: string, networkId: Network) => [
             'multipleCollateral',
             walletAddress,
             networkId,
         ],
-        OvertimeVoucher: (walletAddress: string, networkId: Network) => [
-            'wallet',
-            'overtimeVoucher',
-            walletAddress,
-            networkId,
-        ],
-        OvertimeVoucherEscrow: (walletAddress: string, networkId: Network) => [
-            'wallet',
-            'overtimeVoucherEscrow',
-            walletAddress,
-            networkId,
-        ],
+        FreeBetBalance: (walletAddress: string, networkId: Network) => ['freeBetBalance', walletAddress, networkId],
         Stats: (networkId: Network, walletAddress: string) => ['wallet', 'stats', networkId, walletAddress],
-        VaultsAndLpTxs: (networkId: Network, walletAddress: string) => [
+        StatsV2: (networkId: Network, walletAddress: string) => ['wallet', 'statsV2', networkId, walletAddress],
+        LiquidityPoolTransactions: (networkId: Network, walletAddress: string) => [
             'wallet',
-            'vaultsAndLpTxs',
+            'liquidityPoolTransactions',
             networkId,
             walletAddress,
         ],
-    },
-    Quiz: {
-        Leaderboard: () => ['quiz', 'leaderboard'],
     },
     FavoriteTeam: (walletAddress: string, networkId: Network) => ['favoriteTeam', walletAddress, networkId],
-    Vault: {
-        Data: (vaultAddress: string, networkId: Network) => [vaultAddress, 'data', networkId],
-        UserData: (vaultAddress: string, walletAddress: string, networkId: Network) => [
-            vaultAddress,
+    Banners: (networkId: Network) => ['banners', networkId],
+    LiquidityPool: {
+        Data: (address: string, networkId: Network) => ['liquidityPool', 'data', address, networkId],
+        ParlayData: (networkId: Network) => ['liquidityPool', 'parlayData', networkId],
+        UserData: (address: string, walletAddress: string, networkId: Network) => [
+            'liquidityPool',
             'data',
+            address,
             walletAddress,
             networkId,
         ],
-        AllVaultsUserData: (walletAddress: string, networkId: Network) => ['data', walletAddress, networkId],
-        Trades: (vaultAddress: string, networkId: Network) => [vaultAddress, 'trades', networkId],
-        ParlayTrades: (vaultAddress: string, networkId: Network) => [vaultAddress, 'parlayTrades', networkId],
-        PnL: (vaultAddress: string, networkId: Network) => [vaultAddress, 'pnl', networkId],
-        UserTransactions: (vaultAddress: string, networkId: Network) => [vaultAddress, 'userTransactions', networkId],
-    },
-    Bungee: {
-        Tokens: () => ['bungee', 'tokens'],
-    },
-    Banners: (networkId: Network) => ['banners', networkId],
-    LiquidityPool: {
-        Data: (networkId: Network) => ['liquidityPool', 'data', networkId],
-        ParlayData: (networkId: Network) => ['liquidityPool', 'parlayData', networkId],
-        UserData: (walletAddress: string, networkId: Network) => ['liquidityPool', 'data', walletAddress, networkId],
         ParlayUserData: (walletAddress: string, networkId: Network) => [
             'liquidityPool',
             'parlayLPData',
             walletAddress,
             networkId,
         ],
-        PnL: (networkId: Network, liquidityPoolType: LiquidityPoolType) => [
+        PnL: (networkId: Network, liquidityPoolAddress: string) => [
             'liquidityPool',
             'pnl',
-            liquidityPoolType,
+            liquidityPoolAddress,
             networkId,
         ],
-        Return: (networkId: Network, liquidityPoolType: LiquidityPoolType) => [
+        Return: (networkId: Network, liquidityPoolAddress: string) => [
             'liquidityPool',
             'return',
-            liquidityPoolType,
+            liquidityPoolAddress,
             networkId,
         ],
-        UserTransactions: (networkId: Network, liquidityPoolType: LiquidityPoolType) => [
+        UserTransactions: (networkId: Network, liquidityPoolAddress: string) => [
             'liquidityPool',
             'userTransactions',
-            liquidityPoolType,
+            liquidityPoolAddress,
             networkId,
         ],
     },
-    SGPFees: (networkId: Network) => ['sgpFees', networkId],
     CheckPausedAMM: (networkId: Network) => ['checkPausedAMM', networkId],
     Rates: {
         ExchangeRates: (networkId: Network) => ['rates', 'exchangeRates', networkId],
+        CoingeckoRates: () => ['rates', 'coingeckoRates'],
     },
     Promotions: (branchName: string) => [branchName, 'promotions'],
+    Overdrop: {
+        Leaderboard: () => ['leaderboard'],
+        UserMultipliers: (walletAddress: string) => ['userMultipliers', walletAddress],
+        UserData: (walletAddress: string) => ['userData', walletAddress],
+        UserXPHistory: (walletAddress: string) => ['userXPHistory', walletAddress],
+        GameMultipliers: () => ['gameMultipliers'],
+        Price: () => ['price'],
+    },
 };
 
 export default QUERY_KEYS;

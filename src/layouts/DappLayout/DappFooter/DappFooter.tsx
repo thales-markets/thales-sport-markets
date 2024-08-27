@@ -1,10 +1,10 @@
+import termsOfUse from 'assets/docs/thales-terms-of-use.pdf';
+import { ReactComponent as ThalesLogo } from 'assets/images/thales-logo.svg';
+import { LINKS } from 'constants/links';
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
-import { ReactComponent as ThalesLogo } from 'assets/images/thales-logo.svg';
-import { LINKS } from 'constants/links';
-import termsOfUse from 'assets/docs/thales-terms-of-use.pdf';
 
 const DappFooter: React.FC = () => {
     const { t } = useTranslation();
@@ -173,64 +173,64 @@ const LinkText = styled(FlexDivCentered)`
 const TwitterIcon = styled.i`
     color: ${(props) => props.theme.textColor.secondary};
     &:before {
-        font-family: ExoticIcons !important;
-        content: '\\005C';
+        font-family: HomepageIconsV2 !important;
+        content: '\\0021';
     }
 `;
 
 const DiscordIcon = styled.i`
     color: ${(props) => props.theme.textColor.secondary};
     &:before {
-        font-family: ExoticIcons !important;
-        content: '\\005A';
+        font-family: HomepageIconsV2 !important;
+        content: '\\0023';
     }
 `;
 
 const DocsIcon = styled.i`
     color: ${(props) => props.theme.textColor.secondary};
     &:before {
-        font-family: ExoticIcons !important;
-        content: '\\0059';
+        font-family: HomepageIconsV2 !important;
+        content: '\\0025';
     }
 `;
 
 const YoutubeIcon = styled.i`
     color: ${(props) => props.theme.textColor.secondary};
     &:before {
-        font-family: ExoticIcons !important;
-        content: '\\005B';
+        font-family: OvertimeIconsV2 !important;
+        content: '\\0119';
     }
 `;
 
 const MediumIcon = styled.i`
     color: ${(props) => props.theme.textColor.secondary};
     &:before {
-        font-family: ExoticIcons !important;
-        content: '\\0056';
+        font-family: HomepageIconsV2 !important;
+        content: '\\0024';
     }
 `;
 
 const GithubIcon = styled.i`
     color: ${(props) => props.theme.textColor.secondary};
     &:before {
-        font-family: ExoticIcons !important;
-        content: '\\0057';
+        font-family: HomepageIconsV2 !important;
+        content: '\\0022';
     }
 `;
 
 const InstagramIcon = styled.i`
     color: ${(props) => props.theme.textColor.secondary};
     &:before {
-        font-family: ExoticIcons !important;
-        content: '\\002C';
+        font-family: OvertimeIconsV2 !important;
+        content: '\\0116';
     }
 `;
 
 const RedditIcon = styled.i`
     color: ${(props) => props.theme.textColor.secondary};
     &:before {
-        font-family: ExoticIcons !important;
-        content: '\\002E';
+        font-family: OvertimeIconsV2 !important;
+        content: '\\0114';
     }
 `;
 

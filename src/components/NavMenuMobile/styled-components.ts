@@ -1,5 +1,5 @@
 import styled, { css, keyframes } from 'styled-components';
-import { FlexDivColumnNative, FlexDivRow, FlexDiv, FlexDivColumn } from 'styles/common';
+import { FlexDiv, FlexDivColumn, FlexDivColumnNative, FlexDivRow } from 'styles/common';
 
 const WrapperAnimation = (props: any) => keyframes`
     0% {
@@ -49,7 +49,7 @@ export const Wrapper = styled.div<{ show?: boolean | null }>`
     left: 0;
     right: 0;
     ${(props) => (props.show == true ? 'top: 0;' : '')}
-    ${(props) => (props.show == false || props.show == null ? 'top: -640px;' : '')}
+    ${(props) => (props.show == false || props.show == null ? 'top: -700px;' : '')}
     ${(props) => props.show === true && animationOpen};
     ${({ show }) => show === false && animationClose};
     background-color: ${(props) => props.theme.background.secondary};
@@ -57,7 +57,7 @@ export const Wrapper = styled.div<{ show?: boolean | null }>`
     z-index: 200;
     ${(props) => (props.show == true ? `-webkit-box-shadow: ${props.theme.shadow.navBar};` : '')}
     ${(props) => (props.show == true ? `-moz-box-shadow: ${props.theme.shadow.navBar};` : '')}
-    padding: 20px 10px;
+    padding: 5px 10px 40px 10px;
     border-radius: 0px 0px 25px 25px;
 `;
 
@@ -94,12 +94,14 @@ export const NavLabel = styled.span<{ active?: boolean }>`
 export const NavIcon = styled.i<{ active?: boolean }>`
     font-size: 25px;
     margin-right: 10px;
+    font-weight: 400;
     color: ${(props) => (props.active ? `${props.theme.link.textColor.primary}` : `${props.theme.textColor.primary}`)};
 `;
 
 export const FooterContainer = styled(FlexDivColumn)`
     align-items: center;
     justify-content: center;
+    position: relative;
 `;
 
 export const Network = styled(FlexDivRow)`
@@ -130,16 +132,9 @@ export const CloseIcon = styled.i.attrs({ className: 'icon icon--arrow-up' })`
     color: white;
     font-size: 20px;
     position: absolute;
-    bottom: -10px;
+    bottom: -30px;
     right: calc(50% - 10px);
     cursor: pointer;
-`;
-
-export const LogoContainer = styled.div`
-    position: relative;
-    width: 100%;
-    display: flex;
-    justify-content: center;
 `;
 
 export const WalletWrapper = styled(FlexDiv)`
@@ -147,4 +142,10 @@ export const WalletWrapper = styled(FlexDiv)`
     align-self: center;
     justify-self: center;
     margin-top: 15px;
+`;
+
+export const ButtonWrapper = styled(FlexDiv)`
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0px;
 `;

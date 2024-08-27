@@ -1,5 +1,7 @@
 import CollateralSelector from 'components/CollateralSelector';
 import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
+import { COLLATERALS } from 'constants/currency';
+import ROUTES from 'constants/routes';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
@@ -14,6 +16,7 @@ import { FlexDiv, FlexDivStart } from 'styles/common';
 import { getOnRamperUrl } from 'utils/biconomy';
 import { getCollaterals } from 'utils/collaterals';
 import { getNetworkNameByNetworkId } from 'utils/network';
+import { navigateTo } from 'utils/routes';
 import useQueryParam, { getQueryStringVal } from 'utils/useQueryParams';
 import {
     BalanceSection,
@@ -31,9 +34,6 @@ import {
 import AllSetModal from './components/AllSetModal';
 import BalanceDetails from './components/BalanceDetails';
 import QRCodeModal from './components/QRCodeModal';
-import { navigateTo } from 'utils/routes';
-import ROUTES from 'constants/routes';
-import { COLLATERALS } from 'constants/currency';
 
 const Deposit: React.FC = () => {
     const { t } = useTranslation();
@@ -201,7 +201,7 @@ const Deposit: React.FC = () => {
                                     onClick={() => {
                                         setShowQRModal(!showQRModal);
                                     }}
-                                    className="social-icon icon--qr-code"
+                                    className="icon icon--qr-code"
                                 />
                             </InputContainer>
                             <CopyButton onClick={() => handleCopy()}>{'Copy'}</CopyButton>
@@ -220,11 +220,11 @@ const Deposit: React.FC = () => {
                             window.open(onramperUrl, '_blank');
                         }}
                     >
-                        <OnramperIcons className={`social-icon icon--visa`} />
-                        <OnramperIcons className={`social-icon icon--master`} />
-                        <OnramperIcons className={`social-icon icon--applepay`} />
-                        <OnramperIcons className={`social-icon icon--googlepay`} />
-                        <ExternalIcon className={`social-icon icon--arrow-link`} />
+                        <OnramperIcons className={`icon-homepage icon--visa`} />
+                        <OnramperIcons className={`icon-homepage icon--master`} />
+                        <OnramperIcons className={`icon-homepage icon--applepay`} />
+                        <OnramperIcons className={`icon-homepage icon--googlepay`} />
+                        <ExternalIcon className={`icon-homepage icon--arrow-right`} />
                     </OnramperDiv>
                 </FormContainer>
                 <BalanceSection>
@@ -289,6 +289,8 @@ const BuyWithText = styled.span`
 
 const OnramperIcons = styled.i`
     font-size: 100px;
+    font-weight: 400;
+    text-transform: none;
     @media (max-width: 800px) {
         font-size: 80px;
     }
@@ -348,7 +350,7 @@ const QRIcon = styled.i`
 const CopyButton = styled(FlexDiv)`
     font-size: 18px;
     border-radius: 5px;
-    font-weight: 700;
+    font-weight: 600;
     padding: 7px 20px;
     height: auto;
     cursor: pointer;
@@ -365,7 +367,7 @@ const CopyButton = styled(FlexDiv)`
 
 const SectionLabel = styled.span`
     font-size: 12px;
-    font-weight: 700;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 3px;
     margin-bottom: 13px;
@@ -380,17 +382,15 @@ const TutorialLinksContainer = styled(FlexDiv)`
 `;
 
 const Link = styled.a`
-    font-family: Roboto;
     color: ${(props) => props.theme.textColor.primary};
     font-size: 12px;
-    font-style: normal;
-    font-weight: 700;
+    font-weight: 600;
     line-height: 250%;
     text-decoration-line: underline;
 `;
 
 const ExternalIcon = styled.i`
-    font-size: 26px;
+    font-size: 50px;
     font-weight: 400;
 `;
 

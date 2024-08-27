@@ -8,9 +8,12 @@ export const PLAUSIBLE = Plausible({
 
 export const PLAUSIBLE_KEYS = {
     parlayBuy: 'parlay-buy',
+    livePositionBuy: 'live-position-buy',
     multiSingleBuy: 'multi-single-buy',
     singleBuy: 'single-buy',
     depositLp: 'deposit-lp',
     walletConnect: 'wallet-connect',
     submitReferralId: 'submit-referral-id',
+    freeBetLive: 'free-bet-live',
+    freeBetBuy: 'free-bet-buy',
 };
