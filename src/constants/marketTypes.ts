@@ -677,8 +677,8 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         key: 'receivingYards',
         name: 'Receiving yards',
     },
-    [MarketType.PLAYER_PROPS_TOUCHDOWNS]: {
-        id: MarketType.PLAYER_PROPS_TOUCHDOWNS,
+    [MarketType.PLAYER_PROPS_TOUCHDOWN_SCORER]: {
+        id: MarketType.PLAYER_PROPS_TOUCHDOWN_SCORER,
         key: 'touchdowns',
         name: 'Scoring touchdown',
         description: 'Who will score a touchdown in the game?',
@@ -761,6 +761,27 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         id: MarketType.PLAYER_PROPS_BLOCKS,
         key: 'blocks',
         name: 'Blocks',
+    },
+
+    [MarketType.PLAYER_PROPS_INTERCEPTIONS]: {
+        id: MarketType.PLAYER_PROPS_INTERCEPTIONS,
+        key: 'interceptions',
+        name: 'Interceptions',
+    },
+    [MarketType.PLAYER_PROPS_KICKING_POINTS]: {
+        id: MarketType.PLAYER_PROPS_KICKING_POINTS,
+        key: 'KickingPoints',
+        name: 'Kicking points',
+    },
+    [MarketType.PLAYER_PROPS_PASSING_ATTEMPTS]: {
+        id: MarketType.PLAYER_PROPS_PASSING_ATTEMPTS,
+        key: 'passingAttempts',
+        name: 'Passing attempts',
+    },
+    [MarketType.PLAYER_PROPS_PASSING_COMPLETIONS]: {
+        id: MarketType.PLAYER_PROPS_PASSING_COMPLETIONS,
+        key: 'passingCompletions',
+        name: 'Passing completions',
     },
 
     // UFC market types
@@ -898,7 +919,7 @@ export const PLAYER_PROPS_MARKET_TYPES = [
     MarketType.PLAYER_PROPS_PASSING_TOUCHDOWNS,
     MarketType.PLAYER_PROPS_RUSHING_YARDS,
     MarketType.PLAYER_PROPS_RECEIVING_YARDS,
-    MarketType.PLAYER_PROPS_TOUCHDOWNS,
+    MarketType.PLAYER_PROPS_TOUCHDOWN_SCORER,
     MarketType.PLAYER_PROPS_FIELD_GOALS_MADE,
     MarketType.PLAYER_PROPS_PITCHER_HITS_ALLOWED,
     MarketType.PLAYER_PROPS_POINTS,
@@ -916,10 +937,14 @@ export const PLAYER_PROPS_MARKET_TYPES = [
     MarketType.PLAYER_PROPS_BLOCKS,
     MarketType.PLAYER_PROPS_UFC_TAKEDOWNS_LANDED,
     MarketType.PLAYER_PROPS_UFC_SIGNIFICANT_STRIKES_LANDED,
+    MarketType.PLAYER_PROPS_INTERCEPTIONS,
+    MarketType.PLAYER_PROPS_KICKING_POINTS,
+    MarketType.PLAYER_PROPS_PASSING_ATTEMPTS,
+    MarketType.PLAYER_PROPS_PASSING_COMPLETIONS,
 ];
 
 export const ONE_SIDE_PLAYER_PROPS_MARKET_TYPES = [
-    MarketType.PLAYER_PROPS_TOUCHDOWNS,
+    MarketType.PLAYER_PROPS_TOUCHDOWN_SCORER,
     MarketType.PLAYER_PROPS_GOALS,
     MarketType.PLAYER_PROPS_FIRST_TOUCHDOWN,
     MarketType.PLAYER_PROPS_LAST_TOUCHDOWN,
