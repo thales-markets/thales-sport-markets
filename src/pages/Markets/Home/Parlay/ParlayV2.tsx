@@ -181,9 +181,11 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
 
     const onCloseValidationModal = useCallback(() => dispatch(resetTicketError()), [dispatch]);
 
+    const hasParlayMarkets = ticketMarkets.length > 0 || notOpenedMarkets.length > 0;
+
     return (
         <Container isMobile={isMobile} isWalletConnected={isWalletConnected}>
-            {ticketMarkets.length > 0 ? (
+            {hasParlayMarkets ? (
                 <>
                     {!isMobile && (
                         <Title>
@@ -398,8 +400,12 @@ const RowMarket = styled.div<{ outOfLiquidity: boolean; notOpened?: boolean }>`
                     circle,
                     transparent,
                     transparent 50%,
-                    ${(props) => props.theme.background.secondary} 50%,
-                    ${(props) => props.theme.background.secondary} 100%
+                    ${(props) =>
+                            props.notOpened ? props.theme.error.borderColor.primary : props.theme.background.secondary}
+                        50%,
+                    ${(props) =>
+                            props.notOpened ? props.theme.error.borderColor.primary : props.theme.background.secondary}
+                        100%
                 )
                 0px 1px / 0.7rem 0.7rem repeat-x;
         }
