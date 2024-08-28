@@ -6,11 +6,15 @@ import SPAAnchor from '../SPAAnchor';
 
 const Banner: React.FC = () => {
     return (
-        <SPAAnchor href={'https://v1.overtimemarkets.xyz/'}>
+        <SPAAnchor
+            href={
+                'https://www.thales.io/dao/thalescouncil.eth/0x6a17a87eed3471e95f8ca04b2034c2601ca56dd6b4cf7e632de56f8f3225a531'
+            }
+        >
             <Container>
                 <Label>
                     <Trans
-                        i18nKey={'banner.v1-text'}
+                        i18nKey={'banner.elections-text'}
                         components={{
                             highlight: <HightlightLabel />,
                         }}
