@@ -21,7 +21,12 @@ export const RowContainer = styled(FlexDiv)`
     width: 100%;
 `;
 
-export const SummaryLabel = styled.span<{ alignRight?: boolean; lineHeight?: number; isBonus?: boolean }>`
+export const SummaryLabel = styled.span<{
+    alignRight?: boolean;
+    lineHeight?: number;
+    isBonus?: boolean;
+    disabled?: boolean;
+}>`
     font-weight: 400;
     font-size: 12px;
     line-height: ${(props) => props.lineHeight || 20}px;
@@ -29,6 +34,7 @@ export const SummaryLabel = styled.span<{ alignRight?: boolean; lineHeight?: num
     text-transform: uppercase;
     color: ${(props) => (props.isBonus ? props.theme.status.win : props.theme.textColor.quaternary)};
     ${(props) => (props.alignRight ? `margin-left: auto;` : '')}
+    ${(props) => (props.disabled ? `opacity: 0.7;` : '')}
     @media (max-width: 950px) {
         line-height: 24px;
     }
@@ -206,7 +212,7 @@ export const XButton = styled.i<{ margin?: string }>`
 export const ShareWrapper = styled(FlexDivCentered)<{ disabled?: boolean }>`
     margin-top: 15px;
     gap: 10px;
-    cursor: pointer;
+    cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
     ${(props) => (props.disabled ? `opacity: 0.7;` : '')}
 `;
 

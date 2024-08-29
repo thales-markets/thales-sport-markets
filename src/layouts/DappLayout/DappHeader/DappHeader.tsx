@@ -65,11 +65,9 @@ const PULSING_COUNT = 10;
 const customModalStyles = {
     content: {
         top: '85px',
-        left: '50%',
+        left: '0',
         right: 'auto',
         bottom: 'auto',
-        marginRight: '-48%',
-        transform: 'translate(-50%, -50%)',
         padding: '0px',
         background: 'transparent',
         border: 'none',
@@ -78,6 +76,9 @@ const customModalStyles = {
     },
     overlay: {
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        backdropFilter: 'unset',
+        WebkitBackdropFilter: 'unset',
+        webkitBackdropFilter: 'unset',
         zIndex: '5',
     },
 };
@@ -99,7 +100,7 @@ const DappHeader: React.FC = () => {
 
     const [currentPulsingCount, setCurrentPulsingCount] = useState<number>(0);
     const [navMenuVisibility, setNavMenuVisibility] = useState<boolean | null>(null);
-    const [showSearcHModal, setShowSearchModal] = useState<boolean>(false);
+    const [showSearchModal, setShowSearchModal] = useState<boolean>(false);
     const [dropdownIsOpen, setDropdownIsOpen] = useState<boolean>(false);
 
     const isMarketsPage = location.pathname === ROUTES.Home || location.pathname === ROUTES.Markets.Home;
@@ -198,7 +199,7 @@ const DappHeader: React.FC = () => {
                                     </OutsideClickHandler>
                                 )}
                             </SettingsContainer>
-                            <TopUp />
+                            {isConnectedViaParticle && <TopUp />}
                         </FlexDiv>
                     </MiddleContainer>
 
@@ -279,7 +280,7 @@ const DappHeader: React.FC = () => {
                                 <SearchIcon onClick={() => setShowSearchModal(true)} />
                             </IconWrapper>
                             <ReactModal
-                                isOpen={showSearcHModal}
+                                isOpen={showSearchModal}
                                 onRequestClose={() => {
                                     setShowSearchModal(false);
                                 }}
