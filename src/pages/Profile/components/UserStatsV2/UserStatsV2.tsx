@@ -187,7 +187,9 @@ const UserStats: React.FC = () => {
                 </SubHeaderWrapper>
                 {lpStats.map((stats) => (
                     <Section key={stats.name}>
-                        <Label>{stats.name}</Label>
+                        <Label>
+                            <CurrencyIcon className={COLLATERAL_ICONS_CLASS_NAMES[stats.name as Coins]} /> {stats.name}
+                        </Label>
                         <Value>{`${formatCurrencyWithKey(stats.name, stats.pnl, 2)} (${formatCurrencyWithSign(
                             USD_SIGN,
                             stats.pnlInUsd,
