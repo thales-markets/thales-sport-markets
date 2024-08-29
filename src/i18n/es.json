@@ -1238,7 +1238,8 @@
     },
     "banner": {
         "arb-distribution-message": "La distribución de ARB ha comenzado. Gana tokens ARB usando horas extras. Echa un vistazo a los detalles aquí.",
-        "v1-text": "<highlight>V2</highlight>: This is the V2 version of Overtime. To switch back to deprecated V1, <highlight>click here</highlight>."
+        "v1-text": "<highlight>V2</highlight>: This is the V2 version of Overtime. To switch back to deprecated V1, <highlight>click here</highlight>.",
+        "elections-text": "Las elecciones para el Consejo de Thales ya están activas, ejerza su poder de voto <highlight>aquí</highlight>."
     },
     "promotions": {
         "nav-items": {

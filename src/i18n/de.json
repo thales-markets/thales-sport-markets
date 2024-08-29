@@ -1243,7 +1243,8 @@
     },
     "banner": {
         "arb-distribution-message": "Die ARB-Verteilung hat begonnen. Verdienen Sie ARB-Tokens, indem Sie Überstunden nutzen. Schauen Sie sich die Details hier an.",
-        "v1-text": "<highlight>V2</highlight>: This is the V2 version of Overtime. To switch back to deprecated V1, <highlight>click here</highlight>."
+        "v1-text": "<highlight>V2</highlight>: This is the V2 version of Overtime. To switch back to deprecated V1, <highlight>click here</highlight>.",
+        "elections-text": "Die Wahlen zum Thales-Rat haben begonnen. Geben Sie <highlight>hier</highlight> Ihr Stimmrecht ab."
     },
     "promotions": {
         "nav-items": {

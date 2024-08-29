@@ -74,10 +74,11 @@ export const SummaryValue = styled.span<{
     }
 `;
 
-export const InfoContainer = styled.div`
+export const InfoContainer = styled.div<{ hasMarginTop?: boolean }>`
     position: relative;
     display: flex;
     justify-content: space-between;
+    ${(props) => (props.hasMarginTop ? `margin-top: 5px;` : '')}
     margin-bottom: 5px;
     align-items: center;
     line-height: 15px;
