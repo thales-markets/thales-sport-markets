@@ -1,1 +1,1 @@
-export { default } from './MatchInfoNotOpenedV2';
+export { default } from './MatchUnavailableInfo';
