@@ -188,6 +188,13 @@ export type UserStats = {
     pnl: number;
 };
 
+export type LpStats = {
+    name: string;
+    numberOfTickets: number;
+    pnl: number;
+    pnlInUsd: number;
+};
+
 export type Team = {
     name: string;
     isHome: boolean;

@@ -2,8 +2,8 @@ import { Network } from 'enums/network';
 
 const liquidityPoolDataContract = {
     addresses: {
-        [Network.OptimismMainnet]: '0x2152A0bC2DE4a1D4FA1E81F60e094C44ec24Fe2D',
-        [Network.Arbitrum]: '0xcc4ED8cD7101B512B134360ED3cCB759caB33f17',
+        [Network.OptimismMainnet]: '0xD9cb9c42c9f84EAd43cf86030A7ae2430Fa34F26',
+        [Network.Arbitrum]: '0xe82627ADB08cC7701a501C319942CbF72a401a83',
         [Network.Base]: '',
         [Network.OptimismSepolia]: '0xd61FA46d4e3CD47584a56fC20856Fdd197135756',
     },
@@ -38,6 +38,32 @@ const liquidityPoolDataContract = {
             type: 'event',
         },
         { inputs: [], name: 'acceptOwnership', outputs: [], stateMutability: 'nonpayable', type: 'function' },
+        {
+            inputs: [{ internalType: 'contract SportsAMMV2LiquidityPool', name: 'liquidityPool', type: 'address' }],
+            name: 'getCurrentRoundTickets',
+            outputs: [{ internalType: 'address[]', name: 'tickets', type: 'address[]' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'contract SportsAMMV2LiquidityPool', name: 'liquidityPool', type: 'address' }],
+            name: 'getCurrentRoundTicketsData',
+            outputs: [
+                {
+                    components: [
+                        { internalType: 'uint256', name: 'totalTickets', type: 'uint256' },
+                        { internalType: 'uint256', name: 'numOfClosedTickets', type: 'uint256' },
+                        { internalType: 'uint256', name: 'numOfPendingTickets', type: 'uint256' },
+                        { internalType: 'address[]', name: 'pendingTickets', type: 'address[]' },
+                    ],
+                    internalType: 'struct SportsAMMV2LiquidityPoolData.RoundTicketsData',
+                    name: '',
+                    type: 'tuple',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
         {
             inputs: [{ internalType: 'contract SportsAMMV2LiquidityPool', name: 'liquidityPool', type: 'address' }],
             name: 'getLiquidityPoolData',

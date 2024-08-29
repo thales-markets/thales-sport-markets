@@ -1,5 +1,7 @@
+import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from 'constants/currency';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
+import useLpStatsV2Query from 'queries/wallet/useLpStatsV2Query';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import useUsersStatsV2Query from 'queries/wallet/useUsersStatsV2Query';
 import React, { Fragment, useCallback, useMemo } from 'react';
@@ -9,11 +11,10 @@ import { getIsAppReady } from 'redux/modules/app';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { formatCurrencyWithSign } from 'thales-utils';
+import { FlexDivColumn, FlexDivRow } from 'styles/common';
+import { formatCurrencyWithKey, formatCurrencyWithSign } from 'thales-utils';
 import { Coins } from 'types/tokens';
 import { isStableCurrency, sortCollateralBalances } from 'utils/collaterals';
-import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from '../../../../constants/currency';
-import { FlexDivColumn, FlexDivRow } from '../../../../styles/common';
 
 const UserStats: React.FC = () => {
     const { t } = useTranslation();
@@ -75,6 +76,9 @@ const UserStats: React.FC = () => {
 
         return sortedBalances;
     }, [exchangeRates, multiCollateralBalances, networkId]);
+
+    const lpStatsQuery = useLpStatsV2Query(networkId);
+    const lpStats = lpStatsQuery.isSuccess && lpStatsQuery.data ? lpStatsQuery.data : [];
 
     return (
         <Wrapper>
@@ -174,6 +178,24 @@ const UserStats: React.FC = () => {
                         })}
                 </SectionWrapper>
             )}
+            <SectionWrapper>
+                <SubHeaderWrapper>
+                    <SubHeader>
+                        <SubHeaderIcon className="icon icon--yield" />
+                        LP Stats
+                    </SubHeader>
+                </SubHeaderWrapper>
+                {lpStats.map((stats) => (
+                    <Section key={stats.name}>
+                        <Label>{stats.name}</Label>
+                        <Value>{`${formatCurrencyWithKey(stats.name, stats.pnl, 2)} (${formatCurrencyWithSign(
+                            USD_SIGN,
+                            stats.pnlInUsd,
+                            2
+                        )})`}</Value>
+                    </Section>
+                ))}
+            </SectionWrapper>
         </Wrapper>
     );
 };
