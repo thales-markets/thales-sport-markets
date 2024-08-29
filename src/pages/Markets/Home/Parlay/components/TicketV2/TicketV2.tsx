@@ -2003,7 +2003,7 @@ const Ticket: React.FC<TicketProps> = ({
                     </ToggleContainer>
                 </RowSummary>
             )}
-            <InfoContainer>
+            <InfoContainer hasMarginTop={!isThales && !isFreeBetActive && isLiveTicket}>
                 <InfoWrapper>
                     <InfoLabel>{t('markets.parlay.liquidity')}:</InfoLabel>
                     <InfoValue>
@@ -2011,29 +2011,25 @@ const Ticket: React.FC<TicketProps> = ({
                     </InfoValue>
                 </InfoWrapper>
                 {isLiveTicket && (
-                    <>
-                        <SettingsIconContainer>
-                            <OutsideClickHandler
-                                onOutsideClick={() => slippageDropdownOpen && setSlippageDropdownOpen(false)}
-                            >
-                                <SettingsWrapper onClick={() => setSlippageDropdownOpen(!slippageDropdownOpen)}>
-                                    <SettingsLabel>{t('markets.parlay.slippage.slippage')}</SettingsLabel>
-                                    <SettingsIcon className={`icon icon--settings`} />
-                                </SettingsWrapper>
-                                {slippageDropdownOpen && (
-                                    <SlippageDropdownContainer>
-                                        <Slippage
-                                            fixed={SLIPPAGE_PERCENTAGES}
-                                            defaultValue={liveBetSlippage}
-                                            onChangeHandler={(slippage: number) =>
-                                                dispatch(setLiveBetSlippage(slippage))
-                                            }
-                                        />
-                                    </SlippageDropdownContainer>
-                                )}
-                            </OutsideClickHandler>
-                        </SettingsIconContainer>
-                    </>
+                    <SettingsIconContainer>
+                        <OutsideClickHandler
+                            onOutsideClick={() => slippageDropdownOpen && setSlippageDropdownOpen(false)}
+                        >
+                            <SettingsWrapper onClick={() => setSlippageDropdownOpen(!slippageDropdownOpen)}>
+                                <SettingsLabel>{t('markets.parlay.slippage.slippage')}</SettingsLabel>
+                                <SettingsIcon className={`icon icon--settings`} />
+                            </SettingsWrapper>
+                            {slippageDropdownOpen && (
+                                <SlippageDropdownContainer>
+                                    <Slippage
+                                        fixed={SLIPPAGE_PERCENTAGES}
+                                        defaultValue={liveBetSlippage}
+                                        onChangeHandler={(slippage: number) => dispatch(setLiveBetSlippage(slippage))}
+                                    />
+                                </SlippageDropdownContainer>
+                            )}
+                        </OutsideClickHandler>
+                    </SettingsIconContainer>
                 )}
             </InfoContainer>
             {isAA && (
