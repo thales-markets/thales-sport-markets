@@ -72,6 +72,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
         }
     }, [ticket]);
 
+    // Live matches
     useEffect(() => {
         if (liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data && isLiveFilterSelected) {
             const liveSportOpenMarkets = liveSportMarketsQuery.data.live.reduce(
@@ -102,6 +103,20 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
                         odd: openMarket.odds[ticketPosition.position],
                     };
                 });
+
+            if (ticket.length > ticketMarkets.length) {
+                const notOpenedMarkets = ticket.filter((ticketPosition) => {
+                    const marketNotOpened = liveSportOpenMarkets.every(
+                        (market: SportMarket) => !isSameMarket(market, ticketPosition)
+                    );
+                    return marketNotOpened;
+                });
+
+                setNotOpenedMarkets(notOpenedMarkets);
+            } else {
+                setNotOpenedMarkets([]);
+            }
+
             const ticketOdds = ticketMarkets.map((market) => ({
                 odd: market.odd,
                 position: market.position,
@@ -116,6 +131,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
         }
     }, [isLiveFilterSelected, liveSportMarketsQuery.data, liveSportMarketsQuery.isSuccess, ticket]);
 
+    // Non-Live matches
     useEffect(() => {
         if (sportMarketsQuery.isSuccess && sportMarketsQuery.data && !isLiveFilterSelected) {
             const sportOpenMarkets = sportMarketsQuery.data[StatusFilter.OPEN_MARKETS].reduce(
