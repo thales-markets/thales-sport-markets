@@ -103,7 +103,15 @@ const useLpStatsV2Query = (networkId: SupportedNetwork, options?: UseQueryOption
                 const wethLpStats = await getLpStats(wethTickets, sportsAMMDataContract, networkId, exchangeRates);
                 const thalesLpStats = await getLpStats(thalesTickets, sportsAMMDataContract, networkId, exchangeRates);
 
-                return [usdcLpStats, wethLpStats, thalesLpStats];
+                const lpStats: LpStats = {
+                    name: 'TOTAL',
+                    numberOfTickets:
+                        usdcLpStats.numberOfTickets + wethLpStats.numberOfTickets + thalesLpStats.numberOfTickets,
+                    pnl: usdcLpStats.pnlInUsd + wethLpStats.pnlInUsd + thalesLpStats.pnlInUsd,
+                    pnlInUsd: usdcLpStats.pnlInUsd + wethLpStats.pnlInUsd + thalesLpStats.pnlInUsd,
+                };
+
+                return [usdcLpStats, wethLpStats, thalesLpStats, lpStats];
             }
 
             return [];

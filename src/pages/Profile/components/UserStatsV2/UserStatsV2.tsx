@@ -185,18 +185,29 @@ const UserStats: React.FC = () => {
                         LP Stats
                     </SubHeader>
                 </SubHeaderWrapper>
-                {lpStats.map((stats) => (
-                    <Section key={stats.name}>
-                        <Label>
-                            <CurrencyIcon className={COLLATERAL_ICONS_CLASS_NAMES[stats.name as Coins]} /> {stats.name}
-                        </Label>
-                        <Value>{`${formatCurrencyWithKey(stats.name, stats.pnl, 2)} (${formatCurrencyWithSign(
-                            USD_SIGN,
-                            stats.pnlInUsd,
-                            2
-                        )})`}</Value>
-                    </Section>
-                ))}
+                {lpStats.map((stats, index) => {
+                    return index === 3 ? (
+                        <Section key={stats.name}>
+                            <Label>
+                                <CurrencyIcon className="icon icon--yield" />
+                                {stats.name}
+                            </Label>
+                            <Value>{formatCurrencyWithSign(USD_SIGN, stats.pnlInUsd, 2)}</Value>
+                        </Section>
+                    ) : (
+                        <Section key={stats.name}>
+                            <Label>
+                                <CurrencyIcon className={COLLATERAL_ICONS_CLASS_NAMES[stats.name as Coins]} />{' '}
+                                {stats.name}
+                            </Label>
+                            <Value>{`${formatCurrencyWithKey(stats.name, stats.pnl, 2)} (${formatCurrencyWithSign(
+                                USD_SIGN,
+                                stats.pnlInUsd,
+                                2
+                            )})`}</Value>
+                        </Section>
+                    );
+                })}
             </SectionWrapper>
         </Wrapper>
     );
