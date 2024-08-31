@@ -41,8 +41,6 @@ const getLpStats = async (
 
     const finalTickets: Ticket[] = orderBy(updateTotalQuoteAndPayout(mappedTickets), ['timestamp'], ['desc']);
 
-    console.log(finalTickets.filter((ticket) => ticket.isCancelled).length);
-
     for (let index = 0; index < finalTickets.length; index++) {
         const ticket = finalTickets[index];
         collateral = ticket.collateral;
@@ -56,7 +54,7 @@ const getLpStats = async (
         if (ticket.isUserTheWinner && !ticket.isCancelled) {
             pnl -= payout + fees - buyInAmount;
         }
-        if (ticket.isLost && !ticket.isCancelled) {
+        if (ticket.isLost && !ticket.isCancelled && !ticket.isFreeBet) {
             pnl += buyInAmount - fees;
         }
     }
