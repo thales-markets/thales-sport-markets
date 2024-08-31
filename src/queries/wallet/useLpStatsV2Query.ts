@@ -4,14 +4,17 @@ import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { BATCH_SIZE } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
 import { Contract } from 'ethers';
+import { orderBy } from 'lodash';
 import { useQuery, UseQueryOptions } from 'react-query';
-import { bigNumberFormatter, coinFormatter, Coins, parseBytes32String } from 'thales-utils';
-import { LpStats } from 'types/markets';
-import { getCollateralByAddress, isLpSupported, isStableCurrency } from 'utils/collaterals';
+import { bigNumberFormatter, Coins, parseBytes32String } from 'thales-utils';
+import { LpStats, Ticket } from 'types/markets';
+import { isLpSupported, isStableCurrency } from 'utils/collaterals';
 import networkConnector from 'utils/networkConnector';
 import { LiquidityPoolCollateral } from '../../enums/liquidityPool';
 import { SupportedNetwork } from '../../types/network';
 import { getLpAddress } from '../../utils/liquidityPool';
+import { updateTotalQuoteAndPayout } from '../../utils/marketsV2';
+import { mapTicket } from '../../utils/tickets';
 import { Rates } from '../rates/useExchangeRatesQuery';
 
 const getLpStats = async (
@@ -33,20 +36,27 @@ const getLpStats = async (
     let pnl = 0;
     let convertAmount = false;
     let collateral = '' as Coins;
-    for (let index = 0; index < ticketsData.length; index++) {
-        const ticket = ticketsData[index];
-        collateral = getCollateralByAddress(ticket.collateral, networkId);
+
+    const mappedTickets: Ticket[] = ticketsData.map((ticket: any) => mapTicket(ticket, networkId, [], [], []));
+
+    const finalTickets: Ticket[] = orderBy(updateTotalQuoteAndPayout(mappedTickets), ['timestamp'], ['desc']);
+
+    console.log(finalTickets.filter((ticket) => ticket.isCancelled).length);
+
+    for (let index = 0; index < finalTickets.length; index++) {
+        const ticket = finalTickets[index];
+        collateral = ticket.collateral;
         convertAmount = isLpSupported(collateral) && !isStableCurrency(collateral);
 
-        const buyInAmount = coinFormatter(ticket.buyInAmount, networkId, collateral);
-        const fees = coinFormatter(ticket.fees, networkId, collateral);
-        const totalQuote = bigNumberFormatter(ticket.totalQuote);
+        const buyInAmount = ticket.buyInAmount;
+        const fees = ticket.fees;
+        const totalQuote = ticket.totalQuote;
         const payout = buyInAmount / totalQuote;
 
-        if (ticket.isUserTheWinner) {
+        if (ticket.isUserTheWinner && !ticket.isCancelled) {
             pnl -= payout + fees - buyInAmount;
         }
-        if (ticket.isLost) {
+        if (ticket.isLost && !ticket.isCancelled) {
             pnl += buyInAmount - fees;
         }
     }
