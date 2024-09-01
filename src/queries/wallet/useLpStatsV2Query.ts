@@ -46,16 +46,11 @@ const getLpStats = async (
         collateral = ticket.collateral;
         convertAmount = isLpSupported(collateral) && !isStableCurrency(collateral);
 
-        const buyInAmount = ticket.buyInAmount;
-        const fees = ticket.fees;
-        const totalQuote = ticket.totalQuote;
-        const payout = buyInAmount / totalQuote;
-
         if (ticket.isUserTheWinner && !ticket.isCancelled) {
-            pnl -= payout + fees - buyInAmount;
+            pnl -= ticket.payout + ticket.fees - ticket.buyInAmount;
         }
-        if (ticket.isLost && !ticket.isCancelled && !ticket.isFreeBet) {
-            pnl += buyInAmount - fees;
+        if (ticket.isLost && !ticket.isCancelled) {
+            pnl += ticket.buyInAmount - ticket.fees;
         }
     }
 
