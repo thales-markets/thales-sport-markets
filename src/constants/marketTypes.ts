@@ -784,6 +784,37 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         name: 'Passing completions',
     },
 
+    [MarketType.PLAYER_PROPS_SACKS]: {
+        id: MarketType.PLAYER_PROPS_SACKS,
+        key: 'sacks',
+        name: 'Sacks',
+    },
+    [MarketType.PLAYER_PROPS_PASSING_RUSHING]: {
+        id: MarketType.PLAYER_PROPS_PASSING_RUSHING,
+        key: 'passingAndRushing',
+        name: 'Passing + Rushing Yards',
+    },
+    [MarketType.PLAYER_PROPS_RUSHING_RECEIVING]: {
+        id: MarketType.PLAYER_PROPS_RUSHING_RECEIVING,
+        key: 'rushingAndReceiving',
+        name: 'Rushing + Receiving Yards',
+    },
+    [MarketType.PLAYER_PROPS_LONGEST_RECEPTION]: {
+        id: MarketType.PLAYER_PROPS_LONGEST_RECEPTION,
+        key: 'longestReception',
+        name: 'Longest reception',
+    },
+    [MarketType.PLAYER_PROPS_EXTRA_POINTS]: {
+        id: MarketType.PLAYER_PROPS_EXTRA_POINTS,
+        key: 'extraPoints',
+        name: 'Extra points',
+    },
+    [MarketType.PLAYER_PROPS_TACKLES]: {
+        id: MarketType.PLAYER_PROPS_TACKLES,
+        key: 'tackles',
+        name: 'Tackles',
+    },
+
     // UFC market types
     [MarketType.WINNING_ROUND]: {
         id: MarketType.WINNING_ROUND,
@@ -941,6 +972,12 @@ export const PLAYER_PROPS_MARKET_TYPES = [
     MarketType.PLAYER_PROPS_KICKING_POINTS,
     MarketType.PLAYER_PROPS_PASSING_ATTEMPTS,
     MarketType.PLAYER_PROPS_PASSING_COMPLETIONS,
+    MarketType.PLAYER_PROPS_SACKS,
+    MarketType.PLAYER_PROPS_RUSHING_RECEIVING,
+    MarketType.PLAYER_PROPS_PASSING_RUSHING,
+    MarketType.PLAYER_PROPS_LONGEST_RECEPTION,
+    MarketType.PLAYER_PROPS_EXTRA_POINTS,
+    MarketType.PLAYER_PROPS_TACKLES,
 ];
 
 export const ONE_SIDE_PLAYER_PROPS_MARKET_TYPES = [
