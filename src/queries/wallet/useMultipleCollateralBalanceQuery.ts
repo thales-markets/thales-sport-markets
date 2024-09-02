@@ -1,9 +1,8 @@
-import { COLLATERAL_DECIMALS, CRYPTO_CURRENCY_MAP } from 'constants/currency';
+import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
-import { UseQueryOptions, useQuery } from 'react-query';
-import { bigNumberFormatter } from 'thales-utils';
-import { Coins } from 'types/tokens';
+import { useQuery, UseQueryOptions } from 'react-query';
+import { bigNumberFormatter, Coins, COLLATERAL_DECIMALS } from 'thales-utils';
 import networkConnector from 'utils/networkConnector';
 
 const useMultipleCollateralBalanceQuery = (

@@ -2,7 +2,7 @@ import { COLLATERALS, CRYPTO_CURRENCY_MAP, FREE_BET_COLLATERALS, STABLE_COINS } 
 import _ from 'lodash';
 import { Rates } from 'queries/rates/useExchangeRatesQuery';
 import { SupportedNetwork } from 'types/network';
-import { Coins } from 'types/tokens';
+import { Coins } from 'thales-utils';
 import multipleCollateral from './contracts/multipleCollateralContract';
 
 export const getDefaultCollateral = (networkId: SupportedNetwork) => COLLATERALS[networkId][0];

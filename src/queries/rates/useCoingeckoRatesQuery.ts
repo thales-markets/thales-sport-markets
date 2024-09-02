@@ -28,7 +28,6 @@ const useCoingeckoRatesQuery = (options?: UseQueryOptions<CoingeckoRates>) => {
                 USDC: 1,
                 USDT: 1,
                 USDbC: 1,
-                BUSD: 1,
                 THALES: 0,
                 sTHALES: 0,
             };

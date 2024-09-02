@@ -6,7 +6,7 @@ import { getLiveBetSlippage, getTicketPayment, removeFromTicket } from 'redux/mo
 import { getOddsType } from 'redux/modules/ui';
 import { getNetworkId } from 'redux/modules/wallet';
 import { TicketMarket } from 'types/markets';
-import { Coins } from 'types/tokens';
+import { Coins } from 'thales-utils';
 import { getCollateral } from 'utils/collaterals';
 import { formatMarketOdds, isWithinSlippage } from 'utils/markets';
 import {

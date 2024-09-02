@@ -10,7 +10,7 @@ import { CRYPTO_CURRENCY_MAP } from '../constants/currency';
 import { THALES_ADDED_PAYOUT_PERCENTAGE } from '../constants/markets';
 import { League } from '../enums/sports';
 import { TicketMarketStatus } from '../enums/tickets';
-import { Coins } from '../types/tokens';
+import { Coins } from '../thales-utils';
 import { getCollateralByAddress } from './collaterals';
 import freeBetHolder from './contracts/freeBetHolder';
 import stakingThalesBettingProxy from './contracts/stakingThalesBettingProxy';

@@ -1,7 +1,7 @@
 import { Network } from 'enums/network';
 import { keyBy } from 'lodash';
 import { SupportedNetwork } from 'types/network';
-import { Coins } from 'types/tokens';
+import { Coins } from 'thales-utils';
 
 export const USD_SIGN = '$';
 
@@ -127,21 +127,6 @@ export const FREE_BET_COLLATERALS: Record<SupportedNetwork, Coins[]> = {
 //         CRYPTO_CURRENCY_MAP.WETH as Coins,
 //     ],
 // };
-
-export const COLLATERAL_DECIMALS: Record<Coins, number> = {
-    sUSD: 18,
-    DAI: 18,
-    USDCe: 6,
-    USDC: 6,
-    USDbC: 6,
-    USDT: 6,
-    OP: 18,
-    WETH: 18,
-    ETH: 18,
-    ARB: 18,
-    THALES: 18,
-    sTHALES: 18,
-};
 
 export const COLLATERAL_ICONS_CLASS_NAMES: Record<Coins, string> = {
     sUSD: 'currency-icon currency-icon--susd',

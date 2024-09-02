@@ -1,7 +1,7 @@
 import { Network } from 'enums/network';
 import { ethers, Signer } from 'ethers';
 import { NetworkSettings } from 'types/network';
-import { Coins } from 'types/tokens';
+import { Coins } from 'thales-utils';
 import liquidityPoolDataContract from 'utils/contracts/liquidityPoolDataContractV2';
 import sportsAMMDataContract from 'utils/contracts/sportsAMMDataContract';
 import sportsAMMV2Contract from 'utils/contracts/sportsAMMV2Contract';

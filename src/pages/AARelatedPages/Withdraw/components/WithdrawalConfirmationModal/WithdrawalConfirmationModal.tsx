@@ -10,7 +10,7 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { coinParser, formatCurrencyWithKey } from 'thales-utils';
-import { Coins } from 'types/tokens';
+import { Coins } from 'thales-utils';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 
