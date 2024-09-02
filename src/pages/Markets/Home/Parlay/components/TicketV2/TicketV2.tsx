@@ -335,7 +335,7 @@ const Ticket: React.FC<TicketProps> = ({
             parlayMultiplier,
             thalesMultiplier,
         ];
-    }, [userMultipliersQuery.data, userMultipliersQuery.isSuccess, markets, isThales]);
+    }, [swapToThales, userMultipliersQuery.data, userMultipliersQuery.isSuccess, markets, isThales]);
 
     const ammContractsPaused = useAMMContractsPausedQuery(networkId, {
         enabled: isAppReady,
