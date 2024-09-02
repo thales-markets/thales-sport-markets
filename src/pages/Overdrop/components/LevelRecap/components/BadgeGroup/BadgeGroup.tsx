@@ -5,7 +5,7 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
-import { getWalletAddress } from 'redux/modules/wallet';
+import { getIsWalletConnected, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivRowCentered } from 'styles/common';
@@ -25,10 +25,11 @@ const BadgeGroup: React.FC<BadgeGroupProps> = ({ loyaltyBoost, startIndex, endIn
     const { t } = useTranslation();
 
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
+    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
 
     const userDataQuery = useUserDataQuery(walletAddress, {
-        enabled: !!isAppReady,
+        enabled: isAppReady && isWalletConnected,
     });
 
     const userData: OverdropUserData | undefined = useMemo(() => {
