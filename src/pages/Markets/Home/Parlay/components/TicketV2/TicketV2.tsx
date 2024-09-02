@@ -440,7 +440,7 @@ const Ticket: React.FC<TicketProps> = ({
     );
 
     const userDataQuery = useUserDataQuery(walletAddress, {
-        enabled: !!isAppReady,
+        enabled: isAppReady && isWalletConnected,
     });
 
     const userData: OverdropUserData | undefined = useMemo(() => {
@@ -653,7 +653,7 @@ const Ticket: React.FC<TicketProps> = ({
 
     const fetchTicketAmmQuote = useCallback(
         async (buyInAmountForQuote: number) => {
-            if (Number(buyInAmountForQuote) <= 0) return;
+            if (buyInAmountForQuote <= 0) return;
 
             const { sportsAMMV2Contract, multiCollateralOnOffRampContract } = networkConnector;
             if (sportsAMMV2Contract && minBuyInAmountInDefaultCollateral) {
@@ -696,6 +696,7 @@ const Ticket: React.FC<TicketProps> = ({
                         const minimumReceivedForBuyInAmountInDefaultCollateral = collateralHasLp
                             ? minimumReceivedForBuyInAmount
                             : coinFormatter(minimumReceivedForBuyInAmount, networkId);
+
                         setBuyInAmountInDefaultCollateral(minimumReceivedForBuyInAmountInDefaultCollateral);
 
                         return { buyInAmountInDefaultCollateral: minimumReceivedForBuyInAmountInDefaultCollateral };
@@ -902,9 +903,7 @@ const Ticket: React.FC<TicketProps> = ({
 
         if (
             (Number(buyInAmount) && finalQuotes.some((quote) => quote === 0)) ||
-            (Number(buyInAmountInDefaultCollateral) &&
-                ticketLiquidity &&
-                Number(buyInAmountInDefaultCollateral) > ticketLiquidity)
+            (buyInAmountInDefaultCollateral && ticketLiquidity && buyInAmountInDefaultCollateral > ticketLiquidity)
         ) {
             setTooltipTextBuyInAmount(t('markets.parlay.validation.availability'));
         } else if (
