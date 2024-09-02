@@ -1239,7 +1239,8 @@
     },
     "banner": {
         "arb-distribution-message": "Распространение ARB началось. Зарабатывайте токены ARB, используя сверхурочную работу. Подробности уточняйте здесь.",
-        "v1-text": "<highlight>V2</highlight>: This is the V2 version of Overtime. To switch back to deprecated V1, <highlight>click here</highlight>."
+        "v1-text": "<highlight>V2</highlight>: This is the V2 version of Overtime. To switch back to deprecated V1, <highlight>click here</highlight>.",
+        "elections-text": "Выборы в Совет Фалеса уже начались, воспользуйтесь своим правом голоса <highlight>здесь</highlight>."
     },
     "promotions": {
         "nav-items": {

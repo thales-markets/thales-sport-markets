@@ -1239,7 +1239,8 @@
     },
     "banner": {
         "arb-distribution-message": "การกระจาย ARB ได้เริ่มต้นแล้ว รับโทเค็น ARB โดยใช้การต่อเวลา ชำระเงินรายละเอียดได้ที่นี่",
-        "v1-text": "<highlight>V2</highlight>: This is the V2 version of Overtime. To switch back to deprecated V1, <highlight>click here</highlight>."
+        "v1-text": "<highlight>V2</highlight>: This is the V2 version of Overtime. To switch back to deprecated V1, <highlight>click here</highlight>.",
+        "elections-text": "การเลือกตั้งสภา Thales เริ่มต้นแล้ว ใช้สิทธิลงคะแนนของคุณได้ <highlight>ที่นี่</highlight>"
     },
     "promotions": {
         "nav-items": {

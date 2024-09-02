@@ -20,7 +20,7 @@ type MatchInfoProps = {
     applyPayoutMultiplier: boolean;
 };
 
-const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isLive }) => {
+const MatchUnavailableInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isLive }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const matchLabel = getMatchLabel(market);
@@ -75,4 +75,4 @@ const LeftContainer = styled(FlexDivColumn)`
     height: 49px;
 `;
 
-export default MatchInfo;
+export default MatchUnavailableInfo;
