@@ -14,11 +14,12 @@ const XPCalculation: React.FC = () => {
     const { t } = useTranslation();
 
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
+    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const userMultipliersQuery = useUserMultipliersQuery(walletAddress, {
-        enabled: !!isAppReady,
+        enabled: isAppReady && isWalletConnected,
     });
 
     const userMultipliers = useMemo(() => {
