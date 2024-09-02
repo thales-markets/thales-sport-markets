@@ -299,7 +299,7 @@ const Ticket: React.FC<TicketProps> = ({
         const thalesMultiplier = {
             name: 'thalesMultiplier',
             label: 'THALES used',
-            multiplier: isThales ? 10 : 0,
+            multiplier: isThales || swapToThales ? 10 : 0,
             icon: <OverdropIcon className="icon icon--thales-logo" />,
             tooltip: 'thales-boost',
         };
