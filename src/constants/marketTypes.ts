@@ -686,8 +686,8 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
     },
     [MarketType.PLAYER_PROPS_TOUCHDOWNS]: {
         id: MarketType.PLAYER_PROPS_TOUCHDOWNS,
-        key: 'totalTouchdowns', // TODO
-        name: 'Touchdowns', // TODO
+        key: 'totalTouchdowns', // TODO: new
+        name: 'Touchdowns', // TODO: new
     },
     [MarketType.PLAYER_PROPS_FIELD_GOALS_MADE]: {
         id: MarketType.PLAYER_PROPS_FIELD_GOALS_MADE,
