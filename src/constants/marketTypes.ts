@@ -1497,14 +1497,14 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
         ],
         [MarketTypeGroup.PLAYER_RUSHING]: [
             MarketType.PLAYER_PROPS_RUSHING_YARDS,
-            MarketType.PLAYER_PROPS_RUSHING_RECEIVING,
             MarketType.PLAYER_PROPS_PASSING_RUSHING,
+            MarketType.PLAYER_PROPS_RUSHING_RECEIVING,
         ],
         [MarketTypeGroup.PLAYER_RECEIVING]: [
             MarketType.PLAYER_PROPS_RECEIVING_YARDS,
             MarketType.PLAYER_PROPS_RECEPTIONS,
-            MarketType.PLAYER_PROPS_LONGEST_RECEPTION,
             MarketType.PLAYER_PROPS_RUSHING_RECEIVING,
+            MarketType.PLAYER_PROPS_LONGEST_RECEPTION,
         ],
         [MarketTypeGroup.PLAYER_DEFENSE_SPECIAL_TEAMS]: [
             MarketType.PLAYER_PROPS_PASSING_COMPLETIONS,
