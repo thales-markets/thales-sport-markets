@@ -42,11 +42,11 @@ const ModalWrapper: React.FC = () => {
     const [showDailyMultiplierModal, setShowDailyMultiplierModal] = useState<boolean>(false);
 
     const userDataQuery = useUserDataQuery(walletAddress, {
-        enabled: !!isAppReady,
+        enabled: isAppReady && isWalletConnected,
     });
 
     const userMultipliersQuery = useUserMultipliersQuery(walletAddress, {
-        enabled: !!isAppReady,
+        enabled: isAppReady && isWalletConnected,
     });
 
     const userData: OverdropUserData | undefined =
