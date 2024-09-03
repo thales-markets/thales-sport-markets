@@ -213,14 +213,14 @@ export const LeagueMap: Record<League, LeagueInfo> = {
     [League.FIFA_WC]: {
         sport: Sport.SOCCER,
         id: League.FIFA_WC,
-        label: 'FIFA World Cup',
+        label: 'FIFA World Cup Qualifiers',
         logoClass: 'icon-homepage league--fifa-world-cup',
         scoringType: ScoringType.GOALS,
         matchResolveType: MatchResolveType.REGULAR,
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 100,
-        hidden: true,
+        hidden: false,
         tooltipKey: 'common.fifa-tooltip',
     },
     [League.J1_LEAGUE]: {
