@@ -352,7 +352,7 @@ const getTooltipText = (typeId: number, position: Position, line: number, market
     } else if (typeId === MarketType.SPREAD) {
         translationKey = line < 0 ? `spread-${position}` : `spread-${position === 1 ? 0 : 1}`;
     } else {
-        translationKey = `${MarketTypeMap[typeId as MarketType]}-${position}`;
+        translationKey = `${MarketTypeMap[typeId as MarketType].key}-${position}`;
     }
 
     return i18n.t(`markets.market-card.odd-tooltip-v2.${translationKey}`, {
