@@ -1507,7 +1507,7 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
             MarketType.PLAYER_PROPS_LONGEST_RECEPTION,
         ],
         [MarketTypeGroup.PLAYER_DEFENSE_SPECIAL_TEAMS]: [
-            MarketType.PLAYER_PROPS_PASSING_COMPLETIONS,
+            MarketType.PLAYER_PROPS_SACKS,
             MarketType.PLAYER_PROPS_TACKLES,
         ],
         [MarketTypeGroup.PLAYER_KICKING]: [
