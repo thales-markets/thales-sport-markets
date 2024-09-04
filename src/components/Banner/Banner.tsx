@@ -40,7 +40,6 @@ const Container = styled(FlexDiv)`
     cursor: pointer;
     text-align: center;
     padding: 2px 5px;
-    margin-bottom: -15px;
     @media (max-width: 767px) {
         min-height: 20px;
     }
