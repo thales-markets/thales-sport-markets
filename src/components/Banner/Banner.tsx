@@ -4,8 +4,12 @@ import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import SPAAnchor from '../SPAAnchor';
 
+const IS_VISIBLE = false;
+
 const Banner: React.FC = () => {
-    return (
+    return !IS_VISIBLE ? (
+        <></>
+    ) : (
         <SPAAnchor
             href={
                 'https://www.thales.io/dao/thalescouncil.eth/0x6a17a87eed3471e95f8ca04b2034c2601ca56dd6b4cf7e632de56f8f3225a531'
@@ -36,6 +40,7 @@ const Container = styled(FlexDiv)`
     cursor: pointer;
     text-align: center;
     padding: 2px 5px;
+    margin-bottom: -15px;
     @media (max-width: 767px) {
         min-height: 20px;
     }
