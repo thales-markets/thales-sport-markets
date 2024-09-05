@@ -793,31 +793,37 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         id: MarketType.PLAYER_PROPS_SACKS,
         key: 'sacks',
         name: 'Sacks',
+        tooltipKey: 'sacks',
     },
     [MarketType.PLAYER_PROPS_PASSING_RUSHING]: {
         id: MarketType.PLAYER_PROPS_PASSING_RUSHING,
         key: 'passingAndRushing',
         name: 'Passing + Rushing Yards',
+        tooltipKey: 'passing-rushing',
     },
     [MarketType.PLAYER_PROPS_RUSHING_RECEIVING]: {
         id: MarketType.PLAYER_PROPS_RUSHING_RECEIVING,
         key: 'rushingAndReceiving',
         name: 'Rushing + Receiving Yards',
+        tooltipKey: 'rushing-receiving',
     },
     [MarketType.PLAYER_PROPS_LONGEST_RECEPTION]: {
         id: MarketType.PLAYER_PROPS_LONGEST_RECEPTION,
         key: 'longestReception',
         name: 'Longest reception',
+        tooltipKey: 'longest-reception',
     },
     [MarketType.PLAYER_PROPS_EXTRA_POINTS]: {
         id: MarketType.PLAYER_PROPS_EXTRA_POINTS,
         key: 'extraPoints',
         name: 'Extra points',
+        tooltipKey: 'extra-points',
     },
     [MarketType.PLAYER_PROPS_TACKLES]: {
         id: MarketType.PLAYER_PROPS_TACKLES,
         key: 'tackles',
         name: 'Tackles',
+        tooltipKey: 'tackles',
     },
 
     // UFC market types
