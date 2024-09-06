@@ -1495,6 +1495,7 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
             MarketType.PLAYER_PROPS_TOUCHDOWNS,
         ],
         [MarketTypeGroup.PLAYER_PASSING]: [
+            MarketType.PLAYER_PROPS_PASSING_YARDS,
             MarketType.PLAYER_PROPS_PASSING_TOUCHDOWNS,
             MarketType.PLAYER_PROPS_INTERCEPTIONS,
             MarketType.PLAYER_PROPS_PASSING_ATTEMPTS,
