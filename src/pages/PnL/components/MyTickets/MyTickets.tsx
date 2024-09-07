@@ -1,12 +1,9 @@
-import ROUTES from 'constants/routes';
 import { PnlTab } from 'enums/ui';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { getIsWalletConnected } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
-import { navigateTo } from 'utils/routes';
 import { LiquidityPoolCollateral } from '../../../../enums/liquidityPool';
 import NavigationBar from '../NavigationBar';
 import UserPnl from '../UserPnl';
@@ -19,11 +16,6 @@ type MyTicketsProps = {
 
 const MyTickets: React.FC<MyTicketsProps> = ({ selectedTab, setSelectedTab }) => {
     const isMobile = useSelector(getIsMobile);
-    const isWalletConnected = useSelector(getIsWalletConnected);
-
-    useEffect(() => {
-        !isWalletConnected && navigateTo(ROUTES.Markets.Home);
-    }, [isWalletConnected]);
 
     return (
         <RowContainer>
