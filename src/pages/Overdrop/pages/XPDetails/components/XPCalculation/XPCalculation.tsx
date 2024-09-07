@@ -4,7 +4,7 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import { getWalletAddress } from 'redux/modules/wallet';
+import { getIsWalletConnected, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
@@ -14,11 +14,12 @@ const XPCalculation: React.FC = () => {
     const { t } = useTranslation();
 
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
+    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const userMultipliersQuery = useUserMultipliersQuery(walletAddress, {
-        enabled: !!isAppReady,
+        enabled: isAppReady && isWalletConnected,
     });
 
     const userMultipliers = useMemo(() => {

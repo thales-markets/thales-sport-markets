@@ -1239,7 +1239,8 @@
     },
     "banner": {
         "arb-distribution-message": "ARB 分发已开始。通过加班赚取 ARB 代币。从这里获得更多信息。",
-        "v1-text": "<highlight>V2</highlight>: This is the V2 version of Overtime. To switch back to deprecated V1, <highlight>click here</highlight>."
+        "v1-text": "<highlight>V2</highlight>: This is the V2 version of Overtime. To switch back to deprecated V1, <highlight>click here</highlight>.",
+        "elections-text": "泰雷兹理事会选举现已开始，请在<highlight>此处</highlight>行使您的投票权。"
     },
     "promotions": {
         "nav-items": {

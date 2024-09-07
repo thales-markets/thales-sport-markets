@@ -684,6 +684,11 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         description: 'Who will score a touchdown in the game?',
         tooltipKey: 'touchdowns',
     },
+    [MarketType.PLAYER_PROPS_TOUCHDOWNS]: {
+        id: MarketType.PLAYER_PROPS_TOUCHDOWNS,
+        key: 'totalTouchdowns', // TODO: new
+        name: 'Touchdowns', // TODO: new
+    },
     [MarketType.PLAYER_PROPS_FIELD_GOALS_MADE]: {
         id: MarketType.PLAYER_PROPS_FIELD_GOALS_MADE,
         key: 'fieldGoalsMade',
@@ -782,6 +787,43 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         id: MarketType.PLAYER_PROPS_PASSING_COMPLETIONS,
         key: 'passingCompletions',
         name: 'Passing completions',
+    },
+
+    [MarketType.PLAYER_PROPS_SACKS]: {
+        id: MarketType.PLAYER_PROPS_SACKS,
+        key: 'sacks',
+        name: 'Sacks',
+        tooltipKey: 'sacks',
+    },
+    [MarketType.PLAYER_PROPS_PASSING_RUSHING]: {
+        id: MarketType.PLAYER_PROPS_PASSING_RUSHING,
+        key: 'passingAndRushing',
+        name: 'Passing + Rushing Yards',
+        tooltipKey: 'passing-rushing',
+    },
+    [MarketType.PLAYER_PROPS_RUSHING_RECEIVING]: {
+        id: MarketType.PLAYER_PROPS_RUSHING_RECEIVING,
+        key: 'rushingAndReceiving',
+        name: 'Rushing + Receiving Yards',
+        tooltipKey: 'rushing-receiving',
+    },
+    [MarketType.PLAYER_PROPS_LONGEST_RECEPTION]: {
+        id: MarketType.PLAYER_PROPS_LONGEST_RECEPTION,
+        key: 'longestReception',
+        name: 'Longest reception',
+        tooltipKey: 'longest-reception',
+    },
+    [MarketType.PLAYER_PROPS_EXTRA_POINTS]: {
+        id: MarketType.PLAYER_PROPS_EXTRA_POINTS,
+        key: 'extraPoints',
+        name: 'Extra points',
+        tooltipKey: 'extra-points',
+    },
+    [MarketType.PLAYER_PROPS_TACKLES]: {
+        id: MarketType.PLAYER_PROPS_TACKLES,
+        key: 'tackles',
+        name: 'Tackles',
+        tooltipKey: 'tackles',
     },
 
     // UFC market types
@@ -941,6 +983,12 @@ export const PLAYER_PROPS_MARKET_TYPES = [
     MarketType.PLAYER_PROPS_KICKING_POINTS,
     MarketType.PLAYER_PROPS_PASSING_ATTEMPTS,
     MarketType.PLAYER_PROPS_PASSING_COMPLETIONS,
+    MarketType.PLAYER_PROPS_SACKS,
+    MarketType.PLAYER_PROPS_RUSHING_RECEIVING,
+    MarketType.PLAYER_PROPS_PASSING_RUSHING,
+    MarketType.PLAYER_PROPS_LONGEST_RECEPTION,
+    MarketType.PLAYER_PROPS_EXTRA_POINTS,
+    MarketType.PLAYER_PROPS_TACKLES,
 ];
 
 export const ONE_SIDE_PLAYER_PROPS_MARKET_TYPES = [
@@ -1439,6 +1487,40 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
             MarketType.SECOND_PERIOD_TOTAL2_ODD_EVEN,
             MarketType.SECOND_PERIOD_TOTAL2_HOME_TEAM,
             MarketType.SECOND_PERIOD_TOTAL2_AWAY_TEAM,
+        ],
+        [MarketTypeGroup.PLAYER_TOUCHDOWN_SCORERS]: [
+            MarketType.PLAYER_PROPS_FIRST_TOUCHDOWN,
+            MarketType.PLAYER_PROPS_TOUCHDOWN_SCORER,
+            MarketType.PLAYER_PROPS_LAST_TOUCHDOWN,
+            MarketType.PLAYER_PROPS_TOUCHDOWNS,
+        ],
+        [MarketTypeGroup.PLAYER_PASSING]: [
+            MarketType.PLAYER_PROPS_PASSING_YARDS,
+            MarketType.PLAYER_PROPS_PASSING_TOUCHDOWNS,
+            MarketType.PLAYER_PROPS_INTERCEPTIONS,
+            MarketType.PLAYER_PROPS_PASSING_ATTEMPTS,
+            MarketType.PLAYER_PROPS_PASSING_COMPLETIONS,
+            MarketType.PLAYER_PROPS_PASSING_RUSHING,
+        ],
+        [MarketTypeGroup.PLAYER_RUSHING]: [
+            MarketType.PLAYER_PROPS_RUSHING_YARDS,
+            MarketType.PLAYER_PROPS_PASSING_RUSHING,
+            MarketType.PLAYER_PROPS_RUSHING_RECEIVING,
+        ],
+        [MarketTypeGroup.PLAYER_RECEIVING]: [
+            MarketType.PLAYER_PROPS_RECEIVING_YARDS,
+            MarketType.PLAYER_PROPS_RECEPTIONS,
+            MarketType.PLAYER_PROPS_RUSHING_RECEIVING,
+            MarketType.PLAYER_PROPS_LONGEST_RECEPTION,
+        ],
+        [MarketTypeGroup.PLAYER_DEFENSE_SPECIAL_TEAMS]: [
+            MarketType.PLAYER_PROPS_SACKS,
+            MarketType.PLAYER_PROPS_TACKLES,
+        ],
+        [MarketTypeGroup.PLAYER_KICKING]: [
+            MarketType.PLAYER_PROPS_FIELD_GOALS_MADE,
+            MarketType.PLAYER_PROPS_KICKING_POINTS,
+            MarketType.PLAYER_PROPS_EXTRA_POINTS,
         ],
     },
     [Sport.BASEBALL]: {

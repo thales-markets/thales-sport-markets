@@ -1,12 +1,14 @@
 import Progress from 'components/Progress';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
+import useOpAndArbPriceQuery from 'queries/overdrop/useOpAndArbPriceQuery';
 import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { useSwipeable } from 'react-swipeable';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import { getWalletAddress } from 'redux/modules/wallet';
+import { getIsWalletConnected, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivRow } from 'styles/common';
@@ -14,13 +16,12 @@ import { formatCurrencyWithKey, formatCurrencyWithSign } from 'thales-utils';
 import { OverdropUserData } from 'types/overdrop';
 import { formatPoints, getCurrentLevelByPoints, getNextThalesRewardLevel, getProgressLevel } from 'utils/overdrop';
 import SmallBadge from '../SmallBadge';
-import { useSwipeable } from 'react-swipeable';
-import useOpAndArbPriceQuery from 'queries/overdrop/useOpAndArbPriceQuery';
 
 const BadgeOverview: React.FC = () => {
     const { t } = useTranslation();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
+    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
 
     const [currentStep, setCurrentStep] = useState<number>(0);
@@ -31,7 +32,7 @@ const BadgeOverview: React.FC = () => {
     }, [isMobile]);
 
     const userDataQuery = useUserDataQuery(walletAddress, {
-        enabled: !!isAppReady,
+        enabled: isAppReady && isWalletConnected,
     });
 
     const priceQuery = useOpAndArbPriceQuery({ enabled: isAppReady });
