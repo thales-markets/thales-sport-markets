@@ -78,6 +78,12 @@ const QUERY_KEYS = {
             lpCollateral,
             networkId,
         ],
+        LpUsersPnl: (lpCollateral: LiquidityPoolCollateral, networkId: Network) => [
+            'wallet',
+            'lpUsersPnl',
+            lpCollateral,
+            networkId,
+        ],
         LiquidityPoolTransactions: (networkId: Network, walletAddress: string) => [
             'wallet',
             'liquidityPoolTransactions',

@@ -195,6 +195,12 @@ export type LpStats = {
     pnlInUsd: number;
 };
 
+export type LpUsersPnl = {
+    account: string;
+    pnl: number;
+    pnlInUsd: number;
+};
+
 export type Team = {
     name: string;
     isHome: boolean;
