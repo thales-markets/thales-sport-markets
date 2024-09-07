@@ -1,5 +1,6 @@
 import { Position, StatusFilter } from 'enums/markets';
 import { Network } from 'enums/network';
+import { LiquidityPoolCollateral } from '../enums/liquidityPool';
 
 const QUERY_KEYS = {
     ParlayMarkets: (networkId: Network, account: string, minTimestamp?: number, maxTimestamp?: number) => [
@@ -71,6 +72,12 @@ const QUERY_KEYS = {
         Stats: (networkId: Network, walletAddress: string) => ['wallet', 'stats', networkId, walletAddress],
         StatsV2: (networkId: Network, walletAddress: string) => ['wallet', 'statsV2', networkId, walletAddress],
         LpStatsV2: (networkId: Network) => ['wallet', 'lpStatsV2', networkId],
+        LpHistory: (lpCollateral: LiquidityPoolCollateral, networkId: Network) => [
+            'wallet',
+            'lpHistory',
+            lpCollateral,
+            networkId,
+        ],
         LiquidityPoolTransactions: (networkId: Network, walletAddress: string) => [
             'wallet',
             'liquidityPoolTransactions',

@@ -40,6 +40,7 @@ const GetStarted = lazy(() => import('pages/AARelatedPages/GetStarted'));
 const Promotions = lazy(() => import('pages/Promotions/Home'));
 const Promotion = lazy(() => import('pages/Promotions/Promotion'));
 const Overdrop = lazy(() => import('pages/Overdrop'));
+const PnL = lazy(() => import('pages/PnL'));
 
 const particle = new ParticleNetwork({
     projectId: process.env.REACT_APP_PARTICLE_PROJECT_ID,
@@ -193,6 +194,11 @@ const App = () => {
                                         </DappLayout>
                                     </Route>
                                 )}
+                                <Route exact path={ROUTES.PnL}>
+                                    <DappLayout>
+                                        <PnL />
+                                    </DappLayout>
+                                </Route>
                                 {
                                     <Route exact path={ROUTES.Overdrop}>
                                         <DappLayout>

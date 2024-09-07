@@ -30,7 +30,7 @@ export const mapTicket = (
 ): Ticket => {
     const collateral = getCollateralByAddress(ticket.collateral, networkId);
     const mappedTicket: Ticket = {
-        id: ticket.id,
+        id: ticket.ticketOwner,
         txHash: '',
         timestamp: Number(ticket.createdAt) * 1000,
         collateral,

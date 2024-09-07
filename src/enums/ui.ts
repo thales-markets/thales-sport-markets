@@ -9,6 +9,13 @@ export enum ProfileTab {
     MY_PORTFOLIO = 'my-portfolio',
 }
 
+export enum PnlTab {
+    LP_STATS = 'lp-stats',
+    USDC = 'usdc',
+    WETH = 'weth',
+    THALES = 'thales',
+}
+
 export enum OverdropTab {
     OVERDROP_HOME = 'overdrop-home',
     XP_CALCULATOR = 'xp-calculator',

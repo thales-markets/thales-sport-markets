@@ -7,6 +7,7 @@ const ROUTES = {
         Market: '/markets/:marketAddress',
     },
     Profile: '/profile',
+    PnL: '/pnl',
     Wizard: '/wizard',
     LiquidityPool: '/liquidity-pool',
     SingleLiquidityPool: '/liquidity-pool?pool-type=single',
