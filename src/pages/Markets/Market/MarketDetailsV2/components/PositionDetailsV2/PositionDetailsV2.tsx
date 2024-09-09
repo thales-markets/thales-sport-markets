@@ -12,25 +12,8 @@ import { getTicket, removeFromTicket, updateTicket } from 'redux/modules/ticket'
 import { getOddsType } from 'redux/modules/ui';
 import { SportMarket, TicketPosition } from 'types/markets';
 import { formatMarketOdds, getPositionOrder } from 'utils/markets';
-import {
-    getMatchLabel,
-    getOddTooltipTextV2,
-    getPositionTextV2,
-    isSameMarket,
-    sportMarketAsSerializable,
-} from 'utils/marketsV2';
-import {
-    Container,
-    Odd,
-    Status,
-    Text,
-    TooltipContainer,
-    TooltipFooter,
-    TooltipFooterInfo,
-    TooltipFooterInfoContianer,
-    TooltipFooterInfoLabel,
-    TooltipText,
-} from './styled-components';
+import { getMatchLabel, getPositionTextV2, isSameMarket, sportMarketAsSerializable } from 'utils/marketsV2';
+import { Container, Odd, Status, Text } from './styled-components';
 
 type PositionDetailsProps = {
     market: SportMarket;
@@ -63,15 +46,12 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isM
     const disabledPosition = noOdd || (!isGameOpen && !isGameLive);
 
     const showOdd = isGameOpen || isGameLive;
-    const showTooltip = showOdd && !noOdd && !isMobile && false; // TODO: check all translations by market type key or remove it
 
     const positionText = getPositionTextV2(
         market,
         position,
         isMainPageView && (market.typeId === MarketType.TOTAL || !!marketTypeFilter)
     );
-
-    const oddTooltipText = getOddTooltipTextV2(position, market);
 
     const getDetails = () => (
         <Container
@@ -113,7 +93,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isM
                     }
                     if (isMobile) {
                         // TODO: temporary solution
-                        toast(`${getMatchLabel(market)} added to the ticket` || oddTooltipText, oddToastOptions);
+                        toast(`${getMatchLabel(market)} added to the ticket`, oddToastOptions);
                     }
                 }
             }}
@@ -142,21 +122,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isM
         </Container>
     );
 
-    const getTooltip = () => (
-        <TooltipContainer>
-            <TooltipText>{oddTooltipText}</TooltipText>
-            {isGameOpen && !isMobile && (
-                <TooltipFooter>
-                    <TooltipFooterInfoContianer>
-                        <TooltipFooterInfoLabel>{t('markets.market-details.odds')}:</TooltipFooterInfoLabel>
-                        <TooltipFooterInfo>{formatMarketOdds(selectedOddsType, odd)}</TooltipFooterInfo>
-                    </TooltipFooterInfoContianer>
-                </TooltipFooter>
-            )}
-        </TooltipContainer>
-    );
-
-    return <>{showTooltip ? <Tooltip overlay={getTooltip()} component={getDetails()} /> : getDetails()}</>;
+    return getDetails();
 };
 
 export default PositionDetails;
