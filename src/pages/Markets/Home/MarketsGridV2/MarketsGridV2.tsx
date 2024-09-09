@@ -59,7 +59,7 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
                 if (markets.length - 1 === index && sortedMarketsByLeague.length) {
                     content.push(
                         <MarketsListV2
-                            key={sortedMarketsByLeague.length}
+                            key={'sorted' + sortedMarketsByLeague.length}
                             league={previousMarketLeagueId as League}
                             markets={sortedMarketsByLeague}
                             language={language}
