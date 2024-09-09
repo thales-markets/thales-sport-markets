@@ -546,7 +546,13 @@
             },
             "type-tooltip": {
                 "11055": "I touchdown di ricezione, corsa, ritorno del punt, ritorno del calcio, difensivi e di intercettazione vengono conteggiati ai fini del risultato",
-                "touchdowns": "I touchdown di ricezione, corsa, ritorno del punt, ritorno del calcio, difensivi e di intercettazione vengono conteggiati ai fini del risultato"
+                "touchdowns": "I touchdown di ricezione, corsa, ritorno del punt, ritorno del calcio, difensivi e di intercettazione vengono conteggiati ai fini del risultato",
+                "passing-rushing": "Una scommessa sulla possibilità che i passaggi e le yard corse da un determinato giocatore superino/siano inferiori a una certa quantità.",
+                "tackles": "Una scommessa sulla possibilità che il numero di placcaggi di un determinato giocatore sia superiore/inferiore a un certo importo.",
+                "sacks": "Una scommessa over/under su quanti sack farà un giocatore durante una partita.",
+                "rushing-receiving": "Una scommessa sulla possibilità che le yard corse + ricevute da un determinato giocatore superino/siano inferiori a una certa quantità.",
+                "longest-reception": "Una scommessa sulla possibilità che la ricezione più lunga di un determinato giocatore sia superiore/inferiore a un certo importo.",
+                "extra-points": "Una scommessa sulla possibilità che i punti extra di un determinato giocatore siano superiori/inferiori a un certo importo."
             },
             "odds-live-limitation-message": "Le posizioni dal vivo sono consentite solo come single",
             "live": "Vivere",
