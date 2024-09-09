@@ -37,8 +37,8 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
     const finalOrderKeys = groupBySortedMarketsKeys(marketsKeys);
 
     const getContainerContent = () => {
+        let content: React.ReactElement[] = [];
         if (sportFilter === SportFilter.Boosted) {
-            const content: React.ReactElement[] = [];
             let sortedMarketsByLeague: SportMarket[] = [];
             let previousMarketLeagueId: League;
             markets.forEach((market: SportMarket, index: number) => {
@@ -67,23 +67,13 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
                     );
                 }
             });
-            return content;
+        } else {
+            content = finalOrderKeys.map((leagueId: number, index: number) => (
+                <MarketsListV2 key={index} league={leagueId} markets={marketsMap[leagueId]} language={language} />
+            ));
         }
 
-        return (
-            <ListContainer isMarketSelected={isMarketSelected}>
-                {finalOrderKeys.map((leagueId: number, index: number) => {
-                    return (
-                        <MarketsListV2
-                            key={index}
-                            league={leagueId}
-                            markets={marketsMap[leagueId]}
-                            language={language}
-                        />
-                    );
-                })}
-            </ListContainer>
-        );
+        return <ListContainer isMarketSelected={isMarketSelected}>{content}</ListContainer>;
     };
 
     return (
