@@ -546,7 +546,13 @@
             },
             "type-tooltip": {
                 "11055": "Touchdowns beim Empfangen, Rushen, Punt Return, Kick Return, Defensiv- und Interception-Pass werden zum Ergebnis gezählt.",
-                "touchdowns": "Touchdowns beim Empfangen, Rushen, Punt Return, Kick Return, Defensiv- und Interception-Pass werden zum Ergebnis gezählt."
+                "touchdowns": "Touchdowns beim Empfangen, Rushen, Punt Return, Kick Return, Defensiv- und Interception-Pass werden zum Ergebnis gezählt.",
+                "longest-reception": "Eine Wette darauf, ob der längste Empfang eines bestimmten Spielers über/unter einem bestimmten Betrag liegen wird.",
+                "passing-rushing": "Eine Wette darauf, ob die Pass- und Laufyards eines bestimmten Spielers über/unter einem bestimmten Wert liegen.",
+                "sacks": "Eine Über/Unter-Wette darauf, wie viele Sacks ein Spieler während eines Spiels erzielen wird.",
+                "tackles": "Eine Wette darauf, ob die Anzahl der Tackles eines bestimmten Spielers über/unter einem bestimmten Wert liegen wird.",
+                "extra-points": "Eine Wette darauf, ob die Extrapunkte eines bestimmten Spielers über/unter einem bestimmten Betrag liegen.",
+                "rushing-receiving": "Eine Wette darauf, ob die Rushing- und Receiving-Yards eines bestimmten Spielers über/unter einem bestimmten Wert liegen."
             },
             "odds-live-limitation-message": "Live-Positionen nur als Singles erlaubt",
             "live": "Live",
