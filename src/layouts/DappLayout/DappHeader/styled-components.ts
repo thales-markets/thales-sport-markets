@@ -185,7 +185,7 @@ export const OverdropButtonContainer = styled(FlexDiv)`
     cursor: pointer;
     width: 160px;
     font-size: 10px;
-    font-weight: 500;
+    font-weight: 600;
     text-transform: uppercase;
     color: ${(props) => props.theme.overdrop.textColor.primary};
 `;
