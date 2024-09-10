@@ -1053,7 +1053,8 @@
     },
     "banner": {
         "v1-text": "<highlight>Welcome to Overtime V2!</highlight> If you are looking for the legacy V1 version, <highlight>click here</highlight>.",
-        "elections-text": "Elections for Thales Council are now live, exercise your voting power <highlight>here</highlight>."
+        "elections-text": "Elections for Thales Council are now live, exercise your voting power <highlight>here</highlight>.",
+        "speed-text": "Trade on Speed Markets, win 20,000 PYTH! <highlight>Learn more.</highlight>"
     },
     "promotions": {
         "title": "Promotions and Incentives",
