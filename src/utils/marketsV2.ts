@@ -88,7 +88,8 @@ const getSimplePositionText = (
     awayTeam: string,
     leagueId: League,
     extendedText?: boolean,
-    positionNames?: string[]
+    positionNames?: string[],
+    odds?: number[]
 ) => {
     if (leagueId === League.US_ELECTION && positionNames && positionNames[position]) {
         const text = positionNames[position]
@@ -142,7 +143,7 @@ const getSimplePositionText = (
             ? isSpreadMarket(marketType)
                 ? `${position === 0 ? homeTeam : awayTeam} (${getLineInfo(marketType, position, line)})`
                 : `${position === 0 ? 'Over' : 'Under'} ${getLineInfo(marketType, position, line)}`
-            : isOnlyOverPlayerPropsMarket(marketType)
+            : isOnlyOverPlayerPropsMarket(marketType, odds || [])
             ? `Over ${getLineInfo(marketType, position, line)}`
             : getLineInfo(marketType, position, line);
     }
@@ -229,7 +230,8 @@ export const getPositionTextV2 = (market: SportMarket, position: number, extende
               market.awayTeam,
               market.leagueId,
               extendedText,
-              market.positionNames
+              market.positionNames,
+              market.odds
           );
 };
 
@@ -309,7 +311,7 @@ export const getSubtitleText = (market: SportMarket, position: Position) => {
 
     if (
         (market.isPlayerPropsMarket &&
-            !isOnlyOverPlayerPropsMarket(marketType) &&
+            !isOnlyOverPlayerPropsMarket(marketType, market.odds) &&
             !market.isYesNoPlayerPropsMarket &&
             !market.isOneSidePlayerPropsMarket) ||
         isTotalMarket(marketType)

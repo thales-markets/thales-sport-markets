@@ -5,7 +5,6 @@ import {
     DOUBLE_CHANCE_MARKET_TYPES,
     HOME_TEAM_MARKET_TYPES,
     ONE_SIDE_PLAYER_PROPS_MARKET_TYPES,
-    ONLY_OVER_PLAYER_PROPS_MARKET_TYPES,
     OTHER_YES_NO_MARKET_TYPES,
     PLAYER_PROPS_MARKET_TYPES,
     SCORE_MARKET_TYPES,
@@ -51,16 +50,16 @@ export const isPlayerPropsMarket = (marketType: MarketType) => {
     return PLAYER_PROPS_MARKET_TYPES.includes(marketType);
 };
 
+export const isOnlyOverPlayerPropsMarket = (marketType: MarketType, odds: number[]) => {
+    return isPlayerPropsMarket(marketType) && odds.length === 1;
+};
+
 export const isOneSidePlayerPropsMarket = (marketType: MarketType) => {
     return ONE_SIDE_PLAYER_PROPS_MARKET_TYPES.includes(marketType);
 };
 
 export const isYesNoPlayerPropsMarket = (marketType: MarketType) => {
     return YES_NO_PLAYER_PROPS_MARKET_TYPES.includes(marketType);
-};
-
-export const isOnlyOverPlayerPropsMarket = (marketType: MarketType) => {
-    return ONLY_OVER_PLAYER_PROPS_MARKET_TYPES.includes(marketType);
 };
 
 export const isWinnerMarket = (marketType: MarketType) => {

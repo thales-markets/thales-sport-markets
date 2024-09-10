@@ -1011,8 +1011,6 @@ export const YES_NO_PLAYER_PROPS_MARKET_TYPES = [
     MarketType.PLAYER_PROPS_TRIPLE_DOUBLE,
 ];
 
-export const ONLY_OVER_PLAYER_PROPS_MARKET_TYPES = [MarketType.PLAYER_PROPS_OVER_GOALS];
-
 export const TOTAL_MARKET_TYPES = [
     MarketType.TOTAL,
     MarketType.TOTAL2,
@@ -1358,7 +1356,7 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
         [MarketTypeGroup.BOTH_TEAMS_TO_SCORE]: BOTH_TEAMS_TO_SCORE_MARKET_TYPES,
         [MarketTypeGroup.FIRST_HALF]: FIRST_PERIOD_MARKET_TYPES,
         [MarketTypeGroup.SECOND_HALF]: SECOND_PERIOD_MARKET_TYPES,
-        [MarketTypeGroup.PLAYER_PROPS]: PLAYER_PROPS_MARKET_TYPES,
+        [MarketTypeGroup.PLAYER_GOALS]: [MarketType.PLAYER_PROPS_OVER_GOALS],
     },
     [Sport.BASKETBALL]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
