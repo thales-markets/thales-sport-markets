@@ -14,6 +14,7 @@ import {
     isHomeTeamMarket,
     isOneSideMarket,
     isOneSidePlayerPropsMarket,
+    isOnlyOverPlayerPropsMarket,
     isOtherYesNoMarket,
     isPeriod2Market,
     isPeriodMarket,
@@ -141,6 +142,8 @@ const getSimplePositionText = (
             ? isSpreadMarket(marketType)
                 ? `${position === 0 ? homeTeam : awayTeam} (${getLineInfo(marketType, position, line)})`
                 : `${position === 0 ? 'Over' : 'Under'} ${getLineInfo(marketType, position, line)}`
+            : isOnlyOverPlayerPropsMarket(marketType)
+            ? `Over ${getLineInfo(marketType, position, line)}`
             : getLineInfo(marketType, position, line);
     }
 
@@ -305,7 +308,10 @@ export const getSubtitleText = (market: SportMarket, position: Position) => {
     const marketType = market.typeId;
 
     if (
-        (market.isPlayerPropsMarket && !market.isYesNoPlayerPropsMarket && !market.isOneSidePlayerPropsMarket) ||
+        (market.isPlayerPropsMarket &&
+            !isOnlyOverPlayerPropsMarket(marketType) &&
+            !market.isYesNoPlayerPropsMarket &&
+            !market.isOneSidePlayerPropsMarket) ||
         isTotalMarket(marketType)
     ) {
         return position === 0 ? 'Over' : 'Under';
