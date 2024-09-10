@@ -1,8 +1,9 @@
 import { ONE_HUNDRED_K, ONE_MILLION } from 'constants/defaults';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
+import { MultiplierType } from 'enums/overdrop';
 import { OverdropIcon } from 'pages/Overdrop/components/styled-components';
 import { floorNumberToDecimals, formatCurrencyWithKey } from 'thales-utils';
-import { MultiplierType, OverdropMultiplier } from 'types/overdrop';
+import { OverdropMultiplier } from 'types/overdrop';
 import { OverdropLevel } from 'types/ui';
 
 export const formatPoints = (amount: number) => {
