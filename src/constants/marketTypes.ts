@@ -684,11 +684,6 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         description: 'Who will score a touchdown in the game?',
         tooltipKey: 'touchdowns',
     },
-    [MarketType.PLAYER_PROPS_TOUCHDOWNS]: {
-        id: MarketType.PLAYER_PROPS_TOUCHDOWNS,
-        key: 'totalTouchdowns', // TODO: new
-        name: 'Touchdowns', // TODO: new
-    },
     [MarketType.PLAYER_PROPS_FIELD_GOALS_MADE]: {
         id: MarketType.PLAYER_PROPS_FIELD_GOALS_MADE,
         key: 'fieldGoalsMade',
@@ -767,6 +762,12 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         key: 'blocks',
         name: 'Blocks',
     },
+    [MarketType.PLAYER_PROPS_OVER_GOALS]: {
+        id: MarketType.PLAYER_PROPS_OVER_GOALS,
+        key: 'overGoals',
+        name: 'OverGoals',
+        description: 'How many goals will player score?',
+    },
 
     [MarketType.PLAYER_PROPS_INTERCEPTIONS]: {
         id: MarketType.PLAYER_PROPS_INTERCEPTIONS,
@@ -787,6 +788,11 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         id: MarketType.PLAYER_PROPS_PASSING_COMPLETIONS,
         key: 'passingCompletions',
         name: 'Passing completions',
+    },
+    [MarketType.PLAYER_PROPS_TOUCHDOWNS]: {
+        id: MarketType.PLAYER_PROPS_TOUCHDOWNS,
+        key: 'totalTouchdowns', // TODO: new
+        name: 'Touchdowns', // TODO: new
     },
 
     [MarketType.PLAYER_PROPS_SACKS]: {
@@ -977,12 +983,14 @@ export const PLAYER_PROPS_MARKET_TYPES = [
     MarketType.PLAYER_PROPS_LAST_TOUCHDOWN,
     MarketType.PLAYER_PROPS_3PTS_MADE,
     MarketType.PLAYER_PROPS_BLOCKS,
+    MarketType.PLAYER_PROPS_OVER_GOALS,
     MarketType.PLAYER_PROPS_UFC_TAKEDOWNS_LANDED,
     MarketType.PLAYER_PROPS_UFC_SIGNIFICANT_STRIKES_LANDED,
     MarketType.PLAYER_PROPS_INTERCEPTIONS,
     MarketType.PLAYER_PROPS_KICKING_POINTS,
     MarketType.PLAYER_PROPS_PASSING_ATTEMPTS,
     MarketType.PLAYER_PROPS_PASSING_COMPLETIONS,
+    MarketType.PLAYER_PROPS_TOUCHDOWNS,
     MarketType.PLAYER_PROPS_SACKS,
     MarketType.PLAYER_PROPS_RUSHING_RECEIVING,
     MarketType.PLAYER_PROPS_PASSING_RUSHING,
@@ -1002,6 +1010,8 @@ export const YES_NO_PLAYER_PROPS_MARKET_TYPES = [
     MarketType.PLAYER_PROPS_DOUBLE_DOUBLE,
     MarketType.PLAYER_PROPS_TRIPLE_DOUBLE,
 ];
+
+export const ONLY_OVER_PLAYER_PROPS_MARKET_TYPES = [MarketType.PLAYER_PROPS_OVER_GOALS];
 
 export const TOTAL_MARKET_TYPES = [
     MarketType.TOTAL,
@@ -1348,6 +1358,7 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
         [MarketTypeGroup.BOTH_TEAMS_TO_SCORE]: BOTH_TEAMS_TO_SCORE_MARKET_TYPES,
         [MarketTypeGroup.FIRST_HALF]: FIRST_PERIOD_MARKET_TYPES,
         [MarketTypeGroup.SECOND_HALF]: SECOND_PERIOD_MARKET_TYPES,
+        [MarketTypeGroup.PLAYER_PROPS]: PLAYER_PROPS_MARKET_TYPES,
     },
     [Sport.BASKETBALL]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
