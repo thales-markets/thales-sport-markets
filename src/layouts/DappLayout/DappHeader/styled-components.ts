@@ -1,4 +1,5 @@
 import burger from 'assets/images/burger.svg';
+import OverdropButtonBackground from 'assets/images/overdrop/overdrop-button-background.png';
 import overdrop from 'assets/images/overdrop/overdrop-nav.png';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
@@ -171,6 +172,29 @@ export const MobileButtonWrapper = styled.div`
     button {
         width: 100%;
     }
+`;
+
+export const OverdropButtonContainer = styled(FlexDiv)`
+    position: relative;
+    background-image: url(${OverdropButtonBackground});
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: 160px;
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: ${(props) => props.theme.overdrop.textColor.primary};
+`;
+
+export const SmallBadgeImage = styled.img`
+    position: absolute;
+    left: -25px;
+    width: 50px;
+    height: 50px;
 `;
 
 export const SettingsContainer = styled(FlexDivRowCentered)`
