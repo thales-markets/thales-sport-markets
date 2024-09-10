@@ -174,7 +174,10 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                 }}
             >
                 {overdropGameMultiplier && (
-                    <GameOfLabel selected={selected}>{`Game of the ${overdropGameMultiplier.type}`}</GameOfLabel>
+                    <GameOfLabel
+                        isLive={isGameLive}
+                        selected={selected}
+                    >{`Game of the ${overdropGameMultiplier.type}`}</GameOfLabel>
                 )}
                 <MatchInfo selected={selected}>
                     {isGameLive ? (

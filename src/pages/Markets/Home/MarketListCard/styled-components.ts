@@ -89,7 +89,7 @@ export const MatchInfo = styled(FlexDivStart)<{
     }
 `;
 
-export const GameOfLabel = styled.span<{ selected?: boolean }>`
+export const GameOfLabel = styled.span<{ selected?: boolean; isLive?: boolean }>`
     color: ${(props) => (props.selected ? 'inherit' : props.theme.overdrop.textColor.primary)};
     font-size: 10px;
     position: absolute;
@@ -99,8 +99,8 @@ export const GameOfLabel = styled.span<{ selected?: boolean }>`
     @media (max-width: 600px) {
         top: 10px;
         text-align: center;
-        left: 0;
-        right: 0;
+        left: ${(props) => (props.isLive ? '55px' : '0')};
+        right: 0px;
     }
 `;
 
