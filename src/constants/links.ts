@@ -13,5 +13,5 @@ export const LINKS = {
         Reddit: 'https://www.reddit.com/r/overtimemarkets',
     },
     ThalesTip142: 'https://github.com/thales-markets/thales-improvement-proposals/blob/main/TIPs/TIP-142.md',
-    SpeedMarkets: 'https://speedmarkets.xyz',
+    SpeedMarkets: 'https://www.speedmarkets.xyz',
 };
