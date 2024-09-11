@@ -19,6 +19,7 @@ import { getWalletAddress } from 'redux/modules/wallet';
 import axios from 'axios';
 import { generalConfig } from 'config/general';
 import { refetchOverdropMultipliers } from 'utils/queryConnector';
+import { secondsToMilliseconds } from 'date-fns';
 
 export type ShareTicketModalProps = {
     markets: TicketMarket[];
@@ -103,8 +104,8 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                     return;
                 }
 
-                const IOS_DOWNLOAD_DELAY = 10 * 1000; // 10 seconds
-                const MOBILE_TWITTER_TOAST_AUTO_CLOSE = 15 * 1000; // 15 seconds
+                const IOS_DOWNLOAD_DELAY = secondsToMilliseconds(10);
+                const MOBILE_TWITTER_TOAST_AUTO_CLOSE = secondsToMilliseconds(15);
                 try {
                     // In order to improve image quality enlarge image by 2.
                     // Twitter is trying to fit into 504 x 510 with the same aspect ratio, so when image is smaller than 504 x 510, there is quality loss.

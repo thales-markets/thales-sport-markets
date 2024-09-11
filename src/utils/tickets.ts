@@ -20,6 +20,7 @@ import {
     isYesNoPlayerPropsMarket,
 } from './markets';
 import { getLeagueSport } from './sports';
+import { secondsToMilliseconds } from 'date-fns';
 
 export const mapTicket = (
     ticket: any,
@@ -32,7 +33,7 @@ export const mapTicket = (
     const mappedTicket: Ticket = {
         id: ticket.id,
         txHash: '',
-        timestamp: Number(ticket.createdAt) * 1000,
+        timestamp: secondsToMilliseconds(Number(ticket.createdAt)),
         collateral,
         account: ticket.ticketOwner,
         buyInAmount: coinFormatter(ticket.buyInAmount, networkId, collateral),
@@ -40,7 +41,7 @@ export const mapTicket = (
         totalQuote: bigNumberFormatter(ticket.totalQuote),
         payout: coinFormatter(ticket.buyInAmount, networkId, collateral) / bigNumberFormatter(ticket.totalQuote),
         numOfMarkets: Number(ticket.numOfMarkets),
-        expiry: Number(ticket.expiry) * 1000,
+        expiry: secondsToMilliseconds(Number(ticket.expiry)),
         isResolved: ticket.resolved,
         isPaused: ticket.paused,
         isCancelled: ticket.marketsResult.every(
@@ -99,8 +100,8 @@ export const mapTicket = (
                     leagueName: '',
                     typeId: typeId,
                     type: type ? type.key : '',
-                    maturity: Number(market.maturity) * 1000,
-                    maturityDate: new Date(market.maturity * 1000),
+                    maturity: secondsToMilliseconds(Number(market.maturity)),
+                    maturityDate: new Date(secondsToMilliseconds(market.maturity)),
                     homeTeam: homeTeamName,
                     awayTeam: awayTeamName,
                     homeScore: isPlayerProps
