@@ -614,15 +614,6 @@ const Ticket: React.FC<TicketProps> = ({
         ]
     );
 
-    const overdropTotalXP = useMemo(() => {
-        if (!buyInAmountInDefaultCollateral) {
-            return 0;
-        }
-        const basePoints = buyInAmountInDefaultCollateral * (2 - totalQuote);
-        const totalMultiplier = overdropMultipliers.reduce((prev, curr) => prev + curr.multiplier, 0);
-        return basePoints * (1 + totalMultiplier / 100);
-    }, [overdropMultipliers, buyInAmountInDefaultCollateral, totalQuote]);
-
     const overdropSummaryOpen = useMemo(() => isOverdropSummaryOpen && !isFreeBetActive, [
         isOverdropSummaryOpen,
         isFreeBetActive,
@@ -637,6 +628,18 @@ const Ticket: React.FC<TicketProps> = ({
             gameMultipliersQuery.isSuccess && gameMultipliersQuery.data ? gameMultipliersQuery.data : [];
         return gameMultipliers.filter((multiplier) => markets.find((market) => multiplier.gameId === market.gameId));
     }, [gameMultipliersQuery.data, gameMultipliersQuery.isSuccess, markets]);
+
+    const overdropTotalXP = useMemo(() => {
+        if (!buyInAmountInDefaultCollateral) {
+            return 0;
+        }
+        const basePoints = buyInAmountInDefaultCollateral * (2 - totalQuote);
+        const totalMultiplier = [...overdropMultipliers, ...overdropGameMultipliersInThisTicket].reduce(
+            (prev, curr) => prev + Number(curr.multiplier),
+            0
+        );
+        return basePoints * (1 + totalMultiplier / 100);
+    }, [buyInAmountInDefaultCollateral, totalQuote, overdropMultipliers, overdropGameMultipliersInThisTicket]);
 
     // Clear Ticket when network is changed
     const isMounted = useRef(false);
