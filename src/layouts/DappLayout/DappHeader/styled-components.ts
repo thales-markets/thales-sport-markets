@@ -198,7 +198,7 @@ export const SmallBadgeImage = styled.img`
 `;
 
 export const SettingsContainer = styled(FlexDivRowCentered)`
-    padding-right: 15px;
+    padding-right: 5px;
     position: relative;
     margin: 0 10px;
     cursor: pointer;

@@ -180,7 +180,9 @@ const DappHeader: React.FC = () => {
                     </LeftContainer>
 
                     <MiddleContainer>
-                        <div>{(isConnectedViaParticle || !isWalletConnected) && getGetStartedButton()}</div>
+                        <div>
+                            {!isWalletConnected ? getGetStartedButton() : isConnectedViaParticle ? <TopUp /> : <></>}
+                        </div>
                         {isMarketsPage && <TimeFilters />}
                         <FlexDiv>
                             <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
@@ -223,7 +225,6 @@ const DappHeader: React.FC = () => {
                                     </OutsideClickHandler>
                                 )}
                             </SettingsContainer>
-                            {isConnectedViaParticle && <TopUp />}
                         </FlexDiv>
                     </MiddleContainer>
 
