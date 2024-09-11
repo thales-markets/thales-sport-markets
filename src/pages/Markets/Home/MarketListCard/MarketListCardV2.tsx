@@ -72,7 +72,6 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const selectedMarket = useSelector(getSelectedMarket);
     const marketTypeFilter = useSelector(getMarketTypeFilter);
     const isMobile = useSelector(getIsMobile);
-    // const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.leagueId));
     const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.leagueId));
 
