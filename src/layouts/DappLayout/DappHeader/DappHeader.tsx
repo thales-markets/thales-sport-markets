@@ -297,7 +297,14 @@ const DappHeader: React.FC = () => {
                         <LogoContainer>
                             <Logo width={150} />
                             <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
-                                <OverdropIcon />
+                                {levelItem.level > 0 ? (
+                                    <OverdropButtonContainer>
+                                        <SmallBadgeImage src={levelItem.smallBadge} />
+                                        {`LVL ${levelItem.level} ${levelItem.levelName}`}
+                                    </OverdropButtonContainer>
+                                ) : (
+                                    <OverdropIcon />
+                                )}
                             </SPAAnchor>
                         </LogoContainer>
                         <SearchIconContainer>
