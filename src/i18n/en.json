@@ -798,7 +798,7 @@
                 "tooltip": {
                     "daily-boost": "The more days in a row you bet, the higher your XP boost. Increase +5% for each day up to maximum of +35%. If you miss one day, this boost resets to 0%",
                     "weekly-boost": "The more weeks in a row you bet, the higher your XP boost. Increase +5% for each week up to maximum of +20%. If you miss one week, this boost resets to 0%",
-                    "parlay-boost": "Depending on how many individual games are within your parlay, you will get an additional boost on your XP accrual for that parlay. Maximum is +290% XP boost on 15 games in parlay.",
+                    "parlay-boost": "Depending on how many individual games are within your parlay, you will get an additional boost on your XP accrual for that parlay. Maximum is +420% XP boost on 15 games in parlay.",
                     "thales-boost": "All bets executed with THALES as collateral will have +10% bonus on baseline XP accrual for that specific bet!",
                     "twitter-boost": "If you share your Overtime bet on Twitter in the form of a Flex Card, you will activate a 3 day long Twitter Flex Boost of +10%.",
                     "loyalty-boost": "The Loyalty XP Boost gives you up to 25% permanent boost on all your general XP earning, depending on your XP level. Starting at 5% boost on Level 1, you gain another +5% increase on reaching every fifth level.",

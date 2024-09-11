@@ -88,20 +88,20 @@ const Explainer: React.FC = () => {
                         levels={[2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]}
                         displayLevelNumberInsideCircle={true}
                         additionalLabelsForLevels={[
-                            '10%',
-                            '20%',
                             '30%',
-                            '40%',
                             '60%',
-                            '80%',
-                            '100%',
+                            '90%',
                             '120%',
-                            '140%',
-                            '170%',
-                            '200%',
-                            '230%',
-                            '260%',
-                            '290%',
+                            '150%',
+                            '180%',
+                            '210%',
+                            '240%',
+                            '270%',
+                            '300%',
+                            '330%',
+                            '360%',
+                            '390%',
+                            '420%',
                         ]}
                         additionalStyles={{ flexWrap: 'wrap', gap: '0 14px', justifyContent: 'flex-start' }}
                         currentLevel={15}
