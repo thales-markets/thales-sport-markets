@@ -3,7 +3,7 @@ import SPAAnchor from 'components/SPAAnchor';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
 import { MarketType } from 'enums/marketTypes';
-import { League, Sport } from 'enums/sports';
+import { League, PeriodType, Sport } from 'enums/sports';
 import Lottie from 'lottie-react';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -194,8 +194,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                 {displayGameClock(market) ? market.gameClock : ''}
                                 {(market.gamePeriod != null &&
                                     market.gamePeriod != undefined &&
-                                    getLeaguePeriodType(Number(market.leagueId)) == 'half') ||
-                                getLeaguePeriodType(Number(market.leagueId)) == 'quarter' ? (
+                                    getLeaguePeriodType(market.leagueId) === PeriodType.HALF) ||
+                                getLeaguePeriodType(market.leagueId) === PeriodType.QUARTER ? (
                                     <Blink>&prime;</Blink>
                                 ) : (
                                     ''
