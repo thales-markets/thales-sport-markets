@@ -50,6 +50,10 @@ export const isPlayerPropsMarket = (marketType: MarketType) => {
     return PLAYER_PROPS_MARKET_TYPES.includes(marketType);
 };
 
+export const isOnlyOverPlayerPropsMarket = (marketType: MarketType, odds: number[]) => {
+    return isPlayerPropsMarket(marketType) && odds.length === 1;
+};
+
 export const isOneSidePlayerPropsMarket = (marketType: MarketType) => {
     return ONE_SIDE_PLAYER_PROPS_MARKET_TYPES.includes(marketType);
 };
