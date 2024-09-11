@@ -26,7 +26,6 @@ import {
     getWalletAddress,
     setWalletConnectModalVisibility,
 } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivEnd } from 'styles/common';
 import { OverdropLevel, ThemeInterface } from 'types/ui';
@@ -95,13 +94,13 @@ const DappHeader: React.FC = () => {
     const theme: ThemeInterface = useTheme();
 
     const networkId = useSelector(getNetworkId);
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const isWalletConnected = useSelector(getIsWalletConnected);
     const walletAddress = useSelector(getWalletAddress) || '';
     const isConnectedViaParticle = useSelector(getIsConnectedViaParticle);
     const marketSearch = useSelector(getMarketSearch);
     const stopPulsing = useSelector(getStopPulsing);
     const isMobile = useSelector(getIsMobile);
-    const overdropUIState = useSelector((state: RootState) => getOverdropUIState(state));
+    const overdropUIState = useSelector(getOverdropUIState);
 
     const [levelItem, setLevelItem] = useState<OverdropLevel>(OVERDROP_LEVELS[0]);
     const [currentPulsingCount, setCurrentPulsingCount] = useState<number>(0);
