@@ -188,6 +188,18 @@ export const OverdropButtonContainer = styled(FlexDiv)`
     font-weight: 600;
     text-transform: uppercase;
     color: ${(props) => props.theme.overdrop.textColor.primary};
+    @media (max-width: 950px) {
+        font-size: 8px;
+        width: 140px;
+        height: 30px;
+        margin-left: 20px;
+    }
+
+    @media (max-width: 767px) {
+        font-size: 8px;
+        width: 120px;
+        height: 30px;
+    }
 `;
 
 export const SmallBadgeImage = styled.img`
@@ -195,6 +207,11 @@ export const SmallBadgeImage = styled.img`
     left: -25px;
     width: 50px;
     height: 50px;
+    @media (max-width: 767px) {
+        width: 30px;
+        height: 30px;
+        left: -10px;
+    }
 `;
 
 export const SettingsContainer = styled(FlexDivRowCentered)`
