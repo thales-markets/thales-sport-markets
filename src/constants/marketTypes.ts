@@ -765,7 +765,7 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
     [MarketType.PLAYER_PROPS_OVER_GOALS]: {
         id: MarketType.PLAYER_PROPS_OVER_GOALS,
         key: 'overGoals',
-        name: 'OverGoals',
+        name: 'Over Goals',
         description: 'How many goals will player score?',
     },
 
