@@ -1,52 +1,18 @@
 import styled, { CSSProperties } from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivStart } from 'styles/common';
 
-export const OverdropGradientBorder = styled.div<{
-    isOverdrop: boolean;
-}>`
-    @keyframes bgRotate {
-        100% {
-            transform: rotate(1turn);
-        }
-    }
-    ${(props) =>
-        props.isOverdrop
-            ? `
-            border-radius: 6px;
-            padding: 1px;
-            position: relative;
-            overflow: hidden;
-            &:before {
-                content: "";
-                background: ${props.theme.overdrop.borderColor.tertiary};
-                animation: bgRotate 4s linear infinite;
-                position: absolute;
-                width: 120%;
-                height: 0;
-                padding-bottom: 120%;
-                margin: -1px;
-                z-index: 0;
-                left: -10%;
-                top: -400px;
-                @media (max-width: 600px) {
-                    top: -200px;
-                }
-            }
-
-                `
-            : ``}
-`;
-
 export const Wrapper = styled(FlexDivColumn)<{
     hideGame: boolean;
     isResolved: boolean;
     selected: boolean;
     isMarketSelected: boolean;
+    isOverdrop: boolean;
 }>`
     position: relative;
     z-index: 1;
     width: 100%;
     display: ${(props) => (props.hideGame ? 'none' : '')};
+    ${(props) => (props.isOverdrop ? `border: 1px solid ${props.theme.overdrop.borderColor.tertiary};` : '')}
     border-radius: 5px;
     background-color: ${(props) =>
         props.selected

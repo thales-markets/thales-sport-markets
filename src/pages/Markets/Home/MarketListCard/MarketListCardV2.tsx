@@ -44,7 +44,6 @@ import {
     MatchInfo,
     MatchInfoContainer,
     MatchInfoLabel,
-    OverdropGradientBorder,
     PeriodResultContainer,
     ResultLabel,
     SecondaryResultsWrapper,
@@ -409,29 +408,28 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     );
 
     return (
-        <OverdropGradientBorder isOverdrop={!!overdropGameMultiplier}>
-            <Wrapper
-                hideGame={hideGame}
-                isResolved={isGameRegularlyResolved}
-                selected={selected}
-                isMarketSelected={isMarketSelected}
-            >
-                {isGameOpen || isGameLive ? (
-                    <>{getMainContainerContent()}</>
-                ) : (
-                    <SPAAnchor
-                        href={buildMarketLink(
-                            market.gameId,
-                            language,
-                            false,
-                            encodeURIComponent(`${market.homeTeam} vs ${market.awayTeam}`)
-                        )}
-                    >
-                        {getMainContainerContent()}
-                    </SPAAnchor>
-                )}
-            </Wrapper>
-        </OverdropGradientBorder>
+        <Wrapper
+            hideGame={hideGame}
+            isResolved={isGameRegularlyResolved}
+            selected={selected}
+            isMarketSelected={isMarketSelected}
+            isOverdrop={!!overdropGameMultiplier}
+        >
+            {isGameOpen || isGameLive ? (
+                <>{getMainContainerContent()}</>
+            ) : (
+                <SPAAnchor
+                    href={buildMarketLink(
+                        market.gameId,
+                        language,
+                        false,
+                        encodeURIComponent(`${market.homeTeam} vs ${market.awayTeam}`)
+                    )}
+                >
+                    {getMainContainerContent()}
+                </SPAAnchor>
+            )}
+        </Wrapper>
     );
 };
 
