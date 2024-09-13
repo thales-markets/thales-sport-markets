@@ -121,7 +121,6 @@ export const ClaimAllContainer = styled(FlexDivColumnNative)`
         margin-right: 30px;
     }
     button {
-        margin-right: 4px;
         margin-top: 2px;
         width: fit-content;
         @media (max-width: 767px) {

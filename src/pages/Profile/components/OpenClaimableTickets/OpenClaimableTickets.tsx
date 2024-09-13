@@ -1,7 +1,6 @@
 import Button from 'components/Button';
 import SimpleLoader from 'components/SimpleLoader';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import { ZERO_ADDRESS } from 'constants/network';
 import { ethers } from 'ethers';
 import { LoaderContainer } from 'pages/Markets/Home/HomeV2';
 import useMarketDurationQuery from 'queries/markets/useMarketDurationQuery';
@@ -11,17 +10,10 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
-import { getIsAA, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import {
-    getCollateral,
-    getCollateralAddress,
-    getCollaterals,
-    getDefaultCollateral,
-    isLpSupported,
-} from 'utils/collaterals';
+import { getCollateral, getCollaterals, getDefaultCollateral, isLpSupported } from 'utils/collaterals';
 import networkConnector from 'utils/networkConnector';
-import { executeBiconomyTransaction } from '../../../../utils/biconomy';
 import TicketDetails from './components/TicketDetails';
 import {
     Arrow,
@@ -48,7 +40,7 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
     const [openOpenPositions, setOpenState] = useState<boolean>(true);
 
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const isAA = useSelector((state: RootState) => getIsAA(state));
+    // const isAA = useSelector((state: RootState) => getIsAA(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -69,12 +61,12 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
         networkId,
         claimCollateralIndex,
     ]);
-    const claimCollateralAddress = useMemo(
-        () => getCollateralAddress(networkId, claimCollateralIndex, claimCollateralArray),
-        [networkId, claimCollateralIndex, claimCollateralArray]
-    );
+    // const claimCollateralAddress = useMemo(
+    //     () => getCollateralAddress(networkId, claimCollateralIndex, claimCollateralArray),
+    //     [networkId, claimCollateralIndex, claimCollateralArray]
+    // );
 
-    const isEth = claimCollateralAddress === ZERO_ADDRESS;
+    // const isEth = claimCollateralAddress === ZERO_ADDRESS;
 
     const userTicketsQuery = useUserTicketsQuery(
         isSearchTextWalletAddress ? searchText : walletAddress.toLowerCase(),
@@ -110,89 +102,89 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
 
     const isLoading = userTicketsQuery.isLoading;
 
-    const claimAllRewards = async () => {
-        const { signer, sportsAMMV2Contract } = networkConnector;
-        if (signer) {
-            const transactions: any = [];
+    // const claimAllRewards = async () => {
+    //     const { signer, sportsAMMV2Contract } = networkConnector;
+    //     if (signer) {
+    //         const transactions: any = [];
 
-            if (userTicketsByStatus.claimable.length) {
-                if (sportsAMMV2Contract) {
-                    userTicketsByStatus.claimable.forEach(async (ticket) => {
-                        transactions.push(
-                            new Promise(async (resolve, reject) => {
-                                const id = toast.loading(t('market.toast-message.transaction-pending'));
+    //         if (userTicketsByStatus.claimable.length) {
+    //             if (sportsAMMV2Contract) {
+    //                 userTicketsByStatus.claimable.forEach(async (ticket) => {
+    //                     transactions.push(
+    //                         new Promise(async (resolve, reject) => {
+    //                             const id = toast.loading(t('market.toast-message.transaction-pending'));
 
-                                try {
-                                    const ticketCollateralHasLp = isLpSupported(ticket.collateral);
-                                    const isTicketCollateralDefaultCollateral = ticket.collateral === defaultCollateral;
-                                    const isClaimCollateralDefaultCollateral = claimCollateral === defaultCollateral;
+    //                             try {
+    //                                 const ticketCollateralHasLp = isLpSupported(ticket.collateral);
+    //                                 const isTicketCollateralDefaultCollateral = ticket.collateral === defaultCollateral;
+    //                                 const isClaimCollateralDefaultCollateral = claimCollateral === defaultCollateral;
 
-                                    let txResult;
-                                    const sportsAMMV2ContractWithSigner = sportsAMMV2Contract.connect(signer);
-                                    if (isAA) {
-                                        txResult =
-                                            isClaimCollateralDefaultCollateral ||
-                                            (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral) ||
-                                            ticket.isFreeBet
-                                                ? await executeBiconomyTransaction(
-                                                      claimCollateralAddress,
-                                                      sportsAMMV2ContractWithSigner,
-                                                      'exerciseTicket',
-                                                      [ticket.id]
-                                                  )
-                                                : await executeBiconomyTransaction(
-                                                      claimCollateralAddress,
-                                                      sportsAMMV2ContractWithSigner,
-                                                      'exerciseTicketOffRamp',
-                                                      [ticket.id, claimCollateralAddress, isEth]
-                                                  );
-                                    } else {
-                                        const tx =
-                                            isClaimCollateralDefaultCollateral ||
-                                            (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral) ||
-                                            ticket.isFreeBet
-                                                ? await sportsAMMV2ContractWithSigner.exerciseTicket(ticket.id)
-                                                : await sportsAMMV2ContractWithSigner.exerciseTicketOffRamp(
-                                                      ticket.id,
-                                                      claimCollateralAddress,
-                                                      isEth
-                                                  );
-                                        txResult = await tx.wait();
-                                    }
+    //                                 let txResult;
+    //                                 const sportsAMMV2ContractWithSigner = sportsAMMV2Contract.connect(signer);
+    //                                 if (isAA) {
+    //                                     txResult =
+    //                                         isClaimCollateralDefaultCollateral ||
+    //                                         (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral) ||
+    //                                         ticket.isFreeBet
+    //                                             ? await executeBiconomyTransaction(
+    //                                                   claimCollateralAddress,
+    //                                                   sportsAMMV2ContractWithSigner,
+    //                                                   'exerciseTicket',
+    //                                                   [ticket.id]
+    //                                               )
+    //                                             : await executeBiconomyTransaction(
+    //                                                   claimCollateralAddress,
+    //                                                   sportsAMMV2ContractWithSigner,
+    //                                                   'exerciseTicketOffRamp',
+    //                                                   [ticket.id, claimCollateralAddress, isEth]
+    //                                               );
+    //                                 } else {
+    //                                     const tx =
+    //                                         isClaimCollateralDefaultCollateral ||
+    //                                         (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral) ||
+    //                                         ticket.isFreeBet
+    //                                             ? await sportsAMMV2ContractWithSigner.exerciseTicket(ticket.id)
+    //                                             : await sportsAMMV2ContractWithSigner.exerciseTicketOffRamp(
+    //                                                   ticket.id,
+    //                                                   claimCollateralAddress,
+    //                                                   isEth
+    //                                               );
+    //                                     txResult = await tx.wait();
+    //                                 }
 
-                                    if (txResult && txResult.transactionHash) {
-                                        resolve(
-                                            toast.update(
-                                                id,
-                                                getSuccessToastOptions(t('market.toast-message.claim-winnings-success'))
-                                            )
-                                        );
-                                    } else {
-                                        reject(
-                                            toast.update(
-                                                id,
-                                                getErrorToastOptions(t('common.errors.unknown-error-try-again'))
-                                            )
-                                        );
-                                    }
-                                } catch (e) {
-                                    reject(
-                                        toast.update(
-                                            id,
-                                            getErrorToastOptions(t('common.errors.unknown-error-try-again'))
-                                        )
-                                    );
-                                    console.log(e);
-                                }
-                            })
-                        );
-                    });
-                }
-            }
+    //                                 if (txResult && txResult.transactionHash) {
+    //                                     resolve(
+    //                                         toast.update(
+    //                                             id,
+    //                                             getSuccessToastOptions(t('market.toast-message.claim-winnings-success'))
+    //                                         )
+    //                                     );
+    //                                 } else {
+    //                                     reject(
+    //                                         toast.update(
+    //                                             id,
+    //                                             getErrorToastOptions(t('common.errors.unknown-error-try-again'))
+    //                                         )
+    //                                     );
+    //                                 }
+    //                             } catch (e) {
+    //                                 reject(
+    //                                     toast.update(
+    //                                         id,
+    //                                         getErrorToastOptions(t('common.errors.unknown-error-try-again'))
+    //                                     )
+    //                                 );
+    //                                 console.log(e);
+    //                             }
+    //                         })
+    //                     );
+    //                 });
+    //             }
+    //         }
 
-            Promise.all(transactions).catch((e) => console.log(e));
-        }
-    };
+    //         Promise.all(transactions).catch((e) => console.log(e));
+    //     }
+    // };
 
     const claimBatch = async () => {
         const { signer, sportsAMMV2Contract, multiCallContract } = networkConnector;
@@ -230,13 +222,9 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
                             return;
                         }
                     }
-                    console.log('calls ', calls);
-
                     const tx: any = await multiCallContractWithSigner.aggregate3(calls);
 
                     const txResult = await tx.wait();
-
-                    console.log('txResults ', txResult);
 
                     if (txResult && txResult?.transactionHash) {
                         toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
@@ -273,21 +261,6 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
                             {userTicketsByStatus.claimable.length ? (
                                 <>
                                     <ClaimAllContainer>
-                                        <Button
-                                            onClick={(e: any) => {
-                                                e.preventDefault();
-                                                e.stopPropagation();
-                                                claimAllRewards();
-                                            }}
-                                            additionalStyles={
-                                                isMobile ? additionalClaimButtonStyleMobile : additionalClaimButtonStyle
-                                            }
-                                            padding="2px 5px"
-                                            fontSize={isMobile ? '9px' : undefined}
-                                            height={isMobile ? '19px' : '24px'}
-                                        >
-                                            {t('profile.card.claim-all')}
-                                        </Button>
                                         <Button
                                             onClick={(e: any) => {
                                                 e.preventDefault();
