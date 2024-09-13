@@ -205,6 +205,8 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
         try {
             if (userTicketsByStatus.claimable.length) {
                 if (sportsAMMV2Contract && multiCallContract) {
+                    const multiCallContractWithSigner = sportsAMMV2Contract.connect(signer);
+
                     for (let i = 0; i < userTicketsByStatus.claimable.length; i++) {
                         const ticket = userTicketsByStatus.claimable[i];
                         try {
@@ -230,7 +232,7 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
                     }
                     console.log('calls ', calls);
 
-                    const tx: any = await multiCallContract.aggregate3(calls);
+                    const tx: any = await multiCallContractWithSigner.aggregate3(calls);
 
                     const txResult = await tx.wait();
 
