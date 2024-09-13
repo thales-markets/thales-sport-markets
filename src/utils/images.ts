@@ -128,6 +128,32 @@ export const getLeagueFlagSource = (tagId: number | any) => {
             return `/logos/Countries/brazil.svg`;
         case League.LIGA_MX:
             return `/logos/Countries/mexico.svg`;
+        case League.SCOTLAND_PREMIERSHIP:
+            return `/logos/Countries/scotland.svg`;
+        case League.BELGIUM_LEAGUE:
+            return `/logos/Countries/belgium.svg`;
+        case League.CZECH_LEAGUE:
+            return `/logos/Countries/czech-republic.svg`;
+        case League.CHILE_PRIMERA:
+            return `/logos/Countries/chile.svg`;
+        case League.FINLAND_LEAGUE:
+            return `/logos/Countries/finland.svg`;
+        case League.ARGENTINA_PRIMERA:
+            return `/logos/Countries/argentina.svg`;
+        case League.RUSSIA_PREMIER:
+            return `/logos/Countries/russia.svg`;
+        case League.TURKEY_SUPER_LEAGUE:
+            return `/logos/Countries/turkey.svg`;
+        case League.SERBIA_SUPER_LEAGUE:
+            return `/logos/Countries/serbia.svg`;
+        case League.GREECE_SUPER_LEAGUE:
+            return `/logos/Countries/greece.svg`;
+        case League.INDIA_PREMIER:
+            return `/logos/Countries/india.svg`;
+        case League.CHINA_SUPER_LEAGUE:
+            return `/logos/Countries/china.svg`;
+        case League.AUSTRALIA_A_LEAGUE:
+            return `/logos/Countries/australia.svg`;
         case League.UEFA_CL:
         case League.UEFA_EL:
         case League.UEFA_EURO:
