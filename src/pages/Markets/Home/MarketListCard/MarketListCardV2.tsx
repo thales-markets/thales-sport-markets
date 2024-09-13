@@ -3,7 +3,7 @@ import SPAAnchor from 'components/SPAAnchor';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
 import { MarketType } from 'enums/marketTypes';
-import { League, Sport } from 'enums/sports';
+import { League, PeriodType, Sport } from 'enums/sports';
 import Lottie from 'lottie-react';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -44,7 +44,6 @@ import {
     MatchInfo,
     MatchInfoContainer,
     MatchInfoLabel,
-    OverdropGradientBorder,
     PeriodResultContainer,
     ResultLabel,
     SecondaryResultsWrapper,
@@ -72,7 +71,6 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const selectedMarket = useSelector(getSelectedMarket);
     const marketTypeFilter = useSelector(getMarketTypeFilter);
     const isMobile = useSelector(getIsMobile);
-    // const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.leagueId));
     const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.leagueId));
 
@@ -195,8 +193,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                 {displayGameClock(market) ? market.gameClock : ''}
                                 {(market.gamePeriod != null &&
                                     market.gamePeriod != undefined &&
-                                    getLeaguePeriodType(Number(market.leagueId)) == 'half') ||
-                                getLeaguePeriodType(Number(market.leagueId)) == 'quarter' ? (
+                                    getLeaguePeriodType(market.leagueId) === PeriodType.HALF) ||
+                                getLeaguePeriodType(market.leagueId) === PeriodType.QUARTER ? (
                                     <Blink>&prime;</Blink>
                                 ) : (
                                     ''
@@ -409,29 +407,28 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     );
 
     return (
-        <OverdropGradientBorder isOverdrop={!!overdropGameMultiplier}>
-            <Wrapper
-                hideGame={hideGame}
-                isResolved={isGameRegularlyResolved}
-                selected={selected}
-                isMarketSelected={isMarketSelected}
-            >
-                {isGameOpen || isGameLive ? (
-                    <>{getMainContainerContent()}</>
-                ) : (
-                    <SPAAnchor
-                        href={buildMarketLink(
-                            market.gameId,
-                            language,
-                            false,
-                            encodeURIComponent(`${market.homeTeam} vs ${market.awayTeam}`)
-                        )}
-                    >
-                        {getMainContainerContent()}
-                    </SPAAnchor>
-                )}
-            </Wrapper>
-        </OverdropGradientBorder>
+        <Wrapper
+            hideGame={hideGame}
+            isResolved={isGameRegularlyResolved}
+            selected={selected}
+            isMarketSelected={isMarketSelected}
+            isOverdrop={!!overdropGameMultiplier}
+        >
+            {isGameOpen || isGameLive ? (
+                <>{getMainContainerContent()}</>
+            ) : (
+                <SPAAnchor
+                    href={buildMarketLink(
+                        market.gameId,
+                        language,
+                        false,
+                        encodeURIComponent(`${market.homeTeam} vs ${market.awayTeam}`)
+                    )}
+                >
+                    {getMainContainerContent()}
+                </SPAAnchor>
+            )}
+        </Wrapper>
     );
 };
 

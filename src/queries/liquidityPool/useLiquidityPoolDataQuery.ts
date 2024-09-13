@@ -4,6 +4,7 @@ import { bigNumberFormatter, coinFormatter, Coins } from 'thales-utils';
 import { LiquidityPoolData } from 'types/liquidityPool';
 import networkConnector from 'utils/networkConnector';
 import QUERY_KEYS from '../../constants/queryKeys';
+import { secondsToMilliseconds } from 'date-fns';
 
 const useLiquidityPoolDataQuery = (
     address: string,
@@ -48,7 +49,9 @@ const useLiquidityPoolDataQuery = (
                         collateral
                     );
                     liquidityPoolData.round = Number(contractLiquidityPoolData.round);
-                    liquidityPoolData.roundEndTime = Number(contractLiquidityPoolData.roundEndTime) * 1000;
+                    liquidityPoolData.roundEndTime = secondsToMilliseconds(
+                        Number(contractLiquidityPoolData.roundEndTime)
+                    );
                     liquidityPoolData.allocationNextRound = coinFormatter(
                         contractLiquidityPoolData.totalDeposited,
                         networkId,
