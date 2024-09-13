@@ -113,6 +113,9 @@ export const TeamNamesContainer = styled(FlexDivColumn)<{
 }>`
     margin-left: 10px;
     gap: ${(props) => (props.isColumnView ? (props.isTwoPositionalMarket ? '5px' : '10px') : '0px')};
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
     @media (max-width: 950px) {
         flex-direction: ${(props) => (props.isGameOpen ? 'row' : 'column')};
     }
