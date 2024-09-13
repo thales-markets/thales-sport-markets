@@ -205,7 +205,7 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
         try {
             if (userTicketsByStatus.claimable.length) {
                 if (sportsAMMV2Contract && multiCallContract) {
-                    const multiCallContractWithSigner = sportsAMMV2Contract.connect(signer);
+                    const multiCallContractWithSigner = multiCallContract.connect(signer);
 
                     for (let i = 0; i < userTicketsByStatus.claimable.length; i++) {
                         const ticket = userTicketsByStatus.claimable[i];
