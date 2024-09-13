@@ -358,6 +358,7 @@
         "card": {
             "ticket-id": "Ticket ID",
             "live": "Live",
+            "claim-test": "Claim batch",
             "number-of-games": "No. of games",
             "ticket-paid": "Ticket paid",
             "to-win": "Potential win",

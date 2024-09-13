@@ -194,6 +194,60 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
         }
     };
 
+    const claimBatch = async () => {
+        const { signer, sportsAMMV2Contract, multiCallContract } = networkConnector;
+        const id = toast.loading(t('market.toast-message.transaction-pending'));
+
+        if (!signer) return;
+
+        const calls: { target: string; allowFailure: boolean; callData: any }[] = [];
+
+        try {
+            if (userTicketsByStatus.claimable.length) {
+                if (sportsAMMV2Contract && multiCallContract) {
+                    for (let i = 0; i < userTicketsByStatus.claimable.length; i++) {
+                        const ticket = userTicketsByStatus.claimable[i];
+                        try {
+                            const sportsAMMV2ContractWithSigner = sportsAMMV2Contract.connect(signer);
+
+                            const isClaimCollateralDefaultCollateral = claimCollateral === defaultCollateral;
+
+                            const _tx = await sportsAMMV2ContractWithSigner.populateTransaction.exerciseTicket(
+                                ticket.id
+                            );
+
+                            if (!ticket.isFreeBet && isClaimCollateralDefaultCollateral) {
+                                calls.push({
+                                    target: sportsAMMV2Contract.address,
+                                    allowFailure: true,
+                                    callData: _tx?.data,
+                                });
+                            }
+                        } catch (e) {
+                            console.log('Error ', e);
+                            return;
+                        }
+                    }
+                    console.log('calls ', calls);
+
+                    const tx: any = await multiCallContract.aggregate3(calls);
+
+                    const txResult = await tx.wait();
+
+                    console.log('txResults ', txResult);
+
+                    if (txResult && txResult?.transactionHash) {
+                        toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
+                    }
+                }
+            }
+        } catch (e) {
+            toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+            console.log('Error ', e);
+            return;
+        }
+    };
+
     return (
         <Container>
             <CategoryContainer onClick={() => setClaimableState(!openClaimable)}>
@@ -231,6 +285,21 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
                                             height={isMobile ? '19px' : '24px'}
                                         >
                                             {t('profile.card.claim-all')}
+                                        </Button>
+                                        <Button
+                                            onClick={(e: any) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                claimBatch();
+                                            }}
+                                            additionalStyles={
+                                                isMobile ? additionalClaimButtonStyleMobile : additionalClaimButtonStyle
+                                            }
+                                            padding="2px 5px"
+                                            fontSize={isMobile ? '9px' : undefined}
+                                            height={isMobile ? '19px' : '24px'}
+                                        >
+                                            {t('profile.card.claim-test')}
                                         </Button>
                                     </ClaimAllContainer>
                                     {userTicketsByStatus.claimable.map((parlayMarket, index) => {
