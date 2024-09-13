@@ -1374,7 +1374,7 @@ const Ticket: React.FC<TicketProps> = ({
                                 requestId
                             );
                             if (!isFulfilled) {
-                                if (Date.now() - startTime >= (maxAllowedExecutionDelay + 10) * 1000) {
+                                if (Date.now() - startTime >= secondsToMilliseconds(maxAllowedExecutionDelay + 10)) {
                                     setIsBuying(false);
                                     refetchBalances(walletAddress, networkId);
                                     toast.update(toastId, getErrorToastOptions(t('markets.parlay.odds-changed-error')));

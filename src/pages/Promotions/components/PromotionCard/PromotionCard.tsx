@@ -15,6 +15,7 @@ import { getPromotionDateRange, getPromotionStatus } from 'utils/ui';
 import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
 import { ReactComponent as BaseLogo } from 'assets/images/base-logo.svg';
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
+import { secondsToMilliseconds } from 'date-fns';
 
 const PromotionCard: React.FC<PromotionItem> = ({
     title,
@@ -39,7 +40,7 @@ const PromotionCard: React.FC<PromotionItem> = ({
                 <>
                     <span>{t('promotions.ends-in')}</span>
                     <TimeRemaining
-                        end={endDate * 1000}
+                        end={secondsToMilliseconds(endDate)}
                         fontSize={14}
                         fontWeight={600}
                         color={theme.promotion.textColor.primary}
@@ -52,7 +53,7 @@ const PromotionCard: React.FC<PromotionItem> = ({
                 <>
                     <span>{t('promotions.starts-in')}</span>
                     <TimeRemaining
-                        end={startDate * 1000}
+                        end={secondsToMilliseconds(startDate)}
                         fontSize={14}
                         fontWeight={600}
                         color={theme.promotion.textColor.primary}

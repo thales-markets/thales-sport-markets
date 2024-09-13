@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { generalConfig, noCacheConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
+import { secondsToMilliseconds } from 'date-fns';
 import { StatusFilter } from 'enums/markets';
 import { Network } from 'enums/network';
 import { orderBy } from 'lodash';
@@ -91,7 +92,7 @@ const useSportsMarketsV2Query = (
             return marketsCache;
         },
         {
-            refetchInterval: 5 * 1000,
+            refetchInterval: secondsToMilliseconds(5),
             ...options,
         }
     );

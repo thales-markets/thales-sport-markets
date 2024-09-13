@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
+import { secondsToMilliseconds } from 'date-fns';
 import { Network } from 'enums/network';
 import { UseQueryOptions, useQuery } from 'react-query';
 import { SportMarkets } from 'types/markets';
@@ -43,7 +44,7 @@ const useLiveSportsMarketsQuery = (
             return marketsCache;
         },
         {
-            refetchInterval: isLiveSelected ? 2 * 1000 : 10 * 1000,
+            refetchInterval: secondsToMilliseconds(isLiveSelected ? 2 : 10),
             ...options,
         }
     );

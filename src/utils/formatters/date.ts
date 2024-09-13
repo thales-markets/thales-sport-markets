@@ -1,4 +1,4 @@
-import { Duration, format } from 'date-fns';
+import { Duration, format, secondsToMilliseconds } from 'date-fns';
 
 export const formattedDuration = (
     duration: Duration,
@@ -72,5 +72,5 @@ export const formattedDurationFull = (
 };
 
 export const formatTimestampForPromotionDate = (timestamp: number) => {
-    return format(new Date(timestamp * 1000), 'd MMM Y');
+    return format(new Date(secondsToMilliseconds(timestamp)), 'd MMM Y');
 };
