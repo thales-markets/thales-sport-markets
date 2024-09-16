@@ -362,12 +362,10 @@ const Home: React.FC = () => {
             const tagsPerSport = getSportLeagueIds(filterItem as Sport);
             let count = 0;
             if (tagsPerSport) {
-                tagsPerSport
-                    .filter((tag) => !LeagueMap[tag].hidden)
-                    .forEach((tag) => {
-                        count += openMarketsCountPerTag[tag] || 0;
-                        totalCount += openMarketsCountPerTag[tag] || 0;
-                    });
+                tagsPerSport.forEach((tag) => {
+                    count += openMarketsCountPerTag[tag] || 0;
+                    totalCount += openMarketsCountPerTag[tag] || 0;
+                });
             }
 
             openMarketsCount[filterItem] = count;
