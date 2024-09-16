@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { generalConfig } from 'config/general';
+import { generalConfig, noCacheConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
 import { secondsToMilliseconds } from 'date-fns';
 import { Network } from 'enums/network';
@@ -20,7 +20,7 @@ const useLiveSportsMarketsQuery = (
             try {
                 const response = await axios.get<undefined, { data: { errors: string[]; markets: SportMarkets } }>(
                     `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/live-markets`,
-                    { headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache', Expires: '0' } }
+                    noCacheConfig
                 );
 
                 const markets: any[] = response?.data?.markets || marketsCache.live;
