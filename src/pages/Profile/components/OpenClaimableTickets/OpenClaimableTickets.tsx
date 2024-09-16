@@ -275,7 +275,7 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
                                             fontSize={isMobile ? '9px' : undefined}
                                             height={isMobile ? '19px' : '24px'}
                                         >
-                                            {t('profile.card.claim-test')}
+                                            {t('profile.card.claim-all')}
                                         </Button>
                                         <Tooltip
                                             overlay={t('profile.card.claim-batch-tooltip')}

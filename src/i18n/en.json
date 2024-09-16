@@ -358,8 +358,7 @@
         "card": {
             "ticket-id": "Ticket ID",
             "live": "Live",
-            "claim-test": "Claim batch",
-            "claim-batch-tooltip": " Instantly claim all your eligible positions at once, excluding free bets and positions in other collaterals.",
+            "claim-batch-tooltip": "Claim all your pending positions in one transactions, excluding free bet claims.",
             "number-of-games": "No. of games",
             "ticket-paid": "Ticket paid",
             "to-win": "Potential win",
