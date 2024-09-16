@@ -1262,6 +1262,8 @@ export const LeagueMap: Record<League, LeagueInfo> = {
 
 export const BOXING_LEAGUES = [League.BOXING, League.NON_TITLE_BOXING];
 
+export const UFC_LEAGUE_IDS = [701, 702, 703, 704];
+
 export const INTERNATIONAL_LEAGUES = [
     League.FIFA_WC,
     League.IIHF_WORLD_CHAMPIONSHIP,
