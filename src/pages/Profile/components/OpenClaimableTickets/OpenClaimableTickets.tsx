@@ -1,5 +1,6 @@
 import Button from 'components/Button';
 import SimpleLoader from 'components/SimpleLoader';
+import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { ethers } from 'ethers';
 import { LoaderContainer } from 'pages/Markets/Home/HomeV2';
@@ -276,6 +277,12 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
                                         >
                                             {t('profile.card.claim-test')}
                                         </Button>
+                                        <Tooltip
+                                            overlay={t('profile.card.claim-batch-tooltip')}
+                                            iconFontSize={23}
+                                            marginLeft={4}
+                                            top={-2}
+                                        />
                                     </ClaimAllContainer>
                                     {userTicketsByStatus.claimable.map((parlayMarket, index) => {
                                         return (
