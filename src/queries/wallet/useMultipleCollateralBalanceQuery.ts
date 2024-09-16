@@ -96,7 +96,10 @@ const useMultipleCollateralBalanceQuery = (
                     USDbC: USDbCBalance ? bigNumberFormatter(USDbCBalance, COLLATERAL_DECIMALS.USDbC) : 0,
                     THALES: THALESBalance ? bigNumberFormatter(THALESBalance, COLLATERAL_DECIMALS.THALES) : 0,
                     // sub 1 staked THALES due to limitation on contract side
-                    sTHALES: sTHALESBalance ? bigNumberFormatter(sTHALESBalance, COLLATERAL_DECIMALS.sTHALES) - 1 : 0,
+                    sTHALES:
+                        sTHALESBalance && bigNumberFormatter(sTHALESBalance, COLLATERAL_DECIMALS.sTHALES) > 1
+                            ? bigNumberFormatter(sTHALESBalance, COLLATERAL_DECIMALS.sTHALES) - 1
+                            : 0,
                 };
             } catch (e) {
                 console.log('e ', e);
