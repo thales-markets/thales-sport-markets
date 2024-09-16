@@ -1,52 +1,18 @@
 import styled, { CSSProperties } from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivStart } from 'styles/common';
 
-export const OverdropGradientBorder = styled.div<{
-    isOverdrop: boolean;
-}>`
-    @keyframes bgRotate {
-        100% {
-            transform: rotate(1turn);
-        }
-    }
-    ${(props) =>
-        props.isOverdrop
-            ? `
-            border-radius: 6px;
-            padding: 1px;
-            position: relative;
-            overflow: hidden;
-            &:before {
-                content: "";
-                background: ${props.theme.overdrop.borderColor.tertiary};
-                animation: bgRotate 4s linear infinite;
-                position: absolute;
-                width: 120%;
-                height: 0;
-                padding-bottom: 120%;
-                margin: -1px;
-                z-index: 0;
-                left: -10%;
-                top: -400px;
-                @media (max-width: 600px) {
-                    top: -200px;
-                }
-            }
-
-                `
-            : ``}
-`;
-
 export const Wrapper = styled(FlexDivColumn)<{
     hideGame: boolean;
     isResolved: boolean;
     selected: boolean;
     isMarketSelected: boolean;
+    isOverdrop: boolean;
 }>`
     position: relative;
     z-index: 1;
     width: 100%;
     display: ${(props) => (props.hideGame ? 'none' : '')};
+    ${(props) => (props.isOverdrop ? `border: 1px solid ${props.theme.overdrop.borderColor.tertiary};` : '')}
     border-radius: 5px;
     background-color: ${(props) =>
         props.selected
@@ -89,7 +55,7 @@ export const MatchInfo = styled(FlexDivStart)<{
     }
 `;
 
-export const GameOfLabel = styled.span<{ selected?: boolean }>`
+export const GameOfLabel = styled.span<{ selected?: boolean; isLive?: boolean }>`
     color: ${(props) => (props.selected ? 'inherit' : props.theme.overdrop.textColor.primary)};
     font-size: 10px;
     position: absolute;
@@ -99,8 +65,8 @@ export const GameOfLabel = styled.span<{ selected?: boolean }>`
     @media (max-width: 600px) {
         top: 10px;
         text-align: center;
-        left: 0;
-        right: 0;
+        left: ${(props) => (props.isLive ? '55px' : '0')};
+        right: 0px;
     }
 `;
 
@@ -147,6 +113,9 @@ export const TeamNamesContainer = styled(FlexDivColumn)<{
 }>`
     margin-left: 10px;
     gap: ${(props) => (props.isColumnView ? (props.isTwoPositionalMarket ? '5px' : '10px') : '0px')};
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
     @media (max-width: 950px) {
         flex-direction: ${(props) => (props.isGameOpen ? 'row' : 'column')};
     }

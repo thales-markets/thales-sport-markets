@@ -54,7 +54,7 @@ const Positions: React.FC<PositionsProps> = ({
 
     const showContainer = !isGameOpen || areOddsValid || showInvalid;
 
-    const sortedMarkets = useMemo(() => orderBy(markets, ['line'], ['asc']), [markets]);
+    const sortedMarkets = useMemo(() => orderBy(markets, ['line', 'odds'], ['asc', 'desc']), [markets]);
 
     const positionText0 = markets[0] ? getSubtitleText(markets[0], 0) : undefined;
     const positionText1 = markets[0] ? getSubtitleText(markets[0], 1) : undefined;

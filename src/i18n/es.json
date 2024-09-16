@@ -546,7 +546,13 @@
             },
             "type-tooltip": {
                 "11055": "Los touchdowns de recepción, carrera, devolución de despeje, devolución de patada, touchdowns defensivos e intercepciones cuentan para el resultado.",
-                "touchdowns": "Los touchdowns de recepción, carrera, devolución de despeje, devolución de patada, touchdowns defensivos e intercepciones cuentan para el resultado."
+                "touchdowns": "Los touchdowns de recepción, carrera, devolución de despeje, devolución de patada, touchdowns defensivos e intercepciones cuentan para el resultado.",
+                "rushing-receiving": "Una apuesta sobre si las yardas terrestres y recibidas de un determinado jugador serán superiores o inferiores a una cierta cantidad.",
+                "sacks": "Una apuesta de más/menos sobre cuántas capturas registrará un jugador durante un juego.",
+                "tackles": "Una apuesta sobre si el número de tackles de un determinado jugador será mayor o menor a una cierta cantidad.",
+                "longest-reception": "Una apuesta sobre si la recepción más larga de un determinado jugador será superior o inferior a una cierta cantidad.",
+                "extra-points": "Una apuesta sobre si los puntos extra de un determinado jugador serán superiores o inferiores a una cierta cantidad.",
+                "passing-rushing": "Una apuesta sobre si las yardas de pase y carrera de un determinado jugador serán superiores o inferiores a una cierta cantidad."
             },
             "odds-live-limitation-message": "Posiciones en vivo solo permitidas como individuales",
             "live": "Vivir",

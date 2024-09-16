@@ -6,10 +6,11 @@ import NetworkSwitcher from 'components/NetworkSwitcher';
 import SPAAnchor from 'components/SPAAnchor';
 import Search from 'components/Search';
 import WalletInfo from 'components/WalletInfo';
+import { OVERDROP_LEVELS } from 'constants/overdrop';
 import ROUTES from 'constants/routes';
 import useInterval from 'hooks/useInterval';
 import useClaimablePositionCountV2Query from 'queries/markets/useClaimablePositionCountV2Query';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import OutsideClickHandler from 'react-outside-click-handler';
@@ -17,7 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { getIsMobile } from 'redux/modules/app';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
-import { getStopPulsing, setOddsType, setStopPulsing } from 'redux/modules/ui';
+import { getOverdropUIState, getStopPulsing, setOddsType, setStopPulsing } from 'redux/modules/ui';
 import {
     getIsConnectedViaParticle,
     getIsWalletConnected,
@@ -27,7 +28,7 @@ import {
 } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivEnd } from 'styles/common';
-import { ThemeInterface } from 'types/ui';
+import { OverdropLevel, ThemeInterface } from 'types/ui';
 import { buildHref } from 'utils/routes';
 import { ODDS_TYPES } from '../../../constants/markets';
 import { OddsType } from '../../../enums/markets';
@@ -51,12 +52,14 @@ import {
     MiddleContainer,
     MobileButtonWrapper,
     NotificationCount,
+    OverdropButtonContainer,
     OverdropIcon,
     RightContainer,
     SearchContainer,
     SearchIcon,
     SearchIconContainer,
     SettingsContainer,
+    SmallBadgeImage,
     WrapperMobile,
 } from './styled-components';
 
@@ -97,7 +100,9 @@ const DappHeader: React.FC = () => {
     const marketSearch = useSelector(getMarketSearch);
     const stopPulsing = useSelector(getStopPulsing);
     const isMobile = useSelector(getIsMobile);
+    const overdropUIState = useSelector(getOverdropUIState);
 
+    const [levelItem, setLevelItem] = useState<OverdropLevel>(OVERDROP_LEVELS[0]);
     const [currentPulsingCount, setCurrentPulsingCount] = useState<number>(0);
     const [navMenuVisibility, setNavMenuVisibility] = useState<boolean | null>(null);
     const [showSearchModal, setShowSearchModal] = useState<boolean>(false);
@@ -129,6 +134,17 @@ const DappHeader: React.FC = () => {
             }
         }
     }, 1000);
+
+    useEffect(() => {
+        const overdropStateItem = overdropUIState.find(
+            (item) => item.walletAddress?.toLowerCase() == walletAddress.toLowerCase()
+        );
+
+        const currentLevelItem = overdropStateItem
+            ? OVERDROP_LEVELS.find((item) => item.level == overdropStateItem?.currentLevel)
+            : OVERDROP_LEVELS[0];
+        if (currentLevelItem) setLevelItem(currentLevelItem);
+    }, [dispatch, walletAddress, overdropUIState]);
 
     const menuImageRef = useRef<HTMLImageElement>(null);
 
@@ -163,11 +179,20 @@ const DappHeader: React.FC = () => {
                     </LeftContainer>
 
                     <MiddleContainer>
-                        <div>{(isConnectedViaParticle || !isWalletConnected) && getGetStartedButton()}</div>
+                        <div>
+                            {!isWalletConnected ? getGetStartedButton() : isConnectedViaParticle ? <TopUp /> : <></>}
+                        </div>
                         {isMarketsPage && <TimeFilters />}
                         <FlexDiv>
                             <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
-                                <OverdropIcon />
+                                {levelItem.level > 0 ? (
+                                    <OverdropButtonContainer>
+                                        <SmallBadgeImage src={levelItem.smallBadge} />
+                                        {`LVL ${levelItem.level} ${levelItem.levelName}`}
+                                    </OverdropButtonContainer>
+                                ) : (
+                                    <OverdropIcon />
+                                )}
                             </SPAAnchor>
                             {isWalletConnected && <ProfileItem />}
                             <SettingsContainer
@@ -199,7 +224,6 @@ const DappHeader: React.FC = () => {
                                     </OutsideClickHandler>
                                 )}
                             </SettingsContainer>
-                            {isConnectedViaParticle && <TopUp />}
                         </FlexDiv>
                     </MiddleContainer>
 
@@ -272,7 +296,14 @@ const DappHeader: React.FC = () => {
                         <LogoContainer>
                             <Logo width={150} />
                             <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
-                                <OverdropIcon />
+                                {levelItem.level > 0 ? (
+                                    <OverdropButtonContainer>
+                                        <SmallBadgeImage src={levelItem.smallBadge} />
+                                        {`LVL ${levelItem.level} ${levelItem.levelName}`}
+                                    </OverdropButtonContainer>
+                                ) : (
+                                    <OverdropIcon />
+                                )}
                             </SPAAnchor>
                         </LogoContainer>
                         <SearchIconContainer>

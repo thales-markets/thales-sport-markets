@@ -546,7 +546,13 @@
             },
             "type-tooltip": {
                 "11055": "Les réceptions, les courses, les retours de botté de dégagement, les retours de coups de pied, les touchés défensifs et d'interception sont pris en compte dans le résultat.",
-                "touchdowns": "Les réceptions, les courses, les retours de bottés de dégagement, les retours de coups de pied, les touchés défensifs et d'interception sont pris en compte dans le résultat."
+                "touchdowns": "Les réceptions, les courses, les retours de bottés de dégagement, les retours de coups de pied, les touchés défensifs et d'interception sont pris en compte dans le résultat.",
+                "extra-points": "Un pari sur le fait que les points supplémentaires d'un certain joueur seront supérieurs ou inférieurs à un certain montant.",
+                "sacks": "Un pari supérieur/inférieur sur le nombre de sacs qu'un joueur enregistrera au cours d'un match.",
+                "tackles": "Un pari sur le fait que le nombre de plaquages d'un certain joueur sera supérieur ou inférieur à un certain montant.",
+                "passing-rushing": "Un pari sur le fait que les yards de passe et de course d'un certain joueur seront supérieurs ou inférieurs à un certain montant.",
+                "longest-reception": "Un pari sur le fait que la réception la plus longue d'un certain joueur sera supérieure ou inférieure à un certain montant.",
+                "rushing-receiving": "Un pari sur le fait que les yards de course et de réception d'un certain joueur seront supérieurs ou inférieurs à un certain montant."
             },
             "odds-live-limitation-message": "Positions en direct autorisées uniquement en tant que célibataires",
             "time": "Temps",

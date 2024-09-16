@@ -1,4 +1,5 @@
 import burger from 'assets/images/burger.svg';
+import OverdropButtonBackground from 'assets/images/overdrop/overdrop-button-background.png';
 import overdrop from 'assets/images/overdrop/overdrop-nav.png';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
@@ -173,8 +174,48 @@ export const MobileButtonWrapper = styled.div`
     }
 `;
 
+export const OverdropButtonContainer = styled(FlexDiv)`
+    position: relative;
+    background-image: url(${OverdropButtonBackground});
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: 160px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: ${(props) => props.theme.overdrop.textColor.primary};
+    @media (max-width: 950px) {
+        font-size: 8px;
+        width: 140px;
+        height: 30px;
+        margin-left: 20px;
+    }
+
+    @media (max-width: 767px) {
+        font-size: 8px;
+        width: 120px;
+        height: 30px;
+    }
+`;
+
+export const SmallBadgeImage = styled.img`
+    position: absolute;
+    left: -25px;
+    width: 50px;
+    height: 50px;
+    @media (max-width: 767px) {
+        width: 30px;
+        height: 30px;
+        left: -10px;
+    }
+`;
+
 export const SettingsContainer = styled(FlexDivRowCentered)`
-    padding-right: 15px;
+    padding-right: 5px;
     position: relative;
     margin: 0 10px;
     cursor: pointer;

@@ -1,8 +1,9 @@
 import { ONE_HUNDRED_K, ONE_MILLION } from 'constants/defaults';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
+import { MultiplierType } from 'enums/overdrop';
 import { OverdropIcon } from 'pages/Overdrop/components/styled-components';
 import { floorNumberToDecimals, formatCurrencyWithKey } from 'thales-utils';
-import { MultiplierType, OverdropMultiplier } from 'types/overdrop';
+import { OverdropMultiplier } from 'types/overdrop';
 import { OverdropLevel } from 'types/ui';
 
 export const formatPoints = (amount: number) => {
@@ -56,17 +57,7 @@ export const getMultiplierIcon = (multiplier: OverdropMultiplier) => {
 };
 
 export const getParlayMultiplier = (numberOfMarkets: number) => {
-    let parlayMultiplier = 0;
-    for (let index = 1; index < numberOfMarkets; index++) {
-        if (index < 5) {
-            parlayMultiplier = parlayMultiplier + 10;
-        } else if (index >= 5 && index < 10) {
-            parlayMultiplier = parlayMultiplier + 20;
-        } else {
-            parlayMultiplier = parlayMultiplier + 30;
-        }
-    }
-    return parlayMultiplier;
+    return (numberOfMarkets - 1) * 30;
 };
 
 export const getCurrentLevelByPoints = (points: number) => {

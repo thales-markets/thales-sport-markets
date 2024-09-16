@@ -2,6 +2,7 @@ import ConnectWalletButtonMobile from 'components/ConnectWalletButtonMobile';
 import SPAAnchor from 'components/SPAAnchor';
 import { ODDS_TYPES } from 'constants/markets';
 import ROUTES from 'constants/routes';
+import { secondsToMilliseconds } from 'date-fns';
 import { OddsType } from 'enums/markets';
 import { t } from 'i18next';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -43,19 +44,18 @@ const FooterSidebarMobile: React.FC<FooterSidebarMobileProps> = ({ setParlayMobi
         [dispatch]
     );
 
-    const animate = () => {
-        setPulse(true);
-
-        setTimeout(() => setPulse(false), ticket.length == 1 ? (ticket.length + 1) * 1000 : ticket.length * 1000);
-    };
-
     const ticketLength = useMemo(() => {
         return ticket.length;
     }, [ticket]);
 
     useEffect(() => {
+        const animate = () => {
+            setPulse(true);
+
+            setTimeout(() => setPulse(false), secondsToMilliseconds(ticket.length === 1 ? 2 : ticket.length));
+        };
+
         animate();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [ticket.length]);
 
     return (

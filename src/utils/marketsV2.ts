@@ -1,9 +1,7 @@
-import { MarketTypeMap } from 'constants/marketTypes';
 import { MarketType } from 'enums/marketTypes';
 import { GameStatus, Position } from 'enums/markets';
 import { League } from 'enums/sports';
 import { ethers } from 'ethers';
-import i18n from 'i18n';
 import { SerializableSportMarket, SportMarket, Ticket, TicketMarket, TicketPosition, TradeData } from 'types/markets';
 import { fixOneSideMarketCompetitorName } from './formatters/string';
 import {
@@ -16,6 +14,7 @@ import {
     isHomeTeamMarket,
     isOneSideMarket,
     isOneSidePlayerPropsMarket,
+    isOnlyOverPlayerPropsMarket,
     isOtherYesNoMarket,
     isPeriod2Market,
     isPeriodMarket,
@@ -29,7 +28,7 @@ import {
     isWinnerMarket,
     isYesNoPlayerPropsMarket,
 } from './markets';
-import { getLeagueMatchResolveType, getLeaguePeriodType, getLeagueScoringType } from './sports';
+import { getLeaguePeriodType, getLeagueScoringType } from './sports';
 import _ from 'lodash';
 import { secondsToMilliseconds } from 'date-fns';
 
@@ -89,7 +88,8 @@ const getSimplePositionText = (
     awayTeam: string,
     leagueId: League,
     extendedText?: boolean,
-    positionNames?: string[]
+    positionNames?: string[],
+    odds?: number[]
 ) => {
     if (leagueId === League.US_ELECTION && positionNames && positionNames[position]) {
         const text = positionNames[position]
@@ -143,6 +143,8 @@ const getSimplePositionText = (
             ? isSpreadMarket(marketType)
                 ? `${position === 0 ? homeTeam : awayTeam} (${getLineInfo(marketType, position, line)})`
                 : `${position === 0 ? 'Over' : 'Under'} ${getLineInfo(marketType, position, line)}`
+            : isOnlyOverPlayerPropsMarket(marketType, odds || [])
+            ? `Over ${getLineInfo(marketType, position, line)}`
             : getLineInfo(marketType, position, line);
     }
 
@@ -228,7 +230,8 @@ export const getPositionTextV2 = (market: SportMarket, position: number, extende
               market.awayTeam,
               market.leagueId,
               extendedText,
-              market.positionNames
+              market.positionNames,
+              market.odds
           );
 };
 
@@ -307,7 +310,10 @@ export const getSubtitleText = (market: SportMarket, position: Position) => {
     const marketType = market.typeId;
 
     if (
-        (market.isPlayerPropsMarket && !market.isYesNoPlayerPropsMarket && !market.isOneSidePlayerPropsMarket) ||
+        (market.isPlayerPropsMarket &&
+            !isOnlyOverPlayerPropsMarket(marketType, market.odds) &&
+            !market.isYesNoPlayerPropsMarket &&
+            !market.isOneSidePlayerPropsMarket) ||
         isTotalMarket(marketType)
     ) {
         return position === 0 ? 'Over' : 'Under';
@@ -327,74 +333,6 @@ const getLineInfo = (typeId: number, position: Position, line: number) => {
     if (isTotalMarket(typeId) || isPlayerPropsMarket(typeId)) return `${Number(line)}`;
     return undefined;
 };
-
-const getTooltipText = (typeId: number, position: Position, line: number, market: SportMarket) => {
-    const team = market.isPlayerPropsMarket
-        ? market.playerProps.playerName
-        : position === Position.AWAY
-        ? market.awayTeam
-        : market.isOneSideMarket
-        ? fixOneSideMarketCompetitorName(market.homeTeam)
-        : market.homeTeam;
-    const team2 = market.awayTeam;
-
-    const scoringType = getLeagueScoringType(market.leagueId);
-    const matchResolveType = getLeagueMatchResolveType(market.leagueId);
-
-    const scoring = scoringType !== '' ? i18n.t(`markets.market-card.odd-tooltip-v2.scoring.${scoringType}`) : '';
-    const matchResolve =
-        matchResolveType !== '' ? i18n.t(`markets.market-card.odd-tooltip-v2.match-resolve.${matchResolveType}`) : '';
-
-    let translationKey = '';
-
-    if (market.isOneSideMarket) {
-        translationKey = market.leagueId == League.GOLF_WINNER ? 'tournament-winner' : 'race-winner';
-    } else if (typeId === MarketType.SPREAD) {
-        translationKey = line < 0 ? `spread-${position}` : `spread-${position === 1 ? 0 : 1}`;
-    } else {
-        translationKey = `${MarketTypeMap[typeId as MarketType].key}-${position}`;
-    }
-
-    return i18n.t(`markets.market-card.odd-tooltip-v2.${translationKey}`, {
-        team,
-        team2,
-        line: Math.abs(line),
-        scoring,
-        matchResolve,
-    });
-};
-
-const getCombinedPositionsOddTooltipText = (position: Position, market: SportMarket) => {
-    const combinedPositions = market.selectedCombinedPositions || market.combinedPositions[position];
-    if (!combinedPositions) return '';
-
-    const position1 = combinedPositions[0];
-    const position2 = combinedPositions[1];
-
-    let tooltipText = '';
-
-    let position1TooltipText = getTooltipText(position1.typeId, position1.position, position1.line, market);
-
-    if (position1TooltipText.trim().endsWith('.')) {
-        position1TooltipText = position1TooltipText.slice(0, -1);
-    }
-
-    tooltipText = position1TooltipText;
-    if (position1TooltipText !== '') {
-        tooltipText = `${tooltipText} ${i18n.t('markets.market-card.odd-tooltip.and')} `;
-    }
-
-    const position2TooltipText = getTooltipText(position2.typeId, position2.position, position2.line, market);
-
-    tooltipText = `${tooltipText}${position2TooltipText.charAt(0).toLowerCase()}${position2TooltipText.slice(1)}`;
-
-    return tooltipText;
-};
-
-export const getOddTooltipTextV2 = (position: Position, market: SportMarket) =>
-    market.typeId === MarketType.WINNER_TOTAL
-        ? getCombinedPositionsOddTooltipText(position, market)
-        : getTooltipText(market.typeId, position, market.line, market);
 
 export const getTeamNameV2 = (market: SportMarket | TicketPosition, position?: Position) => {
     if (market.isOneSideMarket) return fixOneSideMarketCompetitorName(market.homeTeam);
