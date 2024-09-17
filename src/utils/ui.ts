@@ -7,6 +7,7 @@ import { SportMarket } from '../types/markets';
 import { formatTimestampForPromotionDate } from './formatters/date';
 import { isCombinedPositionsMarket, isDoubleChanceMarket } from './markets';
 import { getLeaguePeriodType } from './sports';
+import { PeriodType } from 'enums/sports';
 
 export const getOrdinalNumberLabel = (num: number): string => {
     switch (num) {
@@ -69,7 +70,7 @@ export const displayGameClock = (market: SportMarket): boolean => {
 export const displayGamePeriod = (market: SportMarket): string => {
     return market.gamePeriod == null || market.gamePeriod == undefined
         ? ''
-        : `${market.gamePeriod}`.toLowerCase() === 'half'
+        : `${market.gamePeriod}`.toLowerCase() === PeriodType.HALF
         ? `${t('markets.market-card.half-time')}`
         : `${getOrdinalNumberLabel(Number(`${market.gamePeriod}`[0]))} ${t(
               `markets.market-card.${getLeaguePeriodType(Number(market.leagueId))}`
