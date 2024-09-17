@@ -10,7 +10,7 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivEnd } from 'styles/common';
 import { formatCurrency, formatCurrencyWithSign } from 'thales-utils';
-import { Coins } from 'types/tokens';
+import { Coins } from 'thales-utils';
 import { getCollaterals, isStableCurrency } from 'utils/collaterals';
 
 const BalanceDetails: React.FC = () => {

@@ -1,9 +1,8 @@
-import { COLLATERAL_DECIMALS, CRYPTO_CURRENCY_MAP } from 'constants/currency';
+import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
-import { UseQueryOptions, useQuery } from 'react-query';
-import { bigNumberFormatter } from 'thales-utils';
-import { Coins } from 'types/tokens';
+import { useQuery, UseQueryOptions } from 'react-query';
+import { bigNumberFormatter, Coins, COLLATERAL_DECIMALS } from 'thales-utils';
 import networkConnector from 'utils/networkConnector';
 
 const useMultipleCollateralBalanceQuery = (
@@ -30,6 +29,7 @@ const useMultipleCollateralBalanceQuery = (
                         USDC: 0,
                         USDbC: 0,
                         THALES: 0,
+                        sTHALES: 0,
                     };
                 }
 
@@ -45,6 +45,7 @@ const useMultipleCollateralBalanceQuery = (
                     ARBBalance,
                     USDbCBalance,
                     THALESBalance,
+                    sTHALESBalance,
                 ] = await Promise.all([
                     multipleCollateral
                         ? multipleCollateral[CRYPTO_CURRENCY_MAP.sUSD as Coins]?.balanceOf(walletAddress)
@@ -77,6 +78,9 @@ const useMultipleCollateralBalanceQuery = (
                     multipleCollateral
                         ? multipleCollateral[CRYPTO_CURRENCY_MAP.THALES as Coins]?.balanceOf(walletAddress)
                         : undefined,
+                    multipleCollateral
+                        ? multipleCollateral[CRYPTO_CURRENCY_MAP.sTHALES as Coins]?.stakedBalanceOf(walletAddress)
+                        : undefined,
                 ]);
 
                 return {
@@ -91,6 +95,11 @@ const useMultipleCollateralBalanceQuery = (
                     ARB: ARBBalance ? bigNumberFormatter(ARBBalance, COLLATERAL_DECIMALS.ARB) : 0,
                     USDbC: USDbCBalance ? bigNumberFormatter(USDbCBalance, COLLATERAL_DECIMALS.USDbC) : 0,
                     THALES: THALESBalance ? bigNumberFormatter(THALESBalance, COLLATERAL_DECIMALS.THALES) : 0,
+                    // sub 1 staked THALES due to limitation on contract side
+                    sTHALES:
+                        sTHALESBalance && bigNumberFormatter(sTHALESBalance, COLLATERAL_DECIMALS.sTHALES) > 1
+                            ? bigNumberFormatter(sTHALESBalance, COLLATERAL_DECIMALS.sTHALES) - 1
+                            : 0,
                 };
             } catch (e) {
                 console.log('e ', e);

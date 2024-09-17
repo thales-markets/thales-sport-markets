@@ -10,7 +10,7 @@ import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modu
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { formatCurrencyWithSign } from 'thales-utils';
-import { Coins } from 'types/tokens';
+import { Coins } from 'thales-utils';
 import { isStableCurrency, sortCollateralBalances } from 'utils/collaterals';
 import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from '../../../../constants/currency';
 import { FlexDivColumn, FlexDivRow } from '../../../../styles/common';
@@ -215,6 +215,7 @@ const Label = styled.span`
 
 const SubLabel = styled(Label)`
     font-weight: 400;
+    text-transform: none;
 `;
 
 const Value = styled.span`

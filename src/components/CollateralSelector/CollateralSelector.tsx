@@ -12,7 +12,7 @@ import {
     FlexDivStart,
 } from 'styles/common';
 import { formatCurrencyWithSign } from 'thales-utils';
-import { Coins } from 'types/tokens';
+import { Coins } from 'thales-utils';
 import { isStableCurrency } from 'utils/collaterals';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import { setPaymentSelectedCollateralIndex } from '../../redux/modules/ticket';

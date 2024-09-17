@@ -5,7 +5,7 @@ import { BigNumber, BigNumberish } from 'ethers';
 import { coinFormatter } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
 import { SwapParams } from 'types/swap';
-import { Coins } from 'types/tokens';
+import { Coins } from 'thales-utils';
 import { Address } from 'viem';
 import multipleCollateralContract from './contracts/multipleCollateralContract';
 import networkConnector from './networkConnector';
