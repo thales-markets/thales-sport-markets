@@ -18,7 +18,7 @@ import {
     ceilNumberToDecimals,
     formatCurrencyWithKey,
 } from 'thales-utils';
-import { getCollateral, getDefaultCollateral, isStableCurrency } from 'utils/collaterals';
+import { getCollateral, getDefaultCollateral, isStableCurrency, isThalesCurrency } from 'utils/collaterals';
 
 const AMOUNTS = [3, 10, 20, 50, 100];
 
@@ -43,7 +43,7 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
     const isStableCollateral = isStableCurrency(collateral);
     const decimals = isStableCollateral ? DEFAULT_CURRENCY_DECIMALS : LONG_CURRENCY_DECIMALS;
-    const isThales = collateral === CRYPTO_CURRENCY_MAP.THALES;
+    const isThales = isThalesCurrency(collateral);
 
     const convertFromStable = useCallback(
         (value: number) => {

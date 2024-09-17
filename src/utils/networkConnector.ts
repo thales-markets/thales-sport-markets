@@ -1,7 +1,7 @@
 import { Network } from 'enums/network';
 import { ethers, Signer } from 'ethers';
+import { Coins } from 'thales-utils';
 import { NetworkSettings } from 'types/network';
-import { Coins } from 'types/tokens';
 import liquidityPoolDataContract from 'utils/contracts/liquidityPoolDataContractV2';
 import sportsAMMDataContract from 'utils/contracts/sportsAMMDataContract';
 import sportsAMMV2Contract from 'utils/contracts/sportsAMMV2Contract';
@@ -15,6 +15,8 @@ import multiCallContract from './contracts/multiCallContract';
 import multiCollateralOnOffRampContract from './contracts/multiCollateralOnOffRampContract';
 import multipleCollateral from './contracts/multipleCollateralContract';
 import priceFeedContract from './contracts/priceFeedContract';
+import stakingThalesBettingProxy from './contracts/stakingThalesBettingProxy';
+import stakingThalesContract from './contracts/stakingThalesContract';
 
 type NetworkConnector = {
     initialized: boolean;
@@ -38,6 +40,8 @@ type NetworkConnector = {
     freeBetHolderContract?: ethers.Contract;
     sportsAMMV2ManagerContract?: ethers.Contract;
     multiCallContract?: ethers.Contract;
+    stakingThalesContract?: ethers.Contract;
+    stakingThalesBettingProxy?: ethers.Contract;
 };
 
 // @ts-ignore
@@ -65,6 +69,7 @@ const networkConnector: NetworkConnector = {
             ARB: initializeContract(multipleCollateral.ARB, networkSettings),
             USDbC: initializeContract(multipleCollateral.USDbC, networkSettings),
             THALES: initializeContract(multipleCollateral.THALES, networkSettings),
+            sTHALES: initializeContract(stakingThalesContract, networkSettings),
         };
         this.sportsAMMDataContract = initializeContract(sportsAMMDataContract, networkSettings);
         this.sportsAMMV2Contract = initializeContract(sportsAMMV2Contract, networkSettings);
@@ -73,6 +78,8 @@ const networkConnector: NetworkConnector = {
         this.freeBetHolderContract = initializeContract(freeBetHolder, networkSettings);
         this.sportsAMMV2ManagerContract = initializeContract(sportsAMMV2ManagerContract, networkSettings);
         this.multiCallContract = initializeContract(multiCallContract, networkSettings);
+        this.stakingThalesContract = initializeContract(stakingThalesContract, networkSettings);
+        this.stakingThalesBettingProxy = initializeContract(stakingThalesBettingProxy, networkSettings);
     },
 };
 

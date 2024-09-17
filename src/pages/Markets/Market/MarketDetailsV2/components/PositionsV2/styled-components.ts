@@ -56,6 +56,7 @@ export const ContentRow = styled.div<{ gridMinMaxPercentage: number; isColumnVie
     gap: 5px;
     flex-direction: column;
     flex: 1;
+    ${(props) => (props.isColumnView ? 'max-width: 250px;' : '')}
 `;
 
 export const Arrow = styled.i`
