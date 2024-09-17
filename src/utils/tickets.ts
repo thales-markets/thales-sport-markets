@@ -1,4 +1,5 @@
 import { MarketTypeMap } from 'constants/marketTypes';
+import { secondsToMilliseconds } from 'date-fns';
 import { MarketType } from 'enums/marketTypes';
 import { OddsType } from 'enums/markets';
 import { t } from 'i18next';
@@ -8,6 +9,7 @@ import { SupportedNetwork } from 'types/network';
 import positionNamesMap from '../assets/json/positionNamesMap.json';
 import { CRYPTO_CURRENCY_MAP } from '../constants/currency';
 import { THALES_ADDED_PAYOUT_PERCENTAGE } from '../constants/markets';
+import { UFC_LEAGUE_IDS } from '../constants/sports';
 import { League } from '../enums/sports';
 import { TicketMarketStatus } from '../enums/tickets';
 import { Coins } from '../thales-utils';
@@ -71,7 +73,7 @@ export const mapTicket = (
                     ? League.TENNIS_GS
                     : `${market.sportId}`.startsWith('156')
                     ? League.TENNIS_MASTERS
-                    : market.sportId === 701 || market.sportId == 702 || market.sportId == 703
+                    : UFC_LEAGUE_IDS.includes(market.sportId)
                     ? League.UFC
                     : Number(market.sportId);
                 const typeId = Number(market.typeId);
