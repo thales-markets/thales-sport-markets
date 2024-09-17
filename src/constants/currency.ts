@@ -1,7 +1,7 @@
 import { Network } from 'enums/network';
 import { keyBy } from 'lodash';
-import { SupportedNetwork } from 'types/network';
 import { Coins } from 'thales-utils';
+import { SupportedNetwork } from 'types/network';
 
 export const USD_SIGN = '$';
 
@@ -35,6 +35,7 @@ export const COLLATERALS: Record<SupportedNetwork, Coins[]> = {
     [Network.OptimismMainnet]: [
         CRYPTO_CURRENCY_MAP.USDC as Coins,
         CRYPTO_CURRENCY_MAP.THALES as Coins,
+        CRYPTO_CURRENCY_MAP.sTHALES as Coins,
         CRYPTO_CURRENCY_MAP.sUSD as Coins,
         CRYPTO_CURRENCY_MAP.USDCe as Coins,
         CRYPTO_CURRENCY_MAP.DAI as Coins,
@@ -46,6 +47,7 @@ export const COLLATERALS: Record<SupportedNetwork, Coins[]> = {
     [Network.Arbitrum]: [
         CRYPTO_CURRENCY_MAP.USDC as Coins,
         CRYPTO_CURRENCY_MAP.THALES as Coins,
+        CRYPTO_CURRENCY_MAP.sTHALES as Coins,
         CRYPTO_CURRENCY_MAP.USDCe as Coins,
         CRYPTO_CURRENCY_MAP.DAI as Coins,
         CRYPTO_CURRENCY_MAP.USDT as Coins,
