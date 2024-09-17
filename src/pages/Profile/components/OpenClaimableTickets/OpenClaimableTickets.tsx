@@ -2,6 +2,7 @@ import Button from 'components/Button';
 import SimpleLoader from 'components/SimpleLoader';
 import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { GAS_BUFFER_FOR_CLAIM_BATCH } from 'constants/network';
 import { ethers } from 'ethers';
 import { LoaderContainer } from 'pages/Markets/Home/HomeV2';
 import useMarketDurationQuery from 'queries/markets/useMarketDurationQuery';
@@ -223,7 +224,14 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
                             return;
                         }
                     }
-                    const tx: any = await multiCallContractWithSigner.aggregate3(calls);
+
+                    const gasEstimation = await multiCallContractWithSigner.estimateGas.aggregate3(calls);
+
+                    const gasEstimationWithBuffer = Math.ceil(Number(gasEstimation) * GAS_BUFFER_FOR_CLAIM_BATCH);
+
+                    const tx: any = await multiCallContractWithSigner.aggregate3(calls, {
+                        gasLimit: gasEstimationWithBuffer,
+                    });
 
                     const txResult = await tx.wait();
 
