@@ -10,11 +10,13 @@ export const getLiveTradingProcessorTransaction: any = async (
     tradeData: TradeData[],
     sUSDPaid: BigNumber,
     expectedQuote: BigNumber,
-    referral?: string | null,
-    additionalSlippage?: BigNumber,
-    isAA?: boolean,
-    isFreeBet?: boolean,
-    freeBetHolderContract?: ethers.Contract
+    referral: string | null,
+    additionalSlippage: BigNumber,
+    isAA: boolean,
+    isFreeBet: boolean,
+    freeBetHolderContract: ethers.Contract,
+    isStakedThales: boolean,
+    stakingThalesBettingProxyContract: ethers.Contract
 ): Promise<any> => {
     const referralAddress = referral || ZERO_ADDRESS;
     const gameId = convertFromBytes32(tradeData[0].gameId);
@@ -35,6 +37,21 @@ export const getLiveTradingProcessorTransaction: any = async (
     } else {
         if (isFreeBet && freeBetHolderContract) {
             return freeBetHolderContract.tradeLive({
+                _gameId: gameId,
+                _sportId: tradeData[0].sportId,
+                _typeId: tradeData[0].typeId,
+                _line: tradeData[0].line,
+                _position: tradeData[0].position,
+                _buyInAmount: sUSDPaid,
+                _expectedQuote: expectedQuote,
+                _additionalSlippage: additionalSlippage,
+                _referrer: referralAddress,
+                _collateral: collateralAddress,
+            });
+        }
+
+        if (isStakedThales && stakingThalesBettingProxyContract) {
+            return stakingThalesBettingProxyContract.tradeLive({
                 _gameId: gameId,
                 _sportId: tradeData[0].sportId,
                 _typeId: tradeData[0].typeId,

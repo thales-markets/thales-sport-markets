@@ -109,7 +109,7 @@ const MyTicket: React.FC<MyTicketProps> = ({
                 )}
                 <InfoDiv>
                     <InfoLabel>{t('markets.parlay.buy-in')}:</InfoLabel>
-                    <InfoValue>{formatCurrencyWithKey(collateral, paid)}</InfoValue>
+                    <BuyInValue>{formatCurrencyWithKey(collateral, paid)}</BuyInValue>
                 </InfoDiv>
             </InfoWrapper>
         </Container>
@@ -197,6 +197,7 @@ const PayoutValue = styled.span<{ isLost?: boolean }>`
     font-size: 30px;
     line-height: 32px;
     font-weight: 600;
+    text-transform: none;
     color: ${(props) => (props.isLost ? props.theme.status.loss : props.theme.status.win)};
     ${(props) => (props.isLost ? `text-decoration: line-through 2px solid ${props.theme.status.loss};` : '')}
 `;
@@ -224,9 +225,14 @@ const InfoDiv = styled(FlexDiv)``;
 const InfoLabel = styled.span`
     font-weight: 600;
 `;
+
 const InfoValue = styled.span`
     font-weight: 600;
     margin-left: 5px;
+`;
+
+const BuyInValue = styled(InfoValue)`
+    text-transform: none;
 `;
 
 const HorizontalLine = styled.hr`
