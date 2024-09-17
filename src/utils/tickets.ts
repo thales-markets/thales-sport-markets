@@ -3,7 +3,7 @@ import { secondsToMilliseconds } from 'date-fns';
 import { MarketType } from 'enums/marketTypes';
 import { OddsType } from 'enums/markets';
 import { t } from 'i18next';
-import { bigNumberFormatter, coinFormatter, formatDateWithTime } from 'thales-utils';
+import { bigNumberFormatter, coinFormatter, Coins, formatDateWithTime } from 'thales-utils';
 import { CombinedPosition, Team, Ticket, TicketMarket } from 'types/markets';
 import { SupportedNetwork } from 'types/network';
 import positionNamesMap from '../assets/json/positionNamesMap.json';
@@ -12,7 +12,6 @@ import { THALES_ADDED_PAYOUT_PERCENTAGE } from '../constants/markets';
 import { UFC_LEAGUE_IDS } from '../constants/sports';
 import { League } from '../enums/sports';
 import { TicketMarketStatus } from '../enums/tickets';
-import { Coins } from '../thales-utils';
 import { getCollateralByAddress } from './collaterals';
 import freeBetHolder from './contracts/freeBetHolder';
 import stakingThalesBettingProxy from './contracts/stakingThalesBettingProxy';
@@ -24,7 +23,6 @@ import {
     isYesNoPlayerPropsMarket,
 } from './markets';
 import { getLeagueSport } from './sports';
-import { secondsToMilliseconds } from 'date-fns';
 
 export const mapTicket = (
     ticket: any,
