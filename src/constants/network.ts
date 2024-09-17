@@ -85,5 +85,3 @@ export const optimismSepolia = {
         },
     },
 } as Chain;
-
-export const GAS_BUFFER_FOR_CLAIM_BATCH = 1.1;

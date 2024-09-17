@@ -2,7 +2,7 @@ import Button from 'components/Button';
 import SimpleLoader from 'components/SimpleLoader';
 import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import { GAS_BUFFER_FOR_CLAIM_BATCH } from 'constants/network';
+import { GAS_ESTIMATION_BUFFER } from 'constants/network';
 import { ethers } from 'ethers';
 import { LoaderContainer } from 'pages/Markets/Home/HomeV2';
 import useMarketDurationQuery from 'queries/markets/useMarketDurationQuery';
@@ -42,7 +42,6 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
     const [openOpenPositions, setOpenState] = useState<boolean>(true);
 
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    // const isAA = useSelector((state: RootState) => getIsAA(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -63,12 +62,6 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
         networkId,
         claimCollateralIndex,
     ]);
-    // const claimCollateralAddress = useMemo(
-    //     () => getCollateralAddress(networkId, claimCollateralIndex, claimCollateralArray),
-    //     [networkId, claimCollateralIndex, claimCollateralArray]
-    // );
-
-    // const isEth = claimCollateralAddress === ZERO_ADDRESS;
 
     const userTicketsQuery = useUserTicketsQuery(
         isSearchTextWalletAddress ? searchText : walletAddress.toLowerCase(),
@@ -143,7 +136,7 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
 
                     const gasEstimation = await multiCallContractWithSigner.estimateGas.aggregate3(calls);
 
-                    const gasEstimationWithBuffer = Math.ceil(Number(gasEstimation) * GAS_BUFFER_FOR_CLAIM_BATCH);
+                    const gasEstimationWithBuffer = Math.ceil(Number(gasEstimation) * GAS_ESTIMATION_BUFFER);
 
                     const tx: any = await multiCallContractWithSigner.aggregate3(calls, {
                         gasLimit: gasEstimationWithBuffer,
