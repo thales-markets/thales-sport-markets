@@ -345,6 +345,8 @@ export const getMatchLabel = (market: SportMarket | TicketPosition) =>
         !market.isOneSideMarket && !market.isPlayerPropsMarket ? ` - ${getTeamNameV2(market, 1)}` : ''
     }`;
 
+export const getMatchTeams = (market: SportMarket | TicketPosition) => `${market.homeTeam} - ${market.awayTeam}`;
+
 const areSameCombinedPositions = (market: SportMarket | TicketPosition, ticketPosition: TicketPosition) => {
     for (let i = 0; i < market.combinedPositions.length; i++) {
         for (let j = 0; j < market.combinedPositions[i].length; j++) {
