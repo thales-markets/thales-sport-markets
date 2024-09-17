@@ -27,7 +27,7 @@ import { SportMarket, Ticket, TicketMarket } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { getDefaultCollateral } from 'utils/collaterals';
 import { formatMarketOdds } from 'utils/markets';
-import { getPositionTextV2, getTeamNameV2, getTitleText } from 'utils/marketsV2';
+import { getMatchTeams, getPositionTextV2, getTeamNameV2, getTitleText } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
 import { formatTicketOdds, getTicketMarketOdd, getTicketMarketStatus } from 'utils/tickets';
 import {
@@ -41,6 +41,7 @@ import {
     MarketStatus,
     MarketStatusIcon,
     MarketTypeInfo,
+    MatchTeamsLabel,
     Odd,
     PositionInfo,
     PositionText,
@@ -397,12 +398,9 @@ const getTicketMarkets = (
     market?: SportMarket
 ) => {
     return ticket.sportMarkets.map((ticketMarket, index) => {
+        const isCurrentMarket = market && ticketMarket.gameId === market.gameId;
         return (
-            <TicketRow
-                highlighted={market && ticketMarket.gameId === market.gameId}
-                style={{ opacity: getOpacity(ticketMarket) }}
-                key={`m-${index}`}
-            >
+            <TicketRow highlighted={isCurrentMarket} style={{ opacity: getOpacity(ticketMarket) }} key={`m-${index}`}>
                 <SPAAnchor href={buildMarketLink(ticketMarket.gameId, language)}>
                     <TeamNamesContainer>
                         <TeamNameLabel>{getTeamNameV2(ticketMarket, 0)}</TeamNameLabel>
@@ -413,6 +411,9 @@ const getTicketMarkets = (
                             </>
                         )}
                     </TeamNamesContainer>
+                    {ticketMarket.isPlayerPropsMarket && !isCurrentMarket && (
+                        <MatchTeamsLabel>{`(${getMatchTeams(ticketMarket)})`}</MatchTeamsLabel>
+                    )}
                 </SPAAnchor>
                 <SelectionInfoContainer>
                     <MarketTypeInfo>{getTitleText(ticketMarket)}</MarketTypeInfo>
