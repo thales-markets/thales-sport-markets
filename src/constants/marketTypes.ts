@@ -765,7 +765,7 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
     [MarketType.PLAYER_PROPS_OVER_GOALS]: {
         id: MarketType.PLAYER_PROPS_OVER_GOALS,
         key: 'overGoals',
-        name: 'Over Goals',
+        name: 'Over goals',
         description: 'How many goals will player score?',
     },
 
@@ -830,6 +830,62 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         key: 'tackles',
         name: 'Tackles',
         tooltipKey: 'tackles',
+    },
+
+    [MarketType.PLAYER_PROPS_OUTS]: {
+        id: MarketType.PLAYER_PROPS_OUTS,
+        key: 'outs',
+        name: 'Outs recorded',
+    },
+    [MarketType.PLAYER_PROPS_RBIS]: {
+        id: MarketType.PLAYER_PROPS_RBIS,
+        key: 'rbis',
+        name: 'RBIs O/U',
+    },
+    [MarketType.PLAYER_PROPS_HITS_RUNS_RBIS]: {
+        id: MarketType.PLAYER_PROPS_HITS_RUNS_RBIS,
+        key: 'hitsRunsRbis',
+        name: 'Hits + Runs + RBIs',
+    },
+    [MarketType.PLAYER_PROPS_EARNED_RUNS]: {
+        id: MarketType.PLAYER_PROPS_EARNED_RUNS,
+        key: 'earnedRuns',
+        name: 'Earned runs allowed',
+    },
+    [MarketType.PLAYER_PROPS_DOUBLES]: {
+        id: MarketType.PLAYER_PROPS_DOUBLES,
+        key: 'doubles',
+        name: 'Doubles',
+    },
+    [MarketType.PLAYER_PROPS_BATTING_WALKS]: {
+        id: MarketType.PLAYER_PROPS_BATTING_WALKS,
+        key: 'battingWalks',
+        name: 'Walks',
+    },
+    [MarketType.PLAYER_PROPS_BATTING_STRIKEOUTS]: {
+        id: MarketType.PLAYER_PROPS_BATTING_STRIKEOUTS,
+        key: 'battingStrikeouts',
+        name: 'Strikeouts',
+    },
+    [MarketType.PLAYER_PROPS_SINGLES]: {
+        id: MarketType.PLAYER_PROPS_SINGLES,
+        key: 'singles',
+        name: 'Singles',
+    },
+    [MarketType.PLAYER_PROPS_STOLEN_BASES]: {
+        id: MarketType.PLAYER_PROPS_STOLEN_BASES,
+        key: 'stolenBases',
+        name: 'Stolen bases',
+    },
+    [MarketType.PLAYER_PROPS_RUNS]: {
+        id: MarketType.PLAYER_PROPS_RUNS,
+        key: 'runsScored',
+        name: 'Runs scored',
+    },
+    [MarketType.PLAYER_PROPS_WALKS]: {
+        id: MarketType.PLAYER_PROPS_WALKS,
+        key: 'walksAllowed',
+        name: 'Walks allowed',
     },
 
     // UFC market types
@@ -997,6 +1053,17 @@ export const PLAYER_PROPS_MARKET_TYPES = [
     MarketType.PLAYER_PROPS_LONGEST_RECEPTION,
     MarketType.PLAYER_PROPS_EXTRA_POINTS,
     MarketType.PLAYER_PROPS_TACKLES,
+    MarketType.PLAYER_PROPS_OUTS,
+    MarketType.PLAYER_PROPS_RBIS,
+    MarketType.PLAYER_PROPS_HITS_RUNS_RBIS,
+    MarketType.PLAYER_PROPS_EARNED_RUNS,
+    MarketType.PLAYER_PROPS_DOUBLES,
+    MarketType.PLAYER_PROPS_BATTING_WALKS,
+    MarketType.PLAYER_PROPS_BATTING_STRIKEOUTS,
+    MarketType.PLAYER_PROPS_SINGLES,
+    MarketType.PLAYER_PROPS_STOLEN_BASES,
+    MarketType.PLAYER_PROPS_RUNS,
+    MarketType.PLAYER_PROPS_WALKS,
 ];
 
 export const ONE_SIDE_PLAYER_PROPS_MARKET_TYPES = [
@@ -1551,11 +1618,26 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
             ...NINTH_PERIOD_MARKET_TYPES,
         ],
         [MarketTypeGroup.PLAYER_PROPS]: PLAYER_PROPS_MARKET_TYPES,
-        [MarketTypeGroup.PLAYER_HITS_RECORDED]: [MarketType.PLAYER_PROPS_HITS_RECORDED],
-        [MarketTypeGroup.PLAYER_STRIKEOUTS]: [MarketType.PLAYER_PROPS_STRIKEOUTS],
-        [MarketTypeGroup.PLAYER_HOMERUNS]: [MarketType.PLAYER_PROPS_HOMERUNS],
-        [MarketTypeGroup.PLAYER_BASES]: [MarketType.PLAYER_PROPS_BASES],
-        [MarketTypeGroup.PLAYER_HITS_ALLOWED]: [MarketType.PLAYER_PROPS_PITCHER_HITS_ALLOWED],
+        [MarketTypeGroup.PLAYER_BATTER]: [
+            MarketType.PLAYER_PROPS_HOMERUNS,
+            MarketType.PLAYER_PROPS_HITS_RECORDED,
+            MarketType.PLAYER_PROPS_BASES,
+            MarketType.PLAYER_PROPS_RBIS,
+            MarketType.PLAYER_PROPS_HITS_RUNS_RBIS,
+            MarketType.PLAYER_PROPS_RUNS,
+            MarketType.PLAYER_PROPS_STOLEN_BASES,
+            MarketType.PLAYER_PROPS_BATTING_STRIKEOUTS,
+            MarketType.PLAYER_PROPS_SINGLES,
+            MarketType.PLAYER_PROPS_DOUBLES,
+            MarketType.PLAYER_PROPS_BATTING_WALKS,
+        ],
+        [MarketTypeGroup.PLAYER_PITCHER]: [
+            MarketType.PLAYER_PROPS_STRIKEOUTS,
+            MarketType.PLAYER_PROPS_OUTS,
+            MarketType.PLAYER_PROPS_PITCHER_HITS_ALLOWED,
+            MarketType.PLAYER_PROPS_EARNED_RUNS,
+            MarketType.PLAYER_PROPS_WALKS,
+        ],
     },
     [Sport.HOCKEY]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
