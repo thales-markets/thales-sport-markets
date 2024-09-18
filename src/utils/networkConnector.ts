@@ -1,7 +1,7 @@
 import { Network } from 'enums/network';
 import { ethers, Signer } from 'ethers';
-import { NetworkSettings } from 'types/network';
 import { Coins } from 'thales-utils';
+import { NetworkSettings } from 'types/network';
 import liquidityPoolDataContract from 'utils/contracts/liquidityPoolDataContractV2';
 import sportsAMMDataContract from 'utils/contracts/sportsAMMDataContract';
 import sportsAMMV2Contract from 'utils/contracts/sportsAMMV2Contract';
@@ -11,6 +11,7 @@ import sUSDContract from 'utils/contracts/sUSDContract';
 import { FIFAFavoriteTeam } from './contracts/FIFAFavoriteTeam';
 import freeBetHolder from './contracts/freeBetHolder';
 import liveTradingProcessorContract from './contracts/liveTradingProcessorContract';
+import multiCallContract from './contracts/multiCallContract';
 import multiCollateralOnOffRampContract from './contracts/multiCollateralOnOffRampContract';
 import multipleCollateral from './contracts/multipleCollateralContract';
 import priceFeedContract from './contracts/priceFeedContract';
@@ -38,6 +39,7 @@ type NetworkConnector = {
     liveTradingProcessorContract?: ethers.Contract;
     freeBetHolderContract?: ethers.Contract;
     sportsAMMV2ManagerContract?: ethers.Contract;
+    multiCallContract?: ethers.Contract;
     stakingThalesContract?: ethers.Contract;
     stakingThalesBettingProxy?: ethers.Contract;
 };
@@ -75,6 +77,7 @@ const networkConnector: NetworkConnector = {
         this.sportsAMMV2RiskManagerContract = initializeContract(sportsAMMV2RiskManagerContract, networkSettings);
         this.freeBetHolderContract = initializeContract(freeBetHolder, networkSettings);
         this.sportsAMMV2ManagerContract = initializeContract(sportsAMMV2ManagerContract, networkSettings);
+        this.multiCallContract = initializeContract(multiCallContract, networkSettings);
         this.stakingThalesContract = initializeContract(stakingThalesContract, networkSettings);
         this.stakingThalesBettingProxy = initializeContract(stakingThalesBettingProxy, networkSettings);
     },
