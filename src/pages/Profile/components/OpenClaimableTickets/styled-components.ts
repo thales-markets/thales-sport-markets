@@ -115,8 +115,10 @@ export const ClaimAllContainer = styled(FlexDivColumnNative)`
     flex-direction: row;
     justify-content: flex-end;
     margin-bottom: 10px;
+    margin-right: 14px;
     @media (max-width: 767px) {
         min-width: 60px;
+        margin-right: 0px;
     }
     button {
         margin-top: 2px;
@@ -128,7 +130,7 @@ export const ClaimAllContainer = styled(FlexDivColumnNative)`
 `;
 
 export const additionalClaimButtonStyle: CSSProperties = {
-    minWidth: '110px',
+    minWidth: '100px',
     maxWidth: '100px',
 };
 
