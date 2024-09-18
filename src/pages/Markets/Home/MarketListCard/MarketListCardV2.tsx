@@ -321,14 +321,50 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
             {!isMarketSelected && (
                 <>
                     {isGameLive ? (
-                        <PositionsV2
-                            markets={[market]}
-                            marketType={MarketType.WINNER}
-                            isGameOpen={isGameLive}
-                            isGameLive={isGameLive}
-                            isMainPageView
-                            isColumnView={isColumnView}
-                        />
+                        <>
+                            <PositionsV2
+                                markets={[market]}
+                                marketType={MarketType.WINNER}
+                                isGameOpen={isGameLive}
+                                isGameLive={isGameLive}
+                                isMainPageView
+                                isColumnView
+                            />
+                            {!isMobile && spreadMarket && (
+                                <PositionsV2
+                                    markets={[spreadMarket]}
+                                    marketType={MarketType.SPREAD}
+                                    isGameOpen={isGameOpen}
+                                    isMainPageView
+                                    isColumnView
+                                />
+                            )}
+                            {!isMobile && totalMarket && (
+                                <PositionsV2
+                                    markets={[totalMarket]}
+                                    marketType={MarketType.TOTAL}
+                                    isGameOpen={isGameOpen}
+                                    isMainPageView
+                                    isColumnView
+                                />
+                            )}
+                            {(marketsCount > 0 || !!overdropGameMultiplier) && (
+                                <MarketsCountWrapper
+                                    onClick={() =>
+                                        dispatch(setSelectedMarket({ gameId: market.gameId, sport: market.sport }))
+                                    }
+                                >
+                                    {!!overdropGameMultiplier && (
+                                        <FireContainer gap={2}>
+                                            <Fire className={'icon icon--fire'} />
+                                            <FireText>{`+${overdropGameMultiplier.multiplier}% XP`}</FireText>
+                                        </FireContainer>
+                                    )}
+                                    {marketsCount > 0 && `+${marketsCount}`}
+                                    {!isMobile && <Arrow className={'icon icon--arrow-down'} />}
+                                </MarketsCountWrapper>
+                            )}
+                        </>
                     ) : isGameOpen ? (
                         <>
                             <PositionsV2
@@ -378,7 +414,6 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                             <FireText>{`+${overdropGameMultiplier.multiplier}% XP`}</FireText>
                                         </FireContainer>
                                     )}
-
                                     {marketsCount > 0 && `+${marketsCount}`}
                                     {!isMobile && <Arrow className={'icon icon--arrow-down'} />}
                                 </MarketsCountWrapper>
