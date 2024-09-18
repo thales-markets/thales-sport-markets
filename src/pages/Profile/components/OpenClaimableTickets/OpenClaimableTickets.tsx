@@ -1,7 +1,8 @@
 import Button from 'components/Button';
 import SimpleLoader from 'components/SimpleLoader';
+import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import { ZERO_ADDRESS } from 'constants/network';
+import { GAS_ESTIMATION_BUFFER } from 'constants/network';
 import { ethers } from 'ethers';
 import { LoaderContainer } from 'pages/Markets/Home/HomeV2';
 import useMarketDurationQuery from 'queries/markets/useMarketDurationQuery';
@@ -11,17 +12,10 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
-import { getIsAA, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import {
-    getCollateral,
-    getCollateralAddress,
-    getCollaterals,
-    getDefaultCollateral,
-    isLpSupported,
-} from 'utils/collaterals';
+import { getCollateral, getCollaterals, getDefaultCollateral, isLpSupported } from 'utils/collaterals';
 import networkConnector from 'utils/networkConnector';
-import { executeBiconomyTransaction } from '../../../../utils/biconomy';
 import TicketDetails from './components/TicketDetails';
 import {
     Arrow,
@@ -48,7 +42,6 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
     const [openOpenPositions, setOpenState] = useState<boolean>(true);
 
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const isAA = useSelector((state: RootState) => getIsAA(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -69,12 +62,6 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
         networkId,
         claimCollateralIndex,
     ]);
-    const claimCollateralAddress = useMemo(
-        () => getCollateralAddress(networkId, claimCollateralIndex, claimCollateralArray),
-        [networkId, claimCollateralIndex, claimCollateralArray]
-    );
-
-    const isEth = claimCollateralAddress === ZERO_ADDRESS;
 
     const userTicketsQuery = useUserTicketsQuery(
         isSearchTextWalletAddress ? searchText : walletAddress.toLowerCase(),
@@ -110,87 +97,62 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
 
     const isLoading = userTicketsQuery.isLoading;
 
-    const claimAllRewards = async () => {
-        const { signer, sportsAMMV2Contract } = networkConnector;
-        if (signer) {
-            const transactions: any = [];
+    const claimBatch = async () => {
+        const { signer, sportsAMMV2Contract, multiCallContract } = networkConnector;
+        const id = toast.loading(t('market.toast-message.transaction-pending'));
 
+        if (!signer) return;
+
+        const calls: { target: string; allowFailure: boolean; callData: any }[] = [];
+
+        try {
             if (userTicketsByStatus.claimable.length) {
-                if (sportsAMMV2Contract) {
-                    userTicketsByStatus.claimable.forEach(async (ticket) => {
-                        transactions.push(
-                            new Promise(async (resolve, reject) => {
-                                const id = toast.loading(t('market.toast-message.transaction-pending'));
+                if (sportsAMMV2Contract && multiCallContract) {
+                    const multiCallContractWithSigner = multiCallContract.connect(signer);
 
-                                try {
-                                    const ticketCollateralHasLp = isLpSupported(ticket.collateral);
-                                    const isTicketCollateralDefaultCollateral = ticket.collateral === defaultCollateral;
-                                    const isClaimCollateralDefaultCollateral = claimCollateral === defaultCollateral;
+                    for (let i = 0; i < userTicketsByStatus.claimable.length; i++) {
+                        const ticket = userTicketsByStatus.claimable[i];
+                        try {
+                            const sportsAMMV2ContractWithSigner = sportsAMMV2Contract.connect(signer);
 
-                                    let txResult;
-                                    const sportsAMMV2ContractWithSigner = sportsAMMV2Contract.connect(signer);
-                                    if (isAA) {
-                                        txResult =
-                                            isClaimCollateralDefaultCollateral ||
-                                            (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral) ||
-                                            ticket.isFreeBet
-                                                ? await executeBiconomyTransaction(
-                                                      claimCollateralAddress,
-                                                      sportsAMMV2ContractWithSigner,
-                                                      'exerciseTicket',
-                                                      [ticket.id]
-                                                  )
-                                                : await executeBiconomyTransaction(
-                                                      claimCollateralAddress,
-                                                      sportsAMMV2ContractWithSigner,
-                                                      'exerciseTicketOffRamp',
-                                                      [ticket.id, claimCollateralAddress, isEth]
-                                                  );
-                                    } else {
-                                        const tx =
-                                            isClaimCollateralDefaultCollateral ||
-                                            (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral) ||
-                                            ticket.isFreeBet
-                                                ? await sportsAMMV2ContractWithSigner.exerciseTicket(ticket.id)
-                                                : await sportsAMMV2ContractWithSigner.exerciseTicketOffRamp(
-                                                      ticket.id,
-                                                      claimCollateralAddress,
-                                                      isEth
-                                                  );
-                                        txResult = await tx.wait();
-                                    }
+                            const isClaimCollateralDefaultCollateral = claimCollateral === defaultCollateral;
 
-                                    if (txResult && txResult.transactionHash) {
-                                        resolve(
-                                            toast.update(
-                                                id,
-                                                getSuccessToastOptions(t('market.toast-message.claim-winnings-success'))
-                                            )
-                                        );
-                                    } else {
-                                        reject(
-                                            toast.update(
-                                                id,
-                                                getErrorToastOptions(t('common.errors.unknown-error-try-again'))
-                                            )
-                                        );
-                                    }
-                                } catch (e) {
-                                    reject(
-                                        toast.update(
-                                            id,
-                                            getErrorToastOptions(t('common.errors.unknown-error-try-again'))
-                                        )
-                                    );
-                                    console.log(e);
-                                }
-                            })
-                        );
+                            const tx = await sportsAMMV2ContractWithSigner.populateTransaction.exerciseTicket(
+                                ticket.id
+                            );
+
+                            if (!ticket.isFreeBet && isClaimCollateralDefaultCollateral) {
+                                calls.push({
+                                    target: sportsAMMV2Contract.address,
+                                    allowFailure: true,
+                                    callData: tx?.data,
+                                });
+                            }
+                        } catch (e) {
+                            console.log('Error ', e);
+                            return;
+                        }
+                    }
+
+                    const gasEstimation = await multiCallContractWithSigner.estimateGas.aggregate3(calls);
+
+                    const gasEstimationWithBuffer = Math.ceil(Number(gasEstimation) * GAS_ESTIMATION_BUFFER);
+
+                    const tx: any = await multiCallContractWithSigner.aggregate3(calls, {
+                        gasLimit: gasEstimationWithBuffer,
                     });
+
+                    const txResult = await tx.wait();
+
+                    if (txResult && txResult?.transactionHash) {
+                        toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
+                    }
                 }
             }
-
-            Promise.all(transactions).catch((e) => console.log(e));
+        } catch (e) {
+            toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+            console.log('Error ', e);
+            return;
         }
     };
 
@@ -221,7 +183,7 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
                                             onClick={(e: any) => {
                                                 e.preventDefault();
                                                 e.stopPropagation();
-                                                claimAllRewards();
+                                                claimBatch();
                                             }}
                                             additionalStyles={
                                                 isMobile ? additionalClaimButtonStyleMobile : additionalClaimButtonStyle
@@ -232,6 +194,12 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
                                         >
                                             {t('profile.card.claim-all')}
                                         </Button>
+                                        <Tooltip
+                                            overlay={t('profile.card.claim-batch-tooltip')}
+                                            iconFontSize={23}
+                                            marginLeft={4}
+                                            top={-2}
+                                        />
                                     </ClaimAllContainer>
                                     {userTicketsByStatus.claimable.map((parlayMarket, index) => {
                                         return (

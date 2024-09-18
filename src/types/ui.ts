@@ -58,3 +58,5 @@ export type OverdropLevel = {
     loyaltyBoost: number;
     voucherAmount?: number;
 };
+
+export type Aggregate3Response = { success: boolean; returnData: string };

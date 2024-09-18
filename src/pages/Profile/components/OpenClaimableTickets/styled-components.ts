@@ -112,15 +112,15 @@ export const ListContainer = styled(FlexDivColumnNative)`
 export const ClaimAllContainer = styled(FlexDivColumnNative)`
     min-width: 100px;
     align-items: end;
+    flex-direction: row;
     justify-content: flex-end;
     margin-bottom: 10px;
-    margin-right: 40px;
     @media (max-width: 767px) {
         min-width: 60px;
-        margin-right: 30px;
     }
     button {
         margin-top: 2px;
+        width: fit-content;
         @media (max-width: 767px) {
             margin-top: 0px;
         }
@@ -128,7 +128,7 @@ export const ClaimAllContainer = styled(FlexDivColumnNative)`
 `;
 
 export const additionalClaimButtonStyle: CSSProperties = {
-    minWidth: '100px',
+    minWidth: '110px',
     maxWidth: '100px',
 };
 
