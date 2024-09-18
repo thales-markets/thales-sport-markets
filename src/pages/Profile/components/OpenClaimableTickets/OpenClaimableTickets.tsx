@@ -14,7 +14,6 @@ import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import { getCollateral, getCollaterals, getDefaultCollateral, isLpSupported } from 'utils/collaterals';
 import networkConnector from 'utils/networkConnector';
 import TicketDetails from './components/TicketDetails';
 import {
@@ -48,20 +47,6 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
 
     const isSearchTextWalletAddress = searchText && ethers.utils.isAddress(searchText);
     const [claimCollateralIndex, setClaimCollateralIndex] = useState(0);
-
-    const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
-    const claimCollateralArray = useMemo(
-        () =>
-            getCollaterals(networkId).filter(
-                (collateral) => !isLpSupported(collateral) || collateral === defaultCollateral
-            ),
-        [networkId, defaultCollateral]
-    );
-    const claimCollateral = useMemo(() => getCollateral(networkId, claimCollateralIndex, claimCollateralArray), [
-        claimCollateralArray,
-        networkId,
-        claimCollateralIndex,
-    ]);
 
     const userTicketsQuery = useUserTicketsQuery(
         isSearchTextWalletAddress ? searchText : walletAddress.toLowerCase(),
@@ -115,19 +100,15 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
                         try {
                             const sportsAMMV2ContractWithSigner = sportsAMMV2Contract.connect(signer);
 
-                            const isClaimCollateralDefaultCollateral = claimCollateral === defaultCollateral;
-
                             const tx = await sportsAMMV2ContractWithSigner.populateTransaction.exerciseTicket(
                                 ticket.id
                             );
 
-                            if (!ticket.isFreeBet && isClaimCollateralDefaultCollateral) {
-                                calls.push({
-                                    target: sportsAMMV2Contract.address,
-                                    allowFailure: true,
-                                    callData: tx?.data,
-                                });
-                            }
+                            calls.push({
+                                target: sportsAMMV2Contract.address,
+                                allowFailure: true,
+                                callData: tx?.data,
+                            });
                         } catch (e) {
                             console.log('Error ', e);
                             return;
