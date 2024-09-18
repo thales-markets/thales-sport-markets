@@ -117,7 +117,7 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
 
                             const isClaimCollateralDefaultCollateral = claimCollateral === defaultCollateral;
 
-                            const _tx = await sportsAMMV2ContractWithSigner.populateTransaction.exerciseTicket(
+                            const tx = await sportsAMMV2ContractWithSigner.populateTransaction.exerciseTicket(
                                 ticket.id
                             );
 
@@ -125,7 +125,7 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
                                 calls.push({
                                     target: sportsAMMV2Contract.address,
                                     allowFailure: true,
-                                    callData: _tx?.data,
+                                    callData: tx?.data,
                                 });
                             }
                         } catch (e) {
