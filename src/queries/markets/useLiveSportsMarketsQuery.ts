@@ -27,6 +27,15 @@ const useLiveSportsMarketsQuery = (
                 const marketsFlattened = markets
                     .reduce((accumulator, value) => accumulator.concat(value), [])
                     .map((game: any) => {
+                        game.childMarkets = game.childMarkets.map((childMarket: any) => {
+                            return {
+                                ...childMarket,
+                                live: true,
+                                line: childMarket.line,
+                                maturityDate: new Date(childMarket.maturityDate),
+                                odds: childMarket.odds.map((odd: any) => odd.normalizedImplied),
+                            };
+                        });
                         return {
                             ...game,
                             live: true,
