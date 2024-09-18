@@ -196,7 +196,7 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
                                         </Button>
                                         <Tooltip
                                             overlay={t('profile.card.claim-batch-tooltip')}
-                                            iconFontSize={23}
+                                            iconFontSize={isMobile ? 16 : 20}
                                             marginLeft={4}
                                             top={-2}
                                         />
