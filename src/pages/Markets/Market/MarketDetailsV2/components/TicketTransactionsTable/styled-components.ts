@@ -119,6 +119,10 @@ export const TeamNamesContainer = styled.div`
 
 export const TeamNameLabel = styled(FlexDivRow)``;
 
+export const MatchTeamsLabel = styled.span`
+    font-size: 10px;
+`;
+
 export const SelectionInfoContainer = styled.div`
     display: flex;
     flex-direction: row;
