@@ -115,7 +115,7 @@ export const ClaimAllContainer = styled(FlexDivColumnNative)`
     flex-direction: row;
     justify-content: flex-end;
     margin-bottom: 10px;
-    margin-right: 14px;
+    margin-right: 8px;
     @media (max-width: 767px) {
         min-width: 60px;
         margin-right: 0px;
