@@ -28,8 +28,8 @@ const useCoingeckoRatesQuery = (options?: UseQueryOptions<CoingeckoRates>) => {
                 USDC: 1,
                 USDT: 1,
                 USDbC: 1,
-                BUSD: 1,
                 THALES: 0,
+                sTHALES: 0,
             };
 
             const url =
@@ -53,6 +53,9 @@ const useCoingeckoRatesQuery = (options?: UseQueryOptions<CoingeckoRates>) => {
                     body[COINGECKO_CURRENCY_ID_MAP[CRYPTO_CURRENCY_MAP.WETH]].usd
                 );
                 rates[CRYPTO_CURRENCY_MAP.THALES as Coins] = Number(
+                    body[COINGECKO_CURRENCY_ID_MAP[CRYPTO_CURRENCY_MAP.THALES]].usd
+                );
+                rates[CRYPTO_CURRENCY_MAP.sTHALES as Coins] = Number(
                     body[COINGECKO_CURRENCY_ID_MAP[CRYPTO_CURRENCY_MAP.THALES]].usd
                 );
             } catch (err) {

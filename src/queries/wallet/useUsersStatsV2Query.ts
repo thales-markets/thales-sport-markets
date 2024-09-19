@@ -11,55 +11,67 @@ import { getCollateralByAddress, isLpSupported, isStableCurrency } from 'utils/c
 import networkConnector from 'utils/networkConnector';
 import { Rates } from '../rates/useExchangeRatesQuery';
 
-const useUsersStatsV2Query = (
-    walletAddress: string,
-    networkId: Network,
-    options?: UseQueryOptions<UserStats | undefined>
-) => {
+const useUsersStatsV2Query = (user: string, networkId: Network, options?: UseQueryOptions<UserStats | undefined>) => {
     return useQuery<UserStats | undefined>(
-        QUERY_KEYS.Wallet.StatsV2(networkId, walletAddress),
+        QUERY_KEYS.Wallet.StatsV2(networkId, user),
         async () => {
             const {
                 sportsAMMDataContract,
                 priceFeedContract,
                 sportsAMMV2ManagerContract,
                 freeBetHolderContract,
+                stakingThalesBettingProxy,
             } = networkConnector;
-            if (sportsAMMDataContract && priceFeedContract && sportsAMMV2ManagerContract && freeBetHolderContract) {
+            if (
+                sportsAMMDataContract &&
+                priceFeedContract &&
+                sportsAMMV2ManagerContract &&
+                freeBetHolderContract &&
+                stakingThalesBettingProxy
+            ) {
                 const [
                     numOfActiveTicketsPerUser,
                     numOfResolvedTicketsPerUser,
                     numOfActiveFreeBetTicketsPerUser,
                     numOfResolvedFreeBetTicketsPerUser,
+                    numOfActiveStakedThalesTicketsPerUser,
+                    numOfResolvedStakedThalesTicketsPerUser,
                 ] = await Promise.all([
-                    sportsAMMV2ManagerContract.numOfActiveTicketsPerUser(walletAddress),
-                    sportsAMMV2ManagerContract.numOfResolvedTicketsPerUser(walletAddress),
-                    freeBetHolderContract.numOfActiveTicketsPerUser(walletAddress),
-                    freeBetHolderContract.numOfResolvedTicketsPerUser(walletAddress),
+                    sportsAMMV2ManagerContract.numOfActiveTicketsPerUser(user),
+                    sportsAMMV2ManagerContract.numOfResolvedTicketsPerUser(user),
+                    freeBetHolderContract.numOfActiveTicketsPerUser(user),
+                    freeBetHolderContract.numOfResolvedTicketsPerUser(user),
+                    stakingThalesBettingProxy.numOfActiveTicketsPerUser(user),
+                    stakingThalesBettingProxy.numOfResolvedTicketsPerUser(user),
                 ]);
 
                 const numberOfActiveBatches =
                     Math.trunc(
-                        (Number(numOfActiveTicketsPerUser) > Number(numOfActiveFreeBetTicketsPerUser)
+                        (Number(numOfActiveTicketsPerUser) > Number(numOfActiveFreeBetTicketsPerUser) &&
+                        Number(numOfActiveTicketsPerUser) > Number(numOfActiveStakedThalesTicketsPerUser)
                             ? Number(numOfActiveTicketsPerUser)
-                            : Number(numOfActiveFreeBetTicketsPerUser)) / BATCH_SIZE
+                            : Number(numOfActiveFreeBetTicketsPerUser) > Number(numOfActiveStakedThalesTicketsPerUser)
+                            ? Number(numOfActiveFreeBetTicketsPerUser)
+                            : Number(numOfActiveStakedThalesTicketsPerUser)) / BATCH_SIZE
                     ) + 1;
                 const numberOfResolvedBatches =
                     Math.trunc(
-                        (Number(numOfResolvedTicketsPerUser) > Number(numOfResolvedFreeBetTicketsPerUser)
+                        (Number(numOfResolvedTicketsPerUser) > Number(numOfResolvedFreeBetTicketsPerUser) &&
+                        Number(numOfResolvedTicketsPerUser) > Number(numOfResolvedStakedThalesTicketsPerUser)
                             ? Number(numOfResolvedTicketsPerUser)
-                            : Number(numOfResolvedFreeBetTicketsPerUser)) / BATCH_SIZE
+                            : Number(numOfResolvedFreeBetTicketsPerUser) >
+                              Number(numOfResolvedStakedThalesTicketsPerUser)
+                            ? Number(numOfResolvedFreeBetTicketsPerUser)
+                            : Number(numOfResolvedStakedThalesTicketsPerUser)) / BATCH_SIZE
                     ) + 1;
 
                 const promises = [];
                 for (let i = 0; i < numberOfActiveBatches; i++) {
-                    promises.push(
-                        sportsAMMDataContract.getActiveTicketsDataPerUser(walletAddress, i * BATCH_SIZE, BATCH_SIZE)
-                    );
+                    promises.push(sportsAMMDataContract.getActiveTicketsDataPerUser(user, i * BATCH_SIZE, BATCH_SIZE));
                 }
                 for (let i = 0; i < numberOfResolvedBatches; i++) {
                     promises.push(
-                        sportsAMMDataContract.getResolvedTicketsDataPerUser(walletAddress, i * BATCH_SIZE, BATCH_SIZE)
+                        sportsAMMDataContract.getResolvedTicketsDataPerUser(user, i * BATCH_SIZE, BATCH_SIZE)
                     );
                 }
                 promises.push(priceFeedContract.getCurrencies());
@@ -71,18 +83,12 @@ const useUsersStatsV2Query = (
 
                 const tickets = promisesResult
                     .slice(0, promisesLength - 3)
-                    .map((allData) => allData.ticketsData)
+                    .map((allData) => [
+                        ...allData.ticketsData,
+                        ...allData.freeBetsData,
+                        ...allData.stakingBettingProxyData,
+                    ])
                     .flat(1);
-
-                const freeBetTickets = promisesResult
-                    .slice(0, promisesLength - 3)
-                    .map((allData) => allData.freeBetsData)
-                    .flat(1)
-                    .map((ticket) => {
-                        return { ...ticket, isFreeBet: true };
-                    });
-
-                tickets.push(...freeBetTickets);
 
                 const currencies = promisesResult[promisesLength - 3];
                 const rates = promisesResult[promisesLength - 2];
@@ -97,6 +103,7 @@ const useUsersStatsV2Query = (
                     }
                 });
                 exchangeRates['THALES'] = Number(thalesPriceResponse.data);
+                exchangeRates['sTHALES'] = Number(thalesPriceResponse.data);
 
                 let volume = 0;
                 let highestWin = 0;
@@ -126,7 +133,7 @@ const useUsersStatsV2Query = (
                 }
 
                 return {
-                    id: walletAddress,
+                    id: user,
                     volume,
                     trades: tickets.length,
                     highestWin,

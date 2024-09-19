@@ -13,7 +13,7 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
 import { formatCurrencyWithKey, formatCurrencyWithSign } from 'thales-utils';
-import { Coins } from 'types/tokens';
+import { Coins } from 'thales-utils';
 import { isStableCurrency, sortCollateralBalances } from 'utils/collaterals';
 
 const UserStats: React.FC = () => {
@@ -254,6 +254,7 @@ const Label = styled.span`
 
 const SubLabel = styled(Label)`
     font-weight: 400;
+    text-transform: none;
 `;
 
 const Value = styled.span`

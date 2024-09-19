@@ -214,6 +214,8 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.SUMMER_OLYMPICS_TENNIS:
         case League.SUMMER_OLYMPICS_TABLE_TENNIS:
             return `/logos/Countries/paris2024.png`;
+        case League.COPA_LIBERTADORES:
+            return '/logos/Countries/south-america.webp';
         default:
             return `/logos/Countries/world.svg`;
     }
