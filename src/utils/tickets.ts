@@ -52,9 +52,11 @@ export const mapTicket = (
         expiry: secondsToMilliseconds(Number(ticket.expiry)),
         isResolved: ticket.resolved,
         isPaused: ticket.paused,
-        isCancelled: ticket.marketsResult.every(
-            (marketResult: any) => Number(marketResult.status) === TicketMarketStatus.CANCELLED
-        ),
+        isCancelled:
+            ticket.cancelled ||
+            ticket.marketsResult.every(
+                (marketResult: any) => Number(marketResult.status) === TicketMarketStatus.CANCELLED
+            ),
         isLost: ticket.isLost,
         isUserTheWinner: ticket.isUserTheWinner,
         isExercisable: ticket.isExercisable,
