@@ -358,7 +358,7 @@
         "card": {
             "ticket-id": "Ticket ID",
             "live": "Live",
-            "claim-batch-tooltip": "Claim all your pending positions in one transaction, excluding free bet claims.",
+            "claim-batch-tooltip": "Claim all your pending positions in one transaction.",
             "number-of-games": "No. of games",
             "ticket-paid": "Ticket paid",
             "to-win": "Potential win",
