@@ -197,3 +197,32 @@ export const getAddedPayoutOdds = (currencyKey: Coins, odds: number) =>
     currencyKey === CRYPTO_CURRENCY_MAP.THALES || currencyKey === CRYPTO_CURRENCY_MAP.sTHALES
         ? odds / (1 + THALES_ADDED_PAYOUT_PERCENTAGE - THALES_ADDED_PAYOUT_PERCENTAGE * odds)
         : odds;
+
+// Order asc: 1,2,3,4; desc: 4,3,2,1;
+const getOrderByStatus = (status: TicketMarketStatus) => {
+    switch (status) {
+        case TicketMarketStatus.OPEN:
+            return 1;
+        case TicketMarketStatus.WINNING:
+            return 2;
+        case TicketMarketStatus.LOSING:
+            return 3;
+        case TicketMarketStatus.CANCELLED:
+            return 4;
+    }
+};
+
+const getTicketStatusOrder = (market: Ticket) =>
+    market.isCancelled
+        ? getOrderByStatus(TicketMarketStatus.CANCELLED)
+        : market.isUserTheWinner
+        ? getOrderByStatus(TicketMarketStatus.WINNING)
+        : market.isLost
+        ? getOrderByStatus(TicketMarketStatus.LOSING)
+        : getOrderByStatus(TicketMarketStatus.OPEN);
+
+export const tableSortByStatus = (rowA: any, rowB: any) => {
+    const aOrder = getTicketStatusOrder(rowA.original);
+    const bOrder = getTicketStatusOrder(rowB.original);
+    return aOrder < bOrder ? -1 : aOrder > bOrder ? 1 : 0;
+};

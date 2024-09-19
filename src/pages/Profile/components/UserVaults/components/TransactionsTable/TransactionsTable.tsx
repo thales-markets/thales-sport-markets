@@ -28,7 +28,6 @@ const TransactionsTable: React.FC = () => {
         if (txQuery.isSuccess && txQuery.data) setLastValidData(txQuery.data);
     }, [txQuery]);
 
-    // @ts-ignore
     return (
         <Wrapper>
             <Title>{t('markets.nav-menu.items.history')}</Title>
