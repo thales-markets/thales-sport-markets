@@ -121,7 +121,7 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
                                 ticket.id
                             );
 
-                            if (!ticket.isFreeBet && isClaimCollateralDefaultCollateral) {
+                            if (isClaimCollateralDefaultCollateral) {
                                 calls.push({
                                     target: sportsAMMV2Contract.address,
                                     allowFailure: true,
