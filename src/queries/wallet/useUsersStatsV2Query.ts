@@ -4,11 +4,14 @@ import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { BATCH_SIZE } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
+import { orderBy } from 'lodash';
 import { useQuery, UseQueryOptions } from 'react-query';
-import { bigNumberFormatter, coinFormatter, parseBytes32String } from 'thales-utils';
-import { UserStats } from 'types/markets';
-import { getCollateralByAddress, isLpSupported, isStableCurrency } from 'utils/collaterals';
+import { bigNumberFormatter, parseBytes32String } from 'thales-utils';
+import { Ticket, UserStats } from 'types/markets';
+import { isLpSupported, isStableCurrency } from 'utils/collaterals';
+import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
 import networkConnector from 'utils/networkConnector';
+import { mapTicket } from 'utils/tickets';
 import { Rates } from '../rates/useExchangeRatesQuery';
 
 const useUsersStatsV2Query = (user: string, networkId: Network, options?: UseQueryOptions<UserStats | undefined>) => {
@@ -109,25 +112,33 @@ const useUsersStatsV2Query = (user: string, networkId: Network, options?: UseQue
                 let highestWin = 0;
                 let lifetimeWins = 0;
                 let pnl = 0;
-                for (let index = 0; index < tickets.length; index++) {
-                    const ticket = tickets[index];
-                    const collateral = getCollateralByAddress(ticket.collateral, networkId);
+
+                const mappedTickets: Ticket[] = tickets.map((ticket: any) => mapTicket(ticket, networkId, [], [], []));
+
+                const finalTickets: Ticket[] = orderBy(
+                    updateTotalQuoteAndPayout(mappedTickets),
+                    ['timestamp'],
+                    ['desc']
+                );
+
+                for (let index = 0; index < finalTickets.length; index++) {
+                    const ticket = finalTickets[index];
+                    const collateral = ticket.collateral;
                     const convertAmount = isLpSupported(collateral) && !isStableCurrency(collateral);
 
-                    const buyInAmount = coinFormatter(ticket.buyInAmount, networkId, collateral);
-                    const totalQuote = bigNumberFormatter(ticket.totalQuote);
-                    const buyInAmountInUsd = convertAmount ? buyInAmount * exchangeRates[collateral] : buyInAmount;
-                    const payout = buyInAmountInUsd / totalQuote;
+                    const buyInAmountInUsd = convertAmount
+                        ? ticket.buyInAmount * exchangeRates[collateral]
+                        : ticket.buyInAmount;
 
                     volume += buyInAmountInUsd;
-                    if (ticket.isUserTheWinner && payout > highestWin) {
-                        highestWin = payout;
+                    if (ticket.isUserTheWinner && ticket.payout > highestWin && !ticket.isCancelled) {
+                        highestWin = ticket.payout;
                     }
-                    if (ticket.isUserTheWinner) {
+                    if (ticket.isUserTheWinner && !ticket.isCancelled) {
                         lifetimeWins += 1;
-                        pnl += payout - buyInAmountInUsd;
+                        pnl += ticket.payout - buyInAmountInUsd;
                     }
-                    if (ticket.isLost) {
+                    if (ticket.isLost && !ticket.isCancelled) {
                         pnl -= buyInAmountInUsd;
                     }
                 }
