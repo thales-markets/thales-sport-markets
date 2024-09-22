@@ -129,14 +129,15 @@ const useUsersStatsV2Query = (user: string, networkId: Network, options?: UseQue
                     const buyInAmountInUsd = convertAmount
                         ? ticket.buyInAmount * exchangeRates[collateral]
                         : ticket.buyInAmount;
+                    const payoutInUsd = convertAmount ? ticket.payout * exchangeRates[collateral] : ticket.payout;
 
                     volume += buyInAmountInUsd;
-                    if (ticket.isUserTheWinner && ticket.payout > highestWin && !ticket.isCancelled) {
-                        highestWin = ticket.payout;
+                    if (ticket.isUserTheWinner && payoutInUsd > highestWin && !ticket.isCancelled) {
+                        highestWin = payoutInUsd;
                     }
                     if (ticket.isUserTheWinner && !ticket.isCancelled) {
                         lifetimeWins += 1;
-                        pnl += ticket.payout - buyInAmountInUsd;
+                        pnl += payoutInUsd - buyInAmountInUsd;
                     }
                     if (ticket.isLost && !ticket.isCancelled) {
                         pnl -= buyInAmountInUsd;
