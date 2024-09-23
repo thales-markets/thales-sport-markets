@@ -11,9 +11,12 @@ export enum ProfileTab {
 
 export enum PnlTab {
     LP_STATS = 'lp-stats',
-    USDC = 'usdc',
-    WETH = 'weth',
-    THALES = 'thales',
+    USDC_USER_PNL = 'usdc',
+    WETH_USER_PNL = 'weth',
+    THALES_USER_PNL = 'thales',
+    USDC_TICKETS = 'usdc-tickets',
+    WETH_TICKETS = 'weth-tickets',
+    THALES_TICKETS = 'thales-tickets',
 }
 
 export enum OverdropTab {

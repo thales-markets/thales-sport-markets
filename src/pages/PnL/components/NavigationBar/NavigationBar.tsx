@@ -9,18 +9,33 @@ const navItems = [
         icon: 'icon icon--yield',
     },
     {
-        id: PnlTab.USDC,
+        id: PnlTab.USDC_USER_PNL,
         label: 'USDC',
         icon: 'currency-icon currency-icon--usdc',
     },
     {
-        id: PnlTab.WETH,
+        id: PnlTab.WETH_USER_PNL,
         label: 'WETH',
         icon: 'currency-icon currency-icon--weth',
     },
     {
-        id: PnlTab.THALES,
+        id: PnlTab.THALES_USER_PNL,
         label: 'THALES',
+        icon: 'currency-icon currency-icon--thales',
+    },
+    {
+        id: PnlTab.USDC_TICKETS,
+        label: 'USDC TICKETS',
+        icon: 'currency-icon currency-icon--usdc',
+    },
+    {
+        id: PnlTab.WETH_TICKETS,
+        label: 'WETH TICKETS',
+        icon: 'currency-icon currency-icon--weth',
+    },
+    {
+        id: PnlTab.THALES_TICKETS,
+        label: 'THALES TICKETS',
         icon: 'currency-icon currency-icon--thales',
     },
 ];

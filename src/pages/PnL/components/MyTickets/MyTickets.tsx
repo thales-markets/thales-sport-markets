@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
 import { LiquidityPoolCollateral } from '../../../../enums/liquidityPool';
 import NavigationBar from '../NavigationBar';
+import TicketTransactions from '../TicketTransactions';
 import UserPnl from '../UserPnl';
 import UserStatsV2 from '../UserStatsV2';
 
@@ -27,12 +28,18 @@ const MyTickets: React.FC<MyTicketsProps> = ({ selectedTab, setSelectedTab }) =>
                     {isMobile && <NavigationBar selectedTab={selectedTab} setSelectedTab={setSelectedTab} />}
                 </NavigationWrapper>
                 {selectedTab == PnlTab.LP_STATS && <UserStatsV2 />}
-                {/* {selectedTab == PnlTab.USDC && <TicketTransactions lpCollateral={LiquidityPoolCollateral.USDC} />}
-                {selectedTab == PnlTab.WETH && <TicketTransactions lpCollateral={LiquidityPoolCollateral.WETH} />}
-                {selectedTab == PnlTab.THALES && <TicketTransactions lpCollateral={LiquidityPoolCollateral.THALES} />} */}
-                {selectedTab == PnlTab.USDC && <UserPnl lpCollateral={LiquidityPoolCollateral.USDC} />}
-                {selectedTab == PnlTab.WETH && <UserPnl lpCollateral={LiquidityPoolCollateral.WETH} />}
-                {selectedTab == PnlTab.THALES && <UserPnl lpCollateral={LiquidityPoolCollateral.THALES} />}
+                {selectedTab == PnlTab.USDC_USER_PNL && <UserPnl lpCollateral={LiquidityPoolCollateral.USDC} />}
+                {selectedTab == PnlTab.WETH_USER_PNL && <UserPnl lpCollateral={LiquidityPoolCollateral.WETH} />}
+                {selectedTab == PnlTab.THALES_USER_PNL && <UserPnl lpCollateral={LiquidityPoolCollateral.THALES} />}
+                {selectedTab == PnlTab.USDC_TICKETS && (
+                    <TicketTransactions lpCollateral={LiquidityPoolCollateral.USDC} />
+                )}
+                {selectedTab == PnlTab.WETH_TICKETS && (
+                    <TicketTransactions lpCollateral={LiquidityPoolCollateral.WETH} />
+                )}
+                {selectedTab == PnlTab.THALES_TICKETS && (
+                    <TicketTransactions lpCollateral={LiquidityPoolCollateral.THALES} />
+                )}
             </MainContainer>
         </RowContainer>
     );
