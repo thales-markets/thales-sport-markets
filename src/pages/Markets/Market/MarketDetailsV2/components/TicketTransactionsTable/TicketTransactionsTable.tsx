@@ -29,7 +29,7 @@ import { getDefaultCollateral } from 'utils/collaterals';
 import { formatMarketOdds } from 'utils/markets';
 import { getMatchTeams, getPositionTextV2, getTeamNameV2, getTitleText } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
-import { formatTicketOdds, getTicketMarketOdd, getTicketMarketStatus } from 'utils/tickets';
+import { formatTicketOdds, getTicketMarketOdd, getTicketMarketStatus, tableSortByStatus } from 'utils/tickets';
 import {
     ExpandedRowWrapper,
     ExternalLink,
@@ -152,6 +152,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                         Header: <>{t('profile.table.time')}</>,
                         accessor: 'timestamp',
                         sortable: true,
+                        sortDescFirst: true,
                         Cell: (cellProps: any) => {
                             return (
                                 <>
@@ -251,7 +252,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                     {
                         Header: <>{t('profile.table.status')}</>,
                         accessor: 'status',
-                        sortable: false,
+                        sortable: true,
                         Cell: (cellProps: any) => {
                             let statusComponent;
                             if (cellProps.row.original.isCancelled) {
@@ -295,6 +296,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                             }
                             return statusComponent;
                         },
+                        sortType: tableSortByStatus,
                     },
                 ]}
                 initialState={{
