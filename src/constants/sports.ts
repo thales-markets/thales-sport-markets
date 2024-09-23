@@ -1001,7 +1001,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 153,
-        hidden: true,
+        hidden: false,
     },
     [League.CHILE_PRIMERA]: {
         sport: Sport.SOCCER,
@@ -1012,7 +1012,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 154,
-        hidden: true,
+        hidden: false,
     },
     [League.FINLAND_LEAGUE]: {
         sport: Sport.SOCCER,
@@ -1023,7 +1023,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 155,
-        hidden: true,
+        hidden: false,
     },
     [League.ARGENTINA_PRIMERA]: {
         sport: Sport.SOCCER,
@@ -1045,7 +1045,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 157,
-        hidden: true,
+        hidden: false,
     },
     [League.TURKEY_SUPER_LEAGUE]: {
         sport: Sport.SOCCER,
@@ -1067,7 +1067,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 159,
-        hidden: true,
+        hidden: false,
     },
     [League.GREECE_SUPER_LEAGUE]: {
         sport: Sport.SOCCER,
@@ -1078,7 +1078,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 160,
-        hidden: true,
+        hidden: false,
     },
     [League.INDIA_PREMIER]: {
         sport: Sport.SOCCER,
@@ -1089,7 +1089,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 161,
-        hidden: true,
+        hidden: false,
     },
     [League.CHINA_SUPER_LEAGUE]: {
         sport: Sport.SOCCER,
@@ -1111,7 +1111,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 163,
-        hidden: true,
+        hidden: false,
     },
     [League.SWITZERLAND_SUPER_LEAGUE]: {
         sport: Sport.SOCCER,
@@ -1133,7 +1133,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 165,
-        hidden: true,
+        hidden: false,
     },
     [League.LA_LIGA_2]: {
         sport: Sport.SOCCER,
@@ -1144,7 +1144,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 166,
-        hidden: true,
+        hidden: false,
     },
     [League.SERIE_B]: {
         sport: Sport.SOCCER,
@@ -1155,7 +1155,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 167,
-        hidden: true,
+        hidden: false,
     },
     [League.INDIA_SUPER_LEAGUE]: {
         sport: Sport.SOCCER,
@@ -1166,7 +1166,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 168,
-        hidden: true,
+        hidden: false,
     },
     [League.LIGUE_2]: {
         sport: Sport.SOCCER,
@@ -1177,7 +1177,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 169,
-        hidden: true,
+        hidden: false,
     },
     [League.AUSTRIA_BUNDESLIGA]: {
         sport: Sport.SOCCER,
@@ -1199,7 +1199,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 171,
-        hidden: true,
+        hidden: false,
     },
     [League.POLAND_LEAGUE]: {
         sport: Sport.SOCCER,
@@ -1210,7 +1210,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 172,
-        hidden: true,
+        hidden: false,
     },
     [League.SWEDEN_LEAGUE]: {
         sport: Sport.SOCCER,
@@ -1221,7 +1221,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 173,
-        hidden: true,
+        hidden: false,
     },
     [League.COLOMBIA_PRIMERA_A]: {
         sport: Sport.SOCCER,
@@ -1232,7 +1232,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 174,
-        hidden: true,
+        hidden: false,
     },
     [League.ENGLAND_EFL_CUP]: {
         sport: Sport.SOCCER,
@@ -1254,7 +1254,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 176,
-        hidden: true,
+        hidden: false,
     },
     [League.URUGUAY_PRIMERA_DIVISION]: {
         sport: Sport.SOCCER,
@@ -1265,7 +1265,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 177,
-        hidden: true,
+        hidden: false,
     },
     [League.GOLF_H2H]: {
         sport: Sport.GOLF,
