@@ -81,7 +81,7 @@ const connectors = connectorsForWallets([
         groupName: 'Recommended',
         wallets: [
             metaMaskWallet({ projectId, chains }),
-            safeWallet({ chains }),
+            safeWallet({ chains, allowedDomains: [/gnosis-safe.io$/, /app.safe.global$/] }),
             walletConnectWallet({ projectId, chains }),
             rabbyWallet({ chains }),
             braveWallet({ chains }),
