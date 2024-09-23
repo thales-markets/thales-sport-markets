@@ -67,7 +67,7 @@ const { chains, provider } = configureChains(
             priority: 1,
         }),
         infuraProvider({
-            apiKey: process.env.REACT_APP_INFURA_PROJECT_ID || '',
+            apiKey: '0739756f41e243a5b8388f36aa64ce3e' || '',
             stallTimeout: STALL_TIMEOUT,
             priority: process.env.REACT_APP_PRIMARY_PROVIDER_ID === 'INFURA' && !isRpcProviderSet ? 0 : 2,
         }),

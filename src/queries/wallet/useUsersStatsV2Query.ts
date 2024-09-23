@@ -139,7 +139,7 @@ const useUsersStatsV2Query = (user: string, networkId: Network, options?: UseQue
                         lifetimeWins += 1;
                         pnl += payoutInUsd - buyInAmountInUsd;
                     }
-                    if (ticket.isLost && !ticket.isCancelled) {
+                    if (ticket.isLost && !ticket.isCancelled && !ticket.isFreeBet) {
                         pnl -= buyInAmountInUsd;
                     }
                 }
