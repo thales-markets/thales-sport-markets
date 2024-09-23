@@ -10,6 +10,7 @@ import {
     metaMaskWallet,
     rabbyWallet,
     rainbowWallet,
+    safeWallet,
     trustWallet,
     walletConnectWallet,
 } from '@rainbow-me/rainbowkit/wallets';
@@ -80,6 +81,7 @@ const connectors = connectorsForWallets([
         groupName: 'Recommended',
         wallets: [
             metaMaskWallet({ projectId, chains }),
+            safeWallet({ chains }),
             walletConnectWallet({ projectId, chains }),
             rabbyWallet({ chains }),
             braveWallet({ chains }),
