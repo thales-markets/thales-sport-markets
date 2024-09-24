@@ -102,6 +102,8 @@ export const getLeagueFlagSource = (tagId: number | any) => {
             return `/logos/Countries/united-states-of-america.svg`;
         case League.EPL:
         case League.ENGLAND_CHAMPIONSHIP:
+        case League.ENGLAND_EFL_CUP:
+        case League.ENGLAND_LEGAUE_1:
             return `/logos/Countries/england.svg`;
         case League.LIGUE_ONE:
         case League.LIGUE_2:
@@ -171,6 +173,8 @@ export const getLeagueFlagSource = (tagId: number | any) => {
             return `/logos/Countries/sweden.svg`;
         case League.COLOMBIA_PRIMERA_A:
             return `/logos/Countries/colombia.svg`;
+        case League.URUGUAY_PRIMERA_DIVISION:
+            return `/logos/Countries/uruguay.svg`;
         case League.UEFA_CL:
         case League.UEFA_EL:
         case League.UEFA_EURO:
