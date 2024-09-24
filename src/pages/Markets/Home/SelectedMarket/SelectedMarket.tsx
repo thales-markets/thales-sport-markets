@@ -25,7 +25,7 @@ const SelectedMarket: React.FC = () => {
     const isMobile = useSelector(getIsMobile);
     const [lastValidMarket, setLastValidMarket] = useState<SportMarket | undefined>(undefined);
 
-    const marketQuery = useSportMarketV2Query(selectedMarket?.gameId || '', true, networkId, {
+    const marketQuery = useSportMarketV2Query(selectedMarket?.gameId || '', true, !!selectedMarket?.live, networkId, {
         enabled: isAppReady && !!selectedMarket,
     });
 

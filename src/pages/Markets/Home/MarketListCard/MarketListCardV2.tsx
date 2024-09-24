@@ -168,7 +168,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                 isGameLive={isGameLive}
                 onClick={() => {
                     if (isGameOpen && !isGameLive) {
-                        dispatch(setSelectedMarket({ gameId: market.gameId, sport: market.sport }));
+                        dispatch(setSelectedMarket({ gameId: market.gameId, sport: market.sport, live: market.live }));
                     }
                 }}
             >
@@ -351,7 +351,13 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             {(marketsCount > 0 || !!overdropGameMultiplier) && (
                                 <MarketsCountWrapper
                                     onClick={() =>
-                                        dispatch(setSelectedMarket({ gameId: market.gameId, sport: market.sport }))
+                                        dispatch(
+                                            setSelectedMarket({
+                                                gameId: market.gameId,
+                                                sport: market.sport,
+                                                live: market.live,
+                                            })
+                                        )
                                     }
                                 >
                                     {!!overdropGameMultiplier && (
@@ -405,7 +411,13 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             {(marketsCount > 0 || !!overdropGameMultiplier) && (
                                 <MarketsCountWrapper
                                     onClick={() =>
-                                        dispatch(setSelectedMarket({ gameId: market.gameId, sport: market.sport }))
+                                        dispatch(
+                                            setSelectedMarket({
+                                                gameId: market.gameId,
+                                                sport: market.sport,
+                                                live: market.live,
+                                            })
+                                        )
                                     }
                                 >
                                     {!!overdropGameMultiplier && (

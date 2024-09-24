@@ -9,6 +9,7 @@ import { SportMarket, Team } from 'types/markets';
 const useSportMarketQuery = (
     marketAddress: string,
     onlyOpenChildMarkets: boolean,
+    isLive: boolean,
     networkId: Network,
     options?: UseQueryOptions<SportMarket | undefined>
 ) => {
@@ -18,7 +19,9 @@ const useSportMarketQuery = (
             try {
                 const [marketResponse, gameInfoResponse, liveScoreResponse] = await Promise.all([
                     axios.get(
-                        `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/markets/${marketAddress}`,
+                        `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/${
+                            isLive ? 'live-' : ''
+                        }markets/${marketAddress}`,
                         noCacheConfig
                     ),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/games-info/${marketAddress}`, noCacheConfig),
@@ -52,6 +55,7 @@ const useSportMarketQuery = (
                                     ...childMarket,
                                     maturityDate: new Date(childMarket.maturityDate),
                                     odds: childMarket.odds.map((odd: any) => odd.normalizedImplied),
+                                    live: isLive,
                                 };
                             }),
                         ['typeId'],
@@ -66,6 +70,7 @@ const useSportMarketQuery = (
                     isGameFinished: gameInfo?.isGameFinished,
                     gameStatus: gameInfo?.gameStatus,
                     liveScore,
+                    live: isLive,
                 };
             } catch (e) {
                 console.log(e);
@@ -73,6 +78,7 @@ const useSportMarketQuery = (
             }
         },
         {
+            refetchInterval: isLive ? 2 * 1000 : 10 * 1000,
             ...options,
         }
     );
