@@ -413,6 +413,18 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         priority: 132,
         hidden: false,
     },
+    [League.TENNIS_WTA]: {
+        sport: Sport.TENNIS,
+        id: League.TENNIS_WTA,
+        label: 'WTA Events',
+        scoringType: ScoringType.SETS,
+        matchResolveType: MatchResolveType.REGULAR,
+        periodType: PeriodType.SET,
+        isDrawAvailable: false,
+        priority: 703,
+        hidden: false,
+        tooltipKey: 'common.tennis-tooltip',
+    },
     [League.TENNIS_GS]: {
         sport: Sport.TENNIS,
         id: League.TENNIS_GS,
@@ -1133,7 +1145,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 165,
-        hidden: true,
+        hidden: false,
     },
     [League.LA_LIGA_2]: {
         sport: Sport.SOCCER,
@@ -1144,7 +1156,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 166,
-        hidden: true,
+        hidden: false,
     },
     [League.SERIE_B]: {
         sport: Sport.SOCCER,
