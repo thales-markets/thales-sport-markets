@@ -413,6 +413,18 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         priority: 132,
         hidden: false,
     },
+    [League.TENNIS_WTA]: {
+        sport: Sport.TENNIS,
+        id: League.TENNIS_WTA,
+        label: 'WTA Events',
+        scoringType: ScoringType.SETS,
+        matchResolveType: MatchResolveType.REGULAR,
+        periodType: PeriodType.SET,
+        isDrawAvailable: false,
+        priority: 703,
+        hidden: false,
+        tooltipKey: 'common.tennis-tooltip',
+    },
     [League.TENNIS_GS]: {
         sport: Sport.TENNIS,
         id: League.TENNIS_GS,
