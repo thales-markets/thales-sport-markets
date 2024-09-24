@@ -53,6 +53,7 @@ export enum League {
     FRANCE_CUP = 134,
     SPAIN_CUP = 138,
     ITALY_CUP = 141,
+    TENNIS_WTA = 152,
     TENNIS_GS = 153,
     TENNIS_MASTERS = 156,
     SUMMER_OLYMPICS_TENNIS = 158,
