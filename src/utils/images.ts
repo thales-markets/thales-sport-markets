@@ -24,7 +24,7 @@ export const getTeamImageSource = (team: string, league: League) => {
               .replaceAll(' 3x3', '')
               .replaceAll(' ', '-')
               .toLowerCase()}.svg`
-        : league == League.ENGLAND_CUP || league == League.ENGLAND_EFL_CUP
+        : league == League.ENGLAND_CUP
         ? `/logos/EPL/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.FRANCE_CUP
         ? `/logos/Ligue 1/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`

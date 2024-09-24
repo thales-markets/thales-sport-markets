@@ -1133,7 +1133,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 165,
-        hidden: true,
+        hidden: false,
     },
     [League.LA_LIGA_2]: {
         sport: Sport.SOCCER,
@@ -1144,7 +1144,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 166,
-        hidden: true,
+        hidden: false,
     },
     [League.SERIE_B]: {
         sport: Sport.SOCCER,
