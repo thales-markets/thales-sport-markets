@@ -101,7 +101,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         matchResolveType: MatchResolveType.OVERTIME,
         periodType: PeriodType.QUARTER,
         isDrawAvailable: false,
-        priority: 304,
+        priority: 305,
         hidden: false,
     },
     [League.MLS]: {
@@ -413,6 +413,18 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         priority: 132,
         hidden: false,
     },
+    [League.TENNIS_WTA]: {
+        sport: Sport.TENNIS,
+        id: League.TENNIS_WTA,
+        label: 'WTA Events',
+        scoringType: ScoringType.SETS,
+        matchResolveType: MatchResolveType.REGULAR,
+        periodType: PeriodType.SET,
+        isDrawAvailable: false,
+        priority: 703,
+        hidden: false,
+        tooltipKey: 'common.tennis-tooltip',
+    },
     [League.TENNIS_GS]: {
         sport: Sport.TENNIS,
         id: League.TENNIS_GS,
@@ -558,7 +570,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         matchResolveType: MatchResolveType.OVERTIME,
         periodType: PeriodType.QUARTER,
         isDrawAvailable: false,
-        priority: 305,
+        priority: 306,
         hidden: true,
     },
     [League.SUMMER_OLYMPICS_BASKETBALL_WOMEN]: {
@@ -570,7 +582,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         matchResolveType: MatchResolveType.OVERTIME,
         periodType: PeriodType.QUARTER,
         isDrawAvailable: false,
-        priority: 305,
+        priority: 306,
         hidden: true,
     },
     [League.FIBA_WORLD_CUP]: {
@@ -811,7 +823,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         matchResolveType: MatchResolveType.OVERTIME,
         periodType: PeriodType.QUARTER,
         isDrawAvailable: false,
-        priority: 306,
+        priority: 307,
         hidden: true,
     },
     [League.SUMMER_OLYMPICS_BASKETBALL_3X3_WOMEN]: {
@@ -823,7 +835,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         matchResolveType: MatchResolveType.OVERTIME,
         periodType: PeriodType.QUARTER,
         isDrawAvailable: false,
-        priority: 306,
+        priority: 307,
         hidden: true,
     },
     [League.SUMMER_OLYMPICS_QUALIFICATION]: {
@@ -834,7 +846,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         matchResolveType: MatchResolveType.OVERTIME,
         periodType: PeriodType.QUARTER,
         isDrawAvailable: false,
-        priority: 305,
+        priority: 306,
         hidden: true,
     },
     [League.LOL]: {
@@ -1266,6 +1278,17 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: true,
         priority: 177,
         hidden: true,
+    },
+    [League.EUROCUP]: {
+        sport: Sport.BASKETBALL,
+        id: League.EUROCUP,
+        label: 'Eurocup',
+        scoringType: ScoringType.POINTS,
+        matchResolveType: MatchResolveType.OVERTIME,
+        periodType: PeriodType.QUARTER,
+        isDrawAvailable: false,
+        priority: 304,
+        hidden: false,
     },
     [League.GOLF_H2H]: {
         sport: Sport.GOLF,

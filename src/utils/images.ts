@@ -6,7 +6,10 @@ import { getLeagueLabel, isInternationalLeague } from './sports';
 
 export const getTeamImageSource = (team: string, league: League) => {
     const leagueLabel = getLeagueLabel(league);
-    return league == League.TENNIS_GS || league == League.TENNIS_MASTERS || league == League.SUMMER_OLYMPICS_TENNIS
+    return league == League.TENNIS_WTA ||
+        league == League.TENNIS_GS ||
+        league == League.TENNIS_MASTERS ||
+        league == League.SUMMER_OLYMPICS_TENNIS
         ? `/logos/Tennis/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.FORMULA1 || league == League.MOTOGP
         ? `/logos/${leagueLabel}/${fixOneSideMarketCompetitorName(team).replaceAll(' ', '-').toLowerCase()}.webp`
@@ -187,6 +190,7 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.UEFA_SUPER_CUP:
             return `/logos/Countries/europe.svg`;
         case League.EUROLEAGUE:
+        case League.EUROCUP:
             return `/logos/Countries/europe.svg`;
         case League.ENGLAND_CUP:
             return `/logos/Countries/england.svg`;
