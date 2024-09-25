@@ -190,6 +190,7 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.UEFA_SUPER_CUP:
             return `/logos/Countries/europe.svg`;
         case League.EUROLEAGUE:
+        case League.EUROCUP:
             return `/logos/Countries/europe.svg`;
         case League.ENGLAND_CUP:
             return `/logos/Countries/england.svg`;
