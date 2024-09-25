@@ -1279,6 +1279,17 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         priority: 177,
         hidden: true,
     },
+    [League.EUROCUP]: {
+        sport: Sport.BASKETBALL,
+        id: League.EUROCUP,
+        label: 'Eurocup',
+        scoringType: ScoringType.POINTS,
+        matchResolveType: MatchResolveType.OVERTIME,
+        periodType: PeriodType.QUARTER,
+        isDrawAvailable: false,
+        priority: 303,
+        hidden: false,
+    },
     [League.GOLF_H2H]: {
         sport: Sport.GOLF,
         id: League.GOLF_H2H,
