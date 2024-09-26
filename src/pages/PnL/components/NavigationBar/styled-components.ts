@@ -25,6 +25,7 @@ export const Item = styled.span<{ selected: boolean }>`
     font-weight: 600;
     text-transform: uppercase;
     cursor: pointer;
+    white-space: nowrap;
     i {
         color: ${(props) => (props.selected ? props.theme.textColor.quaternary : props.theme.textColor.secondary)};
     }

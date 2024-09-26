@@ -89,7 +89,7 @@ const RowContainer = styled(FlexDivRow)`
 
 const MainContainer = styled(FlexDivColumn)`
     width: 100%;
-    max-width: 806px;
+    max-width: 950px;
     flex-grow: 1;
     margin: 0 25px;
     @media (max-width: 1499px) {
