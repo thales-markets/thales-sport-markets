@@ -1,4 +1,6 @@
 import { USD_SIGN } from 'constants/currency';
+import { LiquidityPoolCollateral } from 'enums/liquidityPool';
+import useLpUsersPnl from 'queries/wallet/useLpUsersPnl';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { getNetworkId } from 'redux/modules/wallet';
@@ -6,13 +8,16 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
 import { formatCurrencyWithKey, formatCurrencyWithSign } from 'thales-utils';
-import { LiquidityPoolCollateral } from '../../../../enums/liquidityPool';
-import useLpUsersPnl from '../../../../queries/wallet/useLpUsersPnl';
 
-const UserPnl: React.FC<{ lpCollateral: LiquidityPoolCollateral }> = ({ lpCollateral }) => {
+type UserPnlProps = {
+    lpCollateral: LiquidityPoolCollateral;
+    round: number;
+};
+
+const UserPnl: React.FC<UserPnlProps> = ({ lpCollateral, round }) => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
-    const lpStatsQuery = useLpUsersPnl(lpCollateral, networkId);
+    const lpStatsQuery = useLpUsersPnl(lpCollateral, round, networkId);
     const lpStats = lpStatsQuery.isSuccess && lpStatsQuery.data ? lpStatsQuery.data : [];
 
     return (

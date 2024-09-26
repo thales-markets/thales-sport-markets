@@ -6,13 +6,16 @@ import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
-import { formatCurrencyWithKey, formatCurrencyWithSign } from 'thales-utils';
-import { Coins } from 'types/tokens';
+import { Coins, formatCurrencyWithKey, formatCurrencyWithSign } from 'thales-utils';
 
-const UserStats: React.FC = () => {
+type UserStatsProps = {
+    round: number;
+};
+
+const UserStats: React.FC<UserStatsProps> = ({ round }) => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
-    const lpStatsQuery = useLpStatsV2Query(networkId);
+    const lpStatsQuery = useLpStatsV2Query(round, networkId);
     const lpStats = lpStatsQuery.isSuccess && lpStatsQuery.data ? lpStatsQuery.data : [];
 
     return (

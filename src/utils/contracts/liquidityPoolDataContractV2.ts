@@ -2,8 +2,8 @@ import { Network } from 'enums/network';
 
 const liquidityPoolDataContract = {
     addresses: {
-        [Network.OptimismMainnet]: '0xD9cb9c42c9f84EAd43cf86030A7ae2430Fa34F26',
-        [Network.Arbitrum]: '0xe82627ADB08cC7701a501C319942CbF72a401a83',
+        [Network.OptimismMainnet]: '0xDd6D342AeA00BA926290752dB7D0a852c88340Db',
+        [Network.Arbitrum]: '0xE68Cd7FC812F174c2091E70e85f7B51B082d9215',
         [Network.Base]: '',
         [Network.OptimismSepolia]: '0xd61FA46d4e3CD47584a56fC20856Fdd197135756',
     },
@@ -90,6 +90,16 @@ const liquidityPoolDataContract = {
                     type: 'tuple',
                 },
             ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                { internalType: 'contract SportsAMMV2LiquidityPool', name: 'liquidityPool', type: 'address' },
+                { internalType: 'uint256', name: 'round', type: 'uint256' },
+            ],
+            name: 'getRoundTickets',
+            outputs: [{ internalType: 'address[]', name: 'tickets', type: 'address[]' }],
             stateMutability: 'view',
             type: 'function',
         },

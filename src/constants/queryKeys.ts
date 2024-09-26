@@ -71,17 +71,19 @@ const QUERY_KEYS = {
         FreeBetBalance: (walletAddress: string, networkId: Network) => ['freeBetBalance', walletAddress, networkId],
         Stats: (networkId: Network, walletAddress: string) => ['wallet', 'stats', networkId, walletAddress],
         StatsV2: (networkId: Network, walletAddress: string) => ['wallet', 'statsV2', networkId, walletAddress],
-        LpStatsV2: (networkId: Network) => ['wallet', 'lpStatsV2', networkId],
-        LpHistory: (lpCollateral: LiquidityPoolCollateral, networkId: Network) => [
+        LpStatsV2: (round: number, networkId: Network) => ['wallet', 'lpStatsV2', round, networkId],
+        LpHistory: (lpCollateral: LiquidityPoolCollateral, round: number, networkId: Network) => [
             'wallet',
             'lpHistory',
             lpCollateral,
+            round,
             networkId,
         ],
-        LpUsersPnl: (lpCollateral: LiquidityPoolCollateral, networkId: Network) => [
+        LpUsersPnl: (lpCollateral: LiquidityPoolCollateral, round: number, networkId: Network) => [
             'wallet',
             'lpUsersPnl',
             lpCollateral,
+            round,
             networkId,
         ],
         LiquidityPoolTransactions: (networkId: Network, walletAddress: string) => [

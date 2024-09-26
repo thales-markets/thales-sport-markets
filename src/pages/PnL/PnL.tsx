@@ -1,12 +1,44 @@
+import { LiquidityPoolMap } from 'constants/liquidityPool';
+import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 import { PnlTab } from 'enums/ui';
-import React, { useEffect, useState } from 'react';
+import useLiquidityPoolDataQuery from 'queries/liquidityPool/useLiquidityPoolDataQuery';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { getIsAppReady } from 'redux/modules/app';
+import { getNetworkId } from 'redux/modules/wallet';
+import { LiquidityPoolData } from 'types/liquidityPool';
 import useQueryParam from 'utils/useQueryParams';
 import MyTickets from './components/MyTickets';
 import { Container } from './styled-components';
 
 const Profile: React.FC = () => {
+    const networkId = useSelector(getNetworkId);
+    const isAppReady = useSelector(getIsAppReady);
     const [selectedTabParam, setSelectedTabParam] = useQueryParam('selected-tab', PnlTab.LP_STATS);
     const [selectedTab, setSelectedTab] = useState<PnlTab>(PnlTab.LP_STATS);
+    const [lastValidLiquidityPoolData, setLastValidLiquidityPoolData] = useState<LiquidityPoolData | undefined>(
+        undefined
+    );
+
+    const liquidityPoolAddress = LiquidityPoolMap[networkId]
+        ? LiquidityPoolMap[networkId][LiquidityPoolCollateral.USDC]?.address || ''
+        : '';
+    const liquidityPoolDataQuery = useLiquidityPoolDataQuery(liquidityPoolAddress, 'USDC', networkId, {
+        enabled: isAppReady && liquidityPoolAddress !== '',
+    });
+
+    useEffect(() => {
+        if (liquidityPoolDataQuery.isSuccess && liquidityPoolDataQuery.data) {
+            setLastValidLiquidityPoolData(liquidityPoolDataQuery.data);
+        }
+    }, [liquidityPoolDataQuery.isSuccess, liquidityPoolDataQuery.data]);
+
+    const liquidityPoolData: LiquidityPoolData | undefined = useMemo(() => {
+        if (liquidityPoolDataQuery.isSuccess && liquidityPoolDataQuery.data) {
+            return liquidityPoolDataQuery.data;
+        }
+        return lastValidLiquidityPoolData;
+    }, [liquidityPoolDataQuery.isSuccess, liquidityPoolDataQuery.data, lastValidLiquidityPoolData]);
 
     useEffect(() => {
         if (Object.values(PnlTab).includes(selectedTabParam.toLowerCase() as PnlTab)) {
@@ -23,7 +55,13 @@ const Profile: React.FC = () => {
 
     return (
         <Container>
-            <MyTickets selectedTab={selectedTab} setSelectedTab={handleTabChange} />
+            {liquidityPoolData && (
+                <MyTickets
+                    selectedTab={selectedTab}
+                    setSelectedTab={handleTabChange}
+                    currentRound={liquidityPoolData.round}
+                />
+            )}
         </Container>
     );
 };

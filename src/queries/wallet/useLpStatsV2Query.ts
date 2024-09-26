@@ -64,11 +64,12 @@ const getLpStats = async (
     return lpStats;
 };
 
-const useLpStatsV2Query = (networkId: SupportedNetwork, options?: UseQueryOptions<LpStats[]>) => {
+const useLpStatsV2Query = (round: number, networkId: SupportedNetwork, options?: UseQueryOptions<LpStats[]>) => {
     return useQuery<LpStats[]>(
-        QUERY_KEYS.Wallet.LpStatsV2(networkId),
+        QUERY_KEYS.Wallet.LpStatsV2(round, networkId),
         async () => {
             const { sportsAMMDataContract, liquidityPoolDataContract, priceFeedContract } = networkConnector;
+            console.log(getLpAddress(networkId, LiquidityPoolCollateral.USDC), round);
             if (sportsAMMDataContract && liquidityPoolDataContract && priceFeedContract) {
                 const [
                     usdcTickets,
@@ -78,14 +79,17 @@ const useLpStatsV2Query = (networkId: SupportedNetwork, options?: UseQueryOption
                     rates,
                     thalesPriceResponse,
                 ] = await Promise.all([
-                    liquidityPoolDataContract.getCurrentRoundTickets(
-                        getLpAddress(networkId, LiquidityPoolCollateral.USDC)
+                    liquidityPoolDataContract.getRoundTickets(
+                        getLpAddress(networkId, LiquidityPoolCollateral.USDC),
+                        round
                     ),
-                    liquidityPoolDataContract.getCurrentRoundTickets(
-                        getLpAddress(networkId, LiquidityPoolCollateral.WETH)
+                    liquidityPoolDataContract.getRoundTickets(
+                        getLpAddress(networkId, LiquidityPoolCollateral.WETH),
+                        round
                     ),
-                    liquidityPoolDataContract.getCurrentRoundTickets(
-                        getLpAddress(networkId, LiquidityPoolCollateral.THALES)
+                    liquidityPoolDataContract.getRoundTickets(
+                        getLpAddress(networkId, LiquidityPoolCollateral.THALES),
+                        round
                     ),
                     priceFeedContract.getCurrencies(),
                     priceFeedContract.getRates(),

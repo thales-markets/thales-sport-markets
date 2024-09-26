@@ -1,29 +1,29 @@
 import axios from 'axios';
 import { generalConfig, noCacheConfig } from 'config/general';
+import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { BATCH_SIZE } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
+import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 import { orderBy } from 'lodash';
 import { useQuery, UseQueryOptions } from 'react-query';
-import { bigNumberFormatter, parseBytes32String } from 'thales-utils';
+import { bigNumberFormatter, Coins, parseBytes32String } from 'thales-utils';
 import { LpUsersPnl, Ticket } from 'types/markets';
+import { SupportedNetwork } from 'types/network';
+import { isLpSupported, isStableCurrency } from 'utils/collaterals';
+import { getLpAddress } from 'utils/liquidityPool';
+import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
 import networkConnector from 'utils/networkConnector';
-import { CRYPTO_CURRENCY_MAP } from '../../constants/currency';
-import { LiquidityPoolCollateral } from '../../enums/liquidityPool';
-import { SupportedNetwork } from '../../types/network';
-import { Coins } from '../../types/tokens';
-import { isLpSupported, isStableCurrency } from '../../utils/collaterals';
-import { getLpAddress } from '../../utils/liquidityPool';
-import { updateTotalQuoteAndPayout } from '../../utils/marketsV2';
-import { mapTicket } from '../../utils/tickets';
+import { mapTicket } from 'utils/tickets';
 import { Rates } from '../rates/useExchangeRatesQuery';
 
 const useLpUsersPnl = (
     lpCollateral: LiquidityPoolCollateral,
+    round: number,
     networkId: SupportedNetwork,
     options?: UseQueryOptions<LpUsersPnl[]>
 ) => {
     return useQuery<LpUsersPnl[]>(
-        QUERY_KEYS.Wallet.LpUsersPnl(lpCollateral, networkId),
+        QUERY_KEYS.Wallet.LpUsersPnl(lpCollateral, round, networkId),
         async () => {
             const { sportsAMMDataContract, liquidityPoolDataContract, priceFeedContract } = networkConnector;
             if (sportsAMMDataContract && liquidityPoolDataContract && priceFeedContract) {
@@ -36,7 +36,7 @@ const useLpUsersPnl = (
                     rates,
                     thalesPriceResponse,
                 ] = await Promise.all([
-                    liquidityPoolDataContract.getCurrentRoundTickets(getLpAddress(networkId, lpCollateral)),
+                    liquidityPoolDataContract.getRoundTickets(getLpAddress(networkId, lpCollateral), round),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, noCacheConfig),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/players-info`, noCacheConfig),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/live-scores`, noCacheConfig),
