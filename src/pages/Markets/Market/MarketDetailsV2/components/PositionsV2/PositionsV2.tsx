@@ -127,6 +127,7 @@ const Positions: React.FC<PositionsProps> = ({
                                             market={market}
                                             position={index}
                                             isMainPageView={isMainPageView}
+                                            isColumnView={isColumnView}
                                         />
                                     ))}
                                 </ContentRow>

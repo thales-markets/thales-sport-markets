@@ -5,19 +5,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getIsMarketSelected } from 'redux/modules/market';
 import { getFavouriteLeagues, setFavouriteLeague } from 'redux/modules/ui';
 import styled from 'styled-components';
-import { SportMarkets, TagInfo } from 'types/markets';
+import { SportMarket, SportMarkets, TagInfo } from 'types/markets';
 import { getLeagueFlagSource } from 'utils/images';
 import { isOneSideMarket } from 'utils/markets';
 import { getLeagueLabel } from '../../../../utils/sports';
 import MarketListCardV2 from '../MarketListCard';
 
-type MarketsList = {
+type MarketsListProps = {
     markets: SportMarkets;
     league: number;
     language: string;
 };
 
-const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
+const MarketsList: React.FC<MarketsListProps> = ({ markets, league, language }) => {
     const dispatch = useDispatch();
     const favouriteLeagues = useSelector(getFavouriteLeagues);
     const isMarketSelected = useSelector(getIsMarketSelected);
@@ -63,7 +63,7 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                 )}
             </LeagueCard>
             <GamesContainer hidden={hideLeague}>
-                {sortedMarkets.map((market: any, index: number) => (
+                {sortedMarkets.map((market: SportMarket, index: number) => (
                     <MarketListCardV2 language={language} market={market} key={index + 'list'} />
                 ))}
             </GamesContainer>

@@ -2,7 +2,7 @@ import { NetworkId } from 'thales-utils';
 import { LiquidityPoolCollateral } from '../enums/liquidityPool';
 import { LiquidityPool } from '../types/liquidityPool';
 import { SupportedNetwork } from '../types/network';
-import { Coins } from '../types/tokens';
+import { Coins } from 'thales-utils';
 import { CRYPTO_CURRENCY_MAP } from './currency';
 
 export const LiquidityPoolMap: Record<

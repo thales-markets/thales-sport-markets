@@ -1,17 +1,20 @@
 import { MarketTypeMap } from 'constants/marketTypes';
+import { secondsToMilliseconds } from 'date-fns';
 import { MarketType } from 'enums/marketTypes';
 import { OddsType } from 'enums/markets';
 import { t } from 'i18next';
-import { Coins, bigNumberFormatter, coinFormatter, formatDateWithTime } from 'thales-utils';
+import { bigNumberFormatter, coinFormatter, Coins, formatDateWithTime } from 'thales-utils';
 import { CombinedPosition, Team, Ticket, TicketMarket } from 'types/markets';
 import { SupportedNetwork } from 'types/network';
 import positionNamesMap from '../assets/json/positionNamesMap.json';
 import { CRYPTO_CURRENCY_MAP } from '../constants/currency';
 import { THALES_ADDED_PAYOUT_PERCENTAGE } from '../constants/markets';
+import { UFC_LEAGUE_IDS } from '../constants/sports';
 import { League } from '../enums/sports';
 import { TicketMarketStatus } from '../enums/tickets';
 import { getCollateralByAddress } from './collaterals';
 import freeBetHolder from './contracts/freeBetHolder';
+import stakingThalesBettingProxy from './contracts/stakingThalesBettingProxy';
 import {
     formatMarketOdds,
     isOneSideMarket,
@@ -28,11 +31,17 @@ export const mapTicket = (
     playersInfo: any,
     liveScores: any
 ): Ticket => {
-    const collateral = getCollateralByAddress(ticket.collateral, networkId);
+    let collateral = getCollateralByAddress(ticket.collateral, networkId);
+    collateral =
+        collateral === CRYPTO_CURRENCY_MAP.sTHALES &&
+        ticket.ticketOwner.toLowerCase() !==
+            stakingThalesBettingProxy.addresses[networkId as SupportedNetwork].toLowerCase()
+            ? (CRYPTO_CURRENCY_MAP.THALES as Coins)
+            : collateral;
     const mappedTicket: Ticket = {
         id: ticket.id,
         txHash: '',
-        timestamp: Number(ticket.createdAt) * 1000,
+        timestamp: secondsToMilliseconds(Number(ticket.createdAt)),
         collateral,
         account: ticket.ticketOwner,
         buyInAmount: coinFormatter(ticket.buyInAmount, networkId, collateral),
@@ -40,12 +49,14 @@ export const mapTicket = (
         totalQuote: bigNumberFormatter(ticket.totalQuote),
         payout: coinFormatter(ticket.buyInAmount, networkId, collateral) / bigNumberFormatter(ticket.totalQuote),
         numOfMarkets: Number(ticket.numOfMarkets),
-        expiry: Number(ticket.expiry) * 1000,
+        expiry: secondsToMilliseconds(Number(ticket.expiry)),
         isResolved: ticket.resolved,
         isPaused: ticket.paused,
-        isCancelled: ticket.marketsResult.every(
-            (marketResult: any) => Number(marketResult.status) === TicketMarketStatus.CANCELLED
-        ),
+        isCancelled:
+            ticket.cancelled ||
+            ticket.marketsResult.every(
+                (marketResult: any) => Number(marketResult.status) === TicketMarketStatus.CANCELLED
+            ),
         isLost: ticket.isLost,
         isUserTheWinner: ticket.isUserTheWinner,
         isExercisable: ticket.isExercisable,
@@ -58,11 +69,13 @@ export const mapTicket = (
 
         sportMarkets: ticket.marketsData.map(
             (market: any, index: number): TicketMarket => {
-                const leagueId = `${market.sportId}`.startsWith('153')
+                const leagueId = `${market.sportId}`.startsWith('152')
+                    ? League.TENNIS_WTA
+                    : `${market.sportId}`.startsWith('153')
                     ? League.TENNIS_GS
                     : `${market.sportId}`.startsWith('156')
                     ? League.TENNIS_MASTERS
-                    : market.sportId === 701 || market.sportId == 702 || market.sportId == 703
+                    : UFC_LEAGUE_IDS.includes(market.sportId)
                     ? League.UFC
                     : Number(market.sportId);
                 const typeId = Number(market.typeId);
@@ -99,8 +112,8 @@ export const mapTicket = (
                     leagueName: '',
                     typeId: typeId,
                     type: type ? type.key : '',
-                    maturity: Number(market.maturity) * 1000,
-                    maturityDate: new Date(market.maturity * 1000),
+                    maturity: secondsToMilliseconds(Number(market.maturity)),
+                    maturityDate: new Date(secondsToMilliseconds(market.maturity)),
                     homeTeam: homeTeamName,
                     awayTeam: awayTeamName,
                     homeScore: isPlayerProps
@@ -183,6 +196,35 @@ export const formatTicketOdds = (oddsType: OddsType, paid: number, payout: numbe
 export const getTicketMarketOdd = (market: TicketMarket) => (market.isCancelled ? 1 : market.odd);
 
 export const getAddedPayoutOdds = (currencyKey: Coins, odds: number) =>
-    currencyKey === CRYPTO_CURRENCY_MAP.THALES
+    currencyKey === CRYPTO_CURRENCY_MAP.THALES || currencyKey === CRYPTO_CURRENCY_MAP.sTHALES
         ? odds / (1 + THALES_ADDED_PAYOUT_PERCENTAGE - THALES_ADDED_PAYOUT_PERCENTAGE * odds)
         : odds;
+
+// Order asc: 1,2,3,4; desc: 4,3,2,1;
+const getOrderByStatus = (status: TicketMarketStatus) => {
+    switch (status) {
+        case TicketMarketStatus.OPEN:
+            return 1;
+        case TicketMarketStatus.WINNING:
+            return 2;
+        case TicketMarketStatus.LOSING:
+            return 3;
+        case TicketMarketStatus.CANCELLED:
+            return 4;
+    }
+};
+
+const getTicketStatusOrder = (market: Ticket) =>
+    market.isCancelled
+        ? getOrderByStatus(TicketMarketStatus.CANCELLED)
+        : market.isUserTheWinner
+        ? getOrderByStatus(TicketMarketStatus.WINNING)
+        : market.isLost
+        ? getOrderByStatus(TicketMarketStatus.LOSING)
+        : getOrderByStatus(TicketMarketStatus.OPEN);
+
+export const tableSortByStatus = (rowA: any, rowB: any) => {
+    const aOrder = getTicketStatusOrder(rowA.original);
+    const bOrder = getTicketStatusOrder(rowB.original);
+    return aOrder < bOrder ? -1 : aOrder > bOrder ? 1 : 0;
+};

@@ -14,10 +14,12 @@ export const getSportsAMMV2Transaction: any = async (
     tradeData: TradeData[],
     buyInAmount: BigNumber,
     expectedQuote: BigNumber,
-    referral?: string | null,
-    additionalSlippage?: BigNumber,
-    isAA?: boolean,
-    isFreeBet?: boolean
+    referral: string | null,
+    additionalSlippage: BigNumber,
+    isAA: boolean,
+    isFreeBet: boolean,
+    isStakedThales: boolean,
+    stakingThalesBettingProxyContract: ethers.Contract
 ): Promise<any> => {
     let finalEstimation = null;
     const referralAddress = referral || ZERO_ADDRESS;
@@ -54,6 +56,27 @@ export const getSportsAMMV2Transaction: any = async (
                 referralAddress,
                 collateralAddress,
                 { value: 0, gasLimit: finalEstimation }
+            );
+        }
+
+        if (isStakedThales && stakingThalesBettingProxyContract) {
+            const estimation = await stakingThalesBettingProxyContract.estimateGas.trade(
+                tradeData,
+                buyInAmount,
+                expectedQuote,
+                additionalSlippage,
+                referralAddress
+            );
+
+            finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER); // using Math.celi as gasLimit is accepting only integer.
+
+            return stakingThalesBettingProxyContract.trade(
+                tradeData,
+                buyInAmount,
+                expectedQuote,
+                additionalSlippage,
+                referralAddress,
+                { gasLimit: finalEstimation }
             );
         }
 

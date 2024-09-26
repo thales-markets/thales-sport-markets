@@ -19,9 +19,10 @@ type PositionDetailsProps = {
     market: SportMarket;
     position: Position;
     isMainPageView?: boolean;
+    isColumnView?: boolean;
 };
 
-const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isMainPageView }) => {
+const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isMainPageView, isColumnView }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const selectedOddsType = useSelector(getOddsType);
@@ -99,7 +100,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isM
                 }
             }}
         >
-            <Text>{positionText}</Text>
+            <Text isColumnView={isColumnView}>{positionText}</Text>
             {showOdd ? (
                 <Odd selected={isAddedToTicket} isMainPageView={isMainPageView}>
                     {formatMarketOdds(selectedOddsType, odd)}

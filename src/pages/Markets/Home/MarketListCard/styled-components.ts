@@ -113,8 +113,12 @@ export const TeamNamesContainer = styled(FlexDivColumn)<{
 }>`
     margin-left: 10px;
     gap: ${(props) => (props.isColumnView ? (props.isTwoPositionalMarket ? '5px' : '10px') : '0px')};
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
     @media (max-width: 950px) {
         flex-direction: ${(props) => (props.isGameOpen ? 'row' : 'column')};
+        overflow: initial;
     }
 `;
 
@@ -241,7 +245,9 @@ export const Blink = styled.span`
 export const CurrentResultContainer = styled(FlexDivColumn)<{
     isColumnView: boolean;
 }>`
-    margin-left: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+    flex: initial;
     gap: ${(props) => (props.isColumnView ? '10px' : '0px')};
     @media (max-width: 950px) {
         flex-direction: row;
@@ -252,7 +258,9 @@ export const SecondaryResultsWrapper = styled(FlexDivRow)`
     gap: 5px;
     justify-content: start;
     flex-grow: 3;
+    flex: initial;
     margin-left: 5px;
+    margin-right: 5px;
     @media (max-width: 950px) {
         flex-basis: 100%;
     }

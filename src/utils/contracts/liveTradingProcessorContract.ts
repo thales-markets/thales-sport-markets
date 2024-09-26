@@ -2,8 +2,8 @@ import { Network } from 'enums/network';
 
 const liquidityPoolDataContract = {
     addresses: {
-        [Network.OptimismMainnet]: '0x3b834149f21b9a6c2ddc9f6ce97f2fd1097f8eab',
-        [Network.Arbitrum]: '0x3b250d77b982Fd3eb67ddEa5191cE0115cC226a7',
+        [Network.OptimismMainnet]: '0x330c4c4Bcde91aDC17c0293A90dC05a046ce3FE4',
+        [Network.Arbitrum]: '0xa5567Cd13F3a0c71B4a85E3a0DdAbfeeCB409339',
         [Network.Base]: '',
         [Network.OptimismSepolia]: '0x01546a60C30CaCAe105210381a11449F430489Cf',
     },
@@ -123,6 +123,12 @@ const liquidityPoolDataContract = {
             anonymous: false,
             inputs: [{ indexed: false, internalType: 'uint256', name: '_maxAllowedExecutionDelay', type: 'uint256' }],
             name: 'SetMaxAllowedExecutionDelay',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [{ indexed: false, internalType: 'address', name: '_stakingThalesBettingProxy', type: 'address' }],
+            name: 'SetStakingThalesBettingProxy',
             type: 'event',
         },
         {
@@ -291,9 +297,23 @@ const liquidityPoolDataContract = {
             type: 'function',
         },
         {
+            inputs: [{ internalType: 'address', name: '_stakingThalesBettingProxy', type: 'address' }],
+            name: 'setStakingThalesBettingProxy',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
             inputs: [],
             name: 'sportsAMM',
             outputs: [{ internalType: 'contract ISportsAMMV2', name: '', type: 'address' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'stakingThalesBettingProxy',
+            outputs: [{ internalType: 'address', name: '', type: 'address' }],
             stateMutability: 'view',
             type: 'function',
         },
