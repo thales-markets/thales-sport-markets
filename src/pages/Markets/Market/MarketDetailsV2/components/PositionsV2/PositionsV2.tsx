@@ -61,8 +61,8 @@ const Positions: React.FC<PositionsProps> = ({
     const titleText = getTitleText(markets[0], true);
     const tooltipKey = getMarketTypeTooltipKey(marketType);
 
-    const marketErrors = markets[0].errors;
-    const marketLastError = marketErrors.length > 0 ? marketErrors[marketErrors.length - 1].errorMessage : '';
+    // const marketErrors = markets[0].errors;
+    const marketLastError = ''; //marketErrors.length > 0 ? marketErrors[marketErrors.length - 1].errorMessage : '';
     // TODO: if wanted to remove team names add .replace(` ${markets[0].homeTeam} - ${markets[0].awayTeam}`, '');
 
     return showContainer ? (
