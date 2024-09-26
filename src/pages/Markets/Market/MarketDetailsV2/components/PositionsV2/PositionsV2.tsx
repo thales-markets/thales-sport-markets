@@ -61,6 +61,9 @@ const Positions: React.FC<PositionsProps> = ({
     const titleText = getTitleText(markets[0], true);
     const tooltipKey = getMarketTypeTooltipKey(marketType);
 
+    const marketErrors = markets[0].errors;
+    const marketLastError = marketErrors.length > 0 ? marketErrors[marketErrors.length - 1].errorMessage : '';
+
     return showContainer ? (
         <Container
             onClick={() => {
@@ -139,7 +142,10 @@ const Positions: React.FC<PositionsProps> = ({
         </Container>
     ) : isGameLive ? (
         <Container isExpanded={true} noOdds={true}>
-            <Message>{t(`markets.market-card.live-trading-paused`)}</Message>
+            <Message>
+                {t(`markets.market-card.live-trading-paused`)}
+                {marketLastError && <Tooltip overlay={marketLastError} marginLeft={5} top={0} />}
+            </Message>
         </Container>
     ) : (
         <></>

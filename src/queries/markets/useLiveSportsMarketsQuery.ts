@@ -4,10 +4,10 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { secondsToMilliseconds } from 'date-fns';
 import { Network } from 'enums/network';
 import { UseQueryOptions, useQuery } from 'react-query';
-import { SportMarkets } from 'types/markets';
+import { SportMarket, SportMarketError, SportMarkets } from 'types/markets';
 
 // without this every request is treated as new even though it has the same response
-const marketsCache = { live: [] };
+const marketsCache = { live: [] as SportMarkets };
 
 const useLiveSportsMarketsQuery = (
     networkId: Network,
@@ -18,21 +18,31 @@ const useLiveSportsMarketsQuery = (
         QUERY_KEYS.LiveSportMarkets(networkId),
         async () => {
             try {
-                const response = await axios.get<undefined, { data: { errors: string[]; markets: SportMarkets } }>(
-                    `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/live-markets`,
-                    noCacheConfig
-                );
+                const response = await axios.get<
+                    undefined,
+                    { data: { errors: SportMarketError[]; markets: SportMarkets } }
+                >(`${generalConfig.API_URL}/overtime-v2/networks/${networkId}/live-markets`, noCacheConfig);
 
-                const markets: any[] = response?.data?.markets || marketsCache.live;
+                const markets: SportMarkets = response?.data?.markets || marketsCache.live;
+                const errors = response?.data?.errors;
 
-                const marketsFlattened = markets
-                    .reduce((accumulator, value) => accumulator.concat(value), [])
-                    .map((game: any) => {
+                const marketsFlattened: SportMarkets = markets
+                    .reduce((accumulator: SportMarkets, value) => accumulator.concat(value), [])
+                    .map((game: SportMarket) => {
+                        const gameErrors = errors.find((error) => error.gameId === game.gameId);
+                        if (gameErrors) {
+                            gameErrors.errorsDetails = gameErrors.errorsDetails.map((errorDetails) => ({
+                                ...errorDetails,
+                                errorTime: new Date(errorDetails.errorTime).getTime(),
+                            }));
+                        }
+
                         return {
                             ...game,
                             live: true,
                             maturityDate: new Date(game.maturityDate),
                             odds: game.odds.map((odd: any) => odd.normalizedImplied),
+                            errors: gameErrors?.errorsDetails || [],
                         };
                     });
                 marketsCache.live = marketsFlattened;
