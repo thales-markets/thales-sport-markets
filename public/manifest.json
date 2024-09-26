@@ -1,6 +1,8 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Overtime",
+  "name": "Overtime markets",
+  "description": "Overtime Markets is a decentralized betting DApp offering a secure and transparent platform for sports betting.",
+  "icon_path": "logo192.png",
   "icons": [
     {
       "src": "favicon.ico",
