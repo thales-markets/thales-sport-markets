@@ -80,7 +80,7 @@ export type SportMarket = {
     gameStatus?: GameStatus;
     liveScore?: SportMarketScore;
     positionNames?: string[];
-    errors: SportMarketErrorDetails[];
+    errors?: SportMarketErrorDetails[];
 };
 
 export type SportMarketError = { gameId: SportMarket['gameId']; errorsDetails: SportMarketErrorDetails[] };
