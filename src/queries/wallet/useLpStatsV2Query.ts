@@ -69,7 +69,6 @@ const useLpStatsV2Query = (round: number, networkId: SupportedNetwork, options?:
         QUERY_KEYS.Wallet.LpStatsV2(round, networkId),
         async () => {
             const { sportsAMMDataContract, liquidityPoolDataContract, priceFeedContract } = networkConnector;
-            console.log(getLpAddress(networkId, LiquidityPoolCollateral.USDC), round);
             if (sportsAMMDataContract && liquidityPoolDataContract && priceFeedContract) {
                 const [
                     usdcTickets,

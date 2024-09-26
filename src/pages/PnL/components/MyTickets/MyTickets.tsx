@@ -2,7 +2,7 @@ import SelectInput from 'components/SelectInput';
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 import { PnlTab } from 'enums/ui';
 import { t } from 'i18next';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import styled from 'styled-components';
@@ -21,6 +21,10 @@ type MyTicketsProps = {
 const MyTickets: React.FC<MyTicketsProps> = ({ selectedTab, setSelectedTab, currentRound }) => {
     const isMobile = useSelector(getIsMobile);
     const [round, setRound] = useState<number>(currentRound);
+
+    useEffect(() => {
+        setRound(currentRound);
+    }, [currentRound]);
 
     const rounds: Array<{ value: number; label: string }> = [];
     for (let index = 0; index <= currentRound; index++) {
