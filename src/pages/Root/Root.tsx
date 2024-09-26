@@ -14,7 +14,6 @@ import {
     walletConnectWallet,
 } from '@rainbow-me/rainbowkit/wallets';
 import WalletDisclaimer from 'components/WalletDisclaimer';
-import { generalConfig } from 'config/general';
 import { PLAUSIBLE } from 'constants/analytics';
 import { optimismSepolia } from 'constants/network';
 import { ThemeMap } from 'constants/ui';
@@ -23,11 +22,9 @@ import { Network } from 'enums/network';
 import { merge } from 'lodash';
 import App from 'pages/Root/App';
 import React from 'react';
-import { Helmet } from 'react-helmet';
 import { Provider } from 'react-redux';
 import { Store } from 'redux';
 import { getDefaultTheme } from 'redux/modules/ui';
-import useQueryParam from 'utils/useQueryParams';
 import { WagmiConfig, configureChains, createClient } from 'wagmi';
 import { arbitrum, optimism } from 'wagmi/dist/chains';
 import { infuraProvider } from 'wagmi/dist/providers/infura';
@@ -112,8 +109,6 @@ const wagmiClient = createClient({
 const Root: React.FC<RootProps> = ({ store }) => {
     PLAUSIBLE.enableAutoPageviews();
 
-    const [branchName] = useQueryParam('branch-name', '');
-
     return (
         <Provider store={store}>
             <WagmiConfig client={wagmiClient}>
@@ -125,11 +120,6 @@ const Root: React.FC<RootProps> = ({ store }) => {
                         disclaimer: WalletDisclaimer,
                     }}
                 >
-                    <Helmet>
-                        <script
-                            src={`${generalConfig.API_URL}/promotions?branch-name=${branchName ? branchName : 'dev'}`}
-                        ></script>
-                    </Helmet>
                     <App />
                 </RainbowKitProvider>
             </WagmiConfig>
