@@ -34,6 +34,10 @@
                 {
                     "key": "Vary",
                     "value": "Accept-Encoding"
+                },
+                {
+                    "key": "Content-Security-Policy",
+                    "value": "frame-ancestors 'self' https://app.safe.global"
                 }
             ]
         }
