@@ -643,17 +643,6 @@ const Ticket: React.FC<TicketProps> = ({
         return basePoints * (1 + totalMultiplier / 100);
     }, [buyInAmountInDefaultCollateral, totalQuote, overdropMultipliers, overdropGameMultipliersInThisTicket]);
 
-    // Clear Ticket when network is changed
-    const isMounted = useRef(false);
-    useEffect(() => {
-        // skip first render
-        if (isMounted.current) {
-            dispatch(removeAll());
-        } else {
-            isMounted.current = true;
-        }
-    }, [dispatch, networkId]);
-
     const fetchTicketAmmQuote = useCallback(
         async (buyInAmountForQuote: number) => {
             if (buyInAmountForQuote <= 0) return;
