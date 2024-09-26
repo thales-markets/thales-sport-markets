@@ -52,6 +52,7 @@ import {
     getLiveBetSlippage,
     getTicketPayment,
     removeAll,
+    resetTicketError,
     setIsFreeBetDisabledByUser,
     setLiveBetSlippage,
     setPaymentAmountToBuy,
@@ -642,6 +643,18 @@ const Ticket: React.FC<TicketProps> = ({
         );
         return basePoints * (1 + totalMultiplier / 100);
     }, [buyInAmountInDefaultCollateral, totalQuote, overdropMultipliers, overdropGameMultipliersInThisTicket]);
+
+    // Clear buyin and errors when network is changed
+    const isMounted = useRef(false);
+    useEffect(() => {
+        // skip first render
+        if (isMounted.current) {
+            dispatch(setPaymentAmountToBuy(''));
+            dispatch(resetTicketError());
+        } else {
+            isMounted.current = true;
+        }
+    }, [dispatch, networkId]);
 
     const fetchTicketAmmQuote = useCallback(
         async (buyInAmountForQuote: number) => {
