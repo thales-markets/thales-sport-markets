@@ -369,6 +369,21 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                     {!isMobile && <Arrow className={'icon icon--arrow-down'} />}
                                 </MarketsCountWrapper>
                             )}
+                            {!isMobile && (
+                                <SPAAnchor
+                                    href={buildMarketLink(
+                                        market.gameId,
+                                        language,
+                                        false,
+                                        encodeURIComponent(`${market.homeTeam} vs ${market.awayTeam}`)
+                                    )}
+                                >
+                                    <Tooltip
+                                        overlay="Open market page"
+                                        component={<ExternalArrow className={'icon icon--arrow-external'} />}
+                                    />
+                                </SPAAnchor>
+                            )}
                         </>
                     ) : isGameOpen ? (
                         <>
