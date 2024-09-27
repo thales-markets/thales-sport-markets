@@ -166,9 +166,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
             <MatchInfoContainer
                 isGameLive={isGameLive}
                 onClick={() => {
-                    if (isGameOpen && !isGameLive) {
-                        dispatch(setSelectedMarket({ gameId: market.gameId, sport: market.sport, live: market.live }));
-                    }
+                    dispatch(setSelectedMarket({ gameId: market.gameId, sport: market.sport, live: market.live }));
                 }}
             >
                 {overdropGameMultiplier && (
@@ -268,7 +266,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             </>
                         )}
                     </TeamNamesContainer>
-                    {isGameLive && (
+                    {isGameLive && !selectedMarket && (
                         <>
                             <CurrentResultContainer isColumnView={isColumnView}>
                                 <ResultLabel isColumnView={isColumnView} isMarketSelected={isMarketSelected}>

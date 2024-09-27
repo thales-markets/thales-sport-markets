@@ -1,6 +1,8 @@
 import { ReactComponent as UsElectionHeader } from 'assets/images/us-election.svg';
 import MatchLogosV2 from 'components/MatchLogosV2';
 import SimpleLoader from 'components/SimpleLoader';
+import { t } from 'i18next';
+import { Message } from 'pages/Markets/Market/MarketDetailsV2/components/PositionsV2/styled-components';
 import useSportMarketV2Query from 'queries/markets/useSportMarketV2Query';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,7 +13,7 @@ import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
 import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarket } from 'types/markets';
-import { getMatchLabel } from 'utils/marketsV2';
+import { getMatchLabel, isOddValid } from 'utils/marketsV2';
 import { League } from '../../../../enums/sports';
 import TicketTransactions from '../../Market/MarketDetailsV2/components/TicketTransactions';
 import Header from '../Header';
@@ -28,6 +30,8 @@ const SelectedMarket: React.FC = () => {
     const marketQuery = useSportMarketV2Query(selectedMarket?.gameId || '', true, !!selectedMarket?.live, networkId, {
         enabled: isAppReady && !!selectedMarket,
     });
+
+    const areOddsValid = lastValidMarket?.odds.some((odd) => isOddValid(odd));
 
     useEffect(() => {
         if (marketQuery.isSuccess && marketQuery.data) {
@@ -66,10 +70,14 @@ const SelectedMarket: React.FC = () => {
                 />
             </HeaderContainer>
             {lastValidMarket ? (
-                <>
-                    <SelectedMarketDetails market={lastValidMarket} />
-                    {isMobile && <TicketTransactions market={lastValidMarket} isOnSelectedMarket />}
-                </>
+                areOddsValid ? (
+                    <>
+                        <SelectedMarketDetails market={lastValidMarket} />
+                        {isMobile && <TicketTransactions market={lastValidMarket} isOnSelectedMarket />}
+                    </>
+                ) : (
+                    <Message>{t(`markets.market-card.live-trading-paused`)}</Message>
+                )
             ) : (
                 <LoaderContainer>
                     <SimpleLoader />
