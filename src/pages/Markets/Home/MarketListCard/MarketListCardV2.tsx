@@ -140,7 +140,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const selected = selectedMarket?.gameId == market.gameId;
 
     let marketsCount = market.childMarkets.length;
-    if (isColumnView) {
+    if (isColumnView || isGameLive) {
         if (spreadMarket) {
             marketsCount -= 1;
         }
@@ -164,7 +164,6 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const getMainContainerContent = () => (
         <MainContainer isBoosted={!!overdropGameMultiplier} isGameOpen={isGameOpen || isGameLive}>
             <MatchInfoContainer
-                isGameLive={isGameLive}
                 onClick={() => {
                     dispatch(setSelectedMarket({ gameId: market.gameId, sport: market.sport, live: market.live }));
                 }}
@@ -185,7 +184,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                     loop={true}
                                     style={isMobile ? liveBlinkStyleMobile : liveBlinkStyle}
                                 />
-                                <MatchInfoLabel>{t(`markets.market-card.live`)}</MatchInfoLabel>
+                                <MatchInfoLabel selected={selected}>{t(`markets.market-card.live`)}</MatchInfoLabel>
                             </LiveIndicatorContainer>
                             <MatchInfoLabel>
                                 {displayGameClock(market) ? market.gameClock : ''}
@@ -364,7 +363,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                         </FireContainer>
                                     )}
                                     {marketsCount > 0 && `+${marketsCount}`}
-                                    {!isMobile && <Arrow className={'icon icon--arrow-down'} />}
+                                    {!isMobile && marketsCount > 0 && <Arrow className={'icon icon--arrow-down'} />}
                                 </MarketsCountWrapper>
                             )}
                             {!isMobile && (

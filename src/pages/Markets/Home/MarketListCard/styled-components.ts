@@ -35,8 +35,8 @@ export const MainContainer = styled(FlexDivRow)<{ isGameOpen: boolean; isBoosted
     }
 `;
 
-export const MatchInfoContainer = styled(FlexDivColumn)<{ isGameLive: boolean }>`
-    cursor: ${(props) => (props.isGameLive ? 'default' : 'pointer')};
+export const MatchInfoContainer = styled(FlexDivColumn)`
+    cursor: pointer;
     max-width: 250px;
     margin-right: 5px;
     @media (max-width: 950px) {
@@ -70,7 +70,8 @@ export const GameOfLabel = styled.span<{ selected?: boolean; isLive?: boolean }>
     }
 `;
 
-export const MatchInfoLabel = styled.label`
+export const MatchInfoLabel = styled.label<{ selected?: boolean }>`
+    color: ${(props) => (props.selected ? props.theme.textColor.tertiary : 'inherit')};
     font-size: 12px;
     font-weight: 600;
     line-height: 14px;
