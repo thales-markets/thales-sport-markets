@@ -10,7 +10,9 @@ export const usePromotionsQuery = (branchName: string, options?: UseQueryOptions
         async () => {
             try {
                 const response = await axios.get(
-                    `${generalConfig.API_URL}/promotions?branch-name=${branchName ? branchName : 'dev'}`
+                    `${generalConfig.API_URL}/v1/sport-markets/promotions/list?branch-name=${
+                        branchName ? branchName : 'dev'
+                    }`
                 );
 
                 if (!response.data) return [];
