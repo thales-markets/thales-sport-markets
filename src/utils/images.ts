@@ -6,7 +6,10 @@ import { getLeagueLabel, isInternationalLeague } from './sports';
 
 export const getTeamImageSource = (team: string, league: League) => {
     const leagueLabel = getLeagueLabel(league);
-    return league == League.TENNIS_GS || league == League.TENNIS_MASTERS || league == League.SUMMER_OLYMPICS_TENNIS
+    return league == League.TENNIS_WTA ||
+        league == League.TENNIS_GS ||
+        league == League.TENNIS_MASTERS ||
+        league == League.SUMMER_OLYMPICS_TENNIS
         ? `/logos/Tennis/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.FORMULA1 || league == League.MOTOGP
         ? `/logos/${leagueLabel}/${fixOneSideMarketCompetitorName(team).replaceAll(' ', '-').toLowerCase()}.webp`
@@ -102,6 +105,8 @@ export const getLeagueFlagSource = (tagId: number | any) => {
             return `/logos/Countries/united-states-of-america.svg`;
         case League.EPL:
         case League.ENGLAND_CHAMPIONSHIP:
+        case League.ENGLAND_EFL_CUP:
+        case League.ENGLAND_LEGAUE_1:
             return `/logos/Countries/england.svg`;
         case League.LIGUE_ONE:
         case League.LIGUE_2:
@@ -171,6 +176,8 @@ export const getLeagueFlagSource = (tagId: number | any) => {
             return `/logos/Countries/sweden.svg`;
         case League.COLOMBIA_PRIMERA_A:
             return `/logos/Countries/colombia.svg`;
+        case League.URUGUAY_PRIMERA_DIVISION:
+            return `/logos/Countries/uruguay.svg`;
         case League.UEFA_CL:
         case League.UEFA_EL:
         case League.UEFA_EURO:
@@ -183,6 +190,7 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.UEFA_SUPER_CUP:
             return `/logos/Countries/europe.svg`;
         case League.EUROLEAGUE:
+        case League.EUROCUP:
             return `/logos/Countries/europe.svg`;
         case League.ENGLAND_CUP:
             return `/logos/Countries/england.svg`;

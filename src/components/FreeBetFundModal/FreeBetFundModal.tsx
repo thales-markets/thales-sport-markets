@@ -83,7 +83,10 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
     const exchangeRates: Rates | null =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
-    const selectedCollateral = useMemo(() => getCollateral(networkId, collateralIndex), [networkId, collateralIndex]);
+    const selectedCollateral = useMemo(
+        () => getCollateral(networkId, collateralIndex, getFreeBetCollaterals(networkId)),
+        [networkId, collateralIndex]
+    );
     const selectedCollateralBalance = useMemo(() => {
         if (multipleCollateralBalances) {
             return multipleCollateralBalances[selectedCollateral];
@@ -378,6 +381,7 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
                                     setAmount('');
                                     setCollateralIndex(index);
                                 }}
+                                preventPaymentCollateralChange
                                 collateralBalances={multipleCollateralBalances}
                                 exchangeRates={exchangeRates}
                                 isDetailedView

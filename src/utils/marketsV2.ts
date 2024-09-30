@@ -1,7 +1,9 @@
+import { secondsToMilliseconds } from 'date-fns';
 import { MarketType } from 'enums/marketTypes';
 import { GameStatus, Position } from 'enums/markets';
 import { League } from 'enums/sports';
 import { ethers } from 'ethers';
+import _ from 'lodash';
 import { SerializableSportMarket, SportMarket, Ticket, TicketMarket, TicketPosition, TradeData } from 'types/markets';
 import { fixOneSideMarketCompetitorName } from './formatters/string';
 import {
@@ -29,8 +31,6 @@ import {
     isYesNoPlayerPropsMarket,
 } from './markets';
 import { getLeaguePeriodType, getLeagueScoringType } from './sports';
-import _ from 'lodash';
-import { secondsToMilliseconds } from 'date-fns';
 
 const getUfcSpecificPositionText = (marketType: number, position: number, homeTeam: string, awayTeam: string) => {
     if (marketType === MarketType.WINNING_ROUND) {
@@ -255,7 +255,8 @@ export const getTitleText = (market: SportMarket, useDescription?: boolean) => {
         : '';
 
     if (
-        (market.leagueId == League.TENNIS_GS ||
+        (market.leagueId == League.TENNIS_WTA ||
+            market.leagueId == League.TENNIS_GS ||
             market.leagueId == League.TENNIS_MASTERS ||
             market.leagueId == League.SUMMER_OLYMPICS_TENNIS) &&
         (isTotalMarket(marketType) || isTotalOddEvenMarket(marketType) || isSpreadMarket(marketType))
