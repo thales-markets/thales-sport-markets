@@ -16,6 +16,7 @@ const useSportMarketQuery = (
     return useQuery<SportMarket | undefined>(
         QUERY_KEYS.SportMarketV2(marketAddress, networkId),
         async () => {
+            const enableOnlyOpenChildMarkets = onlyOpenChildMarkets && !isLive;
             try {
                 const [marketResponse, gameInfoResponse, liveScoreResponse] = await Promise.all([
                     axios.get(
@@ -48,7 +49,7 @@ const useSportMarketQuery = (
                         market.childMarkets
                             .filter(
                                 (childMarket: any) =>
-                                    (onlyOpenChildMarkets && childMarket.isOpen) || !onlyOpenChildMarkets
+                                    (enableOnlyOpenChildMarkets && childMarket.isOpen) || !enableOnlyOpenChildMarkets
                             )
                             .map((childMarket: any) => {
                                 return {
