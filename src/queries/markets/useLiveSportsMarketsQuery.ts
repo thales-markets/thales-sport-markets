@@ -31,10 +31,17 @@ const useLiveSportsMarketsQuery = (
                     .map((game: SportMarket) => {
                         const gameErrors = errors.find((error) => error.gameId === game.gameId);
                         if (gameErrors) {
-                            gameErrors.errorsDetails = gameErrors.errorsDetails.map((errorDetails) => ({
-                                ...errorDetails,
-                                errorTime: new Date(errorDetails.errorTime).getTime(),
-                            }));
+                            gameErrors.errorsDetails = gameErrors.errorsDetails
+                                .filter((errorDetails) => {
+                                    // get only errors from last processing
+                                    const lastError = gameErrors.errorsDetails.at(-1);
+                                    return errorDetails.processingTime === lastError?.processingTime;
+                                })
+                                .map((errorDetails) => ({
+                                    ...errorDetails,
+                                    processingTime: new Date(errorDetails.processingTime).getTime(),
+                                    errorTime: new Date(errorDetails.errorTime).getTime(),
+                                }));
                         }
 
                         return {
