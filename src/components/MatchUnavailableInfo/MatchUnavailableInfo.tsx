@@ -1,12 +1,12 @@
 import { LiveTag, MarketPositionContainer, MatchLabel } from 'components/MatchInfoV2/styled-components';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { removeFromTicket } from 'redux/modules/ticket';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn } from 'styles/common';
 import { TicketPosition } from 'types/markets';
-import { getMatchLabel } from 'utils/marketsV2';
+import { getMatchLabel, getTitleText } from 'utils/marketsV2';
 import MatchLogosV2 from '../MatchLogosV2';
 
 type MatchInfoProps = {
@@ -26,6 +26,13 @@ const MatchUnavailableInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isLi
     const matchLabel = getMatchLabel(market);
 
     const isLiveTicket = market.live || !!isLive;
+
+    const marketText = useMemo(() => {
+        if (isLiveTicket && market.line) {
+            return `${getTitleText(market as any, true)} ${market.line}`;
+        }
+        return;
+    }, [market, isLiveTicket]);
 
     return (
         <>
@@ -51,9 +58,8 @@ const MatchUnavailableInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isLi
                         />
                     )}
                 </MatchLabel>
-                <Description>{`${market.line ? 'Line ' + market.line : ''} ${t(
-                    `markets.market-card.not-available-for-trading`
-                )}`}</Description>
+                {marketText && <MatchType>{marketText}</MatchType>}
+                <Description>{t(`markets.market-card.not-available-for-trading`)}</Description>
             </MarketPositionContainer>
         </>
     );
@@ -62,6 +68,11 @@ const MatchUnavailableInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isLi
 const Description = styled(FlexDiv)`
     text-transform: uppercase;
     font-weight: bold;
+`;
+
+const MatchType = styled(FlexDiv)`
+    font-weight: bold;
+    margin-bottom: 1px;
 `;
 
 const CloseIcon = styled.i`
