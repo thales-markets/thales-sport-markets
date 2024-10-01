@@ -35,8 +35,8 @@ export const MainContainer = styled(FlexDivRow)<{ isGameOpen: boolean; isBoosted
     }
 `;
 
-export const MatchInfoContainer = styled(FlexDivColumn)<{ isGameLive: boolean }>`
-    cursor: ${(props) => (props.isGameLive ? 'default' : 'pointer')};
+export const MatchInfoContainer = styled(FlexDivColumn)`
+    cursor: pointer;
     max-width: 250px;
     margin-right: 5px;
     @media (max-width: 950px) {
@@ -70,7 +70,8 @@ export const GameOfLabel = styled.span<{ selected?: boolean; isLive?: boolean }>
     }
 `;
 
-export const MatchInfoLabel = styled.label`
+export const MatchInfoLabel = styled.label<{ selected?: boolean }>`
+    color: ${(props) => (props.selected ? props.theme.textColor.tertiary : 'inherit')};
     font-size: 12px;
     font-weight: 600;
     line-height: 14px;
@@ -176,6 +177,7 @@ export const Arrow = styled.i`
 export const FireContainer = styled(FlexDivColumnCentered)`
     position: absolute;
     top: 7px;
+    right: 7px;
     @media (max-width: 600px) {
         flex-direction: row;
         top: 9px;
@@ -186,12 +188,18 @@ export const FireContainer = styled(FlexDivColumnCentered)`
 export const Fire = styled.i`
     color: ${(props) => props.theme.overdrop.textColor.primary};
     font-size: 20px;
+    display: flex;
+    justify-content: center;
 `;
 
 export const FireText = styled.span`
     color: ${(props) => props.theme.overdrop.textColor.primary};
     white-space: pre;
     font-size: 9px;
+    @media (max-width: 600px) {
+        display: flex;
+        align-items: center;
+    }
 `;
 
 export const liveBlinkStyle: CSSProperties = {
