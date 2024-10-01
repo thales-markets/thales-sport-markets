@@ -51,7 +51,9 @@ const MatchUnavailableInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isLi
                         />
                     )}
                 </MatchLabel>
-                <Description>{t(`markets.market-card.not-available-for-trading`)}</Description>
+                <Description>{`${market.line ? 'Line ' + market.line : ''} ${t(
+                    `markets.market-card.not-available-for-trading`
+                )}`}</Description>
             </MarketPositionContainer>
         </>
     );
