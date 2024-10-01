@@ -116,6 +116,7 @@ const Leaderboard: React.FC = () => {
                         <TableCell id={'rewardsHeader'}>{t('overdrop.leaderboard.table.rewards')}</TableCell>
                         <TableCell isCard id={'rewards'}>
                             <div>{formatCurrency(data.rewards.op)} OP</div>
+                            <div>{' + '}</div>
                             <div>{formatCurrency(data.rewards.arb)} ARB</div>
                         </TableCell>
                     </TableRowMobile>
@@ -245,6 +246,7 @@ const Leaderboard: React.FC = () => {
                             return (
                                 <>
                                     <div>{formatCurrency(cellProps.cell.value.op)} OP</div>
+                                    {isMobile ? <div>{' + '}</div> : <></>}
                                     <div>{formatCurrency(cellProps.cell.value.arb)} ARB</div>
                                 </>
                             );
