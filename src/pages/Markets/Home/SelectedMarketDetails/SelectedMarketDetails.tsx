@@ -24,7 +24,7 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ market }) => {
     const theme: ThemeInterface = useTheme();
     const dispatch = useDispatch();
     const isGameStarted = market.maturityDate < new Date();
-    const isGameOpen = (market.isOpen && !isGameStarted) || true;
+    const isGameOpen = market.isOpen && !isGameStarted;
     const marketTypeGroupFilter = useSelector(getMarketTypeGroupFilter);
     const isMobile = useSelector(getIsMobile);
 
