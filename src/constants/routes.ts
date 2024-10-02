@@ -19,6 +19,7 @@ const ROUTES = {
     },
     Ticket: '/tickets/:ticketAddress',
     Overdrop: '/overdrop',
+    SEO: '/seo',
 };
 
 export const PAGE_NAME_TO_META_DATA_KEYS: {
