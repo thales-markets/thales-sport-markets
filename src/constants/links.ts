@@ -1,6 +1,7 @@
 export const LINKS = {
     Overtime: 'https://overtimemarkets.xyz/',
     Thales: 'https://thalesmarket.io/',
+    SpeedMarkets: 'https://www.speedmarkets.xyz',
     TwitterTweetStatus: 'https://twitter.com/intent/tweet?text=',
     Footer: {
         Twitter: 'https://twitter.com/OvertimeMarkets',
@@ -13,5 +14,4 @@ export const LINKS = {
         Reddit: 'https://www.reddit.com/r/overtimemarkets',
     },
     ThalesTip142: 'https://github.com/thales-markets/thales-improvement-proposals/blob/main/TIPs/TIP-142.md',
-    SpeedMarkets: 'https://www.speedmarkets.xyz',
 };
