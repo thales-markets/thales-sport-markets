@@ -135,7 +135,11 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
 
     const hideGame = isGameLive ? false : isGameOpen && !areOddsValid && !areChildMarketsOddsValid;
     const isColumnView =
-        !isGameLive && marketTypeFilter === undefined && isThreeWayView && !isMarketSelected && isGameOpen && !isMobile;
+        marketTypeFilter === undefined &&
+        isThreeWayView &&
+        !isMarketSelected &&
+        (isGameOpen || isGameLive) &&
+        !isMobile;
     const isTwoPositionalMarket = market.odds.length === 2;
     const selected = selectedMarket?.gameId == market.gameId;
 
@@ -319,14 +323,16 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                     {isGameLive ? (
                         <>
                             <PositionsV2
-                                markets={[market]}
-                                marketType={MarketType.WINNER}
+                                markets={[marketTypeFilterMarket ? marketTypeFilterMarket : market]}
+                                marketType={
+                                    marketTypeFilter && marketTypeFilterMarket ? marketTypeFilter : MarketType.WINNER
+                                }
                                 isGameOpen={isGameLive}
                                 isGameLive={isGameLive}
                                 isMainPageView
                                 isColumnView={!isMobile}
                             />
-                            {spreadMarket && (
+                            {isColumnView && !isMobile && spreadMarket && (
                                 <PositionsV2
                                     markets={[spreadMarket]}
                                     marketType={MarketType.SPREAD}
@@ -335,7 +341,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                     isColumnView={!isMobile}
                                 />
                             )}
-                            {totalMarket && (
+                            {isColumnView && !isMobile && totalMarket && (
                                 <PositionsV2
                                     markets={[totalMarket]}
                                     marketType={MarketType.TOTAL}
