@@ -20,7 +20,7 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
     [MarketType.WINNER2]: {
         id: MarketType.WINNER2,
         key: 'winner2',
-        name: 'Winner',
+        name: 'Winner 3-way (60 min)',
     },
     // Winner (placeholder)
     [MarketType.WINNER3]: {

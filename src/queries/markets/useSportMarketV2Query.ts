@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { generalConfig, noCacheConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
+import { secondsToMilliseconds } from 'date-fns';
 import { Network } from 'enums/network';
 import { orderBy } from 'lodash';
 import { UseQueryOptions, useQuery } from 'react-query';
@@ -9,16 +10,20 @@ import { SportMarket, Team } from 'types/markets';
 const useSportMarketQuery = (
     marketAddress: string,
     onlyOpenChildMarkets: boolean,
+    isLive: boolean,
     networkId: Network,
     options?: UseQueryOptions<SportMarket | undefined>
 ) => {
     return useQuery<SportMarket | undefined>(
-        QUERY_KEYS.SportMarketV2(marketAddress, networkId),
+        QUERY_KEYS.SportMarketV2(marketAddress, networkId, isLive),
         async () => {
+            const enableOnlyOpenChildMarkets = onlyOpenChildMarkets && !isLive;
             try {
                 const [marketResponse, gameInfoResponse, liveScoreResponse] = await Promise.all([
                     axios.get(
-                        `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/markets/${marketAddress}`,
+                        `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/${
+                            isLive ? 'live-' : ''
+                        }markets/${marketAddress}`,
                         noCacheConfig
                     ),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/games-info/${marketAddress}`, noCacheConfig),
@@ -45,7 +50,7 @@ const useSportMarketQuery = (
                         market.childMarkets
                             .filter(
                                 (childMarket: any) =>
-                                    (onlyOpenChildMarkets && childMarket.isOpen) || !onlyOpenChildMarkets
+                                    (enableOnlyOpenChildMarkets && childMarket.isOpen) || !enableOnlyOpenChildMarkets
                             )
                             .map((childMarket: any) => {
                                 return {
@@ -66,6 +71,7 @@ const useSportMarketQuery = (
                     isGameFinished: gameInfo?.isGameFinished,
                     gameStatus: gameInfo?.gameStatus,
                     liveScore,
+                    live: isLive,
                 };
             } catch (e) {
                 console.log(e);
@@ -73,6 +79,7 @@ const useSportMarketQuery = (
             }
         },
         {
+            refetchInterval: secondsToMilliseconds(isLive ? 2 : 10),
             ...options,
         }
     );

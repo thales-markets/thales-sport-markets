@@ -35,8 +35,8 @@ export const MainContainer = styled(FlexDivRow)<{ isGameOpen: boolean; isBoosted
     }
 `;
 
-export const MatchInfoContainer = styled(FlexDivColumn)<{ isGameLive: boolean }>`
-    cursor: ${(props) => (props.isGameLive ? 'default' : 'pointer')};
+export const MatchInfoContainer = styled(FlexDivColumn)`
+    cursor: pointer;
     max-width: 250px;
     margin-right: 5px;
     @media (max-width: 950px) {
@@ -70,7 +70,8 @@ export const GameOfLabel = styled.span<{ selected?: boolean; isLive?: boolean }>
     }
 `;
 
-export const MatchInfoLabel = styled.label`
+export const MatchInfoLabel = styled.label<{ selected?: boolean }>`
+    color: ${(props) => (props.selected ? props.theme.textColor.tertiary : 'inherit')};
     font-size: 12px;
     font-weight: 600;
     line-height: 14px;
@@ -97,6 +98,9 @@ export const TeamLogosContainer = styled(FlexDivRow)<{ isColumnView: boolean; is
     flex-direction: ${(props) => (props.isColumnView ? 'column' : 'row')};
     align-items: center;
     gap: ${(props) => (props.isColumnView ? (props.isTwoPositionalMarket ? '2px' : '10px') : '0px')};
+    @media (min-width: 950px) {
+        height: 100%;
+    }
 `;
 
 export const ClubLogo = styled.img<{ awayTeam?: boolean; isColumnView: boolean }>`
@@ -116,6 +120,10 @@ export const TeamNamesContainer = styled(FlexDivColumn)<{
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    @media (min-width: 950px) {
+        justify-content: space-around;
+        height: 100%;
+    }
     @media (max-width: 950px) {
         flex-direction: ${(props) => (props.isGameOpen ? 'row' : 'column')};
         overflow: initial;
@@ -176,6 +184,7 @@ export const Arrow = styled.i`
 export const FireContainer = styled(FlexDivColumnCentered)`
     position: absolute;
     top: 7px;
+    right: 7px;
     @media (max-width: 600px) {
         flex-direction: row;
         top: 9px;
@@ -186,12 +195,18 @@ export const FireContainer = styled(FlexDivColumnCentered)`
 export const Fire = styled.i`
     color: ${(props) => props.theme.overdrop.textColor.primary};
     font-size: 20px;
+    display: flex;
+    justify-content: center;
 `;
 
 export const FireText = styled.span`
     color: ${(props) => props.theme.overdrop.textColor.primary};
     white-space: pre;
     font-size: 9px;
+    @media (max-width: 600px) {
+        display: flex;
+        align-items: center;
+    }
 `;
 
 export const liveBlinkStyle: CSSProperties = {
@@ -248,7 +263,10 @@ export const CurrentResultContainer = styled(FlexDivColumn)<{
     margin-left: 5px;
     margin-right: 5px;
     flex: initial;
-    gap: ${(props) => (props.isColumnView ? '10px' : '0px')};
+    @media (min-width: 950px) {
+        justify-content: space-around;
+        height: 100%;
+    }
     @media (max-width: 950px) {
         flex-direction: row;
     }
@@ -264,6 +282,10 @@ export const SecondaryResultsWrapper = styled(FlexDivRow)`
     @media (max-width: 950px) {
         flex-basis: 100%;
     }
+    @media (max-width: 375px) {
+        flex-basis: 100%;
+        flex: auto;
+    }
 `;
 
 export const PeriodResultContainer = styled(FlexDivColumn)<{
@@ -272,6 +294,10 @@ export const PeriodResultContainer = styled(FlexDivColumn)<{
     gap: ${(props) => (props.isColumnView ? '3px' : '0px')};
     color: ${(props) => props.theme.textColor.quinary};
     flex-grow: 0;
+    @media (min-width: 950px) {
+        justify-content: space-around;
+        height: 100%;
+    }
     @media (max-width: 950px) {
         flex-direction: row;
     }
