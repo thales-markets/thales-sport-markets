@@ -282,6 +282,10 @@ export const SecondaryResultsWrapper = styled(FlexDivRow)`
     @media (max-width: 950px) {
         flex-basis: 100%;
     }
+    @media (max-width: 375px) {
+        flex-basis: 100%;
+        flex: auto;
+    }
 `;
 
 export const PeriodResultContainer = styled(FlexDivColumn)<{
