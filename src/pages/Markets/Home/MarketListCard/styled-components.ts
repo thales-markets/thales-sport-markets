@@ -98,6 +98,7 @@ export const TeamLogosContainer = styled(FlexDivRow)<{ isColumnView: boolean; is
     flex-direction: ${(props) => (props.isColumnView ? 'column' : 'row')};
     align-items: center;
     gap: ${(props) => (props.isColumnView ? (props.isTwoPositionalMarket ? '2px' : '10px') : '0px')};
+    height: 100%;
 `;
 
 export const ClubLogo = styled.img<{ awayTeam?: boolean; isColumnView: boolean }>`
@@ -117,6 +118,8 @@ export const TeamNamesContainer = styled(FlexDivColumn)<{
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    height: 100%;
+    justify-content: space-around;
     @media (max-width: 950px) {
         flex-direction: ${(props) => (props.isGameOpen ? 'row' : 'column')};
         overflow: initial;
@@ -256,7 +259,8 @@ export const CurrentResultContainer = styled(FlexDivColumn)<{
     margin-left: 5px;
     margin-right: 5px;
     flex: initial;
-    gap: ${(props) => (props.isColumnView ? '10px' : '0px')};
+    height: 100%;
+    justify-content: space-around;
     @media (max-width: 950px) {
         flex-direction: row;
     }
@@ -280,6 +284,8 @@ export const PeriodResultContainer = styled(FlexDivColumn)<{
     gap: ${(props) => (props.isColumnView ? '3px' : '0px')};
     color: ${(props) => props.theme.textColor.quinary};
     flex-grow: 0;
+    justify-content: space-around;
+    height: 100%;
     @media (max-width: 950px) {
         flex-direction: row;
     }
