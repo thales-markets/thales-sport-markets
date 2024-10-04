@@ -76,6 +76,7 @@ const QUERY_KEYS = {
             networkId,
             walletAddress,
         ],
+        StakingData: (walletAddress: string, networkId: Network) => ['stakingData', walletAddress, networkId],
     },
     FavoriteTeam: (walletAddress: string, networkId: Network) => ['favoriteTeam', walletAddress, networkId],
     Banners: (networkId: Network) => ['banners', networkId],

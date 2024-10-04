@@ -16,6 +16,7 @@ import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modu
 import { RootState } from 'redux/rootReducer';
 import { getCollateral, getCollaterals, getDefaultCollateral, isLpSupported } from 'utils/collaterals';
 import networkConnector from 'utils/networkConnector';
+import StakingModal from '../StakingModal';
 import TicketDetails from './components/TicketDetails';
 import {
     Arrow,
@@ -262,6 +263,7 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
                     )}
                 </ListContainer>
             )}
+            <StakingModal defaultAmount={1000} onClose={() => {}} />
         </Container>
     );
 };
