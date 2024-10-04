@@ -330,7 +330,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                 isGameOpen={isGameLive}
                                 isGameLive={isGameLive}
                                 isMainPageView
-                                isColumnView={!isMobile}
+                                isColumnView={isColumnView}
                             />
                             {isColumnView && !isMobile && spreadMarket && (
                                 <PositionsV2
@@ -338,7 +338,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                     marketType={MarketType.SPREAD}
                                     isGameOpen={isGameOpen}
                                     isMainPageView
-                                    isColumnView={!isMobile}
+                                    isColumnView={isColumnView}
                                 />
                             )}
                             {isColumnView && !isMobile && totalMarket && (
@@ -347,7 +347,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                     marketType={MarketType.TOTAL}
                                     isGameOpen={isGameOpen}
                                     isMainPageView
-                                    isColumnView={!isMobile}
+                                    isColumnView={isColumnView}
                                 />
                             )}
                             {!!overdropGameMultiplier && (
