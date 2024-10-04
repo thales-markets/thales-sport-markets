@@ -69,7 +69,7 @@ const SelectedMarket: React.FC = () => {
                     }}
                 />
             </HeaderContainer>
-            {lastValidMarket ? (
+            {lastValidMarket && !marketQuery.isLoading ? (
                 areOddsValid ? (
                     <>
                         <SelectedMarketDetails market={lastValidMarket} />

@@ -15,7 +15,7 @@ const useSportMarketQuery = (
     options?: UseQueryOptions<SportMarket | undefined>
 ) => {
     return useQuery<SportMarket | undefined>(
-        QUERY_KEYS.SportMarketV2(marketAddress, networkId),
+        QUERY_KEYS.SportMarketV2(marketAddress, networkId, isLive),
         async () => {
             const enableOnlyOpenChildMarkets = onlyOpenChildMarkets && !isLive;
             try {
@@ -57,7 +57,6 @@ const useSportMarketQuery = (
                                     ...childMarket,
                                     maturityDate: new Date(childMarket.maturityDate),
                                     odds: childMarket.odds.map((odd: any) => odd.normalizedImplied),
-                                    live: isLive,
                                 };
                             }),
                         ['typeId'],
