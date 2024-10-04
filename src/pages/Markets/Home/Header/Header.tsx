@@ -81,7 +81,7 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitc
 
     const marketToCheck = market || selectedMarket;
 
-    const marketQuery = useSportMarketV2Query(selectedMarket?.gameId || '', true, networkId, {
+    const marketQuery = useSportMarketV2Query(selectedMarket?.gameId || '', true, !!market?.live, networkId, {
         enabled: isAppReady && !market && !!selectedMarket,
     });
 

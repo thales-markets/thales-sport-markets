@@ -12,6 +12,7 @@ const sliceName = 'market';
 type SelectedMarket = {
     gameId: string;
     sport: Sport;
+    live?: boolean;
 };
 
 const getDefaultMarketSearch = (): string => {
