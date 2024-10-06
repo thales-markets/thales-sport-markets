@@ -29,7 +29,7 @@ const UserStats: React.FC<UserStatsProps> = ({ round }) => {
                 </SubHeaderWrapper>
                 {lpStats.map((stats, index) => {
                     return index === 3 ? (
-                        <Section key={stats.name}>
+                        <Section key={`total-${stats.name}-${index}-${networkId}-lp`}>
                             <Label>
                                 <CurrencyIcon className="icon icon--yield" />
                                 {stats.name}
@@ -37,7 +37,7 @@ const UserStats: React.FC<UserStatsProps> = ({ round }) => {
                             <Value>{formatCurrencyWithSign(USD_SIGN, stats.pnlInUsd, 2)}</Value>
                         </Section>
                     ) : (
-                        <Section key={stats.name}>
+                        <Section key={`${stats.name}-${index}-${networkId}-lp`}>
                             <Label>
                                 <CurrencyIcon className={COLLATERAL_ICONS_CLASS_NAMES[stats.name as Coins]} />{' '}
                                 {stats.name}
@@ -60,7 +60,7 @@ const UserStats: React.FC<UserStatsProps> = ({ round }) => {
                 </SubHeaderWrapper>
                 {lpStats.map((stats, index) => {
                     return index === 3 ? (
-                        <Section key={stats.name}>
+                        <Section key={`total-${stats.name}-${index}-${networkId}-fees`}>
                             <Label>
                                 <CurrencyIcon className="icon icon--yield" />
                                 {stats.name}
@@ -68,7 +68,7 @@ const UserStats: React.FC<UserStatsProps> = ({ round }) => {
                             <Value>{formatCurrencyWithSign(USD_SIGN, stats.feesInUsd, 2)}</Value>
                         </Section>
                     ) : (
-                        <Section key={stats.name}>
+                        <Section key={`${stats.name}-${index}-${networkId}-fees`}>
                             <Label>
                                 <CurrencyIcon className={COLLATERAL_ICONS_CLASS_NAMES[stats.name as Coins]} />{' '}
                                 {stats.name}
@@ -91,7 +91,7 @@ const UserStats: React.FC<UserStatsProps> = ({ round }) => {
                 </SubHeaderWrapper>
                 {lpStats.map((stats, index) => {
                     return index === 3 ? (
-                        <Section key={stats.name}>
+                        <Section key={`total-${stats.name}-${index}-${networkId}-user`}>
                             <Label>
                                 <CurrencyIcon className="icon icon--yield" />
                                 {stats.name}
@@ -99,7 +99,7 @@ const UserStats: React.FC<UserStatsProps> = ({ round }) => {
                             <Value>{formatCurrencyWithSign(USD_SIGN, -stats.feesInUsd - stats.pnlInUsd, 2)}</Value>
                         </Section>
                     ) : (
-                        <Section key={stats.name}>
+                        <Section key={`${stats.name}-${index}-${networkId}-user`}>
                             <Label>
                                 <CurrencyIcon className={COLLATERAL_ICONS_CLASS_NAMES[stats.name as Coins]} />{' '}
                                 {stats.name}
