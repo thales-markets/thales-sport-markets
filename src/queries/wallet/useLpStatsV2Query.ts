@@ -34,6 +34,7 @@ const getLpStats = async (
     const ticketsData = promisesResult.flat(1);
 
     let pnl = 0;
+    let fees = 0;
     let convertAmount = false;
     let collateral = '' as Coins;
 
@@ -48,9 +49,11 @@ const getLpStats = async (
 
         if (ticket.isUserTheWinner && !ticket.isCancelled) {
             pnl -= ticket.payout + ticket.fees - ticket.buyInAmount;
+            fees += ticket.fees;
         }
         if (ticket.isLost && !ticket.isCancelled) {
             pnl += ticket.buyInAmount - ticket.fees;
+            fees += ticket.fees;
         }
     }
 
@@ -58,7 +61,9 @@ const getLpStats = async (
         name: collateral.toUpperCase(),
         numberOfTickets: tickets.length,
         pnl,
+        fees,
         pnlInUsd: convertAmount ? pnl * exchangeRates[collateral] : pnl,
+        feesInUsd: convertAmount ? fees * exchangeRates[collateral] : fees,
     };
 
     return lpStats;
@@ -114,7 +119,9 @@ const useLpStatsV2Query = (round: number, networkId: SupportedNetwork, options?:
                     numberOfTickets:
                         usdcLpStats.numberOfTickets + wethLpStats.numberOfTickets + thalesLpStats.numberOfTickets,
                     pnl: usdcLpStats.pnlInUsd + wethLpStats.pnlInUsd + thalesLpStats.pnlInUsd,
+                    fees: usdcLpStats.feesInUsd + wethLpStats.feesInUsd + thalesLpStats.feesInUsd,
                     pnlInUsd: usdcLpStats.pnlInUsd + wethLpStats.pnlInUsd + thalesLpStats.pnlInUsd,
+                    feesInUsd: usdcLpStats.feesInUsd + wethLpStats.feesInUsd + thalesLpStats.feesInUsd,
                 };
 
                 return [usdcLpStats, wethLpStats, thalesLpStats, lpStats];

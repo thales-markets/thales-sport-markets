@@ -24,7 +24,7 @@ const UserStats: React.FC<UserStatsProps> = ({ round }) => {
                 <SubHeaderWrapper>
                     <SubHeader>
                         <SubHeaderIcon className="icon icon--yield" />
-                        LP Stats
+                        LP PnL
                     </SubHeader>
                 </SubHeaderWrapper>
                 {lpStats.map((stats, index) => {
@@ -47,6 +47,68 @@ const UserStats: React.FC<UserStatsProps> = ({ round }) => {
                                 stats.pnlInUsd,
                                 2
                             )})`}</Value>
+                        </Section>
+                    );
+                })}
+            </SectionWrapper>
+            <SectionWrapper>
+                <SubHeaderWrapper>
+                    <SubHeader>
+                        <SubHeaderIcon className="icon icon--yield" />
+                        Fees
+                    </SubHeader>
+                </SubHeaderWrapper>
+                {lpStats.map((stats, index) => {
+                    return index === 3 ? (
+                        <Section key={stats.name}>
+                            <Label>
+                                <CurrencyIcon className="icon icon--yield" />
+                                {stats.name}
+                            </Label>
+                            <Value>{formatCurrencyWithSign(USD_SIGN, stats.feesInUsd, 2)}</Value>
+                        </Section>
+                    ) : (
+                        <Section key={stats.name}>
+                            <Label>
+                                <CurrencyIcon className={COLLATERAL_ICONS_CLASS_NAMES[stats.name as Coins]} />{' '}
+                                {stats.name}
+                            </Label>
+                            <Value>{`${formatCurrencyWithKey(stats.name, stats.fees, 2)} (${formatCurrencyWithSign(
+                                USD_SIGN,
+                                stats.feesInUsd,
+                                2
+                            )})`}</Value>
+                        </Section>
+                    );
+                })}
+            </SectionWrapper>
+            <SectionWrapper>
+                <SubHeaderWrapper>
+                    <SubHeader>
+                        <SubHeaderIcon className="icon icon--yield" />
+                        User Pnl
+                    </SubHeader>
+                </SubHeaderWrapper>
+                {lpStats.map((stats, index) => {
+                    return index === 3 ? (
+                        <Section key={stats.name}>
+                            <Label>
+                                <CurrencyIcon className="icon icon--yield" />
+                                {stats.name}
+                            </Label>
+                            <Value>{formatCurrencyWithSign(USD_SIGN, -stats.feesInUsd - stats.pnlInUsd, 2)}</Value>
+                        </Section>
+                    ) : (
+                        <Section key={stats.name}>
+                            <Label>
+                                <CurrencyIcon className={COLLATERAL_ICONS_CLASS_NAMES[stats.name as Coins]} />{' '}
+                                {stats.name}
+                            </Label>
+                            <Value>{`${formatCurrencyWithKey(
+                                stats.name,
+                                -stats.fees - stats.pnl,
+                                2
+                            )} (${formatCurrencyWithSign(USD_SIGN, -stats.feesInUsd - stats.pnlInUsd, 2)})`}</Value>
                         </Section>
                     );
                 })}

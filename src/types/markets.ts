@@ -192,7 +192,9 @@ export type LpStats = {
     name: string;
     numberOfTickets: number;
     pnl: number;
+    fees: number;
     pnlInUsd: number;
+    feesInUsd: number;
 };
 
 export type LpUsersPnl = {
