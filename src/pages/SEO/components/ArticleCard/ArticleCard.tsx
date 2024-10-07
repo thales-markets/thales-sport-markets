@@ -1,90 +1,29 @@
 import Button from 'components/Button';
 import SPAAnchor from 'components/SPAAnchor';
-import TimeRemaining from 'components/TimeRemaining';
-import { Network } from 'enums/network';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivRow } from 'styles/common';
-import { PromotionCardStatus, PromotionItem, PromotionStatus, ThemeInterface } from 'types/ui';
-import { getPromotionDateRange, getPromotionStatus } from 'utils/ui';
+import { SEOItem, ThemeInterface } from 'types/ui';
 
-import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
-import { ReactComponent as BaseLogo } from 'assets/images/base-logo.svg';
-import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
-import { secondsToMilliseconds } from 'date-fns';
-
-const ArticleCard: React.FC<PromotionItem> = ({
+const ArticleCard: React.FC<SEOItem> = ({
     title,
     description,
-    startDate,
-    endDate,
-    displayCountdown,
-    promotionUrl,
+    url,
     backgroundImageUrl,
     callToActionButton,
-    availableOnNetworks,
     branchName,
 }) => {
-    const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
-    const getPromotionStatusLabel = (startDate: number, endDate: number, displayCountdown?: boolean) => {
-        if (!displayCountdown) return <>{getPromotionDateRange(startDate, endDate)}</>;
-        if (getPromotionStatus(startDate, endDate) == PromotionStatus.ONGOING) {
-            return (
-                <>
-                    <span>{t('promotions.ends-in')}</span>
-                    <TimeRemaining
-                        end={secondsToMilliseconds(endDate)}
-                        fontSize={14}
-                        fontWeight={600}
-                        color={theme.promotion.textColor.primary}
-                    />
-                </>
-            );
-        }
-        if (getPromotionStatus(startDate, endDate) == PromotionStatus.COMING_SOON) {
-            return (
-                <>
-                    <span>{t('promotions.starts-in')}</span>
-                    <TimeRemaining
-                        end={secondsToMilliseconds(startDate)}
-                        fontSize={14}
-                        fontWeight={600}
-                        color={theme.promotion.textColor.primary}
-                    />
-                </>
-            );
-        }
-        return <>{getPromotionStatus(startDate, endDate)}</>;
-    };
-
     return (
         <Wrapper backgroundImageUrl={backgroundImageUrl} isMobile={isMobile}>
-            <SPAAnchor
-                href={`${promotionUrl}${branchName ? `?branch-name=${branchName}` : ''}`}
-                style={{ height: '100%' }}
-            >
+            <SPAAnchor href={`${url}${branchName ? `?branch-name=${branchName}` : ''}`} style={{ height: '100%' }}>
                 <ContentWrapper>
-                    <HeaderContainer>
-                        <NetworkIconsWrapper>
-                            {availableOnNetworks?.length ? (
-                                availableOnNetworks.map((item) => {
-                                    return getNetworkLogo(item as Network);
-                                })
-                            ) : (
-                                <></>
-                            )}
-                        </NetworkIconsWrapper>
-                        <PromotionStatusBadge status={getPromotionStatus(startDate, endDate)}>
-                            {getPromotionStatusLabel(startDate, endDate, displayCountdown)}
-                        </PromotionStatusBadge>
-                    </HeaderContainer>
+                    <HeaderContainer></HeaderContainer>
                     <Title>{title}</Title>
                     <BottomContainer>
                         <Description>{description}</Description>
@@ -104,19 +43,6 @@ const ArticleCard: React.FC<PromotionItem> = ({
             </SPAAnchor>
         </Wrapper>
     );
-};
-
-const getNetworkLogo = (networkId: number) => {
-    switch (networkId) {
-        case Network.OptimismMainnet:
-            return <OPLogo />;
-        case Network.Arbitrum:
-            return <ArbitrumLogo />;
-        case Network.Base:
-            return <BaseLogo />;
-        default:
-            return <></>;
-    }
 };
 
 const Wrapper = styled(FlexDiv)<{ backgroundImageUrl: string; isMobile: boolean }>`
@@ -144,33 +70,6 @@ const ContentWrapper = styled(FlexDiv)`
 const HeaderContainer = styled(FlexDivRow)`
     margin-bottom: 120px;
     align-items: center;
-`;
-
-const PromotionStatusBadge = styled(FlexDiv)<{ status: PromotionCardStatus }>`
-    background-color: ${(props) => props.status == 'coming-soon' && props.theme.promotion.background.primary};
-    background-color: ${(props) => props.status == 'ongoing' && props.theme.promotion.background.primary};
-    background-color: ${(props) => props.status == 'finished' && props.theme.promotion.background.secondary};
-    color: ${(props) => props.status == 'coming-soon' && props.theme.promotion.textColor.primary};
-    color: ${(props) => props.status == 'ongoing' && props.theme.promotion.textColor.primary};
-    color: ${(props) => props.status == 'finished' && props.theme.promotion.textColor.secondary};
-    border-radius: 30px;
-    font-size: 14px;
-    padding: 5px 20px;
-    font-weight: 600;
-    text-transform: uppercase;
-    justify-content: space-between;
-    > span:first-child {
-        margin-right: 4px;
-    }
-`;
-
-const NetworkIconsWrapper = styled(FlexDiv)`
-    flex-direction: row;
-    svg {
-        width: 24px;
-        height: 24px;
-    }
-    gap: 5px;
 `;
 
 const Title = styled.h2`

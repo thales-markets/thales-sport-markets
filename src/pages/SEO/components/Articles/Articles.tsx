@@ -1,74 +1,35 @@
 import Loader from 'components/Loader';
-import { usePromotionsQuery } from 'queries/promotions/usePromotionsQuery';
-import React, { useMemo, useState } from 'react';
+import { useSEOArticlesQuery } from 'queries/seo/useSEOArticlesQuery';
+import React, { useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
-import { PromotionStatus } from 'types/ui';
-import { getPromotionStatus } from 'utils/ui';
 import useQueryParam from 'utils/useQueryParams';
 import ArticleCard from '../ArticleCard';
-import Navigation from '../Navigation';
-import { NavigationItem } from '../Navigation/Navigation';
-
-enum NavigationEnum {
-    'ALL',
-    'ONGOING',
-    'COMING_SOON',
-}
-
-const NavItems: NavigationItem[] = [
-    {
-        index: NavigationEnum.ALL,
-        i18Label: 'promotions.nav-items.all',
-    },
-    {
-        index: NavigationEnum.ONGOING,
-        i18Label: 'promotions.nav-items.ongoing',
-    },
-    {
-        index: NavigationEnum.COMING_SOON,
-        i18Label: 'promotions.nav-items.finished',
-    },
-];
 
 const Articles: React.FC = () => {
     const { t } = useTranslation();
 
-    const [selectedNavItem, setSelectedNavItem] = useState<number>(NavigationEnum.ONGOING);
-
     const [branchName] = useQueryParam('branch-name', '');
 
-    const promotionsQuery = usePromotionsQuery(branchName, {
+    const seoArticlesQuery = useSEOArticlesQuery(branchName, {
         enabled: true,
     });
 
-    const promotions = useMemo(() => {
+    const seoArticles = useMemo(() => {
         try {
-            const promotions = promotionsQuery.isSuccess && promotionsQuery.data ? promotionsQuery.data : [];
-            if (selectedNavItem == NavigationEnum.ONGOING) {
-                return promotions.filter((item) => {
-                    const status = getPromotionStatus(item.startDate, item.endDate);
-                    return status == PromotionStatus.ONGOING || status == PromotionStatus.COMING_SOON;
-                });
-            }
-            if (selectedNavItem == NavigationEnum.COMING_SOON) {
-                return promotions.filter((item) => {
-                    const status = getPromotionStatus(item.startDate, item.endDate);
-                    return status == PromotionStatus.FINISHED;
-                });
-            }
-            return promotions;
+            const articles = seoArticlesQuery.isSuccess && seoArticlesQuery.data ? seoArticlesQuery.data : [];
+            return articles;
         } catch (e) {
             console.log('Error ', e);
             return [];
         }
-    }, [promotionsQuery.data, promotionsQuery.isSuccess, selectedNavItem]);
+    }, [seoArticlesQuery.data, seoArticlesQuery.isSuccess]);
 
     return (
         <Wrapper>
-            {promotionsQuery.isLoading && <Loader />}
-            {!promotionsQuery.isLoading && (
+            {seoArticlesQuery.isLoading && <Loader />}
+            {!seoArticlesQuery.isLoading && (
                 <>
                     <HeadingWrapper>
                         <Heading>
@@ -81,22 +42,15 @@ const Articles: React.FC = () => {
                         </Heading>
                         <Description>{t('promotions.description')}</Description>
                     </HeadingWrapper>
-                    <Navigation
-                        items={NavItems}
-                        selectedItemIndex={selectedNavItem}
-                        onChangeNavItem={(index: number) => setSelectedNavItem(index)}
-                    />
                     <CardsWrapper>
-                        {promotions.length > 0 ? (
-                            promotions.map((promotion, index) => {
+                        {seoArticles.length > 0 ? (
+                            seoArticles.map((seoArticle, index) => {
                                 return (
                                     <ArticleCard
-                                        key={`${index}-${promotion.promotionUrl}`}
-                                        {...promotion}
-                                        promotionUrl={
-                                            branchName
-                                                ? `${promotion.promotionUrl}?branch-name=${branchName}`
-                                                : promotion.promotionUrl
+                                        key={`${index}-${seoArticle.url}`}
+                                        {...seoArticle}
+                                        url={
+                                            branchName ? `${seoArticle.url}?branch-name=${branchName}` : seoArticle.url
                                         }
                                     />
                                 );
