@@ -38,7 +38,8 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isM
     const isGameCancelled = market.isCancelled;
     const isGameResolved = market.isResolved || market.isCancelled;
     const isGameRegularlyResolved = market.isResolved && !market.isCancelled;
-    const isPendingResolution = isGameStarted && !isGameResolved;
+    const isPendingResolution = isGameStarted && !isGameResolved && !market.live;
+
     const isGamePaused = market.isPaused && !isGameResolved;
     const isGameOpen = !market.isResolved && !market.isCancelled && !market.isPaused && !isGameStarted;
 

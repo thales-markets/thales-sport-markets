@@ -27,6 +27,7 @@ import {
     getIsMarketSelected,
     getMarketSearch,
     getMarketTypeFilter,
+    getSelectedMarket,
     getSportFilter,
     getStatusFilter,
     getTagFilter,
@@ -86,6 +87,7 @@ const Home: React.FC = () => {
     const location = useLocation();
     const isMobile = useSelector(getIsMobile);
     const isMarketSelected = useSelector(getIsMarketSelected);
+    const selectedMarket = useSelector(getSelectedMarket);
 
     const [showBurger, setShowBurger] = useState<boolean>(false);
     const [showActive, setShowActive] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_ACTIVE, true);
@@ -633,8 +635,7 @@ const Home: React.FC = () => {
                             <SportFilterMobile setAvailableTags={setAvailableTags} tagsList={tagsList} />
                             {!marketsLoading &&
                                 finalMarkets.length > 0 &&
-                                statusFilter === StatusFilter.OPEN_MARKETS &&
-                                sportFilter !== SportFilter.Live && (
+                                (statusFilter === StatusFilter.OPEN_MARKETS || sportFilter === SportFilter.Live) && (
                                     <Header availableMarketTypes={availableMarketTypes} />
                                 )}
                             <FilterTagsMobile />
@@ -667,8 +668,8 @@ const Home: React.FC = () => {
                             ) : (
                                 <>
                                     {!isMobile &&
-                                        statusFilter === StatusFilter.OPEN_MARKETS &&
-                                        sportFilter !== SportFilter.Live && (
+                                        (statusFilter === StatusFilter.OPEN_MARKETS ||
+                                            sportFilter === SportFilter.Live) && (
                                             <Header availableMarketTypes={availableMarketTypes} />
                                         )}
                                     <FlexDivRow>
@@ -685,7 +686,11 @@ const Home: React.FC = () => {
                                         )}
                                         {isMobile ? (
                                             <ReactModal
-                                                isOpen={isMarketSelected && statusFilter === StatusFilter.OPEN_MARKETS}
+                                                isOpen={
+                                                    isMarketSelected &&
+                                                    (statusFilter === StatusFilter.OPEN_MARKETS ||
+                                                        !!selectedMarket?.live)
+                                                }
                                                 onRequestClose={() => {
                                                     dispatch(setSelectedMarket(undefined));
                                                 }}
@@ -696,7 +701,9 @@ const Home: React.FC = () => {
                                             </ReactModal>
                                         ) : (
                                             isMarketSelected &&
-                                            statusFilter === StatusFilter.OPEN_MARKETS && <SelectedMarket />
+                                            (statusFilter === StatusFilter.OPEN_MARKETS || !!selectedMarket?.live) && (
+                                                <SelectedMarket />
+                                            )
                                         )}
                                     </FlexDivRow>
                                 </>

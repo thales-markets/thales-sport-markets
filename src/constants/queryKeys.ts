@@ -17,7 +17,12 @@ const QUERY_KEYS = {
     SportMarketsV2: (statusFilter: StatusFilter, networkId: Network) => ['sportMarketsV2', statusFilter, networkId],
     LiveSportMarkets: (networkId: Network) => ['liveSportMarkets', networkId],
     SportMarket: (address: string, networkId: Network) => ['sportMarket', address, networkId],
-    SportMarketV2: (address: string, networkId: Network) => ['sportMarketV2', address, networkId],
+    SportMarketV2: (address: string, networkId: Network, isLive: boolean) => [
+        'sportMarketV2',
+        address,
+        networkId,
+        isLive,
+    ],
     ParlayAmmData: (networkId: Network) => ['parlayAmmData', networkId],
     SportsAmmData: (networkId: Network) => ['sportsAmmData', networkId],
     TicketLiquidity: (
