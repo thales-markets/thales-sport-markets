@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
-import Articles from './components/Articles';
+import Articles from '../components/Articles';
 
 const SEO: React.FC = () => {
     return (
