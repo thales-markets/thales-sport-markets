@@ -5,6 +5,7 @@ import { PROMOTION_SANITIZE_PROPS } from 'constants/ui';
 import DOMPurify from 'dompurify';
 import { useSEOArticlesQuery } from 'queries/seo/useSEOArticlesQuery';
 import React, { useMemo } from 'react';
+import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
 import { RouteComponentProps, useHistory } from 'react-router-dom';
 import styled, { useTheme } from 'styled-components';
@@ -48,6 +49,11 @@ const SeoArticle: React.FC<SeoArticleProps> = (props) => {
                 {(!seoArticle || SEOArticlesQuery.isLoading) && <Loader />}
                 {seoArticle !== undefined && (
                     <>
+                        <Helmet>
+                            <meta name="title" content={seoArticle.meta.title} />
+                            <meta name="description" content={seoArticle.meta.description} />
+                            <meta name="keywords" content={seoArticle.meta.keywords} />
+                        </Helmet>
                         <BackContainer>
                             <Back onClick={() => history.goBack()}>{t('promotions.back')}</Back>
                         </BackContainer>

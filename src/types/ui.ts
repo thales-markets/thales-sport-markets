@@ -84,4 +84,9 @@ type SEOArticle = {
 
 export type SEOItem = SEOCardData & {
     article: SEOArticle;
+    meta: {
+        title: string;
+        description: string;
+        keywords: string;
+    };
 };
