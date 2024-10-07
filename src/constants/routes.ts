@@ -19,7 +19,10 @@ const ROUTES = {
     },
     Ticket: '/tickets/:ticketAddress',
     Overdrop: '/overdrop',
-    SEO: '/seo',
+    SEO: {
+        Home: '/seo',
+        SeoArticle: '/seo/:seoId',
+    },
 };
 
 export const PAGE_NAME_TO_META_DATA_KEYS: {
