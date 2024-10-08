@@ -2,10 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
 import Articles from '../components/Articles';
+import Header from '../components/Header';
 
 const SEO: React.FC = () => {
     return (
         <Background>
+            <Header />
             <Wrapper>
                 <Articles />
             </Wrapper>
