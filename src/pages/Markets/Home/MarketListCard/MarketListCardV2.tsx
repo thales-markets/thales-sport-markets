@@ -228,7 +228,11 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                     </MatchInfoLabel>
                 </MatchInfo>
                 <TeamsInfoContainer>
-                    <TeamLogosContainer isColumnView={isColumnView} isTwoPositionalMarket={isTwoPositionalMarket}>
+                    <TeamLogosContainer
+                        isColumnView={isColumnView}
+                        isTwoPositionalMarket={isTwoPositionalMarket}
+                        isOneSideMarket={market.isOneSideMarket}
+                    >
                         <ClubLogo
                             alt="Home team logo"
                             src={homeLogoSrc}
