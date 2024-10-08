@@ -2,8 +2,8 @@ import { Network } from 'enums/network';
 import { Theme } from 'enums/ui';
 import darkTheme from 'styles/themes/dark';
 import { NavMenuItem, ThemeInterface } from 'types/ui';
-import ROUTES from './routes';
 import { LINKS } from './links';
+import ROUTES from './routes';
 
 export const ThemeMap: Record<Theme, ThemeInterface> = {
     [Theme.DARK]: darkTheme,
@@ -93,3 +93,5 @@ export const PROMOTION_SANITIZE_PROPS = {
     ],
     ALLOWED_ATTR: ['href', 'target', 'style', 'src', 'alt'],
 };
+
+export const SEO_ARTICLES_PER_PAGE = 12;

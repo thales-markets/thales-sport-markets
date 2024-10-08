@@ -1050,6 +1050,10 @@
         "single-market": {
             "title": "Overtime Markets Web3 Sportsbook: {{dynamicTitle}}",
             "description": "{{dynamicTitle}}: Enjoy the best Web3 sportsbook odds on the market. No registration needed. Fully decentralized sports markets."
+        },
+        "page": {
+            "title": "Resources and guides",
+            "content": "Learn about the best strategies and ways to bet on different sports, how to find the best games and odds, and how to get started on Overtime Markets."
         }
     },
     "banner": {
