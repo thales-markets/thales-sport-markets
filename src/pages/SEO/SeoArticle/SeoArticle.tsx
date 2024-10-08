@@ -1,6 +1,7 @@
 import Button from 'components/Button';
 import Loader from 'components/Loader';
 import SPAAnchor from 'components/SPAAnchor';
+import ROUTES from 'constants/routes';
 import { PROMOTION_SANITIZE_PROPS } from 'constants/ui';
 import DOMPurify from 'dompurify';
 import { useSEOArticlesQuery } from 'queries/seo/useSEOArticlesQuery';
@@ -11,7 +12,9 @@ import { RouteComponentProps, useHistory } from 'react-router-dom';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivColumn } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
+import { buildHref } from 'utils/routes';
 import useQueryParam from 'utils/useQueryParams';
+import Header from '../components/Header';
 
 type SeoArticleProps = RouteComponentProps<{
     seoId: string;
@@ -45,7 +48,13 @@ const SeoArticle: React.FC<SeoArticleProps> = (props) => {
 
     return (
         <Background>
+            <Header />
             <Wrapper>
+                <BackContainer>
+                    <SPAAnchor href={buildHref(`${ROUTES.SEO.Home}${branchName ? `?branch-name=${branchName}` : ''}`)}>
+                        <Back>{t('promotions.back')}</Back>
+                    </SPAAnchor>
+                </BackContainer>
                 {(!seoArticle || SEOArticlesQuery.isLoading) && <Loader />}
                 {seoArticle !== undefined && (
                     <>
@@ -54,9 +63,7 @@ const SeoArticle: React.FC<SeoArticleProps> = (props) => {
                             <meta name="description" content={seoArticle.meta.description} />
                             <meta name="keywords" content={seoArticle.meta.keywords} />
                         </Helmet>
-                        <BackContainer>
-                            <Back onClick={() => history.goBack()}>{t('promotions.back')}</Back>
-                        </BackContainer>
+
                         <CoverImageWrapper imageUrl={seoArticle.article.coverImageUrl}></CoverImageWrapper>
                         <HeaderContainer
                             dangerouslySetInnerHTML={{
@@ -132,6 +139,7 @@ const BackContainer = styled(FlexDiv)`
     align-items: center;
     justify-content: flex-start;
     margin: 10px 0px;
+    width: 100%;
 `;
 
 const Back = styled.span`
