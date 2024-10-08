@@ -94,12 +94,17 @@ export const TeamsInfoContainer = styled(FlexDivRow)`
     }
 `;
 
-export const TeamLogosContainer = styled(FlexDivRow)<{ isColumnView: boolean; isTwoPositionalMarket: boolean }>`
+export const TeamLogosContainer = styled(FlexDivRow)<{
+    isColumnView: boolean;
+    isTwoPositionalMarket: boolean;
+    isOneSideMarket: boolean;
+}>`
     flex-direction: ${(props) => (props.isColumnView ? 'column' : 'row')};
     align-items: center;
     gap: ${(props) => (props.isColumnView ? (props.isTwoPositionalMarket ? '2px' : '10px') : '0px')};
+    justify-content: space-around;
     @media (min-width: 950px) {
-        height: 100%;
+        height: ${(props) => (!props.isOneSideMarket ? '100%' : 'auto')};
     }
 `;
 
