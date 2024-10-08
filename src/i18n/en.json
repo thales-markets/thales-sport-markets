@@ -430,6 +430,18 @@
             "fund-batch": "Fund multiple addresses",
             "insufficient-balance": "Insufficient balance",
             "total-amount-batch": "Total amount will be {{ amount }} multiple by {{ count }} wallet address(es)."
+        },
+        "staking-modal": {
+            "congratulations-label": "Congratulations!",
+            "title": "You claimed: {{amount}}",
+            "description": "Stake your THALES to earn yield? You will still be able to use your staked THALES on Overtime.",
+            "amount-to-stake-label": "Amount to stake",
+            "stake-confirmation-message": "THALES successfully staked",
+            "button": {
+                "stake-label": "Stake",
+                "stake-progress-label": "Staking",
+                "mute-label": "Mute popup for 7 days"
+            }
         }
     },
     "markets": {

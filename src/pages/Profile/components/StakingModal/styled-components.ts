@@ -6,6 +6,8 @@ export const Container = styled(FlexDivColumnCentered)`
     height: 500px;
     background-image: url(stake-modal-image.png);
     border-radius: 7px;
+    align-items: center;
+    padding: 30px 10px 20px 10px;
     @media (max-width: 950px) {
         width: auto;
         height: auto;
@@ -19,6 +21,34 @@ export const Title = styled.span`
     line-height: 32px;
     letter-spacing: 0.025em;
     text-align: center;
+    margin-top: 5px;
+    @media (max-width: 575px) {
+        font-size: 20px;
+        margin-top: 0px;
+    }
+`;
+
+export const Description = styled.span`
+    color: ${(props) => props.theme.textColor.primary};
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 15.23px;
+    letter-spacing: 0.025em;
+    text-align: center;
+    margin-top: 10px;
+    @media (max-width: 575px) {
+        font-size: 12px;
+        margin-top: 5px;
+    }
+`;
+
+export const InputContainer = styled.div`
+    position: relative;
+    width: 300px;
+    margin-top: 70px;
+    @media (max-width: 575px) {
+        margin-top: 50px;
+    }
 `;
 
 export const CongratulationsTitle = styled(Title)`
@@ -26,7 +56,10 @@ export const CongratulationsTitle = styled(Title)`
 `;
 
 export const ButtonContainer = styled(FlexDivCentered)`
-    margin: 30px 0 10px 0;
+    margin-bottom: 100px;
+    @media (max-width: 575px) {
+        margin-bottom: 50px;
+    }
 `;
 
 export const defaultCustomStyles = {
@@ -64,3 +97,8 @@ export const CloseIcon = styled.i`
         padding: 12px 10px 15px 15px;
     }
 `;
+
+export const defaultButtonProps = {
+    width: '300px',
+    margin: '10px 0 0 0',
+};

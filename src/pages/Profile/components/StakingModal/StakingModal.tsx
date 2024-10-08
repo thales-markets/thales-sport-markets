@@ -1,30 +1,36 @@
-import { Button } from '@material-ui/core';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
+import ApprovalModal from 'components/ApprovalModal';
+import Button from 'components/Button';
 import NumericInput from 'components/fields/NumericInput';
+import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { BigNumber, ethers } from 'ethers';
+import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
+import useUserStakingDataQuery from 'queries/wallet/useUserStakingData';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { getIsAppReady } from 'redux/modules/app';
 import { getIsConnectedViaParticle, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
-import { Coins, formatCurrencyWithKey } from 'thales-utils';
-import ApprovalModal from '../../../../components/ApprovalModal';
-import { getErrorToastOptions, getSuccessToastOptions } from '../../../../config/toast';
-import { CRYPTO_CURRENCY_MAP } from '../../../../constants/currency';
-import useMultipleCollateralBalanceQuery from '../../../../queries/wallet/useMultipleCollateralBalanceQuery';
-import useUserStakingDataQuery from '../../../../queries/wallet/useUserStakingData';
-import { getIsAppReady } from '../../../../redux/modules/app';
-import { StakingData } from '../../../../types/markets';
-import { getCollateralIndex } from '../../../../utils/collaterals';
-import { checkAllowance } from '../../../../utils/network';
-import networkConnector from '../../../../utils/networkConnector';
+import { useTheme } from 'styled-components';
+import { Coins, formatCurrencyWithKey, truncToDecimals } from 'thales-utils';
+import { StakingData } from 'types/markets';
+import { ThemeInterface } from 'types/ui';
+import { getCollateralIndex } from 'utils/collaterals';
+import { checkAllowance } from 'utils/network';
+import networkConnector from 'utils/networkConnector';
+import { setStakingModalMuteEnd } from '../../../../redux/modules/ui';
 import {
     ButtonContainer,
     CloseIcon,
     CongratulationsTitle,
     Container,
+    defaultButtonProps,
     defaultCustomStyles,
+    Description,
+    InputContainer,
     Title,
 } from './styled-components';
 
@@ -36,6 +42,7 @@ type StakingModalProps = {
 const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
+    const theme: ThemeInterface = useTheme();
     const { openConnectModal } = useConnectModal();
 
     const isAppReady = useSelector(getIsAppReady);
@@ -172,7 +179,10 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {
-                    toast.update(toastId, getSuccessToastOptions(t('staking.staking.stake-unstake.stake-success')));
+                    toast.update(
+                        toastId,
+                        getSuccessToastOptions(t('profile.staking-modal.stake-confirmation-message'))
+                    );
                     setAmountToStake('');
                     setIsStaking(false);
                 }
@@ -185,13 +195,25 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
 
     const getSubmitButton = () => {
         if (!isWalletConnected) {
-            return <Button onClick={openConnectModal}>{t('common.wallet.connect-your-wallet')}</Button>;
+            return (
+                <Button onClick={openConnectModal} {...defaultButtonProps}>
+                    {t('common.wallet.connect-your-wallet')}
+                </Button>
+            );
         }
         if (insufficientBalance) {
-            return <Button disabled={true}>{t(`common.errors.insufficient-balance`)}</Button>;
+            return (
+                <Button disabled={true} {...defaultButtonProps}>
+                    {t(`common.errors.insufficient-balance`)}
+                </Button>
+            );
         }
         if (!isAmountEntered) {
-            return <Button disabled={true}>{t(`common.errors.enter-amount`)}</Button>;
+            return (
+                <Button disabled={true} {...defaultButtonProps}>
+                    {t(`common.errors.enter-amount`)}
+                </Button>
+            );
         }
         if (!hasStakeAllowance) {
             return (
@@ -200,6 +222,7 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
                     onClick={() =>
                         isParticle ? handleAllowance(ethers.constants.MaxUint256) : setOpenApprovalModal(true)
                     }
+                    {...defaultButtonProps}
                 >
                     {t('common.wallet.approve')}
                 </Button>
@@ -207,18 +230,22 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
         }
 
         return (
-            <Button disabled={isButtonDisabled} onClick={handleStakeThales}>
+            <Button disabled={isButtonDisabled} onClick={handleStakeThales} {...defaultButtonProps}>
                 {!isStaking
-                    ? `${t('staking.staking.stake-unstake.stake')} ${formatCurrencyWithKey(
+                    ? `${t('profile.staking-modal.button.stake-label')} ${formatCurrencyWithKey(
                           CRYPTO_CURRENCY_MAP.THALES,
                           amountToStake
                       )}    `
-                    : `${t('staking.staking.stake-unstake.staking')} ${formatCurrencyWithKey(
+                    : `${t('profile.staking-modal.button.stake-progress-label')} ${formatCurrencyWithKey(
                           CRYPTO_CURRENCY_MAP.THALES,
                           amountToStake
                       )}...`}
             </Button>
         );
+    };
+
+    const onMaxClick = () => {
+        setAmountToStake(truncToDecimals(thalesBalance, 8));
     };
 
     return (
@@ -230,18 +257,46 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
         >
             <Container>
                 <CloseIcon className="icon icon--close" onClick={() => onClose()} />
-                <CongratulationsTitle>Congratulations!</CongratulationsTitle>
-                <Title>You claimed: 25,134.45 THALES</Title>
-                <NumericInput
-                    value={amountToStake}
-                    onChange={(_, value) => setAmountToStake(value)}
-                    disabled={isAllowingStake}
-                    label={t('common.enable-wallet-access.custom-amount-label')}
-                    currencyLabel={'THALES'}
-                    showValidation={!isAmountValid}
-                    validationMessage={t('common.errors.invalid-amount-max')}
-                />
+                <CongratulationsTitle>{t('profile.staking-modal.congratulations-label')}</CongratulationsTitle>
+                <Title>
+                    {t('profile.staking-modal.title', {
+                        amount: `${formatCurrencyWithKey(CRYPTO_CURRENCY_MAP.THALES, defaultAmount)}`,
+                    })}
+                </Title>
+                <Description>{t('profile.staking-modal.description')}</Description>
+                <InputContainer>
+                    <NumericInput
+                        value={amountToStake}
+                        onChange={(_, value) => setAmountToStake(value)}
+                        disabled={isAllowingStake}
+                        label={t('profile.staking-modal.amount-to-stake-label')}
+                        currencyLabel={CRYPTO_CURRENCY_MAP.THALES}
+                        showValidation={!isAmountValid}
+                        validationMessage={t('common.errors.insufficient-balance-wallet', {
+                            currencyKey: CRYPTO_CURRENCY_MAP.THALES,
+                        })}
+                        validationPlacement="bottom"
+                        balance={formatCurrencyWithKey(CRYPTO_CURRENCY_MAP.THALES, thalesBalance)}
+                        onMaxButton={onMaxClick}
+                        inputFontWeight="600"
+                        inputPadding="5px 10px"
+                        borderColor={theme.input.borderColor.tertiary}
+                    />
+                </InputContainer>
                 <ButtonContainer>{getSubmitButton()}</ButtonContainer>
+                <Button
+                    backgroundColor="#D9D9D91A"
+                    textColor="#5F6180"
+                    borderColor="#5F6180"
+                    fontSize="13px"
+                    fontWeight="500"
+                    onClick={() => {
+                        dispatch(setStakingModalMuteEnd(new Date().getTime() + 7 * 24 * 60 * 60 * 1000));
+                        onClose();
+                    }}
+                >
+                    {t('profile.staking-modal.button.mute-label')}
+                </Button>
             </Container>
             {openApprovalModal && (
                 <ApprovalModal

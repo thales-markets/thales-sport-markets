@@ -13,7 +13,7 @@ import { getIsMobile } from 'redux/modules/app';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsAA, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import { formatCurrencyWithKey, getEtherscanAddressLink, truncateAddress } from 'thales-utils';
+import { Coins, formatCurrencyWithKey, getEtherscanAddressLink, truncateAddress } from 'thales-utils';
 import { Ticket } from 'types/markets';
 import { executeBiconomyTransaction } from 'utils/biconomy';
 import {
@@ -27,6 +27,7 @@ import { getIsMultiCollateralSupported } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { refetchAfterClaim } from 'utils/queryConnector';
 import { formatTicketOdds, getTicketMarketOdd } from 'utils/tickets';
+import { CRYPTO_CURRENCY_MAP } from '../../../../../../constants/currency';
 import TicketMarketDetails from '../TicketMarketDetails';
 import {
     ArrowIcon,
@@ -63,9 +64,15 @@ type TicketDetailsProps = {
     ticket: Ticket;
     claimCollateralIndex: number;
     setClaimCollateralIndex: any;
+    onThalesClaim: (thalesClaimed: number) => void;
 };
 
-const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIndex, setClaimCollateralIndex }) => {
+const TicketDetails: React.FC<TicketDetailsProps> = ({
+    ticket,
+    claimCollateralIndex,
+    setClaimCollateralIndex,
+    onThalesClaim,
+}) => {
     const { t } = useTranslation();
     const selectedOddsType = useSelector(getOddsType);
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -149,6 +156,9 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
                     if (setShareTicketModalData && setShowShareTicketModal) {
                         setShareTicketModalData(shareTicketData);
                         setShowShareTicketModal(true);
+                    }
+                    if (ticket.collateral === (CRYPTO_CURRENCY_MAP.THALES as Coins)) {
+                        onThalesClaim(ticket.payout);
                     }
                 }
             } catch (e) {
