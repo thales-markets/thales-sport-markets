@@ -139,15 +139,15 @@ const getSimplePositionText = (
     }
 
     if (isPlayerPropsMarket(marketType) || isTotalMarket(marketType) || isSpreadMarket(marketType)) {
-        const isOnlyOverPlayerProps = isOnlyOverPlayerPropsMarket(marketType, odds || []);
-        if (!isOnlyOverPlayerProps && !line) {
+        if (line === -1) {
             return '-';
         }
+
         return extendedText
             ? isSpreadMarket(marketType)
                 ? `${position === 0 ? homeTeam : awayTeam} (${getLineInfo(marketType, position, line)})`
                 : `${position === 0 ? 'Over' : 'Under'} ${getLineInfo(marketType, position, line)}`
-            : isOnlyOverPlayerProps
+            : isOnlyOverPlayerPropsMarket(marketType, odds || [])
             ? `Over ${getLineInfo(marketType, position, line)}`
             : getLineInfo(marketType, position, line);
     }
