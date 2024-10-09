@@ -44,7 +44,8 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isM
     const isGameOpen = !market.isResolved && !market.isCancelled && !market.isPaused && !isGameStarted;
 
     const odd = market.odds[position];
-    const noOdd = !odd || odd == 0 || odd > 0.97;
+    const isZeroOdd = !odd || odd == 0;
+    const noOdd = isZeroOdd || odd > 0.97;
     const disabledPosition = noOdd || (!isGameOpen && !isGameLive);
 
     const showOdd = isGameOpen || isGameLive;
@@ -103,9 +104,12 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isM
             <Text isColumnView={isColumnView}>{positionText}</Text>
             {showOdd ? (
                 <Odd selected={isAddedToTicket} isMainPageView={isMainPageView}>
-                    {formatMarketOdds(selectedOddsType, odd)}
-                    {noOdd && (
+                    {isZeroOdd ? '-' : formatMarketOdds(selectedOddsType, odd)}
+                    {isZeroOdd && (
                         <Tooltip overlay={<>{t('markets.zero-odds-tooltip')}</>} iconFontSize={13} marginLeft={3} />
+                    )}
+                    {odd > 0.97 && (
+                        <Tooltip overlay={<>{t('markets.low-odds-tooltip')}</>} iconFontSize={13} marginLeft={3} />
                     )}
                 </Odd>
             ) : (
