@@ -31,6 +31,7 @@ const useLiveSportsMarketsQuery = (
                         game.childMarkets = game.childMarkets.map((childMarket: any) => {
                             return {
                                 ...childMarket,
+                                live: true, // TODO: remove this property from business logic on UI
                                 maturityDate: new Date(childMarket.maturityDate),
                                 odds: childMarket.odds.map((odd: any) => odd.normalizedImplied),
                             };
@@ -38,6 +39,7 @@ const useLiveSportsMarketsQuery = (
 
                         return {
                             ...game,
+                            live: true, // TODO: remove this property from business logic on UI(we can leave this one for parent, but child markets shouldnt have live flag)
                             maturityDate: new Date(game.maturityDate),
                             odds: game.odds.map((odd: any) => odd.normalizedImplied),
                         };
