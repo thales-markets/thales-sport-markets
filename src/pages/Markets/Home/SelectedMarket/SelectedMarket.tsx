@@ -13,7 +13,7 @@ import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
 import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarket } from 'types/markets';
-import { getMatchLabel, isOddValid } from 'utils/marketsV2';
+import { getMatchLabel } from 'utils/marketsV2';
 import { League } from '../../../../enums/sports';
 import TicketTransactions from '../../Market/MarketDetailsV2/components/TicketTransactions';
 import Header from '../Header';
@@ -31,7 +31,7 @@ const SelectedMarket: React.FC = () => {
         enabled: isAppReady && !!selectedMarket,
     });
 
-    const areOddsValid = lastValidMarket?.odds.some((odd) => isOddValid(odd));
+    const isMarketPaused = lastValidMarket?.isPaused;
 
     useEffect(() => {
         if (marketQuery.isSuccess && marketQuery.data) {
@@ -70,7 +70,7 @@ const SelectedMarket: React.FC = () => {
                 />
             </HeaderContainer>
             {lastValidMarket && !marketQuery.isLoading ? (
-                areOddsValid ? (
+                !isMarketPaused ? (
                     <>
                         <SelectedMarketDetails market={lastValidMarket} />
                         {isMobile && <TicketTransactions market={lastValidMarket} isOnSelectedMarket />}
