@@ -434,9 +434,14 @@
         "staking-modal": {
             "congratulations-label": "Congratulations!",
             "title": "You claimed: {{amount}}",
-            "description": "Stake your THALES to earn yield? You will still be able to use your staked THALES on Overtime.",
+            "description1": "Stake your THALES to earn yield?",
+            "description2": "You will still be able to use your staked THALES on Overtime.",
             "amount-to-stake-label": "Amount to stake",
             "stake-confirmation-message": "THALES successfully staked",
+            "validation": {
+                "unstaking-in-progress": "Unstaking in progress, you cannot stake",
+                "staking-paused": "Staking paused, please try later"
+            },
             "button": {
                 "stake-label": "Stake",
                 "stake-progress-label": "Staking",

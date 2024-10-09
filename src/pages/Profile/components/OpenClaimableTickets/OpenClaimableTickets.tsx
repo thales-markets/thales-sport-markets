@@ -9,15 +9,15 @@ import useMarketDurationQuery from 'queries/markets/useMarketDurationQuery';
 import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
 import React, { useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsConnectedViaParticle, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { Coins } from 'thales-utils';
 import { getCollateral, getCollaterals, getDefaultCollateral, isLpSupported } from 'utils/collaterals';
 import networkConnector from 'utils/networkConnector';
 import { CRYPTO_CURRENCY_MAP } from '../../../../constants/currency';
-import { getIsStakingModalMuted } from '../../../../redux/modules/ui';
+import { getIsStakingModalMuted, setStakingModalMuteEnd } from '../../../../redux/modules/ui';
 import StakingModal from '../StakingModal';
 import TicketDetails from './components/TicketDetails';
 import {
@@ -33,6 +33,8 @@ import {
     EmptySubtitle,
     EmptyTitle,
     ListContainer,
+    StakeArrow,
+    StakingInfo,
     StyledParlayEmptyIcon,
     additionalClaimButtonStyle,
     additionalClaimButtonStyleMobile,
@@ -40,6 +42,7 @@ import {
 
 const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
 
     const [openClaimable, setClaimableState] = useState<boolean>(true);
     const [openOpenPositions, setOpenState] = useState<boolean>(true);
@@ -51,6 +54,7 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
     const networkId = useSelector(getNetworkId);
     const isMobile = useSelector(getIsMobile);
     const isStakingModalMuted = useSelector(getIsStakingModalMuted);
+    const isParticle = useSelector(getIsConnectedViaParticle);
 
     const isSearchTextWalletAddress = searchText && ethers.utils.isAddress(searchText);
     const [claimCollateralIndex, setClaimCollateralIndex] = useState(0);
@@ -167,12 +171,21 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
     };
 
     const onThalesClaim = (amount: number) => {
-        setOpenStakingModal(!isStakingModalMuted && amount > 0);
+        setOpenStakingModal(!isStakingModalMuted && !isParticle && amount > 0);
         setThalesClaimed(amount);
     };
 
     return (
         <Container>
+            <StakingInfo
+                onClick={() => {
+                    setOpenStakingModal(true);
+                    dispatch(setStakingModalMuteEnd(0));
+                }}
+            >
+                Stake THALES to earn yield and still use staked THALES on Overtime
+                <StakeArrow className="icon icon--caret-right" />
+            </StakingInfo>
             <CategoryContainer onClick={() => setClaimableState(!openClaimable)}>
                 <CategoryInfo>
                     <CategoryIcon className="icon icon--claimable-ticket" />
@@ -279,7 +292,7 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
                     )}
                 </ListContainer>
             )}
-            {openStakingModal && !isStakingModalMuted && thalesClaimed > 0 && (
+            {openStakingModal && !isStakingModalMuted && !isParticle && (
                 <StakingModal
                     defaultAmount={thalesClaimed}
                     onClose={() => {

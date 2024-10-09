@@ -18,7 +18,7 @@ export const Title = styled.span`
     color: ${(props) => props.theme.textColor.primary};
     font-size: 27px;
     font-weight: 600;
-    line-height: 32px;
+    line-height: 30px;
     letter-spacing: 0.025em;
     text-align: center;
     margin-top: 5px;
@@ -32,7 +32,7 @@ export const Description = styled.span`
     color: ${(props) => props.theme.textColor.primary};
     font-size: 13px;
     font-weight: 500;
-    line-height: 15.23px;
+    line-height: 15px;
     letter-spacing: 0.025em;
     text-align: center;
     margin-top: 10px;

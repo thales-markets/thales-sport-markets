@@ -22,6 +22,7 @@ import { getCollateralIndex } from 'utils/collaterals';
 import { checkAllowance } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { setStakingModalMuteEnd } from '../../../../redux/modules/ui';
+import { StakingMessage } from '../OpenClaimableTickets/styled-components';
 import {
     ButtonContainer,
     CloseIcon,
@@ -101,6 +102,8 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
         isStakingPaused ||
         !hasStakeAllowance;
 
+    const noClaim = defaultAmount === 0;
+
     useEffect(() => {
         setIsAmountValid(
             Number(amountToStake) === 0 || (Number(amountToStake) > 0 && Number(amountToStake) <= thalesBalance)
@@ -150,11 +153,11 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
                     stakingThalesContract.address,
                     approveAmount
                 )) as ethers.ContractTransaction;
-                setOpenApprovalModal(false);
 
                 const txResult = await tx.wait();
                 if (txResult && txResult.transactionHash) {
                     toast.update(id, getSuccessToastOptions(t('market.toast-message.approve-success')));
+                    setOpenApprovalModal(false);
                     setIsAllowingStake(false);
                 }
             } catch (e) {
@@ -183,7 +186,7 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
                         toastId,
                         getSuccessToastOptions(t('profile.staking-modal.stake-confirmation-message'))
                     );
-                    setAmountToStake('');
+                    setAmountToStake(0);
                     setIsStaking(false);
                 }
             } catch (e) {
@@ -257,18 +260,26 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
         >
             <Container>
                 <CloseIcon className="icon icon--close" onClick={() => onClose()} />
-                <CongratulationsTitle>{t('profile.staking-modal.congratulations-label')}</CongratulationsTitle>
+                {!noClaim && (
+                    <CongratulationsTitle>{t('profile.staking-modal.congratulations-label')}</CongratulationsTitle>
+                )}
                 <Title>
-                    {t('profile.staking-modal.title', {
-                        amount: `${formatCurrencyWithKey(CRYPTO_CURRENCY_MAP.THALES, defaultAmount)}`,
-                    })}
+                    {noClaim
+                        ? t('profile.staking-modal.description1')
+                        : t('profile.staking-modal.title', {
+                              amount: `${formatCurrencyWithKey(CRYPTO_CURRENCY_MAP.THALES, defaultAmount)}`,
+                          })}
                 </Title>
-                <Description>{t('profile.staking-modal.description')}</Description>
+                {
+                    <Description>{`${noClaim ? '' : t('profile.staking-modal.description1')} ${t(
+                        'profile.staking-modal.description2'
+                    )}`}</Description>
+                }
                 <InputContainer>
                     <NumericInput
                         value={amountToStake}
                         onChange={(_, value) => setAmountToStake(value)}
-                        disabled={isAllowingStake}
+                        disabled={isAllowingStake || isStaking || isUnstaking || isStakingPaused}
                         label={t('profile.staking-modal.amount-to-stake-label')}
                         currencyLabel={CRYPTO_CURRENCY_MAP.THALES}
                         showValidation={!isAmountValid}
@@ -283,6 +294,17 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
                         borderColor={theme.input.borderColor.tertiary}
                     />
                 </InputContainer>
+                {(isUnstaking || isStakingPaused) && (
+                    <StakingMessage>
+                        {isUnstaking
+                            ? t('profile.staking-modal.validation.unstaking-in-progress')
+                            : isStakingPaused
+                            ? t('profile.staking-modal.validation.staking-paused')
+                            : t('common.errors.insufficient-balance-wallet', {
+                                  currencyKey: CRYPTO_CURRENCY_MAP.THALES,
+                              })}
+                    </StakingMessage>
+                )}
                 <ButtonContainer>{getSubmitButton()}</ButtonContainer>
                 <Button
                     backgroundColor="#D9D9D91A"
