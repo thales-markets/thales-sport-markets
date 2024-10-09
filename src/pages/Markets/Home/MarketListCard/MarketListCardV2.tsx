@@ -5,6 +5,7 @@ import Tooltip from 'components/Tooltip';
 import { MarketType } from 'enums/marketTypes';
 import { League, PeriodType, Sport } from 'enums/sports';
 import Lottie from 'lottie-react';
+import { getBetTypesForLeague, SpreadTypes, TotalTypes } from 'overtime-live-trading-utils';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -38,6 +39,8 @@ import {
     FireContainer,
     FireText,
     GameOfLabel,
+    liveBlinkStyle,
+    liveBlinkStyleMobile,
     LiveIndicatorContainer,
     MainContainer,
     MarketsCountWrapper,
@@ -52,8 +55,6 @@ import {
     TeamNamesContainer,
     TeamsInfoContainer,
     Wrapper,
-    liveBlinkStyle,
-    liveBlinkStyleMobile,
 } from './styled-components';
 
 type MarketRowCardProps = {
@@ -92,12 +93,24 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                 : childMarket.typeId === MarketType.SPREAD
         );
 
-        return spreadMarkets.length > 0
-            ? spreadMarkets.reduce(function (prev, curr) {
-                  return Math.abs(curr.odds[0] - MEDIUM_ODDS) < Math.abs(prev.odds[0] - MEDIUM_ODDS) ? curr : prev;
-              })
-            : undefined;
-    }, [market.childMarkets]);
+        const mainSpreadMarket =
+            spreadMarkets.length > 0
+                ? spreadMarkets.reduce(function (prev, curr) {
+                      return Math.abs(curr.odds[0] - MEDIUM_ODDS) < Math.abs(prev.odds[0] - MEDIUM_ODDS) ? curr : prev;
+                  })
+                : undefined;
+
+        const betTypesForLeague = getBetTypesForLeague(market.leagueId);
+        if (
+            market.live &&
+            !mainSpreadMarket &&
+            betTypesForLeague.find((betType: SpreadTypes) => Object.values(SpreadTypes).includes(betType))
+        ) {
+            return { ...market, type: 'spread', typeId: MarketType.SPREAD, odds: [0, 0], line: undefined };
+        }
+
+        return mainSpreadMarket;
+    }, [market]);
 
     const totalMarket = useMemo(() => {
         const totalMarkets = market.childMarkets.filter((childMarket) =>
@@ -106,12 +119,24 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                 : childMarket.typeId === MarketType.TOTAL
         );
 
-        return totalMarkets.length > 0
-            ? totalMarkets.reduce(function (prev, curr) {
-                  return Math.abs(curr.odds[0] - MEDIUM_ODDS) < Math.abs(prev.odds[0] - MEDIUM_ODDS) ? curr : prev;
-              })
-            : undefined;
-    }, [market.childMarkets]);
+        const mainTotalMarket =
+            totalMarkets.length > 0
+                ? totalMarkets.reduce(function (prev, curr) {
+                      return Math.abs(curr.odds[0] - MEDIUM_ODDS) < Math.abs(prev.odds[0] - MEDIUM_ODDS) ? curr : prev;
+                  })
+                : undefined;
+
+        const betTypesForLeague = getBetTypesForLeague(market.leagueId);
+        if (
+            market.live &&
+            !mainTotalMarket &&
+            betTypesForLeague.find((betType: TotalTypes) => Object.values(TotalTypes).includes(betType))
+        ) {
+            return { ...market, type: 'total', typeId: MarketType.TOTAL, odds: [0, 0], line: undefined };
+        }
+
+        return mainTotalMarket;
+    }, [market]);
 
     const marketTypeFilterMarket = useMemo(() => {
         if (marketTypeFilter === undefined) return undefined;
