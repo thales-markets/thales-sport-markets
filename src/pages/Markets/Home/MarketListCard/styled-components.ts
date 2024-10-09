@@ -94,12 +94,17 @@ export const TeamsInfoContainer = styled(FlexDivRow)`
     }
 `;
 
-export const TeamLogosContainer = styled(FlexDivRow)<{ isColumnView: boolean; isTwoPositionalMarket: boolean }>`
+export const TeamLogosContainer = styled(FlexDivRow)<{
+    isColumnView: boolean;
+    isTwoPositionalMarket: boolean;
+    isOneSideMarket: boolean;
+}>`
     flex-direction: ${(props) => (props.isColumnView ? 'column' : 'row')};
     align-items: center;
     gap: ${(props) => (props.isColumnView ? (props.isTwoPositionalMarket ? '2px' : '10px') : '0px')};
+    justify-content: space-around;
     @media (min-width: 950px) {
-        height: 100%;
+        height: ${(props) => (!props.isOneSideMarket ? '100%' : 'auto')};
     }
 `;
 
@@ -130,14 +135,14 @@ export const TeamNamesContainer = styled(FlexDivColumn)<{
     }
 `;
 
-export const TeamNameLabel = styled.span<{ isColumnView: boolean; isMarketSelected: boolean }>`
+export const TeamNameLabel = styled.span<{ isColumnView: boolean; isMarketSelected: boolean; isLive: boolean }>`
     font-weight: 600;
     font-size: 12px;
     line-height: ${(props) => (props.isColumnView ? '25px' : '18px')};
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    width: ${(props) => (props.isMarketSelected ? '130px' : '100%')};
+    width: ${(props) => (props.isMarketSelected ? (props.isLive ? '100px' : '130px') : '100%')};
     @media (max-width: 950px) {
         width: fit-content;
         margin-right: 5px;
@@ -290,9 +295,10 @@ export const SecondaryResultsWrapper = styled(FlexDivRow)`
 
 export const PeriodResultContainer = styled(FlexDivColumn)<{
     isColumnView: boolean;
+    selected: boolean;
 }>`
     gap: ${(props) => (props.isColumnView ? '3px' : '0px')};
-    color: ${(props) => props.theme.textColor.quinary};
+    color: ${(props) => (props.selected ? props.theme.textColor.septenary : props.theme.textColor.quinary)};
     flex-grow: 0;
     @media (min-width: 950px) {
         justify-content: space-around;
