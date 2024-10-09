@@ -23,7 +23,7 @@ export const Title = styled.span`
     text-align: center;
     margin-top: 5px;
     @media (max-width: 575px) {
-        font-size: 20px;
+        font-size: 18px;
         margin-top: 0px;
     }
 `;
@@ -32,7 +32,7 @@ export const Description = styled.span`
     color: ${(props) => props.theme.textColor.primary};
     font-size: 13px;
     font-weight: 500;
-    line-height: 15px;
+    line-height: 13px;
     letter-spacing: 0.025em;
     text-align: center;
     margin-top: 10px;
@@ -102,3 +102,10 @@ export const defaultButtonProps = {
     width: '300px',
     margin: '10px 0 0 0',
 };
+
+export const StakingPageLink = styled.a`
+    color: ${(props) => props.theme.link.textColor.primary};
+    &:hover {
+        text-decoration: underline;
+    }
+`;

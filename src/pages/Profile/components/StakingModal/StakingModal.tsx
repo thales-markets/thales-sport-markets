@@ -8,7 +8,7 @@ import { BigNumber, ethers } from 'ethers';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import useUserStakingDataQuery from 'queries/wallet/useUserStakingData';
 import React, { useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -21,6 +21,7 @@ import { ThemeInterface } from 'types/ui';
 import { getCollateralIndex } from 'utils/collaterals';
 import { checkAllowance } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
+import { STAKING_MODAL_MUTE_PERIOD_IN_MS } from '../../../../constants/ui';
 import { setStakingModalMuteEnd } from '../../../../redux/modules/ui';
 import { StakingMessage } from '../OpenClaimableTickets/styled-components';
 import {
@@ -32,6 +33,7 @@ import {
     defaultCustomStyles,
     Description,
     InputContainer,
+    StakingPageLink,
     Title,
 } from './styled-components';
 
@@ -59,6 +61,7 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
     const [hasStakeAllowance, setStakeAllowance] = useState<boolean>(false);
     const [openApprovalModal, setOpenApprovalModal] = useState<boolean>(false);
     const [lastValidStakingData, setLastValidStakingData] = useState<StakingData | undefined>(undefined);
+    const [stakedAmount, setStakedAmount] = useState<number>(0);
 
     const multipleCollateralBalancesQuery = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
@@ -103,6 +106,7 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
         !hasStakeAllowance;
 
     const noClaim = defaultAmount === 0;
+    const isStaked = stakedAmount > 0;
 
     useEffect(() => {
         setIsAmountValid(
@@ -186,6 +190,7 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
                         toastId,
                         getSuccessToastOptions(t('profile.staking-modal.stake-confirmation-message'))
                     );
+                    setStakedAmount(Number(amountToStake));
                     setAmountToStake(0);
                     setIsStaking(false);
                 }
@@ -260,21 +265,40 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
         >
             <Container>
                 <CloseIcon className="icon icon--close" onClick={() => onClose()} />
-                {!noClaim && (
+                {(!noClaim || isStaked) && (
                     <CongratulationsTitle>{t('profile.staking-modal.congratulations-label')}</CongratulationsTitle>
                 )}
                 <Title>
-                    {noClaim
-                        ? t('profile.staking-modal.description1')
-                        : t('profile.staking-modal.title', {
+                    {isStaked
+                        ? t('profile.staking-modal.staked', {
+                              amount: `${formatCurrencyWithKey(CRYPTO_CURRENCY_MAP.THALES, stakedAmount)}`,
+                          })
+                        : noClaim
+                        ? t('profile.staking-modal.earn-yield')
+                        : t('profile.staking-modal.claimed', {
                               amount: `${formatCurrencyWithKey(CRYPTO_CURRENCY_MAP.THALES, defaultAmount)}`,
                           })}
                 </Title>
-                {
-                    <Description>{`${noClaim ? '' : t('profile.staking-modal.description1')} ${t(
-                        'profile.staking-modal.description2'
+                {!isStaked && (
+                    <Description>{`${noClaim ? '' : t('profile.staking-modal.earn-yield')} ${t(
+                        'profile.staking-modal.thales-on-overtime'
                     )}`}</Description>
-                }
+                )}
+                <Description>
+                    <Trans
+                        i18nKey={'profile.staking-modal.weekly-rewards'}
+                        components={{
+                            stakingPageLink: (
+                                <StakingPageLink
+                                    href={'https://www.thales.io/token/staking'}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                />
+                            ),
+                        }}
+                    />
+                </Description>
+                {isStaked && <Description>{t('profile.staking-modal.stake-more')}</Description>}
                 <InputContainer>
                     <NumericInput
                         value={amountToStake}
@@ -307,13 +331,13 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
                 )}
                 <ButtonContainer>{getSubmitButton()}</ButtonContainer>
                 <Button
-                    backgroundColor="#D9D9D91A"
-                    textColor="#5F6180"
-                    borderColor="#5F6180"
+                    backgroundColor={theme.button.background.octonary}
+                    textColor={theme.button.textColor.senary}
+                    borderColor={theme.button.borderColor.senary}
                     fontSize="13px"
-                    fontWeight="500"
+                    fontWeight="600"
                     onClick={() => {
-                        dispatch(setStakingModalMuteEnd(new Date().getTime() + 7 * 24 * 60 * 60 * 1000));
+                        dispatch(setStakingModalMuteEnd(new Date().getTime() + STAKING_MODAL_MUTE_PERIOD_IN_MS));
                         onClose();
                     }}
                 >
@@ -322,7 +346,6 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
             </Container>
             {openApprovalModal && (
                 <ApprovalModal
-                    // ADDING 1% TO ENSURE TRANSACTIONS PASSES DUE TO CALCULATION DEVIATIONS
                     defaultAmount={Number(amountToStake)}
                     collateralIndex={getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.THALES as Coins)}
                     tokenSymbol={CRYPTO_CURRENCY_MAP.THALES}

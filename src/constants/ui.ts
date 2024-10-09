@@ -2,8 +2,8 @@ import { Network } from 'enums/network';
 import { Theme } from 'enums/ui';
 import darkTheme from 'styles/themes/dark';
 import { NavMenuItem, ThemeInterface } from 'types/ui';
-import ROUTES from './routes';
 import { LINKS } from './links';
+import ROUTES from './routes';
 
 export const ThemeMap: Record<Theme, ThemeInterface> = {
     [Theme.DARK]: darkTheme,
@@ -93,3 +93,6 @@ export const PROMOTION_SANITIZE_PROPS = {
     ],
     ALLOWED_ATTR: ['href', 'target', 'style', 'src', 'alt'],
 };
+
+export const STAKING_MODAL_MUTE_PERIOD_IN_DAYS = 7;
+export const STAKING_MODAL_MUTE_PERIOD_IN_MS = STAKING_MODAL_MUTE_PERIOD_IN_DAYS * 24 * 60 * 60 * 1000;

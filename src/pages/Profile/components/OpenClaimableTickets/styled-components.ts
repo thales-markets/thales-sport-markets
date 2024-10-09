@@ -93,6 +93,7 @@ export const StakingInfo = styled.div`
     cursor: pointer;
     @media (max-width: 767px) {
         font-size: 11px;
+        margin-top: 0px;
     }
 `;
 

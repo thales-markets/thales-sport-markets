@@ -47,6 +47,7 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
     const [openClaimable, setClaimableState] = useState<boolean>(true);
     const [openOpenPositions, setOpenState] = useState<boolean>(true);
     const [openStakingModal, setOpenStakingModal] = useState<boolean>(false);
+    const [forceOpenStakingModal, setForceOpenStakingModal] = useState<boolean>(false);
     const [thalesClaimed, setThalesClaimed] = useState<number>(0);
 
     const walletAddress = useSelector(getWalletAddress) || '';
@@ -177,15 +178,17 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
 
     return (
         <Container>
-            <StakingInfo
-                onClick={() => {
-                    setOpenStakingModal(true);
-                    dispatch(setStakingModalMuteEnd(0));
-                }}
-            >
-                Stake THALES to earn yield and still use staked THALES on Overtime
-                <StakeArrow className="icon icon--caret-right" />
-            </StakingInfo>
+            {!isParticle && (
+                <StakingInfo
+                    onClick={() => {
+                        setForceOpenStakingModal(true);
+                        dispatch(setStakingModalMuteEnd(0));
+                    }}
+                >
+                    {t('profile.staking-modal.staking-message')}
+                    <StakeArrow className="icon icon--caret-right" />
+                </StakingInfo>
+            )}
             <CategoryContainer onClick={() => setClaimableState(!openClaimable)}>
                 <CategoryInfo>
                     <CategoryIcon className="icon icon--claimable-ticket" />
@@ -292,10 +295,11 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
                     )}
                 </ListContainer>
             )}
-            {openStakingModal && !isStakingModalMuted && !isParticle && (
+            {((openStakingModal && thalesClaimed > 0) || forceOpenStakingModal) && !isStakingModalMuted && !isParticle && (
                 <StakingModal
                     defaultAmount={thalesClaimed}
                     onClose={() => {
+                        setForceOpenStakingModal(false);
                         setOpenStakingModal(false);
                         setThalesClaimed(0);
                     }}

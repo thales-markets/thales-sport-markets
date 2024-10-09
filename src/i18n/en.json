@@ -432,10 +432,14 @@
             "total-amount-batch": "Total amount will be {{ amount }} multiple by {{ count }} wallet address(es)."
         },
         "staking-modal": {
+            "staking-message": "Stake THALES to earn yield and still use staked THALES on Overtime",
             "congratulations-label": "Congratulations!",
-            "title": "You claimed: {{amount}}",
-            "description1": "Stake your THALES to earn yield?",
-            "description2": "You will still be able to use your staked THALES on Overtime.",
+            "claimed": "You claimed: {{amount}}",
+            "staked": "You staked: {{amount}}",
+            "earn-yield": "Stake your THALES to earn yield?",
+            "thales-on-overtime": "You will still be able to use your staked THALES on Overtime.",
+            "weekly-rewards": "Claim your weekly rewards on <stakingPageLink>thales.io staking page</stakingPageLink>.",
+            "stake-more": "Stake more to earn more yield every week.",
             "amount-to-stake-label": "Amount to stake",
             "stake-confirmation-message": "THALES successfully staked",
             "validation": {
