@@ -4,7 +4,7 @@ import SimpleLoader from 'components/SimpleLoader';
 import { t } from 'i18next';
 import { Message } from 'pages/Markets/Market/MarketDetailsV2/components/PositionsV2/styled-components';
 import useSportMarketV2Query from 'queries/markets/useSportMarketV2Query';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getSelectedMarket, setSelectedMarket } from 'redux/modules/market';
@@ -32,6 +32,21 @@ const SelectedMarket: React.FC = () => {
     });
 
     const areOddsValid = lastValidMarket?.odds.some((odd) => isOddValid(odd));
+
+    // TODO: remove, rely on market.paused from api response once implemented
+    const marketPaused = useMemo(() => {
+        // when market odds are stale API sets odds to []
+        if (!lastValidMarket?.odds.length) {
+            return true;
+        }
+        if (areOddsValid) {
+            return false;
+        }
+        if (lastValidMarket?.childMarkets.some((child) => child.odds.some((odd) => isOddValid(odd)))) {
+            return false;
+        }
+        return true;
+    }, [lastValidMarket, areOddsValid]);
 
     useEffect(() => {
         if (marketQuery.isSuccess && marketQuery.data) {
@@ -70,7 +85,7 @@ const SelectedMarket: React.FC = () => {
                 />
             </HeaderContainer>
             {lastValidMarket && !marketQuery.isLoading ? (
-                areOddsValid ? (
+                !marketPaused ? (
                     <>
                         <SelectedMarketDetails market={lastValidMarket} />
                         {isMobile && <TicketTransactions market={lastValidMarket} isOnSelectedMarket />}
