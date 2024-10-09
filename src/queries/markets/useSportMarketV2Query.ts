@@ -55,6 +55,7 @@ const useSportMarketQuery = (
                             .map((childMarket: any) => {
                                 return {
                                     ...childMarket,
+                                    live: isLive,
                                     maturityDate: new Date(childMarket.maturityDate),
                                     odds: childMarket.odds.map((odd: any) => odd.normalizedImplied),
                                 };
