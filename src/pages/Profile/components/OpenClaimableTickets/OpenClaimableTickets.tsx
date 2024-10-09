@@ -2,6 +2,7 @@ import Button from 'components/Button';
 import SimpleLoader from 'components/SimpleLoader';
 import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { GAS_ESTIMATION_BUFFER } from 'constants/network';
 import { ethers } from 'ethers';
 import { LoaderContainer } from 'pages/Markets/Home/HomeV2';
@@ -12,12 +13,11 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
+import { getIsStakingModalMuted, setStakingModalMuteEnd } from 'redux/modules/ui';
 import { getIsConnectedViaParticle, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { Coins } from 'thales-utils';
 import { getCollateral, getCollaterals, getDefaultCollateral, isLpSupported } from 'utils/collaterals';
 import networkConnector from 'utils/networkConnector';
-import { CRYPTO_CURRENCY_MAP } from '../../../../constants/currency';
-import { getIsStakingModalMuted, setStakingModalMuteEnd } from '../../../../redux/modules/ui';
 import StakingModal from '../StakingModal';
 import TicketDetails from './components/TicketDetails';
 import {
@@ -141,7 +141,11 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
                                 });
                             }
                             thalesForClaim +=
-                                ticket.collateral === (CRYPTO_CURRENCY_MAP.THALES as Coins) ? ticket.payout : 0;
+                                ticket.collateral === (CRYPTO_CURRENCY_MAP.THALES as Coins)
+                                    ? ticket.isFreeBet
+                                        ? ticket.payout - ticket.buyInAmount
+                                        : ticket.payout
+                                    : 0;
                         } catch (e) {
                             console.log('Error ', e);
                             return;

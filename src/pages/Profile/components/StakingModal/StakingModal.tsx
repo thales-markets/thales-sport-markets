@@ -4,6 +4,7 @@ import Button from 'components/Button';
 import NumericInput from 'components/fields/NumericInput';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
+import { STAKING_MODAL_MUTE_PERIOD_IN_MS } from 'constants/ui';
 import { BigNumber, ethers } from 'ethers';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import useUserStakingDataQuery from 'queries/wallet/useUserStakingData';
@@ -13,6 +14,7 @@ import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
+import { setStakingModalMuteEnd } from 'redux/modules/ui';
 import { getIsConnectedViaParticle, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
 import { Coins, formatCurrencyWithKey, truncToDecimals } from 'thales-utils';
@@ -21,8 +23,6 @@ import { ThemeInterface } from 'types/ui';
 import { getCollateralIndex } from 'utils/collaterals';
 import { checkAllowance } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
-import { STAKING_MODAL_MUTE_PERIOD_IN_MS } from '../../../../constants/ui';
-import { setStakingModalMuteEnd } from '../../../../redux/modules/ui';
 import { StakingMessage } from '../OpenClaimableTickets/styled-components';
 import {
     ButtonContainer,

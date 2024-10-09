@@ -4,6 +4,7 @@ import ShareTicketModalV2 from 'components/ShareTicketModalV2';
 import { ShareTicketModalProps } from 'components/ShareTicketModalV2/ShareTicketModalV2';
 import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { ZERO_ADDRESS } from 'constants/network';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -27,7 +28,6 @@ import { getIsMultiCollateralSupported } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { refetchAfterClaim } from 'utils/queryConnector';
 import { formatTicketOdds, getTicketMarketOdd } from 'utils/tickets';
-import { CRYPTO_CURRENCY_MAP } from '../../../../../../constants/currency';
 import TicketMarketDetails from '../TicketMarketDetails';
 import {
     ArrowIcon,
@@ -158,7 +158,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
                         setShowShareTicketModal(true);
                     }
                     if (ticket.collateral === (CRYPTO_CURRENCY_MAP.THALES as Coins)) {
-                        onThalesClaim(ticket.payout);
+                        onThalesClaim(ticket.isFreeBet ? ticket.payout - ticket.buyInAmount : ticket.payout);
                     }
                 }
             } catch (e) {
