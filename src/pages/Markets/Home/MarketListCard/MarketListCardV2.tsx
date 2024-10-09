@@ -83,6 +83,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const isGameOpen = market.isOpen && !isGameStarted;
     const isGameRegularlyResolved = market.isResolved && !market.isCancelled;
     const isGameLive = !!market.live;
+    const isMarketPaused = market.isPaused;
 
     const spreadMarket = useMemo(() => {
         const spreadMarkets = market.childMarkets.filter((childMarket) =>
@@ -164,21 +165,6 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
             gameMultipliersQuery.isSuccess && gameMultipliersQuery.data ? gameMultipliersQuery.data : [];
         return gameMultipliers.find((multiplier) => multiplier.gameId === market.gameId);
     }, [gameMultipliersQuery.data, gameMultipliersQuery.isSuccess, market.gameId]);
-
-    // TODO: remove, rely on market.paused from api response once implemented
-    const marketPaused = useMemo(() => {
-        // when market odds are stale API sets odds to []
-        if (!market.odds.length) {
-            return true;
-        }
-        if (areOddsValid) {
-            return false;
-        }
-        if (market.childMarkets.some((child) => child.odds.some((odd) => isOddValid(odd)))) {
-            return false;
-        }
-        return true;
-    }, [market, areOddsValid]);
 
     const getMainContainerContent = () => (
         <MainContainer isBoosted={!!overdropGameMultiplier} isGameOpen={isGameOpen || isGameLive}>
@@ -355,7 +341,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
             </MatchInfoContainer>
             {!isMarketSelected && (
                 <>
-                    {isGameLive && !marketPaused ? (
+                    {isGameLive && !isMarketPaused ? (
                         <>
                             <PositionsV2
                                 markets={[marketTypeFilterMarket ? marketTypeFilterMarket : market]}
