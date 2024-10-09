@@ -8,7 +8,7 @@ import { getIsMobile } from 'redux/modules/app';
 import styled from 'styled-components';
 import { SportMarket } from 'types/markets';
 import { getMarketTypeTooltipKey } from 'utils/markets';
-import { getSubtitleText, getTitleText, isOddValid } from 'utils/marketsV2';
+import { getSubtitleText, getTitleText } from 'utils/marketsV2';
 import { League } from '../../../../../../enums/sports';
 import { getGridMinMaxPercentage } from '../../../../../../utils/ui';
 import PositionDetailsV2 from '../PositionDetailsV2';
@@ -50,9 +50,9 @@ const Positions: React.FC<PositionsProps> = ({
     const isMobile = useSelector(getIsMobile);
     const [isExpanded, setIsExpanded] = useState<boolean>(true);
 
-    const areOddsValid = markets.some((market) => market.odds.some((odd) => isOddValid(odd)));
+    const hasOdds = markets.some((market) => market.odds.length);
 
-    const showContainer = !isGameOpen || areOddsValid || showInvalid;
+    const showContainer = !isGameOpen || hasOdds || showInvalid;
 
     const sortedMarkets = useMemo(() => orderBy(markets, ['line', 'odds'], ['asc', 'desc']), [markets]);
 

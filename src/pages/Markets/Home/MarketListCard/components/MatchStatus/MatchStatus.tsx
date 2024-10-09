@@ -1,7 +1,8 @@
+import Tooltip from 'components/Tooltip';
 import { GameStatusKey } from 'constants/markets';
 import { GameStatus } from 'enums/markets';
 import { League, Sport } from 'enums/sports';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
@@ -9,7 +10,7 @@ import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { SportMarket, SportMarketScore } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
-import { showGameScore, showLiveInfo } from 'utils/marketsV2';
+import { isOddValid, showGameScore, showLiveInfo } from 'utils/marketsV2';
 import { getLeaguePeriodType, getLeagueSport } from 'utils/sports';
 import { getOrdinalNumberLabel } from 'utils/ui';
 
@@ -28,6 +29,33 @@ const MatchStatus: React.FC<MatchStatusProps> = ({ market }) => {
     const liveScore = market.liveScore;
 
     const leagueSport = getLeagueSport(market.leagueId);
+
+    const areOddsValid = market.odds.some((odd) => isOddValid(odd));
+
+    // TODO: rely on market.paused from api response once implemented
+    const marketPaused = useMemo(() => {
+        // when market odds are stale API sets odds to []
+        if (!market.odds.length) {
+            return true;
+        }
+        if (areOddsValid) {
+            return false;
+        }
+        if (market.childMarkets.some((child) => child.odds.some((odd) => isOddValid(odd)))) {
+            return false;
+        }
+        return true;
+    }, [market, areOddsValid]);
+
+    const liveMarketFirstErrorMessage = useMemo(
+        () =>
+            market.live && market.errors && market.errors.length > 0
+                ? // TODO: if we want to remove teams add .replace(` ${market.homeTeam} - ${market.awayTeam}`, '');
+                  market.errors[0].errorMessage
+                : '',
+
+        [market]
+    );
 
     const getScoreComponent = (scoreData: SportMarket | SportMarketScore) =>
         showGameScore(scoreData.gameStatus) || !scoreData.gameStatus ? (
@@ -89,7 +117,14 @@ const MatchStatus: React.FC<MatchStatusProps> = ({ market }) => {
             market.isResolved || market.isGameFinished ? (
                 <>{getScoreComponent(market)}</>
             ) : isPendingResolution ? (
-                liveScore ? (
+                marketPaused ? (
+                    <Status color={theme.status.paused}>
+                        {t(`markets.market-card.live-trading-paused`)}
+                        {liveMarketFirstErrorMessage && (
+                            <Tooltip overlay={liveMarketFirstErrorMessage} marginLeft={5} top={0} />
+                        )}
+                    </Status>
+                ) : liveScore ? (
                     <>
                         {showLiveInfo(liveScore.gameStatus, liveScore.period) && (
                             <MatchScoreContainer>
