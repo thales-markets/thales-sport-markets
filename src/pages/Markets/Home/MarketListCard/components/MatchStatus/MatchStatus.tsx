@@ -26,7 +26,7 @@ const MatchStatus: React.FC<MatchStatusProps> = ({ market }) => {
     const isGameStarted = market.maturityDate < new Date();
     const isGameResolved = market.isResolved || market.isCancelled;
     const isPendingResolution = isGameStarted && !isGameResolved;
-    const isMarketPaused = market.isPaused;
+    const isGamePaused = market.isPaused;
     const liveScore = market.liveScore;
 
     const leagueSport = getLeagueSport(market.leagueId);
@@ -97,7 +97,7 @@ const MatchStatus: React.FC<MatchStatusProps> = ({ market }) => {
             market.isResolved || market.isGameFinished ? (
                 <>{getScoreComponent(market)}</>
             ) : isPendingResolution ? (
-                isMarketPaused ? (
+                isGamePaused ? (
                     <Status color={theme.status.paused}>
                         {t(`markets.market-card.live-trading-paused`)}
                         {liveMarketErrorMessage && <Tooltip overlay={liveMarketErrorMessage} marginLeft={5} top={0} />}

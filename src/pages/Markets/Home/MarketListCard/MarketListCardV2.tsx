@@ -84,7 +84,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const isGameOpen = market.isOpen && !isGameStarted;
     const isGameRegularlyResolved = market.isResolved && !market.isCancelled;
     const isGameLive = !!market.live;
-    const isMarketPaused = market.isPaused;
+    const isGamePaused = market.isPaused;
 
     const spreadMarket = useMemo(() => {
         const spreadMarkets = market.childMarkets.filter((childMarket) =>
@@ -366,7 +366,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
             </MatchInfoContainer>
             {!isMarketSelected && (
                 <>
-                    {isGameLive && !isMarketPaused ? (
+                    {isGameLive && !isGamePaused ? (
                         <>
                             <PositionsV2
                                 markets={[marketTypeFilterMarket ? marketTypeFilterMarket : market]}
