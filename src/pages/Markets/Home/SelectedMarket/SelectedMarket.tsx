@@ -4,7 +4,7 @@ import SimpleLoader from 'components/SimpleLoader';
 import { t } from 'i18next';
 import { Message } from 'pages/Markets/Market/MarketDetailsV2/components/PositionsV2/styled-components';
 import useSportMarketV2Query from 'queries/markets/useSportMarketV2Query';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getSelectedMarket, setSelectedMarket } from 'redux/modules/market';
@@ -13,7 +13,7 @@ import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
 import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarket } from 'types/markets';
-import { getMatchLabel, isOddValid } from 'utils/marketsV2';
+import { getMatchLabel } from 'utils/marketsV2';
 import { League } from '../../../../enums/sports';
 import TicketTransactions from '../../Market/MarketDetailsV2/components/TicketTransactions';
 import Header from '../Header';
@@ -31,22 +31,7 @@ const SelectedMarket: React.FC = () => {
         enabled: isAppReady && !!selectedMarket,
     });
 
-    const areOddsValid = lastValidMarket?.odds.some((odd) => isOddValid(odd));
-
-    // TODO: remove, rely on market.paused from api response once implemented
-    const marketPaused = useMemo(() => {
-        // when market odds are stale API sets odds to []
-        if (!lastValidMarket?.odds.length) {
-            return true;
-        }
-        if (areOddsValid) {
-            return false;
-        }
-        if (lastValidMarket?.childMarkets.some((child) => child.odds.some((odd) => isOddValid(odd)))) {
-            return false;
-        }
-        return true;
-    }, [lastValidMarket, areOddsValid]);
+    const isMarketPaused = lastValidMarket?.isPaused;
 
     useEffect(() => {
         if (marketQuery.isSuccess && marketQuery.data) {
@@ -85,7 +70,7 @@ const SelectedMarket: React.FC = () => {
                 />
             </HeaderContainer>
             {lastValidMarket && !marketQuery.isLoading ? (
-                !marketPaused ? (
+                !isMarketPaused ? (
                     <>
                         <SelectedMarketDetails market={lastValidMarket} />
                         {isMobile && <TicketTransactions market={lastValidMarket} isOnSelectedMarket />}
