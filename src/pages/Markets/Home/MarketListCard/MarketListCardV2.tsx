@@ -106,7 +106,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
             !mainSpreadMarket &&
             betTypesForLeague.find((betType: SpreadTypes) => Object.values(SpreadTypes).includes(betType))
         ) {
-            return { ...market, type: 'spread', typeId: MarketType.SPREAD, odds: [0, 0], line: undefined };
+            return { ...market, type: 'spread', typeId: MarketType.SPREAD, odds: [0, 0], line: Infinity };
         }
 
         return mainSpreadMarket;
@@ -132,7 +132,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
             !mainTotalMarket &&
             betTypesForLeague.find((betType: TotalTypes) => Object.values(TotalTypes).includes(betType))
         ) {
-            return { ...market, type: 'total', typeId: MarketType.TOTAL, odds: [0, 0], line: undefined };
+            return { ...market, type: 'total', typeId: MarketType.TOTAL, odds: [0, 0], line: Infinity };
         }
 
         return mainTotalMarket;
