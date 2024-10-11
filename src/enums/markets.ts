@@ -13,6 +13,7 @@ export enum SortDirection {
 }
 
 export enum SportFilter {
+    Boosted = 'Promo',
     Live = 'Live',
     Favourites = 'Favourites',
     All = 'All',
@@ -23,12 +24,14 @@ export enum SportFilter {
     Hockey = 'Hockey',
     Fighting = 'Fighting',
     Tennis = 'Tennis',
+    TableTennis = 'TableTennis',
     eSports = 'eSports',
     Rugby = 'Rugby',
     Volleyball = 'Volleyball',
     Handball = 'Handball',
     Waterpolo = 'Waterpolo',
     Cricket = 'Cricket',
+    Politics = 'Politics',
     // Motosport = 'Motosport',
     // Golf = 'Golf',
 }

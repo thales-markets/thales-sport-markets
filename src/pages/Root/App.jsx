@@ -8,7 +8,6 @@ import { ethers } from 'ethers';
 import DappLayout from 'layouts/DappLayout';
 import Theme from 'layouts/Theme';
 import Profile from 'pages/Profile';
-import Referral from 'pages/Referral';
 import { Suspense, lazy, useEffect } from 'react';
 import { QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
@@ -31,17 +30,16 @@ import { buildHref, history } from 'utils/routes';
 import { mainnet, useAccount, useDisconnect, useNetwork, useProvider, useSigner } from 'wagmi';
 import RouterProvider from './Provider/RouterProvider/RouterProvider';
 
-// const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));
 const Market = lazy(() => import('pages/Markets/Market'));
 const Ticket = lazy(() => import('pages/Ticket'));
-const ParlayLeaderboard = lazy(() => import('pages/ParlayLeaderboard'));
 const LiquidityPool = lazy(() => import('pages/LiquidityPool'));
 const Deposit = lazy(() => import('pages/AARelatedPages/Deposit'));
 const Withdraw = lazy(() => import('pages/AARelatedPages/Withdraw'));
 const GetStarted = lazy(() => import('pages/AARelatedPages/GetStarted'));
 const Promotions = lazy(() => import('pages/Promotions/Home'));
 const Promotion = lazy(() => import('pages/Promotions/Promotion'));
+const Overdrop = lazy(() => import('pages/Overdrop'));
 
 const particle = new ParticleNetwork({
     projectId: import.meta.env.VITE_APP_PARTICLE_PROJECT_ID,
@@ -66,7 +64,6 @@ const App = () => {
     const dispatch = useDispatch();
     const networkId = useSelector((state) => getNetworkId(state));
     const switchedToNetworkId = useSelector((state) => getSwitchToNetworkId(state));
-    // const isConnectedViaParticle = useSelector((state) => getIsConnectedViaParticle(state));
 
     const { address } = useAccount();
     const provider = useProvider(!address && { chainId: switchedToNetworkId }); // when wallet not connected force chain
@@ -189,13 +186,6 @@ const App = () => {
                                         <Markets />
                                     </DappLayout>
                                 </Route>
-                                {isRouteAvailableForNetwork(ROUTES.Leaderboard, networkId) && (
-                                    <Route exact path={ROUTES.Leaderboard}>
-                                        <DappLayout>
-                                            <ParlayLeaderboard />
-                                        </DappLayout>
-                                    </Route>
-                                )}
                                 {isRouteAvailableForNetwork(ROUTES.Profile, networkId) && (
                                     <Route exact path={ROUTES.Profile}>
                                         <DappLayout>
@@ -203,13 +193,13 @@ const App = () => {
                                         </DappLayout>
                                     </Route>
                                 )}
-                                {isRouteAvailableForNetwork(ROUTES.Referral, networkId) && (
-                                    <Route exact path={ROUTES.Referral}>
+                                {
+                                    <Route exact path={ROUTES.Overdrop}>
                                         <DappLayout>
-                                            <Referral />
+                                            <Overdrop />
                                         </DappLayout>
                                     </Route>
-                                )}
+                                }
 
                                 <Route exact path={ROUTES.Deposit}>
                                     <DappLayout>
@@ -226,8 +216,6 @@ const App = () => {
                                 <Route exact path={ROUTES.Wizard}>
                                     <DappLayout>
                                         <GetStarted />
-                                        {/* {isConnectedViaParticle && <GetStarted />}
-                                        {!isConnectedViaParticle && <Wizard />} */}
                                     </DappLayout>
                                 </Route>
                                 {isRouteAvailableForNetwork(ROUTES.LiquidityPool, networkId) && (

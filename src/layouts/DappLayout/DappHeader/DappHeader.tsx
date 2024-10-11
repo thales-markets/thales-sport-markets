@@ -6,10 +6,11 @@ import NetworkSwitcher from 'components/NetworkSwitcher';
 import SPAAnchor from 'components/SPAAnchor';
 import Search from 'components/Search';
 import WalletInfo from 'components/WalletInfo';
+import { OVERDROP_LEVELS } from 'constants/overdrop';
 import ROUTES from 'constants/routes';
 import useInterval from 'hooks/useInterval';
 import useClaimablePositionCountV2Query from 'queries/markets/useClaimablePositionCountV2Query';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import OutsideClickHandler from 'react-outside-click-handler';
@@ -17,7 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { getIsMobile } from 'redux/modules/app';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
-import { getStopPulsing, setOddsType, setStopPulsing } from 'redux/modules/ui';
+import { getOverdropUIState, getStopPulsing, setOddsType, setStopPulsing } from 'redux/modules/ui';
 import {
     getIsConnectedViaParticle,
     getIsWalletConnected,
@@ -27,7 +28,7 @@ import {
 } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivEnd } from 'styles/common';
-import { ThemeInterface } from 'types/ui';
+import { OverdropLevel, ThemeInterface } from 'types/ui';
 import { buildHref } from 'utils/routes';
 import { ODDS_TYPES } from '../../../constants/markets';
 import { OddsType } from '../../../enums/markets';
@@ -51,11 +52,14 @@ import {
     MiddleContainer,
     MobileButtonWrapper,
     NotificationCount,
+    OverdropButtonContainer,
+    OverdropIcon,
     RightContainer,
     SearchContainer,
     SearchIcon,
     SearchIconContainer,
     SettingsContainer,
+    SmallBadgeImage,
     WrapperMobile,
 } from './styled-components';
 
@@ -64,11 +68,9 @@ const PULSING_COUNT = 10;
 const customModalStyles = {
     content: {
         top: '85px',
-        left: '50%',
+        left: '0',
         right: 'auto',
         bottom: 'auto',
-        marginRight: '-48%',
-        transform: 'translate(-50%, -50%)',
         padding: '0px',
         background: 'transparent',
         border: 'none',
@@ -77,6 +79,9 @@ const customModalStyles = {
     },
     overlay: {
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        backdropFilter: 'unset',
+        WebkitBackdropFilter: 'unset',
+        webkitBackdropFilter: 'unset',
         zIndex: '5',
     },
 };
@@ -95,10 +100,12 @@ const DappHeader: React.FC = () => {
     const marketSearch = useSelector(getMarketSearch);
     const stopPulsing = useSelector(getStopPulsing);
     const isMobile = useSelector(getIsMobile);
+    const overdropUIState = useSelector(getOverdropUIState);
 
+    const [levelItem, setLevelItem] = useState<OverdropLevel>(OVERDROP_LEVELS[0]);
     const [currentPulsingCount, setCurrentPulsingCount] = useState<number>(0);
     const [navMenuVisibility, setNavMenuVisibility] = useState<boolean | null>(null);
-    const [showSearcHModal, setShowSearchModal] = useState<boolean>(false);
+    const [showSearchModal, setShowSearchModal] = useState<boolean>(false);
     const [dropdownIsOpen, setDropdownIsOpen] = useState<boolean>(false);
 
     const isMarketsPage = location.pathname === ROUTES.Home || location.pathname === ROUTES.Markets.Home;
@@ -127,6 +134,17 @@ const DappHeader: React.FC = () => {
             }
         }
     }, 1000);
+
+    useEffect(() => {
+        const overdropStateItem = overdropUIState.find(
+            (item) => item.walletAddress?.toLowerCase() == walletAddress.toLowerCase()
+        );
+
+        const currentLevelItem = overdropStateItem
+            ? OVERDROP_LEVELS.find((item) => item.level == overdropStateItem?.currentLevel)
+            : OVERDROP_LEVELS[0];
+        if (currentLevelItem) setLevelItem(currentLevelItem);
+    }, [dispatch, walletAddress, overdropUIState]);
 
     const menuImageRef = useRef<HTMLImageElement>(null);
 
@@ -161,22 +179,21 @@ const DappHeader: React.FC = () => {
                     </LeftContainer>
 
                     <MiddleContainer>
-                        {/* <SPAAnchor href={buildHref(ROUTES.Referral)}>
-                            <ReferAndEarn>{t('common.referral.header-label')}</ReferAndEarn>
-                        </SPAAnchor> */}
-                        {/* {isWalletConnected && isMarketsPage && (
-                            <SPAAnchor href={buildHref(ROUTES.Wizard)}>
-                                <HeaderIcon className="icon icon--tour" />
-                                <HeaderLabel>{t('get-started.start-tour')}</HeaderLabel>
-                            </SPAAnchor>
-                        )} */}
                         <div>
-                            {location.pathname !== ROUTES.Wizard &&
-                                (isConnectedViaParticle || !isWalletConnected) &&
-                                getGetStartedButton()}
+                            {!isWalletConnected ? getGetStartedButton() : isConnectedViaParticle ? <TopUp /> : <></>}
                         </div>
                         {isMarketsPage && <TimeFilters />}
                         <FlexDiv>
+                            <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
+                                {levelItem.level > 0 ? (
+                                    <OverdropButtonContainer>
+                                        <SmallBadgeImage src={levelItem.smallBadge} />
+                                        {`LVL ${levelItem.level} ${levelItem.levelName}`}
+                                    </OverdropButtonContainer>
+                                ) : (
+                                    <OverdropIcon />
+                                )}
+                            </SPAAnchor>
                             {isWalletConnected && <ProfileItem />}
                             <SettingsContainer
                                 onClick={() => {
@@ -207,7 +224,6 @@ const DappHeader: React.FC = () => {
                                     </OutsideClickHandler>
                                 )}
                             </SettingsContainer>
-                            <TopUp />
                         </FlexDiv>
                     </MiddleContainer>
 
@@ -278,14 +294,24 @@ const DappHeader: React.FC = () => {
                 <>
                     <WrapperMobile>
                         <LogoContainer>
-                            <Logo />
+                            <Logo width={150} />
+                            <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
+                                {levelItem.level > 0 ? (
+                                    <OverdropButtonContainer>
+                                        <SmallBadgeImage src={levelItem.smallBadge} />
+                                        {`LVL ${levelItem.level} ${levelItem.levelName}`}
+                                    </OverdropButtonContainer>
+                                ) : (
+                                    <OverdropIcon />
+                                )}
+                            </SPAAnchor>
                         </LogoContainer>
                         <SearchIconContainer>
                             <IconWrapper>
                                 <SearchIcon onClick={() => setShowSearchModal(true)} />
                             </IconWrapper>
                             <ReactModal
-                                isOpen={showSearcHModal}
+                                isOpen={showSearchModal}
                                 onRequestClose={() => {
                                     setShowSearchModal(false);
                                 }}

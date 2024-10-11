@@ -2,8 +2,6 @@ import Button from 'components/Button';
 import FreeBetFundModal from 'components/FreeBetFundModal';
 import LanguageSelector from 'components/LanguageSelector';
 import SPAAnchor from 'components/SPAAnchor';
-import { LINKS } from 'constants/links';
-import ROUTES from 'constants/routes';
 import {
     NAV_MENU_FIRST_SECTION,
     NAV_MENU_FOURTH_SECTION,
@@ -129,14 +127,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                     {NAV_MENU_THIRD_SECTION.map((item, index) => {
                         if (!item.supportedNetworks.includes(networkId)) return;
                         return (
-                            <SPAAnchor
-                                key={index}
-                                href={
-                                    item.route === ROUTES.Leaderboard
-                                        ? LINKS.ParlayLeaderboardV1
-                                        : buildHref(item.route)
-                                }
-                            >
+                            <SPAAnchor key={index} href={buildHref(item.route)}>
                                 <ItemContainer
                                     key={index}
                                     active={location.pathname === item.route}

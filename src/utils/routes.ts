@@ -1,3 +1,4 @@
+import { LINKS } from 'constants/links';
 import ROUTES from 'constants/routes';
 import { MetaRoutes } from 'enums/routes';
 import { createBrowserHistory, createHashHistory } from 'history';
@@ -25,17 +26,12 @@ export const buildDepositOrWithdrawLink = (language: string, page: string, coinI
     }?lang=${language}&coin-index=${coinIndex}`;
 };
 
-export const buildReffererLink = (reffererID: string) => {
-    return `${window.location.origin}${ifIpfsDeployment ? '/#' : ''}${
-        ROUTES.Markets.Home
-    }?referrerId=${encodeURIComponent(reffererID)}`;
-};
+export const buildSpeedMarketsBannerHref = () =>
+    `${LINKS.SpeedMarkets}/speed-markets?utm_source=internal&utm_medium=ot_banner&utm_campaign=speed_markets_oct_2024`;
 
 export const getMetaRouteItem = (pathName: string) => {
     if (pathName.includes(ROUTES.Markets.Home + '/')) return MetaRoutes.SingleMarket;
     if (pathName.includes(ROUTES.Markets.Home)) return MetaRoutes.Markets;
-    if (pathName.includes(ROUTES.ParlayLiquidityPool)) return MetaRoutes.ParlayLeaderboard;
-    if (pathName.includes(ROUTES.Referral)) return MetaRoutes.Referral;
     if (pathName.includes(ROUTES.Profile)) return MetaRoutes.Profile;
     if (pathName.includes(ROUTES.LiquidityPool)) return MetaRoutes.LiquidityPool;
     return MetaRoutes.Home;

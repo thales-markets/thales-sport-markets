@@ -7,7 +7,7 @@ import { ScrollMenu, VisibilityContext, publicApiType } from 'react-horizontal-s
 import 'react-horizontal-scrolling-menu/dist/styles.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSportFilter, setSportFilter, setTagFilter } from 'redux/modules/market';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
 import { TagInfo, Tags } from 'types/markets';
 import { getSportLeagueIds } from 'utils/sports';
@@ -50,6 +50,8 @@ const SportFilterMobile: React.FC<SportFilterMobileProps> = ({ tagsList, setAvai
     const sportFilter = useSelector(getSportFilter);
     const [, setSportParam] = useQueryParam('sport', '');
     const [, setTagParam] = useQueryParam('tag', '');
+
+    const theme = useTheme();
 
     return (
         <Container>
@@ -96,6 +98,13 @@ const SportFilterMobile: React.FC<SportFilterMobileProps> = ({ tagsList, setAvai
                                         loop={true}
                                         style={liveBlinkStyleMobile}
                                     />
+                                ) : filterItem == SportFilter.Boosted ? (
+                                    <FlexDivColumnCentered>
+                                        <SportIcon
+                                            color={theme.overdrop.textColor.primary}
+                                            className={`icon icon--fire`}
+                                        />
+                                    </FlexDivColumnCentered>
                                 ) : (
                                     <FlexDivColumnCentered>
                                         <SportIcon
@@ -139,8 +148,11 @@ const LabelContainer = styled(FlexDivColumn)`
     margin: 0 10px;
 `;
 
-const SportIcon = styled.i`
+const SportIcon = styled.i<{ color?: string }>`
     font-size: 30px;
+    ::before {
+        color: ${(props) => props.color || 'ingerit'};
+    }
 `;
 
 const NoScrollbarContainer = styled.div`

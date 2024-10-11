@@ -3,12 +3,14 @@ import SPAAnchor from 'components/SPAAnchor';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
 import { MarketType } from 'enums/marketTypes';
-import { Sport } from 'enums/sports';
+import { League, PeriodType, Sport } from 'enums/sports';
 import Lottie from 'lottie-react';
+import { getBetTypesForLeague, SpreadTypes, TotalTypes } from 'overtime-live-trading-utils';
+import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { getIsMobile } from 'redux/modules/app';
+import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import {
     getIsMarketSelected,
     getIsThreeWayView,
@@ -33,6 +35,12 @@ import {
     ClubLogo,
     CurrentResultContainer,
     ExternalArrow,
+    Fire,
+    FireContainer,
+    FireText,
+    GameOfLabel,
+    liveBlinkStyle,
+    liveBlinkStyleMobile,
     LiveIndicatorContainer,
     MainContainer,
     MarketsCountWrapper,
@@ -47,8 +55,6 @@ import {
     TeamNamesContainer,
     TeamsInfoContainer,
     Wrapper,
-    liveBlinkStyle,
-    liveBlinkStyleMobile,
 } from './styled-components';
 
 type MarketRowCardProps = {
@@ -59,12 +65,13 @@ type MarketRowCardProps = {
 const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
+
+    const isAppReady = useSelector(getIsAppReady);
     const isMarketSelected = useSelector(getIsMarketSelected);
     const isThreeWayView = useSelector(getIsThreeWayView);
     const selectedMarket = useSelector(getSelectedMarket);
     const marketTypeFilter = useSelector(getMarketTypeFilter);
     const isMobile = useSelector(getIsMobile);
-    // const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.leagueId));
     const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.leagueId));
 
@@ -79,24 +86,56 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const isGameLive = !!market.live;
 
     const spreadMarket = useMemo(() => {
-        const spreadMarkets = market.childMarkets.filter((childMarket) => childMarket.typeId === MarketType.SPREAD);
+        const spreadMarkets = market.childMarkets.filter((childMarket) =>
+            childMarket.leagueId === League.US_ELECTION
+                ? childMarket.typeId === MarketType.US_ELECTION_POPULAR_VOTE_WINNER
+                : childMarket.typeId === MarketType.SPREAD
+        );
 
-        return spreadMarkets.length > 0
-            ? spreadMarkets.reduce(function (prev, curr) {
-                  return Math.abs(curr.odds[0] - MEDIUM_ODDS) < Math.abs(prev.odds[0] - MEDIUM_ODDS) ? curr : prev;
-              })
-            : undefined;
-    }, [market.childMarkets]);
+        const mainSpreadMarket =
+            spreadMarkets.length > 0
+                ? spreadMarkets.reduce(function (prev, curr) {
+                      return Math.abs(curr.odds[0] - MEDIUM_ODDS) < Math.abs(prev.odds[0] - MEDIUM_ODDS) ? curr : prev;
+                  })
+                : undefined;
+
+        const betTypesForLeague = getBetTypesForLeague(market.leagueId);
+        if (
+            market.live &&
+            !mainSpreadMarket &&
+            betTypesForLeague.find((betType: SpreadTypes) => Object.values(SpreadTypes).includes(betType))
+        ) {
+            return { ...market, type: 'spread', typeId: MarketType.SPREAD, odds: [0, 0], line: Infinity };
+        }
+
+        return mainSpreadMarket;
+    }, [market]);
 
     const totalMarket = useMemo(() => {
-        const totalMarkets = market.childMarkets.filter((childMarket) => childMarket.typeId === MarketType.TOTAL);
+        const totalMarkets = market.childMarkets.filter((childMarket) =>
+            childMarket.leagueId === League.US_ELECTION
+                ? childMarket.typeId === MarketType.US_ELECTION_WINNING_PARTY
+                : childMarket.typeId === MarketType.TOTAL
+        );
 
-        return totalMarkets.length > 0
-            ? totalMarkets.reduce(function (prev, curr) {
-                  return Math.abs(curr.odds[0] - MEDIUM_ODDS) < Math.abs(prev.odds[0] - MEDIUM_ODDS) ? curr : prev;
-              })
-            : undefined;
-    }, [market.childMarkets]);
+        const mainTotalMarket =
+            totalMarkets.length > 0
+                ? totalMarkets.reduce(function (prev, curr) {
+                      return Math.abs(curr.odds[0] - MEDIUM_ODDS) < Math.abs(prev.odds[0] - MEDIUM_ODDS) ? curr : prev;
+                  })
+                : undefined;
+
+        const betTypesForLeague = getBetTypesForLeague(market.leagueId);
+        if (
+            market.live &&
+            !mainTotalMarket &&
+            betTypesForLeague.find((betType: TotalTypes) => Object.values(TotalTypes).includes(betType))
+        ) {
+            return { ...market, type: 'total', typeId: MarketType.TOTAL, odds: [0, 0], line: Infinity };
+        }
+
+        return mainTotalMarket;
+    }, [market]);
 
     const marketTypeFilterMarket = useMemo(() => {
         if (marketTypeFilter === undefined) return undefined;
@@ -121,12 +160,16 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
 
     const hideGame = isGameLive ? false : isGameOpen && !areOddsValid && !areChildMarketsOddsValid;
     const isColumnView =
-        !isGameLive && marketTypeFilter === undefined && isThreeWayView && !isMarketSelected && isGameOpen && !isMobile;
+        marketTypeFilter === undefined &&
+        isThreeWayView &&
+        !isMarketSelected &&
+        (isGameOpen || isGameLive) &&
+        !isMobile;
     const isTwoPositionalMarket = market.odds.length === 2;
     const selected = selectedMarket?.gameId == market.gameId;
 
     let marketsCount = market.childMarkets.length;
-    if (isColumnView) {
+    if (isColumnView || isGameLive) {
         if (spreadMarket) {
             marketsCount -= 1;
         }
@@ -137,16 +180,44 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
 
     const leagueTooltipKey = getLeagueTooltipKey(market.leagueId);
 
+    const gameMultipliersQuery = useGameMultipliersQuery({
+        enabled: isAppReady,
+    });
+
+    const overdropGameMultiplier = useMemo(() => {
+        const gameMultipliers =
+            gameMultipliersQuery.isSuccess && gameMultipliersQuery.data ? gameMultipliersQuery.data : [];
+        return gameMultipliers.find((multiplier) => multiplier.gameId === market.gameId);
+    }, [gameMultipliersQuery.data, gameMultipliersQuery.isSuccess, market.gameId]);
+
+    // TODO: remove, rely on market.paused from api response once implemented
+    const marketPaused = useMemo(() => {
+        // when market odds are stale API sets odds to []
+        if (!market.odds.length) {
+            return true;
+        }
+        if (areOddsValid) {
+            return false;
+        }
+        if (market.childMarkets.some((child) => child.odds.some((odd) => isOddValid(odd)))) {
+            return false;
+        }
+        return true;
+    }, [market, areOddsValid]);
+
     const getMainContainerContent = () => (
-        <MainContainer isGameOpen={isGameOpen || isGameLive}>
+        <MainContainer isBoosted={!!overdropGameMultiplier} isGameOpen={isGameOpen || isGameLive}>
             <MatchInfoContainer
-                isGameLive={isGameLive}
                 onClick={() => {
-                    if (isGameOpen && !isGameLive) {
-                        dispatch(setSelectedMarket({ gameId: market.gameId, sport: market.sport }));
-                    }
+                    dispatch(setSelectedMarket({ gameId: market.gameId, sport: market.sport, live: market.live }));
                 }}
             >
+                {overdropGameMultiplier && (
+                    <GameOfLabel
+                        isLive={isGameLive}
+                        selected={selected}
+                    >{`Game of the ${overdropGameMultiplier.type}`}</GameOfLabel>
+                )}
                 <MatchInfo selected={selected}>
                     {isGameLive ? (
                         <>
@@ -157,13 +228,14 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                     loop={true}
                                     style={isMobile ? liveBlinkStyleMobile : liveBlinkStyle}
                                 />
-                                <MatchInfoLabel>{t(`markets.market-card.live`)}</MatchInfoLabel>
+                                <MatchInfoLabel selected={selected}>{t(`markets.market-card.live`)}</MatchInfoLabel>
                             </LiveIndicatorContainer>
                             <MatchInfoLabel>
                                 {displayGameClock(market) ? market.gameClock : ''}
-                                {market.gamePeriod != null &&
+                                {displayGameClock(market) &&
+                                market.gamePeriod != null &&
                                 market.gamePeriod != undefined &&
-                                getLeaguePeriodType(Number(market.leagueId)) == 'half' ? (
+                                [PeriodType.HALF, PeriodType.QUARTER].includes(getLeaguePeriodType(market.leagueId)) ? (
                                     <Blink>&prime;</Blink>
                                 ) : (
                                     ''
@@ -196,7 +268,11 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                     </MatchInfoLabel>
                 </MatchInfo>
                 <TeamsInfoContainer>
-                    <TeamLogosContainer isColumnView={isColumnView} isTwoPositionalMarket={isTwoPositionalMarket}>
+                    <TeamLogosContainer
+                        isColumnView={isColumnView}
+                        isTwoPositionalMarket={isTwoPositionalMarket}
+                        isOneSideMarket={market.isOneSideMarket}
+                    >
                         <ClubLogo
                             alt="Home team logo"
                             src={homeLogoSrc}
@@ -220,18 +296,30 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                         isTwoPositionalMarket={isTwoPositionalMarket}
                         isGameOpen={isGameOpen || isGameLive}
                     >
-                        <TeamNameLabel isColumnView={isColumnView} isMarketSelected={isMarketSelected}>
+                        <TeamNameLabel
+                            isLive={isGameLive}
+                            isColumnView={isColumnView}
+                            isMarketSelected={isMarketSelected}
+                        >
                             {market.isOneSideMarket ? fixOneSideMarketCompetitorName(market.homeTeam) : market.homeTeam}
                         </TeamNameLabel>
                         {!market.isOneSideMarket && (
                             <>
                                 {isMobile && (isGameOpen || isGameLive) && (
-                                    <TeamNameLabel isColumnView={isColumnView} isMarketSelected={isMarketSelected}>
+                                    <TeamNameLabel
+                                        isLive={isGameLive}
+                                        isColumnView={isColumnView}
+                                        isMarketSelected={isMarketSelected}
+                                    >
                                         {' '}
                                         -{' '}
                                     </TeamNameLabel>
                                 )}
-                                <TeamNameLabel isColumnView={isColumnView} isMarketSelected={isMarketSelected}>
+                                <TeamNameLabel
+                                    isLive={isGameLive}
+                                    isColumnView={isColumnView}
+                                    isMarketSelected={isMarketSelected}
+                                >
                                     {market.awayTeam}
                                 </TeamNameLabel>
                             </>
@@ -256,7 +344,11 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             {market.sport == Sport.TENNIS && (
                                 <SecondaryResultsWrapper>
                                     {market.homeScoreByPeriod.map((score: number, index: number) => (
-                                        <PeriodResultContainer key={index} isColumnView={isColumnView}>
+                                        <PeriodResultContainer
+                                            key={index}
+                                            isColumnView={isColumnView}
+                                            selected={selected}
+                                        >
                                             <ResultLabel
                                                 isColumnView={isColumnView}
                                                 isMarketSelected={isMarketSelected}
@@ -288,23 +380,15 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
             </MatchInfoContainer>
             {!isMarketSelected && (
                 <>
-                    {isGameLive ? (
-                        <PositionsV2
-                            markets={[market]}
-                            marketType={MarketType.WINNER}
-                            isGameOpen={isGameLive}
-                            isGameLive={isGameLive}
-                            isMainPageView
-                            isColumnView={isColumnView}
-                        />
-                    ) : isGameOpen ? (
+                    {isGameLive && !marketPaused ? (
                         <>
                             <PositionsV2
                                 markets={[marketTypeFilterMarket ? marketTypeFilterMarket : market]}
                                 marketType={
                                     marketTypeFilter && marketTypeFilterMarket ? marketTypeFilter : MarketType.WINNER
                                 }
-                                isGameOpen={isGameOpen}
+                                isGameOpen={isGameLive}
+                                isGameLive={isGameLive}
                                 isMainPageView
                                 isColumnView={isColumnView}
                             />
@@ -326,17 +410,103 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                     isColumnView={isColumnView}
                                 />
                             )}
+                            {!!overdropGameMultiplier && (
+                                <FireContainer gap={2}>
+                                    <Fire className={'icon icon--fire'} />
+                                    <FireText>{`+${overdropGameMultiplier.multiplier}% XP`}</FireText>
+                                </FireContainer>
+                            )}
                             {marketsCount > 0 && (
                                 <MarketsCountWrapper
                                     onClick={() =>
-                                        dispatch(setSelectedMarket({ gameId: market.gameId, sport: market.sport }))
+                                        dispatch(
+                                            setSelectedMarket({
+                                                gameId: market.gameId,
+                                                sport: market.sport,
+                                                live: market.live,
+                                            })
+                                        )
                                     }
                                 >
-                                    {`+${marketsCount}`}
+                                    {marketsCount > 0 && `+${marketsCount}`}
+                                    {!isMobile && marketsCount > 0 && <Arrow className={'icon icon--arrow-down'} />}
+                                </MarketsCountWrapper>
+                            )}
+                            {!isMobile && (
+                                <SPAAnchor
+                                    href={buildMarketLink(
+                                        market.gameId,
+                                        language,
+                                        false,
+                                        encodeURIComponent(`${market.homeTeam} vs ${market.awayTeam}`)
+                                    )}
+                                >
+                                    <Tooltip
+                                        overlay="Open market page"
+                                        component={<ExternalArrow className={'icon icon--arrow-external'} />}
+                                    />
+                                </SPAAnchor>
+                            )}
+                        </>
+                    ) : isGameOpen ? (
+                        <>
+                            <PositionsV2
+                                markets={[marketTypeFilterMarket ? marketTypeFilterMarket : market]}
+                                marketType={
+                                    marketTypeFilter && marketTypeFilterMarket ? marketTypeFilter : MarketType.WINNER
+                                }
+                                isGameOpen={isGameOpen}
+                                isMainPageView
+                                isColumnView={isColumnView}
+                            />
+                            {isColumnView && !isMobile && spreadMarket && (
+                                <PositionsV2
+                                    markets={[spreadMarket]}
+                                    marketType={
+                                        market.leagueId === League.US_ELECTION
+                                            ? MarketType.US_ELECTION_POPULAR_VOTE_WINNER
+                                            : MarketType.SPREAD
+                                    }
+                                    isGameOpen={isGameOpen}
+                                    isMainPageView
+                                    isColumnView={isColumnView}
+                                />
+                            )}
+                            {isColumnView && !isMobile && totalMarket && (
+                                <PositionsV2
+                                    markets={[totalMarket]}
+                                    marketType={
+                                        market.leagueId === League.US_ELECTION
+                                            ? MarketType.US_ELECTION_WINNING_PARTY
+                                            : MarketType.TOTAL
+                                    }
+                                    isGameOpen={isGameOpen}
+                                    isMainPageView
+                                    isColumnView={isColumnView}
+                                />
+                            )}
+                            {(marketsCount > 0 || !!overdropGameMultiplier) && (
+                                <MarketsCountWrapper
+                                    onClick={() =>
+                                        dispatch(
+                                            setSelectedMarket({
+                                                gameId: market.gameId,
+                                                sport: market.sport,
+                                                live: market.live,
+                                            })
+                                        )
+                                    }
+                                >
+                                    {!!overdropGameMultiplier && (
+                                        <FireContainer gap={2}>
+                                            <Fire className={'icon icon--fire'} />
+                                            <FireText>{`+${overdropGameMultiplier.multiplier}% XP`}</FireText>
+                                        </FireContainer>
+                                    )}
+                                    {marketsCount > 0 && `+${marketsCount}`}
                                     {!isMobile && <Arrow className={'icon icon--arrow-down'} />}
                                 </MarketsCountWrapper>
                             )}
-
                             {!isMobile && (
                                 <SPAAnchor
                                     href={buildMarketLink(
@@ -367,6 +537,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
             isResolved={isGameRegularlyResolved}
             selected={selected}
             isMarketSelected={isMarketSelected}
+            isOverdrop={!!overdropGameMultiplier}
         >
             {isGameOpen || isGameLive ? (
                 <>{getMainContainerContent()}</>

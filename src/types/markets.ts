@@ -1,8 +1,8 @@
 import { GameStatus, Position, StatusFilter } from 'enums/markets';
+import { Coins } from 'thales-utils';
 import { MarketType } from '../enums/marketTypes';
 import { Network } from '../enums/network';
 import { League, Sport } from '../enums/sports';
-import { Coins } from './tokens';
 
 export type TagInfo = {
     id: League;
@@ -16,13 +16,6 @@ export type ParlayPayment = {
     amountToBuy: number | string;
     networkId: Network;
     forceChangeCollateral: boolean;
-};
-
-export type LeaderboardPoints = {
-    basicPoints: number;
-    points: number;
-    buyinBonus: number;
-    numberOfGamesBonus: number;
 };
 
 type PlayerProps = {
@@ -86,7 +79,23 @@ export type SportMarket = {
     isGameFinished?: boolean;
     gameStatus?: GameStatus;
     liveScore?: SportMarketScore;
+    positionNames?: string[];
+    errors?: SportMarketErrorDetails[];
 };
+
+export type SportMarketError = { gameId: SportMarket['gameId']; errorsDetails: SportMarketErrorDetails[] };
+export type SportMarketErrorDetails = { processingTime: number; errorTime: number; errorMessage: string };
+
+type OmitDistributive<T, K extends PropertyKey> = T extends any
+    ? T extends object
+        ? Id<OmitRecursively<T, K>>
+        : T
+    : never;
+type Id<T> = {} & { [P in keyof T]: T[P] };
+type OmitRecursively<T, K extends PropertyKey> = Omit<{ [P in keyof T]: OmitDistributive<T[P], K> }, K>;
+
+// Omit all non-serializable values from SportMarket (maturityDate)
+export type SerializableSportMarket = OmitRecursively<SportMarket, 'maturityDate'>;
 
 export type SportMarkets = SportMarket[];
 

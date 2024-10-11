@@ -1,14 +1,4 @@
 @font-face {
-    font-family: 'Roboto';
-    src: local('Roboto'), url(../assets/fonts/Roboto/Roboto.ttf) format('truetype');
-}
-
-@font-face {
-    font-family: 'RobotoThin';
-    src: local('RobotoThin'), url(../assets/fonts/Roboto/RobotoThin.ttf) format('truetype');
-}
-
-@font-face {
     font-family: 'Jost';
     src: local('Jost'), url(../assets/fonts/Jost/Jost.ttf) format('truetype');
 }
@@ -77,4 +67,9 @@
     font-family: 'Inter';
     src: local('Inter'), url(../assets/fonts/Inter/Inter-VariableFont_slntwght.ttf) format('truetype');
     font-weight: 100 900;
+}
+
+@font-face {
+    font-family: 'ThalesSidebarIcons';
+    src: local('ThalesSidebarIcons'), url(../assets/fonts/ThalesSidebarIcons/ThalesSidebarIcons.ttf) format('truetype');
 }

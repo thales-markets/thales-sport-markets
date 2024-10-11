@@ -15,6 +15,7 @@ import i18n from 'i18n';
 import { groupBy, orderBy } from 'lodash';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
+import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
 import React, { Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
@@ -26,6 +27,7 @@ import {
     getIsMarketSelected,
     getMarketSearch,
     getMarketTypeFilter,
+    getSelectedMarket,
     getSportFilter,
     getStatusFilter,
     getTagFilter,
@@ -85,6 +87,7 @@ const Home: React.FC = () => {
     const location = useLocation();
     const isMobile = useSelector(getIsMobile);
     const isMarketSelected = useSelector(getIsMarketSelected);
+    const selectedMarket = useSelector(getSelectedMarket);
 
     const [showBurger, setShowBurger] = useState<boolean>(false);
     const [showActive, setShowActive] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_ACTIVE, true);
@@ -199,6 +202,10 @@ const Home: React.FC = () => {
         enabled: isAppReady,
     });
 
+    const gameMultipliersQuery = useGameMultipliersQuery({
+        enabled: isAppReady,
+    });
+
     const finalMarkets = useMemo(() => {
         const allMarkets: MarketsCache =
             sportMarketsQueryNew.isSuccess && sportMarketsQueryNew.data
@@ -213,6 +220,9 @@ const Home: React.FC = () => {
         const marketTypes = new Set<MarketType>();
         const allLiveMarkets =
             liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data ? liveSportMarketsQuery.data.live : [];
+
+        const gameMultipliers =
+            gameMultipliersQuery.isSuccess && gameMultipliersQuery.data ? gameMultipliersQuery.data : [];
 
         const filteredMarkets = (sportFilter === SportFilter.Live
             ? allLiveMarkets
@@ -247,13 +257,19 @@ const Home: React.FC = () => {
             }
 
             if (sportFilter !== SportFilter.All) {
-                if (sportFilter != SportFilter.Favourites && sportFilter != SportFilter.Live) {
-                    if (((market.sport as unknown) as SportFilter) !== sportFilter) {
+                if (sportFilter === SportFilter.Boosted) {
+                    if (!gameMultipliers.find((multiplier) => multiplier.gameId === market.gameId)) {
                         return false;
                     }
                 } else {
-                    if (sportFilter == SportFilter.Favourites) {
-                        if (!favouriteLeagues.map((league) => league.id).includes(market.leagueId)) return false;
+                    if (sportFilter != SportFilter.Favourites && sportFilter != SportFilter.Live) {
+                        if (((market.sport as unknown) as SportFilter) !== sportFilter) {
+                            return false;
+                        }
+                    } else {
+                        if (sportFilter == SportFilter.Favourites) {
+                            if (!favouriteLeagues.map((league) => league.id).includes(market.leagueId)) return false;
+                        }
                     }
                 }
             }
@@ -298,11 +314,13 @@ const Home: React.FC = () => {
         sportMarketsQueryNew.data,
         liveSportMarketsQuery.isSuccess,
         liveSportMarketsQuery.data,
+        gameMultipliersQuery.isSuccess,
+        gameMultipliersQuery.data,
+        sportFilter,
         statusFilter,
         marketSearch,
         tagFilter,
         datePeriodFilter,
-        sportFilter,
         marketTypeFilter,
         favouriteLeagues,
     ]);
@@ -314,7 +332,7 @@ const Home: React.FC = () => {
         if (sportFilter == SportFilter.Favourites) {
             setAvailableTags(favouriteLeagues);
         }
-    }, [favouriteLeagues, sportFilter]);
+    }, [favouriteLeagues, sportFilter, showActive]);
 
     const openSportMarketsQuery = useSportsMarketsV2Query(StatusFilter.OPEN_MARKETS, networkId, {
         enabled: isAppReady,
@@ -363,7 +381,7 @@ const Home: React.FC = () => {
         openMarketsCount[SportFilter.Favourites] = favouriteCount;
 
         return openMarketsCount;
-    }, [openMarketsCountPerTag, favouriteLeagues]);
+    }, [favouriteLeagues, openMarketsCountPerTag]);
 
     const liveMarketsCountPerTag = useMemo(() => {
         const liveSportMarkets: SportMarkets =
@@ -382,6 +400,24 @@ const Home: React.FC = () => {
         Object.values(SportFilter);
         return liveMarketsCountPerTag;
     }, [liveSportMarketsQuery]);
+
+    const boostedMarketsCount = useMemo(() => {
+        const openSportMarkets: SportMarkets =
+            openSportMarketsQuery.isSuccess && openSportMarketsQuery.data
+                ? openSportMarketsQuery.data[StatusFilter.OPEN_MARKETS]
+                : [];
+        const gameMultipliers =
+            gameMultipliersQuery.isSuccess && gameMultipliersQuery.data ? gameMultipliersQuery.data : [];
+
+        return openSportMarkets.filter((openMarket) =>
+            gameMultipliers.find((multiplier) => multiplier.gameId === openMarket.gameId)
+        ).length;
+    }, [
+        gameMultipliersQuery.data,
+        gameMultipliersQuery.isSuccess,
+        openSportMarketsQuery.data,
+        openSportMarketsQuery.isSuccess,
+    ]);
 
     const liveMarketsCountPerSport = useMemo(() => {
         const liveMarketsCount: any = {};
@@ -462,6 +498,7 @@ const Home: React.FC = () => {
                 .filter(
                     (filterItem: any) =>
                         (showActive && filterItem !== SportFilter.Live && openMarketsCountPerSport[filterItem] > 0) ||
+                        (showActive && filterItem === SportFilter.Boosted && boostedMarketsCount > 0) ||
                         (showActive && filterItem === SportFilter.Live && liveMarketsCountPerSport[filterItem] > 0) ||
                         !showActive ||
                         openSportMarketsQuery.isLoading ||
@@ -513,7 +550,9 @@ const Home: React.FC = () => {
                             }}
                             sport={filterItem}
                             sportCount={
-                                filterItem == SportFilter.Live
+                                filterItem === SportFilter.Boosted
+                                    ? boostedMarketsCount
+                                    : filterItem == SportFilter.Live
                                     ? liveMarketsCountPerSport[filterItem]
                                     : openMarketsCountPerSport[filterItem]
                             }
@@ -587,9 +626,6 @@ const Home: React.FC = () => {
                             {getSportFilters()}
                         </SportFiltersContainer>
                     </Scroll>
-                    {/* <Suspense fallback={<Loader />}>
-                        {networkId !== Network.Base && networkId !== Network.OptimismSepolia && <SidebarLeaderboard />}
-                    </Suspense> */}
                 </LeftSidebarContainer>
 
                 {/* MAIN PART */}
@@ -599,8 +635,7 @@ const Home: React.FC = () => {
                             <SportFilterMobile setAvailableTags={setAvailableTags} tagsList={tagsList} />
                             {!marketsLoading &&
                                 finalMarkets.length > 0 &&
-                                statusFilter === StatusFilter.OPEN_MARKETS &&
-                                sportFilter !== SportFilter.Live && (
+                                (statusFilter === StatusFilter.OPEN_MARKETS || sportFilter === SportFilter.Live) && (
                                     <Header availableMarketTypes={availableMarketTypes} />
                                 )}
                             <FilterTagsMobile />
@@ -633,8 +668,8 @@ const Home: React.FC = () => {
                             ) : (
                                 <>
                                     {!isMobile &&
-                                        statusFilter === StatusFilter.OPEN_MARKETS &&
-                                        sportFilter !== SportFilter.Live && (
+                                        (statusFilter === StatusFilter.OPEN_MARKETS ||
+                                            sportFilter === SportFilter.Live) && (
                                             <Header availableMarketTypes={availableMarketTypes} />
                                         )}
                                     <FlexDivRow>
@@ -651,7 +686,11 @@ const Home: React.FC = () => {
                                         )}
                                         {isMobile ? (
                                             <ReactModal
-                                                isOpen={isMarketSelected && statusFilter === StatusFilter.OPEN_MARKETS}
+                                                isOpen={
+                                                    isMarketSelected &&
+                                                    (statusFilter === StatusFilter.OPEN_MARKETS ||
+                                                        !!selectedMarket?.live)
+                                                }
                                                 onRequestClose={() => {
                                                     dispatch(setSelectedMarket(undefined));
                                                 }}
@@ -662,7 +701,9 @@ const Home: React.FC = () => {
                                             </ReactModal>
                                         ) : (
                                             isMarketSelected &&
-                                            statusFilter === StatusFilter.OPEN_MARKETS && <SelectedMarket />
+                                            (statusFilter === StatusFilter.OPEN_MARKETS || !!selectedMarket?.live) && (
+                                                <SelectedMarket />
+                                            )
                                         )}
                                     </FlexDivRow>
                                 </>
@@ -830,10 +871,9 @@ const getCustomModalStyles = (theme: ThemeInterface, zIndex: string) => ({
     content: {
         top: '0',
         overflow: 'auto',
-        left: '50%',
+        left: '0',
         right: 'auto',
         bottom: 'auto',
-        marginRight: '-48%',
         padding: '0px',
         background: 'transparent',
         border: 'none',

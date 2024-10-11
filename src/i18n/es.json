@@ -76,7 +76,8 @@
             "to-label": "Recibo",
             "balance-label": "Balance: {{amount}}",
             "swap-label": "Intercambiar",
-            "swap-progress-label": "Intercambio en progreso..."
+            "swap-progress-label": "Intercambio en progreso...",
+            "approve": "Aprobar intercambio"
         },
         "enable-wallet-access": {
             "approve-label": "Aprobar {{currencyKey}}",
@@ -108,7 +109,8 @@
             "enter-percentage": "Enter percentage",
             "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}",
             "single-amm-paused": "AMM en pausa",
-            "invalid-amount-max": "La cantidad no puede ser superior a {{max}}"
+            "invalid-amount-max": "La cantidad no puede ser superior a {{max}}",
+            "swap-quote-low": "¡La cotización de swap es demasiado baja (recibir: {{quote}}, recibir mínimo {{minQuote}})! Inténtalo de nuevo..."
         },
         "time-remaining": {
             "ended": "finalizado",
@@ -194,7 +196,10 @@
         "filters": "Filtros",
         "status": "Estado",
         "wrap-eth-tooltip": "Su ETH primero se incluye en WETH y luego se pasa al contrato.",
-        "wrap-and-buy": "Envuelva ETH y compre"
+        "wrap-and-buy": "Envuelva ETH y compre",
+        "election-tooltip": "La fuente de resolución será Associated Press, Fox News y NBC. Estos mercados se resolverán una vez que las tres fuentes convoquen la carrera para el mismo candidato. Si las tres fuentes no han convocado la carrera para el mismo candidato antes del 11 de noviembre, se anularán todas las apuestas.",
+        "submit": "Entregar",
+        "try-again": "Intentar otra vez"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV TODOS LOS DERECHOS RESERVADOS.",
@@ -277,7 +282,16 @@
                 "fighting": "Deportes de lucha",
                 "boxing": "Boxeo",
                 "golf": "Golf",
-                "live": "Vivir"
+                "live": "Vivir",
+                "handball": "Balonmano",
+                "waterpolo": "Polo acuático",
+                "rugby": "Rugby",
+                "volleyball": "Vóleibol",
+                "tabletennis": "Tenis de mesa",
+                "politics": "Política",
+                "olympicgames": "Juegos olímpicos",
+                "boosted": "Juegos promocionales",
+                "promo": "Juegos promocionales"
             },
             "all": "Todo",
             "datepicker": {
@@ -327,7 +341,7 @@
         "back": "atrás",
         "apply-filters": "Aplicar filtros",
         "incentivized-market": "MERCADO INCENTIVIZADO",
-        "number-of-rounds": "Número total de rondas"
+        "number-of-rounds": "Redondo"
     },
     "markets": {
         "market-card": {
@@ -532,7 +546,13 @@
             },
             "type-tooltip": {
                 "11055": "Los touchdowns de recepción, carrera, devolución de despeje, devolución de patada, touchdowns defensivos e intercepciones cuentan para el resultado.",
-                "touchdowns": "Los touchdowns de recepción, carrera, devolución de despeje, devolución de patada, touchdowns defensivos e intercepciones cuentan para el resultado."
+                "touchdowns": "Los touchdowns de recepción, carrera, devolución de despeje, devolución de patada, touchdowns defensivos e intercepciones cuentan para el resultado.",
+                "rushing-receiving": "Una apuesta sobre si las yardas terrestres y recibidas de un determinado jugador serán superiores o inferiores a una cierta cantidad.",
+                "sacks": "Una apuesta de más/menos sobre cuántas capturas registrará un jugador durante un juego.",
+                "tackles": "Una apuesta sobre si el número de tackles de un determinado jugador será mayor o menor a una cierta cantidad.",
+                "longest-reception": "Una apuesta sobre si la recepción más larga de un determinado jugador será superior o inferior a una cierta cantidad.",
+                "extra-points": "Una apuesta sobre si los puntos extra de un determinado jugador serán superiores o inferiores a una cierta cantidad.",
+                "passing-rushing": "Una apuesta sobre si las yardas de pase y carrera de un determinado jugador serán superiores o inferiores a una cierta cantidad."
             },
             "odds-live-limitation-message": "Posiciones en vivo solo permitidas como individuales",
             "live": "Vivir",
@@ -552,7 +572,9 @@
             "end-of-fight": "Fin de la pelea",
             "end-of-round": "Fin de ronda",
             "fighters-introduction": "Introducción a los luchadores",
-            "fighters-walking": "Luchadores caminando"
+            "fighters-walking": "Luchadores caminando",
+            "suspended": "Suspendido",
+            "not-available-for-trading": "No disponible para negociar"
         },
         "market-details": {
             "price": "Precio",
@@ -575,7 +597,7 @@
             "positions": "Posiciones",
             "odds": "Posibilidades"
         },
-        "zero-odds-tooltip": "El AMM de deportes sólo ofrece liquidez si el rango de precios ofrecido es entre 0.05 y 0.95 USD. Esto significa que si las probabilidades de una posición son menores a 5% o mayores a 95%, esa posición no tendrá liquidez.",
+        "zero-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",
         "parlay": {
             "pay-with": "Pagar con",
             "total-quote": "Cotización total",
@@ -636,7 +658,11 @@
                 "share": "Cuota",
                 "loser": "Perdedor",
                 "potential-payout": "Pago potencial",
-                "positions": "Número de posiciones"
+                "positions": "Número de posiciones",
+                "label": "Bono por compartir en Twitter",
+                "submit-url": "Envía la URL de tu tweet para impulsar Overdrop",
+                "network-error": "Error de red, verifique la consola del navegador para obtener más información",
+                "verifying-tweet": "Verificando tweet"
             },
             "buy-in": "Aceptacion",
             "total-bonus": "bono total",
@@ -658,13 +684,46 @@
                 "slippage": "deslizamiento",
                 "invalid-value": "valor no válido",
                 "tooltip": "La transferencia no se realizará si la tasa puente se mueve desfavorablemente en más de este porcentaje cuando se ejecuta la transferencia.",
-                "enter-value": "Introducir valor"
+                "enter-value": "Introducir valor",
+                "swap-thales": "Deslizamiento de intercambio"
             },
             "odds-changed-description": "Las probabilidades cambiaron. Aceptar cambios para poder comprar.",
-            "thales-bonus-tooltip": "Los usuarios que realicen intercambios con THALES obtendrán pagos adicionales del 1 % por cada juego que tengan en su boleto (ya calculado en Cotización total y Pago).",
+            "thales-bonus-tooltip": "Los usuarios que realicen intercambios con THALES obtendrán pagos adicionales del 2 % por cada juego que tengan en su boleto (ya calculado en Cotización total y Pago).",
             "accept-odds-changes": "Aceptar cambios de probabilidades",
-            "thales-bonus-info": "Utilice THALES y obtenga un bono del 1% por cada juego.",
-            "odds-changed-error": "Las probabilidades cambiaron mientras se cumplía el pedido. Intente aumentar el deslizamiento."
+            "thales-bonus-info": "Utilice THALES y obtenga un bono del 2% por cada juego.",
+            "odds-changed-error": "Las probabilidades cambiaron mientras se cumplía el pedido. Intente aumentar el deslizamiento.",
+            "overdrop": {
+                "overdrop-xp-overview": "Descripción general de Overdrop XP",
+                "overdrop-xp": "Exceso de XP",
+                "base-xp": "XP básica",
+                "bonus-applied": "Bonificación aplicada",
+                "active-boost": "Impulso activo",
+                "total-xp-earned": "XP total obtenida",
+                "total-xp-boost": "Aumento total de XP",
+                "tooltip": {
+                    "weekly-boost": "Cuantas más semanas seguidas apuestes, mayor será tu aumento de XP. Aumenta un 5 % por cada semana hasta un máximo de un 20 %. Si te saltas una semana, este aumento se restablece a 0 %",
+                    "thales-boost": "¡Todas las apuestas ejecutadas con THALES como garantía tendrán un bono de +10% en la acumulación de XP base para esa apuesta específica!",
+                    "loyalty-boost": "El aumento de XP por lealtad te otorga hasta un 25 % de aumento permanente en toda tu XP general, según tu nivel de XP. Comienza con un aumento del 5 % en el nivel 1 y obtienes otro aumento del +5 % al alcanzar cada quinto nivel.",
+                    "parlay-boost": "Dependiendo de la cantidad de juegos individuales que incluyas en tu apuesta combinada, recibirás un aumento adicional en tu acumulación de XP para esa apuesta combinada. El máximo es un aumento de XP del +290 % en 15 juegos de la apuesta combinada.",
+                    "twitter-boost": "Si compartes tu apuesta de tiempo extra en Twitter en forma de Tarjeta Flex, activarás un Flex Boost de Twitter de +10 % durante 3 días.",
+                    "base-xp": "La XP base se calcula mediante la siguiente fórmula:\n\nXP base = importe de buy-in * (2 - cuotas normalizadas).\n\nEsto significa que tu apuesta acumula más XP base cuanto mayor sea tu buy-in y cuanto mayores sean tus cuotas de apuesta.",
+                    "promo-boost": "Ciertos juegos deportivos conllevan mejoras de XP adicionales.",
+                    "daily-boost": "Cuantos más días seguidos apuestes, mayor será tu aumento de XP. Aumenta un 5 % por cada día hasta un máximo de un 35 %. Si te saltas un día, este aumento se restablece a 0 %"
+                },
+                "buy-in-xp": "Comprar en XP",
+                "odds-xp": "Multiplicador de probabilidades"
+            },
+            "use-free-bet": "Usar apuesta gratis",
+            "swap-thales-receive": "Recepción mínima",
+            "swap-thales-tooltip": "TODO",
+            "buy-steps": {
+                "buy": "Compre con {{currencyKey}}",
+                "approve-swap": "Aprobar el cambio a {{currencyKey}}",
+                "swap": "Cambiar a {{currencyKey}}",
+                "approve-buy": "Aprobar compra con {{currencyKey}}"
+            },
+            "swap-thales": "Utilice THALES para obtener mejores probabilidades",
+            "disable-free-bet": "Desactivar saldos de apuestas gratuitas"
         },
         "discounted-per": "Con descuento según",
         "nav-menu": {
@@ -679,11 +738,14 @@
                 "fee-rebates": "Reembolsos de tarifas",
                 "fifa-campaign": "Campaña Zebro FIFA",
                 "liquidity-pool": "Proporcionar Liquidez",
-                "promotions": "Promociones"
+                "promotions": "Promociones",
+                "speed-markets": "Comercio de criptomonedas",
+                "digital-options": "Opciones digitales"
             },
             "buttons": {
                 "disconnect": "Desconectar",
-                "switch": "Cambiar"
+                "switch": "Cambiar",
+                "particle-wallet": "Cartera de partículas"
             },
             "labels": {
                 "language": "Idioma"
@@ -697,7 +759,9 @@
         "incentivized-tooltip-uefa": "Se distribuirá un total enorme de {{rewards}} para las competiciones de la UEFA. ¡Solo el volumen en la red Arbitrum se calculará para las recompensas! Consulta más detalles <detailsLink>aquí</detailsLink>.",
         "incentivized-tooltip-nhl": "Se distribuirá un total enorme de {{rewards}} durante el resto de la temporada de la NHL, incluidos los playoffs. ¡Solo el volumen en la red Arbitrum se calculará para las recompensas! Consulta más detalles <detailsLink>aquí</detailsLink>.",
         "incentivized-tooltip-nhl-mlb": "Se distribuirá un total enorme de {{rewards}} durante el resto de la temporada de la {{league}}, incluidos los playoffs. ¡Solo el volumen en la red Arbitrum se calculará para las recompensas! Consulta más detalles <detailsLink>aquí</detailsLink>.",
-        "incentivized-tooltip-euro-copa": "Se distribuirá un total enorme de {{rewards}} para las competiciones Euro 2024 y Copa América. Consulta más detalles <detailsLink>aquí</detailsLink>."
+        "incentivized-tooltip-euro-copa": "Se distribuirá un total enorme de {{rewards}} para las competiciones Euro 2024 y Copa América. Consulta más detalles <detailsLink>aquí</detailsLink>.",
+        "incentivized-tooltip-wimbledon": "Compite por {{rewards}} durante Wimbledon 2024 en Overtime V1 y V2. Consulte más detalles <detailsLink>aquí</detailsLink>.",
+        "incentivized-tooltip-olympics": "Gane {{rewards}} en recompensas basadas en volumen durante los Juegos Olímpicos. Consulte más detalles <detailsLink>aquí</detailsLink>."
     },
     "rewards": {
         "header": "Recompensas",
@@ -819,7 +883,9 @@
             "trades": "Trades",
             "highest-win": "Highest win",
             "lifetime-wins": "Lifetime wins",
-            "profile-data": "Datos de perfil"
+            "profile-data": "Datos de perfil",
+            "wallet": "Billetera",
+            "free-bet": "apuesta gratis"
         },
         "in-lp": "Liquidez proporcionada",
         "go-to-lp": "Ir a LP",
@@ -841,7 +907,31 @@
         },
         "lp": "LP",
         "back": "Atrás",
-        "go-to": "Ir a"
+        "go-to": "Ir a",
+        "free-bet": {
+            "claim-btn": "El importe reclamado se reducirá según el importe de la entrada, que se transferirá a su saldo de apuesta gratuita."
+        },
+        "free-bet-modal": {
+            "invalid-amount": "Monto invalido",
+            "funding": "Fondos...",
+            "transaction-pending": "Transacción pendiente",
+            "fund": "Enviar apuesta gratis",
+            "approve-success": "Aprobado exitosamente",
+            "enter-wallet-address": "Ingrese la dirección de la billetera",
+            "insufficient-balance": "Saldo insuficiente",
+            "enter-amount": "Introduzca la cantidad",
+            "invalid-wallet-address": "Dirección de billetera no válida",
+            "title": "Enviar apuesta gratis",
+            "no-funds": "Asegúrese de que su billetera tenga fondos suficientes",
+            "fund-successful": "Fondo exitoso",
+            "enter-wallet-addresses": "Ingrese direcciones de billetera",
+            "duplicate": "Direcciones de billetera duplicadas detectadas",
+            "one-or-more-address-invalid": "Una o más direcciones de billetera ingresadas no son válidas",
+            "total-amount-batch": "El monto total será {{ amount }} múltiplo de {{ count }} dirección(es) de billetera.",
+            "fund-batch": "Financiar varias direcciones",
+            "enter-amount-per-user": "Ingrese el monto por usuario"
+        },
+        "send-free-bet": "Enviar apuesta gratis"
     },
     "referral": {
         "generate-link": "Generar enlace",
@@ -1154,7 +1244,8 @@
     },
     "banner": {
         "arb-distribution-message": "La distribución de ARB ha comenzado. Gana tokens ARB usando horas extras. Echa un vistazo a los detalles aquí.",
-        "v1-text": "<highlight>V2</highlight>: Esta es la versión beta V2 de Overtime. Para volver a V1, <highlight>haga clic aquí</highlight>."
+        "v1-text": "<highlight>V2</highlight>: This is the V2 version of Overtime. To switch back to deprecated V1, <highlight>click here</highlight>.",
+        "elections-text": "Las elecciones para el Consejo de Thales ya están activas, ejerza su poder de voto <highlight>aquí</highlight>."
     },
     "promotions": {
         "nav-items": {
@@ -1171,5 +1262,95 @@
         "to-label": "a",
         "from-label": "De",
         "title": "Promociones e incentivos"
+    },
+    "overdrop": {
+        "navigation-menu": {
+            "home": "casa excesiva",
+            "xp-calculation": "Cálculo de XP",
+            "leaderboard": "Tabla de clasificación",
+            "leveling-tree": "árbol de nivelación"
+        },
+        "overdrop-home": {
+            "next-thales-rewards-at": "Siguiente recompensas de Thales en",
+            "current-rewards": "Recompensas estimadas actuales",
+            "twitter-share": "Aumento de XP para compartir en Twitter",
+            "twitter-xp-boost-resets": "Twitter xp boost se reinicia en",
+            "daily-streak": "Aumento de XP de racha diaria",
+            "level": "Nivel",
+            "xp": "XP",
+            "social-multiplier": "Multiplicador de XP social",
+            "my-total-xp": "Mi XP total",
+            "next-level": "Siguiente nivel",
+            "weekly-streak": "Aumento de XP de racha semanal",
+            "total-xp-multiplier": "Multiplicador de XP total",
+            "loyalty-boost": "Aumento de la fidelidad",
+            "rank": "Rango",
+            "rank-tooltip": "Tu posición actual en la Overdrop League. Consulta la pestaña de clasificación para obtener más información."
+        },
+        "leveling-tree": {
+            "explainer": {
+                "xp-explained-content": "Campaña de toda la temporada en la que los usuarios acumulan XP hasta el final de la temporada deportiva conduciendo<bold> volumen en horas extras</bold> con<bold> multiplicadores</bold> basado en varias métricas dinámicas y objetivos.<br/><br/> Una vez finalizada la campaña, todos los usuarios compartirán<highlight> 100k OP</highlight> y<highlight> 150k ARB</highlight> prorrateado basado en XP<br><br> Mientras dure la campaña, los usuarios tendrán recompensas únicas en NIVELES de XP específicos.",
+                "twitter-content": "Comparte tu <bold>Tarjeta Flex</bold> de tiempo extra de la apuesta de hoy <bold>en Twitter: bonificación del 10% por XP BASE por $</bold> durante el resto del día",
+                "position-thales-content": "Utilice <bold>THALES</bold> como garantía y <bold>obtendrá una bonificación del 10 % por XP BASE por $</bold> para esa operación específica.",
+                "positions-thales": "Posición CON BONO THALES (un descuento por apuesta)",
+                "parlay-xp": "BONIFICACIÓN DE XP DE PARLAY (una de descuento por parlay)",
+                "xp-explained": "XP explicado",
+                "games-in-parlay": "juegos en parlay",
+                "days": "días",
+                "base-xp-accrual": "Acumulación de XP base",
+                "daily-bonus": "Bonus diario",
+                "base-xp-content": "<bold>1 XP base = 1 $</bold> de volumen<br/><br/> Después<bold> 28 días</bold> en una fila de<bold> volumen &gt;10$</bold> has alcanzado<bold> Multiplicador de base MAX</bold><br/><br/> Cada día que se pierde un volumen por debajo de los 10 $, se reduce su base.<bold> XP por -0,1</bold>",
+                "twitter-share-bonus": "Bono por compartir en Twitter (una vez al día)",
+                "parlay-content": "Dependiendo de cuántos juegos individuales haya en tu parlay, ¡obtendrás un impulso adicional en tu acumulación de XP para ese parlay!",
+                "loyalty-boost": "Aumento de la fidelidad",
+                "xp-boost": "Aumentos de XP",
+                "weekly-boost-content": "Las condiciones para que se active el impulso de racha semanal para la semana en curso son tener un volumen de apuestas entre las 00:00 UTC del lunes y las 23:59 UTC del domingo para la semana en curso. ¡Cuantas más semanas seguidas se cumpla esta condición, mayor será el <bold>Impulso de racha semanal</bold> en tu acumulación de XP base!\n\nEl <bold>Impulso de racha semanal</bold> se aplica a todas las apuestas realizadas mientras el impulso está activo.\n\nSi interrumpes tu racha y no logras generar volumen un día, tu <bold>Impulso de racha semanal</bold> se restablece a +0%.",
+                "days-content": "Las condiciones para que se active el impulso de racha diaria para el día en curso son tener un volumen de apuestas entre las 00:00 UTC y las 23:59 UTC para el día en curso. Cuantos más días seguidos se cumpla esta condición, mayor será el <bold>impulso de racha diaria</bold> en tu acumulación de XP de referencia. \n\nEl <bold>impulso de racha diaria</bold> se aplica a todas las apuestas realizadas mientras el impulso está activo. \n\nSi interrumpes tu racha y no logras generar volumen un día, <bold>tu impulso de racha diaria se restablece a +0 %.</bold>",
+                "weekly-boost": "Impulso de racha semanal",
+                "loyalty-boost-content": "El aumento de XP por lealtad te otorga hasta un 25 % de aumento permanente en toda tu acumulación de XP general, según tu nivel. Comienza con un aumento del 5 % en el nivel 1 y obtienes otro aumento del +5 % al alcanzar cada quinto nivel. Alcanzarás el aumento máximo de XP por lealtad del 25 % cuando alcances el nivel 20 (GOAT) y hayas acumulado 5 000 000 de puntos de XP. Puedes ver el desglose de los niveles de XP en la página del ÁRBOL DE NIVELES.",
+                "xp-boost-content": "Hay varias formas de aumentar aún más la cantidad de XP que acumulas por apuesta: puedes obtener aumentos en las rachas de apuestas diarias, las rachas de apuestas semanales, la cantidad de juegos en parlay, usar el token THALES como garantía, mostrar tus apuestas en Twitter y alcanzar niveles de XP para obtener aumentos de lealtad."
+            },
+            "heading": "La liga agrícola de Overdrop"
+        },
+        "xp-details": {
+            "received": "Recibió",
+            "xp-history": "Historial de XP",
+            "paragraph": "Utilice THALES como garantía para obtener un bono adicional del 10 %, cree combinaciones para obtener un bono de hasta el 100 % y consulte juegos de promoción especial.",
+            "weekly-multiplier": "Multiplicador semanal",
+            "tx-link": "enlace TX",
+            "days-in-row": "Días seguidos",
+            "total-bonus": "Bonificación total",
+            "daily-multiplier": "Multiplicador diario",
+            "shared-flex": "Tarjeta flexible compartida",
+            "active-xp-bonus": "Bonificación de XP activa",
+            "twitter-multiplier": "Multiplicador de Twitter",
+            "no-results": "No hay resultados",
+            "date-time": "Fecha | Tiempo",
+            "loyalty-multiplier": "Multiplicador de lealtad",
+            "weeks-in-row": "Semanas seguidas",
+            "loyalty-boost": "Aumento de la fidelidad"
+        },
+        "leaderboard": {
+            "table": {
+                "total-xp": "Puntos XP totales",
+                "level": "Nivel",
+                "rewards": "Monto de la recompensa",
+                "address": "DIRECCIÓN",
+                "total-volume": "Volumen total",
+                "rank": "Rango"
+            }
+        },
+        "modal": {
+            "check-out": "Verificar<br/> ¡Liga de sobregiro!",
+            "reached-level": "¡Has alcanzado el NIVEL {{ level }} y has ganado una apuesta gratis de THALES de {{ amount }}!",
+            "dont-show-this": "No mostrar esto otra vez",
+            "you-are-rocking": "¡Lo estás arrasando!",
+            "day-streak": "<bold>{{ days }}</bold><br/> ¡racha de un día!",
+            "congratulation": "¡Enhorabuena!",
+            "active-daily-streak": "Aumento de XP de racha diaria activa",
+            "unlocked-level": "¡Has desbloqueado el NIVEL {{ level }}!",
+            "go-to-overdrop": "Ir a sobreentrega",
+            "gain-xp-label": "¡Gana XP, sube de nivel, gana recompensas y cultiva el airdrop!"
+        }
     }
 }

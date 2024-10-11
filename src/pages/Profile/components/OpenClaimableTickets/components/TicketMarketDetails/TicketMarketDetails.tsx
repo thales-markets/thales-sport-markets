@@ -15,7 +15,14 @@ import { formatDateWithTime } from 'thales-utils';
 import { SportMarket, SportMarketScore, TicketMarket } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { formatMarketOdds } from 'utils/markets';
-import { getPositionTextV2, getTeamNameV2, getTitleText, showGameScore, showLiveInfo } from 'utils/marketsV2';
+import {
+    getMatchTeams,
+    getPositionTextV2,
+    getTeamNameV2,
+    getTitleText,
+    showGameScore,
+    showLiveInfo,
+} from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
 import { getLeaguePeriodType, getLeagueSport } from 'utils/sports';
 import { getOrdinalNumberLabel } from 'utils/ui';
@@ -25,6 +32,7 @@ import {
     MatchPeriodContainer,
     MatchPeriodLabel,
     MatchScoreContainer,
+    MatchTeamsLabel,
     Odd,
     PositionInfo,
     PositionText,
@@ -119,6 +127,9 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean }> =
                     />
                     <TeamNamesContainer>
                         <TeamNameLabel>{getTeamNameV2(market, 0)}</TeamNameLabel>
+                        {market.isPlayerPropsMarket && (
+                            <MatchTeamsLabel>{`(${getMatchTeams(market)})`}</MatchTeamsLabel>
+                        )}
                         {!market.isOneSideMarket && !market.isPlayerPropsMarket && (
                             <TeamNameLabel>{getTeamNameV2(market, 1)}</TeamNameLabel>
                         )}

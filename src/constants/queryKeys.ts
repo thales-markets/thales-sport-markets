@@ -13,12 +13,16 @@ const QUERY_KEYS = {
     Ticket: (networkId: Network, ticketAddress: string) => ['gameTickets', networkId, ticketAddress],
     GameTickets: (networkId: Network, gameId: string) => ['gameTickets', networkId, gameId],
     UserTickets: (networkId: Network, user: string) => ['userTickets', networkId, user],
-    ParlayLeaderboard: (networkId: Network, period: number) => ['parlayLeaderboard', period, networkId],
     SportMarkets: (statusFilter: StatusFilter, networkId: Network) => ['sportMarkets', statusFilter, networkId],
     SportMarketsV2: (statusFilter: StatusFilter, networkId: Network) => ['sportMarketsV2', statusFilter, networkId],
     LiveSportMarkets: (networkId: Network) => ['liveSportMarkets', networkId],
     SportMarket: (address: string, networkId: Network) => ['sportMarket', address, networkId],
-    SportMarketV2: (address: string, networkId: Network) => ['sportMarketV2', address, networkId],
+    SportMarketV2: (address: string, networkId: Network, isLive: boolean) => [
+        'sportMarketV2',
+        address,
+        networkId,
+        isLive,
+    ],
     ParlayAmmData: (networkId: Network) => ['parlayAmmData', networkId],
     SportsAmmData: (networkId: Network) => ['sportsAmmData', networkId],
     TicketLiquidity: (
@@ -62,29 +66,7 @@ const QUERY_KEYS = {
     ClaimableCount: (walletAddress: string, networkId: Network) => ['claimable', 'count', walletAddress, networkId],
     ClaimableCountV2: (walletAddress: string, networkId: Network) => ['claimable', 'countV2', walletAddress, networkId],
     AccountPositions: (walletAddress: string, networkId: Network) => ['accountPosition', walletAddress, networkId],
-    ReferralTransaction: (walletAddress: string, networkId: Network) => [
-        'referralTransaction',
-        walletAddress,
-        networkId,
-    ],
-    ReferrerID: (walletAddress: string) => ['referrerId', walletAddress],
-    Referrers: (networkId: Network) => ['referrers', networkId],
-    ReferredTraders: (walletAddress: string, networkId: Network) => ['referredTraders', walletAddress, networkId],
-    ReferralOverview: (walletAddress: string, networkId: Network) => ['referralOverview', walletAddress, networkId],
     Wallet: {
-        GetsUSDWalletBalance: (walletAddress: string, networkId: Network) => [
-            'sUsd',
-            'balance',
-            walletAddress,
-            networkId,
-        ],
-        TokenBalance: (token: string, walletAddress: string, networkId: Network) => [
-            'wallet',
-            'tokenBalance',
-            token,
-            walletAddress,
-            networkId,
-        ],
         MultipleCollateral: (walletAddress: string, networkId: Network) => [
             'multipleCollateral',
             walletAddress,
@@ -101,9 +83,6 @@ const QUERY_KEYS = {
         ],
     },
     FavoriteTeam: (walletAddress: string, networkId: Network) => ['favoriteTeam', walletAddress, networkId],
-    Bungee: {
-        Tokens: () => ['bungee', 'tokens'],
-    },
     Banners: (networkId: Network) => ['banners', networkId],
     LiquidityPool: {
         Data: (address: string, networkId: Network) => ['liquidityPool', 'data', address, networkId],
@@ -143,8 +122,17 @@ const QUERY_KEYS = {
     CheckPausedAMM: (networkId: Network) => ['checkPausedAMM', networkId],
     Rates: {
         ExchangeRates: (networkId: Network) => ['rates', 'exchangeRates', networkId],
+        CoingeckoRates: () => ['rates', 'coingeckoRates'],
     },
     Promotions: (branchName: string) => [branchName, 'promotions'],
+    Overdrop: {
+        Leaderboard: () => ['leaderboard'],
+        UserMultipliers: (walletAddress: string) => ['userMultipliers', walletAddress],
+        UserData: (walletAddress: string) => ['userData', walletAddress],
+        UserXPHistory: (walletAddress: string) => ['userXPHistory', walletAddress],
+        GameMultipliers: () => ['gameMultipliers'],
+        Price: () => ['price'],
+    },
 };
 
 export default QUERY_KEYS;

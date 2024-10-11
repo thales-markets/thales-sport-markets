@@ -9,8 +9,10 @@ import {
     PLAYER_PROPS_MARKET_TYPES,
     SCORE_MARKET_TYPES,
     SPREAD_MARKET_TYPES,
+    TOTAL_EXACT_MARKET_TYPES,
     TOTAL_MARKET_TYPES,
     TOTAL_ODD_EVEN_MARKET_TYPES,
+    UFC_SPECIFIC_MARKET_TYPES,
     WINNER_MARKET_TYPES,
     YES_NO_PLAYER_PROPS_MARKET_TYPES,
 } from 'constants/marketTypes';
@@ -42,10 +44,14 @@ export const formatMarketOdds = (oddsType: OddsType, odds: number | undefined) =
 };
 
 export const isOneSideMarket = (league: number) =>
-    getLeagueSport(league) === Sport.MOTOSPORT || league == League.GOLF_WINNER;
+    getLeagueSport(league) === Sport.MOTOSPORT || league == League.GOLF_WINNER || league == League.US_ELECTION;
 
 export const isPlayerPropsMarket = (marketType: MarketType) => {
     return PLAYER_PROPS_MARKET_TYPES.includes(marketType);
+};
+
+export const isOnlyOverPlayerPropsMarket = (marketType: MarketType, odds: number[]) => {
+    return isPlayerPropsMarket(marketType) && odds.length === 1;
 };
 
 export const isOneSidePlayerPropsMarket = (marketType: MarketType) => {
@@ -60,7 +66,7 @@ export const isWinnerMarket = (marketType: MarketType) => {
     return WINNER_MARKET_TYPES.includes(marketType);
 };
 
-export const isDrawAvailableMarket = (marketType: MarketType) => {
+const isDrawAvailableMarket = (marketType: MarketType) => {
     return WINNER_MARKET_TYPES.includes(marketType) || SCORE_MARKET_TYPES.includes(marketType);
 };
 
@@ -102,7 +108,9 @@ export const isPeriodMarket = (marketType: MarketType) => {
             marketType <= MarketType.FIRST_PERIOD_TOTAL_AWAY_TEAM) ||
         (marketType >= MarketType.SECOND_PERIOD_TOTAL_HOME_TEAM &&
             marketType <= MarketType.SECOND_PERIOD_TOTAL_AWAY_TEAM) ||
-        (marketType >= MarketType.FIRST_PERIOD_DRAW_NO_BET && marketType <= MarketType.FOURTH_PERIOD_DRAW_NO_BET)
+        (marketType >= MarketType.FIRST_PERIOD_DRAW_NO_BET && marketType <= MarketType.FOURTH_PERIOD_DRAW_NO_BET) ||
+        (marketType >= MarketType.FIRST_PERIOD_TOTAL_EXACT_HOME_TEAM &&
+            marketType <= MarketType.SECOND_PERIOD_TOTAL_EXACT_AWAY_TEAM)
     );
 };
 
@@ -111,7 +119,12 @@ export const isPeriod2Market = (marketType: MarketType) => {
         (marketType >= MarketType.FIRST_PERIOD_WINNER2 && marketType <= MarketType.NINTH_PERIOD_WINNER2) ||
         (marketType >= MarketType.FIRST_PERIOD_TOTAL2 && marketType <= MarketType.NINTH_PERIOD_TOTAL2) ||
         (marketType >= MarketType.FIRST_PERIOD_SPREAD2 && marketType <= MarketType.NINTH_PERIOD_SPREAD2) ||
-        (marketType >= MarketType.FIRST_PERIOD_TOTAL2_ODD_EVEN && marketType <= MarketType.NINTH_PERIOD_TOTAL2_ODD_EVEN)
+        (marketType >= MarketType.FIRST_PERIOD_TOTAL2_ODD_EVEN &&
+            marketType <= MarketType.NINTH_PERIOD_TOTAL2_ODD_EVEN) ||
+        (marketType >= MarketType.FIRST_PERIOD_TOTAL2_HOME_TEAM &&
+            marketType <= MarketType.FIRST_PERIOD_TOTAL2_AWAY_TEAM) ||
+        (marketType >= MarketType.SECOND_PERIOD_TOTAL2_HOME_TEAM &&
+            marketType <= MarketType.SECOND_PERIOD_TOTAL2_AWAY_TEAM)
     );
 };
 
@@ -129,6 +142,14 @@ export const isScoreMarket = (marketType: MarketType) => {
 
 export const isOtherYesNoMarket = (marketType: MarketType) => {
     return OTHER_YES_NO_MARKET_TYPES.includes(marketType);
+};
+
+export const isUfcSpecificMarket = (marketType: MarketType) => {
+    return UFC_SPECIFIC_MARKET_TYPES.includes(marketType);
+};
+
+export const isTotalExactMarket = (marketType: MarketType) => {
+    return TOTAL_EXACT_MARKET_TYPES.includes(marketType);
 };
 
 const getIsDrawAvailable = (leagueId: number, marketType: MarketType) =>

@@ -1,9 +1,15 @@
 import { ConnectButton as RainbowConnectButton } from '@rainbow-me/rainbowkit';
 import ConnectWalletModal from 'components/ConnectWalletModal';
-import React, { useMemo } from 'react';
+import NetworkSwitcher from 'components/NetworkSwitcher';
+import { COLLATERALS } from 'constants/currency';
+import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
+import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
+import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
+import { getIsFreeBetDisabledByUser, getTicketPayment, setPaymentSelectedCollateralIndex } from 'redux/modules/ticket';
 import {
     getIsWalletConnected,
     getNetworkId,
@@ -13,14 +19,11 @@ import {
 } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { formatCurrency, truncateAddress } from 'thales-utils';
-
-import NetworkSwitcher from 'components/NetworkSwitcher';
-import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
-import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
-import { getTicketPayment } from 'redux/modules/ticket';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
-import { getCollateral } from 'utils/collaterals';
+import { formatCurrencyWithKey, truncateAddress } from 'thales-utils';
+import { getCollateral, getMaxCollateralDollarValue, mapMultiCollateralBalances } from 'utils/collaterals';
+
+const MIN_BUYIN_DOLLAR = 3;
 
 const WalletInfo: React.FC = ({}) => {
     const { t } = useTranslation();
@@ -33,8 +36,17 @@ const WalletInfo: React.FC = ({}) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const connectWalletModalVisibility = useSelector((state: RootState) => getWalletConnectModalVisibility(state));
     const ticketPayment = useSelector(getTicketPayment);
+    const isFreeBetDisabledByUser = useSelector(getIsFreeBetDisabledByUser);
 
     const selectedCollateralIndex = ticketPayment.selectedCollateralIndex;
+
+    const [isFreeBetInitialized, setIsFreeBetInitialized] = useState(false);
+    const [freeBetBalance, setFreeBetBalance] = useState(0);
+
+    const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
+        enabled: isAppReady,
+    });
+    const exchangeRates = exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
     const multipleCollateralBalancesQuery = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
@@ -61,17 +73,53 @@ const WalletInfo: React.FC = ({}) => {
             ? freeBetCollateralBalancesQuery?.data
             : undefined;
 
-    const isFreeBetExistsInWallet =
-        freeBetCollateralBalances &&
-        Object.keys(freeBetCollateralBalances).find((key) => freeBetCollateralBalances[key] > 0)
-            ? true
-            : false;
+    const balanceList = mapMultiCollateralBalances(freeBetCollateralBalances, exchangeRates, networkId);
+    const maxBalanceItem = balanceList ? getMaxCollateralDollarValue(balanceList) : undefined;
+    const isFreeBet =
+        !isFreeBetDisabledByUser && maxBalanceItem && maxBalanceItem.balanceDollarValue >= MIN_BUYIN_DOLLAR;
 
-    const selectedCollateralBalanceFreeBet = freeBetCollateralBalances
-        ? freeBetCollateralBalances[selectedCollateral]
-        : 0;
+    // Invalidate default selectedCollateralIndex
+    useEffect(() => {
+        const maxCollateralIndex = COLLATERALS[networkId].length - 1;
+        if (selectedCollateralIndex > maxCollateralIndex) {
+            dispatch(
+                setPaymentSelectedCollateralIndex({
+                    selectedCollateralIndex: maxCollateralIndex,
+                    networkId,
+                })
+            );
+        }
+    }, [dispatch, networkId, selectedCollateralIndex]);
 
-    const walletBalance = isFreeBetExistsInWallet ? selectedCollateralBalanceFreeBet : selectedCollateralBalance;
+    // Refresh free bet on wallet change
+    useEffect(() => {
+        setIsFreeBetInitialized(false);
+    }, [walletAddress, networkId]);
+
+    // Initialize free bet collateral
+    useEffect(() => {
+        if (isFreeBet && !isFreeBetInitialized && maxBalanceItem.balanceDollarValue >= MIN_BUYIN_DOLLAR) {
+            dispatch(
+                setPaymentSelectedCollateralIndex({
+                    selectedCollateralIndex: maxBalanceItem.index,
+                    networkId,
+                })
+            );
+            setIsFreeBetInitialized(true);
+            setFreeBetBalance(maxBalanceItem.balance);
+        } else {
+            setFreeBetBalance(balanceList?.find((b) => b.collateralKey === selectedCollateral)?.balance || 0);
+        }
+    }, [
+        dispatch,
+        networkId,
+        isFreeBet,
+        maxBalanceItem,
+        selectedCollateralIndex,
+        isFreeBetInitialized,
+        balanceList,
+        selectedCollateral,
+    ]);
 
     return (
         <Container walletConnected={isWalletConnected}>
@@ -95,9 +143,13 @@ const WalletInfo: React.FC = ({}) => {
                                 )}
                                 {isWalletConnected && (
                                     <WalletBalanceInfo>
-                                        {isFreeBetExistsInWallet && <FreeBetIcon className="icon icon--gift" />}
-                                        <Text>{formatCurrency(walletBalance, 2)}</Text>
-                                        <Currency>{getCollateral(networkId, selectedCollateralIndex)}</Currency>
+                                        {isFreeBet && <FreeBetIcon className="icon icon--gift" />}
+                                        <Text>
+                                            {formatCurrencyWithKey(
+                                                selectedCollateral,
+                                                isFreeBet ? freeBetBalance : selectedCollateralBalance
+                                            )}
+                                        </Text>
                                     </WalletBalanceInfo>
                                 )}
                                 <NetworkSwitcher />
@@ -188,11 +240,6 @@ const Text = styled.span`
     font-size: 10.8px;
     line-height: 12px;
     color: ${(props) => props.theme.textColor.secondary};
-`;
-
-const Currency = styled(Text)`
-    font-weight: bold;
-    margin-left: 2px;
 `;
 
 const FreeBetIcon = styled.i`

@@ -104,6 +104,7 @@ export const MarketTypeInfo = styled(FlexDivRow)<{ readOnly?: boolean; isLive?: 
     @media (max-width: 950px) {
         margin-bottom: ${(props) => (props.readOnly ? (props.isLive ? '4px' : '2px') : '5px')};
     }
+    text-align: start;
 `;
 
 export const PositionInfo = styled(FlexDivRow)`
@@ -124,9 +125,10 @@ export const CloseIcon = styled.i`
     font-size: 10px;
     color: ${(props) => props.theme.textColor.secondary};
     cursor: pointer;
+    margin-left: 5px;
 `;
 
-export const Icon = styled.i`
+const Icon = styled.i`
     font-size: 12px;
     position: absolute;
     top: 12px;

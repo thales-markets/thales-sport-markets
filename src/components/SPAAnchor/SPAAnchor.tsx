@@ -47,6 +47,7 @@ const SPAAnchor: React.FC<FieldValidationMessageProps> = ({ onClick, children, h
 const Anchor = styled.a<{ hasHref?: boolean }>`
     cursor: ${(props) => (props.hasHref ? 'pointer' : 'default')};
     all: unset;
+    display: contents;
 `;
 
 export default SPAAnchor;

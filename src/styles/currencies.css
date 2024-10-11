@@ -49,3 +49,7 @@
 .currency-icon--thales::before {
     content: '\00F9';
 }
+
+.currency-icon--sthales::before {
+    content: '\00F9';
+}

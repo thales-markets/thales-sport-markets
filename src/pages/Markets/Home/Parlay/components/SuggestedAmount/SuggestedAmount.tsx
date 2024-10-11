@@ -18,7 +18,7 @@ import {
     ceilNumberToDecimals,
     formatCurrencyWithKey,
 } from 'thales-utils';
-import { getCollateral, getDefaultCollateral, isStableCurrency } from 'utils/collaterals';
+import { getCollateral, getDefaultCollateral, isStableCurrency, isThalesCurrency } from 'utils/collaterals';
 
 const AMOUNTS = [3, 10, 20, 50, 100];
 
@@ -27,6 +27,7 @@ type SuggestedAmountProps = {
     changeAmount: (value: number | string) => void;
     exchangeRates: Rates | null;
     insertedAmount: number | string;
+    minAmount?: number;
 };
 
 const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
@@ -34,6 +35,7 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
     changeAmount,
     exchangeRates,
     insertedAmount,
+    minAmount,
 }) => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
@@ -41,11 +43,12 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
     const isStableCollateral = isStableCurrency(collateral);
     const decimals = isStableCollateral ? DEFAULT_CURRENCY_DECIMALS : LONG_CURRENCY_DECIMALS;
-    const isThales = collateral === CRYPTO_CURRENCY_MAP.THALES;
+    const isThales = isThalesCurrency(collateral);
 
     const convertFromStable = useCallback(
         (value: number) => {
             const rate = exchangeRates?.[isThales ? THALES_CONTRACT_RATE_KEY : collateral];
+
             if (collateral == defaultCollateral) {
                 return value;
             } else {
@@ -69,7 +72,8 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
     return (
         <Container>
             {AMOUNTS.map((amount, index) => {
-                const buyAmount = convertFromStable(amount);
+                const convertedAmount = convertFromStable(amount);
+                const buyAmount = minAmount && index === 0 && minAmount > convertedAmount ? minAmount : convertedAmount;
 
                 return (
                     <AmountContainer

@@ -83,6 +83,11 @@ export default {
             secondary: Colors.WHITE,
         },
     },
+    success: {
+        textColor: {
+            primary: Colors.GREEN,
+        },
+    },
     error: {
         background: {
             primary: Colors.NAVY_BLUE,
@@ -168,5 +173,49 @@ export default {
     progressBar: {
         selected: Colors.BLUE,
         unselected: Colors.WHITE,
+    },
+    overdrop: {
+        background: {
+            secondary: '#F1BA2099',
+            tertiary: 'rgba(60, 73, 138, 0.15)',
+            quaternary: Colors.METALIC_BLUE,
+            quinary: Colors.NAVY_BLUE_EXTRA_DARK,
+            senary: Colors.LIGHTNING_YELLOW,
+            septenary: Colors.METALIC_YELLOW,
+            active: Colors.NAVY_BLUE_DARK,
+            progressBar: Colors.YELLOW,
+        },
+        textColor: {
+            primary: Colors.YELLOW,
+            secondary: Colors.NAVY_BLUE_DARK,
+            tertiary: Colors.CHINESE_BLUE,
+            quaternary: Colors.NAVY_BLUE_EXTRA_DARK,
+            quinary: Colors.TORY_BLUE_LIGHT,
+            senary: Colors.OVERDROP_GREEN,
+            septenary: Colors.METALIC_YELLOW,
+            inactive: Colors.NAVY_BLUE_LIGHT,
+        },
+        borderColor: {
+            primary: Colors.JONQUIL,
+            secondary: `linear-gradient(160deg, #4e5fb1, #dba111)`,
+            tertiary: Colors.GOLD,
+        },
+        badge: {
+            background: {
+                primary: Colors.JONQUIL,
+                secondary: 'rgb(21, 27, 54, 0.3)',
+            },
+            textColor: {
+                primary: Colors.SMOKEY_TOPAZ,
+            },
+        },
+        button: {
+            textColor: {
+                primary: Colors.NAVY_BLUE,
+            },
+            background: {
+                primary: Colors.METALIC_YELLOW,
+            },
+        },
     },
 };

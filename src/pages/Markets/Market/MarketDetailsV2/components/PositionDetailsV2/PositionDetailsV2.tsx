@@ -12,27 +12,17 @@ import { getTicket, removeFromTicket, updateTicket } from 'redux/modules/ticket'
 import { getOddsType } from 'redux/modules/ui';
 import { SportMarket, TicketPosition } from 'types/markets';
 import { formatMarketOdds, getPositionOrder } from 'utils/markets';
-import { getMatchLabel, getOddTooltipTextV2, getPositionTextV2, isSameMarket } from 'utils/marketsV2';
-import {
-    Container,
-    Odd,
-    Status,
-    Text,
-    TooltipContainer,
-    TooltipFooter,
-    TooltipFooterInfo,
-    TooltipFooterInfoContianer,
-    TooltipFooterInfoLabel,
-    TooltipText,
-} from './styled-components';
+import { getMatchLabel, getPositionTextV2, isSameMarket, sportMarketAsSerializable } from 'utils/marketsV2';
+import { Container, Odd, Status, Text } from './styled-components';
 
 type PositionDetailsProps = {
     market: SportMarket;
     position: Position;
     isMainPageView?: boolean;
+    isColumnView?: boolean;
 };
 
-const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isMainPageView }) => {
+const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isMainPageView, isColumnView }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const selectedOddsType = useSelector(getOddsType);
@@ -48,24 +38,23 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isM
     const isGameCancelled = market.isCancelled;
     const isGameResolved = market.isResolved || market.isCancelled;
     const isGameRegularlyResolved = market.isResolved && !market.isCancelled;
-    const isPendingResolution = isGameStarted && !isGameResolved;
+    const isPendingResolution = isGameStarted && !isGameResolved && !market.live;
+
     const isGamePaused = market.isPaused && !isGameResolved;
     const isGameOpen = !market.isResolved && !market.isCancelled && !market.isPaused && !isGameStarted;
 
     const odd = market.odds[position];
-    const noOdd = !odd || odd == 0;
+    const isZeroOdd = !odd || odd == 0;
+    const noOdd = isZeroOdd || odd > 0.97;
     const disabledPosition = noOdd || (!isGameOpen && !isGameLive);
 
     const showOdd = isGameOpen || isGameLive;
-    const showTooltip = showOdd && !noOdd && !isMobile && false;
 
     const positionText = getPositionTextV2(
         market,
         position,
         isMainPageView && (market.typeId === MarketType.TOTAL || !!marketTypeFilter)
     );
-
-    const oddTooltipText = getOddTooltipTextV2(position, market);
 
     const getDetails = () => (
         <Container
@@ -77,7 +66,8 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isM
             onClick={() => {
                 if (disabledPosition) return;
                 if (isAddedToTicket) {
-                    dispatch(removeFromTicket(market));
+                    const serializableMarket = sportMarketAsSerializable(market);
+                    dispatch(removeFromTicket(serializableMarket));
                 } else {
                     const ticketPosition: TicketPosition = {
                         gameId: market.gameId,
@@ -106,17 +96,20 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isM
                     }
                     if (isMobile) {
                         // TODO: temporary solution
-                        toast(`${getMatchLabel(market)} added to the ticket` || oddTooltipText, oddToastOptions);
+                        toast(`${getMatchLabel(market)} added to the ticket`, oddToastOptions);
                     }
                 }
             }}
         >
-            <Text>{positionText}</Text>
+            <Text isColumnView={isColumnView}>{positionText}</Text>
             {showOdd ? (
                 <Odd selected={isAddedToTicket} isMainPageView={isMainPageView}>
-                    {formatMarketOdds(selectedOddsType, odd)}
-                    {noOdd && (
+                    {isZeroOdd ? '-' : formatMarketOdds(selectedOddsType, odd)}
+                    {isZeroOdd && (
                         <Tooltip overlay={<>{t('markets.zero-odds-tooltip')}</>} iconFontSize={13} marginLeft={3} />
+                    )}
+                    {odd > 0.97 && (
+                        <Tooltip overlay={<>{t('markets.low-odds-tooltip')}</>} iconFontSize={13} marginLeft={3} />
                     )}
                 </Odd>
             ) : (
@@ -135,21 +128,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isM
         </Container>
     );
 
-    const getTooltip = () => (
-        <TooltipContainer>
-            <TooltipText>{oddTooltipText}</TooltipText>
-            {isGameOpen && !isMobile && (
-                <TooltipFooter>
-                    <TooltipFooterInfoContianer>
-                        <TooltipFooterInfoLabel>{t('markets.market-details.odds')}:</TooltipFooterInfoLabel>
-                        <TooltipFooterInfo>{formatMarketOdds(selectedOddsType, odd)}</TooltipFooterInfo>
-                    </TooltipFooterInfoContianer>
-                </TooltipFooter>
-            )}
-        </TooltipContainer>
-    );
-
-    return <>{showTooltip ? <Tooltip overlay={getTooltip()} component={getDetails()} /> : getDetails()}</>;
+    return getDetails();
 };
 
 export default PositionDetails;

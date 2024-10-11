@@ -1,12 +1,8 @@
 import { ReactComponent as OvertimeLogoIcon } from 'assets/images/overtime-logo.svg';
 import { t } from 'i18next';
-import useGetReffererIdQuery from 'queries/referral/useGetReffererIdQuery';
 import React from 'react';
-import QRCode from 'react-qr-code';
 import { useSelector } from 'react-redux';
 import { getOddsType } from 'redux/modules/ui';
-import { getWalletAddress } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import {
     FlexDiv,
@@ -18,7 +14,6 @@ import {
 } from 'styles/common';
 import { Coins, formatCurrencyWithKey } from 'thales-utils';
 import { TicketMarket } from 'types/markets';
-import { buildReffererLink } from 'utils/routes';
 import { formatTicketOdds } from 'utils/tickets';
 import MatchInfoV2 from '../../../MatchInfoV2';
 
@@ -43,13 +38,9 @@ const MyTicket: React.FC<MyTicketProps> = ({
     isLive,
     applyPayoutMultiplier,
 }) => {
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const selectedOddsType = useSelector(getOddsType);
 
     const isTicket = !multiSingle;
-
-    const reffererIDQuery = useGetReffererIdQuery(walletAddress || '', { enabled: !!walletAddress });
-    const reffererID = reffererIDQuery.isSuccess && reffererIDQuery.data ? reffererIDQuery.data : '';
 
     return (
         <Container>
@@ -59,23 +50,17 @@ const MyTicket: React.FC<MyTicketProps> = ({
                 {!isTicket && (
                     <Header isTicket={isTicket}>
                         {t('markets.parlay.share-ticket.header')}
-                        <BoldContent>{' v2.overtimemarkets.xyz'}</BoldContent>
+                        <BoldContent>{' overtimemarkets.xyz'}</BoldContent>
                     </Header>
                 )}
             </ContentRow>
             {isTicket && (
                 <Header isTicket={isTicket}>
                     {t('markets.parlay.share-ticket.header')}
-                    <BoldContent>{' v2.overtimemarkets.xyz'}</BoldContent>
+                    <BoldContent>{' overtimemarkets.xyz'}</BoldContent>
                 </Header>
             )}
-            <ContentRow margin={'3px 0'}>
-                {reffererID && (
-                    <ReferralWrapper>
-                        <QRCode size={70} value={buildReffererLink(reffererID)} />
-                        <ReferralLabel>{t('markets.parlay.share-ticket.referral')}</ReferralLabel>
-                    </ReferralWrapper>
-                )}
+            <ContentRow margin={'10px 0'}>
                 <PayoutWrapper>
                     <PayoutRow>
                         <Square isLost={isTicketLost} />
@@ -124,7 +109,7 @@ const MyTicket: React.FC<MyTicketProps> = ({
                 )}
                 <InfoDiv>
                     <InfoLabel>{t('markets.parlay.buy-in')}:</InfoLabel>
-                    <InfoValue>{formatCurrencyWithKey(collateral, paid)}</InfoValue>
+                    <BuyInValue>{formatCurrencyWithKey(collateral, paid)}</BuyInValue>
                 </InfoDiv>
             </InfoWrapper>
         </Container>
@@ -212,6 +197,7 @@ const PayoutValue = styled.span<{ isLost?: boolean }>`
     font-size: 30px;
     line-height: 32px;
     font-weight: 600;
+    text-transform: none;
     color: ${(props) => (props.isLost ? props.theme.status.loss : props.theme.status.win)};
     ${(props) => (props.isLost ? `text-decoration: line-through 2px solid ${props.theme.status.loss};` : '')}
 `;
@@ -239,21 +225,14 @@ const InfoDiv = styled(FlexDiv)``;
 const InfoLabel = styled.span`
     font-weight: 600;
 `;
+
 const InfoValue = styled.span`
     font-weight: 600;
     margin-left: 5px;
 `;
 
-const ReferralWrapper = styled(FlexDivColumnCentered)``;
-
-const ReferralLabel = styled.span`
-    font-weight: 400;
-    font-size: 10px;
-    line-height: 12px;
-    text-transform: uppercase;
-    color: ${(props) => props.theme.textColor.primary};
-    margin-top: 3px;
-    white-space: nowrap;
+const BuyInValue = styled(InfoValue)`
+    text-transform: none;
 `;
 
 const HorizontalLine = styled.hr`

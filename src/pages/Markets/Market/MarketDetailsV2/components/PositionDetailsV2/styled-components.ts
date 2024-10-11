@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FlexDiv, FlexDivColumn, FlexDivRow } from 'styles/common';
+import { FlexDivRow } from 'styles/common';
 
 export const Container = styled(FlexDivRow)<{
     disabled: boolean;
@@ -37,13 +37,14 @@ export const Container = styled(FlexDivRow)<{
     }
 `;
 
-export const Text = styled.span`
+export const Text = styled.span<{ isColumnView?: boolean }>`
     font-weight: 600;
     font-size: 12px;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
     width: 100%;
+    ${(props) => (props.isColumnView ? 'max-width: 200px;' : '')}
 `;
 
 export const Odd = styled.span<{
@@ -69,24 +70,4 @@ export const Status = styled(Text)`
         font-size: 11px;
         margin-top: 1px;
     }
-`;
-
-export const TooltipContainer = styled(FlexDivColumn)``;
-
-export const TooltipText = styled.span``;
-
-export const TooltipFooter = styled(FlexDivRow)`
-    border-top: 1px solid ${(props) => props.theme.background.secondary};
-    margin-top: 10px;
-    padding-top: 8px;
-`;
-
-export const TooltipFooterInfoContianer = styled(FlexDiv)``;
-
-export const TooltipFooterInfoLabel = styled(TooltipText)`
-    margin-right: 2px;
-`;
-
-export const TooltipFooterInfo = styled(TooltipText)`
-    font-weight: 600;
 `;

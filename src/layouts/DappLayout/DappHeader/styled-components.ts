@@ -1,4 +1,6 @@
 import burger from 'assets/images/burger.svg';
+import OverdropButtonBackground from 'assets/images/overdrop/overdrop-button-background.png';
+import overdrop from 'assets/images/overdrop/overdrop-nav.png';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 
@@ -65,6 +67,16 @@ export const MenuIcon = styled.img.attrs({ src: burger })`
     filter: invert(39%) sepia(9%) saturate(1318%) hue-rotate(199deg) brightness(71%) contrast(88%);
 `;
 
+export const OverdropIcon = styled.img.attrs({ src: overdrop })`
+    height: 75px;
+    cursor: pointer;
+    margin-right: 20px;
+    @media (max-width: 576px) {
+        height: 70px;
+        margin-right: 0;
+    }
+`;
+
 export const WrapperMobile = styled(FlexDivRow)`
     width: 100%;
     align-items: center;
@@ -91,6 +103,8 @@ export const LogoContainer = styled.div`
     width: 100%;
     display: flex;
     justify-content: center;
+    align-items: center;
+    gap: 12px;
 `;
 
 export const IconWrapper = styled.div`
@@ -160,8 +174,48 @@ export const MobileButtonWrapper = styled.div`
     }
 `;
 
+export const OverdropButtonContainer = styled(FlexDiv)`
+    position: relative;
+    background-image: url(${OverdropButtonBackground});
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: 160px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: ${(props) => props.theme.overdrop.textColor.primary};
+    @media (max-width: 950px) {
+        font-size: 8px;
+        width: 140px;
+        height: 30px;
+        margin-left: 20px;
+    }
+
+    @media (max-width: 767px) {
+        font-size: 8px;
+        width: 120px;
+        height: 30px;
+    }
+`;
+
+export const SmallBadgeImage = styled.img`
+    position: absolute;
+    left: -25px;
+    width: 50px;
+    height: 50px;
+    @media (max-width: 767px) {
+        width: 30px;
+        height: 30px;
+        left: -10px;
+    }
+`;
+
 export const SettingsContainer = styled(FlexDivRowCentered)`
-    padding-right: 15px;
+    padding-right: 5px;
     position: relative;
     margin: 0 10px;
     cursor: pointer;

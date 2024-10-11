@@ -26,7 +26,7 @@ import { Provider } from 'react-redux';
 import { Store } from 'redux';
 import { getDefaultTheme } from 'redux/modules/ui';
 import { WagmiConfig, configureChains, createClient } from 'wagmi';
-import { optimism } from 'wagmi/dist/chains';
+import { arbitrum, optimism } from 'wagmi/dist/chains';
 import { infuraProvider } from 'wagmi/dist/providers/infura';
 import { jsonRpcProvider } from 'wagmi/dist/providers/jsonRpc';
 import { publicProvider } from 'wagmi/dist/providers/public';
@@ -36,41 +36,24 @@ type RootProps = {
     store: Store;
 };
 
-type RpcProvider = {
-    ankr: string;
-    chainnode: string;
-    blast: string;
-};
-
 const STALL_TIMEOUT = 2000;
 const projectId = import.meta.env.VITE_APP_WALLET_CONNECT_PROJECT_ID || '';
-
-const CHAIN_TO_RPC_PROVIDER_NETWORK_NAME: Record<number, RpcProvider> = {
-    [Network.OptimismMainnet]: {
-        ankr: 'optimism',
-        chainnode: 'optimism-mainnet',
-        blast: 'optimism-mainnet',
-    },
-    [Network.Arbitrum]: { ankr: 'arbitrum', chainnode: 'arbitrum-one', blast: 'arbitrum-one' },
-    [Network.Base]: { ankr: 'base', chainnode: 'base-mainnet', blast: '' },
-    [Network.OptimismSepolia]: { ankr: '', chainnode: '', blast: '' },
-};
 
 const CHAIN_TO_RPC_PROVIDER_URL: Record<number, string | undefined> = {
     [Network.OptimismMainnet]: import.meta.env.VITE_APP_OPTIMISM_RPC_URL,
     [Network.Arbitrum]: import.meta.env.VITE_APP_ARBITRUM_RPC_URL,
     [Network.Base]: import.meta.env.VITE_APP_BASE_RPC_URL,
 };
+const isRpcProviderSet = Object.values(CHAIN_TO_RPC_PROVIDER_URL).filter((url) => url && url !== '').length;
 
 const theme = getDefaultTheme();
 const customTheme = merge(darkTheme(), { colors: { modalBackground: ThemeMap[theme].background.primary } });
 
 const { chains, provider } = configureChains(
-    [optimism, optimismSepolia],
+    [optimism, arbitrum, optimismSepolia],
     [
         jsonRpcProvider({
             rpc: (chain) => {
-                const chainnodeNetworkName = CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id]?.chainnode;
                 const rpcProvider = CHAIN_TO_RPC_PROVIDER_URL[chain.id];
                 return {
                     http: rpcProvider
@@ -80,10 +63,7 @@ const { chains, provider } = configureChains(
                         : import.meta.env.VITE_APP_PRIMARY_PROVIDER_ID === 'INFURA' && chain.id === Network.Base
                         ? // For Base use Ankr when Infura is primary as Infura doesn't support it
                           `https://rpc.ankr.com/base/${import.meta.env.VITE_APP_ANKR_PROJECT_ID}`
-                        : !!chainnodeNetworkName
-                        ? `https://${chainnodeNetworkName}.chainnodes.org/${
-                              import.meta.env.VITE_APP_CHAINNODE_PROJECT_ID
-                          }`
+                        ? `https://optimism-sepolia.blastapi.io/${process.env.REACT_APP_BLAST_PROJECT_ID}`
                         : chain.rpcUrls.default.http[0],
                 };
             },

@@ -1,5 +1,5 @@
 import { ReactComponent as ParlayEmptyIcon } from 'assets/images/parlay-empty.svg';
-import MatchInfoNotOpenedV2 from 'components/MatchInfoNotOpenedV2';
+import MatchUnavailableInfo from 'components/MatchUnavailableInfo';
 import MatchInfoV2 from 'components/MatchInfoV2';
 import { SportFilter, StatusFilter } from 'enums/markets';
 import { isEqual } from 'lodash';
@@ -36,10 +36,11 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
     const isLiveFilterSelected = sportFilter == SportFilter.Live;
 
     const [ticketMarkets, setTicketMarkets] = useState<TicketMarket[]>([]);
-    const [notOpenedMarkets, setNotOpenedMarkets] = useState<TicketPosition[]>([]);
+    const [unavailableMarkets, setUnavailableMarkets] = useState<TicketPosition[]>([]);
     const [oddsChanged, setOddsChanged] = useState<boolean>(false);
     const [acceptOdds, setAcceptOdds] = useState<boolean>(false);
     const [outOfLiquidityMarkets, setOutOfLiquidityMarkets] = useState<number[]>([]);
+    const [useThalesCollateral, setUseThalesCollateral] = useState(false);
 
     const previousTicketOdds = useRef<{ position: number; odd: number; gameId: string; proof: string[] }[]>([]);
 
@@ -61,13 +62,17 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
         }
     }, [dispatch, sportsAmmDataQuery.isSuccess, sportsAmmDataQuery.data]);
 
+    // Reset states when empty ticket
     useEffect(() => {
         if (!ticket.length) {
             setOddsChanged(false);
-            setNotOpenedMarkets([]);
+            setUnavailableMarkets([]);
+            setOutOfLiquidityMarkets([]);
+            setUseThalesCollateral(false);
         }
     }, [ticket]);
 
+    // Live matches
     useEffect(() => {
         if (liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data && isLiveFilterSelected) {
             const liveSportOpenMarkets = liveSportMarketsQuery.data.live.reduce(
@@ -81,11 +86,11 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
                 []
             );
 
-            const ticketMarkets: TicketMarket[] = ticket
+            const openTicketMarketsWithOdds: TicketMarket[] = ticket
                 .filter((ticketPosition) =>
                     liveSportOpenMarkets.some(
                         (market: SportMarket) =>
-                            market.odds.some((odd) => odd != 0) && isSameMarket(market, ticketPosition)
+                            market.odds.some((odd) => odd !== 0) && isSameMarket(market, ticketPosition)
                     )
                 )
                 .map((ticketPosition) => {
@@ -98,7 +103,18 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
                         odd: openMarket.odds[ticketPosition.position],
                     };
                 });
-            const ticketOdds = ticketMarkets.map((market) => ({
+
+            if (ticket.length > openTicketMarketsWithOdds.length) {
+                const marketsUnavailable = ticket.filter((ticketPosition) =>
+                    openTicketMarketsWithOdds.every((market: SportMarket) => !isSameMarket(market, ticketPosition))
+                );
+
+                setUnavailableMarkets(marketsUnavailable);
+            } else {
+                setUnavailableMarkets([]);
+            }
+
+            const ticketOdds = openTicketMarketsWithOdds.map((market) => ({
                 odd: market.odd,
                 position: market.position,
                 gameId: market.gameId,
@@ -106,12 +122,13 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
             }));
 
             if (!isEqual(previousTicketOdds.current, ticketOdds)) {
-                setTicketMarkets(ticketMarkets);
+                setTicketMarkets(openTicketMarketsWithOdds);
                 previousTicketOdds.current = ticketOdds;
             }
         }
     }, [isLiveFilterSelected, liveSportMarketsQuery.data, liveSportMarketsQuery.isSuccess, ticket]);
 
+    // Non-Live matches
     useEffect(() => {
         if (sportMarketsQuery.isSuccess && sportMarketsQuery.data && !isLiveFilterSelected) {
             const sportOpenMarkets = sportMarketsQuery.data[StatusFilter.OPEN_MARKETS].reduce(
@@ -125,7 +142,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
                 []
             );
 
-            const ticketMarkets: TicketMarket[] = ticket
+            const openTicketMarkets: TicketMarket[] = ticket
                 .filter((ticketPosition) =>
                     sportOpenMarkets.some((market: SportMarket) => isSameMarket(market, ticketPosition))
                 )
@@ -140,23 +157,17 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
                     };
                 });
 
-            if (ticket.length > ticketMarkets.length) {
-                const notOpenedMarkets = ticket.filter((ticketPosition) => {
-                    const marketNotOpened = sportOpenMarkets.every(
-                        (market: SportMarket) => !isSameMarket(market, ticketPosition)
-                    );
-                    return marketNotOpened;
-                });
-                if (notOpenedMarkets.length > 0 && notOpenedMarkets.some((market) => !market.playerProps)) {
-                    dispatch(removeAll());
-                } else {
-                    setNotOpenedMarkets(notOpenedMarkets);
-                }
+            if (ticket.length > openTicketMarkets.length) {
+                const notOpenedMarkets = ticket.filter((ticketPosition) =>
+                    openTicketMarkets.every((market: SportMarket) => !isSameMarket(market, ticketPosition))
+                );
+
+                setUnavailableMarkets(notOpenedMarkets);
             } else {
-                setNotOpenedMarkets([]);
+                setUnavailableMarkets([]);
             }
 
-            const ticketOdds = ticketMarkets.map((market) => ({
+            const ticketOdds = openTicketMarkets.map((market) => ({
                 odd: market.odd,
                 position: market.position,
                 gameId: market.gameId,
@@ -164,7 +175,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
             }));
 
             if (!isEqual(previousTicketOdds.current, ticketOdds)) {
-                setTicketMarkets(ticketMarkets);
+                setTicketMarkets(openTicketMarkets);
                 previousTicketOdds.current = ticketOdds;
             }
         }
@@ -173,17 +184,18 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
     useEffect(() => {
         if (ticket[0] && ticket[0].live && !isLiveFilterSelected) {
             dispatch(removeAll());
-        } else if (ticket[0] && !ticket[0]?.live && isLiveFilterSelected) {
+        } else if (ticket[0] && !ticket[0].live && isLiveFilterSelected) {
             dispatch(removeAll());
         }
-        // eslint-disable-next-line
-    }, [isLiveFilterSelected]);
+    }, [isLiveFilterSelected, dispatch, ticket]);
 
     const onCloseValidationModal = useCallback(() => dispatch(resetTicketError()), [dispatch]);
 
+    const hasParlayMarkets = ticketMarkets.length > 0 || unavailableMarkets.length > 0;
+
     return (
         <Container isMobile={isMobile} isWalletConnected={isWalletConnected}>
-            {ticketMarkets.length > 0 ? (
+            {hasParlayMarkets ? (
                 <>
                     {!isMobile && (
                         <Title>
@@ -207,15 +219,16 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
                                             acceptOdds={acceptOdds}
                                             setAcceptOdds={setAcceptOdds}
                                             applyPayoutMultiplier={true}
+                                            useThalesCollateral={useThalesCollateral}
                                         />
                                     </RowMarket>
                                 );
                             })}
-                        {notOpenedMarkets.length > 0 &&
-                            notOpenedMarkets.map((market, index) => {
+                        {unavailableMarkets.length > 0 &&
+                            unavailableMarkets.map((market, index) => {
                                 return (
                                     <RowMarket key={index} outOfLiquidity={false} notOpened={true}>
-                                        <MatchInfoNotOpenedV2
+                                        <MatchUnavailableInfo
                                             market={market}
                                             showOddUpdates
                                             setOddsChanged={setOddsChanged}
@@ -236,7 +249,8 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
                             setOddsChanged(changed);
                         }}
                         onSuccess={onSuccess}
-                        submitButtonDisabled={!!notOpenedMarkets.length}
+                        submitButtonDisabled={!!unavailableMarkets.length}
+                        setUseThalesCollateral={setUseThalesCollateral}
                     />
                 </>
             ) : (
@@ -320,7 +334,7 @@ const ThalesBonus = styled.span`
             width: 0;
         }
         to {
-            width: 270px;
+            width: 320px;
         }
     }
 
@@ -396,8 +410,12 @@ const RowMarket = styled.div<{ outOfLiquidity: boolean; notOpened?: boolean }>`
                     circle,
                     transparent,
                     transparent 50%,
-                    ${(props) => props.theme.background.secondary} 50%,
-                    ${(props) => props.theme.background.secondary} 100%
+                    ${(props) =>
+                            props.notOpened ? props.theme.error.borderColor.primary : props.theme.background.secondary}
+                        50%,
+                    ${(props) =>
+                            props.notOpened ? props.theme.error.borderColor.primary : props.theme.background.secondary}
+                        100%
                 )
                 0px 1px / 0.7rem 0.7rem repeat-x;
         }

@@ -8,7 +8,8 @@ import { getIsMobile } from 'redux/modules/app';
 import styled from 'styled-components';
 import { SportMarket } from 'types/markets';
 import { getMarketTypeTooltipKey } from 'utils/markets';
-import { getSubtitleText, getTitleText, isOddValid } from 'utils/marketsV2';
+import { getSubtitleText, getTitleText } from 'utils/marketsV2';
+import { League } from '../../../../../../enums/sports';
 import { getGridMinMaxPercentage } from '../../../../../../utils/ui';
 import PositionDetailsV2 from '../PositionDetailsV2';
 import {
@@ -49,16 +50,26 @@ const Positions: React.FC<PositionsProps> = ({
     const isMobile = useSelector(getIsMobile);
     const [isExpanded, setIsExpanded] = useState<boolean>(true);
 
-    const areOddsValid = markets.some((market) => market.odds.some((odd) => isOddValid(odd)));
+    const hasOdds = markets.some((market) => market.odds.length);
 
-    const showContainer = !isGameOpen || areOddsValid || showInvalid;
+    const showContainer = !isGameOpen || hasOdds || showInvalid;
 
-    const sortedMarkets = useMemo(() => orderBy(markets, ['line'], ['asc']), [markets]);
+    const sortedMarkets = useMemo(() => orderBy(markets, ['line', 'odds'], ['asc', 'desc']), [markets]);
 
     const positionText0 = markets[0] ? getSubtitleText(markets[0], 0) : undefined;
     const positionText1 = markets[0] ? getSubtitleText(markets[0], 1) : undefined;
     const titleText = getTitleText(markets[0], true);
     const tooltipKey = getMarketTypeTooltipKey(marketType);
+
+    const liveMarketFirstErrorMessage = useMemo(
+        () =>
+            markets[0].live && markets[0].errors && markets[0].errors.length > 0
+                ? // TODO: if we want to remove teams add .replace(` ${markets[0].homeTeam} - ${markets[0].awayTeam}`, '');
+                  markets[0].errors[0].errorMessage
+                : '',
+
+        [markets]
+    );
 
     return showContainer ? (
         <Container
@@ -103,6 +114,12 @@ const Positions: React.FC<PositionsProps> = ({
                         </SubTitleContainer>
                     )}
                     {sortedMarkets.map((market, index) => {
+                        const odds =
+                            isMainPageView &&
+                            market.typeId === MarketType.WINNER &&
+                            market.leagueId === League.US_ELECTION
+                                ? market.odds.slice(0, 2)
+                                : market.odds;
                         return (
                             <ContentWrapper key={index}>
                                 {market.isPlayerPropsMarket && (
@@ -114,12 +131,13 @@ const Positions: React.FC<PositionsProps> = ({
                                     gridMinMaxPercentage={getGridMinMaxPercentage(market, isMobile)}
                                     isColumnView={isColumnView}
                                 >
-                                    {market.odds.map((_, index) => (
+                                    {odds.map((_, index) => (
                                         <PositionDetailsV2
                                             key={index}
                                             market={market}
                                             position={index}
                                             isMainPageView={isMainPageView}
+                                            isColumnView={isColumnView}
                                         />
                                     ))}
                                 </ContentRow>
@@ -131,7 +149,12 @@ const Positions: React.FC<PositionsProps> = ({
         </Container>
     ) : isGameLive ? (
         <Container isExpanded={true} noOdds={true}>
-            <Message>{t(`markets.market-card.live-trading-paused`)}</Message>
+            <Message>
+                {t(`markets.market-card.live-trading-paused`)}
+                {liveMarketFirstErrorMessage && (
+                    <Tooltip overlay={liveMarketFirstErrorMessage} marginLeft={5} top={0} />
+                )}
+            </Message>
         </Container>
     ) : (
         <></>

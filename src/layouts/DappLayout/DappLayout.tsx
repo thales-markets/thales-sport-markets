@@ -4,6 +4,7 @@ import MetaData from 'components/MetaData';
 import { generalConfig } from 'config/general';
 import { Theme } from 'enums/ui';
 import useWidgetBotScript from 'hooks/useWidgetBotScript';
+import ModalWrapper from 'pages/Overdrop/components/ModalWrapper';
 import queryString from 'query-string';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -73,6 +74,7 @@ const DappLayout: React.FC = ({ children }) => {
         <>
             {isAppReady ? (
                 <Background>
+                    <ModalWrapper />
                     <Banner />
                     <Wrapper>
                         <MetaData />

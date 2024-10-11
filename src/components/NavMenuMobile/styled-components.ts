@@ -49,7 +49,7 @@ export const Wrapper = styled.div<{ show?: boolean | null }>`
     left: 0;
     right: 0;
     ${(props) => (props.show == true ? 'top: 0;' : '')}
-    ${(props) => (props.show == false || props.show == null ? 'top: -640px;' : '')}
+    ${(props) => (props.show == false || props.show == null ? 'top: -700px;' : '')}
     ${(props) => props.show === true && animationOpen};
     ${({ show }) => show === false && animationClose};
     background-color: ${(props) => props.theme.background.secondary};
@@ -135,13 +135,6 @@ export const CloseIcon = styled.i.attrs({ className: 'icon icon--arrow-up' })`
     bottom: -30px;
     right: calc(50% - 10px);
     cursor: pointer;
-`;
-
-export const LogoContainer = styled.div`
-    position: relative;
-    width: 100%;
-    display: flex;
-    justify-content: center;
 `;
 
 export const WalletWrapper = styled(FlexDiv)`

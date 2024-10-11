@@ -19,15 +19,54 @@ export const useUserTicketsQuery = (
         QUERY_KEYS.UserTickets(networkId, user),
         async () => {
             try {
-                const { sportsAMMDataContract, sportsAMMV2ManagerContract } = networkConnector;
-                if (sportsAMMDataContract && sportsAMMV2ManagerContract) {
-                    const [numOfActiveTicketsPerUser, numOfResolvedTicketsPerUser] = await Promise.all([
+                const {
+                    sportsAMMDataContract,
+                    sportsAMMV2ManagerContract,
+                    freeBetHolderContract,
+                    stakingThalesBettingProxy,
+                } = networkConnector;
+                if (
+                    sportsAMMDataContract &&
+                    sportsAMMV2ManagerContract &&
+                    freeBetHolderContract &&
+                    stakingThalesBettingProxy
+                ) {
+                    const [
+                        numOfActiveTicketsPerUser,
+                        numOfResolvedTicketsPerUser,
+                        numOfActiveFreeBetTicketsPerUser,
+                        numOfResolvedFreeBetTicketsPerUser,
+                        numOfActiveStakedThalesTicketsPerUser,
+                        numOfResolvedStakedThalesTicketsPerUser,
+                    ] = await Promise.all([
                         sportsAMMV2ManagerContract.numOfActiveTicketsPerUser(user),
                         sportsAMMV2ManagerContract.numOfResolvedTicketsPerUser(user),
+                        freeBetHolderContract.numOfActiveTicketsPerUser(user),
+                        freeBetHolderContract.numOfResolvedTicketsPerUser(user),
+                        stakingThalesBettingProxy.numOfActiveTicketsPerUser(user),
+                        stakingThalesBettingProxy.numOfResolvedTicketsPerUser(user),
                     ]);
 
-                    const numberOfActiveBatches = Math.trunc(Number(numOfActiveTicketsPerUser) / BATCH_SIZE) + 1;
-                    const numberOfResolvedBatches = Math.trunc(Number(numOfResolvedTicketsPerUser) / BATCH_SIZE) + 1;
+                    const numberOfActiveBatches =
+                        Math.trunc(
+                            (Number(numOfActiveTicketsPerUser) > Number(numOfActiveFreeBetTicketsPerUser) &&
+                            Number(numOfActiveTicketsPerUser) > Number(numOfActiveStakedThalesTicketsPerUser)
+                                ? Number(numOfActiveTicketsPerUser)
+                                : Number(numOfActiveFreeBetTicketsPerUser) >
+                                  Number(numOfActiveStakedThalesTicketsPerUser)
+                                ? Number(numOfActiveFreeBetTicketsPerUser)
+                                : Number(numOfActiveStakedThalesTicketsPerUser)) / BATCH_SIZE
+                        ) + 1;
+                    const numberOfResolvedBatches =
+                        Math.trunc(
+                            (Number(numOfResolvedTicketsPerUser) > Number(numOfResolvedFreeBetTicketsPerUser) &&
+                            Number(numOfResolvedTicketsPerUser) > Number(numOfResolvedStakedThalesTicketsPerUser)
+                                ? Number(numOfResolvedTicketsPerUser)
+                                : Number(numOfResolvedFreeBetTicketsPerUser) >
+                                  Number(numOfResolvedStakedThalesTicketsPerUser)
+                                ? Number(numOfResolvedFreeBetTicketsPerUser)
+                                : Number(numOfResolvedStakedThalesTicketsPerUser)) / BATCH_SIZE
+                        ) + 1;
 
                     const promises = [];
                     for (let i = 0; i < numberOfActiveBatches; i++) {
@@ -49,19 +88,12 @@ export const useUserTicketsQuery = (
 
                     const tickets = promisesResult
                         .slice(0, promisesLength - 3)
-                        .map((allData) => allData.ticketsData)
+                        .map((allData) => [
+                            ...allData.ticketsData,
+                            ...allData.freeBetsData,
+                            ...allData.stakingBettingProxyData,
+                        ])
                         .flat(1);
-
-                    // Add free bets tickets
-                    const freeBetTickets = promisesResult
-                        .slice(0, promisesLength - 3)
-                        .map((allData) => allData.freeBetsData)
-                        .flat(1)
-                        .map((ticket) => {
-                            return { ...ticket, isFreeBet: true };
-                        });
-
-                    tickets.push(...freeBetTickets);
 
                     const gamesInfoResponse = promisesResult[promisesLength - 3];
                     const playersInfoResponse = promisesResult[promisesLength - 2];

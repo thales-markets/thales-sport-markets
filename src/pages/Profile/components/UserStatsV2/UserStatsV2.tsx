@@ -2,7 +2,7 @@ import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuer
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import useUsersStatsV2Query from 'queries/wallet/useUsersStatsV2Query';
-import React, { useCallback, useMemo } from 'react';
+import React, { Fragment, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
@@ -10,7 +10,7 @@ import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modu
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { formatCurrencyWithSign } from 'thales-utils';
-import { Coins } from 'types/tokens';
+import { Coins } from 'thales-utils';
 import { isStableCurrency, sortCollateralBalances } from 'utils/collaterals';
 import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from '../../../../constants/currency';
 import { FlexDivColumn, FlexDivRow } from '../../../../styles/common';
@@ -130,7 +130,7 @@ const UserStats: React.FC = () => {
                                     </SubValue>
                                 </Section>
                             ) : (
-                                <></>
+                                <Fragment key={`${currencyKey}-freebet`} />
                             );
                         })}
                 </SectionWrapper>
@@ -146,7 +146,7 @@ const UserStats: React.FC = () => {
                     {freeBetBalances &&
                         Object.keys(multiCollateralsSorted).map((currencyKey) => {
                             return multiCollateralBalances[currencyKey] ? (
-                                <Section key={`${currencyKey}`}>
+                                <Section key={currencyKey}>
                                     <SubLabel>
                                         <CurrencyIcon className={COLLATERAL_ICONS_CLASS_NAMES[currencyKey as Coins]} />
                                         {currencyKey}
@@ -165,7 +165,7 @@ const UserStats: React.FC = () => {
                                     </SubValue>
                                 </Section>
                             ) : (
-                                <></>
+                                <Fragment key={currencyKey} />
                             );
                         })}
                 </SectionWrapper>
@@ -215,6 +215,7 @@ const Label = styled.span`
 
 const SubLabel = styled(Label)`
     font-weight: 400;
+    text-transform: none;
 `;
 
 const Value = styled.span`

@@ -8,6 +8,7 @@
         "wrap-and-buy": "Wrap ETH and Buy",
         "wrap-eth-tooltip": "Your ETH is first wrapped into WETH and then passed to the contract",
         "sell-side": "SELL",
+        "submit": "Submit",
         "days-of-week": {
             "mon": "mon",
             "tue": "tue",
@@ -78,32 +79,6 @@
                 }
             }
         },
-        "referral": {
-            "header-label": "Refer & earn",
-            "link-copied": "Referral link copied!",
-            "button": {
-                "label": "Refer and earn",
-                "disbled-tooltip": "Connect wallet to generate a referral link.",
-                "enabled-tooltip": "Invite people to trade on overtime to earn fees from each trade they make."
-            },
-            "id-exists": "Referral ID already exists",
-            "id-create-success": "Successfully set referral ID",
-            "modal": {
-                "title": "Referral ID",
-                "description": "Choose your Referral ID",
-                "submit-button": "Submit",
-                "copy-button": "Copy Referral link"
-            },
-            "your-referral-id": "Your Referral ID"
-        },
-        "swap": {
-            "title": "Get USD",
-            "from-label": "From",
-            "to-label": "To",
-            "balance-label": "Balance: {{amount}}",
-            "swap-label": "Swap",
-            "swap-progress-label": "Swapping in progress..."
-        },
         "enable-wallet-access": {
             "approve": "Approve",
             "approve-progress": "Approving...",
@@ -134,7 +109,8 @@
             "enter-percentage": "Enter percentage",
             "single-amm-paused": "AMM Paused",
             "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}",
-            "invalid-amount-max": "The amount cannot be higher than {{max}}"
+            "invalid-amount-max": "The amount cannot be higher than {{max}}",
+            "swap-quote-low": "Swap quote is too low (receive: {{quote}}, min receive {{minQuote}})! Please try again..."
         },
         "time-remaining": {
             "ended": "ended",
@@ -161,6 +137,7 @@
         "dapp": "dapp",
         "launch-dapp": "launch dapp",
         "cancel": "Cancel",
+        "try-again": "Try again",
         "select-date": "Select date...",
         "tags-placeholder": "Search tags...",
         "remove-tag-tooltip": "Click to remove tag",
@@ -179,6 +156,7 @@
         "fifa-tooltip": "FIFA World Cup markets results are based on regulation results, should they go to overtime the regulation result is the one the market will resolve at.",
         "iihf-tooltip": "IIHF World Championship markets results are based on regulation results, should they go to overtime the regulation result is the one the market will resolve at.",
         "football-tooltip": "Markets results are based on regulation results, should they go to overtime the regulation result is the one the market will resolve at.",
+        "election-tooltip": "The resolution source will be the Associated Press, Fox News, and NBC. These markets will resolve once all three sources call the race for the same candidate. If all three sources haven’t called the race for the same candidate by 11th of November, all bets will be voided.",
         "top-bet-type-title": "Will {{driver}} finish the {{race}} race in the {{betType}} drivers?",
         "top3": "TOP 3",
         "top5": "TOP 5",
@@ -223,7 +201,7 @@
         "grid-view": "Grid",
         "list-view": "List",
         "skew-tooltip": "Skew Impact is the amount of premium added to a position price based on current risk the AMM incurs from this specific market.",
-        "number-of-rounds": "Total number of rounds",
+        "number-of-rounds": "Round",
         "toast-message": {
             "transaction-pending": "Transaction pending",
             "swap-success": "Successfully swapped {{ currencyKey }}",
@@ -261,6 +239,7 @@
                 "tooltip": "Markets resolved more than 7 days ago"
             },
             "sport": {
+                "promo": "Promo games",
                 "live": "Live",
                 "all": "All sports",
                 "favourites": "Favourites",
@@ -282,7 +261,10 @@
                 "cricket": "Cricket",
                 "boxing": "Boxing",
                 "golf": "Golf",
-                "soon": "More sports coming soon!"
+                "soon": "More sports coming soon!",
+                "olympicgames": "Olympic games",
+                "tabletennis": "Table tennis",
+                "politics": "Politics"
             },
             "all": "All",
             "datepicker": {
@@ -376,6 +358,7 @@
         "card": {
             "ticket-id": "Ticket ID",
             "live": "Live",
+            "claim-batch-tooltip": "Claim all your pending positions in one transaction.",
             "number-of-games": "No. of games",
             "ticket-paid": "Ticket paid",
             "to-win": "Potential win",
@@ -431,16 +414,22 @@
         "free-bet-modal": {
             "title": "Send free bet",
             "enter-wallet-address": "Enter wallet address",
+            "enter-wallet-addresses": "Enter wallet addresses",
             "enter-amount": "Enter amount",
+            "enter-amount-per-user": "Enter amount per user",
             "approve-success": "Successfully approved",
             "transaction-pending": "Transaction pending",
             "fund": "Send free bet",
             "funding": "Funding...",
             "fund-successful": "Fund successful",
             "invalid-wallet-address": "Invalid wallet address",
+            "one-or-more-address-invalid": "One or more entered wallet address is invalid",
+            "duplicate": "Duplicate Wallet Addresses Detected",
             "invalid-amount": "Invalid amount",
             "no-funds": "Please ensure your wallet has enough funds",
-            "insufficient-balance": "Insufficient balance"
+            "fund-batch": "Fund multiple addresses",
+            "insufficient-balance": "Insufficient balance",
+            "total-amount-batch": "Total amount will be {{ amount }} multiple by {{ count }} wallet address(es)."
         }
     },
     "markets": {
@@ -655,7 +644,13 @@
                 "bonus": "{{bonus}} added bonus on win!"
             },
             "type-tooltip": {
-                "touchdowns": "Receiving, rushing, punt return, kick return, defensive and interception touchdowns are counted towards the result"
+                "touchdowns": "Receiving, rushing, punt return, kick return, defensive and interception touchdowns are counted towards the result",
+                "sacks": "An over/under wager on how many sacks a player will record during a game.",
+                "extra-points": "A wager on whether a certain player's extra points will be over/under a certain amount.",
+                "tackles": "A wager on whether a certain player's number of tackles will be over/under a certain amount.",
+                "longest-reception": "A wager on whether a certain player's longest reception will be over/under a certain amount.",
+                "passing-rushing": "A wager on whether a certain player's passing + rushing yards will be over/under a certain amount.",
+                "rushing-receiving": "A wager on whether a certain player's rushing + receiving yards will be over/under a certain amount."
             },
             "player-props": "Player props",
             "total-markets": "Total markets",
@@ -690,15 +685,11 @@
             "items": {
                 "markets": "Markets",
                 "profile": "Profile",
-                "onboarding-wizard": "Get started",
                 "history": "History",
-                "fifa-campaign": "Zebro FIFA campaign",
-                "sports-trivia": "Sports trivia",
-                "leaderboard": "Parlay leaderboard",
-                "fee-rebates": "Fee rebates",
-                "become-affiliate": "Become affiliate",
                 "liquidity-pool": "Provide Liquidity",
-                "promotions": "Promotions"
+                "promotions": "Promotions",
+                "speed-markets": "Speed markets",
+                "digital-options": "Digital options"
             },
             "buttons": {
                 "switch": "Switch",
@@ -711,12 +702,14 @@
         },
         "parlay": {
             "ticket-slip": "Ticket slip",
-            "thales-bonus-info": "Use THALES and get 1% bonus for each game.",
+            "thales-bonus-info": "Use THALES and get 2% bonus payout for each game.",
             "total-quote": "Total quote",
             "total-bonus": "Total bonus",
             "persist-games": "Keep selection after submit",
             "keep-selection-tooltip": "By default, the parlay builder is reset after successful submission. Tick this if you want to keep current context after submission.",
-            "thales-bonus-tooltip": "Users placing trades with THALES will get 1% extra payouts for each game they have in their ticket (already calculated in Total quote and Payout).",
+            "thales-bonus-tooltip": "Users placing trades with THALES will get 2% extra payouts for each game they have in their ticket (already calculated in Total quote and Payout).",
+            "swap-thales": "Use THALES for better odds",
+            "swap-thales-tooltip": "<bold>Boost your winnings with THALES!</bold> With just a simple click, you can automatically swap to THALES and enjoy improved betting quotes instantly! Payout is in THALES.",
             "clear": "Clear all",
             "buy-in": "Buy-in",
             "parlay-fee": "Parlay fee",
@@ -762,12 +755,12 @@
                 "not-supported": "Not supported validation error: {{error}}"
             },
             "share-ticket": {
+                "label": "Share for Twitter boost",
                 "header": "Web3 Sport markets on",
                 "parlay": "ticket",
                 "potential-payout": "Potential payout",
                 "total-quote": "Total quote",
                 "positions": "Number of Positions",
-                "referral": "Referral link",
                 "share": "Share",
                 "winner": "Winner",
                 "loser": "Loser",
@@ -776,7 +769,10 @@
                     "view-details": "Detailed",
                     "view-simple": "Simple",
                     "usd-amount": "USD amount"
-                }
+                },
+                "submit-url": "Submit your tweet URL for Overdrop boost",
+                "verifying-tweet": "Verifying tweet",
+                "network-error": "Network error, check browser console for more info"
             },
             "toggle-parlay": {
                 "multi-single": "Multi single",
@@ -784,20 +780,49 @@
             },
             "slippage": {
                 "slippage": "Slippage",
+                "swap-thales": "Swap slippage",
                 "label": "Accept trade if odds drop by:",
                 "enter-value": "Enter value",
                 "invalid-value": "Invalid value",
                 "tooltip": "The transfer won’t go through if the bridge rate moves unfavorably by more than this percentage when the transfer is executed."
+            },
+            "overdrop": {
+                "overdrop-xp": "Overdrop XP",
+                "overdrop-xp-overview": "Overdrop XP overview",
+                "base-xp": "Base XP",
+                "buy-in-xp": "Buy in XP",
+                "odds-xp": "Odds multiplier",
+                "active-boost": "Active boost",
+                "bonus-applied": "Boost applied",
+                "total-xp-boost": "Total XP Boost",
+                "total-xp-earned": "Total XP Earned",
+                "tooltip": {
+                    "daily-boost": "The more days in a row you bet, the higher your XP boost. Increase +5% for each day up to maximum of +35%. If you miss one day, this boost resets to 0%",
+                    "weekly-boost": "The more weeks in a row you bet, the higher your XP boost. Increase +5% for each week up to maximum of +20%. If you miss one week, this boost resets to 0%",
+                    "parlay-boost": "Depending on how many individual games are within your parlay, you will get an additional boost on your XP accrual for that parlay. Maximum is +420% XP boost on 15 games in parlay.",
+                    "thales-boost": "All bets executed with THALES as collateral will have +10% bonus on baseline XP accrual for that specific bet!",
+                    "twitter-boost": "If you share your Overtime bet on Twitter in the form of a Flex Card, you will activate a 3 day long Twitter Flex Boost of +10%.",
+                    "loyalty-boost": "The Loyalty XP Boost gives you up to 25% permanent boost on all your general XP earning, depending on your XP level. Starting at 5% boost on Level 1, you gain another +5% increase on reaching every fifth level.",
+                    "promo-boost": "Certain sports games carry additional XP boosts.",
+                    "base-xp": "The base XP is calculated via the following formula:\n\nBase XP = Buy In Amount * (2 - Normalized Odds). \n\nThis means that your bet accrues more base XP the higher your buy-in and the higher your bet odds are."
+                }
+            },
+            "buy-steps": {
+                "approve-swap": "Approve swap {{src}} to {{dst}}",
+                "swap": "Swap {{src}} to {{dst}}",
+                "approve-buy": "Approve buy with {{currencyKey}}",
+                "buy": "Buy with {{currencyKey}}"
             }
         },
-        "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity.",
+        "zero-odds-tooltip": "Odds unavailable at the moment.",
+        "low-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",
         "discounted-per": "Discounted as per",
         "incentivized-tooltip": "Triple Thrill: EPL, NFL, and NBA Rewards. A whopping total of 90k OP, 90k ARB, and 180k THALES will be distributed across the three leagues, with each league having its own dedicated 30k OP or ARB + 30k THALES bucket per chain. Check more details <detailsLink>here</detailsLink>.",
         "incentivized-markets": "INCENTIVIZED MARKETS",
         "incentivized-tooltip-tennis": "A total of {{rewards}} will be distributed during the Australian Open. Check more details <detailsLink>here</detailsLink>.",
         "incentivized-tooltip-nfl-playoffs": "A whopping total of {{rewards}} will be distributed for the NFL Superbowl. Only volume on Arbitrum network will be calculated towards rewards! Check more details <detailsLink>here</detailsLink>.",
         "incentivized-tooltip-uefa": "A whopping total of {{rewards}} will be distributed for the UEFA competitions. Only volume on Arbitrum network will be calculated towards rewards! Check more details <detailsLink>here</detailsLink>.",
-        "incentivized-tooltip-nhl-mlb": "A whopping total of {{rewards}} will be distributed for the rest of the {{league}} season, including the playoffs. Only volume on Arbitrum network will be calculated towards rewards! Check more details <detailsLink>here</detailsLink>.",
+        "incentivized-tooltip-nhl-mlb": "A whopping total of {{rewards}} will be distributed for the rest of the MLB season, including the playoffs. Only volume on Arbitrum network will be calculated towards rewards! Check more details <detailsLink>here</detailsLink>.",
         "superbowl-incentive": "10,000 ARB IN INCENTIVES",
         "incentivized-tooltip-euro-copa": "A whopping total of {{rewards}} will be distributed for the Euro 2024 and Copa America competitions. Check more details <detailsLink>here</detailsLink>.",
         "incentivized-tooltip-wimbledon": "Compete for {{rewards}} during Wimbledon 2024 on Overtime V1 and V2. Check more details <detailsLink>here</detailsLink>.",
@@ -824,60 +849,6 @@
             "safebox": "SafeBox fees",
             "rebates": "Rebates",
             "rank": "Rank"
-        }
-    },
-    "landing-page": {
-        "best-odds": "Join the Web3 sports markets revolution",
-        "try-now": "Try it now",
-        "powered-by": "Powered by",
-        "no-kyc": "No registration needed to participate",
-        "launch-dapp": "Launch dapp",
-        "leagues": "Leagues",
-        "info-text-title-1": "No sign-up required",
-        "info-text-title-2": "Everything is on-chain",
-        "info-text-title-3": "Non-custodial markets",
-        "info-text-title-4": "Data provided by Chainlink",
-        "info-text-title-5": "Fast & low-cost transactions",
-        "info-text-1": "You don’t need to create an user. We don't gather any kind of personal information either.",
-        "info-text-2": "When centralized entities are falling, transparency is key. All our code is public and the smart contracts can be reviewed by anyone",
-        "info-text-3": "There’s no one holding your collateral. Your keys, your tokens.",
-        "info-text-4": "Industry-leader provides tamper-proof odds and sport matches result in a decentralized way.",
-        "info-text-5": "Every interaction with Overtime sports AMM is done on Optimism network, leader in scalability.",
-        "browse-markets": "Browse sport markets",
-        "web3-positioning": "Web3 sport positioning",
-        "learn-more": "Wanna learn more?",
-        "documentation": "Check our documentation",
-        "jump-in": "Ready to jump in?",
-        "open-overtime": "Open Overtime markets",
-        "join-discord": "Need any help? Join our discord",
-        "read-now": "Read now"
-    },
-    "referral": {
-        "generate-link": "Generate link",
-        "copy-link": "Copy link",
-        "trades": "Trades",
-        "total-volume": "Total volume",
-        "total-earned": "Total earned",
-        "total-trading-fees": "Total trading fees",
-        "affiliate-leaderboard-table": {
-            "address": "Referral ID",
-            "number-of-trades": "Trades",
-            "total-volume": "Total volume",
-            "first-transaction": "First transaction",
-            "total-earned": "Total earned",
-            "amount": "Amount",
-            "volume": "Volume",
-            "type": "Type",
-            "timestamp": "Date/Time"
-        },
-        "no-result": "There are no results for this table",
-        "earned": "Earned",
-        "header": "Create referral links",
-        "paragraph": "<bold>Overtime Referrals Program is an on-chain incentivized user acquisition and onboarding tool.</bold>The program allows anyone to <bold>generate a Referral Link</bold> and share it with users they are trying to onboard.<br /><br /> When sharing your personal Referral Link, you earn <bold>0.5% of all {{ collateralKey }} volume your referred users produce!</bold> There are no manual claims needed, the {{ collateralKey }} is auto-accruing in your wallet in form of simple {{ collateralKey }} transfers.",
-        "nav-items": {
-            "all-transactions": "All transactions",
-            "see-result-by-trader": "See result by trader",
-            "affiliate-leaderboard": "Affiliate Leaderboard"
         }
     },
     "deposit": {
@@ -963,81 +934,6 @@
                 "sign-up": "Sign up",
                 "trade": "Trade on Overtime"
             }
-        }
-    },
-    "wizard": {
-        "title": "Get Started!",
-        "steps": {
-            "title": {
-                "connect-wallet": "Connect Wallet",
-                "fund": "Fund with ETH",
-                "exchange": "Get Crypto USD",
-                "trade": "Overtime Markets"
-            },
-            "description": {
-                "connect-wallet": "If you don't have {{network}} connected Wallet installed, you will be routed to install a wallet of choice before being able to connect it.",
-                "fund": "Before you can use Overtime, first you need to get ETH on your {{network}} connected wallet. After clicking on the Fund button, choose one of the available options to continue.",
-                "exchange": "Overtime uses popular stablecoins (Crypto USD) to execute trades. By clicking on Exchange to {{collateral}} button, seamlessly swap ETH to a desired amount of stablecoins.",
-                "trade": "Now you are funded and ready to use Overtime Markets. Good luck!"
-            },
-            "action": {
-                "connect-wallet": "Connect Wallet",
-                "connected": "Connected",
-                "fund": "Fund with ETH",
-                "exchange": "Exchange to USD",
-                "trade": "Trade on Overtime"
-            }
-        },
-        "fund-modal": {
-            "title": "Fund, Bridge & Send",
-            "buy": "Fund with card",
-            "buy-banxa": "Fund with Banxa",
-            "buy-mt-pelerin": "Fund with Mt Pelerin",
-            "bridge": "Bridge to {{network}}",
-            "exchange": "Send from exchange",
-            "copy-address": "Copy address",
-            "copied": "Copied!",
-            "address": "Your address QR code"
-        }
-    },
-    "parlay-leaderboard": {
-        "title": "Parlay Incentives Leaderboard",
-        "description": "A total of <bold>{{amount}}</bold> will be distributed to the best winning parlays on a <bold>weekly basis</bold>. The tickets will be ranked based on a points system. The points are calculated by taking the odds of the parlay, multiplying it with the square root of the buy-in and adding 10% bonus for each game on the ticket.",
-        "info": "Points = parlayOdds * √buyin * (1+0.1*numberOfGames).",
-        "distribution-note": "Rewards will be distributed to the <bold>TOP 20 parlays every week</bold>!",
-        "no-parlays": "No winning parlays registered in the period yet.",
-        "warning": "*Overtime team holds the right to disqualify wallets we suspect of gaming the system.",
-        "warning2": "Users that have covered 50% or more of potential combinations of their winning tickets will be disqualified.",
-        "sidebar": {
-            "title-parlay": "Parlay",
-            "title-leaderboard": "Leaderboard",
-            "wallet": "Wallet",
-            "quote": "Quote",
-            "paid": "Paid",
-            "won": "Won",
-            "reward": "Reward",
-            "total-quote": "Total Quote",
-            "total-amount": "Total Amount",
-            "positions": "Positions",
-            "points": "Points"
-        },
-        "periods": {
-            "period-end-label": "The period ends in",
-            "period-ended-label": "Period ended",
-            "weekly-period": "Weekly period"
-        },
-        "ticket-info": {
-            "title": "Parlay leaderboard",
-            "points-label": "Points",
-            "points-tooltip": "Calculated total points with bonuses for parlay leaderboard. Points are derived by multiplying the total odds of the parlay with square root of the buy-in and then adding 10% bonus for each game on the ticket.",
-            "rank-label": "Rank",
-            "rank-tooltip": "Tentative ranking based on current state of the leaderboard. Final ranking are known at round's end. Rounds are weekly Wednesday to Wednesday.",
-            "rewards-label": "Rewards",
-            "rewards-tooltip": "Potential rewards if your parlay assumes the rank above at round's end.",
-            "basic-points-label": "Basic points",
-            "buy-in-bonus-label": "Buy-in bonus",
-            "number-of-games-bonus-label": "Number of games bonus",
-            "total-points-label": "Total points"
         }
     },
     "liquidity-pool": {
@@ -1144,10 +1040,6 @@
             "title": "Overtime Markets: Earn Parlay Rewards Every 2 Weeks",
             "description": "Overtime Markets is a web3 sportsbook with the best biweekly bonuses on the market for parlay players! Check out the leaderboard and if you qualified here."
         },
-        "referral": {
-            "title": "Overtime Markets: Earn Referral Fees",
-            "description": "Refer a friend to Overtime Markets and get a percentage from each trade of the person you refer, paid in USD collateral instantly and directly into your wallet."
-        },
         "profile": {
             "title": "Overtime Market: User Profile",
             "description": "Claim your winnings, review your performance, and track deposits you've made to the Overtime Market Vaults."
@@ -1162,7 +1054,9 @@
         }
     },
     "banner": {
-        "v1-text": "<highlight>V2</highlight>: This is the V2 beta version of Overtime. To switch back to V1, <highlight>click here</highlight>."
+        "v1-text": "<highlight>Welcome to Overtime V2!</highlight> If you are looking for the legacy V1 version, <highlight>click here</highlight>.",
+        "elections-text": "Elections for Thales Council are now live, exercise your voting power <highlight>here</highlight>.",
+        "speed-text": "Trade on Speed Markets, win 10,000 PYTH! <highlight>Learn more.</highlight>"
     },
     "promotions": {
         "title": "Promotions and Incentives",
@@ -1179,5 +1073,95 @@
         "starts-in": "starts in",
         "ends-in": "ends in",
         "no-promotions": "Oops! It looks like there are no promotions available at the moment for given filter."
+    },
+    "overdrop": {
+        "navigation-menu": {
+            "home": "Overdrop home",
+            "xp-calculation": "XP Details",
+            "leveling-tree": "Leveling tree",
+            "leaderboard": "Leaderboard"
+        },
+        "overdrop-home": {
+            "my-total-xp": "My Total XP",
+            "rank-tooltip": "Your current rank in Overdrop League. Check leaderboard tab for more info.",
+            "daily-streak": "Daily streak xp boost",
+            "weekly-streak": "Weekly streak XP boost",
+            "twitter-share": "Twitter share xp boost",
+            "twitter-xp-boost-resets": "Twitter xp boost resets in",
+            "loyalty-boost": "Loyalty boost",
+            "level": "Level",
+            "xp": "xp",
+            "next-level": "Next level",
+            "total-xp-multiplier": "Total XP multiplier",
+            "social-multiplier": "Social XP multiplier",
+            "current-rewards": "Current estimated rewards",
+            "next-thales-rewards-at": "Next Thales free bet rewards at",
+            "rank": "Rank"
+        },
+        "leveling-tree": {
+            "heading": "The overdrop farming league",
+            "explainer": {
+                "xp-explained": "XP Explained",
+                "xp-explained-content": "<bold>Overdrop</bold> is a season-long league where users accrue XP on Overtime by placing bets. The higher the buy-in and odds of the bet, the more XP the bet earns. Users can also <bold>gain additional XP boosts</bold> through various achievements that can speed up their XP progress. \n\nThe league will run <bold>until June 2025</bold> and it will have rewards for all participants <bold>in the form of airdrops, free bets and many more!</bold> \n\nAfter the Overdrop League ends in June 2025, all users with accrued XP will be rewarded their share of <highlight>100,000 OP</highlight> and <highlight>200,000 ARB</highlight> tokens proportionally. You can take a look at your estimated rewards at any point on the leaderboard page. \n\nAdditionally, users will be able to reach <bold>XP levels</bold> that carry special rewards! You can read more about <bold>XP levels</bold> here.",
+                "base-xp-accrual": "Base XP",
+                "base-xp-content": "The base calculation for how much XP your bet gains you is calculated via the following formula: \n\n <highlight>Base XP = Buy In Amount * (2 - Normalized Odds )</highlight> \n\n - <bold>Buy In Amount:</bold> the amount of $ that you placed as a Buy In on the respective bet.\n\n - <bold>Normalized Odds:</bold> Odds of your bet shown in the format of Normalized Probability between 0 and 1. For example, Decimal Odds of 1.60 is 0.625 in  Normalized Odds format.\n\nThis means that your bet accrues more base XP the higher your buy-in and the higher your bet odds are.",
+                "xp-boost": "XP Boosts",
+                "xp-boost-content": "There are several ways to further boost the amount of your XP accrual per bet by having boosts from <bold>daily bet streaks, weekly bet streaks, amount of games in parlay, using THALES token as collateral,  flexing your bets on twitter and reaching XP levels for loyalty boosts!</bold>",
+                "daily-bonus": "Daily streak boost",
+                "weekly-boost": "Weekly streak boost",
+                "weekly-boost-content": "The conditions for the weekly streak boost to be activated for the ongoing week is to have any betting volume between Monday 00:00UTC and Sunday 23:59UTC for the ongoing week. The more weeks in a row this condition is met, the higher the <bold>Weekly Streak Boost</bold> on your baseline XP accrual!\n\n<bold>Weekly Streak Boost</bold> is applied to all bets made while the boost is active.\n\nIf you break your streak and miss out to drive volume one day, your <bold>Weekly Streak Boost</bold> is reset to +0%.",
+                "parlay-xp": "PARLAY BOOST",
+                "parlay-content": "Depending on how many individual games are within your parlay, you will get an additional boost on your XP accrual for that parlay!",
+                "positions-thales": "THALES BOOST",
+                "days": "days",
+                "days-content": "The conditions for the daily streak boost to be activated for the ongoing day is to have any betting volume between 00:00UTC and 23:59UTC for the ongoing day. The more days in a row this condition is met, the higher the <bold>Daily Streak Boost</bold> on your baseline XP accrual ! \n\n<bold>Daily Streak Boost</bold> is applied to all bets made while the boost is active. \n\nIf you break your streak and miss out to drive volume one day, <bold>your Daily Streak Boost is reset to +0%.</bold>",
+                "games-in-parlay": "games in parlay",
+                "position-thales-content": "All bets executed with  <bold>THALES</bold> as collateral will have <bold>+10% boost</bold> on baseline XP accrual for that specific bet!",
+                "twitter-share-bonus": "twitter share boost",
+                "twitter-content": "If you share your Overtime bet on Twitter in the form of a <bold>Flex Card</bold>, you will activate a <bold>3 day long Twitter Flex Boost of +10%.</bold>  This specific boost is valid for all trades executed within those 72 hours. <bold>After the 72 hours</bold> have elapsed, the boost expires and you can activate it again by sharing a new flex card on Twitter under the same conditions.",
+                "loyalty-boost": "Loyalty boost",
+                "loyalty-boost-content": "The Loyalty XP Boost gives you up to 25% permanent boost on all your general XP accrual, depending on your level. Starting at 5% boost on Level 1, you gain another +5% increase on reaching every fifth level. You reach max Loyalty XP boost of 25% when you reach Level 20 (GOAT) with having accrued 5,000,000 XP points. You can see the XP levels breakdown on the LEVELING TREE page."
+            }
+        },
+        "xp-details": {
+            "days-in-row": "Days in a row",
+            "weeks-in-row": "Weeks in a row",
+            "daily-multiplier": "Daily multiplier",
+            "weekly-multiplier": "Weekly multiplier",
+            "loyalty-multiplier": "Loyalty multiplier",
+            "loyalty-boost": "Loyalty boost",
+            "shared-flex": "Shared ticket",
+            "twitter-multiplier": "Twitter multiplier",
+            "total-bonus": "Total boost",
+            "active-xp-bonus": "Active xp boost",
+            "xp-history": "XP History",
+            "paragraph": "Check your currently active XP boosts below. Additional XP boosts are available on a per-bet basis when using THALES as collateral and/or increasing the number of games in a parlay.",
+            "no-results": "No results",
+            "date-time": "Date | Time",
+            "received": "Received",
+            "tx-link": "TX link"
+        },
+        "leaderboard": {
+            "table": {
+                "address": "Address",
+                "rank": "Rank",
+                "level": "Level",
+                "total-xp": "Total XP Points",
+                "total-volume": "Total volume",
+                "rewards": "Reward amount"
+            }
+        },
+        "modal": {
+            "check-out": "Check out<br/>overdrop league!",
+            "gain-xp-label": "Gain XP, level up, earn rewards and farm  the airdrop!",
+            "go-to-overdrop": "Go to overdrop",
+            "congratulation": "Congratulations!",
+            "reached-level": "You have reached LEVEL {{ level }} and won {{ amount }} THALES free bet!",
+            "unlocked-level": "You unlocked LEVEL {{ level }}!",
+            "you-are-rocking": "You are rocking it!",
+            "day-streak": "<bold>{{ days }}</bold><br/>day streak!",
+            "active-daily-streak": "Active daily streak xp boost",
+            "dont-show-this": "Don't show this again"
+        }
     }
 }
