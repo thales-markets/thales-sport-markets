@@ -1,6 +1,6 @@
 import { Network } from 'enums/network';
 import { useQuery, UseQueryOptions } from 'react-query';
-import { coinFormatter, Coins } from 'thales-utils';
+import { bigNumberFormatter, coinFormatter, Coins } from 'thales-utils';
 import { UserLiquidityPoolData } from 'types/liquidityPool';
 import networkConnector from 'utils/networkConnector';
 import QUERY_KEYS from '../../constants/queryKeys';
@@ -36,10 +36,8 @@ const useLiquidityPoolUserDataQuery = (
                     );
 
                     userLiquidityPoolData.isWithdrawalRequested = contractUserLiquidityPoolData.withdrawalRequested;
-                    userLiquidityPoolData.withdrawalShare = coinFormatter(
-                        contractUserLiquidityPoolData.withdrawalShare,
-                        networkId,
-                        collateral
+                    userLiquidityPoolData.withdrawalShare = bigNumberFormatter(
+                        contractUserLiquidityPoolData.withdrawalShare
                     );
                     userLiquidityPoolData.isPartialWithdrawalRequested = userLiquidityPoolData.withdrawalShare > 0;
 
