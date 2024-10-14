@@ -242,6 +242,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                 ) : (
                                     ''
                                 )}
+                                {displayGameClock(market) && ' '}
                                 {displayGamePeriod(market)}
                             </MatchInfoLabel>
                         </>
