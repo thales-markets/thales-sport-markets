@@ -1,5 +1,10 @@
+import axios from 'axios';
+import Button from 'components/Button';
+import { Input } from 'components/fields/common';
+import { generalConfig } from 'config/general';
 import { defaultToastOptions, getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { LINKS } from 'constants/links';
+import { secondsToMilliseconds } from 'date-fns';
 import { toPng } from 'html-to-image';
 import { t } from 'i18next';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
@@ -7,19 +12,14 @@ import ReactModal from 'react-modal';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
+import { getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
 import { Coins, isFirefox, isIos, isMetamask } from 'thales-utils';
 import { TicketMarket } from 'types/markets';
-import MyTicket from './components/MyTicket';
-import { Input } from 'components/fields/common';
-import Button from 'components/Button';
-import { getWalletAddress } from 'redux/modules/wallet';
-import axios from 'axios';
-import { generalConfig } from 'config/general';
 import { refetchOverdropMultipliers } from 'utils/queryConnector';
-import { secondsToMilliseconds } from 'date-fns';
+import MyTicket from './components/MyTicket';
 
 export type ShareTicketModalProps = {
     markets: TicketMarket[];
@@ -39,6 +39,21 @@ const TWITTER_MESSAGES_TEXT = [
     `This is my @OvertimeMarkets bet. Let's get it! %0ATry it yourself on ${LINKS.Overtime}`,
     `Just flexing my @OvertimeMarkets bet! %0ATake a shot yourself at ${LINKS.Overtime}`,
     `Peep my @OvertimeMarkets onchain bet! %0ATry your luck as well on ${LINKS.Overtime}`,
+    `Another day, another bet locked in on @OvertimeMarkets. Let’s ride this one out! 🌪️ ${LINKS.Overtime}`,
+    `If this bet cashes, beers on me! 💰 Come join the action on @OvertimeMarkets: ${LINKS.Overtime}`,
+    `Smokin’ odds, guaranteed payouts, and I keep my privacy? @OvertimeMarkets is where it’s at. 👀 ${LINKS.Overtime}`,
+    `I’m running it up on @OvertimeMarkets. No bans, no limits, just straight betting 🔥 ${LINKS.Overtime}`,
+    `Here to stack THALES and bets on @OvertimeMarkets – let’s gooo! 💥 ${LINKS.Overtime} (for the THALES bets)`,
+    `Just placed my bet on @OvertimeMarkets. No sweat, smart contracts got me covered! 💸 ${LINKS.Overtime}`,
+    `Made this bet on @OvertimeMarkets, and I’m ready to flex hard. Who’s joining? 💪 ${LINKS.Overtime}`,
+    `Betting where it counts ${LINKS.Overtime}  On-chain and guaranteed payouts with @OvertimeMarkets. 🙌`,
+    `Just secured another bet on @OvertimeMarkets. Let’s cash this in and flex hard! 💪 ${LINKS.Overtime}`,
+    `This bet hits, and it’s beers all weekend! 🍻 @OvertimeMarkets making it easy to stay winning. ${LINKS.Overtime}`,
+    `Running the odds like a boss on @OvertimeMarkets – no bans, all gains. 💥 ${LINKS.Overtime}`,
+    `Another day, another THALES bet locked in on @OvertimeMarkets – Who's joining the action? 🦓 ${LINKS.Overtime} (for the THALES bets)`,
+    `Great odds, smart contracts, and I’m fully in. You betting on @OvertimeMarkets yet? 💪 ${LINKS.Overtime}`,
+    `Taking my betting game to the next level with @OvertimeMarkets. Join the movement! ⚡ ${LINKS.Overtime}`,
+    `Levelling up my game with @OvertimeMarkets! Are you ready to take the plunge? 🔥 ${LINKS.Overtime}`,
 ];
 
 const TWITTER_MESSAGE_PASTE = '%0A<PASTE YOUR IMAGE>';
