@@ -44,7 +44,7 @@ const getLpStats = async (
 
     for (let index = 0; index < finalTickets.length; index++) {
         const ticket = finalTickets[index];
-        collateral = ticket.collateral;
+        collateral = ticket.collateral === 'sTHALES' ? 'THALES' : ticket.collateral;
         convertAmount = isLpSupported(collateral) && !isStableCurrency(collateral);
 
         if (ticket.isUserTheWinner && !ticket.isCancelled) {
