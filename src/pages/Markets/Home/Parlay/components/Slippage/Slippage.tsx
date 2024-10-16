@@ -64,13 +64,7 @@ const Slippage: React.FC<SlippageProps> = ({ fixed, defaultValue, onChangeHandle
                     }}
                 />
                 {t('markets.parlay.slippage.label')}
-                {tooltip && (
-                    <Tooltip
-                        customIconStyling={{ marginLeft: '2px', marginTop: '1px' }}
-                        overlay={tooltip}
-                        iconFontSize={14}
-                    />
-                )}
+                {tooltip && <Tooltip customIconStyling={{ marginLeft: '2px', marginTop: '1px' }} overlay={tooltip} />}
             </Text>
             <Row>
                 {fixed.length && (

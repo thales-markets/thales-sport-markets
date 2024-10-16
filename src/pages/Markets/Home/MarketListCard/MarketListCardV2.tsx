@@ -251,12 +251,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                     <TimeRemaining end={market.maturityDate} fontSize={11} />
                                 </>
                             }
-                            component={
-                                <MatchInfoLabel>
-                                    {formatShortDateWithTime(new Date(market.maturityDate))}{' '}
-                                </MatchInfoLabel>
-                            }
-                        />
+                        >
+                            <MatchInfoLabel>{formatShortDateWithTime(new Date(market.maturityDate))} </MatchInfoLabel>
+                        </Tooltip>
                     )}
                     <MatchInfoLabel>
                         {!isColumnView && !isMarketSelected && !isMobile && (
@@ -264,7 +261,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                 market.tournamentRound ? ` | ${market.tournamentRound}` : ''
                             }`}</>
                         )}
-                        {leagueTooltipKey && <Tooltip overlay={t(leagueTooltipKey)} iconFontSize={12} marginLeft={2} />}
+                        {leagueTooltipKey && <Tooltip overlay={t(leagueTooltipKey)} />}
                     </MatchInfoLabel>
                 </MatchInfo>
                 <TeamsInfoContainer>
@@ -441,10 +438,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                         encodeURIComponent(`${market.homeTeam} vs ${market.awayTeam}`)
                                     )}
                                 >
-                                    <Tooltip
-                                        overlay="Open market page"
-                                        component={<ExternalArrow className={'icon icon--arrow-external'} />}
-                                    />
+                                    <Tooltip overlay="Open market page">
+                                        <ExternalArrow className={'icon icon--arrow-external'} />
+                                    </Tooltip>
                                 </SPAAnchor>
                             )}
                         </>
@@ -516,10 +512,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                         encodeURIComponent(`${market.homeTeam} vs ${market.awayTeam}`)
                                     )}
                                 >
-                                    <Tooltip
-                                        overlay="Open market page"
-                                        component={<ExternalArrow className={'icon icon--arrow-external'} />}
-                                    />
+                                    <Tooltip overlay="Open market page">
+                                        <ExternalArrow className={'icon icon--arrow-external'} />
+                                    </Tooltip>
                                 </SPAAnchor>
                             )}
                         </>

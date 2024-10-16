@@ -1,3 +1,5 @@
+import Tooltip from 'components/Tooltip';
+import { OverdropTab } from 'enums/ui';
 import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -11,8 +13,6 @@ import { OverdropUserData } from 'types/overdrop';
 import { OverdropLevel } from 'types/ui';
 import { formatPoints, getCurrentLevelByPoints, getNextLevelItemByPoints } from 'utils/overdrop';
 import CurrentLevelProgressLine from '../CurrentLevelProgressLine';
-import Tooltip from 'components/Tooltip';
-import { OverdropTab } from 'enums/ui';
 
 type XPOverviewProps = {
     setSelectedTab: (tab: OverdropTab) => void;
@@ -68,11 +68,7 @@ const XPOverview: React.FC<XPOverviewProps> = ({ setSelectedTab }) => {
                                     <Label> {t('overdrop.overdrop-home.rank')} </Label>
                                     <FlexDivCentered>
                                         <Value>{userData ? `#${userData.rank}` : '-'}</Value>{' '}
-                                        <Tooltip
-                                            overlay={<>{t(`overdrop.overdrop-home.rank-tooltip`)}</>}
-                                            iconFontSize={14}
-                                            marginLeft={3}
-                                        />
+                                        <Tooltip overlay={<>{t(`overdrop.overdrop-home.rank-tooltip`)}</>} />
                                     </FlexDivCentered>
                                 </InfoItem>
                             </>
@@ -87,11 +83,7 @@ const XPOverview: React.FC<XPOverviewProps> = ({ setSelectedTab }) => {
                                         <Label> {t('overdrop.overdrop-home.rank')} </Label>
                                         <FlexDivCentered>
                                             <Value>{userData ? `#${userData.rank}` : '-'}</Value>{' '}
-                                            <Tooltip
-                                                overlay={<>{t(`overdrop.overdrop-home.rank-tooltip`)}</>}
-                                                iconFontSize={14}
-                                                marginLeft={3}
-                                            />
+                                            <Tooltip overlay={<>{t(`overdrop.overdrop-home.rank-tooltip`)}</>} />
                                         </FlexDivCentered>
                                     </InfoItem>
                                 </LevelWrapper>

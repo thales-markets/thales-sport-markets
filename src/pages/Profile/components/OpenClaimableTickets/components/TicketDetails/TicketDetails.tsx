@@ -186,25 +186,22 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
 
     const getClaimButton = (isMobile: boolean) => {
         return ticket.isFreeBet ? (
-            <Tooltip
-                overlay={t('profile.free-bet.claim-btn')}
-                component={
-                    <Button
-                        disabled={isSubmitting}
-                        additionalStyles={isMobile ? additionalClaimButtonStyleMobile : additionalClaimButtonStyle}
-                        padding="2px 5px"
-                        fontSize={isMobile ? '9px' : '15px'}
-                        height={isMobile ? '19px' : '24px'}
-                        onClick={(e: any) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            claimTicket(ticket.id);
-                        }}
-                    >
-                        {isSubmitting ? t('profile.card.claim-progress') : t('profile.card.claim')}
-                    </Button>
-                }
-            />
+            <Tooltip overlay={t('profile.free-bet.claim-btn')}>
+                <Button
+                    disabled={isSubmitting}
+                    additionalStyles={isMobile ? additionalClaimButtonStyleMobile : additionalClaimButtonStyle}
+                    padding="2px 5px"
+                    fontSize={isMobile ? '9px' : '15px'}
+                    height={isMobile ? '19px' : '24px'}
+                    onClick={(e: any) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        claimTicket(ticket.id);
+                    }}
+                >
+                    {isSubmitting ? t('profile.card.claim-progress') : t('profile.card.claim')}
+                </Button>
+            </Tooltip>
         ) : (
             <Button
                 disabled={isSubmitting}
@@ -268,10 +265,9 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
                             <PayoutWrapper>
                                 {ticket.isFreeBet && (
                                     <FreeBetWrapper>
-                                        <Tooltip
-                                            overlay={t('profile.free-bet.claim-btn')}
-                                            component={<FreeBetIcon className={'icon icon--gift'} />}
-                                        />
+                                        <Tooltip overlay={t('profile.free-bet.claim-btn')}>
+                                            <FreeBetIcon className={'icon icon--gift'} />
+                                        </Tooltip>
                                     </FreeBetWrapper>
                                 )}
                                 <InfoContainerColumn isOpen={!isClaimable}>

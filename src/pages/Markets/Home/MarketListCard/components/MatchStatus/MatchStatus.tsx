@@ -120,9 +120,7 @@ const MatchStatus: React.FC<MatchStatusProps> = ({ market }) => {
                 marketPaused ? (
                     <Status color={theme.status.paused}>
                         {t(`markets.market-card.live-trading-paused`)}
-                        {liveMarketFirstErrorMessage && (
-                            <Tooltip overlay={liveMarketFirstErrorMessage} marginLeft={5} top={0} />
-                        )}
+                        {liveMarketFirstErrorMessage && <Tooltip overlay={liveMarketFirstErrorMessage} />}
                     </Status>
                 ) : liveScore ? (
                     <>

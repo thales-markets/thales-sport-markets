@@ -169,21 +169,18 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitc
             </NoScrollbarContainer>
             {!hideSwitch && !selectedMarket && marketTypeFilter === undefined && (
                 <SwitchContainer>
-                    <Tooltip
-                        overlay={isThreeWayView ? 'Switch to standard view' : 'Switch to three column view'}
-                        component={
-                            <ThreeWayIcon
-                                onClick={() => {
-                                    if (!selectedMarket && marketTypeFilter === undefined) {
-                                        dispatch(setIsThreeWayView(!isThreeWayView));
-                                    }
-                                }}
-                                fontSize={isThreeWayView ? 20 : 28}
-                                className={`icon ${isThreeWayView ? 'icon--list' : 'icon--three-column'}`}
-                                disabled={!!selectedMarket || marketTypeFilter !== undefined}
-                            />
-                        }
-                    />
+                    <Tooltip overlay={isThreeWayView ? 'Switch to standard view' : 'Switch to three column view'}>
+                        <ThreeWayIcon
+                            onClick={() => {
+                                if (!selectedMarket && marketTypeFilter === undefined) {
+                                    dispatch(setIsThreeWayView(!isThreeWayView));
+                                }
+                            }}
+                            fontSize={isThreeWayView ? 20 : 28}
+                            className={`icon ${isThreeWayView ? 'icon--list' : 'icon--three-column'}`}
+                            disabled={!!selectedMarket || marketTypeFilter !== undefined}
+                        />
+                    </Tooltip>
                 </SwitchContainer>
             )}
         </Container>

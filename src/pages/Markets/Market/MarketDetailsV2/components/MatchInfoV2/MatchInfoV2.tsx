@@ -110,9 +110,7 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
                         <MatchTimeLabel>{t('market.match-time')}:</MatchTimeLabel>
                         <MatchTime>
                             {formatShortDateWithTime(market.maturityDate)}
-                            {leagueTooltipKey && (
-                                <Tooltip overlay={t(leagueTooltipKey)} iconFontSize={14} marginLeft={2} />
-                            )}
+                            {leagueTooltipKey && <Tooltip overlay={t(leagueTooltipKey)} />}
                         </MatchTime>
                         <>
                             {`${market.tournamentName ? `${market.tournamentName}` : ''}${

@@ -218,4 +218,15 @@ export default {
             },
         },
     },
+    icon: {
+        background: {
+            primary: Colors.BLACK,
+            secondary: Colors.PURPLE,
+        },
+        textColor: {
+            primary: Colors.PURPLE,
+            secondary: Colors.BLACK,
+            tertiary: Colors.WHITE,
+        },
+    },
 };

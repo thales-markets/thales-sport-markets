@@ -105,12 +105,8 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isM
             {showOdd ? (
                 <Odd selected={isAddedToTicket} isMainPageView={isMainPageView}>
                     {isZeroOdd ? '-' : formatMarketOdds(selectedOddsType, odd)}
-                    {isZeroOdd && (
-                        <Tooltip overlay={<>{t('markets.zero-odds-tooltip')}</>} iconFontSize={13} marginLeft={3} />
-                    )}
-                    {odd > 0.97 && (
-                        <Tooltip overlay={<>{t('markets.low-odds-tooltip')}</>} iconFontSize={13} marginLeft={3} />
-                    )}
+                    {isZeroOdd && <Tooltip overlay={<>{t('markets.zero-odds-tooltip')}</>} />}
+                    {odd > 0.97 && <Tooltip overlay={<>{t('markets.low-odds-tooltip')}</>} />}
                 </Odd>
             ) : (
                 <Status>

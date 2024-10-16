@@ -525,22 +525,19 @@ const LiquidityPool: React.FC = () => {
         if (!hasAllowance) {
             if (ethSelected) {
                 return (
-                    <Tooltip
-                        overlay={t('common.wrap-eth-tooltip')}
-                        component={
-                            <Button
-                                {...defaultButtonProps}
-                                disabled={isAllowing}
-                                onClick={() => setOpenApprovalModal(true)}
-                            >
-                                {!isAllowing
-                                    ? t('common.enable-wallet-access.approve-label', { currencyKey: collateral })
-                                    : t('common.enable-wallet-access.approve-progress-label', {
-                                          currencyKey: collateral,
-                                      })}
-                            </Button>
-                        }
-                    ></Tooltip>
+                    <Tooltip overlay={t('common.wrap-eth-tooltip')}>
+                        <Button
+                            {...defaultButtonProps}
+                            disabled={isAllowing}
+                            onClick={() => setOpenApprovalModal(true)}
+                        >
+                            {!isAllowing
+                                ? t('common.enable-wallet-access.approve-label', { currencyKey: collateral })
+                                : t('common.enable-wallet-access.approve-progress-label', {
+                                      currencyKey: collateral,
+                                  })}
+                        </Button>
+                    </Tooltip>
                 );
             } else {
                 return (
@@ -561,16 +558,13 @@ const LiquidityPool: React.FC = () => {
                     : t('liquidity-pool.button.deposit-progress-label')}
             </Button>
         ) : (
-            <Tooltip
-                overlay={t('common.wrap-eth-tooltip')}
-                component={
-                    <Button {...defaultButtonProps} disabled={isDepositButtonDisabled} onClick={handleDeposit}>
-                        {!isSubmitting
-                            ? t('liquidity-pool.button.deposit-label')
-                            : t('liquidity-pool.button.deposit-progress-label')}
-                    </Button>
-                }
-            ></Tooltip>
+            <Tooltip overlay={t('common.wrap-eth-tooltip')}>
+                <Button {...defaultButtonProps} disabled={isDepositButtonDisabled} onClick={handleDeposit}>
+                    {!isSubmitting
+                        ? t('liquidity-pool.button.deposit-label')
+                        : t('liquidity-pool.button.deposit-progress-label')}
+                </Button>
+            </Tooltip>
         );
     };
 
@@ -800,8 +794,6 @@ const LiquidityPool: React.FC = () => {
                                                                             overlay={t(
                                                                                 `liquidity-pool.estimated-amount-tooltip`
                                                                             )}
-                                                                            iconFontSize={14}
-                                                                            marginLeft={2}
                                                                         />
                                                                     </ContentInfo>
                                                                     <ContentInfo>
@@ -896,8 +888,6 @@ const LiquidityPool: React.FC = () => {
                                                                             overlay={t(
                                                                                 `liquidity-pool.estimated-amount-tooltip`
                                                                             )}
-                                                                            iconFontSize={14}
-                                                                            marginLeft={2}
                                                                         />
                                                                     </ContentInfo>
                                                                 </>
@@ -927,8 +917,6 @@ const LiquidityPool: React.FC = () => {
                                                                     overlay={t(
                                                                         `liquidity-pool.estimated-amount-tooltip`
                                                                     )}
-                                                                    iconFontSize={14}
-                                                                    marginLeft={2}
                                                                 />
                                                             ),
                                                         }}
@@ -1081,11 +1069,7 @@ const LiquidityPool: React.FC = () => {
                                         {userLiquidityPoolData &&
                                             userLiquidityPoolData.balanceCurrentRound > 0 &&
                                             userLiquidityPoolData.balanceTotal > 0 && (
-                                                <Tooltip
-                                                    overlay={t(`liquidity-pool.estimated-amount-tooltip`)}
-                                                    iconFontSize={14}
-                                                    marginLeft={2}
-                                                />
+                                                <Tooltip overlay={t(`liquidity-pool.estimated-amount-tooltip`)} />
                                             )}
                                     </LiquidityPoolInfo>
                                 </LiquidityPoolInfoContainer>
@@ -1097,11 +1081,7 @@ const LiquidityPool: React.FC = () => {
                                             }-withdrawal-request-label`}
                                             components={{
                                                 tooltip: (
-                                                    <Tooltip
-                                                        overlay={t(`liquidity-pool.estimated-amount-tooltip`)}
-                                                        iconFontSize={14}
-                                                        marginLeft={2}
-                                                    />
+                                                    <Tooltip overlay={t(`liquidity-pool.estimated-amount-tooltip`)} />
                                                 ),
                                             }}
                                             values={{

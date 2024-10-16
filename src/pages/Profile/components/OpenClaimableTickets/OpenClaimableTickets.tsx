@@ -194,12 +194,7 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
                                         >
                                             {t('profile.card.claim-all')}
                                         </Button>
-                                        <Tooltip
-                                            overlay={t('profile.card.claim-batch-tooltip')}
-                                            iconFontSize={isMobile ? 16 : 20}
-                                            marginLeft={12}
-                                            top={-2}
-                                        />
+                                        <Tooltip overlay={t('profile.card.claim-batch-tooltip')} />
                                     </ClaimAllContainer>
                                     {userTicketsByStatus.claimable.map((parlayMarket, index) => {
                                         return (
