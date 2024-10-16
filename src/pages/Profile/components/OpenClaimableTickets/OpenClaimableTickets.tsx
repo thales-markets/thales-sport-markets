@@ -2,6 +2,7 @@ import Button from 'components/Button';
 import SimpleLoader from 'components/SimpleLoader';
 import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { GAS_ESTIMATION_BUFFER } from 'constants/network';
 import { ethers } from 'ethers';
 import { LoaderContainer } from 'pages/Markets/Home/HomeV2';
@@ -9,13 +10,15 @@ import useMarketDurationQuery from 'queries/markets/useMarketDurationQuery';
 import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
 import React, { useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
+import { getIsStakingModalMuted, setStakingModalMuteEnd } from 'redux/modules/ui';
+import { getIsConnectedViaParticle, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { Coins } from 'thales-utils';
 import { getCollateral, getCollaterals, getDefaultCollateral, isLpSupported } from 'utils/collaterals';
 import networkConnector from 'utils/networkConnector';
+import StakingModal from '../StakingModal';
 import TicketDetails from './components/TicketDetails';
 import {
     Arrow,
@@ -30,6 +33,8 @@ import {
     EmptySubtitle,
     EmptyTitle,
     ListContainer,
+    StakeArrow,
+    StakingInfo,
     StyledParlayEmptyIcon,
     additionalClaimButtonStyle,
     additionalClaimButtonStyleMobile,
@@ -37,14 +42,20 @@ import {
 
 const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
 
     const [openClaimable, setClaimableState] = useState<boolean>(true);
     const [openOpenPositions, setOpenState] = useState<boolean>(true);
+    const [openStakingModal, setOpenStakingModal] = useState<boolean>(false);
+    const [forceOpenStakingModal, setForceOpenStakingModal] = useState<boolean>(false);
+    const [thalesClaimed, setThalesClaimed] = useState<number>(0);
 
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const isMobile = useSelector((state: RootState) => getIsMobile(state));
+    const walletAddress = useSelector(getWalletAddress) || '';
+    const isWalletConnected = useSelector(getIsWalletConnected);
+    const networkId = useSelector(getNetworkId);
+    const isMobile = useSelector(getIsMobile);
+    const isStakingModalMuted = useSelector(getIsStakingModalMuted);
+    const isParticle = useSelector(getIsConnectedViaParticle);
 
     const isSearchTextWalletAddress = searchText && ethers.utils.isAddress(searchText);
     const [claimCollateralIndex, setClaimCollateralIndex] = useState(0);
@@ -110,6 +121,7 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
                 if (sportsAMMV2Contract && multiCallContract) {
                     const multiCallContractWithSigner = multiCallContract.connect(signer);
 
+                    let thalesForClaim = 0;
                     for (let i = 0; i < userTicketsByStatus.claimable.length; i++) {
                         const ticket = userTicketsByStatus.claimable[i];
                         try {
@@ -128,6 +140,12 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
                                     callData: tx?.data,
                                 });
                             }
+                            thalesForClaim +=
+                                ticket.collateral === (CRYPTO_CURRENCY_MAP.THALES as Coins)
+                                    ? ticket.isFreeBet
+                                        ? ticket.payout - ticket.buyInAmount
+                                        : ticket.payout
+                                    : 0;
                         } catch (e) {
                             console.log('Error ', e);
                             return;
@@ -146,6 +164,7 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
 
                     if (txResult && txResult?.transactionHash) {
                         toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
+                        onThalesClaim(thalesForClaim);
                     }
                 }
             }
@@ -156,8 +175,24 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
         }
     };
 
+    const onThalesClaim = (amount: number) => {
+        setOpenStakingModal(!isStakingModalMuted && !isParticle && amount > 0);
+        setThalesClaimed(amount);
+    };
+
     return (
         <Container>
+            {!isParticle && (
+                <StakingInfo
+                    onClick={() => {
+                        setForceOpenStakingModal(true);
+                        dispatch(setStakingModalMuteEnd(0));
+                    }}
+                >
+                    {t('profile.staking-modal.staking-message')}
+                    <StakeArrow className="icon icon--caret-right" />
+                </StakingInfo>
+            )}
             <CategoryContainer onClick={() => setClaimableState(!openClaimable)}>
                 <CategoryInfo>
                     <CategoryIcon className="icon icon--claimable-ticket" />
@@ -208,6 +243,7 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
                                                 key={index}
                                                 claimCollateralIndex={claimCollateralIndex}
                                                 setClaimCollateralIndex={setClaimCollateralIndex}
+                                                onThalesClaim={onThalesClaim}
                                             />
                                         );
                                     })}
@@ -247,6 +283,7 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
                                                 key={index}
                                                 claimCollateralIndex={claimCollateralIndex}
                                                 setClaimCollateralIndex={setClaimCollateralIndex}
+                                                onThalesClaim={onThalesClaim}
                                             />
                                         );
                                     })}
@@ -261,6 +298,16 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
                         </>
                     )}
                 </ListContainer>
+            )}
+            {((openStakingModal && thalesClaimed > 0) || forceOpenStakingModal) && !isStakingModalMuted && !isParticle && (
+                <StakingModal
+                    defaultAmount={thalesClaimed}
+                    onClose={() => {
+                        setForceOpenStakingModal(false);
+                        setOpenStakingModal(false);
+                        setThalesClaimed(0);
+                    }}
+                />
             )}
         </Container>
     );
