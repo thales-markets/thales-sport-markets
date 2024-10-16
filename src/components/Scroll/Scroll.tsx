@@ -5,6 +5,7 @@ import { ThemeInterface } from '../../types/ui';
 
 type ScrollProps = {
     height: string;
+    children: React.ReactNode;
 };
 
 const Scroll: React.FC<ScrollProps> = ({ children, height }) => {

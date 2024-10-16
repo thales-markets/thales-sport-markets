@@ -1,4 +1,4 @@
-import { ReactComponent as Logo } from 'assets/images/overtime-logo.svg';
+import Logo from 'assets/images/overtime-logo.svg?react';
 import BannerCarousel from 'components/BannerCarousel';
 import Button from 'components/Button';
 import Loader from 'components/Loader';

@@ -1,4 +1,4 @@
-import BalanceIcon from 'assets/images/balance-icon.svg';
+import BalanceIcon from 'assets/images/balance-icon.svg?react';
 import Tooltip from 'components/Tooltip';
 import { DEFAULT_TOKEN_DECIMALS } from 'constants/defaults';
 import React, { ChangeEvent } from 'react';

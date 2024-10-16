@@ -1,5 +1,5 @@
-import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
-import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
+import ArbitrumLogo from 'assets/images/arbitrum-logo.svg?react';
+import OPLogo from 'assets/images/optimism-logo.svg?react';
 import Tooltip from 'components/Tooltip';
 import { INCENTIVIZED_LEAGUES } from 'constants/markets';
 import { Network } from 'enums/network';
@@ -47,13 +47,12 @@ const IncentivizedLeague: React.FC<IncentivizedLeagueProps> = ({ league, maturit
                                 }}
                             />
                         }
-                        component={
-                            <Container onlyLogo={onlyLogo}>
-                                {!onlyLogo && <Title fontSize={fontSize}>{t('markets.incentivized-markets')}</Title>}
-                                {getNetworkLogo(incentivizedLeague.showOnAllNetworks || networkId)}
-                            </Container>
-                        }
-                    ></Tooltip>
+                    >
+                        <Container onlyLogo={onlyLogo}>
+                            {!onlyLogo && <Title fontSize={fontSize}>{t('markets.incentivized-markets')}</Title>}
+                            {getNetworkLogo(incentivizedLeague.showOnAllNetworks || networkId)}
+                        </Container>
+                    </Tooltip>
                 )}
         </>
     );

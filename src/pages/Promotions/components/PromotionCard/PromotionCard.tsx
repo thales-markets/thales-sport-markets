@@ -12,9 +12,9 @@ import { FlexDiv, FlexDivCentered, FlexDivRow } from 'styles/common';
 import { PromotionCardStatus, PromotionItem, PromotionStatus, ThemeInterface } from 'types/ui';
 import { getPromotionDateRange, getPromotionStatus } from 'utils/ui';
 
-import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
-import { ReactComponent as BaseLogo } from 'assets/images/base-logo.svg';
-import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
+import ArbitrumLogo from 'assets/images/arbitrum-logo.svg?react';
+import BaseLogo from 'assets/images/base-logo.svg?react';
+import OPLogo from 'assets/images/optimism-logo.svg?react';
 import { secondsToMilliseconds } from 'date-fns';
 
 const PromotionCard: React.FC<PromotionItem> = ({
