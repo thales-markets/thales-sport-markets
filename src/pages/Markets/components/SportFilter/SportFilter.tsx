@@ -13,6 +13,7 @@ type SportFilterProps = {
     onClick: () => void;
     count: number;
     open: boolean;
+    children: React.ReactNode;
 };
 
 const SportFilterDetails: React.FC<SportFilterProps> = ({ selected, sport, onClick, count, children, open }) => {
