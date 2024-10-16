@@ -139,6 +139,9 @@ const getSimplePositionText = (
     }
 
     if (isPlayerPropsMarket(marketType) || isTotalMarket(marketType) || isSpreadMarket(marketType)) {
+        if (line === Infinity) {
+            return '-';
+        }
         return extendedText
             ? isSpreadMarket(marketType)
                 ? `${position === 0 ? homeTeam : awayTeam} (${getLineInfo(marketType, position, line)})`
