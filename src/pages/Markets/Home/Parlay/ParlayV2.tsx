@@ -1,6 +1,6 @@
-import { ReactComponent as ParlayEmptyIcon } from 'assets/images/parlay-empty.svg';
-import MatchUnavailableInfo from 'components/MatchUnavailableInfo';
+import ParlayEmptyIcon from 'assets/images/parlay-empty.svg?react';
 import MatchInfoV2 from 'components/MatchInfoV2';
+import MatchUnavailableInfo from 'components/MatchUnavailableInfo';
 import { SportFilter, StatusFilter } from 'enums/markets';
 import { isEqual } from 'lodash';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';

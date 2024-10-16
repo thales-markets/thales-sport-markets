@@ -1,18 +1,36 @@
+import {
+    Cell,
+    Column,
+    flexRender,
+    getCoreRowModel,
+    getPaginationRowModel,
+    getSortedRowModel,
+    Row,
+    SortingState,
+    useReactTable,
+} from '@tanstack/react-table';
 import SimpleLoader from 'components/SimpleLoader';
 import { SortDirection } from 'enums/markets';
 import React, { CSSProperties, DependencyList, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { Cell, Column, Row, usePagination, useSortBy, useTable } from 'react-table';
 import { getIsMobile } from 'redux/modules/app';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivCentered } from 'styles/common';
 
+export const PAGINATION_SIZE = [
+    { value: 5, label: '5' },
+    { value: 10, label: '10' },
+    { value: 20, label: '20' },
+    { value: 50, label: '50' },
+    { value: 100, label: '100' },
+];
+
 type CSSPropertiesWithMedia = { cssProperties: CSSProperties } & { mediaMaxWidth: string };
 
 type ColumnWithSorting<D extends Record<string, unknown>> = Column<D> & {
-    sortType?: string | ((rowA: any, rowB: any, columnId?: string, desc?: boolean) => number);
-    sortable?: boolean;
+    sortingFn?: string | ((rowA: any, rowB: any, columnId?: string, desc?: boolean) => number);
+    enableSorting?: boolean;
     headStyle?: CSSPropertiesWithMedia;
     headTitleStyle?: CSSPropertiesWithMedia;
 };
@@ -23,7 +41,7 @@ type TableProps = {
     columnsDeps?: DependencyList;
     options?: any;
     onTableRowClick?: (row: Row<any>) => void;
-    onTableCellClick?: (row: Row<any>, cell: Cell<any>) => void;
+    onTableCellClick?: (row: Row<any>, cell: Cell<any, any>) => void;
     isLoading?: boolean;
     noResultsMessage?: React.ReactNode;
     tableRowHeadStyles?: CSSProperties;
@@ -31,8 +49,6 @@ type TableProps = {
     tableHeadCellStyles?: CSSProperties;
     tableRowCellStyles?: CSSProperties;
     initialState?: any;
-    onSortByChanged?: any;
-    currentPage?: number;
     rowsPerPage?: number;
     tableHeight?: string;
     expandedRow?: (row: Row<any>) => JSX.Element;
@@ -54,8 +70,6 @@ const Table: React.FC<TableProps> = ({
     tableHeadCellStyles = {},
     tableRowCellStyles = {},
     initialState = {},
-    onSortByChanged = undefined,
-    currentPage,
     rowsPerPage,
     expandedRow,
     stickyRow,
@@ -64,54 +78,47 @@ const Table: React.FC<TableProps> = ({
 }) => {
     const { t } = useTranslation();
 
+    const [sorting, setSorting] = React.useState<SortingState>(initialState.sorting ? initialState.sorting : []);
+    const [pagination, setPagination] = useState({
+        pageIndex: 0, //initial page index
+        pageSize: rowsPerPage || PAGINATION_SIZE[0].value, //default page size
+    });
+
     const isMobile = useSelector(getIsMobile);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const memoizedColumns = useMemo(() => columns, [...columnsDeps, t]);
-    const {
-        getTableProps,
-        getTableBodyProps,
-        headerGroups,
-        rows,
-        prepareRow,
-        state,
-        gotoPage,
-        setPageSize,
-        page,
-    } = useTable(
-        {
-            columns: memoizedColumns,
-            data,
-            ...options,
-            initialState,
-            autoResetSortBy: false,
-            autoResetPage: false,
+
+    const tableInstance = useReactTable({
+        columns: memoizedColumns,
+        data,
+        ...options,
+        autoResetSortBy: false,
+        autoResetPageIndex: false, // turn off auto reset of pageIndex
+        getCoreRowModel: getCoreRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
+        onSortingChange: setSorting, //optionally control sorting state in your own scope for easy access
+        onPaginationChange: setPagination, // update the pagination state when internal APIs mutate the pagination state
+        state: {
+            sorting,
+            pagination,
         },
-        useSortBy,
-        usePagination
-    );
+    });
 
+    // handle resetting the pageIndex to avoid showing empty pages (required when autoResetPageIndex is turned off)
     useEffect(() => {
-        onSortByChanged && onSortByChanged();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [state.sortBy]);
+        const maxPageIndex = Math.ceil(data.length / pagination.pageSize) - 1;
 
-    useEffect(() => {
-        if (currentPage !== undefined) {
-            gotoPage(currentPage);
+        if (pagination.pageIndex > maxPageIndex) {
+            setPagination({ ...pagination, pageIndex: maxPageIndex });
         }
-    }, [currentPage, gotoPage]);
-
-    useEffect(() => {
-        if (rowsPerPage !== undefined) {
-            setPageSize(rowsPerPage || 0);
-        }
-    }, [rowsPerPage, setPageSize]);
+    }, [data.length, pagination]);
 
     return (
         <>
             {!(isMobile && mobileCards) &&
-                headerGroups.map((headerGroup, headerGroupIndex: any) => (
+                tableInstance.getHeaderGroups().map((headerGroup: any, headerGroupIndex: any) => (
                     <TableRowHead
                         style={tableRowHeadStyles}
                         {...headerGroup.getHeaderGroupProps()}
@@ -148,7 +155,7 @@ const Table: React.FC<TableProps> = ({
                         ))}
                     </TableRowHead>
                 ))}
-            <ReactTable height={tableHeight} {...getTableProps()}>
+            <ReactTable height={tableHeight}>
                 {isLoading ? (
                     <LoaderContainer>
                         <SimpleLoader />
@@ -156,14 +163,12 @@ const Table: React.FC<TableProps> = ({
                 ) : noResultsMessage != null && !data?.length && !stickyRow ? (
                     <NoResultContainer>{noResultsMessage}</NoResultContainer>
                 ) : (
-                    <TableBody height={tableHeight} {...getTableBodyProps()}>
+                    <TableBody height={tableHeight}>
                         {stickyRow ?? <></>}
-                        {(currentPage !== undefined ? page : rows).map((row, rowIndex: any) => {
-                            prepareRow(row);
-
+                        {tableInstance.getPaginationRowModel().rows.map((row: any, rowIndex: any) => {
                             return (
                                 <ExpandableRow key={rowIndex}>
-                                    {expandedRow ? (
+                                    {expandedRow && expandedRow(row) && expandedRow(row).type !== React.Fragment ? (
                                         <ExpandableRowReact
                                             row={row}
                                             tableRowCellStyles={tableRowCellStyles}
@@ -180,7 +185,7 @@ const Table: React.FC<TableProps> = ({
                                             cursorPointer={!!onTableRowClick}
                                             onClick={onTableRowClick ? () => onTableRowClick(row) : undefined}
                                         >
-                                            {row.cells.map((cell, cellIndex: any) => {
+                                            {row.getAllCells().map((cell: any, cellIndex: any) => {
                                                 return isMobile && mobileCards ? (
                                                     <TableRowMobile key={`mrm${rowIndex}${cellIndex}`}>
                                                         <TableCell
@@ -232,6 +237,7 @@ const ExpandableRowReact: React.FC<{
     tableRowStyles: React.CSSProperties;
     row: Row<any>;
     tableRowCellStyles: React.CSSProperties;
+    children: React.ReactNode;
 }> = ({ isVisible, tableRowStyles, row, tableRowCellStyles, children }) => {
     const [hidden, setHidden] = useState<boolean>(!isVisible);
 
@@ -239,20 +245,17 @@ const ExpandableRowReact: React.FC<{
         <>
             <TableRow
                 style={{ ...tableRowStyles, borderBottom: hidden ? '' : '2px dashed transparent' }}
-                {...row.getRowProps()}
                 cursorPointer={true}
                 onClick={setHidden.bind(this, !hidden)}
             >
-                {row.cells.map((cell, cellIndex: any) => (
+                {row.getAllCells().map((cell: any, cellIndex: any) => (
                     <TableCell
                         style={tableRowCellStyles}
-                        {...cell.getCellProps()}
                         key={cellIndex}
-                        width={cell.column.width}
-                        minWidth={cell.column.minWidth}
+                        width={cell.column.getSize()}
                         id={cell.column.id}
                     >
-                        {cell.render('Cell')}
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                 ))}
                 <ArrowIcon className={hidden ? 'icon icon--arrow-down' : 'icon icon--arrow-up'} />

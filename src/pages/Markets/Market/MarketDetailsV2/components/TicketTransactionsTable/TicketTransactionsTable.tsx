@@ -34,7 +34,6 @@ import {
     ExpandedRowWrapper,
     ExternalLink,
     FirstExpandedSection,
-    FreeBetIcon,
     LastExpandedSection,
     LiveIndicatorContainer,
     LiveLabel,
@@ -137,6 +136,138 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
 
     useEffect(() => setPage(0), [ticketTransactions.length]);
 
+    const columns = [
+        {
+            header: <>{t('profile.table.time')}</>,
+            accessor: 'timestamp',
+            sortable: true,
+            sortDescFirst: true,
+            Cell: (cellProps: any) => {
+                return (
+                    <>
+                        <LiveIndicatorContainer isLive={cellProps.cell.row.original.isLive}>
+                            {cellProps.cell.row.original.isLive && <LiveLabel>{t('profile.card.live')}</LiveLabel>}
+                        </LiveIndicatorContainer>
+                        <TableText>{formatDateWithTime(cellProps.cell.value)}</TableText>
+                    </>
+                );
+            },
+        },
+        {
+            header: <>{t('profile.table.id')}</>,
+            accessor: 'id',
+            sortable: false,
+            Cell: (cellProps: any) => {
+                return (
+                    <ExternalLink href={getEtherscanAddressLink(networkId, cellProps.cell.value)} target={'_blank'}>
+                        <TableText>{truncateAddress(cellProps.cell.value)}</TableText>
+                    </ExternalLink>
+                );
+            },
+        },
+        {
+            header: <>{t('profile.table.games')}</>,
+            accessor: 'numOfMarkets',
+            sortable: true,
+            Cell: (cellProps: any) => {
+                return <TableText>{cellProps.cell.value}</TableText>;
+            },
+        },
+        {
+            header: <>{t('profile.table.paid')}</>,
+            accessor: 'buyInAmount',
+            sortable: true,
+            cell: (cellProps: any) => {
+                return (
+                    <Tooltip
+                        overlay={formatCurrencyWithSign(
+                            USD_SIGN,
+                            getValueInUsd(cellProps.row.original.collateral, cellProps.cell.value)
+                        )}
+                    >
+                        <TableText>
+                            {formatCurrencyWithKey(cellProps.row.original.collateral, cellProps.cell.value)}
+                        </TableText>
+                    </Tooltip>
+                );
+            },
+            sortType: (rowA: any, rowB: any) => {
+                return (
+                    getValueInUsd(rowA.original.collateral, rowA.original.buyInAmount) -
+                    getValueInUsd(rowB.original.collateral, rowB.original.buyInAmount)
+                );
+            },
+            sortDescFirst: true,
+        },
+        {
+            header: <>{t('profile.table.payout')}</>,
+            accessor: 'payout',
+            sortable: true,
+            Cell: (cellProps: any) => {
+                return (
+                    <Tooltip
+                        overlay={formatCurrencyWithSign(
+                            USD_SIGN,
+                            getValueInUsd(cellProps.row.original.collateral, cellProps.cell.value)
+                        )}
+                    >
+                        <TableText>
+                            {formatCurrencyWithKey(cellProps.row.original.collateral, cellProps.cell.value)}
+                        </TableText>
+                    </Tooltip>
+                );
+            },
+            sortType: (rowA: any, rowB: any) => {
+                return (
+                    getValueInUsd(rowA.original.collateral, rowA.original.payout) -
+                    getValueInUsd(rowB.original.collateral, rowB.original.payout)
+                );
+            },
+            sortDescFirst: true,
+        },
+        {
+            header: <p>{t('profile.table.status')}</p>,
+            accessor: 'status',
+            sortable: true,
+            Cell: (cellProps: any) => {
+                let statusComponent;
+                if (cellProps.row.original.isCancelled) {
+                    statusComponent = (
+                        <StatusWrapper color={theme.status.sold}>
+                            <StatusIcon className={`icon icon--lost`} />
+                            {t('markets.market-card.canceled')}
+                        </StatusWrapper>
+                    );
+                } else if (cellProps.row.original.isUserTheWinner) {
+                    statusComponent = (
+                        <StatusWrapper color={theme.status.win}>
+                            <StatusIcon className={`icon icon--ticket-win`} />
+                            {t('markets.market-card.won')}
+                        </StatusWrapper>
+                    );
+                } else {
+                    statusComponent = cellProps.row.original.isLost ? (
+                        <StatusWrapper color={theme.status.loss}>
+                            <StatusIcon className={`icon icon--ticket-loss`} />
+                            {t('markets.market-card.loss')}
+                        </StatusWrapper>
+                    ) : (
+                        <StatusWrapper color={theme.status.open}>
+                            <StatusIcon className={`icon icon--ticket-open`} />
+                            {t('markets.market-card.open')}
+                        </StatusWrapper>
+                    );
+                }
+
+                if (cellProps.row.original.isFreeBet) {
+                    return <Tooltip overlay={t('profile.free-bet.claim-btn')}>{statusComponent}</Tooltip>;
+                }
+                return statusComponent;
+            },
+            sortType: tableSortByStatus,
+        },
+    ];
+
     return (
         <>
             <Table
@@ -147,158 +278,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                 }}
                 tableRowCellStyles={tableRowStyle}
                 columnsDeps={[networkId, exchangeRates]}
-                columns={[
-                    {
-                        Header: <>{t('profile.table.time')}</>,
-                        accessor: 'timestamp',
-                        sortable: true,
-                        sortDescFirst: true,
-                        Cell: (cellProps: any) => {
-                            return (
-                                <>
-                                    <LiveIndicatorContainer isLive={cellProps.cell.row.original.isLive}>
-                                        {cellProps.cell.row.original.isLive && (
-                                            <LiveLabel>{t('profile.card.live')}</LiveLabel>
-                                        )}
-                                    </LiveIndicatorContainer>
-                                    <TableText>{formatDateWithTime(cellProps.cell.value)}</TableText>
-                                </>
-                            );
-                        },
-                    },
-                    {
-                        Header: <>{t('profile.table.id')}</>,
-                        accessor: 'id',
-                        sortable: false,
-                        Cell: (cellProps: any) => {
-                            return (
-                                <ExternalLink
-                                    href={getEtherscanAddressLink(networkId, cellProps.cell.value)}
-                                    target={'_blank'}
-                                >
-                                    <TableText>{truncateAddress(cellProps.cell.value)}</TableText>
-                                </ExternalLink>
-                            );
-                        },
-                    },
-                    {
-                        Header: <>{t('profile.table.games')}</>,
-                        accessor: 'numOfMarkets',
-                        sortable: true,
-                        Cell: (cellProps: any) => {
-                            return <TableText>{cellProps.cell.value}</TableText>;
-                        },
-                    },
-                    {
-                        Header: <>{t('profile.table.paid')}</>,
-                        accessor: 'buyInAmount',
-                        sortable: true,
-                        Cell: (cellProps: any) => {
-                            return (
-                                <Tooltip
-                                    overlay={formatCurrencyWithSign(
-                                        USD_SIGN,
-                                        getValueInUsd(cellProps.row.original.collateral, cellProps.cell.value)
-                                    )}
-                                    component={
-                                        <TableText>
-                                            {formatCurrencyWithKey(
-                                                cellProps.row.original.collateral,
-                                                cellProps.cell.value
-                                            )}
-                                        </TableText>
-                                    }
-                                />
-                            );
-                        },
-                        sortType: (rowA: any, rowB: any) => {
-                            return (
-                                getValueInUsd(rowA.original.collateral, rowA.original.buyInAmount) -
-                                getValueInUsd(rowB.original.collateral, rowB.original.buyInAmount)
-                            );
-                        },
-                        sortDescFirst: true,
-                    },
-                    {
-                        Header: <>{t('profile.table.payout')}</>,
-                        accessor: 'payout',
-                        sortable: true,
-                        Cell: (cellProps: any) => {
-                            return (
-                                <Tooltip
-                                    overlay={formatCurrencyWithSign(
-                                        USD_SIGN,
-                                        getValueInUsd(cellProps.row.original.collateral, cellProps.cell.value)
-                                    )}
-                                    component={
-                                        <TableText>
-                                            {formatCurrencyWithKey(
-                                                cellProps.row.original.collateral,
-                                                cellProps.cell.value
-                                            )}
-                                        </TableText>
-                                    }
-                                />
-                            );
-                        },
-                        sortType: (rowA: any, rowB: any) => {
-                            return (
-                                getValueInUsd(rowA.original.collateral, rowA.original.payout) -
-                                getValueInUsd(rowB.original.collateral, rowB.original.payout)
-                            );
-                        },
-                        sortDescFirst: true,
-                    },
-                    {
-                        Header: <>{t('profile.table.status')}</>,
-                        accessor: 'status',
-                        sortable: true,
-                        Cell: (cellProps: any) => {
-                            let statusComponent;
-                            if (cellProps.row.original.isCancelled) {
-                                statusComponent = (
-                                    <StatusWrapper color={theme.status.sold}>
-                                        <StatusIcon className={`icon icon--lost`} />
-                                        {t('markets.market-card.canceled')}
-                                    </StatusWrapper>
-                                );
-                            } else if (cellProps.row.original.isUserTheWinner) {
-                                statusComponent = (
-                                    <StatusWrapper color={theme.status.win}>
-                                        <StatusIcon className={`icon icon--ticket-win`} />
-                                        {t('markets.market-card.won')}
-                                    </StatusWrapper>
-                                );
-                            } else {
-                                statusComponent = cellProps.row.original.isLost ? (
-                                    <StatusWrapper color={theme.status.loss}>
-                                        <StatusIcon className={`icon icon--ticket-loss`} />
-                                        {t('markets.market-card.loss')}
-                                    </StatusWrapper>
-                                ) : (
-                                    <StatusWrapper color={theme.status.open}>
-                                        <StatusIcon className={`icon icon--ticket-open`} />
-                                        {t('markets.market-card.open')}
-                                    </StatusWrapper>
-                                );
-                            }
-
-                            if (cellProps.row.original.isFreeBet) {
-                                return (
-                                    <>
-                                        <Tooltip
-                                            overlay={t('profile.free-bet.claim-btn')}
-                                            component={<FreeBetIcon className={'icon icon--gift'} />}
-                                        />
-                                        {statusComponent}
-                                    </>
-                                );
-                            }
-                            return statusComponent;
-                        },
-                        sortType: tableSortByStatus,
-                    },
-                ]}
+                columns={columns as any}
                 initialState={{
                     sortBy: [
                         {
@@ -307,8 +287,6 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                         },
                     ],
                 }}
-                onSortByChanged={() => setPage(0)}
-                currentPage={page}
                 rowsPerPage={rowsPerPage}
                 isLoading={isLoading}
                 data={ticketTransactions}

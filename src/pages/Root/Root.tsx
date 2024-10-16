@@ -26,7 +26,7 @@ import { Provider } from 'react-redux';
 import { Store } from 'redux';
 import { getDefaultTheme } from 'redux/modules/ui';
 import { WagmiConfig, configureChains, createClient } from 'wagmi';
-import { arbitrum, optimism } from 'wagmi/dist/chains';
+import { arbitrum, optimism } from 'wagmi/chains';
 import { infuraProvider } from 'wagmi/dist/providers/infura';
 import { jsonRpcProvider } from 'wagmi/dist/providers/jsonRpc';
 import { publicProvider } from 'wagmi/dist/providers/public';
@@ -63,8 +63,8 @@ const { chains, provider } = configureChains(
                         : import.meta.env.VITE_APP_PRIMARY_PROVIDER_ID === 'INFURA' && chain.id === Network.Base
                         ? // For Base use Ankr when Infura is primary as Infura doesn't support it
                           `https://rpc.ankr.com/base/${import.meta.env.VITE_APP_ANKR_PROJECT_ID}`
-                        ? `https://optimism-sepolia.blastapi.io/${process.env.REACT_APP_BLAST_PROJECT_ID}`
-                        : chain.rpcUrls.default.http[0],
+                        : `https://optimism-sepolia.blastapi.io/${process.env.REACT_APP_BLAST_PROJECT_ID}`,
+                    // : chain.rpcUrls.default.http[0],
                 };
             },
             stallTimeout: STALL_TIMEOUT,
@@ -73,7 +73,7 @@ const { chains, provider } = configureChains(
         infuraProvider({
             apiKey: import.meta.env.VITE_APP_INFURA_PROJECT_ID || '',
             stallTimeout: STALL_TIMEOUT,
-            priority: import.meta.env.VITE_APP_PRIMARY_PROVIDER_ID === 'INFURA' ? 0 : 2,
+            priority: import.meta.env.VITE_APP_PRIMARY_PROVIDER_ID === 'INFURA' && !isRpcProviderSet ? 0 : 2,
         }),
         publicProvider({ stallTimeout: STALL_TIMEOUT, priority: 5 }),
     ]

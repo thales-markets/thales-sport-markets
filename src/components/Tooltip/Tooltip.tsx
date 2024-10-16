@@ -1,65 +1,61 @@
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import ReactTooltip from 'rc-tooltip';
 import React, { CSSProperties } from 'react';
 import styled from 'styled-components';
 import 'styles/tooltip.css';
 
 type TooltipProps = {
-    component?: any;
     overlay: any;
-    iconFontSize?: number;
+    children?: React.ReactNode;
     customIconStyling?: CSSProperties;
-    overlayInnerStyle?: CSSProperties;
-    marginLeft?: number;
-    top?: number;
-    overlayClassName?: string;
-    iconColor?: string;
 };
 
-const Tooltip: React.FC<TooltipProps> = ({
-    component,
-    overlay,
-    iconFontSize,
-    customIconStyling,
-    overlayInnerStyle,
-    marginLeft,
-    top,
-    overlayClassName,
-    iconColor,
-}) => {
+const Tooltip: React.FC<TooltipProps> = ({ overlay, children, customIconStyling }) => {
     return (
         <ReactTooltip
-            overlay={overlay}
+            overlay={
+                <Container>
+                    <Content>{overlay}</Content>
+                </Container>
+            }
             placement="top"
-            overlayClassName={overlayClassName || ''}
-            overlayInnerStyle={overlayInnerStyle}
         >
-            {component ? (
-                component
-            ) : (
-                <InfoIcon
-                    color={iconColor}
-                    iconFontSize={iconFontSize}
-                    marginLeft={marginLeft}
-                    top={top}
-                    style={customIconStyling}
-                />
-            )}
+            {children ? (children as any) : <InfoIcon style={customIconStyling} />}
         </ReactTooltip>
     );
 };
 
-const InfoIcon = styled.i<{ iconFontSize?: number; marginLeft?: number; top?: number; color?: string }>`
-    font-size: ${(props) => props.iconFontSize || 18}px;
-    font-weight: 400;
-    cursor: pointer;
+const Container = styled.div`
+    background: ${(props) => props.theme.borderColor.secondary};
+    border-width: 1px;
+    border-radius: 2px;
+    padding: 1px;
+`;
+
+const Content = styled.div`
+    background: ${(props) => props.theme.background.primary};
+    border-radius: 2px;
+    color: ${(props) => props.theme.textColor.secondary};
+    font-weight: 700;
+    padding: 10px;
+`;
+
+const InfoIcon = styled.i`
     position: relative;
-    margin-left: ${(props) => props.marginLeft || 0}px;
-    top: ${(props) => (props.top !== undefined ? props.top : -1)}px;
-    color: ${(props) => props.color || 'white'};
-    text-transform: none;
+    font-size: 16px;
+    line-height: 100%;
+    vertical-align: middle;
+    font-weight: normal;
+    cursor: pointer;
+    margin-top: 1px;
+    margin-left: 4px;
+    color: ${(props) => props.theme.icon.background.secondary};
     &:before {
-        font-family: OvertimeIconsV2 !important;
-        content: '\\011B';
+        font-family: Icons !important;
+        content: '\\0046';
+    }
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        font-size: 15px;
     }
 `;
 
