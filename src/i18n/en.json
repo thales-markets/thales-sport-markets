@@ -814,7 +814,8 @@
                 "buy": "Buy with {{currencyKey}}"
             }
         },
-        "zero-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",
+        "zero-odds-tooltip": "Odds unavailable at the moment.",
+        "low-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",
         "discounted-per": "Discounted as per",
         "incentivized-tooltip": "Triple Thrill: EPL, NFL, and NBA Rewards. A whopping total of 90k OP, 90k ARB, and 180k THALES will be distributed across the three leagues, with each league having its own dedicated 30k OP or ARB + 30k THALES bucket per chain. Check more details <detailsLink>here</detailsLink>.",
         "incentivized-markets": "INCENTIVIZED MARKETS",
@@ -1055,7 +1056,7 @@
     "banner": {
         "v1-text": "<highlight>Welcome to Overtime V2!</highlight> If you are looking for the legacy V1 version, <highlight>click here</highlight>.",
         "elections-text": "Elections for Thales Council are now live, exercise your voting power <highlight>here</highlight>.",
-        "speed-text": "Trade on Speed Markets, win 20,000 PYTH! <highlight>Learn more.</highlight>"
+        "speed-text": "Trade on Speed Markets, win 10,000 PYTH! <highlight>Learn more.</highlight>"
     },
     "promotions": {
         "title": "Promotions and Incentives",

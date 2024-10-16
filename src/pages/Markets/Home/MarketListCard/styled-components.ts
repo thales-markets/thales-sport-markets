@@ -35,8 +35,8 @@ export const MainContainer = styled(FlexDivRow)<{ isGameOpen: boolean; isBoosted
     }
 `;
 
-export const MatchInfoContainer = styled(FlexDivColumn)<{ isGameLive: boolean }>`
-    cursor: ${(props) => (props.isGameLive ? 'default' : 'pointer')};
+export const MatchInfoContainer = styled(FlexDivColumn)`
+    cursor: pointer;
     max-width: 250px;
     margin-right: 5px;
     @media (max-width: 950px) {
@@ -70,7 +70,8 @@ export const GameOfLabel = styled.span<{ selected?: boolean; isLive?: boolean }>
     }
 `;
 
-export const MatchInfoLabel = styled.label`
+export const MatchInfoLabel = styled.label<{ selected?: boolean }>`
+    color: ${(props) => (props.selected ? props.theme.textColor.tertiary : 'inherit')};
     font-size: 12px;
     font-weight: 600;
     line-height: 14px;
@@ -93,10 +94,18 @@ export const TeamsInfoContainer = styled(FlexDivRow)`
     }
 `;
 
-export const TeamLogosContainer = styled(FlexDivRow)<{ isColumnView: boolean; isTwoPositionalMarket: boolean }>`
+export const TeamLogosContainer = styled(FlexDivRow)<{
+    isColumnView: boolean;
+    isTwoPositionalMarket: boolean;
+    isOneSideMarket: boolean;
+}>`
     flex-direction: ${(props) => (props.isColumnView ? 'column' : 'row')};
     align-items: center;
     gap: ${(props) => (props.isColumnView ? (props.isTwoPositionalMarket ? '2px' : '10px') : '0px')};
+    justify-content: space-around;
+    @media (min-width: 950px) {
+        height: ${(props) => (!props.isOneSideMarket ? '100%' : 'auto')};
+    }
 `;
 
 export const ClubLogo = styled.img<{ awayTeam?: boolean; isColumnView: boolean }>`
@@ -116,20 +125,24 @@ export const TeamNamesContainer = styled(FlexDivColumn)<{
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    @media (min-width: 950px) {
+        justify-content: space-around;
+        height: 100%;
+    }
     @media (max-width: 950px) {
         flex-direction: ${(props) => (props.isGameOpen ? 'row' : 'column')};
         overflow: initial;
     }
 `;
 
-export const TeamNameLabel = styled.span<{ isColumnView: boolean; isMarketSelected: boolean }>`
+export const TeamNameLabel = styled.span<{ isColumnView: boolean; isMarketSelected: boolean; isLive: boolean }>`
     font-weight: 600;
     font-size: 12px;
     line-height: ${(props) => (props.isColumnView ? '25px' : '18px')};
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    width: ${(props) => (props.isMarketSelected ? '130px' : '100%')};
+    width: ${(props) => (props.isMarketSelected ? (props.isLive ? '100px' : '130px') : '100%')};
     @media (max-width: 950px) {
         width: fit-content;
         margin-right: 5px;
@@ -176,6 +189,7 @@ export const Arrow = styled.i`
 export const FireContainer = styled(FlexDivColumnCentered)`
     position: absolute;
     top: 7px;
+    right: 7px;
     @media (max-width: 600px) {
         flex-direction: row;
         top: 9px;
@@ -186,12 +200,18 @@ export const FireContainer = styled(FlexDivColumnCentered)`
 export const Fire = styled.i`
     color: ${(props) => props.theme.overdrop.textColor.primary};
     font-size: 20px;
+    display: flex;
+    justify-content: center;
 `;
 
 export const FireText = styled.span`
     color: ${(props) => props.theme.overdrop.textColor.primary};
     white-space: pre;
     font-size: 9px;
+    @media (max-width: 600px) {
+        display: flex;
+        align-items: center;
+    }
 `;
 
 export const liveBlinkStyle: CSSProperties = {
@@ -248,7 +268,10 @@ export const CurrentResultContainer = styled(FlexDivColumn)<{
     margin-left: 5px;
     margin-right: 5px;
     flex: initial;
-    gap: ${(props) => (props.isColumnView ? '10px' : '0px')};
+    @media (min-width: 950px) {
+        justify-content: space-around;
+        height: 100%;
+    }
     @media (max-width: 950px) {
         flex-direction: row;
     }
@@ -264,14 +287,23 @@ export const SecondaryResultsWrapper = styled(FlexDivRow)`
     @media (max-width: 950px) {
         flex-basis: 100%;
     }
+    @media (max-width: 375px) {
+        flex-basis: 100%;
+        flex: auto;
+    }
 `;
 
 export const PeriodResultContainer = styled(FlexDivColumn)<{
     isColumnView: boolean;
+    selected: boolean;
 }>`
     gap: ${(props) => (props.isColumnView ? '3px' : '0px')};
-    color: ${(props) => props.theme.textColor.quinary};
+    color: ${(props) => (props.selected ? props.theme.textColor.septenary : props.theme.textColor.quinary)};
     flex-grow: 0;
+    @media (min-width: 950px) {
+        justify-content: space-around;
+        height: 100%;
+    }
     @media (max-width: 950px) {
         flex-direction: row;
     }

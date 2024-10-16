@@ -24,12 +24,4 @@ export type NetworkParams = {
     order: number;
 };
 
-export type SupportedNetwork = Exclude<
-    Network,
-    | Network.Mainnet
-    | Network.PolygonMainnet
-    | Network.ZkSyncSepolia
-    | Network.ZkSync
-    | Network.BlastSepolia
-    | Network.Base
->;
+export type SupportedNetwork = Exclude<Network, Network.Mainnet | Network.PolygonMainnet | Network.Base>;
