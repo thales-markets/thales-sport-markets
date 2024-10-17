@@ -44,6 +44,10 @@ export const FlexDivColumnCentered = styled(FlexDivColumn)`
     justify-content: center;
 `;
 
+export const FlexChild = styled.div<{ flex?: number }>`
+    flex: ${(props) => props.flex ?? 1};
+`;
+
 export const BoldContent = styled.span`
     font-weight: 600;
 `;

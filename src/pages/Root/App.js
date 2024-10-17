@@ -6,6 +6,7 @@ import ROUTES from 'constants/routes';
 import { Network } from 'enums/network';
 import { ethers } from 'ethers';
 import DappLayout from 'layouts/DappLayout';
+import LandingLayout from 'layouts/LandingLayout';
 import Theme from 'layouts/Theme';
 import Profile from 'pages/Profile';
 import { Suspense, lazy, useEffect } from 'react';
@@ -40,6 +41,7 @@ const GetStarted = lazy(() => import('pages/AARelatedPages/GetStarted'));
 const Promotions = lazy(() => import('pages/Promotions/Home'));
 const Promotion = lazy(() => import('pages/Promotions/Promotion'));
 const Overdrop = lazy(() => import('pages/Overdrop'));
+const Landing = lazy(() => import('pages/Landing'));
 
 const particle = new ParticleNetwork({
     projectId: process.env.REACT_APP_PARTICLE_PROJECT_ID,
@@ -240,9 +242,9 @@ const App = () => {
                                     )}
                                 />
                                 <Route exact path={ROUTES.Home}>
-                                    <DappLayout>
-                                        <Markets />
-                                    </DappLayout>
+                                    <LandingLayout>
+                                        <Landing />
+                                    </LandingLayout>
                                 </Route>
                                 <Route>
                                     <Redirect to={ROUTES.Markets.Home} />

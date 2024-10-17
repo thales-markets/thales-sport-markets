@@ -33,6 +33,11 @@
 }
 
 @font-face {
+    font-family: 'DMSans';
+    src: local('DMSans'), url(../assets/fonts/DMSans/DMSans.ttf) format('truetype');
+}
+
+@font-face {
     font-family: 'OswaldBold';
     src: local('OswaldBold'), url(../assets/fonts/Oswald/Oswald-Bold.ttf) format('truetype');
 }
