@@ -5,13 +5,11 @@ import { t } from 'i18next';
 import useUserXPHistoryQuery from 'queries/overdrop/useUserXPHistoryQuery';
 import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { CellProps } from 'react-table';
 import { getIsAppReady } from 'redux/modules/app';
 import { getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { FlexDiv } from 'styles/common';
 import { formatTxTimestamp } from 'thales-utils';
-import { OverdropXPHistory } from 'types/overdrop';
 import { formatPoints } from 'utils/overdrop';
 
 const XPHistoryTable: React.FC = () => {
@@ -52,9 +50,7 @@ const XPHistoryTable: React.FC = () => {
             header: <>{t('overdrop.xp-details.received')}</>,
             accessor: 'points',
             sortType: 'alphanumeric',
-            cell: (cellProps: CellProps<OverdropXPHistory, OverdropXPHistory['points']>) => (
-                <p>{formatPoints(cellProps.cell.getValue())}</p>
-            ),
+            cell: (cellProps: any) => <p>{formatPoints(cellProps.cell.getValue())}</p>,
             width: 150,
             enableSorting: true,
         },
@@ -62,7 +58,7 @@ const XPHistoryTable: React.FC = () => {
             header: <>{t('overdrop.xp-details.tx-link')}</>,
             accessor: 'txHash',
             sortType: 'alphanumeric',
-            cell: (cellProps: CellProps<OverdropXPHistory, OverdropXPHistory['txHash']>) => (
+            cell: (cellProps: any) => (
                 <ViewEtherscanLink overrideNetwork={cellProps.row.original.network} hash={cellProps.cell.getValue()} />
             ),
             width: 150,
