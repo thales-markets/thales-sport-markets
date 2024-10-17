@@ -8,6 +8,7 @@ const sliceName = 'wallet';
 
 type WalletSliceState = {
     walletAddress: string | null;
+    isBiconomy?: boolean;
     isAA: boolean;
     connectedViaParticle: boolean;
     networkId: SupportedNetwork;
@@ -22,6 +23,7 @@ type WalletSliceState = {
 const initialState: WalletSliceState = {
     walletAddress: null,
     isAA: false,
+    isBiconomy: false,
     connectedViaParticle: false,
     networkId: DEFAULT_NETWORK.networkId,
     networkName: DEFAULT_NETWORK.name,
@@ -76,6 +78,9 @@ const walletDetailsSlice = createSlice({
             state.walletConnectModal.visibility = action.payload.visibility;
             state.walletConnectModal.origin = action.payload.origin;
         },
+        setIsBiconomy: (state, action: PayloadAction<boolean>) => {
+            state.isBiconomy = action.payload;
+        },
     },
 });
 
@@ -96,6 +101,7 @@ export const {
     updateWallet,
     updateParticleState,
     setWalletConnectModalVisibility,
+    setIsBiconomy,
 } = walletDetailsSlice.actions;
 
 export default walletDetailsSlice.reducer;

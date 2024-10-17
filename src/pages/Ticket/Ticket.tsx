@@ -3,7 +3,7 @@ import SimpleLoader from 'components/SimpleLoader';
 import { useTicketQuery } from 'queries/markets/useTicketQuery';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { RouteComponentProps } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { getIsAppReady } from 'redux/modules/app';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -12,16 +12,12 @@ import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 import { Ticket as TicketData } from 'types/markets';
 import { getTicketMarketOdd } from 'utils/tickets';
 
-type TicketProps = RouteComponentProps<{
-    ticketAddress: string;
-}>;
-
-const Ticket: React.FC<TicketProps> = (props) => {
+const Ticket: React.FC = () => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const [lastValidTicket, setLastValidTicket] = useState<TicketData | undefined>(undefined);
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
-    const { params } = props.match;
+    const params = useParams() as { ticketAddress: string };
     const ticketAddress = params && params.ticketAddress ? params.ticketAddress : '';
 
     const ticketQuery = useTicketQuery(ticketAddress, networkId, {

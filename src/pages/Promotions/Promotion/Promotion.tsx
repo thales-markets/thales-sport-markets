@@ -8,7 +8,7 @@ import { usePromotionsQuery } from 'queries/promotions/usePromotionsQuery';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { RouteComponentProps, useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { getIsAppReady } from 'redux/modules/app';
 import { switchToNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -20,11 +20,7 @@ import { ThemeInterface } from 'types/ui';
 import useQueryParam from 'utils/useQueryParams';
 import { useSwitchNetwork } from 'wagmi';
 
-type PromotionProps = RouteComponentProps<{
-    promotionId: string;
-}>;
-
-const Promotion: React.FC<PromotionProps> = (props) => {
+const Promotion: React.FC = () => {
     const theme: ThemeInterface = useTheme();
     const dispatch = useDispatch();
 
@@ -32,7 +28,9 @@ const Promotion: React.FC<PromotionProps> = (props) => {
     const { t } = useTranslation();
     const { switchNetwork } = useSwitchNetwork();
 
-    const promotionId = props?.match?.params?.promotionId;
+    const params = useParams() as { promotionId: string };
+
+    const promotionId = params?.promotionId;
 
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
 
