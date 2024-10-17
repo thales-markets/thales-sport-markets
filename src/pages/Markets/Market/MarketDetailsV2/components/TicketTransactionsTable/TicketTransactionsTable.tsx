@@ -140,15 +140,15 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
         {
             header: <>{t('profile.table.time')}</>,
             accessor: 'timestamp',
-            sortable: true,
+            enableSorting: true,
             sortDescFirst: true,
-            Cell: (cellProps: any) => {
+            cell: (cellProps: any) => {
                 return (
                     <>
                         <LiveIndicatorContainer isLive={cellProps.cell.row.original.isLive}>
                             {cellProps.cell.row.original.isLive && <LiveLabel>{t('profile.card.live')}</LiveLabel>}
                         </LiveIndicatorContainer>
-                        <TableText>{formatDateWithTime(cellProps.cell.value)}</TableText>
+                        <TableText>{formatDateWithTime(cellProps.cell.getValue())}</TableText>
                     </>
                 );
             },
@@ -156,11 +156,14 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
         {
             header: <>{t('profile.table.id')}</>,
             accessor: 'id',
-            sortable: false,
-            Cell: (cellProps: any) => {
+            enableSorting: false,
+            cell: (cellProps: any) => {
                 return (
-                    <ExternalLink href={getEtherscanAddressLink(networkId, cellProps.cell.value)} target={'_blank'}>
-                        <TableText>{truncateAddress(cellProps.cell.value)}</TableText>
+                    <ExternalLink
+                        href={getEtherscanAddressLink(networkId, cellProps.cell.getValue())}
+                        target={'_blank'}
+                    >
+                        <TableText>{truncateAddress(cellProps.cell.getValue())}</TableText>
                     </ExternalLink>
                 );
             },
@@ -168,25 +171,25 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
         {
             header: <>{t('profile.table.games')}</>,
             accessor: 'numOfMarkets',
-            sortable: true,
-            Cell: (cellProps: any) => {
-                return <TableText>{cellProps.cell.value}</TableText>;
+            enableSorting: true,
+            cell: (cellProps: any) => {
+                return <TableText>{cellProps.cell.getValue()}</TableText>;
             },
         },
         {
             header: <>{t('profile.table.paid')}</>,
             accessor: 'buyInAmount',
-            sortable: true,
+            enableSorting: true,
             cell: (cellProps: any) => {
                 return (
                     <Tooltip
                         overlay={formatCurrencyWithSign(
                             USD_SIGN,
-                            getValueInUsd(cellProps.row.original.collateral, cellProps.cell.value)
+                            getValueInUsd(cellProps.row.original.collateral, cellProps.cell.getValue())
                         )}
                     >
                         <TableText>
-                            {formatCurrencyWithKey(cellProps.row.original.collateral, cellProps.cell.value)}
+                            {formatCurrencyWithKey(cellProps.row.original.collateral, cellProps.cell.getValue())}
                         </TableText>
                     </Tooltip>
                 );
@@ -202,17 +205,17 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
         {
             header: <>{t('profile.table.payout')}</>,
             accessor: 'payout',
-            sortable: true,
-            Cell: (cellProps: any) => {
+            enableSorting: true,
+            cell: (cellProps: any) => {
                 return (
                     <Tooltip
                         overlay={formatCurrencyWithSign(
                             USD_SIGN,
-                            getValueInUsd(cellProps.row.original.collateral, cellProps.cell.value)
+                            getValueInUsd(cellProps.row.original.collateral, cellProps.cell.getValue())
                         )}
                     >
                         <TableText>
-                            {formatCurrencyWithKey(cellProps.row.original.collateral, cellProps.cell.value)}
+                            {formatCurrencyWithKey(cellProps.row.original.collateral, cellProps.cell.getValue())}
                         </TableText>
                     </Tooltip>
                 );
@@ -228,8 +231,8 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
         {
             header: <p>{t('profile.table.status')}</p>,
             accessor: 'status',
-            sortable: true,
-            Cell: (cellProps: any) => {
+            enableSorting: true,
+            cell: (cellProps: any) => {
                 let statusComponent;
                 if (cellProps.row.original.isCancelled) {
                     statusComponent = (

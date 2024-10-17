@@ -38,44 +38,42 @@ const XPHistoryTable: React.FC = () => {
         return [];
     }, [userXPHistoryQuery.data, userXPHistoryQuery?.isSuccess]);
 
+    const columns = [
+        {
+            header: <>{t('overdrop.xp-details.date-time')}</>,
+            accessor: 'timestamp',
+            cell: (cellProps: any) => (
+                <p>{cellProps.cell.getValue() && formatTxTimestamp(cellProps.cell.getValue())}</p>
+            ),
+            width: 150,
+            enableSorting: true,
+        },
+        {
+            header: <>{t('overdrop.xp-details.received')}</>,
+            accessor: 'points',
+            sortType: 'alphanumeric',
+            cell: (cellProps: CellProps<OverdropXPHistory, OverdropXPHistory['points']>) => (
+                <p>{formatPoints(cellProps.cell.getValue())}</p>
+            ),
+            width: 150,
+            enableSorting: true,
+        },
+        {
+            header: <>{t('overdrop.xp-details.tx-link')}</>,
+            accessor: 'txHash',
+            sortType: 'alphanumeric',
+            cell: (cellProps: CellProps<OverdropXPHistory, OverdropXPHistory['txHash']>) => (
+                <ViewEtherscanLink overrideNetwork={cellProps.row.original.network} hash={cellProps.cell.getValue()} />
+            ),
+            width: 150,
+        },
+    ];
+
     // ts-ignore
     return (
         <>
             <Table
-                columns={[
-                    {
-                        Header: <>{t('overdrop.xp-details.date-time')}</>,
-                        accessor: 'timestamp',
-                        Cell: (cellProps: CellProps<OverdropXPHistory, OverdropXPHistory['timestamp']>) => (
-                            <p>{cellProps.cell.value && formatTxTimestamp(cellProps.cell.value)}</p>
-                        ),
-                        width: 150,
-                        sortable: true,
-                    },
-                    {
-                        Header: <>{t('overdrop.xp-details.received')}</>,
-                        accessor: 'points',
-                        sortType: 'alphanumeric',
-                        Cell: (cellProps: CellProps<OverdropXPHistory, OverdropXPHistory['points']>) => (
-                            <p>{formatPoints(cellProps.cell.value)}</p>
-                        ),
-                        width: 150,
-                        sortable: true,
-                    },
-                    {
-                        Header: <>{t('overdrop.xp-details.tx-link')}</>,
-                        accessor: 'txHash',
-                        sortType: 'alphanumeric',
-                        Cell: (cellProps: CellProps<OverdropXPHistory, OverdropXPHistory['txHash']>) => (
-                            <ViewEtherscanLink
-                                overrideNetwork={cellProps.row.original.network}
-                                hash={cellProps.cell.value}
-                            />
-                        ),
-                        width: 150,
-                    },
-                ]}
-                currentPage={page}
+                columns={columns as any}
                 rowsPerPage={rowsPerPage}
                 tableHeight="auto"
                 data={userXPHistory ? userXPHistory : []}

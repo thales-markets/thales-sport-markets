@@ -152,6 +152,91 @@ const Leaderboard: React.FC = () => {
         );
     }, [isMobile, leaderboard, networkId, walletAddress]);
 
+    const columns = [
+        {
+            accessor: 'level.smallBadge',
+            enableSorting: false,
+            cell: (cellProps: any) => {
+                return <Badge style={{ width: '45px' }} src={cellProps.cell.getValue()} />;
+            },
+            width: '50px',
+            maxWidth: 50,
+        },
+        {
+            header: <>{t('overdrop.leaderboard.table.address')}</>,
+            accessor: 'address',
+            enableSorting: false,
+            cell: (cellProps: any) => {
+                return (
+                    <>
+                        <AddressContainer>
+                            <SPAAnchor href={getEtherscanAddressLink(networkId, cellProps.cell.getValue())}>
+                                {truncateAddress(cellProps.cell.getValue())}
+                            </SPAAnchor>
+                        </AddressContainer>
+                    </>
+                );
+            },
+        },
+        {
+            header: <>{t('overdrop.leaderboard.table.rank')}</>,
+            accessor: 'rank',
+            enableSorting: true,
+            cell: (cellProps: any) => {
+                return <div>#{cellProps.cell.getValue()}</div>;
+            },
+            width: '50px',
+            maxWidth: 50,
+        },
+        {
+            header: <>{t('overdrop.leaderboard.table.level')}</>,
+            accessor: 'level',
+            enableSorting: true,
+            cell: (cellProps: any) => {
+                return (
+                    <div>
+                        #{cellProps.cell.getValue().level} {cellProps.cell.getValue().levelName}
+                    </div>
+                );
+            },
+            sortInverted: true,
+        },
+        {
+            header: <>{t('overdrop.leaderboard.table.total-xp')}</>,
+            accessor: 'points',
+            cell: (cellProps: any) => {
+                return <div>{formatCurrency(cellProps.cell.getValue())}</div>;
+            },
+            enableSorting: true,
+            sortDescFirst: true,
+        },
+        {
+            header: <>{t('overdrop.leaderboard.table.total-volume')}</>,
+            accessor: 'volume',
+            enableSorting: true,
+            cell: (cellProps: any) => {
+                return <div>{formatCurrency(cellProps.cell.getValue())}</div>;
+            },
+            sortDescFirst: true,
+        },
+        {
+            header: <>{t('overdrop.leaderboard.table.rewards')}</>,
+            accessor: 'rewards',
+            enableSorting: true,
+            cell: (cellProps: any) => {
+                return (
+                    <>
+                        <div>{formatCurrency(cellProps.cell.getValue().op)} OP</div>
+                        {isMobile ? <div>{' + '}</div> : <></>}
+                        <div>{formatCurrency(cellProps.cell.getValue().arb)} ARB</div>
+                    </>
+                );
+            },
+            sortInverted: true,
+            sortDescFirst: true,
+        },
+    ];
+
     return (
         <TableContainer>
             <SearchFieldContainer>
@@ -171,90 +256,7 @@ const Leaderboard: React.FC = () => {
                 }}
                 tableRowCellStyles={tableRowStyle}
                 stickyRow={stickyRow}
-                columns={[
-                    {
-                        accessor: 'level.smallBadge',
-                        sortable: false,
-                        Cell: (cellProps: any) => {
-                            return <Badge style={{ width: '45px' }} src={cellProps.cell.value} />;
-                        },
-                        width: '50px',
-                        maxWidth: 50,
-                    },
-                    {
-                        Header: <>{t('overdrop.leaderboard.table.address')}</>,
-                        accessor: 'address',
-                        sortable: false,
-                        Cell: (cellProps: any) => {
-                            return (
-                                <>
-                                    <AddressContainer>
-                                        <SPAAnchor href={getEtherscanAddressLink(networkId, cellProps.cell.value)}>
-                                            {truncateAddress(cellProps.cell.value)}
-                                        </SPAAnchor>
-                                    </AddressContainer>
-                                </>
-                            );
-                        },
-                    },
-                    {
-                        Header: <>{t('overdrop.leaderboard.table.rank')}</>,
-                        accessor: 'rank',
-                        sortable: true,
-                        Cell: (cellProps: any) => {
-                            return <div>#{cellProps.cell.value}</div>;
-                        },
-                        width: '50px',
-                        maxWidth: 50,
-                    },
-                    {
-                        Header: <>{t('overdrop.leaderboard.table.level')}</>,
-                        accessor: 'level',
-                        sortable: true,
-                        Cell: (cellProps: any) => {
-                            return (
-                                <div>
-                                    #{cellProps.cell.value.level} {cellProps.cell.value.levelName}
-                                </div>
-                            );
-                        },
-                        sortInverted: true,
-                    },
-                    {
-                        Header: <>{t('overdrop.leaderboard.table.total-xp')}</>,
-                        accessor: 'points',
-                        sortable: true,
-                        Cell: (cellProps: any) => {
-                            return <div>{formatCurrency(cellProps.cell.value)}</div>;
-                        },
-                        sortDescFirst: true,
-                    },
-                    {
-                        Header: <>{t('overdrop.leaderboard.table.total-volume')}</>,
-                        accessor: 'volume',
-                        sortable: true,
-                        Cell: (cellProps: any) => {
-                            return <div>{formatCurrency(cellProps.cell.value)}</div>;
-                        },
-                        sortDescFirst: true,
-                    },
-                    {
-                        Header: <>{t('overdrop.leaderboard.table.rewards')}</>,
-                        accessor: 'rewards',
-                        sortable: true,
-                        Cell: (cellProps: any) => {
-                            return (
-                                <>
-                                    <div>{formatCurrency(cellProps.cell.value.op)} OP</div>
-                                    {isMobile ? <div>{' + '}</div> : <></>}
-                                    <div>{formatCurrency(cellProps.cell.value.arb)} ARB</div>
-                                </>
-                            );
-                        },
-                        sortInverted: true,
-                        sortDescFirst: true,
-                    },
-                ]}
+                columns={columns as any}
                 initialState={{
                     sortBy: [
                         {
@@ -263,8 +265,6 @@ const Leaderboard: React.FC = () => {
                         },
                     ],
                 }}
-                onSortByChanged={() => setPage(0)}
-                currentPage={page}
                 rowsPerPage={rowsPerPage}
                 isLoading={leaderboardQuery.isLoading}
                 data={leaderboardFiltered}
