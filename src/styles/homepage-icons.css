@@ -21,6 +21,26 @@
     content: '\0029';
 }
 
+.icon--arbitrum-logo:before {
+    content: '\0030';
+}
+
+.icon--chainlink-logo:before {
+    content: '\0031';
+}
+
+.icon--base-logo:before {
+    content: '\0032';
+}
+
+.icon--optimism-logo:before {
+    content: '\0033';
+}
+
+.icon--thales-logo:before {
+    content: '\0034';
+}
+
 .icon--visa::before {
     content: '\002A';
 }
