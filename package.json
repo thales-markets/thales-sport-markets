@@ -17,6 +17,8 @@
         "@particle-network/rainbowkit-ext": "1.2.0",
         "@rainbow-me/rainbowkit": "^0.12.16",
         "@reduxjs/toolkit": "^1.7.2",
+        "@splinetool/react-spline": "^4.0.0",
+        "@splinetool/runtime": "^1.9.30",
         "axios": "^1.7.4",
         "bytes32": "^0.0.3",
         "date-fns": "^2.28.0",

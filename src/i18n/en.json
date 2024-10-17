@@ -174,6 +174,33 @@
             "title": "Welcome to Overtime Markets"
         }
     },
+    "landing": {
+        "nav": {
+            "overdrop-token": "Overdrop token",
+            "be-the-house": "Be the house",
+            "airdrops": "Airdrops",
+            "dao": "DAO",
+            "blog": "Blog",
+            "about": "About"
+        },
+        "open-dapp": "Open dApp",
+        "title-1": "Welcome to <span>Overtime</span>,",
+        "title-2": "<span>the best</span> crypto sportsbook",
+        "title-description": "<span>Fully onchain</span> platform where you sign in in seconds, just connect and play. Bet with various currencies seamlessly and hassle free. Earn crypto airdrops, free bets and other rewards. Deposit funds in the liquidity pool and <span>become the house</span>.",
+        "connect-title": "Just <span>connect and go</span>",
+        "connect-description": "Log in with your existing wallet or generate a new one with a social login. Just plug and play!",
+        "live-games-title": "Enjoy <span>live games</span> and<br /> hundreds of market types",
+        "live-games-description": "Enjoy an open crypto sportsbook that offers everything traditional sportsbooks do and more! Predict live matches, player props, and choose from an abundance of sports and leagues.",
+        "win-title": "<span>Win</span> without limitations",
+        "win-description": "Traditional sportsbooks limit users if they're too successful. Overtime is fully transparent onchain and cannot ban or limit anyone. It's you versus the liquidity smart contracts. The Overtime community celebrates your wins with you!",
+        "various-title": "Bet with <span>various currencies</span>",
+        "various-description": "You can place your bets with many major ethereum tokens. From stablecoins, native ETH to",
+        "rewards-title": "Using Overtime gets you <span>crypto rewards!</span>",
+        "rewards-description": "To date, Overtime awarded its users millions of $ worth of crypto in various incentives, rewards and competitions! From millions of OP and ARB tokens secured by grants, liquid THALES tokens as incentives and various Free Bet airdrops.",
+        "house-title": "<span>Be the House</span> and share Overtime's success",
+        "house-description": "On Overtime, you can deposit funds in the liquidity pool smart contract and thus collateralize the platform against the user bets, gaining exposure to the entire platform's performance. Essentially, you become the House!",
+        "impressions-title": "What people are saying about Overtime"
+    },
     "footer": {
         "all-rights-reserved": "© {{year}} Overtime Markets ALL RIGHTS RESERVED.",
         "twitter": "Twitter",
