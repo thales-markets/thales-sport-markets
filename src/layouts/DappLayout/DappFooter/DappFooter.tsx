@@ -93,6 +93,7 @@ const DappFooter: React.FC = () => {
 };
 
 const Container = styled(FlexDivColumnCentered)`
+    z-index: 1;
     max-height: 75px;
     @media (max-width: 950px) {
         max-height: fit-content;
@@ -101,6 +102,7 @@ const Container = styled(FlexDivColumnCentered)`
 `;
 
 const DisclaimerContainer = styled(FlexDivCentered)`
+    z-index: 1;
     border-top: 1px solid ${(props) => props.theme.borderColor.primary};
     margin-top: 10px;
     padding-top: 15px;
