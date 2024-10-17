@@ -19,6 +19,7 @@ const plugins = (mode: string): PluginOption[] => {
             emitError: true,
             emitWarning: true,
             useEslintrc: true,
+            exclude: ['node_modules'],
         }),
     ];
 };
