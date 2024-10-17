@@ -23,7 +23,11 @@ import Banner from '../../components/Banner';
 import DappFooter from './DappFooter';
 import DappHeader from './DappHeader';
 
-const DappLayout: React.FC = ({ children }) => {
+type DappLayoutProps = {
+    children: React.ReactNode;
+};
+
+const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const dispatch = useDispatch();
     const location = useLocation();

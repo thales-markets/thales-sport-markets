@@ -18,6 +18,7 @@ type ModalProps = {
         header?: CSSProperties;
     };
     onClose: () => void;
+    children: React.ReactNode;
 };
 
 ReactModal.setAppElement('#root');
