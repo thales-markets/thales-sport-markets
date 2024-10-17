@@ -1,4 +1,5 @@
 import { Network } from 'enums/network';
+import { NetworkId } from 'thales-utils';
 import { Chain } from 'wagmi';
 import { NetworkParams, SupportedNetwork } from '../types/network';
 
@@ -85,3 +86,15 @@ export const optimismSepolia = {
         },
     },
 } as Chain;
+
+const INFURA_PROJECT_ID = import.meta.env.VITE_APP_INFURA_PROJECT_ID;
+
+export const RPC_LIST = {
+    INFURA: {
+        [NetworkId.OptimismMainnet]: `https://optimism-mainnet.infura.io/v3/${INFURA_PROJECT_ID}`,
+        [NetworkId.Arbitrum]: `https://arbitrum-mainnet.infura.io/v3/${INFURA_PROJECT_ID}`,
+        [NetworkId.Base]: `https://base-mainnet.infura.io/v3/${INFURA_PROJECT_ID}`,
+        [NetworkId.PolygonMainnet]: `https://polygon-mainnet.infura.io/v3/${INFURA_PROJECT_ID}`,
+        [NetworkId.OptimismSepolia]: `https://optimism-sepolia.infura.io/v3/${INFURA_PROJECT_ID}`,
+    },
+};
