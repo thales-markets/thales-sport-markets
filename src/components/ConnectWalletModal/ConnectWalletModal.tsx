@@ -10,7 +10,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { getNetworkId, getWalletConnectModalOrigin } from 'redux/modules/wallet';
+import { getWalletConnectModalOrigin } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivRow } from 'styles/common';
@@ -49,11 +49,8 @@ type ConnectWalletModalProps = {
 
 const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose }) => {
     const { t } = useTranslation();
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
 
-    const { connectors, isLoading, isSuccess, connect } = useConnect({
-        chainId: networkId,
-    });
+    const { connectors, isPending, isSuccess, connect } = useConnect();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const { openConnectModal } = useConnectModal();
     const [termsAccepted, setTerms] = useState(false);
@@ -87,7 +84,7 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
             <CloseIconContainer>
                 <CloseIcon onClick={onClose} />
             </CloseIconContainer>
-            {!isLoading && (
+            {!isPending && (
                 <>
                     <HeaderContainer>
                         <Header>{t('common.wallet.connect-wallet-modal-title')}</Header>
@@ -187,7 +184,7 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                     </FooterContainer>
                 </>
             )}
-            {isLoading && (
+            {isPending && (
                 <LoaderContainer>
                     <SimpleLoader />
                 </LoaderContainer>

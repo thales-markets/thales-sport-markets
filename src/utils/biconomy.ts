@@ -396,7 +396,7 @@ export const getHostedConnectors = (connectors: Connector[]): Connector[] => {
 };
 
 export const getSpecificConnectorFromConnectorsArray = (
-    connectors: Connector[],
+    connectors: readonly Connector[],
     name: string,
     particle?: boolean
 ): Connector | undefined => {
