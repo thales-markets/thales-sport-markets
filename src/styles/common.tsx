@@ -52,6 +52,7 @@ export const Colors = {
     GRAY: '#303656',
     GRAY_LIGHT: '#5F6180',
     GRAY_DARK: '#1A1C2B',
+    GRAY_TRANSPARENT: '#D9D9D91A',
 
     // specific shades for odds background display
     GRAY_SECOND: '#242842',

@@ -38,6 +38,7 @@ export default {
             quinary: Colors.BLUE,
             senary: Colors.TORY_BLUE,
             septenary: Colors.RED,
+            octonary: Colors.GRAY_TRANSPARENT,
         },
         textColor: {
             primary: Colors.NAVY_BLUE_DARK,
@@ -45,6 +46,7 @@ export default {
             tertiary: Colors.ORANGE,
             quaternary: Colors.BLUE,
             quinary: Colors.NAVY_BLUE,
+            senary: Colors.GRAY_LIGHT,
         },
         borderColor: {
             primary: Colors.GREEN,
@@ -52,6 +54,7 @@ export default {
             tertiary: Colors.NAVY_BLUE_DARK,
             quaternary: Colors.NAVY_BLUE_LIGHT,
             quinary: Colors.GRAY_DARK,
+            senary: Colors.GRAY_LIGHT,
         },
     },
     input: {
