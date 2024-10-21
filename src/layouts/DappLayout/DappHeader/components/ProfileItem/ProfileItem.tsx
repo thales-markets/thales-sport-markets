@@ -1,7 +1,5 @@
 import SPAAnchor from 'components/SPAAnchor';
 import ROUTES from 'constants/routes';
-import { countries } from 'constants/worldCup';
-import useFavoriteTeamDataQuery from 'queries/favoriteTeam/useFavoriteTeamDataQuery';
 import useClaimablePositionCountV2Query from 'queries/markets/useClaimablePositionCountV2Query';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -16,7 +14,6 @@ import {
     ProfileIcon,
     ProfileIconContainer,
     ProfileLabel,
-    TeamImage,
 } from './styled-components';
 
 type ProfileItemProperties = {
@@ -42,10 +39,6 @@ export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({ avatarSize,
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
 
-    const favoriteTeamDataQuery = useFavoriteTeamDataQuery(walletAddress, networkId);
-    const favoriteTeamData =
-        favoriteTeamDataQuery.isSuccess && favoriteTeamDataQuery.data ? favoriteTeamDataQuery.data : null;
-
     const claimablePositionsCountQuery = useClaimablePositionCountV2Query(walletAddress, networkId, {
         enabled: isWalletConnected,
     });
@@ -64,19 +57,7 @@ export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({ avatarSize,
                         <Count>{notificationsCount}</Count>
                     </NotificationCount>
                 )}
-                {favoriteTeamData?.favoriteTeam ? (
-                    <TeamImage
-                        avatarSize={avatarSize}
-                        src={`https://thales-protocol.s3.eu-north-1.amazonaws.com/zebro_${countries[
-                            favoriteTeamData?.favoriteTeam - 1
-                        ]
-                            .toLocaleLowerCase()
-                            .split(' ')
-                            .join('_')}.png`}
-                    />
-                ) : (
-                    <ProfileIcon avatarSize={avatarSize} iconColor={iconColor} />
-                )}
+                <ProfileIcon avatarSize={avatarSize} iconColor={iconColor} />
             </ProfileIconContainer>
         </>
     );
