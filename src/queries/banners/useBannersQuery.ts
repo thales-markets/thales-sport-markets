@@ -1,20 +1,24 @@
 import axios from 'axios';
 import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
-import { Network } from 'enums/network';
 import { useQuery, UseQueryOptions } from 'react-query';
+import { QueryConfig } from 'types/network';
 
 export type Banner = {
     url: string;
     image: string;
 };
 
-export const useBannersQuery = (networkId: Network, options?: UseQueryOptions<Banner[]>) => {
-    return useQuery<Banner[]>(
-        QUERY_KEYS.Banners(networkId),
-        async () => {
+export const useBannersQuery = (
+    queryConfig: QueryConfig,
+    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery<Banner[]>({
+        ...options,
+        queryKey: QUERY_KEYS.Banners(queryConfig.networkId),
+        queryFn: async () => {
             try {
-                const response = await axios.get(`${generalConfig.API_URL}/banners-v2/${networkId}`);
+                const response = await axios.get(`${generalConfig.API_URL}/banners-v2/${queryConfig.networkId}`);
                 const mappedData = response.data.map((banner: Banner) => ({
                     url: banner.url,
                     image: `${generalConfig.API_URL}/banners-v2/image/${banner.image}`,
@@ -26,8 +30,5 @@ export const useBannersQuery = (networkId: Network, options?: UseQueryOptions<Ba
                 return [];
             }
         },
-        {
-            ...options,
-        }
-    );
+    });
 };
