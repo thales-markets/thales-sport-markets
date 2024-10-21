@@ -1,20 +1,23 @@
-import { Network } from 'enums/network';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { coinFormatter, Coins } from 'thales-utils';
 import { UserLiquidityPoolData } from 'types/liquidityPool';
-import networkConnector from 'utils/networkConnector';
+import { QueryConfig } from 'types/network';
+import { ViemContract } from 'types/viem';
+import { getContractAbi } from 'utils/contracts/abi';
+import liquidityPoolDataContract from 'utils/contracts/liquidityPoolDataContractV2';
+import { getContract } from 'viem';
 import QUERY_KEYS from '../../constants/queryKeys';
 
 const useLiquidityPoolUserDataQuery = (
     address: string,
     collateral: Coins,
     walletAddress: string,
-    networkId: Network,
-    options?: UseQueryOptions<UserLiquidityPoolData | undefined>
+    queryConfig: QueryConfig,
+    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<UserLiquidityPoolData | undefined>(
-        QUERY_KEYS.LiquidityPool.UserData(address, walletAddress, networkId),
-        async () => {
+    return useQuery<UserLiquidityPoolData | undefined>({
+        queryKey: QUERY_KEYS.LiquidityPool.UserData(address, walletAddress, queryConfig.networkId),
+        queryFn: async () => {
             const userLiquidityPoolData: UserLiquidityPoolData = {
                 balanceCurrentRound: 0,
                 balanceNextRound: 0,
@@ -28,9 +31,14 @@ const useLiquidityPoolUserDataQuery = (
             };
 
             try {
-                const { liquidityPoolDataContract } = networkConnector;
-                if (liquidityPoolDataContract) {
-                    const contractUserLiquidityPoolData = await liquidityPoolDataContract.getUserLiquidityPoolData(
+                const liquidityPoolDataContractInstance = getContract({
+                    abi: getContractAbi(liquidityPoolDataContract, queryConfig.networkId),
+                    address: liquidityPoolDataContract.addresses[queryConfig.networkId],
+                    client: queryConfig.client,
+                }) as ViemContract;
+
+                if (liquidityPoolDataContractInstance) {
+                    const contractUserLiquidityPoolData = await liquidityPoolDataContractInstance.read.getUserLiquidityPoolData(
                         address,
                         walletAddress
                     );
@@ -38,19 +46,19 @@ const useLiquidityPoolUserDataQuery = (
                     userLiquidityPoolData.isWithdrawalRequested = contractUserLiquidityPoolData.withdrawalRequested;
                     userLiquidityPoolData.withdrawalShare = coinFormatter(
                         contractUserLiquidityPoolData.withdrawalShare,
-                        networkId,
+                        queryConfig.networkId,
                         collateral
                     );
                     userLiquidityPoolData.isPartialWithdrawalRequested = userLiquidityPoolData.withdrawalShare > 0;
 
                     userLiquidityPoolData.balanceCurrentRound = coinFormatter(
                         contractUserLiquidityPoolData.balanceCurrentRound,
-                        networkId,
+                        queryConfig.networkId,
                         collateral
                     );
                     userLiquidityPoolData.balanceNextRound = coinFormatter(
                         contractUserLiquidityPoolData.balanceNextRound,
-                        networkId,
+                        queryConfig.networkId,
                         collateral
                     );
                     userLiquidityPoolData.withdrawalAmount = userLiquidityPoolData.isWithdrawalRequested
@@ -74,10 +82,8 @@ const useLiquidityPoolUserDataQuery = (
             }
             return undefined;
         },
-        {
-            ...options,
-        }
-    );
+        ...options,
+    });
 };
 
 export default useLiquidityPoolUserDataQuery;
