@@ -3,7 +3,7 @@ import MatchLogosV2 from 'components/MatchLogosV2';
 import SimpleLoader from 'components/SimpleLoader';
 import { t } from 'i18next';
 import { Message } from 'pages/Markets/Market/MarketDetailsV2/components/PositionsV2/styled-components';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import { setSelectedMarket } from 'redux/modules/market';
@@ -11,7 +11,7 @@ import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
 import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarket } from 'types/markets';
-import { getMatchLabel, isOddValid } from 'utils/marketsV2';
+import { getMatchLabel } from 'utils/marketsV2';
 import { League } from '../../../../enums/sports';
 import TicketTransactions from '../../Market/MarketDetailsV2/components/TicketTransactions';
 import Header from '../Header';
@@ -21,22 +21,7 @@ const SelectedMarket: React.FC<{ market: SportMarket | undefined }> = ({ market 
     const dispatch = useDispatch();
     const isMobile = useSelector(getIsMobile);
 
-    const areOddsValid = market?.odds.some((odd) => isOddValid(odd));
-
-    // TODO: remove, rely on market.paused from api response once implemented
-    const marketPaused = useMemo(() => {
-        // when market odds are stale API sets odds to []
-        if (!market?.odds.length) {
-            return true;
-        }
-        if (areOddsValid) {
-            return false;
-        }
-        if (market?.childMarkets.some((child) => child.odds.some((odd) => isOddValid(odd)))) {
-            return false;
-        }
-        return true;
-    }, [market, areOddsValid]);
+    const isMarketPaused = market?.isPaused;
 
     return (
         <Wrapper>
@@ -67,7 +52,7 @@ const SelectedMarket: React.FC<{ market: SportMarket | undefined }> = ({ market 
                 />
             </HeaderContainer>
             {market ? (
-                !marketPaused ? (
+                !isMarketPaused ? (
                     <>
                         <SelectedMarketDetails market={market} />
                         {isMobile && <TicketTransactions market={market} isOnSelectedMarket />}

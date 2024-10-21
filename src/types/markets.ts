@@ -80,11 +80,8 @@ export type SportMarket = {
     gameStatus?: GameStatus;
     liveScore?: SportMarketScore;
     positionNames?: string[];
-    errors?: SportMarketErrorDetails[];
+    errorMessage?: string;
 };
-
-export type SportMarketError = { gameId: SportMarket['gameId']; errorsDetails: SportMarketErrorDetails[] };
-export type SportMarketErrorDetails = { processingTime: number; errorTime: number; errorMessage: string };
 
 type OmitDistributive<T, K extends PropertyKey> = T extends any
     ? T extends object
