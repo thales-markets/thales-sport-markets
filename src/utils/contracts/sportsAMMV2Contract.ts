@@ -1,11 +1,11 @@
 import { Network } from 'enums/network';
+import { Address } from 'viem';
 
 const sportsAMMV2Contract = {
     addresses: {
-        [Network.OptimismMainnet]: '0xFb4e4811C7A811E098A556bD79B64c20b479E431',
-        [Network.Arbitrum]: '0xfb64E79A562F7250131cf528242CEB10fDC82395',
-        [Network.Base]: '',
-        [Network.OptimismSepolia]: '0xe58C88622EC9eaF137089A2Df94B53B6521F55A3',
+        [Network.OptimismMainnet]: '0xFb4e4811C7A811E098A556bD79B64c20b479E431' as Address,
+        [Network.Arbitrum]: '0xfb64E79A562F7250131cf528242CEB10fDC82395' as Address,
+        [Network.OptimismSepolia]: '0xe58C88622EC9eaF137089A2Df94B53B6521F55A3' as Address,
     },
     abi: [
         {
