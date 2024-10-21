@@ -1,38 +1,36 @@
 import QUERY_KEYS from 'constants/queryKeys';
-import { Network } from 'enums/network';
 import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import { coinFormatter, Coins } from 'thales-utils';
 import { LiquidityPoolUserTransaction, LiquidityPoolUserTransactions } from 'types/liquidityPool';
+import { QueryConfig } from 'types/network';
 
 const useLiquidityPoolUserTransactionsQuery = (
-    networkId: Network,
     liquidityPoolAddress: string,
     collateral: Coins,
-    options?: UseQueryOptions<LiquidityPoolUserTransactions>
+    queryConfig: QueryConfig,
+    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<LiquidityPoolUserTransactions>(
-        QUERY_KEYS.LiquidityPool.UserTransactions(networkId, liquidityPoolAddress),
-        async () => {
+    return useQuery<LiquidityPoolUserTransactions>({
+        queryKey: QUERY_KEYS.LiquidityPool.UserTransactions(queryConfig.networkId, liquidityPoolAddress),
+        queryFn: async () => {
             try {
                 const liquidityPoolUserTransactions = await thalesData.sportMarketsV2.liquidityPoolUserTransactions({
-                    network: networkId,
+                    network: queryConfig.networkId,
                     liquidityPool: liquidityPoolAddress,
                 });
 
                 return liquidityPoolUserTransactions.map((tx: LiquidityPoolUserTransaction) => ({
                     ...tx,
-                    amount: coinFormatter(tx.amount || 0, networkId, collateral),
+                    amount: coinFormatter(tx.amount as bigint, queryConfig.networkId, collateral),
                 }));
             } catch (e) {
                 console.log(e);
                 return [];
             }
         },
-        {
-            ...options,
-        }
-    );
+        ...options,
+    });
 };
 
 export default useLiquidityPoolUserTransactionsQuery;
