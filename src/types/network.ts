@@ -24,6 +24,11 @@ export type NetworkParams = {
     order: number;
 };
 
+export type QueryConfig = {
+    networkId: SupportedNetwork;
+    client: any;
+};
+
 export type SupportedNetwork = Exclude<
     Network,
     | Network.Mainnet

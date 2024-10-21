@@ -1,36 +1,91 @@
-import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
+import { getBalance } from '@wagmi/core';
+import { TBD_ADDRESS } from 'constants/network';
 import QUERY_KEYS from 'constants/queryKeys';
-import { Network } from 'enums/network';
+import { wagmiConfig } from 'pages/Root/wagmiConfig';
 import { useQuery, UseQueryOptions } from 'react-query';
-import { bigNumberFormatter, Coins, COLLATERAL_DECIMALS } from 'thales-utils';
-import networkConnector from 'utils/networkConnector';
+import { bigNumberFormatter, COLLATERAL_DECIMALS } from 'thales-utils';
+import { CollateralsBalance } from 'types/collateral';
+import { QueryConfig } from 'types/network';
+import { ViemContract } from 'types/viem';
+import multipleCollateral from 'utils/contracts/multipleCollateralContract';
+import { Address, getContract } from 'viem';
 
 const useMultipleCollateralBalanceQuery = (
     walletAddress: string,
-    networkId: Network,
-    options?: UseQueryOptions<any>
+    queryConfig: QueryConfig,
+    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<any>(
-        QUERY_KEYS.Wallet.MultipleCollateral(walletAddress, networkId),
-        async () => {
+    return useQuery<CollateralsBalance>({
+        queryKey: QUERY_KEYS.Wallet.MultipleCollateral(walletAddress, queryConfig.networkId),
+        queryFn: async () => {
+            let collaterasBalance: CollateralsBalance = {
+                sUSD: 0,
+                DAI: 0,
+                USDCe: 0,
+                USDbC: 0,
+                USDT: 0,
+                OP: 0,
+                WETH: 0,
+                ETH: 0,
+                ARB: 0,
+                USDC: 0,
+            };
             try {
-                const multipleCollateral = networkConnector.multipleCollateral;
+                const multipleCollateralObject = {
+                    sUSD: getContract({
+                        abi: multipleCollateral.sUSD.abi,
+                        address: multipleCollateral.sUSD.addresses[queryConfig.networkId],
+                        client: queryConfig.client,
+                    }) as ViemContract,
+                    DAI: getContract({
+                        abi: multipleCollateral.DAI.abi,
+                        address: multipleCollateral.DAI.addresses[queryConfig.networkId],
+                        client: queryConfig.client,
+                    }) as ViemContract,
+                    USDC: getContract({
+                        abi: multipleCollateral.USDC.abi,
+                        address: multipleCollateral.USDC.addresses[queryConfig.networkId],
+                        client: queryConfig.client,
+                    }) as ViemContract,
+                    USDCe: getContract({
+                        abi: multipleCollateral.USDCe.abi,
+                        address: multipleCollateral.USDCe.addresses[queryConfig.networkId],
+                        client: queryConfig.client,
+                    }) as ViemContract,
+                    USDbC: getContract({
+                        abi: multipleCollateral.USDbC.abi,
+                        address: multipleCollateral.USDbC.addresses[queryConfig.networkId],
+                        client: queryConfig.client,
+                    }) as ViemContract,
+                    USDT: getContract({
+                        abi: multipleCollateral.USDT.abi,
+                        address: multipleCollateral.USDT.addresses[queryConfig.networkId],
+                        client: queryConfig.client,
+                    }) as ViemContract,
+                    OP: getContract({
+                        abi: multipleCollateral.OP.abi,
+                        address: multipleCollateral.OP.addresses[queryConfig.networkId],
+                        client: queryConfig.client,
+                    }) as ViemContract,
+                    WETH: getContract({
+                        abi: multipleCollateral.WETH.abi,
+                        address: multipleCollateral.WETH.addresses[queryConfig.networkId],
+                        client: queryConfig.client,
+                    }) as ViemContract,
+                    ETH: getContract({
+                        abi: multipleCollateral.ETH.abi,
+                        address: multipleCollateral.ETH.addresses[queryConfig.networkId],
+                        client: queryConfig.client,
+                    }) as ViemContract,
+                    ARB: getContract({
+                        abi: multipleCollateral.ARB.abi,
+                        address: multipleCollateral.ARB.addresses[queryConfig.networkId],
+                        client: queryConfig.client,
+                    }) as ViemContract,
+                };
 
-                if (!walletAddress || !networkId) {
-                    return {
-                        sUSD: 0,
-                        DAI: 0,
-                        USDCe: 0,
-                        USDT: 0,
-                        OP: 0,
-                        WETH: 0,
-                        ETH: 0,
-                        ARB: 0,
-                        USDC: 0,
-                        USDbC: 0,
-                        THALES: 0,
-                        sTHALES: 0,
-                    };
+                if (!walletAddress || !queryConfig.networkId) {
+                    return collaterasBalance;
                 }
 
                 const [
@@ -38,87 +93,62 @@ const useMultipleCollateralBalanceQuery = (
                     DAIBalance,
                     USDCBalance,
                     USDCeBalance,
+                    USDbCBalance,
                     USDTBalance,
                     OPBalance,
                     WETHBalance,
                     ETHBalance,
                     ARBBalance,
-                    USDbCBalance,
-                    THALESBalance,
-                    sTHALESBalance,
                 ] = await Promise.all([
-                    multipleCollateral
-                        ? multipleCollateral[CRYPTO_CURRENCY_MAP.sUSD as Coins]?.balanceOf(walletAddress)
-                        : undefined,
-                    multipleCollateral
-                        ? multipleCollateral[CRYPTO_CURRENCY_MAP.DAI as Coins]?.balanceOf(walletAddress)
-                        : undefined,
-                    multipleCollateral
-                        ? multipleCollateral[CRYPTO_CURRENCY_MAP.USDC as Coins]?.balanceOf(walletAddress)
-                        : undefined,
-                    multipleCollateral
-                        ? multipleCollateral[CRYPTO_CURRENCY_MAP.USDCe as Coins]?.balanceOf(walletAddress)
-                        : undefined,
-                    multipleCollateral
-                        ? multipleCollateral[CRYPTO_CURRENCY_MAP.USDT as Coins]?.balanceOf(walletAddress)
-                        : undefined,
-                    multipleCollateral
-                        ? multipleCollateral[CRYPTO_CURRENCY_MAP.OP as Coins]?.balanceOf(walletAddress)
-                        : undefined,
-                    multipleCollateral
-                        ? multipleCollateral[CRYPTO_CURRENCY_MAP.WETH as Coins]?.balanceOf(walletAddress)
-                        : undefined,
-                    networkConnector.provider ? networkConnector.provider.getBalance(walletAddress) : undefined,
-                    multipleCollateral
-                        ? multipleCollateral[CRYPTO_CURRENCY_MAP.ARB as Coins]?.balanceOf(walletAddress)
-                        : undefined,
-                    multipleCollateral
-                        ? multipleCollateral[CRYPTO_CURRENCY_MAP.USDbC as Coins]?.balanceOf(walletAddress)
-                        : undefined,
-                    multipleCollateral
-                        ? multipleCollateral[CRYPTO_CURRENCY_MAP.THALES as Coins]?.balanceOf(walletAddress)
-                        : undefined,
-                    multipleCollateral
-                        ? multipleCollateral[CRYPTO_CURRENCY_MAP.sTHALES as Coins]?.stakedBalanceOf(walletAddress)
-                        : undefined,
+                    multipleCollateralObject.sUSD.address !== TBD_ADDRESS
+                        ? multipleCollateralObject.sUSD.read.balanceOf([walletAddress])
+                        : 0,
+                    multipleCollateralObject.DAI.address !== TBD_ADDRESS
+                        ? multipleCollateralObject.DAI.read.balanceOf([walletAddress])
+                        : 0,
+                    multipleCollateralObject.USDC.address !== TBD_ADDRESS
+                        ? multipleCollateralObject.USDC.read.balanceOf([walletAddress])
+                        : 0,
+                    multipleCollateralObject.USDCe.address !== TBD_ADDRESS
+                        ? multipleCollateralObject.USDCe.read.balanceOf([walletAddress])
+                        : 0,
+                    multipleCollateralObject.USDbC.address !== TBD_ADDRESS
+                        ? multipleCollateralObject.USDbC.read.balanceOf([walletAddress])
+                        : 0,
+                    multipleCollateralObject.USDT.address !== TBD_ADDRESS
+                        ? multipleCollateralObject.USDT.read.balanceOf([walletAddress])
+                        : 0,
+                    multipleCollateralObject.OP.address !== TBD_ADDRESS
+                        ? multipleCollateralObject.OP.read.balanceOf([walletAddress])
+                        : 0,
+                    multipleCollateralObject.WETH.address !== TBD_ADDRESS
+                        ? multipleCollateralObject.WETH.read.balanceOf([walletAddress])
+                        : 0,
+                    getBalance(wagmiConfig, { address: walletAddress as Address }),
+                    multipleCollateralObject.ARB.address !== TBD_ADDRESS
+                        ? multipleCollateralObject.ARB.read.balanceOf([walletAddress])
+                        : 0,
                 ]);
-
-                return {
+                collaterasBalance = {
                     sUSD: sUSDBalance ? bigNumberFormatter(sUSDBalance, COLLATERAL_DECIMALS.sUSD) : 0,
                     DAI: DAIBalance ? bigNumberFormatter(DAIBalance, COLLATERAL_DECIMALS.DAI) : 0,
                     USDC: USDCBalance ? bigNumberFormatter(USDCBalance, COLLATERAL_DECIMALS.USDC) : 0,
                     USDCe: USDCeBalance ? bigNumberFormatter(USDCeBalance, COLLATERAL_DECIMALS.USDCe) : 0,
+                    USDbC: USDbCBalance ? bigNumberFormatter(USDbCBalance, COLLATERAL_DECIMALS.USDbC) : 0,
                     USDT: USDTBalance ? bigNumberFormatter(USDTBalance, COLLATERAL_DECIMALS.USDT) : 0,
                     OP: OPBalance ? bigNumberFormatter(OPBalance, COLLATERAL_DECIMALS.OP) : 0,
                     WETH: WETHBalance ? bigNumberFormatter(WETHBalance, COLLATERAL_DECIMALS.WETH) : 0,
-                    ETH: ETHBalance ? bigNumberFormatter(ETHBalance, COLLATERAL_DECIMALS.ETH) : 0,
+                    ETH: ETHBalance ? bigNumberFormatter(ETHBalance.value, COLLATERAL_DECIMALS.ETH) : 0,
                     ARB: ARBBalance ? bigNumberFormatter(ARBBalance, COLLATERAL_DECIMALS.ARB) : 0,
-                    USDbC: USDbCBalance ? bigNumberFormatter(USDbCBalance, COLLATERAL_DECIMALS.USDbC) : 0,
-                    THALES: THALESBalance ? bigNumberFormatter(THALESBalance, COLLATERAL_DECIMALS.THALES) : 0,
-                    // sub 1 staked THALES due to limitation on contract side
-                    sTHALES:
-                        sTHALESBalance && bigNumberFormatter(sTHALESBalance, COLLATERAL_DECIMALS.sTHALES) > 1
-                            ? bigNumberFormatter(sTHALESBalance, COLLATERAL_DECIMALS.sTHALES) - 1
-                            : 0,
                 };
             } catch (e) {
                 console.log('e ', e);
-                return {
-                    sUSD: 0,
-                    DAI: 0,
-                    USDCe: 0,
-                    USDT: 0,
-                    OP: 0,
-                    WETH: 0,
-                    ETH: 0,
-                    ARB: 0,
-                    USDC: 0,
-                    USDbC: 0,
-                };
             }
+
+            return collaterasBalance;
         },
-        options
-    );
+        ...options,
+    });
 };
 
 export default useMultipleCollateralBalanceQuery;
