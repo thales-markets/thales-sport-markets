@@ -1,10 +1,11 @@
 import { Network } from 'enums/network';
 import { NetworkId } from 'thales-utils';
-import { Chain } from 'wagmi';
+import { Address } from 'viem';
 import { NetworkParams, SupportedNetwork } from '../types/network';
 
-export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
+export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000' as Address;
 export const NATIVE_TOKEN_ADDRES = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
+export const TBD_ADDRESS = '0xTBD' as Address;
 
 export const SUPPORTED_NETWORKS: Record<SupportedNetwork, string> = {
     [Network.OptimismMainnet]: 'OPTIMISTIC',
@@ -57,35 +58,6 @@ export const SUPPORTED_NETWORKS_PARAMS: Record<number, NetworkParams> = {
 };
 
 export const GAS_ESTIMATION_BUFFER = 1.2; // Adding 20% on gas estimation as a buffer. Used only on Optimisme
-
-// configuration for wagmi
-export const optimismSepolia = {
-    id: 11155420,
-    network: 'OP Sepolia',
-    name: 'OP Sepolia',
-    nativeCurrency: { name: 'Sepolia Ether', symbol: 'ETH', decimals: 18 },
-    rpcUrls: {
-        default: {
-            http: ['https://sepolia.optimism.io'],
-        },
-        public: {
-            http: ['https://sepolia.optimism.io'],
-        },
-    },
-    blockExplorers: {
-        default: {
-            name: 'Blockscout',
-            url: 'https://optimism-sepolia.blockscout.com',
-            apiUrl: 'https://optimism-sepolia.blockscout.com/api',
-        },
-    },
-    contracts: {
-        multicall3: {
-            address: '0xca11bde05977b3631167028862be2a173976ca11',
-            blockCreated: 1620204,
-        },
-    },
-} as Chain;
 
 const INFURA_PROJECT_ID = import.meta.env.VITE_APP_INFURA_PROJECT_ID;
 

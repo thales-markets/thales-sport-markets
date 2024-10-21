@@ -1,6 +1,7 @@
 import MetaMaskIcon from 'assets/images/wallets/metamask.svg';
 import WalletConnectIcon from 'assets/images/wallets/wallet_connect.svg';
-import { HostedWallets, ParticalTypes } from 'enums/wallet';
+import { HostedWallets } from 'enums/wallet';
+import { ParticalTypes } from 'types/wallet';
 
 export const SUPPORTED_PARTICAL_CONNECTORS: ParticalTypes[] = [
     ParticalTypes.GOOGLE,
@@ -8,8 +9,6 @@ export const SUPPORTED_PARTICAL_CONNECTORS: ParticalTypes[] = [
     ParticalTypes.DISCORD,
     ParticalTypes.GITHUB,
     ParticalTypes.APPLE,
-    ParticalTypes.EMAIL,
-    ParticalTypes.PHONE,
 ];
 
 export const HOSTED_WALLETS_ICONS: { walletId: HostedWallets; image: string }[] = [
