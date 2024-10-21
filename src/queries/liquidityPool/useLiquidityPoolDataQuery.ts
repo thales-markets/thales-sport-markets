@@ -1,20 +1,23 @@
-import { Network } from 'enums/network';
+import { secondsToMilliseconds } from 'date-fns';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { bigNumberFormatter, coinFormatter, Coins } from 'thales-utils';
 import { LiquidityPoolData } from 'types/liquidityPool';
-import networkConnector from 'utils/networkConnector';
+import { QueryConfig } from 'types/network';
+import { ViemContract } from 'types/viem';
+import { getContractAbi } from 'utils/contracts/abi';
+import liquidityPoolDataContract from 'utils/contracts/liquidityPoolDataContractV2';
+import { getContract } from 'viem';
 import QUERY_KEYS from '../../constants/queryKeys';
-import { secondsToMilliseconds } from 'date-fns';
 
 const useLiquidityPoolDataQuery = (
     address: string,
     collateral: Coins,
-    networkId: Network,
-    options?: UseQueryOptions<LiquidityPoolData | undefined>
+    queryConfig: QueryConfig,
+    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<LiquidityPoolData | undefined>(
-        QUERY_KEYS.LiquidityPool.Data(address, networkId),
-        async () => {
+    return useQuery<LiquidityPoolData | undefined>({
+        queryKey: QUERY_KEYS.LiquidityPool.Data(address, queryConfig.networkId),
+        queryFn: async () => {
             const liquidityPoolData: LiquidityPoolData = {
                 collateral: '',
                 liquidityPoolStarted: false,
@@ -36,16 +39,23 @@ const useLiquidityPoolDataQuery = (
             };
 
             try {
-                const { liquidityPoolDataContract } = networkConnector;
-                if (liquidityPoolDataContract) {
-                    const contractLiquidityPoolData = await liquidityPoolDataContract.getLiquidityPoolData(address);
+                const liquidityPoolDataContractInstance = getContract({
+                    abi: getContractAbi(liquidityPoolDataContract, queryConfig.networkId),
+                    address: liquidityPoolDataContract.addresses[queryConfig.networkId],
+                    client: queryConfig.client,
+                }) as ViemContract;
+
+                if (liquidityPoolDataContractInstance) {
+                    const contractLiquidityPoolData = await liquidityPoolDataContractInstance.read.getLiquidityPoolData(
+                        address
+                    );
 
                     liquidityPoolData.collateral = contractLiquidityPoolData.collateral;
 
                     liquidityPoolData.liquidityPoolStarted = contractLiquidityPoolData.started;
                     liquidityPoolData.maxAllowedDeposit = coinFormatter(
                         contractLiquidityPoolData.maxAllowedDeposit,
-                        networkId,
+                        queryConfig.networkId,
                         collateral
                     );
                     liquidityPoolData.round = Number(contractLiquidityPoolData.round);
@@ -54,7 +64,7 @@ const useLiquidityPoolDataQuery = (
                     );
                     liquidityPoolData.allocationNextRound = coinFormatter(
                         contractLiquidityPoolData.totalDeposited,
-                        networkId,
+                        queryConfig.networkId,
                         collateral
                     );
                     liquidityPoolData.allocationNextRoundPercentage =
@@ -63,13 +73,13 @@ const useLiquidityPoolDataQuery = (
                         liquidityPoolData.maxAllowedDeposit - liquidityPoolData.allocationNextRound;
                     liquidityPoolData.allocationCurrentRound = coinFormatter(
                         contractLiquidityPoolData.allocationCurrentRound,
-                        networkId,
+                        queryConfig.networkId,
                         collateral
                     );
                     liquidityPoolData.isRoundEnded = new Date().getTime() > liquidityPoolData.roundEndTime;
                     liquidityPoolData.minDepositAmount = coinFormatter(
                         contractLiquidityPoolData.minDepositAmount,
-                        networkId,
+                        queryConfig.networkId,
                         collateral
                     );
                     liquidityPoolData.maxAllowedUsers = Number(contractLiquidityPoolData.maxAllowedUsers);
@@ -91,10 +101,8 @@ const useLiquidityPoolDataQuery = (
             }
             return undefined;
         },
-        {
-            ...options,
-        }
-    );
+        ...options,
+    });
 };
 
 export default useLiquidityPoolDataQuery;
