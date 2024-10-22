@@ -1,0 +1,15 @@
+export enum ContractType {
+    LIQUIDITY_POOL_DATA = 'liquidityPoolDataContract',
+    PRICE_FEED = 'priceFeedContract',
+    MULTICOLLATERAL = 'multiCollateralContract',
+    MULTICOLLATERAL_ON_OFF_RAMP = 'multiCollateralOnOffRampContract',
+    SPORTS_AMM_DATA = 'sportsAMMDataContract',
+    SPORTS_AMM_V2 = 'sportsAMMV2Contract',
+    SPORTS_AMM_V2_RISK_MANAGER = 'sportsAMMV2RiskManagerContract',
+    LIVE_TRADING_PROCESSOR = 'liveTradingProcessorContract',
+    FREE_BET_HOLDER = 'freeBetHolderContract',
+    SPORTS_AMM_V2_MANAGER = 'sportsAMMV2ManagerContract',
+    MULTICALL = 'multiCallContract',
+    STAKING_THALES = 'stakingThalesContract',
+    STAKING_THALES_BETTING_PROXY = 'stakingThalesBettingProxy',
+}

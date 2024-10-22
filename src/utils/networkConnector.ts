@@ -1,93 +1,109 @@
-import { Network } from 'enums/network';
-import { ethers, Signer } from 'ethers';
-import { Coins } from 'thales-utils';
-import { NetworkSettings } from 'types/network';
-import liquidityPoolDataContract from 'utils/contracts/liquidityPoolDataContractV2';
-import sportsAMMDataContract from 'utils/contracts/sportsAMMDataContract';
-import sportsAMMV2Contract from 'utils/contracts/sportsAMMV2Contract';
-import sportsAMMV2ManagerContract from 'utils/contracts/sportsAMMV2ManagerContract';
-import sportsAMMV2RiskManagerContract from 'utils/contracts/sportsAMMV2RiskManagerContract';
-import sUSDContract from 'utils/contracts/sUSDContract';
-import { FIFAFavoriteTeam } from './contracts/FIFAFavoriteTeam';
-import freeBetHolder from './contracts/freeBetHolder';
-import liveTradingProcessorContract from './contracts/liveTradingProcessorContract';
-import multiCallContract from './contracts/multiCallContract';
-import multiCollateralOnOffRampContract from './contracts/multiCollateralOnOffRampContract';
-import multipleCollateral from './contracts/multipleCollateralContract';
-import priceFeedContract from './contracts/priceFeedContract';
-import stakingThalesBettingProxy from './contracts/stakingThalesBettingProxy';
-import stakingThalesContract from './contracts/stakingThalesContract';
+import { ContractType } from 'enums/contract';
+import { SupportedNetwork } from 'types/network';
+import { ViemContract } from 'types/viem';
+import { getContract } from 'viem';
+import { getCollaterals } from './collaterals';
 
-type NetworkConnector = {
-    initialized: boolean;
-    provider: ethers.providers.Provider | undefined;
-    signer: Signer | undefined;
-    setNetworkSettings: (networkSettings: NetworkSettings) => void;
-    paymentTokenContract?: ethers.Contract;
-    multipleCollateral?: Record<Coins, ethers.Contract | undefined>;
-    marketManagerContract?: ethers.Contract;
-    marketDataContract?: ethers.Contract;
-    exoticUsdContract?: ethers.Contract;
-    sUSDContract?: ethers.Contract;
-    favoriteTeamContract?: ethers.Contract;
-    liquidityPoolDataContract?: ethers.Contract;
-    priceFeedContract?: ethers.Contract;
-    multiCollateralOnOffRampContract?: ethers.Contract;
-    sportsAMMDataContract?: ethers.Contract;
-    sportsAMMV2Contract?: ethers.Contract;
-    sportsAMMV2RiskManagerContract?: ethers.Contract;
-    liveTradingProcessorContract?: ethers.Contract;
-    freeBetHolderContract?: ethers.Contract;
-    sportsAMMV2ManagerContract?: ethers.Contract;
-    multiCallContract?: ethers.Contract;
-    stakingThalesContract?: ethers.Contract;
-    stakingThalesBettingProxy?: ethers.Contract;
+export const getContractInstance = async (
+    contractName: string,
+    client: any,
+    networkId: SupportedNetwork,
+    selectedToken?: number
+) => {
+    switch (contractName) {
+        case ContractType.LIQUIDITY_POOL_DATA:
+            const liquidityPoolDataContract = await import('utils/contracts/liquidityPoolDataContractV2');
+            return getContract({
+                abi: liquidityPoolDataContract.default.abi,
+                address: liquidityPoolDataContract.default.addresses[networkId],
+                client,
+            }) as ViemContract;
+        case ContractType.PRICE_FEED:
+            const priceFeed = await import('utils/contracts/priceFeedContract');
+            return getContract({
+                abi: priceFeed.default.abi,
+                address: priceFeed.default.addresses[networkId],
+                client,
+            }) as ViemContract;
+        case ContractType.MULTICOLLATERAL:
+            const multiCollateral = await import('utils/contracts/multipleCollateralContract');
+            if (!selectedToken) return;
+            return getContract({
+                abi: multiCollateral.default[getCollaterals(networkId)[selectedToken]].abi,
+                address: multiCollateral.default[getCollaterals(networkId)[selectedToken]].addresses[networkId],
+                client,
+            }) as ViemContract;
+        case ContractType.MULTICOLLATERAL_ON_OFF_RAMP:
+            const multiCollateralOnOffRamp = await import('utils/contracts/multiCollateralOnOffRampContract');
+            return getContract({
+                abi: multiCollateralOnOffRamp.default.abi,
+                address: multiCollateralOnOffRamp.default.addresses[networkId],
+                client,
+            }) as ViemContract;
+        case ContractType.SPORTS_AMM_DATA:
+            const sportsAMM = await import('utils/contracts/sportsAMMDataContract');
+            return getContract({
+                abi: sportsAMM.default.abi,
+                address: sportsAMM.default.addresses[networkId],
+                client,
+            }) as ViemContract;
+        case ContractType.SPORTS_AMM_V2:
+            const sportsAMMV2 = await import('utils/contracts/sportsAMMV2Contract');
+            return getContract({
+                abi: sportsAMMV2.default.abi,
+                address: sportsAMMV2.default.addresses[networkId],
+                client,
+            }) as ViemContract;
+        case ContractType.SPORTS_AMM_V2_RISK_MANAGER:
+            const sportsAMMV2RiskManager = await import('utils/contracts/sportsAMMV2RiskManagerContract');
+            return getContract({
+                abi: sportsAMMV2RiskManager.default.abi,
+                address: sportsAMMV2RiskManager.default.addresses[networkId],
+                client,
+            }) as ViemContract;
+        case ContractType.LIVE_TRADING_PROCESSOR:
+            const liveTradingProcessor = await import('utils/contracts/liveTradingProcessorContract');
+            return getContract({
+                abi: liveTradingProcessor.default.abi,
+                address: liveTradingProcessor.default.addresses[networkId],
+                client,
+            }) as ViemContract;
+        case ContractType.FREE_BET_HOLDER:
+            const freeBetHolder = await import('utils/contracts/freeBetHolder');
+            return getContract({
+                abi: freeBetHolder.default.abi,
+                address: freeBetHolder.default.addresses[networkId],
+                client,
+            }) as ViemContract;
+        case ContractType.SPORTS_AMM_V2_MANAGER:
+            const sportsAMMV2Manager = await import('utils/contracts/sportsAMMV2ManagerContract');
+            return getContract({
+                abi: sportsAMMV2Manager.default.abi,
+                address: sportsAMMV2Manager.default.addresses[networkId],
+                client,
+            }) as ViemContract;
+        case ContractType.MULTICALL:
+            const multiCall = await import('utils/contracts/multiCallContract');
+            return getContract({
+                abi: multiCall.default.abi,
+                address: multiCall.default.addresses[networkId],
+                client,
+            }) as ViemContract;
+        case ContractType.STAKING_THALES:
+            const stakingThales = await import('utils/contracts/stakingThalesContract');
+            return getContract({
+                abi: stakingThales.default.abi,
+                address: stakingThales.default.addresses[networkId],
+                client,
+            }) as ViemContract;
+        case ContractType.STAKING_THALES_BETTING_PROXY:
+            const stakingThalesBettingProxy = await import('utils/contracts/stakingThalesBettingProxy');
+            return getContract({
+                abi: stakingThalesBettingProxy.default.abi,
+                address: stakingThalesBettingProxy.default.addresses[networkId],
+                client,
+            }) as ViemContract;
+        default:
+            return undefined;
+    }
 };
-
-// @ts-ignore
-const networkConnector: NetworkConnector = {
-    initialized: false,
-    setNetworkSettings: function (networkSettings: NetworkSettings) {
-        this.initialized = true;
-        this.signer = networkSettings.signer;
-        this.provider = networkSettings.provider;
-        this.sUSDContract = initializeContract(sUSDContract, networkSettings);
-        this.favoriteTeamContract = initializeContract(FIFAFavoriteTeam, networkSettings);
-        this.liquidityPoolDataContract = initializeContract(liquidityPoolDataContract, networkSettings);
-        this.priceFeedContract = initializeContract(priceFeedContract, networkSettings);
-        this.multiCollateralOnOffRampContract = initializeContract(multiCollateralOnOffRampContract, networkSettings);
-
-        this.multipleCollateral = {
-            sUSD: initializeContract(multipleCollateral.sUSD, networkSettings),
-            DAI: initializeContract(multipleCollateral.DAI, networkSettings),
-            USDC: initializeContract(multipleCollateral.USDC, networkSettings),
-            USDCe: initializeContract(multipleCollateral.USDCe, networkSettings),
-            USDT: initializeContract(multipleCollateral.USDT, networkSettings),
-            OP: initializeContract(multipleCollateral.OP, networkSettings),
-            WETH: initializeContract(multipleCollateral.WETH, networkSettings),
-            ETH: initializeContract(multipleCollateral.ETH, networkSettings),
-            ARB: initializeContract(multipleCollateral.ARB, networkSettings),
-            USDbC: initializeContract(multipleCollateral.USDbC, networkSettings),
-            THALES: initializeContract(multipleCollateral.THALES, networkSettings),
-            sTHALES: initializeContract(stakingThalesContract, networkSettings),
-        };
-        this.sportsAMMDataContract = initializeContract(sportsAMMDataContract, networkSettings);
-        this.sportsAMMV2Contract = initializeContract(sportsAMMV2Contract, networkSettings);
-        this.liveTradingProcessorContract = initializeContract(liveTradingProcessorContract, networkSettings);
-        this.sportsAMMV2RiskManagerContract = initializeContract(sportsAMMV2RiskManagerContract, networkSettings);
-        this.freeBetHolderContract = initializeContract(freeBetHolder, networkSettings);
-        this.sportsAMMV2ManagerContract = initializeContract(sportsAMMV2ManagerContract, networkSettings);
-        this.multiCallContract = initializeContract(multiCallContract, networkSettings);
-        this.stakingThalesContract = initializeContract(stakingThalesContract, networkSettings);
-        this.stakingThalesBettingProxy = initializeContract(stakingThalesBettingProxy, networkSettings);
-    },
-};
-
-const initializeContract = (contract: any, networkSettings: NetworkSettings) => {
-    const contractAddress = contract.addresses[networkSettings.networkId || Network.OptimismMainnet];
-    return contractAddress !== ''
-        ? new ethers.Contract(contractAddress, contract.abi, networkConnector.provider)
-        : undefined;
-};
-
-export default networkConnector;

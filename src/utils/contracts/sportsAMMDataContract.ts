@@ -1,11 +1,13 @@
+import { TBD_ADDRESS } from 'constants/network';
 import { Network } from 'enums/network';
+import { Address } from 'viem';
 
 const sportsAMMDataContract = {
     addresses: {
-        [Network.OptimismMainnet]: '0x71CE219942FFD9C1d8B67d6C35C39Ae04C4F647B',
-        [Network.Arbitrum]: '0x04386f9b2b4f713984Fe0425E46a376201641649',
-        [Network.Base]: '',
-        [Network.OptimismSepolia]: '0xe4d8d605874443f952fBdc03Dd1C69761230A7f0',
+        [Network.OptimismMainnet]: '0x71CE219942FFD9C1d8B67d6C35C39Ae04C4F647B' as Address,
+        [Network.Arbitrum]: '0x04386f9b2b4f713984Fe0425E46a376201641649' as Address,
+        [Network.Base]: TBD_ADDRESS,
+        [Network.OptimismSepolia]: '0xe4d8d605874443f952fBdc03Dd1C69761230A7f0' as Address,
     },
     abi: [
         { inputs: [], name: 'InvalidInitialization', type: 'error' },

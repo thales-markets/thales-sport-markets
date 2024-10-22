@@ -755,7 +755,7 @@ const abi = [
     },
 ];
 
-const multipleCollateral = {
+const multipleCollateral: any = {
     sUSD: {
         addresses: {
             [Network.OptimismMainnet]: '0x8c6f28f2F1A3C87F0f938b96d27520d9751ec8d9' as Address, // sUSD

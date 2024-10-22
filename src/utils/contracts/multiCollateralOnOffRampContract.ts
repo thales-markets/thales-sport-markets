@@ -1,11 +1,13 @@
+import { TBD_ADDRESS } from 'constants/network';
 import { Network } from 'enums/network';
+import { Address } from 'viem';
 
 const multiCollateralOnOffRampContract = {
     addresses: {
-        [Network.OptimismMainnet]: '0xdD462615884E70C80037cCf8Aa0f82cb06056D81',
-        [Network.Arbitrum]: '0x8ebBF37C80aFE0Fcfa569DeAc810bDe641225E4f',
-        [Network.Base]: '',
-        [Network.OptimismSepolia]: '0x770087E059aa6038ba23b474e18473E1a61bA37F',
+        [Network.OptimismMainnet]: '0xdD462615884E70C80037cCf8Aa0f82cb06056D81' as Address,
+        [Network.Arbitrum]: '0x8ebBF37C80aFE0Fcfa569DeAc810bDe641225E4f' as Address,
+        [Network.Base]: TBD_ADDRESS,
+        [Network.OptimismSepolia]: '0x770087E059aa6038ba23b474e18473E1a61bA37F' as Address,
     },
     abi: [
         {
