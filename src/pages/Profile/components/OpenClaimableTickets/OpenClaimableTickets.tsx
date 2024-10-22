@@ -5,7 +5,6 @@ import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { GAS_ESTIMATION_BUFFER } from 'constants/network';
 import { ethers } from 'ethers';
 import { LoaderContainer } from 'pages/Markets/Home/HomeV2';
-import useMarketDurationQuery from 'queries/markets/useMarketDurationQuery';
 import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
 import React, { useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
@@ -71,10 +70,7 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
         }
     );
 
-    const marketDurationQuery = useMarketDurationQuery(networkId);
-
-    const marketDuration =
-        marketDurationQuery.isSuccess && marketDurationQuery.data ? Math.floor(marketDurationQuery.data) : 30;
+    const marketDuration = Math.floor(90);
 
     const userTicketsByStatus = useMemo(() => {
         let userTickets = userTicketsQuery.isSuccess && userTicketsQuery.data ? userTicketsQuery.data : [];
