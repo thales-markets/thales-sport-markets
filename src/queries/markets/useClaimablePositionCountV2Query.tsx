@@ -1,20 +1,38 @@
 import { BATCH_SIZE } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
-import { Network } from 'enums/network';
+import { ContractType } from 'enums/contract';
 import { useQuery, UseQueryOptions } from 'react-query';
-import networkConnector from 'utils/networkConnector';
+import { QueryConfig } from 'types/network';
+import { ViemContract } from 'types/viem';
+import { getContractInstance } from 'utils/networkConnector';
 
-const useClaimablePositionCountQuery = (user: string, networkId: Network, options?: UseQueryOptions<number | null>) => {
-    return useQuery<number | null>(
-        QUERY_KEYS.ClaimableCountV2(user, networkId),
-        async () => {
+const useClaimablePositionCountQuery = (
+    user: string,
+    queryConfig: QueryConfig,
+    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery<number | null>({
+        queryKey: QUERY_KEYS.ClaimableCountV2(user, queryConfig.networkId),
+        queryFn: async () => {
             try {
-                const {
+                const contractInstances = (await Promise.all([
+                    getContractInstance(ContractType.SPORTS_AMM_DATA, queryConfig.client, queryConfig.networkId),
+                    getContractInstance(ContractType.SPORTS_AMM_V2_MANAGER, queryConfig.client, queryConfig.networkId),
+                    getContractInstance(ContractType.FREE_BET_HOLDER, queryConfig.client, queryConfig.networkId),
+                    getContractInstance(
+                        ContractType.STAKING_THALES_BETTING_PROXY,
+                        queryConfig.client,
+                        queryConfig.networkId
+                    ),
+                ])) as ViemContract[];
+
+                const [
                     sportsAMMDataContract,
                     sportsAMMV2ManagerContract,
                     freeBetHolderContract,
                     stakingThalesBettingProxy,
-                } = networkConnector;
+                ] = contractInstances;
+
                 if (
                     sportsAMMDataContract &&
                     sportsAMMV2ManagerContract &&
@@ -26,9 +44,9 @@ const useClaimablePositionCountQuery = (user: string, networkId: Network, option
                         numOfActiveFreeBetTicketsPerUser,
                         numOfActiveStakedThalesTicketsPerUser,
                     ] = await Promise.all([
-                        sportsAMMV2ManagerContract.numOfActiveTicketsPerUser(user),
-                        freeBetHolderContract.numOfActiveTicketsPerUser(user),
-                        stakingThalesBettingProxy.numOfActiveTicketsPerUser(user),
+                        sportsAMMV2ManagerContract.read.numOfActiveTicketsPerUser([user]),
+                        freeBetHolderContract.read.numOfActiveTicketsPerUser([user]),
+                        stakingThalesBettingProxy.read.numOfActiveTicketsPerUser([user]),
                     ]);
                     const numberOfActiveBatches =
                         Math.trunc(
@@ -44,7 +62,7 @@ const useClaimablePositionCountQuery = (user: string, networkId: Network, option
                     const promises = [];
                     for (let i = 0; i < numberOfActiveBatches; i++) {
                         promises.push(
-                            sportsAMMDataContract.getActiveTicketsDataPerUser(user, i * BATCH_SIZE, BATCH_SIZE)
+                            sportsAMMDataContract.read.getActiveTicketsDataPerUser([user, i * BATCH_SIZE, BATCH_SIZE])
                         );
                     }
                     const promisesResult = await Promise.all(promises);
@@ -66,10 +84,8 @@ const useClaimablePositionCountQuery = (user: string, networkId: Network, option
                 return null;
             }
         },
-        {
-            ...options,
-        }
-    );
+        ...options,
+    });
 };
 
 export default useClaimablePositionCountQuery;

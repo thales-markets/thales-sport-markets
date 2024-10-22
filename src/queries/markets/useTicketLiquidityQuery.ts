@@ -1,51 +1,58 @@
 import QUERY_KEYS from 'constants/queryKeys';
-import { Network } from 'enums/network';
+import { ContractType } from 'enums/contract';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { bigNumberFormatter, getDefaultDecimalsForNetwork } from 'thales-utils';
 import { TicketMarket } from 'types/markets';
-import networkConnector from 'utils/networkConnector';
+import { QueryConfig } from 'types/network';
+import { ViemContract } from 'types/viem';
+import { getContractInstance } from 'utils/networkConnector';
 
 const useTicketLiquidityQuery = (
     markets: TicketMarket[],
-    networkId: Network,
-    options?: UseQueryOptions<number | undefined>
+    queryConfig: QueryConfig,
+    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<number | undefined>(
-        QUERY_KEYS.TicketLiquidity(
+    return useQuery<number | undefined>({
+        queryKey: QUERY_KEYS.TicketLiquidity(
             markets.map((market) => market.gameId).join(','),
             markets.map((market) => market.typeId).join(','),
             markets.map((market) => market.playerProps.playerId).join(','),
             markets.map((market) => market.line).join(','),
             markets.map((market) => market.position).join(','),
             markets.map((market) => market.live).join(','),
-            networkId
+            queryConfig.networkId
         ),
-        async () => {
+        queryFn: async () => {
             try {
-                const { sportsAMMV2RiskManagerContract } = networkConnector;
+                const sportsAMMV2RiskManagerContract = (await getContractInstance(
+                    ContractType.SPORTS_AMM_V2_RISK_MANAGER,
+                    queryConfig.client,
+                    queryConfig.networkId
+                )) as ViemContract;
+
                 if (sportsAMMV2RiskManagerContract) {
                     const riskPromises = [];
                     const capPromises = [];
                     for (let i = 0; i < markets.length; i++) {
                         const market = markets[i];
                         riskPromises.push(
-                            sportsAMMV2RiskManagerContract.riskPerMarketTypeAndPosition(
+                            sportsAMMV2RiskManagerContract.read.riskPerMarketTypeAndPosition([
                                 market.gameId,
                                 market.typeId,
                                 market.playerProps.playerId,
-                                market.position
-                            )
+                                market.position,
+                            ])
                         );
                         capPromises.push(
-                            sportsAMMV2RiskManagerContract.calculateCapToBeUsed(
+                            sportsAMMV2RiskManagerContract.read.calculateCapToBeUsed([
                                 market.gameId,
                                 market.subLeagueId,
                                 market.typeId,
                                 market.playerProps.playerId,
                                 market.line * 100,
                                 market.live ? Math.round(new Date().getTime() / 1000) + 60 : market.maturity,
-                                !!market.live
-                            )
+                                !!market.live,
+                            ])
                         );
                     }
 
@@ -55,8 +62,14 @@ const useTicketLiquidityQuery = (
                     let ticketLiquidity = 0;
                     for (let i = 0; i < markets.length; i++) {
                         const market = markets[i];
-                        const formattedRisk = bigNumberFormatter(risks[i], getDefaultDecimalsForNetwork(networkId));
-                        const formattedCap = bigNumberFormatter(caps[i], getDefaultDecimalsForNetwork(networkId));
+                        const formattedRisk = bigNumberFormatter(
+                            risks[i],
+                            getDefaultDecimalsForNetwork(queryConfig.networkId)
+                        );
+                        const formattedCap = bigNumberFormatter(
+                            caps[i],
+                            getDefaultDecimalsForNetwork(queryConfig.networkId)
+                        );
                         const marketLiquidity = Math.floor((formattedCap - formattedRisk) / (1 / market.odd - 1));
                         ticketLiquidity =
                             i === 0 || marketLiquidity < ticketLiquidity ? marketLiquidity : ticketLiquidity;
@@ -69,10 +82,8 @@ const useTicketLiquidityQuery = (
             }
             return undefined;
         },
-        {
-            ...options,
-        }
-    );
+        ...options,
+    });
 };
 
 export default useTicketLiquidityQuery;

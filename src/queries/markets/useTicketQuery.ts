@@ -1,27 +1,33 @@
 import axios from 'axios';
 import QUERY_KEYS from 'constants/queryKeys';
-import { Network } from 'enums/network';
+import { ContractType } from 'enums/contract';
 import { orderBy } from 'lodash';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { Ticket } from 'types/markets';
+import { QueryConfig } from 'types/network';
+import { ViemContract } from 'types/viem';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
-import networkConnector from 'utils/networkConnector';
+import { getContractInstance } from 'utils/networkConnector';
 import { mapTicket } from 'utils/tickets';
 import { generalConfig, noCacheConfig } from '../../config/general';
 
 export const useTicketQuery = (
     ticketAddress: string,
-    networkId: Network,
-    options?: UseQueryOptions<Ticket | undefined>
+    queryConfig: QueryConfig,
+    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<Ticket | undefined>(
-        QUERY_KEYS.Ticket(networkId, ticketAddress),
-        async () => {
+    return useQuery<Ticket | undefined>({
+        queryKey: QUERY_KEYS.Ticket(queryConfig.networkId, ticketAddress),
+        queryFn: async () => {
             try {
-                const { sportsAMMDataContract } = networkConnector;
+                const sportsAMMDataContract = (await getContractInstance(
+                    ContractType.SPORTS_AMM_DATA,
+                    queryConfig.client,
+                    queryConfig.networkId
+                )) as ViemContract;
                 if (sportsAMMDataContract) {
                     const [tickets, gamesInfoResponse, playersInfoResponse, liveScoresResponse] = await Promise.all([
-                        sportsAMMDataContract.getTicketsData([ticketAddress]),
+                        sportsAMMDataContract.read.getTicketsData([ticketAddress]),
                         axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, noCacheConfig),
                         axios.get(`${generalConfig.API_URL}/overtime-v2/players-info`, noCacheConfig),
                         axios.get(`${generalConfig.API_URL}/overtime-v2/live-scores`, noCacheConfig),
@@ -30,7 +36,7 @@ export const useTicketQuery = (
                     const mappedTickets: Ticket[] = tickets.map((ticket: any) =>
                         mapTicket(
                             ticket,
-                            networkId,
+                            queryConfig.networkId,
                             gamesInfoResponse.data,
                             playersInfoResponse.data,
                             liveScoresResponse.data
@@ -44,8 +50,6 @@ export const useTicketQuery = (
                 console.log('E ', e);
             }
         },
-        {
-            ...options,
-        }
-    );
+        ...options,
+    });
 };
