@@ -2,23 +2,28 @@ import { ethers } from 'ethers';
 import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { Ticket } from 'types/markets';
+import biconomyConnector from 'utils/biconomyWallet';
+import { useAccount, useChainId, useClient } from 'wagmi';
 import TicketTransactionsTable from '../../../Markets/Market/MarketDetailsV2/components/TicketTransactionsTable';
 
 const TicketTransactions: React.FC<{ searchText?: string }> = ({ searchText }) => {
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+
+    const networkId = useChainId();
+    const client = useClient();
+    const { address, isConnected } = useAccount();
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
     const isSearchTextWalletAddress = searchText && ethers.utils.isAddress(searchText);
 
     const userTicketsQuery = useUserTicketsQuery(
         isSearchTextWalletAddress ? searchText : walletAddress.toLowerCase(),
-        networkId,
+        { networkId, client },
         {
-            enabled: isWalletConnected,
+            enabled: isConnected,
         }
     );
 
