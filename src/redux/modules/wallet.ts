@@ -85,10 +85,10 @@ const walletDetailsSlice = createSlice({
 });
 
 const getWalletState = (state: RootState) => state[sliceName];
-export const getNetworkId = (state: RootState) => getWalletState(state).networkId;
 export const getSwitchToNetworkId = (state: RootState) => getWalletState(state).switchToNetworkId;
 export const getWalletAddress = (state: RootState) => getWalletState(state).walletAddress;
 export const getIsAA = (state: RootState) => getWalletState(state).isAA;
+export const getIsBiconomy = (state: RootState) => getWalletState(state).isBiconomy;
 export const getIsConnectedViaParticle = (state: RootState) => getWalletState(state).connectedViaParticle;
 export const getWalletConnectModalVisibility = (state: RootState) =>
     getWalletState(state).walletConnectModal.visibility;
