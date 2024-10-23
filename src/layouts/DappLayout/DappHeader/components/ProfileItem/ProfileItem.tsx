@@ -4,9 +4,11 @@ import useClaimablePositionCountV2Query from 'queries/markets/useClaimablePositi
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
+import biconomyConnector from 'utils/biconomyWallet';
 import { buildHref } from 'utils/routes';
+import { useAccount, useChainId, useClient } from 'wagmi';
 import {
     Count,
     NotificationCount,
@@ -35,13 +37,20 @@ const ProfileItem: React.FC<ProfileItemProperties> = ({ labelHidden, avatarSize 
 };
 
 export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({ avatarSize, iconColor }) => {
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
-    const claimablePositionsCountQuery = useClaimablePositionCountV2Query(walletAddress, networkId, {
-        enabled: isWalletConnected,
-    });
+    const networkId = useChainId();
+    const client = useClient();
+    const { address, isConnected } = useAccount();
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+
+    const claimablePositionsCountQuery = useClaimablePositionCountV2Query(
+        walletAddress,
+        { networkId, client },
+        {
+            enabled: isConnected,
+        }
+    );
     const claimablePositionCount =
         claimablePositionsCountQuery.isSuccess && claimablePositionsCountQuery.data
             ? claimablePositionsCountQuery.data
