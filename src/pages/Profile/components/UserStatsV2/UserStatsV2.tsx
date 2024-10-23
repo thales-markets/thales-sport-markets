@@ -6,43 +6,62 @@ import React, { Fragment, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { formatCurrencyWithSign } from 'thales-utils';
-import { Coins } from 'thales-utils';
+import { Coins, formatCurrencyWithSign } from 'thales-utils';
+import biconomyConnector from 'utils/biconomyWallet';
 import { isStableCurrency, sortCollateralBalances } from 'utils/collaterals';
+import { useAccount, useChainId, useClient } from 'wagmi';
 import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from '../../../../constants/currency';
 import { FlexDivColumn, FlexDivRow } from '../../../../styles/common';
 
 const UserStats: React.FC = () => {
     const { t } = useTranslation();
 
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
 
-    const userStatsQuery = useUsersStatsV2Query(walletAddress.toLowerCase(), networkId, { enabled: isWalletConnected });
+    const networkId = useChainId();
+    const client = useClient();
+    const { address, isConnected } = useAccount();
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+
+    const userStatsQuery = useUsersStatsV2Query(
+        walletAddress?.toLowerCase(),
+        { networkId, client },
+        { enabled: isConnected }
+    );
     const userStats = userStatsQuery.isSuccess && userStatsQuery.data ? userStatsQuery.data : undefined;
 
-    const freeBetBalancesQuery = useFreeBetCollateralBalanceQuery(walletAddress?.toLowerCase(), networkId, {
-        enabled: isWalletConnected,
-    });
+    const freeBetBalancesQuery = useFreeBetCollateralBalanceQuery(
+        walletAddress?.toLowerCase(),
+        { networkId, client },
+        {
+            enabled: isConnected,
+        }
+    );
     const freeBetBalances =
         freeBetBalancesQuery.isSuccess && freeBetBalancesQuery.data ? freeBetBalancesQuery.data : undefined;
 
     const isFreeBetExists = freeBetBalances && !!Object.values(freeBetBalances).find((balance) => !!balance);
 
-    const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
-        enabled: isAppReady,
-    });
+    const exchangeRatesQuery = useExchangeRatesQuery(
+        { networkId, client },
+        {
+            enabled: isAppReady,
+        }
+    );
     const exchangeRates: Rates | null =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
-    const multiCollateralBalancesQuery = useMultipleCollateralBalanceQuery(walletAddress?.toLowerCase(), networkId, {
-        enabled: isWalletConnected,
-    });
+    const multiCollateralBalancesQuery = useMultipleCollateralBalanceQuery(
+        walletAddress?.toLowerCase(),
+        { networkId, client },
+        {
+            enabled: isConnected,
+        }
+    );
     const multiCollateralBalances =
         multiCollateralBalancesQuery.isSuccess && multiCollateralBalancesQuery.data
             ? multiCollateralBalancesQuery.data
@@ -145,7 +164,7 @@ const UserStats: React.FC = () => {
                     </SubHeaderWrapper>
                     {freeBetBalances &&
                         Object.keys(multiCollateralsSorted).map((currencyKey) => {
-                            return multiCollateralBalances[currencyKey] ? (
+                            return multiCollateralBalances[currencyKey as Coins] ? (
                                 <Section key={currencyKey}>
                                     <SubLabel>
                                         <CurrencyIcon className={COLLATERAL_ICONS_CLASS_NAMES[currencyKey as Coins]} />
@@ -154,7 +173,7 @@ const UserStats: React.FC = () => {
                                     <SubValue>
                                         {formatCurrencyWithSign(
                                             null,
-                                            multiCollateralBalances ? multiCollateralBalances[currencyKey] : 0
+                                            multiCollateralBalances ? multiCollateralBalances[currencyKey as Coins] : 0
                                         )}
                                         {!exchangeRates?.[currencyKey] && !isStableCurrency(currencyKey as Coins)
                                             ? '...'
