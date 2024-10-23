@@ -17,7 +17,7 @@ import { getIsAppReady } from 'redux/modules/app';
 import { setStakingModalMuteEnd } from 'redux/modules/ui';
 import { getIsConnectedViaParticle, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
-import { Coins, formatCurrencyWithKey, truncToDecimals } from 'thales-utils';
+import { Coins, formatCurrencyWithKey, formatPercentage, truncToDecimals } from 'thales-utils';
 import { StakingData } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { getCollateralIndex } from 'utils/collaterals';
@@ -93,6 +93,7 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
 
     const isUnstaking = stakingData && stakingData.isUnstaking;
     const isStakingPaused = stakingData && stakingData.isPaused;
+    const apy = stakingData ? stakingData.apy : 0;
 
     const isAmountEntered = Number(amountToStake) > 0;
     const insufficientBalance = Number(amountToStake) > thalesBalance || !thalesBalance;
@@ -279,11 +280,21 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
                               amount: `${formatCurrencyWithKey(CRYPTO_CURRENCY_MAP.THALES, defaultAmount)}`,
                           })}
                 </Title>
-                {!isStaked && (
-                    <Description>{`${noClaim ? '' : t('profile.staking-modal.earn-yield')} ${t(
-                        'profile.staking-modal.thales-on-overtime'
-                    )}`}</Description>
-                )}
+                <Description>{t('profile.staking-modal.rewards-apy', { apy: formatPercentage(apy) })}</Description>
+                <Description>
+                    <Trans
+                        i18nKey={'profile.staking-modal.thales-on-overtime'}
+                        components={{
+                            stakingPageLink: (
+                                <StakingPageLink
+                                    href={'https://docs.thales.io/thales-token/staking-guide'}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                />
+                            ),
+                        }}
+                    />
+                </Description>
                 <Description>
                     <Trans
                         i18nKey={'profile.staking-modal.weekly-rewards'}
@@ -298,7 +309,9 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
                         }}
                     />
                 </Description>
-                {isStaked && <Description>{t('profile.staking-modal.stake-more')}</Description>}
+                <Description>
+                    {isStaked ? t('profile.staking-modal.stake-more') : t('profile.staking-modal.stake-now')}
+                </Description>
                 <InputContainer>
                     <NumericInput
                         value={amountToStake}

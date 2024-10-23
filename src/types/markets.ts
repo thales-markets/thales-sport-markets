@@ -199,4 +199,5 @@ export type Team = {
 export type StakingData = {
     isPaused: boolean;
     isUnstaking: boolean;
+    apy: number;
 };
