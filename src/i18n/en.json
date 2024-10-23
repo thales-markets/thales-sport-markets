@@ -439,7 +439,7 @@
             "earn-yield": "Stake your THALES to earn yield?",
             "rewards-apy": "You can stake your THALES to earn weekly rewards, currently at {{apy}} APY.",
             "thales-on-overtime": "Staked THALES can still be used to bet on Overtime. More details on staking <stakingPageLink>here</stakingPageLink>.",
-            "weekly-rewards": "Claim your weekly rewards on <stakingPageLink>thales.io staking page</stakingPageLink>.",
+            "weekly-rewards": "Claim your weekly staking rewards on <stakingPageLink>thales.io staking page</stakingPageLink>.",
             "stake-more": "Stake more to earn more yield every week!",
             "stake-now": "Click below to stake now!",
             "amount-to-stake-label": "Amount to stake",
