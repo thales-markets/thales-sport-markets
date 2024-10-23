@@ -1,5 +1,7 @@
 import { TBD_ADDRESS, ZERO_ADDRESS } from 'constants/network';
 import { Network } from 'enums/network';
+import { Coins } from 'thales-utils';
+import { ContractData } from 'types/viem';
 import { Address } from 'viem';
 
 const WETHabi = [
@@ -755,7 +757,7 @@ const abi = [
     },
 ];
 
-const multipleCollateral: any = {
+const multipleCollateral: Record<Coins, ContractData> = {
     sUSD: {
         addresses: {
             [Network.OptimismMainnet]: '0x8c6f28f2F1A3C87F0f938b96d27520d9751ec8d9' as Address, // sUSD

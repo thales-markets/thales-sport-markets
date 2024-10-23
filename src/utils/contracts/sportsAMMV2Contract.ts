@@ -1,7 +1,8 @@
 import { Network } from 'enums/network';
+import { ContractData } from 'types/viem';
 import { Address } from 'viem';
 
-const sportsAMMV2Contract = {
+const sportsAMMV2Contract: ContractData = {
     addresses: {
         [Network.OptimismMainnet]: '0xFb4e4811C7A811E098A556bD79B64c20b479E431' as Address,
         [Network.Arbitrum]: '0xfb64E79A562F7250131cf528242CEB10fDC82395' as Address,

@@ -1,8 +1,9 @@
 import { TBD_ADDRESS } from 'constants/network';
 import { Network } from 'enums/network';
+import { ContractData } from 'types/viem';
 import { Address } from 'viem';
 
-const sportsAMMV2RiskManagerContract = {
+const sportsAMMV2RiskManagerContract: ContractData = {
     addresses: {
         [Network.OptimismMainnet]: '0x32077d9F7BF3994f3A0E905b3EefF34410eCA9A5' as Address,
         [Network.Arbitrum]: '0x10764f2787841E928E53e5Be1588a73E3c994EDe' as Address,

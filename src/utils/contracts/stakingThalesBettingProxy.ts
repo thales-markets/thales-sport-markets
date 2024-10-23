@@ -1,8 +1,9 @@
 import { TBD_ADDRESS } from 'constants/network';
 import { Network } from 'enums/network';
+import { ContractData } from 'types/viem';
 import { Address } from 'viem';
 
-const stakingThalesBettingProxy = {
+const stakingThalesBettingProxy: ContractData = {
     addresses: {
         [Network.OptimismMainnet]: '0x5e6D44B17bc989652920197790eF626b8a84e219' as Address,
         [Network.Arbitrum]: '0x109e966A4d856B82f158BF528395de6fF36214A8' as Address,

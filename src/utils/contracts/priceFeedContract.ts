@@ -1,7 +1,8 @@
 import { Network } from 'enums/network';
+import { ContractData } from 'types/viem';
 import { Address } from 'viem';
 
-const priceFeedContract = {
+const priceFeedContract: ContractData = {
     addresses: {
         [Network.OptimismMainnet]: '0xf4aef21d906992aFAdde7A9676e1dB4feb6390DD' as Address,
         [Network.Arbitrum]: '0x563cCaBfBaCCb1a2e00d21704570cFc1AF21f47f' as Address,

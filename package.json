@@ -52,7 +52,7 @@
         "redux": "^4.1.2",
         "styled-components": "^5.3.3",
         "thales-data": "^3.0.8",
-        "thales-utils": "^1.1.6",
+        "thales-utils": "^0.7.1",
         "typescript": "^5.0.4",
         "viem": "^2.7.19",
         "wagmi": "^2.11.2",

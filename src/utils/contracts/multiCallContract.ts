@@ -1,7 +1,8 @@
 import { Network } from 'enums/network';
+import { ContractData } from 'types/viem';
 import { Address } from 'viem';
 
-const multiCallContract = {
+const multiCallContract: ContractData = {
     addresses: {
         [Network.OptimismMainnet]: '0xcA11bde05977b3631167028862bE2a173976CA11' as Address,
         [Network.Arbitrum]: '0xcA11bde05977b3631167028862bE2a173976CA11' as Address,
