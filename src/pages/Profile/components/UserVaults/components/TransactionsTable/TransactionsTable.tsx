@@ -4,22 +4,36 @@ import useProfileLiquidityPoolUserTransactions from 'queries/wallet/useProfileLi
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsAppReady } from 'redux/modules/app';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { formatCurrencyWithKey, formatTxTimestamp } from 'thales-utils';
 import { LiquidityPoolUserTransactions } from 'types/liquidityPool';
 import { ThemeInterface } from 'types/ui';
+import biconomyConnector from 'utils/biconomyWallet';
+import { useAccount, useChainId, useClient } from 'wagmi';
 
 const TransactionsTable: React.FC = () => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
 
-    const txQuery = useProfileLiquidityPoolUserTransactions(networkId, walletAddress, {
-        enabled: walletAddress !== '',
-    });
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
+
+    const networkId = useChainId();
+    const client = useClient();
+    const { address, isConnected } = useAccount();
+
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+
+    const txQuery = useProfileLiquidityPoolUserTransactions(
+        walletAddress,
+        { networkId, client },
+        {
+            enabled: isConnected && isAppReady,
+        }
+    );
 
     const [lastValidData, setLastValidData] = useState<LiquidityPoolUserTransactions>([]);
 
