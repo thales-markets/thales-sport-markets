@@ -2,25 +2,36 @@ import axios from 'axios';
 import { generalConfig } from 'config/general';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import QUERY_KEYS from 'constants/queryKeys';
-import { Network } from 'enums/network';
+import { minutesToMilliseconds } from 'date-fns';
+import { ContractType } from 'enums/contract';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { bigNumberFormatter, parseBytes32String } from 'thales-utils';
-import networkConnector from 'utils/networkConnector';
+import { QueryConfig } from 'types/network';
+import { ViemContract } from 'types/viem';
+import { getContractInstance } from 'utils/networkConnector';
 import { THALES_CONTRACT_RATE_KEY } from '../../constants/markets';
-import { minutesToMilliseconds } from 'date-fns';
 
 export type Rates = Record<string, number>;
 
-const useExchangeRatesQuery = (networkId: Network, options?: UseQueryOptions<Rates>) => {
-    return useQuery<Rates>(
-        QUERY_KEYS.Rates.ExchangeRates(networkId),
-        async () => {
+const useExchangeRatesQuery = (
+    queryConfig: QueryConfig,
+    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery<Rates>({
+        queryKey: QUERY_KEYS.Rates.ExchangeRates(queryConfig.networkId),
+        queryFn: async () => {
             const exchangeRates: Rates = {};
 
-            if (networkConnector.priceFeedContract) {
+            const priceFeedContract = (await getContractInstance(
+                ContractType.PRICE_FEED,
+                queryConfig.client,
+                queryConfig.networkId
+            )) as ViemContract;
+
+            if (priceFeedContract) {
                 const [currencies, rates, thalesPriceResponse] = await Promise.all([
-                    networkConnector.priceFeedContract.getCurrencies(),
-                    networkConnector.priceFeedContract.getRates(),
+                    priceFeedContract.read.getCurrencies(),
+                    priceFeedContract.read.getRates(),
                     axios.get(`${generalConfig.API_URL}/token/price`),
                 ]);
 
@@ -44,11 +55,9 @@ const useExchangeRatesQuery = (networkId: Network, options?: UseQueryOptions<Rat
 
             return exchangeRates;
         },
-        {
-            refetchInterval: minutesToMilliseconds(1),
-            ...options,
-        }
-    );
+        refetchInterval: minutesToMilliseconds(1),
+        ...options,
+    });
 };
 
 export default useExchangeRatesQuery;

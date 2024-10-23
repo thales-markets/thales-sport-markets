@@ -1,3 +1,5 @@
+import { Coins } from 'thales-utils';
+
 export type CollateralsBalance = {
     sUSD: number;
     DAI: number;
@@ -12,3 +14,5 @@ export type CollateralsBalance = {
     THALES: number;
     sTHALES: number;
 };
+
+export type ExtendedCoins = Coins | 'THALES' | 'sTHALES';
