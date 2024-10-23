@@ -1,3 +1,5 @@
+import { SupportedNetwork } from 'types/network';
+
 export const LOCAL_STORAGE_KEYS = {
     SELECTED_WALLET: 'selectedWallet',
     UI_THEME: 'ui-theme',
@@ -32,15 +34,15 @@ export const LOCAL_STORAGE_KEYS = {
     OVERDROP_STATE: 'overdropState',
     SESSION_P_KEY: {
         10: 'sessionPKey_10',
-        137: 'sessionPKey_137',
+        // 137: 'sessionPKey_137',
         42161: 'sessionPKey_42161',
         8453: 'sessionPKey_8453',
-        300: 'sessionPKey_300',
-        324: 'sessionPKey_324',
-        420: 'sessionPKey_420',
-        11155420: 'sessionPKey_11155420',
-        168587773: 'sessionPKey_168587773',
-    },
+        // 300: 'sessionPKey_300',
+        // 324: 'sessionPKey_324',
+        // 420: 'sessionPKey_420',
+        // 11155420: 'sessionPKey_11155420',
+        // 168587773: 'sessionPKey_168587773',
+    } as Record<SupportedNetwork, string>,
     SESSION_VALID_UNTIL: {
         10: 'sessionValidUntil_10',
         137: 'sessionValidUntil_137',
@@ -51,5 +53,5 @@ export const LOCAL_STORAGE_KEYS = {
         420: 'sessionValidUntil_420',
         11155420: 'sessionValidUntil_11155420',
         168587773: 'sessionValidUntil_168587773',
-    },
+    } as Record<SupportedNetwork, string>,
 };

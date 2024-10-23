@@ -1,6 +1,7 @@
 import { Network } from 'enums/network';
+import { ContractData } from 'types/viem';
 
-const erc20Contract = {
+const erc20Contract: ContractData = {
     addresses: {
         [Network.OptimismMainnet]: '0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85',
         [Network.Arbitrum]: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831',
