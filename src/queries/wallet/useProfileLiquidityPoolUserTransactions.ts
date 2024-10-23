@@ -3,28 +3,28 @@ import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import { coinFormatter } from 'thales-utils';
 import { LiquidityPoolUserTransactions } from 'types/liquidityPool';
-import { SupportedNetwork } from '../../types/network';
+import { QueryConfig } from '../../types/network';
 import { getLiquidityPools } from '../../utils/liquidityPool';
 
 const useLiquidityPoolUserTransactions = (
-    networkId: SupportedNetwork,
     walletAddress: string,
-    options?: UseQueryOptions<LiquidityPoolUserTransactions>
+    queryConfig: QueryConfig,
+    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<LiquidityPoolUserTransactions>(
-        QUERY_KEYS.Wallet.LiquidityPoolTransactions(networkId, walletAddress),
-        async () => {
+    return useQuery<LiquidityPoolUserTransactions>({
+        queryKey: QUERY_KEYS.Wallet.LiquidityPoolTransactions(queryConfig.networkId, walletAddress),
+        queryFn: async () => {
             try {
                 const vaultTx: LiquidityPoolUserTransactions = [];
 
                 const liquidityPoolUserTransactions: LiquidityPoolUserTransactions = await thalesData.sportMarketsV2.liquidityPoolUserTransactions(
                     {
-                        network: networkId,
+                        network: queryConfig.networkId,
                         account: walletAddress,
                     }
                 );
 
-                const liquidityPools = getLiquidityPools(networkId);
+                const liquidityPools = getLiquidityPools(queryConfig.networkId);
 
                 vaultTx.push(
                     ...liquidityPoolUserTransactions.map((tx) => {
@@ -35,7 +35,7 @@ const useLiquidityPoolUserTransactions = (
                         return {
                             ...tx,
                             name: lp.name,
-                            amount: coinFormatter(tx.amount, networkId, lp.collateral),
+                            amount: coinFormatter(tx.amount, queryConfig.networkId, lp.collateral),
                             collateral: lp.collateral,
                         };
                     })
@@ -47,10 +47,8 @@ const useLiquidityPoolUserTransactions = (
                 return [];
             }
         },
-        {
-            ...options,
-        }
-    );
+        ...options,
+    });
 };
 
 export default useLiquidityPoolUserTransactions;

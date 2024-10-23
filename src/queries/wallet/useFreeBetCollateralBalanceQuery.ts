@@ -1,24 +1,28 @@
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import QUERY_KEYS from 'constants/queryKeys';
-import { Network } from 'enums/network';
+import { ContractType } from 'enums/contract';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { bigNumberFormatter, Coins, COLLATERAL_DECIMALS } from 'thales-utils';
-import { SupportedNetwork } from 'types/network';
+import { QueryConfig, SupportedNetwork } from 'types/network';
 import multipleCollateral from 'utils/contracts/multipleCollateralContract';
-import networkConnector from 'utils/networkConnector';
+import { getContractInstance } from 'utils/networkConnector';
 
 const useFreeBetCollateralBalanceQuery = (
     walletAddress: string,
-    networkId: Network,
-    options?: UseQueryOptions<any>
+    queryConfig: QueryConfig,
+    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<any>(
-        QUERY_KEYS.Wallet.FreeBetBalance(walletAddress, networkId),
-        async () => {
+    return useQuery<any>({
+        queryKey: QUERY_KEYS.Wallet.FreeBetBalance(walletAddress, queryConfig.networkId),
+        queryFn: async () => {
             try {
-                const { freeBetHolderContract } = networkConnector;
+                const freeBetHolderContract = await getContractInstance(
+                    ContractType.FREE_BET_HOLDER,
+                    queryConfig.client,
+                    queryConfig.networkId
+                );
 
-                if (!walletAddress || !networkId || !freeBetHolderContract || !multipleCollateral) {
+                if (!walletAddress || !queryConfig.networkId || !freeBetHolderContract || !multipleCollateral) {
                     return {
                         sUSD: 0,
                         DAI: 0,
@@ -46,85 +50,105 @@ const useFreeBetCollateralBalanceQuery = (
                     USDbCBalance,
                     THALESBalance,
                 ] = await Promise.all([
-                    multipleCollateral[CRYPTO_CURRENCY_MAP.sUSD as Coins]?.addresses[networkId as SupportedNetwork]
-                        ? freeBetHolderContract?.balancePerUserAndCollateral(
+                    multipleCollateral[CRYPTO_CURRENCY_MAP.sUSD as Coins]?.addresses[
+                        queryConfig.networkId as SupportedNetwork
+                    ]
+                        ? freeBetHolderContract.read?.balancePerUserAndCollateral([
                               walletAddress,
                               multipleCollateral[CRYPTO_CURRENCY_MAP.sUSD as Coins]?.addresses[
-                                  networkId as SupportedNetwork
-                              ]
-                          )
+                                  queryConfig.networkId as SupportedNetwork
+                              ],
+                          ])
                         : undefined,
-                    multipleCollateral[CRYPTO_CURRENCY_MAP.DAI as Coins]?.addresses[networkId as SupportedNetwork]
-                        ? freeBetHolderContract?.balancePerUserAndCollateral(
+                    multipleCollateral[CRYPTO_CURRENCY_MAP.DAI as Coins]?.addresses[
+                        queryConfig.networkId as SupportedNetwork
+                    ]
+                        ? freeBetHolderContract?.read.balancePerUserAndCollateral([
                               walletAddress,
                               multipleCollateral[CRYPTO_CURRENCY_MAP.DAI as Coins]?.addresses[
-                                  networkId as SupportedNetwork
-                              ]
-                          )
+                                  queryConfig.networkId as SupportedNetwork
+                              ],
+                          ])
                         : undefined,
-                    multipleCollateral[CRYPTO_CURRENCY_MAP.USDC as Coins]?.addresses[networkId as SupportedNetwork]
-                        ? freeBetHolderContract?.balancePerUserAndCollateral(
+                    multipleCollateral[CRYPTO_CURRENCY_MAP.USDC as Coins]?.addresses[
+                        queryConfig.networkId as SupportedNetwork
+                    ]
+                        ? freeBetHolderContract?.read.balancePerUserAndCollateral([
                               walletAddress,
                               multipleCollateral[CRYPTO_CURRENCY_MAP.USDC as Coins]?.addresses[
-                                  networkId as SupportedNetwork
-                              ]
-                          )
+                                  queryConfig.networkId as SupportedNetwork
+                              ],
+                          ])
                         : undefined,
-                    multipleCollateral[CRYPTO_CURRENCY_MAP.USDCe as Coins]?.addresses[networkId as SupportedNetwork]
-                        ? freeBetHolderContract?.balancePerUserAndCollateral(
+                    multipleCollateral[CRYPTO_CURRENCY_MAP.USDCe as Coins]?.addresses[
+                        queryConfig.networkId as SupportedNetwork
+                    ]
+                        ? freeBetHolderContract?.read.balancePerUserAndCollateral([
                               walletAddress,
                               multipleCollateral[CRYPTO_CURRENCY_MAP.USDCe as Coins]?.addresses[
-                                  networkId as SupportedNetwork
-                              ]
-                          )
+                                  queryConfig.networkId as SupportedNetwork
+                              ],
+                          ])
                         : undefined,
-                    multipleCollateral[CRYPTO_CURRENCY_MAP.USDT as Coins]?.addresses[networkId as SupportedNetwork]
-                        ? freeBetHolderContract?.balancePerUserAndCollateral(
+                    multipleCollateral[CRYPTO_CURRENCY_MAP.USDT as Coins]?.addresses[
+                        queryConfig.networkId as SupportedNetwork
+                    ]
+                        ? freeBetHolderContract.read?.balancePerUserAndCollateral([
                               walletAddress,
                               multipleCollateral[CRYPTO_CURRENCY_MAP.USDT as Coins]?.addresses[
-                                  networkId as SupportedNetwork
-                              ]
-                          )
+                                  queryConfig.networkId as SupportedNetwork
+                              ],
+                          ])
                         : undefined,
-                    multipleCollateral[CRYPTO_CURRENCY_MAP.OP as Coins]?.addresses[networkId as SupportedNetwork]
-                        ? freeBetHolderContract?.balancePerUserAndCollateral(
+                    multipleCollateral[CRYPTO_CURRENCY_MAP.OP as Coins]?.addresses[
+                        queryConfig.networkId as SupportedNetwork
+                    ]
+                        ? freeBetHolderContract?.read.balancePerUserAndCollateral([
                               walletAddress,
                               multipleCollateral[CRYPTO_CURRENCY_MAP.OP as Coins]?.addresses[
-                                  networkId as SupportedNetwork
-                              ]
-                          )
+                                  queryConfig.networkId as SupportedNetwork
+                              ],
+                          ])
                         : undefined,
-                    multipleCollateral[CRYPTO_CURRENCY_MAP.WETH as Coins]?.addresses[networkId as SupportedNetwork]
-                        ? freeBetHolderContract?.balancePerUserAndCollateral(
+                    multipleCollateral[CRYPTO_CURRENCY_MAP.WETH as Coins]?.addresses[
+                        queryConfig.networkId as SupportedNetwork
+                    ]
+                        ? freeBetHolderContract?.read.balancePerUserAndCollateral([
                               walletAddress,
                               multipleCollateral[CRYPTO_CURRENCY_MAP.WETH as Coins]?.addresses[
-                                  networkId as SupportedNetwork
-                              ]
-                          )
+                                  queryConfig.networkId as SupportedNetwork
+                              ],
+                          ])
                         : undefined,
-                    multipleCollateral[CRYPTO_CURRENCY_MAP.ARB as Coins]?.addresses[networkId as SupportedNetwork]
-                        ? freeBetHolderContract?.balancePerUserAndCollateral(
+                    multipleCollateral[CRYPTO_CURRENCY_MAP.ARB as Coins]?.addresses[
+                        queryConfig.networkId as SupportedNetwork
+                    ]
+                        ? freeBetHolderContract?.read.balancePerUserAndCollateral([
                               walletAddress,
                               multipleCollateral[CRYPTO_CURRENCY_MAP.ARB as Coins]?.addresses[
-                                  networkId as SupportedNetwork
-                              ]
-                          )
+                                  queryConfig.networkId as SupportedNetwork
+                              ],
+                          ])
                         : undefined,
-                    multipleCollateral[CRYPTO_CURRENCY_MAP.USDbC as Coins]?.addresses[networkId as SupportedNetwork]
-                        ? freeBetHolderContract?.balancePerUserAndCollateral(
+                    multipleCollateral[CRYPTO_CURRENCY_MAP.USDbC as Coins]?.addresses[
+                        queryConfig.networkId as SupportedNetwork
+                    ]
+                        ? freeBetHolderContract?.read.balancePerUserAndCollateral([
                               walletAddress,
                               multipleCollateral[CRYPTO_CURRENCY_MAP.USDbC as Coins]?.addresses[
-                                  networkId as SupportedNetwork
-                              ]
-                          )
+                                  queryConfig.networkId as SupportedNetwork
+                              ],
+                          ])
                         : undefined,
-                    multipleCollateral[CRYPTO_CURRENCY_MAP.THALES as Coins]?.addresses[networkId as SupportedNetwork]
-                        ? freeBetHolderContract?.balancePerUserAndCollateral(
+                    multipleCollateral[CRYPTO_CURRENCY_MAP.THALES as Coins]?.addresses[
+                        queryConfig.networkId as SupportedNetwork
+                    ]
+                        ? freeBetHolderContract?.read.balancePerUserAndCollateral([
                               walletAddress,
                               multipleCollateral[CRYPTO_CURRENCY_MAP.THALES as Coins]?.addresses[
-                                  networkId as SupportedNetwork
-                              ]
-                          )
+                                  queryConfig.networkId as SupportedNetwork
+                              ],
+                          ])
                         : undefined,
                 ]);
 
@@ -157,8 +181,8 @@ const useFreeBetCollateralBalanceQuery = (
                 };
             }
         },
-        options
-    );
+        ...options,
+    });
 };
 
 export default useFreeBetCollateralBalanceQuery;

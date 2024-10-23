@@ -18,7 +18,7 @@ const useMultipleCollateralBalanceQuery = (
     return useQuery<CollateralsBalance>({
         queryKey: QUERY_KEYS.Wallet.MultipleCollateral(walletAddress, queryConfig.networkId),
         queryFn: async () => {
-            let collaterasBalance: CollateralsBalance = {
+            let collateralsBalance: CollateralsBalance = {
                 sUSD: 0,
                 DAI: 0,
                 USDCe: 0,
@@ -29,6 +29,8 @@ const useMultipleCollateralBalanceQuery = (
                 ETH: 0,
                 ARB: 0,
                 USDC: 0,
+                THALES: 0,
+                sTHALES: 0,
             };
             try {
                 const multipleCollateralObject = {
@@ -82,10 +84,20 @@ const useMultipleCollateralBalanceQuery = (
                         address: multipleCollateral.ARB.addresses[queryConfig.networkId],
                         client: queryConfig.client,
                     }) as ViemContract,
+                    THALES: getContract({
+                        abi: multipleCollateral.THALES.abi,
+                        address: multipleCollateral.THALES.addresses[queryConfig.networkId],
+                        client: queryConfig.client,
+                    }) as ViemContract,
+                    sTHALES: getContract({
+                        abi: multipleCollateral.sTHALES.abi,
+                        address: multipleCollateral.sTHALES.addresses[queryConfig.networkId],
+                        client: queryConfig.client,
+                    }) as ViemContract,
                 };
 
                 if (!walletAddress || !queryConfig.networkId) {
-                    return collaterasBalance;
+                    return collateralsBalance;
                 }
 
                 const [
@@ -99,6 +111,8 @@ const useMultipleCollateralBalanceQuery = (
                     WETHBalance,
                     ETHBalance,
                     ARBBalance,
+                    THALESBalance,
+                    sTHALESBalance,
                 ] = await Promise.all([
                     multipleCollateralObject.sUSD.address !== TBD_ADDRESS
                         ? multipleCollateralObject.sUSD.read.balanceOf([walletAddress])
@@ -128,8 +142,14 @@ const useMultipleCollateralBalanceQuery = (
                     multipleCollateralObject.ARB.address !== TBD_ADDRESS
                         ? multipleCollateralObject.ARB.read.balanceOf([walletAddress])
                         : 0,
+                    multipleCollateralObject.THALES.address !== TBD_ADDRESS
+                        ? multipleCollateralObject.THALES.read.balanceOf([walletAddress])
+                        : 0,
+                    multipleCollateralObject.sTHALES.address !== TBD_ADDRESS
+                        ? multipleCollateralObject.sTHALES.read.balanceOf([walletAddress])
+                        : 0,
                 ]);
-                collaterasBalance = {
+                collateralsBalance = {
                     sUSD: sUSDBalance ? bigNumberFormatter(sUSDBalance, COLLATERAL_DECIMALS.sUSD) : 0,
                     DAI: DAIBalance ? bigNumberFormatter(DAIBalance, COLLATERAL_DECIMALS.DAI) : 0,
                     USDC: USDCBalance ? bigNumberFormatter(USDCBalance, COLLATERAL_DECIMALS.USDC) : 0,
@@ -140,12 +160,14 @@ const useMultipleCollateralBalanceQuery = (
                     WETH: WETHBalance ? bigNumberFormatter(WETHBalance, COLLATERAL_DECIMALS.WETH) : 0,
                     ETH: ETHBalance ? bigNumberFormatter(ETHBalance.value, COLLATERAL_DECIMALS.ETH) : 0,
                     ARB: ARBBalance ? bigNumberFormatter(ARBBalance, COLLATERAL_DECIMALS.ARB) : 0,
+                    THALES: THALESBalance ? bigNumberFormatter(THALESBalance, COLLATERAL_DECIMALS.THALES) : 0,
+                    sTHALES: sTHALESBalance ? bigNumberFormatter(sTHALESBalance, COLLATERAL_DECIMALS.sTHALES) : 0,
                 };
             } catch (e) {
                 console.log('e ', e);
             }
 
-            return collaterasBalance;
+            return collateralsBalance;
         },
         ...options,
     });

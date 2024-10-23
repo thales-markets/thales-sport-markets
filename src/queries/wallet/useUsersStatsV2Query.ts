@@ -3,25 +3,43 @@ import { generalConfig } from 'config/general';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { BATCH_SIZE } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
-import { Network } from 'enums/network';
+import { ContractType } from 'enums/contract';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { bigNumberFormatter, coinFormatter, parseBytes32String } from 'thales-utils';
 import { UserStats } from 'types/markets';
+import { QueryConfig } from 'types/network';
+import { ViemContract } from 'types/viem';
 import { getCollateralByAddress, isLpSupported, isStableCurrency } from 'utils/collaterals';
-import networkConnector from 'utils/networkConnector';
+import { getContractInstance } from 'utils/networkConnector';
 import { Rates } from '../rates/useExchangeRatesQuery';
 
-const useUsersStatsV2Query = (user: string, networkId: Network, options?: UseQueryOptions<UserStats | undefined>) => {
-    return useQuery<UserStats | undefined>(
-        QUERY_KEYS.Wallet.StatsV2(networkId, user),
-        async () => {
-            const {
+const useUsersStatsV2Query = (
+    user: string,
+    queryConfig: QueryConfig,
+    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery<UserStats | undefined>({
+        queryKey: QUERY_KEYS.Wallet.StatsV2(queryConfig.networkId, user),
+        queryFn: async () => {
+            const contracts = (await Promise.all([
+                getContractInstance(ContractType.SPORTS_AMM_DATA, queryConfig.client, queryConfig.networkId),
+                getContractInstance(ContractType.PRICE_FEED, queryConfig.client, queryConfig.networkId),
+                getContractInstance(ContractType.SPORTS_AMM_V2_MANAGER, queryConfig.client, queryConfig.networkId),
+                getContractInstance(ContractType.FREE_BET_HOLDER, queryConfig.client, queryConfig.networkId),
+                getContractInstance(
+                    ContractType.STAKING_THALES_BETTING_PROXY,
+                    queryConfig.client,
+                    queryConfig.networkId
+                ),
+            ])) as ViemContract[];
+
+            const [
                 sportsAMMDataContract,
                 priceFeedContract,
                 sportsAMMV2ManagerContract,
                 freeBetHolderContract,
                 stakingThalesBettingProxy,
-            } = networkConnector;
+            ] = contracts;
             if (
                 sportsAMMDataContract &&
                 priceFeedContract &&
@@ -37,12 +55,12 @@ const useUsersStatsV2Query = (user: string, networkId: Network, options?: UseQue
                     numOfActiveStakedThalesTicketsPerUser,
                     numOfResolvedStakedThalesTicketsPerUser,
                 ] = await Promise.all([
-                    sportsAMMV2ManagerContract.numOfActiveTicketsPerUser(user),
-                    sportsAMMV2ManagerContract.numOfResolvedTicketsPerUser(user),
-                    freeBetHolderContract.numOfActiveTicketsPerUser(user),
-                    freeBetHolderContract.numOfResolvedTicketsPerUser(user),
-                    stakingThalesBettingProxy.numOfActiveTicketsPerUser(user),
-                    stakingThalesBettingProxy.numOfResolvedTicketsPerUser(user),
+                    sportsAMMV2ManagerContract.read.numOfActiveTicketsPerUser([user]),
+                    sportsAMMV2ManagerContract.read.numOfResolvedTicketsPerUser([user]),
+                    freeBetHolderContract.read.numOfActiveTicketsPerUser([user]),
+                    freeBetHolderContract.read.numOfResolvedTicketsPerUser([user]),
+                    stakingThalesBettingProxy.read.numOfActiveTicketsPerUser([user]),
+                    stakingThalesBettingProxy.read.numOfResolvedTicketsPerUser([user]),
                 ]);
 
                 const numberOfActiveBatches =
@@ -67,15 +85,17 @@ const useUsersStatsV2Query = (user: string, networkId: Network, options?: UseQue
 
                 const promises = [];
                 for (let i = 0; i < numberOfActiveBatches; i++) {
-                    promises.push(sportsAMMDataContract.getActiveTicketsDataPerUser(user, i * BATCH_SIZE, BATCH_SIZE));
+                    promises.push(
+                        sportsAMMDataContract.read.getActiveTicketsDataPerUser([user, i * BATCH_SIZE, BATCH_SIZE])
+                    );
                 }
                 for (let i = 0; i < numberOfResolvedBatches; i++) {
                     promises.push(
-                        sportsAMMDataContract.getResolvedTicketsDataPerUser(user, i * BATCH_SIZE, BATCH_SIZE)
+                        sportsAMMDataContract.read.getResolvedTicketsDataPerUser([user, i * BATCH_SIZE, BATCH_SIZE])
                     );
                 }
-                promises.push(priceFeedContract.getCurrencies());
-                promises.push(priceFeedContract.getRates());
+                promises.push(priceFeedContract.read.getCurrencies());
+                promises.push(priceFeedContract.read.getRates());
                 promises.push(axios.get(`${generalConfig.API_URL}/token/price`));
 
                 const promisesResult = await Promise.all(promises);
@@ -110,10 +130,10 @@ const useUsersStatsV2Query = (user: string, networkId: Network, options?: UseQue
                 let lifetimeWins = 0;
                 for (let index = 0; index < tickets.length; index++) {
                     const ticket = tickets[index];
-                    const collateral = getCollateralByAddress(ticket.collateral, networkId);
+                    const collateral = getCollateralByAddress(ticket.collateral, queryConfig.networkId);
                     const convertAmount = isLpSupported(collateral) && !isStableCurrency(collateral);
 
-                    const buyInAmount = coinFormatter(ticket.buyInAmount, networkId, collateral);
+                    const buyInAmount = coinFormatter(ticket.buyInAmount, queryConfig.networkId, collateral);
                     const totalQuote = bigNumberFormatter(ticket.totalQuote);
                     const buyInAmountInUsd = convertAmount ? buyInAmount * exchangeRates[collateral] : buyInAmount;
                     const payout = buyInAmountInUsd / totalQuote;
@@ -138,10 +158,8 @@ const useUsersStatsV2Query = (user: string, networkId: Network, options?: UseQue
 
             return undefined;
         },
-        {
-            ...options,
-        }
-    );
+        ...options,
+    });
 };
 
 export default useUsersStatsV2Query;

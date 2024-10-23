@@ -48,7 +48,7 @@ export type LiquidityPoolUserTransaction = {
     name: string;
     type: string;
     account: string;
-    amount: bigint;
+    amount: number;
     round: number;
     collateral: Coins;
 };

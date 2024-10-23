@@ -2,9 +2,8 @@ import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import QUERY_KEYS from 'constants/queryKeys';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { Coins } from 'thales-utils';
-import { ExtendedCoins } from 'types/collateral';
 
-type CoingeckoRates = Record<ExtendedCoins, number>;
+type CoingeckoRates = Record<Coins, number>;
 
 const COINGECKO_CURRENCY_ID_MAP = {
     [CRYPTO_CURRENCY_MAP.ARB]: 'arbitrum',
