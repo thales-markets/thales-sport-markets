@@ -1004,6 +1004,11 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         key: 'winningPartyWinsconsin',
         name: 'Winning party Winsconsin',
     },
+    [MarketType.US_ELECTION_WINNING_PARTY_NORTH_CAROLINA]: {
+        id: MarketType.US_ELECTION_WINNING_PARTY_NORTH_CAROLINA,
+        key: 'winningPartyNorthCarolina',
+        name: 'Winning party North Carolina',
+    },
     [MarketType.CORRECT_SCORE]: {
         id: MarketType.CORRECT_SCORE,
         key: 'correctScore',
@@ -1773,6 +1778,7 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
             MarketType.US_ELECTION_WINNING_PARTY_NEVADA,
             MarketType.US_ELECTION_WINNING_PARTY_PENNSYLVANIA,
             MarketType.US_ELECTION_WINNING_PARTY_WINSCONSIN,
+            MarketType.US_ELECTION_WINNING_PARTY_NORTH_CAROLINA,
         ],
     },
     [Sport.EMPTY]: {

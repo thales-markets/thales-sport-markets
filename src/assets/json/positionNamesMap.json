@@ -24,6 +24,7 @@
     "10905": ["nevada_democrats", "nevada_republicans"],
     "10906": ["pennsylvania_democrats", "pennsylvania_republicans"],
     "10907": ["wisconsin_democrats", "wisconsin_republicans"],
+    "10908": ["north_carolina_democrats", "north_carolina_republicans"],
     "10100": [
         "draw_0_0",
         "draw_1_1",
