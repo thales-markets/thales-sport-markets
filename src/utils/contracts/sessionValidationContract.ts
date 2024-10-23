@@ -1,8 +1,9 @@
 import { ZERO_ADDRESS } from 'constants/network';
 import { NetworkId } from 'thales-utils';
+import { ContractData } from 'types/viem';
 import { Address } from 'viem';
 
-const sessionValidationContract = {
+const sessionValidationContract: ContractData = {
     addresses: {
         [NetworkId.OptimismMainnet]: '0x78D089FCD2308011E87B9a5b85cD309d29e9cF1e' as Address,
         [NetworkId.OptimismSepolia]: ZERO_ADDRESS as Address,
