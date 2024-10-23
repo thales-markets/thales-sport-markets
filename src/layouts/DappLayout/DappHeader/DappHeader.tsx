@@ -19,17 +19,14 @@ import { useLocation } from 'react-router-dom';
 import { getIsMobile } from 'redux/modules/app';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
 import { getOverdropUIState, getStopPulsing, setOddsType, setStopPulsing } from 'redux/modules/ui';
-import {
-    getIsConnectedViaParticle,
-    getIsWalletConnected,
-    getNetworkId,
-    getWalletAddress,
-    setWalletConnectModalVisibility,
-} from 'redux/modules/wallet';
+import { getIsBiconomy, setWalletConnectModalVisibility } from 'redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivEnd } from 'styles/common';
 import { OverdropLevel, ThemeInterface } from 'types/ui';
+import biconomyConnector from 'utils/biconomyWallet';
 import { buildHref } from 'utils/routes';
+import { useAccount, useChainId, useClient } from 'wagmi';
 import { ODDS_TYPES } from '../../../constants/markets';
 import { OddsType } from '../../../enums/markets';
 import ProfileItem from './components/ProfileItem';
@@ -93,10 +90,13 @@ const DappHeader: React.FC = () => {
     const location = useLocation();
     const theme: ThemeInterface = useTheme();
 
-    const networkId = useSelector(getNetworkId);
-    const isWalletConnected = useSelector(getIsWalletConnected);
-    const walletAddress = useSelector(getWalletAddress) || '';
-    const isConnectedViaParticle = useSelector(getIsConnectedViaParticle);
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+
+    const networkId = useChainId();
+    const client = useClient();
+    const { address, isConnected } = useAccount();
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+
     const marketSearch = useSelector(getMarketSearch);
     const stopPulsing = useSelector(getStopPulsing);
     const isMobile = useSelector(getIsMobile);
@@ -110,9 +110,13 @@ const DappHeader: React.FC = () => {
 
     const isMarketsPage = location.pathname === ROUTES.Home || location.pathname === ROUTES.Markets.Home;
 
-    const claimablePositionsCountQuery = useClaimablePositionCountV2Query(walletAddress, networkId, {
-        enabled: isWalletConnected,
-    });
+    const claimablePositionsCountQuery = useClaimablePositionCountV2Query(
+        walletAddress,
+        { networkId, client },
+        {
+            enabled: isConnected,
+        }
+    );
 
     const claimablePositionCount =
         claimablePositionsCountQuery.isSuccess && claimablePositionsCountQuery.data
@@ -179,9 +183,7 @@ const DappHeader: React.FC = () => {
                     </LeftContainer>
 
                     <MiddleContainer>
-                        <div>
-                            {!isWalletConnected ? getGetStartedButton() : isConnectedViaParticle ? <TopUp /> : <></>}
-                        </div>
+                        <div>{!isConnected ? getGetStartedButton() : isBiconomy ? <TopUp /> : <></>}</div>
                         {isMarketsPage && <TimeFilters />}
                         <FlexDiv>
                             <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
@@ -194,7 +196,7 @@ const DappHeader: React.FC = () => {
                                     <OverdropIcon />
                                 )}
                             </SPAAnchor>
-                            {isWalletConnected && <ProfileItem />}
+                            {isConnected && <ProfileItem />}
                             <SettingsContainer
                                 onClick={() => {
                                     setDropdownIsOpen(!dropdownIsOpen);
@@ -228,7 +230,7 @@ const DappHeader: React.FC = () => {
                     </MiddleContainer>
 
                     <RightContainer>
-                        {!isWalletConnected && (
+                        {!isConnected && (
                             <Button
                                 backgroundColor={'transparent'}
                                 textColor={theme.button.borderColor.quaternary}
@@ -253,7 +255,7 @@ const DappHeader: React.FC = () => {
                                 {t('get-started.log-in')}
                             </Button>
                         )}
-                        {!isWalletConnected && (
+                        {!isConnected && (
                             <Button
                                 backgroundColor={theme.button.background.tertiary}
                                 textColor={theme.button.textColor.primary}
@@ -342,13 +344,13 @@ const DappHeader: React.FC = () => {
                         </MenuIconContainer>
                     </WrapperMobile>
 
-                    {isWalletConnected && (
+                    {isConnected && (
                         <FlexDivCentered>
                             <WalletInfo />
                         </FlexDivCentered>
                     )}
 
-                    {!isWalletConnected ? (
+                    {!isConnected ? (
                         <MobileButtonWrapper>
                             <Button
                                 backgroundColor={'transparent'}
@@ -407,7 +409,7 @@ const DappHeader: React.FC = () => {
                             </FlexDivEnd>
                         </MobileButtonWrapper>
                     ) : (
-                        isConnectedViaParticle && (
+                        isBiconomy && (
                             <MobileButtonWrapper>
                                 {location.pathname !== ROUTES.Wizard && getGetStartedButton()}
                                 <TopUp />
