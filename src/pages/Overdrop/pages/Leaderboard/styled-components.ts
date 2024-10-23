@@ -118,4 +118,5 @@ export const HeaderContainer = styled(FlexDivRow)`
 
 export const Disclaimer = styled.span`
     font-size: 12px;
+    font-style: italic;
 `;
