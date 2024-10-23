@@ -4,10 +4,10 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { OverdropUserData } from 'types/overdrop';
 
-const useUserDataQuery = (walletAddress: string, options?: UseQueryOptions<OverdropUserData>) => {
-    return useQuery<OverdropUserData>(
-        QUERY_KEYS.Overdrop.UserData(walletAddress),
-        async () => {
+const useUserDataQuery = (walletAddress: string, options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
+    return useQuery<OverdropUserData>({
+        queryKey: QUERY_KEYS.Overdrop.UserData(walletAddress),
+        queryFn: async () => {
             try {
                 const response = await axios.get(`${generalConfig.OVERDROP_API_URL}/user/${walletAddress}`);
 
@@ -18,10 +18,8 @@ const useUserDataQuery = (walletAddress: string, options?: UseQueryOptions<Overd
                 return;
             }
         },
-        {
-            ...options,
-        }
-    );
+        ...options,
+    });
 };
 
 export default useUserDataQuery;

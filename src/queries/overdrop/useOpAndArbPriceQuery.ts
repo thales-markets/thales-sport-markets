@@ -7,10 +7,10 @@ import { useQuery, UseQueryOptions } from 'react-query';
 const OP_PRICE_FEED_ID = '385f64d993f7b77d8182ed5003d97c60aa3361f3cecfe711544d2d59165e9bdf';
 const ARB_PRICE_FEED_ID = '3fa4252848f9f0a1480be62745a4629d9eb1322aebab8a791e344b3b9c1adcf5';
 
-const useOpAndArbPriceQuery = (options?: UseQueryOptions<{ op: number; arb: number }>) => {
-    return useQuery<{ op: number; arb: number }>(
-        QUERY_KEYS.Overdrop.Price(),
-        async () => {
+const useOpAndArbPriceQuery = (options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
+    return useQuery<{ op: number; arb: number }>({
+        queryKey: QUERY_KEYS.Overdrop.Price(),
+        queryFn: async () => {
             try {
                 const response = await axios.get(
                     `${generalConfig.PYTH_API_URL}?ids%5B%5D=${OP_PRICE_FEED_ID}&ids%5B%5D=${ARB_PRICE_FEED_ID}`
@@ -27,10 +27,8 @@ const useOpAndArbPriceQuery = (options?: UseQueryOptions<{ op: number; arb: numb
                 return { op: 0, arb: 0 };
             }
         },
-        {
-            ...options,
-        }
-    );
+        ...options,
+    });
 };
 
 export default useOpAndArbPriceQuery;
