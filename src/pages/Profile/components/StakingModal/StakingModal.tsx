@@ -110,6 +110,12 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
     const isStaked = stakedAmount > 0;
 
     useEffect(() => {
+        if (noClaim) {
+            setAmountToStake(thalesBalance);
+        }
+    }, [noClaim, thalesBalance]);
+
+    useEffect(() => {
         setIsAmountValid(
             Number(amountToStake) === 0 || (Number(amountToStake) > 0 && Number(amountToStake) <= thalesBalance)
         );

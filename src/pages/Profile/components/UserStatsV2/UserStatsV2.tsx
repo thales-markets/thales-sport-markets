@@ -574,7 +574,7 @@ const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
                     />
                 )}
             </Wrapper>
-            {!isParticle && thalesBalance > 0 && (
+            {!isParticle && thalesBalance > 1 && (
                 <Wrapper>
                     <SectionWrapper>
                         <Title>{t('profile.stats.stake-title')}</Title>
