@@ -63,16 +63,6 @@ export const Arrow = styled.i`
     }
 `;
 
-export const StakeArrow = styled(Arrow)`
-    font-size: 16px;
-    text-transform: none;
-    font-weight: 400;
-    color: ${(props) => props.theme.status.win};
-    @media (max-width: 767px) {
-        font-size: 10px;
-    }
-`;
-
 export const CategoryDisclaimer = styled.div`
     font-weight: 600;
     font-size: 12px;
@@ -81,19 +71,6 @@ export const CategoryDisclaimer = styled.div`
         font-size: 10px;
         margin-left: 10px;
         margin-right: 10px;
-    }
-`;
-
-export const StakingInfo = styled.div`
-    font-weight: 600;
-    font-size: 13px;
-    color: ${(props) => props.theme.status.win};
-    text-align: center;
-    margin-top: 10px;
-    cursor: pointer;
-    @media (max-width: 767px) {
-        font-size: 11px;
-        margin-top: 0px;
     }
 `;
 

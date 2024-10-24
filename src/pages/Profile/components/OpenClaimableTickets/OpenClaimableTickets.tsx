@@ -10,10 +10,10 @@ import useMarketDurationQuery from 'queries/markets/useMarketDurationQuery';
 import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
 import React, { useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
-import { getIsStakingModalMuted, setStakingModalMuteEnd } from 'redux/modules/ui';
+import { getIsStakingModalMuted } from 'redux/modules/ui';
 import { getIsConnectedViaParticle, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { Coins } from 'thales-utils';
 import { getCollateral, getCollaterals, getDefaultCollateral, isLpSupported } from 'utils/collaterals';
@@ -33,21 +33,27 @@ import {
     EmptySubtitle,
     EmptyTitle,
     ListContainer,
-    StakeArrow,
-    StakingInfo,
     StyledParlayEmptyIcon,
     additionalClaimButtonStyle,
     additionalClaimButtonStyleMobile,
 } from './styled-components';
 
-const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText }) => {
+type OpenClaimableTicketsProps = {
+    searchText?: string;
+    forceOpenStakingModal: boolean;
+    setForceOpenStakingModal: (forceOpenStakingModal: boolean) => void;
+};
+
+const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({
+    searchText,
+    forceOpenStakingModal,
+    setForceOpenStakingModal,
+}) => {
     const { t } = useTranslation();
-    const dispatch = useDispatch();
 
     const [openClaimable, setClaimableState] = useState<boolean>(true);
     const [openOpenPositions, setOpenState] = useState<boolean>(true);
     const [openStakingModal, setOpenStakingModal] = useState<boolean>(false);
-    const [forceOpenStakingModal, setForceOpenStakingModal] = useState<boolean>(false);
     const [thalesClaimed, setThalesClaimed] = useState<number>(0);
 
     const walletAddress = useSelector(getWalletAddress) || '';
@@ -182,17 +188,6 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
 
     return (
         <Container>
-            {!isParticle && (
-                <StakingInfo
-                    onClick={() => {
-                        setForceOpenStakingModal(true);
-                        dispatch(setStakingModalMuteEnd(0));
-                    }}
-                >
-                    {t('profile.staking-modal.staking-message')}
-                    <StakeArrow className="icon icon--caret-right" />
-                </StakingInfo>
-            )}
             <CategoryContainer onClick={() => setClaimableState(!openClaimable)}>
                 <CategoryInfo>
                     <CategoryIcon className="icon icon--claimable-ticket" />

@@ -321,7 +321,10 @@
             "trades": "Trades",
             "wallet": "Wallet",
             "highest-win": "Highest win",
-            "lifetime-wins": "Lifetime wins"
+            "lifetime-wins": "Lifetime wins",
+            "stake-title": "You get BEST odds when betting with staked THALES (sTHALES)",
+            "stake-label": "Stake",
+            "weekly-rewards": "You also get weekly USDC+THALES staking rewards! Claim them weekly on <stakingPageLink>thales.io staking page<stakingPageLink>"
         },
         "wrapper-nav": {
             "my-tickets": "My tickets",
@@ -432,7 +435,6 @@
             "total-amount-batch": "Total amount will be {{ amount }} multiple by {{ count }} wallet address(es)."
         },
         "staking-modal": {
-            "staking-message": "Stake THALES to earn yield and still use staked THALES on Overtime",
             "congratulations-label": "Congratulations!",
             "claimed": "You claimed: {{amount}}",
             "staked": "You staked: {{amount}}",

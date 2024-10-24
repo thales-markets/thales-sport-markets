@@ -3,25 +3,33 @@ import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollatera
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import useUsersStatsV2Query from 'queries/wallet/useUsersStatsV2Query';
 import React, { Fragment, useCallback, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { Trans, useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
-import styled from 'styled-components';
-import { formatCurrencyWithSign } from 'thales-utils';
-import { Coins } from 'thales-utils';
+import { getIsConnectedViaParticle, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import styled, { useTheme } from 'styled-components';
+import { Coins, formatCurrency, formatCurrencyWithSign } from 'thales-utils';
 import { isStableCurrency, sortCollateralBalances } from 'utils/collaterals';
-import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from '../../../../constants/currency';
-import { FlexDivColumn, FlexDivRow } from '../../../../styles/common';
+import Button from '../../../../components/Button';
+import { COLLATERAL_ICONS_CLASS_NAMES, CRYPTO_CURRENCY_MAP, USD_SIGN } from '../../../../constants/currency';
+import { setStakingModalMuteEnd } from '../../../../redux/modules/ui';
+import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from '../../../../styles/common';
+import { ThemeInterface } from '../../../../types/ui';
 
-const UserStats: React.FC = () => {
+type UserStatsProps = {
+    setForceOpenStakingModal: (forceOpenStakingModal: boolean) => void;
+};
+
+const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
+    const theme: ThemeInterface = useTheme();
 
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
+    const walletAddress = useSelector(getWalletAddress) || '';
+    const isWalletConnected = useSelector(getIsWalletConnected);
+    const networkId = useSelector(getNetworkId);
+    const isAppReady = useSelector(getIsAppReady);
+    const isParticle = useSelector(getIsConnectedViaParticle);
 
     const userStatsQuery = useUsersStatsV2Query(walletAddress.toLowerCase(), networkId, { enabled: isWalletConnected });
     const userStats = userStatsQuery.isSuccess && userStatsQuery.data ? userStatsQuery.data : undefined;
@@ -76,101 +84,157 @@ const UserStats: React.FC = () => {
         return sortedBalances;
     }, [exchangeRates, multiCollateralBalances, networkId]);
 
+    const thalesBalance = multiCollateralBalances ? multiCollateralBalances[CRYPTO_CURRENCY_MAP.THALES as Coins] : 0;
+
     return (
-        <Wrapper>
-            <SectionWrapper>
-                <Header>
-                    <ProfileIcon className="icon icon--profile3" />
-                    {t('profile.stats.profile-data')}
-                </Header>
-                <Section>
-                    <Label>{t('profile.stats.total-volume')}</Label>
-                    <Value>{!userStats ? '-' : formatCurrencyWithSign(USD_SIGN, userStats.volume)}</Value>
-                </Section>
-                <Section>
-                    <Label>{t('profile.stats.trades')}</Label>
-                    <Value>{!userStats ? '-' : userStats.trades}</Value>
-                </Section>
-                <Section>
-                    <Label>{t('profile.stats.highest-win')}</Label>
-                    <Value>{!userStats ? '-' : formatCurrencyWithSign(USD_SIGN, userStats.highestWin)}</Value>
-                </Section>
-                <Section>
-                    <Label>{t('profile.stats.lifetime-wins')}</Label>
-                    <Value>{!userStats ? '-' : userStats.lifetimeWins}</Value>
-                </Section>
-            </SectionWrapper>
-            {isFreeBetExists && (
+        <>
+            <Wrapper>
                 <SectionWrapper>
-                    <SubHeaderWrapper>
-                        <SubHeader>
-                            <SubHeaderIcon className="icon icon--gift" />
-                            {t('profile.stats.free-bet')}
-                        </SubHeader>
-                    </SubHeaderWrapper>
-                    {freeBetBalances &&
-                        Object.keys(freeBetCollateralsSorted).map((currencyKey) => {
-                            return freeBetBalances[currencyKey] ? (
-                                <Section key={`${currencyKey}-freebet`}>
-                                    <SubLabel>
-                                        <CurrencyIcon className={COLLATERAL_ICONS_CLASS_NAMES[currencyKey as Coins]} />
-                                        {currencyKey}
-                                    </SubLabel>
-                                    <SubValue>
-                                        {formatCurrencyWithSign(
-                                            null,
-                                            freeBetBalances ? freeBetBalances[currencyKey] : 0
-                                        )}
-                                        {!exchangeRates?.[currencyKey] && !isStableCurrency(currencyKey as Coins)
-                                            ? '...'
-                                            : ` (${formatCurrencyWithSign(
-                                                  USD_SIGN,
-                                                  getUSDForCollateral(currencyKey as Coins, true)
-                                              )})`}
-                                    </SubValue>
-                                </Section>
-                            ) : (
-                                <Fragment key={`${currencyKey}-freebet`} />
-                            );
-                        })}
+                    <Header>
+                        <ProfileIcon className="icon icon--profile3" />
+                        {t('profile.stats.profile-data')}
+                    </Header>
+                    <Section>
+                        <Label>{t('profile.stats.total-volume')}</Label>
+                        <Value>{!userStats ? '-' : formatCurrencyWithSign(USD_SIGN, userStats.volume)}</Value>
+                    </Section>
+                    <Section>
+                        <Label>{t('profile.stats.trades')}</Label>
+                        <Value>{!userStats ? '-' : userStats.trades}</Value>
+                    </Section>
+                    <Section>
+                        <Label>{t('profile.stats.highest-win')}</Label>
+                        <Value>{!userStats ? '-' : formatCurrencyWithSign(USD_SIGN, userStats.highestWin)}</Value>
+                    </Section>
+                    <Section>
+                        <Label>{t('profile.stats.lifetime-wins')}</Label>
+                        <Value>{!userStats ? '-' : userStats.lifetimeWins}</Value>
+                    </Section>
                 </SectionWrapper>
+                {isFreeBetExists && (
+                    <SectionWrapper>
+                        <SubHeaderWrapper>
+                            <SubHeader>
+                                <SubHeaderIcon className="icon icon--gift" />
+                                {t('profile.stats.free-bet')}
+                            </SubHeader>
+                        </SubHeaderWrapper>
+                        {freeBetBalances &&
+                            Object.keys(freeBetCollateralsSorted).map((currencyKey) => {
+                                return freeBetBalances[currencyKey] ? (
+                                    <Section key={`${currencyKey}-freebet`}>
+                                        <SubLabel>
+                                            <CurrencyIcon
+                                                className={COLLATERAL_ICONS_CLASS_NAMES[currencyKey as Coins]}
+                                            />
+                                            {currencyKey}
+                                        </SubLabel>
+                                        <SubValue>
+                                            {formatCurrencyWithSign(
+                                                null,
+                                                freeBetBalances ? freeBetBalances[currencyKey] : 0
+                                            )}
+                                            {!exchangeRates?.[currencyKey] && !isStableCurrency(currencyKey as Coins)
+                                                ? '...'
+                                                : ` (${formatCurrencyWithSign(
+                                                      USD_SIGN,
+                                                      getUSDForCollateral(currencyKey as Coins, true)
+                                                  )})`}
+                                        </SubValue>
+                                    </Section>
+                                ) : (
+                                    <Fragment key={`${currencyKey}-freebet`} />
+                                );
+                            })}
+                    </SectionWrapper>
+                )}
+                {multiCollateralBalances && (
+                    <SectionWrapper>
+                        <SubHeaderWrapper>
+                            <SubHeader>
+                                <SubHeaderIcon className="icon icon--wallet-connected" />
+                                {t('profile.stats.wallet')}
+                            </SubHeader>
+                        </SubHeaderWrapper>
+                        {freeBetBalances &&
+                            Object.keys(multiCollateralsSorted).map((currencyKey) => {
+                                return multiCollateralBalances[currencyKey] ? (
+                                    <Section key={currencyKey}>
+                                        <SubLabel>
+                                            <CurrencyIcon
+                                                className={COLLATERAL_ICONS_CLASS_NAMES[currencyKey as Coins]}
+                                            />
+                                            {currencyKey}
+                                        </SubLabel>
+                                        <SubValue>
+                                            {formatCurrencyWithSign(
+                                                null,
+                                                multiCollateralBalances ? multiCollateralBalances[currencyKey] : 0
+                                            )}
+                                            {!exchangeRates?.[currencyKey] && !isStableCurrency(currencyKey as Coins)
+                                                ? '...'
+                                                : ` (${formatCurrencyWithSign(
+                                                      USD_SIGN,
+                                                      getUSDForCollateral(currencyKey as Coins)
+                                                  )})`}
+                                        </SubValue>
+                                    </Section>
+                                ) : (
+                                    <Fragment key={currencyKey} />
+                                );
+                            })}
+                    </SectionWrapper>
+                )}
+            </Wrapper>
+            {!isParticle && thalesBalance > 0 && (
+                <Wrapper>
+                    <SectionWrapper>
+                        <Title>{t('profile.stats.stake-title')}</Title>
+                        <Section>
+                            <SubLabel>
+                                <CurrencyIcon
+                                    className={COLLATERAL_ICONS_CLASS_NAMES[CRYPTO_CURRENCY_MAP.THALES as Coins]}
+                                />
+                                {CRYPTO_CURRENCY_MAP.THALES}
+                            </SubLabel>
+                            <SubValue>{formatCurrency(thalesBalance)}</SubValue>
+                        </Section>
+                        <Button
+                            backgroundColor={theme.button.textColor.tertiary}
+                            borderColor={theme.button.textColor.tertiary}
+                            height="24px"
+                            margin="10px 0 5px 0"
+                            padding="2px 40px"
+                            width="fit-content"
+                            fontSize="16px"
+                            fontWeight="800"
+                            lineHeight="16px"
+                            additionalStyles={additionalButtonStyles}
+                            onClick={() => {
+                                setForceOpenStakingModal(true);
+                                dispatch(setStakingModalMuteEnd(0));
+                            }}
+                        >
+                            {t('profile.stats.stake-label')}
+                        </Button>
+                        <Description>
+                            <Trans
+                                i18nKey={'profile.stats.weekly-rewards'}
+                                components={{
+                                    stakingPageLink: (
+                                        <StakingPageLink
+                                            href={'https://www.thales.io/token/staking'}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                        />
+                                    ),
+                                }}
+                            />
+                        </Description>
+                    </SectionWrapper>
+                </Wrapper>
             )}
-            {multiCollateralBalances && (
-                <SectionWrapper>
-                    <SubHeaderWrapper>
-                        <SubHeader>
-                            <SubHeaderIcon className="icon icon--wallet-connected" />
-                            {t('profile.stats.wallet')}
-                        </SubHeader>
-                    </SubHeaderWrapper>
-                    {freeBetBalances &&
-                        Object.keys(multiCollateralsSorted).map((currencyKey) => {
-                            return multiCollateralBalances[currencyKey] ? (
-                                <Section key={currencyKey}>
-                                    <SubLabel>
-                                        <CurrencyIcon className={COLLATERAL_ICONS_CLASS_NAMES[currencyKey as Coins]} />
-                                        {currencyKey}
-                                    </SubLabel>
-                                    <SubValue>
-                                        {formatCurrencyWithSign(
-                                            null,
-                                            multiCollateralBalances ? multiCollateralBalances[currencyKey] : 0
-                                        )}
-                                        {!exchangeRates?.[currencyKey] && !isStableCurrency(currencyKey as Coins)
-                                            ? '...'
-                                            : ` (${formatCurrencyWithSign(
-                                                  USD_SIGN,
-                                                  getUSDForCollateral(currencyKey as Coins)
-                                              )})`}
-                                    </SubValue>
-                                </Section>
-                            ) : (
-                                <Fragment key={currencyKey} />
-                            );
-                        })}
-                </SectionWrapper>
-            )}
-        </Wrapper>
+        </>
     );
 };
 
@@ -184,13 +248,25 @@ const Header = styled(FlexDivRow)`
     align-items: center;
 `;
 
+const Description = styled.span`
+    color: ${(props) => props.theme.textColor.primary};
+    font-size: 13px;
+    line-height: 15px;
+    font-weight: 500;
+    text-align: center;
+    margin: 10px 0;
+`;
+
+const Title = styled(Description)``;
+
 const Wrapper = styled(FlexDivColumn)`
     background: ${(props) => props.theme.background.quinary};
     border-radius: 5px;
     width: 100%;
-    padding: 10px 15px 20px 15px;
+    padding: 10px 15px 15px 15px;
     gap: 4px;
     flex: initial;
+    margin-bottom: 5px;
 `;
 
 const Section = styled.div`
@@ -270,8 +346,19 @@ const CurrencyIcon = styled.i`
     color: ${(props) => props.theme.textColor.quaternary};
 `;
 
-const SectionWrapper = styled.div`
+const SectionWrapper = styled(FlexDivColumnCentered)`
     width: 100%;
 `;
+
+const StakingPageLink = styled.a`
+    color: ${(props) => props.theme.link.textColor.primary};
+    &:hover {
+        text-decoration: underline;
+    }
+`;
+
+const additionalButtonStyles = {
+    alignSelf: 'center',
+};
 
 export default UserStats;
