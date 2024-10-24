@@ -38,7 +38,11 @@ const getLpStats = async (
     let convertAmount = false;
     let collateral = '' as Coins;
 
-    const mappedTickets: Ticket[] = ticketsData.map((ticket: any) => mapTicket(ticket, networkId, [], [], []));
+    const mappedTickets: Ticket[] = ticketsData
+        .map((ticket: any) => mapTicket(ticket, networkId, [], [], []))
+        .filter((ticket) => {
+            return ticket.sportMarkets.length === 1 && ticket.sportMarkets[0].isPlayerPropsMarket && !ticket.isOpen;
+        });
 
     const finalTickets: Ticket[] = orderBy(updateTotalQuoteAndPayout(mappedTickets), ['timestamp'], ['desc']);
 

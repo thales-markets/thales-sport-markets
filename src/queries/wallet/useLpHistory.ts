@@ -42,15 +42,23 @@ const useLpHistory = (
                 const promisesResult = await Promise.all(promises);
                 const ticketsData = promisesResult.flat(1);
 
-                const mappedTickets: Ticket[] = ticketsData.map((ticket: any) =>
-                    mapTicket(
-                        ticket,
-                        networkId,
-                        gamesInfoResponse.data,
-                        playersInfoResponse.data,
-                        liveScoresResponse.data
+                const mappedTickets: Ticket[] = ticketsData
+                    .map((ticket: any) =>
+                        mapTicket(
+                            ticket,
+                            networkId,
+                            gamesInfoResponse.data,
+                            playersInfoResponse.data,
+                            liveScoresResponse.data
+                        )
                     )
-                );
+                    .filter((ticket) => {
+                        return (
+                            ticket.sportMarkets.length === 1 &&
+                            ticket.sportMarkets[0].isPlayerPropsMarket &&
+                            !ticket.isOpen
+                        );
+                    });
 
                 const finalTickets: Ticket[] = orderBy(
                     updateTotalQuoteAndPayout(mappedTickets),
