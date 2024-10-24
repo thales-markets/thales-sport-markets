@@ -17,7 +17,6 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
-import { getTicketPayment } from 'redux/modules/ticket';
 import { setStakingModalMuteEnd } from 'redux/modules/ui';
 import { getIsConnectedViaParticle, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
@@ -39,6 +38,7 @@ import {
     getCollateralAddress,
     getCollaterals,
     isStableCurrency,
+    isThalesCurrency,
     sortCollateralBalances,
 } from 'utils/collaterals';
 import networkConnector from 'utils/networkConnector';
@@ -69,18 +69,6 @@ const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
     const networkId = useSelector(getNetworkId);
     const isAppReady = useSelector(getIsAppReady);
     const isParticle = useSelector(getIsConnectedViaParticle);
-    const ticketPayment = useSelector(getTicketPayment);
-    const selectedCollateralIndex = ticketPayment.selectedCollateralIndex;
-    const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
-        networkId,
-        selectedCollateralIndex,
-    ]);
-    const isStableCollateral = isStableCurrency(selectedCollateral);
-    const collateralAddress = useMemo(() => getCollateralAddress(networkId, selectedCollateralIndex), [
-        networkId,
-        selectedCollateralIndex,
-    ]);
-    const isEth = selectedCollateral === CRYPTO_CURRENCY_MAP.ETH;
 
     const [buyInAmount, setBuyInAmount] = useState<number | string>('');
     const [isBuying, setIsBuying] = useState(false);
@@ -91,6 +79,24 @@ const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
     const [hasSwapAllowance, setHasSwapAllowance] = useState(false);
     const [buyStep, setBuyStep] = useState(BuyTicketStep.APPROVE_SWAP);
     const [openBuyStepsModal, setOpenBuyStepsModal] = useState(false);
+    const [swapCollateralIndex, setSwapCollateralIndex] = useState(0);
+
+    const swapCollateralArray = useMemo(
+        () => getCollaterals(networkId).filter((collateral) => !isThalesCurrency(collateral)),
+        [networkId]
+    );
+    const selectedCollateral = useMemo(() => getCollateral(networkId, swapCollateralIndex, swapCollateralArray), [
+        networkId,
+        swapCollateralArray,
+        swapCollateralIndex,
+    ]);
+    const isStableCollateral = isStableCurrency(selectedCollateral);
+    const collateralAddress = useMemo(() => getCollateralAddress(networkId, swapCollateralIndex, swapCollateralArray), [
+        networkId,
+        swapCollateralArray,
+        swapCollateralIndex,
+    ]);
+    const isEth = selectedCollateral === CRYPTO_CURRENCY_MAP.ETH;
 
     const userStatsQuery = useUsersStatsV2Query(walletAddress.toLowerCase(), networkId, { enabled: isWalletConnected });
     const userStats = userStatsQuery.isSuccess && userStatsQuery.data ? userStatsQuery.data : undefined;
@@ -514,15 +520,17 @@ const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
                             placeholder={t('liquidity-pool.deposit-amount-placeholder')}
                             currencyComponent={
                                 <CollateralSelector
-                                    collateralArray={getCollaterals(networkId)}
-                                    selectedItem={selectedCollateralIndex}
-                                    onChangeCollateral={() => {
+                                    collateralArray={swapCollateralArray}
+                                    selectedItem={swapCollateralIndex}
+                                    onChangeCollateral={(index: number) => {
                                         setBuyInAmount('');
+                                        setSwapCollateralIndex(index);
                                     }}
                                     isDetailedView
                                     collateralBalances={multiCollateralBalances}
                                     exchangeRates={exchangeRates}
                                     dropDownWidth={inputRef.current?.getBoundingClientRect().width + 'px'}
+                                    preventPaymentCollateralChange
                                 />
                             }
                             balance={formatCurrencyWithKey(selectedCollateral, paymentTokenBalance)}
