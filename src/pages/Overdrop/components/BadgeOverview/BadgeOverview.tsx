@@ -152,6 +152,7 @@ const BadgeOverview: React.FC = () => {
                             )}`}
                         />
                     </ProgressContainer>
+                    <Disclaimer>{t('overdrop.leveling-tree.payout-disclaimer')}</Disclaimer>
                 </ItemContainer>
             </DetailsWrapper>
         </Wrapper>
@@ -228,6 +229,11 @@ const Icon = styled.i`
 
 const ProgressContainer = styled(FlexDiv)`
     min-width: 100%;
+`;
+
+const Disclaimer = styled.p`
+    font-size: 12px;
+    font-style: italic;
 `;
 
 export default BadgeOverview;
