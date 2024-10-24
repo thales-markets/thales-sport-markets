@@ -195,3 +195,9 @@ export type Team = {
     name: string;
     isHome: boolean;
 };
+
+export type StakingData = {
+    isPaused: boolean;
+    isUnstaking: boolean;
+    apy: number;
+};

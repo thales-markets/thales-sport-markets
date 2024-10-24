@@ -1,27 +1,102 @@
+import Button from 'components/Button';
+import CollateralSelector from 'components/CollateralSelector';
+import NumericInput from 'components/fields/NumericInput';
+import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { COLLATERAL_ICONS_CLASS_NAMES, CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
+import { SWAP_APPROVAL_BUFFER } from 'constants/markets';
+import { secondsToMilliseconds } from 'date-fns';
+import { BuyTicketStep } from 'enums/tickets';
+import useDebouncedEffect from 'hooks/useDebouncedEffect';
+import useInterval from 'hooks/useInterval';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import useUsersStatsV2Query from 'queries/wallet/useUsersStatsV2Query';
-import React, { Fragment, useCallback, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
-import styled from 'styled-components';
-import { formatCurrencyWithSign } from 'thales-utils';
-import { Coins } from 'thales-utils';
-import { isStableCurrency, sortCollateralBalances } from 'utils/collaterals';
-import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from '../../../../constants/currency';
-import { FlexDivColumn, FlexDivRow } from '../../../../styles/common';
+import { setStakingModalMuteEnd } from 'redux/modules/ui';
+import { getIsConnectedViaParticle, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import styled, { useTheme } from 'styled-components';
+import { FlexDiv, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
+import {
+    bigNumberFormatter,
+    coinParser,
+    Coins,
+    DEFAULT_CURRENCY_DECIMALS,
+    floorNumberToDecimals,
+    formatCurrency,
+    formatCurrencyWithKey,
+    formatCurrencyWithSign,
+    LONG_CURRENCY_DECIMALS,
+} from 'thales-utils';
+import { ThemeInterface } from 'types/ui';
+import {
+    getCollateral,
+    getCollateralAddress,
+    getCollaterals,
+    isStableCurrency,
+    isThalesCurrency,
+    sortCollateralBalances,
+} from 'utils/collaterals';
+import networkConnector from 'utils/networkConnector';
+import {
+    buildTxForApproveTradeWithRouter,
+    buildTxForSwap,
+    checkSwapAllowance,
+    getQuote,
+    getSwapParams,
+    sendTransaction,
+} from 'utils/swap';
+import { delay } from 'utils/timer';
+import { Address } from 'viem';
+import InlineLoader from '../../../../components/InlineLoader';
+import BuyStepsModal from '../../../Markets/Home/Parlay/components/BuyStepsModal';
 
-const UserStats: React.FC = () => {
+type UserStatsProps = {
+    setForceOpenStakingModal: (forceOpenStakingModal: boolean) => void;
+};
+
+const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
+    const theme: ThemeInterface = useTheme();
 
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
+    const walletAddress = useSelector(getWalletAddress) || '';
+    const isWalletConnected = useSelector(getIsWalletConnected);
+    const networkId = useSelector(getNetworkId);
+    const isAppReady = useSelector(getIsAppReady);
+    const isParticle = useSelector(getIsConnectedViaParticle);
+
+    const [buyInAmount, setBuyInAmount] = useState<number | string>('');
+    const [isBuying, setIsBuying] = useState(false);
+    const [isAmountValid, setIsAmountValid] = useState<boolean>(true);
+    const [isFetching, setIsFetching] = useState(false);
+    const [swappedThalesToReceive, setSwappedThalesToReceive] = useState(0);
+    const [swapQuote, setSwapQuote] = useState(0);
+    const [hasSwapAllowance, setHasSwapAllowance] = useState(false);
+    const [buyStep, setBuyStep] = useState(BuyTicketStep.APPROVE_SWAP);
+    const [openBuyStepsModal, setOpenBuyStepsModal] = useState(false);
+    const [swapCollateralIndex, setSwapCollateralIndex] = useState(0);
+
+    const swapCollateralArray = useMemo(
+        () => getCollaterals(networkId).filter((collateral) => !isThalesCurrency(collateral)),
+        [networkId]
+    );
+    const selectedCollateral = useMemo(() => getCollateral(networkId, swapCollateralIndex, swapCollateralArray), [
+        networkId,
+        swapCollateralArray,
+        swapCollateralIndex,
+    ]);
+    const isStableCollateral = isStableCurrency(selectedCollateral);
+    const collateralAddress = useMemo(() => getCollateralAddress(networkId, swapCollateralIndex, swapCollateralArray), [
+        networkId,
+        swapCollateralArray,
+        swapCollateralIndex,
+    ]);
+    const isEth = selectedCollateral === CRYPTO_CURRENCY_MAP.ETH;
 
     const userStatsQuery = useUsersStatsV2Query(walletAddress.toLowerCase(), networkId, { enabled: isWalletConnected });
     const userStats = userStatsQuery.isSuccess && userStatsQuery.data ? userStatsQuery.data : undefined;
@@ -76,101 +151,478 @@ const UserStats: React.FC = () => {
         return sortedBalances;
     }, [exchangeRates, multiCollateralBalances, networkId]);
 
+    const thalesBalance = multiCollateralBalances ? multiCollateralBalances[CRYPTO_CURRENCY_MAP.THALES as Coins] : 0;
+    const paymentTokenBalance: number = useMemo(() => {
+        if (multiCollateralBalances) {
+            return multiCollateralBalances[selectedCollateral];
+        }
+        return 0;
+    }, [multiCollateralBalances, selectedCollateral]);
+
+    const isAmountEntered = Number(buyInAmount) > 0;
+    const insufficientBalance = Number(buyInAmount) > paymentTokenBalance || !paymentTokenBalance;
+    const isButtonDisabled =
+        isBuying || !isAmountEntered || insufficientBalance || !isWalletConnected || swappedThalesToReceive === 0;
+
+    const inputRef = useRef<HTMLDivElement>(null);
+    const inputRefVisible = !!inputRef?.current?.getBoundingClientRect().width;
+
+    useEffect(() => {
+        setIsAmountValid(
+            Number(buyInAmount) === 0 || (Number(buyInAmount) > 0 && Number(buyInAmount) <= paymentTokenBalance)
+        );
+    }, [buyInAmount, paymentTokenBalance]);
+
+    // Clear buyin and errors when network is changed
+    const isMounted = useRef(false);
+    useEffect(() => {
+        // skip first render
+        if (isMounted.current) {
+            setBuyInAmount('');
+        } else {
+            isMounted.current = true;
+        }
+    }, [dispatch, networkId]);
+
+    const swapToThalesParams = useMemo(
+        () =>
+            getSwapParams(
+                networkId,
+                walletAddress as Address,
+                coinParser(buyInAmount.toString(), networkId, selectedCollateral),
+                collateralAddress as Address
+            ),
+        [buyInAmount, collateralAddress, networkId, selectedCollateral, walletAddress]
+    );
+
+    // Set THALES swap receive
+    useDebouncedEffect(() => {
+        if (buyInAmount) {
+            const getSwapQuote = async () => {
+                setIsFetching(true);
+                const quote = await getQuote(networkId, swapToThalesParams);
+
+                setSwappedThalesToReceive(quote);
+                setSwapQuote(Number(buyInAmount) > 0 ? quote / Number(buyInAmount) : 0);
+                setIsFetching(false);
+            };
+
+            getSwapQuote();
+        } else {
+            setSwappedThalesToReceive(0);
+            setSwapQuote(0);
+        }
+    }, [buyInAmount, networkId, swapToThalesParams]);
+
+    // Refresh swap THALES quote on 7s
+    useInterval(
+        async () => {
+            if (!openBuyStepsModal /*&& !tooltipTextBuyInAmount*/) {
+                const quote = await getQuote(networkId, swapToThalesParams);
+                setSwappedThalesToReceive(quote);
+                setSwapQuote(Number(buyInAmount) > 0 ? quote / Number(buyInAmount) : 0);
+            }
+        },
+        buyInAmount ? secondsToMilliseconds(7) : null
+    );
+
+    const setMaxAmount = (value: string | number) => {
+        const decimals = isStableCollateral ? DEFAULT_CURRENCY_DECIMALS : LONG_CURRENCY_DECIMALS;
+        setBuyInAmount(floorNumberToDecimals(Number(value), decimals));
+    };
+
+    // Reset buy step when collateral is changed
+    useEffect(() => {
+        setBuyStep(BuyTicketStep.APPROVE_SWAP);
+    }, [selectedCollateral]);
+
+    // Check swap allowance
+    useEffect(() => {
+        if (isWalletConnected && buyInAmount) {
+            const getSwapAllowance = async () => {
+                const allowance = await checkSwapAllowance(
+                    networkId,
+                    walletAddress as Address,
+                    swapToThalesParams.src,
+                    coinParser(buyInAmount.toString(), networkId, selectedCollateral)
+                );
+
+                setHasSwapAllowance(allowance);
+            };
+
+            getSwapAllowance();
+        }
+    }, [
+        walletAddress,
+        isWalletConnected,
+        buyInAmount,
+        networkId,
+        selectedCollateral,
+        swapToThalesParams.src,
+        isBuying,
+    ]);
+
+    const handleBuyWithThalesSteps = async (
+        initialStep: BuyTicketStep
+    ): Promise<{ step: BuyTicketStep; thalesAmount: number }> => {
+        let step = initialStep;
+        let thalesAmount = swappedThalesToReceive;
+
+        const { multipleCollateral } = networkConnector;
+
+        if (step <= BuyTicketStep.SWAP) {
+            if (!isEth && !hasSwapAllowance) {
+                if (step !== BuyTicketStep.APPROVE_SWAP) {
+                    step = BuyTicketStep.APPROVE_SWAP;
+                    setBuyStep(BuyTicketStep.APPROVE_SWAP);
+                }
+
+                const approveAmount = coinParser(
+                    (Number(buyInAmount) * (1 + SWAP_APPROVAL_BUFFER)).toString(),
+                    networkId,
+                    selectedCollateral
+                );
+                const approveSwapRawTransaction = await buildTxForApproveTradeWithRouter(
+                    networkId,
+                    walletAddress as Address,
+                    swapToThalesParams.src,
+                    approveAmount.toString()
+                );
+
+                try {
+                    const approveTxHash = await sendTransaction(approveSwapRawTransaction);
+
+                    if (approveTxHash) {
+                        await delay(3000); // wait for 1inch API to read correct approval
+                        step = BuyTicketStep.SWAP;
+                        setBuyStep(step);
+                    }
+                } catch (e) {
+                    console.log('Approve swap failed', e);
+                }
+            } else {
+                step = BuyTicketStep.SWAP;
+                setBuyStep(step);
+            }
+        }
+
+        if (step === BuyTicketStep.SWAP) {
+            try {
+                const swapRawTransaction = (await buildTxForSwap(networkId, swapToThalesParams)).tx;
+
+                // check allowance again
+                if (!swapRawTransaction) {
+                    await delay(1800);
+                    const hasRefreshedAllowance = await checkSwapAllowance(
+                        networkId,
+                        walletAddress as Address,
+                        swapToThalesParams.src,
+                        coinParser(buyInAmount.toString(), networkId, selectedCollateral)
+                    );
+                    if (!hasRefreshedAllowance) {
+                        step = BuyTicketStep.APPROVE_SWAP;
+                        setBuyStep(step);
+                    }
+                }
+
+                const balanceBefore = multiCollateralBalances[CRYPTO_CURRENCY_MAP.THALES as Coins];
+                const swapTxHash = swapRawTransaction ? await sendTransaction(swapRawTransaction) : undefined;
+
+                if (swapTxHash) {
+                    step = BuyTicketStep.COMPLETED;
+                    setBuyStep(step);
+
+                    await delay(3000); // wait for THALES balance to increase
+                    const balanceAfter = bigNumberFormatter(
+                        await multipleCollateral?.[CRYPTO_CURRENCY_MAP.THALES as Coins]?.balanceOf(walletAddress)
+                    );
+                    thalesAmount = balanceAfter - balanceBefore;
+                    setSwappedThalesToReceive(thalesAmount);
+                }
+            } catch (e) {
+                console.log('Swap tx failed', e);
+            }
+        }
+
+        return { step, thalesAmount };
+    };
+
+    const handleSubmit = async () => {
+        setIsBuying(true);
+        const toastId = toast.loading(t('market.toast-message.transaction-pending'));
+
+        let step = buyStep;
+        setOpenBuyStepsModal(true);
+        ({ step } = await handleBuyWithThalesSteps(step));
+
+        if (step !== BuyTicketStep.COMPLETED) {
+            toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+            setIsBuying(false);
+            return;
+        }
+        setIsBuying(false);
+        setOpenBuyStepsModal(false);
+        setBuyInAmount('');
+        setBuyStep(BuyTicketStep.APPROVE_SWAP);
+        toast.update(toastId, getSuccessToastOptions(t('profile.stats.swap-success')));
+    };
+
+    const getButton = (text: string, isDisabled: boolean) => {
+        return (
+            <Button
+                backgroundColor={theme.button.background.quaternary}
+                borderColor={theme.button.borderColor.secondary}
+                height="24px"
+                margin="10px 0 5px 0"
+                padding="2px 40px"
+                width="fit-content"
+                fontSize="16px"
+                fontWeight="800"
+                lineHeight="16px"
+                additionalStyles={additionalButtonStyles}
+                onClick={async () => handleSubmit()}
+                disabled={isDisabled}
+            >
+                {text}
+            </Button>
+        );
+    };
+
+    const getSubmitButton = () => {
+        if (insufficientBalance) {
+            return getButton(t(`common.errors.insufficient-balance`), true);
+        }
+        if (!isAmountEntered) {
+            return getButton(t(`common.errors.enter-amount`), true);
+        }
+
+        return getButton(t('profile.stats.get-thales-label'), isButtonDisabled);
+    };
+
     return (
-        <Wrapper>
-            <SectionWrapper>
-                <Header>
-                    <ProfileIcon className="icon icon--profile3" />
-                    {t('profile.stats.profile-data')}
-                </Header>
-                <Section>
-                    <Label>{t('profile.stats.total-volume')}</Label>
-                    <Value>{!userStats ? '-' : formatCurrencyWithSign(USD_SIGN, userStats.volume)}</Value>
-                </Section>
-                <Section>
-                    <Label>{t('profile.stats.trades')}</Label>
-                    <Value>{!userStats ? '-' : userStats.trades}</Value>
-                </Section>
-                <Section>
-                    <Label>{t('profile.stats.highest-win')}</Label>
-                    <Value>{!userStats ? '-' : formatCurrencyWithSign(USD_SIGN, userStats.highestWin)}</Value>
-                </Section>
-                <Section>
-                    <Label>{t('profile.stats.lifetime-wins')}</Label>
-                    <Value>{!userStats ? '-' : userStats.lifetimeWins}</Value>
-                </Section>
-            </SectionWrapper>
-            {isFreeBetExists && (
+        <>
+            <Wrapper>
                 <SectionWrapper>
-                    <SubHeaderWrapper>
-                        <SubHeader>
-                            <SubHeaderIcon className="icon icon--gift" />
-                            {t('profile.stats.free-bet')}
-                        </SubHeader>
-                    </SubHeaderWrapper>
-                    {freeBetBalances &&
-                        Object.keys(freeBetCollateralsSorted).map((currencyKey) => {
-                            return freeBetBalances[currencyKey] ? (
-                                <Section key={`${currencyKey}-freebet`}>
-                                    <SubLabel>
-                                        <CurrencyIcon className={COLLATERAL_ICONS_CLASS_NAMES[currencyKey as Coins]} />
-                                        {currencyKey}
-                                    </SubLabel>
-                                    <SubValue>
-                                        {formatCurrencyWithSign(
-                                            null,
-                                            freeBetBalances ? freeBetBalances[currencyKey] : 0
-                                        )}
-                                        {!exchangeRates?.[currencyKey] && !isStableCurrency(currencyKey as Coins)
-                                            ? '...'
-                                            : ` (${formatCurrencyWithSign(
-                                                  USD_SIGN,
-                                                  getUSDForCollateral(currencyKey as Coins, true)
-                                              )})`}
-                                    </SubValue>
-                                </Section>
-                            ) : (
-                                <Fragment key={`${currencyKey}-freebet`} />
-                            );
-                        })}
+                    <Header>
+                        <ProfileIcon className="icon icon--profile3" />
+                        {t('profile.stats.profile-data')}
+                    </Header>
+                    <Section>
+                        <Label>{t('profile.stats.total-volume')}</Label>
+                        <Value>{!userStats ? '-' : formatCurrencyWithSign(USD_SIGN, userStats.volume)}</Value>
+                    </Section>
+                    <Section>
+                        <Label>{t('profile.stats.trades')}</Label>
+                        <Value>{!userStats ? '-' : userStats.trades}</Value>
+                    </Section>
+                    <Section>
+                        <Label>{t('profile.stats.highest-win')}</Label>
+                        <Value>{!userStats ? '-' : formatCurrencyWithSign(USD_SIGN, userStats.highestWin)}</Value>
+                    </Section>
+                    <Section>
+                        <Label>{t('profile.stats.lifetime-wins')}</Label>
+                        <Value>{!userStats ? '-' : userStats.lifetimeWins}</Value>
+                    </Section>
                 </SectionWrapper>
-            )}
-            {multiCollateralBalances && (
+                {isFreeBetExists && (
+                    <SectionWrapper>
+                        <SubHeaderWrapper>
+                            <SubHeader>
+                                <SubHeaderIcon className="icon icon--gift" />
+                                {t('profile.stats.free-bet')}
+                            </SubHeader>
+                        </SubHeaderWrapper>
+                        {freeBetBalances &&
+                            Object.keys(freeBetCollateralsSorted).map((currencyKey) => {
+                                return freeBetBalances[currencyKey] ? (
+                                    <Section key={`${currencyKey}-freebet`}>
+                                        <SubLabel>
+                                            <CurrencyIcon
+                                                className={COLLATERAL_ICONS_CLASS_NAMES[currencyKey as Coins]}
+                                            />
+                                            {currencyKey}
+                                        </SubLabel>
+                                        <SubValue>
+                                            {formatCurrencyWithSign(
+                                                null,
+                                                freeBetBalances ? freeBetBalances[currencyKey] : 0
+                                            )}
+                                            {!exchangeRates?.[currencyKey] && !isStableCurrency(currencyKey as Coins)
+                                                ? '...'
+                                                : ` (${formatCurrencyWithSign(
+                                                      USD_SIGN,
+                                                      getUSDForCollateral(currencyKey as Coins, true)
+                                                  )})`}
+                                        </SubValue>
+                                    </Section>
+                                ) : (
+                                    <Fragment key={`${currencyKey}-freebet`} />
+                                );
+                            })}
+                    </SectionWrapper>
+                )}
+                {multiCollateralBalances && (
+                    <SectionWrapper>
+                        <SubHeaderWrapper>
+                            <SubHeader>
+                                <SubHeaderIcon className="icon icon--wallet-connected" />
+                                {t('profile.stats.wallet')}
+                            </SubHeader>
+                        </SubHeaderWrapper>
+                        {freeBetBalances &&
+                            Object.keys(multiCollateralsSorted).map((currencyKey) => {
+                                return multiCollateralBalances[currencyKey] ? (
+                                    <Section key={currencyKey}>
+                                        <SubLabel>
+                                            <CurrencyIcon
+                                                className={COLLATERAL_ICONS_CLASS_NAMES[currencyKey as Coins]}
+                                            />
+                                            {currencyKey}
+                                        </SubLabel>
+                                        <SubValue>
+                                            {formatCurrencyWithSign(
+                                                null,
+                                                multiCollateralBalances ? multiCollateralBalances[currencyKey] : 0
+                                            )}
+                                            {!exchangeRates?.[currencyKey] && !isStableCurrency(currencyKey as Coins)
+                                                ? '...'
+                                                : ` (${formatCurrencyWithSign(
+                                                      USD_SIGN,
+                                                      getUSDForCollateral(currencyKey as Coins)
+                                                  )})`}
+                                        </SubValue>
+                                    </Section>
+                                ) : (
+                                    <Fragment key={currencyKey} />
+                                );
+                            })}
+                    </SectionWrapper>
+                )}
+            </Wrapper>
+            <Wrapper>
                 <SectionWrapper>
-                    <SubHeaderWrapper>
-                        <SubHeader>
-                            <SubHeaderIcon className="icon icon--wallet-connected" />
-                            {t('profile.stats.wallet')}
-                        </SubHeader>
-                    </SubHeaderWrapper>
-                    {freeBetBalances &&
-                        Object.keys(multiCollateralsSorted).map((currencyKey) => {
-                            return multiCollateralBalances[currencyKey] ? (
-                                <Section key={currencyKey}>
-                                    <SubLabel>
-                                        <CurrencyIcon className={COLLATERAL_ICONS_CLASS_NAMES[currencyKey as Coins]} />
-                                        {currencyKey}
-                                    </SubLabel>
-                                    <SubValue>
-                                        {formatCurrencyWithSign(
-                                            null,
-                                            multiCollateralBalances ? multiCollateralBalances[currencyKey] : 0
-                                        )}
-                                        {!exchangeRates?.[currencyKey] && !isStableCurrency(currencyKey as Coins)
-                                            ? '...'
-                                            : ` (${formatCurrencyWithSign(
-                                                  USD_SIGN,
-                                                  getUSDForCollateral(currencyKey as Coins)
-                                              )})`}
-                                    </SubValue>
-                                </Section>
+                    <Title>{t('profile.stats.buy-thales-title')}</Title>
+                    <InputContainer ref={inputRef}>
+                        <NumericInput
+                            value={buyInAmount}
+                            onChange={(e) => {
+                                setBuyInAmount(e.target.value);
+                            }}
+                            showValidation={inputRefVisible && !isAmountValid}
+                            validationMessage={t('common.errors.insufficient-balance-wallet', {
+                                currencyKey: selectedCollateral,
+                            })}
+                            inputFontWeight="600"
+                            inputPadding="5px 10px"
+                            borderColor={theme.input.borderColor.tertiary}
+                            disabled={isBuying}
+                            label={t('profile.stats.swap-to-thales-label')}
+                            placeholder={t('liquidity-pool.deposit-amount-placeholder')}
+                            currencyComponent={
+                                <CollateralSelector
+                                    collateralArray={swapCollateralArray}
+                                    selectedItem={swapCollateralIndex}
+                                    onChangeCollateral={(index: number) => {
+                                        setBuyInAmount('');
+                                        setSwapCollateralIndex(index);
+                                    }}
+                                    isDetailedView
+                                    collateralBalances={multiCollateralBalances}
+                                    exchangeRates={exchangeRates}
+                                    dropDownWidth={inputRef.current?.getBoundingClientRect().width + 'px'}
+                                    preventPaymentCollateralChange
+                                />
+                            }
+                            balance={formatCurrencyWithKey(selectedCollateral, paymentTokenBalance)}
+                            onMaxButton={() => setMaxAmount(paymentTokenBalance)}
+                        />
+                    </InputContainer>
+                    <Section>
+                        <SubLabel>{t('profile.stats.thales-price-label')}:</SubLabel>
+                        <Value>
+                            {isFetching ? (
+                                <InlineLoader />
+                            ) : Number(swapQuote) === 0 ? (
+                                '-'
                             ) : (
-                                <Fragment key={currencyKey} />
-                            );
-                        })}
+                                formatCurrencyWithKey(selectedCollateral, 1 / swapQuote)
+                            )}
+                        </Value>
+                    </Section>
+                    <Section>
+                        <SubLabel>{t('profile.stats.thales-to-receive')}:</SubLabel>
+                        <Value>
+                            {isFetching ? (
+                                <InlineLoader />
+                            ) : swappedThalesToReceive === 0 ? (
+                                '-'
+                            ) : (
+                                formatCurrency(swappedThalesToReceive)
+                            )}
+                        </Value>
+                    </Section>
+                    {getSubmitButton()}
                 </SectionWrapper>
+                {openBuyStepsModal && (
+                    <BuyStepsModal
+                        step={(buyStep as unknown) as BuyTicketStep}
+                        isFailed={!isBuying}
+                        currencyKey={selectedCollateral}
+                        onSubmit={handleSubmit}
+                        onClose={() => setOpenBuyStepsModal(false)}
+                        onlySwap={true}
+                    />
+                )}
+            </Wrapper>
+            {!isParticle && thalesBalance > 1 && (
+                <Wrapper>
+                    <SectionWrapper>
+                        <Title>{t('profile.stats.stake-title')}</Title>
+                        <Section>
+                            <SubLabel>
+                                <CurrencyIcon
+                                    className={COLLATERAL_ICONS_CLASS_NAMES[CRYPTO_CURRENCY_MAP.THALES as Coins]}
+                                />
+                                {CRYPTO_CURRENCY_MAP.THALES}
+                            </SubLabel>
+                            <SubValue>{formatCurrency(thalesBalance)}</SubValue>
+                        </Section>
+                        <Button
+                            backgroundColor={theme.button.textColor.tertiary}
+                            borderColor={theme.button.textColor.tertiary}
+                            height="24px"
+                            margin="10px 0 5px 0"
+                            padding="2px 40px"
+                            width="fit-content"
+                            fontSize="16px"
+                            fontWeight="800"
+                            lineHeight="16px"
+                            additionalStyles={additionalButtonStyles}
+                            onClick={() => {
+                                setForceOpenStakingModal(true);
+                                dispatch(setStakingModalMuteEnd(0));
+                            }}
+                        >
+                            {t('profile.stats.stake-label')}
+                        </Button>
+                        <Description>
+                            <Trans
+                                i18nKey={'profile.stats.weekly-rewards'}
+                                components={{
+                                    stakingPageLink: (
+                                        <StakingPageLink
+                                            href={'https://www.thales.io/token/staking'}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                        />
+                                    ),
+                                }}
+                            />
+                        </Description>
+                    </SectionWrapper>
+                </Wrapper>
             )}
-        </Wrapper>
+        </>
     );
 };
 
@@ -184,13 +636,25 @@ const Header = styled(FlexDivRow)`
     align-items: center;
 `;
 
+const Description = styled.span`
+    color: ${(props) => props.theme.textColor.primary};
+    font-size: 13px;
+    line-height: 15px;
+    font-weight: 500;
+    text-align: center;
+    margin: 10px 0;
+`;
+
+const Title = styled(Description)``;
+
 const Wrapper = styled(FlexDivColumn)`
     background: ${(props) => props.theme.background.quinary};
     border-radius: 5px;
     width: 100%;
-    padding: 10px 15px 20px 15px;
+    padding: 10px 15px 15px 15px;
     gap: 4px;
     flex: initial;
+    margin-bottom: 8px;
 `;
 
 const Section = styled.div`
@@ -270,8 +734,24 @@ const CurrencyIcon = styled.i`
     color: ${(props) => props.theme.textColor.quaternary};
 `;
 
-const SectionWrapper = styled.div`
+const SectionWrapper = styled(FlexDivColumnCentered)`
     width: 100%;
+`;
+
+const StakingPageLink = styled.a`
+    color: ${(props) => props.theme.link.textColor.primary};
+    &:hover {
+        text-decoration: underline;
+    }
+`;
+
+const additionalButtonStyles = {
+    alignSelf: 'center',
+};
+
+const InputContainer = styled(FlexDiv)`
+    margin-top: 10px;
+    margin-bottom: 5px;
 `;
 
 export default UserStats;
