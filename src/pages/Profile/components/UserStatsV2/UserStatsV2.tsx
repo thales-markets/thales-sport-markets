@@ -357,6 +357,7 @@ const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
         setIsBuying(false);
         setOpenBuyStepsModal(false);
         setBuyInAmount('');
+        setBuyStep(BuyTicketStep.APPROVE_SWAP);
         toast.update(toastId, getSuccessToastOptions(t('profile.stats.swap-success')));
     };
 
