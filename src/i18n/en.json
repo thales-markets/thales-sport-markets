@@ -689,7 +689,8 @@
                 "liquidity-pool": "Provide Liquidity",
                 "promotions": "Promotions",
                 "speed-markets": "Speed markets",
-                "digital-options": "Digital options"
+                "digital-options": "Digital options",
+                "resources": "Resources"
             },
             "buttons": {
                 "switch": "Switch",
