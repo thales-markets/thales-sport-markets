@@ -1,7 +1,6 @@
 import { SUPPORTED_NETWORKS, SUPPORTED_NETWORKS_PARAMS } from 'constants/network';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { Network } from 'enums/network';
-import { BigNumber } from 'ethers';
 import { localStore } from 'thales-utils';
 import { SupportedNetwork } from '../types/network';
 import { getCollaterals } from './collaterals';
@@ -11,10 +10,10 @@ export const isNetworkSupported = (networkId: SupportedNetwork): boolean => {
     return !!SUPPORTED_NETWORKS[networkId];
 };
 
-export const checkAllowance = async (amount: BigNumber, token: any, walletAddress: string, spender: string) => {
+export const checkAllowance = async (amount: bigint, token: any, walletAddress: string, spender: string) => {
     try {
-        const approved = await token.allowance(walletAddress, spender);
-        return approved.gte(amount);
+        const approved = await token.read.allowance([walletAddress, spender]);
+        return approved >= amount;
     } catch (err: any) {
         console.log(err);
         return false;
