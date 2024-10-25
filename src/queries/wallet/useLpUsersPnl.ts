@@ -81,7 +81,8 @@ const useLpUsersPnl = (
                         return (
                             ticket.sportMarkets.length === 1 &&
                             ticket.sportMarkets[0].isPlayerPropsMarket &&
-                            !ticket.isOpen
+                            !ticket.isOpen &&
+                            ticket.sportMarkets[0].maturity > 1729811883000
                         );
                     });
 
