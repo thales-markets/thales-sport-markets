@@ -93,11 +93,12 @@ const getSimplePositionText = (
 ) => {
     if (leagueId === League.US_ELECTION && positionNames && positionNames[position]) {
         const text = positionNames[position]
-            .replace('_', ' ')
+            .replaceAll('_', ' ')
             .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
+
         return marketType >= MarketType.US_ELECTION_WINNING_PARTY_ARIZONA &&
-            marketType <= MarketType.US_ELECTION_WINNING_PARTY_WINSCONSIN
-            ? text.split(' ')[1]
+            marketType <= MarketType.US_ELECTION_WINNING_PARTY_NORTH_CAROLINA
+            ? text.split(' ')[marketType === MarketType.US_ELECTION_WINNING_PARTY_NORTH_CAROLINA ? 2 : 1]
             : text;
     }
     if (marketType === MarketType.CORRECT_SCORE && positionNames && positionNames[position]) {
@@ -139,6 +140,9 @@ const getSimplePositionText = (
     }
 
     if (isPlayerPropsMarket(marketType) || isTotalMarket(marketType) || isSpreadMarket(marketType)) {
+        if (line === Infinity) {
+            return '-';
+        }
         return extendedText
             ? isSpreadMarket(marketType)
                 ? `${position === 0 ? homeTeam : awayTeam} (${getLineInfo(marketType, position, line)})`

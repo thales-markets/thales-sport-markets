@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 
 import { OVERDROP_LEVELS } from 'constants/overdrop';
+import { ModalTypes } from 'enums/overdrop';
 import { Trans, useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
 import { OverdropLevel } from 'types/ui';
 import BaseModal from '../BaseModal';
 import LargeBadge from '../LargeBadge';
-import { ModalTypes } from 'enums/overdrop';
 
 type LevelUpModalProps = {
     currentLevel: number;
@@ -66,6 +66,7 @@ const LevelUpModal: React.FC<LevelUpModalProps> = ({ currentLevel, onClose }) =>
                     })}
                     <Arrow className={'icon-homepage icon--arrow-right'} onClick={() => handleOnNext()} />
                 </BadgeWrapper>
+                <Disclaimer>{t('overdrop.leveling-tree.payout-disclaimer')}</Disclaimer>
             </Wrapper>
         </BaseModal>
     );
@@ -114,6 +115,12 @@ const Arrow = styled.i`
     color: ${(props) => props.theme.button.background.senary};
     font-size: 18px;
     cursor: pointer;
+`;
+
+const Disclaimer = styled.p`
+    font-size: 12px;
+    font-style: italic;
+    color: ${(props) => props.theme.overdrop.textColor.primary};
 `;
 
 export default LevelUpModal;

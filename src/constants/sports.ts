@@ -75,7 +75,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         scoringType: ScoringType.GOALS,
         matchResolveType: MatchResolveType.OVERTIME,
         periodType: PeriodType.PERIOD,
-        isDrawAvailable: false,
+        isDrawAvailable: true,
         priority: 501,
         hidden: false,
     },
@@ -1167,7 +1167,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 167,
-        hidden: true,
+        hidden: false,
     },
     [League.INDIA_SUPER_LEAGUE]: {
         sport: Sport.SOCCER,
@@ -1189,7 +1189,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 169,
-        hidden: true,
+        hidden: false,
     },
     [League.AUSTRIA_BUNDESLIGA]: {
         sport: Sport.SOCCER,
@@ -1374,4 +1374,4 @@ export const OLYMPIC_LEAGUES = [
     League.SUMMER_OLYMPICS_TABLE_TENNIS,
 ];
 
-export const PLAYER_PROPS_COMBINING_ENABLED_LEAGUES = [League.NBA];
+export const PLAYER_PROPS_COMBINING_ENABLED_LEAGUES = [League.NBA, League.WNBA, League.EUROLEAGUE];

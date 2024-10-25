@@ -814,7 +814,8 @@
                 "buy": "Buy with {{currencyKey}}"
             }
         },
-        "zero-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",
+        "zero-odds-tooltip": "Odds unavailable at the moment.",
+        "low-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",
         "discounted-per": "Discounted as per",
         "incentivized-tooltip": "Triple Thrill: EPL, NFL, and NBA Rewards. A whopping total of 90k OP, 90k ARB, and 180k THALES will be distributed across the three leagues, with each league having its own dedicated 30k OP or ARB + 30k THALES bucket per chain. Check more details <detailsLink>here</detailsLink>.",
         "incentivized-markets": "INCENTIVIZED MARKETS",
@@ -1100,7 +1101,8 @@
             "social-multiplier": "Social XP multiplier",
             "current-rewards": "Current estimated rewards",
             "next-thales-rewards-at": "Next Thales free bet rewards at",
-            "rank": "Rank"
+            "rank": "Rank",
+            "disclaimer": "*Wallets suspected of gaming the system can be disqualified."
         },
         "leveling-tree": {
             "heading": "The overdrop farming league",
@@ -1125,7 +1127,8 @@
                 "twitter-content": "If you share your Overtime bet on Twitter in the form of a <bold>Flex Card</bold>, you will activate a <bold>3 day long Twitter Flex Boost of +10%.</bold>  This specific boost is valid for all trades executed within those 72 hours. <bold>After the 72 hours</bold> have elapsed, the boost expires and you can activate it again by sharing a new flex card on Twitter under the same conditions.",
                 "loyalty-boost": "Loyalty boost",
                 "loyalty-boost-content": "The Loyalty XP Boost gives you up to 25% permanent boost on all your general XP accrual, depending on your level. Starting at 5% boost on Level 1, you gain another +5% increase on reaching every fifth level. You reach max Loyalty XP boost of 25% when you reach Level 20 (GOAT) with having accrued 5,000,000 XP points. You can see the XP levels breakdown on the LEVELING TREE page."
-            }
+            },
+            "payout-disclaimer": "*won Free Bets are airdropped each Friday."
         },
         "xp-details": {
             "days-in-row": "Days in a row",

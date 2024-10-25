@@ -27,6 +27,7 @@ import {
     getIsMarketSelected,
     getMarketSearch,
     getMarketTypeFilter,
+    getSelectedMarket,
     getSportFilter,
     getStatusFilter,
     getTagFilter,
@@ -86,6 +87,7 @@ const Home: React.FC = () => {
     const location = useLocation();
     const isMobile = useSelector(getIsMobile);
     const isMarketSelected = useSelector(getIsMarketSelected);
+    const selectedMarket = useSelector(getSelectedMarket);
 
     const [showBurger, setShowBurger] = useState<boolean>(false);
     const [showActive, setShowActive] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_ACTIVE, true);
@@ -435,6 +437,35 @@ const Home: React.FC = () => {
         return liveMarketsCount;
     }, [liveMarketsCountPerTag, favouriteLeagues]);
 
+    const selectedMarketData = useMemo(() => {
+        if (selectedMarket) {
+            if (selectedMarket.live) {
+                const liveMarkets: SportMarkets =
+                    liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data
+                        ? liveSportMarketsQuery.data.live
+                        : [];
+                return liveMarkets.find(
+                    (market) => market.gameId.toLowerCase() === selectedMarket?.gameId.toLowerCase()
+                );
+            } else {
+                const openSportMarkets: SportMarkets =
+                    openSportMarketsQuery.isSuccess && openSportMarketsQuery.data
+                        ? openSportMarketsQuery.data[StatusFilter.OPEN_MARKETS]
+                        : [];
+
+                return openSportMarkets.find(
+                    (market) => market.gameId.toLowerCase() === selectedMarket?.gameId.toLowerCase()
+                );
+            }
+        }
+    }, [
+        openSportMarketsQuery.data,
+        openSportMarketsQuery.isSuccess,
+        liveSportMarketsQuery.data,
+        liveSportMarketsQuery.isSuccess,
+        selectedMarket,
+    ]);
+
     const resetFilters = useCallback(() => {
         dispatch(setStatusFilter(StatusFilter.OPEN_MARKETS));
         setStatusParam(StatusFilter.OPEN_MARKETS);
@@ -633,8 +664,7 @@ const Home: React.FC = () => {
                             <SportFilterMobile setAvailableTags={setAvailableTags} tagsList={tagsList} />
                             {!marketsLoading &&
                                 finalMarkets.length > 0 &&
-                                statusFilter === StatusFilter.OPEN_MARKETS &&
-                                sportFilter !== SportFilter.Live && (
+                                (statusFilter === StatusFilter.OPEN_MARKETS || sportFilter === SportFilter.Live) && (
                                     <Header availableMarketTypes={availableMarketTypes} />
                                 )}
                             <FilterTagsMobile />
@@ -667,8 +697,8 @@ const Home: React.FC = () => {
                             ) : (
                                 <>
                                     {!isMobile &&
-                                        statusFilter === StatusFilter.OPEN_MARKETS &&
-                                        sportFilter !== SportFilter.Live && (
+                                        (statusFilter === StatusFilter.OPEN_MARKETS ||
+                                            sportFilter === SportFilter.Live) && (
                                             <Header availableMarketTypes={availableMarketTypes} />
                                         )}
                                     <FlexDivRow>
@@ -685,18 +715,24 @@ const Home: React.FC = () => {
                                         )}
                                         {isMobile ? (
                                             <ReactModal
-                                                isOpen={isMarketSelected && statusFilter === StatusFilter.OPEN_MARKETS}
+                                                isOpen={
+                                                    isMarketSelected &&
+                                                    (statusFilter === StatusFilter.OPEN_MARKETS ||
+                                                        !!selectedMarket?.live)
+                                                }
                                                 onRequestClose={() => {
                                                     dispatch(setSelectedMarket(undefined));
                                                 }}
                                                 shouldCloseOnOverlayClick={false}
                                                 style={getCustomModalStyles(theme, '10')}
                                             >
-                                                <SelectedMarket />
+                                                <SelectedMarket market={selectedMarketData} />
                                             </ReactModal>
                                         ) : (
                                             isMarketSelected &&
-                                            statusFilter === StatusFilter.OPEN_MARKETS && <SelectedMarket />
+                                            (statusFilter === StatusFilter.OPEN_MARKETS || !!selectedMarket?.live) && (
+                                                <SelectedMarket market={selectedMarketData} />
+                                            )
                                         )}
                                     </FlexDivRow>
                                 </>

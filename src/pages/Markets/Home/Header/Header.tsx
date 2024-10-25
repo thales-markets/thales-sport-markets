@@ -81,7 +81,7 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitc
 
     const marketToCheck = market || selectedMarket;
 
-    const marketQuery = useSportMarketV2Query(selectedMarket?.gameId || '', true, networkId, {
+    const marketQuery = useSportMarketV2Query(selectedMarket?.gameId || '', true, !!marketToCheck?.live, networkId, {
         enabled: isAppReady && !market && !!selectedMarket,
     });
 
@@ -108,6 +108,7 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitc
 
                 marketTypeGroups = marketTypeGroups.filter((group: MarketTypeGroup) => {
                     const marketTypes = (MarketTypeGroupsBySport[marketToCheck.sport] || {})[group];
+
                     return marketTypes
                         ? marketTypes.some((marketType: MarketType) =>
                               marketToCheckAvailableMarketTypes.includes(marketType)
@@ -115,6 +116,7 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitc
                         : false;
                 });
             }
+
             return marketTypeGroups;
         } else {
             return availableMarketTypes
