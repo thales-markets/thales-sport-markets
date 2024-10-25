@@ -1,14 +1,12 @@
 import { Banner, useBannersQuery } from 'queries/banners/useBannersQuery';
 import React, { useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import { getNetworkId } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
+import { useChainId } from 'wagmi';
 
 const BannerCarousel: React.FC = () => {
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const networkId = useChainId();
 
     const bannersQuery = useBannersQuery(networkId);
 
