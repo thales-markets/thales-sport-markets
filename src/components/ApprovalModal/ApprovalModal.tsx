@@ -2,15 +2,15 @@ import Button from 'components/Button';
 import Modal from 'components/Modal';
 import Checkbox from 'components/fields/Checkbox';
 import NumericInput from 'components/fields/NumericInput';
-import { BigNumber, ethers } from 'ethers';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
-import { bigNumberFormatter, coinParser } from 'thales-utils';
 import { getCollateral } from 'utils/collaterals';
+import { bigNumberFormatter, coinParser } from 'utils/formatters/viem';
+import { maxUint256 } from 'viem';
 import { useAccount, useChainId } from 'wagmi';
 
 type ApprovalModalProps = {
@@ -18,7 +18,7 @@ type ApprovalModalProps = {
     collateralIndex?: number;
     tokenSymbol: string;
     isAllowing: boolean;
-    onSubmit: (approveAmount: BigNumber) => void;
+    onSubmit: (approveAmount: bigint) => void;
     onClose: () => void;
 };
 
@@ -40,7 +40,7 @@ const ApprovalModal: React.FC<ApprovalModalProps> = ({
     const [approveAll, setApproveAll] = useState<boolean>(true);
     const [isAmountValid, setIsAmountValid] = useState<boolean>(true);
 
-    const maxApproveAmount = bigNumberFormatter(ethers.constants.MaxUint256);
+    const maxApproveAmount = bigNumberFormatter(maxUint256);
     const isAmountEntered = Number(amount) > 0;
     const isButtonDisabled = !isConnected || isAllowing || (!approveAll && (!isAmountEntered || !isAmountValid));
 
@@ -70,10 +70,7 @@ const ApprovalModal: React.FC<ApprovalModalProps> = ({
             return <Button disabled={true}>{t(`common.errors.enter-amount`)}</Button>;
         }
         return (
-            <Button
-                disabled={isButtonDisabled}
-                onClick={() => onSubmit(approveAll ? ethers.constants.MaxUint256 : amountConverted)}
-            >
+            <Button disabled={isButtonDisabled} onClick={() => onSubmit(approveAll ? maxUint256 : amountConverted)}>
                 {!isAllowing
                     ? t('common.enable-wallet-access.approve-label', { currencyKey: tokenSymbol })
                     : t('common.enable-wallet-access.approve-progress-label', {
