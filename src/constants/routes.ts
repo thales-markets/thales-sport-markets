@@ -20,8 +20,8 @@ const ROUTES = {
     Ticket: '/tickets/:ticketAddress',
     Overdrop: '/overdrop',
     SEO: {
-        Home: '/seo',
-        SeoArticle: '/seo/:seoId',
+        Home: '/resources',
+        SeoArticle: '/resources/:seoId',
     },
 };
 
