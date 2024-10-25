@@ -5,9 +5,8 @@ import { INCENTIVIZED_LEAGUES } from 'constants/markets';
 import { Network } from 'enums/network';
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { getNetworkId } from 'redux/modules/wallet';
 import styled from 'styled-components';
+import { useChainId } from 'wagmi';
 import { League } from '../../enums/sports';
 
 type IncentivizedLeagueProps = {
@@ -19,7 +18,8 @@ type IncentivizedLeagueProps = {
 
 const IncentivizedLeague: React.FC<IncentivizedLeagueProps> = ({ league, maturityDate, fontSize, onlyLogo }) => {
     const { t } = useTranslation();
-    const networkId = useSelector(getNetworkId);
+
+    const networkId = useChainId();
 
     const incentivizedLeague = INCENTIVIZED_LEAGUES[league];
     const rewards = incentivizedLeague

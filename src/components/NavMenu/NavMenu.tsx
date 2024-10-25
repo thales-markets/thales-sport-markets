@@ -14,12 +14,13 @@ import { useTranslation } from 'react-i18next';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { getIsConnectedViaParticle, getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
+import { getIsConnectedViaParticle } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
 import { getNetworkIconClassNameByNetworkId, getNetworkNameByNetworkId } from 'utils/network';
 import { buildHref } from 'utils/routes';
+import { useAccount, useChainId } from 'wagmi';
 import {
     CloseIcon,
     FooterContainer,
@@ -49,8 +50,9 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
     const location = useLocation();
     const theme: ThemeInterface = useTheme();
 
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const networkId = useChainId();
+    const { isConnected } = useAccount();
+
     const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
 
     const [openFreeBetModal, setOpenFreeBetModal] = useState<boolean>(false);
@@ -89,7 +91,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                 <ItemsContainer>
                     {NAV_MENU_FIRST_SECTION.map((item, index) => {
                         if (!item.supportedNetworks.includes(networkId)) return;
-                        if (item.name == 'profile' && !isWalletConnected) return;
+                        if (item.name == 'profile' && !isConnected) return;
                         return (
                             <SPAAnchor key={index} href={buildHref(item.route)}>
                                 <ItemContainer
@@ -97,7 +99,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                                     active={location.pathname === item.route}
                                     onClick={() => setNavMenuVisibility(null)}
                                 >
-                                    {isWalletConnected ? (
+                                    {isConnected ? (
                                         <ProfileIconWidget avatarSize={25} iconColor={theme.textColor.primary} />
                                     ) : (
                                         <NavIcon className={item.iconClass} active={location.pathname === item.route} />
