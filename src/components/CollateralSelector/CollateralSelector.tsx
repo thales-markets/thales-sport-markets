@@ -2,7 +2,7 @@ import { USD_SIGN } from 'constants/currency';
 import { Rates } from 'queries/rates/useExchangeRatesQuery';
 import React, { useCallback, useMemo, useState } from 'react';
 import OutsideClickHandler from 'react-outside-click-handler';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import {
     FlexDivCentered,
@@ -11,12 +11,11 @@ import {
     FlexDivSpaceBetween,
     FlexDivStart,
 } from 'styles/common';
-import { formatCurrencyWithSign } from 'thales-utils';
-import { Coins } from 'thales-utils';
+import { Coins, formatCurrencyWithSign } from 'thales-utils';
 import { isStableCurrency } from 'utils/collaterals';
 import { getNetworkNameByNetworkId } from 'utils/network';
+import { useChainId } from 'wagmi';
 import { setPaymentSelectedCollateralIndex } from '../../redux/modules/ticket';
-import { getNetworkId } from '../../redux/modules/wallet';
 
 type CollateralSelectorProps = {
     collateralArray: Array<string>;
@@ -52,7 +51,8 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
     preventPaymentCollateralChange,
 }) => {
     const dispatch = useDispatch();
-    const networkId = useSelector(getNetworkId);
+
+    const networkId = useChainId();
 
     const [open, setOpen] = useState(false);
 
