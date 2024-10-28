@@ -45,7 +45,7 @@ const getLpStats = async (
                 ticket.sportMarkets.length === 1 &&
                 ticket.sportMarkets[0].isPlayerPropsMarket &&
                 !ticket.isOpen &&
-                ticket.sportMarkets[0].maturity > 1729811883000
+                ticket.sportMarkets[0].maturity > 1730039659000
             );
         });
 
