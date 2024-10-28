@@ -13,7 +13,6 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getOddsType } from 'redux/modules/ui';
-import { getNetworkId } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
 import {
     Coins,
@@ -30,6 +29,7 @@ import { formatMarketOdds } from 'utils/markets';
 import { getMatchTeams, getPositionTextV2, getTeamNameV2, getTitleText } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
 import { formatTicketOdds, getTicketMarketOdd, getTicketMarketStatus, tableSortByStatus } from 'utils/tickets';
+import { useChainId, useClient } from 'wagmi';
 import {
     ExpandedRowWrapper,
     ExternalLink,
@@ -80,15 +80,21 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
     const theme: ThemeInterface = useTheme();
     const isMobile = useSelector(getIsMobile);
     const selectedOddsType = useSelector(getOddsType);
-    const networkId = useSelector(getNetworkId);
+
+    const networkId = useChainId();
+    const client = useClient();
+
     const isAppReady = useSelector(getIsAppReady);
 
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
     const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps | undefined>(undefined);
 
-    const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
-        enabled: isAppReady,
-    });
+    const exchangeRatesQuery = useExchangeRatesQuery(
+        { networkId, client },
+        {
+            enabled: isAppReady,
+        }
+    );
     const exchangeRates: Rates | undefined =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : undefined;
 
