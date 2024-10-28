@@ -23,6 +23,7 @@ import {
 } from 'constants/markets';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
 import { secondsToMilliseconds } from 'date-fns';
+import { ContractType } from 'enums/contract';
 import { OddsType } from 'enums/markets';
 import { BuyTicketStep } from 'enums/tickets';
 import { BigNumber, ethers } from 'ethers';
@@ -59,14 +60,7 @@ import {
     setPaymentSelectedCollateralIndex,
 } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
-import {
-    getIsAA,
-    getIsConnectedViaParticle,
-    getIsWalletConnected,
-    getNetworkId,
-    getWalletAddress,
-    setWalletConnectModalVisibility,
-} from 'redux/modules/wallet';
+import { getIsBiconomy, getIsConnectedViaParticle, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { BoldContent, FlexDiv, FlexDivCentered } from 'styles/common';
@@ -74,10 +68,7 @@ import {
     Coins,
     DEFAULT_CURRENCY_DECIMALS,
     LONG_CURRENCY_DECIMALS,
-    bigNumberFormatter,
     ceilNumberToDecimals,
-    coinFormatter,
-    coinParser,
     floorNumberToDecimals,
     formatCurrency,
     formatCurrencyWithKey,
@@ -89,7 +80,9 @@ import {
 import { SportsAmmData, TicketMarket } from 'types/markets';
 import { OverdropMultiplier, OverdropUserData } from 'types/overdrop';
 import { OverdropLevel, ThemeInterface } from 'types/ui';
-import { executeBiconomyTransaction, getGasFeesForTx } from 'utils/biconomy';
+import { ViemContract } from 'types/viem';
+import { executeBiconomyTransaction } from 'utils/biconomy';
+import biconomyConnector from 'utils/biconomyWallet';
 import {
     getCollateral,
     getCollateralAddress,
@@ -103,11 +96,12 @@ import {
     mapMultiCollateralBalances,
 } from 'utils/collaterals';
 import multipleCollateral from 'utils/contracts/multipleCollateralContract';
+import { bigNumberFormatter, coinFormatter, coinParser } from 'utils/formatters/viem';
 import { getLiveTradingProcessorTransaction } from 'utils/liveTradingProcessor';
 import { formatMarketOdds } from 'utils/markets';
 import { getTradeData } from 'utils/marketsV2';
 import { checkAllowance } from 'utils/network';
-import networkConnector from 'utils/networkConnector';
+import { getContractInstance } from 'utils/networkConnector';
 import {
     formatPoints,
     getCurrentLevelByPoints,
@@ -132,6 +126,7 @@ import { getAddedPayoutOdds } from 'utils/tickets';
 import { delay } from 'utils/timer';
 import { getKeepSelectionFromStorage, setKeepSelectionToStorage } from 'utils/ui';
 import { Address } from 'viem';
+import { useAccount, useChainId, useClient } from 'wagmi';
 import BuyStepsModal from '../BuyStepsModal';
 import SuggestedAmount from '../SuggestedAmount';
 import {
@@ -206,10 +201,13 @@ const Ticket: React.FC<TicketProps> = ({
     }, [markets]);
 
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const isAA = useSelector((state: RootState) => getIsAA(state));
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+
+    const networkId = useChainId();
+    const client = useClient();
+    const { address, isConnected } = useAccount();
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+
     const isParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
     const selectedOddsType = useSelector(getOddsType);
     const ticketPayment = useSelector(getTicketPayment);
@@ -252,7 +250,7 @@ const Ticket: React.FC<TicketProps> = ({
     const [buyStep, setBuyStep] = useState(BuyTicketStep.APPROVE_SWAP);
     const [openBuyStepsModal, setOpenBuyStepsModal] = useState(false);
 
-    const userMultipliersQuery = useUserMultipliersQuery(walletAddress, { enabled: isAppReady && isWalletConnected });
+    const userMultipliersQuery = useUserMultipliersQuery(walletAddress, { enabled: isAppReady && isConnected });
 
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
     const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
@@ -340,9 +338,12 @@ const Ticket: React.FC<TicketProps> = ({
         ];
     }, [swapToThales, userMultipliersQuery.data, userMultipliersQuery.isSuccess, markets, isThales]);
 
-    const ammContractsPaused = useAMMContractsPausedQuery(networkId, {
-        enabled: isAppReady,
-    });
+    const ammContractsPaused = useAMMContractsPausedQuery(
+        { networkId, client },
+        {
+            enabled: isAppReady,
+        }
+    );
 
     const ammContractsStatusData = useMemo(() => {
         if (ammContractsPaused.data && ammContractsPaused.isSuccess) {
@@ -356,16 +357,27 @@ const Ticket: React.FC<TicketProps> = ({
         }
     }, [ammContractsStatusData]);
 
-    const sportsAmmDataQuery = useSportsAmmDataQuery(networkId, {
-        enabled: isAppReady,
-    });
-    const multipleCollateralBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
-        enabled: isAppReady && isWalletConnected,
-    });
+    const sportsAmmDataQuery = useSportsAmmDataQuery(
+        { networkId, client },
+        {
+            enabled: isAppReady,
+        }
+    );
+    const multipleCollateralBalances = useMultipleCollateralBalanceQuery(
+        walletAddress,
+        { networkId, client },
+        {
+            enabled: isAppReady && isConnected,
+        }
+    );
 
-    const freeBetCollateralBalancesQuery = useFreeBetCollateralBalanceQuery(walletAddress, networkId, {
-        enabled: isAppReady && isWalletConnected,
-    });
+    const freeBetCollateralBalancesQuery = useFreeBetCollateralBalanceQuery(
+        walletAddress,
+        { networkId, client },
+        {
+            enabled: isAppReady && isConnected,
+        }
+    );
 
     const freeBetCollateralBalances =
         freeBetCollateralBalancesQuery?.isSuccess && freeBetCollateralBalancesQuery.data
@@ -406,9 +418,12 @@ const Ticket: React.FC<TicketProps> = ({
         selectedCollateral,
     ]);
 
-    const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
-        enabled: isAppReady,
-    });
+    const exchangeRatesQuery = useExchangeRatesQuery(
+        { networkId, client },
+        {
+            enabled: isAppReady,
+        }
+    );
     const exchangeRates = exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
     const coingeckoRatesQuery = useCoingeckoRatesQuery({
@@ -428,9 +443,12 @@ const Ticket: React.FC<TicketProps> = ({
     const thalesContractCurrencyRate =
         exchangeRates && exchangeRates !== null ? exchangeRates[THALES_CONTRACT_RATE_KEY] : 1;
 
-    const liveTradingProcessorDataQuery = useLiveTradingProcessorDataQuery(networkId, {
-        enabled: isAppReady,
-    });
+    const liveTradingProcessorDataQuery = useLiveTradingProcessorDataQuery(
+        { networkId, client },
+        {
+            enabled: isAppReady,
+        }
+    );
 
     const maxAllowedExecutionDelay = useMemo(
         () =>
@@ -441,7 +459,7 @@ const Ticket: React.FC<TicketProps> = ({
     );
 
     const userDataQuery = useUserDataQuery(walletAddress, {
-        enabled: isAppReady && isWalletConnected,
+        enabled: isAppReady && isConnected,
     });
 
     const userData: OverdropUserData | undefined = useMemo(() => {
@@ -594,9 +612,13 @@ const Ticket: React.FC<TicketProps> = ({
         return bonus;
     }, [isThales, markets, payout, swapToThales]);
 
-    const ticketLiquidityQuery = useTicketLiquidityQuery(markets, networkId, {
-        enabled: isAppReady,
-    });
+    const ticketLiquidityQuery = useTicketLiquidityQuery(
+        markets,
+        { networkId, client },
+        {
+            enabled: isAppReady,
+        }
+    );
 
     const ticketLiquidity: number | undefined = useMemo(
         () =>
@@ -660,7 +682,12 @@ const Ticket: React.FC<TicketProps> = ({
         async (buyInAmountForQuote: number) => {
             if (buyInAmountForQuote <= 0) return;
 
-            const { sportsAMMV2Contract, multiCollateralOnOffRampContract } = networkConnector;
+            const contracts = (await Promise.all([
+                getContractInstance(ContractType.SPORTS_AMM_V2, client, networkId),
+                getContractInstance(ContractType.MULTICOLLATERAL_ON_OFF_RAMP, client, networkId),
+            ])) as ViemContract[];
+
+            const [sportsAMMV2Contract, multiCollateralOnOffRampContract] = contracts;
             if (sportsAMMV2Contract && minBuyInAmountInDefaultCollateral) {
                 const tradeData = getTradeData(markets);
 
@@ -673,10 +700,10 @@ const Ticket: React.FC<TicketProps> = ({
                                   : isDefaultCollateral
                                   ? 1
                                   : selectedCollateralCurrencyRate)
-                            : multiCollateralOnOffRampContract?.getMinimumNeeded(
+                            : multiCollateralOnOffRampContract?.read.getMinimumNeeded([
                                   collateralAddress,
-                                  coinParser(minBuyInAmountInDefaultCollateral.toString(), networkId)
-                              ),
+                                  coinParser(minBuyInAmountInDefaultCollateral.toString(), networkId),
+                              ]),
                     ]);
 
                     const minBuyin =
@@ -692,10 +719,10 @@ const Ticket: React.FC<TicketProps> = ({
                             collateralHasLp
                                 ? buyInAmountForQuote *
                                   (isDefaultCollateral && !swapToThales ? 1 : selectedCollateralCurrencyRate)
-                                : multiCollateralOnOffRampContract?.getMinimumReceived(
+                                : multiCollateralOnOffRampContract?.read.getMinimumReceived([
                                       swapToThales ? thalesCollateralAddress : collateralAddress,
-                                      coinParser(buyInAmountForQuote.toString(), networkId, usedCollateralForBuy)
-                                  ),
+                                      coinParser(buyInAmountForQuote.toString(), networkId, usedCollateralForBuy),
+                                  ]),
                         ]);
 
                         const minimumReceivedForBuyInAmountInDefaultCollateral = collateralHasLp
@@ -740,20 +767,21 @@ const Ticket: React.FC<TicketProps> = ({
             }
         },
         [
+            client,
+            networkId,
             minBuyInAmountInDefaultCollateral,
             markets,
             collateralHasLp,
-            isDefaultCollateral,
             isThales,
+            swapToThales,
             thalesContractCurrencyRate,
+            isDefaultCollateral,
             selectedCollateralCurrencyRate,
             collateralAddress,
-            networkId,
-            buyInAmount,
-            swapToThales,
-            swappedThalesToReceive,
             usedCollateralForBuy,
             thalesCollateralAddress,
+            swappedThalesToReceive,
+            buyInAmount,
         ]
     );
 
@@ -809,7 +837,7 @@ const Ticket: React.FC<TicketProps> = ({
 
     // Check swap allowance
     useEffect(() => {
-        if (isWalletConnected && swapToThales && buyInAmount) {
+        if (isConnected && swapToThales && buyInAmount) {
             const getSwapAllowance = async () => {
                 const allowance = await checkSwapAllowance(
                     networkId,
@@ -825,13 +853,13 @@ const Ticket: React.FC<TicketProps> = ({
         }
     }, [
         walletAddress,
-        isWalletConnected,
         buyInAmount,
         networkId,
         selectedCollateral,
         swapToThales,
         swapToThalesParams.src,
         isBuying,
+        isConnected,
     ]);
 
     // Check allowance
@@ -984,7 +1012,7 @@ const Ticket: React.FC<TicketProps> = ({
         setCollateralAmount(floorNumberToDecimals(amount, decimals));
     };
 
-    const handleAllowance = async (approveAmount: BigNumber) => {
+    const handleAllowance = async (approveAmount: bigint) => {
         const { sportsAMMV2Contract, sUSDContract, signer, multipleCollateral } = networkConnector;
 
         if (sportsAMMV2Contract && multipleCollateral && signer) {
