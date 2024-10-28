@@ -18,9 +18,9 @@ import {
     setMarketTypeFilter,
     setMarketTypeGroupFilter,
 } from 'redux/modules/market';
-import { getNetworkId } from 'redux/modules/wallet';
 import { SportMarket } from 'types/markets';
 import { getMarketTypeName } from 'utils/markets';
+import { useChainId, useClient } from 'wagmi';
 import {
     ArrowIcon,
     Container,
@@ -71,7 +71,10 @@ const RightArrow: React.FC = () => {
 const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitch }) => {
     const dispatch = useDispatch();
     const isAppReady = useSelector(getIsAppReady);
-    const networkId = useSelector(getNetworkId);
+
+    const networkId = useChainId();
+    const client = useClient();
+
     const isThreeWayView = useSelector(getIsThreeWayView);
     const marketTypeFilter = useSelector(getMarketTypeFilter);
     const marketTypeGroupFilter = useSelector(getMarketTypeGroupFilter);
@@ -81,9 +84,15 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitc
 
     const marketToCheck = market || selectedMarket;
 
-    const marketQuery = useSportMarketV2Query(selectedMarket?.gameId || '', true, !!marketToCheck?.live, networkId, {
-        enabled: isAppReady && !market && !!selectedMarket,
-    });
+    const marketQuery = useSportMarketV2Query(
+        selectedMarket?.gameId || '',
+        true,
+        !!marketToCheck?.live,
+        { networkId, client },
+        {
+            enabled: isAppReady && !market && !!selectedMarket,
+        }
+    );
 
     useEffect(() => {
         if (market) {
