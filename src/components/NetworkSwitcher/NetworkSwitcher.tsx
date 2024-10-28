@@ -1,6 +1,6 @@
+import OutsideClickHandler from 'components/OutsideClick';
 import { DEFAULT_NETWORK, SUPPORTED_NETWORKS_PARAMS } from 'constants/network';
 import { useMemo, useState } from 'react';
-import OutsideClickHandler from 'react-outside-click-handler';
 import styled from 'styled-components';
 import { SupportedNetwork } from 'types/network';
 import { useAccount, useChainId, useSwitchChain } from 'wagmi';

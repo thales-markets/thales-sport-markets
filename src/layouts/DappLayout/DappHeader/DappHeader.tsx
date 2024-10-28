@@ -3,6 +3,7 @@ import Logo from 'components/Logo';
 import NavMenu from 'components/NavMenu';
 import NavMenuMobile from 'components/NavMenuMobile';
 import NetworkSwitcher from 'components/NetworkSwitcher';
+import OutsideClickHandler from 'components/OutsideClick';
 import SPAAnchor from 'components/SPAAnchor';
 import Search from 'components/Search';
 import WalletInfo from 'components/WalletInfo';
@@ -13,7 +14,6 @@ import useClaimablePositionCountV2Query from 'queries/markets/useClaimablePositi
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
-import OutsideClickHandler from 'react-outside-click-handler';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { getIsMobile } from 'redux/modules/app';

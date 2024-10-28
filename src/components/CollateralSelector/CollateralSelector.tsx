@@ -1,7 +1,7 @@
+import OutsideClickHandler from 'components/OutsideClick';
 import { USD_SIGN } from 'constants/currency';
 import { Rates } from 'queries/rates/useExchangeRatesQuery';
 import React, { useCallback, useMemo, useState } from 'react';
-import OutsideClickHandler from 'react-outside-click-handler';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import {
@@ -75,7 +75,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
 
     return (
         <Container stretch={stretch} isDetailedView={isDetailedView}>
-            <OutsideClickHandler display="contents" onOutsideClick={() => setOpen(false)}>
+            <OutsideClickHandler onOutsideClick={() => setOpen(false)}>
                 <SelectedCollateral stretch={stretch} disabled={!!disabled} onClick={() => !disabled && setOpen(!open)}>
                     <TextCollateralWrapper isDetailedView={isDetailedView}>
                         {showCollateralImg && (

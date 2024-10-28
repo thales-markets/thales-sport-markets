@@ -1,4 +1,5 @@
 import ConnectWalletButtonMobile from 'components/ConnectWalletButtonMobile';
+import OutsideClickHandler from 'components/OutsideClick';
 import SPAAnchor from 'components/SPAAnchor';
 import { ODDS_TYPES } from 'constants/markets';
 import ROUTES from 'constants/routes';
@@ -6,7 +7,6 @@ import { secondsToMilliseconds } from 'date-fns';
 import { OddsType } from 'enums/markets';
 import { t } from 'i18next';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import OutsideClickHandler from 'react-outside-click-handler';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTicket } from 'redux/modules/ticket';
 import { setOddsType } from 'redux/modules/ui';

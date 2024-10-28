@@ -3,6 +3,7 @@ import FreeBetFundModal from 'components/FreeBetFundModal';
 import LanguageSelector from 'components/LanguageSelector';
 import Logo from 'components/Logo';
 import { Separator } from 'components/NavMenu/styled-components';
+import OutsideClickHandler from 'components/OutsideClick';
 import SPAAnchor from 'components/SPAAnchor';
 import WalletInfo from 'components/WalletInfo';
 import ROUTES from 'constants/routes';
@@ -16,7 +17,6 @@ import { ProfileIconWidget } from 'layouts/DappLayout/DappHeader/components/Prof
 import { LogoContainer, OverdropIcon } from 'layouts/DappLayout/DappHeader/styled-components';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import OutsideClickHandler from 'react-outside-click-handler';
 import { useLocation } from 'react-router-dom';
 import { useTheme } from 'styled-components';
 import { FlexDivCentered } from 'styles/common';

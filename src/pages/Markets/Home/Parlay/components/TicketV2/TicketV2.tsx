@@ -2,6 +2,7 @@ import axios from 'axios';
 import ApprovalModal from 'components/ApprovalModal';
 import Button from 'components/Button';
 import CollateralSelector from 'components/CollateralSelector';
+import OutsideClickHandler from 'components/OutsideClick';
 import ShareTicketModalV2 from 'components/ShareTicketModalV2';
 import { ShareTicketModalProps } from 'components/ShareTicketModalV2/ShareTicketModalV2';
 import Toggle from 'components/Toggle';
@@ -43,7 +44,6 @@ import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollatera
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import OutsideClickHandler from 'react-outside-click-handler';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';

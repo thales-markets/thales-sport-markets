@@ -1,6 +1,7 @@
 import Button from 'components/Button';
 import FreeBetFundModal from 'components/FreeBetFundModal';
 import LanguageSelector from 'components/LanguageSelector';
+import OutsideClickHandler from 'components/OutsideClick';
 import SPAAnchor from 'components/SPAAnchor';
 import {
     NAV_MENU_FIRST_SECTION,
@@ -11,7 +12,6 @@ import {
 import { ProfileIconWidget } from 'layouts/DappLayout/DappHeader/components/ProfileItem/ProfileItem';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import OutsideClickHandler from 'react-outside-click-handler';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { getIsConnectedViaParticle } from 'redux/modules/wallet';
