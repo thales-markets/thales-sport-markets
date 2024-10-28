@@ -16,13 +16,13 @@ import {
     YAxis,
 } from 'recharts';
 import { getIsAppReady } from 'redux/modules/app';
-import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { Colors, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { formatPercentageWithSign } from 'thales-utils';
 import { LiquidityPoolPnls } from 'types/liquidityPool';
 import { ThemeInterface } from 'types/ui';
+import { useChainId, useClient } from 'wagmi';
 
 type PnlProps = {
     lifetimePnl: number;
@@ -34,16 +34,23 @@ const PnL: React.FC<PnlProps> = ({ lifetimePnl, type, liquidityPoolAddress }) =>
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
+
+    const networkId = useChainId();
+    const client = useClient();
+
     const [liquidityPoolPnls, setLiquidityPoolPnls] = useState<LiquidityPoolPnls>([]);
 
     // TODO temp disable THALES PnL
-    const liquidityPoolPnlsQuery = useLiquidityPoolPnlsQuery(networkId, liquidityPoolAddress, {
-        enabled:
-            isAppReady &&
-            liquidityPoolAddress !== '0xE59206b08cC96Da0818522C75eE3Fd4EBB7c0A47' &&
-            liquidityPoolAddress !== '0x9733AB157f5A89f0AD7460d08F869956aE2018dA',
-    });
+    const liquidityPoolPnlsQuery = useLiquidityPoolPnlsQuery(
+        liquidityPoolAddress,
+        { networkId, client },
+        {
+            enabled:
+                isAppReady &&
+                liquidityPoolAddress !== '0xE59206b08cC96Da0818522C75eE3Fd4EBB7c0A47' &&
+                liquidityPoolAddress !== '0x9733AB157f5A89f0AD7460d08F869956aE2018dA',
+        }
+    );
 
     useEffect(() => {
         if (liquidityPoolPnlsQuery.isSuccess && liquidityPoolPnlsQuery.data) {
