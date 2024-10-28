@@ -39,7 +39,6 @@ import {
     setTagFilter,
 } from 'redux/modules/market';
 import { getFavouriteLeagues } from 'redux/modules/ui';
-import { getNetworkId } from 'redux/modules/wallet';
 import styled, { CSSProperties, useTheme } from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { addHoursToCurrentDate, localStore } from 'thales-utils';
@@ -47,6 +46,7 @@ import { MarketsCache, SportMarket, SportMarkets, TagInfo, Tags } from 'types/ma
 import { ThemeInterface } from 'types/ui';
 import { history } from 'utils/routes';
 import useQueryParam from 'utils/useQueryParams';
+import { useChainId, useClient } from 'wagmi';
 import { BOXING_LEAGUES, LeagueMap } from '../../../constants/sports';
 import { MarketType } from '../../../enums/marketTypes';
 import { Sport } from '../../../enums/sports';
@@ -77,7 +77,10 @@ const Home: React.FC = () => {
     const dispatch = useDispatch();
     const theme: ThemeInterface = useTheme();
     const isAppReady = useSelector(getIsAppReady);
-    const networkId = useSelector(getNetworkId);
+
+    const networkId = useChainId();
+    const client = useClient();
+
     const marketSearch = useSelector(getMarketSearch);
     const datePeriodFilter = useSelector(getDatePeriodFilter);
     const statusFilter = useSelector(getStatusFilter);
@@ -194,13 +197,21 @@ const Home: React.FC = () => {
         []
     );
 
-    const sportMarketsQueryNew = useSportsMarketsV2Query(statusFilter, networkId, {
-        enabled: isAppReady,
-    });
+    const sportMarketsQueryNew = useSportsMarketsV2Query(
+        statusFilter,
+        { networkId, client },
+        {
+            enabled: isAppReady,
+        }
+    );
 
-    const liveSportMarketsQuery = useLiveSportsMarketsQuery(networkId, sportFilter === SportFilter.Live, {
-        enabled: isAppReady,
-    });
+    const liveSportMarketsQuery = useLiveSportsMarketsQuery(
+        sportFilter === SportFilter.Live,
+        { networkId, client },
+        {
+            enabled: isAppReady,
+        }
+    );
 
     const gameMultipliersQuery = useGameMultipliersQuery({
         enabled: isAppReady,
@@ -334,9 +345,13 @@ const Home: React.FC = () => {
         }
     }, [favouriteLeagues, sportFilter, showActive]);
 
-    const openSportMarketsQuery = useSportsMarketsV2Query(StatusFilter.OPEN_MARKETS, networkId, {
-        enabled: isAppReady,
-    });
+    const openSportMarketsQuery = useSportsMarketsV2Query(
+        StatusFilter.OPEN_MARKETS,
+        { networkId, client },
+        {
+            enabled: isAppReady,
+        }
+    );
 
     const openMarketsCountPerTag = useMemo(() => {
         const openSportMarkets: SportMarkets =
