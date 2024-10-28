@@ -8,13 +8,15 @@ import useOverdropLeaderboardQuery from 'queries/overdrop/useOverdropLeaderboard
 import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { formatCurrency, getEtherscanAddressLink, truncateAddress } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
+import biconomyConnector from 'utils/biconomyWallet';
 import { getCurrentLevelByPoints } from 'utils/overdrop';
+import { useAccount, useChainId } from 'wagmi';
 import {
     AddressContainer,
     Badge,
@@ -30,9 +32,13 @@ import {
 
 const Leaderboard: React.FC = () => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state));
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isMobile = useSelector(getIsMobile);
+
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+
+    const networkId = useChainId();
+    const { address } = useAccount();
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
     const theme: ThemeInterface = useTheme();
 
