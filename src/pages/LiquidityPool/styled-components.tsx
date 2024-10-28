@@ -336,7 +336,7 @@ export const TextLink = styled.a`
     }
 `;
 
-export const TipLink: React.FC<{ href: string; children: React.ReactNode }> = ({ children, href }) => {
+export const TipLink: React.FC<{ href: string; children?: React.ReactNode }> = ({ children, href }) => {
     return (
         <TextLink target="_blank" rel="noreferrer" href={href}>
             {children}

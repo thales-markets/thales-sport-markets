@@ -12,8 +12,8 @@ import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { LINKS } from 'constants/links';
+import { ContractType } from 'enums/contract';
 import { LiquidityPoolCollateral, LiquidityPoolPnlType, LiquidityPoolTab } from 'enums/liquidityPool';
-import { BigNumber, Contract, ethers } from 'ethers';
 import useLiquidityPoolDataQuery from 'queries/liquidityPool/useLiquidityPoolDataQuery';
 import useLiquidityPoolUserDataQuery from 'queries/liquidityPool/useLiquidityPoolUserDataQuery';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
@@ -24,22 +24,24 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
-import {
-    getIsWalletConnected,
-    getNetworkId,
-    getWalletAddress,
-    setWalletConnectModalVisibility,
-} from 'redux/modules/wallet';
+import { getIsBiconomy, setWalletConnectModalVisibility } from 'redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
 import { FlexDivRow } from 'styles/common';
-import { Coins, coinParser, formatCurrencyWithKey, formatPercentage } from 'thales-utils';
+import { Coins, formatCurrencyWithKey, formatPercentage } from 'thales-utils';
 import { LiquidityPoolData, UserLiquidityPoolData } from 'types/liquidityPool';
 import { ThemeInterface } from 'types/ui';
+import { ViemContract } from 'types/viem';
+import biconomyConnector from 'utils/biconomyWallet';
 import liquidityPoolContract from 'utils/contracts/liquidityPoolContractV2';
+import { coinParser } from 'utils/formatters/viem';
 import { checkAllowance } from 'utils/network';
-import networkConnector from 'utils/networkConnector';
+import { getContractInstance } from 'utils/networkConnector';
 import { refetchLiquidityPoolData } from 'utils/queryConnector';
 import { delay } from 'utils/timer';
+import { Address, Client, getContract, parseUnits } from 'viem';
+import { waitForTransactionReceipt } from 'viem/actions';
+import { useAccount, useChainId, useClient } from 'wagmi';
 import SPAAnchor from '../../components/SPAAnchor';
 import ROUTES from '../../constants/routes';
 import useMultipleCollateralBalanceQuery from '../../queries/wallet/useMultipleCollateralBalanceQuery';
@@ -96,10 +98,13 @@ const LiquidityPool: React.FC = () => {
     const location = useLocation();
     const theme: ThemeInterface = useTheme();
 
-    const networkId = useSelector(getNetworkId);
     const isAppReady = useSelector(getIsAppReady);
-    const isWalletConnected = useSelector(getIsWalletConnected);
-    const walletAddress = useSelector(getWalletAddress) || '';
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+
+    const networkId = useChainId();
+    const client = useClient();
+    const { address, isConnected } = useAccount();
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
     const [selectedCollateralIndex, setSelectedCollateralIndex] = useState<number>(0);
     const [amount, setAmount] = useState<number | string>('');
@@ -131,27 +136,39 @@ const LiquidityPool: React.FC = () => {
 
     const { openConnectModal } = useConnectModal();
 
-    const multipleCollateralBalanceQuery = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
-        enabled: isAppReady && isWalletConnected,
-    });
+    const multipleCollateralBalanceQuery = useMultipleCollateralBalanceQuery(
+        walletAddress,
+        { networkId, client },
+        {
+            enabled: isAppReady && isConnected,
+        }
+    );
 
-    const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
-        enabled: isAppReady,
-    });
+    const exchangeRatesQuery = useExchangeRatesQuery(
+        { networkId, client },
+        {
+            enabled: isAppReady,
+        }
+    );
     const exchangeRates: Rates | null =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
-    const liquidityPoolDataQuery = useLiquidityPoolDataQuery(liquidityPoolAddress, collateral, networkId, {
-        enabled: isAppReady && liquidityPoolAddress !== undefined,
-    });
+    const liquidityPoolDataQuery = useLiquidityPoolDataQuery(
+        liquidityPoolAddress,
+        collateral,
+        { networkId, client },
+        {
+            enabled: isAppReady && liquidityPoolAddress !== undefined,
+        }
+    );
 
     const userLiquidityPoolDataQuery = useLiquidityPoolUserDataQuery(
         liquidityPoolAddress,
         collateral,
         walletAddress,
-        networkId,
+        { networkId, client },
         {
-            enabled: isAppReady && isWalletConnected && liquidityPoolAddress !== undefined,
+            enabled: isAppReady && isConnected && liquidityPoolAddress !== undefined,
         }
     );
 
@@ -163,7 +180,9 @@ const LiquidityPool: React.FC = () => {
     useEffect(() => {
         if (multipleCollateralBalanceQuery.isSuccess && multipleCollateralBalanceQuery.data !== undefined) {
             setPaymentTokenBalance(
-                Number(multipleCollateralBalanceQuery.data[ethSelected ? CRYPTO_CURRENCY_MAP.ETH : collateral])
+                Number(
+                    multipleCollateralBalanceQuery.data[(ethSelected ? CRYPTO_CURRENCY_MAP.ETH : collateral) as Coins]
+                )
             );
         }
     }, [multipleCollateralBalanceQuery.isSuccess, multipleCollateralBalanceQuery.data, collateral, ethSelected]);
@@ -181,38 +200,44 @@ const LiquidityPool: React.FC = () => {
     }, [userLiquidityPoolDataQuery.isSuccess, userLiquidityPoolDataQuery.data]);
 
     useEffect(() => {
-        const { signer, multipleCollateral } = networkConnector;
+        (async () => {
+            const collateralContractWithSigner = await getContractInstance(
+                ContractType.MULTICOLLATERAL,
+                client,
+                networkId,
+                getCollateralIndex(networkId, collateral)
+            );
 
-        if (signer && multipleCollateral) {
-            const collateralContractWithSigner = multipleCollateral[collateral]?.connect(signer);
-
-            const getAllowance = async () => {
-                try {
-                    const parsedAmount = coinParser(Number(amount).toString(), networkId, collateral);
-                    const allowance = await checkAllowance(
-                        parsedAmount,
-                        collateralContractWithSigner,
-                        walletAddress,
-                        liquidityPoolAddress
-                    );
-                    setAllowance(allowance);
-                } catch (e) {
-                    console.log(e);
+            if (collateralContractWithSigner) {
+                const getAllowance = async () => {
+                    try {
+                        const parsedAmount = coinParser(Number(amount).toString(), networkId, collateral);
+                        const allowance = await checkAllowance(
+                            parsedAmount,
+                            collateralContractWithSigner,
+                            walletAddress,
+                            liquidityPoolAddress
+                        );
+                        setAllowance(allowance);
+                    } catch (e) {
+                        console.log(e);
+                    }
+                };
+                if (isConnected) {
+                    getAllowance();
                 }
-            };
-            if (isWalletConnected) {
-                getAllowance();
             }
-        }
+        })();
     }, [
         walletAddress,
-        isWalletConnected,
         hasAllowance,
         amount,
         isAllowing,
         networkId,
         liquidityPoolAddress,
         collateral,
+        isConnected,
+        client,
     ]);
 
     const liquidityPoolData: LiquidityPoolData | undefined = useMemo(() => {
@@ -256,7 +281,7 @@ const LiquidityPool: React.FC = () => {
         !userLiquidityPoolData.hasDepositForNextRound &&
         isAmountEntered;
     const insufficientBalance =
-        (Number(paymentTokenBalance) < Number(amount) || Number(paymentTokenBalance) === 0) && isWalletConnected;
+        (Number(paymentTokenBalance) < Number(amount) || Number(paymentTokenBalance) === 0) && isConnected;
 
     const liquidityPoolPaused = liquidityPoolData && liquidityPoolData.paused;
 
@@ -274,7 +299,7 @@ const LiquidityPool: React.FC = () => {
     const nothingToWithdraw = userLiquidityPoolData && userLiquidityPoolData.balanceCurrentRound === 0;
 
     const isRequestWithdrawalButtonDisabled =
-        !isWalletConnected ||
+        !isConnected ||
         isSubmitting ||
         nothingToWithdraw ||
         (userLiquidityPoolData && userLiquidityPoolData.hasDepositForNextRound) ||
@@ -283,7 +308,7 @@ const LiquidityPool: React.FC = () => {
     const isPartialWithdrawalDisabled = isRequestWithdrawalButtonDisabled || withdrawAll;
 
     const isDepositButtonDisabled =
-        !isWalletConnected ||
+        !isConnected ||
         !isAmountEntered ||
         insufficientBalance ||
         isSubmitting ||
@@ -301,24 +326,28 @@ const LiquidityPool: React.FC = () => {
         liquidityPoolPaused ||
         isLiquidityPoolCapReached;
 
-    const handleAllowance = async (approveAmount: BigNumber) => {
-        const { signer, multipleCollateral } = networkConnector;
+    const handleAllowance = async (approveAmount: bigint) => {
+        const multiCollateralWithSigner = await getContractInstance(
+            ContractType.MULTICOLLATERAL,
+            client,
+            networkId,
+            getCollateralIndex(networkId, collateral)
+        );
 
-        if (signer && multipleCollateral) {
-            const collateralContractWithSigner = multipleCollateral[collateral]?.connect(signer);
+        if (multiCollateralWithSigner) {
             const id = toast.loading(t('market.toast-message.transaction-pending'));
             setIsAllowing(true);
 
             try {
                 console.log(approveAmount.toString(), collateral);
-                const tx = (await collateralContractWithSigner?.approve(
-                    liquidityPoolAddress,
-                    approveAmount
-                )) as ethers.ContractTransaction;
+                const hash = await multiCollateralWithSigner?.write.approve([liquidityPoolAddress, approveAmount]);
                 setOpenApprovalModal(false);
-                const txResult = await tx.wait();
 
-                if (txResult && txResult.transactionHash) {
+                const txReceipt = await waitForTransactionReceipt(client as Client, {
+                    hash,
+                });
+
+                if (txReceipt.status === 'success') {
                     toast.update(
                         id,
                         getSuccessToastOptions(t('market.toast-message.approve-success', { token: collateral }))
@@ -334,48 +363,42 @@ const LiquidityPool: React.FC = () => {
     };
 
     const handleDeposit = async () => {
-        const { signer, multipleCollateral } = networkConnector;
+        const id = toast.loading(t('market.toast-message.transaction-pending'));
+        setIsSubmitting(true);
+        try {
+            const liquidityPoolContractWithSigner = getContract({
+                abi: liquidityPoolContract,
+                address: liquidityPoolAddress as Address,
+                client,
+            }) as ViemContract;
+            const parsedAmount = coinParser(Number(amount).toString(), networkId, collateral);
 
-        if (signer) {
-            const id = toast.loading(t('market.toast-message.transaction-pending'));
-            setIsSubmitting(true);
-            try {
-                const liquidityPoolContractWithSigner = new Contract(
-                    liquidityPoolAddress,
-                    liquidityPoolContract,
-                    signer
-                );
-                const parsedAmount = coinParser(Number(amount).toString(), networkId, collateral);
+            const WETHContractWithSigner = await getContractInstance(
+                ContractType.MULTICOLLATERAL,
+                client,
+                networkId,
+                getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins)
+            );
 
-                if (
-                    paramCollateral === LiquidityPoolCollateral.WETH &&
-                    multipleCollateral?.WETH &&
-                    selectedCollateralIndex === 1
-                ) {
-                    const WETHContractWithSigner = multipleCollateral.WETH.connect(signer);
-                    const wrapTx = await WETHContractWithSigner.deposit({ value: parsedAmount });
-                    const wrapTxResult = await wrapTx.wait();
+            if (
+                paramCollateral === LiquidityPoolCollateral.WETH &&
+                WETHContractWithSigner &&
+                selectedCollateralIndex === 1
+            ) {
+                const wrapTxHash = await WETHContractWithSigner.write.deposit([parsedAmount]);
 
-                    if (wrapTxResult && wrapTxResult.transactionHash) {
-                        const tx = await liquidityPoolContractWithSigner.deposit(parsedAmount);
-                        const txResult = await tx.wait();
+                const wrapTxReceipt = await waitForTransactionReceipt(client as Client, {
+                    hash: wrapTxHash,
+                });
 
-                        if (txResult && txResult.events) {
-                            PLAUSIBLE.trackEvent(PLAUSIBLE_KEYS.depositLp);
-                            toast.update(
-                                id,
-                                getSuccessToastOptions(t('liquidity-pool.button.deposit-confirmation-message'))
-                            );
-                            setAmount('');
-                            setIsSubmitting(false);
-                            refetchLiquidityPoolData(walletAddress, networkId, liquidityPoolAddress);
-                        }
-                    }
-                } else {
-                    const tx = await liquidityPoolContractWithSigner.deposit(parsedAmount);
-                    const txResult = await tx.wait();
+                if (wrapTxReceipt.status === 'success') {
+                    const txHash = await liquidityPoolContractWithSigner.write.deposit(parsedAmount);
 
-                    if (txResult && txResult.events) {
+                    const txReceipt = await waitForTransactionReceipt(client as Client, {
+                        hash: txHash,
+                    });
+
+                    if (txReceipt.status === 'success') {
                         PLAUSIBLE.trackEvent(PLAUSIBLE_KEYS.depositLp);
                         toast.update(
                             id,
@@ -386,47 +409,60 @@ const LiquidityPool: React.FC = () => {
                         refetchLiquidityPoolData(walletAddress, networkId, liquidityPoolAddress);
                     }
                 }
-            } catch (e) {
-                console.log(e);
-                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                setIsSubmitting(false);
-            }
-        }
-    };
+            } else {
+                const txHash = await liquidityPoolContractWithSigner.write.deposit([parsedAmount]);
 
-    const handleWithdrawalRequest = async () => {
-        const { signer } = networkConnector;
+                const txReceipt = await waitForTransactionReceipt(client as Client, {
+                    hash: txHash,
+                });
 
-        if (signer) {
-            const id = toast.loading(t('market.toast-message.transaction-pending'));
-            setIsSubmitting(true);
-            try {
-                const liquidityPoolContractWithSigner = new Contract(
-                    liquidityPoolAddress,
-                    liquidityPoolContract,
-                    signer
-                );
-                const parsedPercentage = ethers.utils.parseEther((Number(withdrawalPercentage) / 100).toString());
-
-                const tx = withdrawAll
-                    ? await liquidityPoolContractWithSigner.withdrawalRequest()
-                    : await liquidityPoolContractWithSigner.partialWithdrawalRequest(parsedPercentage);
-                const txResult = await tx.wait();
-
-                if (txResult && txResult.events) {
-                    toast.update(
-                        id,
-                        getSuccessToastOptions(t('liquidity-pool.button.request-withdrawal-confirmation-message'))
-                    );
+                if (txReceipt.status === 'success') {
+                    PLAUSIBLE.trackEvent(PLAUSIBLE_KEYS.depositLp);
+                    toast.update(id, getSuccessToastOptions(t('liquidity-pool.button.deposit-confirmation-message')));
                     setAmount('');
                     setIsSubmitting(false);
                     refetchLiquidityPoolData(walletAddress, networkId, liquidityPoolAddress);
                 }
-            } catch (e) {
-                console.log(e);
-                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                setIsSubmitting(false);
             }
+        } catch (e) {
+            console.log(e);
+            toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+            setIsSubmitting(false);
+        }
+    };
+
+    const handleWithdrawalRequest = async () => {
+        const id = toast.loading(t('market.toast-message.transaction-pending'));
+        setIsSubmitting(true);
+        try {
+            const liquidityPoolContractWithSigner = getContract({
+                address: liquidityPoolAddress as Address,
+                abi: liquidityPoolContract,
+                client,
+            }) as ViemContract;
+            const parsedPercentage = parseUnits((Number(withdrawalPercentage) / 100).toString(), 18);
+
+            const txHash = withdrawAll
+                ? await liquidityPoolContractWithSigner.write.withdrawalRequest()
+                : await liquidityPoolContractWithSigner.write.partialWithdrawalRequest([parsedPercentage]);
+
+            const txReceipt = await waitForTransactionReceipt(client as Client, {
+                hash: txHash,
+            });
+
+            if (txReceipt.status === 'success') {
+                toast.update(
+                    id,
+                    getSuccessToastOptions(t('liquidity-pool.button.request-withdrawal-confirmation-message'))
+                );
+                setAmount('');
+                setIsSubmitting(false);
+                refetchLiquidityPoolData(walletAddress, networkId, liquidityPoolAddress);
+            }
+        } catch (e) {
+            console.log(e);
+            toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+            setIsSubmitting(false);
         }
     };
 
@@ -434,63 +470,72 @@ const LiquidityPool: React.FC = () => {
         const id = toast.loading(t('market.toast-message.transaction-pending'));
         setIsSubmitting(true);
         try {
-            const { signer } = networkConnector;
+            const liquidityPoolContractWithSigner = getContract({
+                address: liquidityPoolAddress as Address,
+                abi: liquidityPoolContract,
+                client,
+            }) as ViemContract;
 
-            if (signer) {
-                const liquidityPoolContractWithSigner = new Contract(
-                    liquidityPoolAddress,
-                    liquidityPoolContract,
-                    signer
-                );
+            const canCloseCurrentRound = await liquidityPoolContractWithSigner.read.canCloseCurrentRound();
+            const roundClosingPrepared = await liquidityPoolContractWithSigner.read.roundClosingPrepared();
 
-                const canCloseCurrentRound = await liquidityPoolContractWithSigner.canCloseCurrentRound();
-                const roundClosingPrepared = await liquidityPoolContractWithSigner.roundClosingPrepared();
+            let getUsersCountInCurrentRound = await liquidityPoolContractWithSigner.read.getUsersCountInCurrentRound();
+            let usersProcessedInRound = await liquidityPoolContractWithSigner.read.usersProcessedInRound();
+            if (canCloseCurrentRound) {
+                try {
+                    if (!roundClosingPrepared) {
+                        const txHash = await liquidityPoolContractWithSigner.write.prepareRoundClosing([
+                            undefined,
+                            undefined,
+                            2,
+                        ]);
 
-                let getUsersCountInCurrentRound = await liquidityPoolContractWithSigner.getUsersCountInCurrentRound();
-                let usersProcessedInRound = await liquidityPoolContractWithSigner.usersProcessedInRound();
-                if (canCloseCurrentRound) {
-                    try {
-                        if (!roundClosingPrepared) {
-                            const tx = await liquidityPoolContractWithSigner.prepareRoundClosing({
-                                type: 2,
-                            });
-                            await tx.wait().then(() => {
-                                console.log('prepareRoundClosing closed');
-                            });
-                            await delay(1000 * 2);
-                        }
-
-                        while (usersProcessedInRound.toString() < getUsersCountInCurrentRound.toString()) {
-                            const tx = await liquidityPoolContractWithSigner.processRoundClosingBatch(100, {
-                                type: 2,
-                            });
-                            await tx.wait().then(() => {
-                                console.log('Round closed');
-                            });
-                            await delay(1000 * 2);
-                            getUsersCountInCurrentRound = await liquidityPoolContractWithSigner.getUsersCountInCurrentRound();
-                            usersProcessedInRound = await liquidityPoolContractWithSigner.usersProcessedInRound();
-                        }
-
-                        const tx = await liquidityPoolContractWithSigner.closeRound({
-                            type: 2,
-                        });
-                        await tx.wait().then(() => {
-                            console.log('Round closed');
+                        const txReceipt = await waitForTransactionReceipt(client as Client, {
+                            hash: txHash,
                         });
 
+                        if (txReceipt.status === 'success') console.log('prepareRoundClosing closed');
+
+                        await delay(1000 * 2);
+                    }
+
+                    while (usersProcessedInRound.toString() < getUsersCountInCurrentRound.toString()) {
+                        const txHash = await liquidityPoolContractWithSigner.write.processRoundClosingBatch([
+                            undefined,
+                            100,
+                            2,
+                        ]);
+
+                        const txReceipt = await waitForTransactionReceipt(client as Client, {
+                            hash: txHash,
+                        });
+
+                        if (txReceipt.status === 'success') console.log('Closing batch round');
+
+                        await delay(1000 * 2);
+                        getUsersCountInCurrentRound = await liquidityPoolContractWithSigner.read.getUsersCountInCurrentRound();
+                        usersProcessedInRound = await liquidityPoolContractWithSigner.read.usersProcessedInRound();
+                    }
+
+                    const tx = await liquidityPoolContractWithSigner.write.closeRound([undefined, undefined, 2]);
+                    const txReceipt = await waitForTransactionReceipt(client as Client, {
+                        hash: tx,
+                    });
+
+                    if (txReceipt.status === 'success') {
                         toast.update(
                             id,
                             getSuccessToastOptions(t('liquidity-pool.button.close-round-confirmation-message'))
                         );
-                        setIsSubmitting(false);
-                        refetchLiquidityPoolData(walletAddress, networkId, 'parlay');
-                        refetchLiquidityPoolData(walletAddress, networkId, 'single');
-                    } catch (e) {
-                        toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                        setIsSubmitting(false);
-                        console.log(e);
                     }
+
+                    setIsSubmitting(false);
+                    refetchLiquidityPoolData(walletAddress, networkId, 'parlay');
+                    refetchLiquidityPoolData(walletAddress, networkId, 'single');
+                } catch (e) {
+                    toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+                    setIsSubmitting(false);
+                    console.log(e);
                 }
             }
         } catch (e) {
@@ -501,7 +546,7 @@ const LiquidityPool: React.FC = () => {
     };
 
     const getDepositSubmitButton = () => {
-        if (!isWalletConnected) {
+        if (!isConnected) {
             return (
                 <Button {...defaultButtonProps} onClick={() => openConnectModal?.()}>
                     {t('common.wallet.connect-your-wallet')}
@@ -569,7 +614,7 @@ const LiquidityPool: React.FC = () => {
     };
 
     const getWithdrawButton = () => {
-        if (!isWalletConnected) {
+        if (!isConnected) {
             return (
                 <Button
                     onClick={() =>
@@ -753,9 +798,9 @@ const LiquidityPool: React.FC = () => {
                             {selectedTab === LiquidityPoolTab.WITHDRAW && (
                                 <>
                                     {((liquidityPoolData && userLiquidityPoolData && !isWithdrawalRequested) ||
-                                        !isWalletConnected) && (
+                                        !isConnected) && (
                                         <>
-                                            {nothingToWithdraw || !isWalletConnected ? (
+                                            {nothingToWithdraw || !isConnected ? (
                                                 <>
                                                     <ContentInfo>
                                                         <Trans i18nKey="liquidity-pool.nothing-to-withdraw-label" />
