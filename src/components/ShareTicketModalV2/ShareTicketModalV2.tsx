@@ -227,7 +227,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                 }
             }
         },
-        [collateral, isLoading, isMobile, useDownloadImage]
+        [isLoading, isMobile, isThalesCollateral, useDownloadImage]
     );
 
     const onTwitterShareClick = () => {
