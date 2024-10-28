@@ -6,12 +6,14 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
-import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
 import { Coins } from 'thales-utils';
 import { LiquidityPoolUserTransaction, LiquidityPoolUserTransactions } from 'types/liquidityPool';
+import biconomyConnector from 'utils/biconomyWallet';
+import { useAccount, useChainId, useClient } from 'wagmi';
 import UserTransactionsTable from '../UserTransactionsTable';
 
 type TransactionsProps = {
@@ -23,8 +25,13 @@ type TransactionsProps = {
 const Transactions: React.FC<TransactionsProps> = ({ currentRound, liquidityPoolAddress, collateral }) => {
     const { t } = useTranslation();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+
+    const networkId = useChainId();
+    const client = useClient();
+    const { address } = useAccount();
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+
     const [liquidityPoolUserTransactions, setLiquidityPoolUserTransactions] = useState<LiquidityPoolUserTransactions>(
         []
     );
@@ -60,9 +67,9 @@ const Transactions: React.FC<TransactionsProps> = ({ currentRound, liquidityPool
     }
 
     const liquidityPoolUserTransactionsQuery = useLiquidityPoolUserTransactionsQuery(
-        networkId,
         liquidityPoolAddress,
         collateral,
+        { networkId, client },
         {
             enabled: isAppReady,
         }
