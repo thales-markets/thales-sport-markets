@@ -79,7 +79,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
 
     const networkId = useChainId();
     const client = useClient();
-    const { address, isConnected } = useAccount();
+    const { address } = useAccount();
     const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
     const [showDetails, setShowDetails] = useState<boolean>(false);
