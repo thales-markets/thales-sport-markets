@@ -12,11 +12,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getSportFilter } from 'redux/modules/market';
 import { getHasTicketError, getTicket, removeAll, resetTicketError, setMaxTicketSize } from 'redux/modules/ticket';
-import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 import { SportMarket, TicketMarket, TicketPosition } from 'types/markets';
 import { isSameMarket } from 'utils/marketsV2';
+import { useAccount, useChainId, useClient } from 'wagmi';
 import TicketV2 from './components/TicketV2';
 import ValidationModal from './components/ValidationModal';
 type ParlayProps = {
@@ -28,8 +28,11 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
     const dispatch = useDispatch();
     const isAppReady = useSelector(getIsAppReady);
     const isMobile = useSelector(getIsMobile);
-    const networkId = useSelector(getNetworkId);
-    const isWalletConnected = useSelector(getIsWalletConnected);
+
+    const networkId = useChainId();
+    const client = useClient();
+    const { isConnected } = useAccount();
+
     const ticket = useSelector(getTicket);
     const hasTicketError = useSelector(getHasTicketError);
     const sportFilter = useSelector(getSportFilter);
@@ -44,17 +47,28 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
 
     const previousTicketOdds = useRef<{ position: number; odd: number; gameId: string; proof: string[] }[]>([]);
 
-    const sportsAmmDataQuery = useSportsAmmDataQuery(networkId, {
-        enabled: isAppReady,
-    });
+    const sportsAmmDataQuery = useSportsAmmDataQuery(
+        { networkId, client },
+        {
+            enabled: isAppReady,
+        }
+    );
 
-    const sportMarketsQuery = useSportsMarketsV2Query(StatusFilter.OPEN_MARKETS, networkId, {
-        enabled: isAppReady,
-    });
+    const sportMarketsQuery = useSportsMarketsV2Query(
+        StatusFilter.OPEN_MARKETS,
+        { networkId, client },
+        {
+            enabled: isAppReady,
+        }
+    );
 
-    const liveSportMarketsQuery = useLiveSportsMarketsQuery(networkId, isLiveFilterSelected, {
-        enabled: isAppReady,
-    });
+    const liveSportMarketsQuery = useLiveSportsMarketsQuery(
+        isLiveFilterSelected,
+        { networkId, client },
+        {
+            enabled: isAppReady,
+        }
+    );
 
     useEffect(() => {
         if (sportsAmmDataQuery.isSuccess && sportsAmmDataQuery.data) {
@@ -194,7 +208,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
     const hasParlayMarkets = ticketMarkets.length > 0 || unavailableMarkets.length > 0;
 
     return (
-        <Container isMobile={isMobile} isWalletConnected={isWalletConnected}>
+        <Container isMobile={isMobile} isWalletConnected={isConnected}>
             {hasParlayMarkets ? (
                 <>
                     {!isMobile && (
