@@ -1,21 +1,20 @@
 import { generalConfig } from 'config/general';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
+import { NATIVE_TOKEN_ADDRES, ZERO_ADDRESS } from 'constants/network';
 import { Network } from 'enums/network';
 import { BigNumber, BigNumberish } from 'ethers';
-import { coinFormatter } from 'thales-utils';
+import { coinFormatter, Coins } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
 import { SwapParams } from 'types/swap';
-import { Coins } from 'thales-utils';
 import { Address } from 'viem';
 import multipleCollateralContract from './contracts/multipleCollateralContract';
 import networkConnector from './networkConnector';
-import { NATIVE_TOKEN_ADDRES, ZERO_ADDRESS } from 'constants/network';
 import { delay } from './timer';
 
 export const getSwapParams = (
     networkId: SupportedNetwork,
     walletAddress: Address,
-    buyIn: BigNumber,
+    buyIn: bigint,
     tokenAddress: Address
 ): SwapParams => {
     const src = tokenAddress === ZERO_ADDRESS ? NATIVE_TOKEN_ADDRES : tokenAddress;
@@ -68,7 +67,7 @@ export const checkSwapAllowance = async (
     networkId: SupportedNetwork,
     walletAddress: Address,
     tokenAddress: Address,
-    amount: BigNumber
+    amount: bigint
 ) => {
     const url = apiRequestUrl(networkId, '/approve/allowance', { tokenAddress, walletAddress });
 

@@ -1,6 +1,7 @@
 import { GAS_ESTIMATION_BUFFER, ZERO_ADDRESS } from 'constants/network';
 import { Network } from 'enums/network';
 import { BigNumber, ethers } from 'ethers';
+import { ViemContract } from 'types/viem';
 import { TradeData } from '../types/markets';
 import { executeBiconomyTransaction } from './biconomy';
 
@@ -111,14 +112,14 @@ export const getSportsAMMV2Transaction: any = async (
 export const getSportsAMMV2QuoteMethod: any = (
     collateralAddress: string,
     isDefaultCollateral: boolean,
-    sportsAMMV2Contract: ethers.Contract,
+    sportsAMMV2Contract: ViemContract,
     tradeData: TradeData[],
-    buyInAmount: BigNumber
+    buyInAmount: bigint
 ) => {
-    return sportsAMMV2Contract.tradeQuote(
+    return sportsAMMV2Contract.read.tradeQuote([
         tradeData,
         buyInAmount,
         isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
-        false
-    );
+        false,
+    ]);
 };
