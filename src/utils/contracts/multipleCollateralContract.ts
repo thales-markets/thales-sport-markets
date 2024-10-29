@@ -834,7 +834,6 @@ const multipleCollateral: Record<Coins, ContractData> = {
         addresses: {
             [Network.OptimismMainnet]: TBD_ADDRESS,
             [Network.Arbitrum]: TBD_ADDRESS,
-            [Network.Base]: TBD_ADDRESS as Address,
             [Network.OptimismSepolia]: TBD_ADDRESS,
         },
         abi,
