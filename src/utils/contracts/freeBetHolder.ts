@@ -1,4 +1,3 @@
-import { TBD_ADDRESS } from 'constants/network';
 import { Network } from 'enums/network';
 import { ContractData } from 'types/viem';
 import { Address } from 'viem';
@@ -7,7 +6,6 @@ const freeBetHolder: ContractData = {
     addresses: {
         [Network.OptimismMainnet]: '0x8D18e68563d53be97c2ED791CA4354911F16A54B' as Address,
         [Network.Arbitrum]: '0xd1F2b87a9521315337855A132e5721cfe272BBd9' as Address,
-        [Network.Base]: TBD_ADDRESS,
         [Network.OptimismSepolia]: '0x97687d195A4296223ebCce238890b28Ba54cfD46' as Address,
     },
     abi: [
