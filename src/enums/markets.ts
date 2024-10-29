@@ -72,7 +72,7 @@ export enum GameStatus {
     OPTICODDS_COMPLETED = 'completed',
     OPTICODDS_SUSPENDED = 'suspended',
     OPTICODDS_DELAYED = 'delayed',
-    CANCELED = 'cancelled', // the same for ENETPULSE and OPTICODDS
+    CANCELED = 'cancelled',
 }
 
 export enum TicketErrorCode {
