@@ -8,21 +8,25 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useSwipeable } from 'react-swipeable';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import { getIsWalletConnected, getWalletAddress } from 'redux/modules/wallet';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivRow } from 'styles/common';
 import { formatCurrencyWithKey, formatCurrencyWithSign } from 'thales-utils';
 import { OverdropUserData } from 'types/overdrop';
+import biconomyConnector from 'utils/biconomyWallet';
 import { formatPoints, getCurrentLevelByPoints, getNextThalesRewardLevel, getProgressLevel } from 'utils/overdrop';
+import { useAccount } from 'wagmi';
 import SmallBadge from '../SmallBadge';
 
 const BadgeOverview: React.FC = () => {
     const { t } = useTranslation();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+
+    const { address, isConnected } = useAccount();
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
     const [currentStep, setCurrentStep] = useState<number>(0);
     const [numberOfCards, setNumberOfCards] = useState<number>(isMobile ? 3 : 6);
@@ -32,7 +36,7 @@ const BadgeOverview: React.FC = () => {
     }, [isMobile]);
 
     const userDataQuery = useUserDataQuery(walletAddress, {
-        enabled: isAppReady && isWalletConnected,
+        enabled: isAppReady && isConnected,
     });
 
     const priceQuery = useOpAndArbPriceQuery({ enabled: isAppReady });

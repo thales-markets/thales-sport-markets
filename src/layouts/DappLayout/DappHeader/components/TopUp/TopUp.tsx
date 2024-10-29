@@ -7,7 +7,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import { getIsBiconomy, getIsWalletConnected } from 'redux/modules/wallet';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
@@ -23,10 +23,9 @@ const TopUp: React.FC = () => {
 
     const networkId = useChainId();
     const client = useClient();
-    const { address } = useAccount();
+    const { address, isConnected } = useAccount();
     const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const [showLowBalanceAlert, setShowLowBalanceAlert] = useState<boolean>(false);
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const theme: ThemeInterface = useTheme();
@@ -35,7 +34,7 @@ const TopUp: React.FC = () => {
         walletAddress,
         { networkId, client },
         {
-            enabled: isAppReady && isWalletConnected,
+            enabled: isAppReady && isConnected,
         }
     );
 

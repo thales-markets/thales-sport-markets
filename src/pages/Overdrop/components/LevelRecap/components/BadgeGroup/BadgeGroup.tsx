@@ -5,13 +5,15 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
-import { getIsWalletConnected, getWalletAddress } from 'redux/modules/wallet';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivRowCentered } from 'styles/common';
 import { OverdropUserData } from 'types/overdrop';
 import { OverdropLevel } from 'types/ui';
+import biconomyConnector from 'utils/biconomyWallet';
 import { getCurrentLevelByPoints } from 'utils/overdrop';
+import { useAccount } from 'wagmi';
 
 const LOYALTY_BOOST = ['5%', '10%', '15%', '20%', '25%'];
 
@@ -25,11 +27,13 @@ const BadgeGroup: React.FC<BadgeGroupProps> = ({ loyaltyBoost, startIndex, endIn
     const { t } = useTranslation();
 
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+
+    const { address, isConnected } = useAccount();
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
     const userDataQuery = useUserDataQuery(walletAddress, {
-        enabled: isAppReady && isWalletConnected,
+        enabled: isAppReady && isConnected,
     });
 
     const userData: OverdropUserData | undefined = useMemo(() => {

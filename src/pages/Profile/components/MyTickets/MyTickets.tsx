@@ -6,10 +6,10 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { getIsWalletConnected } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
 import { buildHref, navigateTo } from 'utils/routes';
+import { useAccount } from 'wagmi';
 import SearchField from '../../components/SearchField';
 import UserVaults from '../../components/UserVaults';
 import NavigationBar from '../NavigationBar';
@@ -25,12 +25,12 @@ type MyTicketsProps = {
 const MyTickets: React.FC<MyTicketsProps> = ({ selectedTab, setSelectedTab }) => {
     const { t } = useTranslation();
     const isMobile = useSelector(getIsMobile);
-    const isWalletConnected = useSelector(getIsWalletConnected);
+    const { isConnected } = useAccount();
     const [searchText, setSearchText] = useState<string>('');
 
     useEffect(() => {
-        !isWalletConnected && navigateTo(ROUTES.Markets.Home);
-    }, [isWalletConnected]);
+        !isConnected && navigateTo(ROUTES.Markets.Home);
+    }, [isConnected]);
 
     return (
         <RowContainer>

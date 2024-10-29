@@ -10,10 +10,9 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTicket } from 'redux/modules/ticket';
 import { setOddsType } from 'redux/modules/ui';
-import { getIsWalletConnected } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
 import { buildHref } from 'utils/routes';
+import { useAccount } from 'wagmi';
 import {
     Container,
     DropDown,
@@ -32,7 +31,9 @@ type FooterSidebarMobileProps = {
 
 const FooterSidebarMobile: React.FC<FooterSidebarMobileProps> = ({ setParlayMobileVisibility, setShowBurger }) => {
     const dispatch = useDispatch();
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+
+    const { isConnected } = useAccount();
+
     const ticket = useSelector(getTicket);
     const [dropdownIsOpen, setDropdownIsOpen] = useState<boolean>(false);
     const [pulse, setPulse] = useState(false);
@@ -89,7 +90,7 @@ const FooterSidebarMobile: React.FC<FooterSidebarMobileProps> = ({ setParlayMobi
                     </DropdownContainer>
                 )}
 
-                {isWalletConnected && (
+                {isConnected && (
                     <ItemContainer>
                         <SPAAnchor href={buildHref(ROUTES.Profile)}>
                             <ItemIcon className="icon icon--profile2" />

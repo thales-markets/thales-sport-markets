@@ -3,6 +3,7 @@ import SimpleLoader from 'components/SimpleLoader';
 import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { GAS_ESTIMATION_BUFFER } from 'constants/network';
+import { ContractType } from 'enums/contract';
 import { ethers } from 'ethers';
 import { LoaderContainer } from 'pages/Markets/Home/HomeV2';
 import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
@@ -11,12 +12,20 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
+import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateral, getCollaterals, getDefaultCollateral, isLpSupported } from 'utils/collaterals';
-import networkConnector from 'utils/networkConnector';
+import multiCallContract from 'utils/contracts/multiCallContract';
+import sportsAMMV2Contract from 'utils/contracts/sportsAMMV2Contract';
+import { getContractInstance } from 'utils/networkConnector';
+import { Address, Client, encodeFunctionData } from 'viem';
+import { estimateContractGas, waitForTransactionReceipt } from 'viem/actions';
+import { useAccount, useChainId, useClient } from 'wagmi';
 import TicketDetails from './components/TicketDetails';
 import {
+    additionalClaimButtonStyle,
+    additionalClaimButtonStyleMobile,
     Arrow,
     CategoryContainer,
     CategoryDisclaimer,
@@ -30,8 +39,6 @@ import {
     EmptyTitle,
     ListContainer,
     StyledParlayEmptyIcon,
-    additionalClaimButtonStyle,
-    additionalClaimButtonStyleMobile,
 } from './styled-components';
 
 const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText }) => {
@@ -40,9 +47,13 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
     const [openClaimable, setClaimableState] = useState<boolean>(true);
     const [openOpenPositions, setOpenState] = useState<boolean>(true);
 
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+
+    const networkId = useChainId();
+    const client = useClient();
+    const { address, isConnected } = useAccount();
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const isSearchTextWalletAddress = searchText && ethers.utils.isAddress(searchText);
@@ -64,9 +75,9 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
 
     const userTicketsQuery = useUserTicketsQuery(
         isSearchTextWalletAddress ? searchText : walletAddress.toLowerCase(),
-        networkId,
+        { networkId, client },
         {
-            enabled: isWalletConnected,
+            enabled: isConnected,
         }
     );
 
@@ -94,34 +105,35 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
     const isLoading = userTicketsQuery.isLoading;
 
     const claimBatch = async () => {
-        const { signer, sportsAMMV2Contract, multiCallContract } = networkConnector;
-        const id = toast.loading(t('market.toast-message.transaction-pending'));
+        const contracts = await Promise.all([
+            getContractInstance(ContractType.SPORTS_AMM_V2, client, networkId),
+            getContractInstance(ContractType.MULTICALL, client, networkId),
+        ]);
+        const [sportsAMMV2ContractWithSigner, multiCallContractWithSigner] = contracts;
 
-        if (!signer) return;
+        const id = toast.loading(t('market.toast-message.transaction-pending'));
 
         const calls: { target: string; allowFailure: boolean; callData: any }[] = [];
 
         try {
-            if (userTicketsByStatus.claimable.length) {
+            if (userTicketsByStatus.claimable.length && sportsAMMV2ContractWithSigner && multiCallContractWithSigner) {
                 if (sportsAMMV2Contract && multiCallContract) {
-                    const multiCallContractWithSigner = multiCallContract.connect(signer);
-
                     for (let i = 0; i < userTicketsByStatus.claimable.length; i++) {
                         const ticket = userTicketsByStatus.claimable[i];
                         try {
-                            const sportsAMMV2ContractWithSigner = sportsAMMV2Contract.connect(signer);
-
                             const isClaimCollateralDefaultCollateral = claimCollateral === defaultCollateral;
 
-                            const tx = await sportsAMMV2ContractWithSigner.populateTransaction.exerciseTicket(
-                                ticket.id
-                            );
+                            const tx = encodeFunctionData({
+                                abi: sportsAMMV2ContractWithSigner?.abi,
+                                functionName: 'exerciseTicket',
+                                args: [ticket.id],
+                            });
 
                             if (isClaimCollateralDefaultCollateral) {
                                 calls.push({
-                                    target: sportsAMMV2Contract.address,
+                                    target: sportsAMMV2ContractWithSigner.address,
                                     allowFailure: true,
-                                    callData: tx?.data,
+                                    callData: tx,
                                 });
                             }
                         } catch (e) {
@@ -130,17 +142,25 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
                         }
                     }
 
-                    const gasEstimation = await multiCallContractWithSigner.estimateGas.aggregate3(calls);
+                    const gasEstimation = await estimateContractGas(client as Client, {
+                        address: multiCallContractWithSigner.address as Address,
+                        abi: multiCallContractWithSigner.abi,
+                        functionName: 'aggregate3',
+                        args: [calls],
+                    });
+                    // const gasEstimation = await multiCallContractWithSigner.estimateGas.aggregate3(calls);
 
                     const gasEstimationWithBuffer = Math.ceil(Number(gasEstimation) * GAS_ESTIMATION_BUFFER);
 
-                    const tx: any = await multiCallContractWithSigner.aggregate3(calls, {
+                    const txHash = await multiCallContractWithSigner.write.aggregate3([calls], {
                         gasLimit: gasEstimationWithBuffer,
                     });
 
-                    const txResult = await tx.wait();
+                    const txReceipt = await waitForTransactionReceipt(client as Client, {
+                        hash: txHash,
+                    });
 
-                    if (txResult && txResult?.transactionHash) {
+                    if (txReceipt.status === 'success') {
                         toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
                     }
                 }

@@ -5,13 +5,15 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import { getIsWalletConnected, getWalletAddress } from 'redux/modules/wallet';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
 import { OverdropUserData } from 'types/overdrop';
 import { OverdropLevel } from 'types/ui';
+import biconomyConnector from 'utils/biconomyWallet';
 import { formatPoints, getCurrentLevelByPoints, getNextLevelItemByPoints } from 'utils/overdrop';
+import { useAccount } from 'wagmi';
 import CurrentLevelProgressLine from '../CurrentLevelProgressLine';
 
 type XPOverviewProps = {
@@ -22,12 +24,15 @@ const XPOverview: React.FC<XPOverviewProps> = ({ setSelectedTab }) => {
     const { t } = useTranslation();
 
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+
+    const { address, isConnected } = useAccount();
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const userDataQuery = useUserDataQuery(walletAddress, {
-        enabled: isAppReady && isWalletConnected,
+        enabled: isAppReady && isConnected,
     });
 
     const userData: OverdropUserData | undefined = useMemo(() => {
