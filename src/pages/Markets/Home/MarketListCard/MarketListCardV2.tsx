@@ -85,6 +85,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const isGameOpen = market.isOpen && !isGameStarted;
     const isGameRegularlyResolved = market.isResolved && !market.isCancelled;
     const isGameLive = !!market.live;
+    const isFutures = isFuturesMarket(market.typeId);
 
     const spreadMarket = useMemo(() => {
         const spreadMarkets = market.childMarkets.filter((childMarket) =>
@@ -166,7 +167,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
         !isMarketSelected &&
         (isGameOpen || isGameLive) &&
         !isMobile;
-    const isTwoPositionalMarket = market.odds.length === 2;
+    const isTwoPositionalMarket = market.odds.length === 2 || isFutures;
     const selected = selectedMarket?.gameId == market.gameId;
 
     let marketsCount = market.childMarkets.length;
@@ -178,7 +179,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
             marketsCount -= 1;
         }
     }
-    if (isFuturesMarket(market.typeId)) {
+    if (isFutures) {
         marketsCount += 1;
     }
 
@@ -285,8 +286,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             src={homeLogoSrc}
                             onError={getOnImageError(setHomeLogoSrc, market.leagueId)}
                             isColumnView={isColumnView}
+                            isFutures={isFutures}
                         />
-                        {!market.isOneSideMarket && !isFuturesMarket(market.typeId) && (
+                        {!market.isOneSideMarket && !isFutures && (
                             <>
                                 <ClubLogo
                                     alt="Away team logo"
@@ -294,6 +296,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                     onError={getOnImageError(setAwayLogoSrc, market.leagueId)}
                                     awayTeam={true}
                                     isColumnView={isColumnView}
+                                    isFutures={isFutures}
                                 />
                             </>
                         )}
@@ -435,7 +438,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                         )
                                     }
                                 >
-                                    {marketsCount > 0 && !isFuturesMarket(market.typeId) && `+${marketsCount}`}
+                                    {marketsCount > 0 && !isFutures && `+${marketsCount}`}
                                     {!isMobile && marketsCount > 0 && <Arrow className={'icon icon--arrow-down'} />}
                                 </MarketsCountWrapper>
                             )}
@@ -510,7 +513,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                             <FireText>{`+${overdropGameMultiplier.multiplier}% XP`}</FireText>
                                         </FireContainer>
                                     )}
-                                    {marketsCount > 0 && !isFuturesMarket(market.typeId) && `+${marketsCount}`}
+                                    {marketsCount > 0 && !isFutures && `+${marketsCount}`}
                                     {!isMobile && <Arrow className={'icon icon--arrow-down'} />}
                                 </MarketsCountWrapper>
                             )}
