@@ -66,7 +66,7 @@ export const Colors = {
 
     GREEN: '#5FC694',
 
-    BLUE: '#3FFFFF',
+    BLUE: '#EF9115',
 
     RED: '#e26a78',
     RED_DARK: '#ca4c53',

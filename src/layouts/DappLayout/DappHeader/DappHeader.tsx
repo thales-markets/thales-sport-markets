@@ -1,3 +1,4 @@
+import pumpkinData from 'assets/lotties/halloween.json';
 import Button from 'components/Button';
 import Logo from 'components/Logo';
 import NavMenu from 'components/NavMenu';
@@ -54,6 +55,8 @@ import {
     NotificationCount,
     OverdropButtonContainer,
     OverdropIcon,
+    PumpkinContainer,
+    PumpkinLottieStyles,
     RightContainer,
     SearchContainer,
     SearchIcon,
@@ -62,6 +65,7 @@ import {
     SmallBadgeImage,
     WrapperMobile,
 } from './styled-components';
+import Lottie from 'lottie-react';
 
 const PULSING_COUNT = 10;
 
@@ -176,6 +180,14 @@ const DappHeader: React.FC = () => {
                 <Container>
                     <LeftContainer>
                         <Logo />
+                        <PumpkinContainer>
+                            <Lottie
+                                autoplay={true}
+                                animationData={pumpkinData}
+                                loop={true}
+                                style={PumpkinLottieStyles}
+                            />
+                        </PumpkinContainer>
                     </LeftContainer>
 
                     <MiddleContainer>
