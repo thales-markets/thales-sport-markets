@@ -3,7 +3,6 @@ import { Trans } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import SPAAnchor from '../SPAAnchor';
-import { buildSpeedMarketsBannerHref } from 'utils/routes';
 
 const IS_VISIBLE = true;
 
@@ -11,11 +10,11 @@ const Banner: React.FC = () => {
     return !IS_VISIBLE ? (
         <></>
     ) : (
-        <SPAAnchor href={buildSpeedMarketsBannerHref()}>
+        <SPAAnchor>
             <Container>
                 <Label>
                     <Trans
-                        i18nKey={'banner.speed-text'}
+                        i18nKey={'banner.halloween-text'}
                         components={{
                             highlight: <HightlightLabel />,
                         }}

@@ -321,7 +321,16 @@
             "trades": "Trades",
             "wallet": "Wallet",
             "highest-win": "Highest win",
-            "lifetime-wins": "Lifetime wins"
+            "lifetime-wins": "Lifetime wins",
+            "buy-thales-title": "You get better odds when betting with THALES",
+            "stake-title": "You can stake THALES to also earn yield while still being able to use it on Overtime for best odds",
+            "stake-label": "Stake",
+            "weekly-rewards": "You get weekly USDC+THALES staking rewards! Claim them on <stakingPageLink>thales.io staking page<stakingPageLink>",
+            "swap-to-thales-label": "Swap to THALES",
+            "get-thales-label": "Get THALES",
+            "swap-success": "Successfully swapped to THALES",
+            "thales-price-label": "THALES PRICE",
+            "thales-to-receive": "THALES TO RECEIVE"
         },
         "wrapper-nav": {
             "my-tickets": "My tickets",
@@ -430,6 +439,28 @@
             "fund-batch": "Fund multiple addresses",
             "insufficient-balance": "Insufficient balance",
             "total-amount-batch": "Total amount will be {{ amount }} multiple by {{ count }} wallet address(es)."
+        },
+        "staking-modal": {
+            "congratulations-label": "Congratulations!",
+            "claimed": "You claimed: {{amount}}",
+            "staked": "You staked: {{amount}}",
+            "earn-yield": "Stake your THALES to earn yield?",
+            "rewards-apy": "You can stake your THALES to earn weekly rewards, currently at {{apy}} APY.",
+            "thales-on-overtime": "Staked THALES can still be used to bet on Overtime. More details on staking <stakingPageLink>here</stakingPageLink>.",
+            "weekly-rewards": "Claim your staking rewards on <stakingPageLink>thales.io staking page</stakingPageLink>.",
+            "stake-more": "Stake more to earn more yield every week!",
+            "stake-now": "Click below to stake now!",
+            "amount-to-stake-label": "Amount to stake",
+            "stake-confirmation-message": "THALES successfully staked",
+            "validation": {
+                "unstaking-in-progress": "Unstaking in progress, you cannot stake",
+                "staking-paused": "Staking paused, please try later"
+            },
+            "button": {
+                "stake-label": "Stake",
+                "stake-progress-label": "Staking",
+                "mute-label": "Mute popup for 7 days"
+            }
         }
     },
     "markets": {
@@ -689,7 +720,8 @@
                 "liquidity-pool": "Provide Liquidity",
                 "promotions": "Promotions",
                 "speed-markets": "Speed markets",
-                "digital-options": "Digital options"
+                "digital-options": "Digital options",
+                "resources": "Resources"
             },
             "buttons": {
                 "switch": "Switch",
@@ -1051,12 +1083,18 @@
         "single-market": {
             "title": "Overtime Markets Web3 Sportsbook: {{dynamicTitle}}",
             "description": "{{dynamicTitle}}: Enjoy the best Web3 sportsbook odds on the market. No registration needed. Fully decentralized sports markets."
+        },
+        "page": {
+            "title": "Resources and guides",
+            "content": "Learn about the best strategies and ways to bet on different sports, how to find the best games and odds, and how to get started on Overtime Markets.",
+            "start-using-overtime": "Start using Overtime"
         }
     },
     "banner": {
         "v1-text": "<highlight>Welcome to Overtime V2!</highlight> If you are looking for the legacy V1 version, <highlight>click here</highlight>.",
         "elections-text": "Elections for Thales Council are now live, exercise your voting power <highlight>here</highlight>.",
-        "speed-text": "Trade on Speed Markets, win 10,000 PYTH! <highlight>Learn more.</highlight>"
+        "speed-text": "Trade on Speed Markets, win 10,000 PYTH! <highlight>Learn more.</highlight>",
+        "halloween-text": "<highlight>SCARY GOOD ODDS during Halloween! Enjoy best Player Props odds in the world from Oct 31st - Nov 3rd!</highlight>"
     },
     "promotions": {
         "title": "Promotions and Incentives",
@@ -1122,7 +1160,8 @@
                 "twitter-content": "If you share your Overtime bet on Twitter in the form of a <bold>Flex Card</bold>, you will activate a <bold>3 day long Twitter Flex Boost of +10%.</bold>  This specific boost is valid for all trades executed within those 72 hours. <bold>After the 72 hours</bold> have elapsed, the boost expires and you can activate it again by sharing a new flex card on Twitter under the same conditions.",
                 "loyalty-boost": "Loyalty boost",
                 "loyalty-boost-content": "The Loyalty XP Boost gives you up to 25% permanent boost on all your general XP accrual, depending on your level. Starting at 5% boost on Level 1, you gain another +5% increase on reaching every fifth level. You reach max Loyalty XP boost of 25% when you reach Level 20 (GOAT) with having accrued 5,000,000 XP points. You can see the XP levels breakdown on the LEVELING TREE page."
-            }
+            },
+            "payout-disclaimer": "*won Free Bets are airdropped each Friday."
         },
         "xp-details": {
             "days-in-row": "Days in a row",

@@ -81,6 +81,7 @@ const QUERY_KEYS = {
             networkId,
             walletAddress,
         ],
+        StakingData: (walletAddress: string, networkId: Network) => ['stakingData', walletAddress, networkId],
     },
     FavoriteTeam: (walletAddress: string, networkId: Network) => ['favoriteTeam', walletAddress, networkId],
     Banners: (networkId: Network) => ['banners', networkId],
@@ -125,6 +126,7 @@ const QUERY_KEYS = {
         CoingeckoRates: () => ['rates', 'coingeckoRates'],
     },
     Promotions: (branchName: string) => [branchName, 'promotions'],
+    SeoArticles: (branchName: string) => ['seoArticles', branchName],
     Overdrop: {
         Leaderboard: () => ['leaderboard'],
         UserMultipliers: (walletAddress: string) => ['userMultipliers', walletAddress],
