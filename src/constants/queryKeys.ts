@@ -126,6 +126,7 @@ const QUERY_KEYS = {
         CoingeckoRates: () => ['rates', 'coingeckoRates'],
     },
     Promotions: (branchName: string) => [branchName, 'promotions'],
+    SeoArticles: (branchName: string) => ['seoArticles', branchName],
     Overdrop: {
         Leaderboard: () => ['leaderboard'],
         UserMultipliers: (walletAddress: string) => ['userMultipliers', walletAddress],
