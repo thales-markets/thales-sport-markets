@@ -3,6 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
+        "@ant-design/icons": "^5.5.1",
         "@biconomy/account": "4.1.1",
         "@google-cloud/translate": "^6.3.0",
         "@particle-network/auth-core-modal": "^1.4.0",
