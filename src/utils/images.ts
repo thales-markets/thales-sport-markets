@@ -46,7 +46,7 @@ export const getTeamImageSource = (team: string, league: League) => {
         : league == League.NBA_FUTURES
         ? `/logos/NBA/nba.webp`
         : league == League.EPL_FUTURES
-        ? `/logos/EPL/epl.jpg`
+        ? `/logos/EPL/epl.webp`
         : `/logos/${leagueLabel}/${team.trim().replaceAll(' ', '-').replaceAll('/', '-').toLowerCase()}.webp`;
 };
 

@@ -96,7 +96,7 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ market }) => {
                         {(!marketTypesFilter.length || marketTypesFilter.includes(MarketType.WINNER)) && (
                             <PositionsV2
                                 markets={[market]}
-                                marketType={MarketType.WINNER}
+                                marketType={market.typeId}
                                 isGameOpen={isGameOpen}
                                 onAccordionClick={refreshScroll}
                             />

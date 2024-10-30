@@ -289,7 +289,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                 {(!marketTypesFilter.length || marketTypesFilter.includes(MarketType.WINNER)) && (
                                     <PositionsV2
                                         markets={[market]}
-                                        marketType={MarketType.WINNER}
+                                        marketType={market.typeId}
                                         isGameOpen={isGameOpen}
                                         showInvalid={!hidePausedMarkets}
                                     />
