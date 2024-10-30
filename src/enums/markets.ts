@@ -32,6 +32,7 @@ export enum SportFilter {
     Waterpolo = 'Waterpolo',
     Cricket = 'Cricket',
     Politics = 'Politics',
+    Futures = 'Futures',
     // Motosport = 'Motosport',
     // Golf = 'Golf',
 }

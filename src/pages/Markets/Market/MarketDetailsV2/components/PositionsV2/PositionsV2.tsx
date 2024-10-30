@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import styled from 'styled-components';
 import { SportMarket } from 'types/markets';
-import { getMarketTypeTooltipKey } from 'utils/markets';
+import { getMarketTypeTooltipKey, isFuturesMarket } from 'utils/markets';
 import { getSubtitleText, getTitleText } from 'utils/marketsV2';
 import { League } from '../../../../../../enums/sports';
 import { getGridMinMaxPercentage } from '../../../../../../utils/ui';
@@ -116,8 +116,8 @@ const Positions: React.FC<PositionsProps> = ({
                     {sortedMarkets.map((market, index) => {
                         const odds =
                             isMainPageView &&
-                            market.typeId === MarketType.WINNER &&
-                            market.leagueId === League.US_ELECTION
+                            ((market.typeId === MarketType.WINNER && market.leagueId === League.US_ELECTION) ||
+                                isFuturesMarket(market.typeId))
                                 ? market.odds.slice(0, 2)
                                 : market.odds;
                         return (

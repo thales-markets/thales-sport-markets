@@ -5,7 +5,7 @@ import Tooltip from 'components/Tooltip';
 import { MarketType } from 'enums/marketTypes';
 import { League, PeriodType, Sport } from 'enums/sports';
 import Lottie from 'lottie-react';
-import { getBetTypesForLeague, SpreadTypes, TotalTypes } from 'overtime-live-trading-utils';
+// import { getBetTypesForLeague, SpreadTypes, TotalTypes } from 'overtime-live-trading-utils';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -27,6 +27,7 @@ import { buildMarketLink } from 'utils/routes';
 import { getLeaguePeriodType, getLeagueTooltipKey } from 'utils/sports';
 import { displayGameClock, displayGamePeriod } from 'utils/ui';
 import { MEDIUM_ODDS } from '../../../../constants/markets';
+import { isFuturesMarket } from '../../../../utils/markets';
 import PositionsV2 from '../../Market/MarketDetailsV2/components/PositionsV2';
 import MatchStatus from './components/MatchStatus';
 import {
@@ -99,14 +100,14 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                   })
                 : undefined;
 
-        const betTypesForLeague = getBetTypesForLeague(market.leagueId);
-        if (
-            market.live &&
-            !mainSpreadMarket &&
-            betTypesForLeague.find((betType: SpreadTypes) => Object.values(SpreadTypes).includes(betType))
-        ) {
-            return { ...market, type: 'spread', typeId: MarketType.SPREAD, odds: [0, 0], line: Infinity };
-        }
+        // const betTypesForLeague = getBetTypesForLeague(market.leagueId);
+        // if (
+        //     market.live &&
+        //     !mainSpreadMarket &&
+        //     betTypesForLeague.find((betType: SpreadTypes) => Object.values(SpreadTypes).includes(betType))
+        // ) {
+        //     return { ...market, type: 'spread', typeId: MarketType.SPREAD, odds: [0, 0], line: Infinity };
+        // }
 
         return mainSpreadMarket;
     }, [market]);
@@ -125,14 +126,14 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                   })
                 : undefined;
 
-        const betTypesForLeague = getBetTypesForLeague(market.leagueId);
-        if (
-            market.live &&
-            !mainTotalMarket &&
-            betTypesForLeague.find((betType: TotalTypes) => Object.values(TotalTypes).includes(betType))
-        ) {
-            return { ...market, type: 'total', typeId: MarketType.TOTAL, odds: [0, 0], line: Infinity };
-        }
+        // const betTypesForLeague = getBetTypesForLeague(market.leagueId);
+        // if (
+        //     market.live &&
+        //     !mainTotalMarket &&
+        //     betTypesForLeague.find((betType: TotalTypes) => Object.values(TotalTypes).includes(betType))
+        // ) {
+        //     return { ...market, type: 'total', typeId: MarketType.TOTAL, odds: [0, 0], line: Infinity };
+        // }
 
         return mainTotalMarket;
     }, [market]);
@@ -176,6 +177,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
         if (totalMarket) {
             marketsCount -= 1;
         }
+    }
+    if (isFuturesMarket(market.typeId)) {
+        marketsCount += 1;
     }
 
     const leagueTooltipKey = getLeagueTooltipKey(market.leagueId);
@@ -388,7 +392,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             <PositionsV2
                                 markets={[marketTypeFilterMarket ? marketTypeFilterMarket : market]}
                                 marketType={
-                                    marketTypeFilter && marketTypeFilterMarket ? marketTypeFilter : MarketType.WINNER
+                                    marketTypeFilter && marketTypeFilterMarket ? marketTypeFilter : market.typeId
                                 }
                                 isGameOpen={isGameLive}
                                 isGameLive={isGameLive}
@@ -431,7 +435,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                         )
                                     }
                                 >
-                                    {marketsCount > 0 && `+${marketsCount}`}
+                                    {marketsCount > 0 && !isFuturesMarket(market.typeId) && `+${marketsCount}`}
                                     {!isMobile && marketsCount > 0 && <Arrow className={'icon icon--arrow-down'} />}
                                 </MarketsCountWrapper>
                             )}
@@ -456,7 +460,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             <PositionsV2
                                 markets={[marketTypeFilterMarket ? marketTypeFilterMarket : market]}
                                 marketType={
-                                    marketTypeFilter && marketTypeFilterMarket ? marketTypeFilter : MarketType.WINNER
+                                    marketTypeFilter && marketTypeFilterMarket ? marketTypeFilter : market.typeId
                                 }
                                 isGameOpen={isGameOpen}
                                 isMainPageView
@@ -506,7 +510,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                             <FireText>{`+${overdropGameMultiplier.multiplier}% XP`}</FireText>
                                         </FireContainer>
                                     )}
-                                    {marketsCount > 0 && `+${marketsCount}`}
+                                    {marketsCount > 0 && !isFuturesMarket(market.typeId) && `+${marketsCount}`}
                                     {!isMobile && <Arrow className={'icon icon--arrow-down'} />}
                                 </MarketsCountWrapper>
                             )}

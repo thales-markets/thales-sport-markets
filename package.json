@@ -30,7 +30,7 @@
         "lottie-react": "^2.3.1",
         "numbro": "^2.3.6",
         "ordinal": "^1.0.3",
-        "overtime-live-trading-utils": "^0.2.4",
+        "overtime-live-trading-utils": "^0.3.1",
         "plausible-tracker": "^0.3.8",
         "rc-tooltip": "^5.1.1",
         "react": "^17.0.2",

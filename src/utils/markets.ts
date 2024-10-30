@@ -3,6 +3,7 @@ import {
     BOTH_TEAMS_TO_SCORE_MARKET_TYPES,
     COMBINED_POSITIONS_MARKET_TYPES,
     DOUBLE_CHANCE_MARKET_TYPES,
+    FUTURES_MARKET_TYPES,
     HOME_TEAM_MARKET_TYPES,
     ONE_SIDE_PLAYER_PROPS_MARKET_TYPES,
     OTHER_YES_NO_MARKET_TYPES,
@@ -44,7 +45,10 @@ export const formatMarketOdds = (oddsType: OddsType, odds: number | undefined) =
 };
 
 export const isOneSideMarket = (league: number) =>
-    getLeagueSport(league) === Sport.MOTOSPORT || league == League.GOLF_WINNER || league == League.US_ELECTION;
+    getLeagueSport(league) === Sport.MOTOSPORT ||
+    league == League.GOLF_WINNER ||
+    league == League.US_ELECTION ||
+    getLeagueSport(league) === Sport.FUTURES;
 
 export const isPlayerPropsMarket = (marketType: MarketType) => {
     return PLAYER_PROPS_MARKET_TYPES.includes(marketType);
@@ -179,4 +183,8 @@ export const isWithinSlippage = (originalOdd: number, newOdd: number, slippage: 
     }
     const allowedChange = (originalOdd * slippage) / 100;
     return newOdd < originalOdd ? newOdd >= originalOdd - allowedChange : newOdd <= originalOdd + allowedChange;
+};
+
+export const isFuturesMarket = (marketType: MarketType) => {
+    return FUTURES_MARKET_TYPES.includes(marketType);
 };

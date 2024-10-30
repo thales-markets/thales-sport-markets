@@ -29,6 +29,7 @@ import { buildHref } from 'utils/routes';
 import { getLeaguePeriodType, getLeagueSport } from 'utils/sports';
 import { getOrdinalNumberLabel } from 'utils/ui';
 import useQueryParam from 'utils/useQueryParams';
+import { isFuturesMarket } from '../../../../utils/markets';
 import Header from '../../Home/Header';
 import MatchInfoV2 from './components/MatchInfoV2';
 import PositionsV2 from './components/PositionsV2';
@@ -71,14 +72,17 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     );
 
     const numberOfMarkets = useMemo(() => {
-        let num = !marketTypesFilter.length || marketTypesFilter.includes(MarketType.WINNER) ? 1 : 0;
+        let num =
+            !marketTypesFilter.length || marketTypesFilter.includes(MarketType.WINNER) || isFuturesMarket(market.typeId)
+                ? 1
+                : 0;
         Object.keys(groupedChildMarkets).forEach((key) => {
             const typeId = Number(key);
             const childMarkets = groupedChildMarkets[typeId];
             num += childMarkets.length;
         });
         return num;
-    }, [groupedChildMarkets, marketTypesFilter]);
+    }, [groupedChildMarkets, market.typeId, marketTypesFilter]);
 
     useEffect(() => {
         if (!metaTitle) {

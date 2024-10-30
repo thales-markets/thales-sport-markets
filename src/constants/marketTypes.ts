@@ -1048,6 +1048,18 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         key: 'secondPeriodExactTotalAwayTeam',
         name: 'Exact total 2nd',
     },
+
+    // Futures
+    [MarketType.LEAGUE_WINNER]: {
+        id: MarketType.LEAGUE_WINNER,
+        key: 'leagueWinner',
+        name: 'Champion',
+    },
+    [MarketType.MVP]: {
+        id: MarketType.MVP,
+        key: 'mvp',
+        name: 'MVP',
+    },
 };
 
 export const PLAYER_PROPS_MARKET_TYPES = [
@@ -1405,6 +1417,8 @@ export const UFC_SPECIFIC_MARKET_TYPES = [
     MarketType.METHOD_OF_VICTORY,
 ];
 
+export const FUTURES_MARKET_TYPES = [MarketType.LEAGUE_WINNER, MarketType.MVP];
+
 export const MarketTypesBySportFilter: Record<SportFilter, MarketType[]> = {
     [SportFilter.Boosted]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.Live]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
@@ -1452,6 +1466,7 @@ export const MarketTypesBySportFilter: Record<SportFilter, MarketType[]> = {
         MarketType.US_ELECTION_POPULAR_VOTE_WINNER,
         MarketType.US_ELECTION_WINNING_PARTY,
     ],
+    [SportFilter.Futures]: [MarketType.LEAGUE_WINNER, MarketType.MVP],
 };
 
 export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGroup, MarketType[]>>> = {
@@ -1780,6 +1795,9 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
             MarketType.US_ELECTION_WINNING_PARTY_WINSCONSIN,
             MarketType.US_ELECTION_WINNING_PARTY_NORTH_CAROLINA,
         ],
+    },
+    [Sport.FUTURES]: {
+        [MarketTypeGroup.WINNER]: FUTURES_MARKET_TYPES,
     },
     [Sport.EMPTY]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,

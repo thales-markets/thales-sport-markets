@@ -13,6 +13,7 @@ import { SportMarket } from 'types/markets';
 import { isOddValid } from 'utils/marketsV2';
 import { League } from '../../../../enums/sports';
 import { ThemeInterface } from '../../../../types/ui';
+import { isFuturesMarket } from '../../../../utils/markets';
 import PositionsV2 from '../../Market/MarketDetailsV2/components/PositionsV2';
 import { NoMarketsContainer, NoMarketsLabel, Wrapper } from './styled-components';
 
@@ -53,14 +54,17 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ market }) => {
     );
 
     const numberOfMarkets = useMemo(() => {
-        let num = !marketTypesFilter.length || marketTypesFilter.includes(MarketType.WINNER) ? 1 : 0;
+        let num =
+            !marketTypesFilter.length || marketTypesFilter.includes(MarketType.WINNER) || isFuturesMarket(market.typeId)
+                ? 1
+                : 0;
         Object.keys(groupedChildMarkets).forEach((key) => {
             const typeId = Number(key);
             const childMarkets = groupedChildMarkets[typeId];
             num += childMarkets.length;
         });
         return num;
-    }, [groupedChildMarkets, marketTypesFilter]);
+    }, [groupedChildMarkets, market.typeId, marketTypesFilter]);
 
     const areChildMarketsOddsValid = market.childMarkets.some((childMarket) =>
         childMarket.odds.some((odd) => isOddValid(odd))
