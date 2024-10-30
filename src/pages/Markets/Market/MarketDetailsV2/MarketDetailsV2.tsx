@@ -86,7 +86,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
 
     useEffect(() => {
         if (!metaTitle) {
-            setMetaTitle(`${market.homeTeam} vs ${market.awayTeam}`);
+            setMetaTitle(`${market.homeTeam} - ${market.awayTeam}`);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [market.awayTeam, market.homeTeam]);

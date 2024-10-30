@@ -6,6 +6,7 @@ import { MarketType } from 'enums/marketTypes';
 import { League, PeriodType, Sport } from 'enums/sports';
 import Lottie from 'lottie-react';
 // import { getBetTypesForLeague, SpreadTypes, TotalTypes } from 'overtime-live-trading-utils';
+import { MEDIUM_ODDS } from 'constants/markets';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -22,12 +23,11 @@ import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarket } from 'types/markets';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
+import { isFuturesMarket } from 'utils/markets';
 import { isOddValid } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
 import { getLeaguePeriodType, getLeagueTooltipKey } from 'utils/sports';
 import { displayGameClock, displayGamePeriod } from 'utils/ui';
-import { MEDIUM_ODDS } from '../../../../constants/markets';
-import { isFuturesMarket } from '../../../../utils/markets';
 import PositionsV2 from '../../Market/MarketDetailsV2/components/PositionsV2';
 import MatchStatus from './components/MatchStatus';
 import {
@@ -286,7 +286,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             onError={getOnImageError(setHomeLogoSrc, market.leagueId)}
                             isColumnView={isColumnView}
                         />
-                        {!market.isOneSideMarket && (
+                        {!market.isOneSideMarket && !isFuturesMarket(market.typeId) && (
                             <>
                                 <ClubLogo
                                     alt="Away team logo"
@@ -445,7 +445,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                         market.gameId,
                                         language,
                                         false,
-                                        encodeURIComponent(`${market.homeTeam} vs ${market.awayTeam}`)
+                                        encodeURIComponent(`${market.homeTeam} - ${market.awayTeam}`)
                                     )}
                                 >
                                     <Tooltip
@@ -520,7 +520,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                         market.gameId,
                                         language,
                                         false,
-                                        encodeURIComponent(`${market.homeTeam} vs ${market.awayTeam}`)
+                                        encodeURIComponent(`${market.homeTeam} - ${market.awayTeam}`)
                                     )}
                                 >
                                     <Tooltip
@@ -554,7 +554,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                         market.gameId,
                         language,
                         false,
-                        encodeURIComponent(`${market.homeTeam} vs ${market.awayTeam}`)
+                        encodeURIComponent(`${market.homeTeam} - ${market.awayTeam}`)
                     )}
                 >
                     {getMainContainerContent()}

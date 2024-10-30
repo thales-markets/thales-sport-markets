@@ -39,8 +39,14 @@ export const getTeamImageSource = (team: string, league: League) => {
         ? `/logos/Bundesliga/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.BRAZIL_CUP
         ? `/logos/Brazil-Serie-A/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : league == League.US_ELECTION || league == League.NFL_FUTURES || league == League.NBA_FUTURES
+        : league == League.US_ELECTION
         ? `/logos/Countries/united-states-of-america.svg`
+        : league == League.NFL_FUTURES
+        ? `/logos/NFL/nfl.webp`
+        : league == League.NBA_FUTURES
+        ? `/logos/NBA/nba.webp`
+        : league == League.EPL_FUTURES
+        ? `/logos/EPL/epl.jpg`
         : `/logos/${leagueLabel}/${team.trim().replaceAll(' ', '-').replaceAll('/', '-').toLowerCase()}.webp`;
 };
 
