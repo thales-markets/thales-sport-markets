@@ -180,7 +180,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
         }
     }
     if (isFutures) {
-        marketsCount += 1;
+        marketsCount += market.odds.length - 2;
     }
 
     const leagueTooltipKey = getLeagueTooltipKey(market.leagueId);
@@ -438,7 +438,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                         )
                                     }
                                 >
-                                    {marketsCount > 0 && !isFutures && `+${marketsCount}`}
+                                    {marketsCount > 0 && `+${marketsCount}`}
                                     {!isMobile && marketsCount > 0 && <Arrow className={'icon icon--arrow-down'} />}
                                 </MarketsCountWrapper>
                             )}
@@ -513,8 +513,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                             <FireText>{`+${overdropGameMultiplier.multiplier}% XP`}</FireText>
                                         </FireContainer>
                                     )}
-                                    {marketsCount > 0 && !isFutures && `+${marketsCount}`}
-                                    {(!isMobile || isFutures) && <Arrow className={'icon icon--arrow-down'} />}
+                                    {marketsCount > 0 && `+${marketsCount}`}
+                                    {!isMobile && <Arrow className={'icon icon--arrow-down'} />}
                                 </MarketsCountWrapper>
                             )}
                             {!isMobile && (
