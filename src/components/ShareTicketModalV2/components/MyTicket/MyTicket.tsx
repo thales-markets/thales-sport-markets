@@ -1,4 +1,4 @@
-import { ReactComponent as OvertimeLogoIcon } from 'assets/images/overtime-logo.svg';
+import { ReactComponent as OvertimeLogoIcon } from 'assets/images/halloween-logo.svg';
 import { t } from 'i18next';
 import React from 'react';
 import { useSelector } from 'react-redux';
@@ -44,9 +44,8 @@ const MyTicket: React.FC<MyTicketProps> = ({
 
     return (
         <Container>
-            <ContentRow>
+            <ContentRow margin={'0 0 10px 0'} style={{ justifyContent: 'center' }}>
                 <OvertimeLogo />
-                {isTicket && <TicketLabel>{t('markets.parlay.share-ticket.parlay')}</TicketLabel>}
                 {!isTicket && (
                     <Header isTicket={isTicket}>
                         {t('markets.parlay.share-ticket.header')}

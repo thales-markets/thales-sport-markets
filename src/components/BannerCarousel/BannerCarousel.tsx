@@ -56,6 +56,9 @@ const Container = styled.div`
     @media (max-width: 1199px) {
         margin-right: 5px;
     }
+    .dot.selected {
+        opacity: 0 !important;
+    }
 `;
 
 const StyledDiv = styled.div<{ image: string; hasHref: boolean }>`
