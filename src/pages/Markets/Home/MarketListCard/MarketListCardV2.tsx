@@ -514,7 +514,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                         </FireContainer>
                                     )}
                                     {marketsCount > 0 && !isFutures && `+${marketsCount}`}
-                                    {!isMobile && <Arrow className={'icon icon--arrow-down'} />}
+                                    {(!isMobile || isFutures) && <Arrow className={'icon icon--arrow-down'} />}
                                 </MarketsCountWrapper>
                             )}
                             {!isMobile && (
