@@ -44,7 +44,7 @@ const MyTicket: React.FC<MyTicketProps> = ({
 
     return (
         <Container>
-            <ContentRow margin={'0 0 10px 0'}>
+            <ContentRow margin={'0 0 10px 0'} style={{ justifyContent: 'center' }}>
                 <OvertimeLogo />
                 {!isTicket && (
                     <Header isTicket={isTicket}>
