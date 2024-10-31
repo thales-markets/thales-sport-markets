@@ -1,5 +1,6 @@
 import { Position, StatusFilter } from 'enums/markets';
 import { Network } from 'enums/network';
+import { RiskManagementConfig } from 'enums/riskManagement';
 
 const QUERY_KEYS = {
     ParlayMarkets: (networkId: Network, account: string, minTimestamp?: number, maxTimestamp?: number) => [
@@ -135,6 +136,11 @@ const QUERY_KEYS = {
         GameMultipliers: () => ['gameMultipliers'],
         Price: () => ['price'],
     },
+    RiskManagementConfig: (networkId: Network, configType: RiskManagementConfig) => [
+        'RiskManagementConfig',
+        networkId,
+        configType,
+    ],
 };
 
 export default QUERY_KEYS;

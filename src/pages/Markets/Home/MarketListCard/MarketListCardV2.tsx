@@ -3,10 +3,13 @@ import SPAAnchor from 'components/SPAAnchor';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
 import { MarketType } from 'enums/marketTypes';
+import { RiskManagementConfig } from 'enums/riskManagement';
 import { League, PeriodType, Sport } from 'enums/sports';
+import _ from 'lodash';
 import Lottie from 'lottie-react';
-import { getBetTypesForLeague, SpreadTypes, TotalTypes } from 'overtime-live-trading-utils';
+import { SpreadTypes, TotalTypes } from 'overtime-live-trading-utils';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
+import useRiskManagementConfigQuery from 'queries/riskManagement/riskManagementConfig';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,6 +21,7 @@ import {
     getSelectedMarket,
     setSelectedMarket,
 } from 'redux/modules/market';
+import { getNetworkId } from 'redux/modules/wallet';
 import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarket } from 'types/markets';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
@@ -67,6 +71,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const dispatch = useDispatch();
 
     const isAppReady = useSelector(getIsAppReady);
+    const networkId = useSelector(getNetworkId);
     const isMarketSelected = useSelector(getIsMarketSelected);
     const isThreeWayView = useSelector(getIsThreeWayView);
     const selectedMarket = useSelector(getSelectedMarket);
@@ -74,6 +79,22 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const isMobile = useSelector(getIsMobile);
     const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.leagueId));
     const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.leagueId));
+
+    const riskManagementLeaguesQuery = useRiskManagementConfigQuery(networkId, RiskManagementConfig.LEAGUES, {
+        enabled: isAppReady && !!market.live,
+    });
+
+    const riskManagementBetTypesByLeague = useMemo(
+        () =>
+            riskManagementLeaguesQuery.isSuccess && riskManagementLeaguesQuery.data
+                ? _.uniq(
+                      riskManagementLeaguesQuery.data
+                          .filter((leagueInfo) => leagueInfo.leagueId === market.leagueId && leagueInfo.enabled)
+                          .map((leagueInfo) => leagueInfo.marketName)
+                  )
+                : [],
+        [riskManagementLeaguesQuery.isSuccess, riskManagementLeaguesQuery.data, market.leagueId]
+    );
 
     useEffect(() => {
         setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.leagueId));
@@ -100,17 +121,18 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                   })
                 : undefined;
 
-        const betTypesForLeague = getBetTypesForLeague(market.leagueId);
         if (
             market.live &&
             !mainSpreadMarket &&
-            betTypesForLeague.find((betType: SpreadTypes) => Object.values(SpreadTypes).includes(betType))
+            riskManagementBetTypesByLeague.find((betType) =>
+                Object.values(SpreadTypes).includes(betType as SpreadTypes)
+            )
         ) {
             return { ...market, type: 'spread', typeId: MarketType.SPREAD, odds: [0, 0], line: Infinity };
         }
 
         return mainSpreadMarket;
-    }, [market]);
+    }, [market, riskManagementBetTypesByLeague]);
 
     const totalMarket = useMemo(() => {
         const totalMarkets = market.childMarkets.filter((childMarket) =>
@@ -126,17 +148,16 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                   })
                 : undefined;
 
-        const betTypesForLeague = getBetTypesForLeague(market.leagueId);
         if (
             market.live &&
             !mainTotalMarket &&
-            betTypesForLeague.find((betType: TotalTypes) => Object.values(TotalTypes).includes(betType))
+            riskManagementBetTypesByLeague.find((betType) => Object.values(TotalTypes).includes(betType as TotalTypes))
         ) {
             return { ...market, type: 'total', typeId: MarketType.TOTAL, odds: [0, 0], line: Infinity };
         }
 
         return mainTotalMarket;
-    }, [market]);
+    }, [market, riskManagementBetTypesByLeague]);
 
     const marketTypeFilterMarket = useMemo(() => {
         if (marketTypeFilter === undefined) return undefined;

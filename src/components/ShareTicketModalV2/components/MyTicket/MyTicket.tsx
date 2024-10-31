@@ -150,20 +150,6 @@ const BoldContent = styled.span`
     font-weight: 600;
 `;
 
-const TicketLabel = styled.span`
-    font-size: 34px;
-    line-height: 27px;
-    letter-spacing: 0.3em;
-    font-weight: 400;
-    text-transform: uppercase;
-    color: ${(props) => props.theme.textColor.primary};
-    padding-left: 8px;
-    opacity: 0.8;
-    @media (max-width: 950px) {
-        letter-spacing: 0.18em;
-    }
-`;
-
 const OvertimeLogo = styled(OvertimeLogoIcon)`
     fill: ${(props) => props.theme.textColor.primary};
 `;
