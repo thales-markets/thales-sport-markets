@@ -1,5 +1,6 @@
 import Tooltip from 'components/Tooltip';
 import { oddToastOptions } from 'config/toast';
+import { FUTURES_MAIN_VIEW_DISPLAY_COUNT } from 'constants/markets';
 import { MarketType } from 'enums/marketTypes';
 import { Position } from 'enums/markets';
 import React from 'react';
@@ -11,7 +12,7 @@ import { getMarketTypeFilter } from 'redux/modules/market';
 import { getTicket, removeFromTicket, updateTicket } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import { SportMarket, TicketPosition } from 'types/markets';
-import { formatMarketOdds, getPositionOrder } from 'utils/markets';
+import { formatMarketOdds, getPositionOrder, isFuturesMarket } from 'utils/markets';
 import { getMatchLabel, getPositionTextV2, isSameMarket, sportMarketAsSerializable } from 'utils/marketsV2';
 import { Container, Odd, Status, Text } from './styled-components';
 
@@ -56,8 +57,13 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isM
         isMainPageView && (market.typeId === MarketType.TOTAL || !!marketTypeFilter)
     );
 
+    const isFutures = isFuturesMarket(market.typeId);
+
     const getDetails = () => (
         <Container
+            hide={
+                ((showOdd && noOdd) || (!!isMainPageView && position >= FUTURES_MAIN_VIEW_DISPLAY_COUNT)) && isFutures
+            }
             disabled={disabledPosition}
             selected={isAddedToTicket}
             isWinner={isGameRegularlyResolved && market.winningPositions && market.winningPositions.includes(position)}

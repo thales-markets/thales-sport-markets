@@ -1,5 +1,6 @@
 import Tooltip from 'components/Tooltip';
 import { MarketType } from 'enums/marketTypes';
+import { League } from 'enums/sports';
 import { orderBy } from 'lodash';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -9,8 +10,7 @@ import styled from 'styled-components';
 import { SportMarket } from 'types/markets';
 import { getMarketTypeTooltipKey, isFuturesMarket } from 'utils/markets';
 import { getSubtitleText, getTitleText } from 'utils/marketsV2';
-import { League } from '../../../../../../enums/sports';
-import { getGridMinMaxPercentage } from '../../../../../../utils/ui';
+import { getGridMinMaxPercentage } from 'utils/ui';
 import PositionDetailsV2 from '../PositionDetailsV2';
 import {
     Arrow,
@@ -114,12 +114,25 @@ const Positions: React.FC<PositionsProps> = ({
                         </SubTitleContainer>
                     )}
                     {sortedMarkets.map((market, index) => {
-                        const odds =
+                        const oddsInfo = market.odds.map((odd: number, index: number) => {
+                            return {
+                                odd,
+                                position: index,
+                                positionName: market.positionNames ? market.positionNames[index] : '',
+                            };
+                        });
+                        const sortedOddsInfo = orderBy(oddsInfo, ['odd', 'position'], ['desc', 'asc']);
+                        const isFutures = isFuturesMarket(market.typeId);
+
+                        const oddsForDisplay = isFutures ? sortedOddsInfo : oddsInfo;
+
+                        const filteredOdds =
                             isMainPageView &&
-                            ((market.typeId === MarketType.WINNER && market.leagueId === League.US_ELECTION) ||
-                                isFuturesMarket(market.typeId))
-                                ? market.odds.slice(0, 2)
-                                : market.odds;
+                            market.typeId === MarketType.WINNER &&
+                            market.leagueId === League.US_ELECTION
+                                ? oddsForDisplay.slice(0, 2)
+                                : oddsForDisplay;
+
                         return (
                             <ContentWrapper key={index}>
                                 {market.isPlayerPropsMarket && (
@@ -131,15 +144,25 @@ const Positions: React.FC<PositionsProps> = ({
                                     gridMinMaxPercentage={getGridMinMaxPercentage(market, isMobile)}
                                     isColumnView={isColumnView}
                                 >
-                                    {odds.map((_, index) => (
-                                        <PositionDetailsV2
-                                            key={index}
-                                            market={market}
-                                            position={index}
-                                            isMainPageView={isMainPageView}
-                                            isColumnView={isColumnView}
-                                        />
-                                    ))}
+                                    {filteredOdds.map((_, index) => {
+                                        const position = isFutures
+                                            ? oddsInfo.findIndex(
+                                                  (oddInfo) =>
+                                                      market.positionNames &&
+                                                      oddInfo.positionName === filteredOdds[index].positionName
+                                              )
+                                            : index;
+
+                                        return (
+                                            <PositionDetailsV2
+                                                key={`${market.gameId}-${market.typeId}-${market.line}-${market.playerProps.playerId}-${position}`}
+                                                market={market}
+                                                position={position}
+                                                isMainPageView={isMainPageView}
+                                                isColumnView={isColumnView}
+                                            />
+                                        );
+                                    })}
                                 </ContentRow>
                             </ContentWrapper>
                         );

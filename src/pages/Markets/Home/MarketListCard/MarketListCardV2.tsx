@@ -6,7 +6,7 @@ import { MarketType } from 'enums/marketTypes';
 import { League, PeriodType, Sport } from 'enums/sports';
 import Lottie from 'lottie-react';
 // import { getBetTypesForLeague, SpreadTypes, TotalTypes } from 'overtime-live-trading-utils';
-import { MEDIUM_ODDS } from 'constants/markets';
+import { FUTURES_MAIN_VIEW_DISPLAY_COUNT, MEDIUM_ODDS } from 'constants/markets';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -180,7 +180,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
         }
     }
     if (isFutures) {
-        marketsCount += market.odds.length - 2;
+        marketsCount += market.odds.filter((odd) => odd).length - FUTURES_MAIN_VIEW_DISPLAY_COUNT;
     }
 
     const leagueTooltipKey = getLeagueTooltipKey(market.leagueId);
