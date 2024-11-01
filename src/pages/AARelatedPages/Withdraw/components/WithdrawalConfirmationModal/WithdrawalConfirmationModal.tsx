@@ -1,6 +1,9 @@
+import { getWalletClient } from '@wagmi/core';
 import Modal from 'components/Modal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { ContractType } from 'enums/contract';
 import { Network } from 'enums/network';
+import { wagmiConfig } from 'pages/Root/wagmiConfig';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -9,10 +12,13 @@ import { getIsMobile } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
-import { coinParser, formatCurrencyWithKey } from 'thales-utils';
-import { Coins } from 'thales-utils';
+import { coinParser, Coins, formatCurrencyWithKey } from 'thales-utils';
+import { getCollateralIndex } from 'utils/collaterals';
 import { getNetworkNameByNetworkId } from 'utils/network';
-import networkConnector from 'utils/networkConnector';
+import { getContractInstance } from 'utils/networkConnector';
+import { Address, Client } from 'viem';
+import { waitForTransactionReceipt } from 'viem/actions';
+import { useChainId, useClient } from 'wagmi';
 
 type WithdrawalConfirmationModalProps = {
     amount: number;
@@ -33,6 +39,8 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     // const [_gas, setGas] = useState(0);
+    const networkId = useChainId();
+    const client = useClient();
 
     const networkName = useMemo(() => {
         return getNetworkNameByNetworkId(network);
@@ -59,25 +67,32 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
         const id = toast.loading(t('withdraw.toast-messages.pending'));
 
         try {
-            const { signer, multipleCollateral } = networkConnector;
-            if (multipleCollateral && signer) {
-                let txResult;
-                if (token === 'ETH') {
-                    const tx = {
-                        to: withdrawalAddress,
-                        value: parsedAmount,
-                    };
-                    txResult = await signer.sendTransaction(tx);
-                } else {
-                    const collateralContractWithSigner = multipleCollateral[token]?.connect(signer);
-                    const tx =
-                        collateralContractWithSigner &&
-                        (await collateralContractWithSigner?.transfer(withdrawalAddress, parsedAmount));
+            const walletClient = await getWalletClient(wagmiConfig);
 
-                    txResult = await tx.wait();
+            if (walletClient) {
+                let txHash;
+                if (token === 'ETH') {
+                    txHash = await walletClient.sendTransaction({
+                        to: withdrawalAddress as Address,
+                        value: parsedAmount,
+                    });
+                } else {
+                    const collateralContractWithSigner = await getContractInstance(
+                        ContractType.MULTICOLLATERAL,
+                        client,
+                        networkId,
+                        getCollateralIndex(networkId, token)
+                    );
+                    txHash =
+                        collateralContractWithSigner &&
+                        (await collateralContractWithSigner?.write.transfer([withdrawalAddress, parsedAmount]));
                 }
 
-                if (txResult) {
+                const txReceipt = await waitForTransactionReceipt(client as Client, {
+                    hash: txHash,
+                });
+
+                if (txReceipt.status === 'success') {
                     toast.update(id, getSuccessToastOptions(t('withdraw.toast-messages.success')));
                     onClose();
                     return;
