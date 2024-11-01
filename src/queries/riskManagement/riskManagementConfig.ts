@@ -4,12 +4,7 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
 import { RiskManagementConfig } from 'enums/riskManagement';
 import { UseQueryOptions, useQuery } from 'react-query';
-
-type RiskManagementData = {
-    leagueId: number;
-    marketName: string;
-    enabled: boolean;
-}[];
+import { RiskManagementData } from 'types/riskManagement';
 
 const useRiskManagementConfigQuery = (
     networkId: Network,
@@ -19,7 +14,7 @@ const useRiskManagementConfigQuery = (
     return useQuery<RiskManagementData>(
         QUERY_KEYS.RiskManagementConfig(networkId, configType),
         async () => {
-            let config: RiskManagementData = [];
+            let config: RiskManagementData = {};
             try {
                 const configResponse = await axios.get(
                     `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/risk-management-config/${configType}`,
@@ -30,14 +25,19 @@ const useRiskManagementConfigQuery = (
 
                 switch (configType) {
                     case RiskManagementConfig.LEAGUES:
-                        config = configData.map((leagueInfo: any) => ({
+                        const leagues = configData.leagues.map((leagueInfo: any) => ({
                             leagueId: Number(leagueInfo.sportId),
                             marketName: leagueInfo.marketName,
                             enabled: leagueInfo.enabled === 'true',
                         }));
+                        config = {
+                            leagues,
+                            spreadTypes: configData.spreadTypes,
+                            totalTypes: configData.totalTypes,
+                        };
                         break;
                     default:
-                        config = [];
+                        config = {};
                 }
 
                 return config;

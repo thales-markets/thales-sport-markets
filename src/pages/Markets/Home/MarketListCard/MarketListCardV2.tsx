@@ -7,7 +7,6 @@ import { RiskManagementConfig } from 'enums/riskManagement';
 import { League, PeriodType, Sport } from 'enums/sports';
 import _ from 'lodash';
 import Lottie from 'lottie-react';
-import { SpreadTypes, TotalTypes } from 'overtime-live-trading-utils';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
 import useRiskManagementConfigQuery from 'queries/riskManagement/riskManagementConfig';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -60,6 +59,7 @@ import {
     TeamsInfoContainer,
     Wrapper,
 } from './styled-components';
+import { RiskManagementLeaguesAndTypes } from 'types/riskManagement';
 
 type MarketRowCardProps = {
     market: SportMarket;
@@ -84,17 +84,23 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
         enabled: isAppReady && !!market.live,
     });
 
-    const riskManagementBetTypesByLeague = useMemo(
-        () =>
-            riskManagementLeaguesQuery.isSuccess && riskManagementLeaguesQuery.data
-                ? _.uniq(
-                      riskManagementLeaguesQuery.data
-                          .filter((leagueInfo) => leagueInfo.leagueId === market.leagueId && leagueInfo.enabled)
-                          .map((leagueInfo) => leagueInfo.marketName)
-                  )
-                : [],
-        [riskManagementLeaguesQuery.isSuccess, riskManagementLeaguesQuery.data, market.leagueId]
-    );
+    const riskManagementLeaguesWithTypes = useMemo(() => {
+        if (riskManagementLeaguesQuery.isSuccess && riskManagementLeaguesQuery.data) {
+            const queryData = riskManagementLeaguesQuery.data as RiskManagementLeaguesAndTypes;
+            const leagues = _.uniq(
+                queryData.leagues
+                    .filter((leagueInfo) => leagueInfo.leagueId === market.leagueId && leagueInfo.enabled)
+                    .map((leagueInfo) => leagueInfo.marketName)
+            );
+            return {
+                leagues,
+                spreadTypes: queryData.spreadTypes,
+                totalTypes: queryData.totalTypes,
+            };
+        } else {
+            return { leagues: [], spreadTypes: [], totalTypes: [] };
+        }
+    }, [riskManagementLeaguesQuery.isSuccess, riskManagementLeaguesQuery.data, market.leagueId]);
 
     useEffect(() => {
         setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.leagueId));
@@ -121,18 +127,15 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                   })
                 : undefined;
 
-        if (
-            market.live &&
-            !mainSpreadMarket &&
-            riskManagementBetTypesByLeague.find((betType) =>
-                Object.values(SpreadTypes).includes(betType as SpreadTypes)
-            )
-        ) {
+        const isSpreadTypeSupported = riskManagementLeaguesWithTypes.leagues.find((betType) =>
+            riskManagementLeaguesWithTypes.spreadTypes.includes(betType)
+        );
+        if (market.live && !mainSpreadMarket && isSpreadTypeSupported) {
             return { ...market, type: 'spread', typeId: MarketType.SPREAD, odds: [0, 0], line: Infinity };
         }
 
         return mainSpreadMarket;
-    }, [market, riskManagementBetTypesByLeague]);
+    }, [market, riskManagementLeaguesWithTypes]);
 
     const totalMarket = useMemo(() => {
         const totalMarkets = market.childMarkets.filter((childMarket) =>
@@ -148,16 +151,16 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                   })
                 : undefined;
 
-        if (
-            market.live &&
-            !mainTotalMarket &&
-            riskManagementBetTypesByLeague.find((betType) => Object.values(TotalTypes).includes(betType as TotalTypes))
-        ) {
+        const isTotalTypeSupported = riskManagementLeaguesWithTypes.leagues.find((betType) =>
+            riskManagementLeaguesWithTypes.totalTypes.includes(betType)
+        );
+
+        if (market.live && !mainTotalMarket && isTotalTypeSupported) {
             return { ...market, type: 'total', typeId: MarketType.TOTAL, odds: [0, 0], line: Infinity };
         }
 
         return mainTotalMarket;
-    }, [market, riskManagementBetTypesByLeague]);
+    }, [market, riskManagementLeaguesWithTypes]);
 
     const marketTypeFilterMarket = useMemo(() => {
         if (marketTypeFilter === undefined) return undefined;
