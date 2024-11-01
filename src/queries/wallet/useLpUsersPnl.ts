@@ -25,8 +25,13 @@ const useLpUsersPnl = (
     return useQuery<LpUsersPnl[]>(
         QUERY_KEYS.Wallet.LpUsersPnl(lpCollateral, round, networkId),
         async () => {
-            const { sportsAMMDataContract, liquidityPoolDataContract, priceFeedContract } = networkConnector;
-            if (sportsAMMDataContract && liquidityPoolDataContract && priceFeedContract) {
+            const {
+                sportsAMMDataContract,
+                liquidityPoolDataContract,
+                priceFeedContract,
+                stakingThalesBettingProxy,
+            } = networkConnector;
+            if (sportsAMMDataContract && liquidityPoolDataContract && priceFeedContract && stakingThalesBettingProxy) {
                 const [
                     lpTickets,
                     gamesInfoResponse,
@@ -77,8 +82,34 @@ const useLpUsersPnl = (
                     )
                 );
 
+                const stakingTickets = mappedTickets.filter(
+                    (ticket) => ticket.account.toLowerCase() === stakingThalesBettingProxy.address.toLowerCase()
+                );
+
+                const stakingPromises = [];
+                for (let i = 0; i < stakingTickets.length; i++) {
+                    stakingPromises.push(stakingThalesBettingProxy.ticketToUser(stakingTickets[i].id));
+                }
+                const stakingPromisesResult = await Promise.all(stakingPromises);
+                const stakingTicketsData = stakingPromisesResult.flat(1);
+
+                const mappedTicketsWithStaking: Ticket[] = mappedTickets.map((ticket: any) => {
+                    let owner = ticket.account;
+                    const stakingUserIndex = stakingTickets.findIndex(
+                        (stakingTicket) => ticket.account.toLowerCase() === stakingTicket.account.toLowerCase()
+                    );
+                    if (stakingUserIndex > -1) {
+                        owner = stakingTicketsData[stakingUserIndex];
+                    }
+
+                    return {
+                        ...ticket,
+                        account: owner,
+                    };
+                });
+
                 const finalTickets: Ticket[] = orderBy(
-                    updateTotalQuoteAndPayout(mappedTickets),
+                    updateTotalQuoteAndPayout(mappedTicketsWithStaking),
                     ['timestamp'],
                     ['desc']
                 );
