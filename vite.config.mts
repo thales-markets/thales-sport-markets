@@ -32,7 +32,7 @@ const plugins = (mode: string): PluginOption[] => {
         tsconfigPaths(),
         svgr(),
         checker({
-            typescript: true,
+            typescript: { tsconfigPath: 'tsconfig.json' },
         }),
         eslint({
             failOnError: true,
@@ -40,7 +40,6 @@ const plugins = (mode: string): PluginOption[] => {
             emitError: true,
             emitWarning: true,
             useEslintrc: true,
-            exclude: ['node_modules'],
         }),
         particleWasmPlugin,
     ];

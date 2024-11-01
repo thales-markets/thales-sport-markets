@@ -5,7 +5,6 @@ import Tooltip from 'components/Tooltip';
 import { MarketType } from 'enums/marketTypes';
 import { League, PeriodType, Sport } from 'enums/sports';
 import Lottie from 'lottie-react';
-import { getBetTypesForLeague, SpreadTypes, TotalTypes } from 'overtime-live-trading-utils';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -99,15 +98,6 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                   })
                 : undefined;
 
-        const betTypesForLeague = getBetTypesForLeague(market.leagueId);
-        if (
-            market.live &&
-            !mainSpreadMarket &&
-            betTypesForLeague.find((betType: SpreadTypes) => Object.values(SpreadTypes).includes(betType))
-        ) {
-            return { ...market, type: 'spread', typeId: MarketType.SPREAD, odds: [0, 0], line: Infinity };
-        }
-
         return mainSpreadMarket;
     }, [market]);
 
@@ -124,15 +114,6 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                       return Math.abs(curr.odds[0] - MEDIUM_ODDS) < Math.abs(prev.odds[0] - MEDIUM_ODDS) ? curr : prev;
                   })
                 : undefined;
-
-        const betTypesForLeague = getBetTypesForLeague(market.leagueId);
-        if (
-            market.live &&
-            !mainTotalMarket &&
-            betTypesForLeague.find((betType: TotalTypes) => Object.values(TotalTypes).includes(betType))
-        ) {
-            return { ...market, type: 'total', typeId: MarketType.TOTAL, odds: [0, 0], line: Infinity };
-        }
 
         return mainTotalMarket;
     }, [market]);
