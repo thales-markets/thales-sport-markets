@@ -754,7 +754,8 @@
                 "availability": "Not enough liquidity for this buy-in amount",
                 "no-funds": "Please ensure your wallet has enough funds",
                 "no-funds-multi-collateral": "Please ensure your wallet has enough funds (buy-in amount plus {{percentage}}%)",
-                "not-supported": "Not supported validation error: {{error}}"
+                "not-supported": "Not supported validation error: {{error}}",
+                "futures-combining-not-supported": "Combining futures on parlay is not supported"
             },
             "share-ticket": {
                 "label": "Share for Twitter boost",

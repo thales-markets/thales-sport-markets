@@ -160,6 +160,7 @@ const Positions: React.FC<PositionsProps> = ({
                                                 position={position}
                                                 isMainPageView={isMainPageView}
                                                 isColumnView={isColumnView}
+                                                displayPosition={index}
                                             />
                                         );
                                     })}

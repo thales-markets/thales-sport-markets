@@ -4,7 +4,7 @@ import { TicketErrorCode } from 'enums/markets';
 import { Network } from 'enums/network';
 import { localStore } from 'thales-utils';
 import { ParlayPayment, SerializableSportMarket, TicketPosition } from 'types/markets';
-import { isPlayerPropsMarket } from '../../utils/markets';
+import { isFuturesMarket, isPlayerPropsMarket } from '../../utils/markets';
 import { isSameMarket, serializableSportMarketAsSportMarket } from '../../utils/marketsV2';
 import { isPlayerPropsCombiningEnabled } from '../../utils/sports';
 import { RootState } from '../rootReducer';
@@ -72,7 +72,11 @@ const ticketSlice = createSlice({
                 state.ticket = [action.payload];
             } else if (existingPositionIndex === -1) {
                 if (state.ticket.length < state.maxTicketSize) {
-                    state.ticket.push(action.payload);
+                    if (state.ticket.length > 0 && isFuturesMarket(action.payload.typeId)) {
+                        state.error.code = TicketErrorCode.FUTURES_COMBINING_NOT_SUPPORTED;
+                    } else {
+                        state.ticket.push(action.payload);
+                    }
                 } else {
                     state.error.code = TicketErrorCode.MAX_MATCHES;
                     state.error.data = state.maxTicketSize.toString();

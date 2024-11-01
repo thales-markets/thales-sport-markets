@@ -21,9 +21,16 @@ type PositionDetailsProps = {
     position: Position;
     isMainPageView?: boolean;
     isColumnView?: boolean;
+    displayPosition: number;
 };
 
-const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isMainPageView, isColumnView }) => {
+const PositionDetails: React.FC<PositionDetailsProps> = ({
+    market,
+    position,
+    isMainPageView,
+    isColumnView,
+    displayPosition,
+}) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const selectedOddsType = useSelector(getOddsType);
@@ -62,7 +69,8 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isM
     const getDetails = () => (
         <Container
             hide={
-                ((showOdd && noOdd) || (!!isMainPageView && position >= FUTURES_MAIN_VIEW_DISPLAY_COUNT)) && isFutures
+                ((showOdd && noOdd) || (!!isMainPageView && displayPosition >= FUTURES_MAIN_VIEW_DISPLAY_COUNT)) &&
+                isFutures
             }
             disabled={disabledPosition}
             selected={isAddedToTicket}
