@@ -72,7 +72,11 @@ const ticketSlice = createSlice({
                 state.ticket = [action.payload];
             } else if (existingPositionIndex === -1) {
                 if (state.ticket.length < state.maxTicketSize) {
-                    if (state.ticket.length > 0 && isFuturesMarket(action.payload.typeId)) {
+                    if (
+                        state.ticket.length > 0 &&
+                        (isFuturesMarket(action.payload.typeId) ||
+                            state.ticket.some((position) => isFuturesMarket(position.typeId)))
+                    ) {
                         state.error.code = TicketErrorCode.FUTURES_COMBINING_NOT_SUPPORTED;
                     } else {
                         state.ticket.push(action.payload);
