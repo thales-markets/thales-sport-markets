@@ -39,8 +39,6 @@ const useRiskManagementConfigQuery = (
                     default:
                         config = {};
                 }
-
-                return config;
             } catch (e) {
                 console.log(e);
             }

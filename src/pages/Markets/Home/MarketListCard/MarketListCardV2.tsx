@@ -85,7 +85,11 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     });
 
     const riskManagementLeaguesWithTypes = useMemo(() => {
-        if (riskManagementLeaguesQuery.isSuccess && riskManagementLeaguesQuery.data) {
+        if (
+            riskManagementLeaguesQuery.isSuccess &&
+            riskManagementLeaguesQuery.data &&
+            Object.keys(riskManagementLeaguesQuery.data).length
+        ) {
             const queryData = riskManagementLeaguesQuery.data as RiskManagementLeaguesAndTypes;
             const leagues = _.uniq(
                 queryData.leagues
