@@ -1,6 +1,5 @@
 import { AuthCoreContextProvider } from '@particle-network/auth-core-modal';
 import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
-import '@rainbow-me/rainbowkit/dist/index.css';
 import '@rainbow-me/rainbowkit/styles.css';
 import UnexpectedError from 'components/UnexpectedError';
 import WalletDisclaimer from 'components/WalletDisclaimer';
