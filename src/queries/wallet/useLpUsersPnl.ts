@@ -96,7 +96,7 @@ const useLpUsersPnl = (
                 const mappedTicketsWithStaking: Ticket[] = mappedTickets.map((ticket: any) => {
                     let owner = ticket.account;
                     const stakingUserIndex = stakingTickets.findIndex(
-                        (stakingTicket) => ticket.account.toLowerCase() === stakingTicket.account.toLowerCase()
+                        (stakingTicket) => ticket.id.toLowerCase() === stakingTicket.id.toLowerCase()
                     );
                     if (stakingUserIndex > -1) {
                         owner = stakingTicketsData[stakingUserIndex];
