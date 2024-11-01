@@ -36,7 +36,7 @@ export const LOCAL_STORAGE_KEYS = {
         10: 'sessionPKey_10',
         // 137: 'sessionPKey_137',
         42161: 'sessionPKey_42161',
-        8453: 'sessionPKey_8453',
+        // 8453: 'sessionPKey_8453',
         // 300: 'sessionPKey_300',
         // 324: 'sessionPKey_324',
         // 420: 'sessionPKey_420',
