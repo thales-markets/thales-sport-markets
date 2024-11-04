@@ -172,7 +172,8 @@
             "save": "Save",
             "info": "*You can always change the odds type in Settings",
             "title": "Welcome to Overtime Markets"
-        }
+        },
+        "new": "new"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} Overtime Markets ALL RIGHTS RESERVED.",

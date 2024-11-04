@@ -135,6 +135,9 @@ const groupBySortedMarketsKeys = (marketsKeys: number[]) => {
     const futuresKeys: number[] = [];
     marketsKeys.forEach((tag: number) => {
         const leagueSport = getLeagueSport(tag);
+        if (leagueSport === Sport.FUTURES) {
+            futuresKeys.push(tag);
+        }
         if (leagueSport === Sport.SOCCER) {
             soccerKeys.push(tag);
         }
@@ -186,12 +189,10 @@ const groupBySortedMarketsKeys = (marketsKeys: number[]) => {
         if (leagueSport === Sport.POLITICS) {
             politicsKeys.push(tag);
         }
-        if (leagueSport === Sport.FUTURES) {
-            futuresKeys.push(tag);
-        }
     });
 
     return [
+        ...futuresKeys,
         ...soccerKeys,
         ...footballKeys,
         ...basketballKeys,
@@ -209,7 +210,6 @@ const groupBySortedMarketsKeys = (marketsKeys: number[]) => {
         ...motosportKeys,
         ...golfKeys,
         ...politicsKeys,
-        ...futuresKeys,
     ];
 };
 

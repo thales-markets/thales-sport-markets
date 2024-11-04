@@ -1,4 +1,5 @@
 export enum Sport {
+    FUTURES = 'Futures',
     SOCCER = 'Soccer',
     FOOTBALL = 'Football',
     BASKETBALL = 'Basketball',
@@ -16,7 +17,6 @@ export enum Sport {
     MOTOSPORT = 'Motosport',
     GOLF = 'Golf',
     POLITICS = 'Politics',
-    FUTURES = 'Futures',
     EMPTY = '',
 }
 

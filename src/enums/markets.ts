@@ -17,6 +17,7 @@ export enum SportFilter {
     Live = 'Live',
     Favourites = 'Favourites',
     All = 'All',
+    Futures = 'Futures',
     Soccer = 'Soccer',
     Football = 'Football',
     Basketball = 'Basketball',
@@ -32,7 +33,6 @@ export enum SportFilter {
     Waterpolo = 'Waterpolo',
     Cricket = 'Cricket',
     Politics = 'Politics',
-    Futures = 'Futures',
     // Motosport = 'Motosport',
     // Golf = 'Golf',
 }
