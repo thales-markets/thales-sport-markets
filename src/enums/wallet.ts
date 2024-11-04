@@ -13,3 +13,9 @@ export enum ParticalTypes {
     EMAIL = 'email',
     PHONE = 'phone',
 }
+
+export enum BuyThalesStep {
+    APPROVE_SWAP,
+    SWAP,
+    COMPLETED,
+}
