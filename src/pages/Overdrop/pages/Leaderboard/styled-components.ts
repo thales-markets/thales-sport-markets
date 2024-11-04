@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FlexDivEnd } from 'styles/common';
+import { FlexDivEnd, FlexDivRow } from 'styles/common';
 
 export const tableHeaderStyle: React.CSSProperties = {
     textAlign: 'center',
@@ -110,4 +110,13 @@ export const SearchFieldContainer = styled(FlexDivEnd)`
             padding-top: 0 !important;
         }
     }
+`;
+
+export const HeaderContainer = styled(FlexDivRow)`
+    align-items: center;
+`;
+
+export const Disclaimer = styled.span`
+    font-size: 12px;
+    font-style: italic;
 `;

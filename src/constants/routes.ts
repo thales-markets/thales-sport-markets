@@ -20,6 +20,10 @@ const ROUTES = {
     },
     Ticket: '/tickets/:ticketAddress',
     Overdrop: '/overdrop',
+    SEO: {
+        Home: '/resources',
+        SeoArticle: '/resources/:seoId',
+    },
 };
 
 export const PAGE_NAME_TO_META_DATA_KEYS: {

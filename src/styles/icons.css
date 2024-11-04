@@ -500,3 +500,7 @@
 .icon--fire:before {
     content: '\002C';
 }
+
+.icon--resources:before {
+    content: '\0122';
+}
