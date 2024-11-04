@@ -273,16 +273,3 @@ export const Label = styled.div`
     display: block;
     text-transform: capitalize;
 `;
-
-export const PumpkinContainer = styled.div`
-    position: relative;
-    width: 45px;
-    height: 37px;
-`;
-
-export const PumpkinLottieStyles = {
-    position: 'absolute',
-    height: '90px',
-    width: '90px',
-    transform: 'translate(-25%, -32%)',
-};
