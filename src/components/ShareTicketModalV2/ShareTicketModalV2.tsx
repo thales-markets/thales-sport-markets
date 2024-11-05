@@ -8,7 +8,7 @@ import { LINKS } from 'constants/links';
 import { secondsToMilliseconds } from 'date-fns';
 import { toPng } from 'html-to-image';
 import { t } from 'i18next';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ReactModal from 'react-modal';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -84,7 +84,10 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
 
     const ref = useRef<HTMLDivElement>(null);
 
-    const isThalesCollateral = collateral === CRYPTO_CURRENCY_MAP.THALES || collateral === CRYPTO_CURRENCY_MAP.sTHALES;
+    const isThalesCollateral = useMemo(
+        () => collateral === CRYPTO_CURRENCY_MAP.THALES || collateral === CRYPTO_CURRENCY_MAP.sTHALES,
+        [collateral]
+    );
 
     const customStyles = {
         content: {
