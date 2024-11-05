@@ -35,7 +35,11 @@ const useLiquidityPoolUserTransactions = (
                         return {
                             ...tx,
                             name: lp.name,
-                            amount: coinFormatter(tx.amount, queryConfig.networkId, lp.collateral),
+                            amount: coinFormatter(
+                                (tx.amount as unknown) as bigint,
+                                queryConfig.networkId,
+                                lp.collateral
+                            ),
                             collateral: lp.collateral,
                         };
                     })

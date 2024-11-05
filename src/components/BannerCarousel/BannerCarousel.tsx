@@ -3,12 +3,13 @@ import React, { useMemo } from 'react';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import styled from 'styled-components';
-import { useChainId } from 'wagmi';
+import { useChainId, useClient } from 'wagmi';
 
 const BannerCarousel: React.FC = () => {
     const networkId = useChainId();
+    const client = useClient();
 
-    const bannersQuery = useBannersQuery(networkId);
+    const bannersQuery = useBannersQuery({ networkId, client });
 
     const banners: Banner[] = useMemo(() => {
         return bannersQuery.isSuccess && bannersQuery.data ? bannersQuery.data : [];
