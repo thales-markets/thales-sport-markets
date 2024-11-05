@@ -1,4 +1,3 @@
-import { Slider } from '@material-ui/core';
 import React from 'react';
 import styled from 'styled-components';
 import {
@@ -382,58 +381,6 @@ export const InputButtonContainer = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
-`;
-
-export const StyledSlider = styled((props) => (
-    <Slider
-        classes={{ root: props.className, thumb: props.className, track: props.className, rail: props.className }}
-        {...props}
-    />
-))`
-    &.MuiSlider-root {
-        color: ${(props) => props.theme.status.win};
-        padding: 6px 0 10px 0;
-
-        &.Mui-disabled {
-            color: ${(props) => props.theme.status.win};
-            opacity: 0.5;
-        }
-    }
-
-    &.MuiSlider-thumb {
-        width: 14px;
-        height: 14px;
-        margin-top: -2px;
-        background: ${(props) => props.theme.textColor.primary};
-        boxShadow: 0px 1px 4px rgba(202, 202, 241, 0.5),
-        &:focus, &:hover: {
-            boxShadow: 0px 1px 4px rgba(202, 202, 241, 0.5),
-        },
-
-        &:focus,
-        &:hover {
-            box-shadow: none;
-        }
-
-        &.Mui-disabled {
-            width: 14px;
-            height: 14px;
-            margin-top: -2px;
-            margin-left: -6px;
-            box-shadow: none;
-            outline: 0;
-        }
-    }
-
-    &.MuiSlider-track {
-        height: 10px;
-        border-radius: 10px;
-    }
-
-    &.MuiSlider-rail {
-        height: 10px;
-        border-radius: 10px;
-    }
 `;
 
 export const SliderRange = styled.div`

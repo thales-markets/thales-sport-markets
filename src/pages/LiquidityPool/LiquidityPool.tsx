@@ -3,6 +3,7 @@ import ApprovalModal from 'components/ApprovalModal';
 import Button from 'components/Button';
 import CollateralSelector from 'components/CollateralSelector';
 import SimpleLoader from 'components/SimpleLoader';
+import Slider from 'components/Slider';
 import TimeRemaining from 'components/TimeRemaining';
 import Toggle from 'components/Toggle/Toggle';
 import Tooltip from 'components/Tooltip';
@@ -81,7 +82,6 @@ import {
     RoundInfoContainer,
     SliderContainer,
     SliderRange,
-    StyledSlider,
     TipLink,
     Title,
     ToggleContainer,
@@ -885,12 +885,11 @@ const LiquidityPool: React.FC = () => {
                                                                         validationPlacement="bottom"
                                                                     />
                                                                     <SliderContainer>
-                                                                        <StyledSlider
+                                                                        <Slider
                                                                             value={Number(withdrawalPercentage)}
-                                                                            step={1}
                                                                             max={90}
                                                                             min={10}
-                                                                            onChange={(_: any, value: any) =>
+                                                                            onChange={(value: any) =>
                                                                                 setWithdrawalPercentage(Number(value))
                                                                             }
                                                                             disabled={isPartialWithdrawalDisabled}
