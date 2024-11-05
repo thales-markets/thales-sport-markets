@@ -18,7 +18,7 @@ import { changeNetwork } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
 import { ThemeInterface } from 'types/ui';
 import useQueryParam from 'utils/useQueryParams';
-import { useSwitchNetwork } from 'wagmi';
+import { useSwitchChain } from 'wagmi';
 
 const Promotion: React.FC = () => {
     const theme: ThemeInterface = useTheme();
@@ -26,7 +26,7 @@ const Promotion: React.FC = () => {
 
     const history = useHistory();
     const { t } = useTranslation();
-    const { switchNetwork } = useSwitchNetwork();
+    const { switchChain } = useSwitchChain();
 
     const params = useParams() as { promotionId: string };
 
@@ -90,7 +90,7 @@ const Promotion: React.FC = () => {
                             onClick={async () => {
                                 if (promotion?.article.ctaSection.forceChangeNetworkOnClick && network) {
                                     await changeNetwork(network, () => {
-                                        switchNetwork?.(network.id);
+                                        switchChain?.({ chainId: network.id as SupportedNetwork });
                                         // Trigger App.js init
                                         // do not use updateNetworkSettings(networkId) as it will trigger queries before provider in App.js is initialized
                                         dispatch(
