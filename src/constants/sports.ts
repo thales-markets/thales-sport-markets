@@ -1123,7 +1123,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 163,
-        hidden: true,
+        hidden: false,
     },
     [League.SWITZERLAND_SUPER_LEAGUE]: {
         sport: Sport.SOCCER,
