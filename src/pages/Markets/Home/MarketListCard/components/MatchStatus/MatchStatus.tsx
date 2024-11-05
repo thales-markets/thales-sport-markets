@@ -1,11 +1,12 @@
 import Tooltip from 'components/Tooltip';
 import { GameStatusKey } from 'constants/markets';
-import { GameStatus } from 'enums/markets';
+import { GameStatus, SportFilter } from 'enums/markets';
 import { League, Sport } from 'enums/sports';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
+import { getSportFilter } from 'redux/modules/market';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { SportMarket, SportMarketScore } from 'types/markets';
@@ -23,10 +24,12 @@ const MatchStatus: React.FC<MatchStatusProps> = ({ market }) => {
     const isMobile = useSelector(getIsMobile);
     const theme: ThemeInterface = useTheme();
 
+    const sportFilter = useSelector(getSportFilter);
+
     const isGameStarted = market.maturityDate < new Date();
     const isGameResolved = market.isResolved || market.isCancelled;
     const isPendingResolution = isGameStarted && !isGameResolved;
-    const isGamePaused = market.isPaused;
+    const isGamePaused = sportFilter === SportFilter.Live && market.isPaused;
     const liveScore = market.liveScore;
 
     const leagueSport = getLeagueSport(market.leagueId);
