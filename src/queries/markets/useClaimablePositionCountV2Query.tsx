@@ -1,7 +1,7 @@
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { BATCH_SIZE } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
 import { ContractType } from 'enums/contract';
-import { useQuery, UseQueryOptions } from 'react-query';
 import { QueryConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { getContractInstance } from 'utils/networkConnector';

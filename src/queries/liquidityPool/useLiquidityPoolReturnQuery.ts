@@ -1,6 +1,6 @@
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import QUERY_KEYS from 'constants/queryKeys';
 import { orderBy } from 'lodash';
-import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import { LiquidityPoolReturn } from 'types/liquidityPool';
 import { QueryConfig } from 'types/network';

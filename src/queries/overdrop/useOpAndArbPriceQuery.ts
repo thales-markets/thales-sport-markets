@@ -1,7 +1,7 @@
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import axios from 'axios';
 import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
-import { useQuery, UseQueryOptions } from 'react-query';
 
 // IDs can be found here: https://pyth.network/developers/price-feed-ids#pyth-evm-stable
 const OP_PRICE_FEED_ID = '385f64d993f7b77d8182ed5003d97c60aa3361f3cecfe711544d2d59165e9bdf';

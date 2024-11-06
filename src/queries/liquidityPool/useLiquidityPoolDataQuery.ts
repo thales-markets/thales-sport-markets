@@ -1,5 +1,5 @@
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { secondsToMilliseconds } from 'date-fns';
-import { useQuery, UseQueryOptions } from 'react-query';
 import { bigNumberFormatter, coinFormatter, Coins } from 'thales-utils';
 import { LiquidityPoolData } from 'types/liquidityPool';
 import { QueryConfig } from 'types/network';

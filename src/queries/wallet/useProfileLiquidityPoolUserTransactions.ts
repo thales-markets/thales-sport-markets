@@ -1,5 +1,5 @@
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import QUERY_KEYS from 'constants/queryKeys';
-import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import { coinFormatter } from 'thales-utils';
 import { LiquidityPoolUserTransactions } from 'types/liquidityPool';

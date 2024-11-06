@@ -1,7 +1,7 @@
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import axios from 'axios';
 import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
-import { useQuery, UseQueryOptions } from 'react-query';
 import { GameMultiplier } from 'types/overdrop';
 
 const useGameMultipliersQuery = (options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {

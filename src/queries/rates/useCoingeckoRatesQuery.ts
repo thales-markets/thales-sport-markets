@@ -1,6 +1,6 @@
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import QUERY_KEYS from 'constants/queryKeys';
-import { useQuery, UseQueryOptions } from 'react-query';
 import { Coins } from 'thales-utils';
 
 type CoingeckoRates = Record<Coins, number>;

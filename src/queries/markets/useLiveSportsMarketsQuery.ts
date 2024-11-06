@@ -1,8 +1,8 @@
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import axios from 'axios';
 import { generalConfig, noCacheConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
 import { secondsToMilliseconds } from 'date-fns';
-import { UseQueryOptions, useQuery } from 'react-query';
 import { SportMarket, SportMarketError, SportMarkets } from 'types/markets';
 import { QueryConfig } from 'types/network';
 

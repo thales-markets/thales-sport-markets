@@ -1,10 +1,10 @@
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import axios from 'axios';
 import { generalConfig } from 'config/general';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { BATCH_SIZE } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
 import { ContractType } from 'enums/contract';
-import { useQuery, UseQueryOptions } from 'react-query';
 import { bigNumberFormatter, coinFormatter, parseBytes32String } from 'thales-utils';
 import { UserStats } from 'types/markets';
 import { QueryConfig } from 'types/network';

@@ -1,8 +1,8 @@
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import axios from 'axios';
 import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
 import { OverdropIcon } from 'layouts/DappLayout/DappHeader/styled-components';
-import { useQuery, UseQueryOptions } from 'react-query';
 import { OverdropMultiplier } from 'types/overdrop';
 
 const useUserMultipliersQuery = (

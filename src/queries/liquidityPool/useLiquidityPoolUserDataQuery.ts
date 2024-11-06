@@ -1,4 +1,4 @@
-import { useQuery, UseQueryOptions } from 'react-query';
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { coinFormatter, Coins } from 'thales-utils';
 import { UserLiquidityPoolData } from 'types/liquidityPool';
 import { QueryConfig } from 'types/network';

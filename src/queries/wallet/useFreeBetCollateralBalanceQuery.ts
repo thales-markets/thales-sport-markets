@@ -1,7 +1,7 @@
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import QUERY_KEYS from 'constants/queryKeys';
 import { ContractType } from 'enums/contract';
-import { useQuery, UseQueryOptions } from 'react-query';
 import { bigNumberFormatter, Coins, COLLATERAL_DECIMALS } from 'thales-utils';
 import { QueryConfig, SupportedNetwork } from 'types/network';
 import multipleCollateral from 'utils/contracts/multipleCollateralContract';

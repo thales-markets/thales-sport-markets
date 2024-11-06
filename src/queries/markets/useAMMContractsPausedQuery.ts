@@ -1,6 +1,6 @@
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import QUERY_KEYS from 'constants/queryKeys';
 import { ContractType } from 'enums/contract';
-import { useQuery, UseQueryOptions } from 'react-query';
 import { QueryConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
 import sportsAMMV2Contract from 'utils/contracts/sportsAMMV2Contract';

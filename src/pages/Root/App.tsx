@@ -1,5 +1,7 @@
 import { createSmartAccountClient } from '@biconomy/account';
 import { AuthCoreEvent, SocialAuthType, getLatestAuthType, particleAuth } from '@particle-network/auth-core';
+import { useConnect as useParticleConnect } from '@particle-network/auth-core-modal';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import Loader from 'components/Loader';
 import { LINKS } from 'constants/links';
 import ROUTES from 'constants/routes';
@@ -17,7 +19,6 @@ import Promotions from 'pages/Promotions/Home';
 import Promotion from 'pages/Promotions/Promotion';
 import Ticket from 'pages/Ticket';
 import { Suspense, useEffect } from 'react';
-import { ReactQueryDevtools } from 'react-query/devtools';
 import { useDispatch } from 'react-redux';
 import { Redirect, Route, Router, Switch } from 'react-router-dom';
 import { setAppReady, setMobileState } from 'redux/modules/app';
@@ -241,6 +242,3 @@ const App = () => {
 };
 
 export default App;
-function useParticleConnect(): { connectionStatus: any } {
-    throw new Error('Function not implemented.');
-}

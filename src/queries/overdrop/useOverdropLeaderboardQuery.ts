@@ -1,7 +1,7 @@
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import axios from 'axios';
 import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
-import { useQuery, UseQueryOptions } from 'react-query';
 import { LeaderboardRow } from 'types/overdrop';
 
 const useOverdropLeaderboardQuery = (options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {

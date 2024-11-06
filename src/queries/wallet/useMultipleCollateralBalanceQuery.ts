@@ -1,8 +1,8 @@
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { getBalance } from '@wagmi/core';
 import { TBD_ADDRESS } from 'constants/network';
 import QUERY_KEYS from 'constants/queryKeys';
 import { wagmiConfig } from 'pages/Root/wagmiConfig';
-import { useQuery, UseQueryOptions } from 'react-query';
 import { bigNumberFormatter, COLLATERAL_DECIMALS } from 'thales-utils';
 import { CollateralsBalance } from 'types/collateral';
 import { QueryConfig } from 'types/network';

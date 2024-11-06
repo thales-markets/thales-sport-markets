@@ -1,25 +1,24 @@
 import { AuthCoreContextProvider } from '@particle-network/auth-core-modal';
 import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
+import { QueryClientProvider } from '@tanstack/react-query';
 import UnexpectedError from 'components/UnexpectedError';
 import WalletDisclaimer from 'components/WalletDisclaimer';
 import { PLAUSIBLE } from 'constants/analytics';
 import { ThemeMap } from 'constants/ui';
-import dotenv from 'dotenv';
 import { merge } from 'lodash';
 import App from 'pages/Root/App';
 import React, { ErrorInfo } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { QueryClientProvider } from 'react-query';
+import { useTranslation } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { Store } from 'redux';
 import { getDefaultTheme } from 'redux/modules/ui';
 import { PARTICLE_STYLE } from 'utils/particleWallet/utils';
 import queryConnector from 'utils/queryConnector';
 import { WagmiProvider } from 'wagmi';
+import enTranslation from '../../i18n/en.json';
 import { wagmiConfig } from './wagmiConfig';
-
-dotenv.config();
 
 type RootProps = {
     store: Store;
@@ -44,12 +43,17 @@ const rainbowCustomTheme = merge(darkTheme(), {
 queryConnector.setQueryClient();
 
 const Root: React.FC<RootProps> = ({ store }) => {
+    // particle context provider is overriding our i18n configuration and languages, so we need to add our localization after the initialization of particle context
+    // initialization of particle context is happening in Root
+    const { i18n } = useTranslation();
+    i18n.addResourceBundle('en', 'translation', enTranslation, true);
+
     PLAUSIBLE.enableAutoPageviews();
 
     const logError = (error: Error, info: ErrorInfo) => {
-        // if (import.meta.env.DEV) {
-        //     return;
-        // }
+        if (import.meta.env.DEV) {
+            return;
+        }
 
         // let content = `IsMobile:${isMobile()}\nError:\n${error.stack || error.message}`;
         // const flags = 4; // SUPPRESS_EMBEDS

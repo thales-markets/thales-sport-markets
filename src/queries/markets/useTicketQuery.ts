@@ -1,8 +1,8 @@
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import axios from 'axios';
 import QUERY_KEYS from 'constants/queryKeys';
 import { ContractType } from 'enums/contract';
 import { orderBy } from 'lodash';
-import { useQuery, UseQueryOptions } from 'react-query';
 import { Ticket } from 'types/markets';
 import { QueryConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
