@@ -57,7 +57,7 @@ export const getMultiplierIcon = (multiplier: OverdropMultiplier) => {
 };
 
 export const getParlayMultiplier = (numberOfMarkets: number) => {
-    return (numberOfMarkets - 1) * 30;
+    return (numberOfMarkets - 1) * 50;
 };
 
 export const getCurrentLevelByPoints = (points: number) => {
