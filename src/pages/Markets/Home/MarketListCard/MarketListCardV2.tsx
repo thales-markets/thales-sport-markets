@@ -2,6 +2,7 @@ import liveAnimationData from 'assets/lotties/live-markets-filter.json';
 import SPAAnchor from 'components/SPAAnchor';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
+import { FUTURES_MAIN_VIEW_DISPLAY_COUNT, MEDIUM_ODDS } from 'constants/markets';
 import { MarketType } from 'enums/marketTypes';
 import { RiskManagementConfig } from 'enums/riskManagement';
 import { League, PeriodType, Sport } from 'enums/sports';
@@ -23,6 +24,7 @@ import {
 import { getNetworkId } from 'redux/modules/wallet';
 import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarket } from 'types/markets';
+import { RiskManagementLeaguesAndTypes } from 'types/riskManagement';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { isFuturesMarket } from 'utils/markets';
@@ -59,7 +61,6 @@ import {
     TeamsInfoContainer,
     Wrapper,
 } from './styled-components';
-import { RiskManagementLeaguesAndTypes } from 'types/riskManagement';
 
 type MarketRowCardProps = {
     market: SportMarket;

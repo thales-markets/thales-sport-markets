@@ -135,5 +135,44 @@
             "Ipswich Town FC",
             "AFC Bournemouth"
         ]
+    },
+    "30016": {
+        "13001": [
+            "Manchester City FC",
+            "Real Madrid CF",
+            "Liverpool FC",
+            "FC Barcelona",
+            "Arsenal FC",
+            "FC Bayern München",
+            "FC Internazionale Milano",
+            "Aston Villa FC",
+            "Paris Saint-Germain FC",
+            "BV Borussia 09 Dortmund",
+            "Juventus FC",
+            "Sporting CP",
+            "Bayer 04 Leverkusen",
+            "Club Atlético de Madrid",
+            "Atalanta Bergamasca Calcio",
+            "AC Milan",
+            "Lille OSC",
+            "SL Benfica",
+            "PSV Eindhoven",
+            "Feyenoord Rotterdam",
+            "VfB Stuttgart 1893",
+            "RasenBallsport Leipzig",
+            "Celtic FC",
+            "Dinamo Zagreb",
+            "Sparta Prague",
+            "Girona FC",
+            "Bologna FC 1909",
+            "Club Brugge",
+            "FC Shakhtar Donetsk",
+            "FC Salzburg",
+            "Stade Brestois 29",
+            "FK Crvena zvezda Beograd",
+            "Sturm Graz",
+            "BSC Young Boys",
+            "Slovan Bratislava"
+        ]
     }
 }

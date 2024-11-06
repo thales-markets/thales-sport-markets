@@ -193,6 +193,7 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.UEFA_EUROPA_LEAGUE_QUALIFICATION:
         case League.UEFA_CONFERENCE_LEAGUE_QUALIFICATION:
         case League.UEFA_SUPER_CUP:
+        case League.UEFA_CHAMPIONS_LEAGUE_FUTURES:
             return `/logos/Countries/europe.svg`;
         case League.EUROLEAGUE:
         case League.EUROCUP:
