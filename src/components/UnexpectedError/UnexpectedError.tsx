@@ -8,36 +8,13 @@ import { Trans, useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
-import { isMobile } from 'utils/device';
 import { navigateTo } from 'utils/routes';
-
-const DISCORD_HELP_CHANNEL_ID = '906723153349316638';
 
 const UnexpectedError: React.FC<{ theme: ThemeInterface }> = ({ theme }) => {
     const { t } = useTranslation();
     const { resetBoundary } = useErrorBoundary();
 
-    // Discord Widget bot
-    const crate = (window as any).crate;
-    if (crate) {
-        if (isMobile()) {
-            // notify user with a message
-            crate.notify(t('common.errors.unexpected'));
-            setTimeout(() => {
-                // change channel to Help and Questions
-                crate.navigate(DISCORD_HELP_CHANNEL_ID);
-            }, 7000);
-        } else {
-            // change channel to Help and Questions
-            crate.navigate(DISCORD_HELP_CHANNEL_ID);
-        }
-    }
-
     const tryAgainHandler = () => {
-        if (crate) {
-            // close widget
-            crate.toggle(false);
-        }
         resetBoundary();
         navigateTo(ROUTES.Markets.Home);
     };
