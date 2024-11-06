@@ -2,17 +2,18 @@ import axios from 'axios';
 import { generalConfig, noCacheConfig } from 'config/general';
 import { BATCH_SIZE } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
-import { Network } from 'enums/network';
 import { orderBy } from 'lodash';
 import { UseQueryOptions, useQuery } from 'react-query';
 import { Ticket } from 'types/markets';
+import { SupportedNetwork } from 'types/network';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
+import { isTestNetwork } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { mapTicket } from 'utils/tickets';
 
 export const useGameTicketsQuery = (
     gameId: string,
-    networkId: Network,
+    networkId: SupportedNetwork,
     options?: UseQueryOptions<Ticket[] | undefined>
 ) => {
     return useQuery<Ticket[] | undefined>(
@@ -24,12 +25,19 @@ export const useGameTicketsQuery = (
                     const numOfActiveTicketsPerGame = await sportsAMMV2ManagerContract.numOfTicketsPerGame(gameId);
                     const numberOfActiveBatches = Math.trunc(Number(numOfActiveTicketsPerGame) / BATCH_SIZE) + 1;
 
+                    const playersInfoQueryParam = `isTestnet=${isTestNetwork(networkId)}`;
+
                     const promises = [];
                     for (let i = 0; i < numberOfActiveBatches; i++) {
                         promises.push(sportsAMMDataContract.getTicketsDataPerGame(gameId, i * BATCH_SIZE, BATCH_SIZE));
                     }
                     promises.push(axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, noCacheConfig));
-                    promises.push(axios.get(`${generalConfig.API_URL}/overtime-v2/players-info`, noCacheConfig));
+                    promises.push(
+                        axios.get(
+                            `${generalConfig.API_URL}/overtime-v2/players-info?${playersInfoQueryParam}`,
+                            noCacheConfig
+                        )
+                    );
                     promises.push(axios.get(`${generalConfig.API_URL}/overtime-v2/live-scores`, noCacheConfig));
 
                     const promisesResult = await Promise.all(promises);

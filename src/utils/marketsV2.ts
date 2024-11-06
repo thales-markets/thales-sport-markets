@@ -454,9 +454,9 @@ export const showLiveInfo = (status: GameStatus | undefined, period: number | un
         status !== GameStatus.RUNDOWN_END_OF_ROUND &&
         status !== GameStatus.RUNDOWN_END_OF_FIGHT &&
         status !== GameStatus.OPTICODDS_COMPLETED &&
-        status !== GameStatus.OPTICODDS_CANCELLED &&
         status !== GameStatus.OPTICODDS_DELAYED &&
         status !== GameStatus.OPTICODDS_SUSPENDED &&
+        status !== GameStatus.CANCELED &&
         (!Number.isNaN(Number(period)) ||
             status === GameStatus.RUNDOWN_HALF_TIME ||
             status === GameStatus.OPTICODDS_HALF)
@@ -477,10 +477,9 @@ export const showGameScore = (status: GameStatus | undefined) => {
         status !== GameStatus.RUNDOWN_END_OF_ROUND &&
         status !== GameStatus.RUNDOWN_END_OF_FIGHT &&
         status !== GameStatus.ENETPULSE_INTERRUPTED &&
-        status !== GameStatus.ENETPULSE_CANCELED &&
-        status !== GameStatus.OPTICODDS_CANCELLED &&
         status !== GameStatus.OPTICODDS_DELAYED &&
-        status !== GameStatus.OPTICODDS_SUSPENDED
+        status !== GameStatus.OPTICODDS_SUSPENDED &&
+        status !== GameStatus.CANCELED
     );
 };
 

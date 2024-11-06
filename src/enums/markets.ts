@@ -67,14 +67,13 @@ export enum GameStatus {
     RUNDOWN_OVERTIME = 'STATUS_OVERTIME',
     ENETPULSE_FINISHED = 'finished',
     ENETPULSE_INTERRUPTED = 'interrupted',
-    ENETPULSE_CANCELED = 'cancelled',
-    OPTICODDS_LIVE = 'Live',
-    OPTICODDS_HALF = 'Half',
-    OPTICODDS_UNPLAYED = 'Unplayed',
-    OPTICODDS_COMPLETED = 'Completed',
-    OPTICODDS_CANCELLED = 'Cancelled',
-    OPTICODDS_SUSPENDED = 'Suspended',
-    OPTICODDS_DELAYED = 'Delayed',
+    OPTICODDS_LIVE = 'live',
+    OPTICODDS_HALF = 'half',
+    OPTICODDS_UNPLAYED = 'unplayed',
+    OPTICODDS_COMPLETED = 'completed',
+    OPTICODDS_SUSPENDED = 'suspended',
+    OPTICODDS_DELAYED = 'delayed',
+    CANCELED = 'cancelled', // the same for ENETPULSE and OPTICODDS
 }
 
 export enum TicketErrorCode {
