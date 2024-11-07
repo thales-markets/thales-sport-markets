@@ -6,6 +6,7 @@ import { t } from 'i18next';
 import { bigNumberFormatter, coinFormatter, Coins, formatDateWithTime } from 'thales-utils';
 import { CombinedPosition, Team, Ticket, TicketMarket } from 'types/markets';
 import { SupportedNetwork } from 'types/network';
+import futuresPositionNamesMap from '../assets/json/futuresPositionNamesMap.json';
 import positionNamesMap from '../assets/json/positionNamesMap.json';
 import { CRYPTO_CURRENCY_MAP } from '../constants/currency';
 import { THALES_ADDED_PAYOUT_PERCENTAGE } from '../constants/markets';
@@ -17,6 +18,7 @@ import freeBetHolder from './contracts/freeBetHolder';
 import stakingThalesBettingProxy from './contracts/stakingThalesBettingProxy';
 import {
     formatMarketOdds,
+    isFuturesMarket,
     isOneSideMarket,
     isOneSidePlayerPropsMarket,
     isPlayerPropsMarket,
@@ -102,7 +104,11 @@ export const mapTicket = (
                 const marketResult = ticket.marketsResult[index];
                 const marketStatus = Number(marketResult.status);
 
-                const positionNames = (positionNamesMap as any)[typeId];
+                const positionNames = isFuturesMarket(typeId)
+                    ? (futuresPositionNamesMap as any)[leagueId]
+                        ? (futuresPositionNamesMap as any)[leagueId][typeId]
+                        : undefined
+                    : (positionNamesMap as any)[typeId];
 
                 return {
                     gameId: market.gameId,

@@ -1,6 +1,6 @@
 import { GameStatus, OddsType } from 'enums/markets';
-import { Network } from '../enums/network';
-import { League } from '../enums/sports';
+import { Network } from 'enums/network';
+import { League } from 'enums/sports';
 import { NetworkId } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
 
@@ -65,3 +65,5 @@ export const BATCH_SIZE = 10;
 export const THALES_CONTRACT_RATE_KEY = 'THALES-CONTRACT';
 
 export const THALES_ADDED_PAYOUT_PERCENTAGE = 0.02;
+
+export const FUTURES_MAIN_VIEW_DISPLAY_COUNT = 2;

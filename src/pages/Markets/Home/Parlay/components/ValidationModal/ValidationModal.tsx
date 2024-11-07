@@ -92,6 +92,9 @@ const ValidationModal: React.FC<ValidationModalProps> = ({ onClose }) => {
                         })}
                     </ErrorMessage>
                 )}
+                {ticketError.code === TicketErrorCode.FUTURES_COMBINING_NOT_SUPPORTED && (
+                    <ErrorMessage>{t('markets.parlay.validation.futures-combining-not-supported')}</ErrorMessage>
+                )}
             </Container>
         </Modal>
     );
