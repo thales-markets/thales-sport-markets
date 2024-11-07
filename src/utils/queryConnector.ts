@@ -1,4 +1,5 @@
 import QUERY_KEYS from 'constants/queryKeys';
+import { StatusFilter } from 'enums/markets';
 import { Network } from 'enums/network';
 import { QueryClient } from 'react-query';
 
@@ -18,6 +19,10 @@ const queryConnector: QueryConnector = {
 
 export const refetchBalances = (walletAddress: string, networkId: Network) => {
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.MultipleCollateral(walletAddress, networkId));
+};
+
+export const refetchOpenMarkets = (networkId: Network) => {
+    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.SportMarketsV2(StatusFilter.OPEN_MARKETS, networkId));
 };
 
 export const refetchFreeBetBalance = (walletAddress: string, networkId: Network) => {
