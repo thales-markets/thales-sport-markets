@@ -306,6 +306,10 @@ const Home: React.FC = () => {
             ]
         );
 
+        if (selectedMarket && !filteredMarkets.map((market) => market.gameId).includes(selectedMarket.gameId)) {
+            dispatch(setSelectedMarket(undefined));
+        }
+
         setAvailableMarketTypes(Array.from(marketTypes));
 
         return sortedFilteredMarkets;
@@ -323,6 +327,8 @@ const Home: React.FC = () => {
         datePeriodFilter,
         marketTypeFilter,
         favouriteLeagues,
+        selectedMarket,
+        dispatch,
     ]);
 
     const marketsLoading =
