@@ -1,5 +1,6 @@
 import { Position, StatusFilter } from 'enums/markets';
 import { Network } from 'enums/network';
+import { RiskManagementConfig } from 'enums/riskManagement';
 import { LiquidityPoolCollateral } from '../enums/liquidityPool';
 
 const QUERY_KEYS = {
@@ -151,6 +152,11 @@ const QUERY_KEYS = {
         GameMultipliers: () => ['gameMultipliers'],
         Price: () => ['price'],
     },
+    RiskManagementConfig: (networkId: Network, configType: RiskManagementConfig) => [
+        'RiskManagementConfig',
+        networkId,
+        configType,
+    ],
 };
 
 export default QUERY_KEYS;
