@@ -54,7 +54,9 @@ const CurrentLevelProgressLine: React.FC<CurrentLevelProgressLineProps> = ({
     }, [userData]);
 
     const progress =
-        userData && nextLevelItem
+        levelItem?.level == OVERDROP_LEVELS.length - 1
+            ? 100
+            : userData && nextLevelItem
             ? getProgressLevel(userData.points, levelItem.minimumPoints, nextLevelItem.minimumPoints)
             : 0;
 
