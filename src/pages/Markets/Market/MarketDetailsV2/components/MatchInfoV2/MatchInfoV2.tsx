@@ -5,7 +5,8 @@ import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarket } from 'types/markets';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getErrorImage, getLeagueLogoClass, getOnImageError, getTeamImageSource } from 'utils/images';
-import { getLeagueTooltipKey } from '../../../../../../utils/sports';
+import { isFuturesMarket } from 'utils/markets';
+import { getLeagueTooltipKey } from 'utils/sports';
 import {
     Container,
     LeagueLogo,
@@ -50,7 +51,7 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
             </TeamName>
             {!market.isOneSideMarket && (
                 <>
-                    <Versus>{' vs '}</Versus>
+                    <Versus>{' - '}</Versus>
                     <TeamName isHomeTeam={false}>{market.awayTeam}</TeamName>
                 </>
             )}
@@ -84,7 +85,7 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
                                 onError={getOnImageError(setHomeLogoSrc, market.leagueId)}
                             />
                         </ParticipantLogoContainer>
-                        {!market.isOneSideMarket && (
+                        {!market.isOneSideMarket && !isFuturesMarket(market.typeId) && (
                             <ParticipantLogoContainer
                                 isWinner={
                                     isGameRegularlyResolved &&

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { SportMarket, TicketPosition } from 'types/markets';
 import { getOnImageError, getOnPlayerImageError, getTeamImageSource } from 'utils/images';
-import { SportMarket, TicketPosition } from '../../types/markets';
+import { isFuturesMarket } from 'utils/markets';
 
 type MatchLogosProps = {
     market: SportMarket | TicketPosition;
@@ -47,7 +48,7 @@ const MatchLogos: React.FC<MatchLogosProps> = ({ market, width, height, logoWidt
                     logoHeight={logoHeight}
                 />
             )}
-            {!market.isOneSideMarket && !market.isPlayerPropsMarket && (
+            {!market.isOneSideMarket && !market.isPlayerPropsMarket && !isFuturesMarket(market.typeId) && (
                 <ClubLogo
                     awayTeam={true}
                     alt={market.awayTeam}

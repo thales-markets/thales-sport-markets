@@ -41,6 +41,12 @@ export const getTeamImageSource = (team: string, league: League) => {
         ? `/logos/Brazil-Serie-A/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.US_ELECTION
         ? `/logos/Countries/united-states-of-america.svg`
+        : league == League.NFL_FUTURES
+        ? `/logos/NFL/nfl.webp`
+        : league == League.NBA_FUTURES
+        ? `/logos/NBA/nba.webp`
+        : league == League.EPL_FUTURES
+        ? `/logos/EPL/epl.webp`
         : `/logos/${leagueLabel}/${team.trim().replaceAll(' ', '-').replaceAll('/', '-').toLowerCase()}.webp`;
 };
 
@@ -86,27 +92,22 @@ export const getLanguageFlagSource = (language: SupportedLanguages | any) => {
 export const getLeagueFlagSource = (tagId: number | any) => {
     switch (tagId) {
         case League.NCAAF:
-            return `/logos/Countries/united-states-of-america.svg`;
         case League.NFL:
-            return `/logos/Countries/united-states-of-america.svg`;
         case League.MLB:
-            return `/logos/Countries/united-states-of-america.svg`;
         case League.NBA:
-            return `/logos/Countries/united-states-of-america.svg`;
         case League.NCAAB:
-            return `/logos/Countries/united-states-of-america.svg`;
         case League.NHL:
-            return `/logos/Countries/united-states-of-america.svg`;
         case League.WNBA:
-            return `/logos/Countries/united-states-of-america.svg`;
         case League.MLS:
-            return `/logos/Countries/united-states-of-america.svg`;
         case League.US_ELECTION:
+        case League.NFL_FUTURES:
+        case League.NBA_FUTURES:
             return `/logos/Countries/united-states-of-america.svg`;
         case League.EPL:
         case League.ENGLAND_CHAMPIONSHIP:
         case League.ENGLAND_EFL_CUP:
         case League.ENGLAND_LEGAUE_1:
+        case League.EPL_FUTURES:
             return `/logos/Countries/england.svg`;
         case League.LIGUE_ONE:
         case League.LIGUE_2:
@@ -192,6 +193,7 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.UEFA_EUROPA_LEAGUE_QUALIFICATION:
         case League.UEFA_CONFERENCE_LEAGUE_QUALIFICATION:
         case League.UEFA_SUPER_CUP:
+        case League.UEFA_CHAMPIONS_LEAGUE_FUTURES:
             return `/logos/Countries/europe.svg`;
         case League.EUROLEAGUE:
         case League.EUROCUP:

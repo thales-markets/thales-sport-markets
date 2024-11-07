@@ -32,6 +32,7 @@ export enum SportFilter {
     Waterpolo = 'Waterpolo',
     Cricket = 'Cricket',
     Politics = 'Politics',
+    Futures = 'Futures',
     // Motosport = 'Motosport',
     // Golf = 'Golf',
 }
@@ -81,4 +82,5 @@ export enum TicketErrorCode {
     OTHER_TYPES_WITH_PLAYER_PROPS = 2,
     SAME_PLAYER_DIFFERENT_TYPES = 3,
     PLAYER_PROPS_COMBINING_NOT_ENABLED = 4,
+    FUTURES_COMBINING_NOT_SUPPORTED = 5,
 }
