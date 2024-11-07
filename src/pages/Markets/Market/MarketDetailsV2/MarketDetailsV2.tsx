@@ -122,7 +122,9 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                 <ResultContainer>
                                     <ResultLabel>
                                         {market.isOneSideMarket ? (
-                                            market.homeScore == 1 ? (
+                                            market.leagueId === League.US_ELECTION && market.positionNames ? (
+                                                market.positionNames[market.winningPositions[0]]
+                                            ) : market.homeScore == 1 ? (
                                                 t('markets.market-card.race-winner')
                                             ) : (
                                                 t('markets.market-card.no-win')
@@ -157,7 +159,8 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                     </ResultLabel>
                                     {leagueSport !== Sport.SOCCER &&
                                         leagueSport !== Sport.CRICKET &&
-                                        market.leagueId !== League.UFC && (
+                                        market.leagueId !== League.UFC &&
+                                        market.leagueId !== League.US_ELECTION && (
                                             <PeriodsContainer directionRow={true}>
                                                 {market.homeScoreByPeriod.map((_, index) => {
                                                     return (
