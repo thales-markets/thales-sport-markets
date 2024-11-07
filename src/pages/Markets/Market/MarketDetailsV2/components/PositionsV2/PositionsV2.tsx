@@ -61,15 +61,11 @@ const Positions: React.FC<PositionsProps> = ({
     const titleText = getTitleText(markets[0], true);
     const tooltipKey = getMarketTypeTooltipKey(marketType);
 
-    const liveMarketFirstErrorMessage = useMemo(
-        () =>
-            markets[0].live && markets[0].errors && markets[0].errors.length > 0
-                ? // TODO: if we want to remove teams add .replace(` ${markets[0].homeTeam} - ${markets[0].awayTeam}`, '');
-                  markets[0].errors[0].errorMessage
-                : '',
-
-        [markets]
-    );
+    const liveMarketErrorMessage =
+        markets[0].live && markets[0].errorMessage
+            ? // TODO: if we want to remove teams add .replace(` ${markets[0].homeTeam} - ${markets[0].awayTeam}`, '');
+              markets[0].errorMessage
+            : '';
 
     return showContainer ? (
         <Container
@@ -145,7 +141,7 @@ const Positions: React.FC<PositionsProps> = ({
         <Container isExpanded={true} noOdds={true}>
             <Message>
                 {t(`markets.market-card.live-trading-paused`)}
-                {liveMarketFirstErrorMessage && <Tooltip overlay={liveMarketFirstErrorMessage} />}
+                {liveMarketErrorMessage && <Tooltip overlay={liveMarketErrorMessage} />}
             </Message>
         </Container>
     ) : (

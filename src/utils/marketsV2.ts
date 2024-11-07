@@ -93,11 +93,12 @@ const getSimplePositionText = (
 ) => {
     if (leagueId === League.US_ELECTION && positionNames && positionNames[position]) {
         const text = positionNames[position]
-            .replace('_', ' ')
+            .replaceAll('_', ' ')
             .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
+
         return marketType >= MarketType.US_ELECTION_WINNING_PARTY_ARIZONA &&
-            marketType <= MarketType.US_ELECTION_WINNING_PARTY_WINSCONSIN
-            ? text.split(' ')[1]
+            marketType <= MarketType.US_ELECTION_WINNING_PARTY_NORTH_CAROLINA
+            ? text.split(' ')[marketType === MarketType.US_ELECTION_WINNING_PARTY_NORTH_CAROLINA ? 2 : 1]
             : text;
     }
     if (marketType === MarketType.CORRECT_SCORE && positionNames && positionNames[position]) {
@@ -448,9 +449,9 @@ export const showLiveInfo = (status: GameStatus | undefined, period: number | un
         status !== GameStatus.RUNDOWN_END_OF_ROUND &&
         status !== GameStatus.RUNDOWN_END_OF_FIGHT &&
         status !== GameStatus.OPTICODDS_COMPLETED &&
-        status !== GameStatus.OPTICODDS_CANCELLED &&
         status !== GameStatus.OPTICODDS_DELAYED &&
         status !== GameStatus.OPTICODDS_SUSPENDED &&
+        status !== GameStatus.CANCELED &&
         (!Number.isNaN(Number(period)) ||
             status === GameStatus.RUNDOWN_HALF_TIME ||
             status === GameStatus.OPTICODDS_HALF)
@@ -471,10 +472,9 @@ export const showGameScore = (status: GameStatus | undefined) => {
         status !== GameStatus.RUNDOWN_END_OF_ROUND &&
         status !== GameStatus.RUNDOWN_END_OF_FIGHT &&
         status !== GameStatus.ENETPULSE_INTERRUPTED &&
-        status !== GameStatus.ENETPULSE_CANCELED &&
-        status !== GameStatus.OPTICODDS_CANCELLED &&
         status !== GameStatus.OPTICODDS_DELAYED &&
-        status !== GameStatus.OPTICODDS_SUSPENDED
+        status !== GameStatus.OPTICODDS_SUSPENDED &&
+        status !== GameStatus.CANCELED
     );
 };
 

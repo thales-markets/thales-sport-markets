@@ -1019,7 +1019,7 @@ const Ticket: React.FC<TicketProps> = ({
     const setMaxAmount = (value: string | number) => {
         const decimals = isStableCollateral ? DEFAULT_CURRENCY_DECIMALS : LONG_CURRENCY_DECIMALS;
         const liquidityInCollateral = (ticketLiquidity || 1) / selectedCollateralCurrencyRate;
-        const amount = liquidityInCollateral > Number(value) ? Number(value) : liquidityInCollateral;
+        const amount = liquidityInCollateral > Number(value) ? Number(value) : Math.max(0, liquidityInCollateral);
         setCollateralAmount(floorNumberToDecimals(amount, decimals));
     };
 

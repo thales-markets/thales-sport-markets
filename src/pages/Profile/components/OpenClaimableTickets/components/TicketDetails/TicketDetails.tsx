@@ -4,6 +4,7 @@ import ShareTicketModalV2 from 'components/ShareTicketModalV2';
 import { ShareTicketModalProps } from 'components/ShareTicketModalV2/ShareTicketModalV2';
 import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { ZERO_ADDRESS } from 'constants/network';
 import { ContractType } from 'enums/contract';
 import React, { useMemo, useState } from 'react';
@@ -14,7 +15,7 @@ import { getIsMobile } from 'redux/modules/app';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import { formatCurrencyWithKey, getEtherscanAddressLink, truncateAddress } from 'thales-utils';
+import { Coins, formatCurrencyWithKey, getEtherscanAddressLink, truncateAddress } from 'thales-utils';
 import { Ticket } from 'types/markets';
 import { executeBiconomyTransaction } from 'utils/biconomy';
 import biconomyConnector from 'utils/biconomyWallet';
@@ -68,9 +69,15 @@ type TicketDetailsProps = {
     ticket: Ticket;
     claimCollateralIndex: number;
     setClaimCollateralIndex: any;
+    onThalesClaim: (thalesClaimed: number) => void;
 };
 
-const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIndex, setClaimCollateralIndex }) => {
+const TicketDetails: React.FC<TicketDetailsProps> = ({
+    ticket,
+    claimCollateralIndex,
+    setClaimCollateralIndex,
+    onThalesClaim,
+}) => {
     const { t } = useTranslation();
     const selectedOddsType = useSelector(getOddsType);
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -163,6 +170,9 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
                     if (setShareTicketModalData && setShowShareTicketModal) {
                         setShareTicketModalData(shareTicketData);
                         setShowShareTicketModal(true);
+                    }
+                    if (ticket.collateral === (CRYPTO_CURRENCY_MAP.THALES as Coins)) {
+                        onThalesClaim(ticket.isFreeBet ? ticket.payout - ticket.buyInAmount : ticket.payout);
                     }
                 }
             } catch (e) {

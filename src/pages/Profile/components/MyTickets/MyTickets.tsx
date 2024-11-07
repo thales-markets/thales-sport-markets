@@ -27,6 +27,7 @@ const MyTickets: React.FC<MyTicketsProps> = ({ selectedTab, setSelectedTab }) =>
     const isMobile = useSelector(getIsMobile);
     const { isConnected } = useAccount();
     const [searchText, setSearchText] = useState<string>('');
+    const [forceOpenStakingModal, setForceOpenStakingModal] = useState<boolean>(false);
 
     useEffect(() => {
         !isConnected && navigateTo(ROUTES.Markets.Home);
@@ -56,12 +57,18 @@ const MyTickets: React.FC<MyTicketsProps> = ({ selectedTab, setSelectedTab }) =>
                     </Header>
                     {isMobile && <NavigationBar selectedTab={selectedTab} setSelectedTab={setSelectedTab} />}
                 </NavigationWrapper>
-                {selectedTab == ProfileTab.OPEN_CLAIMABLE && <OpenClaimableTickets searchText={searchText} />}
+                {selectedTab == ProfileTab.OPEN_CLAIMABLE && (
+                    <OpenClaimableTickets
+                        searchText={searchText}
+                        forceOpenStakingModal={forceOpenStakingModal}
+                        setForceOpenStakingModal={setForceOpenStakingModal}
+                    />
+                )}
                 {selectedTab == ProfileTab.TRANSACTION_HISTORY && <TicketTransactions searchText={searchText} />}
                 {selectedTab == ProfileTab.LP && <UserVaults />}
             </MainContainer>
             <RightSidebarContainer>
-                <UserStatsV2 />
+                <UserStatsV2 setForceOpenStakingModal={setForceOpenStakingModal} />
             </RightSidebarContainer>
         </RowContainer>
     );

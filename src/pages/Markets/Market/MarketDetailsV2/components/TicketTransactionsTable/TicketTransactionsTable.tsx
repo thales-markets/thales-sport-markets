@@ -14,6 +14,7 @@ import { useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getOddsType } from 'redux/modules/ui';
 import { useTheme } from 'styled-components';
+import { FlexDivColumn } from 'styles/common';
 import {
     Coins,
     formatCurrencyWithKey,
@@ -391,18 +392,20 @@ const getTicketMarkets = (
         return (
             <TicketRow highlighted={isCurrentMarket} style={{ opacity: getOpacity(ticketMarket) }} key={`m-${index}`}>
                 <SPAAnchor href={buildMarketLink(ticketMarket.gameId, language)}>
-                    <TeamNamesContainer>
-                        <TeamNameLabel>{getTeamNameV2(ticketMarket, 0)}</TeamNameLabel>
-                        {!ticketMarket.isOneSideMarket && !ticketMarket.isPlayerPropsMarket && (
-                            <>
-                                {!isMobile && <TeamNameLabel>&nbsp;-&nbsp;</TeamNameLabel>}
-                                <TeamNameLabel>{getTeamNameV2(ticketMarket, 1)}</TeamNameLabel>
-                            </>
+                    <FlexDivColumn>
+                        <TeamNamesContainer>
+                            <TeamNameLabel>{getTeamNameV2(ticketMarket, 0)}</TeamNameLabel>
+                            {!ticketMarket.isOneSideMarket && !ticketMarket.isPlayerPropsMarket && (
+                                <>
+                                    {!isMobile && <TeamNameLabel>&nbsp;-&nbsp;</TeamNameLabel>}
+                                    <TeamNameLabel>{getTeamNameV2(ticketMarket, 1)}</TeamNameLabel>
+                                </>
+                            )}
+                        </TeamNamesContainer>
+                        {ticketMarket.isPlayerPropsMarket && !isCurrentMarket && (
+                            <MatchTeamsLabel>{`(${getMatchTeams(ticketMarket)})`}</MatchTeamsLabel>
                         )}
-                    </TeamNamesContainer>
-                    {ticketMarket.isPlayerPropsMarket && !isCurrentMarket && (
-                        <MatchTeamsLabel>{`(${getMatchTeams(ticketMarket)})`}</MatchTeamsLabel>
-                    )}
+                    </FlexDivColumn>
                 </SPAAnchor>
                 <SelectionInfoContainer>
                     <MarketTypeInfo>{getTitleText(ticketMarket)}</MarketTypeInfo>

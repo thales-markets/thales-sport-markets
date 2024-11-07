@@ -129,6 +129,13 @@ export const ClaimAllContainer = styled(FlexDivColumnNative)`
     }
 `;
 
+export const StakingMessage = styled.div`
+    font-size: 14px;
+    line-height: 16px;
+    letter-spacing: 0.25px;
+    color: ${(props) => props.theme.warning.textColor.primary};
+`;
+
 export const additionalClaimButtonStyle: CSSProperties = {
     minWidth: '100px',
     maxWidth: '100px',

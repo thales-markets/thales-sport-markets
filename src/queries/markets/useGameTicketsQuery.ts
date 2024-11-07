@@ -9,13 +9,14 @@ import { Ticket } from 'types/markets';
 import { QueryConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
+import { isTestNetwork } from 'utils/network';
 import { getContractInstance } from 'utils/networkConnector';
 import { mapTicket } from 'utils/tickets';
 
 export const useGameTicketsQuery = (
     gameId: string,
     queryConfig: QueryConfig,
-    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
+    options?: Omit<UseQueryOptions<Ticket[] | undefined>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<Ticket[] | undefined>({
         queryKey: QUERY_KEYS.GameTickets(queryConfig.networkId, gameId),
@@ -34,6 +35,8 @@ export const useGameTicketsQuery = (
                     ]);
                     const numberOfActiveBatches = Math.trunc(Number(numOfActiveTicketsPerGame) / BATCH_SIZE) + 1;
 
+                    const playersInfoQueryParam = `isTestnet=${isTestNetwork(queryConfig.networkId)}`;
+
                     const promises = [];
                     for (let i = 0; i < numberOfActiveBatches; i++) {
                         promises.push(
@@ -41,7 +44,12 @@ export const useGameTicketsQuery = (
                         );
                     }
                     promises.push(axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, noCacheConfig));
-                    promises.push(axios.get(`${generalConfig.API_URL}/overtime-v2/players-info`, noCacheConfig));
+                    promises.push(
+                        axios.get(
+                            `${generalConfig.API_URL}/overtime-v2/players-info?${playersInfoQueryParam}`,
+                            noCacheConfig
+                        )
+                    );
                     promises.push(axios.get(`${generalConfig.API_URL}/overtime-v2/live-scores`, noCacheConfig));
 
                     const promisesResult = await Promise.all(promises);

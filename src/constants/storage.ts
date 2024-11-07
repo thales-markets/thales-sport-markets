@@ -54,4 +54,5 @@ export const LOCAL_STORAGE_KEYS = {
         11155420: 'sessionValidUntil_11155420',
         168587773: 'sessionValidUntil_168587773',
     } as Record<SupportedNetwork, string>,
+    STAKING_MODAL_MUTE_END: 'stakingModalMuteEnd',
 };

@@ -3,9 +3,12 @@ import SPAAnchor from 'components/SPAAnchor';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
 import { MarketType } from 'enums/marketTypes';
+import { RiskManagementConfig } from 'enums/riskManagement';
 import { League, PeriodType, Sport } from 'enums/sports';
+import _ from 'lodash';
 import Lottie from 'lottie-react';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
+import useRiskManagementConfigQuery from 'queries/riskManagement/riskManagementConfig';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,8 +20,10 @@ import {
     getSelectedMarket,
     setSelectedMarket,
 } from 'redux/modules/market';
+import { getNetworkId } from 'redux/modules/wallet';
 import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarket } from 'types/markets';
+import { RiskManagementLeaguesAndTypes } from 'types/riskManagement';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { isOddValid } from 'utils/marketsV2';
@@ -66,6 +71,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const dispatch = useDispatch();
 
     const isAppReady = useSelector(getIsAppReady);
+    const networkId = useSelector(getNetworkId);
     const isMarketSelected = useSelector(getIsMarketSelected);
     const isThreeWayView = useSelector(getIsThreeWayView);
     const selectedMarket = useSelector(getSelectedMarket);
@@ -73,6 +79,32 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const isMobile = useSelector(getIsMobile);
     const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.leagueId));
     const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.leagueId));
+
+    const riskManagementLeaguesQuery = useRiskManagementConfigQuery(networkId, RiskManagementConfig.LEAGUES, {
+        enabled: isAppReady && !!market.live,
+    });
+
+    const riskManagementLeaguesWithTypes = useMemo(() => {
+        if (
+            riskManagementLeaguesQuery.isSuccess &&
+            riskManagementLeaguesQuery.data &&
+            Object.keys(riskManagementLeaguesQuery.data).length
+        ) {
+            const queryData = riskManagementLeaguesQuery.data as RiskManagementLeaguesAndTypes;
+            const leagues = _.uniq(
+                queryData.leagues
+                    .filter((leagueInfo) => leagueInfo.leagueId === market.leagueId && leagueInfo.enabled)
+                    .map((leagueInfo) => leagueInfo.marketName)
+            );
+            return {
+                leagues,
+                spreadTypes: queryData.spreadTypes,
+                totalTypes: queryData.totalTypes,
+            };
+        } else {
+            return { leagues: [], spreadTypes: [], totalTypes: [] };
+        }
+    }, [riskManagementLeaguesQuery.isSuccess, riskManagementLeaguesQuery.data, market.leagueId]);
 
     useEffect(() => {
         setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.leagueId));
@@ -83,6 +115,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const isGameOpen = market.isOpen && !isGameStarted;
     const isGameRegularlyResolved = market.isResolved && !market.isCancelled;
     const isGameLive = !!market.live;
+    const isGamePaused = market.isPaused;
 
     const spreadMarket = useMemo(() => {
         const spreadMarkets = market.childMarkets.filter((childMarket) =>
@@ -98,8 +131,15 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                   })
                 : undefined;
 
+        const isSpreadTypeSupported = riskManagementLeaguesWithTypes.leagues.find((betType) =>
+            riskManagementLeaguesWithTypes.spreadTypes.includes(betType)
+        );
+        if (market.live && !mainSpreadMarket && isSpreadTypeSupported) {
+            return { ...market, type: 'spread', typeId: MarketType.SPREAD, odds: [0, 0], line: Infinity };
+        }
+
         return mainSpreadMarket;
-    }, [market]);
+    }, [market, riskManagementLeaguesWithTypes]);
 
     const totalMarket = useMemo(() => {
         const totalMarkets = market.childMarkets.filter((childMarket) =>
@@ -115,8 +155,16 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                   })
                 : undefined;
 
+        const isTotalTypeSupported = riskManagementLeaguesWithTypes.leagues.find((betType) =>
+            riskManagementLeaguesWithTypes.totalTypes.includes(betType)
+        );
+
+        if (market.live && !mainTotalMarket && isTotalTypeSupported) {
+            return { ...market, type: 'total', typeId: MarketType.TOTAL, odds: [0, 0], line: Infinity };
+        }
+
         return mainTotalMarket;
-    }, [market]);
+    }, [market, riskManagementLeaguesWithTypes]);
 
     const marketTypeFilterMarket = useMemo(() => {
         if (marketTypeFilter === undefined) return undefined;
@@ -170,21 +218,6 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
             gameMultipliersQuery.isSuccess && gameMultipliersQuery.data ? gameMultipliersQuery.data : [];
         return gameMultipliers.find((multiplier) => multiplier.gameId === market.gameId);
     }, [gameMultipliersQuery.data, gameMultipliersQuery.isSuccess, market.gameId]);
-
-    // TODO: remove, rely on market.paused from api response once implemented
-    const marketPaused = useMemo(() => {
-        // when market odds are stale API sets odds to []
-        if (!market.odds.length) {
-            return true;
-        }
-        if (areOddsValid) {
-            return false;
-        }
-        if (market.childMarkets.some((child) => child.odds.some((odd) => isOddValid(odd)))) {
-            return false;
-        }
-        return true;
-    }, [market, areOddsValid]);
 
     const getMainContainerContent = () => (
         <MainContainer isBoosted={!!overdropGameMultiplier} isGameOpen={isGameOpen || isGameLive}>
@@ -361,7 +394,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
             </MatchInfoContainer>
             {!isMarketSelected && (
                 <>
-                    {isGameLive && !marketPaused ? (
+                    {isGameLive && !isGamePaused ? (
                         <>
                             <PositionsV2
                                 markets={[marketTypeFilterMarket ? marketTypeFilterMarket : market]}

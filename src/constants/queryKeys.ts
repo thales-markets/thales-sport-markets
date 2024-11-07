@@ -1,5 +1,6 @@
 import { Position, StatusFilter } from 'enums/markets';
 import { Network } from 'enums/network';
+import { RiskManagementConfig } from 'enums/riskManagement';
 
 const QUERY_KEYS = {
     ParlayMarkets: (networkId: Network, account: string, minTimestamp?: number, maxTimestamp?: number) => [
@@ -81,6 +82,7 @@ const QUERY_KEYS = {
             networkId,
             walletAddress,
         ],
+        StakingData: (walletAddress: string, networkId: Network) => ['stakingData', walletAddress, networkId],
     },
     FavoriteTeam: (walletAddress: string, networkId: Network) => ['favoriteTeam', walletAddress, networkId],
     Banners: (networkId: Network) => ['banners', networkId],
@@ -125,6 +127,7 @@ const QUERY_KEYS = {
         CoingeckoRates: () => ['rates', 'coingeckoRates'],
     },
     Promotions: (branchName: string) => [branchName, 'promotions'],
+    SeoArticles: (branchName: string) => ['seoArticles', branchName],
     Overdrop: {
         Leaderboard: () => ['leaderboard'],
         UserMultipliers: (walletAddress: string) => ['userMultipliers', walletAddress],
@@ -133,6 +136,11 @@ const QUERY_KEYS = {
         GameMultipliers: () => ['gameMultipliers'],
         Price: () => ['price'],
     },
+    RiskManagementConfig: (networkId: Network, configType: RiskManagementConfig) => [
+        'RiskManagementConfig',
+        networkId,
+        configType,
+    ],
 };
 
 export default QUERY_KEYS;
