@@ -5,6 +5,8 @@
     "dependencies": {
         "@ant-design/icons": "^5.5.1",
         "@biconomy/account": "4.1.1",
+        "@emotion/react": "^11.13.3",
+        "@emotion/styled": "^11.13.0",
         "@google-cloud/translate": "^6.3.0",
         "@mui/material": "^6.1.6",
         "@particle-network/auth-core-modal": "^1.4.0",
