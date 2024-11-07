@@ -60,3 +60,33 @@ export type OverdropLevel = {
 };
 
 export type Aggregate3Response = { success: boolean; returnData: string };
+
+type SEOCardData = {
+    title: string;
+    description: string;
+    seoId: string;
+    url: string;
+    backgroundImageUrl: string;
+    callToActionButton?: string;
+    branchName?: string;
+};
+
+type SEOArticle = {
+    coverImageUrl: string;
+    headerHtml: string;
+    ctaSection: {
+        sectionHtml: string;
+        ctaButtonLink: string;
+        ctaButtonLabel: string;
+    };
+    contentHtml: string;
+};
+
+export type SEOItem = SEOCardData & {
+    article: SEOArticle;
+    meta: {
+        title: string;
+        description: string;
+        keywords: string;
+    };
+};

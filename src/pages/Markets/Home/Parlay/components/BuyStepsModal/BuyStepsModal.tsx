@@ -7,8 +7,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
-import { defaultButtonProps } from '../styled-components';
 import { Coins } from 'thales-utils';
+import { defaultButtonProps } from '../styled-components';
 
 type BuyStepsModalProps = {
     step: BuyTicketStep;
@@ -16,9 +16,10 @@ type BuyStepsModalProps = {
     currencyKey: Coins;
     onSubmit: () => void;
     onClose: () => void;
+    onlySwap?: boolean;
 };
 
-const BuyStepsModal: React.FC<BuyStepsModalProps> = ({ step, isFailed, currencyKey, onSubmit, onClose }) => {
+const BuyStepsModal: React.FC<BuyStepsModalProps> = ({ step, isFailed, currencyKey, onSubmit, onClose, onlySwap }) => {
     const { t } = useTranslation();
 
     const getLoader = () => (
@@ -58,25 +59,31 @@ const BuyStepsModal: React.FC<BuyStepsModalProps> = ({ step, isFailed, currencyK
                         ? getCheckmark()
                         : ''}
                 </FlexDivRow>
-                <FlexDivRow>
-                    <Text>
-                        {t('markets.parlay.buy-steps.approve-buy', { currencyKey: CRYPTO_CURRENCY_MAP.THALES })}:
-                    </Text>
-                    {step === BuyTicketStep.APPROVE_BUY
-                        ? statusFailedOrInProgress
-                        : step > BuyTicketStep.APPROVE_BUY
-                        ? getCheckmark()
-                        : ''}
-                </FlexDivRow>
-                <FlexDivRow>
-                    <Text>{t('markets.parlay.buy-steps.buy', { currencyKey: CRYPTO_CURRENCY_MAP.THALES })}:</Text>
-                    {step === BuyTicketStep.BUY
-                        ? statusFailedOrInProgress
-                        : step > BuyTicketStep.BUY
-                        ? getCheckmark()
-                        : ''}
-                </FlexDivRow>
-
+                {!onlySwap && (
+                    <>
+                        <FlexDivRow>
+                            <Text>
+                                {t('markets.parlay.buy-steps.approve-buy', { currencyKey: CRYPTO_CURRENCY_MAP.THALES })}
+                                :
+                            </Text>
+                            {step === BuyTicketStep.APPROVE_BUY
+                                ? statusFailedOrInProgress
+                                : step > BuyTicketStep.APPROVE_BUY
+                                ? getCheckmark()
+                                : ''}
+                        </FlexDivRow>
+                        <FlexDivRow>
+                            <Text>
+                                {t('markets.parlay.buy-steps.buy', { currencyKey: CRYPTO_CURRENCY_MAP.THALES })}:
+                            </Text>
+                            {step === BuyTicketStep.BUY
+                                ? statusFailedOrInProgress
+                                : step > BuyTicketStep.BUY
+                                ? getCheckmark()
+                                : ''}
+                        </FlexDivRow>
+                    </>
+                )}
                 {isFailed && (
                     <FlexDivCentered>
                         <Button onClick={onSubmit} {...defaultButtonProps} width="150px">

@@ -2,8 +2,8 @@ import React from 'react';
 import { Trans } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
-import SPAAnchor from '../SPAAnchor';
 import { buildSpeedMarketsBannerHref } from 'utils/routes';
+import SPAAnchor from '../SPAAnchor';
 
 const IS_VISIBLE = true;
 

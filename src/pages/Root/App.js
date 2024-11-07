@@ -40,6 +40,8 @@ const GetStarted = lazy(() => import('pages/AARelatedPages/GetStarted'));
 const Promotions = lazy(() => import('pages/Promotions/Home'));
 const Promotion = lazy(() => import('pages/Promotions/Promotion'));
 const Overdrop = lazy(() => import('pages/Overdrop'));
+const SEO = lazy(() => import('pages/SEO/Home'));
+const SEOArticle = lazy(() => import('pages/SEO/SeoArticle'));
 const PnL = lazy(() => import('pages/PnL'));
 
 const particle = new ParticleNetwork({
@@ -250,6 +252,14 @@ const App = () => {
                                         <Markets />
                                     </DappLayout>
                                 </Route>
+                                <Route exact path={ROUTES.SEO.Home}>
+                                    <SEO />
+                                </Route>
+                                <Route
+                                    exact
+                                    path={ROUTES.SEO.SeoArticle}
+                                    render={(routeProps) => <SEOArticle {...routeProps} />}
+                                />
                                 <Route>
                                     <Redirect to={ROUTES.Markets.Home} />
                                     <DappLayout>

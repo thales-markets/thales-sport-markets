@@ -45,7 +45,7 @@ const useSportsMarketsV2Query = (
                 const liveScores = liveScoresResponse.data;
 
                 const mappedMarkets = markets
-                    .filter((market: any) => !LeagueMap[market.leagueId as League].hidden)
+                    .filter((market: any) => !LeagueMap[market.leagueId as League]?.hidden)
                     .map((market: any) => {
                         const gameInfo = gamesInfo[market.gameId];
                         const liveScore = liveScores[market.gameId];

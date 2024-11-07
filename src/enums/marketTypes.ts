@@ -211,6 +211,9 @@ export enum MarketType {
     PLAYER_PROPS_POINTS_ASSISTS = 11225,
     PLAYER_PROPS_POINTS_REBOUNDS = 11226,
     PLAYER_PROPS_POINTS_REBOUNDS_ASSISTS = 11227,
+    PLAYER_PROPS_REBOUNDS_ASSISTS = 11228,
+    PLAYER_PROPS_STEALS = 11229,
+    PLAYER_PROPS_STEALS_BLOCKS = 11230,
 
     // UFC market types
     WINNING_ROUND = 10151,
@@ -232,6 +235,7 @@ export enum MarketType {
     US_ELECTION_WINNING_PARTY_NEVADA = 10905,
     US_ELECTION_WINNING_PARTY_PENNSYLVANIA = 10906,
     US_ELECTION_WINNING_PARTY_WINSCONSIN = 10907,
+    US_ELECTION_WINNING_PARTY_NORTH_CAROLINA = 10908,
 
     // Correct score
     CORRECT_SCORE = 10100,
@@ -267,6 +271,7 @@ export enum MarketTypeGroup {
     PLAYER_ASSISTS = 'Player assists',
     PLAYER_THRESS = 'Player threes',
     PLAYER_BLOCKS = 'Player blocks',
+    PLAYER_STEALS = 'Player steals',
     PLAYER_DOUBLE_DOUBLE = 'Player double double',
     PLAYER_TRIPLE_DOUBLE = 'Player triple double',
     PLAYER_GOALS = 'Goalscorer',

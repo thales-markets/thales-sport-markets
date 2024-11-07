@@ -121,6 +121,9 @@ export const TeamNameLabel = styled(FlexDivRow)``;
 
 export const MatchTeamsLabel = styled.span`
     font-size: 10px;
+    @media (max-width: 575px) {
+        font-size: 9px;
+    }
 `;
 
 export const SelectionInfoContainer = styled.div`

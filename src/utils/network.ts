@@ -11,6 +11,10 @@ export const isNetworkSupported = (networkId: SupportedNetwork): boolean => {
     return !!SUPPORTED_NETWORKS[networkId];
 };
 
+export const isTestNetwork = (networkId: SupportedNetwork): boolean => {
+    return networkId === Network.OptimismSepolia;
+};
+
 export const checkAllowance = async (amount: BigNumber, token: any, walletAddress: string, spender: string) => {
     try {
         const approved = await token.allowance(walletAddress, spender);

@@ -18,6 +18,8 @@ import { getCurrentLevelByPoints } from 'utils/overdrop';
 import {
     AddressContainer,
     Badge,
+    Disclaimer,
+    HeaderContainer,
     SearchFieldContainer,
     StickyCell,
     StickyContainer,
@@ -154,13 +156,16 @@ const Leaderboard: React.FC = () => {
 
     return (
         <TableContainer>
-            <SearchFieldContainer>
-                <SearchField
-                    customPlaceholder={t('profile.search-field')}
-                    text={searchText}
-                    handleChange={(value) => setSearchText(value)}
-                />
-            </SearchFieldContainer>
+            <HeaderContainer>
+                <Disclaimer>{t('overdrop.overdrop-home.disclaimer')}</Disclaimer>
+                <SearchFieldContainer>
+                    <SearchField
+                        customPlaceholder={t('profile.search-field')}
+                        text={searchText}
+                        handleChange={(value) => setSearchText(value)}
+                    />
+                </SearchFieldContainer>
+            </HeaderContainer>
             <Table
                 mobileCards
                 tableHeight="auto"

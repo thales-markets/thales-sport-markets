@@ -902,6 +902,21 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         key: 'pointsReboundsAssists',
         name: 'Points + Rebounds + Assists',
     },
+    [MarketType.PLAYER_PROPS_REBOUNDS_ASSISTS]: {
+        id: MarketType.PLAYER_PROPS_REBOUNDS_ASSISTS,
+        key: 'reboundsAssists',
+        name: 'Rebounds + Assists',
+    },
+    [MarketType.PLAYER_PROPS_STEALS]: {
+        id: MarketType.PLAYER_PROPS_STEALS,
+        key: 'steals',
+        name: 'Steals',
+    },
+    [MarketType.PLAYER_PROPS_STEALS_BLOCKS]: {
+        id: MarketType.PLAYER_PROPS_STEALS_BLOCKS,
+        key: 'stealsBlocks',
+        name: 'Steals + Blocks',
+    },
 
     // UFC market types
     [MarketType.WINNING_ROUND]: {
@@ -988,6 +1003,11 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         id: MarketType.US_ELECTION_WINNING_PARTY_WINSCONSIN,
         key: 'winningPartyWinsconsin',
         name: 'Winning party Winsconsin',
+    },
+    [MarketType.US_ELECTION_WINNING_PARTY_NORTH_CAROLINA]: {
+        id: MarketType.US_ELECTION_WINNING_PARTY_NORTH_CAROLINA,
+        key: 'winningPartyNorthCarolina',
+        name: 'Winning party North Carolina',
     },
     [MarketType.CORRECT_SCORE]: {
         id: MarketType.CORRECT_SCORE,
@@ -1082,6 +1102,9 @@ export const PLAYER_PROPS_MARKET_TYPES = [
     MarketType.PLAYER_PROPS_POINTS_ASSISTS,
     MarketType.PLAYER_PROPS_POINTS_REBOUNDS,
     MarketType.PLAYER_PROPS_POINTS_REBOUNDS_ASSISTS,
+    MarketType.PLAYER_PROPS_REBOUNDS_ASSISTS,
+    MarketType.PLAYER_PROPS_STEALS,
+    MarketType.PLAYER_PROPS_STEALS_BLOCKS,
 ];
 
 export const ONE_SIDE_PLAYER_PROPS_MARKET_TYPES = [
@@ -1485,13 +1508,16 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
             MarketType.PLAYER_PROPS_REBOUNDS,
             MarketType.PLAYER_PROPS_POINTS_REBOUNDS,
             MarketType.PLAYER_PROPS_POINTS_REBOUNDS_ASSISTS,
+            MarketType.PLAYER_PROPS_REBOUNDS_ASSISTS,
         ],
         [MarketTypeGroup.PLAYER_ASSISTS]: [
             MarketType.PLAYER_PROPS_ASSISTS,
             MarketType.PLAYER_PROPS_POINTS_ASSISTS,
             MarketType.PLAYER_PROPS_POINTS_REBOUNDS_ASSISTS,
+            MarketType.PLAYER_PROPS_REBOUNDS_ASSISTS,
         ],
-        [MarketTypeGroup.PLAYER_BLOCKS]: [MarketType.PLAYER_PROPS_BLOCKS],
+        [MarketTypeGroup.PLAYER_BLOCKS]: [MarketType.PLAYER_PROPS_BLOCKS, MarketType.PLAYER_PROPS_STEALS_BLOCKS],
+        [MarketTypeGroup.PLAYER_STEALS]: [MarketType.PLAYER_PROPS_STEALS, MarketType.PLAYER_PROPS_STEALS_BLOCKS],
         [MarketTypeGroup.PLAYER_THRESS]: [MarketType.PLAYER_PROPS_3PTS_MADE],
         [MarketTypeGroup.PLAYER_DOUBLE_DOUBLE]: [MarketType.PLAYER_PROPS_DOUBLE_DOUBLE],
         [MarketTypeGroup.PLAYER_TRIPLE_DOUBLE]: [MarketType.PLAYER_PROPS_TRIPLE_DOUBLE],
@@ -1752,6 +1778,7 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
             MarketType.US_ELECTION_WINNING_PARTY_NEVADA,
             MarketType.US_ELECTION_WINNING_PARTY_PENNSYLVANIA,
             MarketType.US_ELECTION_WINNING_PARTY_WINSCONSIN,
+            MarketType.US_ELECTION_WINNING_PARTY_NORTH_CAROLINA,
         ],
     },
     [Sport.EMPTY]: {
