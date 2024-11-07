@@ -1,23 +1,23 @@
+import { UseQueryOptions, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { generalConfig, noCacheConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
-import { Network } from 'enums/network';
 import { RiskManagementConfig } from 'enums/riskManagement';
-import { UseQueryOptions, useQuery } from 'react-query';
+import { QueryConfig } from 'types/network';
 import { RiskManagementData } from 'types/riskManagement';
 
 const useRiskManagementConfigQuery = (
-    networkId: Network,
     configType: RiskManagementConfig,
-    options?: UseQueryOptions<RiskManagementData>
+    queryConfig: QueryConfig,
+    options?: Omit<UseQueryOptions<RiskManagementData>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<RiskManagementData>(
-        QUERY_KEYS.RiskManagementConfig(networkId, configType),
-        async () => {
+    return useQuery<RiskManagementData>({
+        queryKey: QUERY_KEYS.RiskManagementConfig(queryConfig.networkId, configType),
+        queryFn: async () => {
             let config: RiskManagementData = {};
             try {
                 const configResponse = await axios.get(
-                    `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/risk-management-config/${configType}`,
+                    `${generalConfig.API_URL}/overtime-v2/networks/${queryConfig.networkId}/risk-management-config/${configType}`,
                     noCacheConfig
                 );
 
@@ -44,8 +44,8 @@ const useRiskManagementConfigQuery = (
             }
             return config;
         },
-        { ...options }
-    );
+        ...options,
+    });
 };
 
 export default useRiskManagementConfigQuery;

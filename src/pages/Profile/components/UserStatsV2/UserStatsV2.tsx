@@ -60,7 +60,7 @@ import InlineLoader from '../../../../components/InlineLoader';
 import BuyStepsModal from '../../../Markets/Home/Parlay/components/BuyStepsModal';
 
 type UserStatsProps = {
-    setForceOpenStakingModal: (forceOpenStakingModal: boolean) => void;
+    setForceOpenStakingModal?: (forceOpenStakingModal: boolean) => void;
 };
 
 const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
@@ -654,7 +654,7 @@ const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
                             lineHeight="16px"
                             additionalStyles={additionalButtonStyles}
                             onClick={() => {
-                                setForceOpenStakingModal(true);
+                                setForceOpenStakingModal ? setForceOpenStakingModal(true) : '';
                                 dispatch(setStakingModalMuteEnd(0));
                             }}
                         >

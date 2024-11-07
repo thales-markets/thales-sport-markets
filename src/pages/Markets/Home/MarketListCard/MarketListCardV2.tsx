@@ -20,7 +20,6 @@ import {
     getSelectedMarket,
     setSelectedMarket,
 } from 'redux/modules/market';
-import { getNetworkId } from 'redux/modules/wallet';
 import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarket } from 'types/markets';
 import { RiskManagementLeaguesAndTypes } from 'types/riskManagement';
@@ -30,6 +29,7 @@ import { isOddValid } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
 import { getLeaguePeriodType, getLeagueTooltipKey } from 'utils/sports';
 import { displayGameClock, displayGamePeriod } from 'utils/ui';
+import { useChainId, useClient } from 'wagmi';
 import { MEDIUM_ODDS } from '../../../../constants/markets';
 import PositionsV2 from '../../Market/MarketDetailsV2/components/PositionsV2';
 import MatchStatus from './components/MatchStatus';
@@ -71,7 +71,10 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const dispatch = useDispatch();
 
     const isAppReady = useSelector(getIsAppReady);
-    const networkId = useSelector(getNetworkId);
+
+    const networkId = useChainId();
+    const client = useClient();
+
     const isMarketSelected = useSelector(getIsMarketSelected);
     const isThreeWayView = useSelector(getIsThreeWayView);
     const selectedMarket = useSelector(getSelectedMarket);
@@ -80,9 +83,13 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.leagueId));
     const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.leagueId));
 
-    const riskManagementLeaguesQuery = useRiskManagementConfigQuery(networkId, RiskManagementConfig.LEAGUES, {
-        enabled: isAppReady && !!market.live,
-    });
+    const riskManagementLeaguesQuery = useRiskManagementConfigQuery(
+        RiskManagementConfig.LEAGUES,
+        { networkId, client },
+        {
+            enabled: isAppReady && !!market.live,
+        }
+    );
 
     const riskManagementLeaguesWithTypes = useMemo(() => {
         if (

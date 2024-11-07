@@ -165,6 +165,7 @@ const useMultipleCollateralBalanceQuery = (
                 };
             } catch (e) {
                 console.log('e ', e);
+                return collateralsBalance;
             }
 
             return collateralsBalance;

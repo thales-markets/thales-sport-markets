@@ -6,6 +6,7 @@
         "@ant-design/icons": "^5.5.1",
         "@biconomy/account": "4.1.1",
         "@google-cloud/translate": "^6.3.0",
+        "@mui/material": "^6.1.6",
         "@particle-network/auth-core-modal": "^1.4.0",
         "@rainbow-me/rainbowkit": "^2.0.0",
         "@reduxjs/toolkit": "^1.7.2",
