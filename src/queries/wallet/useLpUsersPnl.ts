@@ -83,11 +83,7 @@ const useLpUsersPnl = (
                         )
                     )
                     .filter((ticket) => {
-                        return (
-                            ticket.sportMarkets.length === 1 &&
-                            ticket.sportMarkets[0].isPlayerPropsMarket &&
-                            !ticket.isOpen
-                        );
+                        return ticket.sportMarkets.length === 1 && ticket.sportMarkets[0].leagueId === 20000;
                     });
 
                 const stakingTickets = mappedTickets.filter(
