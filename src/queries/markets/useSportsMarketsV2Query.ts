@@ -21,16 +21,18 @@ const marketsCache: MarketsCache = {
 const useSportsMarketsV2Query = (
     statusFilter: StatusFilter,
     networkId: Network,
+    gameIds?: string,
     options?: UseQueryOptions<MarketsCache>
 ) => {
     return useQuery<MarketsCache>(
-        QUERY_KEYS.SportMarketsV2(statusFilter, networkId),
+        QUERY_KEYS.SportMarketsV2(statusFilter, networkId, gameIds),
         async () => {
             try {
                 const status = statusFilter.toLowerCase().split('market')[0];
                 const today = new Date();
-                // APU takes timestamp argument in seconds
+                // API takes timestamp argument in seconds
                 const minMaturity = Math.round(new Date(new Date().setDate(today.getDate() - 7)).getTime() / 1000); // show history for 7 days in the past
+                const hasGameIds = gameIds && gameIds !== '';
 
                 const [
                     marketsResponse,
@@ -39,7 +41,11 @@ const useSportsMarketsV2Query = (
                     numberOfMarketsResponse,
                 ] = await Promise.all([
                     axios.get(
-                        `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/markets/?status=${status}&ungroup=true&onlyMainMarkets=true&minMaturity=${minMaturity}`,
+                        `${
+                            generalConfig.API_URL
+                        }/overtime-v2/networks/${networkId}/markets/?status=${status}&ungroup=true&onlyMainMarkets=${!hasGameIds}&minMaturity=${minMaturity}${
+                            hasGameIds ? `&gameIds=${gameIds}` : ''
+                        }`,
                         noCacheConfig
                     ),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, noCacheConfig),
