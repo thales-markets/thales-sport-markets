@@ -429,6 +429,10 @@
     content: '\00F7';
 }
 
+.icon--futures:before {
+    content: '\00F7';
+}
+
 .icon--wallet2:before {
     content: '\00FA';
 }

@@ -13,6 +13,7 @@ import {
     isBothsTeamsToScoreMarket,
     isCombinedPositionsMarket,
     isDoubleChanceMarket,
+    isFuturesMarket,
     isHomeTeamMarket,
     isOneSideMarket,
     isOneSidePlayerPropsMarket,
@@ -91,6 +92,10 @@ const getSimplePositionText = (
     positionNames?: string[],
     odds?: number[]
 ) => {
+    if (isFuturesMarket(marketType) && positionNames && positionNames[position]) {
+        return positionNames[position];
+    }
+
     if (leagueId === League.US_ELECTION && positionNames && positionNames[position]) {
         const text = positionNames[position]
             .replaceAll('_', ' ')

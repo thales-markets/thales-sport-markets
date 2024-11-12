@@ -16,6 +16,7 @@ export enum Sport {
     MOTOSPORT = 'Motosport',
     GOLF = 'Golf',
     POLITICS = 'Politics',
+    FUTURES = 'Futures',
     EMPTY = '',
 }
 
@@ -135,6 +136,10 @@ export enum League {
     FRANCE_LNB_PRO_A = 20204,
     CHINA_CBA = 20205,
     AUSTRALIA_NBL = 20206,
+    NFL_FUTURES = 30002,
+    NBA_FUTURES = 30004,
+    EPL_FUTURES = 30011,
+    UEFA_CHAMPIONS_LEAGUE_FUTURES = 30016,
     GOLF_H2H = 100021,
     GOLF_WINNER = 100121,
 }

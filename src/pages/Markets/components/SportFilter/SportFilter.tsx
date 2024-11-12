@@ -1,5 +1,6 @@
 import liveAnimationData from 'assets/lotties/live-markets-filter.json';
 import { SportFilter } from 'enums/markets';
+import { t } from 'i18next';
 import Lottie from 'lottie-react';
 import React, { CSSProperties } from 'react';
 import { useSelector } from 'react-redux';
@@ -36,7 +37,10 @@ const SportFilterDetails: React.FC<SportFilterProps> = ({ selected, sport, onCli
                 ) : (
                     <SportIcon className={`icon icon--${sport == SportFilter.All ? 'logo' : sport.toLowerCase()}`} />
                 )}
-                <Label>{children}</Label>
+                <Label>
+                    {children}
+                    {sport == SportFilter.Futures && <NewBadge>{t(`common.new`)}</NewBadge>}
+                </Label>
             </LeftContainer>
             <RightContainer>
                 {count > 0 && <Count>{count}</Count>}
@@ -86,6 +90,7 @@ const RightContainer = styled(FlexDiv)`
 `;
 
 const Label = styled.div`
+    position: relative;
     white-space: pre-line;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -138,6 +143,22 @@ const Count = styled(FlexDivCentered)`
         color: ${(props) => props.theme.textColor.tertiary};
         background: ${(props) => props.theme.background.septenary};
         border: 2px solid ${(props) => props.theme.background.secondary};
+    }
+`;
+
+export const NewBadge = styled.div`
+    position: absolute;
+    background-color: #3cb55b;
+    border-radius: 5px;
+    color: #f6f6fe;
+    display: inline-block;
+    font-size: 10px;
+    line-height: 10px;
+    padding: 2px 4px;
+    margin-top: -1px;
+    margin-left: 4px;
+    @media (max-width: 950px) {
+        margin-top: 2px;
     }
 `;
 
