@@ -32,23 +32,34 @@ const useSportsMarketsV2Query = (
                 // APU takes timestamp argument in seconds
                 const minMaturity = Math.round(new Date(new Date().setDate(today.getDate() - 7)).getTime() / 1000); // show history for 7 days in the past
 
-                const [marketsResponse, gamesInfoResponse, liveScoresResponse] = await Promise.all([
+                const [
+                    marketsResponse,
+                    gamesInfoResponse,
+                    liveScoresResponse,
+                    numberOfMarketsResponse,
+                ] = await Promise.all([
                     axios.get(
-                        `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/markets/?status=${status}&ungroup=true&minMaturity=${minMaturity}`,
+                        `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/markets/?status=${status}&ungroup=true&onlyMainMarkets=true&minMaturity=${minMaturity}`,
                         noCacheConfig
                     ),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, noCacheConfig),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/live-scores`, noCacheConfig),
+                    axios.get(
+                        `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/number-of-markets`,
+                        noCacheConfig
+                    ),
                 ]);
                 const markets = marketsResponse.data;
                 const gamesInfo = gamesInfoResponse.data;
                 const liveScores = liveScoresResponse.data;
+                const numberOfMarkets = numberOfMarketsResponse.data;
 
                 const mappedMarkets = markets
                     .filter((market: any) => !LeagueMap[market.leagueId as League]?.hidden)
                     .map((market: any) => {
                         const gameInfo = gamesInfo[market.gameId];
                         const liveScore = liveScores[market.gameId];
+                        const numberOfMarketsPerGame = numberOfMarkets[market.gameId];
 
                         const homeTeam =
                             !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => team.isHome);
@@ -86,6 +97,7 @@ const useSportsMarketsV2Query = (
                             isGameFinished: gameInfo?.isGameFinished,
                             gameStatus: gameInfo?.gameStatus,
                             liveScore,
+                            numberOfMarkets: numberOfMarketsPerGame || 0,
                         };
                     });
 

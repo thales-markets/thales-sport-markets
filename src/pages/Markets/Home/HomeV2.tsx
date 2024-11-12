@@ -443,35 +443,6 @@ const Home: React.FC = () => {
         return liveMarketsCount;
     }, [liveMarketsCountPerTag, favouriteLeagues]);
 
-    const selectedMarketData = useMemo(() => {
-        if (selectedMarket) {
-            if (selectedMarket.live) {
-                const liveMarkets: SportMarkets =
-                    liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data
-                        ? liveSportMarketsQuery.data.live
-                        : [];
-                return liveMarkets.find(
-                    (market) => market.gameId.toLowerCase() === selectedMarket?.gameId.toLowerCase()
-                );
-            } else {
-                const openSportMarkets: SportMarkets =
-                    openSportMarketsQuery.isSuccess && openSportMarketsQuery.data
-                        ? openSportMarketsQuery.data[StatusFilter.OPEN_MARKETS]
-                        : [];
-
-                return openSportMarkets.find(
-                    (market) => market.gameId.toLowerCase() === selectedMarket?.gameId.toLowerCase()
-                );
-            }
-        }
-    }, [
-        openSportMarketsQuery.data,
-        openSportMarketsQuery.isSuccess,
-        liveSportMarketsQuery.data,
-        liveSportMarketsQuery.isSuccess,
-        selectedMarket,
-    ]);
-
     const resetFilters = useCallback(() => {
         dispatch(setStatusFilter(StatusFilter.OPEN_MARKETS));
         setStatusParam(StatusFilter.OPEN_MARKETS);
@@ -732,12 +703,12 @@ const Home: React.FC = () => {
                                                 shouldCloseOnOverlayClick={false}
                                                 style={getCustomModalStyles(theme, '10')}
                                             >
-                                                <SelectedMarket market={selectedMarketData} />
+                                                <SelectedMarket />
                                             </ReactModal>
                                         ) : (
                                             isMarketSelected &&
                                             (statusFilter === StatusFilter.OPEN_MARKETS || !!selectedMarket?.live) && (
-                                                <SelectedMarket market={selectedMarketData} />
+                                                <SelectedMarket />
                                             )
                                         )}
                                     </FlexDivRow>

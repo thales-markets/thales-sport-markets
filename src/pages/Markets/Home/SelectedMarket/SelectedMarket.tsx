@@ -1,46 +1,64 @@
 import { ReactComponent as UsElectionHeader } from 'assets/images/us-election.svg';
 import MatchLogosV2 from 'components/MatchLogosV2';
 import SimpleLoader from 'components/SimpleLoader';
+import { League } from 'enums/sports';
 import { t } from 'i18next';
 import { Message } from 'pages/Markets/Market/MarketDetailsV2/components/PositionsV2/styled-components';
-import React from 'react';
+import useSportMarketV2Query from 'queries/markets/useSportMarketV2Query';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getIsMobile } from 'redux/modules/app';
-import { setSelectedMarket } from 'redux/modules/market';
+import { getIsAppReady, getIsMobile } from 'redux/modules/app';
+import { getSelectedMarket, setSelectedMarket } from 'redux/modules/market';
+import { getNetworkId } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
 import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarket } from 'types/markets';
 import { getMatchLabel } from 'utils/marketsV2';
-import { League } from '../../../../enums/sports';
 import TicketTransactions from '../../Market/MarketDetailsV2/components/TicketTransactions';
 import Header from '../Header';
 import SelectedMarketDetails from '../SelectedMarketDetails';
 
-const SelectedMarket: React.FC<{ market: SportMarket | undefined }> = ({ market }) => {
+const SelectedMarket: React.FC = () => {
     const dispatch = useDispatch();
+    const selectedMarket = useSelector(getSelectedMarket);
+    const isAppReady = useSelector(getIsAppReady);
+    const networkId = useSelector(getNetworkId);
     const isMobile = useSelector(getIsMobile);
+    const [lastValidMarket, setLastValidMarket] = useState<SportMarket | undefined>(undefined);
 
-    const isMarketPaused = market?.isPaused;
+    const marketQuery = useSportMarketV2Query(selectedMarket?.gameId || '', true, !!selectedMarket?.live, networkId, {
+        enabled: isAppReady && !!selectedMarket,
+    });
+
+    useEffect(() => {
+        if (marketQuery.isSuccess && marketQuery.data) {
+            setLastValidMarket(marketQuery.data);
+        }
+    }, [selectedMarket, marketQuery.isSuccess, marketQuery.data]);
+
+    const isMarketPaused = lastValidMarket?.isPaused;
 
     return (
         <Wrapper>
             <HeaderContainer>
-                {market && (
+                {lastValidMarket && (
                     <>
                         {isMobile && (
-                            <MatchInfoLabel>{formatShortDateWithTime(new Date(market.maturityDate))} </MatchInfoLabel>
+                            <MatchInfoLabel>
+                                {formatShortDateWithTime(new Date(lastValidMarket.maturityDate))}{' '}
+                            </MatchInfoLabel>
                         )}
                         <MatchInfo>
                             <MatchLogosV2
-                                market={market}
+                                market={lastValidMarket}
                                 width={isMobile ? '55px' : '45px'}
                                 logoWidth={isMobile ? '30px' : '24px'}
                                 logoHeight={isMobile ? '30px' : '24px'}
                             />
-                            <MatchLabel>{getMatchLabel(market)} </MatchLabel>
+                            <MatchLabel>{getMatchLabel(lastValidMarket)} </MatchLabel>
                         </MatchInfo>
-                        {market.leagueId === League.US_ELECTION && <StyledUsElectionHeader />}
+                        {lastValidMarket.leagueId === League.US_ELECTION && <StyledUsElectionHeader />}
                         {isMobile && <Header />}
                     </>
                 )}
@@ -51,11 +69,11 @@ const SelectedMarket: React.FC<{ market: SportMarket | undefined }> = ({ market 
                     }}
                 />
             </HeaderContainer>
-            {market ? (
+            {lastValidMarket && !marketQuery.isLoading ? (
                 !isMarketPaused ? (
                     <>
-                        <SelectedMarketDetails market={market} />
-                        {isMobile && <TicketTransactions market={market} isOnSelectedMarket />}
+                        <SelectedMarketDetails market={lastValidMarket} />
+                        {isMobile && <TicketTransactions market={lastValidMarket} isOnSelectedMarket />}
                     </>
                 ) : (
                     <Message>{t(`markets.market-card.live-trading-paused`)}</Message>

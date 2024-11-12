@@ -81,6 +81,7 @@ export type SportMarket = {
     liveScore?: SportMarketScore;
     positionNames?: string[];
     errorMessage?: string;
+    numberOfMarkets?: number;
 };
 
 type OmitDistributive<T, K extends PropertyKey> = T extends any
