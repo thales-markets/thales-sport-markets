@@ -2,10 +2,12 @@ import axios from 'axios';
 import { generalConfig, noCacheConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
 import { secondsToMilliseconds } from 'date-fns';
+import { MarketStatus } from 'enums/markets';
 import { Network } from 'enums/network';
 import { orderBy } from 'lodash';
 import { UseQueryOptions, useQuery } from 'react-query';
 import { SportMarket, Team } from 'types/markets';
+import { packMarket } from 'utils/marketsV2';
 
 const useSportMarketQuery = (
     marketAddress: string,
@@ -23,7 +25,7 @@ const useSportMarketQuery = (
                     axios.get(
                         `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/${
                             isLive ? 'live-' : ''
-                        }markets/${marketAddress}`,
+                        }markets/${marketAddress}?onlyBasicProperties=true`,
                         noCacheConfig
                     ),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/games-info/${marketAddress}`, noCacheConfig),
@@ -43,22 +45,16 @@ const useSportMarketQuery = (
                 const awayScoreByPeriod = awayTeam ? awayTeam.scoreByPeriod : [];
 
                 return {
-                    ...market,
-                    maturityDate: new Date(market.maturityDate),
-                    odds: market.odds.map((odd: any) => odd.normalizedImplied),
+                    ...packMarket(market),
                     childMarkets: orderBy(
                         market.childMarkets
                             .filter(
                                 (childMarket: any) =>
-                                    (enableOnlyOpenChildMarkets && childMarket.isOpen) || !enableOnlyOpenChildMarkets
+                                    (enableOnlyOpenChildMarkets && childMarket.status === MarketStatus.OPEN) ||
+                                    !enableOnlyOpenChildMarkets
                             )
                             .map((childMarket: any) => {
-                                return {
-                                    ...childMarket,
-                                    live: isLive,
-                                    maturityDate: new Date(childMarket.maturityDate),
-                                    odds: childMarket.odds.map((odd: any) => odd.normalizedImplied),
-                                };
+                                return { ...packMarket(childMarket, market), live: isLive };
                             }),
                         ['typeId'],
                         ['asc']

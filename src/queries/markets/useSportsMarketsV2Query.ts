@@ -9,6 +9,7 @@ import { League } from 'enums/sports';
 import { orderBy } from 'lodash';
 import { UseQueryOptions, useQuery } from 'react-query';
 import { MarketsCache, Team } from 'types/markets';
+import { packMarket } from '../../utils/marketsV2';
 
 const marketsCache: MarketsCache = {
     [StatusFilter.OPEN_MARKETS]: [],
@@ -43,7 +44,7 @@ const useSportsMarketsV2Query = (
                     axios.get(
                         `${
                             generalConfig.API_URL
-                        }/overtime-v2/networks/${networkId}/markets/?status=${status}&ungroup=true&onlyMainMarkets=${!hasGameIds}&minMaturity=${minMaturity}${
+                        }/overtime-v2/networks/${networkId}/markets/?status=${status}&ungroup=true&onlyMainMarkets=${!hasGameIds}&onlyBasicProperties=true&minMaturity=${minMaturity}${
                             hasGameIds ? `&gameIds=${gameIds}` : ''
                         }`,
                         noCacheConfig
@@ -78,17 +79,13 @@ const useSportsMarketsV2Query = (
                         const awayScoreByPeriod = awayTeam ? awayTeam.scoreByPeriod : [];
 
                         return {
-                            ...market,
-                            maturityDate: new Date(market.maturityDate),
-                            odds: market.odds.map((odd: any) => odd.normalizedImplied),
+                            ...packMarket(market),
                             childMarkets: orderBy(
                                 market.childMarkets
                                     .filter((childMarket: any) => market.status === childMarket.status)
                                     .map((childMarket: any) => {
                                         return {
-                                            ...childMarket,
-                                            maturityDate: new Date(childMarket.maturityDate),
-                                            odds: childMarket.odds.map((odd: any) => odd.normalizedImplied),
+                                            ...packMarket(childMarket, market),
                                         };
                                     }),
                                 ['typeId'],
