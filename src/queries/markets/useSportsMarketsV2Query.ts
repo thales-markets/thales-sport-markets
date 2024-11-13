@@ -44,7 +44,7 @@ const useSportsMarketsV2Query = (
                     axios.get(
                         `${
                             generalConfig.API_URL
-                        }/overtime-v2/networks/${networkId}/markets/?status=${status}&ungroup=true&onlyMainMarkets=${!hasGameIds}&onlyBasicProperties=true&minMaturity=${minMaturity}${
+                        }/overtime-v2/networks/${networkId}/markets/?status=${status}&ungroup=true&onlyBasicProperties=true&minMaturity=${minMaturity}${
                             hasGameIds ? `&gameIds=${gameIds}` : ''
                         }`,
                         noCacheConfig

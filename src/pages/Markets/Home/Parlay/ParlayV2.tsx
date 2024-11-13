@@ -48,14 +48,9 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
         enabled: isAppReady,
     });
 
-    const sportMarketsQuery = useSportsMarketsV2Query(
-        StatusFilter.OPEN_MARKETS,
-        networkId,
-        ticket.map((market) => market.gameId).join(','),
-        {
-            enabled: isAppReady,
-        }
-    );
+    const sportMarketsQuery = useSportsMarketsV2Query(StatusFilter.OPEN_MARKETS, networkId, '', {
+        enabled: isAppReady,
+    });
 
     const liveSportMarketsQuery = useLiveSportsMarketsQuery(networkId, isLiveFilterSelected, {
         enabled: isAppReady,
