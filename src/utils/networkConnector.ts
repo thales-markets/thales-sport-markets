@@ -63,7 +63,7 @@ export const getContractInstance = async (
             })) as ViemContract;
         case ContractType.MULTICOLLATERAL:
             const multiCollateral = await import('utils/contracts/multipleCollateralContract');
-            if (!selectedToken) return;
+            if (selectedToken == undefined) return;
             return (await getContractWithModifiedResponse({
                 abi: multiCollateral.default[getCollaterals(networkId)[selectedToken]].abi,
                 address: multiCollateral.default[getCollaterals(networkId)[selectedToken]].addresses[networkId],
