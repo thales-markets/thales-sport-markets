@@ -187,12 +187,13 @@ export const Arrow = styled.i`
 `;
 
 export const FireContainer = styled(FlexDivColumnCentered)`
+    font-weight: 600;
     position: absolute;
     top: 7px;
     right: 7px;
     @media (max-width: 600px) {
         flex-direction: row;
-        top: 9px;
+        top: 5px;
         right: 44px;
     }
 `;
