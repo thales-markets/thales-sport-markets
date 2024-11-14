@@ -8,7 +8,7 @@ import { Network } from 'enums/network';
 import { League } from 'enums/sports';
 import { orderBy } from 'lodash';
 import { UseQueryOptions, useQuery } from 'react-query';
-import { MarketsCache, Team } from 'types/markets';
+import { MarketsCache } from 'types/markets';
 import { packMarket } from '../../utils/marketsV2';
 
 const marketsCache: MarketsCache = {
@@ -68,39 +68,17 @@ const useSportsMarketsV2Query = (
                         const liveScore = liveScores[market.gameId];
                         const numberOfMarketsPerGame = numberOfMarkets[market.gameId];
 
-                        const homeTeam =
-                            !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => team.isHome);
-                        const homeScore = homeTeam?.score;
-                        const homeScoreByPeriod = homeTeam ? homeTeam.scoreByPeriod : [];
-
-                        const awayTeam =
-                            !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => !team.isHome);
-                        const awayScore = awayTeam?.score;
-                        const awayScoreByPeriod = awayTeam ? awayTeam.scoreByPeriod : [];
-
                         return {
-                            ...packMarket(market),
+                            ...packMarket(market, gameInfo, liveScore, false, numberOfMarketsPerGame),
                             childMarkets: orderBy(
                                 market.childMarkets
                                     .filter((childMarket: any) => market.status === childMarket.status)
-                                    .map((childMarket: any) => {
-                                        return {
-                                            ...packMarket(childMarket, market),
-                                        };
-                                    }),
+                                    .map((childMarket: any) =>
+                                        packMarket(childMarket, gameInfo, liveScore, false, 0, market)
+                                    ),
                                 ['typeId'],
                                 ['asc']
                             ),
-                            tournamentName: gameInfo?.tournamentName,
-                            tournamentRound: gameInfo?.tournamentRound,
-                            homeScore,
-                            awayScore,
-                            homeScoreByPeriod,
-                            awayScoreByPeriod,
-                            isGameFinished: gameInfo?.isGameFinished,
-                            gameStatus: gameInfo?.gameStatus,
-                            liveScore,
-                            numberOfMarkets: numberOfMarketsPerGame || 0,
                         };
                     });
 

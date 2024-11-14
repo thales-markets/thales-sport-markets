@@ -6,7 +6,7 @@ import { MarketStatus } from 'enums/markets';
 import { Network } from 'enums/network';
 import { orderBy } from 'lodash';
 import { UseQueryOptions, useQuery } from 'react-query';
-import { SportMarket, Team } from 'types/markets';
+import { SportMarket } from 'types/markets';
 import { packMarket } from 'utils/marketsV2';
 
 const useSportMarketQuery = (
@@ -36,16 +36,8 @@ const useSportMarketQuery = (
                 const gameInfo = gameInfoResponse.data;
                 const liveScore = liveScoreResponse.data;
 
-                const homeTeam = !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => team.isHome);
-                const homeScore = homeTeam?.score;
-                const homeScoreByPeriod = homeTeam ? homeTeam.scoreByPeriod : [];
-
-                const awayTeam = !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => !team.isHome);
-                const awayScore = awayTeam?.score;
-                const awayScoreByPeriod = awayTeam ? awayTeam.scoreByPeriod : [];
-
                 return {
-                    ...packMarket(market),
+                    ...packMarket(market, gameInfo, liveScore, isLive, 0),
                     childMarkets: orderBy(
                         market.childMarkets
                             .filter(
@@ -53,22 +45,10 @@ const useSportMarketQuery = (
                                     (enableOnlyOpenChildMarkets && childMarket.status === MarketStatus.OPEN) ||
                                     !enableOnlyOpenChildMarkets
                             )
-                            .map((childMarket: any) => {
-                                return { ...packMarket(childMarket, market), live: isLive };
-                            }),
+                            .map((childMarket: any) => packMarket(childMarket, gameInfo, liveScore, isLive, 0, market)),
                         ['typeId'],
                         ['asc']
                     ),
-                    tournamentName: gameInfo?.tournamentName,
-                    tournamentRound: gameInfo?.tournamentRound,
-                    homeScore,
-                    awayScore,
-                    homeScoreByPeriod,
-                    awayScoreByPeriod,
-                    isGameFinished: gameInfo?.isGameFinished,
-                    gameStatus: gameInfo?.gameStatus,
-                    liveScore,
-                    live: isLive,
                 };
             } catch (e) {
                 console.log(e);

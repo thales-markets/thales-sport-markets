@@ -4,7 +4,15 @@ import { GameStatus, MarketStatus, Position } from 'enums/markets';
 import { League } from 'enums/sports';
 import { ethers } from 'ethers';
 import _ from 'lodash';
-import { SerializableSportMarket, SportMarket, Ticket, TicketMarket, TicketPosition, TradeData } from 'types/markets';
+import {
+    SerializableSportMarket,
+    SportMarket,
+    Team,
+    Ticket,
+    TicketMarket,
+    TicketPosition,
+    TradeData,
+} from 'types/markets';
 import { MarketTypeMap } from '../constants/marketTypes';
 import { UFC_LEAGUE_IDS } from '../constants/sports';
 import { fixOneSideMarketCompetitorName } from './formatters/string';
@@ -526,7 +534,22 @@ export const serializableSportMarketAsSportMarket = (market: SerializableSportMa
     return sportMarket;
 };
 
-export const packMarket = (market: SportMarket, parentMarket?: SportMarket): SportMarket => {
+export const packMarket = (
+    market: SportMarket,
+    gameInfo: any,
+    liveScore: any,
+    isLive: boolean,
+    numberOfMarketsPerGame: number,
+    parentMarket?: SportMarket
+): SportMarket => {
+    const homeTeam = !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => team.isHome);
+    const homeScore = homeTeam?.score;
+    const homeScoreByPeriod = homeTeam ? homeTeam.scoreByPeriod : [];
+
+    const awayTeam = !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => !team.isHome);
+    const awayScore = awayTeam?.score;
+    const awayScoreByPeriod = awayTeam ? awayTeam.scoreByPeriod : [];
+
     const marketForGameData = parentMarket || market;
 
     const leagueId = `${marketForGameData.subLeagueId}`.startsWith('152')
@@ -540,7 +563,7 @@ export const packMarket = (market: SportMarket, parentMarket?: SportMarket): Spo
         : marketForGameData.subLeagueId;
     const type = MarketTypeMap[market.typeId as MarketType];
 
-    const packedMarket = {
+    let packedMarket: SportMarket = {
         ...market,
         gameId: marketForGameData.gameId,
         sport: getLeagueSport(leagueId),
@@ -569,6 +592,23 @@ export const packMarket = (market: SportMarket, parentMarket?: SportMarket): Spo
         positionNames: market.positionNames,
         proof: market.proof,
     };
+
+    if (!parentMarket) {
+        packedMarket = {
+            ...packedMarket,
+            tournamentName: gameInfo?.tournamentName,
+            tournamentRound: gameInfo?.tournamentRound,
+            homeScore,
+            awayScore,
+            homeScoreByPeriod,
+            awayScoreByPeriod,
+            isGameFinished: gameInfo?.isGameFinished,
+            gameStatus: gameInfo?.gameStatus,
+            liveScore,
+            live: isLive,
+            numberOfMarkets: numberOfMarketsPerGame || 0,
+        };
+    }
 
     return packedMarket;
 };
