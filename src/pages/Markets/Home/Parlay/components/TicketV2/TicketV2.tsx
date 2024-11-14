@@ -889,7 +889,7 @@ const Ticket: React.FC<TicketProps> = ({
                               ContractType.MULTICOLLATERAL,
                               walletClient.data,
                               networkId,
-                              getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.sUSD as Coins)
+                              getCollateralIndex(networkId, getDefaultCollateral(networkId))
                           )
                         : await getContractInstance(
                               ContractType.MULTICOLLATERAL,
@@ -1036,7 +1036,7 @@ const Ticket: React.FC<TicketProps> = ({
                       ContractType.MULTICOLLATERAL,
                       walletClient.data,
                       networkId,
-                      getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.sUSD as Coins)
+                      getCollateralIndex(networkId, getDefaultCollateral(networkId))
                   )
                 : await getContractInstance(
                       ContractType.MULTICOLLATERAL,
@@ -1376,7 +1376,8 @@ const Ticket: React.FC<TicketProps> = ({
                         isAA,
                         isFreeBetActive,
                         isStakedThales,
-                        stakingThalesBettingProxyWithSigner
+                        stakingThalesBettingProxyWithSigner,
+                        walletClient.data
                     );
                 }
 
@@ -1851,9 +1852,9 @@ const Ticket: React.FC<TicketProps> = ({
                 address: sportsAMMV2Contract.addresses[networkId],
                 client: walletClient.data as any,
             }) as ViemContract;
-            const sUSDContractWithSigner = getContract({
-                abi: multipleCollateral['sUSD'].abi,
-                address: multipleCollateral['sUSD'].addresses[networkId],
+            const defaultCollateralContractWithSigner = getContract({
+                abi: multipleCollateral[getDefaultCollateral(networkId)].abi,
+                address: multipleCollateral[getDefaultCollateral(networkId)].addresses[networkId],
                 client: walletClient.data as any,
             }) as ViemContract;
             const multipleCollateralWithSigner = getContract({
@@ -1862,7 +1863,8 @@ const Ticket: React.FC<TicketProps> = ({
                 client: walletClient.data as any,
             }) as ViemContract;
 
-            if (!sportsAMMV2ContractWithSigner || !sUSDContractWithSigner || !multipleCollateralWithSigner) return;
+            if (!sportsAMMV2ContractWithSigner || !defaultCollateralContractWithSigner || !multipleCollateralWithSigner)
+                return;
 
             const referralId =
                 walletAddress && getReferralId()?.toLowerCase() !== walletAddress.toLowerCase()
@@ -1876,7 +1878,7 @@ const Ticket: React.FC<TicketProps> = ({
             // TODO: check swap to THALES
             if (!hasAllowance) {
                 const collateralContractWithSigner = isDefaultCollateral
-                    ? sUSDContractWithSigner
+                    ? defaultCollateralContractWithSigner
                     : multipleCollateralWithSigner;
 
                 const addressToApprove = sportsAMMV2ContractWithSigner.address;
