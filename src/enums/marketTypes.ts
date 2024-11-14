@@ -252,6 +252,7 @@ export enum MarketType {
     // Futures
     LEAGUE_WINNER = 13001,
     MVP = 13002,
+    CUP_WINNER = 13003,
 }
 
 export enum MarketTypeGroup {
