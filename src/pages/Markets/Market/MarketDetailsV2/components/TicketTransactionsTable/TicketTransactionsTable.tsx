@@ -146,14 +146,14 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
     const columns = [
         {
             header: <>{t('profile.table.time')}</>,
-            accessor: 'timestamp',
+            accessorKey: 'timestamp',
             enableSorting: true,
             sortDescFirst: true,
             cell: (cellProps: any) => {
                 return (
                     <>
-                        <LiveIndicatorContainer isLive={cellProps.cell.row.original.isLive}>
-                            {cellProps.cell.row.original.isLive && <LiveLabel>{t('profile.card.live')}</LiveLabel>}
+                        <LiveIndicatorContainer isLive={cellProps.row.original.isLive}>
+                            {cellProps.row.original.isLive && <LiveLabel>{t('profile.card.live')}</LiveLabel>}
                         </LiveIndicatorContainer>
                         <TableText>{formatDateWithTime(cellProps.cell.getValue())}</TableText>
                     </>
@@ -162,7 +162,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
         },
         {
             header: <>{t('profile.table.id')}</>,
-            accessor: 'id',
+            accessorKey: 'id',
             enableSorting: false,
             cell: (cellProps: any) => {
                 return (
@@ -177,7 +177,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
         },
         {
             header: <>{t('profile.table.games')}</>,
-            accessor: 'numOfMarkets',
+            accessorKey: 'numOfMarkets',
             enableSorting: true,
             cell: (cellProps: any) => {
                 return <TableText>{cellProps.cell.getValue()}</TableText>;
@@ -185,7 +185,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
         },
         {
             header: <>{t('profile.table.paid')}</>,
-            accessor: 'buyInAmount',
+            accessorKey: 'buyInAmount',
             enableSorting: true,
             cell: (cellProps: any) => {
                 return (
@@ -211,7 +211,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
         },
         {
             header: <>{t('profile.table.payout')}</>,
-            accessor: 'payout',
+            accessorKey: 'payout',
             enableSorting: true,
             cell: (cellProps: any) => {
                 return (
@@ -237,7 +237,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
         },
         {
             header: <p>{t('profile.table.status')}</p>,
-            accessor: 'status',
+            accessorKey: 'status',
             enableSorting: true,
             cell: (cellProps: any) => {
                 let statusComponent;
