@@ -22,11 +22,12 @@ const marketsCache: MarketsCache = {
 const useSportsMarketsV2Query = (
     statusFilter: StatusFilter,
     networkId: Network,
+    includeProofs: boolean,
     gameIds?: string,
     options?: UseQueryOptions<MarketsCache>
 ) => {
     return useQuery<MarketsCache>(
-        QUERY_KEYS.SportMarketsV2(statusFilter, networkId, gameIds),
+        QUERY_KEYS.SportMarketsV2(statusFilter, networkId, includeProofs, gameIds),
         async () => {
             try {
                 const status = statusFilter.toLowerCase().split('market')[0];
@@ -44,7 +45,7 @@ const useSportsMarketsV2Query = (
                     axios.get(
                         `${
                             generalConfig.API_URL
-                        }/overtime-v2/networks/${networkId}/markets/?status=${status}&ungroup=true&onlyBasicProperties=true&minMaturity=${minMaturity}${
+                        }/overtime-v2/networks/${networkId}/markets/?status=${status}&ungroup=true&onlyBasicProperties=true&includeProofs=${includeProofs}&minMaturity=${minMaturity}${
                             hasGameIds ? `&gameIds=${gameIds}` : ''
                         }`,
                         noCacheConfig

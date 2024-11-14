@@ -15,10 +15,11 @@ const QUERY_KEYS = {
     GameTickets: (networkId: Network, gameId: string) => ['gameTickets', networkId, gameId],
     UserTickets: (networkId: Network, user: string) => ['userTickets', networkId, user],
     SportMarkets: (statusFilter: StatusFilter, networkId: Network) => ['sportMarkets', statusFilter, networkId],
-    SportMarketsV2: (statusFilter: StatusFilter, networkId: Network, gameIds?: string) => [
+    SportMarketsV2: (statusFilter: StatusFilter, networkId: Network, includeProofs: boolean, gameIds?: string) => [
         'sportMarketsV2',
         statusFilter,
         networkId,
+        includeProofs,
         gameIds,
     ],
     LiveSportMarkets: (networkId: Network) => ['liveSportMarkets', networkId],

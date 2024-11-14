@@ -194,7 +194,7 @@ const Home: React.FC = () => {
         []
     );
 
-    const sportMarketsQueryNew = useSportsMarketsV2Query(statusFilter, networkId, '', {
+    const sportMarketsQueryNew = useSportsMarketsV2Query(statusFilter, networkId, false, '', {
         enabled: isAppReady,
     });
 
@@ -340,7 +340,7 @@ const Home: React.FC = () => {
         }
     }, [favouriteLeagues, sportFilter, showActive]);
 
-    const openSportMarketsQuery = useSportsMarketsV2Query(StatusFilter.OPEN_MARKETS, networkId, '', {
+    const openSportMarketsQuery = useSportsMarketsV2Query(StatusFilter.OPEN_MARKETS, networkId, false, '', {
         enabled: isAppReady,
     });
 
