@@ -111,7 +111,7 @@ const Table: React.FC<TableProps> = ({
         const maxPageIndex = Math.ceil(data.length / pagination.pageSize) - 1;
 
         if (pagination.pageIndex > maxPageIndex) {
-            setPagination({ ...pagination, pageIndex: maxPageIndex });
+            setPagination({ ...pagination, pageIndex: maxPageIndex < 0 ? 0 : maxPageIndex });
         }
     }, [data.length, pagination]);
 
@@ -119,40 +119,43 @@ const Table: React.FC<TableProps> = ({
         <>
             {!(isMobile && mobileCards) &&
                 tableInstance.getHeaderGroups().map((headerGroup: any, headerGroupIndex: any) => (
-                    <TableRowHead
-                        style={tableRowHeadStyles}
-                        {...headerGroup.getHeaderGroupProps()}
-                        key={headerGroupIndex}
-                    >
-                        {headerGroup.headers.map((column: any, headerIndex: any) => (
-                            <TableCellHead
-                                {...column.getHeaderProps(column.sortable ? column.getSortByToggleProps() : undefined)}
-                                cssProp={column.headStyle}
-                                key={headerIndex}
-                                style={
-                                    column.sortable
-                                        ? { cursor: 'pointer', ...tableHeadCellStyles }
-                                        : { ...tableHeadCellStyles }
-                                }
-                                width={column.width}
-                                id={column.id}
-                            >
-                                <HeaderTitle cssProp={column.headTitleStyle}>{column.render('Header')}</HeaderTitle>
-                                {column.sortable && (
-                                    <SortIconContainer>
-                                        {column.isSorted ? (
-                                            column.isSortedDesc ? (
-                                                <SortIcon selected sortDirection={SortDirection.DESC} />
+                    <TableRowHead style={tableRowHeadStyles} key={headerGroupIndex}>
+                        {headerGroup.headers.map((header: any, headerIndex: any) => {
+                            const isSortEnabled = header.column.columnDef.enableSorting;
+                            return (
+                                <TableCellHead
+                                    {...{
+                                        onClick: isSortEnabled ? header.column.getToggleSortingHandler() : undefined,
+                                    }}
+                                    cssProp={header.headStyle}
+                                    key={headerIndex}
+                                    style={
+                                        isSortEnabled
+                                            ? { cursor: 'pointer', ...tableHeadCellStyles }
+                                            : { ...tableHeadCellStyles }
+                                    }
+                                    width={header.getSize()}
+                                    id={header.id}
+                                >
+                                    <HeaderTitle cssProp={header.headTitleStyle}>
+                                        {flexRender(header.column.columnDef.header, header.getContext())}{' '}
+                                    </HeaderTitle>
+                                    {isSortEnabled && (
+                                        <SortIconContainer>
+                                            {header.column.getIsSorted() ? (
+                                                header.column.getIsSorted() === SortDirection.DESC ? (
+                                                    <SortIcon selected sortDirection={SortDirection.DESC} />
+                                                ) : (
+                                                    <SortIcon selected sortDirection={SortDirection.ASC} />
+                                                )
                                             ) : (
-                                                <SortIcon selected sortDirection={SortDirection.ASC} />
-                                            )
-                                        ) : (
-                                            <SortIcon selected={false} sortDirection={SortDirection.NONE} />
-                                        )}
-                                    </SortIconContainer>
-                                )}
-                            </TableCellHead>
-                        ))}
+                                                <SortIcon selected={false} sortDirection={SortDirection.NONE} />
+                                            )}
+                                        </SortIconContainer>
+                                    )}
+                                </TableCellHead>
+                            );
+                        })}
                     </TableRowHead>
                 ))}
             <ReactTable height={tableHeight}>
@@ -181,25 +184,17 @@ const Table: React.FC<TableProps> = ({
                                         <TableRow
                                             isCard={isMobile && mobileCards}
                                             style={tableRowStyles}
-                                            {...row.getRowProps()}
                                             cursorPointer={!!onTableRowClick}
                                             onClick={onTableRowClick ? () => onTableRowClick(row) : undefined}
                                         >
                                             {row.getAllCells().map((cell: any, cellIndex: any) => {
                                                 return isMobile && mobileCards ? (
                                                     <TableRowMobile key={`mrm${rowIndex}${cellIndex}`}>
-                                                        <TableCell
-                                                            id={cell.column.id + 'Header'}
-                                                            {...cell.getCellProps()}
-                                                        >
-                                                            {cell.render('Header')}
+                                                        <TableCell id={cell.column.id + 'Header'}>
+                                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                                         </TableCell>
-                                                        <TableCell
-                                                            isCard={mobileCards}
-                                                            id={cell.column.id}
-                                                            {...cell.getCellProps()}
-                                                        >
-                                                            {cell.render('Cell')}
+                                                        <TableCell isCard={mobileCards} id={cell.column.id}>
+                                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                                         </TableCell>
                                                     </TableRowMobile>
                                                 ) : (
@@ -207,8 +202,7 @@ const Table: React.FC<TableProps> = ({
                                                         style={tableRowCellStyles}
                                                         {...cell.getCellProps()}
                                                         key={cellIndex}
-                                                        width={cell.column.width}
-                                                        minWidth={cell.column.minWidth}
+                                                        width={cell.column.getSize()}
                                                         id={cell.column.id}
                                                         onClick={
                                                             onTableCellClick
@@ -216,7 +210,7 @@ const Table: React.FC<TableProps> = ({
                                                                 : undefined
                                                         }
                                                     >
-                                                        {cell.render('Cell')}
+                                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                                     </TableCell>
                                                 );
                                             })}
