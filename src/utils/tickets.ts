@@ -119,7 +119,7 @@ export const mapTicket = (
                     typeId: typeId,
                     type: type ? type.key : '',
                     maturity: secondsToMilliseconds(Number(market.maturity)),
-                    maturityDate: new Date(secondsToMilliseconds(market.maturity)),
+                    maturityDate: new Date(secondsToMilliseconds(Number(market.maturity))),
                     homeTeam: homeTeamName,
                     awayTeam: awayTeamName,
                     homeScore: isPlayerProps
