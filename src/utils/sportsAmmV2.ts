@@ -53,15 +53,10 @@ export const getSportsAMMV2Transaction: any = async (
 
             finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER); // using Math.celi as gasLimit is accepting only integer.
 
-            return freeBetHolderContract.write.trade([
-                tradeData,
-                buyInAmount,
-                expectedQuote,
-                additionalSlippage,
-                referralAddress,
-                collateralAddress,
-                { value: 0, gasLimit: finalEstimation },
-            ]);
+            return freeBetHolderContract.write.trade(
+                [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress, collateralAddress],
+                { value: 0, gasLimit: finalEstimation }
+            );
         }
 
         if (isStakedThales && stakingThalesBettingProxyContract) {
@@ -78,14 +73,10 @@ export const getSportsAMMV2Transaction: any = async (
 
             finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER); // using Math.celi as gasLimit is accepting only integer.
 
-            return stakingThalesBettingProxyContract.write.trade([
-                tradeData,
-                buyInAmount,
-                expectedQuote,
-                additionalSlippage,
-                referralAddress,
-                { gasLimit: finalEstimation },
-            ]);
+            return stakingThalesBettingProxyContract.write.trade(
+                [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress],
+                { gasLimit: finalEstimation }
+            );
         }
 
         if (networkId === Network.OptimismMainnet) {
@@ -112,16 +103,18 @@ export const getSportsAMMV2Transaction: any = async (
             finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER); // using Math.celi as gasLimit is accepting only integer.
         }
 
-        return sportsAMMV2Contract.write.trade([
-            tradeData,
-            buyInAmount,
-            expectedQuote,
-            additionalSlippage,
-            referralAddress,
-            isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
-            isEth,
-            { value: isEth ? buyInAmount : 0, gasLimit: finalEstimation },
-        ]);
+        return sportsAMMV2Contract.write.trade(
+            [
+                tradeData,
+                buyInAmount,
+                expectedQuote,
+                additionalSlippage,
+                referralAddress,
+                isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
+                isEth,
+            ],
+            { value: isEth ? buyInAmount : 0, gasLimit: finalEstimation }
+        );
     }
 };
 
