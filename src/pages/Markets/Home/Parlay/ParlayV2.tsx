@@ -19,6 +19,7 @@ import { SportMarket, TicketMarket, TicketPosition } from 'types/markets';
 import { isSameMarket } from 'utils/marketsV2';
 import TicketV2 from './components/TicketV2';
 import ValidationModal from './components/ValidationModal';
+
 type ParlayProps = {
     onSuccess?: () => void;
 };
@@ -51,7 +52,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
     const sportMarketsQuery = useSportsMarketsV2Query(StatusFilter.OPEN_MARKETS, networkId, false, undefined);
 
     const sportMarketsProofsQuery = useSportsMarketsV2Query(StatusFilter.OPEN_MARKETS, networkId, true, ticket, {
-        enabled: isAppReady,
+        enabled: isAppReady && !!ticket.length,
     });
 
     const liveSportMarketsQuery = useLiveSportsMarketsQuery(networkId, isLiveFilterSelected, {
