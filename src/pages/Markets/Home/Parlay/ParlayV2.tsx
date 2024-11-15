@@ -15,16 +15,17 @@ import { getHasTicketError, getTicket, removeAll, resetTicketError, setMaxTicket
 import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
-import { SportMarket, TicketMarket, TicketPosition } from 'types/markets';
+import { SportMarket, SportMarkets, TicketMarket, TicketPosition } from 'types/markets';
 import { isSameMarket } from 'utils/marketsV2';
 import TicketV2 from './components/TicketV2';
 import ValidationModal from './components/ValidationModal';
 
 type ParlayProps = {
     onSuccess?: () => void;
+    openMarkets?: SportMarkets;
 };
 
-const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
+const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const isAppReady = useSelector(getIsAppReady);
@@ -49,7 +50,9 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
         enabled: isAppReady,
     });
 
-    const sportMarketsQuery = useSportsMarketsV2Query(StatusFilter.OPEN_MARKETS, networkId, false, undefined);
+    const sportMarketsQuery = useSportsMarketsV2Query(StatusFilter.OPEN_MARKETS, networkId, false, undefined, {
+        enabled: !!openMarkets,
+    });
 
     const sportMarketsProofsQuery = useSportsMarketsV2Query(StatusFilter.OPEN_MARKETS, networkId, true, ticket, {
         enabled: isAppReady && !!ticket.length,
@@ -135,11 +138,15 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
         if (sportMarketsProofsQuery.isSuccess && sportMarketsProofsQuery.data) {
             return sportMarketsProofsQuery.data[StatusFilter.OPEN_MARKETS];
         }
+        if (openMarkets) {
+            return openMarkets;
+        }
         if (sportMarketsQuery.isSuccess && sportMarketsQuery.data) {
             return sportMarketsQuery.data[StatusFilter.OPEN_MARKETS];
         }
         return undefined;
     }, [
+        openMarkets,
         sportMarketsProofsQuery.data,
         sportMarketsProofsQuery.isSuccess,
         sportMarketsQuery.data,
