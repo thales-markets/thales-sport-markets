@@ -37,7 +37,7 @@ const useSportMarketQuery = (
                 const liveScore = liveScoreResponse.data;
 
                 return {
-                    ...packMarket(market, gameInfo, liveScore, isLive, 0),
+                    ...packMarket(market, gameInfo, liveScore, isLive),
                     childMarkets: orderBy(
                         market.childMarkets
                             .filter(
@@ -45,7 +45,7 @@ const useSportMarketQuery = (
                                     (enableOnlyOpenChildMarkets && childMarket.status === MarketStatus.OPEN) ||
                                     !enableOnlyOpenChildMarkets
                             )
-                            .map((childMarket: any) => packMarket(childMarket, gameInfo, liveScore, isLive, 0, market)),
+                            .map((childMarket: any) => packMarket(childMarket, gameInfo, liveScore, isLive, market)),
                         ['typeId'],
                         ['asc']
                     ),

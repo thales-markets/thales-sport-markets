@@ -199,7 +199,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const isTwoPositionalMarket = market.odds.length === 2 || isFutures;
     const selected = selectedMarket?.gameId == market.gameId;
 
-    let marketsCount = market.numberOfMarkets ? market.numberOfMarkets - 1 : 0;
+    let marketsCount = market.childMarkets.length;
     if (isColumnView || isGameLive) {
         if (spreadMarket) {
             marketsCount -= 1;

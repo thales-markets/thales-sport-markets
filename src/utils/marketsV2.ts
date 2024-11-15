@@ -539,7 +539,6 @@ export const packMarket = (
     gameInfo: any,
     liveScore: any,
     isLive: boolean,
-    numberOfMarketsPerGame: number,
     parentMarket?: SportMarket
 ): SportMarket => {
     const homeTeam = !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => team.isHome);
@@ -606,7 +605,6 @@ export const packMarket = (
             gameStatus: gameInfo?.gameStatus,
             liveScore,
             live: isLive,
-            numberOfMarkets: numberOfMarketsPerGame || 0,
         };
     }
 

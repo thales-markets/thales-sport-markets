@@ -40,12 +40,7 @@ const useSportsMarketsV2Query = (
                 // API takes timestamp argument in seconds
                 const minMaturity = Math.round(new Date(new Date().setDate(today.getDate() - 7)).getTime() / 1000); // show history for 7 days in the past
 
-                const [
-                    marketsResponse,
-                    gamesInfoResponse,
-                    liveScoresResponse,
-                    numberOfMarketsResponse,
-                ] = await Promise.all([
+                const [marketsResponse, gamesInfoResponse, liveScoresResponse] = await Promise.all([
                     axios.get(
                         `${
                             generalConfig.API_URL
@@ -58,30 +53,24 @@ const useSportsMarketsV2Query = (
                     ),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, noCacheConfig),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/live-scores`, noCacheConfig),
-                    axios.get(
-                        `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/number-of-markets`,
-                        noCacheConfig
-                    ),
                 ]);
                 const markets = marketsResponse.data;
                 const gamesInfo = gamesInfoResponse.data;
                 const liveScores = liveScoresResponse.data;
-                const numberOfMarkets = numberOfMarketsResponse.data;
 
                 const mappedMarkets = markets
                     .filter((market: any) => !LeagueMap[market.leagueId as League]?.hidden)
                     .map((market: any) => {
                         const gameInfo = gamesInfo[market.gameId];
                         const liveScore = liveScores[market.gameId];
-                        const numberOfMarketsPerGame = numberOfMarkets[market.gameId];
 
                         return {
-                            ...packMarket(market, gameInfo, liveScore, false, numberOfMarketsPerGame),
+                            ...packMarket(market, gameInfo, liveScore, false),
                             childMarkets: orderBy(
                                 market.childMarkets
                                     .filter((childMarket: any) => market.status === childMarket.status)
                                     .map((childMarket: any) =>
-                                        packMarket(childMarket, gameInfo, liveScore, false, 0, market)
+                                        packMarket(childMarket, gameInfo, liveScore, false, market)
                                     ),
                                 ['typeId'],
                                 ['asc']
