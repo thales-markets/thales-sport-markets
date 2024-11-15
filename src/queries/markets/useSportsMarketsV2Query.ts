@@ -8,7 +8,8 @@ import { Network } from 'enums/network';
 import { League } from 'enums/sports';
 import { orderBy } from 'lodash';
 import { UseQueryOptions, useQuery } from 'react-query';
-import { MarketsCache, Team } from 'types/markets';
+import { MarketsCache, TicketPosition } from 'types/markets';
+import { packMarket } from '../../utils/marketsV2';
 
 const marketsCache: MarketsCache = {
     [StatusFilter.OPEN_MARKETS]: [],
@@ -21,71 +22,66 @@ const marketsCache: MarketsCache = {
 const useSportsMarketsV2Query = (
     statusFilter: StatusFilter,
     networkId: Network,
+    includeProofs: boolean,
+    ticket?: TicketPosition[],
     options?: UseQueryOptions<MarketsCache>
 ) => {
+    const gameIds = ticket?.map((market) => market.gameId).join(',') || '';
+    const typeIds = ticket?.map((market) => market.typeId).join(',') || '';
+    const playerIds = ticket?.map((market) => market.playerId).join(',') || '';
+    const lines = ticket?.map((market) => market.line).join(',') || '';
+
     return useQuery<MarketsCache>(
-        QUERY_KEYS.SportMarketsV2(statusFilter, networkId),
+        QUERY_KEYS.SportMarketsV2(statusFilter, networkId, includeProofs, gameIds, typeIds, playerIds, lines),
         async () => {
             try {
                 const status = statusFilter.toLowerCase().split('market')[0];
                 const today = new Date();
-                // APU takes timestamp argument in seconds
+                // API takes timestamp argument in seconds
                 const minMaturity = Math.round(new Date(new Date().setDate(today.getDate() - 7)).getTime() / 1000); // show history for 7 days in the past
 
+                const fetchLiveScore = statusFilter === StatusFilter.ONGOING_MARKETS;
+                const fetchGameInfo =
+                    statusFilter === StatusFilter.ONGOING_MARKETS || statusFilter === StatusFilter.RESOLVED_MARKETS;
                 const [marketsResponse, gamesInfoResponse, liveScoresResponse] = await Promise.all([
                     axios.get(
-                        `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/markets/?status=${status}&ungroup=true&minMaturity=${minMaturity}`,
+                        `${
+                            generalConfig.API_URL
+                        }/overtime-v2/networks/${networkId}/markets/?status=${status}&ungroup=true&onlyBasicProperties=true&includeProofs=${includeProofs}&minMaturity=${minMaturity}${
+                            ticket ? `&gameIds=${gameIds}` : ''
+                        }${ticket ? `&typeIds=${typeIds}` : ''}${ticket ? `&playerIds=${playerIds}` : ''}${
+                            ticket ? `&lines=${lines}` : ''
+                        }`,
                         noCacheConfig
                     ),
-                    axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, noCacheConfig),
-                    axios.get(`${generalConfig.API_URL}/overtime-v2/live-scores`, noCacheConfig),
+                    fetchGameInfo
+                        ? axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, noCacheConfig)
+                        : undefined,
+                    fetchLiveScore
+                        ? axios.get(`${generalConfig.API_URL}/overtime-v2/live-scores`, noCacheConfig)
+                        : undefined,
                 ]);
                 const markets = marketsResponse.data;
-                const gamesInfo = gamesInfoResponse.data;
-                const liveScores = liveScoresResponse.data;
+                const gamesInfo = gamesInfoResponse?.data;
+                const liveScores = liveScoresResponse?.data;
 
                 const mappedMarkets = markets
                     .filter((market: any) => !LeagueMap[market.leagueId as League]?.hidden)
                     .map((market: any) => {
-                        const gameInfo = gamesInfo[market.gameId];
-                        const liveScore = liveScores[market.gameId];
-
-                        const homeTeam =
-                            !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => team.isHome);
-                        const homeScore = homeTeam?.score;
-                        const homeScoreByPeriod = homeTeam ? homeTeam.scoreByPeriod : [];
-
-                        const awayTeam =
-                            !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => !team.isHome);
-                        const awayScore = awayTeam?.score;
-                        const awayScoreByPeriod = awayTeam ? awayTeam.scoreByPeriod : [];
+                        const gameInfo = gamesInfo ? gamesInfo[market.gameId] : undefined;
+                        const liveScore = liveScores ? liveScores[market.gameId] : undefined;
 
                         return {
-                            ...market,
-                            maturityDate: new Date(market.maturityDate),
-                            odds: market.odds.map((odd: any) => odd.normalizedImplied),
+                            ...packMarket(market, gameInfo, liveScore, false),
                             childMarkets: orderBy(
                                 market.childMarkets
                                     .filter((childMarket: any) => market.status === childMarket.status)
-                                    .map((childMarket: any) => {
-                                        return {
-                                            ...childMarket,
-                                            maturityDate: new Date(childMarket.maturityDate),
-                                            odds: childMarket.odds.map((odd: any) => odd.normalizedImplied),
-                                        };
-                                    }),
+                                    .map((childMarket: any) =>
+                                        packMarket(childMarket, gameInfo, liveScore, false, market)
+                                    ),
                                 ['typeId'],
                                 ['asc']
                             ),
-                            tournamentName: gameInfo?.tournamentName,
-                            tournamentRound: gameInfo?.tournamentRound,
-                            homeScore,
-                            awayScore,
-                            homeScoreByPeriod,
-                            awayScoreByPeriod,
-                            isGameFinished: gameInfo?.isGameFinished,
-                            gameStatus: gameInfo?.gameStatus,
-                            liveScore,
                         };
                     });
 
