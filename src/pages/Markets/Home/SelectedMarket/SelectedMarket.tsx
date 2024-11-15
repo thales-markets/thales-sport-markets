@@ -41,7 +41,7 @@ const SelectedMarket: React.FC<{ market: SportMarket | undefined }> = ({ market 
                             <MatchLabel>{getMatchLabel(market)} </MatchLabel>
                         </MatchInfo>
                         {market.leagueId === League.US_ELECTION && <StyledUsElectionHeader />}
-                        {isMobile && <Header />}
+                        {isMobile && <Header market={market} />}
                     </>
                 )}
                 <CloseIcon
