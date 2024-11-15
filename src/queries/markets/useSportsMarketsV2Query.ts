@@ -8,7 +8,7 @@ import { Network } from 'enums/network';
 import { League } from 'enums/sports';
 import { orderBy } from 'lodash';
 import { UseQueryOptions, useQuery } from 'react-query';
-import { MarketsCache } from 'types/markets';
+import { MarketsCache, TicketPosition } from 'types/markets';
 import { packMarket } from '../../utils/marketsV2';
 
 const marketsCache: MarketsCache = {
@@ -23,18 +23,22 @@ const useSportsMarketsV2Query = (
     statusFilter: StatusFilter,
     networkId: Network,
     includeProofs: boolean,
-    gameIds?: string,
+    ticket?: TicketPosition[],
     options?: UseQueryOptions<MarketsCache>
 ) => {
+    const gameIds = ticket?.map((market) => market.gameId).join(',') || '';
+    const typeIds = ticket?.map((market) => market.typeId).join(',') || '';
+    const playerIds = ticket?.map((market) => market.playerId).join(',') || '';
+    const lines = ticket?.map((market) => market.line).join(',') || '';
+
     return useQuery<MarketsCache>(
-        QUERY_KEYS.SportMarketsV2(statusFilter, networkId, includeProofs, gameIds),
+        QUERY_KEYS.SportMarketsV2(statusFilter, networkId, includeProofs, gameIds, typeIds, playerIds, lines),
         async () => {
             try {
                 const status = statusFilter.toLowerCase().split('market')[0];
                 const today = new Date();
                 // API takes timestamp argument in seconds
                 const minMaturity = Math.round(new Date(new Date().setDate(today.getDate() - 7)).getTime() / 1000); // show history for 7 days in the past
-                const hasGameIds = gameIds && gameIds !== '';
 
                 const [
                     marketsResponse,
@@ -46,7 +50,9 @@ const useSportsMarketsV2Query = (
                         `${
                             generalConfig.API_URL
                         }/overtime-v2/networks/${networkId}/markets/?status=${status}&ungroup=true&onlyBasicProperties=true&includeProofs=${includeProofs}&minMaturity=${minMaturity}${
-                            hasGameIds ? `&gameIds=${gameIds}` : ''
+                            ticket ? `&gameIds=${gameIds}` : ''
+                        }${ticket ? `&typeIds=${typeIds}` : ''}${ticket ? `&playerIds=${playerIds}` : ''}${
+                            ticket ? `&lines=${lines}` : ''
                         }`,
                         noCacheConfig
                     ),
