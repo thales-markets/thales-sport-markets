@@ -54,7 +54,7 @@ const TransactionsTable: React.FC = () => {
                     [
                         {
                             header: <>{t('profile.table.date-time-col')}</>,
-                            accessor: 'timestamp',
+                            accessorKey: 'timestamp',
                             cell: (cellProps: any) => (
                                 <TableText>{formatTxTimestamp(cellProps.cell.getValue())}</TableText>
                             ),
@@ -63,14 +63,14 @@ const TransactionsTable: React.FC = () => {
                         },
                         {
                             header: <>{t(`profile.table.name-col`)}</>,
-                            accessor: 'name',
+                            accessorKey: 'name',
                             cell: (cellProps: any) => <TableText> {cellProps.cell.getValue()}</TableText>,
                             width: 150,
                             enableSorting: true,
                         },
                         {
                             header: <>{t('profile.table.type-col')}</>,
-                            accessor: 'type',
+                            accessorKey: 'type',
                             sortType: 'alphanumeric',
                             cell: (cellProps: any) => (
                                 <TableText>{t(`profile.table.${cellProps.cell.getValue()}`)}</TableText>
@@ -81,7 +81,7 @@ const TransactionsTable: React.FC = () => {
                         {
                             header: <>{t('profile.table.amount-col')}</>,
                             sortType: 'basic',
-                            accessor: 'amount',
+                            accessorKey: 'amount',
                             cell: (cellProps: any) => (
                                 <>
                                     <TableText>
@@ -99,7 +99,7 @@ const TransactionsTable: React.FC = () => {
                         },
                         {
                             header: <>{t('profile.table.round-col')}</>,
-                            accessor: 'round',
+                            accessorKey: 'round',
                             cell: (cellProps: any) => (
                                 <TableText>
                                     {t('profile.table.round-label')} {cellProps.cell.getValue()}
@@ -109,7 +109,7 @@ const TransactionsTable: React.FC = () => {
                         },
                         {
                             header: <>{t('profile.table.tx-status-col')}</>,
-                            accessor: 'hash',
+                            accessorKey: 'hash',
                             cell: (cellProps: any) => <ViewEtherscanLink hash={cellProps.cell.getValue()} />,
                             width: 150,
                         },
