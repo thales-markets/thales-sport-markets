@@ -664,7 +664,8 @@ const Ticket: React.FC<TicketProps> = ({
 
     const fetchTicketAmmQuote = useCallback(
         async (buyInAmountForQuote: number) => {
-            if (buyInAmountForQuote <= 0) return;
+            const noProofs = markets.every((market) => !market.proof);
+            if (buyInAmountForQuote <= 0 || noProofs) return;
 
             const { sportsAMMV2Contract, multiCollateralOnOffRampContract } = networkConnector;
             if (sportsAMMV2Contract && minBuyInAmountInDefaultCollateral) {

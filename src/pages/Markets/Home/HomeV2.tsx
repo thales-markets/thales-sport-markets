@@ -194,7 +194,7 @@ const Home: React.FC = () => {
         []
     );
 
-    const sportMarketsQueryNew = useSportsMarketsV2Query(statusFilter, networkId, {
+    const sportMarketsQueryNew = useSportsMarketsV2Query(statusFilter, networkId, false, undefined, {
         enabled: isAppReady,
     });
 
@@ -340,7 +340,7 @@ const Home: React.FC = () => {
         }
     }, [favouriteLeagues, sportFilter, showActive]);
 
-    const openSportMarketsQuery = useSportsMarketsV2Query(StatusFilter.OPEN_MARKETS, networkId, {
+    const openSportMarketsQuery = useSportsMarketsV2Query(StatusFilter.OPEN_MARKETS, networkId, false, undefined, {
         enabled: isAppReady,
     });
 
@@ -671,7 +671,7 @@ const Home: React.FC = () => {
                             {!marketsLoading &&
                                 finalMarkets.length > 0 &&
                                 (statusFilter === StatusFilter.OPEN_MARKETS || sportFilter === SportFilter.Live) && (
-                                    <Header availableMarketTypes={availableMarketTypes} />
+                                    <Header availableMarketTypes={availableMarketTypes} market={selectedMarketData} />
                                 )}
                             <FilterTagsMobile />
                         </>
@@ -705,7 +705,10 @@ const Home: React.FC = () => {
                                     {!isMobile &&
                                         (statusFilter === StatusFilter.OPEN_MARKETS ||
                                             sportFilter === SportFilter.Live) && (
-                                            <Header availableMarketTypes={availableMarketTypes} />
+                                            <Header
+                                                availableMarketTypes={availableMarketTypes}
+                                                market={selectedMarketData}
+                                            />
                                         )}
                                     <FlexDivRow>
                                         {((isMobile && !isMarketSelected && !showTicketMobileModal) || !isMobile) && (
