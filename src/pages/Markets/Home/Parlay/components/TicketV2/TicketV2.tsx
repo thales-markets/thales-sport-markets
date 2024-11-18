@@ -117,12 +117,7 @@ import {
     getParlayMultiplier,
     getTooltipKey,
 } from 'utils/overdrop';
-import {
-    refetchBalances,
-    refetchCoingeckoRates,
-    refetchFreeBetBalance,
-    refetchOpenMarkets,
-} from 'utils/queryConnector';
+import { refetchBalances, refetchCoingeckoRates, refetchFreeBetBalance, refetchProofs } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import { getSportsAMMV2QuoteMethod, getSportsAMMV2Transaction } from 'utils/sportsAmmV2';
 import {
@@ -286,6 +281,8 @@ const Ticket: React.FC<TicketProps> = ({
     const isStableCollateral = isStableCurrency(selectedCollateral);
     const isDefaultCollateral = selectedCollateral === defaultCollateral;
     const collateralHasLp = isLpSupported(usedCollateralForBuy);
+
+    const noProofs = useMemo(() => markets.every((market) => !market.proof), [markets]);
 
     // Used for cancelling the subscription and asynchronous tasks in a useEffect
     const mountedRef = useRef(true);
@@ -601,7 +598,7 @@ const Ticket: React.FC<TicketProps> = ({
     }, [isThales, markets, payout, swapToThales]);
 
     const ticketLiquidityQuery = useTicketLiquidityQuery(markets, networkId, {
-        enabled: isAppReady,
+        enabled: isAppReady && !noProofs,
     });
 
     const ticketLiquidity: number | undefined = useMemo(
@@ -664,7 +661,6 @@ const Ticket: React.FC<TicketProps> = ({
 
     const fetchTicketAmmQuote = useCallback(
         async (buyInAmountForQuote: number) => {
-            const noProofs = markets.every((market) => !market.proof);
             if (buyInAmountForQuote <= 0 || noProofs) return;
 
             const { sportsAMMV2Contract, multiCollateralOnOffRampContract } = networkConnector;
@@ -741,7 +737,11 @@ const Ticket: React.FC<TicketProps> = ({
                             return { error: TicketErrorMessage.SAME_TEAM_IN_PARLAY };
                         }
                     } else if (e && e.toString().includes(TicketErrorMessage.PROOF_IS_NOT_VALID)) {
-                        refetchOpenMarkets(networkId);
+                        const gameIds = markets.map((market) => market.gameId).join(',');
+                        const typeIds = markets.map((market) => market.typeId).join(',');
+                        const playerIds = markets.map((market) => market.playerProps.playerId).join(',');
+                        const lines = markets.map((market) => market.line).join(',');
+                        refetchProofs(networkId, gameIds, typeIds, playerIds, lines);
                     }
                     console.log(e);
                     return { error: e };
@@ -749,6 +749,7 @@ const Ticket: React.FC<TicketProps> = ({
             }
         },
         [
+            noProofs,
             minBuyInAmountInDefaultCollateral,
             markets,
             collateralHasLp,

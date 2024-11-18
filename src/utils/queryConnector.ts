@@ -21,8 +21,16 @@ export const refetchBalances = (walletAddress: string, networkId: Network) => {
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.MultipleCollateral(walletAddress, networkId));
 };
 
-export const refetchOpenMarkets = (networkId: Network) => {
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.SportMarketsV2(StatusFilter.OPEN_MARKETS, networkId));
+export const refetchProofs = (
+    networkId: Network,
+    gameIds: string,
+    typeIds: string,
+    playerIds: string,
+    lines: string
+) => {
+    queryConnector.queryClient.invalidateQueries(
+        QUERY_KEYS.SportMarketsV2(StatusFilter.OPEN_MARKETS, networkId, true, gameIds, typeIds, playerIds, lines)
+    );
 };
 
 export const refetchFreeBetBalance = (walletAddress: string, networkId: Network) => {
