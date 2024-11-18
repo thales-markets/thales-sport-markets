@@ -39,29 +39,29 @@ const XPHistoryTable: React.FC = () => {
     const columns = [
         {
             header: <>{t('overdrop.xp-details.date-time')}</>,
-            accessor: 'timestamp',
+            accessorKey: 'timestamp',
             cell: (cellProps: any) => (
                 <p>{cellProps.cell.getValue() && formatTxTimestamp(cellProps.cell.getValue())}</p>
             ),
-            width: 150,
+            size: 150,
             enableSorting: true,
         },
         {
             header: <>{t('overdrop.xp-details.received')}</>,
-            accessor: 'points',
+            accessorKey: 'points',
             sortType: 'alphanumeric',
             cell: (cellProps: any) => <p>{formatPoints(cellProps.cell.getValue())}</p>,
-            width: 150,
+            size: 150,
             enableSorting: true,
         },
         {
             header: <>{t('overdrop.xp-details.tx-link')}</>,
-            accessor: 'txHash',
+            accessorKey: 'txHash',
             sortType: 'alphanumeric',
             cell: (cellProps: any) => (
                 <ViewEtherscanLink overrideNetwork={cellProps.row.original.network} hash={cellProps.cell.getValue()} />
             ),
-            width: 150,
+            size: 150,
         },
     ];
 

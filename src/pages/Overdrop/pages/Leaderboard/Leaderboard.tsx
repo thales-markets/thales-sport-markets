@@ -162,17 +162,16 @@ const Leaderboard: React.FC = () => {
 
     const columns = [
         {
-            accessor: 'level.smallBadge',
+            accessorKey: 'level.smallBadge',
             enableSorting: false,
             cell: (cellProps: any) => {
                 return <Badge style={{ width: '45px' }} src={cellProps.cell.getValue()} />;
             },
-            width: '50px',
-            maxWidth: 50,
+            size: 50,
         },
         {
             header: <>{t('overdrop.leaderboard.table.address')}</>,
-            accessor: 'address',
+            accessorKey: 'address',
             enableSorting: false,
             cell: (cellProps: any) => {
                 return (
@@ -188,7 +187,7 @@ const Leaderboard: React.FC = () => {
         },
         {
             header: <>{t('overdrop.leaderboard.table.rank')}</>,
-            accessor: 'rank',
+            accessorKey: 'rank',
             enableSorting: true,
             cell: (cellProps: any) => {
                 return <div>#{cellProps.cell.getValue()}</div>;
@@ -198,7 +197,7 @@ const Leaderboard: React.FC = () => {
         },
         {
             header: <>{t('overdrop.leaderboard.table.level')}</>,
-            accessor: 'level',
+            accessorKey: 'level',
             enableSorting: true,
             cell: (cellProps: any) => {
                 return (
@@ -211,7 +210,7 @@ const Leaderboard: React.FC = () => {
         },
         {
             header: <>{t('overdrop.leaderboard.table.total-xp')}</>,
-            accessor: 'points',
+            accessorKey: 'points',
             cell: (cellProps: any) => {
                 return <div>{formatCurrency(cellProps.cell.getValue())}</div>;
             },
@@ -220,7 +219,7 @@ const Leaderboard: React.FC = () => {
         },
         {
             header: <>{t('overdrop.leaderboard.table.total-volume')}</>,
-            accessor: 'volume',
+            accessorKey: 'volume',
             enableSorting: true,
             cell: (cellProps: any) => {
                 return <div>{formatCurrency(cellProps.cell.getValue())}</div>;
@@ -229,7 +228,7 @@ const Leaderboard: React.FC = () => {
         },
         {
             header: <>{t('overdrop.leaderboard.table.rewards')}</>,
-            accessor: 'rewards',
+            accessorKey: 'rewards',
             enableSorting: true,
             cell: (cellProps: any) => {
                 return (
