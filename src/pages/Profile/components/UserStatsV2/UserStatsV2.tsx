@@ -55,7 +55,7 @@ import {
 } from 'utils/swap';
 import { delay } from 'utils/timer';
 import { Address, getContract } from 'viem';
-import { useAccount, useChainId, useClient } from 'wagmi';
+import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 import InlineLoader from '../../../../components/InlineLoader';
 import BuyStepsModal from '../../../Markets/Home/Parlay/components/BuyStepsModal';
 
@@ -75,6 +75,8 @@ const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
 
     const networkId = useChainId();
     const client = useClient();
+    const walletClient = useWalletClient();
+
     const { address, isConnected } = useAccount();
     const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
@@ -299,6 +301,7 @@ const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
                     networkId,
                     walletAddress as Address,
                     swapToThalesParams.src,
+                    walletClient.data as any,
                     approveAmount.toString()
                 );
 
@@ -354,7 +357,7 @@ const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
                         address: multipleCollateral[CRYPTO_CURRENCY_MAP.THALES as Coins].addresses[
                             networkId
                         ] as Address,
-                        client,
+                        client: walletClient.data as any,
                     }) as ViemContract;
 
                     const balanceAfter = bigNumberFormatter(await thalesTokenContract?.read.balanceOf([walletAddress]));
