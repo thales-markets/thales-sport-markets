@@ -47,7 +47,7 @@ const useLiquidityPoolDataQuery = (
 
                 if (liquidityPoolDataContractInstance) {
                     const contractLiquidityPoolData = await liquidityPoolDataContractInstance.read.getLiquidityPoolData(
-                        address
+                        [address]
                     );
 
                     liquidityPoolData.collateral = contractLiquidityPoolData.collateral;

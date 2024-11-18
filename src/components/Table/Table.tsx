@@ -105,13 +105,12 @@ const Table: React.FC<TableProps> = ({
             pagination,
         },
     });
-
     // handle resetting the pageIndex to avoid showing empty pages (required when autoResetPageIndex is turned off)
     useEffect(() => {
-        const maxPageIndex = Math.ceil(data.length / pagination.pageSize) - 1;
+        const maxPageIndex = data.length > 0 ? Math.ceil(data.length / pagination.pageSize) - 1 : 0;
 
         if (pagination.pageIndex > maxPageIndex) {
-            setPagination({ ...pagination, pageIndex: maxPageIndex < 0 ? 0 : maxPageIndex });
+            setPagination({ ...pagination, pageIndex: maxPageIndex });
         }
     }, [data.length, pagination]);
 
@@ -200,7 +199,6 @@ const Table: React.FC<TableProps> = ({
                                                 ) : (
                                                     <TableCell
                                                         style={tableRowCellStyles}
-                                                        {...cell.getCellProps()}
                                                         key={cellIndex}
                                                         width={cell.column.getSize()}
                                                         id={cell.column.id}

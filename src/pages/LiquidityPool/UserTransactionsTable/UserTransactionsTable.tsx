@@ -19,50 +19,47 @@ const UserTransactionsTable: FC<UserTransactionsTableProps> = memo(
         const columns = [
             {
                 header: <>{t('market.table.date-time-col')}</>,
-                accessor: 'timestamp',
+                accessorKey: 'timestamp',
                 cell: (cellProps: any) => <p>{formatTxTimestamp(cellProps.cell.getValue())}</p>,
-                width: 150,
+                size: 150,
                 enableSorting: true,
             },
             {
                 header: <>{t('rewards.table.wallet-address')}</>,
-                accessor: 'account',
-                sortType: 'alphanumeric',
+                accessorKey: 'account',
                 cell: (cellProps: any) => <p>{truncateAddress(cellProps.cell.getValue(), 5)}</p>,
-                width: 150,
+                size: 150,
                 enableSorting: true,
             },
             {
                 header: <>{t('market.table.type-col')}</>,
-                accessor: 'type',
-                sortType: 'alphanumeric',
+                accessorKey: 'type',
                 cell: (cellProps: any) => (
                     <p>{t(`liquidity-pool.user-transactions.type.${cellProps.cell.getValue()}`)}</p>
                 ),
-                width: 150,
+                size: 150,
                 enableSorting: true,
             },
             {
                 header: <>{t('market.table.amount-col')}</>,
-                sortType: 'basic',
-                accessor: 'amount',
+                accessorKey: 'amount',
                 cell: (cellProps: any) => (
                     <>
                         <p>
-                            {cellProps.cell.row.original.type === 'withdrawalRequest'
+                            {cellProps.row.original.type === 'withdrawalRequest'
                                 ? '-'
                                 : formatCurrencyWithKey(collateral, cellProps.cell.getValue())}
                         </p>
                     </>
                 ),
-                width: 150,
+                size: 150,
                 enableSorting: true,
             },
             {
                 header: <>{t('market.table.tx-status-col')}</>,
-                accessor: 'hash',
+                accessorKey: 'hash',
                 cell: (cellProps: any) => <ViewEtherscanLink hash={cellProps.cell.getValue()} />,
-                width: 150,
+                size: 150,
             },
         ];
         // @ts-ignore

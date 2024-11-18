@@ -20,10 +20,12 @@ const useLiquidityPoolUserTransactionsQuery = (
                     liquidityPool: liquidityPoolAddress,
                 });
 
-                return liquidityPoolUserTransactions.map((tx: LiquidityPoolUserTransaction) => ({
-                    ...tx,
-                    amount: coinFormatter((tx.amount as unknown) as bigint, queryConfig.networkId, collateral),
-                }));
+                return liquidityPoolUserTransactions.map((tx: LiquidityPoolUserTransaction) => {
+                    return {
+                        ...tx,
+                        amount: coinFormatter(BigInt(tx.amount ? tx.amount : 0), queryConfig.networkId, collateral),
+                    };
+                });
             } catch (e) {
                 console.log(e);
                 return [];

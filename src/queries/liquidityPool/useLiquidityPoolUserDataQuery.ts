@@ -39,8 +39,7 @@ const useLiquidityPoolUserDataQuery = (
 
                 if (liquidityPoolDataContractInstance) {
                     const contractUserLiquidityPoolData = await liquidityPoolDataContractInstance.read.getUserLiquidityPoolData(
-                        address,
-                        walletAddress
+                        [address, walletAddress]
                     );
 
                     userLiquidityPoolData.isWithdrawalRequested = contractUserLiquidityPoolData.withdrawalRequested;
