@@ -31,7 +31,7 @@ import { checkAllowance, getDefaultCollateralIndexForNetworkId } from 'utils/net
 import { getContractInstance } from 'utils/networkConnector';
 import { Client, isAddress } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
-import { useAccount, useChainId, useClient } from 'wagmi';
+import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 
 type FreeBetFundModalProps = {
     onClose: () => void;
@@ -47,6 +47,8 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
 
     const networkId = useChainId();
     const client = useClient();
+    const walletClient = useWalletClient();
+
     const { address, isConnected } = useAccount();
     const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
@@ -142,11 +144,15 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
     const handleAllowance = async (approveAmount: bigint) => {
         const multiCollateralWithSigner = await getContractInstance(
             ContractType.MULTICOLLATERAL,
-            client,
+            walletClient.data,
             networkId,
             getCollateralIndex(networkId, selectedCollateral)
         );
-        const freeBetHolderContract = await getContractInstance(ContractType.FREE_BET_HOLDER, client, networkId);
+        const freeBetHolderContract = await getContractInstance(
+            ContractType.FREE_BET_HOLDER,
+            walletClient.data,
+            networkId
+        );
 
         const freeBetHolderContractAddress = freeBetHolderContract && freeBetHolderContract.address;
 
@@ -235,11 +241,11 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
         const contracts = await Promise.all([
             getContractInstance(
                 ContractType.MULTICOLLATERAL,
-                client,
+                walletClient.data,
                 networkId,
                 getCollateralIndex(networkId, selectedCollateral)
             ),
-            getContractInstance(ContractType.FREE_BET_HOLDER, client, networkId),
+            getContractInstance(ContractType.FREE_BET_HOLDER, walletClient.data, networkId),
         ]);
         const [multipleCollateralWithSigner, freeBetHolderContractWithSigner] = contracts;
 
@@ -326,36 +332,45 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
     }, [fundBatchRaw, t]);
 
     useEffect(() => {
-        const multiCollateralContractWithSigner = getContractInstance(
-            ContractType.MULTICOLLATERAL,
-            client,
-            networkId,
-            getCollateralIndex(networkId, selectedCollateral)
-        );
+        const handleAllowanceCheck = async () => {
+            const multiCollateralContractWithSigner = await getContractInstance(
+                ContractType.MULTICOLLATERAL,
+                walletClient.data,
+                networkId,
+                getCollateralIndex(networkId, selectedCollateral)
+            );
 
-        const freeBetHolderContractAddress = freeBetHolder && freeBetHolder?.addresses[networkId];
+            const freeBetHolderContractAddress = freeBetHolder && freeBetHolder?.addresses[networkId];
 
-        if (multiCollateralContractWithSigner && freeBetHolderContractAddress) {
-            const getAllowance = async () => {
-                const amountForCheck = isFundBatch ? Number(amount) * bulkWalletAddresses.length : Number(amount);
+            if (multiCollateralContractWithSigner && freeBetHolderContractAddress) {
+                const getAllowance = async () => {
+                    const amountForCheck = isFundBatch ? Number(amount) * bulkWalletAddresses.length : Number(amount);
 
-                try {
-                    const parsedAmount = coinParser(Number(amountForCheck).toString(), networkId, selectedCollateral);
-                    const allowance = await checkAllowance(
-                        parsedAmount,
-                        multiCollateralContractWithSigner,
-                        walletAddress,
-                        freeBetHolderContractAddress
-                    );
-                    setAllowance(allowance);
-                } catch (e) {
-                    console.log(e);
+                    try {
+                        const parsedAmount = coinParser(
+                            Number(amountForCheck).toString(),
+                            networkId,
+                            selectedCollateral
+                        );
+                        const allowance = await checkAllowance(
+                            parsedAmount,
+                            multiCollateralContractWithSigner,
+                            walletAddress,
+                            freeBetHolderContractAddress
+                        );
+                        console.log('allowance', allowance);
+                        setAllowance(allowance);
+                    } catch (e) {
+                        console.log(e);
+                    }
+                };
+                if (isConnected) {
+                    getAllowance();
                 }
-            };
-            if (isConnected) {
-                getAllowance();
             }
-        }
+        };
+
+        handleAllowanceCheck();
     }, [
         walletAddress,
         isConnected,
@@ -367,6 +382,7 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
         isFundBatch,
         bulkWalletAddresses.length,
         client,
+        walletClient.data,
     ]);
 
     return (
