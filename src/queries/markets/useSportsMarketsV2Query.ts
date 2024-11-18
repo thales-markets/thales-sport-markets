@@ -94,7 +94,7 @@ const useSportsMarketsV2Query = (
             return marketsCache;
         },
         {
-            refetchInterval: secondsToMilliseconds(statusFilter === StatusFilter.OPEN_MARKETS ? 500 : 60),
+            refetchInterval: secondsToMilliseconds(statusFilter === StatusFilter.OPEN_MARKETS ? 5 : 60),
             ...options,
         }
     );
