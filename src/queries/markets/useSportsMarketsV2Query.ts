@@ -47,11 +47,11 @@ const useSportsMarketsV2Query = (
                     axios.get(
                         `${
                             generalConfig.API_URL
-                        }/overtime-v2/networks/${networkId}/markets/?status=${status}&ungroup=true&onlyBasicProperties=true&includeProofs=${includeProofs}&minMaturity=${minMaturity}${
-                            ticket ? `&gameIds=${gameIds}` : ''
-                        }${ticket ? `&typeIds=${typeIds}` : ''}${ticket ? `&playerIds=${playerIds}` : ''}${
-                            ticket ? `&lines=${lines}` : ''
-                        }`,
+                        }/overtime-v2/networks/${networkId}/markets/?status=${status}&ungroup=true&onlyBasicProperties=true&includeProofs=${includeProofs}${
+                            ticket ? '' : `&minMaturity=${minMaturity}`
+                        }${ticket ? `&gameIds=${gameIds}` : ''}${ticket ? `&typeIds=${typeIds}` : ''}${
+                            ticket ? `&playerIds=${playerIds}` : ''
+                        }${ticket ? `&lines=${lines}` : ''}`,
                         noCacheConfig
                     ),
                     fetchGameInfo
@@ -94,7 +94,7 @@ const useSportsMarketsV2Query = (
             return marketsCache;
         },
         {
-            refetchInterval: secondsToMilliseconds(statusFilter === StatusFilter.OPEN_MARKETS ? 5 : 60),
+            refetchInterval: secondsToMilliseconds(statusFilter === StatusFilter.OPEN_MARKETS ? 500 : 60),
             ...options,
         }
     );
