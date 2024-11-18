@@ -42,7 +42,7 @@ import { refetchLiquidityPoolData } from 'utils/queryConnector';
 import { delay } from 'utils/timer';
 import { Address, Client, getContract, parseUnits } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
-import { useAccount, useChainId, useClient } from 'wagmi';
+import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 import SPAAnchor from '../../components/SPAAnchor';
 import ROUTES from '../../constants/routes';
 import useMultipleCollateralBalanceQuery from '../../queries/wallet/useMultipleCollateralBalanceQuery';
@@ -103,6 +103,8 @@ const LiquidityPool: React.FC = () => {
 
     const networkId = useChainId();
     const client = useClient();
+    const walletClient = useWalletClient();
+
     const { address, isConnected } = useAccount();
     const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
@@ -203,7 +205,7 @@ const LiquidityPool: React.FC = () => {
         (async () => {
             const collateralContractWithSigner = await getContractInstance(
                 ContractType.MULTICOLLATERAL,
-                client,
+                walletClient.data as Client,
                 networkId,
                 getCollateralIndex(networkId, collateral)
             );
@@ -237,7 +239,7 @@ const LiquidityPool: React.FC = () => {
         liquidityPoolAddress,
         collateral,
         isConnected,
-        client,
+        walletClient,
     ]);
 
     const liquidityPoolData: LiquidityPoolData | undefined = useMemo(() => {
@@ -329,7 +331,7 @@ const LiquidityPool: React.FC = () => {
     const handleAllowance = async (approveAmount: bigint) => {
         const multiCollateralWithSigner = await getContractInstance(
             ContractType.MULTICOLLATERAL,
-            client,
+            walletClient.data as Client,
             networkId,
             getCollateralIndex(networkId, collateral)
         );
@@ -340,6 +342,7 @@ const LiquidityPool: React.FC = () => {
 
             try {
                 console.log(approveAmount.toString(), collateral);
+                console.log('liquidityPoolAddress ', liquidityPoolAddress);
                 const hash = await multiCollateralWithSigner?.write.approve([liquidityPoolAddress, approveAmount]);
                 setOpenApprovalModal(false);
 
@@ -369,13 +372,13 @@ const LiquidityPool: React.FC = () => {
             const liquidityPoolContractWithSigner = getContract({
                 abi: liquidityPoolContract,
                 address: liquidityPoolAddress as Address,
-                client,
+                client: walletClient.data as any,
             }) as ViemContract;
             const parsedAmount = coinParser(Number(amount).toString(), networkId, collateral);
 
             const WETHContractWithSigner = await getContractInstance(
                 ContractType.MULTICOLLATERAL,
-                client,
+                walletClient.data as Client,
                 networkId,
                 getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins)
             );
@@ -438,7 +441,7 @@ const LiquidityPool: React.FC = () => {
             const liquidityPoolContractWithSigner = getContract({
                 address: liquidityPoolAddress as Address,
                 abi: liquidityPoolContract,
-                client,
+                client: walletClient.data as any,
             }) as ViemContract;
             const parsedPercentage = parseUnits((Number(withdrawalPercentage) / 100).toString(), 18);
 
@@ -473,7 +476,7 @@ const LiquidityPool: React.FC = () => {
             const liquidityPoolContractWithSigner = getContract({
                 address: liquidityPoolAddress as Address,
                 abi: liquidityPoolContract,
-                client,
+                client: walletClient.data as any,
             }) as ViemContract;
 
             const canCloseCurrentRound = await liquidityPoolContractWithSigner.read.canCloseCurrentRound();
