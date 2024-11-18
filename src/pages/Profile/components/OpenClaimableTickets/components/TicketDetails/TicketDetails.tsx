@@ -32,7 +32,7 @@ import { refetchAfterClaim } from 'utils/queryConnector';
 import { formatTicketOdds, getTicketMarketOdd } from 'utils/tickets';
 import { Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
-import { useAccount, useChainId, useClient } from 'wagmi';
+import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 import TicketMarketDetails from '../TicketMarketDetails';
 import {
     ArrowIcon,
@@ -86,6 +86,8 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
 
     const networkId = useChainId();
     const client = useClient();
+    const walletClient = useWalletClient();
+
     const { address } = useAccount();
     const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
@@ -124,7 +126,11 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
     const claimTicket = async (ticketAddress: string) => {
         const id = toast.loading(t('market.toast-message.transaction-pending'));
 
-        const sportsAMMV2ContractWithSigner = await getContractInstance(ContractType.SPORTS_AMM_V2, client, networkId);
+        const sportsAMMV2ContractWithSigner = await getContractInstance(
+            ContractType.SPORTS_AMM_V2,
+            walletClient.data as Client,
+            networkId
+        );
 
         if (sportsAMMV2ContractWithSigner) {
             setIsSubmitting(true);
