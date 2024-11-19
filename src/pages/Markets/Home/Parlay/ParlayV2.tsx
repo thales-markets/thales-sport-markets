@@ -14,7 +14,7 @@ import { getSportFilter } from 'redux/modules/market';
 import { getHasTicketError, getTicket, removeAll, resetTicketError, setMaxTicketSize } from 'redux/modules/ticket';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
-import { SportMarket, TicketMarket, TicketPosition } from 'types/markets';
+import { SportMarket, SportMarkets, TicketMarket, TicketPosition } from 'types/markets';
 import { isSameMarket } from 'utils/marketsV2';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import TicketV2 from './components/TicketV2';
@@ -22,9 +22,10 @@ import ValidationModal from './components/ValidationModal';
 
 type ParlayProps = {
     onSuccess?: () => void;
+    openMarkets?: SportMarkets;
 };
 
-const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
+const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const isAppReady = useSelector(getIsAppReady);
@@ -59,7 +60,10 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
         StatusFilter.OPEN_MARKETS,
         false,
         { networkId, client },
-        undefined
+        undefined,
+        {
+            enabled: !!openMarkets,
+        }
     );
 
     const sportMarketsProofsQuery = useSportsMarketsV2Query(
@@ -156,11 +160,15 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
         if (sportMarketsProofsQuery.isSuccess && sportMarketsProofsQuery.data) {
             return sportMarketsProofsQuery.data[StatusFilter.OPEN_MARKETS];
         }
+        if (openMarkets) {
+            return openMarkets;
+        }
         if (sportMarketsQuery.isSuccess && sportMarketsQuery.data) {
             return sportMarketsQuery.data[StatusFilter.OPEN_MARKETS];
         }
         return undefined;
     }, [
+        openMarkets,
         sportMarketsProofsQuery.data,
         sportMarketsProofsQuery.isSuccess,
         sportMarketsQuery.data,

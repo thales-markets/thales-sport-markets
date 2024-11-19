@@ -357,13 +357,15 @@ const Home: React.FC = () => {
         }
     );
 
-    const openMarketsCountPerTag = useMemo(() => {
-        const openSportMarkets: SportMarkets =
-            openSportMarketsQuery.isSuccess && openSportMarketsQuery.data
-                ? openSportMarketsQuery.data[StatusFilter.OPEN_MARKETS]
-                : [];
+    const openSportMarkets = useMemo(() => {
+        if (openSportMarketsQuery.isSuccess && openSportMarketsQuery.data) {
+            return openSportMarketsQuery.data[StatusFilter.OPEN_MARKETS];
+        }
+        return undefined;
+    }, [openSportMarketsQuery.data, openSportMarketsQuery.isSuccess]);
 
-        const groupedMarkets = groupBy(openSportMarkets, (market) => market.leagueId);
+    const openMarketsCountPerTag = useMemo(() => {
+        const groupedMarkets = groupBy(openSportMarkets || [], (market) => market.leagueId);
 
         const openMarketsCountPerTag: any = {};
         Object.keys(groupedMarkets).forEach((key: string) => {
@@ -374,7 +376,7 @@ const Home: React.FC = () => {
             }
         });
         return openMarketsCountPerTag;
-    }, [openSportMarketsQuery]);
+    }, [openSportMarkets]);
 
     const openMarketsCountPerSport = useMemo(() => {
         const openMarketsCount: any = {};
@@ -421,22 +423,13 @@ const Home: React.FC = () => {
     }, [liveSportMarketsQuery]);
 
     const boostedMarketsCount = useMemo(() => {
-        const openSportMarkets: SportMarkets =
-            openSportMarketsQuery.isSuccess && openSportMarketsQuery.data
-                ? openSportMarketsQuery.data[StatusFilter.OPEN_MARKETS]
-                : [];
         const gameMultipliers =
             gameMultipliersQuery.isSuccess && gameMultipliersQuery.data ? gameMultipliersQuery.data : [];
 
-        return openSportMarkets.filter((openMarket) =>
+        return (openSportMarkets || []).filter((openMarket) =>
             gameMultipliers.find((multiplier) => multiplier.gameId === openMarket.gameId)
         ).length;
-    }, [
-        gameMultipliersQuery.data,
-        gameMultipliersQuery.isSuccess,
-        openSportMarketsQuery.data,
-        openSportMarketsQuery.isSuccess,
-    ]);
+    }, [gameMultipliersQuery.data, gameMultipliersQuery.isSuccess, openSportMarkets]);
 
     const liveMarketsCountPerSport = useMemo(() => {
         const liveMarketsCount: any = {};
@@ -765,7 +758,7 @@ const Home: React.FC = () => {
                 {/* RIGHT PART */}
                 <RightSidebarContainer>
                     <Suspense fallback={<Loader />}>
-                        <Parlay />
+                        <Parlay openMarkets={openSportMarkets} />
                     </Suspense>
                 </RightSidebarContainer>
             </RowContainer>
@@ -773,6 +766,7 @@ const Home: React.FC = () => {
                 <TicketMobileModal
                     onClose={() => setShowTicketMobileModal(false)}
                     isOpen={isMobile && showTicketMobileModal}
+                    openMarkets={openSportMarkets}
                 />
             </Suspense>
             {isMobile && (

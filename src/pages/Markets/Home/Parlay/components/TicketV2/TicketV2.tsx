@@ -285,6 +285,8 @@ const Ticket: React.FC<TicketProps> = ({
     const isDefaultCollateral = selectedCollateral === defaultCollateral;
     const collateralHasLp = isLpSupported(usedCollateralForBuy);
 
+    const noProofs = useMemo(() => markets.every((market) => !market.proof), [markets]);
+
     // Used for cancelling the subscription and asynchronous tasks in a useEffect
     const mountedRef = useRef(true);
     useEffect(() => {
@@ -622,7 +624,7 @@ const Ticket: React.FC<TicketProps> = ({
         markets,
         { networkId, client },
         {
-            enabled: isAppReady,
+            enabled: isAppReady && !noProofs,
         }
     );
 
@@ -686,7 +688,6 @@ const Ticket: React.FC<TicketProps> = ({
 
     const fetchTicketAmmQuote = useCallback(
         async (buyInAmountForQuote: number) => {
-            const noProofs = markets.every((market) => !market.proof);
             if (buyInAmountForQuote <= 0 || noProofs) return;
 
             const contracts = (await Promise.all([
@@ -782,6 +783,7 @@ const Ticket: React.FC<TicketProps> = ({
         [
             walletClient.data,
             networkId,
+            noProofs,
             minBuyInAmountInDefaultCollateral,
             markets,
             collateralHasLp,
