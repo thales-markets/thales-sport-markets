@@ -914,7 +914,6 @@ const Ticket: React.FC<TicketProps> = ({
                     walletAddress,
                     sportsAMMV2Contract.addresses[networkId]
                 );
-                console.log('allowance ', allowance);
                 if (!mountedRef.current) return null;
                 setHasAllowance(allowance);
             } catch (e) {
