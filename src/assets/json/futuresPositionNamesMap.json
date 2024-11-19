@@ -145,6 +145,42 @@
             "Washington Wizards"
         ]
     },
+    "30006": {
+        "13001": [
+            "Carolina Hurricanes",
+            "Edmonton Oilers",
+            "Florida Panthers",
+            "Dallas Stars",
+            "New York Rangers",
+            "Colorado Avalanche",
+            "Toronto Maple Leafs",
+            "New Jersey Devils",
+            "Winnipeg Jets",
+            "Tampa Bay Lightning",
+            "Vegas Golden Knights",
+            "Vancouver Canucks",
+            "Minnesota Wild",
+            "Boston Bruins",
+            "Nashville Predators",
+            "Los Angeles Kings",
+            "Washington Capitals",
+            "New York Islanders",
+            "Ottawa Senators",
+            "Buffalo Sabres",
+            "Utah Hockey Club",
+            "Seattle Kraken",
+            "Detroit Red Wings",
+            "Calgary Flames",
+            "Pittsburgh Penguins",
+            "St. Louis Blues",
+            "Philadelphia Flyers",
+            "Chicago Blackhawks",
+            "Montreal Canadiens",
+            "Columbus Blue Jackets",
+            "Anaheim Ducks",
+            "San Jose Sharks"
+        ]
+    },
     "30011": {
         "13001": [
             "Arsenal FC",
@@ -166,6 +202,98 @@
             "Southampton FC",
             "Ipswich Town FC",
             "AFC Bournemouth"
+        ]
+    },
+    "30012": {
+        "13001": [
+            "Angers Sporting Club de l'Ouest",
+            "AS Monaco FC",
+            "AS Saint-Étienne",
+            "Association Jeunesse Auxerroise",
+            "FC Nantes",
+            "Le Havre AC",
+            "Lille OSC",
+            "Montpellier HSC",
+            "OGC Nice Côte d'Azur",
+            "Olympique de Marseille",
+            "Olympique Lyonnais",
+            "Paris Saint-Germain FC",
+            "Racing Club de Lens",
+            "RC Strasbourg Alsace",
+            "Stade Brestois 29",
+            "Stade de Reims",
+            "Stade Rennais FC",
+            "Toulouse FC"
+        ]
+    },
+    "30013": {
+        "13001": [
+            "FC Bayern München",
+            "Bayer 04 Leverkusen",
+            "RasenBallsport Leipzig",
+            "BV Borussia 09 Dortmund",
+            "Eintracht Frankfurt",
+            "VfB Stuttgart 1893",
+            "1. FC Union Berlin",
+            "VfL Wolfsburg",
+            "Borussia VfL Mönchengladbach",
+            "SC Freiburg",
+            "TSG 1899 Hoffenheim",
+            "1. FSV Mainz 05",
+            "SV Werder Bremen",
+            "1. FC Heidenheim 1846",
+            "FC Augsburg",
+            "FC St. Pauli",
+            "Kieler SV Holstein 1900",
+            "VfL Bochum 1848"
+        ]
+    },
+    "30014": {
+        "13001": [
+            "FC Barcelona",
+            "Real Madrid CF",
+            "Club Atlético de Madrid",
+            "Real Sociedad de Fútbol",
+            "Athletic Club Bilbao",
+            "Villarreal CF",
+            "Real Betis Balompié",
+            "CA Osasuna",
+            "Girona FC",
+            "Real Club Celta de Vigo",
+            "Rayo Vallecano",
+            "Sevilla FC",
+            "Deportivo Alavés",
+            "Real Club Deportivo Mallorca",
+            "Getafe CF",
+            "Reial Club Deportiu Espanyol",
+            "Valencia CF",
+            "CD Leganés",
+            "Real Valladolid CF",
+            "UD Las Palmas"
+        ]
+    },
+    "30015": {
+        "13001": [
+            "FC Internazionale Milano",
+            "SSC Napoli",
+            "Atalanta Bergamasca Calcio",
+            "Juventus FC",
+            "AC Milan",
+            "ACF Fiorentina",
+            "SS Lazio",
+            "AS Roma",
+            "Bologna FC 1909",
+            "Torino FC",
+            "Udinese Calcio",
+            "AC Monza",
+            "Cagliari Calcio",
+            "Calcio Como 1907",
+            "Empoli FC",
+            "Genoa CFC",
+            "Hellas Verona FC",
+            "Parma Calcio 1913",
+            "US Lecce",
+            "Venezia FC"
         ]
     },
     "30016": {
@@ -205,6 +333,28 @@
             "Sturm Graz",
             "BSC Young Boys",
             "Slovan Bratislava"
+        ]
+    },
+    "30399": {
+        "13001": [
+            "ALBA Berlin",
+            "Anadolu Efes",
+            "AS Monaco",
+            "Barcelona",
+            "Baskonia Vitoria-Gasteiz",
+            "Bayern Munich",
+            "Crvena Zvezda",
+            "Fenerbahce",
+            "Lyon-Villeurbanne",
+            "Maccabi Tel Aviv",
+            "Olimpia Milano",
+            "Olympiacos",
+            "Panathinaikos",
+            "Paris Basketball",
+            "Partizan",
+            "Real Madrid",
+            "Virtus Bologna",
+            "Zalgiris"
         ]
     }
 }
