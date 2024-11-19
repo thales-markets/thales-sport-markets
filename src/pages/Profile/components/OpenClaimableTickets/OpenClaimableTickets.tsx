@@ -24,7 +24,7 @@ import sportsAMMV2Contract from 'utils/contracts/sportsAMMV2Contract';
 import { getContractInstance } from 'utils/networkConnector';
 import { Address, Client, encodeFunctionData } from 'viem';
 import { estimateContractGas, waitForTransactionReceipt } from 'viem/actions';
-import { useAccount, useChainId, useClient } from 'wagmi';
+import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 import StakingModal from '../StakingModal';
 import TicketDetails from './components/TicketDetails';
 import {
@@ -67,6 +67,8 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({
 
     const networkId = useChainId();
     const client = useClient();
+    const walletClient = useWalletClient();
+
     const { address, isConnected } = useAccount();
     const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
@@ -124,8 +126,8 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({
 
     const claimBatch = async () => {
         const contracts = await Promise.all([
-            getContractInstance(ContractType.SPORTS_AMM_V2, client, networkId),
-            getContractInstance(ContractType.MULTICALL, client, networkId),
+            getContractInstance(ContractType.SPORTS_AMM_V2, walletClient?.data, networkId),
+            getContractInstance(ContractType.MULTICALL, walletClient?.data, networkId),
         ]);
         const [sportsAMMV2ContractWithSigner, multiCallContractWithSigner] = contracts;
 
