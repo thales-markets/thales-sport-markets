@@ -1,6 +1,6 @@
 import { generalConfig } from 'config/general';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
-import { NATIVE_TOKEN_ADDRES, SAFE_BOX_ADDRESS, ZERO_ADDRESS } from 'constants/network';
+import { NATIVE_TOKEN_ADDRES, ZERO_ADDRESS } from 'constants/network';
 import { Network } from 'enums/network';
 import { BigNumber, BigNumberish } from 'ethers';
 import { coinFormatter, Coins } from 'thales-utils';
@@ -10,6 +10,8 @@ import { Address } from 'viem';
 import multipleCollateralContract from './contracts/multipleCollateralContract';
 import networkConnector from './networkConnector';
 import { delay } from './timer';
+
+const REFERRER_ADDRESS = '0x1777C6d588fd931751762836811529c0073D6376';
 
 export const getSwapParams = (
     networkId: SupportedNetwork,
@@ -132,7 +134,7 @@ export const buildTxForSwap = async (
     networkId: SupportedNetwork,
     swapParams: SwapParams
 ): Promise<{ dstAmount: BigNumberish; tx: string }> => {
-    const url = apiRequestUrl(networkId, '/swap', { ...swapParams, referrer: SAFE_BOX_ADDRESS[networkId] });
+    const url = apiRequestUrl(networkId, '/swap', { ...swapParams, referrer: REFERRER_ADDRESS });
 
     try {
         let response = await fetch(url);
