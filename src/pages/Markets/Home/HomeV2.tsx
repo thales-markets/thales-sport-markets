@@ -197,13 +197,9 @@ const Home: React.FC = () => {
         []
     );
 
-    const sportMarketsQueryNew = useSportsMarketsV2Query(
-        statusFilter,
-        { networkId, client },
-        {
-            enabled: isAppReady,
-        }
-    );
+    const sportMarketsQueryNew = useSportsMarketsV2Query(statusFilter, false, { networkId, client }, undefined, {
+        enabled: isAppReady,
+    });
 
     const liveSportMarketsQuery = useLiveSportsMarketsQuery(
         sportFilter === SportFilter.Live,
@@ -317,6 +313,10 @@ const Home: React.FC = () => {
             ]
         );
 
+        if (selectedMarket && !filteredMarkets.map((market) => market.gameId).includes(selectedMarket.gameId)) {
+            dispatch(setSelectedMarket(undefined));
+        }
+
         setAvailableMarketTypes(Array.from(marketTypes));
 
         return sortedFilteredMarkets;
@@ -334,6 +334,8 @@ const Home: React.FC = () => {
         datePeriodFilter,
         marketTypeFilter,
         favouriteLeagues,
+        selectedMarket,
+        dispatch,
     ]);
 
     const marketsLoading =
@@ -347,7 +349,9 @@ const Home: React.FC = () => {
 
     const openSportMarketsQuery = useSportsMarketsV2Query(
         StatusFilter.OPEN_MARKETS,
+        false,
         { networkId, client },
+        undefined,
         {
             enabled: isAppReady,
         }
@@ -680,7 +684,7 @@ const Home: React.FC = () => {
                             {!marketsLoading &&
                                 finalMarkets.length > 0 &&
                                 (statusFilter === StatusFilter.OPEN_MARKETS || sportFilter === SportFilter.Live) && (
-                                    <Header availableMarketTypes={availableMarketTypes} />
+                                    <Header availableMarketTypes={availableMarketTypes} market={selectedMarketData} />
                                 )}
                             <FilterTagsMobile />
                         </>
@@ -714,7 +718,10 @@ const Home: React.FC = () => {
                                     {!isMobile &&
                                         (statusFilter === StatusFilter.OPEN_MARKETS ||
                                             sportFilter === SportFilter.Live) && (
-                                            <Header availableMarketTypes={availableMarketTypes} />
+                                            <Header
+                                                availableMarketTypes={availableMarketTypes}
+                                                market={selectedMarketData}
+                                            />
                                         )}
                                     <FlexDivRow>
                                         {((isMobile && !isMarketSelected && !showTicketMobileModal) || !isMobile) && (

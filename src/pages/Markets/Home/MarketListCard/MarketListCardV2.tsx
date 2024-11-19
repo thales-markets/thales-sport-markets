@@ -456,8 +456,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                         )
                                     }
                                 >
-                                    {marketsCount > 0 && `+${marketsCount}`}
-                                    {!isMobile && marketsCount > 0 && <Arrow className={'icon icon--arrow-down'} />}
+                                    {`+${marketsCount}`}
+                                    {!isMobile && <Arrow className={'icon icon--arrow-down'} />}
                                 </MarketsCountWrapper>
                             )}
                             {!isMobile && (
@@ -512,7 +512,13 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                     isColumnView={isColumnView}
                                 />
                             )}
-                            {(marketsCount > 0 || !!overdropGameMultiplier) && (
+                            {!!overdropGameMultiplier && (
+                                <FireContainer gap={2}>
+                                    <Fire className={'icon icon--fire'} />
+                                    <FireText>{`+${overdropGameMultiplier.multiplier}% XP`}</FireText>
+                                </FireContainer>
+                            )}
+                            {marketsCount > 0 && (
                                 <MarketsCountWrapper
                                     onClick={() =>
                                         dispatch(
@@ -524,13 +530,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                         )
                                     }
                                 >
-                                    {!!overdropGameMultiplier && (
-                                        <FireContainer gap={2}>
-                                            <Fire className={'icon icon--fire'} />
-                                            <FireText>{`+${overdropGameMultiplier.multiplier}% XP`}</FireText>
-                                        </FireContainer>
-                                    )}
-                                    {marketsCount > 0 && `+${marketsCount}`}
+                                    {`+${marketsCount}`}
                                     {!isMobile && <Arrow className={'icon icon--arrow-down'} />}
                                 </MarketsCountWrapper>
                             )}

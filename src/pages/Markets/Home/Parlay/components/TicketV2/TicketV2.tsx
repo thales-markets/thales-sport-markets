@@ -113,7 +113,7 @@ import {
     getParlayMultiplier,
     getTooltipKey,
 } from 'utils/overdrop';
-import { refetchBalances, refetchCoingeckoRates, refetchFreeBetBalance } from 'utils/queryConnector';
+import { refetchBalances, refetchCoingeckoRates, refetchFreeBetBalance, refetchProofs } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import { getSportsAMMV2QuoteMethod, getSportsAMMV2Transaction } from 'utils/sportsAmmV2';
 import {
@@ -180,6 +180,7 @@ type TicketProps = {
 const TicketErrorMessage = {
     RISK_PER_COMB: 'RiskPerComb exceeded',
     SAME_TEAM_IN_PARLAY: 'SameTeamOnParlay',
+    PROOF_IS_NOT_VALID: 'Proof is not valid',
 };
 
 const SLIPPAGE_PERCENTAGES = [0.5, 1, 2];
@@ -685,7 +686,8 @@ const Ticket: React.FC<TicketProps> = ({
 
     const fetchTicketAmmQuote = useCallback(
         async (buyInAmountForQuote: number) => {
-            if (buyInAmountForQuote <= 0) return;
+            const noProofs = markets.every((market) => !market.proof);
+            if (buyInAmountForQuote <= 0 || noProofs) return;
 
             const contracts = (await Promise.all([
                 getContractInstance(ContractType.SPORTS_AMM_V2, walletClient.data, networkId),
@@ -765,6 +767,12 @@ const Ticket: React.FC<TicketProps> = ({
                         } else if (errorMessage.includes(TicketErrorMessage.SAME_TEAM_IN_PARLAY)) {
                             return { error: TicketErrorMessage.SAME_TEAM_IN_PARLAY };
                         }
+                    } else if (e && e.toString().includes(TicketErrorMessage.PROOF_IS_NOT_VALID)) {
+                        const gameIds = markets.map((market) => market.gameId).join(',');
+                        const typeIds = markets.map((market) => market.typeId).join(',');
+                        const playerIds = markets.map((market) => market.playerProps.playerId).join(',');
+                        const lines = markets.map((market) => market.line).join(',');
+                        refetchProofs(networkId, gameIds, typeIds, playerIds, lines);
                     }
                     console.log(e);
                     return { error: e };

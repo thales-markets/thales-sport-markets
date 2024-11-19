@@ -1060,6 +1060,11 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         key: 'mvp',
         name: 'MVP',
     },
+    [MarketType.CUP_WINNER]: {
+        id: MarketType.CUP_WINNER,
+        key: 'cupWinner',
+        name: 'Cup winner',
+    },
 };
 
 export const PLAYER_PROPS_MARKET_TYPES = [
@@ -1417,7 +1422,7 @@ export const UFC_SPECIFIC_MARKET_TYPES = [
     MarketType.METHOD_OF_VICTORY,
 ];
 
-export const FUTURES_MARKET_TYPES = [MarketType.LEAGUE_WINNER, MarketType.MVP];
+export const FUTURES_MARKET_TYPES = [MarketType.LEAGUE_WINNER, MarketType.MVP, MarketType.CUP_WINNER];
 
 export const MarketTypesBySportFilter: Record<SportFilter, MarketType[]> = {
     [SportFilter.Boosted]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],

@@ -76,6 +76,14 @@ export enum GameStatus {
     CANCELED = 'cancelled', // the same for ENETPULSE and OPTICODDS
 }
 
+export enum MarketStatus {
+    OPEN = 0,
+    PAUSED = 1,
+    IN_PROGRESS = 3,
+    RESOLVED = 10,
+    CANCELLED = 255,
+}
+
 export enum TicketErrorCode {
     NO_ERROS = 0,
     MAX_MATCHES = 1,

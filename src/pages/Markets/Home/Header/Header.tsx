@@ -2,12 +2,10 @@ import Tooltip from 'components/Tooltip';
 import { MarketTypeGroupsBySport, MarketTypesBySportFilter } from 'constants/marketTypes';
 import { MarketType, MarketTypeGroup } from 'enums/marketTypes';
 import { uniq } from 'lodash';
-import useSportMarketV2Query from 'queries/markets/useSportMarketV2Query';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { ScrollMenu, VisibilityContext, publicApiType } from 'react-horizontal-scrolling-menu';
 import 'react-horizontal-scrolling-menu/dist/styles.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { getIsAppReady } from 'redux/modules/app';
 import {
     getIsThreeWayView,
     getMarketTypeFilter,
@@ -20,7 +18,6 @@ import {
 } from 'redux/modules/market';
 import { SportMarket } from 'types/markets';
 import { getMarketTypeName } from 'utils/markets';
-import { useChainId, useClient } from 'wagmi';
 import {
     ArrowIcon,
     Container,
@@ -70,47 +67,24 @@ const RightArrow: React.FC = () => {
 
 const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitch }) => {
     const dispatch = useDispatch();
-    const isAppReady = useSelector(getIsAppReady);
-
-    const networkId = useChainId();
-    const client = useClient();
 
     const isThreeWayView = useSelector(getIsThreeWayView);
     const marketTypeFilter = useSelector(getMarketTypeFilter);
     const marketTypeGroupFilter = useSelector(getMarketTypeGroupFilter);
     const sportFilter = useSelector(getSportFilter);
     const selectedMarket = useSelector(getSelectedMarket);
-    const [lastValidMarket, setLastValidMarket] = useState<SportMarket | undefined>(market);
 
     const marketToCheck = market || selectedMarket;
-
-    const marketQuery = useSportMarketV2Query(
-        selectedMarket?.gameId || '',
-        true,
-        !!marketToCheck?.live,
-        { networkId, client },
-        {
-            enabled: isAppReady && !market && !!selectedMarket,
-        }
-    );
-
-    useEffect(() => {
-        if (market) {
-            setLastValidMarket(market);
-        } else if (marketQuery.isSuccess && marketQuery.data) {
-            setLastValidMarket(marketQuery.data);
-        }
-    }, [selectedMarket, marketQuery.isSuccess, marketQuery.data, market]);
 
     const marketTypes = useMemo(() => {
         if (marketToCheck) {
             let marketTypeGroups = Object.keys(MarketTypeGroupsBySport[marketToCheck.sport] || {}).map(
                 (key) => key as MarketTypeGroup
             );
-            if (lastValidMarket) {
-                let marketToCheckAvailableMarketTypes = [lastValidMarket.typeId];
+            if (market) {
+                let marketToCheckAvailableMarketTypes = [market.typeId];
 
-                lastValidMarket.childMarkets.forEach((childMarket: SportMarket) => {
+                market.childMarkets.forEach((childMarket: SportMarket) => {
                     marketToCheckAvailableMarketTypes.push(childMarket.typeId);
                 });
                 marketToCheckAvailableMarketTypes = uniq(marketToCheckAvailableMarketTypes);
@@ -134,7 +108,7 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitc
                   )
                 : [];
         }
-    }, [marketToCheck, lastValidMarket, availableMarketTypes, sportFilter]);
+    }, [marketToCheck, market, availableMarketTypes, sportFilter]);
 
     return (
         <Container>

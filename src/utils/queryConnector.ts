@@ -1,5 +1,6 @@
 import { QueryClient } from '@tanstack/react-query';
 import QUERY_KEYS from 'constants/queryKeys';
+import { StatusFilter } from 'enums/markets';
 import { Network } from 'enums/network';
 
 type QueryConnector = {
@@ -19,6 +20,26 @@ const queryConnector: QueryConnector = {
 export const refetchBalances = (walletAddress: string, networkId: Network) => {
     queryConnector.queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.Wallet.MultipleCollateral(walletAddress, networkId),
+    });
+};
+
+export const refetchProofs = (
+    networkId: Network,
+    gameIds: string,
+    typeIds: string,
+    playerIds: string,
+    lines: string
+) => {
+    queryConnector.queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.SportMarketsV2(
+            StatusFilter.OPEN_MARKETS,
+            networkId,
+            true,
+            gameIds,
+            typeIds,
+            playerIds,
+            lines
+        ),
     });
 };
 

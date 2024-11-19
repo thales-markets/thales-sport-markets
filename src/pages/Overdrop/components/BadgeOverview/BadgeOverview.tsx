@@ -51,7 +51,9 @@ const BadgeOverview: React.FC = () => {
 
     useEffect(() => {
         if (levelItem) {
-            if (levelItem.level > numberOfCards) {
+            if (levelItem.level > OVERDROP_LEVELS.length - numberOfCards) {
+                setCurrentStep(OVERDROP_LEVELS.length - numberOfCards);
+            } else if (levelItem.level > numberOfCards) {
                 setCurrentStep(levelItem.level - (isMobile ? 1 : 2));
             } else {
                 setCurrentStep(levelItem.level - 2 > 0 ? levelItem.level - (isMobile ? 1 : 2) : 0);
@@ -129,35 +131,37 @@ const BadgeOverview: React.FC = () => {
                         </ValueSecondary>
                     </ValueWrapper>
                 </ItemContainer>
-                <ItemContainer>
-                    <Label>{t('overdrop.overdrop-home.next-thales-rewards-at')}</Label>
-                    <ValueWrapper>
-                        <ValueSecondary>
-                            {nextThalesRewardLevel
-                                ? `${formatPoints(nextThalesRewardLevel?.minimumPoints)} @ LVL ${
-                                      nextThalesRewardLevel?.level
-                                  }  (${formatCurrencyWithKey(
-                                      'THALES',
-                                      nextThalesRewardLevel?.voucherAmount ?? 0,
-                                      0,
-                                      true
-                                  )})`
-                                : ''}
-                        </ValueSecondary>
-                    </ValueWrapper>
+                {levelItem.level !== OVERDROP_LEVELS.length - 1 && (
+                    <ItemContainer>
+                        <Label>{t('overdrop.overdrop-home.next-thales-rewards-at')}</Label>
+                        <ValueWrapper>
+                            <ValueSecondary>
+                                {nextThalesRewardLevel
+                                    ? `${formatPoints(nextThalesRewardLevel?.minimumPoints)} @ LVL ${
+                                          nextThalesRewardLevel?.level
+                                      }  (${formatCurrencyWithKey(
+                                          'THALES',
+                                          nextThalesRewardLevel?.voucherAmount ?? 0,
+                                          0,
+                                          true
+                                      )})`
+                                    : ''}
+                            </ValueSecondary>
+                        </ValueWrapper>
 
-                    <ProgressContainer>
-                        <Progress
-                            progress={isNaN(progressLevel) ? 0 : progressLevel}
-                            width="100%"
-                            height="18px"
-                            textBelow={`${formatPoints(userData?.points ?? 0)} / ${formatPoints(
-                                nextThalesRewardLevel?.minimumPoints ?? OVERDROP_LEVELS[1].minimumPoints
-                            )}`}
-                        />
-                    </ProgressContainer>
-                    <Disclaimer>{t('overdrop.leveling-tree.payout-disclaimer')}</Disclaimer>
-                </ItemContainer>
+                        <ProgressContainer>
+                            <Progress
+                                progress={isNaN(progressLevel) ? 0 : progressLevel}
+                                width="100%"
+                                height="18px"
+                                textBelow={`${formatPoints(userData?.points ?? 0)} / ${formatPoints(
+                                    nextThalesRewardLevel?.minimumPoints ?? OVERDROP_LEVELS[1].minimumPoints
+                                )}`}
+                            />
+                        </ProgressContainer>
+                        <Disclaimer>{t('overdrop.leveling-tree.payout-disclaimer')}</Disclaimer>
+                    </ItemContainer>
+                )}
             </DetailsWrapper>
         </Wrapper>
     );
