@@ -4,6 +4,11 @@ import { NetworkParams, SupportedNetwork } from '../types/network';
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 export const NATIVE_TOKEN_ADDRES = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
+export const SAFE_BOX_ADDRESS = {
+    [Network.OptimismMainnet]: '0xE853207c30F3c32Eda9aEfFDdc67357d5332978C',
+    [Network.Arbitrum]: '0xCd9c0E99396627C7746b4363B880939Ac2828d3E',
+    [Network.OptimismSepolia]: '0xd866b2332d4383c1bf719732177e2d9109c99dbc',
+};
 
 export const SUPPORTED_NETWORKS: Record<SupportedNetwork, string> = {
     [Network.OptimismMainnet]: 'OPTIMISTIC',
