@@ -1,3 +1,4 @@
+import Loyalty25 from 'assets/images/overdrop/loyalty_25.webp';
 import ThalesAmountImage from 'assets/images/overdrop/thales_voucher.png';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
@@ -15,6 +16,7 @@ type LargeBadgeProps = {
     reached: boolean;
     voucherAmount?: number;
     highlight?: boolean;
+    gold?: boolean;
 };
 
 const LargeBadge: React.FC<LargeBadgeProps> = ({
@@ -24,16 +26,19 @@ const LargeBadge: React.FC<LargeBadgeProps> = ({
     reached,
     voucherAmount,
     highlight,
+    gold,
 }) => {
     const { t } = useTranslation();
 
     const levelItem = OVERDROP_LEVELS.find((item) => item.level == level);
 
     return (
-        <Wrapper active={reached} highlight={highlight}>
+        <Wrapper active={reached} highlight={highlight} gold={gold}>
+            {gold && <GoldText>{`25% ${t('overdrop.leveling-tree.explainer.loyalty-boost')}`}</GoldText>}
+            {gold && <GoldBorders src={Loyalty25} />}
             <BadgeImage active={reached} src={levelItem ? levelItem.largeBadge : ''} />
             {!reached && (
-                <LockWrapper>
+                <LockWrapper gold={gold}>
                     <Icon className="icon icon--lock" />
                 </LockWrapper>
             )}
@@ -52,11 +57,11 @@ const LargeBadge: React.FC<LargeBadgeProps> = ({
     );
 };
 
-const Wrapper = styled(FlexDivColumn)<{ active?: boolean; highlight?: boolean }>`
+const Wrapper = styled(FlexDivColumn)<{ active?: boolean; highlight?: boolean; gold?: boolean }>`
     min-width: 122px;
     margin-top: 40px;
     margin-bottom: ${(props) => (props.highlight ? '50px' : '')};
-    border: 3px solid transparent;
+    border: ${(props) => (props.gold ? 0 : 3)}px solid transparent;
     border-radius: 6px;
     background: linear-gradient(
                 ${(props) => (props.active ? props.theme.overdrop.background.active : props.theme.background.quinary)} 0
@@ -70,6 +75,7 @@ const Wrapper = styled(FlexDivColumn)<{ active?: boolean; highlight?: boolean }>
     flex: 1 0 18%;
     @media (max-width: 767px) {
         min-width: 90px;
+        margin-top: ${(props) => (props.gold ? '60px' : '40px')};
     }
 `;
 
@@ -85,7 +91,7 @@ const BadgeImage = styled.img<{ active?: boolean }>`
     } */
 `;
 
-const LockWrapper = styled(FlexDivColumn)`
+const LockWrapper = styled(FlexDivColumn)<{ gold?: boolean }>`
     position: absolute;
     align-items: center;
     justify-content: center;
@@ -93,7 +99,7 @@ const LockWrapper = styled(FlexDivColumn)`
     height: 74px;
     top: -30px;
     background-color: ${(props) => props.theme.overdrop.badge.background.secondary};
-    border: 3px solid ${(props) => props.theme.overdrop.borderColor.primary};
+    border: 3px solid ${(props) => (props.gold ? '#E6D7B5' : props.theme.overdrop.borderColor.primary)};
     border-radius: 50%;
     text-align: center;
 `;
@@ -151,6 +157,23 @@ const VoucherAmount = styled.span`
     white-space: pre;
     font-weight: 800;
     color: ${(props) => props.theme.overdrop.badge.textColor.primary};
+`;
+
+const GoldBorders = styled.img`
+    position: absolute;
+    top: -5px;
+    left: 0;
+    width: 102%;
+    height: 108%;
+`;
+
+const GoldText = styled.span`
+    position: absolute;
+    top: -60px;
+    color: #e6d7b5;
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: bold;
 `;
 
 export default LargeBadge;

@@ -221,3 +221,5 @@ export const OVERDROP_LEVELS: OverdropLevel[] = [
         largeBadge: Level20Large,
     },
 ];
+
+export const LOYALTY_BOOST_TEXT_COLORS = ['#BA6D38', '#A9A79F', '#F9CC7B', '#FDFDFF'];
