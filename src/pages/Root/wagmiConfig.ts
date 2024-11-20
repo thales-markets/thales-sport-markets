@@ -62,7 +62,7 @@ export const wagmiConfig = createConfig({
             },
         ],
         {
-            appName: 'Speed Markets',
+            appName: 'Overtime Markets',
             projectId: import.meta.env.VITE_APP_WALLET_CONNECT_PROJECT_ID || '',
         }
     ),

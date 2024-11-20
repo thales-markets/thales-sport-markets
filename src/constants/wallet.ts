@@ -41,6 +41,29 @@ export const HOSTED_WALLETS_LABELS: { walletId: HostedWallets; labelKey: string 
     },
 ];
 
+export const PARTICAL_WALLETS_LABELS: { id: ParticalTypes; labelKey: string }[] = [
+    {
+        id: ParticalTypes.GOOGLE,
+        labelKey: 'common.wallet.particle-logins.google',
+    },
+    {
+        id: ParticalTypes.TWITTER,
+        labelKey: 'common.wallet.particle-logins.twitter',
+    },
+    {
+        id: ParticalTypes.DISCORD,
+        labelKey: 'common.wallet.particle-logins.discord',
+    },
+    {
+        id: ParticalTypes.GITHUB,
+        labelKey: 'common.wallet.particle-logins.github',
+    },
+    {
+        id: ParticalTypes.APPLE,
+        labelKey: 'common.wallet.particle-logins.apple',
+    },
+];
+
 export const PARTICAL_LOGINS_CLASSNAMES: { socialId: ParticalTypes; className: string }[] = [
     {
         socialId: ParticalTypes.APPLE,

@@ -14,7 +14,11 @@ import { getWalletConnectModalOrigin } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivRow } from 'styles/common';
-import { getClassNameForParticalLogin, getSpecificConnectorFromConnectorsArray } from 'utils/particleWallet/utils';
+import {
+    getClassNameForParticalLogin,
+    getLabelForParticalLogin,
+    getSpecificConnectorFromConnectorsArray,
+} from 'utils/particleWallet/utils';
 import { navigateTo } from 'utils/routes';
 import { Connector, useConnect } from 'wagmi';
 
@@ -94,7 +98,7 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                             <SocialButtonsWrapper>
                                 {SUPPORTED_PARTICAL_CONNECTORS.map((item, index) => {
                                     const connector = getSpecificConnectorFromConnectorsArray(connectors, item, true);
-                                    if (index == 0 && connector && connector?.ready) {
+                                    if (index == 0 && connector) {
                                         return (
                                             <Button
                                                 key={index}
@@ -102,7 +106,7 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                                                 oneButtoninRow={true}
                                             >
                                                 <SocialIcon className={getClassNameForParticalLogin(item)} />
-                                                {item}
+                                                {t(getLabelForParticalLogin(item))}
                                             </Button>
                                         );
                                     }
@@ -111,11 +115,11 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                             <SocialButtonsWrapper>
                                 {SUPPORTED_PARTICAL_CONNECTORS.map((item, index) => {
                                     const connector = getSpecificConnectorFromConnectorsArray(connectors, item, true);
-                                    if (index > 0 && index < 3 && connector && connector?.ready) {
+                                    if (index > 0 && index < 3 && connector) {
                                         return (
                                             <Button key={index} onClick={() => handleConnect(connector)}>
                                                 <SocialIcon className={getClassNameForParticalLogin(item)} />
-                                                {item}
+                                                {t(getLabelForParticalLogin(item))}
                                             </Button>
                                         );
                                     }
@@ -124,11 +128,11 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                             <SocialButtonsWrapper>
                                 {SUPPORTED_PARTICAL_CONNECTORS.map((item, index) => {
                                     const connector = getSpecificConnectorFromConnectorsArray(connectors, item, true);
-                                    if (index > 2 && index < 5 && connector && connector?.ready) {
+                                    if (index > 2 && index < 5 && connector) {
                                         return (
                                             <Button key={index} onClick={() => handleConnect(connector)}>
                                                 <SocialIcon className={getClassNameForParticalLogin(item)} />
-                                                {item}
+                                                {t(getLabelForParticalLogin(item))}
                                             </Button>
                                         );
                                     }
@@ -138,11 +142,11 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                                 {SUPPORTED_PARTICAL_CONNECTORS.map((item, index) => {
                                     const connector = getSpecificConnectorFromConnectorsArray(connectors, item, true);
 
-                                    if (index > 4 && index < 7 && connector && connector?.ready) {
+                                    if (index > 4 && index < 7 && connector) {
                                         return (
                                             <Button key={index} onClick={() => handleConnect(connector)}>
                                                 <SocialIcon className={getClassNameForParticalLogin(item)} />
-                                                {item}
+                                                {t(getLabelForParticalLogin(item))}
                                             </Button>
                                         );
                                     }

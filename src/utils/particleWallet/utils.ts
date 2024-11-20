@@ -1,6 +1,6 @@
 import { isSocialAuthType } from '@particle-network/auth-core';
 import { CustomStyle } from '@particle-network/auth-core-modal';
-import { PARTICAL_LOGINS_CLASSNAMES } from 'constants/wallet';
+import { PARTICAL_LOGINS_CLASSNAMES, PARTICAL_WALLETS_LABELS } from 'constants/wallet';
 import { NetworkId } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
 import { ParticalTypes } from 'types/wallet';
@@ -18,7 +18,7 @@ export const getSpecificConnectorFromConnectorsArray = (
     particle?: boolean
 ): Connector | undefined => {
     if (particle) {
-        return connectors.find((connector: any) => connector?.type == name);
+        return connectors.find((connector: any) => connector?.id == name);
     }
     return connectors.find((connector: any) => connector.id == name);
 };
@@ -78,4 +78,9 @@ export const PARTICLE_STYLE: CustomStyle = {
     primaryBtnBorderRadius: '30px',
     modalBorderRadius: '8px',
     cardBorderRadius: '8px',
+};
+
+export const getLabelForParticalLogin = (id: ParticalTypes) => {
+    const label = PARTICAL_WALLETS_LABELS.find((item) => item.id == id)?.labelKey;
+    return label ? label : '';
 };

@@ -23,6 +23,7 @@
         "history": "^4.10.1",
         "html-to-image": "^1.11.11",
         "i18next": "^23.11.5",
+        "buffer": "^6.0.3",
         "i18next-browser-languagedetector": "^7.2.0",
         "lodash": "^4.17.21",
         "lottie-react": "^2.3.1",
