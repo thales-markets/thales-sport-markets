@@ -29,7 +29,6 @@ const Container = styled.div`
     background: ${(props) => props.theme.borderColor.secondary};
     border-width: 1px;
     border-radius: 2px;
-    padding: 1px;
 `;
 
 const Content = styled.div`
@@ -47,12 +46,11 @@ const InfoIcon = styled.i`
     vertical-align: middle;
     font-weight: normal;
     cursor: pointer;
-    margin-top: 1px;
     margin-left: 4px;
     color: ${(props) => props.theme.icon.background.secondary};
     &:before {
-        font-family: Icons !important;
-        content: '\\0046';
+        font-family: OvertimeIconsV2 !important;
+        content: '\\011C';
     }
     @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         font-size: 15px;
