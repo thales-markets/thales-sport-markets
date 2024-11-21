@@ -14,7 +14,7 @@ import {
     TradeData,
 } from 'types/markets';
 import { MarketTypeMap } from '../constants/marketTypes';
-import { UFC_LEAGUE_IDS } from '../constants/sports';
+import { PLAYER_PROPS_MARKETS_MAP, UFC_LEAGUE_IDS } from '../constants/sports';
 import { fixOneSideMarketCompetitorName } from './formatters/string';
 import {
     getMarketTypeDescription,
@@ -609,4 +609,23 @@ export const packMarket = (
     }
 
     return packedMarket;
+};
+
+export const getMarketPlayerPropsMarketsForSport = (market: SportMarket) => {
+    const marketTypesForSport = PLAYER_PROPS_MARKETS_MAP[market.sport];
+
+    if (marketTypesForSport?.length) {
+        return marketTypesForSport.map(
+            (marketType) =>
+                market.childMarkets.find((childMarket) => childMarket.typeId === marketType) || {
+                    ...market,
+                    type: getPositionTextV2(market, 0, false),
+                    typeId: marketType,
+                    odds: [0, 0],
+                    line: Infinity,
+                }
+        );
+    } else {
+        return market.childMarkets.slice(0, 3);
+    }
 };

@@ -13,9 +13,14 @@ export const Container = styled(FlexDivColumn)<{ isExpanded: boolean; isMainPage
     }
 `;
 
-export const Header = styled(FlexDivColumnCentered)<{ isMainPageView?: boolean; isColumnView?: boolean }>`
+export const Header = styled(FlexDivColumnCentered)<{
+    isMainPageView?: boolean;
+    isColumnView?: boolean;
+    alignHeader?: boolean;
+}>`
     position: relative;
     max-height: ${(props) => (props.isMainPageView && !props.isColumnView ? 'auto' : '25px')};
+    margin-bottom: ${(props) => (props.alignHeader ? '-19px' : '0')};
     flex: none;
 `;
 

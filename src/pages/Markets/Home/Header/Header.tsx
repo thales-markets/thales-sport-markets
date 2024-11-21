@@ -17,7 +17,7 @@ import {
     setMarketTypeGroupFilter,
 } from 'redux/modules/market';
 import { SportMarket } from 'types/markets';
-import { getMarketTypeName } from 'utils/markets';
+import { getMarketTypeName, isPlayerPropsMarket } from 'utils/markets';
 import {
     ArrowIcon,
     Container,
@@ -27,6 +27,7 @@ import {
     SwitchContainer,
     ThreeWayIcon,
 } from './styled-components';
+import { SportFilter } from 'enums/markets';
 
 type HeaderProps = {
     availableMarketTypes?: MarketType[];
@@ -81,10 +82,17 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitc
                 (key) => key as MarketTypeGroup
             );
             if (market) {
-                let marketToCheckAvailableMarketTypes = [market.typeId];
+                const isPlayerPropsFilter = sportFilter == SportFilter.PlayerProps;
+                let marketToCheckAvailableMarketTypes: MarketType[] = [];
+
+                if (!isPlayerPropsFilter) {
+                    marketToCheckAvailableMarketTypes = [market.typeId];
+                }
 
                 market.childMarkets.forEach((childMarket: SportMarket) => {
-                    marketToCheckAvailableMarketTypes.push(childMarket.typeId);
+                    if (!isPlayerPropsFilter || isPlayerPropsMarket(childMarket.typeId)) {
+                        marketToCheckAvailableMarketTypes.push(childMarket.typeId);
+                    }
                 });
                 marketToCheckAvailableMarketTypes = uniq(marketToCheckAvailableMarketTypes);
 

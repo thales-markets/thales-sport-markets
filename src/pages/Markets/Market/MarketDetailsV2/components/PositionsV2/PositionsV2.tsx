@@ -24,6 +24,8 @@ import {
     SubTitleContainer,
     Title,
 } from './styled-components';
+import { getSportFilter } from 'redux/modules/market';
+import { SportFilter } from 'enums/markets';
 
 type PositionsProps = {
     markets: SportMarket[];
@@ -33,6 +35,8 @@ type PositionsProps = {
     isColumnView?: boolean;
     showInvalid?: boolean;
     isGameLive?: boolean;
+    hidePlayerName?: boolean;
+    alignHeader?: boolean;
     onAccordionClick?: () => void;
 };
 
@@ -45,9 +49,16 @@ const Positions: React.FC<PositionsProps> = ({
     showInvalid,
     isGameLive,
     onAccordionClick,
+    hidePlayerName,
+    alignHeader,
 }) => {
     const { t } = useTranslation();
+
+    const sportFilter = useSelector(getSportFilter);
     const isMobile = useSelector(getIsMobile);
+
+    const isPlayerPropsMarket = useMemo(() => sportFilter === SportFilter.PlayerProps, [sportFilter]);
+
     const [isExpanded, setIsExpanded] = useState<boolean>(true);
 
     const hasOdds = markets.some((market) => market.odds.length);
@@ -58,7 +69,8 @@ const Positions: React.FC<PositionsProps> = ({
 
     const positionText0 = markets[0] ? getSubtitleText(markets[0], 0) : undefined;
     const positionText1 = markets[0] ? getSubtitleText(markets[0], 1) : undefined;
-    const titleText = getTitleText(markets[0], true);
+    const titleText = getTitleText(markets[0], !isPlayerPropsMarket);
+
     const tooltipKey = getMarketTypeTooltipKey(marketType);
 
     const liveMarketErrorMessage =
@@ -78,8 +90,12 @@ const Positions: React.FC<PositionsProps> = ({
             isExpanded={isExpanded}
             isMainPageView={isMainPageView}
         >
-            <Header isMainPageView={isMainPageView} isColumnView={isColumnView}>
-                {((isMobile && !isMainPageView) || !isMobile) && (
+            <Header
+                isMainPageView={isMainPageView}
+                isColumnView={isColumnView}
+                alignHeader={alignHeader && (!!positionText0 || !!positionText1) && isExpanded && !isMobile}
+            >
+                {((isMobile && !isMainPageView) || !isMobile || isPlayerPropsMarket) && (
                     <Title isExpanded={isExpanded} isMainPageView={isMainPageView} isColumnView={isColumnView}>
                         {titleText}
                         {tooltipKey && (
@@ -131,7 +147,7 @@ const Positions: React.FC<PositionsProps> = ({
 
                         return (
                             <ContentWrapper key={index}>
-                                {market.isPlayerPropsMarket && (
+                                {market.isPlayerPropsMarket && !hidePlayerName && (
                                     <PropsTextContainer>
                                         <PropsText>{`${market.playerProps.playerName}`}</PropsText>
                                     </PropsTextContainer>

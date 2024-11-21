@@ -1,4 +1,6 @@
+import { MarketType } from 'enums/marketTypes';
 import { League, MatchResolveType, PeriodType, ScoringType, Sport } from 'enums/sports';
+import { SportMarket } from 'types/markets';
 import { LeagueInfo } from 'types/sports';
 
 export const LeagueMap: Record<League, LeagueInfo> = {
@@ -1583,3 +1585,29 @@ export const OLYMPIC_LEAGUES = [
 ];
 
 export const PLAYER_PROPS_COMBINING_ENABLED_LEAGUES = [League.NBA, League.WNBA, League.EUROLEAGUE];
+
+export const PLAYER_PROPS_MARKETS_MAP: Record<Sport, MarketType[]> = {
+    [Sport.SOCCER]: [],
+    [Sport.FOOTBALL]: [],
+    [Sport.BASKETBALL]: [
+        MarketType.PLAYER_PROPS_POINTS,
+        MarketType.PLAYER_PROPS_REBOUNDS,
+        MarketType.PLAYER_PROPS_ASSISTS,
+    ],
+    [Sport.BASEBALL]: [],
+    [Sport.HOCKEY]: [MarketType.PLAYER_PROPS_POINTS, MarketType.PLAYER_PROPS_SHOTS, MarketType.PLAYER_PROPS_ASSISTS],
+    [Sport.FIGHTING]: [],
+    [Sport.TENNIS]: [],
+    [Sport.TABLE_TENNIS]: [],
+    [Sport.ESPORTS]: [],
+    [Sport.RUGBY]: [],
+    [Sport.VOLLEYBALL]: [],
+    [Sport.HANDBALL]: [],
+    [Sport.WATERPOLO]: [],
+    [Sport.CRICKET]: [],
+    [Sport.MOTOSPORT]: [],
+    [Sport.GOLF]: [],
+    [Sport.POLITICS]: [],
+    [Sport.FUTURES]: [],
+    [Sport.EMPTY]: [],
+};

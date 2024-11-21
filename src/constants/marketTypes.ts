@@ -1472,6 +1472,7 @@ export const MarketTypesBySportFilter: Record<SportFilter, MarketType[]> = {
         MarketType.US_ELECTION_WINNING_PARTY,
     ],
     [SportFilter.Futures]: FUTURES_MARKET_TYPES,
+    [SportFilter.PlayerProps]: PLAYER_PROPS_MARKET_TYPES,
 };
 
 export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGroup, MarketType[]>>> = {

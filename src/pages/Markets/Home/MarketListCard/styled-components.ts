@@ -37,7 +37,7 @@ export const MainContainer = styled(FlexDivRow)<{ isGameOpen: boolean; isBoosted
 
 export const MatchInfoContainer = styled(FlexDivColumn)`
     cursor: pointer;
-    max-width: 250px;
+    max-width: 180px;
     margin-right: 5px;
     @media (max-width: 950px) {
         max-width: 100%;
@@ -149,7 +149,8 @@ export const TeamNameLabel = styled.span<{ isColumnView: boolean; isMarketSelect
     }
 `;
 
-export const MarketsCountWrapper = styled(FlexDivColumnCentered)`
+export const MarketsCountWrapper = styled(FlexDivColumnCentered)<{ hidden?: boolean }>`
+    visibility: ${(props) => (props.hidden ? 'hidden' : 'visible')};
     max-width: 35px;
     margin-left: 5px;
     font-weight: 600;
