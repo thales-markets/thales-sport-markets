@@ -1,5 +1,5 @@
 import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from 'constants/currency';
-import useLpStatsV2Query from 'queries/wallet/useLpStatsV2Query';
+import useLpStatsV2Query from 'queries/pnl/useLpStatsV2Query';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { getNetworkId } from 'redux/modules/wallet';

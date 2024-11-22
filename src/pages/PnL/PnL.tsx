@@ -11,7 +11,7 @@ import useQueryParam from 'utils/useQueryParams';
 import MyTickets from './components/MyTickets';
 import { Container } from './styled-components';
 
-const Profile: React.FC = () => {
+const PnL: React.FC = () => {
     const networkId = useSelector(getNetworkId);
     const isAppReady = useSelector(getIsAppReady);
     const [selectedTabParam, setSelectedTabParam] = useQueryParam('selected-tab', PnlTab.LP_STATS);
@@ -66,4 +66,4 @@ const Profile: React.FC = () => {
     );
 };
 
-export default Profile;
+export default PnL;

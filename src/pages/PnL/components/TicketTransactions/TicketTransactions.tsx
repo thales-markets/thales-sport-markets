@@ -1,5 +1,5 @@
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
-import useLpHistory from 'queries/wallet/useLpHistory';
+import useLpTickets from 'queries/pnl/useLpTickets';
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { getNetworkId } from 'redux/modules/wallet';
@@ -15,22 +15,22 @@ type TicketTransactionsProps = {
 const TicketTransactions: React.FC<TicketTransactionsProps> = ({ lpCollateral, round }) => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
-    const userTicketsQuery = useLpHistory(lpCollateral, round, networkId);
+    const lpTicketsQuery = useLpTickets(lpCollateral, round, networkId);
 
-    const userTickets: Ticket[] = useMemo(() => {
-        let userTickets: Ticket[] = [];
+    const lpTickets: Ticket[] = useMemo(() => {
+        let lpTickets: Ticket[] = [];
 
-        if (userTicketsQuery.data && userTicketsQuery.isSuccess) {
-            userTickets = userTicketsQuery.data || [];
+        if (lpTicketsQuery.data && lpTicketsQuery.isSuccess) {
+            lpTickets = lpTicketsQuery.data || [];
         }
 
-        return userTickets;
-    }, [userTicketsQuery.data, userTicketsQuery.isSuccess]);
+        return lpTickets;
+    }, [lpTicketsQuery.data, lpTicketsQuery.isSuccess]);
 
     return (
         <TicketTransactionsTable
-            ticketTransactions={userTickets}
-            isLoading={userTicketsQuery.isLoading}
+            ticketTransactions={lpTickets}
+            isLoading={lpTicketsQuery.isLoading}
             tableHeight="auto"
             ticketsPerPage={20}
         />

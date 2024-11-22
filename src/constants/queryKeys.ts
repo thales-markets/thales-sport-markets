@@ -86,9 +86,9 @@ const QUERY_KEYS = {
         Stats: (networkId: Network, walletAddress: string) => ['wallet', 'stats', networkId, walletAddress],
         StatsV2: (networkId: Network, walletAddress: string) => ['wallet', 'statsV2', networkId, walletAddress],
         LpStatsV2: (round: number, networkId: Network) => ['wallet', 'lpStatsV2', round, networkId],
-        LpHistory: (lpCollateral: LiquidityPoolCollateral, round: number, networkId: Network) => [
+        LpTickets: (lpCollateral: LiquidityPoolCollateral, round: number, networkId: Network) => [
             'wallet',
-            'lpHistory',
+            'lpTickets',
             lpCollateral,
             round,
             networkId,

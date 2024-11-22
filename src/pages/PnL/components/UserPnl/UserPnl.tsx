@@ -1,6 +1,6 @@
 import { USD_SIGN } from 'constants/currency';
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
-import useLpUsersPnl from 'queries/wallet/useLpUsersPnl';
+import useLpUsersPnl from 'queries/pnl/useLpUsersPnl';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { getNetworkId } from 'redux/modules/wallet';

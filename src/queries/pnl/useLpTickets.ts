@@ -12,14 +12,14 @@ import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
 import networkConnector from 'utils/networkConnector';
 import { mapTicket } from 'utils/tickets';
 
-const useLpHistory = (
+const useLpTickets = (
     lpCollateral: LiquidityPoolCollateral,
     round: number,
     networkId: SupportedNetwork,
     options?: UseQueryOptions<Ticket[]>
 ) => {
     return useQuery<Ticket[]>(
-        QUERY_KEYS.Wallet.LpHistory(lpCollateral, round, networkId),
+        QUERY_KEYS.Wallet.LpTickets(lpCollateral, round, networkId),
         async () => {
             const { sportsAMMDataContract, liquidityPoolDataContract } = networkConnector;
             if (sportsAMMDataContract && liquidityPoolDataContract) {
@@ -69,4 +69,4 @@ const useLpHistory = (
     );
 };
 
-export default useLpHistory;
+export default useLpTickets;
