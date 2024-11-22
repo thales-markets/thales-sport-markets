@@ -25,7 +25,7 @@ export const getContractWithModifiedResponse = async (props: { abi: any; address
                 } else {
                     modifiedResponse.push(...(functionResponse as any[]));
                 }
-                console.log(`functionResponse ${functionName.toString()}`, functionResponse);
+                // console.log(`functionResponse ${functionName.toString()}`, functionResponse);
 
                 if (functionABI) {
                     functionABI.outputs.forEach((output: any, index: number) => {
@@ -33,7 +33,7 @@ export const getContractWithModifiedResponse = async (props: { abi: any; address
                         modifiedResponse[output.name] = functionResponse[index];
                     });
                 }
-                console.log(`Modified Response ${functionName.toString()}`, modifiedResponse);
+                // console.log(`Modified Response ${functionName.toString()}`, modifiedResponse);
                 return modifiedResponse?.length === 1 ? modifiedResponse[0] : modifiedResponse;
             },
         }),

@@ -2,6 +2,7 @@ import { SupportedNetwork } from 'types/network';
 
 export const LOCAL_STORAGE_KEYS = {
     SELECTED_WALLET: 'selectedWallet',
+    TABLE_ROWS_PER_PAGE: 'tabel-rows-per-page',
     UI_THEME: 'ui-theme',
     SORT_DIRECTION: 'sortDirection',
     SORT_BY: 'sortBy',

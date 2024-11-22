@@ -1,4 +1,3 @@
-import PaginationWrapper from 'components/PaginationWrapper';
 import SPAAnchor from 'components/SPAAnchor';
 import ShareTicketModalV2 from 'components/ShareTicketModalV2';
 import { ShareTicketModalProps } from 'components/ShareTicketModalV2/ShareTicketModalV2';
@@ -8,7 +7,7 @@ import { USD_SIGN } from 'constants/currency';
 import { OddsType } from 'enums/markets';
 import i18n from 'i18n';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
@@ -129,19 +128,6 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
         setShareTicketModalData(modalData);
         setShowShareTicketModal(true);
     };
-
-    const [page, setPage] = useState(0);
-    const handleChangePage = (_event: unknown, newPage: number) => {
-        setPage(newPage);
-    };
-
-    const [rowsPerPage, setRowsPerPage] = useState(ticketsPerPage || 10);
-    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setRowsPerPage(Number(event.target.value));
-        setPage(0);
-    };
-
-    useEffect(() => setPage(0), [ticketTransactions.length]);
 
     const columns = [
         {
@@ -297,7 +283,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                         },
                     ],
                 }}
-                rowsPerPage={rowsPerPage}
+                rowsPerPage={ticketsPerPage}
                 isLoading={isLoading}
                 data={ticketTransactions}
                 noResultsMessage={t('market.table.no-results')}
@@ -333,17 +319,6 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                     );
                 }}
             ></Table>
-            {!isLoading && ticketTransactions.length > 0 && (
-                <PaginationWrapper
-                    rowsPerPageOptions={[10, 20, 50, 100]}
-                    count={ticketTransactions.length}
-                    labelRowsPerPage={t(`common.pagination.rows-per-page`)}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-            )}
             {showShareTicketModal && shareTicketModalData && (
                 <ShareTicketModalV2
                     markets={shareTicketModalData.markets}

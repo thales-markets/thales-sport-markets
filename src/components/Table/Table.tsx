@@ -9,7 +9,9 @@ import {
     SortingState,
     useReactTable,
 } from '@tanstack/react-table';
+import SelectInput from 'components/SelectInput';
 import SimpleLoader from 'components/SimpleLoader';
+import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { SortDirection } from 'enums/markets';
 import React, { CSSProperties, DependencyList, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -17,6 +19,7 @@ import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivCentered } from 'styles/common';
+import { localStore } from 'thales-utils';
 
 export const PAGINATION_SIZE = [
     { value: 5, label: '5' },
@@ -220,6 +223,56 @@ const Table: React.FC<TableProps> = ({
                     </TableBody>
                 )}
             </ReactTable>
+            <PaginationWrapper>
+                <SelectWrapper>
+                    <ArrowWrapper
+                        onClick={() => tableInstance.firstPage()}
+                        disabled={!tableInstance.getCanPreviousPage()}
+                    >
+                        {'<<'}
+                    </ArrowWrapper>
+                    <ArrowWrapper
+                        onClick={() => tableInstance.previousPage()}
+                        disabled={!tableInstance.getCanPreviousPage()}
+                    >
+                        {'<'}
+                    </ArrowWrapper>
+                </SelectWrapper>
+
+                <SelectWrapper className="flex items-center gap-1">
+                    <PaginationLabel>{t('common.pagination.page')}</PaginationLabel>
+                    <PaginationLabel>
+                        {tableInstance.getState().pagination.pageIndex + 1} {t('common.pagination.of')}{' '}
+                        {tableInstance.getPageCount().toLocaleString()}
+                    </PaginationLabel>
+                </SelectWrapper>
+
+                <SelectWrapper>
+                    <ArrowWrapper
+                        onClick={() => tableInstance.getCanNextPage() && tableInstance.nextPage()}
+                        disabled={!tableInstance.getCanNextPage()}
+                    >
+                        {'>'}
+                    </ArrowWrapper>
+                    <ArrowWrapper onClick={() => tableInstance.lastPage()} disabled={!tableInstance.getCanNextPage()}>
+                        {'>>'}
+                    </ArrowWrapper>
+                </SelectWrapper>
+
+                <SelectWrapper>
+                    <PaginationLabel>{t('common.pagination.rows-per-page')}</PaginationLabel>
+                    <div>
+                        <SelectInput
+                            handleChange={(e) => {
+                                tableInstance.setPageSize(Number(e));
+                                localStore.set(LOCAL_STORAGE_KEYS.TABLE_ROWS_PER_PAGE, Number(e));
+                            }}
+                            value={{ value: pagination.pageSize, label: '' + pagination.pageSize }}
+                            options={PAGINATION_SIZE}
+                        />
+                    </div>
+                </SelectWrapper>
+            </PaginationWrapper>
         </>
     );
 };
@@ -395,6 +448,45 @@ const SortIcon = styled.i<{ selected: boolean; sortDirection: SortDirection }>`
     @media (max-width: 575px) {
         font-size: 10px;
     }
+`;
+
+const SelectWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    margin: 0 14px;
+`;
+
+const PaginationWrapper = styled.div`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 10px 0;
+`;
+
+const PaginationLabel = styled.p`
+    color: ${(props) => props.theme.textColor.primary};
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 10%;
+    letter-spacing: 0.13px;
+`;
+
+const ArrowWrapper = styled.span<{ disabled: boolean }>`
+    height: 24px;
+    font-size: 14px;
+    padding: 4px;
+    border-radius: 14px;
+    border: 2px solid ${(props) => props.theme.borderColor.primary};
+    color: ${(props) => props.theme.textColor.secondary};
+    opacity: ${(props) => (props.disabled ? 0.5 : 1)};
+    cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 const CellAlignment: Record<string, string> = {
