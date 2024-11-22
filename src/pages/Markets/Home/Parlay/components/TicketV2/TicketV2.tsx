@@ -96,7 +96,6 @@ import {
     mapMultiCollateralBalances,
 } from 'utils/collaterals';
 import multipleCollateral from 'utils/contracts/multipleCollateralContract';
-import sportsAMMDataContract from 'utils/contracts/sportsAMMDataContract';
 import sportsAMMV2Contract from 'utils/contracts/sportsAMMV2Contract';
 import { bigNumberFormatter, coinFormatter, coinParser } from 'utils/formatters/viem';
 import { getLiveTradingProcessorTransaction, getRequestId } from 'utils/liveTradingProcessor';
@@ -1054,7 +1053,7 @@ const Ticket: React.FC<TicketProps> = ({
                       getCollateralIndex(networkId, isEth ? (CRYPTO_CURRENCY_MAP.WETH as Coins) : selectedCollateral)
                   );
 
-            const addressToApprove = sportsAMMDataContract.addresses[networkId];
+            const addressToApprove = sportsAMMV2Contract.addresses[networkId];
             let txHash;
             if (isAA) {
                 txHash = await executeBiconomyTransaction(
@@ -1444,7 +1443,12 @@ const Ticket: React.FC<TicketProps> = ({
                     } else if (sportsAMMV2ContractWithSigner) {
                         let counter = 0;
                         let adapterAllowed = false;
+
                         const requestId = getRequestId(txReceipt.logs, isFreeBetActive, isStakedThales);
+
+                        console.log('requestId:', requestId);
+                        if (!requestId) throw new Error('Request ID not found');
+
                         const startTime = Date.now();
                         console.log('filfill start time:', new Date(startTime));
                         const checkFulfilled = async () => {
