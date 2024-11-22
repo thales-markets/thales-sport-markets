@@ -85,6 +85,15 @@ const QUERY_KEYS = {
         FreeBetBalance: (walletAddress: string, networkId: Network) => ['freeBetBalance', walletAddress, networkId],
         Stats: (networkId: Network, walletAddress: string) => ['wallet', 'stats', networkId, walletAddress],
         StatsV2: (networkId: Network, walletAddress: string) => ['wallet', 'statsV2', networkId, walletAddress],
+        LiquidityPoolTransactions: (networkId: Network, walletAddress: string) => [
+            'wallet',
+            'liquidityPoolTransactions',
+            networkId,
+            walletAddress,
+        ],
+        StakingData: (walletAddress: string, networkId: Network) => ['stakingData', walletAddress, networkId],
+    },
+    Pnl: {
         LpStats: (round: number, networkId: Network) => ['pnl', 'lpStats', round, networkId],
         LpTickets: (lpCollateral: LiquidityPoolCollateral, round: number, networkId: Network) => [
             'pnl',
@@ -100,13 +109,6 @@ const QUERY_KEYS = {
             round,
             networkId,
         ],
-        LiquidityPoolTransactions: (networkId: Network, walletAddress: string) => [
-            'wallet',
-            'liquidityPoolTransactions',
-            networkId,
-            walletAddress,
-        ],
-        StakingData: (walletAddress: string, networkId: Network) => ['stakingData', walletAddress, networkId],
     },
     FavoriteTeam: (walletAddress: string, networkId: Network) => ['favoriteTeam', walletAddress, networkId],
     Banners: (networkId: Network) => ['banners', networkId],

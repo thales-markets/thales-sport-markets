@@ -19,7 +19,7 @@ const useLpTicketsQuery = (
     options?: UseQueryOptions<Ticket[]>
 ) => {
     return useQuery<Ticket[]>(
-        QUERY_KEYS.Wallet.LpTickets(lpCollateral, round, networkId),
+        QUERY_KEYS.Pnl.LpTickets(lpCollateral, round, networkId),
         async () => {
             const { sportsAMMDataContract, liquidityPoolDataContract } = networkConnector;
             if (sportsAMMDataContract && liquidityPoolDataContract) {

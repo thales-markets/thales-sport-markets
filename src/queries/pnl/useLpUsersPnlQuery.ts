@@ -23,7 +23,7 @@ const useLpUsersPnlQuery = (
     options?: UseQueryOptions<LpUsersPnl[]>
 ) => {
     return useQuery<LpUsersPnl[]>(
-        QUERY_KEYS.Wallet.LpUsersPnl(lpCollateral, round, networkId),
+        QUERY_KEYS.Pnl.LpUsersPnl(lpCollateral, round, networkId),
         async () => {
             const {
                 sportsAMMDataContract,

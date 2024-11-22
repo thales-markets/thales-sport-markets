@@ -3,18 +3,18 @@ import { generalConfig } from 'config/general';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { BATCH_SIZE } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
+import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 import { Contract } from 'ethers';
 import { orderBy } from 'lodash';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { bigNumberFormatter, Coins, parseBytes32String } from 'thales-utils';
 import { LpStats, Ticket } from 'types/markets';
+import { SupportedNetwork } from 'types/network';
 import { isLpSupported, isStableCurrency } from 'utils/collaterals';
+import { getLpAddress } from 'utils/liquidityPool';
+import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
 import networkConnector from 'utils/networkConnector';
-import { LiquidityPoolCollateral } from '../../enums/liquidityPool';
-import { SupportedNetwork } from '../../types/network';
-import { getLpAddress } from '../../utils/liquidityPool';
-import { updateTotalQuoteAndPayout } from '../../utils/marketsV2';
-import { mapTicket } from '../../utils/tickets';
+import { mapTicket } from 'utils/tickets';
 import { Rates } from '../rates/useExchangeRatesQuery';
 
 const getLpStats = async (
@@ -71,7 +71,7 @@ const getLpStats = async (
 
 const useLpStatsQuery = (round: number, networkId: SupportedNetwork, options?: UseQueryOptions<LpStats[]>) => {
     return useQuery<LpStats[]>(
-        QUERY_KEYS.Wallet.LpStats(round, networkId),
+        QUERY_KEYS.Pnl.LpStats(round, networkId),
         async () => {
             const { sportsAMMDataContract, liquidityPoolDataContract, priceFeedContract } = networkConnector;
             if (sportsAMMDataContract && liquidityPoolDataContract && priceFeedContract) {
