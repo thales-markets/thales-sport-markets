@@ -69,9 +69,9 @@ const getLpStats = async (
     return lpStats;
 };
 
-const useLpStatsV2Query = (round: number, networkId: SupportedNetwork, options?: UseQueryOptions<LpStats[]>) => {
+const useLpStatsQuery = (round: number, networkId: SupportedNetwork, options?: UseQueryOptions<LpStats[]>) => {
     return useQuery<LpStats[]>(
-        QUERY_KEYS.Wallet.LpStatsV2(round, networkId),
+        QUERY_KEYS.Wallet.LpStats(round, networkId),
         async () => {
             const { sportsAMMDataContract, liquidityPoolDataContract, priceFeedContract } = networkConnector;
             if (sportsAMMDataContract && liquidityPoolDataContract && priceFeedContract) {
@@ -135,4 +135,4 @@ const useLpStatsV2Query = (round: number, networkId: SupportedNetwork, options?:
     );
 };
 
-export default useLpStatsV2Query;
+export default useLpStatsQuery;

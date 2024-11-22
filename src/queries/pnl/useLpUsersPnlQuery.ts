@@ -16,7 +16,7 @@ import networkConnector from 'utils/networkConnector';
 import { mapTicket } from 'utils/tickets';
 import { Rates } from '../rates/useExchangeRatesQuery';
 
-const useLpUsersPnl = (
+const useLpUsersPnlQuery = (
     lpCollateral: LiquidityPoolCollateral,
     round: number,
     networkId: SupportedNetwork,
@@ -153,4 +153,4 @@ const useLpUsersPnl = (
     );
 };
 
-export default useLpUsersPnl;
+export default useLpUsersPnlQuery;

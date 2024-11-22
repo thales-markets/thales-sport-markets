@@ -1,5 +1,6 @@
 import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from 'constants/currency';
-import useLpStatsV2Query from 'queries/pnl/useLpStatsV2Query';
+import { t } from 'i18next';
+import useLpStatsQuery from 'queries/pnl/useLpStatsQuery';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { getNetworkId } from 'redux/modules/wallet';
@@ -15,7 +16,7 @@ type LpStatsProps = {
 const LpStats: React.FC<LpStatsProps> = ({ round }) => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
-    const lpStatsQuery = useLpStatsV2Query(round, networkId);
+    const lpStatsQuery = useLpStatsQuery(round, networkId);
     const lpStats = lpStatsQuery.isSuccess && lpStatsQuery.data ? lpStatsQuery.data : [];
 
     return (
@@ -24,7 +25,7 @@ const LpStats: React.FC<LpStatsProps> = ({ round }) => {
                 <SubHeaderWrapper>
                     <SubHeader>
                         <SubHeaderIcon className="icon icon--yield" />
-                        LP PnL
+                        {t('liquidity-pool.pnl.lp-pnl')}
                     </SubHeader>
                 </SubHeaderWrapper>
                 {lpStats.map((stats, index) => {
@@ -55,7 +56,7 @@ const LpStats: React.FC<LpStatsProps> = ({ round }) => {
                 <SubHeaderWrapper>
                     <SubHeader>
                         <SubHeaderIcon className="icon icon--yield" />
-                        Fees
+                        {t('liquidity-pool.pnl.fees')}
                     </SubHeader>
                 </SubHeaderWrapper>
                 {lpStats.map((stats, index) => {
@@ -86,7 +87,7 @@ const LpStats: React.FC<LpStatsProps> = ({ round }) => {
                 <SubHeaderWrapper>
                     <SubHeader>
                         <SubHeaderIcon className="icon icon--yield" />
-                        User Pnl
+                        {t('liquidity-pool.pnl.users-pnl')}
                     </SubHeader>
                 </SubHeaderWrapper>
                 {lpStats.map((stats, index) => {

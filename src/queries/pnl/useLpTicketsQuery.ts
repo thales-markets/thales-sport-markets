@@ -12,7 +12,7 @@ import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
 import networkConnector from 'utils/networkConnector';
 import { mapTicket } from 'utils/tickets';
 
-const useLpTickets = (
+const useLpTicketsQuery = (
     lpCollateral: LiquidityPoolCollateral,
     round: number,
     networkId: SupportedNetwork,
@@ -69,4 +69,4 @@ const useLpTickets = (
     );
 };
 
-export default useLpTickets;
+export default useLpTicketsQuery;

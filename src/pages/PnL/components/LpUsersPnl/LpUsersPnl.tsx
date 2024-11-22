@@ -1,6 +1,7 @@
 import { USD_SIGN } from 'constants/currency';
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
-import useLpUsersPnl from 'queries/pnl/useLpUsersPnl';
+import { t } from 'i18next';
+import useLpUsersPnlQuery from 'queries/pnl/useLpUsersPnlQuery';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { getNetworkId } from 'redux/modules/wallet';
@@ -9,16 +10,16 @@ import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
 import { formatCurrencyWithKey, formatCurrencyWithSign } from 'thales-utils';
 
-type UserPnlProps = {
+type LpUsersPnlProps = {
     lpCollateral: LiquidityPoolCollateral;
     round: number;
 };
 
-const UserPnl: React.FC<UserPnlProps> = ({ lpCollateral, round }) => {
+const LpUsersPnl: React.FC<LpUsersPnlProps> = ({ lpCollateral, round }) => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
-    const lpStatsQuery = useLpUsersPnl(lpCollateral, round, networkId);
-    const lpStats = lpStatsQuery.isSuccess && lpStatsQuery.data ? lpStatsQuery.data : [];
+    const lpUsersPnlQuery = useLpUsersPnlQuery(lpCollateral, round, networkId);
+    const lpUsersPnl = lpUsersPnlQuery.isSuccess && lpUsersPnlQuery.data ? lpUsersPnlQuery.data : [];
 
     return (
         <Wrapper>
@@ -26,18 +27,18 @@ const UserPnl: React.FC<UserPnlProps> = ({ lpCollateral, round }) => {
                 <SubHeaderWrapper>
                     <SubHeader>
                         <SubHeaderIcon className="icon icon--profile" />
-                        Users PnL current round
+                        {t('liquidity-pool.pnl.users-pnl')}
                     </SubHeader>
                 </SubHeaderWrapper>
-                {lpStats.map((stats) => {
+                {lpUsersPnl.map((lpUserPnl) => {
                     return (
-                        <Section key={stats.account}>
-                            <Label>{stats.account}</Label>
+                        <Section key={lpUserPnl.account}>
+                            <Label>{lpUserPnl.account}</Label>
                             <Value>{`${formatCurrencyWithKey(
                                 lpCollateral.toUpperCase(),
-                                stats.pnl,
+                                lpUserPnl.pnl,
                                 2
-                            )} (${formatCurrencyWithSign(USD_SIGN, stats.pnlInUsd, 2)})`}</Value>
+                            )} (${formatCurrencyWithSign(USD_SIGN, lpUserPnl.pnlInUsd, 2)})`}</Value>
                         </Section>
                     );
                 })}
@@ -113,11 +114,11 @@ const SubHeaderWrapper = styled(FlexDivRow)`
 `;
 
 const SubHeader = styled(Header)`
-    width: 800px;
+    width: 300px;
 `;
 
 const SectionWrapper = styled.div`
     width: 100%;
 `;
 
-export default UserPnl;
+export default LpUsersPnl;

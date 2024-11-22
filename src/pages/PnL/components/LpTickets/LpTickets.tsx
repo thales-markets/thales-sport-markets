@@ -1,5 +1,5 @@
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
-import useLpTickets from 'queries/pnl/useLpTickets';
+import useLpTicketsQuery from 'queries/pnl/useLpTicketsQuery';
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { getNetworkId } from 'redux/modules/wallet';
@@ -15,7 +15,7 @@ type LpTicketsProps = {
 const LpTickets: React.FC<LpTicketsProps> = ({ lpCollateral, round }) => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
-    const lpTicketsQuery = useLpTickets(lpCollateral, round, networkId);
+    const lpTicketsQuery = useLpTicketsQuery(lpCollateral, round, networkId);
 
     const lpTickets: Ticket[] = useMemo(() => {
         let lpTickets: Ticket[] = [];

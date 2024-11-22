@@ -7,10 +7,10 @@ import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
-import LpStats from '../LpStats';
+import LpPnl from '../LpStats';
 import LpTickets from '../LpTickets';
+import LpUsersPnl from '../LpUsersPnl';
 import NavigationBar from '../NavigationBar';
-import UsersPnl from '../UsersPnl';
 
 type StatsProps = {
     selectedTab: PnlTab;
@@ -60,15 +60,15 @@ const Stats: React.FC<StatsProps> = ({ selectedTab, setSelectedTab, currentRound
                     </Header>
                     {isMobile && <NavigationBar selectedTab={selectedTab} setSelectedTab={setSelectedTab} />}
                 </NavigationWrapper>
-                {selectedTab == PnlTab.LP_STATS && <LpStats round={round} />}
+                {selectedTab == PnlTab.LP_STATS && <LpPnl round={round} />}
                 {selectedTab == PnlTab.USDC_USERS_PNL && (
-                    <UsersPnl lpCollateral={LiquidityPoolCollateral.USDC} round={round} />
+                    <LpUsersPnl lpCollateral={LiquidityPoolCollateral.USDC} round={round} />
                 )}
                 {selectedTab == PnlTab.WETH_USERS_PNL && (
-                    <UsersPnl lpCollateral={LiquidityPoolCollateral.WETH} round={round} />
+                    <LpUsersPnl lpCollateral={LiquidityPoolCollateral.WETH} round={round} />
                 )}
                 {selectedTab == PnlTab.THALES_USERS_PNL && (
-                    <UsersPnl lpCollateral={LiquidityPoolCollateral.THALES} round={round} />
+                    <LpUsersPnl lpCollateral={LiquidityPoolCollateral.THALES} round={round} />
                 )}
                 {selectedTab == PnlTab.USDC_TICKETS && (
                     <LpTickets lpCollateral={LiquidityPoolCollateral.USDC} round={round} />
