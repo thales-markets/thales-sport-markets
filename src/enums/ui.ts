@@ -11,9 +11,9 @@ export enum ProfileTab {
 
 export enum PnlTab {
     LP_STATS = 'lp-stats',
-    USDC_USER_PNL = 'usdc',
-    WETH_USER_PNL = 'weth',
-    THALES_USER_PNL = 'thales',
+    USDC_USERS_PNL = 'usdc',
+    WETH_USERS_PNL = 'weth',
+    THALES_USERS_PNL = 'thales',
     USDC_TICKETS = 'usdc-tickets',
     WETH_TICKETS = 'weth-tickets',
     THALES_TICKETS = 'thales-tickets',

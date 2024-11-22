@@ -7,12 +7,12 @@ import { RootState } from 'redux/rootReducer';
 import { Ticket } from 'types/markets';
 import TicketTransactionsTable from '../../../Markets/Market/MarketDetailsV2/components/TicketTransactionsTable';
 
-type TicketTransactionsProps = {
+type LpTicketsProps = {
     lpCollateral: LiquidityPoolCollateral;
     round: number;
 };
 
-const TicketTransactions: React.FC<TicketTransactionsProps> = ({ lpCollateral, round }) => {
+const LpTickets: React.FC<LpTicketsProps> = ({ lpCollateral, round }) => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
     const lpTicketsQuery = useLpTickets(lpCollateral, round, networkId);
@@ -37,4 +37,4 @@ const TicketTransactions: React.FC<TicketTransactionsProps> = ({ lpCollateral, r
     );
 };
 
-export default TicketTransactions;
+export default LpTickets;

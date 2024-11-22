@@ -1055,6 +1055,8 @@
             "your-transactions-title": "Your transactions",
             "no-transactions": "No user transactions associated with this liquidity pool in the selected round.",
             "round-label": "Round",
+            "current-round-label": "Current round",
+            "default-round-label": "Default round",
             "type": {
                 "deposit": "Deposit",
                 "withdrawalRequest": "Withdrawal Request",

@@ -8,7 +8,7 @@ import { getIsAppReady } from 'redux/modules/app';
 import { getNetworkId } from 'redux/modules/wallet';
 import { LiquidityPoolData } from 'types/liquidityPool';
 import useQueryParam from 'utils/useQueryParams';
-import MyTickets from './components/MyTickets';
+import Stats from './components/Stats';
 import { Container } from './styled-components';
 
 const PnL: React.FC = () => {
@@ -56,7 +56,7 @@ const PnL: React.FC = () => {
     return (
         <Container>
             {liquidityPoolData && (
-                <MyTickets
+                <Stats
                     selectedTab={selectedTab}
                     setSelectedTab={handleTabChange}
                     currentRound={liquidityPoolData.round}

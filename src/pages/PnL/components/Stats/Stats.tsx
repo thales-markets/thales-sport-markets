@@ -7,18 +7,18 @@ import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
+import LpStats from '../LpStats';
+import LpTickets from '../LpTickets';
 import NavigationBar from '../NavigationBar';
-import TicketTransactions from '../TicketTransactions';
-import UserPnl from '../UserPnl';
-import UserStatsV2 from '../UserStatsV2';
+import UsersPnl from '../UsersPnl';
 
-type MyTicketsProps = {
+type StatsProps = {
     selectedTab: PnlTab;
     setSelectedTab: (tab: PnlTab) => void;
     currentRound: number;
 };
 
-const MyTickets: React.FC<MyTicketsProps> = ({ selectedTab, setSelectedTab, currentRound }) => {
+const Stats: React.FC<StatsProps> = ({ selectedTab, setSelectedTab, currentRound }) => {
     const isMobile = useSelector(getIsMobile);
     const [round, setRound] = useState<number>(currentRound);
 
@@ -32,9 +32,13 @@ const MyTickets: React.FC<MyTicketsProps> = ({ selectedTab, setSelectedTab, curr
             value: index,
             label:
                 index === currentRound
-                    ? `Current round (round ${index})`
+                    ? `${t('liquidity-pool.user-transactions.current-round-label')} (${t(
+                          'liquidity-pool.user-transactions.round-label'
+                      )} ${index})`
                     : index === 1
-                    ? `Default round (round ${index})`
+                    ? `${t('liquidity-pool.user-transactions.default-round-label')} (${t(
+                          'liquidity-pool.user-transactions.round-label'
+                      )} ${index})`
                     : `${t('liquidity-pool.user-transactions.round-label')} ${index}`,
         });
     }
@@ -56,24 +60,24 @@ const MyTickets: React.FC<MyTicketsProps> = ({ selectedTab, setSelectedTab, curr
                     </Header>
                     {isMobile && <NavigationBar selectedTab={selectedTab} setSelectedTab={setSelectedTab} />}
                 </NavigationWrapper>
-                {selectedTab == PnlTab.LP_STATS && <UserStatsV2 round={round} />}
-                {selectedTab == PnlTab.USDC_USER_PNL && (
-                    <UserPnl lpCollateral={LiquidityPoolCollateral.USDC} round={round} />
+                {selectedTab == PnlTab.LP_STATS && <LpStats round={round} />}
+                {selectedTab == PnlTab.USDC_USERS_PNL && (
+                    <UsersPnl lpCollateral={LiquidityPoolCollateral.USDC} round={round} />
                 )}
-                {selectedTab == PnlTab.WETH_USER_PNL && (
-                    <UserPnl lpCollateral={LiquidityPoolCollateral.WETH} round={round} />
+                {selectedTab == PnlTab.WETH_USERS_PNL && (
+                    <UsersPnl lpCollateral={LiquidityPoolCollateral.WETH} round={round} />
                 )}
-                {selectedTab == PnlTab.THALES_USER_PNL && (
-                    <UserPnl lpCollateral={LiquidityPoolCollateral.THALES} round={round} />
+                {selectedTab == PnlTab.THALES_USERS_PNL && (
+                    <UsersPnl lpCollateral={LiquidityPoolCollateral.THALES} round={round} />
                 )}
                 {selectedTab == PnlTab.USDC_TICKETS && (
-                    <TicketTransactions lpCollateral={LiquidityPoolCollateral.USDC} round={round} />
+                    <LpTickets lpCollateral={LiquidityPoolCollateral.USDC} round={round} />
                 )}
                 {selectedTab == PnlTab.WETH_TICKETS && (
-                    <TicketTransactions lpCollateral={LiquidityPoolCollateral.WETH} round={round} />
+                    <LpTickets lpCollateral={LiquidityPoolCollateral.WETH} round={round} />
                 )}
                 {selectedTab == PnlTab.THALES_TICKETS && (
-                    <TicketTransactions lpCollateral={LiquidityPoolCollateral.THALES} round={round} />
+                    <LpTickets lpCollateral={LiquidityPoolCollateral.THALES} round={round} />
                 )}
             </MainContainer>
         </RowContainer>
@@ -124,4 +128,4 @@ const SelectContainer = styled.div`
     width: 300px;
 `;
 
-export default MyTickets;
+export default Stats;

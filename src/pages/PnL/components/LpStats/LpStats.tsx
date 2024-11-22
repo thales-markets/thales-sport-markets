@@ -8,11 +8,11 @@ import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
 import { Coins, formatCurrencyWithKey, formatCurrencyWithSign } from 'thales-utils';
 
-type UserStatsProps = {
+type LpStatsProps = {
     round: number;
 };
 
-const UserStats: React.FC<UserStatsProps> = ({ round }) => {
+const LpStats: React.FC<LpStatsProps> = ({ round }) => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
     const lpStatsQuery = useLpStatsV2Query(round, networkId);
@@ -200,4 +200,4 @@ const SectionWrapper = styled.div`
     width: 100%;
 `;
 
-export default UserStats;
+export default LpStats;

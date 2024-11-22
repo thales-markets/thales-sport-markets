@@ -9,17 +9,17 @@ const navItems = [
         icon: 'icon icon--yield',
     },
     {
-        id: PnlTab.USDC_USER_PNL,
+        id: PnlTab.USDC_USERS_PNL,
         label: 'USDC',
         icon: 'currency-icon currency-icon--usdc',
     },
     {
-        id: PnlTab.WETH_USER_PNL,
+        id: PnlTab.WETH_USERS_PNL,
         label: 'WETH',
         icon: 'currency-icon currency-icon--weth',
     },
     {
-        id: PnlTab.THALES_USER_PNL,
+        id: PnlTab.THALES_USERS_PNL,
         label: 'THALES',
         icon: 'currency-icon currency-icon--thales',
     },
