@@ -32,6 +32,7 @@ export enum SportFilter {
     Waterpolo = 'Waterpolo',
     Cricket = 'Cricket',
     Politics = 'Politics',
+    Futures = 'Futures',
     // Motosport = 'Motosport',
     // Golf = 'Golf',
 }
@@ -75,10 +76,19 @@ export enum GameStatus {
     CANCELED = 'cancelled', // the same for ENETPULSE and OPTICODDS
 }
 
+export enum MarketStatus {
+    OPEN = 0,
+    PAUSED = 1,
+    IN_PROGRESS = 3,
+    RESOLVED = 10,
+    CANCELLED = 255,
+}
+
 export enum TicketErrorCode {
     NO_ERROS = 0,
     MAX_MATCHES = 1,
     OTHER_TYPES_WITH_PLAYER_PROPS = 2,
     SAME_PLAYER_DIFFERENT_TYPES = 3,
     PLAYER_PROPS_COMBINING_NOT_ENABLED = 4,
+    FUTURES_COMBINING_NOT_SUPPORTED = 5,
 }

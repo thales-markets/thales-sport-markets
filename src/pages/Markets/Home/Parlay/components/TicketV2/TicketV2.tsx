@@ -71,6 +71,7 @@ import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { BoldContent, FlexDiv, FlexDivCentered } from 'styles/common';
 import {
+    Coins,
     DEFAULT_CURRENCY_DECIMALS,
     LONG_CURRENCY_DECIMALS,
     bigNumberFormatter,
@@ -87,7 +88,6 @@ import {
 } from 'thales-utils';
 import { SportsAmmData, TicketMarket } from 'types/markets';
 import { OverdropMultiplier, OverdropUserData } from 'types/overdrop';
-import { Coins } from 'thales-utils';
 import { OverdropLevel, ThemeInterface } from 'types/ui';
 import { executeBiconomyTransaction, getGasFeesForTx } from 'utils/biconomy';
 import {
@@ -117,7 +117,7 @@ import {
     getParlayMultiplier,
     getTooltipKey,
 } from 'utils/overdrop';
-import { refetchBalances, refetchCoingeckoRates, refetchFreeBetBalance } from 'utils/queryConnector';
+import { refetchBalances, refetchCoingeckoRates, refetchFreeBetBalance, refetchProofs } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import { getSportsAMMV2QuoteMethod, getSportsAMMV2Transaction } from 'utils/sportsAmmV2';
 import {
@@ -183,6 +183,7 @@ type TicketProps = {
 const TicketErrorMessage = {
     RISK_PER_COMB: 'RiskPerComb exceeded',
     SAME_TEAM_IN_PARLAY: 'SameTeamOnParlay',
+    PROOF_IS_NOT_VALID: 'Proof is not valid',
 };
 
 const SLIPPAGE_PERCENTAGES = [0.5, 1, 2];
@@ -280,6 +281,8 @@ const Ticket: React.FC<TicketProps> = ({
     const isStableCollateral = isStableCurrency(selectedCollateral);
     const isDefaultCollateral = selectedCollateral === defaultCollateral;
     const collateralHasLp = isLpSupported(usedCollateralForBuy);
+
+    const noProofs = useMemo(() => markets.every((market) => !market.proof), [markets]);
 
     // Used for cancelling the subscription and asynchronous tasks in a useEffect
     const mountedRef = useRef(true);
@@ -595,7 +598,7 @@ const Ticket: React.FC<TicketProps> = ({
     }, [isThales, markets, payout, swapToThales]);
 
     const ticketLiquidityQuery = useTicketLiquidityQuery(markets, networkId, {
-        enabled: isAppReady,
+        enabled: isAppReady && !noProofs,
     });
 
     const ticketLiquidity: number | undefined = useMemo(
@@ -658,7 +661,7 @@ const Ticket: React.FC<TicketProps> = ({
 
     const fetchTicketAmmQuote = useCallback(
         async (buyInAmountForQuote: number) => {
-            if (buyInAmountForQuote <= 0) return;
+            if (buyInAmountForQuote <= 0 || noProofs) return;
 
             const { sportsAMMV2Contract, multiCollateralOnOffRampContract } = networkConnector;
             if (sportsAMMV2Contract && minBuyInAmountInDefaultCollateral) {
@@ -733,6 +736,12 @@ const Ticket: React.FC<TicketProps> = ({
                         } else if (errorMessage.includes(TicketErrorMessage.SAME_TEAM_IN_PARLAY)) {
                             return { error: TicketErrorMessage.SAME_TEAM_IN_PARLAY };
                         }
+                    } else if (e && e.toString().includes(TicketErrorMessage.PROOF_IS_NOT_VALID)) {
+                        const gameIds = markets.map((market) => market.gameId).join(',');
+                        const typeIds = markets.map((market) => market.typeId).join(',');
+                        const playerIds = markets.map((market) => market.playerProps.playerId).join(',');
+                        const lines = markets.map((market) => market.line).join(',');
+                        refetchProofs(networkId, gameIds, typeIds, playerIds, lines);
                     }
                     console.log(e);
                     return { error: e };
@@ -740,20 +749,21 @@ const Ticket: React.FC<TicketProps> = ({
             }
         },
         [
+            noProofs,
             minBuyInAmountInDefaultCollateral,
             markets,
             collateralHasLp,
-            isDefaultCollateral,
             isThales,
+            swapToThales,
             thalesContractCurrencyRate,
+            isDefaultCollateral,
             selectedCollateralCurrencyRate,
             collateralAddress,
             networkId,
-            buyInAmount,
-            swapToThales,
-            swappedThalesToReceive,
             usedCollateralForBuy,
             thalesCollateralAddress,
+            swappedThalesToReceive,
+            buyInAmount,
         ]
     );
 

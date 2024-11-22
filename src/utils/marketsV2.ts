@@ -1,10 +1,20 @@
 import { secondsToMilliseconds } from 'date-fns';
 import { MarketType } from 'enums/marketTypes';
-import { GameStatus, Position } from 'enums/markets';
+import { GameStatus, MarketStatus, Position } from 'enums/markets';
 import { League } from 'enums/sports';
 import { ethers } from 'ethers';
 import _ from 'lodash';
-import { SerializableSportMarket, SportMarket, Ticket, TicketMarket, TicketPosition, TradeData } from 'types/markets';
+import {
+    SerializableSportMarket,
+    SportMarket,
+    Team,
+    Ticket,
+    TicketMarket,
+    TicketPosition,
+    TradeData,
+} from 'types/markets';
+import { MarketTypeMap } from '../constants/marketTypes';
+import { UFC_LEAGUE_IDS } from '../constants/sports';
 import { fixOneSideMarketCompetitorName } from './formatters/string';
 import {
     getMarketTypeDescription,
@@ -13,6 +23,7 @@ import {
     isBothsTeamsToScoreMarket,
     isCombinedPositionsMarket,
     isDoubleChanceMarket,
+    isFuturesMarket,
     isHomeTeamMarket,
     isOneSideMarket,
     isOneSidePlayerPropsMarket,
@@ -30,7 +41,7 @@ import {
     isWinnerMarket,
     isYesNoPlayerPropsMarket,
 } from './markets';
-import { getLeaguePeriodType, getLeagueScoringType } from './sports';
+import { getLeagueLabel, getLeaguePeriodType, getLeagueScoringType, getLeagueSport } from './sports';
 
 const getUfcSpecificPositionText = (marketType: number, position: number, homeTeam: string, awayTeam: string) => {
     if (marketType === MarketType.WINNING_ROUND) {
@@ -91,6 +102,10 @@ const getSimplePositionText = (
     positionNames?: string[],
     odds?: number[]
 ) => {
+    if (isFuturesMarket(marketType) && positionNames && positionNames[position]) {
+        return positionNames[position];
+    }
+
     if (leagueId === League.US_ELECTION && positionNames && positionNames[position]) {
         const text = positionNames[position]
             .replaceAll('_', ' ')
@@ -517,4 +532,81 @@ export const serializableSportMarketAsSportMarket = (market: SerializableSportMa
     } as SportMarket;
 
     return sportMarket;
+};
+
+export const packMarket = (
+    market: SportMarket,
+    gameInfo: any,
+    liveScore: any,
+    isLive: boolean,
+    parentMarket?: SportMarket
+): SportMarket => {
+    const homeTeam = !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => team.isHome);
+    const homeScore = homeTeam?.score;
+    const homeScoreByPeriod = homeTeam ? homeTeam.scoreByPeriod : [];
+
+    const awayTeam = !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => !team.isHome);
+    const awayScore = awayTeam?.score;
+    const awayScoreByPeriod = awayTeam ? awayTeam.scoreByPeriod : [];
+
+    const marketForGameData = parentMarket || market;
+
+    const leagueId = `${marketForGameData.subLeagueId}`.startsWith('152')
+        ? League.TENNIS_WTA
+        : `${marketForGameData.subLeagueId}`.startsWith('153')
+        ? League.TENNIS_GS
+        : `${marketForGameData.subLeagueId}`.startsWith('156')
+        ? League.TENNIS_MASTERS
+        : UFC_LEAGUE_IDS.includes(marketForGameData.subLeagueId)
+        ? League.UFC
+        : marketForGameData.subLeagueId;
+    const type = MarketTypeMap[market.typeId as MarketType];
+
+    let packedMarket: SportMarket = {
+        ...market,
+        gameId: marketForGameData.gameId,
+        sport: getLeagueSport(leagueId),
+        leagueId: leagueId,
+        leagueName: getLeagueLabel(leagueId),
+        subLeagueId: marketForGameData.subLeagueId,
+        type: type ? type.key : '',
+        maturity: marketForGameData.maturity,
+        maturityDate: new Date(marketForGameData.maturity * 1000),
+        homeTeam: marketForGameData.homeTeam,
+        awayTeam: marketForGameData.awayTeam,
+        status: market.status,
+        isOpen: market.status === MarketStatus.OPEN || market.status === MarketStatus.IN_PROGRESS,
+        isResolved: market.status === MarketStatus.RESOLVED,
+        isCancelled: market.status === MarketStatus.CANCELLED,
+        isPaused: market.status === MarketStatus.PAUSED,
+        isOneSideMarket: isOneSideMarket(leagueId),
+        isPlayerPropsMarket: isPlayerPropsMarket(market.typeId),
+        isOneSidePlayerPropsMarket: isOneSidePlayerPropsMarket(market.typeId),
+        isYesNoPlayerPropsMarket: isYesNoPlayerPropsMarket(market.typeId),
+        playerProps: market.playerProps || {
+            playerId: 0,
+            playerName: '',
+        },
+        combinedPositions: market.combinedPositions || new Array(market.odds.length).fill([]),
+        positionNames: market.positionNames,
+        proof: market.proof,
+    };
+
+    if (!parentMarket) {
+        packedMarket = {
+            ...packedMarket,
+            tournamentName: gameInfo?.tournamentName,
+            tournamentRound: gameInfo?.tournamentRound,
+            homeScore,
+            awayScore,
+            homeScoreByPeriod,
+            awayScoreByPeriod,
+            isGameFinished: gameInfo?.isGameFinished,
+            gameStatus: gameInfo?.gameStatus,
+            liveScore,
+            live: isLive,
+        };
+    }
+
+    return packedMarket;
 };

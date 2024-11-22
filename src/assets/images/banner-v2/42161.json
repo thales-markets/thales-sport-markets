@@ -1,10 +1,18 @@
 [
     {
+        "image": "overdrop-boost.png",
+        "url": ""
+    },
+    {
         "image": "overdrop-small-banner.png",
         "url": "https://overtimemarkets.xyz/overdrop"
     },
     {
         "image": "v2.jpg",
         "url": ""
+    },
+    {
+        "image": "futures_background4.png",
+        "url": "https://www.overtimemarkets.xyz/markets?status=OpenMarkets&sport=Futures"
     }
 ]

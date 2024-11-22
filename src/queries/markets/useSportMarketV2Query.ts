@@ -2,10 +2,12 @@ import axios from 'axios';
 import { generalConfig, noCacheConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
 import { secondsToMilliseconds } from 'date-fns';
+import { MarketStatus } from 'enums/markets';
 import { Network } from 'enums/network';
 import { orderBy } from 'lodash';
 import { UseQueryOptions, useQuery } from 'react-query';
-import { SportMarket, Team } from 'types/markets';
+import { SportMarket } from 'types/markets';
+import { packMarket } from 'utils/marketsV2';
 
 const useSportMarketQuery = (
     marketAddress: string,
@@ -23,7 +25,7 @@ const useSportMarketQuery = (
                     axios.get(
                         `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/${
                             isLive ? 'live-' : ''
-                        }markets/${marketAddress}`,
+                        }markets/${marketAddress}?onlyBasicProperties=true`,
                         noCacheConfig
                     ),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/games-info/${marketAddress}`, noCacheConfig),
@@ -34,45 +36,19 @@ const useSportMarketQuery = (
                 const gameInfo = gameInfoResponse.data;
                 const liveScore = liveScoreResponse.data;
 
-                const homeTeam = !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => team.isHome);
-                const homeScore = homeTeam?.score;
-                const homeScoreByPeriod = homeTeam ? homeTeam.scoreByPeriod : [];
-
-                const awayTeam = !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => !team.isHome);
-                const awayScore = awayTeam?.score;
-                const awayScoreByPeriod = awayTeam ? awayTeam.scoreByPeriod : [];
-
                 return {
-                    ...market,
-                    maturityDate: new Date(market.maturityDate),
-                    odds: market.odds.map((odd: any) => odd.normalizedImplied),
+                    ...packMarket(market, gameInfo, liveScore, isLive),
                     childMarkets: orderBy(
                         market.childMarkets
                             .filter(
                                 (childMarket: any) =>
-                                    (enableOnlyOpenChildMarkets && childMarket.isOpen) || !enableOnlyOpenChildMarkets
+                                    (enableOnlyOpenChildMarkets && childMarket.status === MarketStatus.OPEN) ||
+                                    !enableOnlyOpenChildMarkets
                             )
-                            .map((childMarket: any) => {
-                                return {
-                                    ...childMarket,
-                                    live: isLive,
-                                    maturityDate: new Date(childMarket.maturityDate),
-                                    odds: childMarket.odds.map((odd: any) => odd.normalizedImplied),
-                                };
-                            }),
+                            .map((childMarket: any) => packMarket(childMarket, gameInfo, liveScore, isLive, market)),
                         ['typeId'],
                         ['asc']
                     ),
-                    tournamentName: gameInfo?.tournamentName,
-                    tournamentRound: gameInfo?.tournamentRound,
-                    homeScore,
-                    awayScore,
-                    homeScoreByPeriod,
-                    awayScoreByPeriod,
-                    isGameFinished: gameInfo?.isGameFinished,
-                    gameStatus: gameInfo?.gameStatus,
-                    liveScore,
-                    live: isLive,
                 };
             } catch (e) {
                 console.log(e);

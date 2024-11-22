@@ -29,6 +29,7 @@ import { buildHref } from 'utils/routes';
 import { getLeaguePeriodType, getLeagueSport } from 'utils/sports';
 import { getOrdinalNumberLabel } from 'utils/ui';
 import useQueryParam from 'utils/useQueryParams';
+import { isFuturesMarket } from '../../../../utils/markets';
 import Header from '../../Home/Header';
 import MatchInfoV2 from './components/MatchInfoV2';
 import PositionsV2 from './components/PositionsV2';
@@ -71,18 +72,21 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     );
 
     const numberOfMarkets = useMemo(() => {
-        let num = !marketTypesFilter.length || marketTypesFilter.includes(MarketType.WINNER) ? 1 : 0;
+        let num =
+            !marketTypesFilter.length || marketTypesFilter.includes(MarketType.WINNER) || isFuturesMarket(market.typeId)
+                ? 1
+                : 0;
         Object.keys(groupedChildMarkets).forEach((key) => {
             const typeId = Number(key);
             const childMarkets = groupedChildMarkets[typeId];
             num += childMarkets.length;
         });
         return num;
-    }, [groupedChildMarkets, marketTypesFilter]);
+    }, [groupedChildMarkets, market.typeId, marketTypesFilter]);
 
     useEffect(() => {
         if (!metaTitle) {
-            setMetaTitle(`${market.homeTeam} vs ${market.awayTeam}`);
+            setMetaTitle(`${market.homeTeam} - ${market.awayTeam}`);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [market.awayTeam, market.homeTeam]);
@@ -118,7 +122,9 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                 <ResultContainer>
                                     <ResultLabel>
                                         {market.isOneSideMarket ? (
-                                            market.homeScore == 1 ? (
+                                            market.leagueId === League.US_ELECTION && market.positionNames ? (
+                                                market.positionNames[market.winningPositions[0]]
+                                            ) : market.homeScore == 1 ? (
                                                 t('markets.market-card.race-winner')
                                             ) : (
                                                 t('markets.market-card.no-win')
@@ -153,7 +159,8 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                     </ResultLabel>
                                     {leagueSport !== Sport.SOCCER &&
                                         leagueSport !== Sport.CRICKET &&
-                                        market.leagueId !== League.UFC && (
+                                        market.leagueId !== League.UFC &&
+                                        market.leagueId !== League.US_ELECTION && (
                                             <PeriodsContainer directionRow={true}>
                                                 {market.homeScoreByPeriod.map((_, index) => {
                                                     return (
@@ -285,7 +292,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                 {(!marketTypesFilter.length || marketTypesFilter.includes(MarketType.WINNER)) && (
                                     <PositionsV2
                                         markets={[market]}
-                                        marketType={MarketType.WINNER}
+                                        marketType={market.typeId}
                                         isGameOpen={isGameOpen}
                                         showInvalid={!hidePausedMarkets}
                                     />

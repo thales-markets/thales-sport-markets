@@ -16,6 +16,7 @@ export enum Sport {
     MOTOSPORT = 'Motosport',
     GOLF = 'Golf',
     POLITICS = 'Politics',
+    FUTURES = 'Futures',
     EMPTY = '',
 }
 
@@ -135,6 +136,16 @@ export enum League {
     FRANCE_LNB_PRO_A = 20204,
     CHINA_CBA = 20205,
     AUSTRALIA_NBL = 20206,
+    NFL_FUTURES = 30002,
+    NBA_FUTURES = 30004,
+    NHL_FUTURES = 30006,
+    EPL_FUTURES = 30011,
+    LIGUE_ONE_FUTURES = 30012,
+    BUNDESLIGA_FUTURES = 30013,
+    LA_LIGA_FUTURES = 30014,
+    SERIE_A_FUTURES = 30015,
+    UEFA_CHAMPIONS_LEAGUE_FUTURES = 30016,
+    EUROLEAGUE_FUTURES = 30399,
     GOLF_H2H = 100021,
     GOLF_WINNER = 100121,
 }
@@ -144,6 +155,7 @@ export enum ScoringType {
     GOALS = 'goals',
     ROUNDS = 'rounds',
     SETS = 'sets',
+    MAPS = 'maps',
     EMPTY = '',
 }
 
@@ -160,5 +172,6 @@ export enum PeriodType {
     ROUND = 'round',
     INNING = 'inning',
     SET = 'set',
+    MAP = 'map',
     EMPTY = '',
 }

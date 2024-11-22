@@ -248,6 +248,11 @@ export enum MarketType {
     FIRST_PERIOD_TOTAL_EXACT_AWAY_TEAM = 10146,
     SECOND_PERIOD_TOTAL_EXACT_HOME_TEAM = 10147,
     SECOND_PERIOD_TOTAL_EXACT_AWAY_TEAM = 10148,
+
+    // Futures
+    LEAGUE_WINNER = 13001,
+    MVP = 13002,
+    CUP_WINNER = 13003,
 }
 
 export enum MarketTypeGroup {

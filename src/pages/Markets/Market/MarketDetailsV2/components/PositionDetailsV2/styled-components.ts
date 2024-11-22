@@ -8,7 +8,9 @@ export const Container = styled(FlexDivRow)<{
     isWinner: boolean;
     order?: string;
     isMainPageView?: boolean;
+    hide: boolean;
 }>`
+    display: ${(props) => (props.hide ? 'none' : 'flex')};
     position: relative;
     align-items: center;
     border-radius: 5px;

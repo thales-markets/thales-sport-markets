@@ -108,9 +108,9 @@ export const TeamLogosContainer = styled(FlexDivRow)<{
     }
 `;
 
-export const ClubLogo = styled.img<{ awayTeam?: boolean; isColumnView: boolean }>`
-    height: ${(props) => props.height || (props.isColumnView ? '26px' : '24px')};
-    width: ${(props) => props.width || (props.isColumnView ? '26px' : '24px')};
+export const ClubLogo = styled.img<{ awayTeam?: boolean; isColumnView: boolean; isFutures: boolean }>`
+    height: ${(props) => props.height || (props.isFutures ? '30px' : props.isColumnView ? '26px' : '24px')};
+    width: ${(props) => props.width || (props.isFutures ? '30px' : props.isColumnView ? '26px' : '24px')};
     margin-left: ${(props) => (props.awayTeam && !props.isColumnView ? '-10px' : '0')};
     z-index: ${(props) => (props.awayTeam ? '1' : '2')};
 `;
@@ -187,12 +187,13 @@ export const Arrow = styled.i`
 `;
 
 export const FireContainer = styled(FlexDivColumnCentered)`
+    font-weight: 600;
     position: absolute;
     top: 7px;
     right: 7px;
     @media (max-width: 600px) {
         flex-direction: row;
-        top: 9px;
+        top: 5px;
         right: 44px;
     }
 `;
