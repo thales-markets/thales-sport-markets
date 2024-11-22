@@ -324,6 +324,7 @@
             "wallet": "Wallet",
             "highest-win": "Highest win",
             "lifetime-wins": "Lifetime wins",
+            "pnl": "PnL",
             "buy-thales-title": "You get better odds when betting with THALES",
             "stake-title": "You can stake THALES to also earn yield while still being able to use it on Overtime for best odds",
             "stake-label": "Stake",
@@ -1042,7 +1043,10 @@
             },
             "no-data": "No PnL data for previous rounds.",
             "lifetime-pnl": "Lifetime PnL",
-            "ongoing-pnl": "Ongoing PnL"
+            "ongoing-pnl": "Ongoing PnL",
+            "lp-pnl": "LP PnL",
+            "fees": "Fees",
+            "users-pnl": "Users PnL"
         },
         "return": {
             "title": "Return",
@@ -1055,6 +1059,8 @@
             "your-transactions-title": "Your transactions",
             "no-transactions": "No user transactions associated with this liquidity pool in the selected round.",
             "round-label": "Round",
+            "current-round-label": "Current round",
+            "default-round-label": "Default round",
             "type": {
                 "deposit": "Deposit",
                 "withdrawalRequest": "Withdrawal Request",
