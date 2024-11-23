@@ -55,7 +55,7 @@ import { delay } from 'utils/timer';
 import { Address } from 'viem';
 import BuyStepsModal from '../../../Markets/Home/Parlay/components/BuyStepsModal';
 
-const SHOW_PNL = false;
+const SHOW_PNL = true;
 
 type UserStatsProps = {
     setForceOpenStakingModal: (forceOpenStakingModal: boolean) => void;
