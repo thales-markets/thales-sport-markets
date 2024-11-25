@@ -14,6 +14,7 @@ import LiquidityPool from 'pages/LiquidityPool';
 import Markets from 'pages/Markets/Home';
 import Market from 'pages/Markets/Market';
 import Overdrop from 'pages/Overdrop';
+import PnL from 'pages/PnL';
 import Profile from 'pages/Profile';
 import Promotions from 'pages/Promotions/Home';
 import Promotion from 'pages/Promotions/Promotion';
@@ -220,6 +221,11 @@ const App = () => {
                                 <Promotion />
                             </DappLayout>
                         </Suspense>
+                    </Route>
+                    <Route exact path={ROUTES.PnL}>
+                        <DappLayout>
+                            <PnL />
+                        </DappLayout>
                     </Route>
                     <Route exact path={ROUTES.Home}>
                         <Suspense fallback={<Loader />}>
