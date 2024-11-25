@@ -1,25 +1,26 @@
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import axios from 'axios';
 import { generalConfig } from 'config/general';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { BATCH_SIZE } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
+import { ContractType } from 'enums/contract';
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
-import { Contract } from 'ethers';
 import { orderBy } from 'lodash';
-import { useQuery, UseQueryOptions } from 'react-query';
 import { bigNumberFormatter, Coins, parseBytes32String } from 'thales-utils';
 import { LpStats, Ticket } from 'types/markets';
-import { SupportedNetwork } from 'types/network';
+import { QueryConfig, SupportedNetwork } from 'types/network';
+import { ViemContract } from 'types/viem';
 import { isLpSupported, isStableCurrency } from 'utils/collaterals';
 import { getLpAddress } from 'utils/liquidityPool';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
-import networkConnector from 'utils/networkConnector';
+import { getContractInstance } from 'utils/networkConnector';
 import { mapTicket } from 'utils/tickets';
 import { Rates } from '../rates/useExchangeRatesQuery';
 
 const getLpStats = async (
     tickets: string[],
-    sportsAMMDataContract: Contract,
+    sportsAMMDataContract: ViemContract,
     networkId: SupportedNetwork,
     exchangeRates: Rates
 ) => {
@@ -27,7 +28,7 @@ const getLpStats = async (
 
     const promises = [];
     for (let i = 0; i < numberOfBatches; i++) {
-        promises.push(sportsAMMDataContract.getTicketsData(tickets.slice(i * BATCH_SIZE, (i + 1) * BATCH_SIZE)));
+        promises.push(sportsAMMDataContract.read?.getTicketsData(tickets.slice(i * BATCH_SIZE, (i + 1) * BATCH_SIZE)));
     }
 
     const promisesResult = await Promise.all(promises);
@@ -69,11 +70,19 @@ const getLpStats = async (
     return lpStats;
 };
 
-const useLpStatsQuery = (round: number, networkId: SupportedNetwork, options?: UseQueryOptions<LpStats[]>) => {
-    return useQuery<LpStats[]>(
-        QUERY_KEYS.Pnl.LpStats(round, networkId),
-        async () => {
-            const { sportsAMMDataContract, liquidityPoolDataContract, priceFeedContract } = networkConnector;
+const useLpStatsQuery = (
+    round: number,
+    queryConfig: QueryConfig,
+    options?: Omit<UseQueryOptions<LpStats[]>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery<LpStats[]>({
+        queryKey: QUERY_KEYS.Pnl.LpStats(round, queryConfig.networkId),
+        queryFn: async () => {
+            const [sportsAMMDataContract, liquidityPoolDataContract, priceFeedContract] = await Promise.all([
+                getContractInstance(ContractType.SPORTS_AMM_DATA, queryConfig.client, queryConfig.networkId),
+                getContractInstance(ContractType.LIQUIDITY_POOL_DATA, queryConfig.client, queryConfig.networkId),
+                getContractInstance(ContractType.PRICE_FEED, queryConfig.client, queryConfig.networkId),
+            ]);
             if (sportsAMMDataContract && liquidityPoolDataContract && priceFeedContract) {
                 const [
                     usdcTickets,
@@ -83,20 +92,20 @@ const useLpStatsQuery = (round: number, networkId: SupportedNetwork, options?: U
                     rates,
                     thalesPriceResponse,
                 ] = await Promise.all([
-                    liquidityPoolDataContract.getRoundTickets(
-                        getLpAddress(networkId, LiquidityPoolCollateral.USDC),
+                    liquidityPoolDataContract.read?.getRoundTickets(
+                        getLpAddress(queryConfig.networkId, LiquidityPoolCollateral.USDC),
                         round
                     ),
-                    liquidityPoolDataContract.getRoundTickets(
-                        getLpAddress(networkId, LiquidityPoolCollateral.WETH),
+                    liquidityPoolDataContract.read?.getRoundTickets(
+                        getLpAddress(queryConfig.networkId, LiquidityPoolCollateral.WETH),
                         round
                     ),
-                    liquidityPoolDataContract.getRoundTickets(
-                        getLpAddress(networkId, LiquidityPoolCollateral.THALES),
+                    liquidityPoolDataContract.read?.getRoundTickets(
+                        getLpAddress(queryConfig.networkId, LiquidityPoolCollateral.THALES),
                         round
                     ),
-                    priceFeedContract.getCurrencies(),
-                    priceFeedContract.getRates(),
+                    priceFeedContract.read?.getCurrencies(),
+                    priceFeedContract.read?.getRates(),
                     axios.get(`${generalConfig.API_URL}/token/price`),
                 ]);
 
@@ -110,9 +119,24 @@ const useLpStatsQuery = (round: number, networkId: SupportedNetwork, options?: U
                 });
                 exchangeRates['THALES'] = Number(thalesPriceResponse.data);
 
-                const usdcLpStats = await getLpStats(usdcTickets, sportsAMMDataContract, networkId, exchangeRates);
-                const wethLpStats = await getLpStats(wethTickets, sportsAMMDataContract, networkId, exchangeRates);
-                const thalesLpStats = await getLpStats(thalesTickets, sportsAMMDataContract, networkId, exchangeRates);
+                const usdcLpStats = await getLpStats(
+                    usdcTickets,
+                    sportsAMMDataContract,
+                    queryConfig.networkId,
+                    exchangeRates
+                );
+                const wethLpStats = await getLpStats(
+                    wethTickets,
+                    sportsAMMDataContract,
+                    queryConfig.networkId,
+                    exchangeRates
+                );
+                const thalesLpStats = await getLpStats(
+                    thalesTickets,
+                    sportsAMMDataContract,
+                    queryConfig.networkId,
+                    exchangeRates
+                );
 
                 const lpStats: LpStats = {
                     name: 'TOTAL',
@@ -129,10 +153,8 @@ const useLpStatsQuery = (round: number, networkId: SupportedNetwork, options?: U
 
             return [];
         },
-        {
-            ...options,
-        }
-    );
+        ...options,
+    });
 };
 
 export default useLpStatsQuery;

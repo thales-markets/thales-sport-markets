@@ -1,10 +1,8 @@
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 import useLpTicketsQuery from 'queries/pnl/useLpTicketsQuery';
 import React, { useMemo } from 'react';
-import { useSelector } from 'react-redux';
-import { getNetworkId } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
 import { Ticket } from 'types/markets';
+import { useChainId, useClient } from 'wagmi';
 import TicketTransactionsTable from '../../../Markets/Market/MarketDetailsV2/components/TicketTransactionsTable';
 
 type LpTicketsProps = {
@@ -13,9 +11,10 @@ type LpTicketsProps = {
 };
 
 const LpTickets: React.FC<LpTicketsProps> = ({ lpCollateral, round }) => {
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const networkId = useChainId();
+    const client = useClient();
 
-    const lpTicketsQuery = useLpTicketsQuery(lpCollateral, round, networkId);
+    const lpTicketsQuery = useLpTicketsQuery(lpCollateral, round, { networkId, client });
 
     const lpTickets: Ticket[] = useMemo(() => {
         let lpTickets: Ticket[] = [];

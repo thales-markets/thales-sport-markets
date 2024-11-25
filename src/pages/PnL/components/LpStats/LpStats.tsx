@@ -2,21 +2,20 @@ import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from 'constants/currency';
 import { t } from 'i18next';
 import useLpStatsQuery from 'queries/pnl/useLpStatsQuery';
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { getNetworkId } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
 import { Coins, formatCurrencyWithKey, formatCurrencyWithSign } from 'thales-utils';
+import { useChainId, useClient } from 'wagmi';
 
 type LpStatsProps = {
     round: number;
 };
 
 const LpStats: React.FC<LpStatsProps> = ({ round }) => {
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const networkId = useChainId();
+    const client = useClient();
 
-    const lpStatsQuery = useLpStatsQuery(round, networkId);
+    const lpStatsQuery = useLpStatsQuery(round, { networkId, client });
     const lpStats = lpStatsQuery.isSuccess && lpStatsQuery.data ? lpStatsQuery.data : [];
 
     return (

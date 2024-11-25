@@ -1,30 +1,38 @@
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import axios from 'axios';
 import { generalConfig, noCacheConfig } from 'config/general';
 import { BATCH_SIZE } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
+import { ContractType } from 'enums/contract';
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 import { orderBy } from 'lodash';
-import { useQuery, UseQueryOptions } from 'react-query';
 import { Ticket } from 'types/markets';
-import { SupportedNetwork } from 'types/network';
+import { QueryConfig } from 'types/network';
 import { getLpAddress } from 'utils/liquidityPool';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
-import networkConnector from 'utils/networkConnector';
+import { getContractInstance } from 'utils/networkConnector';
 import { mapTicket } from 'utils/tickets';
 
 const useLpTicketsQuery = (
     lpCollateral: LiquidityPoolCollateral,
     round: number,
-    networkId: SupportedNetwork,
-    options?: UseQueryOptions<Ticket[]>
+    queryConfig: QueryConfig,
+    options?: Omit<UseQueryOptions<Ticket[]>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<Ticket[]>(
-        QUERY_KEYS.Pnl.LpTickets(lpCollateral, round, networkId),
-        async () => {
-            const { sportsAMMDataContract, liquidityPoolDataContract } = networkConnector;
+    return useQuery<Ticket[]>({
+        queryKey: QUERY_KEYS.Pnl.LpTickets(lpCollateral, round, queryConfig.networkId),
+        queryFn: async () => {
+            const [sportsAMMDataContract, liquidityPoolDataContract] = await Promise.all([
+                getContractInstance(ContractType.SPORTS_AMM_DATA, queryConfig.client, queryConfig.networkId),
+                getContractInstance(ContractType.LIQUIDITY_POOL_DATA, queryConfig.client, queryConfig.networkId),
+            ]);
+
             if (sportsAMMDataContract && liquidityPoolDataContract) {
                 const [lpTickets, gamesInfoResponse, playersInfoResponse, liveScoresResponse] = await Promise.all([
-                    liquidityPoolDataContract.getRoundTickets(getLpAddress(networkId, lpCollateral), round),
+                    liquidityPoolDataContract.read?.getRoundTickets(
+                        getLpAddress(queryConfig.networkId, lpCollateral),
+                        round
+                    ),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, noCacheConfig),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/players-info`, noCacheConfig),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/live-scores`, noCacheConfig),
@@ -35,7 +43,9 @@ const useLpTicketsQuery = (
                 const promises = [];
                 for (let i = 0; i < numberOfBatches; i++) {
                     promises.push(
-                        sportsAMMDataContract.getTicketsData(lpTickets.slice(i * BATCH_SIZE, (i + 1) * BATCH_SIZE))
+                        sportsAMMDataContract.read?.getTicketsData(
+                            lpTickets.slice(i * BATCH_SIZE, (i + 1) * BATCH_SIZE)
+                        )
                     );
                 }
 
@@ -45,7 +55,7 @@ const useLpTicketsQuery = (
                 const mappedTickets: Ticket[] = ticketsData.map((ticket: any) =>
                     mapTicket(
                         ticket,
-                        networkId,
+                        queryConfig.networkId,
                         gamesInfoResponse.data,
                         playersInfoResponse.data,
                         liveScoresResponse.data
@@ -63,10 +73,8 @@ const useLpTicketsQuery = (
 
             return [];
         },
-        {
-            ...options,
-        }
-    );
+        ...options,
+    });
 };
 
 export default useLpTicketsQuery;
