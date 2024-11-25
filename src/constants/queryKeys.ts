@@ -110,6 +110,15 @@ const QUERY_KEYS = {
             networkId,
         ],
     },
+    ResolveBlocker: {
+        BlockedGames: (networkId: Network) => ['resolveBlocker', 'blockedGames', networkId],
+        WhitelistedForUnblock: (walletAddress: string, networkId: Network) => [
+            'resolveBlocker',
+            'whitelistedForUnblock',
+            networkId,
+            walletAddress,
+        ],
+    },
     FavoriteTeam: (walletAddress: string, networkId: Network) => ['favoriteTeam', walletAddress, networkId],
     Banners: (networkId: Network) => ['banners', networkId],
     LiquidityPool: {

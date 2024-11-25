@@ -1211,5 +1211,16 @@
             "active-daily-streak": "Active daily streak xp boost",
             "dont-show-this": "Don't show this again"
         }
+    },
+    "resolve-blocker": {
+        "title": "Blocked games",
+        "game": "Game",
+        "reason": "Reason",
+        "action": "Action",
+        "unblock": "Unblock",
+        "unblocking": "Unblocking...",
+        "not-whitelisted-for-unblock-tooltip": "Connected wallet is not whitelisted for unblock",
+        "unblock-confirmation-message": "Game successfully unblocked",
+        "no-blocked-games": "No blocked games"
     }
 }
