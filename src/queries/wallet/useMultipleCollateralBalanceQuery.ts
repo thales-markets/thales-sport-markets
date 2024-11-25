@@ -146,7 +146,7 @@ const useMultipleCollateralBalanceQuery = (
                         ? multipleCollateralObject.THALES.read.balanceOf([walletAddress])
                         : 0,
                     multipleCollateralObject.sTHALES.address !== TBD_ADDRESS
-                        ? multipleCollateralObject.sTHALES.read.balanceOf([walletAddress])
+                        ? multipleCollateralObject.sTHALES.read.stakedBalanceOf([walletAddress])
                         : 0,
                 ]);
                 collateralsBalance = {
