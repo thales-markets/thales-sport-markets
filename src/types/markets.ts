@@ -187,6 +187,22 @@ export type UserStats = {
     trades: number;
     highestWin: number;
     lifetimeWins: number;
+    pnl: number;
+};
+
+export type LpStats = {
+    name: string;
+    numberOfTickets: number;
+    pnl: number;
+    fees: number;
+    pnlInUsd: number;
+    feesInUsd: number;
+};
+
+export type LpUsersPnl = {
+    account: string;
+    pnl: number;
+    pnlInUsd: number;
 };
 
 export type Team = {

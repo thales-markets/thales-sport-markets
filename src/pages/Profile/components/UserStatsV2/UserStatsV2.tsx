@@ -1,6 +1,7 @@
 import Button from 'components/Button';
 import CollateralSelector from 'components/CollateralSelector';
 import NumericInput from 'components/fields/NumericInput';
+import InlineLoader from 'components/InlineLoader';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { COLLATERAL_ICONS_CLASS_NAMES, CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
 import { SWAP_APPROVAL_BUFFER } from 'constants/markets';
@@ -56,8 +57,9 @@ import {
 import { delay } from 'utils/timer';
 import { Address, getContract } from 'viem';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
-import InlineLoader from '../../../../components/InlineLoader';
 import BuyStepsModal from '../../../Markets/Home/Parlay/components/BuyStepsModal';
+
+const SHOW_PNL = false;
 
 type UserStatsProps = {
     setForceOpenStakingModal?: (forceOpenStakingModal: boolean) => void;
@@ -448,6 +450,12 @@ const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
                         <Label>{t('profile.stats.lifetime-wins')}</Label>
                         <Value>{!userStats ? '-' : userStats.lifetimeWins}</Value>
                     </Section>
+                    {SHOW_PNL && (
+                        <Section>
+                            <Label>{t('profile.stats.pnl')}</Label>
+                            <Value>{!userStats ? '-' : formatCurrencyWithSign(USD_SIGN, userStats.pnl, 2)}</Value>
+                        </Section>
+                    )}
                 </SectionWrapper>
                 {isFreeBetExists && (
                     <SectionWrapper>

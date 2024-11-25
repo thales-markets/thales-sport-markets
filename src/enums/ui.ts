@@ -9,6 +9,16 @@ export enum ProfileTab {
     MY_PORTFOLIO = 'my-portfolio',
 }
 
+export enum PnlTab {
+    LP_STATS = 'lp-stats',
+    USDC_USERS_PNL = 'usdc',
+    WETH_USERS_PNL = 'weth',
+    THALES_USERS_PNL = 'thales',
+    USDC_TICKETS = 'usdc-tickets',
+    WETH_TICKETS = 'weth-tickets',
+    THALES_TICKETS = 'thales-tickets',
+}
+
 export enum OverdropTab {
     OVERDROP_HOME = 'overdrop-home',
     XP_CALCULATOR = 'xp-calculator',

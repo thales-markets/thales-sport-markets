@@ -41,6 +41,32 @@ const liquidityPoolDataContract: ContractData = {
         { inputs: [], name: 'acceptOwnership', outputs: [], stateMutability: 'nonpayable', type: 'function' },
         {
             inputs: [{ internalType: 'contract SportsAMMV2LiquidityPool', name: 'liquidityPool', type: 'address' }],
+            name: 'getCurrentRoundTickets',
+            outputs: [{ internalType: 'address[]', name: 'tickets', type: 'address[]' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'contract SportsAMMV2LiquidityPool', name: 'liquidityPool', type: 'address' }],
+            name: 'getCurrentRoundTicketsData',
+            outputs: [
+                {
+                    components: [
+                        { internalType: 'uint256', name: 'totalTickets', type: 'uint256' },
+                        { internalType: 'uint256', name: 'numOfClosedTickets', type: 'uint256' },
+                        { internalType: 'uint256', name: 'numOfPendingTickets', type: 'uint256' },
+                        { internalType: 'address[]', name: 'pendingTickets', type: 'address[]' },
+                    ],
+                    internalType: 'struct SportsAMMV2LiquidityPoolData.RoundTicketsData',
+                    name: '',
+                    type: 'tuple',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'contract SportsAMMV2LiquidityPool', name: 'liquidityPool', type: 'address' }],
             name: 'getLiquidityPoolData',
             outputs: [
                 {
@@ -65,6 +91,16 @@ const liquidityPoolDataContract: ContractData = {
                     type: 'tuple',
                 },
             ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                { internalType: 'contract SportsAMMV2LiquidityPool', name: 'liquidityPool', type: 'address' },
+                { internalType: 'uint256', name: 'round', type: 'uint256' },
+            ],
+            name: 'getRoundTickets',
+            outputs: [{ internalType: 'address[]', name: 'tickets', type: 'address[]' }],
             stateMutability: 'view',
             type: 'function',
         },

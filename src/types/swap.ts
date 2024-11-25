@@ -8,4 +8,5 @@ export type SwapParams = {
     slippage: number; // Maximum acceptable slippage percentage for the swap (e.g., 1 for 1%)
     disableEstimate: boolean; // Set to true to disable estimation of swap details
     allowPartialFill: boolean; // Set to true to allow partial filling of the swap order
+    referrer?: string; // Referrer's address
 };

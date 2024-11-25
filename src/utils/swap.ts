@@ -13,6 +13,8 @@ import { estimateGas } from 'viem/actions';
 import multipleCollateralContract from './contracts/multipleCollateralContract';
 import { delay } from './timer';
 
+const REFERRER_ADDRESS = '0x1777C6d588fd931751762836811529c0073D6376';
+
 export const getSwapParams = (
     networkId: SupportedNetwork,
     walletAddress: Address,
@@ -137,7 +139,7 @@ export const buildTxForSwap = async (
     networkId: SupportedNetwork,
     swapParams: SwapParams
 ): Promise<{ dstAmount: BigNumberish; tx: string }> => {
-    const url = apiRequestUrl(networkId, '/swap', swapParams);
+    const url = apiRequestUrl(networkId, '/swap', { ...swapParams, referrer: REFERRER_ADDRESS });
 
     try {
         let response = await fetch(url);
