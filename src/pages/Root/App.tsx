@@ -49,6 +49,8 @@ const App = () => {
         dispatch(setAppReady());
     }, [dispatch]);
 
+    console.log('App');
+
     useEffect(() => {
         if (window.ethereum && window.ethereum.on) {
             window.ethereum.on('chainChanged', (chainIdParam: string) => {
