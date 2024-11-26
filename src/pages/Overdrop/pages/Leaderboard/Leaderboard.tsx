@@ -1,17 +1,15 @@
-import PaginationWrapper from 'components/PaginationWrapper';
 import SPAAnchor from 'components/SPAAnchor';
 import Table from 'components/Table';
 import { TableCell, TableRow, TableRowMobile } from 'components/Table/Table';
 import { t } from 'i18next';
 import SearchField from 'pages/Profile/components/SearchField';
 import useOverdropLeaderboardQuery from 'queries/overdrop/useOverdropLeaderboardQuery';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
-import { FlexDiv } from 'styles/common';
 import { formatCurrency, getEtherscanAddressLink, truncateAddress } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
 import biconomyConnector from 'utils/biconomyWallet';
@@ -44,16 +42,7 @@ const Leaderboard: React.FC = () => {
 
     const theme: ThemeInterface = useTheme();
 
-    const [page, setPage] = useState(0);
-    const handleChangePage = (_event: unknown, newPage: number) => {
-        setPage(newPage);
-    };
     const [searchText, setSearchText] = useState<string>('');
-    const [rowsPerPage, setRowsPerPage] = useState(20);
-    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setRowsPerPage(Number(event.target.value));
-        setPage(0);
-    };
 
     const leaderboardQuery = useOverdropLeaderboardQuery({ enabled: isAppReady });
 
@@ -69,8 +58,6 @@ const Leaderboard: React.FC = () => {
         () => leaderboard.filter((row) => row.address.toLowerCase().includes(searchText.toLowerCase())),
         [leaderboard, searchText]
     );
-
-    useEffect(() => setPage(0), [leaderboard.length]);
 
     const stickyRow = useMemo(() => {
         const data = leaderboard.find((row) => row.address.toLowerCase() == walletAddress?.toLowerCase());
@@ -275,24 +262,10 @@ const Leaderboard: React.FC = () => {
                         },
                     ],
                 }}
-                rowsPerPage={rowsPerPage}
                 isLoading={leaderboardQuery.isLoading}
                 data={leaderboardFiltered}
                 noResultsMessage={t('market.table.no-results')}
             ></Table>
-            {!leaderboardQuery.isLoading && leaderboard.length > 0 && (
-                <FlexDiv>
-                    <PaginationWrapper
-                        rowsPerPageOptions={[10, 20, 50, 100]}
-                        count={leaderboardFiltered.length}
-                        labelRowsPerPage={t(`common.pagination.rows-per-page`)}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
-                </FlexDiv>
-            )}
         </TableContainer>
     );
 };
