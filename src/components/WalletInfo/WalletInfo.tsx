@@ -205,7 +205,7 @@ const Wrapper = styled.div<{ displayPadding?: boolean }>`
     align-items: center;
     padding-left: ${(props) => (props.displayPadding ? '10px' : '')};
     & > div {
-        flex: 0.4;
+        flex: 0.6;
     }
     & > div:last-child {
         flex: 0.2;
