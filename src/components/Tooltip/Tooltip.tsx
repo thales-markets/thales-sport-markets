@@ -18,7 +18,9 @@ const Tooltip: React.FC<TooltipProps> = ({ overlay, children, customIconStyling 
                     <Content>{overlay}</Content>
                 </Container>
             }
+            overlayInnerStyle={{ padding: 0 }}
             placement="top"
+            overlayStyle={{ borderRadius: '5px' }}
         >
             {children ? (children as any) : <InfoIcon style={customIconStyling} />}
         </ReactTooltip>
@@ -28,13 +30,13 @@ const Tooltip: React.FC<TooltipProps> = ({ overlay, children, customIconStyling 
 const Container = styled.div`
     background: ${(props) => props.theme.borderColor.secondary};
     border-width: 1px;
-    border-radius: 2px;
+    border-radius: 5px;
 `;
 
 const Content = styled.div`
-    background: ${(props) => props.theme.background.primary};
-    border-radius: 2px;
-    color: ${(props) => props.theme.textColor.secondary};
+    background: ${(props) => props.theme.background.senary};
+    border-radius: 5px;
+    color: ${(props) => props.theme.textColor.primary};
     font-weight: 700;
     padding: 10px;
 `;
@@ -50,7 +52,7 @@ const InfoIcon = styled.i`
     color: ${(props) => props.theme.icon.background.secondary};
     &:before {
         font-family: OvertimeIconsV2 !important;
-        content: '\\011C';
+        content: '\\011B';
     }
     @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         font-size: 15px;
