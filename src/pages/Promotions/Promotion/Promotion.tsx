@@ -7,9 +7,7 @@ import DOMPurify from 'dompurify';
 import { usePromotionsQuery } from 'queries/promotions/usePromotionsQuery';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
-import { switchToNetworkId } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivColumn } from 'styles/common';
 import { changeNetwork } from 'thales-utils';
@@ -20,7 +18,6 @@ import { useSwitchChain } from 'wagmi';
 
 const Promotion: React.FC = () => {
     const theme: ThemeInterface = useTheme();
-    const dispatch = useDispatch();
 
     const history = useHistory();
     const { t } = useTranslation();
@@ -87,11 +84,6 @@ const Promotion: React.FC = () => {
                                         switchChain?.({ chainId: network.id as SupportedNetwork });
                                         // Trigger App.js init
                                         // do not use updateNetworkSettings(networkId) as it will trigger queries before provider in App.js is initialized
-                                        dispatch(
-                                            switchToNetworkId({
-                                                networkId: Number(network.id) as SupportedNetwork,
-                                            })
-                                        );
                                     });
                                 }
                             }}

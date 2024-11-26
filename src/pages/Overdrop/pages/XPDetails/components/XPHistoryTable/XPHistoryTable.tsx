@@ -3,14 +3,12 @@ import ViewEtherscanLink from 'components/ViewEtherscanLink';
 import { t } from 'i18next';
 import useUserXPHistoryQuery from 'queries/overdrop/useUserXPHistoryQuery';
 import React, { useMemo } from 'react';
-import { useSelector } from 'react-redux';
-import { getWalletAddress } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
 import { formatTxTimestamp } from 'thales-utils';
 import { formatPoints } from 'utils/overdrop';
+import { useAccount } from 'wagmi';
 
 const XPHistoryTable: React.FC = () => {
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const walletAddress = useAccount()?.address || '';
 
     const userXPHistoryQuery = useUserXPHistoryQuery(walletAddress);
 
