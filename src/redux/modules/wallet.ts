@@ -5,7 +5,6 @@ const sliceName = 'wallet';
 
 type WalletSliceState = {
     isBiconomy?: boolean;
-    isAA: boolean;
     connectedViaParticle: boolean;
     walletConnectModal: {
         visibility: boolean;
@@ -14,7 +13,6 @@ type WalletSliceState = {
 };
 
 const initialState: WalletSliceState = {
-    isAA: false,
     isBiconomy: false,
     connectedViaParticle: false,
     walletConnectModal: {
@@ -41,7 +39,6 @@ const walletDetailsSlice = createSlice({
 });
 
 const getWalletState = (state: RootState) => state[sliceName];
-export const getIsAA = (state: RootState) => getWalletState(state).isAA;
 export const getIsBiconomy = (state: RootState) => getWalletState(state).isBiconomy;
 export const getIsConnectedViaParticle = (state: RootState) => getWalletState(state).connectedViaParticle;
 export const getWalletConnectModalVisibility = (state: RootState) =>
