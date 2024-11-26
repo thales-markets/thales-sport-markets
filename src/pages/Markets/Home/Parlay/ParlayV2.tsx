@@ -9,7 +9,7 @@ import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { getIsAppReady, getIsMobile } from 'redux/modules/app';
+import { getIsMobile } from 'redux/modules/app';
 import { getSportFilter } from 'redux/modules/market';
 import { getHasTicketError, getTicket, removeAll, resetTicketError, setMaxTicketSize } from 'redux/modules/ticket';
 import styled from 'styled-components';
@@ -28,7 +28,6 @@ type ParlayProps = {
 const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
-    const isAppReady = useSelector(getIsAppReady);
     const isMobile = useSelector(getIsMobile);
 
     const networkId = useChainId();
@@ -49,12 +48,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
 
     const previousTicketOdds = useRef<{ position: number; odd: number; gameId: string; proof: string[] }[]>([]);
 
-    const sportsAmmDataQuery = useSportsAmmDataQuery(
-        { networkId, client },
-        {
-            enabled: isAppReady,
-        }
-    );
+    const sportsAmmDataQuery = useSportsAmmDataQuery({ networkId, client });
 
     const sportMarketsQuery = useSportsMarketsV2Query(
         StatusFilter.OPEN_MARKETS,
@@ -72,17 +66,11 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
         { networkId, client },
         ticket,
         {
-            enabled: isAppReady && !!ticket.length,
+            enabled: !!ticket.length,
         }
     );
 
-    const liveSportMarketsQuery = useLiveSportsMarketsQuery(
-        isLiveFilterSelected,
-        { networkId, client },
-        {
-            enabled: isAppReady,
-        }
-    );
+    const liveSportMarketsQuery = useLiveSportsMarketsQuery(isLiveFilterSelected, { networkId, client });
 
     useEffect(() => {
         if (sportsAmmDataQuery.isSuccess && sportsAmmDataQuery.data) {

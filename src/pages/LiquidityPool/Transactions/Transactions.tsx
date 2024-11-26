@@ -5,7 +5,6 @@ import useLiquidityPoolUserTransactionsQuery from 'queries/liquidityPool/useLiqu
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { getIsAppReady } from 'redux/modules/app';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
@@ -24,7 +23,6 @@ type TransactionsProps = {
 
 const Transactions: React.FC<TransactionsProps> = ({ currentRound, liquidityPoolAddress, collateral }) => {
     const { t } = useTranslation();
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
     const networkId = useChainId();
@@ -66,14 +64,10 @@ const Transactions: React.FC<TransactionsProps> = ({ currentRound, liquidityPool
         });
     }
 
-    const liquidityPoolUserTransactionsQuery = useLiquidityPoolUserTransactionsQuery(
-        liquidityPoolAddress,
-        collateral,
-        { networkId, client },
-        {
-            enabled: isAppReady,
-        }
-    );
+    const liquidityPoolUserTransactionsQuery = useLiquidityPoolUserTransactionsQuery(liquidityPoolAddress, collateral, {
+        networkId,
+        client,
+    });
 
     useEffect(() => setRound(currentRound), [currentRound]);
 

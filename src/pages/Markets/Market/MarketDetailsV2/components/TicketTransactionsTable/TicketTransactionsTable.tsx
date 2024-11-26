@@ -10,7 +10,7 @@ import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuer
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { getIsAppReady, getIsMobile } from 'redux/modules/app';
+import { getIsMobile } from 'redux/modules/app';
 import { getOddsType } from 'redux/modules/ui';
 import { useTheme } from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
@@ -84,17 +84,10 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
     const networkId = useChainId();
     const client = useClient();
 
-    const isAppReady = useSelector(getIsAppReady);
-
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
     const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps | undefined>(undefined);
 
-    const exchangeRatesQuery = useExchangeRatesQuery(
-        { networkId, client },
-        {
-            enabled: isAppReady,
-        }
-    );
+    const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
     const exchangeRates: Rates | undefined =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : undefined;
 

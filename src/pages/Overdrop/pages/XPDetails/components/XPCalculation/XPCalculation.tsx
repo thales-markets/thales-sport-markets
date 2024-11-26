@@ -3,7 +3,7 @@ import useUserMultipliersQuery from 'queries/overdrop/useUserMultipliersQuery';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { getIsAppReady, getIsMobile } from 'redux/modules/app';
+import { getIsMobile } from 'redux/modules/app';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
@@ -15,7 +15,6 @@ import { useAccount } from 'wagmi';
 const XPCalculation: React.FC = () => {
     const { t } = useTranslation();
 
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
     const { address, isConnected } = useAccount();
@@ -24,7 +23,7 @@ const XPCalculation: React.FC = () => {
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const userMultipliersQuery = useUserMultipliersQuery(walletAddress, {
-        enabled: isAppReady && isConnected,
+        enabled: isConnected,
     });
 
     const userMultipliers = useMemo(() => {

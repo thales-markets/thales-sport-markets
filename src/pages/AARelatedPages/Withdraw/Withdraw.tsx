@@ -10,7 +10,6 @@ import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuer
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getIsAppReady } from 'redux/modules/app';
 import { getIsBiconomy, getIsConnectedViaParticle } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
@@ -52,7 +51,6 @@ const Withdraw: React.FC = () => {
     const { address, isConnected } = useAccount();
     const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
     const [selectedToken, setSelectedToken] = useState<number>(0);
     const [withdrawalWalletAddress, setWithdrawalWalletAddress] = useState<string>('');
@@ -77,7 +75,7 @@ const Withdraw: React.FC = () => {
         walletAddress,
         { networkId, client },
         {
-            enabled: isAppReady && isConnected,
+            enabled: isConnected,
         }
     );
 
@@ -88,12 +86,7 @@ const Withdraw: React.FC = () => {
         return 0;
     }, [multipleCollateralBalances.data, multipleCollateralBalances.isSuccess, networkId, selectedToken]);
 
-    const exchangeRatesQuery = useExchangeRatesQuery(
-        { networkId, client },
-        {
-            enabled: isAppReady,
-        }
-    );
+    const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
     const exchangeRates: Rates | null =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 

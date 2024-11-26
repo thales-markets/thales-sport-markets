@@ -21,7 +21,7 @@ import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { getIsAppReady, getIsMobile } from 'redux/modules/app';
+import { getIsMobile } from 'redux/modules/app';
 import {
     getDatePeriodFilter,
     getIsMarketSelected,
@@ -76,7 +76,6 @@ const Home: React.FC = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const theme: ThemeInterface = useTheme();
-    const isAppReady = useSelector(getIsAppReady);
 
     const networkId = useChainId();
     const client = useClient();
@@ -197,21 +196,11 @@ const Home: React.FC = () => {
         []
     );
 
-    const sportMarketsQueryNew = useSportsMarketsV2Query(statusFilter, false, { networkId, client }, undefined, {
-        enabled: isAppReady,
-    });
+    const sportMarketsQueryNew = useSportsMarketsV2Query(statusFilter, false, { networkId, client }, undefined);
 
-    const liveSportMarketsQuery = useLiveSportsMarketsQuery(
-        sportFilter === SportFilter.Live,
-        { networkId, client },
-        {
-            enabled: isAppReady,
-        }
-    );
+    const liveSportMarketsQuery = useLiveSportsMarketsQuery(sportFilter === SportFilter.Live, { networkId, client });
 
-    const gameMultipliersQuery = useGameMultipliersQuery({
-        enabled: isAppReady,
-    });
+    const gameMultipliersQuery = useGameMultipliersQuery();
 
     const finalMarkets = useMemo(() => {
         const allMarkets: MarketsCache =
@@ -351,10 +340,7 @@ const Home: React.FC = () => {
         StatusFilter.OPEN_MARKETS,
         false,
         { networkId, client },
-        undefined,
-        {
-            enabled: isAppReady,
-        }
+        undefined
     );
 
     const openSportMarkets = useMemo(() => {

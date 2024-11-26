@@ -6,7 +6,7 @@ import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollate
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { getIsAppReady, getIsMobile } from 'redux/modules/app';
+import { getIsMobile } from 'redux/modules/app';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
@@ -27,7 +27,6 @@ const MyPortfolio: React.FC = () => {
     const { address, isConnected } = useAccount();
     const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const language = i18n.language;
@@ -36,16 +35,11 @@ const MyPortfolio: React.FC = () => {
         walletAddress,
         { networkId, client },
         {
-            enabled: isAppReady && isConnected,
+            enabled: isConnected,
         }
     );
 
-    const exchangeRatesQuery = useExchangeRatesQuery(
-        { networkId, client },
-        {
-            enabled: isAppReady,
-        }
-    );
+    const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
 
     const exchangeRates: Rates | null =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;

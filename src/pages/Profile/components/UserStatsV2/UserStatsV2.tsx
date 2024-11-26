@@ -17,7 +17,6 @@ import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } fr
 import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getIsAppReady } from 'redux/modules/app';
 import { setStakingModalMuteEnd } from 'redux/modules/ui';
 import { getIsBiconomy, getIsConnectedViaParticle } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -71,7 +70,6 @@ const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
     const theme: ThemeInterface = useTheme();
 
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
-    const isAppReady = useSelector(getIsAppReady);
 
     const isParticle = useSelector(getIsConnectedViaParticle);
 
@@ -129,12 +127,7 @@ const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
 
     const isFreeBetExists = freeBetBalances && !!Object.values(freeBetBalances).find((balance) => !!balance);
 
-    const exchangeRatesQuery = useExchangeRatesQuery(
-        { networkId, client },
-        {
-            enabled: isAppReady,
-        }
-    );
+    const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
     const exchangeRates: Rates | null =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 

@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useSwipeable } from 'react-swipeable';
-import { getIsAppReady, getIsMobile } from 'redux/modules/app';
+import { getIsMobile } from 'redux/modules/app';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
@@ -22,7 +22,6 @@ import SmallBadge from '../SmallBadge';
 const BadgeOverview: React.FC = () => {
     const { t } = useTranslation();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
     const { address, isConnected } = useAccount();
@@ -36,10 +35,10 @@ const BadgeOverview: React.FC = () => {
     }, [isMobile]);
 
     const userDataQuery = useUserDataQuery(walletAddress, {
-        enabled: isAppReady && isConnected,
+        enabled: isConnected,
     });
 
-    const priceQuery = useOpAndArbPriceQuery({ enabled: isAppReady });
+    const priceQuery = useOpAndArbPriceQuery();
 
     const exchangeRates = priceQuery.isSuccess && priceQuery.data ? priceQuery.data : null;
 

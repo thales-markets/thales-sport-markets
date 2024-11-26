@@ -6,7 +6,6 @@ import useUserMultipliersQuery from 'queries/overdrop/useUserMultipliersQuery';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { getIsAppReady } from 'redux/modules/app';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
@@ -26,18 +25,17 @@ const dateTimeTranslationMap = {
 const DailyRecap: React.FC = () => {
     const { t } = useTranslation();
 
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
     const { address, isConnected } = useAccount();
     const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
     const userMultipliersQuery = useUserMultipliersQuery(walletAddress, {
-        enabled: isAppReady && isConnected,
+        enabled: isConnected,
     });
 
     const userDataQuery = useUserDataQuery(walletAddress, {
-        enabled: isAppReady && isConnected,
+        enabled: isConnected,
     });
 
     const userMultipliers =

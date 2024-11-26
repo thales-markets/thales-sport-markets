@@ -6,7 +6,7 @@ import SearchField from 'pages/Profile/components/SearchField';
 import useOverdropLeaderboardQuery from 'queries/overdrop/useOverdropLeaderboardQuery';
 import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getIsAppReady, getIsMobile } from 'redux/modules/app';
+import { getIsMobile } from 'redux/modules/app';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
@@ -31,7 +31,6 @@ import {
 } from './styled-components';
 
 const Leaderboard: React.FC = () => {
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isMobile = useSelector(getIsMobile);
 
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
@@ -44,7 +43,7 @@ const Leaderboard: React.FC = () => {
 
     const [searchText, setSearchText] = useState<string>('');
 
-    const leaderboardQuery = useOverdropLeaderboardQuery({ enabled: isAppReady });
+    const leaderboardQuery = useOverdropLeaderboardQuery();
 
     const leaderboard = useMemo(
         () =>

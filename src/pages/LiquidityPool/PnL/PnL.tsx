@@ -2,7 +2,6 @@ import { LiquidityPoolPnlType } from 'enums/liquidityPool';
 import useLiquidityPoolPnlsQuery from 'queries/liquidityPool/useLiquidityPoolPnlsQuery';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 import {
     Bar,
     BarChart,
@@ -15,8 +14,6 @@ import {
     XAxis,
     YAxis,
 } from 'recharts';
-import { getIsAppReady } from 'redux/modules/app';
-import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { Colors, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { formatPercentageWithSign } from 'thales-utils';
@@ -33,7 +30,6 @@ type PnlProps = {
 const PnL: React.FC<PnlProps> = ({ lifetimePnl, type, liquidityPoolAddress }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
 
     const networkId = useChainId();
     const client = useClient();
@@ -46,7 +42,6 @@ const PnL: React.FC<PnlProps> = ({ lifetimePnl, type, liquidityPoolAddress }) =>
         { networkId, client },
         {
             enabled:
-                isAppReady &&
                 liquidityPoolAddress !== '0xE59206b08cC96Da0818522C75eE3Fd4EBB7c0A47' &&
                 liquidityPoolAddress !== '0x9733AB157f5A89f0AD7460d08F869956aE2018dA',
         }

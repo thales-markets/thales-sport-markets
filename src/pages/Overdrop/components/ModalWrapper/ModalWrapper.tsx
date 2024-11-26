@@ -3,7 +3,6 @@ import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
 import useUserMultipliersQuery from 'queries/overdrop/useUserMultipliersQuery';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getIsAppReady } from 'redux/modules/app';
 import {
     getOverdropPreventShowingModal,
     getOverdropUIState,
@@ -25,7 +24,6 @@ import WelcomeModal from '../WelcomeModal';
 const ModalWrapper: React.FC = () => {
     const dispatch = useDispatch();
 
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
     const { address, isConnected } = useAccount();
@@ -47,11 +45,11 @@ const ModalWrapper: React.FC = () => {
     const [showDailyMultiplierModal, setShowDailyMultiplierModal] = useState<boolean>(false);
 
     const userDataQuery = useUserDataQuery(walletAddress, {
-        enabled: isAppReady && isConnected,
+        enabled: isConnected,
     });
 
     const userMultipliersQuery = useUserMultipliersQuery(walletAddress, {
-        enabled: isAppReady && isConnected,
+        enabled: isConnected,
     });
 
     const userData: OverdropUserData | undefined =

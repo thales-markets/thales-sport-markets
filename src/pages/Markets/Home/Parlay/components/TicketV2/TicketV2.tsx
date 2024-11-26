@@ -47,7 +47,6 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getIsAppReady } from 'redux/modules/app';
 import {
     getIsFreeBetDisabledByUser,
     getLiveBetSlippage,
@@ -202,7 +201,6 @@ const Ticket: React.FC<TicketProps> = ({
         return markets?.[0]?.live;
     }, [markets]);
 
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const isAA = useSelector((state: RootState) => getIsConnectedViaParticle(state));
 
@@ -255,7 +253,7 @@ const Ticket: React.FC<TicketProps> = ({
     const [buyStep, setBuyStep] = useState(BuyTicketStep.APPROVE_SWAP);
     const [openBuyStepsModal, setOpenBuyStepsModal] = useState(false);
 
-    const userMultipliersQuery = useUserMultipliersQuery(walletAddress, { enabled: isAppReady && isConnected });
+    const userMultipliersQuery = useUserMultipliersQuery(walletAddress, { enabled: isConnected });
 
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
     const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
@@ -345,12 +343,7 @@ const Ticket: React.FC<TicketProps> = ({
         ];
     }, [swapToThales, userMultipliersQuery.data, userMultipliersQuery.isSuccess, markets, isThales]);
 
-    const ammContractsPaused = useAMMContractsPausedQuery(
-        { networkId, client },
-        {
-            enabled: isAppReady,
-        }
-    );
+    const ammContractsPaused = useAMMContractsPausedQuery({ networkId, client });
 
     const ammContractsStatusData = useMemo(() => {
         if (ammContractsPaused.data && ammContractsPaused.isSuccess) {
@@ -364,17 +357,12 @@ const Ticket: React.FC<TicketProps> = ({
         }
     }, [ammContractsStatusData]);
 
-    const sportsAmmDataQuery = useSportsAmmDataQuery(
-        { networkId, client },
-        {
-            enabled: isAppReady,
-        }
-    );
+    const sportsAmmDataQuery = useSportsAmmDataQuery({ networkId, client });
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(
         walletAddress,
         { networkId, client },
         {
-            enabled: isAppReady && isConnected,
+            enabled: isConnected,
         }
     );
 
@@ -382,7 +370,7 @@ const Ticket: React.FC<TicketProps> = ({
         walletAddress,
         { networkId, client },
         {
-            enabled: isAppReady && isConnected,
+            enabled: isConnected,
         }
     );
 
@@ -425,17 +413,10 @@ const Ticket: React.FC<TicketProps> = ({
         selectedCollateral,
     ]);
 
-    const exchangeRatesQuery = useExchangeRatesQuery(
-        { networkId, client },
-        {
-            enabled: isAppReady,
-        }
-    );
+    const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
     const exchangeRates = exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
-    const coingeckoRatesQuery = useCoingeckoRatesQuery({
-        enabled: isAppReady,
-    });
+    const coingeckoRatesQuery = useCoingeckoRatesQuery();
     const coingeckoThalesMinRecive = useMemo(() => {
         const coingeckoThalesAmount =
             coingeckoRatesQuery.isSuccess && coingeckoRatesQuery.data[CRYPTO_CURRENCY_MAP.THALES as Coins]
@@ -450,12 +431,7 @@ const Ticket: React.FC<TicketProps> = ({
     const thalesContractCurrencyRate =
         exchangeRates && exchangeRates !== null ? exchangeRates[THALES_CONTRACT_RATE_KEY] : 1;
 
-    const liveTradingProcessorDataQuery = useLiveTradingProcessorDataQuery(
-        { networkId, client },
-        {
-            enabled: isAppReady,
-        }
-    );
+    const liveTradingProcessorDataQuery = useLiveTradingProcessorDataQuery({ networkId, client });
 
     const maxAllowedExecutionDelay = useMemo(
         () =>
@@ -466,7 +442,7 @@ const Ticket: React.FC<TicketProps> = ({
     );
 
     const userDataQuery = useUserDataQuery(walletAddress, {
-        enabled: isAppReady && isConnected,
+        enabled: isConnected,
     });
 
     const userData: OverdropUserData | undefined = useMemo(() => {
@@ -623,7 +599,7 @@ const Ticket: React.FC<TicketProps> = ({
         markets,
         { networkId, client },
         {
-            enabled: isAppReady && !noProofs,
+            enabled: !noProofs,
         }
     );
 
@@ -651,9 +627,7 @@ const Ticket: React.FC<TicketProps> = ({
         isFreeBetActive,
     ]);
 
-    const gameMultipliersQuery = useGameMultipliersQuery({
-        enabled: isAppReady,
-    });
+    const gameMultipliersQuery = useGameMultipliersQuery();
 
     const overdropGameMultipliersInThisTicket = useMemo(() => {
         const gameMultipliers =

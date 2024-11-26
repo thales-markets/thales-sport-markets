@@ -4,7 +4,6 @@ import useProfileLiquidityPoolUserTransactions from 'queries/wallet/useProfileLi
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { getIsAppReady } from 'redux/modules/app';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
@@ -19,7 +18,6 @@ const TransactionsTable: React.FC = () => {
     const theme: ThemeInterface = useTheme();
 
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
 
     const networkId = useChainId();
     const client = useClient();
@@ -31,7 +29,7 @@ const TransactionsTable: React.FC = () => {
         walletAddress,
         { networkId, client },
         {
-            enabled: isConnected && isAppReady,
+            enabled: isConnected,
         }
     );
 

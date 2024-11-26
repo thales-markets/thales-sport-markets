@@ -4,7 +4,7 @@ import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { getIsAppReady, getIsMobile } from 'redux/modules/app';
+import { getIsMobile } from 'redux/modules/app';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
@@ -23,7 +23,6 @@ type XPOverviewProps = {
 const XPOverview: React.FC<XPOverviewProps> = ({ setSelectedTab }) => {
     const { t } = useTranslation();
 
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
     const { address, isConnected } = useAccount();
@@ -32,7 +31,7 @@ const XPOverview: React.FC<XPOverviewProps> = ({ setSelectedTab }) => {
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const userDataQuery = useUserDataQuery(walletAddress, {
-        enabled: isAppReady && isConnected,
+        enabled: isConnected,
     });
 
     const userData: OverdropUserData | undefined = useMemo(() => {

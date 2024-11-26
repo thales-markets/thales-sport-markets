@@ -12,7 +12,6 @@ import { Trans, useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getIsAppReady } from 'redux/modules/app';
 import { setStakingModalMuteEnd } from 'redux/modules/ui';
 import { getIsBiconomy, getIsConnectedViaParticle } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -56,7 +55,6 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
     const theme: ThemeInterface = useTheme();
     const { openConnectModal } = useConnectModal();
 
-    const isAppReady = useSelector(getIsAppReady);
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
     const networkId = useChainId();
@@ -79,7 +77,7 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
         walletAddress,
         { networkId, client },
         {
-            enabled: isAppReady && isConnected,
+            enabled: isConnected,
         }
     );
 
@@ -94,7 +92,7 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
         walletAddress,
         { networkId, client },
         {
-            enabled: isAppReady && isConnected,
+            enabled: isConnected,
         }
     );
 

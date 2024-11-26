@@ -7,11 +7,9 @@ import DOMPurify from 'dompurify';
 import { usePromotionsQuery } from 'queries/promotions/usePromotionsQuery';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
-import { getIsAppReady } from 'redux/modules/app';
 import { switchToNetworkId } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivColumn } from 'styles/common';
 import { changeNetwork } from 'thales-utils';
@@ -32,13 +30,9 @@ const Promotion: React.FC = () => {
 
     const promotionId = params?.promotionId;
 
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-
     const [branchName] = useQueryParam('branch-name', '');
 
-    const promotionsQuery = usePromotionsQuery(branchName, {
-        enabled: isAppReady,
-    });
+    const promotionsQuery = usePromotionsQuery(branchName);
 
     const promotions = useMemo(() => {
         if (promotionsQuery.isSuccess && promotionsQuery.data) return promotionsQuery.data;

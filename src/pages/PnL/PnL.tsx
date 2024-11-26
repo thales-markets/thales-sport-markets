@@ -3,8 +3,6 @@ import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 import { PnlTab } from 'enums/ui';
 import useLiquidityPoolDataQuery from 'queries/liquidityPool/useLiquidityPoolDataQuery';
 import React, { useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { getIsAppReady } from 'redux/modules/app';
 import { LiquidityPoolData } from 'types/liquidityPool';
 import useQueryParam from 'utils/useQueryParams';
 import { useChainId, useClient } from 'wagmi';
@@ -14,8 +12,6 @@ import { Container } from './styled-components';
 const PnL: React.FC = () => {
     const networkId = useChainId();
     const client = useClient();
-
-    const isAppReady = useSelector(getIsAppReady);
 
     const [selectedTabParam, setSelectedTabParam] = useQueryParam('selected-tab', PnlTab.LP_STATS);
     const [selectedTab, setSelectedTab] = useState<PnlTab>(PnlTab.LP_STATS);
@@ -31,7 +27,7 @@ const PnL: React.FC = () => {
         'USDC',
         { networkId, client },
         {
-            enabled: isAppReady && liquidityPoolAddress !== '',
+            enabled: liquidityPoolAddress !== '',
         }
     );
 

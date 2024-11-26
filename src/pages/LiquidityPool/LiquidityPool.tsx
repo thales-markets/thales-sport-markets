@@ -24,7 +24,6 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { getIsAppReady } from 'redux/modules/app';
 import { getIsBiconomy, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
@@ -98,7 +97,6 @@ const LiquidityPool: React.FC = () => {
     const location = useLocation();
     const theme: ThemeInterface = useTheme();
 
-    const isAppReady = useSelector(getIsAppReady);
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
     const networkId = useChainId();
@@ -142,16 +140,11 @@ const LiquidityPool: React.FC = () => {
         walletAddress,
         { networkId, client },
         {
-            enabled: isAppReady && isConnected,
+            enabled: isConnected,
         }
     );
 
-    const exchangeRatesQuery = useExchangeRatesQuery(
-        { networkId, client },
-        {
-            enabled: isAppReady,
-        }
-    );
+    const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
     const exchangeRates: Rates | null =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
@@ -160,7 +153,7 @@ const LiquidityPool: React.FC = () => {
         collateral,
         { networkId, client },
         {
-            enabled: isAppReady && liquidityPoolAddress !== undefined,
+            enabled: liquidityPoolAddress !== undefined,
         }
     );
 
@@ -170,7 +163,7 @@ const LiquidityPool: React.FC = () => {
         walletAddress,
         { networkId, client },
         {
-            enabled: isAppReady && isConnected && liquidityPoolAddress !== undefined,
+            enabled: isConnected && liquidityPoolAddress !== undefined,
         }
     );
 

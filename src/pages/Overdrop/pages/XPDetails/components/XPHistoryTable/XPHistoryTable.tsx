@@ -4,19 +4,15 @@ import { t } from 'i18next';
 import useUserXPHistoryQuery from 'queries/overdrop/useUserXPHistoryQuery';
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { getIsAppReady } from 'redux/modules/app';
 import { getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { formatTxTimestamp } from 'thales-utils';
 import { formatPoints } from 'utils/overdrop';
 
 const XPHistoryTable: React.FC = () => {
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
 
-    const userXPHistoryQuery = useUserXPHistoryQuery(walletAddress, {
-        enabled: !!isAppReady,
-    });
+    const userXPHistoryQuery = useUserXPHistoryQuery(walletAddress);
 
     const userXPHistory = useMemo(() => {
         if (userXPHistoryQuery?.isSuccess && userXPHistoryQuery?.data) {

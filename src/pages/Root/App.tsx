@@ -22,7 +22,7 @@ import Ticket from 'pages/Ticket';
 import { Suspense, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Redirect, Route, Router, Switch } from 'react-router-dom';
-import { setAppReady, setMobileState } from 'redux/modules/app';
+import { setMobileState } from 'redux/modules/app';
 import { setIsBiconomy } from 'redux/modules/wallet';
 import { SupportedNetwork } from 'types/network';
 import biconomyConnector from 'utils/biconomyWallet';
@@ -45,10 +45,6 @@ const App = () => {
     const { connectionStatus } = useParticleConnect();
 
     queryConnector.setQueryClient();
-
-    useEffect(() => {
-        dispatch(setAppReady());
-    }, [dispatch]);
 
     useEffect(() => {
         if (window.ethereum && window.ethereum.on) {

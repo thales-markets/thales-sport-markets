@@ -2,10 +2,7 @@ import MyTicket from 'components/ShareTicketModalV2/components/MyTicket';
 import SimpleLoader from 'components/SimpleLoader';
 import { useTicketQuery } from 'queries/markets/useTicketQuery';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { getIsAppReady } from 'redux/modules/app';
-import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 import { Ticket as TicketData } from 'types/markets';
@@ -13,8 +10,6 @@ import { getTicketMarketOdd } from 'utils/tickets';
 import { useChainId, useClient } from 'wagmi';
 
 const Ticket: React.FC = () => {
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-
     const [lastValidTicket, setLastValidTicket] = useState<TicketData | undefined>(undefined);
 
     const networkId = useChainId();
@@ -23,13 +18,7 @@ const Ticket: React.FC = () => {
     const params = useParams() as { ticketAddress: string };
     const ticketAddress = params && params.ticketAddress ? params.ticketAddress : '';
 
-    const ticketQuery = useTicketQuery(
-        ticketAddress,
-        { networkId, client },
-        {
-            enabled: isAppReady,
-        }
-    );
+    const ticketQuery = useTicketQuery(ticketAddress, { networkId, client });
 
     useEffect(() => {
         if (ticketQuery.isSuccess && ticketQuery.data) {

@@ -8,7 +8,6 @@ import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollate
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { getIsAppReady } from 'redux/modules/app';
 import { getIsFreeBetDisabledByUser, getTicketPayment, setPaymentSelectedCollateralIndex } from 'redux/modules/ticket';
 import { getIsBiconomy, getWalletConnectModalVisibility, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -25,7 +24,6 @@ const WalletInfo: React.FC = ({}) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
 
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
     const networkId = useChainId();
@@ -42,19 +40,14 @@ const WalletInfo: React.FC = ({}) => {
     const [isFreeBetInitialized, setIsFreeBetInitialized] = useState(false);
     const [freeBetBalance, setFreeBetBalance] = useState(0);
 
-    const exchangeRatesQuery = useExchangeRatesQuery(
-        { networkId, client },
-        {
-            enabled: isAppReady,
-        }
-    );
+    const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
     const exchangeRates = exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
     const multipleCollateralBalancesQuery = useMultipleCollateralBalanceQuery(
         walletAddress,
         { networkId, client },
         {
-            enabled: isAppReady && isConnected,
+            enabled: isConnected,
         }
     );
 
@@ -74,7 +67,7 @@ const WalletInfo: React.FC = ({}) => {
         walletAddress,
         { networkId, client },
         {
-            enabled: isAppReady && isConnected,
+            enabled: isConnected,
         }
     );
 

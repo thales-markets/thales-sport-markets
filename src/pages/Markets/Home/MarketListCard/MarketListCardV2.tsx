@@ -13,7 +13,7 @@ import useRiskManagementConfigQuery from 'queries/riskManagement/riskManagementC
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { getIsAppReady, getIsMobile } from 'redux/modules/app';
+import { getIsMobile } from 'redux/modules/app';
 import {
     getIsMarketSelected,
     getIsThreeWayView,
@@ -71,8 +71,6 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
 
-    const isAppReady = useSelector(getIsAppReady);
-
     const networkId = useChainId();
     const client = useClient();
 
@@ -88,7 +86,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
         RiskManagementConfig.LEAGUES,
         { networkId, client },
         {
-            enabled: isAppReady && !!market.live,
+            enabled: !!market.live,
         }
     );
 
@@ -221,9 +219,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
 
     const leagueTooltipKey = getLeagueTooltipKey(market.leagueId);
 
-    const gameMultipliersQuery = useGameMultipliersQuery({
-        enabled: isAppReady,
-    });
+    const gameMultipliersQuery = useGameMultipliersQuery();
 
     const overdropGameMultiplier = useMemo(() => {
         const gameMultipliers =
