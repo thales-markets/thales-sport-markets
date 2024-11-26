@@ -8,6 +8,7 @@ import { CollateralsBalance } from 'types/collateral';
 import { QueryConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
 import multipleCollateral from 'utils/contracts/multipleCollateralContract';
+import stakingThalesContract from 'utils/contracts/stakingThalesContract';
 import { Address, getContract } from 'viem';
 
 const useMultipleCollateralBalanceQuery = (
@@ -90,8 +91,8 @@ const useMultipleCollateralBalanceQuery = (
                         client: queryConfig.client,
                     }) as ViemContract,
                     sTHALES: getContract({
-                        abi: multipleCollateral.sTHALES.abi,
-                        address: multipleCollateral.sTHALES.addresses[queryConfig.networkId],
+                        abi: stakingThalesContract.abi,
+                        address: stakingThalesContract.addresses[queryConfig.networkId],
                         client: queryConfig.client,
                     }) as ViemContract,
                 };
