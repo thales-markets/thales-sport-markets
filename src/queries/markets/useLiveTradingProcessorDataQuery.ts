@@ -17,11 +17,11 @@ const useLiveTradingProcessorDataQuery = (
                 maxAllowedExecutionDelay: 10,
             };
 
-            const liveTradingProcessorContract = (await getContractInstance(
+            const liveTradingProcessorContract = getContractInstance(
                 ContractType.LIVE_TRADING_PROCESSOR,
                 networkConfig.client,
                 networkConfig.networkId
-            )) as ViemContract;
+            ) as ViemContract;
 
             if (liveTradingProcessorContract) {
                 const maxAllowedExecutionDelay = await liveTradingProcessorContract.read.maxAllowedExecutionDelay();

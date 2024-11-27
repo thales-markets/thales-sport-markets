@@ -17,7 +17,7 @@ const useFreeBetCollateralBalanceQuery = (
         queryKey: QUERY_KEYS.Wallet.FreeBetBalance(walletAddress, networkConfig.networkId),
         queryFn: async () => {
             try {
-                const freeBetHolderContract = await getContractInstance(
+                const freeBetHolderContract = getContractInstance(
                     ContractType.FREE_BET_HOLDER,
                     networkConfig.client,
                     networkConfig.networkId

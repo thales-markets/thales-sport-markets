@@ -136,17 +136,13 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
     }, [amount, selectedCollateralBalance, t]);
 
     const handleAllowance = async (approveAmount: bigint) => {
-        const multiCollateralWithSigner = await getContractInstance(
+        const multiCollateralWithSigner = getContractInstance(
             ContractType.MULTICOLLATERAL,
             walletClient.data,
             networkId,
             getCollateralIndex(networkId, selectedCollateral)
         );
-        const freeBetHolderContract = await getContractInstance(
-            ContractType.FREE_BET_HOLDER,
-            walletClient.data,
-            networkId
-        );
+        const freeBetHolderContract = getContractInstance(ContractType.FREE_BET_HOLDER, walletClient.data, networkId);
 
         const freeBetHolderContractAddress = freeBetHolderContract && freeBetHolderContract.address;
 
@@ -232,7 +228,7 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
     };
 
     const handleSubmit = async () => {
-        const contracts = await Promise.all([
+        const contracts = [
             getContractInstance(
                 ContractType.MULTICOLLATERAL,
                 walletClient.data,
@@ -240,7 +236,7 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
                 getCollateralIndex(networkId, selectedCollateral)
             ),
             getContractInstance(ContractType.FREE_BET_HOLDER, walletClient.data, networkId),
-        ]);
+        ];
         const [multipleCollateralWithSigner, freeBetHolderContractWithSigner] = contracts;
 
         if (
@@ -327,7 +323,7 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
 
     useEffect(() => {
         const handleAllowanceCheck = async () => {
-            const multiCollateralContractWithSigner = await getContractInstance(
+            const multiCollateralContractWithSigner = getContractInstance(
                 ContractType.MULTICOLLATERAL,
                 walletClient.data,
                 networkId,

@@ -24,11 +24,11 @@ const useTicketLiquidityQuery = (
         ),
         queryFn: async () => {
             try {
-                const sportsAMMV2RiskManagerContract = (await getContractInstance(
+                const sportsAMMV2RiskManagerContract = getContractInstance(
                     ContractType.SPORTS_AMM_V2_RISK_MANAGER,
                     networkConfig.client,
                     networkConfig.networkId
-                )) as ViemContract;
+                ) as ViemContract;
 
                 if (sportsAMMV2RiskManagerContract) {
                     const riskPromises = [];

@@ -196,7 +196,7 @@ const LiquidityPool: React.FC = () => {
 
     useEffect(() => {
         (async () => {
-            const collateralContractWithSigner = await getContractInstance(
+            const collateralContractWithSigner = getContractInstance(
                 ContractType.MULTICOLLATERAL,
                 walletClient.data as Client,
                 networkId,
@@ -322,7 +322,7 @@ const LiquidityPool: React.FC = () => {
         isLiquidityPoolCapReached;
 
     const handleAllowance = async (approveAmount: bigint) => {
-        const multiCollateralWithSigner = await getContractInstance(
+        const multiCollateralWithSigner = getContractInstance(
             ContractType.MULTICOLLATERAL,
             walletClient.data as Client,
             networkId,
@@ -369,7 +369,7 @@ const LiquidityPool: React.FC = () => {
             }) as ViemContract;
             const parsedAmount = coinParser(Number(amount).toString(), networkId, collateral);
 
-            const WETHContractWithSigner = await getContractInstance(
+            const WETHContractWithSigner = getContractInstance(
                 ContractType.MULTICOLLATERAL,
                 walletClient.data as Client,
                 networkId,

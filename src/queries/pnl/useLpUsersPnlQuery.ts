@@ -26,12 +26,7 @@ const useLpUsersPnlQuery = (
     return useQuery<LpUsersPnl[]>({
         queryKey: QUERY_KEYS.Pnl.LpUsersPnl(lpCollateral, round, networkConfig.networkId),
         queryFn: async () => {
-            const [
-                sportsAMMDataContract,
-                liquidityPoolDataContract,
-                priceFeedContract,
-                stakingThalesBettingProxy,
-            ] = await Promise.all([
+            const [sportsAMMDataContract, liquidityPoolDataContract, priceFeedContract, stakingThalesBettingProxy] = [
                 getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig.client, networkConfig.networkId),
                 getContractInstance(ContractType.LIQUIDITY_POOL_DATA, networkConfig.client, networkConfig.networkId),
                 getContractInstance(ContractType.PRICE_FEED, networkConfig.client, networkConfig.networkId),
@@ -40,7 +35,7 @@ const useLpUsersPnlQuery = (
                     networkConfig.client,
                     networkConfig.networkId
                 ),
-            ]);
+            ];
 
             if (sportsAMMDataContract && liquidityPoolDataContract && priceFeedContract && stakingThalesBettingProxy) {
                 const [

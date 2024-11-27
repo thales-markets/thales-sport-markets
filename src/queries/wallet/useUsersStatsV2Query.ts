@@ -24,7 +24,7 @@ const useUsersStatsV2Query = (
     return useQuery<UserStats | undefined>({
         queryKey: QUERY_KEYS.Wallet.StatsV2(networkConfig.networkId, user),
         queryFn: async () => {
-            const contracts = (await Promise.all([
+            const contracts = [
                 getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig.client, networkConfig.networkId),
                 getContractInstance(ContractType.PRICE_FEED, networkConfig.client, networkConfig.networkId),
                 getContractInstance(ContractType.SPORTS_AMM_V2_MANAGER, networkConfig.client, networkConfig.networkId),
@@ -34,7 +34,7 @@ const useUsersStatsV2Query = (
                     networkConfig.client,
                     networkConfig.networkId
                 ),
-            ])) as ViemContract[];
+            ] as ViemContract[];
 
             const [
                 sportsAMMDataContract,

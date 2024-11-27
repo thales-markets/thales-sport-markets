@@ -125,10 +125,10 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({
     const isLoading = userTicketsQuery.isLoading;
 
     const claimBatch = async () => {
-        const contracts = await Promise.all([
+        const contracts = [
             getContractInstance(ContractType.SPORTS_AMM_V2, walletClient?.data, networkId),
             getContractInstance(ContractType.MULTICALL, walletClient?.data, networkId),
-        ]);
+        ];
         const [sportsAMMV2ContractWithSigner, multiCallContractWithSigner] = contracts;
 
         const id = toast.loading(t('market.toast-message.transaction-pending'));

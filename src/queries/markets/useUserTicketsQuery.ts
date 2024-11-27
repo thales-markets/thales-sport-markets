@@ -23,7 +23,7 @@ export const useUserTicketsQuery = (
         queryKey: QUERY_KEYS.UserTickets(networkConfig.networkId, user),
         queryFn: async () => {
             try {
-                const contracts = (await Promise.all([
+                const contracts = [
                     getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig.client, networkConfig.networkId),
                     getContractInstance(
                         ContractType.SPORTS_AMM_V2_MANAGER,
@@ -36,7 +36,7 @@ export const useUserTicketsQuery = (
                         networkConfig.client,
                         networkConfig.networkId
                     ),
-                ])) as ViemContract[];
+                ] as ViemContract[];
 
                 const [
                     sportsAMMDataContract,

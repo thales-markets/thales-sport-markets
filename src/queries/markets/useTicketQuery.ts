@@ -22,11 +22,11 @@ export const useTicketQuery = (
         queryKey: QUERY_KEYS.Ticket(networkConfig.networkId, ticketAddress),
         queryFn: async () => {
             try {
-                const sportsAMMDataContract = (await getContractInstance(
+                const sportsAMMDataContract = getContractInstance(
                     ContractType.SPORTS_AMM_DATA,
                     networkConfig.client,
                     networkConfig.networkId
-                )) as ViemContract;
+                ) as ViemContract;
                 if (sportsAMMDataContract) {
                     const playersInfoQueryParam = `isTestnet=${isTestNetwork(networkConfig.networkId)}`;
 

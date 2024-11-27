@@ -18,11 +18,11 @@ const useAMMContractsPausedQuery = (
         queryKey: QUERY_KEYS.CheckPausedAMM(networkConfig.networkId),
         queryFn: async () => {
             try {
-                const sportsAMMV2ContractInstance = (await getContractInstance(
+                const sportsAMMV2ContractInstance = getContractInstance(
                     ContractType.SPORTS_AMM_V2,
                     networkConfig.client,
                     networkConfig.networkId
-                )) as ViemContract;
+                ) as ViemContract;
 
                 if (sportsAMMV2Contract) {
                     const [isSportsAMMPaused] = await Promise.all([sportsAMMV2ContractInstance.read.paused()]);

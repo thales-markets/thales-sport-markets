@@ -55,7 +55,7 @@ export const getContractWithModifiedResponse = (props: { abi: any; address: Addr
     };
 };
 
-export const getContractInstance = async (
+export const getContractInstance = (
     contractName: string,
     client: any,
     networkId: SupportedNetwork,

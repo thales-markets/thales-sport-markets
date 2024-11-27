@@ -126,7 +126,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
     const claimTicket = async (ticketAddress: string) => {
         const id = toast.loading(t('market.toast-message.transaction-pending'));
 
-        const sportsAMMV2ContractWithSigner = await getContractInstance(
+        const sportsAMMV2ContractWithSigner = getContractInstance(
             ContractType.SPORTS_AMM_V2,
             walletClient.data as Client,
             networkId

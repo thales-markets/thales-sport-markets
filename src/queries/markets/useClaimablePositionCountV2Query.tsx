@@ -15,7 +15,7 @@ const useClaimablePositionCountQuery = (
         queryKey: QUERY_KEYS.ClaimableCountV2(user, networkConfig.networkId),
         queryFn: async () => {
             try {
-                const contractInstances = (await Promise.all([
+                const contractInstances = [
                     getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig.client, networkConfig.networkId),
                     getContractInstance(
                         ContractType.SPORTS_AMM_V2_MANAGER,
@@ -28,7 +28,7 @@ const useClaimablePositionCountQuery = (
                         networkConfig.client,
                         networkConfig.networkId
                     ),
-                ])) as ViemContract[];
+                ] as ViemContract[];
 
                 const [
                     sportsAMMDataContract,

@@ -23,11 +23,11 @@ const useSportsAmmDataQuery = (
                     safeBoxFee: 0,
                 };
 
-                const sportsAMMDataContract = (await getContractInstance(
+                const sportsAMMDataContract = getContractInstance(
                     ContractType.SPORTS_AMM_DATA,
                     networkConfig.client,
                     networkConfig.networkId
-                )) as ViemContract;
+                ) as ViemContract;
 
                 if (sportsAMMDataContract) {
                     const sportsAMMParameters = await sportsAMMDataContract.read.getSportsAMMParameters();

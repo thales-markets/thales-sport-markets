@@ -78,11 +78,11 @@ const useLpStatsQuery = (
     return useQuery<LpStats[]>({
         queryKey: QUERY_KEYS.Pnl.LpStats(round, networkConfig.networkId),
         queryFn: async () => {
-            const [sportsAMMDataContract, liquidityPoolDataContract, priceFeedContract] = await Promise.all([
+            const [sportsAMMDataContract, liquidityPoolDataContract, priceFeedContract] = [
                 getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig.client, networkConfig.networkId),
                 getContractInstance(ContractType.LIQUIDITY_POOL_DATA, networkConfig.client, networkConfig.networkId),
                 getContractInstance(ContractType.PRICE_FEED, networkConfig.client, networkConfig.networkId),
-            ]);
+            ];
             if (sportsAMMDataContract && liquidityPoolDataContract && priceFeedContract) {
                 const [
                     usdcTickets,

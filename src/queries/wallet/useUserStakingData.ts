@@ -29,11 +29,11 @@ const useUserStakingDataQuery = (
                 apy: 0,
             };
             try {
-                const stakingThalesContract = (await getContractInstance(
+                const stakingThalesContract = getContractInstance(
                     ContractType.STAKING_THALES,
                     networkConfig.client,
                     networkConfig.networkId
-                )) as ViemContract;
+                ) as ViemContract;
 
                 if (stakingThalesContract) {
                     const baseProvider = new ethers.providers.JsonRpcProvider(

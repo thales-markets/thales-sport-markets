@@ -22,11 +22,11 @@ const useExchangeRatesQuery = (
         queryFn: async () => {
             const exchangeRates: Rates = {};
 
-            const priceFeedContract = (await getContractInstance(
+            const priceFeedContract = getContractInstance(
                 ContractType.PRICE_FEED,
                 networkConfig.client,
                 networkConfig.networkId
-            )) as ViemContract;
+            ) as ViemContract;
 
             if (priceFeedContract) {
                 const [currencies, rates, thalesPriceResponse] = await Promise.all([

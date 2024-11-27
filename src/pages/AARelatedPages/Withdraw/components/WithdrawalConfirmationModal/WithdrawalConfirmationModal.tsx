@@ -77,7 +77,7 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
                         value: parsedAmount,
                     });
                 } else {
-                    const collateralContractWithSigner = await getContractInstance(
+                    const collateralContractWithSigner = getContractInstance(
                         ContractType.MULTICOLLATERAL,
                         client,
                         networkId,

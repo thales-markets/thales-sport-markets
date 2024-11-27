@@ -663,10 +663,10 @@ const Ticket: React.FC<TicketProps> = ({
         async (buyInAmountForQuote: number) => {
             if (buyInAmountForQuote <= 0 || noProofs) return;
 
-            const contracts = (await Promise.all([
+            const contracts = [
                 getContractInstance(ContractType.SPORTS_AMM_V2, walletClient.data, networkId),
                 getContractInstance(ContractType.MULTICOLLATERAL_ON_OFF_RAMP, walletClient.data, networkId),
-            ])) as ViemContract[];
+            ] as ViemContract[];
 
             const [sportsAMMV2Contract, multiCollateralOnOffRampContract] = contracts;
             if (sportsAMMV2Contract && minBuyInAmountInDefaultCollateral) {
@@ -868,13 +868,13 @@ const Ticket: React.FC<TicketProps> = ({
 
                 const collateralContractWithSigner =
                     isDefaultCollateral && !swapToThales
-                        ? await getContractInstance(
+                        ? getContractInstance(
                               ContractType.MULTICOLLATERAL,
                               walletClient.data,
                               networkId,
                               getCollateralIndex(networkId, getDefaultCollateral(networkId))
                           )
-                        : await getContractInstance(
+                        : getContractInstance(
                               ContractType.MULTICOLLATERAL,
                               walletClient.data,
                               networkId,
@@ -1014,13 +1014,13 @@ const Ticket: React.FC<TicketProps> = ({
         const id = toast.loading(t('market.toast-message.transaction-pending'));
         try {
             const collateralContractWithSigner = isDefaultCollateral
-                ? await getContractInstance(
+                ? getContractInstance(
                       ContractType.MULTICOLLATERAL,
                       walletClient.data,
                       networkId,
                       getCollateralIndex(networkId, getDefaultCollateral(networkId))
                   )
-                : await getContractInstance(
+                : getContractInstance(
                       ContractType.MULTICOLLATERAL,
                       walletClient.data,
                       networkId,
@@ -1207,14 +1207,14 @@ const Ticket: React.FC<TicketProps> = ({
     };
 
     const handleSubmit = async () => {
-        const contracts = (await Promise.all([
+        const contracts = [
             getContractInstance(ContractType.SPORTS_AMM_V2, walletClient.data, networkId),
             getContractInstance(ContractType.LIVE_TRADING_PROCESSOR, walletClient.data, networkId),
             getContractInstance(ContractType.SPORTS_AMM_DATA, walletClient.data, networkId),
             getContractInstance(ContractType.SPORTS_AMM_V2_MANAGER, walletClient.data, networkId),
             getContractInstance(ContractType.FREE_BET_HOLDER, walletClient.data, networkId),
             getContractInstance(ContractType.STAKING_THALES_BETTING_PROXY, walletClient.data, networkId),
-        ])) as ViemContract[];
+        ] as ViemContract[];
 
         const [
             sportsAMMV2Contract,
@@ -1295,7 +1295,7 @@ const Ticket: React.FC<TicketProps> = ({
                     const liveTotalQuote = liveTradeDataOdds[liveTradeDataPosition];
 
                     if (isEth && !swapToThales) {
-                        const WETHContractWithSigner = await getContractInstance(
+                        const WETHContractWithSigner = getContractInstance(
                             ContractType.MULTICOLLATERAL,
                             walletClient.data,
                             networkId,
