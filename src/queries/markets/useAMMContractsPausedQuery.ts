@@ -3,8 +3,8 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { ContractType } from 'enums/contract';
 import { NetworkConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
+import { getContractInstance } from 'utils/contract';
 import sportsAMMV2Contract from 'utils/contracts/sportsAMMV2Contract';
-import { getContractInstance } from 'utils/networkConnector';
 
 type AMMContractsPausedData = {
     sportsAMM: boolean;

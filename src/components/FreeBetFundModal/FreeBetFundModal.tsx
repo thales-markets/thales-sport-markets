@@ -25,10 +25,10 @@ import { CollateralsBalance } from 'types/collateral';
 import { ThemeInterface } from 'types/ui';
 import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateral, getCollateralAddress, getCollateralIndex, getFreeBetCollaterals } from 'utils/collaterals';
+import { getContractInstance } from 'utils/contract';
 import freeBetHolder from 'utils/contracts/freeBetHolder';
 import { coinParser } from 'utils/formatters/viem';
 import { checkAllowance, getDefaultCollateralIndexForNetworkId } from 'utils/network';
-import { getContractInstance } from 'utils/networkConnector';
 import { Client, isAddress } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
@@ -138,11 +138,13 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
     const handleAllowance = async (approveAmount: bigint) => {
         const multiCollateralWithSigner = getContractInstance(
             ContractType.MULTICOLLATERAL,
-            walletClient.data,
-            networkId,
+            { client: walletClient.data, networkId },
             getCollateralIndex(networkId, selectedCollateral)
         );
-        const freeBetHolderContract = getContractInstance(ContractType.FREE_BET_HOLDER, walletClient.data, networkId);
+        const freeBetHolderContract = getContractInstance(ContractType.FREE_BET_HOLDER, {
+            client: walletClient.data,
+            networkId,
+        });
 
         const freeBetHolderContractAddress = freeBetHolderContract && freeBetHolderContract.address;
 
@@ -231,11 +233,10 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
         const contracts = [
             getContractInstance(
                 ContractType.MULTICOLLATERAL,
-                walletClient.data,
-                networkId,
+                { client: walletClient.data, networkId },
                 getCollateralIndex(networkId, selectedCollateral)
             ),
-            getContractInstance(ContractType.FREE_BET_HOLDER, walletClient.data, networkId),
+            getContractInstance(ContractType.FREE_BET_HOLDER, { client: walletClient.data, networkId }),
         ];
         const [multipleCollateralWithSigner, freeBetHolderContractWithSigner] = contracts;
 
@@ -325,8 +326,7 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
         const handleAllowanceCheck = async () => {
             const multiCollateralContractWithSigner = getContractInstance(
                 ContractType.MULTICOLLATERAL,
-                walletClient.data,
-                networkId,
+                { client: walletClient.data, networkId },
                 getCollateralIndex(networkId, selectedCollateral)
             );
 

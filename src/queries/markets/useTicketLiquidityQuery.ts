@@ -5,7 +5,7 @@ import { bigNumberFormatter, getDefaultDecimalsForNetwork } from 'thales-utils';
 import { TicketMarket } from 'types/markets';
 import { NetworkConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
-import { getContractInstance } from 'utils/networkConnector';
+import { getContractInstance } from 'utils/contract';
 
 const useTicketLiquidityQuery = (
     markets: TicketMarket[],

@@ -13,11 +13,7 @@ type TooltipProps = {
 const Tooltip: React.FC<TooltipProps> = ({ overlay, children, customIconStyling }) => {
     return (
         <ReactTooltip
-            overlay={
-                <Container>
-                    <Content>{overlay}</Content>
-                </Container>
-            }
+            overlay={overlay}
             overlayInnerStyle={{ padding: 0 }}
             placement="top"
             overlayStyle={{ borderRadius: '5px' }}
@@ -26,21 +22,6 @@ const Tooltip: React.FC<TooltipProps> = ({ overlay, children, customIconStyling 
         </ReactTooltip>
     );
 };
-
-const Container = styled.div`
-    background: ${(props) => props.theme.borderColor.secondary};
-    border-width: 1px;
-    border-radius: 6px;
-`;
-
-const Content = styled.div`
-    background: ${(props) => props.theme.background.senary};
-    border-radius: 5px;
-    color: ${(props) => props.theme.textColor.primary};
-    font-weight: 700;
-    padding: 10px;
-    font-weight: normal !important;
-`;
 
 const InfoIcon = styled.i`
     position: relative;

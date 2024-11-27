@@ -40,7 +40,7 @@ import {
 
 // Contracts
 import { ContractType } from 'enums/contract';
-import { getContractInstance } from 'utils/networkConnector';
+import { getContractInstance } from 'utils/contract';
 import { waitForTransactionReceipt } from 'viem/actions';
 
 type StakingModalProps = {
@@ -142,11 +142,10 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
         const contracts = [
             getContractInstance(
                 ContractType.MULTICOLLATERAL,
-                client,
-                networkId,
+                { client, networkId },
                 getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.sTHALES as Coins)
             ),
-            getContractInstance(ContractType.STAKING_THALES, client, networkId),
+            getContractInstance(ContractType.STAKING_THALES, { client, networkId }),
         ];
 
         const [stakingThalesTokenContract, thalesTokenContract] = contracts;
@@ -176,11 +175,10 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
         const contracts = [
             getContractInstance(
                 ContractType.MULTICOLLATERAL,
-                client,
-                networkId,
+                { client, networkId },
                 getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.sTHALES as Coins)
             ),
-            getContractInstance(ContractType.STAKING_THALES, client, networkId),
+            getContractInstance(ContractType.STAKING_THALES, { client, networkId }),
         ];
 
         const [stakingThalesTokenContract, thalesTokenContract] = contracts;
@@ -213,7 +211,7 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
     };
 
     const handleStakeThales = async () => {
-        const stakingThalesContract = getContractInstance(ContractType.STAKING_THALES, client, networkId);
+        const stakingThalesContract = getContractInstance(ContractType.STAKING_THALES, { client, networkId });
 
         if (stakingThalesContract) {
             const toastId = toast.loading(t('market.toast-message.transaction-pending'));

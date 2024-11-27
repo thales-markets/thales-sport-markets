@@ -45,7 +45,7 @@ import {
     isThalesCurrency,
     sortCollateralBalances,
 } from 'utils/collaterals';
-import { getContractInstance } from 'utils/networkConnector';
+import { getContractInstance } from 'utils/contract';
 import {
     buildTxForApproveTradeWithRouter,
     buildTxForSwap,
@@ -350,8 +350,10 @@ const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
 
                     const thalesTokenContract = getContractInstance(
                         ContractType.MULTICOLLATERAL,
-                        walletClient.data as any,
-                        networkId,
+                        {
+                            networkId,
+                            client: walletClient.data as any,
+                        },
                         getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.THALES as Coins)
                     );
 

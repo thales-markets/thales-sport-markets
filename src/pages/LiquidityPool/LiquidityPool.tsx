@@ -33,9 +33,9 @@ import { LiquidityPoolData, UserLiquidityPoolData } from 'types/liquidityPool';
 import { ThemeInterface } from 'types/ui';
 import { ViemContract } from 'types/viem';
 import biconomyConnector from 'utils/biconomyWallet';
+import { getContractInstance } from 'utils/contract';
 import { coinParser } from 'utils/formatters/viem';
 import { checkAllowance } from 'utils/network';
-import { getContractInstance } from 'utils/networkConnector';
 import { refetchLiquidityPoolData } from 'utils/queryConnector';
 import { delay } from 'utils/timer';
 import { Client, parseUnits } from 'viem';
@@ -197,8 +197,7 @@ const LiquidityPool: React.FC = () => {
         (async () => {
             const collateralContractWithSigner = getContractInstance(
                 ContractType.MULTICOLLATERAL,
-                walletClient.data as Client,
-                networkId,
+                { client: walletClient.data, networkId },
                 getCollateralIndex(networkId, collateral)
             );
 
@@ -323,8 +322,7 @@ const LiquidityPool: React.FC = () => {
     const handleAllowance = async (approveAmount: bigint) => {
         const multiCollateralWithSigner = getContractInstance(
             ContractType.MULTICOLLATERAL,
-            walletClient.data as Client,
-            networkId,
+            { client: walletClient.data, networkId },
             getCollateralIndex(networkId, collateral)
         );
 
@@ -363,8 +361,7 @@ const LiquidityPool: React.FC = () => {
         try {
             const liquidityPoolContractWithSigner = getContractInstance(
                 ContractType.LIQUIDITY_POOL,
-                walletClient.data as Client,
-                networkId,
+                { client: walletClient.data, networkId },
                 undefined,
                 collateral.toLowerCase() as LiquidityPoolCollateral
             ) as ViemContract;
@@ -372,8 +369,7 @@ const LiquidityPool: React.FC = () => {
 
             const WETHContractWithSigner = getContractInstance(
                 ContractType.MULTICOLLATERAL,
-                walletClient.data as Client,
-                networkId,
+                { client: walletClient.data, networkId },
                 getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins)
             );
 
@@ -434,8 +430,7 @@ const LiquidityPool: React.FC = () => {
         try {
             const liquidityPoolContractWithSigner = getContractInstance(
                 ContractType.LIQUIDITY_POOL,
-                walletClient.data as Client,
-                networkId,
+                { client: walletClient.data, networkId },
                 undefined,
                 collateral.toLowerCase() as LiquidityPoolCollateral
             ) as ViemContract;
@@ -471,8 +466,7 @@ const LiquidityPool: React.FC = () => {
         try {
             const liquidityPoolContractWithSigner = getContractInstance(
                 ContractType.LIQUIDITY_POOL,
-                walletClient.data as Client,
-                networkId,
+                { client: walletClient.data, networkId },
                 undefined,
                 collateral.toLowerCase() as LiquidityPoolCollateral
             ) as ViemContract;

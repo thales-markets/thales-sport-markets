@@ -8,7 +8,7 @@ import { ContractType } from 'enums/contract';
 import { bigNumberFormatter, parseBytes32String } from 'thales-utils';
 import { NetworkConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
-import { getContractInstance } from 'utils/networkConnector';
+import { getContractInstance } from 'utils/contract';
 import { THALES_CONTRACT_RATE_KEY } from '../../constants/markets';
 
 export type Rates = Record<string, number>;

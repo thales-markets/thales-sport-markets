@@ -5,7 +5,7 @@ import { bigNumberFormatter, coinFormatter, Coins } from 'thales-utils';
 import { LiquidityPoolData } from 'types/liquidityPool';
 import { NetworkConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
-import { getContractInstance } from 'utils/networkConnector';
+import { getContractInstance } from 'utils/contract';
 import QUERY_KEYS from '../../constants/queryKeys';
 
 const useLiquidityPoolDataQuery = (

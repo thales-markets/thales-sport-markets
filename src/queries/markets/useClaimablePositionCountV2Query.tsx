@@ -4,7 +4,7 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { ContractType } from 'enums/contract';
 import { NetworkConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
-import { getContractInstance } from 'utils/networkConnector';
+import { getContractInstance } from 'utils/contract';
 
 const useClaimablePositionCountQuery = (
     user: string,

@@ -10,7 +10,7 @@ import { CollateralsBalance } from 'types/collateral';
 import { NetworkConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { getCollateralIndex } from 'utils/collaterals';
-import { getContractInstance } from 'utils/networkConnector';
+import { getContractInstance } from 'utils/contract';
 import { Address } from 'viem';
 
 const useMultipleCollateralBalanceQuery = (
@@ -39,74 +39,62 @@ const useMultipleCollateralBalanceQuery = (
                 const multipleCollateralObject = {
                     sUSD: getContractInstance(
                         ContractType.MULTICOLLATERAL,
-                        networkConfig.client,
-                        networkConfig.networkId,
+                        networkConfig,
                         getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.sUSD as Coins)
                     ) as ViemContract,
                     DAI: getContractInstance(
                         ContractType.MULTICOLLATERAL,
-                        networkConfig.client,
-                        networkConfig.networkId,
+                        networkConfig,
                         getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.DAI as Coins)
                     ) as ViemContract,
                     USDC: getContractInstance(
                         ContractType.MULTICOLLATERAL,
-                        networkConfig.client,
-                        networkConfig.networkId,
+                        networkConfig,
                         getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.USDC as Coins)
                     ) as ViemContract,
                     USDCe: getContractInstance(
                         ContractType.MULTICOLLATERAL,
-                        networkConfig.client,
-                        networkConfig.networkId,
+                        networkConfig,
                         getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.USDCe as Coins)
                     ) as ViemContract,
                     USDbC: getContractInstance(
                         ContractType.MULTICOLLATERAL,
-                        networkConfig.client,
-                        networkConfig.networkId,
+                        networkConfig,
                         getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.USDbC as Coins)
                     ) as ViemContract,
                     USDT: getContractInstance(
                         ContractType.MULTICOLLATERAL,
-                        networkConfig.client,
-                        networkConfig.networkId,
+                        networkConfig,
                         getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.USDT as Coins)
                     ) as ViemContract,
                     OP: getContractInstance(
                         ContractType.MULTICOLLATERAL,
-                        networkConfig.client,
-                        networkConfig.networkId,
+                        networkConfig,
                         getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.OP as Coins)
                     ) as ViemContract,
                     WETH: getContractInstance(
                         ContractType.MULTICOLLATERAL,
-                        networkConfig.client,
-                        networkConfig.networkId,
+                        networkConfig,
                         getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.WETH as Coins)
                     ) as ViemContract,
                     ETH: getContractInstance(
                         ContractType.MULTICOLLATERAL,
-                        networkConfig.client,
-                        networkConfig.networkId,
+                        networkConfig,
                         getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.ETH as Coins)
                     ) as ViemContract,
                     ARB: getContractInstance(
                         ContractType.MULTICOLLATERAL,
-                        networkConfig.client,
-                        networkConfig.networkId,
+                        networkConfig,
                         getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.ARB as Coins)
                     ) as ViemContract,
                     THALES: getContractInstance(
                         ContractType.MULTICOLLATERAL,
-                        networkConfig.client,
-                        networkConfig.networkId,
+                        networkConfig,
                         getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.THALES as Coins)
                     ) as ViemContract,
                     sTHALES: getContractInstance(
                         ContractType.MULTICOLLATERAL,
-                        networkConfig.client,
-                        networkConfig.networkId,
+                        networkConfig,
                         getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.sTHALES as Coins)
                     ) as ViemContract,
                 };

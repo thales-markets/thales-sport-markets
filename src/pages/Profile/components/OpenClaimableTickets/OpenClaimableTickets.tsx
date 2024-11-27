@@ -19,9 +19,9 @@ import { RootState } from 'redux/rootReducer';
 import { Coins } from 'thales-utils';
 import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateral, getCollaterals, getDefaultCollateral, isLpSupported } from 'utils/collaterals';
+import { getContractInstance } from 'utils/contract';
 import multiCallContract from 'utils/contracts/multiCallContract';
 import sportsAMMV2Contract from 'utils/contracts/sportsAMMV2Contract';
-import { getContractInstance } from 'utils/networkConnector';
 import { Address, Client, encodeFunctionData } from 'viem';
 import { estimateContractGas, waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
@@ -126,8 +126,8 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({
 
     const claimBatch = async () => {
         const contracts = [
-            getContractInstance(ContractType.SPORTS_AMM_V2, walletClient?.data, networkId),
-            getContractInstance(ContractType.MULTICALL, walletClient?.data, networkId),
+            getContractInstance(ContractType.SPORTS_AMM_V2, { client: walletClient?.data, networkId }),
+            getContractInstance(ContractType.MULTICALL, { client: walletClient?.data, networkId }),
         ];
         const [sportsAMMV2ContractWithSigner, multiCallContractWithSigner] = contracts;
 

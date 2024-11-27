@@ -6,9 +6,9 @@ import { orderBy } from 'lodash';
 import { Ticket } from 'types/markets';
 import { NetworkConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
+import { getContractInstance } from 'utils/contract';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
 import { isTestNetwork } from 'utils/network';
-import { getContractInstance } from 'utils/networkConnector';
 
 import { mapTicket } from 'utils/tickets';
 import { generalConfig, noCacheConfig } from '../../config/general';

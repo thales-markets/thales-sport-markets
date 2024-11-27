@@ -8,8 +8,8 @@ import { bigNumberFormatter } from 'thales-utils';
 import { StakingData } from 'types/markets';
 import { NetworkConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
+import { getContractInstance } from 'utils/contract';
 import ccipCollector from 'utils/contracts/ccipCollector';
-import { getContractInstance } from 'utils/networkConnector';
 import { generalConfig } from '../../config/general';
 
 const APR_FREQUENCY = 52;

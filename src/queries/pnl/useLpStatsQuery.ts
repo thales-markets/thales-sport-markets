@@ -12,9 +12,9 @@ import { LpStats, Ticket } from 'types/markets';
 import { NetworkConfig, SupportedNetwork } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { isLpSupported, isStableCurrency } from 'utils/collaterals';
+import { getContractInstance } from 'utils/contract';
 import { getLpAddress } from 'utils/liquidityPool';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
-import { getContractInstance } from 'utils/networkConnector';
 import { mapTicket } from 'utils/tickets';
 import { Rates } from '../rates/useExchangeRatesQuery';
 

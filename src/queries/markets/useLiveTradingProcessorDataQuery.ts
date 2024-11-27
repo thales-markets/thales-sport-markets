@@ -4,7 +4,7 @@ import { ContractType } from 'enums/contract';
 import { LiveTradingProcessorData } from 'types/markets';
 import { NetworkConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
-import { getContractInstance } from 'utils/networkConnector';
+import { getContractInstance } from 'utils/contract';
 
 const useLiveTradingProcessorDataQuery = (
     networkConfig: NetworkConfig,

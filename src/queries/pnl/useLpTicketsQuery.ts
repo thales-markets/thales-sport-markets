@@ -8,9 +8,9 @@ import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 import { orderBy } from 'lodash';
 import { Ticket } from 'types/markets';
 import { NetworkConfig } from 'types/network';
+import { getContractInstance } from 'utils/contract';
 import { getLpAddress } from 'utils/liquidityPool';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
-import { getContractInstance } from 'utils/networkConnector';
 import { mapTicket } from 'utils/tickets';
 
 const useLpTicketsQuery = (

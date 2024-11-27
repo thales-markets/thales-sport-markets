@@ -1,6 +1,6 @@
 import { ContractType } from 'enums/contract';
-import { SupportedNetwork } from 'types/network';
-import { ViemContract } from 'types/viem';
+import { NetworkConfig } from 'types/network';
+import { ContractData, ViemContract } from 'types/viem';
 import { Address, getContract } from 'viem';
 import { getCollaterals } from './collaterals';
 
@@ -21,7 +21,7 @@ import stakingThalesBettingProxy from 'utils/contracts/stakingThalesBettingProxy
 import stakingThales from 'utils/contracts/stakingThalesContract';
 import liquidityPoolContractV2 from './contracts/liquidityPoolContractV2';
 
-export const getContractWithModifiedResponse = (props: { abi: any; address: Address; client: any }) => {
+export const prepareContractWithModifiedResponse = (props: { abi: any; address: Address; client: any }) => {
     const contract = getContract(props) as ViemContract;
 
     return {
@@ -57,102 +57,54 @@ export const getContractWithModifiedResponse = (props: { abi: any; address: Addr
     };
 };
 
+const getContractWithModifiedResponse = (contractData: ContractData, networkConfig: NetworkConfig) => {
+    return prepareContractWithModifiedResponse({
+        abi: contractData.abi,
+        address: contractData.addresses[networkConfig?.networkId],
+        client: networkConfig?.client,
+    }) as ViemContract;
+};
+
 export const getContractInstance = (
     contractName: string,
-    client: any,
-    networkId: SupportedNetwork,
+    networkConfig: NetworkConfig,
     selectedToken?: number,
     lpCollateral?: LiquidityPoolCollateral
 ) => {
     switch (contractName) {
         case ContractType.LIQUIDITY_POOL_DATA:
-            return getContractWithModifiedResponse({
-                abi: liquidityPoolDataContract.abi,
-                address: liquidityPoolDataContract.addresses[networkId],
-                client,
-            }) as ViemContract;
+            return getContractWithModifiedResponse(liquidityPoolDataContract, networkConfig);
         case ContractType.PRICE_FEED:
-            return getContractWithModifiedResponse({
-                abi: priceFeed.abi,
-                address: priceFeed.addresses[networkId],
-                client,
-            }) as ViemContract;
+            return getContractWithModifiedResponse(priceFeed, networkConfig);
         case ContractType.MULTICOLLATERAL:
             if (selectedToken == undefined || selectedToken == -1) return;
-            return getContractWithModifiedResponse({
-                abi: multiCollateral[getCollaterals(networkId)[selectedToken]].abi,
-                address: multiCollateral[getCollaterals(networkId)[selectedToken]].addresses[networkId],
-                client,
-            }) as ViemContract;
+            return getContractWithModifiedResponse(
+                multiCollateral[getCollaterals(networkConfig.networkId)[selectedToken]],
+                networkConfig
+            );
         case ContractType.MULTICOLLATERAL_ON_OFF_RAMP:
-            return getContractWithModifiedResponse({
-                abi: multiCollateralOnOffRamp.abi,
-                address: multiCollateralOnOffRamp.addresses[networkId],
-                client,
-            }) as ViemContract;
+            return getContractWithModifiedResponse(multiCollateralOnOffRamp, networkConfig);
         case ContractType.SPORTS_AMM_DATA:
-            return getContractWithModifiedResponse({
-                abi: sportsAMMData.abi,
-                address: sportsAMMData.addresses[networkId],
-                client,
-            }) as ViemContract;
+            return getContractWithModifiedResponse(sportsAMMData, networkConfig);
         case ContractType.SPORTS_AMM_V2:
-            return getContractWithModifiedResponse({
-                abi: sportsAMMV2.abi,
-                address: sportsAMMV2.addresses[networkId],
-                client,
-            }) as ViemContract;
+            return getContractWithModifiedResponse(sportsAMMV2, networkConfig);
         case ContractType.SPORTS_AMM_V2_RISK_MANAGER:
-            return getContractWithModifiedResponse({
-                abi: sportsAMMV2RiskManager.abi,
-                address: sportsAMMV2RiskManager.addresses[networkId],
-                client,
-            }) as ViemContract;
+            return getContractWithModifiedResponse(sportsAMMV2RiskManager, networkConfig);
         case ContractType.LIVE_TRADING_PROCESSOR:
-            return getContractWithModifiedResponse({
-                abi: liveTradingProcessor.abi,
-                address: liveTradingProcessor.addresses[networkId],
-                client,
-            }) as ViemContract;
+            return getContractWithModifiedResponse(liveTradingProcessor, networkConfig);
         case ContractType.FREE_BET_HOLDER:
-            return getContractWithModifiedResponse({
-                abi: freeBetHolder.abi,
-                address: freeBetHolder.addresses[networkId],
-                client,
-            }) as ViemContract;
+            return getContractWithModifiedResponse(freeBetHolder, networkConfig);
         case ContractType.SPORTS_AMM_V2_MANAGER:
-            return getContractWithModifiedResponse({
-                abi: sportsAMMV2Manager.abi,
-                address: sportsAMMV2Manager.addresses[networkId],
-                client,
-            }) as ViemContract;
+            return getContractWithModifiedResponse(sportsAMMV2Manager, networkConfig);
         case ContractType.MULTICALL:
-            return getContractWithModifiedResponse({
-                abi: multiCall.abi,
-                address: multiCall.addresses[networkId],
-                client,
-            }) as ViemContract;
+            return getContractWithModifiedResponse(multiCall, networkConfig);
         case ContractType.STAKING_THALES:
-            return getContractWithModifiedResponse({
-                abi: stakingThales.abi,
-                address: stakingThales.addresses[networkId],
-                client,
-            }) as ViemContract;
+            return getContractWithModifiedResponse(stakingThales, networkConfig);
         case ContractType.STAKING_THALES_BETTING_PROXY:
-            return getContractWithModifiedResponse({
-                abi: stakingThalesBettingProxy.abi,
-                address: stakingThalesBettingProxy.addresses[networkId],
-                client,
-            }) as ViemContract;
+            return getContractWithModifiedResponse(stakingThalesBettingProxy, networkConfig);
         case ContractType.LIQUIDITY_POOL:
-            if (lpCollateral) {
-                return getContractWithModifiedResponse({
-                    abi: liquidityPoolContractV2[lpCollateral].abi,
-                    address: liquidityPoolContractV2[lpCollateral].addresses[networkId],
-                    client,
-                }) as ViemContract;
-            }
-            return undefined;
+            if (!lpCollateral) return;
+            return getContractWithModifiedResponse(liquidityPoolContractV2[lpCollateral], networkConfig);
         default:
             return undefined;
     }

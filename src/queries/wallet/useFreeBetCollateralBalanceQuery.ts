@@ -5,8 +5,8 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { ContractType } from 'enums/contract';
 import { bigNumberFormatter, Coins, COLLATERAL_DECIMALS } from 'thales-utils';
 import { NetworkConfig, SupportedNetwork } from 'types/network';
+import { getContractInstance } from 'utils/contract';
 import multipleCollateral from 'utils/contracts/multipleCollateralContract';
-import { getContractInstance } from 'utils/networkConnector';
 
 const useFreeBetCollateralBalanceQuery = (
     walletAddress: string,

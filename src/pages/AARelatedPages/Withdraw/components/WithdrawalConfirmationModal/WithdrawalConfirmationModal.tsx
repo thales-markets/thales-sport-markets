@@ -14,8 +14,8 @@ import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { coinParser, Coins, formatCurrencyWithKey } from 'thales-utils';
 import { getCollateralIndex } from 'utils/collaterals';
+import { getContractInstance } from 'utils/contract';
 import { getNetworkNameByNetworkId } from 'utils/network';
-import { getContractInstance } from 'utils/networkConnector';
 import { Address, Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useChainId, useClient } from 'wagmi';
@@ -79,8 +79,7 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
                 } else {
                     const collateralContractWithSigner = getContractInstance(
                         ContractType.MULTICOLLATERAL,
-                        client,
-                        networkId,
+                        { client, networkId },
                         getCollateralIndex(networkId, token)
                     );
                     txHash =
