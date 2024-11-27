@@ -36,8 +36,19 @@ type RootProps = {
     store: Store;
 };
 
+type RpcProvider = {
+    ankr: string;
+    blast: string;
+};
+
 const STALL_TIMEOUT = 2000;
 const projectId = process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID || '';
+
+const CHAIN_TO_RPC_PROVIDER_NETWORK_NAME: Record<number, RpcProvider> = {
+    [Network.OptimismMainnet]: { ankr: 'optimism', blast: 'optimism-mainnet' },
+    [Network.Arbitrum]: { ankr: 'arbitrum', blast: 'arbitrum-one' },
+    [Network.OptimismSepolia]: { ankr: '', blast: 'optimism-sepolia' },
+};
 
 const CHAIN_TO_RPC_PROVIDER_URL: Record<number, string | undefined> = {
     [Network.OptimismMainnet]: process.env.REACT_APP_OPTIMISM_RPC_URL,
@@ -54,12 +65,13 @@ const { chains, provider } = configureChains(
     [
         jsonRpcProvider({
             rpc: (chain) => {
+                const blastNetworkName = CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id]?.blast;
                 const rpcProvider = CHAIN_TO_RPC_PROVIDER_URL[chain.id];
                 return {
                     http: rpcProvider
                         ? rpcProvider
-                        : chain.id === Network.OptimismSepolia
-                        ? `https://optimism-sepolia.blastapi.io/${process.env.REACT_APP_BLAST_PROJECT_ID}`
+                        : !!blastNetworkName
+                        ? `https://${blastNetworkName}.blastapi.io/${process.env.REACT_APP_BLAST_PROJECT_ID}`
                         : chain.rpcUrls.default.http[0],
                 };
             },
