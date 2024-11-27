@@ -25,6 +25,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { Store } from 'redux';
 import { getDefaultTheme } from 'redux/modules/ui';
+import { SupportedNetwork } from 'types/network';
 import { WagmiConfig, configureChains, createClient } from 'wagmi';
 import { arbitrum, optimism } from 'wagmi/dist/chains';
 import { infuraProvider } from 'wagmi/dist/providers/infura';
@@ -36,7 +37,7 @@ type RootProps = {
     store: Store;
 };
 
-type RpcProvider = {
+type RpcProviders = {
     ankr: string;
     blast: string;
 };
@@ -44,7 +45,7 @@ type RpcProvider = {
 const STALL_TIMEOUT = 2000;
 const projectId = process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID || '';
 
-const CHAIN_TO_RPC_PROVIDER_NETWORK_NAME: Record<number, RpcProvider> = {
+const CHAIN_TO_RPC_PROVIDER_NETWORK_NAME: Record<SupportedNetwork, RpcProviders> = {
     [Network.OptimismMainnet]: { ankr: 'optimism', blast: 'optimism-mainnet' },
     [Network.Arbitrum]: { ankr: 'arbitrum', blast: 'arbitrum-one' },
     [Network.OptimismSepolia]: { ankr: '', blast: 'optimism-sepolia' },
@@ -65,7 +66,7 @@ const { chains, provider } = configureChains(
     [
         jsonRpcProvider({
             rpc: (chain) => {
-                const blastNetworkName = CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id]?.blast;
+                const blastNetworkName = CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id as SupportedNetwork]?.blast;
                 const rpcProvider = CHAIN_TO_RPC_PROVIDER_URL[chain.id];
                 return {
                     http: rpcProvider
