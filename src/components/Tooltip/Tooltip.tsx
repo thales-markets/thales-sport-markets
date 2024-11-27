@@ -46,8 +46,8 @@ const InfoIcon = styled.i`
     font-size: 16px;
     line-height: 100%;
     vertical-align: middle;
-    font-weight: normal;
     cursor: pointer;
+    text-transform: none !important;
     margin-left: 4px;
     color: ${(props) => props.theme.icon.background.secondary};
     &:before {
