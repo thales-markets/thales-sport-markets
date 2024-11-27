@@ -111,6 +111,12 @@ const useMultipleCollateralBalanceQuery = (
                     ) as ViemContract,
                 };
 
+                const thalesStakingContract = getContractInstance(
+                    ContractType.STAKING_THALES,
+                    networkConfig.client,
+                    networkConfig.networkId
+                ) as ViemContract;
+
                 if (!walletAddress || !networkConfig.networkId) {
                     return collateralsBalance;
                 }
@@ -129,40 +135,38 @@ const useMultipleCollateralBalanceQuery = (
                     THALESBalance,
                     sTHALESBalance,
                 ] = await Promise.all([
-                    multipleCollateralObject.sUSD.address !== TBD_ADDRESS
+                    multipleCollateralObject?.sUSD && multipleCollateralObject?.sUSD?.address !== TBD_ADDRESS
                         ? multipleCollateralObject.sUSD.read.balanceOf([walletAddress])
                         : 0,
-                    multipleCollateralObject.DAI.address !== TBD_ADDRESS
+                    multipleCollateralObject?.DAI && multipleCollateralObject?.DAI?.address !== TBD_ADDRESS
                         ? multipleCollateralObject.DAI.read.balanceOf([walletAddress])
                         : 0,
-                    multipleCollateralObject.USDC.address !== TBD_ADDRESS
+                    multipleCollateralObject?.USDC && multipleCollateralObject?.USDC?.address !== TBD_ADDRESS
                         ? multipleCollateralObject.USDC.read.balanceOf([walletAddress])
                         : 0,
-                    multipleCollateralObject.USDCe.address !== TBD_ADDRESS
+                    multipleCollateralObject?.USDCe && multipleCollateralObject?.USDCe?.address !== TBD_ADDRESS
                         ? multipleCollateralObject.USDCe.read.balanceOf([walletAddress])
                         : 0,
-                    multipleCollateralObject.USDbC.address !== TBD_ADDRESS
+                    multipleCollateralObject?.USDbC && multipleCollateralObject?.USDbC?.address !== TBD_ADDRESS
                         ? multipleCollateralObject.USDbC.read.balanceOf([walletAddress])
                         : 0,
-                    multipleCollateralObject.USDT.address !== TBD_ADDRESS
+                    multipleCollateralObject?.USDT && multipleCollateralObject?.USDT?.address !== TBD_ADDRESS
                         ? multipleCollateralObject.USDT.read.balanceOf([walletAddress])
                         : 0,
-                    multipleCollateralObject.OP.address !== TBD_ADDRESS
+                    multipleCollateralObject?.OP && multipleCollateralObject?.OP?.address !== TBD_ADDRESS
                         ? multipleCollateralObject.OP.read.balanceOf([walletAddress])
                         : 0,
-                    multipleCollateralObject.WETH.address !== TBD_ADDRESS
+                    multipleCollateralObject?.WETH && multipleCollateralObject?.WETH?.address !== TBD_ADDRESS
                         ? multipleCollateralObject.WETH.read.balanceOf([walletAddress])
                         : 0,
                     getBalance(wagmiConfig, { address: walletAddress as Address }),
-                    multipleCollateralObject.ARB.address !== TBD_ADDRESS
+                    multipleCollateralObject?.ARB && multipleCollateralObject?.ARB?.address !== TBD_ADDRESS
                         ? multipleCollateralObject.ARB.read.balanceOf([walletAddress])
                         : 0,
-                    multipleCollateralObject.THALES.address !== TBD_ADDRESS
+                    multipleCollateralObject?.THALES && multipleCollateralObject?.THALES?.address !== TBD_ADDRESS
                         ? multipleCollateralObject.THALES.read.balanceOf([walletAddress])
                         : 0,
-                    multipleCollateralObject.sTHALES.address !== TBD_ADDRESS
-                        ? multipleCollateralObject.sTHALES.read.stakedBalanceOf([walletAddress])
-                        : 0,
+                    thalesStakingContract ? thalesStakingContract.read.stakedBalanceOf([walletAddress]) : 0,
                 ]);
                 collateralsBalance = {
                     sUSD: sUSDBalance ? bigNumberFormatter(sUSDBalance, COLLATERAL_DECIMALS.sUSD) : 0,

@@ -78,7 +78,7 @@ export const getContractInstance = (
                 client,
             }) as ViemContract;
         case ContractType.MULTICOLLATERAL:
-            if (selectedToken == undefined) return;
+            if (selectedToken == undefined || selectedToken == -1) return;
             return getContractWithModifiedResponse({
                 abi: multiCollateral[getCollaterals(networkId)[selectedToken]].abi,
                 address: multiCollateral[getCollaterals(networkId)[selectedToken]].addresses[networkId],
