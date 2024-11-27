@@ -4,7 +4,22 @@ import { ViemContract } from 'types/viem';
 import { Address, getContract } from 'viem';
 import { getCollaterals } from './collaterals';
 
-export const getContractWithModifiedResponse = async (props: { abi: any; address: Address; client: any }) => {
+// Contract import
+import freeBetHolder from 'utils/contracts/freeBetHolder';
+import liquidityPoolDataContract from 'utils/contracts/liquidityPoolDataContractV2';
+import liveTradingProcessor from 'utils/contracts/liveTradingProcessorContract';
+import multiCall from 'utils/contracts/multiCallContract';
+import multiCollateralOnOffRamp from 'utils/contracts/multiCollateralOnOffRampContract';
+import multiCollateral from 'utils/contracts/multipleCollateralContract';
+import priceFeed from 'utils/contracts/priceFeedContract';
+import sportsAMMData from 'utils/contracts/sportsAMMDataContract';
+import sportsAMMV2 from 'utils/contracts/sportsAMMV2Contract';
+import sportsAMMV2Manager from 'utils/contracts/sportsAMMV2ManagerContract';
+import sportsAMMV2RiskManager from 'utils/contracts/sportsAMMV2RiskManagerContract';
+import stakingThalesBettingProxy from 'utils/contracts/stakingThalesBettingProxy';
+import stakingThales from 'utils/contracts/stakingThalesContract';
+
+export const getContractWithModifiedResponse = (props: { abi: any; address: Address; client: any }) => {
     const contract = getContract(props) as ViemContract;
 
     return {
@@ -48,97 +63,84 @@ export const getContractInstance = async (
 ) => {
     switch (contractName) {
         case ContractType.LIQUIDITY_POOL_DATA:
-            const liquidityPoolDataContract = await import('utils/contracts/liquidityPoolDataContractV2');
-            return (await getContractWithModifiedResponse({
-                abi: liquidityPoolDataContract.default.abi,
-                address: liquidityPoolDataContract.default.addresses[networkId],
+            return getContractWithModifiedResponse({
+                abi: liquidityPoolDataContract.abi,
+                address: liquidityPoolDataContract.addresses[networkId],
                 client,
-            })) as ViemContract;
+            }) as ViemContract;
         case ContractType.PRICE_FEED:
-            const priceFeed = await import('utils/contracts/priceFeedContract');
-            return (await getContractWithModifiedResponse({
-                abi: priceFeed.default.abi,
-                address: priceFeed.default.addresses[networkId],
+            return getContractWithModifiedResponse({
+                abi: priceFeed.abi,
+                address: priceFeed.addresses[networkId],
                 client,
-            })) as ViemContract;
+            }) as ViemContract;
         case ContractType.MULTICOLLATERAL:
-            const multiCollateral = await import('utils/contracts/multipleCollateralContract');
             if (selectedToken == undefined) return;
-            return (await getContractWithModifiedResponse({
-                abi: multiCollateral.default[getCollaterals(networkId)[selectedToken]].abi,
-                address: multiCollateral.default[getCollaterals(networkId)[selectedToken]].addresses[networkId],
+            return getContractWithModifiedResponse({
+                abi: multiCollateral[getCollaterals(networkId)[selectedToken]].abi,
+                address: multiCollateral[getCollaterals(networkId)[selectedToken]].addresses[networkId],
                 client,
-            })) as ViemContract;
+            }) as ViemContract;
         case ContractType.MULTICOLLATERAL_ON_OFF_RAMP:
-            const multiCollateralOnOffRamp = await import('utils/contracts/multiCollateralOnOffRampContract');
-            return (await getContractWithModifiedResponse({
-                abi: multiCollateralOnOffRamp.default.abi,
-                address: multiCollateralOnOffRamp.default.addresses[networkId],
+            return getContractWithModifiedResponse({
+                abi: multiCollateralOnOffRamp.abi,
+                address: multiCollateralOnOffRamp.addresses[networkId],
                 client,
-            })) as ViemContract;
+            }) as ViemContract;
         case ContractType.SPORTS_AMM_DATA:
-            const sportsAMM = await import('utils/contracts/sportsAMMDataContract');
-            return (await getContractWithModifiedResponse({
-                abi: sportsAMM.default.abi,
-                address: sportsAMM.default.addresses[networkId],
+            return getContractWithModifiedResponse({
+                abi: sportsAMMData.abi,
+                address: sportsAMMData.addresses[networkId],
                 client,
-            })) as ViemContract;
+            }) as ViemContract;
         case ContractType.SPORTS_AMM_V2:
-            const sportsAMMV2 = await import('utils/contracts/sportsAMMV2Contract');
-            return (await getContractWithModifiedResponse({
-                abi: sportsAMMV2.default.abi,
-                address: sportsAMMV2.default.addresses[networkId],
+            return getContractWithModifiedResponse({
+                abi: sportsAMMV2.abi,
+                address: sportsAMMV2.addresses[networkId],
                 client,
-            })) as ViemContract;
+            }) as ViemContract;
         case ContractType.SPORTS_AMM_V2_RISK_MANAGER:
-            const sportsAMMV2RiskManager = await import('utils/contracts/sportsAMMV2RiskManagerContract');
-            return (await getContractWithModifiedResponse({
-                abi: sportsAMMV2RiskManager.default.abi,
-                address: sportsAMMV2RiskManager.default.addresses[networkId],
+            return getContractWithModifiedResponse({
+                abi: sportsAMMV2RiskManager.abi,
+                address: sportsAMMV2RiskManager.addresses[networkId],
                 client,
-            })) as ViemContract;
+            }) as ViemContract;
         case ContractType.LIVE_TRADING_PROCESSOR:
-            const liveTradingProcessor = await import('utils/contracts/liveTradingProcessorContract');
-            return (await getContractWithModifiedResponse({
-                abi: liveTradingProcessor.default.abi,
-                address: liveTradingProcessor.default.addresses[networkId],
+            return getContractWithModifiedResponse({
+                abi: liveTradingProcessor.abi,
+                address: liveTradingProcessor.addresses[networkId],
                 client,
-            })) as ViemContract;
+            }) as ViemContract;
         case ContractType.FREE_BET_HOLDER:
-            const freeBetHolder = await import('utils/contracts/freeBetHolder');
-            return (await getContractWithModifiedResponse({
-                abi: freeBetHolder.default.abi,
-                address: freeBetHolder.default.addresses[networkId],
+            return getContractWithModifiedResponse({
+                abi: freeBetHolder.abi,
+                address: freeBetHolder.addresses[networkId],
                 client,
-            })) as ViemContract;
+            }) as ViemContract;
         case ContractType.SPORTS_AMM_V2_MANAGER:
-            const sportsAMMV2Manager = await import('utils/contracts/sportsAMMV2ManagerContract');
-            return (await getContractWithModifiedResponse({
-                abi: sportsAMMV2Manager.default.abi,
-                address: sportsAMMV2Manager.default.addresses[networkId],
+            return getContractWithModifiedResponse({
+                abi: sportsAMMV2Manager.abi,
+                address: sportsAMMV2Manager.addresses[networkId],
                 client,
-            })) as ViemContract;
+            }) as ViemContract;
         case ContractType.MULTICALL:
-            const multiCall = await import('utils/contracts/multiCallContract');
-            return (await getContractWithModifiedResponse({
-                abi: multiCall.default.abi,
-                address: multiCall.default.addresses[networkId],
+            return getContractWithModifiedResponse({
+                abi: multiCall.abi,
+                address: multiCall.addresses[networkId],
                 client,
-            })) as ViemContract;
+            }) as ViemContract;
         case ContractType.STAKING_THALES:
-            const stakingThales = await import('utils/contracts/stakingThalesContract');
-            return (await getContractWithModifiedResponse({
-                abi: stakingThales.default.abi,
-                address: stakingThales.default.addresses[networkId],
+            return getContractWithModifiedResponse({
+                abi: stakingThales.abi,
+                address: stakingThales.addresses[networkId],
                 client,
-            })) as ViemContract;
+            }) as ViemContract;
         case ContractType.STAKING_THALES_BETTING_PROXY:
-            const stakingThalesBettingProxy = await import('utils/contracts/stakingThalesBettingProxy');
-            return (await getContractWithModifiedResponse({
-                abi: stakingThalesBettingProxy.default.abi,
-                address: stakingThalesBettingProxy.default.addresses[networkId],
+            return getContractWithModifiedResponse({
+                abi: stakingThalesBettingProxy.abi,
+                address: stakingThalesBettingProxy.addresses[networkId],
                 client,
-            })) as ViemContract;
+            }) as ViemContract;
         default:
             return undefined;
     }
