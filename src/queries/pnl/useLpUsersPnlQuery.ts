@@ -9,7 +9,7 @@ import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 import { orderBy } from 'lodash';
 import { bigNumberFormatter, Coins, parseBytes32String } from 'thales-utils';
 import { LpUsersPnl, Ticket } from 'types/markets';
-import { QueryConfig } from 'types/network';
+import { NetworkConfig } from 'types/network';
 import { isLpSupported, isStableCurrency } from 'utils/collaterals';
 import { getLpAddress } from 'utils/liquidityPool';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
@@ -20,11 +20,11 @@ import { Rates } from '../rates/useExchangeRatesQuery';
 const useLpUsersPnlQuery = (
     lpCollateral: LiquidityPoolCollateral,
     round: number,
-    queryConfig: QueryConfig,
+    networkConfig: NetworkConfig,
     options?: Omit<UseQueryOptions<LpUsersPnl[]>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<LpUsersPnl[]>({
-        queryKey: QUERY_KEYS.Pnl.LpUsersPnl(lpCollateral, round, queryConfig.networkId),
+        queryKey: QUERY_KEYS.Pnl.LpUsersPnl(lpCollateral, round, networkConfig.networkId),
         queryFn: async () => {
             const [
                 sportsAMMDataContract,
@@ -32,13 +32,13 @@ const useLpUsersPnlQuery = (
                 priceFeedContract,
                 stakingThalesBettingProxy,
             ] = await Promise.all([
-                getContractInstance(ContractType.SPORTS_AMM_DATA, queryConfig.client, queryConfig.networkId),
-                getContractInstance(ContractType.LIQUIDITY_POOL_DATA, queryConfig.client, queryConfig.networkId),
-                getContractInstance(ContractType.PRICE_FEED, queryConfig.client, queryConfig.networkId),
+                getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig.client, networkConfig.networkId),
+                getContractInstance(ContractType.LIQUIDITY_POOL_DATA, networkConfig.client, networkConfig.networkId),
+                getContractInstance(ContractType.PRICE_FEED, networkConfig.client, networkConfig.networkId),
                 getContractInstance(
                     ContractType.STAKING_THALES_BETTING_PROXY,
-                    queryConfig.client,
-                    queryConfig.networkId
+                    networkConfig.client,
+                    networkConfig.networkId
                 ),
             ]);
 
@@ -53,7 +53,7 @@ const useLpUsersPnlQuery = (
                     thalesPriceResponse,
                 ] = await Promise.all([
                     liquidityPoolDataContract.read?.getRoundTickets(
-                        getLpAddress(queryConfig.networkId, lpCollateral),
+                        getLpAddress(networkConfig.networkId, lpCollateral),
                         round
                     ),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, noCacheConfig),
@@ -91,7 +91,7 @@ const useLpUsersPnlQuery = (
                 const mappedTickets: Ticket[] = ticketsData.map((ticket: any) =>
                     mapTicket(
                         ticket,
-                        queryConfig.networkId,
+                        networkConfig.networkId,
                         gamesInfoResponse.data,
                         playersInfoResponse.data,
                         liveScoresResponse.data

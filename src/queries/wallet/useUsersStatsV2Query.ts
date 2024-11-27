@@ -8,7 +8,7 @@ import { ContractType } from 'enums/contract';
 import { orderBy } from 'lodash';
 import { bigNumberFormatter, parseBytes32String } from 'thales-utils';
 import { Ticket, UserStats } from 'types/markets';
-import { QueryConfig } from 'types/network';
+import { NetworkConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { isLpSupported, isStableCurrency } from 'utils/collaterals';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
@@ -18,21 +18,21 @@ import { Rates } from '../rates/useExchangeRatesQuery';
 
 const useUsersStatsV2Query = (
     user: string,
-    queryConfig: QueryConfig,
+    networkConfig: NetworkConfig,
     options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<UserStats | undefined>({
-        queryKey: QUERY_KEYS.Wallet.StatsV2(queryConfig.networkId, user),
+        queryKey: QUERY_KEYS.Wallet.StatsV2(networkConfig.networkId, user),
         queryFn: async () => {
             const contracts = (await Promise.all([
-                getContractInstance(ContractType.SPORTS_AMM_DATA, queryConfig.client, queryConfig.networkId),
-                getContractInstance(ContractType.PRICE_FEED, queryConfig.client, queryConfig.networkId),
-                getContractInstance(ContractType.SPORTS_AMM_V2_MANAGER, queryConfig.client, queryConfig.networkId),
-                getContractInstance(ContractType.FREE_BET_HOLDER, queryConfig.client, queryConfig.networkId),
+                getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig.client, networkConfig.networkId),
+                getContractInstance(ContractType.PRICE_FEED, networkConfig.client, networkConfig.networkId),
+                getContractInstance(ContractType.SPORTS_AMM_V2_MANAGER, networkConfig.client, networkConfig.networkId),
+                getContractInstance(ContractType.FREE_BET_HOLDER, networkConfig.client, networkConfig.networkId),
                 getContractInstance(
                     ContractType.STAKING_THALES_BETTING_PROXY,
-                    queryConfig.client,
-                    queryConfig.networkId
+                    networkConfig.client,
+                    networkConfig.networkId
                 ),
             ])) as ViemContract[];
 
@@ -135,7 +135,7 @@ const useUsersStatsV2Query = (
                 let pnl = 0;
 
                 const mappedTickets: Ticket[] = tickets.map((ticket: any) =>
-                    mapTicket(ticket, queryConfig.networkId, [], [], [])
+                    mapTicket(ticket, networkConfig.networkId, [], [], [])
                 );
 
                 const finalTickets: Ticket[] = orderBy(

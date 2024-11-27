@@ -31,7 +31,7 @@ import { isOddValid } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
 import { getLeaguePeriodType, getLeagueTooltipKey } from 'utils/sports';
 import { displayGameClock, displayGamePeriod } from 'utils/ui';
-import { useChainId, useClient } from 'wagmi';
+import { useChainId } from 'wagmi';
 import PositionsV2 from '../../Market/MarketDetailsV2/components/PositionsV2';
 import MatchStatus from './components/MatchStatus';
 import {
@@ -72,7 +72,6 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const dispatch = useDispatch();
 
     const networkId = useChainId();
-    const client = useClient();
 
     const isMarketSelected = useSelector(getIsMarketSelected);
     const isThreeWayView = useSelector(getIsThreeWayView);
@@ -84,7 +83,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
 
     const riskManagementLeaguesQuery = useRiskManagementConfigQuery(
         RiskManagementConfig.LEAGUES,
-        { networkId, client },
+        { networkId },
         {
             enabled: !!market.live,
         }

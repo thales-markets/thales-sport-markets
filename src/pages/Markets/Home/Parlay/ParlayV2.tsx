@@ -50,27 +50,15 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
 
     const sportsAmmDataQuery = useSportsAmmDataQuery({ networkId, client });
 
-    const sportMarketsQuery = useSportsMarketsV2Query(
-        StatusFilter.OPEN_MARKETS,
-        false,
-        { networkId, client },
-        undefined,
-        {
-            enabled: !!openMarkets,
-        }
-    );
+    const sportMarketsQuery = useSportsMarketsV2Query(StatusFilter.OPEN_MARKETS, false, { networkId }, undefined, {
+        enabled: !!openMarkets,
+    });
 
-    const sportMarketsProofsQuery = useSportsMarketsV2Query(
-        StatusFilter.OPEN_MARKETS,
-        true,
-        { networkId, client },
-        ticket,
-        {
-            enabled: !!ticket.length,
-        }
-    );
+    const sportMarketsProofsQuery = useSportsMarketsV2Query(StatusFilter.OPEN_MARKETS, true, { networkId }, ticket, {
+        enabled: !!ticket.length,
+    });
 
-    const liveSportMarketsQuery = useLiveSportsMarketsQuery(isLiveFilterSelected, { networkId, client });
+    const liveSportMarketsQuery = useLiveSportsMarketsQuery(isLiveFilterSelected, { networkId });
 
     useEffect(() => {
         if (sportsAmmDataQuery.isSuccess && sportsAmmDataQuery.data) {

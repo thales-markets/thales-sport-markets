@@ -24,9 +24,9 @@ export type NetworkParams = {
     order: number;
 };
 
-export type QueryConfig = {
+export type NetworkConfig = {
     networkId: SupportedNetwork;
-    client: any;
+    client?: any;
 };
 
 export type SupportedNetwork = Exclude<

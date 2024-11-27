@@ -1,7 +1,7 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import QUERY_KEYS from 'constants/queryKeys';
 import { ContractType } from 'enums/contract';
-import { QueryConfig } from 'types/network';
+import { NetworkConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
 import sportsAMMV2Contract from 'utils/contracts/sportsAMMV2Contract';
 import { getContractInstance } from 'utils/networkConnector';
@@ -11,17 +11,17 @@ type AMMContractsPausedData = {
 };
 
 const useAMMContractsPausedQuery = (
-    queryConfig: QueryConfig,
+    networkConfig: NetworkConfig,
     options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<AMMContractsPausedData>({
-        queryKey: QUERY_KEYS.CheckPausedAMM(queryConfig.networkId),
+        queryKey: QUERY_KEYS.CheckPausedAMM(networkConfig.networkId),
         queryFn: async () => {
             try {
                 const sportsAMMV2ContractInstance = (await getContractInstance(
                     ContractType.SPORTS_AMM_V2,
-                    queryConfig.client,
-                    queryConfig.networkId
+                    networkConfig.client,
+                    networkConfig.networkId
                 )) as ViemContract;
 
                 if (sportsAMMV2Contract) {

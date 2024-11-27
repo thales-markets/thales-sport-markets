@@ -9,7 +9,7 @@ import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 import { orderBy } from 'lodash';
 import { bigNumberFormatter, Coins, parseBytes32String } from 'thales-utils';
 import { LpStats, Ticket } from 'types/markets';
-import { QueryConfig, SupportedNetwork } from 'types/network';
+import { NetworkConfig, SupportedNetwork } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { isLpSupported, isStableCurrency } from 'utils/collaterals';
 import { getLpAddress } from 'utils/liquidityPool';
@@ -72,16 +72,16 @@ const getLpStats = async (
 
 const useLpStatsQuery = (
     round: number,
-    queryConfig: QueryConfig,
+    networkConfig: NetworkConfig,
     options?: Omit<UseQueryOptions<LpStats[]>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<LpStats[]>({
-        queryKey: QUERY_KEYS.Pnl.LpStats(round, queryConfig.networkId),
+        queryKey: QUERY_KEYS.Pnl.LpStats(round, networkConfig.networkId),
         queryFn: async () => {
             const [sportsAMMDataContract, liquidityPoolDataContract, priceFeedContract] = await Promise.all([
-                getContractInstance(ContractType.SPORTS_AMM_DATA, queryConfig.client, queryConfig.networkId),
-                getContractInstance(ContractType.LIQUIDITY_POOL_DATA, queryConfig.client, queryConfig.networkId),
-                getContractInstance(ContractType.PRICE_FEED, queryConfig.client, queryConfig.networkId),
+                getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig.client, networkConfig.networkId),
+                getContractInstance(ContractType.LIQUIDITY_POOL_DATA, networkConfig.client, networkConfig.networkId),
+                getContractInstance(ContractType.PRICE_FEED, networkConfig.client, networkConfig.networkId),
             ]);
             if (sportsAMMDataContract && liquidityPoolDataContract && priceFeedContract) {
                 const [
@@ -93,15 +93,15 @@ const useLpStatsQuery = (
                     thalesPriceResponse,
                 ] = await Promise.all([
                     liquidityPoolDataContract.read?.getRoundTickets(
-                        getLpAddress(queryConfig.networkId, LiquidityPoolCollateral.USDC),
+                        getLpAddress(networkConfig.networkId, LiquidityPoolCollateral.USDC),
                         round
                     ),
                     liquidityPoolDataContract.read?.getRoundTickets(
-                        getLpAddress(queryConfig.networkId, LiquidityPoolCollateral.WETH),
+                        getLpAddress(networkConfig.networkId, LiquidityPoolCollateral.WETH),
                         round
                     ),
                     liquidityPoolDataContract.read?.getRoundTickets(
-                        getLpAddress(queryConfig.networkId, LiquidityPoolCollateral.THALES),
+                        getLpAddress(networkConfig.networkId, LiquidityPoolCollateral.THALES),
                         round
                     ),
                     priceFeedContract.read?.getCurrencies(),
@@ -122,19 +122,19 @@ const useLpStatsQuery = (
                 const usdcLpStats = await getLpStats(
                     usdcTickets,
                     sportsAMMDataContract,
-                    queryConfig.networkId,
+                    networkConfig.networkId,
                     exchangeRates
                 );
                 const wethLpStats = await getLpStats(
                     wethTickets,
                     sportsAMMDataContract,
-                    queryConfig.networkId,
+                    networkConfig.networkId,
                     exchangeRates
                 );
                 const thalesLpStats = await getLpStats(
                     thalesTickets,
                     sportsAMMDataContract,
-                    queryConfig.networkId,
+                    networkConfig.networkId,
                     exchangeRates
                 );
 

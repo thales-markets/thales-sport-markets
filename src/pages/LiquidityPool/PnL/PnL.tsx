@@ -19,7 +19,7 @@ import { Colors, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivR
 import { formatPercentageWithSign } from 'thales-utils';
 import { LiquidityPoolPnls } from 'types/liquidityPool';
 import { ThemeInterface } from 'types/ui';
-import { useChainId, useClient } from 'wagmi';
+import { useChainId } from 'wagmi';
 
 type PnlProps = {
     lifetimePnl: number;
@@ -32,14 +32,13 @@ const PnL: React.FC<PnlProps> = ({ lifetimePnl, type, liquidityPoolAddress }) =>
     const theme: ThemeInterface = useTheme();
 
     const networkId = useChainId();
-    const client = useClient();
 
     const [liquidityPoolPnls, setLiquidityPoolPnls] = useState<LiquidityPoolPnls>([]);
 
     // TODO temp disable THALES PnL
     const liquidityPoolPnlsQuery = useLiquidityPoolPnlsQuery(
         liquidityPoolAddress,
-        { networkId, client },
+        { networkId },
         {
             enabled:
                 liquidityPoolAddress !== '0xE59206b08cC96Da0818522C75eE3Fd4EBB7c0A47' &&

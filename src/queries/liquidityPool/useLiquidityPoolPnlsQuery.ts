@@ -3,19 +3,19 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { orderBy } from 'lodash';
 import thalesData from 'thales-data';
 import { LiquidityPoolPnls } from 'types/liquidityPool';
-import { QueryConfig } from 'types/network';
+import { NetworkConfig } from 'types/network';
 
 const useLiquidityPoolPnlsQuery = (
     liquidityPoolAddress: string,
-    queryConfig: QueryConfig,
+    networkConfig: NetworkConfig,
     options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<LiquidityPoolPnls>({
-        queryKey: QUERY_KEYS.LiquidityPool.PnL(queryConfig.networkId, liquidityPoolAddress),
+        queryKey: QUERY_KEYS.LiquidityPool.PnL(networkConfig.networkId, liquidityPoolAddress),
         queryFn: async () => {
             try {
                 const liquidityPoolPnls = await thalesData.sportMarketsV2.liquidityPoolPnls({
-                    network: queryConfig.networkId,
+                    network: networkConfig.networkId,
                     liquidityPool: liquidityPoolAddress,
                 });
 

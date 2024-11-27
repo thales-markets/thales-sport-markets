@@ -46,7 +46,7 @@ import { MarketsCache, SportMarket, SportMarkets, TagInfo, Tags } from 'types/ma
 import { ThemeInterface } from 'types/ui';
 import { history } from 'utils/routes';
 import useQueryParam from 'utils/useQueryParams';
-import { useChainId, useClient } from 'wagmi';
+import { useChainId } from 'wagmi';
 import { BOXING_LEAGUES, LeagueMap } from '../../../constants/sports';
 import { MarketType } from '../../../enums/marketTypes';
 import { Sport } from '../../../enums/sports';
@@ -78,7 +78,6 @@ const Home: React.FC = () => {
     const theme: ThemeInterface = useTheme();
 
     const networkId = useChainId();
-    const client = useClient();
 
     const marketSearch = useSelector(getMarketSearch);
     const datePeriodFilter = useSelector(getDatePeriodFilter);
@@ -196,9 +195,9 @@ const Home: React.FC = () => {
         []
     );
 
-    const sportMarketsQueryNew = useSportsMarketsV2Query(statusFilter, false, { networkId, client }, undefined);
+    const sportMarketsQueryNew = useSportsMarketsV2Query(statusFilter, false, { networkId }, undefined);
 
-    const liveSportMarketsQuery = useLiveSportsMarketsQuery(sportFilter === SportFilter.Live, { networkId, client });
+    const liveSportMarketsQuery = useLiveSportsMarketsQuery(sportFilter === SportFilter.Live, { networkId });
 
     const gameMultipliersQuery = useGameMultipliersQuery();
 
@@ -336,12 +335,7 @@ const Home: React.FC = () => {
         }
     }, [favouriteLeagues, sportFilter, showActive]);
 
-    const openSportMarketsQuery = useSportsMarketsV2Query(
-        StatusFilter.OPEN_MARKETS,
-        false,
-        { networkId, client },
-        undefined
-    );
+    const openSportMarketsQuery = useSportsMarketsV2Query(StatusFilter.OPEN_MARKETS, false, { networkId }, undefined);
 
     const openSportMarkets = useMemo(() => {
         if (openSportMarketsQuery.isSuccess && openSportMarketsQuery.data) {

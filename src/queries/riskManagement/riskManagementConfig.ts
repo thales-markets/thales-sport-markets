@@ -3,21 +3,21 @@ import axios from 'axios';
 import { generalConfig, noCacheConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
 import { RiskManagementConfig } from 'enums/riskManagement';
-import { QueryConfig } from 'types/network';
+import { NetworkConfig } from 'types/network';
 import { RiskManagementData } from 'types/riskManagement';
 
 const useRiskManagementConfigQuery = (
     configType: RiskManagementConfig,
-    queryConfig: QueryConfig,
+    networkConfig: NetworkConfig,
     options?: Omit<UseQueryOptions<RiskManagementData>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<RiskManagementData>({
-        queryKey: QUERY_KEYS.RiskManagementConfig(queryConfig.networkId, configType),
+        queryKey: QUERY_KEYS.RiskManagementConfig(networkConfig.networkId, configType),
         queryFn: async () => {
             let config: RiskManagementData = {};
             try {
                 const configResponse = await axios.get(
-                    `${generalConfig.API_URL}/overtime-v2/networks/${queryConfig.networkId}/risk-management-config/${configType}`,
+                    `${generalConfig.API_URL}/overtime-v2/networks/${networkConfig.networkId}/risk-management-config/${configType}`,
                     noCacheConfig
                 );
 

@@ -4,22 +4,22 @@ import { generalConfig, noCacheConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
 import { secondsToMilliseconds } from 'date-fns';
 import { SportMarket, SportMarkets } from 'types/markets';
-import { QueryConfig } from 'types/network';
+import { NetworkConfig } from 'types/network';
 
 // without this every request is treated as new even though it has the same response
 const marketsCache = { live: [] as SportMarkets };
 
 const useLiveSportsMarketsQuery = (
     isLiveSelected: boolean,
-    queryConfig: QueryConfig,
+    networkConfig: NetworkConfig,
     options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<{ live: SportMarkets }>({
-        queryKey: QUERY_KEYS.LiveSportMarkets(queryConfig.networkId),
+        queryKey: QUERY_KEYS.LiveSportMarkets(networkConfig.networkId),
         queryFn: async () => {
             try {
                 const response = await axios.get<undefined, { data: { markets: SportMarkets } }>(
-                    `${generalConfig.API_URL}/overtime-v2/networks/${queryConfig.networkId}/live-markets`,
+                    `${generalConfig.API_URL}/overtime-v2/networks/${networkConfig.networkId}/live-markets`,
                     noCacheConfig
                 );
 

@@ -5,21 +5,19 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
 import { SportMarket } from 'types/markets';
-import { useChainId, useClient } from 'wagmi';
+import { useChainId } from 'wagmi';
 import MarketDetailsV2 from './MarketDetailsV2';
 
 const Market: React.FC = () => {
     const [lastValidMarket, setLastValidMarket] = useState<SportMarket | undefined>(undefined);
 
     const networkId = useChainId();
-    const client = useClient();
 
     const params = useParams() as { marketAddress: string };
     const marketAddress = params && params.marketAddress ? params.marketAddress : '';
 
     const singleMarketQuery = useSportMarketV2Query(marketAddress, false, !!lastValidMarket?.live, {
         networkId,
-        client,
     });
 
     useEffect(() => {

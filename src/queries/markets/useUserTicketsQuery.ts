@@ -6,7 +6,7 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { ContractType } from 'enums/contract';
 import { orderBy } from 'lodash';
 import { Ticket } from 'types/markets';
-import { QueryConfig } from 'types/network';
+import { NetworkConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
 import { isTestNetwork } from 'utils/network';
@@ -16,21 +16,25 @@ import { mapTicket } from 'utils/tickets';
 
 export const useUserTicketsQuery = (
     user: string,
-    queryConfig: QueryConfig,
+    networkConfig: NetworkConfig,
     options?: Omit<UseQueryOptions<Ticket[] | undefined>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<Ticket[] | undefined>({
-        queryKey: QUERY_KEYS.UserTickets(queryConfig.networkId, user),
+        queryKey: QUERY_KEYS.UserTickets(networkConfig.networkId, user),
         queryFn: async () => {
             try {
                 const contracts = (await Promise.all([
-                    getContractInstance(ContractType.SPORTS_AMM_DATA, queryConfig.client, queryConfig.networkId),
-                    getContractInstance(ContractType.SPORTS_AMM_V2_MANAGER, queryConfig.client, queryConfig.networkId),
-                    getContractInstance(ContractType.FREE_BET_HOLDER, queryConfig.client, queryConfig.networkId),
+                    getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig.client, networkConfig.networkId),
+                    getContractInstance(
+                        ContractType.SPORTS_AMM_V2_MANAGER,
+                        networkConfig.client,
+                        networkConfig.networkId
+                    ),
+                    getContractInstance(ContractType.FREE_BET_HOLDER, networkConfig.client, networkConfig.networkId),
                     getContractInstance(
                         ContractType.STAKING_THALES_BETTING_PROXY,
-                        queryConfig.client,
-                        queryConfig.networkId
+                        networkConfig.client,
+                        networkConfig.networkId
                     ),
                 ])) as ViemContract[];
 
@@ -83,7 +87,7 @@ export const useUserTicketsQuery = (
                                 : Number(numOfResolvedStakedThalesTicketsPerUser)) / BATCH_SIZE
                         ) + 1;
 
-                    const playersInfoQueryParam = `isTestnet=${isTestNetwork(queryConfig.networkId)}`;
+                    const playersInfoQueryParam = `isTestnet=${isTestNetwork(networkConfig.networkId)}`;
 
                     const promises = [];
                     for (let i = 0; i < numberOfActiveBatches; i++) {
@@ -124,7 +128,7 @@ export const useUserTicketsQuery = (
                     const mappedTickets: Ticket[] = tickets.map((ticket: any) =>
                         mapTicket(
                             ticket,
-                            queryConfig.networkId,
+                            networkConfig.networkId,
                             gamesInfoResponse.data,
                             playersInfoResponse.data,
                             liveScoresResponse.data

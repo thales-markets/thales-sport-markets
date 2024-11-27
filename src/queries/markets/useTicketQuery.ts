@@ -4,7 +4,7 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { ContractType } from 'enums/contract';
 import { orderBy } from 'lodash';
 import { Ticket } from 'types/markets';
-import { QueryConfig } from 'types/network';
+import { NetworkConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
 import { isTestNetwork } from 'utils/network';
@@ -15,20 +15,20 @@ import { generalConfig, noCacheConfig } from '../../config/general';
 
 export const useTicketQuery = (
     ticketAddress: string,
-    queryConfig: QueryConfig,
+    networkConfig: NetworkConfig,
     options?: Omit<UseQueryOptions<Ticket | undefined>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<Ticket | undefined>({
-        queryKey: QUERY_KEYS.Ticket(queryConfig.networkId, ticketAddress),
+        queryKey: QUERY_KEYS.Ticket(networkConfig.networkId, ticketAddress),
         queryFn: async () => {
             try {
                 const sportsAMMDataContract = (await getContractInstance(
                     ContractType.SPORTS_AMM_DATA,
-                    queryConfig.client,
-                    queryConfig.networkId
+                    networkConfig.client,
+                    networkConfig.networkId
                 )) as ViemContract;
                 if (sportsAMMDataContract) {
-                    const playersInfoQueryParam = `isTestnet=${isTestNetwork(queryConfig.networkId)}`;
+                    const playersInfoQueryParam = `isTestnet=${isTestNetwork(networkConfig.networkId)}`;
 
                     const [tickets, gamesInfoResponse, playersInfoResponse, liveScoresResponse] = await Promise.all([
                         sportsAMMDataContract.read.getTicketsData([ticketAddress]),
@@ -43,7 +43,7 @@ export const useTicketQuery = (
                     const mappedTickets: Ticket[] = tickets.map((ticket: any) =>
                         mapTicket(
                             ticket,
-                            queryConfig.networkId,
+                            networkConfig.networkId,
                             gamesInfoResponse.data,
                             playersInfoResponse.data,
                             liveScoresResponse.data

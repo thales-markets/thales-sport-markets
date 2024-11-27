@@ -3,16 +3,16 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { ContractType } from 'enums/contract';
 import { bigNumberFormatter, getDefaultDecimalsForNetwork } from 'thales-utils';
 import { SportsAmmData } from 'types/markets';
-import { QueryConfig } from 'types/network';
+import { NetworkConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { getContractInstance } from 'utils/networkConnector';
 
 const useSportsAmmDataQuery = (
-    queryConfig: QueryConfig,
+    networkConfig: NetworkConfig,
     options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<SportsAmmData | undefined>({
-        queryKey: QUERY_KEYS.SportsAmmData(queryConfig.networkId),
+        queryKey: QUERY_KEYS.SportsAmmData(networkConfig.networkId),
         queryFn: async () => {
             try {
                 const sportsAmmData: SportsAmmData = {
@@ -25,8 +25,8 @@ const useSportsAmmDataQuery = (
 
                 const sportsAMMDataContract = (await getContractInstance(
                     ContractType.SPORTS_AMM_DATA,
-                    queryConfig.client,
-                    queryConfig.networkId
+                    networkConfig.client,
+                    networkConfig.networkId
                 )) as ViemContract;
 
                 if (sportsAMMDataContract) {
@@ -34,12 +34,12 @@ const useSportsAmmDataQuery = (
 
                     sportsAmmData.minBuyInAmount = bigNumberFormatter(
                         sportsAMMParameters.minBuyInAmount,
-                        getDefaultDecimalsForNetwork(queryConfig.networkId)
+                        getDefaultDecimalsForNetwork(networkConfig.networkId)
                     );
                     sportsAmmData.maxTicketSize = Number(sportsAMMParameters.maxTicketSize);
                     sportsAmmData.maxSupportedAmount = bigNumberFormatter(
                         sportsAMMParameters.maxSupportedAmount,
-                        getDefaultDecimalsForNetwork(queryConfig.networkId)
+                        getDefaultDecimalsForNetwork(networkConfig.networkId)
                     );
                     sportsAmmData.maxSupportedOdds = bigNumberFormatter(sportsAMMParameters.maxSupportedOdds);
                     sportsAmmData.safeBoxFee = bigNumberFormatter(sportsAMMParameters.safeBoxFee);

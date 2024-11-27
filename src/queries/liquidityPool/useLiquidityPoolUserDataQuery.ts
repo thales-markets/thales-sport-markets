@@ -1,7 +1,7 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { coinFormatter, Coins } from 'thales-utils';
 import { UserLiquidityPoolData } from 'types/liquidityPool';
-import { QueryConfig } from 'types/network';
+import { NetworkConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { getContractAbi } from 'utils/contracts/abi';
 import liquidityPoolDataContract from 'utils/contracts/liquidityPoolDataContractV2';
@@ -12,11 +12,11 @@ const useLiquidityPoolUserDataQuery = (
     address: string,
     collateral: Coins,
     walletAddress: string,
-    queryConfig: QueryConfig,
+    networkConfig: NetworkConfig,
     options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<UserLiquidityPoolData | undefined>({
-        queryKey: QUERY_KEYS.LiquidityPool.UserData(address, walletAddress, queryConfig.networkId),
+        queryKey: QUERY_KEYS.LiquidityPool.UserData(address, walletAddress, networkConfig.networkId),
         queryFn: async () => {
             const userLiquidityPoolData: UserLiquidityPoolData = {
                 balanceCurrentRound: 0,
@@ -32,9 +32,9 @@ const useLiquidityPoolUserDataQuery = (
 
             try {
                 const liquidityPoolDataContractInstance = getContract({
-                    abi: getContractAbi(liquidityPoolDataContract, queryConfig.networkId),
-                    address: liquidityPoolDataContract.addresses[queryConfig.networkId],
-                    client: queryConfig.client,
+                    abi: getContractAbi(liquidityPoolDataContract, networkConfig.networkId),
+                    address: liquidityPoolDataContract.addresses[networkConfig.networkId],
+                    client: networkConfig.client,
                 }) as ViemContract;
 
                 if (liquidityPoolDataContractInstance) {
@@ -45,19 +45,19 @@ const useLiquidityPoolUserDataQuery = (
                     userLiquidityPoolData.isWithdrawalRequested = contractUserLiquidityPoolData.withdrawalRequested;
                     userLiquidityPoolData.withdrawalShare = coinFormatter(
                         contractUserLiquidityPoolData.withdrawalShare,
-                        queryConfig.networkId,
+                        networkConfig.networkId,
                         collateral
                     );
                     userLiquidityPoolData.isPartialWithdrawalRequested = userLiquidityPoolData.withdrawalShare > 0;
 
                     userLiquidityPoolData.balanceCurrentRound = coinFormatter(
                         contractUserLiquidityPoolData.balanceCurrentRound,
-                        queryConfig.networkId,
+                        networkConfig.networkId,
                         collateral
                     );
                     userLiquidityPoolData.balanceNextRound = coinFormatter(
                         contractUserLiquidityPoolData.balanceNextRound,
-                        queryConfig.networkId,
+                        networkConfig.networkId,
                         collateral
                     );
                     userLiquidityPoolData.withdrawalAmount = userLiquidityPoolData.isWithdrawalRequested

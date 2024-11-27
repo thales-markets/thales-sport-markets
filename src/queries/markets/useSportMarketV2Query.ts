@@ -6,24 +6,24 @@ import { secondsToMilliseconds } from 'date-fns';
 import { MarketStatus } from 'enums/markets';
 import { orderBy } from 'lodash';
 import { SportMarket } from 'types/markets';
-import { QueryConfig } from 'types/network';
+import { NetworkConfig } from 'types/network';
 import { packMarket } from 'utils/marketsV2';
 
 const useSportMarketQuery = (
     marketAddress: string,
     onlyOpenChildMarkets: boolean,
     isLive: boolean,
-    queryConfig: QueryConfig,
+    networkConfig: NetworkConfig,
     options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<SportMarket | undefined>({
-        queryKey: QUERY_KEYS.SportMarketV2(marketAddress, queryConfig.networkId, isLive),
+        queryKey: QUERY_KEYS.SportMarketV2(marketAddress, networkConfig.networkId, isLive),
         queryFn: async () => {
             const enableOnlyOpenChildMarkets = onlyOpenChildMarkets && !isLive;
             try {
                 const [marketResponse, gameInfoResponse, liveScoreResponse] = await Promise.all([
                     axios.get(
-                        `${generalConfig.API_URL}/overtime-v2/networks/${queryConfig.networkId}/${
+                        `${generalConfig.API_URL}/overtime-v2/networks/${networkConfig.networkId}/${
                             isLive ? 'live-' : ''
                         }markets/${marketAddress}?onlyBasicProperties=true`,
                         noCacheConfig

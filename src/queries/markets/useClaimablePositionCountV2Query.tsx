@@ -2,27 +2,31 @@ import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { BATCH_SIZE } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
 import { ContractType } from 'enums/contract';
-import { QueryConfig } from 'types/network';
+import { NetworkConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { getContractInstance } from 'utils/networkConnector';
 
 const useClaimablePositionCountQuery = (
     user: string,
-    queryConfig: QueryConfig,
+    networkConfig: NetworkConfig,
     options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<number | null>({
-        queryKey: QUERY_KEYS.ClaimableCountV2(user, queryConfig.networkId),
+        queryKey: QUERY_KEYS.ClaimableCountV2(user, networkConfig.networkId),
         queryFn: async () => {
             try {
                 const contractInstances = (await Promise.all([
-                    getContractInstance(ContractType.SPORTS_AMM_DATA, queryConfig.client, queryConfig.networkId),
-                    getContractInstance(ContractType.SPORTS_AMM_V2_MANAGER, queryConfig.client, queryConfig.networkId),
-                    getContractInstance(ContractType.FREE_BET_HOLDER, queryConfig.client, queryConfig.networkId),
+                    getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig.client, networkConfig.networkId),
+                    getContractInstance(
+                        ContractType.SPORTS_AMM_V2_MANAGER,
+                        networkConfig.client,
+                        networkConfig.networkId
+                    ),
+                    getContractInstance(ContractType.FREE_BET_HOLDER, networkConfig.client, networkConfig.networkId),
                     getContractInstance(
                         ContractType.STAKING_THALES_BETTING_PROXY,
-                        queryConfig.client,
-                        queryConfig.networkId
+                        networkConfig.client,
+                        networkConfig.networkId
                     ),
                 ])) as ViemContract[];
 

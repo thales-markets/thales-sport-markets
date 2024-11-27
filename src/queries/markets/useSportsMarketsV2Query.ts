@@ -8,7 +8,7 @@ import { StatusFilter } from 'enums/markets';
 import { League } from 'enums/sports';
 import { orderBy } from 'lodash';
 import { MarketsCache, TicketPosition } from 'types/markets';
-import { QueryConfig } from 'types/network';
+import { NetworkConfig } from 'types/network';
 import { packMarket } from 'utils/marketsV2';
 
 const marketsCache: MarketsCache = {
@@ -22,7 +22,7 @@ const marketsCache: MarketsCache = {
 const useSportsMarketsV2Query = (
     statusFilter: StatusFilter,
     includeProofs: boolean,
-    queryConfig: QueryConfig,
+    networkConfig: NetworkConfig,
     ticket?: TicketPosition[],
     options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
@@ -34,7 +34,7 @@ const useSportsMarketsV2Query = (
     return useQuery<MarketsCache>({
         queryKey: QUERY_KEYS.SportMarketsV2(
             statusFilter,
-            queryConfig.networkId,
+            networkConfig.networkId,
             includeProofs,
             gameIds,
             typeIds,
@@ -54,7 +54,7 @@ const useSportsMarketsV2Query = (
                 const [marketsResponse, gamesInfoResponse, liveScoresResponse] = await Promise.all([
                     axios.get(
                         `${generalConfig.API_URL}/overtime-v2/networks/${
-                            queryConfig.networkId
+                            networkConfig.networkId
                         }/markets/?status=${status}&ungroup=true&onlyBasicProperties=true&includeProofs=${includeProofs}${
                             ticket ? '' : `&minMaturity=${minMaturity}`
                         }${ticket ? `&gameIds=${gameIds}` : ''}${ticket ? `&typeIds=${typeIds}` : ''}${

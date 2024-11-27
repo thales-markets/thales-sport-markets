@@ -3,28 +3,28 @@ import QUERY_KEYS from 'constants/queryKeys';
 import thalesData from 'thales-data';
 import { coinFormatter } from 'thales-utils';
 import { LiquidityPoolUserTransactions } from 'types/liquidityPool';
-import { QueryConfig } from '../../types/network';
+import { NetworkConfig } from '../../types/network';
 import { getLiquidityPools } from '../../utils/liquidityPool';
 
 const useLiquidityPoolUserTransactions = (
     walletAddress: string,
-    queryConfig: QueryConfig,
+    networkConfig: NetworkConfig,
     options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<LiquidityPoolUserTransactions>({
-        queryKey: QUERY_KEYS.Wallet.LiquidityPoolTransactions(queryConfig.networkId, walletAddress),
+        queryKey: QUERY_KEYS.Wallet.LiquidityPoolTransactions(networkConfig.networkId, walletAddress),
         queryFn: async () => {
             try {
                 const vaultTx: LiquidityPoolUserTransactions = [];
 
                 const liquidityPoolUserTransactions: LiquidityPoolUserTransactions = await thalesData.sportMarketsV2.liquidityPoolUserTransactions(
                     {
-                        network: queryConfig.networkId,
+                        network: networkConfig.networkId,
                         account: walletAddress,
                     }
                 );
 
-                const liquidityPools = getLiquidityPools(queryConfig.networkId);
+                const liquidityPools = getLiquidityPools(networkConfig.networkId);
 
                 vaultTx.push(
                     ...liquidityPoolUserTransactions.map((tx) => {
@@ -37,7 +37,7 @@ const useLiquidityPoolUserTransactions = (
                             name: lp.name,
                             amount: coinFormatter(
                                 (tx.amount as unknown) as bigint,
-                                queryConfig.networkId,
+                                networkConfig.networkId,
                                 lp.collateral
                             ),
                             collateral: lp.collateral,

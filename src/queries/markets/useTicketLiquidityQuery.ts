@@ -3,13 +3,13 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { ContractType } from 'enums/contract';
 import { bigNumberFormatter, getDefaultDecimalsForNetwork } from 'thales-utils';
 import { TicketMarket } from 'types/markets';
-import { QueryConfig } from 'types/network';
+import { NetworkConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { getContractInstance } from 'utils/networkConnector';
 
 const useTicketLiquidityQuery = (
     markets: TicketMarket[],
-    queryConfig: QueryConfig,
+    networkConfig: NetworkConfig,
     options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<number | undefined>({
@@ -20,14 +20,14 @@ const useTicketLiquidityQuery = (
             markets.map((market) => market.line).join(','),
             markets.map((market) => market.position).join(','),
             markets.map((market) => market.live).join(','),
-            queryConfig.networkId
+            networkConfig.networkId
         ),
         queryFn: async () => {
             try {
                 const sportsAMMV2RiskManagerContract = (await getContractInstance(
                     ContractType.SPORTS_AMM_V2_RISK_MANAGER,
-                    queryConfig.client,
-                    queryConfig.networkId
+                    networkConfig.client,
+                    networkConfig.networkId
                 )) as ViemContract;
 
                 if (sportsAMMV2RiskManagerContract) {
@@ -64,11 +64,11 @@ const useTicketLiquidityQuery = (
                         const market = markets[i];
                         const formattedRisk = bigNumberFormatter(
                             risks[i],
-                            getDefaultDecimalsForNetwork(queryConfig.networkId)
+                            getDefaultDecimalsForNetwork(networkConfig.networkId)
                         );
                         const formattedCap = bigNumberFormatter(
                             caps[i],
-                            getDefaultDecimalsForNetwork(queryConfig.networkId)
+                            getDefaultDecimalsForNetwork(networkConfig.networkId)
                         );
                         const marketLiquidity = Math.floor((formattedCap - formattedRisk) / (1 / market.odd - 1));
                         ticketLiquidity =

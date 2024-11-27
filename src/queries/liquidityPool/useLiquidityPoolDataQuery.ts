@@ -2,7 +2,7 @@ import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { secondsToMilliseconds } from 'date-fns';
 import { bigNumberFormatter, coinFormatter, Coins } from 'thales-utils';
 import { LiquidityPoolData } from 'types/liquidityPool';
-import { QueryConfig } from 'types/network';
+import { NetworkConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { getContractAbi } from 'utils/contracts/abi';
 import liquidityPoolDataContract from 'utils/contracts/liquidityPoolDataContractV2';
@@ -12,11 +12,11 @@ import QUERY_KEYS from '../../constants/queryKeys';
 const useLiquidityPoolDataQuery = (
     address: string,
     collateral: Coins,
-    queryConfig: QueryConfig,
+    networkConfig: NetworkConfig,
     options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<LiquidityPoolData | undefined>({
-        queryKey: QUERY_KEYS.LiquidityPool.Data(address, queryConfig.networkId),
+        queryKey: QUERY_KEYS.LiquidityPool.Data(address, networkConfig.networkId),
         queryFn: async () => {
             const liquidityPoolData: LiquidityPoolData = {
                 collateral: '',
@@ -40,9 +40,9 @@ const useLiquidityPoolDataQuery = (
 
             try {
                 const liquidityPoolDataContractInstance = getContract({
-                    abi: getContractAbi(liquidityPoolDataContract, queryConfig.networkId),
-                    address: liquidityPoolDataContract.addresses[queryConfig.networkId],
-                    client: queryConfig.client,
+                    abi: getContractAbi(liquidityPoolDataContract, networkConfig.networkId),
+                    address: liquidityPoolDataContract.addresses[networkConfig.networkId],
+                    client: networkConfig.client,
                 }) as ViemContract;
 
                 if (liquidityPoolDataContractInstance) {
@@ -55,7 +55,7 @@ const useLiquidityPoolDataQuery = (
                     liquidityPoolData.liquidityPoolStarted = contractLiquidityPoolData.started;
                     liquidityPoolData.maxAllowedDeposit = coinFormatter(
                         contractLiquidityPoolData.maxAllowedDeposit,
-                        queryConfig.networkId,
+                        networkConfig.networkId,
                         collateral
                     );
                     liquidityPoolData.round = Number(contractLiquidityPoolData.round);
@@ -64,7 +64,7 @@ const useLiquidityPoolDataQuery = (
                     );
                     liquidityPoolData.allocationNextRound = coinFormatter(
                         contractLiquidityPoolData.totalDeposited,
-                        queryConfig.networkId,
+                        networkConfig.networkId,
                         collateral
                     );
                     liquidityPoolData.allocationNextRoundPercentage =
@@ -73,13 +73,13 @@ const useLiquidityPoolDataQuery = (
                         liquidityPoolData.maxAllowedDeposit - liquidityPoolData.allocationNextRound;
                     liquidityPoolData.allocationCurrentRound = coinFormatter(
                         contractLiquidityPoolData.allocationCurrentRound,
-                        queryConfig.networkId,
+                        networkConfig.networkId,
                         collateral
                     );
                     liquidityPoolData.isRoundEnded = new Date().getTime() > liquidityPoolData.roundEndTime;
                     liquidityPoolData.minDepositAmount = coinFormatter(
                         contractLiquidityPoolData.minDepositAmount,
-                        queryConfig.networkId,
+                        networkConfig.networkId,
                         collateral
                     );
                     liquidityPoolData.maxAllowedUsers = Number(contractLiquidityPoolData.maxAllowedUsers);

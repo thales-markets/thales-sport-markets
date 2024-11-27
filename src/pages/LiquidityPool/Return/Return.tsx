@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatPercentage } from 'thales-utils';
 import { LiquidityPoolReturn } from 'types/liquidityPool';
-import { useChainId, useClient } from 'wagmi';
+import { useChainId } from 'wagmi';
 import {
     ContentInfoContainer,
     LiquidityPoolInfoContainer,
@@ -16,11 +16,10 @@ const Return: React.FC<{ liquidityPoolAddress: string }> = ({ liquidityPoolAddre
     const { t } = useTranslation();
 
     const networkId = useChainId();
-    const client = useClient();
 
     const [liquidityPoolReturn, setLiquidityPoolReturn] = useState<LiquidityPoolReturn | undefined>(undefined);
 
-    const liquidityPoolReturnQuery = useLiquidityPoolReturnQuery(liquidityPoolAddress, { networkId, client });
+    const liquidityPoolReturnQuery = useLiquidityPoolReturnQuery(liquidityPoolAddress, { networkId });
 
     useEffect(
         () =>

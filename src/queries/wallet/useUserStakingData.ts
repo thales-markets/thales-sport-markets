@@ -6,7 +6,7 @@ import { Network } from 'enums/network';
 import { ethers } from 'ethers';
 import { bigNumberFormatter } from 'thales-utils';
 import { StakingData } from 'types/markets';
-import { QueryConfig } from 'types/network';
+import { NetworkConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
 import ccipCollector from 'utils/contracts/ccipCollector';
 import { getContractInstance } from 'utils/networkConnector';
@@ -17,11 +17,11 @@ const aprToApy = (interest: number) => ((1 + interest / 100 / APR_FREQUENCY) ** 
 
 const useUserStakingDataQuery = (
     walletAddress: string,
-    queryConfig: QueryConfig,
+    networkConfig: NetworkConfig,
     options?: Omit<UseQueryOptions<StakingData | undefined>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<StakingData | undefined>({
-        queryKey: QUERY_KEYS.Wallet.StakingData(walletAddress, queryConfig.networkId),
+        queryKey: QUERY_KEYS.Wallet.StakingData(walletAddress, networkConfig.networkId),
         queryFn: async () => {
             const stakingData: StakingData = {
                 isPaused: false,
@@ -31,8 +31,8 @@ const useUserStakingDataQuery = (
             try {
                 const stakingThalesContract = (await getContractInstance(
                     ContractType.STAKING_THALES,
-                    queryConfig.client,
-                    queryConfig.networkId
+                    networkConfig.client,
+                    networkConfig.networkId
                 )) as ViemContract;
 
                 if (stakingThalesContract) {

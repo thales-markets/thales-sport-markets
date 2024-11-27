@@ -5,7 +5,7 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { wagmiConfig } from 'pages/Root/wagmiConfig';
 import { bigNumberFormatter, COLLATERAL_DECIMALS } from 'thales-utils';
 import { CollateralsBalance } from 'types/collateral';
-import { QueryConfig } from 'types/network';
+import { NetworkConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
 import multipleCollateral from 'utils/contracts/multipleCollateralContract';
 import stakingThalesContract from 'utils/contracts/stakingThalesContract';
@@ -13,11 +13,11 @@ import { Address, getContract } from 'viem';
 
 const useMultipleCollateralBalanceQuery = (
     walletAddress: string,
-    queryConfig: QueryConfig,
+    networkConfig: NetworkConfig,
     options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<CollateralsBalance>({
-        queryKey: QUERY_KEYS.Wallet.MultipleCollateral(walletAddress, queryConfig.networkId),
+        queryKey: QUERY_KEYS.Wallet.MultipleCollateral(walletAddress, networkConfig.networkId),
         queryFn: async () => {
             let collateralsBalance: CollateralsBalance = {
                 sUSD: 0,
@@ -37,67 +37,67 @@ const useMultipleCollateralBalanceQuery = (
                 const multipleCollateralObject = {
                     sUSD: getContract({
                         abi: multipleCollateral.sUSD.abi,
-                        address: multipleCollateral.sUSD.addresses[queryConfig.networkId],
-                        client: queryConfig.client,
+                        address: multipleCollateral.sUSD.addresses[networkConfig.networkId],
+                        client: networkConfig.client,
                     }) as ViemContract,
                     DAI: getContract({
                         abi: multipleCollateral.DAI.abi,
-                        address: multipleCollateral.DAI.addresses[queryConfig.networkId],
-                        client: queryConfig.client,
+                        address: multipleCollateral.DAI.addresses[networkConfig.networkId],
+                        client: networkConfig.client,
                     }) as ViemContract,
                     USDC: getContract({
                         abi: multipleCollateral.USDC.abi,
-                        address: multipleCollateral.USDC.addresses[queryConfig.networkId],
-                        client: queryConfig.client,
+                        address: multipleCollateral.USDC.addresses[networkConfig.networkId],
+                        client: networkConfig.client,
                     }) as ViemContract,
                     USDCe: getContract({
                         abi: multipleCollateral.USDCe.abi,
-                        address: multipleCollateral.USDCe.addresses[queryConfig.networkId],
-                        client: queryConfig.client,
+                        address: multipleCollateral.USDCe.addresses[networkConfig.networkId],
+                        client: networkConfig.client,
                     }) as ViemContract,
                     USDbC: getContract({
                         abi: multipleCollateral.USDbC.abi,
-                        address: multipleCollateral.USDbC.addresses[queryConfig.networkId],
-                        client: queryConfig.client,
+                        address: multipleCollateral.USDbC.addresses[networkConfig.networkId],
+                        client: networkConfig.client,
                     }) as ViemContract,
                     USDT: getContract({
                         abi: multipleCollateral.USDT.abi,
-                        address: multipleCollateral.USDT.addresses[queryConfig.networkId],
-                        client: queryConfig.client,
+                        address: multipleCollateral.USDT.addresses[networkConfig.networkId],
+                        client: networkConfig.client,
                     }) as ViemContract,
                     OP: getContract({
                         abi: multipleCollateral.OP.abi,
-                        address: multipleCollateral.OP.addresses[queryConfig.networkId],
-                        client: queryConfig.client,
+                        address: multipleCollateral.OP.addresses[networkConfig.networkId],
+                        client: networkConfig.client,
                     }) as ViemContract,
                     WETH: getContract({
                         abi: multipleCollateral.WETH.abi,
-                        address: multipleCollateral.WETH.addresses[queryConfig.networkId],
-                        client: queryConfig.client,
+                        address: multipleCollateral.WETH.addresses[networkConfig.networkId],
+                        client: networkConfig.client,
                     }) as ViemContract,
                     ETH: getContract({
                         abi: multipleCollateral.ETH.abi,
-                        address: multipleCollateral.ETH.addresses[queryConfig.networkId],
-                        client: queryConfig.client,
+                        address: multipleCollateral.ETH.addresses[networkConfig.networkId],
+                        client: networkConfig.client,
                     }) as ViemContract,
                     ARB: getContract({
                         abi: multipleCollateral.ARB.abi,
-                        address: multipleCollateral.ARB.addresses[queryConfig.networkId],
-                        client: queryConfig.client,
+                        address: multipleCollateral.ARB.addresses[networkConfig.networkId],
+                        client: networkConfig.client,
                     }) as ViemContract,
                     THALES: getContract({
                         abi: multipleCollateral.THALES.abi,
-                        address: multipleCollateral.THALES.addresses[queryConfig.networkId],
-                        client: queryConfig.client,
+                        address: multipleCollateral.THALES.addresses[networkConfig.networkId],
+                        client: networkConfig.client,
                     }) as ViemContract,
                     sTHALES: getContract({
                         abi: stakingThalesContract.abi,
-                        address: stakingThalesContract.addresses[queryConfig.networkId],
-                        client: queryConfig.client,
+                        address: stakingThalesContract.addresses[networkConfig.networkId],
+                        client: networkConfig.client,
                     }) as ViemContract,
                 };
 
-                if (!walletAddress || !queryConfig.networkId) {
+                if (!walletAddress || !networkConfig.networkId) {
                     return collateralsBalance;
                 }
 

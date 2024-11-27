@@ -6,7 +6,7 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { minutesToMilliseconds } from 'date-fns';
 import { ContractType } from 'enums/contract';
 import { bigNumberFormatter, parseBytes32String } from 'thales-utils';
-import { QueryConfig } from 'types/network';
+import { NetworkConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { getContractInstance } from 'utils/networkConnector';
 import { THALES_CONTRACT_RATE_KEY } from '../../constants/markets';
@@ -14,18 +14,18 @@ import { THALES_CONTRACT_RATE_KEY } from '../../constants/markets';
 export type Rates = Record<string, number>;
 
 const useExchangeRatesQuery = (
-    queryConfig: QueryConfig,
+    networkConfig: NetworkConfig,
     options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<Rates>({
-        queryKey: QUERY_KEYS.Rates.ExchangeRates(queryConfig.networkId),
+        queryKey: QUERY_KEYS.Rates.ExchangeRates(networkConfig.networkId),
         queryFn: async () => {
             const exchangeRates: Rates = {};
 
             const priceFeedContract = (await getContractInstance(
                 ContractType.PRICE_FEED,
-                queryConfig.client,
-                queryConfig.networkId
+                networkConfig.client,
+                networkConfig.networkId
             )) as ViemContract;
 
             if (priceFeedContract) {
