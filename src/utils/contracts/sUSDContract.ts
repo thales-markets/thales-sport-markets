@@ -1,12 +1,11 @@
 import { Network } from 'enums/network';
 import { ContractData } from 'types/viem';
-import { Address } from 'viem';
 
 const erc20Contract: ContractData = {
     addresses: {
-        [Network.OptimismMainnet]: '0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85' as Address,
-        [Network.Arbitrum]: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831' as Address,
-        [Network.OptimismSepolia]: '0xff6535c1F971245435429A915aB9eB1713beC1C1' as Address,
+        [Network.OptimismMainnet]: '0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85',
+        [Network.Arbitrum]: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831',
+        [Network.OptimismSepolia]: '0xff6535c1F971245435429A915aB9eB1713beC1C1',
     },
     abi: [
         { inputs: [], stateMutability: 'nonpayable', type: 'constructor' },

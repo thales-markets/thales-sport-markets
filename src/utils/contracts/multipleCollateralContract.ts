@@ -2,7 +2,6 @@ import { TBD_ADDRESS, ZERO_ADDRESS } from 'constants/network';
 import { Network } from 'enums/network';
 import { Coins } from 'thales-utils';
 import { ContractData } from 'types/viem';
-import { Address } from 'viem';
 
 const WETHabi = [
     {
@@ -760,7 +759,7 @@ const abi = [
 const multipleCollateral: Record<Coins, ContractData> = {
     sUSD: {
         addresses: {
-            [Network.OptimismMainnet]: '0x8c6f28f2F1A3C87F0f938b96d27520d9751ec8d9' as Address, // sUSD
+            [Network.OptimismMainnet]: '0x8c6f28f2F1A3C87F0f938b96d27520d9751ec8d9', // sUSD
             [Network.Arbitrum]: TBD_ADDRESS,
             [Network.OptimismSepolia]: TBD_ADDRESS,
         },
@@ -768,39 +767,39 @@ const multipleCollateral: Record<Coins, ContractData> = {
     },
     DAI: {
         addresses: {
-            [Network.OptimismMainnet]: '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1' as Address,
-            [Network.Arbitrum]: '0xda10009cbd5d07dd0cecc66161fc93d7c9000da1' as Address,
+            [Network.OptimismMainnet]: '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1',
+            [Network.Arbitrum]: '0xda10009cbd5d07dd0cecc66161fc93d7c9000da1',
             [Network.OptimismSepolia]: TBD_ADDRESS,
         },
         abi,
     },
     USDCe: {
         addresses: {
-            [Network.OptimismMainnet]: '0x7F5c764cBc14f9669B88837ca1490cCa17c31607' as Address,
-            [Network.Arbitrum]: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8' as Address,
+            [Network.OptimismMainnet]: '0x7F5c764cBc14f9669B88837ca1490cCa17c31607',
+            [Network.Arbitrum]: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
             [Network.OptimismSepolia]: TBD_ADDRESS,
         },
         abi,
     },
     USDC: {
         addresses: {
-            [Network.OptimismMainnet]: '0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85' as Address,
-            [Network.Arbitrum]: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831' as Address,
+            [Network.OptimismMainnet]: '0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85',
+            [Network.Arbitrum]: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831',
             [Network.OptimismSepolia]: TBD_ADDRESS,
         },
         abi,
     },
     USDT: {
         addresses: {
-            [Network.OptimismMainnet]: '0x94b008aA00579c1307B0EF2c499aD98a8ce58e58' as Address,
-            [Network.Arbitrum]: '0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9' as Address,
-            [Network.OptimismSepolia]: '0x6DbE2E4C68EB80b76a1c0F7b5bA9564C72280cB3' as Address,
+            [Network.OptimismMainnet]: '0x94b008aA00579c1307B0EF2c499aD98a8ce58e58',
+            [Network.Arbitrum]: '0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9',
+            [Network.OptimismSepolia]: '0x6DbE2E4C68EB80b76a1c0F7b5bA9564C72280cB3',
         },
         abi,
     },
     OP: {
         addresses: {
-            [Network.OptimismMainnet]: '0x4200000000000000000000000000000000000042' as Address,
+            [Network.OptimismMainnet]: '0x4200000000000000000000000000000000000042',
             [Network.Arbitrum]: TBD_ADDRESS,
             [Network.OptimismSepolia]: TBD_ADDRESS,
         },
@@ -809,16 +808,16 @@ const multipleCollateral: Record<Coins, ContractData> = {
     ARB: {
         addresses: {
             [Network.OptimismMainnet]: TBD_ADDRESS,
-            [Network.Arbitrum]: '0x912CE59144191C1204E64559FE8253a0e49E6548' as Address,
+            [Network.Arbitrum]: '0x912CE59144191C1204E64559FE8253a0e49E6548',
             [Network.OptimismSepolia]: TBD_ADDRESS,
         },
         abi,
     },
     WETH: {
         addresses: {
-            [Network.OptimismMainnet]: '0x4200000000000000000000000000000000000006' as Address,
-            [Network.Arbitrum]: '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1' as Address,
-            [Network.OptimismSepolia]: '0xF9b8b43530A3CF8D29cb0D657867347958edf63F' as Address,
+            [Network.OptimismMainnet]: '0x4200000000000000000000000000000000000006',
+            [Network.Arbitrum]: '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1',
+            [Network.OptimismSepolia]: '0xF9b8b43530A3CF8D29cb0D657867347958edf63F',
         },
         abi: WETHabi,
     },
@@ -840,17 +839,17 @@ const multipleCollateral: Record<Coins, ContractData> = {
     },
     THALES: {
         addresses: {
-            [Network.OptimismMainnet]: '0x217d47011b23bb961eb6d93ca9945b7501a5bb11' as Address,
-            [Network.Arbitrum]: '0xe85b662fe97e8562f4099d8a1d5a92d4b453bf30' as Address,
-            [Network.OptimismSepolia]: '0xeC60249ee888FFdE5Ee09920C9644A904D4f49de' as Address,
+            [Network.OptimismMainnet]: '0x217d47011b23bb961eb6d93ca9945b7501a5bb11',
+            [Network.Arbitrum]: '0xe85b662fe97e8562f4099d8a1d5a92d4b453bf30',
+            [Network.OptimismSepolia]: '0xeC60249ee888FFdE5Ee09920C9644A904D4f49de',
         },
         abi,
     },
     sTHALES: {
         addresses: {
-            [Network.OptimismMainnet]: '0x217d47011b23bb961eb6d93ca9945b7501a5bb11' as Address,
-            [Network.Arbitrum]: '0xe85b662fe97e8562f4099d8a1d5a92d4b453bf30' as Address,
-            [Network.OptimismSepolia]: '0xeC60249ee888FFdE5Ee09920C9644A904D4f49de' as Address,
+            [Network.OptimismMainnet]: '0x217d47011b23bb961eb6d93ca9945b7501a5bb11',
+            [Network.Arbitrum]: '0xe85b662fe97e8562f4099d8a1d5a92d4b453bf30',
+            [Network.OptimismSepolia]: '0xeC60249ee888FFdE5Ee09920C9644A904D4f49de',
         },
         abi,
     },

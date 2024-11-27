@@ -1,12 +1,11 @@
 import { Network } from 'enums/network';
 import { ContractData } from 'types/viem';
-import { Address } from 'viem';
 
 const stakingThalesContract: ContractData = {
     addresses: {
-        [Network.OptimismMainnet]: '0xC392133eEa695603B51a5d5de73655d571c2CE51' as Address,
-        [Network.Arbitrum]: '0x160Ca569999601bca06109D42d561D85D6Bb4b57' as Address,
-        [Network.OptimismSepolia]: '0x02b9aE5a116450BE67AABF0d7EF5D06bda9dc962' as Address,
+        [Network.OptimismMainnet]: '0xC392133eEa695603B51a5d5de73655d571c2CE51',
+        [Network.Arbitrum]: '0x160Ca569999601bca06109D42d561D85D6Bb4b57',
+        [Network.OptimismSepolia]: '0x02b9aE5a116450BE67AABF0d7EF5D06bda9dc962',
     },
     abi: [
         {

@@ -1,12 +1,11 @@
 import { Network } from 'enums/network';
 import { ContractData } from 'types/viem';
-import { Address } from 'viem';
 
 const sportsAMMV2RiskManagerContract: ContractData = {
     addresses: {
-        [Network.OptimismMainnet]: '0x32077d9F7BF3994f3A0E905b3EefF34410eCA9A5' as Address,
-        [Network.Arbitrum]: '0x10764f2787841E928E53e5Be1588a73E3c994EDe' as Address,
-        [Network.OptimismSepolia]: '0x96F56752BDe1b9f6f86393658a79dec9f7095de3' as Address,
+        [Network.OptimismMainnet]: '0x32077d9F7BF3994f3A0E905b3EefF34410eCA9A5',
+        [Network.Arbitrum]: '0x10764f2787841E928E53e5Be1588a73E3c994EDe',
+        [Network.OptimismSepolia]: '0x96F56752BDe1b9f6f86393658a79dec9f7095de3',
     },
     abi: [
         { inputs: [], name: 'InvalidInitialization', type: 'error' },
