@@ -1,12 +1,11 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { secondsToMilliseconds } from 'date-fns';
+import { ContractType } from 'enums/contract';
 import { bigNumberFormatter, coinFormatter, Coins } from 'thales-utils';
 import { LiquidityPoolData } from 'types/liquidityPool';
 import { NetworkConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
-import { getContractAbi } from 'utils/contracts/abi';
-import liquidityPoolDataContract from 'utils/contracts/liquidityPoolDataContractV2';
-import { getContract } from 'viem';
+import { getContractInstance } from 'utils/networkConnector';
 import QUERY_KEYS from '../../constants/queryKeys';
 
 const useLiquidityPoolDataQuery = (
@@ -39,11 +38,11 @@ const useLiquidityPoolDataQuery = (
             };
 
             try {
-                const liquidityPoolDataContractInstance = getContract({
-                    abi: getContractAbi(liquidityPoolDataContract, networkConfig.networkId),
-                    address: liquidityPoolDataContract.addresses[networkConfig.networkId],
-                    client: networkConfig.client,
-                }) as ViemContract;
+                const liquidityPoolDataContractInstance = getContractInstance(
+                    ContractType.LIQUIDITY_POOL_DATA,
+                    networkConfig.client,
+                    networkConfig.networkId
+                ) as ViemContract;
 
                 if (liquidityPoolDataContractInstance) {
                     const contractLiquidityPoolData = await liquidityPoolDataContractInstance.read.getLiquidityPoolData(

@@ -1,5 +1,6 @@
 export enum ContractType {
     LIQUIDITY_POOL_DATA = 'liquidityPoolDataContract',
+    LIQUIDITY_POOL = 'liquidityPoolContract',
     PRICE_FEED = 'priceFeedContract',
     MULTICOLLATERAL = 'multiCollateralContract',
     MULTICOLLATERAL_ON_OFF_RAMP = 'multiCollateralOnOffRampContract',

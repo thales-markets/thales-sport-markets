@@ -125,7 +125,7 @@ import {
 import { getAddedPayoutOdds } from 'utils/tickets';
 import { delay } from 'utils/timer';
 import { getKeepSelectionFromStorage, setKeepSelectionToStorage } from 'utils/ui';
-import { Address, Client, getContract, maxUint256, parseEther } from 'viem';
+import { Address, Client, maxUint256, parseEther } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 import BuyStepsModal from '../BuyStepsModal';
@@ -1136,11 +1136,12 @@ const Ticket: React.FC<TicketProps> = ({
 
                     await delay(3000); // wait for THALES balance to increase
 
-                    const collateralContractWithSigner = getContract({
-                        abi: multipleCollateral[CRYPTO_CURRENCY_MAP.THALES as Coins].abi,
-                        address: multipleCollateral[CRYPTO_CURRENCY_MAP.THALES as Coins]?.addresses[networkId],
-                        client: walletClient.data as any,
-                    }) as ViemContract;
+                    const collateralContractWithSigner = getContractInstance(
+                        ContractType.MULTICOLLATERAL,
+                        walletClient.data,
+                        networkId,
+                        getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.THALES as Coins)
+                    );
 
                     const balanceAfter = bigNumberFormatter(
                         await collateralContractWithSigner?.read.balanceOf([walletAddress])
@@ -1159,16 +1160,18 @@ const Ticket: React.FC<TicketProps> = ({
                 setBuyStep(step);
 
                 try {
-                    const collateralContractWithSigner = getContract({
-                        abi: multipleCollateral[CRYPTO_CURRENCY_MAP.THALES as Coins].abi,
-                        address: multipleCollateral[CRYPTO_CURRENCY_MAP.THALES as Coins]?.addresses[networkId],
-                        client: walletClient.data as any,
-                    }) as ViemContract;
-                    const sportsAMMV2ContractWithSigner = getContract({
-                        abi: sportsAMMV2Contract.abi,
-                        address: sportsAMMV2Contract.addresses[networkId],
-                        client: walletClient.data as any,
-                    }) as ViemContract;
+                    const collateralContractWithSigner = getContractInstance(
+                        ContractType.MULTICOLLATERAL,
+                        walletClient.data,
+                        networkId,
+                        getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.THALES as Coins)
+                    );
+
+                    const sportsAMMV2ContractWithSigner = getContractInstance(
+                        ContractType.SPORTS_AMM_V2,
+                        walletClient.data,
+                        networkId
+                    ) as ViemContract;
 
                     const addressToApprove = sportsAMMV2ContractWithSigner.address;
                     const approveAmount = maxUint256;
@@ -1690,13 +1693,7 @@ const Ticket: React.FC<TicketProps> = ({
         const fetchData = async () => {
             setIsFetching(true);
 
-            const sportsAMMV2ContractInstance = getContract({
-                abi: sportsAMMV2Contract.abi,
-                address: sportsAMMV2Contract.addresses[networkId],
-                client: walletClient.data as any,
-            }) as ViemContract;
-
-            if (sportsAMMV2ContractInstance && Number(buyInAmount) > 0 && minBuyInAmountInDefaultCollateral) {
+            if (Number(buyInAmount) > 0 && minBuyInAmountInDefaultCollateral) {
                 const parlayAmmQuote = await fetchTicketAmmQuote(
                     swapToThales ? swappedThalesToReceive : Number(buyInAmount)
                 );
@@ -1834,21 +1831,27 @@ const Ticket: React.FC<TicketProps> = ({
 
     useEffect(() => {
         const setGasFee = async () => {
-            const sportsAMMV2ContractWithSigner = getContract({
-                abi: sportsAMMV2Contract.abi,
-                address: sportsAMMV2Contract.addresses[networkId],
-                client: walletClient.data as any,
-            }) as ViemContract;
-            const defaultCollateralContractWithSigner = getContract({
-                abi: multipleCollateral[getDefaultCollateral(networkId)].abi,
-                address: multipleCollateral[getDefaultCollateral(networkId)].addresses[networkId],
-                client: walletClient.data as any,
-            }) as ViemContract;
-            const multipleCollateralWithSigner = getContract({
-                abi: multipleCollateral[selectedCollateral].abi,
-                address: multipleCollateral[selectedCollateral].addresses[networkId],
-                client: walletClient.data as any,
-            }) as ViemContract;
+            const contracts = [
+                getContractInstance(ContractType.SPORTS_AMM_V2, walletClient.data, networkId),
+                getContractInstance(
+                    ContractType.MULTICOLLATERAL,
+                    walletClient.data,
+                    networkId,
+                    getCollateralIndex(networkId, getDefaultCollateral(networkId))
+                ),
+                getContractInstance(
+                    ContractType.MULTICOLLATERAL,
+                    walletClient.data,
+                    networkId,
+                    getCollateralIndex(networkId, selectedCollateral)
+                ),
+            ];
+
+            const [
+                sportsAMMV2ContractWithSigner,
+                defaultCollateralContractWithSigner,
+                multipleCollateralWithSigner,
+            ] = contracts;
 
             if (!sportsAMMV2ContractWithSigner || !defaultCollateralContractWithSigner || !multipleCollateralWithSigner)
                 return;

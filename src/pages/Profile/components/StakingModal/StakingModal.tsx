@@ -22,7 +22,7 @@ import { ThemeInterface } from 'types/ui';
 import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateralIndex } from 'utils/collaterals';
 import { checkAllowance } from 'utils/network';
-import { Client, getContract, maxUint256, parseEther } from 'viem';
+import { Client, maxUint256, parseEther } from 'viem';
 import { useChainId, useClient } from 'wagmi';
 import { StakingMessage } from '../OpenClaimableTickets/styled-components';
 import {
@@ -39,9 +39,8 @@ import {
 } from './styled-components';
 
 // Contracts
-import { ViemContract } from 'types/viem';
-import { default as multipleCollateralContractInfo } from 'utils/contracts/multipleCollateralContract';
-import { default as stakingThalesContractInfo } from 'utils/contracts/stakingThalesContract';
+import { ContractType } from 'enums/contract';
+import { getContractInstance } from 'utils/networkConnector';
 import { waitForTransactionReceipt } from 'viem/actions';
 
 type StakingModalProps = {
@@ -140,19 +139,19 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
     }, [amountToStake, thalesBalance]);
 
     useEffect(() => {
-        const stakingThalesContract = getContract({
-            abi: multipleCollateralContractInfo[CRYPTO_CURRENCY_MAP.THALES as Coins].abi,
-            address: multipleCollateralContractInfo[CRYPTO_CURRENCY_MAP.THALES as Coins].addresses[networkId],
-            client,
-        }) as ViemContract;
+        const contracts = [
+            getContractInstance(
+                ContractType.MULTICOLLATERAL,
+                client,
+                networkId,
+                getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.sTHALES as Coins)
+            ),
+            getContractInstance(ContractType.STAKING_THALES, client, networkId),
+        ];
 
-        const thalesTokenContract = getContract({
-            abi: stakingThalesContractInfo.abi,
-            address: stakingThalesContractInfo.addresses[networkId],
-            client,
-        }) as ViemContract;
+        const [stakingThalesTokenContract, thalesTokenContract] = contracts;
 
-        if (stakingThalesContract && thalesTokenContract) {
+        if (stakingThalesTokenContract && thalesTokenContract) {
             const getAllowance = async () => {
                 try {
                     const parsedStakeAmount = parseEther(Number(amountToStake).toString());
@@ -160,7 +159,7 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
                         parsedStakeAmount,
                         thalesTokenContract,
                         walletAddress,
-                        stakingThalesContract.address
+                        stakingThalesTokenContract.address
                     );
                     setStakeAllowance(allowance);
                 } catch (e) {
@@ -174,24 +173,27 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
     }, [walletAddress, isConnected, hasStakeAllowance, amountToStake, isAllowingStake, networkId, client]);
 
     const handleAllowance = async (approveAmount: bigint) => {
-        const stakingThalesContract = getContract({
-            abi: multipleCollateralContractInfo[CRYPTO_CURRENCY_MAP.THALES as Coins].abi,
-            address: multipleCollateralContractInfo[CRYPTO_CURRENCY_MAP.THALES as Coins].addresses[networkId],
-            client,
-        }) as ViemContract;
+        const contracts = [
+            getContractInstance(
+                ContractType.MULTICOLLATERAL,
+                client,
+                networkId,
+                getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.sTHALES as Coins)
+            ),
+            getContractInstance(ContractType.STAKING_THALES, client, networkId),
+        ];
 
-        const thalesTokenContract = getContract({
-            abi: stakingThalesContractInfo.abi,
-            address: stakingThalesContractInfo.addresses[networkId],
-            client,
-        }) as ViemContract;
+        const [stakingThalesTokenContract, thalesTokenContract] = contracts;
 
-        if (stakingThalesContract && thalesTokenContract) {
+        if (stakingThalesTokenContract && thalesTokenContract) {
             setIsAllowingStake(true);
             const id = toast.loading(t('market.toast-message.transaction-pending'));
 
             try {
-                const txHash = await thalesTokenContract.write.approve([stakingThalesContract.address, approveAmount]);
+                const txHash = await thalesTokenContract.write.approve([
+                    stakingThalesTokenContract.address,
+                    approveAmount,
+                ]);
 
                 const txReceipt = await waitForTransactionReceipt(client as Client, {
                     hash: txHash,
@@ -211,11 +213,7 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
     };
 
     const handleStakeThales = async () => {
-        const stakingThalesContract = getContract({
-            abi: multipleCollateralContractInfo[CRYPTO_CURRENCY_MAP.THALES as Coins].abi,
-            address: multipleCollateralContractInfo[CRYPTO_CURRENCY_MAP.THALES as Coins].addresses[networkId],
-            client,
-        }) as ViemContract;
+        const stakingThalesContract = getContractInstance(ContractType.STAKING_THALES, client, networkId);
 
         if (stakingThalesContract) {
             const toastId = toast.loading(t('market.toast-message.transaction-pending'));
@@ -223,7 +221,7 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
                 setIsStaking(true);
 
                 const amount = parseEther(amountToStake.toString());
-                const txHash = await stakingThalesContract.write.stake([amount]);
+                const txHash = await stakingThalesContract?.write?.stake([amount]);
 
                 const txReceipt = await waitForTransactionReceipt(client as Client, {
                     hash: txHash,

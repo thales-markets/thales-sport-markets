@@ -5,6 +5,7 @@ import { Address, getContract } from 'viem';
 import { getCollaterals } from './collaterals';
 
 // Contract import
+import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 import freeBetHolder from 'utils/contracts/freeBetHolder';
 import liquidityPoolDataContract from 'utils/contracts/liquidityPoolDataContractV2';
 import liveTradingProcessor from 'utils/contracts/liveTradingProcessorContract';
@@ -18,6 +19,7 @@ import sportsAMMV2Manager from 'utils/contracts/sportsAMMV2ManagerContract';
 import sportsAMMV2RiskManager from 'utils/contracts/sportsAMMV2RiskManagerContract';
 import stakingThalesBettingProxy from 'utils/contracts/stakingThalesBettingProxy';
 import stakingThales from 'utils/contracts/stakingThalesContract';
+import liquidityPoolContractV2 from './contracts/liquidityPoolContractV2';
 
 export const getContractWithModifiedResponse = (props: { abi: any; address: Address; client: any }) => {
     const contract = getContract(props) as ViemContract;
@@ -59,7 +61,8 @@ export const getContractInstance = (
     contractName: string,
     client: any,
     networkId: SupportedNetwork,
-    selectedToken?: number
+    selectedToken?: number,
+    lpCollateral?: LiquidityPoolCollateral
 ) => {
     switch (contractName) {
         case ContractType.LIQUIDITY_POOL_DATA:
@@ -141,6 +144,15 @@ export const getContractInstance = (
                 address: stakingThalesBettingProxy.addresses[networkId],
                 client,
             }) as ViemContract;
+        case ContractType.LIQUIDITY_POOL:
+            if (lpCollateral) {
+                return getContractWithModifiedResponse({
+                    abi: liquidityPoolContractV2[lpCollateral].abi,
+                    address: liquidityPoolContractV2[lpCollateral].addresses[networkId],
+                    client,
+                }) as ViemContract;
+            }
+            return undefined;
         default:
             return undefined;
     }

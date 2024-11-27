@@ -33,13 +33,12 @@ import { LiquidityPoolData, UserLiquidityPoolData } from 'types/liquidityPool';
 import { ThemeInterface } from 'types/ui';
 import { ViemContract } from 'types/viem';
 import biconomyConnector from 'utils/biconomyWallet';
-import liquidityPoolContract from 'utils/contracts/liquidityPoolContractV2';
 import { coinParser } from 'utils/formatters/viem';
 import { checkAllowance } from 'utils/network';
 import { getContractInstance } from 'utils/networkConnector';
 import { refetchLiquidityPoolData } from 'utils/queryConnector';
 import { delay } from 'utils/timer';
-import { Address, Client, getContract, parseUnits } from 'viem';
+import { Client, parseUnits } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 import SPAAnchor from '../../components/SPAAnchor';
@@ -362,11 +361,13 @@ const LiquidityPool: React.FC = () => {
         const id = toast.loading(t('market.toast-message.transaction-pending'));
         setIsSubmitting(true);
         try {
-            const liquidityPoolContractWithSigner = getContract({
-                abi: liquidityPoolContract,
-                address: liquidityPoolAddress as Address,
-                client: walletClient.data as any,
-            }) as ViemContract;
+            const liquidityPoolContractWithSigner = getContractInstance(
+                ContractType.LIQUIDITY_POOL,
+                walletClient.data as Client,
+                networkId,
+                undefined,
+                collateral.toLowerCase() as LiquidityPoolCollateral
+            ) as ViemContract;
             const parsedAmount = coinParser(Number(amount).toString(), networkId, collateral);
 
             const WETHContractWithSigner = getContractInstance(
@@ -431,11 +432,13 @@ const LiquidityPool: React.FC = () => {
         const id = toast.loading(t('market.toast-message.transaction-pending'));
         setIsSubmitting(true);
         try {
-            const liquidityPoolContractWithSigner = getContract({
-                address: liquidityPoolAddress as Address,
-                abi: liquidityPoolContract,
-                client: walletClient.data as any,
-            }) as ViemContract;
+            const liquidityPoolContractWithSigner = getContractInstance(
+                ContractType.LIQUIDITY_POOL,
+                walletClient.data as Client,
+                networkId,
+                undefined,
+                collateral.toLowerCase() as LiquidityPoolCollateral
+            ) as ViemContract;
             const parsedPercentage = parseUnits((Number(withdrawalPercentage) / 100).toString(), 18);
 
             const txHash = withdrawAll
@@ -466,11 +469,13 @@ const LiquidityPool: React.FC = () => {
         const id = toast.loading(t('market.toast-message.transaction-pending'));
         setIsSubmitting(true);
         try {
-            const liquidityPoolContractWithSigner = getContract({
-                address: liquidityPoolAddress as Address,
-                abi: liquidityPoolContract,
-                client: walletClient.data as any,
-            }) as ViemContract;
+            const liquidityPoolContractWithSigner = getContractInstance(
+                ContractType.LIQUIDITY_POOL,
+                walletClient.data as Client,
+                networkId,
+                undefined,
+                collateral.toLowerCase() as LiquidityPoolCollateral
+            ) as ViemContract;
 
             const canCloseCurrentRound = await liquidityPoolContractWithSigner.read.canCloseCurrentRound();
             const roundClosingPrepared = await liquidityPoolContractWithSigner.read.roundClosingPrepared();

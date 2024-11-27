@@ -6,6 +6,7 @@ import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { COLLATERAL_ICONS_CLASS_NAMES, CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
 import { SWAP_APPROVAL_BUFFER } from 'constants/markets';
 import { secondsToMilliseconds } from 'date-fns';
+import { ContractType } from 'enums/contract';
 import { BuyTicketStep } from 'enums/tickets';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import useInterval from 'hooks/useInterval';
@@ -34,17 +35,17 @@ import {
     LONG_CURRENCY_DECIMALS,
 } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
-import { ViemContract } from 'types/viem';
 import biconomyConnector from 'utils/biconomyWallet';
 import {
     getCollateral,
     getCollateralAddress,
+    getCollateralIndex,
     getCollaterals,
     isStableCurrency,
     isThalesCurrency,
     sortCollateralBalances,
 } from 'utils/collaterals';
-import multipleCollateral from 'utils/contracts/multipleCollateralContract';
+import { getContractInstance } from 'utils/networkConnector';
 import {
     buildTxForApproveTradeWithRouter,
     buildTxForSwap,
@@ -54,7 +55,7 @@ import {
     sendTransaction,
 } from 'utils/swap';
 import { delay } from 'utils/timer';
-import { Address, getContract } from 'viem';
+import { Address } from 'viem';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 import BuyStepsModal from '../../../Markets/Home/Parlay/components/BuyStepsModal';
 
@@ -347,13 +348,12 @@ const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
 
                     await delay(3000); // wait for THALES balance to increase
 
-                    const thalesTokenContract = getContract({
-                        abi: multipleCollateral[CRYPTO_CURRENCY_MAP.THALES as Coins].abi,
-                        address: multipleCollateral[CRYPTO_CURRENCY_MAP.THALES as Coins].addresses[
-                            networkId
-                        ] as Address,
-                        client: walletClient.data as any,
-                    }) as ViemContract;
+                    const thalesTokenContract = getContractInstance(
+                        ContractType.MULTICOLLATERAL,
+                        walletClient.data as any,
+                        networkId,
+                        getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.THALES as Coins)
+                    );
 
                     const balanceAfter = bigNumberFormatter(await thalesTokenContract?.read.balanceOf([walletAddress]));
                     thalesAmount = balanceAfter - balanceBefore;
