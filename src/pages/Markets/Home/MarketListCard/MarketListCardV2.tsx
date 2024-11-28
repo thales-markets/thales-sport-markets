@@ -285,7 +285,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                 market.tournamentRound ? ` | ${market.tournamentRound}` : ''
                             }`}</>
                         )}
-                        {leagueTooltipKey && <Tooltip overlay={t(leagueTooltipKey)} />}
+                        {leagueTooltipKey && <Tooltip overlay={t(leagueTooltipKey)} iconFontSize={12} marginLeft={2} />}
                     </MatchInfoLabel>
                 </MatchInfo>
                 <TeamsInfoContainer>

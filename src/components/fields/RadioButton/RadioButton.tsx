@@ -36,7 +36,14 @@ const RadioButton: React.FC<RadioButtonProps> = ({
                 disabled={disabled}
             />
             <Checkmark className="checkmark" checked={checked} />
-            {tooltip && <Tooltip overlay={<OverlayContainer>{tooltip}</OverlayContainer>} />}
+            {tooltip && (
+                <Tooltip
+                    overlay={<OverlayContainer>{tooltip}</OverlayContainer>}
+                    iconFontSize={23}
+                    marginLeft={4}
+                    top={-2}
+                />
+            )}
         </Container>
     );
 };

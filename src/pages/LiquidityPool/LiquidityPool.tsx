@@ -834,6 +834,8 @@ const LiquidityPool: React.FC = () => {
                                                                             overlay={t(
                                                                                 `liquidity-pool.estimated-amount-tooltip`
                                                                             )}
+                                                                            iconFontSize={14}
+                                                                            marginLeft={2}
                                                                         />
                                                                     </ContentInfo>
                                                                     <ContentInfo>
@@ -927,6 +929,8 @@ const LiquidityPool: React.FC = () => {
                                                                             overlay={t(
                                                                                 `liquidity-pool.estimated-amount-tooltip`
                                                                             )}
+                                                                            iconFontSize={14}
+                                                                            marginLeft={2}
                                                                         />
                                                                     </ContentInfo>
                                                                 </>
@@ -956,6 +960,8 @@ const LiquidityPool: React.FC = () => {
                                                                     overlay={t(
                                                                         `liquidity-pool.estimated-amount-tooltip`
                                                                     )}
+                                                                    iconFontSize={14}
+                                                                    marginLeft={2}
                                                                 />
                                                             ),
                                                         }}
@@ -1108,7 +1114,11 @@ const LiquidityPool: React.FC = () => {
                                         {userLiquidityPoolData &&
                                             userLiquidityPoolData.balanceCurrentRound > 0 &&
                                             userLiquidityPoolData.balanceTotal > 0 && (
-                                                <Tooltip overlay={t(`liquidity-pool.estimated-amount-tooltip`)} />
+                                                <Tooltip
+                                                    overlay={t(`liquidity-pool.estimated-amount-tooltip`)}
+                                                    iconFontSize={14}
+                                                    marginLeft={2}
+                                                />
                                             )}
                                     </LiquidityPoolInfo>
                                 </LiquidityPoolInfoContainer>
@@ -1120,7 +1130,11 @@ const LiquidityPool: React.FC = () => {
                                             }-withdrawal-request-label`}
                                             components={{
                                                 tooltip: (
-                                                    <Tooltip overlay={t(`liquidity-pool.estimated-amount-tooltip`)} />
+                                                    <Tooltip
+                                                        overlay={t(`liquidity-pool.estimated-amount-tooltip`)}
+                                                        iconFontSize={14}
+                                                        marginLeft={2}
+                                                    />
                                                 ),
                                             }}
                                             values={{

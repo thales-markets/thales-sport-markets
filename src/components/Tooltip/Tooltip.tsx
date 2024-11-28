@@ -1,4 +1,3 @@
-import { ScreenSizeBreakpoint } from 'enums/ui';
 import ReactTooltip from 'rc-tooltip';
 import React, { CSSProperties } from 'react';
 import styled from 'styled-components';
@@ -6,38 +5,61 @@ import 'styles/tooltip.css';
 
 type TooltipProps = {
     overlay: any;
-    children?: React.ReactNode;
+    iconFontSize?: number;
     customIconStyling?: CSSProperties;
+    overlayInnerStyle?: CSSProperties;
+    marginLeft?: number;
+    top?: number;
+    overlayClassName?: string;
+    iconColor?: string;
+    children?: React.ReactNode;
 };
 
-const Tooltip: React.FC<TooltipProps> = ({ overlay, children, customIconStyling }) => {
+const Tooltip: React.FC<TooltipProps> = ({
+    overlay,
+    iconFontSize,
+    customIconStyling,
+    overlayInnerStyle,
+    marginLeft,
+    top,
+    overlayClassName,
+    iconColor,
+    children,
+}) => {
     return (
         <ReactTooltip
             overlay={overlay}
-            overlayInnerStyle={{ padding: 0 }}
             placement="top"
-            overlayStyle={{ borderRadius: '5px' }}
+            overlayClassName={overlayClassName || ''}
+            overlayInnerStyle={overlayInnerStyle}
         >
-            {children ? (children as any) : <InfoIcon style={customIconStyling} />}
+            {children ? (
+                (children as any)
+            ) : (
+                <InfoIcon
+                    color={iconColor}
+                    iconFontSize={iconFontSize}
+                    marginLeft={marginLeft}
+                    top={top}
+                    style={customIconStyling}
+                />
+            )}
         </ReactTooltip>
     );
 };
 
-const InfoIcon = styled.i`
-    position: relative;
-    font-size: 16px;
-    line-height: 100%;
-    vertical-align: middle;
+const InfoIcon = styled.i<{ iconFontSize?: number; marginLeft?: number; top?: number; color?: string }>`
+    font-size: ${(props) => props.iconFontSize || 18}px;
+    font-weight: 400;
     cursor: pointer;
-    text-transform: none !important;
-    margin-left: 4px;
-    color: ${(props) => props.theme.icon.background.secondary};
+    position: relative;
+    margin-left: ${(props) => props.marginLeft || 0}px;
+    top: ${(props) => (props.top !== undefined ? props.top : -1)}px;
+    color: ${(props) => props.color || 'white'};
+    text-transform: none;
     &:before {
         font-family: OvertimeIconsV2 !important;
         content: '\\011B';
-    }
-    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
-        font-size: 15px;
     }
 `;
 

@@ -103,7 +103,7 @@ const MatchStatus: React.FC<MatchStatusProps> = ({ market }) => {
                 isGamePaused ? (
                     <Status color={theme.status.paused}>
                         {t(`markets.market-card.live-trading-paused`)}
-                        {liveMarketErrorMessage && <Tooltip overlay={liveMarketErrorMessage} />}
+                        {liveMarketErrorMessage && <Tooltip overlay={liveMarketErrorMessage} marginLeft={5} top={0} />}
                     </Status>
                 ) : liveScore ? (
                     <>

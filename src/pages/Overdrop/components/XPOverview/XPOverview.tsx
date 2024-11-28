@@ -72,7 +72,11 @@ const XPOverview: React.FC<XPOverviewProps> = ({ setSelectedTab }) => {
                                     <Label> {t('overdrop.overdrop-home.rank')} </Label>
                                     <FlexDivCentered>
                                         <Value>{userData ? `#${userData.rank}` : '-'}</Value>{' '}
-                                        <Tooltip overlay={<>{t(`overdrop.overdrop-home.rank-tooltip`)}</>} />
+                                        <Tooltip
+                                            overlay={<>{t(`overdrop.overdrop-home.rank-tooltip`)}</>}
+                                            iconFontSize={14}
+                                            marginLeft={3}
+                                        />
                                     </FlexDivCentered>
                                 </InfoItem>
                             </>
@@ -87,7 +91,11 @@ const XPOverview: React.FC<XPOverviewProps> = ({ setSelectedTab }) => {
                                         <Label> {t('overdrop.overdrop-home.rank')} </Label>
                                         <FlexDivCentered>
                                             <Value>{userData ? `#${userData.rank}` : '-'}</Value>{' '}
-                                            <Tooltip overlay={<>{t(`overdrop.overdrop-home.rank-tooltip`)}</>} />
+                                            <Tooltip
+                                                overlay={<>{t(`overdrop.overdrop-home.rank-tooltip`)}</>}
+                                                iconFontSize={14}
+                                                marginLeft={3}
+                                            />
                                         </FlexDivCentered>
                                     </InfoItem>
                                 </LevelWrapper>

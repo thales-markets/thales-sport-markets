@@ -82,7 +82,13 @@ const Positions: React.FC<PositionsProps> = ({
                 {((isMobile && !isMainPageView) || !isMobile) && (
                     <Title isExpanded={isExpanded} isMainPageView={isMainPageView} isColumnView={isColumnView}>
                         {titleText}
-                        {tooltipKey && <Tooltip overlay={<>{t(`markets.market-card.type-tooltip.${tooltipKey}`)}</>} />}
+                        {tooltipKey && (
+                            <Tooltip
+                                overlay={<>{t(`markets.market-card.type-tooltip.${tooltipKey}`)}</>}
+                                iconFontSize={13}
+                                marginLeft={3}
+                            />
+                        )}
                     </Title>
                 )}
             </Header>
@@ -165,7 +171,7 @@ const Positions: React.FC<PositionsProps> = ({
         <Container isExpanded={true} noOdds={true}>
             <Message>
                 {t(`markets.market-card.live-trading-paused`)}
-                {liveMarketErrorMessage && <Tooltip overlay={liveMarketErrorMessage} />}
+                {liveMarketErrorMessage && <Tooltip overlay={liveMarketErrorMessage} marginLeft={5} top={0} />}
             </Message>
         </Container>
     ) : (

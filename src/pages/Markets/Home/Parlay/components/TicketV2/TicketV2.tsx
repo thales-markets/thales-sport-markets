@@ -1946,7 +1946,11 @@ const Ticket: React.FC<TicketProps> = ({
                             )})`}
                         </SummaryValue>
                         <SummaryLabel>
-                            <Tooltip overlay={<>{t(`markets.parlay.thales-bonus-tooltip`)}</>} />
+                            <Tooltip
+                                overlay={<>{t(`markets.parlay.thales-bonus-tooltip`)}</>}
+                                iconFontSize={14}
+                                marginLeft={3}
+                            />
                         </SummaryLabel>
                     </RowContainer>
                 )}
@@ -1968,7 +1972,12 @@ const Ticket: React.FC<TicketProps> = ({
                         <SummaryLabel>
                             <FreeBetIcon className="icon icon--gift" />
                             {t('markets.parlay.use-free-bet')}
-                            <Tooltip overlay={<>{t('profile.free-bet.claim-btn')}</>} />:
+                            <Tooltip
+                                overlay={<>{t('profile.free-bet.claim-btn')}</>}
+                                iconFontSize={14}
+                                marginLeft={3}
+                            />
+                            :
                         </SummaryLabel>
                         <CheckboxContainer>
                             <Checkbox
@@ -2039,6 +2048,8 @@ const Ticket: React.FC<TicketProps> = ({
                                         }}
                                     />
                                 }
+                                iconFontSize={14}
+                                marginLeft={3}
                             />
                             :
                         </SummaryLabel>
@@ -2095,7 +2106,7 @@ const Ticket: React.FC<TicketProps> = ({
                 <GasSummary>
                     <SummaryLabel>
                         {t('markets.parlay.total-gas')}:
-                        <Tooltip overlay={<> {t('markets.parlay.gas-tooltip')}</>} />
+                        <Tooltip overlay={<> {t('markets.parlay.gas-tooltip')}</>} iconFontSize={14} marginLeft={3} />
                     </SummaryLabel>
                     <SummaryValue isCollateralInfo={true}>
                         {gas === 0 ? '-' : formatCurrencyWithSign(USD_SIGN, gas as number, 2, true)}
@@ -2152,7 +2163,12 @@ const Ticket: React.FC<TicketProps> = ({
                 <RowContainer>
                     <SummaryLabel>
                         {t('markets.parlay.persist-games')}
-                        <Tooltip overlay={<>{t(`markets.parlay.keep-selection-tooltip`)}</>} />:
+                        <Tooltip
+                            overlay={<>{t(`markets.parlay.keep-selection-tooltip`)}</>}
+                            iconFontSize={14}
+                            marginLeft={3}
+                        />
+                        :
                     </SummaryLabel>
                     <CheckboxContainer>
                         <Checkbox
@@ -2200,7 +2216,11 @@ const Ticket: React.FC<TicketProps> = ({
                     <OverdropRowSummary>
                         <OverdropLabel>
                             {t('markets.parlay.overdrop.base-xp')}{' '}
-                            <Tooltip overlay={<>{t(`markets.parlay.overdrop.tooltip.base-xp`)}</>} />
+                            <Tooltip
+                                overlay={<>{t(`markets.parlay.overdrop.tooltip.base-xp`)}</>}
+                                iconFontSize={14}
+                                marginLeft={3}
+                            />
                         </OverdropLabel>
                         <OverdropValue>{`${formatCurrency(
                             buyInAmountInDefaultCollateral * (2 - totalQuote)
@@ -2211,7 +2231,11 @@ const Ticket: React.FC<TicketProps> = ({
                         <OverdropRowSummary key={multiplier.name}>
                             <OverdropLabel>
                                 {multiplier.label}{' '}
-                                <Tooltip overlay={<>{t(`markets.parlay.overdrop.tooltip.${multiplier.tooltip}`)}</>} />
+                                <Tooltip
+                                    overlay={<>{t(`markets.parlay.overdrop.tooltip.${multiplier.tooltip}`)}</>}
+                                    iconFontSize={14}
+                                    marginLeft={3}
+                                />
                             </OverdropLabel>
                             <OverdropValue>+{multiplier.multiplier}%</OverdropValue>
                         </OverdropRowSummary>
@@ -2220,7 +2244,11 @@ const Ticket: React.FC<TicketProps> = ({
                         <OverdropRowSummary>
                             <OverdropLabel>
                                 Boosted games{' '}
-                                <Tooltip overlay={<>{t(`markets.parlay.overdrop.tooltip.promo-boost`)}</>} />
+                                <Tooltip
+                                    overlay={<>{t(`markets.parlay.overdrop.tooltip.promo-boost`)}</>}
+                                    iconFontSize={14}
+                                    marginLeft={3}
+                                />
                             </OverdropLabel>
                             <OverdropValue>+{overdropBoostedGamesTotalBoost}%</OverdropValue>
                         </OverdropRowSummary>
