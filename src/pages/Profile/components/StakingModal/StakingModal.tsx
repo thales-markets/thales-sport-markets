@@ -23,7 +23,7 @@ import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateralIndex } from 'utils/collaterals';
 import { checkAllowance } from 'utils/network';
 import { Client, maxUint256, parseEther } from 'viem';
-import { useChainId, useClient } from 'wagmi';
+import { useAccount, useChainId, useClient } from 'wagmi';
 import { StakingMessage } from '../OpenClaimableTickets/styled-components';
 import {
     ButtonContainer,
@@ -408,6 +408,3 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
 };
 
 export default StakingModal;
-function useAccount(): { address: any; isConnected: any } {
-    throw new Error('Function not implemented.');
-}
