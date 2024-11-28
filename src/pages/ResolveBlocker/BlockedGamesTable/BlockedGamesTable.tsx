@@ -1,3 +1,4 @@
+import PaginationWrapper from 'components/PaginationWrapper';
 import SPAAnchor from 'components/SPAAnchor';
 import Table from 'components/Table';
 import i18n from 'i18n';
@@ -12,9 +13,8 @@ import { useTheme } from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
 import { formatTxTimestamp, getEtherscanAddressLink, getEtherscanTxLink, truncateAddress } from 'thales-utils';
 import { BlockedGame, BlockedGames } from 'types/resolveBlocker';
+import { ThemeInterface } from 'types/ui';
 import { buildMarketLink } from 'utils/routes';
-import PaginationWrapper from '../../../components/PaginationWrapper';
-import { ThemeInterface } from '../../../types/ui';
 import {
     TeamNameLabel,
     TeamNamesContainer,

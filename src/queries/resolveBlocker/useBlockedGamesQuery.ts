@@ -3,10 +3,10 @@ import { generalConfig, noCacheConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
 import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
+import { Team } from 'types/markets';
 import { SupportedNetwork } from 'types/network';
 import { BlockedGame, BlockedGames } from 'types/resolveBlocker';
 import networkConnector from 'utils/networkConnector';
-import { Team } from '../../types/markets';
 
 const useBlockedGamesQuery = (
     isUnblocked: boolean,

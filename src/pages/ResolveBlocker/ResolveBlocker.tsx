@@ -1,3 +1,4 @@
+import { ResolveBlockerTab } from 'enums/resolveBlocker';
 import { t } from 'i18next';
 import useBlockedGamesQuery from 'queries/resolveBlocker/useBlockedGamesQuery';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -5,7 +6,6 @@ import { useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
 import { getNetworkId } from 'redux/modules/wallet';
 import { BlockedGames } from 'types/resolveBlocker';
-import { ResolveBlockerTab } from '../../enums/resolveBlocker';
 import BlockedGamesTable from './BlockedGamesTable';
 import { Container, Tab, TabContainer } from './styled-components';
 
