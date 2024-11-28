@@ -24,18 +24,10 @@ export const useUserTicketsQuery = (
         queryFn: async () => {
             try {
                 const contracts = [
-                    getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig.client, networkConfig.networkId),
-                    getContractInstance(
-                        ContractType.SPORTS_AMM_V2_MANAGER,
-                        networkConfig.client,
-                        networkConfig.networkId
-                    ),
-                    getContractInstance(ContractType.FREE_BET_HOLDER, networkConfig.client, networkConfig.networkId),
-                    getContractInstance(
-                        ContractType.STAKING_THALES_BETTING_PROXY,
-                        networkConfig.client,
-                        networkConfig.networkId
-                    ),
+                    getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig),
+                    getContractInstance(ContractType.SPORTS_AMM_V2_MANAGER, networkConfig),
+                    getContractInstance(ContractType.FREE_BET_HOLDER, networkConfig),
+                    getContractInstance(ContractType.STAKING_THALES_BETTING_PROXY, networkConfig),
                 ] as ViemContract[];
 
                 const [

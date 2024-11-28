@@ -31,8 +31,7 @@ const useUserStakingDataQuery = (
             try {
                 const stakingThalesContract = getContractInstance(
                     ContractType.STAKING_THALES,
-                    networkConfig.client,
-                    networkConfig.networkId
+                    networkConfig
                 ) as ViemContract;
 
                 if (stakingThalesContract) {

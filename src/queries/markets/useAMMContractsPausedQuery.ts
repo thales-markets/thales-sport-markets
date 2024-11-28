@@ -20,8 +20,7 @@ const useAMMContractsPausedQuery = (
             try {
                 const sportsAMMV2ContractInstance = getContractInstance(
                     ContractType.SPORTS_AMM_V2,
-                    networkConfig.client,
-                    networkConfig.networkId
+                    networkConfig
                 ) as ViemContract;
 
                 if (sportsAMMV2Contract) {

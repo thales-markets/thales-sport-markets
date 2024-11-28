@@ -32,8 +32,7 @@ const useLiquidityPoolUserDataQuery = (
             try {
                 const liquidityPoolDataContractInstance = getContractInstance(
                     ContractType.LIQUIDITY_POOL_DATA,
-                    networkConfig.client,
-                    networkConfig.networkId
+                    networkConfig
                 ) as ViemContract;
 
                 if (liquidityPoolDataContractInstance) {

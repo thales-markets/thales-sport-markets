@@ -23,8 +23,8 @@ const useLpTicketsQuery = (
         queryKey: QUERY_KEYS.Pnl.LpTickets(lpCollateral, round, networkConfig.networkId),
         queryFn: async () => {
             const [sportsAMMDataContract, liquidityPoolDataContract] = [
-                getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig.client, networkConfig.networkId),
-                getContractInstance(ContractType.LIQUIDITY_POOL_DATA, networkConfig.client, networkConfig.networkId),
+                getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig),
+                getContractInstance(ContractType.LIQUIDITY_POOL_DATA, networkConfig),
             ];
 
             if (sportsAMMDataContract && liquidityPoolDataContract) {

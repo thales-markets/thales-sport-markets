@@ -23,12 +23,8 @@ export const useGameTicketsQuery = (
         queryFn: async () => {
             try {
                 const contractInstances = [
-                    getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig.client, networkConfig.networkId),
-                    getContractInstance(
-                        ContractType.SPORTS_AMM_V2_MANAGER,
-                        networkConfig.client,
-                        networkConfig.networkId
-                    ),
+                    getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig),
+                    getContractInstance(ContractType.SPORTS_AMM_V2_MANAGER, networkConfig),
                 ] as ViemContract[];
 
                 const [sportsAMMDataContract, sportsAMMV2ManagerContract] = contractInstances;

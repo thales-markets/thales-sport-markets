@@ -25,8 +25,7 @@ const useSportsAmmDataQuery = (
 
                 const sportsAMMDataContract = getContractInstance(
                     ContractType.SPORTS_AMM_DATA,
-                    networkConfig.client,
-                    networkConfig.networkId
+                    networkConfig
                 ) as ViemContract;
 
                 if (sportsAMMDataContract) {

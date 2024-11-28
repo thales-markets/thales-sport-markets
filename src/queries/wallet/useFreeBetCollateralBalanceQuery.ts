@@ -1,4 +1,5 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
+import console from 'console';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { TBD_ADDRESS } from 'constants/network';
 import QUERY_KEYS from 'constants/queryKeys';
@@ -16,12 +17,9 @@ const useFreeBetCollateralBalanceQuery = (
     return useQuery<any>({
         queryKey: QUERY_KEYS.Wallet.FreeBetBalance(walletAddress, networkConfig.networkId),
         queryFn: async () => {
+            console.log('networkConfig free', networkConfig);
             try {
-                const freeBetHolderContract = getContractInstance(
-                    ContractType.FREE_BET_HOLDER,
-                    networkConfig.client,
-                    networkConfig.networkId
-                );
+                const freeBetHolderContract = getContractInstance(ContractType.FREE_BET_HOLDER, networkConfig);
 
                 if (!walletAddress || !networkConfig.networkId || !freeBetHolderContract || !multipleCollateral) {
                     return {

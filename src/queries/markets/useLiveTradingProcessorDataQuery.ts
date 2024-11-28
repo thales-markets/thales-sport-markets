@@ -19,8 +19,7 @@ const useLiveTradingProcessorDataQuery = (
 
             const liveTradingProcessorContract = getContractInstance(
                 ContractType.LIVE_TRADING_PROCESSOR,
-                networkConfig.client,
-                networkConfig.networkId
+                networkConfig
             ) as ViemContract;
 
             if (liveTradingProcessorContract) {

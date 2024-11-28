@@ -26,8 +26,7 @@ const useTicketLiquidityQuery = (
             try {
                 const sportsAMMV2RiskManagerContract = getContractInstance(
                     ContractType.SPORTS_AMM_V2_RISK_MANAGER,
-                    networkConfig.client,
-                    networkConfig.networkId
+                    networkConfig
                 ) as ViemContract;
 
                 if (sportsAMMV2RiskManagerContract) {

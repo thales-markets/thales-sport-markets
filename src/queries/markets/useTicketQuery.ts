@@ -24,8 +24,7 @@ export const useTicketQuery = (
             try {
                 const sportsAMMDataContract = getContractInstance(
                     ContractType.SPORTS_AMM_DATA,
-                    networkConfig.client,
-                    networkConfig.networkId
+                    networkConfig
                 ) as ViemContract;
                 if (sportsAMMDataContract) {
                     const playersInfoQueryParam = `isTestnet=${isTestNetwork(networkConfig.networkId)}`;
