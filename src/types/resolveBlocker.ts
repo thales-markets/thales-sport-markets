@@ -1,9 +1,10 @@
-import { SportMarket } from './markets';
-
 export type BlockedGame = {
-    game: SportMarket;
+    timestamp: number;
+    gameId: string;
+    homeTeam: string;
+    awayTeam: string;
     reason: string;
-    isBlocked: boolean;
+    isUnblocked: boolean;
 };
 
 export type BlockedGames = BlockedGame[];

@@ -1214,6 +1214,7 @@
     },
     "resolve-blocker": {
         "title": "Blocked games",
+        "date-time": "Date | Time",
         "game": "Game",
         "reason": "Reason",
         "action": "Action",
