@@ -111,7 +111,12 @@ const QUERY_KEYS = {
         ],
     },
     ResolveBlocker: {
-        BlockedGames: (networkId: Network) => ['resolveBlocker', 'blockedGames', networkId],
+        BlockedGames: (isUnblocked: boolean, networkId: Network) => [
+            'resolveBlocker',
+            'blockedGames',
+            isUnblocked,
+            networkId,
+        ],
         WhitelistedForUnblock: (walletAddress: string, networkId: Network) => [
             'resolveBlocker',
             'whitelistedForUnblock',

@@ -8,9 +8,13 @@ import { BlockedGame, BlockedGames } from 'types/resolveBlocker';
 import networkConnector from 'utils/networkConnector';
 import { Team } from '../../types/markets';
 
-const useBlockedGamesQuery = (networkId: SupportedNetwork, options?: UseQueryOptions<BlockedGames>) => {
+const useBlockedGamesQuery = (
+    isUnblocked: boolean,
+    networkId: SupportedNetwork,
+    options?: UseQueryOptions<BlockedGames>
+) => {
     return useQuery<BlockedGames>(
-        QUERY_KEYS.ResolveBlocker.BlockedGames(networkId),
+        QUERY_KEYS.ResolveBlocker.BlockedGames(isUnblocked, networkId),
         async () => {
             const { resolveBlockerContract } = networkConnector;
             if (resolveBlockerContract) {
@@ -18,7 +22,7 @@ const useBlockedGamesQuery = (networkId: SupportedNetwork, options?: UseQueryOpt
                     axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, noCacheConfig),
                     thalesData.sportMarketsV2.blockedGames({
                         network: networkId,
-                        isUnblocked: false,
+                        isUnblocked,
                     }),
                 ]);
                 const gamesInfo = gamesInfoResponse.data;
@@ -36,12 +40,9 @@ const useBlockedGamesQuery = (networkId: SupportedNetwork, options?: UseQueryOpt
                         const awayTeamName = awayTeam?.name ?? '';
 
                         return {
-                            timestamp: game.timestamp,
-                            gameId: game.gameId,
+                            ...game,
                             homeTeam: homeTeamName,
                             awayTeam: awayTeamName,
-                            reason: game.reason,
-                            isUnblocked: game.isUnblocked,
                         };
                     }
                 );

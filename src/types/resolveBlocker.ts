@@ -5,6 +5,8 @@ export type BlockedGame = {
     awayTeam: string;
     reason: string;
     isUnblocked: boolean;
+    unblockedBy: string;
+    hash: string;
 };
 
 export type BlockedGames = BlockedGame[];

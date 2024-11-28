@@ -1218,10 +1218,16 @@
         "game": "Game",
         "reason": "Reason",
         "action": "Action",
+        "unblocked-by": "Unblocked by",
         "unblock": "Unblock",
         "unblocking": "Unblocking...",
         "not-whitelisted-for-unblock-tooltip": "Connected wallet is not whitelisted for unblock",
         "unblock-confirmation-message": "Game successfully unblocked",
-        "no-blocked-games": "No blocked games"
+        "no-blocked-games": "No blocked games",
+        "no-unblocked-games": "No unblocked games",
+        "tab": {
+            "blocked-games": "Blocked games",
+            "unblocked-games": "Unblocked games"
+        }
     }
 }
