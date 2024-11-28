@@ -25,10 +25,9 @@ export const prepareContractWithModifiedResponse = (props: { abi: any; address: 
     const contract = getContract(props) as ViemContract;
 
     if (typeof contract.read !== 'object' || contract.read === null) {
-        console.log('Address ', props.address);
-        console.log('Contract ', contract);
         throw new Error('contract.read must be an object');
     }
+
     return {
         ...contract,
         read: new Proxy(contract.read, {
@@ -64,7 +63,6 @@ export const prepareContractWithModifiedResponse = (props: { abi: any; address: 
 
 const getContractWithModifiedResponse = (contractData: ContractData, networkConfig: NetworkConfig) => {
     if (!networkConfig) return;
-    console.log('contractData.addresses ', contractData.addresses);
     return prepareContractWithModifiedResponse({
         abi: contractData.abi,
         address: contractData.addresses[networkConfig?.networkId],
@@ -78,7 +76,6 @@ export const getContractInstance = (
     selectedToken?: number,
     lpCollateral?: LiquidityPoolCollateral
 ) => {
-    console.log('networkConfig 2', networkConfig);
     switch (contractName) {
         case ContractType.LIQUIDITY_POOL_DATA:
             return getContractWithModifiedResponse(liquidityPoolDataContract, networkConfig);
