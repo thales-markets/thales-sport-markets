@@ -92,11 +92,16 @@ export const SearchIconContainer = styled.div`
 `;
 
 export const MenuIconContainer = styled.div`
-    width: 50%;
     display: flex;
-    justify-content: start;
-    position: absolute;
-    left: 12px;
+    position: relative;
+    margin-right: 0px !important;
+    @media (max-width: 950px) {
+        width: 50%;
+        display: flex;
+        justify-content: start;
+        position: absolute;
+        left: 12px;
+    }
 `;
 
 export const LogoContainer = styled.div`
@@ -151,6 +156,12 @@ export const NotificationCount = styled.div`
     width: 16px;
     background-color: ${(props) => props.theme.background.quaternary};
     box-shadow: ${(props) => props.theme.shadow.notification};
+`;
+
+export const BlockedGamesNotificationCount = styled(NotificationCount)`
+    left: -5px;
+    background-color: ${(props) => props.theme.error.textColor.primary};
+    box-shadow: ${(props) => props.theme.shadow.errorNotification};
 `;
 
 export const Count = styled.span`

@@ -2,7 +2,7 @@ import Button from 'components/Button';
 import FreeBetFundModal from 'components/FreeBetFundModal';
 import LanguageSelector from 'components/LanguageSelector';
 import Logo from 'components/Logo';
-import { Separator } from 'components/NavMenu/styled-components';
+import { Count, NotificationCount, Separator } from 'components/NavMenu/styled-components';
 import SPAAnchor from 'components/SPAAnchor';
 import WalletInfo from 'components/WalletInfo';
 import ROUTES from 'constants/routes';
@@ -14,13 +14,15 @@ import {
 } from 'constants/ui';
 import { ProfileIconWidget } from 'layouts/DappLayout/DappHeader/components/ProfileItem/ProfileItem';
 import { LogoContainer, OverdropIcon } from 'layouts/DappLayout/DappHeader/styled-components';
-import React, { useState } from 'react';
+import useBlockedGamesQuery from 'queries/resolveBlocker/useBlockedGamesQuery';
+import useWhitelistedForUnblock from 'queries/resolveBlocker/useWhitelistedForUnblock';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
+import { getIsAppReady } from 'redux/modules/app';
+import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
 import { FlexDivCentered } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
@@ -51,10 +53,31 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
     const { t } = useTranslation();
     const location = useLocation();
     const theme: ThemeInterface = useTheme();
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const isAppReady = useSelector(getIsAppReady);
+    const networkId = useSelector(getNetworkId);
+    const isWalletConnected = useSelector(getIsWalletConnected);
+    const walletAddress = useSelector(getWalletAddress) || '';
 
     const [openFreeBetModal, setOpenFreeBetModal] = useState<boolean>(false);
+
+    const whitelistedForUnblockQuery = useWhitelistedForUnblock(walletAddress, networkId, {
+        enabled: isAppReady && isWalletConnected,
+    });
+    const isWitelistedForUnblock = useMemo(
+        () => whitelistedForUnblockQuery.isSuccess && whitelistedForUnblockQuery.data,
+        [whitelistedForUnblockQuery.data, whitelistedForUnblockQuery.isSuccess]
+    );
+
+    const blockedGamesQuery = useBlockedGamesQuery(false, networkId, {
+        enabled: isAppReady && isWitelistedForUnblock,
+    });
+    const blockedGamesCount = useMemo(
+        () =>
+            blockedGamesQuery.isSuccess && blockedGamesQuery.data && isWitelistedForUnblock
+                ? blockedGamesQuery.data.length
+                : 0,
+        [blockedGamesQuery.data, blockedGamesQuery.isSuccess, isWitelistedForUnblock]
+    );
 
     return (
         <OutsideClickHandler onOutsideClick={() => visibility && setNavMenuVisibility(false)}>
@@ -86,6 +109,7 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                     {NAV_MENU_FIRST_SECTION.map((item, index) => {
                         if (!item.supportedNetworks.includes(networkId)) return;
                         if (item.name == 'profile' && !isWalletConnected) return;
+                        if (item.name == 'resolve-blocker' && !isWitelistedForUnblock) return;
                         return (
                             <SPAAnchor key={index} href={buildHref(item.route)}>
                                 <ItemContainer
@@ -93,10 +117,20 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                                     active={location.pathname === item.route}
                                     onClick={() => setNavMenuVisibility(false)}
                                 >
-                                    {isWalletConnected ? (
+                                    {isWalletConnected && item.name == 'profile' ? (
                                         <ProfileIconWidget avatarSize={25} iconColor={theme.textColor.primary} />
                                     ) : (
-                                        <NavIcon className={item.iconClass} active={location.pathname === item.route} />
+                                        <>
+                                            {item.name == 'resolve-blocker' && blockedGamesCount > 0 && (
+                                                <NotificationCount>
+                                                    <Count>{blockedGamesCount}</Count>
+                                                </NotificationCount>
+                                            )}
+                                            <NavIcon
+                                                className={item.iconClass}
+                                                active={location.pathname === item.route}
+                                            />
+                                        </>
                                     )}
                                     <NavLabel>{t(item.i18label)}</NavLabel>
                                 </ItemContainer>

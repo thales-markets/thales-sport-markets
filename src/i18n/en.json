@@ -719,6 +719,7 @@
             "items": {
                 "markets": "Markets",
                 "profile": "Profile",
+                "resolve-blocker": "Resolve blocker",
                 "history": "History",
                 "liquidity-pool": "Provide Liquidity",
                 "promotions": "Promotions",

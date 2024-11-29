@@ -17,6 +17,13 @@ export const NAV_MENU_FIRST_SECTION: NavMenuItem[] = [
         route: ROUTES.Profile,
         supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.OptimismSepolia],
     },
+    {
+        i18label: 'markets.nav-menu.items.resolve-blocker',
+        iconClass: 'icon icon--cross-button',
+        name: 'resolve-blocker',
+        route: ROUTES.ResolveBlocker,
+        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.OptimismSepolia],
+    },
 ];
 
 export const NAV_MENU_SECOND_SECTION: NavMenuItem[] = [

@@ -2,8 +2,8 @@ import { Network } from 'enums/network';
 
 const resolveBlockerContract = {
     addresses: {
-        [Network.OptimismMainnet]: '0xdEB3672FA27678a328b0C9Bdbb7fdb42ebc1494B',
-        [Network.Arbitrum]: '0x521deE9087C5C0E5672D24a7a34F3176B5Cdb56a',
+        [Network.OptimismMainnet]: '0xA5232A7AFE810bf453e2d13DdAf0689bbED31f60',
+        [Network.Arbitrum]: '0x758c0fb1F629d0597b195B1653e2D656c5A55f53',
         [Network.Base]: '',
         [Network.OptimismSepolia]: '0x13488544345346d6a61b4408eF5f936ec5C8c027',
     },
@@ -117,6 +117,13 @@ const resolveBlockerContract = {
             name: 'initialize',
             outputs: [],
             stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'address', name: '_address', type: 'address' }],
+            name: 'isWhitelistedForUnblock',
+            outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+            stateMutability: 'view',
             type: 'function',
         },
         {

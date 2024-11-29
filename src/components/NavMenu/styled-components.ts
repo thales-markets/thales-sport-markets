@@ -148,3 +148,22 @@ export const CloseIcon = styled.i.attrs({ className: 'icon icon--close' })`
     right: 15px;
     cursor: pointer;
 `;
+
+export const NotificationCount = styled.div`
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    height: 18px;
+    width: 18px;
+    background-color: ${(props) => props.theme.error.textColor.primary};
+    box-shadow: ${(props) => props.theme.shadow.errorNotification};
+    margin-right: 5px;
+`;
+
+export const Count = styled.span`
+    color: ${(props) => props.theme.button.textColor.primary};
+    font-weight: 600;
+    font-size: 13px;
+`;
