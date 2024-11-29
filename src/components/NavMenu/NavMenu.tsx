@@ -123,7 +123,11 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                                     onClick={() => setNavMenuVisibility(null)}
                                 >
                                     {isWalletConnected && item.name == 'profile' ? (
-                                        <ProfileIconWidget avatarSize={25} iconColor={theme.textColor.primary} />
+                                        <ProfileIconWidget
+                                            avatarSize={25}
+                                            iconColor={theme.textColor.primary}
+                                            marginRight="10px"
+                                        />
                                     ) : (
                                         <>
                                             {item.name == 'resolve-blocker' && blockedGamesCount > 0 && (
