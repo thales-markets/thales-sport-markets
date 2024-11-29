@@ -17,8 +17,12 @@ export const Header = styled(FlexDivColumnCentered)<{
     isMainPageView?: boolean;
     isColumnView?: boolean;
     alignHeader?: boolean;
+    hidden?: boolean;
+    float?: boolean;
 }>`
-    position: relative;
+    display: ${(props) => (props.hidden ? 'none' : 'flex')};
+    position: ${(props) => (props.float ? 'absolute' : 'relative')};
+    ${(props) => props.float && 'top: -30px; left: 50%; transform: translateX(-50%);'}
     max-height: ${(props) => (props.isMainPageView && !props.isColumnView ? 'auto' : '25px')};
     margin-bottom: ${(props) => (props.alignHeader ? '-19px' : '0')};
     flex: none;

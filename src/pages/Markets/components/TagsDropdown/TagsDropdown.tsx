@@ -1,15 +1,16 @@
+import { SportFilter } from 'enums/markets';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
+import { getSportFilter, setMarketTypeFilter } from 'redux/modules/market';
 import { getFavouriteLeagues, setFavouriteLeague } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { TagInfo, Tags } from 'types/markets';
 import { getLeagueFlagSource } from 'utils/images';
+import { getScrollMainContainerToTop } from 'utils/scroll';
 import IncentivizedLeague from '../../../../components/IncentivizedLeague';
 import { LeagueMap } from '../../../../constants/sports';
-import { getSportFilter, setMarketTypeFilter } from 'redux/modules/market';
-import { SportFilter } from 'enums/markets';
 
 type TagsDropdownProps = {
     open: boolean;
@@ -93,6 +94,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                 .map((tag: TagInfo) => {
                     const isFavourite = !!favouriteLeagues.find((favourite: TagInfo) => favourite.id == tag.id);
                     const label = tag.label;
+                    const scrollMainToTop = getScrollMainContainerToTop();
 
                     return (
                         <TagContainer key={tag.id} isMobile={isMobile}>
@@ -110,6 +112,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                 .map((tagInfo) => tagInfo.label)
                                                 .toString();
                                             setTagParam(newTagParam);
+                                            scrollMainToTop();
                                         } else {
                                             if (isPlayerPropsTag) {
                                                 dispatch(setMarketTypeFilter(undefined));
@@ -121,6 +124,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                     [...tagFilter, tag].map((tagInfo) => tagInfo.label).toString()
                                                 );
                                             }
+                                            scrollMainToTop();
                                         }
                                     }}
                                 >

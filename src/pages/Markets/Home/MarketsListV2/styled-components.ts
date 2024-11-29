@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FlexDiv } from 'styles/common';
+import { FlexDiv, FlexDivColumnCentered } from 'styles/common';
 
 export const LeagueCard = styled.div<{ isMarketSelected: boolean }>`
     display: flex;
@@ -81,6 +81,7 @@ export const StarIcon = styled.i`
 `;
 
 export const PlayerPropsHeader = styled(FlexDiv)<{ marketSelected: boolean }>`
+    position: relative;
     padding: ${(props) => (props.marketSelected ? '0' : '0 15px')};
     justify-content: space-between;
     cursor: pointer;
@@ -102,8 +103,7 @@ export const MatchTimeLabel = styled.label<{ marketSelected: boolean }>`
     }
 `;
 
-export const MatchTeamsLabel = styled.label<{ marketSelected: boolean; overdropBoosted?: boolean }>`
-    color: ${(props) => (props.overdropBoosted ? props.theme.overdrop.textColor.primary : 'inherit')};
+export const MatchTeamsLabel = styled.label<{ marketSelected: boolean }>`
     display: flex;
     flex-direction: ${(props) => (props.marketSelected ? 'column' : 'row')};
     gap: 3px;
@@ -116,12 +116,44 @@ export const MatchTimeLabelContainer = styled(FlexDiv)`
 `;
 
 export const GameOfLabel = styled.span`
+    display: flex;
+    align-items: center;
+    height: 100%;
+    position: absolute;
+    right: 60px;
     color: ${(props) => props.theme.overdrop.textColor.primary};
-    font-size: 10px;
+    font-size: 12px;
     text-transform: uppercase;
     @media (max-width: 600px) {
         top: 10px;
         text-align: center;
         right: 0px;
+    }
+`;
+
+export const FireContainer = styled(FlexDivColumnCentered)`
+    font-weight: 600;
+    margin-right: 10px;
+    @media (max-width: 600px) {
+        flex-direction: row;
+        top: 5px;
+        right: 44px;
+    }
+`;
+
+export const Fire = styled.i`
+    color: ${(props) => props.theme.overdrop.textColor.primary};
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+`;
+
+export const FireText = styled.span`
+    color: ${(props) => props.theme.overdrop.textColor.primary};
+    white-space: pre;
+    font-size: 7px;
+    @media (max-width: 600px) {
+        display: flex;
+        align-items: center;
     }
 `;

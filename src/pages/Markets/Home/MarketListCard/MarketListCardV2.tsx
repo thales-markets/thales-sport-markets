@@ -3,6 +3,7 @@ import SPAAnchor from 'components/SPAAnchor';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
 import { FUTURES_MAIN_VIEW_DISPLAY_COUNT, MEDIUM_ODDS } from 'constants/markets';
+import { SportFilter } from 'enums/markets';
 import { MarketType } from 'enums/marketTypes';
 import { RiskManagementConfig } from 'enums/riskManagement';
 import { League, PeriodType, Sport } from 'enums/sports';
@@ -29,7 +30,7 @@ import { RiskManagementLeaguesAndTypes } from 'types/riskManagement';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getOnImageError, getOnPlayerImageError, getTeamImageSource } from 'utils/images';
 import { isFuturesMarket } from 'utils/markets';
-import { getMarketPlayerPropsMarketsForSport, isOddValid } from 'utils/marketsV2';
+import { getMarketPlayerPropsMarketsForProp, getMarketPlayerPropsMarketsForSport, isOddValid } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
 import { getLeaguePeriodType, getLeagueTooltipKey } from 'utils/sports';
 import { displayGameClock, displayGamePeriod } from 'utils/ui';
@@ -62,14 +63,15 @@ import {
     TeamsInfoContainer,
     Wrapper,
 } from './styled-components';
-import { SportFilter } from 'enums/markets';
 
 type MarketRowCardProps = {
     market: SportMarket;
     language: string;
+    floatingOddsTitles?: boolean;
+    oddsTitlesHidden?: boolean;
 };
 
-const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
+const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language, oddsTitlesHidden, floatingOddsTitles }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
 
@@ -201,6 +203,10 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
         if (!isPlayerPropsMarket) {
             return null;
         }
+        if (market.sport === Sport.FOOTBALL) {
+            return getMarketPlayerPropsMarketsForProp(market);
+        }
+
         return getMarketPlayerPropsMarketsForSport(market);
     }, [market, isPlayerPropsMarket]);
 
@@ -565,6 +571,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                         isMainPageView
                                         isColumnView={isColumnView}
                                         hidePlayerName
+                                        oddsTitlesHidden={oddsTitlesHidden}
+                                        floatingOddsTitles={floatingOddsTitles}
                                     />
                                     {isColumnView && !isMobile && playerPropsMarkets[1] && (
                                         <PositionsV2
@@ -574,6 +582,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                             isMainPageView
                                             isColumnView={isColumnView}
                                             hidePlayerName
+                                            oddsTitlesHidden={oddsTitlesHidden}
+                                            floatingOddsTitles={floatingOddsTitles}
                                         />
                                     )}
                                     {isColumnView && !isMobile && playerPropsMarkets[2] && (
@@ -584,6 +594,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                             isMainPageView
                                             isColumnView={isColumnView}
                                             hidePlayerName
+                                            oddsTitlesHidden={oddsTitlesHidden}
+                                            floatingOddsTitles={floatingOddsTitles}
                                         />
                                     )}
                                 </>
@@ -691,6 +703,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
             selected={selected}
             isMarketSelected={isMarketSelected}
             isOverdrop={!isPlayerPropsMarket && !!overdropGameMultiplier}
+            floatingOddsTitles={floatingOddsTitles}
         >
             {isGameOpen || isGameLive ? (
                 <>{getMainContainerContent()}</>

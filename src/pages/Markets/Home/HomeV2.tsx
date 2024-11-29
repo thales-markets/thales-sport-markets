@@ -46,6 +46,7 @@ import { addHoursToCurrentDate, localStore } from 'thales-utils';
 import { MarketsCache, SportMarket, SportMarkets, TagInfo, Tags } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { history } from 'utils/routes';
+import { getScrollMainContainerToTop } from 'utils/scroll';
 import useQueryParam from 'utils/useQueryParams';
 import { BOXING_LEAGUES, LeagueMap } from '../../../constants/sports';
 import { MarketType } from '../../../enums/marketTypes';
@@ -274,11 +275,13 @@ const Home: React.FC = () => {
 
         const filteredMarkets = marketsToFilter.filter((market: SportMarket) => {
             if (marketSearch) {
-                if (
-                    (!market.homeTeam.toLowerCase().includes(marketSearch.toLowerCase()) &&
-                        !market.awayTeam.toLowerCase().includes(marketSearch.toLowerCase())) ||
-                    (sportFilter == SportFilter.PlayerProps &&
-                        !market.playerProps.playerName.toLowerCase().includes(marketSearch.toLowerCase()))
+                if (sportFilter == SportFilter.PlayerProps) {
+                    if (!market.playerProps.playerName.toLowerCase().includes(marketSearch.toLowerCase())) {
+                        return false;
+                    }
+                } else if (
+                    !market.homeTeam.toLowerCase().includes(marketSearch.toLowerCase()) &&
+                    !market.awayTeam.toLowerCase().includes(marketSearch.toLowerCase())
                 ) {
                     return false;
                 }
@@ -623,6 +626,8 @@ const Home: React.FC = () => {
                             key={index}
                             onSportClick={() => {
                                 if (filterItem !== sportFilter) {
+                                    const scrollMainToTop = getScrollMainContainerToTop();
+                                    scrollMainToTop();
                                     dispatch(setSportFilter(filterItem));
                                     setSportParam(filterItem);
                                     // TODO: if nba empty use smth else

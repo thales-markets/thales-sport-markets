@@ -14,7 +14,11 @@ import {
     TradeData,
 } from 'types/markets';
 import { MarketTypeMap } from '../constants/marketTypes';
-import { PLAYER_PROPS_MARKETS_MAP, UFC_LEAGUE_IDS } from '../constants/sports';
+import {
+    PLAYER_PROPS_MARKETS_PER_PROP_MAP,
+    PLAYER_PROPS_MARKETS_PER_SPORT_MAP,
+    UFC_LEAGUE_IDS,
+} from '../constants/sports';
 import { fixOneSideMarketCompetitorName } from './formatters/string';
 import {
     getMarketTypeDescription,
@@ -612,20 +616,54 @@ export const packMarket = (
 };
 
 export const getMarketPlayerPropsMarketsForSport = (market: SportMarket) => {
-    const marketTypesForSport = PLAYER_PROPS_MARKETS_MAP[market.sport];
+    const marketTypesForSport = PLAYER_PROPS_MARKETS_PER_SPORT_MAP[market.sport];
 
     if (marketTypesForSport?.length) {
         return marketTypesForSport.map(
             (marketType) =>
                 market.childMarkets.find((childMarket) => childMarket.typeId === marketType) || {
                     ...market,
-                    type: getPositionTextV2(market, 0, false),
+                    type: getPositionTextV2(market, 0, false) || '',
                     typeId: marketType,
                     odds: [0, 0],
                     line: Infinity,
                 }
         );
     } else {
-        return market.childMarkets.slice(0, 3);
+        return _.uniqBy(market.childMarkets, 'typeId').slice(0, 3);
     }
+};
+
+export const getSpecializedPropForMarket = (market: SportMarket) =>
+    Number(
+        Object.keys(PLAYER_PROPS_MARKETS_PER_PROP_MAP).find((key) => {
+            return market.childMarkets.some((childMarket) => childMarket.typeId === Number(key));
+        })
+    );
+
+export const getMarketPlayerPropsMarketsForProp = (market: SportMarket) => {
+    const specializedPropMarketType: MarketType | undefined = getSpecializedPropForMarket(market);
+
+    const marketTypesForProp =
+        !isNaN(specializedPropMarketType) && PLAYER_PROPS_MARKETS_PER_PROP_MAP[specializedPropMarketType];
+
+    if (marketTypesForProp) {
+        return marketTypesForProp.map(
+            (marketType) =>
+                market.childMarkets.find((childMarket) => childMarket.typeId === marketType) || {
+                    ...market,
+                    type: getPositionTextV2(market, 0, false) || '',
+                    typeId: marketType,
+                    odds: [0, 0],
+                    line: Infinity,
+                }
+        );
+    } else {
+        return _.uniqBy(market.childMarkets, 'typeId').slice(0, 3);
+    }
+};
+
+export const getPlayerPropsMarketsOverviewLength = (market: SportMarket) => {
+    const uniqueMarketsLength = _.uniqBy(market.childMarkets, 'typeId').length;
+    return Math.min(uniqueMarketsLength, 3);
 };

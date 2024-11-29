@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { LegacyRef } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import { useTheme } from 'styled-components';
 import { ThemeInterface } from '../../types/ui';
 
 type ScrollProps = {
+    innerRef?: LegacyRef<Scrollbars>;
     height: string;
+    onScroll?: () => void;
+    onScrollStart?: () => void;
+    onScrollStop?: () => void;
 };
 
-const Scroll: React.FC<ScrollProps> = ({ children, height }) => {
+const Scroll: React.FC<ScrollProps> = ({ children, height, onScrollStart, onScrollStop, onScroll, innerRef }) => {
     const theme: ThemeInterface = useTheme();
 
     const renderThumb = ({ style, ...props }: any) => {
@@ -32,12 +36,16 @@ const Scroll: React.FC<ScrollProps> = ({ children, height }) => {
 
     return (
         <Scrollbars
+            ref={innerRef}
             hideTracksWhenNotNeeded
             style={{ height }}
             renderTrackHorizontal={renderTrack}
             renderThumbHorizontal={renderThumb}
             renderTrackVertical={renderTrack}
             renderThumbVertical={renderThumb}
+            onScroll={onScroll}
+            onScrollStart={onScrollStart}
+            onScrollStop={onScrollStop}
         >
             {children}
         </Scrollbars>

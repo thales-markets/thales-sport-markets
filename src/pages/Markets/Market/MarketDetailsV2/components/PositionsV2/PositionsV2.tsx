@@ -1,4 +1,5 @@
 import Tooltip from 'components/Tooltip';
+import { SportFilter } from 'enums/markets';
 import { MarketType } from 'enums/marketTypes';
 import { League } from 'enums/sports';
 import { orderBy } from 'lodash';
@@ -6,6 +7,7 @@ import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
+import { getSportFilter } from 'redux/modules/market';
 import styled from 'styled-components';
 import { SportMarket } from 'types/markets';
 import { getMarketTypeTooltipKey, isFuturesMarket } from 'utils/markets';
@@ -24,8 +26,6 @@ import {
     SubTitleContainer,
     Title,
 } from './styled-components';
-import { getSportFilter } from 'redux/modules/market';
-import { SportFilter } from 'enums/markets';
 
 type PositionsProps = {
     markets: SportMarket[];
@@ -37,6 +37,8 @@ type PositionsProps = {
     isGameLive?: boolean;
     hidePlayerName?: boolean;
     alignHeader?: boolean;
+    oddsTitlesHidden?: boolean;
+    floatingOddsTitles?: boolean;
     onAccordionClick?: () => void;
 };
 
@@ -51,6 +53,8 @@ const Positions: React.FC<PositionsProps> = ({
     onAccordionClick,
     hidePlayerName,
     alignHeader,
+    oddsTitlesHidden,
+    floatingOddsTitles,
 }) => {
     const { t } = useTranslation();
 
@@ -94,6 +98,8 @@ const Positions: React.FC<PositionsProps> = ({
                 isMainPageView={isMainPageView}
                 isColumnView={isColumnView}
                 alignHeader={alignHeader && (!!positionText0 || !!positionText1) && isExpanded && !isMobile}
+                hidden={oddsTitlesHidden}
+                float={floatingOddsTitles}
             >
                 {((isMobile && !isMainPageView) || !isMobile || isPlayerPropsMarket) && (
                     <Title isExpanded={isExpanded} isMainPageView={isMainPageView} isColumnView={isColumnView}>

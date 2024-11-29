@@ -1,6 +1,8 @@
 import IncentivizedLeague from 'components/IncentivizedLeague';
+import { SportFilter } from 'enums/markets';
 import { groupBy, orderBy } from 'lodash';
 import React, { useMemo, useState } from 'react';
+import LazyLoad, { forceCheck } from 'react-lazyload';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMarketSelected, getSportFilter } from 'redux/modules/market';
 import { getFavouriteLeagues, setFavouriteLeague } from 'redux/modules/ui';
@@ -9,7 +11,7 @@ import { getLeagueFlagSource } from 'utils/images';
 import { isOneSideMarket } from 'utils/markets';
 import { getLeagueLabel } from '../../../../utils/sports';
 import MarketListCardV2 from '../MarketListCard';
-import { SportFilter } from 'enums/markets';
+import GameList from './GameList';
 import {
     ArrowIcon,
     GamesContainer,
@@ -19,7 +21,6 @@ import {
     LeagueName,
     StarIcon,
 } from './styled-components';
-import GameList from './GameList';
 
 type MarketsListProps = {
     markets: SportMarkets;
@@ -56,6 +57,9 @@ const MarketsList: React.FC<MarketsListProps> = ({ markets, league, language }) 
                         } else {
                             setHideLeague(true);
                         }
+                        setTimeout(() => {
+                            forceCheck();
+                        }, 1);
                     }}
                 >
                     <LeagueFlag alt={league.toString()} src={getLeagueFlagSource(Number(league))} />
@@ -91,7 +95,9 @@ const MarketsList: React.FC<MarketsListProps> = ({ markets, league, language }) 
             ) : (
                 <GamesContainer hidden={hideLeague}>
                     {sortedMarkets.map((market: SportMarket, index: number) => (
-                        <MarketListCardV2 language={language} market={market} key={index + 'list'} />
+                        <LazyLoad height={130} key={index + 'list'} offset={800}>
+                            <MarketListCardV2 language={language} market={market} />
+                        </LazyLoad>
                     ))}
                 </GamesContainer>
             )}

@@ -7,7 +7,9 @@ export const Wrapper = styled(FlexDivColumn)<{
     selected: boolean;
     isMarketSelected: boolean;
     isOverdrop: boolean;
+    floatingOddsTitles?: boolean;
 }>`
+    margin-top: ${(props) => (props.floatingOddsTitles ? '25px' : '0')};
     position: relative;
     z-index: 1;
     width: 100%;
@@ -24,7 +26,10 @@ export const Wrapper = styled(FlexDivColumn)<{
         props.selected ? props.theme.oddsContainerBackground.tertiary : props.theme.textColor.primary};
 `;
 
-export const MainContainer = styled(FlexDivRow)<{ isGameOpen: boolean; isBoosted?: boolean }>`
+export const MainContainer = styled(FlexDivRow)<{
+    isGameOpen: boolean;
+    isBoosted?: boolean;
+}>`
     position: relative;
     width: 100%;
     padding: ${(props) => (props.isBoosted ? '20px 12px 10px 12px' : '10px 12px')};
