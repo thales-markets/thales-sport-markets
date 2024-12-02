@@ -28,13 +28,12 @@ import { getIsBiconomy, setWalletConnectModalVisibility } from 'redux/modules/wa
 import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
 import { FlexDivRow } from 'styles/common';
-import { Coins, formatCurrencyWithKey, formatPercentage } from 'thales-utils';
+import { Coins, coinParser, formatCurrencyWithKey, formatPercentage } from 'thales-utils';
 import { LiquidityPoolData, UserLiquidityPoolData } from 'types/liquidityPool';
 import { ThemeInterface } from 'types/ui';
 import { ViemContract } from 'types/viem';
 import biconomyConnector from 'utils/biconomyWallet';
 import { getContractInstance } from 'utils/contract';
-import { coinParser } from 'utils/formatters/viem';
 import { checkAllowance } from 'utils/network';
 import { refetchLiquidityPoolData } from 'utils/queryConnector';
 import { delay } from 'utils/timer';

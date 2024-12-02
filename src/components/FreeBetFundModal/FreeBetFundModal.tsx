@@ -20,14 +20,13 @@ import { getIsBiconomy, setWalletConnectModalVisibility } from 'redux/modules/wa
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
-import { floorNumberToDecimals, formatCurrencyWithKey, getPrecision } from 'thales-utils';
+import { coinParser, floorNumberToDecimals, formatCurrencyWithKey, getPrecision } from 'thales-utils';
 import { CollateralsBalance } from 'types/collateral';
 import { ThemeInterface } from 'types/ui';
 import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateral, getCollateralAddress, getCollateralIndex, getFreeBetCollaterals } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import freeBetHolder from 'utils/contracts/freeBetHolder';
-import { coinParser } from 'utils/formatters/viem';
 import { checkAllowance, getDefaultCollateralIndexForNetworkId } from 'utils/network';
 import { Client, isAddress } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';

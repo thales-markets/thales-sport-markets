@@ -66,7 +66,10 @@ import {
     Coins,
     DEFAULT_CURRENCY_DECIMALS,
     LONG_CURRENCY_DECIMALS,
+    bigNumberFormatter,
     ceilNumberToDecimals,
+    coinFormatter,
+    coinParser,
     floorNumberToDecimals,
     formatCurrency,
     formatCurrencyWithKey,
@@ -96,7 +99,6 @@ import {
 import { getContractInstance } from 'utils/contract';
 import multipleCollateral from 'utils/contracts/multipleCollateralContract';
 import sportsAMMV2Contract from 'utils/contracts/sportsAMMV2Contract';
-import { bigNumberFormatter, coinFormatter, coinParser } from 'utils/formatters/viem';
 import { getLiveTradingProcessorTransaction, getRequestId } from 'utils/liveTradingProcessor';
 import { formatMarketOdds } from 'utils/markets';
 import { getTradeData } from 'utils/marketsV2';

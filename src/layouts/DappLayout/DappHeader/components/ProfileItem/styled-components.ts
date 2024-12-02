@@ -47,9 +47,3 @@ export const Count = styled.span`
     font-weight: 600;
     font-size: 13px;
 `;
-
-export const TeamImage = styled.img<{ avatarSize?: number }>`
-    width: ${(props) => (props.avatarSize ? props.avatarSize : '20')}px;
-    height: ${(props) => (props.avatarSize ? props.avatarSize : '20')}px;
-    border-radius: 50%;
-`;

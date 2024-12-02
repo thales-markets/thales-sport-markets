@@ -59,8 +59,6 @@ export type OverdropLevel = {
     voucherAmount?: number;
 };
 
-export type Aggregate3Response = { success: boolean; returnData: string };
-
 type SEOCardData = {
     title: string;
     description: string;

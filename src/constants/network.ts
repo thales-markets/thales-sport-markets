@@ -13,7 +13,7 @@ export const SUPPORTED_NETWORKS: Record<SupportedNetwork, string> = {
     [Network.OptimismSepolia]: 'SEPOLIA-OPTIMISM',
 };
 
-export const SUPPORTED_NETWORKS_NAMES: Record<SupportedNetwork, string> = {
+const SUPPORTED_NETWORKS_NAMES: Record<SupportedNetwork, string> = {
     [Network.OptimismMainnet]: 'OPTIMISM MAINNET',
     [Network.Arbitrum]: 'ARBITRUM ONE',
     [Network.OptimismSepolia]: 'OPTIMISM SEPOLIA',
