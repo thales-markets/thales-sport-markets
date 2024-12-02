@@ -2,7 +2,6 @@ import { secondsToMilliseconds } from 'date-fns';
 import { MarketType } from 'enums/marketTypes';
 import { GameStatus, MarketStatus, Position } from 'enums/markets';
 import { League } from 'enums/sports';
-import { ethers } from 'ethers';
 import _ from 'lodash';
 import {
     SerializableSportMarket,
@@ -13,6 +12,7 @@ import {
     TicketPosition,
     TradeData,
 } from 'types/markets';
+import { parseEther } from 'viem';
 import { MarketTypeMap } from '../constants/marketTypes';
 import { UFC_LEAGUE_IDS } from '../constants/sports';
 import { fixOneSideMarketCompetitorName } from './formatters/string';
@@ -406,7 +406,7 @@ export const getTradeData = (markets: TicketMarket[]): TradeData[] =>
             status: market.status,
             line: market.line * 100,
             playerId: market.playerProps.playerId,
-            odds: market.odds.map((odd) => ethers.utils.parseEther(odd.toString()).toString()),
+            odds: market.odds.map((odd) => parseEther(odd.toString()).toString()),
             merkleProof: market.proof,
             position: market.position,
             combinedPositions: market.combinedPositions.map((combinedPositions) =>

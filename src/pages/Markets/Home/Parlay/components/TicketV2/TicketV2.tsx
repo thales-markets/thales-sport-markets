@@ -26,7 +26,6 @@ import { secondsToMilliseconds } from 'date-fns';
 import { ContractType } from 'enums/contract';
 import { OddsType } from 'enums/markets';
 import { BuyTicketStep } from 'enums/tickets';
-import { ethers } from 'ethers';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import useInterval from 'hooks/useInterval';
 import Slippage from 'pages/Markets/Home/Parlay/components/Slippage';
@@ -1279,10 +1278,8 @@ const Ticket: React.FC<TicketProps> = ({
                     networkId,
                     usedCollateralForBuy
                 );
-                const parsedTotalQuote = ethers.utils.parseEther(floorNumberToDecimals(totalQuote, 18).toString());
-                const additionalSlippage = ethers.utils.parseEther(
-                    tradeData[0].live ? liveBetSlippage / 100 + '' : '0.02'
-                );
+                const parsedTotalQuote = parseEther(floorNumberToDecimals(totalQuote, 18).toString());
+                const additionalSlippage = parseEther(tradeData[0].live ? liveBetSlippage / 100 + '' : '0.02');
 
                 let tx;
                 if (tradeData[0].live) {
@@ -1867,7 +1864,7 @@ const Ticket: React.FC<TicketProps> = ({
                     collateralContractWithSigner?.address ?? '',
                     collateralContractWithSigner,
                     'approve',
-                    [addressToApprove, ethers.constants.MaxUint256]
+                    [addressToApprove, maxUint256]
                 );
 
                 if (gasFees) {

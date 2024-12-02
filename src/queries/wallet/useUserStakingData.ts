@@ -2,14 +2,11 @@ import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import axios from 'axios';
 import QUERY_KEYS from 'constants/queryKeys';
 import { ContractType } from 'enums/contract';
-import { Network } from 'enums/network';
-import { ethers } from 'ethers';
 import { bigNumberFormatter } from 'thales-utils';
 import { StakingData } from 'types/markets';
 import { NetworkConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { getContractInstance } from 'utils/contract';
-import ccipCollector from 'utils/contracts/ccipCollector';
 import { generalConfig } from '../../config/general';
 
 const APR_FREQUENCY = 52;
@@ -35,18 +32,24 @@ const useUserStakingDataQuery = (
                 ) as ViemContract;
 
                 if (stakingThalesContract) {
-                    const baseProvider = new ethers.providers.JsonRpcProvider(
-                        `https://base-mainnet.blastapi.io/${process.env.REACT_APP_BLAST_PROJECT_ID}`,
-                        Network.Base
-                    );
+                    // TODO:
+                    // const baseProvider = new ethers.providers.JsonRpcProvider(
+                    //     `https://base-mainnet.blastapi.io/${process.env.REACT_APP_BLAST_PROJECT_ID}`,
+                    //     Network.Base
+                    // );
 
-                    const ccipCollectorContract = new ethers.Contract(
-                        ccipCollector.addresses[Network.Base],
-                        ccipCollector.abi,
-                        baseProvider
-                    );
+                    // TODO:
+                    const ccipCollectorContract = getContractInstance(
+                        ContractType.SPORTS_AMM_DATA,
+                        networkConfig
+                    ) as ViemContract;
+                    // const ccipCollectorContract = new ethers.Contract(
+                    //     ccipCollector.addresses[Network.Base],
+                    //     ccipCollector.abi,
+                    //     baseProvider
+                    // );
 
-                    const period = Number(await ccipCollectorContract.period()) - 1;
+                    const period = Number(await ccipCollectorContract.read.period()) - 1;
 
                     const [
                         paused,
@@ -63,11 +66,11 @@ const useUserStakingDataQuery = (
                         stakingThalesContract.read.closingPeriodInProgress(),
                         stakingThalesContract.read.unstaking([walletAddress]),
                         axios.get(`${generalConfig.API_URL}/token/price`),
-                        ccipCollectorContract.calculatedStakedAmountForPeriod(Number(period)),
-                        ccipCollectorContract.calculatedEscrowedAmountForPeriod(Number(period)),
-                        ccipCollectorContract.calculatedRevenueForPeriod(Number(period)),
-                        ccipCollectorContract.baseRewardsPerPeriod(),
-                        ccipCollectorContract.extraRewardsPerPeriod(),
+                        ccipCollectorContract.read.calculatedStakedAmountForPeriod(Number(period)),
+                        ccipCollectorContract.read.calculatedEscrowedAmountForPeriod(Number(period)),
+                        ccipCollectorContract.read.calculatedRevenueForPeriod(Number(period)),
+                        ccipCollectorContract.read.baseRewardsPerPeriod(),
+                        ccipCollectorContract.read.extraRewardsPerPeriod(),
                     ]);
                     stakingData.isPaused = paused || closingPeriodInProgress;
                     stakingData.isUnstaking = unstaking;
