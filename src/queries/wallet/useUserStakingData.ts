@@ -38,7 +38,7 @@ const useUserStakingDataQuery = (
                 if (stakingThalesContract) {
                     const baseProviderClient = createPublicClient({
                         chain: base,
-                        transport: http(`https://base-mainnet.blastapi.io/${process.env.REACT_APP_BLAST_PROJECT_ID}`),
+                        transport: http(`https://base-mainnet.blastapi.io/${process.env.VITE_APP_BLAST_PROJECT_ID}`),
                     });
 
                     const ccipCollectorContract = prepareContractWithModifiedResponse({
