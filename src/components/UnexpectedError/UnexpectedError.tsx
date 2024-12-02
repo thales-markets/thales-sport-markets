@@ -50,7 +50,7 @@ const UnexpectedError: React.FC<{ theme: ThemeInterface }> = ({ theme }) => {
 };
 
 const Container = styled(FlexDivColumnCentered)<{ theme: ThemeInterface }>`
-    height: 100%;
+    height: 100vh;
     background: ${(props) => props.theme.background.primary};
     color: ${(props) => props.theme.textColor.secondary};
     font-family: ${(props) => props.theme.fontFamily.primary};
@@ -58,11 +58,8 @@ const Container = styled(FlexDivColumnCentered)<{ theme: ThemeInterface }>`
     a {
         color: ${(props) => props.theme.link.textColor.secondary};
     }
-    button:hover {
-        color: ${(props) => props.theme.button.textColor.tertiary};
-    }
-    div:has(> button:hover) {
-        background: ${(props) => props.theme.button.textColor.tertiary};
+    a:hover {
+        color: ${(props) => props.theme.link.textColor.primary};
     }
 `;
 

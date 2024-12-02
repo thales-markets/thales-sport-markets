@@ -105,6 +105,7 @@
             }
         },
         "errors": {
+            "something-went-wrong": "Something went wrong!",
             "unknown-error-try-again": "An unknown error occurred after you submitted. Please try again.",
             "unknown-error-try-again-general": "An unknown error occurred. Please try again.",
             "batch-transaction-single-failure": "A transaction was rejected or failed.",
@@ -146,6 +147,7 @@
         "dapp": "dapp",
         "launch-dapp": "launch dapp",
         "cancel": "Cancel",
+        "support-contact": "Please contact <anchor>Thales support</anchor>",
         "try-again": "Try again",
         "select-date": "Select date...",
         "tags-placeholder": "Search tags...",
