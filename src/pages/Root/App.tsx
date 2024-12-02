@@ -109,6 +109,8 @@ const App = () => {
             dispatch(setMobileState(isMobile()));
         };
 
+        handlePageResized();
+
         if (typeof window !== 'undefined') {
             window.addEventListener('resize', handlePageResized);
             window.addEventListener('orientationchange', handlePageResized);
@@ -238,7 +240,7 @@ const App = () => {
                     </Route>
                 </Switch>
             </Router>
-            <ReactQueryDevtools initialIsOpen={false} />
+            <ReactQueryDevtools initialIsOpen={false} buttonPosition={'bottom-left'} />
         </Theme>
     );
 };
