@@ -14,7 +14,7 @@ type WalletSliceState = {
 
 const initialState: WalletSliceState = {
     isBiconomy: false,
-    connectedViaParticle: false,
+    connectedViaParticle: true,
     walletConnectModal: {
         visibility: false,
         origin: undefined,

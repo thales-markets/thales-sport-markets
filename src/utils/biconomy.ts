@@ -25,6 +25,7 @@ export const executeBiconomyTransactionWithConfirmation = async (
     data?: ReadonlyArray<any>,
     value?: any
 ): Promise<any | undefined> => {
+    console.log(collateral);
     if (biconomyConnector.wallet && contract) {
         const encodedCall = encodeFunctionData({
             abi: contract.abi,
@@ -41,8 +42,7 @@ export const executeBiconomyTransactionWithConfirmation = async (
         try {
             const { wait } = await biconomyConnector.wallet.sendTransaction(transaction, {
                 paymasterServiceData: {
-                    mode: PaymasterMode.ERC20,
-                    preferredToken: collateral,
+                    mode: PaymasterMode.SPONSORED,
                 },
             });
 
@@ -141,8 +141,7 @@ export const executeBiconomyTransaction = async (
                             ? {}
                             : {
                                   paymasterServiceData: {
-                                      mode: PaymasterMode.ERC20,
-                                      preferredToken: collateral,
+                                      mode: PaymasterMode.SPONSORED,
                                   },
                               }
                     );
@@ -211,8 +210,7 @@ export const executeBiconomyTransaction = async (
                           }
                         : {
                               paymasterServiceData: {
-                                  mode: PaymasterMode.ERC20,
-                                  preferredToken: collateral,
+                                  mode: PaymasterMode.SPONSORED,
                               },
                               params: {
                                   sessionSigner: sessionSigner,
@@ -294,6 +292,8 @@ const getCreateSessionTxs = async (networkId: SupportedNetwork, collateralAddres
             transactionArray.push(enableModuleTrx);
         }
 
+        console.log('create session');
+
         localStore.set(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId], privateKey);
         localStore.set(
             LOCAL_STORAGE_KEYS.SESSION_VALID_UNTIL[networkId],
@@ -331,8 +331,9 @@ const getSessionSigner = async (networkId: SupportedNetwork) => {
         smartAccountAddress: biconomyConnector.address,
     });
     biconomyConnector.wallet?.setActiveValidationModule(sessionModule);
+    console.log('get session');
     const sessionKeyPrivKey = localStore.get(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId]);
-
+    console.log('sessionKeyPrivKey: ', sessionKeyPrivKey);
     const sessionAccount = privateKeyToAccount(sessionKeyPrivKey as any);
     const sessionSigner = createWalletClient({
         account: sessionAccount,
@@ -348,6 +349,7 @@ export const getPaymasterData = async (
     data?: ReadonlyArray<any>,
     value?: any
 ): Promise<PaymasterFeeQuote | undefined> => {
+    console.log(collateral);
     if (biconomyConnector.wallet && contract) {
         try {
             biconomyConnector.wallet.setActiveValidationModule(biconomyConnector.wallet.defaultValidationModule);
@@ -365,15 +367,13 @@ export const getPaymasterData = async (
 
             const userOp = await biconomyConnector.wallet.buildUserOp([transaction], {
                 paymasterServiceData: {
-                    mode: PaymasterMode.ERC20,
-                    preferredToken: collateral,
+                    mode: PaymasterMode.SPONSORED,
                 },
             });
 
             const biconomyPaymaster = biconomyConnector.wallet.paymaster as IHybridPaymaster<SponsorUserOperationDto>;
             const feeQuotesData = await biconomyPaymaster?.getPaymasterFeeQuotesOrData(userOp, {
-                mode: PaymasterMode.ERC20,
-                preferredToken: collateral,
+                mode: PaymasterMode.SPONSORED,
             });
 
             if (feeQuotesData.feeQuotes && feeQuotesData.feeQuotes[0].maxGasFeeUSD) {

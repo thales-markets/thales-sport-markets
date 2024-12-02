@@ -75,7 +75,7 @@ const App = () => {
 
                 if (!biconomyConnector.address || biconomyConnector.address === smartAddress) {
                     biconomyConnector.setWallet(smartAccount, smartAddress);
-                    dispatch(setIsBiconomy(false));
+                    dispatch(setIsBiconomy(true));
                 }
             };
 
