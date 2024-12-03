@@ -27,6 +27,80 @@ export const getLiveTradingProcessorTransaction: any = async (
     const referralAddress = referral || ZERO_ADDRESS;
     const gameId = convertFromBytes32(tradeData[0].gameId);
 
+    if (isFreeBet && freeBetHolderContract) {
+        if (isAA) {
+            return executeBiconomyTransaction(networkId, collateralAddress, freeBetHolderContract, 'tradeLive', [
+                {
+                    _gameId: gameId,
+                    _sportId: tradeData[0].sportId,
+                    _typeId: tradeData[0].typeId,
+                    _line: tradeData[0].line,
+                    _position: tradeData[0].position,
+                    _buyInAmount: sUSDPaid,
+                    _expectedQuote: expectedQuote,
+                    _additionalSlippage: additionalSlippage,
+                    _referrer: referralAddress,
+                    _collateral: collateralAddress,
+                },
+            ]);
+        } else {
+            return freeBetHolderContract.write.tradeLive([
+                {
+                    _gameId: gameId,
+                    _sportId: tradeData[0].sportId,
+                    _typeId: tradeData[0].typeId,
+                    _line: tradeData[0].line,
+                    _position: tradeData[0].position,
+                    _buyInAmount: sUSDPaid,
+                    _expectedQuote: expectedQuote,
+                    _additionalSlippage: additionalSlippage,
+                    _referrer: referralAddress,
+                    _collateral: collateralAddress,
+                },
+            ]);
+        }
+    }
+
+    if (isStakedThales && stakingThalesBettingProxyContract) {
+        if (isAA) {
+            return executeBiconomyTransaction(
+                networkId,
+                collateralAddress,
+                stakingThalesBettingProxyContract,
+                'tradeLive',
+                [
+                    {
+                        _gameId: gameId,
+                        _sportId: tradeData[0].sportId,
+                        _typeId: tradeData[0].typeId,
+                        _line: tradeData[0].line,
+                        _position: tradeData[0].position,
+                        _buyInAmount: sUSDPaid,
+                        _expectedQuote: expectedQuote,
+                        _additionalSlippage: additionalSlippage,
+                        _referrer: referralAddress,
+                        _collateral: collateralAddress,
+                    },
+                ]
+            );
+        } else {
+            return stakingThalesBettingProxyContract.write.tradeLive([
+                {
+                    _gameId: gameId,
+                    _sportId: tradeData[0].sportId,
+                    _typeId: tradeData[0].typeId,
+                    _line: tradeData[0].line,
+                    _position: tradeData[0].position,
+                    _buyInAmount: sUSDPaid,
+                    _expectedQuote: expectedQuote,
+                    _additionalSlippage: additionalSlippage,
+                    _referrer: referralAddress,
+                    _collateral: collateralAddress,
+                },
+            ]);
+        }
+    }
+
     if (isAA) {
         return executeBiconomyTransaction(
             networkId,
@@ -49,39 +123,6 @@ export const getLiveTradingProcessorTransaction: any = async (
             ]
         );
     } else {
-        if (isFreeBet && freeBetHolderContract) {
-            return freeBetHolderContract.write.tradeLive([
-                {
-                    _gameId: gameId,
-                    _sportId: tradeData[0].sportId,
-                    _typeId: tradeData[0].typeId,
-                    _line: tradeData[0].line,
-                    _position: tradeData[0].position,
-                    _buyInAmount: sUSDPaid,
-                    _expectedQuote: expectedQuote,
-                    _additionalSlippage: additionalSlippage,
-                    _referrer: referralAddress,
-                    _collateral: collateralAddress,
-                },
-            ]);
-        }
-
-        if (isStakedThales && stakingThalesBettingProxyContract) {
-            return stakingThalesBettingProxyContract.write.tradeLive([
-                {
-                    _gameId: gameId,
-                    _sportId: tradeData[0].sportId,
-                    _typeId: tradeData[0].typeId,
-                    _line: tradeData[0].line,
-                    _position: tradeData[0].position,
-                    _buyInAmount: sUSDPaid,
-                    _expectedQuote: expectedQuote,
-                    _additionalSlippage: additionalSlippage,
-                    _referrer: referralAddress,
-                    _collateral: collateralAddress,
-                },
-            ]);
-        }
         return liveTradingProcessorContract.write.requestLiveTrade([
             {
                 _gameId: gameId,

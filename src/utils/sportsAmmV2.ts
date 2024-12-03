@@ -28,6 +28,91 @@ export const getSportsAMMV2Transaction: any = async (
     let finalEstimation = null;
     const referralAddress = referral || ZERO_ADDRESS;
 
+    if (isFreeBet && freeBetHolderContract) {
+        const encodedData = encodeFunctionData({
+            abi: freeBetHolderContract.abi,
+            functionName: 'trade',
+            args: [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress, collateralAddress],
+        });
+
+        const estimation = await estimateGas(client, {
+            to: freeBetHolderContract.address as Address,
+            data: encodedData,
+        });
+
+        finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER); // using Math.celi as gasLimit is accepting only integer.
+
+        if (isAA) {
+            return executeBiconomyTransaction(networkId, collateralAddress, freeBetHolderContract, 'trade', [
+                tradeData,
+                buyInAmount,
+                expectedQuote,
+                additionalSlippage,
+                referralAddress,
+                collateralAddress,
+            ]);
+        } else {
+            return freeBetHolderContract.write.trade(
+                [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress, collateralAddress],
+                { value: 0, gasLimit: finalEstimation }
+            );
+        }
+    }
+
+    if (isStakedThales && stakingThalesBettingProxyContract) {
+        const encodedData = encodeFunctionData({
+            abi: stakingThalesBettingProxyContract.abi,
+            functionName: 'trade',
+            args: [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress],
+        });
+
+        const estimation = await estimateGas(client, {
+            to: stakingThalesBettingProxyContract.address as Address,
+            data: encodedData,
+        });
+
+        finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER); // using Math.celi as gasLimit is accepting only integer.
+
+        if (isAA) {
+            return executeBiconomyTransaction(
+                networkId,
+                collateralAddress,
+                stakingThalesBettingProxyContract,
+                'trade',
+                [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress]
+            );
+        } else {
+            return stakingThalesBettingProxyContract.write.trade(
+                [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress],
+                { gasLimit: finalEstimation }
+            );
+        }
+    }
+
+    if (networkId === Network.OptimismMainnet) {
+        const encodedData = encodeFunctionData({
+            abi: sportsAMMV2Contract.abi,
+            functionName: 'trade',
+            args: [
+                tradeData,
+                buyInAmount,
+                expectedQuote,
+                additionalSlippage,
+                referralAddress,
+                collateralAddress,
+                isEth,
+            ],
+        });
+
+        const estimation = await estimateGas(client, {
+            to: sportsAMMV2Contract.address as Address,
+            data: encodedData,
+            value: isEth ? buyInAmount : undefined,
+        });
+
+        finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER); // using Math.celi as gasLimit is accepting only integer.
+    }
+
     if (isAA) {
         return executeBiconomyTransaction(networkId, collateralAddress, sportsAMMV2Contract, 'trade', [
             tradeData,
@@ -39,70 +124,6 @@ export const getSportsAMMV2Transaction: any = async (
             isEth,
         ]);
     } else {
-        if (isFreeBet && freeBetHolderContract) {
-            const encodedData = encodeFunctionData({
-                abi: freeBetHolderContract.abi,
-                functionName: 'trade',
-                args: [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress, collateralAddress],
-            });
-
-            const estimation = await estimateGas(client, {
-                to: freeBetHolderContract.address as Address,
-                data: encodedData,
-            });
-
-            finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER); // using Math.celi as gasLimit is accepting only integer.
-
-            return freeBetHolderContract.write.trade(
-                [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress, collateralAddress],
-                { value: 0, gasLimit: finalEstimation }
-            );
-        }
-
-        if (isStakedThales && stakingThalesBettingProxyContract) {
-            const encodedData = encodeFunctionData({
-                abi: stakingThalesBettingProxyContract.abi,
-                functionName: 'trade',
-                args: [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress],
-            });
-
-            const estimation = await estimateGas(client, {
-                to: stakingThalesBettingProxyContract.address as Address,
-                data: encodedData,
-            });
-
-            finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER); // using Math.celi as gasLimit is accepting only integer.
-
-            return stakingThalesBettingProxyContract.write.trade(
-                [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress],
-                { gasLimit: finalEstimation }
-            );
-        }
-
-        if (networkId === Network.OptimismMainnet) {
-            const encodedData = encodeFunctionData({
-                abi: sportsAMMV2Contract.abi,
-                functionName: 'trade',
-                args: [
-                    tradeData,
-                    buyInAmount,
-                    expectedQuote,
-                    additionalSlippage,
-                    referralAddress,
-                    collateralAddress,
-                    isEth,
-                ],
-            });
-
-            const estimation = await estimateGas(client, {
-                to: sportsAMMV2Contract.address as Address,
-                data: encodedData,
-                value: isEth ? buyInAmount : undefined,
-            });
-
-            finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER); // using Math.celi as gasLimit is accepting only integer.
-        }
-
         return sportsAMMV2Contract.write.trade(
             [
                 tradeData,

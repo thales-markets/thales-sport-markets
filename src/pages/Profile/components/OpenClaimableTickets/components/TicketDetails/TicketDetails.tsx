@@ -134,9 +134,9 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
         if (sportsAMMV2ContractWithSigner) {
             setIsSubmitting(true);
             try {
-                let txReceipt;
+                let hash;
                 if (isBiconomy) {
-                    txReceipt =
+                    hash =
                         isClaimCollateralDefaultCollateral ||
                         (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral) ||
                         ticket.isFreeBet
@@ -155,7 +155,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
                                   [ticketAddress, claimCollateralAddress, isEth]
                               );
                 } else {
-                    const hash =
+                    hash =
                         isClaimCollateralDefaultCollateral ||
                         (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral) ||
                         ticket.isFreeBet
@@ -165,10 +165,10 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
                                   claimCollateralAddress,
                                   isEth,
                               ]);
-                    txReceipt = await waitForTransactionReceipt(client as Client, {
-                        hash,
-                    });
                 }
+                const txReceipt = await waitForTransactionReceipt(client as Client, {
+                    hash,
+                });
 
                 if (txReceipt.status === 'success') {
                     toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
