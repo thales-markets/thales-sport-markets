@@ -61,7 +61,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         logoClass: 'icon-homepage league--ncaa',
         scoringType: ScoringType.POINTS,
         matchResolveType: MatchResolveType.OVERTIME,
-        periodType: PeriodType.QUARTER,
+        periodType: PeriodType.HALF,
         isDrawAvailable: false,
         priority: 302,
         hidden: false,
