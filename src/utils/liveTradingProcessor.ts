@@ -34,16 +34,18 @@ export const getLiveTradingProcessorTransaction: any = async (
             liveTradingProcessorContract,
             'requestLiveTrade',
             [
-                gameId,
-                tradeData[0].sportId,
-                tradeData[0].typeId,
-                tradeData[0].position,
-                tradeData[0].line,
-                sUSDPaid,
-                expectedQuote,
-                additionalSlippage,
-                referralAddress,
-                collateralAddress,
+                {
+                    _gameId: gameId,
+                    _sportId: tradeData[0].sportId,
+                    _typeId: tradeData[0].typeId,
+                    _line: tradeData[0].line,
+                    _position: tradeData[0].position,
+                    _buyInAmount: sUSDPaid,
+                    _expectedQuote: expectedQuote,
+                    _additionalSlippage: additionalSlippage,
+                    _referrer: referralAddress,
+                    _collateral: collateralAddress,
+                },
             ]
         );
     } else {

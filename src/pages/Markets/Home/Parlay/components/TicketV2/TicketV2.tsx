@@ -1317,7 +1317,8 @@ const Ticket: React.FC<TicketProps> = ({
                                     false,
                                     undefined,
                                     isStakedThales,
-                                    stakingThalesBettingProxyWithSigner
+                                    stakingThalesBettingProxyWithSigner,
+                                    networkId
                                 );
                             }
                         }
@@ -1334,7 +1335,8 @@ const Ticket: React.FC<TicketProps> = ({
                             isFreeBetActive,
                             freeBetContractWithSigner,
                             isStakedThales,
-                            stakingThalesBettingProxyWithSigner
+                            stakingThalesBettingProxyWithSigner,
+                            networkId
                         );
                     }
                 } else {

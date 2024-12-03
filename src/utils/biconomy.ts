@@ -71,7 +71,7 @@ export const executeBiconomyTransaction = async (
     collateral: string,
     contract: ViemContract | undefined,
     methodName: string,
-    data?: ReadonlyArray<any>,
+    data?: any,
     value?: any,
     isEth?: boolean,
     buyInAmountParam?: bigint
