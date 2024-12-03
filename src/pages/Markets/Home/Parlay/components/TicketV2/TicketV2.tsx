@@ -1413,12 +1413,11 @@ const Ticket: React.FC<TicketProps> = ({
                         let adapterAllowed = false;
 
                         const requestId = getRequestId(txReceipt.logs, isFreeBetActive, isStakedThales);
-
-                        console.log('requestId:', requestId);
-                        if (!requestId) throw new Error('Request ID not found');
+                        if (!requestId) {
+                            throw new Error('Request ID not found');
+                        }
 
                         const startTime = Date.now();
-                        console.log('filfill start time:', new Date(startTime));
                         const checkFulfilled = async () => {
                             counter++;
                             if (!adapterAllowed) {
@@ -1457,8 +1456,6 @@ const Ticket: React.FC<TicketProps> = ({
                                     setTimeout(checkFulfilled, 1000);
                                 }
                             } else {
-                                console.log('filfill end time:', new Date(Date.now()));
-                                console.log('fulfill duration', (Date.now() - startTime) / 1000, 'seconds');
                                 refetchBalances(walletAddress, networkId);
                                 if (
                                     sportsAMMDataContract &&

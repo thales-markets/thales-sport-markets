@@ -331,7 +331,6 @@ const LiquidityPool: React.FC = () => {
 
             try {
                 console.log(approveAmount.toString(), collateral);
-                console.log('liquidityPoolAddress ', liquidityPoolAddress);
                 const hash = await multiCollateralWithSigner?.write.approve([liquidityPoolAddress, approveAmount]);
                 setOpenApprovalModal(false);
 
@@ -488,7 +487,9 @@ const LiquidityPool: React.FC = () => {
                             hash: txHash,
                         });
 
-                        if (txReceipt.status === 'success') console.log('prepareRoundClosing closed');
+                        if (txReceipt.status === 'success') {
+                            console.log('prepareRoundClosing closed');
+                        }
 
                         await delay(1000 * 2);
                     }
@@ -504,7 +505,9 @@ const LiquidityPool: React.FC = () => {
                             hash: txHash,
                         });
 
-                        if (txReceipt.status === 'success') console.log('Closing batch round');
+                        if (txReceipt.status === 'success') {
+                            console.log('Closing batch round');
+                        }
 
                         await delay(1000 * 2);
                         getUsersCountInCurrentRound = await liquidityPoolContractWithSigner.read.getUsersCountInCurrentRound();
