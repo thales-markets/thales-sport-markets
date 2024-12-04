@@ -53,6 +53,7 @@ export const refetchAfterClaim = (walletAddress: string, networkId: Network) => 
     queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.ParlayMarkets(networkId, walletAddress) });
     queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.AccountPositions(walletAddress, networkId) });
     queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.ClaimableCount(walletAddress, networkId) });
+    queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.UserTickets(networkId, walletAddress) });
 };
 
 export const refetchLiquidityPoolData = (walletAddress: string, networkId: Network, liquidityPoolAddress: string) => {
