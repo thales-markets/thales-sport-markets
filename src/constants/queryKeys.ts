@@ -14,7 +14,7 @@ const QUERY_KEYS = {
     MarketParlays: (networkId: Network, marketAddress: string) => ['marketParlays', networkId, marketAddress],
     Ticket: (networkId: Network, ticketAddress: string) => ['gameTickets', networkId, ticketAddress],
     GameTickets: (networkId: Network, gameId: string) => ['gameTickets', networkId, gameId],
-    UserTickets: (networkId: Network, user: string) => ['userTickets', networkId, user],
+    UserTickets: (networkId: Network, walletAddress: string) => ['userTickets', networkId, walletAddress],
     SportMarkets: (statusFilter: StatusFilter, networkId: Network) => ['sportMarkets', statusFilter, networkId],
     SportMarketsV2: (
         statusFilter: StatusFilter,
@@ -73,9 +73,7 @@ const QUERY_KEYS = {
     UserTransactions: (walletAddress: string, networkId: Network) => ['user', 'transactions', walletAddress, networkId],
     WinningInfo: (walletAddress: string, networkId: Network) => ['user', 'winningInfo', walletAddress, networkId],
     ClaimTx: (market: string, networkId: Network) => ['claim', 'transactions', market, networkId],
-    ClaimableCount: (walletAddress: string, networkId: Network) => ['claimable', 'count', walletAddress, networkId],
     ClaimableCountV2: (walletAddress: string, networkId: Network) => ['claimable', 'countV2', walletAddress, networkId],
-    AccountPositions: (walletAddress: string, networkId: Network) => ['accountPosition', walletAddress, networkId],
     Wallet: {
         MultipleCollateral: (walletAddress: string, networkId: Network) => [
             'multipleCollateral',
