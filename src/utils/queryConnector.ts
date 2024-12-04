@@ -50,7 +50,6 @@ export const refetchFreeBetBalance = (walletAddress: string, networkId: Network)
 };
 
 export const refetchAfterClaim = (walletAddress: string, networkId: Network) => {
-    queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.ParlayMarkets(networkId, walletAddress) });
     queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.ClaimableCountV2(walletAddress, networkId) });
     queryConnector.queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.UserTickets(networkId, walletAddress.toLowerCase()),
@@ -58,12 +57,12 @@ export const refetchAfterClaim = (walletAddress: string, networkId: Network) => 
 };
 
 export const refetchLiquidityPoolData = (walletAddress: string, networkId: Network, liquidityPoolAddress: string) => {
-    // queryConnector.queryClient.invalidateQueries(QUERY_KEYS.LiquidityPool.Data(networkId));
-    queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.LiquidityPool.ParlayData(networkId) });
     queryConnector.queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.LiquidityPool.ParlayUserData(walletAddress, networkId),
+        queryKey: QUERY_KEYS.LiquidityPool.Data(liquidityPoolAddress, networkId),
     });
-    // queryConnector.queryClient.invalidateQueries(QUERY_KEYS.LiquidityPool.UserData(walletAddress, networkId));
+    queryConnector.queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.LiquidityPool.UserData(liquidityPoolAddress, walletAddress, networkId),
+    });
     queryConnector.queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.LiquidityPool.PnL(networkId, liquidityPoolAddress),
     });
