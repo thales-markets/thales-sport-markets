@@ -70,7 +70,9 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
         }
 
         return () => {
-            crate.options.css = crate.options.css.replace(moveRightCss, '');
+            if (crate) {
+                crate.options.css = crate.options.css.replace(moveRightCss, '');
+            }
         };
     }, [visibility]);
 
