@@ -27,6 +27,7 @@ import { Redirect, Route, Router, Switch } from 'react-router-dom';
 import { setMobileState } from 'redux/modules/app';
 import { setIsBiconomy } from 'redux/modules/wallet';
 import { SupportedNetwork } from 'types/network';
+import { SeoArticleProps } from 'types/ui';
 import biconomyConnector from 'utils/biconomyWallet';
 import { isMobile } from 'utils/device';
 import { isNetworkSupported, isRouteAvailableForNetwork } from 'utils/network';
@@ -235,7 +236,11 @@ const App = () => {
                     <Route exact path={ROUTES.SEO.Home}>
                         <SEO />
                     </Route>
-                    <Route exact path={ROUTES.SEO.SeoArticle} render={(routeProps) => <SeoArticle {...routeProps} />} />
+                    <Route
+                        exact
+                        path={ROUTES.SEO.SeoArticle}
+                        render={(routeProps) => <SeoArticle {...(routeProps as SeoArticleProps)} />}
+                    />
                     <Route>
                         <Redirect to={ROUTES.Markets.Home} />
                         <Suspense fallback={<Loader />}>

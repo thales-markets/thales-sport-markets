@@ -1,4 +1,5 @@
 import { Network } from 'enums/network';
+import { RouteComponentProps } from 'react-router-dom';
 import theme from 'styles/themes/dark';
 
 export type ThemeInterface = typeof theme;
@@ -88,3 +89,7 @@ export type SEOItem = SEOCardData & {
         keywords: string;
     };
 };
+
+export type SeoArticleProps = RouteComponentProps<{
+    seoId: string;
+}>;
