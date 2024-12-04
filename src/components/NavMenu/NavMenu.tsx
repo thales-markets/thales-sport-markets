@@ -60,14 +60,18 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
     useEffect(() => {
         // Discord Widget bot: move with nav menu
         const crate = (window as any).crate;
+        const moveRightCss = '&:not(.open) .button { right: 275px; }';
         if (crate) {
-            const moveRightCss = '&:not(.open) .button { right: 275px; }';
             if (visibility) {
                 crate.options.css = moveRightCss + crate.options.css;
             } else {
                 crate.options.css = crate.options.css.replace(moveRightCss, '');
             }
         }
+
+        return () => {
+            crate.options.css = crate.options.css.replace(moveRightCss, '');
+        };
     }, [visibility]);
 
     return (
