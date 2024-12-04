@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivRow } from 'styles/common';
 
-export type NavigationItem = {
+type NavigationItem = {
     index: number;
     i18Label: string;
 };

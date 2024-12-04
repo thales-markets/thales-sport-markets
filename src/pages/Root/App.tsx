@@ -18,6 +18,8 @@ import PnL from 'pages/PnL';
 import Profile from 'pages/Profile';
 import Promotions from 'pages/Promotions/Home';
 import Promotion from 'pages/Promotions/Promotion';
+import SEO from 'pages/SEO/Home';
+import SeoArticle from 'pages/SEO/SeoArticle';
 import Ticket from 'pages/Ticket';
 import { Suspense, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
@@ -230,6 +232,10 @@ const App = () => {
                             </DappLayout>
                         </Suspense>
                     </Route>
+                    <Route exact path={ROUTES.SEO.Home}>
+                        <SEO />
+                    </Route>
+                    <Route exact path={ROUTES.SEO.SeoArticle} render={(routeProps) => <SeoArticle {...routeProps} />} />
                     <Route>
                         <Redirect to={ROUTES.Markets.Home} />
                         <Suspense fallback={<Loader />}>
