@@ -50,10 +50,11 @@ export const refetchFreeBetBalance = (walletAddress: string, networkId: Network)
 };
 
 export const refetchAfterClaim = (walletAddress: string, networkId: Network) => {
-    console.log('refetch after claim');
     queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.ParlayMarkets(networkId, walletAddress) });
     queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.ClaimableCountV2(walletAddress, networkId) });
-    queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.UserTickets(networkId, walletAddress) });
+    queryConnector.queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.UserTickets(networkId, walletAddress.toLowerCase()),
+    });
 };
 
 export const refetchLiquidityPoolData = (walletAddress: string, networkId: Network, liquidityPoolAddress: string) => {
