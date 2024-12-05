@@ -146,7 +146,7 @@ const Count = styled(FlexDivCentered)`
     }
 `;
 
-export const NewBadge = styled.div`
+const NewBadge = styled.div`
     position: absolute;
     background-color: #3cb55b;
     border-radius: 5px;

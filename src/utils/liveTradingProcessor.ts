@@ -154,8 +154,6 @@ export const getRequestId = (txLogs: any, isFreeBet: boolean, isStakedThales: bo
                     topics: log.topics,
                 });
 
-                console.log('decoded ', decoded);
-
                 if (
                     (decoded as DecodeEventLogParameters)?.eventName == 'FreeBetLiveTradeRequested' ||
                     (decoded as DecodeEventLogParameters)?.eventName == 'StakingTokensLiveTradeRequested' ||

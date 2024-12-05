@@ -3,7 +3,6 @@ import { generalConfig } from 'config/general';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { NATIVE_TOKEN_ADDRES, ZERO_ADDRESS } from 'constants/network';
 import { Network } from 'enums/network';
-import { BigNumber, BigNumberish } from 'ethers';
 import { wagmiConfig } from 'pages/Root/wagmiConfig';
 import { bigNumberFormatter, coinFormatter, Coins } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
@@ -56,7 +55,7 @@ export const getQuote = async (networkId: SupportedNetwork, swapParams: SwapPara
             response = await fetch(url);
             retryCount++;
         }
-        const responseBody = response.ok ? await response.json() : Promise.resolve({ dstAmount: '' });
+        const responseBody = response.ok ? await response.json() : Promise.resolve({ dstAmount: BigInt(0) });
 
         return responseBody.dstAmount
             ? coinFormatter(responseBody.dstAmount, networkId, CRYPTO_CURRENCY_MAP.THALES as Coins)
@@ -86,7 +85,7 @@ export const checkSwapAllowance = async (
         }
 
         const data = response.ok ? await response.json() : { allowance: 0 };
-        return BigNumber.from(data.allowance).gte(amount);
+        return BigInt(data.allowance) >= amount;
     } catch (e) {
         console.log(e);
         return false;
@@ -138,7 +137,7 @@ export const buildTxForApproveTradeWithRouter = async (
 export const buildTxForSwap = async (
     networkId: SupportedNetwork,
     swapParams: SwapParams
-): Promise<{ dstAmount: BigNumberish; tx: string }> => {
+): Promise<{ dstAmount: bigint; tx: string }> => {
     const url = apiRequestUrl(networkId, '/swap', { ...swapParams, referrer: REFERRER_ADDRESS });
 
     try {
@@ -151,12 +150,12 @@ export const buildTxForSwap = async (
             retryCount++;
         }
 
-        const responseBody = response.ok ? await response.json() : Promise.resolve({ dstAmount: '', tx: '' });
+        const responseBody = response.ok ? await response.json() : Promise.resolve({ dstAmount: BigInt(0), tx: '' });
 
         return responseBody;
     } catch (e) {
         console.log(e);
-        return Promise.resolve({ dstAmount: '', tx: '' });
+        return Promise.resolve({ dstAmount: BigInt(0), tx: '' });
     }
 };
 

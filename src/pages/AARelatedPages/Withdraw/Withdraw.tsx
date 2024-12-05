@@ -3,7 +3,6 @@ import CollateralSelector from 'components/CollateralSelector';
 import NumericInput from 'components/fields/NumericInput';
 import TextInput from 'components/fields/TextInput';
 import ROUTES from 'constants/routes';
-import { ethers } from 'ethers';
 import { t } from 'i18next';
 import BalanceDetails from 'pages/AARelatedPages/Deposit/components/BalanceDetails';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
@@ -21,6 +20,7 @@ import { getCollaterals } from 'utils/collaterals';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import { navigateTo } from 'utils/routes';
 import useQueryParam, { getQueryStringVal } from 'utils/useQueryParams';
+import { isAddress } from 'viem';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import {
     BalanceSection,
@@ -94,7 +94,7 @@ const Withdraw: React.FC = () => {
         let walletValidation = false;
         let amountValidation = false;
 
-        if (withdrawalWalletAddress != '' && ethers.utils.isAddress(withdrawalWalletAddress)) {
+        if (withdrawalWalletAddress != '' && isAddress(withdrawalWalletAddress)) {
             walletValidation = true;
         }
 

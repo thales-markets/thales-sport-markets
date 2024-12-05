@@ -1,6 +1,3 @@
-import MetaMaskIcon from 'assets/images/wallets/metamask.svg';
-import WalletConnectIcon from 'assets/images/wallets/wallet_connect.svg';
-import { HostedWallets } from 'enums/wallet';
 import { ParticalTypes } from 'types/wallet';
 
 export const SUPPORTED_PARTICAL_CONNECTORS: ParticalTypes[] = [
@@ -9,36 +6,6 @@ export const SUPPORTED_PARTICAL_CONNECTORS: ParticalTypes[] = [
     ParticalTypes.DISCORD,
     ParticalTypes.GITHUB,
     ParticalTypes.APPLE,
-];
-
-export const HOSTED_WALLETS_ICONS: { walletId: HostedWallets; image: string }[] = [
-    {
-        walletId: HostedWallets.METAMASK,
-        image: MetaMaskIcon,
-    },
-    {
-        walletId: HostedWallets.INJECTED,
-        image: MetaMaskIcon,
-    },
-    {
-        walletId: HostedWallets.WALLET_CONNECT,
-        image: WalletConnectIcon,
-    },
-];
-
-export const HOSTED_WALLETS_LABELS: { walletId: HostedWallets; labelKey: string }[] = [
-    {
-        walletId: HostedWallets.METAMASK,
-        labelKey: 'common.wallet.metamask',
-    },
-    {
-        walletId: HostedWallets.INJECTED,
-        labelKey: 'common.wallet.metamask',
-    },
-    {
-        walletId: HostedWallets.WALLET_CONNECT,
-        labelKey: 'common.wallet.wallet-connect',
-    },
 ];
 
 export const PARTICAL_WALLETS_LABELS: { id: ParticalTypes; labelKey: string }[] = [

@@ -5,7 +5,6 @@ import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { GAS_ESTIMATION_BUFFER } from 'constants/network';
 import { ContractType } from 'enums/contract';
-import { ethers } from 'ethers';
 import { LoaderContainer } from 'pages/Markets/Home/HomeV2';
 import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
 import React, { useMemo, useState } from 'react';
@@ -22,7 +21,7 @@ import { getCollateral, getCollaterals, getDefaultCollateral, isLpSupported } fr
 import { getContractInstance } from 'utils/contract';
 import multiCallContract from 'utils/contracts/multiCallContract';
 import sportsAMMV2Contract from 'utils/contracts/sportsAMMV2Contract';
-import { Address, Client, encodeFunctionData } from 'viem';
+import { Address, Client, encodeFunctionData, isAddress } from 'viem';
 import { estimateContractGas, waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 import StakingModal from '../StakingModal';
@@ -76,7 +75,7 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({
     const isStakingModalMuted = useSelector(getIsStakingModalMuted);
     const isParticle = useSelector(getIsConnectedViaParticle);
 
-    const isSearchTextWalletAddress = searchText && ethers.utils.isAddress(searchText);
+    const isSearchTextWalletAddress = searchText && isAddress(searchText);
     const [claimCollateralIndex, setClaimCollateralIndex] = useState(0);
 
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
@@ -94,7 +93,7 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({
     ]);
 
     const userTicketsQuery = useUserTicketsQuery(
-        isSearchTextWalletAddress ? searchText : walletAddress.toLowerCase(),
+        isSearchTextWalletAddress ? searchText : walletAddress,
         { networkId, client },
         {
             enabled: isConnected,
@@ -105,7 +104,7 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({
 
     const userTicketsByStatus = useMemo(() => {
         let userTickets = userTicketsQuery.isSuccess && userTicketsQuery.data ? userTicketsQuery.data : [];
-        if (searchText && !ethers.utils.isAddress(searchText)) {
+        if (searchText && !isAddress(searchText)) {
             userTickets = userTickets.filter((ticket) =>
                 ticket.sportMarkets.some(
                     (market) =>

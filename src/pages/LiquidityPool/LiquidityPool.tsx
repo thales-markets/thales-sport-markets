@@ -28,13 +28,12 @@ import { getIsBiconomy, setWalletConnectModalVisibility } from 'redux/modules/wa
 import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
 import { FlexDivRow } from 'styles/common';
-import { Coins, formatCurrencyWithKey, formatPercentage } from 'thales-utils';
+import { Coins, coinParser, formatCurrencyWithKey, formatPercentage } from 'thales-utils';
 import { LiquidityPoolData, UserLiquidityPoolData } from 'types/liquidityPool';
 import { ThemeInterface } from 'types/ui';
 import { ViemContract } from 'types/viem';
 import biconomyConnector from 'utils/biconomyWallet';
 import { getContractInstance } from 'utils/contract';
-import { coinParser } from 'utils/formatters/viem';
 import { checkAllowance } from 'utils/network';
 import { refetchLiquidityPoolData } from 'utils/queryConnector';
 import { delay } from 'utils/timer';
@@ -332,7 +331,6 @@ const LiquidityPool: React.FC = () => {
 
             try {
                 console.log(approveAmount.toString(), collateral);
-                console.log('liquidityPoolAddress ', liquidityPoolAddress);
                 const hash = await multiCollateralWithSigner?.write.approve([liquidityPoolAddress, approveAmount]);
                 setOpenApprovalModal(false);
 
@@ -489,7 +487,9 @@ const LiquidityPool: React.FC = () => {
                             hash: txHash,
                         });
 
-                        if (txReceipt.status === 'success') console.log('prepareRoundClosing closed');
+                        if (txReceipt.status === 'success') {
+                            console.log('prepareRoundClosing closed');
+                        }
 
                         await delay(1000 * 2);
                     }
@@ -505,7 +505,9 @@ const LiquidityPool: React.FC = () => {
                             hash: txHash,
                         });
 
-                        if (txReceipt.status === 'success') console.log('Closing batch round');
+                        if (txReceipt.status === 'success') {
+                            console.log('Closing batch round');
+                        }
 
                         await delay(1000 * 2);
                         getUsersCountInCurrentRound = await liquidityPoolContractWithSigner.read.getUsersCountInCurrentRound();

@@ -1,4 +1,3 @@
-import { ethers } from 'ethers';
 import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
@@ -6,6 +5,7 @@ import { getIsBiconomy } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { Ticket } from 'types/markets';
 import biconomyConnector from 'utils/biconomyWallet';
+import { isAddress } from 'viem';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import TicketTransactionsTable from '../../../Markets/Market/MarketDetailsV2/components/TicketTransactionsTable';
 
@@ -17,10 +17,10 @@ const TicketTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
     const { address, isConnected } = useAccount();
     const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
-    const isSearchTextWalletAddress = searchText && ethers.utils.isAddress(searchText);
+    const isSearchTextWalletAddress = searchText && isAddress(searchText);
 
     const userTicketsQuery = useUserTicketsQuery(
-        isSearchTextWalletAddress ? searchText : walletAddress.toLowerCase(),
+        isSearchTextWalletAddress ? searchText : walletAddress,
         { networkId, client },
         {
             enabled: isConnected,

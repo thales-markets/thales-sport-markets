@@ -179,6 +179,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
                     if (ticket.collateral === (CRYPTO_CURRENCY_MAP.THALES as Coins)) {
                         onThalesClaim(ticket.isFreeBet ? ticket.payout - ticket.buyInAmount : ticket.payout);
                     }
+                    refetchAfterClaim(walletAddress, networkId);
                 }
             } catch (e) {
                 toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
@@ -204,7 +205,6 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
         payout: ticket.payout,
         multiSingle: false,
         onClose: () => {
-            refetchAfterClaim(walletAddress, networkId);
             setShowShareTicketModal ? setShowShareTicketModal(false) : null;
         },
         isTicketLost: ticket.isLost,

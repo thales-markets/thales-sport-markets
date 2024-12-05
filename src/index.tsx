@@ -1,4 +1,3 @@
-import 'i18n';
 import Root from 'pages/Root';
 import React from 'react';
 import ReactDOM from 'react-dom/client';

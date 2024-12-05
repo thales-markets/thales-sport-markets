@@ -26,7 +26,6 @@ import { secondsToMilliseconds } from 'date-fns';
 import { ContractType } from 'enums/contract';
 import { OddsType } from 'enums/markets';
 import { BuyTicketStep } from 'enums/tickets';
-import { ethers } from 'ethers';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import useInterval from 'hooks/useInterval';
 import Slippage from 'pages/Markets/Home/Parlay/components/Slippage';
@@ -67,7 +66,10 @@ import {
     Coins,
     DEFAULT_CURRENCY_DECIMALS,
     LONG_CURRENCY_DECIMALS,
+    bigNumberFormatter,
     ceilNumberToDecimals,
+    coinFormatter,
+    coinParser,
     floorNumberToDecimals,
     formatCurrency,
     formatCurrencyWithKey,
@@ -97,7 +99,6 @@ import {
 import { getContractInstance } from 'utils/contract';
 import multipleCollateral from 'utils/contracts/multipleCollateralContract';
 import sportsAMMV2Contract from 'utils/contracts/sportsAMMV2Contract';
-import { bigNumberFormatter, coinFormatter, coinParser } from 'utils/formatters/viem';
 import { getLiveTradingProcessorTransaction, getRequestId } from 'utils/liveTradingProcessor';
 import { formatMarketOdds } from 'utils/markets';
 import { getTradeData } from 'utils/marketsV2';
@@ -1279,10 +1280,8 @@ const Ticket: React.FC<TicketProps> = ({
                     networkId,
                     usedCollateralForBuy
                 );
-                const parsedTotalQuote = ethers.utils.parseEther(floorNumberToDecimals(totalQuote, 18).toString());
-                const additionalSlippage = ethers.utils.parseEther(
-                    tradeData[0].live ? liveBetSlippage / 100 + '' : '0.02'
-                );
+                const parsedTotalQuote = parseEther(floorNumberToDecimals(totalQuote, 18).toString());
+                const additionalSlippage = parseEther(tradeData[0].live ? liveBetSlippage / 100 + '' : '0.02');
 
                 let tx;
                 if (tradeData[0].live) {
@@ -1416,12 +1415,11 @@ const Ticket: React.FC<TicketProps> = ({
                         let adapterAllowed = false;
 
                         const requestId = getRequestId(txReceipt.logs, isFreeBetActive, isStakedThales);
-
-                        console.log('requestId:', requestId);
-                        if (!requestId) throw new Error('Request ID not found');
+                        if (!requestId) {
+                            throw new Error('Request ID not found');
+                        }
 
                         const startTime = Date.now();
-                        console.log('filfill start time:', new Date(startTime));
                         const checkFulfilled = async () => {
                             counter++;
                             if (!adapterAllowed) {
@@ -1460,8 +1458,6 @@ const Ticket: React.FC<TicketProps> = ({
                                     setTimeout(checkFulfilled, 1000);
                                 }
                             } else {
-                                console.log('filfill end time:', new Date(Date.now()));
-                                console.log('fulfill duration', (Date.now() - startTime) / 1000, 'seconds');
                                 refetchBalances(walletAddress, networkId);
                                 if (
                                     sportsAMMDataContract &&
@@ -1869,7 +1865,7 @@ const Ticket: React.FC<TicketProps> = ({
                     collateralContractWithSigner?.address ?? '',
                     collateralContractWithSigner,
                     'approve',
-                    [addressToApprove, ethers.constants.MaxUint256]
+                    [addressToApprove, maxUint256]
                 );
 
                 if (gasFees) {

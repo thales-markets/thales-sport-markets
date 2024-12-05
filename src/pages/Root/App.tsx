@@ -18,6 +18,8 @@ import PnL from 'pages/PnL';
 import Profile from 'pages/Profile';
 import Promotions from 'pages/Promotions/Home';
 import Promotion from 'pages/Promotions/Promotion';
+import SEO from 'pages/SEO/Home';
+import SeoArticle from 'pages/SEO/SeoArticle';
 import Ticket from 'pages/Ticket';
 import { Suspense, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
@@ -25,6 +27,7 @@ import { Redirect, Route, Router, Switch } from 'react-router-dom';
 import { setMobileState } from 'redux/modules/app';
 import { setIsBiconomy } from 'redux/modules/wallet';
 import { SupportedNetwork } from 'types/network';
+import { SeoArticleProps } from 'types/ui';
 import biconomyConnector from 'utils/biconomyWallet';
 import { isMobile } from 'utils/device';
 import { isNetworkSupported, isRouteAvailableForNetwork } from 'utils/network';
@@ -108,6 +111,8 @@ const App = () => {
         const handlePageResized = () => {
             dispatch(setMobileState(isMobile()));
         };
+
+        handlePageResized();
 
         if (typeof window !== 'undefined') {
             window.addEventListener('resize', handlePageResized);
@@ -228,6 +233,14 @@ const App = () => {
                             </DappLayout>
                         </Suspense>
                     </Route>
+                    <Route exact path={ROUTES.SEO.Home}>
+                        <SEO />
+                    </Route>
+                    <Route
+                        exact
+                        path={ROUTES.SEO.SeoArticle}
+                        render={(routeProps) => <SeoArticle {...(routeProps as SeoArticleProps)} />}
+                    />
                     <Route>
                         <Redirect to={ROUTES.Markets.Home} />
                         <Suspense fallback={<Loader />}>
@@ -238,7 +251,7 @@ const App = () => {
                     </Route>
                 </Switch>
             </Router>
-            <ReactQueryDevtools initialIsOpen={false} />
+            <ReactQueryDevtools initialIsOpen={false} buttonPosition={'bottom-left'} />
         </Theme>
     );
 };

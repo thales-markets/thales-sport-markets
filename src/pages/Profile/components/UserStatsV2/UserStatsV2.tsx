@@ -641,7 +641,7 @@ const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
                                 components={{
                                     stakingPageLink: (
                                         <StakingPageLink
-                                            href={'https://www.thales.io/token/staking'}
+                                            href="https://www.thales.io/token/staking"
                                             target="_blank"
                                             rel="noreferrer"
                                         />

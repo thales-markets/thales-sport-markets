@@ -8,17 +8,12 @@ import { useSEOArticlesQuery } from 'queries/seo/useSEOArticlesQuery';
 import React, { useMemo } from 'react';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
-import { RouteComponentProps } from 'react-router-dom';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivColumn } from 'styles/common';
-import { ThemeInterface } from 'types/ui';
+import { SeoArticleProps, ThemeInterface } from 'types/ui';
 import { buildHref } from 'utils/routes';
 import useQueryParam from 'utils/useQueryParams';
 import Header from '../components/Header';
-
-type SeoArticleProps = RouteComponentProps<{
-    seoId: string;
-}>;
 
 const SeoArticle: React.FC<SeoArticleProps> = (props) => {
     const theme: ThemeInterface = useTheme();

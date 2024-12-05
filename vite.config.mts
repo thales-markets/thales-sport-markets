@@ -52,7 +52,6 @@ export default defineConfig(({ mode }) => {
         define: {
             'process.env': env,
         },
-        base: '',
         plugins: plugins(mode),
         server: {
             // this ensures that the browser opens upon server start

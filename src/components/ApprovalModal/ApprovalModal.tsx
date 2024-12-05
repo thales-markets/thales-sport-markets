@@ -8,8 +8,8 @@ import { useDispatch } from 'react-redux';
 import { setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
+import { bigNumberFormatter, coinParser } from 'thales-utils';
 import { getCollateral } from 'utils/collaterals';
-import { bigNumberFormatter, coinParser } from 'utils/formatters/viem';
 import { maxUint256 } from 'viem';
 import { useAccount, useChainId } from 'wagmi';
 
