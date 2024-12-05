@@ -1440,7 +1440,7 @@ const Ticket: React.FC<TicketProps> = ({
                                 }
                             }
 
-                            const isFulfilled = await sportsAMMV2ContractWithSigner.write.requestIdToFulfillAllowed([
+                            const isFulfilled = await sportsAMMV2ContractWithSigner.read.requestIdToFulfillAllowed([
                                 requestId,
                             ]);
                             if (!isFulfilled) {
