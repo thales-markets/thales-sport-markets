@@ -20,7 +20,7 @@ const TicketTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
     const isSearchTextWalletAddress = searchText && isAddress(searchText);
 
     const userTicketsQuery = useUserTicketsQuery(
-        isSearchTextWalletAddress ? searchText : walletAddress.toLowerCase(),
+        isSearchTextWalletAddress ? searchText : walletAddress,
         { networkId, client },
         {
             enabled: isConnected,

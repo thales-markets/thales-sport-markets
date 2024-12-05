@@ -93,7 +93,7 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({
     ]);
 
     const userTicketsQuery = useUserTicketsQuery(
-        isSearchTextWalletAddress ? searchText : walletAddress.toLowerCase(),
+        isSearchTextWalletAddress ? searchText : walletAddress,
         { networkId, client },
         {
             enabled: isConnected,
