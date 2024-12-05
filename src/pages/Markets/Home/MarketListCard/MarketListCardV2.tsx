@@ -352,7 +352,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language, oddsTi
                         {leagueTooltipKey && <Tooltip overlay={t(leagueTooltipKey)} iconFontSize={12} marginLeft={2} />}
                     </MatchInfoLabel>
                 </MatchInfo>
-                <TeamsInfoContainer>
+                <TeamsInfoContainer isPlayerPropsMarket={isPlayerPropsMarket}>
                     <TeamLogosContainer
                         isColumnView={isColumnView}
                         isTwoPositionalMarket={isTwoPositionalMarket}
@@ -648,6 +648,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language, oddsTi
                             )}
                             <MarketsCountWrapper
                                 hidden={marketsCount === 0}
+                                isPlayerPropsMarket={isPlayerPropsMarket}
                                 onClick={() => {
                                     if (isPlayerPropsMarket) {
                                         dispatch(

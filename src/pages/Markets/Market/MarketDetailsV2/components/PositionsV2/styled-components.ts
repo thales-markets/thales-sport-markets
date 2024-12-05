@@ -22,7 +22,7 @@ export const Header = styled(FlexDivColumnCentered)<{
 }>`
     display: ${(props) => (props.hidden ? 'none' : 'flex')};
     position: ${(props) => (props.float ? 'absolute' : 'relative')};
-    ${(props) => props.float && 'top: -30px; left: 50%; transform: translateX(-50%);'}
+    ${(props) => props.float && 'top: -35px; left: 50%; transform: translateX(-50%);'}
     max-height: ${(props) => (props.isMainPageView && !props.isColumnView ? 'auto' : '25px')};
     margin-bottom: ${(props) => (props.alignHeader ? '-19px' : '0')};
     flex: none;
@@ -57,8 +57,12 @@ export const ContentContianer = styled(FlexDiv)`
 
 export const ContentWrapper = styled(FlexDivColumn)``;
 
-export const ContentRow = styled.div<{ gridMinMaxPercentage: number; isColumnView?: boolean }>`
-    margin-bottom: ${(props) => (props.isColumnView ? '0' : '5px')};
+export const ContentRow = styled.div<{
+    gridMinMaxPercentage: number;
+    isColumnView?: boolean;
+    filterSelected?: boolean;
+}>`
+    margin-bottom: ${(props) => (props.isColumnView || props.filterSelected ? '0' : '5px')};
     margin-right: ${(props) => (props.isColumnView ? '5px' : '0')};
     display: ${(props) => (props.isColumnView ? 'flex' : 'grid')};
     grid-template-columns: repeat(auto-fit, minmax(calc(${(props) => props.gridMinMaxPercentage}% - 5px), 1fr));

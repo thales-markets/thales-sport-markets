@@ -14,7 +14,6 @@ The UI is available on [overtimemarkets.xyz](https://overtimemarkets.xyz).
 -   React Query
 -   react-i18next
 -   styled-components
--   Material UI
 -   Recharts
 
 ## Ethereum stack

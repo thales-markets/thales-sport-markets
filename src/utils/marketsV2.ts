@@ -243,6 +243,9 @@ const getCombinedPositionsText = (market: SportMarket, position: number) => {
 };
 
 export const getPositionTextV2 = (market: SportMarket, position: number, extendedText?: boolean) => {
+    if (market.typeId === MarketType.EMPTY) {
+        return '-';
+    }
     return isCombinedPositionsMarket(market.typeId)
         ? getCombinedPositionsText(market, position)
         : getSimplePositionText(
@@ -260,6 +263,10 @@ export const getPositionTextV2 = (market: SportMarket, position: number, extende
 
 export const getTitleText = (market: SportMarket, useDescription?: boolean) => {
     const marketType = market.typeId as MarketType;
+    if (marketType === MarketType.EMPTY) {
+        return '';
+    }
+
     const scoringType = getLeagueScoringType(market.leagueId);
     const marketTypeDescription = getMarketTypeDescription(marketType);
     const marketTypeName =
@@ -615,6 +622,30 @@ export const packMarket = (
     return packedMarket;
 };
 
+export const getPlayerPropsEmptyMarkets = (market: SportMarket) => [
+    {
+        ...market,
+        type: '',
+        typeId: -1,
+        odds: [0],
+        line: Infinity,
+    },
+    {
+        ...market,
+        type: '',
+        typeId: -1,
+        odds: [0],
+        line: Infinity,
+    },
+    {
+        ...market,
+        type: '',
+        typeId: -1,
+        odds: [0],
+        line: Infinity,
+    },
+];
+
 export const getMarketPlayerPropsMarketsForSport = (market: SportMarket) => {
     const marketTypesForSport = PLAYER_PROPS_MARKETS_PER_SPORT_MAP[market.sport];
 
@@ -630,7 +661,7 @@ export const getMarketPlayerPropsMarketsForSport = (market: SportMarket) => {
                 }
         );
     } else {
-        return _.uniqBy(market.childMarkets, 'typeId').slice(0, 3);
+        return [..._.uniqBy(market.childMarkets, 'typeId'), ...getPlayerPropsEmptyMarkets(market)].slice(0, 3);
     }
 };
 
@@ -659,7 +690,7 @@ export const getMarketPlayerPropsMarketsForProp = (market: SportMarket) => {
                 }
         );
     } else {
-        return _.uniqBy(market.childMarkets, 'typeId').slice(0, 3);
+        return [..._.uniqBy(market.childMarkets, 'typeId'), ...getPlayerPropsEmptyMarkets(market)].slice(0, 3);
     }
 };
 

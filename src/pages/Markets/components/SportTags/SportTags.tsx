@@ -48,7 +48,7 @@ const SportTags: React.FC<SportTagsProps> = ({
                 selected={sportFilter === sport}
                 sport={sport}
                 onClick={() => {
-                    if (tagFilter.length == 0 || !open) {
+                    if (tagFilter.length == 0 || sportFilter === SportFilter.PlayerProps) {
                         setIsOpen(!open);
                     }
                     onSportClick();

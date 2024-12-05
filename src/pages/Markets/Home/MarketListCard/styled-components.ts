@@ -9,7 +9,7 @@ export const Wrapper = styled(FlexDivColumn)<{
     isOverdrop: boolean;
     floatingOddsTitles?: boolean;
 }>`
-    margin-top: ${(props) => (props.floatingOddsTitles ? '25px' : '0')};
+    margin-top: ${(props) => (props.floatingOddsTitles ? '30px' : '0')};
     position: relative;
     z-index: 1;
     width: 100%;
@@ -90,9 +90,9 @@ export const MatchInfoLabel = styled.label<{ selected?: boolean }>`
     }
 `;
 
-export const TeamsInfoContainer = styled(FlexDivRow)`
+export const TeamsInfoContainer = styled(FlexDivRow)<{ isPlayerPropsMarket?: boolean }>`
     align-items: center;
-    margin-top: 8px;
+    margin-top: ${(props) => (props.isPlayerPropsMarket ? '0' : '8px')};
     flex: 1;
     @media (max-width: 950px) {
         flex-wrap: wrap;
@@ -154,7 +154,7 @@ export const TeamNameLabel = styled.span<{ isColumnView: boolean; isMarketSelect
     }
 `;
 
-export const MarketsCountWrapper = styled(FlexDivColumnCentered)<{ hidden?: boolean }>`
+export const MarketsCountWrapper = styled(FlexDivColumnCentered)<{ hidden?: boolean; isPlayerPropsMarket?: boolean }>`
     visibility: ${(props) => (props.hidden ? 'hidden' : 'visible')};
     max-width: 35px;
     margin-left: 5px;
@@ -164,7 +164,7 @@ export const MarketsCountWrapper = styled(FlexDivColumnCentered)<{ hidden?: bool
     color: ${(props) => props.theme.textColor.quinary};
     text-align: center;
     cursor: pointer;
-    margin-top: 20px;
+    margin-top: ${(props) => (props.isPlayerPropsMarket ? '0' : '20px')};
     @media (max-width: 950px) {
         max-width: initial;
         position: absolute;
