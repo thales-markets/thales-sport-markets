@@ -51,9 +51,7 @@ export const refetchFreeBetBalance = (walletAddress: string, networkId: Network)
 
 export const refetchAfterClaim = (walletAddress: string, networkId: Network) => {
     queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.ClaimableCountV2(walletAddress, networkId) });
-    queryConnector.queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.UserTickets(networkId, walletAddress.toLowerCase()),
-    });
+    queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.UserTickets(networkId, walletAddress) });
 };
 
 export const refetchLiquidityPoolData = (walletAddress: string, networkId: Network, liquidityPoolAddress: string) => {
