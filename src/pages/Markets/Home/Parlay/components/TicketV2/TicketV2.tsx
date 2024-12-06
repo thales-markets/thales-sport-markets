@@ -17,7 +17,7 @@ import {
     APPROVAL_BUFFER,
     BATCH_SIZE,
     COINGECKO_SWAP_TO_THALES_QUOTE_SLIPPAGE,
-    MIN_COLLATERAL_MULTIPLIER,
+    // MIN_COLLATERAL_MULTIPLIER,
     SWAP_APPROVAL_BUFFER,
     THALES_CONTRACT_RATE_KEY,
 } from 'constants/markets';
@@ -76,7 +76,6 @@ import {
     formatCurrencyWithSign,
     formatPercentage,
     getPrecision,
-    roundNumberToDecimals,
 } from 'thales-utils';
 import { SportsAmmData, TicketMarket } from 'types/markets';
 import { OverdropMultiplier, OverdropUserData } from 'types/overdrop';
@@ -85,6 +84,7 @@ import { ViemContract } from 'types/viem';
 import { executeBiconomyTransaction, getPaymasterData } from 'utils/biconomy';
 import biconomyConnector from 'utils/biconomyWallet';
 import {
+    convertFromStableToCollateral,
     getCollateral,
     getCollateralAddress,
     getCollateralIndex,
@@ -553,9 +553,9 @@ const Ticket: React.FC<TicketProps> = ({
         isFreeBetDisabledByUser,
     ]);
 
-    useEffect(() => {
-        setMinBuyInAmountInDefaultCollateral(sportsAmmData?.minBuyInAmount || 0);
-    }, [sportsAmmData?.minBuyInAmount]);
+    // useEffect(() => {
+    //     setMinBuyInAmountInDefaultCollateral(sportsAmmData?.minBuyInAmount || 0);
+    // }, [sportsAmmData?.minBuyInAmount]);
 
     const totalQuote = useMemo(() => {
         const quote = markets.reduce(
@@ -661,7 +661,7 @@ const Ticket: React.FC<TicketProps> = ({
     }, [dispatch, networkId]);
 
     const fetchTicketAmmQuote = useCallback(
-        async (buyInAmountForQuote: number) => {
+        async (buyInAmountForQuote: number, fetchQuoteOnly: boolean) => {
             if (buyInAmountForQuote <= 0 || noProofs) return;
 
             const contracts = [
@@ -670,10 +670,12 @@ const Ticket: React.FC<TicketProps> = ({
             ] as ViemContract[];
 
             const [sportsAMMV2Contract, multiCollateralOnOffRampContract] = contracts;
-            if (sportsAMMV2Contract && minBuyInAmountInDefaultCollateral) {
+            // if (sportsAMMV2Contract && minBuyInAmountInDefaultCollateral) {
+            if (sportsAMMV2Contract) {
                 const tradeData = getTradeData(markets);
 
                 try {
+                    /* TODO: check is this needed
                     const [minimumNeededForMinUsdAmountValue] = await Promise.all([
                         collateralHasLp
                             ? minBuyInAmountInDefaultCollateral /
@@ -695,6 +697,7 @@ const Ticket: React.FC<TicketProps> = ({
                         (isDefaultCollateral && !swapToThales ? 1 : MIN_COLLATERAL_MULTIPLIER);
 
                     setMinBuyInAmount(roundNumberToDecimals(minBuyin, 18));
+                    */
 
                     if (markets[0]?.live) {
                         const [minimumReceivedForBuyInAmount] = await Promise.all([
@@ -711,7 +714,8 @@ const Ticket: React.FC<TicketProps> = ({
                             ? minimumReceivedForBuyInAmount
                             : coinFormatter(minimumReceivedForBuyInAmount, networkId);
 
-                        setBuyInAmountInDefaultCollateral(minimumReceivedForBuyInAmountInDefaultCollateral);
+                        !fetchQuoteOnly &&
+                            setBuyInAmountInDefaultCollateral(minimumReceivedForBuyInAmountInDefaultCollateral);
 
                         return { buyInAmountInDefaultCollateral: minimumReceivedForBuyInAmountInDefaultCollateral };
                     } else {
@@ -725,12 +729,13 @@ const Ticket: React.FC<TicketProps> = ({
                             ),
                         ]);
 
-                        setBuyInAmountInDefaultCollateral(
-                            isThales || swapToThales
-                                ? (swapToThales ? swappedThalesToReceive : Number(buyInAmount)) *
-                                      selectedCollateralCurrencyRate
-                                : coinFormatter(parlayAmmQuote[4], networkId)
-                        );
+                        !fetchQuoteOnly &&
+                            setBuyInAmountInDefaultCollateral(
+                                isThales || swapToThales
+                                    ? (swapToThales ? swappedThalesToReceive : Number(buyInAmount)) *
+                                          selectedCollateralCurrencyRate
+                                    : coinFormatter(parlayAmmQuote[4], networkId)
+                            );
 
                         return parlayAmmQuote;
                     }
@@ -758,12 +763,12 @@ const Ticket: React.FC<TicketProps> = ({
             walletClient.data,
             networkId,
             noProofs,
-            minBuyInAmountInDefaultCollateral,
+            // minBuyInAmountInDefaultCollateral,
             markets,
             collateralHasLp,
             isThales,
             swapToThales,
-            thalesContractCurrencyRate,
+            // thalesContractCurrencyRate,
             isDefaultCollateral,
             selectedCollateralCurrencyRate,
             collateralAddress,
@@ -926,6 +931,24 @@ const Ticket: React.FC<TicketProps> = ({
         );
     }, [sportsAmmData?.maxSupportedAmount, buyInAmountInDefaultCollateral, totalQuote]);
 
+    // set min buy in amount for selected collateral
+    useEffect(() => {
+        const rates = isThales || swapToThales ? thalesContractCurrencyRate : selectedCollateralCurrencyRate;
+        const amount = sportsAmmData?.minBuyInAmount || 0;
+        const minBuyin = convertFromStableToCollateral(usedCollateralForBuy, amount, rates, networkId);
+
+        setMinBuyInAmount(minBuyin);
+    }, [
+        isThales,
+        swapToThales,
+        swappedThalesToReceive,
+        thalesContractCurrencyRate,
+        selectedCollateralCurrencyRate,
+        usedCollateralForBuy,
+        sportsAmmData?.minBuyInAmount,
+        networkId,
+    ]);
+
     // Validations
     useEffect(() => {
         if (isBuying) return;
@@ -948,18 +971,10 @@ const Ticket: React.FC<TicketProps> = ({
 
             setTooltipTextBuyInAmount(
                 t('markets.parlay.validation.min-amount', {
-                    min: `${formatCurrencyWithKey(
-                        selectedCollateral,
-                        ceilNumberToDecimals(minBuyin, decimals),
-                        decimals
-                    )}${
+                    min: `${formatCurrencyWithKey(selectedCollateral, minBuyin, decimals)}${
                         isDefaultCollateral
                             ? ''
-                            : ` (${formatCurrencyWithSign(
-                                  USD_SIGN,
-                                  ceilNumberToDecimals(minBuyInAmountInDefaultCollateral * MIN_COLLATERAL_MULTIPLIER),
-                                  2
-                              )})`
+                            : ` (${formatCurrencyWithSign(USD_SIGN, minBuyInAmountInDefaultCollateral)})`
                     }`,
                 })
             );
@@ -989,7 +1004,6 @@ const Ticket: React.FC<TicketProps> = ({
         ticketLiquidity,
         swapToThales,
         swappedThalesToReceive,
-        selectedCollateralCurrencyRate,
         swapQuote,
         isBuying,
     ]);
@@ -1681,9 +1695,26 @@ const Ticket: React.FC<TicketProps> = ({
         const fetchData = async () => {
             setIsFetching(true);
 
+            if (minBuyInAmount > 0) {
+                const parlayAmmQuoteForMin = await fetchTicketAmmQuote(minBuyInAmount, true);
+
+                if (!mountedRef.current || !isSubscribed || !parlayAmmQuoteForMin) return null;
+
+                if (!parlayAmmQuoteForMin.error) {
+                    setMinBuyInAmountInDefaultCollateral(
+                        isDefaultCollateral
+                            ? sportsAmmData?.minBuyInAmount || 0
+                            : isThales || swapToThales
+                            ? (swapToThales ? swappedThalesToReceive : minBuyInAmount) * selectedCollateralCurrencyRate
+                            : coinFormatter(parlayAmmQuoteForMin.buyInAmountInDefaultCollateral, networkId)
+                    );
+                }
+            }
+
             if (Number(buyInAmount) > 0 && minBuyInAmountInDefaultCollateral) {
                 const parlayAmmQuote = await fetchTicketAmmQuote(
-                    swapToThales ? swappedThalesToReceive : Number(buyInAmount)
+                    swapToThales ? swappedThalesToReceive : Number(buyInAmount),
+                    false
                 );
 
                 if (!mountedRef.current || !isSubscribed || !parlayAmmQuote) return null;
@@ -1751,6 +1782,11 @@ const Ticket: React.FC<TicketProps> = ({
     }, [
         buyInAmount,
         fetchTicketAmmQuote,
+        isDefaultCollateral,
+        isThales,
+        selectedCollateralCurrencyRate,
+        sportsAmmData?.minBuyInAmount,
+        minBuyInAmount,
         minBuyInAmountInDefaultCollateral,
         setMarketsOutOfLiquidity,
         markets,
