@@ -19,7 +19,9 @@ export const getSportsAMMV2Transaction: any = async (
     isAA: boolean,
     isFreeBet: boolean,
     isStakedThales: boolean,
-    stakingThalesBettingProxyContract: ethers.Contract
+    stakingThalesBettingProxyContract: ethers.Contract,
+    isSystemBet: boolean,
+    systemBetDenominator: number
 ): Promise<any> => {
     let finalEstimation = null;
     const referralAddress = referral || ZERO_ADDRESS;
@@ -77,6 +79,36 @@ export const getSportsAMMV2Transaction: any = async (
                 additionalSlippage,
                 referralAddress,
                 { gasLimit: finalEstimation }
+            );
+        }
+
+        if (isSystemBet) {
+            if (networkId === Network.OptimismMainnet) {
+                const estimation = await sportsAMMV2Contract.estimateGas.tradeSystemBet(
+                    tradeData,
+                    buyInAmount,
+                    expectedQuote,
+                    additionalSlippage,
+                    referralAddress,
+                    isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
+                    isEth,
+                    systemBetDenominator,
+                    { value: isEth ? buyInAmount : 0 }
+                );
+
+                finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER); // using Math.celi as gasLimit is accepting only integer.
+            }
+
+            return sportsAMMV2Contract.tradeSystemBet(
+                tradeData,
+                buyInAmount,
+                expectedQuote,
+                additionalSlippage,
+                referralAddress,
+                isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
+                isEth,
+                systemBetDenominator,
+                { value: isEth ? buyInAmount : 0, gasLimit: finalEstimation }
             );
         }
 

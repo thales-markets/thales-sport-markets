@@ -18,6 +18,7 @@ import {
     COINGECKO_SWAP_TO_THALES_QUOTE_SLIPPAGE,
     MIN_COLLATERAL_MULTIPLIER,
     SWAP_APPROVAL_BUFFER,
+    SYSTEM_BET_MINIMUM_MARKETS,
     THALES_CONTRACT_RATE_KEY,
 } from 'constants/markets';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
@@ -168,6 +169,7 @@ import {
     SlippageDropdownContainer,
     SummaryLabel,
     SummaryValue,
+    SystemBetValidation,
     TwitterIcon,
     XButton,
     defaultButtonProps,
@@ -585,11 +587,18 @@ const Ticket: React.FC<TicketProps> = ({
     //     usedCollateralForBuy,
     // ]);
 
-    const systemData = useMemo(() => getSystemBetData(markets, systemBetDenominator, usedCollateralForBuy), [
-        markets,
-        systemBetDenominator,
-        usedCollateralForBuy,
+    const isValidSystemBet = useMemo(() => isSystemBet && markets.length >= SYSTEM_BET_MINIMUM_MARKETS, [
+        isSystemBet,
+        markets.length,
     ]);
+
+    const systemData = useMemo(
+        () =>
+            isValidSystemBet
+                ? getSystemBetData(markets, systemBetDenominator, usedCollateralForBuy)
+                : { systemBetQuotePerCombination: 0, systemBetQuote: 0, systemBetMinimumQuote: 0 },
+        [isValidSystemBet, markets, systemBetDenominator, usedCollateralForBuy]
+    );
 
     const totalQuote = useMemo(() => {
         let quote = 0;
@@ -601,9 +610,10 @@ const Ticket: React.FC<TicketProps> = ({
                     partialQuote * (market.odd > 0 ? getAddedPayoutOdds(usedCollateralForBuy, market.odd) : market.odd),
                 1
             );
+            const maxSupportedOdds = sportsAmmData?.maxSupportedOdds || 1;
+            quote = quote < maxSupportedOdds ? maxSupportedOdds : quote;
         }
-        const maxSupportedOdds = sportsAmmData?.maxSupportedOdds || 1;
-        return quote < maxSupportedOdds ? maxSupportedOdds : quote;
+        return quote;
     }, [isSystemBet, markets, sportsAmmData?.maxSupportedOdds, systemData.systemBetQuote, usedCollateralForBuy]);
 
     const totalBonus = useMemo(() => {
@@ -711,7 +721,7 @@ const Ticket: React.FC<TicketProps> = ({
 
     const fetchTicketAmmQuote = useCallback(
         async (buyInAmountForQuote: number) => {
-            if (buyInAmountForQuote <= 0 || noProofs) return;
+            if (buyInAmountForQuote <= 0 || noProofs || (isSystemBet && !isValidSystemBet)) return;
 
             const { sportsAMMV2Contract, multiCollateralOnOffRampContract } = networkConnector;
             if (sportsAMMV2Contract && minBuyInAmountInDefaultCollateral) {
@@ -802,6 +812,8 @@ const Ticket: React.FC<TicketProps> = ({
         },
         [
             noProofs,
+            isSystemBet,
+            isValidSystemBet,
             minBuyInAmountInDefaultCollateral,
             markets,
             collateralHasLp,
@@ -814,7 +826,6 @@ const Ticket: React.FC<TicketProps> = ({
             networkId,
             usedCollateralForBuy,
             thalesCollateralAddress,
-            isSystemBet,
             systemBetDenominator,
             swappedThalesToReceive,
             buyInAmount,
@@ -960,6 +971,7 @@ const Ticket: React.FC<TicketProps> = ({
 
     const isValidProfit: boolean = useMemo(() => {
         return (
+            totalQuote > 0 &&
             sportsAmmData?.maxSupportedAmount !== undefined &&
             Number(buyInAmountInDefaultCollateral) / Number(totalQuote) - Number(buyInAmountInDefaultCollateral) >
                 sportsAmmData?.maxSupportedAmount
@@ -1364,7 +1376,9 @@ const Ticket: React.FC<TicketProps> = ({
                         isAA,
                         isFreeBetActive,
                         isStakedThales,
-                        stakingThalesBettingProxyWithSigner
+                        stakingThalesBettingProxyWithSigner,
+                        isSystemBet,
+                        systemBetDenominator
                     );
                 }
 
@@ -1587,6 +1601,11 @@ const Ticket: React.FC<TicketProps> = ({
             return;
         }
 
+        if (isSystemBet && markets.length < SYSTEM_BET_MINIMUM_MARKETS) {
+            setSubmitDisabled(true);
+            return;
+        }
+
         // Not enough funds
         setSubmitDisabled(!paymentTokenBalance || Number(buyInAmount) > paymentTokenBalance);
     }, [
@@ -1607,6 +1626,7 @@ const Ticket: React.FC<TicketProps> = ({
         isLiveTicket,
         swappedThalesToReceive,
         swapToThales,
+        isSystemBet,
     ]);
 
     const getSubmitButton = () => {
@@ -1928,17 +1948,24 @@ const Ticket: React.FC<TicketProps> = ({
 
     return (
         <>
-            <RowContainer>
-                <SummaryLabel>System:</SummaryLabel>
-                <SelectContainer>
-                    <SelectInput
-                        options={systemOptions}
-                        handleChange={(value: any) => setSystemBetDenominator(Number(value))}
-                        defaultValue={systemBetDenominator - 2}
-                        width={100}
-                    />
-                </SelectContainer>
-            </RowContainer>
+            {isSystemBet && markets.length >= 3 && (
+                <RowContainer>
+                    <SummaryLabel>System:</SummaryLabel>
+                    <SelectContainer>
+                        <SelectInput
+                            options={systemOptions}
+                            handleChange={(value: any) => setSystemBetDenominator(Number(value))}
+                            defaultValue={systemBetDenominator - 2}
+                            width={100}
+                        />
+                    </SelectContainer>
+                </RowContainer>
+            )}
+            {isSystemBet && markets.length < 3 && (
+                <RowContainer>
+                    <SystemBetValidation>System bet requires minimum 3 markets</SystemBetValidation>
+                </RowContainer>
+            )}
             <RowSummary columnDirection={true}>
                 <RowContainer>
                     <SummaryLabel>{t('markets.parlay.total-quote')}:</SummaryLabel>

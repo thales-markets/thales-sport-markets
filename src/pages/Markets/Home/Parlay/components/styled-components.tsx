@@ -458,3 +458,13 @@ export const RightLevel = styled.div<{ highlight: boolean }>`
 export const SelectContainer = styled(FlexDivEnd)`
     width: 100%;
 `;
+
+export const SystemBetValidation = styled(FlexDivCentered)`
+    font-size: 13px;
+    color: ${(props) => props.theme.warning.textColor.primary};
+    border: 2px solid ${(props) => props.theme.warning.borderColor.primary};
+    width: 100%;
+    border-radius: 5px;
+    padding: 5px;
+    text-align: center;
+`;
