@@ -79,7 +79,7 @@ const InfoIcon = styled.i<{ iconFontSize?: number; marginLeft?: number; top?: nu
     }
 `;
 
-const getValidationStyle = (theme: ThemeInterface) => ({
+const getValidationStyle = (theme: ThemeInterface): React.CSSProperties => ({
     minWidth: '100%',
     maxWidth: '300px',
     padding: '4px 8px',
@@ -90,7 +90,7 @@ const getValidationStyle = (theme: ThemeInterface) => ({
     fontSize: '10px',
     fontWeight: 600,
     lineHeight: '14px',
-    'text-transform': 'uppercase',
+    textTransform: 'uppercase',
 });
 
 const ValidationArrow = styled.div`
