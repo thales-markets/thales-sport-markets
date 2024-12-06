@@ -771,7 +771,9 @@
             "odds-changed-error": "Odds changed while fulfilling the order. Try increasing the slippage.",
             "info": {
                 "min-quote": "Minimal TOTAL QUOTE supported is {{value}}",
-                "max-quote": "Maximal TOTAL QUOTE supported is {{value}}"
+                "max-quote": "Maximal TOTAL QUOTE supported is {{value}}",
+                "system-bet-min-quote": "Minimal TOTAL QUOTE supported for selected system is {{value}}",
+                "system-bet-max-quote": "Maximal TOTAL QUOTE supported for selected system is {{value}}"
             },
             "show-parlay": "Show Parlay",
             "validation": {

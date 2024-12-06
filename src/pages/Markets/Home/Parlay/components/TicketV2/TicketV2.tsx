@@ -1813,8 +1813,22 @@ const Ticket: React.FC<TicketProps> = ({
 
     const getQuoteTooltipText = () => {
         return selectedOddsType === OddsType.AMM
-            ? t('markets.parlay.info.min-quote', {
-                  value: formatMarketOdds(selectedOddsType, sportsAmmData?.maxSupportedOdds),
+            ? isSystemBet
+                ? t('markets.parlay.info.system-bet-min-quote', {
+                      value: formatMarketOdds(
+                          selectedOddsType,
+                          (sportsAmmData?.maxSupportedOdds || 0) / numberOfSystemBetCombination
+                      ),
+                  })
+                : t('markets.parlay.info.min-quote', {
+                      value: formatMarketOdds(selectedOddsType, sportsAmmData?.maxSupportedOdds),
+                  })
+            : isSystemBet
+            ? t('markets.parlay.info.system-bet-max-quote', {
+                  value: formatMarketOdds(
+                      selectedOddsType,
+                      (sportsAmmData?.maxSupportedOdds || 0) / numberOfSystemBetCombination
+                  ),
               })
             : t('markets.parlay.info.max-quote', {
                   value: formatMarketOdds(selectedOddsType, sportsAmmData?.maxSupportedOdds),
@@ -1949,28 +1963,48 @@ const Ticket: React.FC<TicketProps> = ({
     return (
         <>
             {isSystemBet && markets.length >= 3 && (
-                <RowContainer>
-                    <SummaryLabel>System:</SummaryLabel>
-                    <SelectContainer>
-                        <SelectInput
-                            options={systemOptions}
-                            handleChange={(value: any) => setSystemBetDenominator(Number(value))}
-                            defaultValue={systemBetDenominator - 2}
-                            width={100}
-                        />
-                    </SelectContainer>
-                </RowContainer>
+                <>
+                    <RowContainer>
+                        <SummaryLabel>System:</SummaryLabel>
+                        <SelectContainer>
+                            <SelectInput
+                                options={systemOptions}
+                                handleChange={(value: any) => setSystemBetDenominator(Number(value))}
+                                defaultValue={systemBetDenominator - 2}
+                                width={90}
+                                style={{
+                                    menuStyle: { borderRadius: 5, marginTop: 3 },
+                                    controlStyle: { borderRadius: 5, minHeight: '25px', fontSize: '14px' },
+                                    dropdownIndicatorStyle: { padding: '2px' },
+                                    optionStyle: { fontSize: '14px' },
+                                    indicatorSeparatorStyle: { marginBottom: '5px', marginTop: '5px' },
+                                }}
+                            />
+                        </SelectContainer>
+                    </RowContainer>
+                    <RowSummary>
+                        <SummaryLabel>Number of combination:</SummaryLabel>
+                        <SummaryValue isCollateralInfo={true} fontSize={12}>
+                            {numberOfSystemBetCombination}
+                        </SummaryValue>
+                    </RowSummary>
+                </>
             )}
             {isSystemBet && markets.length < 3 && (
                 <RowContainer>
                     <SystemBetValidation>System bet requires minimum 3 markets</SystemBetValidation>
                 </RowContainer>
             )}
+            {isSystemBet && <HorizontalLine />}
             <RowSummary columnDirection={true}>
                 <RowContainer>
                     <SummaryLabel>{t('markets.parlay.total-quote')}:</SummaryLabel>
                     <InfoTooltip
-                        open={inputRefVisible && totalQuote === sportsAmmData?.maxSupportedOdds}
+                        open={
+                            inputRefVisible &&
+                            ((!isSystemBet && totalQuote === sportsAmmData?.maxSupportedOdds) ||
+                                (isSystemBet && totalQuote < (sportsAmmData?.maxSupportedOdds || 0)))
+                        }
                         title={getQuoteTooltipText()}
                         placement={'top'}
                         arrow={true}
@@ -2220,12 +2254,6 @@ const Ticket: React.FC<TicketProps> = ({
                                         )
                               } (${formatPercentage(profitPercentage)})`}
                     </SummaryValue>
-                </RowSummary>
-            )}
-            {isSystemBet && (
-                <RowSummary>
-                    <SummaryLabel>Number of combination:</SummaryLabel>
-                    <SummaryValue isInfo={true}>{numberOfSystemBetCombination}</SummaryValue>
                 </RowSummary>
             )}
             {isSystemBet && (
