@@ -893,7 +893,7 @@ const Ticket: React.FC<TicketProps> = ({
             }
         };
         if (isConnected && buyInAmount) {
-            (isEth && !isLiveTicket && !swapToThales) || isFreeBetActive || isStakedThales
+            (isEth && !isLiveTicket && !swapToThales) || isFreeBetActive || isStakedThales || isAA
                 ? setHasAllowance(true)
                 : getAllowance();
         }
@@ -916,6 +916,7 @@ const Ticket: React.FC<TicketProps> = ({
         isStakedThales,
         client,
         walletClient.data,
+        isAA,
     ]);
 
     const isValidProfit: boolean = useMemo(() => {
