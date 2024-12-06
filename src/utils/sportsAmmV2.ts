@@ -113,12 +113,22 @@ export const getSportsAMMV2QuoteMethod: any = (
     isDefaultCollateral: boolean,
     sportsAMMV2Contract: ethers.Contract,
     tradeData: TradeData[],
-    buyInAmount: BigNumber
+    buyInAmount: BigNumber,
+    isSystemBet: boolean,
+    systemBetDenominator: number
 ) => {
-    return sportsAMMV2Contract.tradeQuote(
-        tradeData,
-        buyInAmount,
-        isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
-        false
-    );
+    return isSystemBet
+        ? sportsAMMV2Contract.tradeQuoteSystem(
+              tradeData,
+              buyInAmount,
+              isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
+              false,
+              systemBetDenominator
+          )
+        : sportsAMMV2Contract.tradeQuote(
+              tradeData,
+              buyInAmount,
+              isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
+              false
+          );
 };

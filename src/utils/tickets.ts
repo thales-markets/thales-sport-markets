@@ -234,3 +234,90 @@ export const tableSortByStatus = (rowA: any, rowB: any) => {
     const bOrder = getTicketStatusOrder(rowB.original);
     return aOrder < bOrder ? -1 : aOrder > bOrder ? 1 : 0;
 };
+
+export const generateSystemBetCombinations = (n: number, k: number): number[][] => {
+    // require(k > 1 && k < n, 'k has to be greater than 1 and less than n');
+
+    // Calculate the number of combinations: n! / (k! * (n-k)!)
+    let combinationsCount = 1;
+    for (let i = 0; i < k; i++) {
+        combinationsCount = (combinationsCount * (n - i)) / (i + 1);
+    }
+
+    // Initialize combinations array
+    const combinations: number[][] = new Array(combinationsCount);
+
+    // Generate combinations
+    const indices: number[] = new Array(k);
+    for (let i = 0; i < k; i++) {
+        indices[i] = i;
+    }
+
+    let index = 0;
+
+    while (true) {
+        // Add the current combination
+        const combination: number[] = new Array(k);
+        for (let i = 0; i < k; i++) {
+            combination[i] = indices[i];
+        }
+        combinations[index] = combination;
+        index++;
+
+        // Generate the next combination
+        let done = true;
+        for (let i = k; i > 0; i--) {
+            if (indices[i - 1] < n - (k - (i - 1))) {
+                indices[i - 1]++;
+                for (let j = i; j < k; j++) {
+                    indices[j] = indices[j - 1] + 1;
+                }
+                done = false;
+                break;
+            }
+        }
+
+        if (done) {
+            break;
+        }
+    }
+
+    return combinations;
+};
+
+export const getSystemBetData = (markets: TicketMarket[], systemBetDenominator: number, currencyKey: Coins) => {
+    const systemCombinations: number[][] = generateSystemBetCombinations(markets.length, systemBetDenominator);
+    const totalCombinations = systemCombinations.length;
+    // let systemBetPayout = 0;
+    let systemBetQuote = 0;
+    let systemBetQuotePerCombination = 0;
+    let systemBetMinimumQuote = 0;
+
+    // Loop through each stored combination
+    for (let i = 0; i < totalCombinations; i++) {
+        const currentCombination: number[] = systemCombinations[i];
+
+        let combinationQuote = 0;
+
+        for (let j = 0; j < currentCombination.length; j++) {
+            const marketIndex = currentCombination[j];
+            let odds = markets[marketIndex].odds[markets[marketIndex].position];
+            odds = odds > 0 ? getAddedPayoutOdds(currencyKey, odds) : odds;
+            combinationQuote = combinationQuote == 0 ? odds : combinationQuote * odds;
+        }
+        systemBetMinimumQuote = combinationQuote > systemBetMinimumQuote ? combinationQuote : systemBetMinimumQuote;
+
+        // if (combinationQuote > 0) {
+        //     const combinationPayout = buyinPerCombination / combinationQuote;
+        //     systemBetPayout += combinationPayout;
+        // }
+        systemBetQuotePerCombination += 1 / combinationQuote;
+    }
+    // const systemBetQuote = _buyInAmount / systemBetPayout;
+
+    // return { systemBetQuote, systemBetPayout };
+    systemBetQuotePerCombination = 1 / systemBetQuotePerCombination;
+    systemBetQuote = totalCombinations * systemBetQuotePerCombination;
+
+    return { systemBetQuotePerCombination, systemBetQuote, systemBetMinimumQuote };
+};

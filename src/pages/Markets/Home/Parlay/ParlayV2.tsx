@@ -11,12 +11,22 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getSportFilter } from 'redux/modules/market';
-import { getHasTicketError, getTicket, removeAll, resetTicketError, setMaxTicketSize } from 'redux/modules/ticket';
+import {
+    getHasTicketError,
+    getIsSystemBet,
+    getTicket,
+    removeAll,
+    resetTicketError,
+    setIsSystemBet,
+    setMaxTicketSize,
+} from 'redux/modules/ticket';
 import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
-import styled from 'styled-components';
-import { FlexDivCentered, FlexDivColumn } from 'styles/common';
+import styled, { useTheme } from 'styled-components';
+import { FlexDiv, FlexDivCentered, FlexDivColumn } from 'styles/common';
 import { SportMarket, SportMarkets, TicketMarket, TicketPosition } from 'types/markets';
 import { isSameMarket } from 'utils/marketsV2';
+import Toggle from '../../../../components/Toggle';
+import { ThemeInterface } from '../../../../types/ui';
 import TicketV2 from './components/TicketV2';
 import ValidationModal from './components/ValidationModal';
 
@@ -28,11 +38,13 @@ type ParlayProps = {
 const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
+    const theme: ThemeInterface = useTheme();
     const isAppReady = useSelector(getIsAppReady);
     const isMobile = useSelector(getIsMobile);
     const networkId = useSelector(getNetworkId);
     const isWalletConnected = useSelector(getIsWalletConnected);
     const ticket = useSelector(getTicket);
+    const isSystemBet = useSelector(getIsSystemBet);
     const hasTicketError = useSelector(getHasTicketError);
     const sportFilter = useSelector(getSportFilter);
     const isLiveFilterSelected = sportFilter == SportFilter.Live;
@@ -225,6 +237,22 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                             <Count>{ticket.length}</Count>
                         </Title>
                     )}
+                    <ToggleContainer>
+                        <Toggle
+                            label={{
+                                firstLabel: 'Ticket',
+                                secondLabel: 'System',
+                                // fontSize: '14px',
+                            }}
+                            active={isSystemBet}
+                            dotSize="18px"
+                            dotBackground={theme.background.secondary}
+                            dotBorder={`3px solid ${theme.borderColor.quaternary}`}
+                            handleClick={() => {
+                                dispatch(setIsSystemBet(!isSystemBet));
+                            }}
+                        />
+                    </ToggleContainer>
                     <ThalesBonusContainer>
                         <ThalesBonus>{t('markets.parlay.thales-bonus-info')}</ThalesBonus>
                     </ThalesBonusContainer>
@@ -479,6 +507,13 @@ const StyledParlayEmptyIcon = styled(ParlayEmptyIcon)`
     path {
         fill: ${(props) => props.theme.textColor.quaternary};
     }
+`;
+
+const ToggleContainer = styled(FlexDiv)`
+    font-weight: 600;
+    width: 100%;
+    margin-bottom: 5px;
+    text-transform: uppercase;
 `;
 
 export default Parlay;

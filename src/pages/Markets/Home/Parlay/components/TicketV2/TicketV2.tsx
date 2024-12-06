@@ -49,6 +49,7 @@ import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
 import {
     getIsFreeBetDisabledByUser,
+    getIsSystemBet,
     getLiveBetSlippage,
     getTicketPayment,
     removeAll,
@@ -128,10 +129,11 @@ import {
     getSwapParams,
     sendTransaction,
 } from 'utils/swap';
-import { getAddedPayoutOdds } from 'utils/tickets';
+import { getAddedPayoutOdds, getSystemBetData } from 'utils/tickets';
 import { delay } from 'utils/timer';
 import { getKeepSelectionFromStorage, setKeepSelectionToStorage } from 'utils/ui';
 import { Address } from 'viem';
+import SelectInput from '../../../../../../components/SelectInput';
 import BuyStepsModal from '../BuyStepsModal';
 import SuggestedAmount from '../SuggestedAmount';
 import {
@@ -157,6 +159,7 @@ import {
     RightLevel,
     RowContainer,
     RowSummary,
+    SelectContainer,
     SettingsIcon,
     SettingsIconContainer,
     SettingsLabel,
@@ -216,6 +219,7 @@ const Ticket: React.FC<TicketProps> = ({
     const ticketPayment = useSelector(getTicketPayment);
     const liveBetSlippage = useSelector(getLiveBetSlippage);
     const isFreeBetDisabledByUser = useSelector(getIsFreeBetDisabledByUser);
+    const isSystemBet = useSelector(getIsSystemBet);
     const selectedCollateralIndex = ticketPayment.selectedCollateralIndex;
     const buyInAmount = ticketPayment.amountToBuy;
 
@@ -252,6 +256,7 @@ const Ticket: React.FC<TicketProps> = ({
     const [hasSwapAllowance, setHasSwapAllowance] = useState(false);
     const [buyStep, setBuyStep] = useState(BuyTicketStep.APPROVE_SWAP);
     const [openBuyStepsModal, setOpenBuyStepsModal] = useState(false);
+    const [systemBetDenominator, setSystemBetDenominator] = useState(2);
 
     const userMultipliersQuery = useUserMultipliersQuery(walletAddress, { enabled: isAppReady && isWalletConnected });
 
@@ -558,15 +563,48 @@ const Ticket: React.FC<TicketProps> = ({
         setMinBuyInAmountInDefaultCollateral(sportsAmmData?.minBuyInAmount || 0);
     }, [sportsAmmData?.minBuyInAmount]);
 
+    // const maxSupportedOddsForSystemBet = useMemo(() => {
+    //     let quote = 0;
+    //     if (isSystemBet) {
+    //         quote = getSystemBetData(markets, systemBetDenominator, Number(buyInAmount), usedCollateralForBuy);
+    //     } else {
+    //         quote = markets.reduce(
+    //             (partialQuote, market) =>
+    //                 partialQuote * (market.odd > 0 ? getAddedPayoutOdds(usedCollateralForBuy, market.odd) : market.odd),
+    //             1
+    //         );
+    //     }
+    //     const maxSupportedOdds = sportsAmmData?.maxSupportedOdds || 1;
+    //     return quote < maxSupportedOdds ? maxSupportedOdds : quote;
+    // }, [
+    //     buyInAmount,
+    //     isSystemBet,
+    //     markets,
+    //     sportsAmmData?.maxSupportedOdds,
+    //     systemBetDenominator,
+    //     usedCollateralForBuy,
+    // ]);
+
+    const systemData = useMemo(() => getSystemBetData(markets, systemBetDenominator, usedCollateralForBuy), [
+        markets,
+        systemBetDenominator,
+        usedCollateralForBuy,
+    ]);
+
     const totalQuote = useMemo(() => {
-        const quote = markets.reduce(
-            (partialQuote, market) =>
-                partialQuote * (market.odd > 0 ? getAddedPayoutOdds(usedCollateralForBuy, market.odd) : market.odd),
-            1
-        );
+        let quote = 0;
+        if (isSystemBet) {
+            quote = systemData.systemBetQuote;
+        } else {
+            quote = markets.reduce(
+                (partialQuote, market) =>
+                    partialQuote * (market.odd > 0 ? getAddedPayoutOdds(usedCollateralForBuy, market.odd) : market.odd),
+                1
+            );
+        }
         const maxSupportedOdds = sportsAmmData?.maxSupportedOdds || 1;
         return quote < maxSupportedOdds ? maxSupportedOdds : quote;
-    }, [markets, sportsAmmData?.maxSupportedOdds, usedCollateralForBuy]);
+    }, [isSystemBet, markets, sportsAmmData?.maxSupportedOdds, systemData.systemBetQuote, usedCollateralForBuy]);
 
     const totalBonus = useMemo(() => {
         const bonus = {
@@ -596,6 +634,18 @@ const Ticket: React.FC<TicketProps> = ({
         }
         return bonus;
     }, [isThales, markets, payout, swapToThales]);
+
+    const numberOfSystemBetCombination = useMemo(() => {
+        let combinationsCount = 1;
+        for (let i = 0; i < systemBetDenominator; i++) {
+            combinationsCount = (combinationsCount * (markets.length - i)) / (i + 1);
+        }
+        return combinationsCount;
+    }, [markets.length, systemBetDenominator]);
+
+    // const buyInPerCombination = useMemo(() => {
+    //     return Number(buyInAmount) / numberOfSystemBetCombination;
+    // }, [buyInAmount, numberOfSystemBetCombination]);
 
     const ticketLiquidityQuery = useTicketLiquidityQuery(markets, networkId, {
         enabled: isAppReady && !noProofs,
@@ -715,7 +765,9 @@ const Ticket: React.FC<TicketProps> = ({
                                 isDefaultCollateral && !swapToThales,
                                 sportsAMMV2Contract,
                                 tradeData,
-                                coinParser(buyInAmountForQuote.toString(), networkId, usedCollateralForBuy)
+                                coinParser(buyInAmountForQuote.toString(), networkId, usedCollateralForBuy),
+                                isSystemBet,
+                                systemBetDenominator
                             ),
                         ]);
 
@@ -762,6 +814,8 @@ const Ticket: React.FC<TicketProps> = ({
             networkId,
             usedCollateralForBuy,
             thalesCollateralAddress,
+            isSystemBet,
+            systemBetDenominator,
             swappedThalesToReceive,
             buyInAmount,
         ]
@@ -1861,8 +1915,30 @@ const Ticket: React.FC<TicketProps> = ({
         [overdropGameMultipliersInThisTicket]
     );
 
+    const systemOptions = useMemo(() => {
+        const systemOptions: Array<{ value: number; label: string }> = [];
+        for (let index = 2; index < markets.length; index++) {
+            systemOptions.push({
+                value: index,
+                label: `${index}/${markets.length}`,
+            });
+        }
+        return systemOptions;
+    }, [markets.length]);
+
     return (
         <>
+            <RowContainer>
+                <SummaryLabel>System:</SummaryLabel>
+                <SelectContainer>
+                    <SelectInput
+                        options={systemOptions}
+                        handleChange={(value: any) => setSystemBetDenominator(Number(value))}
+                        defaultValue={systemBetDenominator - 2}
+                        width={100}
+                    />
+                </SelectContainer>
+            </RowContainer>
             <RowSummary columnDirection={true}>
                 <RowContainer>
                     <SummaryLabel>{t('markets.parlay.total-quote')}:</SummaryLabel>
@@ -1878,6 +1954,20 @@ const Ticket: React.FC<TicketProps> = ({
                         {t('markets.parlay.clear')}
                         <XButton margin={'0 0 4px 5px'} className={`icon icon--clear`} />
                     </ClearLabel>
+                </RowContainer>
+
+                <RowContainer>
+                    <SummaryLabel>{t('markets.parlay.total-quote')} PER COMBINATION:</SummaryLabel>
+                    <InfoTooltip
+                        open={inputRefVisible && totalQuote === sportsAmmData?.maxSupportedOdds && false}
+                        title={getQuoteTooltipText()}
+                        placement={'top'}
+                        arrow={true}
+                    >
+                        <SummaryValue fontSize={12}>
+                            {formatMarketOdds(selectedOddsType, systemData.systemBetQuotePerCombination)}
+                        </SummaryValue>
+                    </InfoTooltip>
                 </RowContainer>
                 {(isThales || swapToThales) && (
                     <RowContainer>
@@ -2070,38 +2160,111 @@ const Ticket: React.FC<TicketProps> = ({
                           )} (${formatCurrencyWithSign(USD_SIGN, Number(buyInAmountInDefaultCollateral) + gas)})`}
                 </SummaryValue>
             </RowSummary>
-            <RowSummary>
-                <SummaryLabel>{t('markets.parlay.payout')}:</SummaryLabel>
-                <SummaryValue isInfo={true}>
-                    {hidePayout
-                        ? '-'
-                        : !collateralHasLp || (isDefaultCollateral && !swapToThales)
-                        ? formatCurrencyWithSign(USD_SIGN, payout)
-                        : `${formatCurrencyWithKey(usedCollateralForBuy, payout)} (${formatCurrencyWithSign(
-                              USD_SIGN,
-                              Number(buyInAmountInDefaultCollateral) / Number(totalQuote)
-                          )})`}
-                </SummaryValue>
-            </RowSummary>
-            <RowSummary>
-                <SummaryLabel>{t('markets.parlay.potential-profit')}:</SummaryLabel>
-                <SummaryValue isInfo={true}>
-                    {hidePayout
-                        ? '-'
-                        : `${
-                              collateralHasLp && (!isDefaultCollateral || swapToThales)
-                                  ? formatCurrencyWithKey(
-                                        usedCollateralForBuy,
-                                        payout - (swapToThales ? swappedThalesToReceive : Number(buyInAmount)) - gas
-                                    )
-                                  : formatCurrencyWithSign(
-                                        USD_SIGN,
-                                        payout - Number(buyInAmountInDefaultCollateral) - gas
-                                    )
-                          } (${formatPercentage(profitPercentage)})`}
-                </SummaryValue>
-            </RowSummary>
-
+            {!isSystemBet && (
+                <RowSummary>
+                    <SummaryLabel>{t('markets.parlay.payout')}:</SummaryLabel>
+                    <SummaryValue isInfo={true}>
+                        {hidePayout
+                            ? '-'
+                            : !collateralHasLp || (isDefaultCollateral && !swapToThales)
+                            ? formatCurrencyWithSign(USD_SIGN, payout)
+                            : `${formatCurrencyWithKey(usedCollateralForBuy, payout)} (${formatCurrencyWithSign(
+                                  USD_SIGN,
+                                  Number(buyInAmountInDefaultCollateral) / Number(totalQuote)
+                              )})`}
+                    </SummaryValue>
+                </RowSummary>
+            )}
+            {!isSystemBet && (
+                <RowSummary>
+                    <SummaryLabel>{t('markets.parlay.potential-profit')}:</SummaryLabel>
+                    <SummaryValue isInfo={true}>
+                        {hidePayout
+                            ? '-'
+                            : `${
+                                  collateralHasLp && (!isDefaultCollateral || swapToThales)
+                                      ? formatCurrencyWithKey(
+                                            usedCollateralForBuy,
+                                            payout - (swapToThales ? swappedThalesToReceive : Number(buyInAmount)) - gas
+                                        )
+                                      : formatCurrencyWithSign(
+                                            USD_SIGN,
+                                            payout - Number(buyInAmountInDefaultCollateral) - gas
+                                        )
+                              } (${formatPercentage(profitPercentage)})`}
+                    </SummaryValue>
+                </RowSummary>
+            )}
+            {isSystemBet && (
+                <RowSummary>
+                    <SummaryLabel>Number of combination:</SummaryLabel>
+                    <SummaryValue isInfo={true}>{numberOfSystemBetCombination}</SummaryValue>
+                </RowSummary>
+            )}
+            {isSystemBet && (
+                <RowSummary>
+                    <SummaryLabel>Buy-in per combination:</SummaryLabel>
+                    <SummaryValue isInfo={true}>
+                        {hidePayout
+                            ? '-'
+                            : isDefaultCollateral && !swapToThales
+                            ? formatCurrencyWithSign(
+                                  USD_SIGN,
+                                  (Number(buyInAmount) + gas) / numberOfSystemBetCombination
+                              )
+                            : `${formatCurrencyWithKey(
+                                  usedCollateralForBuy,
+                                  ((swapToThales ? swappedThalesToReceive : Number(buyInAmount)) + gas) /
+                                      numberOfSystemBetCombination
+                              )} (${formatCurrencyWithSign(
+                                  USD_SIGN,
+                                  (Number(buyInAmountInDefaultCollateral) + gas) / numberOfSystemBetCombination
+                              )})`}
+                    </SummaryValue>
+                </RowSummary>
+            )}
+            {isSystemBet && (
+                <RowSummary>
+                    <SummaryLabel>Min payout:</SummaryLabel>
+                    <SummaryValue isInfo={true}>
+                        {hidePayout
+                            ? '-'
+                            : !collateralHasLp || (isDefaultCollateral && !swapToThales)
+                            ? formatCurrencyWithSign(
+                                  USD_SIGN,
+                                  Number(buyInAmount) /
+                                      numberOfSystemBetCombination /
+                                      Number(systemData.systemBetMinimumQuote)
+                              )
+                            : `${formatCurrencyWithKey(
+                                  usedCollateralForBuy,
+                                  Number(buyInAmount) /
+                                      numberOfSystemBetCombination /
+                                      Number(systemData.systemBetMinimumQuote)
+                              )} (${formatCurrencyWithSign(
+                                  USD_SIGN,
+                                  Number(buyInAmountInDefaultCollateral) /
+                                      numberOfSystemBetCombination /
+                                      Number(systemData.systemBetMinimumQuote)
+                              )})`}
+                    </SummaryValue>
+                </RowSummary>
+            )}
+            {isSystemBet && (
+                <RowSummary>
+                    <SummaryLabel>Max payout:</SummaryLabel>
+                    <SummaryValue isInfo={true}>
+                        {hidePayout
+                            ? '-'
+                            : !collateralHasLp || (isDefaultCollateral && !swapToThales)
+                            ? formatCurrencyWithSign(USD_SIGN, payout)
+                            : `${formatCurrencyWithKey(usedCollateralForBuy, payout)} (${formatCurrencyWithSign(
+                                  USD_SIGN,
+                                  Number(buyInAmountInDefaultCollateral) / Number(totalQuote)
+                              )})`}
+                    </SummaryValue>
+                </RowSummary>
+            )}
             <HorizontalLine />
             <RowSummary>
                 <RowContainer>

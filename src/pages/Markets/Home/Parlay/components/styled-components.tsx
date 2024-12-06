@@ -454,3 +454,7 @@ export const RightLevel = styled.div<{ highlight: boolean }>`
     top: 0;
     bottom: -33px;
 `;
+
+export const SelectContainer = styled(FlexDivEnd)`
+    width: 100%;
+`;
