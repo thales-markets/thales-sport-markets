@@ -23,7 +23,7 @@ import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateralIndex } from 'utils/collaterals';
 import { checkAllowance } from 'utils/network';
 import { Client, maxUint256, parseEther } from 'viem';
-import { useAccount, useChainId, useClient } from 'wagmi';
+import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 import { StakingMessage } from '../OpenClaimableTickets/styled-components';
 import {
     ButtonContainer,
@@ -58,6 +58,7 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
 
     const networkId = useChainId();
     const client = useClient();
+    const walletClient = useWalletClient();
     const { address, isConnected } = useAccount();
     const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
@@ -139,16 +140,14 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
     }, [amountToStake, thalesBalance]);
 
     useEffect(() => {
-        const contracts = [
+        const [stakingThalesTokenContract, thalesTokenContract] = [
+            getContractInstance(ContractType.STAKING_THALES, { client, networkId }),
             getContractInstance(
                 ContractType.MULTICOLLATERAL,
                 { client, networkId },
                 getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.sTHALES as Coins)
             ),
-            getContractInstance(ContractType.STAKING_THALES, { client, networkId }),
         ];
-
-        const [stakingThalesTokenContract, thalesTokenContract] = contracts;
 
         if (stakingThalesTokenContract && thalesTokenContract) {
             const getAllowance = async () => {
@@ -172,16 +171,14 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
     }, [walletAddress, isConnected, hasStakeAllowance, amountToStake, isAllowingStake, networkId, client]);
 
     const handleAllowance = async (approveAmount: bigint) => {
-        const contracts = [
+        const [stakingThalesTokenContract, thalesTokenContract] = [
+            getContractInstance(ContractType.STAKING_THALES, { client, networkId }),
             getContractInstance(
                 ContractType.MULTICOLLATERAL,
-                { client, networkId },
+                { client: walletClient.data, networkId },
                 getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.sTHALES as Coins)
             ),
-            getContractInstance(ContractType.STAKING_THALES, { client, networkId }),
         ];
-
-        const [stakingThalesTokenContract, thalesTokenContract] = contracts;
 
         if (stakingThalesTokenContract && thalesTokenContract) {
             setIsAllowingStake(true);
@@ -211,7 +208,10 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
     };
 
     const handleStakeThales = async () => {
-        const stakingThalesContract = getContractInstance(ContractType.STAKING_THALES, { client, networkId });
+        const stakingThalesContract = getContractInstance(ContractType.STAKING_THALES, {
+            client: walletClient.data,
+            networkId,
+        });
 
         if (stakingThalesContract) {
             const toastId = toast.loading(t('market.toast-message.transaction-pending'));

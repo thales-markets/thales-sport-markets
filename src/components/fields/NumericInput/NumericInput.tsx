@@ -109,8 +109,9 @@ const NumericInput: React.FC<NumericInputProps> = ({
                 </InfoWrapper>
             )}
             {showValidation ? (
-                <Tooltip overlay={validationMessage ?? ''}>
+                <Tooltip overlay={validationMessage ?? ''} isValidation>
                     <StyledInput
+                        autoFocus
                         readOnly={readonly}
                         {...rest}
                         value={value}
@@ -139,6 +140,7 @@ const NumericInput: React.FC<NumericInputProps> = ({
                 </Tooltip>
             ) : (
                 <StyledInput
+                    autoFocus
                     readOnly={readonly}
                     {...rest}
                     value={value}

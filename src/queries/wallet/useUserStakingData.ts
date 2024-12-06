@@ -64,9 +64,9 @@ const useUserStakingDataQuery = (
                         stakingThalesContract.read.closingPeriodInProgress(),
                         stakingThalesContract.read.unstaking([walletAddress]),
                         axios.get(`${generalConfig.API_URL}/token/price`),
-                        ccipCollectorContract.read.calculatedStakedAmountForPeriod(Number(period)),
-                        ccipCollectorContract.read.calculatedEscrowedAmountForPeriod(Number(period)),
-                        ccipCollectorContract.read.calculatedRevenueForPeriod(Number(period)),
+                        ccipCollectorContract.read.calculatedStakedAmountForPeriod([period]),
+                        ccipCollectorContract.read.calculatedEscrowedAmountForPeriod([period]),
+                        ccipCollectorContract.read.calculatedRevenueForPeriod([period]),
                         ccipCollectorContract.read.baseRewardsPerPeriod(),
                         ccipCollectorContract.read.extraRewardsPerPeriod(),
                     ]);
