@@ -109,15 +109,11 @@ const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
     ]);
     const isEth = selectedCollateral === CRYPTO_CURRENCY_MAP.ETH;
 
-    const userStatsQuery = useUsersStatsV2Query(
-        walletAddress?.toLowerCase(),
-        { networkId, client },
-        { enabled: isConnected }
-    );
+    const userStatsQuery = useUsersStatsV2Query(walletAddress, { networkId, client }, { enabled: isConnected });
     const userStats = userStatsQuery.isSuccess && userStatsQuery.data ? userStatsQuery.data : undefined;
 
     const freeBetBalancesQuery = useFreeBetCollateralBalanceQuery(
-        walletAddress?.toLowerCase(),
+        walletAddress,
         { networkId, client },
         {
             enabled: isConnected,
@@ -133,7 +129,7 @@ const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
     const multiCollateralBalancesQuery = useMultipleCollateralBalanceQuery(
-        walletAddress?.toLowerCase(),
+        walletAddress,
         { networkId, client },
         {
             enabled: isConnected,

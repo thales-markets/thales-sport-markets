@@ -1473,7 +1473,7 @@ const Ticket: React.FC<TicketProps> = ({
                                               walletAddress,
                                           ]);
                                     const userTickets = await sportsAMMDataContract.read.getActiveTicketsDataPerUser([
-                                        walletAddress.toLowerCase(),
+                                        walletAddress,
                                         Number(numOfActiveTicketsPerUser) - 1,
                                         BATCH_SIZE,
                                     ]);
