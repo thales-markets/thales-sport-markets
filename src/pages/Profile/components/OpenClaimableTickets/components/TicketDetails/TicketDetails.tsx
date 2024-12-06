@@ -28,7 +28,7 @@ import {
 } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import { getIsMultiCollateralSupported } from 'utils/network';
-import { refetchAfterClaim } from 'utils/queryConnector';
+import { refetchAfterClaim, refetchBalances } from 'utils/queryConnector';
 import { formatTicketOdds, getTicketMarketOdd } from 'utils/tickets';
 import { Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
@@ -180,6 +180,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
                         onThalesClaim(ticket.isFreeBet ? ticket.payout - ticket.buyInAmount : ticket.payout);
                     }
                     refetchAfterClaim(walletAddress, networkId);
+                    refetchBalances(walletAddress, networkId);
                 }
             } catch (e) {
                 toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
