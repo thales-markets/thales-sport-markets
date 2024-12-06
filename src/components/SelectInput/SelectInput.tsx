@@ -41,7 +41,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
             border: `1px solid ${theme.button.borderColor.tertiary}`,
             marginTop: 5,
             borderRadius: 10,
-            ...style.menuStyle,
+            ...style?.menuStyle,
         }),
         option: (provided: any, state: any) => ({
             ...provided,
@@ -50,7 +50,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
             opacity: state.isSelected && !state?.isFocused ? 0.7 : 0.9,
             cursor: 'pointer',
             fontFamily: theme.fontFamily.primary,
-            ...style.optionStyle,
+            ...style?.optionStyle,
         }),
         control: (provided: any, state: any) => ({
             ...provided,
@@ -66,18 +66,18 @@ const SelectInput: React.FC<SelectInputProps> = ({
                 boxShadow: 'none',
             },
             opacity: state.isDisabled ? 0.4 : 1,
-            ...style.controlStyle,
+            ...style?.controlStyle,
         }),
         placeholder: (provided: any) => ({
             ...provided,
             color: theme.textColor.primary,
-            ...style.placeholderStyle,
+            ...style?.placeholderStyle,
         }),
         singleValue: (provided: any) => ({
             ...provided,
             color: theme.textColor.primary,
             fontFamily: theme.fontFamily.primary,
-            ...style.singleValueStyle,
+            ...style?.singleValueStyle,
         }),
         dropdownIndicator: (provided: any) => ({
             ...provided,
@@ -86,11 +86,11 @@ const SelectInput: React.FC<SelectInputProps> = ({
                 ...provided[':hover'],
                 color: theme.textColor.primary,
             },
-            ...style.dropdownIndicatorStyle,
+            ...style?.dropdownIndicatorStyle,
         }),
         indicatorSeparator: (provided: any) => ({
             ...provided,
-            ...style.indicatorSeparatorStyle,
+            ...style?.indicatorSeparatorStyle,
         }),
     };
 
