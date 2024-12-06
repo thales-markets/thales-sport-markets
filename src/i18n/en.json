@@ -1062,6 +1062,7 @@
             "round-label": "Round",
             "current-round-label": "Current round",
             "default-round-label": "Default round",
+            "only-open-tickets": "Show only open tickets",
             "type": {
                 "deposit": "Deposit",
                 "withdrawalRequest": "Withdrawal Request",

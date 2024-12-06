@@ -1,3 +1,4 @@
+import Checkbox from 'components/fields/Checkbox';
 import SelectInput from 'components/SelectInput';
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 import { PnlTab } from 'enums/ui';
@@ -6,7 +7,8 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import styled from 'styled-components';
-import { FlexDivColumn, FlexDivRow } from 'styles/common';
+import { FlexDivCentered, FlexDivColumn, FlexDivRow, FlexDivSpaceBetween } from 'styles/common';
+import AllLpTickets from '../AllLpTickets';
 import LpPnl from '../LpStats';
 import LpTickets from '../LpTickets';
 import LpUsersPnl from '../LpUsersPnl';
@@ -21,6 +23,7 @@ type StatsProps = {
 const Stats: React.FC<StatsProps> = ({ selectedTab, setSelectedTab, currentRound }) => {
     const isMobile = useSelector(getIsMobile);
     const [round, setRound] = useState<number>(currentRound);
+    const [showOnlyOpenTickets, setShowOnlyOpenTickets] = useState<boolean>(false);
 
     useEffect(() => {
         setRound(currentRound);
@@ -46,14 +49,24 @@ const Stats: React.FC<StatsProps> = ({ selectedTab, setSelectedTab, currentRound
     return (
         <RowContainer>
             <MainContainer>
-                <SelectContainer>
-                    <SelectInput
-                        options={rounds}
-                        handleChange={(value) => setRound(Number(value))}
-                        defaultValue={round}
-                        width={300}
-                    />
-                </SelectContainer>
+                <FiltersContainer>
+                    <SelectContainer>
+                        <SelectInput
+                            options={rounds}
+                            handleChange={(value) => setRound(Number(value))}
+                            defaultValue={round}
+                            width={300}
+                        />
+                    </SelectContainer>
+                    <CheckboxContainer>
+                        <Checkbox
+                            checked={showOnlyOpenTickets}
+                            value={showOnlyOpenTickets.toString()}
+                            onChange={(e: any) => setShowOnlyOpenTickets(e.target.checked || false)}
+                            label={t('liquidity-pool.user-transactions.only-open-tickets')}
+                        />
+                    </CheckboxContainer>
+                </FiltersContainer>
                 <NavigationWrapper>
                     <Header>
                         {!isMobile && <NavigationBar selectedTab={selectedTab} setSelectedTab={setSelectedTab} />}
@@ -78,6 +91,9 @@ const Stats: React.FC<StatsProps> = ({ selectedTab, setSelectedTab, currentRound
                 )}
                 {selectedTab == PnlTab.THALES_TICKETS && (
                     <LpTickets lpCollateral={LiquidityPoolCollateral.THALES} round={round} />
+                )}
+                {selectedTab == PnlTab.TICKETS && (
+                    <AllLpTickets round={round} showOnlyOpenTickets={showOnlyOpenTickets} />
                 )}
             </MainContainer>
         </RowContainer>
@@ -123,9 +139,19 @@ const Header = styled(FlexDivRow)`
     }
 `;
 
+const FiltersContainer = styled(FlexDivSpaceBetween)``;
+
 const SelectContainer = styled.div`
     margin: 10px 0;
     width: 300px;
+`;
+
+const CheckboxContainer = styled(FlexDivCentered)`
+    label {
+        align-self: center;
+        font-size: 18px;
+        text-transform: none;
+    }
 `;
 
 export default Stats;
