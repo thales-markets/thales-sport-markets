@@ -487,6 +487,7 @@
             "pending": "Pending",
             "no-liquidity": "No liquidity",
             "period": "Period",
+            "map": "Map",
             "quarter": "Quarter",
             "set": "Set",
             "inning": "Inning",
@@ -1061,6 +1062,7 @@
             "round-label": "Round",
             "current-round-label": "Current round",
             "default-round-label": "Default round",
+            "only-open-tickets": "Show only open tickets",
             "type": {
                 "deposit": "Deposit",
                 "withdrawalRequest": "Withdrawal Request",
