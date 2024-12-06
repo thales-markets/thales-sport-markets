@@ -1628,6 +1628,18 @@ const Ticket: React.FC<TicketProps> = ({
             );
         }
 
+        if (isAA && buyInAmount && Number(buyInAmount) >= minBuyInAmount) {
+            return (
+                <Button
+                    disabled={submitDisabled || submitButtonDisabled}
+                    onClick={async () => handleSubmit()}
+                    {...defaultButtonProps}
+                >
+                    {t(`common.buy-side`)}
+                </Button>
+            );
+        }
+
         // Show Approve only on valid input buy amount
         if (!swapToThales && !hasAllowance && buyInAmount && Number(buyInAmount) >= minBuyInAmount) {
             if (isLiveTicket && isEth) {
