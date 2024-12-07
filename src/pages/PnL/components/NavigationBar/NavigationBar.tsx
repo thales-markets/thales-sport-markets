@@ -41,7 +41,7 @@ const navItems = [
     {
         id: PnlTab.TICKETS,
         label: 'TICKETS',
-        icon: 'currency-icon currency-icon--thales',
+        icon: 'icon icon--ticket-horizontal',
     },
 ];
 
