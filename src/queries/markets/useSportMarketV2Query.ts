@@ -1,29 +1,29 @@
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import axios from 'axios';
 import { generalConfig, noCacheConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
 import { secondsToMilliseconds } from 'date-fns';
 import { MarketStatus } from 'enums/markets';
-import { Network } from 'enums/network';
 import { orderBy } from 'lodash';
-import { UseQueryOptions, useQuery } from 'react-query';
 import { SportMarket } from 'types/markets';
+import { NetworkConfig } from 'types/network';
 import { packMarket } from 'utils/marketsV2';
 
 const useSportMarketQuery = (
     marketAddress: string,
     onlyOpenChildMarkets: boolean,
     isLive: boolean,
-    networkId: Network,
-    options?: UseQueryOptions<SportMarket | undefined>
+    networkConfig: NetworkConfig,
+    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<SportMarket | undefined>(
-        QUERY_KEYS.SportMarketV2(marketAddress, networkId, isLive),
-        async () => {
+    return useQuery<SportMarket | undefined>({
+        queryKey: QUERY_KEYS.SportMarketV2(marketAddress, networkConfig.networkId, isLive),
+        queryFn: async () => {
             const enableOnlyOpenChildMarkets = onlyOpenChildMarkets && !isLive;
             try {
                 const [marketResponse, gameInfoResponse, liveScoreResponse] = await Promise.all([
                     axios.get(
-                        `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/${
+                        `${generalConfig.API_URL}/overtime-v2/networks/${networkConfig.networkId}/${
                             isLive ? 'live-' : ''
                         }markets/${marketAddress}?onlyBasicProperties=true`,
                         noCacheConfig
@@ -55,11 +55,9 @@ const useSportMarketQuery = (
                 return undefined;
             }
         },
-        {
-            refetchInterval: secondsToMilliseconds(isLive ? 2 : 10),
-            ...options,
-        }
-    );
+        refetchInterval: secondsToMilliseconds(isLive ? 2 : 10),
+        ...options,
+    });
 };
 
 export default useSportMarketQuery;

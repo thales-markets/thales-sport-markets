@@ -1,4 +1,4 @@
-import { ReactComponent as UsElectionHeader } from 'assets/images/us-election.svg';
+import UsElectionHeader from 'assets/images/us-election.svg?react';
 import MatchLogosV2 from 'components/MatchLogosV2';
 import SimpleLoader from 'components/SimpleLoader';
 import { t } from 'i18next';

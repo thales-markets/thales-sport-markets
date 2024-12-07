@@ -508,3 +508,7 @@
 .icon--resources:before {
     content: '\0122';
 }
+
+.icon--info::before {
+    content: '\011B';
+}

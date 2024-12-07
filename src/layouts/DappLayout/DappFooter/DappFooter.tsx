@@ -1,5 +1,5 @@
 import termsOfUse from 'assets/docs/thales-terms-of-use.pdf';
-import { ReactComponent as ThalesLogo } from 'assets/images/thales-logo.svg';
+import ThalesLogo from 'assets/images/thales-logo.svg?react';
 import { LINKS } from 'constants/links';
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';

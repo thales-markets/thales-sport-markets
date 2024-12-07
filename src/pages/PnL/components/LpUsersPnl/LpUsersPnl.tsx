@@ -3,12 +3,10 @@ import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 import { t } from 'i18next';
 import useLpUsersPnlQuery from 'queries/pnl/useLpUsersPnlQuery';
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { getNetworkId } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
 import { formatCurrencyWithKey, formatCurrencyWithSign } from 'thales-utils';
+import { useChainId, useClient } from 'wagmi';
 
 type LpUsersPnlProps = {
     lpCollateral: LiquidityPoolCollateral;
@@ -16,9 +14,10 @@ type LpUsersPnlProps = {
 };
 
 const LpUsersPnl: React.FC<LpUsersPnlProps> = ({ lpCollateral, round }) => {
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const networkId = useChainId();
+    const client = useClient();
 
-    const lpUsersPnlQuery = useLpUsersPnlQuery(lpCollateral, round, networkId);
+    const lpUsersPnlQuery = useLpUsersPnlQuery(lpCollateral, round, { networkId, client });
     const lpUsersPnl = lpUsersPnlQuery.isSuccess && lpUsersPnlQuery.data ? lpUsersPnlQuery.data : [];
 
     return (

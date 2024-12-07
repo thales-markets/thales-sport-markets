@@ -13,7 +13,7 @@ import useRiskManagementConfigQuery from 'queries/riskManagement/riskManagementC
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { getIsAppReady, getIsMobile } from 'redux/modules/app';
+import { getIsMobile } from 'redux/modules/app';
 import {
     getIsMarketSelected,
     getIsThreeWayView,
@@ -21,7 +21,6 @@ import {
     getSelectedMarket,
     setSelectedMarket,
 } from 'redux/modules/market';
-import { getNetworkId } from 'redux/modules/wallet';
 import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarket } from 'types/markets';
 import { RiskManagementLeaguesAndTypes } from 'types/riskManagement';
@@ -32,6 +31,7 @@ import { isOddValid } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
 import { getLeaguePeriodType, getLeagueTooltipKey } from 'utils/sports';
 import { displayGameClock, displayGamePeriod } from 'utils/ui';
+import { useChainId } from 'wagmi';
 import PositionsV2 from '../../Market/MarketDetailsV2/components/PositionsV2';
 import MatchStatus from './components/MatchStatus';
 import {
@@ -71,8 +71,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
 
-    const isAppReady = useSelector(getIsAppReady);
-    const networkId = useSelector(getNetworkId);
+    const networkId = useChainId();
+
     const isMarketSelected = useSelector(getIsMarketSelected);
     const isThreeWayView = useSelector(getIsThreeWayView);
     const selectedMarket = useSelector(getSelectedMarket);
@@ -81,9 +81,13 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.leagueId));
     const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.leagueId));
 
-    const riskManagementLeaguesQuery = useRiskManagementConfigQuery(networkId, RiskManagementConfig.LEAGUES, {
-        enabled: isAppReady && !!market.live,
-    });
+    const riskManagementLeaguesQuery = useRiskManagementConfigQuery(
+        RiskManagementConfig.LEAGUES,
+        { networkId },
+        {
+            enabled: !!market.live,
+        }
+    );
 
     const riskManagementLeaguesWithTypes = useMemo(() => {
         if (
@@ -214,9 +218,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
 
     const leagueTooltipKey = getLeagueTooltipKey(market.leagueId);
 
-    const gameMultipliersQuery = useGameMultipliersQuery({
-        enabled: isAppReady,
-    });
+    const gameMultipliersQuery = useGameMultipliersQuery();
 
     const overdropGameMultiplier = useMemo(() => {
         const gameMultipliers =
@@ -273,12 +275,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                     <TimeRemaining end={market.maturityDate} fontSize={11} />
                                 </>
                             }
-                            component={
-                                <MatchInfoLabel>
-                                    {formatShortDateWithTime(new Date(market.maturityDate))}{' '}
-                                </MatchInfoLabel>
-                            }
-                        />
+                        >
+                            <MatchInfoLabel>{formatShortDateWithTime(new Date(market.maturityDate))} </MatchInfoLabel>
+                        </Tooltip>
                     )}
                     <MatchInfoLabel>
                         {!isColumnView && !isMarketSelected && !isMobile && (
@@ -465,10 +464,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                         encodeURIComponent(`${market.homeTeam} - ${market.awayTeam}`)
                                     )}
                                 >
-                                    <Tooltip
-                                        overlay="Open market page"
-                                        component={<ExternalArrow className={'icon icon--arrow-external'} />}
-                                    />
+                                    <Tooltip overlay="Open market page">
+                                        <ExternalArrow className={'icon icon--arrow-external'} />
+                                    </Tooltip>
                                 </SPAAnchor>
                             )}
                         </>
@@ -540,10 +538,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                         encodeURIComponent(`${market.homeTeam} - ${market.awayTeam}`)
                                     )}
                                 >
-                                    <Tooltip
-                                        overlay="Open market page"
-                                        component={<ExternalArrow className={'icon icon--arrow-external'} />}
-                                    />
+                                    <Tooltip overlay="Open market page">
+                                        <ExternalArrow className={'icon icon--arrow-external'} />
+                                    </Tooltip>
                                 </SPAAnchor>
                             )}
                         </>

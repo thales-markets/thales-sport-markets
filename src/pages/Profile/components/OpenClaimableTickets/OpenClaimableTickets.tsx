@@ -4,9 +4,8 @@ import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { GAS_ESTIMATION_BUFFER } from 'constants/network';
-import { ethers } from 'ethers';
+import { ContractType } from 'enums/contract';
 import { LoaderContainer } from 'pages/Markets/Home/HomeV2';
-import useMarketDurationQuery from 'queries/markets/useMarketDurationQuery';
 import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
 import React, { useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
@@ -14,13 +13,22 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
 import { getIsStakingModalMuted } from 'redux/modules/ui';
-import { getIsConnectedViaParticle, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsBiconomy, getIsConnectedViaParticle } from 'redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
 import { Coins } from 'thales-utils';
+import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateral, getCollaterals, getDefaultCollateral, isLpSupported } from 'utils/collaterals';
-import networkConnector from 'utils/networkConnector';
+import { getContractInstance } from 'utils/contract';
+import multiCallContract from 'utils/contracts/multiCallContract';
+import sportsAMMV2Contract from 'utils/contracts/sportsAMMV2Contract';
+import { Address, Client, encodeFunctionData, isAddress } from 'viem';
+import { estimateContractGas, waitForTransactionReceipt } from 'viem/actions';
+import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 import StakingModal from '../StakingModal';
 import TicketDetails from './components/TicketDetails';
 import {
+    additionalClaimButtonStyle,
+    additionalClaimButtonStyleMobile,
     Arrow,
     CategoryContainer,
     CategoryDisclaimer,
@@ -34,8 +42,6 @@ import {
     EmptyTitle,
     ListContainer,
     StyledParlayEmptyIcon,
-    additionalClaimButtonStyle,
-    additionalClaimButtonStyleMobile,
 } from './styled-components';
 
 type OpenClaimableTicketsProps = {
@@ -56,14 +62,20 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({
     const [openStakingModal, setOpenStakingModal] = useState<boolean>(false);
     const [thalesClaimed, setThalesClaimed] = useState<number>(0);
 
-    const walletAddress = useSelector(getWalletAddress) || '';
-    const isWalletConnected = useSelector(getIsWalletConnected);
-    const networkId = useSelector(getNetworkId);
-    const isMobile = useSelector(getIsMobile);
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+
+    const networkId = useChainId();
+    const client = useClient();
+    const walletClient = useWalletClient();
+
+    const { address, isConnected } = useAccount();
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const isStakingModalMuted = useSelector(getIsStakingModalMuted);
     const isParticle = useSelector(getIsConnectedViaParticle);
 
-    const isSearchTextWalletAddress = searchText && ethers.utils.isAddress(searchText);
+    const isSearchTextWalletAddress = searchText && isAddress(searchText);
     const [claimCollateralIndex, setClaimCollateralIndex] = useState(0);
 
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
@@ -81,21 +93,18 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({
     ]);
 
     const userTicketsQuery = useUserTicketsQuery(
-        isSearchTextWalletAddress ? searchText : walletAddress.toLowerCase(),
-        networkId,
+        isSearchTextWalletAddress ? searchText : walletAddress,
+        { networkId, client },
         {
-            enabled: isWalletConnected,
+            enabled: isConnected,
         }
     );
 
-    const marketDurationQuery = useMarketDurationQuery(networkId);
-
-    const marketDuration =
-        marketDurationQuery.isSuccess && marketDurationQuery.data ? Math.floor(marketDurationQuery.data) : 30;
+    const marketDuration = Math.floor(90);
 
     const userTicketsByStatus = useMemo(() => {
         let userTickets = userTicketsQuery.isSuccess && userTicketsQuery.data ? userTicketsQuery.data : [];
-        if (searchText && !ethers.utils.isAddress(searchText)) {
+        if (searchText && !isAddress(searchText)) {
             userTickets = userTickets.filter((ticket) =>
                 ticket.sportMarkets.some(
                     (market) =>
@@ -115,35 +124,36 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({
     const isLoading = userTicketsQuery.isLoading;
 
     const claimBatch = async () => {
-        const { signer, sportsAMMV2Contract, multiCallContract } = networkConnector;
-        const id = toast.loading(t('market.toast-message.transaction-pending'));
+        const contracts = [
+            getContractInstance(ContractType.SPORTS_AMM_V2, { client: walletClient?.data, networkId }),
+            getContractInstance(ContractType.MULTICALL, { client: walletClient?.data, networkId }),
+        ];
+        const [sportsAMMV2ContractWithSigner, multiCallContractWithSigner] = contracts;
 
-        if (!signer) return;
+        const id = toast.loading(t('market.toast-message.transaction-pending'));
 
         const calls: { target: string; allowFailure: boolean; callData: any }[] = [];
 
         try {
-            if (userTicketsByStatus.claimable.length) {
+            if (userTicketsByStatus.claimable.length && sportsAMMV2ContractWithSigner && multiCallContractWithSigner) {
                 if (sportsAMMV2Contract && multiCallContract) {
-                    const multiCallContractWithSigner = multiCallContract.connect(signer);
-
                     let thalesForClaim = 0;
                     for (let i = 0; i < userTicketsByStatus.claimable.length; i++) {
                         const ticket = userTicketsByStatus.claimable[i];
                         try {
-                            const sportsAMMV2ContractWithSigner = sportsAMMV2Contract.connect(signer);
-
                             const isClaimCollateralDefaultCollateral = claimCollateral === defaultCollateral;
 
-                            const tx = await sportsAMMV2ContractWithSigner.populateTransaction.exerciseTicket(
-                                ticket.id
-                            );
+                            const tx = encodeFunctionData({
+                                abi: sportsAMMV2ContractWithSigner?.abi,
+                                functionName: 'exerciseTicket',
+                                args: [ticket.id],
+                            });
 
                             if (isClaimCollateralDefaultCollateral) {
                                 calls.push({
-                                    target: sportsAMMV2Contract.address,
+                                    target: sportsAMMV2ContractWithSigner.address,
                                     allowFailure: true,
-                                    callData: tx?.data,
+                                    callData: tx,
                                 });
                             }
                             thalesForClaim +=
@@ -158,17 +168,25 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({
                         }
                     }
 
-                    const gasEstimation = await multiCallContractWithSigner.estimateGas.aggregate3(calls);
+                    const gasEstimation = await estimateContractGas(client as Client, {
+                        address: multiCallContractWithSigner.address as Address,
+                        abi: multiCallContractWithSigner.abi,
+                        functionName: 'aggregate3',
+                        args: [calls],
+                    });
+                    // const gasEstimation = await multiCallContractWithSigner.estimateGas.aggregate3(calls);
 
                     const gasEstimationWithBuffer = Math.ceil(Number(gasEstimation) * GAS_ESTIMATION_BUFFER);
 
-                    const tx: any = await multiCallContractWithSigner.aggregate3(calls, {
+                    const txHash = await multiCallContractWithSigner.write.aggregate3([calls], {
                         gasLimit: gasEstimationWithBuffer,
                     });
 
-                    const txResult = await tx.wait();
+                    const txReceipt = await waitForTransactionReceipt(client as Client, {
+                        hash: txHash,
+                    });
 
-                    if (txResult && txResult?.transactionHash) {
+                    if (txReceipt.status === 'success') {
                         toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
                         onThalesClaim(thalesForClaim);
                     }

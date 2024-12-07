@@ -1,4 +1,4 @@
-import { ReactComponent as OvertimeTicket } from 'assets/images/parlay-empty.svg';
+import OvertimeTicket from 'assets/images/parlay-empty.svg?react';
 import styled, { CSSProperties } from 'styled-components';
 import {
     FlexDivColumn,

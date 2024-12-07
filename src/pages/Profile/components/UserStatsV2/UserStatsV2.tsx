@@ -6,6 +6,7 @@ import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { COLLATERAL_ICONS_CLASS_NAMES, CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
 import { SWAP_APPROVAL_BUFFER } from 'constants/markets';
 import { secondsToMilliseconds } from 'date-fns';
+import { ContractType } from 'enums/contract';
 import { BuyTicketStep } from 'enums/tickets';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import useInterval from 'hooks/useInterval';
@@ -17,9 +18,9 @@ import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } fr
 import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getIsAppReady } from 'redux/modules/app';
 import { setStakingModalMuteEnd } from 'redux/modules/ui';
-import { getIsConnectedViaParticle, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsBiconomy, getIsConnectedViaParticle } from 'redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import {
@@ -34,15 +35,17 @@ import {
     LONG_CURRENCY_DECIMALS,
 } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
+import biconomyConnector from 'utils/biconomyWallet';
 import {
     getCollateral,
     getCollateralAddress,
+    getCollateralIndex,
     getCollaterals,
     isStableCurrency,
     isThalesCurrency,
     sortCollateralBalances,
 } from 'utils/collaterals';
-import networkConnector from 'utils/networkConnector';
+import { getContractInstance } from 'utils/contract';
 import {
     buildTxForApproveTradeWithRouter,
     buildTxForSwap,
@@ -53,12 +56,13 @@ import {
 } from 'utils/swap';
 import { delay } from 'utils/timer';
 import { Address } from 'viem';
+import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 import BuyStepsModal from '../../../Markets/Home/Parlay/components/BuyStepsModal';
 
 const SHOW_PNL = false;
 
 type UserStatsProps = {
-    setForceOpenStakingModal: (forceOpenStakingModal: boolean) => void;
+    setForceOpenStakingModal?: (forceOpenStakingModal: boolean) => void;
 };
 
 const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
@@ -66,11 +70,16 @@ const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
     const dispatch = useDispatch();
     const theme: ThemeInterface = useTheme();
 
-    const walletAddress = useSelector(getWalletAddress) || '';
-    const isWalletConnected = useSelector(getIsWalletConnected);
-    const networkId = useSelector(getNetworkId);
-    const isAppReady = useSelector(getIsAppReady);
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+
     const isParticle = useSelector(getIsConnectedViaParticle);
+
+    const networkId = useChainId();
+    const client = useClient();
+    const walletClient = useWalletClient();
+
+    const { address, isConnected } = useAccount();
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
     const [buyInAmount, setBuyInAmount] = useState<number | string>('');
     const [isBuying, setIsBuying] = useState(false);
@@ -100,26 +109,32 @@ const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
     ]);
     const isEth = selectedCollateral === CRYPTO_CURRENCY_MAP.ETH;
 
-    const userStatsQuery = useUsersStatsV2Query(walletAddress.toLowerCase(), networkId, { enabled: isWalletConnected });
+    const userStatsQuery = useUsersStatsV2Query(walletAddress, { networkId, client }, { enabled: isConnected });
     const userStats = userStatsQuery.isSuccess && userStatsQuery.data ? userStatsQuery.data : undefined;
 
-    const freeBetBalancesQuery = useFreeBetCollateralBalanceQuery(walletAddress?.toLowerCase(), networkId, {
-        enabled: isWalletConnected,
-    });
+    const freeBetBalancesQuery = useFreeBetCollateralBalanceQuery(
+        walletAddress,
+        { networkId, client },
+        {
+            enabled: isConnected,
+        }
+    );
     const freeBetBalances =
         freeBetBalancesQuery.isSuccess && freeBetBalancesQuery.data ? freeBetBalancesQuery.data : undefined;
 
     const isFreeBetExists = freeBetBalances && !!Object.values(freeBetBalances).find((balance) => !!balance);
 
-    const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
-        enabled: isAppReady,
-    });
+    const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
     const exchangeRates: Rates | null =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
-    const multiCollateralBalancesQuery = useMultipleCollateralBalanceQuery(walletAddress?.toLowerCase(), networkId, {
-        enabled: isWalletConnected,
-    });
+    const multiCollateralBalancesQuery = useMultipleCollateralBalanceQuery(
+        walletAddress,
+        { networkId, client },
+        {
+            enabled: isConnected,
+        }
+    );
     const multiCollateralBalances =
         multiCollateralBalancesQuery.isSuccess && multiCollateralBalancesQuery.data
             ? multiCollateralBalancesQuery.data
@@ -164,7 +179,7 @@ const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
     const isAmountEntered = Number(buyInAmount) > 0;
     const insufficientBalance = Number(buyInAmount) > paymentTokenBalance || !paymentTokenBalance;
     const isButtonDisabled =
-        isBuying || !isAmountEntered || insufficientBalance || !isWalletConnected || swappedThalesToReceive === 0;
+        isBuying || !isAmountEntered || insufficientBalance || !isConnected || swappedThalesToReceive === 0;
 
     const inputRef = useRef<HTMLDivElement>(null);
     const inputRefVisible = !!inputRef?.current?.getBoundingClientRect().width;
@@ -240,7 +255,7 @@ const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
 
     // Check swap allowance
     useEffect(() => {
-        if (isWalletConnected && buyInAmount) {
+        if (isConnected && buyInAmount) {
             const getSwapAllowance = async () => {
                 const allowance = await checkSwapAllowance(
                     networkId,
@@ -254,23 +269,13 @@ const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
 
             getSwapAllowance();
         }
-    }, [
-        walletAddress,
-        isWalletConnected,
-        buyInAmount,
-        networkId,
-        selectedCollateral,
-        swapToThalesParams.src,
-        isBuying,
-    ]);
+    }, [walletAddress, isConnected, buyInAmount, networkId, selectedCollateral, swapToThalesParams.src, isBuying]);
 
     const handleBuyWithThalesSteps = async (
         initialStep: BuyTicketStep
     ): Promise<{ step: BuyTicketStep; thalesAmount: number }> => {
         let step = initialStep;
         let thalesAmount = swappedThalesToReceive;
-
-        const { multipleCollateral } = networkConnector;
 
         if (step <= BuyTicketStep.SWAP) {
             if (!isEth && !hasSwapAllowance) {
@@ -288,6 +293,7 @@ const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
                     networkId,
                     walletAddress as Address,
                     swapToThalesParams.src,
+                    walletClient.data as any,
                     approveAmount.toString()
                 );
 
@@ -327,7 +333,9 @@ const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
                     }
                 }
 
-                const balanceBefore = multiCollateralBalances[CRYPTO_CURRENCY_MAP.THALES as Coins];
+                const balanceBefore = multiCollateralBalances
+                    ? multiCollateralBalances[CRYPTO_CURRENCY_MAP.THALES as Coins]
+                    : 0;
                 const swapTxHash = swapRawTransaction ? await sendTransaction(swapRawTransaction) : undefined;
 
                 if (swapTxHash) {
@@ -335,9 +343,17 @@ const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
                     setBuyStep(step);
 
                     await delay(3000); // wait for THALES balance to increase
-                    const balanceAfter = bigNumberFormatter(
-                        await multipleCollateral?.[CRYPTO_CURRENCY_MAP.THALES as Coins]?.balanceOf(walletAddress)
+
+                    const thalesTokenContract = getContractInstance(
+                        ContractType.MULTICOLLATERAL,
+                        {
+                            networkId,
+                            client: walletClient.data as any,
+                        },
+                        getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.THALES as Coins)
                     );
+
+                    const balanceAfter = bigNumberFormatter(await thalesTokenContract?.read.balanceOf([walletAddress]));
                     thalesAmount = balanceAfter - balanceBefore;
                     setSwappedThalesToReceive(thalesAmount);
                 }
@@ -479,7 +495,7 @@ const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
                         </SubHeaderWrapper>
                         {freeBetBalances &&
                             Object.keys(multiCollateralsSorted).map((currencyKey) => {
-                                return multiCollateralBalances[currencyKey] ? (
+                                return multiCollateralBalances[currencyKey as Coins] ? (
                                     <Section key={currencyKey}>
                                         <SubLabel>
                                             <CurrencyIcon
@@ -490,7 +506,9 @@ const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
                                         <SubValue>
                                             {formatCurrencyWithSign(
                                                 null,
-                                                multiCollateralBalances ? multiCollateralBalances[currencyKey] : 0
+                                                multiCollateralBalances
+                                                    ? multiCollateralBalances[currencyKey as Coins]
+                                                    : 0
                                             )}
                                             {!exchangeRates?.[currencyKey] && !isStableCurrency(currencyKey as Coins)
                                                 ? '...'
@@ -607,7 +625,7 @@ const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
                             lineHeight="16px"
                             additionalStyles={additionalButtonStyles}
                             onClick={() => {
-                                setForceOpenStakingModal(true);
+                                setForceOpenStakingModal ? setForceOpenStakingModal(true) : '';
                                 dispatch(setStakingModalMuteEnd(0));
                             }}
                         >
@@ -619,7 +637,7 @@ const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
                                 components={{
                                     stakingPageLink: (
                                         <StakingPageLink
-                                            href={'https://www.thales.io/token/staking'}
+                                            href="https://www.thales.io/token/staking"
                                             target="_blank"
                                             rel="noreferrer"
                                         />

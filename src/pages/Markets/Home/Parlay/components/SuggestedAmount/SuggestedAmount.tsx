@@ -6,9 +6,6 @@ import {
 } from 'constants/markets';
 import { Rates } from 'queries/rates/useExchangeRatesQuery';
 import React, { useCallback, useMemo } from 'react';
-import { useSelector } from 'react-redux';
-import { getNetworkId } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import {
@@ -19,6 +16,7 @@ import {
     formatCurrencyWithKey,
 } from 'thales-utils';
 import { getCollateral, getDefaultCollateral, isStableCurrency, isThalesCurrency } from 'utils/collaterals';
+import { useChainId } from 'wagmi';
 
 const AMOUNTS = [3, 10, 20, 50, 100];
 
@@ -37,7 +35,7 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
     insertedAmount,
     minAmount,
 }) => {
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const networkId = useChainId();
 
     const collateral = useMemo(() => getCollateral(networkId, collateralIndex), [networkId, collateralIndex]);
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);

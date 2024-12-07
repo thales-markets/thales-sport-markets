@@ -14,6 +14,7 @@ type SportFilterProps = {
     onClick: () => void;
     count: number;
     open: boolean;
+    children: React.ReactNode;
 };
 
 const SportFilterDetails: React.FC<SportFilterProps> = ({ selected, sport, onClick, count, children, open }) => {
@@ -145,7 +146,7 @@ const Count = styled(FlexDivCentered)`
     }
 `;
 
-export const NewBadge = styled.div`
+const NewBadge = styled.div`
     position: absolute;
     background-color: #3cb55b;
     border-radius: 5px;

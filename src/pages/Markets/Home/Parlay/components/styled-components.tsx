@@ -1,4 +1,3 @@
-import MuiTooltip from '@material-ui/core/Tooltip';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivEnd } from 'styles/common';
 
@@ -102,30 +101,6 @@ export const InfoValue = styled.span`
 `;
 
 export const InputContainer = styled(FlexDiv)``;
-
-export const InfoTooltip = styled((props) => <MuiTooltip classes={{ popper: props.className }} {...props} />)`
-    & .MuiTooltip-tooltip {
-        min-width: 100%;
-        margin-bottom: 7px;
-        background-color: ${(props) => props.theme.warning.background.primary};
-        color: ${(props) => props.theme.warning.textColor.primary};
-        border: 1.5px solid ${(props) => props.theme.warning.borderColor.primary};
-        border-radius: 2px;
-        font-size: 9px;
-        line-height: 12px;
-        text-transform: uppercase;
-    }
-    & .MuiTooltip-arrow {
-        &:before {
-            border: 1.5px solid ${(props) => props.theme.warning.borderColor.primary};
-            background-color: ${(props) => props.theme.warning.background.primary};
-            box-sizing: border-box;
-        }
-        width: 11px;
-        height: 8px;
-        bottom: -2px !important;
-    }
-`;
 
 export const AmountToBuyContainer = styled.div`
     position: relative;

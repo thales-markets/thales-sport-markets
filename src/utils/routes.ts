@@ -3,7 +3,7 @@ import ROUTES from 'constants/routes';
 import { MetaRoutes } from 'enums/routes';
 import { createBrowserHistory, createHashHistory } from 'history';
 
-const ifIpfsDeployment = process.env.REACT_APP_IPFS_DEPLOYMENT === 'true';
+const ifIpfsDeployment = import.meta.env.VITE_APP_IPFS_DEPLOYMENT === 'true';
 const history = ifIpfsDeployment ? createHashHistory() : createBrowserHistory();
 
 export const navigateTo = (path: string, replacePath = false, scrollToTop = false, state = '') => {
