@@ -68,6 +68,7 @@ type TicketTransactionsTableProps = {
     tableHeight?: string;
     isLoading: boolean;
     ticketsPerPage?: number;
+    expandAll?: boolean;
 };
 
 const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
@@ -76,6 +77,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
     tableHeight,
     isLoading,
     ticketsPerPage,
+    expandAll,
 }) => {
     const { t } = useTranslation();
     const language = i18n.language;
@@ -345,6 +347,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                         </ExpandedRowWrapper>
                     );
                 }}
+                expandAll={expandAll}
             ></Table>
             {!isLoading && ticketTransactions.length > 0 && (
                 <PaginationWrapper
