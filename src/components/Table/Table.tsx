@@ -38,6 +38,7 @@ type TableProps = {
     expandedRow?: (row: Row<any>) => JSX.Element;
     stickyRow?: JSX.Element;
     mobileCards?: boolean;
+    expandAll?: boolean;
 };
 
 const Table: React.FC<TableProps> = ({
@@ -61,6 +62,7 @@ const Table: React.FC<TableProps> = ({
     stickyRow,
     tableHeight,
     mobileCards,
+    expandAll,
 }) => {
     const { t } = useTranslation();
 
@@ -169,6 +171,7 @@ const Table: React.FC<TableProps> = ({
                                             tableRowCellStyles={tableRowCellStyles}
                                             isVisible={false}
                                             tableRowStyles={tableRowStyles}
+                                            expandAll={expandAll}
                                         >
                                             {expandedRow(row)}
                                         </ExpandableRowReact>
@@ -232,8 +235,14 @@ const ExpandableRowReact: React.FC<{
     tableRowStyles: React.CSSProperties;
     row: Row<any>;
     tableRowCellStyles: React.CSSProperties;
-}> = ({ isVisible, tableRowStyles, row, tableRowCellStyles, children }) => {
+    expandAll?: boolean;
+}> = ({ isVisible, tableRowStyles, row, tableRowCellStyles, children, expandAll }) => {
     const [hidden, setHidden] = useState<boolean>(!isVisible);
+
+    useEffect(() => {
+        console.log('expandAll', expandAll);
+        setHidden(!expandAll);
+    }, [expandAll]);
 
     return (
         <>
@@ -241,7 +250,7 @@ const ExpandableRowReact: React.FC<{
                 style={{ ...tableRowStyles, borderBottom: hidden ? '' : '2px dashed transparent' }}
                 {...row.getRowProps()}
                 cursorPointer={true}
-                onClick={setHidden.bind(this, !hidden)}
+                onClick={() => setHidden(!hidden)}
             >
                 {row.cells.map((cell, cellIndex: any) => (
                     <TableCell
