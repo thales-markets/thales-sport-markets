@@ -103,13 +103,20 @@ export const InfoValue = styled.span`
 
 export const InputContainer = styled(FlexDiv)``;
 
-export const InfoTooltip = styled((props) => <MuiTooltip classes={{ popper: props.className }} {...props} />)`
+export const InfoTooltip = styled((props) => <MuiTooltip classes={{ popper: props.className }} {...props} />)<{
+    isError: boolean;
+}>`
     & .MuiTooltip-tooltip {
         min-width: 100%;
+        max-width: ${(props) => (props.isError ? '250px' : '100%')};
         margin-bottom: 7px;
-        background-color: ${(props) => props.theme.warning.background.primary};
-        color: ${(props) => props.theme.warning.textColor.primary};
-        border: 1.5px solid ${(props) => props.theme.warning.borderColor.primary};
+        background-color: ${(props) =>
+            props.isError ? props.theme.error.background.primary : props.theme.warning.background.primary};
+        color: ${(props) =>
+            props.isError ? props.theme.error.textColor.primary : props.theme.warning.textColor.primary};
+        border: 1.5px solid
+            ${(props) =>
+                props.isError ? props.theme.error.borderColor.primary : props.theme.warning.borderColor.primary};
         border-radius: 2px;
         font-size: 9px;
         line-height: 12px;
@@ -117,8 +124,11 @@ export const InfoTooltip = styled((props) => <MuiTooltip classes={{ popper: prop
     }
     & .MuiTooltip-arrow {
         &:before {
-            border: 1.5px solid ${(props) => props.theme.warning.borderColor.primary};
-            background-color: ${(props) => props.theme.warning.background.primary};
+            border: 1.5px solid
+                ${(props) =>
+                    props.isError ? props.theme.error.borderColor.primary : props.theme.warning.borderColor.primary};
+            background-color: ${(props) =>
+                props.isError ? props.theme.error.background.primary : props.theme.warning.background.primary};
             box-sizing: border-box;
         }
         width: 11px;
@@ -468,3 +478,11 @@ export const SystemBetValidation = styled(FlexDivCentered)`
     padding: 5px;
     text-align: center;
 `;
+
+export const systemDropdownStyle = {
+    menuStyle: { borderRadius: 5, marginTop: 3 },
+    controlStyle: { borderRadius: 5, minHeight: '25px', fontSize: '14px', fontWeight: 600 },
+    dropdownIndicatorStyle: { padding: '2px' },
+    optionStyle: { fontSize: '14px', fontWeight: 600 },
+    indicatorSeparatorStyle: { marginBottom: '5px', marginTop: '5px' },
+};

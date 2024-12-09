@@ -40,7 +40,7 @@ export const formatMarketOdds = (oddsType: OddsType, odds: number | undefined) =
             }
         case OddsType.AMM:
         default:
-            return `${formatCurrency(odds, odds < 0.1 ? 4 : 2)}`;
+            return `${formatCurrency(odds, odds < 0.001 ? 8 : odds < 0.1 ? 4 : 2)}`;
     }
 };
 

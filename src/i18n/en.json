@@ -738,6 +738,8 @@
         },
         "parlay": {
             "ticket-slip": "Ticket slip",
+            "regular": "Regular",
+            "system": "System",
             "thales-bonus-info": "Use THALES and get 2% bonus payout for each game.",
             "total-quote": "Total quote",
             "total-bonus": "Total bonus",
@@ -851,7 +853,12 @@
                 "swap": "Swap {{src}} to {{dst}}",
                 "approve-buy": "Approve buy with {{currencyKey}}",
                 "buy": "Buy with {{currencyKey}}"
-            }
+            },
+            "number-of-combinations": "Number of combinations",
+            "buy-in-per-combination": "Buy-in per combination",
+            "min-payout": "Min payout",
+            "max-payout": "Max payout",
+            "system-bet-min-markets-validation": "System bet requires minimum {{minMarkets}} markets"
         },
         "zero-odds-tooltip": "Odds unavailable at the moment.",
         "low-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",

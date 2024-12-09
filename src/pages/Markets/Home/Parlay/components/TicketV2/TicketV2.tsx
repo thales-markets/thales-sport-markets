@@ -173,6 +173,7 @@ import {
     TwitterIcon,
     XButton,
     defaultButtonProps,
+    systemDropdownStyle,
 } from '../styled-components';
 
 type TicketProps = {
@@ -565,28 +566,6 @@ const Ticket: React.FC<TicketProps> = ({
         setMinBuyInAmountInDefaultCollateral(sportsAmmData?.minBuyInAmount || 0);
     }, [sportsAmmData?.minBuyInAmount]);
 
-    // const maxSupportedOddsForSystemBet = useMemo(() => {
-    //     let quote = 0;
-    //     if (isSystemBet) {
-    //         quote = getSystemBetData(markets, systemBetDenominator, Number(buyInAmount), usedCollateralForBuy);
-    //     } else {
-    //         quote = markets.reduce(
-    //             (partialQuote, market) =>
-    //                 partialQuote * (market.odd > 0 ? getAddedPayoutOdds(usedCollateralForBuy, market.odd) : market.odd),
-    //             1
-    //         );
-    //     }
-    //     const maxSupportedOdds = sportsAmmData?.maxSupportedOdds || 1;
-    //     return quote < maxSupportedOdds ? maxSupportedOdds : quote;
-    // }, [
-    //     buyInAmount,
-    //     isSystemBet,
-    //     markets,
-    //     sportsAmmData?.maxSupportedOdds,
-    //     systemBetDenominator,
-    //     usedCollateralForBuy,
-    // ]);
-
     const isValidSystemBet = useMemo(() => isSystemBet && markets.length >= SYSTEM_BET_MINIMUM_MARKETS, [
         isSystemBet,
         markets.length,
@@ -653,9 +632,16 @@ const Ticket: React.FC<TicketProps> = ({
         return combinationsCount;
     }, [markets.length, systemBetDenominator]);
 
-    // const buyInPerCombination = useMemo(() => {
-    //     return Number(buyInAmount) / numberOfSystemBetCombination;
-    // }, [buyInAmount, numberOfSystemBetCombination]);
+    const isInvalidRegularTotalQuote = useMemo(() => !isSystemBet && totalQuote === sportsAmmData?.maxSupportedOdds, [
+        isSystemBet,
+        sportsAmmData?.maxSupportedOdds,
+        totalQuote,
+    ]);
+
+    const isInvalidSystemTotalQuote = useMemo(
+        () => isSystemBet && isValidSystemBet && totalQuote < (sportsAmmData?.maxSupportedOdds || 0),
+        [isSystemBet, isValidSystemBet, sportsAmmData?.maxSupportedOdds, totalQuote]
+    );
 
     const ticketLiquidityQuery = useTicketLiquidityQuery(markets, networkId, {
         enabled: isAppReady && !noProofs,
@@ -1601,7 +1587,12 @@ const Ticket: React.FC<TicketProps> = ({
             return;
         }
 
-        if (isSystemBet && markets.length < SYSTEM_BET_MINIMUM_MARKETS) {
+        if (isSystemBet && !isValidSystemBet) {
+            setSubmitDisabled(true);
+            return;
+        }
+
+        if (isInvalidSystemTotalQuote) {
             setSubmitDisabled(true);
             return;
         }
@@ -1627,6 +1618,8 @@ const Ticket: React.FC<TicketProps> = ({
         swappedThalesToReceive,
         swapToThales,
         isSystemBet,
+        isInvalidSystemTotalQuote,
+        isValidSystemBet,
     ]);
 
     const getSubmitButton = () => {
@@ -1962,73 +1955,62 @@ const Ticket: React.FC<TicketProps> = ({
 
     return (
         <>
-            {isSystemBet && markets.length >= 3 && (
+            {isSystemBet && (
                 <>
-                    <RowContainer>
-                        <SummaryLabel>System:</SummaryLabel>
-                        <SelectContainer>
-                            <SelectInput
-                                options={systemOptions}
-                                handleChange={(value: any) => setSystemBetDenominator(Number(value))}
-                                defaultValue={systemBetDenominator - 2}
-                                width={90}
-                                style={{
-                                    menuStyle: { borderRadius: 5, marginTop: 3 },
-                                    controlStyle: { borderRadius: 5, minHeight: '25px', fontSize: '14px' },
-                                    dropdownIndicatorStyle: { padding: '2px' },
-                                    optionStyle: { fontSize: '14px' },
-                                    indicatorSeparatorStyle: { marginBottom: '5px', marginTop: '5px' },
-                                }}
-                            />
-                        </SelectContainer>
-                    </RowContainer>
-                    <RowSummary>
-                        <SummaryLabel>Number of combination:</SummaryLabel>
-                        <SummaryValue isCollateralInfo={true} fontSize={12}>
-                            {numberOfSystemBetCombination}
-                        </SummaryValue>
-                    </RowSummary>
+                    {isValidSystemBet ? (
+                        <>
+                            <RowContainer>
+                                <SummaryLabel>{t('markets.parlay.system')}:</SummaryLabel>
+                                <SelectContainer>
+                                    <SelectInput
+                                        options={systemOptions}
+                                        handleChange={(value: any) => setSystemBetDenominator(Number(value))}
+                                        defaultValue={systemBetDenominator - 2}
+                                        width={90}
+                                        style={systemDropdownStyle}
+                                    />
+                                </SelectContainer>
+                            </RowContainer>
+                            <RowSummary>
+                                <SummaryLabel>{t('markets.parlay.number-of-combinations')}:</SummaryLabel>
+                                <SummaryValue isCollateralInfo={true} fontSize={14}>
+                                    {numberOfSystemBetCombination}
+                                </SummaryValue>
+                            </RowSummary>{' '}
+                        </>
+                    ) : (
+                        <RowContainer>
+                            <SystemBetValidation>
+                                {t('markets.parlay.system-bet-min-markets-validation', {
+                                    minMarkets: SYSTEM_BET_MINIMUM_MARKETS,
+                                })}
+                            </SystemBetValidation>
+                        </RowContainer>
+                    )}
+                    {isSystemBet && <HorizontalLine />}
                 </>
             )}
-            {isSystemBet && markets.length < 3 && (
-                <RowContainer>
-                    <SystemBetValidation>System bet requires minimum 3 markets</SystemBetValidation>
-                </RowContainer>
-            )}
-            {isSystemBet && <HorizontalLine />}
             <RowSummary columnDirection={true}>
                 <RowContainer>
                     <SummaryLabel>{t('markets.parlay.total-quote')}:</SummaryLabel>
                     <InfoTooltip
-                        open={
-                            inputRefVisible &&
-                            ((!isSystemBet && totalQuote === sportsAmmData?.maxSupportedOdds) ||
-                                (isSystemBet && totalQuote < (sportsAmmData?.maxSupportedOdds || 0)))
-                        }
+                        open={inputRefVisible && (isInvalidRegularTotalQuote || isInvalidSystemTotalQuote)}
                         title={getQuoteTooltipText()}
                         placement={'top'}
                         arrow={true}
+                        isError={isInvalidSystemTotalQuote}
                     >
-                        <SummaryValue fontSize={12}>{formatMarketOdds(selectedOddsType, totalQuote)}</SummaryValue>
+                        <SummaryValue fontSize={12}>
+                            {formatMarketOdds(
+                                selectedOddsType,
+                                isSystemBet ? systemData.systemBetQuotePerCombination : totalQuote
+                            )}
+                        </SummaryValue>
                     </InfoTooltip>
                     <ClearLabel alignRight={true} onClick={() => dispatch(removeAll())}>
                         {t('markets.parlay.clear')}
                         <XButton margin={'0 0 4px 5px'} className={`icon icon--clear`} />
                     </ClearLabel>
-                </RowContainer>
-
-                <RowContainer>
-                    <SummaryLabel>{t('markets.parlay.total-quote')} PER COMBINATION:</SummaryLabel>
-                    <InfoTooltip
-                        open={inputRefVisible && totalQuote === sportsAmmData?.maxSupportedOdds && false}
-                        title={getQuoteTooltipText()}
-                        placement={'top'}
-                        arrow={true}
-                    >
-                        <SummaryValue fontSize={12}>
-                            {formatMarketOdds(selectedOddsType, systemData.systemBetQuotePerCombination)}
-                        </SummaryValue>
-                    </InfoTooltip>
                 </RowContainer>
                 {(isThales || swapToThales) && (
                     <RowContainer>
@@ -2221,104 +2203,103 @@ const Ticket: React.FC<TicketProps> = ({
                           )} (${formatCurrencyWithSign(USD_SIGN, Number(buyInAmountInDefaultCollateral) + gas)})`}
                 </SummaryValue>
             </RowSummary>
-            {!isSystemBet && (
-                <RowSummary>
-                    <SummaryLabel>{t('markets.parlay.payout')}:</SummaryLabel>
-                    <SummaryValue isInfo={true}>
-                        {hidePayout
-                            ? '-'
-                            : !collateralHasLp || (isDefaultCollateral && !swapToThales)
-                            ? formatCurrencyWithSign(USD_SIGN, payout)
-                            : `${formatCurrencyWithKey(usedCollateralForBuy, payout)} (${formatCurrencyWithSign(
-                                  USD_SIGN,
-                                  Number(buyInAmountInDefaultCollateral) / Number(totalQuote)
-                              )})`}
-                    </SummaryValue>
-                </RowSummary>
-            )}
-            {!isSystemBet && (
-                <RowSummary>
-                    <SummaryLabel>{t('markets.parlay.potential-profit')}:</SummaryLabel>
-                    <SummaryValue isInfo={true}>
-                        {hidePayout
-                            ? '-'
-                            : `${
-                                  collateralHasLp && (!isDefaultCollateral || swapToThales)
-                                      ? formatCurrencyWithKey(
-                                            usedCollateralForBuy,
-                                            payout - (swapToThales ? swappedThalesToReceive : Number(buyInAmount)) - gas
-                                        )
-                                      : formatCurrencyWithSign(
-                                            USD_SIGN,
-                                            payout - Number(buyInAmountInDefaultCollateral) - gas
-                                        )
-                              } (${formatPercentage(profitPercentage)})`}
-                    </SummaryValue>
-                </RowSummary>
-            )}
-            {isSystemBet && (
-                <RowSummary>
-                    <SummaryLabel>Buy-in per combination:</SummaryLabel>
-                    <SummaryValue isInfo={true}>
-                        {hidePayout
-                            ? '-'
-                            : isDefaultCollateral && !swapToThales
-                            ? formatCurrencyWithSign(
-                                  USD_SIGN,
-                                  (Number(buyInAmount) + gas) / numberOfSystemBetCombination
-                              )
-                            : `${formatCurrencyWithKey(
-                                  usedCollateralForBuy,
-                                  ((swapToThales ? swappedThalesToReceive : Number(buyInAmount)) + gas) /
-                                      numberOfSystemBetCombination
-                              )} (${formatCurrencyWithSign(
-                                  USD_SIGN,
-                                  (Number(buyInAmountInDefaultCollateral) + gas) / numberOfSystemBetCombination
-                              )})`}
-                    </SummaryValue>
-                </RowSummary>
-            )}
-            {isSystemBet && (
-                <RowSummary>
-                    <SummaryLabel>Min payout:</SummaryLabel>
-                    <SummaryValue isInfo={true}>
-                        {hidePayout
-                            ? '-'
-                            : !collateralHasLp || (isDefaultCollateral && !swapToThales)
-                            ? formatCurrencyWithSign(
-                                  USD_SIGN,
-                                  Number(buyInAmount) /
-                                      numberOfSystemBetCombination /
-                                      Number(systemData.systemBetMinimumQuote)
-                              )
-                            : `${formatCurrencyWithKey(
-                                  usedCollateralForBuy,
-                                  Number(buyInAmount) /
-                                      numberOfSystemBetCombination /
-                                      Number(systemData.systemBetMinimumQuote)
-                              )} (${formatCurrencyWithSign(
-                                  USD_SIGN,
-                                  Number(buyInAmountInDefaultCollateral) /
-                                      numberOfSystemBetCombination /
-                                      Number(systemData.systemBetMinimumQuote)
-                              )})`}
-                    </SummaryValue>
-                </RowSummary>
-            )}
-            {isSystemBet && (
-                <RowSummary>
-                    <SummaryLabel>Max payout:</SummaryLabel>
-                    <SummaryValue isInfo={true}>
-                        {hidePayout
-                            ? '-'
-                            : !collateralHasLp || (isDefaultCollateral && !swapToThales)
-                            ? formatCurrencyWithSign(USD_SIGN, payout)
-                            : `${formatCurrencyWithKey(usedCollateralForBuy, payout)} (${formatCurrencyWithSign(
-                                  USD_SIGN,
-                                  Number(buyInAmountInDefaultCollateral) / Number(totalQuote)
-                              )})`}
-                    </SummaryValue>
-                </RowSummary>
+            {isSystemBet ? (
+                <>
+                    <RowSummary>
+                        <SummaryLabel>{t('markets.parlay.buy-in-per-combination')}:</SummaryLabel>
+                        <SummaryValue isInfo={true}>
+                            {hidePayout
+                                ? '-'
+                                : isDefaultCollateral && !swapToThales
+                                ? formatCurrencyWithSign(
+                                      USD_SIGN,
+                                      (Number(buyInAmount) + gas) / numberOfSystemBetCombination
+                                  )
+                                : `${formatCurrencyWithKey(
+                                      usedCollateralForBuy,
+                                      ((swapToThales ? swappedThalesToReceive : Number(buyInAmount)) + gas) /
+                                          numberOfSystemBetCombination
+                                  )} (${formatCurrencyWithSign(
+                                      USD_SIGN,
+                                      (Number(buyInAmountInDefaultCollateral) + gas) / numberOfSystemBetCombination
+                                  )})`}
+                        </SummaryValue>
+                    </RowSummary>
+                    <RowSummary>
+                        <SummaryLabel>{t('markets.parlay.min-payout')}:</SummaryLabel>
+                        <SummaryValue isInfo={true}>
+                            {hidePayout
+                                ? '-'
+                                : !collateralHasLp || (isDefaultCollateral && !swapToThales)
+                                ? formatCurrencyWithSign(
+                                      USD_SIGN,
+                                      Number(buyInAmount) /
+                                          numberOfSystemBetCombination /
+                                          Number(systemData.systemBetMinimumQuote)
+                                  )
+                                : `${formatCurrencyWithKey(
+                                      usedCollateralForBuy,
+                                      Number(buyInAmount) /
+                                          numberOfSystemBetCombination /
+                                          Number(systemData.systemBetMinimumQuote)
+                                  )} (${formatCurrencyWithSign(
+                                      USD_SIGN,
+                                      Number(buyInAmountInDefaultCollateral) /
+                                          numberOfSystemBetCombination /
+                                          Number(systemData.systemBetMinimumQuote)
+                                  )})`}
+                        </SummaryValue>
+                    </RowSummary>
+                    <RowSummary>
+                        <SummaryLabel>{t('markets.parlay.max-payout')}:</SummaryLabel>
+                        <SummaryValue isInfo={true}>
+                            {hidePayout
+                                ? '-'
+                                : !collateralHasLp || (isDefaultCollateral && !swapToThales)
+                                ? formatCurrencyWithSign(USD_SIGN, payout)
+                                : `${formatCurrencyWithKey(usedCollateralForBuy, payout)} (${formatCurrencyWithSign(
+                                      USD_SIGN,
+                                      Number(buyInAmountInDefaultCollateral) / Number(totalQuote)
+                                  )})`}
+                        </SummaryValue>
+                    </RowSummary>
+                </>
+            ) : (
+                <>
+                    <RowSummary>
+                        <SummaryLabel>{t('markets.parlay.payout')}:</SummaryLabel>
+                        <SummaryValue isInfo={true}>
+                            {hidePayout
+                                ? '-'
+                                : !collateralHasLp || (isDefaultCollateral && !swapToThales)
+                                ? formatCurrencyWithSign(USD_SIGN, payout)
+                                : `${formatCurrencyWithKey(usedCollateralForBuy, payout)} (${formatCurrencyWithSign(
+                                      USD_SIGN,
+                                      Number(buyInAmountInDefaultCollateral) / Number(totalQuote)
+                                  )})`}
+                        </SummaryValue>
+                    </RowSummary>
+                    <RowSummary>
+                        <SummaryLabel>{t('markets.parlay.potential-profit')}:</SummaryLabel>
+                        <SummaryValue isInfo={true}>
+                            {hidePayout
+                                ? '-'
+                                : `${
+                                      collateralHasLp && (!isDefaultCollateral || swapToThales)
+                                          ? formatCurrencyWithKey(
+                                                usedCollateralForBuy,
+                                                payout -
+                                                    (swapToThales ? swappedThalesToReceive : Number(buyInAmount)) -
+                                                    gas
+                                            )
+                                          : formatCurrencyWithSign(
+                                                USD_SIGN,
+                                                payout - Number(buyInAmountInDefaultCollateral) - gas
+                                            )
+                                  } (${formatPercentage(profitPercentage)})`}
+                        </SummaryValue>
+                    </RowSummary>
+                </>
             )}
             <HorizontalLine />
             <RowSummary>

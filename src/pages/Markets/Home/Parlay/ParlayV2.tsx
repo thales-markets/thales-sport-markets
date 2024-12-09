@@ -1,6 +1,7 @@
 import { ReactComponent as ParlayEmptyIcon } from 'assets/images/parlay-empty.svg';
 import MatchInfoV2 from 'components/MatchInfoV2';
 import MatchUnavailableInfo from 'components/MatchUnavailableInfo';
+import Toggle from 'components/Toggle';
 import { SportFilter, StatusFilter } from 'enums/markets';
 import { isEqual } from 'lodash';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
@@ -24,9 +25,8 @@ import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumn } from 'styles/common';
 import { SportMarket, SportMarkets, TicketMarket, TicketPosition } from 'types/markets';
+import { ThemeInterface } from 'types/ui';
 import { isSameMarket } from 'utils/marketsV2';
-import Toggle from '../../../../components/Toggle';
-import { ThemeInterface } from '../../../../types/ui';
 import TicketV2 from './components/TicketV2';
 import ValidationModal from './components/ValidationModal';
 
@@ -240,14 +240,17 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                     <ToggleContainer>
                         <Toggle
                             label={{
-                                firstLabel: 'Ticket',
-                                secondLabel: 'System',
-                                // fontSize: '14px',
+                                firstLabel: t('markets.parlay.regular'),
+                                secondLabel: t('markets.parlay.system'),
+                                fontSize: '14px',
                             }}
+                            width="46px"
+                            height="24px"
                             active={isSystemBet}
-                            dotSize="18px"
+                            dotSize="16px"
                             dotBackground={theme.background.secondary}
                             dotBorder={`3px solid ${theme.borderColor.quaternary}`}
+                            dotMargin="3px"
                             handleClick={() => {
                                 dispatch(setIsSystemBet(!isSystemBet));
                             }}
