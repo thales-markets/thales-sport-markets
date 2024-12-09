@@ -2,6 +2,7 @@ import { Position, StatusFilter } from 'enums/markets';
 import { Network } from 'enums/network';
 import { RiskManagementConfig } from 'enums/riskManagement';
 import { LiquidityPoolCollateral } from '../enums/liquidityPool';
+import { League } from '../enums/sports';
 
 const QUERY_KEYS = {
     ParlayMarkets: (networkId: Network, account: string, minTimestamp?: number, maxTimestamp?: number) => [
@@ -94,21 +95,28 @@ const QUERY_KEYS = {
         StakingData: (walletAddress: string, networkId: Network) => ['stakingData', walletAddress, networkId],
     },
     Pnl: {
-        LpStats: (round: number, networkId: Network) => ['pnl', 'lpStats', round, networkId],
-        LpTickets: (lpCollateral: LiquidityPoolCollateral, round: number, networkId: Network) => [
+        LpStats: (round: number, leagueId: League, onlyPP: boolean, networkId: Network) => [
             'pnl',
-            'lpTickets',
-            lpCollateral,
+            'lpStats',
             round,
+            leagueId,
+            onlyPP,
             networkId,
         ],
-        LpUsersPnl: (lpCollateral: LiquidityPoolCollateral, round: number, networkId: Network) => [
-            'pnl',
-            'lpUsersPnl',
-            lpCollateral,
-            round,
-            networkId,
-        ],
+        LpTickets: (
+            lpCollateral: LiquidityPoolCollateral,
+            round: number,
+            leagueId: League,
+            onlyPP: boolean,
+            networkId: Network
+        ) => ['pnl', 'lpTickets', lpCollateral, round, leagueId, onlyPP, networkId],
+        LpUsersPnl: (
+            lpCollateral: LiquidityPoolCollateral,
+            round: number,
+            leagueId: League,
+            onlyPP: boolean,
+            networkId: Network
+        ) => ['pnl', 'lpUsersPnl', lpCollateral, round, leagueId, onlyPP, networkId],
     },
     FavoriteTeam: (walletAddress: string, networkId: Network) => ['favoriteTeam', walletAddress, networkId],
     Banners: (networkId: Network) => ['banners', networkId],
