@@ -142,7 +142,7 @@ const App = () => {
                             </DappLayout>
                         </Suspense>
                     </Route>
-                    <Route exact path={`${ROUTES.Markets.Market}/:marketAddress`}>
+                    <Route exact path={ROUTES.Markets.Market}>
                         <Suspense fallback={<Loader />}>
                             <DappLayout>
                                 <Market />
