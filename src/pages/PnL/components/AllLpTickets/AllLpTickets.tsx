@@ -1,6 +1,7 @@
 import Checkbox from 'components/fields/Checkbox';
 import SelectInput from 'components/SelectInput';
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
+import { League } from 'enums/sports';
 import { t } from 'i18next';
 import { orderBy } from 'lodash';
 import useLpTicketsQuery from 'queries/pnl/useLpTicketsQuery';
@@ -34,9 +35,11 @@ const lpOptions = [
 
 type AllLpTicketsProps = {
     round: number;
+    leagueId: League;
+    onlyPP: boolean;
 };
 
-const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round }) => {
+const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) => {
     const networkId = useSelector(getNetworkId);
     const isMobile = useSelector(getIsMobile);
     const [lp, setLp] = useState<number>(0);
@@ -45,9 +48,9 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round }) => {
     const [showOnlyPendingTickets, setShowOnlyPendingTickets] = useState<boolean>(false);
     const [expandAll, setExpandAll] = useState<boolean>(false);
 
-    const usdcLpTicketsQuery = useLpTicketsQuery(LiquidityPoolCollateral.USDC, round, networkId);
-    const wethLpTicketsQuery = useLpTicketsQuery(LiquidityPoolCollateral.WETH, round, networkId);
-    const thalesLpTicketsQuery = useLpTicketsQuery(LiquidityPoolCollateral.THALES, round, networkId);
+    const usdcLpTicketsQuery = useLpTicketsQuery(LiquidityPoolCollateral.USDC, round, leagueId, onlyPP, networkId);
+    const wethLpTicketsQuery = useLpTicketsQuery(LiquidityPoolCollateral.WETH, round, leagueId, onlyPP, networkId);
+    const thalesLpTicketsQuery = useLpTicketsQuery(LiquidityPoolCollateral.THALES, round, leagueId, onlyPP, networkId);
 
     const lpTickets: Ticket[] = useMemo(() => {
         let lpTickets: Ticket[] = [];
@@ -159,7 +162,7 @@ const ExpandAllContainer = styled(FlexDivCentered)`
     font-size: 18px;
 `;
 
-const SelectContainer = styled.div`
+const SelectContainer = styled.div<{ width?: string }>`
     margin: 15px 0;
     width: 150px;
 `;
@@ -169,6 +172,7 @@ const CheckboxContainer = styled(FlexDivSpaceBetween)`
         align-self: center;
         font-size: 18px;
         text-transform: none;
+    }
     @media (max-width: 575px) {
         font-size: 14px;
     }

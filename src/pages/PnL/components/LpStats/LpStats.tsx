@@ -1,4 +1,5 @@
 import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from 'constants/currency';
+import { League } from 'enums/sports';
 import { t } from 'i18next';
 import useLpStatsQuery from 'queries/pnl/useLpStatsQuery';
 import React from 'react';
@@ -11,12 +12,14 @@ import { Coins, formatCurrencyWithKey, formatCurrencyWithSign } from 'thales-uti
 
 type LpStatsProps = {
     round: number;
+    leagueId: League;
+    onlyPP: boolean;
 };
 
-const LpStats: React.FC<LpStatsProps> = ({ round }) => {
+const LpStats: React.FC<LpStatsProps> = ({ round, leagueId, onlyPP }) => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
-    const lpStatsQuery = useLpStatsQuery(round, networkId);
+    const lpStatsQuery = useLpStatsQuery(round, leagueId, onlyPP, networkId);
     const lpStats = lpStatsQuery.isSuccess && lpStatsQuery.data ? lpStatsQuery.data : [];
 
     return (
