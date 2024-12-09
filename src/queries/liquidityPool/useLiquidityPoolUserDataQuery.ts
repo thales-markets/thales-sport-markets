@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { ContractType } from 'enums/contract';
-import { coinFormatter, Coins } from 'thales-utils';
+import { bigNumberFormatter, coinFormatter, Coins } from 'thales-utils';
 import { UserLiquidityPoolData } from 'types/liquidityPool';
 import { NetworkConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
@@ -41,10 +41,8 @@ const useLiquidityPoolUserDataQuery = (
                     );
 
                     userLiquidityPoolData.isWithdrawalRequested = contractUserLiquidityPoolData.withdrawalRequested;
-                    userLiquidityPoolData.withdrawalShare = coinFormatter(
-                        contractUserLiquidityPoolData.withdrawalShare,
-                        networkConfig.networkId,
-                        collateral
+                    userLiquidityPoolData.withdrawalShare = bigNumberFormatter(
+                        contractUserLiquidityPoolData.withdrawalShare
                     );
                     userLiquidityPoolData.isPartialWithdrawalRequested = userLiquidityPoolData.withdrawalShare > 0;
 
