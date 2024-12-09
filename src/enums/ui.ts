@@ -17,6 +17,7 @@ export enum PnlTab {
     USDC_TICKETS = 'usdc-tickets',
     WETH_TICKETS = 'weth-tickets',
     THALES_TICKETS = 'thales-tickets',
+    TICKETS = 'tickets',
 }
 
 export enum OverdropTab {
