@@ -232,4 +232,8 @@ export default {
             tertiary: Colors.WHITE,
         },
     },
+    slider: {
+        trackColor: Colors.GREEN,
+        thumbColor: Colors.WHITE,
+    },
 };

@@ -19,7 +19,7 @@ type SelectInputProps = {
 const SelectInput: React.FC<SelectInputProps> = ({ options, handleChange, defaultValue, value, width, isDisabled }) => {
     const theme: ThemeInterface = useTheme();
 
-    const defaultOption = value ?? options[defaultValue ? defaultValue : 0];
+    const defaultOption = (value ?? options[defaultValue || 0]) || Number(defaultValue);
 
     const customStyled = {
         menu: (provided: any, state: any) => ({

@@ -1603,7 +1603,7 @@ const Ticket: React.FC<TicketProps> = ({
                     }
                     {...defaultButtonProps}
                 >
-                    {t('common.wallet.connect-your-wallet')}
+                    {t('get-started.log-in')}
                 </Button>
             );
         }
