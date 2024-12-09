@@ -6,7 +6,8 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import styled from 'styled-components';
-import { FlexDivColumn, FlexDivRow } from 'styles/common';
+import { FlexDivColumn, FlexDivRow, FlexDivSpaceBetween } from 'styles/common';
+import AllLpTickets from '../AllLpTickets';
 import LpPnl from '../LpStats';
 import LpTickets from '../LpTickets';
 import LpUsersPnl from '../LpUsersPnl';
@@ -46,14 +47,16 @@ const Stats: React.FC<StatsProps> = ({ selectedTab, setSelectedTab, currentRound
     return (
         <RowContainer>
             <MainContainer>
-                <SelectContainer>
-                    <SelectInput
-                        options={rounds}
-                        handleChange={(value) => setRound(Number(value))}
-                        defaultValue={round}
-                        width={300}
-                    />
-                </SelectContainer>
+                <FiltersContainer>
+                    <SelectContainer>
+                        <SelectInput
+                            options={rounds}
+                            handleChange={(value) => setRound(Number(value))}
+                            defaultValue={round}
+                            width={300}
+                        />
+                    </SelectContainer>
+                </FiltersContainer>
                 <NavigationWrapper>
                     <Header>
                         {!isMobile && <NavigationBar selectedTab={selectedTab} setSelectedTab={setSelectedTab} />}
@@ -79,6 +82,7 @@ const Stats: React.FC<StatsProps> = ({ selectedTab, setSelectedTab, currentRound
                 {selectedTab == PnlTab.THALES_TICKETS && (
                     <LpTickets lpCollateral={LiquidityPoolCollateral.THALES} round={round} />
                 )}
+                {selectedTab == PnlTab.TICKETS && <AllLpTickets round={round} />}
             </MainContainer>
         </RowContainer>
     );
@@ -122,6 +126,8 @@ const Header = styled(FlexDivRow)`
         margin-bottom: 15px;
     }
 `;
+
+const FiltersContainer = styled(FlexDivSpaceBetween)``;
 
 const SelectContainer = styled.div`
     margin: 10px 0;
