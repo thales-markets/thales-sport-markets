@@ -1,142 +1,112 @@
-import { particleWallet } from '@particle-network/rainbowkit-ext';
-import { RainbowKitProvider, connectorsForWallets, darkTheme } from '@rainbow-me/rainbowkit';
-import '@rainbow-me/rainbowkit/dist/index.css';
-import {
-    braveWallet,
-    coinbaseWallet,
-    imTokenWallet,
-    injectedWallet,
-    ledgerWallet,
-    metaMaskWallet,
-    rabbyWallet,
-    rainbowWallet,
-    trustWallet,
-    walletConnectWallet,
-} from '@rainbow-me/rainbowkit/wallets';
+import { AuthCoreContextProvider } from '@particle-network/auth-core-modal';
+import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
+import '@rainbow-me/rainbowkit/styles.css';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { Buffer as buffer } from 'buffer';
+import UnexpectedError from 'components/UnexpectedError';
 import WalletDisclaimer from 'components/WalletDisclaimer';
 import { PLAUSIBLE } from 'constants/analytics';
-import { optimismSepolia } from 'constants/network';
 import { ThemeMap } from 'constants/ui';
-import dotenv from 'dotenv';
-import { Network } from 'enums/network';
 import { merge } from 'lodash';
 import App from 'pages/Root/App';
-import React from 'react';
+import React, { ErrorInfo } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
+import { useTranslation } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { Store } from 'redux';
 import { getDefaultTheme } from 'redux/modules/ui';
-import { SupportedNetwork } from 'types/network';
-import { WagmiConfig, configureChains, createClient } from 'wagmi';
-import { arbitrum, optimism } from 'wagmi/dist/chains';
-import { infuraProvider } from 'wagmi/dist/providers/infura';
-import { jsonRpcProvider } from 'wagmi/dist/providers/jsonRpc';
-import { publicProvider } from 'wagmi/dist/providers/public';
-dotenv.config();
+import { PARTICLE_STYLE } from 'utils/particleWallet/utils';
+import queryConnector from 'utils/queryConnector';
+import { WagmiProvider } from 'wagmi';
+import enTranslation from '../../i18n/en.json';
+import { wagmiConfig } from './wagmiConfig';
+
+window.Buffer = window.Buffer || buffer;
 
 type RootProps = {
     store: Store;
 };
 
-type RpcProviders = {
-    ankr: string;
-    blast: string;
-};
-
-const STALL_TIMEOUT = 2000;
-const projectId = process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID || '';
-
-const CHAIN_TO_RPC_PROVIDER_NETWORK_NAME: Record<SupportedNetwork, RpcProviders> = {
-    [Network.OptimismMainnet]: { ankr: 'optimism', blast: 'optimism-mainnet' },
-    [Network.Arbitrum]: { ankr: 'arbitrum', blast: 'arbitrum-one' },
-    [Network.OptimismSepolia]: { ankr: '', blast: 'optimism-sepolia' },
-};
-
-const CHAIN_TO_RPC_PROVIDER_URL: Record<number, string | undefined> = {
-    [Network.OptimismMainnet]: process.env.REACT_APP_OPTIMISM_RPC_URL,
-    [Network.Arbitrum]: process.env.REACT_APP_ARBITRUM_RPC_URL,
-    [Network.Base]: process.env.REACT_APP_BASE_RPC_URL,
-};
-const isRpcProviderSet = Object.values(CHAIN_TO_RPC_PROVIDER_URL).filter((url) => url && url !== '').length;
-
 const theme = getDefaultTheme();
-const customTheme = merge(darkTheme(), { colors: { modalBackground: ThemeMap[theme].background.primary } });
-
-const { chains, provider } = configureChains(
-    [optimism, arbitrum, optimismSepolia],
-    [
-        jsonRpcProvider({
-            rpc: (chain) => {
-                const blastNetworkName = CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id as SupportedNetwork]?.blast;
-                const rpcProvider = CHAIN_TO_RPC_PROVIDER_URL[chain.id];
-                return {
-                    http: rpcProvider
-                        ? rpcProvider
-                        : !!blastNetworkName
-                        ? `https://${blastNetworkName}.blastapi.io/${process.env.REACT_APP_BLAST_PROJECT_ID}`
-                        : chain.rpcUrls.default.http[0],
-                };
-            },
-            stallTimeout: STALL_TIMEOUT,
-            priority: 1,
-        }),
-        infuraProvider({
-            apiKey: process.env.REACT_APP_INFURA_PROJECT_ID || '',
-            stallTimeout: STALL_TIMEOUT,
-            priority: process.env.REACT_APP_PRIMARY_PROVIDER_ID === 'INFURA' && !isRpcProviderSet ? 0 : 2,
-        }),
-        publicProvider({ stallTimeout: STALL_TIMEOUT, priority: 5 }),
-    ]
-);
-
-const connectors = connectorsForWallets([
-    {
-        groupName: 'Recommended',
-        wallets: [
-            metaMaskWallet({ projectId, chains }),
-            walletConnectWallet({ projectId, chains }),
-            rabbyWallet({ chains }),
-            braveWallet({ chains }),
-            ledgerWallet({ projectId, chains }),
-            trustWallet({ projectId, chains }),
-            injectedWallet({ chains }),
-            coinbaseWallet({ appName: 'Overtime', chains }),
-            rainbowWallet({ projectId, chains }),
-            imTokenWallet({ projectId, chains }),
-            particleWallet({ chains, authType: 'google' }),
-            particleWallet({ chains, authType: 'github' }),
-            particleWallet({ chains, authType: 'apple' }),
-            particleWallet({ chains, authType: 'twitter' }),
-            particleWallet({ chains, authType: 'discord' }),
-            particleWallet({ chains, authType: 'email' }),
-            particleWallet({ chains, authType: 'phone' }),
-        ],
+const rainbowCustomTheme = merge(darkTheme(), {
+    colors: {
+        modalBackground: ThemeMap[theme].background.primary,
     },
-]);
-
-const wagmiClient = createClient({
-    autoConnect: true,
-    connectors,
-    provider,
+    shadows: { dialog: ThemeMap[theme].borderColor.primary },
+    radii: { menuButton: '8px' },
 });
 
+queryConnector.setQueryClient();
+
 const Root: React.FC<RootProps> = ({ store }) => {
+    // particle context provider is overriding our i18n configuration and languages, so we need to add our localization after the initialization of particle context
+    // initialization of particle context is happening in Root
+    const { i18n } = useTranslation();
+    i18n.addResourceBundle('en', 'translation', enTranslation, true);
+
     PLAUSIBLE.enableAutoPageviews();
 
+    const logError = (error: Error, info: ErrorInfo) => {
+        if (import.meta.env.DEV) {
+            return;
+        }
+
+        // let content = `IsMobile:${isMobile()}\nError:\n${error.stack || error.message}`;
+        // const flags = 4; // SUPPRESS_EMBEDS
+        // fetch(LINKS.Discord.SpeedErrors, {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify({ content, flags }),
+        // });
+
+        // content = `ErrorInfo:${info.componentStack}`;
+        // if (content.length > DISCORD_MESSAGE_MAX_LENGTH) {
+        //     content = content.substring(0, DISCORD_MESSAGE_MAX_LENGTH);
+        // }
+        // fetch(LINKS.Discord.SpeedErrors, {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify({ content, flags }),
+        // });
+        console.error(error, info);
+    };
+
     return (
-        <Provider store={store}>
-            <WagmiConfig client={wagmiClient}>
-                <RainbowKitProvider
-                    chains={chains}
-                    theme={customTheme}
-                    appInfo={{
-                        appName: 'Overtime',
-                        disclaimer: WalletDisclaimer,
-                    }}
-                >
-                    <App />
-                </RainbowKitProvider>
-            </WagmiConfig>
-        </Provider>
+        <ErrorBoundary fallback={<UnexpectedError theme={ThemeMap[theme]} />} onError={logError}>
+            <QueryClientProvider client={queryConnector.queryClient}>
+                <Provider store={store}>
+                    <AuthCoreContextProvider
+                        options={{
+                            projectId: import.meta.env.VITE_APP_PARTICLE_PROJECT_ID,
+                            clientKey: import.meta.env.VITE_APP_PARTICLE_CLIENT_KEY,
+                            appId: import.meta.env.VITE_APP_PARTICLE_API_ID,
+                            language: 'en',
+                            wallet: {
+                                visible: false,
+                            },
+                            themeType: 'dark',
+                            customStyle: PARTICLE_STYLE,
+                        }}
+                    >
+                        <WagmiProvider config={wagmiConfig}>
+                            <RainbowKitProvider
+                                theme={rainbowCustomTheme}
+                                appInfo={{
+                                    appName: 'OvertimeMarkets',
+                                    disclaimer: WalletDisclaimer,
+                                }}
+                            >
+                                <App />
+                            </RainbowKitProvider>
+                        </WagmiProvider>
+                    </AuthCoreContextProvider>
+                </Provider>
+            </QueryClientProvider>
+        </ErrorBoundary>
     );
 };
 

@@ -42,30 +42,3 @@ export const Icon = styled.i`
     margin-right: 6px;
     margin-top: -2px;
 `;
-
-export const NotificationCount = styled.div`
-    position: absolute;
-    border-radius: 50%;
-    top: -6px;
-    right: 4px;
-    display: flex;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-    height: 14px;
-    width: 14px;
-    background-color: ${(props) => props.theme.background.quaternary};
-    box-shadow: ${(props) => props.theme.shadow.notification};
-    @media (max-width: 767px) {
-        height: 12px;
-        width: 12px;
-        right: -2px;
-        top: -4px;
-    }
-`;
-
-export const Count = styled.span`
-    color: ${(props) => props.theme.button.textColor.primary};
-    font-weight: 600;
-    font-size: 10px;
-`;

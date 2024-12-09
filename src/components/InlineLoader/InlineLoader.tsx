@@ -1,4 +1,4 @@
-import CircularProgress from '@material-ui/core/CircularProgress';
+import CircularProgress from '@mui/material/CircularProgress';
 import React from 'react';
 import styled from 'styled-components';
 import { FlexDivCentered } from 'styles/common';

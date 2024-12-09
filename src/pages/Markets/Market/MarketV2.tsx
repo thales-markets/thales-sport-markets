@@ -1,30 +1,23 @@
 import SimpleLoader from 'components/SimpleLoader';
 import useSportMarketV2Query from 'queries/markets/useSportMarketV2Query';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { RouteComponentProps } from 'react-router-dom';
-import { getIsAppReady } from 'redux/modules/app';
-import { getNetworkId } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
 import { SportMarket } from 'types/markets';
+import { useChainId } from 'wagmi';
 import MarketDetailsV2 from './MarketDetailsV2';
 
-type MarketProps = RouteComponentProps<{
-    marketAddress: string;
-}>;
-
-const Market: React.FC<MarketProps> = (props) => {
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
+const Market: React.FC = () => {
     const [lastValidMarket, setLastValidMarket] = useState<SportMarket | undefined>(undefined);
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
 
-    const { params } = props.match;
+    const networkId = useChainId();
+
+    const params = useParams() as { marketAddress: string };
     const marketAddress = params && params.marketAddress ? params.marketAddress : '';
 
-    const singleMarketQuery = useSportMarketV2Query(marketAddress, false, !!lastValidMarket?.live, networkId, {
-        enabled: isAppReady,
+    const singleMarketQuery = useSportMarketV2Query(marketAddress, false, !!lastValidMarket?.live, {
+        networkId,
     });
 
     useEffect(() => {

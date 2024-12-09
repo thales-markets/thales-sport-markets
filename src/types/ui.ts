@@ -1,4 +1,5 @@
 import { Network } from 'enums/network';
+import { RouteComponentProps } from 'react-router-dom';
 import theme from 'styles/themes/dark';
 
 export type ThemeInterface = typeof theme;
@@ -59,8 +60,6 @@ export type OverdropLevel = {
     voucherAmount?: number;
 };
 
-export type Aggregate3Response = { success: boolean; returnData: string };
-
 type SEOCardData = {
     title: string;
     description: string;
@@ -90,3 +89,7 @@ export type SEOItem = SEOCardData & {
         keywords: string;
     };
 };
+
+export type SeoArticleProps = RouteComponentProps<{
+    seoId: string;
+}>;

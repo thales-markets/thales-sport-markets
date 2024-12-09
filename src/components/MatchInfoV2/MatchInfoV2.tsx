@@ -4,9 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getLiveBetSlippage, getTicketPayment, removeFromTicket } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
-import { getNetworkId } from 'redux/modules/wallet';
-import { TicketMarket } from 'types/markets';
 import { Coins } from 'thales-utils';
+import { TicketMarket } from 'types/markets';
 import { getCollateral } from 'utils/collaterals';
 import { formatMarketOdds, isWithinSlippage } from 'utils/markets';
 import {
@@ -18,6 +17,7 @@ import {
     ticketMarketAsTicketPosition,
 } from 'utils/marketsV2';
 import { getAddedPayoutOdds } from 'utils/tickets';
+import { useChainId } from 'wagmi';
 import MatchLogosV2 from '../MatchLogosV2';
 import {
     Canceled,
@@ -62,7 +62,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
-    const networkId = useSelector(getNetworkId);
+    const networkId = useChainId();
     const selectedOddsType = useSelector(getOddsType);
     const matchLabel = getMatchLabel(market);
     const ticketPayment = useSelector(getTicketPayment);

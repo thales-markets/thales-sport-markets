@@ -35,9 +35,9 @@ npm i
 Copy the `.env.local.example` file in this directory to `.env.local` (which will be ignored by Git):
 Then, open `.env.local` and add the missing environment variables:
 
--   `REACT_APP_INFURA_PROJECT_ID` - Infura project id (get it from [infura.io](https://infura.io/)).
--   `REACT_APP_IPFS_DEPLOYMENT` - Is dApp in the mode for deployment on IPFS. Set to `false`.
--   `REACT_APP_WALLET_CONNECT_PROJECT_ID` - WalletConnect project id (get it from [WalletConnect Cloud](https://cloud.walletconnect.com/)).
+-   `VITE_APP_IPFS_DEPLOYMENT` - Is dApp in the mode for deployment on IPFS. Set to `false`.
+-   `VITE_APP_INFURA_PROJECT_ID` - Infura project id (get it from [infura.io](https://infura.io/)).
+-   `VITE_APP_WALLET_CONNECT_PROJECT_ID` - WalletConnect project id (get it from [WalletConnect Cloud](https://cloud.walletconnect.com/)).
 
 ### Set up Google Translate API
 

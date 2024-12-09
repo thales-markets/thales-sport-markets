@@ -6,32 +6,38 @@ import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollate
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import { getIsConnectedViaParticle, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsMobile } from 'redux/modules/app';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
+import biconomyConnector from 'utils/biconomyWallet';
 import { buildHref } from 'utils/routes';
+import { useAccount, useChainId, useClient } from 'wagmi';
 
 const TopUp: React.FC = () => {
     const { t } = useTranslation();
 
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
-    const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+
+    const networkId = useChainId();
+    const client = useClient();
+    const { address, isConnected } = useAccount();
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+
     const [showLowBalanceAlert, setShowLowBalanceAlert] = useState<boolean>(false);
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const theme: ThemeInterface = useTheme();
 
-    const multipleCollateralBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
-        enabled: isAppReady && isWalletConnected,
-    });
+    const multipleCollateralBalances = useMultipleCollateralBalanceQuery(
+        walletAddress,
+        { networkId, client },
+        {
+            enabled: isConnected,
+        }
+    );
 
-    const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
-        enabled: isAppReady,
-    });
+    const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
 
     const exchangeRates: Rates | null =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
@@ -50,16 +56,16 @@ const TopUp: React.FC = () => {
     }, [exchangeRates, multipleCollateralBalances.data]);
 
     useEffect(() => {
-        if (isConnectedViaParticle && ethBalanceValue !== undefined && Number(ethBalanceValue) < 2) {
+        if (isBiconomy && ethBalanceValue !== undefined && Number(ethBalanceValue) < 2) {
             setShowLowBalanceAlert(true);
         } else {
             setShowLowBalanceAlert(false);
         }
-    }, [ethBalanceValue, isConnectedViaParticle]);
+    }, [ethBalanceValue, isBiconomy]);
 
     return (
         <>
-            {isConnectedViaParticle &&
+            {isBiconomy &&
                 ethBalanceValue !== undefined &&
                 (!isMobile ? (
                     <>

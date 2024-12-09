@@ -4,23 +4,34 @@ import useProfileLiquidityPoolUserTransactions from 'queries/wallet/useProfileLi
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { CellProps } from 'react-table';
-import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { formatCurrencyWithKey, formatTxTimestamp } from 'thales-utils';
-import { LiquidityPoolUserTransaction, LiquidityPoolUserTransactions } from 'types/liquidityPool';
+import { LiquidityPoolUserTransactions } from 'types/liquidityPool';
 import { ThemeInterface } from 'types/ui';
+import biconomyConnector from 'utils/biconomyWallet';
+import { useAccount, useChainId, useClient } from 'wagmi';
 
 const TransactionsTable: React.FC = () => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
 
-    const txQuery = useProfileLiquidityPoolUserTransactions(networkId, walletAddress, {
-        enabled: walletAddress !== '',
-    });
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+
+    const networkId = useChainId();
+    const client = useClient();
+    const { address, isConnected } = useAccount();
+
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+
+    const txQuery = useProfileLiquidityPoolUserTransactions(
+        walletAddress,
+        { networkId, client },
+        {
+            enabled: isConnected,
+        }
+    );
 
     const [lastValidData, setLastValidData] = useState<LiquidityPoolUserTransactions>([]);
 
@@ -37,80 +48,71 @@ const TransactionsTable: React.FC = () => {
                     color: theme.textColor.secondary,
                 }}
                 tableRowCellStyles={TableRowStyle}
-                columns={[
-                    {
-                        Header: <>{t('profile.table.date-time-col')}</>,
-                        accessor: 'timestamp',
-                        Cell: (
-                            cellProps: CellProps<
-                                LiquidityPoolUserTransaction,
-                                LiquidityPoolUserTransaction['timestamp']
-                            >
-                        ) => <TableText>{formatTxTimestamp(cellProps.cell.value)}</TableText>,
-                        width: 150,
-                        sortable: true,
-                    },
-                    {
-                        Header: <>{t(`profile.table.name-col`)}</>,
-                        accessor: 'name',
-                        Cell: (
-                            cellProps: CellProps<LiquidityPoolUserTransaction, LiquidityPoolUserTransaction['name']>
-                        ) => <TableText> {cellProps.cell.value}</TableText>,
-                        width: 150,
-                        sortable: true,
-                    },
-                    {
-                        Header: <>{t('profile.table.type-col')}</>,
-                        accessor: 'type',
-                        sortType: 'alphanumeric',
-                        Cell: (
-                            cellProps: CellProps<LiquidityPoolUserTransaction, LiquidityPoolUserTransaction['type']>
-                        ) => <TableText>{t(`profile.table.${cellProps.cell.value}`)}</TableText>,
-                        width: 150,
-                        sortable: true,
-                    },
-                    {
-                        Header: <>{t('profile.table.amount-col')}</>,
-                        sortType: 'basic',
-                        accessor: 'amount',
-                        Cell: (
-                            cellProps: CellProps<LiquidityPoolUserTransaction, LiquidityPoolUserTransaction['amount']>
-                        ) => (
-                            <>
+                columns={
+                    [
+                        {
+                            header: <>{t('profile.table.date-time-col')}</>,
+                            accessorKey: 'timestamp',
+                            cell: (cellProps: any) => (
+                                <TableText>{formatTxTimestamp(cellProps.cell.getValue())}</TableText>
+                            ),
+                            width: 150,
+                            enableSorting: true,
+                        },
+                        {
+                            header: <>{t(`profile.table.name-col`)}</>,
+                            accessorKey: 'name',
+                            cell: (cellProps: any) => <TableText> {cellProps.cell.getValue()}</TableText>,
+                            width: 150,
+                            enableSorting: true,
+                        },
+                        {
+                            header: <>{t('profile.table.type-col')}</>,
+                            accessorKey: 'type',
+                            sortType: 'alphanumeric',
+                            cell: (cellProps: any) => (
+                                <TableText>{t(`profile.table.${cellProps.cell.getValue()}`)}</TableText>
+                            ),
+                            width: 150,
+                            enableSorting: true,
+                        },
+                        {
+                            header: <>{t('profile.table.amount-col')}</>,
+                            sortType: 'basic',
+                            accessorKey: 'amount',
+                            cell: (cellProps: any) => (
+                                <>
+                                    <TableText>
+                                        {cellProps.cell.row.original.type === 'withdrawalRequest'
+                                            ? '-'
+                                            : formatCurrencyWithKey(
+                                                  cellProps.cell.row.original.collateral,
+                                                  cellProps.cell.getValue()
+                                              )}
+                                    </TableText>
+                                </>
+                            ),
+                            width: 150,
+                            enableSorting: true,
+                        },
+                        {
+                            header: <>{t('profile.table.round-col')}</>,
+                            accessorKey: 'round',
+                            cell: (cellProps: any) => (
                                 <TableText>
-                                    {cellProps.cell.row.original.type === 'withdrawalRequest'
-                                        ? '-'
-                                        : formatCurrencyWithKey(
-                                              cellProps.cell.row.original.collateral,
-                                              cellProps.cell.value
-                                          )}
+                                    {t('profile.table.round-label')} {cellProps.cell.getValue()}
                                 </TableText>
-                            </>
-                        ),
-                        width: 150,
-                        sortable: true,
-                    },
-                    {
-                        Header: <>{t('profile.table.round-col')}</>,
-                        accessor: 'round',
-                        Cell: (
-                            cellProps: CellProps<LiquidityPoolUserTransaction, LiquidityPoolUserTransaction['round']>
-                        ) => (
-                            <TableText>
-                                {t('profile.table.round-label')} {cellProps.cell.value}
-                            </TableText>
-                        ),
-                        width: 150,
-                    },
-                    {
-                        Header: <>{t('profile.table.tx-status-col')}</>,
-                        accessor: 'hash',
-                        Cell: (
-                            cellProps: CellProps<LiquidityPoolUserTransaction, LiquidityPoolUserTransaction['hash']>
-                        ) => <ViewEtherscanLink hash={cellProps.cell.value} />,
-                        width: 150,
-                    },
-                ]}
+                            ),
+                            width: 150,
+                        },
+                        {
+                            header: <>{t('profile.table.tx-status-col')}</>,
+                            accessorKey: 'hash',
+                            cell: (cellProps: any) => <ViewEtherscanLink hash={cellProps.cell.getValue()} />,
+                            width: 150,
+                        },
+                    ] as any
+                }
                 data={lastValidData}
                 isLoading={lastValidData.length === 0 && txQuery.isFetching}
                 noResultsMessage={t('profile.messages.no-lp-transactions')}

@@ -1,10 +1,10 @@
 import { Network } from 'enums/network';
+import { ContractData } from 'types/viem';
 
-const stakingThalesBettingProxy = {
+const stakingThalesBettingProxy: ContractData = {
     addresses: {
         [Network.OptimismMainnet]: '0x5e6D44B17bc989652920197790eF626b8a84e219',
         [Network.Arbitrum]: '0x109e966A4d856B82f158BF528395de6fF36214A8',
-        [Network.Base]: '',
         [Network.OptimismSepolia]: '0xba6dd31c0a7550f39ae83b7995a6fcdda5875ef9',
     },
     abi: [

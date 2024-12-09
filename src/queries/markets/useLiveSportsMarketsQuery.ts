@@ -1,25 +1,25 @@
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import axios from 'axios';
 import { generalConfig, noCacheConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
 import { secondsToMilliseconds } from 'date-fns';
-import { Network } from 'enums/network';
-import { UseQueryOptions, useQuery } from 'react-query';
 import { SportMarket, SportMarkets } from 'types/markets';
+import { NetworkConfig } from 'types/network';
 
 // without this every request is treated as new even though it has the same response
 const marketsCache = { live: [] as SportMarkets };
 
 const useLiveSportsMarketsQuery = (
-    networkId: Network,
     isLiveSelected: boolean,
-    options?: UseQueryOptions<{ live: SportMarkets }>
+    networkConfig: NetworkConfig,
+    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<{ live: SportMarkets }>(
-        QUERY_KEYS.LiveSportMarkets(networkId),
-        async () => {
+    return useQuery<{ live: SportMarkets }>({
+        queryKey: QUERY_KEYS.LiveSportMarkets(networkConfig.networkId),
+        queryFn: async () => {
             try {
                 const response = await axios.get<undefined, { data: { markets: SportMarkets } }>(
-                    `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/live-markets`,
+                    `${generalConfig.API_URL}/overtime-v2/networks/${networkConfig.networkId}/live-markets`,
                     noCacheConfig
                 );
 
@@ -52,11 +52,9 @@ const useLiveSportsMarketsQuery = (
 
             return marketsCache;
         },
-        {
-            refetchInterval: secondsToMilliseconds(isLiveSelected ? 2 : 10),
-            ...options,
-        }
-    );
+        refetchInterval: secondsToMilliseconds(isLiveSelected ? 2 : 10),
+        ...options,
+    });
 };
 
 export default useLiveSportsMarketsQuery;
