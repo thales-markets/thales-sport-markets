@@ -125,9 +125,10 @@ export const GameOfLabel = styled.span`
     font-size: 12px;
     text-transform: uppercase;
     @media (max-width: 600px) {
-        top: 10px;
-        text-align: center;
-        right: 0px;
+        font-size: 10px;
+        top: -5px;
+        right: 35px;
+        height: auto;
     }
 `;
 
@@ -151,7 +152,7 @@ export const Fire = styled.i`
 export const FireText = styled.span`
     color: ${(props) => props.theme.overdrop.textColor.primary};
     white-space: pre;
-    font-size: 7px;
+    font-size: 8px;
     @media (max-width: 600px) {
         display: flex;
         align-items: center;

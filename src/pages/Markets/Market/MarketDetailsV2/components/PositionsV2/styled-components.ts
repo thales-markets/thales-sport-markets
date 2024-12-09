@@ -26,6 +26,9 @@ export const Header = styled(FlexDivColumnCentered)<{
     max-height: ${(props) => (props.isMainPageView && !props.isColumnView ? 'auto' : '25px')};
     margin-bottom: ${(props) => (props.alignHeader ? '-19px' : '0')};
     flex: none;
+    @media (max-width: 950px) {
+        ${(props) => props.float && 'top: -50px;'}
+    }
 `;
 
 export const Title = styled.span<{ isExpanded: boolean; isMainPageView?: boolean; isColumnView?: boolean }>`
