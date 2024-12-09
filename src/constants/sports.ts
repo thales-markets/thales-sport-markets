@@ -1668,3 +1668,5 @@ export const PLAYER_PROPS_MARKETS_PER_PROP_MAP: Record<number, MarketType[]> = {
         MarketType.PLAYER_PROPS_TOUCHDOWN_SCORER,
     ],
 };
+
+export const PLAYER_PROPS_SPECIAL_SPORTS = [Sport.FOOTBALL];

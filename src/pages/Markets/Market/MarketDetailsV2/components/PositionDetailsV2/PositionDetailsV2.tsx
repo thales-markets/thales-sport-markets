@@ -79,6 +79,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
             isWinner={isGameRegularlyResolved && market.winningPositions && market.winningPositions.includes(position)}
             order={getPositionOrder(market.leagueId, market.typeId, position)}
             isMainPageView={isMainPageView}
+            isPlayerPropsMarket={isPlayerPropsMarket}
             onClick={() => {
                 if (disabledPosition) return;
                 if (isAddedToTicket) {

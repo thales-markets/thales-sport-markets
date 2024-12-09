@@ -3,6 +3,7 @@ import SPAAnchor from 'components/SPAAnchor';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
 import { FUTURES_MAIN_VIEW_DISPLAY_COUNT, MEDIUM_ODDS } from 'constants/markets';
+import { PLAYER_PROPS_SPECIAL_SPORTS } from 'constants/sports';
 import { SportFilter } from 'enums/markets';
 import { MarketType } from 'enums/marketTypes';
 import { RiskManagementConfig } from 'enums/riskManagement';
@@ -203,7 +204,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language, oddsTi
         if (!isPlayerPropsMarket) {
             return null;
         }
-        if (market.sport === Sport.FOOTBALL) {
+        if (PLAYER_PROPS_SPECIAL_SPORTS.includes(market.sport)) {
             return getMarketPlayerPropsMarketsForProp(market);
         }
 
