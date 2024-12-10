@@ -37,6 +37,11 @@ const getDefaultLiveSlippage = (): number => {
     return slippage !== undefined ? slippage : 1;
 };
 
+const getDefaultIsSystemBet = (): boolean => {
+    const lsIsSystemBet = localStore.get(LOCAL_STORAGE_KEYS.IS_SYSTEM_BET);
+    return lsIsSystemBet !== undefined ? (lsIsSystemBet as boolean) : true;
+};
+
 const getDefaultError = () => {
     return { code: TicketErrorCode.NO_ERROS, data: '' };
 };
@@ -57,7 +62,7 @@ const initialState: TicketSliceState = {
     maxTicketSize: DEFAULT_MAX_TICKET_SIZE,
     liveBetSlippage: getDefaultLiveSlippage(),
     isFreeBetDisabledByUser: false,
-    isSystemBet: false,
+    isSystemBet: getDefaultIsSystemBet(),
     error: getDefaultError(),
 };
 
@@ -189,6 +194,7 @@ const ticketSlice = createSlice({
         },
         setIsSystemBet: (state, action: PayloadAction<boolean>) => {
             state.isSystemBet = action.payload;
+            localStore.set(LOCAL_STORAGE_KEYS.IS_SYSTEM_BET, action.payload);
         },
         resetTicketError: (state) => {
             state.error = getDefaultError();

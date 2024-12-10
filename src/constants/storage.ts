@@ -31,4 +31,6 @@ export const LOCAL_STORAGE_KEYS = {
     OVERDROP_PREVENT_DAILY_MODAL: 'overdropPreventDailyModal',
     OVERDROP_STATE: 'overdropState',
     STAKING_MODAL_MUTE_END: 'stakingModalMuteEnd',
+    IS_SYSTEM_BET: 'isSystemBet',
+    SYSTEM_BET_DENOMINATOR: 'systemBetDenominator',
 };

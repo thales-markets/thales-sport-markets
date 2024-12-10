@@ -62,12 +62,18 @@ export const SummaryValue = styled.span<{
     isHidden?: boolean;
     isCollateralInfo?: boolean;
     fontSize?: number;
+    isError?: boolean;
 }>`
     font-weight: 600;
     font-size: ${(props) => props.fontSize || 11}px;
     line-height: 20px;
     display: ${(props) => (props.isHidden ? 'none' : '')};
-    color: ${(props) => (props.isInfo || props.isCurrency ? props.theme.status.win : props.theme.textColor.primary)};
+    color: ${(props) =>
+        props.isError
+            ? props.theme.error.textColor.primary
+            : props.isInfo || props.isCurrency
+            ? props.theme.status.win
+            : props.theme.textColor.primary};
     margin-left: ${(props) => (props.isInfo || props.isCollateralInfo ? 'auto' : '5px')};
     i {
         color: ${(props) => props.theme.textColor.septenary};
@@ -480,7 +486,7 @@ export const SystemBetValidation = styled(FlexDivCentered)`
 `;
 
 export const systemDropdownStyle = {
-    menuStyle: { borderRadius: 5, marginTop: 3 },
+    menuStyle: { borderRadius: 5, marginTop: 3, zIndex: 4000 },
     controlStyle: { borderRadius: 5, minHeight: '25px', fontSize: '14px', fontWeight: 600 },
     dropdownIndicatorStyle: { padding: '2px' },
     optionStyle: { fontSize: '14px', fontWeight: 600 },

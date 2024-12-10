@@ -2,6 +2,7 @@ import axios from 'axios';
 import ApprovalModal from 'components/ApprovalModal';
 import Button from 'components/Button';
 import CollateralSelector from 'components/CollateralSelector';
+import SelectInput from 'components/SelectInput';
 import ShareTicketModalV2 from 'components/ShareTicketModalV2';
 import { ShareTicketModalProps } from 'components/ShareTicketModalV2/ShareTicketModalV2';
 import Toggle from 'components/Toggle';
@@ -18,16 +19,19 @@ import {
     COINGECKO_SWAP_TO_THALES_QUOTE_SLIPPAGE,
     MIN_COLLATERAL_MULTIPLIER,
     SWAP_APPROVAL_BUFFER,
+    SYSTEM_BET_MINIMUM_DENOMINATOR,
     SYSTEM_BET_MINIMUM_MARKETS,
     THALES_CONTRACT_RATE_KEY,
 } from 'constants/markets';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
+import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { secondsToMilliseconds } from 'date-fns';
 import { OddsType } from 'enums/markets';
 import { BuyTicketStep } from 'enums/tickets';
 import { BigNumber, ethers } from 'ethers';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import useInterval from 'hooks/useInterval';
+import useLocalStorage from 'hooks/useLocalStorage';
 import Slippage from 'pages/Markets/Home/Parlay/components/Slippage';
 import CurrentLevelProgressLine from 'pages/Overdrop/components/CurrentLevelProgressLine';
 import { OverdropIcon } from 'pages/Overdrop/components/styled-components';
@@ -134,7 +138,6 @@ import { getAddedPayoutOdds, getSystemBetData } from 'utils/tickets';
 import { delay } from 'utils/timer';
 import { getKeepSelectionFromStorage, setKeepSelectionToStorage } from 'utils/ui';
 import { Address } from 'viem';
-import SelectInput from '../../../../../../components/SelectInput';
 import BuyStepsModal from '../BuyStepsModal';
 import SuggestedAmount from '../SuggestedAmount';
 import {
@@ -259,7 +262,10 @@ const Ticket: React.FC<TicketProps> = ({
     const [hasSwapAllowance, setHasSwapAllowance] = useState(false);
     const [buyStep, setBuyStep] = useState(BuyTicketStep.APPROVE_SWAP);
     const [openBuyStepsModal, setOpenBuyStepsModal] = useState(false);
-    const [systemBetDenominator, setSystemBetDenominator] = useState(2);
+    const [systemBetDenominator, setSystemBetDenominator] = useLocalStorage(
+        LOCAL_STORAGE_KEYS.SYSTEM_BET_DENOMINATOR,
+        SYSTEM_BET_MINIMUM_DENOMINATOR
+    );
 
     const userMultipliersQuery = useUserMultipliersQuery(walletAddress, { enabled: isAppReady && isWalletConnected });
 
@@ -299,6 +305,14 @@ const Ticket: React.FC<TicketProps> = ({
             mountedRef.current = false;
         };
     }, []);
+
+    useEffect(() => {
+        if (markets.length <= systemBetDenominator) {
+            setSystemBetDenominator(
+                markets.length <= SYSTEM_BET_MINIMUM_DENOMINATOR ? SYSTEM_BET_MINIMUM_DENOMINATOR : markets.length - 1
+            );
+        }
+    }, [markets.length, setSystemBetDenominator, systemBetDenominator]);
 
     const overdropMultipliers: OverdropMultiplier[] = useMemo(() => {
         const parlayMultiplier = {
@@ -601,28 +615,47 @@ const Ticket: React.FC<TicketProps> = ({
             value: 0,
         };
         if (isThales || swapToThales) {
-            const { quote, basicQuote } = markets.reduce(
-                (partialQuote, market) => {
-                    return {
-                        quote:
-                            partialQuote.quote *
-                            (market.odd > 0
-                                ? getAddedPayoutOdds(CRYPTO_CURRENCY_MAP.THALES as Coins, market.odd)
-                                : market.odd),
-                        basicQuote: partialQuote.basicQuote * market.odd,
-                    };
-                },
-                {
-                    quote: 1,
-                    basicQuote: 1,
-                }
-            );
+            const { quote, basicQuote } = isSystemBet
+                ? isValidSystemBet
+                    ? {
+                          quote: systemData.systemBetQuote,
+                          basicQuote: getSystemBetData(markets, systemBetDenominator, 'USDC' as Coins).systemBetQuote,
+                      }
+                    : {
+                          quote: 0,
+                          basicQuote: 0,
+                      }
+                : markets.reduce(
+                      (partialQuote, market) => {
+                          return {
+                              quote:
+                                  partialQuote.quote *
+                                  (market.odd > 0
+                                      ? getAddedPayoutOdds(CRYPTO_CURRENCY_MAP.THALES as Coins, market.odd)
+                                      : market.odd),
+                              basicQuote: partialQuote.basicQuote * market.odd,
+                          };
+                      },
+                      {
+                          quote: 1,
+                          basicQuote: 1,
+                      }
+                  );
             const percentage = basicQuote / quote;
             bonus.percentage = percentage - 1;
             bonus.value = Number(payout) - Number(payout) / percentage;
         }
         return bonus;
-    }, [isThales, markets, payout, swapToThales]);
+    }, [
+        isSystemBet,
+        isThales,
+        isValidSystemBet,
+        markets,
+        payout,
+        swapToThales,
+        systemBetDenominator,
+        systemData.systemBetQuote,
+    ]);
 
     const numberOfSystemBetCombination = useMemo(() => {
         let combinationsCount = 1;
@@ -2000,7 +2033,7 @@ const Ticket: React.FC<TicketProps> = ({
                         arrow={true}
                         isError={isInvalidSystemTotalQuote}
                     >
-                        <SummaryValue fontSize={12}>
+                        <SummaryValue fontSize={12} isError={isInvalidSystemTotalQuote}>
                             {formatMarketOdds(
                                 selectedOddsType,
                                 isSystemBet ? systemData.systemBetQuotePerCombination : totalQuote
