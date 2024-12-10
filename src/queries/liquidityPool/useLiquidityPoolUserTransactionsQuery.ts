@@ -1,38 +1,38 @@
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import QUERY_KEYS from 'constants/queryKeys';
-import { Network } from 'enums/network';
-import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import { coinFormatter, Coins } from 'thales-utils';
 import { LiquidityPoolUserTransaction, LiquidityPoolUserTransactions } from 'types/liquidityPool';
+import { NetworkConfig } from 'types/network';
 
 const useLiquidityPoolUserTransactionsQuery = (
-    networkId: Network,
     liquidityPoolAddress: string,
     collateral: Coins,
-    options?: UseQueryOptions<LiquidityPoolUserTransactions>
+    networkConfig: NetworkConfig,
+    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<LiquidityPoolUserTransactions>(
-        QUERY_KEYS.LiquidityPool.UserTransactions(networkId, liquidityPoolAddress),
-        async () => {
+    return useQuery<LiquidityPoolUserTransactions>({
+        queryKey: QUERY_KEYS.LiquidityPool.UserTransactions(networkConfig.networkId, liquidityPoolAddress),
+        queryFn: async () => {
             try {
                 const liquidityPoolUserTransactions = await thalesData.sportMarketsV2.liquidityPoolUserTransactions({
-                    network: networkId,
+                    network: networkConfig.networkId,
                     liquidityPool: liquidityPoolAddress,
                 });
 
-                return liquidityPoolUserTransactions.map((tx: LiquidityPoolUserTransaction) => ({
-                    ...tx,
-                    amount: coinFormatter(tx.amount || 0, networkId, collateral),
-                }));
+                return liquidityPoolUserTransactions.map((tx: LiquidityPoolUserTransaction) => {
+                    return {
+                        ...tx,
+                        amount: coinFormatter(BigInt(tx.amount ? tx.amount : 0), networkConfig.networkId, collateral),
+                    };
+                });
             } catch (e) {
                 console.log(e);
                 return [];
             }
         },
-        {
-            ...options,
-        }
-    );
+        ...options,
+    });
 };
 
 export default useLiquidityPoolUserTransactionsQuery;

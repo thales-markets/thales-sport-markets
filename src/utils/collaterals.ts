@@ -1,8 +1,15 @@
 import { COLLATERALS, CRYPTO_CURRENCY_MAP, FREE_BET_COLLATERALS, STABLE_COINS } from 'constants/currency';
+import { ALTCOIN_CONVERSION_BUFFER_PERCENTAGE, SUSD_CONVERSION_BUFFER_PERCENTAGE } from 'constants/markets';
 import _ from 'lodash';
 import { Rates } from 'queries/rates/useExchangeRatesQuery';
+import {
+    COLLATERAL_DECIMALS,
+    Coins,
+    DEFAULT_CURRENCY_DECIMALS,
+    LONG_CURRENCY_DECIMALS,
+    ceilNumberToDecimals,
+} from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
-import { Coins } from 'thales-utils';
 import multipleCollateral from './contracts/multipleCollateralContract';
 
 export const getDefaultCollateral = (networkId: SupportedNetwork) => COLLATERALS[networkId][0];
@@ -92,4 +99,31 @@ export const sortCollateralBalances = (
         newObject[item.collateralKey] = item.balance;
     });
     return newObject;
+};
+
+export const convertFromStableToCollateral = (
+    dstCollateral: Coins,
+    amount: number,
+    rate: number,
+    networkId: SupportedNetwork
+) => {
+    const defaultCollateral = getDefaultCollateral(networkId);
+    const decimals = isStableCurrency(dstCollateral) ? DEFAULT_CURRENCY_DECIMALS : LONG_CURRENCY_DECIMALS;
+
+    if (dstCollateral == defaultCollateral) {
+        return amount;
+    } else {
+        const priceFeedBuffer =
+            1 -
+            (dstCollateral === CRYPTO_CURRENCY_MAP.sUSD
+                ? SUSD_CONVERSION_BUFFER_PERCENTAGE
+                : ALTCOIN_CONVERSION_BUFFER_PERCENTAGE);
+        return rate
+            ? ceilNumberToDecimals(
+                  Math.ceil((amount / (rate * priceFeedBuffer)) * 10 ** COLLATERAL_DECIMALS[dstCollateral]) /
+                      10 ** COLLATERAL_DECIMALS[dstCollateral],
+                  decimals
+              )
+            : 0;
+    }
 };

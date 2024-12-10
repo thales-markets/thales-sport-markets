@@ -3,12 +3,10 @@ import { League } from 'enums/sports';
 import { t } from 'i18next';
 import useLpStatsQuery from 'queries/pnl/useLpStatsQuery';
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { getNetworkId } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
 import { Coins, formatCurrencyWithKey, formatCurrencyWithSign } from 'thales-utils';
+import { useChainId, useClient } from 'wagmi';
 
 type LpStatsProps = {
     round: number;
@@ -17,9 +15,10 @@ type LpStatsProps = {
 };
 
 const LpStats: React.FC<LpStatsProps> = ({ round, leagueId, onlyPP }) => {
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const networkId = useChainId();
+    const client = useClient();
 
-    const lpStatsQuery = useLpStatsQuery(round, leagueId, onlyPP, networkId);
+    const lpStatsQuery = useLpStatsQuery(round, leagueId, onlyPP, { networkId, client });
     const lpStats = lpStatsQuery.isSuccess && lpStatsQuery.data ? lpStatsQuery.data : [];
 
     return (

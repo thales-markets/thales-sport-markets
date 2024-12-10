@@ -8,10 +8,10 @@ import useLpTicketsQuery from 'queries/pnl/useLpTicketsQuery';
 import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { getNetworkId } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivSpaceBetween } from 'styles/common';
 import { Ticket } from 'types/markets';
+import { useChainId, useClient } from 'wagmi';
 import TicketTransactionsTable from '../../../Markets/Market/MarketDetailsV2/components/TicketTransactionsTable';
 
 const lpOptions = [
@@ -40,7 +40,9 @@ type AllLpTicketsProps = {
 };
 
 const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) => {
-    const networkId = useSelector(getNetworkId);
+    const networkId = useChainId();
+    const client = useClient();
+
     const isMobile = useSelector(getIsMobile);
     const [lp, setLp] = useState<number>(0);
     const [showOnlyOpenTickets, setShowOnlyOpenTickets] = useState<boolean>(false);
@@ -48,9 +50,18 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
     const [showOnlyPendingTickets, setShowOnlyPendingTickets] = useState<boolean>(false);
     const [expandAll, setExpandAll] = useState<boolean>(false);
 
-    const usdcLpTicketsQuery = useLpTicketsQuery(LiquidityPoolCollateral.USDC, round, leagueId, onlyPP, networkId);
-    const wethLpTicketsQuery = useLpTicketsQuery(LiquidityPoolCollateral.WETH, round, leagueId, onlyPP, networkId);
-    const thalesLpTicketsQuery = useLpTicketsQuery(LiquidityPoolCollateral.THALES, round, leagueId, onlyPP, networkId);
+    const usdcLpTicketsQuery = useLpTicketsQuery(LiquidityPoolCollateral.USDC, round, leagueId, onlyPP, {
+        networkId,
+        client,
+    });
+    const wethLpTicketsQuery = useLpTicketsQuery(LiquidityPoolCollateral.WETH, round, leagueId, onlyPP, {
+        networkId,
+        client,
+    });
+    const thalesLpTicketsQuery = useLpTicketsQuery(LiquidityPoolCollateral.THALES, round, leagueId, onlyPP, {
+        networkId,
+        client,
+    });
 
     const lpTickets: Ticket[] = useMemo(() => {
         let lpTickets: Ticket[] = [];
@@ -162,7 +173,7 @@ const ExpandAllContainer = styled(FlexDivCentered)`
     font-size: 18px;
 `;
 
-const SelectContainer = styled.div<{ width?: string }>`
+const SelectContainer = styled.div`
     margin: 15px 0;
     width: 150px;
 `;

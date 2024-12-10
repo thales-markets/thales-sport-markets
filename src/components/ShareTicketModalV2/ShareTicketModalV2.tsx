@@ -13,13 +13,13 @@ import ReactModal from 'react-modal';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
-import { getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
 import { Coins, isFirefox, isIos, isMetamask } from 'thales-utils';
 import { TicketMarket } from 'types/markets';
 import { refetchOverdropMultipliers } from 'utils/queryConnector';
+import { useAccount } from 'wagmi';
 import MyTicket from './components/MyTicket';
 
 export type ShareTicketModalProps = {
@@ -74,7 +74,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
     isLive,
     applyPayoutMultiplier,
 }) => {
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state));
+    const walletAddress = useAccount()?.address || '';
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const [isLoading, setIsLoading] = useState(false);

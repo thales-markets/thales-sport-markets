@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 const useWidgetBotScript = (preventWidgetLoad: boolean) => {
     useEffect(() => {
-        if (preventWidgetLoad) {
+        if (preventWidgetLoad || (window as any).crate) {
             return;
         }
 

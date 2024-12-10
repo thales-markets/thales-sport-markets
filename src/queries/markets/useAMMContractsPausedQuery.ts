@@ -1,21 +1,30 @@
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import QUERY_KEYS from 'constants/queryKeys';
-import { Network } from 'enums/network';
-import { useQuery, UseQueryOptions } from 'react-query';
-import networkConnector from 'utils/networkConnector';
+import { ContractType } from 'enums/contract';
+import { NetworkConfig } from 'types/network';
+import { ViemContract } from 'types/viem';
+import { getContractInstance } from 'utils/contract';
+import sportsAMMV2Contract from 'utils/contracts/sportsAMMV2Contract';
 
 type AMMContractsPausedData = {
     sportsAMM: boolean;
 };
 
-const useAMMContractsPausedQuery = (networkId: Network, options?: UseQueryOptions<AMMContractsPausedData>) => {
-    return useQuery<AMMContractsPausedData>(
-        QUERY_KEYS.CheckPausedAMM(networkId),
-        async () => {
+const useAMMContractsPausedQuery = (
+    networkConfig: NetworkConfig,
+    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery<AMMContractsPausedData>({
+        queryKey: QUERY_KEYS.CheckPausedAMM(networkConfig.networkId),
+        queryFn: async () => {
             try {
-                const { sportsAMMV2Contract } = networkConnector;
+                const sportsAMMV2ContractInstance = getContractInstance(
+                    ContractType.SPORTS_AMM_V2,
+                    networkConfig
+                ) as ViemContract;
 
                 if (sportsAMMV2Contract) {
-                    const [isSportsAMMPaused] = await Promise.all([sportsAMMV2Contract.paused()]);
+                    const [isSportsAMMPaused] = await Promise.all([sportsAMMV2ContractInstance.read.paused()]);
 
                     return {
                         sportsAMM: isSportsAMMPaused,
@@ -32,10 +41,8 @@ const useAMMContractsPausedQuery = (networkId: Network, options?: UseQueryOption
                 };
             }
         },
-        {
-            ...options,
-        }
-    );
+        ...options,
+    });
 };
 
 export default useAMMContractsPausedQuery;

@@ -1,34 +1,25 @@
-import React, { useEffect } from 'react';
-import Select from 'react-select';
+import React from 'react';
+import Select, { CSSObjectWithLabel } from 'react-select';
 import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
 
-type SelectOptions = Array<{ value: number | string; label: string }>;
+type SelectOption = { value: number | string; label: string };
+
+type SelectOptions = SelectOption[];
 
 type SelectInputProps = {
     options: SelectOptions;
     handleChange: (value: number | undefined | null) => void;
     defaultValue?: number;
-    placeholder?: string;
+    value?: SelectOption;
     width?: number;
     isDisabled?: boolean;
 };
 
-const SelectInput: React.FC<SelectInputProps> = ({
-    options,
-    handleChange,
-    defaultValue,
-    placeholder,
-    width,
-    isDisabled,
-}) => {
+const SelectInput: React.FC<SelectInputProps> = ({ options, handleChange, defaultValue, value, width, isDisabled }) => {
     const theme: ThemeInterface = useTheme();
 
-    const defaultOption = options[defaultValue ? defaultValue : 0];
-    const defaultOptionWithPlaceholder = defaultOption || {
-        value: Number(defaultValue),
-        label: placeholder,
-    };
+    const defaultOption = (value ?? options[defaultValue || 0]) || Number(defaultValue);
 
     const customStyled = {
         menu: (provided: any, state: any) => ({
@@ -67,10 +58,11 @@ const SelectInput: React.FC<SelectInputProps> = ({
             ...provided,
             color: theme.textColor.primary,
         }),
-        singleValue: (provided: any) => ({
+        singleValue: (provided: CSSObjectWithLabel) => ({
             ...provided,
             color: theme.textColor.primary,
             fontFamily: theme.fontFamily.primary,
+            lineHeight: '120%',
         }),
         dropdownIndicator: (provided: any) => ({
             ...provided,
@@ -82,23 +74,15 @@ const SelectInput: React.FC<SelectInputProps> = ({
         }),
     };
 
-    // when there are no options but there is a placeholder
-    useEffect(() => {
-        if (!defaultOption && placeholder) {
-            handleChange(Number(defaultValue));
-        }
-    }, [defaultOption, defaultValue, handleChange, placeholder]);
-
     return (
         <Select
-            value={defaultOptionWithPlaceholder}
-            placeholder={placeholder}
+            value={defaultOption}
             options={options}
             styles={customStyled}
-            onChange={(props) => {
+            onChange={(props: any) => {
                 handleChange(Number(props?.value));
             }}
-            defaultValue={defaultOptionWithPlaceholder}
+            defaultValue={defaultOption}
             isSearchable={false}
             isDisabled={isDisabled}
         />

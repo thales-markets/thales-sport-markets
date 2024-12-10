@@ -6,17 +6,19 @@ import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { ZERO_ADDRESS } from 'constants/network';
+import { ContractType } from 'enums/contract';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
 import { getOddsType } from 'redux/modules/ui';
-import { getIsAA, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { Coins, formatCurrencyWithKey, getEtherscanAddressLink, truncateAddress } from 'thales-utils';
 import { Ticket } from 'types/markets';
 import { executeBiconomyTransaction } from 'utils/biconomy';
+import biconomyConnector from 'utils/biconomyWallet';
 import {
     getCollateral,
     getCollateralAddress,
@@ -24,10 +26,13 @@ import {
     getDefaultCollateral,
     isLpSupported,
 } from 'utils/collaterals';
+import { getContractInstance } from 'utils/contract';
 import { getIsMultiCollateralSupported } from 'utils/network';
-import networkConnector from 'utils/networkConnector';
-import { refetchAfterClaim } from 'utils/queryConnector';
+import { refetchAfterClaim, refetchBalances } from 'utils/queryConnector';
 import { formatTicketOdds, getTicketMarketOdd } from 'utils/tickets';
+import { Client } from 'viem';
+import { waitForTransactionReceipt } from 'viem/actions';
+import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 import TicketMarketDetails from '../TicketMarketDetails';
 import {
     ArrowIcon,
@@ -76,9 +81,15 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
     const { t } = useTranslation();
     const selectedOddsType = useSelector(getOddsType);
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const isAA = useSelector((state: RootState) => getIsAA(state));
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
+
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+
+    const networkId = useChainId();
+    const client = useClient();
+    const walletClient = useWalletClient();
+
+    const { address } = useAccount();
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
     const [showDetails, setShowDetails] = useState<boolean>(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -114,44 +125,52 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
 
     const claimTicket = async (ticketAddress: string) => {
         const id = toast.loading(t('market.toast-message.transaction-pending'));
-        const { sportsAMMV2Contract, signer } = networkConnector;
-        if (signer && sportsAMMV2Contract) {
+
+        const sportsAMMV2ContractWithSigner = getContractInstance(ContractType.SPORTS_AMM_V2, {
+            client: walletClient.data as Client,
+            networkId,
+        });
+
+        if (sportsAMMV2ContractWithSigner) {
             setIsSubmitting(true);
             try {
-                let txResult;
-                const sportsAMMV2ContractWithSigner = sportsAMMV2Contract.connect(signer);
-                if (isAA) {
-                    txResult =
+                let txReceipt;
+                if (isBiconomy) {
+                    txReceipt =
                         isClaimCollateralDefaultCollateral ||
                         (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral) ||
                         ticket.isFreeBet
                             ? await executeBiconomyTransaction(
+                                  networkId,
                                   claimCollateralAddress,
                                   sportsAMMV2ContractWithSigner,
                                   'exerciseTicket',
                                   [ticketAddress]
                               )
                             : await executeBiconomyTransaction(
+                                  networkId,
                                   claimCollateralAddress,
                                   sportsAMMV2ContractWithSigner,
                                   'exerciseTicketOffRamp',
                                   [ticketAddress, claimCollateralAddress, isEth]
                               );
                 } else {
-                    const tx =
+                    const hash =
                         isClaimCollateralDefaultCollateral ||
                         (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral) ||
                         ticket.isFreeBet
-                            ? await sportsAMMV2ContractWithSigner.exerciseTicket(ticketAddress)
-                            : await sportsAMMV2ContractWithSigner.exerciseTicketOffRamp(
+                            ? await sportsAMMV2ContractWithSigner.write.exerciseTicket([ticketAddress])
+                            : await sportsAMMV2ContractWithSigner.write.exerciseTicketOffRamp([
                                   ticketAddress,
                                   claimCollateralAddress,
-                                  isEth
-                              );
-                    txResult = await tx.wait();
+                                  isEth,
+                              ]);
+                    txReceipt = await waitForTransactionReceipt(client as Client, {
+                        hash,
+                    });
                 }
 
-                if (txResult && txResult.transactionHash) {
+                if (txReceipt.status === 'success') {
                     toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
                     if (setShareTicketModalData && setShowShareTicketModal) {
                         setShareTicketModalData(shareTicketData);
@@ -160,6 +179,8 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
                     if (ticket.collateral === (CRYPTO_CURRENCY_MAP.THALES as Coins)) {
                         onThalesClaim(ticket.isFreeBet ? ticket.payout - ticket.buyInAmount : ticket.payout);
                     }
+                    refetchAfterClaim(walletAddress, networkId);
+                    refetchBalances(walletAddress, networkId);
                 }
             } catch (e) {
                 toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
@@ -185,7 +206,6 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
         payout: ticket.payout,
         multiSingle: false,
         onClose: () => {
-            refetchAfterClaim(walletAddress, networkId);
             setShowShareTicketModal ? setShowShareTicketModal(false) : null;
         },
         isTicketLost: ticket.isLost,
@@ -196,25 +216,22 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
 
     const getClaimButton = (isMobile: boolean) => {
         return ticket.isFreeBet ? (
-            <Tooltip
-                overlay={t('profile.free-bet.claim-btn')}
-                component={
-                    <Button
-                        disabled={isSubmitting}
-                        additionalStyles={isMobile ? additionalClaimButtonStyleMobile : additionalClaimButtonStyle}
-                        padding="2px 5px"
-                        fontSize={isMobile ? '9px' : '15px'}
-                        height={isMobile ? '19px' : '24px'}
-                        onClick={(e: any) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            claimTicket(ticket.id);
-                        }}
-                    >
-                        {isSubmitting ? t('profile.card.claim-progress') : t('profile.card.claim')}
-                    </Button>
-                }
-            />
+            <Tooltip overlay={t('profile.free-bet.claim-btn')}>
+                <Button
+                    disabled={isSubmitting}
+                    additionalStyles={isMobile ? additionalClaimButtonStyleMobile : additionalClaimButtonStyle}
+                    padding="2px 5px"
+                    fontSize={isMobile ? '9px' : '15px'}
+                    height={isMobile ? '19px' : '24px'}
+                    onClick={(e: any) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        claimTicket(ticket.id);
+                    }}
+                >
+                    {isSubmitting ? t('profile.card.claim-progress') : t('profile.card.claim')}
+                </Button>
+            </Tooltip>
         ) : (
             <Button
                 disabled={isSubmitting}
@@ -278,10 +295,9 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
                             <PayoutWrapper>
                                 {ticket.isFreeBet && (
                                     <FreeBetWrapper>
-                                        <Tooltip
-                                            overlay={t('profile.free-bet.claim-btn')}
-                                            component={<FreeBetIcon className={'icon icon--gift'} />}
-                                        />
+                                        <Tooltip overlay={t('profile.free-bet.claim-btn')}>
+                                            <FreeBetIcon className={'icon icon--gift'} />
+                                        </Tooltip>
                                     </FreeBetWrapper>
                                 )}
                                 <InfoContainerColumn isOpen={!isClaimable}>

@@ -1,20 +1,22 @@
-import { Network } from 'enums/network';
-import { useQuery, UseQueryOptions } from 'react-query';
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
+import { ContractType } from 'enums/contract';
 import { bigNumberFormatter, coinFormatter, Coins } from 'thales-utils';
 import { UserLiquidityPoolData } from 'types/liquidityPool';
-import networkConnector from 'utils/networkConnector';
+import { NetworkConfig } from 'types/network';
+import { ViemContract } from 'types/viem';
+import { getContractInstance } from 'utils/contract';
 import QUERY_KEYS from '../../constants/queryKeys';
 
 const useLiquidityPoolUserDataQuery = (
     address: string,
     collateral: Coins,
     walletAddress: string,
-    networkId: Network,
-    options?: UseQueryOptions<UserLiquidityPoolData | undefined>
+    networkConfig: NetworkConfig,
+    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<UserLiquidityPoolData | undefined>(
-        QUERY_KEYS.LiquidityPool.UserData(address, walletAddress, networkId),
-        async () => {
+    return useQuery<UserLiquidityPoolData | undefined>({
+        queryKey: QUERY_KEYS.LiquidityPool.UserData(address, walletAddress, networkConfig.networkId),
+        queryFn: async () => {
             const userLiquidityPoolData: UserLiquidityPoolData = {
                 balanceCurrentRound: 0,
                 balanceNextRound: 0,
@@ -28,11 +30,14 @@ const useLiquidityPoolUserDataQuery = (
             };
 
             try {
-                const { liquidityPoolDataContract } = networkConnector;
-                if (liquidityPoolDataContract) {
-                    const contractUserLiquidityPoolData = await liquidityPoolDataContract.getUserLiquidityPoolData(
-                        address,
-                        walletAddress
+                const liquidityPoolDataContractInstance = getContractInstance(
+                    ContractType.LIQUIDITY_POOL_DATA,
+                    networkConfig
+                ) as ViemContract;
+
+                if (liquidityPoolDataContractInstance) {
+                    const contractUserLiquidityPoolData = await liquidityPoolDataContractInstance.read.getUserLiquidityPoolData(
+                        [address, walletAddress]
                     );
 
                     userLiquidityPoolData.isWithdrawalRequested = contractUserLiquidityPoolData.withdrawalRequested;
@@ -43,12 +48,12 @@ const useLiquidityPoolUserDataQuery = (
 
                     userLiquidityPoolData.balanceCurrentRound = coinFormatter(
                         contractUserLiquidityPoolData.balanceCurrentRound,
-                        networkId,
+                        networkConfig.networkId,
                         collateral
                     );
                     userLiquidityPoolData.balanceNextRound = coinFormatter(
                         contractUserLiquidityPoolData.balanceNextRound,
-                        networkId,
+                        networkConfig.networkId,
                         collateral
                     );
                     userLiquidityPoolData.withdrawalAmount = userLiquidityPoolData.isWithdrawalRequested
@@ -72,10 +77,8 @@ const useLiquidityPoolUserDataQuery = (
             }
             return undefined;
         },
-        {
-            ...options,
-        }
-    );
+        ...options,
+    });
 };
 
 export default useLiquidityPoolUserDataQuery;
