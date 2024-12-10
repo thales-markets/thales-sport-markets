@@ -37,8 +37,8 @@ import {
     FirstExpandedSection,
     FreeBetIcon,
     LastExpandedSection,
-    LiveIndicatorContainer,
-    LiveLabel,
+    LiveSystemIndicatorContainer,
+    LiveSystemLabel,
     MarketStatus,
     MarketStatusIcon,
     MarketTypeInfo,
@@ -159,11 +159,18 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                         Cell: (cellProps: any) => {
                             return (
                                 <>
-                                    <LiveIndicatorContainer isLive={cellProps.cell.row.original.isLive}>
-                                        {cellProps.cell.row.original.isLive && (
-                                            <LiveLabel>{t('profile.card.live')}</LiveLabel>
+                                    <LiveSystemIndicatorContainer
+                                        isLive={cellProps.cell.row.original.isLive}
+                                        isSystem={cellProps.cell.row.original.isSystem}
+                                    >
+                                        {cellProps.cell.row.original.isLive ? (
+                                            <LiveSystemLabel>{t('profile.card.live')}</LiveSystemLabel>
+                                        ) : cellProps.cell.row.original.isSystem ? (
+                                            <LiveSystemLabel>{t('profile.card.system-short')}</LiveSystemLabel>
+                                        ) : (
+                                            <></>
                                         )}
-                                    </LiveIndicatorContainer>
+                                    </LiveSystemIndicatorContainer>
                                     <TableText>{formatDateWithTime(cellProps.cell.value)}</TableText>
                                 </>
                             );
@@ -189,7 +196,11 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                         accessor: 'numOfMarkets',
                         sortable: true,
                         Cell: (cellProps: any) => {
-                            return <TableText>{cellProps.cell.value}</TableText>;
+                            return (
+                                <TableText>{`${cellProps.cell.row.original.isSystem ? 'X/' : ''}${
+                                    cellProps.cell.value
+                                }`}</TableText>
+                            );
                         },
                     },
                     {

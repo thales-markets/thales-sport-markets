@@ -16,12 +16,13 @@ export const TableText = styled.span`
     }
 `;
 
-export const LiveIndicatorContainer = styled(FlexDivStart)<{ isLive?: boolean }>`
+export const LiveSystemIndicatorContainer = styled(FlexDivStart)<{ isLive?: boolean; isSystem?: boolean }>`
     min-width: 10px;
     max-width: 10px;
     height: 30px;
     border-radius: 3px;
-    background: ${(props) => (props.isLive ? props.theme.status.live : 'transparent')};
+    background: ${(props) =>
+        props.isLive ? props.theme.status.live : props.isSystem ? props.theme.status.system : 'transparent'};
     color: ${(props) => props.theme.textColor.secondary};
     align-items: center;
     justify-content: center;
@@ -32,7 +33,7 @@ export const LiveIndicatorContainer = styled(FlexDivStart)<{ isLive?: boolean }>
     }
 `;
 
-export const LiveLabel = styled.span`
+export const LiveSystemLabel = styled.span`
     transform: rotate(270deg);
     color: ${(props) => props.theme.textColor.tertiary};
     font-size: 10px;

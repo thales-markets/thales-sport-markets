@@ -41,7 +41,7 @@ import {
     FreeBetWrapper,
     InfoContainerColumn,
     Label,
-    LiveIndicatorContainer,
+    LiveSystemIndicatorContainer,
     NumberOfGamesContainer,
     OverviewContainer,
     OverviewWrapper,
@@ -240,9 +240,15 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
     return (
         <Container>
             <OverviewWrapper>
-                <LiveIndicatorContainer isLive={ticket.isLive}>
-                    {ticket.isLive && <Label>{t('profile.card.live')}</Label>}
-                </LiveIndicatorContainer>
+                <LiveSystemIndicatorContainer isLive={ticket.isLive} isSystem={ticket.isSystem}>
+                    {ticket.isLive ? (
+                        <Label>{t('profile.card.live')}</Label>
+                    ) : ticket.isSystem ? (
+                        <Label>{t('profile.card.system')}</Label>
+                    ) : (
+                        <></>
+                    )}
+                </LiveSystemIndicatorContainer>
                 <OverviewContainer onClick={() => setShowDetails(!showDetails)}>
                     <TicketInfo>
                         <ExternalLink href={getEtherscanAddressLink(networkId, ticket.id)} target={'_blank'}>
@@ -252,8 +258,10 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
                             </TicketIdContainer>
                         </ExternalLink>
                         <NumberOfGamesContainer>
-                            <Label>{t('profile.card.number-of-games')}:</Label>
-                            <Value>{ticket.numOfMarkets}</Value>
+                            <Label>
+                                {ticket.isSystem ? t('profile.card.system') : t('profile.card.number-of-games')}:
+                            </Label>
+                            <Value>{`${ticket.isSystem ? 'X/' : ''}${ticket.numOfMarkets}`}</Value>
                         </NumberOfGamesContainer>
                     </TicketInfo>
                     <InfoContainerColumn isOpen={!isClaimable}>

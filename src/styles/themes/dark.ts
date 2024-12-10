@@ -139,6 +139,7 @@ export default {
         canceled: Colors.RED,
         paused: Colors.RED,
         live: Colors.RED_DARK,
+        system: Colors.ORANGE,
         sold: Colors.NAVY_BLUE_LIGHT,
         comingSoon: Colors.ORANGE,
         finished: Colors.NAVY_BLUE_LIGHT,

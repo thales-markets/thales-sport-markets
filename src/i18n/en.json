@@ -370,6 +370,8 @@
         "card": {
             "ticket-id": "Ticket ID",
             "live": "Live",
+            "system": "System",
+            "system-short": "Sys",
             "claim-batch-tooltip": "Claim all your pending positions in one transaction.",
             "number-of-games": "No. of games",
             "ticket-paid": "Ticket paid",

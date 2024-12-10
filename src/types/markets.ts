@@ -179,6 +179,7 @@ export type Ticket = {
     finalPayout: number;
     isLive: boolean;
     isFreeBet: boolean;
+    isSystem: boolean;
 };
 
 export type UserStats = {
