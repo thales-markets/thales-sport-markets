@@ -170,6 +170,21 @@ export const mapTicket = (
         ),
     };
 
+    if (mappedTicket.isSystem) {
+        if (mappedTicket.isUserTheWinner) {
+            if (mappedTicket.isResolved) {
+                mappedTicket.payout = mappedTicket.finalPayout;
+            } else {
+                mappedTicket.payout = getSystemBetPayoutData(
+                    mappedTicket.sportMarkets,
+                    2,
+                    mappedTicket.collateral,
+                    mappedTicket.buyInAmount
+                ).systemBetPayout;
+            }
+        }
+    }
+
     return mappedTicket;
 };
 
@@ -289,7 +304,6 @@ export const generateSystemBetCombinations = (n: number, k: number): number[][] 
 export const getSystemBetData = (markets: TicketMarket[], systemBetDenominator: number, currencyKey: Coins) => {
     const systemCombinations: number[][] = generateSystemBetCombinations(markets.length, systemBetDenominator);
     const totalCombinations = systemCombinations.length;
-    // let systemBetPayout = 0;
     let systemBetQuote = 0;
     let systemBetQuotePerCombination = 0;
     let systemBetMinimumQuote = 0;
@@ -298,27 +312,66 @@ export const getSystemBetData = (markets: TicketMarket[], systemBetDenominator: 
     for (let i = 0; i < totalCombinations; i++) {
         const currentCombination: number[] = systemCombinations[i];
 
-        let combinationQuote = 0;
+        let combinationQuote = 1;
 
         for (let j = 0; j < currentCombination.length; j++) {
             const marketIndex = currentCombination[j];
-            let odds = markets[marketIndex].odds[markets[marketIndex].position];
+            const market = markets[marketIndex];
+            let odds = market.odds[market.position];
             odds = odds > 0 ? getAddedPayoutOdds(currencyKey, odds) : odds;
-            combinationQuote = combinationQuote == 0 ? odds : combinationQuote * odds;
+            combinationQuote *= odds;
         }
-        systemBetMinimumQuote = combinationQuote > systemBetMinimumQuote ? combinationQuote : systemBetMinimumQuote;
 
-        // if (combinationQuote > 0) {
-        //     const combinationPayout = buyinPerCombination / combinationQuote;
-        //     systemBetPayout += combinationPayout;
-        // }
+        systemBetMinimumQuote = combinationQuote > systemBetMinimumQuote ? combinationQuote : systemBetMinimumQuote;
         systemBetQuotePerCombination += 1 / combinationQuote;
     }
-    // const systemBetQuote = _buyInAmount / systemBetPayout;
 
-    // return { systemBetQuote, systemBetPayout };
     systemBetQuotePerCombination = 1 / systemBetQuotePerCombination;
     systemBetQuote = totalCombinations * systemBetQuotePerCombination;
 
     return { systemBetQuotePerCombination, systemBetQuote, systemBetMinimumQuote };
+};
+
+const getSystemBetPayoutData = (
+    markets: TicketMarket[],
+    systemBetDenominator: number,
+    currencyKey: Coins,
+    buyInAmount: number
+) => {
+    const systemCombinations: number[][] = generateSystemBetCombinations(markets.length, systemBetDenominator);
+    const totalCombinations = systemCombinations.length;
+    const buyinPerCombination = buyInAmount / totalCombinations;
+    let systemBetPayout = 0;
+    let systemBetMinimumQuote = 0;
+
+    // Loop through each stored combination
+    for (let i = 0; i < totalCombinations; i++) {
+        const currentCombination: number[] = systemCombinations[i];
+
+        let combinationQuote = 1;
+
+        for (let j = 0; j < currentCombination.length; j++) {
+            const marketIndex = currentCombination[j];
+            const market = markets[marketIndex];
+
+            if (!market.isResolved) {
+                return { systemBetPayout: 0, systemBetMinimumQuote: 0 };
+            }
+            if (market.isCancelled) {
+                continue;
+            }
+            if (market.isWinning) {
+                combinationQuote *= market.odd;
+            } else {
+                combinationQuote = 0;
+                break;
+            }
+        }
+        if (combinationQuote > 0) {
+            systemBetMinimumQuote = combinationQuote > systemBetMinimumQuote ? combinationQuote : systemBetMinimumQuote;
+            systemBetPayout += buyinPerCombination / combinationQuote;
+        }
+    }
+
+    return { systemBetPayout, systemBetMinimumQuote };
 };

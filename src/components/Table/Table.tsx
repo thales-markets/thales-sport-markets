@@ -240,7 +240,6 @@ const ExpandableRowReact: React.FC<{
     const [hidden, setHidden] = useState<boolean>(!isVisible);
 
     useEffect(() => {
-        console.log('expandAll', expandAll);
         setHidden(!expandAll);
     }, [expandAll]);
 
