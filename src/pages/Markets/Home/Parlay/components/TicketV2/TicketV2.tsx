@@ -1440,6 +1440,19 @@ const Ticket: React.FC<TicketProps> = ({
                             collateral: collateralHasLp ? usedCollateralForBuy : defaultCollateral,
                             isLive: false,
                             applyPayoutMultiplier: true,
+                            isTicketOpen: true,
+                            systemBetData: isSystemBet
+                                ? {
+                                      systemBetDenominator,
+                                      numberOfCombination: numberOfSystemBetCombination,
+                                      buyInPerCombination: Number(buyInAmount) / numberOfSystemBetCombination,
+                                      minPayout:
+                                          Number(buyInAmount) /
+                                          numberOfSystemBetCombination /
+                                          systemData.systemBetMinimumQuote,
+                                      maxPayout: payout,
+                                  }
+                                : undefined,
                         };
                         setShareTicketModalData(modalData);
                         setShowShareTicketModal(true);
@@ -1553,6 +1566,8 @@ const Ticket: React.FC<TicketProps> = ({
                                         collateral: collateralHasLp ? selectedCollateral : defaultCollateral,
                                         isLive: true,
                                         applyPayoutMultiplier: false,
+                                        isTicketOpen: true,
+                                        systemBetData: undefined,
                                     };
                                     setShareTicketModalData(modalData);
                                     setShowShareTicketModal(true);
@@ -1895,6 +1910,16 @@ const Ticket: React.FC<TicketProps> = ({
             collateral: collateralHasLp ? selectedCollateral : defaultCollateral,
             isLive: !!markets[0].live,
             applyPayoutMultiplier: true,
+            isTicketOpen: true,
+            systemBetData: isSystemBet
+                ? {
+                      systemBetDenominator,
+                      numberOfCombination: numberOfSystemBetCombination,
+                      buyInPerCombination: Number(buyInAmount) / numberOfSystemBetCombination,
+                      minPayout: Number(buyInAmount) / numberOfSystemBetCombination / systemData.systemBetMinimumQuote,
+                      maxPayout: payout,
+                  }
+                : undefined,
         };
         setShareTicketModalData(modalData);
         setShowShareTicketModal(!twitterShareDisabled);
@@ -2268,18 +2293,18 @@ const Ticket: React.FC<TicketProps> = ({
                                       USD_SIGN,
                                       Number(buyInAmount) /
                                           numberOfSystemBetCombination /
-                                          Number(systemData.systemBetMinimumQuote)
+                                          systemData.systemBetMinimumQuote
                                   )
                                 : `${formatCurrencyWithKey(
                                       usedCollateralForBuy,
                                       Number(buyInAmount) /
                                           numberOfSystemBetCombination /
-                                          Number(systemData.systemBetMinimumQuote)
+                                          systemData.systemBetMinimumQuote
                                   )} (${formatCurrencyWithSign(
                                       USD_SIGN,
                                       Number(buyInAmountInDefaultCollateral) /
                                           numberOfSystemBetCombination /
-                                          Number(systemData.systemBetMinimumQuote)
+                                          systemData.systemBetMinimumQuote
                                   )})`}
                         </SummaryValue>
                     </RowSummary>
@@ -2495,6 +2520,8 @@ const Ticket: React.FC<TicketProps> = ({
                     collateral={shareTicketModalData.collateral}
                     isLive={shareTicketModalData.isLive}
                     applyPayoutMultiplier={shareTicketModalData.applyPayoutMultiplier}
+                    systemBetData={shareTicketModalData.systemBetData}
+                    isTicketOpen={shareTicketModalData.isTicketOpen}
                 />
             )}
             {openApprovalModal && (

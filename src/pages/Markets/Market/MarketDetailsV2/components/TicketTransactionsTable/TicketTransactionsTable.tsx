@@ -122,6 +122,8 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
             collateral: ticket.collateral,
             isLive: ticket.isLive,
             applyPayoutMultiplier: false,
+            isTicketOpen: ticket.isOpen,
+            systemBetData: ticket.systemBetData,
         };
         setShareTicketModalData(modalData);
         setShowShareTicketModal(true);
@@ -359,21 +361,21 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                                     </LastExpandedSection>
                                     <LastExpandedSection>
                                         <QuoteWrapper>
-                                            <QuoteLabel>{t('profile.card.paid-per-combination')}:</QuoteLabel>
-                                            <QuoteText>
-                                                {formatCurrencyWithKey(
-                                                    row.original.collateral,
-                                                    row.original.systemBetData?.buyInPerCombination || 0
-                                                )}
-                                            </QuoteText>
-                                        </QuoteWrapper>
-                                        <QuoteWrapper>
                                             <QuoteLabel>{t('profile.card.total-quote')}:</QuoteLabel>
                                             <QuoteText>
                                                 {formatTicketOdds(
                                                     selectedOddsType,
                                                     row.original.systemBetData?.buyInPerCombination,
                                                     row.original.systemBetData?.maxPayout
+                                                )}
+                                            </QuoteText>
+                                        </QuoteWrapper>
+                                        <QuoteWrapper>
+                                            <QuoteLabel>{t('profile.card.paid-per-combination')}:</QuoteLabel>
+                                            <QuoteText>
+                                                {formatCurrencyWithKey(
+                                                    row.original.collateral,
+                                                    row.original.systemBetData?.buyInPerCombination || 0
                                                 )}
                                             </QuoteText>
                                         </QuoteWrapper>
@@ -446,6 +448,8 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                     collateral={shareTicketModalData.collateral}
                     isLive={shareTicketModalData.isLive}
                     applyPayoutMultiplier={shareTicketModalData.applyPayoutMultiplier}
+                    systemBetData={shareTicketModalData.systemBetData}
+                    isTicketOpen={shareTicketModalData.isTicketOpen}
                 />
             )}
         </>

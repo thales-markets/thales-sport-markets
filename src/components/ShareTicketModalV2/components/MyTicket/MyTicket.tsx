@@ -11,9 +11,10 @@ import {
     FlexDivColumnCentered,
     FlexDivRow,
     FlexDivRowCentered,
+    FlexDivSpaceBetween,
 } from 'styles/common';
-import { Coins, formatCurrencyWithKey } from 'thales-utils';
-import { TicketMarket } from 'types/markets';
+import { Coins, formatCurrency, formatCurrencyWithKey } from 'thales-utils';
+import { SystemBetData, TicketMarket } from 'types/markets';
 import { formatTicketOdds } from 'utils/tickets';
 import MatchInfoV2 from '../../../MatchInfoV2';
 
@@ -26,6 +27,8 @@ type MyTicketProps = {
     collateral: Coins;
     isLive: boolean;
     applyPayoutMultiplier: boolean;
+    isTicketOpen: boolean;
+    systemBetData?: SystemBetData;
 };
 
 const MyTicket: React.FC<MyTicketProps> = ({
@@ -37,6 +40,8 @@ const MyTicket: React.FC<MyTicketProps> = ({
     collateral,
     isLive,
     applyPayoutMultiplier,
+    isTicketOpen,
+    systemBetData,
 }) => {
     const selectedOddsType = useSelector(getOddsType);
 
@@ -64,7 +69,11 @@ const MyTicket: React.FC<MyTicketProps> = ({
                 <PayoutWrapper>
                     <PayoutRow>
                         <Square isLost={isTicketLost} />
-                        <PayoutLabel isLost={isTicketLost}>{t('markets.parlay.payout')}</PayoutLabel>
+                        <PayoutLabel isLost={isTicketLost}>
+                            {systemBetData && isTicketOpen
+                                ? t('markets.parlay.max-payout')
+                                : t('markets.parlay.payout')}
+                        </PayoutLabel>
                         <Square isLost={isTicketLost} />
                     </PayoutRow>
                     <PayoutRow>
@@ -91,6 +100,20 @@ const MyTicket: React.FC<MyTicketProps> = ({
                 })}
             </MarketsContainer>
             <HorizontalLine />
+            {systemBetData && (
+                <InfoWrapper>
+                    <InfoDiv>
+                        <InfoLabel>{t('markets.parlay.system')}:</InfoLabel>
+                        <InfoValue>
+                            {systemBetData?.systemBetDenominator}/{markets.length}
+                        </InfoValue>
+                    </InfoDiv>
+                    <InfoDiv>
+                        <InfoLabel>{t('markets.parlay.number-of-combinations-short')}:</InfoLabel>
+                        <InfoValue>{systemBetData?.numberOfCombination}</InfoValue>
+                    </InfoDiv>
+                </InfoWrapper>
+            )}
             <InfoWrapper>
                 {multiSingle ? (
                     <>
@@ -112,6 +135,17 @@ const MyTicket: React.FC<MyTicketProps> = ({
                     <BuyInValue>{formatCurrencyWithKey(collateral, paid)}</BuyInValue>
                 </InfoDiv>
             </InfoWrapper>
+            {systemBetData && (
+                <InfoWrapper>
+                    <InfoDivFull>
+                        <InfoLabel>{t('markets.parlay.min-max-payout')}:</InfoLabel>
+                        <InfoValue>
+                            {formatCurrency(systemBetData?.minPayout || 0)}/
+                            {formatCurrency(systemBetData?.maxPayout || 0)} {collateral}
+                        </InfoValue>
+                    </InfoDivFull>
+                </InfoWrapper>
+            )}
         </Container>
     );
 };
@@ -221,6 +255,10 @@ const InfoWrapper = styled(FlexDivRow)`
 `;
 
 const InfoDiv = styled(FlexDiv)``;
+
+const InfoDivFull = styled(FlexDivSpaceBetween)`
+    width: 100%;
+`;
 
 const InfoLabel = styled.span`
     font-weight: 600;

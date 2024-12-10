@@ -184,7 +184,7 @@ export const mapTicket = (
             minPayout: systemBetPayoutData.systemBetPayoutMinPayout,
             maxPayout: mappedTicket.buyInAmount / mappedTicket.totalQuote,
         };
-        if (mappedTicket.isUserTheWinner) {
+        if (mappedTicket.isUserTheWinner || mappedTicket.isCancelled) {
             if (mappedTicket.isResolved) {
                 mappedTicket.payout = mappedTicket.finalPayout;
             } else {

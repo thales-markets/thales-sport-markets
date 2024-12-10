@@ -861,9 +861,11 @@
                 "buy": "Buy with {{currencyKey}}"
             },
             "number-of-combinations": "Number of combinations",
+            "number-of-combinations-short": "No. of comb",
             "buy-in-per-combination": "Buy-in per combination",
             "min-payout": "Min payout",
             "max-payout": "Max payout",
+            "min-max-payout": "Min/max payout",
             "system-bet-min-markets-validation": "System bet requires minimum {{minMarkets}} games"
         },
         "zero-odds-tooltip": "Odds unavailable at the moment.",

@@ -193,6 +193,8 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
         collateral: ticket.collateral,
         isLive: ticket.isLive,
         applyPayoutMultiplier: false,
+        isTicketOpen: ticket.isOpen,
+        systemBetData: ticket.systemBetData,
     };
 
     const getClaimButton = (isMobile: boolean) => {
@@ -279,7 +281,12 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
                                 </FreeBetWrapper>
                             )}
                             <InfoContainerColumn isOpen={!isClaimable}>
-                                <WinLabel>{t('profile.card.payout')}:</WinLabel>
+                                <WinLabel>
+                                    {ticket.isSystemBet && ticket.isOpen
+                                        ? t('profile.card.max-payout')
+                                        : t('profile.card.payout')}
+                                    :
+                                </WinLabel>
                                 <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
                             </InfoContainerColumn>
                         </PayoutWrapper>
@@ -296,7 +303,12 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
                                     </FreeBetWrapper>
                                 )}
                                 <InfoContainerColumn isOpen={!isClaimable}>
-                                    <WinLabel>{t('profile.card.payout')}:</WinLabel>
+                                    <WinLabel>
+                                        {ticket.isSystemBet && ticket.isOpen
+                                            ? t('profile.card.max-payout')
+                                            : t('profile.card.payout')}
+                                        :
+                                    </WinLabel>
                                     <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
                                 </InfoContainerColumn>
                             </PayoutWrapper>
@@ -379,21 +391,21 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
                         </CollapseFooterContainer>
                         <CollapseFooterContainer>
                             <FooterContainer>
-                                <Label>{t('profile.card.paid-per-combination')}:</Label>
-                                <Value>
-                                    {formatCurrencyWithKey(
-                                        ticket.collateral,
-                                        ticket.systemBetData?.buyInPerCombination || 0
-                                    )}
-                                </Value>
-                            </FooterContainer>
-                            <FooterContainer>
                                 <Label>{t('profile.card.total-quote')}:</Label>
                                 <Value>
                                     {formatTicketOdds(
                                         selectedOddsType,
                                         ticket.systemBetData?.buyInPerCombination || 0,
                                         ticket.systemBetData?.maxPayout || 0
+                                    )}
+                                </Value>
+                            </FooterContainer>
+                            <FooterContainer>
+                                <Label>{t('profile.card.paid-per-combination')}:</Label>
+                                <Value>
+                                    {formatCurrencyWithKey(
+                                        ticket.collateral,
+                                        ticket.systemBetData?.buyInPerCombination || 0
                                     )}
                                 </Value>
                             </FooterContainer>
@@ -441,6 +453,8 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
                     collateral={shareTicketModalData.collateral}
                     isLive={shareTicketModalData.isLive}
                     applyPayoutMultiplier={shareTicketModalData.applyPayoutMultiplier}
+                    systemBetData={shareTicketModalData.systemBetData}
+                    isTicketOpen={shareTicketModalData.isTicketOpen}
                 />
             )}
         </Container>
