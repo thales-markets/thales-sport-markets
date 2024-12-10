@@ -271,7 +271,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                 columnsDeps={[networkId, exchangeRates]}
                 columns={columns as any}
                 initialState={{
-                    sortBy: [
+                    sorting: [
                         {
                             id: 'timestamp',
                             desc: true,

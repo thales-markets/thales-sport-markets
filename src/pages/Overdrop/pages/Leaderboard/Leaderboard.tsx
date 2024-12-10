@@ -254,7 +254,7 @@ const Leaderboard: React.FC = () => {
                 stickyRow={stickyRow}
                 columns={columns as any}
                 initialState={{
-                    sortBy: [
+                    sorting: [
                         {
                             id: 'rank',
                             desc: false,
