@@ -11,7 +11,6 @@ import {
 } from '@tanstack/react-table';
 import SelectInput from 'components/SelectInput';
 import SimpleLoader from 'components/SimpleLoader';
-import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { SortDirection } from 'enums/markets';
 import React, { CSSProperties, DependencyList, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -19,10 +18,8 @@ import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivCentered } from 'styles/common';
-import { localStore } from 'thales-utils';
 
 const PAGINATION_SIZE = [
-    { value: 5, label: '5' },
     { value: 10, label: '10' },
     { value: 20, label: '20' },
     { value: 50, label: '50' },
@@ -58,6 +55,7 @@ type TableProps = {
     stickyRow?: JSX.Element;
     mobileCards?: boolean;
     expandAll?: boolean;
+    showPagination?: boolean;
 };
 
 const Table: React.FC<TableProps> = ({
@@ -80,6 +78,7 @@ const Table: React.FC<TableProps> = ({
     tableHeight,
     mobileCards,
     expandAll,
+    showPagination,
 }) => {
     const { t } = useTranslation();
 
@@ -226,8 +225,19 @@ const Table: React.FC<TableProps> = ({
                     </TableBody>
                 )}
             </ReactTable>
-            {data?.length > 0 && (
+            {showPagination && data?.length > 0 && (
                 <PaginationWrapper>
+                    <SelectWrapper>
+                        <PaginationLabel>{t('common.pagination.rows-per-page')}</PaginationLabel>
+                        <div>
+                            <SelectInput
+                                handleChange={(e) => tableInstance.setPageSize(Number(e))}
+                                value={{ value: pagination.pageSize, label: '' + pagination.pageSize }}
+                                options={PAGINATION_SIZE}
+                            />
+                        </div>
+                    </SelectWrapper>
+
                     <SelectWrapper>
                         <ArrowWrapper
                             onClick={() => tableInstance.firstPage()}
@@ -264,20 +274,6 @@ const Table: React.FC<TableProps> = ({
                         >
                             {'>>'}
                         </ArrowWrapper>
-                    </SelectWrapper>
-
-                    <SelectWrapper>
-                        <PaginationLabel>{t('common.pagination.rows-per-page')}</PaginationLabel>
-                        <div>
-                            <SelectInput
-                                handleChange={(e) => {
-                                    tableInstance.setPageSize(Number(e));
-                                    localStore.set(LOCAL_STORAGE_KEYS.TABLE_ROWS_PER_PAGE, Number(e));
-                                }}
-                                value={{ value: pagination.pageSize, label: '' + pagination.pageSize }}
-                                options={PAGINATION_SIZE}
-                            />
-                        </div>
                     </SelectWrapper>
                 </PaginationWrapper>
             )}
@@ -481,8 +477,8 @@ const PaginationWrapper = styled.div`
 
 const PaginationLabel = styled.p`
     color: ${(props) => props.theme.textColor.primary};
-    font-size: 13px;
-    font-weight: 700;
+    font-size: 14px;
+    font-weight: 400;
     line-height: 10%;
     letter-spacing: 0.13px;
 `;

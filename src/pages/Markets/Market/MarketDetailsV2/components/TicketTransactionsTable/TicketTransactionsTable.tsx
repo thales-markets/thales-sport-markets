@@ -282,6 +282,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                 isLoading={isLoading}
                 data={ticketTransactions}
                 noResultsMessage={t('market.table.no-results')}
+                showPagination
                 expandedRow={(row) => {
                     const ticketMarkets = getTicketMarkets(
                         row.original,

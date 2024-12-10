@@ -264,6 +264,7 @@ const Leaderboard: React.FC = () => {
                 isLoading={leaderboardQuery.isLoading}
                 data={leaderboardFiltered}
                 noResultsMessage={t('market.table.no-results')}
+                showPagination
             ></Table>
         </TableContainer>
     );

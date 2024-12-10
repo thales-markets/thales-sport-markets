@@ -75,13 +75,13 @@ const SelectInput: React.FC<SelectInputProps> = ({ options, handleChange, defaul
 
     return (
         <Select
-            value={defaultOption.value}
+            value={defaultOption}
             options={options}
             styles={customStyled}
             onChange={(props: any) => {
                 handleChange(Number(props?.value));
             }}
-            defaultValue={defaultOption.label}
+            defaultValue={defaultOption}
             isSearchable={false}
             isDisabled={isDisabled}
         />
