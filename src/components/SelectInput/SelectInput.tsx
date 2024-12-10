@@ -51,6 +51,9 @@ const SelectInput: React.FC<SelectInputProps> = ({
             cursor: 'pointer',
             fontFamily: theme.fontFamily.primary,
             ...style?.optionStyle,
+            [':active']: {
+                backgroundColor: state?.isFocused || state.isSelected ? theme.background.primary : 'transparent',
+            },
         }),
         control: (provided: any, state: any) => ({
             ...provided,
