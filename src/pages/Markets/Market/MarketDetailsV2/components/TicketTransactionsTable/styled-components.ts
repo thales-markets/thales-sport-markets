@@ -199,22 +199,20 @@ export const MarketStatus = styled.span<{ color?: string }>`
 export const LastExpandedSection = styled(FlexDivRowCentered)`
     position: relative;
     justify-content: center;
-    flex: 1;
-    gap: 30px;
-    @media (max-width: 600px) {
-        margin: 10px 0;
-    }
+    width: 100%;
+    align-items: center;
     margin-bottom: 10px;
 `;
 
-export const QuoteWrapper = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    gap: 6px;
+export const QuoteWrapper = styled(FlexDivRow)`
+    width: 200px;
+    margin: 0 20px;
     font-size: 10px;
     color: ${(props) => props.theme.textColor.quaternary};
+    @media (max-width: 767px) {
+        margin: 0 10px;
+        font-size: 9px;
+    }
 `;
 
 export const QuoteText = styled.span`

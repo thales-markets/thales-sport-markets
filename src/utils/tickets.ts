@@ -66,9 +66,9 @@ export const mapTicket = (
         isOpen: !ticket.resolved && !ticket.isExercisable,
         finalPayout: coinFormatter(ticket.finalPayout, networkId, collateral),
         isLive: ticket.isLive,
-        isSystem: ticket.isSystem,
         isFreeBet:
             ticket.ticketOwner.toLowerCase() == freeBetHolder.addresses[networkId as SupportedNetwork].toLowerCase(),
+        isSystemBet: ticket.isSystem,
 
         sportMarkets: ticket.marketsData.map(
             (market: any, index: number): TicketMarket => {
@@ -170,15 +170,27 @@ export const mapTicket = (
         ),
     };
 
-    if (mappedTicket.isSystem) {
+    if (mappedTicket.isSystemBet) {
+        const systemBetDenominator = Number(ticket.systemBetDenominator);
+        const systemBetPayoutData = getSystemBetPayoutData(
+            mappedTicket.sportMarkets,
+            systemBetDenominator,
+            mappedTicket.buyInAmount
+        );
+        mappedTicket.systemBetData = {
+            systemBetDenominator: Number(ticket.systemBetDenominator),
+            numberOfCombination: systemBetPayoutData.numberOfCombinations,
+            buyInPerCombination: systemBetPayoutData.buyinPerCombination,
+            minPayout: systemBetPayoutData.systemBetPayoutMinPayout,
+            maxPayout: mappedTicket.buyInAmount / mappedTicket.totalQuote,
+        };
         if (mappedTicket.isUserTheWinner) {
             if (mappedTicket.isResolved) {
                 mappedTicket.payout = mappedTicket.finalPayout;
             } else {
                 mappedTicket.payout = getSystemBetPayoutData(
                     mappedTicket.sportMarkets,
-                    2,
-                    mappedTicket.collateral,
+                    systemBetDenominator,
                     mappedTicket.buyInAmount
                 ).systemBetPayout;
             }
@@ -303,13 +315,13 @@ export const generateSystemBetCombinations = (n: number, k: number): number[][] 
 
 export const getSystemBetData = (markets: TicketMarket[], systemBetDenominator: number, currencyKey: Coins) => {
     const systemCombinations: number[][] = generateSystemBetCombinations(markets.length, systemBetDenominator);
-    const totalCombinations = systemCombinations.length;
+    const numberOfCombinations = systemCombinations.length;
     let systemBetQuote = 0;
     let systemBetQuotePerCombination = 0;
     let systemBetMinimumQuote = 0;
 
     // Loop through each stored combination
-    for (let i = 0; i < totalCombinations; i++) {
+    for (let i = 0; i < numberOfCombinations; i++) {
         const currentCombination: number[] = systemCombinations[i];
 
         let combinationQuote = 1;
@@ -327,35 +339,36 @@ export const getSystemBetData = (markets: TicketMarket[], systemBetDenominator: 
     }
 
     systemBetQuotePerCombination = 1 / systemBetQuotePerCombination;
-    systemBetQuote = totalCombinations * systemBetQuotePerCombination;
+    systemBetQuote = numberOfCombinations * systemBetQuotePerCombination;
 
     return { systemBetQuotePerCombination, systemBetQuote, systemBetMinimumQuote };
 };
 
-const getSystemBetPayoutData = (
-    markets: TicketMarket[],
-    systemBetDenominator: number,
-    currencyKey: Coins,
-    buyInAmount: number
-) => {
+const getSystemBetPayoutData = (markets: TicketMarket[], systemBetDenominator: number, buyInAmount: number) => {
     const systemCombinations: number[][] = generateSystemBetCombinations(markets.length, systemBetDenominator);
-    const totalCombinations = systemCombinations.length;
-    const buyinPerCombination = buyInAmount / totalCombinations;
+    const numberOfCombinations = systemCombinations.length;
+    const buyinPerCombination = buyInAmount / numberOfCombinations;
     let systemBetPayout = 0;
     let systemBetMinimumQuote = 0;
+    let areAllMarketsResolved = true;
 
     // Loop through each stored combination
-    for (let i = 0; i < totalCombinations; i++) {
+    for (let i = 0; i < numberOfCombinations; i++) {
         const currentCombination: number[] = systemCombinations[i];
 
         let combinationQuote = 1;
+        let originalCominationQuote = 1;
 
         for (let j = 0; j < currentCombination.length; j++) {
             const marketIndex = currentCombination[j];
             const market = markets[marketIndex];
 
+            originalCominationQuote *= market.odd;
+            systemBetMinimumQuote =
+                originalCominationQuote > systemBetMinimumQuote ? originalCominationQuote : systemBetMinimumQuote;
+
             if (!market.isResolved) {
-                return { systemBetPayout: 0, systemBetMinimumQuote: 0 };
+                areAllMarketsResolved = false;
             }
             if (market.isCancelled) {
                 continue;
@@ -368,10 +381,14 @@ const getSystemBetPayoutData = (
             }
         }
         if (combinationQuote > 0) {
-            systemBetMinimumQuote = combinationQuote > systemBetMinimumQuote ? combinationQuote : systemBetMinimumQuote;
             systemBetPayout += buyinPerCombination / combinationQuote;
         }
     }
 
-    return { systemBetPayout, systemBetMinimumQuote };
+    return {
+        systemBetPayout: areAllMarketsResolved ? systemBetPayout : 0,
+        systemBetPayoutMinPayout: buyinPerCombination / systemBetMinimumQuote,
+        numberOfCombinations,
+        buyinPerCombination,
+    };
 };

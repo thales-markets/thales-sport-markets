@@ -1,5 +1,5 @@
 import styled, { CSSProperties } from 'styled-components';
-import { FlexDivColumnNative, FlexDivRow, FlexDivStart } from 'styles/common';
+import { FlexDivColumn, FlexDivColumnNative, FlexDivRow, FlexDivStart } from 'styles/common';
 
 export const Container = styled(FlexDivColumnNative)`
     position: relative;
@@ -179,17 +179,31 @@ export const TicketMarketsContainer = styled(FlexDivColumnNative)`
     }
 `;
 
+export const CollapseFooterWrapper = styled(FlexDivColumn)`
+    position: relative;
+    justify-content: center;
+    width: 100%;
+    align-items: center;
+    margin-bottom: 10px;
+    margin-top: 10px;
+`;
+
 export const CollapseFooterContainer = styled(FlexDivRow)`
     position: relative;
     justify-content: center;
     width: 100%;
     align-items: center;
-    margin-bottom: 15px;
-    margin-top: 15px;
+    margin-bottom: 5px;
+    margin-top: 5px;
 `;
 
-export const TotalQuoteContainer = styled(FlexDivRow)`
+export const FooterContainer = styled(FlexDivRow)`
     color: ${(props) => props.theme.textColor.quaternary};
+    width: 200px;
+    margin: 0 20px;
+    @media (max-width: 767px) {
+        margin: 0 10px;
+    }
 `;
 
 export const CollateralSelectorContainer = styled(FlexDivRow)`

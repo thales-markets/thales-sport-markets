@@ -155,6 +155,14 @@ export type TradeData = {
     live?: boolean;
 };
 
+export type SystemBetData = {
+    systemBetDenominator: number;
+    numberOfCombination: number;
+    buyInPerCombination: number;
+    minPayout: number;
+    maxPayout: number;
+};
+
 export type Ticket = {
     id: string;
     timestamp: number;
@@ -179,7 +187,8 @@ export type Ticket = {
     finalPayout: number;
     isLive: boolean;
     isFreeBet: boolean;
-    isSystem: boolean;
+    isSystemBet: boolean;
+    systemBetData?: SystemBetData;
 };
 
 export type UserStats = {

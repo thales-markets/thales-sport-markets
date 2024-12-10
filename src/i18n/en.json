@@ -388,7 +388,11 @@
             "starts": "Starts",
             "payout": "Payout",
             "payout-in": "Payout in",
-            "approve-swap-tooltip": "To get payout in {{currencyKey}}, you need to approve swap from {{defaultCurrency}} to {{currencyKey}}."
+            "approve-swap-tooltip": "To get payout in {{currencyKey}}, you need to approve swap from {{defaultCurrency}} to {{currencyKey}}.",
+            "number-of-combination": "No. of combination",
+            "paid-per-combination": "Paid per comb",
+            "min-payout": "Min payout",
+            "max-payout": "Max payout"
         },
         "table": {
             "time": "Time",

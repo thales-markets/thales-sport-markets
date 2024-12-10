@@ -161,11 +161,11 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                                 <>
                                     <LiveSystemIndicatorContainer
                                         isLive={cellProps.cell.row.original.isLive}
-                                        isSystem={cellProps.cell.row.original.isSystem}
+                                        isSystem={cellProps.cell.row.original.isSystemBet}
                                     >
                                         {cellProps.cell.row.original.isLive ? (
                                             <LiveSystemLabel>{t('profile.card.live')}</LiveSystemLabel>
-                                        ) : cellProps.cell.row.original.isSystem ? (
+                                        ) : cellProps.cell.row.original.isSystemBet ? (
                                             <LiveSystemLabel>{t('profile.card.system-short')}</LiveSystemLabel>
                                         ) : (
                                             <></>
@@ -197,9 +197,11 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                         sortable: true,
                         Cell: (cellProps: any) => {
                             return (
-                                <TableText>{`${cellProps.cell.row.original.isSystem ? 'X/' : ''}${
-                                    cellProps.cell.value
-                                }`}</TableText>
+                                <TableText>{`${
+                                    cellProps.cell.row.original.isSystemBet
+                                        ? `${cellProps.cell.row.original.systemBetData?.systemBetDenominator}/`
+                                        : ''
+                                }${cellProps.cell.value}`}</TableText>
                             );
                         },
                     },
@@ -340,21 +342,83 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                     return (
                         <ExpandedRowWrapper>
                             <FirstExpandedSection>{ticketMarkets}</FirstExpandedSection>
-                            <LastExpandedSection>
-                                <QuoteWrapper>
-                                    <QuoteLabel>{t('profile.table.total-quote')}:</QuoteLabel>
-                                    <QuoteText>
-                                        {formatTicketOdds(
-                                            selectedOddsType,
-                                            row.original.buyInAmount,
-                                            row.original.payout
-                                        )}
-                                    </QuoteText>
-                                </QuoteWrapper>
-                                <TwitterWrapper>
-                                    <TwitterIcon onClick={() => onTwitterIconClick(row.original)} />
-                                </TwitterWrapper>
-                            </LastExpandedSection>
+                            {row.original.isSystemBet ? (
+                                <>
+                                    <LastExpandedSection>
+                                        <QuoteWrapper>
+                                            <QuoteLabel>{t('profile.card.system')}:</QuoteLabel>
+                                            <QuoteText>
+                                                {row.original.systemBetData?.systemBetDenominator}/
+                                                {row.original.numOfMarkets}
+                                            </QuoteText>
+                                        </QuoteWrapper>
+                                        <QuoteWrapper>
+                                            <QuoteLabel>{t('profile.card.number-of-combination')}:</QuoteLabel>
+                                            <QuoteText>{row.original.systemBetData?.numberOfCombination}</QuoteText>
+                                        </QuoteWrapper>
+                                    </LastExpandedSection>
+                                    <LastExpandedSection>
+                                        <QuoteWrapper>
+                                            <QuoteLabel>{t('profile.card.paid-per-combination')}:</QuoteLabel>
+                                            <QuoteText>
+                                                {formatCurrencyWithKey(
+                                                    row.original.collateral,
+                                                    row.original.systemBetData?.buyInPerCombination || 0
+                                                )}
+                                            </QuoteText>
+                                        </QuoteWrapper>
+                                        <QuoteWrapper>
+                                            <QuoteLabel>{t('profile.card.total-quote')}:</QuoteLabel>
+                                            <QuoteText>
+                                                {formatTicketOdds(
+                                                    selectedOddsType,
+                                                    row.original.systemBetData?.buyInPerCombination,
+                                                    row.original.systemBetData?.maxPayout
+                                                )}
+                                            </QuoteText>
+                                        </QuoteWrapper>
+                                    </LastExpandedSection>
+                                    <LastExpandedSection>
+                                        <QuoteWrapper>
+                                            <QuoteLabel>{t('profile.card.min-payout')}:</QuoteLabel>
+                                            <QuoteText>
+                                                {formatCurrencyWithKey(
+                                                    row.original.collateral,
+                                                    row.original.systemBetData?.minPayout || 0
+                                                )}
+                                            </QuoteText>
+                                        </QuoteWrapper>
+                                        <QuoteWrapper>
+                                            <QuoteLabel>{t('profile.card.max-payout')}:</QuoteLabel>
+                                            <QuoteText>
+                                                {formatCurrencyWithKey(
+                                                    row.original.collateral,
+                                                    row.original.systemBetData?.maxPayout || 0
+                                                )}
+                                            </QuoteText>
+                                        </QuoteWrapper>
+                                        <TwitterWrapper>
+                                            <TwitterIcon onClick={() => onTwitterIconClick(row.original)} />
+                                        </TwitterWrapper>
+                                    </LastExpandedSection>
+                                </>
+                            ) : (
+                                <LastExpandedSection>
+                                    <QuoteWrapper>
+                                        <QuoteLabel>{t('profile.table.total-quote')}:</QuoteLabel>
+                                        <QuoteText>
+                                            {formatTicketOdds(
+                                                selectedOddsType,
+                                                row.original.buyInAmount,
+                                                row.original.payout
+                                            )}
+                                        </QuoteText>
+                                    </QuoteWrapper>
+                                    <TwitterWrapper>
+                                        <TwitterIcon onClick={() => onTwitterIconClick(row.original)} />
+                                    </TwitterWrapper>
+                                </LastExpandedSection>
+                            )}
                         </ExpandedRowWrapper>
                     );
                 }}
