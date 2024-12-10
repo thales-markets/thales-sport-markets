@@ -167,7 +167,7 @@ const Table: React.FC<TableProps> = ({
                     <LoaderContainer>
                         <SimpleLoader />
                     </LoaderContainer>
-                ) : noResultsMessage != null && !data?.length && !stickyRow ? (
+                ) : noResultsMessage !== null && !data?.length && !stickyRow ? (
                     <NoResultContainer>{noResultsMessage}</NoResultContainer>
                 ) : (
                     <TableBody height={tableHeight}>
@@ -226,56 +226,61 @@ const Table: React.FC<TableProps> = ({
                     </TableBody>
                 )}
             </ReactTable>
-            <PaginationWrapper>
-                <SelectWrapper>
-                    <ArrowWrapper
-                        onClick={() => tableInstance.firstPage()}
-                        disabled={!tableInstance.getCanPreviousPage()}
-                    >
-                        {'<<'}
-                    </ArrowWrapper>
-                    <ArrowWrapper
-                        onClick={() => tableInstance.previousPage()}
-                        disabled={!tableInstance.getCanPreviousPage()}
-                    >
-                        {'<'}
-                    </ArrowWrapper>
-                </SelectWrapper>
+            {data?.length > 0 && (
+                <PaginationWrapper>
+                    <SelectWrapper>
+                        <ArrowWrapper
+                            onClick={() => tableInstance.firstPage()}
+                            disabled={!tableInstance.getCanPreviousPage()}
+                        >
+                            {'<<'}
+                        </ArrowWrapper>
+                        <ArrowWrapper
+                            onClick={() => tableInstance.previousPage()}
+                            disabled={!tableInstance.getCanPreviousPage()}
+                        >
+                            {'<'}
+                        </ArrowWrapper>
+                    </SelectWrapper>
 
-                <SelectWrapper className="flex items-center gap-1">
-                    <PaginationLabel>{t('common.pagination.page')}</PaginationLabel>
-                    <PaginationLabel>
-                        {tableInstance.getState().pagination.pageIndex + 1} {t('common.pagination.of')}{' '}
-                        {tableInstance.getPageCount().toLocaleString()}
-                    </PaginationLabel>
-                </SelectWrapper>
+                    <SelectWrapper className="flex items-center gap-1">
+                        <PaginationLabel>{t('common.pagination.page')}</PaginationLabel>
+                        <PaginationLabel>
+                            {tableInstance.getState().pagination.pageIndex + 1} {t('common.pagination.of')}{' '}
+                            {tableInstance.getPageCount().toLocaleString()}
+                        </PaginationLabel>
+                    </SelectWrapper>
 
-                <SelectWrapper>
-                    <ArrowWrapper
-                        onClick={() => tableInstance.getCanNextPage() && tableInstance.nextPage()}
-                        disabled={!tableInstance.getCanNextPage()}
-                    >
-                        {'>'}
-                    </ArrowWrapper>
-                    <ArrowWrapper onClick={() => tableInstance.lastPage()} disabled={!tableInstance.getCanNextPage()}>
-                        {'>>'}
-                    </ArrowWrapper>
-                </SelectWrapper>
+                    <SelectWrapper>
+                        <ArrowWrapper
+                            onClick={() => tableInstance.getCanNextPage() && tableInstance.nextPage()}
+                            disabled={!tableInstance.getCanNextPage()}
+                        >
+                            {'>'}
+                        </ArrowWrapper>
+                        <ArrowWrapper
+                            onClick={() => tableInstance.lastPage()}
+                            disabled={!tableInstance.getCanNextPage()}
+                        >
+                            {'>>'}
+                        </ArrowWrapper>
+                    </SelectWrapper>
 
-                <SelectWrapper>
-                    <PaginationLabel>{t('common.pagination.rows-per-page')}</PaginationLabel>
-                    <div>
-                        <SelectInput
-                            handleChange={(e) => {
-                                tableInstance.setPageSize(Number(e));
-                                localStore.set(LOCAL_STORAGE_KEYS.TABLE_ROWS_PER_PAGE, Number(e));
-                            }}
-                            value={{ value: pagination.pageSize, label: '' + pagination.pageSize }}
-                            options={PAGINATION_SIZE}
-                        />
-                    </div>
-                </SelectWrapper>
-            </PaginationWrapper>
+                    <SelectWrapper>
+                        <PaginationLabel>{t('common.pagination.rows-per-page')}</PaginationLabel>
+                        <div>
+                            <SelectInput
+                                handleChange={(e) => {
+                                    tableInstance.setPageSize(Number(e));
+                                    localStore.set(LOCAL_STORAGE_KEYS.TABLE_ROWS_PER_PAGE, Number(e));
+                                }}
+                                value={{ value: pagination.pageSize, label: '' + pagination.pageSize }}
+                                options={PAGINATION_SIZE}
+                            />
+                        </div>
+                    </SelectWrapper>
+                </PaginationWrapper>
+            )}
         </>
     );
 };
