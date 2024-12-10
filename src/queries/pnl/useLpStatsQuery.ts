@@ -31,7 +31,7 @@ const getLpStats = async (
 
     const promises = [];
     for (let i = 0; i < numberOfBatches; i++) {
-        promises.push(sportsAMMDataContract.read?.getTicketsData(tickets.slice(i * BATCH_SIZE, (i + 1) * BATCH_SIZE)));
+        promises.push(sportsAMMDataContract.read.getTicketsData([tickets.slice(i * BATCH_SIZE, (i + 1) * BATCH_SIZE)]));
     }
 
     const promisesResult = await Promise.all(promises);
@@ -98,6 +98,7 @@ const useLpStatsQuery = (
                 getContractInstance(ContractType.LIQUIDITY_POOL_DATA, networkConfig),
                 getContractInstance(ContractType.PRICE_FEED, networkConfig),
             ];
+
             if (sportsAMMDataContract && liquidityPoolDataContract && priceFeedContract) {
                 const [
                     usdcTickets,
@@ -107,20 +108,20 @@ const useLpStatsQuery = (
                     rates,
                     thalesPriceResponse,
                 ] = await Promise.all([
-                    liquidityPoolDataContract.read?.getRoundTickets(
+                    liquidityPoolDataContract.read.getRoundTickets([
                         getLpAddress(networkConfig.networkId, LiquidityPoolCollateral.USDC),
-                        round
-                    ),
-                    liquidityPoolDataContract.read?.getRoundTickets(
+                        round,
+                    ]),
+                    liquidityPoolDataContract.read.getRoundTickets([
                         getLpAddress(networkConfig.networkId, LiquidityPoolCollateral.WETH),
-                        round
-                    ),
-                    liquidityPoolDataContract.read?.getRoundTickets(
+                        round,
+                    ]),
+                    liquidityPoolDataContract.read.getRoundTickets([
                         getLpAddress(networkConfig.networkId, LiquidityPoolCollateral.THALES),
-                        round
-                    ),
-                    priceFeedContract.read?.getCurrencies(),
-                    priceFeedContract.read?.getRates(),
+                        round,
+                    ]),
+                    priceFeedContract.read.getCurrencies(),
+                    priceFeedContract.read.getRates(),
                     axios.get(`${generalConfig.API_URL}/token/price`),
                 ]);
 

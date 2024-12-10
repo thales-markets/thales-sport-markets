@@ -1,5 +1,5 @@
 import React from 'react';
-import Select from 'react-select';
+import Select, { CSSObjectWithLabel } from 'react-select';
 import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
 
@@ -58,10 +58,11 @@ const SelectInput: React.FC<SelectInputProps> = ({ options, handleChange, defaul
             ...provided,
             color: theme.textColor.primary,
         }),
-        singleValue: (provided: any) => ({
+        singleValue: (provided: CSSObjectWithLabel) => ({
             ...provided,
             color: theme.textColor.primary,
             fontFamily: theme.fontFamily.primary,
+            lineHeight: '120%',
         }),
         dropdownIndicator: (provided: any) => ({
             ...provided,

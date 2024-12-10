@@ -32,10 +32,10 @@ const useLpTicketsQuery = (
 
             if (sportsAMMDataContract && liquidityPoolDataContract) {
                 const [lpTickets, gamesInfoResponse, playersInfoResponse, liveScoresResponse] = await Promise.all([
-                    liquidityPoolDataContract.read?.getRoundTickets(
+                    liquidityPoolDataContract.read.getRoundTickets([
                         getLpAddress(networkConfig.networkId, lpCollateral),
-                        round
-                    ),
+                        round,
+                    ]),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, noCacheConfig),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/players-info`, noCacheConfig),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/live-scores`, noCacheConfig),
@@ -46,9 +46,9 @@ const useLpTicketsQuery = (
                 const promises = [];
                 for (let i = 0; i < numberOfBatches; i++) {
                     promises.push(
-                        sportsAMMDataContract.read?.getTicketsData(
-                            lpTickets.slice(i * BATCH_SIZE, (i + 1) * BATCH_SIZE)
-                        )
+                        sportsAMMDataContract.read.getTicketsData([
+                            lpTickets.slice(i * BATCH_SIZE, (i + 1) * BATCH_SIZE),
+                        ])
                     );
                 }
 

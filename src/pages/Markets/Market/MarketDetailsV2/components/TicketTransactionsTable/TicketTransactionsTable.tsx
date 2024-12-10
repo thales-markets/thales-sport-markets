@@ -34,6 +34,7 @@ import {
     ExpandedRowWrapper,
     ExternalLink,
     FirstExpandedSection,
+    FreeBetIcon,
     LastExpandedSection,
     LiveIndicatorContainer,
     LiveLabel,
@@ -251,7 +252,14 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                 }
 
                 if (cellProps.row.original.isFreeBet) {
-                    return <Tooltip overlay={t('profile.free-bet.claim-btn')}>{statusComponent}</Tooltip>;
+                    return (
+                        <>
+                            <Tooltip overlay={t('profile.free-bet.claim-btn')}>
+                                <FreeBetIcon className={'icon icon--gift'} />
+                            </Tooltip>
+                            {statusComponent}
+                        </>
+                    );
                 }
                 return statusComponent;
             },
