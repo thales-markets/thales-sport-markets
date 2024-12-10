@@ -16,13 +16,16 @@ import { getContractInstance } from 'utils/contract';
 import { getLpAddress } from 'utils/liquidityPool';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
 import { mapTicket } from 'utils/tickets';
+import { League } from '../../enums/sports';
 import { Rates } from '../rates/useExchangeRatesQuery';
 
 const getLpStats = async (
     tickets: string[],
     sportsAMMDataContract: ViemContract,
     networkId: SupportedNetwork,
-    exchangeRates: Rates
+    exchangeRates: Rates,
+    leagueId: League,
+    onlyPP: boolean
 ) => {
     const numberOfBatches = Math.trunc(tickets.length / BATCH_SIZE) + 1;
 
@@ -41,7 +44,17 @@ const getLpStats = async (
 
     const mappedTickets: Ticket[] = ticketsData.map((ticket: any) => mapTicket(ticket, networkId, [], [], []));
 
-    const finalTickets: Ticket[] = orderBy(updateTotalQuoteAndPayout(mappedTickets), ['timestamp'], ['desc']);
+    const finalTickets: Ticket[] = orderBy(
+        updateTotalQuoteAndPayout(mappedTickets).filter(
+            (ticket) =>
+                ((ticket.sportMarkets.length === 1 && ticket.sportMarkets[0].leagueId === leagueId && !!leagueId) ||
+                    !leagueId) &&
+                ((ticket.sportMarkets.length === 1 && ticket.sportMarkets[0].isPlayerPropsMarket && !!onlyPP) ||
+                    !onlyPP)
+        ),
+        ['timestamp'],
+        ['desc']
+    );
 
     for (let index = 0; index < finalTickets.length; index++) {
         const ticket = finalTickets[index];
@@ -72,11 +85,13 @@ const getLpStats = async (
 
 const useLpStatsQuery = (
     round: number,
+    leagueId: League,
+    onlyPP: boolean,
     networkConfig: NetworkConfig,
     options?: Omit<UseQueryOptions<LpStats[]>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<LpStats[]>({
-        queryKey: QUERY_KEYS.Pnl.LpStats(round, networkConfig.networkId),
+        queryKey: QUERY_KEYS.Pnl.LpStats(round, leagueId, onlyPP, networkConfig.networkId),
         queryFn: async () => {
             const [sportsAMMDataContract, liquidityPoolDataContract, priceFeedContract] = [
                 getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig),
@@ -123,19 +138,25 @@ const useLpStatsQuery = (
                     usdcTickets,
                     sportsAMMDataContract,
                     networkConfig.networkId,
-                    exchangeRates
+                    exchangeRates,
+                    leagueId,
+                    onlyPP
                 );
                 const wethLpStats = await getLpStats(
                     wethTickets,
                     sportsAMMDataContract,
                     networkConfig.networkId,
-                    exchangeRates
+                    exchangeRates,
+                    leagueId,
+                    onlyPP
                 );
                 const thalesLpStats = await getLpStats(
                     thalesTickets,
                     sportsAMMDataContract,
                     networkConfig.networkId,
-                    exchangeRates
+                    exchangeRates,
+                    leagueId,
+                    onlyPP
                 );
 
                 const lpStats: LpStats = {

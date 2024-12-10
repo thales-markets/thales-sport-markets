@@ -1076,9 +1076,11 @@
             "only-open-tickets": "Only open tickets",
             "only-live-tickets": "Only LIVE tickets",
             "only-pending-tickets": "Only pending tickets (singles)",
+            "only-pp": "Only PP tickets",
             "only-open-tickets-short": "Only open",
             "only-live-tickets-short": "Only LIVE",
             "only-pending-tickets-short": "Only pending (singles)",
+            "only-pp-short": "Only PP",
             "expand-all": "Expand All",
             "colapse-all": "Colapse All",
             "type": {
