@@ -39,7 +39,7 @@ const getDefaultLiveSlippage = (): number => {
 
 const getDefaultIsSystemBet = (): boolean => {
     const lsIsSystemBet = localStore.get(LOCAL_STORAGE_KEYS.IS_SYSTEM_BET);
-    return lsIsSystemBet !== undefined ? (lsIsSystemBet as boolean) : true;
+    return lsIsSystemBet !== undefined ? (lsIsSystemBet as boolean) : false;
 };
 
 const getDefaultError = () => {
