@@ -6,17 +6,21 @@ import NetworkSwitcher from 'components/NetworkSwitcher';
 import SPAAnchor from 'components/SPAAnchor';
 import Search from 'components/Search';
 import WalletInfo from 'components/WalletInfo';
+import { ODDS_TYPES } from 'constants/markets';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
 import ROUTES from 'constants/routes';
+import { OddsType } from 'enums/markets';
 import useInterval from 'hooks/useInterval';
 import useClaimablePositionCountV2Query from 'queries/markets/useClaimablePositionCountV2Query';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import useBlockedGamesQuery from 'queries/resolveBlocker/useBlockedGamesQuery';
+import useWhitelistedForUnblock from 'queries/resolveBlocker/useWhitelistedForUnblock';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { getIsMobile } from 'redux/modules/app';
+import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
 import { getOverdropUIState, getStopPulsing, setOddsType, setStopPulsing } from 'redux/modules/ui';
 import {
@@ -30,12 +34,11 @@ import { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivEnd } from 'styles/common';
 import { OverdropLevel, ThemeInterface } from 'types/ui';
 import { buildHref } from 'utils/routes';
-import { ODDS_TYPES } from '../../../constants/markets';
-import { OddsType } from '../../../enums/markets';
 import ProfileItem from './components/ProfileItem';
 import TimeFilters from './components/TimeFilters';
 import TopUp from './components/TopUp';
 import {
+    BlockedGamesNotificationCount,
     Container,
     Count,
     DropDown,
@@ -93,6 +96,7 @@ const DappHeader: React.FC = () => {
     const location = useLocation();
     const theme: ThemeInterface = useTheme();
 
+    const isAppReady = useSelector(getIsAppReady);
     const networkId = useSelector(getNetworkId);
     const isWalletConnected = useSelector(getIsWalletConnected);
     const walletAddress = useSelector(getWalletAddress) || '';
@@ -118,6 +122,25 @@ const DappHeader: React.FC = () => {
         claimablePositionsCountQuery.isSuccess && claimablePositionsCountQuery.data
             ? claimablePositionsCountQuery.data
             : null;
+
+    const whitelistedForUnblockQuery = useWhitelistedForUnblock(walletAddress, networkId, {
+        enabled: isAppReady && isWalletConnected,
+    });
+    const isWitelistedForUnblock = useMemo(
+        () => whitelistedForUnblockQuery.isSuccess && whitelistedForUnblockQuery.data,
+        [whitelistedForUnblockQuery.data, whitelistedForUnblockQuery.isSuccess]
+    );
+
+    const blockedGamesQuery = useBlockedGamesQuery(false, networkId, {
+        enabled: isAppReady && isWitelistedForUnblock,
+    });
+    const blockedGamesCount = useMemo(
+        () =>
+            blockedGamesQuery.isSuccess && blockedGamesQuery.data && isWitelistedForUnblock
+                ? blockedGamesQuery.data.length
+                : 0,
+        [blockedGamesQuery.data, blockedGamesQuery.isSuccess, isWitelistedForUnblock]
+    );
 
     const setSelectedOddsType = useCallback(
         (oddsType: OddsType) => {
@@ -281,7 +304,14 @@ const DappHeader: React.FC = () => {
                             </Button>
                         )}
                         <WalletInfo />
-                        <MenuIcon ref={menuImageRef} onClick={() => setNavMenuVisibility(true)} />
+                        <MenuIconContainer>
+                            <MenuIcon ref={menuImageRef} onClick={() => setNavMenuVisibility(true)} />
+                            {blockedGamesCount > 0 && (
+                                <BlockedGamesNotificationCount>
+                                    <Count>{blockedGamesCount}</Count>
+                                </BlockedGamesNotificationCount>
+                            )}
+                        </MenuIconContainer>
                         <NavMenu
                             visibility={navMenuVisibility}
                             setNavMenuVisibility={(value: boolean | null) => setNavMenuVisibility(value)}
@@ -334,6 +364,11 @@ const DappHeader: React.FC = () => {
                                 <NotificationCount>
                                     <Count>{claimablePositionCount}</Count>
                                 </NotificationCount>
+                            )}
+                            {blockedGamesCount > 0 && (
+                                <BlockedGamesNotificationCount>
+                                    <Count>{blockedGamesCount}</Count>
+                                </BlockedGamesNotificationCount>
                             )}
                             <NavMenuMobile
                                 visibility={navMenuVisibility}

@@ -15,6 +15,7 @@ import multiCallContract from './contracts/multiCallContract';
 import multiCollateralOnOffRampContract from './contracts/multiCollateralOnOffRampContract';
 import multipleCollateral from './contracts/multipleCollateralContract';
 import priceFeedContract from './contracts/priceFeedContract';
+import resolveBlockerContract from './contracts/resolveBlockerContract';
 import stakingThalesBettingProxy from './contracts/stakingThalesBettingProxy';
 import stakingThalesContract from './contracts/stakingThalesContract';
 
@@ -42,6 +43,7 @@ type NetworkConnector = {
     multiCallContract?: ethers.Contract;
     stakingThalesContract?: ethers.Contract;
     stakingThalesBettingProxy?: ethers.Contract;
+    resolveBlockerContract?: ethers.Contract;
 };
 
 // @ts-ignore
@@ -80,6 +82,7 @@ const networkConnector: NetworkConnector = {
         this.multiCallContract = initializeContract(multiCallContract, networkSettings);
         this.stakingThalesContract = initializeContract(stakingThalesContract, networkSettings);
         this.stakingThalesBettingProxy = initializeContract(stakingThalesBettingProxy, networkSettings);
+        this.resolveBlockerContract = initializeContract(resolveBlockerContract, networkSettings);
     },
 };
 
