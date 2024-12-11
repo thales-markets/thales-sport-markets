@@ -81,8 +81,11 @@ export const StarIcon = styled.i`
 `;
 
 export const PlayerPropsHeader = styled(FlexDiv)<{ marketSelected: boolean }>`
-    position: relative;
-    padding: ${(props) => (props.marketSelected ? '0' : '0 15px')};
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: ${(props) => props.theme.background.primary};
+    padding: ${(props) => (props.marketSelected ? '0' : '15px')};
     justify-content: space-between;
     cursor: pointer;
 `;

@@ -43,8 +43,9 @@ const DailyRecap: React.FC = () => {
     const duration = useMemo(() => {
         if (userData && userData.lastTwitterActivity) {
             const duration = intervalToDuration({ start: userData.lastTwitterActivity, end: Date.now() });
+
             if (duration && duration.days) {
-                if (duration.days >= 3) return 'expired';
+                if (duration.days >= 3 || !!duration.months || !!duration.years) return 'expired';
             }
             const resetsIn = intervalToDuration({
                 start: Date.now(),

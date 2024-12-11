@@ -7,7 +7,7 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
-import { getMarketTypeFilter, getSelectedMarket } from 'redux/modules/market';
+import { getMarketTypeFilter, getMarketTypeGroupFilter, getSelectedMarket } from 'redux/modules/market';
 import { FlexDivColumn, FlexDivRowCentered } from 'styles/common';
 import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarket } from 'types/markets';
@@ -31,6 +31,7 @@ const GameList: React.FC<{ markets: SportMarket[]; language: string }> = ({ mark
     const isAppReady = useSelector(getIsAppReady);
     const selectedMarket = useSelector(getSelectedMarket);
     const marketTypeFilter = useSelector(getMarketTypeFilter);
+    const marketTypeGroupFilter = useSelector(getMarketTypeGroupFilter);
 
     const parentMarket = { ...markets[0], isPlayerPropsMarket: false, isOneSideMarket: false };
 
@@ -64,7 +65,7 @@ const GameList: React.FC<{ markets: SportMarket[]; language: string }> = ({ mark
                 : 1;
         });
     }, [markets]);
-    console.log(sortedMarkets);
+
     return (
         <>
             <PlayerPropsHeader onClick={() => setHidemarkets(!hideMarkets)} marketSelected={!!selectedMarket}>
@@ -132,7 +133,8 @@ const GameList: React.FC<{ markets: SportMarket[]; language: string }> = ({ mark
                                         market.childMarkets[2]?.typeId) &&
                                     PLAYER_PROPS_SPECIAL_SPORTS.includes(market.sport) &&
                                     getSpecializedPropForMarket(sortedMarkets[index - 1]) !==
-                                        getSpecializedPropForMarket(market))
+                                        getSpecializedPropForMarket(market) &&
+                                    !marketTypeGroupFilter)
                             ) || !!marketTypeFilter
                         }
                         floatingOddsTitles={
@@ -144,7 +146,8 @@ const GameList: React.FC<{ markets: SportMarket[]; language: string }> = ({ mark
                                         market.childMarkets[2]?.typeId) &&
                                     PLAYER_PROPS_SPECIAL_SPORTS.includes(market.sport) &&
                                     getSpecializedPropForMarket(sortedMarkets[index - 1]) !==
-                                        getSpecializedPropForMarket(market))) &&
+                                        getSpecializedPropForMarket(market) &&
+                                    !marketTypeGroupFilter)) &&
                             !marketTypeFilter
                         }
                     />

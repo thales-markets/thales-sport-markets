@@ -1,5 +1,5 @@
 import { secondsToMilliseconds } from 'date-fns';
-import { MarketType } from 'enums/marketTypes';
+import { MarketType, MarketTypeGroup } from 'enums/marketTypes';
 import { GameStatus, MarketStatus, Position } from 'enums/markets';
 import { League } from 'enums/sports';
 import { ethers } from 'ethers';
@@ -13,7 +13,7 @@ import {
     TicketPosition,
     TradeData,
 } from 'types/markets';
-import { MarketTypeMap } from '../constants/marketTypes';
+import { MarketTypeMap, MarketTypePlayerPropsGroupsBySport } from '../constants/marketTypes';
 import {
     PLAYER_PROPS_MARKETS_PER_PROP_MAP,
     PLAYER_PROPS_MARKETS_PER_SPORT_MAP,
@@ -691,6 +691,26 @@ export const getMarketPlayerPropsMarketsForProp = (market: SportMarket) => {
         );
     } else {
         return [..._.uniqBy(market.childMarkets, 'typeId'), ...getPlayerPropsEmptyMarkets(market)].slice(0, 3);
+    }
+};
+
+export const getMarketPlayerPropsMarketsForGroupFilter = (market: SportMarket, groupFilter: MarketTypeGroup) => {
+    const marketTypesGroupFilters = groupFilter
+        ? MarketTypePlayerPropsGroupsBySport[market.sport][groupFilter] || []
+        : [];
+    if (marketTypesGroupFilters) {
+        return marketTypesGroupFilters
+            .map(
+                (marketType) =>
+                    market.childMarkets.find((childMarket) => childMarket.typeId === marketType) || {
+                        ...market,
+                        type: getPositionTextV2(market, 0, false) || '',
+                        typeId: marketType,
+                        odds: [0, 0],
+                        line: Infinity,
+                    }
+            )
+            .slice(0, 3);
     }
 };
 

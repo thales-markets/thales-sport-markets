@@ -27,6 +27,7 @@ import {
     getIsMarketSelected,
     getMarketSearch,
     getMarketTypeFilter,
+    getMarketTypeGroupFilter,
     getSelectedMarket,
     getSportFilter,
     getStatusFilter,
@@ -60,6 +61,7 @@ import GlobalFilters from '../components/StatusFilters';
 import Breadcrumbs from './Breadcrumbs';
 import Header from './Header';
 import SelectedMarket from './SelectedMarket';
+import { MarketTypePlayerPropsGroupsBySport } from 'constants/marketTypes';
 
 const Parlay = lazy(() => import(/* webpackChunkName: "Parlay" */ './Parlay'));
 
@@ -85,6 +87,7 @@ const Home: React.FC = () => {
     const sportFilter = useSelector(getSportFilter);
     const tagFilter = useSelector(getTagFilter);
     const marketTypeFilter = useSelector(getMarketTypeFilter);
+    const marketTypeGroupFilter = useSelector(getMarketTypeGroupFilter);
     const location = useLocation();
     const isMobile = useSelector(getIsMobile);
     const isMarketSelected = useSelector(getIsMarketSelected);
@@ -344,6 +347,20 @@ const Home: React.FC = () => {
                 }
             }
 
+            if (marketTypeGroupFilter !== undefined && sportFilter === SportFilter.PlayerProps) {
+                const marketMarketTypes = [
+                    market.typeId,
+                    ...(market.childMarkets || []).map((childMarket) => childMarket.typeId),
+                ];
+                const marketTypeGroupFilters = marketTypeGroupFilter
+                    ? MarketTypePlayerPropsGroupsBySport[market.sport][marketTypeGroupFilter] || []
+                    : [];
+
+                if (!marketMarketTypes.some((marketType) => marketTypeGroupFilters.includes(marketType))) {
+                    return false;
+                }
+            }
+
             return true;
         });
 
@@ -380,6 +397,7 @@ const Home: React.FC = () => {
         tagFilter,
         datePeriodFilter,
         marketTypeFilter,
+        marketTypeGroupFilter,
         favouriteLeagues,
         selectedMarket,
         dispatch,
@@ -765,7 +783,11 @@ const Home: React.FC = () => {
                             {!marketsLoading &&
                                 finalMarkets.length > 0 &&
                                 (statusFilter === StatusFilter.OPEN_MARKETS || sportFilter === SportFilter.Live) && (
-                                    <Header availableMarketTypes={availableMarketTypes} market={selectedMarketData} />
+                                    <Header
+                                        allMarkets={finalMarkets}
+                                        availableMarketTypes={availableMarketTypes}
+                                        market={selectedMarketData}
+                                    />
                                 )}
                             <FilterTagsMobile />
                         </>
@@ -800,6 +822,7 @@ const Home: React.FC = () => {
                                         (statusFilter === StatusFilter.OPEN_MARKETS ||
                                             sportFilter === SportFilter.Live) && (
                                             <Header
+                                                allMarkets={finalMarkets}
                                                 availableMarketTypes={availableMarketTypes}
                                                 market={selectedMarketData}
                                             />

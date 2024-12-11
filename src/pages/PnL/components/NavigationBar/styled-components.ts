@@ -11,7 +11,7 @@ export const Wrapper = styled(FlexDivRow)`
 
 export const ItemWrapper = styled.div`
     position: relative;
-    padding: 0 20px;
+    padding: 0 50px;
     text-align: start;
     @media (max-width: 767px) {
         padding: 0 10px;

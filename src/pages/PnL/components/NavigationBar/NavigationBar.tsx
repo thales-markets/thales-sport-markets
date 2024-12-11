@@ -23,20 +23,25 @@ const navItems = [
         label: 'THALES',
         icon: 'currency-icon currency-icon--thales',
     },
+    // {
+    //     id: PnlTab.USDC_TICKETS,
+    //     label: 'USDC TICKETS',
+    //     icon: 'currency-icon currency-icon--usdc',
+    // },
+    // {
+    //     id: PnlTab.WETH_TICKETS,
+    //     label: 'WETH TICKETS',
+    //     icon: 'currency-icon currency-icon--weth',
+    // },
+    // {
+    //     id: PnlTab.THALES_TICKETS,
+    //     label: 'THALES TICKETS',
+    //     icon: 'currency-icon currency-icon--thales',
+    // },
     {
-        id: PnlTab.USDC_TICKETS,
-        label: 'USDC TICKETS',
-        icon: 'currency-icon currency-icon--usdc',
-    },
-    {
-        id: PnlTab.WETH_TICKETS,
-        label: 'WETH TICKETS',
-        icon: 'currency-icon currency-icon--weth',
-    },
-    {
-        id: PnlTab.THALES_TICKETS,
-        label: 'THALES TICKETS',
-        icon: 'currency-icon currency-icon--thales',
+        id: PnlTab.TICKETS,
+        label: 'TICKETS',
+        icon: 'icon icon--ticket-horizontal',
     },
 ];
 

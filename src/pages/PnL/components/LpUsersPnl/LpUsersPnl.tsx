@@ -1,5 +1,6 @@
 import { USD_SIGN } from 'constants/currency';
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
+import { League } from 'enums/sports';
 import { t } from 'i18next';
 import useLpUsersPnlQuery from 'queries/pnl/useLpUsersPnlQuery';
 import React from 'react';
@@ -13,12 +14,14 @@ import { formatCurrencyWithKey, formatCurrencyWithSign } from 'thales-utils';
 type LpUsersPnlProps = {
     lpCollateral: LiquidityPoolCollateral;
     round: number;
+    leagueId: League;
+    onlyPP: boolean;
 };
 
-const LpUsersPnl: React.FC<LpUsersPnlProps> = ({ lpCollateral, round }) => {
+const LpUsersPnl: React.FC<LpUsersPnlProps> = ({ lpCollateral, round, leagueId, onlyPP }) => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
-    const lpUsersPnlQuery = useLpUsersPnlQuery(lpCollateral, round, networkId);
+    const lpUsersPnlQuery = useLpUsersPnlQuery(lpCollateral, round, leagueId, onlyPP, networkId);
     const lpUsersPnl = lpUsersPnlQuery.isSuccess && lpUsersPnlQuery.data ? lpUsersPnlQuery.data : [];
 
     return (

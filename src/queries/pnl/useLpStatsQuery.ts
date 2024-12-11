@@ -15,13 +15,16 @@ import { getLpAddress } from 'utils/liquidityPool';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
 import networkConnector from 'utils/networkConnector';
 import { mapTicket } from 'utils/tickets';
+import { League } from '../../enums/sports';
 import { Rates } from '../rates/useExchangeRatesQuery';
 
 const getLpStats = async (
     tickets: string[],
     sportsAMMDataContract: Contract,
     networkId: SupportedNetwork,
-    exchangeRates: Rates
+    exchangeRates: Rates,
+    leagueId: League,
+    onlyPP: boolean
 ) => {
     const numberOfBatches = Math.trunc(tickets.length / BATCH_SIZE) + 1;
 
@@ -40,7 +43,17 @@ const getLpStats = async (
 
     const mappedTickets: Ticket[] = ticketsData.map((ticket: any) => mapTicket(ticket, networkId, [], [], []));
 
-    const finalTickets: Ticket[] = orderBy(updateTotalQuoteAndPayout(mappedTickets), ['timestamp'], ['desc']);
+    const finalTickets: Ticket[] = orderBy(
+        updateTotalQuoteAndPayout(mappedTickets).filter(
+            (ticket) =>
+                ((ticket.sportMarkets.length === 1 && ticket.sportMarkets[0].leagueId === leagueId && !!leagueId) ||
+                    !leagueId) &&
+                ((ticket.sportMarkets.length === 1 && ticket.sportMarkets[0].isPlayerPropsMarket && !!onlyPP) ||
+                    !onlyPP)
+        ),
+        ['timestamp'],
+        ['desc']
+    );
 
     for (let index = 0; index < finalTickets.length; index++) {
         const ticket = finalTickets[index];
@@ -69,9 +82,15 @@ const getLpStats = async (
     return lpStats;
 };
 
-const useLpStatsQuery = (round: number, networkId: SupportedNetwork, options?: UseQueryOptions<LpStats[]>) => {
+const useLpStatsQuery = (
+    round: number,
+    leagueId: League,
+    onlyPP: boolean,
+    networkId: SupportedNetwork,
+    options?: UseQueryOptions<LpStats[]>
+) => {
     return useQuery<LpStats[]>(
-        QUERY_KEYS.Pnl.LpStats(round, networkId),
+        QUERY_KEYS.Pnl.LpStats(round, leagueId, onlyPP, networkId),
         async () => {
             const { sportsAMMDataContract, liquidityPoolDataContract, priceFeedContract } = networkConnector;
             if (sportsAMMDataContract && liquidityPoolDataContract && priceFeedContract) {
@@ -110,9 +129,30 @@ const useLpStatsQuery = (round: number, networkId: SupportedNetwork, options?: U
                 });
                 exchangeRates['THALES'] = Number(thalesPriceResponse.data);
 
-                const usdcLpStats = await getLpStats(usdcTickets, sportsAMMDataContract, networkId, exchangeRates);
-                const wethLpStats = await getLpStats(wethTickets, sportsAMMDataContract, networkId, exchangeRates);
-                const thalesLpStats = await getLpStats(thalesTickets, sportsAMMDataContract, networkId, exchangeRates);
+                const usdcLpStats = await getLpStats(
+                    usdcTickets,
+                    sportsAMMDataContract,
+                    networkId,
+                    exchangeRates,
+                    leagueId,
+                    onlyPP
+                );
+                const wethLpStats = await getLpStats(
+                    wethTickets,
+                    sportsAMMDataContract,
+                    networkId,
+                    exchangeRates,
+                    leagueId,
+                    onlyPP
+                );
+                const thalesLpStats = await getLpStats(
+                    thalesTickets,
+                    sportsAMMDataContract,
+                    networkId,
+                    exchangeRates,
+                    leagueId,
+                    onlyPP
+                );
 
                 const lpStats: LpStats = {
                     name: 'TOTAL',
