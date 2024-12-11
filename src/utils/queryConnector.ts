@@ -60,4 +60,8 @@ export const refetchOverdropMultipliers = (walletAddress: string) => {
 export const refetchCoingeckoRates = () =>
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Rates.CoingeckoRates());
 
+export const refetchResolveBlocker = (networkId: Network) => {
+    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.ResolveBlocker.BlockedGames(networkId));
+};
+
 export default queryConnector;

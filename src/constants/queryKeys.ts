@@ -118,6 +118,20 @@ const QUERY_KEYS = {
             networkId: Network
         ) => ['pnl', 'lpUsersPnl', lpCollateral, round, leagueId, onlyPP, networkId],
     },
+    ResolveBlocker: {
+        BlockedGames: (isUnblocked: boolean, networkId: Network) => [
+            'resolveBlocker',
+            'blockedGames',
+            isUnblocked,
+            networkId,
+        ],
+        WhitelistedForUnblock: (walletAddress: string, networkId: Network) => [
+            'resolveBlocker',
+            'whitelistedForUnblock',
+            networkId,
+            walletAddress,
+        ],
+    },
     FavoriteTeam: (walletAddress: string, networkId: Network) => ['favoriteTeam', walletAddress, networkId],
     Banners: (networkId: Network) => ['banners', networkId],
     LiquidityPool: {
