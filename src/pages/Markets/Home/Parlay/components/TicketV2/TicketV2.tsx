@@ -60,6 +60,7 @@ import {
     removeAll,
     resetTicketError,
     setIsFreeBetDisabledByUser,
+    setIsSystemBet,
     setLiveBetSlippage,
     setPaymentAmountToBuy,
     setPaymentSelectedCollateralIndex,
@@ -305,6 +306,12 @@ const Ticket: React.FC<TicketProps> = ({
             mountedRef.current = false;
         };
     }, []);
+
+    useEffect(() => {
+        if (markets[0]?.live) {
+            dispatch(setIsSystemBet(false));
+        }
+    }, [dispatch, isSystemBet, markets]);
 
     useEffect(() => {
         if (markets.length <= systemBetDenominator) {

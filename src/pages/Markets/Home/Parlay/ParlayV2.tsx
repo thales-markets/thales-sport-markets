@@ -237,25 +237,27 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                             <Count>{ticket.length}</Count>
                         </Title>
                     )}
-                    <ToggleContainer>
-                        <Toggle
-                            label={{
-                                firstLabel: t('markets.parlay.regular'),
-                                secondLabel: t('markets.parlay.system'),
-                                fontSize: '14px',
-                            }}
-                            width="46px"
-                            height="24px"
-                            active={isSystemBet}
-                            dotSize="16px"
-                            dotBackground={theme.background.secondary}
-                            dotBorder={`3px solid ${theme.borderColor.quaternary}`}
-                            dotMargin="3px"
-                            handleClick={() => {
-                                dispatch(setIsSystemBet(!isSystemBet));
-                            }}
-                        />
-                    </ToggleContainer>
+                    {!ticket[0]?.live && (
+                        <ToggleContainer>
+                            <Toggle
+                                label={{
+                                    firstLabel: t('markets.parlay.regular'),
+                                    secondLabel: t('markets.parlay.system'),
+                                    fontSize: '14px',
+                                }}
+                                width="46px"
+                                height="24px"
+                                active={isSystemBet}
+                                dotSize="16px"
+                                dotBackground={theme.background.secondary}
+                                dotBorder={`3px solid ${theme.borderColor.quaternary}`}
+                                dotMargin="3px"
+                                handleClick={() => {
+                                    dispatch(setIsSystemBet(!isSystemBet));
+                                }}
+                            />
+                        </ToggleContainer>
+                    )}
                     <ThalesBonusContainer>
                         <ThalesBonus>{t('markets.parlay.thales-bonus-info')}</ThalesBonus>
                     </ThalesBonusContainer>
