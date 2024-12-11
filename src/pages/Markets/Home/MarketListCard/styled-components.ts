@@ -9,7 +9,7 @@ export const Wrapper = styled(FlexDivColumn)<{
     isOverdrop: boolean;
     floatingOddsTitles?: boolean;
 }>`
-    margin-top: ${(props) => (props.floatingOddsTitles ? '30px' : '0')};
+    margin-top: ${(props) => (props.floatingOddsTitles && !props.isMarketSelected ? '30px' : '0')};
     position: relative;
     z-index: 1;
     width: 100%;

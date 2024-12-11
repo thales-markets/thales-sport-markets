@@ -7,7 +7,7 @@ import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { getMarketTypeFilter, getSportFilter } from 'redux/modules/market';
+import { getSportFilter } from 'redux/modules/market';
 import styled from 'styled-components';
 import { SportMarket } from 'types/markets';
 import { getMarketTypeTooltipKey, isFuturesMarket } from 'utils/markets';
@@ -60,7 +60,6 @@ const Positions: React.FC<PositionsProps> = ({
 
     const sportFilter = useSelector(getSportFilter);
     const isMobile = useSelector(getIsMobile);
-    const marketTypeFilter = useSelector(getMarketTypeFilter);
 
     const isPlayerPropsMarket = useMemo(() => sportFilter === SportFilter.PlayerProps, [sportFilter]);
 
@@ -74,7 +73,7 @@ const Positions: React.FC<PositionsProps> = ({
 
     const positionText0 = markets[0] ? getSubtitleText(markets[0], 0) : undefined;
     const positionText1 = markets[0] ? getSubtitleText(markets[0], 1) : undefined;
-    const titleText = getTitleText(markets[0], !isPlayerPropsMarket);
+    const titleText = getTitleText(markets[0], !isPlayerPropsMarket, isPlayerPropsMarket);
 
     const tooltipKey = getMarketTypeTooltipKey(marketType);
 
@@ -162,7 +161,7 @@ const Positions: React.FC<PositionsProps> = ({
                                 <ContentRow
                                     gridMinMaxPercentage={getGridMinMaxPercentage(market, isMobile)}
                                     isColumnView={isColumnView}
-                                    filterSelected={!!marketTypeFilter}
+                                    isPlayerProps={!!isPlayerPropsMarket}
                                 >
                                     {filteredOdds.map((_, index) => {
                                         const position = isFutures

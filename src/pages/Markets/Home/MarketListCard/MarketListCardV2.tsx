@@ -20,6 +20,7 @@ import {
     getIsMarketSelected,
     getIsThreeWayView,
     getMarketTypeFilter,
+    getMarketTypeGroupFilter,
     getSelectedMarket,
     getSportFilter,
     setSelectedMarket,
@@ -31,7 +32,12 @@ import { RiskManagementLeaguesAndTypes } from 'types/riskManagement';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getOnImageError, getOnPlayerImageError, getTeamImageSource } from 'utils/images';
 import { isFuturesMarket } from 'utils/markets';
-import { getMarketPlayerPropsMarketsForProp, getMarketPlayerPropsMarketsForSport, isOddValid } from 'utils/marketsV2';
+import {
+    getMarketPlayerPropsMarketsForGroupFilter,
+    getMarketPlayerPropsMarketsForProp,
+    getMarketPlayerPropsMarketsForSport,
+    isOddValid,
+} from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
 import { getLeaguePeriodType, getLeagueTooltipKey } from 'utils/sports';
 import { displayGameClock, displayGamePeriod } from 'utils/ui';
@@ -82,6 +88,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language, oddsTi
     const isThreeWayView = useSelector(getIsThreeWayView);
     const selectedMarket = useSelector(getSelectedMarket);
     const marketTypeFilter = useSelector(getMarketTypeFilter);
+    const marketTypeGroupFilter = useSelector(getMarketTypeGroupFilter);
     const sportFilter = useSelector(getSportFilter);
     const isMobile = useSelector(getIsMobile);
 
@@ -204,12 +211,15 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language, oddsTi
         if (!isPlayerPropsMarket) {
             return null;
         }
+        if (marketTypeGroupFilter) {
+            return getMarketPlayerPropsMarketsForGroupFilter(market, marketTypeGroupFilter);
+        }
         if (PLAYER_PROPS_SPECIAL_SPORTS.includes(market.sport)) {
             return getMarketPlayerPropsMarketsForProp(market);
         }
 
         return getMarketPlayerPropsMarketsForSport(market);
-    }, [market, isPlayerPropsMarket]);
+    }, [market, isPlayerPropsMarket, marketTypeGroupFilter]);
 
     const areChildMarketsOddsValid = market.childMarkets.some((childMarket) =>
         childMarket.odds.some((odd) => isOddValid(odd))

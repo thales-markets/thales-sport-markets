@@ -159,9 +159,13 @@ const getIsDrawAvailable = (leagueId: number, marketType: MarketType) =>
 export const getPositionOrder = (leagueId: number, marketType: MarketType, position: number) =>
     getIsDrawAvailable(leagueId, marketType) ? `${position == 0 ? 1 : position == 1 ? 3 : 2}` : undefined;
 
-export const getMarketTypeName = (marketType: MarketType) => {
+export const getMarketTypeName = (marketType: MarketType, shortName?: boolean) => {
     const marketTypeInfo = MarketTypeMap[marketType];
-    return marketTypeInfo ? marketTypeInfo.name : marketType;
+    return marketTypeInfo
+        ? shortName
+            ? marketTypeInfo.shortName || marketTypeInfo.name
+            : marketTypeInfo.name
+        : marketType;
 };
 
 export const getMarketTypeDescription = (marketType: MarketType) => {

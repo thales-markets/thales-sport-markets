@@ -80,11 +80,18 @@ export const StarIcon = styled.i`
     }
 `;
 
-export const PlayerPropsHeader = styled(FlexDiv)<{ marketSelected: boolean }>`
-    position: relative;
-    padding: ${(props) => (props.marketSelected ? '0' : '0 15px')};
+export const PlayerPropsHeader = styled(FlexDiv)<{ marketSelected: boolean; collapsed: boolean }>`
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: ${(props) => props.theme.background.primary};
+    padding: ${(props) => (props.marketSelected ? '0' : props.collapsed ? '0 15px 5px 15px' : '0px 15px 15px 15px')};
     justify-content: space-between;
     cursor: pointer;
+    margin-bottom: -10px;
+    @media (max-width: 950px) {
+        padding: ${(props) => (props.marketSelected ? '0' : props.collapsed ? '0 15px 5px 15px' : '0px 15px 5px 15px')};
+    }
 `;
 
 export const MatchTimeLabel = styled.label<{ marketSelected: boolean }>`
@@ -125,16 +132,16 @@ export const GameOfLabel = styled.span`
     font-size: 12px;
     text-transform: uppercase;
     @media (max-width: 600px) {
-        font-size: 10px;
+        font-size: 8px;
         top: -5px;
-        right: 35px;
+        right: 20px;
         height: auto;
     }
 `;
 
 export const FireContainer = styled(FlexDivColumnCentered)`
     font-weight: 600;
-    margin-right: 10px;
+    margin-right: 5px;
     @media (max-width: 600px) {
         flex-direction: row;
         top: 5px;
@@ -144,7 +151,7 @@ export const FireContainer = styled(FlexDivColumnCentered)`
 
 export const Fire = styled.i`
     color: ${(props) => props.theme.overdrop.textColor.primary};
-    font-size: 16px;
+    font-size: 12px;
     display: flex;
     justify-content: center;
 `;
@@ -152,9 +159,15 @@ export const Fire = styled.i`
 export const FireText = styled.span`
     color: ${(props) => props.theme.overdrop.textColor.primary};
     white-space: pre;
-    font-size: 8px;
+    font-size: 7px;
     @media (max-width: 600px) {
         display: flex;
         align-items: center;
     }
+`;
+
+export const StickyContainer = styled(FlexDiv)`
+    position: relative;
+    justify-content: space-between;
+    flex: 1;
 `;

@@ -2,7 +2,7 @@ import { SportFilter } from 'enums/markets';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { getSportFilter, setMarketTypeFilter } from 'redux/modules/market';
+import { getSportFilter, setMarketTypeFilter, setMarketTypeGroupFilter } from 'redux/modules/market';
 import { getFavouriteLeagues, setFavouriteLeague } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
@@ -116,6 +116,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                         } else {
                                             if (isPlayerPropsTag) {
                                                 dispatch(setMarketTypeFilter(undefined));
+                                                dispatch(setMarketTypeGroupFilter(undefined));
                                                 setTagFilter([tag]);
                                                 setTagParam([tag.label].toString());
                                             } else {

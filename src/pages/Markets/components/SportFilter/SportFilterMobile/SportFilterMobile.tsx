@@ -13,10 +13,12 @@ import { TagInfo, Tags } from 'types/markets';
 import { getSportLeagueIds } from 'utils/sports';
 import useQueryParam from '../../../../../utils/useQueryParams';
 import { LeagueMap } from 'constants/sports';
+import { getDefaultPlayerPropsLeague } from 'utils/marketsV2';
 
 type SportFilterMobileProps = {
     tagsList: Tags;
     setAvailableTags: Dispatch<SetStateAction<Tags>>;
+    playerPropsCountPerTag: Record<number, number>;
 };
 
 const LeftArrow: React.FC = () => {
@@ -46,7 +48,11 @@ const RightArrow: React.FC = () => {
     );
 };
 
-const SportFilterMobile: React.FC<SportFilterMobileProps> = ({ tagsList, setAvailableTags }) => {
+const SportFilterMobile: React.FC<SportFilterMobileProps> = ({
+    tagsList,
+    setAvailableTags,
+    playerPropsCountPerTag,
+}) => {
     const dispatch = useDispatch();
     const sportFilter = useSelector(getSportFilter);
     const [, setSportParam] = useQueryParam('sport', '');
@@ -68,15 +74,17 @@ const SportFilterMobile: React.FC<SportFilterMobileProps> = ({ tagsList, setAvai
                                     if (filterItem !== sportFilter) {
                                         dispatch(setSportFilter(filterItem));
                                         setSportParam(filterItem);
-                                        // TODO: if nba empty use smth else
                                         dispatch(
                                             setTagFilter(
-                                                filterItem === SportFilter.PlayerProps ? [LeagueMap[League.NBA]] : []
+                                                filterItem === SportFilter.PlayerProps
+                                                    ? [LeagueMap[getDefaultPlayerPropsLeague(playerPropsCountPerTag)]]
+                                                    : []
                                             )
                                         );
-                                        // TODO: if nba empty use smth else
                                         setTagParam(
-                                            filterItem === SportFilter.PlayerProps ? LeagueMap[League.NBA].label : ''
+                                            filterItem === SportFilter.PlayerProps
+                                                ? LeagueMap[getDefaultPlayerPropsLeague(playerPropsCountPerTag)].label
+                                                : ''
                                         );
                                         if (filterItem === SportFilter.All || filterItem === SportFilter.PlayerProps) {
                                             setAvailableTags(tagsList);

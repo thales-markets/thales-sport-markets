@@ -27,6 +27,7 @@ import {
     getIsMarketSelected,
     getMarketSearch,
     getMarketTypeFilter,
+    getMarketTypeGroupFilter,
     getSelectedMarket,
     getSportFilter,
     getStatusFilter,
@@ -60,6 +61,8 @@ import GlobalFilters from '../components/StatusFilters';
 import Breadcrumbs from './Breadcrumbs';
 import Header from './Header';
 import SelectedMarket from './SelectedMarket';
+import { MarketTypePlayerPropsGroupsBySport } from 'constants/marketTypes';
+import { getDefaultPlayerPropsLeague } from 'utils/marketsV2';
 
 const Parlay = lazy(() => import(/* webpackChunkName: "Parlay" */ './Parlay'));
 
@@ -85,6 +88,7 @@ const Home: React.FC = () => {
     const sportFilter = useSelector(getSportFilter);
     const tagFilter = useSelector(getTagFilter);
     const marketTypeFilter = useSelector(getMarketTypeFilter);
+    const marketTypeGroupFilter = useSelector(getMarketTypeGroupFilter);
     const location = useLocation();
     const isMobile = useSelector(getIsMobile);
     const isMarketSelected = useSelector(getIsMarketSelected);
@@ -174,7 +178,6 @@ const Home: React.FC = () => {
                 filteredTags.length > 0 ? dispatch(setTagFilter(filteredTags)) : dispatch(setTagFilter([]));
             } else {
                 if (sportFilter == SportFilter.PlayerProps) {
-                    // TODO: if nba empty use smth else
                     setTagParam(LeagueMap[League.NBA].label);
                 } else {
                     setTagParam(tagFilter.map((tag) => tag.label).toString());
@@ -204,6 +207,12 @@ const Home: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         []
     );
+
+    useEffect(() => {
+        if (sportFilter == SportFilter.PlayerProps) {
+            setTagParam(LeagueMap[getDefaultPlayerPropsLeague(playerPropsCountPerTag)].label);
+        }
+    }, [playerPropsCountPerTag]);
 
     const sportMarketsQueryNew = useSportsMarketsV2Query(statusFilter, networkId, false, undefined, {
         enabled: isAppReady,
@@ -344,6 +353,20 @@ const Home: React.FC = () => {
                 }
             }
 
+            if (marketTypeGroupFilter !== undefined && sportFilter === SportFilter.PlayerProps && !selectedMarket) {
+                const marketMarketTypes = [
+                    market.typeId,
+                    ...(market.childMarkets || []).map((childMarket) => childMarket.typeId),
+                ];
+                const marketTypeGroupFilters = marketTypeGroupFilter
+                    ? MarketTypePlayerPropsGroupsBySport[market.sport][marketTypeGroupFilter] || []
+                    : [];
+
+                if (!marketMarketTypes.some((marketType) => marketTypeGroupFilters.includes(marketType))) {
+                    return false;
+                }
+            }
+
             return true;
         });
 
@@ -380,6 +403,7 @@ const Home: React.FC = () => {
         tagFilter,
         datePeriodFilter,
         marketTypeFilter,
+        marketTypeGroupFilter,
         favouriteLeagues,
         selectedMarket,
         dispatch,
@@ -630,15 +654,17 @@ const Home: React.FC = () => {
                                     scrollMainToTop();
                                     dispatch(setSportFilter(filterItem));
                                     setSportParam(filterItem);
-                                    // TODO: if nba empty use smth else
                                     dispatch(
                                         setTagFilter(
-                                            filterItem === SportFilter.PlayerProps ? [LeagueMap[League.NBA]] : []
+                                            filterItem === SportFilter.PlayerProps
+                                                ? [LeagueMap[getDefaultPlayerPropsLeague(playerPropsCountPerTag)]]
+                                                : []
                                         )
                                     );
-                                    // TODO: if nba empty use smth else
                                     setTagParam(
-                                        filterItem === SportFilter.PlayerProps ? LeagueMap[League.NBA].label : ''
+                                        filterItem === SportFilter.PlayerProps
+                                            ? LeagueMap[getDefaultPlayerPropsLeague(playerPropsCountPerTag)].label
+                                            : ''
                                     );
                                     if (filterItem === SportFilter.All || filterItem === SportFilter.PlayerProps) {
                                         dispatch(setDatePeriodFilter(0));
@@ -761,11 +787,19 @@ const Home: React.FC = () => {
                 <MainContainer>
                     {isMobile && (
                         <>
-                            <SportFilterMobile setAvailableTags={setAvailableTags} tagsList={tagsList} />
+                            <SportFilterMobile
+                                playerPropsCountPerTag={playerPropsCountPerTag}
+                                setAvailableTags={setAvailableTags}
+                                tagsList={tagsList}
+                            />
                             {!marketsLoading &&
                                 finalMarkets.length > 0 &&
                                 (statusFilter === StatusFilter.OPEN_MARKETS || sportFilter === SportFilter.Live) && (
-                                    <Header availableMarketTypes={availableMarketTypes} market={selectedMarketData} />
+                                    <Header
+                                        allMarkets={finalMarkets}
+                                        availableMarketTypes={availableMarketTypes}
+                                        market={selectedMarketData}
+                                    />
                                 )}
                             <FilterTagsMobile />
                         </>
@@ -800,6 +834,7 @@ const Home: React.FC = () => {
                                         (statusFilter === StatusFilter.OPEN_MARKETS ||
                                             sportFilter === SportFilter.Live) && (
                                             <Header
+                                                allMarkets={finalMarkets}
                                                 availableMarketTypes={availableMarketTypes}
                                                 market={selectedMarketData}
                                             />

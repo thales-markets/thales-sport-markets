@@ -26,6 +26,7 @@ export const Header = styled(FlexDivColumnCentered)<{
     max-height: ${(props) => (props.isMainPageView && !props.isColumnView ? 'auto' : '25px')};
     margin-bottom: ${(props) => (props.alignHeader ? '-19px' : '0')};
     flex: none;
+    ${(props) => props.isMainPageView && 'width: 90%'};
     @media (max-width: 950px) {
         ${(props) => props.float && 'top: -50px;'}
     }
@@ -49,7 +50,8 @@ export const SubTitle = styled.span`
     font-size: 12px;
     line-height: 14px;
     width: 100%;
-    text-align: center;    margin-bottom: 5px;
+    text-align: center;    
+    margin-bottom: 5px;
 }
 `;
 
@@ -63,9 +65,10 @@ export const ContentWrapper = styled(FlexDivColumn)``;
 export const ContentRow = styled.div<{
     gridMinMaxPercentage: number;
     isColumnView?: boolean;
-    filterSelected?: boolean;
+    isPlayerProps?: boolean;
 }>`
-    margin-bottom: ${(props) => (props.isColumnView || props.filterSelected ? '0' : '5px')};
+    margin-top: ${(props) => (props.isPlayerProps ? '4px' : '0')};
+    margin-bottom: ${(props) => (props.isColumnView ? '0' : props.isPlayerProps ? '4px' : '5px')};
     margin-right: ${(props) => (props.isColumnView ? '5px' : '0')};
     display: ${(props) => (props.isColumnView ? 'flex' : 'grid')};
     grid-template-columns: repeat(auto-fit, minmax(calc(${(props) => props.gridMinMaxPercentage}% - 5px), 1fr));
