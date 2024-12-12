@@ -227,54 +227,43 @@ const Table: React.FC<TableProps> = ({
             </ReactTable>
             {showPagination && data?.length > 0 && (
                 <PaginationWrapper>
-                    <SelectWrapper>
+                    <SectionWrapper>
                         <PaginationLabel>{t('common.pagination.rows-per-page')}</PaginationLabel>
                         <div>
                             <SelectInput
-                                handleChange={(e) => tableInstance.setPageSize(Number(e))}
-                                value={{ value: pagination.pageSize, label: '' + pagination.pageSize }}
                                 options={PAGINATION_SIZE}
+                                value={{ value: pagination.pageSize, label: '' + pagination.pageSize }}
+                                handleChange={(value) => tableInstance.setPageSize(Number(value))}
+                                isPaginationStyle
                             />
                         </div>
-                    </SelectWrapper>
+                    </SectionWrapper>
 
-                    <SelectWrapper>
-                        <ArrowWrapper
-                            onClick={() => tableInstance.firstPage()}
-                            disabled={!tableInstance.getCanPreviousPage()}
-                        >
-                            {'<<'}
-                        </ArrowWrapper>
+                    <SectionWrapper className="flex items-center gap-1">
+                        <PaginationLabel>
+                            {`${tableInstance.getState().pagination.pageIndex * pagination.pageSize + 1}-${Math.min(
+                                data.length,
+                                (tableInstance.getState().pagination.pageIndex + 1) * pagination.pageSize
+                            )} ${t('common.pagination.of')} ${data.length}`}
+                        </PaginationLabel>
+                    </SectionWrapper>
+
+                    <ActionSection>
                         <ArrowWrapper
                             onClick={() => tableInstance.previousPage()}
                             disabled={!tableInstance.getCanPreviousPage()}
                         >
-                            {'<'}
+                            <ArrowLeft className={'icon icon--arrow-down'} />
                         </ArrowWrapper>
-                    </SelectWrapper>
-
-                    <SelectWrapper className="flex items-center gap-1">
-                        <PaginationLabel>{t('common.pagination.page')}</PaginationLabel>
-                        <PaginationLabel>
-                            {tableInstance.getState().pagination.pageIndex + 1} {t('common.pagination.of')}{' '}
-                            {tableInstance.getPageCount().toLocaleString()}
-                        </PaginationLabel>
-                    </SelectWrapper>
-
-                    <SelectWrapper>
+                    </ActionSection>
+                    <ActionSection>
                         <ArrowWrapper
                             onClick={() => tableInstance.getCanNextPage() && tableInstance.nextPage()}
                             disabled={!tableInstance.getCanNextPage()}
                         >
-                            {'>'}
+                            <ArrowRight className={'icon icon--arrow-down'} />
                         </ArrowWrapper>
-                        <ArrowWrapper
-                            onClick={() => tableInstance.lastPage()}
-                            disabled={!tableInstance.getCanNextPage()}
-                        >
-                            {'>>'}
-                        </ArrowWrapper>
-                    </SelectWrapper>
+                    </ActionSection>
                 </PaginationWrapper>
             )}
         </>
@@ -459,20 +448,20 @@ const SortIcon = styled.i<{ selected: boolean; sortDirection: SortDirection }>`
     }
 `;
 
-const SelectWrapper = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    margin: 0 14px;
-`;
-
 const PaginationWrapper = styled.div`
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding: 10px 0;
+    padding: 5px 0;
+`;
+
+const SectionWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    margin: 0 14px;
 `;
 
 const PaginationLabel = styled.p`
@@ -483,19 +472,32 @@ const PaginationLabel = styled.p`
     letter-spacing: 0.13px;
 `;
 
-const ArrowWrapper = styled.span<{ disabled: boolean }>`
-    height: 24px;
-    font-size: 14px;
-    padding: 4px;
-    border-radius: 14px;
-    border: 2px solid ${(props) => props.theme.borderColor.primary};
-    color: ${(props) => props.theme.textColor.secondary};
-    opacity: ${(props) => (props.disabled ? 0.5 : 1)};
-    cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
-    width: 40px;
+const ActionSection = styled.div`
     display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+`;
+
+const ArrowWrapper = styled.span<{ disabled: boolean }>`
+    display: flex;
+    width: 40px;
+    height: 24px;
     justify-content: center;
     align-items: center;
+    padding: 4px;
+    color: ${(props) => props.theme.textColor.primary};
+    opacity: ${(props) => (props.disabled ? 0.5 : 1)};
+    cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
+`;
+
+const ArrowLeft = styled.i`
+    font-size: 12px;
+    rotate: 90deg;
+`;
+const ArrowRight = styled.i`
+    font-size: 12px;
+    rotate: -90deg;
 `;
 
 const CellAlignment: Record<string, string> = {

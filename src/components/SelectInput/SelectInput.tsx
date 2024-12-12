@@ -14,12 +14,22 @@ type SelectInputProps = {
     value?: SelectOption;
     width?: number;
     isDisabled?: boolean;
+    isPaginationStyle?: boolean;
 };
 
-const SelectInput: React.FC<SelectInputProps> = ({ options, handleChange, defaultValue, value, width, isDisabled }) => {
+const SelectInput: React.FC<SelectInputProps> = ({
+    options,
+    handleChange,
+    defaultValue,
+    value,
+    width,
+    isDisabled,
+    isPaginationStyle,
+}) => {
     const theme: ThemeInterface = useTheme();
 
-    const defaultOption = (value ?? options[defaultValue || 0]) || Number(defaultValue);
+    const selectedValue = (value ?? options[defaultValue || 0]) || Number(defaultValue);
+    const optionsIndex = options.findIndex((option) => option.value === selectedValue.value);
 
     const customStyled = {
         menu: (provided: any, state: any) => ({
@@ -34,10 +44,13 @@ const SelectInput: React.FC<SelectInputProps> = ({ options, handleChange, defaul
         option: (provided: any, state: any) => ({
             ...provided,
             color: theme.textColor.primary,
-            backgroundColor: state?.isFocused || state.isSelected ? theme.background.primary : 'transparent',
+            backgroundColor: state.isSelected ? theme.background.primary : 'transparent',
             opacity: state.isSelected && !state?.isFocused ? 0.7 : 0.9,
             cursor: 'pointer',
             fontFamily: theme.fontFamily.primary,
+            '&:hover': {
+                backgroundColor: theme.background.primary,
+            },
         }),
         control: (provided: any, state: any) => ({
             ...provided,
@@ -64,7 +77,7 @@ const SelectInput: React.FC<SelectInputProps> = ({ options, handleChange, defaul
             fontFamily: theme.fontFamily.primary,
             lineHeight: '120%',
         }),
-        dropdownIndicator: (provided: any) => ({
+        dropdownIndicator: (provided: CSSObjectWithLabel) => ({
             ...provided,
             color: theme.textColor.primary,
             [':hover']: {
@@ -74,15 +87,78 @@ const SelectInput: React.FC<SelectInputProps> = ({ options, handleChange, defaul
         }),
     };
 
+    const paginationStyle = {
+        menu: (provided: any, state: any) => ({
+            ...provided,
+            width: '100%',
+            color: state.selectProps.menuColor,
+            backgroundColor: theme.background.secondary,
+            border: `1px solid ${theme.button.borderColor.tertiary}`,
+            marginTop: -40 - 32 * optionsIndex,
+            borderRadius: 10,
+        }),
+        option: (provided: any, state: any) => ({
+            ...provided,
+            color: theme.textColor.primary,
+            backgroundColor: state.isSelected ? theme.background.primary : 'transparent',
+            opacity: state.isSelected && !state?.isFocused ? 0.7 : 0.9,
+            cursor: 'pointer',
+            fontFamily: theme.fontFamily.primary,
+            '&:hover': {
+                backgroundColor: theme.background.primary,
+            },
+        }),
+        control: (provided: any, state: any) => ({
+            ...provided,
+            width: '52px',
+            backgroundColor: 'transparent',
+            borderColor: 'transparent',
+            color: theme.textColor.primary,
+            borderRadius: '10px',
+            fontSize: '14px',
+            cursor: 'pointer',
+            boxShadow: 'none',
+            '&:hover': {
+                boxShadow: 'none',
+            },
+            opacity: state.isDisabled ? 0.4 : 1,
+        }),
+        placeholder: (provided: any) => ({
+            ...provided,
+            color: theme.textColor.primary,
+        }),
+        singleValue: (provided: CSSObjectWithLabel) => ({
+            ...provided,
+            width: 'min-content',
+            marginLeft: '0',
+            marginRight: '0',
+            color: theme.textColor.primary,
+            fontFamily: theme.fontFamily.primary,
+            lineHeight: '100%',
+        }),
+        dropdownIndicator: () => ({
+            width: '18px;',
+            height: '18px;',
+        }),
+        valueContainer: (provided: CSSObjectWithLabel) => ({
+            ...provided,
+            padding: '2px',
+            justifyContent: 'end',
+        }),
+        indicatorSeparator: () => ({
+            display: 'none',
+        }),
+    };
+
     return (
         <Select
-            value={defaultOption}
+            value={selectedValue}
             options={options}
-            styles={customStyled}
+            styles={isPaginationStyle ? paginationStyle : customStyled}
             onChange={(props: any) => {
                 handleChange(Number(props?.value));
             }}
-            defaultValue={defaultOption}
+            defaultValue={selectedValue}
             isSearchable={false}
             isDisabled={isDisabled}
         />

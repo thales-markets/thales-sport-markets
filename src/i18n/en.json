@@ -31,7 +31,6 @@
             "linkedin": "Linkedin"
         },
         "pagination": {
-            "page": "Page",
             "of": "of",
             "rows-per-page": "Rows per page:"
         },
