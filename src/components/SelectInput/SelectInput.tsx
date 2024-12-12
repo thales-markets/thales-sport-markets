@@ -139,6 +139,10 @@ const SelectInput: React.FC<SelectInputProps> = ({
         dropdownIndicator: () => ({
             width: '18px;',
             height: '18px;',
+            '& > svg': {
+                width: 18,
+                height: 18,
+            },
         }),
         valueContainer: (provided: CSSObjectWithLabel) => ({
             ...provided,
