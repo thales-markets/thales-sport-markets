@@ -22,6 +22,7 @@ type ProfileItemProperties = {
     labelHidden?: boolean;
     avatarSize?: number;
     iconColor?: string;
+    marginRight?: string;
 };
 
 const ProfileItem: React.FC<ProfileItemProperties> = ({ labelHidden, avatarSize }) => {
@@ -36,7 +37,7 @@ const ProfileItem: React.FC<ProfileItemProperties> = ({ labelHidden, avatarSize 
     );
 };
 
-export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({ avatarSize, iconColor }) => {
+export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({ avatarSize, iconColor, marginRight }) => {
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
     const networkId = useChainId();
@@ -60,7 +61,7 @@ export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({ avatarSize,
 
     return (
         <>
-            <ProfileIconContainer>
+            <ProfileIconContainer marginRight={marginRight}>
                 {!!notificationsCount && (
                     <NotificationCount>
                         <Count>{notificationsCount}</Count>

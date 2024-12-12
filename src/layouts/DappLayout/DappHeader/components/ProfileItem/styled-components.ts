@@ -13,11 +13,11 @@ export const ProfileLabel = styled.span`
     text-transform: uppercase;
 `;
 
-export const ProfileIconContainer = styled.div`
+export const ProfileIconContainer = styled.div<{ marginRight?: string }>`
     display: flex;
     align-items: center;
     position: relative;
-    margin-right: 5px;
+    margin-right: ${(props) => props.marginRight || '5px'};
 `;
 
 export const ProfileIcon = styled.i.attrs({ className: 'icon icon--profile2' })<{

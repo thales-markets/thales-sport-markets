@@ -11,7 +11,9 @@ import { OVERDROP_LEVELS } from 'constants/overdrop';
 import ROUTES from 'constants/routes';
 import useInterval from 'hooks/useInterval';
 import useClaimablePositionCountV2Query from 'queries/markets/useClaimablePositionCountV2Query';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import useBlockedGamesQuery from 'queries/resolveBlocker/useBlockedGamesQuery';
+import useWhitelistedForUnblock from 'queries/resolveBlocker/useWhitelistedForUnblock';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
@@ -33,6 +35,7 @@ import ProfileItem from './components/ProfileItem';
 import TimeFilters from './components/TimeFilters';
 import TopUp from './components/TopUp';
 import {
+    BlockedGamesNotificationCount,
     Container,
     Count,
     DropDown,
@@ -122,6 +125,33 @@ const DappHeader: React.FC = () => {
         claimablePositionsCountQuery.isSuccess && claimablePositionsCountQuery.data
             ? claimablePositionsCountQuery.data
             : null;
+
+    const whitelistedForUnblockQuery = useWhitelistedForUnblock(
+        walletAddress,
+        { networkId, client },
+        {
+            enabled: isConnected,
+        }
+    );
+    const isWitelistedForUnblock = useMemo(
+        () => whitelistedForUnblockQuery.isSuccess && whitelistedForUnblockQuery.data,
+        [whitelistedForUnblockQuery.data, whitelistedForUnblockQuery.isSuccess]
+    );
+
+    const blockedGamesQuery = useBlockedGamesQuery(
+        false,
+        { networkId, client },
+        {
+            enabled: isWitelistedForUnblock,
+        }
+    );
+    const blockedGamesCount = useMemo(
+        () =>
+            blockedGamesQuery.isSuccess && blockedGamesQuery.data && isWitelistedForUnblock
+                ? blockedGamesQuery.data.length
+                : 0,
+        [blockedGamesQuery.data, blockedGamesQuery.isSuccess, isWitelistedForUnblock]
+    );
 
     const setSelectedOddsType = useCallback(
         (oddsType: OddsType) => {
@@ -283,7 +313,14 @@ const DappHeader: React.FC = () => {
                             </Button>
                         )}
                         <WalletInfo />
-                        <MenuIcon ref={menuImageRef} onClick={() => setNavMenuVisibility(true)} />
+                        <MenuIconContainer>
+                            <MenuIcon ref={menuImageRef} onClick={() => setNavMenuVisibility(true)} />
+                            {blockedGamesCount > 0 && (
+                                <BlockedGamesNotificationCount>
+                                    <Count>{blockedGamesCount}</Count>
+                                </BlockedGamesNotificationCount>
+                            )}
+                        </MenuIconContainer>
                         <NavMenu
                             visibility={navMenuVisibility}
                             setNavMenuVisibility={(value: boolean | null) => setNavMenuVisibility(value)}
@@ -336,6 +373,11 @@ const DappHeader: React.FC = () => {
                                 <NotificationCount>
                                     <Count>{claimablePositionCount}</Count>
                                 </NotificationCount>
+                            )}
+                            {blockedGamesCount > 0 && (
+                                <BlockedGamesNotificationCount>
+                                    <Count>{blockedGamesCount}</Count>
+                                </BlockedGamesNotificationCount>
                             )}
                             <NavMenuMobile
                                 visibility={navMenuVisibility}

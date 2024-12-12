@@ -730,6 +730,7 @@
             "items": {
                 "markets": "Markets",
                 "profile": "Profile",
+                "resolve-blocker": "Resolve blocker",
                 "history": "History",
                 "liquidity-pool": "Provide Liquidity",
                 "promotions": "Promotions",
@@ -1231,6 +1232,24 @@
             "day-streak": "<bold>{{ days }}</bold><br/>day streak!",
             "active-daily-streak": "Active daily streak xp boost",
             "dont-show-this": "Don't show this again"
+        }
+    },
+    "resolve-blocker": {
+        "title": "Blocked games",
+        "date-time": "Date | Time",
+        "game": "Game",
+        "reason": "Reason",
+        "action": "Action",
+        "unblocked-by": "Unblocked by",
+        "unblock": "Unblock",
+        "unblocking": "Unblocking...",
+        "not-whitelisted-for-unblock-tooltip": "Connected wallet is not whitelisted for unblock",
+        "unblock-confirmation-message": "Game successfully unblocked",
+        "no-blocked-games": "No blocked games",
+        "no-unblocked-games": "No unblocked games",
+        "tab": {
+            "blocked-games": "Blocked games",
+            "unblocked-games": "Unblocked games"
         }
     }
 }

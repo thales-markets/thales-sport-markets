@@ -355,7 +355,7 @@ export const TableCell = styled(FlexDivCentered)<{
     isCard?: boolean;
 }>`
     flex: 1;
-    max-width: ${(props) => (props.width ? props.width : 'initial')};
+    max-width: ${(props) => (props.width ? `${props.width}px` : 'initial')};
     min-width: ${(props) => (props.minWidth ? `${props.minWidth}px` : '0px')};
     justify-content: ${(props) => (props.isCard ? 'right' : CellAlignment[props.id] || 'left')};
     &:first-child {
