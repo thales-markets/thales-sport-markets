@@ -361,7 +361,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                                     </LastExpandedSection>
                                     <LastExpandedSection>
                                         <QuoteWrapper>
-                                            <QuoteLabel>{t('profile.card.total-quote')}:</QuoteLabel>
+                                            <QuoteLabel>{t('profile.card.max-quote')}:</QuoteLabel>
                                             <QuoteText>
                                                 {formatTicketOdds(
                                                     selectedOddsType,

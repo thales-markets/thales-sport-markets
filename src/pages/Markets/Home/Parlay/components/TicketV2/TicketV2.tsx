@@ -2056,8 +2056,18 @@ const Ticket: React.FC<TicketProps> = ({
                 </>
             )}
             <RowSummary columnDirection={true}>
+                {isSystemBet && (
+                    <RowContainer>
+                        <SummaryLabel>{t('markets.parlay.min-quote')}:</SummaryLabel>
+                        <SummaryValue fontSize={12}>
+                            {formatMarketOdds(selectedOddsType, systemData.systemBetMinimumQuote)}
+                        </SummaryValue>
+                    </RowContainer>
+                )}
                 <RowContainer>
-                    <SummaryLabel>{t('markets.parlay.total-quote')}:</SummaryLabel>
+                    <SummaryLabel>
+                        {isSystemBet ? t('markets.parlay.max-quote') : t('markets.parlay.total-quote')}:
+                    </SummaryLabel>
                     <InfoTooltip
                         open={inputRefVisible && (isInvalidRegularTotalQuote || isInvalidSystemTotalQuote)}
                         title={getQuoteTooltipText()}
@@ -2072,10 +2082,6 @@ const Ticket: React.FC<TicketProps> = ({
                             )}
                         </SummaryValue>
                     </InfoTooltip>
-                    <ClearLabel alignRight={true} onClick={() => dispatch(removeAll())}>
-                        {t('markets.parlay.clear')}
-                        <XButton margin={'0 0 4px 5px'} className={`icon icon--clear`} />
-                    </ClearLabel>
                 </RowContainer>
                 {(isThales || swapToThales) && (
                     <RowContainer>
@@ -2094,6 +2100,10 @@ const Ticket: React.FC<TicketProps> = ({
                                 marginLeft={3}
                             />
                         </SummaryLabel>
+                        <ClearLabel alignRight={true} onClick={() => dispatch(removeAll())}>
+                            {t('markets.parlay.clear')}
+                            <XButton margin={'0 0 4px 5px'} className={`icon icon--clear`} />
+                        </ClearLabel>
                     </RowContainer>
                 )}
             </RowSummary>

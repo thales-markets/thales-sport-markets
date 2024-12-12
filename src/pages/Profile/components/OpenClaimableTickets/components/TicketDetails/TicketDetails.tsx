@@ -391,7 +391,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
                         </CollapseFooterContainer>
                         <CollapseFooterContainer>
                             <FooterContainer>
-                                <Label>{t('profile.card.total-quote')}:</Label>
+                                <Label>{t('profile.card.max-quote')}:</Label>
                                 <Value>
                                     {formatTicketOdds(
                                         selectedOddsType,
