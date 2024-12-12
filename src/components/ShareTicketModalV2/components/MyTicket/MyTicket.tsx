@@ -125,7 +125,12 @@ const MyTicket: React.FC<MyTicketProps> = ({
                 ) : (
                     <>
                         <InfoDiv>
-                            <InfoLabel>{t('markets.parlay.share-ticket.total-quote')}:</InfoLabel>
+                            <InfoLabel>
+                                {systemBetData
+                                    ? t('markets.parlay.max-quote')
+                                    : t('markets.parlay.share-ticket.total-quote')}
+                                :
+                            </InfoLabel>
                             <InfoValue>{formatTicketOdds(selectedOddsType, paid, payout)}</InfoValue>
                         </InfoDiv>
                     </>

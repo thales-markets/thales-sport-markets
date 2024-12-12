@@ -2062,6 +2062,10 @@ const Ticket: React.FC<TicketProps> = ({
                         <SummaryValue fontSize={12}>
                             {formatMarketOdds(selectedOddsType, systemData.systemBetMinimumQuote)}
                         </SummaryValue>
+                        <ClearLabel alignRight={true} onClick={() => dispatch(removeAll())}>
+                            {t('markets.parlay.clear')}
+                            <XButton margin={'0 0 4px 5px'} className={`icon icon--clear`} />
+                        </ClearLabel>
                     </RowContainer>
                 )}
                 <RowContainer>
@@ -2082,6 +2086,12 @@ const Ticket: React.FC<TicketProps> = ({
                             )}
                         </SummaryValue>
                     </InfoTooltip>
+                    {!isSystemBet && (
+                        <ClearLabel alignRight={true} onClick={() => dispatch(removeAll())}>
+                            {t('markets.parlay.clear')}
+                            <XButton margin={'0 0 4px 5px'} className={`icon icon--clear`} />
+                        </ClearLabel>
+                    )}
                 </RowContainer>
                 {(isThales || swapToThales) && (
                     <RowContainer>
@@ -2100,10 +2110,6 @@ const Ticket: React.FC<TicketProps> = ({
                                 marginLeft={3}
                             />
                         </SummaryLabel>
-                        <ClearLabel alignRight={true} onClick={() => dispatch(removeAll())}>
-                            {t('markets.parlay.clear')}
-                            <XButton margin={'0 0 4px 5px'} className={`icon icon--clear`} />
-                        </ClearLabel>
                     </RowContainer>
                 )}
             </RowSummary>
