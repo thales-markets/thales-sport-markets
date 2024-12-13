@@ -346,7 +346,8 @@ export const getSystemBetData = (
     if (maxSupportedOdds) {
         systemBetQuote = systemBetQuote < maxSupportedOdds ? maxSupportedOdds : systemBetQuote;
         systemBetQuotePerCombination = systemBetQuote / numberOfCombinations;
-        systemBetMinimumQuote = systemBetMinimumQuote < maxSupportedOdds ? maxSupportedOdds : systemBetMinimumQuote;
+        systemBetMinimumQuote =
+            systemBetMinimumQuote < systemBetQuotePerCombination ? systemBetQuotePerCombination : systemBetMinimumQuote;
     }
 
     return { systemBetQuotePerCombination, systemBetQuote, systemBetMinimumQuote };
@@ -400,9 +401,11 @@ const getSystemBetPayoutData = (
     }
 
     const maxPayout = buyInAmount / totalQuote;
+    const maxTotalQuotePerCombination = totalQuote / numberOfCombinations;
 
     systemBetPayout = systemBetPayout > maxPayout ? maxPayout : systemBetPayout;
-    systemBetMinimumQuote = systemBetMinimumQuote < totalQuote ? totalQuote : systemBetMinimumQuote;
+    systemBetMinimumQuote =
+        systemBetMinimumQuote < maxTotalQuotePerCombination ? maxTotalQuotePerCombination : systemBetMinimumQuote;
 
     return {
         systemBetPayout: areAllMarketsResolved ? systemBetPayout : 0,
