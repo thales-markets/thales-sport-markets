@@ -34,7 +34,9 @@ const useSportsAmmDataQuery = (networkId: Network, options?: UseQueryOptions<Spo
                     );
                     sportsAmmData.maxSupportedOdds = bigNumberFormatter(sportsAMMParameters.maxSupportedOdds);
                     sportsAmmData.safeBoxFee = bigNumberFormatter(sportsAMMParameters.safeBoxFee);
-                    sportsAmmData.maxAllowedSystemCombinations = 1000;
+                    sportsAmmData.maxAllowedSystemCombinations = Number(
+                        sportsAMMParameters.maxAllowedSystemCombinations
+                    );
                 }
 
                 return sportsAmmData;

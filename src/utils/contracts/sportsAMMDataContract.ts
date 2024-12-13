@@ -538,6 +538,7 @@ const sportsAMMDataContract = {
                         { internalType: 'uint256', name: 'maxSupportedOdds', type: 'uint256' },
                         { internalType: 'uint256', name: 'safeBoxFee', type: 'uint256' },
                         { internalType: 'bool', name: 'paused', type: 'bool' },
+                        { internalType: 'uint256', name: 'maxAllowedSystemCombinations', type: 'uint256' },
                     ],
                     internalType: 'struct SportsAMMV2Data.SportsAMMParameters',
                     name: '',
