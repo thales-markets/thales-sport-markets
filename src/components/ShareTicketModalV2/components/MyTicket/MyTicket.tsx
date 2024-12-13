@@ -102,10 +102,16 @@ const MyTicket: React.FC<MyTicketProps> = ({
             <HorizontalLine />
             {systemBetData && (
                 <InfoWrapper>
-                    <InfoDiv>
+                    <InfoDiv isWinning={!isTicketOpen && !isTicketLost} isLost={!isTicketOpen && isTicketLost}>
                         <InfoLabel>{t('markets.parlay.system')}:</InfoLabel>
                         <InfoValue>
                             {systemBetData?.systemBetDenominator}/{markets.length}
+                            {!isTicketOpen &&
+                                (isTicketLost ? (
+                                    <Wrong className="icon icon--wrong" />
+                                ) : (
+                                    <Correct className="icon icon--correct" />
+                                ))}
                         </InfoValue>
                     </InfoDiv>
                     <InfoDiv>
@@ -267,7 +273,14 @@ const InfoWrapper = styled(FlexDivRow)`
     padding: 5px 5px 0 5px;
 `;
 
-const InfoDiv = styled(FlexDiv)``;
+const InfoDiv = styled(FlexDiv)<{ isWinning?: boolean; isLost?: boolean }>`
+    color: ${(props) =>
+        props.isWinning
+            ? props.theme.status.win
+            : props.isLost
+            ? props.theme.status.loss
+            : props.theme.textColor.primary};
+`;
 
 const InfoDivFull = styled(FlexDivSpaceBetween)`
     width: 100%;
@@ -301,6 +314,20 @@ const HorizontalDashedLine = styled.hr`
     border-right: none;
     border-left: none;
     margin: 0;
+`;
+
+const Icon = styled.i`
+    font-size: 12px;
+    margin-left: 4px;
+    margin-top: -3px;
+`;
+
+const Correct = styled(Icon)`
+    color: ${(props) => props.theme.status.win};
+`;
+
+const Wrong = styled(Icon)`
+    color: ${(props) => props.theme.status.loss};
 `;
 
 export default MyTicket;
