@@ -4,6 +4,7 @@ import { useQuery, UseQueryOptions } from 'react-query';
 import { bigNumberFormatter, getDefaultDecimalsForNetwork } from 'thales-utils';
 import { SportsAmmData } from 'types/markets';
 import networkConnector from 'utils/networkConnector';
+import { SYSTEM_BET_MAX_ALLOWED_SYSTEM_COMBINATIONS } from '../../constants/markets';
 
 const useSportsAmmDataQuery = (networkId: Network, options?: UseQueryOptions<SportsAmmData | undefined>) => {
     return useQuery<SportsAmmData | undefined>(
@@ -16,7 +17,7 @@ const useSportsAmmDataQuery = (networkId: Network, options?: UseQueryOptions<Spo
                     maxSupportedAmount: 0,
                     maxSupportedOdds: 0,
                     safeBoxFee: 0,
-                    maxAllowedSystemCombinations: 0,
+                    maxAllowedSystemCombinations: SYSTEM_BET_MAX_ALLOWED_SYSTEM_COMBINATIONS,
                 };
 
                 const { sportsAMMDataContract } = networkConnector;

@@ -175,7 +175,8 @@ export const mapTicket = (
         const systemBetPayoutData = getSystemBetPayoutData(
             mappedTicket.sportMarkets,
             systemBetDenominator,
-            mappedTicket.buyInAmount
+            mappedTicket.buyInAmount,
+            mappedTicket.totalQuote
         );
         mappedTicket.systemBetData = {
             systemBetDenominator: Number(ticket.systemBetDenominator),
@@ -188,11 +189,7 @@ export const mapTicket = (
             if (mappedTicket.isResolved) {
                 mappedTicket.payout = mappedTicket.finalPayout;
             } else {
-                mappedTicket.payout = getSystemBetPayoutData(
-                    mappedTicket.sportMarkets,
-                    systemBetDenominator,
-                    mappedTicket.buyInAmount
-                ).systemBetPayout;
+                mappedTicket.payout = systemBetPayoutData.systemBetPayout;
             }
         }
     }
@@ -313,7 +310,12 @@ export const generateSystemBetCombinations = (n: number, k: number): number[][] 
     return combinations;
 };
 
-export const getSystemBetData = (markets: TicketMarket[], systemBetDenominator: number, currencyKey: Coins) => {
+export const getSystemBetData = (
+    markets: TicketMarket[],
+    systemBetDenominator: number,
+    currencyKey: Coins,
+    maxSupportedOdds?: number
+) => {
     const systemCombinations: number[][] = generateSystemBetCombinations(markets.length, systemBetDenominator);
     const numberOfCombinations = systemCombinations.length;
     let systemBetQuote = 0;
@@ -341,10 +343,21 @@ export const getSystemBetData = (markets: TicketMarket[], systemBetDenominator: 
     systemBetQuotePerCombination = 1 / systemBetQuotePerCombination;
     systemBetQuote = numberOfCombinations * systemBetQuotePerCombination;
 
+    if (maxSupportedOdds) {
+        systemBetQuote = systemBetQuote < maxSupportedOdds ? maxSupportedOdds : systemBetQuote;
+        systemBetQuotePerCombination = systemBetQuote / numberOfCombinations;
+        systemBetMinimumQuote = systemBetMinimumQuote < maxSupportedOdds ? maxSupportedOdds : systemBetMinimumQuote;
+    }
+
     return { systemBetQuotePerCombination, systemBetQuote, systemBetMinimumQuote };
 };
 
-const getSystemBetPayoutData = (markets: TicketMarket[], systemBetDenominator: number, buyInAmount: number) => {
+const getSystemBetPayoutData = (
+    markets: TicketMarket[],
+    systemBetDenominator: number,
+    buyInAmount: number,
+    totalQuote: number
+) => {
     const systemCombinations: number[][] = generateSystemBetCombinations(markets.length, systemBetDenominator);
     const numberOfCombinations = systemCombinations.length;
     const buyinPerCombination = buyInAmount / numberOfCombinations;
@@ -364,11 +377,10 @@ const getSystemBetPayoutData = (markets: TicketMarket[], systemBetDenominator: n
             const market = markets[marketIndex];
 
             originalCominationQuote *= market.odd;
-            systemBetMinimumQuote =
-                originalCominationQuote > systemBetMinimumQuote ? originalCominationQuote : systemBetMinimumQuote;
 
             if (!market.isResolved) {
                 areAllMarketsResolved = false;
+                continue;
             }
             if (market.isCancelled) {
                 continue;
@@ -377,13 +389,20 @@ const getSystemBetPayoutData = (markets: TicketMarket[], systemBetDenominator: n
                 combinationQuote *= market.odd;
             } else {
                 combinationQuote = 0;
-                break;
             }
         }
+
+        systemBetMinimumQuote =
+            originalCominationQuote > systemBetMinimumQuote ? originalCominationQuote : systemBetMinimumQuote;
         if (combinationQuote > 0) {
             systemBetPayout += buyinPerCombination / combinationQuote;
         }
     }
+
+    const maxPayout = buyInAmount / totalQuote;
+
+    systemBetPayout = systemBetPayout > maxPayout ? maxPayout : systemBetPayout;
+    systemBetMinimumQuote = systemBetMinimumQuote < totalQuote ? totalQuote : systemBetMinimumQuote;
 
     return {
         systemBetPayout: areAllMarketsResolved ? systemBetPayout : 0,

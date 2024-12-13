@@ -19,6 +19,7 @@ import {
     COINGECKO_SWAP_TO_THALES_QUOTE_SLIPPAGE,
     MIN_COLLATERAL_MULTIPLIER,
     SWAP_APPROVAL_BUFFER,
+    SYSTEM_BET_MAX_ALLOWED_SYSTEM_COMBINATIONS,
     SYSTEM_BET_MINIMUM_DENOMINATOR,
     SYSTEM_BET_MINIMUM_MARKETS,
     THALES_CONTRACT_RATE_KEY,
@@ -595,9 +596,14 @@ const Ticket: React.FC<TicketProps> = ({
     const systemData = useMemo(
         () =>
             isValidSystemBet
-                ? getSystemBetData(markets, systemBetDenominator, usedCollateralForBuy)
+                ? getSystemBetData(
+                      markets,
+                      systemBetDenominator,
+                      usedCollateralForBuy,
+                      sportsAmmData?.maxSupportedOdds || 1
+                  )
                 : { systemBetQuotePerCombination: 0, systemBetQuote: 0, systemBetMinimumQuote: 0 },
-        [isValidSystemBet, markets, systemBetDenominator, usedCollateralForBuy]
+        [isValidSystemBet, markets, sportsAmmData?.maxSupportedOdds, systemBetDenominator, usedCollateralForBuy]
     );
 
     const totalQuote = useMemo(() => {
@@ -625,7 +631,7 @@ const Ticket: React.FC<TicketProps> = ({
             const { quote, basicQuote } = isSystemBet
                 ? isValidSystemBet
                     ? {
-                          quote: systemData.systemBetQuote,
+                          quote: getSystemBetData(markets, systemBetDenominator, usedCollateralForBuy).systemBetQuote,
                           basicQuote: getSystemBetData(markets, systemBetDenominator, 'USDC' as Coins).systemBetQuote,
                       }
                     : {
@@ -679,12 +685,15 @@ const Ticket: React.FC<TicketProps> = ({
     ]);
 
     const isInvalidSystemTotalQuote = useMemo(
-        () => isSystemBet && isValidSystemBet && totalQuote < (sportsAmmData?.maxSupportedOdds || 0),
+        () => isSystemBet && isValidSystemBet && totalQuote === sportsAmmData?.maxSupportedOdds,
         [isSystemBet, isValidSystemBet, sportsAmmData?.maxSupportedOdds, totalQuote]
     );
 
     const isInvalidNumberOfCombination = useMemo(
-        () => isSystemBet && numberOfSystemBetCombination > (sportsAmmData?.maxAllowedSystemCombinations || 0),
+        () =>
+            isSystemBet &&
+            numberOfSystemBetCombination >
+                (sportsAmmData?.maxAllowedSystemCombinations || SYSTEM_BET_MAX_ALLOWED_SYSTEM_COMBINATIONS),
         [isSystemBet, numberOfSystemBetCombination, sportsAmmData?.maxAllowedSystemCombinations]
     );
 
@@ -1658,11 +1667,6 @@ const Ticket: React.FC<TicketProps> = ({
             return;
         }
 
-        if (isInvalidSystemTotalQuote) {
-            setSubmitDisabled(true);
-            return;
-        }
-
         // Not enough funds
         setSubmitDisabled(!paymentTokenBalance || Number(buyInAmount) > paymentTokenBalance);
     }, [
@@ -2051,7 +2055,9 @@ const Ticket: React.FC<TicketProps> = ({
                                 <InfoTooltip
                                     open={inputRefVisible && isInvalidNumberOfCombination}
                                     title={t('markets.parlay.info.system-bet-number-of-combination', {
-                                        value: sportsAmmData?.maxAllowedSystemCombinations || 0,
+                                        value:
+                                            sportsAmmData?.maxAllowedSystemCombinations ||
+                                            SYSTEM_BET_MAX_ALLOWED_SYSTEM_COMBINATIONS,
                                     })}
                                     placement={'top'}
                                     arrow={true}
@@ -2102,9 +2108,8 @@ const Ticket: React.FC<TicketProps> = ({
                         title={getQuoteTooltipText()}
                         placement={'top'}
                         arrow={true}
-                        isError={isInvalidSystemTotalQuote}
                     >
-                        <SummaryValue fontSize={12} isError={isInvalidSystemTotalQuote}>
+                        <SummaryValue fontSize={12}>
                             {formatMarketOdds(
                                 selectedOddsType,
                                 isSystemBet ? systemData.systemBetQuotePerCombination : totalQuote
