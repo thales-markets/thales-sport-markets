@@ -784,7 +784,8 @@
                 "min-quote": "Minimal TOTAL QUOTE supported is {{value}}",
                 "max-quote": "Maximal TOTAL QUOTE supported is {{value}}",
                 "system-bet-min-quote": "Minimal TOTAL QUOTE supported for selected system is {{value}}",
-                "system-bet-max-quote": "Maximal TOTAL QUOTE supported for selected system is {{value}}"
+                "system-bet-max-quote": "Maximal TOTAL QUOTE supported for selected system is {{value}}",
+                "system-bet-number-of-combination": "Max allowed number of system combinations is {{value}}"
             },
             "show-parlay": "Show Parlay",
             "validation": {

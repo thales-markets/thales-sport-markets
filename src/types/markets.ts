@@ -134,6 +134,7 @@ export type SportsAmmData = {
     maxSupportedAmount: number;
     maxSupportedOdds: number;
     safeBoxFee: number;
+    maxAllowedSystemCombinations: number;
 };
 
 export type LiveTradingProcessorData = {

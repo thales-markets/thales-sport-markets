@@ -683,6 +683,11 @@ const Ticket: React.FC<TicketProps> = ({
         [isSystemBet, isValidSystemBet, sportsAmmData?.maxSupportedOdds, totalQuote]
     );
 
+    const isInvalidNumberOfCombination = useMemo(
+        () => isSystemBet && numberOfSystemBetCombination > (sportsAmmData?.maxAllowedSystemCombinations || 0),
+        [isSystemBet, numberOfSystemBetCombination, sportsAmmData?.maxAllowedSystemCombinations]
+    );
+
     const ticketLiquidityQuery = useTicketLiquidityQuery(markets, networkId, {
         enabled: isAppReady && !noProofs,
     });
@@ -747,7 +752,12 @@ const Ticket: React.FC<TicketProps> = ({
 
     const fetchTicketAmmQuote = useCallback(
         async (buyInAmountForQuote: number) => {
-            if (buyInAmountForQuote <= 0 || noProofs || (isSystemBet && !isValidSystemBet)) return;
+            if (
+                buyInAmountForQuote <= 0 ||
+                noProofs ||
+                (isSystemBet && (!isValidSystemBet || isInvalidNumberOfCombination))
+            )
+                return;
 
             const { sportsAMMV2Contract, multiCollateralOnOffRampContract } = networkConnector;
             if (sportsAMMV2Contract && minBuyInAmountInDefaultCollateral) {
@@ -840,6 +850,7 @@ const Ticket: React.FC<TicketProps> = ({
             noProofs,
             isSystemBet,
             isValidSystemBet,
+            isInvalidNumberOfCombination,
             minBuyInAmountInDefaultCollateral,
             markets,
             collateralHasLp,
@@ -2037,8 +2048,22 @@ const Ticket: React.FC<TicketProps> = ({
                                 </SelectContainer>
                             </RowContainer>
                             <RowSummary>
-                                <SummaryLabel>{t('markets.parlay.number-of-combinations')}:</SummaryLabel>
-                                <SummaryValue isCollateralInfo={true} fontSize={14}>
+                                <InfoTooltip
+                                    open={inputRefVisible && isInvalidNumberOfCombination}
+                                    title={t('markets.parlay.info.system-bet-number-of-combination', {
+                                        value: sportsAmmData?.maxAllowedSystemCombinations || 0,
+                                    })}
+                                    placement={'top'}
+                                    arrow={true}
+                                    isError={isInvalidNumberOfCombination}
+                                >
+                                    <SummaryLabel>{t('markets.parlay.number-of-combinations')}:</SummaryLabel>
+                                </InfoTooltip>
+                                <SummaryValue
+                                    isCollateralInfo={true}
+                                    fontSize={14}
+                                    isError={isInvalidNumberOfCombination}
+                                >
                                     {numberOfSystemBetCombination}
                                 </SummaryValue>
                             </RowSummary>{' '}
