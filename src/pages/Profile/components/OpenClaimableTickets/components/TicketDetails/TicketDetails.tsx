@@ -390,16 +390,18 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
                             </FooterContainer>
                         </CollapseFooterContainer>
                         <CollapseFooterContainer>
-                            <FooterContainer>
-                                <Label>{t('profile.card.max-quote')}:</Label>
-                                <Value>
-                                    {formatTicketOdds(
-                                        selectedOddsType,
-                                        ticket.systemBetData?.buyInPerCombination || 0,
-                                        ticket.systemBetData?.maxPayout || 0
-                                    )}
-                                </Value>
-                            </FooterContainer>
+                            {!isClaimable && (
+                                <FooterContainer>
+                                    <Label>{t('profile.card.max-quote')}:</Label>
+                                    <Value>
+                                        {formatTicketOdds(
+                                            selectedOddsType,
+                                            ticket.systemBetData?.buyInPerCombination || 0,
+                                            ticket.systemBetData?.maxPayout || 0
+                                        )}
+                                    </Value>
+                                </FooterContainer>
+                            )}
                             <FooterContainer>
                                 <Label>{t('profile.card.paid-per-combination')}:</Label>
                                 <Value>
@@ -409,18 +411,41 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
                                     )}
                                 </Value>
                             </FooterContainer>
+                            {isClaimable && (
+                                <FooterContainer>
+                                    <Label>{t('profile.card.number-of-winning-combination')}:</Label>
+                                    <Value>{ticket.systemBetData?.numberOfWinningCombinations}</Value>
+                                </FooterContainer>
+                            )}
                         </CollapseFooterContainer>
                         <CollapseFooterContainer>
+                            {isClaimable && (
+                                <FooterContainer>
+                                    <Label>{t('profile.card.winning-quote')}:</Label>
+                                    <Value>
+                                        {formatTicketOdds(
+                                            selectedOddsType,
+                                            ticket.systemBetData?.buyInPerCombination || 0,
+                                            ticket.payout
+                                        )}
+                                    </Value>
+                                </FooterContainer>
+                            )}
+                            {!isClaimable && (
+                                <FooterContainer>
+                                    <Label>{t('profile.card.min-payout')}:</Label>
+                                    <Value>
+                                        {formatCurrencyWithKey(ticket.collateral, ticket.systemBetData?.minPayout || 0)}
+                                    </Value>
+                                </FooterContainer>
+                            )}
                             <FooterContainer>
-                                <Label>{t('profile.card.min-payout')}:</Label>
+                                <Label>{isClaimable ? t('profile.card.payout') : t('profile.card.max-payout')}:</Label>
                                 <Value>
-                                    {formatCurrencyWithKey(ticket.collateral, ticket.systemBetData?.minPayout || 0)}
-                                </Value>
-                            </FooterContainer>
-                            <FooterContainer>
-                                <Label>{t('profile.card.max-payout')}:</Label>
-                                <Value>
-                                    {formatCurrencyWithKey(ticket.collateral, ticket.systemBetData?.maxPayout || 0)}
+                                    {formatCurrencyWithKey(
+                                        ticket.collateral,
+                                        isClaimable ? ticket.payout : ticket.systemBetData?.maxPayout || 0
+                                    )}
                                 </Value>
                             </FooterContainer>
                             <TwitterWrapper>

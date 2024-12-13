@@ -120,6 +120,14 @@ const MyTicket: React.FC<MyTicketProps> = ({
                     </InfoDiv>
                 </InfoWrapper>
             )}
+            {systemBetData && !isTicketOpen && !isTicketLost && (
+                <InfoWrapper>
+                    <InfoDivFull>
+                        <InfoLabel>{t('markets.parlay.number-of-winning-combinations-short')}:</InfoLabel>
+                        <InfoValue>{systemBetData?.numberOfWinningCombinations}</InfoValue>
+                    </InfoDivFull>
+                </InfoWrapper>
+            )}
             <InfoWrapper>
                 {multiSingle ? (
                     <>
@@ -133,7 +141,9 @@ const MyTicket: React.FC<MyTicketProps> = ({
                         <InfoDiv>
                             <InfoLabel>
                                 {systemBetData
-                                    ? t('markets.parlay.max-quote')
+                                    ? !isTicketOpen && !isTicketLost
+                                        ? t('markets.parlay.winning-quote')
+                                        : t('markets.parlay.max-quote')
                                     : t('markets.parlay.share-ticket.total-quote')}
                                 :
                             </InfoLabel>
@@ -142,7 +152,7 @@ const MyTicket: React.FC<MyTicketProps> = ({
                                     ? formatTicketOdds(
                                           selectedOddsType,
                                           systemBetData?.buyInPerCombination || 0,
-                                          systemBetData?.maxPayout || 0
+                                          !isTicketOpen && !isTicketLost ? payout : systemBetData?.maxPayout || 0
                                       )
                                     : formatTicketOdds(selectedOddsType, paid, payout)}
                             </InfoValue>
@@ -154,7 +164,7 @@ const MyTicket: React.FC<MyTicketProps> = ({
                     <BuyInValue>{formatCurrencyWithKey(collateral, paid)}</BuyInValue>
                 </InfoDiv>
             </InfoWrapper>
-            {systemBetData && (
+            {systemBetData && (isTicketOpen || isTicketLost) && (
                 <InfoWrapper>
                     <InfoDivFull>
                         <InfoLabel>{t('markets.parlay.min-max-payout')}:</InfoLabel>

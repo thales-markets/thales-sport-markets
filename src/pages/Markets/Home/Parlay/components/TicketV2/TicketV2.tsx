@@ -667,7 +667,7 @@ const Ticket: React.FC<TicketProps> = ({
         payout,
         swapToThales,
         systemBetDenominator,
-        systemData.systemBetQuote,
+        usedCollateralForBuy,
     ]);
 
     const numberOfSystemBetCombination = useMemo(() => {
@@ -1478,6 +1478,7 @@ const Ticket: React.FC<TicketProps> = ({
                                           numberOfSystemBetCombination /
                                           systemData.systemBetMinimumQuote,
                                       maxPayout: payout,
+                                      numberOfWinningCombinations: 0,
                                   }
                                 : undefined,
                         };
@@ -1940,6 +1941,7 @@ const Ticket: React.FC<TicketProps> = ({
                       buyInPerCombination: Number(buyInAmount) / numberOfSystemBetCombination,
                       minPayout: Number(buyInAmount) / numberOfSystemBetCombination / systemData.systemBetMinimumQuote,
                       maxPayout: payout,
+                      numberOfWinningCombinations: 0,
                   }
                 : undefined,
         };

@@ -360,16 +360,18 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                                         </QuoteWrapper>
                                     </LastExpandedSection>
                                     <LastExpandedSection>
-                                        <QuoteWrapper>
-                                            <QuoteLabel>{t('profile.card.max-quote')}:</QuoteLabel>
-                                            <QuoteText>
-                                                {formatTicketOdds(
-                                                    selectedOddsType,
-                                                    row.original.systemBetData?.buyInPerCombination,
-                                                    row.original.systemBetData?.maxPayout
-                                                )}
-                                            </QuoteText>
-                                        </QuoteWrapper>
+                                        {!row.original.isUserTheWinner && (
+                                            <QuoteWrapper>
+                                                <QuoteLabel>{t('profile.card.max-quote')}:</QuoteLabel>
+                                                <QuoteText>
+                                                    {formatTicketOdds(
+                                                        selectedOddsType,
+                                                        row.original.systemBetData?.buyInPerCombination,
+                                                        row.original.systemBetData?.maxPayout
+                                                    )}
+                                                </QuoteText>
+                                            </QuoteWrapper>
+                                        )}
                                         <QuoteWrapper>
                                             <QuoteLabel>{t('profile.card.paid-per-combination')}:</QuoteLabel>
                                             <QuoteText>
@@ -379,23 +381,54 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                                                 )}
                                             </QuoteText>
                                         </QuoteWrapper>
+                                        {row.original.isUserTheWinner && (
+                                            <QuoteWrapper>
+                                                <QuoteLabel>
+                                                    {t('profile.card.number-of-winning-combination')}:
+                                                </QuoteLabel>
+                                                <QuoteText>
+                                                    {row.original.systemBetData?.numberOfWinningCombinations}
+                                                </QuoteText>
+                                            </QuoteWrapper>
+                                        )}
                                     </LastExpandedSection>
                                     <LastExpandedSection>
+                                        {row.original.isUserTheWinner && (
+                                            <QuoteWrapper>
+                                                <QuoteLabel>{t('profile.card.winning-quote')}:</QuoteLabel>
+                                                <QuoteText>
+                                                    {formatTicketOdds(
+                                                        selectedOddsType,
+                                                        row.original.systemBetData?.buyInPerCombination,
+                                                        row.original.payout
+                                                    )}
+                                                </QuoteText>
+                                            </QuoteWrapper>
+                                        )}
+                                        {!row.original.isUserTheWinner && (
+                                            <QuoteWrapper>
+                                                <QuoteLabel>{t('profile.card.min-payout')}:</QuoteLabel>
+                                                <QuoteText>
+                                                    {formatCurrencyWithKey(
+                                                        row.original.collateral,
+                                                        row.original.systemBetData?.minPayout || 0
+                                                    )}
+                                                </QuoteText>
+                                            </QuoteWrapper>
+                                        )}
                                         <QuoteWrapper>
-                                            <QuoteLabel>{t('profile.card.min-payout')}:</QuoteLabel>
+                                            <QuoteLabel>
+                                                {row.original.isUserTheWinner
+                                                    ? t('profile.card.payout')
+                                                    : t('profile.card.max-payout')}
+                                                :
+                                            </QuoteLabel>
                                             <QuoteText>
                                                 {formatCurrencyWithKey(
                                                     row.original.collateral,
-                                                    row.original.systemBetData?.minPayout || 0
-                                                )}
-                                            </QuoteText>
-                                        </QuoteWrapper>
-                                        <QuoteWrapper>
-                                            <QuoteLabel>{t('profile.card.max-payout')}:</QuoteLabel>
-                                            <QuoteText>
-                                                {formatCurrencyWithKey(
-                                                    row.original.collateral,
-                                                    row.original.systemBetData?.maxPayout || 0
+                                                    row.original.isUserTheWinner
+                                                        ? row.original.payout
+                                                        : row.original.systemBetData?.maxPayout || 0
                                                 )}
                                             </QuoteText>
                                         </QuoteWrapper>

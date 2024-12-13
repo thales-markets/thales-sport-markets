@@ -184,6 +184,7 @@ export const mapTicket = (
             buyInPerCombination: systemBetPayoutData.buyinPerCombination,
             minPayout: systemBetPayoutData.systemBetPayoutMinPayout,
             maxPayout: mappedTicket.buyInAmount / mappedTicket.totalQuote,
+            numberOfWinningCombinations: systemBetPayoutData.numberOfWinningCombinations,
         };
         if (mappedTicket.isUserTheWinner || mappedTicket.isCancelled) {
             if (mappedTicket.isResolved) {
@@ -365,6 +366,7 @@ const getSystemBetPayoutData = (
     let systemBetPayout = 0;
     let systemBetMinimumQuote = 0;
     let areAllMarketsResolved = true;
+    let numberOfWinningCombinations = 0;
 
     // Loop through each stored combination
     for (let i = 0; i < numberOfCombinations; i++) {
@@ -396,6 +398,7 @@ const getSystemBetPayoutData = (
         systemBetMinimumQuote =
             originalCominationQuote > systemBetMinimumQuote ? originalCominationQuote : systemBetMinimumQuote;
         if (combinationQuote > 0) {
+            numberOfWinningCombinations++;
             systemBetPayout += buyinPerCombination / combinationQuote;
         }
     }
@@ -412,5 +415,6 @@ const getSystemBetPayoutData = (
         systemBetPayoutMinPayout: buyinPerCombination / systemBetMinimumQuote,
         numberOfCombinations,
         buyinPerCombination,
+        numberOfWinningCombinations: areAllMarketsResolved ? numberOfWinningCombinations : 0,
     };
 };

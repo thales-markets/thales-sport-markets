@@ -162,6 +162,7 @@ export type SystemBetData = {
     buyInPerCombination: number;
     minPayout: number;
     maxPayout: number;
+    numberOfWinningCombinations: number;
 };
 
 export type Ticket = {
