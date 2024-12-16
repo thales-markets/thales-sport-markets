@@ -276,7 +276,8 @@
                 "olympicgames": "Olympic games",
                 "tabletennis": "Table tennis",
                 "politics": "Politics",
-                "futures": "Futures"
+                "futures": "Futures",
+                "playerprops": "Player Props"
             },
             "all": "All",
             "datepicker": {

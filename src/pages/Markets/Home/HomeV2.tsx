@@ -7,6 +7,7 @@ import Scroll from 'components/Scroll';
 import Search from 'components/Search';
 import SimpleLoader from 'components/SimpleLoader';
 import Checkbox from 'components/fields/Checkbox/Checkbox';
+import { MarketTypePlayerPropsGroupsBySport } from 'constants/marketTypes';
 import { RESET_STATE } from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { SportFilter, StatusFilter } from 'enums/markets';
@@ -27,6 +28,7 @@ import {
     getIsMarketSelected,
     getMarketSearch,
     getMarketTypeFilter,
+    getMarketTypeGroupFilter,
     getSelectedMarket,
     getSportFilter,
     getStatusFilter,
@@ -44,12 +46,14 @@ import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common'
 import { addHoursToCurrentDate, localStore } from 'thales-utils';
 import { MarketsCache, SportMarket, SportMarkets, TagInfo, Tags } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
+import { getDefaultPlayerPropsLeague } from 'utils/marketsV2';
 import { history } from 'utils/routes';
+import { getScrollMainContainerToTop } from 'utils/scroll';
 import useQueryParam from 'utils/useQueryParams';
 import { useChainId } from 'wagmi';
 import { BOXING_LEAGUES, LeagueMap } from '../../../constants/sports';
 import { MarketType } from '../../../enums/marketTypes';
-import { Sport } from '../../../enums/sports';
+import { League, Sport } from '../../../enums/sports';
 import TimeFilters from '../../../layouts/DappLayout/DappHeader/components/TimeFilters';
 import { getSportLeagueIds, isBoxingLeague } from '../../../utils/sports';
 import FilterTagsMobile from '../components/FilterTagsMobile';
@@ -85,12 +89,14 @@ const Home: React.FC = () => {
     const sportFilter = useSelector(getSportFilter);
     const tagFilter = useSelector(getTagFilter);
     const marketTypeFilter = useSelector(getMarketTypeFilter);
+    const marketTypeGroupFilter = useSelector(getMarketTypeGroupFilter);
     const location = useLocation();
     const isMobile = useSelector(getIsMobile);
     const isMarketSelected = useSelector(getIsMarketSelected);
     const selectedMarket = useSelector(getSelectedMarket);
 
     const [showBurger, setShowBurger] = useState<boolean>(false);
+    const [playerPropsCountPerTag, setPlayerPropsCountPerTag] = useState<Record<string, number>>({});
     const [showActive, setShowActive] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_ACTIVE, true);
     const [showTicketMobileModal, setShowTicketMobileModal] = useState<boolean>(false);
     const [showOddsSelectorModal, setShowOddsSelectorModal] = useState<boolean>(false);
@@ -172,14 +178,22 @@ const Home: React.FC = () => {
                 const filteredTags = availableTags.filter((tag) => tagParamsSplitted.includes(tag.label));
                 filteredTags.length > 0 ? dispatch(setTagFilter(filteredTags)) : dispatch(setTagFilter([]));
             } else {
-                setTagParam(tagFilter.map((tag) => tag.label).toString());
+                if (sportFilter == SportFilter.PlayerProps) {
+                    setTagParam(LeagueMap[League.NBA].label);
+                } else {
+                    setTagParam(tagFilter.map((tag) => tag.label).toString());
+                }
             }
 
             searchParam != '' ? dispatch(setMarketSearch(searchParam)) : '';
 
             selectedLanguage == '' ? setSelectedLanguage(i18n.language) : '';
 
-            if (sportFilter == SportFilter.Favourites || sportFilter == SportFilter.Live) {
+            if (
+                sportFilter == SportFilter.Favourites ||
+                sportFilter == SportFilter.Live ||
+                sportFilter == SportFilter.PlayerProps
+            ) {
                 setAvailableTags(tagsList);
             } else {
                 const tagsPerSport = getSportLeagueIds((sportFilter as unknown) as Sport);
@@ -194,6 +208,12 @@ const Home: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         []
     );
+
+    useEffect(() => {
+        if (sportFilter === SportFilter.PlayerProps) {
+            setTagParam(LeagueMap[getDefaultPlayerPropsLeague(playerPropsCountPerTag)].label);
+        }
+    }, [playerPropsCountPerTag, sportFilter, setTagParam]);
 
     const sportMarketsQueryNew = useSportsMarketsV2Query(statusFilter, false, { networkId }, undefined);
 
@@ -219,12 +239,51 @@ const Home: React.FC = () => {
         const gameMultipliers =
             gameMultipliersQuery.isSuccess && gameMultipliersQuery.data ? gameMultipliersQuery.data : [];
 
-        const filteredMarkets = (sportFilter === SportFilter.Live
-            ? allLiveMarkets
-            : allMarkets[statusFilter] || allMarkets[StatusFilter.OPEN_MARKETS]
-        ).filter((market: SportMarket) => {
+        let marketsToFilter = [];
+
+        if (sportFilter === SportFilter.PlayerProps) {
+            const playerMarketMap = allMarkets[statusFilter].reduce(
+                (prev: Record<string, SportMarket>, curr: SportMarket) => {
+                    const playerMap = { ...prev };
+                    curr.childMarkets.forEach((childMarket) => {
+                        if (childMarket.isPlayerPropsMarket) {
+                            if (playerMap[childMarket.playerProps.playerName + childMarket.gameId]) {
+                                playerMap[childMarket.playerProps.playerName + childMarket.gameId].childMarkets = [
+                                    ...playerMap[childMarket.playerProps.playerName + childMarket.gameId].childMarkets,
+                                    childMarket,
+                                ];
+                            } else {
+                                playerMap[childMarket.playerProps.playerName + childMarket.gameId] = {
+                                    ...curr,
+                                    isPlayerPropsMarket: true,
+                                    gameId: childMarket.gameId,
+                                    isOneSideMarket: true,
+                                    childMarkets: [childMarket],
+                                    playerProps: childMarket.playerProps,
+                                };
+                            }
+                        }
+                    });
+                    return playerMap;
+                },
+                {}
+            );
+
+            marketsToFilter = Object.keys(playerMarketMap).map((key) => playerMarketMap[key]);
+        } else {
+            marketsToFilter =
+                sportFilter === SportFilter.Live
+                    ? allLiveMarkets
+                    : allMarkets[statusFilter] || allMarkets[StatusFilter.OPEN_MARKETS];
+        }
+
+        const filteredMarkets = marketsToFilter.filter((market: SportMarket) => {
             if (marketSearch) {
-                if (
+                if (sportFilter == SportFilter.PlayerProps) {
+                    if (!market.playerProps.playerName.toLowerCase().includes(marketSearch.toLowerCase())) {
+                        return false;
+                    }
+                } else if (
                     !market.homeTeam.toLowerCase().includes(marketSearch.toLowerCase()) &&
                     !market.awayTeam.toLowerCase().includes(marketSearch.toLowerCase())
                 ) {
@@ -252,7 +311,11 @@ const Home: React.FC = () => {
             }
 
             if (sportFilter !== SportFilter.All) {
-                if (sportFilter === SportFilter.Boosted) {
+                if (sportFilter === SportFilter.PlayerProps) {
+                    if (!market.childMarkets.length) {
+                        return false;
+                    }
+                } else if (sportFilter === SportFilter.Boosted) {
                     if (!gameMultipliers.find((multiplier) => multiplier.gameId === market.gameId)) {
                         return false;
                     }
@@ -281,6 +344,20 @@ const Home: React.FC = () => {
                 ];
 
                 if (!marketMarketTypes.some((marketType) => marketTypeFilter === marketType)) {
+                    return false;
+                }
+            }
+
+            if (marketTypeGroupFilter !== undefined && sportFilter === SportFilter.PlayerProps && !selectedMarket) {
+                const marketMarketTypes = [
+                    market.typeId,
+                    ...(market.childMarkets || []).map((childMarket) => childMarket.typeId),
+                ];
+                const marketTypeGroupFilters = marketTypeGroupFilter
+                    ? MarketTypePlayerPropsGroupsBySport[market.sport][marketTypeGroupFilter] || []
+                    : [];
+
+                if (!marketMarketTypes.some((marketType) => marketTypeGroupFilters.includes(marketType))) {
                     return false;
                 }
             }
@@ -321,6 +398,7 @@ const Home: React.FC = () => {
         tagFilter,
         datePeriodFilter,
         marketTypeFilter,
+        marketTypeGroupFilter,
         favouriteLeagues,
         selectedMarket,
         dispatch,
@@ -348,13 +426,44 @@ const Home: React.FC = () => {
         const groupedMarkets = groupBy(openSportMarkets || [], (market) => market.leagueId);
 
         const openMarketsCountPerTag: any = {};
+        const ppMarketsCountPerTag: any = {};
         Object.keys(groupedMarkets).forEach((key: string) => {
+            const playerMarketMap = groupedMarkets[key].reduce(
+                (prev: Record<string, SportMarket>, curr: SportMarket) => {
+                    const playerMap = { ...prev };
+                    curr.childMarkets.forEach((childMarket) => {
+                        if (childMarket.isPlayerPropsMarket) {
+                            if (playerMap[childMarket.playerProps.playerName + childMarket.gameId]) {
+                                playerMap[childMarket.playerProps.playerName + childMarket.gameId].childMarkets = [
+                                    ...playerMap[childMarket.playerProps.playerName + childMarket.gameId].childMarkets,
+                                    childMarket,
+                                ];
+                            } else {
+                                playerMap[childMarket.playerProps.playerName as string] = {
+                                    ...curr,
+                                    homeTeam: childMarket.playerProps.playerName,
+                                    isOneSideMarket: true,
+                                    childMarkets: [childMarket],
+                                };
+                            }
+                        }
+                    });
+                    return playerMap;
+                },
+                {}
+            );
             if (isBoxingLeague(Number(key))) {
                 openMarketsCountPerTag[BOXING_LEAGUES[0].toString()] = groupedMarkets[key].length;
+
+                ppMarketsCountPerTag[BOXING_LEAGUES[0].toString()] = Object.keys(playerMarketMap).map(
+                    (key) => playerMarketMap[key]
+                ).length;
             } else {
                 openMarketsCountPerTag[key] = groupedMarkets[key].length;
+                ppMarketsCountPerTag[key] = Object.keys(playerMarketMap).map((key) => playerMarketMap[key]).length;
             }
         });
+        setPlayerPropsCountPerTag(ppMarketsCountPerTag);
         return openMarketsCountPerTag;
     }, [openSportMarkets]);
 
@@ -374,7 +483,10 @@ const Home: React.FC = () => {
             openMarketsCount[filterItem] = count;
         });
         openMarketsCount[SportFilter.All] = totalCount;
-
+        openMarketsCount[SportFilter.PlayerProps] = Object.keys(playerPropsCountPerTag).reduce(
+            (prev: number, curr: string) => prev + playerPropsCountPerTag[curr],
+            0
+        );
         let favouriteCount = 0;
         favouriteLeagues.forEach((tag: TagInfo) => {
             favouriteCount += openMarketsCountPerTag[tag.id] || 0;
@@ -382,7 +494,7 @@ const Home: React.FC = () => {
         openMarketsCount[SportFilter.Favourites] = favouriteCount;
 
         return openMarketsCount;
-    }, [favouriteLeagues, openMarketsCountPerTag]);
+    }, [favouriteLeagues, openMarketsCountPerTag, playerPropsCountPerTag]);
 
     const liveMarketsCountPerTag = useMemo(() => {
         const liveSportMarkets: SportMarkets =
@@ -437,7 +549,7 @@ const Home: React.FC = () => {
                         ? liveSportMarketsQuery.data.live
                         : [];
                 return liveMarkets.find(
-                    (market) => market.gameId.toLowerCase() === selectedMarket?.gameId.toLowerCase()
+                    (market) => market.gameId.toLowerCase() === selectedMarket.gameId.toLowerCase()
                 );
             } else {
                 const openSportMarkets: SportMarkets =
@@ -446,7 +558,7 @@ const Home: React.FC = () => {
                         : [];
 
                 return openSportMarkets.find(
-                    (market) => market.gameId.toLowerCase() === selectedMarket?.gameId.toLowerCase()
+                    (market) => market.gameId.toLowerCase() === selectedMarket.gameId.toLowerCase()
                 );
             }
         }
@@ -531,11 +643,23 @@ const Home: React.FC = () => {
                             key={index}
                             onSportClick={() => {
                                 if (filterItem !== sportFilter) {
+                                    const scrollMainToTop = getScrollMainContainerToTop();
+                                    scrollMainToTop();
                                     dispatch(setSportFilter(filterItem));
                                     setSportParam(filterItem);
-                                    dispatch(setTagFilter([]));
-                                    setTagParam('');
-                                    if (filterItem === SportFilter.All) {
+                                    dispatch(
+                                        setTagFilter(
+                                            filterItem === SportFilter.PlayerProps
+                                                ? [LeagueMap[getDefaultPlayerPropsLeague(playerPropsCountPerTag)]]
+                                                : []
+                                        )
+                                    );
+                                    setTagParam(
+                                        filterItem === SportFilter.PlayerProps
+                                            ? LeagueMap[getDefaultPlayerPropsLeague(playerPropsCountPerTag)].label
+                                            : ''
+                                    );
+                                    if (filterItem === SportFilter.All || filterItem === SportFilter.PlayerProps) {
                                         dispatch(setDatePeriodFilter(0));
                                         setDateParam('');
                                         setAvailableTags(tagsList);
@@ -565,8 +689,10 @@ const Home: React.FC = () => {
                                         }
                                     }
                                 } else {
-                                    dispatch(setTagFilter([]));
-                                    setTagParam('');
+                                    if (filterItem !== SportFilter.PlayerProps) {
+                                        dispatch(setTagFilter([]));
+                                        setTagParam('');
+                                    }
                                 }
                             }}
                             sport={filterItem}
@@ -582,6 +708,7 @@ const Home: React.FC = () => {
                             setTagParam={setTagParam}
                             openMarketsCountPerTag={openMarketsCountPerTag}
                             liveMarketsCountPerTag={liveMarketsCountPerTag}
+                            playerPropsMarketsCountPerTag={playerPropsCountPerTag}
                         />
                     );
                 })}
@@ -653,11 +780,19 @@ const Home: React.FC = () => {
                 <MainContainer>
                     {isMobile && (
                         <>
-                            <SportFilterMobile setAvailableTags={setAvailableTags} tagsList={tagsList} />
+                            <SportFilterMobile
+                                playerPropsCountPerTag={playerPropsCountPerTag}
+                                setAvailableTags={setAvailableTags}
+                                tagsList={tagsList}
+                            />
                             {!marketsLoading &&
                                 finalMarkets.length > 0 &&
                                 (statusFilter === StatusFilter.OPEN_MARKETS || sportFilter === SportFilter.Live) && (
-                                    <Header availableMarketTypes={availableMarketTypes} market={selectedMarketData} />
+                                    <Header
+                                        allMarkets={finalMarkets}
+                                        availableMarketTypes={availableMarketTypes}
+                                        market={selectedMarketData}
+                                    />
                                 )}
                             <FilterTagsMobile />
                         </>
@@ -692,6 +827,7 @@ const Home: React.FC = () => {
                                         (statusFilter === StatusFilter.OPEN_MARKETS ||
                                             sportFilter === SportFilter.Live) && (
                                             <Header
+                                                allMarkets={finalMarkets}
                                                 availableMarketTypes={availableMarketTypes}
                                                 market={selectedMarketData}
                                             />

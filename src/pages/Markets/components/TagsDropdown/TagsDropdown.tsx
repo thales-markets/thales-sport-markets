@@ -1,11 +1,14 @@
+import { SportFilter } from 'enums/markets';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
+import { getSportFilter, setMarketTypeFilter, setMarketTypeGroupFilter } from 'redux/modules/market';
 import { getFavouriteLeagues, setFavouriteLeague } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { TagInfo, Tags } from 'types/markets';
 import { getLeagueFlagSource } from 'utils/images';
+import { getScrollMainContainerToTop } from 'utils/scroll';
 import IncentivizedLeague from '../../../../components/IncentivizedLeague';
 import { LeagueMap } from '../../../../constants/sports';
 
@@ -17,6 +20,7 @@ type TagsDropdownProps = {
     setTagParam: any;
     openMarketsCountPerTag: any;
     liveMarketsCountPerTag: any;
+    playerPropsMarketsCountPerTag: any;
     showActive: boolean;
     showLive: boolean;
 };
@@ -29,13 +33,16 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
     setTagParam,
     openMarketsCountPerTag,
     liveMarketsCountPerTag,
+    playerPropsMarketsCountPerTag,
     showActive,
     showLive,
 }) => {
     const dispatch = useDispatch();
+    const sportFilter = useSelector(getSportFilter);
     const favouriteLeagues = useSelector(getFavouriteLeagues);
     const isMobile = useSelector(getIsMobile);
     const tagFilterIds = tagFilter.map((tag) => tag.id);
+    const isPlayerPropsTag = sportFilter == SportFilter.PlayerProps;
 
     return (
         <Container open={open}>
@@ -43,6 +50,8 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                 .filter((tag: TagInfo) => {
                     if (showLive) {
                         return !!liveMarketsCountPerTag[tag.id];
+                    } else if (isPlayerPropsTag) {
+                        return !!playerPropsMarketsCountPerTag[tag.id];
                     } else {
                         return (showActive && !!openMarketsCountPerTag[tag.id]) || !showActive;
                     }
@@ -85,6 +94,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                 .map((tag: TagInfo) => {
                     const isFavourite = !!favouriteLeagues.find((favourite: TagInfo) => favourite.id == tag.id);
                     const label = tag.label;
+                    const scrollMainToTop = getScrollMainContainerToTop();
 
                     return (
                         <TagContainer key={tag.id} isMobile={isMobile}>
@@ -93,15 +103,29 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                     className={`${tagFilterIds.includes(tag.id) ? 'selected' : ''}`}
                                     onClick={() => {
                                         if (tagFilterIds.includes(tag.id)) {
+                                            if (isPlayerPropsTag) {
+                                                return;
+                                            }
                                             const newTagFilters = tagFilter.filter((tagInfo) => tagInfo.id != tag.id);
                                             setTagFilter(newTagFilters);
                                             const newTagParam = newTagFilters
                                                 .map((tagInfo) => tagInfo.label)
                                                 .toString();
                                             setTagParam(newTagParam);
+                                            scrollMainToTop();
                                         } else {
-                                            setTagFilter([...tagFilter, tag]);
-                                            setTagParam([...tagFilter, tag].map((tagInfo) => tagInfo.label).toString());
+                                            if (isPlayerPropsTag) {
+                                                dispatch(setMarketTypeFilter(undefined));
+                                                dispatch(setMarketTypeGroupFilter(undefined));
+                                                setTagFilter([tag]);
+                                                setTagParam([tag.label].toString());
+                                            } else {
+                                                setTagFilter([...tagFilter, tag]);
+                                                setTagParam(
+                                                    [...tagFilter, tag].map((tagInfo) => tagInfo.label).toString()
+                                                );
+                                            }
+                                            scrollMainToTop();
                                         }
                                     }}
                                 >
@@ -113,6 +137,10 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                             {showLive
                                 ? !!liveMarketsCountPerTag[tag.id] && (
                                       <Count isMobile={isMobile}>{liveMarketsCountPerTag[tag.id]}</Count>
+                                  )
+                                : isPlayerPropsTag
+                                ? !!playerPropsMarketsCountPerTag[tag.id] && (
+                                      <Count isMobile={isMobile}>{playerPropsMarketsCountPerTag[tag.id]}</Count>
                                   )
                                 : !!openMarketsCountPerTag[tag.id] && (
                                       <Count isMobile={isMobile}>{openMarketsCountPerTag[tag.id]}</Count>
