@@ -26,7 +26,7 @@ const XPHistoryTable: React.FC = () => {
             cell: (cellProps: any) => (
                 <p>{cellProps.cell.getValue() && formatTxTimestamp(cellProps.cell.getValue())}</p>
             ),
-            size: 150,
+            size: 250,
             enableSorting: true,
         },
         {
@@ -34,7 +34,7 @@ const XPHistoryTable: React.FC = () => {
             accessorKey: 'points',
             sortType: 'alphanumeric',
             cell: (cellProps: any) => <p>{formatPoints(cellProps.cell.getValue())}</p>,
-            size: 150,
+            size: 230,
             enableSorting: true,
         },
         {
@@ -44,13 +44,13 @@ const XPHistoryTable: React.FC = () => {
             cell: (cellProps: any) => (
                 <ViewEtherscanLink overrideNetwork={cellProps.row.original.network} hash={cellProps.cell.getValue()} />
             ),
-            size: 150,
         },
     ];
 
     return (
         <Table
             columns={columns as any}
+            rowsPerPage={20}
             tableHeight="auto"
             data={userXPHistory ? userXPHistory : []}
             isLoading={userXPHistoryQuery.isLoading}
