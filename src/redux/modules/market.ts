@@ -13,6 +13,7 @@ type SelectedMarket = {
     gameId: string;
     sport: Sport;
     live?: boolean;
+    playerName?: string;
 };
 
 const getDefaultMarketSearch = (): string => {

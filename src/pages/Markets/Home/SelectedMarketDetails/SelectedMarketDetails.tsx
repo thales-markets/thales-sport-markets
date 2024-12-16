@@ -1,13 +1,18 @@
 import Button from 'components/Button';
 import Scroll from 'components/Scroll';
-import { MarketTypeGroupsBySport } from 'constants/marketTypes';
+import { MarketTypeGroupsBySport, PLAYER_PROPS_MARKET_TYPES } from 'constants/marketTypes';
 import { MarketType } from 'enums/marketTypes';
 import { t } from 'i18next';
 import { groupBy } from 'lodash';
 import React, { useMemo, useReducer } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { getMarketTypeGroupFilter, setMarketTypeGroupFilter } from 'redux/modules/market';
+import {
+    getMarketTypeGroupFilter,
+    getSelectedMarket,
+    getSportFilter,
+    setMarketTypeGroupFilter,
+} from 'redux/modules/market';
 import { useTheme } from 'styled-components';
 import { SportMarket } from 'types/markets';
 import { isOddValid } from 'utils/marketsV2';
@@ -16,6 +21,7 @@ import { ThemeInterface } from '../../../../types/ui';
 import { isFuturesMarket } from '../../../../utils/markets';
 import PositionsV2 from '../../Market/MarketDetailsV2/components/PositionsV2';
 import { NoMarketsContainer, NoMarketsLabel, Wrapper } from './styled-components';
+import { SportFilter } from 'enums/markets';
 
 type SelectedMarketProps = {
     market: SportMarket;
@@ -28,6 +34,10 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ market }) => {
     const isGameOpen = market.isOpen && !isGameStarted;
     const marketTypeGroupFilter = useSelector(getMarketTypeGroupFilter);
     const isMobile = useSelector(getIsMobile);
+    const sportFilter = useSelector(getSportFilter);
+    const selectedMarket = useSelector(getSelectedMarket);
+
+    const playerName = useMemo(() => selectedMarket?.playerName, [selectedMarket?.playerName]);
 
     // hack to rerender scroll due to bug in scroll component when scroll should change state (become hidden/visible)
     const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
@@ -37,20 +47,27 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ market }) => {
         }
     };
 
-    const marketTypesFilter = useMemo(
-        () => (marketTypeGroupFilter ? MarketTypeGroupsBySport[market.sport][marketTypeGroupFilter] || [] : []),
-        [market.sport, marketTypeGroupFilter]
-    );
+    const marketTypesFilter = useMemo(() => {
+        const marketTypeGroupFilters = marketTypeGroupFilter
+            ? MarketTypeGroupsBySport[market.sport][marketTypeGroupFilter] || []
+            : [];
+        const playerPropsFilters = sportFilter === SportFilter.PlayerProps ? PLAYER_PROPS_MARKET_TYPES : [];
+
+        return marketTypeGroupFilters.length ? marketTypeGroupFilters : playerPropsFilters;
+    }, [market.sport, marketTypeGroupFilter, sportFilter]);
 
     const groupedChildMarkets = useMemo(
         () =>
             groupBy(
                 market.childMarkets.filter(
-                    (childMarket) => !marketTypesFilter.length || marketTypesFilter.includes(childMarket.typeId)
+                    (childMarket) =>
+                        !marketTypesFilter.length ||
+                        (marketTypesFilter.includes(childMarket.typeId) &&
+                            (!playerName || childMarket.playerProps.playerName === playerName))
                 ),
                 (childMarket: SportMarket) => childMarket.typeId
             ),
-        [market.childMarkets, marketTypesFilter]
+        [market.childMarkets, marketTypesFilter, playerName]
     );
 
     const numberOfMarkets = useMemo(() => {
@@ -99,6 +116,8 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ market }) => {
                                 marketType={market.typeId}
                                 isGameOpen={isGameOpen}
                                 onAccordionClick={refreshScroll}
+                                hidePlayerName={sportFilter === SportFilter.PlayerProps}
+                                alignHeader={sportFilter === SportFilter.PlayerProps}
                             />
                         )}
                         {Object.keys(groupedChildMarkets).map((key, index) => {
@@ -111,6 +130,8 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ market }) => {
                                     marketType={typeId}
                                     isGameOpen={isGameOpen}
                                     onAccordionClick={refreshScroll}
+                                    hidePlayerName={sportFilter === SportFilter.PlayerProps}
+                                    alignHeader={sportFilter === SportFilter.PlayerProps}
                                 />
                             );
                         })}

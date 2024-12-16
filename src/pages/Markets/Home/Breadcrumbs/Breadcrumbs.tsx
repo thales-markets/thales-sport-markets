@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getSportFilter, getTagFilter, setTagFilter } from 'redux/modules/market';
 import { RootState } from 'redux/rootReducer';
 import { Breadcrumb, BreadcrumbsContainer } from './styled-components';
+import { SportFilter } from 'enums/markets';
 
 const Breadcrumbs: React.FC = () => {
     const dispatch = useDispatch();
@@ -15,7 +16,13 @@ const Breadcrumbs: React.FC = () => {
 
     return (
         <BreadcrumbsContainer>
-            <Breadcrumb onClick={() => dispatch(setTagFilter([]))}>
+            <Breadcrumb
+                onClick={() => {
+                    if (sportFilter !== SportFilter.PlayerProps) {
+                        dispatch(setTagFilter([]));
+                    }
+                }}
+            >
                 {t(`market.filter-label.sport.${sportFilter.toLowerCase()}`)}
             </Breadcrumb>
 

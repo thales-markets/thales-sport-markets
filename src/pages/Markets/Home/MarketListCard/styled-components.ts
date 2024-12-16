@@ -7,7 +7,9 @@ export const Wrapper = styled(FlexDivColumn)<{
     selected: boolean;
     isMarketSelected: boolean;
     isOverdrop: boolean;
+    floatingOddsTitles?: boolean;
 }>`
+    margin-top: ${(props) => (props.floatingOddsTitles && !props.isMarketSelected ? '30px' : '0')};
     position: relative;
     z-index: 1;
     width: 100%;
@@ -24,7 +26,10 @@ export const Wrapper = styled(FlexDivColumn)<{
         props.selected ? props.theme.oddsContainerBackground.tertiary : props.theme.textColor.primary};
 `;
 
-export const MainContainer = styled(FlexDivRow)<{ isGameOpen: boolean; isBoosted?: boolean }>`
+export const MainContainer = styled(FlexDivRow)<{
+    isGameOpen: boolean;
+    isBoosted?: boolean;
+}>`
     position: relative;
     width: 100%;
     padding: ${(props) => (props.isBoosted ? '20px 12px 10px 12px' : '10px 12px')};
@@ -37,7 +42,7 @@ export const MainContainer = styled(FlexDivRow)<{ isGameOpen: boolean; isBoosted
 
 export const MatchInfoContainer = styled(FlexDivColumn)`
     cursor: pointer;
-    max-width: 250px;
+    max-width: 180px;
     margin-right: 5px;
     @media (max-width: 950px) {
         max-width: 100%;
@@ -85,9 +90,9 @@ export const MatchInfoLabel = styled.label<{ selected?: boolean }>`
     }
 `;
 
-export const TeamsInfoContainer = styled(FlexDivRow)`
+export const TeamsInfoContainer = styled(FlexDivRow)<{ isPlayerPropsMarket?: boolean }>`
     align-items: center;
-    margin-top: 8px;
+    margin-top: ${(props) => (props.isPlayerPropsMarket ? '0' : '8px')};
     flex: 1;
     @media (max-width: 950px) {
         flex-wrap: wrap;
@@ -149,7 +154,8 @@ export const TeamNameLabel = styled.span<{ isColumnView: boolean; isMarketSelect
     }
 `;
 
-export const MarketsCountWrapper = styled(FlexDivColumnCentered)`
+export const MarketsCountWrapper = styled(FlexDivColumnCentered)<{ hidden?: boolean; isPlayerPropsMarket?: boolean }>`
+    visibility: ${(props) => (props.hidden ? 'hidden' : 'visible')};
     max-width: 35px;
     margin-left: 5px;
     font-weight: 600;
@@ -158,7 +164,7 @@ export const MarketsCountWrapper = styled(FlexDivColumnCentered)`
     color: ${(props) => props.theme.textColor.quinary};
     text-align: center;
     cursor: pointer;
-    margin-top: 20px;
+    margin-top: ${(props) => (props.isPlayerPropsMarket ? '0' : '20px')};
     @media (max-width: 950px) {
         max-width: initial;
         position: absolute;
