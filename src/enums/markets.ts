@@ -92,10 +92,3 @@ export enum TicketErrorCode {
     PLAYER_PROPS_COMBINING_NOT_ENABLED = 4,
     FUTURES_COMBINING_NOT_SUPPORTED = 5,
 }
-
-export enum ContractRole {
-    ROOT_SETTING,
-    RISK_MANAGING,
-    MARKET_RESOLVING,
-    TICKET_PAUSER,
-}

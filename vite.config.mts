@@ -27,6 +27,7 @@ const particleWasmPlugin: Plugin | undefined = {
 };
 
 const plugins = (mode: string): PluginOption[] => {
+    console.log(mode);
     return [
         react(),
         tsconfigPaths(),
@@ -58,6 +59,50 @@ export default defineConfig(({ mode }) => {
             open: true,
             // this sets a default port to 3000
             port: 3000,
+        },
+        build: {
+            rollupOptions: {
+                output: {
+                    manualChunks: {
+                        rainbowkit: ['@rainbow-me/rainbowkit'],
+                        lottie: ['lottie-react'],
+                        router: ['react-router-dom'],
+                        reduxToolkit: ['@reduxjs/toolkit'],
+                        qrCode: ['react-qr-code'],
+                        toastify: ['react-toastify'],
+                        thalesUtils: ['thales-utils'],
+                        thalesData: ['thales-data'],
+                        styledComponents: ['styled-components'],
+                        i18next: ['i18next'],
+                        lodash: ['lodash'],
+                        axios: ['axios'],
+                        dateFns: ['date-fns'],
+                        htmlToImage: ['html-to-image'],
+                        buffer: ['buffer'],
+                        history: ['history'],
+                        i18nextBrowser: ['i18next-browser-languagedetector'],
+                        queryString: ['query-string'],
+                        tooltip: ['rc-tooltip'],
+                        react: ['react'],
+                        reactDom: ['react-dom'],
+                        errorBoundary: ['react-error-boundary'],
+                        reactI18next: ['react-i18next'],
+                        modal: ['react-modal'],
+                        redux: ['react-redux'],
+                        select: ['react-select'],
+                        // TODO: Test biconomy and particle
+                        biconomy: ['@biconomy/account'],
+                        // particle: ['@particle-network/auth-core-modal'],
+                        googleTrans: ['@google-cloud/translate'],
+                        tanstack: ['@tanstack/react-query', '@tanstack/react-table'],
+                        recharts: ['recharts'],
+                        scrollbars: ['react-custom-scrollbars-2', 'react-horizontal-scrolling-menu'],
+                        carousel: ['react-responsive-carousel'],
+                        dompurify: ['dompurify'],
+                        helmet: ['react-helmet'],
+                    },
+                },
+            },
         },
     };
 });
