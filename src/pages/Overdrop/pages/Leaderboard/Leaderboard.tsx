@@ -148,6 +148,7 @@ const Leaderboard: React.FC = () => {
 
     const columns = [
         {
+            header: '',
             accessorKey: 'level.smallBadge',
             enableSorting: false,
             cell: (cellProps: any) => {
@@ -178,8 +179,7 @@ const Leaderboard: React.FC = () => {
             cell: (cellProps: any) => {
                 return <div>#{cellProps.cell.getValue()}</div>;
             },
-            width: '50px',
-            maxWidth: 50,
+            size: 50,
         },
         {
             header: <>{t('overdrop.leaderboard.table.level')}</>,
@@ -253,6 +253,7 @@ const Leaderboard: React.FC = () => {
                 tableRowCellStyles={tableRowStyle}
                 stickyRow={stickyRow}
                 columns={columns as any}
+                rowsPerPage={20}
                 initialState={{
                     sorting: [
                         {
