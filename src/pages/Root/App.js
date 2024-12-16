@@ -43,6 +43,7 @@ const Overdrop = lazy(() => import('pages/Overdrop'));
 const SEO = lazy(() => import('pages/SEO/Home'));
 const SEOArticle = lazy(() => import('pages/SEO/SeoArticle'));
 const PnL = lazy(() => import('pages/PnL'));
+const ResolveBlocker = lazy(() => import('pages/ResolveBlocker'));
 
 const particle = new ParticleNetwork({
     projectId: process.env.REACT_APP_PARTICLE_PROJECT_ID,
@@ -199,6 +200,11 @@ const App = () => {
                                 <Route exact path={ROUTES.PnL}>
                                     <DappLayout>
                                         <PnL />
+                                    </DappLayout>
+                                </Route>
+                                <Route exact path={ROUTES.ResolveBlocker}>
+                                    <DappLayout>
+                                        <ResolveBlocker />
                                     </DappLayout>
                                 </Route>
                                 {

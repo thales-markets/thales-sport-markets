@@ -23,6 +23,7 @@ type ProfileItemProperties = {
     labelHidden?: boolean;
     avatarSize?: number;
     iconColor?: string;
+    marginRight?: string;
 };
 
 const ProfileItem: React.FC<ProfileItemProperties> = ({ labelHidden, avatarSize }) => {
@@ -37,7 +38,7 @@ const ProfileItem: React.FC<ProfileItemProperties> = ({ labelHidden, avatarSize 
     );
 };
 
-export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({ avatarSize, iconColor }) => {
+export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({ avatarSize, iconColor, marginRight }) => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
@@ -58,7 +59,7 @@ export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({ avatarSize,
 
     return (
         <>
-            <ProfileIconContainer>
+            <ProfileIconContainer marginRight={marginRight}>
                 {!!notificationsCount && (
                     <NotificationCount>
                         <Count>{notificationsCount}</Count>

@@ -96,11 +96,11 @@ export const TicketRow = styled(FlexDivRowCentered)<{ highlighted?: boolean }>`
     }
 `;
 
-export const TeamNamesContainer = styled.div`
+export const TeamNamesContainer = styled.div<{ width?: string }>`
     display: flex;
     flex-direction: row;
-    min-width: 250px;
-    width: 250px;
+    min-width: ${(props) => props.width || '250px'};
+    width: ${(props) => props.width || '250px'};
     @media (max-width: 950px) {
         flex-direction: column;
     }
