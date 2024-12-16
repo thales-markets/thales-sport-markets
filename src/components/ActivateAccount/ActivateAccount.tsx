@@ -1,8 +1,11 @@
 import styled from 'styled-components';
 import { Colors } from 'styles/common';
 import Zebra from 'assets/images/overtime-zebra.svg?react';
+import { activateOvertimeAccount } from 'utils/biconomy';
+import { useChainId } from 'wagmi';
 
 const ActivateAccount: React.FC<any> = () => {
+    const networkId = useChainId();
     return (
         <Wrapper>
             <StyledBalanceIcon />
@@ -12,7 +15,13 @@ const ActivateAccount: React.FC<any> = () => {
                 To start trading, your Overtime Account must be activated. This will set up collateral approval and
                 session parameters for secure and seamless trading.
             </Box>
-            <ActivateButton>Activate My Account</ActivateButton>
+            <ActivateButton
+                onClick={() => {
+                    activateOvertimeAccount(networkId);
+                }}
+            >
+                Activate My Account
+            </ActivateButton>
         </Wrapper>
     );
 };
