@@ -13,6 +13,7 @@ type ModalProps = {
         header?: CSSProperties;
     };
     onClose: () => void;
+    hideHeader?: boolean;
     children: React.ReactNode;
 };
 
@@ -44,6 +45,7 @@ const Modal: React.FC<ModalProps> = ({
     shouldCloseOnOverlayClick,
     customStyle,
     mobileStyle,
+    hideHeader,
 }) => {
     const customStylesOverride = customStyle
         ? {
@@ -60,10 +62,12 @@ const Modal: React.FC<ModalProps> = ({
             style={customStylesOverride}
         >
             <Container mobileStyle={mobileStyle?.container}>
-                <Header mobileStyle={mobileStyle?.header}>
-                    <Title>{title}</Title>
-                    <FlexDivRow>{<CloseIcon onClick={onClose} />}</FlexDivRow>
-                </Header>
+                {!hideHeader && (
+                    <Header mobileStyle={mobileStyle?.header}>
+                        <Title>{title}</Title>
+                        <FlexDivRow>{<CloseIcon onClick={onClose} />}</FlexDivRow>
+                    </Header>
+                )}
                 {children}
             </Container>
         </ReactModal>
