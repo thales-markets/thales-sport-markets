@@ -5,7 +5,7 @@ import { decodeEventLog, DecodeEventLogParameters } from 'viem';
 import { TradeData } from '../types/markets';
 import { executeBiconomyTransaction } from './biconomy';
 import freeBetHolder from './contracts/freeBetHolder';
-import liquidityPoolDataContract from './contracts/liveTradingProcessorContract';
+import liveTradingProcessorContract from './contracts/liveTradingProcessorContract';
 import stakingThalesBettingProxy from './contracts/stakingThalesBettingProxy';
 import { convertFromBytes32 } from './formatters/string';
 
@@ -149,7 +149,7 @@ export const getRequestId = (txLogs: any, isFreeBet: boolean, isStakedThales: bo
                         ? freeBetHolder.abi
                         : isStakedThales
                         ? stakingThalesBettingProxy.abi
-                        : liquidityPoolDataContract.abi,
+                        : liveTradingProcessorContract.abi,
                     data: log.data,
                     topics: log.topics,
                 });
