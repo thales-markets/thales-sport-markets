@@ -36,7 +36,7 @@ const useLiquidityPoolUserTransactions = (
                             ...tx,
                             name: lp.name,
                             amount: coinFormatter(
-                                (tx.amount as unknown) as bigint,
+                                BigInt(tx.amount ? tx.amount : 0),
                                 networkConfig.networkId,
                                 lp.collateral
                             ),

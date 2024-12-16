@@ -2,13 +2,13 @@ import Tooltip from 'components/Tooltip';
 import { oddToastOptions } from 'config/toast';
 import { FUTURES_MAIN_VIEW_DISPLAY_COUNT } from 'constants/markets';
 import { MarketType } from 'enums/marketTypes';
-import { Position } from 'enums/markets';
-import React from 'react';
+import { Position, SportFilter } from 'enums/markets';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
-import { getMarketTypeFilter } from 'redux/modules/market';
+import { getMarketTypeFilter, getSportFilter } from 'redux/modules/market';
 import { getTicket, removeFromTicket, updateTicket } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import { SportMarket, TicketPosition } from 'types/markets';
@@ -37,9 +37,11 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
     const isMobile = useSelector(getIsMobile);
     const ticket = useSelector(getTicket);
     const marketTypeFilter = useSelector(getMarketTypeFilter);
-    const addedToTicket = ticket.filter((position: any) => isSameMarket(market, position))[0];
+    const sportFilter = useSelector(getSportFilter);
 
+    const addedToTicket = ticket.filter((position: any) => isSameMarket(market, position))[0];
     const isAddedToTicket = addedToTicket && addedToTicket.position == position;
+    const isPlayerPropsMarket = useMemo(() => sportFilter === SportFilter.PlayerProps, [sportFilter]);
 
     const isGameStarted = market.maturityDate < new Date();
     const isGameLive = !!market.live && isGameStarted;
@@ -52,7 +54,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
     const isGameOpen = !market.isResolved && !market.isCancelled && !market.isPaused && !isGameStarted;
 
     const odd = market.odds[position];
-    const isZeroOdd = !odd || odd == 0;
+    const isZeroOdd = !odd || odd == 0 || market.typeId === MarketType.EMPTY;
     const noOdd = isZeroOdd || odd > 0.97;
     const disabledPosition = noOdd || (!isGameOpen && !isGameLive);
 
@@ -61,7 +63,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
     const positionText = getPositionTextV2(
         market,
         position,
-        isMainPageView && (market.typeId === MarketType.TOTAL || !!marketTypeFilter)
+        isMainPageView && (market.typeId === MarketType.TOTAL || !!marketTypeFilter || isPlayerPropsMarket)
     );
 
     const isFutures = isFuturesMarket(market.typeId);
@@ -77,6 +79,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
             isWinner={isGameRegularlyResolved && market.winningPositions && market.winningPositions.includes(position)}
             order={getPositionOrder(market.leagueId, market.typeId, position)}
             isMainPageView={isMainPageView}
+            isPlayerPropsMarket={isPlayerPropsMarket}
             onClick={() => {
                 if (disabledPosition) return;
                 if (isAddedToTicket) {

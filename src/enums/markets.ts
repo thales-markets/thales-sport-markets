@@ -16,6 +16,7 @@ export enum SportFilter {
     Boosted = 'Promo',
     Live = 'Live',
     Favourites = 'Favourites',
+    PlayerProps = 'PlayerProps',
     All = 'All',
     Soccer = 'Soccer',
     Football = 'Football',

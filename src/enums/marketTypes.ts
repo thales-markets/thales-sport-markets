@@ -1,4 +1,5 @@
 export enum MarketType {
+    EMPTY = -1,
     // Winner
     WINNER = 0,
     // Winner without draw

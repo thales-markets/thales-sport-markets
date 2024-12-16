@@ -69,8 +69,6 @@ export const wagmiConfig = createConfig({
     transports: {
         [optimism.id]: fallback([http(RPC_LIST.INFURA[NetworkId.OptimismMainnet]), http()]),
         [arbitrum.id]: fallback([http(RPC_LIST.INFURA[NetworkId.Arbitrum]), http()]),
-        // [base.id]: fallback([http(RPC_LIST.INFURA[NetworkId.Base]), http()]),
-        // [polygon.id]: fallback([http(RPC_LIST.INFURA[NetworkId.PolygonMainnet]), http()]),
         [optimismSepolia.id]: fallback([http(RPC_LIST.INFURA[NetworkId.OptimismSepolia]), http()]),
     },
 });

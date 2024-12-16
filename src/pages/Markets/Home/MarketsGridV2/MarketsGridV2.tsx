@@ -4,7 +4,10 @@ import { SportFilter } from 'enums/markets';
 import { League, Sport } from 'enums/sports';
 import i18n from 'i18n';
 import { groupBy } from 'lodash';
-import React from 'react';
+import debounce from 'lodash/debounce';
+import React, { useCallback, useEffect } from 'react';
+import Scrollbars from 'react-custom-scrollbars-2';
+import { forceCheck } from 'react-lazyload';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import { getIsMarketSelected, getSportFilter } from 'redux/modules/market';
@@ -12,6 +15,7 @@ import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { SportMarket, SportMarkets, TagInfo, Tags } from 'types/markets';
+import { setScrollMainContainerToTop } from 'utils/scroll';
 import { getLeagueSport } from 'utils/sports';
 import MarketsListV2 from '../MarketsListV2';
 
@@ -35,6 +39,10 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
     );
 
     const finalOrderKeys = groupBySortedMarketsKeys(marketsKeys);
+
+    useEffect(() => {
+        forceCheck();
+    }, [markets]);
 
     const getContainerContent = () => {
         let content: React.ReactElement[] = [];
@@ -76,9 +84,27 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
         return <ListContainer isMarketSelected={isMarketSelected}>{content}</ListContainer>;
     };
 
+    const onRefChange = useCallback((scrollRef: Scrollbars) => {
+        if (scrollRef) {
+            setScrollMainContainerToTop(scrollRef.scrollToTop);
+        }
+    }, []);
+
     return (
         <Container isMarketSelected={isMarketSelected}>
-            {isMobile ? getContainerContent() : <Scroll height="calc(100vh - 154px)">{getContainerContent()}</Scroll>}
+            {isMobile ? (
+                getContainerContent()
+            ) : (
+                <Scroll
+                    innerRef={onRefChange}
+                    onScroll={debounce(() => {
+                        forceCheck();
+                    }, 100)}
+                    height="calc(100vh - 154px)"
+                >
+                    {getContainerContent()}
+                </Scroll>
+            )}
         </Container>
     );
 };

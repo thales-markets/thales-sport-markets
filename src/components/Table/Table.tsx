@@ -12,6 +12,7 @@ import {
 import SelectInput from 'components/SelectInput';
 import SimpleLoader from 'components/SimpleLoader';
 import { SortDirection } from 'enums/markets';
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import React, { CSSProperties, DependencyList, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -462,6 +463,9 @@ const SectionWrapper = styled.div`
     justify-content: center;
     gap: 4px;
     margin: 0 14px;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        margin: 0 8px;
+    }
 `;
 
 const PaginationLabel = styled.p`
@@ -470,6 +474,9 @@ const PaginationLabel = styled.p`
     font-weight: 400;
     line-height: 10%;
     letter-spacing: 0.13px;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        font-size: 12px;
+    }
 `;
 
 const ActionSection = styled.div`

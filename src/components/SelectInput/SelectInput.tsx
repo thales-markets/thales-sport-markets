@@ -1,5 +1,7 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import Select, { CSSObjectWithLabel } from 'react-select';
+import { getIsMobile } from 'redux/modules/app';
 import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
 
@@ -27,6 +29,8 @@ const SelectInput: React.FC<SelectInputProps> = ({
     isPaginationStyle,
 }) => {
     const theme: ThemeInterface = useTheme();
+
+    const isMobile = useSelector(getIsMobile);
 
     const selectedValue = (value ?? options[defaultValue || 0]) || Number(defaultValue);
     const optionsIndex = options.findIndex((option) => option.value === selectedValue.value);
@@ -91,10 +95,11 @@ const SelectInput: React.FC<SelectInputProps> = ({
         menu: (provided: any, state: any) => ({
             ...provided,
             width: '100%',
+            fontSize: isMobile ? '12px' : '14px',
             color: state.selectProps.menuColor,
             backgroundColor: theme.background.secondary,
             border: `1px solid ${theme.button.borderColor.tertiary}`,
-            marginTop: -40 - 32 * optionsIndex,
+            marginTop: isMobile ? -38 - 28 * optionsIndex : -40 - 32 * optionsIndex,
             borderRadius: 10,
         }),
         option: (provided: any, state: any) => ({
@@ -110,12 +115,12 @@ const SelectInput: React.FC<SelectInputProps> = ({
         }),
         control: (provided: any, state: any) => ({
             ...provided,
-            width: '52px',
+            width: isMobile ? '40px' : '52px',
             backgroundColor: 'transparent',
             borderColor: 'transparent',
             color: theme.textColor.primary,
             borderRadius: '10px',
-            fontSize: '14px',
+            fontSize: isMobile ? '12px' : '14px',
             cursor: 'pointer',
             boxShadow: 'none',
             '&:hover': {
