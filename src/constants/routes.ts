@@ -8,6 +8,7 @@ const ROUTES = {
     },
     Profile: '/profile',
     PnL: '/pnl',
+    ResolveBlocker: '/resolve-blocker',
     Wizard: '/wizard',
     LiquidityPool: '/liquidity-pool',
     SingleLiquidityPool: '/liquidity-pool?pool-type=single',

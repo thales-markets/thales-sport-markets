@@ -1,4 +1,5 @@
 import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from 'constants/currency';
+import { League } from 'enums/sports';
 import { t } from 'i18next';
 import useLpStatsQuery from 'queries/pnl/useLpStatsQuery';
 import React from 'react';
@@ -9,13 +10,15 @@ import { useChainId, useClient } from 'wagmi';
 
 type LpStatsProps = {
     round: number;
+    leagueId: League;
+    onlyPP: boolean;
 };
 
-const LpStats: React.FC<LpStatsProps> = ({ round }) => {
+const LpStats: React.FC<LpStatsProps> = ({ round, leagueId, onlyPP }) => {
     const networkId = useChainId();
     const client = useClient();
 
-    const lpStatsQuery = useLpStatsQuery(round, { networkId, client });
+    const lpStatsQuery = useLpStatsQuery(round, leagueId, onlyPP, { networkId, client });
     const lpStats = lpStatsQuery.isSuccess && lpStatsQuery.data ? lpStatsQuery.data : [];
 
     return (

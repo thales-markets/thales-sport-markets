@@ -27,7 +27,6 @@ import { toast } from 'react-toastify';
 import { getIsBiconomy, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
-import { FlexDivRow } from 'styles/common';
 import { Coins, coinParser, formatCurrencyWithKey, formatPercentage } from 'thales-utils';
 import { LiquidityPoolData, UserLiquidityPoolData } from 'types/liquidityPool';
 import { ThemeInterface } from 'types/ui';
@@ -79,6 +78,7 @@ import {
     RoundInfoContainer,
     SliderContainer,
     SliderRange,
+    SliderRangeWrapper,
     TipLink,
     Title,
     ToggleContainer,
@@ -194,29 +194,31 @@ const LiquidityPool: React.FC = () => {
 
     useEffect(() => {
         (async () => {
-            const collateralContractWithSigner = getContractInstance(
-                ContractType.MULTICOLLATERAL,
-                { client: walletClient.data, networkId },
-                getCollateralIndex(networkId, collateral)
-            );
+            if (walletClient.data) {
+                const collateralContractWithSigner = getContractInstance(
+                    ContractType.MULTICOLLATERAL,
+                    { client: walletClient.data, networkId },
+                    getCollateralIndex(networkId, collateral)
+                );
 
-            if (collateralContractWithSigner) {
-                const getAllowance = async () => {
-                    try {
-                        const parsedAmount = coinParser(Number(amount).toString(), networkId, collateral);
-                        const allowance = await checkAllowance(
-                            parsedAmount,
-                            collateralContractWithSigner,
-                            walletAddress,
-                            liquidityPoolAddress
-                        );
-                        setAllowance(allowance);
-                    } catch (e) {
-                        console.log(e);
+                if (collateralContractWithSigner) {
+                    const getAllowance = async () => {
+                        try {
+                            const parsedAmount = coinParser(Number(amount).toString(), networkId, collateral);
+                            const allowance = await checkAllowance(
+                                parsedAmount,
+                                collateralContractWithSigner,
+                                walletAddress,
+                                liquidityPoolAddress
+                            );
+                            setAllowance(allowance);
+                        } catch (e) {
+                            console.log(e);
+                        }
+                    };
+                    if (isConnected) {
+                        getAllowance();
                     }
-                };
-                if (isConnected) {
-                    getAllowance();
                 }
             }
         })();
@@ -893,7 +895,7 @@ const LiquidityPool: React.FC = () => {
                                                                             }
                                                                             disabled={isPartialWithdrawalDisabled}
                                                                         />
-                                                                        <FlexDivRow>
+                                                                        <SliderRangeWrapper>
                                                                             <SliderRange
                                                                                 className={
                                                                                     isPartialWithdrawalDisabled
@@ -912,7 +914,7 @@ const LiquidityPool: React.FC = () => {
                                                                             >
                                                                                 90%
                                                                             </SliderRange>
-                                                                        </FlexDivRow>
+                                                                        </SliderRangeWrapper>
                                                                     </SliderContainer>
                                                                     <ContentInfo>
                                                                         <Trans

@@ -11,7 +11,6 @@ import {
 } from '@tanstack/react-table';
 import SelectInput from 'components/SelectInput';
 import SimpleLoader from 'components/SimpleLoader';
-import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { SortDirection } from 'enums/markets';
 import React, { CSSProperties, DependencyList, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -19,10 +18,8 @@ import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivCentered } from 'styles/common';
-import { localStore } from 'thales-utils';
 
 const PAGINATION_SIZE = [
-    { value: 5, label: '5' },
     { value: 10, label: '10' },
     { value: 20, label: '20' },
     { value: 50, label: '50' },
@@ -57,6 +54,8 @@ type TableProps = {
     expandedRow?: (row: Row<any>) => JSX.Element;
     stickyRow?: JSX.Element;
     mobileCards?: boolean;
+    expandAll?: boolean;
+    showPagination?: boolean;
 };
 
 const Table: React.FC<TableProps> = ({
@@ -78,6 +77,8 @@ const Table: React.FC<TableProps> = ({
     stickyRow,
     tableHeight,
     mobileCards,
+    expandAll,
+    showPagination,
 }) => {
     const { t } = useTranslation();
 
@@ -165,7 +166,7 @@ const Table: React.FC<TableProps> = ({
                     <LoaderContainer>
                         <SimpleLoader />
                     </LoaderContainer>
-                ) : noResultsMessage != null && !data?.length && !stickyRow ? (
+                ) : noResultsMessage !== null && !data?.length && !stickyRow ? (
                     <NoResultContainer>{noResultsMessage}</NoResultContainer>
                 ) : (
                     <TableBody height={tableHeight}>
@@ -179,6 +180,7 @@ const Table: React.FC<TableProps> = ({
                                             tableRowCellStyles={tableRowCellStyles}
                                             isVisible={false}
                                             tableRowStyles={tableRowStyles}
+                                            expandAll={expandAll}
                                         >
                                             {expandedRow(row)}
                                         </ExpandableRowReact>
@@ -223,56 +225,47 @@ const Table: React.FC<TableProps> = ({
                     </TableBody>
                 )}
             </ReactTable>
-            <PaginationWrapper>
-                <SelectWrapper>
-                    <ArrowWrapper
-                        onClick={() => tableInstance.firstPage()}
-                        disabled={!tableInstance.getCanPreviousPage()}
-                    >
-                        {'<<'}
-                    </ArrowWrapper>
-                    <ArrowWrapper
-                        onClick={() => tableInstance.previousPage()}
-                        disabled={!tableInstance.getCanPreviousPage()}
-                    >
-                        {'<'}
-                    </ArrowWrapper>
-                </SelectWrapper>
+            {showPagination && data?.length > 0 && (
+                <PaginationWrapper>
+                    <SectionWrapper>
+                        <PaginationLabel>{t('common.pagination.rows-per-page')}</PaginationLabel>
+                        <div>
+                            <SelectInput
+                                options={PAGINATION_SIZE}
+                                value={{ value: pagination.pageSize, label: '' + pagination.pageSize }}
+                                handleChange={(value) => tableInstance.setPageSize(Number(value))}
+                                isPaginationStyle
+                            />
+                        </div>
+                    </SectionWrapper>
 
-                <SelectWrapper className="flex items-center gap-1">
-                    <PaginationLabel>{t('common.pagination.page')}</PaginationLabel>
-                    <PaginationLabel>
-                        {tableInstance.getState().pagination.pageIndex + 1} {t('common.pagination.of')}{' '}
-                        {tableInstance.getPageCount().toLocaleString()}
-                    </PaginationLabel>
-                </SelectWrapper>
+                    <SectionWrapper className="flex items-center gap-1">
+                        <PaginationLabel>
+                            {`${tableInstance.getState().pagination.pageIndex * pagination.pageSize + 1}-${Math.min(
+                                data.length,
+                                (tableInstance.getState().pagination.pageIndex + 1) * pagination.pageSize
+                            )} ${t('common.pagination.of')} ${data.length}`}
+                        </PaginationLabel>
+                    </SectionWrapper>
 
-                <SelectWrapper>
-                    <ArrowWrapper
-                        onClick={() => tableInstance.getCanNextPage() && tableInstance.nextPage()}
-                        disabled={!tableInstance.getCanNextPage()}
-                    >
-                        {'>'}
-                    </ArrowWrapper>
-                    <ArrowWrapper onClick={() => tableInstance.lastPage()} disabled={!tableInstance.getCanNextPage()}>
-                        {'>>'}
-                    </ArrowWrapper>
-                </SelectWrapper>
-
-                <SelectWrapper>
-                    <PaginationLabel>{t('common.pagination.rows-per-page')}</PaginationLabel>
-                    <div>
-                        <SelectInput
-                            handleChange={(e) => {
-                                tableInstance.setPageSize(Number(e));
-                                localStore.set(LOCAL_STORAGE_KEYS.TABLE_ROWS_PER_PAGE, Number(e));
-                            }}
-                            value={{ value: pagination.pageSize, label: '' + pagination.pageSize }}
-                            options={PAGINATION_SIZE}
-                        />
-                    </div>
-                </SelectWrapper>
-            </PaginationWrapper>
+                    <ActionSection>
+                        <ArrowWrapper
+                            onClick={() => tableInstance.previousPage()}
+                            disabled={!tableInstance.getCanPreviousPage()}
+                        >
+                            <ArrowLeft className={'icon icon--arrow-down'} />
+                        </ArrowWrapper>
+                    </ActionSection>
+                    <ActionSection>
+                        <ArrowWrapper
+                            onClick={() => tableInstance.getCanNextPage() && tableInstance.nextPage()}
+                            disabled={!tableInstance.getCanNextPage()}
+                        >
+                            <ArrowRight className={'icon icon--arrow-down'} />
+                        </ArrowWrapper>
+                    </ActionSection>
+                </PaginationWrapper>
+            )}
         </>
     );
 };
@@ -283,15 +276,20 @@ const ExpandableRowReact: React.FC<{
     row: Row<any>;
     tableRowCellStyles: React.CSSProperties;
     children: React.ReactNode;
-}> = ({ isVisible, tableRowStyles, row, tableRowCellStyles, children }) => {
+    expandAll?: boolean;
+}> = ({ isVisible, tableRowStyles, row, tableRowCellStyles, children, expandAll }) => {
     const [hidden, setHidden] = useState<boolean>(!isVisible);
+
+    useEffect(() => {
+        setHidden(!expandAll);
+    }, [expandAll]);
 
     return (
         <>
             <TableRow
                 style={{ ...tableRowStyles, borderBottom: hidden ? '' : '2px dashed transparent' }}
                 cursorPointer={true}
-                onClick={setHidden.bind(this, !hidden)}
+                onClick={() => setHidden(!hidden)}
             >
                 {row.getAllCells().map((cell: any, cellIndex: any) => (
                     <TableCell
@@ -357,7 +355,7 @@ export const TableCell = styled(FlexDivCentered)<{
     isCard?: boolean;
 }>`
     flex: 1;
-    max-width: ${(props) => (props.width ? props.width : 'initial')};
+    max-width: ${(props) => (props.width ? `${props.width}px` : 'initial')};
     min-width: ${(props) => (props.minWidth ? `${props.minWidth}px` : '0px')};
     justify-content: ${(props) => (props.isCard ? 'right' : CellAlignment[props.id] || 'left')};
     &:first-child {
@@ -450,7 +448,15 @@ const SortIcon = styled.i<{ selected: boolean; sortDirection: SortDirection }>`
     }
 `;
 
-const SelectWrapper = styled.div`
+const PaginationWrapper = styled.div`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 5px 0;
+`;
+
+const SectionWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
@@ -458,35 +464,40 @@ const SelectWrapper = styled.div`
     margin: 0 14px;
 `;
 
-const PaginationWrapper = styled.div`
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding: 10px 0;
-`;
-
 const PaginationLabel = styled.p`
     color: ${(props) => props.theme.textColor.primary};
-    font-size: 13px;
-    font-weight: 700;
+    font-size: 14px;
+    font-weight: 400;
     line-height: 10%;
     letter-spacing: 0.13px;
 `;
 
-const ArrowWrapper = styled.span<{ disabled: boolean }>`
-    height: 24px;
-    font-size: 14px;
-    padding: 4px;
-    border-radius: 14px;
-    border: 2px solid ${(props) => props.theme.borderColor.primary};
-    color: ${(props) => props.theme.textColor.secondary};
-    opacity: ${(props) => (props.disabled ? 0.5 : 1)};
-    cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
-    width: 40px;
+const ActionSection = styled.div`
     display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+`;
+
+const ArrowWrapper = styled.span<{ disabled: boolean }>`
+    display: flex;
+    width: 40px;
+    height: 24px;
     justify-content: center;
     align-items: center;
+    padding: 4px;
+    color: ${(props) => props.theme.textColor.primary};
+    opacity: ${(props) => (props.disabled ? 0.5 : 1)};
+    cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
+`;
+
+const ArrowLeft = styled.i`
+    font-size: 12px;
+    rotate: 90deg;
+`;
+const ArrowRight = styled.i`
+    font-size: 12px;
+    rotate: -90deg;
 `;
 
 const CellAlignment: Record<string, string> = {

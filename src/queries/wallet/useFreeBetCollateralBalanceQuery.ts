@@ -50,7 +50,7 @@ const useFreeBetCollateralBalanceQuery = (
                     multipleCollateral[CRYPTO_CURRENCY_MAP.sUSD as Coins]?.addresses[
                         networkConfig.networkId as SupportedNetwork
                     ] !== TBD_ADDRESS
-                        ? freeBetHolderContract.read?.balancePerUserAndCollateral([
+                        ? freeBetHolderContract?.read.balancePerUserAndCollateral([
                               walletAddress,
                               multipleCollateral[CRYPTO_CURRENCY_MAP.sUSD as Coins]?.addresses[
                                   networkConfig.networkId as SupportedNetwork
@@ -90,7 +90,7 @@ const useFreeBetCollateralBalanceQuery = (
                     multipleCollateral[CRYPTO_CURRENCY_MAP.USDT as Coins]?.addresses[
                         networkConfig.networkId as SupportedNetwork
                     ] !== TBD_ADDRESS
-                        ? freeBetHolderContract.read?.balancePerUserAndCollateral([
+                        ? freeBetHolderContract?.read.balancePerUserAndCollateral([
                               walletAddress,
                               multipleCollateral[CRYPTO_CURRENCY_MAP.USDT as Coins]?.addresses[
                                   networkConfig.networkId as SupportedNetwork

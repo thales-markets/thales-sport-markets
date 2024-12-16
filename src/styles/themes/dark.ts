@@ -130,6 +130,7 @@ export default {
         notification: '0px 0px 20px rgba(63, 177, 213, 0.96)',
         positionWinner: '0px 0px 15px -7px rgba(63,209,255,1)',
         winner: '0px 0px 33px -7px rgba(63,209,255,1)',
+        errorNotification: '0px 0px 20px rgba(226, 106, 120, 0.96)',
     },
     status: {
         open: Colors.WHITE,
@@ -231,5 +232,9 @@ export default {
             secondary: Colors.BLACK,
             tertiary: Colors.WHITE,
         },
+    },
+    slider: {
+        trackColor: Colors.GREEN,
+        thumbColor: Colors.WHITE,
     },
 };

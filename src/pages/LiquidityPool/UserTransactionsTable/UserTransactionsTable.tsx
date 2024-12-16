@@ -62,21 +62,19 @@ const UserTransactionsTable: FC<UserTransactionsTableProps> = memo(
                 size: 150,
             },
         ];
-        // @ts-ignore
+
         return (
-            <>
-                <Table
-                    columns={columns as any}
-                    data={transactions}
-                    isLoading={isLoading}
-                    noResultsMessage={noResultsMessage}
-                    tableRowHeadStyles={{ minHeight: '35px' }}
-                    tableHeadCellStyles={{ fontSize: '14px' }}
-                    tableRowStyles={{ minHeight: '35px' }}
-                    tableRowCellStyles={{ fontSize: '13px' }}
-                    columnsDeps={[collateral]}
-                />
-            </>
+            <Table
+                columns={columns as any}
+                data={transactions}
+                isLoading={isLoading}
+                noResultsMessage={noResultsMessage}
+                tableRowHeadStyles={{ minHeight: '35px' }}
+                tableHeadCellStyles={{ fontSize: '14px' }}
+                tableRowStyles={{ minHeight: '35px' }}
+                tableRowCellStyles={{ fontSize: '13px' }}
+                columnsDeps={[collateral]}
+            />
         );
     }
 );

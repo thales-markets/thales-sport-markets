@@ -372,8 +372,8 @@ export const RadioButtonContainer = styled(FlexDivColumnCentered)`
 export const SliderContainer = styled.div`
     position: relative;
     width: 100%;
-    padding: 0 5px;
-    margin-bottom: 10px;
+    padding: 5px;
+    margin-bottom: 5px;
 `;
 
 export const InputButtonContainer = styled.div`
@@ -392,6 +392,10 @@ export const SliderRange = styled.div`
         opacity: 0.4;
         cursor: default;
     }
+`;
+
+export const SliderRangeWrapper = styled(FlexDivRow)`
+    padding-top: 5px;
 `;
 
 export const defaultButtonProps = {

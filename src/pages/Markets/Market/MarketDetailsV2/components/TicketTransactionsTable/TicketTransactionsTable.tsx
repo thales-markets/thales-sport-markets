@@ -34,6 +34,7 @@ import {
     ExpandedRowWrapper,
     ExternalLink,
     FirstExpandedSection,
+    FreeBetIcon,
     LastExpandedSection,
     LiveIndicatorContainer,
     LiveLabel,
@@ -66,6 +67,7 @@ type TicketTransactionsTableProps = {
     tableHeight?: string;
     isLoading: boolean;
     ticketsPerPage?: number;
+    expandAll?: boolean;
 };
 
 const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
@@ -74,6 +76,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
     tableHeight,
     isLoading,
     ticketsPerPage,
+    expandAll,
 }) => {
     const { t } = useTranslation();
     const language = i18n.language;
@@ -249,7 +252,14 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                 }
 
                 if (cellProps.row.original.isFreeBet) {
-                    return <Tooltip overlay={t('profile.free-bet.claim-btn')}>{statusComponent}</Tooltip>;
+                    return (
+                        <>
+                            <Tooltip overlay={t('profile.free-bet.claim-btn')}>
+                                <FreeBetIcon className={'icon icon--gift'} />
+                            </Tooltip>
+                            {statusComponent}
+                        </>
+                    );
                 }
                 return statusComponent;
             },
@@ -269,7 +279,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                 columnsDeps={[networkId, exchangeRates]}
                 columns={columns as any}
                 initialState={{
-                    sortBy: [
+                    sorting: [
                         {
                             id: 'timestamp',
                             desc: true,
@@ -280,6 +290,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                 isLoading={isLoading}
                 data={ticketTransactions}
                 noResultsMessage={t('market.table.no-results')}
+                showPagination
                 expandedRow={(row) => {
                     const ticketMarkets = getTicketMarkets(
                         row.original,
@@ -311,6 +322,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                         </ExpandedRowWrapper>
                     );
                 }}
+                expandAll={expandAll}
             ></Table>
             {showShareTicketModal && shareTicketModalData && (
                 <ShareTicketModalV2

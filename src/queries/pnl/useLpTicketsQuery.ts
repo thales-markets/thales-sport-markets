@@ -12,15 +12,18 @@ import { getContractInstance } from 'utils/contract';
 import { getLpAddress } from 'utils/liquidityPool';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
 import { mapTicket } from 'utils/tickets';
+import { League } from '../../enums/sports';
 
 const useLpTicketsQuery = (
     lpCollateral: LiquidityPoolCollateral,
     round: number,
+    leagueId: League,
+    onlyPP: boolean,
     networkConfig: NetworkConfig,
     options?: Omit<UseQueryOptions<Ticket[]>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<Ticket[]>({
-        queryKey: QUERY_KEYS.Pnl.LpTickets(lpCollateral, round, networkConfig.networkId),
+        queryKey: QUERY_KEYS.Pnl.LpTickets(lpCollateral, round, leagueId, onlyPP, networkConfig.networkId),
         queryFn: async () => {
             const [sportsAMMDataContract, liquidityPoolDataContract] = [
                 getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig),
@@ -29,10 +32,10 @@ const useLpTicketsQuery = (
 
             if (sportsAMMDataContract && liquidityPoolDataContract) {
                 const [lpTickets, gamesInfoResponse, playersInfoResponse, liveScoresResponse] = await Promise.all([
-                    liquidityPoolDataContract.read?.getRoundTickets(
+                    liquidityPoolDataContract.read.getRoundTickets([
                         getLpAddress(networkConfig.networkId, lpCollateral),
-                        round
-                    ),
+                        round,
+                    ]),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, noCacheConfig),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/players-info`, noCacheConfig),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/live-scores`, noCacheConfig),
@@ -43,9 +46,9 @@ const useLpTicketsQuery = (
                 const promises = [];
                 for (let i = 0; i < numberOfBatches; i++) {
                     promises.push(
-                        sportsAMMDataContract.read?.getTicketsData(
-                            lpTickets.slice(i * BATCH_SIZE, (i + 1) * BATCH_SIZE)
-                        )
+                        sportsAMMDataContract.read.getTicketsData([
+                            lpTickets.slice(i * BATCH_SIZE, (i + 1) * BATCH_SIZE),
+                        ])
                     );
                 }
 
@@ -63,7 +66,17 @@ const useLpTicketsQuery = (
                 );
 
                 const finalTickets: Ticket[] = orderBy(
-                    updateTotalQuoteAndPayout(mappedTickets),
+                    updateTotalQuoteAndPayout(mappedTickets).filter(
+                        (ticket) =>
+                            ((ticket.sportMarkets.length === 1 &&
+                                ticket.sportMarkets[0].leagueId === leagueId &&
+                                !!leagueId) ||
+                                !leagueId) &&
+                            ((ticket.sportMarkets.length === 1 &&
+                                ticket.sportMarkets[0].isPlayerPropsMarket &&
+                                !!onlyPP) ||
+                                !onlyPP)
+                    ),
                     ['timestamp'],
                     ['desc']
                 );

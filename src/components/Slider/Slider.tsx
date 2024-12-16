@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 interface SliderProps {
@@ -12,19 +12,36 @@ interface SliderProps {
 
 const Slider: React.FC<SliderProps> = ({ min = 0, max = 100, value = 0, onChange, disabled = false, marks = [] }) => {
     const [sliderValue, setSliderValue] = useState(value);
+
+    useEffect(() => {
+        setSliderValue(value < min ? min : value > max ? max : value);
+    }, [value, min, max]);
+
     const sliderRef = useRef<HTMLDivElement>(null);
 
-    const handleThumbPosition = (event: React.MouseEvent) => {
-        if (disabled) return;
+    const handleThumbPosition = (event: React.MouseEvent | React.DragEvent) => {
+        if (disabled || !event.clientX) return;
+
         const rect = sliderRef.current?.getBoundingClientRect();
         if (!rect) return;
-        const newValue = Math.min(Math.max(min, ((event.clientX - rect.left) / rect.width) * (max - min) + min), max);
+
+        const newValue = Math.ceil(
+            Math.min(Math.max(min, ((event.clientX - rect.left) / rect.width) * (max - min) + min), max)
+        );
         setSliderValue(newValue);
         onChange && onChange(newValue);
     };
 
     return (
-        <SliderContainer ref={sliderRef} onClick={handleThumbPosition}>
+        <SliderContainer
+            isDisabled={!!disabled}
+            ref={sliderRef}
+            onClick={handleThumbPosition}
+            onDrag={handleThumbPosition}
+            onDragEnter={(e) => e.preventDefault()}
+            onDragOver={(e) => e.preventDefault()}
+        >
+            <SliderTrackDefault />
             <SliderTrack value={sliderValue} min={min} max={max} />
             <SliderThumb value={sliderValue} min={min} max={max} />
             <SliderMarks>
@@ -36,20 +53,31 @@ const Slider: React.FC<SliderProps> = ({ min = 0, max = 100, value = 0, onChange
     );
 };
 
-const SliderContainer = styled.div`
+const SliderContainer = styled.div<{ isDisabled: boolean }>`
     position: relative;
     width: 100%;
-    height: 4px;
-    background-color: #e0e0e0;
-    border-radius: 2px;
+    height: 10px;
+    border-radius: 10px;
+    cursor: ${(props) => (props.isDisabled ? 'deafult' : 'pointer')};
+    opacity: ${(props) => (props.isDisabled ? '0.5' : '1')};
 `;
 
 const SliderTrack = styled.div<{ value: number; min: number; max: number }>`
     position: absolute;
     height: 100%;
-    background-color: #3f51b5;
-    border-radius: 2px;
+    background-color: ${(props) => props.theme.slider.trackColor};
+    border-radius: 10px;
     width: ${({ value, min, max }) => ((value - min) / (max - min)) * 100}%;
+`;
+
+const SliderTrackDefault = styled.div`
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    background-color: ${(props) => props.theme.slider.trackColor};
+    opacity: 0.38;
+    z-index: 1;
 `;
 
 const SliderThumb = styled.div<{ value: number; min: number; max: number }>`
@@ -57,11 +85,12 @@ const SliderThumb = styled.div<{ value: number; min: number; max: number }>`
     top: 50%;
     left: ${({ value, min, max }) => ((value - min) / (max - min)) * 100}%;
     transform: translate(-50%, -50%);
-    width: 12px;
-    height: 12px;
-    background-color: #3f51b5;
+    width: 14px;
+    height: 14px;
+    background-color: ${(props) => props.theme.slider.thumbColor};
     border-radius: 50%;
     cursor: pointer;
+    z-index: 2;
 `;
 
 const SliderMarks = styled.div`

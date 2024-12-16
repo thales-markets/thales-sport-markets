@@ -1,10 +1,9 @@
 import { ContractType } from 'enums/contract';
+import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 import { NetworkConfig } from 'types/network';
 import { ContractData, ViemContract } from 'types/viem';
 import { Address, getContract } from 'viem';
 import { getCollaterals } from './collaterals';
-
-import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 // Contract import
 import freeBetHolder from 'utils/contracts/freeBetHolder';
 import liquidityPoolDataContract from 'utils/contracts/liquidityPoolDataContractV2';
@@ -20,6 +19,7 @@ import sportsAMMV2RiskManager from 'utils/contracts/sportsAMMV2RiskManagerContra
 import stakingThalesBettingProxy from 'utils/contracts/stakingThalesBettingProxy';
 import stakingThales from 'utils/contracts/stakingThalesContract';
 import liquidityPoolContractV2 from './contracts/liquidityPoolContractV2';
+import resolveBlockerContract from './contracts/resolveBlockerContract';
 
 export const prepareContractWithModifiedResponse = (props: { abi: any; address: Address; client: any }) => {
     const contract = getContract(props) as ViemContract;
@@ -46,7 +46,6 @@ export const prepareContractWithModifiedResponse = (props: { abi: any; address: 
                 } else {
                     modifiedResponse.push(...(functionResponse as any[]));
                 }
-                // console.log(`functionResponse ${functionName.toString()}`, functionResponse);
 
                 if (functionABI) {
                     functionABI.outputs.forEach((output: any, index: number) => {
@@ -54,7 +53,7 @@ export const prepareContractWithModifiedResponse = (props: { abi: any; address: 
                         modifiedResponse[output.name] = functionResponse[index];
                     });
                 }
-                // console.log(`Modified Response ${functionName.toString()}`, modifiedResponse);
+
                 return modifiedResponse?.length === 1 ? modifiedResponse[0] : modifiedResponse;
             },
         }),
@@ -110,6 +109,8 @@ export const getContractInstance = (
         case ContractType.LIQUIDITY_POOL:
             if (!lpCollateral) return;
             return getContractWithModifiedResponse(liquidityPoolContractV2[lpCollateral], networkConfig);
+        case ContractType.RESOLVE_BLOCKER:
+            return getContractWithModifiedResponse(resolveBlockerContract, networkConfig);
         default:
             return undefined;
     }

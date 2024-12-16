@@ -1,5 +1,6 @@
 import { USD_SIGN } from 'constants/currency';
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
+import { League } from 'enums/sports';
 import { t } from 'i18next';
 import useLpUsersPnlQuery from 'queries/pnl/useLpUsersPnlQuery';
 import React from 'react';
@@ -11,13 +12,15 @@ import { useChainId, useClient } from 'wagmi';
 type LpUsersPnlProps = {
     lpCollateral: LiquidityPoolCollateral;
     round: number;
+    leagueId: League;
+    onlyPP: boolean;
 };
 
-const LpUsersPnl: React.FC<LpUsersPnlProps> = ({ lpCollateral, round }) => {
+const LpUsersPnl: React.FC<LpUsersPnlProps> = ({ lpCollateral, round, leagueId, onlyPP }) => {
     const networkId = useChainId();
     const client = useClient();
 
-    const lpUsersPnlQuery = useLpUsersPnlQuery(lpCollateral, round, { networkId, client });
+    const lpUsersPnlQuery = useLpUsersPnlQuery(lpCollateral, round, leagueId, onlyPP, { networkId, client });
     const lpUsersPnl = lpUsersPnlQuery.isSuccess && lpUsersPnlQuery.data ? lpUsersPnlQuery.data : [];
 
     return (

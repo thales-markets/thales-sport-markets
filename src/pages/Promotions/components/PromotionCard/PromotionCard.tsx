@@ -74,8 +74,8 @@ const PromotionCard: React.FC<PromotionItem> = ({
                     <HeaderContainer>
                         <NetworkIconsWrapper>
                             {availableOnNetworks?.length ? (
-                                availableOnNetworks.map((item) => {
-                                    return getNetworkLogo(item as Network);
+                                availableOnNetworks.map((item, i) => {
+                                    return getNetworkLogo(item as Network, `logo-${i}`);
                                 })
                             ) : (
                                 <></>
@@ -106,16 +106,16 @@ const PromotionCard: React.FC<PromotionItem> = ({
     );
 };
 
-const getNetworkLogo = (networkId: number) => {
+const getNetworkLogo = (networkId: number, key: string) => {
     switch (networkId) {
         case Network.OptimismMainnet:
-            return <OPLogo />;
+            return <OPLogo key={key} />;
         case Network.Arbitrum:
-            return <ArbitrumLogo />;
+            return <ArbitrumLogo key={key} />;
         case Network.Base:
-            return <BaseLogo />;
+            return <BaseLogo key={key} />;
         default:
-            return <></>;
+            return <React.Fragment key={key}></React.Fragment>;
     }
 };
 

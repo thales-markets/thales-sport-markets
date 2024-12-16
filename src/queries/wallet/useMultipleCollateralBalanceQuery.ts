@@ -167,7 +167,11 @@ const useMultipleCollateralBalanceQuery = (
                     ETH: ETHBalance ? bigNumberFormatter(ETHBalance.value, COLLATERAL_DECIMALS.ETH) : 0,
                     ARB: ARBBalance ? bigNumberFormatter(ARBBalance, COLLATERAL_DECIMALS.ARB) : 0,
                     THALES: THALESBalance ? bigNumberFormatter(THALESBalance, COLLATERAL_DECIMALS.THALES) : 0,
-                    sTHALES: sTHALESBalance ? bigNumberFormatter(sTHALESBalance, COLLATERAL_DECIMALS.sTHALES) : 0,
+                    // sub 1 staked THALES due to limitation on contract side
+                    sTHALES:
+                        sTHALESBalance && bigNumberFormatter(sTHALESBalance, COLLATERAL_DECIMALS.sTHALES) > 1
+                            ? bigNumberFormatter(sTHALESBalance, COLLATERAL_DECIMALS.sTHALES) - 1
+                            : 0,
                 };
             } catch (e) {
                 console.log('e ', e);

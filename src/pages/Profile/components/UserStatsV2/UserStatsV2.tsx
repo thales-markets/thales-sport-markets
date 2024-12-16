@@ -1,7 +1,7 @@
 import Button from 'components/Button';
 import CollateralSelector from 'components/CollateralSelector';
 import NumericInput from 'components/fields/NumericInput';
-import InlineLoader from 'components/InlineLoader';
+import SimpleLoader from 'components/SimpleLoader';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { COLLATERAL_ICONS_CLASS_NAMES, CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
 import { SWAP_APPROVAL_BUFFER } from 'constants/markets';
@@ -565,27 +565,27 @@ const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
                     </InputContainer>
                     <Section>
                         <SubLabel>{t('profile.stats.thales-price-label')}:</SubLabel>
-                        <Value>
-                            {isFetching ? (
-                                <InlineLoader />
-                            ) : Number(swapQuote) === 0 ? (
-                                '-'
-                            ) : (
-                                formatCurrencyWithKey(selectedCollateral, 1 / swapQuote)
-                            )}
-                        </Value>
+                        {isFetching ? (
+                            <LoaderContainer>
+                                <SimpleLoader size={16} strokeWidth={6} />
+                            </LoaderContainer>
+                        ) : (
+                            <Value>
+                                {Number(swapQuote) === 0
+                                    ? '-'
+                                    : formatCurrencyWithKey(selectedCollateral, 1 / swapQuote)}
+                            </Value>
+                        )}
                     </Section>
                     <Section>
                         <SubLabel>{t('profile.stats.thales-to-receive')}:</SubLabel>
-                        <Value>
-                            {isFetching ? (
-                                <InlineLoader />
-                            ) : swappedThalesToReceive === 0 ? (
-                                '-'
-                            ) : (
-                                formatCurrency(swappedThalesToReceive)
-                            )}
-                        </Value>
+                        {isFetching ? (
+                            <LoaderContainer>
+                                <SimpleLoader size={16} strokeWidth={6} />
+                            </LoaderContainer>
+                        ) : (
+                            <Value>{swappedThalesToReceive === 0 ? '-' : formatCurrency(swappedThalesToReceive)}</Value>
+                        )}
                     </Section>
                     {getSubmitButton()}
                 </SectionWrapper>
@@ -778,6 +778,12 @@ const additionalButtonStyles = {
 const InputContainer = styled(FlexDiv)`
     margin-top: 10px;
     margin-bottom: 5px;
+`;
+
+const LoaderContainer = styled.div`
+    position: relative;
+    width: 16px;
+    margin-left: auto;
 `;
 
 export default UserStats;

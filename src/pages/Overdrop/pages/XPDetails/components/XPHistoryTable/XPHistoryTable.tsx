@@ -48,21 +48,19 @@ const XPHistoryTable: React.FC = () => {
         },
     ];
 
-    // ts-ignore
     return (
-        <>
-            <Table
-                columns={columns as any}
-                tableHeight="auto"
-                data={userXPHistory ? userXPHistory : []}
-                isLoading={userXPHistoryQuery.isLoading}
-                noResultsMessage={t('overdrop.xp-details.no-results')}
-                tableRowHeadStyles={{ minHeight: '35px' }}
-                tableHeadCellStyles={{ fontSize: '14px' }}
-                tableRowStyles={{ minHeight: '35px' }}
-                tableRowCellStyles={{ fontSize: '13px' }}
-            />
-        </>
+        <Table
+            columns={columns as any}
+            tableHeight="auto"
+            data={userXPHistory ? userXPHistory : []}
+            isLoading={userXPHistoryQuery.isLoading}
+            noResultsMessage={t('overdrop.xp-details.no-results')}
+            showPagination
+            tableRowHeadStyles={{ minHeight: '35px' }}
+            tableHeadCellStyles={{ fontSize: '14px' }}
+            tableRowStyles={{ minHeight: '35px' }}
+            tableRowCellStyles={{ fontSize: '13px' }}
+        />
     );
 };
 

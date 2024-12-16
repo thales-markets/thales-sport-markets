@@ -18,6 +18,7 @@ import PnL from 'pages/PnL';
 import Profile from 'pages/Profile';
 import Promotions from 'pages/Promotions/Home';
 import Promotion from 'pages/Promotions/Promotion';
+import ResolveBlocker from 'pages/ResolveBlocker';
 import SEO from 'pages/SEO/Home';
 import SeoArticle from 'pages/SEO/SeoArticle';
 import Ticket from 'pages/Ticket';
@@ -142,7 +143,7 @@ const App = () => {
                             </DappLayout>
                         </Suspense>
                     </Route>
-                    <Route exact path={`${ROUTES.Markets.Market}/:marketAddress`}>
+                    <Route exact path={ROUTES.Markets.Market}>
                         <Suspense fallback={<Loader />}>
                             <DappLayout>
                                 <Market />
@@ -165,16 +166,23 @@ const App = () => {
                             </Suspense>
                         </Route>
                     )}
-                    {
-                        <Route exact path={ROUTES.Overdrop}>
-                            <Suspense fallback={<Loader />}>
-                                <DappLayout>
-                                    <Overdrop />
-                                </DappLayout>
-                            </Suspense>
-                        </Route>
-                    }
-
+                    <Route exact path={ROUTES.PnL}>
+                        <DappLayout>
+                            <PnL />
+                        </DappLayout>
+                    </Route>
+                    <Route exact path={ROUTES.ResolveBlocker}>
+                        <DappLayout>
+                            <ResolveBlocker />
+                        </DappLayout>
+                    </Route>
+                    <Route exact path={ROUTES.Overdrop}>
+                        <Suspense fallback={<Loader />}>
+                            <DappLayout>
+                                <Overdrop />
+                            </DappLayout>
+                        </Suspense>
+                    </Route>
                     <Route exact path={ROUTES.Deposit}>
                         <Suspense fallback={<Loader />}>
                             <DappLayout>
@@ -182,7 +190,6 @@ const App = () => {
                             </DappLayout>
                         </Suspense>
                     </Route>
-
                     <Route exact path={ROUTES.Withdraw}>
                         <Suspense fallback={<Loader />}>
                             <DappLayout>
@@ -190,7 +197,6 @@ const App = () => {
                             </DappLayout>
                         </Suspense>
                     </Route>
-
                     <Route exact path={ROUTES.Wizard}>
                         <Suspense fallback={<Loader />}>
                             <DappLayout>
@@ -220,11 +226,6 @@ const App = () => {
                                 <Promotion />
                             </DappLayout>
                         </Suspense>
-                    </Route>
-                    <Route exact path={ROUTES.PnL}>
-                        <DappLayout>
-                            <PnL />
-                        </DappLayout>
                     </Route>
                     <Route exact path={ROUTES.Home}>
                         <Suspense fallback={<Loader />}>

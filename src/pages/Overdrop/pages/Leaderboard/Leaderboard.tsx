@@ -254,7 +254,7 @@ const Leaderboard: React.FC = () => {
                 stickyRow={stickyRow}
                 columns={columns as any}
                 initialState={{
-                    sortBy: [
+                    sorting: [
                         {
                             id: 'rank',
                             desc: false,
@@ -264,6 +264,7 @@ const Leaderboard: React.FC = () => {
                 isLoading={leaderboardQuery.isLoading}
                 data={leaderboardFiltered}
                 noResultsMessage={t('market.table.no-results')}
+                showPagination
             ></Table>
         </TableContainer>
     );

@@ -1,4 +1,5 @@
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
+import { League } from 'enums/sports';
 import useLpTicketsQuery from 'queries/pnl/useLpTicketsQuery';
 import React, { useMemo } from 'react';
 import { Ticket } from 'types/markets';
@@ -8,13 +9,15 @@ import TicketTransactionsTable from '../../../Markets/Market/MarketDetailsV2/com
 type LpTicketsProps = {
     lpCollateral: LiquidityPoolCollateral;
     round: number;
+    leagueId: League;
+    onlyPP: boolean;
 };
 
-const LpTickets: React.FC<LpTicketsProps> = ({ lpCollateral, round }) => {
+const LpTickets: React.FC<LpTicketsProps> = ({ lpCollateral, round, leagueId, onlyPP }) => {
     const networkId = useChainId();
     const client = useClient();
 
-    const lpTicketsQuery = useLpTicketsQuery(lpCollateral, round, { networkId, client });
+    const lpTicketsQuery = useLpTicketsQuery(lpCollateral, round, leagueId, onlyPP, { networkId, client });
 
     const lpTickets: Ticket[] = useMemo(() => {
         let lpTickets: Ticket[] = [];
