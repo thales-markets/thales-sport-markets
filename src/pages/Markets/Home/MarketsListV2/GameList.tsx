@@ -6,7 +6,6 @@ import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { getIsAppReady } from 'redux/modules/app';
 import { getMarketTypeFilter, getMarketTypeGroupFilter, getSelectedMarket } from 'redux/modules/market';
 import { FlexDivColumn, FlexDivRowCentered } from 'styles/common';
 import { formatShortDateWithTime } from 'thales-utils';
@@ -29,7 +28,6 @@ import {
 const GameList: React.FC<{ markets: SportMarket[]; language: string }> = ({ markets, language }) => {
     const { t } = useTranslation();
 
-    const isAppReady = useSelector(getIsAppReady);
     const selectedMarket = useSelector(getSelectedMarket);
     const marketTypeFilter = useSelector(getMarketTypeFilter);
     const marketTypeGroupFilter = useSelector(getMarketTypeGroupFilter);
@@ -38,9 +36,7 @@ const GameList: React.FC<{ markets: SportMarket[]; language: string }> = ({ mark
 
     const [hideMarkets, setHidemarkets] = useState<boolean>(false);
 
-    const gameMultipliersQuery = useGameMultipliersQuery({
-        enabled: isAppReady,
-    });
+    const gameMultipliersQuery = useGameMultipliersQuery();
 
     const overdropGameMultiplier = useMemo(() => {
         const gameMultipliers =
@@ -91,14 +87,13 @@ const GameList: React.FC<{ markets: SportMarket[]; language: string }> = ({ mark
                                         <TimeRemaining end={markets[0].maturityDate} fontSize={11} />
                                     </>
                                 }
-                                component={
-                                    <MatchTimeLabelContainer gap={5}>
-                                        <MatchTimeLabel marketSelected={!!selectedMarket}>
-                                            {formatShortDateWithTime(new Date(markets[0].maturityDate))}{' '}
-                                        </MatchTimeLabel>
-                                    </MatchTimeLabelContainer>
-                                }
-                            />
+                            >
+                                <MatchTimeLabelContainer gap={5}>
+                                    <MatchTimeLabel marketSelected={!!selectedMarket}>
+                                        {formatShortDateWithTime(new Date(markets[0].maturityDate))}{' '}
+                                    </MatchTimeLabel>
+                                </MatchTimeLabelContainer>
+                            </Tooltip>
                             {!selectedMarket && (
                                 <GameOfLabel>
                                     {!!overdropGameMultiplier && (

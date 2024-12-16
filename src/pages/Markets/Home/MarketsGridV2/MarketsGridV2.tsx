@@ -6,6 +6,7 @@ import i18n from 'i18n';
 import { groupBy } from 'lodash';
 import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect } from 'react';
+import Scrollbars from 'react-custom-scrollbars-2';
 import { forceCheck } from 'react-lazyload';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
@@ -83,7 +84,7 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
         return <ListContainer isMarketSelected={isMarketSelected}>{content}</ListContainer>;
     };
 
-    const onRefChange = useCallback((scrollRef) => {
+    const onRefChange = useCallback((scrollRef: Scrollbars) => {
         if (scrollRef) {
             setScrollMainContainerToTop(scrollRef.scrollToTop);
         }
