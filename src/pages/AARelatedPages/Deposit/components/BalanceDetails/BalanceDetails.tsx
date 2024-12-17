@@ -1,5 +1,5 @@
 import { USD_SIGN } from 'constants/currency';
-import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
+import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -9,6 +9,7 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivEnd } from 'styles/common';
 import { Coins, formatCurrency, formatCurrencyWithSign } from 'thales-utils';
+import { Rates } from 'types/collateral';
 import biconomyConnector from 'utils/biconomyWallet';
 import { getCollaterals, isStableCurrency } from 'utils/collaterals';
 import { useAccount, useChainId, useClient } from 'wagmi';

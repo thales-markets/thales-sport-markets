@@ -1,10 +1,10 @@
 import { USD_SIGN } from 'constants/currency';
 import { THALES_CONTRACT_RATE_KEY } from 'constants/markets';
-import { Rates } from 'queries/rates/useExchangeRatesQuery';
 import React, { useCallback, useMemo } from 'react';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { formatCurrencyWithKey } from 'thales-utils';
+import { Rates } from 'types/collateral';
 import { convertFromStableToCollateral, getCollateral, isThalesCurrency } from 'utils/collaterals';
 import { useChainId } from 'wagmi';
 

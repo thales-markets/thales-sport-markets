@@ -1,6 +1,6 @@
 import { GetStartedStep } from 'enums/wizard';
 import { t } from 'i18next';
-import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
+import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -9,6 +9,7 @@ import { getIsBiconomy } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivStart } from 'styles/common';
+import { Rates } from 'types/collateral';
 import biconomyConnector from 'utils/biconomyWallet';
 import { getCollaterals } from 'utils/collaterals';
 import { useAccount, useChainId, useClient } from 'wagmi';

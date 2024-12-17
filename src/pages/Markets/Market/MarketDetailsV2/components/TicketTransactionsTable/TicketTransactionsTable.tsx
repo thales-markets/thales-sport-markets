@@ -6,7 +6,7 @@ import Tooltip from 'components/Tooltip';
 import { USD_SIGN } from 'constants/currency';
 import { OddsType } from 'enums/markets';
 import i18n from 'i18n';
-import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
+import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -22,6 +22,7 @@ import {
     getEtherscanAddressLink,
     truncateAddress,
 } from 'thales-utils';
+import { Rates } from 'types/collateral';
 import { SportMarket, Ticket, TicketMarket } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { getDefaultCollateral } from 'utils/collaterals';

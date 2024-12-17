@@ -8,6 +8,7 @@ import { ContractType } from 'enums/contract';
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 import { orderBy } from 'lodash';
 import { bigNumberFormatter, Coins, parseBytes32String } from 'thales-utils';
+import { Rates } from 'types/collateral';
 import { LpStats, Ticket } from 'types/markets';
 import { NetworkConfig, SupportedNetwork } from 'types/network';
 import { ViemContract } from 'types/viem';
@@ -17,7 +18,6 @@ import { getLpAddress } from 'utils/liquidityPool';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
 import { mapTicket } from 'utils/tickets';
 import { League } from '../../enums/sports';
-import { Rates } from '../rates/useExchangeRatesQuery';
 
 const getLpStats = async (
     tickets: string[],

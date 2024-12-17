@@ -7,13 +7,13 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { ContractType } from 'enums/contract';
 import { orderBy } from 'lodash';
 import { bigNumberFormatter, parseBytes32String } from 'thales-utils';
+import { Rates } from 'types/collateral';
 import { Ticket, UserStats } from 'types/markets';
 import { NetworkConfig } from 'types/network';
 import { isLpSupported, isStableCurrency } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
 import { mapTicket } from 'utils/tickets';
-import { Rates } from '../rates/useExchangeRatesQuery';
 
 const useUsersStatsV2Query = (
     user: string,

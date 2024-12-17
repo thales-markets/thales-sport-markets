@@ -17,7 +17,7 @@ import { ContractType } from 'enums/contract';
 import { LiquidityPoolCollateral, LiquidityPoolPnlType, LiquidityPoolTab } from 'enums/liquidityPool';
 import useLiquidityPoolDataQuery from 'queries/liquidityPool/useLiquidityPoolDataQuery';
 import useLiquidityPoolUserDataQuery from 'queries/liquidityPool/useLiquidityPoolUserDataQuery';
-import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
+import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import queryString from 'query-string';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
@@ -28,6 +28,7 @@ import { getIsBiconomy, setWalletConnectModalVisibility } from 'redux/modules/wa
 import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
 import { Coins, coinParser, formatCurrencyWithKey, formatPercentage } from 'thales-utils';
+import { Rates } from 'types/collateral';
 import { LiquidityPoolData, UserLiquidityPoolData } from 'types/liquidityPool';
 import { ThemeInterface } from 'types/ui';
 import { ViemContract } from 'types/viem';
