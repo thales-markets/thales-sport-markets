@@ -1,4 +1,4 @@
-import LogoIcon from 'assets/images/mages/xmas-overtime-logo.svg?react';
+import LogoIcon from 'assets/images/xmas-overtime-logo.svg?react';
 import SPAAnchor from 'components/SPAAnchor';
 import ROUTES, { RESET_STATE } from 'constants/routes';
 import React from 'react';
