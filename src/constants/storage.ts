@@ -1,3 +1,4 @@
+import { NetworkId } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
 
 export const LOCAL_STORAGE_KEYS = {
@@ -33,26 +34,14 @@ export const LOCAL_STORAGE_KEYS = {
     OVERDROP_PREVENT_DAILY_MODAL: 'overdropPreventDailyModal',
     OVERDROP_STATE: 'overdropState',
     SESSION_P_KEY: {
-        10: 'sessionPKey_10',
-        // 137: 'sessionPKey_137',
-        42161: 'sessionPKey_42161',
-        // 8453: 'sessionPKey_8453',
-        // 300: 'sessionPKey_300',
-        // 324: 'sessionPKey_324',
-        // 420: 'sessionPKey_420',
-        // 11155420: 'sessionPKey_11155420',
-        // 168587773: 'sessionPKey_168587773',
+        [NetworkId.OptimismMainnet]: 'sessionPKey_10',
+        [NetworkId.Arbitrum]: 'sessionPKey_42161',
+        [NetworkId.OptimismSepolia]: 'sessionPKey_11155420',
     } as Record<SupportedNetwork, string>,
     SESSION_VALID_UNTIL: {
-        10: 'sessionValidUntil_10',
-        137: 'sessionValidUntil_137',
-        42161: 'sessionValidUntil_42161',
-        8453: 'sessionValidUntil_8453',
-        300: 'sessionValidUntil_300',
-        324: 'sessionValidUntil_324',
-        420: 'sessionValidUntil_420',
-        11155420: 'sessionValidUntil_11155420',
-        168587773: 'sessionValidUntil_168587773',
+        [NetworkId.OptimismMainnet]: 'sessionValidUntil_10',
+        [NetworkId.Arbitrum]: 'sessionValidUntil_42161',
+        [NetworkId.OptimismSepolia]: 'sessionValidUntil_11155420',
     } as Record<SupportedNetwork, string>,
     STAKING_MODAL_MUTE_END: 'stakingModalMuteEnd',
 };
