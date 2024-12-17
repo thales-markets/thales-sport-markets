@@ -61,7 +61,8 @@ export const refetchCoingeckoRates = () =>
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Rates.CoingeckoRates());
 
 export const refetchResolveBlocker = (networkId: Network) => {
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.ResolveBlocker.BlockedGames(networkId));
+    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.ResolveBlocker.BlockedGames(true, networkId));
+    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.ResolveBlocker.BlockedGames(false, networkId));
 };
 
 export default queryConnector;

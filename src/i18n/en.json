@@ -1227,6 +1227,9 @@
     },
     "resolve-blocker": {
         "title": "Blocked games",
+        "select-all": "Select All",
+        "unblock-selected": "Unblock Selected",
+        "select": "Select",
         "date-time": "Date | Time",
         "game": "Game",
         "reason": "Reason",
@@ -1236,6 +1239,7 @@
         "unblocking": "Unblocking...",
         "not-whitelisted-for-unblock-tooltip": "Connected wallet is not whitelisted for unblock",
         "unblock-confirmation-message": "Game successfully unblocked",
+        "unblock-batch-confirmation-message": "Games successfully unblocked",
         "no-blocked-games": "No blocked games",
         "no-unblocked-games": "No unblocked games",
         "tab": {

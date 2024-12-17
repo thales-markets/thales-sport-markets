@@ -40,7 +40,9 @@ const UnblockAction: FC<UnblockActionProps> = memo(({ gameId, isWitelistedForUnb
         </Button>
     );
 
-    const handleUnblock = async () => {
+    const handleUnblock = async (e: any) => {
+        e.preventDefault();
+        e.stopPropagation();
         const { resolveBlockerContract, signer } = networkConnector;
 
         if (resolveBlockerContract && signer) {
