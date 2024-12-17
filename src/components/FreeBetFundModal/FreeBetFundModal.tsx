@@ -230,15 +230,15 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
     };
 
     const handleSubmit = async () => {
-        const contracts = [
-            getContractInstance(
-                ContractType.MULTICOLLATERAL,
-                { client: walletClient.data, networkId },
-                getCollateralIndex(networkId, selectedCollateral)
-            ),
-            getContractInstance(ContractType.FREE_BET_HOLDER, { client: walletClient.data, networkId }),
-        ];
-        const [multipleCollateralWithSigner, freeBetHolderContractWithSigner] = contracts;
+        const multipleCollateralWithSigner = getContractInstance(
+            ContractType.MULTICOLLATERAL,
+            { client: walletClient.data, networkId },
+            getCollateralIndex(networkId, selectedCollateral)
+        );
+        const freeBetHolderContractWithSigner = getContractInstance(ContractType.FREE_BET_HOLDER, {
+            client: walletClient.data,
+            networkId,
+        });
 
         if (
             multipleCollateralWithSigner &&

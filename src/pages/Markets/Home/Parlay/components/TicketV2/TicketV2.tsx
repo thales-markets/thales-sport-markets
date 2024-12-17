@@ -659,12 +659,15 @@ const Ticket: React.FC<TicketProps> = ({
         async (buyInAmountForQuote: number, fetchQuoteOnly: boolean) => {
             if (buyInAmountForQuote <= 0 || noProofs) return;
 
-            const contracts = [
-                getContractInstance(ContractType.SPORTS_AMM_V2, { client: walletClient.data, networkId }),
-                getContractInstance(ContractType.MULTICOLLATERAL_ON_OFF_RAMP, { client: walletClient.data, networkId }),
-            ] as ViemContract[];
+            const sportsAMMV2Contract = getContractInstance(ContractType.SPORTS_AMM_V2, {
+                client: walletClient.data,
+                networkId,
+            });
+            const multiCollateralOnOffRampContract = getContractInstance(ContractType.MULTICOLLATERAL_ON_OFF_RAMP, {
+                client: walletClient.data,
+                networkId,
+            });
 
-            const [sportsAMMV2Contract, multiCollateralOnOffRampContract] = contracts;
             if (sportsAMMV2Contract) {
                 const tradeData = getTradeData(markets);
 
@@ -1186,23 +1189,17 @@ const Ticket: React.FC<TicketProps> = ({
     };
 
     const handleSubmit = async () => {
-        const contracts = [
-            getContractInstance(ContractType.SPORTS_AMM_V2, { client: walletClient.data, networkId }),
-            getContractInstance(ContractType.LIVE_TRADING_PROCESSOR, { client: walletClient.data, networkId }),
-            getContractInstance(ContractType.SPORTS_AMM_DATA, { client: walletClient.data, networkId }),
-            getContractInstance(ContractType.SPORTS_AMM_V2_MANAGER, { client: walletClient.data, networkId }),
-            getContractInstance(ContractType.FREE_BET_HOLDER, { client: walletClient.data, networkId }),
-            getContractInstance(ContractType.STAKING_THALES_BETTING_PROXY, { client: walletClient.data, networkId }),
-        ] as ViemContract[];
+        const networkConfig = {
+            client: walletClient.data,
+            networkId,
+        };
 
-        const [
-            sportsAMMV2Contract,
-            liveTradingProcessorContract,
-            sportsAMMDataContract,
-            sportsAMMV2ManagerContract,
-            freeBetHolderContract,
-            stakingThalesBettingProxy,
-        ] = contracts;
+        const sportsAMMV2Contract = getContractInstance(ContractType.SPORTS_AMM_V2, networkConfig);
+        const liveTradingProcessorContract = getContractInstance(ContractType.LIVE_TRADING_PROCESSOR, networkConfig);
+        const sportsAMMDataContract = getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig);
+        const sportsAMMV2ManagerContract = getContractInstance(ContractType.SPORTS_AMM_V2_MANAGER, networkConfig);
+        const freeBetHolderContract = getContractInstance(ContractType.FREE_BET_HOLDER, networkConfig);
+        const stakingThalesBettingProxy = getContractInstance(ContractType.STAKING_THALES_BETTING_PROXY, networkConfig);
 
         // TODO: separate logic for regular and live markets
         if (
@@ -1828,25 +1825,22 @@ const Ticket: React.FC<TicketProps> = ({
 
     useEffect(() => {
         const setGasFee = async () => {
-            const contracts = [
-                getContractInstance(ContractType.SPORTS_AMM_V2, { client: walletClient.data, networkId }),
-                getContractInstance(
-                    ContractType.MULTICOLLATERAL,
-                    { client: walletClient.data, networkId },
-                    getCollateralIndex(networkId, getDefaultCollateral(networkId))
-                ),
-                getContractInstance(
-                    ContractType.MULTICOLLATERAL,
-                    { client: walletClient.data, networkId },
-                    getCollateralIndex(networkId, selectedCollateral)
-                ),
-            ];
+            const networkConfig = {
+                client: walletClient.data,
+                networkId,
+            };
 
-            const [
-                sportsAMMV2ContractWithSigner,
-                defaultCollateralContractWithSigner,
-                multipleCollateralWithSigner,
-            ] = contracts;
+            const sportsAMMV2ContractWithSigner = getContractInstance(ContractType.SPORTS_AMM_V2, networkConfig);
+            const defaultCollateralContractWithSigner = getContractInstance(
+                ContractType.MULTICOLLATERAL,
+                networkConfig,
+                getCollateralIndex(networkId, getDefaultCollateral(networkId))
+            );
+            const multipleCollateralWithSigner = getContractInstance(
+                ContractType.MULTICOLLATERAL,
+                networkConfig,
+                getCollateralIndex(networkId, selectedCollateral)
+            );
 
             if (!sportsAMMV2ContractWithSigner || !defaultCollateralContractWithSigner || !multipleCollateralWithSigner)
                 return;
