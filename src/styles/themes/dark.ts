@@ -240,6 +240,7 @@ export default {
     christmasTheme: {
         background: {
             primary: Colors.CARIBBEAN_GREEN,
+            secondary: Colors.WHITE,
         },
         textColor: {
             primary: Colors.CARIBBEAN_GREEN,
