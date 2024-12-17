@@ -7,6 +7,7 @@ import Checkbox from 'components/fields/Checkbox/Checkbox';
 import NumericInput from 'components/fields/NumericInput';
 import TextArea from 'components/fields/TextArea';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { DEFAULT_MULTI_COLLATERAL_BALANCE } from 'constants/currency';
 import { ContractType } from 'enums/contract';
 import _ from 'lodash';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
@@ -80,10 +81,10 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
         }
     );
 
-    const multipleCollateralBalances = useMemo<CollateralsBalance | []>(() => {
+    const multipleCollateralBalances = useMemo<CollateralsBalance>(() => {
         return multipleCollateralBalancesQuery?.data && multipleCollateralBalancesQuery?.isSuccess
             ? multipleCollateralBalancesQuery.data
-            : [];
+            : DEFAULT_MULTI_COLLATERAL_BALANCE;
     }, [multipleCollateralBalancesQuery.data, multipleCollateralBalancesQuery?.isSuccess]);
 
     const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
@@ -96,7 +97,7 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
     );
     const selectedCollateralBalance = useMemo(() => {
         if (multipleCollateralBalances) {
-            return (multipleCollateralBalances as CollateralsBalance)[selectedCollateral];
+            return multipleCollateralBalances[selectedCollateral];
         }
         return 0;
     }, [multipleCollateralBalances, selectedCollateral]);

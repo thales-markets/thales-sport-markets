@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { getBalance } from '@wagmi/core';
-import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
+import { CRYPTO_CURRENCY_MAP, DEFAULT_MULTI_COLLATERAL_BALANCE } from 'constants/currency';
 import { TBD_ADDRESS } from 'constants/network';
 import QUERY_KEYS from 'constants/queryKeys';
 import { ContractType } from 'enums/contract';
@@ -21,20 +21,7 @@ const useMultipleCollateralBalanceQuery = (
     return useQuery<CollateralsBalance>({
         queryKey: QUERY_KEYS.Wallet.MultipleCollateral(walletAddress, networkConfig.networkId),
         queryFn: async () => {
-            let collateralsBalance: CollateralsBalance = {
-                sUSD: 0,
-                DAI: 0,
-                USDCe: 0,
-                USDbC: 0,
-                USDT: 0,
-                OP: 0,
-                WETH: 0,
-                ETH: 0,
-                ARB: 0,
-                USDC: 0,
-                THALES: 0,
-                sTHALES: 0,
-            };
+            let collateralsBalance: CollateralsBalance = DEFAULT_MULTI_COLLATERAL_BALANCE;
             try {
                 const multipleCollateralObject = {
                     sUSD: getContractInstance(
