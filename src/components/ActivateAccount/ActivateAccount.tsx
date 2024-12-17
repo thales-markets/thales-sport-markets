@@ -58,7 +58,7 @@ const ActivateAccount: React.FC<any> = () => {
             return undefined;
         }
     }, [exchangeRates, multipleCollateralBalances.data, networkId]);
-    console.log('totalBalanceValue: ', showFundModal);
+
     useEffect(() => {
         if (isConnected) {
             if (totalBalanceValue === undefined) {
