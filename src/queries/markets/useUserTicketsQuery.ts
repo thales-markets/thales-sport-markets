@@ -7,7 +7,6 @@ import { ContractType } from 'enums/contract';
 import { orderBy } from 'lodash';
 import { Ticket } from 'types/markets';
 import { NetworkConfig } from 'types/network';
-import { ViemContract } from 'types/viem';
 import { getContractInstance } from 'utils/contract';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
 import { isTestNetwork } from 'utils/network';
@@ -23,19 +22,17 @@ export const useUserTicketsQuery = (
         queryKey: QUERY_KEYS.UserTickets(networkConfig.networkId, walletAddress),
         queryFn: async () => {
             try {
-                const contracts = [
-                    getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig),
-                    getContractInstance(ContractType.SPORTS_AMM_V2_MANAGER, networkConfig),
-                    getContractInstance(ContractType.FREE_BET_HOLDER, networkConfig),
-                    getContractInstance(ContractType.STAKING_THALES_BETTING_PROXY, networkConfig),
-                ] as ViemContract[];
+                const sportsAMMDataContract = getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig);
+                const sportsAMMV2ManagerContract = getContractInstance(
+                    ContractType.SPORTS_AMM_V2_MANAGER,
+                    networkConfig
+                );
+                const freeBetHolderContract = getContractInstance(ContractType.FREE_BET_HOLDER, networkConfig);
+                const stakingThalesBettingProxy = getContractInstance(
+                    ContractType.STAKING_THALES_BETTING_PROXY,
+                    networkConfig
+                );
 
-                const [
-                    sportsAMMDataContract,
-                    sportsAMMV2ManagerContract,
-                    freeBetHolderContract,
-                    stakingThalesBettingProxy,
-                ] = contracts;
                 if (
                     sportsAMMDataContract &&
                     sportsAMMV2ManagerContract &&

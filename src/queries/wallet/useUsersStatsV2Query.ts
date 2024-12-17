@@ -9,7 +9,6 @@ import { orderBy } from 'lodash';
 import { bigNumberFormatter, parseBytes32String } from 'thales-utils';
 import { Ticket, UserStats } from 'types/markets';
 import { NetworkConfig } from 'types/network';
-import { ViemContract } from 'types/viem';
 import { isLpSupported, isStableCurrency } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
@@ -24,21 +23,15 @@ const useUsersStatsV2Query = (
     return useQuery<UserStats | undefined>({
         queryKey: QUERY_KEYS.Wallet.StatsV2(networkConfig.networkId, user),
         queryFn: async () => {
-            const contracts = [
-                getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig),
-                getContractInstance(ContractType.PRICE_FEED, networkConfig),
-                getContractInstance(ContractType.SPORTS_AMM_V2_MANAGER, networkConfig),
-                getContractInstance(ContractType.FREE_BET_HOLDER, networkConfig),
-                getContractInstance(ContractType.STAKING_THALES_BETTING_PROXY, networkConfig),
-            ] as ViemContract[];
+            const sportsAMMDataContract = getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig);
+            const priceFeedContract = getContractInstance(ContractType.PRICE_FEED, networkConfig);
+            const sportsAMMV2ManagerContract = getContractInstance(ContractType.SPORTS_AMM_V2_MANAGER, networkConfig);
+            const freeBetHolderContract = getContractInstance(ContractType.FREE_BET_HOLDER, networkConfig);
+            const stakingThalesBettingProxy = getContractInstance(
+                ContractType.STAKING_THALES_BETTING_PROXY,
+                networkConfig
+            );
 
-            const [
-                sportsAMMDataContract,
-                priceFeedContract,
-                sportsAMMV2ManagerContract,
-                freeBetHolderContract,
-                stakingThalesBettingProxy,
-            ] = contracts;
             if (
                 sportsAMMDataContract &&
                 priceFeedContract &&

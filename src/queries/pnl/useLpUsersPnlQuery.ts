@@ -31,12 +31,13 @@ const useLpUsersPnlQuery = (
     return useQuery<LpUsersPnl[]>({
         queryKey: QUERY_KEYS.Pnl.LpUsersPnl(lpCollateral, round, leagueId, onlyPP, networkConfig.networkId),
         queryFn: async () => {
-            const [sportsAMMDataContract, liquidityPoolDataContract, priceFeedContract, stakingThalesBettingProxy] = [
-                getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig),
-                getContractInstance(ContractType.LIQUIDITY_POOL_DATA, networkConfig),
-                getContractInstance(ContractType.PRICE_FEED, networkConfig),
-                getContractInstance(ContractType.STAKING_THALES_BETTING_PROXY, networkConfig),
-            ];
+            const sportsAMMDataContract = getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig);
+            const liquidityPoolDataContract = getContractInstance(ContractType.LIQUIDITY_POOL_DATA, networkConfig);
+            const priceFeedContract = getContractInstance(ContractType.PRICE_FEED, networkConfig);
+            const stakingThalesBettingProxy = getContractInstance(
+                ContractType.STAKING_THALES_BETTING_PROXY,
+                networkConfig
+            );
 
             if (sportsAMMDataContract && liquidityPoolDataContract && priceFeedContract && stakingThalesBettingProxy) {
                 const [
