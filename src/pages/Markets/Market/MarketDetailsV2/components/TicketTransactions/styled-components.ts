@@ -8,9 +8,6 @@ export const Container = styled.div<{ isOnSelectedMarket?: boolean; isOpen: bool
     overflow: hidden;
     margin: ${(props) =>
         !props.isOnSelectedMarket ? '20px 0px' : props.isOpen ? '20px 5px 72px 5px' : '20px 5px 20px 5px'};
-    .MuiTablePagination-spacer {
-        flex: ${(props) => (props.isOnSelectedMarket ? '0' : '1 1 100%')};
-    }
 `;
 
 export const Title = styled.span`

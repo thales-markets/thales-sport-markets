@@ -1,6 +1,4 @@
-import MetaMaskIcon from 'assets/images/wallets/metamask.svg';
-import WalletConnectIcon from 'assets/images/wallets/wallet_connect.svg';
-import { HostedWallets, ParticalTypes } from 'enums/wallet';
+import { ParticalTypes } from 'types/wallet';
 
 export const SUPPORTED_PARTICAL_CONNECTORS: ParticalTypes[] = [
     ParticalTypes.GOOGLE,
@@ -8,37 +6,28 @@ export const SUPPORTED_PARTICAL_CONNECTORS: ParticalTypes[] = [
     ParticalTypes.DISCORD,
     ParticalTypes.GITHUB,
     ParticalTypes.APPLE,
-    ParticalTypes.EMAIL,
-    ParticalTypes.PHONE,
 ];
 
-export const HOSTED_WALLETS_ICONS: { walletId: HostedWallets; image: string }[] = [
+export const PARTICAL_WALLETS_LABELS: { id: ParticalTypes; labelKey: string }[] = [
     {
-        walletId: HostedWallets.METAMASK,
-        image: MetaMaskIcon,
+        id: ParticalTypes.GOOGLE,
+        labelKey: 'common.wallet.particle-logins.google',
     },
     {
-        walletId: HostedWallets.INJECTED,
-        image: MetaMaskIcon,
+        id: ParticalTypes.TWITTER,
+        labelKey: 'common.wallet.particle-logins.twitter',
     },
     {
-        walletId: HostedWallets.WALLET_CONNECT,
-        image: WalletConnectIcon,
-    },
-];
-
-export const HOSTED_WALLETS_LABELS: { walletId: HostedWallets; labelKey: string }[] = [
-    {
-        walletId: HostedWallets.METAMASK,
-        labelKey: 'common.wallet.metamask',
+        id: ParticalTypes.DISCORD,
+        labelKey: 'common.wallet.particle-logins.discord',
     },
     {
-        walletId: HostedWallets.INJECTED,
-        labelKey: 'common.wallet.metamask',
+        id: ParticalTypes.GITHUB,
+        labelKey: 'common.wallet.particle-logins.github',
     },
     {
-        walletId: HostedWallets.WALLET_CONNECT,
-        labelKey: 'common.wallet.wallet-connect',
+        id: ParticalTypes.APPLE,
+        labelKey: 'common.wallet.particle-logins.apple',
     },
 ];
 

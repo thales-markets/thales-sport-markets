@@ -1,20 +1,20 @@
-import PaginationWrapper from 'components/PaginationWrapper';
 import SPAAnchor from 'components/SPAAnchor';
 import Table from 'components/Table';
 import { TableCell, TableRow, TableRowMobile } from 'components/Table/Table';
 import { t } from 'i18next';
 import SearchField from 'pages/Profile/components/SearchField';
 import useOverdropLeaderboardQuery from 'queries/overdrop/useOverdropLeaderboardQuery';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsMobile } from 'redux/modules/app';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
-import { FlexDiv } from 'styles/common';
 import { formatCurrency, getEtherscanAddressLink, truncateAddress } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
+import biconomyConnector from 'utils/biconomyWallet';
 import { getCurrentLevelByPoints } from 'utils/overdrop';
+import { useAccount, useChainId } from 'wagmi';
 import {
     AddressContainer,
     Badge,
@@ -31,25 +31,19 @@ import {
 } from './styled-components';
 
 const Leaderboard: React.FC = () => {
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state));
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isMobile = useSelector(getIsMobile);
+
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+
+    const networkId = useChainId();
+    const { address } = useAccount();
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
     const theme: ThemeInterface = useTheme();
 
-    const [page, setPage] = useState(0);
-    const handleChangePage = (_event: unknown, newPage: number) => {
-        setPage(newPage);
-    };
     const [searchText, setSearchText] = useState<string>('');
-    const [rowsPerPage, setRowsPerPage] = useState(20);
-    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setRowsPerPage(Number(event.target.value));
-        setPage(0);
-    };
 
-    const leaderboardQuery = useOverdropLeaderboardQuery({ enabled: isAppReady });
+    const leaderboardQuery = useOverdropLeaderboardQuery();
 
     const leaderboard = useMemo(
         () =>
@@ -63,8 +57,6 @@ const Leaderboard: React.FC = () => {
         () => leaderboard.filter((row) => row.address.toLowerCase().includes(searchText.toLowerCase())),
         [leaderboard, searchText]
     );
-
-    useEffect(() => setPage(0), [leaderboard.length]);
 
     const stickyRow = useMemo(() => {
         const data = leaderboard.find((row) => row.address.toLowerCase() == walletAddress?.toLowerCase());
@@ -154,6 +146,90 @@ const Leaderboard: React.FC = () => {
         );
     }, [isMobile, leaderboard, networkId, walletAddress]);
 
+    const columns = [
+        {
+            header: '',
+            accessorKey: 'level.smallBadge',
+            enableSorting: false,
+            cell: (cellProps: any) => {
+                return <Badge style={{ width: '45px' }} src={cellProps.cell.getValue()} />;
+            },
+            size: 50,
+        },
+        {
+            header: <>{t('overdrop.leaderboard.table.address')}</>,
+            accessorKey: 'address',
+            enableSorting: false,
+            cell: (cellProps: any) => {
+                return (
+                    <>
+                        <AddressContainer>
+                            <SPAAnchor href={getEtherscanAddressLink(networkId, cellProps.cell.getValue())}>
+                                {truncateAddress(cellProps.cell.getValue())}
+                            </SPAAnchor>
+                        </AddressContainer>
+                    </>
+                );
+            },
+        },
+        {
+            header: <>{t('overdrop.leaderboard.table.rank')}</>,
+            accessorKey: 'rank',
+            enableSorting: true,
+            cell: (cellProps: any) => {
+                return <div>#{cellProps.cell.getValue()}</div>;
+            },
+            size: 50,
+        },
+        {
+            header: <>{t('overdrop.leaderboard.table.level')}</>,
+            accessorKey: 'level',
+            enableSorting: true,
+            cell: (cellProps: any) => {
+                return (
+                    <div>
+                        #{cellProps.cell.getValue().level} {cellProps.cell.getValue().levelName}
+                    </div>
+                );
+            },
+            sortInverted: true,
+        },
+        {
+            header: <>{t('overdrop.leaderboard.table.total-xp')}</>,
+            accessorKey: 'points',
+            cell: (cellProps: any) => {
+                return <div>{formatCurrency(cellProps.cell.getValue())}</div>;
+            },
+            enableSorting: true,
+            sortDescFirst: true,
+        },
+        {
+            header: <>{t('overdrop.leaderboard.table.total-volume')}</>,
+            accessorKey: 'volume',
+            enableSorting: true,
+            cell: (cellProps: any) => {
+                return <div>{formatCurrency(cellProps.cell.getValue())}</div>;
+            },
+            sortDescFirst: true,
+        },
+        {
+            header: <>{t('overdrop.leaderboard.table.rewards')}</>,
+            accessorKey: 'rewards',
+            enableSorting: true,
+            cell: (cellProps: any) => {
+                return (
+                    <>
+                        <div>{formatCurrency(cellProps.cell.getValue().op)} OP</div>
+                        {isMobile ? <div>{' + '}</div> : <></>}
+                        <div>{formatCurrency(cellProps.cell.getValue().arb)} ARB</div>
+                    </>
+                );
+            },
+            sortInverted: true,
+            sortDescFirst: true,
+        },
+    ];
+
     return (
         <TableContainer>
             <HeaderContainer>
@@ -176,118 +252,21 @@ const Leaderboard: React.FC = () => {
                 }}
                 tableRowCellStyles={tableRowStyle}
                 stickyRow={stickyRow}
-                columns={[
-                    {
-                        accessor: 'level.smallBadge',
-                        sortable: false,
-                        Cell: (cellProps: any) => {
-                            return <Badge style={{ width: '45px' }} src={cellProps.cell.value} />;
-                        },
-                        width: '50px',
-                        maxWidth: 50,
-                    },
-                    {
-                        Header: <>{t('overdrop.leaderboard.table.address')}</>,
-                        accessor: 'address',
-                        sortable: false,
-                        Cell: (cellProps: any) => {
-                            return (
-                                <>
-                                    <AddressContainer>
-                                        <SPAAnchor href={getEtherscanAddressLink(networkId, cellProps.cell.value)}>
-                                            {truncateAddress(cellProps.cell.value)}
-                                        </SPAAnchor>
-                                    </AddressContainer>
-                                </>
-                            );
-                        },
-                    },
-                    {
-                        Header: <>{t('overdrop.leaderboard.table.rank')}</>,
-                        accessor: 'rank',
-                        sortable: true,
-                        Cell: (cellProps: any) => {
-                            return <div>#{cellProps.cell.value}</div>;
-                        },
-                        width: '50px',
-                        maxWidth: 50,
-                    },
-                    {
-                        Header: <>{t('overdrop.leaderboard.table.level')}</>,
-                        accessor: 'level',
-                        sortable: true,
-                        Cell: (cellProps: any) => {
-                            return (
-                                <div>
-                                    #{cellProps.cell.value.level} {cellProps.cell.value.levelName}
-                                </div>
-                            );
-                        },
-                        sortInverted: true,
-                    },
-                    {
-                        Header: <>{t('overdrop.leaderboard.table.total-xp')}</>,
-                        accessor: 'points',
-                        sortable: true,
-                        Cell: (cellProps: any) => {
-                            return <div>{formatCurrency(cellProps.cell.value)}</div>;
-                        },
-                        sortDescFirst: true,
-                    },
-                    {
-                        Header: <>{t('overdrop.leaderboard.table.total-volume')}</>,
-                        accessor: 'volume',
-                        sortable: true,
-                        Cell: (cellProps: any) => {
-                            return <div>{formatCurrency(cellProps.cell.value)}</div>;
-                        },
-                        sortDescFirst: true,
-                    },
-                    {
-                        Header: <>{t('overdrop.leaderboard.table.rewards')}</>,
-                        accessor: 'rewards',
-                        sortable: true,
-                        Cell: (cellProps: any) => {
-                            return (
-                                <>
-                                    <div>{formatCurrency(cellProps.cell.value.op)} OP</div>
-                                    {isMobile ? <div>{' + '}</div> : <></>}
-                                    <div>{formatCurrency(cellProps.cell.value.arb)} ARB</div>
-                                </>
-                            );
-                        },
-                        sortInverted: true,
-                        sortDescFirst: true,
-                    },
-                ]}
+                columns={columns as any}
+                rowsPerPage={20}
                 initialState={{
-                    sortBy: [
+                    sorting: [
                         {
                             id: 'rank',
                             desc: false,
                         },
                     ],
                 }}
-                onSortByChanged={() => setPage(0)}
-                currentPage={page}
-                rowsPerPage={rowsPerPage}
                 isLoading={leaderboardQuery.isLoading}
                 data={leaderboardFiltered}
                 noResultsMessage={t('market.table.no-results')}
+                showPagination
             ></Table>
-            {!leaderboardQuery.isLoading && leaderboard.length > 0 && (
-                <FlexDiv>
-                    <PaginationWrapper
-                        rowsPerPageOptions={[10, 20, 50, 100]}
-                        count={leaderboardFiltered.length}
-                        labelRowsPerPage={t(`common.pagination.rows-per-page`)}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
-                </FlexDiv>
-            )}
         </TableContainer>
     );
 };

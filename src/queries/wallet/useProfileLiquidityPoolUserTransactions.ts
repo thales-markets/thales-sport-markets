@@ -1,30 +1,30 @@
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import QUERY_KEYS from 'constants/queryKeys';
-import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import { coinFormatter } from 'thales-utils';
 import { LiquidityPoolUserTransactions } from 'types/liquidityPool';
-import { SupportedNetwork } from '../../types/network';
+import { NetworkConfig } from '../../types/network';
 import { getLiquidityPools } from '../../utils/liquidityPool';
 
 const useLiquidityPoolUserTransactions = (
-    networkId: SupportedNetwork,
     walletAddress: string,
-    options?: UseQueryOptions<LiquidityPoolUserTransactions>
+    networkConfig: NetworkConfig,
+    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<LiquidityPoolUserTransactions>(
-        QUERY_KEYS.Wallet.LiquidityPoolTransactions(networkId, walletAddress),
-        async () => {
+    return useQuery<LiquidityPoolUserTransactions>({
+        queryKey: QUERY_KEYS.Wallet.LiquidityPoolTransactions(networkConfig.networkId, walletAddress),
+        queryFn: async () => {
             try {
                 const vaultTx: LiquidityPoolUserTransactions = [];
 
                 const liquidityPoolUserTransactions: LiquidityPoolUserTransactions = await thalesData.sportMarketsV2.liquidityPoolUserTransactions(
                     {
-                        network: networkId,
+                        network: networkConfig.networkId,
                         account: walletAddress,
                     }
                 );
 
-                const liquidityPools = getLiquidityPools(networkId);
+                const liquidityPools = getLiquidityPools(networkConfig.networkId);
 
                 vaultTx.push(
                     ...liquidityPoolUserTransactions.map((tx) => {
@@ -35,7 +35,11 @@ const useLiquidityPoolUserTransactions = (
                         return {
                             ...tx,
                             name: lp.name,
-                            amount: coinFormatter(tx.amount, networkId, lp.collateral),
+                            amount: coinFormatter(
+                                BigInt(tx.amount ? tx.amount : 0),
+                                networkConfig.networkId,
+                                lp.collateral
+                            ),
                             collateral: lp.collateral,
                         };
                     })
@@ -47,10 +51,8 @@ const useLiquidityPoolUserTransactions = (
                 return [];
             }
         },
-        {
-            ...options,
-        }
-    );
+        ...options,
+    });
 };
 
 export default useLiquidityPoolUserTransactions;

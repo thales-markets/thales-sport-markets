@@ -2,23 +2,27 @@ import Button from 'components/Button';
 import CollateralSelector from 'components/CollateralSelector';
 import NumericInput from 'components/fields/NumericInput';
 import TextInput from 'components/fields/TextInput';
-import { ethers } from 'ethers';
+import ROUTES from 'constants/routes';
 import { t } from 'i18next';
 import BalanceDetails from 'pages/AARelatedPages/Deposit/components/BalanceDetails';
-import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
+import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getIsAppReady } from 'redux/modules/app';
-import { getIsConnectedViaParticle, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsBiconomy, getIsConnectedViaParticle } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv } from 'styles/common';
-import { ThemeInterface } from 'types/ui';
-import { getCollaterals } from 'utils/collaterals';
 import { formatCurrencyWithKey } from 'thales-utils';
+import { Rates } from 'types/collateral';
+import { ThemeInterface } from 'types/ui';
+import biconomyConnector from 'utils/biconomyWallet';
+import { getCollaterals } from 'utils/collaterals';
 import { getNetworkNameByNetworkId } from 'utils/network';
+import { navigateTo } from 'utils/routes';
 import useQueryParam, { getQueryStringVal } from 'utils/useQueryParams';
+import { isAddress } from 'viem';
+import { useAccount, useChainId, useClient } from 'wagmi';
 import {
     BalanceSection,
     CollateralContainer,
@@ -32,8 +36,6 @@ import {
     Wrapper,
 } from '../styled-components';
 import WithdrawalConfirmationModal from './components/WithdrawalConfirmationModal';
-import ROUTES from 'constants/routes';
-import { navigateTo } from 'utils/routes';
 
 type FormValidation = {
     walletAddress: boolean;
@@ -43,10 +45,13 @@ type FormValidation = {
 const Withdraw: React.FC = () => {
     const theme: ThemeInterface = useTheme();
 
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+
+    const networkId = useChainId();
+    const client = useClient();
+    const { address, isConnected } = useAccount();
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+
     const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
     const [selectedToken, setSelectedToken] = useState<number>(0);
     const [withdrawalWalletAddress, setWithdrawalWalletAddress] = useState<string>('');
@@ -67,9 +72,13 @@ const Withdraw: React.FC = () => {
 
     const inputRef = useRef<HTMLDivElement>(null);
 
-    const multipleCollateralBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
-        enabled: isAppReady && isWalletConnected,
-    });
+    const multipleCollateralBalances = useMultipleCollateralBalanceQuery(
+        walletAddress,
+        { networkId, client },
+        {
+            enabled: isConnected,
+        }
+    );
 
     const paymentTokenBalance: number = useMemo(() => {
         if (multipleCollateralBalances.data && multipleCollateralBalances.isSuccess) {
@@ -78,9 +87,7 @@ const Withdraw: React.FC = () => {
         return 0;
     }, [multipleCollateralBalances.data, multipleCollateralBalances.isSuccess, networkId, selectedToken]);
 
-    const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
-        enabled: isAppReady,
-    });
+    const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
     const exchangeRates: Rates | null =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
@@ -88,7 +95,7 @@ const Withdraw: React.FC = () => {
         let walletValidation = false;
         let amountValidation = false;
 
-        if (withdrawalWalletAddress != '' && ethers.utils.isAddress(withdrawalWalletAddress)) {
+        if (withdrawalWalletAddress != '' && isAddress(withdrawalWalletAddress)) {
             walletValidation = true;
         }
 

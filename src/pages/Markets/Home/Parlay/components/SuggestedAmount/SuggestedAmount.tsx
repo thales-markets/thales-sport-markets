@@ -1,24 +1,12 @@
-import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
-import {
-    ALTCOIN_CONVERSION_BUFFER_PERCENTAGE,
-    SUSD_CONVERSION_BUFFER_PERCENTAGE,
-    THALES_CONTRACT_RATE_KEY,
-} from 'constants/markets';
-import { Rates } from 'queries/rates/useExchangeRatesQuery';
+import { USD_SIGN } from 'constants/currency';
+import { THALES_CONTRACT_RATE_KEY } from 'constants/markets';
 import React, { useCallback, useMemo } from 'react';
-import { useSelector } from 'react-redux';
-import { getNetworkId } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
-import {
-    COLLATERAL_DECIMALS,
-    DEFAULT_CURRENCY_DECIMALS,
-    LONG_CURRENCY_DECIMALS,
-    ceilNumberToDecimals,
-    formatCurrencyWithKey,
-} from 'thales-utils';
-import { getCollateral, getDefaultCollateral, isStableCurrency, isThalesCurrency } from 'utils/collaterals';
+import { formatCurrencyWithKey } from 'thales-utils';
+import { Rates } from 'types/collateral';
+import { convertFromStableToCollateral, getCollateral, isThalesCurrency } from 'utils/collaterals';
+import { useChainId } from 'wagmi';
 
 const AMOUNTS = [3, 10, 20, 50, 100];
 
@@ -37,36 +25,18 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
     insertedAmount,
     minAmount,
 }) => {
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const networkId = useChainId();
 
     const collateral = useMemo(() => getCollateral(networkId, collateralIndex), [networkId, collateralIndex]);
-    const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
-    const isStableCollateral = isStableCurrency(collateral);
-    const decimals = isStableCollateral ? DEFAULT_CURRENCY_DECIMALS : LONG_CURRENCY_DECIMALS;
     const isThales = isThalesCurrency(collateral);
 
     const convertFromStable = useCallback(
         (value: number) => {
-            const rate = exchangeRates?.[isThales ? THALES_CONTRACT_RATE_KEY : collateral];
+            const rate = exchangeRates?.[isThales ? THALES_CONTRACT_RATE_KEY : collateral] || 0;
 
-            if (collateral == defaultCollateral) {
-                return value;
-            } else {
-                const priceFeedBuffer =
-                    1 -
-                    (collateral === CRYPTO_CURRENCY_MAP.sUSD
-                        ? SUSD_CONVERSION_BUFFER_PERCENTAGE
-                        : ALTCOIN_CONVERSION_BUFFER_PERCENTAGE);
-                return rate
-                    ? ceilNumberToDecimals(
-                          Math.ceil((value / (rate * priceFeedBuffer)) * 10 ** COLLATERAL_DECIMALS[collateral]) /
-                              10 ** COLLATERAL_DECIMALS[collateral],
-                          decimals
-                      )
-                    : 0;
-            }
+            return convertFromStableToCollateral(collateral, value, rate, networkId);
         },
-        [collateral, decimals, defaultCollateral, exchangeRates, isThales]
+        [collateral, networkId, exchangeRates, isThales]
     );
 
     return (

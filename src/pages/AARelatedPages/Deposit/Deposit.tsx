@@ -2,22 +2,24 @@ import CollateralSelector from 'components/CollateralSelector';
 import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
 import { COLLATERALS } from 'constants/currency';
 import ROUTES from 'constants/routes';
-import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
+import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getIsAppReady } from 'redux/modules/app';
-import { getIsConnectedViaParticle, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivStart } from 'styles/common';
-import { getOnRamperUrl } from 'utils/biconomy';
+import { Rates } from 'types/collateral';
+import biconomyConnector from 'utils/biconomyWallet';
 import { getCollaterals } from 'utils/collaterals';
 import { getNetworkNameByNetworkId } from 'utils/network';
+import { getOnRamperUrl } from 'utils/particleWallet/utils';
 import { navigateTo } from 'utils/routes';
 import useQueryParam, { getQueryStringVal } from 'utils/useQueryParams';
+import { useAccount, useChainId, useClient } from 'wagmi';
 import {
     BalanceSection,
     CollateralContainer,
@@ -37,11 +39,13 @@ import QRCodeModal from './components/QRCodeModal';
 
 const Deposit: React.FC = () => {
     const { t } = useTranslation();
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-    const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
+
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+
+    const networkId = useChainId();
+    const client = useClient();
+    const { address, isConnected } = useAccount();
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
     const [selectedToken, setSelectedToken] = useState<number>(0);
     const [showQRModal, setShowQRModal] = useState<boolean>(false);
@@ -57,20 +61,22 @@ const Deposit: React.FC = () => {
     );
 
     useEffect(() => {
-        if (!isConnectedViaParticle) navigateTo(ROUTES.Markets.Home);
-    }, [isConnectedViaParticle]);
+        if (!isBiconomy) navigateTo(ROUTES.Markets.Home);
+    }, [isBiconomy]);
 
     useEffect(() => {
         setSelectedToken(Number(selectedTokenFromUrl));
     }, [selectedTokenFromUrl]);
 
-    const multipleCollateralBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
-        enabled: isAppReady && isWalletConnected,
-    });
+    const multipleCollateralBalances = useMultipleCollateralBalanceQuery(
+        walletAddress,
+        { networkId, client },
+        {
+            enabled: isConnected,
+        }
+    );
 
-    const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
-        enabled: isAppReady,
-    });
+    const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
     const exchangeRates: Rates | null =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
@@ -117,12 +123,12 @@ const Deposit: React.FC = () => {
     }, [exchangeRates, multipleCollateralBalances.data]);
 
     useEffect(() => {
-        if (isConnectedViaParticle && ethBalanceValue !== undefined && Number(ethBalanceValue) < 2) {
+        if (isBiconomy && ethBalanceValue !== undefined && Number(ethBalanceValue) < 2) {
             setLowBalanceAlert(true);
         } else {
             setLowBalanceAlert(false);
         }
-    }, [ethBalanceValue, isConnectedViaParticle]);
+    }, [ethBalanceValue, isBiconomy]);
 
     const inputRef = useRef<HTMLDivElement>(null);
 
@@ -143,11 +149,11 @@ const Deposit: React.FC = () => {
         setSelectedTokenFromQuery(index.toString());
     };
 
-    const apiKey = process.env.REACT_APP_ONRAMPER_KEY || '';
+    const apiKey = import.meta.env.VITE_APP_ONRAMPER_KEY || '';
 
     const onramperUrl = useMemo(() => {
-        return getOnRamperUrl(apiKey, walletAddress, networkId, selectedToken);
-    }, [walletAddress, networkId, apiKey, selectedToken]);
+        return getOnRamperUrl(apiKey, walletAddress, networkId);
+    }, [walletAddress, networkId, apiKey]);
 
     return (
         <>

@@ -31,7 +31,7 @@
             "linkedin": "Linkedin"
         },
         "pagination": {
-            "page": "Page",
+            "of": "of",
             "rows-per-page": "Rows per page:"
         },
         "filter": {
@@ -58,7 +58,15 @@
             "approve-parlay": "Approve ParlayAMM",
             "approve-sports": "Approve SportsAMM",
             "get-usd-progress": "Minting {{amount}}...",
-            "disclaimer": "By signing up to Overtimemarkets <terms>Terms of Use</terms> and Privacy Policy you acknowledge that you have read and understand the Thales DAO protocol <disclaimer>disclaimer</disclaimer>."
+            "disclaimer": "By signing up to Overtimemarkets <terms>Terms of Use</terms> and Privacy Policy you acknowledge that you have read and understand the Thales DAO protocol <disclaimer>disclaimer</disclaimer>.",
+            "particle-logins": {
+                "google": "Google",
+                "twitter": "Twitter",
+                "facebook": "Facebook",
+                "github": "GitHub",
+                "discord": "Discord",
+                "apple": "Apple"
+            }
         },
         "voucher": {
             "remaining-amount": "Remaining amount",
@@ -96,6 +104,7 @@
             }
         },
         "errors": {
+            "something-went-wrong": "Something went wrong!",
             "unknown-error-try-again": "An unknown error occurred after you submitted. Please try again.",
             "unknown-error-try-again-general": "An unknown error occurred. Please try again.",
             "batch-transaction-single-failure": "A transaction was rejected or failed.",
@@ -137,6 +146,7 @@
         "dapp": "dapp",
         "launch-dapp": "launch dapp",
         "cancel": "Cancel",
+        "support-contact": "Please contact <anchor>Thales support</anchor>",
         "try-again": "Try again",
         "select-date": "Select date...",
         "tags-placeholder": "Search tags...",
@@ -329,7 +339,7 @@
             "buy-thales-title": "You get better odds when betting with THALES",
             "stake-title": "You can stake THALES to also earn yield while still being able to use it on Overtime for best odds",
             "stake-label": "Stake",
-            "weekly-rewards": "You get weekly USDC+THALES staking rewards! Claim them on <stakingPageLink>thales.io staking page<stakingPageLink>",
+            "weekly-rewards": "You get weekly USDC+THALES staking rewards! Claim them on <stakingPageLink>thales.io staking page</stakingPageLink>",
             "swap-to-thales-label": "Swap to THALES",
             "get-thales-label": "Get THALES",
             "swap-success": "Successfully swapped to THALES",

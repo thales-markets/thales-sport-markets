@@ -14,4 +14,10 @@ export const LINKS = {
         Reddit: 'https://www.reddit.com/r/overtimemarkets',
     },
     ThalesTip142: 'https://github.com/thales-markets/thales-improvement-proposals/blob/main/TIPs/TIP-142.md',
+    Discord: {
+        Help: 'https://discord.com/channels/906484044915687464/906723153349316638',
+    },
+    Biconomy: {
+        Bundler: 'https://bundler.biconomy.io/api/v2/',
+    },
 };

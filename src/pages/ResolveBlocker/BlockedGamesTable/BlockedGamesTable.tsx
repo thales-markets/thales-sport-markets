@@ -1,4 +1,3 @@
-import PaginationWrapper from 'components/PaginationWrapper';
 import SPAAnchor from 'components/SPAAnchor';
 import Table from 'components/Table';
 import i18n from 'i18n';
@@ -6,15 +5,14 @@ import useWhitelistedForUnblock from 'queries/resolveBlocker/useWhitelistedForUn
 import React, { FC, memo, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { CellProps } from 'react-table';
-import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsMobile } from 'redux/modules/app';
 import { useTheme } from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
 import { formatTxTimestamp, getEtherscanAddressLink, getEtherscanTxLink, truncateAddress } from 'thales-utils';
-import { BlockedGame, BlockedGames } from 'types/resolveBlocker';
+import { BlockedGames } from 'types/resolveBlocker';
 import { ThemeInterface } from 'types/ui';
 import { buildMarketLink } from 'utils/routes';
+import { useAccount, useChainId, useClient } from 'wagmi';
 import {
     TeamNameLabel,
     TeamNamesContainer,
@@ -35,16 +33,20 @@ const BlockedGamesTable: FC<BlockedGamesTableProps> = memo(
         const { t } = useTranslation();
         const theme: ThemeInterface = useTheme();
         const isMobile = useSelector(getIsMobile);
-        const isAppReady = useSelector(getIsAppReady);
-        const networkId = useSelector(getNetworkId);
-        const isWalletConnected = useSelector(getIsWalletConnected);
-        const walletAddress = useSelector(getWalletAddress) || '';
+        const networkId = useChainId();
+        const client = useClient();
+        const { address, isConnected } = useAccount();
+        const walletAddress = address || '';
 
         const [isWitelistedForUnblock, setIsWitelistedForUnblock] = useState<boolean>(false);
 
-        const whitelistedForUnblockQuery = useWhitelistedForUnblock(walletAddress, networkId, {
-            enabled: isAppReady && isWalletConnected,
-        });
+        const whitelistedForUnblockQuery = useWhitelistedForUnblock(
+            walletAddress,
+            { networkId, client },
+            {
+                enabled: isConnected,
+            }
+        );
 
         useEffect(() => {
             if (whitelistedForUnblockQuery.isSuccess && whitelistedForUnblockQuery.data !== undefined) {
@@ -52,54 +54,43 @@ const BlockedGamesTable: FC<BlockedGamesTableProps> = memo(
             }
         }, [whitelistedForUnblockQuery]);
 
-        const [page, setPage] = useState(0);
-        const handleChangePage = (_event: unknown, newPage: number) => {
-            setPage(newPage);
-        };
-
-        const [rowsPerPage, setRowsPerPage] = useState(20);
-        const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-            setRowsPerPage(Number(event.target.value));
-            setPage(0);
-        };
-
-        useEffect(() => setPage(0), [blockedGames.length]);
-
-        // @ts-ignore
         return (
-            <>
-                <Table
-                    tableHeadCellStyles={{
-                        color: theme.textColor.secondary,
-                    }}
-                    columnsDeps={[isWitelistedForUnblock, networkId]}
-                    columns={[
+            <Table
+                tableHeadCellStyles={{
+                    color: theme.textColor.secondary,
+                }}
+                columnsDeps={[isWitelistedForUnblock, networkId]}
+                columns={
+                    [
                         {
-                            Header: <>{t('resolve-blocker.date-time')}</>,
-                            accessor: 'timestamp',
-                            Cell: (cellProps: CellProps<BlockedGame, BlockedGame['timestamp']>) => (
-                                <ExternalLink
-                                    href={getEtherscanTxLink(networkId, cellProps.cell.row.original.hash)}
-                                    target={'_blank'}
-                                >
-                                    <p>{formatTxTimestamp(cellProps.cell.value)}</p>
-                                </ExternalLink>
-                            ),
-                            sortable: true,
-                            width: '160px',
+                            header: <>{t('resolve-blocker.date-time')}</>,
+                            accessorKey: 'timestamp',
+                            cell: (cellProps: any) => {
+                                return (
+                                    <ExternalLink
+                                        href={getEtherscanTxLink(networkId, cellProps.cell.row.original.hash)}
+                                        target={'_blank'}
+                                    >
+                                        <p>{formatTxTimestamp(cellProps.cell.getValue())}</p>
+                                    </ExternalLink>
+                                );
+                            },
+                            enableSorting: true,
+                            sortDescFirst: true,
+                            size: 160,
                         },
                         {
-                            Header: <>{t('resolve-blocker.game')}</>,
-                            accessor: 'homeTeam',
-                            Cell: (cellProps: CellProps<BlockedGame, BlockedGame['homeTeam']>) => {
-                                const hasGameInfo = cellProps.cell.value !== '';
+                            header: <>{t('resolve-blocker.game')}</>,
+                            accessorKey: 'homeTeam',
+                            cell: (cellProps: any) => {
+                                const hasGameInfo = cellProps.cell.getValue() !== '';
                                 return (
                                     <SPAAnchor href={buildMarketLink(cellProps.cell.row.original.gameId, language)}>
                                         <FlexDivColumn>
                                             <TeamNamesContainer width="auto">
                                                 <TeamNameLabel>
                                                     {hasGameInfo
-                                                        ? cellProps.cell.value
+                                                        ? cellProps.cell.getValue()
                                                         : truncateAddress(cellProps.cell.row.original.gameId, 10)}
                                                 </TeamNameLabel>
                                                 {!isMobile && hasGameInfo && (
@@ -115,26 +106,26 @@ const BlockedGamesTable: FC<BlockedGamesTableProps> = memo(
                                     </SPAAnchor>
                                 );
                             },
-                            sortable: false,
+                            enableSorting: false,
+                            size: 380,
                         },
                         {
-                            Header: <>{t('resolve-blocker.reason')}</>,
-                            accessor: 'reason',
-                            Cell: (cellProps: CellProps<BlockedGame, BlockedGame['reason']>) => (
-                                <p>{cellProps.cell.value}</p>
-                            ),
-                            sortable: true,
+                            header: <>{t('resolve-blocker.reason')}</>,
+                            accessorKey: 'reason',
+                            cell: (cellProps: any) => <p>{cellProps.cell.getValue()}</p>,
+                            enableSorting: true,
+                            size: 380,
                         },
                         {
-                            Header: <>{t(isUnblocked ? 'resolve-blocker.unblocked-by' : 'resolve-blocker.action')}</>,
-                            accessor: 'unblockedBy',
-                            Cell: (cellProps: CellProps<BlockedGame, BlockedGame['unblockedBy']>) => {
+                            header: <>{t(isUnblocked ? 'resolve-blocker.unblocked-by' : 'resolve-blocker.action')}</>,
+                            accessorKey: 'unblockedBy',
+                            cell: (cellProps: any) => {
                                 return isUnblocked ? (
                                     <ExternalLink
-                                        href={getEtherscanAddressLink(networkId, cellProps.cell.value)}
+                                        href={getEtherscanAddressLink(networkId, cellProps.cell.getValue())}
                                         target={'_blank'}
                                     >
-                                        <p>{truncateAddress(cellProps.cell.value)}</p>
+                                        <p>{truncateAddress(cellProps.cell.getValue())}</p>
                                     </ExternalLink>
                                 ) : (
                                     <UnblockAction
@@ -143,31 +134,27 @@ const BlockedGamesTable: FC<BlockedGamesTableProps> = memo(
                                     />
                                 );
                             },
-                            sortable: false,
-                            width: '160px',
+                            enableSorting: false,
+                            size: 160,
                         },
-                    ]}
-                    data={blockedGames}
-                    isLoading={isLoading}
-                    noResultsMessage={noResultsMessage}
-                    tableRowHeadStyles={{ minHeight: '32px' }}
-                    tableRowStyles={{ minHeight: '32px' }}
-                    onSortByChanged={() => setPage(0)}
-                    currentPage={page}
-                    rowsPerPage={rowsPerPage}
-                />
-                {!isLoading && blockedGames.length > 0 && (
-                    <PaginationWrapper
-                        rowsPerPageOptions={[10, 20, 50, 100]}
-                        count={blockedGames.length}
-                        labelRowsPerPage={t(`common.pagination.rows-per-page`)}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
-                )}
-            </>
+                    ] as any
+                }
+                initialState={{
+                    sorting: [
+                        {
+                            id: 'timestamp',
+                            desc: true,
+                        },
+                    ],
+                }}
+                data={blockedGames}
+                isLoading={isLoading}
+                noResultsMessage={noResultsMessage}
+                showPagination
+                tableRowHeadStyles={{ minHeight: '32px' }}
+                tableRowStyles={{ minHeight: '32px' }}
+                rowsPerPage={20}
+            />
         );
     }
 );

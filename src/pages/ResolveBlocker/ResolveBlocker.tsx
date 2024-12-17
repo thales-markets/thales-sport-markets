@@ -2,32 +2,27 @@ import { ResolveBlockerTab } from 'enums/resolveBlocker';
 import { t } from 'i18next';
 import useBlockedGamesQuery from 'queries/resolveBlocker/useBlockedGamesQuery';
 import React, { useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { getIsAppReady } from 'redux/modules/app';
-import { getNetworkId } from 'redux/modules/wallet';
 import { BlockedGames } from 'types/resolveBlocker';
+import { useChainId, useClient } from 'wagmi';
 import BlockedGamesTable from './BlockedGamesTable';
 import { Container, Tab, TabContainer } from './styled-components';
 
 const ResolveBlocker: React.FC = () => {
-    const networkId = useSelector(getNetworkId);
-    const isAppReady = useSelector(getIsAppReady);
+    const networkId = useChainId();
+    const client = useClient();
+
     const [lastValidBlockedGames, setLastValidBlockedGames] = useState<BlockedGames>([]);
     const [lastValidUnblockedGames, setLastValidUnblockedGames] = useState<BlockedGames>([]);
     const [selectedTab, setSelectedTab] = useState<ResolveBlockerTab>(ResolveBlockerTab.BLOCKED_GAMES);
 
-    const blockedGamesQuery = useBlockedGamesQuery(false, networkId, {
-        enabled: isAppReady,
-    });
+    const blockedGamesQuery = useBlockedGamesQuery(false, { networkId, client });
     useEffect(() => {
         if (blockedGamesQuery.isSuccess && blockedGamesQuery.data) {
             setLastValidBlockedGames(blockedGamesQuery.data);
         }
     }, [blockedGamesQuery]);
 
-    const unblockedGamesQuery = useBlockedGamesQuery(true, networkId, {
-        enabled: isAppReady,
-    });
+    const unblockedGamesQuery = useBlockedGamesQuery(true, { networkId, client });
     useEffect(() => {
         if (unblockedGamesQuery.isSuccess && unblockedGamesQuery.data) {
             setLastValidUnblockedGames(unblockedGamesQuery.data);

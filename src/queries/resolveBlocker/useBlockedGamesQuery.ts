@@ -1,27 +1,29 @@
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import axios from 'axios';
 import { generalConfig, noCacheConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
-import { useQuery, UseQueryOptions } from 'react-query';
+import { ContractType } from 'enums/contract';
 import thalesData from 'thales-data';
 import { Team } from 'types/markets';
-import { SupportedNetwork } from 'types/network';
+import { NetworkConfig } from 'types/network';
 import { BlockedGame, BlockedGames } from 'types/resolveBlocker';
-import networkConnector from 'utils/networkConnector';
+import { getContractInstance } from 'utils/contract';
 
 const useBlockedGamesQuery = (
     isUnblocked: boolean,
-    networkId: SupportedNetwork,
-    options?: UseQueryOptions<BlockedGames>
+    networkConfig: NetworkConfig,
+    options?: Omit<UseQueryOptions<BlockedGames>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<BlockedGames>(
-        QUERY_KEYS.ResolveBlocker.BlockedGames(isUnblocked, networkId),
-        async () => {
-            const { resolveBlockerContract } = networkConnector;
+    return useQuery<BlockedGames>({
+        queryKey: QUERY_KEYS.ResolveBlocker.BlockedGames(isUnblocked, networkConfig.networkId),
+        queryFn: async () => {
+            const resolveBlockerContract = getContractInstance(ContractType.RESOLVE_BLOCKER, networkConfig);
+
             if (resolveBlockerContract) {
                 const [gamesInfoResponse, blockedGames] = await Promise.all([
                     axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, noCacheConfig),
                     thalesData.sportMarketsV2.blockedGames({
-                        network: networkId,
+                        network: networkConfig.networkId,
                         isUnblocked,
                     }),
                 ]);
@@ -50,10 +52,8 @@ const useBlockedGamesQuery = (
 
             return [];
         },
-        {
-            ...options,
-        }
-    );
+        ...options,
+    });
 };
 
 export default useBlockedGamesQuery;

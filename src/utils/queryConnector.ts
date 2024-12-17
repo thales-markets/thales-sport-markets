@@ -1,7 +1,7 @@
+import { QueryClient } from '@tanstack/react-query';
 import QUERY_KEYS from 'constants/queryKeys';
 import { StatusFilter } from 'enums/markets';
 import { Network } from 'enums/network';
-import { QueryClient } from 'react-query';
 
 type QueryConnector = {
     queryClient: QueryClient;
@@ -18,7 +18,9 @@ const queryConnector: QueryConnector = {
 };
 
 export const refetchBalances = (walletAddress: string, networkId: Network) => {
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.MultipleCollateral(walletAddress, networkId));
+    queryConnector.queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.Wallet.MultipleCollateral(walletAddress, networkId),
+    });
 };
 
 export const refetchProofs = (
@@ -28,40 +30,56 @@ export const refetchProofs = (
     playerIds: string,
     lines: string
 ) => {
-    queryConnector.queryClient.invalidateQueries(
-        QUERY_KEYS.SportMarketsV2(StatusFilter.OPEN_MARKETS, networkId, true, gameIds, typeIds, playerIds, lines)
-    );
+    queryConnector.queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.SportMarketsV2(
+            StatusFilter.OPEN_MARKETS,
+            networkId,
+            true,
+            gameIds,
+            typeIds,
+            playerIds,
+            lines
+        ),
+    });
 };
 
 export const refetchFreeBetBalance = (walletAddress: string, networkId: Network) => {
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.FreeBetBalance(walletAddress, networkId));
+    queryConnector.queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.Wallet.FreeBetBalance(walletAddress, networkId),
+    });
 };
 
 export const refetchAfterClaim = (walletAddress: string, networkId: Network) => {
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.ParlayMarkets(networkId, walletAddress));
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.AccountPositions(walletAddress, networkId));
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.ClaimableCount(walletAddress, networkId));
+    queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.ClaimableCountV2(walletAddress, networkId) });
+    queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.UserTickets(networkId, walletAddress) });
 };
 
 export const refetchLiquidityPoolData = (walletAddress: string, networkId: Network, liquidityPoolAddress: string) => {
-    // queryConnector.queryClient.invalidateQueries(QUERY_KEYS.LiquidityPool.Data(networkId));
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.LiquidityPool.ParlayData(networkId));
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.LiquidityPool.ParlayUserData(walletAddress, networkId));
-    // queryConnector.queryClient.invalidateQueries(QUERY_KEYS.LiquidityPool.UserData(walletAddress, networkId));
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.LiquidityPool.PnL(networkId, liquidityPoolAddress));
-    queryConnector.queryClient.invalidateQueries(
-        QUERY_KEYS.LiquidityPool.UserTransactions(networkId, liquidityPoolAddress)
-    );
+    queryConnector.queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.LiquidityPool.Data(liquidityPoolAddress, networkId),
+    });
+    queryConnector.queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.LiquidityPool.UserData(liquidityPoolAddress, walletAddress, networkId),
+    });
+    queryConnector.queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.LiquidityPool.PnL(networkId, liquidityPoolAddress),
+    });
+    queryConnector.queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.LiquidityPool.UserTransactions(networkId, liquidityPoolAddress),
+    });
 };
 
 export const refetchOverdropMultipliers = (walletAddress: string) => {
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Overdrop.UserMultipliers(walletAddress));
+    queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.Overdrop.UserMultipliers(walletAddress) });
 };
 export const refetchCoingeckoRates = () =>
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Rates.CoingeckoRates());
+    queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.Rates.CoingeckoRates() });
 
 export const refetchResolveBlocker = (networkId: Network) => {
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.ResolveBlocker.BlockedGames(networkId));
+    queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.ResolveBlocker.BlockedGames(true, networkId) });
+    queryConnector.queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.ResolveBlocker.BlockedGames(false, networkId),
+    });
 };
 
 export default queryConnector;

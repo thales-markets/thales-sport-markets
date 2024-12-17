@@ -4,13 +4,12 @@ import Logo from 'components/Logo';
 import NavMenu from 'components/NavMenu';
 import NavMenuMobile from 'components/NavMenuMobile';
 import NetworkSwitcher from 'components/NetworkSwitcher';
+import OutsideClickHandler from 'components/OutsideClick';
 import SPAAnchor from 'components/SPAAnchor';
 import Search from 'components/Search';
 import WalletInfo from 'components/WalletInfo';
-import { ODDS_TYPES } from 'constants/markets';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
 import ROUTES from 'constants/routes';
-import { OddsType } from 'enums/markets';
 import useInterval from 'hooks/useInterval';
 import Lottie from 'lottie-react';
 import useClaimablePositionCountV2Query from 'queries/markets/useClaimablePositionCountV2Query';
@@ -19,23 +18,21 @@ import useWhitelistedForUnblock from 'queries/resolveBlocker/useWhitelistedForUn
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
-import OutsideClickHandler from 'react-outside-click-handler';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { getIsAppReady, getIsMobile } from 'redux/modules/app';
+import { getIsMobile } from 'redux/modules/app';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
 import { getOverdropUIState, getStopPulsing, setOddsType, setStopPulsing } from 'redux/modules/ui';
-import {
-    getIsConnectedViaParticle,
-    getIsWalletConnected,
-    getNetworkId,
-    getWalletAddress,
-    setWalletConnectModalVisibility,
-} from 'redux/modules/wallet';
+import { getIsBiconomy, setWalletConnectModalVisibility } from 'redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivEnd } from 'styles/common';
 import { OverdropLevel, ThemeInterface } from 'types/ui';
+import biconomyConnector from 'utils/biconomyWallet';
 import { buildHref } from 'utils/routes';
+import { useAccount, useChainId, useClient } from 'wagmi';
+import { ODDS_TYPES } from '../../../constants/markets';
+import { OddsType } from '../../../enums/markets';
 import ProfileItem from './components/ProfileItem';
 import TimeFilters from './components/TimeFilters';
 import TopUp from './components/TopUp';
@@ -98,11 +95,13 @@ const DappHeader: React.FC = () => {
     const location = useLocation();
     const theme: ThemeInterface = useTheme();
 
-    const isAppReady = useSelector(getIsAppReady);
-    const networkId = useSelector(getNetworkId);
-    const isWalletConnected = useSelector(getIsWalletConnected);
-    const walletAddress = useSelector(getWalletAddress) || '';
-    const isConnectedViaParticle = useSelector(getIsConnectedViaParticle);
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+
+    const networkId = useChainId();
+    const client = useClient();
+    const { address, isConnected } = useAccount();
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+
     const marketSearch = useSelector(getMarketSearch);
     const stopPulsing = useSelector(getStopPulsing);
     const isMobile = useSelector(getIsMobile);
@@ -116,26 +115,38 @@ const DappHeader: React.FC = () => {
 
     const isMarketsPage = location.pathname === ROUTES.Home || location.pathname === ROUTES.Markets.Home;
 
-    const claimablePositionsCountQuery = useClaimablePositionCountV2Query(walletAddress, networkId, {
-        enabled: isWalletConnected,
-    });
+    const claimablePositionsCountQuery = useClaimablePositionCountV2Query(
+        walletAddress,
+        { networkId, client },
+        {
+            enabled: isConnected,
+        }
+    );
 
     const claimablePositionCount =
         claimablePositionsCountQuery.isSuccess && claimablePositionsCountQuery.data
             ? claimablePositionsCountQuery.data
             : null;
 
-    const whitelistedForUnblockQuery = useWhitelistedForUnblock(walletAddress, networkId, {
-        enabled: isAppReady && isWalletConnected,
-    });
+    const whitelistedForUnblockQuery = useWhitelistedForUnblock(
+        walletAddress,
+        { networkId, client },
+        {
+            enabled: isConnected,
+        }
+    );
     const isWitelistedForUnblock = useMemo(
         () => whitelistedForUnblockQuery.isSuccess && whitelistedForUnblockQuery.data,
         [whitelistedForUnblockQuery.data, whitelistedForUnblockQuery.isSuccess]
     );
 
-    const blockedGamesQuery = useBlockedGamesQuery(false, networkId, {
-        enabled: isAppReady && isWitelistedForUnblock,
-    });
+    const blockedGamesQuery = useBlockedGamesQuery(
+        false,
+        { networkId, client },
+        {
+            enabled: isWitelistedForUnblock,
+        }
+    );
     const blockedGamesCount = useMemo(
         () =>
             blockedGamesQuery.isSuccess && blockedGamesQuery.data && isWitelistedForUnblock
@@ -212,9 +223,7 @@ const DappHeader: React.FC = () => {
                     </LeftContainer>
 
                     <MiddleContainer>
-                        <div>
-                            {!isWalletConnected ? getGetStartedButton() : isConnectedViaParticle ? <TopUp /> : <></>}
-                        </div>
+                        <div>{!isConnected ? getGetStartedButton() : isBiconomy ? <TopUp /> : <></>}</div>
                         {isMarketsPage && <TimeFilters />}
                         <FlexDiv>
                             <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
@@ -227,7 +236,7 @@ const DappHeader: React.FC = () => {
                                     <OverdropIcon />
                                 )}
                             </SPAAnchor>
-                            {isWalletConnected && <ProfileItem />}
+                            {isConnected && <ProfileItem />}
                             <SettingsContainer
                                 onClick={() => {
                                     setDropdownIsOpen(!dropdownIsOpen);
@@ -261,7 +270,7 @@ const DappHeader: React.FC = () => {
                     </MiddleContainer>
 
                     <RightContainer>
-                        {!isWalletConnected && (
+                        {!isConnected && (
                             <Button
                                 backgroundColor={'transparent'}
                                 textColor={theme.christmasTheme.button.textColor.secondary}
@@ -286,7 +295,7 @@ const DappHeader: React.FC = () => {
                                 {t('get-started.log-in')}
                             </Button>
                         )}
-                        {!isWalletConnected && (
+                        {!isConnected && (
                             <Button
                                 backgroundColor={theme.christmasTheme.button.background.primary}
                                 textColor={theme.button.textColor.primary}
@@ -387,13 +396,13 @@ const DappHeader: React.FC = () => {
                         </MenuIconContainer>
                     </WrapperMobile>
 
-                    {isWalletConnected && (
+                    {isConnected && (
                         <FlexDivCentered>
                             <WalletInfo />
                         </FlexDivCentered>
                     )}
 
-                    {!isWalletConnected ? (
+                    {!isConnected ? (
                         <MobileButtonWrapper>
                             <Button
                                 backgroundColor={'transparent'}
@@ -452,7 +461,7 @@ const DappHeader: React.FC = () => {
                             </FlexDivEnd>
                         </MobileButtonWrapper>
                     ) : (
-                        isConnectedViaParticle && (
+                        isBiconomy && (
                             <MobileButtonWrapper>
                                 {location.pathname !== ROUTES.Wizard && getGetStartedButton()}
                                 <TopUp />

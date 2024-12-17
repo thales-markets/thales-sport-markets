@@ -1,36 +1,37 @@
-import { Chip } from '@material-ui/core';
 import ApprovalModal from 'components/ApprovalModal';
 import Button from 'components/Button';
+import Chip from 'components/Chip';
 import CollateralSelector from 'components/CollateralSelector';
 import Modal from 'components/Modal';
 import Checkbox from 'components/fields/Checkbox/Checkbox';
 import NumericInput from 'components/fields/NumericInput';
 import TextArea from 'components/fields/TextArea';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import { BigNumber, ethers } from 'ethers';
+import { DEFAULT_MULTI_COLLATERAL_BALANCE } from 'constants/currency';
+import { ContractType } from 'enums/contract';
 import _ from 'lodash';
-import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
+import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import {
-    getIsWalletConnected,
-    getNetworkId,
-    getWalletAddress,
-    setWalletConnectModalVisibility,
-} from 'redux/modules/wallet';
+import { getIsMobile } from 'redux/modules/app';
+import { getIsBiconomy, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { coinParser, floorNumberToDecimals, formatCurrencyWithKey, getPrecision } from 'thales-utils';
+import { CollateralsBalance, Rates } from 'types/collateral';
 import { ThemeInterface } from 'types/ui';
+import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateral, getCollateralAddress, getCollateralIndex, getFreeBetCollaterals } from 'utils/collaterals';
+import { getContractInstance } from 'utils/contract';
 import freeBetHolder from 'utils/contracts/freeBetHolder';
 import { checkAllowance, getDefaultCollateralIndexForNetworkId } from 'utils/network';
-import networkConnector from 'utils/networkConnector';
+import { Client, isAddress } from 'viem';
+import { waitForTransactionReceipt } from 'viem/actions';
+import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 
 type FreeBetFundModalProps = {
     onClose: () => void;
@@ -41,10 +42,15 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
     const dispatch = useDispatch();
     const theme: ThemeInterface = useTheme();
 
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+
+    const networkId = useChainId();
+    const client = useClient();
+    const walletClient = useWalletClient();
+
+    const { address, isConnected } = useAccount();
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const [amount, setAmount] = useState<number | string>('');
@@ -67,19 +73,21 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
     const walletAddressInputRef = useRef<HTMLDivElement>(null);
     const walletAddressInputRefVisible = !!walletAddressInputRef?.current?.getBoundingClientRect().width;
 
-    const multipleCollateralBalancesQuery = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
-        enabled: isAppReady && isWalletConnected,
-    });
+    const multipleCollateralBalancesQuery = useMultipleCollateralBalanceQuery(
+        walletAddress,
+        { networkId, client },
+        {
+            enabled: isConnected,
+        }
+    );
 
-    const multipleCollateralBalances = useMemo(() => {
+    const multipleCollateralBalances = useMemo<CollateralsBalance>(() => {
         return multipleCollateralBalancesQuery?.data && multipleCollateralBalancesQuery?.isSuccess
             ? multipleCollateralBalancesQuery.data
-            : [];
+            : DEFAULT_MULTI_COLLATERAL_BALANCE;
     }, [multipleCollateralBalancesQuery.data, multipleCollateralBalancesQuery?.isSuccess]);
 
-    const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
-        enabled: isAppReady,
-    });
+    const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
     const exchangeRates: Rates | null =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
@@ -116,7 +124,7 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
     ]);
 
     useEffect(() => {
-        if (fundWalletAddress && !ethers.utils.isAddress(fundWalletAddress))
+        if (fundWalletAddress && !isAddress(fundWalletAddress))
             return setFundWalletValidationMessage(t('profile.free-bet-modal.invalid-wallet-address'));
         return setFundWalletValidationMessage('');
     }, [fundWalletAddress, t]);
@@ -127,24 +135,34 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
         return setValidationMessage('');
     }, [amount, selectedCollateralBalance, t]);
 
-    const handleAllowance = async (approveAmount: BigNumber) => {
-        const { signer, multipleCollateral } = networkConnector;
-        const freeBetHolderContractAddress = freeBetHolder && freeBetHolder?.addresses[networkId];
+    const handleAllowance = async (approveAmount: bigint) => {
+        const multiCollateralWithSigner = getContractInstance(
+            ContractType.MULTICOLLATERAL,
+            { client: walletClient.data, networkId },
+            getCollateralIndex(networkId, selectedCollateral)
+        );
+        const freeBetHolderContract = getContractInstance(ContractType.FREE_BET_HOLDER, {
+            client: walletClient.data,
+            networkId,
+        });
 
-        if (signer && multipleCollateral && freeBetHolderContractAddress) {
-            const collateralContractWithSigner = multipleCollateral[selectedCollateral]?.connect(signer);
+        const freeBetHolderContractAddress = freeBetHolderContract && freeBetHolderContract.address;
+
+        if (multiCollateralWithSigner && freeBetHolderContractAddress) {
             const id = toast.loading(t('profile.free-bet-modal.transaction-pending'));
             setIsAllowing(true);
 
             try {
-                const tx = (await collateralContractWithSigner?.approve(
+                const hash = await multiCollateralWithSigner.write.approve([
                     freeBetHolderContractAddress,
-                    approveAmount
-                )) as ethers.ContractTransaction;
+                    approveAmount,
+                ]);
                 setOpenApprovalModal(false);
-                const txResult = await tx.wait();
+                const txReceipt = await waitForTransactionReceipt(client as Client, {
+                    hash,
+                });
 
-                if (txResult && txResult.transactionHash) {
+                if (txReceipt.status === 'success') {
                     toast.update(
                         id,
                         getSuccessToastOptions(
@@ -162,7 +180,7 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
     };
 
     const getSubmitButton = () => {
-        if (!isWalletConnected) {
+        if (!isConnected) {
             return (
                 <Button
                     onClick={() =>
@@ -212,37 +230,49 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
     };
 
     const handleSubmit = async () => {
-        const { signer, multipleCollateral, freeBetHolderContract } = networkConnector;
+        const contracts = [
+            getContractInstance(
+                ContractType.MULTICOLLATERAL,
+                { client: walletClient.data, networkId },
+                getCollateralIndex(networkId, selectedCollateral)
+            ),
+            getContractInstance(ContractType.FREE_BET_HOLDER, { client: walletClient.data, networkId }),
+        ];
+        const [multipleCollateralWithSigner, freeBetHolderContractWithSigner] = contracts;
 
-        if (signer && multipleCollateral && freeBetHolderContract && (fundWalletAddress || bulkWalletAddresses)) {
+        if (
+            multipleCollateralWithSigner &&
+            freeBetHolderContractWithSigner &&
+            (fundWalletAddress || bulkWalletAddresses)
+        ) {
             const collateralAddress = getCollateralAddress(
                 networkId,
                 getCollateralIndex(networkId, selectedCollateral)
             );
-            const freeBetHolderContractWithSigner = freeBetHolderContract?.connect(signer);
             const id = toast.loading(t('profile.free-bet-modal.transaction-pending'));
             setInProgress(true);
 
             const amountFormatted = coinParser(amount.toString(), networkId, selectedCollateral);
 
             try {
-                const tx = isFundBatch
-                    ? ((await freeBetHolderContractWithSigner?.fundBatch(
+                const hash = isFundBatch
+                    ? await freeBetHolderContractWithSigner.write.fundBatch([
                           bulkWalletAddresses,
                           collateralAddress,
-                          amountFormatted
-                      )) as ethers.ContractTransaction)
-                    : ((await freeBetHolderContractWithSigner?.fund(
+                          amountFormatted,
+                      ])
+                    : await freeBetHolderContractWithSigner.write.fund([
                           fundWalletAddress,
                           collateralAddress,
-                          amountFormatted
-                      )) as ethers.ContractTransaction);
+                          amountFormatted,
+                      ]);
                 setOpenApprovalModal(false);
-                const txResult = await tx.wait();
 
-                console.log('txResult ', txResult);
+                const txReceipt = await waitForTransactionReceipt(client as Client, {
+                    hash,
+                });
 
-                if (txResult && txResult.transactionHash) {
+                if (txReceipt.status === 'success') {
                     toast.update(
                         id,
                         getSuccessToastOptions(
@@ -280,49 +310,60 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
                 return [];
             }
 
-            if (splitByNewLine.find((item) => !ethers.utils.isAddress(item.trim()))) {
+            if (splitByNewLine.find((item) => !isAddress(item.trim()))) {
                 setValidationForTextArea(t('profile.free-bet-modal.one-or-more-address-invalid'));
             } else {
                 setValidationForTextArea('');
             }
             return splitByNewLine
-                .filter((item) => item.trim() !== '' && ethers.utils.isAddress(item.trim()))
+                .filter((item) => item.trim() !== '' && isAddress(item.trim()))
                 .map((item) => item.trim());
         }
         return [];
     }, [fundBatchRaw, t]);
 
     useEffect(() => {
-        const { signer, multipleCollateral } = networkConnector;
+        const handleAllowanceCheck = async () => {
+            const multiCollateralContractWithSigner = getContractInstance(
+                ContractType.MULTICOLLATERAL,
+                { client: walletClient.data, networkId },
+                getCollateralIndex(networkId, selectedCollateral)
+            );
 
-        const freeBetHolderContractAddress = freeBetHolder && freeBetHolder?.addresses[networkId];
+            const freeBetHolderContractAddress = freeBetHolder && freeBetHolder?.addresses[networkId];
 
-        if (signer && multipleCollateral && freeBetHolderContractAddress) {
-            const collateralContractWithSigner = multipleCollateral[selectedCollateral]?.connect(signer);
+            if (multiCollateralContractWithSigner && freeBetHolderContractAddress) {
+                const getAllowance = async () => {
+                    const amountForCheck = isFundBatch ? Number(amount) * bulkWalletAddresses.length : Number(amount);
 
-            const getAllowance = async () => {
-                const amountForCheck = isFundBatch ? Number(amount) * bulkWalletAddresses.length : Number(amount);
-
-                try {
-                    const parsedAmount = coinParser(Number(amountForCheck).toString(), networkId, selectedCollateral);
-                    const allowance = await checkAllowance(
-                        parsedAmount,
-                        collateralContractWithSigner,
-                        walletAddress,
-                        freeBetHolderContractAddress
-                    );
-                    setAllowance(allowance);
-                } catch (e) {
-                    console.log(e);
+                    try {
+                        const parsedAmount = coinParser(
+                            Number(amountForCheck).toString(),
+                            networkId,
+                            selectedCollateral
+                        );
+                        const allowance = await checkAllowance(
+                            parsedAmount,
+                            multiCollateralContractWithSigner,
+                            walletAddress,
+                            freeBetHolderContractAddress
+                        );
+                        console.log('allowance', allowance);
+                        setAllowance(allowance);
+                    } catch (e) {
+                        console.log(e);
+                    }
+                };
+                if (isConnected) {
+                    getAllowance();
                 }
-            };
-            if (isWalletConnected) {
-                getAllowance();
             }
-        }
+        };
+
+        handleAllowanceCheck();
     }, [
         walletAddress,
-        isWalletConnected,
+        isConnected,
         hasAllowance,
         amount,
         isAllowing,
@@ -330,6 +371,8 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
         selectedCollateral,
         isFundBatch,
         bulkWalletAddresses.length,
+        client,
+        walletClient.data,
     ]);
 
     return (

@@ -509,6 +509,10 @@
     content: '\0122';
 }
 
+.icon--info::before {
+    content: '\011B';
+}
+
 .icon--playerprops:before {
     content: '\00C2';
 }
