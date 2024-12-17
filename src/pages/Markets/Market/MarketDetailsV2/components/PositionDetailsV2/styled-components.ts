@@ -8,6 +8,7 @@ export const Container = styled(FlexDivRow)<{
     isWinner: boolean;
     order?: string;
     isMainPageView?: boolean;
+    isPlayerPropsMarket?: boolean;
     hide: boolean;
 }>`
     display: ${(props) => (props.hide ? 'none' : 'flex')};
@@ -33,7 +34,7 @@ export const Container = styled(FlexDivRow)<{
     }
     order: ${(props) => props.order || 'initial'};
     @media (max-width: 950px) {
-        flex-direction: ${(props) => (props.isMainPageView ? 'column' : 'row')};
+        flex-direction: ${(props) => (props.isMainPageView && !props.isPlayerPropsMarket ? 'column' : 'row')};
         align-items: ${(props) => (props.isMainPageView ? 'flex-start' : 'center')};
         padding: ${(props) => (props.isMainPageView ? '2px 5px' : '0 5px')};
     }

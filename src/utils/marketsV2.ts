@@ -1,5 +1,5 @@
 import { secondsToMilliseconds } from 'date-fns';
-import { MarketType } from 'enums/marketTypes';
+import { MarketType, MarketTypeGroup } from 'enums/marketTypes';
 import { GameStatus, MarketStatus, Position } from 'enums/markets';
 import { League } from 'enums/sports';
 import { ethers } from 'ethers';
@@ -13,8 +13,12 @@ import {
     TicketPosition,
     TradeData,
 } from 'types/markets';
-import { MarketTypeMap } from '../constants/marketTypes';
-import { UFC_LEAGUE_IDS } from '../constants/sports';
+import { MarketTypeMap, MarketTypePlayerPropsGroupsBySport } from '../constants/marketTypes';
+import {
+    PLAYER_PROPS_MARKETS_PER_PROP_MAP,
+    PLAYER_PROPS_MARKETS_PER_SPORT_MAP,
+    UFC_LEAGUE_IDS,
+} from '../constants/sports';
 import { fixOneSideMarketCompetitorName } from './formatters/string';
 import {
     getMarketTypeDescription,
@@ -239,6 +243,9 @@ const getCombinedPositionsText = (market: SportMarket, position: number) => {
 };
 
 export const getPositionTextV2 = (market: SportMarket, position: number, extendedText?: boolean) => {
+    if (market.typeId === MarketType.EMPTY) {
+        return '-';
+    }
     return isCombinedPositionsMarket(market.typeId)
         ? getCombinedPositionsText(market, position)
         : getSimplePositionText(
@@ -254,8 +261,12 @@ export const getPositionTextV2 = (market: SportMarket, position: number, extende
           );
 };
 
-export const getTitleText = (market: SportMarket, useDescription?: boolean) => {
+export const getTitleText = (market: SportMarket, useDescription?: boolean, shortName?: boolean) => {
     const marketType = market.typeId as MarketType;
+    if (marketType === MarketType.EMPTY) {
+        return '';
+    }
+
     const scoringType = getLeagueScoringType(market.leagueId);
     const marketTypeDescription = getMarketTypeDescription(marketType);
     const marketTypeName =
@@ -263,7 +274,7 @@ export const getTitleText = (market: SportMarket, useDescription?: boolean) => {
             ? marketTypeDescription
             : market.leagueId === League.UEFA_SUPER_CUP && marketType === MarketType.WHO_WILL_QUALIFY
             ? 'To win the cup'
-            : getMarketTypeName(marketType);
+            : getMarketTypeName(marketType, shortName);
 
     let sufix = isPeriodMarket(marketType)
         ? ` ${getLeaguePeriodType(market.leagueId)}`
@@ -609,4 +620,114 @@ export const packMarket = (
     }
 
     return packedMarket;
+};
+
+export const getPlayerPropsEmptyMarkets = (market: SportMarket) => [
+    {
+        ...market,
+        type: '',
+        typeId: -1,
+        odds: [0],
+        line: Infinity,
+    },
+    {
+        ...market,
+        type: '',
+        typeId: -1,
+        odds: [0],
+        line: Infinity,
+    },
+    {
+        ...market,
+        type: '',
+        typeId: -1,
+        odds: [0],
+        line: Infinity,
+    },
+];
+
+export const getMarketPlayerPropsMarketsForSport = (market: SportMarket) => {
+    const marketTypesForSport = PLAYER_PROPS_MARKETS_PER_SPORT_MAP[market.sport];
+
+    if (marketTypesForSport?.length) {
+        return marketTypesForSport.map(
+            (marketType) =>
+                market.childMarkets.find((childMarket) => childMarket.typeId === marketType) || {
+                    ...market,
+                    type: getPositionTextV2(market, 0, false) || '',
+                    typeId: marketType,
+                    odds: [0, 0],
+                    line: Infinity,
+                }
+        );
+    } else {
+        return [..._.uniqBy(market.childMarkets, 'typeId'), ...getPlayerPropsEmptyMarkets(market)].slice(0, 3);
+    }
+};
+
+export const getSpecializedPropForMarket = (market: SportMarket) =>
+    Number(
+        Object.keys(PLAYER_PROPS_MARKETS_PER_PROP_MAP).find((key) => {
+            return market.childMarkets.some((childMarket) => childMarket.typeId === Number(key));
+        })
+    );
+
+export const getMarketPlayerPropsMarketsForProp = (market: SportMarket) => {
+    const specializedPropMarketType: MarketType | undefined = getSpecializedPropForMarket(market);
+
+    const marketTypesForProp =
+        !isNaN(specializedPropMarketType) && PLAYER_PROPS_MARKETS_PER_PROP_MAP[specializedPropMarketType];
+
+    if (marketTypesForProp) {
+        return marketTypesForProp.map(
+            (marketType) =>
+                market.childMarkets.find((childMarket) => childMarket.typeId === marketType) || {
+                    ...market,
+                    type: getPositionTextV2(market, 0, false) || '',
+                    typeId: marketType,
+                    odds: [0, 0],
+                    line: Infinity,
+                }
+        );
+    } else {
+        return [..._.uniqBy(market.childMarkets, 'typeId'), ...getPlayerPropsEmptyMarkets(market)].slice(0, 3);
+    }
+};
+
+export const getMarketPlayerPropsMarketsForGroupFilter = (market: SportMarket, groupFilter: MarketTypeGroup) => {
+    const marketTypesGroupFilters = groupFilter
+        ? MarketTypePlayerPropsGroupsBySport[market.sport][groupFilter] || []
+        : [];
+    if (marketTypesGroupFilters) {
+        return marketTypesGroupFilters
+            .map(
+                (marketType) =>
+                    market.childMarkets.find((childMarket) => childMarket.typeId === marketType) || {
+                        ...market,
+                        type: getPositionTextV2(market, 0, false) || '',
+                        typeId: marketType,
+                        odds: [0, 0],
+                        line: Infinity,
+                    }
+            )
+            .slice(0, 3);
+    }
+};
+
+export const getPlayerPropsMarketsOverviewLength = (market: SportMarket) => {
+    const uniqueMarketsLength = _.uniqBy(market.childMarkets, 'typeId').length;
+    return Math.min(uniqueMarketsLength, 3);
+};
+
+export const getDefaultPlayerPropsLeague = (leagueCount: Record<number, number>) => {
+    if (leagueCount[League.NBA]) {
+        return League.NBA;
+    }
+    if (leagueCount[League.NFL]) {
+        return League.NFL;
+    }
+    if (leagueCount[League.NHL]) {
+        return League.NHL;
+    }
+    return League.NBA;
 };

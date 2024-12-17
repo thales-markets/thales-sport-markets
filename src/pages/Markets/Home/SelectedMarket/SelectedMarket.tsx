@@ -6,7 +6,7 @@ import { Message } from 'pages/Markets/Market/MarketDetailsV2/components/Positio
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { setSelectedMarket } from 'redux/modules/market';
+import { getSelectedMarket, getSportFilter, setSelectedMarket } from 'redux/modules/market';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
 import { formatShortDateWithTime } from 'thales-utils';
@@ -16,10 +16,15 @@ import { League } from '../../../../enums/sports';
 import TicketTransactions from '../../Market/MarketDetailsV2/components/TicketTransactions';
 import Header from '../Header';
 import SelectedMarketDetails from '../SelectedMarketDetails';
+import { SportFilter } from 'enums/markets';
 
 const SelectedMarket: React.FC<{ market: SportMarket | undefined }> = ({ market }) => {
     const dispatch = useDispatch();
     const isMobile = useSelector(getIsMobile);
+    const sportFilter = useSelector(getSportFilter);
+    const selectedMarket = useSelector(getSelectedMarket);
+
+    const isPlayerPropsFilter = sportFilter === SportFilter.PlayerProps;
 
     const isMarketPaused = market?.isPaused;
 
@@ -33,12 +38,35 @@ const SelectedMarket: React.FC<{ market: SportMarket | undefined }> = ({ market 
                         )}
                         <MatchInfo>
                             <MatchLogosV2
-                                market={market}
+                                market={
+                                    isPlayerPropsFilter
+                                        ? {
+                                              ...market,
+                                              isPlayerPropsMarket: true,
+                                              isOneSideMarket: true,
+                                              playerProps: {
+                                                  ...market.playerProps,
+                                                  playerName: selectedMarket?.playerName || '',
+                                              },
+                                          }
+                                        : market
+                                }
                                 width={isMobile ? '55px' : '45px'}
                                 logoWidth={isMobile ? '30px' : '24px'}
                                 logoHeight={isMobile ? '30px' : '24px'}
                             />
-                            <MatchLabel>{getMatchLabel(market)} </MatchLabel>
+                            <MatchLabel>
+                                {getMatchLabel(
+                                    isPlayerPropsFilter
+                                        ? {
+                                              ...market,
+                                              isPlayerPropsMarket: true,
+                                              isOneSideMarket: true,
+                                              homeTeam: selectedMarket?.playerName || '',
+                                          }
+                                        : market
+                                )}
+                            </MatchLabel>
                         </MatchInfo>
                         {market.leagueId === League.US_ELECTION && <StyledUsElectionHeader />}
                         {isMobile && <Header market={market} />}
@@ -112,6 +140,7 @@ const CloseIcon = styled.i`
     right: 0px;
     padding: 8px 10px;
     cursor: pointer;
+    z-index: 100;
     @media (max-width: 950px) {
         right: 0px;
         top: 0px;

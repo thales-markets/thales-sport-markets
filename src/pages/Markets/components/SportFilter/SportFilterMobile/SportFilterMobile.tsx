@@ -1,6 +1,6 @@
 import liveAnimationData from 'assets/lotties/live-markets-filter.json';
 import { SportFilter } from 'enums/markets';
-import { Sport } from 'enums/sports';
+import { League, Sport } from 'enums/sports';
 import Lottie from 'lottie-react';
 import React, { CSSProperties, Dispatch, SetStateAction, useContext } from 'react';
 import { ScrollMenu, VisibilityContext, publicApiType } from 'react-horizontal-scrolling-menu';
@@ -12,10 +12,13 @@ import { FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered } from 'styles
 import { TagInfo, Tags } from 'types/markets';
 import { getSportLeagueIds } from 'utils/sports';
 import useQueryParam from '../../../../../utils/useQueryParams';
+import { LeagueMap } from 'constants/sports';
+import { getDefaultPlayerPropsLeague } from 'utils/marketsV2';
 
 type SportFilterMobileProps = {
     tagsList: Tags;
     setAvailableTags: Dispatch<SetStateAction<Tags>>;
+    playerPropsCountPerTag: Record<number, number>;
 };
 
 const LeftArrow: React.FC = () => {
@@ -45,7 +48,11 @@ const RightArrow: React.FC = () => {
     );
 };
 
-const SportFilterMobile: React.FC<SportFilterMobileProps> = ({ tagsList, setAvailableTags }) => {
+const SportFilterMobile: React.FC<SportFilterMobileProps> = ({
+    tagsList,
+    setAvailableTags,
+    playerPropsCountPerTag,
+}) => {
     const dispatch = useDispatch();
     const sportFilter = useSelector(getSportFilter);
     const [, setSportParam] = useQueryParam('sport', '');
@@ -67,9 +74,19 @@ const SportFilterMobile: React.FC<SportFilterMobileProps> = ({ tagsList, setAvai
                                     if (filterItem !== sportFilter) {
                                         dispatch(setSportFilter(filterItem));
                                         setSportParam(filterItem);
-                                        dispatch(setTagFilter([]));
-                                        setTagParam('');
-                                        if (filterItem === SportFilter.All) {
+                                        dispatch(
+                                            setTagFilter(
+                                                filterItem === SportFilter.PlayerProps
+                                                    ? [LeagueMap[getDefaultPlayerPropsLeague(playerPropsCountPerTag)]]
+                                                    : []
+                                            )
+                                        );
+                                        setTagParam(
+                                            filterItem === SportFilter.PlayerProps
+                                                ? LeagueMap[getDefaultPlayerPropsLeague(playerPropsCountPerTag)].label
+                                                : ''
+                                        );
+                                        if (filterItem === SportFilter.All || filterItem === SportFilter.PlayerProps) {
                                             setAvailableTags(tagsList);
                                         } else {
                                             const tagsPerSport = getSportLeagueIds(filterItem as Sport);

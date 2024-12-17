@@ -1,5 +1,9 @@
 import Tooltip from 'components/Tooltip';
-import { MarketTypeGroupsBySport, MarketTypesBySportFilter } from 'constants/marketTypes';
+import {
+    MarketTypeGroupsBySport,
+    MarketTypePlayerPropsGroupsBySport,
+    MarketTypesBySportFilter,
+} from 'constants/marketTypes';
 import { MarketType, MarketTypeGroup } from 'enums/marketTypes';
 import { uniq } from 'lodash';
 import React, { useContext, useMemo } from 'react';
@@ -17,7 +21,7 @@ import {
     setMarketTypeGroupFilter,
 } from 'redux/modules/market';
 import { SportMarket } from 'types/markets';
-import { getMarketTypeName } from 'utils/markets';
+import { getMarketTypeName, isPlayerPropsMarket } from 'utils/markets';
 import {
     ArrowIcon,
     Container,
@@ -27,8 +31,11 @@ import {
     SwitchContainer,
     ThreeWayIcon,
 } from './styled-components';
+import { SportFilter } from 'enums/markets';
+import { getIsMobile } from 'redux/modules/app';
 
 type HeaderProps = {
+    allMarkets?: SportMarket[];
     availableMarketTypes?: MarketType[];
     market?: SportMarket;
     hideSwitch?: boolean;
@@ -65,15 +72,17 @@ const RightArrow: React.FC = () => {
     );
 };
 
-const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitch }) => {
+const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitch, allMarkets }) => {
     const dispatch = useDispatch();
     const isThreeWayView = useSelector(getIsThreeWayView);
     const marketTypeFilter = useSelector(getMarketTypeFilter);
     const marketTypeGroupFilter = useSelector(getMarketTypeGroupFilter);
     const sportFilter = useSelector(getSportFilter);
     const selectedMarket = useSelector(getSelectedMarket);
+    const isMobile = useSelector(getIsMobile);
 
-    const marketToCheck = market || selectedMarket;
+    const isPlayerPropsFilter = useMemo(() => sportFilter == SportFilter.PlayerProps, [sportFilter]);
+    const marketToCheck = useMemo(() => market || selectedMarket, [market, selectedMarket]);
 
     const marketTypes = useMemo(() => {
         if (marketToCheck) {
@@ -81,10 +90,16 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitc
                 (key) => key as MarketTypeGroup
             );
             if (market) {
-                let marketToCheckAvailableMarketTypes = [market.typeId];
+                let marketToCheckAvailableMarketTypes: MarketType[] = [];
+
+                if (!isPlayerPropsFilter) {
+                    marketToCheckAvailableMarketTypes = [market.typeId];
+                }
 
                 market.childMarkets.forEach((childMarket: SportMarket) => {
-                    marketToCheckAvailableMarketTypes.push(childMarket.typeId);
+                    if (!isPlayerPropsFilter || isPlayerPropsMarket(childMarket.typeId)) {
+                        marketToCheckAvailableMarketTypes.push(childMarket.typeId);
+                    }
                 });
                 marketToCheckAvailableMarketTypes = uniq(marketToCheckAvailableMarketTypes);
 
@@ -101,13 +116,31 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitc
 
             return marketTypeGroups;
         } else {
+            const sport = allMarkets?.[0]?.sport || '';
+            let marketTypeGroups: any[] = [];
+
+            if (isPlayerPropsFilter) {
+                marketTypeGroups = Object.keys(MarketTypePlayerPropsGroupsBySport[sport] || {}).map(
+                    (key) => key as MarketTypeGroup
+                );
+                marketTypeGroups = marketTypeGroups.filter((group: MarketTypeGroup) => {
+                    const marketTypes = (MarketTypePlayerPropsGroupsBySport[sport] || {})[group];
+                    return marketTypes && availableMarketTypes
+                        ? marketTypes.some((marketType: MarketType) => availableMarketTypes.includes(marketType))
+                        : false;
+                });
+            }
+
             return availableMarketTypes
-                ? MarketTypesBySportFilter[sportFilter].filter((marketType) =>
-                      availableMarketTypes.includes(marketType)
-                  )
+                ? [
+                      ...(isMobile ? [] : marketTypeGroups),
+                      ...MarketTypesBySportFilter[sportFilter].filter((marketType) =>
+                          availableMarketTypes.includes(marketType)
+                      ),
+                  ]
                 : [];
         }
-    }, [marketToCheck, market, availableMarketTypes, sportFilter]);
+    }, [marketToCheck, market, availableMarketTypes, sportFilter, allMarkets, isPlayerPropsFilter, isMobile]);
 
     return (
         <Container>
@@ -130,7 +163,37 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitc
                                     {marketType}
                                 </MarketTypeButton>
                             );
-                        } else {
+                        } else if (isPlayerPropsFilter) {
+                            return (
+                                <MarketTypeButton
+                                    onClick={() => {
+                                        if (typeof marketType === 'number') {
+                                            if (marketTypeFilter === marketType) {
+                                                dispatch(setMarketTypeFilter(undefined));
+                                            } else {
+                                                dispatch(setMarketTypeGroupFilter(undefined));
+                                                dispatch(setMarketTypeFilter(marketType as MarketType));
+                                            }
+                                        } else {
+                                            if (marketTypeGroupFilter === marketType) {
+                                                dispatch(setMarketTypeGroupFilter(undefined));
+                                            } else {
+                                                dispatch(setMarketTypeFilter(undefined));
+                                                dispatch(setMarketTypeGroupFilter(marketType as MarketTypeGroup));
+                                            }
+                                        }
+                                    }}
+                                    selected={marketTypeGroupFilter === marketType || marketTypeFilter === marketType}
+                                    key={`${marketType}${index}`}
+                                    itemID={`${marketType}`}
+                                >
+                                    {typeof marketType === 'number'
+                                        ? getMarketTypeName(marketType as MarketType, true)
+                                        : marketType}
+                                </MarketTypeButton>
+                            );
+                        }
+                        {
                             return (
                                 <MarketTypeButton
                                     onClick={() =>
