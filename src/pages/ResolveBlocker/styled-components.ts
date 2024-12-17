@@ -47,3 +47,7 @@ export const ExternalLink = styled.a`
         text-decoration: underline;
     }
 `;
+
+export const CheckboxContainer = styled(FlexDivCentered)`
+    margin: -20px 0 0 10px;
+`;
