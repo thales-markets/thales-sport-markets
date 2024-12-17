@@ -36,7 +36,7 @@ export const getSportsAMMV2Transaction: any = async (
         });
 
         if (isAA) {
-            return executeBiconomyTransaction(networkId, collateralAddress, freeBetHolderContract, 'trade', [
+            return executeBiconomyTransaction(networkId, freeBetHolderContract, 'trade', [
                 tradeData,
                 buyInAmount,
                 expectedQuote,
@@ -68,7 +68,7 @@ export const getSportsAMMV2Transaction: any = async (
         if (isAA) {
             return executeBiconomyTransaction(
                 networkId,
-                collateralAddress,
+
                 stakingThalesBettingProxyContract,
                 'trade',
                 [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress]
@@ -88,7 +88,7 @@ export const getSportsAMMV2Transaction: any = async (
     }
 
     if (isAA) {
-        return executeBiconomyTransaction(networkId, collateralAddress, sportsAMMV2Contract, 'trade', [
+        return executeBiconomyTransaction(networkId, sportsAMMV2Contract, 'trade', [
             tradeData,
             buyInAmount,
             expectedQuote,

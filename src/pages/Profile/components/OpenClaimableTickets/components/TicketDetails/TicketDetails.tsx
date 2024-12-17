@@ -142,14 +142,12 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
                         ticket.isFreeBet
                             ? await executeBiconomyTransaction(
                                   networkId,
-                                  claimCollateralAddress,
                                   sportsAMMV2ContractWithSigner,
                                   'exerciseTicket',
                                   [ticketAddress]
                               )
                             : await executeBiconomyTransaction(
                                   networkId,
-                                  claimCollateralAddress,
                                   sportsAMMV2ContractWithSigner,
                                   'exerciseTicketOffRamp',
                                   [ticketAddress, claimCollateralAddress, isEth]

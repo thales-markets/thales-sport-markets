@@ -33,7 +33,6 @@ import { ODDS_TYPES } from '../../../constants/markets';
 import { OddsType } from '../../../enums/markets';
 import ProfileItem from './components/ProfileItem';
 import TimeFilters from './components/TimeFilters';
-import TopUp from './components/TopUp';
 import {
     BlockedGamesNotificationCount,
     Container,
@@ -62,6 +61,7 @@ import {
     SmallBadgeImage,
     WrapperMobile,
 } from './styled-components';
+import ActivateAccount from 'components/ActivateAccount';
 
 const PULSING_COUNT = 10;
 
@@ -213,7 +213,6 @@ const DappHeader: React.FC = () => {
                     </LeftContainer>
 
                     <MiddleContainer>
-                        <div>{!isConnected ? getGetStartedButton() : isBiconomy ? <TopUp /> : <></>}</div>
                         {isMarketsPage && <TimeFilters />}
                         <FlexDiv>
                             <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
@@ -326,6 +325,7 @@ const DappHeader: React.FC = () => {
                             setNavMenuVisibility={(value: boolean | null) => setNavMenuVisibility(value)}
                             skipOutsideClickOnElement={menuImageRef}
                         />
+                        <ActivateAccount />
                     </RightContainer>
                 </Container>
             )}
@@ -386,13 +386,11 @@ const DappHeader: React.FC = () => {
                         </MenuIconContainer>
                     </WrapperMobile>
 
-                    {isConnected && (
+                    {isConnected ? (
                         <FlexDivCentered>
                             <WalletInfo />
                         </FlexDivCentered>
-                    )}
-
-                    {!isConnected ? (
+                    ) : (
                         <MobileButtonWrapper>
                             <Button
                                 backgroundColor={'transparent'}
@@ -450,13 +448,6 @@ const DappHeader: React.FC = () => {
                                 <NetworkSwitcher />
                             </FlexDivEnd>
                         </MobileButtonWrapper>
-                    ) : (
-                        isBiconomy && (
-                            <MobileButtonWrapper>
-                                {location.pathname !== ROUTES.Wizard && getGetStartedButton()}
-                                <TopUp />
-                            </MobileButtonWrapper>
-                        )
                     )}
                 </>
             )}

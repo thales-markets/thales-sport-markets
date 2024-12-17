@@ -2,27 +2,130 @@ import styled from 'styled-components';
 import { Colors } from 'styles/common';
 import Zebra from 'assets/images/overtime-zebra.svg?react';
 import { activateOvertimeAccount } from 'utils/biconomy';
-import { useChainId } from 'wagmi';
+import { useAccount, useChainId, useClient } from 'wagmi';
+import { useEffect, useMemo, useState } from 'react';
+import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
+import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
+import biconomyConnector from 'utils/biconomyWallet';
+import { useSelector } from 'react-redux';
+import { getIsBiconomy } from 'redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
+import { getCollaterals } from 'utils/collaterals';
+import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import { localStore } from 'thales-utils';
+import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
+import { waitForTransactionReceipt } from 'viem/actions';
+import { Client } from 'viem';
+import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import FundModal from 'components/FundOvertimeAccountModal';
 
 const ActivateAccount: React.FC<any> = () => {
     const networkId = useChainId();
+    const { t } = useTranslation();
+
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+    const client = useClient();
+    const { address, isConnected } = useAccount();
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+
+    const [showSuccessfulDepositModal, setShowSuccessfulDepositModal] = useState<boolean>(false);
+    const [showFundModal, setShowFundModal] = useState<boolean>(false);
+
+    const multipleCollateralBalances = useMultipleCollateralBalanceQuery(
+        walletAddress,
+        { networkId, client },
+        {
+            enabled: isConnected,
+        }
+    );
+
+    const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
+    const exchangeRates: Rates | null =
+        exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
+
+    const totalBalanceValue = useMemo(() => {
+        let total = 0;
+        try {
+            if (exchangeRates && multipleCollateralBalances.data) {
+                getCollaterals(networkId).forEach((token) => {
+                    total += multipleCollateralBalances.data[token] * (exchangeRates[token] ? exchangeRates[token] : 1);
+                });
+                return total;
+            }
+            return undefined;
+        } catch (e) {
+            return undefined;
+        }
+    }, [exchangeRates, multipleCollateralBalances.data, networkId]);
+    console.log('totalBalanceValue: ', showFundModal);
+    useEffect(() => {
+        if (isConnected) {
+            if (totalBalanceValue === undefined) {
+                return;
+            }
+            if (totalBalanceValue && totalBalanceValue > 3) {
+                setShowFundModal(false);
+
+                const validUntil = localStore.get(LOCAL_STORAGE_KEYS.SESSION_VALID_UNTIL[networkId]);
+
+                if (validUntil) {
+                    const dateUntilValid = new Date(Number(validUntil) * 1000);
+                    const nowDate = new Date();
+                    if (Number(nowDate) > Number(dateUntilValid)) {
+                        setShowSuccessfulDepositModal(true);
+                    } else {
+                        setShowSuccessfulDepositModal(false);
+                    }
+                } else {
+                    setShowSuccessfulDepositModal(true);
+                }
+            } else {
+                setShowFundModal(true);
+                setShowSuccessfulDepositModal(false);
+            }
+        }
+    }, [totalBalanceValue, networkId, isConnected]);
+
     return (
-        <Wrapper>
-            <StyledBalanceIcon />
-            <Header>Deposit Received!</Header>
-            <SubTitle>Activate Your Overtime Account for this device.</SubTitle>
-            <Box>
-                To start trading, your Overtime Account must be activated. This will set up collateral approval and
-                session parameters for secure and seamless trading.
-            </Box>
-            <ActivateButton
-                onClick={() => {
-                    activateOvertimeAccount(networkId);
-                }}
-            >
-                Activate My Account
-            </ActivateButton>
-        </Wrapper>
+        <div>
+            {showSuccessfulDepositModal && (
+                <Wrapper>
+                    <StyledBalanceIcon />
+                    <Header>Deposit Received!</Header>
+                    <SubTitle>Activate Your Overtime Account for this device.</SubTitle>
+                    <Box>
+                        To start trading, your Overtime Account must be activated. This will set up collateral approval
+                        and session parameters for secure and seamless trading.
+                    </Box>
+                    <ActivateButton
+                        onClick={async () => {
+                            const toastId = toast.loading(t('market.toast-message.transaction-pending'));
+                            const txHash = await activateOvertimeAccount(networkId);
+                            if (txHash) {
+                                const txReceipt = await waitForTransactionReceipt(client as Client, {
+                                    hash: txHash,
+                                });
+
+                                if (txReceipt.status === 'success') {
+                                    toast.update(
+                                        toastId,
+                                        getSuccessToastOptions(t('market.toast-message.approve-success'))
+                                    );
+                                    setShowSuccessfulDepositModal(false);
+                                    return;
+                                }
+                            }
+                            toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+                        }}
+                    >
+                        Activate My Account
+                    </ActivateButton>
+                </Wrapper>
+            )}
+
+            {showFundModal && <FundModal onClose={() => setShowFundModal(false)} />}
+        </div>
     );
 };
 
@@ -90,6 +193,7 @@ const ActivateButton = styled.div`
     height: 56px;
     padding: 18px;
     width: 100%;
+    cursor: pointer;
 `;
 
 export default ActivateAccount;

@@ -1,12 +1,37 @@
 import Modal from 'components/Modal';
+import { getInfoToastOptions, getErrorToastOptions } from 'config/toast';
+import { t } from 'i18next';
 
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { getIsBiconomy } from 'redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
+import biconomyConnector from 'utils/biconomyWallet';
+import { useAccount } from 'wagmi';
 
-const FundModal: React.FC<any> = () => {
+type FundModalProps = {
+    onClose: () => void;
+};
+
+const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+    const { address } = useAccount();
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+
+    const handleCopy = () => {
+        const id = toast.loading(t('deposit.copying-address'));
+        try {
+            navigator.clipboard.writeText(walletAddress);
+            toast.update(id, getInfoToastOptions(t('deposit.copied')));
+        } catch (e) {
+            toast.update(id, getErrorToastOptions('Error'));
+        }
+    };
     return (
-        <Modal hideHeader title="" onClose={() => {}}>
+        <Modal hideHeader title="" onClose={onClose}>
             <Wrapper>
                 <Title>Fund Overtime Account</Title>
                 <SubTitle>Add funds to your smart account to get started.</SubTitle>
@@ -23,8 +48,8 @@ const FundModal: React.FC<any> = () => {
                 <WalletContainer>
                     <FieldHeader>Your Deposit Address</FieldHeader>
                     <FlexDivCentered gap={20}>
-                        <Field>0xb8D08D9537FC8E5624c298302137c5b5ce2F301D</Field>
-                        <BlueField>Copy</BlueField>
+                        <Field>{walletAddress}</Field>
+                        <BlueField onClick={handleCopy}>Copy</BlueField>
                     </FlexDivCentered>
                 </WalletContainer>
 
@@ -136,6 +161,8 @@ const BlueField = styled(Field)`
     background: ${(props) => props.theme.textColor.quaternary};
     color: ${(props) => props.theme.textColor.senary};
     flex: 1;
+    font-weight: 600;
+    cursor: pointer;
 `;
 
 const Info = styled.p`
