@@ -622,7 +622,7 @@ export const packMarket = (
     return packedMarket;
 };
 
-export const getPlayerPropsEmptyMarkets = (market: SportMarket) => [
+const getPlayerPropsEmptyMarkets = (market: SportMarket) => [
     {
         ...market,
         type: '',
