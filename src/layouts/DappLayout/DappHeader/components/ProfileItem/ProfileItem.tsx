@@ -28,7 +28,7 @@ type ProfileItemProperties = {
 const ProfileItem: React.FC<ProfileItemProperties> = ({ labelHidden, avatarSize }) => {
     const { t } = useTranslation();
     return (
-        <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Profile)}>
+        <SPAAnchor style={{ display: 'flex', zIndex: 1 }} href={buildHref(ROUTES.Profile)}>
             <ProfileContainer>
                 <ProfileIconWidget avatarSize={avatarSize} />
                 {!labelHidden && <ProfileLabel>{t('markets.nav-menu.items.profile')}</ProfileLabel>}
