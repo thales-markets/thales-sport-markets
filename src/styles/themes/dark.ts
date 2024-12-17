@@ -222,4 +222,29 @@ export default {
             },
         },
     },
+    christmasTheme: {
+        background: {
+            primary: Colors.CARIBBEAN_GREEN,
+        },
+        textColor: {
+            primary: Colors.CARIBBEAN_GREEN,
+            secondary: Colors.WHITE,
+        },
+        borderColor: {
+            primary: Colors.CARIBBEAN_GREEN,
+        },
+        button: {
+            background: {
+                primary: Colors.CARIBBEAN_GREEN,
+                secondary: 'transparent',
+            },
+            textColor: {
+                primary: Colors.WHITE,
+                secondary: Colors.CARIBBEAN_GREEN,
+            },
+            borderColor: {
+                primary: Colors.CARIBBEAN_GREEN,
+            },
+        },
+    },
 };

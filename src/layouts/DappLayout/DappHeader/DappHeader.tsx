@@ -1,3 +1,4 @@
+import xmasPackage from 'assets/lotties/xmas-package.json';
 import Button from 'components/Button';
 import Logo from 'components/Logo';
 import NavMenu from 'components/NavMenu';
@@ -11,6 +12,7 @@ import { OVERDROP_LEVELS } from 'constants/overdrop';
 import ROUTES from 'constants/routes';
 import { OddsType } from 'enums/markets';
 import useInterval from 'hooks/useInterval';
+import Lottie from 'lottie-react';
 import useClaimablePositionCountV2Query from 'queries/markets/useClaimablePositionCountV2Query';
 import useBlockedGamesQuery from 'queries/resolveBlocker/useBlockedGamesQuery';
 import useWhitelistedForUnblock from 'queries/resolveBlocker/useWhitelistedForUnblock';
@@ -199,6 +201,14 @@ const DappHeader: React.FC = () => {
                 <Container>
                     <LeftContainer>
                         <Logo />
+                        {!isMobile && (
+                            <Lottie
+                                autoplay={true}
+                                animationData={xmasPackage}
+                                loop={true}
+                                style={{ width: '50px', height: '50px', marginBottom: '10px', marginLeft: '-20px' }}
+                            />
+                        )}
                     </LeftContainer>
 
                     <MiddleContainer>
@@ -254,8 +264,8 @@ const DappHeader: React.FC = () => {
                         {!isWalletConnected && (
                             <Button
                                 backgroundColor={'transparent'}
-                                textColor={theme.button.borderColor.quaternary}
-                                borderColor={theme.button.borderColor.quaternary}
+                                textColor={theme.christmasTheme.button.textColor.secondary}
+                                borderColor={theme.christmasTheme.button.borderColor.primary}
                                 width="150px"
                                 fontWeight="400"
                                 additionalStyles={{
@@ -278,7 +288,7 @@ const DappHeader: React.FC = () => {
                         )}
                         {!isWalletConnected && (
                             <Button
-                                backgroundColor={theme.button.background.tertiary}
+                                backgroundColor={theme.christmasTheme.button.background.primary}
                                 textColor={theme.button.textColor.primary}
                                 borderColor={theme.button.borderColor.quinary}
                                 fontWeight="400"
@@ -305,7 +315,7 @@ const DappHeader: React.FC = () => {
                         )}
                         <WalletInfo />
                         <MenuIconContainer>
-                            <MenuIcon ref={menuImageRef} onClick={() => setNavMenuVisibility(true)} />
+                            <MenuIcon className="icon icon--burger-icon" onClick={() => setNavMenuVisibility(true)} />
                             {blockedGamesCount > 0 && (
                                 <BlockedGamesNotificationCount>
                                     <Count>{blockedGamesCount}</Count>
