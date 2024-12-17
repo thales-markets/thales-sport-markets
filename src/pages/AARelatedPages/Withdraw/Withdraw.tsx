@@ -10,11 +10,11 @@ import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollate
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsBiconomy, getIsConnectedViaParticle } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { formatCurrencyWithKey } from 'thales-utils';
 import { Rates } from 'types/collateral';
+import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
 import biconomyConnector from 'utils/biconomyWallet';
 import { getCollaterals } from 'utils/collaterals';

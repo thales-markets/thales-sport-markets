@@ -58,7 +58,6 @@ import {
 } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsBiconomy, getIsConnectedViaParticle, setWalletConnectModalVisibility } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { BoldContent, FlexDiv, FlexDivCentered } from 'styles/common';
 import {
@@ -78,6 +77,7 @@ import {
 } from 'thales-utils';
 import { SportsAmmData, TicketMarket } from 'types/markets';
 import { OverdropMultiplier, OverdropUserData } from 'types/overdrop';
+import { RootState } from 'types/redux';
 import { OverdropLevel, ThemeInterface } from 'types/ui';
 import { ViemContract } from 'types/viem';
 import { executeBiconomyTransaction, getPaymasterData } from 'utils/biconomy';

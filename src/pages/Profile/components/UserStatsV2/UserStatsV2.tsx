@@ -20,7 +20,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { setStakingModalMuteEnd } from 'redux/modules/ui';
 import { getIsBiconomy, getIsConnectedViaParticle } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import {
@@ -35,6 +34,7 @@ import {
     LONG_CURRENCY_DECIMALS,
 } from 'thales-utils';
 import { Rates } from 'types/collateral';
+import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
 import biconomyConnector from 'utils/biconomyWallet';
 import {

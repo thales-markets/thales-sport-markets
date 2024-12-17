@@ -4,7 +4,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsBiconomy } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
+import { RootState } from 'types/redux';
 import biconomyConnector from 'utils/biconomyWallet';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import { Count, Icon, Item, ItemWrapper, NotificationCount, Wrapper } from './styled-components';
