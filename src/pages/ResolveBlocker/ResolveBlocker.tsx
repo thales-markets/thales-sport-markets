@@ -7,7 +7,6 @@ import useBlockedGamesQuery from 'queries/resolveBlocker/useBlockedGamesQuery';
 import React, { useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useTheme } from 'styled-components';
-import { FlexDivSpaceBetween } from 'styles/common';
 import { BlockedGame, BlockedGames, SelectedBlockedGames } from 'types/resolveBlocker';
 import { ThemeInterface } from 'types/ui';
 import { refetchResolveBlocker } from 'utils/queryConnector';
@@ -17,7 +16,7 @@ import { useChainId, useClient, useWalletClient } from 'wagmi';
 import { ContractType } from '../../enums/contract';
 import { getContractInstance } from '../../utils/contract';
 import BlockedGamesTable from './BlockedGamesTable';
-import { CheckboxContainer, Container, Tab, TabContainer } from './styled-components';
+import { CheckboxContainer, Container, HeadeContainer, Tab, TabContainer } from './styled-components';
 
 const ResolveBlocker: React.FC = () => {
     const networkId = useChainId();
@@ -128,7 +127,7 @@ const ResolveBlocker: React.FC = () => {
 
     return (
         <Container>
-            <FlexDivSpaceBetween>
+            <HeadeContainer>
                 <TabContainer>
                     {tabContent.map((tab, index) => (
                         <Tab
@@ -169,7 +168,7 @@ const ResolveBlocker: React.FC = () => {
                         </Button>
                     </CheckboxContainer>
                 )}
-            </FlexDivSpaceBetween>
+            </HeadeContainer>
             {selectedTab === ResolveBlockerTab.BLOCKED_GAMES && (
                 <BlockedGamesTable
                     blockedGames={lastValidBlockedGames}
