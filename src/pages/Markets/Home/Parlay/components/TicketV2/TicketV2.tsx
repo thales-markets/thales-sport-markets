@@ -682,14 +682,16 @@ const Ticket: React.FC<TicketProps> = ({
                                   ]),
                         ]);
 
-                        const minimumReceivedForBuyInAmountInDefaultCollateral = collateralHasLp
+                        const minimumReceivedForBuyInAmountInDefaultCollateral: number = collateralHasLp
                             ? minimumReceivedForBuyInAmount
                             : coinFormatter(minimumReceivedForBuyInAmount, networkId);
 
                         !fetchQuoteOnly &&
                             setBuyInAmountInDefaultCollateral(minimumReceivedForBuyInAmountInDefaultCollateral);
 
-                        return { buyInAmountInDefaultCollateral: minimumReceivedForBuyInAmountInDefaultCollateral };
+                        return {
+                            buyInAmountInDefaultCollateralNumber: minimumReceivedForBuyInAmountInDefaultCollateral,
+                        };
                     } else {
                         const [parlayAmmQuote] = await Promise.all([
                             getSportsAMMV2QuoteMethod(
@@ -706,10 +708,16 @@ const Ticket: React.FC<TicketProps> = ({
                                 isThales || swapToThales
                                     ? (swapToThales ? swappedThalesToReceive : Number(buyInAmount)) *
                                           selectedCollateralCurrencyRate
-                                    : coinFormatter(parlayAmmQuote[4], networkId)
+                                    : coinFormatter(parlayAmmQuote.buyInAmountInDefaultCollateral, networkId)
                             );
 
-                        return parlayAmmQuote;
+                        return {
+                            ...parlayAmmQuote,
+                            buyInAmountInDefaultCollateralNumber: coinFormatter(
+                                parlayAmmQuote.buyInAmountInDefaultCollateral,
+                                networkId
+                            ),
+                        };
                     }
                 } catch (e: any) {
                     const errorMessage = e.error?.data?.message;
@@ -1672,9 +1680,7 @@ const Ticket: React.FC<TicketProps> = ({
                     if (!mountedRef.current || !isSubscribed || !parlayAmmQuoteForMin) return null;
 
                     if (!parlayAmmQuoteForMin.error) {
-                        setMinBuyInAmountInDefaultCollateral(
-                            coinFormatter(parlayAmmQuoteForMin.buyInAmountInDefaultCollateral, networkId)
-                        );
+                        setMinBuyInAmountInDefaultCollateral(parlayAmmQuoteForMin.buyInAmountInDefaultCollateralNumber);
                     }
                 } else {
                     setMinBuyInAmountInDefaultCollateral(
@@ -1702,7 +1708,7 @@ const Ticket: React.FC<TicketProps> = ({
                                         ? swapToThales
                                             ? swappedThalesToReceive
                                             : buyInAmount
-                                        : parlayAmmQuote.buyInAmountInDefaultCollateral
+                                        : parlayAmmQuote.buyInAmountInDefaultCollateralNumber
                                 )
                         );
                     } else {
