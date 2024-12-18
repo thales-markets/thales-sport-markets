@@ -1,4 +1,5 @@
 import axios from 'axios';
+import ChristmasHeaderAnimation from 'components/ChristmasHeaderAnimation';
 import MetaData from 'components/MetaData';
 import { generalConfig } from 'config/general';
 import { Theme } from 'enums/ui';
@@ -19,6 +20,9 @@ import { setReferralId } from 'utils/referral';
 import Banner from '../../components/Banner';
 import DappFooter from './DappFooter';
 import DappHeader from './DappHeader';
+
+// ChristmasSnowBackground
+import SnowBackground from 'assets/images/snow-background.svg';
 
 type DappLayoutProps = {
     children: React.ReactNode;
@@ -73,6 +77,7 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
     return (
         <>
             <Background>
+                <ChristmasHeaderAnimation />
                 <ModalWrapper />
                 <Banner />
                 <Wrapper>
@@ -92,6 +97,8 @@ const Background = styled.section`
     background: ${(props) => props.theme.background.primary};
     color: ${(props) => props.theme.textColor.primary};
     position: relative;
+    background-image: ${`url(${SnowBackground})`};
+    background-size: cover;
 `;
 
 const Wrapper = styled(FlexDivColumn)`
