@@ -95,20 +95,22 @@ const WalletInfo: React.FC = ({}) => {
         }
     }, [dispatch, networkId, selectedCollateralIndex]);
 
-    // Refresh free bet on wallet change
+    // Refresh free bet on wallet and network change
     useEffect(() => {
         setIsFreeBetInitialized(false);
     }, [walletAddress, networkId]);
 
     // Initialize default collateral from LS
     useEffect(() => {
-        dispatch(
-            setPaymentSelectedCollateralIndex({
-                selectedCollateralIndex: getDefaultCollateralIndexForNetworkId(networkId),
-                networkId,
-            })
-        );
-    }, [dispatch, networkId]);
+        if (!isFreeBetInitialized) {
+            dispatch(
+                setPaymentSelectedCollateralIndex({
+                    selectedCollateralIndex: getDefaultCollateralIndexForNetworkId(networkId),
+                    networkId,
+                })
+            );
+        }
+    }, [dispatch, networkId, isFreeBetInitialized]);
 
     // Initialize free bet collateral
     useEffect(() => {
