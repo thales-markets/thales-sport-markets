@@ -74,7 +74,7 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
     return (
         <>
             <Background>
-                {!isMobile && <ChristmasHeaderAnimation />}
+                <ChristmasHeaderAnimation />
                 <ModalWrapper />
                 <Banner />
                 <Wrapper>
