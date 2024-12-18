@@ -2177,7 +2177,11 @@ const Ticket: React.FC<TicketProps> = ({
                         placement={'top'}
                         arrow={true}
                     > */}
-                    <Tooltip overlay={getQuoteTooltipText()}>
+                    <Tooltip
+                        open={inputRefVisible && totalQuote === sportsAmmData?.maxSupportedOdds}
+                        overlay={getQuoteTooltipText()}
+                        isWarning
+                    >
                         <SummaryValue fontSize={12}>
                             {formatMarketOdds(
                                 selectedOddsType,
