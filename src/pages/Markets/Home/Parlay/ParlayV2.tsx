@@ -1,6 +1,7 @@
 import ParlayEmptyIcon from 'assets/images/parlay-empty.svg?react';
 import MatchInfoV2 from 'components/MatchInfoV2';
 import MatchUnavailableInfo from 'components/MatchUnavailableInfo';
+import Toggle from 'components/Toggle';
 import { SportFilter, StatusFilter } from 'enums/markets';
 import { isEqual } from 'lodash';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
@@ -11,10 +12,19 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import { getSportFilter } from 'redux/modules/market';
-import { getHasTicketError, getTicket, removeAll, resetTicketError, setMaxTicketSize } from 'redux/modules/ticket';
-import styled from 'styled-components';
-import { FlexDivCentered, FlexDivColumn } from 'styles/common';
+import {
+    getHasTicketError,
+    getIsSystemBet,
+    getTicket,
+    removeAll,
+    resetTicketError,
+    setIsSystemBet,
+    setMaxTicketSize,
+} from 'redux/modules/ticket';
+import styled, { useTheme } from 'styled-components';
+import { FlexDiv, FlexDivCentered, FlexDivColumn } from 'styles/common';
 import { SportMarket, SportMarkets, TicketMarket, TicketPosition } from 'types/markets';
+import { ThemeInterface } from 'types/ui';
 import { isSameMarket } from 'utils/marketsV2';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import TicketV2 from './components/TicketV2';
@@ -28,6 +38,7 @@ type ParlayProps = {
 const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
+    const theme: ThemeInterface = useTheme();
     const isMobile = useSelector(getIsMobile);
 
     const networkId = useChainId();
@@ -35,6 +46,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     const { isConnected } = useAccount();
 
     const ticket = useSelector(getTicket);
+    const isSystemBet = useSelector(getIsSystemBet);
     const hasTicketError = useSelector(getHasTicketError);
     const sportFilter = useSelector(getSportFilter);
     const isLiveFilterSelected = sportFilter == SportFilter.Live;
@@ -222,6 +234,27 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                             {t('markets.parlay.ticket-slip')}
                             <Count>{ticket.length}</Count>
                         </Title>
+                    )}
+                    {!ticket[0]?.live && (
+                        <ToggleContainer>
+                            <Toggle
+                                label={{
+                                    firstLabel: t('markets.parlay.regular'),
+                                    secondLabel: t('markets.parlay.system'),
+                                    fontSize: '14px',
+                                }}
+                                width="46px"
+                                height="24px"
+                                active={isSystemBet}
+                                dotSize="16px"
+                                dotBackground={theme.background.secondary}
+                                dotBorder={`3px solid ${theme.borderColor.quaternary}`}
+                                dotMargin="3px"
+                                handleClick={() => {
+                                    dispatch(setIsSystemBet(!isSystemBet));
+                                }}
+                            />
+                        </ToggleContainer>
                     )}
                     <ThalesBonusContainer>
                         <ThalesBonus>{t('markets.parlay.thales-bonus-info')}</ThalesBonus>
@@ -477,6 +510,13 @@ const StyledParlayEmptyIcon = styled(ParlayEmptyIcon)`
     path {
         fill: ${(props) => props.theme.textColor.quaternary};
     }
+`;
+
+const ToggleContainer = styled(FlexDiv)`
+    font-weight: 600;
+    width: 100%;
+    margin-bottom: 5px;
+    text-transform: uppercase;
 `;
 
 export default Parlay;

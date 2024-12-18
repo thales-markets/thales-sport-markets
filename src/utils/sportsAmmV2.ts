@@ -23,7 +23,9 @@ export const getSportsAMMV2Transaction: any = async (
     isFreeBet: boolean,
     isStakedThales: boolean,
     stakingThalesBettingProxyContract: ViemContract,
-    client: Client
+    client: Client,
+    isSystemBet: boolean,
+    systemBetDenominator: number
 ): Promise<any> => {
     let finalEstimation = null;
     const referralAddress = referral || ZERO_ADDRESS;
@@ -79,6 +81,47 @@ export const getSportsAMMV2Transaction: any = async (
             );
         }
 
+        if (isSystemBet) {
+            if (networkId === Network.OptimismMainnet) {
+                const encodedData = encodeFunctionData({
+                    abi: sportsAMMV2Contract.abi,
+                    functionName: 'tradeSystemBet',
+                    args: [
+                        tradeData,
+                        buyInAmount,
+                        expectedQuote,
+                        additionalSlippage,
+                        referralAddress,
+                        collateralAddress,
+                        isEth,
+                        systemBetDenominator,
+                    ],
+                });
+
+                const estimation = await estimateGas(client, {
+                    to: sportsAMMV2Contract.address as Address,
+                    data: encodedData,
+                    value: isEth ? buyInAmount : undefined,
+                });
+
+                finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER); // using Math.celi as gasLimit is accepting only integer.
+            }
+
+            return sportsAMMV2Contract.write.tradeSystemBet(
+                [
+                    tradeData,
+                    buyInAmount,
+                    expectedQuote,
+                    additionalSlippage,
+                    referralAddress,
+                    isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
+                    isEth,
+                    systemBetDenominator,
+                ],
+                { value: isEth ? buyInAmount : 0, gasLimit: finalEstimation }
+            );
+        }
+
         if (networkId === Network.OptimismMainnet) {
             const encodedData = encodeFunctionData({
                 abi: sportsAMMV2Contract.abi,
@@ -123,12 +166,22 @@ export const getSportsAMMV2QuoteMethod: any = (
     isDefaultCollateral: boolean,
     sportsAMMV2Contract: ViemContract,
     tradeData: TradeData[],
-    buyInAmount: bigint
+    buyInAmount: bigint,
+    isSystemBet: boolean,
+    systemBetDenominator: number
 ) => {
-    return sportsAMMV2Contract.read.tradeQuote([
-        tradeData,
-        buyInAmount,
-        isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
-        false,
-    ]);
+    return isSystemBet
+        ? sportsAMMV2Contract.read.tradeQuoteSystem([
+              tradeData,
+              buyInAmount,
+              isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
+              false,
+              systemBetDenominator,
+          ])
+        : sportsAMMV2Contract.read.tradeQuote([
+              tradeData,
+              buyInAmount,
+              isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
+              false,
+          ]);
 };

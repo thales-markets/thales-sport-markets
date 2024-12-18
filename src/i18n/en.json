@@ -381,6 +381,8 @@
         "card": {
             "ticket-id": "Ticket ID",
             "live": "Live",
+            "system": "System",
+            "system-short": "Sys",
             "claim-batch-tooltip": "Claim all your pending positions in one transaction.",
             "number-of-games": "No. of games",
             "ticket-paid": "Ticket paid",
@@ -392,12 +394,19 @@
             "claim-all": "Claim All",
             "canceled": "Canceled",
             "total-quote": "Total quote",
+            "max-quote": "Max quote",
+            "winning-quote": "Winning quote",
             "result": "Result",
             "position-size": "Position size",
             "starts": "Starts",
             "payout": "Payout",
             "payout-in": "Payout in",
-            "approve-swap-tooltip": "To get payout in {{currencyKey}}, you need to approve swap from {{defaultCurrency}} to {{currencyKey}}."
+            "approve-swap-tooltip": "To get payout in {{currencyKey}}, you need to approve swap from {{defaultCurrency}} to {{currencyKey}}.",
+            "number-of-combination": "No. of combinations",
+            "number-of-winning-combination": "No. of winning comb",
+            "paid-per-combination": "Paid per comb",
+            "min-payout": "Min payout",
+            "max-payout": "Max payout"
         },
         "table": {
             "time": "Time",
@@ -750,7 +759,12 @@
         },
         "parlay": {
             "ticket-slip": "Ticket slip",
+            "regular": "Regular",
+            "system": "System",
             "thales-bonus-info": "Use THALES and get 2% bonus payout for each game.",
+            "min-quote": "Min quote",
+            "max-quote": "Max quote",
+            "winning-quote": "Winning quote",
             "total-quote": "Total quote",
             "total-bonus": "Total bonus",
             "persist-games": "Keep selection after submit",
@@ -783,7 +797,10 @@
             "odds-changed-error": "Odds changed while fulfilling the order. Try increasing the slippage.",
             "info": {
                 "min-quote": "Minimal TOTAL QUOTE supported is {{value}}",
-                "max-quote": "Maximal TOTAL QUOTE supported is {{value}}"
+                "max-quote": "Maximal TOTAL QUOTE supported is {{value}}",
+                "system-bet-min-quote": "Minimal TOTAL QUOTE supported for selected system is {{value}}",
+                "system-bet-max-quote": "Maximal TOTAL QUOTE supported for selected system is {{value}}",
+                "system-bet-number-of-combination": "Max allowed number of system combinations is {{value}}"
             },
             "show-parlay": "Show Parlay",
             "validation": {
@@ -861,7 +878,15 @@
                 "swap": "Swap {{src}} to {{dst}}",
                 "approve-buy": "Approve buy with {{currencyKey}}",
                 "buy": "Buy with {{currencyKey}}"
-            }
+            },
+            "number-of-combinations": "Number of combinations",
+            "number-of-combinations-short": "No. of comb",
+            "number-of-winning-combinations-short": "No. of winning comb",
+            "buy-in-per-combination": "Buy-in per combination",
+            "min-payout": "Min payout",
+            "max-payout": "Max payout",
+            "min-max-payout": "Min/max payout",
+            "system-bet-min-markets-validation": "System bet requires minimum {{minMarkets}} games"
         },
         "zero-odds-tooltip": "Odds unavailable at the moment.",
         "low-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",
