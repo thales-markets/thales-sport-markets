@@ -16,6 +16,7 @@ import { formatCurrencyWithKey, truncateAddress } from 'thales-utils';
 import { RootState } from 'types/redux';
 import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateral, getMaxCollateralDollarValue, mapMultiCollateralBalances } from 'utils/collaterals';
+import { getDefaultCollateralIndexForNetworkId } from 'utils/network';
 import { useAccount, useChainId, useClient } from 'wagmi';
 
 const MIN_BUYIN_DOLLAR = 3;
@@ -98,6 +99,16 @@ const WalletInfo: React.FC = ({}) => {
     useEffect(() => {
         setIsFreeBetInitialized(false);
     }, [walletAddress, networkId]);
+
+    // Initialize default collateral from LS
+    useEffect(() => {
+        dispatch(
+            setPaymentSelectedCollateralIndex({
+                selectedCollateralIndex: getDefaultCollateralIndexForNetworkId(networkId),
+                networkId,
+            })
+        );
+    }, [dispatch, networkId]);
 
     // Initialize free bet collateral
     useEffect(() => {
