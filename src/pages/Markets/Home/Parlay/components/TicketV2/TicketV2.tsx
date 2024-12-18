@@ -659,11 +659,11 @@ const Ticket: React.FC<TicketProps> = ({
             if (buyInAmountForQuote <= 0 || noProofs) return;
 
             const sportsAMMV2Contract = getContractInstance(ContractType.SPORTS_AMM_V2, {
-                client: walletClient.data,
+                client,
                 networkId,
             });
             const multiCollateralOnOffRampContract = getContractInstance(ContractType.MULTICOLLATERAL_ON_OFF_RAMP, {
-                client: walletClient.data,
+                client,
                 networkId,
             });
 
@@ -732,7 +732,7 @@ const Ticket: React.FC<TicketProps> = ({
             }
         },
         [
-            walletClient.data,
+            client,
             networkId,
             noProofs,
             markets,
@@ -846,12 +846,12 @@ const Ticket: React.FC<TicketProps> = ({
                     isDefaultCollateral && !swapToThales
                         ? getContractInstance(
                               ContractType.MULTICOLLATERAL,
-                              { client: walletClient.data, networkId },
+                              { client, networkId },
                               getCollateralIndex(networkId, getDefaultCollateral(networkId))
                           )
                         : getContractInstance(
                               ContractType.MULTICOLLATERAL,
-                              { client: walletClient.data, networkId },
+                              { client, networkId },
                               getCollateralIndex(networkId, collateralToAllow)
                           );
 
@@ -890,7 +890,6 @@ const Ticket: React.FC<TicketProps> = ({
         isBuying,
         isStakedThales,
         client,
-        walletClient.data,
     ]);
 
     const isValidProfit: boolean = useMemo(() => {
@@ -996,17 +995,23 @@ const Ticket: React.FC<TicketProps> = ({
         setIsAllowing(true);
         const id = toast.loading(t('market.toast-message.transaction-pending'));
         try {
-            const collateralContractWithSigner = isDefaultCollateral
-                ? getContractInstance(
-                      ContractType.MULTICOLLATERAL,
-                      { client: walletClient.data, networkId },
-                      getCollateralIndex(networkId, getDefaultCollateral(networkId))
-                  )
-                : getContractInstance(
-                      ContractType.MULTICOLLATERAL,
-                      { client: walletClient.data, networkId },
-                      getCollateralIndex(networkId, isEth ? (CRYPTO_CURRENCY_MAP.WETH as Coins) : selectedCollateral)
-                  );
+            const collateralIndex = getCollateralIndex(
+                networkId,
+                isDefaultCollateral
+                    ? getDefaultCollateral(networkId)
+                    : isEth
+                    ? (CRYPTO_CURRENCY_MAP.WETH as Coins)
+                    : selectedCollateral
+            );
+
+            const collateralContractWithSigner = getContractInstance(
+                ContractType.MULTICOLLATERAL,
+                {
+                    client: walletClient.data,
+                    networkId,
+                },
+                collateralIndex
+            );
 
             const addressToApprove = sportsAMMV2Contract.addresses[networkId];
             let txHash;
@@ -1198,13 +1203,16 @@ const Ticket: React.FC<TicketProps> = ({
         const sportsAMMDataContract = getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig);
         const sportsAMMV2ManagerContract = getContractInstance(ContractType.SPORTS_AMM_V2_MANAGER, networkConfig);
         const freeBetHolderContract = getContractInstance(ContractType.FREE_BET_HOLDER, networkConfig);
-        const stakingThalesBettingProxy = getContractInstance(ContractType.STAKING_THALES_BETTING_PROXY, networkConfig);
+        const stakingThalesBettingProxyContract = getContractInstance(
+            ContractType.STAKING_THALES_BETTING_PROXY,
+            networkConfig
+        );
 
         // TODO: separate logic for regular and live markets
         if (
             (sportsAMMV2Contract && !markets[0].live) ||
             (liveTradingProcessorContract && markets[0].live) ||
-            (stakingThalesBettingProxy && isStakedThales)
+            (stakingThalesBettingProxyContract && isStakedThales)
         ) {
             setIsBuying(true);
             const toastId = toast.loading(t('market.toast-message.transaction-pending'));
@@ -1242,9 +1250,7 @@ const Ticket: React.FC<TicketProps> = ({
                 }
             }
 
-            const sportsAMMV2ContractWithSigner = markets[0].live ? liveTradingProcessorContract : sportsAMMV2Contract;
-            const freeBetContractWithSigner = freeBetHolderContract;
-            const stakingThalesBettingProxyWithSigner = stakingThalesBettingProxy;
+            const sportsAMMV2OrLiveContract = markets[0].live ? liveTradingProcessorContract : sportsAMMV2Contract;
 
             try {
                 const referralId =
@@ -1284,7 +1290,7 @@ const Ticket: React.FC<TicketProps> = ({
                             if (txReceipt.status === 'success') {
                                 tx = await getLiveTradingProcessorTransaction(
                                     collateralAddress,
-                                    sportsAMMV2ContractWithSigner,
+                                    sportsAMMV2OrLiveContract,
                                     tradeData,
                                     parsedBuyInAmount,
                                     liveTotalQuote,
@@ -1294,14 +1300,14 @@ const Ticket: React.FC<TicketProps> = ({
                                     false,
                                     undefined,
                                     isStakedThales,
-                                    stakingThalesBettingProxyWithSigner
+                                    stakingThalesBettingProxyContract
                                 );
                             }
                         }
                     } else {
                         tx = await getLiveTradingProcessorTransaction(
                             swapToThales ? thalesCollateralAddress : collateralAddress,
-                            sportsAMMV2ContractWithSigner,
+                            sportsAMMV2OrLiveContract,
                             tradeData,
                             parsedBuyInAmount,
                             liveTotalQuote,
@@ -1309,9 +1315,9 @@ const Ticket: React.FC<TicketProps> = ({
                             additionalSlippage,
                             isBiconomy,
                             isFreeBetActive,
-                            freeBetContractWithSigner,
+                            freeBetHolderContract,
                             isStakedThales,
-                            stakingThalesBettingProxyWithSigner
+                            stakingThalesBettingProxyContract
                         );
                     }
                 } else {
@@ -1320,8 +1326,8 @@ const Ticket: React.FC<TicketProps> = ({
                         isDefaultCollateral && !swapToThales,
                         isEth && !swapToThales,
                         networkId,
-                        sportsAMMV2ContractWithSigner,
-                        freeBetContractWithSigner,
+                        sportsAMMV2OrLiveContract,
+                        freeBetHolderContract,
                         tradeData,
                         parsedBuyInAmount,
                         parsedTotalQuote,
@@ -1330,7 +1336,7 @@ const Ticket: React.FC<TicketProps> = ({
                         isBiconomy,
                         isFreeBetActive,
                         isStakedThales,
-                        stakingThalesBettingProxyWithSigner,
+                        stakingThalesBettingProxyContract,
                         walletClient.data
                     );
                 }
@@ -1386,7 +1392,7 @@ const Ticket: React.FC<TicketProps> = ({
                         toast.update(toastId, getSuccessToastOptions(t('market.toast-message.buy-success')));
                         setIsBuying(false);
                         setCollateralAmount('');
-                    } else if (sportsAMMV2ContractWithSigner) {
+                    } else if (sportsAMMV2OrLiveContract) {
                         let counter = 0;
                         let adapterAllowed = false;
 
@@ -1416,7 +1422,7 @@ const Ticket: React.FC<TicketProps> = ({
                                 }
                             }
 
-                            const isFulfilled = await sportsAMMV2ContractWithSigner.read.requestIdToFulfillAllowed([
+                            const isFulfilled = await sportsAMMV2OrLiveContract.read.requestIdToFulfillAllowed([
                                 requestId,
                             ]);
                             if (!isFulfilled) {
@@ -1439,12 +1445,12 @@ const Ticket: React.FC<TicketProps> = ({
                                     sportsAMMDataContract &&
                                     sportsAMMV2ManagerContract &&
                                     freeBetHolderContract &&
-                                    stakingThalesBettingProxy
+                                    stakingThalesBettingProxyContract
                                 ) {
                                     const numOfActiveTicketsPerUser = isFreeBetActive
                                         ? await freeBetHolderContract.read.numOfActiveTicketsPerUser([walletAddress])
                                         : isStakedThales
-                                        ? await stakingThalesBettingProxy.read.numOfActiveTicketsPerUser([
+                                        ? await stakingThalesBettingProxyContract.read.numOfActiveTicketsPerUser([
                                               walletAddress,
                                           ])
                                         : await sportsAMMV2ManagerContract.read.numOfActiveTicketsPerUser([
@@ -1766,8 +1772,6 @@ const Ticket: React.FC<TicketProps> = ({
         totalQuote,
         swappedThalesToReceive,
         swapToThales,
-        client,
-        walletClient.data,
     ]);
 
     const inputRef = useRef<HTMLDivElement>(null);
