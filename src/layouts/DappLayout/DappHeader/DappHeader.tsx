@@ -188,8 +188,8 @@ const DappHeader: React.FC = () => {
         <SPAAnchor style={{ width: isMobile ? '100%' : 'fit-content' }} href={buildHref(ROUTES.Wizard)}>
             <Button
                 backgroundColor={theme.background.primary}
-                textColor={theme.button.textColor.quaternary}
-                borderColor={theme.button.borderColor.secondary}
+                textColor={theme.christmasTheme.button.textColor.secondary}
+                borderColor={theme.christmasTheme.button.borderColor.primary}
                 width="100%"
                 fontWeight="400"
                 additionalStyles={{
@@ -216,7 +216,7 @@ const DappHeader: React.FC = () => {
                             <Lottie
                                 autoplay={true}
                                 animationData={xmasPackage}
-                                loop={true}
+                                loop={false}
                                 style={{ width: '50px', height: '50px', marginBottom: '10px' }}
                             />
                         )}
