@@ -1,4 +1,4 @@
-import { ReactComponent as Logo } from 'assets/images/overtime-logo.svg';
+import Logo from 'assets/images/overtime-logo.svg?react';
 import BannerCarousel from 'components/BannerCarousel';
 import Button from 'components/Button';
 import Loader from 'components/Loader';
@@ -7,6 +7,7 @@ import Scroll from 'components/Scroll';
 import Search from 'components/Search';
 import SimpleLoader from 'components/SimpleLoader';
 import Checkbox from 'components/fields/Checkbox/Checkbox';
+import { MarketTypePlayerPropsGroupsBySport } from 'constants/marketTypes';
 import { RESET_STATE } from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { SportFilter, StatusFilter } from 'enums/markets';
@@ -21,7 +22,7 @@ import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { getIsAppReady, getIsMobile } from 'redux/modules/app';
+import { getIsMobile } from 'redux/modules/app';
 import {
     getDatePeriodFilter,
     getIsMarketSelected,
@@ -40,15 +41,16 @@ import {
     setTagFilter,
 } from 'redux/modules/market';
 import { getFavouriteLeagues } from 'redux/modules/ui';
-import { getNetworkId } from 'redux/modules/wallet';
 import styled, { CSSProperties, useTheme } from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { addHoursToCurrentDate, localStore } from 'thales-utils';
 import { MarketsCache, SportMarket, SportMarkets, TagInfo, Tags } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
+import { getDefaultPlayerPropsLeague } from 'utils/marketsV2';
 import { history } from 'utils/routes';
 import { getScrollMainContainerToTop } from 'utils/scroll';
 import useQueryParam from 'utils/useQueryParams';
+import { useChainId } from 'wagmi';
 import { BOXING_LEAGUES, LeagueMap } from '../../../constants/sports';
 import { MarketType } from '../../../enums/marketTypes';
 import { League, Sport } from '../../../enums/sports';
@@ -61,8 +63,6 @@ import GlobalFilters from '../components/StatusFilters';
 import Breadcrumbs from './Breadcrumbs';
 import Header from './Header';
 import SelectedMarket from './SelectedMarket';
-import { MarketTypePlayerPropsGroupsBySport } from 'constants/marketTypes';
-import { getDefaultPlayerPropsLeague } from 'utils/marketsV2';
 
 const Parlay = lazy(() => import(/* webpackChunkName: "Parlay" */ './Parlay'));
 
@@ -80,8 +80,9 @@ const Home: React.FC = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const theme: ThemeInterface = useTheme();
-    const isAppReady = useSelector(getIsAppReady);
-    const networkId = useSelector(getNetworkId);
+
+    const networkId = useChainId();
+
     const marketSearch = useSelector(getMarketSearch);
     const datePeriodFilter = useSelector(getDatePeriodFilter);
     const statusFilter = useSelector(getStatusFilter);
@@ -209,22 +210,16 @@ const Home: React.FC = () => {
     );
 
     useEffect(() => {
-        if (sportFilter == SportFilter.PlayerProps) {
+        if (sportFilter === SportFilter.PlayerProps) {
             setTagParam(LeagueMap[getDefaultPlayerPropsLeague(playerPropsCountPerTag)].label);
         }
-    }, [playerPropsCountPerTag]);
+    }, [playerPropsCountPerTag, sportFilter, setTagParam]);
 
-    const sportMarketsQueryNew = useSportsMarketsV2Query(statusFilter, networkId, false, undefined, {
-        enabled: isAppReady,
-    });
+    const sportMarketsQueryNew = useSportsMarketsV2Query(statusFilter, false, { networkId }, undefined);
 
-    const liveSportMarketsQuery = useLiveSportsMarketsQuery(networkId, sportFilter === SportFilter.Live, {
-        enabled: isAppReady,
-    });
+    const liveSportMarketsQuery = useLiveSportsMarketsQuery(sportFilter === SportFilter.Live, { networkId });
 
-    const gameMultipliersQuery = useGameMultipliersQuery({
-        enabled: isAppReady,
-    });
+    const gameMultipliersQuery = useGameMultipliersQuery();
 
     const finalMarkets = useMemo(() => {
         const allMarkets: MarketsCache =
@@ -418,9 +413,7 @@ const Home: React.FC = () => {
         }
     }, [favouriteLeagues, sportFilter, showActive]);
 
-    const openSportMarketsQuery = useSportsMarketsV2Query(StatusFilter.OPEN_MARKETS, networkId, false, undefined, {
-        enabled: isAppReady,
-    });
+    const openSportMarketsQuery = useSportsMarketsV2Query(StatusFilter.OPEN_MARKETS, false, { networkId }, undefined);
 
     const openSportMarkets = useMemo(() => {
         if (openSportMarketsQuery.isSuccess && openSportMarketsQuery.data) {

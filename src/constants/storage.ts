@@ -1,3 +1,6 @@
+import { NetworkId } from 'thales-utils';
+import { SupportedNetwork } from 'types/network';
+
 export const LOCAL_STORAGE_KEYS = {
     SELECTED_WALLET: 'selectedWallet',
     UI_THEME: 'ui-theme',
@@ -30,5 +33,15 @@ export const LOCAL_STORAGE_KEYS = {
     OVERDROP_WELCOME_MODAL_FLAG: 'overdropWelcomeModalFlag',
     OVERDROP_PREVENT_DAILY_MODAL: 'overdropPreventDailyModal',
     OVERDROP_STATE: 'overdropState',
+    SESSION_P_KEY: {
+        [NetworkId.OptimismMainnet]: 'sessionPKey_10',
+        [NetworkId.Arbitrum]: 'sessionPKey_42161',
+        [NetworkId.OptimismSepolia]: 'sessionPKey_11155420',
+    } as Record<SupportedNetwork, string>,
+    SESSION_VALID_UNTIL: {
+        [NetworkId.OptimismMainnet]: 'sessionValidUntil_10',
+        [NetworkId.Arbitrum]: 'sessionValidUntil_42161',
+        [NetworkId.OptimismSepolia]: 'sessionValidUntil_11155420',
+    } as Record<SupportedNetwork, string>,
     STAKING_MODAL_MUTE_END: 'stakingModalMuteEnd',
 };

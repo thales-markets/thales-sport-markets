@@ -1,4 +1,4 @@
-import { ReactComponent as LogoIcon } from 'assets/images/overtime-logo.svg';
+import LogoIcon from 'assets/images/overtime-logo.svg?react';
 import SPAAnchor from 'components/SPAAnchor';
 import ROUTES, { RESET_STATE } from 'constants/routes';
 import React from 'react';

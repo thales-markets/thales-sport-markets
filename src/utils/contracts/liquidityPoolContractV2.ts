@@ -1,4 +1,8 @@
-const liquidityPoolContractV2 = [
+import { LiquidityPoolCollateral } from 'enums/liquidityPool';
+import { Network } from 'enums/network';
+import { ContractData } from 'types/viem';
+
+const ABI = [
     { inputs: [{ internalType: 'address', name: 'target', type: 'address' }], name: 'AddressEmptyCode', type: 'error' },
     {
         inputs: [{ internalType: 'address', name: 'account', type: 'address' }],
@@ -728,5 +732,32 @@ const liquidityPoolContractV2 = [
         type: 'function',
     },
 ];
+
+const liquidityPoolContractV2: Record<LiquidityPoolCollateral, ContractData> = {
+    [LiquidityPoolCollateral.THALES]: {
+        addresses: {
+            [Network.OptimismMainnet]: '0xE59206b08cC96Da0818522C75eE3Fd4EBB7c0A47',
+            [Network.Arbitrum]: '0x9733AB157f5A89f0AD7460d08F869956aE2018dA',
+            [Network.OptimismSepolia]: '0x93ca60840984348f8Dc4d81e274a12CAaDDC59aE',
+        },
+        abi: ABI,
+    },
+    [LiquidityPoolCollateral.USDC]: {
+        addresses: {
+            [Network.OptimismMainnet]: '0x0fe1044Fc8C05482102Db14368fE88791E9B8698',
+            [Network.Arbitrum]: '0x22D180F39A0eB66098cf839AF5e3C6b009383B6A',
+            [Network.OptimismSepolia]: '0xAE145Fe3Af36aAE9135c488E9B728eD504B2385C',
+        },
+        abi: ABI,
+    },
+    [LiquidityPoolCollateral.WETH]: {
+        addresses: {
+            [Network.OptimismMainnet]: '0x4f2822D4e60af7f9F70E7e45BC1941fe3461231e',
+            [Network.Arbitrum]: '0xcB4728a1789B87E05c813B68DBc5E6A98a4856bA',
+            [Network.OptimismSepolia]: '0xCb99b139a30fa2C09a8396B4a1cCda06D91DdC72',
+        },
+        abi: ABI,
+    },
+};
 
 export default liquidityPoolContractV2;

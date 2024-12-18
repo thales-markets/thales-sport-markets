@@ -4,10 +4,10 @@ import { TicketErrorCode } from 'enums/markets';
 import { Network } from 'enums/network';
 import { localStore } from 'thales-utils';
 import { ParlayPayment, SerializableSportMarket, TicketPosition } from 'types/markets';
+import { RootState, TicketSliceState } from 'types/redux';
 import { isFuturesMarket, isPlayerPropsMarket } from '../../utils/markets';
 import { isSameMarket, serializableSportMarketAsSportMarket } from '../../utils/marketsV2';
 import { isPlayerPropsCombiningEnabled } from '../../utils/sports';
-import { RootState } from '../rootReducer';
 
 const sliceName = 'ticket';
 
@@ -39,15 +39,6 @@ const getDefaultLiveSlippage = (): number => {
 
 const getDefaultError = () => {
     return { code: TicketErrorCode.NO_ERROS, data: '' };
-};
-
-type TicketSliceState = {
-    ticket: TicketPosition[];
-    payment: ParlayPayment;
-    maxTicketSize: number;
-    liveBetSlippage: number;
-    isFreeBetDisabledByUser: boolean;
-    error: { code: TicketErrorCode; data: string };
 };
 
 const initialState: TicketSliceState = {

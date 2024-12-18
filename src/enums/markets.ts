@@ -7,9 +7,9 @@ export enum StatusFilter {
 }
 
 export enum SortDirection {
-    NONE,
-    ASC,
-    DESC,
+    NONE = 'none',
+    ASC = 'asc',
+    DESC = 'desc',
 }
 
 export enum SportFilter {
@@ -92,11 +92,4 @@ export enum TicketErrorCode {
     SAME_PLAYER_DIFFERENT_TYPES = 3,
     PLAYER_PROPS_COMBINING_NOT_ENABLED = 4,
     FUTURES_COMBINING_NOT_SUPPORTED = 5,
-}
-
-export enum ContractRole {
-    ROOT_SETTING,
-    RISK_MANAGING,
-    MARKET_RESOLVING,
-    TICKET_PAUSER,
 }

@@ -5,7 +5,6 @@ import NumericInput from 'components/fields/NumericInput';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { STAKING_MODAL_MUTE_PERIOD_IN_MS } from 'constants/ui';
-import { BigNumber, ethers } from 'ethers';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import useUserStakingDataQuery from 'queries/wallet/useUserStakingData';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -13,16 +12,18 @@ import { Trans, useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getIsAppReady } from 'redux/modules/app';
 import { setStakingModalMuteEnd } from 'redux/modules/ui';
-import { getIsConnectedViaParticle, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsBiconomy, getIsConnectedViaParticle } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
 import { Coins, formatCurrencyWithKey, formatPercentage, truncToDecimals } from 'thales-utils';
 import { StakingData } from 'types/markets';
+import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
+import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateralIndex } from 'utils/collaterals';
 import { checkAllowance } from 'utils/network';
-import networkConnector from 'utils/networkConnector';
+import { Client, maxUint256, parseEther } from 'viem';
+import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 import { StakingMessage } from '../OpenClaimableTickets/styled-components';
 import {
     ButtonContainer,
@@ -37,6 +38,11 @@ import {
     Title,
 } from './styled-components';
 
+// Contracts
+import { ContractType } from 'enums/contract';
+import { getContractInstance } from 'utils/contract';
+import { waitForTransactionReceipt } from 'viem/actions';
+
 type StakingModalProps = {
     defaultAmount: number;
     onClose: () => void;
@@ -48,10 +54,14 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
     const theme: ThemeInterface = useTheme();
     const { openConnectModal } = useConnectModal();
 
-    const isAppReady = useSelector(getIsAppReady);
-    const isWalletConnected = useSelector(getIsWalletConnected);
-    const networkId = useSelector(getNetworkId);
-    const walletAddress = useSelector(getWalletAddress) || '';
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+
+    const networkId = useChainId();
+    const client = useClient();
+    const walletClient = useWalletClient();
+    const { address, isConnected } = useAccount();
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+
     const isParticle = useSelector(getIsConnectedViaParticle);
 
     const [amountToStake, setAmountToStake] = useState<number | string>(defaultAmount);
@@ -63,9 +73,13 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
     const [lastValidStakingData, setLastValidStakingData] = useState<StakingData | undefined>(undefined);
     const [stakedAmount, setStakedAmount] = useState<number>(0);
 
-    const multipleCollateralBalancesQuery = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
-        enabled: isAppReady && isWalletConnected,
-    });
+    const multipleCollateralBalancesQuery = useMultipleCollateralBalanceQuery(
+        walletAddress,
+        { networkId, client },
+        {
+            enabled: isConnected,
+        }
+    );
 
     const multiCollateralBalances =
         multipleCollateralBalancesQuery?.isSuccess && multipleCollateralBalancesQuery?.data
@@ -74,9 +88,13 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
 
     const thalesBalance = multiCollateralBalances ? multiCollateralBalances[CRYPTO_CURRENCY_MAP.THALES as Coins] : 0;
 
-    const userStakingDataQuery = useUserStakingDataQuery(walletAddress, networkId, {
-        enabled: isAppReady && isWalletConnected,
-    });
+    const userStakingDataQuery = useUserStakingDataQuery(
+        walletAddress,
+        { networkId, client },
+        {
+            enabled: isConnected,
+        }
+    );
 
     useEffect(() => {
         if (userStakingDataQuery.isSuccess && userStakingDataQuery.data) {
@@ -102,7 +120,7 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
         isUnstaking ||
         !isAmountEntered ||
         insufficientBalance ||
-        !isWalletConnected ||
+        !isConnected ||
         isStakingPaused ||
         !hasStakeAllowance;
 
@@ -122,51 +140,61 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
     }, [amountToStake, thalesBalance]);
 
     useEffect(() => {
-        const { stakingThalesContract, signer, multipleCollateral } = networkConnector;
+        const [stakingThalesTokenContract, thalesTokenContract] = [
+            getContractInstance(ContractType.STAKING_THALES, { client, networkId }),
+            getContractInstance(
+                ContractType.MULTICOLLATERAL,
+                { client, networkId },
+                getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.sTHALES as Coins)
+            ),
+        ];
 
-        if (stakingThalesContract && multipleCollateral && signer) {
-            const thalesTokenContractWithSigner = multipleCollateral[CRYPTO_CURRENCY_MAP.THALES as Coins]?.connect(
-                signer
-            );
+        if (stakingThalesTokenContract && thalesTokenContract) {
             const getAllowance = async () => {
                 try {
-                    const parsedStakeAmount = ethers.utils.parseEther(Number(amountToStake).toString());
+                    const parsedStakeAmount = parseEther(Number(amountToStake).toString());
                     const allowance = await checkAllowance(
                         parsedStakeAmount,
-                        thalesTokenContractWithSigner,
+                        thalesTokenContract,
                         walletAddress,
-                        stakingThalesContract.address
+                        stakingThalesTokenContract.address
                     );
                     setStakeAllowance(allowance);
                 } catch (e) {
                     console.log(e);
                 }
             };
-            if (isWalletConnected && amountToStake) {
+            if (isConnected && amountToStake) {
                 getAllowance();
             }
         }
-    }, [walletAddress, isWalletConnected, hasStakeAllowance, amountToStake, isAllowingStake]);
+    }, [walletAddress, isConnected, hasStakeAllowance, amountToStake, isAllowingStake, networkId, client]);
 
-    const handleAllowance = async (approveAmount: BigNumber) => {
-        const { stakingThalesContract, signer, multipleCollateral } = networkConnector;
+    const handleAllowance = async (approveAmount: bigint) => {
+        const [stakingThalesTokenContract, thalesTokenContract] = [
+            getContractInstance(ContractType.STAKING_THALES, { client, networkId }),
+            getContractInstance(
+                ContractType.MULTICOLLATERAL,
+                { client: walletClient.data, networkId },
+                getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.sTHALES as Coins)
+            ),
+        ];
 
-        if (stakingThalesContract && multipleCollateral && signer) {
+        if (stakingThalesTokenContract && thalesTokenContract) {
             setIsAllowingStake(true);
             const id = toast.loading(t('market.toast-message.transaction-pending'));
 
             try {
-                const thalesTokenContractWithSigner = multipleCollateral[CRYPTO_CURRENCY_MAP.THALES as Coins]?.connect(
-                    signer
-                );
+                const txHash = await thalesTokenContract.write.approve([
+                    stakingThalesTokenContract.address,
+                    approveAmount,
+                ]);
 
-                const tx = (await thalesTokenContractWithSigner?.approve(
-                    stakingThalesContract.address,
-                    approveAmount
-                )) as ethers.ContractTransaction;
+                const txReceipt = await waitForTransactionReceipt(client as Client, {
+                    hash: txHash,
+                });
 
-                const txResult = await tx.wait();
-                if (txResult && txResult.transactionHash) {
+                if (txReceipt.status === 'success') {
                     toast.update(id, getSuccessToastOptions(t('market.toast-message.approve-success')));
                     setOpenApprovalModal(false);
                     setIsAllowingStake(false);
@@ -180,19 +208,23 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
     };
 
     const handleStakeThales = async () => {
-        const { stakingThalesContract, signer } = networkConnector;
+        const stakingThalesContract = getContractInstance(ContractType.STAKING_THALES, {
+            client: walletClient.data,
+            networkId,
+        });
 
-        if (stakingThalesContract && signer) {
+        if (stakingThalesContract) {
             const toastId = toast.loading(t('market.toast-message.transaction-pending'));
             try {
                 setIsStaking(true);
 
-                const stakingThalesContractWithSigner = stakingThalesContract.connect((networkConnector as any).signer);
-                const amount = ethers.utils.parseEther(amountToStake.toString());
-                const tx = await stakingThalesContractWithSigner.stake(amount);
-                const txResult = await tx.wait();
+                const amount = parseEther(amountToStake.toString());
+                const txHash = await stakingThalesContract?.write?.stake([amount]);
 
-                if (txResult && txResult.transactionHash) {
+                const txReceipt = await waitForTransactionReceipt(client as Client, {
+                    hash: txHash,
+                });
+                if (txReceipt.status === 'success') {
                     toast.update(
                         toastId,
                         getSuccessToastOptions(t('profile.staking-modal.stake-confirmation-message'))
@@ -209,7 +241,7 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
     };
 
     const getSubmitButton = () => {
-        if (!isWalletConnected) {
+        if (!isConnected) {
             return (
                 <Button onClick={openConnectModal} {...defaultButtonProps}>
                     {t('common.wallet.connect-your-wallet')}
@@ -234,9 +266,7 @@ const StakingModal: React.FC<StakingModalProps> = ({ defaultAmount, onClose }) =
             return (
                 <Button
                     disabled={isAllowingStake}
-                    onClick={() =>
-                        isParticle ? handleAllowance(ethers.constants.MaxUint256) : setOpenApprovalModal(true)
-                    }
+                    onClick={() => (isParticle ? handleAllowance(maxUint256) : setOpenApprovalModal(true))}
                     {...defaultButtonProps}
                 >
                     {t('common.wallet.approve')}

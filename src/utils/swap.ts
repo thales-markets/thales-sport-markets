@@ -1,14 +1,15 @@
+import { getWalletClient } from '@wagmi/core';
 import { generalConfig } from 'config/general';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { NATIVE_TOKEN_ADDRES, ZERO_ADDRESS } from 'constants/network';
 import { Network } from 'enums/network';
-import { BigNumber, BigNumberish } from 'ethers';
-import { coinFormatter, Coins } from 'thales-utils';
+import { wagmiConfig } from 'pages/Root/wagmiConfig';
+import { bigNumberFormatter, coinFormatter, Coins } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
 import { SwapParams } from 'types/swap';
 import { Address } from 'viem';
+import { estimateGas } from 'viem/actions';
 import multipleCollateralContract from './contracts/multipleCollateralContract';
-import networkConnector from './networkConnector';
 import { delay } from './timer';
 
 const REFERRER_ADDRESS = '0x1777C6d588fd931751762836811529c0073D6376';
@@ -16,7 +17,7 @@ const REFERRER_ADDRESS = '0x1777C6d588fd931751762836811529c0073D6376';
 export const getSwapParams = (
     networkId: SupportedNetwork,
     walletAddress: Address,
-    buyIn: BigNumber,
+    buyIn: bigint,
     tokenAddress: Address
 ): SwapParams => {
     const src = tokenAddress === ZERO_ADDRESS ? NATIVE_TOKEN_ADDRES : tokenAddress;
@@ -54,7 +55,7 @@ export const getQuote = async (networkId: SupportedNetwork, swapParams: SwapPara
             response = await fetch(url);
             retryCount++;
         }
-        const responseBody = response.ok ? await response.json() : Promise.resolve({ dstAmount: '' });
+        const responseBody = response.ok ? await response.json() : Promise.resolve({ dstAmount: BigInt(0) });
 
         return responseBody.dstAmount
             ? coinFormatter(responseBody.dstAmount, networkId, CRYPTO_CURRENCY_MAP.THALES as Coins)
@@ -69,7 +70,7 @@ export const checkSwapAllowance = async (
     networkId: SupportedNetwork,
     walletAddress: Address,
     tokenAddress: Address,
-    amount: BigNumber
+    amount: bigint
 ) => {
     const url = apiRequestUrl(networkId, '/approve/allowance', { tokenAddress, walletAddress });
 
@@ -84,7 +85,7 @@ export const checkSwapAllowance = async (
         }
 
         const data = response.ok ? await response.json() : { allowance: 0 };
-        return BigNumber.from(data.allowance).gte(amount);
+        return BigInt(data.allowance) >= amount;
     } catch (e) {
         console.log(e);
         return false;
@@ -95,6 +96,7 @@ export const buildTxForApproveTradeWithRouter = async (
     networkId: SupportedNetwork,
     walletAddress: Address,
     tokenAddress: Address,
+    client: any,
     amount?: string
 ) => {
     const url = apiRequestUrl(networkId, '/approve/transaction', amount ? { tokenAddress, amount } : { tokenAddress });
@@ -112,9 +114,11 @@ export const buildTxForApproveTradeWithRouter = async (
         const rawTransaction = await response.json();
 
         const gasLimit = Number(
-            await networkConnector.signer?.estimateGas({
-                ...rawTransaction,
-                from: walletAddress,
+            await estimateGas(client, {
+                account: rawTransaction?.from,
+                to: rawTransaction?.to,
+                data: rawTransaction?.data,
+                value: rawTransaction?.value,
             })
         );
 
@@ -133,7 +137,7 @@ export const buildTxForApproveTradeWithRouter = async (
 export const buildTxForSwap = async (
     networkId: SupportedNetwork,
     swapParams: SwapParams
-): Promise<{ dstAmount: BigNumberish; tx: string }> => {
+): Promise<{ dstAmount: bigint; tx: string }> => {
     const url = apiRequestUrl(networkId, '/swap', { ...swapParams, referrer: REFERRER_ADDRESS });
 
     try {
@@ -146,25 +150,26 @@ export const buildTxForSwap = async (
             retryCount++;
         }
 
-        const responseBody = response.ok ? await response.json() : Promise.resolve({ dstAmount: '', tx: '' });
+        const responseBody = response.ok ? await response.json() : Promise.resolve({ dstAmount: BigInt(0), tx: '' });
 
         return responseBody;
     } catch (e) {
         console.log(e);
-        return Promise.resolve({ dstAmount: '', tx: '' });
+        return Promise.resolve({ dstAmount: BigInt(0), tx: '' });
     }
 };
 
 // Send a transaction, return its hash
 export const sendTransaction = async (rawTransaction: any) => {
-    rawTransaction.value = BigNumber.from(rawTransaction.value).toHexString();
+    rawTransaction.value = bigNumberFormatter(rawTransaction.value);
+
+    const walletClient = await getWalletClient(wagmiConfig);
 
     let txHash = '';
     try {
-        txHash = await (networkConnector.signer?.provider as any).provider.request({
-            method: 'eth_sendTransaction',
-            params: [rawTransaction],
-        });
+        if (walletClient) {
+            txHash = await walletClient.sendTransaction(rawTransaction);
+        }
     } catch (e) {
         console.log(e);
         console.log('params:', rawTransaction);

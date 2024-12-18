@@ -1,10 +1,10 @@
 import { Network } from 'enums/network';
+import { ContractData } from 'types/viem';
 
-const priceFeedContract = {
+const priceFeedContract: ContractData = {
     addresses: {
         [Network.OptimismMainnet]: '0xf4aef21d906992aFAdde7A9676e1dB4feb6390DD',
         [Network.Arbitrum]: '0x563cCaBfBaCCb1a2e00d21704570cFc1AF21f47f',
-        [Network.Base]: '0x5B5DbF38a1fcf63B58d263648EBb63b53c1de3E7',
         [Network.OptimismSepolia]: '0x1B6F4245F79D968285df4056931d408C99F54A06',
     },
     abi: [

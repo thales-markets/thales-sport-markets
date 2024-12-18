@@ -1,31 +1,36 @@
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import QUERY_KEYS from 'constants/queryKeys';
-import { Network } from 'enums/network';
-import { useQuery, UseQueryOptions } from 'react-query';
+import { ContractType } from 'enums/contract';
 import { LiveTradingProcessorData } from 'types/markets';
-import networkConnector from 'utils/networkConnector';
+import { NetworkConfig } from 'types/network';
+import { ViemContract } from 'types/viem';
+import { getContractInstance } from 'utils/contract';
 
 const useLiveTradingProcessorDataQuery = (
-    networkId: Network,
-    options?: UseQueryOptions<LiveTradingProcessorData | undefined>
+    networkConfig: NetworkConfig,
+    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<LiveTradingProcessorData | undefined>(
-        QUERY_KEYS.LiveTradingProcessorData(networkId),
-        async () => {
+    return useQuery<LiveTradingProcessorData | undefined>({
+        queryKey: QUERY_KEYS.LiveTradingProcessorData(networkConfig.networkId),
+        queryFn: async () => {
             const data: LiveTradingProcessorData = {
                 maxAllowedExecutionDelay: 10,
             };
 
-            const { liveTradingProcessorContract } = networkConnector;
+            const liveTradingProcessorContract = getContractInstance(
+                ContractType.LIVE_TRADING_PROCESSOR,
+                networkConfig
+            ) as ViemContract;
 
             if (liveTradingProcessorContract) {
-                const maxAllowedExecutionDelay = await liveTradingProcessorContract.maxAllowedExecutionDelay();
+                const maxAllowedExecutionDelay = await liveTradingProcessorContract.read.maxAllowedExecutionDelay();
                 data.maxAllowedExecutionDelay = Number(maxAllowedExecutionDelay);
             }
 
             return data;
         },
-        { ...options }
-    );
+        ...options,
+    });
 };
 
 export default useLiveTradingProcessorDataQuery;

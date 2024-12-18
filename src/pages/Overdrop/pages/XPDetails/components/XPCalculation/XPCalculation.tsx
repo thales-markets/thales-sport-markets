@@ -3,23 +3,27 @@ import useUserMultipliersQuery from 'queries/overdrop/useUserMultipliersQuery';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import { getIsWalletConnected, getWalletAddress } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
+import { getIsMobile } from 'redux/modules/app';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
+import { RootState } from 'types/redux';
+import biconomyConnector from 'utils/biconomyWallet';
 import { getMultiplierValueFromQuery } from 'utils/overdrop';
+import { useAccount } from 'wagmi';
 
 const XPCalculation: React.FC = () => {
     const { t } = useTranslation();
 
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+
+    const { address, isConnected } = useAccount();
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const userMultipliersQuery = useUserMultipliersQuery(walletAddress, {
-        enabled: isAppReady && isWalletConnected,
+        enabled: isConnected,
     });
 
     const userMultipliers = useMemo(() => {

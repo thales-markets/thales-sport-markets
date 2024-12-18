@@ -6,6 +6,7 @@ import { ThemeInterface } from '../../types/ui';
 type ScrollProps = {
     innerRef?: LegacyRef<Scrollbars>;
     height: string;
+    children: React.ReactNode;
     onScroll?: () => void;
     onScrollStart?: () => void;
     onScrollStop?: () => void;

@@ -1,8 +1,8 @@
+import { MultiplierType } from 'enums/overdrop';
 import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
 import useUserMultipliersQuery from 'queries/overdrop/useUserMultipliersQuery';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getIsAppReady } from 'redux/modules/app';
 import {
     getOverdropPreventShowingModal,
     getOverdropUIState,
@@ -11,21 +11,24 @@ import {
     setOverdropState,
     setWelcomeModalVisibility,
 } from 'redux/modules/ui';
-import { getIsWalletConnected, getWalletAddress } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import { OverdropUIState, OverdropUserData } from 'types/overdrop';
+import { RootState } from 'types/redux';
+import biconomyConnector from 'utils/biconomyWallet';
 import { getCurrentLevelByPoints, getMultiplierValueFromQuery } from 'utils/overdrop';
+import { useAccount } from 'wagmi';
 import DailyModal from '../DailyModal';
 import LevelUpModal from '../LevelUpModal';
 import WelcomeModal from '../WelcomeModal';
-import { MultiplierType } from 'enums/overdrop';
 
 const ModalWrapper: React.FC = () => {
     const dispatch = useDispatch();
 
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+
+    const { address, isConnected } = useAccount();
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+
     const overdropUIState = useSelector((state: RootState) => getOverdropUIState(state));
     const overdropWelcomeModalFlag = useSelector((state: RootState) => getOverdropWelcomeModalFlag(state));
     const preventShowingModal = useSelector((state: RootState) => getOverdropPreventShowingModal(state));
@@ -42,11 +45,11 @@ const ModalWrapper: React.FC = () => {
     const [showDailyMultiplierModal, setShowDailyMultiplierModal] = useState<boolean>(false);
 
     const userDataQuery = useUserDataQuery(walletAddress, {
-        enabled: isAppReady && isWalletConnected,
+        enabled: isConnected,
     });
 
     const userMultipliersQuery = useUserMultipliersQuery(walletAddress, {
-        enabled: isAppReady && isWalletConnected,
+        enabled: isConnected,
     });
 
     const userData: OverdropUserData | undefined =
@@ -76,7 +79,7 @@ const ModalWrapper: React.FC = () => {
             (item) => item.walletAddress?.toLowerCase() == walletAddress.toLowerCase()
         );
 
-        if (isWalletConnected) {
+        if (isConnected) {
             if (!overdropStateItem) {
                 setOverdropStateByWallet({
                     walletAddress: walletAddress,
@@ -90,7 +93,7 @@ const ModalWrapper: React.FC = () => {
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, walletAddress, isWalletConnected]);
+    }, [dispatch, walletAddress, isConnected]);
 
     useEffect(() => {
         if (userData && userMultipliers && overdropStateByWallet) {

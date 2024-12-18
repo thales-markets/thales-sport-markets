@@ -1,36 +1,98 @@
-import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
+import { getBalance } from '@wagmi/core';
+import { CRYPTO_CURRENCY_MAP, DEFAULT_MULTI_COLLATERAL_BALANCE } from 'constants/currency';
+import { TBD_ADDRESS } from 'constants/network';
 import QUERY_KEYS from 'constants/queryKeys';
-import { Network } from 'enums/network';
-import { useQuery, UseQueryOptions } from 'react-query';
+import { ContractType } from 'enums/contract';
+import { wagmiConfig } from 'pages/Root/wagmiConfig';
 import { bigNumberFormatter, Coins, COLLATERAL_DECIMALS } from 'thales-utils';
-import networkConnector from 'utils/networkConnector';
+import { CollateralsBalance } from 'types/collateral';
+import { NetworkConfig } from 'types/network';
+import { ViemContract } from 'types/viem';
+import { getCollateralIndex } from 'utils/collaterals';
+import { getContractInstance } from 'utils/contract';
+import { Address } from 'viem';
 
 const useMultipleCollateralBalanceQuery = (
     walletAddress: string,
-    networkId: Network,
-    options?: UseQueryOptions<any>
+    networkConfig: NetworkConfig,
+    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<any>(
-        QUERY_KEYS.Wallet.MultipleCollateral(walletAddress, networkId),
-        async () => {
+    return useQuery<CollateralsBalance>({
+        queryKey: QUERY_KEYS.Wallet.MultipleCollateral(walletAddress, networkConfig.networkId),
+        queryFn: async () => {
+            let collateralsBalance: CollateralsBalance = DEFAULT_MULTI_COLLATERAL_BALANCE;
             try {
-                const multipleCollateral = networkConnector.multipleCollateral;
+                const multipleCollateralObject = {
+                    sUSD: getContractInstance(
+                        ContractType.MULTICOLLATERAL,
+                        networkConfig,
+                        getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.sUSD as Coins)
+                    ) as ViemContract,
+                    DAI: getContractInstance(
+                        ContractType.MULTICOLLATERAL,
+                        networkConfig,
+                        getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.DAI as Coins)
+                    ) as ViemContract,
+                    USDC: getContractInstance(
+                        ContractType.MULTICOLLATERAL,
+                        networkConfig,
+                        getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.USDC as Coins)
+                    ) as ViemContract,
+                    USDCe: getContractInstance(
+                        ContractType.MULTICOLLATERAL,
+                        networkConfig,
+                        getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.USDCe as Coins)
+                    ) as ViemContract,
+                    USDbC: getContractInstance(
+                        ContractType.MULTICOLLATERAL,
+                        networkConfig,
+                        getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.USDbC as Coins)
+                    ) as ViemContract,
+                    USDT: getContractInstance(
+                        ContractType.MULTICOLLATERAL,
+                        networkConfig,
+                        getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.USDT as Coins)
+                    ) as ViemContract,
+                    OP: getContractInstance(
+                        ContractType.MULTICOLLATERAL,
+                        networkConfig,
+                        getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.OP as Coins)
+                    ) as ViemContract,
+                    WETH: getContractInstance(
+                        ContractType.MULTICOLLATERAL,
+                        networkConfig,
+                        getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.WETH as Coins)
+                    ) as ViemContract,
+                    ETH: getContractInstance(
+                        ContractType.MULTICOLLATERAL,
+                        networkConfig,
+                        getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.ETH as Coins)
+                    ) as ViemContract,
+                    ARB: getContractInstance(
+                        ContractType.MULTICOLLATERAL,
+                        networkConfig,
+                        getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.ARB as Coins)
+                    ) as ViemContract,
+                    THALES: getContractInstance(
+                        ContractType.MULTICOLLATERAL,
+                        networkConfig,
+                        getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.THALES as Coins)
+                    ) as ViemContract,
+                    sTHALES: getContractInstance(
+                        ContractType.MULTICOLLATERAL,
+                        networkConfig,
+                        getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.sTHALES as Coins)
+                    ) as ViemContract,
+                };
 
-                if (!walletAddress || !networkId) {
-                    return {
-                        sUSD: 0,
-                        DAI: 0,
-                        USDCe: 0,
-                        USDT: 0,
-                        OP: 0,
-                        WETH: 0,
-                        ETH: 0,
-                        ARB: 0,
-                        USDC: 0,
-                        USDbC: 0,
-                        THALES: 0,
-                        sTHALES: 0,
-                    };
+                const thalesStakingContract = getContractInstance(
+                    ContractType.STAKING_THALES,
+                    networkConfig
+                ) as ViemContract;
+
+                if (!walletAddress || !networkConfig.networkId) {
+                    return collateralsBalance;
                 }
 
                 const [
@@ -38,62 +100,59 @@ const useMultipleCollateralBalanceQuery = (
                     DAIBalance,
                     USDCBalance,
                     USDCeBalance,
+                    USDbCBalance,
                     USDTBalance,
                     OPBalance,
                     WETHBalance,
                     ETHBalance,
                     ARBBalance,
-                    USDbCBalance,
                     THALESBalance,
                     sTHALESBalance,
                 ] = await Promise.all([
-                    multipleCollateral
-                        ? multipleCollateral[CRYPTO_CURRENCY_MAP.sUSD as Coins]?.balanceOf(walletAddress)
-                        : undefined,
-                    multipleCollateral
-                        ? multipleCollateral[CRYPTO_CURRENCY_MAP.DAI as Coins]?.balanceOf(walletAddress)
-                        : undefined,
-                    multipleCollateral
-                        ? multipleCollateral[CRYPTO_CURRENCY_MAP.USDC as Coins]?.balanceOf(walletAddress)
-                        : undefined,
-                    multipleCollateral
-                        ? multipleCollateral[CRYPTO_CURRENCY_MAP.USDCe as Coins]?.balanceOf(walletAddress)
-                        : undefined,
-                    multipleCollateral
-                        ? multipleCollateral[CRYPTO_CURRENCY_MAP.USDT as Coins]?.balanceOf(walletAddress)
-                        : undefined,
-                    multipleCollateral
-                        ? multipleCollateral[CRYPTO_CURRENCY_MAP.OP as Coins]?.balanceOf(walletAddress)
-                        : undefined,
-                    multipleCollateral
-                        ? multipleCollateral[CRYPTO_CURRENCY_MAP.WETH as Coins]?.balanceOf(walletAddress)
-                        : undefined,
-                    networkConnector.provider ? networkConnector.provider.getBalance(walletAddress) : undefined,
-                    multipleCollateral
-                        ? multipleCollateral[CRYPTO_CURRENCY_MAP.ARB as Coins]?.balanceOf(walletAddress)
-                        : undefined,
-                    multipleCollateral
-                        ? multipleCollateral[CRYPTO_CURRENCY_MAP.USDbC as Coins]?.balanceOf(walletAddress)
-                        : undefined,
-                    multipleCollateral
-                        ? multipleCollateral[CRYPTO_CURRENCY_MAP.THALES as Coins]?.balanceOf(walletAddress)
-                        : undefined,
-                    multipleCollateral
-                        ? multipleCollateral[CRYPTO_CURRENCY_MAP.sTHALES as Coins]?.stakedBalanceOf(walletAddress)
-                        : undefined,
+                    multipleCollateralObject?.sUSD && multipleCollateralObject?.sUSD?.address !== TBD_ADDRESS
+                        ? multipleCollateralObject.sUSD.read.balanceOf([walletAddress])
+                        : 0,
+                    multipleCollateralObject?.DAI && multipleCollateralObject?.DAI?.address !== TBD_ADDRESS
+                        ? multipleCollateralObject.DAI.read.balanceOf([walletAddress])
+                        : 0,
+                    multipleCollateralObject?.USDC && multipleCollateralObject?.USDC?.address !== TBD_ADDRESS
+                        ? multipleCollateralObject.USDC.read.balanceOf([walletAddress])
+                        : 0,
+                    multipleCollateralObject?.USDCe && multipleCollateralObject?.USDCe?.address !== TBD_ADDRESS
+                        ? multipleCollateralObject.USDCe.read.balanceOf([walletAddress])
+                        : 0,
+                    multipleCollateralObject?.USDbC && multipleCollateralObject?.USDbC?.address !== TBD_ADDRESS
+                        ? multipleCollateralObject.USDbC.read.balanceOf([walletAddress])
+                        : 0,
+                    multipleCollateralObject?.USDT && multipleCollateralObject?.USDT?.address !== TBD_ADDRESS
+                        ? multipleCollateralObject.USDT.read.balanceOf([walletAddress])
+                        : 0,
+                    multipleCollateralObject?.OP && multipleCollateralObject?.OP?.address !== TBD_ADDRESS
+                        ? multipleCollateralObject.OP.read.balanceOf([walletAddress])
+                        : 0,
+                    multipleCollateralObject?.WETH && multipleCollateralObject?.WETH?.address !== TBD_ADDRESS
+                        ? multipleCollateralObject.WETH.read.balanceOf([walletAddress])
+                        : 0,
+                    getBalance(wagmiConfig, { address: walletAddress as Address }),
+                    multipleCollateralObject?.ARB && multipleCollateralObject?.ARB?.address !== TBD_ADDRESS
+                        ? multipleCollateralObject.ARB.read.balanceOf([walletAddress])
+                        : 0,
+                    multipleCollateralObject?.THALES && multipleCollateralObject?.THALES?.address !== TBD_ADDRESS
+                        ? multipleCollateralObject.THALES.read.balanceOf([walletAddress])
+                        : 0,
+                    thalesStakingContract ? thalesStakingContract.read.stakedBalanceOf([walletAddress]) : 0,
                 ]);
-
-                return {
+                collateralsBalance = {
                     sUSD: sUSDBalance ? bigNumberFormatter(sUSDBalance, COLLATERAL_DECIMALS.sUSD) : 0,
                     DAI: DAIBalance ? bigNumberFormatter(DAIBalance, COLLATERAL_DECIMALS.DAI) : 0,
                     USDC: USDCBalance ? bigNumberFormatter(USDCBalance, COLLATERAL_DECIMALS.USDC) : 0,
                     USDCe: USDCeBalance ? bigNumberFormatter(USDCeBalance, COLLATERAL_DECIMALS.USDCe) : 0,
+                    USDbC: USDbCBalance ? bigNumberFormatter(USDbCBalance, COLLATERAL_DECIMALS.USDbC) : 0,
                     USDT: USDTBalance ? bigNumberFormatter(USDTBalance, COLLATERAL_DECIMALS.USDT) : 0,
                     OP: OPBalance ? bigNumberFormatter(OPBalance, COLLATERAL_DECIMALS.OP) : 0,
                     WETH: WETHBalance ? bigNumberFormatter(WETHBalance, COLLATERAL_DECIMALS.WETH) : 0,
-                    ETH: ETHBalance ? bigNumberFormatter(ETHBalance, COLLATERAL_DECIMALS.ETH) : 0,
+                    ETH: ETHBalance ? bigNumberFormatter(ETHBalance.value, COLLATERAL_DECIMALS.ETH) : 0,
                     ARB: ARBBalance ? bigNumberFormatter(ARBBalance, COLLATERAL_DECIMALS.ARB) : 0,
-                    USDbC: USDbCBalance ? bigNumberFormatter(USDbCBalance, COLLATERAL_DECIMALS.USDbC) : 0,
                     THALES: THALESBalance ? bigNumberFormatter(THALESBalance, COLLATERAL_DECIMALS.THALES) : 0,
                     // sub 1 staked THALES due to limitation on contract side
                     sTHALES:
@@ -103,22 +162,13 @@ const useMultipleCollateralBalanceQuery = (
                 };
             } catch (e) {
                 console.log('e ', e);
-                return {
-                    sUSD: 0,
-                    DAI: 0,
-                    USDCe: 0,
-                    USDT: 0,
-                    OP: 0,
-                    WETH: 0,
-                    ETH: 0,
-                    ARB: 0,
-                    USDC: 0,
-                    USDbC: 0,
-                };
+                return collateralsBalance;
             }
+
+            return collateralsBalance;
         },
-        options
-    );
+        ...options,
+    });
 };
 
 export default useMultipleCollateralBalanceQuery;

@@ -1,6 +1,7 @@
 import liveAnimationData from 'assets/lotties/live-markets-filter.json';
+import { LeagueMap } from 'constants/sports';
 import { SportFilter } from 'enums/markets';
-import { League, Sport } from 'enums/sports';
+import { Sport } from 'enums/sports';
 import Lottie from 'lottie-react';
 import React, { CSSProperties, Dispatch, SetStateAction, useContext } from 'react';
 import { ScrollMenu, VisibilityContext, publicApiType } from 'react-horizontal-scrolling-menu';
@@ -10,10 +11,9 @@ import { getSportFilter, setSportFilter, setTagFilter } from 'redux/modules/mark
 import styled, { useTheme } from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
 import { TagInfo, Tags } from 'types/markets';
+import { getDefaultPlayerPropsLeague } from 'utils/marketsV2';
 import { getSportLeagueIds } from 'utils/sports';
 import useQueryParam from '../../../../../utils/useQueryParams';
-import { LeagueMap } from 'constants/sports';
-import { getDefaultPlayerPropsLeague } from 'utils/marketsV2';
 
 type SportFilterMobileProps = {
     tagsList: Tags;

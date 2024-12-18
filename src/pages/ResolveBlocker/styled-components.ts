@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FlexDiv, FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
+import { FlexDiv, FlexDivCentered, FlexDivColumnCentered, FlexDivSpaceBetween } from 'styles/common';
 
 export const Container = styled(FlexDivColumnCentered)`
     width: 100%;
@@ -11,11 +11,14 @@ export const Container = styled(FlexDivColumnCentered)`
     }
 `;
 
-export const TabContainer = styled(FlexDiv)`
-    min-height: 38px;
+export const HeadeContainer = styled(FlexDivSpaceBetween)`
     @media (max-width: 767px) {
         flex-direction: column;
     }
+`;
+
+export const TabContainer = styled(FlexDiv)`
+    min-height: 38px;
 `;
 
 export const Tab = styled(FlexDivCentered)<{ isActive: boolean; index: number }>`
@@ -37,7 +40,7 @@ export const Tab = styled(FlexDivCentered)<{ isActive: boolean; index: number }>
     @media (max-width: 767px) {
         font-size: 15px;
         margin-bottom: 10px;
-        margin-right: 0px;
+        margin-right: 20px;
     }
 `;
 
@@ -45,5 +48,12 @@ export const ExternalLink = styled.a`
     color: ${(props) => props.theme.link.textColor.secondary};
     &:hover {
         text-decoration: underline;
+    }
+`;
+
+export const CheckboxContainer = styled(FlexDivCentered)`
+    margin: -20px 0 0 10px;
+    @media (max-width: 767px) {
+        margin: 0px 0px 10px 0;
     }
 `;
