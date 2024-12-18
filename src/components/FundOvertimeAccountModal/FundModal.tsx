@@ -6,9 +6,9 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsBiconomy } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
+import { RootState } from 'types/redux';
 import biconomyConnector from 'utils/biconomyWallet';
 import { useAccount } from 'wagmi';
 

@@ -5,11 +5,10 @@ import { activateOvertimeAccount } from 'utils/biconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import { useEffect, useMemo, useState } from 'react';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
-import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
+import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import biconomyConnector from 'utils/biconomyWallet';
 import { useSelector } from 'react-redux';
 import { getIsBiconomy } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
 import { getCollaterals } from 'utils/collaterals';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { localStore } from 'thales-utils';
@@ -19,6 +18,8 @@ import { waitForTransactionReceipt } from 'viem/actions';
 import { Client } from 'viem';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import FundModal from 'components/FundOvertimeAccountModal';
+import { RootState } from 'types/redux';
+import { Rates } from 'types/collateral';
 
 const ActivateAccount: React.FC<any> = () => {
     const networkId = useChainId();
