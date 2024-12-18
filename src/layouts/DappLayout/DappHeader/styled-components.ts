@@ -79,6 +79,7 @@ export const OverdropIcon = styled.img.attrs({ src: overdrop })`
 export const WrapperMobile = styled(FlexDivRow)`
     width: 100%;
     align-items: center;
+    z-index: 1;
     justify-content: center;
 `;
 

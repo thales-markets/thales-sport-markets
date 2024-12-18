@@ -217,7 +217,7 @@ const DappHeader: React.FC = () => {
                                 autoplay={true}
                                 animationData={xmasPackage}
                                 loop={true}
-                                style={{ width: '50px', height: '50px', marginBottom: '10px', marginLeft: '-5px' }}
+                                style={{ width: '50px', height: '50px', marginBottom: '10px' }}
                             />
                         )}
                     </LeftContainer>
