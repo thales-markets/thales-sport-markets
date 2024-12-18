@@ -671,11 +671,11 @@ const Ticket: React.FC<TicketProps> = ({
         return combinationsCount;
     }, [markets.length, systemBetDenominator]);
 
-    // const isInvalidRegularTotalQuote = useMemo(() => !isSystemBet && totalQuote === sportsAmmData?.maxSupportedOdds, [
-    //     isSystemBet,
-    //     sportsAmmData?.maxSupportedOdds,
-    //     totalQuote,
-    // ]);
+    const isInvalidRegularTotalQuote = useMemo(() => !isSystemBet && totalQuote === sportsAmmData?.maxSupportedOdds, [
+        isSystemBet,
+        sportsAmmData?.maxSupportedOdds,
+        totalQuote,
+    ]);
 
     const isInvalidSystemTotalQuote = useMemo(
         () => isSystemBet && isValidSystemBet && totalQuote === sportsAmmData?.maxSupportedOdds,
@@ -2113,23 +2113,14 @@ const Ticket: React.FC<TicketProps> = ({
                                 </SelectContainer>
                             </RowContainer>
                             <RowSummary>
-                                {/* <InfoTooltip
-                                    open={inputRefVisible && isInvalidNumberOfCombination}
-                                    title={t('markets.parlay.info.system-bet-number-of-combination', {
-                                        value:
-                                            sportsAmmData?.maxAllowedSystemCombinations ||
-                                            SYSTEM_BET_MAX_ALLOWED_SYSTEM_COMBINATIONS,
-                                    })}
-                                    placement={'top'}
-                                    arrow={true}
-                                    isError={isInvalidNumberOfCombination}
-                                ></InfoTooltip> */}
                                 <Tooltip
+                                    open={inputRefVisible && isInvalidNumberOfCombination}
                                     overlay={t('markets.parlay.info.system-bet-number-of-combination', {
                                         value:
                                             sportsAmmData?.maxAllowedSystemCombinations ||
                                             SYSTEM_BET_MAX_ALLOWED_SYSTEM_COMBINATIONS,
                                     })}
+                                    isValidation
                                 >
                                     <SummaryLabel>{t('markets.parlay.number-of-combinations')}:</SummaryLabel>
                                 </Tooltip>
@@ -2171,14 +2162,8 @@ const Ticket: React.FC<TicketProps> = ({
                     <SummaryLabel>
                         {isSystemBet ? t('markets.parlay.max-quote') : t('markets.parlay.total-quote')}:
                     </SummaryLabel>
-                    {/* <InfoTooltip
-                        open={inputRefVisible && (isInvalidRegularTotalQuote || isInvalidSystemTotalQuote)}
-                        title={getQuoteTooltipText()}
-                        placement={'top'}
-                        arrow={true}
-                    > */}
                     <Tooltip
-                        open={inputRefVisible && totalQuote === sportsAmmData?.maxSupportedOdds}
+                        open={inputRefVisible && (isInvalidRegularTotalQuote || isInvalidSystemTotalQuote)}
                         overlay={getQuoteTooltipText()}
                         isWarning
                     >
