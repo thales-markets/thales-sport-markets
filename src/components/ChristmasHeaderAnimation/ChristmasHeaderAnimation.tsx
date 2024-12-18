@@ -7,7 +7,7 @@ import SnowAnimationData from 'assets/lotties/snow-animation.json';
 const ChristmasHeaderAnimation: React.FC = () => {
     return (
         <Wrapper>
-            <Lottie animationData={SnowAnimationData} style={{ width: '100%' }} />
+            <Lottie animationData={SnowAnimationData} style={{ width: '100%' }} loop={2} />
         </Wrapper>
     );
 };

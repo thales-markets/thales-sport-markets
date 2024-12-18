@@ -21,9 +21,6 @@ import Banner from '../../components/Banner';
 import DappFooter from './DappFooter';
 import DappHeader from './DappHeader';
 
-// ChristmasSnowBackground
-import SnowBackground from 'assets/images/snow-background.svg';
-
 type DappLayoutProps = {
     children: React.ReactNode;
 };
@@ -77,7 +74,7 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
     return (
         <>
             <Background>
-                <ChristmasHeaderAnimation />
+                {!isMobile && <ChristmasHeaderAnimation />}
                 <ModalWrapper />
                 <Banner />
                 <Wrapper>
@@ -97,8 +94,6 @@ const Background = styled.section`
     background: ${(props) => props.theme.background.primary};
     color: ${(props) => props.theme.textColor.primary};
     position: relative;
-    background-image: ${`url(${SnowBackground})`};
-    background-size: cover;
 `;
 
 const Wrapper = styled(FlexDivColumn)`
