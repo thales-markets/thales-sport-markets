@@ -1,26 +1,27 @@
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import axios from 'axios';
 import { generalConfig } from 'config/general';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { BATCH_SIZE } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
+import { ContractType } from 'enums/contract';
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
-import { Contract } from 'ethers';
 import { orderBy } from 'lodash';
-import { useQuery, UseQueryOptions } from 'react-query';
 import { bigNumberFormatter, Coins, parseBytes32String } from 'thales-utils';
+import { Rates } from 'types/collateral';
 import { LpStats, Ticket } from 'types/markets';
-import { SupportedNetwork } from 'types/network';
+import { NetworkConfig, SupportedNetwork } from 'types/network';
+import { ViemContract } from 'types/viem';
 import { isLpSupported, isStableCurrency } from 'utils/collaterals';
+import { getContractInstance } from 'utils/contract';
 import { getLpAddress } from 'utils/liquidityPool';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
-import networkConnector from 'utils/networkConnector';
 import { mapTicket } from 'utils/tickets';
 import { League } from '../../enums/sports';
-import { Rates } from '../rates/useExchangeRatesQuery';
 
 const getLpStats = async (
     tickets: string[],
-    sportsAMMDataContract: Contract,
+    sportsAMMDataContract: ViemContract,
     networkId: SupportedNetwork,
     exchangeRates: Rates,
     leagueId: League,
@@ -30,7 +31,7 @@ const getLpStats = async (
 
     const promises = [];
     for (let i = 0; i < numberOfBatches; i++) {
-        promises.push(sportsAMMDataContract.getTicketsData(tickets.slice(i * BATCH_SIZE, (i + 1) * BATCH_SIZE)));
+        promises.push(sportsAMMDataContract.read.getTicketsData([tickets.slice(i * BATCH_SIZE, (i + 1) * BATCH_SIZE)]));
     }
 
     const promisesResult = await Promise.all(promises);
@@ -86,13 +87,18 @@ const useLpStatsQuery = (
     round: number,
     leagueId: League,
     onlyPP: boolean,
-    networkId: SupportedNetwork,
-    options?: UseQueryOptions<LpStats[]>
+    networkConfig: NetworkConfig,
+    options?: Omit<UseQueryOptions<LpStats[]>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<LpStats[]>(
-        QUERY_KEYS.Pnl.LpStats(round, leagueId, onlyPP, networkId),
-        async () => {
-            const { sportsAMMDataContract, liquidityPoolDataContract, priceFeedContract } = networkConnector;
+    return useQuery<LpStats[]>({
+        queryKey: QUERY_KEYS.Pnl.LpStats(round, leagueId, onlyPP, networkConfig.networkId),
+        queryFn: async () => {
+            const [sportsAMMDataContract, liquidityPoolDataContract, priceFeedContract] = [
+                getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig),
+                getContractInstance(ContractType.LIQUIDITY_POOL_DATA, networkConfig),
+                getContractInstance(ContractType.PRICE_FEED, networkConfig),
+            ];
+
             if (sportsAMMDataContract && liquidityPoolDataContract && priceFeedContract) {
                 const [
                     usdcTickets,
@@ -102,20 +108,20 @@ const useLpStatsQuery = (
                     rates,
                     thalesPriceResponse,
                 ] = await Promise.all([
-                    liquidityPoolDataContract.getRoundTickets(
-                        getLpAddress(networkId, LiquidityPoolCollateral.USDC),
-                        round
-                    ),
-                    liquidityPoolDataContract.getRoundTickets(
-                        getLpAddress(networkId, LiquidityPoolCollateral.WETH),
-                        round
-                    ),
-                    liquidityPoolDataContract.getRoundTickets(
-                        getLpAddress(networkId, LiquidityPoolCollateral.THALES),
-                        round
-                    ),
-                    priceFeedContract.getCurrencies(),
-                    priceFeedContract.getRates(),
+                    liquidityPoolDataContract.read.getRoundTickets([
+                        getLpAddress(networkConfig.networkId, LiquidityPoolCollateral.USDC),
+                        round,
+                    ]),
+                    liquidityPoolDataContract.read.getRoundTickets([
+                        getLpAddress(networkConfig.networkId, LiquidityPoolCollateral.WETH),
+                        round,
+                    ]),
+                    liquidityPoolDataContract.read.getRoundTickets([
+                        getLpAddress(networkConfig.networkId, LiquidityPoolCollateral.THALES),
+                        round,
+                    ]),
+                    priceFeedContract.read.getCurrencies(),
+                    priceFeedContract.read.getRates(),
                     axios.get(`${generalConfig.API_URL}/token/price`),
                 ]);
 
@@ -132,7 +138,7 @@ const useLpStatsQuery = (
                 const usdcLpStats = await getLpStats(
                     usdcTickets,
                     sportsAMMDataContract,
-                    networkId,
+                    networkConfig.networkId,
                     exchangeRates,
                     leagueId,
                     onlyPP
@@ -140,7 +146,7 @@ const useLpStatsQuery = (
                 const wethLpStats = await getLpStats(
                     wethTickets,
                     sportsAMMDataContract,
-                    networkId,
+                    networkConfig.networkId,
                     exchangeRates,
                     leagueId,
                     onlyPP
@@ -148,7 +154,7 @@ const useLpStatsQuery = (
                 const thalesLpStats = await getLpStats(
                     thalesTickets,
                     sportsAMMDataContract,
-                    networkId,
+                    networkConfig.networkId,
                     exchangeRates,
                     leagueId,
                     onlyPP
@@ -169,10 +175,8 @@ const useLpStatsQuery = (
 
             return [];
         },
-        {
-            ...options,
-        }
-    );
+        ...options,
+    });
 };
 
 export default useLpStatsQuery;

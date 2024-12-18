@@ -8,20 +8,15 @@ import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollate
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { getIsAppReady } from 'redux/modules/app';
 import { getIsFreeBetDisabledByUser, getTicketPayment, setPaymentSelectedCollateralIndex } from 'redux/modules/ticket';
-import {
-    getIsWalletConnected,
-    getNetworkId,
-    getWalletAddress,
-    getWalletConnectModalVisibility,
-    setWalletConnectModalVisibility,
-} from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
+import { getIsBiconomy, getWalletConnectModalVisibility, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 import { formatCurrencyWithKey, truncateAddress } from 'thales-utils';
+import { RootState } from 'types/redux';
+import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateral, getMaxCollateralDollarValue, mapMultiCollateralBalances } from 'utils/collaterals';
+import { useAccount, useChainId, useClient } from 'wagmi';
 
 const MIN_BUYIN_DOLLAR = 3;
 
@@ -29,11 +24,13 @@ const WalletInfo: React.FC = ({}) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
 
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const networkId = useChainId();
+    const client = useClient();
+    const { address, isConnected } = useAccount();
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+
     const connectWalletModalVisibility = useSelector((state: RootState) => getWalletConnectModalVisibility(state));
     const ticketPayment = useSelector(getTicketPayment);
     const isFreeBetDisabledByUser = useSelector(getIsFreeBetDisabledByUser);
@@ -43,14 +40,16 @@ const WalletInfo: React.FC = ({}) => {
     const [isFreeBetInitialized, setIsFreeBetInitialized] = useState(false);
     const [freeBetBalance, setFreeBetBalance] = useState(0);
 
-    const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
-        enabled: isAppReady,
-    });
+    const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
     const exchangeRates = exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
-    const multipleCollateralBalancesQuery = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
-        enabled: isAppReady && isWalletConnected,
-    });
+    const multipleCollateralBalancesQuery = useMultipleCollateralBalanceQuery(
+        walletAddress,
+        { networkId, client },
+        {
+            enabled: isConnected,
+        }
+    );
 
     const multiCollateralBalances =
         multipleCollateralBalancesQuery?.isSuccess && multipleCollateralBalancesQuery?.data
@@ -64,9 +63,13 @@ const WalletInfo: React.FC = ({}) => {
 
     const selectedCollateralBalance = multiCollateralBalances ? multiCollateralBalances[selectedCollateral] : 0;
 
-    const freeBetCollateralBalancesQuery = useFreeBetCollateralBalanceQuery(walletAddress, networkId, {
-        enabled: isAppReady && isWalletConnected,
-    });
+    const freeBetCollateralBalancesQuery = useFreeBetCollateralBalanceQuery(
+        walletAddress,
+        { networkId, client },
+        {
+            enabled: isConnected,
+        }
+    );
 
     const freeBetCollateralBalances =
         freeBetCollateralBalancesQuery?.isSuccess && freeBetCollateralBalancesQuery.data
@@ -122,26 +125,26 @@ const WalletInfo: React.FC = ({}) => {
     ]);
 
     return (
-        <Container walletConnected={isWalletConnected}>
+        <Container walletConnected={isConnected}>
             <FlexDivColumn>
                 <RainbowConnectButton.Custom>
                     {({ openAccountModal }) => {
                         return (
-                            <Wrapper displayPadding={isWalletConnected}>
-                                {isWalletConnected && (
+                            <Wrapper displayPadding={isConnected}>
+                                {isConnected && (
                                     <WalletAddressInfo
-                                        isWalletConnected={isWalletConnected}
+                                        isConnected={isConnected}
                                         isClickable={true}
                                         onClick={openAccountModal}
                                     >
                                         <Text className="wallet-info">
-                                            {isWalletConnected
+                                            {isConnected
                                                 ? truncateAddress(walletAddress, 5, 5)
                                                 : t('common.wallet.connect-your-wallet')}
                                         </Text>
                                     </WalletAddressInfo>
                                 )}
-                                {isWalletConnected && (
+                                {isConnected && (
                                     <WalletBalanceInfo>
                                         {isFreeBet && <FreeBetIcon className="icon icon--gift" />}
                                         <Text>
@@ -195,14 +198,14 @@ const Wrapper = styled.div<{ displayPadding?: boolean }>`
     align-items: center;
     padding-left: ${(props) => (props.displayPadding ? '10px' : '')};
     & > div {
-        flex: 0.4;
+        flex: 0.6;
     }
     & > div:last-child {
         flex: 0.2;
     }
 `;
 
-const WalletAddressInfo = styled.div<{ isWalletConnected: boolean; isClickable?: boolean }>`
+const WalletAddressInfo = styled.div<{ isConnected: boolean; isClickable?: boolean }>`
     justify-content: center;
     cursor: ${(props) => (props.isClickable ? 'pointer' : 'default')};
     height: 100%;

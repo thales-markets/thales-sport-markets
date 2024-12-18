@@ -2,14 +2,16 @@ import { useConnectModal } from '@rainbow-me/rainbowkit';
 import Button from 'components/Button';
 import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { ContractType } from 'enums/contract';
 import { FC, memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
-import networkConnector from 'utils/networkConnector';
+import { getContractInstance } from 'utils/contract';
+import { Client } from 'viem';
+import { waitForTransactionReceipt } from 'viem/actions';
+import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 import { refetchResolveBlocker } from '../../../utils/queryConnector';
 
 type UnblockActionProps = {
@@ -21,8 +23,10 @@ const UnblockAction: FC<UnblockActionProps> = memo(({ gameId, isWitelistedForUnb
     const { t } = useTranslation();
     const { openConnectModal } = useConnectModal();
     const theme: ThemeInterface = useTheme();
-    const networkId = useSelector(getNetworkId);
-    const isWalletConnected = useSelector(getIsWalletConnected);
+    const networkId = useChainId();
+    const client = useClient();
+    const walletClient = useWalletClient();
+    const { isConnected } = useAccount();
     const [isUnblocking, setIsUnblocking] = useState<boolean>(false);
 
     const getButton = (text: string, onClick: any, disabled: boolean) => (
@@ -40,19 +44,25 @@ const UnblockAction: FC<UnblockActionProps> = memo(({ gameId, isWitelistedForUnb
         </Button>
     );
 
-    const handleUnblock = async () => {
-        const { resolveBlockerContract, signer } = networkConnector;
+    const handleUnblock = async (e: any) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const resolveBlockerContractWithSigner = getContractInstance(ContractType.RESOLVE_BLOCKER, {
+            client: walletClient.data,
+            networkId,
+        });
 
-        if (resolveBlockerContract && signer) {
+        if (resolveBlockerContractWithSigner) {
             const toastId = toast.loading(t('market.toast-message.transaction-pending'));
             try {
                 setIsUnblocking(true);
 
-                const resolveBlockerContractWithSigner = resolveBlockerContract.connect(signer);
-                const tx = await resolveBlockerContractWithSigner.unblockGames([gameId]);
-                const txResult = await tx.wait();
+                const txHash = await resolveBlockerContractWithSigner.write.unblockGames([[gameId]]);
+                const txReceipt = await waitForTransactionReceipt(client as Client, {
+                    hash: txHash,
+                });
 
-                if (txResult && txResult.transactionHash) {
+                if (txReceipt.status === 'success') {
                     toast.update(toastId, getSuccessToastOptions(t('resolve-blocker.unblock-confirmation-message')));
                     setIsUnblocking(false);
                     refetchResolveBlocker(networkId);
@@ -65,7 +75,7 @@ const UnblockAction: FC<UnblockActionProps> = memo(({ gameId, isWitelistedForUnb
     };
 
     const getActionButton = () => {
-        if (!isWalletConnected) {
+        if (!isConnected) {
             return getButton(t('common.wallet.connect-your-wallet'), openConnectModal, false);
         }
         if (!isWitelistedForUnblock) {

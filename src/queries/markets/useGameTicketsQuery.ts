@@ -1,35 +1,47 @@
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import axios from 'axios';
 import { generalConfig, noCacheConfig } from 'config/general';
 import { BATCH_SIZE } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
+import { ContractType } from 'enums/contract';
 import { orderBy } from 'lodash';
-import { UseQueryOptions, useQuery } from 'react-query';
 import { Ticket } from 'types/markets';
-import { SupportedNetwork } from 'types/network';
+import { NetworkConfig } from 'types/network';
+import { ViemContract } from 'types/viem';
+import { getContractInstance } from 'utils/contract';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
 import { isTestNetwork } from 'utils/network';
-import networkConnector from 'utils/networkConnector';
 import { mapTicket } from 'utils/tickets';
 
 export const useGameTicketsQuery = (
     gameId: string,
-    networkId: SupportedNetwork,
-    options?: UseQueryOptions<Ticket[] | undefined>
+    networkConfig: NetworkConfig,
+    options?: Omit<UseQueryOptions<Ticket[] | undefined>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<Ticket[] | undefined>(
-        QUERY_KEYS.GameTickets(networkId, gameId),
-        async () => {
+    return useQuery<Ticket[] | undefined>({
+        queryKey: QUERY_KEYS.GameTickets(networkConfig.networkId, gameId),
+        queryFn: async () => {
             try {
-                const { sportsAMMDataContract, sportsAMMV2ManagerContract } = networkConnector;
+                const contractInstances = [
+                    getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig),
+                    getContractInstance(ContractType.SPORTS_AMM_V2_MANAGER, networkConfig),
+                ] as ViemContract[];
+
+                const [sportsAMMDataContract, sportsAMMV2ManagerContract] = contractInstances;
+
                 if (sportsAMMDataContract && sportsAMMV2ManagerContract) {
-                    const numOfActiveTicketsPerGame = await sportsAMMV2ManagerContract.numOfTicketsPerGame(gameId);
+                    const numOfActiveTicketsPerGame = await sportsAMMV2ManagerContract.read.numOfTicketsPerGame([
+                        gameId,
+                    ]);
                     const numberOfActiveBatches = Math.trunc(Number(numOfActiveTicketsPerGame) / BATCH_SIZE) + 1;
 
-                    const playersInfoQueryParam = `isTestnet=${isTestNetwork(networkId)}`;
+                    const playersInfoQueryParam = `isTestnet=${isTestNetwork(networkConfig.networkId)}`;
 
                     const promises = [];
                     for (let i = 0; i < numberOfActiveBatches; i++) {
-                        promises.push(sportsAMMDataContract.getTicketsDataPerGame(gameId, i * BATCH_SIZE, BATCH_SIZE));
+                        promises.push(
+                            sportsAMMDataContract.read.getTicketsDataPerGame([gameId, i * BATCH_SIZE, BATCH_SIZE])
+                        );
                     }
                     promises.push(axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, noCacheConfig));
                     promises.push(
@@ -51,7 +63,7 @@ export const useGameTicketsQuery = (
                     const mappedTickets: Ticket[] = tickets.map((ticket: any) =>
                         mapTicket(
                             ticket,
-                            networkId,
+                            networkConfig.networkId,
                             gamesInfoResponse.data,
                             playersInfoResponse.data,
                             liveScoresResponse.data
@@ -65,8 +77,6 @@ export const useGameTicketsQuery = (
                 console.log('E ', e);
             }
         },
-        {
-            ...options,
-        }
-    );
+        ...options,
+    });
 };

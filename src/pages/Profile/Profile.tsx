@@ -4,7 +4,7 @@ import { Container } from './styled-components';
 import { ProfileTab } from 'enums/ui';
 import { useSelector } from 'react-redux';
 import { getIsConnectedViaParticle } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
+import { RootState } from 'types/redux';
 import useQueryParam from 'utils/useQueryParams';
 import MyPortfolio from './components/MyPortfolio';
 import MyTickets from './components/MyTickets';

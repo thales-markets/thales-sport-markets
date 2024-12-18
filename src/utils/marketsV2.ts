@@ -2,7 +2,6 @@ import { secondsToMilliseconds } from 'date-fns';
 import { MarketType, MarketTypeGroup } from 'enums/marketTypes';
 import { GameStatus, MarketStatus, Position } from 'enums/markets';
 import { League } from 'enums/sports';
-import { ethers } from 'ethers';
 import _ from 'lodash';
 import {
     SerializableSportMarket,
@@ -13,6 +12,7 @@ import {
     TicketPosition,
     TradeData,
 } from 'types/markets';
+import { parseEther } from 'viem';
 import { MarketTypeMap, MarketTypePlayerPropsGroupsBySport } from '../constants/marketTypes';
 import {
     PLAYER_PROPS_MARKETS_PER_PROP_MAP,
@@ -417,7 +417,7 @@ export const getTradeData = (markets: TicketMarket[]): TradeData[] =>
             status: market.status,
             line: market.line * 100,
             playerId: market.playerProps.playerId,
-            odds: market.odds.map((odd) => ethers.utils.parseEther(odd.toString()).toString()),
+            odds: market.odds.map((odd) => parseEther(odd.toString()).toString()),
             merkleProof: market.proof,
             position: market.position,
             combinedPositions: market.combinedPositions.map((combinedPositions) =>
@@ -622,7 +622,7 @@ export const packMarket = (
     return packedMarket;
 };
 
-export const getPlayerPropsEmptyMarkets = (market: SportMarket) => [
+const getPlayerPropsEmptyMarkets = (market: SportMarket) => [
     {
         ...market,
         type: '',

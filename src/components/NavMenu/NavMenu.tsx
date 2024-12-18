@@ -1,6 +1,7 @@
 import Button from 'components/Button';
 import FreeBetFundModal from 'components/FreeBetFundModal';
 import LanguageSelector from 'components/LanguageSelector';
+import OutsideClickHandler from 'components/OutsideClick';
 import SPAAnchor from 'components/SPAAnchor';
 import {
     NAV_MENU_FIRST_SECTION,
@@ -13,15 +14,15 @@ import useBlockedGamesQuery from 'queries/resolveBlocker/useBlockedGamesQuery';
 import useWhitelistedForUnblock from 'queries/resolveBlocker/useWhitelistedForUnblock';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import OutsideClickHandler from 'react-outside-click-handler';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { getIsAppReady } from 'redux/modules/app';
-import { getIsConnectedViaParticle, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsConnectedViaParticle } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
+import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
 import { getNetworkIconClassNameByNetworkId, getNetworkNameByNetworkId } from 'utils/network';
 import { buildHref } from 'utils/routes';
+import { useAccount, useChainId, useClient } from 'wagmi';
 import {
     CloseIcon,
     Count,
@@ -53,25 +54,34 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
     const location = useLocation();
     const theme: ThemeInterface = useTheme();
 
-    const isAppReady = useSelector(getIsAppReady);
-    const networkId = useSelector(getNetworkId);
-    const isWalletConnected = useSelector(getIsWalletConnected);
-    const walletAddress = useSelector(getWalletAddress) || '';
-    const isConnectedViaParticle = useSelector(getIsConnectedViaParticle);
+    const networkId = useChainId();
+    const client = useClient();
+    const { address, isConnected } = useAccount();
+    const walletAddress = address || '';
+
+    const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
 
     const [openFreeBetModal, setOpenFreeBetModal] = useState<boolean>(false);
 
-    const whitelistedForUnblockQuery = useWhitelistedForUnblock(walletAddress, networkId, {
-        enabled: isAppReady && isWalletConnected,
-    });
+    const whitelistedForUnblockQuery = useWhitelistedForUnblock(
+        walletAddress,
+        { networkId, client },
+        {
+            enabled: isConnected,
+        }
+    );
     const isWitelistedForUnblock = useMemo(
         () => whitelistedForUnblockQuery.isSuccess && whitelistedForUnblockQuery.data,
         [whitelistedForUnblockQuery.data, whitelistedForUnblockQuery.isSuccess]
     );
 
-    const blockedGamesQuery = useBlockedGamesQuery(false, networkId, {
-        enabled: isAppReady && isWitelistedForUnblock,
-    });
+    const blockedGamesQuery = useBlockedGamesQuery(
+        false,
+        { networkId, client },
+        {
+            enabled: isWitelistedForUnblock,
+        }
+    );
     const blockedGamesCount = useMemo(
         () =>
             blockedGamesQuery.isSuccess && blockedGamesQuery.data && isWitelistedForUnblock
@@ -82,14 +92,20 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
     useEffect(() => {
         // Discord Widget bot: move with nav menu
         const crate = (window as any).crate;
+        const moveRightCss = '&:not(.open) .button { right: 275px; }';
         if (crate) {
-            const moveRightCss = '&:not(.open) .button { right: 275px; }';
             if (visibility) {
                 crate.options.css = moveRightCss + crate.options.css;
             } else {
                 crate.options.css = crate.options.css.replace(moveRightCss, '');
             }
         }
+
+        return () => {
+            if (crate) {
+                crate.options.css = crate.options.css.replace(moveRightCss, '');
+            }
+        };
     }, [visibility]);
 
     return (
@@ -113,7 +129,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                 <ItemsContainer>
                     {NAV_MENU_FIRST_SECTION.map((item, index) => {
                         if (!item.supportedNetworks.includes(networkId)) return;
-                        if (item.name == 'profile' && !isWalletConnected) return;
+                        if (item.name == 'profile' && !isConnected) return;
                         if (item.name == 'resolve-blocker' && !isWitelistedForUnblock) return;
                         return (
                             <SPAAnchor key={index} href={buildHref(item.route)}>
@@ -122,7 +138,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                                     active={location.pathname === item.route}
                                     onClick={() => setNavMenuVisibility(null)}
                                 >
-                                    {isWalletConnected && item.name == 'profile' ? (
+                                    {isConnected && item.name == 'profile' ? (
                                         <ProfileIconWidget
                                             avatarSize={25}
                                             iconColor={theme.textColor.primary}

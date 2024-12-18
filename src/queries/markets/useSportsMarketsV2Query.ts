@@ -1,15 +1,15 @@
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import axios from 'axios';
 import { generalConfig, noCacheConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
 import { LeagueMap } from 'constants/sports';
 import { secondsToMilliseconds } from 'date-fns';
 import { StatusFilter } from 'enums/markets';
-import { Network } from 'enums/network';
 import { League } from 'enums/sports';
 import { orderBy } from 'lodash';
-import { UseQueryOptions, useQuery } from 'react-query';
 import { MarketsCache, TicketPosition } from 'types/markets';
-import { packMarket } from '../../utils/marketsV2';
+import { NetworkConfig } from 'types/network';
+import { packMarket } from 'utils/marketsV2';
 
 const marketsCache: MarketsCache = {
     [StatusFilter.OPEN_MARKETS]: [],
@@ -21,19 +21,27 @@ const marketsCache: MarketsCache = {
 
 const useSportsMarketsV2Query = (
     statusFilter: StatusFilter,
-    networkId: Network,
     includeProofs: boolean,
+    networkConfig: NetworkConfig,
     ticket?: TicketPosition[],
-    options?: UseQueryOptions<MarketsCache>
+    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
     const gameIds = ticket?.map((market) => market.gameId).join(',') || '';
     const typeIds = ticket?.map((market) => market.typeId).join(',') || '';
     const playerIds = ticket?.map((market) => market.playerId).join(',') || '';
     const lines = ticket?.map((market) => market.line).join(',') || '';
 
-    return useQuery<MarketsCache>(
-        QUERY_KEYS.SportMarketsV2(statusFilter, networkId, includeProofs, gameIds, typeIds, playerIds, lines),
-        async () => {
+    return useQuery<MarketsCache>({
+        queryKey: QUERY_KEYS.SportMarketsV2(
+            statusFilter,
+            networkConfig.networkId,
+            includeProofs,
+            gameIds,
+            typeIds,
+            playerIds,
+            lines
+        ),
+        queryFn: async () => {
             try {
                 const status = statusFilter.toLowerCase().split('market')[0];
                 const today = new Date();
@@ -45,9 +53,9 @@ const useSportsMarketsV2Query = (
                     statusFilter === StatusFilter.ONGOING_MARKETS || statusFilter === StatusFilter.RESOLVED_MARKETS;
                 const [marketsResponse, gamesInfoResponse, liveScoresResponse] = await Promise.all([
                     axios.get(
-                        `${
-                            generalConfig.API_URL
-                        }/overtime-v2/networks/${networkId}/markets/?status=${status}&ungroup=true&onlyBasicProperties=true&includeProofs=${includeProofs}${
+                        `${generalConfig.API_URL}/overtime-v2/networks/${
+                            networkConfig.networkId
+                        }/markets/?status=${status}&ungroup=true&onlyBasicProperties=true&includeProofs=${includeProofs}${
                             ticket ? '' : `&minMaturity=${minMaturity}`
                         }${ticket ? `&gameIds=${gameIds}` : ''}${ticket ? `&typeIds=${typeIds}` : ''}${
                             ticket ? `&playerIds=${playerIds}` : ''
@@ -93,11 +101,9 @@ const useSportsMarketsV2Query = (
             }
             return marketsCache;
         },
-        {
-            refetchInterval: secondsToMilliseconds(statusFilter === StatusFilter.OPEN_MARKETS ? 5 : 60),
-            ...options,
-        }
-    );
+        refetchInterval: secondsToMilliseconds(statusFilter === StatusFilter.OPEN_MARKETS ? 5 : 60),
+        ...options,
+    });
 };
 
 export default useSportsMarketsV2Query;

@@ -1,11 +1,11 @@
+import { SportFilter } from 'enums/markets';
 import { uniqBy } from 'lodash';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSportFilter, getTagFilter, setTagFilter } from 'redux/modules/market';
-import { RootState } from 'redux/rootReducer';
+import { RootState } from 'types/redux';
 import { Breadcrumb, BreadcrumbsContainer } from './styled-components';
-import { SportFilter } from 'enums/markets';
 
 const Breadcrumbs: React.FC = () => {
     const dispatch = useDispatch();

@@ -1,10 +1,10 @@
 import ReactTooltip from 'rc-tooltip';
 import React, { CSSProperties } from 'react';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import 'styles/tooltip.css';
+import { ThemeInterface } from 'types/ui';
 
 type TooltipProps = {
-    component?: any;
     overlay: any;
     iconFontSize?: number;
     customIconStyling?: CSSProperties;
@@ -13,10 +13,11 @@ type TooltipProps = {
     top?: number;
     overlayClassName?: string;
     iconColor?: string;
+    children?: React.ReactElement;
+    isValidation?: boolean;
 };
 
 const Tooltip: React.FC<TooltipProps> = ({
-    component,
     overlay,
     iconFontSize,
     customIconStyling,
@@ -25,16 +26,31 @@ const Tooltip: React.FC<TooltipProps> = ({
     top,
     overlayClassName,
     iconColor,
+    children,
+    isValidation,
 }) => {
-    return (
+    const theme: ThemeInterface = useTheme();
+
+    return isValidation ? (
+        <ReactTooltip
+            visible
+            overlay={overlay}
+            placement="top"
+            overlayClassName={overlayClassName}
+            overlayInnerStyle={{ ...overlayInnerStyle, ...getValidationStyle(theme) }}
+            arrowContent={<ValidationArrow />}
+        >
+            {children}
+        </ReactTooltip>
+    ) : (
         <ReactTooltip
             overlay={overlay}
             placement="top"
-            overlayClassName={overlayClassName || ''}
+            overlayClassName={overlayClassName}
             overlayInnerStyle={overlayInnerStyle}
         >
-            {component ? (
-                component
+            {children ? (
+                children
             ) : (
                 <InfoIcon
                     color={iconColor}
@@ -61,6 +77,42 @@ const InfoIcon = styled.i<{ iconFontSize?: number; marginLeft?: number; top?: nu
         font-family: OvertimeIconsV2 !important;
         content: '\\011B';
     }
+`;
+
+const getValidationStyle = (theme: ThemeInterface): React.CSSProperties => ({
+    minWidth: '100%',
+    maxWidth: '300px',
+    padding: '4px 8px',
+    backgroundColor: theme.error.background.primary,
+    color: theme.error.textColor.primary,
+    border: `1.5px solid ${theme.error.borderColor.primary}`,
+    borderRadius: '2px',
+    fontSize: '10px',
+    fontWeight: 600,
+    lineHeight: '14px',
+    textTransform: 'uppercase',
+});
+
+const ValidationArrow = styled.div`
+    &:before {
+        content: '';
+        display: block;
+        width: 100%;
+        height: 100%;
+        margin: auto;
+        transform-origin: 100% 0;
+        transform: rotate(45deg);
+        border: 1.5px solid ${(props) => props.theme.error.borderColor.primary};
+        background-color: ${(props) => props.theme.error.background.primary};
+        box-sizing: border-box;
+    }
+    position: absolute;
+    overflow: hidden;
+    width: 13px;
+    height: 10px;
+    bottom: -4px;
+    top: auto;
+    right: -7px;
 `;
 
 export default Tooltip;

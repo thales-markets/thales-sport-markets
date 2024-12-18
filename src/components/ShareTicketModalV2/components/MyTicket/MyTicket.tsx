@@ -1,4 +1,4 @@
-import { ReactComponent as OvertimeLogoIcon } from 'assets/images/overtime-logo.svg';
+import OvertimeLogoIcon from 'assets/images/overtime-logo.svg?react';
 import { t } from 'i18next';
 import React from 'react';
 import { useSelector } from 'react-redux';

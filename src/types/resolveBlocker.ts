@@ -9,4 +9,6 @@ export type BlockedGame = {
     hash: string;
 };
 
+export type SelectedBlockedGames = Record<string, boolean>;
+
 export type BlockedGames = BlockedGame[];

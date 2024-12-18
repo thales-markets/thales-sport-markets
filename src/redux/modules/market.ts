@@ -2,19 +2,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { SportFilter, StatusFilter } from 'enums/markets';
 import { MarketType, MarketTypeGroup } from 'enums/marketTypes';
-import { Sport } from 'enums/sports';
 import { localStore } from 'thales-utils';
 import { Tags } from 'types/markets';
-import { RootState } from '../rootReducer';
+import { SelectedMarket } from 'types/marketTypes';
+import { MarketSliceState, RootState } from 'types/redux';
 
 const sliceName = 'market';
-
-type SelectedMarket = {
-    gameId: string;
-    sport: Sport;
-    live?: boolean;
-    playerName?: string;
-};
 
 const getDefaultMarketSearch = (): string => {
     const lsMarketSearch = localStore.get(LOCAL_STORAGE_KEYS.FILTER_MARKET_SEARCH);
@@ -45,18 +38,6 @@ const getDefaultTagFilter = (): Tags => {
 const getDefaultIsThreeWayView = (): boolean => {
     const lsIsThreeWayView = localStore.get(LOCAL_STORAGE_KEYS.IS_THREE_WAY_VIEW);
     return lsIsThreeWayView !== undefined ? (lsIsThreeWayView as boolean) : true;
-};
-
-type MarketSliceState = {
-    marketSearch: string;
-    datePeriodFilter: number;
-    statusFilter: StatusFilter;
-    sportFilter: SportFilter;
-    marketTypeFilter: MarketType | undefined;
-    marketTypeGroupFilter: MarketTypeGroup | undefined;
-    tagFilter: Tags;
-    selectedMarket: SelectedMarket | undefined;
-    isThreeWayView: boolean;
 };
 
 const initialState: MarketSliceState = {

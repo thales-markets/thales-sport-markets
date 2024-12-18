@@ -6,13 +6,15 @@ import useLiquidityPoolUserDataQuery from 'queries/liquidityPool/useLiquidityPoo
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { formatCurrency } from 'thales-utils';
 import { LiquidityPool } from 'types/liquidityPool';
+import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
+import biconomyConnector from 'utils/biconomyWallet';
 import { buildHref } from 'utils/routes';
+import { useAccount, useChainId, useClient } from 'wagmi';
 
 type UserLPProps = {
     lp: LiquidityPool;
@@ -21,15 +23,25 @@ type UserLPProps = {
 const UserLP: React.FC<UserLPProps> = ({ lp }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+
     const [lastValidData, setLastValidData] = useState<number>(0);
     const lpCollateral = lp.collateral.toLowerCase() as LiquidityPoolCollateral;
 
-    const userLpQuery = useLiquidityPoolUserDataQuery(lp.address, lp.collateral, walletAddress, networkId, {
-        enabled: isWalletConnected,
-    });
+    const networkId = useChainId();
+    const client = useClient();
+    const { isConnected, address } = useAccount();
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+
+    const userLpQuery = useLiquidityPoolUserDataQuery(
+        lp.address,
+        lp.collateral,
+        walletAddress,
+        { networkId, client },
+        {
+            enabled: isConnected,
+        }
+    );
 
     useEffect(() => {
         if (userLpQuery.isSuccess && userLpQuery.data) {

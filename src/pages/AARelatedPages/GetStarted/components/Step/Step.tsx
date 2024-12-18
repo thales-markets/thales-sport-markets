@@ -4,13 +4,14 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { getIsWalletConnected, getNetworkId, setWalletConnectModalVisibility } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
+import { setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
+import { RootState } from 'types/redux';
 import { getDefaultCollateral } from 'utils/collaterals';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import { buildHref, navigateTo } from 'utils/routes';
+import { useAccount, useChainId } from 'wagmi';
 
 type StepProps = {
     stepNumber: number;
@@ -21,8 +22,9 @@ type StepProps = {
 };
 
 const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurrentStep, hasFunds }) => {
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const networkId = useChainId();
+    const { isConnected } = useAccount();
+
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -31,7 +33,7 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
         let transKey = 'get-started.steps.title';
         switch (stepType) {
             case GetStartedStep.LOG_IN:
-                transKey += isWalletConnected ? '.logged-in' : '.sign-up';
+                transKey += isConnected ? '.logged-in' : '.sign-up';
                 break;
             case GetStartedStep.DEPOSIT:
                 transKey += '.deposit';
@@ -41,13 +43,13 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
                 break;
         }
         return t(transKey);
-    }, [isWalletConnected, stepType, t]);
+    }, [isConnected, stepType, t]);
 
     const stepDescription = useMemo(() => {
         let transKey = 'get-started.steps.description';
         switch (stepType) {
             case GetStartedStep.LOG_IN:
-                transKey += isWalletConnected ? '.logged-in' : '.sign-up';
+                transKey += isConnected ? '.logged-in' : '.sign-up';
                 break;
             case GetStartedStep.DEPOSIT:
                 transKey += '.deposit';
@@ -61,13 +63,13 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
             network: getNetworkNameByNetworkId(networkId, true),
             collateral: getDefaultCollateral(networkId),
         });
-    }, [stepType, networkId, isWalletConnected, t]);
+    }, [stepType, networkId, isConnected, t]);
 
     const showStepIcon = useMemo(() => {
-        if (isWalletConnected) {
+        if (isConnected) {
             switch (stepType) {
                 case GetStartedStep.LOG_IN:
-                    return isWalletConnected;
+                    return isConnected;
 
                 case GetStartedStep.DEPOSIT:
                     return hasFunds;
@@ -76,7 +78,7 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
                     return false;
             }
         }
-    }, [isWalletConnected, stepType, hasFunds]);
+    }, [isConnected, stepType, hasFunds]);
 
     const getStepAction = () => {
         let className = '';
@@ -84,7 +86,7 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
         switch (stepType) {
             case GetStartedStep.LOG_IN:
                 className = 'icon icon--logged-in';
-                transKey += isWalletConnected ? '.logged-in' : '.sign-up';
+                transKey += isConnected ? '.logged-in' : '.sign-up';
                 break;
             case GetStartedStep.DEPOSIT:
                 className = 'icon icon--card';
@@ -111,7 +113,7 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
     };
 
     const isActive = currentStep === stepType;
-    const isDisabled = !isWalletConnected && stepType !== GetStartedStep.LOG_IN;
+    const isDisabled = !isConnected && stepType !== GetStartedStep.LOG_IN;
 
     const onStepActionClickHandler = () => {
         if (isDisabled) {

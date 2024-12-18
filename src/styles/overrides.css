@@ -14,41 +14,6 @@
     -webkit-backdrop-filter: blur(10px);
 }
 
-.MuiMenu-paper {
-    background: #303656 !important;
-    border: none !important;
-    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.15) !important;
-    border-radius: 10px !important;
-    color: #f6f6fe !important;
-}
-
-.MuiListItem-button:hover {
-    background-color: #252940 !important;
-}
-
-.MuiListItem-root.Mui-selected,
-.MuiListItem-root.Mui-selected:hover {
-    background-color: #1e2134 !important;
-}
-
-.MuiMenuItem-root {
-    font-size: 14px !important;
-    padding-top: 4px !important;
-    padding-bottom: 4px !important;
-    min-height: auto !important;
-}
-
-.MuiListItem-gutters {
-    padding-left: 10px !important;
-    padding-right: 10px !important;
-}
-
-@media (max-width: 512px) {
-    .MuiDialog-paper {
-        margin: 10px !important;
-    }
-}
-
 .odd-toast {
     color: #ffffff !important;
     background-color: #3c498a !important;

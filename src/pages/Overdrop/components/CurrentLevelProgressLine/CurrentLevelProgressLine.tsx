@@ -2,12 +2,13 @@ import { OVERDROP_LEVELS } from 'constants/overdrop';
 import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { getIsAppReady } from 'redux/modules/app';
-import { getIsWalletConnected, getWalletAddress } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import { OverdropUserData } from 'types/overdrop';
+import { RootState } from 'types/redux';
 import { OverdropLevel } from 'types/ui';
+import biconomyConnector from 'utils/biconomyWallet';
 import { getCurrentLevelByPoints, getNextLevelItemByPoints, getProgressLevel } from 'utils/overdrop';
+import { useAccount } from 'wagmi';
 import ProgressLine from '../ProgressLine';
 
 type CurrentLevelProgressLineProps = {
@@ -22,12 +23,13 @@ const CurrentLevelProgressLine: React.FC<CurrentLevelProgressLineProps> = ({
     progressUpdateXP,
     height,
 }) => {
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+
+    const { address, isConnected } = useAccount();
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
     const userDataQuery = useUserDataQuery(walletAddress, {
-        enabled: isAppReady && isWalletConnected,
+        enabled: isConnected,
     });
 
     const userData: OverdropUserData | undefined = useMemo(() => {
