@@ -26,6 +26,9 @@ const walletDetailsSlice = createSlice({
         setIsBiconomy: (state, action: PayloadAction<boolean>) => {
             state.isBiconomy = action.payload;
         },
+        updateParticleState: (state, action: PayloadAction<{ connectedViaParticle: boolean }>) => {
+            state.connectedViaParticle = action.payload.connectedViaParticle;
+        },
     },
 });
 
@@ -36,6 +39,6 @@ export const getWalletConnectModalVisibility = (state: RootState) =>
     getWalletState(state).walletConnectModal.visibility;
 export const getWalletConnectModalOrigin = (state: RootState) => getWalletState(state).walletConnectModal.origin;
 
-export const { setWalletConnectModalVisibility, setIsBiconomy } = walletDetailsSlice.actions;
+export const { setWalletConnectModalVisibility, setIsBiconomy, updateParticleState } = walletDetailsSlice.actions;
 
 export default walletDetailsSlice.reducer;

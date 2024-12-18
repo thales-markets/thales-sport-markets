@@ -202,7 +202,7 @@ const Ticket: React.FC<TicketProps> = ({
     }, [markets]);
 
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
-    const isAA = useSelector((state: RootState) => getIsConnectedViaParticle(state));
+    const isParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
 
     const networkId = useChainId();
     const client = useClient();
@@ -211,7 +211,6 @@ const Ticket: React.FC<TicketProps> = ({
     const { address, isConnected } = useAccount();
     const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
-    const isParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
     const selectedOddsType = useSelector(getOddsType);
     const ticketPayment = useSelector(getTicketPayment);
     const liveBetSlippage = useSelector(getLiveBetSlippage);
@@ -869,7 +868,7 @@ const Ticket: React.FC<TicketProps> = ({
             }
         };
         if (isConnected && buyInAmount) {
-            (isEth && !isLiveTicket && !swapToThales) || isFreeBetActive || isStakedThales || isAA
+            (isEth && !isLiveTicket && !swapToThales) || isFreeBetActive || isStakedThales || isBiconomy
                 ? setHasAllowance(true)
                 : getAllowance();
         }
@@ -892,7 +891,7 @@ const Ticket: React.FC<TicketProps> = ({
         isStakedThales,
         client,
         walletClient.data,
-        isAA,
+        isBiconomy,
     ]);
 
     const isValidProfit: boolean = useMemo(() => {
@@ -1012,7 +1011,7 @@ const Ticket: React.FC<TicketProps> = ({
 
             const addressToApprove = sportsAMMV2Contract.addresses[networkId];
             let txHash;
-            if (isAA) {
+            if (isBiconomy) {
                 txHash = await executeBiconomyTransaction(networkId, collateralContractWithSigner, 'approve', [
                     addressToApprove,
                     approveAmount,
@@ -1154,7 +1153,7 @@ const Ticket: React.FC<TicketProps> = ({
                     const approveAmount = maxUint256;
 
                     let txHash;
-                    if (isAA) {
+                    if (isBiconomy) {
                         txHash = await executeBiconomyTransaction(networkId, collateralContractWithSigner, 'approve', [
                             addressToApprove,
                             approveAmount,
@@ -1286,7 +1285,7 @@ const Ticket: React.FC<TicketProps> = ({
                                     liveTotalQuote,
                                     referralId,
                                     additionalSlippage,
-                                    isAA,
+                                    isBiconomy,
                                     false,
                                     undefined,
                                     isStakedThales,
@@ -1304,7 +1303,7 @@ const Ticket: React.FC<TicketProps> = ({
                             liveTotalQuote,
                             referralId,
                             additionalSlippage,
-                            isAA,
+                            isBiconomy,
                             isFreeBetActive,
                             freeBetContractWithSigner,
                             isStakedThales,
@@ -1325,7 +1324,7 @@ const Ticket: React.FC<TicketProps> = ({
                         parsedTotalQuote,
                         referralId,
                         additionalSlippage,
-                        isAA,
+                        isBiconomy,
                         isFreeBetActive,
                         isStakedThales,
                         stakingThalesBettingProxyWithSigner,
@@ -1885,7 +1884,7 @@ const Ticket: React.FC<TicketProps> = ({
                 }
             }
         };
-        if (isAA) setGasFee();
+        if (isBiconomy) setGasFee();
     }, [
         collateralAddress,
         markets,
@@ -1893,7 +1892,7 @@ const Ticket: React.FC<TicketProps> = ({
         networkId,
         payout,
         isDefaultCollateral,
-        isAA,
+        isBiconomy,
         hasAllowance,
         selectedCollateral,
         isEth,
@@ -2098,7 +2097,7 @@ const Ticket: React.FC<TicketProps> = ({
                     </SettingsIconContainer>
                 )}
             </InfoContainer>
-            {isAA && (
+            {isBiconomy && (
                 <GasSummary>
                     <SummaryLabel>
                         {t('markets.parlay.total-gas')}:

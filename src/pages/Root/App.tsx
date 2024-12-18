@@ -26,7 +26,7 @@ import { Suspense, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Redirect, Route, Router, Switch } from 'react-router-dom';
 import { setMobileState } from 'redux/modules/app';
-import { setIsBiconomy } from 'redux/modules/wallet';
+import { setIsBiconomy, updateParticleState } from 'redux/modules/wallet';
 import { SupportedNetwork } from 'types/network';
 import { SeoArticleProps } from 'types/ui';
 import biconomyConnector from 'utils/biconomyWallet';
@@ -96,9 +96,11 @@ const App = () => {
                 }) as any,
                 chainId: networkId,
             });
+            dispatch(updateParticleState({ connectedViaParticle: true }));
         }
         const onDisconnect = () => {
             dispatch(setIsBiconomy(false));
+            dispatch(updateParticleState({ connectedViaParticle: false }));
             biconomyConnector.resetWallet();
             disconnect();
         };
