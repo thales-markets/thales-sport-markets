@@ -1925,7 +1925,11 @@ const Ticket: React.FC<TicketProps> = ({
             <RowSummary columnDirection={true}>
                 <RowContainer>
                     <SummaryLabel>{t('markets.parlay.total-quote')}:</SummaryLabel>
-                    <Tooltip overlay={getQuoteTooltipText()}>
+                    <Tooltip
+                        open={inputRefVisible && totalQuote === sportsAmmData?.maxSupportedOdds}
+                        overlay={getQuoteTooltipText()}
+                        isWarning
+                    >
                         <SummaryValue fontSize={12}>{formatMarketOdds(selectedOddsType, totalQuote)}</SummaryValue>
                     </Tooltip>
                     <ClearLabel alignRight={true} onClick={() => dispatch(removeAll())}>
