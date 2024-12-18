@@ -22,6 +22,9 @@ import { refetchOverdropMultipliers } from 'utils/queryConnector';
 import { useAccount } from 'wagmi';
 import MyTicket from './components/MyTicket';
 
+// XMAS Background
+import XMasBackgroundTop from 'assets/images/flex-card-top-xmas.svg';
+
 export type ShareTicketModalProps = {
     markets: TicketMarket[];
     multiSingle: boolean;
@@ -343,8 +346,9 @@ const Container = styled(FlexDivColumnCentered)`
     // max-height: 600px;
     padding: 15px;
     flex: none;
-    background: linear-gradient(180deg, #303656 0%, #1a1c2b 100%);
     border-radius: 10px;
+    background-image: ${`url(${XMasBackgroundTop})`};
+    background-size: cover;
     @media (max-width: 950px) {
         width: 357px;
         // max-height: 476px;
