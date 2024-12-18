@@ -347,8 +347,12 @@ const Container = styled(FlexDivColumnCentered)`
     padding: 15px;
     flex: none;
     border-radius: 10px;
+    background: linear-gradient(180deg, #151b36 0%, #111325 100%);
     background-image: ${`url(${XMasBackgroundTop})`};
-    background-size: cover;
+    background-position: center top;
+    background-size: auto;
+    background-repeat: no-repeat;
+    background-color: #151b36;
     @media (max-width: 950px) {
         width: 357px;
         // max-height: 476px;
