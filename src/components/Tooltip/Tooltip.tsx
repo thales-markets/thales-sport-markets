@@ -1,5 +1,5 @@
 import ReactTooltip from 'rc-tooltip';
-import React, { CSSProperties } from 'react';
+import React, { CSSProperties, useEffect, useRef, useState } from 'react';
 import styled, { useTheme } from 'styled-components';
 import 'styles/tooltip.css';
 import { ThemeInterface } from 'types/ui';
@@ -35,18 +35,32 @@ const Tooltip: React.FC<TooltipProps> = ({
 }) => {
     const theme: ThemeInterface = useTheme();
 
+    const validationChildRef = useRef<HTMLDivElement>(null);
+    const isValidationOrWarn = isValidation || isWarning;
+    const validationChildRefPositionTop = isValidationOrWarn
+        ? validationChildRef?.current?.getBoundingClientRect().top
+        : 0;
+
+    const [validationPositionTop, setValidationPositionTop] = useState(validationChildRefPositionTop);
+
+    useEffect(() => {
+        if (isValidationOrWarn && validationChildRefPositionTop !== validationPositionTop) {
+            setValidationPositionTop(validationChildRefPositionTop);
+        }
+    }, [validationPositionTop, validationChildRefPositionTop, isValidationOrWarn]);
+
     return open === false || !overlay ? (
         <>{children}</>
-    ) : isValidation || isWarning ? (
+    ) : isValidationOrWarn ? (
         <ReactTooltip
-            visible
+            visible={validationChildRefPositionTop === validationPositionTop}
             overlay={overlay}
             placement="top"
             overlayClassName={overlayClassName}
             overlayInnerStyle={{ ...overlayInnerStyle, ...getValidationStyle(theme, !!isWarning) }}
             arrowContent={<ValidationArrow isWarning={!!isWarning} />}
         >
-            {children}
+            <div ref={validationChildRef}>{children}</div>
         </ReactTooltip>
     ) : (
         <ReactTooltip
