@@ -93,7 +93,10 @@ const NetworkText = styled.span`
 
 const NetworkIcon = styled.i<{ isConnected: boolean }>`
     font-size: 24px;
-    color: ${(props) => (props.isConnected ? props.theme.button.textColor.primary : props.theme.textColor.secondary)};
+    color: ${(props) =>
+        props.isConnected
+            ? props.theme.button.textColor.primary
+            : props.theme.christmasTheme.button.textColor.secondary};
 `;
 
 const DownIcon = styled.i<{ isConnected: boolean }>`
