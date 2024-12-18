@@ -51,7 +51,7 @@ const TextInput: React.FC<TextAreaInputProps> = ({
                     {tooltip && <Tooltip overlay={tooltip} />}:
                 </FieldLabel>
             )}
-            <Tooltip overlay={showValidation ? validationMessage || '' : ''}>
+            <Tooltip overlay={showValidation ? validationMessage || '' : ''} isValidation={showValidation}>
                 <TextAreaInput
                     {...rest}
                     readOnly={!onChange}
