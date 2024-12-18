@@ -26,11 +26,12 @@ export const useTicketQuery = (
                     ContractType.SPORTS_AMM_DATA,
                     networkConfig
                 ) as ViemContract;
+
                 if (sportsAMMDataContract) {
                     const playersInfoQueryParam = `isTestnet=${isTestNetwork(networkConfig.networkId)}`;
 
                     const [tickets, gamesInfoResponse, playersInfoResponse, liveScoresResponse] = await Promise.all([
-                        sportsAMMDataContract.read.getTicketsData([ticketAddress]),
+                        sportsAMMDataContract.read.getTicketsData([[ticketAddress]]),
                         axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, noCacheConfig),
                         axios.get(
                             `${generalConfig.API_URL}/overtime-v2/players-info?${playersInfoQueryParam}`,
@@ -39,15 +40,17 @@ export const useTicketQuery = (
                         axios.get(`${generalConfig.API_URL}/overtime-v2/live-scores`, noCacheConfig),
                     ]);
 
-                    const mappedTickets: Ticket[] = tickets.map((ticket: any) =>
-                        mapTicket(
-                            ticket,
-                            networkConfig.networkId,
-                            gamesInfoResponse.data,
-                            playersInfoResponse.data,
-                            liveScoresResponse.data
-                        )
-                    );
+                    const mappedTickets: Ticket[] = [tickets] // viem doesn't return array when only one object is returned
+                        .flat()
+                        .map((ticket: any) =>
+                            mapTicket(
+                                ticket,
+                                networkConfig.networkId,
+                                gamesInfoResponse.data,
+                                playersInfoResponse.data,
+                                liveScoresResponse.data
+                            )
+                        );
 
                     return orderBy(updateTotalQuoteAndPayout(mappedTickets), ['timestamp'], ['desc'])[0];
                 }

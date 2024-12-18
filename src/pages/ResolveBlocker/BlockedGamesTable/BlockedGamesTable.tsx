@@ -1,5 +1,6 @@
 import SPAAnchor from 'components/SPAAnchor';
 import Table from 'components/Table';
+import Checkbox from 'components/fields/Checkbox';
 import i18n from 'i18n';
 import useWhitelistedForUnblock from 'queries/resolveBlocker/useWhitelistedForUnblock';
 import React, { FC, memo, useEffect, useState } from 'react';
@@ -9,7 +10,7 @@ import { getIsMobile } from 'redux/modules/app';
 import { useTheme } from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
 import { formatTxTimestamp, getEtherscanAddressLink, getEtherscanTxLink, truncateAddress } from 'thales-utils';
-import { BlockedGames } from 'types/resolveBlocker';
+import { BlockedGames, SelectedBlockedGames } from 'types/resolveBlocker';
 import { ThemeInterface } from 'types/ui';
 import { buildMarketLink } from 'utils/routes';
 import { useAccount, useChainId, useClient } from 'wagmi';
@@ -18,17 +19,19 @@ import {
     TeamNamesContainer,
 } from '../../Markets/Market/MarketDetailsV2/components/TicketTransactionsTable/styled-components';
 import UnblockAction from '../UnblockAction';
-import { ExternalLink } from '../styled-components';
+import { CheckboxContainer, ExternalLink } from '../styled-components';
 
 type BlockedGamesTableProps = {
     blockedGames: BlockedGames;
     noResultsMessage?: React.ReactNode;
     isLoading: boolean;
     isUnblocked: boolean;
+    selectedGames: SelectedBlockedGames;
+    updateSelectedGames: (gameId: string) => void;
 };
 
 const BlockedGamesTable: FC<BlockedGamesTableProps> = memo(
-    ({ blockedGames, noResultsMessage, isLoading, isUnblocked }) => {
+    ({ blockedGames, noResultsMessage, isLoading, isUnblocked, selectedGames, updateSelectedGames }) => {
         const language = i18n.language;
         const { t } = useTranslation();
         const theme: ThemeInterface = useTheme();
@@ -59,9 +62,31 @@ const BlockedGamesTable: FC<BlockedGamesTableProps> = memo(
                 tableHeadCellStyles={{
                     color: theme.textColor.secondary,
                 }}
-                columnsDeps={[isWitelistedForUnblock, networkId]}
+                columnsDeps={[isWitelistedForUnblock, networkId, selectedGames]}
+                onTableRowClick={(row) => {
+                    updateSelectedGames(row.original.gameId);
+                }}
                 columns={
                     [
+                        {
+                            header: <>{t('resolve-blocker.select')}</>,
+                            accessorKey: 'hash',
+                            cell: (cellProps: any) => {
+                                return isUnblocked ? (
+                                    <></>
+                                ) : (
+                                    <CheckboxContainer>
+                                        <Checkbox
+                                            checked={!!selectedGames[cellProps.cell.row.original.gameId]}
+                                            value={(!!selectedGames[cellProps.cell.row.original.gameId]).toString()}
+                                            onChange={() => {}}
+                                        />
+                                    </CheckboxContainer>
+                                );
+                            },
+                            enableSorting: false,
+                            size: 80,
+                        },
                         {
                             header: <>{t('resolve-blocker.date-time')}</>,
                             accessorKey: 'timestamp',

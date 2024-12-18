@@ -1,9 +1,9 @@
+import { ThemeMap } from 'constants/ui';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from 'redux/rootReducer';
 import { getTheme } from 'redux/modules/ui';
 import { ThemeProvider } from 'styled-components';
-import { ThemeMap } from 'constants/ui';
+import { RootState } from 'types/redux';
 
 type ThemeProps = {
     children: React.ReactNode;

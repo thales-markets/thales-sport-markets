@@ -18,11 +18,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
 import { getIsBiconomy, setWalletConnectModalVisibility } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { coinParser, floorNumberToDecimals, formatCurrencyWithKey, getPrecision } from 'thales-utils';
 import { CollateralsBalance, Rates } from 'types/collateral';
+import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
 import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateral, getCollateralAddress, getCollateralIndex, getFreeBetCollaterals } from 'utils/collaterals';
@@ -230,15 +230,15 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
     };
 
     const handleSubmit = async () => {
-        const contracts = [
-            getContractInstance(
-                ContractType.MULTICOLLATERAL,
-                { client: walletClient.data, networkId },
-                getCollateralIndex(networkId, selectedCollateral)
-            ),
-            getContractInstance(ContractType.FREE_BET_HOLDER, { client: walletClient.data, networkId }),
-        ];
-        const [multipleCollateralWithSigner, freeBetHolderContractWithSigner] = contracts;
+        const multipleCollateralWithSigner = getContractInstance(
+            ContractType.MULTICOLLATERAL,
+            { client: walletClient.data, networkId },
+            getCollateralIndex(networkId, selectedCollateral)
+        );
+        const freeBetHolderContractWithSigner = getContractInstance(ContractType.FREE_BET_HOLDER, {
+            client: walletClient.data,
+            networkId,
+        });
 
         if (
             multipleCollateralWithSigner &&

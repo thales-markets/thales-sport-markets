@@ -11,9 +11,9 @@ import ReactModal from 'react-modal';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import { getWalletConnectModalOrigin } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivRow } from 'styles/common';
+import { RootState } from 'types/redux';
 import {
     getClassNameForParticalLogin,
     getLabelForParticalLogin,
