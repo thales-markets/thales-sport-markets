@@ -195,6 +195,7 @@ const LabelContainer = styled(FlexDivRowCentered)`
 `;
 
 const Label = styled.div<{ isMobile: boolean }>`
+    color: ${(props) => props.theme.christmasTheme.textColor.primary};
     margin-left: ${(props) => (props.isMobile ? '20px' : '10px')};
     white-space: pre-line;
     -webkit-user-select: none;
