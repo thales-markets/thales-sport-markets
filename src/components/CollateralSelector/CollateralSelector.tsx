@@ -1,6 +1,5 @@
 import OutsideClickHandler from 'components/OutsideClick';
 import { USD_SIGN } from 'constants/currency';
-import { Rates } from 'queries/rates/useExchangeRatesQuery';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
@@ -12,6 +11,7 @@ import {
     FlexDivStart,
 } from 'styles/common';
 import { Coins, formatCurrencyWithSign } from 'thales-utils';
+import { Rates } from 'types/collateral';
 import { isStableCurrency } from 'utils/collaterals';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import { useChainId } from 'wagmi';

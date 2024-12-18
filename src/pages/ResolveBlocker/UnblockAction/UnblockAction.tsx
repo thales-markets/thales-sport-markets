@@ -44,7 +44,9 @@ const UnblockAction: FC<UnblockActionProps> = memo(({ gameId, isWitelistedForUnb
         </Button>
     );
 
-    const handleUnblock = async () => {
+    const handleUnblock = async (e: any) => {
+        e.preventDefault();
+        e.stopPropagation();
         const resolveBlockerContractWithSigner = getContractInstance(ContractType.RESOLVE_BLOCKER, {
             client: walletClient.data,
             networkId,

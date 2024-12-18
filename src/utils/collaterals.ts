@@ -1,7 +1,6 @@
 import { COLLATERALS, CRYPTO_CURRENCY_MAP, FREE_BET_COLLATERALS, STABLE_COINS } from 'constants/currency';
 import { ALTCOIN_CONVERSION_BUFFER_PERCENTAGE, SUSD_CONVERSION_BUFFER_PERCENTAGE } from 'constants/markets';
 import _ from 'lodash';
-import { Rates } from 'queries/rates/useExchangeRatesQuery';
 import {
     COLLATERAL_DECIMALS,
     Coins,
@@ -9,6 +8,7 @@ import {
     LONG_CURRENCY_DECIMALS,
     ceilNumberToDecimals,
 } from 'thales-utils';
+import { Rates } from 'types/collateral';
 import { SupportedNetwork } from 'types/network';
 import multipleCollateral from './contracts/multipleCollateralContract';
 

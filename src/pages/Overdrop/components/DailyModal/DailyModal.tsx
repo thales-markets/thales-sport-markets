@@ -1,15 +1,15 @@
 import React from 'react';
 
 import Checkbox from 'components/fields/Checkbox';
+import { ModalTypes } from 'enums/overdrop';
 import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getOverdropPreventShowingModal, setPreventOverdropModalValue } from 'redux/modules/ui';
-import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn } from 'styles/common';
+import { RootState } from 'types/redux';
 import BaseModal from '../BaseModal';
 import LevelCircles from '../LevelCircles';
-import { ModalTypes } from 'enums/overdrop';
 
 type DailyModalProps = {
     dayStreak: number;

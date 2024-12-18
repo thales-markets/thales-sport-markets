@@ -6,12 +6,11 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { minutesToMilliseconds } from 'date-fns';
 import { ContractType } from 'enums/contract';
 import { bigNumberFormatter, parseBytes32String } from 'thales-utils';
+import { Rates } from 'types/collateral';
 import { NetworkConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { getContractInstance } from 'utils/contract';
 import { THALES_CONTRACT_RATE_KEY } from '../../constants/markets';
-
-export type Rates = Record<string, number>;
 
 const useExchangeRatesQuery = (
     networkConfig: NetworkConfig,

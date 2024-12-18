@@ -82,8 +82,6 @@ const Promotion: React.FC = () => {
                                 if (promotion?.article.ctaSection.forceChangeNetworkOnClick && network) {
                                     await changeNetwork(network, () => {
                                         switchChain?.({ chainId: network.id as SupportedNetwork });
-                                        // Trigger App.js init
-                                        // do not use updateNetworkSettings(networkId) as it will trigger queries before provider in App.js is initialized
                                     });
                                 }
                             }}

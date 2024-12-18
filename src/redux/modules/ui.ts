@@ -7,9 +7,9 @@ import { uniqBy } from 'lodash';
 import { localStore } from 'thales-utils';
 import { TagInfo, Tags } from 'types/markets';
 import { OverdropUIState } from 'types/overdrop';
+import { RootState, UISliceState } from 'types/redux';
 import { LeagueMap } from '../../constants/sports';
 import { League } from '../../enums/sports';
-import { RootState } from '../rootReducer';
 
 const sliceName = 'ui';
 
@@ -52,17 +52,6 @@ const getDefaultValueForPreventOverdropModals = (): boolean => {
 const getStakingModalMuteEnd = (): number => {
     const stakingModalMuteEnd = localStore.get(LOCAL_STORAGE_KEYS.STAKING_MODAL_MUTE_END);
     return stakingModalMuteEnd as number;
-};
-
-type UISliceState = {
-    theme: Theme;
-    oddsType: OddsType;
-    stopPulsing: boolean;
-    favouriteLeagues: Tags;
-    overdropState: OverdropUIState[];
-    overdropWelcomeModal: boolean;
-    overdropPreventMultipliersModal: boolean;
-    stakingModalMuteEnd: number;
 };
 
 const initialState: UISliceState = {

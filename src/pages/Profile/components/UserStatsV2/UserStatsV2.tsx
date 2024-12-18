@@ -10,7 +10,7 @@ import { ContractType } from 'enums/contract';
 import { BuyTicketStep } from 'enums/tickets';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import useInterval from 'hooks/useInterval';
-import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
+import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import useUsersStatsV2Query from 'queries/wallet/useUsersStatsV2Query';
@@ -20,7 +20,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { setStakingModalMuteEnd } from 'redux/modules/ui';
 import { getIsBiconomy, getIsConnectedViaParticle } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import {
@@ -34,6 +33,8 @@ import {
     formatCurrencyWithSign,
     LONG_CURRENCY_DECIMALS,
 } from 'thales-utils';
+import { Rates } from 'types/collateral';
+import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
 import biconomyConnector from 'utils/biconomyWallet';
 import {

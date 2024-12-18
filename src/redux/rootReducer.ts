@@ -13,6 +13,4 @@ const rootReducer = combineReducers({
     ticket,
 });
 
-export type RootState = ReturnType<typeof rootReducer>;
-
 export default rootReducer;

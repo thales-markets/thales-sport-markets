@@ -14,8 +14,8 @@ import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
 import { getIsStakingModalMuted } from 'redux/modules/ui';
 import { getIsBiconomy, getIsConnectedViaParticle } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
 import { Coins } from 'thales-utils';
+import { RootState } from 'types/redux';
 import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateral, getCollaterals, getDefaultCollateral, isLpSupported } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
@@ -124,11 +124,14 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({
     const isLoading = userTicketsQuery.isLoading;
 
     const claimBatch = async () => {
-        const contracts = [
-            getContractInstance(ContractType.SPORTS_AMM_V2, { client: walletClient?.data, networkId }),
-            getContractInstance(ContractType.MULTICALL, { client: walletClient?.data, networkId }),
-        ];
-        const [sportsAMMV2ContractWithSigner, multiCallContractWithSigner] = contracts;
+        const sportsAMMV2ContractWithSigner = getContractInstance(ContractType.SPORTS_AMM_V2, {
+            client: walletClient?.data,
+            networkId,
+        });
+        const multiCallContractWithSigner = getContractInstance(ContractType.MULTICALL, {
+            client: walletClient?.data,
+            networkId,
+        });
 
         const id = toast.loading(t('market.toast-message.transaction-pending'));
 

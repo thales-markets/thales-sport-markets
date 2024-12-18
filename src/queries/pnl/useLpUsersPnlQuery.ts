@@ -8,6 +8,7 @@ import { ContractType } from 'enums/contract';
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 import { orderBy } from 'lodash';
 import { bigNumberFormatter, Coins, parseBytes32String } from 'thales-utils';
+import { Rates } from 'types/collateral';
 import { LpUsersPnl, Ticket } from 'types/markets';
 import { NetworkConfig } from 'types/network';
 import { isLpSupported, isStableCurrency } from 'utils/collaterals';
@@ -16,7 +17,6 @@ import { getLpAddress } from 'utils/liquidityPool';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
 import { mapTicket } from 'utils/tickets';
 import { League } from '../../enums/sports';
-import { Rates } from '../rates/useExchangeRatesQuery';
 
 const STAKING_TICKETS_BATCH_SIZE = 500;
 
@@ -31,12 +31,13 @@ const useLpUsersPnlQuery = (
     return useQuery<LpUsersPnl[]>({
         queryKey: QUERY_KEYS.Pnl.LpUsersPnl(lpCollateral, round, leagueId, onlyPP, networkConfig.networkId),
         queryFn: async () => {
-            const [sportsAMMDataContract, liquidityPoolDataContract, priceFeedContract, stakingThalesBettingProxy] = [
-                getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig),
-                getContractInstance(ContractType.LIQUIDITY_POOL_DATA, networkConfig),
-                getContractInstance(ContractType.PRICE_FEED, networkConfig),
-                getContractInstance(ContractType.STAKING_THALES_BETTING_PROXY, networkConfig),
-            ];
+            const sportsAMMDataContract = getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig);
+            const liquidityPoolDataContract = getContractInstance(ContractType.LIQUIDITY_POOL_DATA, networkConfig);
+            const priceFeedContract = getContractInstance(ContractType.PRICE_FEED, networkConfig);
+            const stakingThalesBettingProxy = getContractInstance(
+                ContractType.STAKING_THALES_BETTING_PROXY,
+                networkConfig
+            );
 
             if (sportsAMMDataContract && liquidityPoolDataContract && priceFeedContract && stakingThalesBettingProxy) {
                 const [

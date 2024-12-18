@@ -6,9 +6,9 @@ import XPOverview from 'pages/Overdrop/components/XPOverview';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
+import { RootState } from 'types/redux';
 
 type OverdropHomeProps = {
     setSelectedTab: (tab: OverdropTab) => void;

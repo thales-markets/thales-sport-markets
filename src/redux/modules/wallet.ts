@@ -1,16 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { RootState } from 'redux/rootReducer';
+import { RootState, WalletSliceState } from 'types/redux';
 
 const sliceName = 'wallet';
-
-type WalletSliceState = {
-    isBiconomy?: boolean;
-    connectedViaParticle: boolean;
-    walletConnectModal: {
-        visibility: boolean;
-        origin?: 'sign-up' | 'sign-in' | undefined;
-    };
-};
 
 const initialState: WalletSliceState = {
     isBiconomy: false,

@@ -12,8 +12,8 @@ import {
     setWelcomeModalVisibility,
 } from 'redux/modules/ui';
 import { getIsBiconomy } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
 import { OverdropUIState, OverdropUserData } from 'types/overdrop';
+import { RootState } from 'types/redux';
 import biconomyConnector from 'utils/biconomyWallet';
 import { getCurrentLevelByPoints, getMultiplierValueFromQuery } from 'utils/overdrop';
 import { useAccount } from 'wagmi';
