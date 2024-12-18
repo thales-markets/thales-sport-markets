@@ -108,37 +108,7 @@ const NumericInput: React.FC<NumericInputProps> = ({
                     <InfoText>{info}</InfoText>
                 </InfoWrapper>
             )}
-            {showValidation ? (
-                <Tooltip overlay={validationMessage ?? ''} isValidation>
-                    <StyledInput
-                        autoFocus
-                        readOnly={readonly}
-                        {...rest}
-                        value={value}
-                        type={inputType ? inputType : 'number'}
-                        onChange={handleOnChange}
-                        placeholder={placeholder}
-                        disabled={disabled}
-                        className={showValidation ? 'error' : ''}
-                        onKeyDown={(e) => {
-                            if (INVALID_CHARS.includes(e.key)) {
-                                e.preventDefault();
-                            }
-                        }}
-                        min="0"
-                        max={max || 'any'}
-                        step={step || 'any'}
-                        title=""
-                        padding={inputPadding}
-                        fontSize={inputFontSize}
-                        fontWeight={inputFontWeight}
-                        textAlign={inputTextAlign}
-                        width={width}
-                        height={height}
-                        borderColor={borderColor}
-                    />
-                </Tooltip>
-            ) : (
+            <Tooltip overlay={showValidation ? validationMessage || '' : ''} isValidation={showValidation}>
                 <StyledInput
                     autoFocus
                     readOnly={readonly}
@@ -166,7 +136,7 @@ const NumericInput: React.FC<NumericInputProps> = ({
                     height={height}
                     borderColor={borderColor}
                 />
-            )}
+            </Tooltip>
             <RightContainer height={height} currencyLabel={!!currencyLabel}>
                 {onMaxButton && (
                     <MaxButton disabled={disabled} onClick={onMaxButton}>
