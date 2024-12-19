@@ -255,13 +255,13 @@ export const DropdownContainer = styled.div`
     width: 180px;
     top: 28px;
     left: 0;
-    z-index: 1000;
 `;
 
 export const DropDown = styled(FlexDivColumn)`
     border: 1px solid ${(props) => props.theme.borderColor.primary};
     background: ${(props) => props.theme.background.secondary};
     color: white;
+    z-index: 1000;
     border-radius: 5px;
     position: absolute;
     margin-top: 2px;
