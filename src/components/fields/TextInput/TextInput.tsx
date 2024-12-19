@@ -49,7 +49,7 @@ const TextInput: React.FC<TextInputProps> = ({
                     {tooltip && <Tooltip overlay={tooltip} />}:
                 </FieldLabel>
             )}
-            <Tooltip overlay={showValidation ? validationMessage || '' : ''}>
+            <Tooltip overlay={showValidation ? validationMessage || '' : ''} isValidation={showValidation}>
                 <StyledInput
                     {...rest}
                     readOnly={!onChange}
