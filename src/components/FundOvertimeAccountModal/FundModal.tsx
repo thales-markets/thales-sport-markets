@@ -1,8 +1,8 @@
 import Modal from 'components/Modal';
 import { getInfoToastOptions, getErrorToastOptions } from 'config/toast';
 import { t } from 'i18next';
-
 import React from 'react';
+import { Trans } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsBiconomy } from 'redux/modules/wallet';
@@ -33,7 +33,14 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
     return (
         <Modal hideHeader title="" onClose={onClose}>
             <Wrapper>
-                <Title>Fund Overtime Account</Title>
+                <Title>
+                    <Trans
+                        i18nKey="get-started.fund-account"
+                        components={{
+                            icon: <OvertimeIcon className="icon icon--overtime" />,
+                        }}
+                    />
+                </Title>
                 <SubTitle>Add funds to your smart account to get started.</SubTitle>
                 <Box>
                     <FlexDivColumnCentered>
@@ -85,13 +92,20 @@ const Wrapper = styled.div`
     max-width: 500px;
 `;
 
+const OvertimeIcon = styled.i`
+    font-size: 124px;
+    font-weight: 400;
+    line-height: 28px;
+`;
+
 const Title = styled.h1`
     font-size: 24px;
-    font-weight: 700;
+    font-weight: 500;
     color: ${(props) => props.theme.textColor.primary};
     width: 100%;
     text-align: center;
     margin-bottom: 15px;
+    text-transform: uppercase;
 `;
 
 const SubTitle = styled.h1`
