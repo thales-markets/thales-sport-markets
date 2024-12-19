@@ -116,7 +116,6 @@
     bottom: 0px;
     margin-left: -5px;
     border-width: 5px 5px 0;
-    border-top-color: #3c498a;
 }
 .rc-tooltip-placement-top .rc-tooltip-arrow {
     left: 50%;
@@ -201,9 +200,6 @@
     .rc-tooltip-placement-leftTop,
     .rc-tooltip-placement-leftBottom {
         padding: 0 1px 0 3px;
-    }
-    .rc-tooltip-arrow {
-        display: none;
     }
 }
 

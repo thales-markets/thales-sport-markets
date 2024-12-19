@@ -7,7 +7,7 @@ import { wagmiConfig } from 'pages/Root/wagmiConfig';
 import { bigNumberFormatter, coinFormatter, Coins } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
 import { SwapParams } from 'types/swap';
-import { Address } from 'viem';
+import { Address, parseEther } from 'viem';
 import { estimateGas } from 'viem/actions';
 import multipleCollateralContract from './contracts/multipleCollateralContract';
 import { delay } from './timer';
@@ -118,7 +118,7 @@ export const buildTxForApproveTradeWithRouter = async (
                 account: rawTransaction?.from,
                 to: rawTransaction?.to,
                 data: rawTransaction?.data,
-                value: rawTransaction?.value,
+                value: parseEther(rawTransaction?.value),
             })
         );
 
@@ -161,12 +161,12 @@ export const buildTxForSwap = async (
 
 // Send a transaction, return its hash
 export const sendTransaction = async (rawTransaction: any) => {
-    rawTransaction.value = bigNumberFormatter(rawTransaction.value);
-
-    const walletClient = await getWalletClient(wagmiConfig);
-
     let txHash = '';
     try {
+        rawTransaction.value = bigNumberFormatter(rawTransaction.value);
+
+        const walletClient = await getWalletClient(wagmiConfig);
+
         if (walletClient) {
             txHash = await walletClient.sendTransaction(rawTransaction);
         }
