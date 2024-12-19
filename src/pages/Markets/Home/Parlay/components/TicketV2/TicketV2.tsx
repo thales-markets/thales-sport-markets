@@ -74,6 +74,7 @@ import {
     formatCurrencyWithSign,
     formatPercentage,
     getPrecision,
+    roundNumberToDecimals,
 } from 'thales-utils';
 import { SportsAmmData, TicketMarket } from 'types/markets';
 import { OverdropMultiplier, OverdropUserData } from 'types/overdrop';
@@ -2336,7 +2337,10 @@ const Ticket: React.FC<TicketProps> = ({
             {openApprovalModal && (
                 <ApprovalModal
                     // ADDING 1% TO ENSURE TRANSACTIONS PASSES DUE TO CALCULATION DEVIATIONS
-                    defaultAmount={Number(buyInAmount) * (1 + APPROVAL_BUFFER)}
+                    defaultAmount={roundNumberToDecimals(
+                        Number(buyInAmount) * (1 + APPROVAL_BUFFER),
+                        isStableCollateral ? DEFAULT_CURRENCY_DECIMALS : LONG_CURRENCY_DECIMALS
+                    )}
                     collateralIndex={selectedCollateralIndex}
                     tokenSymbol={isEth ? CRYPTO_CURRENCY_MAP.WETH : selectedCollateral}
                     isAllowing={isAllowing}
