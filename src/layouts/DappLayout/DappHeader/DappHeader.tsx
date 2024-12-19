@@ -216,7 +216,7 @@ const DappHeader: React.FC = () => {
                         <div>{!isConnected ? getGetStartedButton() : isBiconomy ? <TopUp /> : <></>}</div>
                         {isMarketsPage && <TimeFilters />}
                         <FlexDiv>
-                            <SPAAnchor style={{ display: 'flex', zIndex: 1 }} href={buildHref(ROUTES.Overdrop)}>
+                            <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
                                 {levelItem.level > 0 ? (
                                     <OverdropButtonContainer>
                                         <SmallBadgeImage src={levelItem.smallBadge} />
