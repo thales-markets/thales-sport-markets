@@ -279,6 +279,7 @@ a {
     position: fixed;
     top: -10%;
     z-index: 9999;
+    height: 50vh;
     -webkit-user-select: none;
     user-select: none;
     cursor: default;
@@ -290,7 +291,7 @@ a {
     /* animation-duration: 10s;
     animation-name: snowflakes-fall;
     animation-timing-function: linear; */
-    animation: snowflakes-fall 7s linear 2 30s;
+    animation: snowflakes-fall 5s linear 1 5s;
 }
 .snowflake:nth-of-type(0) {
     left: 1%;
