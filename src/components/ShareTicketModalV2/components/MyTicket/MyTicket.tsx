@@ -1,4 +1,4 @@
-import OvertimeLogoIcon from 'assets/images/xmas-overtime-logo.svg?react';
+import OvertimeLogoIcon from 'assets/images/xmas-overtime-logo-flex.svg?react';
 import { t } from 'i18next';
 import React from 'react';
 import { useSelector } from 'react-redux';

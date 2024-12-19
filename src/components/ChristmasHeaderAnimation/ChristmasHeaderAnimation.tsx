@@ -5,7 +5,7 @@ import { FlexDiv } from 'styles/common';
 const ChristmasHeaderAnimation: React.FC = () => {
     return (
         <Wrapper>
-            <Snowfall snowflakeCount={80} radius={[0.5, 2]} speed={[0.5, 3]} />
+            <Snowfall snowflakeCount={80} radius={[0.5, 2]} speed={[0.5, 1]} />
         </Wrapper>
     );
 };

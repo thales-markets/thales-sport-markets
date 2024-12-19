@@ -1,4 +1,3 @@
-import xmasPackage from 'assets/lotties/xmas-package.json';
 import Button from 'components/Button';
 import Logo from 'components/Logo';
 import NavMenu from 'components/NavMenu';
@@ -11,7 +10,6 @@ import WalletInfo from 'components/WalletInfo';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
 import ROUTES from 'constants/routes';
 import useInterval from 'hooks/useInterval';
-import Lottie from 'lottie-react';
 import useClaimablePositionCountV2Query from 'queries/markets/useClaimablePositionCountV2Query';
 import useBlockedGamesQuery from 'queries/resolveBlocker/useBlockedGamesQuery';
 import useWhitelistedForUnblock from 'queries/resolveBlocker/useWhitelistedForUnblock';
@@ -212,14 +210,6 @@ const DappHeader: React.FC = () => {
                 <Container>
                     <LeftContainer>
                         <Logo />
-                        {!isMobile && (
-                            <Lottie
-                                autoplay={true}
-                                animationData={xmasPackage}
-                                loop={false}
-                                style={{ width: '50px', height: '50px', marginBottom: '10px' }}
-                            />
-                        )}
                     </LeftContainer>
 
                     <MiddleContainer>
