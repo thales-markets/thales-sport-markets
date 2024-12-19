@@ -101,7 +101,10 @@ const NetworkIcon = styled.i<{ isConnected: boolean }>`
 
 const DownIcon = styled.i<{ isConnected: boolean }>`
     font-size: 12px;
-    color: ${(props) => (props.isConnected ? props.theme.button.textColor.primary : props.theme.textColor.secondary)};
+    color: ${(props) =>
+        props.isConnected
+            ? props.theme.button.textColor.primary
+            : props.theme.christmasTheme.button.textColor.secondary};
 `;
 
 const NetworkDropDown = styled.div`
