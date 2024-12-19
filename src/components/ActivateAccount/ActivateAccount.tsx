@@ -68,15 +68,21 @@ const ActivateAccount: React.FC<any> = () => {
             if (totalBalanceValue && totalBalanceValue > 3) {
                 setShowFundModal(false);
 
-                const validUntil = localStore.get(LOCAL_STORAGE_KEYS.SESSION_VALID_UNTIL[networkId]);
+                const storedMapString: any = localStore.get(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId]);
 
-                if (validUntil) {
-                    const dateUntilValid = new Date(Number(validUntil) * 1000);
-                    const nowDate = new Date();
-                    if (Number(nowDate) > Number(dateUntilValid)) {
-                        setShowSuccessfulDepositModal(true);
+                if (storedMapString) {
+                    const retrievedMap = new Map(JSON.parse(storedMapString));
+                    const sessionData = retrievedMap.get(biconomyConnector.address) as any;
+                    if (sessionData) {
+                        const dateUntilValid = new Date(Number(sessionData.validUntil) * 1000);
+                        const nowDate = new Date();
+                        if (Number(nowDate) > Number(dateUntilValid)) {
+                            setShowSuccessfulDepositModal(true);
+                        } else {
+                            setShowSuccessfulDepositModal(false);
+                        }
                     } else {
-                        setShowSuccessfulDepositModal(false);
+                        setShowSuccessfulDepositModal(true);
                     }
                 } else {
                     setShowSuccessfulDepositModal(true);
@@ -93,12 +99,9 @@ const ActivateAccount: React.FC<any> = () => {
             {showSuccessfulDepositModal && (
                 <Wrapper>
                     <StyledBalanceIcon />
-                    <Header>Deposit Received!</Header>
-                    <SubTitle>Activate Your Overtime Account for this device.</SubTitle>
-                    <Box>
-                        To start trading, your Overtime Account must be activated. This will set up collateral approval
-                        and session parameters for secure and seamless trading.
-                    </Box>
+                    <Header>{t('get-started.activate-account.deposit')}</Header>
+                    <SubTitle>{t('get-started.activate-account.activate')}</SubTitle>
+                    <Box>{t('get-started.activate-account.success')}</Box>
                     <ActivateButton
                         onClick={async () => {
                             const toastId = toast.loading(t('market.toast-message.transaction-pending'));
@@ -120,7 +123,7 @@ const ActivateAccount: React.FC<any> = () => {
                             toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
                         }}
                     >
-                        Activate My Account
+                        {t('get-started.activate-account.activate-my-account')}
                     </ActivateButton>
                 </Wrapper>
             )}
@@ -138,7 +141,7 @@ const Wrapper = styled.div`
     top: 0;
     right: -4px;
     background: ${Colors.GOLD};
-    width: 416px;
+    width: 480px;
     padding: 20px;
     border-radius: 16px;
     z-index: 1000;

@@ -159,13 +159,16 @@ export const activateOvertimeAccount = async (networkId: SupportedNetwork) => {
             } = await wait();
 
             if (success === 'false') {
+                return null;
             } else {
-                console.log('Transaction receipt', transactionHash);
                 return transactionHash;
             }
         } catch (e) {
-            window.localStorage.removeItem(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId]);
-            window.localStorage.removeItem(LOCAL_STORAGE_KEYS.SESSION_VALID_UNTIL[networkId]);
+            const storedMapString: any = localStore.get(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId]);
+
+            const retrievedMap = storedMapString ? new Map(JSON.parse(storedMapString)) : new Map();
+            retrievedMap.delete(biconomyConnector.address);
+            localStore.set(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId], JSON.stringify([...retrievedMap]));
             return null;
         }
     }
@@ -221,13 +224,16 @@ const getCreateSessionTxs = async (networkId: SupportedNetwork) => {
             data: sessionTxData.data,
         };
 
-        console.log('create session');
+        const storedMapString: any = localStore.get(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId]);
 
-        localStore.set(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId], privateKey);
-        localStore.set(
-            LOCAL_STORAGE_KEYS.SESSION_VALID_UNTIL[networkId],
-            Math.floor(sixMonths.getTime() / 1000).toString()
-        );
+        const retrievedMap = storedMapString ? new Map(JSON.parse(storedMapString)) : new Map();
+
+        retrievedMap.set(biconomyConnector.address, {
+            privateKey,
+            validUntil: Math.floor(sixMonths.getTime() / 1000).toString(),
+        });
+
+        localStore.set(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId], JSON.stringify([...retrievedMap]));
 
         transactionArray.push(setSessiontrx);
 
@@ -275,10 +281,11 @@ const getSessionSigner = async (networkId: SupportedNetwork) => {
         smartAccountAddress: biconomyConnector.address,
     });
     biconomyConnector.wallet?.setActiveValidationModule(sessionModule);
-    console.log('get session');
-    const sessionKeyPrivKey = localStore.get(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId]);
-    console.log('sessionKeyPrivKey: ', sessionKeyPrivKey);
-    const sessionAccount = privateKeyToAccount(sessionKeyPrivKey as any);
+    const storedMapString: any = localStore.get(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId]);
+    const retrievedMap = new Map(JSON.parse(storedMapString));
+    const sessionData = retrievedMap.get(biconomyConnector.address) as any;
+
+    const sessionAccount = privateKeyToAccount(sessionData.privateKey);
     const sessionSigner = createWalletClient({
         account: sessionAccount,
         chain: networkId as any,

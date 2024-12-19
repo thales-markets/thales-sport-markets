@@ -80,7 +80,7 @@ import { OverdropMultiplier, OverdropUserData } from 'types/overdrop';
 import { RootState } from 'types/redux';
 import { OverdropLevel, ThemeInterface } from 'types/ui';
 import { ViemContract } from 'types/viem';
-import { executeBiconomyTransaction, getPaymasterData } from 'utils/biconomy';
+import { executeBiconomyTransaction } from 'utils/biconomy';
 import biconomyConnector from 'utils/biconomyWallet';
 import {
     convertFromStableToCollateral,
@@ -136,7 +136,6 @@ import {
     CheckboxContainer,
     ClearLabel,
     CurrentLevelProgressLineContainer,
-    GasSummary,
     HorizontalLine,
     InfoContainer,
     InfoLabel,
@@ -242,7 +241,6 @@ const Ticket: React.FC<TicketProps> = ({
     const [isFreeBetInitialized, setIsFreeBetInitialized] = useState(false);
     const [checkFreeBetBalance, setCheckFreeBetBalance] = useState(false);
 
-    const [gas, setGas] = useState(0);
     const [slippageDropdownOpen, setSlippageDropdownOpen] = useState(false);
 
     const [swapToThales, setSwapToThales] = useState(false);
@@ -1825,90 +1823,6 @@ const Ticket: React.FC<TicketProps> = ({
         setShowShareTicketModal(!twitterShareDisabled);
     };
 
-    useEffect(() => {
-        const setGasFee = async () => {
-            const networkConfig = {
-                client: walletClient.data,
-                networkId,
-            };
-
-            const sportsAMMV2ContractWithSigner = getContractInstance(ContractType.SPORTS_AMM_V2, networkConfig);
-            const defaultCollateralContractWithSigner = getContractInstance(
-                ContractType.MULTICOLLATERAL,
-                networkConfig,
-                getCollateralIndex(networkId, getDefaultCollateral(networkId))
-            );
-            const multipleCollateralWithSigner = getContractInstance(
-                ContractType.MULTICOLLATERAL,
-                networkConfig,
-                getCollateralIndex(networkId, selectedCollateral)
-            );
-
-            if (!sportsAMMV2ContractWithSigner || !defaultCollateralContractWithSigner || !multipleCollateralWithSigner)
-                return;
-
-            const referralId =
-                walletAddress && getReferralId()?.toLowerCase() !== walletAddress.toLowerCase()
-                    ? getReferralId()
-                    : null;
-
-            const tradeData = getTradeData(markets);
-            const parsedTotalQuote = parseEther(totalQuote.toString());
-            const additionalSlippage = parseEther('0.02');
-
-            // TODO: check swap to THALES
-            if (!hasAllowance) {
-                const collateralContractWithSigner = isDefaultCollateral
-                    ? defaultCollateralContractWithSigner
-                    : multipleCollateralWithSigner;
-
-                const addressToApprove = sportsAMMV2ContractWithSigner.address;
-
-                const gasFees = await getPaymasterData(
-                    collateralContractWithSigner?.address ?? '',
-                    collateralContractWithSigner,
-                    'approve',
-                    [addressToApprove, maxUint256]
-                );
-
-                if (gasFees) {
-                    setGas(gasFees?.maxGasFeeUSD as number);
-                }
-            } else {
-                const gasFees = await getPaymasterData(collateralAddress, sportsAMMV2ContractWithSigner, 'trade', [
-                    tradeData,
-                    buyInAmount,
-                    parsedTotalQuote,
-                    additionalSlippage,
-                    referralId,
-                    collateralAddress,
-                    isEth,
-                ]);
-
-                if (gasFees) {
-                    setGas(gasFees?.maxGasFeeUSD as number);
-                }
-            }
-        };
-        if (isBiconomy) setGasFee();
-    }, [
-        collateralAddress,
-        markets,
-        buyInAmountInDefaultCollateral,
-        networkId,
-        payout,
-        isDefaultCollateral,
-        isBiconomy,
-        hasAllowance,
-        selectedCollateral,
-        isEth,
-        walletAddress,
-        totalQuote,
-        buyInAmount,
-        client,
-        walletClient.data,
-    ]);
-
     const overdropTotalBoost = useMemo(
         () =>
             [...overdropMultipliers, ...overdropGameMultipliersInThisTicket].reduce(
@@ -2107,28 +2021,17 @@ const Ticket: React.FC<TicketProps> = ({
                     </SettingsIconContainer>
                 )}
             </InfoContainer>
-            {isBiconomy && (
-                <GasSummary>
-                    <SummaryLabel>
-                        {t('markets.parlay.total-gas')}:
-                        <Tooltip overlay={<> {t('markets.parlay.gas-tooltip')}</>} iconFontSize={14} marginLeft={3} />
-                    </SummaryLabel>
-                    <SummaryValue isCollateralInfo={true}>
-                        {gas === 0 ? '-' : formatCurrencyWithSign(USD_SIGN, gas as number, 2, true)}
-                    </SummaryValue>
-                </GasSummary>
-            )}
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.total-to-pay')}:</SummaryLabel>
                 <SummaryValue isInfo={true}>
                     {hidePayout
                         ? '-'
                         : isDefaultCollateral && !swapToThales
-                        ? formatCurrencyWithSign(USD_SIGN, Number(buyInAmount) + gas)
+                        ? formatCurrencyWithSign(USD_SIGN, Number(buyInAmount))
                         : `${formatCurrencyWithKey(
                               usedCollateralForBuy,
-                              (swapToThales ? swappedThalesToReceive : Number(buyInAmount)) + gas
-                          )} (${formatCurrencyWithSign(USD_SIGN, Number(buyInAmountInDefaultCollateral) + gas)})`}
+                              swapToThales ? swappedThalesToReceive : Number(buyInAmount)
+                          )} (${formatCurrencyWithSign(USD_SIGN, Number(buyInAmountInDefaultCollateral))})`}
                 </SummaryValue>
             </RowSummary>
             <RowSummary>
@@ -2153,12 +2056,9 @@ const Ticket: React.FC<TicketProps> = ({
                               collateralHasLp && (!isDefaultCollateral || swapToThales)
                                   ? formatCurrencyWithKey(
                                         usedCollateralForBuy,
-                                        payout - (swapToThales ? swappedThalesToReceive : Number(buyInAmount)) - gas
+                                        payout - (swapToThales ? swappedThalesToReceive : Number(buyInAmount))
                                     )
-                                  : formatCurrencyWithSign(
-                                        USD_SIGN,
-                                        payout - Number(buyInAmountInDefaultCollateral) - gas
-                                    )
+                                  : formatCurrencyWithSign(USD_SIGN, payout - Number(buyInAmountInDefaultCollateral))
                           } (${formatPercentage(profitPercentage)})`}
                 </SummaryValue>
             </RowSummary>
