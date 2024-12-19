@@ -294,7 +294,7 @@ const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
                     networkId,
                     walletAddress as Address,
                     swapToThalesParams.src,
-                    walletClient.data as any,
+                    walletClient.data,
                     approveAmount.toString()
                 );
 
