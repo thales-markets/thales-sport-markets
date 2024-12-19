@@ -3,7 +3,6 @@ import { FlexDivRow, FlexDivRowCentered } from 'styles/common';
 
 export const FilterTypeContainer = styled(FlexDivRowCentered)<{ isMobile?: boolean }>`
     justify-content: space-around;
-    z-index: 1;
     @media (max-width: 950px) {
         margin-bottom: 70px;
     }

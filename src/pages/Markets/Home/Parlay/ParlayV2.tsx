@@ -297,7 +297,6 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
 const Container = styled(FlexDivColumn)<{ isMobile: boolean; isWalletConnected?: boolean }>`
     max-width: 360px;
     padding: 12px;
-    z-index: 1;
     flex: none;
     background: ${(props) => props.theme.background.quinary};
     border-radius: 7px;

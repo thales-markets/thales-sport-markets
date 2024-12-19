@@ -11,7 +11,6 @@ export const Wrapper = styled(FlexDivColumn)<{
 }>`
     margin-top: ${(props) => (props.floatingOddsTitles && !props.isMarketSelected ? '30px' : '0')};
     position: relative;
-    z-index: 1;
     width: 100%;
     display: ${(props) => (props.hideGame ? 'none' : '')};
     ${(props) => (props.isOverdrop ? `border: 1px solid ${props.theme.overdrop.borderColor.tertiary};` : '')}

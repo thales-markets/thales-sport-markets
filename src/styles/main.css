@@ -287,9 +287,10 @@ a {
     animation-timing-function: ease-in-out;
 }
 .snowflake .inner {
-    animation-duration: 10s;
+    /* animation-duration: 10s;
     animation-name: snowflakes-fall;
-    animation-timing-function: linear;
+    animation-timing-function: linear; */
+    animation: snowflakes-fall 7s linear 2 30s;
 }
 .snowflake:nth-of-type(0) {
     left: 1%;
