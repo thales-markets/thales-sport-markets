@@ -1,5 +1,5 @@
 import ReactTooltip from 'rc-tooltip';
-import React, { CSSProperties } from 'react';
+import React, { CSSProperties, useEffect, useRef, useState } from 'react';
 import styled, { useTheme } from 'styled-components';
 import 'styles/tooltip.css';
 import { ThemeInterface } from 'types/ui';
@@ -15,6 +15,8 @@ type TooltipProps = {
     iconColor?: string;
     children?: React.ReactElement;
     isValidation?: boolean;
+    isWarning?: boolean;
+    open?: boolean;
 };
 
 const Tooltip: React.FC<TooltipProps> = ({
@@ -28,19 +30,37 @@ const Tooltip: React.FC<TooltipProps> = ({
     iconColor,
     children,
     isValidation,
+    isWarning,
+    open,
 }) => {
     const theme: ThemeInterface = useTheme();
 
-    return isValidation ? (
+    const validationChildRef = useRef<HTMLDivElement>(null);
+    const isValidationOrWarn = isValidation || isWarning;
+    const validationChildRefPositionTop = isValidationOrWarn
+        ? validationChildRef?.current?.getBoundingClientRect().top
+        : 0;
+
+    const [validationPositionTop, setValidationPositionTop] = useState(validationChildRefPositionTop);
+
+    useEffect(() => {
+        if (isValidationOrWarn && validationChildRefPositionTop !== validationPositionTop) {
+            setValidationPositionTop(validationChildRefPositionTop);
+        }
+    }, [validationPositionTop, validationChildRefPositionTop, isValidationOrWarn]);
+
+    return open === false || !overlay ? (
+        <>{children}</>
+    ) : isValidationOrWarn ? (
         <ReactTooltip
-            visible
+            visible={validationChildRefPositionTop === validationPositionTop}
             overlay={overlay}
             placement="top"
             overlayClassName={overlayClassName}
-            overlayInnerStyle={{ ...overlayInnerStyle, ...getValidationStyle(theme) }}
-            arrowContent={<ValidationArrow />}
+            overlayInnerStyle={{ ...overlayInnerStyle, ...getValidationStyle(theme, !!isWarning) }}
+            arrowContent={<ValidationArrow isWarning={!!isWarning} />}
         >
-            {children}
+            <div ref={validationChildRef}>{children}</div>
         </ReactTooltip>
     ) : (
         <ReactTooltip
@@ -79,21 +99,21 @@ const InfoIcon = styled.i<{ iconFontSize?: number; marginLeft?: number; top?: nu
     }
 `;
 
-const getValidationStyle = (theme: ThemeInterface): React.CSSProperties => ({
+const getValidationStyle = (theme: ThemeInterface, isWarning: boolean): React.CSSProperties => ({
     minWidth: '100%',
     maxWidth: '300px',
     padding: '4px 8px',
     backgroundColor: theme.error.background.primary,
-    color: theme.error.textColor.primary,
-    border: `1.5px solid ${theme.error.borderColor.primary}`,
+    color: isWarning ? theme.warning.textColor.primary : theme.error.textColor.primary,
+    border: `1.5px solid ${isWarning ? theme.warning.borderColor.primary : theme.error.borderColor.primary}`,
     borderRadius: '2px',
-    fontSize: '10px',
+    fontSize: isWarning ? '9px' : '10px',
     fontWeight: 600,
-    lineHeight: '14px',
+    lineHeight: isWarning ? '12px' : '14px',
     textTransform: 'uppercase',
 });
 
-const ValidationArrow = styled.div`
+const ValidationArrow = styled.div<{ isWarning: boolean }>`
     &:before {
         content: '';
         display: block;
@@ -102,7 +122,9 @@ const ValidationArrow = styled.div`
         margin: auto;
         transform-origin: 100% 0;
         transform: rotate(45deg);
-        border: 1.5px solid ${(props) => props.theme.error.borderColor.primary};
+        border: 1.5px solid
+            ${(props) =>
+                props.isWarning ? props.theme.warning.borderColor.primary : props.theme.error.borderColor.primary};
         background-color: ${(props) => props.theme.error.background.primary};
         box-sizing: border-box;
     }
