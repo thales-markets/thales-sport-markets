@@ -851,18 +851,16 @@ const Ticket: React.FC<TicketProps> = ({
                     collateralToAllow
                 );
 
-                const collateralContractWithSigner =
+                const collateralIndex =
                     isDefaultCollateral && !swapToThales
-                        ? getContractInstance(
-                              ContractType.MULTICOLLATERAL,
-                              { client, networkId },
-                              getCollateralIndex(networkId, getDefaultCollateral(networkId))
-                          )
-                        : getContractInstance(
-                              ContractType.MULTICOLLATERAL,
-                              { client, networkId },
-                              getCollateralIndex(networkId, collateralToAllow)
-                          );
+                        ? getCollateralIndex(networkId, getDefaultCollateral(networkId))
+                        : getCollateralIndex(networkId, collateralToAllow);
+
+                const collateralContractWithSigner = getContractInstance(
+                    ContractType.MULTICOLLATERAL,
+                    { client, networkId },
+                    collateralIndex
+                );
 
                 const allowance = await checkAllowance(
                     parsedTicketPrice,
@@ -1192,6 +1190,9 @@ const Ticket: React.FC<TicketProps> = ({
                 } catch (e) {
                     console.log('Approve buy failed', e);
                 }
+            } else {
+                step = BuyTicketStep.BUY;
+                setBuyStep(step);
             }
         }
 
