@@ -1,3 +1,4 @@
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import ReactTooltip from 'rc-tooltip';
 import React, { CSSProperties, useEffect, useRef, useState } from 'react';
 import styled, { useTheme } from 'styled-components';
@@ -135,6 +136,9 @@ const ValidationArrow = styled.div<{ isWarning: boolean }>`
     bottom: -4px;
     top: auto;
     right: -7px;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        bottom: -6px;
+    }
 `;
 
 export default Tooltip;
