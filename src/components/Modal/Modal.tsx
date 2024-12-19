@@ -12,6 +12,7 @@ type ModalProps = {
         container?: CSSProperties;
         header?: CSSProperties;
     };
+    containerStyle?: CSSProperties;
     onClose: () => void;
     hideHeader?: boolean;
     children: React.ReactNode;
@@ -45,6 +46,7 @@ const Modal: React.FC<ModalProps> = ({
     shouldCloseOnOverlayClick,
     customStyle,
     mobileStyle,
+    containerStyle,
     hideHeader,
 }) => {
     const customStylesOverride = customStyle
@@ -61,7 +63,7 @@ const Modal: React.FC<ModalProps> = ({
             shouldCloseOnOverlayClick={shouldCloseOnOverlayClick}
             style={customStylesOverride}
         >
-            <Container mobileStyle={mobileStyle?.container}>
+            <Container mobileStyle={mobileStyle?.container} containerStyle={containerStyle}>
                 {!hideHeader && (
                     <Header mobileStyle={mobileStyle?.header}>
                         <Title>{title}</Title>
@@ -74,7 +76,7 @@ const Modal: React.FC<ModalProps> = ({
     );
 };
 
-const Container = styled.div<{ mobileStyle?: CSSProperties }>`
+const Container = styled.div<{ mobileStyle?: CSSProperties; containerStyle?: CSSProperties }>`
     border: 1px solid ${(props) => props.theme.borderColor.primary};
     background: ${(props) => props.theme.background.primary};
     padding: 25px 30px 35px 30px;
@@ -85,6 +87,7 @@ const Container = styled.div<{ mobileStyle?: CSSProperties }>`
     }
     max-height: 100vh;
     height: fit-content;
+    ${(props) => (props.containerStyle ? convertCssToStyledProperties(props.containerStyle) : '')}
 `;
 
 const Header = styled(FlexDivRow)<{ mobileStyle?: CSSProperties }>`

@@ -984,7 +984,22 @@
                 "trade": "Trade on Overtime"
             }
         },
-        "fund-account": "Fund your <icon/> account"
+        "fund-account": {
+            "title": "Fund your <icon/> account",
+            "subtitle": "Add funds to your Overtime Account to get started.",
+            "tooltip-1": "To activate your Overtime Account, fund it via one of these methods: send crypto to the Deposit Address, deposit from a connected wallet, buy crypto with fiat, or transfer from an exchange.",
+            "tooltip-2": "Send/Withdraw supported crypto to the address below and select {{ network }} as the network.",
+            "tooltip-3": "Fund directly from your exchange (Binance, Coinbase, Kraken, Okex etc.)",
+            "powered-by": "Powered by <icon/>",
+            "address": "Your Deposit Address",
+            "from-exchange": "Fund from Exchange",
+            "buy-crypto": "Buy crypto",
+            "from-wallet": "Deposit from Wallet",
+            "next": "Next: Wait for Deposit",
+            "skip": "Skip Creating Overtime Account!",
+            "copy": "Copy",
+            "qr": "QR code"
+        }
     },
     "liquidity-pool": {
         "title": "Provide Liquidity",
