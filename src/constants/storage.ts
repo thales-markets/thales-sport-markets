@@ -38,10 +38,5 @@ export const LOCAL_STORAGE_KEYS = {
         [NetworkId.Arbitrum]: 'sessionPKey_42161',
         [NetworkId.OptimismSepolia]: 'sessionPKey_11155420',
     } as Record<SupportedNetwork, string>,
-    SESSION_VALID_UNTIL: {
-        [NetworkId.OptimismMainnet]: 'sessionValidUntil_10',
-        [NetworkId.Arbitrum]: 'sessionValidUntil_42161',
-        [NetworkId.OptimismSepolia]: 'sessionValidUntil_11155420',
-    } as Record<SupportedNetwork, string>,
     STAKING_MODAL_MUTE_END: 'stakingModalMuteEnd',
 };
