@@ -1,5 +1,5 @@
 import { createSessionKeyManagerModule, DEFAULT_SESSION_KEY_MANAGER_MODULE } from '@biconomy/modules';
-import { IHybridPaymaster, PaymasterFeeQuote, PaymasterMode, SponsorUserOperationDto } from '@biconomy/paymaster';
+import { PaymasterMode } from '@biconomy/paymaster';
 import { getPublicClient } from '@wagmi/core';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { addMonths } from 'date-fns';
@@ -292,46 +292,4 @@ const getSessionSigner = async (networkId: SupportedNetwork) => {
         transport: http(biconomyConnector.wallet?.rpcProvider.transport.url),
     });
     return sessionSigner;
-};
-export const getPaymasterData = async (
-    collateral: string,
-    contract: ViemContract | undefined,
-    methodName: string,
-    data?: ReadonlyArray<any>,
-    value?: any
-): Promise<PaymasterFeeQuote | undefined> => {
-    console.log(collateral);
-    if (biconomyConnector.wallet && contract) {
-        try {
-            biconomyConnector.wallet.setActiveValidationModule(biconomyConnector.wallet.defaultValidationModule);
-            const encodedCall = encodeFunctionData({
-                abi: contract.abi,
-                functionName: methodName,
-                args: data ? data : ([] as any),
-            });
-
-            const transaction = {
-                to: contract.address,
-                data: encodedCall,
-                value,
-            };
-
-            const userOp = await biconomyConnector.wallet.buildUserOp([transaction], {
-                paymasterServiceData: {
-                    mode: PaymasterMode.SPONSORED,
-                },
-            });
-
-            const biconomyPaymaster = biconomyConnector.wallet.paymaster as IHybridPaymaster<SponsorUserOperationDto>;
-            const feeQuotesData = await biconomyPaymaster?.getPaymasterFeeQuotesOrData(userOp, {
-                mode: PaymasterMode.SPONSORED,
-            });
-
-            if (feeQuotesData.feeQuotes && feeQuotesData.feeQuotes[0].maxGasFeeUSD) {
-                return feeQuotesData.feeQuotes[0];
-            }
-        } catch (e) {
-            console.log(e);
-        }
-    }
 };
