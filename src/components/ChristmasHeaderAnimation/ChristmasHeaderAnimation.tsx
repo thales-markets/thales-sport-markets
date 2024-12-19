@@ -1,13 +1,11 @@
-import Lottie from 'lottie-react';
+import Snowfall from 'react-snowfall';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
-
-import SnowAnimationData from 'assets/lotties/snow-animation.json';
 
 const ChristmasHeaderAnimation: React.FC = () => {
     return (
         <Wrapper>
-            <Lottie animationData={SnowAnimationData} style={{ width: '100%', zIndex: 0 }} loop={2} />
+            <Snowfall snowflakeCount={80} radius={[0.5, 2]} speed={[0.5, 3]} />
         </Wrapper>
     );
 };
@@ -17,7 +15,7 @@ const Wrapper = styled(FlexDiv)`
     position: absolute;
     top: 0;
     width: 100%;
-    height: 150px;
+    height: 200px;
     padding: 0px !important;
 `;
 
