@@ -1080,7 +1080,7 @@ const Ticket: React.FC<TicketProps> = ({
                     networkId,
                     walletAddress as Address,
                     swapToThalesParams.src,
-                    client,
+                    walletClient.data,
                     approveAmount.toString()
                 );
 
@@ -1193,9 +1193,6 @@ const Ticket: React.FC<TicketProps> = ({
                     console.log('Approve buy failed', e);
                 }
             }
-        } else {
-            step = BuyTicketStep.BUY;
-            setBuyStep(step);
         }
 
         return { step, thalesAmount };
