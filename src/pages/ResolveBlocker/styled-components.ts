@@ -5,6 +5,7 @@ export const Container = styled(FlexDivColumnCentered)`
     width: 100%;
     margin-top: 30px;
     justify-content: start;
+    z-index: 1;
     max-width: 1080px;
     @media (max-width: 767px) {
         margin-top: 20px;

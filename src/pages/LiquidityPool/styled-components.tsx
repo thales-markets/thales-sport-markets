@@ -12,6 +12,7 @@ import {
 export const Wrapper = styled(FlexDivColumn)`
     width: 100%;
     align-items: center;
+    z-index: 1;
 `;
 
 export const Container = styled(FlexDivRow)`

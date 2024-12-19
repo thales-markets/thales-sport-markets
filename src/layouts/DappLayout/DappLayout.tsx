@@ -74,9 +74,9 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
     return (
         <>
             <Background>
-                <ChristmasHeaderAnimation />
                 <ModalWrapper />
                 <Banner />
+                <ChristmasHeaderAnimation />
                 <Wrapper>
                     <MetaData />
                     <DappHeader />
