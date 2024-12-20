@@ -8,7 +8,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getIsBiconomy } from 'redux/modules/wallet';
+import { getIsBiconomy, getIsConnectedViaParticle } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivStart } from 'styles/common';
 import { Rates } from 'types/collateral';
@@ -41,6 +41,7 @@ const Deposit: React.FC = () => {
     const { t } = useTranslation();
 
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+    const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
 
     const networkId = useChainId();
     const client = useClient();
@@ -61,8 +62,8 @@ const Deposit: React.FC = () => {
     );
 
     useEffect(() => {
-        if (!isBiconomy) navigateTo(ROUTES.Markets.Home);
-    }, [isBiconomy]);
+        if (!isConnectedViaParticle) navigateTo(ROUTES.Markets.Home);
+    }, [isConnectedViaParticle]);
 
     useEffect(() => {
         setSelectedToken(Number(selectedTokenFromUrl));
@@ -123,12 +124,12 @@ const Deposit: React.FC = () => {
     }, [exchangeRates, multipleCollateralBalances.data]);
 
     useEffect(() => {
-        if (isBiconomy && ethBalanceValue !== undefined && Number(ethBalanceValue) < 2) {
+        if (isConnectedViaParticle && ethBalanceValue !== undefined && Number(ethBalanceValue) < 2) {
             setLowBalanceAlert(true);
         } else {
             setLowBalanceAlert(false);
         }
-    }, [ethBalanceValue, isBiconomy]);
+    }, [ethBalanceValue, isConnectedViaParticle]);
 
     const inputRef = useRef<HTMLDivElement>(null);
 
