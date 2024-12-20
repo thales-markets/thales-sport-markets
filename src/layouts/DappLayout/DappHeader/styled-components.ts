@@ -264,6 +264,7 @@ export const DropDown = styled(FlexDivColumn)`
     margin-top: 2px;
     padding: 4px;
     width: 100%;
+    z-index: 3;
 `;
 
 export const DropDownItem = styled(FlexDiv)`
