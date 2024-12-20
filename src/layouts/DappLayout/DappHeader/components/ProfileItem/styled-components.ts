@@ -9,7 +9,7 @@ export const ProfileContainer = styled(FlexDivRow)`
 export const ProfileLabel = styled.span`
     font-weight: 600;
     font-size: 12px;
-    color: ${(props) => props.theme.textColor.secondary};
+    color: ${(props) => props.theme.christmasTheme.textColor.primary};
     text-transform: uppercase;
 `;
 
@@ -26,7 +26,7 @@ export const ProfileIcon = styled.i.attrs({ className: 'icon icon--profile2' })<
 }>`
     font-size: ${(props) => (props.avatarSize ? props.avatarSize : '20')}px;
     font-weight: 400;
-    color: ${(props) => (props.iconColor ? props.iconColor : props.theme.textColor.secondary)};
+    color: ${(props) => (props.iconColor ? props.iconColor : props.theme.christmasTheme.textColor.primary)};
 `;
 
 export const NotificationCount = styled.div`

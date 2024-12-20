@@ -92,11 +92,11 @@ const Container = styled(FlexDivSpaceBetween)`
     cursor: pointer;
     height: 25px;
     position: relative;
-    color: ${(props) => props.theme.textColor.quinary};
+    color: ${(props) => props.theme.christmasTheme.textColor.primary};
     margin-bottom: 5px;
     &.selected,
     &:hover {
-        color: ${(props) => props.theme.textColor.quaternary};
+        color: ${(props) => props.theme.christmasTheme.textColor.secondary};
     }
     @media (max-width: 950px) {
         font-size: 14px;

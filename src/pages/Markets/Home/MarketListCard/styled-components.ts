@@ -18,7 +18,7 @@ export const Wrapper = styled(FlexDivColumn)<{
     border-radius: 5px;
     background-color: ${(props) =>
         props.selected
-            ? props.theme.background.quaternary
+            ? props.theme.christmasTheme.background.secondary
             : props.isResolved || props.isMarketSelected
             ? props.theme.background.secondary
             : props.theme.background.quinary};

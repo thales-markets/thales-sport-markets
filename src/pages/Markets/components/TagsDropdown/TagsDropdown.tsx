@@ -130,7 +130,12 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                     }}
                                 >
                                     <LeagueFlag alt={tag.id.toString()} src={getLeagueFlagSource(tag.id)} />
-                                    <Label isMobile={isMobile}>{label}</Label>
+                                    <Label
+                                        isMobile={isMobile}
+                                        className={`${tagFilterIds.includes(tag.id) ? 'selected' : ''}`}
+                                    >
+                                        {label}
+                                    </Label>
                                     <IncentivizedLeague league={tag.id} onlyLogo />
                                 </LabelContainer>
                             </LeftContainer>
@@ -195,6 +200,7 @@ const LabelContainer = styled(FlexDivRowCentered)`
 `;
 
 const Label = styled.div<{ isMobile: boolean }>`
+    color: ${(props) => props.theme.christmasTheme.textColor.primary};
     margin-left: ${(props) => (props.isMobile ? '20px' : '10px')};
     white-space: pre-line;
     -webkit-user-select: none;
@@ -202,6 +208,10 @@ const Label = styled.div<{ isMobile: boolean }>`
     -ms-user-select: none;
     -o-user-select: none;
     user-select: none;
+    &.selected,
+    &:hover {
+        color: ${(props) => props.theme.textColor.quaternary};
+    }
 `;
 
 const StarIcon = styled.i<{ isMobile: boolean }>`
