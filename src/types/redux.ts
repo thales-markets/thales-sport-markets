@@ -27,6 +27,7 @@ export type TicketSliceState = {
     maxTicketSize: number;
     liveBetSlippage: number;
     isFreeBetDisabledByUser: boolean;
+    isSystemBet: boolean;
     error: { code: TicketErrorCode; data: string };
 };
 

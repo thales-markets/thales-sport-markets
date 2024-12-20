@@ -134,6 +134,7 @@ export type SportsAmmData = {
     maxSupportedAmount: number;
     maxSupportedOdds: number;
     safeBoxFee: number;
+    maxAllowedSystemCombinations: number;
 };
 
 export type LiveTradingProcessorData = {
@@ -153,6 +154,15 @@ export type TradeData = {
     position: number;
     combinedPositions: CombinedPositions[];
     live?: boolean;
+};
+
+export type SystemBetData = {
+    systemBetDenominator: number;
+    numberOfCombination: number;
+    buyInPerCombination: number;
+    minPayout: number;
+    maxPayout: number;
+    numberOfWinningCombinations: number;
 };
 
 export type Ticket = {
@@ -179,6 +189,8 @@ export type Ticket = {
     finalPayout: number;
     isLive: boolean;
     isFreeBet: boolean;
+    isSystemBet: boolean;
+    systemBetData?: SystemBetData;
 };
 
 export type UserStats = {

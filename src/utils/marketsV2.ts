@@ -435,6 +435,10 @@ export const isOddValid = (odd: number) => odd < 1 && odd != 0;
 
 export const updateTotalQuoteAndPayout = (tickets: Ticket[]): Ticket[] => {
     const modifiedTickets = tickets.map((ticket: Ticket) => {
+        // Skip system bet, payout is updated in separate function due to different logic and quote is not used
+        if (ticket.isSystemBet) {
+            return ticket;
+        }
         let totalQuote = ticket.totalQuote;
         let payout = ticket.payout;
 
