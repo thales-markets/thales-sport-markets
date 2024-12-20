@@ -21,7 +21,6 @@ import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { useTheme } from 'styled-components';
-import { FlexDivCentered } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
 import { getNetworkIconClassNameByNetworkId, getNetworkNameByNetworkId } from 'utils/network';
 import { buildHref } from 'utils/routes';
@@ -38,6 +37,7 @@ import {
     Network,
     NetworkIcon,
     NetworkName,
+    NetworkWrapper,
     WalletWrapper,
     Wrapper,
 } from './styled-components';
@@ -101,13 +101,13 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                         </SPAAnchor>
                     </LogoContainer>
 
-                    <FlexDivCentered>
+                    <NetworkWrapper>
                         <Network>
                             <NetworkIcon className={getNetworkIconClassNameByNetworkId(networkId)} />
                             <NetworkName>{getNetworkNameByNetworkId(networkId)}</NetworkName>
                         </Network>
                         <LanguageSelector />
-                    </FlexDivCentered>
+                    </NetworkWrapper>
                     <WalletWrapper>
                         <WalletInfo />
                     </WalletWrapper>

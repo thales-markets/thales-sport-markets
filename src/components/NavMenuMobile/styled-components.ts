@@ -1,5 +1,5 @@
 import styled, { css, keyframes } from 'styled-components';
-import { FlexDiv, FlexDivColumn, FlexDivColumnNative, FlexDivRow } from 'styles/common';
+import { FlexDiv, FlexDivColumn, FlexDivColumnNative, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 
 const WrapperAnimation = (props: any) => keyframes`
     0% {
@@ -102,6 +102,10 @@ export const FooterContainer = styled(FlexDivColumn)`
     align-items: center;
     justify-content: center;
     position: relative;
+`;
+
+export const NetworkWrapper = styled(FlexDivRowCentered)`
+    margin: 0 auto;
 `;
 
 export const Network = styled(FlexDivRow)`
