@@ -34,12 +34,10 @@ export const LeftContainer = styled(FlexDivRowCentered)`
     max-width: 278px;
     justify-content: center;
     padding-right: 15px;
-    z-index: 1;
 `;
 
 export const MiddleContainer = styled(FlexDivRowCentered)`
     width: 100%;
-    z-index: 1;
     max-width: 821px;
 `;
 
@@ -81,7 +79,6 @@ export const OverdropIcon = styled.img.attrs({ src: overdrop })`
 export const WrapperMobile = styled(FlexDivRow)`
     width: 100%;
     align-items: center;
-    z-index: 1;
     justify-content: center;
 `;
 
@@ -261,7 +258,6 @@ export const DropDown = styled(FlexDivColumn)`
     border: 1px solid ${(props) => props.theme.borderColor.primary};
     background: ${(props) => props.theme.background.secondary};
     color: white;
-    z-index: 1000;
     border-radius: 5px;
     position: absolute;
     margin-top: 2px;
