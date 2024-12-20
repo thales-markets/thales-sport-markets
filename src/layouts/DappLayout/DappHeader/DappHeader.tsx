@@ -368,7 +368,7 @@ const DappHeader: React.FC = () => {
                             </ReactModal>
                         </SearchIconContainer>
                         <MenuIconContainer>
-                            <MenuIcon onClick={() => setNavMenuVisibility(true)} />
+                            <MenuIcon className="icon icon--burger-icon" onClick={() => setNavMenuVisibility(true)} />
                             {claimablePositionCount && (
                                 <NotificationCount>
                                     <Count>{claimablePositionCount}</Count>
