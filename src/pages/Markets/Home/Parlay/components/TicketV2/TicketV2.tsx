@@ -760,7 +760,7 @@ const Ticket: React.FC<TicketProps> = ({
             if (
                 buyInAmountForQuote <= 0 ||
                 noProofs ||
-                (isSystemBet && (!isValidSystemBet || isInvalidNumberOfCombination))
+                (isSystemBet && (!isValidSystemBet || isInvalidNumberOfCombination || isStakedThales))
             )
                 return;
 
@@ -848,22 +848,23 @@ const Ticket: React.FC<TicketProps> = ({
             }
         },
         [
-            client,
-            networkId,
             noProofs,
             isSystemBet,
             isValidSystemBet,
             isInvalidNumberOfCombination,
+            isStakedThales,
+            client,
+            networkId,
             markets,
             collateralHasLp,
-            isThales,
-            swapToThales,
             isDefaultCollateral,
+            swapToThales,
             selectedCollateralCurrencyRate,
+            thalesCollateralAddress,
             collateralAddress,
             usedCollateralForBuy,
-            thalesCollateralAddress,
             systemBetDenominator,
+            isThales,
             swappedThalesToReceive,
             buyInAmount,
         ]
@@ -1041,7 +1042,9 @@ const Ticket: React.FC<TicketProps> = ({
     useEffect(() => {
         if (isBuying) return;
 
-        if (
+        if (isSystemBet && isStakedThales) {
+            setTooltipTextBuyInAmount(t('markets.parlay.validation.staked-thales-system-bets'));
+        } else if (
             (Number(buyInAmount) && finalQuotes.some((quote) => quote === 0)) ||
             (buyInAmountInDefaultCollateral && ticketLiquidity && buyInAmountInDefaultCollateral > ticketLiquidity)
         ) {
@@ -1094,6 +1097,8 @@ const Ticket: React.FC<TicketProps> = ({
         swappedThalesToReceive,
         swapQuote,
         isBuying,
+        isSystemBet,
+        isStakedThales,
     ]);
 
     const setCollateralAmount = useCallback(
@@ -1699,7 +1704,7 @@ const Ticket: React.FC<TicketProps> = ({
             return;
         }
 
-        if (isSystemBet && !isValidSystemBet) {
+        if (isSystemBet && (!isValidSystemBet || isStakedThales)) {
             setSubmitDisabled(true);
             return;
         }
@@ -1727,6 +1732,7 @@ const Ticket: React.FC<TicketProps> = ({
         isSystemBet,
         isInvalidSystemTotalQuote,
         isValidSystemBet,
+        isStakedThales,
     ]);
 
     const getSubmitButton = () => {

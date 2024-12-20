@@ -815,6 +815,7 @@
                 "min-amount": "Minimal buy-in is {{min}}",
                 "single-min-amount": "Minimal buy-in is {{min}}",
                 "availability": "Not enough liquidity for this buy-in amount",
+                "staked-thales-system-bets": "System bets not available for staked THALES",
                 "no-funds": "Please ensure your wallet has enough funds",
                 "no-funds-multi-collateral": "Please ensure your wallet has enough funds (buy-in amount plus {{percentage}}%)",
                 "not-supported": "Not supported validation error: {{error}}",
