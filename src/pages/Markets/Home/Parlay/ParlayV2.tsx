@@ -343,7 +343,7 @@ const Container = styled(FlexDivColumn)<{ isMobile: boolean; isWalletConnected?:
 `;
 
 const Title = styled(FlexDivCentered)`
-    color: ${(props) => props.theme.textColor.septenary};
+    color: ${(props) => props.theme.christmasTheme.button.textColor.secondary};
     font-weight: 600;
     font-size: 14px;
     line-height: 16px;

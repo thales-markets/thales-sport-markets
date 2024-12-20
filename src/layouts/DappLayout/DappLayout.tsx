@@ -1,4 +1,5 @@
 import axios from 'axios';
+import ChristmasHeaderAnimation from 'components/ChristmasHeaderAnimation';
 import MetaData from 'components/MetaData';
 import { generalConfig } from 'config/general';
 import { Theme } from 'enums/ui';
@@ -75,6 +76,7 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
             <Background>
                 <ModalWrapper />
                 <Banner />
+                <ChristmasHeaderAnimation />
                 <Wrapper>
                     <MetaData />
                     <DappHeader />

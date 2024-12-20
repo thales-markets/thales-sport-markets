@@ -516,3 +516,7 @@
 .icon--playerprops:before {
     content: '\00C2';
 }
+
+.icon--burger-icon:before {
+    content: '\004F';
+}
