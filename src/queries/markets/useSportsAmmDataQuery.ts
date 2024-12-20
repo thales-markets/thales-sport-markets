@@ -6,6 +6,7 @@ import { SportsAmmData } from 'types/markets';
 import { NetworkConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { getContractInstance } from 'utils/contract';
+import { SYSTEM_BET_MAX_ALLOWED_SYSTEM_COMBINATIONS } from '../../constants/markets';
 
 const useSportsAmmDataQuery = (
     networkConfig: NetworkConfig,
@@ -21,6 +22,7 @@ const useSportsAmmDataQuery = (
                     maxSupportedAmount: 0,
                     maxSupportedOdds: 0,
                     safeBoxFee: 0,
+                    maxAllowedSystemCombinations: SYSTEM_BET_MAX_ALLOWED_SYSTEM_COMBINATIONS,
                 };
 
                 const sportsAMMDataContract = getContractInstance(
@@ -42,6 +44,9 @@ const useSportsAmmDataQuery = (
                     );
                     sportsAmmData.maxSupportedOdds = bigNumberFormatter(sportsAMMParameters.maxSupportedOdds);
                     sportsAmmData.safeBoxFee = bigNumberFormatter(sportsAMMParameters.safeBoxFee);
+                    sportsAmmData.maxAllowedSystemCombinations = Number(
+                        sportsAMMParameters.maxAllowedSystemCombinations
+                    );
                 }
 
                 return sportsAmmData;

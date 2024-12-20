@@ -47,6 +47,8 @@ const Ticket: React.FC = () => {
                     collateral={lastValidTicket.collateral}
                     isLive={lastValidTicket.isLive}
                     applyPayoutMultiplier={false}
+                    systemBetData={lastValidTicket.systemBetData}
+                    isTicketOpen={lastValidTicket.isOpen}
                 />
             ) : (
                 <LoaderContainer>

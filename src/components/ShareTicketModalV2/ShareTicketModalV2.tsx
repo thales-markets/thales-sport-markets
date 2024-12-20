@@ -16,7 +16,7 @@ import { getIsMobile } from 'redux/modules/app';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
 import { Coins, isFirefox, isIos, isMetamask } from 'thales-utils';
-import { TicketMarket } from 'types/markets';
+import { SystemBetData, TicketMarket } from 'types/markets';
 import { RootState } from 'types/redux';
 import { refetchOverdropMultipliers } from 'utils/queryConnector';
 import { useAccount } from 'wagmi';
@@ -35,6 +35,8 @@ export type ShareTicketModalProps = {
     collateral: Coins;
     isLive: boolean;
     applyPayoutMultiplier: boolean;
+    isTicketOpen: boolean;
+    systemBetData?: SystemBetData;
 };
 
 const PARLAY_IMAGE_NAME = 'ParlayImage.png';
@@ -76,6 +78,8 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
     collateral,
     isLive,
     applyPayoutMultiplier,
+    isTicketOpen,
+    systemBetData,
 }) => {
     const walletAddress = useAccount()?.address || '';
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -314,6 +318,8 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                     collateral={collateral}
                     isLive={isLive}
                     applyPayoutMultiplier={applyPayoutMultiplier}
+                    systemBetData={systemBetData}
+                    isTicketOpen={isTicketOpen}
                 />
 
                 <TwitterShare disabled={isLoading} onClick={onTwitterShareClick}>

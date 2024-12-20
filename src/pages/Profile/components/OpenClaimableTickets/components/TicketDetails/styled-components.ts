@@ -1,5 +1,5 @@
 import styled, { CSSProperties } from 'styled-components';
-import { FlexDivColumnNative, FlexDivRow, FlexDivStart } from 'styles/common';
+import { FlexDivColumn, FlexDivColumnNative, FlexDivRow, FlexDivStart } from 'styles/common';
 
 export const Container = styled(FlexDivColumnNative)`
     position: relative;
@@ -88,24 +88,29 @@ export const InfoContainerColumn = styled(FlexDivColumnNative)<{ isOpen?: boolea
     }
 `;
 
-export const LiveIndicatorContainer = styled(FlexDivStart)<{ isLive?: boolean }>`
+export const LiveSystemIndicatorContainer = styled(FlexDivStart)<{ isLive?: boolean; isSystem?: boolean }>`
     min-width: 12px;
     max-width: 12px;
     height: 100%;
     border-radius: 5px 0 0 5px;
-    background: ${(props) => (props.isLive ? props.theme.status.live : props.theme.background.secondary)};
+    background: ${(props) =>
+        props.isLive
+            ? props.theme.status.live
+            : props.isSystem
+            ? props.theme.status.system
+            : props.theme.background.secondary};
     color: ${(props) => props.theme.textColor.secondary};
     align-items: center;
     justify-content: center;
     span {
         transform: rotate(270deg);
         color: ${(props) => props.theme.textColor.tertiary};
-        font-size: 10px;
+        font-size: ${(props) => (props.isSystem ? '8px' : '10px')};
         text-transform: uppercase;
         line-height: 10px;
         margin-left: 1px;
         margin-right: 0px;
-        animation: blinker 1.5s step-start infinite;
+        ${(props) => (props.isLive ? 'animation: blinker 1.5s step-start infinite;' : '')}
         @keyframes blinker {
             50% {
                 opacity: 0;
@@ -116,7 +121,7 @@ export const LiveIndicatorContainer = styled(FlexDivStart)<{ isLive?: boolean }>
         min-width: 10px;
         max-width: 10px;
         span {
-            font-size: 9px;
+            font-size: ${(props) => (props.isSystem ? '7px' : '9px')};
             margin-left: 1px;
             margin-bottom: 0px;
         }
@@ -174,17 +179,31 @@ export const TicketMarketsContainer = styled(FlexDivColumnNative)`
     }
 `;
 
+export const CollapseFooterWrapper = styled(FlexDivColumn)`
+    position: relative;
+    justify-content: center;
+    width: 100%;
+    align-items: center;
+    margin-bottom: 10px;
+    margin-top: 10px;
+`;
+
 export const CollapseFooterContainer = styled(FlexDivRow)`
     position: relative;
     justify-content: center;
     width: 100%;
     align-items: center;
-    margin-bottom: 15px;
-    margin-top: 15px;
+    margin-bottom: 5px;
+    margin-top: 5px;
 `;
 
-export const TotalQuoteContainer = styled(FlexDivRow)`
+export const FooterContainer = styled(FlexDivRow)`
     color: ${(props) => props.theme.textColor.quaternary};
+    width: 200px;
+    margin: 0 20px;
+    @media (max-width: 767px) {
+        margin: 0 10px;
+    }
 `;
 
 export const CollateralSelectorContainer = styled(FlexDivRow)`
