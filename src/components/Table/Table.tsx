@@ -52,6 +52,7 @@ type TableProps = {
     initialState?: any;
     rowsPerPage?: number;
     tableHeight?: string;
+    tableStyle?: string;
     expandedRow?: (row: Row<any>) => JSX.Element;
     stickyRow?: JSX.Element;
     mobileCards?: boolean;
@@ -77,6 +78,7 @@ const Table: React.FC<TableProps> = ({
     expandedRow,
     stickyRow,
     tableHeight,
+    tableStyle,
     mobileCards,
     expandAll,
     showPagination,
@@ -162,7 +164,7 @@ const Table: React.FC<TableProps> = ({
                         })}
                     </TableRowHead>
                 ))}
-            <ReactTable height={tableHeight}>
+            <ReactTable height={tableHeight} tabelStyle={tableStyle}>
                 {isLoading ? (
                     <LoaderContainer>
                         <SimpleLoader />
@@ -309,12 +311,13 @@ const ExpandableRowReact: React.FC<{
     );
 };
 
-const ReactTable = styled.div<{ height?: string }>`
+const ReactTable = styled.div<{ height?: string; tabelStyle?: string }>`
     width: 100%;
     height: ${(props) => props.height || '100%'};
     overflow-x: auto;
     position: relative;
     display: flex;
+    ${(props) => props.tabelStyle}
 `;
 
 const TableBody = styled.div<{ height?: string }>`
@@ -455,6 +458,9 @@ const PaginationWrapper = styled.div`
     align-items: center;
     justify-content: flex-end;
     padding: 5px 0;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        justify-content: flex-start;
+    }
 `;
 
 const SectionWrapper = styled.div`
