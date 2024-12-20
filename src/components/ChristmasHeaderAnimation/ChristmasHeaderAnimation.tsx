@@ -1,42 +1,11 @@
 const ChristmasHeaderAnimation: React.FC = () => {
     return (
         <div className="snowflakes" aria-hidden="true">
-            <div className="snowflake">
-                <div className="inner">❅</div>
-            </div>
-            <div className="snowflake">
-                <div className="inner">❅</div>
-            </div>
-            <div className="snowflake">
-                <div className="inner">❅</div>
-            </div>
-            <div className="snowflake">
-                <div className="inner">❅</div>
-            </div>
-            <div className="snowflake">
-                <div className="inner">❅</div>
-            </div>
-            <div className="snowflake">
-                <div className="inner">❅</div>
-            </div>
-            <div className="snowflake">
-                <div className="inner">❅</div>
-            </div>
-            <div className="snowflake">
-                <div className="inner">❅</div>
-            </div>
-            <div className="snowflake">
-                <div className="inner">❅</div>
-            </div>
-            <div className="snowflake">
-                <div className="inner">❅</div>
-            </div>
-            <div className="snowflake">
-                <div className="inner">❅</div>
-            </div>
-            <div className="snowflake">
-                <div className="inner">❅</div>
-            </div>
+            {Array.from({ length: 12 }).map((_, index) => (
+                <div key={index} className="snowflake">
+                    <div className="inner">❅</div>
+                </div>
+            ))}
         </div>
     );
 };
