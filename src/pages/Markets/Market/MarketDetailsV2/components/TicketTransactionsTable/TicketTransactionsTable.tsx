@@ -66,6 +66,7 @@ type TicketTransactionsTableProps = {
     ticketTransactions: Ticket[];
     market?: SportMarket;
     tableHeight?: string;
+    tableStyle?: string;
     isLoading: boolean;
     ticketsPerPage?: number;
     expandAll?: boolean;
@@ -75,6 +76,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
     ticketTransactions,
     market,
     tableHeight,
+    tableStyle,
     isLoading,
     ticketsPerPage,
     expandAll,
@@ -289,6 +291,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
         <>
             <Table
                 tableHeight={tableHeight}
+                tableStyle={tableStyle}
                 tableHeadCellStyles={{
                     ...tableHeaderStyle,
                     color: theme.textColor.secondary,
