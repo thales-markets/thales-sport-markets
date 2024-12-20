@@ -34,6 +34,7 @@ export const LeftContainer = styled(FlexDivRowCentered)`
     max-width: 278px;
     justify-content: center;
     padding-right: 15px;
+    z-index: 1;
 `;
 
 export const MiddleContainer = styled(FlexDivRowCentered)`
