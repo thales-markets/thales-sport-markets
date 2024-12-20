@@ -1,19 +1,20 @@
+import { hoursToMilliseconds, intervalToDuration } from 'date-fns';
+import { MultiplierType } from 'enums/overdrop';
+import { t } from 'i18next';
+import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
 import useUserMultipliersQuery from 'queries/overdrop/useUserMultipliersQuery';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { getIsAppReady } from 'redux/modules/app';
-import { getIsWalletConnected, getWalletAddress } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered } from 'styles/common';
-import { getMultiplierValueFromQuery } from 'utils/overdrop';
-import LevelCircles from '../LevelCircles';
-import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
-import { hoursToMilliseconds, intervalToDuration } from 'date-fns';
+import { RootState } from 'types/redux';
+import biconomyConnector from 'utils/biconomyWallet';
 import { formattedDurationFull } from 'utils/formatters/date';
-import { t } from 'i18next';
-import { MultiplierType } from 'enums/overdrop';
+import { getMultiplierValueFromQuery } from 'utils/overdrop';
+import { useAccount } from 'wagmi';
+import LevelCircles from '../LevelCircles';
 
 const dateTimeTranslationMap = {
     'days-short': t('common.time-remaining.days-short'),
@@ -24,16 +25,17 @@ const dateTimeTranslationMap = {
 const DailyRecap: React.FC = () => {
     const { t } = useTranslation();
 
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+
+    const { address, isConnected } = useAccount();
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
     const userMultipliersQuery = useUserMultipliersQuery(walletAddress, {
-        enabled: isAppReady && isWalletConnected,
+        enabled: isConnected,
     });
 
     const userDataQuery = useUserDataQuery(walletAddress, {
-        enabled: isAppReady && isWalletConnected,
+        enabled: isConnected,
     });
 
     const userMultipliers =
@@ -43,8 +45,9 @@ const DailyRecap: React.FC = () => {
     const duration = useMemo(() => {
         if (userData && userData.lastTwitterActivity) {
             const duration = intervalToDuration({ start: userData.lastTwitterActivity, end: Date.now() });
+
             if (duration && duration.days) {
-                if (duration.days >= 3) return 'expired';
+                if (duration.days >= 3 || !!duration.months || !!duration.years) return 'expired';
             }
             const resetsIn = intervalToDuration({
                 start: Date.now(),

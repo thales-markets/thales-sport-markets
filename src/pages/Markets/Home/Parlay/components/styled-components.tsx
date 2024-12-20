@@ -1,4 +1,3 @@
-import MuiTooltip from '@material-ui/core/Tooltip';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivEnd } from 'styles/common';
 
@@ -62,12 +61,18 @@ export const SummaryValue = styled.span<{
     isHidden?: boolean;
     isCollateralInfo?: boolean;
     fontSize?: number;
+    isError?: boolean;
 }>`
     font-weight: 600;
     font-size: ${(props) => props.fontSize || 11}px;
     line-height: 20px;
     display: ${(props) => (props.isHidden ? 'none' : '')};
-    color: ${(props) => (props.isInfo || props.isCurrency ? props.theme.status.win : props.theme.textColor.primary)};
+    color: ${(props) =>
+        props.isError
+            ? props.theme.error.textColor.primary
+            : props.isInfo || props.isCurrency
+            ? props.theme.status.win
+            : props.theme.textColor.primary};
     margin-left: ${(props) => (props.isInfo || props.isCollateralInfo ? 'auto' : '5px')};
     i {
         color: ${(props) => props.theme.textColor.septenary};
@@ -102,30 +107,6 @@ export const InfoValue = styled.span`
 `;
 
 export const InputContainer = styled(FlexDiv)``;
-
-export const InfoTooltip = styled((props) => <MuiTooltip classes={{ popper: props.className }} {...props} />)`
-    & .MuiTooltip-tooltip {
-        min-width: 100%;
-        margin-bottom: 7px;
-        background-color: ${(props) => props.theme.warning.background.primary};
-        color: ${(props) => props.theme.warning.textColor.primary};
-        border: 1.5px solid ${(props) => props.theme.warning.borderColor.primary};
-        border-radius: 2px;
-        font-size: 9px;
-        line-height: 12px;
-        text-transform: uppercase;
-    }
-    & .MuiTooltip-arrow {
-        &:before {
-            border: 1.5px solid ${(props) => props.theme.warning.borderColor.primary};
-            background-color: ${(props) => props.theme.warning.background.primary};
-            box-sizing: border-box;
-        }
-        width: 11px;
-        height: 8px;
-        bottom: -2px !important;
-    }
-`;
 
 export const AmountToBuyContainer = styled.div`
     position: relative;
@@ -454,3 +435,25 @@ export const RightLevel = styled.div<{ highlight: boolean }>`
     top: 0;
     bottom: -33px;
 `;
+
+export const SelectContainer = styled(FlexDivEnd)`
+    width: 100%;
+`;
+
+export const SystemBetValidation = styled(FlexDivCentered)`
+    font-size: 13px;
+    color: ${(props) => props.theme.warning.textColor.primary};
+    border: 2px solid ${(props) => props.theme.warning.borderColor.primary};
+    width: 100%;
+    border-radius: 5px;
+    padding: 5px;
+    text-align: center;
+`;
+
+export const systemDropdownStyle = {
+    menuStyle: { borderRadius: 5, marginTop: 3, zIndex: 4000 },
+    controlStyle: { borderRadius: 5, minHeight: '25px', fontSize: '14px', fontWeight: 600 },
+    dropdownIndicatorStyle: { padding: '2px' },
+    optionStyle: { fontSize: '14px', fontWeight: 600 },
+    indicatorSeparatorStyle: { marginBottom: '5px', marginTop: '5px' },
+};

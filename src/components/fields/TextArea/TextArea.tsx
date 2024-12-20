@@ -1,4 +1,3 @@
-import MuiTooltip from '@material-ui/core/Tooltip';
 import Tooltip from 'components/Tooltip';
 import React from 'react';
 import styled from 'styled-components';
@@ -42,7 +41,6 @@ const TextInput: React.FC<TextAreaInputProps> = ({
     iconClass,
     borderColor,
     onIconClick,
-    validationPlacement,
     ...rest
 }) => {
     return (
@@ -53,13 +51,7 @@ const TextInput: React.FC<TextAreaInputProps> = ({
                     {tooltip && <Tooltip overlay={tooltip} />}:
                 </FieldLabel>
             )}
-            <ValidationTooltip
-                open={showValidation}
-                title={showValidation ? validationMessage || '' : ''}
-                placement={validationPlacement || 'top'}
-                arrow={true}
-                PopperProps={{ style: { zIndex: '2004' } }}
-            >
+            <Tooltip overlay={showValidation ? validationMessage || '' : ''} isValidation={showValidation}>
                 <TextAreaInput
                     {...rest}
                     readOnly={!onChange}
@@ -75,7 +67,7 @@ const TextInput: React.FC<TextAreaInputProps> = ({
                     height={height}
                     borderColor={borderColor}
                 />
-            </ValidationTooltip>
+            </Tooltip>
             <RightContainer>
                 {onIconClick && (
                     <Icon
@@ -104,33 +96,6 @@ const Icon = styled.i`
     &.disabled {
         opacity: 0.4;
         cursor: default;
-    }
-`;
-
-const ValidationTooltip = styled((props) => <MuiTooltip classes={{ popper: props.className }} {...props} />)`
-    & .MuiTooltip-tooltip {
-        min-width: 100%;
-        max-width: 300px;
-        margin-bottom: ${(props) => (props.placement === 'top' ? '7px' : '0px')} !important;
-        margin-top: ${(props) => (props.placement === 'top' ? '0px' : '7px')} !important;
-        background-color: ${(props) => props.theme.error.background.primary};
-        color: ${(props) => props.theme.error.textColor.primary};
-        border: 1.5px solid ${(props) => props.theme.error.borderColor.primary};
-        border-radius: 2px;
-        font-size: 10px;
-        font-weight: 600;
-        text-transform: uppercase;
-    }
-    & .MuiTooltip-arrow {
-        &:before {
-            border: 1.5px solid ${(props) => props.theme.error.borderColor.primary};
-            background-color: ${(props) => props.theme.error.background.primary};
-            box-sizing: border-box;
-        }
-        width: 13px;
-        height: 10px;
-        bottom: ${(props) => (props.placement === 'top' ? '-3px' : 'auto')} !important;
-        top: ${(props) => (props.placement === 'top' ? 'auto' : '-3px')} !important;
     }
 `;
 

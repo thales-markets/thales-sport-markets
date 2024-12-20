@@ -13,10 +13,10 @@ export const TimeFilterContainer = styled(FlexDivRow)<{ selected: boolean }>`
     margin-top: 2px;
     cursor: pointer;
     div {
-        background-color: ${(props) => (props.selected ? props.theme.textColor.quaternary : '')};
+        background-color: ${(props) => (props.selected ? props.theme.christmasTheme.textColor.secondary : '')};
     }
     label {
-        color: ${(props) => (props.selected ? props.theme.textColor.quaternary : '')};
+        color: ${(props) => (props.selected ? props.theme.christmasTheme.textColor.secondary : '')};
         cursor: pointer;
     }
 `;
@@ -24,7 +24,7 @@ export const TimeFilterContainer = styled(FlexDivRow)<{ selected: boolean }>`
 export const Circle = styled.div<{ isMobile: boolean }>`
     height: 14px;
     width: 14px;
-    background-color: ${(props) => props.theme.textColor.secondary};
+    background-color: ${(props) => props.theme.christmasTheme.background.primary};
     cursor: pointer;
     margin-right: 5px;
     border-radius: 50px;
@@ -40,7 +40,7 @@ export const Label = styled.label`
     font-weight: 600;
     font-size: 14px;
     line-height: 16px;
-    color: ${(props) => props.theme.textColor.secondary};
+    color: ${(props) => props.theme.christmasTheme.textColor.primary};
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;

@@ -1,37 +1,44 @@
 import { GetStartedStep } from 'enums/wizard';
 import { t } from 'i18next';
-import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
+import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import { getIsConnectedViaParticle, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
+import { getIsMobile } from 'redux/modules/app';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivStart } from 'styles/common';
+import { Rates } from 'types/collateral';
+import { RootState } from 'types/redux';
+import biconomyConnector from 'utils/biconomyWallet';
 import { getCollaterals } from 'utils/collaterals';
+import { useAccount, useChainId, useClient } from 'wagmi';
 import Step from './components/Step';
 
 const GetStarted: React.FC = () => {
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+
+    const networkId = useChainId();
+    const client = useClient();
+    const { address, isConnected } = useAccount();
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
-    const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
 
     const steps: GetStartedStep[] = [GetStartedStep.LOG_IN, GetStartedStep.DEPOSIT, GetStartedStep.TRADE];
     const [currentStep, setCurrentStep] = useState<GetStartedStep>(
-        isWalletConnected && isConnectedViaParticle ? GetStartedStep.DEPOSIT : GetStartedStep.LOG_IN
+        isConnected && isBiconomy ? GetStartedStep.DEPOSIT : GetStartedStep.LOG_IN
     );
 
-    const multipleCollateralBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
-        enabled: isAppReady && isWalletConnected,
-    });
+    const multipleCollateralBalances = useMultipleCollateralBalanceQuery(
+        walletAddress,
+        { networkId, client },
+        {
+            enabled: isConnected,
+        }
+    );
 
-    const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
-        enabled: isAppReady,
-    });
+    const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
 
     const exchangeRates: Rates | null =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
@@ -56,12 +63,12 @@ const GetStarted: React.FC = () => {
             setCurrentStep(GetStartedStep.TRADE);
             return;
         }
-        if (isWalletConnected) {
+        if (isConnected) {
             setCurrentStep(GetStartedStep.DEPOSIT);
         } else {
             setCurrentStep(GetStartedStep.LOG_IN);
         }
-    }, [isWalletConnected, totalBalanceValue]);
+    }, [isConnected, totalBalanceValue]);
 
     return (
         <Container>

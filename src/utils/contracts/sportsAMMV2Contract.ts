@@ -1,10 +1,10 @@
 import { Network } from 'enums/network';
+import { ContractData } from 'types/viem';
 
-const sportsAMMV2Contract = {
+const sportsAMMV2Contract: ContractData = {
     addresses: {
         [Network.OptimismMainnet]: '0xFb4e4811C7A811E098A556bD79B64c20b479E431',
         [Network.Arbitrum]: '0xfb64E79A562F7250131cf528242CEB10fDC82395',
-        [Network.Base]: '',
         [Network.OptimismSepolia]: '0xe58C88622EC9eaF137089A2Df94B53B6521F55A3',
     },
     abi: [
@@ -95,6 +95,7 @@ const sportsAMMV2Contract = {
                 { indexed: false, internalType: 'address', name: 'ticket', type: 'address' },
                 { indexed: false, internalType: 'uint256', name: 'buyInAmount', type: 'uint256' },
                 { indexed: false, internalType: 'uint256', name: 'payout', type: 'uint256' },
+                { indexed: false, internalType: 'bool', name: 'isLive', type: 'bool' },
             ],
             name: 'NewTicket',
             type: 'event',
@@ -127,6 +128,7 @@ const sportsAMMV2Contract = {
                 { indexed: false, internalType: 'address', name: 'trader', type: 'address' },
                 { indexed: false, internalType: 'uint256', name: 'amount', type: 'uint256' },
                 { indexed: false, internalType: 'uint256', name: 'volume', type: 'uint256' },
+                { indexed: false, internalType: 'address', name: 'collateral', type: 'address' },
             ],
             name: 'ReferrerPaid',
             type: 'event',
@@ -136,6 +138,7 @@ const sportsAMMV2Contract = {
             inputs: [
                 { indexed: false, internalType: 'uint256', name: 'safeBoxFee', type: 'uint256' },
                 { indexed: false, internalType: 'uint256', name: 'safeBoxAmount', type: 'uint256' },
+                { indexed: false, internalType: 'address', name: 'collateral', type: 'address' },
             ],
             name: 'SafeBoxFeePaid',
             type: 'event',
@@ -190,6 +193,12 @@ const sportsAMMV2Contract = {
         },
         {
             anonymous: false,
+            inputs: [{ indexed: false, internalType: 'address', name: '_stakingThalesBettingProxy', type: 'address' }],
+            name: 'SetStakingThalesBettingProxy',
+            type: 'event',
+        },
+        {
+            anonymous: false,
             inputs: [
                 { indexed: false, internalType: 'address', name: 'ticket', type: 'address' },
                 { indexed: false, internalType: 'address', name: 'recipient', type: 'address' },
@@ -224,6 +233,13 @@ const sportsAMMV2Contract = {
             name: 'addedPayoutPercentagePerCollateral',
             outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
             stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'address', name: '_ticket', type: 'address' }],
+            name: 'cancelTicket',
+            outputs: [],
+            stateMutability: 'nonpayable',
             type: 'function',
         },
         {
@@ -490,6 +506,16 @@ const sportsAMMV2Contract = {
         },
         {
             inputs: [
+                { internalType: 'bytes32', name: '_game', type: 'bytes32' },
+                { internalType: 'bytes32', name: '_root', type: 'bytes32' },
+            ],
+            name: 'setRootForGame',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
                 { internalType: 'bytes32[]', name: '_games', type: 'bytes32[]' },
                 { internalType: 'bytes32[]', name: '_roots', type: 'bytes32[]' },
             ],
@@ -509,6 +535,13 @@ const sportsAMMV2Contract = {
             type: 'function',
         },
         {
+            inputs: [{ internalType: 'address', name: '_stakingThalesBettingProxy', type: 'address' }],
+            name: 'setStakingThalesBettingProxy',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
             inputs: [{ internalType: 'address', name: '_ticketMastercopy', type: 'address' }],
             name: 'setTicketMastercopy',
             outputs: [],
@@ -519,6 +552,13 @@ const sportsAMMV2Contract = {
             inputs: [],
             name: 'stakingThales',
             outputs: [{ internalType: 'contract IStakingThales', name: '', type: 'address' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'stakingThalesBettingProxy',
+            outputs: [{ internalType: 'address', name: '', type: 'address' }],
             stateMutability: 'view',
             type: 'function',
         },
@@ -653,6 +693,94 @@ const sportsAMMV2Contract = {
                 { internalType: 'enum ISportsAMMV2RiskManager.RiskStatus', name: 'riskStatus', type: 'uint8' },
             ],
             stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    components: [
+                        { internalType: 'bytes32', name: 'gameId', type: 'bytes32' },
+                        { internalType: 'uint16', name: 'sportId', type: 'uint16' },
+                        { internalType: 'uint16', name: 'typeId', type: 'uint16' },
+                        { internalType: 'uint256', name: 'maturity', type: 'uint256' },
+                        { internalType: 'uint8', name: 'status', type: 'uint8' },
+                        { internalType: 'int24', name: 'line', type: 'int24' },
+                        { internalType: 'uint24', name: 'playerId', type: 'uint24' },
+                        { internalType: 'uint256[]', name: 'odds', type: 'uint256[]' },
+                        { internalType: 'bytes32[]', name: 'merkleProof', type: 'bytes32[]' },
+                        { internalType: 'uint8', name: 'position', type: 'uint8' },
+                        {
+                            components: [
+                                { internalType: 'uint16', name: 'typeId', type: 'uint16' },
+                                { internalType: 'uint8', name: 'position', type: 'uint8' },
+                                { internalType: 'int24', name: 'line', type: 'int24' },
+                            ],
+                            internalType: 'struct ISportsAMMV2.CombinedPosition[][]',
+                            name: 'combinedPositions',
+                            type: 'tuple[][]',
+                        },
+                    ],
+                    internalType: 'struct ISportsAMMV2.TradeData[]',
+                    name: '_tradeData',
+                    type: 'tuple[]',
+                },
+                { internalType: 'uint256', name: '_buyInAmount', type: 'uint256' },
+                { internalType: 'address', name: '_collateral', type: 'address' },
+                { internalType: 'bool', name: '_isLive', type: 'bool' },
+                { internalType: 'uint8', name: '_systemBetDenominator', type: 'uint8' },
+            ],
+            name: 'tradeQuoteSystem',
+            outputs: [
+                { internalType: 'uint256', name: 'totalQuote', type: 'uint256' },
+                { internalType: 'uint256', name: 'payout', type: 'uint256' },
+                { internalType: 'uint256', name: 'fees', type: 'uint256' },
+                { internalType: 'uint256[]', name: 'amountsToBuy', type: 'uint256[]' },
+                { internalType: 'uint256', name: 'buyInAmountInDefaultCollateral', type: 'uint256' },
+                { internalType: 'enum ISportsAMMV2RiskManager.RiskStatus', name: 'riskStatus', type: 'uint8' },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    components: [
+                        { internalType: 'bytes32', name: 'gameId', type: 'bytes32' },
+                        { internalType: 'uint16', name: 'sportId', type: 'uint16' },
+                        { internalType: 'uint16', name: 'typeId', type: 'uint16' },
+                        { internalType: 'uint256', name: 'maturity', type: 'uint256' },
+                        { internalType: 'uint8', name: 'status', type: 'uint8' },
+                        { internalType: 'int24', name: 'line', type: 'int24' },
+                        { internalType: 'uint24', name: 'playerId', type: 'uint24' },
+                        { internalType: 'uint256[]', name: 'odds', type: 'uint256[]' },
+                        { internalType: 'bytes32[]', name: 'merkleProof', type: 'bytes32[]' },
+                        { internalType: 'uint8', name: 'position', type: 'uint8' },
+                        {
+                            components: [
+                                { internalType: 'uint16', name: 'typeId', type: 'uint16' },
+                                { internalType: 'uint8', name: 'position', type: 'uint8' },
+                                { internalType: 'int24', name: 'line', type: 'int24' },
+                            ],
+                            internalType: 'struct ISportsAMMV2.CombinedPosition[][]',
+                            name: 'combinedPositions',
+                            type: 'tuple[][]',
+                        },
+                    ],
+                    internalType: 'struct ISportsAMMV2.TradeData[]',
+                    name: '_tradeData',
+                    type: 'tuple[]',
+                },
+                { internalType: 'uint256', name: '_buyInAmount', type: 'uint256' },
+                { internalType: 'uint256', name: '_expectedQuote', type: 'uint256' },
+                { internalType: 'uint256', name: '_additionalSlippage', type: 'uint256' },
+                { internalType: 'address', name: '_referrer', type: 'address' },
+                { internalType: 'address', name: '_collateral', type: 'address' },
+                { internalType: 'bool', name: '_isEth', type: 'bool' },
+                { internalType: 'uint8', name: '_systemBetDenominator', type: 'uint8' },
+            ],
+            name: 'tradeSystemBet',
+            outputs: [{ internalType: 'address', name: '_createdTicket', type: 'address' }],
+            stateMutability: 'payable',
             type: 'function',
         },
         {

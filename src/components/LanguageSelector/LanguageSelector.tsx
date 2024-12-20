@@ -1,9 +1,9 @@
+import OutsideClickHandler from 'components/OutsideClick';
 import { SupportedLanguages } from 'enums/languages';
 import i18n from 'i18n';
 import { DEFAULT_LANGUAGE, LanguageNameMap } from 'i18n/config';
 import React, { useEffect, useState } from 'react';
 import { withTranslation } from 'react-i18next';
-import OutsideClickHandler from 'react-outside-click-handler';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered } from 'styles/common';
 import { getLanguageFlagSource } from 'utils/images';

@@ -16,6 +16,7 @@ type SportTagsProps = {
     setTagParam: any;
     openMarketsCountPerTag: any;
     liveMarketsCountPerTag: any;
+    playerPropsMarketsCountPerTag: any;
 };
 
 const SportTags: React.FC<SportTagsProps> = ({
@@ -27,6 +28,7 @@ const SportTags: React.FC<SportTagsProps> = ({
     setTagParam,
     openMarketsCountPerTag,
     liveMarketsCountPerTag,
+    playerPropsMarketsCountPerTag,
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -34,7 +36,6 @@ const SportTags: React.FC<SportTagsProps> = ({
     const tagFilter = useSelector(getTagFilter);
 
     const [isOpen, setIsOpen] = useState(sport == sportFilter && sport !== SportFilter.All);
-
     const open = useMemo(() => sport == sportFilter && sport !== SportFilter.All && isOpen, [
         isOpen,
         sport,
@@ -47,7 +48,7 @@ const SportTags: React.FC<SportTagsProps> = ({
                 selected={sportFilter === sport}
                 sport={sport}
                 onClick={() => {
-                    if (tagFilter.length == 0) {
+                    if (tagFilter.length == 0 || sportFilter === SportFilter.PlayerProps) {
                         setIsOpen(!open);
                     }
                     onSportClick();
@@ -67,6 +68,7 @@ const SportTags: React.FC<SportTagsProps> = ({
                 setTagParam={setTagParam}
                 openMarketsCountPerTag={openMarketsCountPerTag}
                 liveMarketsCountPerTag={liveMarketsCountPerTag}
+                playerPropsMarketsCountPerTag={playerPropsMarketsCountPerTag}
                 showActive={showActive}
                 showLive={sportFilter == SportFilter.Live}
             ></TagsDropdown>

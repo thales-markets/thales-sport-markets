@@ -1,6 +1,7 @@
-import { ReactComponent as ParlayEmptyIcon } from 'assets/images/parlay-empty.svg';
+import ParlayEmptyIcon from 'assets/images/parlay-empty.svg?react';
 import MatchInfoV2 from 'components/MatchInfoV2';
 import MatchUnavailableInfo from 'components/MatchUnavailableInfo';
+import Toggle from 'components/Toggle';
 import { SportFilter, StatusFilter } from 'enums/markets';
 import { isEqual } from 'lodash';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
@@ -9,14 +10,23 @@ import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { getIsAppReady, getIsMobile } from 'redux/modules/app';
+import { getIsMobile } from 'redux/modules/app';
 import { getSportFilter } from 'redux/modules/market';
-import { getHasTicketError, getTicket, removeAll, resetTicketError, setMaxTicketSize } from 'redux/modules/ticket';
-import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
-import styled from 'styled-components';
-import { FlexDivCentered, FlexDivColumn } from 'styles/common';
+import {
+    getHasTicketError,
+    getIsSystemBet,
+    getTicket,
+    removeAll,
+    resetTicketError,
+    setIsSystemBet,
+    setMaxTicketSize,
+} from 'redux/modules/ticket';
+import styled, { useTheme } from 'styled-components';
+import { FlexDiv, FlexDivCentered, FlexDivColumn } from 'styles/common';
 import { SportMarket, SportMarkets, TicketMarket, TicketPosition } from 'types/markets';
+import { ThemeInterface } from 'types/ui';
 import { isSameMarket } from 'utils/marketsV2';
+import { useAccount, useChainId, useClient } from 'wagmi';
 import TicketV2 from './components/TicketV2';
 import ValidationModal from './components/ValidationModal';
 
@@ -28,11 +38,15 @@ type ParlayProps = {
 const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
-    const isAppReady = useSelector(getIsAppReady);
+    const theme: ThemeInterface = useTheme();
     const isMobile = useSelector(getIsMobile);
-    const networkId = useSelector(getNetworkId);
-    const isWalletConnected = useSelector(getIsWalletConnected);
+
+    const networkId = useChainId();
+    const client = useClient();
+    const { isConnected } = useAccount();
+
     const ticket = useSelector(getTicket);
+    const isSystemBet = useSelector(getIsSystemBet);
     const hasTicketError = useSelector(getHasTicketError);
     const sportFilter = useSelector(getSportFilter);
     const isLiveFilterSelected = sportFilter == SportFilter.Live;
@@ -46,21 +60,17 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
 
     const previousTicketOdds = useRef<{ position: number; odd: number; gameId: string; proof: string[] }[]>([]);
 
-    const sportsAmmDataQuery = useSportsAmmDataQuery(networkId, {
-        enabled: isAppReady,
-    });
+    const sportsAmmDataQuery = useSportsAmmDataQuery({ networkId, client });
 
-    const sportMarketsQuery = useSportsMarketsV2Query(StatusFilter.OPEN_MARKETS, networkId, false, undefined, {
+    const sportMarketsQuery = useSportsMarketsV2Query(StatusFilter.OPEN_MARKETS, false, { networkId }, undefined, {
         enabled: !!openMarkets,
     });
 
-    const sportMarketsProofsQuery = useSportsMarketsV2Query(StatusFilter.OPEN_MARKETS, networkId, true, ticket, {
-        enabled: isAppReady && !!ticket.length,
+    const sportMarketsProofsQuery = useSportsMarketsV2Query(StatusFilter.OPEN_MARKETS, true, { networkId }, ticket, {
+        enabled: !!ticket.length,
     });
 
-    const liveSportMarketsQuery = useLiveSportsMarketsQuery(networkId, isLiveFilterSelected, {
-        enabled: isAppReady,
-    });
+    const liveSportMarketsQuery = useLiveSportsMarketsQuery(isLiveFilterSelected, { networkId });
 
     useEffect(() => {
         if (sportsAmmDataQuery.isSuccess && sportsAmmDataQuery.data) {
@@ -216,7 +226,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     const hasParlayMarkets = ticketMarkets.length > 0 || unavailableMarkets.length > 0;
 
     return (
-        <Container isMobile={isMobile} isWalletConnected={isWalletConnected}>
+        <Container isMobile={isMobile} isWalletConnected={isConnected}>
             {hasParlayMarkets ? (
                 <>
                     {!isMobile && (
@@ -224,6 +234,27 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                             {t('markets.parlay.ticket-slip')}
                             <Count>{ticket.length}</Count>
                         </Title>
+                    )}
+                    {!ticket[0]?.live && (
+                        <ToggleContainer>
+                            <Toggle
+                                label={{
+                                    firstLabel: t('markets.parlay.regular'),
+                                    secondLabel: t('markets.parlay.system'),
+                                    fontSize: '14px',
+                                }}
+                                width="46px"
+                                height="24px"
+                                active={isSystemBet}
+                                dotSize="16px"
+                                dotBackground={theme.background.secondary}
+                                dotBorder={`3px solid ${theme.borderColor.quaternary}`}
+                                dotMargin="3px"
+                                handleClick={() => {
+                                    dispatch(setIsSystemBet(!isSystemBet));
+                                }}
+                            />
+                        </ToggleContainer>
                     )}
                     <ThalesBonusContainer>
                         <ThalesBonus>{t('markets.parlay.thales-bonus-info')}</ThalesBonus>
@@ -312,7 +343,7 @@ const Container = styled(FlexDivColumn)<{ isMobile: boolean; isWalletConnected?:
 `;
 
 const Title = styled(FlexDivCentered)`
-    color: ${(props) => props.theme.textColor.septenary};
+    color: ${(props) => props.theme.christmasTheme.button.textColor.secondary};
     font-weight: 600;
     font-size: 14px;
     line-height: 16px;
@@ -479,6 +510,13 @@ const StyledParlayEmptyIcon = styled(ParlayEmptyIcon)`
     path {
         fill: ${(props) => props.theme.textColor.quaternary};
     }
+`;
+
+const ToggleContainer = styled(FlexDiv)`
+    font-weight: 600;
+    width: 100%;
+    margin-bottom: 5px;
+    text-transform: uppercase;
 `;
 
 export default Parlay;

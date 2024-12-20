@@ -133,7 +133,7 @@ const FilterTagsMobile: React.FC = () => {
             {marketTypeFilter !== undefined && (
                 <FilterTagContainer>
                     <FilterTagLabel>
-                        {`type: ${getMarketTypeName(marketTypeFilter)}`}
+                        {`type: ${getMarketTypeName(marketTypeFilter, true)}`}
                         <ClearIcon
                             className="icon icon--close"
                             onClick={() => {

@@ -1,4 +1,3 @@
-import burger from 'assets/images/burger.svg';
 import OverdropButtonBackground from 'assets/images/overdrop/overdrop-button-background.webp';
 import overdrop from 'assets/images/overdrop/overdrop-nav.webp';
 import styled from 'styled-components';
@@ -35,6 +34,7 @@ export const LeftContainer = styled(FlexDivRowCentered)`
     max-width: 278px;
     justify-content: center;
     padding-right: 15px;
+    z-index: 1;
 `;
 
 export const MiddleContainer = styled(FlexDivRowCentered)`
@@ -60,11 +60,11 @@ export const RightContainer = styled(FlexDivRowCentered)`
     }
 `;
 
-export const MenuIcon = styled.img.attrs({ src: burger })`
+export const MenuIcon = styled.i`
     cursor: pointer;
-    height: 25px;
-    width: 35px;
-    filter: invert(39%) sepia(9%) saturate(1318%) hue-rotate(199deg) brightness(71%) contrast(88%);
+    font-size: 26px;
+    color: ${(props) => props.theme.christmasTheme.textColor.primary};
+    /* filter: invert(39%) sepia(9%) saturate(1318%) hue-rotate(199deg) brightness(71%) contrast(88%); */
 `;
 
 export const OverdropIcon = styled.img.attrs({ src: overdrop })`
@@ -92,11 +92,16 @@ export const SearchIconContainer = styled.div`
 `;
 
 export const MenuIconContainer = styled.div`
-    width: 50%;
     display: flex;
-    justify-content: start;
-    position: absolute;
-    left: 12px;
+    position: relative;
+    margin-right: 0px !important;
+    @media (max-width: 950px) {
+        width: 50%;
+        display: flex;
+        justify-content: start;
+        position: absolute;
+        left: 12px;
+    }
 `;
 
 export const LogoContainer = styled.div`
@@ -151,6 +156,12 @@ export const NotificationCount = styled.div`
     width: 16px;
     background-color: ${(props) => props.theme.background.quaternary};
     box-shadow: ${(props) => props.theme.shadow.notification};
+`;
+
+export const BlockedGamesNotificationCount = styled(NotificationCount)`
+    left: -5px;
+    background-color: ${(props) => props.theme.error.textColor.primary};
+    box-shadow: ${(props) => props.theme.shadow.errorNotification};
 `;
 
 export const Count = styled.span`
@@ -227,13 +238,13 @@ export const HeaderIcon = styled.i<{
 }>`
     margin-right: 5px;
     font-size: ${(props) => (props.iconSize ? props.iconSize : '20')}px;
-    color: ${(props) => (props.iconColor ? props.iconColor : props.theme.textColor.secondary)};
+    color: ${(props) => (props.iconColor ? props.iconColor : props.theme.christmasTheme.textColor.primary)};
 `;
 
 export const HeaderLabel = styled.span`
     font-weight: 600;
     font-size: 12px;
-    color: ${(props) => props.theme.textColor.secondary};
+    color: ${(props) => props.theme.christmasTheme.textColor.primary};
     text-transform: uppercase;
 `;
 
@@ -242,7 +253,6 @@ export const DropdownContainer = styled.div`
     width: 180px;
     top: 28px;
     left: 0;
-    z-index: 1000;
 `;
 
 export const DropDown = styled(FlexDivColumn)`
@@ -254,6 +264,7 @@ export const DropDown = styled(FlexDivColumn)`
     margin-top: 2px;
     padding: 4px;
     width: 100%;
+    z-index: 3;
 `;
 
 export const DropDownItem = styled(FlexDiv)`

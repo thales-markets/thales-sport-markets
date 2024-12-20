@@ -7,40 +7,29 @@ import DOMPurify from 'dompurify';
 import { usePromotionsQuery } from 'queries/promotions/usePromotionsQuery';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { RouteComponentProps, useHistory } from 'react-router-dom';
-import { getIsAppReady } from 'redux/modules/app';
-import { switchToNetworkId } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
+import { useHistory, useParams } from 'react-router-dom';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivColumn } from 'styles/common';
 import { changeNetwork } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
 import { ThemeInterface } from 'types/ui';
 import useQueryParam from 'utils/useQueryParams';
-import { useSwitchNetwork } from 'wagmi';
+import { useSwitchChain } from 'wagmi';
 
-type PromotionProps = RouteComponentProps<{
-    promotionId: string;
-}>;
-
-const Promotion: React.FC<PromotionProps> = (props) => {
+const Promotion: React.FC = () => {
     const theme: ThemeInterface = useTheme();
-    const dispatch = useDispatch();
 
     const history = useHistory();
     const { t } = useTranslation();
-    const { switchNetwork } = useSwitchNetwork();
+    const { switchChain } = useSwitchChain();
 
-    const promotionId = props?.match?.params?.promotionId;
+    const params = useParams() as { promotionId: string };
 
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
+    const promotionId = params?.promotionId;
 
     const [branchName] = useQueryParam('branch-name', '');
 
-    const promotionsQuery = usePromotionsQuery(branchName, {
-        enabled: isAppReady,
-    });
+    const promotionsQuery = usePromotionsQuery(branchName);
 
     const promotions = useMemo(() => {
         if (promotionsQuery.isSuccess && promotionsQuery.data) return promotionsQuery.data;
@@ -92,14 +81,7 @@ const Promotion: React.FC<PromotionProps> = (props) => {
                             onClick={async () => {
                                 if (promotion?.article.ctaSection.forceChangeNetworkOnClick && network) {
                                     await changeNetwork(network, () => {
-                                        switchNetwork?.(network.id);
-                                        // Trigger App.js init
-                                        // do not use updateNetworkSettings(networkId) as it will trigger queries before provider in App.js is initialized
-                                        dispatch(
-                                            switchToNetworkId({
-                                                networkId: Number(network.id) as SupportedNetwork,
-                                            })
-                                        );
+                                        switchChain?.({ chainId: network.id as SupportedNetwork });
                                     });
                                 }
                             }}

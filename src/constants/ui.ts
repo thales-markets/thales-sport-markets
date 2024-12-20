@@ -17,6 +17,13 @@ export const NAV_MENU_FIRST_SECTION: NavMenuItem[] = [
         route: ROUTES.Profile,
         supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.OptimismSepolia],
     },
+    {
+        i18label: 'markets.nav-menu.items.resolve-blocker',
+        iconClass: 'icon icon--cross-button',
+        name: 'resolve-blocker',
+        route: ROUTES.ResolveBlocker,
+        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.OptimismSepolia],
+    },
 ];
 
 export const NAV_MENU_SECOND_SECTION: NavMenuItem[] = [
@@ -103,5 +110,5 @@ export const PROMOTION_SANITIZE_PROPS = {
 
 export const SEO_ARTICLES_PER_PAGE = 12;
 
-export const STAKING_MODAL_MUTE_PERIOD_IN_DAYS = 7;
+const STAKING_MODAL_MUTE_PERIOD_IN_DAYS = 7;
 export const STAKING_MODAL_MUTE_PERIOD_IN_MS = STAKING_MODAL_MUTE_PERIOD_IN_DAYS * 24 * 60 * 60 * 1000;

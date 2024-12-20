@@ -1,3 +1,4 @@
+import { MarketType } from 'enums/marketTypes';
 import { League, MatchResolveType, PeriodType, ScoringType, Sport } from 'enums/sports';
 import { LeagueInfo } from 'types/sports';
 
@@ -1627,3 +1628,49 @@ export const OLYMPIC_LEAGUES = [
 ];
 
 export const PLAYER_PROPS_COMBINING_ENABLED_LEAGUES = [League.NBA, League.WNBA, League.EUROLEAGUE];
+
+export const PLAYER_PROPS_MARKETS_PER_SPORT_MAP: Record<Sport, MarketType[]> = {
+    [Sport.SOCCER]: [
+        MarketType.PLAYER_PROPS_OVER_GOALS,
+        MarketType.PLAYER_PROPS_SHOTS,
+        MarketType.PLAYER_PROPS_ASSISTS,
+    ],
+    [Sport.FOOTBALL]: [],
+    [Sport.BASKETBALL]: [
+        MarketType.PLAYER_PROPS_POINTS,
+        MarketType.PLAYER_PROPS_REBOUNDS,
+        MarketType.PLAYER_PROPS_ASSISTS,
+    ],
+    [Sport.BASEBALL]: [],
+    [Sport.HOCKEY]: [MarketType.PLAYER_PROPS_POINTS, MarketType.PLAYER_PROPS_SHOTS, MarketType.PLAYER_PROPS_ASSISTS],
+    [Sport.FIGHTING]: [],
+    [Sport.TENNIS]: [],
+    [Sport.TABLE_TENNIS]: [],
+    [Sport.ESPORTS]: [],
+    [Sport.RUGBY]: [],
+    [Sport.VOLLEYBALL]: [],
+    [Sport.HANDBALL]: [],
+    [Sport.WATERPOLO]: [],
+    [Sport.CRICKET]: [],
+    [Sport.MOTOSPORT]: [],
+    [Sport.GOLF]: [],
+    [Sport.POLITICS]: [],
+    [Sport.FUTURES]: [],
+    [Sport.EMPTY]: [],
+};
+
+// IMPORTANT: first element of MarketType[] must be unique for that entry
+export const PLAYER_PROPS_MARKETS_PER_PROP_MAP: Record<number, MarketType[]> = {
+    [MarketType.PLAYER_PROPS_PASSING_YARDS]: [
+        MarketType.PLAYER_PROPS_PASSING_YARDS,
+        MarketType.PLAYER_PROPS_PASSING_TOUCHDOWNS,
+        MarketType.PLAYER_PROPS_TOUCHDOWN_SCORER,
+    ],
+    [MarketType.PLAYER_PROPS_RECEIVING_YARDS]: [
+        MarketType.PLAYER_PROPS_RUSHING_YARDS,
+        MarketType.PLAYER_PROPS_RECEIVING_YARDS,
+        MarketType.PLAYER_PROPS_TOUCHDOWN_SCORER,
+    ],
+};
+
+export const PLAYER_PROPS_SPECIAL_SPORTS = [Sport.FOOTBALL];

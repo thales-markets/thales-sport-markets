@@ -16,12 +16,13 @@ export const TableText = styled.span`
     }
 `;
 
-export const LiveIndicatorContainer = styled(FlexDivStart)<{ isLive?: boolean }>`
+export const LiveSystemIndicatorContainer = styled(FlexDivStart)<{ isLive?: boolean; isSystem?: boolean }>`
     min-width: 10px;
     max-width: 10px;
     height: 30px;
     border-radius: 3px;
-    background: ${(props) => (props.isLive ? props.theme.status.live : 'transparent')};
+    background: ${(props) =>
+        props.isLive ? props.theme.status.live : props.isSystem ? props.theme.status.system : 'transparent'};
     color: ${(props) => props.theme.textColor.secondary};
     align-items: center;
     justify-content: center;
@@ -32,7 +33,7 @@ export const LiveIndicatorContainer = styled(FlexDivStart)<{ isLive?: boolean }>
     }
 `;
 
-export const LiveLabel = styled.span`
+export const LiveSystemLabel = styled.span`
     transform: rotate(270deg);
     color: ${(props) => props.theme.textColor.tertiary};
     font-size: 10px;
@@ -95,11 +96,11 @@ export const TicketRow = styled(FlexDivRowCentered)<{ highlighted?: boolean }>`
     }
 `;
 
-export const TeamNamesContainer = styled.div`
+export const TeamNamesContainer = styled.div<{ width?: string }>`
     display: flex;
     flex-direction: row;
-    min-width: 250px;
-    width: 250px;
+    min-width: ${(props) => props.width || '250px'};
+    width: ${(props) => props.width || '250px'};
     @media (max-width: 950px) {
         flex-direction: column;
     }
@@ -198,22 +199,20 @@ export const MarketStatus = styled.span<{ color?: string }>`
 export const LastExpandedSection = styled(FlexDivRowCentered)`
     position: relative;
     justify-content: center;
-    flex: 1;
-    gap: 30px;
-    @media (max-width: 600px) {
-        margin: 10px 0;
-    }
+    width: 100%;
+    align-items: center;
     margin-bottom: 10px;
 `;
 
-export const QuoteWrapper = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    gap: 6px;
+export const QuoteWrapper = styled(FlexDivRow)`
+    width: 200px;
+    margin: 0 20px;
     font-size: 10px;
     color: ${(props) => props.theme.textColor.quaternary};
+    @media (max-width: 767px) {
+        margin: 0 10px;
+        font-size: 9px;
+    }
 `;
 
 export const QuoteText = styled.span`

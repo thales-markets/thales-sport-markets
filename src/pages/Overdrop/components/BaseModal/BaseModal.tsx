@@ -6,10 +6,10 @@ import React from 'react';
 import ReactModal from 'react-modal';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { RootState } from 'redux/rootReducer';
 import styled, { CSSProperties } from 'styled-components';
 import { FlexDivRow } from 'styles/common';
 import { convertCssToStyledProperties } from 'thales-utils';
+import { RootState } from 'types/redux';
 
 type ModalProps = {
     type: ModalTypes;
@@ -18,6 +18,7 @@ type ModalProps = {
         header?: CSSProperties;
     };
     onClose: () => void;
+    children: React.ReactNode;
 };
 
 ReactModal.setAppElement('#root');

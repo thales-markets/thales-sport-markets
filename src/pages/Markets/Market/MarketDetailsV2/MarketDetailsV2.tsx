@@ -19,10 +19,10 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import { getMarketTypeGroupFilter, setMarketTypeGroupFilter } from 'redux/modules/market';
-import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { SportMarket } from 'types/markets';
+import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
 import { showGameScore, showLiveInfo } from 'utils/marketsV2';
 import { buildHref } from 'utils/routes';
@@ -121,8 +121,8 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                             showGameScore(market.gameStatus) || !market.gameStatus ? (
                                 <ResultContainer>
                                     <ResultLabel>
-                                        {market.isOneSideMarket ? (
-                                            market.leagueId === League.US_ELECTION && market.positionNames ? (
+                                        {market.isOneSideMarket || leagueSport === Sport.FUTURES ? (
+                                            market.positionNames ? (
                                                 market.positionNames[market.winningPositions[0]]
                                             ) : market.homeScore == 1 ? (
                                                 t('markets.market-card.race-winner')
@@ -159,6 +159,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                     </ResultLabel>
                                     {leagueSport !== Sport.SOCCER &&
                                         leagueSport !== Sport.CRICKET &&
+                                        leagueSport !== Sport.FUTURES &&
                                         market.leagueId !== League.UFC &&
                                         market.leagueId !== League.US_ELECTION && (
                                             <PeriodsContainer directionRow={true}>

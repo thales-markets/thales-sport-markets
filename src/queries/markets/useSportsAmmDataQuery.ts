@@ -1,14 +1,20 @@
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import QUERY_KEYS from 'constants/queryKeys';
-import { Network } from 'enums/network';
-import { useQuery, UseQueryOptions } from 'react-query';
+import { ContractType } from 'enums/contract';
 import { bigNumberFormatter, getDefaultDecimalsForNetwork } from 'thales-utils';
 import { SportsAmmData } from 'types/markets';
-import networkConnector from 'utils/networkConnector';
+import { NetworkConfig } from 'types/network';
+import { ViemContract } from 'types/viem';
+import { getContractInstance } from 'utils/contract';
+import { SYSTEM_BET_MAX_ALLOWED_SYSTEM_COMBINATIONS } from '../../constants/markets';
 
-const useSportsAmmDataQuery = (networkId: Network, options?: UseQueryOptions<SportsAmmData | undefined>) => {
-    return useQuery<SportsAmmData | undefined>(
-        QUERY_KEYS.SportsAmmData(networkId),
-        async () => {
+const useSportsAmmDataQuery = (
+    networkConfig: NetworkConfig,
+    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery<SportsAmmData | undefined>({
+        queryKey: QUERY_KEYS.SportsAmmData(networkConfig.networkId),
+        queryFn: async () => {
             try {
                 const sportsAmmData: SportsAmmData = {
                     minBuyInAmount: 0,
@@ -16,23 +22,31 @@ const useSportsAmmDataQuery = (networkId: Network, options?: UseQueryOptions<Spo
                     maxSupportedAmount: 0,
                     maxSupportedOdds: 0,
                     safeBoxFee: 0,
+                    maxAllowedSystemCombinations: SYSTEM_BET_MAX_ALLOWED_SYSTEM_COMBINATIONS,
                 };
 
-                const { sportsAMMDataContract } = networkConnector;
+                const sportsAMMDataContract = getContractInstance(
+                    ContractType.SPORTS_AMM_DATA,
+                    networkConfig
+                ) as ViemContract;
+
                 if (sportsAMMDataContract) {
-                    const sportsAMMParameters = await sportsAMMDataContract.getSportsAMMParameters();
+                    const sportsAMMParameters = await sportsAMMDataContract.read.getSportsAMMParameters();
 
                     sportsAmmData.minBuyInAmount = bigNumberFormatter(
                         sportsAMMParameters.minBuyInAmount,
-                        getDefaultDecimalsForNetwork(networkId)
+                        getDefaultDecimalsForNetwork(networkConfig.networkId)
                     );
                     sportsAmmData.maxTicketSize = Number(sportsAMMParameters.maxTicketSize);
                     sportsAmmData.maxSupportedAmount = bigNumberFormatter(
                         sportsAMMParameters.maxSupportedAmount,
-                        getDefaultDecimalsForNetwork(networkId)
+                        getDefaultDecimalsForNetwork(networkConfig.networkId)
                     );
                     sportsAmmData.maxSupportedOdds = bigNumberFormatter(sportsAMMParameters.maxSupportedOdds);
                     sportsAmmData.safeBoxFee = bigNumberFormatter(sportsAMMParameters.safeBoxFee);
+                    sportsAmmData.maxAllowedSystemCombinations = Number(
+                        sportsAMMParameters.maxAllowedSystemCombinations
+                    );
                 }
 
                 return sportsAmmData;
@@ -41,10 +55,8 @@ const useSportsAmmDataQuery = (networkId: Network, options?: UseQueryOptions<Spo
                 return undefined;
             }
         },
-        {
-            ...options,
-        }
-    );
+        ...options,
+    });
 };
 
 export default useSportsAmmDataQuery;

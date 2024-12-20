@@ -1,8 +1,12 @@
 {
     "compilerOptions": {
-        "target": "es5",
-        "lib": ["dom", "dom.iterable", "esnext"],
-        "allowJs": true,
+        "target": "ESNext",
+        "lib": [
+            "dom",
+            "dom.iterable",
+            "esnext"
+        ],
+        "allowJs": false,
         "skipLibCheck": true,
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
@@ -17,7 +21,17 @@
         "jsx": "react-jsx",
         "noUnusedLocals": true,
         "noUnusedParameters": true,
-        "baseUrl": "src"
+        "baseUrl": "src",
+        "types": [
+            "vite/client",
+            "vite-plugin-svgr/client"
+        ]
     },
-    "include": ["src", "./react-table-config.d.ts"]
+    "include": [
+        "src",
+        "vite.config.mts"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
 }

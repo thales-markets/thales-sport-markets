@@ -1,10 +1,10 @@
 import { Network } from 'enums/network';
+import { ContractData } from 'types/viem';
 
-const sportsAMMDataContract = {
+const sportsAMMDataContract: ContractData = {
     addresses: {
         [Network.OptimismMainnet]: '0x71CE219942FFD9C1d8B67d6C35C39Ae04C4F647B',
         [Network.Arbitrum]: '0x04386f9b2b4f713984Fe0425E46a376201641649',
-        [Network.Base]: '',
         [Network.OptimismSepolia]: '0xe4d8d605874443f952fBdc03Dd1C69761230A7f0',
     },
     abi: [
@@ -127,6 +127,8 @@ const sportsAMMDataContract = {
                         { internalType: 'bool', name: 'isExercisable', type: 'bool' },
                         { internalType: 'uint256', name: 'finalPayout', type: 'uint256' },
                         { internalType: 'bool', name: 'isLive', type: 'bool' },
+                        { internalType: 'bool', name: 'isSystem', type: 'bool' },
+                        { internalType: 'uint8', name: 'systemBetDenominator', type: 'uint8' },
                     ],
                     internalType: 'struct SportsAMMV2Data.TicketData[]',
                     name: 'ticketsData',
@@ -189,6 +191,8 @@ const sportsAMMDataContract = {
                         { internalType: 'bool', name: 'isExercisable', type: 'bool' },
                         { internalType: 'uint256', name: 'finalPayout', type: 'uint256' },
                         { internalType: 'bool', name: 'isLive', type: 'bool' },
+                        { internalType: 'bool', name: 'isSystem', type: 'bool' },
+                        { internalType: 'uint8', name: 'systemBetDenominator', type: 'uint8' },
                     ],
                     internalType: 'struct SportsAMMV2Data.TicketData[]',
                     name: 'freeBetsData',
@@ -251,6 +255,8 @@ const sportsAMMDataContract = {
                         { internalType: 'bool', name: 'isExercisable', type: 'bool' },
                         { internalType: 'uint256', name: 'finalPayout', type: 'uint256' },
                         { internalType: 'bool', name: 'isLive', type: 'bool' },
+                        { internalType: 'bool', name: 'isSystem', type: 'bool' },
+                        { internalType: 'uint8', name: 'systemBetDenominator', type: 'uint8' },
                     ],
                     internalType: 'struct SportsAMMV2Data.TicketData[]',
                     name: 'stakingBettingProxyData',
@@ -363,6 +369,8 @@ const sportsAMMDataContract = {
                         { internalType: 'bool', name: 'isExercisable', type: 'bool' },
                         { internalType: 'uint256', name: 'finalPayout', type: 'uint256' },
                         { internalType: 'bool', name: 'isLive', type: 'bool' },
+                        { internalType: 'bool', name: 'isSystem', type: 'bool' },
+                        { internalType: 'uint8', name: 'systemBetDenominator', type: 'uint8' },
                     ],
                     internalType: 'struct SportsAMMV2Data.TicketData[]',
                     name: 'ticketsData',
@@ -425,6 +433,8 @@ const sportsAMMDataContract = {
                         { internalType: 'bool', name: 'isExercisable', type: 'bool' },
                         { internalType: 'uint256', name: 'finalPayout', type: 'uint256' },
                         { internalType: 'bool', name: 'isLive', type: 'bool' },
+                        { internalType: 'bool', name: 'isSystem', type: 'bool' },
+                        { internalType: 'uint8', name: 'systemBetDenominator', type: 'uint8' },
                     ],
                     internalType: 'struct SportsAMMV2Data.TicketData[]',
                     name: 'freeBetsData',
@@ -487,6 +497,8 @@ const sportsAMMDataContract = {
                         { internalType: 'bool', name: 'isExercisable', type: 'bool' },
                         { internalType: 'uint256', name: 'finalPayout', type: 'uint256' },
                         { internalType: 'bool', name: 'isLive', type: 'bool' },
+                        { internalType: 'bool', name: 'isSystem', type: 'bool' },
+                        { internalType: 'uint8', name: 'systemBetDenominator', type: 'uint8' },
                     ],
                     internalType: 'struct SportsAMMV2Data.TicketData[]',
                     name: 'stakingBettingProxyData',
@@ -508,6 +520,13 @@ const sportsAMMDataContract = {
             type: 'function',
         },
         {
+            inputs: [{ internalType: 'bytes32[]', name: '_gameIds', type: 'bytes32[]' }],
+            name: 'getSpentOnGames',
+            outputs: [{ internalType: 'uint256[]', name: 'spentAmounts', type: 'uint256[]' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
             inputs: [],
             name: 'getSportsAMMParameters',
             outputs: [
@@ -519,6 +538,7 @@ const sportsAMMDataContract = {
                         { internalType: 'uint256', name: 'maxSupportedOdds', type: 'uint256' },
                         { internalType: 'uint256', name: 'safeBoxFee', type: 'uint256' },
                         { internalType: 'bool', name: 'paused', type: 'bool' },
+                        { internalType: 'uint256', name: 'maxAllowedSystemCombinations', type: 'uint256' },
                     ],
                     internalType: 'struct SportsAMMV2Data.SportsAMMParameters',
                     name: '',
@@ -589,6 +609,8 @@ const sportsAMMDataContract = {
                         { internalType: 'bool', name: 'isExercisable', type: 'bool' },
                         { internalType: 'uint256', name: 'finalPayout', type: 'uint256' },
                         { internalType: 'bool', name: 'isLive', type: 'bool' },
+                        { internalType: 'bool', name: 'isSystem', type: 'bool' },
+                        { internalType: 'uint8', name: 'systemBetDenominator', type: 'uint8' },
                     ],
                     internalType: 'struct SportsAMMV2Data.TicketData[]',
                     name: '',
@@ -663,6 +685,8 @@ const sportsAMMDataContract = {
                         { internalType: 'bool', name: 'isExercisable', type: 'bool' },
                         { internalType: 'uint256', name: 'finalPayout', type: 'uint256' },
                         { internalType: 'bool', name: 'isLive', type: 'bool' },
+                        { internalType: 'bool', name: 'isSystem', type: 'bool' },
+                        { internalType: 'uint8', name: 'systemBetDenominator', type: 'uint8' },
                     ],
                     internalType: 'struct SportsAMMV2Data.TicketData[]',
                     name: '',

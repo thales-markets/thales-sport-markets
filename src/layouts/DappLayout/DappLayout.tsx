@@ -1,5 +1,5 @@
 import axios from 'axios';
-import Loader from 'components/Loader';
+import ChristmasHeaderAnimation from 'components/ChristmasHeaderAnimation';
 import MetaData from 'components/MetaData';
 import { generalConfig } from 'config/general';
 import { Theme } from 'enums/ui';
@@ -7,13 +7,11 @@ import useWidgetBotScript from 'hooks/useWidgetBotScript';
 import ModalWrapper from 'pages/Overdrop/components/ModalWrapper';
 import queryString from 'query-string';
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { getIsAppReady } from 'redux/modules/app';
 import { setTheme } from 'redux/modules/ui';
-import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
 import { isAndroid, isMetamask } from 'thales-utils';
@@ -23,8 +21,11 @@ import Banner from '../../components/Banner';
 import DappFooter from './DappFooter';
 import DappHeader from './DappHeader';
 
-const DappLayout: React.FC = ({ children }) => {
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
+type DappLayoutProps = {
+    children: React.ReactNode;
+};
+
+const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
     const dispatch = useDispatch();
     const location = useLocation();
 
@@ -72,21 +73,18 @@ const DappLayout: React.FC = ({ children }) => {
 
     return (
         <>
-            {isAppReady ? (
-                <Background>
-                    <ModalWrapper />
-                    <Banner />
-                    <Wrapper>
-                        <MetaData />
-                        <DappHeader />
-                        {children}
-                        <DappFooter />
-                    </Wrapper>
-                    <ToastContainer theme={'colored'} />
-                </Background>
-            ) : (
-                <Loader />
-            )}
+            <Background>
+                <ModalWrapper />
+                <Banner />
+                <ChristmasHeaderAnimation />
+                <Wrapper>
+                    <MetaData />
+                    <DappHeader />
+                    {children}
+                    <DappFooter />
+                </Wrapper>
+                <ToastContainer theme={'colored'} />
+            </Background>
         </>
     );
 };

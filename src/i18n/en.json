@@ -31,7 +31,7 @@
             "linkedin": "Linkedin"
         },
         "pagination": {
-            "page": "Page",
+            "of": "of",
             "rows-per-page": "Rows per page:"
         },
         "filter": {
@@ -58,7 +58,15 @@
             "approve-parlay": "Approve ParlayAMM",
             "approve-sports": "Approve SportsAMM",
             "get-usd-progress": "Minting {{amount}}...",
-            "disclaimer": "By signing up to Overtimemarkets <terms>Terms of Use</terms> and Privacy Policy you acknowledge that you have read and understand the Thales DAO protocol <disclaimer>disclaimer</disclaimer>."
+            "disclaimer": "By signing up to Overtimemarkets <terms>Terms of Use</terms> and Privacy Policy you acknowledge that you have read and understand the Thales DAO protocol <disclaimer>disclaimer</disclaimer>.",
+            "particle-logins": {
+                "google": "Google",
+                "twitter": "Twitter",
+                "facebook": "Facebook",
+                "github": "GitHub",
+                "discord": "Discord",
+                "apple": "Apple"
+            }
         },
         "voucher": {
             "remaining-amount": "Remaining amount",
@@ -96,6 +104,7 @@
             }
         },
         "errors": {
+            "something-went-wrong": "Something went wrong!",
             "unknown-error-try-again": "An unknown error occurred after you submitted. Please try again.",
             "unknown-error-try-again-general": "An unknown error occurred. Please try again.",
             "batch-transaction-single-failure": "A transaction was rejected or failed.",
@@ -137,6 +146,7 @@
         "dapp": "dapp",
         "launch-dapp": "launch dapp",
         "cancel": "Cancel",
+        "support-contact": "Please contact <anchor>Thales support</anchor>",
         "try-again": "Try again",
         "select-date": "Select date...",
         "tags-placeholder": "Search tags...",
@@ -266,7 +276,8 @@
                 "olympicgames": "Olympic games",
                 "tabletennis": "Table tennis",
                 "politics": "Politics",
-                "futures": "Futures"
+                "futures": "Futures",
+                "playerprops": "Player Props"
             },
             "all": "All",
             "datepicker": {
@@ -328,7 +339,7 @@
             "buy-thales-title": "You get better odds when betting with THALES",
             "stake-title": "You can stake THALES to also earn yield while still being able to use it on Overtime for best odds",
             "stake-label": "Stake",
-            "weekly-rewards": "You get weekly USDC+THALES staking rewards! Claim them on <stakingPageLink>thales.io staking page<stakingPageLink>",
+            "weekly-rewards": "You get weekly USDC+THALES staking rewards! Claim them on <stakingPageLink>thales.io staking page</stakingPageLink>",
             "swap-to-thales-label": "Swap to THALES",
             "get-thales-label": "Get THALES",
             "swap-success": "Successfully swapped to THALES",
@@ -370,6 +381,8 @@
         "card": {
             "ticket-id": "Ticket ID",
             "live": "Live",
+            "system": "System",
+            "system-short": "Sys",
             "claim-batch-tooltip": "Claim all your pending positions in one transaction.",
             "number-of-games": "No. of games",
             "ticket-paid": "Ticket paid",
@@ -381,12 +394,19 @@
             "claim-all": "Claim All",
             "canceled": "Canceled",
             "total-quote": "Total quote",
+            "max-quote": "Max quote",
+            "winning-quote": "Winning quote",
             "result": "Result",
             "position-size": "Position size",
             "starts": "Starts",
             "payout": "Payout",
             "payout-in": "Payout in",
-            "approve-swap-tooltip": "To get payout in {{currencyKey}}, you need to approve swap from {{defaultCurrency}} to {{currencyKey}}."
+            "approve-swap-tooltip": "To get payout in {{currencyKey}}, you need to approve swap from {{defaultCurrency}} to {{currencyKey}}.",
+            "number-of-combination": "No. of combinations",
+            "number-of-winning-combination": "No. of winning comb",
+            "paid-per-combination": "Paid per comb",
+            "min-payout": "Min payout",
+            "max-payout": "Max payout"
         },
         "table": {
             "time": "Time",
@@ -720,6 +740,7 @@
             "items": {
                 "markets": "Markets",
                 "profile": "Profile",
+                "resolve-blocker": "Resolve blocker",
                 "history": "History",
                 "liquidity-pool": "Provide Liquidity",
                 "promotions": "Promotions",
@@ -738,7 +759,12 @@
         },
         "parlay": {
             "ticket-slip": "Ticket slip",
+            "regular": "Regular",
+            "system": "System",
             "thales-bonus-info": "Use THALES and get 2% bonus payout for each game.",
+            "min-quote": "Min quote",
+            "max-quote": "Max quote",
+            "winning-quote": "Winning quote",
             "total-quote": "Total quote",
             "total-bonus": "Total bonus",
             "persist-games": "Keep selection after submit",
@@ -771,7 +797,10 @@
             "odds-changed-error": "Odds changed while fulfilling the order. Try increasing the slippage.",
             "info": {
                 "min-quote": "Minimal TOTAL QUOTE supported is {{value}}",
-                "max-quote": "Maximal TOTAL QUOTE supported is {{value}}"
+                "max-quote": "Maximal TOTAL QUOTE supported is {{value}}",
+                "system-bet-min-quote": "Minimal TOTAL QUOTE supported for selected system is {{value}}",
+                "system-bet-max-quote": "Maximal TOTAL QUOTE supported for selected system is {{value}}",
+                "system-bet-number-of-combination": "Max allowed number of system combinations is {{value}}"
             },
             "show-parlay": "Show Parlay",
             "validation": {
@@ -786,6 +815,7 @@
                 "min-amount": "Minimal buy-in is {{min}}",
                 "single-min-amount": "Minimal buy-in is {{min}}",
                 "availability": "Not enough liquidity for this buy-in amount",
+                "staked-thales-system-bets": "System bets are not yet available for staked THALES or free bets",
                 "no-funds": "Please ensure your wallet has enough funds",
                 "no-funds-multi-collateral": "Please ensure your wallet has enough funds (buy-in amount plus {{percentage}}%)",
                 "not-supported": "Not supported validation error: {{error}}",
@@ -836,7 +866,7 @@
                 "tooltip": {
                     "daily-boost": "The more days in a row you bet, the higher your XP boost. Increase +5% for each day up to maximum of +35%. If you miss one day, this boost resets to 0%",
                     "weekly-boost": "The more weeks in a row you bet, the higher your XP boost. Increase +5% for each week up to maximum of +20%. If you miss one week, this boost resets to 0%",
-                    "parlay-boost": "Depending on how many individual games are within your parlay, you will get an additional boost on your XP accrual for that parlay. Maximum is +700% XP boost on 15 games in parlay.",
+                    "parlay-boost": "Depending on how many individual games are within your parlay, you will get an additional boost on your XP accrual for that parlay. Maximum is +700% XP boost on 15 games in parlay. The number of games on a parlay for system bets equals the minimal number of games that need to hit.",
                     "thales-boost": "All bets executed with THALES as collateral will have +10% bonus on baseline XP accrual for that specific bet!",
                     "twitter-boost": "If you share your Overtime bet on Twitter in the form of a Flex Card, you will activate a 3 day long Twitter Flex Boost of +10%.",
                     "loyalty-boost": "The Loyalty XP Boost gives you up to 25% permanent boost on all your general XP earning, depending on your XP level. Starting at 5% boost on Level 1, you gain another +5% increase on reaching every fifth level.",
@@ -849,7 +879,15 @@
                 "swap": "Swap {{src}} to {{dst}}",
                 "approve-buy": "Approve buy with {{currencyKey}}",
                 "buy": "Buy with {{currencyKey}}"
-            }
+            },
+            "number-of-combinations": "Number of combinations",
+            "number-of-combinations-short": "No. of comb",
+            "number-of-winning-combinations-short": "No. of winning comb",
+            "buy-in-per-combination": "Buy-in per combination",
+            "min-payout": "Min payout",
+            "max-payout": "Max payout",
+            "min-max-payout": "Min/max payout",
+            "system-bet-min-markets-validation": "System bet requires minimum {{minMarkets}} games"
         },
         "zero-odds-tooltip": "Odds unavailable at the moment.",
         "low-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",
@@ -1169,7 +1207,7 @@
                 "weekly-boost": "Weekly streak boost",
                 "weekly-boost-content": "The conditions for the weekly streak boost to be activated for the ongoing week is to have any betting volume between Monday 00:00UTC and Sunday 23:59UTC for the ongoing week. The more weeks in a row this condition is met, the higher the <bold>Weekly Streak Boost</bold> on your baseline XP accrual!\n\n<bold>Weekly Streak Boost</bold> is applied to all bets made while the boost is active.\n\nIf you break your streak and miss out to drive volume one day, your <bold>Weekly Streak Boost</bold> is reset to +0%.",
                 "parlay-xp": "PARLAY BOOST",
-                "parlay-content": "Depending on how many individual games are within your parlay, you will get an additional boost on your XP accrual for that parlay!",
+                "parlay-content": "Depending on how many individual games are within your parlay, you will get an additional boost on your XP accrual for that parlay! The number of games on a parlay for system bets equals the minimal number of games that need to hit.",
                 "positions-thales": "THALES BOOST",
                 "days": "days",
                 "days-content": "The conditions for the daily streak boost to be activated for the ongoing day is to have any betting volume between 00:00UTC and 23:59UTC for the ongoing day. The more days in a row this condition is met, the higher the <bold>Daily Streak Boost</bold> on your baseline XP accrual ! \n\n<bold>Daily Streak Boost</bold> is applied to all bets made while the boost is active. \n\nIf you break your streak and miss out to drive volume one day, <bold>your Daily Streak Boost is reset to +0%.</bold>",
@@ -1221,6 +1259,28 @@
             "day-streak": "<bold>{{ days }}</bold><br/>day streak!",
             "active-daily-streak": "Active daily streak xp boost",
             "dont-show-this": "Don't show this again"
+        }
+    },
+    "resolve-blocker": {
+        "title": "Blocked games",
+        "select-all": "Select All",
+        "unblock-selected": "Unblock Selected",
+        "select": "Select",
+        "date-time": "Date | Time",
+        "game": "Game",
+        "reason": "Reason",
+        "action": "Action",
+        "unblocked-by": "Unblocked by",
+        "unblock": "Unblock",
+        "unblocking": "Unblocking...",
+        "not-whitelisted-for-unblock-tooltip": "Connected wallet is not whitelisted for unblock",
+        "unblock-confirmation-message": "Game successfully unblocked",
+        "unblock-batch-confirmation-message": "Games successfully unblocked",
+        "no-blocked-games": "No blocked games",
+        "no-unblocked-games": "No unblocked games",
+        "tab": {
+            "blocked-games": "Blocked games",
+            "unblocked-games": "Unblocked games"
         }
     }
 }

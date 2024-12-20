@@ -2,18 +2,19 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivStart } from 'styles/common';
+import { RootState } from 'types/redux';
 
 type SearchProps = {
     text: string;
     handleChange: (event: any) => void;
     width?: number;
     customPlaceholder?: string;
+    customColor?: string;
 };
 
-const Search: React.FC<SearchProps> = ({ text, handleChange, width, customPlaceholder }) => {
+const Search: React.FC<SearchProps> = ({ text, handleChange, width, customPlaceholder, customColor }) => {
     const { t } = useTranslation();
 
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -27,9 +28,10 @@ const Search: React.FC<SearchProps> = ({ text, handleChange, width, customPlaceh
                 onChange={(event) => handleChange(event.target.value)}
                 width={width}
                 autoFocus={isMobile}
+                customColor={customColor}
             />
             <IconWrapper>
-                <SearchIcon />
+                <SearchIcon customColor={customColor} />
             </IconWrapper>
             {text !== '' && <ClearIcon className="icon icon--close" onClick={() => handleChange('')} />}
         </Wrapper>
@@ -46,10 +48,10 @@ const Wrapper = styled(FlexDivStart)<{ marginBottom?: number }>`
     }
 `;
 
-const Input = styled.input<{ width?: number }>`
+const Input = styled.input<{ width?: number; customColor?: string }>`
     background: ${(props) => props.theme.background.primary};
     border-radius: 5px;
-    border: 1px solid ${(props) => props.theme.borderColor.primary};
+    border: 1px solid ${(props) => (props?.customColor ? props.customColor : props.theme.borderColor.primary)};
     color: ${(props) => props.theme.textColor.primary};
     width: ${(props) => props.width || 250}px;
     height: 24px;
@@ -60,7 +62,7 @@ const Input = styled.input<{ width?: number }>`
     line-height: 12px;
     outline: none;
     &::placeholder {
-        color: ${(props) => props.theme.textColor.secondary};
+        color: ${(props) => (props?.customColor ? props.customColor : props.theme.textColor.secondary)};
     }
     &:focus {
         border: 1px solid ${(props) => props.theme.textColor.quaternary} !important;
@@ -90,7 +92,7 @@ const IconWrapper = styled.div`
     }
 `;
 
-const SearchIcon = styled.i`
+const SearchIcon = styled.i<{ customColor?: string }>`
     font-size: 14px;
     position: absolute;
     top: 0;
@@ -98,7 +100,7 @@ const SearchIcon = styled.i`
     &:before {
         font-family: OvertimeIconsV2 !important;
         content: '\\00E5';
-        color: ${(props) => props.theme.textColor.secondary};
+        color: ${(props) => (props?.customColor ? props.customColor : props.theme.textColor.secondary)};
     }
     @media (max-width: 950px) {
         font-size: 20px;

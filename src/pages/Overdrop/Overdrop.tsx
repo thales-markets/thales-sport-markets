@@ -1,19 +1,27 @@
 import BannerCarousel from 'components/BannerCarousel';
 import { OverdropTab } from 'enums/ui';
+import StakingModal from 'pages/Profile/components/StakingModal';
 import UserStatsV2 from 'pages/Profile/components/UserStatsV2';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { getIsStakingModalMuted } from 'redux/modules/ui';
+import { getIsConnectedViaParticle } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
+import useQueryParam from 'utils/useQueryParams';
 import Navigation from './components/Navigation';
 import Leaderboard from './pages/Leaderboard';
 import LevelingTree from './pages/LevelingTree';
 import OverdropHome from './pages/OverdropHome';
 import XPDetails from './pages/XPDetails';
-import useQueryParam from 'utils/useQueryParams';
 
 const Overdrop: React.FC = () => {
     const [selectedTabParam, setSelectedTabParam] = useQueryParam('selected-tab', OverdropTab.OVERDROP_HOME);
     const [selectedTab, setSelectedTab] = useState<OverdropTab>(OverdropTab.OVERDROP_HOME);
+    const [openStakingModal, setOpenStakingModal] = useState<boolean>(false);
+
+    const isParticle = useSelector(getIsConnectedViaParticle);
+    const isStakingModalMuted = useSelector(getIsStakingModalMuted);
 
     useEffect(() => {
         if (Object.values(OverdropTab).includes(selectedTabParam.toLowerCase() as OverdropTab)) {
@@ -43,8 +51,16 @@ const Overdrop: React.FC = () => {
                 {selectedTab == OverdropTab.LEADERBOARD && <Leaderboard />}
             </MainContainer>
             <RightSidebarContainer>
-                <UserStatsV2 />
+                <UserStatsV2 setForceOpenStakingModal={setOpenStakingModal} />
             </RightSidebarContainer>
+            {openStakingModal && !isStakingModalMuted && !isParticle && (
+                <StakingModal
+                    defaultAmount={0}
+                    onClose={() => {
+                        setOpenStakingModal(false);
+                    }}
+                />
+            )}
         </RowContainer>
     );
 };

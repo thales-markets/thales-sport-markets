@@ -8,6 +8,7 @@ export const Container = styled(FlexDivRow)<{
     isWinner: boolean;
     order?: string;
     isMainPageView?: boolean;
+    isPlayerPropsMarket?: boolean;
     hide: boolean;
 }>`
     display: ${(props) => (props.hide ? 'none' : 'flex')};
@@ -20,11 +21,14 @@ export const Container = styled(FlexDivRow)<{
     font-weight: 600;
     font-size: 13px;
     line-height: 16px;
-    background: ${(props) => (props.selected ? props.theme.background.quaternary : props.theme.background.secondary)};
+    background: ${(props) =>
+        props.selected ? props.theme.christmasTheme.background.secondary : props.theme.background.secondary};
     color: ${(props) => (props.selected ? props.theme.textColor.tertiary : props.theme.textColor.primary)};
     border: 1px solid
         ${(props) =>
-            props.selected || props.isWinner ? props.theme.borderColor.quaternary : props.theme.borderColor.quinary};
+            props.selected || props.isWinner
+                ? props.theme.christmasTheme.background.secondary
+                : props.theme.borderColor.quinary};
     box-shadow: ${(props) => (props.isWinner ? props.theme.shadow.positionWinner : '')};
     opacity: ${(props) => (props.disabled && !props.isWinner ? '0.4' : '1')};
     cursor: ${(props) => (props.disabled ? '' : 'pointer')};
@@ -33,7 +37,7 @@ export const Container = styled(FlexDivRow)<{
     }
     order: ${(props) => props.order || 'initial'};
     @media (max-width: 950px) {
-        flex-direction: ${(props) => (props.isMainPageView ? 'column' : 'row')};
+        flex-direction: ${(props) => (props.isMainPageView && !props.isPlayerPropsMarket ? 'column' : 'row')};
         align-items: ${(props) => (props.isMainPageView ? 'flex-start' : 'center')};
         padding: ${(props) => (props.isMainPageView ? '2px 5px' : '0 5px')};
     }

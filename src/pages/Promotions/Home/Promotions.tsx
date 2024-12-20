@@ -2,9 +2,6 @@ import Loader from 'components/Loader';
 import { usePromotionsQuery } from 'queries/promotions/usePromotionsQuery';
 import React, { useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { getIsAppReady } from 'redux/modules/app';
-import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { PromotionStatus } from 'types/ui';
@@ -38,15 +35,11 @@ const NavItems: NavigationItem[] = [
 const Promotions: React.FC = () => {
     const { t } = useTranslation();
 
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-
     const [selectedNavItem, setSelectedNavItem] = useState<number>(NavigationEnum.ONGOING);
 
     const [branchName] = useQueryParam('branch-name', '');
 
-    const promotionsQuery = usePromotionsQuery(branchName, {
-        enabled: isAppReady,
-    });
+    const promotionsQuery = usePromotionsQuery(branchName);
 
     const promotions = useMemo(() => {
         try {

@@ -1,4 +1,5 @@
 import Tooltip from 'components/Tooltip';
+import { SportFilter } from 'enums/markets';
 import { MarketType } from 'enums/marketTypes';
 import { League } from 'enums/sports';
 import { orderBy } from 'lodash';
@@ -6,6 +7,7 @@ import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
+import { getSportFilter } from 'redux/modules/market';
 import styled from 'styled-components';
 import { SportMarket } from 'types/markets';
 import { getMarketTypeTooltipKey, isFuturesMarket } from 'utils/markets';
@@ -33,6 +35,10 @@ type PositionsProps = {
     isColumnView?: boolean;
     showInvalid?: boolean;
     isGameLive?: boolean;
+    hidePlayerName?: boolean;
+    alignHeader?: boolean;
+    oddsTitlesHidden?: boolean;
+    floatingOddsTitles?: boolean;
     onAccordionClick?: () => void;
 };
 
@@ -45,9 +51,18 @@ const Positions: React.FC<PositionsProps> = ({
     showInvalid,
     isGameLive,
     onAccordionClick,
+    hidePlayerName,
+    alignHeader,
+    oddsTitlesHidden,
+    floatingOddsTitles,
 }) => {
     const { t } = useTranslation();
+
+    const sportFilter = useSelector(getSportFilter);
     const isMobile = useSelector(getIsMobile);
+
+    const isPlayerPropsMarket = useMemo(() => sportFilter === SportFilter.PlayerProps, [sportFilter]);
+
     const [isExpanded, setIsExpanded] = useState<boolean>(true);
 
     const hasOdds = markets.some((market) => market.odds.length);
@@ -58,7 +73,8 @@ const Positions: React.FC<PositionsProps> = ({
 
     const positionText0 = markets[0] ? getSubtitleText(markets[0], 0) : undefined;
     const positionText1 = markets[0] ? getSubtitleText(markets[0], 1) : undefined;
-    const titleText = getTitleText(markets[0], true);
+    const titleText = getTitleText(markets[0], !isPlayerPropsMarket, isPlayerPropsMarket);
+
     const tooltipKey = getMarketTypeTooltipKey(marketType);
 
     const liveMarketErrorMessage =
@@ -78,8 +94,14 @@ const Positions: React.FC<PositionsProps> = ({
             isExpanded={isExpanded}
             isMainPageView={isMainPageView}
         >
-            <Header isMainPageView={isMainPageView} isColumnView={isColumnView}>
-                {((isMobile && !isMainPageView) || !isMobile) && (
+            <Header
+                isMainPageView={isMainPageView}
+                isColumnView={isColumnView}
+                alignHeader={alignHeader && (!!positionText0 || !!positionText1) && isExpanded && !isMobile}
+                hidden={oddsTitlesHidden}
+                float={floatingOddsTitles}
+            >
+                {((isMobile && !isMainPageView) || !isMobile || isPlayerPropsMarket) && (
                     <Title isExpanded={isExpanded} isMainPageView={isMainPageView} isColumnView={isColumnView}>
                         {titleText}
                         {tooltipKey && (
@@ -131,7 +153,7 @@ const Positions: React.FC<PositionsProps> = ({
 
                         return (
                             <ContentWrapper key={index}>
-                                {market.isPlayerPropsMarket && (
+                                {market.isPlayerPropsMarket && !hidePlayerName && (
                                     <PropsTextContainer>
                                         <PropsText>{`${market.playerProps.playerName}`}</PropsText>
                                     </PropsTextContainer>
@@ -139,6 +161,7 @@ const Positions: React.FC<PositionsProps> = ({
                                 <ContentRow
                                     gridMinMaxPercentage={getGridMinMaxPercentage(market, isMobile)}
                                     isColumnView={isColumnView}
+                                    isPlayerProps={!!isPlayerPropsMarket}
                                 >
                                     {filteredOdds.map((_, index) => {
                                         const position = isFutures

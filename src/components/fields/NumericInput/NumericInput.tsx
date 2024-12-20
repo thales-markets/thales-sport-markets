@@ -1,5 +1,4 @@
-import MuiTooltip from '@material-ui/core/Tooltip';
-import { ReactComponent as BalanceIcon } from 'assets/images/balance-icon.svg';
+import BalanceIcon from 'assets/images/balance-icon.svg?react';
 import Tooltip from 'components/Tooltip';
 import { DEFAULT_TOKEN_DECIMALS } from 'constants/defaults';
 import React, { ChangeEvent } from 'react';
@@ -70,10 +69,8 @@ const NumericInput: React.FC<NumericInputProps> = ({
     width,
     height,
     enableCurrencyComponentOnly,
-    validationPlacement,
     borderColor,
     containerWidth,
-    validationTooltipZIndex,
     ...rest
 }) => {
     const { t } = useTranslation();
@@ -111,14 +108,9 @@ const NumericInput: React.FC<NumericInputProps> = ({
                     <InfoText>{info}</InfoText>
                 </InfoWrapper>
             )}
-            <ValidationTooltip
-                open={showValidation}
-                title={showValidation ? validationMessage || '' : ''}
-                placement={validationPlacement || 'top'}
-                arrow={true}
-                PopperProps={{ style: { zIndex: validationTooltipZIndex ? validationTooltipZIndex : '' } }}
-            >
+            <Tooltip overlay={showValidation ? validationMessage || '' : ''} isValidation={showValidation}>
                 <StyledInput
+                    autoFocus
                     readOnly={readonly}
                     {...rest}
                     value={value}
@@ -144,7 +136,7 @@ const NumericInput: React.FC<NumericInputProps> = ({
                     height={height}
                     borderColor={borderColor}
                 />
-            </ValidationTooltip>
+            </Tooltip>
             <RightContainer height={height} currencyLabel={!!currencyLabel}>
                 {onMaxButton && (
                     <MaxButton disabled={disabled} onClick={onMaxButton}>
@@ -210,33 +202,6 @@ const MaxButton = styled.button`
     &:disabled {
         opacity: 0.4;
         cursor: default;
-    }
-`;
-
-const ValidationTooltip = styled((props) => <MuiTooltip classes={{ popper: props.className }} {...props} />)`
-    & .MuiTooltip-tooltip {
-        min-width: 100%;
-        max-width: 300px;
-        margin-bottom: ${(props) => (props.placement === 'top' ? '7px' : '0px')} !important;
-        margin-top: ${(props) => (props.placement === 'top' ? '0px' : '7px')} !important;
-        background-color: ${(props) => props.theme.error.background.primary};
-        color: ${(props) => props.theme.error.textColor.primary};
-        border: 1.5px solid ${(props) => props.theme.error.borderColor.primary};
-        border-radius: 2px;
-        font-size: 10px;
-        font-weight: 600;
-        text-transform: uppercase;
-    }
-    & .MuiTooltip-arrow {
-        &:before {
-            border: 1.5px solid ${(props) => props.theme.error.borderColor.primary};
-            background-color: ${(props) => props.theme.error.background.primary};
-            box-sizing: border-box;
-        }
-        width: 13px;
-        height: 10px;
-        bottom: ${(props) => (props.placement === 'top' ? '-3px' : 'auto')} !important;
-        top: ${(props) => (props.placement === 'top' ? 'auto' : '-3px')} !important;
     }
 `;
 

@@ -1,14 +1,17 @@
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import axios from 'axios';
 import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
 import { OverdropIcon } from 'layouts/DappLayout/DappHeader/styled-components';
-import { useQuery, UseQueryOptions } from 'react-query';
 import { OverdropMultiplier } from 'types/overdrop';
 
-const useUserMultipliersQuery = (walletAddress: string, options?: UseQueryOptions<OverdropMultiplier[]>) => {
-    return useQuery<OverdropMultiplier[]>(
-        QUERY_KEYS.Overdrop.UserMultipliers(walletAddress),
-        async () => {
+const useUserMultipliersQuery = (
+    walletAddress: string,
+    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery<OverdropMultiplier[]>({
+        queryKey: QUERY_KEYS.Overdrop.UserMultipliers(walletAddress),
+        queryFn: async () => {
             try {
                 const response = await axios.get(`${generalConfig.OVERDROP_API_URL}/user-multipliers/${walletAddress}`);
 
@@ -43,10 +46,8 @@ const useUserMultipliersQuery = (walletAddress: string, options?: UseQueryOption
                 ];
             }
         },
-        {
-            ...options,
-        }
-    );
+        ...options,
+    });
 };
 
 export default useUserMultipliersQuery;

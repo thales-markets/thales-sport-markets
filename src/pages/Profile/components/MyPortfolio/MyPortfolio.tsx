@@ -1,37 +1,46 @@
 import SPAAnchor from 'components/SPAAnchor';
 import { USD_SIGN } from 'constants/currency';
 import i18n from 'i18n';
-import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
+import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
+import { getIsMobile } from 'redux/modules/app';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { formatCurrency, formatCurrencyWithSign } from 'thales-utils';
+import { Rates } from 'types/collateral';
+import { RootState } from 'types/redux';
+import biconomyConnector from 'utils/biconomyWallet';
 import { getCollaterals } from 'utils/collaterals';
 import { buildDepositOrWithdrawLink } from 'utils/routes';
+import { useAccount, useChainId, useClient } from 'wagmi';
 
 const MyPortfolio: React.FC = () => {
     const { t } = useTranslation();
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
+
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+
+    const networkId = useChainId();
+    const client = useClient();
+    const { address, isConnected } = useAccount();
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const language = i18n.language;
 
-    const multipleCollateralBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
-        enabled: isAppReady && isWalletConnected,
-    });
+    const multipleCollateralBalances = useMultipleCollateralBalanceQuery(
+        walletAddress,
+        { networkId, client },
+        {
+            enabled: isConnected,
+        }
+    );
 
-    const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
-        enabled: isAppReady,
-    });
+    const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
 
     const exchangeRates: Rates | null =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
@@ -152,7 +161,7 @@ const TokenBalance = styled(FlexDiv)`
 `;
 
 const Deposit = styled.span`
-    color: ${(props) => props.theme.textColor.quaternary};
+    color: ${(props) => props.theme.christmasTheme.textColor.primary};
     font-size: 12px;
     text-transform: uppercase;
     font-weight: 600;

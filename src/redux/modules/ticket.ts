@@ -4,10 +4,10 @@ import { TicketErrorCode } from 'enums/markets';
 import { Network } from 'enums/network';
 import { localStore } from 'thales-utils';
 import { ParlayPayment, SerializableSportMarket, TicketPosition } from 'types/markets';
+import { RootState, TicketSliceState } from 'types/redux';
 import { isFuturesMarket, isPlayerPropsMarket } from '../../utils/markets';
 import { isSameMarket, serializableSportMarketAsSportMarket } from '../../utils/marketsV2';
 import { isPlayerPropsCombiningEnabled } from '../../utils/sports';
-import { RootState } from '../rootReducer';
 
 const sliceName = 'ticket';
 
@@ -37,17 +37,13 @@ const getDefaultLiveSlippage = (): number => {
     return slippage !== undefined ? slippage : 1;
 };
 
-const getDefaultError = () => {
-    return { code: TicketErrorCode.NO_ERROS, data: '' };
+const getDefaultIsSystemBet = (): boolean => {
+    const lsIsSystemBet = localStore.get(LOCAL_STORAGE_KEYS.IS_SYSTEM_BET);
+    return lsIsSystemBet !== undefined ? (lsIsSystemBet as boolean) : false;
 };
 
-type TicketSliceState = {
-    ticket: TicketPosition[];
-    payment: ParlayPayment;
-    maxTicketSize: number;
-    liveBetSlippage: number;
-    isFreeBetDisabledByUser: boolean;
-    error: { code: TicketErrorCode; data: string };
+const getDefaultError = () => {
+    return { code: TicketErrorCode.NO_ERROS, data: '' };
 };
 
 const initialState: TicketSliceState = {
@@ -56,6 +52,7 @@ const initialState: TicketSliceState = {
     maxTicketSize: DEFAULT_MAX_TICKET_SIZE,
     liveBetSlippage: getDefaultLiveSlippage(),
     isFreeBetDisabledByUser: false,
+    isSystemBet: getDefaultIsSystemBet(),
     error: getDefaultError(),
 };
 
@@ -185,6 +182,10 @@ const ticketSlice = createSlice({
         setIsFreeBetDisabledByUser: (state, action: PayloadAction<boolean>) => {
             state.isFreeBetDisabledByUser = action.payload;
         },
+        setIsSystemBet: (state, action: PayloadAction<boolean>) => {
+            state.isSystemBet = action.payload;
+            localStore.set(LOCAL_STORAGE_KEYS.IS_SYSTEM_BET, action.payload);
+        },
         resetTicketError: (state) => {
             state.error = getDefaultError();
         },
@@ -201,6 +202,7 @@ export const {
     setMaxTicketSize,
     setLiveBetSlippage,
     setIsFreeBetDisabledByUser,
+    setIsSystemBet,
 } = ticketSlice.actions;
 
 const getTicketState = (state: RootState) => state[sliceName];
@@ -208,6 +210,7 @@ export const getTicket = (state: RootState) => getTicketState(state).ticket;
 export const getTicketPayment = (state: RootState) => getTicketState(state).payment;
 export const getLiveBetSlippage = (state: RootState) => getTicketState(state).liveBetSlippage;
 export const getIsFreeBetDisabledByUser = (state: RootState) => getTicketState(state).isFreeBetDisabledByUser;
+export const getIsSystemBet = (state: RootState) => getTicketState(state).isSystemBet;
 export const getTicketError = (state: RootState) => getTicketState(state).error;
 export const getHasTicketError = createSelector(getTicketError, (error) => error.code != TicketErrorCode.NO_ERROS);
 

@@ -7,15 +7,16 @@ export enum StatusFilter {
 }
 
 export enum SortDirection {
-    NONE,
-    ASC,
-    DESC,
+    NONE = 'none',
+    ASC = 'asc',
+    DESC = 'desc',
 }
 
 export enum SportFilter {
     Boosted = 'Promo',
     Live = 'Live',
     Favourites = 'Favourites',
+    PlayerProps = 'PlayerProps',
     All = 'All',
     Soccer = 'Soccer',
     Football = 'Football',

@@ -1,20 +1,16 @@
+import OutsideClickHandler from 'components/OutsideClick';
 import { DEFAULT_NETWORK, SUPPORTED_NETWORKS_PARAMS } from 'constants/network';
 import { useMemo, useState } from 'react';
-import OutsideClickHandler from 'react-outside-click-handler';
-import { useDispatch, useSelector } from 'react-redux';
-import { getIsWalletConnected, getNetworkId, switchToNetworkId } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { changeNetwork } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
-import { useSwitchNetwork } from 'wagmi';
+import { useAccount, useChainId, useSwitchChain } from 'wagmi';
 
 const NetworkSwitcher: React.FC = () => {
-    const dispatch = useDispatch();
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const networkId = useChainId();
+    const { isConnected } = useAccount();
 
-    const { switchNetwork } = useSwitchNetwork();
+    const { switchChain } = useSwitchChain();
+
     const [dropDownOpen, setDropDownOpen] = useState(false);
     const selectedNetwork = useMemo(
         () => SUPPORTED_NETWORKS_PARAMS[networkId] || SUPPORTED_NETWORKS_PARAMS[DEFAULT_NETWORK.networkId],
@@ -29,12 +25,12 @@ const NetworkSwitcher: React.FC = () => {
                 onClick={() => {
                     if (supportedNetworks.length > 1) setDropDownOpen(!dropDownOpen);
                 }}
-                isConnected={isWalletConnected}
+                isConnected={isConnected}
                 isMultiChain={supportedNetworks.length > 1}
             >
-                <NetworkIcon className={selectedNetwork.iconClassName} isConnected={isWalletConnected} />
+                <NetworkIcon className={selectedNetwork.iconClassName} isConnected={isConnected} />
                 {supportedNetworks.length > 1 && (
-                    <DownIcon isConnected={isWalletConnected} className={`icon icon--arrow-down`} />
+                    <DownIcon isConnected={isConnected} className={`icon icon--arrow-down`} />
                 )}
             </NetworkIconWrapper>
             {dropDownOpen && (
@@ -52,16 +48,7 @@ const NetworkSwitcher: React.FC = () => {
                                 key={index}
                                 onClick={async () => {
                                     setDropDownOpen(false);
-                                    await changeNetwork(network, () => {
-                                        switchNetwork?.(network.id);
-                                        // Trigger App.js init
-                                        // do not use updateNetworkSettings(networkId) as it will trigger queries before provider in App.js is initialized
-                                        dispatch(
-                                            switchToNetworkId({
-                                                networkId: Number(network.id) as SupportedNetwork,
-                                            })
-                                        );
-                                    });
+                                    switchChain?.({ chainId: network.id as SupportedNetwork });
                                 }}
                             >
                                 <NetworkIcon isConnected={true} className={network.iconClassName} />
@@ -78,11 +65,12 @@ const NetworkSwitcher: React.FC = () => {
 };
 
 const NetworkIconWrapper = styled.div<{ isConnected: boolean; isMultiChain: boolean }>`
-    background: ${(props) => (props.isConnected ? props.theme.background.tertiary : 'transparent')};
+    background: ${(props) =>
+        props.isConnected ? props.theme.christmasTheme.button.background.primary : 'transparent'};
     height: 28px;
     border-radius: 20px;
     border-radius: 20px;
-    border: 1px solid ${(props) => props.theme.background.tertiary};
+    border: 1px solid ${(props) => props.theme.christmasTheme.button.borderColor.primary};
     display: flex;
     justify-content: center;
     gap: 4px;
@@ -105,12 +93,18 @@ const NetworkText = styled.span`
 
 const NetworkIcon = styled.i<{ isConnected: boolean }>`
     font-size: 24px;
-    color: ${(props) => (props.isConnected ? props.theme.button.textColor.primary : props.theme.textColor.secondary)};
+    color: ${(props) =>
+        props.isConnected
+            ? props.theme.button.textColor.primary
+            : props.theme.christmasTheme.button.textColor.secondary};
 `;
 
 const DownIcon = styled.i<{ isConnected: boolean }>`
     font-size: 12px;
-    color: ${(props) => (props.isConnected ? props.theme.button.textColor.primary : props.theme.textColor.secondary)};
+    color: ${(props) =>
+        props.isConnected
+            ? props.theme.button.textColor.primary
+            : props.theme.christmasTheme.button.textColor.secondary};
 `;
 
 const NetworkDropDown = styled.div`
@@ -121,7 +115,7 @@ const NetworkDropDown = styled.div`
     display: flex;
     flex-direction: column;
     border-radius: 20px;
-    background: ${(props) => props.theme.background.tertiary};
+    background: ${(props) => props.theme.christmasTheme.background.primary};
     width: 130px;
     padding: 10px;
     justify-content: center;

@@ -1,6 +1,6 @@
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import QUERY_KEYS from 'constants/queryKeys';
-import { useQuery, UseQueryOptions } from 'react-query';
 import { Coins } from 'thales-utils';
 
 type CoingeckoRates = Record<Coins, number>;
@@ -13,10 +13,10 @@ const COINGECKO_CURRENCY_ID_MAP = {
     [CRYPTO_CURRENCY_MAP.THALES]: 'thales',
 };
 
-const useCoingeckoRatesQuery = (options?: UseQueryOptions<CoingeckoRates>) => {
-    return useQuery<CoingeckoRates>(
-        QUERY_KEYS.Rates.CoingeckoRates(),
-        async () => {
+const useCoingeckoRatesQuery = (options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
+    return useQuery<CoingeckoRates>({
+        queryKey: QUERY_KEYS.Rates.CoingeckoRates(),
+        queryFn: async () => {
             const rates: CoingeckoRates = {
                 ARB: 0,
                 OP: 0,
@@ -64,11 +64,9 @@ const useCoingeckoRatesQuery = (options?: UseQueryOptions<CoingeckoRates>) => {
 
             return rates;
         },
-        {
-            refetchOnWindowFocus: false, // due to rate limit
-            ...options,
-        }
-    );
+        refetchOnWindowFocus: false, // due to rate limit
+        ...options,
+    });
 };
 
 export default useCoingeckoRatesQuery;

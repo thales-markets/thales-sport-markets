@@ -6,15 +6,15 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivRow } from 'styles/common';
+import { RootState } from 'types/redux';
 import { PromotionCardStatus, PromotionItem, PromotionStatus, ThemeInterface } from 'types/ui';
 import { getPromotionDateRange, getPromotionStatus } from 'utils/ui';
 
-import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
-import { ReactComponent as BaseLogo } from 'assets/images/base-logo.svg';
-import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
+import ArbitrumLogo from 'assets/images/arbitrum-logo.svg?react';
+import BaseLogo from 'assets/images/base-logo.svg?react';
+import OPLogo from 'assets/images/optimism-logo.svg?react';
 import { secondsToMilliseconds } from 'date-fns';
 
 const PromotionCard: React.FC<PromotionItem> = ({
@@ -74,8 +74,8 @@ const PromotionCard: React.FC<PromotionItem> = ({
                     <HeaderContainer>
                         <NetworkIconsWrapper>
                             {availableOnNetworks?.length ? (
-                                availableOnNetworks.map((item) => {
-                                    return getNetworkLogo(item as Network);
+                                availableOnNetworks.map((item, i) => {
+                                    return getNetworkLogo(item as Network, `logo-${i}`);
                                 })
                             ) : (
                                 <></>
@@ -106,16 +106,16 @@ const PromotionCard: React.FC<PromotionItem> = ({
     );
 };
 
-const getNetworkLogo = (networkId: number) => {
+const getNetworkLogo = (networkId: number, key: string) => {
     switch (networkId) {
         case Network.OptimismMainnet:
-            return <OPLogo />;
+            return <OPLogo key={key} />;
         case Network.Arbitrum:
-            return <ArbitrumLogo />;
+            return <ArbitrumLogo key={key} />;
         case Network.Base:
-            return <BaseLogo />;
+            return <BaseLogo key={key} />;
         default:
-            return <></>;
+            return <React.Fragment key={key}></React.Fragment>;
     }
 };
 
