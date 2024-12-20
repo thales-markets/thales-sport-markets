@@ -768,7 +768,8 @@ const Ticket: React.FC<TicketProps> = ({
             if (
                 buyInAmountForQuote <= 0 ||
                 noProofs ||
-                (isSystemBet && (!isValidSystemBet || isInvalidNumberOfCombination || isStakedThales))
+                (isSystemBet &&
+                    (!isValidSystemBet || isInvalidNumberOfCombination || isStakedThales || isFreeBetActive))
             )
                 return;
 
@@ -861,6 +862,7 @@ const Ticket: React.FC<TicketProps> = ({
             isValidSystemBet,
             isInvalidNumberOfCombination,
             isStakedThales,
+            isFreeBetActive,
             client,
             networkId,
             markets,
@@ -1050,7 +1052,7 @@ const Ticket: React.FC<TicketProps> = ({
     useEffect(() => {
         if (isBuying) return;
 
-        if (isSystemBet && isStakedThales) {
+        if (isSystemBet && (isStakedThales || isFreeBetActive)) {
             setTooltipTextBuyInAmount(t('markets.parlay.validation.staked-thales-system-bets'));
         } else if (
             (Number(buyInAmount) && finalQuotes.some((quote) => quote === 0)) ||
@@ -1107,6 +1109,7 @@ const Ticket: React.FC<TicketProps> = ({
         isBuying,
         isSystemBet,
         isStakedThales,
+        isFreeBetActive,
     ]);
 
     const setCollateralAmount = useCallback(
@@ -1712,7 +1715,7 @@ const Ticket: React.FC<TicketProps> = ({
             return;
         }
 
-        if (isSystemBet && (!isValidSystemBet || isStakedThales)) {
+        if (isSystemBet && (!isValidSystemBet || isStakedThales || isFreeBetActive)) {
             setSubmitDisabled(true);
             return;
         }
@@ -1741,6 +1744,7 @@ const Ticket: React.FC<TicketProps> = ({
         isInvalidSystemTotalQuote,
         isValidSystemBet,
         isStakedThales,
+        isFreeBetActive,
     ]);
 
     const getSubmitButton = () => {
