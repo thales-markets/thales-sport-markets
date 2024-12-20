@@ -866,7 +866,7 @@
                 "tooltip": {
                     "daily-boost": "The more days in a row you bet, the higher your XP boost. Increase +5% for each day up to maximum of +35%. If you miss one day, this boost resets to 0%",
                     "weekly-boost": "The more weeks in a row you bet, the higher your XP boost. Increase +5% for each week up to maximum of +20%. If you miss one week, this boost resets to 0%",
-                    "parlay-boost": "Depending on how many individual games are within your parlay, you will get an additional boost on your XP accrual for that parlay. Maximum is +700% XP boost on 15 games in parlay.",
+                    "parlay-boost": "Depending on how many individual games are within your parlay, you will get an additional boost on your XP accrual for that parlay. Maximum is +700% XP boost on 15 games in parlay. The number of games on a parlay for system bets equals the minimal number of games that need to hit.",
                     "thales-boost": "All bets executed with THALES as collateral will have +10% bonus on baseline XP accrual for that specific bet!",
                     "twitter-boost": "If you share your Overtime bet on Twitter in the form of a Flex Card, you will activate a 3 day long Twitter Flex Boost of +10%.",
                     "loyalty-boost": "The Loyalty XP Boost gives you up to 25% permanent boost on all your general XP earning, depending on your XP level. Starting at 5% boost on Level 1, you gain another +5% increase on reaching every fifth level.",
@@ -1207,7 +1207,7 @@
                 "weekly-boost": "Weekly streak boost",
                 "weekly-boost-content": "The conditions for the weekly streak boost to be activated for the ongoing week is to have any betting volume between Monday 00:00UTC and Sunday 23:59UTC for the ongoing week. The more weeks in a row this condition is met, the higher the <bold>Weekly Streak Boost</bold> on your baseline XP accrual!\n\n<bold>Weekly Streak Boost</bold> is applied to all bets made while the boost is active.\n\nIf you break your streak and miss out to drive volume one day, your <bold>Weekly Streak Boost</bold> is reset to +0%.",
                 "parlay-xp": "PARLAY BOOST",
-                "parlay-content": "Depending on how many individual games are within your parlay, you will get an additional boost on your XP accrual for that parlay!",
+                "parlay-content": "Depending on how many individual games are within your parlay, you will get an additional boost on your XP accrual for that parlay! The number of games on a parlay for system bets equals the minimal number of games that need to hit.",
                 "positions-thales": "THALES BOOST",
                 "days": "days",
                 "days-content": "The conditions for the daily streak boost to be activated for the ongoing day is to have any betting volume between 00:00UTC and 23:59UTC for the ongoing day. The more days in a row this condition is met, the higher the <bold>Daily Streak Boost</bold> on your baseline XP accrual ! \n\n<bold>Daily Streak Boost</bold> is applied to all bets made while the boost is active. \n\nIf you break your streak and miss out to drive volume one day, <bold>your Daily Streak Boost is reset to +0%.</bold>",
