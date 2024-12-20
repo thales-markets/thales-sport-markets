@@ -17,8 +17,10 @@ import { isMobile } from 'utils/device';
 import {
     particleAppleWallet,
     particleDiscordWallet,
+    particleEmailWallet,
     particleGithubWallet,
     particleGoogleWallet,
+    particlePhoneWallet,
     particleTwitterWallet,
     particleWallet,
 } from 'utils/particleWallet';
@@ -44,6 +46,8 @@ const socialWallets = [
     particleGithubWallet,
     particleAppleWallet,
     particleDiscordWallet,
+    particleEmailWallet,
+    particlePhoneWallet,
 ];
 
 !isMobile() && wallets.push(injectedWallet);

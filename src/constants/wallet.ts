@@ -6,6 +6,8 @@ export const SUPPORTED_PARTICAL_CONNECTORS: ParticalTypes[] = [
     ParticalTypes.DISCORD,
     ParticalTypes.GITHUB,
     ParticalTypes.APPLE,
+    ParticalTypes.EMAIL,
+    ParticalTypes.PHONE,
 ];
 
 export const PARTICAL_WALLETS_LABELS: { id: ParticalTypes; labelKey: string }[] = [
@@ -29,6 +31,14 @@ export const PARTICAL_WALLETS_LABELS: { id: ParticalTypes; labelKey: string }[] 
         id: ParticalTypes.APPLE,
         labelKey: 'common.wallet.particle-logins.apple',
     },
+    {
+        id: ParticalTypes.PHONE,
+        labelKey: 'common.wallet.particle-logins.phone',
+    },
+    {
+        id: ParticalTypes.EMAIL,
+        labelKey: 'common.wallet.particle-logins.email',
+    },
 ];
 
 export const PARTICAL_LOGINS_CLASSNAMES: { socialId: ParticalTypes; className: string }[] = [
@@ -50,6 +60,14 @@ export const PARTICAL_LOGINS_CLASSNAMES: { socialId: ParticalTypes; className: s
     },
     {
         socialId: ParticalTypes.TWITTER,
+        className: 'icon-homepage icon--x',
+    },
+    {
+        socialId: ParticalTypes.EMAIL,
+        className: 'icon-homepage icon--x',
+    },
+    {
+        socialId: ParticalTypes.PHONE,
         className: 'icon-homepage icon--x',
     },
 ];
