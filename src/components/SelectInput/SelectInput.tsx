@@ -130,7 +130,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
         }),
         control: (provided: any, state: any) => ({
             ...provided,
-            width: isMobile ? '40px' : '52px',
+            width: isMobile ? '42px' : '52px',
             backgroundColor: 'transparent',
             borderColor: 'transparent',
             color: theme.textColor.primary,
