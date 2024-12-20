@@ -40,7 +40,7 @@ export const formatMarketOdds = (oddsType: OddsType, odds: number | undefined) =
             }
         case OddsType.AMM:
         default:
-            return `${formatCurrency(odds, odds < 0.1 ? 4 : 2)}`;
+            return `${formatCurrency(odds, odds < 0.001 ? 8 : odds < 0.1 ? 4 : 2)}`;
     }
 };
 
@@ -111,7 +111,13 @@ export const isPeriodMarket = (marketType: MarketType) => {
             marketType <= MarketType.SECOND_PERIOD_TOTAL_AWAY_TEAM) ||
         (marketType >= MarketType.FIRST_PERIOD_DRAW_NO_BET && marketType <= MarketType.FOURTH_PERIOD_DRAW_NO_BET) ||
         (marketType >= MarketType.FIRST_PERIOD_TOTAL_EXACT_HOME_TEAM &&
-            marketType <= MarketType.SECOND_PERIOD_TOTAL_EXACT_AWAY_TEAM)
+            marketType <= MarketType.SECOND_PERIOD_TOTAL_EXACT_AWAY_TEAM) ||
+        (marketType >= MarketType.FIRST_PERIOD_TOTAL_CORNERS && marketType <= MarketType.SECOND_PERIOD_TOTAL_CORNERS) ||
+        (marketType >= MarketType.FIRST_PERIOD_TOTAL_CORNERS_HOME_TEAM &&
+            marketType <= MarketType.SECOND_PERIOD_TOTAL_CORNERS_AWAY_TEAM) ||
+        (marketType >= MarketType.FIRST_PERIOD_SPREAD_CORNERS &&
+            marketType <= MarketType.SECOND_PERIOD_SPREAD_CORNERS) ||
+        (marketType >= MarketType.FIRST_PERIOD_MOST_CORNERS && marketType <= MarketType.SECOND_PERIOD_MOST_CORNERS)
     );
 };
 

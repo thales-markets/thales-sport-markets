@@ -216,6 +216,12 @@ export enum MarketType {
     PLAYER_PROPS_STEALS = 11229,
     PLAYER_PROPS_STEALS_BLOCKS = 11230,
 
+    PLAYER_PROPS_CARD_RECEIVER = 11234,
+    PLAYER_PROPS_RED_CARD_RECEIVER = 11235,
+    PLAYER_PROPS_FIRST_SCORER = 11236,
+    PLAYER_PROPS_LAST_SCORER = 11237,
+    PLAYER_PROPS_SHOTS_ON_TARGET = 11238,
+
     // UFC market types
     WINNING_ROUND = 10151,
     GO_THE_DISTANCE = 10154,
@@ -254,6 +260,47 @@ export enum MarketType {
     LEAGUE_WINNER = 13001,
     MVP = 13002,
     CUP_WINNER = 13003,
+
+    // Spread (handicap) corners
+    SPREAD_CORNERS = 10221,
+    // Total corners
+    TOTAL_CORNERS = 10222,
+    // Total corners per team
+    TOTAL_CORNERS_HOME_TEAM = 10223,
+    TOTAL_CORNERS_AWAY_TEAM = 10224,
+    // Total corners odd/even
+    TOTAL_CORNERS_ODD_EVEN = 10225,
+    // Total corners period - half for soccer
+    FIRST_PERIOD_TOTAL_CORNERS = 10226,
+    SECOND_PERIOD_TOTAL_CORNERS = 10227,
+    // Total corners per team period - half for soccer
+    FIRST_PERIOD_TOTAL_CORNERS_HOME_TEAM = 10228,
+    FIRST_PERIOD_TOTAL_CORNERS_AWAY_TEAM = 10229,
+    SECOND_PERIOD_TOTAL_CORNERS_HOME_TEAM = 10230,
+    SECOND_PERIOD_TOTAL_CORNERS_AWAY_TEAM = 10231,
+    // Spread corners period - half for soccer
+    FIRST_PERIOD_SPREAD_CORNERS = 10232,
+    SECOND_PERIOD_SPREAD_CORNERS = 10233,
+    // Most corners
+    MOST_CORNERS = 10234,
+    // Most corners period - half for soccer
+    FIRST_PERIOD_MOST_CORNERS = 10235,
+    SECOND_PERIOD_MOST_CORNERS = 10236,
+
+    // Spread (handicap) cards
+    SPREAD_CARDS = 10241,
+    // Total cards
+    TOTAL_CARDS = 10242,
+    // Total cards per team
+    TOTAL_CARDS_HOME_TEAM = 10243,
+    TOTAL_CARDS_AWAY_TEAM = 10244,
+    // Total red cards
+    TOTA_RED_CARDS = 10245,
+    // Most cards
+    MOST_CARDS = 10246,
+    //First/last card
+    FIRST_CARD = 10247,
+    LAST_CARD = 10248,
 }
 
 export enum MarketTypeGroup {
@@ -306,4 +353,6 @@ export enum MarketTypeGroup {
     POPULAR_VOTE_WINNER = 'Popular vote winner',
     WINNING_PARTY = 'Winning party',
     WINNING_PARTY_STATE = 'Winning party (states)',
+    CORNERS = 'Corners',
+    CARDS = 'Cards',
 }

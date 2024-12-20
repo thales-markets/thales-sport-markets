@@ -922,6 +922,32 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         name: 'Steals + Blocks',
     },
 
+    [MarketType.PLAYER_PROPS_CARD_RECEIVER]: {
+        id: MarketType.PLAYER_PROPS_CARD_RECEIVER,
+        key: 'cardReceiver',
+        name: 'Card receiver',
+    },
+    [MarketType.PLAYER_PROPS_RED_CARD_RECEIVER]: {
+        id: MarketType.PLAYER_PROPS_RED_CARD_RECEIVER,
+        key: 'redCardReceiver',
+        name: 'Red card receiver',
+    },
+    [MarketType.PLAYER_PROPS_FIRST_SCORER]: {
+        id: MarketType.PLAYER_PROPS_FIRST_SCORER,
+        key: 'firstScorer',
+        name: 'First scorer',
+    },
+    [MarketType.PLAYER_PROPS_LAST_SCORER]: {
+        id: MarketType.PLAYER_PROPS_LAST_SCORER,
+        key: 'lastScorer',
+        name: 'Last scorer',
+    },
+    [MarketType.PLAYER_PROPS_SHOTS_ON_TARGET]: {
+        id: MarketType.PLAYER_PROPS_SHOTS_ON_TARGET,
+        key: 'shotsOnTarget',
+        name: 'Shots on target',
+    },
+
     // UFC market types
     [MarketType.WINNING_ROUND]: {
         id: MarketType.WINNING_ROUND,
@@ -1069,6 +1095,144 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         key: 'cupWinner',
         name: 'Cup winner',
     },
+
+    // Spread (handicap) corners
+    [MarketType.SPREAD_CORNERS]: {
+        id: MarketType.SPREAD_CORNERS,
+        key: 'spreadCorners',
+        name: 'Handicap corners',
+    },
+    // Total corners
+    [MarketType.TOTAL_CORNERS]: {
+        id: MarketType.TOTAL_CORNERS,
+        key: 'totalCorners',
+        name: 'Total corners',
+    },
+    // Total corners per team
+    [MarketType.TOTAL_CORNERS_HOME_TEAM]: {
+        id: MarketType.TOTAL_CORNERS_HOME_TEAM,
+        key: 'totalCornersHomeTeam',
+        name: 'Total corners',
+    },
+    [MarketType.TOTAL_CORNERS_AWAY_TEAM]: {
+        id: MarketType.TOTAL_CORNERS_AWAY_TEAM,
+        key: 'totalCornersAwayTeam',
+        name: 'Total corners',
+    },
+    // Total corners odd/even
+    [MarketType.TOTAL_CORNERS_ODD_EVEN]: {
+        id: MarketType.TOTAL_CORNERS_ODD_EVEN,
+        key: 'totalCornersOddEven',
+        name: 'Total corners odd/even',
+    },
+    // Total corners period - half for soccer
+    [MarketType.FIRST_PERIOD_TOTAL_CORNERS]: {
+        id: MarketType.FIRST_PERIOD_TOTAL_CORNERS,
+        key: 'firstPeriodTotalCorners',
+        name: 'Total corners 1st',
+    },
+    [MarketType.SECOND_PERIOD_TOTAL_CORNERS]: {
+        id: MarketType.SECOND_PERIOD_TOTAL_CORNERS,
+        key: 'secondPeriodTotalCorners',
+        name: 'Total corners 2nd',
+    },
+    // Total corners per team period - half for soccer
+    [MarketType.FIRST_PERIOD_TOTAL_CORNERS_HOME_TEAM]: {
+        id: MarketType.FIRST_PERIOD_TOTAL_CORNERS_HOME_TEAM,
+        key: 'firstPeriodTotalCornersHomeTeam',
+        name: 'Total corners 1st',
+    },
+    [MarketType.FIRST_PERIOD_TOTAL_CORNERS_AWAY_TEAM]: {
+        id: MarketType.FIRST_PERIOD_TOTAL_CORNERS_AWAY_TEAM,
+        key: 'firstPeriodTotalCornersAwayTeam',
+        name: 'Total corners 1st',
+    },
+    [MarketType.SECOND_PERIOD_TOTAL_CORNERS_HOME_TEAM]: {
+        id: MarketType.SECOND_PERIOD_TOTAL_CORNERS_HOME_TEAM,
+        key: 'secondPeriodTotalCornersHomeTeam',
+        name: 'Total corners 2nd',
+    },
+    [MarketType.SECOND_PERIOD_TOTAL_CORNERS_AWAY_TEAM]: {
+        id: MarketType.SECOND_PERIOD_TOTAL_CORNERS_AWAY_TEAM,
+        key: 'secondPeriodTotalCornersAwayTeam',
+        name: 'Total corners 2nd',
+    },
+    // Spread corners period - half for soccer
+    [MarketType.FIRST_PERIOD_SPREAD_CORNERS]: {
+        id: MarketType.FIRST_PERIOD_SPREAD_CORNERS,
+        key: 'firstPeriodSpreadCorners',
+        name: 'Handicap corners 1st',
+    },
+    [MarketType.SECOND_PERIOD_SPREAD_CORNERS]: {
+        id: MarketType.SECOND_PERIOD_SPREAD_CORNERS,
+        key: 'secondPeriodSpreadCorners',
+        name: 'Handicap corners 2nd',
+    },
+    // Most corners
+    [MarketType.MOST_CORNERS]: {
+        id: MarketType.MOST_CORNERS,
+        key: 'mostCorners',
+        name: 'Most corners',
+    },
+    // Most corners period - half for soccer
+    [MarketType.FIRST_PERIOD_MOST_CORNERS]: {
+        id: MarketType.FIRST_PERIOD_MOST_CORNERS,
+        key: 'firstPeriodMostCorners',
+        name: 'Most corners 1st',
+    },
+    [MarketType.SECOND_PERIOD_MOST_CORNERS]: {
+        id: MarketType.SECOND_PERIOD_MOST_CORNERS,
+        key: 'secondPeriodSpreadCorners',
+        name: 'Most corners 2nd',
+    },
+
+    // Spread (handicap) cards
+    [MarketType.SPREAD_CARDS]: {
+        id: MarketType.SPREAD_CARDS,
+        key: 'spreadCards',
+        name: 'Handicap cards',
+    },
+    // Total cards
+    [MarketType.TOTAL_CARDS]: {
+        id: MarketType.TOTAL_CARDS,
+        key: 'totalCards',
+        name: 'Total cards',
+    },
+    // Total cards per team
+    [MarketType.TOTAL_CARDS_HOME_TEAM]: {
+        id: MarketType.TOTAL_CARDS_HOME_TEAM,
+        key: 'totalCardsHomeTeam',
+        name: 'Total cards',
+    },
+    [MarketType.TOTAL_CARDS_AWAY_TEAM]: {
+        id: MarketType.TOTAL_CARDS_AWAY_TEAM,
+        key: 'totalCardsAwayTeam',
+        name: 'Total cards',
+    },
+    // Total red cards
+    [MarketType.TOTA_RED_CARDS]: {
+        id: MarketType.TOTA_RED_CARDS,
+        key: 'totalRedCards',
+        name: 'Total red cards',
+    },
+    // Most cards
+    [MarketType.MOST_CARDS]: {
+        id: MarketType.MOST_CARDS,
+        key: 'mostCards',
+        name: 'Most cards',
+    },
+    //First/last card
+    [MarketType.FIRST_CARD]: {
+        id: MarketType.FIRST_CARD,
+        key: 'firstCards',
+        name: 'First card',
+    },
+    [MarketType.LAST_CARD]: {
+        id: MarketType.LAST_CARD,
+        key: 'lastCard',
+        name: 'Last card',
+    },
+
     [MarketType.EMPTY]: {
         id: MarketType.EMPTY,
         key: '',
@@ -1133,6 +1297,11 @@ export const PLAYER_PROPS_MARKET_TYPES = [
     MarketType.PLAYER_PROPS_REBOUNDS_ASSISTS,
     MarketType.PLAYER_PROPS_STEALS,
     MarketType.PLAYER_PROPS_STEALS_BLOCKS,
+    MarketType.PLAYER_PROPS_CARD_RECEIVER,
+    MarketType.PLAYER_PROPS_RED_CARD_RECEIVER,
+    MarketType.PLAYER_PROPS_FIRST_SCORER,
+    MarketType.PLAYER_PROPS_LAST_SCORER,
+    MarketType.PLAYER_PROPS_SHOTS_ON_TARGET,
 ];
 
 export const ONE_SIDE_PLAYER_PROPS_MARKET_TYPES = [
@@ -1140,6 +1309,10 @@ export const ONE_SIDE_PLAYER_PROPS_MARKET_TYPES = [
     MarketType.PLAYER_PROPS_GOALS,
     MarketType.PLAYER_PROPS_FIRST_TOUCHDOWN,
     MarketType.PLAYER_PROPS_LAST_TOUCHDOWN,
+    MarketType.PLAYER_PROPS_CARD_RECEIVER,
+    MarketType.PLAYER_PROPS_RED_CARD_RECEIVER,
+    MarketType.PLAYER_PROPS_FIRST_SCORER,
+    MarketType.PLAYER_PROPS_LAST_SCORER,
 ];
 
 export const YES_NO_PLAYER_PROPS_MARKET_TYPES = [
@@ -1178,6 +1351,19 @@ export const TOTAL_MARKET_TYPES = [
     MarketType.FIRST_PERIOD_TOTAL2_AWAY_TEAM,
     MarketType.SECOND_PERIOD_TOTAL2_HOME_TEAM,
     MarketType.SECOND_PERIOD_TOTAL2_AWAY_TEAM,
+    MarketType.TOTAL_CORNERS,
+    MarketType.TOTAL_CORNERS_HOME_TEAM,
+    MarketType.TOTAL_CORNERS_AWAY_TEAM,
+    MarketType.FIRST_PERIOD_TOTAL_CORNERS,
+    MarketType.SECOND_PERIOD_TOTAL_CORNERS,
+    MarketType.FIRST_PERIOD_TOTAL_CORNERS_HOME_TEAM,
+    MarketType.FIRST_PERIOD_TOTAL_CORNERS_AWAY_TEAM,
+    MarketType.SECOND_PERIOD_TOTAL_CORNERS_HOME_TEAM,
+    MarketType.SECOND_PERIOD_TOTAL_CORNERS_AWAY_TEAM,
+    MarketType.TOTAL_CARDS,
+    MarketType.TOTAL_CARDS_HOME_TEAM,
+    MarketType.TOTAL_CARDS_AWAY_TEAM,
+    MarketType.TOTA_RED_CARDS,
 ];
 
 export const TOTAL_ODD_EVEN_MARKET_TYPES = [
@@ -1200,6 +1386,7 @@ export const TOTAL_ODD_EVEN_MARKET_TYPES = [
     MarketType.SEVENTH_PERIOD_TOTAL2_ODD_EVEN,
     MarketType.EIGHTH_PERIOD_TOTAL2_ODD_EVEN,
     MarketType.NINTH_PERIOD_TOTAL2_ODD_EVEN,
+    MarketType.TOTAL_CORNERS_ODD_EVEN,
 ];
 
 export const SPREAD_MARKET_TYPES = [
@@ -1223,6 +1410,10 @@ export const SPREAD_MARKET_TYPES = [
     MarketType.SEVENTH_PERIOD_SPREAD2,
     MarketType.EIGHTH_PERIOD_SPREAD2,
     MarketType.NINTH_PERIOD_SPREAD2,
+    MarketType.SPREAD_CORNERS,
+    MarketType.FIRST_PERIOD_SPREAD_CORNERS,
+    MarketType.SECOND_PERIOD_SPREAD_CORNERS,
+    MarketType.SPREAD_CARDS,
 ];
 
 export const COMBINED_POSITIONS_MARKET_TYPES = [
@@ -1260,6 +1451,10 @@ export const WINNER_MARKET_TYPES = [
     MarketType.THIRD_PERIOD_DRAW_NO_BET,
     MarketType.FOURTH_PERIOD_DRAW_NO_BET,
     MarketType.WHO_WILL_QUALIFY,
+    MarketType.MOST_CORNERS,
+    MarketType.FIRST_PERIOD_MOST_CORNERS,
+    MarketType.SECOND_PERIOD_MOST_CORNERS,
+    MarketType.MOST_CARDS,
 ];
 
 export const BOTH_TEAMS_TO_SCORE_MARKET_TYPES = [
@@ -1301,6 +1496,11 @@ const FIRST_PERIOD_MARKET_TYPES = [
     MarketType.FIRST_PERIOD_DRAW_NO_BET,
     MarketType.FIRST_PERIOD_TOTAL_EXACT_HOME_TEAM,
     MarketType.FIRST_PERIOD_TOTAL_EXACT_HOME_TEAM,
+    MarketType.FIRST_PERIOD_TOTAL_CORNERS,
+    MarketType.FIRST_PERIOD_TOTAL_CORNERS_HOME_TEAM,
+    MarketType.FIRST_PERIOD_TOTAL_CORNERS_AWAY_TEAM,
+    MarketType.FIRST_PERIOD_SPREAD_CORNERS,
+    MarketType.FIRST_PERIOD_MOST_CORNERS,
 ];
 
 const SECOND_PERIOD_MARKET_TYPES = [
@@ -1315,6 +1515,11 @@ const SECOND_PERIOD_MARKET_TYPES = [
     MarketType.SECOND_PERIOD_DRAW_NO_BET,
     MarketType.SECOND_PERIOD_TOTAL_EXACT_HOME_TEAM,
     MarketType.SECOND_PERIOD_TOTAL_EXACT_HOME_TEAM,
+    MarketType.SECOND_PERIOD_TOTAL_CORNERS,
+    MarketType.SECOND_PERIOD_TOTAL_CORNERS_HOME_TEAM,
+    MarketType.SECOND_PERIOD_TOTAL_CORNERS_AWAY_TEAM,
+    MarketType.SECOND_PERIOD_SPREAD_CORNERS,
+    MarketType.SECOND_PERIOD_MOST_CORNERS,
 ];
 
 const THIRD_PERIOD_MARKET_TYPES = [
@@ -1392,6 +1597,10 @@ export const HOME_TEAM_MARKET_TYPES = [
     MarketType.TOTAL_EXACT_HOME_TEAM,
     MarketType.FIRST_PERIOD_TOTAL_EXACT_HOME_TEAM,
     MarketType.SECOND_PERIOD_TOTAL_EXACT_HOME_TEAM,
+    MarketType.TOTAL_CORNERS_HOME_TEAM,
+    MarketType.FIRST_PERIOD_TOTAL_CORNERS_HOME_TEAM,
+    MarketType.SECOND_PERIOD_TOTAL_CORNERS_HOME_TEAM,
+    MarketType.TOTAL_CARDS_HOME_TEAM,
 ];
 
 export const AWAY_TEAM_MARKET_TYPES = [
@@ -1404,6 +1613,10 @@ export const AWAY_TEAM_MARKET_TYPES = [
     MarketType.TOTAL_EXACT_AWAY_TEAM,
     MarketType.FIRST_PERIOD_TOTAL_EXACT_AWAY_TEAM,
     MarketType.SECOND_PERIOD_TOTAL_EXACT_AWAY_TEAM,
+    MarketType.TOTAL_CORNERS_AWAY_TEAM,
+    MarketType.FIRST_PERIOD_TOTAL_CORNERS_AWAY_TEAM,
+    MarketType.SECOND_PERIOD_TOTAL_CORNERS_AWAY_TEAM,
+    MarketType.TOTAL_CARDS_AWAY_TEAM,
 ];
 
 export const SCORE_MARKET_TYPES = [MarketType.FIRST_SCORE, MarketType.LAST_SCORE];
@@ -1434,6 +1647,38 @@ export const UFC_SPECIFIC_MARKET_TYPES = [
 ];
 
 export const FUTURES_MARKET_TYPES = [MarketType.LEAGUE_WINNER, MarketType.MVP, MarketType.CUP_WINNER];
+
+export const CORNERS_MARKET_TYPES = [
+    MarketType.SPREAD_CORNERS,
+    MarketType.TOTAL_CORNERS,
+    MarketType.TOTAL_CORNERS_HOME_TEAM,
+    MarketType.TOTAL_CORNERS_AWAY_TEAM,
+    MarketType.TOTAL_CORNERS_ODD_EVEN,
+    MarketType.FIRST_PERIOD_TOTAL_CORNERS,
+    MarketType.SECOND_PERIOD_TOTAL_CORNERS,
+    MarketType.FIRST_PERIOD_TOTAL_CORNERS_HOME_TEAM,
+    MarketType.FIRST_PERIOD_TOTAL_CORNERS_AWAY_TEAM,
+    MarketType.SECOND_PERIOD_TOTAL_CORNERS_HOME_TEAM,
+    MarketType.SECOND_PERIOD_TOTAL_CORNERS_AWAY_TEAM,
+    MarketType.FIRST_PERIOD_SPREAD_CORNERS,
+    MarketType.SECOND_PERIOD_SPREAD_CORNERS,
+    MarketType.MOST_CORNERS,
+    MarketType.FIRST_PERIOD_MOST_CORNERS,
+    MarketType.SECOND_PERIOD_MOST_CORNERS,
+];
+
+export const CARDS_MARKET_TYPES = [
+    MarketType.SPREAD_CARDS,
+    MarketType.TOTAL_CARDS,
+    MarketType.TOTAL_CARDS_HOME_TEAM,
+    MarketType.TOTAL_CARDS_AWAY_TEAM,
+    MarketType.TOTA_RED_CARDS,
+    MarketType.MOST_CARDS,
+    MarketType.FIRST_CARD,
+    MarketType.LAST_CARD,
+    MarketType.PLAYER_PROPS_CARD_RECEIVER,
+    MarketType.PLAYER_PROPS_RED_CARD_RECEIVER,
+];
 
 export const MarketTypesBySportFilter: Record<SportFilter, MarketType[]> = {
     [SportFilter.Boosted]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
@@ -1496,7 +1741,10 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
         [MarketTypeGroup.BOTH_TEAMS_TO_SCORE]: BOTH_TEAMS_TO_SCORE_MARKET_TYPES,
         [MarketTypeGroup.FIRST_HALF]: FIRST_PERIOD_MARKET_TYPES,
         [MarketTypeGroup.SECOND_HALF]: SECOND_PERIOD_MARKET_TYPES,
+        [MarketTypeGroup.PLAYER_PROPS]: PLAYER_PROPS_MARKET_TYPES,
         [MarketTypeGroup.PLAYER_GOALS]: [MarketType.PLAYER_PROPS_OVER_GOALS],
+        [MarketTypeGroup.CORNERS]: CORNERS_MARKET_TYPES,
+        [MarketTypeGroup.CARDS]: CARDS_MARKET_TYPES,
     },
     [Sport.BASKETBALL]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,

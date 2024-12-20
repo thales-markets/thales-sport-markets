@@ -39,14 +39,16 @@ import {
     ClaimContainer,
     CollapsableContainer,
     CollapseFooterContainer,
+    CollapseFooterWrapper,
     CollateralSelectorContainer,
     Container,
     ExternalLink,
+    FooterContainer,
     FreeBetIcon,
     FreeBetWrapper,
     InfoContainerColumn,
     Label,
-    LiveIndicatorContainer,
+    LiveSystemIndicatorContainer,
     NumberOfGamesContainer,
     OverviewContainer,
     OverviewWrapper,
@@ -55,7 +57,6 @@ import {
     TicketIdContainer,
     TicketInfo,
     TicketMarketsContainer,
-    TotalQuoteContainer,
     TwitterIcon,
     TwitterWrapper,
     Value,
@@ -212,6 +213,8 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
         collateral: ticket.collateral,
         isLive: ticket.isLive,
         applyPayoutMultiplier: false,
+        isTicketOpen: ticket.isOpen,
+        systemBetData: ticket.systemBetData,
     };
 
     const getClaimButton = (isMobile: boolean) => {
@@ -257,9 +260,15 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
     return (
         <Container>
             <OverviewWrapper>
-                <LiveIndicatorContainer isLive={ticket.isLive}>
-                    {ticket.isLive && <Label>{t('profile.card.live')}</Label>}
-                </LiveIndicatorContainer>
+                <LiveSystemIndicatorContainer isLive={ticket.isLive} isSystem={ticket.isSystemBet}>
+                    {ticket.isLive ? (
+                        <Label>{t('profile.card.live')}</Label>
+                    ) : ticket.isSystemBet ? (
+                        <Label>{t('profile.card.system')}</Label>
+                    ) : (
+                        <></>
+                    )}
+                </LiveSystemIndicatorContainer>
                 <OverviewContainer onClick={() => setShowDetails(!showDetails)}>
                     <TicketInfo>
                         <ExternalLink href={getEtherscanAddressLink(networkId, ticket.id)} target={'_blank'}>
@@ -269,8 +278,12 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
                             </TicketIdContainer>
                         </ExternalLink>
                         <NumberOfGamesContainer>
-                            <Label>{t('profile.card.number-of-games')}:</Label>
-                            <Value>{ticket.numOfMarkets}</Value>
+                            <Label>
+                                {ticket.isSystemBet ? t('profile.card.system') : t('profile.card.number-of-games')}:
+                            </Label>
+                            <Value>{`${ticket.isSystemBet ? `${ticket.systemBetData?.systemBetDenominator}/` : ''}${
+                                ticket.numOfMarkets
+                            }`}</Value>
                         </NumberOfGamesContainer>
                     </TicketInfo>
                     <InfoContainerColumn isOpen={!isClaimable}>
@@ -285,7 +298,12 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
                                 </FreeBetWrapper>
                             )}
                             <InfoContainerColumn isOpen={!isClaimable}>
-                                <WinLabel>{t('profile.card.payout')}:</WinLabel>
+                                <WinLabel>
+                                    {ticket.isSystemBet && ticket.isOpen
+                                        ? t('profile.card.max-payout')
+                                        : t('profile.card.payout')}
+                                    :
+                                </WinLabel>
                                 <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
                             </InfoContainerColumn>
                         </PayoutWrapper>
@@ -301,7 +319,12 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
                                     </FreeBetWrapper>
                                 )}
                                 <InfoContainerColumn isOpen={!isClaimable}>
-                                    <WinLabel>{t('profile.card.payout')}:</WinLabel>
+                                    <WinLabel>
+                                        {ticket.isSystemBet && ticket.isOpen
+                                            ? t('profile.card.max-payout')
+                                            : t('profile.card.payout')}
+                                        :
+                                    </WinLabel>
                                     <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
                                 </InfoContainerColumn>
                             </PayoutWrapper>
@@ -368,15 +391,97 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
                         return <TicketMarketDetails market={market} key={index} isLive={ticket.isLive} />;
                     })}
                 </TicketMarketsContainer>
-                <CollapseFooterContainer>
-                    <TotalQuoteContainer>
-                        <Label>{t('profile.card.total-quote')}:</Label>
-                        <Value>{formatTicketOdds(selectedOddsType, ticket.buyInAmount, ticket.payout)}</Value>
-                    </TotalQuoteContainer>
-                    <TwitterWrapper>
-                        <TwitterIcon onClick={() => onTwitterIconClick()} />
-                    </TwitterWrapper>
-                </CollapseFooterContainer>
+                {ticket.isSystemBet ? (
+                    <CollapseFooterWrapper>
+                        <CollapseFooterContainer>
+                            <FooterContainer>
+                                <Label>{t('profile.card.system')}:</Label>
+                                <Value>
+                                    {ticket.systemBetData?.systemBetDenominator}/{ticket.numOfMarkets}
+                                </Value>
+                            </FooterContainer>
+                            <FooterContainer>
+                                <Label>{t('profile.card.number-of-combination')}:</Label>
+                                <Value>{ticket.systemBetData?.numberOfCombination}</Value>
+                            </FooterContainer>
+                        </CollapseFooterContainer>
+                        <CollapseFooterContainer>
+                            {!isClaimable && (
+                                <FooterContainer>
+                                    <Label>{t('profile.card.max-quote')}:</Label>
+                                    <Value>
+                                        {formatTicketOdds(
+                                            selectedOddsType,
+                                            ticket.systemBetData?.buyInPerCombination || 0,
+                                            ticket.systemBetData?.maxPayout || 0
+                                        )}
+                                    </Value>
+                                </FooterContainer>
+                            )}
+                            <FooterContainer>
+                                <Label>{t('profile.card.paid-per-combination')}:</Label>
+                                <Value>
+                                    {formatCurrencyWithKey(
+                                        ticket.collateral,
+                                        ticket.systemBetData?.buyInPerCombination || 0
+                                    )}
+                                </Value>
+                            </FooterContainer>
+                            {isClaimable && (
+                                <FooterContainer>
+                                    <Label>{t('profile.card.number-of-winning-combination')}:</Label>
+                                    <Value>{ticket.systemBetData?.numberOfWinningCombinations}</Value>
+                                </FooterContainer>
+                            )}
+                        </CollapseFooterContainer>
+                        <CollapseFooterContainer>
+                            {isClaimable && (
+                                <FooterContainer>
+                                    <Label>{t('profile.card.winning-quote')}:</Label>
+                                    <Value>
+                                        {formatTicketOdds(
+                                            selectedOddsType,
+                                            ticket.systemBetData?.buyInPerCombination || 0,
+                                            ticket.payout
+                                        )}
+                                    </Value>
+                                </FooterContainer>
+                            )}
+                            {!isClaimable && (
+                                <FooterContainer>
+                                    <Label>{t('profile.card.min-payout')}:</Label>
+                                    <Value>
+                                        {formatCurrencyWithKey(ticket.collateral, ticket.systemBetData?.minPayout || 0)}
+                                    </Value>
+                                </FooterContainer>
+                            )}
+                            <FooterContainer>
+                                <Label>{isClaimable ? t('profile.card.payout') : t('profile.card.max-payout')}:</Label>
+                                <Value>
+                                    {formatCurrencyWithKey(
+                                        ticket.collateral,
+                                        isClaimable ? ticket.payout : ticket.systemBetData?.maxPayout || 0
+                                    )}
+                                </Value>
+                            </FooterContainer>
+                            <TwitterWrapper>
+                                <TwitterIcon onClick={() => onTwitterIconClick()} />
+                            </TwitterWrapper>
+                        </CollapseFooterContainer>
+                    </CollapseFooterWrapper>
+                ) : (
+                    <CollapseFooterWrapper>
+                        <CollapseFooterContainer>
+                            <FooterContainer>
+                                <Label>{t('profile.card.total-quote')}:</Label>
+                                <Value>{formatTicketOdds(selectedOddsType, ticket.buyInAmount, ticket.payout)}</Value>
+                            </FooterContainer>
+                            <TwitterWrapper>
+                                <TwitterIcon onClick={() => onTwitterIconClick()} />
+                            </TwitterWrapper>
+                        </CollapseFooterContainer>
+                    </CollapseFooterWrapper>
+                )}
             </CollapsableContainer>
             {showShareTicketModal && shareTicketModalData && (
                 <ShareTicketModalV2
@@ -389,6 +494,8 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
                     collateral={shareTicketModalData.collateral}
                     isLive={shareTicketModalData.isLive}
                     applyPayoutMultiplier={shareTicketModalData.applyPayoutMultiplier}
+                    systemBetData={shareTicketModalData.systemBetData}
+                    isTicketOpen={shareTicketModalData.isTicketOpen}
                 />
             )}
         </Container>
