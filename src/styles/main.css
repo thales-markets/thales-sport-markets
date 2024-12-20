@@ -279,13 +279,10 @@ a {
     position: fixed;
     top: -10%;
     z-index: 9999;
-    height: 50vh;
     -webkit-user-select: none;
     user-select: none;
     cursor: default;
-    animation-name: snowflakes-shake;
-    animation-duration: 3s;
-    animation-timing-function: ease-in-out;
+    animation: snowflakes-shake 3s ease-in-out 1 2s;
 }
 .snowflake .inner {
     /* animation-duration: 10s;
