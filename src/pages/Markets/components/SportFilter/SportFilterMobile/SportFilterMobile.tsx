@@ -156,7 +156,7 @@ const Container = styled(FlexDivRowCentered)`
 `;
 
 const LabelContainer = styled(FlexDivColumn)`
-    &.selected
+    &.selected {
         color: ${(props) => props.theme.textColor.quaternary};
     }
     height: 36px;
