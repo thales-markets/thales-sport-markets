@@ -2,6 +2,7 @@ import liveAnimationData from 'assets/lotties/live-markets-filter.json';
 import { LeagueMap } from 'constants/sports';
 import { SportFilter } from 'enums/markets';
 import { Sport } from 'enums/sports';
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import Lottie from 'lottie-react';
 import React, { CSSProperties, Dispatch, SetStateAction, useContext } from 'react';
 import { ScrollMenu, VisibilityContext, publicApiType } from 'react-horizontal-scrolling-menu';
@@ -156,13 +157,17 @@ const Container = styled(FlexDivRowCentered)`
 `;
 
 const LabelContainer = styled(FlexDivColumn)`
-    &.selected,
-    &:hover {
+    &.selected
         color: ${(props) => props.theme.textColor.quaternary};
     }
     height: 36px;
     width: 30px;
     margin: 0 10px;
+    @media (min-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        &:hover {
+            color: ${(props) => props.theme.textColor.quaternary};
+        }
+    }
 `;
 
 const SportIcon = styled.i<{ color?: string }>`

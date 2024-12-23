@@ -137,6 +137,7 @@ export const TeamNamesContainer = styled(FlexDivColumn)<{
     @media (max-width: 950px) {
         flex-direction: ${(props) => (props.isGameOpen ? 'row' : 'column')};
         overflow: initial;
+        max-width: calc(100% - 48px); // when long team names sub width of logos (38px) and margin (10px)
     }
 `;
 
