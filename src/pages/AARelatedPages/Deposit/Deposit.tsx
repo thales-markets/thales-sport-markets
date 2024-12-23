@@ -1,6 +1,5 @@
 import CollateralSelector from 'components/CollateralSelector';
 import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
-import { COLLATERALS } from 'constants/currency';
 import ROUTES from 'constants/routes';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
@@ -8,7 +7,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getIsBiconomy } from 'redux/modules/wallet';
+import { getIsBiconomy, getIsConnectedViaParticle, getIsParticleReady } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivStart } from 'styles/common';
 import { Rates } from 'types/collateral';
@@ -41,6 +40,8 @@ const Deposit: React.FC = () => {
     const { t } = useTranslation();
 
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+    const isParticleReady = useSelector(getIsParticleReady);
+    const isConnectedViaParticle = useSelector(getIsConnectedViaParticle);
 
     const networkId = useChainId();
     const client = useClient();
@@ -61,8 +62,10 @@ const Deposit: React.FC = () => {
     );
 
     useEffect(() => {
-        if (!isBiconomy) navigateTo(ROUTES.Markets.Home);
-    }, [isBiconomy]);
+        if (isParticleReady && !isConnectedViaParticle) {
+            navigateTo(ROUTES.Markets.Home);
+        }
+    }, [isParticleReady, isConnectedViaParticle]);
 
     useEffect(() => {
         setSelectedToken(Number(selectedTokenFromUrl));
@@ -123,12 +126,12 @@ const Deposit: React.FC = () => {
     }, [exchangeRates, multipleCollateralBalances.data]);
 
     useEffect(() => {
-        if (isBiconomy && ethBalanceValue !== undefined && Number(ethBalanceValue) < 2) {
+        if (isConnectedViaParticle && ethBalanceValue !== undefined && Number(ethBalanceValue) < 2) {
             setLowBalanceAlert(true);
         } else {
             setLowBalanceAlert(false);
         }
-    }, [ethBalanceValue, isBiconomy]);
+    }, [ethBalanceValue, isConnectedViaParticle]);
 
     const inputRef = useRef<HTMLDivElement>(null);
 
@@ -165,8 +168,8 @@ const Deposit: React.FC = () => {
                     <InputContainer ref={inputRef}>
                         <CollateralContainer ref={inputRef}>
                             <CollateralSelector
-                                collateralArray={lowBalanceAlert ? ['ETH'] : COLLATERALS[networkId]}
-                                selectedItem={selectedToken}
+                                collateralArray={lowBalanceAlert ? ['ETH'] : getCollaterals(networkId)}
+                                selectedItem={lowBalanceAlert ? 0 : selectedToken}
                                 onChangeCollateral={(index) => handleChangeCollateral(index)}
                                 disabled={false}
                                 collateralBalances={[multipleCollateralBalances.data]}
