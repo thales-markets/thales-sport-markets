@@ -5,7 +5,7 @@ const freeBetHolder: ContractData = {
     addresses: {
         [Network.OptimismMainnet]: '0x8D18e68563d53be97c2ED791CA4354911F16A54B',
         [Network.Arbitrum]: '0xd1F2b87a9521315337855A132e5721cfe272BBd9',
-        [Network.OptimismSepolia]: '0x97687d195A4296223ebCce238890b28Ba54cfD46',
+        [Network.OptimismSepolia]: '0xAeDB908b82626F031E31140527b45c7C89d4bb53',
     },
     abi: [
         {
