@@ -768,8 +768,7 @@ const Ticket: React.FC<TicketProps> = ({
             if (
                 buyInAmountForQuote <= 0 ||
                 noProofs ||
-                (isSystemBet &&
-                    (!isValidSystemBet || isInvalidNumberOfCombination || isStakedThales || isFreeBetActive))
+                (isSystemBet && (!isValidSystemBet || isInvalidNumberOfCombination))
             )
                 return;
 
@@ -857,24 +856,22 @@ const Ticket: React.FC<TicketProps> = ({
             }
         },
         [
+            client,
+            networkId,
             noProofs,
             isSystemBet,
             isValidSystemBet,
             isInvalidNumberOfCombination,
-            isStakedThales,
-            isFreeBetActive,
-            client,
-            networkId,
             markets,
             collateralHasLp,
-            isDefaultCollateral,
+            isThales,
             swapToThales,
+            isDefaultCollateral,
             selectedCollateralCurrencyRate,
-            thalesCollateralAddress,
             collateralAddress,
             usedCollateralForBuy,
+            thalesCollateralAddress,
             systemBetDenominator,
-            isThales,
             swappedThalesToReceive,
             buyInAmount,
         ]
@@ -1052,9 +1049,7 @@ const Ticket: React.FC<TicketProps> = ({
     useEffect(() => {
         if (isBuying) return;
 
-        if (isSystemBet && (isStakedThales || isFreeBetActive)) {
-            setTooltipTextBuyInAmount(t('markets.parlay.validation.staked-thales-system-bets'));
-        } else if (
+        if (
             (Number(buyInAmount) && finalQuotes.some((quote) => quote === 0)) ||
             (buyInAmountInDefaultCollateral && ticketLiquidity && buyInAmountInDefaultCollateral > ticketLiquidity)
         ) {
@@ -1107,9 +1102,6 @@ const Ticket: React.FC<TicketProps> = ({
         swappedThalesToReceive,
         swapQuote,
         isBuying,
-        isSystemBet,
-        isStakedThales,
-        isFreeBetActive,
     ]);
 
     const setCollateralAmount = useCallback(
@@ -1715,7 +1707,7 @@ const Ticket: React.FC<TicketProps> = ({
             return;
         }
 
-        if (isSystemBet && (!isValidSystemBet || isStakedThales || isFreeBetActive)) {
+        if (isSystemBet && !isValidSystemBet) {
             setSubmitDisabled(true);
             return;
         }
@@ -1743,8 +1735,6 @@ const Ticket: React.FC<TicketProps> = ({
         isSystemBet,
         isInvalidSystemTotalQuote,
         isValidSystemBet,
-        isStakedThales,
-        isFreeBetActive,
     ]);
 
     const getSubmitButton = () => {
