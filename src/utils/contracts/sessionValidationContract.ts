@@ -4,11 +4,9 @@ import { ContractData } from 'types/viem';
 
 const sessionValidationContract: ContractData = {
     addresses: {
-        [NetworkId.OptimismMainnet]: '0xCf664abDFa6F56Dc449B0c18c5955c8A8291743a',
+        [NetworkId.OptimismMainnet]: '0x5851C89881735dE46bd7edDf04E0e0DD51CC6dc5',
         [NetworkId.OptimismSepolia]: ZERO_ADDRESS,
-        // [NetworkId.PolygonMainnet]: '0x0Cfff1E16E8956439DD33d8350949ca669dBD371',
-        [NetworkId.Arbitrum]: '0xbF9ef1Ff0DeDdb839995aF17B5eDD2a7e55031c2',
-        // [NetworkId.Base]: '0x1E82dbfb6BefF4b4799a1a688d09B259eb173F64',
+        [NetworkId.Arbitrum]: '0x37bc5a3E8a6ff55edA325ba51Ba8a5d83a52e939',
     },
     abi: [
         {
