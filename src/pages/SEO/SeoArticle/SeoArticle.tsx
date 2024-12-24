@@ -4,6 +4,7 @@ import SPAAnchor from 'components/SPAAnchor';
 import ROUTES from 'constants/routes';
 import { PROMOTION_SANITIZE_PROPS } from 'constants/ui';
 import DOMPurify from 'dompurify';
+import DappFooter from 'layouts/DappLayout/DappFooter';
 import { useSEOArticlesQuery } from 'queries/seo/useSEOArticlesQuery';
 import React, { useMemo } from 'react';
 import { Helmet } from 'react-helmet';
@@ -92,6 +93,7 @@ const SeoArticle: React.FC<SeoArticleProps> = (props) => {
                         ></MainContent>
                     </>
                 )}
+                <DappFooter />
             </Wrapper>
         </Background>
     );

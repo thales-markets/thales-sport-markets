@@ -1,5 +1,6 @@
 import Loader from 'components/Loader';
 import { SEO_ARTICLES_PER_PAGE } from 'constants/ui';
+import DappFooter from 'layouts/DappLayout/DappFooter';
 import { useSEOArticlesQuery } from 'queries/seo/useSEOArticlesQuery';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
@@ -107,6 +108,7 @@ const Articles: React.FC = () => {
                     </PaginationControls>
                 </>
             )}
+            <DappFooter />
         </Wrapper>
     );
 };
