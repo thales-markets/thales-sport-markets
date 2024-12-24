@@ -1632,7 +1632,7 @@ export const PLAYER_PROPS_COMBINING_ENABLED_LEAGUES = [League.NBA, League.WNBA, 
 export const PLAYER_PROPS_MARKETS_PER_SPORT_MAP: Record<Sport, MarketType[]> = {
     [Sport.SOCCER]: [
         MarketType.PLAYER_PROPS_OVER_GOALS,
-        MarketType.PLAYER_PROPS_SHOTS,
+        MarketType.PLAYER_PROPS_TOTAL_SHOTS,
         MarketType.PLAYER_PROPS_ASSISTS,
     ],
     [Sport.FOOTBALL]: [],
