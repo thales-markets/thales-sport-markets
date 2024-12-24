@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const BreadcrumbsContainer = styled.div`
-    color: ${(props) => props.theme.textColor.secondary};
+    color: ${(props) => props.theme.christmasTheme.textColor.primary};
     margin-bottom: 10px;
 `;
 

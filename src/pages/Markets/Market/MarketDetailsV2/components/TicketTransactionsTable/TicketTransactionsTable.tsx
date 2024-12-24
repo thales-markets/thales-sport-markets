@@ -203,7 +203,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                     </Tooltip>
                 );
             },
-            sortType: (rowA: any, rowB: any) => {
+            sortingFn: (rowA: any, rowB: any) => {
                 return (
                     getValueInUsd(rowA.original.collateral, rowA.original.buyInAmount) -
                     getValueInUsd(rowB.original.collateral, rowB.original.buyInAmount)
@@ -229,7 +229,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                     </Tooltip>
                 );
             },
-            sortType: (rowA: any, rowB: any) => {
+            sortingFn: (rowA: any, rowB: any) => {
                 return (
                     getValueInUsd(rowA.original.collateral, rowA.original.payout) -
                     getValueInUsd(rowB.original.collateral, rowB.original.payout)
@@ -283,7 +283,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                 }
                 return statusComponent;
             },
-            sortType: tableSortByStatus,
+            sortingFn: tableSortByStatus,
         },
     ];
 

@@ -222,6 +222,9 @@ const Home: React.FC = () => {
     const gameMultipliersQuery = useGameMultipliersQuery();
 
     const finalMarkets = useMemo(() => {
+        if (showBurger) {
+            return [];
+        }
         const allMarkets: MarketsCache =
             sportMarketsQueryNew.isSuccess && sportMarketsQueryNew.data
                 ? sportMarketsQueryNew.data
@@ -401,6 +404,7 @@ const Home: React.FC = () => {
         marketTypeGroupFilter,
         favouriteLeagues,
         selectedMarket,
+        showBurger,
         dispatch,
     ]);
 
@@ -591,7 +595,7 @@ const Home: React.FC = () => {
     }, [location, resetFilters]);
 
     const getShowActiveCheckbox = () => (
-        <CheckboxContainer isMobile={isMobile}>
+        <CheckboxContainer isMobile={isMobile} textColor={theme.christmasTheme.button.textColor.secondary}>
             <Checkbox
                 checked={showActive}
                 value={showActive.toString()}
@@ -621,6 +625,7 @@ const Home: React.FC = () => {
                     }
                 }}
                 label={t(`market.filter-label.show-active`)}
+                textColor={theme.christmasTheme.button.textColor.secondary}
             />
         </CheckboxContainer>
     );
@@ -766,6 +771,7 @@ const Home: React.FC = () => {
                             setSearchParam(value);
                         }}
                         width={263}
+                        customColor={theme.christmasTheme.borderColor.primary}
                     />
                     {getShowActiveCheckbox()}
                     <Scroll height="calc(100vh - 430px)">
@@ -1055,12 +1061,17 @@ const additionalApplyFiltersButtonStyle: CSSProperties = {
     position: 'fixed',
 };
 
-const CheckboxContainer = styled.div<{ isMobile: boolean }>`
+const CheckboxContainer = styled.div<{ isMobile: boolean; textColor?: string }>`
     margin-left: ${(props) => (props.isMobile ? '34px' : '5px')};
     margin-top: 15px;
     margin-bottom: 10px;
     label {
-        color: ${(props) => (props.isMobile ? props.theme.textColor.primary : props.theme.textColor.quinary)};
+        color: ${(props) =>
+            props.isMobile
+                ? props.theme.christmasTheme.button.textColor.secondary
+                : props?.textColor
+                ? props.textColor
+                : props.theme.textColor.quinary};
         font-size: ${(props) => (props.isMobile ? '14px' : '12px')};
         line-height: ${(props) => (props.isMobile ? '19px' : '13px')};
         font-weight: 600;
@@ -1070,21 +1081,34 @@ const CheckboxContainer = styled.div<{ isMobile: boolean }>`
         padding-left: ${(props) => (props.isMobile ? '38px' : '28px')};
         input:checked ~ .checkmark {
             border: 2px solid
-                ${(props) => (props.isMobile ? props.theme.background.septenary : props.theme.borderColor.quaternary)};
+                ${(props) =>
+                    props.isMobile
+                        ? props.theme.background.septenary
+                        : props?.textColor
+                        ? props.textColor
+                        : props.theme.borderColor.quaternary};
         }
     }
     .checkmark {
         height: ${(props) => (props.isMobile ? '18px' : '15px')};
         width: ${(props) => (props.isMobile ? '18px' : '15px')};
         border: 2px solid
-            ${(props) => (props.isMobile ? props.theme.background.septenary : props.theme.borderColor.primary)};
+            ${(props) =>
+                props.isMobile
+                    ? props.theme.christmasTheme.button.textColor.secondary
+                    : props?.textColor
+                    ? props.textColor
+                    : props.theme.borderColor.primary};
         :after {
             left: ${(props) => (props.isMobile ? '4px' : '3px')};
             width: ${(props) => (props.isMobile ? '4px' : '3px')};
             height: ${(props) => (props.isMobile ? '9px' : '8px')};
             top: ${(props) => (props.isMobile ? '0px' : '-1px')};
             border: 2px solid
-                ${(props) => (props.isMobile ? props.theme.background.septenary : props.theme.borderColor.quaternary)};
+                ${(props) =>
+                    props.isMobile
+                        ? props.theme.christmasTheme.button.textColor.secondary
+                        : props.theme.borderColor.quaternary};
             border-width: 0 2px 2px 0;
         }
     }

@@ -326,7 +326,7 @@ const Ticket: React.FC<TicketProps> = ({
         const parlayMultiplier = {
             name: 'parlayMultiplier',
             label: 'Games in parlay',
-            multiplier: getParlayMultiplier(markets.length),
+            multiplier: getParlayMultiplier(isSystemBet ? systemBetDenominator : markets.length),
             icon: <>{markets.length}</>,
             tooltip: 'parlay-boost',
         };
@@ -371,7 +371,15 @@ const Ticket: React.FC<TicketProps> = ({
             parlayMultiplier,
             thalesMultiplier,
         ];
-    }, [swapToThales, userMultipliersQuery.data, userMultipliersQuery.isSuccess, markets, isThales]);
+    }, [
+        swapToThales,
+        userMultipliersQuery.data,
+        userMultipliersQuery.isSuccess,
+        markets,
+        isThales,
+        isSystemBet,
+        systemBetDenominator,
+    ]);
 
     const ammContractsPaused = useAMMContractsPausedQuery({ networkId, client });
 

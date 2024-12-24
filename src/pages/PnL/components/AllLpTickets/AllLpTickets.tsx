@@ -48,6 +48,7 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
     const [showOnlyOpenTickets, setShowOnlyOpenTickets] = useState<boolean>(false);
     const [showOnlyLiveTickets, setShowOnlyLiveTickets] = useState<boolean>(false);
     const [showOnlyPendingTickets, setShowOnlyPendingTickets] = useState<boolean>(false);
+    const [showOnlySystemBets, setShowOnlySystemBets] = useState<boolean>(false);
     const [expandAll, setExpandAll] = useState<boolean>(false);
 
     const usdcLpTicketsQuery = useLpTicketsQuery(LiquidityPoolCollateral.USDC, round, leagueId, onlyPP, {
@@ -94,7 +95,8 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
                             (market) => market.maturityDate < new Date() && !market.isResolved && !market.isCancelled
                         ) &&
                         showOnlyPendingTickets) ||
-                        !showOnlyPendingTickets)
+                        !showOnlyPendingTickets) &&
+                    ((ticket.isSystemBet && showOnlySystemBets) || !showOnlySystemBets)
             ),
             ['timestamp'],
             ['desc']
@@ -104,6 +106,7 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
         showOnlyLiveTickets,
         showOnlyOpenTickets,
         showOnlyPendingTickets,
+        showOnlySystemBets,
         thalesLpTicketsQuery.data,
         thalesLpTicketsQuery.isSuccess,
         usdcLpTicketsQuery.data,
@@ -132,6 +135,14 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
                     value={showOnlyPendingTickets.toString()}
                     onChange={(e: any) => setShowOnlyPendingTickets(e.target.checked || false)}
                     label={t(`liquidity-pool.user-transactions.only-pending-tickets${isMobile ? '-short' : ''}`)}
+                />
+            </CheckboxContainer>
+            <CheckboxContainer>
+                <Checkbox
+                    checked={showOnlySystemBets}
+                    value={showOnlySystemBets.toString()}
+                    onChange={(e: any) => setShowOnlySystemBets(e.target.checked || false)}
+                    label={t(`liquidity-pool.user-transactions.only-system-bets`)}
                 />
             </CheckboxContainer>
             <FlexDivSpaceBetween>
@@ -174,7 +185,7 @@ const ExpandAllContainer = styled(FlexDivCentered)`
 `;
 
 const SelectContainer = styled.div`
-    margin: 15px 0;
+    margin: 0 0 15px 0;
     width: 150px;
 `;
 
@@ -187,6 +198,7 @@ const CheckboxContainer = styled(FlexDivSpaceBetween)`
     @media (max-width: 575px) {
         font-size: 14px;
     }
+    margin-bottom: 10px;
 `;
 
 const ArrowIcon = styled.i`

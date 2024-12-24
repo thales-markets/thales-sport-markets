@@ -412,9 +412,10 @@ export const NavigationContainer = styled(FlexDivRow)`
 
 export const NavigationItem = styled(FlexDivRow)`
     color: ${(props) => props.theme.textColor.primary};
+    cursor: pointer;
     &.selected {
         transition: 0.2s;
-        color: ${(props) => props.theme.textColor.quaternary};
+        color: ${(props) => props.theme.christmasTheme.textColor.primary};
     }
     &:hover:not(.selected) {
         cursor: pointer;
