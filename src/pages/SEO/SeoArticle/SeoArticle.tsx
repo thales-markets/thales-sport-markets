@@ -46,6 +46,7 @@ const SeoArticle: React.FC<SeoArticleProps> = (props) => {
             <Wrapper>
                 <BackContainer>
                     <SPAAnchor href={buildHref(`${ROUTES.SEO.Home}${branchName ? `?branch-name=${branchName}` : ''}`)}>
+                        <ArrowIcon className="icon icon--arrow-down" />
                         <Back>{t('promotions.back')}</Back>
                     </SPAAnchor>
                 </BackContainer>
@@ -141,6 +142,14 @@ const Back = styled.span`
     cursor: pointer;
     font-size: 14px;
     text-transform: uppercase;
+`;
+
+const ArrowIcon = styled.i`
+    font-size: 14px;
+    color: ${(props) => props.theme.textColor.primary};
+    text-transform: none !important;
+    margin-right: 5px;
+    transform: rotate(90deg);
 `;
 
 const HeaderContainer = styled(FlexDiv)`
