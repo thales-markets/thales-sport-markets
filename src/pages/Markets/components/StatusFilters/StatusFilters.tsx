@@ -102,7 +102,7 @@ const Container = styled(FlexDivSpaceBetween)`
         font-size: 14px;
         line-height: 18px;
         height: 30px;
-        color: ${(props) => props.theme.textColor.primary};
+        color: ${(props) => props.theme.christmasTheme.textColor.primary};
     }
 `;
 
@@ -152,7 +152,7 @@ const Separator = styled.div`
     height: 2px;
     margin-top: 15px;
     margin-bottom: 15px;
-    background: ${(props) => props.theme.textColor.septenary};
+    background: ${(props) => props.theme.christmasTheme.textColor.primary};
     border-radius: 5px;
 `;
 

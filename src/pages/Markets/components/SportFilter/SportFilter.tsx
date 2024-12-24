@@ -35,7 +35,10 @@ const SportFilterDetails: React.FC<SportFilterProps> = ({ selected, sport, onCli
                 ) : sport == SportFilter.Boosted ? (
                     <SportIcon color={theme.overdrop.textColor.primary} className={`icon icon--fire`} />
                 ) : (
-                    <SportIcon className={`icon icon--${sport == SportFilter.All ? 'logo' : sport.toLowerCase()}`} />
+                    <SportIcon
+                        color={theme.christmasTheme.textColor.primary}
+                        className={`icon icon--${sport == SportFilter.All ? 'logo' : sport.toLowerCase()}`}
+                    />
                 )}
                 <Label>
                     {children}
@@ -76,7 +79,7 @@ const Container = styled(FlexDivSpaceBetween)`
         font-size: 14px;
         line-height: 18px;
         height: 30px;
-        color: ${(props) => props.theme.textColor.primary};
+        color: ${(props) => props.theme.christmasTheme.textColor.primary};
     }
 `;
 
@@ -140,9 +143,8 @@ const Count = styled(FlexDivCentered)`
         line-height: 20px;
         min-width: 40px;
         height: 24px;
-        color: ${(props) => props.theme.textColor.tertiary};
-        background: ${(props) => props.theme.background.septenary};
-        border: 2px solid ${(props) => props.theme.background.secondary};
+        color: ${(props) => props.theme.christmasTheme.textColor.secondary};
+        border: 2px solid ${(props) => props.theme.christmasTheme.background.secondary};
     }
 `;
 
