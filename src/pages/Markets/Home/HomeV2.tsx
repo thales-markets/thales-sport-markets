@@ -222,6 +222,9 @@ const Home: React.FC = () => {
     const gameMultipliersQuery = useGameMultipliersQuery();
 
     const finalMarkets = useMemo(() => {
+        if (showBurger) {
+            return [];
+        }
         const allMarkets: MarketsCache =
             sportMarketsQueryNew.isSuccess && sportMarketsQueryNew.data
                 ? sportMarketsQueryNew.data
@@ -401,6 +404,7 @@ const Home: React.FC = () => {
         marketTypeGroupFilter,
         favouriteLeagues,
         selectedMarket,
+        showBurger,
         dispatch,
     ]);
 
