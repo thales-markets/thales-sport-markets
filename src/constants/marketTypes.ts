@@ -947,6 +947,11 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         key: 'shotsOnTarget',
         name: 'Shots on target',
     },
+    [MarketType.PLAYER_PROPS_TOTAL_SHOTS]: {
+        id: MarketType.PLAYER_PROPS_TOTAL_SHOTS,
+        key: 'shots',
+        name: 'Shots',
+    },
 
     // UFC market types
     [MarketType.WINNING_ROUND]: {
@@ -1302,6 +1307,7 @@ export const PLAYER_PROPS_MARKET_TYPES = [
     MarketType.PLAYER_PROPS_FIRST_SCORER,
     MarketType.PLAYER_PROPS_LAST_SCORER,
     MarketType.PLAYER_PROPS_SHOTS_ON_TARGET,
+    MarketType.PLAYER_PROPS_TOTAL_SHOTS,
 ];
 
 export const ONE_SIDE_PLAYER_PROPS_MARKET_TYPES = [
