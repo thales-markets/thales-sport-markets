@@ -31,7 +31,7 @@ export const Circle = styled.div<{ isMobile: boolean }>`
     @media (max-width: 950px) {
         height: 20px;
         width: 20px;
-        background-color: ${(props) => props.theme.textColor.septenary};
+        background-color: ${(props) => props.theme.christmasTheme.background.primary};
         margin-right: 10px;
     }
 `;
@@ -48,6 +48,6 @@ export const Label = styled.label`
     user-select: none;
     @media (max-width: 950px) {
         line-height: 20px;
-        color: ${(props) => props.theme.textColor.primary};
+        color: ${(props) => props.theme.christmasTheme.textColor.primary};
     }
 `;
