@@ -1,5 +1,4 @@
-import { isSocialAuthType } from '@particle-network/auth-core';
-import { CustomStyle } from '@particle-network/auth-core-modal';
+import { CustomStyle } from '@particle-network/authkit';
 import { PARTICAL_LOGINS_CLASSNAMES, PARTICAL_WALLETS_LABELS } from 'constants/wallet';
 import { NetworkId } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
@@ -22,8 +21,6 @@ export const getSpecificConnectorFromConnectorsArray = (
     }
     return connectors.find((connector: any) => connector.id == name);
 };
-
-export const isSocialLogin = (authType: any) => isSocialAuthType(authType) || (authType as any) === 'twitterv1';
 
 export const getOnRamperUrl = (apiKey: string, walletAddress: string, networkId: SupportedNetwork) => {
     return `https://buy.onramper.com?apiKey=${apiKey}&mode=buy&onlyCryptos=${supportedOnramperTokens(
