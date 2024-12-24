@@ -16,6 +16,7 @@ import { formatCurrencyWithKey, truncateAddress } from 'thales-utils';
 import { RootState } from 'types/redux';
 import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateral, getMaxCollateralDollarValue, mapMultiCollateralBalances } from 'utils/collaterals';
+import { getDefaultCollateralIndexForNetworkId } from 'utils/network';
 import { useAccount, useChainId, useClient } from 'wagmi';
 
 const MIN_BUYIN_DOLLAR = 3;
@@ -94,10 +95,22 @@ const WalletInfo: React.FC = ({}) => {
         }
     }, [dispatch, networkId, selectedCollateralIndex]);
 
-    // Refresh free bet on wallet change
+    // Refresh free bet on wallet and network change
     useEffect(() => {
         setIsFreeBetInitialized(false);
     }, [walletAddress, networkId]);
+
+    // Initialize default collateral from LS
+    useEffect(() => {
+        if (!isFreeBetInitialized) {
+            dispatch(
+                setPaymentSelectedCollateralIndex({
+                    selectedCollateralIndex: getDefaultCollateralIndexForNetworkId(networkId),
+                    networkId,
+                })
+            );
+        }
+    }, [dispatch, networkId, isFreeBetInitialized]);
 
     // Initialize free bet collateral
     useEffect(() => {
@@ -192,7 +205,7 @@ const Container = styled(FlexDivCentered)<{ walletConnected?: boolean }>`
 const Wrapper = styled.div<{ displayPadding?: boolean }>`
     display: flex;
     border-radius: 20px;
-    border: 1px solid ${(props) => props.theme.borderColor.primary};
+    border: 1px solid ${(props) => props.theme.christmasTheme.borderColor.primary};
     height: 28px;
     justify-content: space-between;
     align-items: center;
@@ -242,7 +255,7 @@ const Text = styled.span`
     font-weight: 600;
     font-size: 10.8px;
     line-height: 12px;
-    color: ${(props) => props.theme.textColor.secondary};
+    color: ${(props) => props.theme.christmasTheme.textColor.primary};
 `;
 
 const FreeBetIcon = styled.i`

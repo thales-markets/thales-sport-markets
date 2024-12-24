@@ -186,8 +186,8 @@ const DappHeader: React.FC = () => {
         <SPAAnchor style={{ width: isMobile ? '100%' : 'fit-content' }} href={buildHref(ROUTES.Wizard)}>
             <Button
                 backgroundColor={theme.background.primary}
-                textColor={theme.button.textColor.quaternary}
-                borderColor={theme.button.borderColor.secondary}
+                textColor={theme.christmasTheme.button.textColor.secondary}
+                borderColor={theme.christmasTheme.button.borderColor.primary}
                 width="100%"
                 fontWeight="400"
                 additionalStyles={{
@@ -262,8 +262,8 @@ const DappHeader: React.FC = () => {
                         {!isConnected && (
                             <Button
                                 backgroundColor={'transparent'}
-                                textColor={theme.button.borderColor.quaternary}
-                                borderColor={theme.button.borderColor.quaternary}
+                                textColor={theme.christmasTheme.button.textColor.secondary}
+                                borderColor={theme.christmasTheme.button.borderColor.primary}
                                 width="150px"
                                 fontWeight="400"
                                 additionalStyles={{
@@ -286,7 +286,7 @@ const DappHeader: React.FC = () => {
                         )}
                         {!isConnected && (
                             <Button
-                                backgroundColor={theme.button.background.tertiary}
+                                backgroundColor={theme.christmasTheme.button.background.primary}
                                 textColor={theme.button.textColor.primary}
                                 borderColor={theme.button.borderColor.quinary}
                                 fontWeight="400"
@@ -313,7 +313,7 @@ const DappHeader: React.FC = () => {
                         )}
                         <WalletInfo />
                         <MenuIconContainer>
-                            <MenuIcon ref={menuImageRef} onClick={() => setNavMenuVisibility(true)} />
+                            <MenuIcon className="icon icon--burger-icon" onClick={() => setNavMenuVisibility(true)} />
                             {blockedGamesCount > 0 && (
                                 <BlockedGamesNotificationCount>
                                     <Count>{blockedGamesCount}</Count>
@@ -368,7 +368,7 @@ const DappHeader: React.FC = () => {
                             </ReactModal>
                         </SearchIconContainer>
                         <MenuIconContainer>
-                            <MenuIcon onClick={() => setNavMenuVisibility(true)} />
+                            <MenuIcon className="icon icon--burger-icon" onClick={() => setNavMenuVisibility(true)} />
                             {claimablePositionCount && (
                                 <NotificationCount>
                                     <Count>{claimablePositionCount}</Count>

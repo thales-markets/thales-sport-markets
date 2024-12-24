@@ -79,7 +79,7 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
                 } else {
                     const collateralContractWithSigner = getContractInstance(
                         ContractType.MULTICOLLATERAL,
-                        { client, networkId },
+                        { client: walletClient, networkId },
                         getCollateralIndex(networkId, token)
                     );
                     txHash =

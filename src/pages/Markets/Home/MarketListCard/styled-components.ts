@@ -18,7 +18,7 @@ export const Wrapper = styled(FlexDivColumn)<{
     border-radius: 5px;
     background-color: ${(props) =>
         props.selected
-            ? props.theme.background.quaternary
+            ? props.theme.christmasTheme.background.secondary
             : props.isResolved || props.isMarketSelected
             ? props.theme.background.secondary
             : props.theme.background.quinary};
@@ -137,6 +137,7 @@ export const TeamNamesContainer = styled(FlexDivColumn)<{
     @media (max-width: 950px) {
         flex-direction: ${(props) => (props.isGameOpen ? 'row' : 'column')};
         overflow: initial;
+        max-width: calc(100% - 48px); // when long team names sub width of logos (38px) and margin (10px)
     }
 `;
 

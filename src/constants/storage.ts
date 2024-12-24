@@ -39,4 +39,6 @@ export const LOCAL_STORAGE_KEYS = {
         [NetworkId.OptimismSepolia]: 'sessionPKey_11155420',
     } as Record<SupportedNetwork, string>,
     STAKING_MODAL_MUTE_END: 'stakingModalMuteEnd',
+    IS_SYSTEM_BET: 'isSystemBet',
+    SYSTEM_BET_DENOMINATOR: 'systemBetDenominator',
 };

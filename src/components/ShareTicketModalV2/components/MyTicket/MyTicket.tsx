@@ -1,4 +1,4 @@
-import OvertimeLogoIcon from 'assets/images/overtime-logo.svg?react';
+import OvertimeLogoIcon from 'assets/images/xmas-overtime-logo-flex.svg?react';
 import { t } from 'i18next';
 import React from 'react';
 import { useSelector } from 'react-redux';
@@ -11,9 +11,10 @@ import {
     FlexDivColumnCentered,
     FlexDivRow,
     FlexDivRowCentered,
+    FlexDivSpaceBetween,
 } from 'styles/common';
-import { Coins, formatCurrencyWithKey } from 'thales-utils';
-import { TicketMarket } from 'types/markets';
+import { Coins, formatCurrency, formatCurrencyWithKey } from 'thales-utils';
+import { SystemBetData, TicketMarket } from 'types/markets';
 import { formatTicketOdds } from 'utils/tickets';
 import MatchInfoV2 from '../../../MatchInfoV2';
 
@@ -26,6 +27,8 @@ type MyTicketProps = {
     collateral: Coins;
     isLive: boolean;
     applyPayoutMultiplier: boolean;
+    isTicketOpen: boolean;
+    systemBetData?: SystemBetData;
 };
 
 const MyTicket: React.FC<MyTicketProps> = ({
@@ -37,6 +40,8 @@ const MyTicket: React.FC<MyTicketProps> = ({
     collateral,
     isLive,
     applyPayoutMultiplier,
+    isTicketOpen,
+    systemBetData,
 }) => {
     const selectedOddsType = useSelector(getOddsType);
 
@@ -64,7 +69,11 @@ const MyTicket: React.FC<MyTicketProps> = ({
                 <PayoutWrapper>
                     <PayoutRow>
                         <Square isLost={isTicketLost} />
-                        <PayoutLabel isLost={isTicketLost}>{t('markets.parlay.payout')}</PayoutLabel>
+                        <PayoutLabel isLost={isTicketLost}>
+                            {systemBetData && isTicketOpen
+                                ? t('markets.parlay.max-payout')
+                                : t('markets.parlay.payout')}
+                        </PayoutLabel>
                         <Square isLost={isTicketLost} />
                     </PayoutRow>
                     <PayoutRow>
@@ -91,6 +100,34 @@ const MyTicket: React.FC<MyTicketProps> = ({
                 })}
             </MarketsContainer>
             <HorizontalLine />
+            {systemBetData && (
+                <InfoWrapper>
+                    <InfoDiv isWinning={!isTicketOpen && !isTicketLost} isLost={!isTicketOpen && isTicketLost}>
+                        <InfoLabel>{t('markets.parlay.system')}:</InfoLabel>
+                        <InfoValue>
+                            {systemBetData?.systemBetDenominator}/{markets.length}
+                            {!isTicketOpen &&
+                                (isTicketLost ? (
+                                    <Wrong className="icon icon--wrong" />
+                                ) : (
+                                    <Correct className="icon icon--correct" />
+                                ))}
+                        </InfoValue>
+                    </InfoDiv>
+                    <InfoDiv>
+                        <InfoLabel>{t('markets.parlay.number-of-combinations-short')}:</InfoLabel>
+                        <InfoValue>{systemBetData?.numberOfCombination}</InfoValue>
+                    </InfoDiv>
+                </InfoWrapper>
+            )}
+            {systemBetData && !isTicketOpen && !isTicketLost && (
+                <InfoWrapper>
+                    <InfoDivFull>
+                        <InfoLabel>{t('markets.parlay.number-of-winning-combinations-short')}:</InfoLabel>
+                        <InfoValue>{systemBetData?.numberOfWinningCombinations}</InfoValue>
+                    </InfoDivFull>
+                </InfoWrapper>
+            )}
             <InfoWrapper>
                 {multiSingle ? (
                     <>
@@ -102,8 +139,23 @@ const MyTicket: React.FC<MyTicketProps> = ({
                 ) : (
                     <>
                         <InfoDiv>
-                            <InfoLabel>{t('markets.parlay.share-ticket.total-quote')}:</InfoLabel>
-                            <InfoValue>{formatTicketOdds(selectedOddsType, paid, payout)}</InfoValue>
+                            <InfoLabel>
+                                {systemBetData
+                                    ? !isTicketOpen && !isTicketLost
+                                        ? t('markets.parlay.winning-quote')
+                                        : t('markets.parlay.max-quote')
+                                    : t('markets.parlay.share-ticket.total-quote')}
+                                :
+                            </InfoLabel>
+                            <InfoValue>
+                                {systemBetData
+                                    ? formatTicketOdds(
+                                          selectedOddsType,
+                                          systemBetData?.buyInPerCombination || 0,
+                                          !isTicketOpen && !isTicketLost ? payout : systemBetData?.maxPayout || 0
+                                      )
+                                    : formatTicketOdds(selectedOddsType, paid, payout)}
+                            </InfoValue>
                         </InfoDiv>
                     </>
                 )}
@@ -112,6 +164,17 @@ const MyTicket: React.FC<MyTicketProps> = ({
                     <BuyInValue>{formatCurrencyWithKey(collateral, paid)}</BuyInValue>
                 </InfoDiv>
             </InfoWrapper>
+            {systemBetData && (isTicketOpen || isTicketLost) && (
+                <InfoWrapper>
+                    <InfoDivFull>
+                        <InfoLabel>{t('markets.parlay.min-max-payout')}:</InfoLabel>
+                        <InfoValue>
+                            {formatCurrency(systemBetData?.minPayout || 0)}/
+                            {formatCurrency(systemBetData?.maxPayout || 0)} {collateral}
+                        </InfoValue>
+                    </InfoDivFull>
+                </InfoWrapper>
+            )}
         </Container>
     );
 };
@@ -167,6 +230,7 @@ const TicketLabel = styled.span`
 
 const OvertimeLogo = styled(OvertimeLogoIcon)`
     fill: ${(props) => props.theme.textColor.primary};
+    margin-bottom: 5px;
 `;
 
 const PayoutWrapper = styled.div`
@@ -217,10 +281,21 @@ const InfoWrapper = styled(FlexDivRow)`
     text-transform: uppercase;
     color: ${(props) => props.theme.textColor.primary};
     width: 100%;
-    padding: 5px 5px 0 5px;
+    padding-bottom: 5px;
 `;
 
-const InfoDiv = styled(FlexDiv)``;
+const InfoDiv = styled(FlexDiv)<{ isWinning?: boolean; isLost?: boolean }>`
+    color: ${(props) =>
+        props.isWinning
+            ? props.theme.status.win
+            : props.isLost
+            ? props.theme.status.loss
+            : props.theme.textColor.primary};
+`;
+
+const InfoDivFull = styled(FlexDivSpaceBetween)`
+    width: 100%;
+`;
 
 const InfoLabel = styled.span`
     font-weight: 600;
@@ -250,6 +325,20 @@ const HorizontalDashedLine = styled.hr`
     border-right: none;
     border-left: none;
     margin: 0;
+`;
+
+const Icon = styled.i`
+    font-size: 12px;
+    margin-left: 4px;
+    margin-top: -3px;
+`;
+
+const Correct = styled(Icon)`
+    color: ${(props) => props.theme.status.win};
+`;
+
+const Wrong = styled(Icon)`
+    color: ${(props) => props.theme.status.loss};
 `;
 
 export default MyTicket;

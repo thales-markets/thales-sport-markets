@@ -64,7 +64,7 @@ const BalanceDetails: React.FC = () => {
             <SectionLabel>{t('my-portfolio.estimated-balance')}</SectionLabel>
             <TotalBalance>{formatCurrencyWithSign(USD_SIGN, totalBalanceValue)}</TotalBalance>
             <TokenBalancesWrapper>
-                {getCollaterals(networkId)
+                {[...getCollaterals(networkId)]
                     .sort((a, b) => {
                         return getUSDForCollateral(b) - getUSDForCollateral(a);
                     })

@@ -454,11 +454,7 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
                 {isFundBatch ? (
                     <InputContainer ref={walletAddressInputRef}>
                         <TextArea
-                            label={
-                                isFundBatch
-                                    ? t('profile.free-bet-modal.enter-wallet-addresses')
-                                    : t('profile.free-bet-modal.enter-wallet-address')
-                            }
+                            label={t('profile.free-bet-modal.enter-wallet-addresses')}
                             value={fundBatchRaw}
                             inputFontSize="12px"
                             height="150px"
@@ -473,11 +469,7 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
                 ) : (
                     <InputContainer ref={walletAddressInputRef}>
                         <NumericInput
-                            label={
-                                isFundBatch
-                                    ? t('profile.free-bet-modal.enter-wallet-addresses')
-                                    : t('profile.free-bet-modal.enter-wallet-address')
-                            }
+                            label={t('profile.free-bet-modal.enter-wallet-address')}
                             value={fundWalletAddress}
                             validationMessage={fundWalletValidationMessage}
                             showValidation={!!fundWalletValidationMessage && walletAddressInputRefVisible}

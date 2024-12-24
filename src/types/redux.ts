@@ -27,6 +27,7 @@ export type TicketSliceState = {
     maxTicketSize: number;
     liveBetSlippage: number;
     isFreeBetDisabledByUser: boolean;
+    isSystemBet: boolean;
     error: { code: TicketErrorCode; data: string };
 };
 
@@ -43,6 +44,7 @@ export type UISliceState = {
 
 export type WalletSliceState = {
     isBiconomy?: boolean;
+    isParticleReady: boolean;
     connectedViaParticle: boolean;
     walletConnectModal: {
         visibility: boolean;

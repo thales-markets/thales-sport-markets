@@ -9,7 +9,7 @@ import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getIsBiconomy, getIsConnectedViaParticle } from 'redux/modules/wallet';
+import { getIsBiconomy, getIsConnectedViaParticle, getIsParticleReady } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { formatCurrencyWithKey } from 'thales-utils';
@@ -52,7 +52,9 @@ const Withdraw: React.FC = () => {
     const { address, isConnected } = useAccount();
     const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
-    const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
+    const isParticleReady = useSelector(getIsParticleReady);
+    const isConnectedViaParticle = useSelector(getIsConnectedViaParticle);
+
     const [selectedToken, setSelectedToken] = useState<number>(0);
     const [withdrawalWalletAddress, setWithdrawalWalletAddress] = useState<string>('');
     const [amount, setAmount] = useState<number>(0);
@@ -112,8 +114,10 @@ const Withdraw: React.FC = () => {
     };
 
     useEffect(() => {
-        if (!isConnectedViaParticle) navigateTo(ROUTES.Markets.Home);
-    }, [isConnectedViaParticle]);
+        if (isParticleReady && !isConnectedViaParticle) {
+            navigateTo(ROUTES.Markets.Home);
+        }
+    }, [isParticleReady, isConnectedViaParticle]);
 
     return (
         <>

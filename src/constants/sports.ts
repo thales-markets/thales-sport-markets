@@ -1630,7 +1630,11 @@ export const OLYMPIC_LEAGUES = [
 export const PLAYER_PROPS_COMBINING_ENABLED_LEAGUES = [League.NBA, League.WNBA, League.EUROLEAGUE];
 
 export const PLAYER_PROPS_MARKETS_PER_SPORT_MAP: Record<Sport, MarketType[]> = {
-    [Sport.SOCCER]: [],
+    [Sport.SOCCER]: [
+        MarketType.PLAYER_PROPS_OVER_GOALS,
+        MarketType.PLAYER_PROPS_TOTAL_SHOTS,
+        MarketType.PLAYER_PROPS_ASSISTS,
+    ],
     [Sport.FOOTBALL]: [],
     [Sport.BASKETBALL]: [
         MarketType.PLAYER_PROPS_POINTS,
