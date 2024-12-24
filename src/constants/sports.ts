@@ -493,7 +493,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
     [League.BRAZIL_1]: {
         sport: Sport.SOCCER,
         id: League.BRAZIL_1,
-        label: 'Serie A',
+        label: 'Brazil Serie A',
         scoringType: ScoringType.GOALS,
         matchResolveType: MatchResolveType.REGULAR,
         periodType: PeriodType.HALF,
