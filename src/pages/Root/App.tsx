@@ -1,6 +1,5 @@
 import { createSmartAccountClient } from '@biconomy/account';
-import { AuthCoreEvent, SocialAuthType, getLatestAuthType, particleAuth } from '@particle-network/auth-core';
-import { useConnect as useParticleConnect } from '@particle-network/auth-core-modal';
+import { useConnect as useParticleConnect } from '@particle-network/authkit';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import Loader from 'components/Loader';
 import { LINKS } from 'constants/links';
@@ -32,8 +31,6 @@ import { SeoArticleProps } from 'types/ui';
 import biconomyConnector from 'utils/biconomyWallet';
 import { isMobile } from 'utils/device';
 import { isNetworkSupported, isRouteAvailableForNetwork } from 'utils/network';
-import { particleWagmiWallet } from 'utils/particleWallet/particleWagmiWallet';
-import { isSocialLogin } from 'utils/particleWallet/utils';
 import queryConnector from 'utils/queryConnector';
 import { history } from 'utils/routes';
 import { useChainId, useConnect, useDisconnect, useSwitchChain, useWalletClient } from 'wagmi';
@@ -65,7 +62,7 @@ const App = () => {
             });
         }
 
-        if (walletClient && isSocialLogin(getLatestAuthType())) {
+        if (walletClient) {
             const bundlerUrl = `${LINKS.Biconomy.Bundler}${networkId}/${import.meta.env.VITE_APP_BICONOMY_BUNDLE_KEY}`;
 
             const createSmartAccount = async () => {
@@ -88,26 +85,16 @@ const App = () => {
     }, [dispatch, switchChain, networkId, disconnect, walletClient]);
 
     useEffect(() => {
-        if (connectionStatus === 'connected' && isSocialLogin(getLatestAuthType())) {
-            connect({
-                connector: particleWagmiWallet({
-                    socialType: getLatestAuthType() as SocialAuthType,
-                    id: 'adqd',
-                }) as any,
-                chainId: networkId,
-            });
+        console.log(connectionStatus);
+        if (connectionStatus === 'connected') {
             dispatch(updateParticleState({ connectedViaParticle: true }));
         }
-        const onDisconnect = () => {
+        if (connectionStatus === 'disconnected') {
             dispatch(setIsBiconomy(false));
             dispatch(updateParticleState({ connectedViaParticle: false }));
             biconomyConnector.resetWallet();
             disconnect();
-        };
-        particleAuth.on(AuthCoreEvent.ParticleAuthDisconnect, onDisconnect);
-        return () => {
-            particleAuth.off(AuthCoreEvent.ParticleAuthDisconnect, onDisconnect);
-        };
+        }
     }, [connect, connectionStatus, disconnect, networkId, dispatch]);
 
     useEffect(() => {

@@ -1,4 +1,4 @@
-import { AuthCoreContextProvider } from '@particle-network/auth-core-modal';
+import { AuthCoreContextProvider } from '@particle-network/authkit';
 import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
 import { QueryClientProvider } from '@tanstack/react-query';
@@ -20,6 +20,7 @@ import queryConnector from 'utils/queryConnector';
 import { WagmiProvider } from 'wagmi';
 import enTranslation from '../../i18n/en.json';
 import { wagmiConfig } from './wagmiConfig';
+import { arbitrum, optimism, optimismSepolia } from 'viem/chains';
 
 window.Buffer = window.Buffer || buffer;
 
@@ -88,6 +89,7 @@ const Root: React.FC<RootProps> = ({ store }) => {
                             wallet: {
                                 visible: false,
                             },
+                            chains: [optimism, arbitrum, optimismSepolia],
                             themeType: 'dark',
                             customStyle: PARTICLE_STYLE,
                         }}

@@ -1,7 +1,7 @@
 export enum ParticalTypes {
-    GOOGLE = 'particleWalletSDKGoogle',
-    TWITTER = 'particleWalletSDKTwitter',
-    DISCORD = 'particleWalletSDKDiscord',
-    GITHUB = 'particleWalletGithub',
-    APPLE = 'particleWalletSDKApple',
+    GOOGLE = 'google',
+    TWITTER = 'twitter',
+    DISCORD = 'discord',
+    GITHUB = 'github',
+    APPLE = 'apple',
 }
