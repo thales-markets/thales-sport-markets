@@ -368,18 +368,13 @@ const Home: React.FC = () => {
             return true;
         });
 
-        const sortedFilteredMarkets = orderBy(
-            filteredMarkets,
-            ['maturityDate'],
-            [
-                statusFilter === StatusFilter.ONGOING_MARKETS ||
-                statusFilter === StatusFilter.RESOLVED_MARKETS ||
-                statusFilter === StatusFilter.CANCELLED_MARKETS ||
-                statusFilter === StatusFilter.PAUSED_MARKETS
-                    ? 'desc'
-                    : 'asc',
-            ]
-        );
+        const sortedFilteredMarkets =
+            statusFilter === StatusFilter.ONGOING_MARKETS ||
+            statusFilter === StatusFilter.RESOLVED_MARKETS ||
+            statusFilter === StatusFilter.CANCELLED_MARKETS ||
+            statusFilter === StatusFilter.PAUSED_MARKETS
+                ? orderBy(filteredMarkets, ['maturityDate'], ['desc'])
+                : filteredMarkets;
 
         if (selectedMarket && !filteredMarkets.map((market) => market.gameId).includes(selectedMarket.gameId)) {
             dispatch(setSelectedMarket(undefined));

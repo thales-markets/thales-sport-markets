@@ -1674,3 +1674,21 @@ export const PLAYER_PROPS_MARKETS_PER_PROP_MAP: Record<number, MarketType[]> = {
 };
 
 export const PLAYER_PROPS_SPECIAL_SPORTS = [Sport.FOOTBALL];
+
+// lower index => higher priority
+export const LEAGUES_SORT_PRIORITY = [
+    League.EPL,
+    League.LA_LIGA,
+    League.SERIE_A,
+    League.BUNDESLIGA,
+    League.LIGUE_ONE,
+    League.NBA,
+    League.NFL,
+    League.NHL,
+    League.MLB,
+    League.EREDIVISIE,
+    League.PRIMEIRA_LIGA,
+    League.BELGIUM_LEAGUE,
+    League.NCAAF,
+    League.NCAAB,
+];
