@@ -3,7 +3,7 @@ import { BOXING_LEAGUES, LEAGUES_SORT_PRIORITY, LeagueMap } from 'constants/spor
 import { SportFilter } from 'enums/markets';
 import { League, Sport } from 'enums/sports';
 import i18n from 'i18n';
-import { groupBy, sortBy } from 'lodash';
+import { groupBy, orderBy, sortBy } from 'lodash';
 import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
@@ -76,9 +76,17 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
                 }
             });
         } else {
-            content = finalOrderKeys.map((leagueId: number, index: number) => (
-                <MarketsListV2 key={index} league={leagueId} markets={marketsMap[leagueId]} language={language} />
-            ));
+            content = true
+                ? [
+                      <MarketsListV2
+                          key={'singleList'}
+                          markets={orderBy(markets, ['maturityDate'], ['asc'])}
+                          language={language}
+                      />,
+                  ]
+                : finalOrderKeys.map((leagueId: number, index: number) => (
+                      <MarketsListV2 key={index} league={leagueId} markets={marketsMap[leagueId]} language={language} />
+                  ));
         }
 
         return <ListContainer isMarketSelected={isMarketSelected}>{content}</ListContainer>;

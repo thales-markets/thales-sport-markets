@@ -24,7 +24,7 @@ import {
 
 type MarketsListProps = {
     markets: SportMarkets;
-    league: number;
+    league?: number;
     language: string;
 };
 
@@ -37,10 +37,10 @@ const MarketsList: React.FC<MarketsListProps> = ({ markets, league, language }) 
 
     const isPlayerPropsSelected = useMemo(() => sportFilter === SportFilter.PlayerProps, [sportFilter]);
 
-    const leagueName = getLeagueLabel(league);
+    const leagueName = league ? getLeagueLabel(league) : '';
     const isFavourite = !!favouriteLeagues.find((favourite: TagInfo) => favourite.id == league);
 
-    const sortedMarkets = sortWinnerMarkets(markets, league);
+    const sortedMarkets = league ? sortWinnerMarkets(markets, league) : markets;
 
     const marketsMapByGame: Record<string, SportMarket[]> | null = useMemo(
         () => (isPlayerPropsSelected ? groupBy(markets, (market) => market.gameId) : null),
@@ -49,41 +49,43 @@ const MarketsList: React.FC<MarketsListProps> = ({ markets, league, language }) 
 
     return (
         <>
-            <LeagueCard isMarketSelected={isMarketSelected}>
-                <LeagueInfo
-                    onClick={() => {
-                        if (hideLeague) {
-                            setHideLeague(false);
-                        } else {
-                            setHideLeague(true);
-                        }
-                        setTimeout(() => {
-                            forceCheck();
-                        }, 1);
-                    }}
-                >
-                    <LeagueFlag alt={league.toString()} src={getLeagueFlagSource(Number(league))} />
-                    <LeagueName>{leagueName}</LeagueName>
-                    {hideLeague ? (
-                        <ArrowIcon className={`icon icon--caret-right`} />
+            {league && (
+                <LeagueCard isMarketSelected={isMarketSelected}>
+                    <LeagueInfo
+                        onClick={() => {
+                            if (hideLeague) {
+                                setHideLeague(false);
+                            } else {
+                                setHideLeague(true);
+                            }
+                            setTimeout(() => {
+                                forceCheck();
+                            }, 1);
+                        }}
+                    >
+                        <LeagueFlag alt={league.toString()} src={getLeagueFlagSource(Number(league))} />
+                        <LeagueName>{leagueName}</LeagueName>
+                        {hideLeague ? (
+                            <ArrowIcon className={`icon icon--caret-right`} />
+                        ) : (
+                            <ArrowIcon down={true} className={`icon icon--caret-down`} />
+                        )}
+                    </LeagueInfo>
+                    {!isMarketSelected ? (
+                        <>
+                            <IncentivizedLeague league={league} />
+                            <StarIcon
+                                onClick={() => {
+                                    dispatch(setFavouriteLeague(league));
+                                }}
+                                className={`icon icon--${isFavourite ? 'star-full selected' : 'favourites'} `}
+                            />
+                        </>
                     ) : (
-                        <ArrowIcon down={true} className={`icon icon--caret-down`} />
+                        <></>
                     )}
-                </LeagueInfo>
-                {!isMarketSelected ? (
-                    <>
-                        <IncentivizedLeague league={league} />
-                        <StarIcon
-                            onClick={() => {
-                                dispatch(setFavouriteLeague(league));
-                            }}
-                            className={`icon icon--${isFavourite ? 'star-full selected' : 'favourites'} `}
-                        />
-                    </>
-                ) : (
-                    <></>
-                )}
-            </LeagueCard>
+                </LeagueCard>
+            )}
             {isPlayerPropsSelected && marketsMapByGame ? (
                 <>
                     {Object.keys(marketsMapByGame).map((key) => (
