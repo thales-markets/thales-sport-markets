@@ -1268,7 +1268,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 176,
-        hidden: true,
+        hidden: false,
     },
     [League.URUGUAY_PRIMERA_DIVISION]: {
         sport: Sport.SOCCER,
