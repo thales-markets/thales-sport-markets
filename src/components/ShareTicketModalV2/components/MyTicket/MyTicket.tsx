@@ -281,7 +281,7 @@ const InfoWrapper = styled(FlexDivRow)`
     text-transform: uppercase;
     color: ${(props) => props.theme.textColor.primary};
     width: 100%;
-    padding-bottom: 5px;
+    padding: 5px 5px 0 5px;
 `;
 
 const InfoDiv = styled(FlexDiv)<{ isWinning?: boolean; isLost?: boolean }>`

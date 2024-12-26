@@ -129,7 +129,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
     const useDownloadImage = isMobile || isFirefox();
 
     const saveImageAndOpenTwitter = useCallback(
-        async (toastIdParam: string | number) => {
+        async (toastIdParam: string | number, copyOnly?: boolean) => {
             if (!isLoading) {
                 if (ref.current === null) {
                     return;
@@ -175,6 +175,14 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                     }
 
                     if (ref.current === null) {
+                        return;
+                    }
+
+                    if (copyOnly) {
+                        toast.update(
+                            toastIdParam,
+                            getSuccessToastOptions(<>{t('market.toast-message.image-in-clipboard')}</>)
+                        );
                         return;
                     }
 
@@ -240,7 +248,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
         [isLoading, isMobile, isThalesCollateral, useDownloadImage]
     );
 
-    const onTwitterShareClick = () => {
+    const onTwitterShareClick = (copyOnly?: boolean) => {
         if (!isLoading) {
             if (isMetamaskBrowser) {
                 // Metamask dosn't support image download neither clipboard.write
@@ -255,7 +263,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                 // If image creation is not postponed with timeout toaster is not displayed immediately, it is rendered in parallel with toPng() execution.
                 // Function toPng is causing UI to freez for couple of seconds and there is no notification message during that time, so it confuses user.
                 setTimeout(async () => {
-                    await saveImageAndOpenTwitter(id);
+                    await saveImageAndOpenTwitter(id, copyOnly);
                     setIsLoading(false);
                 }, 300);
             }
@@ -322,10 +330,16 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                     isTicketOpen={isTicketOpen}
                 />
 
-                <TwitterShare disabled={isLoading} onClick={onTwitterShareClick}>
-                    <TwitterIcon disabled={isLoading} fontSize={'22px'} />
-                    <TwitterShareLabel>{t('markets.parlay.share-ticket.share')}</TwitterShareLabel>
-                </TwitterShare>
+                <ButtonsWrapper>
+                    <ShareButton disabled={isLoading} onClick={() => onTwitterShareClick()}>
+                        <TwitterIcon disabled={isLoading} fontSize={'22px'} />
+                        <Label>{t('markets.parlay.share-ticket.share')}</Label>
+                    </ShareButton>
+                    <ShareButton disabled={isLoading} onClick={() => onTwitterShareClick(true)}>
+                        <CopyIcon disabled={isLoading} fontSize={'22px'} />
+                        <Label>{t('markets.parlay.share-ticket.copy')}</Label>
+                    </ShareButton>
+                </ButtonsWrapper>
 
                 <ShareWrapper>
                     <SubmitLabel>{t('markets.parlay.share-ticket.submit-url')}</SubmitLabel>
@@ -378,24 +392,31 @@ const CloseIcon = styled.i`
     }
 `;
 
-const TwitterShare = styled(FlexDivRowCentered)<{ disabled?: boolean }>`
+const ShareButton = styled(FlexDivRowCentered)<{ disabled?: boolean }>`
     align-items: center;
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -46px;
-    height: 32px;
     border-radius: 5px;
     background: ${(props) => props.theme.button.background.primary};
     cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
     opacity: ${(props) => (props.disabled ? '0.4' : '1')};
     justify-content: center;
+    flex: 1;
 `;
 
-const TwitterShareLabel = styled.span`
+const ButtonsWrapper = styled(FlexDivRowCentered)`
+    left: 0;
+    right: 0;
+    bottom: -46px;
+    height: 32px;
+    position: absolute;
+    gap: 10px;
+`;
+
+const Label = styled.span`
     font-weight: 700;
     font-size: 20px;
     line-height: 24px;
+    padding: 10px 20px;
+    text-align: center;
     text-transform: uppercase;
     color: ${(props) => props.theme.textColor.tertiary};
 `;
@@ -412,6 +433,21 @@ const TwitterIcon = styled.i<{ disabled?: boolean; fontSize?: string; padding?: 
     &:before {
         font-family: HomepageIconsV2 !important;
         content: '\\0021';
+    }
+`;
+
+const CopyIcon = styled.i<{ disabled?: boolean; fontSize?: string; padding?: string; color?: string }>`
+    font-weight: 500;
+    margin-right: 3px;
+    font-size: ${(props) => (props.fontSize ? props.fontSize : '20px')};
+    color: ${(props) => (props.color ? props.color : props.theme.textColor.tertiary)};
+    cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
+    opacity: ${(props) => (props.disabled ? '0.4' : '1')};
+    ${(props) => (props.padding ? `padding: ${props.padding};` : '')}
+    text-transform: lowercase;
+    &:before {
+        font-family: OvertimeIconsV2 !important;
+        content: '\\00F1';
     }
 `;
 
