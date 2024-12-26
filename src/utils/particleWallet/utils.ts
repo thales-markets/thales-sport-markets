@@ -1,15 +1,11 @@
 import { CustomStyle } from '@particle-network/authkit';
-import { PARTICAL_LOGINS_CLASSNAMES, PARTICAL_WALLETS_LABELS } from 'constants/wallet';
+import { WALLETS_LABELS } from 'constants/wallet';
+
 import { NetworkId } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
-import { ParticalTypes } from 'types/wallet';
+import { ParticalTypes, WalletConnections } from 'types/wallet';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import { Connector } from 'wagmi';
-
-export const getClassNameForParticalLogin = (socialId: ParticalTypes) => {
-    const label = PARTICAL_LOGINS_CLASSNAMES.find((item) => item.socialId == socialId)?.className;
-    return label ? label : '';
-};
 
 export const getSpecificConnectorFromConnectorsArray = (
     connectors: readonly Connector[],
@@ -77,7 +73,7 @@ export const PARTICLE_STYLE: CustomStyle = {
     cardBorderRadius: '8px',
 };
 
-export const getLabelForParticalLogin = (id: ParticalTypes) => {
-    const label = PARTICAL_WALLETS_LABELS.find((item) => item.id == id)?.labelKey;
+export const getWalletLabel = (id: ParticalTypes | WalletConnections) => {
+    const label = WALLETS_LABELS.find((item: any) => item.id == id)?.labelKey;
     return label ? label : '';
 };
