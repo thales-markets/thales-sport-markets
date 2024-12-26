@@ -22,9 +22,9 @@ const Header: React.FC = () => {
                 <RightContainer>
                     <SPAAnchor href={buildHref(ROUTES.Home)}>
                         <Button
+                            backgroundColor={theme.christmasTheme.button.background.primary}
                             textColor={theme.button.textColor.primary}
-                            backgroundColor={theme.button.background.quaternary}
-                            borderColor={theme.button.borderColor.secondary}
+                            additionalStyles={{ borderRadius: '5px' }}
                         >
                             {t('seo.page.start-using-overtime')}
                         </Button>
