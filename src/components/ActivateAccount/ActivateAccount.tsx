@@ -37,7 +37,7 @@ const ActivateAccount: React.FC<any> = () => {
         walletAddress,
         { networkId, client },
         {
-            enabled: isConnected,
+            enabled: isBiconomy,
         }
     );
 
@@ -61,7 +61,7 @@ const ActivateAccount: React.FC<any> = () => {
     }, [exchangeRates, multipleCollateralBalances.data, networkId]);
 
     useEffect(() => {
-        if (isConnected) {
+        if (isConnected && isBiconomy) {
             if (totalBalanceValue === undefined) {
                 return;
             }
@@ -92,7 +92,7 @@ const ActivateAccount: React.FC<any> = () => {
                 setShowSuccessfulDepositModal(false);
             }
         }
-    }, [totalBalanceValue, networkId, isConnected]);
+    }, [totalBalanceValue, networkId, isConnected, isBiconomy]);
 
     return (
         <div>
