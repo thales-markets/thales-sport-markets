@@ -1,6 +1,5 @@
 import Loader from 'components/Loader';
-import SelectInput from 'components/SelectInput';
-import { ScreenSizeBreakpoint } from 'enums/ui';
+import Pagination from 'components/Pagination';
 import DappFooter from 'layouts/DappLayout/DappFooter';
 import { useSEOArticlesQuery } from 'queries/seo/useSEOArticlesQuery';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -105,39 +104,22 @@ const Articles: React.FC = () => {
                             <EmptyContainer>{t('promotions.no-promotions')}</EmptyContainer>
                         )}
                     </CardsWrapper>
-                    <PaginationWrapper>
-                        <SectionWrapper>
-                            <PaginationLabel>{t('common.pagination.rows-per-page')}</PaginationLabel>
-                            <div>
-                                <SelectInput
-                                    options={PAGINATION_SIZE}
-                                    value={{ value: seoArticlesPerPage, label: seoArticlesPerPage.toString() }}
-                                    handleChange={(value: any) => {
-                                        setCurrentPage(1);
-                                        setSeoArticlesPerPage(Number(value));
-                                    }}
-                                    isPaginationStyle
-                                />
-                            </div>
-                        </SectionWrapper>
-
-                        <SectionWrapper className="flex items-center gap-1">
-                            <PaginationLabel>
-                                {`${currentPage} ${t('common.pagination.of')} ${totalPages}`}
-                            </PaginationLabel>
-                        </SectionWrapper>
-
-                        <ActionSection>
-                            <ArrowWrapper onClick={() => handlePreviousPage()} disabled={currentPage === 1}>
-                                <ArrowLeft className={'icon icon--arrow-down'} />
-                            </ArrowWrapper>
-                        </ActionSection>
-                        <ActionSection>
-                            <ArrowWrapper onClick={() => handleNextPage()} disabled={currentPage === totalPages}>
-                                <ArrowRight className={'icon icon--arrow-down'} />
-                            </ArrowWrapper>
-                        </ActionSection>
-                    </PaginationWrapper>
+                    <Pagination
+                        paginationOptions={PAGINATION_SIZE}
+                        onResultsPerPageChange={(value: any) => {
+                            setCurrentPage(1);
+                            setSeoArticlesPerPage(Number(value));
+                        }}
+                        resultPerPageInfo={{
+                            value: seoArticlesPerPage,
+                            label: seoArticlesPerPage.toString(),
+                        }}
+                        onPreviousPage={() => handlePreviousPage()}
+                        disabledPrevious={currentPage === 1}
+                        onNextPage={() => handleNextPage()}
+                        disabledNext={currentPage === totalPages}
+                        label={`${currentPage} ${t('common.pagination.of')} ${totalPages}`}
+                    />
                 </>
             )}
             <DappFooter />
@@ -187,67 +169,6 @@ const EmptyContainer = styled(FlexDiv)`
     align-items: center;
     justify-content: center;
     width: 100%;
-`;
-
-const PaginationWrapper = styled.div`
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding: 5px 0;
-    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
-        justify-content: flex-start;
-    }
-`;
-
-const SectionWrapper = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    margin: 0 14px;
-    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
-        margin: 0 8px;
-    }
-`;
-
-const PaginationLabel = styled.p`
-    color: ${(props) => props.theme.textColor.primary};
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 10%;
-    letter-spacing: 0.13px;
-    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
-        font-size: 12px;
-    }
-`;
-
-const ActionSection = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-`;
-
-const ArrowWrapper = styled.span<{ disabled: boolean }>`
-    display: flex;
-    width: 40px;
-    height: 24px;
-    justify-content: center;
-    align-items: center;
-    padding: 4px;
-    color: ${(props) => props.theme.textColor.primary};
-    opacity: ${(props) => (props.disabled ? 0.5 : 1)};
-    cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
-`;
-
-const ArrowLeft = styled.i`
-    font-size: 12px;
-    rotate: 90deg;
-`;
-const ArrowRight = styled.i`
-    font-size: 12px;
-    rotate: -90deg;
 `;
 
 export default Articles;
