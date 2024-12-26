@@ -1,5 +1,6 @@
 {
     "common": {
+        "overtime-account": "<icon/> account",
         "filters": "Filters",
         "status": "Status",
         "settings": "Settings",
@@ -41,10 +42,13 @@
         },
         "wallet": {
             "connect-wallet-modal-title": "Log in to OvertimeMarkets",
+            "connect-wallet-modal-subtitle": "Choose how you want to log in",
+            "or-connect-with": "or connect via wallet",
             "connect-your-wallet": "Connect wallet",
             "connect-with-wallet": "Connect with wallet",
+            "view-all-wallets": "View All Wallets",
             "please-connect": "please, connect wallet to start using overtime.xyz",
-            "or-connect-with": "or connect with",
+
             "view-more-options": "View more options",
             "view-less-options": "View less options",
             "metamask": "Metamask",
@@ -60,12 +64,16 @@
             "get-usd-progress": "Minting {{amount}}...",
             "disclaimer": "By signing up to Overtimemarkets <terms>Terms of Use</terms> and Privacy Policy you acknowledge that you have read and understand the Thales DAO protocol <disclaimer>disclaimer</disclaimer>.",
             "particle-logins": {
-                "google": "Google",
-                "twitter": "Twitter",
-                "facebook": "Facebook",
-                "github": "GitHub",
-                "discord": "Discord",
-                "apple": "Apple"
+                "google": "Continue with Google",
+                "twitter": "Continue with Twitter",
+                "facebook": "Continue with Facebook",
+                "github": "Continue with GitHub",
+                "discord": "Continue with Discord",
+                "apple": "Continue with Apple",
+
+                "metamask": "Connect with Metamask",
+                "coinbase": "Connect with Coinbase Wallet",
+                "wallet-connect": "WalletConnect"
             }
         },
         "voucher": {
