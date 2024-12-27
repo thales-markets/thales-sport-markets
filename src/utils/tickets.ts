@@ -263,7 +263,7 @@ export const tableSortByStatus = (rowA: any, rowB: any) => {
 };
 
 export const generateSystemBetCombinations = (n: number, k: number): number[][] => {
-    // require(k > 1 && k < n, 'k has to be greater than 1 and less than n');
+    if (k <= 1 || k >= n) return [];
 
     // Calculate the number of combinations: n! / (k! * (n-k)!)
     let combinationsCount = 1;
@@ -339,7 +339,7 @@ export const getSystemBetData = (
                     { name: '', message: 'Custom error' },
                     {
                         componentStack: JSON.stringify({
-                            marketsLength: markets.length,
+                            markets,
                             systemCombinations,
                             i,
                             j,
