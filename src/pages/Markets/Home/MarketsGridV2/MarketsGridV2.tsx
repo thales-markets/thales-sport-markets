@@ -1,9 +1,9 @@
 import Scroll from 'components/Scroll';
-import { BOXING_LEAGUES, LeagueMap } from 'constants/sports';
+import { BOXING_LEAGUES, LEAGUES_SORT_PRIORITY, LeagueMap } from 'constants/sports';
 import { SportFilter } from 'enums/markets';
 import { League, Sport } from 'enums/sports';
 import i18n from 'i18n';
-import { groupBy } from 'lodash';
+import { groupBy, sortBy } from 'lodash';
 import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
@@ -159,72 +159,91 @@ const groupBySortedMarketsKeys = (marketsKeys: number[]) => {
     const golfKeys: number[] = [];
     const politicsKeys: number[] = [];
     const futuresKeys: number[] = [];
+
+    const leaguePriorityMap = new Map<number, number[]>();
+
     marketsKeys.forEach((tag: number) => {
-        const leagueSport = getLeagueSport(tag);
-        if (leagueSport === Sport.SOCCER) {
-            soccerKeys.push(tag);
-        }
-        if (leagueSport === Sport.FOOTBALL) {
-            footballKeys.push(tag);
-        }
-        if (leagueSport === Sport.BASKETBALL) {
-            basketballKeys.push(tag);
-        }
-        if (leagueSport === Sport.BASEBALL) {
-            baseballKeys.push(tag);
-        }
-        if (leagueSport === Sport.HOCKEY) {
-            hockeyKeys.push(tag);
-        }
-        if (leagueSport === Sport.MOTOSPORT) {
-            motosportKeys.push(tag);
-        }
-        if (leagueSport === Sport.TENNIS) {
-            tennisKeys.push(tag);
-        }
-        if (leagueSport === Sport.TABLE_TENNIS) {
-            tableTennisKeys.push(tag);
-        }
-        if (leagueSport === Sport.ESPORTS) {
-            eSportsKeys.push(tag);
-        }
-        if (leagueSport === Sport.RUGBY) {
-            rugbyKeys.push(tag);
-        }
-        if (leagueSport === Sport.VOLLEYBALL) {
-            volleyballKeys.push(tag);
-        }
-        if (leagueSport === Sport.HANDBALL) {
-            handballKeys.push(tag);
-        }
-        if (leagueSport === Sport.WATERPOLO) {
-            waterpoloKeys.push(tag);
-        }
-        if (leagueSport === Sport.CRICKET) {
-            cricketKeys.push(tag);
-        }
-        if (leagueSport === Sport.FIGHTING) {
-            fightingKeys.push(tag);
-        }
-        if (leagueSport === Sport.GOLF) {
-            golfKeys.push(tag);
-        }
-        if (leagueSport === Sport.POLITICS) {
-            politicsKeys.push(tag);
-        }
-        if (leagueSport === Sport.FUTURES) {
-            futuresKeys.push(tag);
+        const leaguePriority = LEAGUES_SORT_PRIORITY.findIndex((league: League) => league === tag);
+
+        if (leaguePriority !== -1) {
+            const currentPriorityLeagues = leaguePriorityMap.get(leaguePriority) || [];
+            currentPriorityLeagues.push(tag);
+            leaguePriorityMap.set(leaguePriority, currentPriorityLeagues);
+        } else {
+            const leagueSport = getLeagueSport(tag);
+
+            if (leagueSport === Sport.SOCCER) {
+                soccerKeys.push(tag);
+            }
+            if (leagueSport === Sport.FOOTBALL) {
+                footballKeys.push(tag);
+            }
+            if (leagueSport === Sport.BASKETBALL) {
+                basketballKeys.push(tag);
+            }
+            if (leagueSport === Sport.BASEBALL) {
+                baseballKeys.push(tag);
+            }
+            if (leagueSport === Sport.HOCKEY) {
+                hockeyKeys.push(tag);
+            }
+            if (leagueSport === Sport.MOTOSPORT) {
+                motosportKeys.push(tag);
+            }
+            if (leagueSport === Sport.TENNIS) {
+                tennisKeys.push(tag);
+            }
+            if (leagueSport === Sport.TABLE_TENNIS) {
+                tableTennisKeys.push(tag);
+            }
+            if (leagueSport === Sport.ESPORTS) {
+                eSportsKeys.push(tag);
+            }
+            if (leagueSport === Sport.RUGBY) {
+                rugbyKeys.push(tag);
+            }
+            if (leagueSport === Sport.VOLLEYBALL) {
+                volleyballKeys.push(tag);
+            }
+            if (leagueSport === Sport.HANDBALL) {
+                handballKeys.push(tag);
+            }
+            if (leagueSport === Sport.WATERPOLO) {
+                waterpoloKeys.push(tag);
+            }
+            if (leagueSport === Sport.CRICKET) {
+                cricketKeys.push(tag);
+            }
+            if (leagueSport === Sport.FIGHTING) {
+                fightingKeys.push(tag);
+            }
+            if (leagueSport === Sport.GOLF) {
+                golfKeys.push(tag);
+            }
+            if (leagueSport === Sport.POLITICS) {
+                politicsKeys.push(tag);
+            }
+            if (leagueSport === Sport.FUTURES) {
+                futuresKeys.push(tag);
+            }
         }
     });
 
+    const prioritizedLeagueKeys: number[] = [];
+
+    sortBy(Array.from(leaguePriorityMap.keys())).forEach((priority: number) => {
+        prioritizedLeagueKeys.push(...(leaguePriorityMap.get(priority) || []));
+    });
+
     return [
+        ...prioritizedLeagueKeys,
         ...soccerKeys,
+        ...tennisKeys,
         ...footballKeys,
         ...basketballKeys,
         ...baseballKeys,
         ...hockeyKeys,
         ...fightingKeys,
-        ...tennisKeys,
         ...tableTennisKeys,
         ...eSportsKeys,
         ...rugbyKeys,
