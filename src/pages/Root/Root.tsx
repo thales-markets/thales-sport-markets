@@ -9,12 +9,13 @@ import { PLAUSIBLE } from 'constants/analytics';
 import { ThemeMap } from 'constants/ui';
 import { merge } from 'lodash';
 import App from 'pages/Root/App';
-import React, { ErrorInfo } from 'react';
+import React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { Store } from 'redux';
 import { getDefaultTheme } from 'redux/modules/ui';
+import { logError } from 'utils/discord';
 import { PARTICLE_STYLE } from 'utils/particleWallet/utils';
 import queryConnector from 'utils/queryConnector';
 import { WagmiProvider } from 'wagmi';
@@ -45,35 +46,6 @@ const Root: React.FC<RootProps> = ({ store }) => {
     i18n.addResourceBundle('en', 'translation', enTranslation, true);
 
     PLAUSIBLE.enableAutoPageviews();
-
-    const logError = (error: Error, info: ErrorInfo) => {
-        if (import.meta.env.DEV) {
-            return;
-        }
-
-        // let content = `IsMobile:${isMobile()}\nError:\n${error.stack || error.message}`;
-        // const flags = 4; // SUPPRESS_EMBEDS
-        // fetch(LINKS.Discord.SpeedErrors, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({ content, flags }),
-        // });
-
-        // content = `ErrorInfo:${info.componentStack}`;
-        // if (content.length > DISCORD_MESSAGE_MAX_LENGTH) {
-        //     content = content.substring(0, DISCORD_MESSAGE_MAX_LENGTH);
-        // }
-        // fetch(LINKS.Discord.SpeedErrors, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({ content, flags }),
-        // });
-        console.error(error, info);
-    };
 
     return (
         <ErrorBoundary fallback={<UnexpectedError theme={ThemeMap[theme]} />} onError={logError}>

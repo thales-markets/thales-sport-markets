@@ -1,4 +1,5 @@
 import { SportFilter } from 'enums/markets';
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
@@ -150,7 +151,6 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                 : !!openMarketsCountPerTag[tag.id] && (
                                       <Count isMobile={isMobile}>{openMarketsCountPerTag[tag.id]}</Count>
                                   )}
-                            {}
                             <StarIcon
                                 isMobile={isMobile}
                                 onClick={() => {
@@ -193,9 +193,13 @@ const LabelContainer = styled(FlexDivRowCentered)`
     width: 100%;
     padding-left: 10px;
     justify-content: flex-start;
-    &.selected,
-    &:hover {
+    &.selected {
         color: ${(props) => props.theme.textColor.quaternary};
+    }
+    @media (min-width: ${ScreenSizeBreakpoint.MEDIUM}px) {
+        &:hover {
+            color: ${(props) => props.theme.textColor.quaternary};
+        }
     }
 `;
 
@@ -208,9 +212,13 @@ const Label = styled.div<{ isMobile: boolean }>`
     -ms-user-select: none;
     -o-user-select: none;
     user-select: none;
-    &.selected,
-    &:hover {
+    &.selected {
         color: ${(props) => props.theme.textColor.quaternary};
+    }
+    @media (min-width: ${ScreenSizeBreakpoint.MEDIUM}px) {
+        &:hover {
+            color: ${(props) => props.theme.textColor.quaternary};
+        }
     }
 `;
 
@@ -230,8 +238,8 @@ const LeagueFlag = styled.img`
 
 const Count = styled(FlexDivCentered)<{ isMobile: boolean }>`
     border-radius: ${(props) => (props.isMobile ? '15px' : '8px')};
-    color: ${(props) => (props.isMobile ? props.theme.textColor.tertiary : props.theme.textColor.quaternary)};
-    background: ${(props) => (props.isMobile ? props.theme.background.septenary : props.theme.background.primary)};
+    color: ${(props) => (props.isMobile ? props.theme.textColor.quaternary : props.theme.textColor.quaternary)};
+    background: ${(props) => (props.isMobile ? props.theme.background.primary : props.theme.background.primary)};
     border: 2px solid ${(props) => props.theme.background.secondary};
     font-size: ${(props) => (props.isMobile ? '12px' : '12px')};
     min-width: ${(props) => (props.isMobile ? '35px' : '30px')};
