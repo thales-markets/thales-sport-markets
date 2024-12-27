@@ -13,17 +13,21 @@ import ReactModal from 'react-modal';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
 import { Coins, isFirefox, isIos, isMetamask } from 'thales-utils';
 import { SystemBetData, TicketMarket } from 'types/markets';
 import { RootState } from 'types/redux';
 import { refetchOverdropMultipliers } from 'utils/queryConnector';
-import { useAccount } from 'wagmi';
+import { useAccount, useChainId, useClient } from 'wagmi';
 import MyTicket from './components/MyTicket';
 
 // XMAS Background
 import XMasBackgroundTop from 'assets/images/flex-card-top-xmas.svg';
+import Toggle from 'components/Toggle';
+import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
+import { Rates } from 'types/collateral';
+import { ThemeInterface } from 'types/ui';
 
 export type ShareTicketModalProps = {
     markets: TicketMarket[];
@@ -81,13 +85,18 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
     isTicketOpen,
     systemBetData,
 }) => {
+    const theme: ThemeInterface = useTheme();
+
     const walletAddress = useAccount()?.address || '';
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
+    const networkId = useChainId();
+    const client = useClient();
 
     const [isLoading, setIsLoading] = useState(false);
     const [toastId, setToastId] = useState<string | number>(0);
     const [isMetamaskBrowser, setIsMetamaskBrowser] = useState(false);
     const [tweetUrl, setTweetUrl] = useState('');
+    const [convertToStableValue, setConvertToStableValue] = useState<boolean>(false);
 
     const ref = useRef<HTMLDivElement>(null);
 
@@ -95,6 +104,18 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
         () => collateral === CRYPTO_CURRENCY_MAP.THALES || collateral === CRYPTO_CURRENCY_MAP.sTHALES,
         [collateral]
     );
+
+    const isNonStableCollateral = useMemo(
+        () =>
+            collateral == CRYPTO_CURRENCY_MAP.THALES ||
+            collateral == CRYPTO_CURRENCY_MAP.sTHALES ||
+            collateral == CRYPTO_CURRENCY_MAP.ETH,
+        [collateral]
+    );
+
+    const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client }, { enabled: isNonStableCollateral });
+    const exchangeRates: Rates | null =
+        exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
     const customStyles = {
         content: {
@@ -320,29 +341,54 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                 <MyTicket
                     markets={markets}
                     multiSingle={multiSingle}
-                    paid={paid}
-                    payout={payout}
+                    paid={
+                        convertToStableValue && isNonStableCollateral && exchangeRates?.[collateral]
+                            ? paid * exchangeRates?.[collateral]
+                            : paid
+                    }
+                    payout={
+                        convertToStableValue && isNonStableCollateral && exchangeRates?.[collateral]
+                            ? payout * exchangeRates?.[collateral]
+                            : payout
+                    }
                     isTicketLost={isTicketLost}
-                    collateral={collateral}
+                    collateral={
+                        convertToStableValue && isNonStableCollateral ? (CRYPTO_CURRENCY_MAP.USDC as Coins) : collateral
+                    }
                     isLive={isLive}
                     applyPayoutMultiplier={applyPayoutMultiplier}
                     systemBetData={systemBetData}
                     isTicketOpen={isTicketOpen}
                 />
 
-                <ButtonsWrapper>
+                <ButtonsWrapper toggleVisible={isNonStableCollateral}>
                     <ShareButton disabled={isLoading} onClick={() => onTwitterShareClick()}>
                         <TwitterIcon disabled={isLoading} fontSize={'22px'} />
-                        <Label>{t('markets.parlay.share-ticket.share')}</Label>
+                        <ButtonLabel>{t('markets.parlay.share-ticket.share')}</ButtonLabel>
                     </ShareButton>
                     <ShareButton disabled={isLoading} onClick={() => onTwitterShareClick(true)}>
                         <CopyIcon disabled={isLoading} fontSize={'22px'} />
-                        <Label>{t('markets.parlay.share-ticket.copy')}</Label>
+                        <ButtonLabel>{t('markets.parlay.share-ticket.copy')}</ButtonLabel>
                     </ShareButton>
                 </ButtonsWrapper>
-
-                <ShareWrapper>
-                    <SubmitLabel>{t('markets.parlay.share-ticket.submit-url')}</SubmitLabel>
+                {isNonStableCollateral && (
+                    <SwitchWrapper>
+                        <Toggle
+                            active={convertToStableValue}
+                            dotSize="14px"
+                            dotBackground={theme.background.secondary}
+                            dotBorder={`3px solid ${theme.borderColor.quaternary}`}
+                            handleClick={() => {
+                                setConvertToStableValue(!convertToStableValue);
+                            }}
+                            label={{
+                                firstLabel: 'Convert to amount to USDC',
+                            }}
+                        />
+                    </SwitchWrapper>
+                )}
+                <ShareWrapper toggleVisible={isNonStableCollateral}>
+                    <Label>{t('markets.parlay.share-ticket.submit-url')}</Label>
                     <Input
                         height="32px"
                         minHeight="32px" // fix for iOS
@@ -402,20 +448,20 @@ const ShareButton = styled(FlexDivRowCentered)<{ disabled?: boolean }>`
     flex: 1;
 `;
 
-const ButtonsWrapper = styled(FlexDivRowCentered)`
+const ButtonsWrapper = styled(FlexDivRowCentered)<{ toggleVisible?: boolean }>`
     left: 0;
     right: 0;
-    bottom: -46px;
+    bottom: ${(props) => (props?.toggleVisible ? '-72px' : '-46px')};
     height: 32px;
     position: absolute;
     gap: 10px;
 `;
 
-const Label = styled.span`
+const ButtonLabel = styled.span`
     font-weight: 700;
     font-size: 20px;
     line-height: 24px;
-    padding: 10px 20px;
+    padding: 7px 20px;
     text-align: center;
     text-transform: uppercase;
     color: ${(props) => props.theme.textColor.tertiary};
@@ -451,15 +497,25 @@ const CopyIcon = styled.i<{ disabled?: boolean; fontSize?: string; padding?: str
     }
 `;
 
-const ShareWrapper = styled(FlexDivColumn)`
+const SwitchWrapper = styled(FlexDivRowCentered)`
     position: absolute;
     left: 0;
     right: 0;
     height: 0px;
-    bottom: -60px;
+    bottom: -17px;
+    width: 100%;
+    justify-content: space-between;
 `;
 
-const SubmitLabel = styled.span`
+const ShareWrapper = styled(FlexDivColumn)<{ toggleVisible?: boolean }>`
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 0px;
+    bottom: ${(props) => (props?.toggleVisible ? '-80px' : '-60px')};
+`;
+
+const Label = styled.span`
     font-weight: 400;
     font-size: 12px;
     line-height: 20px;
