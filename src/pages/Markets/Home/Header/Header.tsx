@@ -25,8 +25,6 @@ import {
     setMarketTypeGroupFilter,
     setSortType,
 } from 'redux/modules/market';
-import styled from 'styled-components';
-import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 import { SportMarket } from 'types/markets';
 import { getMarketTypeName, isPlayerPropsMarket } from 'utils/markets';
 import {
@@ -35,6 +33,10 @@ import {
     FilterIcon,
     MarketTypeButton,
     NoScrollbarContainer,
+    SortIndicator,
+    SortMenu,
+    SortMenuItem,
+    SortSelector,
     SwitchContainer,
     ThreeWayIcon,
 } from './styled-components';
@@ -222,36 +224,37 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitc
                 </ScrollMenu>
             </NoScrollbarContainer>
 
-            <Tooltip overlay={'Select markets sorting'}>
-                <SortSelector>
-                    <OutsideClickHandler onOutsideClick={() => setOpenSortMenu(false)}>
-                        <Arrow
+            <SortSelector>
+                <OutsideClickHandler onOutsideClick={() => setOpenSortMenu(false)}>
+                    <Tooltip overlay={'Select markets sorting'}>
+                        <SortIndicator
                             className={'icon icon--arrows-vertical'}
                             onClick={() => setOpenSortMenu(!openSortMenu)}
                         />
-                        {openSortMenu && (
-                            <SortMenu>
-                                {Object.values(SortType)
-                                    .filter((_, i) => i < Object.values(SortType).length)
-                                    .map((sortType, index) => {
-                                        const isSelected = selectedSortType === (sortType as SortType);
-                                        return (
-                                            <SortMenuItem
-                                                key={`sortMenuItem${index}`}
-                                                isSelected={isSelected}
-                                                onClick={() =>
-                                                    !isSelected && dispatch(setSortType(sortType as SortType))
-                                                }
-                                            >
-                                                {sortType}
-                                            </SortMenuItem>
-                                        );
-                                    })}
-                            </SortMenu>
-                        )}
-                    </OutsideClickHandler>
-                </SortSelector>
-            </Tooltip>
+                    </Tooltip>
+                    {openSortMenu && (
+                        <SortMenu>
+                            {Object.values(SortType)
+                                .filter((_, i) => i < Object.values(SortType).length)
+                                .map((sortType, index) => {
+                                    const isSelected = selectedSortType === (sortType as SortType);
+                                    return (
+                                        <SortMenuItem
+                                            key={`sortMenuItem${index}`}
+                                            isSelected={isSelected}
+                                            onClick={() => {
+                                                !isSelected && dispatch(setSortType(sortType as SortType));
+                                                setOpenSortMenu(false);
+                                            }}
+                                        >
+                                            {sortType}
+                                        </SortMenuItem>
+                                    );
+                                })}
+                        </SortMenu>
+                    )}
+                </OutsideClickHandler>
+            </SortSelector>
 
             {!hideSwitch && !selectedMarket && marketTypeFilter === undefined && (
                 <SwitchContainer>
@@ -272,40 +275,5 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitc
         </Container>
     );
 };
-
-const SortSelector = styled(FlexDivCentered)`
-    position: relative;
-    height: 100%;
-`;
-
-const SortMenu = styled(FlexDivColumn)`
-    position: absolute;
-    gap: 2px;
-    top: 30px;
-    right: 0px;
-    width: 150px;
-    padding: 5px 3px;
-    border-radius: 8px;
-    border: 2px solid ${(props) => props.theme.dropDown.menu.borderColor.primary};
-    background: ${(props) => props.theme.dropDown.menu.background.primary};
-    z-index: 100;
-`;
-
-const SortMenuItem = styled.div<{ isSelected: boolean }>`
-    padding: 5px 15px;
-    border-radius: 8px;
-    cursor: ${(props) => (props.isSelected ? 'default' : 'pointer')};
-    ${(props) => (props.isSelected ? `background: ${props.theme.dropDown.menuItem.selectedColor.primary};` : '')}
-    &:hover {
-        ${(props) => (props.isSelected ? '' : `background: ${props.theme.dropDown.menuItem.hoverColor.primary};`)}
-    }
-`;
-
-const Arrow = styled.i`
-    font-size: 14px;
-    text-transform: none;
-    color: ${(props) => props.theme.dropDown.indicatorColor.primary};
-    cursor: pointer;
-`;
 
 export default Header;
