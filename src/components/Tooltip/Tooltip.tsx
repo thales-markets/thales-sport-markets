@@ -57,7 +57,7 @@ const Tooltip: React.FC<TooltipProps> = ({
             visible={validationChildRefPositionTop === validationPositionTop}
             overlay={overlay}
             placement="top"
-            overlayClassName={overlayClassName}
+            overlayClassName={`${overlayClassName || ''} override-validation-arrow`}
             overlayInnerStyle={{ ...overlayInnerStyle, ...getValidationStyle(theme, !!isWarning) }}
             arrowContent={<ValidationArrow isWarning={!!isWarning} />}
         >
