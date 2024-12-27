@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { SportFilter, StatusFilter } from 'enums/markets';
+import { SortType, SportFilter, StatusFilter } from 'enums/markets';
 import { MarketType, MarketTypeGroup } from 'enums/marketTypes';
 import { localStore } from 'thales-utils';
 import { Tags } from 'types/markets';
@@ -50,6 +50,7 @@ const initialState: MarketSliceState = {
     tagFilter: getDefaultTagFilter(),
     selectedMarket: undefined,
     isThreeWayView: getDefaultIsThreeWayView(),
+    sortType: SortType.DEFAULT,
 };
 
 const marketSlice = createSlice({
@@ -117,6 +118,9 @@ const marketSlice = createSlice({
         setMarketTypeGroupFilter: (state, action: PayloadAction<MarketTypeGroup | undefined>) => {
             state.marketTypeGroupFilter = action.payload;
         },
+        setSortType: (state, action: PayloadAction<SortType>) => {
+            state.sortType = action.payload;
+        },
     },
 });
 
@@ -130,6 +134,7 @@ export const {
     setIsThreeWayView,
     setMarketTypeFilter,
     setMarketTypeGroupFilter,
+    setSortType,
 } = marketSlice.actions;
 
 const getMarketState = (state: RootState) => state[sliceName];
@@ -143,5 +148,6 @@ export const getMarketTypeGroupFilter = (state: RootState) => getMarketState(sta
 export const getSelectedMarket = (state: RootState) => getMarketState(state).selectedMarket;
 export const getIsMarketSelected = (state: RootState) => !!getMarketState(state).selectedMarket;
 export const getIsThreeWayView = (state: RootState) => getMarketState(state).isThreeWayView;
+export const getSortType = (state: RootState) => getMarketState(state).sortType;
 
 export default marketSlice.reducer;

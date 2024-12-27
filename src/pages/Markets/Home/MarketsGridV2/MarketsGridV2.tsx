@@ -1,6 +1,6 @@
 import Scroll from 'components/Scroll';
 import { BOXING_LEAGUES, LEAGUES_SORT_PRIORITY, LeagueMap } from 'constants/sports';
-import { SportFilter } from 'enums/markets';
+import { SortType, SportFilter } from 'enums/markets';
 import { League, Sport } from 'enums/sports';
 import i18n from 'i18n';
 import { groupBy, orderBy, sortBy } from 'lodash';
@@ -10,7 +10,7 @@ import Scrollbars from 'react-custom-scrollbars-2';
 import { forceCheck } from 'react-lazyload';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { getIsMarketSelected, getSportFilter } from 'redux/modules/market';
+import { getIsMarketSelected, getSortType, getSportFilter } from 'redux/modules/market';
 import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
@@ -29,6 +29,7 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
     const isMarketSelected = useSelector(getIsMarketSelected);
     const isMobile = useSelector(getIsMobile);
     const sportFilter = useSelector(getSportFilter);
+    const sortType = useSelector(getSortType);
 
     const marketsMap: Record<number, SportMarket[]> = groupBy(markets, (market) => Number(market.leagueId));
     const unifiedMarketsMap = unifyBoxingMarkets(marketsMap);
@@ -76,17 +77,23 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
                 }
             });
         } else {
-            content = true
-                ? [
-                      <MarketsListV2
-                          key={'singleList'}
-                          markets={orderBy(markets, ['maturityDate'], ['asc'])}
-                          language={language}
-                      />,
-                  ]
-                : finalOrderKeys.map((leagueId: number, index: number) => (
-                      <MarketsListV2 key={index} league={leagueId} markets={marketsMap[leagueId]} language={language} />
-                  ));
+            content =
+                sortType === SortType.START_TIME
+                    ? [
+                          <MarketsListV2
+                              key={'singleList'}
+                              markets={orderBy(markets, ['maturityDate'], ['asc'])}
+                              language={language}
+                          />,
+                      ]
+                    : finalOrderKeys.map((leagueId: number, index: number) => (
+                          <MarketsListV2
+                              key={index}
+                              league={leagueId}
+                              markets={marketsMap[leagueId]}
+                              language={language}
+                          />
+                      ));
         }
 
         return <ListContainer isMarketSelected={isMarketSelected}>{content}</ListContainer>;

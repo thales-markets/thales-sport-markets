@@ -1,24 +1,29 @@
+import SelectInput from 'components/SelectInput';
 import Tooltip from 'components/Tooltip';
 import {
     MarketTypeGroupsBySport,
     MarketTypePlayerPropsGroupsBySport,
     MarketTypesBySportFilter,
 } from 'constants/marketTypes';
+import { SortType, SportFilter } from 'enums/markets';
 import { MarketType, MarketTypeGroup } from 'enums/marketTypes';
 import { uniq } from 'lodash';
 import React, { useContext, useMemo } from 'react';
 import { ScrollMenu, VisibilityContext, publicApiType } from 'react-horizontal-scrolling-menu';
 import 'react-horizontal-scrolling-menu/dist/styles.css';
 import { useDispatch, useSelector } from 'react-redux';
+import { getIsMobile } from 'redux/modules/app';
 import {
     getIsThreeWayView,
     getMarketTypeFilter,
     getMarketTypeGroupFilter,
     getSelectedMarket,
+    getSortType,
     getSportFilter,
     setIsThreeWayView,
     setMarketTypeFilter,
     setMarketTypeGroupFilter,
+    setSortType,
 } from 'redux/modules/market';
 import { SportMarket } from 'types/markets';
 import { getMarketTypeName, isPlayerPropsMarket } from 'utils/markets';
@@ -31,8 +36,6 @@ import {
     SwitchContainer,
     ThreeWayIcon,
 } from './styled-components';
-import { SportFilter } from 'enums/markets';
-import { getIsMobile } from 'redux/modules/app';
 
 type HeaderProps = {
     allMarkets?: SportMarket[];
@@ -44,7 +47,7 @@ type HeaderProps = {
 const LeftArrow: React.FC = () => {
     const visibility = useContext<publicApiType>(VisibilityContext);
     const isFirstItemVisible = visibility.useIsVisible('first', true);
-    const isLastItemVisible = visibility.useIsVisible('last', false);
+    const isLastItemVisible = visibility.useIsVisible('last', true);
 
     return (
         <ArrowIcon
@@ -59,7 +62,7 @@ const LeftArrow: React.FC = () => {
 
 const RightArrow: React.FC = () => {
     const visibility = useContext<publicApiType>(VisibilityContext);
-    const isLastItemVisible = visibility.useIsVisible('last', false);
+    const isLastItemVisible = visibility.useIsVisible('last', true);
     const isFirstItemVisible = visibility.useIsVisible('first', true);
 
     return (
@@ -81,6 +84,7 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitc
     const sportFilter = useSelector(getSportFilter);
     const selectedMarket = useSelector(getSelectedMarket);
     const isMobile = useSelector(getIsMobile);
+    const sortType = useSelector(getSortType);
 
     const isPlayerPropsFilter = useMemo(() => sportFilter == SportFilter.PlayerProps, [sportFilter]);
     const marketToCheck = useMemo(() => market || selectedMarket, [market, selectedMarket]);
@@ -213,6 +217,15 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitc
                     })}
                 </ScrollMenu>
             </NoScrollbarContainer>
+            <SelectInput
+                options={[
+                    { value: SortType.DEFAULT, label: 'Default' },
+                    { value: SortType.START_TIME, label: 'Chronological' },
+                ]}
+                defaultValue={sortType}
+                handleChange={(value) => dispatch(setSortType(Number(value)))}
+                style={{ zIndex: 1 }}
+            />
             {!hideSwitch && !selectedMarket && marketTypeFilter === undefined && (
                 <SwitchContainer>
                     <Tooltip overlay={isThreeWayView ? 'Switch to standard view' : 'Switch to three column view'}>
