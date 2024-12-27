@@ -1,4 +1,4 @@
-import SelectInput from 'components/SelectInput';
+import OutsideClickHandler from 'components/OutsideClick';
 import Tooltip from 'components/Tooltip';
 import {
     MarketTypeGroupsBySport,
@@ -8,7 +8,7 @@ import {
 import { SortType, SportFilter } from 'enums/markets';
 import { MarketType, MarketTypeGroup } from 'enums/marketTypes';
 import { uniq } from 'lodash';
-import React, { useContext, useMemo } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { ScrollMenu, VisibilityContext, publicApiType } from 'react-horizontal-scrolling-menu';
 import 'react-horizontal-scrolling-menu/dist/styles.css';
 import { useDispatch, useSelector } from 'react-redux';
@@ -25,6 +25,8 @@ import {
     setMarketTypeGroupFilter,
     setSortType,
 } from 'redux/modules/market';
+import styled from 'styled-components';
+import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 import { SportMarket } from 'types/markets';
 import { getMarketTypeName, isPlayerPropsMarket } from 'utils/markets';
 import {
@@ -47,7 +49,7 @@ type HeaderProps = {
 const LeftArrow: React.FC = () => {
     const visibility = useContext<publicApiType>(VisibilityContext);
     const isFirstItemVisible = visibility.useIsVisible('first', true);
-    const isLastItemVisible = visibility.useIsVisible('last', true);
+    const isLastItemVisible = visibility.useIsVisible('last', false);
 
     return (
         <ArrowIcon
@@ -62,7 +64,7 @@ const LeftArrow: React.FC = () => {
 
 const RightArrow: React.FC = () => {
     const visibility = useContext<publicApiType>(VisibilityContext);
-    const isLastItemVisible = visibility.useIsVisible('last', true);
+    const isLastItemVisible = visibility.useIsVisible('last', false);
     const isFirstItemVisible = visibility.useIsVisible('first', true);
 
     return (
@@ -84,7 +86,9 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitc
     const sportFilter = useSelector(getSportFilter);
     const selectedMarket = useSelector(getSelectedMarket);
     const isMobile = useSelector(getIsMobile);
-    const sortType = useSelector(getSortType);
+    const selectedSortType = useSelector(getSortType);
+
+    const [openSortMenu, setOpenSortMenu] = useState(false);
 
     const isPlayerPropsFilter = useMemo(() => sportFilter == SportFilter.PlayerProps, [sportFilter]);
     const marketToCheck = useMemo(() => market || selectedMarket, [market, selectedMarket]);
@@ -217,15 +221,38 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitc
                     })}
                 </ScrollMenu>
             </NoScrollbarContainer>
-            <SelectInput
-                options={[
-                    { value: SortType.DEFAULT, label: 'Default' },
-                    { value: SortType.START_TIME, label: 'Chronological' },
-                ]}
-                defaultValue={sortType}
-                handleChange={(value) => dispatch(setSortType(Number(value)))}
-                style={{ zIndex: 1 }}
-            />
+
+            <Tooltip overlay={'Select markets sorting'}>
+                <SortSelector>
+                    <OutsideClickHandler onOutsideClick={() => setOpenSortMenu(false)}>
+                        <Arrow
+                            className={'icon icon--arrows-vertical'}
+                            onClick={() => setOpenSortMenu(!openSortMenu)}
+                        />
+                        {openSortMenu && (
+                            <SortMenu>
+                                {Object.values(SortType)
+                                    .filter((_, i) => i < Object.values(SortType).length)
+                                    .map((sortType, index) => {
+                                        const isSelected = selectedSortType === (sortType as SortType);
+                                        return (
+                                            <SortMenuItem
+                                                key={`sortMenuItem${index}`}
+                                                isSelected={isSelected}
+                                                onClick={() =>
+                                                    !isSelected && dispatch(setSortType(sortType as SortType))
+                                                }
+                                            >
+                                                {sortType}
+                                            </SortMenuItem>
+                                        );
+                                    })}
+                            </SortMenu>
+                        )}
+                    </OutsideClickHandler>
+                </SortSelector>
+            </Tooltip>
+
             {!hideSwitch && !selectedMarket && marketTypeFilter === undefined && (
                 <SwitchContainer>
                     <Tooltip overlay={isThreeWayView ? 'Switch to standard view' : 'Switch to three column view'}>
@@ -245,5 +272,40 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitc
         </Container>
     );
 };
+
+const SortSelector = styled(FlexDivCentered)`
+    position: relative;
+    height: 100%;
+`;
+
+const SortMenu = styled(FlexDivColumn)`
+    position: absolute;
+    gap: 2px;
+    top: 30px;
+    right: 0px;
+    width: 150px;
+    padding: 5px 3px;
+    border-radius: 8px;
+    border: 2px solid ${(props) => props.theme.dropDown.menu.borderColor.primary};
+    background: ${(props) => props.theme.dropDown.menu.background.primary};
+    z-index: 100;
+`;
+
+const SortMenuItem = styled.div<{ isSelected: boolean }>`
+    padding: 5px 15px;
+    border-radius: 8px;
+    cursor: ${(props) => (props.isSelected ? 'default' : 'pointer')};
+    ${(props) => (props.isSelected ? `background: ${props.theme.dropDown.menuItem.selectedColor.primary};` : '')}
+    &:hover {
+        ${(props) => (props.isSelected ? '' : `background: ${props.theme.dropDown.menuItem.hoverColor.primary};`)}
+    }
+`;
+
+const Arrow = styled.i`
+    font-size: 14px;
+    text-transform: none;
+    color: ${(props) => props.theme.dropDown.indicatorColor.primary};
+    cursor: pointer;
+`;
 
 export default Header;

@@ -279,7 +279,7 @@ const DetailedCollateralOption = styled(FlexDivSpaceBetween)`
     border-radius: 8px;
     cursor: pointer;
     &:hover {
-        background: rgb(95, 97, 128, 0.5);
+        background: ${(props) => props.theme.dropDown.menuItem.hoverColor.primary};
     }
 `;
 

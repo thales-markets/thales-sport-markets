@@ -13,8 +13,8 @@ export enum SortDirection {
 }
 
 export enum SortType {
-    DEFAULT,
-    START_TIME,
+    DEFAULT = 'Default',
+    START_TIME = 'Chronological',
 }
 
 export enum SportFilter {
