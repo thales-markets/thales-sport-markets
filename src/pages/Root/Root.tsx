@@ -6,6 +6,7 @@ import { Buffer as buffer } from 'buffer';
 import UnexpectedError from 'components/UnexpectedError';
 import WalletDisclaimer from 'components/WalletDisclaimer';
 import { PLAUSIBLE } from 'constants/analytics';
+import { LINKS } from 'constants/links';
 import { ThemeMap } from 'constants/ui';
 import { merge } from 'lodash';
 import App from 'pages/Root/App';
@@ -15,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { Store } from 'redux';
 import { getDefaultTheme } from 'redux/modules/ui';
+import { isMobile } from 'utils/device';
 import { PARTICLE_STYLE } from 'utils/particleWallet/utils';
 import queryConnector from 'utils/queryConnector';
 import { WagmiProvider } from 'wagmi';
@@ -38,6 +40,8 @@ const rainbowCustomTheme = merge(darkTheme(), {
 
 queryConnector.setQueryClient();
 
+const DISCORD_MESSAGE_MAX_LENGTH = 2000;
+
 const Root: React.FC<RootProps> = ({ store }) => {
     // particle context provider is overriding our i18n configuration and languages, so we need to add our localization after the initialization of particle context
     // initialization of particle context is happening in Root
@@ -51,27 +55,23 @@ const Root: React.FC<RootProps> = ({ store }) => {
             return;
         }
 
-        // let content = `IsMobile:${isMobile()}\nError:\n${error.stack || error.message}`;
-        // const flags = 4; // SUPPRESS_EMBEDS
-        // fetch(LINKS.Discord.SpeedErrors, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({ content, flags }),
-        // });
+        let content = `IsMobile: ${isMobile()}\nError:\n${error.stack || error.message}`;
+        const flags = 4; // SUPPRESS_EMBEDS
+        fetch(LINKS.Discord.OvertimeErrors, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content, flags }),
+        });
 
-        // content = `ErrorInfo:${info.componentStack}`;
-        // if (content.length > DISCORD_MESSAGE_MAX_LENGTH) {
-        //     content = content.substring(0, DISCORD_MESSAGE_MAX_LENGTH);
-        // }
-        // fetch(LINKS.Discord.SpeedErrors, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({ content, flags }),
-        // });
+        content = `ErrorInfo:${info.componentStack}`;
+        if (content.length > DISCORD_MESSAGE_MAX_LENGTH) {
+            content = content.substring(0, DISCORD_MESSAGE_MAX_LENGTH);
+        }
+        fetch(LINKS.Discord.OvertimeErrors, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content, flags }),
+        });
         console.error(error, info);
     };
 
