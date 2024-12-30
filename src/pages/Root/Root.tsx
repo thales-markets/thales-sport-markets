@@ -6,19 +6,20 @@ import { Buffer as buffer } from 'buffer';
 import UnexpectedError from 'components/UnexpectedError';
 import WalletDisclaimer from 'components/WalletDisclaimer';
 import { PLAUSIBLE } from 'constants/analytics';
-import { LINKS } from 'constants/links';
+import ROUTES from 'constants/routes';
 import { ThemeMap } from 'constants/ui';
 import { merge } from 'lodash';
 import App from 'pages/Root/App';
 import React, { ErrorInfo } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
+import { ErrorBoundary, useErrorBoundary } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { Store } from 'redux';
 import { getDefaultTheme } from 'redux/modules/ui';
-import { isMobile } from 'utils/device';
+import { logError } from 'utils/discord';
 import { PARTICLE_STYLE } from 'utils/particleWallet/utils';
 import queryConnector from 'utils/queryConnector';
+import { navigateTo } from 'utils/routes';
 import { WagmiProvider } from 'wagmi';
 import enTranslation from '../../i18n/en.json';
 import { wagmiConfig } from './wagmiConfig';
@@ -40,8 +41,6 @@ const rainbowCustomTheme = merge(darkTheme(), {
 
 queryConnector.setQueryClient();
 
-const DISCORD_MESSAGE_MAX_LENGTH = 2000;
-
 const Root: React.FC<RootProps> = ({ store }) => {
     // particle context provider is overriding our i18n configuration and languages, so we need to add our localization after the initialization of particle context
     // initialization of particle context is happening in Root
@@ -50,33 +49,28 @@ const Root: React.FC<RootProps> = ({ store }) => {
 
     PLAUSIBLE.enableAutoPageviews();
 
-    const logError = (error: Error, info: ErrorInfo) => {
+    const { resetBoundary } = useErrorBoundary();
+
+    const onErrorHandler = (error: Error, info: ErrorInfo) => {
         if (import.meta.env.DEV) {
             return;
         }
 
-        let content = `IsMobile: ${isMobile()}\nError:\n${error.stack || error.message}`;
-        const flags = 4; // SUPPRESS_EMBEDS
-        fetch(LINKS.Discord.OvertimeErrors, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ content, flags }),
-        });
+        const isDeployError =
+            error.message.includes('Failed to fetch dynamically imported module') ||
+            error.message.includes('Importing a module script failed');
 
-        content = `ErrorInfo:${info.componentStack}`;
-        if (content.length > DISCORD_MESSAGE_MAX_LENGTH) {
-            content = content.substring(0, DISCORD_MESSAGE_MAX_LENGTH);
+        if (isDeployError) {
+            console.log('Deployment error:', error, info);
+            resetBoundary();
+            navigateTo(ROUTES.Markets.Home);
+        } else {
+            logError(error, info);
         }
-        fetch(LINKS.Discord.OvertimeErrors, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ content, flags }),
-        });
-        console.error(error, info);
     };
 
     return (
-        <ErrorBoundary fallback={<UnexpectedError theme={ThemeMap[theme]} />} onError={logError}>
+        <ErrorBoundary fallback={<UnexpectedError theme={ThemeMap[theme]} />} onError={onErrorHandler}>
             <QueryClientProvider client={queryConnector.queryClient}>
                 <Provider store={store}>
                     <AuthCoreContextProvider
