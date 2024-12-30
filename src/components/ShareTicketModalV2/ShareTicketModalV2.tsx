@@ -16,11 +16,14 @@ import { getIsMobile } from 'redux/modules/app';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
 import { Coins, isFirefox, isIos, isMetamask } from 'thales-utils';
-import { TicketMarket } from 'types/markets';
+import { SystemBetData, TicketMarket } from 'types/markets';
 import { RootState } from 'types/redux';
 import { refetchOverdropMultipliers } from 'utils/queryConnector';
 import { useAccount } from 'wagmi';
 import MyTicket from './components/MyTicket';
+
+// XMAS Background
+import XMasBackgroundTop from 'assets/images/flex-card-top-xmas.svg';
 
 export type ShareTicketModalProps = {
     markets: TicketMarket[];
@@ -32,6 +35,8 @@ export type ShareTicketModalProps = {
     collateral: Coins;
     isLive: boolean;
     applyPayoutMultiplier: boolean;
+    isTicketOpen: boolean;
+    systemBetData?: SystemBetData;
 };
 
 const PARLAY_IMAGE_NAME = 'ParlayImage.png';
@@ -73,6 +78,8 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
     collateral,
     isLive,
     applyPayoutMultiplier,
+    isTicketOpen,
+    systemBetData,
 }) => {
     const walletAddress = useAccount()?.address || '';
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -311,6 +318,8 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                     collateral={collateral}
                     isLive={isLive}
                     applyPayoutMultiplier={applyPayoutMultiplier}
+                    systemBetData={systemBetData}
+                    isTicketOpen={isTicketOpen}
                 />
 
                 <TwitterShare disabled={isLoading} onClick={onTwitterShareClick}>
@@ -343,8 +352,13 @@ const Container = styled(FlexDivColumnCentered)`
     // max-height: 600px;
     padding: 15px;
     flex: none;
-    background: linear-gradient(180deg, #303656 0%, #1a1c2b 100%);
     border-radius: 10px;
+    background: linear-gradient(180deg, #151b36 0%, #111325 100%);
+    background-image: ${`url(${XMasBackgroundTop})`};
+    background-position: center top;
+    background-size: auto;
+    background-repeat: no-repeat;
+    background-color: #151b36;
     @media (max-width: 950px) {
         width: 357px;
         // max-height: 476px;

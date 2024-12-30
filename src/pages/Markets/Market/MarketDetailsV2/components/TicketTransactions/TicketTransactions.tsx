@@ -43,7 +43,8 @@ const ParlayTransactions: React.FC<{ market: SportMarket; isOnSelectedMarket?: b
                 <TicketTransactionsTable
                     ticketTransactions={gameTickets}
                     market={market}
-                    tableHeight={isOnSelectedMarket ? `calc(100% - 107px)` : 'auto'}
+                    tableHeight={isOnSelectedMarket ? 'calc(100% - 107px)' : 'auto'}
+                    tableStyle={isOnSelectedMarket ? 'overflow-y: hidden; max-height: calc(100vh - 478px);' : undefined}
                     isLoading={gameTicketsQuery.isLoading}
                 />
             )}

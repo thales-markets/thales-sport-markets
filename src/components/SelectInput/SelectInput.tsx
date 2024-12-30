@@ -16,6 +16,7 @@ type SelectInputProps = {
     value?: SelectOption;
     width?: number;
     isDisabled?: boolean;
+    style?: any;
     isPaginationStyle?: boolean;
 };
 
@@ -26,6 +27,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
     value,
     width,
     isDisabled,
+    style,
     isPaginationStyle,
 }) => {
     const theme: ThemeInterface = useTheme();
@@ -44,6 +46,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
             border: `1px solid ${theme.button.borderColor.tertiary}`,
             marginTop: 5,
             borderRadius: 10,
+            ...style?.menuStyle,
         }),
         option: (provided: any, state: any) => ({
             ...provided,
@@ -52,6 +55,10 @@ const SelectInput: React.FC<SelectInputProps> = ({
             opacity: state.isSelected && !state?.isFocused ? 0.7 : 0.9,
             cursor: 'pointer',
             fontFamily: theme.fontFamily.primary,
+            ...style?.optionStyle,
+            [':active']: {
+                backgroundColor: state?.isFocused || state.isSelected ? theme.background.primary : 'transparent',
+            },
             '&:hover': {
                 backgroundColor: theme.background.primary,
             },
@@ -70,15 +77,18 @@ const SelectInput: React.FC<SelectInputProps> = ({
                 boxShadow: 'none',
             },
             opacity: state.isDisabled ? 0.4 : 1,
+            ...style?.controlStyle,
         }),
         placeholder: (provided: any) => ({
             ...provided,
             color: theme.textColor.primary,
+            ...style?.placeholderStyle,
         }),
         singleValue: (provided: CSSObjectWithLabel) => ({
             ...provided,
             color: theme.textColor.primary,
             fontFamily: theme.fontFamily.primary,
+            ...style?.singleValueStyle,
             lineHeight: '120%',
         }),
         dropdownIndicator: (provided: CSSObjectWithLabel) => ({
@@ -88,6 +98,11 @@ const SelectInput: React.FC<SelectInputProps> = ({
                 ...provided[':hover'],
                 color: theme.textColor.primary,
             },
+            ...style?.dropdownIndicatorStyle,
+        }),
+        indicatorSeparator: (provided: any) => ({
+            ...provided,
+            ...style?.indicatorSeparatorStyle,
         }),
     };
 
@@ -115,7 +130,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
         }),
         control: (provided: any, state: any) => ({
             ...provided,
-            width: isMobile ? '40px' : '52px',
+            width: isMobile ? '42px' : '52px',
             backgroundColor: 'transparent',
             borderColor: 'transparent',
             color: theme.textColor.primary,

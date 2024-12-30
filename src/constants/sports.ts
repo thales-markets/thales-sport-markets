@@ -493,7 +493,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
     [League.BRAZIL_1]: {
         sport: Sport.SOCCER,
         id: League.BRAZIL_1,
-        label: 'Serie A',
+        label: 'Brazil Serie A',
         scoringType: ScoringType.GOALS,
         matchResolveType: MatchResolveType.REGULAR,
         periodType: PeriodType.HALF,
@@ -1268,7 +1268,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 176,
-        hidden: true,
+        hidden: false,
     },
     [League.URUGUAY_PRIMERA_DIVISION]: {
         sport: Sport.SOCCER,
@@ -1630,7 +1630,11 @@ export const OLYMPIC_LEAGUES = [
 export const PLAYER_PROPS_COMBINING_ENABLED_LEAGUES = [League.NBA, League.WNBA, League.EUROLEAGUE];
 
 export const PLAYER_PROPS_MARKETS_PER_SPORT_MAP: Record<Sport, MarketType[]> = {
-    [Sport.SOCCER]: [],
+    [Sport.SOCCER]: [
+        MarketType.PLAYER_PROPS_OVER_GOALS,
+        MarketType.PLAYER_PROPS_TOTAL_SHOTS,
+        MarketType.PLAYER_PROPS_ASSISTS,
+    ],
     [Sport.FOOTBALL]: [],
     [Sport.BASKETBALL]: [
         MarketType.PLAYER_PROPS_POINTS,
@@ -1670,3 +1674,21 @@ export const PLAYER_PROPS_MARKETS_PER_PROP_MAP: Record<number, MarketType[]> = {
 };
 
 export const PLAYER_PROPS_SPECIAL_SPORTS = [Sport.FOOTBALL];
+
+// lower index => higher priority
+export const LEAGUES_SORT_PRIORITY = [
+    League.EPL,
+    League.LA_LIGA,
+    League.SERIE_A,
+    League.BUNDESLIGA,
+    League.LIGUE_ONE,
+    League.NBA,
+    League.NFL,
+    League.NHL,
+    League.MLB,
+    League.EREDIVISIE,
+    League.PRIMEIRA_LIGA,
+    League.BELGIUM_LEAGUE,
+    League.NCAAF,
+    League.NCAAB,
+];

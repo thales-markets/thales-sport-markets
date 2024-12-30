@@ -85,12 +85,13 @@ export const PlayerPropsHeader = styled(FlexDiv)<{ marketSelected: boolean; coll
     top: 0;
     z-index: 2;
     background: ${(props) => props.theme.background.primary};
-    padding: ${(props) => (props.marketSelected ? '0' : props.collapsed ? '0 15px 5px 15px' : '0px 15px 15px 15px')};
+    padding: ${(props) => (props.marketSelected ? '0' : props.collapsed ? '0 15px 10px 15px' : '0px 15px 15px 15px')};
     justify-content: space-between;
     cursor: pointer;
     margin-bottom: -10px;
     @media (max-width: 950px) {
-        padding: ${(props) => (props.marketSelected ? '0' : props.collapsed ? '0 15px 5px 15px' : '0px 15px 5px 15px')};
+        padding: ${(props) =>
+            props.marketSelected ? '0' : props.collapsed ? '0 15px 10px 15px' : '0px 15px 5px 15px'};
     }
 `;
 
@@ -133,7 +134,7 @@ export const GameOfLabel = styled.span`
     text-transform: uppercase;
     @media (max-width: 600px) {
         font-size: 8px;
-        top: -5px;
+        top: 0;
         right: 20px;
         height: auto;
     }

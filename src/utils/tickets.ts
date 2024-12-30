@@ -16,6 +16,7 @@ import { TicketMarketStatus } from '../enums/tickets';
 import { getCollateralByAddress } from './collaterals';
 import freeBetHolder from './contracts/freeBetHolder';
 import stakingThalesBettingProxy from './contracts/stakingThalesBettingProxy';
+import { logError } from './discord';
 import {
     formatMarketOdds,
     isFuturesMarket,
@@ -68,6 +69,7 @@ export const mapTicket = (
         isLive: ticket.isLive,
         isFreeBet:
             ticket.ticketOwner.toLowerCase() == freeBetHolder.addresses[networkId as SupportedNetwork].toLowerCase(),
+        isSystemBet: ticket.isSystem,
 
         sportMarkets: ticket.marketsData.map(
             (market: any, index: number): TicketMarket => {
@@ -169,6 +171,31 @@ export const mapTicket = (
         ),
     };
 
+    if (mappedTicket.isSystemBet) {
+        const systemBetDenominator = Number(ticket.systemBetDenominator);
+        const systemBetPayoutData = getSystemBetPayoutData(
+            mappedTicket.sportMarkets,
+            systemBetDenominator,
+            mappedTicket.buyInAmount,
+            mappedTicket.totalQuote
+        );
+        mappedTicket.systemBetData = {
+            systemBetDenominator: Number(ticket.systemBetDenominator),
+            numberOfCombination: systemBetPayoutData.numberOfCombinations,
+            buyInPerCombination: systemBetPayoutData.buyinPerCombination,
+            minPayout: systemBetPayoutData.systemBetPayoutMinPayout,
+            maxPayout: mappedTicket.buyInAmount / mappedTicket.totalQuote,
+            numberOfWinningCombinations: systemBetPayoutData.numberOfWinningCombinations,
+        };
+        if (mappedTicket.isUserTheWinner || mappedTicket.isCancelled) {
+            if (mappedTicket.isResolved) {
+                mappedTicket.payout = mappedTicket.finalPayout;
+            } else {
+                mappedTicket.payout = systemBetPayoutData.systemBetPayout;
+            }
+        }
+    }
+
     return mappedTicket;
 };
 
@@ -233,4 +260,177 @@ export const tableSortByStatus = (rowA: any, rowB: any) => {
     const aOrder = getTicketStatusOrder(rowA.original);
     const bOrder = getTicketStatusOrder(rowB.original);
     return aOrder < bOrder ? -1 : aOrder > bOrder ? 1 : 0;
+};
+
+export const generateSystemBetCombinations = (n: number, k: number): number[][] => {
+    if (k <= 1 || k >= n) return [];
+
+    // Calculate the number of combinations: n! / (k! * (n-k)!)
+    let combinationsCount = 1;
+    for (let i = 0; i < k; i++) {
+        combinationsCount = (combinationsCount * (n - i)) / (i + 1);
+    }
+
+    // Initialize combinations array
+    const combinations: number[][] = new Array(combinationsCount);
+
+    // Generate combinations
+    const indices: number[] = new Array(k);
+    for (let i = 0; i < k; i++) {
+        indices[i] = i;
+    }
+
+    let index = 0;
+
+    while (true) {
+        // Add the current combination
+        const combination: number[] = new Array(k);
+        for (let i = 0; i < k; i++) {
+            combination[i] = indices[i];
+        }
+        combinations[index] = combination;
+        index++;
+
+        // Generate the next combination
+        let done = true;
+        for (let i = k; i > 0; i--) {
+            if (indices[i - 1] < n - (k - (i - 1))) {
+                indices[i - 1]++;
+                for (let j = i; j < k; j++) {
+                    indices[j] = indices[j - 1] + 1;
+                }
+                done = false;
+                break;
+            }
+        }
+
+        if (done) {
+            break;
+        }
+    }
+
+    return combinations;
+};
+
+export const getSystemBetData = (
+    markets: TicketMarket[],
+    systemBetDenominator: number,
+    currencyKey: Coins,
+    maxSupportedOdds?: number
+) => {
+    const systemCombinations: number[][] = generateSystemBetCombinations(markets.length, systemBetDenominator);
+    const numberOfCombinations = systemCombinations.length;
+    let systemBetQuote = 0;
+    let systemBetQuotePerCombination = 0;
+    let systemBetMinimumQuote = 0;
+
+    // Loop through each stored combination
+    for (let i = 0; i < numberOfCombinations; i++) {
+        const currentCombination: number[] = systemCombinations[i];
+
+        let combinationQuote = 1;
+
+        for (let j = 0; j < currentCombination.length; j++) {
+            const marketIndex = currentCombination[j];
+            const market = markets[marketIndex];
+            // For debug purpose
+            if (market === undefined) {
+                logError(
+                    { name: '', message: 'Custom error' },
+                    {
+                        componentStack: JSON.stringify({
+                            markets,
+                            systemCombinations,
+                            i,
+                            j,
+                            marketIndex,
+                        }),
+                    }
+                );
+            }
+            let odds = market.odds[market.position];
+            odds = odds > 0 ? getAddedPayoutOdds(currencyKey, odds) : odds;
+            combinationQuote *= odds;
+        }
+
+        systemBetMinimumQuote = combinationQuote > systemBetMinimumQuote ? combinationQuote : systemBetMinimumQuote;
+        systemBetQuotePerCombination += 1 / combinationQuote;
+    }
+
+    systemBetQuotePerCombination = 1 / systemBetQuotePerCombination;
+    systemBetQuote = numberOfCombinations * systemBetQuotePerCombination;
+
+    if (maxSupportedOdds) {
+        systemBetQuote = systemBetQuote < maxSupportedOdds ? maxSupportedOdds : systemBetQuote;
+        systemBetQuotePerCombination = systemBetQuote / numberOfCombinations;
+        systemBetMinimumQuote =
+            systemBetMinimumQuote < systemBetQuotePerCombination ? systemBetQuotePerCombination : systemBetMinimumQuote;
+    }
+
+    return { systemBetQuotePerCombination, systemBetQuote, systemBetMinimumQuote };
+};
+
+const getSystemBetPayoutData = (
+    markets: TicketMarket[],
+    systemBetDenominator: number,
+    buyInAmount: number,
+    totalQuote: number
+) => {
+    const systemCombinations: number[][] = generateSystemBetCombinations(markets.length, systemBetDenominator);
+    const numberOfCombinations = systemCombinations.length;
+    const buyinPerCombination = buyInAmount / numberOfCombinations;
+    let systemBetPayout = 0;
+    let systemBetMinimumQuote = 0;
+    let areAllMarketsResolved = true;
+    let numberOfWinningCombinations = 0;
+
+    // Loop through each stored combination
+    for (let i = 0; i < numberOfCombinations; i++) {
+        const currentCombination: number[] = systemCombinations[i];
+
+        let combinationQuote = 1;
+        let originalCominationQuote = 1;
+
+        for (let j = 0; j < currentCombination.length; j++) {
+            const marketIndex = currentCombination[j];
+            const market = markets[marketIndex];
+
+            originalCominationQuote *= market.odd;
+
+            if (!market.isResolved) {
+                areAllMarketsResolved = false;
+                continue;
+            }
+            if (market.isCancelled) {
+                continue;
+            }
+            if (market.isWinning) {
+                combinationQuote *= market.odd;
+            } else {
+                combinationQuote = 0;
+            }
+        }
+
+        systemBetMinimumQuote =
+            originalCominationQuote > systemBetMinimumQuote ? originalCominationQuote : systemBetMinimumQuote;
+        if (combinationQuote > 0) {
+            numberOfWinningCombinations++;
+            systemBetPayout += buyinPerCombination / combinationQuote;
+        }
+    }
+
+    const maxPayout = buyInAmount / totalQuote;
+    const maxTotalQuotePerCombination = totalQuote / numberOfCombinations;
+
+    systemBetPayout = systemBetPayout > maxPayout ? maxPayout : systemBetPayout;
+    systemBetMinimumQuote =
+        systemBetMinimumQuote < maxTotalQuotePerCombination ? maxTotalQuotePerCombination : systemBetMinimumQuote;
+
+    return {
+        systemBetPayout: areAllMarketsResolved ? systemBetPayout : 0,
+        systemBetPayoutMinPayout: buyinPerCombination / systemBetMinimumQuote,
+        numberOfCombinations,
+        buyinPerCombination,
+        numberOfWinningCombinations: areAllMarketsResolved ? numberOfWinningCombinations : 0,
+    };
 };
