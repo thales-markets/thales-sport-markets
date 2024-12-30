@@ -226,7 +226,7 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitc
 
             <SortSelector>
                 <OutsideClickHandler onOutsideClick={() => setOpenSortMenu(false)}>
-                    <Tooltip overlay={'Select markets sorting'}>
+                    <Tooltip overlay={'Select games sorting'}>
                         <SortIndicator
                             className={'icon icon--arrows-vertical'}
                             onClick={() => setOpenSortMenu(!openSortMenu)}

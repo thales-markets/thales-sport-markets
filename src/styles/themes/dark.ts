@@ -81,7 +81,7 @@ export default {
         },
     },
     dropDown: {
-        indicatorColor: { primary: Colors.WHITE },
+        indicatorColor: { primary: Colors.CARIBBEAN_GREEN },
         menu: { background: { primary: Colors.NAVY_BLUE_EXTRA_DARK }, borderColor: { primary: Colors.WHITE } },
         menuItem: {
             selectedColor: { primary: Colors.NAVY_BLUE },
