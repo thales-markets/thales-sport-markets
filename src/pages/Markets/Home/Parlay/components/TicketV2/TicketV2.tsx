@@ -705,24 +705,33 @@ const Ticket: React.FC<TicketProps> = ({
         }
     );
 
-    const ticketLiquidity: number | undefined = useMemo(
-        () =>
-            ticketLiquidityQuery.isSuccess && ticketLiquidityQuery.data !== undefined
-                ? isThales || swapToThales
-                    ? Math.floor(
-                          (ticketLiquidityQuery.data * selectedCollateralCurrencyRate) / thalesContractCurrencyRate
-                      )
-                    : ticketLiquidityQuery.data
-                : undefined,
-        [
-            ticketLiquidityQuery.isSuccess,
-            ticketLiquidityQuery.data,
-            isThales,
-            selectedCollateralCurrencyRate,
-            thalesContractCurrencyRate,
-            swapToThales,
-        ]
-    );
+    const ticketLiquidity: number | undefined = useMemo(() => {
+        if (ticketLiquidityQuery.isSuccess && ticketLiquidityQuery.data !== undefined) {
+            let liquidity = ticketLiquidityQuery.data;
+
+            if (isThales || swapToThales) {
+                liquidity = Math.floor((liquidity * selectedCollateralCurrencyRate) / thalesContractCurrencyRate);
+            }
+
+            if (isSystemBet) {
+                liquidity = Math.floor((liquidity * markets.length) / systemBetDenominator);
+            }
+
+            return liquidity;
+        }
+
+        return undefined;
+    }, [
+        ticketLiquidityQuery.isSuccess,
+        ticketLiquidityQuery.data,
+        isThales,
+        swapToThales,
+        isSystemBet,
+        selectedCollateralCurrencyRate,
+        thalesContractCurrencyRate,
+        systemBetDenominator,
+        markets.length,
+    ]);
 
     const overdropSummaryOpen = useMemo(() => isOverdropSummaryOpen && !isFreeBetActive, [
         isOverdropSummaryOpen,

@@ -65,7 +65,7 @@ export const getCurrentLevelByPoints = (points: number) => {
         return OVERDROP_LEVELS[OVERDROP_LEVELS.length - 1];
     }
     const levelItemIndex = OVERDROP_LEVELS.findIndex((item, index) => {
-        if (item.minimumPoints > points && OVERDROP_LEVELS[index - 1].minimumPoints < points) return item;
+        if (item?.minimumPoints > points && OVERDROP_LEVELS[index - 1]?.minimumPoints < points) return item;
     });
 
     if (levelItemIndex !== -1) return OVERDROP_LEVELS[levelItemIndex - 1];
@@ -76,7 +76,7 @@ export const getCurrentLevelByPoints = (points: number) => {
 export const getNextLevelItemByPoints = (points?: number) => {
     if (!points) return OVERDROP_LEVELS[0];
     const currentLevelItemIndex = OVERDROP_LEVELS.findIndex((item, index) => {
-        if (item.minimumPoints > points && OVERDROP_LEVELS[index - 1].minimumPoints < points) return item;
+        if (item?.minimumPoints > points && OVERDROP_LEVELS[index - 1]?.minimumPoints < points) return item;
     });
 
     if (currentLevelItemIndex == -1) return OVERDROP_LEVELS[0];
