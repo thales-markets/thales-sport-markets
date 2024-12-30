@@ -6,11 +6,12 @@ import { Buffer as buffer } from 'buffer';
 import UnexpectedError from 'components/UnexpectedError';
 import WalletDisclaimer from 'components/WalletDisclaimer';
 import { PLAUSIBLE } from 'constants/analytics';
+import ROUTES from 'constants/routes';
 import { ThemeMap } from 'constants/ui';
 import { merge } from 'lodash';
 import App from 'pages/Root/App';
-import React from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
+import React, { ErrorInfo } from 'react';
+import { ErrorBoundary, useErrorBoundary } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { Store } from 'redux';
@@ -18,6 +19,7 @@ import { getDefaultTheme } from 'redux/modules/ui';
 import { logError } from 'utils/discord';
 import { PARTICLE_STYLE } from 'utils/particleWallet/utils';
 import queryConnector from 'utils/queryConnector';
+import { navigateTo } from 'utils/routes';
 import { WagmiProvider } from 'wagmi';
 import enTranslation from '../../i18n/en.json';
 import { wagmiConfig } from './wagmiConfig';
@@ -47,8 +49,28 @@ const Root: React.FC<RootProps> = ({ store }) => {
 
     PLAUSIBLE.enableAutoPageviews();
 
+    const { resetBoundary } = useErrorBoundary();
+
+    const onErrorHandler = (error: Error, info: ErrorInfo) => {
+        if (import.meta.env.DEV) {
+            return;
+        }
+
+        const isDeployError =
+            error.message.includes('Failed to fetch dynamically imported module') ||
+            error.message.includes('Importing a module script failed');
+
+        if (isDeployError) {
+            console.log('Deployment error:', error, info);
+            resetBoundary();
+            navigateTo(ROUTES.Markets.Home);
+        } else {
+            logError(error, info);
+        }
+    };
+
     return (
-        <ErrorBoundary fallback={<UnexpectedError theme={ThemeMap[theme]} />} onError={logError}>
+        <ErrorBoundary fallback={<UnexpectedError theme={ThemeMap[theme]} />} onError={onErrorHandler}>
             <QueryClientProvider client={queryConnector.queryClient}>
                 <Provider store={store}>
                     <AuthCoreContextProvider
