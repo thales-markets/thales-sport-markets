@@ -6,12 +6,11 @@ import { Buffer as buffer } from 'buffer';
 import UnexpectedError from 'components/UnexpectedError';
 import WalletDisclaimer from 'components/WalletDisclaimer';
 import { PLAUSIBLE } from 'constants/analytics';
-import ROUTES from 'constants/routes';
 import { ThemeMap } from 'constants/ui';
 import { merge } from 'lodash';
 import App from 'pages/Root/App';
 import React, { ErrorInfo } from 'react';
-import { ErrorBoundary, useErrorBoundary } from 'react-error-boundary';
+import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { Store } from 'redux';
@@ -19,7 +18,6 @@ import { getDefaultTheme } from 'redux/modules/ui';
 import { logError } from 'utils/discord';
 import { PARTICLE_STYLE } from 'utils/particleWallet/utils';
 import queryConnector from 'utils/queryConnector';
-import { navigateTo } from 'utils/routes';
 import { WagmiProvider } from 'wagmi';
 import enTranslation from '../../i18n/en.json';
 import { wagmiConfig } from './wagmiConfig';
@@ -41,6 +39,10 @@ const rainbowCustomTheme = merge(darkTheme(), {
 
 queryConnector.setQueryClient();
 
+const isDeployError = (errorMessage: string) =>
+    errorMessage.includes('Failed to fetch dynamically imported module') ||
+    errorMessage.includes('Importing a module script failed');
+
 const Root: React.FC<RootProps> = ({ store }) => {
     // particle context provider is overriding our i18n configuration and languages, so we need to add our localization after the initialization of particle context
     // initialization of particle context is happening in Root
@@ -49,28 +51,31 @@ const Root: React.FC<RootProps> = ({ store }) => {
 
     PLAUSIBLE.enableAutoPageviews();
 
-    const { resetBoundary } = useErrorBoundary();
-
     const onErrorHandler = (error: Error, info: ErrorInfo) => {
         if (import.meta.env.DEV) {
             return;
         }
 
-        const isDeployError =
-            error.message.includes('Failed to fetch dynamically imported module') ||
-            error.message.includes('Importing a module script failed');
-
-        if (isDeployError) {
-            console.log('Deployment error:', error, info);
-            resetBoundary();
-            navigateTo(ROUTES.Markets.Home);
-        } else {
-            logError(error, info);
+        if (isDeployError(error.message)) {
+            console.log('Deployment error', error, info);
+            return;
         }
+
+        logError(error, info);
+    };
+
+    const fallbackRender = ({ error, resetErrorBoundary }: FallbackProps) => {
+        if (isDeployError(error.message)) {
+            resetErrorBoundary();
+            window.location.reload();
+            return;
+        }
+
+        return <UnexpectedError theme={ThemeMap[theme]} />;
     };
 
     return (
-        <ErrorBoundary fallback={<UnexpectedError theme={ThemeMap[theme]} />} onError={onErrorHandler}>
+        <ErrorBoundary fallbackRender={fallbackRender} onError={onErrorHandler}>
             <QueryClientProvider client={queryConnector.queryClient}>
                 <Provider store={store}>
                     <AuthCoreContextProvider
