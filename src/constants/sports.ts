@@ -1292,6 +1292,17 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         priority: 178,
         hidden: false,
     },
+    [League.ITALY_SUPER_CUP]: {
+        sport: Sport.SOCCER,
+        id: League.ITALY_SUPER_CUP,
+        label: 'Italy Super Cup',
+        scoringType: ScoringType.GOALS,
+        matchResolveType: MatchResolveType.REGULAR,
+        periodType: PeriodType.HALF,
+        isDrawAvailable: true,
+        priority: 179,
+        hidden: false,
+    },
     [League.EUROCUP]: {
         sport: Sport.BASKETBALL,
         id: League.EUROCUP,
