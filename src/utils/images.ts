@@ -33,7 +33,7 @@ export const getTeamImageSource = (team: string, league: League) => {
         ? `/logos/Ligue 1/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.SPAIN_CUP
         ? `/logos/La Liga/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : league == League.ITALY_CUP
+        : league == League.ITALY_CUP || league == League.ITALY_SUPER_CUP
         ? `/logos/Serie A/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.GERMANY_CUP
         ? `/logos/Bundesliga/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
@@ -129,6 +129,7 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.SERIE_B:
         case League.ITALY_LEGA_BASKET_SERIE_A:
         case League.SERIE_A_FUTURES:
+        case League.ITALY_SUPER_CUP:
             return `/logos/Countries/italy.svg`;
         case League.J1_LEAGUE:
             return `/logos/Countries/japan.svg`;
