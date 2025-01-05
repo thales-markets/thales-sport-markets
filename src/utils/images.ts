@@ -114,16 +114,19 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.LIGUE_2:
         case League.FRANCE_LNB_PRO_A:
         case League.LIGUE_ONE_FUTURES:
+        case League.FRANCE_SUPER_CUP:
             return `/logos/Countries/france.svg`;
         case League.BUNDESLIGA:
         case League.BUNDESLIGA_2:
         case League.GERMANY_BBL:
         case League.BUNDESLIGA_FUTURES:
+        case League.GERMANY_SUPER_CUP:
             return `/logos/Countries/germany.svg`;
         case League.LA_LIGA:
         case League.LA_LIGA_2:
         case League.SPAIN_LIGA_ACB:
         case League.LA_LIGA_FUTURES:
+        case League.SPAIN_SUPER_CUP:
             return `/logos/Countries/spain.svg`;
         case League.SERIE_A:
         case League.SERIE_B:
