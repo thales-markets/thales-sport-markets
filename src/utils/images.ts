@@ -29,13 +29,13 @@ export const getTeamImageSource = (team: string, league: League) => {
               .toLowerCase()}.svg`
         : league == League.ENGLAND_CUP
         ? `/logos/EPL/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : league == League.FRANCE_CUP
+        : league == League.FRANCE_CUP || league == League.FRANCE_SUPER_CUP
         ? `/logos/Ligue 1/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : league == League.SPAIN_CUP
+        : league == League.SPAIN_CUP || league == League.SPAIN_SUPER_CUP
         ? `/logos/La Liga/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.ITALY_CUP || league == League.ITALY_SUPER_CUP
         ? `/logos/Serie A/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : league == League.GERMANY_CUP
+        : league == League.GERMANY_CUP || league == League.GERMANY_SUPER_CUP
         ? `/logos/Bundesliga/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.BRAZIL_CUP
         ? `/logos/Brazil-Serie-A/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
