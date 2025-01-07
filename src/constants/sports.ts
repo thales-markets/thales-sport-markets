@@ -1336,6 +1336,17 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         priority: 182,
         hidden: false,
     },
+    [League.PORTUGAL_LEAGUE_CUP]: {
+        sport: Sport.SOCCER,
+        id: League.PORTUGAL_LEAGUE_CUP,
+        label: 'Portugal League Cup',
+        scoringType: ScoringType.GOALS,
+        matchResolveType: MatchResolveType.REGULAR,
+        periodType: PeriodType.HALF,
+        isDrawAvailable: true,
+        priority: 183,
+        hidden: false,
+    },
     [League.EUROCUP]: {
         sport: Sport.BASKETBALL,
         id: League.EUROCUP,
