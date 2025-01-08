@@ -41,7 +41,8 @@ queryConnector.setQueryClient();
 
 const isDeployError = (errorMessage: string) =>
     errorMessage.includes('Failed to fetch dynamically imported module') ||
-    errorMessage.includes('Importing a module script failed');
+    errorMessage.includes('Importing a module script failed') ||
+    errorMessage.includes("'text/html' is not a valid JavaScript MIME type");
 
 const Root: React.FC<RootProps> = ({ store }) => {
     // particle context provider is overriding our i18n configuration and languages, so we need to add our localization after the initialization of particle context
