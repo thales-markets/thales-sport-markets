@@ -23,7 +23,7 @@ import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
 import { getOverdropUIState, getStopPulsing, setOddsType, setStopPulsing } from 'redux/modules/ui';
 import { getIsBiconomy, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
-import { FlexDiv, FlexDivCentered, FlexDivEnd } from 'styles/common';
+import { FlexDivCentered, FlexDivEnd } from 'styles/common';
 import { RootState } from 'types/redux';
 import { OverdropLevel, ThemeInterface } from 'types/ui';
 import biconomyConnector from 'utils/biconomyWallet';
@@ -50,6 +50,7 @@ import {
     MenuIcon,
     MenuIconContainer,
     MiddleContainer,
+    MiddleRightContainer,
     MobileButtonWrapper,
     NotificationCount,
     OverdropButtonContainer,
@@ -215,7 +216,7 @@ const DappHeader: React.FC = () => {
                     <MiddleContainer>
                         <div>{!isConnected ? getGetStartedButton() : isBiconomy ? <TopUp /> : <></>}</div>
                         {isMarketsPage && <TimeFilters />}
-                        <FlexDiv>
+                        <MiddleRightContainer>
                             <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
                                 {levelItem.level > 0 ? (
                                     <OverdropButtonContainer>
@@ -227,15 +228,15 @@ const DappHeader: React.FC = () => {
                                 )}
                             </SPAAnchor>
                             {isConnected && <ProfileItem />}
-                            <SettingsContainer
-                                onClick={() => {
-                                    setDropdownIsOpen(!dropdownIsOpen);
-                                }}
-                            >
-                                <HeaderIcon className="icon icon--settings" />
-                                <HeaderLabel>{t('common.settings')}</HeaderLabel>
-                                {dropdownIsOpen && (
-                                    <OutsideClickHandler onOutsideClick={() => setDropdownIsOpen(false)}>
+                            <OutsideClickHandler onOutsideClick={() => setDropdownIsOpen(false)}>
+                                <SettingsContainer
+                                    onClick={() => {
+                                        setDropdownIsOpen(!dropdownIsOpen);
+                                    }}
+                                >
+                                    <HeaderIcon className="icon icon--settings" />
+                                    <HeaderLabel>{t('common.settings')}</HeaderLabel>
+                                    {dropdownIsOpen && (
                                         <DropdownContainer>
                                             <DropDown>
                                                 {ODDS_TYPES.map((item: any, index: number) => (
@@ -253,10 +254,10 @@ const DappHeader: React.FC = () => {
                                                 ))}
                                             </DropDown>
                                         </DropdownContainer>
-                                    </OutsideClickHandler>
-                                )}
-                            </SettingsContainer>
-                        </FlexDiv>
+                                    )}
+                                </SettingsContainer>
+                            </OutsideClickHandler>
+                        </MiddleRightContainer>
                     </MiddleContainer>
 
                     <RightContainer>

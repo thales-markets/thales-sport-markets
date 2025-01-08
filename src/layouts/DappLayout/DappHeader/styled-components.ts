@@ -1,7 +1,7 @@
 import OverdropButtonBackground from 'assets/images/overdrop/overdrop-button-background.webp';
 import overdrop from 'assets/images/overdrop/overdrop-nav.webp';
 import styled from 'styled-components';
-import { FlexDiv, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
+import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 
 export const Container = styled(FlexDivRowCentered)`
     width: 100%;
@@ -41,6 +41,8 @@ export const MiddleContainer = styled(FlexDivRowCentered)`
     width: 100%;
     max-width: 821px;
 `;
+
+export const MiddleRightContainer = styled(FlexDivCentered)``;
 
 export const RightContainer = styled(FlexDivRowCentered)`
     position: relative;
@@ -251,8 +253,8 @@ export const HeaderLabel = styled.span`
 export const DropdownContainer = styled.div`
     position: absolute;
     width: 180px;
-    top: 28px;
-    left: 0;
+    top: 24px;
+    right: 0;
 `;
 
 export const DropDown = styled(FlexDivColumn)`
