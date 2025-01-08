@@ -101,12 +101,12 @@ export const SortSelector = styled(FlexDivCentered)`
 export const SortMenu = styled(FlexDivColumn)`
     position: absolute;
     gap: 2px;
-    top: 30px;
+    top: 20px;
     right: 0px;
-    width: 150px;
-    padding: 5px 3px;
+    width: 200px;
+    padding: 3px;
     border-radius: 8px;
-    border: 2px solid ${(props) => props.theme.dropDown.menu.borderColor.primary};
+    border: 1px solid ${(props) => props.theme.dropDown.menu.borderColor.primary};
     background: ${(props) => props.theme.dropDown.menu.background.primary};
     z-index: 1000;
 `;
@@ -114,6 +114,9 @@ export const SortMenu = styled(FlexDivColumn)`
 export const SortMenuItem = styled.div<{ isSelected: boolean }>`
     padding: 5px 15px;
     border-radius: 8px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 14px;
     cursor: ${(props) => (props.isSelected ? 'default' : 'pointer')};
     ${(props) => (props.isSelected ? `background: ${props.theme.dropDown.menuItem.selectedColor.primary};` : '')}
     &:hover {

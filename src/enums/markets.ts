@@ -13,7 +13,7 @@ export enum SortDirection {
 }
 
 export enum SortType {
-    DEFAULT = 'Default',
+    DEFAULT = 'Chronological + Popularity',
     START_TIME = 'Chronological',
 }
 

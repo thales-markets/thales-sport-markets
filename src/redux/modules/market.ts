@@ -40,6 +40,11 @@ const getDefaultIsThreeWayView = (): boolean => {
     return lsIsThreeWayView !== undefined ? (lsIsThreeWayView as boolean) : true;
 };
 
+const getDefaultSortType = (): SortType => {
+    const lsSortType = localStore.get(LOCAL_STORAGE_KEYS.SORT_TYPE);
+    return lsSortType !== undefined ? (lsSortType as SortType) : SortType.DEFAULT;
+};
+
 const initialState: MarketSliceState = {
     marketSearch: getDefaultMarketSearch(),
     datePeriodFilter: getDefaultDatePeriodFilter(),
@@ -50,7 +55,7 @@ const initialState: MarketSliceState = {
     tagFilter: getDefaultTagFilter(),
     selectedMarket: undefined,
     isThreeWayView: getDefaultIsThreeWayView(),
-    sortType: SortType.DEFAULT,
+    sortType: getDefaultSortType(),
 };
 
 const marketSlice = createSlice({
@@ -120,6 +125,7 @@ const marketSlice = createSlice({
         },
         setSortType: (state, action: PayloadAction<SortType>) => {
             state.sortType = action.payload;
+            localStore.set(LOCAL_STORAGE_KEYS.SORT_TYPE, action.payload);
         },
     },
 });

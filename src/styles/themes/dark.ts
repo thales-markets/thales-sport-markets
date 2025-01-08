@@ -82,10 +82,10 @@ export default {
     },
     dropDown: {
         indicatorColor: { primary: Colors.CARIBBEAN_GREEN },
-        menu: { background: { primary: Colors.NAVY_BLUE_EXTRA_DARK }, borderColor: { primary: Colors.WHITE } },
+        menu: { background: { primary: Colors.NAVY_BLUE }, borderColor: { primary: Colors.NAVY_BLUE_LIGHT } },
         menuItem: {
-            selectedColor: { primary: Colors.NAVY_BLUE },
-            hoverColor: { primary: Colors.GRAY_LIGHT_OPACITY },
+            selectedColor: { primary: Colors.GRAY_LIGHT_OPACITY },
+            hoverColor: { primary: Colors.NAVY_BLUE_LIGHT },
         },
     },
     link: {
