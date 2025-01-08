@@ -34,12 +34,14 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
     const marketsMap: Record<number, SportMarket[]> = groupBy(markets, (market) => Number(market.leagueId));
     const unifiedMarketsMap = unifyBoxingMarkets(marketsMap);
 
-    const leaguesWithSameMaturityDateMap = new Map<number, number[]>();
+    const leaguesWithSameMaturityDateMap = new Map<number, number[]>(); // MaturityDate => League[]
+    const leaguesWithMinMaturityDateMap = new Map<number, number>(); // League => MaturityMinTime
     const marketsKeys = sortMarketKeys(
         Object.keys(marketsMap).map((key) => Number(key)),
         unifiedMarketsMap,
         favouriteLeagues,
-        leaguesWithSameMaturityDateMap
+        leaguesWithSameMaturityDateMap,
+        leaguesWithMinMaturityDateMap
     );
 
     const finalOrderKeys: number[] = [];
@@ -50,7 +52,12 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
         const minMaturityDateForLeague = Math.min(
             ...unifiedMarketsMap[league].map((market) => Number(format(market.maturityDate, 'yyyyMMdd')))
         );
-        const leaguesToPrioritize = leaguesWithSameMaturityDateMap.get(minMaturityDateForLeague);
+        const leaguesToPrioritize = leaguesWithSameMaturityDateMap
+            .get(minMaturityDateForLeague)
+            ?.sort(
+                (a: number, b: number) =>
+                    Number(leaguesWithMinMaturityDateMap.get(a)) - Number(leaguesWithMinMaturityDateMap.get(b))
+            );
         if (leaguesToPrioritize && leaguesToPrioritize.includes(league)) {
             // group and prioritize leagues with the same maturity date only once
             if (!alreadyPrioritizedLeagues.includes(league)) {
@@ -119,7 +126,8 @@ const sortMarketKeys = (
     marketsKeys: number[],
     marketsMap: Record<number, SportMarket[]>,
     favouriteLeagues: Tags,
-    leaguesWithSameMaturityDateMap: Map<number, number[]>
+    leaguesWithSameMaturityDateMap: Map<number, number[]>,
+    leaguesWithMinMaturityDateMap: Map<number, number>
 ) => {
     return marketsKeys.sort((a: League, b: League) => {
         const earliestGameA = marketsMap[a][0];
@@ -137,13 +145,14 @@ const sortMarketKeys = (
         const leaguePriorityA = leagueInfoA?.priority || 0;
         const leaguePriorityB = leagueInfoB?.priority || 0;
 
-        // for every league set array of leagues with the same earliest maturity date
+        // for every league set array of leagues with the same earliest maturity date and set earliest maturity time
         const maturityDateA = Number(format(earliestGameA.maturityDate, 'yyyyMMdd'));
         if (maturityDateA === Number(format(earliestGameB.maturityDate, 'yyyyMMdd'))) {
             const currentLeaguesSet = new Set(leaguesWithSameMaturityDateMap.get(maturityDateA) || []);
             currentLeaguesSet.add(a);
             currentLeaguesSet.add(b);
             leaguesWithSameMaturityDateMap.set(maturityDateA, [...currentLeaguesSet]);
+            leaguesWithMinMaturityDateMap.set(a, Number(earliestGameA.maturityDate));
         }
 
         return earliestGameA.maturityDate.getTime() == earliestGameB.maturityDate.getTime()

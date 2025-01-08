@@ -16,8 +16,6 @@ export const LINKS = {
     ThalesTip142: 'https://github.com/thales-markets/thales-improvement-proposals/blob/main/TIPs/TIP-142.md',
     Discord: {
         Help: 'https://discord.com/channels/906484044915687464/906723153349316638',
-        OvertimeErrors:
-            'https://discord.com/api/webhooks/1322113920684789760/upS_u_AmhvIBOoWPJqMwdXo0AERLmmbgVFbHjp5aGC1_vBUHUBSp7Qm1WJuNFanUTZof',
     },
     Biconomy: {
         Bundler: 'https://bundler.biconomy.io/api/v2/',
