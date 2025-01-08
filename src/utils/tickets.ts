@@ -16,7 +16,6 @@ import { TicketMarketStatus } from '../enums/tickets';
 import { getCollateralByAddress } from './collaterals';
 import freeBetHolder from './contracts/freeBetHolder';
 import stakingThalesBettingProxy from './contracts/stakingThalesBettingProxy';
-import { logError } from './discord';
 import {
     formatMarketOdds,
     isFuturesMarket,
@@ -333,21 +332,6 @@ export const getSystemBetData = (
         for (let j = 0; j < currentCombination.length; j++) {
             const marketIndex = currentCombination[j];
             const market = markets[marketIndex];
-            // For debug purpose
-            if (market === undefined) {
-                logError(
-                    { name: '', message: 'Custom error' },
-                    {
-                        componentStack: JSON.stringify({
-                            markets,
-                            systemCombinations,
-                            i,
-                            j,
-                            marketIndex,
-                        }),
-                    }
-                );
-            }
             let odds = market.odds[market.position];
             odds = odds > 0 ? getAddedPayoutOdds(currencyKey, odds) : odds;
             combinationQuote *= odds;

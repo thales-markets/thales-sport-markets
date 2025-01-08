@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { Store } from 'redux';
 import { getDefaultTheme } from 'redux/modules/ui';
-import { logError } from 'utils/discord';
+import { logErrorToDiscord } from 'utils/discord';
 import { PARTICLE_STYLE } from 'utils/particleWallet/utils';
 import queryConnector from 'utils/queryConnector';
 import { WagmiProvider } from 'wagmi';
@@ -61,7 +61,7 @@ const Root: React.FC<RootProps> = ({ store }) => {
             return;
         }
 
-        logError(error, info);
+        logErrorToDiscord(error, info);
     };
 
     const fallbackRender = ({ error, resetErrorBoundary }: FallbackProps) => {
