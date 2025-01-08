@@ -39,6 +39,7 @@ type PositionsProps = {
     alignHeader?: boolean;
     oddsTitlesHidden?: boolean;
     floatingOddsTitles?: boolean;
+    width?: string;
     onAccordionClick?: () => void;
 };
 
@@ -55,6 +56,7 @@ const Positions: React.FC<PositionsProps> = ({
     alignHeader,
     oddsTitlesHidden,
     floatingOddsTitles,
+    width,
 }) => {
     const { t } = useTranslation();
 
@@ -93,6 +95,7 @@ const Positions: React.FC<PositionsProps> = ({
             }}
             isExpanded={isExpanded}
             isMainPageView={isMainPageView}
+            width={width}
         >
             <Header
                 isMainPageView={isMainPageView}
@@ -191,7 +194,7 @@ const Positions: React.FC<PositionsProps> = ({
             )}
         </Container>
     ) : isGameLive ? (
-        <Container isExpanded={true} noOdds={true}>
+        <Container isExpanded={true} noOdds={true} width={width}>
             <Message>
                 {t(`markets.market-card.live-trading-paused`)}
                 {liveMarketErrorMessage && <Tooltip overlay={liveMarketErrorMessage} marginLeft={5} top={0} />}

@@ -42,6 +42,7 @@ export const MainContainer = styled(FlexDivRow)<{
 
 export const MatchInfoContainer = styled(FlexDivColumn)`
     cursor: pointer;
+    min-width: 180px;
     max-width: 180px;
     margin-right: 5px;
     @media (max-width: 950px) {
