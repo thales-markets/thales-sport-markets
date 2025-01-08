@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { Store } from 'redux';
 import { getDefaultTheme } from 'redux/modules/ui';
-import { logError } from 'utils/discord';
+import { logErrorToDiscord } from 'utils/discord';
 import { PARTICLE_STYLE } from 'utils/particleWallet/utils';
 import queryConnector from 'utils/queryConnector';
 import { WagmiProvider } from 'wagmi';
@@ -41,7 +41,8 @@ queryConnector.setQueryClient();
 
 const isDeployError = (errorMessage: string) =>
     errorMessage.includes('Failed to fetch dynamically imported module') ||
-    errorMessage.includes('Importing a module script failed');
+    errorMessage.includes('Importing a module script failed') ||
+    errorMessage.includes("'text/html' is not a valid JavaScript MIME type");
 
 const Root: React.FC<RootProps> = ({ store }) => {
     // particle context provider is overriding our i18n configuration and languages, so we need to add our localization after the initialization of particle context
@@ -61,7 +62,7 @@ const Root: React.FC<RootProps> = ({ store }) => {
             return;
         }
 
-        logError(error, info);
+        logErrorToDiscord(error, info);
     };
 
     const fallbackRender = ({ error, resetErrorBoundary }: FallbackProps) => {
