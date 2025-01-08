@@ -1,14 +1,14 @@
 [
     {
-        "image": "banner3_10OP-01.png",
-        "url": "https://www.overtimemarkets.xyz/promotions/christmas-raffle"
+        "image": "overdrop-small-banner.png",
+        "url": "https://www.overtimemarkets.xyz/promotions/overdrop"
     },
     {
-        "image": "free_bet_banner-01.png",
-        "url": "https://www.overtimemarkets.xyz/promotions/christmas-raffle"
+        "image": "banner_futures_new.png",
+        "url": "https://www.overtimemarkets.xyz/markets?status=OpenMarkets&sport=Futures"
     },
     {
-        "image": "raffle_banner-01.png",
-        "url": "https://www.overtimemarkets.xyz/promotions/christmas-raffle"
+        "image": "overdrop-boost.png",
+        "url": ""
     }
 ]
