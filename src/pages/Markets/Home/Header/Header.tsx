@@ -46,6 +46,7 @@ type HeaderProps = {
     availableMarketTypes?: MarketType[];
     market?: SportMarket;
     hideSwitch?: boolean;
+    isMainPageView?: boolean;
 };
 
 const LeftArrow: React.FC = () => {
@@ -79,7 +80,7 @@ const RightArrow: React.FC = () => {
     );
 };
 
-const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitch, allMarkets }) => {
+const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitch, allMarkets, isMainPageView }) => {
     const dispatch = useDispatch();
 
     const isThreeWayView = useSelector(getIsThreeWayView);
@@ -224,37 +225,39 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitc
                 </ScrollMenu>
             </NoScrollbarContainer>
 
-            <SortSelector>
-                <OutsideClickHandler onOutsideClick={() => setOpenSortMenu(false)}>
-                    <Tooltip overlay={isMobile ? '' : 'Select games sorting'}>
-                        <SortIndicator
-                            className={'icon icon--arrows-vertical'}
-                            onClick={() => setOpenSortMenu(!openSortMenu)}
-                        />
-                    </Tooltip>
-                    {openSortMenu && (
-                        <SortMenu>
-                            {Object.values(SortType)
-                                .filter((_, i) => i < Object.values(SortType).length)
-                                .map((sortType, index) => {
-                                    const isSelected = selectedSortType === (sortType as SortType);
-                                    return (
-                                        <SortMenuItem
-                                            key={`sortMenuItem${index}`}
-                                            isSelected={isSelected}
-                                            onClick={() => {
-                                                !isSelected && dispatch(setSortType(sortType as SortType));
-                                                setOpenSortMenu(false);
-                                            }}
-                                        >
-                                            {sortType}
-                                        </SortMenuItem>
-                                    );
-                                })}
-                        </SortMenu>
-                    )}
-                </OutsideClickHandler>
-            </SortSelector>
+            {isMainPageView && (
+                <SortSelector>
+                    <OutsideClickHandler onOutsideClick={() => setOpenSortMenu(false)}>
+                        <Tooltip overlay={isMobile ? '' : 'Select games sorting'}>
+                            <SortIndicator
+                                className={'icon icon--arrows-vertical'}
+                                onClick={() => setOpenSortMenu(!openSortMenu)}
+                            />
+                        </Tooltip>
+                        {openSortMenu && (
+                            <SortMenu>
+                                {Object.values(SortType)
+                                    .filter((_, i) => i < Object.values(SortType).length)
+                                    .map((sortType, index) => {
+                                        const isSelected = selectedSortType === (sortType as SortType);
+                                        return (
+                                            <SortMenuItem
+                                                key={`sortMenuItem${index}`}
+                                                isSelected={isSelected}
+                                                onClick={() => {
+                                                    !isSelected && dispatch(setSortType(sortType as SortType));
+                                                    setOpenSortMenu(false);
+                                                }}
+                                            >
+                                                {sortType}
+                                            </SortMenuItem>
+                                        );
+                                    })}
+                            </SortMenu>
+                        )}
+                    </OutsideClickHandler>
+                </SortSelector>
+            )}
 
             {!hideSwitch && !selectedMarket && marketTypeFilter === undefined && (
                 <SwitchContainer>

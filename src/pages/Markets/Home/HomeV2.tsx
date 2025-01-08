@@ -798,6 +798,7 @@ const Home: React.FC = () => {
                                         allMarkets={finalMarkets}
                                         availableMarketTypes={availableMarketTypes}
                                         market={selectedMarketData}
+                                        isMainPageView
                                     />
                                 )}
                             <FilterTagsMobile />
@@ -836,6 +837,7 @@ const Home: React.FC = () => {
                                                 allMarkets={finalMarkets}
                                                 availableMarketTypes={availableMarketTypes}
                                                 market={selectedMarketData}
+                                                isMainPageView
                                             />
                                         )}
                                     <FlexDivRow>
