@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { getIsMobile } from 'redux/modules/app';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
-import { getOverdropUIState, getStopPulsing, setOddsType, setStopPulsing } from 'redux/modules/ui';
+import { getOddsType, getOverdropUIState, getStopPulsing, setOddsType, setStopPulsing } from 'redux/modules/ui';
 import { getIsBiconomy, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivEnd } from 'styles/common';
@@ -105,6 +105,7 @@ const DappHeader: React.FC = () => {
     const stopPulsing = useSelector(getStopPulsing);
     const isMobile = useSelector(getIsMobile);
     const overdropUIState = useSelector(getOverdropUIState);
+    const selectedOddsType = useSelector(getOddsType);
 
     const [levelItem, setLevelItem] = useState<OverdropLevel>(OVERDROP_LEVELS[0]);
     const [currentPulsingCount, setCurrentPulsingCount] = useState<number>(0);
@@ -239,9 +240,10 @@ const DappHeader: React.FC = () => {
                                     {dropdownIsOpen && (
                                         <DropdownContainer>
                                             <DropDown>
-                                                {ODDS_TYPES.map((item: any, index: number) => (
+                                                {ODDS_TYPES.map((item: OddsType, index: number) => (
                                                     <DropDownItem
                                                         key={index}
+                                                        isSelected={selectedOddsType === item}
                                                         onClick={() => {
                                                             setSelectedOddsType(item);
                                                             setDropdownIsOpen(false);

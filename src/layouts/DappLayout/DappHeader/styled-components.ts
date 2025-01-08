@@ -269,12 +269,13 @@ export const DropDown = styled(FlexDivColumn)`
     z-index: 3;
 `;
 
-export const DropDownItem = styled(FlexDiv)`
+export const DropDownItem = styled(FlexDiv)<{ isSelected: boolean }>`
     padding: 7px 10px 9px 10px;
-    cursor: pointer;
+    cursor: ${(props) => (props.isSelected ? 'default' : 'pointer')};
+    ${(props) => (props.isSelected ? `background: ${props.theme.dropDown.menuItem.selectedColor.primary};` : '')}
+    border-radius: 5px;
     &:hover {
-        background: ${(props) => props.theme.background.tertiary};
-        border-radius: 5px;
+        ${(props) => (props.isSelected ? '' : `background: ${props.theme.dropDown.menuItem.hoverColor.primary};`)}
     }
 `;
 
