@@ -266,11 +266,12 @@ export const DropDown = styled(FlexDivColumn)`
     margin-top: 2px;
     padding: 4px;
     width: 100%;
+    gap: 2px;
     z-index: 3;
 `;
 
 export const DropDownItem = styled(FlexDiv)<{ isSelected: boolean }>`
-    padding: 7px 10px 9px 10px;
+    padding: 7px 10px;
     cursor: ${(props) => (props.isSelected ? 'default' : 'pointer')};
     ${(props) => (props.isSelected ? `background: ${props.theme.dropDown.menuItem.selectedColor.primary};` : '')}
     border-radius: 5px;

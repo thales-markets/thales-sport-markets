@@ -112,7 +112,7 @@ export const SortMenu = styled(FlexDivColumn)`
 `;
 
 export const SortMenuItem = styled.div<{ isSelected: boolean }>`
-    padding: 5px 15px;
+    padding: 7px 10px;
     border-radius: 8px;
     font-weight: 400;
     font-size: 12px;
