@@ -34,41 +34,43 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
     const marketsMap: Record<number, SportMarket[]> = groupBy(markets, (market) => Number(market.leagueId));
     const unifiedMarketsMap = unifyBoxingMarkets(marketsMap);
 
-    const leaguesWithSameMaturityDateMap = new Map<number, number[]>(); // MaturityDate => League[]
-    const leaguesWithMinMaturityDateMap = new Map<number, number>(); // League => MaturityMinTime
-    const marketsKeys = sortMarketKeys(
-        Object.keys(marketsMap).map((key) => Number(key)),
-        unifiedMarketsMap,
-        favouriteLeagues,
-        leaguesWithSameMaturityDateMap,
-        leaguesWithMinMaturityDateMap
-    );
-
     const finalOrderKeys: number[] = [];
-    let alreadyPrioritizedLeagues: number[] = [];
-
-    // group leagues by maturity date and sort using priorities if there are leagues with the same maturity date
-    marketsKeys.forEach((league: number) => {
-        const minMaturityDateForLeague = Math.min(
-            ...unifiedMarketsMap[league].map((market) => Number(format(market.maturityDate, 'yyyyMMdd')))
+    if (sortType === SortType.DEFAULT) {
+        const leaguesWithSameMaturityDateMap = new Map<number, number[]>(); // MaturityDate => League[]
+        const leaguesWithMinMaturityDateMap = new Map<number, number>(); // League => MaturityMinTime
+        const marketsKeys = sortMarketKeys(
+            Object.keys(marketsMap).map((key) => Number(key)),
+            unifiedMarketsMap,
+            favouriteLeagues,
+            leaguesWithSameMaturityDateMap,
+            leaguesWithMinMaturityDateMap
         );
-        const leaguesToPrioritize = leaguesWithSameMaturityDateMap
-            .get(minMaturityDateForLeague)
-            ?.sort(
-                (a: number, b: number) =>
-                    Number(leaguesWithMinMaturityDateMap.get(a)) - Number(leaguesWithMinMaturityDateMap.get(b))
+
+        let alreadyPrioritizedLeagues: number[] = [];
+
+        // group leagues by maturity date and sort using priorities if there are leagues with the same maturity date
+        marketsKeys.forEach((league: number) => {
+            const minMaturityDateForLeague = Math.min(
+                ...unifiedMarketsMap[league].map((market) => Number(format(market.maturityDate, 'yyyyMMdd')))
             );
-        if (leaguesToPrioritize && leaguesToPrioritize.includes(league)) {
-            // group and prioritize leagues with the same maturity date only once
-            if (!alreadyPrioritizedLeagues.includes(league)) {
-                finalOrderKeys.push(...groupBySortedMarketsKeys(leaguesToPrioritize));
-                alreadyPrioritizedLeagues = [...leaguesToPrioritize];
+            const leaguesToPrioritize = leaguesWithSameMaturityDateMap
+                .get(minMaturityDateForLeague)
+                ?.sort(
+                    (a: number, b: number) =>
+                        Number(leaguesWithMinMaturityDateMap.get(a)) - Number(leaguesWithMinMaturityDateMap.get(b))
+                );
+            if (leaguesToPrioritize && leaguesToPrioritize.includes(league)) {
+                // group and prioritize leagues with the same maturity date only once
+                if (!alreadyPrioritizedLeagues.includes(league)) {
+                    finalOrderKeys.push(...groupBySortedMarketsKeys(leaguesToPrioritize));
+                    alreadyPrioritizedLeagues = [...leaguesToPrioritize];
+                }
+            } else {
+                // add league which is unique by maturity date
+                finalOrderKeys.push(league);
             }
-        } else {
-            // add league which is unique by maturity date
-            finalOrderKeys.push(league);
-        }
-    });
+        });
+    }
 
     useEffect(() => {
         forceCheck();
