@@ -109,7 +109,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
         () =>
             collateral == CRYPTO_CURRENCY_MAP.THALES ||
             collateral == CRYPTO_CURRENCY_MAP.sTHALES ||
-            collateral == CRYPTO_CURRENCY_MAP.ETH,
+            collateral == CRYPTO_CURRENCY_MAP.WETH,
         [collateral]
     );
 
