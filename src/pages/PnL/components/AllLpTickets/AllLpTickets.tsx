@@ -15,7 +15,7 @@ import { Ticket } from 'types/markets';
 import { useChainId, useClient } from 'wagmi';
 import TicketTransactionsTable from '../../../Markets/Market/MarketDetailsV2/components/TicketTransactionsTable';
 
-const UNRESOLVED_PERIOD_IN_HOURS = 6;
+const UNRESOLVED_PERIOD_IN_HOURS = 8;
 
 const lpOptions = [
     {
