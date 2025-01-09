@@ -67,7 +67,7 @@ export const GameOfLabel = styled.span<{ selected?: boolean; isLive?: boolean }>
     font-size: 10px;
     position: absolute;
     top: 6px;
-    left: 12px;
+    left: 48px;
     text-transform: uppercase;
     @media (max-width: 600px) {
         top: 10px;
@@ -92,16 +92,16 @@ export const MatchInfoLabel = styled.label<{ selected?: boolean }>`
     }
 `;
 
-export const LeagueFlag = styled.img<{ isGameOfDay: boolean }>`
+export const LeagueFlag = styled.img`
     width: 24px;
     height: 24px;
     margin-top: -5px;
-    margin-left: auto;
-    margin-right: 20px;
+    margin-left: 1px;
+    margin-right: 11px;
     cursor: pointer;
     @media (max-width: 950px) {
-        margin-left: ${(props) => (props.isGameOfDay ? '0' : '20px')};
-        margin-right: unset;
+        margin-left: 0px;
+        margin-right: 4px;
     }
 `;
 

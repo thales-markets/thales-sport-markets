@@ -329,6 +329,15 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                         >{`Game of the ${overdropGameMultiplier.type}`}</GameOfLabel>
                     )}
                     <MatchInfo selected={selected}>
+                        {showLeagueInfo && (
+                            <Tooltip overlay={getLeagueLabel(market.leagueId)}>
+                                <LeagueFlag
+                                    ref={leagueFlagRef}
+                                    alt={market.leagueId.toString()}
+                                    src={getLeagueFlagSource(market.leagueId)}
+                                />
+                            </Tooltip>
+                        )}
                         {isGameLive ? (
                             <>
                                 <LiveIndicatorContainer>
@@ -382,16 +391,6 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                                 <Tooltip overlay={t(leagueTooltipKey)} iconFontSize={12} marginLeft={2} />
                             )}
                         </MatchInfoLabel>
-                        {showLeagueInfo && (
-                            <Tooltip overlay={getLeagueLabel(market.leagueId)}>
-                                <LeagueFlag
-                                    ref={leagueFlagRef}
-                                    alt={market.leagueId.toString()}
-                                    src={getLeagueFlagSource(market.leagueId)}
-                                    isGameOfDay={!isPlayerPropsMarket && !!overdropGameMultiplier}
-                                />
-                            </Tooltip>
-                        )}
                     </MatchInfo>
                     <TeamsInfoContainer isPlayerPropsMarket={isPlayerPropsMarket}>
                         <TeamLogosContainer
