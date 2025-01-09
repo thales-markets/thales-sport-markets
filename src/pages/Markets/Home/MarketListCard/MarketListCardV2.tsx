@@ -650,7 +650,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                                             isGameOpen={isGameOpen}
                                             isMainPageView
                                             isColumnView={isColumnView}
-                                            width={isColumnView ? '30%' : undefined}
+                                            width={isColumnView ? '20%' : undefined}
                                         />
                                         {isColumnView && !isMobile && spreadMarket && (
                                             <PositionsV2
@@ -663,6 +663,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                                                 isGameOpen={isGameOpen}
                                                 isMainPageView
                                                 isColumnView={isColumnView}
+                                                width="20%"
                                             />
                                         )}
                                         {isColumnView && !isMobile && totalMarket && (
@@ -676,6 +677,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                                                 isGameOpen={isGameOpen}
                                                 isMainPageView
                                                 isColumnView={isColumnView}
+                                                width="20%"
                                             />
                                         )}
                                     </>
