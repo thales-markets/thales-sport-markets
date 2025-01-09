@@ -6,10 +6,12 @@ import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { getIsMobile } from 'redux/modules/app';
 import { getMarketTypeFilter, getMarketTypeGroupFilter, getSelectedMarket } from 'redux/modules/market';
 import { FlexDivColumn, FlexDivRowCentered } from 'styles/common';
 import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarket } from 'types/markets';
+import { getLeagueFlagSource } from 'utils/images';
 import { getPlayerPropsMarketsOverviewLength, getSpecializedPropForMarket, getTeamNameV2 } from 'utils/marketsV2';
 import MarketListCardV2 from '../MarketListCard';
 import {
@@ -18,6 +20,9 @@ import {
     FireContainer,
     FireText,
     GameOfLabel,
+    LeagueFlag,
+    LeagueInfoContainer,
+    LeagueName,
     MatchTeamsLabel,
     MatchTimeLabel,
     MatchTimeLabelContainer,
@@ -25,12 +30,17 @@ import {
     StickyContainer,
 } from './styled-components';
 
-const GameList: React.FC<{ markets: SportMarket[]; language: string }> = ({ markets, language }) => {
+const GameList: React.FC<{ markets: SportMarket[]; language: string; showLeagueInfo?: boolean }> = ({
+    markets,
+    language,
+    showLeagueInfo,
+}) => {
     const { t } = useTranslation();
 
     const selectedMarket = useSelector(getSelectedMarket);
     const marketTypeFilter = useSelector(getMarketTypeFilter);
     const marketTypeGroupFilter = useSelector(getMarketTypeGroupFilter);
+    const isMobile = useSelector(getIsMobile);
 
     const parentMarket = { ...markets[0], isPlayerPropsMarket: false, isOneSideMarket: false };
 
@@ -70,6 +80,15 @@ const GameList: React.FC<{ markets: SportMarket[]; language: string }> = ({ mark
                 marketSelected={!!selectedMarket}
                 collapsed={hideMarkets}
             >
+                {showLeagueInfo && (
+                    <LeagueInfoContainer>
+                        <LeagueFlag
+                            alt={parentMarket.leagueId.toString()}
+                            src={getLeagueFlagSource(parentMarket.leagueId)}
+                        />
+                        {!isMobile && <LeagueName>{parentMarket.leagueName}</LeagueName>}
+                    </LeagueInfoContainer>
+                )}
                 <StickyContainer>
                     <FlexDivRowCentered gap={20}>
                         <MatchLogosV2

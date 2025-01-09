@@ -1,9 +1,10 @@
 import IncentivizedLeague from 'components/IncentivizedLeague';
 import { SportFilter } from 'enums/markets';
 import { groupBy, orderBy } from 'lodash';
-import React, { useMemo, useState } from 'react';
+import React, { Fragment, useMemo, useState } from 'react';
 import LazyLoad, { forceCheck } from 'react-lazyload';
 import { useDispatch, useSelector } from 'react-redux';
+import { getIsMobile } from 'redux/modules/app';
 import { getIsMarketSelected, getSportFilter } from 'redux/modules/market';
 import { getFavouriteLeagues, setFavouriteLeague } from 'redux/modules/ui';
 import { SportMarket, SportMarkets, TagInfo } from 'types/markets';
@@ -18,6 +19,7 @@ import {
     LeagueCard,
     LeagueFlag,
     LeagueInfo,
+    LeagueInfoPerGame,
     LeagueName,
     StarIcon,
 } from './styled-components';
@@ -34,6 +36,7 @@ const MarketsList: React.FC<MarketsListProps> = ({ markets, league, language }) 
     const isMarketSelected = useSelector(getIsMarketSelected);
     const [hideLeague, setHideLeague] = useState<boolean>(false);
     const sportFilter = useSelector(getSportFilter);
+    const isMobile = useSelector(getIsMobile);
 
     const isPlayerPropsSelected = useMemo(() => sportFilter === SportFilter.PlayerProps, [sportFilter]);
 
@@ -89,9 +92,24 @@ const MarketsList: React.FC<MarketsListProps> = ({ markets, league, language }) 
             {isPlayerPropsSelected && marketsMapByGame ? (
                 <>
                     {Object.keys(marketsMapByGame).map((key) => (
-                        <GamesContainer key={key} hidden={hideLeague}>
-                            <GameList markets={marketsMapByGame[key]} language={language} />
-                        </GamesContainer>
+                        <Fragment key={key}>
+                            {isMobile && !league && (
+                                <LeagueInfoPerGame>
+                                    <LeagueFlag
+                                        alt={marketsMapByGame[key][0].leagueId.toString()}
+                                        src={getLeagueFlagSource(marketsMapByGame[key][0].leagueId)}
+                                    />
+                                    <LeagueName>{marketsMapByGame[key][0].leagueName}</LeagueName>
+                                </LeagueInfoPerGame>
+                            )}
+                            <GamesContainer hidden={hideLeague}>
+                                <GameList
+                                    markets={marketsMapByGame[key]}
+                                    language={language}
+                                    showLeagueInfo={!league}
+                                />
+                            </GamesContainer>
+                        </Fragment>
                     ))}
                 </>
             ) : (
