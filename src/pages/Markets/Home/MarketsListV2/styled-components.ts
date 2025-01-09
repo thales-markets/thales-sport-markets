@@ -30,11 +30,6 @@ export const LeagueInfo = styled.div`
     }
 `;
 
-export const LeagueInfoPerGame = styled(LeagueInfo)`
-    padding-left: 12px;
-    padding-bottom: 10px;
-`;
-
 export const GamesContainer = styled.div<{ hidden?: boolean }>`
     display: ${(props) => (props.hidden ? 'none' : 'flex')};
     flex-direction: column;

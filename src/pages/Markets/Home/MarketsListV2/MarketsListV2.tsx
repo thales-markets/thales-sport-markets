@@ -1,10 +1,9 @@
 import IncentivizedLeague from 'components/IncentivizedLeague';
 import { SportFilter } from 'enums/markets';
 import { groupBy, orderBy } from 'lodash';
-import React, { Fragment, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import LazyLoad, { forceCheck } from 'react-lazyload';
 import { useDispatch, useSelector } from 'react-redux';
-import { getIsMobile } from 'redux/modules/app';
 import { getIsMarketSelected, getSportFilter } from 'redux/modules/market';
 import { getFavouriteLeagues, setFavouriteLeague } from 'redux/modules/ui';
 import { SportMarket, SportMarkets, TagInfo } from 'types/markets';
@@ -19,7 +18,6 @@ import {
     LeagueCard,
     LeagueFlag,
     LeagueInfo,
-    LeagueInfoPerGame,
     LeagueName,
     StarIcon,
 } from './styled-components';
@@ -36,11 +34,14 @@ const MarketsList: React.FC<MarketsListProps> = ({ markets, league, language }) 
     const isMarketSelected = useSelector(getIsMarketSelected);
     const [hideLeague, setHideLeague] = useState<boolean>(false);
     const sportFilter = useSelector(getSportFilter);
-    const isMobile = useSelector(getIsMobile);
 
     const isPlayerPropsSelected = useMemo(() => sportFilter === SportFilter.PlayerProps, [sportFilter]);
 
-    const leagueName = league ? getLeagueLabel(league) : '';
+    const leagueName = league
+        ? getLeagueLabel(league)
+        : isPlayerPropsSelected
+        ? getLeagueLabel(markets[0].leagueId) // when not grouped by league
+        : '';
     const isFavourite = !!favouriteLeagues.find((favourite: TagInfo) => favourite.id == league);
 
     const sortedMarkets = league ? sortWinnerMarkets(markets, league) : markets;
@@ -50,9 +51,15 @@ const MarketsList: React.FC<MarketsListProps> = ({ markets, league, language }) 
         [markets, isPlayerPropsSelected]
     );
 
+    const selectedLeagueId = useMemo(() => (isPlayerPropsSelected && !league ? markets[0].leagueId : league), [
+        league,
+        isPlayerPropsSelected,
+        markets,
+    ]);
+
     return (
         <>
-            {league && (
+            {selectedLeagueId && (
                 <LeagueCard isMarketSelected={isMarketSelected}>
                     <LeagueInfo
                         onClick={() => {
@@ -66,7 +73,10 @@ const MarketsList: React.FC<MarketsListProps> = ({ markets, league, language }) 
                             }, 1);
                         }}
                     >
-                        <LeagueFlag alt={league.toString()} src={getLeagueFlagSource(Number(league))} />
+                        <LeagueFlag
+                            alt={selectedLeagueId.toString()}
+                            src={getLeagueFlagSource(Number(selectedLeagueId))}
+                        />
                         <LeagueName>{leagueName}</LeagueName>
                         {hideLeague ? (
                             <ArrowIcon className={`icon icon--caret-right`} />
@@ -76,10 +86,10 @@ const MarketsList: React.FC<MarketsListProps> = ({ markets, league, language }) 
                     </LeagueInfo>
                     {!isMarketSelected ? (
                         <>
-                            <IncentivizedLeague league={league} />
+                            <IncentivizedLeague league={selectedLeagueId} />
                             <StarIcon
                                 onClick={() => {
-                                    dispatch(setFavouriteLeague(league));
+                                    dispatch(setFavouriteLeague(selectedLeagueId));
                                 }}
                                 className={`icon icon--${isFavourite ? 'star-full selected' : 'favourites'} `}
                             />
@@ -92,28 +102,13 @@ const MarketsList: React.FC<MarketsListProps> = ({ markets, league, language }) 
             {isPlayerPropsSelected && marketsMapByGame ? (
                 <>
                     {Object.keys(marketsMapByGame).map((key) => (
-                        <Fragment key={key}>
-                            {isMobile && !league && (
-                                <LeagueInfoPerGame>
-                                    <LeagueFlag
-                                        alt={marketsMapByGame[key][0].leagueId.toString()}
-                                        src={getLeagueFlagSource(marketsMapByGame[key][0].leagueId)}
-                                    />
-                                    <LeagueName>{marketsMapByGame[key][0].leagueName}</LeagueName>
-                                </LeagueInfoPerGame>
-                            )}
-                            <GamesContainer hidden={hideLeague}>
-                                <GameList
-                                    markets={marketsMapByGame[key]}
-                                    language={language}
-                                    showLeagueInfo={!league}
-                                />
-                            </GamesContainer>
-                        </Fragment>
+                        <GamesContainer key={key} hidden={hideLeague}>
+                            <GameList markets={marketsMapByGame[key]} language={language} />
+                        </GamesContainer>
                     ))}
                 </>
             ) : (
-                <GamesContainer hidden={hideLeague}>
+                <GamesContainer hidden={hideLeague && !!league}>
                     {sortedMarkets.map((market: SportMarket, index: number) => (
                         <LazyLoad height={130} key={index + 'list'} offset={800}>
                             <MarketListCardV2 language={language} market={market} showLeagueInfo={!league} />
