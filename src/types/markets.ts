@@ -89,7 +89,7 @@ type OmitDistributive<T, K extends PropertyKey> = T extends any
         ? Id<OmitRecursively<T, K>>
         : T
     : never;
-type Id<T> = {} & { [P in keyof T]: T[P] };
+type Id<T> = object & { [P in keyof T]: T[P] };
 type OmitRecursively<T, K extends PropertyKey> = Omit<{ [P in keyof T]: OmitDistributive<T[P], K> }, K>;
 
 // Omit all non-serializable values from SportMarket (maturityDate)

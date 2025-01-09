@@ -98,7 +98,7 @@ const MarketsList: React.FC<MarketsListProps> = ({ markets, league, language }) 
                 <GamesContainer hidden={hideLeague}>
                     {sortedMarkets.map((market: SportMarket, index: number) => (
                         <LazyLoad height={130} key={index + 'list'} offset={800}>
-                            <MarketListCardV2 language={language} market={market} />
+                            <MarketListCardV2 language={language} market={market} showLeagueInfo={!league} />
                         </LazyLoad>
                     ))}
                 </GamesContainer>

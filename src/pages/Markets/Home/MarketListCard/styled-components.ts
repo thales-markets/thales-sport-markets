@@ -53,6 +53,7 @@ export const MatchInfoContainer = styled(FlexDivColumn)`
 export const MatchInfo = styled(FlexDivStart)<{
     selected: boolean;
 }>`
+    z-index: 1;
     color: ${(props) =>
         props.selected ? props.theme.oddsContainerBackground.tertiary : props.theme.textColor.quinary};
     i {
@@ -88,6 +89,19 @@ export const MatchInfoLabel = styled.label<{ selected?: boolean }>`
     z-index: 2;
     @media (max-width: 950px) {
         font-size: 11px;
+    }
+`;
+
+export const LeagueFlag = styled.img<{ isGameOfDay: boolean }>`
+    width: 24px;
+    height: 24px;
+    margin-top: -5px;
+    margin-left: auto;
+    margin-right: 20px;
+    cursor: pointer;
+    @media (max-width: 950px) {
+        margin-left: ${(props) => (props.isGameOfDay ? '0' : '20px')};
+        margin-right: unset;
     }
 `;
 
