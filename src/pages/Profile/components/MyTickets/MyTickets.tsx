@@ -16,6 +16,7 @@ import NavigationBar from '../NavigationBar';
 import OpenClaimableTickets from '../OpenClaimableTickets';
 import TicketTransactions from '../TicketTransactions';
 import UserStatsV2 from '../UserStatsV2';
+import Account from '../Account';
 
 type MyTicketsProps = {
     selectedTab: ProfileTab;
@@ -66,6 +67,7 @@ const MyTickets: React.FC<MyTicketsProps> = ({ selectedTab, setSelectedTab }) =>
                 )}
                 {selectedTab == ProfileTab.TRANSACTION_HISTORY && <TicketTransactions searchText={searchText} />}
                 {selectedTab == ProfileTab.LP && <UserVaults />}
+                {selectedTab == ProfileTab.ACCOUNT && <Account />}
             </MainContainer>
             <RightSidebarContainer>
                 <UserStatsV2 setForceOpenStakingModal={setForceOpenStakingModal} />

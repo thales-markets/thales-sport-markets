@@ -38,6 +38,7 @@ const ActivateAccount: React.FC<any> = () => {
         { networkId, client },
         {
             enabled: isBiconomy,
+            refetchInterval: 3000,
         }
     );
 
