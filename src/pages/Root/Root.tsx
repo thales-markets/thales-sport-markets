@@ -45,6 +45,7 @@ queryConnector.setQueryClient();
 const isDeployError = (errorMessage: string) =>
     errorMessage &&
     (errorMessage.includes('Failed to fetch dynamically imported module') ||
+        errorMessage.includes('error loading dynamically imported module') ||
         errorMessage.includes('Importing a module script failed') ||
         errorMessage.includes("'text/html' is not a valid JavaScript MIME type"));
 
