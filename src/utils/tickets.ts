@@ -261,7 +261,7 @@ export const tableSortByStatus = (rowA: any, rowB: any) => {
     return aOrder < bOrder ? -1 : aOrder > bOrder ? 1 : 0;
 };
 
-export const generateSystemBetCombinations = (n: number, k: number): number[][] => {
+const generateSystemBetCombinations = (n: number, k: number): number[][] => {
     if (k <= 1 || k >= n) return [];
 
     // Calculate the number of combinations: n! / (k! * (n-k)!)

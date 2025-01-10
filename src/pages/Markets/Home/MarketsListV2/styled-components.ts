@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FlexDiv, FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
+import { FlexDiv, FlexDivColumnCentered } from 'styles/common';
 
 export const LeagueCard = styled.div<{ isMarketSelected: boolean }>`
     display: flex;
@@ -35,13 +35,6 @@ export const GamesContainer = styled.div<{ hidden?: boolean }>`
     flex-direction: column;
     gap: 10px;
     margin-bottom: 10px;
-`;
-
-export const LeagueInfoContainer = styled(FlexDivRowCentered)`
-    margin-right: 10px;
-    @media (max-width: 950px) {
-        display: none;
-    }
 `;
 
 export const LeagueFlag = styled.img`
