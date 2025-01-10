@@ -45,6 +45,7 @@ queryConnector.setQueryClient();
 const isDeployError = (errorMessage: string) =>
     errorMessage &&
     (errorMessage.includes('Failed to fetch dynamically imported module') ||
+        errorMessage.includes('error loading dynamically imported module') ||
         errorMessage.includes('Importing a module script failed') ||
         errorMessage.includes("'text/html' is not a valid JavaScript MIME type"));
 
@@ -63,7 +64,7 @@ const Root: React.FC<RootProps> = ({ store }) => {
             return;
         }
 
-        if (isDeployError(error.message)) {
+        if (isDeployError(error.stack || error.message)) {
             console.log('Deployment error', error, info);
             return;
         }
@@ -77,7 +78,7 @@ const Root: React.FC<RootProps> = ({ store }) => {
 
         if (preventReload) {
             logErrorToDiscord(error, { componentStack: 'Reload loop prevented!' });
-        } else if (isDeployError(error.message)) {
+        } else if (isDeployError(error.stack || error.message)) {
             resetErrorBoundary();
             localStore.set(LOCAL_STORAGE_KEYS.ERROR_RELOAD_TIME, Date.now());
             window.location.reload();
