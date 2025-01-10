@@ -335,6 +335,9 @@
         "incentivized-market": "INCENTIVIZED MARKET"
     },
     "profile": {
+        "account-summary": {
+            "title": "Account Summary"
+        },
         "stats": {
             "profile-data": "Profile data",
             "free-bet": "Free bet",
@@ -359,8 +362,9 @@
             "my-portfolio": "My portfolio"
         },
         "open-claimable": "Open/Claimable",
-        "transaction-history": "Transaction history",
+        "transaction-history": "History",
         "lp": "LP",
+        "account": "Account",
         "voucher": "Voucher",
         "in-lp": "Liquidity provided",
         "lp-title": "Liquidity pool",
