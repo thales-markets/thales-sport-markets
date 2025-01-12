@@ -10,12 +10,14 @@ export const TBD_ADDRESS = '0xTBD' as Address;
 export const SUPPORTED_NETWORKS: Record<SupportedNetwork, string> = {
     [Network.OptimismMainnet]: 'OPTIMISTIC',
     [Network.Arbitrum]: 'ARBITRUM-ONE',
+    [Network.Base]: 'BASE-MAINNET',
     [Network.OptimismSepolia]: 'SEPOLIA-OPTIMISM',
 };
 
 const SUPPORTED_NETWORKS_NAMES: Record<SupportedNetwork, string> = {
     [Network.OptimismMainnet]: 'OPTIMISM MAINNET',
     [Network.Arbitrum]: 'ARBITRUM ONE',
+    [Network.Base]: 'BASE MAINNET',
     [Network.OptimismSepolia]: 'OPTIMISM SEPOLIA',
 };
 
@@ -54,6 +56,21 @@ export const SUPPORTED_NETWORKS_PARAMS: Record<number, NetworkParams> = {
             decimals: 18,
         },
         order: 2,
+    },
+    [Network.Base]: {
+        chainId: '0x2105',
+        chainName: 'Base Mainnet',
+        shortChainName: 'Base',
+        chainKey: 'base_mainnet',
+        iconClassName: 'icon icon--base',
+        rpcUrls: ['https://mainnet.base.org'],
+        blockExplorerUrls: ['https://basescan.org/'],
+        iconUrls: ['https://optimism.io/images/metamask_icon.svg', 'https://optimism.io/images/metamask_icon.png'],
+        nativeCurrency: {
+            symbol: 'ETH',
+            decimals: 18,
+        },
+        order: 3,
     },
 };
 
