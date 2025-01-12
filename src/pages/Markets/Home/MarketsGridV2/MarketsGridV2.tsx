@@ -4,7 +4,7 @@ import { format } from 'date-fns';
 import { SortType, StatusFilter } from 'enums/markets';
 import { League, Sport } from 'enums/sports';
 import i18n from 'i18n';
-import { groupBy, orderBy, sortBy } from 'lodash';
+import { groupBy, orderBy, sortBy, uniq } from 'lodash';
 import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
@@ -32,14 +32,21 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
 
     const sortedMarkets = orderBy(
         markets,
-        ['maturityDate'],
-        [statusFilter === StatusFilter.OPEN_MARKETS ? 'asc' : 'desc']
+        [
+            'maturityDate',
+            (market) => {
+                const sortPriority = LEAGUES_SORT_PRIORITY.findIndex((league: League) => league === market.leagueId);
+                return sortPriority !== -1 ? sortPriority : Number.MAX_VALUE;
+            },
+        ],
+        statusFilter === StatusFilter.OPEN_MARKETS ? ['asc', 'asc'] : ['desc', 'asc']
     );
+
+    const sortedLeagues = uniq(sortedMarkets.map((market) => market.leagueId));
 
     const marketsByLeagueMap: Record<number, SportMarket[]> = unifyBoxingMarkets(
         groupBy(sortedMarkets, (market) => Number(market.leagueId))
     );
-    const sortedLeagues = Object.keys(marketsByLeagueMap).map((key) => Number(key));
 
     let finalOrderKeys: number[] = [];
 
@@ -80,7 +87,7 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
                 if (leaguesToPrioritize && leaguesToPrioritize.includes(league)) {
                     // group and prioritize leagues with the same maturity date only once
                     if (!alreadyPrioritizedLeagues.includes(league)) {
-                        finalOrderKeys.push(...groupBySortedMarketsKeys(leaguesToPrioritize));
+                        finalOrderKeys.push(...groupBySortedMarketsKeys(leaguesToPrioritize, true));
                         alreadyPrioritizedLeagues = [...leaguesToPrioritize];
                     }
                 } else {
@@ -90,7 +97,7 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
             });
         }
     } else {
-        finalOrderKeys = groupBySortedMarketsKeys(sortedLeagues);
+        finalOrderKeys = groupBySortedMarketsKeys(sortedLeagues, false);
     }
 
     useEffect(() => {
@@ -155,7 +162,7 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
     );
 };
 
-const groupBySortedMarketsKeys = (marketsKeys: number[]) => {
+const groupBySortedMarketsKeys = (marketsKeys: number[], usePriority: boolean) => {
     const soccerKeys: number[] = [];
     const footballKeys: number[] = [];
     const basketballKeys: number[] = [];
@@ -180,7 +187,7 @@ const groupBySortedMarketsKeys = (marketsKeys: number[]) => {
     marketsKeys.forEach((tag: number) => {
         const leaguePriority = LEAGUES_SORT_PRIORITY.findIndex((league: League) => league === tag);
 
-        if (leaguePriority !== -1) {
+        if (usePriority && leaguePriority !== -1) {
             const currentPriorityLeagues = leaguePriorityMap.get(leaguePriority) || [];
             currentPriorityLeagues.push(tag);
             leaguePriorityMap.set(leaguePriority, currentPriorityLeagues);
