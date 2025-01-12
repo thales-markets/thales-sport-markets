@@ -79,10 +79,10 @@ const useMultipleCollateralBalanceQuery = (
                         networkConfig,
                         getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.THALES as Coins)
                     ) as ViemContract,
-                    sTHALES: getContractInstance(
+                    OVER: getContractInstance(
                         ContractType.MULTICOLLATERAL,
                         networkConfig,
-                        getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.sTHALES as Coins)
+                        getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.OVER as Coins)
                     ) as ViemContract,
                 };
 
@@ -108,6 +108,7 @@ const useMultipleCollateralBalanceQuery = (
                     ARBBalance,
                     THALESBalance,
                     sTHALESBalance,
+                    OVERBalance,
                 ] = await Promise.all([
                     multipleCollateralObject?.sUSD && multipleCollateralObject?.sUSD?.address !== TBD_ADDRESS
                         ? multipleCollateralObject.sUSD.read.balanceOf([walletAddress])
@@ -141,7 +142,12 @@ const useMultipleCollateralBalanceQuery = (
                         ? multipleCollateralObject.THALES.read.balanceOf([walletAddress])
                         : 0,
                     thalesStakingContract ? thalesStakingContract.read.stakedBalanceOf([walletAddress]) : 0,
+                    multipleCollateralObject?.OVER && multipleCollateralObject?.OVER?.address !== TBD_ADDRESS
+                        ? multipleCollateralObject.OVER.read.balanceOf([walletAddress])
+                        : 0,
                 ]);
+
+                console.log(OVERBalance, 'OVERBalance');
                 collateralsBalance = {
                     sUSD: sUSDBalance ? bigNumberFormatter(sUSDBalance, COLLATERAL_DECIMALS.sUSD) : 0,
                     DAI: DAIBalance ? bigNumberFormatter(DAIBalance, COLLATERAL_DECIMALS.DAI) : 0,
@@ -159,6 +165,7 @@ const useMultipleCollateralBalanceQuery = (
                         sTHALESBalance && bigNumberFormatter(sTHALESBalance, COLLATERAL_DECIMALS.sTHALES) > 1
                             ? bigNumberFormatter(sTHALESBalance, COLLATERAL_DECIMALS.sTHALES) - 1
                             : 0,
+                    OVER: OVERBalance ? bigNumberFormatter(OVERBalance, COLLATERAL_DECIMALS.OVER) : 0,
                 };
             } catch (e) {
                 console.log('e ', e);
