@@ -149,8 +149,8 @@ const sortMarketKeys = (
     leaguesWithMinMaturityDateMap: Map<number, number>
 ) => {
     return marketsKeys.sort((a: League, b: League) => {
-        const earliestGameA = marketsMap[a][0]; // rely on asc sorting SortType.DEFAULT
-        const earliestGameB = marketsMap[b][0]; // rely on asc sorting SortType.DEFAULT
+        const earliestGameA = marketsMap[a][0]; // rely on asc sorting StatusFilter.OPEN_MARKETS
+        const earliestGameB = marketsMap[b][0]; // rely on asc sorting StatusFilter.OPEN_MARKETS
 
         const isFavouriteA = Number(!!favouriteLeagues.find((league: TagInfo) => league.id == a));
         const isFavouriteB = Number(!!favouriteLeagues.find((league: TagInfo) => league.id == b));
