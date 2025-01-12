@@ -1,5 +1,5 @@
 import Scroll from 'components/Scroll';
-import { BOXING_LEAGUES, LEAGUES_SORT_PRIORITY, LeagueMap } from 'constants/sports';
+import { BOXING_LEAGUES, LEAGUES_SORT_PRIORITY } from 'constants/sports';
 import { format } from 'date-fns';
 import { SortType, StatusFilter } from 'enums/markets';
 import { League, Sport } from 'enums/sports';
@@ -12,10 +12,9 @@ import { forceCheck } from 'react-lazyload';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import { getIsMarketSelected, getSortType, getStatusFilter } from 'redux/modules/market';
-import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
-import { SportMarket, SportMarkets, TagInfo, Tags } from 'types/markets';
+import { SportMarket, SportMarkets } from 'types/markets';
 import { setScrollMainContainerToTop } from 'utils/scroll';
 import { getLeagueSport } from 'utils/sports';
 import MarketsListV2 from '../MarketsListV2';
@@ -26,7 +25,6 @@ type MarketsGridProps = {
 
 const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
     const language = i18n.language;
-    const favouriteLeagues = useSelector(getFavouriteLeagues);
     const isMarketSelected = useSelector(getIsMarketSelected);
     const isMobile = useSelector(getIsMobile);
     const sortType = useSelector(getSortType);
@@ -38,36 +36,47 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
         [statusFilter === StatusFilter.OPEN_MARKETS ? 'asc' : 'desc']
     );
 
-    const marketsMap: Record<number, SportMarket[]> = groupBy(sortedMarkets, (market) => Number(market.leagueId));
-    const unifiedMarketsMap = unifyBoxingMarkets(marketsMap);
+    const marketsByLeagueMap: Record<number, SportMarket[]> = unifyBoxingMarkets(
+        groupBy(sortedMarkets, (market) => Number(market.leagueId))
+    );
+    const sortedLeagues = Object.keys(marketsByLeagueMap).map((key) => Number(key));
 
     let finalOrderKeys: number[] = [];
 
     if (statusFilter === StatusFilter.OPEN_MARKETS) {
         if (sortType === SortType.DEFAULT) {
-            const leaguesWithSameMaturityDateMap = new Map<number, number[]>(); // MaturityDate => League[]
-            const leaguesWithMinMaturityDateMap = new Map<number, number>(); // League => MaturityMinTime
-            const marketsKeys = sortMarketKeys(
-                Object.keys(marketsMap).map((key) => Number(key)),
-                unifiedMarketsMap,
-                favouriteLeagues,
-                leaguesWithSameMaturityDateMap,
-                leaguesWithMinMaturityDateMap
-            );
+            const leaguesWithSameMinMaturityShortDateMap = new Map<number, number[]>(); // MinMaturityShortDate => League[]
+            const leaguesWithMinMaturityDateMap = new Map<number, number>(); // League => MinMaturityDate
+
+            // for every league, set array of leagues with the same min maturity date
+            sortedLeagues.forEach((league: number) => {
+                const minMaturityDateForLeague = Math.min(
+                    ...marketsByLeagueMap[league].map((market) => Number(market.maturityDate))
+                );
+                const minMaturityShortDateForLeague = Number(format(minMaturityDateForLeague, 'yyyyMMdd'));
+
+                const currentLeaguesSet = new Set(
+                    leaguesWithSameMinMaturityShortDateMap.get(minMaturityShortDateForLeague) || []
+                );
+                currentLeaguesSet.add(league);
+                leaguesWithSameMinMaturityShortDateMap.set(minMaturityShortDateForLeague, [...currentLeaguesSet]);
+                leaguesWithMinMaturityDateMap.set(league, minMaturityDateForLeague);
+            });
 
             let alreadyPrioritizedLeagues: number[] = [];
 
             // group leagues by maturity date and sort using priorities if there are leagues with the same maturity date
-            marketsKeys.forEach((league: number) => {
+            sortedLeagues.forEach((league: number) => {
                 const minMaturityDateForLeague = Math.min(
-                    ...unifiedMarketsMap[league].map((market) => Number(format(market.maturityDate, 'yyyyMMdd')))
+                    ...marketsByLeagueMap[league].map((market) => Number(format(market.maturityDate, 'yyyyMMdd')))
                 );
-                const leaguesToPrioritize = leaguesWithSameMaturityDateMap
-                    .get(minMaturityDateForLeague)
-                    ?.sort(
-                        (a: number, b: number) =>
-                            Number(leaguesWithMinMaturityDateMap.get(a)) - Number(leaguesWithMinMaturityDateMap.get(b))
-                    );
+
+                const leaguesWithSameMaturityDate =
+                    leaguesWithSameMinMaturityShortDateMap.get(minMaturityDateForLeague) || [];
+                const leaguesToPrioritize = leaguesWithSameMaturityDate.sort(
+                    (a: number, b: number) =>
+                        Number(leaguesWithMinMaturityDateMap.get(a)) - Number(leaguesWithMinMaturityDateMap.get(b))
+                );
                 if (leaguesToPrioritize && leaguesToPrioritize.includes(league)) {
                     // group and prioritize leagues with the same maturity date only once
                     if (!alreadyPrioritizedLeagues.includes(league)) {
@@ -81,7 +90,7 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
             });
         }
     } else {
-        finalOrderKeys = groupBySortedMarketsKeys(Object.keys(marketsMap).map((key) => Number(key)));
+        finalOrderKeys = groupBySortedMarketsKeys(sortedLeagues);
     }
 
     useEffect(() => {
@@ -102,14 +111,19 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
                         <MarketsListV2
                             key={index}
                             league={leagueId}
-                            markets={marketsMap[leagueId]}
+                            markets={marketsByLeagueMap[leagueId]}
                             language={language}
                         />
                     ));
             }
         } else {
             content = finalOrderKeys.map((leagueId: number, index: number) => (
-                <MarketsListV2 key={index} league={leagueId} markets={marketsMap[leagueId]} language={language} />
+                <MarketsListV2
+                    key={index}
+                    league={leagueId}
+                    markets={marketsByLeagueMap[leagueId]}
+                    language={language}
+                />
             ));
         }
 
@@ -139,53 +153,6 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
             )}
         </Container>
     );
-};
-
-const sortMarketKeys = (
-    marketsKeys: number[],
-    marketsMap: Record<number, SportMarket[]>,
-    favouriteLeagues: Tags,
-    leaguesWithSameMaturityDateMap: Map<number, number[]>,
-    leaguesWithMinMaturityDateMap: Map<number, number>
-) => {
-    return marketsKeys.sort((a: League, b: League) => {
-        const earliestGameA = marketsMap[a][0]; // rely on asc sorting StatusFilter.OPEN_MARKETS
-        const earliestGameB = marketsMap[b][0]; // rely on asc sorting StatusFilter.OPEN_MARKETS
-
-        const isFavouriteA = Number(!!favouriteLeagues.find((league: TagInfo) => league.id == a));
-        const isFavouriteB = Number(!!favouriteLeagues.find((league: TagInfo) => league.id == b));
-
-        const leagueInfoA = LeagueMap[a];
-        const leagueInfoB = LeagueMap[b];
-
-        const leagueNameA = leagueInfoA?.label || '';
-        const leagueNameB = leagueInfoB?.label || '';
-
-        const leaguePriorityA = leagueInfoA?.priority || 0;
-        const leaguePriorityB = leagueInfoB?.priority || 0;
-
-        // for every league set array of leagues with the same earliest maturity date and set earliest maturity time
-        const maturityDateA = Number(format(earliestGameA.maturityDate, 'yyyyMMdd'));
-        if (maturityDateA === Number(format(earliestGameB.maturityDate, 'yyyyMMdd'))) {
-            const currentLeaguesSet = new Set(leaguesWithSameMaturityDateMap.get(maturityDateA) || []);
-            currentLeaguesSet.add(a);
-            currentLeaguesSet.add(b);
-            leaguesWithSameMaturityDateMap.set(maturityDateA, [...currentLeaguesSet]);
-            leaguesWithMinMaturityDateMap.set(a, Number(earliestGameA.maturityDate));
-        }
-
-        return earliestGameA.maturityDate.getTime() == earliestGameB.maturityDate.getTime()
-            ? isFavouriteA == isFavouriteB
-                ? leaguePriorityA > leaguePriorityB
-                    ? 1
-                    : leaguePriorityA < leaguePriorityB
-                    ? -1
-                    : leagueNameA > leagueNameB
-                    ? 1
-                    : -1
-                : isFavouriteB - isFavouriteA
-            : earliestGameA.maturityDate.getTime() - earliestGameB.maturityDate.getTime();
-    });
 };
 
 const groupBySortedMarketsKeys = (marketsKeys: number[]) => {
