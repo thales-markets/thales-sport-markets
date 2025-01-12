@@ -6,7 +6,9 @@ import { Buffer as buffer } from 'buffer';
 import UnexpectedError from 'components/UnexpectedError';
 import WalletDisclaimer from 'components/WalletDisclaimer';
 import { PLAUSIBLE } from 'constants/analytics';
+import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { ThemeMap } from 'constants/ui';
+import { differenceInSeconds } from 'date-fns';
 import { merge } from 'lodash';
 import App from 'pages/Root/App';
 import React, { ErrorInfo } from 'react';
@@ -15,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { Store } from 'redux';
 import { getDefaultTheme } from 'redux/modules/ui';
+import { localStore } from 'thales-utils';
 import { logErrorToDiscord } from 'utils/discord';
 import { PARTICLE_STYLE } from 'utils/particleWallet/utils';
 import queryConnector from 'utils/queryConnector';
@@ -42,8 +45,11 @@ queryConnector.setQueryClient();
 const isDeployError = (errorMessage: string) =>
     errorMessage &&
     (errorMessage.includes('Failed to fetch dynamically imported module') ||
+        errorMessage.includes('error loading dynamically imported module') ||
         errorMessage.includes('Importing a module script failed') ||
         errorMessage.includes("'text/html' is not a valid JavaScript MIME type"));
+
+const PREVENT_ERROR_RELOAD_THRESHOLD_SECONDS = 10;
 
 const Root: React.FC<RootProps> = ({ store }) => {
     // particle context provider is overriding our i18n configuration and languages, so we need to add our localization after the initialization of particle context
@@ -58,7 +64,7 @@ const Root: React.FC<RootProps> = ({ store }) => {
             return;
         }
 
-        if (isDeployError(error.message)) {
+        if (isDeployError(error.stack || error.message)) {
             console.log('Deployment error', error, info);
             return;
         }
@@ -67,8 +73,14 @@ const Root: React.FC<RootProps> = ({ store }) => {
     };
 
     const fallbackRender = ({ error, resetErrorBoundary }: FallbackProps) => {
-        if (isDeployError(error.message)) {
+        const reloadedTimeSec = Number(localStore.get(LOCAL_STORAGE_KEYS.ERROR_RELOAD_TIME) || 0);
+        const preventReload = differenceInSeconds(Date.now(), reloadedTimeSec) < PREVENT_ERROR_RELOAD_THRESHOLD_SECONDS;
+
+        if (preventReload) {
+            logErrorToDiscord(error, { componentStack: 'Reload loop prevented!' });
+        } else if (isDeployError(error.stack || error.message)) {
             resetErrorBoundary();
+            localStore.set(LOCAL_STORAGE_KEYS.ERROR_RELOAD_TIME, Date.now());
             window.location.reload();
             return;
         }
