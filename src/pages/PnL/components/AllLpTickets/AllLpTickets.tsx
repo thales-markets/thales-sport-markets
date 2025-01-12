@@ -104,7 +104,8 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
                     ((ticket.isOpen &&
                         ticket.sportMarkets.some(
                             (market) =>
-                                market.maturity <
+                                market.apiMaturity &&
+                                market.apiMaturity <
                                     new Date().getTime() - hoursToMilliseconds(UNRESOLVED_PERIOD_IN_HOURS) &&
                                 !market.isResolved &&
                                 !market.isCancelled
