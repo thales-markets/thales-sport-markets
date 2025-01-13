@@ -19,13 +19,11 @@ import liveTradingProcessorContract from './contracts/liveTradingProcessorContra
 export const ETH_PAYMASTER = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'; // used for paying gas in ETH by AA
 
 export const executeBiconomyTransactionWithConfirmation = async (
-    collateral: string,
     contract: ViemContract | undefined,
     methodName: string,
     data?: ReadonlyArray<any>,
     value?: any
 ): Promise<any | undefined> => {
-    console.log(collateral);
     if (biconomyConnector.wallet && contract) {
         const encodedCall = encodeFunctionData({
             abi: contract.abi,
@@ -51,13 +49,9 @@ export const executeBiconomyTransactionWithConfirmation = async (
                 success,
             } = await wait();
 
-            console.log('tx hash: ', transactionHash);
-            console.log('success: ', success);
-
             if (success === 'false') {
                 throw new Error('tx failed');
             } else {
-                console.log('Transaction receipt', transactionHash);
                 return transactionHash;
             }
         } catch (e) {
