@@ -1,5 +1,4 @@
 import { SportFilter, StatusFilter } from 'enums/markets';
-import { League } from 'enums/sports';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -106,35 +105,31 @@ const FilterTagsMobile: React.FC = () => {
                 </FilterTagContainer>
             )}
             {tagFilter.length != 0 &&
-                tagFilter
-                    .filter((tag) => tag.id !== League.NON_TITLE_BOXING)
-                    .map((tag, index) => {
-                        return (
-                            <FilterTagContainer key={index}>
-                                <FilterTagLabel>
-                                    {tag.label}
-                                    <ClearIcon
-                                        className="icon icon--close"
-                                        onClick={() => {
-                                            if (tagFilter.length == 1) {
-                                                dispatch(setTagFilter([]));
-                                                setTagParam('');
-                                            } else {
-                                                const newTagFilters = tagFilter.filter(
-                                                    (tagInfo) => tagInfo.id != tag.id
-                                                );
-                                                dispatch(setTagFilter(newTagFilters));
-                                                const newTagParam = newTagFilters
-                                                    .map((tagInfo) => tagInfo.label)
-                                                    .toString();
-                                                setTagParam(newTagParam);
-                                            }
-                                        }}
-                                    />
-                                </FilterTagLabel>
-                            </FilterTagContainer>
-                        );
-                    })}
+                tagFilter.map((tag, index) => {
+                    return (
+                        <FilterTagContainer key={index}>
+                            <FilterTagLabel>
+                                {tag.label}
+                                <ClearIcon
+                                    className="icon icon--close"
+                                    onClick={() => {
+                                        if (tagFilter.length == 1) {
+                                            dispatch(setTagFilter([]));
+                                            setTagParam('');
+                                        } else {
+                                            const newTagFilters = tagFilter.filter((tagInfo) => tagInfo.id != tag.id);
+                                            dispatch(setTagFilter(newTagFilters));
+                                            const newTagParam = newTagFilters
+                                                .map((tagInfo) => tagInfo.label)
+                                                .toString();
+                                            setTagParam(newTagParam);
+                                        }
+                                    }}
+                                />
+                            </FilterTagLabel>
+                        </FilterTagContainer>
+                    );
+                })}
             {marketTypeFilter !== undefined && (
                 <FilterTagContainer>
                     <FilterTagLabel>
