@@ -35,12 +35,7 @@ const SportFilterDetails: React.FC<SportFilterProps> = ({ selected, sport, onCli
                 ) : sport == SportFilter.Boosted ? (
                     <SportIcon color={theme.overdrop.textColor.primary} className={`icon icon--fire`} />
                 ) : (
-                    <SportIcon
-                        color={
-                            selected ? theme.christmasTheme.textColor.secondary : theme.christmasTheme.textColor.primary
-                        }
-                        className={`icon icon--${sport == SportFilter.All ? 'logo' : sport.toLowerCase()}`}
-                    />
+                    <SportIcon className={`icon icon--${sport == SportFilter.All ? 'logo' : sport.toLowerCase()}`} />
                 )}
                 <Label>
                     {children}
@@ -48,7 +43,7 @@ const SportFilterDetails: React.FC<SportFilterProps> = ({ selected, sport, onCli
                 </Label>
             </LeftContainer>
             <RightContainer>
-                {count > 0 && <Count className={selected ? 'selected' : ''}>{count}</Count>}
+                {count > 0 && <Count>{count}</Count>}
                 {sport == SportFilter.All ? (
                     <ArrowIcon className={`invisible icon icon--caret-right`} />
                 ) : open ? (
@@ -81,7 +76,7 @@ const Container = styled(FlexDivSpaceBetween)`
         font-size: 14px;
         line-height: 18px;
         height: 30px;
-        color: ${(props) => props.theme.christmasTheme.textColor.primary};
+        color: ${(props) => props.theme.textColor.primary};
     }
 `;
 
@@ -145,12 +140,9 @@ const Count = styled(FlexDivCentered)`
         line-height: 20px;
         min-width: 40px;
         height: 24px;
-        color: ${(props) => props.theme.christmasTheme.textColor.primary};
-        border: 2px solid ${(props) => props.theme.christmasTheme.background.primary};
-        .selected & {
-            border: 2px solid ${(props) => props.theme.christmasTheme.background.secondary};
-            color: ${(props) => props.theme.christmasTheme.textColor.secondary};
-        }
+        color: ${(props) => props.theme.textColor.tertiary};
+        background: ${(props) => props.theme.background.septenary};
+        border: 2px solid ${(props) => props.theme.background.secondary};
     }
 `;
 

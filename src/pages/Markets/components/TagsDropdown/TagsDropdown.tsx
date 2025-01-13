@@ -238,8 +238,8 @@ const LeagueFlag = styled.img`
 
 const Count = styled(FlexDivCentered)<{ isMobile: boolean }>`
     border-radius: ${(props) => (props.isMobile ? '15px' : '8px')};
-    color: ${(props) => (props.isMobile ? props.theme.textColor.quaternary : props.theme.textColor.quaternary)};
-    background: ${(props) => (props.isMobile ? props.theme.background.primary : props.theme.background.primary)};
+    color: ${(props) => (props.isMobile ? props.theme.textColor.tertiary : props.theme.textColor.quaternary)};
+    background: ${(props) => (props.isMobile ? props.theme.background.septenary : props.theme.background.primary)};
     border: 2px solid ${(props) => props.theme.background.secondary};
     font-size: ${(props) => (props.isMobile ? '12px' : '12px')};
     min-width: ${(props) => (props.isMobile ? '35px' : '30px')};
