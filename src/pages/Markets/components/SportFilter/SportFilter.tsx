@@ -66,11 +66,11 @@ const Container = styled(FlexDivSpaceBetween)`
     cursor: pointer;
     height: 25px;
     position: relative;
-    color: ${(props) => props.theme.christmasTheme.textColor.primary};
+    color: ${(props) => props.theme.textColor.quinary};
     margin-bottom: 5px;
     &.selected,
     &:hover {
-        color: ${(props) => props.theme.christmasTheme.textColor.secondary};
+        color: ${(props) => props.theme.textColor.quaternary};
     }
     @media (max-width: 950px) {
         font-size: 14px;
@@ -125,7 +125,7 @@ const Count = styled(FlexDivCentered)`
     line-height: 18px;
     min-width: 30px;
     height: 18px;
-    color: ${(props) => props.theme.christmasTheme.textColor.secondary};
+    color: ${(props) => props.theme.textColor.quaternary};
     background: ${(props) => props.theme.background.primary};
     border: 2px solid ${(props) => props.theme.background.secondary};
     padding: 0 6px;
