@@ -31,7 +31,8 @@ export const mapTicket = (
     networkId: number,
     gamesInfo: any,
     playersInfo: any,
-    liveScores: any
+    liveScores: any,
+    openOngoingMarkets?: any
 ): Ticket => {
     let collateral = getCollateralByAddress(ticket.collateral, networkId);
     collateral =
@@ -88,6 +89,9 @@ export const mapTicket = (
 
                 const gameInfo = gamesInfo[market.gameId];
                 const liveScore = liveScores[market.gameId];
+                const apiMarket = openOngoingMarkets
+                    ? openOngoingMarkets.find((m: any) => m.gameId === market.gameId)
+                    : undefined;
 
                 const homeTeam = !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => team.isHome);
                 const homeTeamName = homeTeam?.name ?? 'Home Team';
@@ -120,6 +124,7 @@ export const mapTicket = (
                     typeId: typeId,
                     type: type ? type.key : '',
                     maturity: secondsToMilliseconds(Number(market.maturity)),
+                    apiMaturity: apiMarket ? secondsToMilliseconds(Number(apiMarket.maturity)) : undefined,
                     maturityDate: new Date(secondsToMilliseconds(Number(market.maturity))),
                     homeTeam: homeTeamName,
                     awayTeam: awayTeamName,
