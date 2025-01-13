@@ -1,4 +1,5 @@
 import { SportFilter } from 'enums/markets';
+import { League } from 'enums/sports';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -49,7 +50,9 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
         <Container open={open}>
             {tags
                 .filter((tag: TagInfo) => {
-                    if (showLive) {
+                    if (tag.id === League.NON_TITLE_BOXING) {
+                        return false;
+                    } else if (showLive) {
                         return !!liveMarketsCountPerTag[tag.id];
                     } else if (isPlayerPropsTag) {
                         return !!playerPropsMarketsCountPerTag[tag.id];
