@@ -124,7 +124,9 @@ export const mapTicket = (
                     typeId: typeId,
                     type: type ? type.key : '',
                     maturity: secondsToMilliseconds(Number(market.maturity)),
-                    apiMaturity: apiMarket ? secondsToMilliseconds(Number(apiMarket.maturity)) : undefined,
+                    apiMaturity: apiMarket
+                        ? secondsToMilliseconds(Number(apiMarket.maturity))
+                        : secondsToMilliseconds(Number(market.maturity)),
                     maturityDate: new Date(secondsToMilliseconds(Number(market.maturity))),
                     homeTeam: homeTeamName,
                     awayTeam: awayTeamName,
