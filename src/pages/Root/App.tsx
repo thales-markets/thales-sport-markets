@@ -6,7 +6,6 @@ import { LINKS } from 'constants/links';
 import ROUTES from 'constants/routes';
 import DappLayout from 'layouts/DappLayout';
 import Theme from 'layouts/Theme';
-import GetStarted from 'pages/AARelatedPages/GetStarted';
 import LiquidityPool from 'pages/LiquidityPool';
 import Markets from 'pages/Markets/Home';
 import Market from 'pages/Markets/Market';
@@ -167,13 +166,6 @@ const App = () => {
                         <Suspense fallback={<Loader />}>
                             <DappLayout>
                                 <Overdrop />
-                            </DappLayout>
-                        </Suspense>
-                    </Route>
-                    <Route exact path={ROUTES.Wizard}>
-                        <Suspense fallback={<Loader />}>
-                            <DappLayout>
-                                <GetStarted />
                             </DappLayout>
                         </Suspense>
                     </Route>

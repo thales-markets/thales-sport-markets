@@ -1,3 +1,4 @@
+import { PaymasterMode } from '@biconomy/account';
 import { getWalletClient } from '@wagmi/core';
 import Modal from 'components/Modal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
@@ -13,6 +14,8 @@ import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { coinParser, Coins, formatCurrencyWithKey } from 'thales-utils';
 import { RootState } from 'types/redux';
+import { executeBiconomyTransactionWithConfirmation } from 'utils/biconomy';
+import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateralIndex } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import { getNetworkNameByNetworkId } from 'utils/network';
@@ -38,7 +41,6 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
     const { t } = useTranslation();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
-    // const [_gas, setGas] = useState(0);
     const networkId = useChainId();
     const client = useClient();
 
@@ -50,19 +52,6 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
         return coinParser('' + amount, network, token);
     }, [amount, network, token]);
 
-    // useEffect(() => {
-    //     const { signer, multipleCollateral } = networkConnector;
-    //     if (multipleCollateral && signer) {
-    //         const collateralContractWithSigner = multipleCollateral[token]?.connect(signer);
-    //         getGasFeesForTx(collateralContractWithSigner?.address as string, collateralContractWithSigner, 'transfer', [
-    //             withdrawalAddress,
-    //             parsedAmount,
-    //         ]).then((estimateGas) => {
-    //             setGas(estimateGas as number);
-    //         });
-    //     }
-    // }, [token, parsedAmount, withdrawalAddress]);
-
     const handleSubmit = async () => {
         const id = toast.loading(t('withdraw.toast-messages.pending'));
 
@@ -72,19 +61,35 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
             if (walletClient) {
                 let txHash;
                 if (token === 'ETH') {
-                    txHash = await walletClient.sendTransaction({
+                    const transaction = {
                         to: withdrawalAddress as Address,
                         value: parsedAmount,
-                    });
+                    };
+                    if (biconomyConnector && biconomyConnector.wallet) {
+                        const { wait } = await biconomyConnector.wallet.sendTransaction(transaction, {
+                            paymasterServiceData: {
+                                mode: PaymasterMode.SPONSORED,
+                            },
+                        });
+
+                        const {
+                            receipt: { transactionHash },
+                        } = await wait();
+
+                        txHash = transactionHash;
+                    }
                 } else {
                     const collateralContractWithSigner = getContractInstance(
                         ContractType.MULTICOLLATERAL,
                         { client: walletClient, networkId },
                         getCollateralIndex(networkId, token)
                     );
-                    txHash =
-                        collateralContractWithSigner &&
-                        (await collateralContractWithSigner?.write.transfer([withdrawalAddress, parsedAmount]));
+
+                    txHash = await executeBiconomyTransactionWithConfirmation(
+                        collateralContractWithSigner,
+                        'transfer',
+                        [withdrawalAddress, parsedAmount]
+                    );
                 }
 
                 const txReceipt = await waitForTransactionReceipt(client as Client, {
