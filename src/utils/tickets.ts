@@ -16,7 +16,6 @@ import { TicketMarketStatus } from '../enums/tickets';
 import { getCollateralByAddress } from './collaterals';
 import freeBetHolder from './contracts/freeBetHolder';
 import stakingThalesBettingProxy from './contracts/stakingThalesBettingProxy';
-import { logError } from './discord';
 import {
     formatMarketOdds,
     isFuturesMarket,
@@ -32,7 +31,8 @@ export const mapTicket = (
     networkId: number,
     gamesInfo: any,
     playersInfo: any,
-    liveScores: any
+    liveScores: any,
+    openOngoingMarkets?: any
 ): Ticket => {
     let collateral = getCollateralByAddress(ticket.collateral, networkId);
     collateral =
@@ -89,6 +89,9 @@ export const mapTicket = (
 
                 const gameInfo = gamesInfo[market.gameId];
                 const liveScore = liveScores[market.gameId];
+                const apiMarket = openOngoingMarkets
+                    ? openOngoingMarkets.find((m: any) => m.gameId === market.gameId)
+                    : undefined;
 
                 const homeTeam = !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => team.isHome);
                 const homeTeamName = homeTeam?.name ?? 'Home Team';
@@ -121,6 +124,7 @@ export const mapTicket = (
                     typeId: typeId,
                     type: type ? type.key : '',
                     maturity: secondsToMilliseconds(Number(market.maturity)),
+                    apiMaturity: apiMarket ? secondsToMilliseconds(Number(apiMarket.maturity)) : undefined,
                     maturityDate: new Date(secondsToMilliseconds(Number(market.maturity))),
                     homeTeam: homeTeamName,
                     awayTeam: awayTeamName,
@@ -333,21 +337,6 @@ export const getSystemBetData = (
         for (let j = 0; j < currentCombination.length; j++) {
             const marketIndex = currentCombination[j];
             const market = markets[marketIndex];
-            // For debug purpose
-            if (market === undefined) {
-                logError(
-                    { name: '', message: 'Custom error' },
-                    {
-                        componentStack: JSON.stringify({
-                            markets,
-                            systemCombinations,
-                            i,
-                            j,
-                            marketIndex,
-                        }),
-                    }
-                );
-            }
             let odds = market.odds[market.position];
             odds = odds > 0 ? getAddedPayoutOdds(currencyKey, odds) : odds;
             combinationQuote *= odds;

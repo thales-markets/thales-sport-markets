@@ -27,7 +27,7 @@ export const getTeamImageSource = (team: string, league: League) => {
               .replaceAll(' 3x3', '')
               .replaceAll(' ', '-')
               .toLowerCase()}.svg`
-        : league == League.ENGLAND_CUP
+        : league == League.ENGLAND_FA_CUP
         ? `/logos/EPL/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.FRANCE_CUP || league == League.FRANCE_SUPER_CUP
         ? `/logos/Ligue 1/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
@@ -49,6 +49,8 @@ export const getTeamImageSource = (team: string, league: League) => {
         ? `/logos/NBA/nba.webp`
         : league == League.EPL_FUTURES
         ? `/logos/EPL/epl.webp`
+        : league == League.NETHERLANDS_CUP
+        ? `/logos/Eredivisie/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : `/logos/${leagueLabel}/${team.trim().replaceAll(' ', '-').replaceAll('/', '-').toLowerCase()}.webp`;
 };
 
@@ -111,12 +113,14 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.ENGLAND_EFL_CUP:
         case League.ENGLAND_LEGAUE_1:
         case League.EPL_FUTURES:
+        case League.ENGLAND_FA_CUP:
             return `/logos/Countries/england.svg`;
         case League.LIGUE_ONE:
         case League.LIGUE_2:
         case League.FRANCE_LNB_PRO_A:
         case League.LIGUE_ONE_FUTURES:
         case League.FRANCE_SUPER_CUP:
+        case League.FRANCE_CUP:
             return `/logos/Countries/france.svg`;
         case League.BUNDESLIGA:
         case League.BUNDESLIGA_2:
@@ -141,6 +145,7 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.IPL:
             return `/logos/Countries/india.svg`;
         case League.EREDIVISIE:
+        case League.NETHERLANDS_CUP:
             return `/logos/Countries/netherlands.svg`;
         case League.PRIMEIRA_LIGA:
         case League.PORTUGAL_LEAGUE_CUP:
@@ -211,8 +216,6 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.EUROLEAGUE:
         case League.EUROCUP:
             return `/logos/Countries/europe.svg`;
-        case League.ENGLAND_CUP:
-            return `/logos/Countries/england.svg`;
         case League.FRANCE_CUP:
             return `/logos/Countries/france.svg`;
         case League.SPAIN_CUP:
@@ -249,6 +252,8 @@ export const getLeagueFlagSource = (tagId: number | any) => {
             return `/logos/Countries/australia.svg`;
         case League.AFC_CHAMPIONS_LEAGUE:
             return `/logos/Countries/afc-champions-league.webp`;
+        case League.THAILAND_LEAGUE_1:
+            return `/logos/Countries/thailand.svg`;
         default:
             return `/logos/Countries/world.svg`;
     }
