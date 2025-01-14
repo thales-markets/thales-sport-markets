@@ -13,7 +13,7 @@ const useUserXPHistoryQuery = (walletAddress: string, options?: Omit<UseQueryOpt
                     `${generalConfig.OVERDROP_API_URL}/user-points-history/${walletAddress}`
                 );
 
-                if (response?.data) return response.data;
+                if (response?.status === 200 && response?.data) return response.data;
                 return [];
             } catch (e) {
                 console.error(e);

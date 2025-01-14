@@ -16,7 +16,7 @@ const useOpAndArbPriceQuery = (options?: Omit<UseQueryOptions<any>, 'queryKey' |
                     `${generalConfig.PYTH_API_URL}?ids%5B%5D=${OP_PRICE_FEED_ID}&ids%5B%5D=${ARB_PRICE_FEED_ID}`
                 );
 
-                if (response?.data)
+                if (response?.status === 200 && response?.data)
                     return {
                         op: Number(response.data.parsed[0].price.price) * 10 ** response.data.parsed[0].price.expo,
                         arb: Number(response.data.parsed[1].price.price) * 10 ** response.data.parsed[1].price.expo,

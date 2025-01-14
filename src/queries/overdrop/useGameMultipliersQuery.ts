@@ -11,7 +11,7 @@ const useGameMultipliersQuery = (options?: Omit<UseQueryOptions<any>, 'queryKey'
             try {
                 const response = await axios.get(`${generalConfig.OVERDROP_API_URL}/game-multipliers`);
 
-                if (response?.data) return response.data;
+                if (response?.status === 200 && response?.data) return response.data;
                 return [];
             } catch (e) {
                 console.error(e);
