@@ -46,6 +46,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
             }}
             containerStyle={{
                 background: theme.background.secondary,
+                border: 'none',
             }}
             hideHeader
             title=""
@@ -111,10 +112,15 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                         <FieldHeader>{t('get-started.fund-account.buy-crypto')}</FieldHeader>
                         <Icon className="icon icon--card" />
                     </Box>
-                    <Box>
-                        <FieldHeader>{t('get-started.fund-account.from-wallet')}</FieldHeader>
-                        <Icon className="icon icon--wallet-connected" />
-                    </Box>
+                    <Tooltip
+                        customIconStyling={{ color: theme.textColor.secondary }}
+                        overlay={t('get-started.fund-account.tooltip-4')}
+                    >
+                        <Box>
+                            <FieldHeader>{t('get-started.fund-account.from-wallet')}</FieldHeader>
+                            <Icon className="icon icon--wallet-connected" />
+                        </Box>
+                    </Tooltip>
                 </Container>
 
                 <BlueField>

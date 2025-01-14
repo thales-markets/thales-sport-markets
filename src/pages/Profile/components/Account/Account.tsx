@@ -15,6 +15,7 @@ import { RootState } from 'types/redux';
 import biconomyConnector from 'utils/biconomyWallet';
 import { getCollaterals } from 'utils/collaterals';
 import { useChainId, useClient, useAccount } from 'wagmi';
+import WithdrawModal from '../WithdrawModal';
 
 const Account: React.FC = () => {
     const { t } = useTranslation();
@@ -27,6 +28,7 @@ const Account: React.FC = () => {
     const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
     const [showFundModal, setShowFundModal] = useState<boolean>(false);
+    const [showWithdrawModal, setShowWithdrawModal] = useState<boolean>(false);
 
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(
         walletAddress,
@@ -76,12 +78,19 @@ const Account: React.FC = () => {
                     <Icon className="icon icon--wallet2" />
                     Add More Funds
                 </Button>
-                <Button borderColor="none" height="48px" width="100%" backgroundColor={Colors.YELLOW}>
+                <Button
+                    onClick={() => setShowWithdrawModal(true)}
+                    borderColor="none"
+                    height="48px"
+                    width="100%"
+                    backgroundColor={Colors.YELLOW}
+                >
                     <Icon className="icon icon--logged-in" />
                     Withdraw Funds
                 </Button>
             </ButtonContainer>
             {showFundModal && <FundModal onClose={() => setShowFundModal(false)} />}
+            {showWithdrawModal && <WithdrawModal onClose={() => setShowWithdrawModal(false)} />}
         </div>
     );
 };

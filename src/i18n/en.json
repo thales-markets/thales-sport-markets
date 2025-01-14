@@ -1027,6 +1027,7 @@
             "tooltip-1": "To activate your Overtime Account, fund it via one of these methods: send crypto to the Deposit Address, deposit from a connected wallet, buy crypto with fiat, or transfer from an exchange.",
             "tooltip-2": "Send/Withdraw supported crypto to the address below and select {{ network }} as the network.",
             "tooltip-3": "Fund directly from your exchange (Binance, Coinbase, Kraken, Okex etc.)",
+            "tooltip-4": "Send funds from your wallet to your Overtime Account.",
             "powered-by": "Powered by <icon/>",
             "address": "Your Deposit Address",
             "from-exchange": "Fund from Exchange",
@@ -1036,6 +1037,11 @@
             "skip": "Skip Creating Overtime Account!",
             "copy": "Copy",
             "qr": "QR code"
+        },
+        "withdraw": {
+            "title": "Withdraw from <icon/> account",
+            "address": "Your Withdraw Address",
+            "subtitle": "Send supported crypto to the address below"
         },
         "activate-account": {
             "deposit": "Deposit received!",

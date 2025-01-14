@@ -3,8 +3,7 @@ import CollateralSelector from 'components/CollateralSelector';
 import NumericInput from 'components/fields/NumericInput';
 import TextInput from 'components/fields/TextInput';
 import Modal from 'components/Modal';
-import { ButtonContainer } from 'pages/LiquidityPool/styled-components';
-import { FormContainer, InputContainer } from 'pages/Profile/components/WithdrawModal/styled-components';
+import { FormContainer, InputContainer } from './styled-components';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
@@ -43,7 +42,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onClose }) => {
     const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
     const [selectedToken, setSelectedToken] = useState<number>(0);
-    const [amount, setAmount] = useState<number>(0);
+    const [amount, setAmount] = useState<string | number>('');
     const [showWithdrawalConfirmationModal, setWithdrawalConfirmationModalVisibility] = useState<boolean>(false);
     const theme: ThemeInterface = useTheme();
     const [withdrawalWalletAddress, setWithdrawalWalletAddress] = useState<string>('');
@@ -84,23 +83,22 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onClose }) => {
             walletValidation = true;
         }
 
-        if (amount > 0 && !(amount > paymentTokenBalance)) {
+        if (Number(amount) > 0 && !(Number(amount) > paymentTokenBalance)) {
             amountValidation = true;
         }
 
         setValidation({ walletAddress: walletValidation, amount: amountValidation });
     }, [amount, paymentTokenBalance, withdrawalWalletAddress]);
 
-    // const handleChangeCollateral = (index: number) => {
-    //     setSelectedToken(index);
-    //     setSelectedTokenFromQuery(index.toString());
-    // };
-
     return (
         <Modal
             customStyle={{
                 overlay: {
                     zIndex: 1000,
+                },
+                content: {
+                    transform: 'translate(-50%, -50%)',
+                    overflow: 'unset',
                 },
             }}
             containerStyle={{
@@ -147,7 +145,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onClose }) => {
                                 <NumericInput
                                     value={amount}
                                     onChange={(e) => {
-                                        setAmount(Number(e.target.value));
+                                        setAmount(Number(e.target.value) === 0 ? '' : Number(e.target.value));
                                     }}
                                     inputFontWeight="700"
                                     inputPadding="5px 10px"
@@ -161,13 +159,18 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onClose }) => {
                                         <CollateralSelector
                                             collateralArray={getCollaterals(networkId)}
                                             selectedItem={selectedToken}
-                                            onChangeCollateral={() => {
+                                            onChangeCollateral={(index) => {
                                                 setAmount(0);
+                                                setSelectedToken(index);
                                             }}
                                             isDetailedView
                                             collateralBalances={multipleCollateralBalances.data}
                                             exchangeRates={exchangeRates}
                                             dropDownWidth={inputRef.current?.getBoundingClientRect().width + 'px'}
+                                            background={theme.background.quaternary}
+                                            color={theme.textColor.tertiary}
+                                            topPosition="50px"
+                                            hideZeroBalance
                                         />
                                     }
                                     balance={formatCurrencyWithKey(
@@ -178,27 +181,26 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onClose }) => {
                                 />
                             </AmountToBuyContainer>
                         </InputContainer>
-
-                        <ButtonContainer>
-                            <Button
-                                backgroundColor={theme.button.background.quaternary}
-                                disabled={!validation.amount || !validation.walletAddress}
-                                textColor={theme.button.textColor.primary}
-                                borderColor={theme.button.borderColor.secondary}
-                                padding={'5px 60px'}
-                                fontSize={'22px'}
-                                onClick={() => setWithdrawalConfirmationModalVisibility(true)}
-                            >
-                                {t('withdraw.button-label-withdraw')}
-                            </Button>
-                        </ButtonContainer>
                     </FormContainer>
                 </WalletContainer>
+                <ButtonContainer>
+                    <Button
+                        backgroundColor={theme.overdrop.borderColor.tertiary}
+                        disabled={!validation.amount || !validation.walletAddress}
+                        borderColor="none"
+                        textColor={theme.button.textColor.primary}
+                        height="48px"
+                        fontSize="22px"
+                        onClick={() => setWithdrawalConfirmationModalVisibility(true)}
+                    >
+                        {t('withdraw.button-label-withdraw')}
+                    </Button>
+                </ButtonContainer>
             </Wrapper>
 
             {showWithdrawalConfirmationModal && (
                 <WithdrawalConfirmationModal
-                    amount={amount}
+                    amount={Number(amount)}
                     token={getCollaterals(networkId)[selectedToken]}
                     withdrawalAddress={withdrawalWalletAddress}
                     network={networkId}
@@ -210,7 +212,9 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onClose }) => {
 };
 
 const Wrapper = styled.div`
-    max-width: 800px;
+    width: 600px;
+    flex-direction: column;
+    display: flex;
 `;
 
 const OvertimeIcon = styled.i`
@@ -236,7 +240,7 @@ const SubTitle = styled.h1`
     color: ${(props) => props.theme.textColor.secondary};
     width: 100%;
     text-align: left;
-    margin-bottom: 20px;
+    margin-bottom: 6px;
 `;
 
 const FieldHeader = styled.p`
@@ -248,8 +252,12 @@ const FieldHeader = styled.p`
 `;
 
 const WalletContainer = styled(FlexDivColumnCentered)`
-    margin-top: 30px;
+    margin-top: 40px;
     gap: 4px;
+`;
+
+const ButtonContainer = styled(FlexDivColumnCentered)`
+    margin-top: 30px;
 `;
 
 export default WithdrawModal;

@@ -39,33 +39,10 @@ export const PrimaryHeading = styled.h1`
     line-height: 20px;
 `;
 
-const Label = styled.span`
-    color: ${(props) => props.theme.textColor.primary};
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 119%; /* 14.28px */
-    margin-top: 4px;
-`;
-
-export const WarningLabel = styled(Label)`
-    margin-top: 2px;
-`;
-
-export const DescriptionLabel = styled(Label)`
-    margin-bottom: 20px;
-`;
-
-export const InputLabel = styled.span<{ marginTop?: string }>`
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: capitalize;
-    margin-top: ${(props) => (props.marginTop ? props.marginTop : '')};
-    margin-bottom: 5px;
-`;
-
 export const InputContainer = styled(FlexDiv)`
     position: relative;
     width: 100%;
+    margin-bottom: 20px;
 `;
 
 export const CollateralContainer = styled.div`
