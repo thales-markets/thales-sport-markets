@@ -103,6 +103,10 @@ const Background = styled.section`
     background: ${(props) => props.theme.background.primary};
     color: ${(props) => props.theme.textColor.primary};
     position: relative;
+    ol {
+        list-style: revert;
+        list-style-position: inside;
+    }
 `;
 
 const Wrapper = styled(FlexDivColumn)`
