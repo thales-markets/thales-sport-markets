@@ -32,6 +32,10 @@ type CollateralSelectorProps = {
     stretch?: boolean;
     showNetworkName?: boolean;
     preventPaymentCollateralChange?: boolean;
+    color?: string;
+    background?: string;
+    topPosition?: string;
+    hideZeroBalance?: boolean;
 };
 
 const CollateralSelector: React.FC<CollateralSelectorProps> = ({
@@ -49,6 +53,10 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
     stretch,
     showNetworkName,
     preventPaymentCollateralChange,
+    color,
+    background,
+    topPosition,
+    hideZeroBalance,
 }) => {
     const dispatch = useDispatch();
 
@@ -64,14 +72,21 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
     );
 
     const collateralsDetailsSorted = useMemo(() => {
-        const mappedCollaterals = collateralArray.map((collateral, index) => ({ name: collateral as Coins, index }));
+        const mappedCollaterals = collateralArray
+            .map((collateral, index) => ({ name: collateral as Coins, index }))
+            .filter((collateral) => {
+                if (hideZeroBalance) {
+                    if (collateralBalances[collateral.name] === 0) return false;
+                }
+                return true;
+            });
         if (!isDetailedView) {
             return mappedCollaterals;
         }
         return mappedCollaterals.sort(
             (collateralA, collateralB) => getUSDForCollateral(collateralB.name) - getUSDForCollateral(collateralA.name)
         );
-    }, [collateralArray, isDetailedView, getUSDForCollateral]);
+    }, [collateralBalances, hideZeroBalance, collateralArray, isDetailedView, getUSDForCollateral]);
 
     return (
         <Container stretch={stretch} isDetailedView={isDetailedView}>
@@ -80,24 +95,31 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                     <TextCollateralWrapper isDetailedView={isDetailedView}>
                         {showCollateralImg && (
                             <Icon
+                                color={color}
                                 className={`currency-icon currency-icon--${collateralArray[
                                     selectedItem
                                 ].toLowerCase()}`}
                             />
                         )}
-                        <TextCollateral isDetailedView={isDetailedView} isSelectedCollateral={true}>
+                        <TextCollateral color={color} isDetailedView={isDetailedView} isSelectedCollateral={true}>
                             {!hideCollateralNameOnInput && collateralArray[selectedItem]}
                             {showNetworkName && ` (${getNetworkNameByNetworkId(networkId, true)})`}
                         </TextCollateral>
                     </TextCollateralWrapper>
                     <Arrow
+                        color={color}
                         className={open ? `icon icon--caret-up` : `icon icon--caret-down`}
                         isDetailedView={isDetailedView}
                     />
                 </SelectedCollateral>
                 {isDetailedView
                     ? open && (
-                          <DetailedDropdown width={dropDownWidth} onClick={() => setOpen(!open)}>
+                          <DetailedDropdown
+                              background={background}
+                              width={dropDownWidth}
+                              top={topPosition}
+                              onClick={() => setOpen(!open)}
+                          >
                               {collateralsDetailsSorted.map((collateral, i) => {
                                   return (
                                       <DetailedCollateralOption
@@ -117,21 +139,22 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                                       >
                                           <FlexDivCentered>
                                               <Icon
+                                                  color={color}
                                                   className={`currency-icon currency-icon--${collateral.name.toLowerCase()}`}
                                               />
-                                              <TextCollateral fontWeight="600" isDetailedView={true}>
+                                              <TextCollateral color={color} fontWeight="600" isDetailedView={true}>
                                                   {collateral.name}
                                               </TextCollateral>
                                           </FlexDivCentered>
                                           {!hideBalance && (
                                               <div>
-                                                  <TextCollateral fontWeight="400" isDetailedView={true}>
+                                                  <TextCollateral color={color} fontWeight="400" isDetailedView={true}>
                                                       {formatCurrencyWithSign(
                                                           null,
                                                           collateralBalances ? collateralBalances[collateral.name] : 0
                                                       )}
                                                   </TextCollateral>
-                                                  <TextCollateral fontWeight="600" isDetailedView={true}>
+                                                  <TextCollateral color={color} fontWeight="600" isDetailedView={true}>
                                                       {!exchangeRates?.[collateral.name] &&
                                                       !isStableCurrency(collateral.name as Coins)
                                                           ? '...'
@@ -187,6 +210,7 @@ const Text = styled.span<{
     fontWeight?: string;
     isDetailedView?: boolean;
     isSelectedCollateral?: boolean;
+    color?: string;
 }>`
     font-family: ${(props) => props.theme.fontFamily.primary};
     font-style: normal;
@@ -201,7 +225,9 @@ const Text = styled.span<{
 
 const TextCollateral = styled(Text)`
     color: ${(props) =>
-        props.isDetailedView
+        props.color
+            ? props.color
+            : props.isDetailedView
             ? props.theme.input.textColor.tertiary
             : props.isSelectedCollateral
             ? props.theme.status.win
@@ -224,10 +250,16 @@ const TextCollateralWrapper = styled.div<{ isDetailedView?: boolean }>`
 
 const Arrow = styled.i<{
     isDetailedView?: boolean;
+    color?: string;
 }>`
     font-size: 10px;
     text-transform: none;
-    color: ${(props) => (props.isDetailedView ? props.theme.input.textColor.tertiary : props.theme.status.win)};
+    color: ${(props) =>
+        props.color
+            ? props.color
+            : props.isDetailedView
+            ? props.theme.input.textColor.tertiary
+            : props.theme.status.win};
 `;
 
 const SelectedCollateral = styled(FlexDivRowCentered)<{ disabled: boolean; stretch?: boolean }>`
@@ -250,14 +282,14 @@ const Dropdown = styled(FlexDivColumnCentered)<{ width?: string }>`
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
 `;
 
-const DetailedDropdown = styled(FlexDivColumnCentered)<{ width?: string }>`
+const DetailedDropdown = styled(FlexDivColumnCentered)<{ width?: string; background?: string; top?: string }>`
     position: absolute;
-    top: 35px;
+    top: ${(props) => (props.top ? props.top : '35px')};
     right: 0px;
     width: ${(props) => (props.width ? props.width : '350px')};
     padding: 5px 3px;
     border-radius: 8px;
-    background: ${(props) => props.theme.input.background.tertiary};
+    background: ${(props) => (props.background ? props.background : props.theme.input.background.tertiary)};
     z-index: 100;
     border: 2px solid ${(props) => props.theme.input.borderColor.tertiary};
 `;
@@ -283,11 +315,11 @@ const DetailedCollateralOption = styled(FlexDivSpaceBetween)`
     }
 `;
 
-const Icon = styled.i`
+const Icon = styled.i<{ color?: string }>`
     font-size: 25px;
     line-height: 100%;
     margin-right: 10px;
-    color: ${(props) => props.theme.input.textColor.tertiary};
+    color: ${(props) => (props.color ? props.color : props.theme.input.textColor.tertiary)};
 `;
 
 export default CollateralSelector;
