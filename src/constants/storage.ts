@@ -46,4 +46,5 @@ export const LOCAL_STORAGE_KEYS = {
     STAKING_MODAL_MUTE_END: 'stakingModalMuteEnd',
     IS_SYSTEM_BET: 'isSystemBet',
     SYSTEM_BET_DENOMINATOR: 'systemBetDenominator',
+    ERROR_RELOAD_TIME: 'errorReloadTime',
 };

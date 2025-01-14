@@ -31,7 +31,14 @@ const useLpTicketsQuery = (
             ];
 
             if (sportsAMMDataContract && liquidityPoolDataContract) {
-                const [lpTickets, gamesInfoResponse, playersInfoResponse, liveScoresResponse] = await Promise.all([
+                const [
+                    lpTickets,
+                    gamesInfoResponse,
+                    playersInfoResponse,
+                    liveScoresResponse,
+                    openMarketsResponse,
+                    ongoingMarketsResponse,
+                ] = await Promise.all([
                     liquidityPoolDataContract.read.getRoundTickets([
                         getLpAddress(networkConfig.networkId, lpCollateral),
                         round,
@@ -39,6 +46,14 @@ const useLpTicketsQuery = (
                     axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, noCacheConfig),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/players-info`, noCacheConfig),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/live-scores`, noCacheConfig),
+                    axios.get(
+                        `${generalConfig.API_URL}/overtime-v2/networks/${networkConfig.networkId}/markets/?status=open&ungroup=true&onlyBasicProperties=true`,
+                        noCacheConfig
+                    ),
+                    axios.get(
+                        `${generalConfig.API_URL}/overtime-v2/networks/${networkConfig.networkId}/markets/?status=ongoing&ungroup=true&onlyBasicProperties=true`,
+                        noCacheConfig
+                    ),
                 ]);
 
                 const numberOfBatches = Math.trunc(lpTickets.length / BATCH_SIZE) + 1;
@@ -55,13 +70,16 @@ const useLpTicketsQuery = (
                 const promisesResult = await Promise.all(promises);
                 const ticketsData = promisesResult.flat(1);
 
+                const openOngoingMarkets = [...openMarketsResponse.data, ...ongoingMarketsResponse.data];
+
                 const mappedTickets: Ticket[] = ticketsData.map((ticket: any) =>
                     mapTicket(
                         ticket,
                         networkConfig.networkId,
                         gamesInfoResponse.data,
                         playersInfoResponse.data,
-                        liveScoresResponse.data
+                        liveScoresResponse.data,
+                        openOngoingMarkets
                     )
                 );
 

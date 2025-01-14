@@ -222,6 +222,9 @@ const Home: React.FC = () => {
     const gameMultipliersQuery = useGameMultipliersQuery();
 
     const finalMarkets = useMemo(() => {
+        if (showBurger) {
+            return [];
+        }
         const allMarkets: MarketsCache =
             sportMarketsQueryNew.isSuccess && sportMarketsQueryNew.data
                 ? sportMarketsQueryNew.data
@@ -401,6 +404,7 @@ const Home: React.FC = () => {
         marketTypeGroupFilter,
         favouriteLeagues,
         selectedMarket,
+        showBurger,
         dispatch,
     ]);
 
@@ -1064,7 +1068,7 @@ const CheckboxContainer = styled.div<{ isMobile: boolean; textColor?: string }>`
     label {
         color: ${(props) =>
             props.isMobile
-                ? props.theme.textColor.primary
+                ? props.theme.christmasTheme.button.textColor.secondary
                 : props?.textColor
                 ? props.textColor
                 : props.theme.textColor.quinary};
@@ -1091,7 +1095,7 @@ const CheckboxContainer = styled.div<{ isMobile: boolean; textColor?: string }>`
         border: 2px solid
             ${(props) =>
                 props.isMobile
-                    ? props.theme.background.septenary
+                    ? props.theme.christmasTheme.button.textColor.secondary
                     : props?.textColor
                     ? props.textColor
                     : props.theme.borderColor.primary};
@@ -1101,7 +1105,10 @@ const CheckboxContainer = styled.div<{ isMobile: boolean; textColor?: string }>`
             height: ${(props) => (props.isMobile ? '9px' : '8px')};
             top: ${(props) => (props.isMobile ? '0px' : '-1px')};
             border: 2px solid
-                ${(props) => (props.isMobile ? props.theme.background.septenary : props.theme.borderColor.quaternary)};
+                ${(props) =>
+                    props.isMobile
+                        ? props.theme.christmasTheme.button.textColor.secondary
+                        : props.theme.borderColor.quaternary};
             border-width: 0 2px 2px 0;
         }
     }

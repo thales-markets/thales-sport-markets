@@ -1,9 +1,10 @@
 import Scroll from 'components/Scroll';
-import { BOXING_LEAGUES, LeagueMap } from 'constants/sports';
+import { BOXING_LEAGUES, LEAGUES_SORT_PRIORITY, LeagueMap } from 'constants/sports';
+import { format } from 'date-fns';
 import { SportFilter } from 'enums/markets';
 import { League, Sport } from 'enums/sports';
 import i18n from 'i18n';
-import { groupBy } from 'lodash';
+import { groupBy, sortBy } from 'lodash';
 import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
@@ -32,13 +33,42 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
 
     const marketsMap: Record<number, SportMarket[]> = groupBy(markets, (market) => Number(market.leagueId));
     const unifiedMarketsMap = unifyBoxingMarkets(marketsMap);
+
+    const leaguesWithSameMaturityDateMap = new Map<number, number[]>(); // MaturityDate => League[]
+    const leaguesWithMinMaturityDateMap = new Map<number, number>(); // League => MaturityMinTime
     const marketsKeys = sortMarketKeys(
         Object.keys(marketsMap).map((key) => Number(key)),
         unifiedMarketsMap,
-        favouriteLeagues
+        favouriteLeagues,
+        leaguesWithSameMaturityDateMap,
+        leaguesWithMinMaturityDateMap
     );
 
-    const finalOrderKeys = groupBySortedMarketsKeys(marketsKeys);
+    const finalOrderKeys: number[] = [];
+    let alreadyPrioritizedLeagues: number[] = [];
+
+    // group leagues by maturity date and sort using priorities if there are leagues with the same maturity date
+    marketsKeys.forEach((league: number) => {
+        const minMaturityDateForLeague = Math.min(
+            ...unifiedMarketsMap[league].map((market) => Number(format(market.maturityDate, 'yyyyMMdd')))
+        );
+        const leaguesToPrioritize = leaguesWithSameMaturityDateMap
+            .get(minMaturityDateForLeague)
+            ?.sort(
+                (a: number, b: number) =>
+                    Number(leaguesWithMinMaturityDateMap.get(a)) - Number(leaguesWithMinMaturityDateMap.get(b))
+            );
+        if (leaguesToPrioritize && leaguesToPrioritize.includes(league)) {
+            // group and prioritize leagues with the same maturity date only once
+            if (!alreadyPrioritizedLeagues.includes(league)) {
+                finalOrderKeys.push(...groupBySortedMarketsKeys(leaguesToPrioritize));
+                alreadyPrioritizedLeagues = [...leaguesToPrioritize];
+            }
+        } else {
+            // add league which is unique by maturity date
+            finalOrderKeys.push(league);
+        }
+    });
 
     useEffect(() => {
         forceCheck();
@@ -109,7 +139,13 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
     );
 };
 
-const sortMarketKeys = (marketsKeys: number[], marketsMap: Record<number, SportMarket[]>, favouriteLeagues: Tags) => {
+const sortMarketKeys = (
+    marketsKeys: number[],
+    marketsMap: Record<number, SportMarket[]>,
+    favouriteLeagues: Tags,
+    leaguesWithSameMaturityDateMap: Map<number, number[]>,
+    leaguesWithMinMaturityDateMap: Map<number, number>
+) => {
     return marketsKeys.sort((a: League, b: League) => {
         const earliestGameA = marketsMap[a][0];
         const earliestGameB = marketsMap[b][0];
@@ -125,6 +161,16 @@ const sortMarketKeys = (marketsKeys: number[], marketsMap: Record<number, SportM
 
         const leaguePriorityA = leagueInfoA?.priority || 0;
         const leaguePriorityB = leagueInfoB?.priority || 0;
+
+        // for every league set array of leagues with the same earliest maturity date and set earliest maturity time
+        const maturityDateA = Number(format(earliestGameA.maturityDate, 'yyyyMMdd'));
+        if (maturityDateA === Number(format(earliestGameB.maturityDate, 'yyyyMMdd'))) {
+            const currentLeaguesSet = new Set(leaguesWithSameMaturityDateMap.get(maturityDateA) || []);
+            currentLeaguesSet.add(a);
+            currentLeaguesSet.add(b);
+            leaguesWithSameMaturityDateMap.set(maturityDateA, [...currentLeaguesSet]);
+            leaguesWithMinMaturityDateMap.set(a, Number(earliestGameA.maturityDate));
+        }
 
         return earliestGameA.maturityDate.getTime() == earliestGameB.maturityDate.getTime()
             ? isFavouriteA == isFavouriteB
@@ -159,72 +205,91 @@ const groupBySortedMarketsKeys = (marketsKeys: number[]) => {
     const golfKeys: number[] = [];
     const politicsKeys: number[] = [];
     const futuresKeys: number[] = [];
+
+    const leaguePriorityMap = new Map<number, number[]>();
+
     marketsKeys.forEach((tag: number) => {
-        const leagueSport = getLeagueSport(tag);
-        if (leagueSport === Sport.SOCCER) {
-            soccerKeys.push(tag);
-        }
-        if (leagueSport === Sport.FOOTBALL) {
-            footballKeys.push(tag);
-        }
-        if (leagueSport === Sport.BASKETBALL) {
-            basketballKeys.push(tag);
-        }
-        if (leagueSport === Sport.BASEBALL) {
-            baseballKeys.push(tag);
-        }
-        if (leagueSport === Sport.HOCKEY) {
-            hockeyKeys.push(tag);
-        }
-        if (leagueSport === Sport.MOTOSPORT) {
-            motosportKeys.push(tag);
-        }
-        if (leagueSport === Sport.TENNIS) {
-            tennisKeys.push(tag);
-        }
-        if (leagueSport === Sport.TABLE_TENNIS) {
-            tableTennisKeys.push(tag);
-        }
-        if (leagueSport === Sport.ESPORTS) {
-            eSportsKeys.push(tag);
-        }
-        if (leagueSport === Sport.RUGBY) {
-            rugbyKeys.push(tag);
-        }
-        if (leagueSport === Sport.VOLLEYBALL) {
-            volleyballKeys.push(tag);
-        }
-        if (leagueSport === Sport.HANDBALL) {
-            handballKeys.push(tag);
-        }
-        if (leagueSport === Sport.WATERPOLO) {
-            waterpoloKeys.push(tag);
-        }
-        if (leagueSport === Sport.CRICKET) {
-            cricketKeys.push(tag);
-        }
-        if (leagueSport === Sport.FIGHTING) {
-            fightingKeys.push(tag);
-        }
-        if (leagueSport === Sport.GOLF) {
-            golfKeys.push(tag);
-        }
-        if (leagueSport === Sport.POLITICS) {
-            politicsKeys.push(tag);
-        }
-        if (leagueSport === Sport.FUTURES) {
-            futuresKeys.push(tag);
+        const leaguePriority = LEAGUES_SORT_PRIORITY.findIndex((league: League) => league === tag);
+
+        if (leaguePriority !== -1) {
+            const currentPriorityLeagues = leaguePriorityMap.get(leaguePriority) || [];
+            currentPriorityLeagues.push(tag);
+            leaguePriorityMap.set(leaguePriority, currentPriorityLeagues);
+        } else {
+            const leagueSport = getLeagueSport(tag);
+
+            if (leagueSport === Sport.SOCCER) {
+                soccerKeys.push(tag);
+            }
+            if (leagueSport === Sport.FOOTBALL) {
+                footballKeys.push(tag);
+            }
+            if (leagueSport === Sport.BASKETBALL) {
+                basketballKeys.push(tag);
+            }
+            if (leagueSport === Sport.BASEBALL) {
+                baseballKeys.push(tag);
+            }
+            if (leagueSport === Sport.HOCKEY) {
+                hockeyKeys.push(tag);
+            }
+            if (leagueSport === Sport.MOTOSPORT) {
+                motosportKeys.push(tag);
+            }
+            if (leagueSport === Sport.TENNIS) {
+                tennisKeys.push(tag);
+            }
+            if (leagueSport === Sport.TABLE_TENNIS) {
+                tableTennisKeys.push(tag);
+            }
+            if (leagueSport === Sport.ESPORTS) {
+                eSportsKeys.push(tag);
+            }
+            if (leagueSport === Sport.RUGBY) {
+                rugbyKeys.push(tag);
+            }
+            if (leagueSport === Sport.VOLLEYBALL) {
+                volleyballKeys.push(tag);
+            }
+            if (leagueSport === Sport.HANDBALL) {
+                handballKeys.push(tag);
+            }
+            if (leagueSport === Sport.WATERPOLO) {
+                waterpoloKeys.push(tag);
+            }
+            if (leagueSport === Sport.CRICKET) {
+                cricketKeys.push(tag);
+            }
+            if (leagueSport === Sport.FIGHTING) {
+                fightingKeys.push(tag);
+            }
+            if (leagueSport === Sport.GOLF) {
+                golfKeys.push(tag);
+            }
+            if (leagueSport === Sport.POLITICS) {
+                politicsKeys.push(tag);
+            }
+            if (leagueSport === Sport.FUTURES) {
+                futuresKeys.push(tag);
+            }
         }
     });
 
-    return [
+    const prioritizedLeagueKeys: number[] = [];
+
+    sortBy(Array.from(leaguePriorityMap.keys())).forEach((priority: number) => {
+        prioritizedLeagueKeys.push(...(leaguePriorityMap.get(priority) || []));
+    });
+
+    const sortedWithPriority = [
+        ...prioritizedLeagueKeys,
         ...soccerKeys,
+        ...tennisKeys,
         ...footballKeys,
         ...basketballKeys,
         ...baseballKeys,
         ...hockeyKeys,
         ...fightingKeys,
-        ...tennisKeys,
         ...tableTennisKeys,
         ...eSportsKeys,
         ...rugbyKeys,
@@ -237,6 +302,8 @@ const groupBySortedMarketsKeys = (marketsKeys: number[]) => {
         ...politicsKeys,
         ...futuresKeys,
     ];
+
+    return sortedWithPriority;
 };
 
 const unifyBoxingMarkets = (marketsMap: Record<number, SportMarket[]>) => {

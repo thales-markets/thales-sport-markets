@@ -6,15 +6,19 @@ import { Buffer as buffer } from 'buffer';
 import UnexpectedError from 'components/UnexpectedError';
 import WalletDisclaimer from 'components/WalletDisclaimer';
 import { PLAUSIBLE } from 'constants/analytics';
+import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { ThemeMap } from 'constants/ui';
+import { differenceInSeconds } from 'date-fns';
 import { merge } from 'lodash';
 import App from 'pages/Root/App';
 import React, { ErrorInfo } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
+import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { Store } from 'redux';
 import { getDefaultTheme } from 'redux/modules/ui';
+import { localStore } from 'thales-utils';
+import { logErrorToDiscord } from 'utils/discord';
 import { PARTICLE_STYLE } from 'utils/particleWallet/utils';
 import queryConnector from 'utils/queryConnector';
 import { WagmiProvider } from 'wagmi';
@@ -38,6 +42,15 @@ const rainbowCustomTheme = merge(darkTheme(), {
 
 queryConnector.setQueryClient();
 
+const isDeployError = (errorMessage: string) =>
+    errorMessage &&
+    (errorMessage.includes('Failed to fetch dynamically imported module') ||
+        errorMessage.includes('error loading dynamically imported module') ||
+        errorMessage.includes('Importing a module script failed') ||
+        errorMessage.includes("'text/html' is not a valid JavaScript MIME type"));
+
+const PREVENT_ERROR_RELOAD_THRESHOLD_SECONDS = 10;
+
 const Root: React.FC<RootProps> = ({ store }) => {
     // particle context provider is overriding our i18n configuration and languages, so we need to add our localization after the initialization of particle context
     // initialization of particle context is happening in Root
@@ -46,37 +59,37 @@ const Root: React.FC<RootProps> = ({ store }) => {
 
     PLAUSIBLE.enableAutoPageviews();
 
-    const logError = (error: Error, info: ErrorInfo) => {
+    const onErrorHandler = (error: Error, info: ErrorInfo) => {
         if (import.meta.env.DEV) {
             return;
         }
 
-        // let content = `IsMobile:${isMobile()}\nError:\n${error.stack || error.message}`;
-        // const flags = 4; // SUPPRESS_EMBEDS
-        // fetch(LINKS.Discord.SpeedErrors, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({ content, flags }),
-        // });
+        if (isDeployError(error.stack || error.message)) {
+            console.log('Deployment error', error, info);
+            return;
+        }
 
-        // content = `ErrorInfo:${info.componentStack}`;
-        // if (content.length > DISCORD_MESSAGE_MAX_LENGTH) {
-        //     content = content.substring(0, DISCORD_MESSAGE_MAX_LENGTH);
-        // }
-        // fetch(LINKS.Discord.SpeedErrors, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({ content, flags }),
-        // });
-        console.error(error, info);
+        logErrorToDiscord(error, info);
+    };
+
+    const fallbackRender = ({ error, resetErrorBoundary }: FallbackProps) => {
+        const reloadedTimeSec = Number(localStore.get(LOCAL_STORAGE_KEYS.ERROR_RELOAD_TIME) || 0);
+        const preventReload = differenceInSeconds(Date.now(), reloadedTimeSec) < PREVENT_ERROR_RELOAD_THRESHOLD_SECONDS;
+
+        if (preventReload) {
+            logErrorToDiscord(error, { componentStack: 'Reload loop prevented!' });
+        } else if (isDeployError(error.stack || error.message)) {
+            resetErrorBoundary();
+            localStore.set(LOCAL_STORAGE_KEYS.ERROR_RELOAD_TIME, Date.now());
+            window.location.reload();
+            return;
+        }
+
+        return <UnexpectedError theme={ThemeMap[theme]} />;
     };
 
     return (
-        <ErrorBoundary fallback={<UnexpectedError theme={ThemeMap[theme]} />} onError={logError}>
+        <ErrorBoundary fallbackRender={fallbackRender} onError={onErrorHandler}>
             <QueryClientProvider client={queryConnector.queryClient}>
                 <Provider store={store}>
                     <AuthCoreContextProvider

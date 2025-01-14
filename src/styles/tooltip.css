@@ -116,6 +116,7 @@
     bottom: 0px;
     margin-left: -5px;
     border-width: 5px 5px 0;
+    border-top-color: #3c498a;
 }
 .rc-tooltip-placement-top .rc-tooltip-arrow {
     left: 50%;
@@ -215,4 +216,8 @@
 
 .lp-max-allowance .rc-tooltip-inner {
     max-width: 500px;
+}
+
+.override-validation-arrow > div > .rc-tooltip-arrow {
+    border-top-color: #1f274d;
 }
