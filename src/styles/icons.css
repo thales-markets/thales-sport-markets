@@ -137,6 +137,10 @@
     content: '\004E';
 }
 
+.icon--burger-icon:before {
+    content: '\004F';
+}
+
 .icon--profile:before {
     content: '\0050';
 }
@@ -319,6 +323,10 @@
 
 .icon--base:before {
     content: '\00C0';
+}
+
+.icon--playerprops:before {
+    content: '\00C2';
 }
 
 .icon--clear:before {
@@ -513,10 +521,6 @@
     content: '\011B';
 }
 
-.icon--playerprops:before {
-    content: '\00C2';
-}
-
-.icon--burger-icon:before {
-    content: '\004F';
+.icon--sorting::before {
+    content: '\0192';
 }

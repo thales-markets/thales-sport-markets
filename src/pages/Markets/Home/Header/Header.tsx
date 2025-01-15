@@ -230,7 +230,7 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitc
                     <OutsideClickHandler onOutsideClick={() => setOpenSortMenu(false)}>
                         <Tooltip overlay={isMobile ? '' : 'Select games sorting'}>
                             <SortIndicator
-                                className={'icon icon--arrows-vertical'}
+                                className={'icon icon--sorting'}
                                 onClick={() => setOpenSortMenu(!openSortMenu)}
                             />
                         </Tooltip>
