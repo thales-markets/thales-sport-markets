@@ -232,6 +232,7 @@ const ItemDescription = styled.div`
     align-items: center;
     overflow-wrap: break-word;
     width: fit-content;
+    font-weight: 500;
     @media (max-width: 575px) {
         max-width: 150px;
         text-align: right;
