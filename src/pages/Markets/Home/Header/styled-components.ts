@@ -45,8 +45,7 @@ export const MarketTypeButton = styled.button<{ selected?: boolean }>`
     font-weight: 600;
     padding: 2px 10px;
     background: ${({ theme }) => theme.button.background.secondary};
-    color: ${({ theme, selected }) =>
-        selected ? theme.button.textColor.quaternary : theme.christmasTheme.textColor.primary};
+    color: ${({ theme, selected }) => (selected ? theme.button.textColor.quaternary : theme.textColor.secondary)};
     :focus {
         outline: none;
     }
@@ -60,7 +59,7 @@ export const ArrowIcon = styled.i<{ hide: boolean; hideBoth: boolean; isLeft?: b
     cursor: pointer;
     font-size: 20px;
     transform: ${(props) => (props.isLeft ? 'rotate(90deg)' : 'rotate(270deg)')};
-    color: ${(props) => props.theme.christmasTheme.textColor.primary};
+    color: ${(props) => props.theme.textColor.secondary};
     display: ${(props) => (props.hideBoth ? 'none' : 'block')};
     opacity: ${(props) => (props.hide ? '0.2' : '1')};
     padding: 0px 5px;
@@ -71,7 +70,7 @@ export const ArrowIcon = styled.i<{ hide: boolean; hideBoth: boolean; isLeft?: b
 
 export const FilterIcon = styled.i`
     font-size: 20px;
-    color: ${(props) => props.theme.christmasTheme.textColor.primary};
+    color: ${(props) => props.theme.textColor.secondary};
     @media (max-width: 950px) {
         font-size: 18px;
     }
@@ -89,6 +88,6 @@ export const SwitchContainer = styled(FlexDiv)`
 export const ThreeWayIcon = styled.i<{ disabled: boolean; fontSize: number }>`
     cursor: ${(props) => (props.disabled ? 'deafult' : 'pointer')};
     font-size: ${(props) => props.fontSize}px;
-    color: ${(props) => props.theme.christmasTheme.textColor.primary};
+    color: ${(props) => props.theme.textColor.secondary};
     opacity: ${(props) => (props.disabled ? '0.2' : '1')};
 `;

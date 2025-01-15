@@ -92,17 +92,17 @@ const Container = styled(FlexDivSpaceBetween)`
     cursor: pointer;
     height: 25px;
     position: relative;
-    color: ${(props) => props.theme.christmasTheme.textColor.primary};
+    color: ${(props) => props.theme.textColor.quinary};
     margin-bottom: 5px;
     &.selected,
     &:hover {
-        color: ${(props) => props.theme.christmasTheme.textColor.secondary};
+        color: ${(props) => props.theme.textColor.quaternary};
     }
     @media (max-width: 950px) {
         font-size: 14px;
         line-height: 18px;
         height: 30px;
-        color: ${(props) => props.theme.christmasTheme.textColor.primary};
+        color: ${(props) => props.theme.textColor.primary};
     }
 `;
 
@@ -152,7 +152,7 @@ const Separator = styled.div`
     height: 2px;
     margin-top: 15px;
     margin-bottom: 15px;
-    background: ${(props) => props.theme.christmasTheme.textColor.primary};
+    background: ${(props) => props.theme.textColor.septenary};
     border-radius: 5px;
 `;
 
