@@ -1,5 +1,6 @@
 import { PaymasterMode } from '@biconomy/account';
 import { getWalletClient } from '@wagmi/core';
+import Zebra from 'assets/images/overtime-zebra.svg?react';
 import Modal from 'components/Modal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { ContractType } from 'enums/contract';
@@ -7,13 +8,11 @@ import { Network } from 'enums/network';
 import { wagmiConfig } from 'pages/Root/wagmiConfig';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getIsMobile } from 'redux/modules/app';
-import styled from 'styled-components';
-import { FlexDiv } from 'styles/common';
+import styled, { useTheme } from 'styled-components';
+import { Colors, FlexDiv } from 'styles/common';
 import { coinParser, Coins, formatCurrencyWithKey } from 'thales-utils';
-import { RootState } from 'types/redux';
+import { ThemeInterface } from 'types/ui';
 import { executeBiconomyTransactionWithConfirmation } from 'utils/biconomy';
 import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateralIndex } from 'utils/collaterals';
@@ -39,8 +38,7 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
     onClose,
 }) => {
     const { t } = useTranslation();
-    const isMobile = useSelector((state: RootState) => getIsMobile(state));
-
+    const theme: ThemeInterface = useTheme();
     const networkId = useChainId();
     const client = useClient();
 
@@ -111,19 +109,25 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
 
     return (
         <Modal
-            title={t('withdraw.confirmation-modal.title')}
-            customStyle={isMobile ? { content: { width: '100%', padding: '0 10px' } } : undefined}
+            title=""
+            containerStyle={{
+                background: theme.overdrop.borderColor.tertiary,
+                border: 'none',
+            }}
+            hideHeader
             onClose={() => onClose()}
         >
             <MainContainer>
-                <MakeSureText>
+                <ZebraIcon />
+                <Header>{t('withdraw.request')}</Header>
+                <SubTitle>
                     {t('withdraw.confirmation-modal.correct-address', {
                         token,
                         network: networkName,
                     })}
-                </MakeSureText>
+                </SubTitle>
 
-                <DetailsContainer>
+                <Box>
                     <ItemContainer>
                         <ItemLabel>{t('withdraw.amount')}:</ItemLabel>
                         <ItemDescription>
@@ -139,9 +143,11 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
                         <ItemLabel>{t('withdraw.confirmation-modal.network')}:</ItemLabel>
                         <ItemDescription>{networkName}</ItemDescription>
                     </ItemContainer>
-                </DetailsContainer>
+                </Box>
                 <ButtonContainer>
-                    <Button onClick={() => handleSubmit()}>{t('withdraw.confirmation-modal.confirm')}</Button>
+                    <ActivateButton onClick={() => handleSubmit()}>
+                        {t('withdraw.confirmation-modal.confirm')}
+                    </ActivateButton>
                 </ButtonContainer>
             </MainContainer>
         </Modal>
@@ -149,39 +155,52 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
 };
 
 const MainContainer = styled(FlexDiv)`
-    padding: 30px 20px 10px 20px;
+    display: flex;
     flex-direction: column;
-    max-width: 550px;
     align-items: center;
-    justify-content: center;
-    @media (max-width: 575px) {
-        width: 100%;
-    }
+    width: 480px;
+    background: ${Colors.GOLD};
+    z-index: 1000;
 `;
 
 const TokenIcon = styled.i`
     font-size: 25px;
     margin-right: 5px;
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.textColor.senary};
     @media (max-width: 575px) {
         margin-right: 0px;
     }
 `;
 
-const MakeSureText = styled.span`
-    color: ${(props) => props.theme.textColor.primary};
-    font-size: 18px;
-    font-weight: 400;
-    line-height: normal;
-    margin-bottom: 14px;
+const Header = styled.h2`
+    color: ${(props) => props.theme.overdrop.textColor.quaternary};
+    text-align: center;
+    font-size: 24px;
+    line-height: 24px;
+    font-weight: 600;
+    margin-top: 13px;
+    margin-bottom: 3px;
 `;
 
-const DetailsContainer = styled(FlexDiv)`
-    width: 100%;
-    margin-top: 10px;
-    flex-direction: column;
-    background-color: ${(props) => props.theme.connectWalletModal.totalBalanceBackground};
-    padding: 18px;
+const SubTitle = styled.p`
+    color: ${(props) => props.theme.overdrop.textColor.quaternary};
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 16px;
+`;
+
+const Box = styled.div`
+    border-radius: 12px;
+    border: 1px solid ${(props) => props.theme.overdrop.textColor.quaternary};
+    padding: 16px 10px;
+    color: ${(props) => props.theme.overdrop.textColor.quaternary};
+    font-size: 14px;
+    font-weight: 400;
+    line-height: normal;
+    text-align: left;
+    margin-top: 12px;
+    margin-bottom: 24px;
 `;
 
 const ItemContainer = styled(FlexDiv)`
@@ -191,7 +210,7 @@ const ItemContainer = styled(FlexDiv)`
     width: 100%;
     justify-content: space-between;
     margin: 5px 0px;
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.textColor.senary};
     @media (max-width: 575px) {
         height: 50px;
         overflow-wrap: break-word;
@@ -223,20 +242,28 @@ const ButtonContainer = styled(FlexDiv)`
     align-items: center;
     justify-content: center;
     width: 100%;
-    margin-top: 24px;
 `;
 
-const Button = styled(FlexDiv)`
+const ZebraIcon = styled(Zebra)`
+    text-align: center;
+    height: 55px;
+    width: 255px;
+    path {
+        fill: ${(props) => props.theme.textColor.senary};
+    }
+`;
+
+const ActivateButton = styled.div`
+    border-radius: 12px;
+    background: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.overdrop.textColor.quaternary};
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    height: 56px;
+    padding: 18px;
+    width: 100%;
     cursor: pointer;
-    padding: 8px 20px;
-    align-items: center;
-    justify-content: center;
-    color: ${(props) => props.theme.button.textColor.primary};
-    background-color: ${(props) => props.theme.button.background.quaternary};
-    font-size: 22px;
-    font-weight: 600;
-    text-transform: uppercase;
-    border-radius: 5px;
 `;
 
 export default WithdrawalConfirmationModal;

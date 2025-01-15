@@ -962,6 +962,7 @@
         "address-input-label": "Your personal {{ token }} withdrawal address on {{ network }}",
         "description": "Use this page to withdraw funds from your Overtime account. Carefully follow the steps below and make sure to double check everything.",
         "amount": "Amount",
+        "request": "Withdrawal Request",
         "heading-withdraw": "Withdraw crypto",
         "paste-address": "Paste your wallet address here",
         "warning": "Double check the Withdrawal Address and make sure it accepts {{ token }} on {{ network }}",
