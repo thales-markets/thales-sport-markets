@@ -125,7 +125,7 @@ export const SortMenuItem = styled.div<{ isSelected: boolean }>`
 `;
 
 export const SortIndicator = styled.i`
-    font-size: 14px;
+    font-size: 18px;
     text-transform: none;
     color: ${(props) => props.theme.dropDown.indicatorColor.primary};
     cursor: pointer;
