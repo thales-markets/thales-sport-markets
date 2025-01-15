@@ -1,4 +1,4 @@
-import LogoIcon from 'assets/images/xmas-overtime-logo.svg?react';
+import LogoIcon from 'assets/images/overtime-logo.svg?react';
 import SPAAnchor from 'components/SPAAnchor';
 import ROUTES, { RESET_STATE } from 'constants/routes';
 import React from 'react';
@@ -28,7 +28,7 @@ const Container = styled.div`
 const StyledLogo = styled(LogoIcon)`
     fill: ${(props) => props.theme.textColor.primary};
     cursor: pointer;
-    height: 60px;
+    height: 35px;
     @media (max-width: 400px) {
         width: 130px;
     }

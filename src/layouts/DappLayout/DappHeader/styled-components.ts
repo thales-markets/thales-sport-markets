@@ -1,3 +1,4 @@
+import burger from 'assets/images/burger.svg';
 import OverdropButtonBackground from 'assets/images/overdrop/overdrop-button-background.webp';
 import overdrop from 'assets/images/overdrop/overdrop-nav.webp';
 import styled from 'styled-components';
@@ -34,7 +35,6 @@ export const LeftContainer = styled(FlexDivRowCentered)`
     max-width: 278px;
     justify-content: center;
     padding-right: 15px;
-    z-index: 1;
 `;
 
 export const MiddleContainer = styled(FlexDivRowCentered)`
@@ -60,11 +60,11 @@ export const RightContainer = styled(FlexDivRowCentered)`
     }
 `;
 
-export const MenuIcon = styled.i`
+export const MenuIcon = styled.img.attrs({ src: burger })`
     cursor: pointer;
-    font-size: 26px;
-    color: ${(props) => props.theme.christmasTheme.textColor.primary};
-    /* filter: invert(39%) sepia(9%) saturate(1318%) hue-rotate(199deg) brightness(71%) contrast(88%); */
+    height: 25px;
+    width: 35px;
+    filter: invert(39%) sepia(9%) saturate(1318%) hue-rotate(199deg) brightness(71%) contrast(88%);
 `;
 
 export const OverdropIcon = styled.img.attrs({ src: overdrop })`
@@ -238,13 +238,13 @@ export const HeaderIcon = styled.i<{
 }>`
     margin-right: 5px;
     font-size: ${(props) => (props.iconSize ? props.iconSize : '20')}px;
-    color: ${(props) => (props.iconColor ? props.iconColor : props.theme.christmasTheme.textColor.primary)};
+    color: ${(props) => (props.iconColor ? props.iconColor : props.theme.textColor.secondary)};
 `;
 
 export const HeaderLabel = styled.span`
     font-weight: 600;
     font-size: 12px;
-    color: ${(props) => props.theme.christmasTheme.textColor.primary};
+    color: ${(props) => props.theme.textColor.secondary};
     text-transform: uppercase;
 `;
 
@@ -253,6 +253,7 @@ export const DropdownContainer = styled.div`
     width: 180px;
     top: 28px;
     left: 0;
+    z-index: 1000;
 `;
 
 export const DropDown = styled(FlexDivColumn)`
@@ -264,7 +265,6 @@ export const DropDown = styled(FlexDivColumn)`
     margin-top: 2px;
     padding: 4px;
     width: 100%;
-    z-index: 3;
 `;
 
 export const DropDownItem = styled(FlexDiv)`

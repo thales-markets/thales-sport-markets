@@ -21,14 +21,11 @@ export const Container = styled(FlexDivRow)<{
     font-weight: 600;
     font-size: 13px;
     line-height: 16px;
-    background: ${(props) =>
-        props.selected ? props.theme.christmasTheme.background.secondary : props.theme.background.secondary};
+    background: ${(props) => (props.selected ? props.theme.background.quaternary : props.theme.background.secondary)};
     color: ${(props) => (props.selected ? props.theme.textColor.tertiary : props.theme.textColor.primary)};
     border: 1px solid
         ${(props) =>
-            props.selected || props.isWinner
-                ? props.theme.christmasTheme.background.secondary
-                : props.theme.borderColor.quinary};
+            props.selected || props.isWinner ? props.theme.borderColor.quaternary : props.theme.borderColor.quinary};
     box-shadow: ${(props) => (props.isWinner ? props.theme.shadow.positionWinner : '')};
     opacity: ${(props) => (props.disabled && !props.isWinner ? '0.4' : '1')};
     cursor: ${(props) => (props.disabled ? '' : 'pointer')};

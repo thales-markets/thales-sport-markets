@@ -65,12 +65,11 @@ const NetworkSwitcher: React.FC = () => {
 };
 
 const NetworkIconWrapper = styled.div<{ isConnected: boolean; isMultiChain: boolean }>`
-    background: ${(props) =>
-        props.isConnected ? props.theme.christmasTheme.button.background.primary : 'transparent'};
+    background: ${(props) => (props.isConnected ? props.theme.background.tertiary : 'transparent')};
     height: 28px;
     border-radius: 20px;
     border-radius: 20px;
-    border: 1px solid ${(props) => props.theme.christmasTheme.button.borderColor.primary};
+    border: 1px solid ${(props) => props.theme.background.tertiary};
     display: flex;
     justify-content: center;
     gap: 4px;
@@ -93,18 +92,12 @@ const NetworkText = styled.span`
 
 const NetworkIcon = styled.i<{ isConnected: boolean }>`
     font-size: 24px;
-    color: ${(props) =>
-        props.isConnected
-            ? props.theme.button.textColor.primary
-            : props.theme.christmasTheme.button.textColor.secondary};
+    color: ${(props) => (props.isConnected ? props.theme.button.textColor.primary : props.theme.textColor.secondary)};
 `;
 
 const DownIcon = styled.i<{ isConnected: boolean }>`
     font-size: 12px;
-    color: ${(props) =>
-        props.isConnected
-            ? props.theme.button.textColor.primary
-            : props.theme.christmasTheme.button.textColor.secondary};
+    color: ${(props) => (props.isConnected ? props.theme.button.textColor.primary : props.theme.textColor.secondary)};
 `;
 
 const NetworkDropDown = styled.div`
@@ -115,7 +108,7 @@ const NetworkDropDown = styled.div`
     display: flex;
     flex-direction: column;
     border-radius: 20px;
-    background: ${(props) => props.theme.christmasTheme.background.primary};
+    background: ${(props) => props.theme.background.tertiary};
     width: 130px;
     padding: 10px;
     justify-content: center;

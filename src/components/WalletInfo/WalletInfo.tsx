@@ -205,7 +205,7 @@ const Container = styled(FlexDivCentered)<{ walletConnected?: boolean }>`
 const Wrapper = styled.div<{ displayPadding?: boolean }>`
     display: flex;
     border-radius: 20px;
-    border: 1px solid ${(props) => props.theme.christmasTheme.borderColor.primary};
+    border: 1px solid ${(props) => props.theme.borderColor.primary};
     height: 28px;
     justify-content: space-between;
     align-items: center;
@@ -255,7 +255,7 @@ const Text = styled.span`
     font-weight: 600;
     font-size: 10.8px;
     line-height: 12px;
-    color: ${(props) => props.theme.christmasTheme.textColor.primary};
+    color: ${(props) => props.theme.textColor.secondary};
 `;
 
 const FreeBetIcon = styled.i`
