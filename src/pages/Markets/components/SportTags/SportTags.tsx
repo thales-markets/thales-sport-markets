@@ -1,5 +1,5 @@
 import { SportFilter } from 'enums/markets';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSportFilter, getTagFilter, setTagFilter } from 'redux/modules/market';
@@ -36,11 +36,11 @@ const SportTags: React.FC<SportTagsProps> = ({
     const tagFilter = useSelector(getTagFilter);
 
     const [isOpen, setIsOpen] = useState(sport == sportFilter && sport !== SportFilter.All);
-    const open = useMemo(() => sport == sportFilter && sport !== SportFilter.All && isOpen, [
-        isOpen,
-        sport,
-        sportFilter,
-    ]);
+    const open = useMemo(() => sport !== SportFilter.All && isOpen, [isOpen, sport]);
+
+    useEffect(() => {
+        setIsOpen(sport == sportFilter && sport !== SportFilter.All);
+    }, [sportFilter, sport]);
 
     return (
         <React.Fragment>
@@ -52,6 +52,10 @@ const SportTags: React.FC<SportTagsProps> = ({
                         setIsOpen(!open);
                     }
                     onSportClick();
+                }}
+                onArrowClick={(e) => {
+                    e.stopPropagation();
+                    setIsOpen(!open);
                 }}
                 key={sport}
                 count={sportCount}
@@ -70,7 +74,8 @@ const SportTags: React.FC<SportTagsProps> = ({
                 liveMarketsCountPerTag={liveMarketsCountPerTag}
                 playerPropsMarketsCountPerTag={playerPropsMarketsCountPerTag}
                 showActive={showActive}
-                showLive={sportFilter == SportFilter.Live}
+                showLive={sport == SportFilter.Live}
+                sport={sport}
             ></TagsDropdown>
         </React.Fragment>
     );
