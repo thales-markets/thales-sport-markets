@@ -44,7 +44,7 @@ const LargeBadge: React.FC<LargeBadgeProps> = ({
             {!!voucherAmount && (
                 <ThalesAmount>
                     <VoucherAmount>
-                        {formatCurrencyWithKey(CRYPTO_CURRENCY_MAP.THALES, voucherAmount, 1, true)}
+                        {formatCurrencyWithKey(CRYPTO_CURRENCY_MAP.OVER, voucherAmount, 1, true)}
                     </VoucherAmount>
                 </ThalesAmount>
             )}

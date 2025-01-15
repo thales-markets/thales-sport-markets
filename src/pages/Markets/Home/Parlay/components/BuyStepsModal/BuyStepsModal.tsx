@@ -42,7 +42,7 @@ const BuyStepsModal: React.FC<BuyStepsModalProps> = ({ step, isFailed, currencyK
                         <Text>
                             {t('markets.parlay.buy-steps.approve-swap', {
                                 src: currencyKey,
-                                dst: CRYPTO_CURRENCY_MAP.THALES,
+                                dst: CRYPTO_CURRENCY_MAP.OVER,
                             })}
                             :
                         </Text>
@@ -51,7 +51,7 @@ const BuyStepsModal: React.FC<BuyStepsModalProps> = ({ step, isFailed, currencyK
                 )}
                 <FlexDivRow>
                     <Text>
-                        {t('markets.parlay.buy-steps.swap', { src: currencyKey, dst: CRYPTO_CURRENCY_MAP.THALES })}:
+                        {t('markets.parlay.buy-steps.swap', { src: currencyKey, dst: CRYPTO_CURRENCY_MAP.OVER })}:
                     </Text>
                     {step === BuyTicketStep.SWAP
                         ? statusFailedOrInProgress
@@ -63,8 +63,7 @@ const BuyStepsModal: React.FC<BuyStepsModalProps> = ({ step, isFailed, currencyK
                     <>
                         <FlexDivRow>
                             <Text>
-                                {t('markets.parlay.buy-steps.approve-buy', { currencyKey: CRYPTO_CURRENCY_MAP.THALES })}
-                                :
+                                {t('markets.parlay.buy-steps.approve-buy', { currencyKey: CRYPTO_CURRENCY_MAP.OVER })}:
                             </Text>
                             {step === BuyTicketStep.APPROVE_BUY
                                 ? statusFailedOrInProgress
@@ -73,9 +72,7 @@ const BuyStepsModal: React.FC<BuyStepsModalProps> = ({ step, isFailed, currencyK
                                 : ''}
                         </FlexDivRow>
                         <FlexDivRow>
-                            <Text>
-                                {t('markets.parlay.buy-steps.buy', { currencyKey: CRYPTO_CURRENCY_MAP.THALES })}:
-                            </Text>
+                            <Text>{t('markets.parlay.buy-steps.buy', { currencyKey: CRYPTO_CURRENCY_MAP.OVER })}:</Text>
                             {step === BuyTicketStep.BUY
                                 ? statusFailedOrInProgress
                                 : step > BuyTicketStep.BUY

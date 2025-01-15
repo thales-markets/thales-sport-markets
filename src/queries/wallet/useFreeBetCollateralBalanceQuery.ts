@@ -45,7 +45,6 @@ const useFreeBetCollateralBalanceQuery = (
                     WETHBalance,
                     ARBBalance,
                     USDbCBalance,
-                    THALESBalance,
                 ] = await Promise.all([
                     multipleCollateral[CRYPTO_CURRENCY_MAP.sUSD as Coins]?.addresses[
                         networkConfig.networkId as SupportedNetwork
@@ -137,16 +136,6 @@ const useFreeBetCollateralBalanceQuery = (
                               ],
                           ])
                         : undefined,
-                    multipleCollateral[CRYPTO_CURRENCY_MAP.THALES as Coins]?.addresses[
-                        networkConfig.networkId as SupportedNetwork
-                    ] !== TBD_ADDRESS
-                        ? freeBetHolderContract?.read.balancePerUserAndCollateral([
-                              walletAddress,
-                              multipleCollateral[CRYPTO_CURRENCY_MAP.THALES as Coins]?.addresses[
-                                  networkConfig.networkId as SupportedNetwork
-                              ],
-                          ])
-                        : undefined,
                 ]);
 
                 return {
@@ -160,7 +149,7 @@ const useFreeBetCollateralBalanceQuery = (
                     ETH: 0,
                     ARB: ARBBalance ? bigNumberFormatter(ARBBalance, COLLATERAL_DECIMALS.ARB) : 0,
                     USDbC: USDbCBalance ? bigNumberFormatter(USDbCBalance, COLLATERAL_DECIMALS.USDbC) : 0,
-                    THALES: THALESBalance ? bigNumberFormatter(THALESBalance, COLLATERAL_DECIMALS.THALES) : 0,
+                    THALES: 0,
                 };
             } catch (e) {
                 console.log('e ', e);

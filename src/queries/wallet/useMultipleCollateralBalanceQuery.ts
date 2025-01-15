@@ -74,22 +74,12 @@ const useMultipleCollateralBalanceQuery = (
                         networkConfig,
                         getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.ARB as Coins)
                     ) as ViemContract,
-                    THALES: getContractInstance(
-                        ContractType.MULTICOLLATERAL,
-                        networkConfig,
-                        getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.THALES as Coins)
-                    ) as ViemContract,
                     OVER: getContractInstance(
                         ContractType.MULTICOLLATERAL,
                         networkConfig,
                         getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.OVER as Coins)
                     ) as ViemContract,
                 };
-
-                const thalesStakingContract = getContractInstance(
-                    ContractType.STAKING_THALES,
-                    networkConfig
-                ) as ViemContract;
 
                 if (!walletAddress || !networkConfig.networkId) {
                     return collateralsBalance;
@@ -106,8 +96,6 @@ const useMultipleCollateralBalanceQuery = (
                     WETHBalance,
                     ETHBalance,
                     ARBBalance,
-                    THALESBalance,
-                    sTHALESBalance,
                     OVERBalance,
                 ] = await Promise.all([
                     multipleCollateralObject?.sUSD && multipleCollateralObject?.sUSD?.address !== TBD_ADDRESS
@@ -138,10 +126,6 @@ const useMultipleCollateralBalanceQuery = (
                     multipleCollateralObject?.ARB && multipleCollateralObject?.ARB?.address !== TBD_ADDRESS
                         ? multipleCollateralObject.ARB.read.balanceOf([walletAddress])
                         : 0,
-                    multipleCollateralObject?.THALES && multipleCollateralObject?.THALES?.address !== TBD_ADDRESS
-                        ? multipleCollateralObject.THALES.read.balanceOf([walletAddress])
-                        : 0,
-                    thalesStakingContract ? thalesStakingContract.read.stakedBalanceOf([walletAddress]) : 0,
                     multipleCollateralObject?.OVER && multipleCollateralObject?.OVER?.address !== TBD_ADDRESS
                         ? multipleCollateralObject.OVER.read.balanceOf([walletAddress])
                         : 0,
@@ -159,12 +143,8 @@ const useMultipleCollateralBalanceQuery = (
                     WETH: WETHBalance ? bigNumberFormatter(WETHBalance, COLLATERAL_DECIMALS.WETH) : 0,
                     ETH: ETHBalance ? bigNumberFormatter(ETHBalance.value, COLLATERAL_DECIMALS.ETH) : 0,
                     ARB: ARBBalance ? bigNumberFormatter(ARBBalance, COLLATERAL_DECIMALS.ARB) : 0,
-                    THALES: THALESBalance ? bigNumberFormatter(THALESBalance, COLLATERAL_DECIMALS.THALES) : 0,
-                    // sub 1 staked THALES due to limitation on contract side
-                    sTHALES:
-                        sTHALESBalance && bigNumberFormatter(sTHALESBalance, COLLATERAL_DECIMALS.sTHALES) > 1
-                            ? bigNumberFormatter(sTHALESBalance, COLLATERAL_DECIMALS.sTHALES) - 1
-                            : 0,
+                    THALES: 0,
+                    sTHALES: 0,
                     OVER: OVERBalance ? bigNumberFormatter(OVERBalance, COLLATERAL_DECIMALS.OVER) : 0,
                 };
             } catch (e) {

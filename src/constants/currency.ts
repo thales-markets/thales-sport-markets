@@ -35,8 +35,8 @@ export const STABLE_COINS = [
 export const COLLATERALS: Record<SupportedNetwork, Coins[]> = {
     [Network.OptimismMainnet]: [
         CRYPTO_CURRENCY_MAP.USDC as Coins,
-        CRYPTO_CURRENCY_MAP.THALES as Coins,
-        CRYPTO_CURRENCY_MAP.sTHALES as Coins,
+        // CRYPTO_CURRENCY_MAP.THALES as Coins,
+        // CRYPTO_CURRENCY_MAP.sTHALES as Coins,
         CRYPTO_CURRENCY_MAP.sUSD as Coins,
         CRYPTO_CURRENCY_MAP.USDCe as Coins,
         CRYPTO_CURRENCY_MAP.DAI as Coins,
@@ -48,8 +48,8 @@ export const COLLATERALS: Record<SupportedNetwork, Coins[]> = {
     ],
     [Network.Arbitrum]: [
         CRYPTO_CURRENCY_MAP.USDC as Coins,
-        CRYPTO_CURRENCY_MAP.THALES as Coins,
-        CRYPTO_CURRENCY_MAP.sTHALES as Coins,
+        // CRYPTO_CURRENCY_MAP.THALES as Coins,
+        // CRYPTO_CURRENCY_MAP.sTHALES as Coins,
         CRYPTO_CURRENCY_MAP.USDCe as Coins,
         CRYPTO_CURRENCY_MAP.DAI as Coins,
         CRYPTO_CURRENCY_MAP.USDT as Coins,
@@ -72,8 +72,8 @@ export const COLLATERALS: Record<SupportedNetwork, Coins[]> = {
     ],
     [Network.OptimismSepolia]: [
         CRYPTO_CURRENCY_MAP.USDC as Coins,
-        CRYPTO_CURRENCY_MAP.THALES as Coins,
-        CRYPTO_CURRENCY_MAP.sTHALES as Coins,
+        // CRYPTO_CURRENCY_MAP.THALES as Coins,
+        // CRYPTO_CURRENCY_MAP.sTHALES as Coins,
         CRYPTO_CURRENCY_MAP.USDT as Coins,
         CRYPTO_CURRENCY_MAP.WETH as Coins,
         CRYPTO_CURRENCY_MAP.ETH as Coins,
@@ -83,7 +83,7 @@ export const COLLATERALS: Record<SupportedNetwork, Coins[]> = {
 export const FREE_BET_COLLATERALS: Record<SupportedNetwork, Coins[]> = {
     [Network.OptimismMainnet]: [
         CRYPTO_CURRENCY_MAP.USDC as Coins,
-        CRYPTO_CURRENCY_MAP.THALES as Coins,
+        // CRYPTO_CURRENCY_MAP.THALES as Coins,
         CRYPTO_CURRENCY_MAP.sUSD as Coins,
         CRYPTO_CURRENCY_MAP.USDCe as Coins,
         CRYPTO_CURRENCY_MAP.DAI as Coins,
@@ -94,7 +94,7 @@ export const FREE_BET_COLLATERALS: Record<SupportedNetwork, Coins[]> = {
     ],
     [Network.Arbitrum]: [
         CRYPTO_CURRENCY_MAP.USDC as Coins,
-        CRYPTO_CURRENCY_MAP.THALES as Coins,
+        // CRYPTO_CURRENCY_MAP.THALES as Coins,
         CRYPTO_CURRENCY_MAP.USDCe as Coins,
         CRYPTO_CURRENCY_MAP.DAI as Coins,
         CRYPTO_CURRENCY_MAP.USDT as Coins,
@@ -116,7 +116,7 @@ export const FREE_BET_COLLATERALS: Record<SupportedNetwork, Coins[]> = {
         CRYPTO_CURRENCY_MAP.USDC as Coins,
         CRYPTO_CURRENCY_MAP.USDT as Coins,
         CRYPTO_CURRENCY_MAP.WETH as Coins,
-        CRYPTO_CURRENCY_MAP.THALES as Coins,
+        // CRYPTO_CURRENCY_MAP.THALES as Coins,
     ],
 };
 

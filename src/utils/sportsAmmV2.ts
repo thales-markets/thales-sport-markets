@@ -21,8 +21,6 @@ export const getSportsAMMV2Transaction: any = async (
     additionalSlippage: bigint,
     isAA: boolean,
     isFreeBet: boolean,
-    isStakedThales: boolean,
-    stakingThalesBettingProxyContract: ViemContract,
     client: Client,
     isSystemBet: boolean,
     systemBetDenominator: number
@@ -96,56 +94,6 @@ export const getSportsAMMV2Transaction: any = async (
             return freeBetHolderContract.write.trade(
                 [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress, collateralAddress],
                 { value: 0, gasLimit: finalEstimation }
-            );
-        }
-
-        if (isStakedThales && stakingThalesBettingProxyContract) {
-            if (isSystemBet) {
-                if (networkId === Network.OptimismMainnet) {
-                    const encodedData = encodeFunctionData({
-                        abi: stakingThalesBettingProxyContract.abi,
-                        functionName: 'tradeSystemBet',
-                        args: [
-                            tradeData,
-                            buyInAmount,
-                            expectedQuote,
-                            additionalSlippage,
-                            referralAddress,
-                            systemBetDenominator,
-                        ],
-                    });
-
-                    const estimation = await estimateGas(client, {
-                        to: stakingThalesBettingProxyContract.address as Address,
-                        data: encodedData,
-                    });
-
-                    finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER); // using Math.celi as gasLimit is accepting only integer.
-                }
-
-                return stakingThalesBettingProxyContract.write.tradeSystemBet(
-                    [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress, systemBetDenominator],
-                    systemBetDenominator,
-                    { gasLimit: finalEstimation }
-                );
-            }
-
-            const encodedData = encodeFunctionData({
-                abi: stakingThalesBettingProxyContract.abi,
-                functionName: 'trade',
-                args: [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress],
-            });
-
-            const estimation = await estimateGas(client, {
-                to: stakingThalesBettingProxyContract.address as Address,
-                data: encodedData,
-            });
-
-            finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER); // using Math.celi as gasLimit is accepting only integer.
-
-            return stakingThalesBettingProxyContract.write.trade(
-                [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress],
-                { gasLimit: finalEstimation }
             );
         }
 
