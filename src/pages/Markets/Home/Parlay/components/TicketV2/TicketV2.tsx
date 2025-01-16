@@ -334,7 +334,7 @@ const Ticket: React.FC<TicketProps> = ({
             label: 'THALES used',
             multiplier: isOver || swapToOver ? 10 : 0,
             icon: <OverdropIcon className="icon icon--thales-logo" />,
-            tooltip: 'thales-boost',
+            tooltip: 'over-boost',
         };
         return [
             ...(userMultipliersQuery.isSuccess
@@ -2188,7 +2188,7 @@ const Ticket: React.FC<TicketProps> = ({
                         </SummaryValue>
                         <SummaryLabel>
                             <Tooltip
-                                overlay={<>{t(`markets.parlay.thales-bonus-tooltip`)}</>}
+                                overlay={<>{t(`markets.parlay.over-bonus-tooltip`)}</>}
                                 iconFontSize={14}
                                 marginLeft={3}
                             />
@@ -2279,11 +2279,11 @@ const Ticket: React.FC<TicketProps> = ({
                 <RowSummary>
                     <RowContainer>
                         <SummaryLabel isBonus>
-                            {t('markets.parlay.swap-thales')}
+                            {t('markets.parlay.swap-over')}
                             <Tooltip
                                 overlay={
                                     <Trans
-                                        i18nKey="markets.parlay.swap-thales-tooltip"
+                                        i18nKey="markets.parlay.swap-over-tooltip"
                                         components={{
                                             bold: <BoldContent />,
                                         }}

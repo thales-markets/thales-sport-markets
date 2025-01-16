@@ -407,7 +407,7 @@ const UserStats: React.FC = () => {
             return getButton(t(`common.errors.enter-amount`), true);
         }
 
-        return getButton(t('profile.stats.get-thales-label'), isButtonDisabled);
+        return getButton(t('profile.stats.get-over-label'), isButtonDisabled);
     };
 
     return (
@@ -520,7 +520,7 @@ const UserStats: React.FC = () => {
             </Wrapper>
             <Wrapper>
                 <SectionWrapper>
-                    <Title>{t('profile.stats.buy-thales-title')}</Title>
+                    <Title>{t('profile.stats.buy-over-title')}</Title>
                     <InputContainer ref={inputRef}>
                         <NumericInput
                             value={buyInAmount}
@@ -535,7 +535,7 @@ const UserStats: React.FC = () => {
                             inputPadding="5px 10px"
                             borderColor={theme.input.borderColor.tertiary}
                             disabled={isBuying}
-                            label={t('profile.stats.swap-to-thales-label')}
+                            label={t('profile.stats.swap-to-over-label')}
                             placeholder={t('liquidity-pool.deposit-amount-placeholder')}
                             currencyComponent={
                                 <CollateralSelector
@@ -557,7 +557,7 @@ const UserStats: React.FC = () => {
                         />
                     </InputContainer>
                     <Section>
-                        <SubLabel>{t('profile.stats.thales-price-label')}:</SubLabel>
+                        <SubLabel>{t('profile.stats.over-price-label')}:</SubLabel>
                         {isFetching ? (
                             <LoaderContainer>
                                 <SimpleLoader size={16} strokeWidth={6} />
@@ -571,7 +571,7 @@ const UserStats: React.FC = () => {
                         )}
                     </Section>
                     <Section>
-                        <SubLabel>{t('profile.stats.thales-to-receive')}:</SubLabel>
+                        <SubLabel>{t('profile.stats.over-to-receive')}:</SubLabel>
                         {isFetching ? (
                             <LoaderContainer>
                                 <SimpleLoader size={16} strokeWidth={6} />

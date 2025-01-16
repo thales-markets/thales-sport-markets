@@ -25,7 +25,7 @@ const UserTransactionsTable: FC<UserTransactionsTableProps> = memo(
                 enableSorting: true,
             },
             {
-                header: <>{t('rewards.table.wallet-address')}</>,
+                header: <>{t('market.table.wallet-address')}</>,
                 accessorKey: 'account',
                 cell: (cellProps: any) => <p>{truncateAddress(cellProps.cell.getValue(), 5)}</p>,
                 size: 150,

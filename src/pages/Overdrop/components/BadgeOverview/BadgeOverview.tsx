@@ -132,7 +132,7 @@ const BadgeOverview: React.FC = () => {
                 </ItemContainer>
                 {levelItem.level !== OVERDROP_LEVELS.length - 1 && (
                     <ItemContainer>
-                        <Label>{t('overdrop.overdrop-home.next-thales-rewards-at')}</Label>
+                        <Label>{t('overdrop.overdrop-home.next-over-rewards-at')}</Label>
                         <ValueWrapper>
                             <ValueSecondary>
                                 {nextThalesRewardLevel

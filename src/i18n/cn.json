@@ -209,7 +209,7 @@
         "discord": "Discord",
         "docs": "文档",
         "github": "GitHub",
-        "disclaimer": "This frontend is hosted decentrally on IPFS (InterPlanetary File System). It serves to visualise the blockchain data and help users interact with the Overtime contracts that belong to Thales DAO. By doing so it helps users understand the risks of using those smart contracts and what the specific interactions entail. The frontend does not facilitate anything else apart from interacting with those contracts in a visually comprehensive way. In doing so, it is no different than the functionality provided by Etherscan or RPCs (Remote Procedure Calls). The frontend itself does not belong to Thales DAO or any individual. It stores no user data and has no dedicated backend or database. All code is uploaded statically directly to the IPFS. Just as the blockchain does no geo-fencing and no KYC, neither can this frontend do so. However, by interacting with Thales DAO contracts, you commit to have read, understood and accepted <disclaimer>Thales DAO’s terms of use</disclaimer> and you take full liability in case you have not adhered to those terms. Thales DAO uses the decentralised sUSD token as collateral for all its transactions. In doing so it inherits all the usage rules from Synthetix DAO with regards to collateral and does not introduce its own.",
+        "disclaimer": "This frontend is hosted decentrally on IPFS (InterPlanetary File System). It serves to visualise the blockchain data and help users interact with the Overtime contracts that belong to Overtime DAO. By doing so it helps users understand the risks of using those smart contracts and what the specific interactions entail. The frontend does not facilitate anything else apart from interacting with those contracts in a visually comprehensive way. In doing so, it is no different than the functionality provided by Etherscan or RPCs (Remote Procedure Calls). The frontend itself does not belong to Overtime DAO or any individual. It stores no user data and has no dedicated backend or database. All code is uploaded statically directly to the IPFS. Just as the blockchain does no geo-fencing and no KYC, neither can this frontend do so. However, by interacting with Overtime DAO contracts, you commit to have read, understood and accepted <disclaimer>Overtime DAO’s terms of use</disclaimer> and you take full liability in case you have not adhered to those terms. Overtime DAO uses the decentralised sUSD token as collateral for all its transactions. In doing so it inherits all the usage rules from Synthetix DAO with regards to collateral and does not introduce its own.",
         "reddit": "红迪网",
         "instagram": "Instagram的"
     },
@@ -314,6 +314,7 @@
             "amount-col": "头寸数量",
             "paid-col": "支付金额",
             "tx-status-col": "状态",
+            "wallet-address": "钱包地址",
             "type": {
                 "bid": "出价",
                 "withdrawal": "提款",
@@ -683,15 +684,13 @@
                 "slippage": "滑移",
                 "invalid-value": "无效值",
                 "enter-value": "输入值",
-                "label": "如果赔率下降则接受交易：",
-                "tooltip": "如果在执行转移时桥接利率的不利变化超过该百分比，转移将不会通过。",
-                "swap-thales": "掉期滑点"
+                "label": "如果赔率下降则接受交易："
             },
             "odds-changed-description": "赔率已更改。请接受更改才能购买。",
             "odds-changed-error": "订单执行过程中赔率发生变化。请尝试增加滑点。",
-            "thales-bonus-info": "使用 THALES，每场游戏可获得 2% 的奖励。",
+            "over-bonus-info": "使用 OVER，每场游戏可获得 2% 的奖励。",
             "accept-odds-changes": "接受赔率变化",
-            "thales-bonus-tooltip": "与 THALES 进行交易的用户将为其票中的每场游戏获得 1% 的额外支出（已在总报价和支出中计算）。",
+            "over-bonus-tooltip": "与 OVER 进行交易的用户将为其票中的每场游戏获得 1% 的额外支出（已在总报价和支出中计算）。",
             "overdrop": {
                 "bonus-applied": "奖金已应用",
                 "overdrop-xp-overview": "Overdrop XP 概述",
@@ -702,7 +701,7 @@
                 "base-xp": "基础经验值",
                 "tooltip": {
                     "loyalty-boost": "忠诚 XP 提升可为您的所有常规 XP 收入提供高达 25% 的永久提升，具体取决于您的 XP 级别。从第 1 级的 5% 提升开始，每达到 5 级，您都会获得另外 +5% 的提升。",
-                    "thales-boost": "所有以 THALES 作为抵押的投注都将获得该特定投注基本 XP 累积 +10% 的奖金！",
+                    "over-boost": "所有以 OVER 作为抵押的投注都将获得该特定投注基本 XP 累积 +10% 的奖金！",
                     "weekly-boost": "您连续下注的周数越多，您的 XP 提升就越高。每周增加 +5%，最高可达 +20%。如果您错过一周，此提升将重置为 0%",
                     "twitter-boost": "如果您以 Flex Card 的形式在 Twitter 上分享您的加时投注，您将激活为期 3 天的 +10% Twitter Flex Boost。",
                     "promo-boost": "某些体育游戏有额外的 XP 提升。",
@@ -714,16 +713,15 @@
                 "buy-in-xp": "购买 XP"
             },
             "use-free-bet": "使用免费投注",
-            "swap-thales-tooltip": "全部",
+            "swap-over-tooltip": "全部",
             "disable-free-bet": "禁用免费投注余额",
-            "swap-thales-receive": "最低接收",
             "buy-steps": {
                 "buy": "使用 {{currencyKey}} 购买",
                 "approve-swap": "批准兑换为 {{currencyKey}}",
                 "swap": "兑换为 {{currencyKey}}",
                 "approve-buy": "使用 {{currencyKey}} 批准购买"
             },
-            "swap-thales": "使用 THALES 获得更好的赔率"
+            "swap-over": "使用 OVER 获得更好的赔率"
         },
         "discounted-per": "折扣按",
         "nav-menu": {
@@ -751,41 +749,7 @@
                 "language": "语言"
             }
         },
-        "incentivized-markets": "激励市场",
-        "incentivized-tooltip": "Triple Thrill: EPL, NFL, and NBA Rewards. A whopping total of 90k OP, 90k ARB, and 180k THALES will be distributed across the three leagues, with each league having its own dedicated 30k OP or ARB + 30k THALES bucket per chain. Check more details <detailsLink>here</detailsLink>.",
-        "incentivized-tooltip-tennis": "温网将受到激励，因为比赛将于 7 月 3 日开始。市场将通过 {{rewards}} 得到提振，直至 7 月 16 日锦标赛结束。奖励将根据您在这些市场上的交易量进行分配。您可以在我们的<detailsLink>Dune Dashboard</detailsLink>上跟踪您的奖励分配。",
-        "incentivized-tooltip-nfl-playoffs": "NFL 季后赛期间将发放总计高达 {{rewards}} 的奖励。查看更多详细信息<detailsLink>此处</detailsLink>。",
-        "superbowl-incentive": "10,000 ARB 奖励",
-        "incentivized-tooltip-uefa": "欧足联比赛将发放总计高达 {{rewards}} 的奖金。只有 Arbitrum 网络上的交易量才会计算奖励！查看更多详细信息<detailsLink>此处</detailsLink>。",
-        "incentivized-tooltip-nhl": "NHL 赛季剩余时间（包括季后赛）将发放总计高达 {{rewards}} 的奖励。只有 Arbitrum 网络上的交易量才会计算奖励！查看更多详细信息<detailsLink>此处</detailsLink>。",
-        "incentivized-tooltip-mm": "在疯狂三月期间赢得 45,000 ARB + 50,000 THALES。更多详细信息<detailsLink>此处</detailsLink>。",
-        "incentivized-tooltip-nhl-mlb": "总计高达 {{rewards}} 的奖励将分发给 {{league}} 赛季的剩余比赛，包括季后赛。只有 Arbitrum 网络上的交易量才会计入奖励！查看<detailsLink>此处</detailsLink>了解更多详情。",
-        "incentivized-tooltip-euro-copa": "2024 年欧洲杯和美洲杯比赛将发放总计高达 {{rewards}} 的奖励。查看<detailsLink>此处</detailsLink>了解更多详情。",
-        "incentivized-tooltip-wimbledon": "在 2024 年温布尔登网球公开赛加时赛 V1 和 V2 期间争夺 {{rewards}}。查看<detailsLink>此处</detailsLink>的更多详细信息。",
-        "incentivized-tooltip-olympics": "奥运会期间，可获得 {{rewards}} 的基于数量的奖励。查看<detailsLink>此处</detailsLink>的更多详细信息。"
-    },
-    "rewards": {
-        "header": "奖励",
-        "search-placeholder": "搜索钱包",
-        "description": "<div>根据 <tipLink>TIP-96</tipLink>，总额为 8,000 枚OP代币和 8,000 枚THALES代币，将每两周发放一次 ，用于补贴用户支付的手续费。</div>  <div>Th排行榜将以用户手续费的90%作为返利的基准（用户手续费为sUSD交易金额的3%）</div>   <div> OP和THALES代币的美元价值将以每轮第一天的7天加权平均价格为准。如果两周后，总手续费的返利超过OP和THALES代币的总价值，那么返利将会按总手续费的比例降低。</div> ",
-        "total-negative-pnl": "所有亏损金额",
-        "op-rewards-banner-message": "OP代币奖励已启动, 查看如何领取<bold>OP代币奖励攻略</bold>",
-        "table": {
-            "wallet-address": "钱包地址",
-            "pnl": "亏损金额",
-            "percentage": "百分比",
-            "reward-amount": "奖励数量",
-            "no-data-available": "无法获取数据",
-            "rebates": "回扣",
-            "volume": "体积",
-            "safebox": "保险箱费用",
-            "percent": "百分",
-            "rank": "Rank"
-        },
-        "your-score": "你的分数",
-        "twap": "一周TWAP",
-        "total-global-rebates": "要支付的总回扣",
-        "parlay-link": "<div>对于 OP 月度 parlay 比赛<parlayLink>点击这里</ parlayLink>.</div>"
+        "incentivized-markets": "激励市场"
     },
     "landing-page": {
         "best-odds": "市场最佳赔率",
@@ -1039,7 +1003,6 @@
     },
     "liquidity-pool": {
         "title": "Provide Liquidity",
-        "description": "<h1>Description</h1><p>Liquidity providing involves users depositing stablecoin collateral into a smart contract-based liquidity pool for Overtime trading. The collateral deposited is used to facilitate trading on Overtime's AMM.</p><p>To be able to provide liquidity you'll need to be staking THALES. There's no maximum cap per wallet and you may deposit a maximum of 1 {{currency}} per {{thalesStakedAmount}} THALES staked until the liquidity pool is filled.</p><p>At the end of each round, the proportional share of that round's PnL will be added to your deposited balance.</p><p>If you wish to withdraw, you can signal that at any time during the ongoing round, and at the end of the round the amount you signaled for withdrawal (inclusive of that round's PnL) is sent to you.  The minimum amount to be withdrawn is set to 10%</p><p>If you decide to unstake THALES while providing liquidity, please be aware that you'll need to signal a withdrawal from the liquidity pool first.</p><p>Providing liquidity exposes you to various risks including potential losses due to users winning in trading as well as smart contract security risks. Please make sure you understand these risks before depositing.</p><p><tipLink>TIP-99</tipLink> has more details on the technical implementation of Overtime liquidity providing.</p>",
         "variables": "<h1>Variables</h1><ul><li>Max total deposit: {{maxAllowedDeposit}}</li><li>Max users in the pool: {{maxAllowedUsers}}</li><li>Minimum deposit: {{minDepositAmount}}</li><li>Round duration: {{roundLength}} days</li></ul>",
         "liquidity-pool-not-started-message": "The liquidity pool has not started",
         "liquidity-pool-paused-message": "The liquidity pool is paused",
@@ -1051,9 +1014,6 @@
         "your-info-label": "Your LP info",
         "current-balance-label": "Current balance",
         "next-round-balance-label": "Next round balance",
-        "max-allowance-label": "Max allowance",
-        "your-thales-staked-label": "Your THALES staked",
-        "allowance-multiplier-label": "Allowance multiplier",
         "full-withdrawal-request-label": "Withdrawal request: {{amount}}<tooltip />",
         "partial-withdrawal-request-label": "Withdrawal request: {{percentage}} of the balance ({{amount}}<tooltip />)",
         "estimated-amount-tooltip": "This is an estimated amount. The actual amount will be calculated upon closing the current round based on the round PnL.",
@@ -1069,7 +1029,6 @@
         "deposit-max-amount-of-users-warning": "Maximum number of users in the liquidity pool is reached, you cannot deposit.",
         "deposit-liquidity-pool-cap-reached-warning": "The liquidity pool cap is reached, you cannot deposit.",
         "deposit-liquidity-pool-cap-error": "Deposit amount exceeds liquidity pool cap",
-        "deposit-staked-thales-error": "Deposit amount exceeds max allowance, stake more THALES to deposit",
         "deposit-min-amount-error": "The minimum amount for the deposit is {{amount}}",
         "withdrawal-deposit-warning": "You cannot withdraw as you already deposited for the next round.",
         "full-withdrawal-label": "Full withdrawal",
@@ -1092,9 +1051,7 @@
             "withdraw-confirmation-message": "Funds successfully withdrawn",
             "close-round-label": "Close round",
             "close-round-progress-label": "Closing round in progress...",
-            "close-round-confirmation-message": "Round successfully closed",
-            "get-thales-label": "Get THALES",
-            "stake-thales-label": "Stake THALES"
+            "close-round-confirmation-message": "Round successfully closed"
         },
         "pnl": {
             "pnl-per-round": {
@@ -1125,7 +1082,6 @@
             "apr": "基于 ARR 的预计 APR"
         },
         "single-lp": "单张唱片",
-        "description-parlay": "<h1>描述</h1><p>流动性提供涉及用户将稳定币抵押品存入基于智能合约的流动性池中以进行加班交易。存入的抵押品用于促进 Overtime 的 Parlay AMM 上的交易。</p><p>为了能够提供流动性，您需要质押泰雷兹。每个钱包没有最高限额，每质押 {{thalesStakedAmount}} THALES 最多可存入 1 {{currency}}，直至流动资金池填满。</p><p>每轮结束时，该轮盈亏的比例份额将添加到您的存入余额中。</p><p>如果您希望提款，您可以在正在进行的回合中随时发出信号，并在该回合结束时，您发出的提款金额（包括该轮的盈亏）将发送给您。最低提款金额设定为10%</p><p>如果您决定在提供流动性的同时解除泰雷兹质押，请注意，您需要首先发出从流动性池中提款的信号。</p><p>提供流动性会让您面临各种风险，包括用户在交易中获胜造成的潜在损失以及智能合约安全风险。请确保您在存款前了解这些风险。</p><p><tipLink> TIP-142</tipLink>有关加班流动性提供的技术实施的更多详细信息。</p>",
         "parlay-lp": "连本带利LP"
     },
     "seo": {
@@ -1276,7 +1232,7 @@
             "xp": "经验",
             "current-rewards": "目前预计的奖励",
             "next-level": "下一级",
-            "next-thales-rewards-at": "泰雷兹的下一轮奖励",
+            "next-over-rewards-at": "泰雷兹的下一轮奖励",
             "daily-streak": "每日连续经验值提升",
             "level": "等级",
             "my-total-xp": "我的总经验值",
@@ -1294,16 +1250,16 @@
                 "days": "天",
                 "parlay-xp": "PARLAY XP BONUS（每场 parlay 可得一次）",
                 "daily-bonus": "每日奖金",
-                "positions-thales": "泰雷兹奖金 (每注一次)",
+                "positions-over": "泰雷兹奖金 (每注一次)",
                 "xp-explained": "XP 解释",
                 "twitter-share-bonus": "Twitter 分享奖励（每天一次）",
                 "base-xp-accrual": "基本 XP 累积",
                 "twitter-content": "在 Twitter 上分享您今天投注的加班<bold>弹性卡</bold>：当天剩余时间内每 BASE XP 每 $</bold> 可获得 10% 的奖励",
-                "position-thales-content": "使用 <bold>THALES</bold> 作为抵押品，您将在该特定交易中获得 <bold>每 BASE XP 每 $ 10% 的奖励</bold>",
+                "position-over-content": "使用 <bold>OVER</bold> 作为抵押品，您将在该特定交易中获得 <bold>每 BASE XP 每 $ 10% 的奖励</bold>",
                 "xp-explained-content": "整个赛季的活动期间，用户可以通过驾驶汽车在赛季结束前积累 XP<bold>加班量</bold>和<bold>乘数</bold>基于各种动态指标和目标。<br/><br/>活动结束后，所有用户将共享<highlight>10 万 OP</highlight>和<highlight>150k 平均收益</highlight>根据 XP 按比例<br><br>活动期间，用户将获得特定 XP 等级的一次性奖励",
                 "base-xp-content": "<bold>1 基本 XP = 1 美元</bold>体积<br/><br/>后<bold>28天</bold>连续<bold>交易量&gt;10$</bold>你已经达到<bold>最大基数乘数</bold><br/><br/>每错过一天低于 10 美元的交易量，你的基础就会下降<bold>经验值 -0.1</bold>",
                 "loyalty-boost": "提高忠诚度",
-                "xp-boost-content": "有多种方法可以进一步提高每次投注所累积的 XP 数量，例如通过<bold>每日投注连续性、每周投注连续性、联注游戏数量、使用 THALES 代币作为抵押品、在 Twitter 上展示您的投注以及达到 XP 级别来提高忠诚度！</bold>",
+                "xp-boost-content": "有多种方法可以进一步提高每次投注所累积的 XP 数量，例如通过<bold>每日投注连续性、每周投注连续性、联注游戏数量、使用 OVER 代币作为抵押品、在 Twitter 上展示您的投注以及达到 XP 级别来提高忠诚度！</bold>",
                 "parlay-content": "根据您的累积赌注中包含的单个游戏数量，您将获得该累积赌注的 XP 额外提升！",
                 "weekly-boost-content": "激活当前周的每周连胜提升的条件是，当前周的周一 00:00UTC 至周日 23:59UTC 之间有任何投注量。连续满足此条件的周数越多，您的基本 XP 累积的<bold>每周连胜提升</bold>就越高！\n\n<bold>每周连胜提升</bold>适用于提升期间进行的所有投注。\n\n如果您中断连胜并错过了一天的投注量提升，您的<bold>每周连胜提升</bold>将重置为 +0%。",
                 "loyalty-boost-content": "忠诚 XP 提升可为您的所有常规 XP 累积提供高达 25% 的永久提升，具体取决于您的级别。从第 1 级的 5% 提升开始，每升至第 5 级，您都会获得 +5% 的提升。当您达到第 20 级 (GOAT) 并累积 5,000,000 XP 点数时，您的忠诚 XP 提升将达到最高 25%。您可以在升级树页面上查看 XP 级别细分。",
@@ -1318,7 +1274,7 @@
             "received": "已收到",
             "date-time": "日期 | 时间",
             "total-bonus": "总奖金",
-            "paragraph": "使用 THALES 作为抵押可获得额外的 10% 奖金，创建高达 100% 奖金的联注，并查看特别促销游戏。",
+            "paragraph": "使用 OVER 作为抵押可获得额外的 10% 奖金，创建高达 100% 奖金的联注，并查看特别促销游戏。",
             "weekly-multiplier": "每周乘数",
             "xp-history": "XP 历史",
             "daily-multiplier": "每日乘数",
@@ -1346,7 +1302,7 @@
             "congratulation": "恭喜！",
             "gain-xp-label": "获取 XP、升级、赢取奖励并收集空投！",
             "go-to-overdrop": "前往超额投放",
-            "reached-level": "您已达到 {{ level }} 级别并赢得 {{ amount }} THALES 免费投注！",
+            "reached-level": "您已达到 {{ level }} 级别并赢得 {{ amount }} OVER 免费投注！",
             "check-out": "查看<br/>超降联赛！",
             "active-daily-streak": "活跃每日连续经验值提升",
             "dont-show-this": "不再显示此内容",

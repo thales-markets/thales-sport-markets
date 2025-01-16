@@ -209,7 +209,7 @@
         "medium": "Medium",
         "twitter": "Twitter",
         "discord": "Discord",
-        "disclaimer": "This frontend is hosted decentrally on IPFS (InterPlanetary File System). It serves to visualise the blockchain data and help users interact with the Overtime contracts that belong to Thales DAO. By doing so it helps users understand the risks of using those smart contracts and what the specific interactions entail. The frontend does not facilitate anything else apart from interacting with those contracts in a visually comprehensive way. In doing so, it is no different than the functionality provided by Etherscan or RPCs (Remote Procedure Calls). The frontend itself does not belong to Thales DAO or any individual. It stores no user data and has no dedicated backend or database. All code is uploaded statically directly to the IPFS. Just as the blockchain does no geo-fencing and no KYC, neither can this frontend do so. However, by interacting with Thales DAO contracts, you commit to have read, understood and accepted <disclaimer>Thales DAO’s terms of use</disclaimer> and you take full liability in case you have not adhered to those terms. Thales DAO uses the decentralised sUSD token as collateral for all its transactions. In doing so it inherits all the usage rules from Synthetix DAO with regards to collateral and does not introduce its own.",
+        "disclaimer": "This frontend is hosted decentrally on IPFS (InterPlanetary File System). It serves to visualise the blockchain data and help users interact with the Overtime contracts that belong to Overtime DAO. By doing so it helps users understand the risks of using those smart contracts and what the specific interactions entail. The frontend does not facilitate anything else apart from interacting with those contracts in a visually comprehensive way. In doing so, it is no different than the functionality provided by Etherscan or RPCs (Remote Procedure Calls). The frontend itself does not belong to Overtime DAO or any individual. It stores no user data and has no dedicated backend or database. All code is uploaded statically directly to the IPFS. Just as the blockchain does no geo-fencing and no KYC, neither can this frontend do so. However, by interacting with Overtime DAO contracts, you commit to have read, understood and accepted <disclaimer>Overtime DAO’s terms of use</disclaimer> and you take full liability in case you have not adhered to those terms. Overtime DAO uses the decentralised sUSD token as collateral for all its transactions. In doing so it inherits all the usage rules from Synthetix DAO with regards to collateral and does not introduce its own.",
         "instagram": "Instagram",
         "reddit": "Reddit"
     },
@@ -314,6 +314,7 @@
             "amount-col": "cantidad",
             "paid-col": "pagado",
             "tx-status-col": "status de transaccion",
+            "wallet-address": "Dirección de billetera",
             "type": {
                 "bid": "Oferta",
                 "withdrawal": "Retirar",
@@ -683,14 +684,12 @@
                 "label": "Acepte el intercambio si las probabilidades bajan:",
                 "slippage": "deslizamiento",
                 "invalid-value": "valor no válido",
-                "tooltip": "La transferencia no se realizará si la tasa puente se mueve desfavorablemente en más de este porcentaje cuando se ejecuta la transferencia.",
-                "enter-value": "Introducir valor",
-                "swap-thales": "Deslizamiento de intercambio"
+                "enter-value": "Introducir valor"
             },
             "odds-changed-description": "Las probabilidades cambiaron. Aceptar cambios para poder comprar.",
-            "thales-bonus-tooltip": "Los usuarios que realicen intercambios con THALES obtendrán pagos adicionales del 2 % por cada juego que tengan en su boleto (ya calculado en Cotización total y Pago).",
+            "over-bonus-tooltip": "Los usuarios que realicen intercambios con OVER obtendrán pagos adicionales del 2 % por cada juego que tengan en su boleto (ya calculado en Cotización total y Pago).",
             "accept-odds-changes": "Aceptar cambios de probabilidades",
-            "thales-bonus-info": "Utilice THALES y obtenga un bono del 2% por cada juego.",
+            "over-bonus-info": "Utilice OVER y obtenga un bono del 2% por cada juego.",
             "odds-changed-error": "Las probabilidades cambiaron mientras se cumplía el pedido. Intente aumentar el deslizamiento.",
             "overdrop": {
                 "overdrop-xp-overview": "Descripción general de Overdrop XP",
@@ -702,7 +701,7 @@
                 "total-xp-boost": "Aumento total de XP",
                 "tooltip": {
                     "weekly-boost": "Cuantas más semanas seguidas apuestes, mayor será tu aumento de XP. Aumenta un 5 % por cada semana hasta un máximo de un 20 %. Si te saltas una semana, este aumento se restablece a 0 %",
-                    "thales-boost": "¡Todas las apuestas ejecutadas con THALES como garantía tendrán un bono de +10% en la acumulación de XP base para esa apuesta específica!",
+                    "over-boost": "¡Todas las apuestas ejecutadas con OVER como garantía tendrán un bono de +10% en la acumulación de XP base para esa apuesta específica!",
                     "loyalty-boost": "El aumento de XP por lealtad te otorga hasta un 25 % de aumento permanente en toda tu XP general, según tu nivel de XP. Comienza con un aumento del 5 % en el nivel 1 y obtienes otro aumento del +5 % al alcanzar cada quinto nivel.",
                     "parlay-boost": "Dependiendo de la cantidad de juegos individuales que incluyas en tu apuesta combinada, recibirás un aumento adicional en tu acumulación de XP para esa apuesta combinada. El máximo es un aumento de XP del +290 % en 15 juegos de la apuesta combinada.",
                     "twitter-boost": "Si compartes tu apuesta de tiempo extra en Twitter en forma de Tarjeta Flex, activarás un Flex Boost de Twitter de +10 % durante 3 días.",
@@ -714,15 +713,14 @@
                 "odds-xp": "Multiplicador de probabilidades"
             },
             "use-free-bet": "Usar apuesta gratis",
-            "swap-thales-receive": "Recepción mínima",
-            "swap-thales-tooltip": "TODO",
+            "swap-over-tooltip": "TODO",
             "buy-steps": {
                 "buy": "Compre con {{currencyKey}}",
                 "approve-swap": "Aprobar el cambio a {{currencyKey}}",
                 "swap": "Cambiar a {{currencyKey}}",
                 "approve-buy": "Aprobar compra con {{currencyKey}}"
             },
-            "swap-thales": "Utilice THALES para obtener mejores probabilidades",
+            "swap-over": "Utilice OVER para obtener mejores probabilidades",
             "disable-free-bet": "Desactivar saldos de apuestas gratuitas"
         },
         "discounted-per": "Con descuento según",
@@ -751,40 +749,7 @@
                 "language": "Idioma"
             }
         },
-        "incentivized-markets": "MERCADOS INCENTIVIZADOS",
-        "incentivized-tooltip": "Triple Thrill: EPL, NFL, and NBA Rewards. A whopping total of 90k OP, 90k ARB, and 180k THALES will be distributed across the three leagues, with each league having its own dedicated 30k OP or ARB + 30k THALES bucket per chain. Check more details <detailsLink>here</detailsLink>.",
-        "incentivized-tooltip-tennis": "Wimbledon será incentivado, ya que el torneo comienza el 3 de julio. Los mercados se potenciarán con {{rewards}} hasta el final del torneo el 16 de julio. Las recompensas se distribuirán en función de su volumen impulsado a través de estos mercados. Puede realizar un seguimiento de la asignación de sus recompensas en nuestro <detailsLink>Dune Dashboard</detailsLink>.",
-        "incentivized-tooltip-nfl-playoffs": "Se distribuirá un total enorme de {{rewards}} durante los playoffs de la NFL. Consulta más detalles <detailsLink>aquí</detailsLink>.",
-        "superbowl-incentive": "10.000 ARB EN INCENTIVOS",
-        "incentivized-tooltip-uefa": "Se distribuirá un total enorme de {{rewards}} para las competiciones de la UEFA. ¡Solo el volumen en la red Arbitrum se calculará para las recompensas! Consulta más detalles <detailsLink>aquí</detailsLink>.",
-        "incentivized-tooltip-nhl": "Se distribuirá un total enorme de {{rewards}} durante el resto de la temporada de la NHL, incluidos los playoffs. ¡Solo el volumen en la red Arbitrum se calculará para las recompensas! Consulta más detalles <detailsLink>aquí</detailsLink>.",
-        "incentivized-tooltip-nhl-mlb": "Se distribuirá un total enorme de {{rewards}} durante el resto de la temporada de la {{league}}, incluidos los playoffs. ¡Solo el volumen en la red Arbitrum se calculará para las recompensas! Consulta más detalles <detailsLink>aquí</detailsLink>.",
-        "incentivized-tooltip-euro-copa": "Se distribuirá un total enorme de {{rewards}} para las competiciones Euro 2024 y Copa América. Consulta más detalles <detailsLink>aquí</detailsLink>.",
-        "incentivized-tooltip-wimbledon": "Compite por {{rewards}} durante Wimbledon 2024 en Overtime V1 y V2. Consulte más detalles <detailsLink>aquí</detailsLink>.",
-        "incentivized-tooltip-olympics": "Gane {{rewards}} en recompensas basadas en volumen durante los Juegos Olímpicos. Consulte más detalles <detailsLink>aquí</detailsLink>."
-    },
-    "rewards": {
-        "header": "Recompensas",
-        "search-placeholder": "Buscar dirección de billetera",
-        "description": "<div>Un total de <bold>8,000 OP</bold> y <bold>8,000 THALES</bold> tokens serán distribuidos cada 2 semanas de forma continua de acuerdo a <tipLink>TIP-96</tipLink> para así reducir la comisión pagada a al contrato SafeBox.</div>  <div> Este ranking considera el calculo de recompensas como un 90% de lo pagado en comisión al contrato SafeBox, la cual es el 3% de la cantidad pagada en sUSD. </div>  <div> El valor en USD de los tokens OP y THALES será calculada usando el metodo TWAP (del inglés Time-weighted average price, o precio promedio en un rango de tiempo) durante 7 días, comenzando al principio de cada periodo de 2 semanas. Si al final de este periodo de 2 semanas el total de reembolsos termina siendo mayor que el valor TWAP inicial para los tokens de OP y THALES, entonces el reembolso será reducido proporcionalmente para cada participante.</div>",
-        "op-rewards-banner-message": "Las recompensas en OP han comenzado, revisa como obtenerlas en <bold>la pagína de recompensas OP</bold>",
-        "table": {
-            "wallet-address": "Dirección de billetera",
-            "pnl": "Losses",
-            "percentage": "Porcentaje",
-            "reward-amount": "Recompensa",
-            "no-data-available": "No hay datos disponibles",
-            "volume": "Volumen",
-            "rebates": "Reembolsos",
-            "safebox": "Tarifas de SafeBox",
-            "percent": "Por ciento",
-            "rank": "Rank"
-        },
-        "your-score": "Tu puntuación",
-        "total-negative-pnl": "pérdidas totales",
-        "twap": "TWAP de una semana",
-        "total-global-rebates": "Reembolsos totales a pagar",
-        "parlay-link": "<div>Para la competencia parlay mensual OP<parlayLink> haga clic aquí</ parlayLink> .</div>"
+        "incentivized-markets": "MERCADOS INCENTIVIZADOS"
     },
     "landing-page": {
         "best-odds": "Las mejores odds en la industria",
@@ -1038,7 +1003,6 @@
     },
     "liquidity-pool": {
         "title": "Provide Liquidity",
-        "description": "<h1>Description</h1><p>Liquidity providing involves users depositing stablecoin collateral into a smart contract-based liquidity pool for Overtime trading. The collateral deposited is used to facilitate trading on Overtime's AMM.</p><p>To be able to provide liquidity you'll need to be staking THALES. There's no maximum cap per wallet and you may deposit a maximum of 1 {{currency}} per {{thalesStakedAmount}} THALES staked until the liquidity pool is filled.</p><p>At the end of each round, the proportional share of that round's PnL will be added to your deposited balance.</p><p>If you wish to withdraw, you can signal that at any time during the ongoing round, and at the end of the round the amount you signaled for withdrawal (inclusive of that round's PnL) is sent to you.  The minimum amount to be withdrawn is set to 10%</p><p>If you decide to unstake THALES while providing liquidity, please be aware that you'll need to signal a withdrawal from the liquidity pool first.</p><p>Providing liquidity exposes you to various risks including potential losses due to users winning in trading as well as smart contract security risks. Please make sure you understand these risks before depositing.</p><p><tipLink>TIP-99</tipLink> has more details on the technical implementation of Overtime liquidity providing.</p>",
         "variables": "<h1>Variables</h1><ul><li>Max total deposit: {{maxAllowedDeposit}}</li><li>Max users in the pool: {{maxAllowedUsers}}</li><li>Minimum deposit: {{minDepositAmount}}</li><li>Round duration: {{roundLength}} days</li></ul>",
         "liquidity-pool-not-started-message": "The liquidity pool has not started",
         "liquidity-pool-paused-message": "The liquidity pool is paused",
@@ -1050,9 +1014,6 @@
         "your-info-label": "Your LP info",
         "current-balance-label": "Current balance",
         "next-round-balance-label": "Next round balance",
-        "max-allowance-label": "Max allowance",
-        "your-thales-staked-label": "Your THALES staked",
-        "allowance-multiplier-label": "Allowance multiplier",
         "full-withdrawal-request-label": "Withdrawal request: {{amount}}<tooltip />",
         "partial-withdrawal-request-label": "Withdrawal request: {{percentage}} of the balance ({{amount}}<tooltip />)",
         "estimated-amount-tooltip": "This is an estimated amount. The actual amount will be calculated upon closing the current round based on the round PnL.",
@@ -1068,7 +1029,6 @@
         "deposit-max-amount-of-users-warning": "Maximum number of users in the liquidity pool is reached, you cannot deposit.",
         "deposit-liquidity-pool-cap-reached-warning": "The liquidity pool cap is reached, you cannot deposit.",
         "deposit-liquidity-pool-cap-error": "Deposit amount exceeds liquidity pool cap",
-        "deposit-staked-thales-error": "Deposit amount exceeds max allowance, stake more THALES to deposit",
         "deposit-min-amount-error": "The minimum amount for the deposit is {{amount}}",
         "withdrawal-deposit-warning": "You cannot withdraw as you already deposited for the next round.",
         "full-withdrawal-label": "Full withdrawal",
@@ -1091,9 +1051,7 @@
             "withdraw-confirmation-message": "Funds successfully withdrawn",
             "close-round-label": "Close round",
             "close-round-progress-label": "Closing round in progress...",
-            "close-round-confirmation-message": "Round successfully closed",
-            "get-thales-label": "Get THALES",
-            "stake-thales-label": "Stake THALES"
+            "close-round-confirmation-message": "Round successfully closed"
         },
         "pnl": {
             "pnl-per-round": {
@@ -1124,8 +1082,7 @@
             "apy": "APY proyectado basado en APR"
         },
         "single-lp": "LP individual",
-        "parlay-lp": "Parlay LP",
-        "description-parlay": "<h1>Descripción</h1><p> La provisión de liquidez implica que los usuarios depositen garantías de monedas estables en un grupo de liquidez basado en contratos inteligentes para el comercio de horas extra. La garantía depositada se utiliza para facilitar la negociación en Parlay AMM de Overtime.</p><p> Para poder proporcionar liquidez, deberá apostar THALES. No hay un límite máximo por billetera y puede depositar un máximo de 1 {{currency}} por {{thalesStakedAmount}} THALES apostado hasta que se llene el fondo de liquidez.</p><p> Al final de cada ronda, la parte proporcional del PnL de esa ronda se agregará a su saldo depositado.</p><p> Si desea retirar dinero, puede indicarlo en cualquier momento durante la ronda en curso y, al final de la ronda, se le enviará la cantidad que indicó para el retiro (incluido el PnL de esa ronda). El importe mínimo a retirar está fijado en el 10%</p><p> Si decide dejar de participar en THALES mientras proporciona liquidez, tenga en cuenta que primero deberá señalar un retiro del grupo de liquidez.</p><p> Proporcionar liquidez lo expone a varios riesgos, incluidas pérdidas potenciales debido a que los usuarios ganan en el comercio, así como riesgos de seguridad de contratos inteligentes. Asegúrese de comprender estos riesgos antes de depositar.</p><p><tipLink> TIP-142</tipLink> tiene más detalles sobre la implementación técnica de la provisión de liquidez de horas extras.</p>"
+        "parlay-lp": "Parlay LP"
     },
     "seo": {
         "home": {
@@ -1245,7 +1202,7 @@
     "banner": {
         "arb-distribution-message": "La distribución de ARB ha comenzado. Gana tokens ARB usando horas extras. Echa un vistazo a los detalles aquí.",
         "v1-text": "<highlight>V2</highlight>: This is the V2 version of Overtime. To switch back to deprecated V1, <highlight>click here</highlight>.",
-        "elections-text": "Las elecciones para el Consejo de Thales ya están activas, ejerza su poder de voto <highlight>aquí</highlight>."
+        "elections-text": "Las elecciones para el Consejo de Overtime ya están activas, ejerza su poder de voto <highlight>aquí</highlight>."
     },
     "promotions": {
         "nav-items": {
@@ -1271,7 +1228,7 @@
             "leveling-tree": "árbol de nivelación"
         },
         "overdrop-home": {
-            "next-thales-rewards-at": "Siguiente recompensas de Thales en",
+            "next-over-rewards-at": "Siguiente recompensas de OVER en",
             "current-rewards": "Recompensas estimadas actuales",
             "twitter-share": "Aumento de XP para compartir en Twitter",
             "twitter-xp-boost-resets": "Twitter xp boost se reinicia en",
@@ -1291,8 +1248,8 @@
             "explainer": {
                 "xp-explained-content": "Campaña de toda la temporada en la que los usuarios acumulan XP hasta el final de la temporada deportiva conduciendo<bold> volumen en horas extras</bold> con<bold> multiplicadores</bold> basado en varias métricas dinámicas y objetivos.<br/><br/> Una vez finalizada la campaña, todos los usuarios compartirán<highlight> 100k OP</highlight> y<highlight> 150k ARB</highlight> prorrateado basado en XP<br><br> Mientras dure la campaña, los usuarios tendrán recompensas únicas en NIVELES de XP específicos.",
                 "twitter-content": "Comparte tu <bold>Tarjeta Flex</bold> de tiempo extra de la apuesta de hoy <bold>en Twitter: bonificación del 10% por XP BASE por $</bold> durante el resto del día",
-                "position-thales-content": "Utilice <bold>THALES</bold> como garantía y <bold>obtendrá una bonificación del 10 % por XP BASE por $</bold> para esa operación específica.",
-                "positions-thales": "Posición CON BONO THALES (un descuento por apuesta)",
+                "position-over-content": "Utilice <bold>OVER</bold> como garantía y <bold>obtendrá una bonificación del 10 % por XP BASE por $</bold> para esa operación específica.",
+                "positions-over": "Posición CON BONO OVER (un descuento por apuesta)",
                 "parlay-xp": "BONIFICACIÓN DE XP DE PARLAY (una de descuento por parlay)",
                 "xp-explained": "XP explicado",
                 "games-in-parlay": "juegos en parlay",
@@ -1308,14 +1265,14 @@
                 "days-content": "Las condiciones para que se active el impulso de racha diaria para el día en curso son tener un volumen de apuestas entre las 00:00 UTC y las 23:59 UTC para el día en curso. Cuantos más días seguidos se cumpla esta condición, mayor será el <bold>impulso de racha diaria</bold> en tu acumulación de XP de referencia. \n\nEl <bold>impulso de racha diaria</bold> se aplica a todas las apuestas realizadas mientras el impulso está activo. \n\nSi interrumpes tu racha y no logras generar volumen un día, <bold>tu impulso de racha diaria se restablece a +0 %.</bold>",
                 "weekly-boost": "Impulso de racha semanal",
                 "loyalty-boost-content": "El aumento de XP por lealtad te otorga hasta un 25 % de aumento permanente en toda tu acumulación de XP general, según tu nivel. Comienza con un aumento del 5 % en el nivel 1 y obtienes otro aumento del +5 % al alcanzar cada quinto nivel. Alcanzarás el aumento máximo de XP por lealtad del 25 % cuando alcances el nivel 20 (GOAT) y hayas acumulado 5 000 000 de puntos de XP. Puedes ver el desglose de los niveles de XP en la página del ÁRBOL DE NIVELES.",
-                "xp-boost-content": "Hay varias formas de aumentar aún más la cantidad de XP que acumulas por apuesta: puedes obtener aumentos en las rachas de apuestas diarias, las rachas de apuestas semanales, la cantidad de juegos en parlay, usar el token THALES como garantía, mostrar tus apuestas en Twitter y alcanzar niveles de XP para obtener aumentos de lealtad."
+                "xp-boost-content": "Hay varias formas de aumentar aún más la cantidad de XP que acumulas por apuesta: puedes obtener aumentos en las rachas de apuestas diarias, las rachas de apuestas semanales, la cantidad de juegos en parlay, usar el token OVER como garantía, mostrar tus apuestas en Twitter y alcanzar niveles de XP para obtener aumentos de lealtad."
             },
             "heading": "La liga agrícola de Overdrop"
         },
         "xp-details": {
             "received": "Recibió",
             "xp-history": "Historial de XP",
-            "paragraph": "Utilice THALES como garantía para obtener un bono adicional del 10 %, cree combinaciones para obtener un bono de hasta el 100 % y consulte juegos de promoción especial.",
+            "paragraph": "Utilice OVER como garantía para obtener un bono adicional del 10 %, cree combinaciones para obtener un bono de hasta el 100 % y consulte juegos de promoción especial.",
             "weekly-multiplier": "Multiplicador semanal",
             "tx-link": "enlace TX",
             "days-in-row": "Días seguidos",
@@ -1342,7 +1299,7 @@
         },
         "modal": {
             "check-out": "Verificar<br/> ¡Liga de sobregiro!",
-            "reached-level": "¡Has alcanzado el NIVEL {{ level }} y has ganado una apuesta gratis de THALES de {{ amount }}!",
+            "reached-level": "¡Has alcanzado el NIVEL {{ level }} y has ganado una apuesta gratis de OVER de {{ amount }}!",
             "dont-show-this": "No mostrar esto otra vez",
             "you-are-rocking": "¡Lo estás arrasando!",
             "day-streak": "<bold>{{ days }}</bold><br/> ¡racha de un día!",

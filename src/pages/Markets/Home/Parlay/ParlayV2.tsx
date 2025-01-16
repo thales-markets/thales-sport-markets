@@ -260,7 +260,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                         </ToggleContainer>
                     )}
                     <ThalesBonusContainer>
-                        <ThalesBonus>{t('markets.parlay.thales-bonus-info')}</ThalesBonus>
+                        <ThalesBonus>{t('markets.parlay.over-bonus-info')}</ThalesBonus>
                     </ThalesBonusContainer>
                     <ListContainer>
                         {ticketMarkets.length > 0 &&
