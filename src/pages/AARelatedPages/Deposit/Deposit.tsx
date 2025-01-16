@@ -68,8 +68,14 @@ const Deposit: React.FC = () => {
     }, [isParticleReady, isConnectedViaParticle]);
 
     useEffect(() => {
-        setSelectedToken(Number(selectedTokenFromUrl));
-    }, [selectedTokenFromUrl]);
+        if (selectedToken < getCollaterals(networkId).length) {
+            setSelectedToken(Number(selectedTokenFromUrl));
+        } else {
+            const index = getCollaterals(networkId).length - 1;
+            setSelectedTokenFromQuery(index.toString());
+            setSelectedToken(index);
+        }
+    }, [selectedTokenFromUrl, setSelectedTokenFromQuery, selectedToken, networkId]);
 
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(
         walletAddress,
@@ -169,7 +175,13 @@ const Deposit: React.FC = () => {
                         <CollateralContainer ref={inputRef}>
                             <CollateralSelector
                                 collateralArray={lowBalanceAlert ? ['ETH'] : getCollaterals(networkId)}
-                                selectedItem={lowBalanceAlert ? 0 : selectedToken}
+                                selectedItem={
+                                    lowBalanceAlert
+                                        ? 0
+                                        : selectedToken < getCollaterals(networkId).length
+                                        ? selectedToken
+                                        : getCollaterals(networkId).length - 1
+                                }
                                 onChangeCollateral={(index) => handleChangeCollateral(index)}
                                 disabled={false}
                                 collateralBalances={[multipleCollateralBalances.data]}
