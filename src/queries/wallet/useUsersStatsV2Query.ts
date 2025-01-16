@@ -6,7 +6,7 @@ import { BATCH_SIZE } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
 import { ContractType } from 'enums/contract';
 import { orderBy } from 'lodash';
-import { bigNumberFormatter, parseBytes32String } from 'thales-utils';
+import { bigNumberFormatter, NetworkId, parseBytes32String } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { Ticket, UserStats } from 'types/markets';
 import { NetworkConfig } from 'types/network';
@@ -18,7 +18,7 @@ import { mapTicket } from 'utils/tickets';
 const useUsersStatsV2Query = (
     user: string,
     networkConfig: NetworkConfig,
-    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
+    options?: Omit<UseQueryOptions<UserStats | undefined>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<UserStats | undefined>({
         queryKey: QUERY_KEYS.Wallet.StatsV2(networkConfig.networkId, user),
@@ -32,13 +32,7 @@ const useUsersStatsV2Query = (
                 networkConfig
             );
 
-            if (
-                sportsAMMDataContract &&
-                priceFeedContract &&
-                sportsAMMV2ManagerContract &&
-                freeBetHolderContract &&
-                stakingThalesBettingProxy
-            ) {
+            if (sportsAMMDataContract && priceFeedContract && sportsAMMV2ManagerContract && freeBetHolderContract) {
                 const [
                     numOfActiveTicketsPerUser,
                     numOfResolvedTicketsPerUser,
@@ -51,8 +45,12 @@ const useUsersStatsV2Query = (
                     sportsAMMV2ManagerContract.read.numOfResolvedTicketsPerUser([user]),
                     freeBetHolderContract.read.numOfActiveTicketsPerUser([user]),
                     freeBetHolderContract.read.numOfResolvedTicketsPerUser([user]),
-                    stakingThalesBettingProxy.read.numOfActiveTicketsPerUser([user]),
-                    stakingThalesBettingProxy.read.numOfResolvedTicketsPerUser([user]),
+                    networkConfig.networkId === NetworkId.Base
+                        ? 0
+                        : stakingThalesBettingProxy?.read.numOfActiveTicketsPerUser([user]),
+                    networkConfig.networkId === NetworkId.Base
+                        ? 0
+                        : stakingThalesBettingProxy?.read.numOfResolvedTicketsPerUser([user]),
                 ]);
 
                 const numberOfActiveBatches =

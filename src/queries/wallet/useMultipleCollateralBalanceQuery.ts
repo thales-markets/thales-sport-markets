@@ -131,7 +131,6 @@ const useMultipleCollateralBalanceQuery = (
                         : 0,
                 ]);
 
-                console.log(OVERBalance, 'OVERBalance');
                 collateralsBalance = {
                     sUSD: sUSDBalance ? bigNumberFormatter(sUSDBalance, COLLATERAL_DECIMALS.sUSD) : 0,
                     DAI: DAIBalance ? bigNumberFormatter(DAIBalance, COLLATERAL_DECIMALS.DAI) : 0,

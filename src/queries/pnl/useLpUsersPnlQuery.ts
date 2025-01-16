@@ -7,7 +7,7 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { ContractType } from 'enums/contract';
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 import { orderBy } from 'lodash';
-import { bigNumberFormatter, Coins, parseBytes32String } from 'thales-utils';
+import { bigNumberFormatter, Coins, NetworkId, parseBytes32String } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { LpUsersPnl, Ticket } from 'types/markets';
 import { NetworkConfig } from 'types/network';
@@ -95,9 +95,13 @@ const useLpUsersPnlQuery = (
                     )
                 );
 
-                const stakingTickets = mappedTickets.filter(
-                    (ticket) => ticket.account.toLowerCase() === stakingThalesBettingProxy.address.toLowerCase()
-                );
+                const stakingTickets =
+                    networkConfig.networkId === NetworkId.Base
+                        ? []
+                        : mappedTickets.filter(
+                              (ticket) =>
+                                  ticket.account.toLowerCase() === stakingThalesBettingProxy.address.toLowerCase()
+                          );
 
                 let stakingPromises = [];
                 const stakingTicketsData: any = [];

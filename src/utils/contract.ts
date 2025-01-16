@@ -18,6 +18,7 @@ import sportsAMMV2Manager from 'utils/contracts/sportsAMMV2ManagerContract';
 import sportsAMMV2RiskManager from 'utils/contracts/sportsAMMV2RiskManagerContract';
 import stakingThalesBettingProxy from 'utils/contracts/stakingThalesBettingProxy';
 import stakingThales from 'utils/contracts/stakingThalesContract';
+import { TBD_ADDRESS } from '../constants/network';
 import liquidityPoolContractV2 from './contracts/liquidityPoolContractV2';
 import resolveBlockerContract from './contracts/resolveBlockerContract';
 
@@ -62,6 +63,7 @@ export const prepareContractWithModifiedResponse = (props: { abi: any; address: 
 
 const getContractWithModifiedResponse = (contractData: ContractData, networkConfig: NetworkConfig) => {
     if (!networkConfig) return;
+    if (contractData.addresses[networkConfig?.networkId] === TBD_ADDRESS) return undefined;
     return prepareContractWithModifiedResponse({
         abi: contractData.abi,
         address: contractData.addresses[networkConfig?.networkId],
