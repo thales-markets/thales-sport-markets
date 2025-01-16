@@ -47,6 +47,7 @@ export type SportMarket = {
     typeId: MarketType;
     type: string;
     maturity: number;
+    apiMaturity?: number;
     maturityDate: Date;
     homeTeam: string;
     awayTeam: string;

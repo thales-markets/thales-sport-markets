@@ -14,8 +14,10 @@ const useUserMultipliersQuery = (
         queryFn: async () => {
             try {
                 const response = await axios.get(`${generalConfig.OVERDROP_API_URL}/user-multipliers/${walletAddress}`);
-
-                return Object.keys(response.data).map((key) => ({ multiplier: response.data[key], name: key }));
+                if (response?.status === 200 && response?.data) {
+                    return Object.keys(response.data).map((key) => ({ multiplier: response.data[key], name: key }));
+                }
+                return [];
             } catch (e) {
                 console.error(e);
                 return [

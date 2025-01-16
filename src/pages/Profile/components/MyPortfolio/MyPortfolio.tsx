@@ -161,7 +161,7 @@ const TokenBalance = styled(FlexDiv)`
 `;
 
 const Deposit = styled.span`
-    color: ${(props) => props.theme.christmasTheme.textColor.primary};
+    color: ${(props) => props.theme.textColor.quaternary};
     font-size: 12px;
     text-transform: uppercase;
     font-weight: 600;
