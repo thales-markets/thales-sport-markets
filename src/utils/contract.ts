@@ -17,7 +17,6 @@ import sportsAMMV2 from 'utils/contracts/sportsAMMV2Contract';
 import sportsAMMV2Manager from 'utils/contracts/sportsAMMV2ManagerContract';
 import sportsAMMV2RiskManager from 'utils/contracts/sportsAMMV2RiskManagerContract';
 import stakingThalesBettingProxy from 'utils/contracts/stakingThalesBettingProxy';
-import stakingThales from 'utils/contracts/stakingThalesContract';
 import { TBD_ADDRESS } from '../constants/network';
 import liquidityPoolContractV2 from './contracts/liquidityPoolContractV2';
 import resolveBlockerContract from './contracts/resolveBlockerContract';
@@ -104,8 +103,6 @@ export const getContractInstance = (
             return getContractWithModifiedResponse(sportsAMMV2Manager, networkConfig);
         case ContractType.MULTICALL:
             return getContractWithModifiedResponse(multiCall, networkConfig);
-        case ContractType.STAKING_THALES:
-            return getContractWithModifiedResponse(stakingThales, networkConfig);
         case ContractType.STAKING_THALES_BETTING_PROXY:
             return getContractWithModifiedResponse(stakingThalesBettingProxy, networkConfig);
         case ContractType.LIQUIDITY_POOL:

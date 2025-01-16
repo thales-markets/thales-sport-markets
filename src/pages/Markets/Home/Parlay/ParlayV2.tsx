@@ -259,9 +259,9 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                             />
                         </ToggleContainer>
                     )}
-                    <ThalesBonusContainer>
-                        <ThalesBonus>{t('markets.parlay.over-bonus-info')}</ThalesBonus>
-                    </ThalesBonusContainer>
+                    <OverBonusContainer>
+                        <OverBonus>{t('markets.parlay.over-bonus-info')}</OverBonus>
+                    </OverBonusContainer>
                     <ListContainer>
                         {ticketMarkets.length > 0 &&
                             ticketMarkets.map((market, index) => {
@@ -364,7 +364,7 @@ const Count = styled(FlexDivCentered)`
     margin-left: 6px;
 `;
 
-const ThalesBonusContainer = styled(FlexDivCentered)`
+const OverBonusContainer = styled(FlexDivCentered)`
     background: ${(props) => props.theme.background.quaternary};
     color: ${(props) => props.theme.textColor.tertiary};
     min-width: 100%;
@@ -373,7 +373,7 @@ const ThalesBonusContainer = styled(FlexDivCentered)`
     margin-bottom: 10px;
 `;
 
-const ThalesBonus = styled.span`
+const OverBonus = styled.span`
     font-size: 12px;
     line-height: 16px;
     font-weight: 600;

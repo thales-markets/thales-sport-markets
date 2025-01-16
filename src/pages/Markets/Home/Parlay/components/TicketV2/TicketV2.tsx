@@ -184,7 +184,7 @@ type TicketProps = {
     acceptOddChanges: (changed: boolean) => void;
     onSuccess?: () => void;
     submitButtonDisabled?: boolean;
-    setUseOverCollateral: (useThales: boolean) => void;
+    setUseOverCollateral: (useOver: boolean) => void;
 };
 
 const TicketErrorMessage = {
@@ -329,9 +329,9 @@ const Ticket: React.FC<TicketProps> = ({
             icon: <>{markets.length}</>,
             tooltip: 'parlay-boost',
         };
-        const thalesMultiplier = {
+        const overMultiplier = {
             name: 'thalesMultiplier',
-            label: 'THALES used',
+            label: 'OVER used',
             multiplier: isOver || swapToOver ? 10 : 0,
             icon: <OverdropIcon className="icon icon--thales-logo" />,
             tooltip: 'over-boost',
@@ -368,7 +368,7 @@ const Ticket: React.FC<TicketProps> = ({
                       },
                   ]),
             parlayMultiplier,
-            thalesMultiplier,
+            overMultiplier,
         ];
     }, [
         swapToOver,
@@ -885,7 +885,7 @@ const Ticket: React.FC<TicketProps> = ({
         ]
     );
 
-    const swapToThalesParams = useMemo(
+    const swapToOverParams = useMemo(
         () =>
             getSwapParams(
                 networkId,
@@ -896,7 +896,7 @@ const Ticket: React.FC<TicketProps> = ({
         [buyInAmount, collateralAddress, networkId, selectedCollateral, walletAddress]
     );
 
-    // Set THALES swap receive
+    // Set OVER swap receive
     useDebouncedEffect(() => {
         if (isOver) {
             setSwapToOver(false);
@@ -905,7 +905,7 @@ const Ticket: React.FC<TicketProps> = ({
             setSwapQuote(0);
         } else if (swapToOver && buyInAmount) {
             const getSwapQuote = async () => {
-                const quote = await getQuote(networkId, swapToThalesParams);
+                const quote = await getQuote(networkId, swapToOverParams);
 
                 setSwappedOverToReceive(quote);
                 setSwapQuote(quote / Number(buyInAmount));
@@ -916,13 +916,13 @@ const Ticket: React.FC<TicketProps> = ({
             setSwappedOverToReceive(0);
             setSwapQuote(0);
         }
-    }, [swapToOver, buyInAmount, networkId, swapToThalesParams, isOver, setUseOverCollateral]);
+    }, [swapToOver, buyInAmount, networkId, swapToOverParams, isOver, setUseOverCollateral]);
 
-    // Refresh swap THALES quote on 7s
+    // Refresh swap OVER quote on 7s
     useInterval(
         async () => {
             if (!openBuyStepsModal && !tooltipTextBuyInAmount) {
-                const quote = await getQuote(networkId, swapToThalesParams);
+                const quote = await getQuote(networkId, swapToOverParams);
                 setSwappedOverToReceive(quote);
                 setSwapQuote(quote / Number(buyInAmount));
             }
@@ -942,7 +942,7 @@ const Ticket: React.FC<TicketProps> = ({
                 const allowance = await checkSwapAllowance(
                     networkId,
                     walletAddress as Address,
-                    swapToThalesParams.src,
+                    swapToOverParams.src,
                     coinParser(buyInAmount.toString(), networkId, selectedCollateral)
                 );
 
@@ -957,7 +957,7 @@ const Ticket: React.FC<TicketProps> = ({
         networkId,
         selectedCollateral,
         swapToOver,
-        swapToThalesParams.src,
+        swapToOverParams.src,
         isBuying,
         isConnected,
     ]);
@@ -1175,7 +1175,7 @@ const Ticket: React.FC<TicketProps> = ({
         }
     };
 
-    const handleBuyWithThalesSteps = async (
+    const handleBuyWithOverSteps = async (
         initialStep: BuyTicketStep
     ): Promise<{ step: BuyTicketStep; overAmount: number }> => {
         let step = initialStep;
@@ -1202,7 +1202,7 @@ const Ticket: React.FC<TicketProps> = ({
                 const approveSwapRawTransaction = await buildTxForApproveTradeWithRouter(
                     networkId,
                     walletAddress as Address,
-                    swapToThalesParams.src,
+                    swapToOverParams.src,
                     walletClient.data,
                     approveAmount.toString()
                 );
@@ -1226,7 +1226,7 @@ const Ticket: React.FC<TicketProps> = ({
 
         if (step === BuyTicketStep.SWAP) {
             try {
-                const swapRawTransaction = (await buildTxForSwap(networkId, swapToThalesParams)).tx;
+                const swapRawTransaction = (await buildTxForSwap(networkId, swapToOverParams)).tx;
 
                 // check allowance again
                 if (!swapRawTransaction) {
@@ -1234,7 +1234,7 @@ const Ticket: React.FC<TicketProps> = ({
                     const hasRefreshedAllowance = await checkSwapAllowance(
                         networkId,
                         walletAddress as Address,
-                        swapToThalesParams.src,
+                        swapToOverParams.src,
                         coinParser(buyInAmount.toString(), networkId, selectedCollateral)
                     );
                     if (!hasRefreshedAllowance) {
@@ -1365,7 +1365,7 @@ const Ticket: React.FC<TicketProps> = ({
                 }
 
                 setOpenBuyStepsModal(true);
-                ({ step, overAmount } = await handleBuyWithThalesSteps(step));
+                ({ step, overAmount } = await handleBuyWithOverSteps(step));
 
                 if (step !== BuyTicketStep.BUY) {
                     toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
@@ -2011,7 +2011,7 @@ const Ticket: React.FC<TicketProps> = ({
             const parsedTotalQuote = parseEther(totalQuote.toString());
             const additionalSlippage = parseEther('0.02');
 
-            // TODO: check swap to THALES
+            // TODO: check swap to OVER
             if (!hasAllowance) {
                 const collateralContractWithSigner = isDefaultCollateral
                     ? defaultCollateralContractWithSigner

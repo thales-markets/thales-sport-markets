@@ -770,7 +770,7 @@ const multipleCollateral: Record<Coins, ContractData> = {
         addresses: {
             [Network.OptimismMainnet]: '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1',
             [Network.Arbitrum]: '0xda10009cbd5d07dd0cecc66161fc93d7c9000da1',
-            [Network.Base]: TBD_ADDRESS,
+            [Network.Base]: '0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb',
             [Network.OptimismSepolia]: TBD_ADDRESS,
         },
         abi,
@@ -797,7 +797,7 @@ const multipleCollateral: Record<Coins, ContractData> = {
         addresses: {
             [Network.OptimismMainnet]: '0x94b008aA00579c1307B0EF2c499aD98a8ce58e58',
             [Network.Arbitrum]: '0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9',
-            [Network.Base]: TBD_ADDRESS,
+            [Network.Base]: '0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2',
             [Network.OptimismSepolia]: '0x6DbE2E4C68EB80b76a1c0F7b5bA9564C72280cB3',
         },
         abi,
@@ -842,7 +842,7 @@ const multipleCollateral: Record<Coins, ContractData> = {
         addresses: {
             [Network.OptimismMainnet]: TBD_ADDRESS,
             [Network.Arbitrum]: TBD_ADDRESS,
-            [Network.Base]: TBD_ADDRESS,
+            [Network.Base]: '0xd9aAEc86B65D86f6A7B5B1b0c42FFA531710b6CA',
             [Network.OptimismSepolia]: TBD_ADDRESS,
         },
         abi,
