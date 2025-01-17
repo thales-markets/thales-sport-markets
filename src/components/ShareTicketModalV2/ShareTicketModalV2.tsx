@@ -19,6 +19,7 @@ import { SystemBetData, TicketMarket } from 'types/markets';
 import { RootState } from 'types/redux';
 import { refetchOverdropMultipliers } from 'utils/queryConnector';
 import { useAccount } from 'wagmi';
+import { isOverCurrency } from '../../utils/collaterals';
 import MyTicket from './components/MyTicket';
 
 export type ShareTicketModalProps = {
