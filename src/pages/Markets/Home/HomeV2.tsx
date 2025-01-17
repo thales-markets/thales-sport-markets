@@ -708,7 +708,7 @@ const Home: React.FC = () => {
                                     : openMarketsCountPerSport[filterItem]
                             }
                             showActive={showActive}
-                            tags={availableTags}
+                            tags={tagsList}
                             setTagParam={setTagParam}
                             openMarketsCountPerTag={openMarketsCountPerTag}
                             liveMarketsCountPerTag={liveMarketsCountPerTag}
