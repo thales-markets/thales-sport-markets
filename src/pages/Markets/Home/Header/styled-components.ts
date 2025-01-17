@@ -100,7 +100,7 @@ export const SortSelector = styled(FlexDivCentered)`
 export const SortMenu = styled(FlexDivColumn)`
     position: absolute;
     gap: 2px;
-    top: 20px;
+    top: 24px;
     right: 0px;
     width: 200px;
     padding: 3px;
