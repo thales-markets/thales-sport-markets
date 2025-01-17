@@ -1,9 +1,11 @@
 import UsElectionHeader from 'assets/images/us-election.svg?react';
 import MatchLogosV2 from 'components/MatchLogosV2';
 import SimpleLoader from 'components/SimpleLoader';
+import { SportFilter } from 'enums/markets';
 import { t } from 'i18next';
+import { isEqual } from 'lodash';
 import { Message } from 'pages/Markets/Market/MarketDetailsV2/components/PositionsV2/styled-components';
-import React from 'react';
+import React, { memo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import { getSelectedMarket, getSportFilter, setSelectedMarket } from 'redux/modules/market';
@@ -16,86 +18,92 @@ import { League } from '../../../../enums/sports';
 import TicketTransactions from '../../Market/MarketDetailsV2/components/TicketTransactions';
 import Header from '../Header';
 import SelectedMarketDetails from '../SelectedMarketDetails';
-import { SportFilter } from 'enums/markets';
 
-const SelectedMarket: React.FC<{ market: SportMarket | undefined }> = ({ market }) => {
-    const dispatch = useDispatch();
-    const isMobile = useSelector(getIsMobile);
-    const sportFilter = useSelector(getSportFilter);
-    const selectedMarket = useSelector(getSelectedMarket);
+const SelectedMarket: React.FC<{ market: SportMarket | undefined }> = memo(
+    ({ market }) => {
+        const dispatch = useDispatch();
+        const isMobile = useSelector(getIsMobile);
+        const sportFilter = useSelector(getSportFilter);
+        const selectedMarket = useSelector(getSelectedMarket);
 
-    const isPlayerPropsFilter = sportFilter === SportFilter.PlayerProps;
+        const isPlayerPropsFilter = sportFilter === SportFilter.PlayerProps;
 
-    const isMarketPaused = market?.isPaused;
+        const isMarketPaused = market?.isPaused;
 
-    return (
-        <Wrapper>
-            <HeaderContainer>
-                {market && (
-                    <>
-                        {isMobile && (
-                            <MatchInfoLabel>{formatShortDateWithTime(new Date(market.maturityDate))} </MatchInfoLabel>
-                        )}
-                        <MatchInfo>
-                            <MatchLogosV2
-                                market={
-                                    isPlayerPropsFilter
-                                        ? {
-                                              ...market,
-                                              isPlayerPropsMarket: true,
-                                              isOneSideMarket: true,
-                                              playerProps: {
-                                                  ...market.playerProps,
-                                                  playerName: selectedMarket?.playerName || '',
-                                              },
-                                          }
-                                        : market
-                                }
-                                width={isMobile ? '55px' : '45px'}
-                                logoWidth={isMobile ? '30px' : '24px'}
-                                logoHeight={isMobile ? '30px' : '24px'}
-                            />
-                            <MatchLabel>
-                                {getMatchLabel(
-                                    isPlayerPropsFilter
-                                        ? {
-                                              ...market,
-                                              isPlayerPropsMarket: true,
-                                              isOneSideMarket: true,
-                                              homeTeam: selectedMarket?.playerName || '',
-                                          }
-                                        : market
-                                )}
-                            </MatchLabel>
-                        </MatchInfo>
-                        {market.leagueId === League.US_ELECTION && <StyledUsElectionHeader />}
-                        {isMobile && <Header market={market} />}
-                    </>
-                )}
-                <CloseIcon
-                    className="icon icon--close"
-                    onClick={() => {
-                        dispatch(setSelectedMarket(undefined));
-                    }}
-                />
-            </HeaderContainer>
-            {market ? (
-                !isMarketPaused ? (
-                    <>
-                        <SelectedMarketDetails market={market} />
-                        {isMobile && <TicketTransactions market={market} isOnSelectedMarket />}
-                    </>
+        return (
+            <Wrapper>
+                <HeaderContainer>
+                    {market && (
+                        <>
+                            {isMobile && (
+                                <MatchInfoLabel>
+                                    {formatShortDateWithTime(new Date(market.maturityDate))}{' '}
+                                </MatchInfoLabel>
+                            )}
+                            <MatchInfo>
+                                <MatchLogosV2
+                                    market={
+                                        isPlayerPropsFilter
+                                            ? {
+                                                  ...market,
+                                                  isPlayerPropsMarket: true,
+                                                  isOneSideMarket: true,
+                                                  playerProps: {
+                                                      ...market.playerProps,
+                                                      playerName: selectedMarket?.playerName || '',
+                                                  },
+                                              }
+                                            : market
+                                    }
+                                    width={isMobile ? '55px' : '45px'}
+                                    logoWidth={isMobile ? '30px' : '24px'}
+                                    logoHeight={isMobile ? '30px' : '24px'}
+                                />
+                                <MatchLabel>
+                                    {getMatchLabel(
+                                        isPlayerPropsFilter
+                                            ? {
+                                                  ...market,
+                                                  isPlayerPropsMarket: true,
+                                                  isOneSideMarket: true,
+                                                  homeTeam: selectedMarket?.playerName || '',
+                                              }
+                                            : market
+                                    )}
+                                </MatchLabel>
+                            </MatchInfo>
+                            {market.leagueId === League.US_ELECTION && <StyledUsElectionHeader />}
+                            {isMobile && <Header market={market} />}
+                        </>
+                    )}
+                    <CloseIcon
+                        className="icon icon--close"
+                        onClick={() => {
+                            dispatch(setSelectedMarket(undefined));
+                        }}
+                    />
+                </HeaderContainer>
+                {market ? (
+                    !isMarketPaused ? (
+                        <>
+                            <SelectedMarketDetails market={market} />
+                            {isMobile && <TicketTransactions market={market} isOnSelectedMarket />}
+                        </>
+                    ) : (
+                        <Message>{t(`markets.market-card.live-trading-paused`)}</Message>
+                    )
                 ) : (
-                    <Message>{t(`markets.market-card.live-trading-paused`)}</Message>
-                )
-            ) : (
-                <LoaderContainer>
-                    <SimpleLoader />
-                </LoaderContainer>
-            )}
-        </Wrapper>
-    );
-};
+                    <LoaderContainer>
+                        <SimpleLoader />
+                    </LoaderContainer>
+                )}
+            </Wrapper>
+        );
+    },
+    (prevProps, newProps) => {
+        return isEqual(prevProps, newProps);
+    }
+);
 
 const Wrapper = styled(FlexDivColumn)`
     margin-top: 10px;

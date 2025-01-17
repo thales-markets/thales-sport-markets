@@ -1,5 +1,6 @@
 import Checkbox from 'components/fields/Checkbox';
 import SelectInput from 'components/SelectInput';
+import { hoursToMilliseconds } from 'date-fns';
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 import { League } from 'enums/sports';
 import { t } from 'i18next';
@@ -13,6 +14,8 @@ import { FlexDivCentered, FlexDivSpaceBetween } from 'styles/common';
 import { Ticket } from 'types/markets';
 import { useChainId, useClient } from 'wagmi';
 import TicketTransactionsTable from '../../../Markets/Market/MarketDetailsV2/components/TicketTransactionsTable';
+
+const UNRESOLVED_PERIOD_IN_HOURS = 8;
 
 const lpOptions = [
     {
@@ -49,6 +52,7 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
     const [showOnlyLiveTickets, setShowOnlyLiveTickets] = useState<boolean>(false);
     const [showOnlyPendingTickets, setShowOnlyPendingTickets] = useState<boolean>(false);
     const [showOnlySystemBets, setShowOnlySystemBets] = useState<boolean>(false);
+    const [showOnlyUnresolved, setShowOnlyUnresolved] = useState<boolean>(false);
     const [expandAll, setExpandAll] = useState<boolean>(false);
 
     const usdcLpTicketsQuery = useLpTicketsQuery(LiquidityPoolCollateral.USDC, round, leagueId, onlyPP, {
@@ -96,7 +100,18 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
                         ) &&
                         showOnlyPendingTickets) ||
                         !showOnlyPendingTickets) &&
-                    ((ticket.isSystemBet && showOnlySystemBets) || !showOnlySystemBets)
+                    ((ticket.isSystemBet && showOnlySystemBets) || !showOnlySystemBets) &&
+                    ((ticket.isOpen &&
+                        ticket.sportMarkets.some(
+                            (market) =>
+                                market.apiMaturity &&
+                                market.apiMaturity <
+                                    new Date().getTime() - hoursToMilliseconds(UNRESOLVED_PERIOD_IN_HOURS) &&
+                                !market.isResolved &&
+                                !market.isCancelled
+                        ) &&
+                        showOnlyUnresolved) ||
+                        !showOnlyUnresolved)
             ),
             ['timestamp'],
             ['desc']
@@ -107,6 +122,7 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
         showOnlyOpenTickets,
         showOnlyPendingTickets,
         showOnlySystemBets,
+        showOnlyUnresolved,
         thalesLpTicketsQuery.data,
         thalesLpTicketsQuery.isSuccess,
         usdcLpTicketsQuery.data,
@@ -143,6 +159,12 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
                     value={showOnlySystemBets.toString()}
                     onChange={(e: any) => setShowOnlySystemBets(e.target.checked || false)}
                     label={t(`liquidity-pool.user-transactions.only-system-bets`)}
+                />
+                <Checkbox
+                    checked={showOnlyUnresolved}
+                    value={showOnlyUnresolved.toString()}
+                    onChange={(e: any) => setShowOnlyUnresolved(e.target.checked || false)}
+                    label={t(`liquidity-pool.user-transactions.only-unresolved`, { hours: UNRESOLVED_PERIOD_IN_HOURS })}
                 />
             </CheckboxContainer>
             <FlexDivSpaceBetween>

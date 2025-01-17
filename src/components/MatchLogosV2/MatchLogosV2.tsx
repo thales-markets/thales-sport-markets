@@ -27,7 +27,7 @@ const MatchLogos: React.FC<MatchLogosProps> = ({ market, width, height, logoWidt
             setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.leagueId));
             setAwayLogoSrc(getTeamImageSource(market.awayTeam, market.leagueId));
         }
-    }, [market.homeTeam, market.awayTeam, market.leagueId, market.isPlayerPropsMarket, market.playerProps.playerName]);
+    }, [market.homeTeam, market.awayTeam, market.leagueId, market.isPlayerPropsMarket, market.playerProps?.playerName]);
 
     return (
         <Container width={width} height={height}>

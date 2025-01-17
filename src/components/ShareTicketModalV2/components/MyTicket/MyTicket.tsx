@@ -1,4 +1,4 @@
-import OvertimeLogoIcon from 'assets/images/xmas-overtime-logo-flex.svg?react';
+import OvertimeLogoIcon from 'assets/images/overtime-logo.svg?react';
 import { t } from 'i18next';
 import React from 'react';
 import { useSelector } from 'react-redux';
@@ -230,7 +230,6 @@ const TicketLabel = styled.span`
 
 const OvertimeLogo = styled(OvertimeLogoIcon)`
     fill: ${(props) => props.theme.textColor.primary};
-    margin-bottom: 5px;
 `;
 
 const PayoutWrapper = styled.div`

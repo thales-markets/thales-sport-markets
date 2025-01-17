@@ -3,7 +3,7 @@ import { ScreenSizeBreakpoint } from 'enums/ui';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { getSportFilter, setMarketTypeFilter, setMarketTypeGroupFilter } from 'redux/modules/market';
+import { getSportFilter, setMarketTypeFilter, setMarketTypeGroupFilter, setSportFilter } from 'redux/modules/market';
 import { getFavouriteLeagues, setFavouriteLeague } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
@@ -12,6 +12,8 @@ import { getLeagueFlagSource } from 'utils/images';
 import { getScrollMainContainerToTop } from 'utils/scroll';
 import IncentivizedLeague from '../../../../components/IncentivizedLeague';
 import { LeagueMap } from '../../../../constants/sports';
+import { getSportLeagueIds } from 'utils/sports';
+import { Sport } from 'enums/sports';
 
 type TagsDropdownProps = {
     open: boolean;
@@ -24,6 +26,7 @@ type TagsDropdownProps = {
     playerPropsMarketsCountPerTag: any;
     showActive: boolean;
     showLive: boolean;
+    sport: SportFilter;
 };
 
 const TagsDropdown: React.FC<TagsDropdownProps> = ({
@@ -37,137 +40,169 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
     playerPropsMarketsCountPerTag,
     showActive,
     showLive,
+    sport,
 }) => {
     const dispatch = useDispatch();
-    const sportFilter = useSelector(getSportFilter);
     const favouriteLeagues = useSelector(getFavouriteLeagues);
     const isMobile = useSelector(getIsMobile);
     const tagFilterIds = tagFilter.map((tag) => tag.id);
-    const isPlayerPropsTag = sportFilter == SportFilter.PlayerProps;
+    const isPlayerPropsTag = sport == SportFilter.PlayerProps;
+    const isFavouritesTag = sport == SportFilter.Favourites;
+    const tagsPerSport = getSportLeagueIds((sport as unknown) as Sport);
+    const sportFilter = useSelector(getSportFilter);
 
     return (
-        <Container open={open}>
-            {tags
-                .filter((tag: TagInfo) => {
-                    if (showLive) {
-                        return !!liveMarketsCountPerTag[tag.id];
-                    } else if (isPlayerPropsTag) {
-                        return !!playerPropsMarketsCountPerTag[tag.id];
-                    } else {
-                        return (showActive && !!openMarketsCountPerTag[tag.id]) || !showActive;
-                    }
-                })
-                .sort((a: TagInfo, b: TagInfo) => {
-                    let numberOfGamesA;
-                    let numberOfGamesB;
-                    if (showLive) {
-                        numberOfGamesA = Number(!!liveMarketsCountPerTag[a.id]);
-                        numberOfGamesB = Number(!!liveMarketsCountPerTag[b.id]);
-                    } else {
-                        numberOfGamesA = Number(!!openMarketsCountPerTag[a.id]);
-                        numberOfGamesB = Number(!!openMarketsCountPerTag[b.id]);
-                    }
+        <>
+            {open && (
+                <Container>
+                    {(isFavouritesTag ? favouriteLeagues : tags)
+                        .filter((tag: TagInfo) => {
+                            if (showLive) {
+                                return !!liveMarketsCountPerTag[tag.id];
+                            } else if (isPlayerPropsTag) {
+                                return !!playerPropsMarketsCountPerTag[tag.id];
+                            } else {
+                                if (!isFavouritesTag && !tagsPerSport.includes(tag.id)) {
+                                    return false;
+                                }
+                                return (showActive && !!openMarketsCountPerTag[tag.id]) || !showActive;
+                            }
+                        })
+                        .sort((a: TagInfo, b: TagInfo) => {
+                            let numberOfGamesA;
+                            let numberOfGamesB;
+                            if (showLive) {
+                                numberOfGamesA = Number(!!liveMarketsCountPerTag[a.id]);
+                                numberOfGamesB = Number(!!liveMarketsCountPerTag[b.id]);
+                            } else {
+                                numberOfGamesA = Number(!!openMarketsCountPerTag[a.id]);
+                                numberOfGamesB = Number(!!openMarketsCountPerTag[b.id]);
+                            }
 
-                    const isFavouriteA = Number(!!favouriteLeagues.find((league: TagInfo) => league.id == a.id));
-                    const isFavouriteB = Number(!!favouriteLeagues.find((league: TagInfo) => league.id == b.id));
+                            const isFavouriteA = Number(
+                                !!favouriteLeagues.find((league: TagInfo) => league.id == a.id)
+                            );
+                            const isFavouriteB = Number(
+                                !!favouriteLeagues.find((league: TagInfo) => league.id == b.id)
+                            );
 
-                    const leagueInfoA = LeagueMap[a.id];
-                    const leagueInfoB = LeagueMap[b.id];
+                            const leagueInfoA = LeagueMap[a.id];
+                            const leagueInfoB = LeagueMap[b.id];
 
-                    const leagueNameA = leagueInfoA?.label || '';
-                    const leagueNameB = leagueInfoB?.label || '';
+                            const leagueNameA = leagueInfoA?.label || '';
+                            const leagueNameB = leagueInfoB?.label || '';
 
-                    const leaguePriorityA = leagueInfoA?.priority || 0;
-                    const leaguePriorityB = leagueInfoB?.priority || 0;
+                            const leaguePriorityA = leagueInfoA?.priority || 0;
+                            const leaguePriorityB = leagueInfoB?.priority || 0;
 
-                    return isFavouriteA == isFavouriteB
-                        ? numberOfGamesA == numberOfGamesB
-                            ? leaguePriorityA > leaguePriorityB
-                                ? 1
-                                : leaguePriorityA < leaguePriorityB
-                                ? -1
-                                : leagueNameA > leagueNameB
-                                ? 1
-                                : -1
-                            : numberOfGamesB - numberOfGamesA
-                        : isFavouriteB - isFavouriteA;
-                })
-                .map((tag: TagInfo) => {
-                    const isFavourite = !!favouriteLeagues.find((favourite: TagInfo) => favourite.id == tag.id);
-                    const label = tag.label;
-                    const scrollMainToTop = getScrollMainContainerToTop();
+                            return isFavouriteA == isFavouriteB
+                                ? numberOfGamesA == numberOfGamesB
+                                    ? leaguePriorityA > leaguePriorityB
+                                        ? 1
+                                        : leaguePriorityA < leaguePriorityB
+                                        ? -1
+                                        : leagueNameA > leagueNameB
+                                        ? 1
+                                        : -1
+                                    : numberOfGamesB - numberOfGamesA
+                                : isFavouriteB - isFavouriteA;
+                        })
+                        .map((tag: TagInfo) => {
+                            const isFavourite = !!favouriteLeagues.find((favourite: TagInfo) => favourite.id == tag.id);
+                            const label = tag.label;
+                            const scrollMainToTop = getScrollMainContainerToTop();
 
-                    return (
-                        <TagContainer key={tag.id} isMobile={isMobile}>
-                            <LeftContainer>
-                                <LabelContainer
-                                    className={`${tagFilterIds.includes(tag.id) ? 'selected' : ''}`}
-                                    onClick={() => {
-                                        if (tagFilterIds.includes(tag.id)) {
-                                            if (isPlayerPropsTag) {
-                                                return;
-                                            }
-                                            const newTagFilters = tagFilter.filter((tagInfo) => tagInfo.id != tag.id);
-                                            setTagFilter(newTagFilters);
-                                            const newTagParam = newTagFilters
-                                                .map((tagInfo) => tagInfo.label)
-                                                .toString();
-                                            setTagParam(newTagParam);
-                                            scrollMainToTop();
-                                        } else {
-                                            if (isPlayerPropsTag) {
-                                                dispatch(setMarketTypeFilter(undefined));
-                                                dispatch(setMarketTypeGroupFilter(undefined));
-                                                setTagFilter([tag]);
-                                                setTagParam([tag.label].toString());
-                                            } else {
-                                                setTagFilter([...tagFilter, tag]);
-                                                setTagParam(
-                                                    [...tagFilter, tag].map((tagInfo) => tagInfo.label).toString()
-                                                );
-                                            }
-                                            scrollMainToTop();
-                                        }
-                                    }}
-                                >
-                                    <LeagueFlag alt={tag.id.toString()} src={getLeagueFlagSource(tag.id)} />
-                                    <Label
+                            return (
+                                <TagContainer key={tag.id} isMobile={isMobile}>
+                                    <LeftContainer>
+                                        <LabelContainer
+                                            className={`${
+                                                tagFilterIds.includes(tag.id) && sport === sportFilter ? 'selected' : ''
+                                            }`}
+                                            onClick={() => {
+                                                if (tagFilterIds.includes(tag.id)) {
+                                                    if (sportFilter !== sport) {
+                                                        dispatch(setSportFilter(sport));
+                                                        setTagFilter([tag]);
+                                                        setTagParam([tag].map((tagInfo) => tagInfo.label).toString());
+                                                    } else {
+                                                        if (isPlayerPropsTag) {
+                                                            return;
+                                                        }
+                                                        const newTagFilters = tagFilter.filter(
+                                                            (tagInfo) => tagInfo.id != tag.id
+                                                        );
+                                                        setTagFilter(newTagFilters);
+                                                        const newTagParam = newTagFilters
+                                                            .map((tagInfo) => tagInfo.label)
+                                                            .toString();
+                                                        setTagParam(newTagParam);
+                                                    }
+
+                                                    scrollMainToTop();
+                                                } else {
+                                                    if (isPlayerPropsTag) {
+                                                        if (sportFilter !== sport) {
+                                                            dispatch(setSportFilter(sport));
+                                                        }
+                                                        dispatch(setMarketTypeFilter(undefined));
+                                                        dispatch(setMarketTypeGroupFilter(undefined));
+                                                        setTagFilter([tag]);
+                                                        setTagParam([tag.label].toString());
+                                                    } else {
+                                                        if (sportFilter !== sport) {
+                                                            dispatch(setSportFilter(sport));
+                                                            setTagFilter([tag]);
+                                                            setTagParam(
+                                                                [tag].map((tagInfo) => tagInfo.label).toString()
+                                                            );
+                                                        } else {
+                                                            dispatch(setSportFilter(sport));
+                                                            setTagFilter([...tagFilter, tag]);
+                                                            setTagParam(
+                                                                [...tagFilter, tag]
+                                                                    .map((tagInfo) => tagInfo.label)
+                                                                    .toString()
+                                                            );
+                                                        }
+                                                    }
+                                                    scrollMainToTop();
+                                                }
+                                            }}
+                                        >
+                                            <LeagueFlag alt={tag.id.toString()} src={getLeagueFlagSource(tag.id)} />
+                                            <Label isMobile={isMobile}>{label}</Label>
+                                            <IncentivizedLeague league={tag.id} onlyLogo />
+                                        </LabelContainer>
+                                    </LeftContainer>
+                                    {showLive
+                                        ? !!liveMarketsCountPerTag[tag.id] && (
+                                              <Count isMobile={isMobile}>{liveMarketsCountPerTag[tag.id]}</Count>
+                                          )
+                                        : isPlayerPropsTag
+                                        ? !!playerPropsMarketsCountPerTag[tag.id] && (
+                                              <Count isMobile={isMobile}>{playerPropsMarketsCountPerTag[tag.id]}</Count>
+                                          )
+                                        : !!openMarketsCountPerTag[tag.id] && (
+                                              <Count isMobile={isMobile}>{openMarketsCountPerTag[tag.id]}</Count>
+                                          )}
+                                    <StarIcon
                                         isMobile={isMobile}
-                                        className={`${tagFilterIds.includes(tag.id) ? 'selected' : ''}`}
-                                    >
-                                        {label}
-                                    </Label>
-                                    <IncentivizedLeague league={tag.id} onlyLogo />
-                                </LabelContainer>
-                            </LeftContainer>
-                            {showLive
-                                ? !!liveMarketsCountPerTag[tag.id] && (
-                                      <Count isMobile={isMobile}>{liveMarketsCountPerTag[tag.id]}</Count>
-                                  )
-                                : isPlayerPropsTag
-                                ? !!playerPropsMarketsCountPerTag[tag.id] && (
-                                      <Count isMobile={isMobile}>{playerPropsMarketsCountPerTag[tag.id]}</Count>
-                                  )
-                                : !!openMarketsCountPerTag[tag.id] && (
-                                      <Count isMobile={isMobile}>{openMarketsCountPerTag[tag.id]}</Count>
-                                  )}
-                            <StarIcon
-                                isMobile={isMobile}
-                                onClick={() => {
-                                    dispatch(setFavouriteLeague(tag.id));
-                                }}
-                                className={`icon icon--${isFavourite ? 'star-full selected' : 'favourites'} `}
-                            />
-                        </TagContainer>
-                    );
-                })}
-        </Container>
+                                        onClick={() => {
+                                            dispatch(setFavouriteLeague(tag.id));
+                                        }}
+                                        className={`icon icon--${isFavourite ? 'star-full selected' : 'favourites'} `}
+                                    />
+                                </TagContainer>
+                            );
+                        })}
+                </Container>
+            )}
+        </>
     );
 };
 
-const Container = styled.div<{ open: boolean }>`
-    display: ${(props) => (!props.open ? 'none' : '')};
-`;
+const Container = styled.div``;
 
 const TagContainer = styled(FlexDivRow)<{ isMobile: boolean }>`
     font-style: normal;
@@ -204,7 +239,6 @@ const LabelContainer = styled(FlexDivRowCentered)`
 `;
 
 const Label = styled.div<{ isMobile: boolean }>`
-    color: ${(props) => props.theme.christmasTheme.textColor.primary};
     margin-left: ${(props) => (props.isMobile ? '20px' : '10px')};
     white-space: pre-line;
     -webkit-user-select: none;
@@ -212,14 +246,6 @@ const Label = styled.div<{ isMobile: boolean }>`
     -ms-user-select: none;
     -o-user-select: none;
     user-select: none;
-    &.selected {
-        color: ${(props) => props.theme.textColor.quaternary};
-    }
-    @media (min-width: ${ScreenSizeBreakpoint.MEDIUM}px) {
-        &:hover {
-            color: ${(props) => props.theme.textColor.quaternary};
-        }
-    }
 `;
 
 const StarIcon = styled.i<{ isMobile: boolean }>`
@@ -238,8 +264,8 @@ const LeagueFlag = styled.img`
 
 const Count = styled(FlexDivCentered)<{ isMobile: boolean }>`
     border-radius: ${(props) => (props.isMobile ? '15px' : '8px')};
-    color: ${(props) => (props.isMobile ? props.theme.textColor.quaternary : props.theme.textColor.quaternary)};
-    background: ${(props) => (props.isMobile ? props.theme.background.primary : props.theme.background.primary)};
+    color: ${(props) => (props.isMobile ? props.theme.textColor.tertiary : props.theme.textColor.quaternary)};
+    background: ${(props) => (props.isMobile ? props.theme.background.septenary : props.theme.background.primary)};
     border: 2px solid ${(props) => props.theme.background.secondary};
     font-size: ${(props) => (props.isMobile ? '12px' : '12px')};
     min-width: ${(props) => (props.isMobile ? '35px' : '30px')};
