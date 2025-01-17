@@ -15,6 +15,7 @@ export enum SortDirection {
 export enum SortType {
     DEFAULT = 'Chronological + Popularity',
     START_TIME = 'Chronological',
+    PRIORITY = 'Popularity',
 }
 
 export enum SportFilter {

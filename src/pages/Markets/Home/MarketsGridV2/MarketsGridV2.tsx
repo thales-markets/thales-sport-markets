@@ -96,6 +96,9 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
                 }
             });
         }
+        if (sortType === SortType.PRIORITY) {
+            finalOrderKeys = groupBySortedMarketsKeys(sortedLeagues, true);
+        }
     } else {
         finalOrderKeys = groupBySortedMarketsKeys(sortedLeagues, false);
     }
@@ -112,6 +115,7 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
                 case SortType.START_TIME:
                     content = [<MarketsListV2 key={'singleList'} markets={sortedMarkets} language={language} />];
                     break;
+                case SortType.PRIORITY:
                 case SortType.DEFAULT:
                 default:
                     content = finalOrderKeys.map((leagueId: number, index: number) => (
