@@ -106,7 +106,8 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
         () =>
             collateral == CRYPTO_CURRENCY_MAP.THALES ||
             collateral == CRYPTO_CURRENCY_MAP.sTHALES ||
-            collateral == CRYPTO_CURRENCY_MAP.WETH,
+            collateral == CRYPTO_CURRENCY_MAP.WETH ||
+            collateral == CRYPTO_CURRENCY_MAP.ETH,
         [collateral]
     );
 
@@ -354,7 +355,15 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                     }
                     isLive={isLive}
                     applyPayoutMultiplier={applyPayoutMultiplier}
-                    systemBetData={systemBetData}
+                    systemBetData={
+                        systemBetData && convertToStableValue && isNonStableCollateral && exchangeRates
+                            ? {
+                                  ...systemBetData,
+                                  minPayout: systemBetData?.minPayout * exchangeRates[collateral],
+                                  maxPayout: systemBetData?.maxPayout * exchangeRates[collateral],
+                              }
+                            : systemBetData
+                    }
                     isTicketOpen={isTicketOpen}
                 />
 
@@ -365,7 +374,11 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                     </ShareButton>
                     <ShareButton disabled={isLoading} onClick={() => onTwitterShareClick(true)}>
                         <CopyIcon disabled={isLoading} fontSize={'22px'} />
-                        <ButtonLabel>{t('markets.parlay.share-ticket.copy')}</ButtonLabel>
+                        <ButtonLabel>
+                            {useDownloadImage
+                                ? t('markets.parlay.share-ticket.download')
+                                : t('markets.parlay.share-ticket.copy')}
+                        </ButtonLabel>
                     </ShareButton>
                 </ButtonsWrapper>
                 {isNonStableCollateral && (
@@ -379,7 +392,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                                 setConvertToStableValue(!convertToStableValue);
                             }}
                             label={{
-                                firstLabel: 'Convert to amount to USDC',
+                                firstLabel: t('markets.parlay.share-ticket.convert-to-usdc'),
                             }}
                         />
                     </SwitchWrapper>

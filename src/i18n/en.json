@@ -829,6 +829,7 @@
                 "positions": "Number of Positions",
                 "share": "Share",
                 "copy": "Copy",
+                "download": "Download",
                 "winner": "Winner",
                 "loser": "Loser",
                 "options": {
@@ -837,6 +838,7 @@
                     "view-simple": "Simple",
                     "usd-amount": "USD amount"
                 },
+                "convert-to-usdc": "Convert amount to USDC",
                 "submit-url": "Submit your tweet URL for Overdrop boost",
                 "verifying-tweet": "Verifying tweet",
                 "network-error": "Network error, check browser console for more info"

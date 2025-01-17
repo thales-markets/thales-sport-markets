@@ -169,8 +169,8 @@ const MyTicket: React.FC<MyTicketProps> = ({
                     <InfoDivFull>
                         <InfoLabel>{t('markets.parlay.min-max-payout')}:</InfoLabel>
                         <InfoValue>
-                            {formatCurrency(systemBetData?.minPayout || 0)}/
-                            {formatCurrency(systemBetData?.maxPayout || 0)} {collateral}
+                            {formatCurrency(systemBetData?.minPayout || 0, 4)}/
+                            {formatCurrency(systemBetData?.maxPayout || 0, 4)} {collateral}
                         </InfoValue>
                     </InfoDivFull>
                 </InfoWrapper>
