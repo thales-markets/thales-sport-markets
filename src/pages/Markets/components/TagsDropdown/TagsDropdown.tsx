@@ -171,16 +171,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                             }}
                                         >
                                             <LeagueFlag alt={tag.id.toString()} src={getLeagueFlagSource(tag.id)} />
-                                            <Label
-                                                isMobile={isMobile}
-                                                className={`${
-                                                    tagFilterIds.includes(tag.id) && sport === sportFilter
-                                                        ? 'selected'
-                                                        : ''
-                                                }`}
-                                            >
-                                                {label}
-                                            </Label>
+                                            <Label isMobile={isMobile}>{label}</Label>
                                             <IncentivizedLeague league={tag.id} onlyLogo />
                                         </LabelContainer>
                                     </LeftContainer>
@@ -248,7 +239,6 @@ const LabelContainer = styled(FlexDivRowCentered)`
 `;
 
 const Label = styled.div<{ isMobile: boolean }>`
-    color: ${(props) => props.theme.christmasTheme.textColor.primary};
     margin-left: ${(props) => (props.isMobile ? '20px' : '10px')};
     white-space: pre-line;
     -webkit-user-select: none;
@@ -256,14 +246,6 @@ const Label = styled.div<{ isMobile: boolean }>`
     -ms-user-select: none;
     -o-user-select: none;
     user-select: none;
-    &.selected {
-        color: ${(props) => props.theme.textColor.quaternary};
-    }
-    @media (min-width: ${ScreenSizeBreakpoint.MEDIUM}px) {
-        &:hover {
-            color: ${(props) => props.theme.textColor.quaternary};
-        }
-    }
 `;
 
 const StarIcon = styled.i<{ isMobile: boolean }>`
@@ -282,8 +264,8 @@ const LeagueFlag = styled.img`
 
 const Count = styled(FlexDivCentered)<{ isMobile: boolean }>`
     border-radius: ${(props) => (props.isMobile ? '15px' : '8px')};
-    color: ${(props) => (props.isMobile ? props.theme.textColor.quaternary : props.theme.textColor.quaternary)};
-    background: ${(props) => (props.isMobile ? props.theme.background.primary : props.theme.background.primary)};
+    color: ${(props) => (props.isMobile ? props.theme.textColor.tertiary : props.theme.textColor.quaternary)};
+    background: ${(props) => (props.isMobile ? props.theme.background.septenary : props.theme.background.primary)};
     border: 2px solid ${(props) => props.theme.background.secondary};
     font-size: ${(props) => (props.isMobile ? '12px' : '12px')};
     min-width: ${(props) => (props.isMobile ? '35px' : '30px')};

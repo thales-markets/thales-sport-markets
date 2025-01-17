@@ -1,5 +1,5 @@
 import { SportFilter } from 'enums/markets';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSportFilter, getTagFilter, setTagFilter } from 'redux/modules/market';
@@ -37,10 +37,6 @@ const SportTags: React.FC<SportTagsProps> = ({
 
     const [isOpen, setIsOpen] = useState(sport == sportFilter && sport !== SportFilter.All);
     const open = useMemo(() => sport !== SportFilter.All && isOpen, [isOpen, sport]);
-
-    useEffect(() => {
-        setIsOpen(sport == sportFilter && sport !== SportFilter.All);
-    }, [sportFilter, sport]);
 
     return (
         <React.Fragment>

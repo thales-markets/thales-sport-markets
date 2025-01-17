@@ -96,7 +96,4 @@ export const Colors = {
     SMOKEY_TOPAZ: '#7C3810',
     OVERDROP_GREEN: '#82EB9F',
     GOLD: '#E9B008',
-
-    // Christmas colors
-    CARIBBEAN_GREEN: '#00BE9C',
 };
