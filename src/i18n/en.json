@@ -228,6 +228,7 @@
             "save-image-error": "Failed to save image! Try again",
             "save-image-cancel": "Image saving canceled!",
             "image-in-clipboard": "Image is in clipboard!",
+            "image-downloaded": "Image downloaded!",
             "open-twitter": "Opening Twitter...",
             "click-open-twitter": "Click here to open Twitter",
             "metamask-not-supported": "Metamask browser doesn't support image download! Please use another browser to share image",

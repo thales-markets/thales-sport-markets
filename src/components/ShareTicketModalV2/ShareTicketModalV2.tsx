@@ -200,7 +200,13 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                     if (copyOnly) {
                         toast.update(
                             toastIdParam,
-                            getSuccessToastOptions(<>{t('market.toast-message.image-in-clipboard')}</>)
+                            getSuccessToastOptions(
+                                <>
+                                    {useDownloadImage
+                                        ? t('market.toast-message.image-downloaded')
+                                        : t('market.toast-message.image-in-clipboard')}
+                                </>
+                            )
                         );
                         return;
                     }
@@ -373,7 +379,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                         <ButtonLabel>{t('markets.parlay.share-ticket.share')}</ButtonLabel>
                     </ShareButton>
                     <ShareButton disabled={isLoading} onClick={() => onTwitterShareClick(true)}>
-                        <CopyIcon disabled={isLoading} fontSize={'22px'} />
+                        {!useDownloadImage && <CopyIcon disabled={isLoading} fontSize={'22px'} />}
                         <ButtonLabel>
                             {useDownloadImage
                                 ? t('markets.parlay.share-ticket.download')
