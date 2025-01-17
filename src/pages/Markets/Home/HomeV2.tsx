@@ -205,6 +205,7 @@ const Home: React.FC = () => {
 
             activeParam != '' ? setShowActive(activeParam === 'true') : setActiveParam(showActive.toString());
         },
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
         []
     );
