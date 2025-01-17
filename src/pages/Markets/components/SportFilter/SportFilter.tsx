@@ -2,7 +2,7 @@ import liveAnimationData from 'assets/lotties/live-markets-filter.json';
 import { SportFilter } from 'enums/markets';
 import { t } from 'i18next';
 import Lottie from 'lottie-react';
-import React, { CSSProperties } from 'react';
+import React, { CSSProperties, MouseEventHandler } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import styled, { useTheme } from 'styled-components';
@@ -12,12 +12,21 @@ type SportFilterProps = {
     selected?: boolean;
     sport: SportFilter;
     onClick: () => void;
+    onArrowClick: MouseEventHandler;
     count: number;
     open: boolean;
     children: React.ReactNode;
 };
 
-const SportFilterDetails: React.FC<SportFilterProps> = ({ selected, sport, onClick, count, children, open }) => {
+const SportFilterDetails: React.FC<SportFilterProps> = ({
+    selected,
+    sport,
+    onClick,
+    onArrowClick,
+    count,
+    children,
+    open,
+}) => {
     const isMobile = useSelector(getIsMobile);
 
     const theme = useTheme();
@@ -44,12 +53,12 @@ const SportFilterDetails: React.FC<SportFilterProps> = ({ selected, sport, onCli
             </LeftContainer>
             <RightContainer>
                 {count > 0 && <Count>{count}</Count>}
-                {sport == SportFilter.All ? (
+                {sport == SportFilter.All || sport == SportFilter.Boosted ? (
                     <ArrowIcon className={`invisible icon icon--caret-right`} />
                 ) : open ? (
-                    <ArrowIcon className="icon icon--caret-down" />
+                    <ArrowIcon onClick={onArrowClick} className="icon icon--caret-down" />
                 ) : (
-                    <ArrowIcon className="icon icon--caret-right" />
+                    <ArrowIcon onClick={onArrowClick} className="icon icon--caret-right" />
                 )}
             </RightContainer>
         </Container>
@@ -87,6 +96,7 @@ const LeftContainer = styled(FlexDiv)`
 const RightContainer = styled(FlexDiv)`
     align-items: center;
     gap: 10px;
+    height: 100%;
 `;
 
 const Label = styled.div`
@@ -114,6 +124,9 @@ const SportIcon = styled.i<{ color?: string }>`
 `;
 
 const ArrowIcon = styled.i`
+    display: flex;
+    height: 100%;
+    align-items: center;
     font-size: 14px;
     text-transform: none;
     font-weight: 400;
