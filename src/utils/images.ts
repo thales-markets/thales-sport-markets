@@ -37,7 +37,7 @@ export const getTeamImageSource = (team: string, league: League) => {
         ? `/logos/Serie A/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.GERMANY_CUP || league == League.GERMANY_SUPER_CUP
         ? `/logos/Bundesliga/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : league == League.PORTUGAL_LEAGUE_CUP
+        : league == League.PORTUGAL_LEAGUE_CUP || league == League.PORTUGAL_CUP
         ? `/logos/Primeira Liga/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.BRAZIL_CUP
         ? `/logos/Brazil-Serie-A/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
@@ -49,6 +49,8 @@ export const getTeamImageSource = (team: string, league: League) => {
         ? `/logos/NBA/nba.webp`
         : league == League.EPL_FUTURES
         ? `/logos/EPL/epl.webp`
+        : league == League.ATP_FUTURES
+        ? `/logos/Countries/ao.webp`
         : league == League.NETHERLANDS_CUP
         ? `/logos/Eredivisie/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : `/logos/${leagueLabel}/${team.trim().replaceAll(' ', '-').replaceAll('/', '-').toLowerCase()}.webp`;
@@ -149,6 +151,7 @@ export const getLeagueFlagSource = (tagId: number | any) => {
             return `/logos/Countries/netherlands.svg`;
         case League.PRIMEIRA_LIGA:
         case League.PORTUGAL_LEAGUE_CUP:
+        case League.PORTUGAL_CUP:
             return `/logos/Countries/portugal.svg`;
         case League.T20_BLAST:
             return `/logos/Countries/united-kingdom.svg`;
@@ -254,6 +257,8 @@ export const getLeagueFlagSource = (tagId: number | any) => {
             return `/logos/Countries/afc-champions-league.webp`;
         case League.THAILAND_LEAGUE_1:
             return `/logos/Countries/thailand.svg`;
+        case League.ATP_FUTURES:
+            return `/logos/Countries/atp.webp`;
         default:
             return `/logos/Countries/world.svg`;
     }

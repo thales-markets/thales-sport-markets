@@ -37,9 +37,9 @@ import {
     Network,
     NetworkIcon,
     NetworkName,
-    NetworkWrapper,
     WalletWrapper,
     Wrapper,
+    NetworkWrapper,
 } from './styled-components';
 
 type NavMenuMobileProps = {

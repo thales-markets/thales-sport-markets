@@ -11,7 +11,7 @@ const useOverdropLeaderboardQuery = (options?: Omit<UseQueryOptions<any>, 'query
             try {
                 const response = await axios.get(`${generalConfig.OVERDROP_API_URL}/leaderboard`);
 
-                if (response?.data) return response.data;
+                if (response?.status === 200 && response?.data) return response.data;
             } catch (e) {
                 console.error(e);
             }
