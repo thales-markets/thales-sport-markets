@@ -119,7 +119,7 @@ export const COLLATERAL_ICONS_CLASS_NAMES: Record<Coins, string> = {
     ARB: 'currency-icon currency-icon--arb',
     THALES: 'currency-icon currency-icon--thales',
     sTHALES: 'currency-icon currency-icon--thales',
-    OVER: 'currency-icon currency-icon--thales',
+    OVER: 'currency-icon currency-icon--over',
 };
 
 export const DEFAULT_MULTI_COLLATERAL_BALANCE = {
