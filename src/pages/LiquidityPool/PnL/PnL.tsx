@@ -42,7 +42,10 @@ const PnL: React.FC<PnlProps> = ({ lifetimePnl, type, liquidityPoolAddress }) =>
         {
             enabled:
                 liquidityPoolAddress !== '0xE59206b08cC96Da0818522C75eE3Fd4EBB7c0A47' &&
-                liquidityPoolAddress !== '0x9733AB157f5A89f0AD7460d08F869956aE2018dA',
+                liquidityPoolAddress !== '0x9733AB157f5A89f0AD7460d08F869956aE2018dA' &&
+                liquidityPoolAddress !== '0xAeb2B8a262D7118322C43449909eEFEe07BbBD7D' &&
+                liquidityPoolAddress !== '0x796B7361F0E818f5D8446f11Be633D60e2B00898' &&
+                liquidityPoolAddress !== '0xe2FCBAC654970bAd1d88B4F6e10d0Ac6152c584E',
         }
     );
 
@@ -102,7 +105,10 @@ const PnL: React.FC<PnlProps> = ({ lifetimePnl, type, liquidityPoolAddress }) =>
                 {type === LiquidityPoolPnlType.CUMULATIVE_PNL &&
                     // TODO temp disable THALES PnL
                     liquidityPoolAddress !== '0xE59206b08cC96Da0818522C75eE3Fd4EBB7c0A47' &&
-                    liquidityPoolAddress !== '0x9733AB157f5A89f0AD7460d08F869956aE2018dA' && (
+                    liquidityPoolAddress !== '0x9733AB157f5A89f0AD7460d08F869956aE2018dA' &&
+                    liquidityPoolAddress !== '0xAeb2B8a262D7118322C43449909eEFEe07BbBD7D' &&
+                    liquidityPoolAddress !== '0x796B7361F0E818f5D8446f11Be633D60e2B00898' &&
+                    liquidityPoolAddress !== '0xe2FCBAC654970bAd1d88B4F6e10d0Ac6152c584E' && (
                         <LifetimePnlContainer>
                             <LifetimePnlLabel>{t('liquidity-pool.pnl.lifetime-pnl')}:</LifetimePnlLabel>
                             <LifetimePnl

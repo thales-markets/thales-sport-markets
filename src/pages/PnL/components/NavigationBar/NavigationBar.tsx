@@ -23,6 +23,11 @@ const navItems = [
         label: 'THALES',
         icon: 'currency-icon currency-icon--thales',
     },
+    {
+        id: PnlTab.OVER_USERS_PNL,
+        label: 'OVER',
+        icon: 'currency-icon currency-icon--over',
+    },
     // {
     //     id: PnlTab.USDC_TICKETS,
     //     label: 'USDC TICKETS',

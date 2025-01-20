@@ -480,11 +480,7 @@ const LiquidityPool: React.FC = () => {
             if (canCloseCurrentRound) {
                 try {
                     if (!roundClosingPrepared) {
-                        const txHash = await liquidityPoolContractWithSigner.write.prepareRoundClosing([
-                            undefined,
-                            undefined,
-                            2,
-                        ]);
+                        const txHash = await liquidityPoolContractWithSigner.write.prepareRoundClosing([]);
 
                         const txReceipt = await waitForTransactionReceipt(client as Client, {
                             hash: txHash,
@@ -498,11 +494,7 @@ const LiquidityPool: React.FC = () => {
                     }
 
                     while (usersProcessedInRound.toString() < getUsersCountInCurrentRound.toString()) {
-                        const txHash = await liquidityPoolContractWithSigner.write.processRoundClosingBatch([
-                            undefined,
-                            100,
-                            2,
-                        ]);
+                        const txHash = await liquidityPoolContractWithSigner.write.processRoundClosingBatch([100]);
 
                         const txReceipt = await waitForTransactionReceipt(client as Client, {
                             hash: txHash,
@@ -517,7 +509,7 @@ const LiquidityPool: React.FC = () => {
                         usersProcessedInRound = await liquidityPoolContractWithSigner.read.usersProcessedInRound();
                     }
 
-                    const tx = await liquidityPoolContractWithSigner.write.closeRound([undefined, undefined, 2]);
+                    const tx = await liquidityPoolContractWithSigner.write.closeRound([]);
                     const txReceipt = await waitForTransactionReceipt(client as Client, {
                         hash: tx,
                     });
@@ -1155,9 +1147,10 @@ const LiquidityPool: React.FC = () => {
                                     </WarningContentInfo>
                                 )}
                             </ContentInfoContainer>
-                            {paramCollateral !== LiquidityPoolCollateral.THALES && (
-                                <Return liquidityPoolAddress={liquidityPoolAddress} />
-                            )}
+                            {paramCollateral !== LiquidityPoolCollateral.THALES &&
+                                paramCollateral !== LiquidityPoolCollateral.OVER && (
+                                    <Return liquidityPoolAddress={liquidityPoolAddress} />
+                                )}
                         </MainContentContainer>
                         <MainContentContainer>
                             {liquidityPoolData && (
