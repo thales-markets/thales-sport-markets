@@ -25,13 +25,17 @@ export const getOnRamperUrl = (apiKey: string, walletAddress: string, networkId:
 };
 
 const supportedOnramperTokens = (networkId: SupportedNetwork) => {
+    const OP_TOKENS =
+        'usdc_optimism,usdt_optimism,dai_optimism,op_optimism,eth_optimism,thales_optimism,weth_optimism,deusdc_optimism';
+    const ARB_TOKENS =
+        'usdc_arbitrum,usdt_arbitrum,dai_arbitrum,arb_arbitrum,eth_arbitrum,weth_arbitrum,deusdc_arbitrum';
     switch (networkId) {
         case NetworkId.OptimismMainnet:
-            return 'usdc_optimism,usdt_optimism,dai_optimism,op_optimism,eth_optimism';
+            return OP_TOKENS;
         case NetworkId.Arbitrum:
-            return 'usdc_arbitrum,usdt_arbitrum,dai_arbitrum,arb_arbitrum,eth_arbitrum';
+            return ARB_TOKENS;
         default:
-            return 'usdc_optimism, usdt_optimism, dai_optimism, op_optimism, eth_optimism, usdc_arbitrum, usdt_arbitrum, dai_arbitrum, arb_arbitrum, eth_arbitrum, usdc_base, eth_base, usdc_polygon';
+            return OP_TOKENS + ',' + ARB_TOKENS;
     }
 };
 

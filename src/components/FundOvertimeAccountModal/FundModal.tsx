@@ -2,7 +2,7 @@ import Modal from 'components/Modal';
 import Tooltip from 'components/Tooltip';
 import { getInfoToastOptions, getErrorToastOptions } from 'config/toast';
 import QRCodeModal from 'pages/AARelatedPages/Deposit/components/QRCodeModal';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -12,6 +12,7 @@ import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
 import { RootState } from 'types/redux';
 import biconomyConnector from 'utils/biconomyWallet';
 import { getNetworkNameByNetworkId } from 'utils/network';
+import { getOnRamperUrl } from 'utils/particleWallet/utils';
 import { useAccount, useChainId } from 'wagmi';
 
 type FundModalProps = {
@@ -37,6 +38,13 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
             toast.update(id, getErrorToastOptions('Error'));
         }
     };
+
+    const apiKey = import.meta.env.VITE_APP_ONRAMPER_KEY || '';
+
+    const onramperUrl = useMemo(() => {
+        return getOnRamperUrl(apiKey, walletAddress, networkId);
+    }, [walletAddress, networkId, apiKey]);
+
     return (
         <Modal
             customStyle={{
@@ -108,7 +116,11 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                         </Box>
                     </Tooltip>
 
-                    <Box>
+                    <Box
+                        onClick={() => {
+                            window.open(onramperUrl, '_blank');
+                        }}
+                    >
                         <FieldHeader>{t('get-started.fund-account.buy-crypto')}</FieldHeader>
                         <Icon className="icon icon--card" />
                     </Box>
