@@ -13,7 +13,7 @@ import { LpUsersPnl, Ticket } from 'types/markets';
 import { NetworkConfig } from 'types/network';
 import { isLpSupported, isStableCurrency } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
-import { getLpAddress } from 'utils/liquidityPool';
+import { getLpAddress, getRoundForOver } from 'utils/liquidityPool';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
 import { mapTicket } from 'utils/tickets';
 import { League } from '../../enums/sports';
@@ -53,7 +53,9 @@ const useLpUsersPnlQuery = (
                         ? []
                         : liquidityPoolDataContract.read.getRoundTickets([
                               getLpAddress(networkConfig.networkId, lpCollateral),
-                              round,
+                              lpCollateral === LiquidityPoolCollateral.OVER
+                                  ? getRoundForOver(round, networkConfig.networkId)
+                                  : round,
                           ]),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, noCacheConfig),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/players-info`, noCacheConfig),
@@ -76,7 +78,6 @@ const useLpUsersPnlQuery = (
 
                 const tickets = Array.isArray(lpTickets) ? lpTickets : [lpTickets];
 
-                console.log(tickets);
                 const numberOfBatches = Math.trunc(tickets.length / BATCH_SIZE) + 1;
 
                 const promises = [];

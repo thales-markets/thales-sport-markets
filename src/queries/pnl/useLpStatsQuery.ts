@@ -14,7 +14,7 @@ import { NetworkConfig, SupportedNetwork } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { isLpSupported, isStableCurrency } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
-import { getLpAddress } from 'utils/liquidityPool';
+import { getLpAddress, getRoundForOver } from 'utils/liquidityPool';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
 import { mapTicket } from 'utils/tickets';
 import { League } from '../../enums/sports';
@@ -126,7 +126,7 @@ const useLpStatsQuery = (
                           ]),
                     liquidityPoolDataContract.read.getRoundTickets([
                         getLpAddress(networkConfig.networkId, LiquidityPoolCollateral.OVER),
-                        round,
+                        getRoundForOver(round, networkConfig.networkId),
                     ]),
                     priceFeedContract.read.getCurrencies(),
                     priceFeedContract.read.getRates(),

@@ -87,3 +87,10 @@ export const LiquidityPoolMap: Record<
         },
     },
 };
+
+export const OverRoundOffsetMap: Record<SupportedNetwork, number> = {
+    [NetworkId.OptimismMainnet]: 33,
+    [NetworkId.Arbitrum]: 23,
+    [NetworkId.Base]: 0,
+    [NetworkId.OptimismSepolia]: 0,
+};
