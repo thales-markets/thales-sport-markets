@@ -73,6 +73,7 @@ const Account: React.FC = () => {
                     borderColor="none"
                     height="48px"
                     width="100%"
+                    lineHeight="16px"
                     backgroundColor={Colors.BLUE}
                 >
                     <Icon className="icon icon--wallet2" />
@@ -83,6 +84,7 @@ const Account: React.FC = () => {
                     borderColor="none"
                     height="48px"
                     width="100%"
+                    lineHeight="16px"
                     backgroundColor={Colors.YELLOW}
                 >
                     <Icon className="icon icon--logged-in" />

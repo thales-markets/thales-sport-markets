@@ -212,7 +212,6 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onClose }) => {
 };
 
 const Wrapper = styled.div`
-    width: 600px;
     flex-direction: column;
     display: flex;
 `;

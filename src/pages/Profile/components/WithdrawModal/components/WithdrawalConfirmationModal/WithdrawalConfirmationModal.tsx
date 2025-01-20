@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import styled, { useTheme } from 'styled-components';
 import { Colors, FlexDiv } from 'styles/common';
-import { coinParser, Coins, formatCurrencyWithKey } from 'thales-utils';
+import { coinParser, Coins, formatCurrencyWithKey, truncateAddress } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
 import { executeBiconomyTransactionWithConfirmation } from 'utils/biconomy';
 import biconomyConnector from 'utils/biconomyWallet';
@@ -137,7 +137,7 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
                     </ItemContainer>
                     <ItemContainer>
                         <ItemLabel>{t('withdraw.confirmation-modal.address')}:</ItemLabel>
-                        <ItemDescription>{withdrawalAddress}</ItemDescription>
+                        <ItemDescription>{truncateAddress(withdrawalAddress, 10, 10)}</ItemDescription>
                     </ItemContainer>
                     <ItemContainer>
                         <ItemLabel>{t('withdraw.confirmation-modal.network')}:</ItemLabel>
@@ -158,7 +158,6 @@ const MainContainer = styled(FlexDiv)`
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 480px;
     background: ${Colors.GOLD};
     z-index: 1000;
 `;
@@ -167,9 +166,6 @@ const TokenIcon = styled.i`
     font-size: 25px;
     margin-right: 5px;
     color: ${(props) => props.theme.textColor.senary};
-    @media (max-width: 575px) {
-        margin-right: 0px;
-    }
 `;
 
 const Header = styled.h2`
@@ -211,20 +207,13 @@ const ItemContainer = styled(FlexDiv)`
     justify-content: space-between;
     margin: 5px 0px;
     color: ${(props) => props.theme.textColor.senary};
-    @media (max-width: 575px) {
-        height: 50px;
-        overflow-wrap: break-word;
-    }
 `;
 
 const ItemLabel = styled(FlexDiv)`
     align-items: center;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
     margin-right: 15px;
-    @media (max-width: 575px) {
-        word-wrap: break-word;
-    }
 `;
 
 const ItemDescription = styled.div`
@@ -233,10 +222,6 @@ const ItemDescription = styled.div`
     overflow-wrap: break-word;
     width: fit-content;
     font-weight: 500;
-    @media (max-width: 575px) {
-        max-width: 150px;
-        text-align: right;
-    }
 `;
 
 const ButtonContainer = styled(FlexDiv)`

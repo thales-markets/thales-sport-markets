@@ -6,9 +6,11 @@ import React, { useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { getIsMobile } from 'redux/modules/app';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
+import { truncateAddress } from 'thales-utils';
 import { RootState } from 'types/redux';
 import biconomyConnector from 'utils/biconomyWallet';
 import { getNetworkNameByNetworkId } from 'utils/network';
@@ -21,6 +23,7 @@ type FundModalProps = {
 
 const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const { t } = useTranslation();
     const { address } = useAccount();
     const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
@@ -88,34 +91,26 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                             })}
                         ></Tooltip>
                     </FieldHeader>
-                    <FlexDivCentered gap={20}>
-                        <Field>{walletAddress}</Field>
-                        <BlueField onClick={handleCopy}>
-                            <QRIcon className="icon icon--copy" />
-                            <FieldText>{t('get-started.fund-account.copy')}</FieldText>
-                        </BlueField>
-                        <BlueField
-                            onClick={() => {
-                                setShowQRModal(!showQRModal);
-                            }}
-                        >
-                            <QRIcon className="icon icon--qr-code" />{' '}
-                            <FieldText>{t('get-started.fund-account.qr')}</FieldText>
-                        </BlueField>
-                    </FlexDivCentered>
+                    <AddressContainer>
+                        <Field>{isMobile ? truncateAddress(walletAddress, 8, 5) : walletAddress}</Field>
+                        <ButtonsContainer>
+                            <BlueField onClick={handleCopy}>
+                                <QRIcon className="icon icon--copy" />
+                                <FieldText>{t('get-started.fund-account.copy')}</FieldText>
+                            </BlueField>
+                            <BlueField
+                                onClick={() => {
+                                    setShowQRModal(!showQRModal);
+                                }}
+                            >
+                                <QRIcon className="icon icon--qr-code" />{' '}
+                                <FieldText>{t('get-started.fund-account.qr')}</FieldText>
+                            </BlueField>
+                        </ButtonsContainer>
+                    </AddressContainer>
                 </WalletContainer>
 
                 <Container>
-                    <Tooltip
-                        customIconStyling={{ color: theme.textColor.secondary }}
-                        overlay={t('get-started.fund-account.tooltip-3')}
-                    >
-                        <Box>
-                            <FieldHeader>{t('get-started.fund-account.from-exchange')}</FieldHeader>
-                            <Icon className="icon icon--affiliate" />
-                        </Box>
-                    </Tooltip>
-
                     <Box
                         onClick={() => {
                             window.open(onramperUrl, '_blank');
@@ -133,6 +128,15 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                             <Icon className="icon icon--wallet-connected" />
                         </Box>
                     </Tooltip>
+                    <Tooltip
+                        customIconStyling={{ color: theme.textColor.secondary }}
+                        overlay={t('get-started.fund-account.tooltip-3')}
+                    >
+                        <Box disabled>
+                            <FieldHeader>{t('get-started.fund-account.from-exchange')}</FieldHeader>
+                            <Icon className="icon icon--affiliate" />
+                        </Box>
+                    </Tooltip>
                 </Container>
 
                 <BlueField>
@@ -148,9 +152,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
     );
 };
 
-const Wrapper = styled.div`
-    max-width: 800px;
-`;
+const Wrapper = styled.div``;
 
 const OvertimeIcon = styled.i`
     font-size: 124px;
@@ -187,10 +189,34 @@ const FieldHeader = styled.p`
     white-space: pre;
 `;
 
+const ButtonsContainer = styled.div`
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+`;
+
+const AddressContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+
+    @media (max-width: 850px) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+`;
+
 const Container = styled(FlexDivCentered)`
     margin-top: 14px;
     margin-bottom: 43px;
     gap: 16px;
+    @media (max-width: 850px) {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 `;
 
 const WalletContainer = styled(FlexDivColumnCentered)`
@@ -198,7 +224,7 @@ const WalletContainer = styled(FlexDivColumnCentered)`
     gap: 14px;
 `;
 
-const Box = styled(FlexDivCentered)`
+const Box = styled(FlexDivCentered)<{ disabled?: boolean }>`
     border: 1px solid ${(props) => props.theme.textColor.secondary};
     border-radius: 8px;
     padding: 14px;
@@ -206,7 +232,9 @@ const Box = styled(FlexDivCentered)`
     justify-content: space-between;
     min-width: 200px;
     height: 60px;
+    width: 100%;
     cursor: pointer;
+    opacity: ${(props) => (props.disabled ? 0.5 : 1)};
 `;
 
 const Field = styled.div`
@@ -215,6 +243,7 @@ const Field = styled.div`
     border-radius: 8px;
     padding: 10px;
     font-size: 14px;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -237,6 +266,7 @@ const FieldText = styled.p`
 
 const QRIcon = styled.i`
     font-size: 24px;
+    font-weight: 400;
     color: ${(props) => props.theme.textColor.senary};
     @media (max-width: 575px) {
         font-size: 20px;
