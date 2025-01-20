@@ -134,7 +134,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onClose }) => {
                                 validationMessage={t('withdraw.validation.wallet-address')}
                                 height="44px"
                                 inputFontSize="16px"
-                                background={theme.background.quaternary}
+                                background={theme.textColor.primary}
                                 fontWeight="700"
                                 color={theme.textColor.tertiary}
                             />
@@ -151,7 +151,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onClose }) => {
                                     inputPadding="5px 10px"
                                     height="44px"
                                     inputFontSize="16px"
-                                    background={theme.background.quaternary}
+                                    background={theme.textColor.primary}
                                     fontWeight="700"
                                     color={theme.textColor.tertiary}
                                     placeholder={t('liquidity-pool.deposit-amount-placeholder')}
@@ -167,7 +167,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onClose }) => {
                                             collateralBalances={multipleCollateralBalances.data}
                                             exchangeRates={exchangeRates}
                                             dropDownWidth={inputRef.current?.getBoundingClientRect().width + 'px'}
-                                            background={theme.background.quaternary}
+                                            background={theme.textColor.primary}
                                             color={theme.textColor.tertiary}
                                             topPosition="50px"
                                             hideZeroBalance
