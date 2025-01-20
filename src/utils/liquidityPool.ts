@@ -31,6 +31,17 @@ export const getLiquidityPools = (networkId: SupportedNetwork) => {
     return lpPerNetwork ? Object.values(lpPerNetwork) : [];
 };
 
+export const hidePnl = (liquidityPoolAddress: string, networkId: SupportedNetwork) => {
+    const lpPerNetwork = LiquidityPoolMap[networkId];
+    if (lpPerNetwork) {
+        return (
+            liquidityPoolAddress.toLowerCase() === lpPerNetwork[LiquidityPoolCollateral.OVER]?.address.toLowerCase() ||
+            liquidityPoolAddress.toLowerCase() === lpPerNetwork[LiquidityPoolCollateral.THALES]?.address.toLowerCase()
+        );
+    }
+    return false;
+};
+
 export const getRoundForOver = (round: number, networkId: SupportedNetwork) => {
     const overRound = round - OverRoundOffsetMap[networkId];
     return overRound > 0 ? overRound : 0;

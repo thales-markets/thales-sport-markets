@@ -20,6 +20,7 @@ import { formatPercentageWithSign } from 'thales-utils';
 import { LiquidityPoolPnls } from 'types/liquidityPool';
 import { ThemeInterface } from 'types/ui';
 import { useChainId } from 'wagmi';
+import { hidePnl } from '../../../utils/liquidityPool';
 
 type PnlProps = {
     lifetimePnl: number;
@@ -40,12 +41,7 @@ const PnL: React.FC<PnlProps> = ({ lifetimePnl, type, liquidityPoolAddress }) =>
         liquidityPoolAddress,
         { networkId },
         {
-            enabled:
-                liquidityPoolAddress !== '0xE59206b08cC96Da0818522C75eE3Fd4EBB7c0A47' &&
-                liquidityPoolAddress !== '0x9733AB157f5A89f0AD7460d08F869956aE2018dA' &&
-                liquidityPoolAddress !== '0xAeb2B8a262D7118322C43449909eEFEe07BbBD7D' &&
-                liquidityPoolAddress !== '0x796B7361F0E818f5D8446f11Be633D60e2B00898' &&
-                liquidityPoolAddress !== '0xe2FCBAC654970bAd1d88B4F6e10d0Ac6152c584E',
+            enabled: !hidePnl(liquidityPoolAddress, networkId),
         }
     );
 
@@ -104,11 +100,7 @@ const PnL: React.FC<PnlProps> = ({ lifetimePnl, type, liquidityPoolAddress }) =>
                 <Title>{t(`liquidity-pool.pnl.${type}.title`)}</Title>
                 {type === LiquidityPoolPnlType.CUMULATIVE_PNL &&
                     // TODO temp disable THALES PnL
-                    liquidityPoolAddress !== '0xE59206b08cC96Da0818522C75eE3Fd4EBB7c0A47' &&
-                    liquidityPoolAddress !== '0x9733AB157f5A89f0AD7460d08F869956aE2018dA' &&
-                    liquidityPoolAddress !== '0xAeb2B8a262D7118322C43449909eEFEe07BbBD7D' &&
-                    liquidityPoolAddress !== '0x796B7361F0E818f5D8446f11Be633D60e2B00898' &&
-                    liquidityPoolAddress !== '0xe2FCBAC654970bAd1d88B4F6e10d0Ac6152c584E' && (
+                    !hidePnl(liquidityPoolAddress, networkId) && (
                         <LifetimePnlContainer>
                             <LifetimePnlLabel>{t('liquidity-pool.pnl.lifetime-pnl')}:</LifetimePnlLabel>
                             <LifetimePnl

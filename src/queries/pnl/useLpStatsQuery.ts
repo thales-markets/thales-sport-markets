@@ -142,6 +142,7 @@ const useLpStatsQuery = (
                     }
                 });
                 exchangeRates['THALES'] = Number(thalesPriceResponse.data);
+                // TODO hardcode OVER price
                 exchangeRates['OVER'] = Number(thalesPriceResponse.data);
 
                 const usdcLpStats = await getLpStats(
