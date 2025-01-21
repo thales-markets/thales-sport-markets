@@ -24,6 +24,7 @@ type TextInputProps = {
     background?: string;
     fontWeight?: string;
     color?: string;
+    borderColor?: string;
 };
 
 const TextInput: React.FC<TextInputProps> = ({

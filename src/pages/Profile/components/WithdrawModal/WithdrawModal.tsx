@@ -129,6 +129,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onClose }) => {
                                 onChange={(el: { target: { value: React.SetStateAction<string> } }) =>
                                     setWithdrawalWalletAddress(el.target.value)
                                 }
+                                borderColor="none"
                                 placeholder={t('withdraw.paste-address')}
                                 showValidation={!validation.walletAddress && !!withdrawalWalletAddress}
                                 validationMessage={t('withdraw.validation.wallet-address')}
@@ -152,11 +153,13 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onClose }) => {
                                     height="44px"
                                     inputFontSize="16px"
                                     background={theme.textColor.primary}
+                                    borderColor="none"
                                     fontWeight="700"
                                     color={theme.textColor.tertiary}
                                     placeholder={t('liquidity-pool.deposit-amount-placeholder')}
                                     currencyComponent={
                                         <CollateralSelector
+                                            borderColor="none"
                                             collateralArray={getCollaterals(networkId)}
                                             selectedItem={selectedToken}
                                             onChangeCollateral={(index) => {

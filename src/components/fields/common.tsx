@@ -96,7 +96,7 @@ export const Input = styled.input<{
         background: ${(props) => props.theme.input.background.selection.primary};
     }
     &:focus {
-        border: 2px solid ${(props) => props.theme.input.borderColor.focus.primary};
+        border: 2px solid ${(props) => props.borderColor || props.theme.input.borderColor.focus.primary};
         box-sizing: border-box;
     }
     &:disabled {
