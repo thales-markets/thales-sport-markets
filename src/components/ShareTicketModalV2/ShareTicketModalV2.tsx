@@ -22,6 +22,7 @@ import { Rates } from 'types/collateral';
 import { SystemBetData, TicketMarket } from 'types/markets';
 import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
+import { isStableCurrency } from 'utils/collaterals';
 import { refetchOverdropMultipliers } from 'utils/queryConnector';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import MyTicket from './components/MyTicket';
@@ -102,14 +103,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
         [collateral]
     );
 
-    const isNonStableCollateral = useMemo(
-        () =>
-            collateral == CRYPTO_CURRENCY_MAP.THALES ||
-            collateral == CRYPTO_CURRENCY_MAP.sTHALES ||
-            collateral == CRYPTO_CURRENCY_MAP.WETH ||
-            collateral == CRYPTO_CURRENCY_MAP.ETH,
-        [collateral]
-    );
+    const isNonStableCollateral = useMemo(() => !isStableCurrency(collateral), [collateral]);
 
     const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client }, { enabled: isNonStableCollateral });
     const exchangeRates: Rates | null =
@@ -391,8 +385,9 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                 {isNonStableCollateral && (
                     <SwitchWrapper>
                         <Toggle
+                            height="20px"
                             active={convertToStableValue}
-                            dotSize="14px"
+                            dotSize="12px"
                             dotBackground={theme.background.secondary}
                             dotBorder={`3px solid ${theme.borderColor.quaternary}`}
                             handleClick={() => {
@@ -451,6 +446,8 @@ const CloseIcon = styled.i`
 `;
 
 const ShareButton = styled(FlexDivRowCentered)<{ disabled?: boolean }>`
+    height: 32px;
+    font-size: 15px;
     align-items: center;
     border-radius: 5px;
     background: ${(props) => props.theme.button.background.primary};
@@ -470,13 +467,13 @@ const ButtonsWrapper = styled(FlexDivRowCentered)<{ toggleVisible?: boolean }>`
 `;
 
 const ButtonLabel = styled.span`
-    font-weight: 700;
-    font-size: 20px;
+    font-weight: 600;
+    font-size: 15px;
     line-height: 24px;
     padding: 7px 20px;
     text-align: center;
     text-transform: uppercase;
-    color: ${(props) => props.theme.textColor.tertiary};
+    color: ${(props) => props.theme.button.textColor.primary};
 `;
 
 const TwitterIcon = styled.i<{ disabled?: boolean; fontSize?: string; padding?: string; color?: string }>`
