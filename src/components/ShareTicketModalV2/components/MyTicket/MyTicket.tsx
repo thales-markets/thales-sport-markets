@@ -1,4 +1,5 @@
 import OvertimeLogoIcon from 'assets/images/overtime-logo.svg?react';
+import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { t } from 'i18next';
 import React from 'react';
 import { useSelector } from 'react-redux';
@@ -46,6 +47,7 @@ const MyTicket: React.FC<MyTicketProps> = ({
     const selectedOddsType = useSelector(getOddsType);
 
     const isTicket = !multiSingle;
+    const isEth = collateral === CRYPTO_CURRENCY_MAP.ETH || collateral === CRYPTO_CURRENCY_MAP.WETH;
 
     return (
         <Container>
@@ -169,8 +171,8 @@ const MyTicket: React.FC<MyTicketProps> = ({
                     <InfoDivFull>
                         <InfoLabel>{t('markets.parlay.min-max-payout')}:</InfoLabel>
                         <InfoValue>
-                            {formatCurrency(systemBetData?.minPayout || 0, 4)}/
-                            {formatCurrency(systemBetData?.maxPayout || 0, 4)} {collateral}
+                            {formatCurrency(systemBetData?.minPayout || 0, isEth ? 4 : 2)}/
+                            {formatCurrency(systemBetData?.maxPayout || 0, isEth ? 4 : 2)} {collateral}
                         </InfoValue>
                     </InfoDivFull>
                 </InfoWrapper>

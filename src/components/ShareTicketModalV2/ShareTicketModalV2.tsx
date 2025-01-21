@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Button from 'components/Button';
 import { Input } from 'components/fields/common';
+import Toggle from 'components/Toggle';
 import { generalConfig } from 'config/general';
 import { defaultToastOptions, getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
@@ -8,6 +9,7 @@ import { LINKS } from 'constants/links';
 import { secondsToMilliseconds } from 'date-fns';
 import { toPng } from 'html-to-image';
 import { t } from 'i18next';
+import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ReactModal from 'react-modal';
 import { useSelector } from 'react-redux';
@@ -16,15 +18,13 @@ import { getIsMobile } from 'redux/modules/app';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
 import { Coins, isFirefox, isIos, isMetamask } from 'thales-utils';
+import { Rates } from 'types/collateral';
 import { SystemBetData, TicketMarket } from 'types/markets';
 import { RootState } from 'types/redux';
+import { ThemeInterface } from 'types/ui';
 import { refetchOverdropMultipliers } from 'utils/queryConnector';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import MyTicket from './components/MyTicket';
-import Toggle from 'components/Toggle';
-import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
-import { Rates } from 'types/collateral';
-import { ThemeInterface } from 'types/ui';
 
 export type ShareTicketModalProps = {
     markets: TicketMarket[];
@@ -367,6 +367,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                                   ...systemBetData,
                                   minPayout: systemBetData?.minPayout * exchangeRates[collateral],
                                   maxPayout: systemBetData?.maxPayout * exchangeRates[collateral],
+                                  buyInPerCombination: systemBetData?.buyInPerCombination * exchangeRates[collateral],
                               }
                             : systemBetData
                     }
