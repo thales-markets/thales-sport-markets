@@ -1745,7 +1745,11 @@ export const PLAYER_PROPS_MARKETS_PER_SPORT_MAP: Record<Sport, MarketType[]> = {
     [Sport.BASEBALL]: [],
     [Sport.HOCKEY]: [MarketType.PLAYER_PROPS_POINTS, MarketType.PLAYER_PROPS_SHOTS, MarketType.PLAYER_PROPS_ASSISTS],
     [Sport.FIGHTING]: [],
-    [Sport.TENNIS]: [],
+    [Sport.TENNIS]: [
+        MarketType.PLAYER_PROPS_ACES,
+        MarketType.PLAYER_PROPS_BREAK_POINTS_WON,
+        MarketType.Player_PROPS_DOUBLE_FAULTS,
+    ],
     [Sport.TABLE_TENNIS]: [],
     [Sport.ESPORTS]: [],
     [Sport.RUGBY]: [],
