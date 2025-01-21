@@ -143,7 +143,7 @@ const Positions: React.FC<PositionsProps> = ({
                         const isFutures = isFuturesMarket(market.typeId);
                         const isCorrectScore = market.typeId === MarketType.CORRECT_SCORE;
 
-                        const oddsForDisplay = isFutures || isCorrectScore ? sortedOddsInfo : oddsInfo;
+                        const oddsForDisplay = isFutures ? sortedOddsInfo : oddsInfo;
 
                         const filteredOdds =
                             isMainPageView &&
