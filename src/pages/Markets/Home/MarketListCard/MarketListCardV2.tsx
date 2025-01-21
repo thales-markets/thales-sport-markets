@@ -373,7 +373,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                                     market.tournamentRound ? ` | ${market.tournamentRound}` : ''
                                 }`}</>
                             )}
-                            {leagueTooltipKey && (
+                            {leagueTooltipKey && !isPlayerPropsMarket && (
                                 <Tooltip overlay={t(leagueTooltipKey)} iconFontSize={12} marginLeft={2} />
                             )}
                         </MatchInfoLabel>
