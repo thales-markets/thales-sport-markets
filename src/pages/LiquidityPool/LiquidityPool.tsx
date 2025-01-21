@@ -87,6 +87,7 @@ import {
     Wrapper,
     defaultButtonProps,
 } from './styled-components';
+import { executeBiconomyTransactionWithConfirmation } from 'utils/biconomy';
 
 const WETH_COLLATERALS = [CRYPTO_CURRENCY_MAP.WETH as Coins, CRYPTO_CURRENCY_MAP.ETH as Coins];
 
@@ -333,8 +334,12 @@ const LiquidityPool: React.FC = () => {
             setIsAllowing(true);
 
             try {
-                console.log(approveAmount.toString(), collateral);
-                const hash = await multiCollateralWithSigner?.write.approve([liquidityPoolAddress, approveAmount]);
+                const hash = isBiconomy
+                    ? await executeBiconomyTransactionWithConfirmation(multiCollateralWithSigner, 'approve', [
+                          liquidityPoolAddress,
+                          approveAmount,
+                      ])
+                    : await multiCollateralWithSigner?.write.approve([liquidityPoolAddress, approveAmount]);
                 setOpenApprovalModal(false);
 
                 const txReceipt = await waitForTransactionReceipt(client as Client, {
@@ -379,14 +384,22 @@ const LiquidityPool: React.FC = () => {
                 WETHContractWithSigner &&
                 selectedCollateralIndex === 1
             ) {
-                const wrapTxHash = await WETHContractWithSigner.write.deposit([parsedAmount]);
+                const wrapTxHash = isBiconomy
+                    ? await executeBiconomyTransactionWithConfirmation(WETHContractWithSigner, 'deposit', [
+                          parsedAmount,
+                      ])
+                    : await WETHContractWithSigner.write.deposit([parsedAmount]);
 
                 const wrapTxReceipt = await waitForTransactionReceipt(client as Client, {
                     hash: wrapTxHash,
                 });
 
                 if (wrapTxReceipt.status === 'success') {
-                    const txHash = await liquidityPoolContractWithSigner.write.deposit(parsedAmount);
+                    const txHash = isBiconomy
+                        ? await executeBiconomyTransactionWithConfirmation(liquidityPoolContractWithSigner, 'deposit', [
+                              parsedAmount,
+                          ])
+                        : await liquidityPoolContractWithSigner.write.deposit(parsedAmount);
 
                     const txReceipt = await waitForTransactionReceipt(client as Client, {
                         hash: txHash,
@@ -404,7 +417,11 @@ const LiquidityPool: React.FC = () => {
                     }
                 }
             } else {
-                const txHash = await liquidityPoolContractWithSigner.write.deposit([parsedAmount]);
+                const txHash = isBiconomy
+                    ? await executeBiconomyTransactionWithConfirmation(liquidityPoolContractWithSigner, 'deposit', [
+                          parsedAmount,
+                      ])
+                    : await liquidityPoolContractWithSigner.write.deposit([parsedAmount]);
 
                 const txReceipt = await waitForTransactionReceipt(client as Client, {
                     hash: txHash,
