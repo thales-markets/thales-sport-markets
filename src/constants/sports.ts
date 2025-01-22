@@ -1782,12 +1782,16 @@ export const PLAYER_PROPS_SPECIAL_SPORTS = [Sport.FOOTBALL];
 
 // lower index => higher priority
 export const LEAGUES_SORT_PRIORITY = [
+    League.UEFA_CL,
+    League.UEFA_EL,
     League.EPL,
     League.LA_LIGA,
     League.SERIE_A,
     League.BUNDESLIGA,
     League.LIGUE_ONE,
     League.NBA,
+    League.EUROLEAGUE,
+    League.EUROCUP,
     League.NFL,
     League.NHL,
     League.MLB,
