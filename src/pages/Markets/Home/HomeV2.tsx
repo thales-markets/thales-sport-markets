@@ -776,6 +776,10 @@ const Home: React.FC = () => {
                                 playerPropsCountPerTag={playerPropsCountPerTag}
                                 setAvailableTags={setAvailableTags}
                                 tagsList={tagsList}
+                                openMarketsCountPerSport={openMarketsCountPerSport}
+                                boostedMarketsCount={boostedMarketsCount}
+                                liveMarketsCountPerSport={liveMarketsCountPerSport}
+                                showActive={showActive}
                             />
                             {!marketsLoading &&
                                 finalMarkets.length > 0 &&
