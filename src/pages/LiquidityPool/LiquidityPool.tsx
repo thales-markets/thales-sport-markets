@@ -454,7 +454,13 @@ const LiquidityPool: React.FC = () => {
             ) as ViemContract;
             const parsedPercentage = parseUnits((Number(withdrawalPercentage) / 100).toString(), 18);
 
-            const txHash = withdrawAll
+            const txHash = isBiconomy
+                ? await executeBiconomyTransactionWithConfirmation(
+                      liquidityPoolContractWithSigner,
+                      withdrawAll ? 'withdrawalRequest' : 'partialWithdrawalRequest',
+                      withdrawAll ? undefined : [parsedPercentage]
+                  )
+                : withdrawAll
                 ? await liquidityPoolContractWithSigner.write.withdrawalRequest()
                 : await liquidityPoolContractWithSigner.write.partialWithdrawalRequest([parsedPercentage]);
 
@@ -497,11 +503,17 @@ const LiquidityPool: React.FC = () => {
             if (canCloseCurrentRound) {
                 try {
                     if (!roundClosingPrepared) {
-                        const txHash = await liquidityPoolContractWithSigner.write.prepareRoundClosing([
-                            undefined,
-                            undefined,
-                            2,
-                        ]);
+                        const txHash = isBiconomy
+                            ? await executeBiconomyTransactionWithConfirmation(
+                                  liquidityPoolContractWithSigner,
+                                  'prepareRoundClosing',
+                                  [undefined, undefined, 2]
+                              )
+                            : await liquidityPoolContractWithSigner.write.prepareRoundClosing([
+                                  undefined,
+                                  undefined,
+                                  2,
+                              ]);
 
                         const txReceipt = await waitForTransactionReceipt(client as Client, {
                             hash: txHash,
@@ -515,11 +527,13 @@ const LiquidityPool: React.FC = () => {
                     }
 
                     while (usersProcessedInRound.toString() < getUsersCountInCurrentRound.toString()) {
-                        const txHash = await liquidityPoolContractWithSigner.write.processRoundClosingBatch([
-                            undefined,
-                            100,
-                            2,
-                        ]);
+                        const txHash = isBiconomy
+                            ? await executeBiconomyTransactionWithConfirmation(
+                                  liquidityPoolContractWithSigner,
+                                  'processRoundClosingBatch',
+                                  [undefined, 100, 2]
+                              )
+                            : await liquidityPoolContractWithSigner.write.processRoundClosingBatch([undefined, 100, 2]);
 
                         const txReceipt = await waitForTransactionReceipt(client as Client, {
                             hash: txHash,
@@ -534,7 +548,13 @@ const LiquidityPool: React.FC = () => {
                         usersProcessedInRound = await liquidityPoolContractWithSigner.read.usersProcessedInRound();
                     }
 
-                    const tx = await liquidityPoolContractWithSigner.write.closeRound([undefined, undefined, 2]);
+                    const tx = isBiconomy
+                        ? await executeBiconomyTransactionWithConfirmation(
+                              liquidityPoolContractWithSigner,
+                              'closeRound',
+                              [undefined, undefined, 2]
+                          )
+                        : await liquidityPoolContractWithSigner.write.closeRound([undefined, undefined, 2]);
                     const txReceipt = await waitForTransactionReceipt(client as Client, {
                         hash: tx,
                     });
