@@ -51,6 +51,7 @@ export const BoldContent = styled.span`
 export const Colors = {
     GRAY: '#303656',
     GRAY_LIGHT: '#5F6180',
+    GRAY_LIGHT_OPACITY: '#5F618080',
     GRAY_DARK: '#1A1C2B',
     GRAY_TRANSPARENT: '#D9D9D91A',
 

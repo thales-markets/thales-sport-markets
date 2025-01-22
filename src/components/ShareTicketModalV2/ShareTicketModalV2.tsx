@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Button from 'components/Button';
 import { Input } from 'components/fields/common';
+import Toggle from 'components/Toggle';
 import { generalConfig } from 'config/general';
 import { defaultToastOptions, getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
@@ -8,18 +9,22 @@ import { LINKS } from 'constants/links';
 import { secondsToMilliseconds } from 'date-fns';
 import { toPng } from 'html-to-image';
 import { t } from 'i18next';
+import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ReactModal from 'react-modal';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
 import { Coins, isFirefox, isIos, isMetamask } from 'thales-utils';
+import { Rates } from 'types/collateral';
 import { SystemBetData, TicketMarket } from 'types/markets';
 import { RootState } from 'types/redux';
+import { ThemeInterface } from 'types/ui';
+import { isStableCurrency } from 'utils/collaterals';
 import { refetchOverdropMultipliers } from 'utils/queryConnector';
-import { useAccount } from 'wagmi';
+import { useAccount, useChainId, useClient } from 'wagmi';
 import MyTicket from './components/MyTicket';
 
 export type ShareTicketModalProps = {
@@ -78,13 +83,18 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
     isTicketOpen,
     systemBetData,
 }) => {
+    const theme: ThemeInterface = useTheme();
+
     const walletAddress = useAccount()?.address || '';
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
+    const networkId = useChainId();
+    const client = useClient();
 
     const [isLoading, setIsLoading] = useState(false);
     const [toastId, setToastId] = useState<string | number>(0);
     const [isMetamaskBrowser, setIsMetamaskBrowser] = useState(false);
     const [tweetUrl, setTweetUrl] = useState('');
+    const [convertToStableValue, setConvertToStableValue] = useState<boolean>(false);
 
     const ref = useRef<HTMLDivElement>(null);
 
@@ -92,6 +102,12 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
         () => collateral === CRYPTO_CURRENCY_MAP.THALES || collateral === CRYPTO_CURRENCY_MAP.sTHALES,
         [collateral]
     );
+
+    const isNonStableCollateral = useMemo(() => !isStableCurrency(collateral), [collateral]);
+
+    const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client }, { enabled: isNonStableCollateral });
+    const exchangeRates: Rates | null =
+        exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
     const customStyles = {
         content: {
@@ -126,7 +142,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
     const useDownloadImage = isMobile || isFirefox();
 
     const saveImageAndOpenTwitter = useCallback(
-        async (toastIdParam: string | number) => {
+        async (toastIdParam: string | number, copyOnly?: boolean) => {
             if (!isLoading) {
                 if (ref.current === null) {
                     return;
@@ -172,6 +188,20 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                     }
 
                     if (ref.current === null) {
+                        return;
+                    }
+
+                    if (copyOnly) {
+                        toast.update(
+                            toastIdParam,
+                            getSuccessToastOptions(
+                                <>
+                                    {useDownloadImage
+                                        ? t('market.toast-message.image-downloaded')
+                                        : t('market.toast-message.image-in-clipboard')}
+                                </>
+                            )
+                        );
                         return;
                     }
 
@@ -237,7 +267,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
         [isLoading, isMobile, isThalesCollateral, useDownloadImage]
     );
 
-    const onTwitterShareClick = () => {
+    const onTwitterShareClick = (copyOnly?: boolean) => {
         if (!isLoading) {
             if (isMetamaskBrowser) {
                 // Metamask dosn't support image download neither clipboard.write
@@ -252,7 +282,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                 // If image creation is not postponed with timeout toaster is not displayed immediately, it is rendered in parallel with toPng() execution.
                 // Function toPng is causing UI to freez for couple of seconds and there is no notification message during that time, so it confuses user.
                 setTimeout(async () => {
-                    await saveImageAndOpenTwitter(id);
+                    await saveImageAndOpenTwitter(id, copyOnly);
                     setIsLoading(false);
                 }, 300);
             }
@@ -309,23 +339,68 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                 <MyTicket
                     markets={markets}
                     multiSingle={multiSingle}
-                    paid={paid}
-                    payout={payout}
+                    paid={
+                        convertToStableValue && isNonStableCollateral && exchangeRates?.[collateral]
+                            ? paid * exchangeRates?.[collateral]
+                            : paid
+                    }
+                    payout={
+                        convertToStableValue && isNonStableCollateral && exchangeRates?.[collateral]
+                            ? payout * exchangeRates?.[collateral]
+                            : payout
+                    }
                     isTicketLost={isTicketLost}
-                    collateral={collateral}
+                    collateral={
+                        convertToStableValue && isNonStableCollateral ? (CRYPTO_CURRENCY_MAP.USDC as Coins) : collateral
+                    }
                     isLive={isLive}
                     applyPayoutMultiplier={applyPayoutMultiplier}
-                    systemBetData={systemBetData}
+                    systemBetData={
+                        systemBetData && convertToStableValue && isNonStableCollateral && exchangeRates
+                            ? {
+                                  ...systemBetData,
+                                  minPayout: systemBetData?.minPayout * exchangeRates[collateral],
+                                  maxPayout: systemBetData?.maxPayout * exchangeRates[collateral],
+                                  buyInPerCombination: systemBetData?.buyInPerCombination * exchangeRates[collateral],
+                              }
+                            : systemBetData
+                    }
                     isTicketOpen={isTicketOpen}
                 />
 
-                <TwitterShare disabled={isLoading} onClick={onTwitterShareClick}>
-                    <TwitterIcon disabled={isLoading} fontSize={'22px'} />
-                    <TwitterShareLabel>{t('markets.parlay.share-ticket.share')}</TwitterShareLabel>
-                </TwitterShare>
-
-                <ShareWrapper>
-                    <SubmitLabel>{t('markets.parlay.share-ticket.submit-url')}</SubmitLabel>
+                <ButtonsWrapper toggleVisible={isNonStableCollateral}>
+                    <ShareButton disabled={isLoading} onClick={() => onTwitterShareClick()}>
+                        <TwitterIcon disabled={isLoading} fontSize={'22px'} />
+                        <ButtonLabel>{t('markets.parlay.share-ticket.share')}</ButtonLabel>
+                    </ShareButton>
+                    <ShareButton disabled={isLoading} onClick={() => onTwitterShareClick(true)}>
+                        {!useDownloadImage && <CopyIcon disabled={isLoading} fontSize={'22px'} />}
+                        <ButtonLabel>
+                            {useDownloadImage
+                                ? t('markets.parlay.share-ticket.download')
+                                : t('markets.parlay.share-ticket.copy')}
+                        </ButtonLabel>
+                    </ShareButton>
+                </ButtonsWrapper>
+                {isNonStableCollateral && (
+                    <SwitchWrapper>
+                        <Toggle
+                            height="20px"
+                            active={convertToStableValue}
+                            dotSize="12px"
+                            dotBackground={theme.background.secondary}
+                            dotBorder={`3px solid ${theme.borderColor.quaternary}`}
+                            handleClick={() => {
+                                setConvertToStableValue(!convertToStableValue);
+                            }}
+                            label={{
+                                firstLabel: t('markets.parlay.share-ticket.convert-to-usdc'),
+                            }}
+                        />
+                    </SwitchWrapper>
+                )}
+                <ShareWrapper toggleVisible={isNonStableCollateral}>
+                    <Label>{t('markets.parlay.share-ticket.submit-url')}</Label>
                     <Input
                         height="32px"
                         minHeight="32px" // fix for iOS
@@ -370,26 +445,35 @@ const CloseIcon = styled.i`
     }
 `;
 
-const TwitterShare = styled(FlexDivRowCentered)<{ disabled?: boolean }>`
-    align-items: center;
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -46px;
+const ShareButton = styled(FlexDivRowCentered)<{ disabled?: boolean }>`
     height: 32px;
+    font-size: 15px;
+    align-items: center;
     border-radius: 5px;
     background: ${(props) => props.theme.button.background.primary};
     cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
     opacity: ${(props) => (props.disabled ? '0.4' : '1')};
     justify-content: center;
+    flex: 1;
 `;
 
-const TwitterShareLabel = styled.span`
-    font-weight: 700;
-    font-size: 20px;
+const ButtonsWrapper = styled(FlexDivRowCentered)<{ toggleVisible?: boolean }>`
+    left: 0;
+    right: 0;
+    bottom: ${(props) => (props?.toggleVisible ? '-72px' : '-46px')};
+    height: 32px;
+    position: absolute;
+    gap: 10px;
+`;
+
+const ButtonLabel = styled.span`
+    font-weight: 600;
+    font-size: 15px;
     line-height: 24px;
+    padding: 7px 20px;
+    text-align: center;
     text-transform: uppercase;
-    color: ${(props) => props.theme.textColor.tertiary};
+    color: ${(props) => props.theme.button.textColor.primary};
 `;
 
 const TwitterIcon = styled.i<{ disabled?: boolean; fontSize?: string; padding?: string; color?: string }>`
@@ -407,15 +491,40 @@ const TwitterIcon = styled.i<{ disabled?: boolean; fontSize?: string; padding?: 
     }
 `;
 
-const ShareWrapper = styled(FlexDivColumn)`
+const CopyIcon = styled.i<{ disabled?: boolean; fontSize?: string; padding?: string; color?: string }>`
+    font-weight: 500;
+    margin-right: 3px;
+    font-size: ${(props) => (props.fontSize ? props.fontSize : '20px')};
+    color: ${(props) => (props.color ? props.color : props.theme.textColor.tertiary)};
+    cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
+    opacity: ${(props) => (props.disabled ? '0.4' : '1')};
+    ${(props) => (props.padding ? `padding: ${props.padding};` : '')}
+    text-transform: lowercase;
+    &:before {
+        font-family: OvertimeIconsV2 !important;
+        content: '\\00F1';
+    }
+`;
+
+const SwitchWrapper = styled(FlexDivRowCentered)`
     position: absolute;
     left: 0;
     right: 0;
     height: 0px;
-    bottom: -60px;
+    bottom: -17px;
+    width: 100%;
+    justify-content: space-between;
 `;
 
-const SubmitLabel = styled.span`
+const ShareWrapper = styled(FlexDivColumn)<{ toggleVisible?: boolean }>`
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 0px;
+    bottom: ${(props) => (props?.toggleVisible ? '-80px' : '-60px')};
+`;
+
+const Label = styled.span`
     font-weight: 400;
     font-size: 12px;
     line-height: 20px;

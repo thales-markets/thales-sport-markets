@@ -369,26 +369,13 @@ const Home: React.FC = () => {
             return true;
         });
 
-        const sortedFilteredMarkets = orderBy(
-            filteredMarkets,
-            ['maturityDate'],
-            [
-                statusFilter === StatusFilter.ONGOING_MARKETS ||
-                statusFilter === StatusFilter.RESOLVED_MARKETS ||
-                statusFilter === StatusFilter.CANCELLED_MARKETS ||
-                statusFilter === StatusFilter.PAUSED_MARKETS
-                    ? 'desc'
-                    : 'asc',
-            ]
-        );
-
         if (selectedMarket && !filteredMarkets.map((market) => market.gameId).includes(selectedMarket.gameId)) {
             dispatch(setSelectedMarket(undefined));
         }
 
         setAvailableMarketTypes(Array.from(marketTypes));
 
-        return sortedFilteredMarkets;
+        return filteredMarkets;
     }, [
         sportMarketsQueryNew.isSuccess,
         sportMarketsQueryNew.data,
@@ -797,6 +784,7 @@ const Home: React.FC = () => {
                                         allMarkets={finalMarkets}
                                         availableMarketTypes={availableMarketTypes}
                                         market={selectedMarketData}
+                                        isMainPageView
                                     />
                                 )}
                             <FilterTagsMobile />
@@ -835,6 +823,7 @@ const Home: React.FC = () => {
                                                 allMarkets={finalMarkets}
                                                 availableMarketTypes={availableMarketTypes}
                                                 market={selectedMarketData}
+                                                isMainPageView
                                             />
                                         )}
                                     <FlexDivRow>

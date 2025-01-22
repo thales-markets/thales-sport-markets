@@ -12,7 +12,7 @@ import _, { isEqual } from 'lodash';
 import Lottie from 'lottie-react';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
 import useRiskManagementConfigQuery from 'queries/riskManagement/riskManagementConfig';
-import React, { memo, useEffect, useMemo, useState } from 'react';
+import React, { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
@@ -29,7 +29,7 @@ import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarket } from 'types/markets';
 import { RiskManagementLeaguesAndTypes } from 'types/riskManagement';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
-import { getOnImageError, getOnPlayerImageError, getTeamImageSource } from 'utils/images';
+import { getLeagueFlagSource, getOnImageError, getOnPlayerImageError, getTeamImageSource } from 'utils/images';
 import { isFuturesMarket } from 'utils/markets';
 import {
     getMarketPlayerPropsMarketsForGroupFilter,
@@ -38,7 +38,7 @@ import {
     isOddValid,
 } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
-import { getLeaguePeriodType, getLeagueTooltipKey } from 'utils/sports';
+import { getLeagueLabel, getLeaguePeriodType, getLeagueTooltipKey } from 'utils/sports';
 import { displayGameClock, displayGamePeriod } from 'utils/ui';
 import { useChainId } from 'wagmi';
 import PositionsV2 from '../../Market/MarketDetailsV2/components/PositionsV2';
@@ -53,6 +53,7 @@ import {
     FireContainer,
     FireText,
     GameOfLabel,
+    LeagueFlag,
     liveBlinkStyle,
     liveBlinkStyleMobile,
     LiveIndicatorContainer,
@@ -76,10 +77,11 @@ type MarketRowCardProps = {
     language: string;
     floatingOddsTitles?: boolean;
     oddsTitlesHidden?: boolean;
+    showLeagueInfo?: boolean;
 };
 
 const MarketListCard: React.FC<MarketRowCardProps> = memo(
-    ({ market, language, oddsTitlesHidden, floatingOddsTitles }) => {
+    ({ market, language, oddsTitlesHidden, floatingOddsTitles, showLeagueInfo }) => {
         const { t } = useTranslation();
         const dispatch = useDispatch();
         const networkId = useChainId();
@@ -292,14 +294,17 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
             return gameMultipliers.find((multiplier) => multiplier.gameId === market.gameId);
         }, [gameMultipliersQuery.data, gameMultipliersQuery.isSuccess, market.gameId]);
 
+        const leagueFlagRef = useRef<HTMLImageElement>(null);
+
         const getMainContainerContent = () => (
             <MainContainer
                 isBoosted={!isPlayerPropsMarket && !!overdropGameMultiplier}
                 isGameOpen={isGameOpen || isGameLive}
             >
                 <MatchInfoContainer
-                    onClick={() => {
-                        if (isGameOpen || isGameLive) {
+                    onClick={(event) => {
+                        const isMobileLeagueFlagClick = isMobile && event.target === leagueFlagRef.current;
+                        if (!isMobileLeagueFlagClick && (isGameOpen || isGameLive)) {
                             if (isPlayerPropsMarket) {
                                 dispatch(
                                     setSelectedMarket({
@@ -324,6 +329,15 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                         >{`Game of the ${overdropGameMultiplier.type}`}</GameOfLabel>
                     )}
                     <MatchInfo selected={selected}>
+                        {showLeagueInfo && (
+                            <Tooltip overlay={getLeagueLabel(market.leagueId)}>
+                                <LeagueFlag
+                                    ref={leagueFlagRef}
+                                    alt={market.leagueId.toString()}
+                                    src={getLeagueFlagSource(market.leagueId)}
+                                />
+                            </Tooltip>
+                        )}
                         {isGameLive ? (
                             <>
                                 <LiveIndicatorContainer>
@@ -636,6 +650,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                                             isGameOpen={isGameOpen}
                                             isMainPageView
                                             isColumnView={isColumnView}
+                                            width={isColumnView ? '20%' : undefined}
                                         />
                                         {isColumnView && !isMobile && spreadMarket && (
                                             <PositionsV2
@@ -648,6 +663,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                                                 isGameOpen={isGameOpen}
                                                 isMainPageView
                                                 isColumnView={isColumnView}
+                                                width="20%"
                                             />
                                         )}
                                         {isColumnView && !isMobile && totalMarket && (
@@ -661,6 +677,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                                                 isGameOpen={isGameOpen}
                                                 isMainPageView
                                                 isColumnView={isColumnView}
+                                                width="20%"
                                             />
                                         )}
                                     </>
