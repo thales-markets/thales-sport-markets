@@ -22,10 +22,11 @@ import { Rates } from 'types/collateral';
 import { SystemBetData, TicketMarket } from 'types/markets';
 import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
-import { isStableCurrency } from 'utils/collaterals';
+import { isStableCurrency, isThalesCurrency } from 'utils/collaterals';
 import { refetchOverdropMultipliers } from 'utils/queryConnector';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import MyTicket from './components/MyTicket';
+import { THALES_CONTRACT_RATE_KEY } from 'constants/markets';
 
 export type ShareTicketModalProps = {
     markets: TicketMarket[];
@@ -104,6 +105,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
     );
 
     const isNonStableCollateral = useMemo(() => !isStableCurrency(collateral), [collateral]);
+    const isThales = isThalesCurrency(collateral);
 
     const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client }, { enabled: isNonStableCollateral });
     const exchangeRates: Rates | null =
@@ -341,12 +343,12 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                     multiSingle={multiSingle}
                     paid={
                         convertToStableValue && isNonStableCollateral && exchangeRates?.[collateral]
-                            ? paid * exchangeRates?.[collateral]
+                            ? paid * exchangeRates?.[isThales ? THALES_CONTRACT_RATE_KEY : collateral]
                             : paid
                     }
                     payout={
                         convertToStableValue && isNonStableCollateral && exchangeRates?.[collateral]
-                            ? payout * exchangeRates?.[collateral]
+                            ? payout * exchangeRates?.[isThales ? THALES_CONTRACT_RATE_KEY : collateral]
                             : payout
                     }
                     isTicketLost={isTicketLost}
