@@ -889,7 +889,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
     [League.NON_TITLE_BOXING]: {
         sport: Sport.FIGHTING,
         id: League.NON_TITLE_BOXING,
-        label: 'Boxing',
+        label: 'Boxing Non Title',
         logoClass: 'icon-homepage league--boxing',
         scoringType: ScoringType.ROUNDS,
         matchResolveType: MatchResolveType.EMPTY,

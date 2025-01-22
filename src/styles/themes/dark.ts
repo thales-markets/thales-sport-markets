@@ -80,6 +80,14 @@ export default {
             },
         },
     },
+    dropDown: {
+        indicatorColor: { primary: Colors.NAVY_BLUE_LIGHT },
+        menu: { background: { primary: Colors.NAVY_BLUE }, borderColor: { primary: Colors.NAVY_BLUE_LIGHT } },
+        menuItem: {
+            selectedColor: { primary: Colors.GRAY_LIGHT_OPACITY },
+            hoverColor: { primary: Colors.NAVY_BLUE_LIGHT, secondary: Colors.GRAY_LIGHT_OPACITY },
+        },
+    },
     link: {
         textColor: {
             primary: Colors.BLUE,
