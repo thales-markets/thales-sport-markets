@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import styled, { useTheme } from 'styled-components';
 import { Colors, FlexDiv } from 'styles/common';
-import { coinParser, Coins, formatCurrencyWithKey, truncateAddress } from 'thales-utils';
+import { coinParser, Coins, formatCurrencyWithKey } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
 import { executeBiconomyTransactionWithConfirmation } from 'utils/biconomy';
 import biconomyConnector from 'utils/biconomyWallet';
@@ -137,7 +137,7 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
                     </ItemContainer>
                     <ItemContainer>
                         <ItemLabel>{t('withdraw.confirmation-modal.address')}:</ItemLabel>
-                        <ItemDescription>{truncateAddress(withdrawalAddress, 10, 10)}</ItemDescription>
+                        <ItemDescription>{withdrawalAddress}</ItemDescription>
                     </ItemContainer>
                     <ItemContainer>
                         <ItemLabel>{t('withdraw.confirmation-modal.network')}:</ItemLabel>
@@ -179,6 +179,7 @@ const Header = styled.h2`
 `;
 
 const SubTitle = styled.p`
+    max-width: 420px;
     color: ${(props) => props.theme.overdrop.textColor.quaternary};
     text-align: center;
     font-size: 16px;
