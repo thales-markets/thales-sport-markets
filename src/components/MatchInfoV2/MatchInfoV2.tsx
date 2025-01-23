@@ -73,7 +73,6 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
     ]);
     const positionText = getPositionTextV2(market, market.position, true);
 
-    // used only for live ticket
     const previousMarket = useRef<TicketMarket>(market);
     const firstClickMarket = useRef<TicketMarket>(market);
 

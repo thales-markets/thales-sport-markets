@@ -13,7 +13,6 @@ type MatchInfoProps = {
     market: TicketPosition;
     readOnly?: boolean;
     showOddUpdates?: boolean;
-    setOddsChanged?: (changed: boolean) => void;
     acceptOdds?: boolean;
     setAcceptOdds?: (accept: boolean) => void;
     isLive?: boolean;
