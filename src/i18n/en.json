@@ -900,7 +900,34 @@
         "superbowl-incentive": "10,000 ARB IN INCENTIVES",
         "incentivized-tooltip-euro-copa": "A whopping total of {{rewards}} will be distributed for the Euro 2024 and Copa America competitions. Check more details <detailsLink>here</detailsLink>.",
         "incentivized-tooltip-wimbledon": "Compete for {{rewards}} during Wimbledon 2024 on Overtime V1 and V2. Check more details <detailsLink>here</detailsLink>.",
-        "incentivized-tooltip-olympics": "Earn {{rewards}} in volume-based rewards during the Olympics. Check more details <detailsLink>here</detailsLink>."
+        "incentivized-tooltip-olympics": "Earn {{rewards}} in volume-based rewards during the Olympics. Check more details <detailsLink>here</detailsLink>.",
+        "resolve-modal": {
+            "title": "Resolve market",
+            "game": "Game",
+            "type": "Type",
+            "player": "Player",
+            "line": "Line",
+            "set-result-label": "Set result",
+            "set-result-placeholder": "Enter result",
+            "set-result-tooltip": "Set result for the markets with the provided gameId, typeId and playerId. If more than one result (e.g. double chance), enter the result comma-separated (e.g. 1,2). NOTE: For total and handicaps, the result should be multiplied by 100. (e.g. total sets is 5, enter 500)",
+            "cancel-confirmation-message": "Successfully cancelled",
+            "result-set-confirmation-message": "Result successfully set",
+            "resolve-market-tooltip": "Resolve market",
+            "validation": {
+                "unstaking-in-progress": "Unstaking in progress, you cannot stake",
+                "staking-paused": "Staking paused, please try later"
+            },
+            "button": {
+                "cancel-market-label": "Cancel market",
+                "cancel-market-tooltip": "This action will cancel the market with the provided gameId, typeId, playerId and line",
+                "cancel-all-market-lines-label": "Cancel all market lines",
+                "cancel-all-market-lines-tooltip": "This action will cancel all market lines with the provided gameId, typeId and playerId (line 0 will be sent to the contract)",
+                "cancel-game-label": "Cancel game",
+                "cancel-game-tooltip": "This action will cancel all markets for the game with the provided gameId",
+                "set-result-label": "Set result",
+                "set-result-tooltip": "This action will set result for the markets with the provided gameId, typeId and playerId"
+            }
+        }
     },
     "rewards": {
         "header": "Rewards",
