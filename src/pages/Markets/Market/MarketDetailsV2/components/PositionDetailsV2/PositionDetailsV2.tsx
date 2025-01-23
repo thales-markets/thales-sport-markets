@@ -67,12 +67,13 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
     );
 
     const isFutures = isFuturesMarket(market.typeId);
+    const isCorrectScore = market.typeId === MarketType.CORRECT_SCORE;
 
     const getDetails = () => (
         <Container
             hide={
                 ((showOdd && noOdd) || (!!isMainPageView && displayPosition >= FUTURES_MAIN_VIEW_DISPLAY_COUNT)) &&
-                isFutures
+                (isFutures || isCorrectScore)
             }
             disabled={disabledPosition}
             selected={isAddedToTicket}

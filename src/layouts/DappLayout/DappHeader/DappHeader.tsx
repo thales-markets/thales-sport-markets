@@ -20,10 +20,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { getIsMobile } from 'redux/modules/app';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
-import { getOverdropUIState, getStopPulsing, setOddsType, setStopPulsing } from 'redux/modules/ui';
+import { getOddsType, getOverdropUIState, getStopPulsing, setOddsType, setStopPulsing } from 'redux/modules/ui';
 import { getIsBiconomy, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
-import { FlexDiv, FlexDivCentered, FlexDivEnd } from 'styles/common';
+import { FlexDivCentered, FlexDivEnd } from 'styles/common';
 import { RootState } from 'types/redux';
 import { OverdropLevel, ThemeInterface } from 'types/ui';
 import biconomyConnector from 'utils/biconomyWallet';
@@ -49,6 +49,7 @@ import {
     MenuIcon,
     MenuIconContainer,
     MiddleContainer,
+    MiddleRightContainer,
     MobileButtonWrapper,
     NotificationCount,
     OverdropButtonContainer,
@@ -104,6 +105,7 @@ const DappHeader: React.FC = () => {
     const stopPulsing = useSelector(getStopPulsing);
     const isMobile = useSelector(getIsMobile);
     const overdropUIState = useSelector(getOverdropUIState);
+    const selectedOddsType = useSelector(getOddsType);
 
     const [levelItem, setLevelItem] = useState<OverdropLevel>(OVERDROP_LEVELS[0]);
     const [currentPulsingCount, setCurrentPulsingCount] = useState<number>(0);
@@ -214,7 +216,7 @@ const DappHeader: React.FC = () => {
 
                     <MiddleContainer>
                         {isMarketsPage && <TimeFilters />}
-                        <FlexDiv>
+                        <MiddleRightContainer>
                             <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
                                 {levelItem.level > 0 ? (
                                     <OverdropButtonContainer>
@@ -226,20 +228,21 @@ const DappHeader: React.FC = () => {
                                 )}
                             </SPAAnchor>
                             {isConnected && <ProfileItem />}
-                            <SettingsContainer
-                                onClick={() => {
-                                    setDropdownIsOpen(!dropdownIsOpen);
-                                }}
-                            >
-                                <HeaderIcon className="icon icon--settings" />
-                                <HeaderLabel>{t('common.settings')}</HeaderLabel>
-                                {dropdownIsOpen && (
-                                    <OutsideClickHandler onOutsideClick={() => setDropdownIsOpen(false)}>
+                            <OutsideClickHandler onOutsideClick={() => setDropdownIsOpen(false)}>
+                                <SettingsContainer
+                                    onClick={() => {
+                                        setDropdownIsOpen(!dropdownIsOpen);
+                                    }}
+                                >
+                                    <HeaderIcon className="icon icon--settings" />
+                                    <HeaderLabel>{t('common.settings')}</HeaderLabel>
+                                    {dropdownIsOpen && (
                                         <DropdownContainer>
                                             <DropDown>
-                                                {ODDS_TYPES.map((item: any, index: number) => (
+                                                {ODDS_TYPES.map((item: OddsType, index: number) => (
                                                     <DropDownItem
                                                         key={index}
+                                                        isSelected={selectedOddsType === item}
                                                         onClick={() => {
                                                             setSelectedOddsType(item);
                                                             setDropdownIsOpen(false);
@@ -252,10 +255,10 @@ const DappHeader: React.FC = () => {
                                                 ))}
                                             </DropDown>
                                         </DropdownContainer>
-                                    </OutsideClickHandler>
-                                )}
-                            </SettingsContainer>
-                        </FlexDiv>
+                                    )}
+                                </SettingsContainer>
+                            </OutsideClickHandler>
+                        </MiddleRightContainer>
                     </MiddleContainer>
 
                     <RightContainer>

@@ -4,7 +4,7 @@ import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { NATIVE_TOKEN_ADDRES, ZERO_ADDRESS } from 'constants/network';
 import { Network } from 'enums/network';
 import { wagmiConfig } from 'pages/Root/wagmiConfig';
-import { bigNumberFormatter, coinFormatter, Coins } from 'thales-utils';
+import { coinFormatter, Coins } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
 import { SwapParams } from 'types/swap';
 import { Address, parseEther } from 'viem';
@@ -168,7 +168,7 @@ export const buildTxForSwap = async (
 export const sendTransaction = async (rawTransaction: any) => {
     let txHash = '';
     try {
-        rawTransaction.value = bigNumberFormatter(rawTransaction.value);
+        rawTransaction.value = BigInt(rawTransaction.value);
 
         const walletClient = await getWalletClient(wagmiConfig);
 

@@ -223,6 +223,11 @@ export enum MarketType {
     PLAYER_PROPS_SHOTS_ON_TARGET = 11238,
     PLAYER_PROPS_TOTAL_SHOTS = 11239,
 
+    // Tennis player props market types
+    PLAYER_PROPS_ACES = 11231,
+    PLAYER_PROPS_BREAK_POINTS_WON = 11232,
+    Player_PROPS_DOUBLE_FAULTS = 11240,
+
     // UFC market types
     WINNING_ROUND = 10151,
     GO_THE_DISTANCE = 10154,

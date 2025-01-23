@@ -902,7 +902,7 @@ const Ticket: React.FC<TicketProps> = ({
             setUseThalesCollateral(false);
             setSwappedThalesToReceive(0);
             setSwapQuote(0);
-        } else if (swapToThales && buyInAmount) {
+        } else if (swapToThales && Number(buyInAmount) > 0) {
             const getSwapQuote = async () => {
                 const quote = await getQuote(networkId, swapToThalesParams);
 
