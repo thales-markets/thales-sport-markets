@@ -77,6 +77,9 @@ const ValidationModal: React.FC<ValidationModalProps> = ({ onClose }) => {
                         {/* {getMaxMatchesAnimation()} */}
                     </>
                 )}
+                {ticketError.code === TicketErrorCode.SGP_DIFFERENT_GAME && (
+                    <ErrorMessage>{t('markets.parlay.validation.sgp-different-game')}</ErrorMessage>
+                )}
                 {ticketError.code === TicketErrorCode.OTHER_TYPES_WITH_PLAYER_PROPS && (
                     <ErrorMessage>{t('markets.parlay.validation.other-types-with-player-props')}</ErrorMessage>
                 )}

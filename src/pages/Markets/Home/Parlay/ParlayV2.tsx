@@ -1,12 +1,16 @@
 import ParlayEmptyIcon from 'assets/images/parlay-empty.svg?react';
+import Checkbox from 'components/fields/Checkbox';
 import MatchInfoV2 from 'components/MatchInfoV2';
 import MatchUnavailableInfo from 'components/MatchUnavailableInfo';
 import Toggle from 'components/Toggle';
+import Tooltip from 'components/Tooltip';
 import { SportFilter, StatusFilter } from 'enums/markets';
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import { isEqual } from 'lodash';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsAmmDataQuery from 'queries/markets/useSportsAmmDataQuery';
 import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
+import useSgpDataQuery from 'queries/sgp/useSgpDataQuery';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,18 +18,22 @@ import { getIsMobile } from 'redux/modules/app';
 import { getSportFilter } from 'redux/modules/market';
 import {
     getHasTicketError,
+    getIsSgp,
     getIsSystemBet,
     getTicket,
     removeAll,
     resetTicketError,
+    setIsSgp,
     setIsSystemBet,
     setMaxTicketSize,
 } from 'redux/modules/ticket';
 import styled, { useTheme } from 'styled-components';
-import { FlexDiv, FlexDivCentered, FlexDivColumn } from 'styles/common';
+import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivSpaceBetween } from 'styles/common';
 import { SportMarket, SportMarkets, TicketMarket, TicketPosition } from 'types/markets';
+import { SgpData, SgpParams, SportsbookData } from 'types/sgp';
 import { ThemeInterface } from 'types/ui';
 import { isSameMarket } from 'utils/marketsV2';
+import { getOpticOddsParamName } from 'utils/sgp';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import TicketV2 from './components/TicketV2';
 import ValidationModal from './components/ValidationModal';
@@ -47,6 +55,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
 
     const ticket = useSelector(getTicket);
     const isSystemBet = useSelector(getIsSystemBet);
+    const isSgp = useSelector(getIsSgp);
     const hasTicketError = useSelector(getHasTicketError);
     const sportFilter = useSelector(getSportFilter);
     const isLiveFilterSelected = sportFilter == SportFilter.Live;
@@ -71,6 +80,42 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     });
 
     const liveSportMarketsQuery = useLiveSportsMarketsQuery(isLiveFilterSelected, { networkId });
+
+    const sgpParams: SgpParams =
+        ticketMarkets.length > 1
+            ? {
+                  gameId: ticketMarkets[0].gameId,
+                  marketNames: ticketMarkets.map((market) => getOpticOddsParamName(market)),
+                  typeIds: ticketMarkets.map((market) => market.typeId),
+                  lines: ticketMarkets.map((market) => market.line),
+                  playerIds: ticketMarkets.map((market) => market.playerProps.playerId),
+              }
+            : { gameId: '', marketNames: [], typeIds: [], lines: [], playerIds: [] };
+
+    const sgpDataQuery = useSgpDataQuery(sgpParams, { networkId }, { enabled: ticketMarkets.length > 1 });
+
+    const sportsbookData: SportsbookData | undefined = useMemo(() => {
+        if (sgpDataQuery.isSuccess && sgpDataQuery.data && Object.keys(sgpDataQuery.data).length) {
+            const sgpData: SgpData = sgpDataQuery.data;
+            const sgpSportsbooksData = sgpData.data;
+            const sportsbooks = Object.keys(sgpSportsbooksData);
+
+            // Find min quote (max price with spread as it is in implied odds format) from multiple sportbooks
+            // If no prices from any sportsbook return first one
+            let maxImpliedOdds = 0;
+            let sportsbookWithMaxImpliedOdds = sportsbooks.length ? sportsbooks[0] : '';
+            sportsbooks.forEach((sportsbook) => {
+                const impliedOdds = sgpSportsbooksData[sportsbook].priceWithSpread || 0;
+                if (impliedOdds > maxImpliedOdds) {
+                    maxImpliedOdds = impliedOdds;
+                    sportsbookWithMaxImpliedOdds = sportsbook;
+                }
+            });
+
+            return sportsbookWithMaxImpliedOdds ? sgpSportsbooksData[sportsbookWithMaxImpliedOdds] : undefined;
+        }
+        return undefined;
+    }, [sgpDataQuery.isSuccess, sgpDataQuery.data]);
 
     useEffect(() => {
         if (sportsAmmDataQuery.isSuccess && sportsAmmDataQuery.data) {
@@ -239,25 +284,38 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                         </Title>
                     )}
                     {!ticket[0]?.live && (
-                        <ToggleContainer>
-                            <Toggle
-                                label={{
-                                    firstLabel: t('markets.parlay.regular'),
-                                    secondLabel: t('markets.parlay.system'),
-                                    fontSize: '14px',
-                                }}
-                                width="46px"
-                                height="24px"
-                                active={isSystemBet}
-                                dotSize="16px"
-                                dotBackground={theme.background.secondary}
-                                dotBorder={`3px solid ${theme.borderColor.quaternary}`}
-                                dotMargin="3px"
-                                handleClick={() => {
-                                    dispatch(setIsSystemBet(!isSystemBet));
-                                }}
-                            />
-                        </ToggleContainer>
+                        <BetTypeContainer>
+                            <Tooltip overlay={t('markets.parlay.sgp')}>
+                                <CheckboxContainer>
+                                    <Checkbox
+                                        checked={isSgp}
+                                        value={isSgp.toString()}
+                                        onChange={() => dispatch(setIsSgp(!isSgp))}
+                                        label={'SGP'}
+                                    />
+                                </CheckboxContainer>
+                            </Tooltip>
+                            <ToggleContainer>
+                                <Toggle
+                                    label={{
+                                        firstLabel: t('markets.parlay.regular'),
+                                        secondLabel: t('markets.parlay.system'),
+                                        fontSize: '14px',
+                                    }}
+                                    width="46px"
+                                    height="24px"
+                                    active={isSystemBet}
+                                    disabled={isSgp}
+                                    dotSize="16px"
+                                    dotBackground={theme.background.secondary}
+                                    dotBorder={`3px solid ${theme.borderColor.quaternary}`}
+                                    dotMargin="3px"
+                                    handleClick={() => {
+                                        dispatch(setIsSystemBet(!isSystemBet));
+                                    }}
+                                />
+                            </ToggleContainer>
+                        </BetTypeContainer>
                     )}
                     <ThalesBonusContainer>
                         <ThalesBonus>{t('markets.parlay.thales-bonus-info')}</ThalesBonus>
@@ -287,7 +345,6 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                                         <MatchUnavailableInfo
                                             market={market}
                                             showOddUpdates
-                                            setOddsChanged={setOddsChanged}
                                             acceptOdds={acceptOdds}
                                             setAcceptOdds={setAcceptOdds}
                                             applyPayoutMultiplier={true}
@@ -307,6 +364,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                         onSuccess={onSuccess}
                         submitButtonDisabled={!!unavailableMarkets.length}
                         setUseThalesCollateral={setUseThalesCollateral}
+                        sgpData={isSgp ? sportsbookData : undefined}
                     />
                 </>
             ) : (
@@ -518,8 +576,26 @@ const StyledParlayEmptyIcon = styled(ParlayEmptyIcon)`
 const ToggleContainer = styled(FlexDiv)`
     font-weight: 600;
     width: 100%;
-    margin-bottom: 5px;
     text-transform: uppercase;
+`;
+
+const BetTypeContainer = styled(FlexDivSpaceBetween)`
+    position: relative;
+    margin-bottom: 5px;
+`;
+
+const CheckboxContainer = styled(FlexDivSpaceBetween)`
+    position: absolute;
+    z-index: 1;
+    label {
+        align-self: center;
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: none;
+    }
+    @media (max-width: ${ScreenSizeBreakpoint.EXTRA_LARGE}px) {
+        position: unset;
+    }
 `;
 
 export default Parlay;

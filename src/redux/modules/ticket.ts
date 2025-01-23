@@ -42,6 +42,11 @@ const getDefaultIsSystemBet = (): boolean => {
     return lsIsSystemBet !== undefined ? (lsIsSystemBet as boolean) : false;
 };
 
+const getDefaultIsSgp = (): boolean => {
+    const lsIsSgp = localStore.get(LOCAL_STORAGE_KEYS.IS_SGP);
+    return lsIsSgp !== undefined ? (lsIsSgp as boolean) : false;
+};
+
 const getDefaultError = () => {
     return { code: TicketErrorCode.NO_ERROS, data: '' };
 };
@@ -53,6 +58,7 @@ const initialState: TicketSliceState = {
     liveBetSlippage: getDefaultLiveSlippage(),
     isFreeBetDisabledByUser: false,
     isSystemBet: getDefaultIsSystemBet(),
+    isSgp: getDefaultIsSgp(),
     error: getDefaultError(),
 };
 
@@ -62,12 +68,27 @@ const ticketSlice = createSlice({
     reducers: {
         updateTicket: (state, action: PayloadAction<TicketPosition>) => {
             const ticketCopy = [...state.ticket];
-            const existingPositionIndex = state.ticket.findIndex((el) => el.gameId === action.payload.gameId);
+            const existingGameIdIndex = state.ticket.findIndex((el) => el.gameId === action.payload.gameId);
 
             // UPDATE market position
             if (action.payload.live) {
                 state.ticket = [action.payload];
-            } else if (existingPositionIndex === -1) {
+            } else if (state.isSgp && state.ticket.length) {
+                const isDifferentGame = state.ticket[0].gameId !== action.payload.gameId;
+                if (isDifferentGame) {
+                    state.error.code = TicketErrorCode.SGP_DIFFERENT_GAME;
+                } else {
+                    const existingPositionIndex = state.ticket.findIndex((el) =>
+                        isSameMarket(el, action.payload, true)
+                    );
+                    if (existingPositionIndex === -1) {
+                        state.ticket.push(action.payload);
+                    } else {
+                        ticketCopy[existingPositionIndex] = action.payload;
+                        state.ticket = [...ticketCopy];
+                    }
+                }
+            } else if (existingGameIdIndex === -1) {
                 if (state.ticket.length < state.maxTicketSize) {
                     if (
                         state.ticket.length > 0 &&
@@ -83,7 +104,7 @@ const ticketSlice = createSlice({
                     state.error.data = state.maxTicketSize.toString();
                 }
             } else {
-                const existingPosition = state.ticket[existingPositionIndex];
+                const existingPosition = state.ticket[existingGameIdIndex];
                 const isExistingPositionPP = isPlayerPropsMarket(existingPosition.typeId);
                 const isNewPositionPP = isPlayerPropsMarket(action.payload.typeId);
 
@@ -121,7 +142,7 @@ const ticketSlice = createSlice({
                         }
                     }
                 } else {
-                    ticketCopy[existingPositionIndex] = action.payload;
+                    ticketCopy[existingGameIdIndex] = action.payload;
                     state.ticket = [...ticketCopy];
                 }
             }
@@ -139,7 +160,7 @@ const ticketSlice = createSlice({
                 payload = action.payload as TicketPosition;
             }
 
-            state.ticket = state.ticket.filter((market) => !isSameMarket(payload, market));
+            state.ticket = state.ticket.filter((market) => !isSameMarket(payload, market, state.isSgp));
 
             if (state.ticket.length === 0) {
                 state.payment.amountToBuy = getDefaultPayment().amountToBuy;
@@ -186,6 +207,10 @@ const ticketSlice = createSlice({
             state.isSystemBet = action.payload;
             localStore.set(LOCAL_STORAGE_KEYS.IS_SYSTEM_BET, action.payload);
         },
+        setIsSgp: (state, action: PayloadAction<boolean>) => {
+            state.isSgp = action.payload;
+            localStore.set(LOCAL_STORAGE_KEYS.IS_SGP, action.payload);
+        },
         resetTicketError: (state) => {
             state.error = getDefaultError();
         },
@@ -203,6 +228,7 @@ export const {
     setLiveBetSlippage,
     setIsFreeBetDisabledByUser,
     setIsSystemBet,
+    setIsSgp,
 } = ticketSlice.actions;
 
 const getTicketState = (state: RootState) => state[sliceName];
@@ -211,6 +237,7 @@ export const getTicketPayment = (state: RootState) => getTicketState(state).paym
 export const getLiveBetSlippage = (state: RootState) => getTicketState(state).liveBetSlippage;
 export const getIsFreeBetDisabledByUser = (state: RootState) => getTicketState(state).isFreeBetDisabledByUser;
 export const getIsSystemBet = (state: RootState) => getTicketState(state).isSystemBet;
+export const getIsSgp = (state: RootState) => getTicketState(state).isSgp;
 export const getTicketError = (state: RootState) => getTicketState(state).error;
 export const getHasTicketError = createSelector(getTicketError, (error) => error.code != TicketErrorCode.NO_ERROS);
 

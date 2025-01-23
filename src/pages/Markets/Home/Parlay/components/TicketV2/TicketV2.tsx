@@ -18,6 +18,7 @@ import {
     APPROVAL_BUFFER,
     BATCH_SIZE,
     COINGECKO_SWAP_TO_THALES_QUOTE_SLIPPAGE,
+    SGP_BET_MINIMUM_MARKETS,
     SWAP_APPROVAL_BUFFER,
     SYSTEM_BET_MAX_ALLOWED_SYSTEM_COMBINATIONS,
     SYSTEM_BET_MINIMUM_DENOMINATOR,
@@ -53,12 +54,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import {
     getIsFreeBetDisabledByUser,
+    getIsSgp,
     getIsSystemBet,
     getLiveBetSlippage,
     getTicketPayment,
     removeAll,
     resetTicketError,
     setIsFreeBetDisabledByUser,
+    setIsSgp,
     setIsSystemBet,
     setLiveBetSlippage,
     setPaymentAmountToBuy,
@@ -87,6 +90,7 @@ import {
 import { SportsAmmData, TicketMarket } from 'types/markets';
 import { OverdropMultiplier, OverdropUserData } from 'types/overdrop';
 import { RootState } from 'types/redux';
+import { SportsbookData } from 'types/sgp';
 import { OverdropLevel, ThemeInterface } from 'types/ui';
 import { ViemContract } from 'types/viem';
 import { executeBiconomyTransaction, getPaymasterData } from 'utils/biconomy';
@@ -185,6 +189,7 @@ type TicketProps = {
     onSuccess?: () => void;
     submitButtonDisabled?: boolean;
     setUseThalesCollateral: (useThales: boolean) => void;
+    sgpData?: SportsbookData;
 };
 
 const TicketErrorMessage = {
@@ -203,6 +208,7 @@ const Ticket: React.FC<TicketProps> = ({
     onSuccess,
     submitButtonDisabled,
     setUseThalesCollateral,
+    sgpData,
 }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
@@ -215,6 +221,7 @@ const Ticket: React.FC<TicketProps> = ({
 
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const isParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
+    const isSgp = useSelector(getIsSgp);
 
     const networkId = useChainId();
     const client = useClient();
@@ -311,6 +318,7 @@ const Ticket: React.FC<TicketProps> = ({
     useEffect(() => {
         if (markets[0]?.live) {
             dispatch(setIsSystemBet(false));
+            dispatch(setIsSgp(false));
         }
     }, [dispatch, isSystemBet, markets]);
 
@@ -590,6 +598,8 @@ const Ticket: React.FC<TicketProps> = ({
         isFreeBetDisabledByUser,
     ]);
 
+    const isValidSgpBet = useMemo(() => isSgp && markets.length >= SGP_BET_MINIMUM_MARKETS, [isSgp, markets.length]);
+
     const isValidSystemBet = useMemo(() => isSystemBet && markets.length >= SYSTEM_BET_MINIMUM_MARKETS, [
         isSystemBet,
         markets.length,
@@ -613,16 +623,27 @@ const Ticket: React.FC<TicketProps> = ({
         if (isSystemBet) {
             quote = systemData.systemBetQuote;
         } else {
-            quote = markets.reduce(
-                (partialQuote, market) =>
-                    partialQuote * (market.odd > 0 ? getAddedPayoutOdds(usedCollateralForBuy, market.odd) : market.odd),
-                1
-            );
+            quote = isSgp
+                ? Number(sgpData?.priceWithSpread)
+                : markets.reduce(
+                      (partialQuote, market) =>
+                          partialQuote *
+                          (market.odd > 0 ? getAddedPayoutOdds(usedCollateralForBuy, market.odd) : market.odd),
+                      1
+                  );
             const maxSupportedOdds = sportsAmmData?.maxSupportedOdds || 1;
-            quote = quote < maxSupportedOdds ? maxSupportedOdds : quote;
+            quote = quote && quote < maxSupportedOdds ? maxSupportedOdds : quote;
         }
         return quote;
-    }, [isSystemBet, markets, sportsAmmData?.maxSupportedOdds, systemData.systemBetQuote, usedCollateralForBuy]);
+    }, [
+        isSystemBet,
+        markets,
+        sportsAmmData?.maxSupportedOdds,
+        systemData.systemBetQuote,
+        usedCollateralForBuy,
+        isSgp,
+        sgpData?.priceWithSpread,
+    ]);
 
     const totalBonus = useMemo(() => {
         const bonus = {
@@ -685,6 +706,11 @@ const Ticket: React.FC<TicketProps> = ({
         sportsAmmData?.maxSupportedOdds,
         totalQuote,
     ]);
+
+    const isInvalidSgpTotalQuote = useMemo(
+        () => isSgp && isValidSgpBet && (totalQuote === 0 || totalQuote === sportsAmmData?.maxSupportedOdds),
+        [isSgp, isValidSgpBet, sportsAmmData?.maxSupportedOdds, totalQuote]
+    );
 
     const isInvalidSystemTotalQuote = useMemo(
         () => isSystemBet && isValidSystemBet && totalQuote === sportsAmmData?.maxSupportedOdds,
@@ -777,7 +803,8 @@ const Ticket: React.FC<TicketProps> = ({
             if (
                 buyInAmountForQuote <= 0 ||
                 noProofs ||
-                (isSystemBet && (!isValidSystemBet || isInvalidNumberOfCombination))
+                (isSystemBet && (!isValidSystemBet || isInvalidNumberOfCombination)) ||
+                (isSgp && isInvalidSgpTotalQuote)
             )
                 return;
 
@@ -791,10 +818,8 @@ const Ticket: React.FC<TicketProps> = ({
             });
 
             if (sportsAMMV2Contract) {
-                const tradeData = getTradeData(markets);
-
                 try {
-                    if (markets[0]?.live) {
+                    if (markets[0]?.live || isSgp) {
                         const [minimumReceivedForBuyInAmount] = await Promise.all([
                             collateralHasLp
                                 ? buyInAmountForQuote *
@@ -816,6 +841,8 @@ const Ticket: React.FC<TicketProps> = ({
                             buyInAmountInDefaultCollateralNumber: minimumReceivedForBuyInAmountInDefaultCollateral,
                         };
                     } else {
+                        const tradeData = getTradeData(markets);
+
                         const [parlayAmmQuote] = await Promise.all([
                             getSportsAMMV2QuoteMethod(
                                 swapToThales ? thalesCollateralAddress : collateralAddress,
@@ -883,6 +910,8 @@ const Ticket: React.FC<TicketProps> = ({
             systemBetDenominator,
             swappedThalesToReceive,
             buyInAmount,
+            isSgp,
+            isInvalidSgpTotalQuote,
         ]
     );
 
@@ -1711,12 +1740,17 @@ const Ticket: React.FC<TicketProps> = ({
         }
 
         // No payout
-        if (!Number(payout)) {
+        if (!payout) {
             setSubmitDisabled(true);
             return;
         }
 
         if (isSystemBet && !isValidSystemBet) {
+            setSubmitDisabled(true);
+            return;
+        }
+
+        if (isSgp && isInvalidSgpTotalQuote) {
             setSubmitDisabled(true);
             return;
         }
@@ -1744,6 +1778,8 @@ const Ticket: React.FC<TicketProps> = ({
         isSystemBet,
         isInvalidSystemTotalQuote,
         isValidSystemBet,
+        isSgp,
+        isInvalidSgpTotalQuote,
     ]);
 
     const getSubmitButton = () => {
@@ -1854,17 +1890,13 @@ const Ticket: React.FC<TicketProps> = ({
                 if (!mountedRef.current || !isSubscribed || !parlayAmmQuote) return null;
 
                 if (!parlayAmmQuote.error) {
-                    if (markets[0]?.live) {
-                        setPayout(
-                            (1 / totalQuote) *
-                                Number(
-                                    collateralHasLp
-                                        ? swapToThales
-                                            ? swappedThalesToReceive
-                                            : buyInAmount
-                                        : parlayAmmQuote.buyInAmountInDefaultCollateralNumber
-                                )
-                        );
+                    if (markets[0]?.live || isSgp) {
+                        const buyIn = collateralHasLp
+                            ? swapToThales
+                                ? swappedThalesToReceive
+                                : Number(buyInAmount)
+                            : parlayAmmQuote.buyInAmountInDefaultCollateralNumber;
+                        setPayout((1 / totalQuote) * buyIn);
                     } else {
                         const payout = coinFormatter(
                             parlayAmmQuote[1],
@@ -1932,33 +1964,48 @@ const Ticket: React.FC<TicketProps> = ({
         totalQuote,
         swappedThalesToReceive,
         swapToThales,
+        isSgp,
     ]);
 
     const inputRef = useRef<HTMLDivElement>(null);
     const inputRefVisible = !!inputRef?.current?.getBoundingClientRect().width;
 
     const getQuoteTooltipText = () => {
-        return selectedOddsType === OddsType.AMM
-            ? isSystemBet
-                ? t('markets.parlay.info.system-bet-min-quote', {
-                      value: formatMarketOdds(
-                          selectedOddsType,
-                          (sportsAmmData?.maxSupportedOdds || 0) / numberOfSystemBetCombination
-                      ),
-                  })
-                : t('markets.parlay.info.min-quote', {
-                      value: formatMarketOdds(selectedOddsType, sportsAmmData?.maxSupportedOdds),
-                  })
-            : isSystemBet
-            ? t('markets.parlay.info.system-bet-max-quote', {
-                  value: formatMarketOdds(
-                      selectedOddsType,
-                      (sportsAmmData?.maxSupportedOdds || 0) / numberOfSystemBetCombination
-                  ),
-              })
-            : t('markets.parlay.info.max-quote', {
-                  value: formatMarketOdds(selectedOddsType, sportsAmmData?.maxSupportedOdds),
-              });
+        let text = '';
+
+        if (isSgp && sgpData && sgpData.error) {
+            text = sgpData.missingEntries?.length
+                ? `${sgpData.error.replace('.', ':')} ${sgpData.missingEntries.map((entry) => entry.name).join()}`
+                : sgpData.error;
+        }
+
+        if (!text) {
+            if (selectedOddsType === OddsType.AMM) {
+                text = isSystemBet
+                    ? t('markets.parlay.info.system-bet-min-quote', {
+                          value: formatMarketOdds(
+                              selectedOddsType,
+                              (sportsAmmData?.maxSupportedOdds || 0) / numberOfSystemBetCombination
+                          ),
+                      })
+                    : t('markets.parlay.info.min-quote', {
+                          value: formatMarketOdds(selectedOddsType, sportsAmmData?.maxSupportedOdds),
+                      });
+            } else {
+                text = isSystemBet
+                    ? t('markets.parlay.info.system-bet-max-quote', {
+                          value: formatMarketOdds(
+                              selectedOddsType,
+                              (sportsAmmData?.maxSupportedOdds || 0) / numberOfSystemBetCombination
+                          ),
+                      })
+                    : t('markets.parlay.info.max-quote', {
+                          value: formatMarketOdds(selectedOddsType, sportsAmmData?.maxSupportedOdds),
+                      });
+            }
+        }
+
+        return text;
     };
 
     const hidePayout =
@@ -2162,7 +2209,7 @@ const Ticket: React.FC<TicketProps> = ({
                     ) : (
                         <RowContainer>
                             <SystemBetValidation>
-                                {t('markets.parlay.system-bet-min-markets-validation', {
+                                {t('markets.parlay.validation.system-bet-min-markets-validation', {
                                     minMarkets: SYSTEM_BET_MINIMUM_MARKETS,
                                 })}
                             </SystemBetValidation>
@@ -2170,6 +2217,15 @@ const Ticket: React.FC<TicketProps> = ({
                     )}
                     {isSystemBet && <HorizontalLine />}
                 </>
+            )}
+            {isSgp && !isValidSgpBet && (
+                <RowContainer>
+                    <SystemBetValidation>
+                        {t('markets.parlay.validation.sgp-bet-min-markets-validation', {
+                            minMarkets: SGP_BET_MINIMUM_MARKETS,
+                        })}
+                    </SystemBetValidation>
+                </RowContainer>
             )}
             <RowSummary columnDirection={true}>
                 {isSystemBet && (
@@ -2189,7 +2245,10 @@ const Ticket: React.FC<TicketProps> = ({
                         {isSystemBet ? t('markets.parlay.max-quote') : t('markets.parlay.total-quote')}:
                     </SummaryLabel>
                     <Tooltip
-                        open={inputRefVisible && (isInvalidRegularTotalQuote || isInvalidSystemTotalQuote)}
+                        open={
+                            inputRefVisible &&
+                            (isInvalidRegularTotalQuote || isInvalidSystemTotalQuote || isInvalidSgpTotalQuote)
+                        }
                         overlay={getQuoteTooltipText()}
                         isWarning
                     >

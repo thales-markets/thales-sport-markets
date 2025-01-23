@@ -18,6 +18,7 @@ const QUERY_KEYS = {
         lines: string
     ) => ['sportMarketsV2', statusFilter, networkId, includeProofs, gameIds, typeIds, playerIds, lines],
     LiveSportMarkets: (networkId: Network) => ['liveSportMarkets', networkId],
+    SgpData: (networkId: Network, gameId: string, params: string) => ['sgpData', networkId, gameId, params],
     SportMarketV2: (address: string, networkId: Network, isLive: boolean) => [
         'sportMarketV2',
         address,

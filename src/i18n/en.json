@@ -762,6 +762,7 @@
             "ticket-slip": "Ticket slip",
             "regular": "Regular",
             "system": "System",
+            "sgp": "Same game parlay",
             "thales-bonus-info": "Use THALES and get 2% bonus payout for each game.",
             "min-quote": "Min quote",
             "max-quote": "Max quote",
@@ -819,7 +820,10 @@
                 "no-funds": "Please ensure your wallet has enough funds",
                 "no-funds-multi-collateral": "Please ensure your wallet has enough funds (buy-in amount plus {{percentage}}%)",
                 "not-supported": "Not supported validation error: {{error}}",
-                "futures-combining-not-supported": "Combining futures on parlay is not supported"
+                "futures-combining-not-supported": "Combining futures on parlay is not supported",
+                "system-bet-min-markets-validation": "System bet requires minimum {{minMarkets}} games",
+                "sgp-bet-min-markets-validation": "SGP bet requires minimum {{minMarkets}} games",
+                "sgp-different-game": "It is not supported to combine different games in the same game parlay"
             },
             "share-ticket": {
                 "label": "Share for Twitter boost",
@@ -889,8 +893,7 @@
             "buy-in-per-combination": "Buy-in per combination",
             "min-payout": "Min payout",
             "max-payout": "Max payout",
-            "min-max-payout": "Min/max payout",
-            "system-bet-min-markets-validation": "System bet requires minimum {{minMarkets}} games"
+            "min-max-payout": "Min/max payout"
         },
         "zero-odds-tooltip": "Odds unavailable at the moment.",
         "low-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",

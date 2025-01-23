@@ -355,7 +355,7 @@ export const getSubtitleText = (market: SportMarket, position: Position) => {
     return undefined;
 };
 
-const getLineInfo = (typeId: number, position: Position, line: number) => {
+export const getLineInfo = (typeId: number, position: Position, line: number) => {
     if (isSpreadMarket(typeId))
         return position === Position.HOME
             ? `${Number(line) > 0 ? '+' : '-'}${Math.abs(line)}`
@@ -399,13 +399,13 @@ const areSameCombinedPositions = (market: SportMarket | TicketPosition, ticketPo
     return true;
 };
 
-export const isSameMarket = (market: SportMarket | TicketPosition, ticketPosition: TicketPosition) =>
+export const isSameMarket = (market: SportMarket | TicketPosition, ticketPosition: TicketPosition, isSgp = false) =>
     market.gameId === ticketPosition.gameId &&
     market.leagueId === ticketPosition.leagueId &&
     market.typeId === ticketPosition.typeId &&
     market.playerProps.playerId === ticketPosition.playerId &&
     market.line === ticketPosition.line &&
-    areSameCombinedPositions(market, ticketPosition);
+    (isSgp || areSameCombinedPositions(market, ticketPosition));
 
 export const getTradeData = (markets: TicketMarket[]): TradeData[] =>
     markets.map((market) => {

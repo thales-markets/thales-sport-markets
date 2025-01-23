@@ -29,6 +29,7 @@ export type TicketSliceState = {
     liveBetSlippage: number;
     isFreeBetDisabledByUser: boolean;
     isSystemBet: boolean;
+    isSgp: boolean;
     error: { code: TicketErrorCode; data: string };
 };
 
