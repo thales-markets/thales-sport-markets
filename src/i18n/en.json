@@ -353,9 +353,14 @@
             "weekly-rewards": "You get weekly USDC+THALES staking rewards! Claim them on <stakingPageLink>thales.io staking page</stakingPageLink>",
             "swap-to-thales-label": "Swap to THALES",
             "get-thales-label": "Get THALES",
-            "swap-success": "Successfully swapped to THALES",
+            "swap-success": "Successfully swapped, got {{amount}} {{token}}",
             "thales-price-label": "THALES PRICE",
             "thales-to-receive": "THALES TO RECEIVE"
+        },
+        "swap": {
+            "swap": "GET {{token}}",
+            "token-price": "{{token}} PRICE",
+            "token-to-receive": "{{token}} TO RECEIVE"
         },
         "wrapper-nav": {
             "my-tickets": "My tickets",

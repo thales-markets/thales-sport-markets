@@ -18,13 +18,16 @@ export const getSwapParams = (
     networkId: SupportedNetwork,
     walletAddress: Address,
     buyIn: bigint,
-    tokenAddress: Address
+    tokenAddress: Address,
+    dstTokenAddress?: Address
 ): SwapParams => {
     const src = tokenAddress === ZERO_ADDRESS ? NATIVE_TOKEN_ADDRES : tokenAddress;
 
     return {
         src,
-        dst: multipleCollateralContract[CRYPTO_CURRENCY_MAP.THALES as Coins].addresses[networkId] as Address, // THALES address
+        dst:
+            dstTokenAddress ??
+            (multipleCollateralContract[CRYPTO_CURRENCY_MAP.THALES as Coins].addresses[networkId] as Address), // THALES address
         amount: buyIn.toString(),
         from: walletAddress,
         slippage: 1, // 1%
@@ -121,6 +124,8 @@ export const buildTxForApproveTradeWithRouter = async (
                 value: parseEther(rawTransaction?.value),
             })
         );
+
+        console.log(rawTransaction);
 
         return {
             ...rawTransaction,

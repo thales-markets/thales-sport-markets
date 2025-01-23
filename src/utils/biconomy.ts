@@ -18,6 +18,31 @@ import liveTradingProcessorContract from './contracts/liveTradingProcessorContra
 
 export const ETH_PAYMASTER = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'; // used for paying gas in ETH by AA
 
+export const sendBiconomyTransaction = async (transaction: any): Promise<any | undefined> => {
+    if (biconomyConnector.wallet) {
+        try {
+            const { wait } = await biconomyConnector.wallet.sendTransaction(transaction, {
+                paymasterServiceData: {
+                    mode: PaymasterMode.SPONSORED,
+                },
+            });
+
+            const {
+                receipt: { transactionHash },
+                success,
+            } = await wait();
+
+            if (success === 'false') {
+                throw new Error('tx failed');
+            } else {
+                return transactionHash;
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+};
+
 export const executeBiconomyTransactionWithConfirmation = async (
     contract: ViemContract | undefined,
     methodName: string,

@@ -16,6 +16,7 @@ import biconomyConnector from 'utils/biconomyWallet';
 import { getCollaterals } from 'utils/collaterals';
 import { useChainId, useClient, useAccount } from 'wagmi';
 import WithdrawModal from '../WithdrawModal';
+import SwapModal from 'components/SwapModal/SwapModal';
 
 const Account: React.FC = () => {
     const { t } = useTranslation();
@@ -29,6 +30,7 @@ const Account: React.FC = () => {
 
     const [showFundModal, setShowFundModal] = useState<boolean>(false);
     const [showWithdrawModal, setShowWithdrawModal] = useState<boolean>(false);
+    const [showSwapModal, setShowSwapModal] = useState<boolean>(false);
 
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(
         walletAddress,
@@ -80,6 +82,17 @@ const Account: React.FC = () => {
                     Add More Funds
                 </Button>
                 <Button
+                    onClick={() => setShowSwapModal(true)}
+                    borderColor="none"
+                    height="48px"
+                    width="100%"
+                    lineHeight="16px"
+                    backgroundColor={Colors.WHITE}
+                >
+                    <Icon className="icon icon--exchange" />
+                    Swap Funds
+                </Button>
+                <Button
                     onClick={() => setShowWithdrawModal(true)}
                     borderColor="none"
                     height="48px"
@@ -93,6 +106,7 @@ const Account: React.FC = () => {
             </ButtonContainer>
             {showFundModal && <FundModal onClose={() => setShowFundModal(false)} />}
             {showWithdrawModal && <WithdrawModal onClose={() => setShowWithdrawModal(false)} />}
+            {showSwapModal && <SwapModal onClose={() => setShowSwapModal(false)} />}
         </div>
     );
 };
