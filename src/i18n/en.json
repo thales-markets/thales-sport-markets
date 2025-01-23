@@ -913,6 +913,7 @@
             "cancel-confirmation-message": "Successfully cancelled",
             "result-set-confirmation-message": "Result successfully set",
             "resolve-market-tooltip": "Resolve market",
+            "cancel-ticket-tooltip": "Cancel ticket",
             "validation": {
                 "unstaking-in-progress": "Unstaking in progress, you cannot stake",
                 "staking-paused": "Staking paused, please try later"

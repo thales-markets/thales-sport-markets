@@ -2,13 +2,16 @@ import ShareTicketModalV2 from 'components/ShareTicketModalV2';
 import { ShareTicketModalProps } from 'components/ShareTicketModalV2/ShareTicketModalV2';
 import Table from 'components/Table';
 import Tooltip from 'components/Tooltip';
+import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { USD_SIGN } from 'constants/currency';
+import { ContractType } from 'enums/contract';
 import { RiskManagementRole } from 'enums/riskManagement';
 import useWhitelistedAddressQuery from 'queries/markets/useWhitelistedAddressQuery';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { getOddsType } from 'redux/modules/ui';
 import { useTheme } from 'styled-components';
 import {
@@ -23,8 +26,11 @@ import { Rates } from 'types/collateral';
 import { SportMarket, Ticket } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { getDefaultCollateral } from 'utils/collaterals';
+import { getContractInstance } from 'utils/contract';
 import { formatTicketOdds, getTicketMarketOdd, tableSortByStatus } from 'utils/tickets';
-import { useAccount, useChainId, useClient } from 'wagmi';
+import { Client } from 'viem';
+import { waitForTransactionReceipt } from 'viem/actions';
+import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 import TicketMarkets from '../TicketMarkets';
 import {
     ExpandedRowWrapper,
@@ -37,6 +43,7 @@ import {
     QuoteLabel,
     QuoteText,
     QuoteWrapper,
+    SettingsIcon,
     StatusIcon,
     StatusWrapper,
     TableText,
@@ -71,6 +78,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
 
     const networkId = useChainId();
     const client = useClient();
+    const walletClient = useWalletClient();
     const { address, isConnected } = useAccount();
     const walletAddress = address || '';
 
@@ -125,6 +133,34 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
         };
         setShareTicketModalData(modalData);
         setShowShareTicketModal(true);
+    };
+
+    const handleTicketCancel = async (ticketAddress: string) => {
+        console.log(walletClient?.data);
+        const sportAmmContract = getContractInstance(ContractType.SPORTS_AMM_V2, {
+            client: walletClient?.data,
+            networkId,
+        });
+
+        if (sportAmmContract) {
+            const toastId = toast.loading(t('market.toast-message.transaction-pending'));
+            try {
+                const txHash = await sportAmmContract?.write?.cancelTicket([ticketAddress]);
+
+                const txReceipt = await waitForTransactionReceipt(client as Client, {
+                    hash: txHash,
+                });
+                if (txReceipt.status === 'success') {
+                    toast.update(
+                        toastId,
+                        getSuccessToastOptions(t('markets.resolve-modal.cancel-confirmation-message'))
+                    );
+                }
+            } catch (e) {
+                toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+                console.log(e);
+            }
+        }
     };
 
     const columns = [
@@ -269,12 +305,30 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                 }
 
                 if (cellProps.row.original.isFreeBet) {
-                    return (
+                    statusComponent = (
                         <>
                             <Tooltip overlay={t('profile.free-bet.claim-btn')}>
                                 <FreeBetIcon className={'icon icon--gift'} />
                             </Tooltip>
                             {statusComponent}
+                        </>
+                    );
+                }
+
+                if (isWitelistedForResolve && cellProps.row.original.isOpen) {
+                    statusComponent = (
+                        <>
+                            {statusComponent}
+                            <Tooltip overlay={t('markets.resolve-modal.cancel-ticket-tooltip')}>
+                                <SettingsIcon
+                                    className={`icon icon--wrong-full`}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        handleTicketCancel(cellProps.row.original.id);
+                                    }}
+                                />
+                            </Tooltip>
                         </>
                     );
                 }
@@ -294,7 +348,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                     color: theme.textColor.secondary,
                 }}
                 tableRowCellStyles={tableRowStyle}
-                columnsDeps={[networkId, exchangeRates, isWitelistedForResolve]}
+                columnsDeps={[networkId, exchangeRates, isWitelistedForResolve, walletClient]}
                 columns={columns as any}
                 initialState={{
                     sorting: [

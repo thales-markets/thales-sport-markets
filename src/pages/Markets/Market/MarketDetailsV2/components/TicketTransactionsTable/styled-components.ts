@@ -156,3 +156,9 @@ export const FreeBetIcon = styled.i`
     color: ${(props) => props.theme.textColor.quaternary};
     margin: 0 3px;
 `;
+
+export const SettingsIcon = styled.i`
+    color: ${(props) => props.theme.error.textColor.primary};
+    font-size: 16px;
+    margin-left: 5px;
+`;
