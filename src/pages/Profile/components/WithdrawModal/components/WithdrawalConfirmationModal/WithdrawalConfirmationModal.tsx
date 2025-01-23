@@ -83,11 +83,12 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
                         getCollateralIndex(networkId, token)
                     );
 
-                    txHash = await executeBiconomyTransactionWithConfirmation(
-                        collateralContractWithSigner,
-                        'transfer',
-                        [withdrawalAddress, parsedAmount]
-                    );
+                    txHash = await executeBiconomyTransactionWithConfirmation({
+                        collateralAddress: collateralContractWithSigner?.address,
+                        contract: collateralContractWithSigner,
+                        methodName: 'transfer',
+                        data: [withdrawalAddress, parsedAmount],
+                    });
                 }
 
                 const txReceipt = await waitForTransactionReceipt(client as Client, {

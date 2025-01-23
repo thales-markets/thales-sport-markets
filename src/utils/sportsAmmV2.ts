@@ -55,15 +55,21 @@ export const getSportsAMMV2Transaction: any = async (
                 finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER); // using Math.celi as gasLimit is accepting only integer.
             }
             return isAA
-                ? await executeBiconomyTransaction(networkId, freeBetHolderContract, 'tradeSystemBet', [
-                      tradeData,
-                      buyInAmount,
-                      expectedQuote,
-                      additionalSlippage,
-                      referralAddress,
-                      collateralAddress,
-                      systemBetDenominator,
-                  ])
+                ? await executeBiconomyTransaction({
+                      collateralAddress: collateralAddress as Address,
+                      networkId,
+                      contract: freeBetHolderContract,
+                      methodName: 'tradeSystemBet',
+                      data: [
+                          tradeData,
+                          buyInAmount,
+                          expectedQuote,
+                          additionalSlippage,
+                          referralAddress,
+                          collateralAddress,
+                          systemBetDenominator,
+                      ],
+                  })
                 : freeBetHolderContract.write.tradeSystemBet(
                       [
                           tradeData,
@@ -94,14 +100,13 @@ export const getSportsAMMV2Transaction: any = async (
         }
 
         return isAA
-            ? await executeBiconomyTransaction(networkId, freeBetHolderContract, 'trade', [
-                  tradeData,
-                  buyInAmount,
-                  expectedQuote,
-                  additionalSlippage,
-                  referralAddress,
-                  collateralAddress,
-              ])
+            ? await executeBiconomyTransaction({
+                  collateralAddress: collateralAddress as Address,
+                  networkId,
+                  contract: freeBetHolderContract,
+                  methodName: 'trade',
+                  data: [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress, collateralAddress],
+              })
             : freeBetHolderContract.write.trade(
                   [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress, collateralAddress],
                   { value: 0, gasLimit: finalEstimation }
@@ -133,14 +138,20 @@ export const getSportsAMMV2Transaction: any = async (
             }
 
             return isAA
-                ? await executeBiconomyTransaction(networkId, stakingThalesBettingProxyContract, 'tradeSystemBet', [
-                      tradeData,
-                      buyInAmount,
-                      expectedQuote,
-                      additionalSlippage,
-                      referralAddress,
-                      systemBetDenominator,
-                  ])
+                ? await executeBiconomyTransaction({
+                      collateralAddress: collateralAddress as Address,
+                      networkId,
+                      contract: stakingThalesBettingProxyContract,
+                      methodName: 'tradeSystemBet',
+                      data: [
+                          tradeData,
+                          buyInAmount,
+                          expectedQuote,
+                          additionalSlippage,
+                          referralAddress,
+                          systemBetDenominator,
+                      ],
+                  })
                 : stakingThalesBettingProxyContract.write.tradeSystemBet(
                       [
                           tradeData,
@@ -171,13 +182,13 @@ export const getSportsAMMV2Transaction: any = async (
         }
 
         return isAA
-            ? await executeBiconomyTransaction(networkId, stakingThalesBettingProxyContract, 'trade', [
-                  tradeData,
-                  buyInAmount,
-                  expectedQuote,
-                  additionalSlippage,
-                  referralAddress,
-              ])
+            ? await executeBiconomyTransaction({
+                  collateralAddress: collateralAddress as Address,
+                  networkId,
+                  contract: stakingThalesBettingProxyContract,
+                  methodName: 'trade',
+                  data: [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress],
+              })
             : stakingThalesBettingProxyContract.write.trade(
                   [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress],
                   { gasLimit: finalEstimation }
@@ -211,16 +222,22 @@ export const getSportsAMMV2Transaction: any = async (
         }
 
         return isAA
-            ? await executeBiconomyTransaction(networkId, sportsAMMV2Contract, 'tradeSystemBet', [
-                  tradeData,
-                  buyInAmount,
-                  expectedQuote,
-                  additionalSlippage,
-                  referralAddress,
-                  isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
-                  isEth,
-                  systemBetDenominator,
-              ])
+            ? await executeBiconomyTransaction({
+                  collateralAddress: collateralAddress as Address,
+                  networkId,
+                  contract: sportsAMMV2Contract,
+                  methodName: 'tradeSystemBet',
+                  data: [
+                      tradeData,
+                      buyInAmount,
+                      expectedQuote,
+                      additionalSlippage,
+                      referralAddress,
+                      isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
+                      isEth,
+                      systemBetDenominator,
+                  ],
+              })
             : sportsAMMV2Contract.write.tradeSystemBet(
                   [
                       tradeData,
@@ -261,11 +278,12 @@ export const getSportsAMMV2Transaction: any = async (
     }
 
     return isAA
-        ? await executeBiconomyTransaction(
+        ? await executeBiconomyTransaction({
+              collateralAddress: collateralAddress as Address,
               networkId,
-              sportsAMMV2Contract,
-              'trade',
-              [
+              contract: sportsAMMV2Contract,
+              methodName: 'trade',
+              data: [
                   tradeData,
                   buyInAmount,
                   expectedQuote,
@@ -274,10 +292,10 @@ export const getSportsAMMV2Transaction: any = async (
                   isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
                   isEth,
               ],
-              undefined,
+
               isEth,
-              buyInAmount
-          )
+              buyInAmountParam: buyInAmount,
+          })
         : sportsAMMV2Contract.write.trade(
               [
                   tradeData,

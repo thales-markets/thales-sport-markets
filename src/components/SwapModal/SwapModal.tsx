@@ -180,7 +180,13 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose }) => {
 
                 try {
                     const approveTxHash = isBiconomy
-                        ? await sendBiconomyTransaction(approveSwapRawTransaction)
+                        ? await sendBiconomyTransaction({
+                              transaction: approveSwapRawTransaction,
+                              collateralAddress: getCollateralAddress(
+                                  networkId,
+                                  getCollateralIndex(networkId, fromToken)
+                              ),
+                          })
                         : await sendTransaction(approveSwapRawTransaction);
 
                     if (approveTxHash) {
@@ -221,7 +227,13 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose }) => {
                     : 0;
                 const swapTxHash = swapRawTransaction
                     ? isBiconomy
-                        ? await sendBiconomyTransaction(swapRawTransaction)
+                        ? await sendBiconomyTransaction({
+                              transaction: swapRawTransaction,
+                              collateralAddress: getCollateralAddress(
+                                  networkId,
+                                  getCollateralIndex(networkId, fromToken)
+                              ),
+                          })
                         : await sendTransaction(swapRawTransaction)
                     : undefined;
 

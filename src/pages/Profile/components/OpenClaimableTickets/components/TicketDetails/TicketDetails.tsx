@@ -30,7 +30,7 @@ import { getContractInstance } from 'utils/contract';
 import { getIsMultiCollateralSupported } from 'utils/network';
 import { refetchAfterClaim, refetchBalances } from 'utils/queryConnector';
 import { formatTicketOdds, getTicketMarketOdd } from 'utils/tickets';
-import { Client } from 'viem';
+import { Address, Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 import TicketMarketDetails from '../TicketMarketDetails';
@@ -141,18 +141,20 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
                         isClaimCollateralDefaultCollateral ||
                         (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral) ||
                         ticket.isFreeBet
-                            ? await executeBiconomyTransaction(
+                            ? await executeBiconomyTransaction({
+                                  collateralAddress: getCollateralAddress(networkId, 0),
                                   networkId,
-                                  sportsAMMV2ContractWithSigner,
-                                  'exerciseTicket',
-                                  [ticketAddress]
-                              )
-                            : await executeBiconomyTransaction(
+                                  contract: sportsAMMV2ContractWithSigner,
+                                  methodName: 'exerciseTicket',
+                                  data: [ticketAddress],
+                              })
+                            : await executeBiconomyTransaction({
+                                  collateralAddress: claimCollateralAddress as Address,
                                   networkId,
-                                  sportsAMMV2ContractWithSigner,
-                                  'exerciseTicketOffRamp',
-                                  [ticketAddress, claimCollateralAddress, isEth]
-                              );
+                                  contract: sportsAMMV2ContractWithSigner,
+                                  methodName: 'exerciseTicketOffRamp',
+                                  data: [ticketAddress, claimCollateralAddress, isEth],
+                              });
                 } else {
                     hash =
                         isClaimCollateralDefaultCollateral ||

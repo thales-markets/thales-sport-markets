@@ -1152,10 +1152,13 @@ const Ticket: React.FC<TicketProps> = ({
             const addressToApprove = sportsAMMV2Contract.addresses[networkId];
             let txHash;
             if (isBiconomy) {
-                txHash = await executeBiconomyTransaction(networkId, collateralContractWithSigner, 'approve', [
-                    addressToApprove,
-                    approveAmount,
-                ]);
+                txHash = await executeBiconomyTransaction({
+                    collateralAddress: collateralContractWithSigner?.address as Address,
+                    networkId,
+                    contract: collateralContractWithSigner,
+                    methodName: 'approve',
+                    data: [addressToApprove, approveAmount],
+                });
             } else {
                 txHash = await collateralContractWithSigner?.write.approve([addressToApprove, approveAmount]);
                 setOpenApprovalModal(false);
@@ -1294,10 +1297,13 @@ const Ticket: React.FC<TicketProps> = ({
 
                     let txHash;
                     if (isBiconomy) {
-                        txHash = await executeBiconomyTransaction(networkId, collateralContractWithSigner, 'approve', [
-                            addressToApprove,
-                            approveAmount,
-                        ]);
+                        txHash = await executeBiconomyTransaction({
+                            collateralAddress: collateralContractWithSigner?.address as Address,
+                            networkId,
+                            contract: collateralContractWithSigner,
+                            methodName: 'approve',
+                            data: [addressToApprove, approveAmount],
+                        });
                     } else {
                         txHash = await collateralContractWithSigner?.write.approve([addressToApprove, approveAmount]);
                     }

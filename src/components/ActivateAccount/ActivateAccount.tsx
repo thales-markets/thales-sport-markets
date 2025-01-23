@@ -9,9 +9,9 @@ import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import biconomyConnector from 'utils/biconomyWallet';
 import { useSelector } from 'react-redux';
 import { getIsBiconomy } from 'redux/modules/wallet';
-import { getCollaterals } from 'utils/collaterals';
+import { getCollateralAddress, getCollateralIndex, getCollaterals } from 'utils/collaterals';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { localStore } from 'thales-utils';
+import { Coins, localStore } from 'thales-utils';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { waitForTransactionReceipt } from 'viem/actions';
@@ -50,10 +50,16 @@ const ActivateAccount: React.FC<any> = () => {
         let total = 0;
         try {
             if (exchangeRates && multipleCollateralBalances.data) {
+                let max = { value: 0, coin: '' };
                 getCollaterals(networkId).forEach((token) => {
+                    const balance =
+                        multipleCollateralBalances.data[token] * (exchangeRates[token] ? exchangeRates[token] : 1);
+                    if (balance > max.value) {
+                        max = { value: balance, coin: token };
+                    }
                     total += multipleCollateralBalances.data[token] * (exchangeRates[token] ? exchangeRates[token] : 1);
                 });
-                return total;
+                return { total, max };
             }
             return undefined;
         } catch (e) {
@@ -63,10 +69,10 @@ const ActivateAccount: React.FC<any> = () => {
 
     useEffect(() => {
         if (isConnected && isBiconomy) {
-            if (totalBalanceValue === undefined) {
+            if (totalBalanceValue?.total === undefined) {
                 return;
             }
-            if (totalBalanceValue && totalBalanceValue > 3) {
+            if (totalBalanceValue && totalBalanceValue?.total > 3) {
                 setShowFundModal(false);
 
                 const storedMapString: any = localStore.get(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId]);
@@ -106,7 +112,13 @@ const ActivateAccount: React.FC<any> = () => {
                     <ActivateButton
                         onClick={async () => {
                             const toastId = toast.loading(t('market.toast-message.transaction-pending'));
-                            const txHash = await activateOvertimeAccount(networkId);
+                            const txHash = await activateOvertimeAccount({
+                                networkId,
+                                collateralAddress: getCollateralAddress(
+                                    networkId,
+                                    getCollateralIndex(networkId, totalBalanceValue?.max.coin as Coins)
+                                ),
+                            });
                             if (txHash) {
                                 const txReceipt = await waitForTransactionReceipt(client as Client, {
                                     hash: txHash,
