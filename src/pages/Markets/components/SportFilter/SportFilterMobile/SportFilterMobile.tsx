@@ -19,6 +19,10 @@ type SportFilterMobileProps = {
     tagsList: Tags;
     setAvailableTags: Dispatch<SetStateAction<Tags>>;
     playerPropsCountPerTag: Record<number, number>;
+    openMarketsCountPerSport: Record<SportFilter, number>;
+    liveMarketsCountPerSport: Record<SportFilter, number>;
+    boostedMarketsCount: number;
+    showActive: boolean;
 };
 
 const LeftArrow: React.FC = () => {
@@ -52,6 +56,10 @@ const SportFilterMobile: React.FC<SportFilterMobileProps> = ({
     tagsList,
     setAvailableTags,
     playerPropsCountPerTag,
+    showActive,
+    openMarketsCountPerSport,
+    liveMarketsCountPerSport,
+    boostedMarketsCount,
 }) => {
     const dispatch = useDispatch();
     const sportFilter = useSelector(getSportFilter);
@@ -64,76 +72,97 @@ const SportFilterMobile: React.FC<SportFilterMobileProps> = ({
         <Container>
             <NoScrollbarContainer>
                 <ScrollMenu LeftArrow={LeftArrow} RightArrow={RightArrow}>
-                    {Object.values(SportFilter).map((filterItem: any, index) => {
-                        return (
-                            <LabelContainer
-                                key={index}
-                                itemID={`${filterItem}`}
-                                className={`${filterItem == sportFilter ? 'selected' : ''}`}
-                                onClick={() => {
-                                    if (filterItem !== sportFilter) {
-                                        dispatch(setSportFilter(filterItem));
-                                        setSportParam(filterItem);
-                                        dispatch(
-                                            setTagFilter(
+                    {Object.values(SportFilter)
+                        .filter(
+                            (filterItem: SportFilter) =>
+                                (showActive &&
+                                    filterItem !== SportFilter.Live &&
+                                    openMarketsCountPerSport[filterItem] > 0) ||
+                                (showActive && filterItem === SportFilter.Boosted && boostedMarketsCount > 0) ||
+                                (showActive &&
+                                    filterItem === SportFilter.Live &&
+                                    liveMarketsCountPerSport[filterItem] > 0) ||
+                                !showActive ||
+                                filterItem === SportFilter.Favourites
+                        )
+                        .map((filterItem: any, index) => {
+                            return (
+                                <LabelContainer
+                                    key={index}
+                                    itemID={`${filterItem}`}
+                                    className={`${filterItem == sportFilter ? 'selected' : ''}`}
+                                    onClick={() => {
+                                        if (filterItem !== sportFilter) {
+                                            dispatch(setSportFilter(filterItem));
+                                            setSportParam(filterItem);
+                                            dispatch(
+                                                setTagFilter(
+                                                    filterItem === SportFilter.PlayerProps
+                                                        ? [
+                                                              LeagueMap[
+                                                                  getDefaultPlayerPropsLeague(playerPropsCountPerTag)
+                                                              ],
+                                                          ]
+                                                        : []
+                                                )
+                                            );
+                                            setTagParam(
                                                 filterItem === SportFilter.PlayerProps
-                                                    ? [LeagueMap[getDefaultPlayerPropsLeague(playerPropsCountPerTag)]]
-                                                    : []
-                                            )
-                                        );
-                                        setTagParam(
-                                            filterItem === SportFilter.PlayerProps
-                                                ? LeagueMap[getDefaultPlayerPropsLeague(playerPropsCountPerTag)].label
-                                                : ''
-                                        );
-                                        if (filterItem === SportFilter.All || filterItem === SportFilter.PlayerProps) {
-                                            setAvailableTags(tagsList);
-                                        } else {
-                                            const tagsPerSport = getSportLeagueIds(filterItem as Sport);
-                                            if (tagsPerSport) {
-                                                const filteredTags = tagsList.filter((tag: TagInfo) =>
-                                                    tagsPerSport.includes(tag.id)
-                                                );
-                                                setAvailableTags(filteredTags);
+                                                    ? LeagueMap[getDefaultPlayerPropsLeague(playerPropsCountPerTag)]
+                                                          .label
+                                                    : ''
+                                            );
+                                            if (
+                                                filterItem === SportFilter.All ||
+                                                filterItem === SportFilter.PlayerProps
+                                            ) {
+                                                setAvailableTags(tagsList);
                                             } else {
-                                                setAvailableTags([]);
+                                                const tagsPerSport = getSportLeagueIds(filterItem as Sport);
+                                                if (tagsPerSport) {
+                                                    const filteredTags = tagsList.filter((tag: TagInfo) =>
+                                                        tagsPerSport.includes(tag.id)
+                                                    );
+                                                    setAvailableTags(filteredTags);
+                                                } else {
+                                                    setAvailableTags([]);
+                                                }
                                             }
+                                        } else {
+                                            dispatch(setSportFilter(SportFilter.All));
+                                            setSportParam(SportFilter.All);
+                                            dispatch(setTagFilter([]));
+                                            setTagParam('');
+                                            setAvailableTags(tagsList);
                                         }
-                                    } else {
-                                        dispatch(setSportFilter(SportFilter.All));
-                                        setSportParam(SportFilter.All);
-                                        dispatch(setTagFilter([]));
-                                        setTagParam('');
-                                        setAvailableTags(tagsList);
-                                    }
-                                }}
-                            >
-                                {filterItem == SportFilter.Live ? (
-                                    <Lottie
-                                        autoplay={true}
-                                        animationData={liveAnimationData}
-                                        loop={true}
-                                        style={liveBlinkStyleMobile}
-                                    />
-                                ) : filterItem == SportFilter.Boosted ? (
-                                    <FlexDivColumnCentered>
-                                        <SportIcon
-                                            color={theme.overdrop.textColor.primary}
-                                            className={`icon icon--fire`}
+                                    }}
+                                >
+                                    {filterItem == SportFilter.Live ? (
+                                        <Lottie
+                                            autoplay={true}
+                                            animationData={liveAnimationData}
+                                            loop={true}
+                                            style={liveBlinkStyleMobile}
                                         />
-                                    </FlexDivColumnCentered>
-                                ) : (
-                                    <FlexDivColumnCentered>
-                                        <SportIcon
-                                            className={`icon icon--${
-                                                filterItem == SportFilter.All ? 'logo' : filterItem.toLowerCase()
-                                            }`}
-                                        />
-                                    </FlexDivColumnCentered>
-                                )}
-                            </LabelContainer>
-                        );
-                    })}
+                                    ) : filterItem == SportFilter.Boosted ? (
+                                        <FlexDivColumnCentered>
+                                            <SportIcon
+                                                color={theme.overdrop.textColor.primary}
+                                                className={`icon icon--fire`}
+                                            />
+                                        </FlexDivColumnCentered>
+                                    ) : (
+                                        <FlexDivColumnCentered>
+                                            <SportIcon
+                                                className={`icon icon--${
+                                                    filterItem == SportFilter.All ? 'logo' : filterItem.toLowerCase()
+                                                }`}
+                                            />
+                                        </FlexDivColumnCentered>
+                                    )}
+                                </LabelContainer>
+                            );
+                        })}
                 </ScrollMenu>
             </NoScrollbarContainer>
         </Container>
