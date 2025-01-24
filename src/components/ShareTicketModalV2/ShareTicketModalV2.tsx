@@ -394,7 +394,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                                 setConvertToStableValue(!convertToStableValue);
                             }}
                             label={{
-                                firstLabel: t('markets.parlay.share-ticket.convert-to-usdc'),
+                                firstLabel: t('markets.parlay.share-ticket.display-as-usdc'),
                             }}
                         />
                     </SwitchWrapper>

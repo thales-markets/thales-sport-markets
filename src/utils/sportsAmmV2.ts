@@ -76,7 +76,7 @@ export const getSportsAMMV2Transaction: any = async (
                         collateralAddress,
                         systemBetDenominator,
                     ],
-                    { value: 0, gasLimit: finalEstimation }
+                    { value: 0, gas: finalEstimation }
                 );
             }
 
@@ -95,7 +95,7 @@ export const getSportsAMMV2Transaction: any = async (
 
             return freeBetHolderContract.write.trade(
                 [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress, collateralAddress],
-                { value: 0, gasLimit: finalEstimation }
+                { value: 0, gas: finalEstimation }
             );
         }
 
@@ -126,7 +126,7 @@ export const getSportsAMMV2Transaction: any = async (
                 return stakingThalesBettingProxyContract.write.tradeSystemBet(
                     [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress, systemBetDenominator],
                     systemBetDenominator,
-                    { gasLimit: finalEstimation }
+                    { gas: finalEstimation }
                 );
             }
 
@@ -145,7 +145,7 @@ export const getSportsAMMV2Transaction: any = async (
 
             return stakingThalesBettingProxyContract.write.trade(
                 [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress],
-                { gasLimit: finalEstimation }
+                { gas: finalEstimation }
             );
         }
 
@@ -186,7 +186,7 @@ export const getSportsAMMV2Transaction: any = async (
                     isEth,
                     systemBetDenominator,
                 ],
-                { value: isEth ? buyInAmount : 0, gasLimit: finalEstimation }
+                { value: isEth ? buyInAmount : 0, gas: finalEstimation }
             );
         }
 
@@ -224,7 +224,7 @@ export const getSportsAMMV2Transaction: any = async (
                 isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
                 isEth,
             ],
-            { value: isEth ? buyInAmount : 0, gasLimit: finalEstimation }
+            { value: isEth ? buyInAmount : 0, gas: finalEstimation }
         );
     }
 };
