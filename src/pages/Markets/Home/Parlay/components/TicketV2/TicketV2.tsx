@@ -407,17 +407,13 @@ const Ticket: React.FC<TicketProps> = ({
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(
         walletAddress,
         { networkId, client },
-        {
-            enabled: isConnected,
-        }
+        { enabled: isConnected }
     );
 
     const freeBetCollateralBalancesQuery = useFreeBetCollateralBalanceQuery(
         walletAddress,
         { networkId, client },
-        {
-            enabled: isConnected,
-        }
+        { enabled: isConnected }
     );
 
     const freeBetCollateralBalances =
@@ -487,9 +483,7 @@ const Ticket: React.FC<TicketProps> = ({
         [liveTradingProcessorDataQuery.isSuccess, liveTradingProcessorDataQuery.data]
     );
 
-    const userDataQuery = useUserDataQuery(walletAddress, {
-        enabled: isConnected,
-    });
+    const userDataQuery = useUserDataQuery(walletAddress, { enabled: isConnected });
 
     const userData: OverdropUserData | undefined = useMemo(() => {
         if (userDataQuery?.isSuccess && userDataQuery?.data) {
@@ -725,13 +719,7 @@ const Ticket: React.FC<TicketProps> = ({
         [isSystemBet, numberOfSystemBetCombination, sportsAmmData?.maxAllowedSystemCombinations]
     );
 
-    const ticketLiquidityQuery = useTicketLiquidityQuery(
-        markets,
-        { networkId, client },
-        {
-            enabled: !noProofs,
-        }
-    );
+    const ticketLiquidityQuery = useTicketLiquidityQuery(markets, { networkId, client }, { enabled: !noProofs });
 
     const ticketLiquidity: number | undefined = useMemo(() => {
         if (ticketLiquidityQuery.isSuccess && ticketLiquidityQuery.data !== undefined) {
