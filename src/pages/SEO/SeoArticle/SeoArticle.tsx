@@ -78,7 +78,8 @@ const SeoArticle: React.FC<SeoArticleProps> = (props) => {
                             <SPAAnchor href={seoArticle.article.ctaSection.ctaButtonLink}>
                                 <Button
                                     additionalStyles={{ minWidth: '200px' }}
-                                    backgroundColor={theme.christmasTheme.button.background.primary}
+                                    borderColor={theme.button.background.quinary}
+                                    backgroundColor={theme.button.background.quinary}
                                     textColor={theme.button.textColor.primary}
                                 >
                                     {seoArticle.article.ctaSection.ctaButtonLabel}

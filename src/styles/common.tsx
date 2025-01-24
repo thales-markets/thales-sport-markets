@@ -51,6 +51,7 @@ export const BoldContent = styled.span`
 export const Colors = {
     GRAY: '#303656',
     GRAY_LIGHT: '#5F6180',
+    GRAY_LIGHT_OPACITY: '#5F618080',
     GRAY_DARK: '#1A1C2B',
     GRAY_TRANSPARENT: '#D9D9D91A',
 
@@ -96,7 +97,4 @@ export const Colors = {
     SMOKEY_TOPAZ: '#7C3810',
     OVERDROP_GREEN: '#82EB9F',
     GOLD: '#E9B008',
-
-    // Christmas colors
-    CARIBBEAN_GREEN: '#00BE9C',
 };

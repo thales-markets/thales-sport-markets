@@ -11,10 +11,9 @@ type SearchProps = {
     handleChange: (event: any) => void;
     width?: number;
     customPlaceholder?: string;
-    customColor?: string;
 };
 
-const Search: React.FC<SearchProps> = ({ text, handleChange, width, customPlaceholder, customColor }) => {
+const Search: React.FC<SearchProps> = ({ text, handleChange, width, customPlaceholder }) => {
     const { t } = useTranslation();
 
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -28,10 +27,9 @@ const Search: React.FC<SearchProps> = ({ text, handleChange, width, customPlaceh
                 onChange={(event) => handleChange(event.target.value)}
                 width={width}
                 autoFocus={isMobile}
-                customColor={customColor}
             />
             <IconWrapper>
-                <SearchIcon customColor={customColor} />
+                <SearchIcon />
             </IconWrapper>
             {text !== '' && <ClearIcon className="icon icon--close" onClick={() => handleChange('')} />}
         </Wrapper>
@@ -48,10 +46,10 @@ const Wrapper = styled(FlexDivStart)<{ marginBottom?: number }>`
     }
 `;
 
-const Input = styled.input<{ width?: number; customColor?: string }>`
+const Input = styled.input<{ width?: number }>`
     background: ${(props) => props.theme.background.primary};
     border-radius: 5px;
-    border: 1px solid ${(props) => (props?.customColor ? props.customColor : props.theme.borderColor.primary)};
+    border: 1px solid ${(props) => props.theme.borderColor.primary};
     color: ${(props) => props.theme.textColor.primary};
     width: ${(props) => props.width || 250}px;
     height: 24px;
@@ -62,7 +60,7 @@ const Input = styled.input<{ width?: number; customColor?: string }>`
     line-height: 12px;
     outline: none;
     &::placeholder {
-        color: ${(props) => (props?.customColor ? props.customColor : props.theme.textColor.secondary)};
+        color: ${(props) => props.theme.textColor.secondary};
     }
     &:focus {
         border: 1px solid ${(props) => props.theme.textColor.quaternary} !important;
@@ -92,7 +90,7 @@ const IconWrapper = styled.div`
     }
 `;
 
-const SearchIcon = styled.i<{ customColor?: string }>`
+const SearchIcon = styled.i`
     font-size: 14px;
     position: absolute;
     top: 0;
@@ -100,7 +98,7 @@ const SearchIcon = styled.i<{ customColor?: string }>`
     &:before {
         font-family: OvertimeIconsV2 !important;
         content: '\\00E5';
-        color: ${(props) => (props?.customColor ? props.customColor : props.theme.textColor.secondary)};
+        color: ${(props) => props.theme.textColor.secondary};
     }
     @media (max-width: 950px) {
         font-size: 20px;

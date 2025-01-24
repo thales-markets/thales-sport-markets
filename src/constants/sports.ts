@@ -889,7 +889,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
     [League.NON_TITLE_BOXING]: {
         sport: Sport.FIGHTING,
         id: League.NON_TITLE_BOXING,
-        label: 'Boxing',
+        label: 'Boxing Non Title',
         logoClass: 'icon-homepage league--boxing',
         scoringType: ScoringType.ROUNDS,
         matchResolveType: MatchResolveType.EMPTY,
@@ -1618,6 +1618,19 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         priority: 1810,
         hidden: false,
     },
+    [League.ATP_FUTURES]: {
+        sport: Sport.FUTURES,
+        id: League.ATP_FUTURES,
+        label: 'ATP Futures',
+        logo: `/logos/Tennis/atp.webp`,
+        logoClass: 'icon-homepage league--atp',
+        scoringType: ScoringType.EMPTY,
+        matchResolveType: MatchResolveType.EMPTY,
+        periodType: PeriodType.EMPTY,
+        isDrawAvailable: false,
+        priority: 1830,
+        hidden: false,
+    },
     [League.EUROLEAGUE_FUTURES]: {
         sport: Sport.FUTURES,
         id: League.EUROLEAGUE_FUTURES,
@@ -1732,7 +1745,11 @@ export const PLAYER_PROPS_MARKETS_PER_SPORT_MAP: Record<Sport, MarketType[]> = {
     [Sport.BASEBALL]: [],
     [Sport.HOCKEY]: [MarketType.PLAYER_PROPS_POINTS, MarketType.PLAYER_PROPS_SHOTS, MarketType.PLAYER_PROPS_ASSISTS],
     [Sport.FIGHTING]: [],
-    [Sport.TENNIS]: [],
+    [Sport.TENNIS]: [
+        MarketType.PLAYER_PROPS_ACES,
+        MarketType.PLAYER_PROPS_BREAK_POINTS_WON,
+        MarketType.Player_PROPS_DOUBLE_FAULTS,
+    ],
     [Sport.TABLE_TENNIS]: [],
     [Sport.ESPORTS]: [],
     [Sport.RUGBY]: [],
@@ -1765,12 +1782,16 @@ export const PLAYER_PROPS_SPECIAL_SPORTS = [Sport.FOOTBALL];
 
 // lower index => higher priority
 export const LEAGUES_SORT_PRIORITY = [
+    League.UEFA_CL,
+    League.UEFA_EL,
     League.EPL,
     League.LA_LIGA,
     League.SERIE_A,
     League.BUNDESLIGA,
     League.LIGUE_ONE,
     League.NBA,
+    League.EUROLEAGUE,
+    League.EUROCUP,
     League.NFL,
     League.NHL,
     League.MLB,

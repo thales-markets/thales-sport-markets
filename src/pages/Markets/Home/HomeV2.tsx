@@ -205,6 +205,7 @@ const Home: React.FC = () => {
 
             activeParam != '' ? setShowActive(activeParam === 'true') : setActiveParam(showActive.toString());
         },
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
         []
     );
@@ -368,26 +369,13 @@ const Home: React.FC = () => {
             return true;
         });
 
-        const sortedFilteredMarkets = orderBy(
-            filteredMarkets,
-            ['maturityDate'],
-            [
-                statusFilter === StatusFilter.ONGOING_MARKETS ||
-                statusFilter === StatusFilter.RESOLVED_MARKETS ||
-                statusFilter === StatusFilter.CANCELLED_MARKETS ||
-                statusFilter === StatusFilter.PAUSED_MARKETS
-                    ? 'desc'
-                    : 'asc',
-            ]
-        );
-
         if (selectedMarket && !filteredMarkets.map((market) => market.gameId).includes(selectedMarket.gameId)) {
             dispatch(setSelectedMarket(undefined));
         }
 
         setAvailableMarketTypes(Array.from(marketTypes));
 
-        return sortedFilteredMarkets;
+        return filteredMarkets;
     }, [
         sportMarketsQueryNew.isSuccess,
         sportMarketsQueryNew.data,
@@ -595,7 +583,7 @@ const Home: React.FC = () => {
     }, [location, resetFilters]);
 
     const getShowActiveCheckbox = () => (
-        <CheckboxContainer isMobile={isMobile} textColor={theme.christmasTheme.button.textColor.secondary}>
+        <CheckboxContainer isMobile={isMobile}>
             <Checkbox
                 checked={showActive}
                 value={showActive.toString()}
@@ -625,7 +613,6 @@ const Home: React.FC = () => {
                     }
                 }}
                 label={t(`market.filter-label.show-active`)}
-                textColor={theme.christmasTheme.button.textColor.secondary}
             />
         </CheckboxContainer>
     );
@@ -709,7 +696,7 @@ const Home: React.FC = () => {
                                     : openMarketsCountPerSport[filterItem]
                             }
                             showActive={showActive}
-                            tags={availableTags}
+                            tags={tagsList}
                             setTagParam={setTagParam}
                             openMarketsCountPerTag={openMarketsCountPerTag}
                             liveMarketsCountPerTag={liveMarketsCountPerTag}
@@ -771,7 +758,6 @@ const Home: React.FC = () => {
                             setSearchParam(value);
                         }}
                         width={263}
-                        customColor={theme.christmasTheme.borderColor.primary}
                     />
                     {getShowActiveCheckbox()}
                     <Scroll height="calc(100vh - 430px)">
@@ -790,6 +776,10 @@ const Home: React.FC = () => {
                                 playerPropsCountPerTag={playerPropsCountPerTag}
                                 setAvailableTags={setAvailableTags}
                                 tagsList={tagsList}
+                                openMarketsCountPerSport={openMarketsCountPerSport}
+                                boostedMarketsCount={boostedMarketsCount}
+                                liveMarketsCountPerSport={liveMarketsCountPerSport}
+                                showActive={showActive}
                             />
                             {!marketsLoading &&
                                 finalMarkets.length > 0 &&
@@ -798,6 +788,7 @@ const Home: React.FC = () => {
                                         allMarkets={finalMarkets}
                                         availableMarketTypes={availableMarketTypes}
                                         market={selectedMarketData}
+                                        isMainPageView
                                     />
                                 )}
                             <FilterTagsMobile />
@@ -836,6 +827,7 @@ const Home: React.FC = () => {
                                                 allMarkets={finalMarkets}
                                                 availableMarketTypes={availableMarketTypes}
                                                 market={selectedMarketData}
+                                                isMainPageView
                                             />
                                         )}
                                     <FlexDivRow>
@@ -1061,17 +1053,12 @@ const additionalApplyFiltersButtonStyle: CSSProperties = {
     position: 'fixed',
 };
 
-const CheckboxContainer = styled.div<{ isMobile: boolean; textColor?: string }>`
+const CheckboxContainer = styled.div<{ isMobile: boolean }>`
     margin-left: ${(props) => (props.isMobile ? '34px' : '5px')};
     margin-top: 15px;
     margin-bottom: 10px;
     label {
-        color: ${(props) =>
-            props.isMobile
-                ? props.theme.christmasTheme.button.textColor.secondary
-                : props?.textColor
-                ? props.textColor
-                : props.theme.textColor.quinary};
+        color: ${(props) => (props.isMobile ? props.theme.textColor.primary : props.theme.textColor.quinary)};
         font-size: ${(props) => (props.isMobile ? '14px' : '12px')};
         line-height: ${(props) => (props.isMobile ? '19px' : '13px')};
         font-weight: 600;
@@ -1081,34 +1068,21 @@ const CheckboxContainer = styled.div<{ isMobile: boolean; textColor?: string }>`
         padding-left: ${(props) => (props.isMobile ? '38px' : '28px')};
         input:checked ~ .checkmark {
             border: 2px solid
-                ${(props) =>
-                    props.isMobile
-                        ? props.theme.background.septenary
-                        : props?.textColor
-                        ? props.textColor
-                        : props.theme.borderColor.quaternary};
+                ${(props) => (props.isMobile ? props.theme.background.septenary : props.theme.borderColor.quaternary)};
         }
     }
     .checkmark {
         height: ${(props) => (props.isMobile ? '18px' : '15px')};
         width: ${(props) => (props.isMobile ? '18px' : '15px')};
         border: 2px solid
-            ${(props) =>
-                props.isMobile
-                    ? props.theme.christmasTheme.button.textColor.secondary
-                    : props?.textColor
-                    ? props.textColor
-                    : props.theme.borderColor.primary};
+            ${(props) => (props.isMobile ? props.theme.background.septenary : props.theme.borderColor.primary)};
         :after {
             left: ${(props) => (props.isMobile ? '4px' : '3px')};
             width: ${(props) => (props.isMobile ? '4px' : '3px')};
             height: ${(props) => (props.isMobile ? '9px' : '8px')};
             top: ${(props) => (props.isMobile ? '0px' : '-1px')};
             border: 2px solid
-                ${(props) =>
-                    props.isMobile
-                        ? props.theme.christmasTheme.button.textColor.secondary
-                        : props.theme.borderColor.quaternary};
+                ${(props) => (props.isMobile ? props.theme.background.septenary : props.theme.borderColor.quaternary)};
             border-width: 0 2px 2px 0;
         }
     }

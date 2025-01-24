@@ -104,10 +104,6 @@ export const FooterContainer = styled(FlexDivColumn)`
     position: relative;
 `;
 
-export const NetworkWrapper = styled(FlexDivRowCentered)`
-    margin: 0 auto;
-`;
-
 export const Network = styled(FlexDivRow)`
     align-items: center;
     justify-content: center;
@@ -152,4 +148,8 @@ export const ButtonWrapper = styled(FlexDiv)`
     align-items: center;
     justify-content: center;
     margin: 20px 0px;
+`;
+
+export const NetworkWrapper = styled(FlexDivRowCentered)`
+    margin: 0 auto;
 `;

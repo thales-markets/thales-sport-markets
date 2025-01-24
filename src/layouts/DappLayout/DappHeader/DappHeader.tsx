@@ -20,10 +20,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { getIsMobile } from 'redux/modules/app';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
-import { getOverdropUIState, getStopPulsing, setOddsType, setStopPulsing } from 'redux/modules/ui';
+import { getOddsType, getOverdropUIState, getStopPulsing, setOddsType, setStopPulsing } from 'redux/modules/ui';
 import { getIsBiconomy, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
-import { FlexDiv, FlexDivCentered, FlexDivEnd } from 'styles/common';
+import { FlexDivCentered, FlexDivEnd } from 'styles/common';
 import { RootState } from 'types/redux';
 import { OverdropLevel, ThemeInterface } from 'types/ui';
 import biconomyConnector from 'utils/biconomyWallet';
@@ -50,6 +50,7 @@ import {
     MenuIcon,
     MenuIconContainer,
     MiddleContainer,
+    MiddleRightContainer,
     MobileButtonWrapper,
     NotificationCount,
     OverdropButtonContainer,
@@ -104,6 +105,7 @@ const DappHeader: React.FC = () => {
     const stopPulsing = useSelector(getStopPulsing);
     const isMobile = useSelector(getIsMobile);
     const overdropUIState = useSelector(getOverdropUIState);
+    const selectedOddsType = useSelector(getOddsType);
 
     const [levelItem, setLevelItem] = useState<OverdropLevel>(OVERDROP_LEVELS[0]);
     const [currentPulsingCount, setCurrentPulsingCount] = useState<number>(0);
@@ -186,8 +188,8 @@ const DappHeader: React.FC = () => {
         <SPAAnchor style={{ width: isMobile ? '100%' : 'fit-content' }} href={buildHref(ROUTES.Wizard)}>
             <Button
                 backgroundColor={theme.background.primary}
-                textColor={theme.christmasTheme.button.textColor.secondary}
-                borderColor={theme.christmasTheme.button.borderColor.primary}
+                textColor={theme.button.textColor.quaternary}
+                borderColor={theme.button.borderColor.secondary}
                 width="100%"
                 fontWeight="400"
                 additionalStyles={{
@@ -215,7 +217,7 @@ const DappHeader: React.FC = () => {
                     <MiddleContainer>
                         <div>{!isConnected ? getGetStartedButton() : isBiconomy ? <TopUp /> : <></>}</div>
                         {isMarketsPage && <TimeFilters />}
-                        <FlexDiv>
+                        <MiddleRightContainer>
                             <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
                                 {levelItem.level > 0 ? (
                                     <OverdropButtonContainer>
@@ -227,20 +229,21 @@ const DappHeader: React.FC = () => {
                                 )}
                             </SPAAnchor>
                             {isConnected && <ProfileItem />}
-                            <SettingsContainer
-                                onClick={() => {
-                                    setDropdownIsOpen(!dropdownIsOpen);
-                                }}
-                            >
-                                <HeaderIcon className="icon icon--settings" />
-                                <HeaderLabel>{t('common.settings')}</HeaderLabel>
-                                {dropdownIsOpen && (
-                                    <OutsideClickHandler onOutsideClick={() => setDropdownIsOpen(false)}>
+                            <OutsideClickHandler onOutsideClick={() => setDropdownIsOpen(false)}>
+                                <SettingsContainer
+                                    onClick={() => {
+                                        setDropdownIsOpen(!dropdownIsOpen);
+                                    }}
+                                >
+                                    <HeaderIcon className="icon icon--settings" />
+                                    <HeaderLabel>{t('common.settings')}</HeaderLabel>
+                                    {dropdownIsOpen && (
                                         <DropdownContainer>
                                             <DropDown>
-                                                {ODDS_TYPES.map((item: any, index: number) => (
+                                                {ODDS_TYPES.map((item: OddsType, index: number) => (
                                                     <DropDownItem
                                                         key={index}
+                                                        isSelected={selectedOddsType === item}
                                                         onClick={() => {
                                                             setSelectedOddsType(item);
                                                             setDropdownIsOpen(false);
@@ -253,18 +256,18 @@ const DappHeader: React.FC = () => {
                                                 ))}
                                             </DropDown>
                                         </DropdownContainer>
-                                    </OutsideClickHandler>
-                                )}
-                            </SettingsContainer>
-                        </FlexDiv>
+                                    )}
+                                </SettingsContainer>
+                            </OutsideClickHandler>
+                        </MiddleRightContainer>
                     </MiddleContainer>
 
                     <RightContainer>
                         {!isConnected && (
                             <Button
                                 backgroundColor={'transparent'}
-                                textColor={theme.christmasTheme.button.textColor.secondary}
-                                borderColor={theme.christmasTheme.button.borderColor.primary}
+                                textColor={theme.button.borderColor.quaternary}
+                                borderColor={theme.button.borderColor.quaternary}
                                 width="150px"
                                 fontWeight="400"
                                 additionalStyles={{
@@ -287,7 +290,7 @@ const DappHeader: React.FC = () => {
                         )}
                         {!isConnected && (
                             <Button
-                                backgroundColor={theme.christmasTheme.button.background.primary}
+                                backgroundColor={theme.button.background.tertiary}
                                 textColor={theme.button.textColor.primary}
                                 borderColor={theme.button.borderColor.quinary}
                                 fontWeight="400"
@@ -314,7 +317,7 @@ const DappHeader: React.FC = () => {
                         )}
                         <WalletInfo />
                         <MenuIconContainer>
-                            <MenuIcon className="icon icon--burger-icon" onClick={() => setNavMenuVisibility(true)} />
+                            <MenuIcon ref={menuImageRef} onClick={() => setNavMenuVisibility(true)} />
                             {blockedGamesCount > 0 && (
                                 <BlockedGamesNotificationCount>
                                     <Count>{blockedGamesCount}</Count>
@@ -368,7 +371,7 @@ const DappHeader: React.FC = () => {
                             </ReactModal>
                         </SearchIconContainer>
                         <MenuIconContainer>
-                            <MenuIcon className="icon icon--burger-icon" onClick={() => setNavMenuVisibility(true)} />
+                            <MenuIcon onClick={() => setNavMenuVisibility(true)} />
                             {claimablePositionCount && (
                                 <NotificationCount>
                                     <Count>{claimablePositionCount}</Count>
