@@ -1,6 +1,7 @@
 import termsOfUse from 'assets/docs/thales-terms-of-use.pdf';
 import ThalesLogo from 'assets/images/thales-logo.svg?react';
 import { LINKS } from 'constants/links';
+import ROUTES from 'constants/routes';
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import styled from 'styled-components';
@@ -45,6 +46,12 @@ const DappFooter: React.FC = () => {
                         <LinkContent>
                             <DocsIcon />
                             <LinkText>{t('footer.docs')}</LinkText>
+                        </LinkContent>
+                    </Link>
+                    <Link target="_blank" rel="noreferrer" href={ROUTES.SEO.Home}>
+                        <LinkContent>
+                            <ResourcesIcon />
+                            <LinkText>{t('footer.resources')}</LinkText>
                         </LinkContent>
                     </Link>
                     <Link target="_blank" rel="noreferrer" href={LINKS.Footer.Tutorial}>
@@ -231,6 +238,14 @@ const RedditIcon = styled.i`
     &:before {
         font-family: OvertimeIconsV2 !important;
         content: '\\0114';
+    }
+`;
+
+const ResourcesIcon = styled.i`
+    color: ${(props) => props.theme.textColor.secondary};
+    &:before {
+        font-family: OvertimeIconsV2 !important;
+        content: '\\0122';
     }
 `;
 
