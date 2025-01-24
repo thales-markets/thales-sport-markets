@@ -2,6 +2,7 @@ import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { TicketErrorCode } from 'enums/markets';
 import { Network } from 'enums/network';
+import { WritableDraft } from 'immer/dist/internal';
 import { localStore } from 'thales-utils';
 import { ParlayPayment, SerializableSportMarket, TicketPosition } from 'types/markets';
 import { RootState, TicketSliceState } from 'types/redux';
@@ -60,6 +61,13 @@ const initialState: TicketSliceState = {
     isSystemBet: getDefaultIsSystemBet(),
     isSgp: getDefaultIsSgp(),
     error: getDefaultError(),
+};
+
+const _removeAll = (state: WritableDraft<TicketSliceState>) => {
+    state.ticket = [];
+    state.payment.amountToBuy = getDefaultPayment().amountToBuy;
+    state.error = getDefaultError();
+    localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.ticket);
 };
 
 const ticketSlice = createSlice({
@@ -169,10 +177,7 @@ const ticketSlice = createSlice({
             localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.ticket);
         },
         removeAll: (state) => {
-            state.ticket = [];
-            state.payment.amountToBuy = getDefaultPayment().amountToBuy;
-            state.error = getDefaultError();
-            localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.ticket);
+            _removeAll(state);
         },
         setLiveBetSlippage: (state, action: PayloadAction<number>) => {
             state.liveBetSlippage = action.payload;
@@ -208,6 +213,7 @@ const ticketSlice = createSlice({
             localStore.set(LOCAL_STORAGE_KEYS.IS_SYSTEM_BET, action.payload);
         },
         setIsSgp: (state, action: PayloadAction<boolean>) => {
+            _removeAll(state);
             state.isSgp = action.payload;
             localStore.set(LOCAL_STORAGE_KEYS.IS_SGP, action.payload);
         },
