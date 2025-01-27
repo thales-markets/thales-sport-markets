@@ -647,31 +647,42 @@ const Ticket: React.FC<TicketProps> = ({
     ]);
 
     const previousTotalQuote = useRef<number>(totalQuote);
-    const previousMarketsLength = useRef<number>(markets.length);
+    const previousMarkets = useRef<TicketMarket[]>(markets);
     const previousUsedCollateral = useRef<Coins>(usedCollateralForBuy);
 
     // Check if SGP total quote is changed
     useEffect(() => {
-        const isQuoteChangedDueThalesBonus =
-            (isThalesCurrency(usedCollateralForBuy) || isThalesCurrency(previousUsedCollateral.current)) &&
-            isThalesCurrency(usedCollateralForBuy) !== isThalesCurrency(previousUsedCollateral.current);
-        if (
-            isSgp &&
-            totalQuote &&
-            previousTotalQuote.current &&
-            totalQuote !== previousTotalQuote.current &&
-            markets.length === previousMarketsLength.current &&
-            !isQuoteChangedDueThalesBonus
-        ) {
-            setOddsChanged && setOddsChanged(true);
-            setIsTotalQuoteIncreased(totalQuote < previousTotalQuote.current); // smaller implied odds => higher quote
-        } else if (isSgp && totalQuote === 0) {
-            acceptOddChanges && acceptOddChanges(false);
+        if (isSgp) {
+            const isMarketsUpdated =
+                markets.length !== previousMarkets.current.length ||
+                markets.some(
+                    (market, i) =>
+                        market.typeId !== previousMarkets.current[i].typeId ||
+                        market.position !== previousMarkets.current[i].position ||
+                        market.playerProps.playerId !== previousMarkets.current[i].playerProps.playerId ||
+                        market.line !== previousMarkets.current[i].line
+                );
+            const isQuoteChangedDueThalesBonus =
+                (isThalesCurrency(usedCollateralForBuy) || isThalesCurrency(previousUsedCollateral.current)) &&
+                isThalesCurrency(usedCollateralForBuy) !== isThalesCurrency(previousUsedCollateral.current);
+
+            if (
+                totalQuote &&
+                previousTotalQuote.current &&
+                totalQuote !== previousTotalQuote.current &&
+                !isMarketsUpdated &&
+                !isQuoteChangedDueThalesBonus
+            ) {
+                setOddsChanged && setOddsChanged(true);
+                setIsTotalQuoteIncreased(totalQuote < previousTotalQuote.current); // smaller implied odds => higher quote
+            } else if (totalQuote === 0) {
+                acceptOddChanges && acceptOddChanges(false);
+            }
         }
         previousTotalQuote.current = totalQuote;
-        previousMarketsLength.current = markets.length;
+        previousMarkets.current = markets;
         previousUsedCollateral.current = usedCollateralForBuy;
-    }, [isSgp, totalQuote, markets.length, usedCollateralForBuy, setOddsChanged, acceptOddChanges]);
+    }, [isSgp, totalQuote, markets, usedCollateralForBuy, setOddsChanged, acceptOddChanges]);
 
     const totalBonus = useMemo(() => {
         const bonus = {
