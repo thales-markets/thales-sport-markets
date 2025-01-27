@@ -73,7 +73,7 @@ export const getSportsAMMV2Transaction: any = async (
                         collateralAddress,
                         systemBetDenominator,
                     ],
-                    { value: 0, gas: finalEstimation }
+                    { value: BigInt(0), gas: finalEstimation }
                 );
             }
 
@@ -92,7 +92,7 @@ export const getSportsAMMV2Transaction: any = async (
 
             return freeBetHolderContract.write.trade(
                 [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress, collateralAddress],
-                { value: 0, gas: finalEstimation }
+                { value: BigInt(0), gas: finalEstimation }
             );
         }
 
@@ -162,7 +162,7 @@ export const getSportsAMMV2Transaction: any = async (
             const estimation = await estimateGas(client, {
                 to: sportsAMMV2Contract.address as Address,
                 data: encodedData,
-                value: isEth ? buyInAmount : undefined,
+                value: isEth ? buyInAmount : BigInt(0),
             });
 
             finalEstimation = BigInt(Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER));
@@ -178,7 +178,7 @@ export const getSportsAMMV2Transaction: any = async (
                     isEth,
                     systemBetDenominator,
                 ],
-                { value: isEth ? buyInAmount : 0, gas: finalEstimation }
+                { value: isEth ? buyInAmount : BigInt(0), gas: finalEstimation }
             );
         }
 
@@ -199,7 +199,7 @@ export const getSportsAMMV2Transaction: any = async (
         const estimation = await estimateGas(client, {
             to: sportsAMMV2Contract.address as Address,
             data: encodedData,
-            value: isEth ? buyInAmount : undefined,
+            value: isEth ? buyInAmount : BigInt(0),
         });
 
         finalEstimation = BigInt(Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER));
@@ -214,7 +214,7 @@ export const getSportsAMMV2Transaction: any = async (
                 isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
                 isEth,
             ],
-            { value: isEth ? buyInAmount : 0, gas: finalEstimation }
+            { value: isEth ? buyInAmount : BigInt(0), gas: finalEstimation }
         );
     }
 };
