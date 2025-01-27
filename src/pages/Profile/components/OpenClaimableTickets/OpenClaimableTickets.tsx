@@ -177,7 +177,7 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({
                         functionName: 'aggregate3',
                         args: [calls],
                     });
-                    const gasEstimationWithBuffer = Math.ceil(Number(gasEstimation) * GAS_ESTIMATION_BUFFER);
+                    const gasEstimationWithBuffer = BigInt(Math.ceil(Number(gasEstimation) * GAS_ESTIMATION_BUFFER));
 
                     const txHash = await multiCallContractWithSigner.write.aggregate3([calls], {
                         gas: gasEstimationWithBuffer,
