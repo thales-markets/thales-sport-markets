@@ -65,7 +65,9 @@
                 "facebook": "Facebook",
                 "github": "GitHub",
                 "discord": "Discord",
-                "apple": "Apple"
+                "apple": "Apple",
+                "email": "Email",
+                "phone": "Phone"
             }
         },
         "voucher": {
