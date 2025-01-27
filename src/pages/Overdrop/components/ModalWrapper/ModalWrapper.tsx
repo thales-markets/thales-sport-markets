@@ -11,10 +11,8 @@ import {
     setOverdropState,
     setWelcomeModalVisibility,
 } from 'redux/modules/ui';
-import { getIsBiconomy } from 'redux/modules/wallet';
 import { OverdropUIState, OverdropUserData } from 'types/overdrop';
 import { RootState } from 'types/redux';
-import biconomyConnector from 'utils/biconomyWallet';
 import { getCurrentLevelByPoints, getMultiplierValueFromQuery } from 'utils/overdrop';
 import { useAccount } from 'wagmi';
 import DailyModal from '../DailyModal';
@@ -24,10 +22,7 @@ import WelcomeModal from '../WelcomeModal';
 const ModalWrapper: React.FC = () => {
     const dispatch = useDispatch();
 
-    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
-
-    const { address, isConnected } = useAccount();
-    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+    const { address: walletAddress, isConnected } = useAccount();
 
     const overdropUIState = useSelector((state: RootState) => getOverdropUIState(state));
     const overdropWelcomeModalFlag = useSelector((state: RootState) => getOverdropWelcomeModalFlag(state));
@@ -44,11 +39,11 @@ const ModalWrapper: React.FC = () => {
     const [showLevelUpModal, setShowLevelUpModal] = useState<boolean>(false);
     const [showDailyMultiplierModal, setShowDailyMultiplierModal] = useState<boolean>(false);
 
-    const userDataQuery = useUserDataQuery(walletAddress, {
+    const userDataQuery = useUserDataQuery(walletAddress as string, {
         enabled: isConnected,
     });
 
-    const userMultipliersQuery = useUserMultipliersQuery(walletAddress, {
+    const userMultipliersQuery = useUserMultipliersQuery(walletAddress as string, {
         enabled: isConnected,
     });
 
@@ -75,20 +70,22 @@ const ModalWrapper: React.FC = () => {
 
     // Handle wallet address change
     useEffect(() => {
-        const overdropStateItem = overdropUIState.find(
-            (item) => item.walletAddress?.toLowerCase() == walletAddress.toLowerCase()
-        );
+        if (walletAddress) {
+            const overdropStateItem = overdropUIState.find(
+                (item) => item.walletAddress?.toLowerCase() == walletAddress.toLowerCase()
+            );
 
-        if (isConnected) {
-            if (!overdropStateItem) {
-                setOverdropStateByWallet({
-                    walletAddress: walletAddress,
-                    dailyMultiplier: 0,
-                    currentLevel: 0,
-                });
-                dispatch(setDefaultOverdropState({ walletAddress }));
-            } else {
-                setOverdropStateByWallet(overdropStateItem);
+            if (isConnected) {
+                if (!overdropStateItem) {
+                    setOverdropStateByWallet({
+                        walletAddress: walletAddress,
+                        dailyMultiplier: 0,
+                        currentLevel: 0,
+                    });
+                    dispatch(setDefaultOverdropState({ walletAddress }));
+                } else {
+                    setOverdropStateByWallet(overdropStateItem);
+                }
             }
         }
 

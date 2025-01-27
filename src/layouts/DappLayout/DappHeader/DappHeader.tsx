@@ -172,15 +172,17 @@ const DappHeader: React.FC = () => {
     }, 1000);
 
     useEffect(() => {
-        const overdropStateItem = overdropUIState.find(
-            (item) => item.walletAddress?.toLowerCase() == walletAddress.toLowerCase()
-        );
+        if (address) {
+            const overdropStateItem = overdropUIState.find(
+                (item) => item.walletAddress?.toLowerCase() == address.toLowerCase()
+            );
 
-        const currentLevelItem = overdropStateItem
-            ? OVERDROP_LEVELS.find((item) => item.level == overdropStateItem?.currentLevel)
-            : OVERDROP_LEVELS[0];
-        if (currentLevelItem) setLevelItem(currentLevelItem);
-    }, [dispatch, walletAddress, overdropUIState]);
+            const currentLevelItem = overdropStateItem
+                ? OVERDROP_LEVELS.find((item) => item.level == overdropStateItem?.currentLevel)
+                : OVERDROP_LEVELS[0];
+            if (currentLevelItem) setLevelItem(currentLevelItem);
+        }
+    }, [dispatch, address, overdropUIState]);
 
     const menuImageRef = useRef<HTMLImageElement>(null);
 
