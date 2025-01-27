@@ -57,7 +57,8 @@ export const SUPPORTED_NETWORKS_PARAMS: Record<number, NetworkParams> = {
     },
 };
 
-export const GAS_ESTIMATION_BUFFER = 1.2; // Adding 20% on gas estimation as a buffer. Used only on Optimisme
+export const GAS_ESTIMATION_BUFFER = 1.1; // Adding 10% on gas estimation as a buffer
+export const GAS_ESTIMATION_BUFFER_CLAIM_ALL = 1.25; // Adding 25% on gas estimation as a buffer
 
 const INFURA_PROJECT_ID = import.meta.env.VITE_APP_INFURA_PROJECT_ID;
 

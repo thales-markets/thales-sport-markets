@@ -39,6 +39,7 @@ type PositionsProps = {
     alignHeader?: boolean;
     oddsTitlesHidden?: boolean;
     floatingOddsTitles?: boolean;
+    width?: string;
     onAccordionClick?: () => void;
 };
 
@@ -55,6 +56,7 @@ const Positions: React.FC<PositionsProps> = ({
     alignHeader,
     oddsTitlesHidden,
     floatingOddsTitles,
+    width,
 }) => {
     const { t } = useTranslation();
 
@@ -93,6 +95,7 @@ const Positions: React.FC<PositionsProps> = ({
             }}
             isExpanded={isExpanded}
             isMainPageView={isMainPageView}
+            width={width}
         >
             <Header
                 isMainPageView={isMainPageView}
@@ -141,6 +144,7 @@ const Positions: React.FC<PositionsProps> = ({
                         });
                         const sortedOddsInfo = orderBy(oddsInfo, ['odd', 'position'], ['desc', 'asc']);
                         const isFutures = isFuturesMarket(market.typeId);
+                        const isCorrectScore = market.typeId === MarketType.CORRECT_SCORE;
 
                         const oddsForDisplay = isFutures ? sortedOddsInfo : oddsInfo;
 
@@ -164,13 +168,14 @@ const Positions: React.FC<PositionsProps> = ({
                                     isPlayerProps={!!isPlayerPropsMarket}
                                 >
                                     {filteredOdds.map((_, index) => {
-                                        const position = isFutures
-                                            ? oddsInfo.findIndex(
-                                                  (oddInfo) =>
-                                                      market.positionNames &&
-                                                      oddInfo.positionName === filteredOdds[index].positionName
-                                              )
-                                            : index;
+                                        const position =
+                                            isFutures || isCorrectScore
+                                                ? oddsInfo.findIndex(
+                                                      (oddInfo) =>
+                                                          market.positionNames &&
+                                                          oddInfo.positionName === filteredOdds[index].positionName
+                                                  )
+                                                : index;
 
                                         return (
                                             <PositionDetailsV2
@@ -191,7 +196,7 @@ const Positions: React.FC<PositionsProps> = ({
             )}
         </Container>
     ) : isGameLive ? (
-        <Container isExpanded={true} noOdds={true}>
+        <Container isExpanded={true} noOdds={true} width={width}>
             <Message>
                 {t(`markets.market-card.live-trading-paused`)}
                 {liveMarketErrorMessage && <Tooltip overlay={liveMarketErrorMessage} marginLeft={5} top={0} />}

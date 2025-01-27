@@ -3,7 +3,7 @@ import SimpleLoader from 'components/SimpleLoader';
 import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
-import { GAS_ESTIMATION_BUFFER } from 'constants/network';
+import { GAS_ESTIMATION_BUFFER_CLAIM_ALL } from 'constants/network';
 import { ContractType } from 'enums/contract';
 import { LoaderContainer } from 'pages/Markets/Home/HomeV2';
 import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
@@ -177,12 +177,12 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({
                         functionName: 'aggregate3',
                         args: [calls],
                     });
-                    // const gasEstimation = await multiCallContractWithSigner.estimateGas.aggregate3(calls);
-
-                    const gasEstimationWithBuffer = Math.ceil(Number(gasEstimation) * GAS_ESTIMATION_BUFFER);
+                    const gasEstimationWithBuffer = BigInt(
+                        Math.ceil(Number(gasEstimation) * GAS_ESTIMATION_BUFFER_CLAIM_ALL)
+                    );
 
                     const txHash = await multiCallContractWithSigner.write.aggregate3([calls], {
-                        gasLimit: gasEstimationWithBuffer,
+                        gas: gasEstimationWithBuffer,
                     });
 
                     const txReceipt = await waitForTransactionReceipt(client as Client, {

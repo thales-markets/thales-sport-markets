@@ -42,6 +42,7 @@ export const MainContainer = styled(FlexDivRow)<{
 
 export const MatchInfoContainer = styled(FlexDivColumn)`
     cursor: pointer;
+    min-width: 180px;
     max-width: 180px;
     margin-right: 5px;
     @media (max-width: 950px) {
@@ -52,6 +53,7 @@ export const MatchInfoContainer = styled(FlexDivColumn)`
 export const MatchInfo = styled(FlexDivStart)<{
     selected: boolean;
 }>`
+    z-index: 1;
     color: ${(props) =>
         props.selected ? props.theme.oddsContainerBackground.tertiary : props.theme.textColor.quinary};
     i {
@@ -65,7 +67,7 @@ export const GameOfLabel = styled.span<{ selected?: boolean; isLive?: boolean }>
     font-size: 10px;
     position: absolute;
     top: 6px;
-    left: 12px;
+    left: 48px;
     text-transform: uppercase;
     @media (max-width: 600px) {
         top: 10px;
@@ -87,6 +89,19 @@ export const MatchInfoLabel = styled.label<{ selected?: boolean }>`
     z-index: 2;
     @media (max-width: 950px) {
         font-size: 11px;
+    }
+`;
+
+export const LeagueFlag = styled.img`
+    width: 24px;
+    height: 24px;
+    margin-top: -5px;
+    margin-left: 1px;
+    margin-right: 11px;
+    cursor: pointer;
+    @media (max-width: 950px) {
+        margin-left: 0px;
+        margin-right: 4px;
     }
 `;
 

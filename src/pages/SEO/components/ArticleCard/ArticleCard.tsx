@@ -30,9 +30,9 @@ const ArticleCard: React.FC<SEOItem> = ({
                         <ButtonContainer marginBottom={callToActionButton ? '' : '28px'}>
                             {callToActionButton && (
                                 <Button
+                                    borderColor={theme.button.background.quinary}
+                                    backgroundColor={theme.button.background.quinary}
                                     textColor={theme.button.textColor.primary}
-                                    backgroundColor={theme.button.background.quaternary}
-                                    borderColor={theme.button.borderColor.secondary}
                                 >
                                     {callToActionButton}
                                 </Button>

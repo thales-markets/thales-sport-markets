@@ -1,5 +1,6 @@
 import Loader from 'components/Loader';
-import { SEO_ARTICLES_PER_PAGE } from 'constants/ui';
+import Pagination from 'components/Pagination';
+import DappFooter from 'layouts/DappLayout/DappFooter';
 import { useSEOArticlesQuery } from 'queries/seo/useSEOArticlesQuery';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
@@ -8,6 +9,13 @@ import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import useQueryParam from 'utils/useQueryParams';
 import ArticleCard from '../ArticleCard';
+
+const PAGINATION_SIZE = [
+    { value: 12, label: '12' },
+    { value: 24, label: '24' },
+    { value: 36, label: '36' },
+    { value: 48, label: '48' },
+];
 
 const Articles: React.FC = () => {
     const { t } = useTranslation();
@@ -19,6 +27,8 @@ const Articles: React.FC = () => {
 
     const queryParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
     const initialPage = parseInt(queryParams.get('page') || '1', 10);
+
+    const [seoArticlesPerPage, setSeoArticlesPerPage] = useState<number>(PAGINATION_SIZE[0].value);
 
     const [currentPage, setCurrentPage] = useState(initialPage);
 
@@ -42,12 +52,12 @@ const Articles: React.FC = () => {
     }, [seoArticlesQuery.data, seoArticlesQuery.isSuccess]);
 
     const paginatedArticles = useMemo(() => {
-        const startIndex = (currentPage - 1) * SEO_ARTICLES_PER_PAGE;
-        const endIndex = startIndex + SEO_ARTICLES_PER_PAGE;
+        const startIndex = (currentPage - 1) * seoArticlesPerPage;
+        const endIndex = startIndex + seoArticlesPerPage;
         return seoArticles.slice(startIndex, endIndex);
-    }, [seoArticles, currentPage]);
+    }, [currentPage, seoArticlesPerPage, seoArticles]);
 
-    const totalPages = Math.ceil(seoArticles.length / SEO_ARTICLES_PER_PAGE);
+    const totalPages = Math.ceil(seoArticles.length / seoArticlesPerPage);
 
     const handleNextPage = () => {
         if (currentPage < totalPages) {
@@ -94,19 +104,25 @@ const Articles: React.FC = () => {
                             <EmptyContainer>{t('promotions.no-promotions')}</EmptyContainer>
                         )}
                     </CardsWrapper>
-                    <PaginationControls>
-                        <button onClick={handlePreviousPage} disabled={currentPage === 1}>
-                            Previous
-                        </button>
-                        <span>
-                            Page {currentPage} of {totalPages}
-                        </span>
-                        <button onClick={handleNextPage} disabled={currentPage === totalPages}>
-                            Next
-                        </button>
-                    </PaginationControls>
+                    <Pagination
+                        paginationOptions={PAGINATION_SIZE}
+                        onResultsPerPageChange={(value: any) => {
+                            setCurrentPage(1);
+                            setSeoArticlesPerPage(Number(value));
+                        }}
+                        resultPerPageInfo={{
+                            value: seoArticlesPerPage,
+                            label: seoArticlesPerPage.toString(),
+                        }}
+                        onPreviousPage={() => handlePreviousPage()}
+                        disabledPrevious={currentPage === 1}
+                        onNextPage={() => handleNextPage()}
+                        disabledNext={currentPage === totalPages}
+                        label={`${currentPage} ${t('common.pagination.of')} ${totalPages}`}
+                    />
                 </>
             )}
+            <DappFooter />
         </Wrapper>
     );
 };
@@ -153,32 +169,6 @@ const EmptyContainer = styled(FlexDiv)`
     align-items: center;
     justify-content: center;
     width: 100%;
-`;
-
-const PaginationControls = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 30px 0px;
-
-    button {
-        margin: 0 10px;
-        padding: 10px 20px;
-        background-color: ${(props) => props.theme.button.background.quaternary};
-        color: ${(props) => props.theme.button.textColor.primary};
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-
-        &:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
-        }
-    }
-
-    span {
-        margin: 0 10px;
-    }
 `;
 
 export default Articles;

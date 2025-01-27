@@ -51,13 +51,6 @@ export const NAV_MENU_THIRD_SECTION: NavMenuItem[] = [
         route: ROUTES.Promotions.Home,
         supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.OptimismSepolia],
     },
-    {
-        i18label: 'markets.nav-menu.items.resources',
-        iconClass: 'icon icon--resources',
-        name: 'promotions',
-        route: ROUTES.SEO.Home,
-        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.OptimismSepolia],
-    },
 ];
 
 export const NAV_MENU_FOURTH_SECTION: NavMenuItem[] = [

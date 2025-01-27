@@ -953,6 +953,23 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         name: 'Shots',
     },
 
+    // Tennis player props market types
+    [MarketType.PLAYER_PROPS_ACES]: {
+        id: MarketType.PLAYER_PROPS_ACES,
+        key: 'aces',
+        name: 'Aces',
+    },
+    [MarketType.PLAYER_PROPS_BREAK_POINTS_WON]: {
+        id: MarketType.PLAYER_PROPS_BREAK_POINTS_WON,
+        key: 'breakPointsWon',
+        name: 'Break points won',
+    },
+    [MarketType.Player_PROPS_DOUBLE_FAULTS]: {
+        id: MarketType.Player_PROPS_DOUBLE_FAULTS,
+        key: 'doubleFaults',
+        name: 'Double faults',
+    },
+
     // UFC market types
     [MarketType.WINNING_ROUND]: {
         id: MarketType.WINNING_ROUND,
@@ -1308,6 +1325,9 @@ export const PLAYER_PROPS_MARKET_TYPES = [
     MarketType.PLAYER_PROPS_LAST_SCORER,
     MarketType.PLAYER_PROPS_SHOTS_ON_TARGET,
     MarketType.PLAYER_PROPS_TOTAL_SHOTS,
+    MarketType.PLAYER_PROPS_ACES,
+    MarketType.PLAYER_PROPS_BREAK_POINTS_WON,
+    MarketType.Player_PROPS_DOUBLE_FAULTS,
 ];
 
 export const ONE_SIDE_PLAYER_PROPS_MARKET_TYPES = [

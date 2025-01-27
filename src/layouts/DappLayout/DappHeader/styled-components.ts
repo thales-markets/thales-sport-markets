@@ -2,7 +2,7 @@ import burger from 'assets/images/burger.svg';
 import OverdropButtonBackground from 'assets/images/overdrop/overdrop-button-background.webp';
 import overdrop from 'assets/images/overdrop/overdrop-nav.webp';
 import styled from 'styled-components';
-import { FlexDiv, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
+import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 
 export const Container = styled(FlexDivRowCentered)`
     width: 100%;
@@ -41,6 +41,8 @@ export const MiddleContainer = styled(FlexDivRowCentered)`
     width: 100%;
     max-width: 821px;
 `;
+
+export const MiddleRightContainer = styled(FlexDivCentered)``;
 
 export const RightContainer = styled(FlexDivRowCentered)`
     position: relative;
@@ -251,8 +253,8 @@ export const HeaderLabel = styled.span`
 export const DropdownContainer = styled.div`
     position: absolute;
     width: 180px;
-    top: 28px;
-    left: 0;
+    top: 24px;
+    right: 0;
     z-index: 1000;
 `;
 
@@ -265,14 +267,16 @@ export const DropDown = styled(FlexDivColumn)`
     margin-top: 2px;
     padding: 4px;
     width: 100%;
+    gap: 2px;
 `;
 
-export const DropDownItem = styled(FlexDiv)`
-    padding: 7px 10px 9px 10px;
-    cursor: pointer;
+export const DropDownItem = styled(FlexDiv)<{ isSelected: boolean }>`
+    padding: 7px 10px;
+    cursor: ${(props) => (props.isSelected ? 'default' : 'pointer')};
+    ${(props) => (props.isSelected ? `background: ${props.theme.dropDown.menuItem.selectedColor.primary};` : '')}
+    border-radius: 5px;
     &:hover {
-        background: ${(props) => props.theme.background.tertiary};
-        border-radius: 5px;
+        ${(props) => (props.isSelected ? '' : `background: ${props.theme.dropDown.menuItem.hoverColor.primary};`)}
     }
 `;
 
