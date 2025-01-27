@@ -136,7 +136,6 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
     };
 
     const handleTicketCancel = async (ticketAddress: string) => {
-        console.log(walletClient?.data);
         const sportAmmContract = getContractInstance(ContractType.SPORTS_AMM_V2, {
             client: walletClient?.data,
             networkId,
