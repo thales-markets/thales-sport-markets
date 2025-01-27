@@ -157,6 +157,8 @@ import {
     InfoWrapper,
     InputContainer,
     LeftLevel,
+    OddChangeDown,
+    OddChangeUp,
     OverdropLabel,
     OverdropProgressWrapper,
     OverdropRowSummary,
@@ -185,6 +187,7 @@ type TicketProps = {
     markets: TicketMarket[];
     setMarketsOutOfLiquidity: (indexes: number[]) => void;
     oddsChanged: boolean;
+    setOddsChanged?: (changed: boolean) => void;
     acceptOddChanges: (changed: boolean) => void;
     onSuccess?: () => void;
     submitButtonDisabled?: boolean;
@@ -204,6 +207,7 @@ const Ticket: React.FC<TicketProps> = ({
     markets,
     setMarketsOutOfLiquidity,
     oddsChanged,
+    setOddsChanged,
     acceptOddChanges,
     onSuccess,
     submitButtonDisabled,
@@ -275,6 +279,7 @@ const Ticket: React.FC<TicketProps> = ({
         LOCAL_STORAGE_KEYS.SYSTEM_BET_DENOMINATOR,
         SYSTEM_BET_MINIMUM_DENOMINATOR
     );
+    const [isTotalQuoteIncreased, setIsTotalQuoteIncreased] = useState(false);
 
     const userMultipliersQuery = useUserMultipliersQuery(walletAddress, { enabled: isConnected });
 
@@ -618,7 +623,9 @@ const Ticket: React.FC<TicketProps> = ({
             quote = systemData.systemBetQuote;
         } else {
             quote = isSgp
-                ? Number(sgpData?.priceWithSpread)
+                ? sgpData?.priceWithSpread
+                    ? getAddedPayoutOdds(usedCollateralForBuy, sgpData.priceWithSpread)
+                    : 0
                 : markets.reduce(
                       (partialQuote, market) =>
                           partialQuote *
@@ -638,6 +645,33 @@ const Ticket: React.FC<TicketProps> = ({
         isSgp,
         sgpData?.priceWithSpread,
     ]);
+
+    const previousTotalQuote = useRef<number>(totalQuote);
+    const previousMarketsLength = useRef<number>(markets.length);
+    const previousUsedCollateral = useRef<Coins>(usedCollateralForBuy);
+
+    // Check if SGP total quote is changed
+    useEffect(() => {
+        const isQuoteChangedDueThalesBonus =
+            (isThalesCurrency(usedCollateralForBuy) || isThalesCurrency(previousUsedCollateral.current)) &&
+            isThalesCurrency(usedCollateralForBuy) !== isThalesCurrency(previousUsedCollateral.current);
+        if (
+            isSgp &&
+            totalQuote &&
+            previousTotalQuote.current &&
+            totalQuote !== previousTotalQuote.current &&
+            markets.length === previousMarketsLength.current &&
+            !isQuoteChangedDueThalesBonus
+        ) {
+            setOddsChanged && setOddsChanged(true);
+            setIsTotalQuoteIncreased(totalQuote < previousTotalQuote.current); // smaller implied odds => higher quote
+        } else if (isSgp && totalQuote === 0) {
+            acceptOddChanges && acceptOddChanges(false);
+        }
+        previousTotalQuote.current = totalQuote;
+        previousMarketsLength.current = markets.length;
+        previousUsedCollateral.current = usedCollateralForBuy;
+    }, [isSgp, totalQuote, markets.length, usedCollateralForBuy, setOddsChanged, acceptOddChanges]);
 
     const totalBonus = useMemo(() => {
         const bonus = {
@@ -1957,8 +1991,12 @@ const Ticket: React.FC<TicketProps> = ({
 
     const inputRef = useRef<HTMLDivElement>(null);
     const inputRefVisible = !!inputRef?.current?.getBoundingClientRect().width;
+    const isQuoteTooltipEnabled =
+        inputRefVisible && (isInvalidRegularTotalQuote || isInvalidSystemTotalQuote || isInvalidSgpTotalQuote);
 
     const getQuoteTooltipText = () => {
+        if (!isQuoteTooltipEnabled) return;
+
         let text = '';
 
         if (isSgp && sgpData && sgpData.error) {
@@ -1967,7 +2005,7 @@ const Ticket: React.FC<TicketProps> = ({
                 : sgpData.error;
         }
 
-        if (!text) {
+        if (!text && totalQuote) {
             if (selectedOddsType === OddsType.AMM) {
                 text = isSystemBet
                     ? t('markets.parlay.info.system-bet-min-quote', {
@@ -2232,14 +2270,7 @@ const Ticket: React.FC<TicketProps> = ({
                     <SummaryLabel>
                         {isSystemBet ? t('markets.parlay.max-quote') : t('markets.parlay.total-quote')}:
                     </SummaryLabel>
-                    <Tooltip
-                        open={
-                            inputRefVisible &&
-                            (isInvalidRegularTotalQuote || isInvalidSystemTotalQuote || isInvalidSgpTotalQuote)
-                        }
-                        overlay={getQuoteTooltipText()}
-                        isWarning
-                    >
+                    <Tooltip open={isQuoteTooltipEnabled} overlay={getQuoteTooltipText()} isWarning>
                         <SummaryValue fontSize={12}>
                             {formatMarketOdds(
                                 selectedOddsType,
@@ -2247,6 +2278,8 @@ const Ticket: React.FC<TicketProps> = ({
                             )}
                         </SummaryValue>
                     </Tooltip>
+                    {oddsChanged && isTotalQuoteIncreased && <OddChangeUp />}
+                    {oddsChanged && !isTotalQuoteIncreased && <OddChangeDown />}
                     {!isSystemBet && (
                         <ClearLabel alignRight={true} onClick={() => dispatch(removeAll())}>
                             {t('markets.parlay.clear')}

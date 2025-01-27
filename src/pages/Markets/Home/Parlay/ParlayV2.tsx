@@ -4,6 +4,7 @@ import MatchInfoV2 from 'components/MatchInfoV2';
 import MatchUnavailableInfo from 'components/MatchUnavailableInfo';
 import Toggle from 'components/Toggle';
 import Tooltip from 'components/Tooltip';
+import { secondsToMilliseconds } from 'date-fns';
 import { SportFilter, StatusFilter } from 'enums/markets';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import { isEqual } from 'lodash';
@@ -92,7 +93,11 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
               }
             : { gameId: '', marketNames: [], typeIds: [], lines: [], playerIds: [] };
 
-    const sgpDataQuery = useSgpDataQuery(sgpParams, { networkId }, { enabled: ticketMarkets.length > 1 });
+    const sgpDataQuery = useSgpDataQuery(
+        sgpParams,
+        { networkId },
+        { enabled: ticketMarkets.length > 1, refetchInterval: secondsToMilliseconds(10) }
+    );
 
     const sportsbookData: SportsbookData | undefined = useMemo(() => {
         if (sgpDataQuery.isSuccess && sgpDataQuery.data && Object.keys(sgpDataQuery.data).length) {
@@ -357,6 +362,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                         markets={ticketMarkets}
                         setMarketsOutOfLiquidity={setOutOfLiquidityMarkets}
                         oddsChanged={oddsChanged}
+                        setOddsChanged={setOddsChanged}
                         acceptOddChanges={(changed: boolean) => {
                             setAcceptOdds(true);
                             setOddsChanged(changed);
