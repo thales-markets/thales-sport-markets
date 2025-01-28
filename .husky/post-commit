@@ -1,9 +1,0 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
-if [ -e .commit ]
-    then
-    rm .commit
-    git add src/i18n/ru.json src/i18n/cn.json src/i18n/de.json src/i18n/es.json src/i18n/fr.json src/i18n/it.json src/i18n/th.json
-    git commit --amend --no-edit --no-verify
-fi
