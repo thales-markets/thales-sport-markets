@@ -754,9 +754,6 @@
                 "switch": "Switch",
                 "disconnect": "Disconnect",
                 "particle-wallet": "Particle Wallet"
-            },
-            "labels": {
-                "language": "Language"
             }
         },
         "parlay": {

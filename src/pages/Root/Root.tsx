@@ -22,12 +22,7 @@ import { logErrorToDiscord } from 'utils/discord';
 import { PARTICLE_STYLE } from 'utils/particleWallet/utils';
 import queryConnector from 'utils/queryConnector';
 import { WagmiProvider } from 'wagmi';
-import cnTranslation from '../../i18n/cn.json';
-import deTranslation from '../../i18n/de.json';
 import enTranslation from '../../i18n/en.json';
-import esTranslation from '../../i18n/es.json';
-import frTranslation from '../../i18n/fr.json';
-import thTranslation from '../../i18n/th.json';
 import { wagmiConfig } from './wagmiConfig';
 
 window.Buffer = window.Buffer || buffer;
@@ -61,11 +56,6 @@ const Root: React.FC<RootProps> = ({ store }) => {
     // initialization of particle context is happening in Root
     const { i18n } = useTranslation();
     i18n.addResourceBundle('en', 'translation', enTranslation, true);
-    i18n.addResourceBundle('cn', 'translation', cnTranslation, true);
-    i18n.addResourceBundle('fr', 'translation', frTranslation, true);
-    i18n.addResourceBundle('de', 'translation', deTranslation, true);
-    i18n.addResourceBundle('es', 'translation', esTranslation, true);
-    i18n.addResourceBundle('th', 'translation', thTranslation, true);
 
     PLAUSIBLE.enableAutoPageviews();
 
