@@ -53,3 +53,5 @@ export const PARTICAL_LOGINS_CLASSNAMES: { socialId: ParticalTypes; className: s
         className: 'icon-homepage icon--x',
     },
 ];
+
+export const BALANCE_THRESHOLD = 0.00000001;

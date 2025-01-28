@@ -3,6 +3,7 @@ import { getBalance } from '@wagmi/core';
 import { CRYPTO_CURRENCY_MAP, DEFAULT_MULTI_COLLATERAL_BALANCE } from 'constants/currency';
 import { TBD_ADDRESS } from 'constants/network';
 import QUERY_KEYS from 'constants/queryKeys';
+import { BALANCE_THRESHOLD } from 'constants/wallet';
 import { ContractType } from 'enums/contract';
 import { wagmiConfig } from 'pages/Root/wagmiConfig';
 import { bigNumberFormatter, Coins, COLLATERAL_DECIMALS } from 'thales-utils';
@@ -147,8 +148,16 @@ const useMultipleCollateralBalanceQuery = (
                     WETH: WETHBalance ? bigNumberFormatter(WETHBalance, COLLATERAL_DECIMALS.WETH) : 0,
                     ETH: ETHBalance ? bigNumberFormatter(ETHBalance.value, COLLATERAL_DECIMALS.ETH) : 0,
                     ARB: ARBBalance ? bigNumberFormatter(ARBBalance, COLLATERAL_DECIMALS.ARB) : 0,
-                    OVER: OVERBalance ? bigNumberFormatter(OVERBalance, COLLATERAL_DECIMALS.OVER) : 0,
-                    THALES: THALESBalance ? bigNumberFormatter(THALESBalance, COLLATERAL_DECIMALS.THALES) : 0,
+                    OVER: OVERBalance
+                        ? bigNumberFormatter(OVERBalance, COLLATERAL_DECIMALS.OVER) < BALANCE_THRESHOLD
+                            ? bigNumberFormatter(OVERBalance, COLLATERAL_DECIMALS.OVER)
+                            : 0
+                        : 0,
+                    THALES: THALESBalance
+                        ? bigNumberFormatter(THALESBalance, COLLATERAL_DECIMALS.THALES) < BALANCE_THRESHOLD
+                            ? 0
+                            : bigNumberFormatter(THALESBalance, COLLATERAL_DECIMALS.THALES)
+                        : 0,
                     sTHALES: 0,
                 };
             } catch (e) {
