@@ -464,8 +464,8 @@
             "total-amount-batch": "Total amount will be {{ amount }} multiple by {{ count }} wallet address(es)."
         },
         "migration-modal": {
-            "title": "Migrate THALES to OVER",
-            "description": "Migrate your THALES to OVER",
+            "title": "Migrate $THALES to $OVER",
+            "description": "Exchange your $THALES tokens to $OVER per <tipLink>TIP-238</tipLink>. The exchange rate is 1:1.",
             "amount-label": "Amount",
             "migration-confirmation-message": "THALES successfully migrated to OVER",
             "button": {

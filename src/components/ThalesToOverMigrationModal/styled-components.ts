@@ -31,10 +31,10 @@ export const Description = styled.span`
     color: ${(props) => props.theme.textColor.primary};
     font-size: 13px;
     font-weight: 500;
-    line-height: 13px;
+    line-height: 15px;
     letter-spacing: 0.025em;
     text-align: center;
-    margin-top: 10px;
+    margin-top: 20px;
     @media (max-width: 575px) {
         font-size: 12px;
         margin-top: 5px;
@@ -44,7 +44,7 @@ export const Description = styled.span`
 export const InputContainer = styled.div`
     position: relative;
     width: 300px;
-    margin-top: 70px;
+    margin-top: 50px;
     @media (max-width: 575px) {
         margin-top: 50px;
     }
@@ -94,10 +94,10 @@ export const CloseIcon = styled.i`
 
 export const defaultButtonProps = {
     width: '300px',
-    margin: '10px 0 0 0',
+    margin: '15px 0 0 0',
 };
 
-export const StakingPageLink = styled.a`
+export const TipLink = styled.a`
     color: ${(props) => props.theme.link.textColor.primary};
     &:hover {
         text-decoration: underline;

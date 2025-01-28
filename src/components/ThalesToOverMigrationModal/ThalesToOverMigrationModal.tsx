@@ -4,10 +4,11 @@ import Button from 'components/Button';
 import NumericInput from 'components/fields/NumericInput';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
+import { LINKS } from 'constants/links';
 import { ContractType } from 'enums/contract';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -31,6 +32,7 @@ import {
     defaultCustomStyles,
     Description,
     InputContainer,
+    TipLink,
     Title,
 } from './styled-components';
 
@@ -242,7 +244,14 @@ const ThalesToOverMigrationModal: React.FC<ThalesToOverMigrationModalProps> = ({
             <Container>
                 <CloseIcon className="icon icon--close" onClick={() => onClose()} />
                 <Title>{t('profile.migration-modal.title')}</Title>
-                <Description>{t('profile.migration-modal.description')}</Description>
+                <Description>
+                    <Trans
+                        i18nKey={'profile.migration-modal.description'}
+                        components={{
+                            tipLink: <TipLink href={LINKS.Tip238} target="_blank" rel="noreferrer" />,
+                        }}
+                    />
+                </Description>
                 <InputContainer>
                     <NumericInput
                         value={amount}

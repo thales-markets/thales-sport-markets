@@ -1,12 +1,11 @@
 import { Network } from 'enums/network';
 import { ContractData } from 'types/viem';
-import { TBD_ADDRESS } from '../../constants/network';
 
 const multiCallContract: ContractData = {
     addresses: {
         [Network.OptimismMainnet]: '0xcA11bde05977b3631167028862bE2a173976CA11',
         [Network.Arbitrum]: '0xcA11bde05977b3631167028862bE2a173976CA11',
-        [Network.Base]: TBD_ADDRESS,
+        [Network.Base]: '0xcA11bde05977b3631167028862bE2a173976CA11',
         [Network.OptimismSepolia]: '0xcA11bde05977b3631167028862bE2a173976CA11',
     },
     abi: [
