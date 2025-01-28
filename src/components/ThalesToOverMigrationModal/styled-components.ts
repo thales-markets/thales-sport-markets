@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
+import { FlexDivCentered, FlexDivColumnCentered, FlexDivSpaceBetween } from 'styles/common';
 
 export const Container = styled(FlexDivColumnCentered)`
     border: 1px solid ${(props) => props.theme.borderColor.primary};
@@ -32,7 +32,7 @@ export const Description = styled.span`
     color: ${(props) => props.theme.textColor.primary};
     font-size: 13px;
     font-weight: 500;
-    line-height: 15px;
+    line-height: 16px;
     letter-spacing: 0.025em;
     text-align: center;
     margin-top: 20px;
@@ -40,14 +40,18 @@ export const Description = styled.span`
         font-size: 12px;
         margin-top: 10px;
     }
+    p {
+        margin-bottom: 15px;
+        text-align: start;
+    }
 `;
 
 export const InputContainer = styled.div`
     position: relative;
     width: 300px;
-    margin-top: 50px;
+    margin-top: 30px;
     @media (max-width: 575px) {
-        margin-top: 30px;
+        margin-top: 20px;
     }
 `;
 
@@ -98,4 +102,33 @@ export const TipLink = styled.a`
     &:hover {
         text-decoration: underline;
     }
+`;
+
+export const Summary = styled(FlexDivSpaceBetween)`
+    width: 300px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+`;
+
+export const SummaryLabel = styled.span`
+    display: flex;
+    align-items: center;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 20px;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+    color: ${(props) => props.theme.textColor.quaternary};
+    @media (max-width: 950px) {
+        line-height: 24px;
+    }
+`;
+
+export const SummaryValue = styled.span`
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 20px;
+    letter-spacing: 0.025em;
+    color: ${(props) => props.theme.textColor.quaternary};
+    margin-left: auto;
 `;

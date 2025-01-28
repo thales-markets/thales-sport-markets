@@ -465,8 +465,9 @@
         },
         "migration-modal": {
             "title": "Migrate $THALES to $OVER",
-            "description": "Exchange your $THALES tokens to $OVER per <tipLink>TIP-238</tipLink>. The exchange rate is 1:1.",
-            "amount-label": "Amount",
+            "description": "<p>Thales DAO has officially migrated to Overtime DAO. You can migrate your  $THALES tokens to $OVER tokens here.</p><p>1 $THALES = 1 $OVER</p><p>More details on the migration in <tipLink>TIP-238</tipLink>.</p>",
+            "amount-label": "THALES to migrate",
+            "over-to-receive": "OVER to receive",
             "migration-confirmation-message": "THALES successfully migrated to OVER",
             "button": {
                 "migrate-label": "Migrate",

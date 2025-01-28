@@ -32,6 +32,9 @@ import {
     defaultCustomStyles,
     Description,
     InputContainer,
+    Summary,
+    SummaryLabel,
+    SummaryValue,
     TipLink,
     Title,
 } from './styled-components';
@@ -248,6 +251,7 @@ const ThalesToOverMigrationModal: React.FC<ThalesToOverMigrationModalProps> = ({
                     <Trans
                         i18nKey={'profile.migration-modal.description'}
                         components={{
+                            p: <p />,
                             tipLink: <TipLink href={LINKS.Tip238} target="_blank" rel="noreferrer" />,
                         }}
                     />
@@ -258,6 +262,7 @@ const ThalesToOverMigrationModal: React.FC<ThalesToOverMigrationModalProps> = ({
                         onChange={(_, value) => setAmount(value)}
                         disabled={isAllowing || isMigrating}
                         label={t('profile.migration-modal.amount-label')}
+                        placeholder={t(`common.errors.enter-amount`)}
                         currencyLabel={CRYPTO_CURRENCY_MAP.THALES}
                         showValidation={!isAmountValid}
                         validationMessage={t('common.errors.insufficient-balance-wallet', {
@@ -271,6 +276,10 @@ const ThalesToOverMigrationModal: React.FC<ThalesToOverMigrationModalProps> = ({
                         borderColor={theme.input.borderColor.tertiary}
                     />
                 </InputContainer>
+                <Summary>
+                    <SummaryLabel>{t('profile.migration-modal.over-to-receive')}:</SummaryLabel>
+                    <SummaryValue>{Number(amount)}</SummaryValue>
+                </Summary>
                 <ButtonContainer>{getSubmitButton()}</ButtonContainer>
             </Container>
             {openApprovalModal && (
