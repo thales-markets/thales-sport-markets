@@ -288,3 +288,10 @@ export const Label = styled.div`
     display: block;
     text-transform: capitalize;
 `;
+
+export const CurrencyIcon = styled.i`
+    text-transform: none;
+    font-size: 16px;
+    margin: 0 4px;
+    color: ${(props) => props.theme.button.textColor.primary};
+`;

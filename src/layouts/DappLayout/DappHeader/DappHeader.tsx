@@ -39,6 +39,7 @@ import {
     BlockedGamesNotificationCount,
     Container,
     Count,
+    CurrencyIcon,
     DropDown,
     DropDownItem,
     DropdownContainer,
@@ -262,7 +263,17 @@ const DappHeader: React.FC = () => {
                                 </SettingsContainer>
                             </OutsideClickHandler>
                         </MiddleRightContainer>
-                        <Button onClick={() => setShowThalesToOverMigrationModal(true)}>Migrate THALES to OP</Button>
+                        <Button
+                            onClick={() => setShowThalesToOverMigrationModal(true)}
+                            backgroundColor={theme.button.textColor.quaternary}
+                            borderColor={theme.button.textColor.quaternary}
+                            fontSize="14px"
+                            height="24px"
+                            padding="2px 15px"
+                        >
+                            Migrate <CurrencyIcon className="currency-icon currency-icon--thales" /> to{' '}
+                            <CurrencyIcon className="currency-icon currency-icon--over" />
+                        </Button>
                         {showThalesToOverMigrationModal && (
                             <ThalesToOverMigrationModal onClose={() => setShowThalesToOverMigrationModal(false)} />
                         )}
