@@ -17,7 +17,7 @@ import { useAccount, useChainId, useClient } from 'wagmi';
 import {
     TeamNameLabel,
     TeamNamesContainer,
-} from '../../Markets/Market/MarketDetailsV2/components/TicketTransactionsTable/styled-components';
+} from '../../Markets/Market/MarketDetailsV2/components/TicketMarketRow/styled-components';
 import UnblockAction from '../UnblockAction';
 import { CheckboxContainer, ExternalLink } from '../styled-components';
 

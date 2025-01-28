@@ -4,6 +4,7 @@ import SPAAnchor from 'components/SPAAnchor';
 import ROUTES from 'constants/routes';
 import { PROMOTION_SANITIZE_PROPS } from 'constants/ui';
 import DOMPurify from 'dompurify';
+import DappFooter from 'layouts/DappLayout/DappFooter';
 import { useSEOArticlesQuery } from 'queries/seo/useSEOArticlesQuery';
 import React, { useMemo } from 'react';
 import { Helmet } from 'react-helmet';
@@ -46,6 +47,7 @@ const SeoArticle: React.FC<SeoArticleProps> = (props) => {
             <Wrapper>
                 <BackContainer>
                     <SPAAnchor href={buildHref(`${ROUTES.SEO.Home}${branchName ? `?branch-name=${branchName}` : ''}`)}>
+                        <ArrowIcon className="icon icon--arrow-down" />
                         <Back>{t('promotions.back')}</Back>
                     </SPAAnchor>
                 </BackContainer>
@@ -75,10 +77,10 @@ const SeoArticle: React.FC<SeoArticleProps> = (props) => {
                             ></CTAContent>
                             <SPAAnchor href={seoArticle.article.ctaSection.ctaButtonLink}>
                                 <Button
-                                    width={'150px'}
-                                    backgroundColor={theme.button.background.quaternary}
+                                    additionalStyles={{ minWidth: '200px' }}
+                                    borderColor={theme.button.background.quinary}
+                                    backgroundColor={theme.button.background.quinary}
                                     textColor={theme.button.textColor.primary}
-                                    borderColor={theme.button.borderColor.secondary}
                                 >
                                     {seoArticle.article.ctaSection.ctaButtonLabel}
                                 </Button>
@@ -91,6 +93,7 @@ const SeoArticle: React.FC<SeoArticleProps> = (props) => {
                         ></MainContent>
                     </>
                 )}
+                <DappFooter />
             </Wrapper>
         </Background>
     );
@@ -101,6 +104,10 @@ const Background = styled.section`
     background: ${(props) => props.theme.background.primary};
     color: ${(props) => props.theme.textColor.primary};
     position: relative;
+    ol {
+        list-style: revert;
+        list-style-position: inside;
+    }
 `;
 
 const Wrapper = styled(FlexDivColumn)`
@@ -141,6 +148,14 @@ const Back = styled.span`
     cursor: pointer;
     font-size: 14px;
     text-transform: uppercase;
+`;
+
+const ArrowIcon = styled.i`
+    font-size: 14px;
+    color: ${(props) => props.theme.textColor.primary};
+    text-transform: none !important;
+    margin-right: 5px;
+    transform: rotate(90deg);
 `;
 
 const HeaderContainer = styled(FlexDiv)`

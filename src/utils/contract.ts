@@ -15,6 +15,7 @@ import priceFeed from 'utils/contracts/priceFeedContract';
 import sportsAMMData from 'utils/contracts/sportsAMMDataContract';
 import sportsAMMV2 from 'utils/contracts/sportsAMMV2Contract';
 import sportsAMMV2Manager from 'utils/contracts/sportsAMMV2ManagerContract';
+import sportsAMMV2ResultManager from 'utils/contracts/sportsAMMV2ResultManagerContract';
 import sportsAMMV2RiskManager from 'utils/contracts/sportsAMMV2RiskManagerContract';
 import stakingThalesBettingProxy from 'utils/contracts/stakingThalesBettingProxy';
 import stakingThales from 'utils/contracts/stakingThalesContract';
@@ -94,6 +95,8 @@ export const getContractInstance = (
             return getContractWithModifiedResponse(sportsAMMV2, networkConfig);
         case ContractType.SPORTS_AMM_V2_RISK_MANAGER:
             return getContractWithModifiedResponse(sportsAMMV2RiskManager, networkConfig);
+        case ContractType.SPORTS_AMM_V2_RESULT_MANAGER:
+            return getContractWithModifiedResponse(sportsAMMV2ResultManager, networkConfig);
         case ContractType.LIVE_TRADING_PROCESSOR:
             return getContractWithModifiedResponse(liveTradingProcessor, networkConfig);
         case ContractType.FREE_BET_HOLDER:
