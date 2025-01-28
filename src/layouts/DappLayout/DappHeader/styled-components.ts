@@ -2,7 +2,7 @@ import burger from 'assets/images/burger.svg';
 import OverdropButtonBackground from 'assets/images/overdrop/overdrop-button-background.webp';
 import overdrop from 'assets/images/overdrop/overdrop-nav.webp';
 import styled from 'styled-components';
-import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
+import { FlexDiv, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 
 export const Container = styled(FlexDivRowCentered)`
     width: 100%;
@@ -41,8 +41,6 @@ export const MiddleContainer = styled(FlexDivRowCentered)`
     width: 100%;
     max-width: 821px;
 `;
-
-export const MiddleRightContainer = styled(FlexDivCentered)``;
 
 export const RightContainer = styled(FlexDivRowCentered)`
     position: relative;
