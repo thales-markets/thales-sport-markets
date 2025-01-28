@@ -213,7 +213,7 @@ const ticketSlice = createSlice({
             localStore.set(LOCAL_STORAGE_KEYS.IS_SYSTEM_BET, action.payload);
         },
         setIsSgp: (state, action: PayloadAction<boolean>) => {
-            _removeAll(state);
+            if (state.ticket.length > 1) _removeAll(state);
             state.isSgp = action.payload;
             localStore.set(LOCAL_STORAGE_KEYS.IS_SGP, action.payload);
         },

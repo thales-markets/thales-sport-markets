@@ -2004,15 +2004,18 @@ const Ticket: React.FC<TicketProps> = ({
     const inputRefVisible = !!inputRef?.current?.getBoundingClientRect().width;
     const isQuoteTooltipEnabled =
         inputRefVisible && (isInvalidRegularTotalQuote || isInvalidSystemTotalQuote || isInvalidSgpTotalQuote);
+    const isQuoteTooltipError = isSgp && !!sgpData && !!sgpData.error;
 
     const getQuoteTooltipText = () => {
-        if (!isQuoteTooltipEnabled) return;
-
         let text = '';
+
+        if (!isQuoteTooltipEnabled) return text;
 
         if (isSgp && sgpData && sgpData.error) {
             text = sgpData.missingEntries?.length
-                ? `${sgpData.error.replace('.', ':')} ${sgpData.missingEntries.map((entry) => entry.name).join()}`
+                ? `${sgpData.error.replace('.', ':')} ${sgpData.missingEntries
+                      .map((entry) => entry.name || entry.market)
+                      .join()}`
                 : sgpData.error;
         }
 
@@ -2281,7 +2284,12 @@ const Ticket: React.FC<TicketProps> = ({
                     <SummaryLabel>
                         {isSystemBet ? t('markets.parlay.max-quote') : t('markets.parlay.total-quote')}:
                     </SummaryLabel>
-                    <Tooltip open={isQuoteTooltipEnabled} overlay={getQuoteTooltipText()} isWarning>
+                    <Tooltip
+                        open={isQuoteTooltipEnabled}
+                        overlay={getQuoteTooltipText()}
+                        isValidation
+                        isWarning={!isQuoteTooltipError}
+                    >
                         <SummaryValue fontSize={12}>
                             {formatMarketOdds(
                                 selectedOddsType,

@@ -54,7 +54,9 @@ const Tooltip: React.FC<TooltipProps> = ({
         <>{children}</>
     ) : isValidationOrWarn ? (
         <ReactTooltip
-            visible={validationChildRefPositionTop === validationPositionTop}
+            visible={
+                validationChildRefPositionTop !== undefined && validationChildRefPositionTop === validationPositionTop
+            }
             overlay={overlay}
             placement="top"
             overlayClassName={`${overlayClassName || ''} override-validation-arrow`}
