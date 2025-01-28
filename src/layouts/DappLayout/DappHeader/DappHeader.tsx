@@ -262,21 +262,18 @@ const DappHeader: React.FC = () => {
                                     )}
                                 </SettingsContainer>
                             </OutsideClickHandler>
+                            <Button
+                                onClick={() => setShowThalesToOverMigrationModal(true)}
+                                backgroundColor={theme.button.textColor.quaternary}
+                                borderColor={theme.button.textColor.quaternary}
+                                fontSize="14px"
+                                height="24px"
+                                padding="2px 15px"
+                            >
+                                Migrate <CurrencyIcon className="currency-icon currency-icon--thales" /> to{' '}
+                                <CurrencyIcon className="currency-icon currency-icon--over" />
+                            </Button>
                         </MiddleRightContainer>
-                        <Button
-                            onClick={() => setShowThalesToOverMigrationModal(true)}
-                            backgroundColor={theme.button.textColor.quaternary}
-                            borderColor={theme.button.textColor.quaternary}
-                            fontSize="14px"
-                            height="24px"
-                            padding="2px 15px"
-                        >
-                            Migrate <CurrencyIcon className="currency-icon currency-icon--thales" /> to{' '}
-                            <CurrencyIcon className="currency-icon currency-icon--over" />
-                        </Button>
-                        {showThalesToOverMigrationModal && (
-                            <ThalesToOverMigrationModal onClose={() => setShowThalesToOverMigrationModal(false)} />
-                        )}
                     </MiddleContainer>
 
                     <RightContainer>
@@ -478,7 +475,23 @@ const DappHeader: React.FC = () => {
                             </MobileButtonWrapper>
                         )
                     )}
+
+                    <Button
+                        onClick={() => setShowThalesToOverMigrationModal(true)}
+                        backgroundColor={theme.button.textColor.quaternary}
+                        borderColor={theme.button.textColor.quaternary}
+                        fontSize="14px"
+                        height="24px"
+                        padding="2px 15px"
+                        margin="10px 0 0 0"
+                    >
+                        Migrate <CurrencyIcon className="currency-icon currency-icon--thales" /> to{' '}
+                        <CurrencyIcon className="currency-icon currency-icon--over" />
+                    </Button>
                 </>
+            )}
+            {showThalesToOverMigrationModal && (
+                <ThalesToOverMigrationModal onClose={() => setShowThalesToOverMigrationModal(false)} />
             )}
         </>
     );

@@ -6,11 +6,12 @@ export const Container = styled(FlexDivColumnCentered)`
     background: ${(props) => props.theme.background.primary};
     border-radius: 15px;
     align-items: center;
-    padding: 40px 40px 40px 40px;
+    padding: 40px;
     width: 450px;
     @media (max-width: 950px) {
         width: auto;
         height: auto;
+        padding: 30px;
     }
 `;
 
@@ -37,7 +38,7 @@ export const Description = styled.span`
     margin-top: 20px;
     @media (max-width: 575px) {
         font-size: 12px;
-        margin-top: 5px;
+        margin-top: 10px;
     }
 `;
 
@@ -46,12 +47,8 @@ export const InputContainer = styled.div`
     width: 300px;
     margin-top: 50px;
     @media (max-width: 575px) {
-        margin-top: 50px;
+        margin-top: 30px;
     }
-`;
-
-export const CongratulationsTitle = styled(Title)`
-    color: ${(props) => props.theme.success.textColor.primary};
 `;
 
 export const ButtonContainer = styled(FlexDivCentered)``;
@@ -82,13 +79,12 @@ export const CloseIcon = styled.i`
     position: absolute;
     top: 0px;
     right: 0px;
-    padding: 16px 18px;
+    padding: 14px 15px;
     cursor: pointer;
     @media (max-width: 950px) {
         right: 0px;
         top: 0px;
-        font-size: 18px;
-        padding: 12px 10px 15px 15px;
+        padding: 12px 13px;
     }
 `;
 
