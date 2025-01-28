@@ -15,6 +15,7 @@ type LanguageSelectorProps = {
 
 const LanguageSelector: React.FC<LanguageSelectorProps> = ({ isBurger }) => {
     const [languageDropdownIsOpen, setLanguageDropdownIsOpen] = useState(false);
+
     const setDropdownIsOpen = (isOpen: boolean) => {
         if (!isOpen && !languageDropdownIsOpen) {
             return;
@@ -24,61 +25,51 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ isBurger }) => {
 
     const [selectedLanguage, setSelectedLanguage] = useQueryParam('lang', '');
 
-    useEffect(
-        () => {
-            setSelectedLanguage(
-                (Object.values(SupportedLanguages) as string[]).includes(i18n.language)
-                    ? i18n.language
-                    : DEFAULT_LANGUAGE
-            );
-        },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        []
-    );
+    useEffect(() => {
+        setSelectedLanguage(
+            (Object.values(SupportedLanguages) as string[]).includes(i18n.language) ? i18n.language : DEFAULT_LANGUAGE
+        );
+    }, [setSelectedLanguage]);
 
     return (
-        <>
-            <OutsideClickHandler onOutsideClick={() => setDropdownIsOpen(false)}>
-                <Container className={isBurger ? 'burger' : ''}>
-                    <LanguageButton
-                        onClick={() => {
-                            setDropdownIsOpen(!languageDropdownIsOpen);
-                        }}
-                    >
-                        <LanguageFlag
-                            alt={(selectedLanguage as any).toString()}
-                            src={getLanguageFlagSource(selectedLanguage as any)}
-                        />
-                    </LanguageButton>
-                    {languageDropdownIsOpen && (
-                        <DropDown className={isBurger ? 'language-dropdown' : ''}>
-                            {Object.values(SupportedLanguages).map((language: string) => (
-                                <DropDownItem
-                                    key={language}
-                                    onClick={() => {
-                                        i18n.changeLanguage(language);
-                                        setDropdownIsOpen(false);
-                                        setSelectedLanguage(language);
-                                    }}
-                                >
-                                    <>
-                                        <LanguageFlag
-                                            alt={(language as any).toString()}
-                                            src={getLanguageFlagSource(language as any)}
-                                        />
-                                        <FlexDivCentered>
-                                            <LanguageName key={language}>
-                                                {(LanguageNameMap as any)[language]}
-                                            </LanguageName>
-                                        </FlexDivCentered>
-                                    </>
-                                </DropDownItem>
-                            ))}
-                        </DropDown>
-                    )}
-                </Container>
-            </OutsideClickHandler>
-        </>
+        <OutsideClickHandler onOutsideClick={() => setDropdownIsOpen(false)}>
+            <Container className={isBurger ? 'burger' : ''}>
+                <LanguageButton
+                    onClick={() => {
+                        setDropdownIsOpen(!languageDropdownIsOpen);
+                    }}
+                >
+                    <LanguageFlag
+                        alt={(selectedLanguage as any).toString()}
+                        src={getLanguageFlagSource(selectedLanguage as any)}
+                    />
+                </LanguageButton>
+                {languageDropdownIsOpen && (
+                    <DropDown className={isBurger ? 'language-dropdown' : ''}>
+                        {Object.values(SupportedLanguages).map((language: string) => (
+                            <DropDownItem
+                                key={language}
+                                onClick={() => {
+                                    i18n.changeLanguage(language);
+                                    setDropdownIsOpen(false);
+                                    setSelectedLanguage(language);
+                                }}
+                            >
+                                <>
+                                    <LanguageFlag
+                                        alt={(language as any).toString()}
+                                        src={getLanguageFlagSource(language as any)}
+                                    />
+                                    <FlexDivCentered>
+                                        <LanguageName key={language}>{(LanguageNameMap as any)[language]}</LanguageName>
+                                    </FlexDivCentered>
+                                </>
+                            </DropDownItem>
+                        ))}
+                    </DropDown>
+                )}
+            </Container>
+        </OutsideClickHandler>
     );
 };
 
