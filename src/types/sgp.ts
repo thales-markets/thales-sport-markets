@@ -6,7 +6,7 @@ export type SgpParams = {
     playerIds: number[];
 };
 
-export type SgpQuoteData = {
+type SgpQuoteData = {
     gameId: string;
     market: string;
     name: string;
