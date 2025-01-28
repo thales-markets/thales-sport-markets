@@ -111,6 +111,7 @@ import {
 import { getContractInstance } from 'utils/contract';
 import multipleCollateral from 'utils/contracts/multipleCollateralContract';
 import sportsAMMV2Contract from 'utils/contracts/sportsAMMV2Contract';
+import { logErrorToDiscord } from 'utils/discord';
 import { getLiveTradingProcessorTransaction, getRequestId } from 'utils/liveTradingProcessor';
 import { formatMarketOdds } from 'utils/markets';
 import { getTradeData } from 'utils/marketsV2';
@@ -1737,7 +1738,14 @@ const Ticket: React.FC<TicketProps> = ({
                 setIsBuying(false);
                 refetchBalances(walletAddress, networkId);
                 toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                console.log('Error ', e);
+                logErrorToDiscord(e as Error, {
+                    componentStack: `BUY error for params:\nnetworkId=${networkId}\nisParticle=${isParticle}\nisLive=${
+                        markets[0].live
+                    }\nbuyInAmount=${(swapToThales
+                        ? thalesAmount
+                        : buyInAmount
+                    ).toString()}\ncollateral=${usedCollateralForBuy}\nisSwapToThales=${swapToThales}`,
+                });
             }
         }
     };
