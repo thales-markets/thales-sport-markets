@@ -1,6 +1,5 @@
 import Button from 'components/Button';
 import FreeBetFundModal from 'components/FreeBetFundModal';
-import LanguageSelector from 'components/LanguageSelector';
 import Logo from 'components/Logo';
 import { Count, NotificationCount, Separator } from 'components/NavMenu/styled-components';
 import OutsideClickHandler from 'components/OutsideClick';
@@ -37,9 +36,9 @@ import {
     Network,
     NetworkIcon,
     NetworkName,
+    NetworkWrapper,
     WalletWrapper,
     Wrapper,
-    NetworkWrapper,
 } from './styled-components';
 
 type NavMenuMobileProps = {
@@ -106,7 +105,6 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                             <NetworkIcon className={getNetworkIconClassNameByNetworkId(networkId)} />
                             <NetworkName>{getNetworkNameByNetworkId(networkId)}</NetworkName>
                         </Network>
-                        <LanguageSelector />
                     </NetworkWrapper>
                     <WalletWrapper>
                         <WalletInfo />

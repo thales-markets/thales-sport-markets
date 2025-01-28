@@ -1,6 +1,5 @@
 import Button from 'components/Button';
 import FreeBetFundModal from 'components/FreeBetFundModal';
-import LanguageSelector from 'components/LanguageSelector';
 import OutsideClickHandler from 'components/OutsideClick';
 import SPAAnchor from 'components/SPAAnchor';
 import {
@@ -30,7 +29,6 @@ import {
     HeaderContainer,
     ItemContainer,
     ItemsContainer,
-    LanguageLabel,
     NavIcon,
     NavLabel,
     Network,
@@ -123,8 +121,6 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                         <NetworkName>{getNetworkNameByNetworkId(networkId)}</NetworkName>
                     </Network>
                     <CloseIcon onClick={() => setNavMenuVisibility(false)} />
-                    <LanguageLabel>{t('markets.nav-menu.labels.language')}:</LanguageLabel>
-                    <LanguageSelector />
                 </HeaderContainer>
                 <ItemsContainer>
                     {NAV_MENU_FIRST_SECTION.map((item, index) => {
