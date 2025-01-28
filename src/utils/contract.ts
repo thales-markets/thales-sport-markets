@@ -21,6 +21,8 @@ import stakingThalesBettingProxy from 'utils/contracts/stakingThalesBettingProxy
 import { TBD_ADDRESS } from '../constants/network';
 import liquidityPoolContractV2 from './contracts/liquidityPoolContractV2';
 import resolveBlockerContract from './contracts/resolveBlockerContract';
+import thalesContract from './contracts/thalesContract';
+import thalesToOverMigrationContract from './contracts/thalesToOverMigrationContract';
 
 export const prepareContractWithModifiedResponse = (props: { abi: any; address: Address; client: any }) => {
     const contract = getContract(props) as ViemContract;
@@ -113,6 +115,10 @@ export const getContractInstance = (
             return getContractWithModifiedResponse(liquidityPoolContractV2[lpCollateral], networkConfig);
         case ContractType.RESOLVE_BLOCKER:
             return getContractWithModifiedResponse(resolveBlockerContract, networkConfig);
+        case ContractType.THALES_TO_OVER_MIGRATION:
+            return getContractWithModifiedResponse(thalesToOverMigrationContract, networkConfig);
+        case ContractType.THALES:
+            return getContractWithModifiedResponse(thalesContract, networkConfig);
         default:
             return undefined;
     }

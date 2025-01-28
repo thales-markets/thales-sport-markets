@@ -462,6 +462,16 @@
             "fund-batch": "Fund multiple addresses",
             "insufficient-balance": "Insufficient balance",
             "total-amount-batch": "Total amount will be {{ amount }} multiple by {{ count }} wallet address(es)."
+        },
+        "migration-modal": {
+            "title": "Migrate THALES to OVER",
+            "description": "Migrate your THALES to OVER",
+            "amount-label": "Amount",
+            "migration-confirmation-message": "THALES successfully migrated to OVER",
+            "button": {
+                "migrate-label": "Migrate",
+                "migrate-progress-label": "Migrating"
+            }
         }
     },
     "markets": {
@@ -898,7 +908,8 @@
                 "set-result-label": "Set result",
                 "set-result-tooltip": "This action will set result for the markets with the provided gameId, typeId and playerId"
             }
-        }    },
+        }
+    },
     "deposit": {
         "deposit-crypto": "Deposit crypto",
         "description": "To trade on Overtime you have to fund your account. Carefully follow the steps below and deposit the selected cryptocurrency into the generated address.",

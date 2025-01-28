@@ -4,6 +4,7 @@ import { Input } from 'components/fields/common';
 import Toggle from 'components/Toggle';
 import { generalConfig } from 'config/general';
 import { defaultToastOptions, getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { LINKS } from 'constants/links';
 import { secondsToMilliseconds } from 'date-fns';
 import { toPng } from 'html-to-image';

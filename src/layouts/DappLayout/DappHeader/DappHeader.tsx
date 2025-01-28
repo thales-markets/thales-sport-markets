@@ -6,6 +6,7 @@ import NetworkSwitcher from 'components/NetworkSwitcher';
 import OutsideClickHandler from 'components/OutsideClick';
 import SPAAnchor from 'components/SPAAnchor';
 import Search from 'components/Search';
+import ThalesToOverMigrationModal from 'components/ThalesToOverMigrationModal';
 import WalletInfo from 'components/WalletInfo';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
 import ROUTES from 'constants/routes';
@@ -112,6 +113,7 @@ const DappHeader: React.FC = () => {
     const [navMenuVisibility, setNavMenuVisibility] = useState<boolean | null>(null);
     const [showSearchModal, setShowSearchModal] = useState<boolean>(false);
     const [dropdownIsOpen, setDropdownIsOpen] = useState<boolean>(false);
+    const [showThalesToOverMigrationModal, setShowThalesToOverMigrationModal] = useState<boolean>(false);
 
     const isMarketsPage = location.pathname === ROUTES.Home || location.pathname === ROUTES.Markets.Home;
 
@@ -260,6 +262,10 @@ const DappHeader: React.FC = () => {
                                 </SettingsContainer>
                             </OutsideClickHandler>
                         </MiddleRightContainer>
+                        <Button onClick={() => setShowThalesToOverMigrationModal(true)}>Migrate THALES to OP</Button>
+                        {showThalesToOverMigrationModal && (
+                            <ThalesToOverMigrationModal onClose={() => setShowThalesToOverMigrationModal(false)} />
+                        )}
                     </MiddleContainer>
 
                     <RightContainer>

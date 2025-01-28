@@ -79,6 +79,7 @@ const useMultipleCollateralBalanceQuery = (
                         networkConfig,
                         getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.OVER as Coins)
                     ) as ViemContract,
+                    THALES: getContractInstance(ContractType.THALES, networkConfig) as ViemContract,
                 };
 
                 if (!walletAddress || !networkConfig.networkId) {
@@ -97,6 +98,7 @@ const useMultipleCollateralBalanceQuery = (
                     ETHBalance,
                     ARBBalance,
                     OVERBalance,
+                    THALESBalance,
                 ] = await Promise.all([
                     multipleCollateralObject?.sUSD && multipleCollateralObject?.sUSD?.address !== TBD_ADDRESS
                         ? multipleCollateralObject.sUSD.read.balanceOf([walletAddress])
@@ -129,6 +131,9 @@ const useMultipleCollateralBalanceQuery = (
                     multipleCollateralObject?.OVER && multipleCollateralObject?.OVER?.address !== TBD_ADDRESS
                         ? multipleCollateralObject.OVER.read.balanceOf([walletAddress])
                         : 0,
+                    multipleCollateralObject?.THALES && multipleCollateralObject?.THALES?.address !== TBD_ADDRESS
+                        ? multipleCollateralObject.THALES.read.balanceOf([walletAddress])
+                        : 0,
                 ]);
 
                 collateralsBalance = {
@@ -142,9 +147,9 @@ const useMultipleCollateralBalanceQuery = (
                     WETH: WETHBalance ? bigNumberFormatter(WETHBalance, COLLATERAL_DECIMALS.WETH) : 0,
                     ETH: ETHBalance ? bigNumberFormatter(ETHBalance.value, COLLATERAL_DECIMALS.ETH) : 0,
                     ARB: ARBBalance ? bigNumberFormatter(ARBBalance, COLLATERAL_DECIMALS.ARB) : 0,
-                    THALES: 0,
-                    sTHALES: 0,
                     OVER: OVERBalance ? bigNumberFormatter(OVERBalance, COLLATERAL_DECIMALS.OVER) : 0,
+                    THALES: THALESBalance ? bigNumberFormatter(THALESBalance, COLLATERAL_DECIMALS.THALES) : 0,
+                    sTHALES: 0,
                 };
             } catch (e) {
                 console.log('e ', e);
