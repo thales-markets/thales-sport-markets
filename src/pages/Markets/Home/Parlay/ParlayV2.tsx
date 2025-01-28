@@ -390,7 +390,7 @@ const OverBonus = styled.span`
             width: 0;
         }
         to {
-            width: 320px;
+            width: 300px;
         }
     }
 
