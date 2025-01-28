@@ -64,17 +64,6 @@ export const ItemsContainer = styled.div`
     margin-right: auto;
 `;
 
-export const LanguageLabel = styled.label`
-    font-family: 'Nunito' !important;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 20px;
-    text-transform: uppercase;
-    margin: 20px auto 5px auto;
-    color: ${(props) => props.theme.textColor.quaternary};
-`;
-
 export const Separator = styled.div`
     height: 3px;
     margin-top: 20px;
