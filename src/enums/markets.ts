@@ -12,6 +12,12 @@ export enum SortDirection {
     DESC = 'desc',
 }
 
+export enum SortType {
+    DEFAULT = 'Chronological + Popularity',
+    START_TIME = 'Chronological',
+    PRIORITY = 'Popularity',
+}
+
 export enum SportFilter {
     Boosted = 'Promo',
     Live = 'Live',

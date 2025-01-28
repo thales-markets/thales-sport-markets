@@ -1,24 +1,29 @@
+import OutsideClickHandler from 'components/OutsideClick';
 import Tooltip from 'components/Tooltip';
 import {
     MarketTypeGroupsBySport,
     MarketTypePlayerPropsGroupsBySport,
     MarketTypesBySportFilter,
 } from 'constants/marketTypes';
+import { SortType, SportFilter } from 'enums/markets';
 import { MarketType, MarketTypeGroup } from 'enums/marketTypes';
 import { uniq } from 'lodash';
-import React, { useContext, useMemo } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { ScrollMenu, VisibilityContext, publicApiType } from 'react-horizontal-scrolling-menu';
 import 'react-horizontal-scrolling-menu/dist/styles.css';
 import { useDispatch, useSelector } from 'react-redux';
+import { getIsMobile } from 'redux/modules/app';
 import {
     getIsThreeWayView,
     getMarketTypeFilter,
     getMarketTypeGroupFilter,
     getSelectedMarket,
+    getSortType,
     getSportFilter,
     setIsThreeWayView,
     setMarketTypeFilter,
     setMarketTypeGroupFilter,
+    setSortType,
 } from 'redux/modules/market';
 import { SportMarket } from 'types/markets';
 import { getMarketTypeName, isPlayerPropsMarket } from 'utils/markets';
@@ -28,17 +33,20 @@ import {
     FilterIcon,
     MarketTypeButton,
     NoScrollbarContainer,
+    SortIndicator,
+    SortMenu,
+    SortMenuItem,
+    SortSelector,
     SwitchContainer,
     ThreeWayIcon,
 } from './styled-components';
-import { SportFilter } from 'enums/markets';
-import { getIsMobile } from 'redux/modules/app';
 
 type HeaderProps = {
     allMarkets?: SportMarket[];
     availableMarketTypes?: MarketType[];
     market?: SportMarket;
     hideSwitch?: boolean;
+    isMainPageView?: boolean;
 };
 
 const LeftArrow: React.FC = () => {
@@ -72,7 +80,7 @@ const RightArrow: React.FC = () => {
     );
 };
 
-const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitch, allMarkets }) => {
+const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitch, allMarkets, isMainPageView }) => {
     const dispatch = useDispatch();
 
     const isThreeWayView = useSelector(getIsThreeWayView);
@@ -81,6 +89,9 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitc
     const sportFilter = useSelector(getSportFilter);
     const selectedMarket = useSelector(getSelectedMarket);
     const isMobile = useSelector(getIsMobile);
+    const selectedSortType = useSelector(getSortType);
+
+    const [openSortMenu, setOpenSortMenu] = useState(false);
 
     const isPlayerPropsFilter = useMemo(() => sportFilter == SportFilter.PlayerProps, [sportFilter]);
     const marketToCheck = useMemo(() => market || selectedMarket, [market, selectedMarket]);
@@ -213,6 +224,41 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitc
                     })}
                 </ScrollMenu>
             </NoScrollbarContainer>
+
+            {isMainPageView && (
+                <SortSelector>
+                    <OutsideClickHandler onOutsideClick={() => setOpenSortMenu(false)}>
+                        <Tooltip overlay={isMobile ? '' : 'Select games sorting'}>
+                            <SortIndicator
+                                className={'icon icon--sorting'}
+                                onClick={() => setOpenSortMenu(!openSortMenu)}
+                            />
+                        </Tooltip>
+                        {openSortMenu && (
+                            <SortMenu>
+                                {Object.values(SortType)
+                                    .filter((_, i) => i < Object.values(SortType).length)
+                                    .map((sortType, index) => {
+                                        const isSelected = selectedSortType === (sortType as SortType);
+                                        return (
+                                            <SortMenuItem
+                                                key={`sortMenuItem${index}`}
+                                                isSelected={isSelected}
+                                                onClick={() => {
+                                                    !isSelected && dispatch(setSortType(sortType as SortType));
+                                                    setOpenSortMenu(false);
+                                                }}
+                                            >
+                                                {sortType}
+                                            </SortMenuItem>
+                                        );
+                                    })}
+                            </SortMenu>
+                        )}
+                    </OutsideClickHandler>
+                </SortSelector>
+            )}
+
             {!hideSwitch && !selectedMarket && marketTypeFilter === undefined && (
                 <SwitchContainer>
                     <Tooltip overlay={isThreeWayView ? 'Switch to standard view' : 'Switch to three column view'}>

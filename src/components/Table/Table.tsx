@@ -9,10 +9,9 @@ import {
     SortingState,
     useReactTable,
 } from '@tanstack/react-table';
-import SelectInput from 'components/SelectInput';
+import Pagination from 'components/Pagination';
 import SimpleLoader from 'components/SimpleLoader';
 import { SortDirection } from 'enums/markets';
-import { ScreenSizeBreakpoint } from 'enums/ui';
 import React, { CSSProperties, DependencyList, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -229,45 +228,22 @@ const Table: React.FC<TableProps> = ({
                 )}
             </ReactTable>
             {showPagination && data?.length > 0 && (
-                <PaginationWrapper>
-                    <SectionWrapper>
-                        <PaginationLabel>{t('common.pagination.rows-per-page')}</PaginationLabel>
-                        <div>
-                            <SelectInput
-                                options={PAGINATION_SIZE}
-                                value={{ value: pagination.pageSize, label: '' + pagination.pageSize }}
-                                handleChange={(value) => tableInstance.setPageSize(Number(value))}
-                                isPaginationStyle
-                            />
-                        </div>
-                    </SectionWrapper>
-
-                    <SectionWrapper className="flex items-center gap-1">
-                        <PaginationLabel>
-                            {`${tableInstance.getState().pagination.pageIndex * pagination.pageSize + 1}-${Math.min(
-                                data.length,
-                                (tableInstance.getState().pagination.pageIndex + 1) * pagination.pageSize
-                            )} ${t('common.pagination.of')} ${data.length}`}
-                        </PaginationLabel>
-                    </SectionWrapper>
-
-                    <ActionSection>
-                        <ArrowWrapper
-                            onClick={() => tableInstance.previousPage()}
-                            disabled={!tableInstance.getCanPreviousPage()}
-                        >
-                            <ArrowLeft className={'icon icon--arrow-down'} />
-                        </ArrowWrapper>
-                    </ActionSection>
-                    <ActionSection>
-                        <ArrowWrapper
-                            onClick={() => tableInstance.getCanNextPage() && tableInstance.nextPage()}
-                            disabled={!tableInstance.getCanNextPage()}
-                        >
-                            <ArrowRight className={'icon icon--arrow-down'} />
-                        </ArrowWrapper>
-                    </ActionSection>
-                </PaginationWrapper>
+                <Pagination
+                    paginationOptions={PAGINATION_SIZE}
+                    onResultsPerPageChange={(value) => tableInstance.setPageSize(Number(value))}
+                    resultPerPageInfo={{
+                        value: pagination.pageSize,
+                        label: '' + pagination.pageSize,
+                    }}
+                    onPreviousPage={() => tableInstance.previousPage()}
+                    disabledPrevious={!tableInstance.getCanPreviousPage()}
+                    onNextPage={() => tableInstance.getCanNextPage() && tableInstance.nextPage()}
+                    disabledNext={!tableInstance.getCanNextPage()}
+                    label={`${tableInstance.getState().pagination.pageIndex * pagination.pageSize + 1}-${Math.min(
+                        data.length,
+                        (tableInstance.getState().pagination.pageIndex + 1) * pagination.pageSize
+                    )} ${t('common.pagination.of')} ${data.length}`}
+                />
             )}
         </>
     );
@@ -450,67 +426,6 @@ const SortIcon = styled.i<{ selected: boolean; sortDirection: SortDirection }>`
     @media (max-width: 575px) {
         font-size: 10px;
     }
-`;
-
-const PaginationWrapper = styled.div`
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding: 5px 0;
-    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
-        justify-content: flex-start;
-    }
-`;
-
-const SectionWrapper = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    margin: 0 14px;
-    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
-        margin: 0 8px;
-    }
-`;
-
-const PaginationLabel = styled.p`
-    color: ${(props) => props.theme.textColor.primary};
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 10%;
-    letter-spacing: 0.13px;
-    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
-        font-size: 12px;
-    }
-`;
-
-const ActionSection = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-`;
-
-const ArrowWrapper = styled.span<{ disabled: boolean }>`
-    display: flex;
-    width: 40px;
-    height: 24px;
-    justify-content: center;
-    align-items: center;
-    padding: 4px;
-    color: ${(props) => props.theme.textColor.primary};
-    opacity: ${(props) => (props.disabled ? 0.5 : 1)};
-    cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
-`;
-
-const ArrowLeft = styled.i`
-    font-size: 12px;
-    rotate: 90deg;
-`;
-const ArrowRight = styled.i`
-    font-size: 12px;
-    rotate: -90deg;
 `;
 
 const CellAlignment: Record<string, string> = {

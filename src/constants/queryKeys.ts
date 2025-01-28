@@ -1,6 +1,6 @@
 import { StatusFilter } from 'enums/markets';
 import { Network } from 'enums/network';
-import { RiskManagementConfig } from 'enums/riskManagement';
+import { RiskManagementConfig, RiskManagementRole } from 'enums/riskManagement';
 import { LiquidityPoolCollateral } from '../enums/liquidityPool';
 import { League } from '../enums/sports';
 
@@ -135,9 +135,15 @@ const QUERY_KEYS = {
         Price: () => ['price'],
     },
     RiskManagementConfig: (networkId: Network, configType: RiskManagementConfig) => [
-        'RiskManagementConfig',
+        'riskManagementConfig',
         networkId,
         configType,
+    ],
+    WhitelistedAddress: (networkId: Network, walletAddress: string, role: RiskManagementRole) => [
+        'whitelistedAddress',
+        networkId,
+        walletAddress,
+        role,
     ],
 };
 

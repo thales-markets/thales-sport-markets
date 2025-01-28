@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FlexDiv } from 'styles/common';
+import { FlexDiv, FlexDivCentered, FlexDivColumn } from 'styles/common';
 
 export const Container = styled(FlexDiv)`
     max-width: 806px;
@@ -79,7 +79,7 @@ export const FilterIcon = styled.i`
 export const SwitchContainer = styled(FlexDiv)`
     min-width: 30px;
     justify-content: center;
-    margin-left: 20px;
+    margin-left: 10px;
     @media (max-width: 950px) {
         display: none;
     }
@@ -90,4 +90,42 @@ export const ThreeWayIcon = styled.i<{ disabled: boolean; fontSize: number }>`
     font-size: ${(props) => props.fontSize}px;
     color: ${(props) => props.theme.textColor.secondary};
     opacity: ${(props) => (props.disabled ? '0.2' : '1')};
+`;
+
+export const SortSelector = styled(FlexDivCentered)`
+    position: relative;
+    height: 20px;
+`;
+
+export const SortMenu = styled(FlexDivColumn)`
+    position: absolute;
+    gap: 2px;
+    top: 24px;
+    right: 0px;
+    width: 200px;
+    padding: 3px;
+    border-radius: 8px;
+    border: 1px solid ${(props) => props.theme.dropDown.menu.borderColor.primary};
+    background: ${(props) => props.theme.dropDown.menu.background.primary};
+    z-index: 1000;
+`;
+
+export const SortMenuItem = styled.div<{ isSelected: boolean }>`
+    padding: 7px 10px;
+    border-radius: 8px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 14px;
+    cursor: ${(props) => (props.isSelected ? 'default' : 'pointer')};
+    ${(props) => (props.isSelected ? `background: ${props.theme.dropDown.menuItem.selectedColor.primary};` : '')}
+    &:hover {
+        ${(props) => (props.isSelected ? '' : `background: ${props.theme.dropDown.menuItem.hoverColor.primary};`)}
+    }
+`;
+
+export const SortIndicator = styled.i`
+    font-size: 18px;
+    text-transform: none;
+    color: ${(props) => props.theme.dropDown.indicatorColor.primary};
+    cursor: pointer;
 `;

@@ -34,7 +34,12 @@ export const mapTicket = (
     liveScores: any,
     openOngoingMarkets?: any
 ): Ticket => {
-    let collateral = getCollateralByAddress(ticket.collateral, networkId);
+    // TODO - hardcode OVER as THALES until we release
+    let collateral =
+        ticket.collateral.toLowerCase() === '0x409b3dcab04b476918e40e186bc77e1cfd2ce482' ||
+        ticket.collateral.toLowerCase() === '0x774ede9cd936118e89f0ca786a007c9db899f3f5'
+            ? (CRYPTO_CURRENCY_MAP.sTHALES as Coins)
+            : getCollateralByAddress(ticket.collateral, networkId);
     collateral =
         collateral === CRYPTO_CURRENCY_MAP.sTHALES &&
         ticket.ticketOwner.toLowerCase() !==
@@ -268,7 +273,7 @@ export const tableSortByStatus = (rowA: any, rowB: any) => {
     return aOrder < bOrder ? -1 : aOrder > bOrder ? 1 : 0;
 };
 
-export const generateSystemBetCombinations = (n: number, k: number): number[][] => {
+const generateSystemBetCombinations = (n: number, k: number): number[][] => {
     if (k <= 1 || k >= n) return [];
 
     // Calculate the number of combinations: n! / (k! * (n-k)!)

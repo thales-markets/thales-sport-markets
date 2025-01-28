@@ -78,7 +78,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
             <OutsideClickHandler onOutsideClick={() => setOpen(false)}>
                 <SelectedCollateral stretch={stretch} disabled={!!disabled} onClick={() => !disabled && setOpen(!open)}>
                     <TextCollateralWrapper isDetailedView={isDetailedView}>
-                        {showCollateralImg && (
+                        {showCollateralImg && collateralArray[selectedItem] && (
                             <Icon
                                 className={`currency-icon currency-icon--${collateralArray[
                                     selectedItem
@@ -279,7 +279,7 @@ const DetailedCollateralOption = styled(FlexDivSpaceBetween)`
     border-radius: 8px;
     cursor: pointer;
     &:hover {
-        background: rgb(95, 97, 128, 0.5);
+        background: ${(props) => props.theme.dropDown.menuItem.hoverColor.secondary};
     }
 `;
 

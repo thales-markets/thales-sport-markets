@@ -7,6 +7,7 @@ export enum ContractType {
     SPORTS_AMM_DATA = 'sportsAMMDataContract',
     SPORTS_AMM_V2 = 'sportsAMMV2Contract',
     SPORTS_AMM_V2_RISK_MANAGER = 'sportsAMMV2RiskManagerContract',
+    SPORTS_AMM_V2_RESULT_MANAGER = 'sportsAMMV2ResultManagerContract',
     LIVE_TRADING_PROCESSOR = 'liveTradingProcessorContract',
     FREE_BET_HOLDER = 'freeBetHolderContract',
     SPORTS_AMM_V2_MANAGER = 'sportsAMMV2ManagerContract',

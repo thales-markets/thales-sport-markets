@@ -1,4 +1,4 @@
-import { OddsType, SportFilter, StatusFilter, TicketErrorCode } from 'enums/markets';
+import { OddsType, SortType, SportFilter, StatusFilter, TicketErrorCode } from 'enums/markets';
 import { MarketType, MarketTypeGroup } from 'enums/marketTypes';
 import { Theme } from 'enums/ui';
 import { ParlayPayment, Tags, TicketPosition } from './markets';
@@ -19,6 +19,7 @@ export type MarketSliceState = {
     tagFilter: Tags;
     selectedMarket: SelectedMarket | undefined;
     isThreeWayView: boolean;
+    sortType: SortType;
 };
 
 export type TicketSliceState = {

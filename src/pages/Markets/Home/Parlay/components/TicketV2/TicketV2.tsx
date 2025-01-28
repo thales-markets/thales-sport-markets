@@ -903,7 +903,7 @@ const Ticket: React.FC<TicketProps> = ({
             setUseOverCollateral(false);
             setSwappedOverToReceive(0);
             setSwapQuote(0);
-        } else if (swapToOver && buyInAmount) {
+        } else if (swapToOver && Number(buyInAmount)) {
             const getSwapQuote = async () => {
                 const quote = await getQuote(networkId, swapToOverParams);
 

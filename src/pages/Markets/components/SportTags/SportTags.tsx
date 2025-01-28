@@ -36,11 +36,7 @@ const SportTags: React.FC<SportTagsProps> = ({
     const tagFilter = useSelector(getTagFilter);
 
     const [isOpen, setIsOpen] = useState(sport == sportFilter && sport !== SportFilter.All);
-    const open = useMemo(() => sport == sportFilter && sport !== SportFilter.All && isOpen, [
-        isOpen,
-        sport,
-        sportFilter,
-    ]);
+    const open = useMemo(() => sport !== SportFilter.All && isOpen, [isOpen, sport]);
 
     return (
         <React.Fragment>
@@ -52,6 +48,10 @@ const SportTags: React.FC<SportTagsProps> = ({
                         setIsOpen(!open);
                     }
                     onSportClick();
+                }}
+                onArrowClick={(e) => {
+                    e.stopPropagation();
+                    setIsOpen(!open);
                 }}
                 key={sport}
                 count={sportCount}
@@ -70,7 +70,8 @@ const SportTags: React.FC<SportTagsProps> = ({
                 liveMarketsCountPerTag={liveMarketsCountPerTag}
                 playerPropsMarketsCountPerTag={playerPropsMarketsCountPerTag}
                 showActive={showActive}
-                showLive={sportFilter == SportFilter.Live}
+                showLive={sport == SportFilter.Live}
+                sport={sport}
             ></TagsDropdown>
         </React.Fragment>
     );
