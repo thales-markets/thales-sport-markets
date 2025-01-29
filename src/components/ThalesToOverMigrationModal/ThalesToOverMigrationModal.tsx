@@ -10,18 +10,14 @@ import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollate
 import React, { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
-import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getIsBiconomy, getIsConnectedViaParticle } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
 import { Coins, formatCurrencyWithKey, truncToDecimals } from 'thales-utils';
-import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
-import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateralIndex } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import { checkAllowance } from 'utils/network';
-import { Client, maxUint256, parseEther } from 'viem';
+import { Client, parseEther } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 import {
@@ -48,15 +44,11 @@ const ThalesToOverMigrationModal: React.FC<ThalesToOverMigrationModalProps> = ({
     const theme: ThemeInterface = useTheme();
     const { openConnectModal } = useConnectModal();
 
-    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
-
     const networkId = useChainId();
     const client = useClient();
     const walletClient = useWalletClient();
     const { address, isConnected } = useAccount();
-    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
-
-    const isParticle = useSelector(getIsConnectedViaParticle);
+    const walletAddress = address || '';
 
     const [amount, setAmount] = useState<number | string>('');
     const [isAmountValid, setIsAmountValid] = useState<boolean>(true);
@@ -208,11 +200,7 @@ const ThalesToOverMigrationModal: React.FC<ThalesToOverMigrationModalProps> = ({
         }
         if (!hasAllowance) {
             return (
-                <Button
-                    disabled={isAllowing}
-                    onClick={() => (isParticle ? handleAllowance(maxUint256) : setOpenApprovalModal(true))}
-                    {...defaultButtonProps}
-                >
+                <Button disabled={isAllowing} onClick={() => setOpenApprovalModal(true)} {...defaultButtonProps}>
                     {t('common.wallet.approve')}
                 </Button>
             );

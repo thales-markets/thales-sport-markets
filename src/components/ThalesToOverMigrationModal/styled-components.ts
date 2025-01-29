@@ -6,8 +6,8 @@ export const Container = styled(FlexDivColumnCentered)`
     background: ${(props) => props.theme.background.primary};
     border-radius: 15px;
     align-items: center;
-    padding: 40px;
-    width: 450px;
+    padding: 50px;
+    width: 600px;
     @media (max-width: 950px) {
         width: auto;
         height: auto;
@@ -106,7 +106,6 @@ export const TipLink = styled.a`
 
 export const Summary = styled(FlexDivSpaceBetween)`
     width: 300px;
-    margin-top: 5px;
     margin-bottom: 10px;
 `;
 
