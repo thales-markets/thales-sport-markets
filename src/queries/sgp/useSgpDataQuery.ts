@@ -35,7 +35,7 @@ const useSgpDataQuery = (
             const playerIds = sgpParams.playerIds.join();
 
             try {
-                const sgpResponse = await axios.post(
+                const sgpResponse = await axios.get(
                     `${generalConfig.API_URL}/overtime-v2/networks/${networkConfig.networkId}/sgp/quote?gameId=${sgpParams.gameId}&marketNames=${marketNames}&typeIds=${typeIds}&lines=${lines}&playerIds=${playerIds}`,
                     noCacheConfig
                 );

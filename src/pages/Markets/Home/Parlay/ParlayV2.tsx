@@ -117,10 +117,18 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                 }
             });
 
-            return sportsbookWithMaxImpliedOdds ? sgpSportsbooksData[sportsbookWithMaxImpliedOdds] : undefined;
+            return sportsbookWithMaxImpliedOdds
+                ? sgpSportsbooksData[sportsbookWithMaxImpliedOdds]
+                : {
+                      error: t('markets.parlay.validation.sgp-no-odds'),
+                      missingEntries: null,
+                      legs: null,
+                      price: null,
+                      priceWithSpread: null,
+                  };
         }
         return undefined;
-    }, [sgpDataQuery.isSuccess, sgpDataQuery.data]);
+    }, [sgpDataQuery.isSuccess, sgpDataQuery.data, t]);
 
     useEffect(() => {
         if (sportsAmmDataQuery.isSuccess && sportsAmmDataQuery.data) {
@@ -277,6 +285,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     const onCloseValidationModal = useCallback(() => dispatch(resetTicketError()), [dispatch]);
 
     const hasParlayMarkets = ticketMarkets.length > 0 || unavailableMarkets.length > 0;
+    const isSgpSupported = !ticket[0]?.live;
 
     return (
         <Container isMobile={isMobile} isWalletConnected={isConnected}>
@@ -288,7 +297,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                             <Count>{ticket.length}</Count>
                         </Title>
                     )}
-                    {!ticket[0]?.live && (
+                    {isSgpSupported && (
                         <BetTypeContainer>
                             <Tooltip overlay={t('markets.parlay.sgp')}>
                                 <CheckboxContainer>

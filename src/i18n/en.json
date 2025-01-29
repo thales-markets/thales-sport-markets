@@ -821,7 +821,8 @@
                 "futures-combining-not-supported": "Combining futures on parlay is not supported",
                 "system-bet-min-markets-validation": "System bet requires minimum {{minMarkets}} games",
                 "sgp-bet-min-markets-validation": "SGP bet requires minimum {{minMarkets}} games",
-                "sgp-different-game": "It is not supported to combine different games in the same game parlay"
+                "sgp-different-game": "It is not supported to combine different games in the same game parlay",
+                "sgp-no-odds": "Missing odds from provider"
             },
             "share-ticket": {
                 "label": "Share for Twitter boost",

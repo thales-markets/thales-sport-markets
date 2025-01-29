@@ -2022,7 +2022,7 @@ const Ticket: React.FC<TicketProps> = ({
         if (isSgp && sgpData && sgpData.error) {
             text = sgpData.missingEntries?.length
                 ? `${sgpData.error.replace('.', ':')} ${sgpData.missingEntries
-                      .map((entry) => entry.name || entry.market)
+                      .map((entry) => `${entry.market} (${entry.name})`)
                       .join()}`
                 : sgpData.error;
         }
