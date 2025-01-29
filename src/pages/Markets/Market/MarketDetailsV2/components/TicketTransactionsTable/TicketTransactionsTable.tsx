@@ -1,19 +1,19 @@
-import SPAAnchor from 'components/SPAAnchor';
 import ShareTicketModalV2 from 'components/ShareTicketModalV2';
 import { ShareTicketModalProps } from 'components/ShareTicketModalV2/ShareTicketModalV2';
 import Table from 'components/Table';
 import Tooltip from 'components/Tooltip';
+import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { USD_SIGN } from 'constants/currency';
-import { OddsType } from 'enums/markets';
-import i18n from 'i18n';
+import { ContractType } from 'enums/contract';
+import { RiskManagementRole } from 'enums/riskManagement';
+import useWhitelistedAddressQuery from 'queries/markets/useWhitelistedAddressQuery';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { getIsMobile } from 'redux/modules/app';
+import { toast } from 'react-toastify';
 import { getOddsType } from 'redux/modules/ui';
 import { useTheme } from 'styled-components';
-import { FlexDivColumn } from 'styles/common';
 import {
     Coins,
     formatCurrencyWithKey,
@@ -23,14 +23,15 @@ import {
     truncateAddress,
 } from 'thales-utils';
 import { Rates } from 'types/collateral';
-import { SportMarket, Ticket, TicketMarket } from 'types/markets';
+import { SportMarket, Ticket } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { getDefaultCollateral } from 'utils/collaterals';
-import { formatMarketOdds } from 'utils/markets';
-import { getMatchTeams, getPositionTextV2, getTeamNameV2, getTitleText } from 'utils/marketsV2';
-import { buildMarketLink } from 'utils/routes';
-import { formatTicketOdds, getTicketMarketOdd, getTicketMarketStatus, tableSortByStatus } from 'utils/tickets';
-import { useChainId, useClient } from 'wagmi';
+import { getContractInstance } from 'utils/contract';
+import { formatTicketOdds, getTicketMarketOdd, tableSortByStatus } from 'utils/tickets';
+import { Client } from 'viem';
+import { waitForTransactionReceipt } from 'viem/actions';
+import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
+import TicketMarkets from '../TicketMarkets';
 import {
     ExpandedRowWrapper,
     ExternalLink,
@@ -39,23 +40,13 @@ import {
     LastExpandedSection,
     LiveSystemIndicatorContainer,
     LiveSystemLabel,
-    MarketStatus,
-    MarketStatusIcon,
-    MarketTypeInfo,
-    MatchTeamsLabel,
-    Odd,
-    PositionInfo,
-    PositionText,
     QuoteLabel,
     QuoteText,
     QuoteWrapper,
-    SelectionInfoContainer,
+    SettingsIcon,
     StatusIcon,
     StatusWrapper,
     TableText,
-    TeamNameLabel,
-    TeamNamesContainer,
-    TicketRow,
     TwitterIcon,
     TwitterWrapper,
     tableHeaderStyle,
@@ -82,13 +73,14 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
     expandAll,
 }) => {
     const { t } = useTranslation();
-    const language = i18n.language;
     const theme: ThemeInterface = useTheme();
-    const isMobile = useSelector(getIsMobile);
     const selectedOddsType = useSelector(getOddsType);
 
     const networkId = useChainId();
     const client = useClient();
+    const walletClient = useWalletClient();
+    const { address, isConnected } = useAccount();
+    const walletAddress = address || '';
 
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
     const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps | undefined>(undefined);
@@ -104,6 +96,19 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
         }
         return (!!exchangeRates ? exchangeRates[collateral] || 1 : 1) * value;
     };
+
+    const whitelistedAddressQuery = useWhitelistedAddressQuery(
+        walletAddress,
+        RiskManagementRole.MARKET_RESOLVING,
+        { networkId, client },
+        {
+            enabled: isConnected,
+        }
+    );
+    const isWitelistedForResolve = useMemo(() => whitelistedAddressQuery.isSuccess && whitelistedAddressQuery.data, [
+        whitelistedAddressQuery.data,
+        whitelistedAddressQuery.isSuccess,
+    ]);
 
     const onTwitterIconClick = (ticket: Ticket) => {
         ticket.sportMarkets = ticket.sportMarkets.map((sportMarket) => {
@@ -128,6 +133,33 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
         };
         setShareTicketModalData(modalData);
         setShowShareTicketModal(true);
+    };
+
+    const handleTicketCancel = async (ticketAddress: string) => {
+        const sportAmmContract = getContractInstance(ContractType.SPORTS_AMM_V2, {
+            client: walletClient?.data,
+            networkId,
+        });
+
+        if (sportAmmContract) {
+            const toastId = toast.loading(t('market.toast-message.transaction-pending'));
+            try {
+                const txHash = await sportAmmContract?.write?.cancelTicket([ticketAddress]);
+
+                const txReceipt = await waitForTransactionReceipt(client as Client, {
+                    hash: txHash,
+                });
+                if (txReceipt.status === 'success') {
+                    toast.update(
+                        toastId,
+                        getSuccessToastOptions(t('markets.resolve-modal.cancel-confirmation-message'))
+                    );
+                }
+            } catch (e) {
+                toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+                console.log(e);
+            }
+        }
     };
 
     const columns = [
@@ -272,12 +304,30 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                 }
 
                 if (cellProps.row.original.isFreeBet) {
-                    return (
+                    statusComponent = (
                         <>
                             <Tooltip overlay={t('profile.free-bet.claim-btn')}>
                                 <FreeBetIcon className={'icon icon--gift'} />
                             </Tooltip>
                             {statusComponent}
+                        </>
+                    );
+                }
+
+                if (isWitelistedForResolve && cellProps.row.original.isOpen) {
+                    statusComponent = (
+                        <>
+                            {statusComponent}
+                            <Tooltip overlay={t('markets.resolve-modal.cancel-ticket-tooltip')}>
+                                <SettingsIcon
+                                    className={`icon icon--wrong-full`}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        handleTicketCancel(cellProps.row.original.id);
+                                    }}
+                                />
+                            </Tooltip>
                         </>
                     );
                 }
@@ -297,7 +347,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                     color: theme.textColor.secondary,
                 }}
                 tableRowCellStyles={tableRowStyle}
-                columnsDeps={[networkId, exchangeRates]}
+                columnsDeps={[networkId, exchangeRates, isWitelistedForResolve, walletClient]}
                 columns={columns as any}
                 initialState={{
                     sorting: [
@@ -313,18 +363,15 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                 noResultsMessage={t('market.table.no-results')}
                 showPagination
                 expandedRow={(row) => {
-                    const ticketMarkets = getTicketMarkets(
-                        row.original,
-                        selectedOddsType,
-                        language,
-                        theme,
-                        isMobile,
-                        market
-                    );
-
                     return (
                         <ExpandedRowWrapper>
-                            <FirstExpandedSection>{ticketMarkets}</FirstExpandedSection>
+                            <FirstExpandedSection>
+                                <TicketMarkets
+                                    ticket={row.original}
+                                    market={market}
+                                    isWitelistedForResolve={isWitelistedForResolve}
+                                />
+                            </FirstExpandedSection>
                             {row.original.isSystemBet ? (
                                 <>
                                     <LastExpandedSection>
@@ -457,76 +504,6 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
             )}
         </>
     );
-};
-
-const getTicketMarketStatusIcon = (market: TicketMarket) => {
-    return market.isCancelled ? (
-        <MarketStatusIcon className={`icon icon--lost`} />
-    ) : market.isOpen ? (
-        market.maturityDate < new Date() ? (
-            <MarketStatusIcon className={`icon icon--ongoing`} />
-        ) : (
-            <MarketStatusIcon className={`icon icon--ticket-open`} />
-        )
-    ) : market.isWinning ? (
-        <MarketStatusIcon className={`icon icon--ticket-win`} />
-    ) : (
-        <MarketStatusIcon className={`icon icon--ticket-loss`} />
-    );
-};
-
-const getOpacity = (market: TicketMarket) => (market.isResolved && !market.isWinning ? 0.5 : 1);
-
-const getTicketMarkets = (
-    ticket: Ticket,
-    selectedOddsType: OddsType,
-    language: string,
-    theme: ThemeInterface,
-    isMobile: boolean,
-    market?: SportMarket
-) => {
-    return ticket.sportMarkets.map((ticketMarket, index) => {
-        const isCurrentMarket = market && ticketMarket.gameId === market.gameId;
-        return (
-            <TicketRow highlighted={isCurrentMarket} style={{ opacity: getOpacity(ticketMarket) }} key={`m-${index}`}>
-                <SPAAnchor href={buildMarketLink(ticketMarket.gameId, language)}>
-                    <FlexDivColumn>
-                        <TeamNamesContainer>
-                            <TeamNameLabel>{getTeamNameV2(ticketMarket, 0)}</TeamNameLabel>
-                            {!ticketMarket.isOneSideMarket && !ticketMarket.isPlayerPropsMarket && (
-                                <>
-                                    {!isMobile && <TeamNameLabel>&nbsp;-&nbsp;</TeamNameLabel>}
-                                    <TeamNameLabel>{getTeamNameV2(ticketMarket, 1)}</TeamNameLabel>
-                                </>
-                            )}
-                        </TeamNamesContainer>
-                        {ticketMarket.isPlayerPropsMarket && !isCurrentMarket && (
-                            <MatchTeamsLabel>{`(${getMatchTeams(ticketMarket)})`}</MatchTeamsLabel>
-                        )}
-                    </FlexDivColumn>
-                </SPAAnchor>
-                <SelectionInfoContainer>
-                    <MarketTypeInfo>{getTitleText(ticketMarket)}</MarketTypeInfo>
-                    <PositionInfo>
-                        <PositionText>{getPositionTextV2(ticketMarket, ticketMarket.position, true)}</PositionText>
-                        <Odd>{formatMarketOdds(selectedOddsType, getTicketMarketOdd(ticketMarket))}</Odd>
-                    </PositionInfo>
-                </SelectionInfoContainer>
-                <MarketStatus
-                    color={
-                        ticketMarket.isOpen || ticketMarket.isCancelled
-                            ? theme.status.open
-                            : ticketMarket.isWinning
-                            ? theme.status.win
-                            : theme.status.loss
-                    }
-                >
-                    {getTicketMarketStatusIcon(ticketMarket)}
-                    {getTicketMarketStatus(ticketMarket)}
-                </MarketStatus>
-            </TicketRow>
-        );
-    });
 };
 
 export default TicketTransactionsTable;

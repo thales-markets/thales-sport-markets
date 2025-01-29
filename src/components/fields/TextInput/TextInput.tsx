@@ -50,7 +50,7 @@ const TextInput: React.FC<TextInputProps> = ({
             {label && (
                 <FieldLabel>
                     {label}
-                    {tooltip && <Tooltip overlay={tooltip} />}:
+                    {tooltip && <Tooltip overlay={tooltip} iconFontSize={14} marginLeft={4} />}:
                 </FieldLabel>
             )}
             <Tooltip overlay={showValidation ? validationMessage || '' : ''} isValidation={showValidation}>

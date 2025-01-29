@@ -84,7 +84,7 @@ import {
     getPrecision,
     roundNumberToDecimals,
 } from 'thales-utils';
-import { SportsAmmData, TicketMarket } from 'types/markets';
+import { SportsAmmData, TicketMarket, TradeData } from 'types/markets';
 import { OverdropMultiplier, OverdropUserData } from 'types/overdrop';
 import { RootState } from 'types/redux';
 import { OverdropLevel, ThemeInterface } from 'types/ui';
@@ -107,6 +107,7 @@ import {
 import { getContractInstance } from 'utils/contract';
 import multipleCollateral from 'utils/contracts/multipleCollateralContract';
 import sportsAMMV2Contract from 'utils/contracts/sportsAMMV2Contract';
+import { isErrorExcluded, logErrorToDiscord } from 'utils/discord';
 import { getLiveTradingProcessorTransaction, getRequestId } from 'utils/liveTradingProcessor';
 import { formatMarketOdds } from 'utils/markets';
 import { getTradeData } from 'utils/marketsV2';
@@ -1387,6 +1388,7 @@ const Ticket: React.FC<TicketProps> = ({
             }
 
             const sportsAMMV2OrLiveContract = markets[0].live ? liveTradingProcessorContract : sportsAMMV2Contract;
+            let tradeData: TradeData[] = [];
 
             try {
                 const referralId =
@@ -1394,7 +1396,7 @@ const Ticket: React.FC<TicketProps> = ({
                         ? getReferralId()
                         : null;
 
-                const tradeData = getTradeData(markets);
+                tradeData = getTradeData(markets);
                 const parsedBuyInAmount = coinParser(
                     (swapToThales ? thalesAmount : buyInAmount).toString(),
                     networkId,
@@ -1677,7 +1679,18 @@ const Ticket: React.FC<TicketProps> = ({
                 setIsBuying(false);
                 refetchBalances(walletAddress, networkId);
                 toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                console.log('Error ', e);
+                if (!isErrorExcluded(e as Error)) {
+                    logErrorToDiscord(e as Error, {
+                        componentStack: `BUY error for params:\nnetworkId=${networkId}\nisParticle=${isParticle}\nisLive=${
+                            markets[0]?.live
+                        }\nliveOdds=${JSON.stringify(tradeData[0]?.odds)}\nlivePosition=${
+                            tradeData[0]?.position
+                        }\nbuyInAmount=${(swapToThales
+                            ? thalesAmount
+                            : buyInAmount
+                        ).toString()}\ncollateral=${usedCollateralForBuy}\nisSwapToThales=${swapToThales}`,
+                    });
+                }
             }
         }
     };

@@ -1,11 +1,11 @@
 import { GAS_ESTIMATION_BUFFER, ZERO_ADDRESS } from 'constants/network';
-import { Network } from 'enums/network';
 import { SupportedNetwork } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { Address, Client, encodeFunctionData } from 'viem';
 import { estimateGas } from 'viem/actions';
 import { TradeData } from '../types/markets';
 import { executeBiconomyTransaction } from './biconomy';
+import { Network } from 'enums/network';
 
 export const getSportsAMMV2Transaction: any = async (
     collateralAddress: string,
@@ -196,30 +196,27 @@ export const getSportsAMMV2Transaction: any = async (
     }
 
     if (isSystemBet) {
-        if (networkId === Network.OptimismMainnet && !isAA) {
-            const encodedData = encodeFunctionData({
-                abi: sportsAMMV2Contract.abi,
-                functionName: 'tradeSystemBet',
-                args: [
-                    tradeData,
-                    buyInAmount,
-                    expectedQuote,
-                    additionalSlippage,
-                    referralAddress,
-                    collateralAddress,
-                    isEth,
-                    systemBetDenominator,
-                ],
-            });
+        const encodedData = encodeFunctionData({
+            abi: sportsAMMV2Contract.abi,
+            functionName: 'trade',
+            args: [
+                tradeData,
+                buyInAmount,
+                expectedQuote,
+                additionalSlippage,
+                referralAddress,
+                isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
+                isEth,
+            ],
+        });
 
-            const estimation = await estimateGas(client, {
-                to: sportsAMMV2Contract.address as Address,
-                data: encodedData,
-                value: isEth ? buyInAmount : undefined,
-            });
+        const estimation = await estimateGas(client, {
+            to: sportsAMMV2Contract.address as Address,
+            data: encodedData,
+            value: isEth ? buyInAmount : BigInt(0),
+        });
 
-            finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER); // using Math.celi as gasLimit is accepting only integer.
-        }
+        finalEstimation = BigInt(Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER));
 
         return isAA
             ? await executeBiconomyTransaction({
