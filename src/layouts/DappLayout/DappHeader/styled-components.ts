@@ -71,6 +71,8 @@ export const OverdropIcon = styled.img.attrs({ src: overdrop })`
     height: 75px;
     cursor: pointer;
     margin-right: 20px;
+    margin-top: -27px;
+    margin-bottom: -27px;
     @media (max-width: 576px) {
         height: 70px;
         margin-right: 0;
@@ -195,6 +197,7 @@ export const OverdropButtonContainer = styled(FlexDiv)`
     justify-content: center;
     cursor: pointer;
     width: 160px;
+    height: 20px;
     font-size: 10px;
     font-weight: 600;
     text-transform: uppercase;
