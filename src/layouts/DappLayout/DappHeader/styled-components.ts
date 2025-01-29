@@ -44,20 +44,7 @@ export const MiddleContainer = styled(FlexDivRowCentered)`
 
 export const RightContainer = styled(FlexDivRowCentered)`
     position: relative;
-    width: 100%;
-    max-width: 360px;
-    @media (max-width: 767px) {
-        flex-direction: column;
-    }
-    > div {
-        :not(:last-child) {
-            margin-right: 20px;
-            @media (max-width: 767px) {
-                margin-right: 0px;
-                margin-bottom: 10px;
-            }
-        }
-    }
+    gap: 15px;
 `;
 
 export const MenuIcon = styled.img.attrs({ src: burger })`

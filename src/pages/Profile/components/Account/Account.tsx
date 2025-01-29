@@ -5,22 +5,23 @@ import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { getIsBiconomy } from 'redux/modules/wallet';
+import { useDispatch, useSelector } from 'react-redux';
+import { getIsBiconomy, setIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { Colors, FlexDivCentered, FlexDivSpaceBetween } from 'styles/common';
-import { formatCurrencyWithSign } from 'thales-utils';
+import { formatCurrencyWithKey } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import biconomyConnector from 'utils/biconomyWallet';
-import { getCollaterals } from 'utils/collaterals';
+import { getCollaterals, mapMultiCollateralBalances } from 'utils/collaterals';
 import { useChainId, useClient, useAccount } from 'wagmi';
 import WithdrawModal from '../WithdrawModal';
 import SwapModal from 'components/SwapModal/SwapModal';
+import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 
 const Account: React.FC = () => {
     const { t } = useTranslation();
-
+    const dispatch = useDispatch();
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
     const networkId = useChainId();
@@ -45,20 +46,36 @@ const Account: React.FC = () => {
     const exchangeRates: Rates | null =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
+    const freeBetCollateralBalancesQuery = useFreeBetCollateralBalanceQuery(
+        walletAddress,
+        { networkId, client },
+        {
+            enabled: isConnected,
+        }
+    );
+
+    const freeBetCollateralBalances =
+        freeBetCollateralBalancesQuery?.isSuccess && freeBetCollateralBalancesQuery.data
+            ? freeBetCollateralBalancesQuery?.data
+            : undefined;
+
+    const balanceList = mapMultiCollateralBalances(freeBetCollateralBalances, exchangeRates, networkId);
+
     const totalBalanceValue = useMemo(() => {
         let total = 0;
         try {
-            if (exchangeRates && multipleCollateralBalances.data) {
+            if (exchangeRates && multipleCollateralBalances.data && balanceList) {
                 getCollaterals(networkId).forEach((token) => {
                     total += multipleCollateralBalances.data[token] * (exchangeRates[token] ? exchangeRates[token] : 1);
                 });
+                balanceList.forEach((data) => (total += data.balanceDollarValue));
             }
 
-            return total ? formatCurrencyWithSign(USD_SIGN, total, 2) : 'N/A';
+            return total ? formatCurrencyWithKey(USD_SIGN, total, 2) : 'N/A';
         } catch (e) {
             return 'N/A';
         }
-    }, [exchangeRates, multipleCollateralBalances.data, networkId]);
+    }, [exchangeRates, multipleCollateralBalances.data, networkId, balanceList]);
 
     return (
         <div>
@@ -104,6 +121,14 @@ const Account: React.FC = () => {
                     Withdraw Funds
                 </Button>
             </ButtonContainer>
+            <SkipText
+                onClick={() => {
+                    console.log('jes pls,', isBiconomy);
+                    dispatch(setIsBiconomy(false));
+                }}
+            >
+                {t('get-started.fund-account.skip')}
+            </SkipText>
             {showFundModal && <FundModal onClose={() => setShowFundModal(false)} />}
             {showWithdrawModal && <WithdrawModal onClose={() => setShowWithdrawModal(false)} />}
             {showSwapModal && <SwapModal onClose={() => setShowSwapModal(false)} />}
@@ -144,6 +169,15 @@ const ButtonContainer = styled(FlexDivCentered)`
 const Icon = styled.i`
     text-transform: lowercase;
     margin-right: 4px;
+`;
+
+const SkipText = styled.p`
+    color: ${(props) => props.theme.textColor.quaternary};
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 30px;
+    cursor: pointer;
 `;
 
 export default Account;

@@ -31,7 +31,6 @@ import { buildHref } from 'utils/routes';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import { ODDS_TYPES } from '../../../constants/markets';
 import { OddsType } from '../../../enums/markets';
-import ProfileItem from './components/ProfileItem';
 import TimeFilters from './components/TimeFilters';
 import {
     BlockedGamesNotificationCount,
@@ -228,7 +227,6 @@ const DappHeader: React.FC = () => {
                                     <OverdropIcon />
                                 )}
                             </SPAAnchor>
-                            {isConnected && <ProfileItem />}
                             <OutsideClickHandler onOutsideClick={() => setDropdownIsOpen(false)}>
                                 <SettingsContainer
                                     onClick={() => {
@@ -265,44 +263,17 @@ const DappHeader: React.FC = () => {
                     <RightContainer>
                         {!isConnected && (
                             <Button
-                                backgroundColor={'transparent'}
-                                textColor={theme.button.borderColor.quaternary}
-                                borderColor={theme.button.borderColor.quaternary}
-                                width="150px"
-                                fontWeight="400"
-                                additionalStyles={{
-                                    borderRadius: '15.5px',
-                                    fontWeight: '600',
-                                    fontSize: '14px',
-                                    marginRight: '10px',
-                                }}
-                                height="28px"
-                                onClick={() =>
-                                    dispatch(
-                                        setWalletConnectModalVisibility({
-                                            visibility: true,
-                                        })
-                                    )
-                                }
-                            >
-                                {t('get-started.log-in')}
-                            </Button>
-                        )}
-                        {!isConnected && (
-                            <Button
-                                backgroundColor={theme.button.background.tertiary}
+                                backgroundColor={theme.button.background.quinary}
                                 textColor={theme.button.textColor.primary}
                                 borderColor={theme.button.borderColor.quinary}
-                                fontWeight="400"
                                 additionalStyles={{
-                                    borderRadius: '15.5px',
-                                    fontWeight: '600',
-                                    fontSize: '14px',
-                                    marginRight: '5px',
-                                    padding: '3px 20px',
+                                    borderRadius: '22px',
+                                    fontWeight: '800',
+                                    fontSize: '12px',
+                                    padding: '9px 20px',
+                                    width: '100px',
+                                    height: '28px',
                                 }}
-                                width="150px"
-                                height="28px"
                                 onClick={() =>
                                     dispatch(
                                         setWalletConnectModalVisibility({
@@ -396,32 +367,6 @@ const DappHeader: React.FC = () => {
                         </FlexDivCentered>
                     ) : (
                         <MobileButtonWrapper>
-                            <Button
-                                backgroundColor={'transparent'}
-                                textColor={theme.button.textColor.quaternary}
-                                borderColor={theme.button.borderColor.secondary}
-                                width="100%"
-                                fontWeight="400"
-                                additionalStyles={{
-                                    maxWidth: 400,
-                                    borderRadius: '15.5px',
-                                    fontWeight: '600',
-                                    fontSize: '12px',
-                                    textTransform: 'capitalize',
-                                    whiteSpace: 'nowrap',
-                                }}
-                                height="28px"
-                                onClick={() =>
-                                    dispatch(
-                                        setWalletConnectModalVisibility({
-                                            visibility: true,
-                                        })
-                                    )
-                                }
-                            >
-                                {t('get-started.log-in')}
-                            </Button>
-
                             <Button
                                 backgroundColor={theme.button.background.quaternary}
                                 textColor={theme.button.textColor.primary}

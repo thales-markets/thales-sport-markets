@@ -11,6 +11,7 @@ export const ProfileLabel = styled.span`
     font-size: 12px;
     color: ${(props) => props.theme.textColor.secondary};
     text-transform: uppercase;
+    white-space: pre;
 `;
 
 export const ProfileIconContainer = styled.div<{ marginRight?: string }>`

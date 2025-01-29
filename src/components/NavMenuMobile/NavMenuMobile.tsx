@@ -113,7 +113,7 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                 <ItemsContainer>
                     {NAV_MENU_FIRST_SECTION.map((item, index) => {
                         if (!item.supportedNetworks.includes(networkId)) return;
-                        if (item.name == 'profile' && !isConnected) return;
+                        if (item.name == 'profile') return;
                         if (item.name == 'resolve-blocker' && !isWitelistedForUnblock) return;
                         return (
                             <SPAAnchor key={index} href={buildHref(item.route)}>

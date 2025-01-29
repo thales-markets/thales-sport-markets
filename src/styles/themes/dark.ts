@@ -35,7 +35,7 @@ export default {
             secondary: Colors.NAVY_BLUE,
             tertiary: Colors.NAVY_BLUE_LIGHT,
             quaternary: Colors.BLUE,
-            quinary: Colors.BLUE,
+            quinary: Colors.GOLD,
             senary: Colors.TORY_BLUE,
             septenary: Colors.RED,
             octonary: Colors.GRAY_TRANSPARENT,

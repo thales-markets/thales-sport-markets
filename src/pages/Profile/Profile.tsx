@@ -5,8 +5,8 @@ import useQueryParam from 'utils/useQueryParams';
 import MyTickets from './components/MyTickets';
 
 const Profile: React.FC = () => {
-    const [selectedTabParam, setSelectedTabParam] = useQueryParam('selected-tab', ProfileTab.OPEN_CLAIMABLE);
-    const [selectedTab, setSelectedTab] = useState<ProfileTab>(ProfileTab.OPEN_CLAIMABLE);
+    const [selectedTabParam, setSelectedTabParam] = useQueryParam('selected-tab', ProfileTab.ACCOUNT);
+    const [selectedTab, setSelectedTab] = useState<ProfileTab>(ProfileTab.ACCOUNT);
 
     useEffect(() => {
         if (Object.values(ProfileTab).includes(selectedTabParam.toLowerCase() as ProfileTab)) {

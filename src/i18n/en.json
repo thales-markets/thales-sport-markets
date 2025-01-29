@@ -758,7 +758,7 @@
         "nav-menu": {
             "items": {
                 "markets": "Markets",
-                "profile": "Profile",
+                "profile": "My Overtime Account",
                 "resolve-blocker": "Resolve blocker",
                 "history": "History",
                 "liquidity-pool": "Provide Liquidity",
@@ -1030,20 +1030,20 @@
     },
     "get-started": {
         "start-tour": "Start tour",
-        "sign-up": "Sign Up",
+        "sign-up": "Sign in",
         "log-in": "Log in",
         "sign-out": "Sign out",
         "get-started": "Get started",
         "title": "Get Started on Overtime",
         "steps": {
             "title": {
-                "sign-up": "Sign up",
+                "sign-up": "Sign in",
                 "logged-in": "Logged in",
                 "deposit": "Deposit ETH",
                 "trade": "Start using Overtime Markets!"
             },
             "description": {
-                "sign-up": "Click on the Sign Up button and choose your Log In method of choice.",
+                "sign-up": "Click on the Sign in button and choose your Log In method of choice.",
                 "logged-in": "You have successfully created your Overtime Smart Account on the blockchain and are logged in.",
                 "deposit": "To start using Overtime, you have to fund your new account with ETH. Click on the Deposit Now button and choose between a Direct Deposit to Address or Buy With Credit Card.",
                 "trade": "You Account is now funded and you are ready to place your positions on Overtime!"
@@ -1053,7 +1053,7 @@
                 "connected": "Connected",
                 "deposit": "Deposit",
                 "logged-in": "Logged in",
-                "sign-up": "Sign up",
+                "sign-up": "Sign in",
                 "trade": "Trade on Overtime"
             }
         },
