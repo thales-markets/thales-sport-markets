@@ -150,8 +150,8 @@ const useMultipleCollateralBalanceQuery = (
                     ARB: ARBBalance ? bigNumberFormatter(ARBBalance, COLLATERAL_DECIMALS.ARB) : 0,
                     OVER: OVERBalance
                         ? bigNumberFormatter(OVERBalance, COLLATERAL_DECIMALS.OVER) < BALANCE_THRESHOLD
-                            ? bigNumberFormatter(OVERBalance, COLLATERAL_DECIMALS.OVER)
-                            : 0
+                            ? 0
+                            : bigNumberFormatter(OVERBalance, COLLATERAL_DECIMALS.OVER)
                         : 0,
                     THALES: THALESBalance
                         ? bigNumberFormatter(THALESBalance, COLLATERAL_DECIMALS.THALES) < BALANCE_THRESHOLD
