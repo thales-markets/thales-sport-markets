@@ -19,4 +19,4 @@ export const logErrorToDiscord = (error: Error, info: ErrorInfo) => {
 const EXCLUDE_ERRORS = ['User rejected the request'];
 
 export const isErrorExcluded = (error: Error) =>
-    EXCLUDE_ERRORS.some((excluded) => (error.message + error.stack || '').includes(excluded));
+    EXCLUDE_ERRORS.some((excluded) => (error.message + (error.stack || '')).includes(excluded));
