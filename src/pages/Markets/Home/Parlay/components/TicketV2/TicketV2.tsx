@@ -464,7 +464,7 @@ const Ticket: React.FC<TicketProps> = ({
     }, [coingeckoRatesQuery, selectedCollateral, buyInAmount, networkId]);
 
     const selectedCollateralCurrencyRate =
-        exchangeRates && exchangeRates !== null ? exchangeRates[usedCollateralForBuy] : 1;
+        exchangeRates && exchangeRates !== null && !isDefaultCollateral ? exchangeRates[usedCollateralForBuy] : 1;
     const overContractCurrencyRate =
         exchangeRates && exchangeRates !== null ? exchangeRates[OVER_CONTRACT_RATE_KEY] : 1;
 
