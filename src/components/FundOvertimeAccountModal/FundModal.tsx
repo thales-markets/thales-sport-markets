@@ -1,6 +1,7 @@
 import Modal from 'components/Modal';
 import Tooltip from 'components/Tooltip';
 import { getInfoToastOptions, getErrorToastOptions } from 'config/toast';
+import { COLLATERAL_ICONS } from 'constants/currency';
 import QRCodeModal from 'pages/AARelatedPages/Deposit/components/QRCodeModal';
 import React, { useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
@@ -13,9 +14,11 @@ import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
 import { truncateAddress } from 'thales-utils';
 import { RootState } from 'types/redux';
 import biconomyConnector from 'utils/biconomyWallet';
+import { getCollaterals } from 'utils/collaterals';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import { getOnRamperUrl } from 'utils/particleWallet/utils';
 import { useAccount, useChainId } from 'wagmi';
+import SandTime from 'assets/images/sand-time.svg?react';
 
 type FundModalProps = {
     onClose: () => void;
@@ -43,6 +46,8 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
     };
 
     const apiKey = import.meta.env.VITE_APP_ONRAMPER_KEY || '';
+
+    console.log(getCollaterals(networkId));
 
     const onramperUrl = useMemo(() => {
         return getOnRamperUrl(apiKey, walletAddress, networkId);
@@ -80,6 +85,23 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                         overlay={t('get-started.fund-account.tooltip-1')}
                     ></Tooltip>
                 </SubTitle>
+
+                <FlexDivCentered>
+                    {getCollaterals(networkId).map((token, key) => {
+                        const ReactElem = COLLATERAL_ICONS[token];
+                        return (
+                            <CollateralWrapper key={key}>
+                                <ReactElem />
+                                <CollateralText>{token}</CollateralText>
+                            </CollateralWrapper>
+                        );
+                    })}
+                </FlexDivCentered>
+
+                <NetworkWrapper>
+                    <FieldHeader>Current Network: </FieldHeader>
+                    <YellowText>{getNetworkNameByNetworkId(networkId, true)}</YellowText>
+                </NetworkWrapper>
 
                 <WalletContainer>
                     <FieldHeader>
@@ -138,10 +160,10 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                         </Box>
                     </Tooltip>
                 </Container>
-
-                <BlueField>
-                    <FieldText>{t('get-started.fund-account.next')}</FieldText>
-                </BlueField>
+                <CollateralWrapper>
+                    <SandTime />
+                    <YellowText>{t('get-started.fund-account.wait-deposit')}</YellowText>
+                </CollateralWrapper>
 
                 <SkipText onClick={onClose}>{t('get-started.fund-account.skip')}</SkipText>
             </Wrapper>
@@ -220,7 +242,6 @@ const Container = styled(FlexDivCentered)`
 `;
 
 const WalletContainer = styled(FlexDivColumnCentered)`
-    margin-top: 30px;
     gap: 14px;
 `;
 
@@ -280,12 +301,34 @@ const Icon = styled.i`
 `;
 
 const SkipText = styled.p`
-    color: ${(props) => props.theme.textColor.quaternary};
+    color: ${(props) => props.theme.textColor.secondary};
     text-align: center;
     font-size: 14px;
     font-weight: 600;
     margin-top: 30px;
     cursor: pointer;
+`;
+
+const CollateralText = styled.p`
+    color: ${(props) => props.theme.textColor.primary};
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.42px;
+`;
+
+const CollateralWrapper = styled(FlexDivColumnCentered)`
+    align-items: center;
+    gap: 8px;
+`;
+
+const YellowText = styled(FieldText)`
+    color: ${(props) => props.theme.button.background.quinary};
+`;
+
+const NetworkWrapper = styled(FlexDivCentered)`
+    margin-top: 30px;
+    margin-bottom: 16px;
+    gap: 2px;
 `;
 
 export default FundModal;

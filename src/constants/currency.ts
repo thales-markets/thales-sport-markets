@@ -3,6 +3,17 @@ import { keyBy } from 'lodash';
 import { Coins } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
 
+import OVER from 'assets/currencies/OVER.svg?react';
+import USDC from 'assets/currencies/USDC.svg?react';
+import USDT from 'assets/currencies/USDT.svg?react';
+import DAI from 'assets/currencies/DAI.svg?react';
+import sUSD from 'assets/currencies/sUSD.svg?react';
+import ETH from 'assets/currencies/ETH.svg?react';
+import WETH from 'assets/currencies/WETH.svg?react';
+import OP from 'assets/currencies/OP.svg?react';
+import ARB from 'assets/currencies/ARB.svg?react';
+import { FunctionComponent, SVGProps } from 'react';
+
 export const USD_SIGN = '$';
 
 const CRYPTO_CURRENCY = [
@@ -121,4 +132,29 @@ export const DEFAULT_MULTI_COLLATERAL_BALANCE = {
     USDC: 0,
     THALES: 0,
     sTHALES: 0,
+};
+
+export const COLLATERAL_ICONS: Record<
+    Coins,
+    FunctionComponent<
+        SVGProps<SVGSVGElement> & {
+            title?: string;
+            titleId?: string;
+            desc?: string;
+            descId?: string;
+        }
+    >
+> = {
+    sUSD: sUSD,
+    DAI: DAI,
+    USDCe: USDC,
+    USDbC: USDC,
+    USDT: USDT,
+    OP: OP,
+    WETH: WETH,
+    ETH: ETH,
+    ARB: ARB,
+    USDC: USDC,
+    THALES: OVER,
+    sTHALES: OVER,
 };
