@@ -31,7 +31,7 @@ import {
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivSpaceBetween } from 'styles/common';
 import { SportMarket, SportMarkets, TicketMarket, TicketPosition } from 'types/markets';
-import { SgpData, SgpParams, SportsbookData } from 'types/sgp';
+import { SgpParams, SportsbookData } from 'types/sgp';
 import { ThemeInterface } from 'types/ui';
 import { isSameMarket } from 'utils/marketsV2';
 import { useAccount, useChainId, useClient } from 'wagmi';
@@ -99,25 +99,11 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     );
 
     const sportsbookData: SportsbookData | undefined = useMemo(() => {
-        if (sgpDataQuery.isSuccess && sgpDataQuery.data && Object.keys(sgpDataQuery.data).length) {
-            const sgpData: SgpData = sgpDataQuery.data;
-            const sgpSportsbooksData = sgpData.data;
-            const sportsbooks = Object.keys(sgpSportsbooksData);
+        if (sgpDataQuery.isSuccess && sgpDataQuery.data) {
+            const selectedSportsbookData = sgpDataQuery.data.data.selectedSportsbook;
 
-            // Find min quote (max price with spread as it is in implied odds format) from multiple sportbooks
-            // If no prices from any sportsbook return first one
-            let maxImpliedOdds = 0;
-            let sportsbookWithMaxImpliedOdds = sportsbooks.length ? sportsbooks[0] : '';
-            sportsbooks.forEach((sportsbook) => {
-                const impliedOdds = sgpSportsbooksData[sportsbook].priceWithSpread || 0;
-                if (impliedOdds > maxImpliedOdds) {
-                    maxImpliedOdds = impliedOdds;
-                    sportsbookWithMaxImpliedOdds = sportsbook;
-                }
-            });
-
-            return sportsbookWithMaxImpliedOdds
-                ? sgpSportsbooksData[sportsbookWithMaxImpliedOdds]
+            return selectedSportsbookData.priceWithSpread || selectedSportsbookData.error
+                ? selectedSportsbookData
                 : {
                       error: t('markets.parlay.validation.sgp-no-odds'),
                       missingEntries: null,

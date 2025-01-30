@@ -22,5 +22,5 @@ export type SportsbookData = {
 };
 
 export type SgpData = {
-    data: Record<string, SportsbookData>;
+    data: Record<string, SportsbookData> & { selectedSportsbook: SportsbookData };
 };

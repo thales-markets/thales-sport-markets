@@ -19,7 +19,7 @@ const useSgpDataQuery = (
         queryFn: async () => {
             let sgpData: SgpData = {
                 data: {
-                    initial: {
+                    selectedSportsbook: {
                         error: null,
                         missingEntries: null,
                         legs: null,
@@ -40,12 +40,13 @@ const useSgpDataQuery = (
                     noCacheConfig
                 );
 
-                if (sgpResponse.status === 200) {
+                // if data object is empty return initial object
+                if (sgpResponse.status === 200 && Object.keys(sgpResponse.data.data).length) {
                     sgpData = sgpResponse.data;
                 }
             } catch (e: any) {
                 console.log(e);
-                sgpData.data.initial.error = e.response.data.error;
+                sgpData.data.selectedSportsbook.error = e.response.data.error;
             }
 
             return sgpData;
