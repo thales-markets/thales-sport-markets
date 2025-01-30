@@ -3,7 +3,7 @@ import { ErrorInfo } from 'react';
 import { isMobile } from 'utils/device';
 
 export const logErrorToDiscord = (error: Error, info: ErrorInfo) => {
-    const content = `IsMobile: ${isMobile()}\nError:\n${error.stack || error.message}\nErrorInfo:${
+    const content = `IsMobile: ${isMobile()}\nError:\n${error.message + '\n' + error.stack || ''}\nErrorInfo:\n${
         info.componentStack
     }`;
 
@@ -15,3 +15,8 @@ export const logErrorToDiscord = (error: Error, info: ErrorInfo) => {
 
     console.error(error, info);
 };
+
+const EXCLUDE_ERRORS = ['User rejected the request'];
+
+export const isErrorExcluded = (error: Error) =>
+    EXCLUDE_ERRORS.some((excluded) => (error.message + (error.stack || '')).includes(excluded));

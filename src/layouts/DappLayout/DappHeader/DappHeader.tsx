@@ -23,7 +23,7 @@ import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
 import { getOddsType, getOverdropUIState, getStopPulsing, setOddsType, setStopPulsing } from 'redux/modules/ui';
 import { getIsBiconomy, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
-import { FlexDiv, FlexDivCentered, FlexDivEnd } from 'styles/common';
+import { FlexDivCentered, FlexDivEnd } from 'styles/common';
 import { RootState } from 'types/redux';
 import { OverdropLevel, ThemeInterface } from 'types/ui';
 import biconomyConnector from 'utils/biconomyWallet';
@@ -216,7 +216,7 @@ const DappHeader: React.FC = () => {
                     <MiddleContainer>
                         <div>{!isConnected ? getGetStartedButton() : isBiconomy ? <TopUp /> : <></>}</div>
                         {isMarketsPage && <TimeFilters />}
-                        <FlexDiv>
+                        <FlexDivCentered>
                             <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
                                 {levelItem.level > 0 ? (
                                     <OverdropButtonContainer>
@@ -258,7 +258,7 @@ const DappHeader: React.FC = () => {
                                     )}
                                 </SettingsContainer>
                             </OutsideClickHandler>
-                        </FlexDiv>
+                        </FlexDivCentered>
                     </MiddleContainer>
 
                     <RightContainer>
