@@ -677,8 +677,8 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         key: 'receivingYards',
         name: 'Receiving yards',
     },
-    [MarketType.PLAYER_PROPS_TOUCHDOWN_SCORER]: {
-        id: MarketType.PLAYER_PROPS_TOUCHDOWN_SCORER,
+    [MarketType.PLAYER_PROPS_TOUCHDOWNS_SCORER]: {
+        id: MarketType.PLAYER_PROPS_TOUCHDOWNS_SCORER,
         key: 'touchdowns',
         name: 'Scoring touchdown',
         description: 'Who will score a touchdown in the game?',
@@ -1272,7 +1272,7 @@ export const PLAYER_PROPS_MARKET_TYPES = [
     MarketType.PLAYER_PROPS_PASSING_TOUCHDOWNS,
     MarketType.PLAYER_PROPS_RUSHING_YARDS,
     MarketType.PLAYER_PROPS_RECEIVING_YARDS,
-    MarketType.PLAYER_PROPS_TOUCHDOWN_SCORER,
+    MarketType.PLAYER_PROPS_TOUCHDOWNS_SCORER,
     MarketType.PLAYER_PROPS_FIELD_GOALS_MADE,
     MarketType.PLAYER_PROPS_PITCHER_HITS_ALLOWED,
     MarketType.PLAYER_PROPS_POINTS,
@@ -1331,7 +1331,7 @@ export const PLAYER_PROPS_MARKET_TYPES = [
 ];
 
 export const ONE_SIDE_PLAYER_PROPS_MARKET_TYPES = [
-    MarketType.PLAYER_PROPS_TOUCHDOWN_SCORER,
+    MarketType.PLAYER_PROPS_TOUCHDOWNS_SCORER,
     MarketType.PLAYER_PROPS_GOALS,
     MarketType.PLAYER_PROPS_FIRST_TOUCHDOWN,
     MarketType.PLAYER_PROPS_LAST_TOUCHDOWN,
@@ -1929,7 +1929,7 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
         ],
         [MarketTypeGroup.PLAYER_TOUCHDOWN_SCORERS]: [
             MarketType.PLAYER_PROPS_FIRST_TOUCHDOWN,
-            MarketType.PLAYER_PROPS_TOUCHDOWN_SCORER,
+            MarketType.PLAYER_PROPS_TOUCHDOWNS_SCORER,
             MarketType.PLAYER_PROPS_LAST_TOUCHDOWN,
             MarketType.PLAYER_PROPS_TOUCHDOWNS,
         ],
@@ -2247,7 +2247,7 @@ export const MarketTypePlayerPropsGroupsBySport: Record<Sport, Partial<Record<Ma
         ],
         [MarketTypeGroup.PLAYER_TOUCHDOWN_SCORERS]: [
             MarketType.PLAYER_PROPS_FIRST_TOUCHDOWN,
-            MarketType.PLAYER_PROPS_TOUCHDOWN_SCORER,
+            MarketType.PLAYER_PROPS_TOUCHDOWNS_SCORER,
             MarketType.PLAYER_PROPS_LAST_TOUCHDOWN,
             MarketType.PLAYER_PROPS_TOUCHDOWNS,
         ],
