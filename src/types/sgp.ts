@@ -1,6 +1,6 @@
 export type SgpParams = {
     gameId: string;
-    marketNames: string[];
+    positions: number[];
     typeIds: number[];
     lines: number[];
     playerIds: number[];

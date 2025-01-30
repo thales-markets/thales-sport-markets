@@ -34,7 +34,6 @@ import { SportMarket, SportMarkets, TicketMarket, TicketPosition } from 'types/m
 import { SgpData, SgpParams, SportsbookData } from 'types/sgp';
 import { ThemeInterface } from 'types/ui';
 import { isSameMarket } from 'utils/marketsV2';
-import { getOpticOddsParamName } from 'utils/sgp';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import TicketV2 from './components/TicketV2';
 import ValidationModal from './components/ValidationModal';
@@ -86,12 +85,12 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
         ticketMarkets.length > 1
             ? {
                   gameId: ticketMarkets[0].gameId,
-                  marketNames: ticketMarkets.map((market) => getOpticOddsParamName(market)),
+                  positions: ticketMarkets.map((market) => market.position),
                   typeIds: ticketMarkets.map((market) => market.typeId),
                   lines: ticketMarkets.map((market) => market.line),
                   playerIds: ticketMarkets.map((market) => market.playerProps.playerId),
               }
-            : { gameId: '', marketNames: [], typeIds: [], lines: [], playerIds: [] };
+            : { gameId: '', positions: [], typeIds: [], lines: [], playerIds: [] };
 
     const sgpDataQuery = useSgpDataQuery(
         sgpParams,

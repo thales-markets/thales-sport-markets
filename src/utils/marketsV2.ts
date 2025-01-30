@@ -47,12 +47,7 @@ import {
 } from './markets';
 import { getLeagueLabel, getLeaguePeriodType, getLeagueScoringType, getLeagueSport } from './sports';
 
-export const getUfcSpecificPositionText = (
-    marketType: number,
-    position: number,
-    homeTeam: string,
-    awayTeam: string
-) => {
+const getUfcSpecificPositionText = (marketType: number, position: number, homeTeam: string, awayTeam: string) => {
     if (marketType === MarketType.WINNING_ROUND) {
         switch (position) {
             case 0:
@@ -150,7 +145,7 @@ const getSimplePositionText = (
         return text;
     }
     if (
-        isOneSideMarket(marketType) ||
+        isOneSideMarket(marketType) || // Looks like a bug, as function is expecting parameter league
         isOneSidePlayerPropsMarket(marketType) ||
         isYesNoPlayerPropsMarket(marketType) ||
         isBothsTeamsToScoreMarket(marketType) ||
@@ -360,7 +355,7 @@ export const getSubtitleText = (market: SportMarket, position: Position) => {
     return undefined;
 };
 
-export const getLineInfo = (typeId: number, position: Position, line: number) => {
+const getLineInfo = (typeId: number, position: Position, line: number) => {
     if (isSpreadMarket(typeId))
         return position === Position.HOME
             ? `${Number(line) > 0 ? '+' : '-'}${Math.abs(line)}`

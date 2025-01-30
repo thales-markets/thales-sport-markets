@@ -14,7 +14,7 @@ const useSgpDataQuery = (
         queryKey: QUERY_KEYS.SgpData(
             networkConfig.networkId,
             sgpParams.gameId,
-            `${sgpParams.marketNames.join()}${sgpParams.typeIds.join()}${sgpParams.lines.join()}${sgpParams.playerIds.join()}`
+            `${sgpParams.positions.join()}${sgpParams.typeIds.join()}${sgpParams.lines.join()}${sgpParams.playerIds.join()}`
         ),
         queryFn: async () => {
             let sgpData: SgpData = {
@@ -29,14 +29,14 @@ const useSgpDataQuery = (
                 },
             };
 
-            const marketNames = sgpParams.marketNames.join();
+            const positions = sgpParams.positions.join();
             const typeIds = sgpParams.typeIds.join();
             const lines = sgpParams.lines.join();
             const playerIds = sgpParams.playerIds.join();
 
             try {
                 const sgpResponse = await axios.get(
-                    `${generalConfig.API_URL}/overtime-v2/networks/${networkConfig.networkId}/sgp/quote?gameId=${sgpParams.gameId}&marketNames=${marketNames}&typeIds=${typeIds}&lines=${lines}&playerIds=${playerIds}`,
+                    `${generalConfig.API_URL}/overtime-v2/networks/${networkConfig.networkId}/sgp/quote?gameId=${sgpParams.gameId}&positions=${positions}&typeIds=${typeIds}&lines=${lines}&playerIds=${playerIds}`,
                     noCacheConfig
                 );
 
