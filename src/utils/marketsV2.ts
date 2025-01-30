@@ -47,7 +47,12 @@ import {
 } from './markets';
 import { getLeagueLabel, getLeaguePeriodType, getLeagueScoringType, getLeagueSport } from './sports';
 
-const getUfcSpecificPositionText = (marketType: number, position: number, homeTeam: string, awayTeam: string) => {
+export const getUfcSpecificPositionText = (
+    marketType: number,
+    position: number,
+    homeTeam: string,
+    awayTeam: string
+) => {
     if (marketType === MarketType.WINNING_ROUND) {
         switch (position) {
             case 0:

@@ -1,4 +1,4 @@
-import { GameStatus, Position, StatusFilter } from 'enums/markets';
+import { GameStatus, StatusFilter } from 'enums/markets';
 import { Coins } from 'thales-utils';
 import { MarketType } from '../enums/marketTypes';
 import { Network } from '../enums/network';
@@ -124,7 +124,7 @@ export type TicketPosition = {
 };
 
 export type TicketMarket = SportMarket & {
-    position: Position;
+    position: number;
     odd: number;
     isWinning?: boolean;
 };

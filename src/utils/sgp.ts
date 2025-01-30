@@ -4,14 +4,19 @@ import { TicketMarket } from 'types/markets';
 import {
     isBothsTeamsToScoreMarket,
     isCombinedPositionsMarket,
+    isOneSideMarket,
+    isOneSidePlayerPropsMarket,
+    isOtherYesNoMarket,
     isPlayerPropsMarket,
     isSpreadMarket,
     isTotalExactMarket,
     isTotalMarket,
     isTotalOddEvenMarket,
+    isUfcSpecificMarket,
     isWinnerMarket,
+    isYesNoPlayerPropsMarket,
 } from './markets';
-import { getLineInfo } from './marketsV2';
+import { getLineInfo, getUfcSpecificPositionText } from './marketsV2';
 
 export const getOpticOddsParamName = (market: TicketMarket) => {
     let paramName = '';
@@ -42,7 +47,13 @@ export const getOpticOddsParamName = (market: TicketMarket) => {
             position2 === Position.DRAW ? 'Draw' : position2 === Position.HOME ? market.homeTeam : market.awayTeam;
 
         paramName = `${name1} :: ${name2}`;
-    } else if (isBothsTeamsToScoreMarket(market.typeId)) {
+    } else if (
+        isOneSideMarket(market.typeId) ||
+        isOneSidePlayerPropsMarket(market.typeId) ||
+        isYesNoPlayerPropsMarket(market.typeId) ||
+        isBothsTeamsToScoreMarket(market.typeId) ||
+        isOtherYesNoMarket(market.typeId)
+    ) {
         paramName = market.position === Position.HOME ? 'Yes' : 'No';
     } else if (
         market.typeId === MarketType.CORRECT_SCORE &&
@@ -55,6 +66,8 @@ export const getOpticOddsParamName = (market: TicketMarket) => {
         paramName = position.slice(0, lastIndex).replaceAll('_', ' ') + position.slice(lastIndex).replace('_', ':');
     } else if (isTotalExactMarket(market.typeId) && market.positionNames && market.positionNames[market.position]) {
         paramName = market.positionNames[market.position].replaceAll('_', ' ');
+    } else if (isUfcSpecificMarket(market.typeId)) {
+        return getUfcSpecificPositionText(market.typeId, market.position, market.homeTeam, market.awayTeam);
     }
 
     return encodeURIComponent(paramName);
