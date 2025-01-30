@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getIsBiconomy, setIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { Colors, FlexDivCentered, FlexDivSpaceBetween } from 'styles/common';
-import { formatCurrencyWithKey } from 'thales-utils';
+import { formatCurrencyWithKey, localStore } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import biconomyConnector from 'utils/biconomyWallet';
@@ -18,6 +18,7 @@ import { useChainId, useClient, useAccount } from 'wagmi';
 import WithdrawModal from '../WithdrawModal';
 import SwapModal from 'components/SwapModal/SwapModal';
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
+import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 
 const Account: React.FC = () => {
     const { t } = useTranslation();
@@ -82,7 +83,7 @@ const Account: React.FC = () => {
             <Box>
                 <Title>{t('profile.account-summary.title')}</Title>
                 <FlexDivSpaceBetween>
-                    <Label>Total Balance</Label>
+                    <Label>{t('profile.account-summary.balance')}</Label>
                     <Value>{totalBalanceValue}</Value>
                 </FlexDivSpaceBetween>
             </Box>
@@ -96,7 +97,7 @@ const Account: React.FC = () => {
                     backgroundColor={Colors.BLUE}
                 >
                     <Icon className="icon icon--wallet2" />
-                    Add More Funds
+                    {t('profile.account-summary.deposit')}
                 </Button>
                 <Button
                     onClick={() => setShowSwapModal(true)}
@@ -107,7 +108,7 @@ const Account: React.FC = () => {
                     backgroundColor={Colors.WHITE}
                 >
                     <Icon className="icon icon--exchange" />
-                    Swap Funds
+                    {t('profile.account-summary.swap')}
                 </Button>
                 <Button
                     onClick={() => setShowWithdrawModal(true)}
@@ -118,13 +119,18 @@ const Account: React.FC = () => {
                     backgroundColor={Colors.YELLOW}
                 >
                     <Icon className="icon icon--logged-in" />
-                    Withdraw Funds
+                    {t('profile.account-summary.withdraw')}
                 </Button>
             </ButtonContainer>
             <SkipText
                 onClick={() => {
-                    console.log('jes pls,', isBiconomy);
-                    dispatch(setIsBiconomy(false));
+                    if (isBiconomy) {
+                        dispatch(setIsBiconomy(false));
+                        localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, false);
+                    } else {
+                        dispatch(setIsBiconomy(true));
+                        localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, true);
+                    }
                 }}
             >
                 {t('get-started.fund-account.skip')}

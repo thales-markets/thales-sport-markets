@@ -338,7 +338,12 @@
     },
     "profile": {
         "account-summary": {
-            "title": "Account Summary"
+            "title": "Account Summary",
+            "balance": "Total balance",
+            "deposit": "Add funds",
+            "swap": "Swap",
+            "withdraw": "Withdraw",
+            "use-eoa": "Switch to your EOA account"
         },
         "stats": {
             "profile-data": "Profile data",
@@ -1072,7 +1077,8 @@
             "next": "Next: Wait for Deposit",
             "skip": "Skip Creating Overtime Account!",
             "copy": "Copy",
-            "qr": "QR code"
+            "qr": "QR code",
+            "wait-deposit": "Waiting for deposit..."
         },
         "withdraw": {
             "title": "Withdraw from <icon/> account",

@@ -4,6 +4,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import Loader from 'components/Loader';
 import { LINKS } from 'constants/links';
 import ROUTES from 'constants/routes';
+import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import DappLayout from 'layouts/DappLayout';
 import Theme from 'layouts/Theme';
 import LiquidityPool from 'pages/LiquidityPool';
@@ -23,6 +24,7 @@ import { useDispatch } from 'react-redux';
 import { Redirect, Route, Router, Switch } from 'react-router-dom';
 import { setMobileState } from 'redux/modules/app';
 import { setIsBiconomy, updateParticleState } from 'redux/modules/wallet';
+import { localStore } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
 import { SeoArticleProps } from 'types/ui';
 import biconomyConnector from 'utils/biconomyWallet';
@@ -73,7 +75,13 @@ const App = () => {
 
                 if (!biconomyConnector.address || biconomyConnector.address === smartAddress) {
                     biconomyConnector.setWallet(smartAccount, smartAddress);
-                    dispatch(setIsBiconomy(true));
+                    const useBiconomy = localStore.get(LOCAL_STORAGE_KEYS.USE_BICONOMY);
+                    console.log('useBiconomy: ', useBiconomy);
+                    if (useBiconomy === false) {
+                        dispatch(setIsBiconomy(false));
+                    } else {
+                        dispatch(setIsBiconomy(true));
+                    }
                 }
             };
 

@@ -32,4 +32,5 @@ export const LOCAL_STORAGE_KEYS = {
     IS_SYSTEM_BET: 'isSystemBet',
     SYSTEM_BET_DENOMINATOR: 'systemBetDenominator',
     ERROR_RELOAD_TIME: 'errorReloadTime',
+    USE_BICONOMY: 'isBiconomy',
 };
