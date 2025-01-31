@@ -40,11 +40,10 @@ export type UISliceState = {
     overdropState: OverdropUIState[];
     overdropWelcomeModal: boolean;
     overdropPreventMultipliersModal: boolean;
-    stakingModalMuteEnd: number;
 };
 
 export type WalletSliceState = {
-    isBiconomy?: boolean;
+    isBiconomy: boolean;
     isParticleReady: boolean;
     connectedViaParticle: boolean;
     walletConnectModal: {

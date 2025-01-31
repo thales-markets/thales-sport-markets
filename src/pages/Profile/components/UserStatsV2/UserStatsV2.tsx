@@ -15,10 +15,9 @@ import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollatera
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import useUsersStatsV2Query from 'queries/wallet/useUsersStatsV2Query';
 import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { setStakingModalMuteEnd } from 'redux/modules/ui';
 import { getIsBiconomy, getIsConnectedViaParticle } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
@@ -62,11 +61,7 @@ import BuyStepsModal from '../../../Markets/Home/Parlay/components/BuyStepsModal
 
 const SHOW_PNL = false;
 
-type UserStatsProps = {
-    setForceOpenStakingModal: (forceOpenStakingModal: boolean) => void;
-};
-
-const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
+const UserStats: React.FC = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const theme: ThemeInterface = useTheme();
@@ -614,38 +609,6 @@ const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
                             </SubLabel>
                             <SubValue>{formatCurrency(thalesBalance)}</SubValue>
                         </Section>
-                        <Button
-                            backgroundColor={theme.button.textColor.tertiary}
-                            borderColor={theme.button.textColor.tertiary}
-                            height="24px"
-                            margin="10px 0 5px 0"
-                            padding="2px 40px"
-                            width="fit-content"
-                            fontSize="16px"
-                            fontWeight="800"
-                            lineHeight="16px"
-                            additionalStyles={additionalButtonStyles}
-                            onClick={() => {
-                                setForceOpenStakingModal(true);
-                                dispatch(setStakingModalMuteEnd(0));
-                            }}
-                        >
-                            {t('profile.stats.stake-label')}
-                        </Button>
-                        <Description>
-                            <Trans
-                                i18nKey={'profile.stats.weekly-rewards'}
-                                components={{
-                                    stakingPageLink: (
-                                        <StakingPageLink
-                                            href="https://www.thales.io/token/staking"
-                                            target="_blank"
-                                            rel="noreferrer"
-                                        />
-                                    ),
-                                }}
-                            />
-                        </Description>
                     </SectionWrapper>
                 </Wrapper>
             )}
@@ -763,13 +726,6 @@ const CurrencyIcon = styled.i`
 
 const SectionWrapper = styled(FlexDivColumnCentered)`
     width: 100%;
-`;
-
-const StakingPageLink = styled.a`
-    color: ${(props) => props.theme.link.textColor.primary};
-    &:hover {
-        text-decoration: underline;
-    }
 `;
 
 const additionalButtonStyles = {

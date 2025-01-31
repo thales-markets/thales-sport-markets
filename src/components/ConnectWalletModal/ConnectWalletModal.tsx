@@ -2,19 +2,18 @@ import { useConnectModal } from '@rainbow-me/rainbowkit';
 import disclaimer from 'assets/docs/overtime-markets-disclaimer.pdf';
 import termsOfUse from 'assets/docs/thales-terms-of-use.pdf';
 import SimpleLoader from 'components/SimpleLoader';
-import ROUTES from 'constants/routes';
+
 import { SUPPORTED_PARTICAL_CONNECTORS_MODAL, SUPPORTED_WALLET_CONNECTORS_MODAL } from 'constants/wallet';
 import React, { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { getWalletConnectModalOrigin } from 'redux/modules/wallet';
+import { getIsBiconomy, setIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
-import { Colors, FlexDiv, FlexDivCentered } from 'styles/common';
+import { Colors, FlexDiv, FlexDivCentered, FlexDivStart } from 'styles/common';
 import { RootState } from 'types/redux';
 import { getWalletLabel, getSpecificConnectorFromConnectorsArray } from 'utils/particleWallet/utils';
-import { navigateTo } from 'utils/routes';
 import { Connector, useConnect } from 'wagmi';
 
 import Discord from 'assets/images/logins-icons/discord.svg?react';
@@ -26,6 +25,9 @@ import WalletConnect from 'assets/images/logins-icons/walletConnect.svg?react';
 import Coinbase from 'assets/images/logins-icons/coinbase.svg?react';
 
 import { ParticalTypes, WalletConnections } from 'types/wallet';
+import Checkbox from 'components/fields/Checkbox';
+import { localStore } from 'thales-utils';
+import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 
 ReactModal.setAppElement('#root');
 
@@ -61,16 +63,14 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
     const { t } = useTranslation();
     const { connectors, isPending, isSuccess, connect } = useConnect();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+    const dispatch = useDispatch();
     const { openConnectModal } = useConnectModal();
-    // const [termsAccepted, setTerms] = useState(false);
-    const [isPartical, setIsPartical] = useState<boolean>(false);
-
-    const modalOrigin = useSelector((state: RootState) => getWalletConnectModalOrigin(state));
+    const [termsAccepted, setTerms] = useState(false);
 
     const handleConnect = (connector: Connector) => {
         try {
             connect({ connector });
-            connector?.id == 'particle' ? setIsPartical(true) : setIsPartical(false);
         } catch (e) {
             console.log('Error occurred');
         }
@@ -78,10 +78,9 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
 
     useEffect(() => {
         if (isSuccess) {
-            if (modalOrigin == 'sign-up') navigateTo(ROUTES.Wizard);
             onClose();
         }
-    }, [isSuccess, isPartical, modalOrigin, onClose]);
+    }, [isSuccess, onClose]);
 
     return (
         <ReactModal
@@ -106,7 +105,7 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                         </Title>
                         <Subtitle>{t('common.wallet.connect-wallet-modal-subtitle')}</Subtitle>
                     </HeaderContainer>
-                    <ButtonsContainer disabled={false}>
+                    <ButtonsContainer disabled={!termsAccepted}>
                         <SocialLoginWrapper>
                             {SUPPORTED_PARTICAL_CONNECTORS_MODAL.map((item, index) => {
                                 const connector = getSpecificConnectorFromConnectorsArray(connectors, item, true);
@@ -156,7 +155,30 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                             </Subtitle>
                         </WalletIconsWrapper>
                     </ButtonsContainer>
-                    <FooterContainer disabled={false}>
+
+                    <CheckboxContainer disabled={!termsAccepted}>
+                        <Checkbox
+                            value={''}
+                            checked={isBiconomy}
+                            onChange={() => {
+                                if (isBiconomy) {
+                                    dispatch(setIsBiconomy(false));
+                                    localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, false);
+                                } else {
+                                    dispatch(setIsBiconomy(true));
+                                    localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, true);
+                                }
+                            }}
+                        />
+                        <FooterText>Use Overtime Account (!Recommended)</FooterText>
+                    </CheckboxContainer>
+
+                    <CheckboxContainer disabled={false}>
+                        <Checkbox value={''} checked={termsAccepted} onChange={setTerms.bind(this, !termsAccepted)} />
+                        <FooterText>I Agree to the Terms and Conditions</FooterText>
+                    </CheckboxContainer>
+
+                    <FooterContainer>
                         <FooterText>
                             <Trans
                                 i18nKey="common.wallet.disclaimer"
@@ -174,7 +196,6 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                                 }}
                             />
                         </FooterText>
-                        {/* <Checkbox value={''} checked={termsAccepted} onChange={setTerms.bind(this, !termsAccepted)} /> */}
                     </FooterContainer>
                 </>
             )}
@@ -247,10 +268,14 @@ const FooterText = styled(Subtitle)`
     text-align: justify;
 `;
 
-const FooterContainer = styled(FlexDivCentered)<{ disabled: boolean }>`
+const CheckboxContainer = styled(FlexDivStart)<{ disabled: boolean }>`
     margin-top: 20px;
     padding-top: 20px;
     border-top: 1px solid ${(props) => (props.disabled ? props.theme.borderColor.quaternary : 'transparent')};
+`;
+
+const FooterContainer = styled(FlexDivCentered)`
+    padding-top: 10px;
 `;
 const WalletIconsWrapper = styled(FlexDivCentered)`
     justify-content: center;

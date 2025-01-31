@@ -4,7 +4,7 @@ import { RootState, WalletSliceState } from 'types/redux';
 const sliceName = 'wallet';
 
 const initialState: WalletSliceState = {
-    isBiconomy: false,
+    isBiconomy: true,
     isParticleReady: false,
     connectedViaParticle: false,
     walletConnectModal: {

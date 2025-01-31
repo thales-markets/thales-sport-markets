@@ -3,7 +3,6 @@ import Logo from 'components/Logo';
 import NavMenu from 'components/NavMenu';
 import NavMenuMobile from 'components/NavMenuMobile';
 import NetworkSwitcher from 'components/NetworkSwitcher';
-import OutsideClickHandler from 'components/OutsideClick';
 import SPAAnchor from 'components/SPAAnchor';
 import Search from 'components/Search';
 import WalletInfo from 'components/WalletInfo';
@@ -13,14 +12,14 @@ import useInterval from 'hooks/useInterval';
 import useClaimablePositionCountV2Query from 'queries/markets/useClaimablePositionCountV2Query';
 import useBlockedGamesQuery from 'queries/resolveBlocker/useBlockedGamesQuery';
 import useWhitelistedForUnblock from 'queries/resolveBlocker/useWhitelistedForUnblock';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { getIsMobile } from 'redux/modules/app';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
-import { getOddsType, getOverdropUIState, getStopPulsing, setOddsType, setStopPulsing } from 'redux/modules/ui';
+import { getOverdropUIState, getStopPulsing, setStopPulsing } from 'redux/modules/ui';
 import { getIsBiconomy, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivEnd } from 'styles/common';
@@ -29,20 +28,11 @@ import { OverdropLevel, ThemeInterface } from 'types/ui';
 import biconomyConnector from 'utils/biconomyWallet';
 import { buildHref } from 'utils/routes';
 import { useAccount, useChainId, useClient } from 'wagmi';
-import { ODDS_TYPES } from '../../../constants/markets';
-import { OddsType } from '../../../enums/markets';
-import TimeFilters from './components/TimeFilters';
 import {
     BlockedGamesNotificationCount,
     Container,
     Count,
-    DropDown,
-    DropDownItem,
-    DropdownContainer,
-    HeaderIcon,
-    HeaderLabel,
     IconWrapper,
-    Label,
     LeftContainer,
     LogoContainer,
     MenuIcon,
@@ -56,7 +46,6 @@ import {
     SearchContainer,
     SearchIcon,
     SearchIconContainer,
-    SettingsContainer,
     SmallBadgeImage,
     WrapperMobile,
 } from './styled-components';
@@ -103,15 +92,11 @@ const DappHeader: React.FC = () => {
     const stopPulsing = useSelector(getStopPulsing);
     const isMobile = useSelector(getIsMobile);
     const overdropUIState = useSelector(getOverdropUIState);
-    const selectedOddsType = useSelector(getOddsType);
 
     const [levelItem, setLevelItem] = useState<OverdropLevel>(OVERDROP_LEVELS[0]);
     const [currentPulsingCount, setCurrentPulsingCount] = useState<number>(0);
     const [navMenuVisibility, setNavMenuVisibility] = useState<boolean | null>(null);
     const [showSearchModal, setShowSearchModal] = useState<boolean>(false);
-    const [dropdownIsOpen, setDropdownIsOpen] = useState<boolean>(false);
-
-    const isMarketsPage = location.pathname === ROUTES.Home || location.pathname === ROUTES.Markets.Home;
 
     const claimablePositionsCountQuery = useClaimablePositionCountV2Query(
         walletAddress,
@@ -151,13 +136,6 @@ const DappHeader: React.FC = () => {
                 ? blockedGamesQuery.data.length
                 : 0,
         [blockedGamesQuery.data, blockedGamesQuery.isSuccess, isWitelistedForUnblock]
-    );
-
-    const setSelectedOddsType = useCallback(
-        (oddsType: OddsType) => {
-            return dispatch(setOddsType(oddsType));
-        },
-        [dispatch]
     );
 
     useInterval(async () => {
@@ -215,7 +193,6 @@ const DappHeader: React.FC = () => {
                     </LeftContainer>
 
                     <MiddleContainer>
-                        {isMarketsPage && <TimeFilters />}
                         <FlexDivCentered>
                             <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
                                 {levelItem.level > 0 ? (
@@ -227,36 +204,6 @@ const DappHeader: React.FC = () => {
                                     <OverdropIcon />
                                 )}
                             </SPAAnchor>
-                            <OutsideClickHandler onOutsideClick={() => setDropdownIsOpen(false)}>
-                                <SettingsContainer
-                                    onClick={() => {
-                                        setDropdownIsOpen(!dropdownIsOpen);
-                                    }}
-                                >
-                                    <HeaderIcon className="icon icon--settings" />
-                                    <HeaderLabel>{t('common.settings')}</HeaderLabel>
-                                    {dropdownIsOpen && (
-                                        <DropdownContainer>
-                                            <DropDown>
-                                                {ODDS_TYPES.map((item: OddsType, index: number) => (
-                                                    <DropDownItem
-                                                        key={index}
-                                                        isSelected={selectedOddsType === item}
-                                                        onClick={() => {
-                                                            setSelectedOddsType(item);
-                                                            setDropdownIsOpen(false);
-                                                        }}
-                                                    >
-                                                        <FlexDivCentered>
-                                                            <Label> {t(`common.odds.${item}`)}</Label>
-                                                        </FlexDivCentered>
-                                                    </DropDownItem>
-                                                ))}
-                                            </DropDown>
-                                        </DropdownContainer>
-                                    )}
-                                </SettingsContainer>
-                            </OutsideClickHandler>
                         </FlexDivCentered>
                     </MiddleContainer>
 
@@ -300,7 +247,7 @@ const DappHeader: React.FC = () => {
                             setNavMenuVisibility={(value: boolean | null) => setNavMenuVisibility(value)}
                             skipOutsideClickOnElement={menuImageRef}
                         />
-                        <ActivateAccount />
+                        {isBiconomy && <ActivateAccount />}
                     </RightContainer>
                 </Container>
             )}

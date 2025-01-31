@@ -40,6 +40,7 @@ export const LeftContainer = styled(FlexDivRowCentered)`
 export const MiddleContainer = styled(FlexDivRowCentered)`
     width: 100%;
     max-width: 821px;
+    justify-content: center;
 `;
 
 export const RightContainer = styled(FlexDivRowCentered)`

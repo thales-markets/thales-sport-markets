@@ -30,12 +30,12 @@ import {
     Value,
 } from './styled-components';
 
-type StakingModalProps = {
+type ResolveModalProps = {
     ticketMarket: TicketMarket;
     onClose: () => void;
 };
 
-const ResolveModal: React.FC<StakingModalProps> = ({ ticketMarket: market, onClose }) => {
+const ResolveModal: React.FC<ResolveModalProps> = ({ ticketMarket: market, onClose }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
     const { openConnectModal } = useConnectModal();
