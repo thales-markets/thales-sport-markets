@@ -150,7 +150,7 @@ export const DEFAULT_MULTI_COLLATERAL_BALANCE = {
 };
 
 export const COLLATERAL_ICONS: Record<
-    Coins,
+    any, // todo: revert to Coins when all collateral are fixed
     FunctionComponent<
         SVGProps<SVGSVGElement> & {
             title?: string;
@@ -160,16 +160,15 @@ export const COLLATERAL_ICONS: Record<
         }
     >
 > = {
-    sUSD: sUSD,
-    DAI: DAI,
+    sUSD,
+    DAI,
     USDCe: USDC,
     USDbC: USDC,
-    USDT: USDT,
-    OP: OP,
-    WETH: WETH,
-    ETH: ETH,
-    ARB: ARB,
-    USDC: USDC,
-    THALES: OVER,
-    sTHALES: OVER,
+    USDT,
+    OP,
+    WETH,
+    ETH,
+    ARB,
+    USDC,
+    OVER,
 };
