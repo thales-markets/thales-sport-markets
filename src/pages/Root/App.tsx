@@ -4,7 +4,6 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import Loader from 'components/Loader';
 import { LINKS } from 'constants/links';
 import ROUTES from 'constants/routes';
-import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import DappLayout from 'layouts/DappLayout';
 import Theme from 'layouts/Theme';
 import LiquidityPool from 'pages/LiquidityPool';
@@ -23,8 +22,7 @@ import { Suspense, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Redirect, Route, Router, Switch } from 'react-router-dom';
 import { setMobileState } from 'redux/modules/app';
-import { setIsBiconomy, updateParticleState } from 'redux/modules/wallet';
-import { localStore } from 'thales-utils';
+import { updateParticleState } from 'redux/modules/wallet';
 import { SupportedNetwork } from 'types/network';
 import { SeoArticleProps } from 'types/ui';
 import biconomyConnector from 'utils/biconomyWallet';
@@ -32,7 +30,7 @@ import { isMobile } from 'utils/device';
 import { isNetworkSupported, isRouteAvailableForNetwork } from 'utils/network';
 import queryConnector from 'utils/queryConnector';
 import { history } from 'utils/routes';
-import { useChainId, useConnect, useDisconnect, useSwitchChain, useWalletClient } from 'wagmi';
+import { useAccount, useChainId, useDisconnect, useSwitchChain, useWalletClient } from 'wagmi';
 
 const App = () => {
     const dispatch = useDispatch();
@@ -41,8 +39,8 @@ const App = () => {
 
     const { switchChain } = useSwitchChain();
     const { disconnect } = useDisconnect();
-    const { connect } = useConnect();
     const { connectionStatus } = useParticleConnect();
+    const { isConnected } = useAccount();
 
     queryConnector.setQueryClient();
 
@@ -75,13 +73,6 @@ const App = () => {
 
                 if (!biconomyConnector.address || biconomyConnector.address === smartAddress) {
                     biconomyConnector.setWallet(smartAccount, smartAddress);
-                    const useBiconomy = localStore.get(LOCAL_STORAGE_KEYS.USE_BICONOMY);
-                    console.log('useBiconomy: ', useBiconomy);
-                    if (useBiconomy === false) {
-                        dispatch(setIsBiconomy(false));
-                    } else {
-                        dispatch(setIsBiconomy(true));
-                    }
                 }
             };
 
@@ -95,12 +86,11 @@ const App = () => {
             dispatch(updateParticleState({ connectedViaParticle: true }));
         }
         if (connectionStatus === 'disconnected') {
-            dispatch(setIsBiconomy(false));
             dispatch(updateParticleState({ connectedViaParticle: false }));
             biconomyConnector.resetWallet();
-            disconnect();
+            if (!isConnected) disconnect();
         }
-    }, [connect, connectionStatus, disconnect, networkId, dispatch]);
+    }, [isConnected, connectionStatus, disconnect, networkId, dispatch]);
 
     useEffect(() => {
         const handlePageResized = () => {
