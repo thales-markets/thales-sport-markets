@@ -21,8 +21,6 @@ export const getSportsAMMV2Transaction: any = async (
     additionalSlippage: bigint,
     isAA: boolean,
     isFreeBet: boolean,
-    isStakedThales: boolean,
-    stakingThalesBettingProxyContract: ViemContract,
     client: Client,
     isSystemBet: boolean,
     systemBetDenominator: number
@@ -113,88 +111,6 @@ export const getSportsAMMV2Transaction: any = async (
               );
     }
 
-    if (isStakedThales && stakingThalesBettingProxyContract) {
-        if (isSystemBet) {
-            if (networkId === Network.OptimismMainnet && !isAA) {
-                const encodedData = encodeFunctionData({
-                    abi: stakingThalesBettingProxyContract.abi,
-                    functionName: 'tradeSystemBet',
-                    args: [
-                        tradeData,
-                        buyInAmount,
-                        expectedQuote,
-                        additionalSlippage,
-                        referralAddress,
-                        systemBetDenominator,
-                    ],
-                });
-
-                const estimation = await estimateGas(client, {
-                    to: stakingThalesBettingProxyContract.address as Address,
-                    data: encodedData,
-                });
-
-                finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER); // using Math.celi as gasLimit is accepting only integer.
-            }
-
-            return isAA
-                ? await executeBiconomyTransaction({
-                      collateralAddress: collateralAddress as Address,
-                      networkId,
-                      contract: stakingThalesBettingProxyContract,
-                      methodName: 'tradeSystemBet',
-                      data: [
-                          tradeData,
-                          buyInAmount,
-                          expectedQuote,
-                          additionalSlippage,
-                          referralAddress,
-                          systemBetDenominator,
-                      ],
-                  })
-                : stakingThalesBettingProxyContract.write.tradeSystemBet(
-                      [
-                          tradeData,
-                          buyInAmount,
-                          expectedQuote,
-                          additionalSlippage,
-                          referralAddress,
-                          systemBetDenominator,
-                      ],
-
-                      { gasLimit: finalEstimation }
-                  );
-        }
-
-        const encodedData = encodeFunctionData({
-            abi: stakingThalesBettingProxyContract.abi,
-            functionName: 'trade',
-            args: [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress],
-        });
-
-        if (networkId === Network.OptimismMainnet && !isAA) {
-            const estimation = await estimateGas(client, {
-                to: stakingThalesBettingProxyContract.address as Address,
-                data: encodedData,
-            });
-
-            finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER); // using Math.celi as gasLimit is accepting only integer.
-        }
-
-        return isAA
-            ? await executeBiconomyTransaction({
-                  collateralAddress: collateralAddress as Address,
-                  networkId,
-                  contract: stakingThalesBettingProxyContract,
-                  methodName: 'trade',
-                  data: [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress],
-              })
-            : stakingThalesBettingProxyContract.write.trade(
-                  [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress],
-                  { gasLimit: finalEstimation }
-              );
-    }
-
     if (isSystemBet) {
         const encodedData = encodeFunctionData({
             abi: sportsAMMV2Contract.abi,
@@ -205,8 +121,9 @@ export const getSportsAMMV2Transaction: any = async (
                 expectedQuote,
                 additionalSlippage,
                 referralAddress,
-                isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
+                collateralAddress,
                 isEth,
+                systemBetDenominator,
             ],
         });
 

@@ -18,7 +18,7 @@ import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } fr
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getIsBiconomy, getIsConnectedViaParticle } from 'redux/modules/wallet';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import {
@@ -41,8 +41,8 @@ import {
     getCollateralAddress,
     getCollateralIndex,
     getCollaterals,
+    isOverCurrency,
     isStableCurrency,
-    isThalesCurrency,
     sortCollateralBalances,
 } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
@@ -68,8 +68,6 @@ const UserStats: React.FC = () => {
 
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
-    const isParticle = useSelector(getIsConnectedViaParticle);
-
     const networkId = useChainId();
     const client = useClient();
     const walletClient = useWalletClient();
@@ -81,7 +79,7 @@ const UserStats: React.FC = () => {
     const [isBuying, setIsBuying] = useState(false);
     const [isAmountValid, setIsAmountValid] = useState<boolean>(true);
     const [isFetching, setIsFetching] = useState(false);
-    const [swappedThalesToReceive, setSwappedThalesToReceive] = useState(0);
+    const [swappedOverToReceive, setSwappedOverToReceive] = useState(0);
     const [swapQuote, setSwapQuote] = useState(0);
     const [hasSwapAllowance, setHasSwapAllowance] = useState(false);
     const [buyStep, setBuyStep] = useState(BuyTicketStep.APPROVE_SWAP);
@@ -89,7 +87,7 @@ const UserStats: React.FC = () => {
     const [swapCollateralIndex, setSwapCollateralIndex] = useState(0);
 
     const swapCollateralArray = useMemo(
-        () => getCollaterals(networkId).filter((collateral) => !isThalesCurrency(collateral)),
+        () => getCollaterals(networkId).filter((collateral) => !isOverCurrency(collateral)),
         [networkId]
     );
     const selectedCollateral = useMemo(() => getCollateral(networkId, swapCollateralIndex, swapCollateralArray), [
@@ -164,7 +162,6 @@ const UserStats: React.FC = () => {
         return sortedBalances;
     }, [exchangeRates, multiCollateralBalances, networkId]);
 
-    const thalesBalance = multiCollateralBalances ? multiCollateralBalances[CRYPTO_CURRENCY_MAP.THALES as Coins] : 0;
     const paymentTokenBalance: number = useMemo(() => {
         if (multiCollateralBalances) {
             return multiCollateralBalances[selectedCollateral];
@@ -175,7 +172,7 @@ const UserStats: React.FC = () => {
     const isAmountEntered = Number(buyInAmount) > 0;
     const insufficientBalance = Number(buyInAmount) > paymentTokenBalance || !paymentTokenBalance;
     const isButtonDisabled =
-        isBuying || !isAmountEntered || insufficientBalance || !isConnected || swappedThalesToReceive === 0;
+        isBuying || !isAmountEntered || insufficientBalance || !isConnected || swappedOverToReceive === 0;
 
     const inputRef = useRef<HTMLDivElement>(null);
     const inputRefVisible = !!inputRef?.current?.getBoundingClientRect().width;
@@ -215,14 +212,14 @@ const UserStats: React.FC = () => {
                 setIsFetching(true);
                 const quote = await getQuote(networkId, swapToThalesParams);
 
-                setSwappedThalesToReceive(quote);
+                setSwappedOverToReceive(quote);
                 setSwapQuote(Number(buyInAmount) > 0 ? quote / Number(buyInAmount) : 0);
                 setIsFetching(false);
             };
 
             getSwapQuote();
         } else {
-            setSwappedThalesToReceive(0);
+            setSwappedOverToReceive(0);
             setSwapQuote(0);
         }
     }, [buyInAmount, networkId, swapToThalesParams]);
@@ -232,7 +229,7 @@ const UserStats: React.FC = () => {
         async () => {
             if (!openBuyStepsModal /*&& !tooltipTextBuyInAmount*/) {
                 const quote = await getQuote(networkId, swapToThalesParams);
-                setSwappedThalesToReceive(quote);
+                setSwappedOverToReceive(quote);
                 setSwapQuote(Number(buyInAmount) > 0 ? quote / Number(buyInAmount) : 0);
             }
         },
@@ -269,9 +266,9 @@ const UserStats: React.FC = () => {
 
     const handleBuyWithThalesSteps = async (
         initialStep: BuyTicketStep
-    ): Promise<{ step: BuyTicketStep; thalesAmount: number }> => {
+    ): Promise<{ step: BuyTicketStep; overAmount: number }> => {
         let step = initialStep;
-        let thalesAmount = swappedThalesToReceive;
+        let overAmount = swappedOverToReceive;
 
         if (step <= BuyTicketStep.SWAP) {
             if (!isEth && !hasSwapAllowance) {
@@ -330,7 +327,7 @@ const UserStats: React.FC = () => {
                 }
 
                 const balanceBefore = multiCollateralBalances
-                    ? multiCollateralBalances[CRYPTO_CURRENCY_MAP.THALES as Coins]
+                    ? multiCollateralBalances[CRYPTO_CURRENCY_MAP.OVER as Coins]
                     : 0;
                 const swapTxHash = swapRawTransaction ? await sendTransaction(swapRawTransaction) : undefined;
 
@@ -340,25 +337,25 @@ const UserStats: React.FC = () => {
 
                     await delay(3000); // wait for THALES balance to increase
 
-                    const thalesTokenContract = getContractInstance(
+                    const overTokenContract = getContractInstance(
                         ContractType.MULTICOLLATERAL,
                         {
                             networkId,
                             client: walletClient.data as any,
                         },
-                        getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.THALES as Coins)
+                        getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.OVER as Coins)
                     );
 
-                    const balanceAfter = bigNumberFormatter(await thalesTokenContract?.read.balanceOf([walletAddress]));
-                    thalesAmount = balanceAfter - balanceBefore;
-                    setSwappedThalesToReceive(thalesAmount);
+                    const balanceAfter = bigNumberFormatter(await overTokenContract?.read.balanceOf([walletAddress]));
+                    overAmount = balanceAfter - balanceBefore;
+                    setSwappedOverToReceive(overAmount);
                 }
             } catch (e) {
                 console.log('Swap tx failed', e);
             }
         }
 
-        return { step, thalesAmount };
+        return { step, overAmount: overAmount };
     };
 
     const handleSubmit = async () => {
@@ -410,7 +407,7 @@ const UserStats: React.FC = () => {
             return getButton(t(`common.errors.enter-amount`), true);
         }
 
-        return getButton(t('profile.stats.get-thales-label'), isButtonDisabled);
+        return getButton(t('profile.stats.get-over-label'), isButtonDisabled);
     };
 
     return (
@@ -523,7 +520,7 @@ const UserStats: React.FC = () => {
             </Wrapper>
             <Wrapper>
                 <SectionWrapper>
-                    <Title>{t('profile.stats.buy-thales-title')}</Title>
+                    <Title>{t('profile.stats.buy-over-title')}</Title>
                     <InputContainer ref={inputRef}>
                         <NumericInput
                             value={buyInAmount}
@@ -538,7 +535,7 @@ const UserStats: React.FC = () => {
                             inputPadding="5px 10px"
                             borderColor={theme.input.borderColor.tertiary}
                             disabled={isBuying}
-                            label={t('profile.stats.swap-to-thales-label')}
+                            label={t('profile.stats.swap-to-over-label')}
                             placeholder={t('liquidity-pool.deposit-amount-placeholder')}
                             currencyComponent={
                                 <CollateralSelector
@@ -560,7 +557,7 @@ const UserStats: React.FC = () => {
                         />
                     </InputContainer>
                     <Section>
-                        <SubLabel>{t('profile.stats.thales-price-label')}:</SubLabel>
+                        <SubLabel>{t('profile.stats.over-price-label')}:</SubLabel>
                         {isFetching ? (
                             <LoaderContainer>
                                 <SimpleLoader size={16} strokeWidth={6} />
@@ -574,13 +571,13 @@ const UserStats: React.FC = () => {
                         )}
                     </Section>
                     <Section>
-                        <SubLabel>{t('profile.stats.thales-to-receive')}:</SubLabel>
+                        <SubLabel>{t('profile.stats.over-to-receive')}:</SubLabel>
                         {isFetching ? (
                             <LoaderContainer>
                                 <SimpleLoader size={16} strokeWidth={6} />
                             </LoaderContainer>
                         ) : (
-                            <Value>{swappedThalesToReceive === 0 ? '-' : formatCurrency(swappedThalesToReceive)}</Value>
+                            <Value>{swappedOverToReceive === 0 ? '-' : formatCurrency(swappedOverToReceive)}</Value>
                         )}
                     </Section>
                     {getSubmitButton()}
@@ -596,22 +593,6 @@ const UserStats: React.FC = () => {
                     />
                 )}
             </Wrapper>
-            {!isParticle && thalesBalance > 1 && (
-                <Wrapper>
-                    <SectionWrapper>
-                        <Title>{t('profile.stats.stake-title')}</Title>
-                        <Section>
-                            <SubLabel>
-                                <CurrencyIcon
-                                    className={COLLATERAL_ICONS_CLASS_NAMES[CRYPTO_CURRENCY_MAP.THALES as Coins]}
-                                />
-                                {CRYPTO_CURRENCY_MAP.THALES}
-                            </SubLabel>
-                            <SubValue>{formatCurrency(thalesBalance)}</SubValue>
-                        </Section>
-                    </SectionWrapper>
-                </Wrapper>
-            )}
         </>
     );
 };

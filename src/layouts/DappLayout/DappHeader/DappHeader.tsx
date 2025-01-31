@@ -5,6 +5,7 @@ import NavMenuMobile from 'components/NavMenuMobile';
 import NetworkSwitcher from 'components/NetworkSwitcher';
 import SPAAnchor from 'components/SPAAnchor';
 import Search from 'components/Search';
+import ThalesToOverMigrationModal from 'components/ThalesToOverMigrationModal';
 import WalletInfo from 'components/WalletInfo';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
 import ROUTES from 'constants/routes';
@@ -32,6 +33,7 @@ import {
     BlockedGamesNotificationCount,
     Container,
     Count,
+    CurrencyIcon,
     IconWrapper,
     LeftContainer,
     LogoContainer,
@@ -97,6 +99,7 @@ const DappHeader: React.FC = () => {
     const [currentPulsingCount, setCurrentPulsingCount] = useState<number>(0);
     const [navMenuVisibility, setNavMenuVisibility] = useState<boolean | null>(null);
     const [showSearchModal, setShowSearchModal] = useState<boolean>(false);
+    const [showThalesToOverMigrationModal, setShowThalesToOverMigrationModal] = useState<boolean>(false);
 
     const claimablePositionsCountQuery = useClaimablePositionCountV2Query(
         walletAddress,
@@ -205,6 +208,17 @@ const DappHeader: React.FC = () => {
                                 )}
                             </SPAAnchor>
                         </FlexDivCentered>
+                        <Button
+                            onClick={() => setShowThalesToOverMigrationModal(true)}
+                            backgroundColor={theme.button.textColor.quaternary}
+                            borderColor={theme.button.textColor.quaternary}
+                            fontSize="14px"
+                            height="24px"
+                            padding="2px 15px"
+                        >
+                            Migrate <CurrencyIcon className="currency-icon currency-icon--thales" /> to{' '}
+                            <CurrencyIcon className="currency-icon currency-icon--over" />
+                        </Button>
                     </MiddleContainer>
 
                     <RightContainer>
@@ -345,7 +359,23 @@ const DappHeader: React.FC = () => {
                             </FlexDivEnd>
                         </MobileButtonWrapper>
                     )}
+
+                    <Button
+                        onClick={() => setShowThalesToOverMigrationModal(true)}
+                        backgroundColor={theme.button.textColor.quaternary}
+                        borderColor={theme.button.textColor.quaternary}
+                        fontSize="14px"
+                        height="24px"
+                        padding="2px 15px"
+                        margin="10px 0 0 0"
+                    >
+                        Migrate <CurrencyIcon className="currency-icon currency-icon--thales" /> to{' '}
+                        <CurrencyIcon className="currency-icon currency-icon--over" />
+                    </Button>
                 </>
+            )}
+            {showThalesToOverMigrationModal && (
+                <ThalesToOverMigrationModal onClose={() => setShowThalesToOverMigrationModal(false)} />
             )}
         </>
     );

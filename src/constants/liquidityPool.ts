@@ -1,8 +1,7 @@
-import { NetworkId } from 'thales-utils';
+import { Coins, NetworkId } from 'thales-utils';
 import { LiquidityPoolCollateral } from '../enums/liquidityPool';
 import { LiquidityPool } from '../types/liquidityPool';
 import { SupportedNetwork } from '../types/network';
-import { Coins } from 'thales-utils';
 import { CRYPTO_CURRENCY_MAP } from './currency';
 
 export const LiquidityPoolMap: Record<
@@ -25,8 +24,12 @@ export const LiquidityPoolMap: Record<
             address: '0xE59206b08cC96Da0818522C75eE3Fd4EBB7c0A47',
             collateral: CRYPTO_CURRENCY_MAP.THALES as Coins,
         },
+        [LiquidityPoolCollateral.OVER]: {
+            name: 'OVER LP',
+            address: '0xAeb2B8a262D7118322C43449909eEFEe07BbBD7D',
+            collateral: CRYPTO_CURRENCY_MAP.OVER as Coins,
+        },
     },
-    // [NetworkId.Base]: undefined,
     [NetworkId.Arbitrum]: {
         [LiquidityPoolCollateral.USDC]: {
             name: 'USDC LP',
@@ -42,6 +45,28 @@ export const LiquidityPoolMap: Record<
             name: 'THALES LP',
             address: '0x9733AB157f5A89f0AD7460d08F869956aE2018dA',
             collateral: CRYPTO_CURRENCY_MAP.THALES as Coins,
+        },
+        [LiquidityPoolCollateral.OVER]: {
+            name: 'OVER LP',
+            address: '0x796B7361F0E818f5D8446f11Be633D60e2B00898',
+            collateral: CRYPTO_CURRENCY_MAP.OVER as Coins,
+        },
+    },
+    [NetworkId.Base]: {
+        [LiquidityPoolCollateral.USDC]: {
+            name: 'USDC LP',
+            address: '0xf86e90412F52fDad8aD8D1aa2dA5B2C9a7e5f018',
+            collateral: CRYPTO_CURRENCY_MAP.USDC as Coins,
+        },
+        [LiquidityPoolCollateral.WETH]: {
+            name: 'WETH LP',
+            address: '0xcc4ED8cD7101B512B134360ED3cCB759caB33f17',
+            collateral: CRYPTO_CURRENCY_MAP.WETH as Coins,
+        },
+        [LiquidityPoolCollateral.OVER]: {
+            name: 'OVER LP',
+            address: '0xe2FCBAC654970bAd1d88B4F6e10d0Ac6152c584E',
+            collateral: CRYPTO_CURRENCY_MAP.OVER as Coins,
         },
     },
     [NetworkId.OptimismSepolia]: {
@@ -61,4 +86,11 @@ export const LiquidityPoolMap: Record<
             collateral: CRYPTO_CURRENCY_MAP.THALES as Coins,
         },
     },
+};
+
+export const OverRoundOffsetMap: Record<SupportedNetwork, number> = {
+    [NetworkId.OptimismMainnet]: 33,
+    [NetworkId.Arbitrum]: 23,
+    [NetworkId.Base]: 0,
+    [NetworkId.OptimismSepolia]: 0,
 };

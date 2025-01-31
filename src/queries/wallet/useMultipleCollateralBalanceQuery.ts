@@ -3,6 +3,7 @@ import { getBalance } from '@wagmi/core';
 import { CRYPTO_CURRENCY_MAP, DEFAULT_MULTI_COLLATERAL_BALANCE } from 'constants/currency';
 import { TBD_ADDRESS } from 'constants/network';
 import QUERY_KEYS from 'constants/queryKeys';
+import { BALANCE_THRESHOLD } from 'constants/wallet';
 import { ContractType } from 'enums/contract';
 import { wagmiConfig } from 'pages/Root/wagmiConfig';
 import { bigNumberFormatter, Coins, COLLATERAL_DECIMALS } from 'thales-utils';
@@ -74,22 +75,13 @@ const useMultipleCollateralBalanceQuery = (
                         networkConfig,
                         getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.ARB as Coins)
                     ) as ViemContract,
-                    THALES: getContractInstance(
+                    OVER: getContractInstance(
                         ContractType.MULTICOLLATERAL,
                         networkConfig,
-                        getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.THALES as Coins)
+                        getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.OVER as Coins)
                     ) as ViemContract,
-                    sTHALES: getContractInstance(
-                        ContractType.MULTICOLLATERAL,
-                        networkConfig,
-                        getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.sTHALES as Coins)
-                    ) as ViemContract,
+                    THALES: getContractInstance(ContractType.THALES, networkConfig) as ViemContract,
                 };
-
-                const thalesStakingContract = getContractInstance(
-                    ContractType.STAKING_THALES,
-                    networkConfig
-                ) as ViemContract;
 
                 if (!walletAddress || !networkConfig.networkId) {
                     return collateralsBalance;
@@ -106,8 +98,8 @@ const useMultipleCollateralBalanceQuery = (
                     WETHBalance,
                     ETHBalance,
                     ARBBalance,
+                    OVERBalance,
                     THALESBalance,
-                    sTHALESBalance,
                 ] = await Promise.all([
                     multipleCollateralObject?.sUSD && multipleCollateralObject?.sUSD?.address !== TBD_ADDRESS
                         ? multipleCollateralObject.sUSD.read.balanceOf([walletAddress])
@@ -137,11 +129,14 @@ const useMultipleCollateralBalanceQuery = (
                     multipleCollateralObject?.ARB && multipleCollateralObject?.ARB?.address !== TBD_ADDRESS
                         ? multipleCollateralObject.ARB.read.balanceOf([walletAddress])
                         : 0,
+                    multipleCollateralObject?.OVER && multipleCollateralObject?.OVER?.address !== TBD_ADDRESS
+                        ? multipleCollateralObject.OVER.read.balanceOf([walletAddress])
+                        : 0,
                     multipleCollateralObject?.THALES && multipleCollateralObject?.THALES?.address !== TBD_ADDRESS
                         ? multipleCollateralObject.THALES.read.balanceOf([walletAddress])
                         : 0,
-                    thalesStakingContract ? thalesStakingContract.read.stakedBalanceOf([walletAddress]) : 0,
                 ]);
+
                 collateralsBalance = {
                     sUSD: sUSDBalance ? bigNumberFormatter(sUSDBalance, COLLATERAL_DECIMALS.sUSD) : 0,
                     DAI: DAIBalance ? bigNumberFormatter(DAIBalance, COLLATERAL_DECIMALS.DAI) : 0,
@@ -153,12 +148,17 @@ const useMultipleCollateralBalanceQuery = (
                     WETH: WETHBalance ? bigNumberFormatter(WETHBalance, COLLATERAL_DECIMALS.WETH) : 0,
                     ETH: ETHBalance ? bigNumberFormatter(ETHBalance.value, COLLATERAL_DECIMALS.ETH) : 0,
                     ARB: ARBBalance ? bigNumberFormatter(ARBBalance, COLLATERAL_DECIMALS.ARB) : 0,
-                    THALES: THALESBalance ? bigNumberFormatter(THALESBalance, COLLATERAL_DECIMALS.THALES) : 0,
-                    // sub 1 staked THALES due to limitation on contract side
-                    sTHALES:
-                        sTHALESBalance && bigNumberFormatter(sTHALESBalance, COLLATERAL_DECIMALS.sTHALES) > 1
-                            ? bigNumberFormatter(sTHALESBalance, COLLATERAL_DECIMALS.sTHALES) - 1
-                            : 0,
+                    OVER: OVERBalance
+                        ? bigNumberFormatter(OVERBalance, COLLATERAL_DECIMALS.OVER) < BALANCE_THRESHOLD
+                            ? 0
+                            : bigNumberFormatter(OVERBalance, COLLATERAL_DECIMALS.OVER)
+                        : 0,
+                    THALES: THALESBalance
+                        ? bigNumberFormatter(THALESBalance, COLLATERAL_DECIMALS.THALES) < BALANCE_THRESHOLD
+                            ? 0
+                            : bigNumberFormatter(THALESBalance, COLLATERAL_DECIMALS.THALES)
+                        : 0,
+                    sTHALES: 0,
                 };
             } catch (e) {
                 console.log('e ', e);

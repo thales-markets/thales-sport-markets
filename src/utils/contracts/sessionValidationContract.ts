@@ -1,12 +1,14 @@
-import { ZERO_ADDRESS } from 'constants/network';
+import { TBD_ADDRESS, ZERO_ADDRESS } from 'constants/network';
 import { NetworkId } from 'thales-utils';
 import { ContractData } from 'types/viem';
+import { Network } from '../../enums/network';
 
 const sessionValidationContract: ContractData = {
     addresses: {
         [NetworkId.OptimismMainnet]: '0x5851C89881735dE46bd7edDf04E0e0DD51CC6dc5',
         [NetworkId.OptimismSepolia]: ZERO_ADDRESS,
         [NetworkId.Arbitrum]: '0x37bc5a3E8a6ff55edA325ba51Ba8a5d83a52e939',
+        [Network.Base]: TBD_ADDRESS,
     },
     abi: [
         {

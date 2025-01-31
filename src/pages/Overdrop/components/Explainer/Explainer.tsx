@@ -114,10 +114,10 @@ const Explainer: React.FC = () => {
                             }}
                         />
                     </Content>
-                    <Label>{t('overdrop.leveling-tree.explainer.positions-thales')}</Label>
+                    <Label>{t('overdrop.leveling-tree.explainer.positions-over')}</Label>
                     <Content>
                         <Trans
-                            i18nKey="overdrop.leveling-tree.explainer.position-thales-content"
+                            i18nKey="overdrop.leveling-tree.explainer.position-over-content"
                             components={{
                                 br: <br />,
                                 bold: <Bold />,

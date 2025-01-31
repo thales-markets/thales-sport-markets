@@ -47,3 +47,5 @@ export const WALLETS_LABELS: { id: ParticalTypes | WalletConnections; labelKey: 
         labelKey: 'common.wallet.particle-logins.wallet-connect',
     },
 ];
+
+export const BALANCE_THRESHOLD = 0.00000001;

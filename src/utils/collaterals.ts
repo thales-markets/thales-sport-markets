@@ -50,12 +50,17 @@ export const isThalesCurrency = (currencyKey: Coins) => {
     return currencyKey === CRYPTO_CURRENCY_MAP.THALES || currencyKey === CRYPTO_CURRENCY_MAP.sTHALES;
 };
 
+export const isOverCurrency = (currencyKey: Coins) => {
+    return currencyKey === CRYPTO_CURRENCY_MAP.OVER;
+};
+
 export const isLpSupported = (currencyKey: Coins) => {
     return (
         currencyKey === CRYPTO_CURRENCY_MAP.USDC ||
         currencyKey === CRYPTO_CURRENCY_MAP.WETH ||
         currencyKey === CRYPTO_CURRENCY_MAP.ETH ||
-        isThalesCurrency(currencyKey)
+        isThalesCurrency(currencyKey) ||
+        isOverCurrency(currencyKey)
     );
 };
 

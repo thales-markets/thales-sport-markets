@@ -27,7 +27,7 @@ export const getSwapParams = (
         src,
         dst:
             dstTokenAddress ??
-            (multipleCollateralContract[CRYPTO_CURRENCY_MAP.THALES as Coins].addresses[networkId] as Address), // THALES address
+            (multipleCollateralContract[CRYPTO_CURRENCY_MAP.OVER as Coins].addresses[networkId] as Address), // OVER address
         amount: buyIn.toString(),
         from: walletAddress,
         slippage: 1, // 1%
@@ -61,7 +61,7 @@ export const getQuote = async (networkId: SupportedNetwork, swapParams: SwapPara
         const responseBody = response.ok ? await response.json() : Promise.resolve({ dstAmount: BigInt(0) });
 
         return responseBody.dstAmount
-            ? coinFormatter(responseBody.dstAmount, networkId, CRYPTO_CURRENCY_MAP.THALES as Coins)
+            ? coinFormatter(responseBody.dstAmount, networkId, CRYPTO_CURRENCY_MAP.OVER as Coins)
             : 0;
     } catch (e) {
         console.log(e);

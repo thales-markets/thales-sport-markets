@@ -31,7 +31,7 @@ const LpStats: React.FC<LpStatsProps> = ({ round, leagueId, onlyPP }) => {
                     </SubHeader>
                 </SubHeaderWrapper>
                 {lpStats.map((stats, index) => {
-                    return index === 3 ? (
+                    return index === lpStats.length - 1 ? (
                         <Section key={`total-${stats.name}-${index}-${networkId}-lp`}>
                             <Label>
                                 <CurrencyIcon className="icon icon--yield" />
@@ -62,7 +62,7 @@ const LpStats: React.FC<LpStatsProps> = ({ round, leagueId, onlyPP }) => {
                     </SubHeader>
                 </SubHeaderWrapper>
                 {lpStats.map((stats, index) => {
-                    return index === 3 ? (
+                    return index === lpStats.length - 1 ? (
                         <Section key={`total-${stats.name}-${index}-${networkId}-fees`}>
                             <Label>
                                 <CurrencyIcon className="icon icon--yield" />
@@ -93,7 +93,7 @@ const LpStats: React.FC<LpStatsProps> = ({ round, leagueId, onlyPP }) => {
                     </SubHeader>
                 </SubHeaderWrapper>
                 {lpStats.map((stats, index) => {
-                    return index === 3 ? (
+                    return index === lpStats.length - 1 ? (
                         <Section key={`total-${stats.name}-${index}-${networkId}-user`}>
                             <Label>
                                 <CurrencyIcon className="icon icon--yield" />

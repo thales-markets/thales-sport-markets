@@ -520,13 +520,9 @@ const LiquidityPool: React.FC = () => {
                                   collateralAddress: getCollateralAddress(networkId, collateralIndex),
                                   contract: liquidityPoolContractWithSigner,
                                   methodName: 'prepareRoundClosing',
-                                  data: [undefined, undefined, 2],
+                                  data: [],
                               })
-                            : await liquidityPoolContractWithSigner.write.prepareRoundClosing([
-                                  undefined,
-                                  undefined,
-                                  2,
-                              ]);
+                            : await liquidityPoolContractWithSigner.write.prepareRoundClosing([]);
 
                         const txReceipt = await waitForTransactionReceipt(client as Client, {
                             hash: txHash,
@@ -545,9 +541,9 @@ const LiquidityPool: React.FC = () => {
                                   collateralAddress: getCollateralAddress(networkId, collateralIndex),
                                   contract: liquidityPoolContractWithSigner,
                                   methodName: 'processRoundClosingBatch',
-                                  data: [undefined, 100, 2],
+                                  data: [100],
                               })
-                            : await liquidityPoolContractWithSigner.write.processRoundClosingBatch([undefined, 100, 2]);
+                            : await liquidityPoolContractWithSigner.write.processRoundClosingBatch([100]);
 
                         const txReceipt = await waitForTransactionReceipt(client as Client, {
                             hash: txHash,
@@ -567,9 +563,9 @@ const LiquidityPool: React.FC = () => {
                               collateralAddress: getCollateralAddress(networkId, collateralIndex),
                               contract: liquidityPoolContractWithSigner,
                               methodName: 'closeRound',
-                              data: [undefined, undefined, 2],
+                              data: [],
                           })
-                        : await liquidityPoolContractWithSigner.write.closeRound([undefined, undefined, 2]);
+                        : await liquidityPoolContractWithSigner.write.closeRound([]);
                     const txReceipt = await waitForTransactionReceipt(client as Client, {
                         hash: tx,
                     });
@@ -1207,9 +1203,10 @@ const LiquidityPool: React.FC = () => {
                                     </WarningContentInfo>
                                 )}
                             </ContentInfoContainer>
-                            {paramCollateral !== LiquidityPoolCollateral.THALES && (
-                                <Return liquidityPoolAddress={liquidityPoolAddress} />
-                            )}
+                            {paramCollateral !== LiquidityPoolCollateral.THALES &&
+                                paramCollateral !== LiquidityPoolCollateral.OVER && (
+                                    <Return liquidityPoolAddress={liquidityPoolAddress} />
+                                )}
                         </MainContentContainer>
                         <MainContentContainer>
                             {liquidityPoolData && (

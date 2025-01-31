@@ -62,7 +62,7 @@
             "approve-parlay": "Approve ParlayAMM",
             "approve-sports": "Approve SportsAMM",
             "get-usd-progress": "Minting {{amount}}...",
-            "disclaimer": "By signing up to Overtimemarkets <terms>Terms of Use</terms> and Privacy Policy you acknowledge that you have read and understand the Thales DAO protocol <disclaimer>disclaimer</disclaimer>.",
+            "disclaimer": "By signing up to Overtimemarkets <terms>Terms of Use</terms> and Privacy Policy you acknowledge that you have read and understand the Overtime DAO protocol <disclaimer>disclaimer</disclaimer>.",
             "particle-logins": {
                 "google": "Continue with Google",
                 "twitter": "Continue with Twitter",
@@ -154,7 +154,7 @@
         "dapp": "dapp",
         "launch-dapp": "launch dapp",
         "cancel": "Cancel",
-        "support-contact": "Please contact <anchor>Thales support</anchor>",
+        "support-contact": "Please contact <anchor>Overtime support</anchor>",
         "try-again": "Try again",
         "select-date": "Select date...",
         "tags-placeholder": "Search tags...",
@@ -204,7 +204,7 @@
         "github": "GitHub",
         "instagram": "Instagram",
         "reddit": "Reddit",
-        "disclaimer": "This frontend is hosted decentrally on IPFS (InterPlanetary File System). It serves to visualise the blockchain data and help users interact with the Overtime contracts that belong to Thales DAO. By doing so it helps users understand the risks of using those smart contracts and what the specific interactions entail. The frontend does not facilitate anything else apart from interacting with those contracts in a visually comprehensive way. In doing so, it is no different than the functionality provided by Etherscan or RPCs (Remote Procedure Calls). The frontend itself does not belong to Thales DAO or any individual. It stores no user data and has no dedicated backend or database. All code is uploaded statically directly to the IPFS. Just as the blockchain does no geo-fencing and no KYC, neither can this frontend do so. However, by interacting with Thales DAO contracts, you commit to have read, understood and accepted <disclaimer>Thales DAO’s terms of use</disclaimer> and you take full liability in case you have not adhered to those terms. Thales DAO uses the decentralised sUSD token as collateral for all its transactions. In doing so it inherits all the usage rules from Synthetix DAO with regards to collateral and does not introduce its own.To get familiar with Overtime rules and trading guidelines, please visit the <guidelines>Sports Trading Guidelines page</guidelines> in the Overtime docs."
+        "disclaimer": "This frontend is hosted decentrally on IPFS (InterPlanetary File System). It serves to visualise the blockchain data and help users interact with the Overtime contracts that belong to Overtime DAO. By doing so it helps users understand the risks of using those smart contracts and what the specific interactions entail. The frontend does not facilitate anything else apart from interacting with those contracts in a visually comprehensive way. In doing so, it is no different than the functionality provided by Etherscan or RPCs (Remote Procedure Calls). The frontend itself does not belong to Overtime DAO or any individual. It stores no user data and has no dedicated backend or database. All code is uploaded statically directly to the IPFS. Just as the blockchain does no geo-fencing and no KYC, neither can this frontend do so. However, by interacting with Overtime DAO contracts, you commit to have read, understood and accepted <disclaimer>Overtime DAO’s terms of use</disclaimer> and you take full liability in case you have not adhered to those terms. Overtime DAO uses the decentralised sUSD token as collateral for all its transactions. In doing so it inherits all the usage rules from Synthetix DAO with regards to collateral and does not introduce its own.To get familiar with Overtime rules and trading guidelines, please visit the <guidelines>Sports Trading Guidelines page</guidelines> in the Overtime docs."
     },
     "market": {
         "match-time": "Match time",
@@ -318,6 +318,7 @@
             "usd-value-col": "usd value",
             "result-col": "result",
             "tx-status-col": "tx status",
+            "wallet-address-col": "wallet address",
             "type": {
                 "bid": "Bid",
                 "withdrawal": "Withdrawal",
@@ -354,15 +355,12 @@
             "highest-win": "Highest win",
             "lifetime-wins": "Lifetime wins",
             "pnl": "PnL",
-            "buy-thales-title": "You get better odds when betting with THALES",
-            "stake-title": "You can stake THALES to also earn yield while still being able to use it on Overtime for best odds",
-            "stake-label": "Stake",
-            "weekly-rewards": "You get weekly USDC+THALES staking rewards! Claim them on <stakingPageLink>thales.io staking page</stakingPageLink>",
-            "swap-to-thales-label": "Swap to THALES",
-            "get-thales-label": "Get THALES",
-            "swap-success": "Successfully swapped, got {{amount}} {{token}}",
-            "thales-price-label": "THALES PRICE",
-            "thales-to-receive": "THALES TO RECEIVE"
+            "buy-over-title": "You get better odds when betting with OVER",
+            "swap-to-over-label": "Swap to OVER",
+            "get-over-label": "Get OVER",
+            "swap-success": "Successfully swapped to OVER",
+            "over-price-label": "OVER PRICE",
+            "over-to-receive": "OVER TO RECEIVE"
         },
         "swap": {
             "swap": "GET {{token}}",
@@ -487,26 +485,15 @@
             "insufficient-balance": "Insufficient balance",
             "total-amount-batch": "Total amount will be {{ amount }} multiple by {{ count }} wallet address(es)."
         },
-        "staking-modal": {
-            "congratulations-label": "Congratulations!",
-            "claimed": "You claimed: {{amount}}",
-            "staked": "You staked: {{amount}}",
-            "earn-yield": "Stake your THALES to earn yield?",
-            "rewards-apy": "You can stake your THALES to earn weekly rewards, currently at {{apy}} APY.",
-            "thales-on-overtime": "Staked THALES can still be used to bet on Overtime. More details on staking <stakingPageLink>here</stakingPageLink>.",
-            "weekly-rewards": "Claim your staking rewards on <stakingPageLink>thales.io staking page</stakingPageLink>.",
-            "stake-more": "Stake more to earn more yield every week!",
-            "stake-now": "Click below to stake now!",
-            "amount-to-stake-label": "Amount to stake",
-            "stake-confirmation-message": "THALES successfully staked",
-            "validation": {
-                "unstaking-in-progress": "Unstaking in progress, you cannot stake",
-                "staking-paused": "Staking paused, please try later"
-            },
+        "migration-modal": {
+            "title": "Migrate $THALES to $OVER",
+            "description": "<p>Thales DAO has officially migrated to Overtime DAO. You can migrate your  $THALES tokens to $OVER tokens here.</p><p>1 $THALES = 1 $OVER</p><p>More details on the migration in <tipLink>TIP-238</tipLink>.</p>",
+            "amount-label": "THALES to migrate",
+            "over-to-receive": "OVER to receive",
+            "migration-confirmation-message": "THALES successfully migrated to OVER",
             "button": {
-                "stake-label": "Stake",
-                "stake-progress-label": "Staking",
-                "mute-label": "Mute popup for 7 days"
+                "migrate-label": "Migrate",
+                "migrate-progress-label": "Migrating"
             }
         }
     },
@@ -782,7 +769,7 @@
             "ticket-slip": "Ticket slip",
             "regular": "Regular",
             "system": "System",
-            "thales-bonus-info": "Use THALES and get 2% bonus payout for each game.",
+            "over-bonus-info": "Use OVER and get 2% bonus payout for each game.",
             "min-quote": "Min quote",
             "max-quote": "Max quote",
             "winning-quote": "Winning quote",
@@ -790,9 +777,9 @@
             "total-bonus": "Total bonus",
             "persist-games": "Keep selection after submit",
             "keep-selection-tooltip": "By default, the parlay builder is reset after successful submission. Tick this if you want to keep current context after submission.",
-            "thales-bonus-tooltip": "Users placing trades with THALES will get 2% extra payouts for each game they have in their ticket (already calculated in Total quote and Payout).",
-            "swap-thales": "Use THALES for better odds",
-            "swap-thales-tooltip": "<bold>Boost your winnings with THALES!</bold> With just a simple click, you can automatically swap to THALES and enjoy improved betting quotes instantly! Payout is in THALES.",
+            "over-bonus-tooltip": "Users placing trades with OVER will get 2% extra payouts for each game they have in their ticket (already calculated in Total quote and Payout).",
+            "swap-over": "Use OVER for better odds",
+            "swap-over-tooltip": "<bold>Boost your winnings with OVER!</bold> With just a simple click, you can automatically swap to OVER and enjoy improved betting quotes instantly! Payout is in OVER.",
             "clear": "Clear all",
             "buy-in": "Buy-in",
             "parlay-fee": "Parlay fee",
@@ -870,11 +857,9 @@
             },
             "slippage": {
                 "slippage": "Slippage",
-                "swap-thales": "Swap slippage",
                 "label": "Accept trade if odds drop by:",
                 "enter-value": "Enter value",
-                "invalid-value": "Invalid value",
-                "tooltip": "The transfer won’t go through if the bridge rate moves unfavorably by more than this percentage when the transfer is executed."
+                "invalid-value": "Invalid value"
             },
             "overdrop": {
                 "overdrop-xp": "Overdrop XP",
@@ -890,7 +875,7 @@
                     "daily-boost": "The more days in a row you bet, the higher your XP boost. Increase +5% for each day up to maximum of +35%. If you miss one day, this boost resets to 0%",
                     "weekly-boost": "The more weeks in a row you bet, the higher your XP boost. Increase +5% for each week up to maximum of +20%. If you miss one week, this boost resets to 0%",
                     "parlay-boost": "Depending on how many individual games are within your parlay, you will get an additional boost on your XP accrual for that parlay. Maximum is +700% XP boost on 15 games in parlay. The number of games on a parlay for system bets equals the minimal number of games that need to hit.",
-                    "thales-boost": "All bets executed with THALES as collateral will have +10% bonus on baseline XP accrual for that specific bet!",
+                    "over-boost": "All bets executed with OVER as collateral will have +10% bonus on baseline XP accrual for that specific bet!",
                     "twitter-boost": "If you share your Overtime bet on Twitter in the form of a Flex Card, you will activate a 3 day long Twitter Flex Boost of +10%.",
                     "loyalty-boost": "The Loyalty XP Boost gives you up to 25% permanent boost on all your general XP earning, depending on your XP level. Starting at 5% boost on Level 1, you gain another +5% increase on reaching every fifth level.",
                     "promo-boost": "Certain sports games carry additional XP boosts.",
@@ -915,16 +900,7 @@
         "zero-odds-tooltip": "Odds unavailable at the moment.",
         "low-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",
         "discounted-per": "Discounted as per",
-        "incentivized-tooltip": "Triple Thrill: EPL, NFL, and NBA Rewards. A whopping total of 90k OP, 90k ARB, and 180k THALES will be distributed across the three leagues, with each league having its own dedicated 30k OP or ARB + 30k THALES bucket per chain. Check more details <detailsLink>here</detailsLink>.",
         "incentivized-markets": "INCENTIVIZED MARKETS",
-        "incentivized-tooltip-tennis": "A total of {{rewards}} will be distributed during the Australian Open. Check more details <detailsLink>here</detailsLink>.",
-        "incentivized-tooltip-nfl-playoffs": "A whopping total of {{rewards}} will be distributed for the NFL Superbowl. Only volume on Arbitrum network will be calculated towards rewards! Check more details <detailsLink>here</detailsLink>.",
-        "incentivized-tooltip-uefa": "A whopping total of {{rewards}} will be distributed for the UEFA competitions. Only volume on Arbitrum network will be calculated towards rewards! Check more details <detailsLink>here</detailsLink>.",
-        "incentivized-tooltip-nhl-mlb": "A whopping total of {{rewards}} will be distributed for the rest of the MLB season, including the playoffs. Only volume on Arbitrum network will be calculated towards rewards! Check more details <detailsLink>here</detailsLink>.",
-        "superbowl-incentive": "10,000 ARB IN INCENTIVES",
-        "incentivized-tooltip-euro-copa": "A whopping total of {{rewards}} will be distributed for the Euro 2024 and Copa America competitions. Check more details <detailsLink>here</detailsLink>.",
-        "incentivized-tooltip-wimbledon": "Compete for {{rewards}} during Wimbledon 2024 on Overtime V1 and V2. Check more details <detailsLink>here</detailsLink>.",
-        "incentivized-tooltip-olympics": "Earn {{rewards}} in volume-based rewards during the Olympics. Check more details <detailsLink>here</detailsLink>.",
         "resolve-modal": {
             "title": "Resolve market",
             "game": "Game",
@@ -952,29 +928,6 @@
                 "set-result-label": "Set result",
                 "set-result-tooltip": "This action will set result for the markets with the provided gameId, typeId and playerId"
             }
-        }
-    },
-    "rewards": {
-        "header": "Rewards",
-        "search-placeholder": "Search wallet address",
-        "description": "<div>A total of <bold>8,000 OP</bold> and <bold>8,000 Thales</bold> will be distributed bi-weekly on a continuous basis as per <tipLink>TIP-96</tipLink> to offset fees paid to the safebox contracts.</div> <div>The leaderboard will calculate rewards as 90% rebate of the SafeBox fee, which is 1% for singles and 2% for parlays of total amount paid.</div> <div>The $ value of OP and THALES will be calculated using a 7 days twap at the start of the period. If at the end of the two weeks period the total rebates end up being more than the initial twap value of OP and THALES tokens, the rebate will be reduced proportionally for every trader. </div>",
-        "parlay-link": "<div>For the OP monthly parlay competition <parlayLink>click here</ parlayLink>.</div>",
-        "total-negative-pnl": "Total losses",
-        "twap": "One week TWAP",
-        "total-global-rebates": "Total rebates to pay",
-        "op-rewards-banner-message": "OP rewards have started, check how you can earn those on <bold>the OP rewards page</bold>",
-        "your-score": "Your score",
-        "table": {
-            "wallet-address": "Wallet address",
-            "pnl": "Losses",
-            "percentage": "Percentage",
-            "percent": "Percent",
-            "reward-amount": "Reward",
-            "no-data-available": "No data available",
-            "volume": "Volume",
-            "safebox": "SafeBox fees",
-            "rebates": "Rebates",
-            "rank": "Rank"
         }
     },
     "deposit": {
@@ -1094,7 +1047,6 @@
     },
     "liquidity-pool": {
         "title": "Provide Liquidity",
-        "description": "<h1>Description</h1><p>Liquidity providing involves users depositing stablecoin collateral into a smart contract-based liquidity pool for Overtime trading. The collateral deposited is used to facilitate trading on Overtime's AMM.</p><p>At the end of each round, the proportional share of that round's PnL will be added to your deposited balance.</p><p>If you wish to withdraw, you can signal that at any time during the ongoing round, and at the end of the round the amount you signaled for withdrawal (inclusive of that round's PnL) is sent to you.  The minimum amount to be withdrawn is set to 10%</p><p>Providing liquidity exposes you to various risks including potential losses due to users winning in trading as well as smart contract security risks. Please make sure you understand these risks before depositing.</p><p><tipLink>TIP-99</tipLink> has more details on the technical implementation of Overtime liquidity providing.</p>",
         "description-parlay": "<h1>Description</h1><p>Liquidity providing involves users depositing stablecoin collateral into a smart contract-based liquidity pool for Overtime trading. The collateral deposited is used to facilitate trading on Overtime's Parlay AMM.</p><p>At the end of each round, the proportional share of that round's PnL will be added to your deposited balance.</p><p>If you wish to withdraw, you can signal that at any time during the ongoing round, and at the end of the round the amount you signaled for withdrawal (inclusive of that round's PnL) is sent to you. The minimum amount to be withdrawn is set to 10%</p><p>Providing liquidity exposes you to various risks including potential losses due to users winning in trading as well as smart contract security risks. Please make sure you understand these risks before depositing.</p><p><tipLink>TIP-142</tipLink> has more details on the technical implementation of Overtime liquidity providing.</p>",
         "variables": "<h1>Variables</h1><ul><li>Max total deposit: {{maxAllowedDeposit}}</li><li>Max users in the pool: {{maxAllowedUsers}}</li><li>Minimum deposit: {{minDepositAmount}}</li><li>Round duration: {{roundLength}} days</li></ul>",
         "liquidity-pool-not-started-message": "The liquidity pool has not started",
@@ -1110,8 +1062,6 @@
         "current-balance-label": "Current balance",
         "next-round-balance-label": "Next round balance",
         "max-allowance-label": "Max allowance",
-        "your-thales-staked-label": "Your THALES staked",
-        "allowance-multiplier-label": "Allowance multiplier",
         "full-withdrawal-request-label": "Withdrawal request: {{amount}}<tooltip />",
         "partial-withdrawal-request-label": "Withdrawal request: {{percentage}} of the balance ({{amount}}<tooltip />)",
         "estimated-amount-tooltip": "This is an estimated amount. The actual amount will be calculated upon closing the current round based on the round PnL.",
@@ -1127,7 +1077,6 @@
         "deposit-max-amount-of-users-warning": "Maximum number of users in the liquidity pool is reached, you cannot deposit.",
         "deposit-liquidity-pool-cap-reached-warning": "The liquidity pool cap is reached, you cannot deposit.",
         "deposit-liquidity-pool-cap-error": "Deposit amount exceeds liquidity pool cap",
-        "deposit-staked-thales-error": "Deposit amount exceeds max allowance, stake more THALES to deposit",
         "deposit-min-amount-error": "The minimum amount for the deposit is {{amount}}",
         "withdrawal-deposit-warning": "You cannot withdraw as you already deposited for the next round.",
         "full-withdrawal-label": "Full withdrawal",
@@ -1150,9 +1099,7 @@
             "withdraw-confirmation-message": "Funds successfully withdrawn",
             "close-round-label": "Close round",
             "close-round-progress-label": "Closing round in progress...",
-            "close-round-confirmation-message": "Round successfully closed",
-            "get-thales-label": "Get THALES",
-            "stake-thales-label": "Stake THALES"
+            "close-round-confirmation-message": "Round successfully closed"
         },
         "pnl": {
             "pnl-per-round": {
@@ -1233,7 +1180,7 @@
     },
     "banner": {
         "v1-text": "<highlight>Welcome to Overtime V2!</highlight> If you are looking for the legacy V1 version, <highlight>click here</highlight>.",
-        "elections-text": "Elections for Thales Council are now live, exercise your voting power <highlight>here</highlight>.",
+        "elections-text": "Elections for Overtime Council are now live, exercise your voting power <highlight>here</highlight>.",
         "speed-text": "Trade on Speed Markets, win 10,000 PYTH! <highlight>Learn more.</highlight>",
         "nfl-playoff-text": "NFL Playoff: Win 10k OP, 10k ARB & 50k OVER in Free Bets! Learn more <highlight>here</highlight>."
     },
@@ -1274,7 +1221,7 @@
             "total-xp-multiplier": "Total XP multiplier",
             "social-multiplier": "Social XP multiplier",
             "current-rewards": "Current estimated rewards",
-            "next-thales-rewards-at": "Next Thales free bet rewards at",
+            "next-over-rewards-at": "Next OVER free bet rewards at",
             "rank": "Rank",
             "disclaimer": "*Wallets suspected of gaming the system can be disqualified."
         },
@@ -1286,17 +1233,17 @@
                 "base-xp-accrual": "Base XP",
                 "base-xp-content": "The base calculation for how much XP your bet gains you is calculated via the following formula: \n\n <highlight>Base XP = Buy In Amount * (2 - Normalized Odds )</highlight> \n\n - <bold>Buy In Amount:</bold> the amount of $ that you placed as a Buy In on the respective bet.\n\n - <bold>Normalized Odds:</bold> Odds of your bet shown in the format of Normalized Probability between 0 and 1. For example, Decimal Odds of 1.60 is 0.625 in  Normalized Odds format.\n\nThis means that your bet accrues more base XP the higher your buy-in and the higher your bet odds are.",
                 "xp-boost": "XP Boosts",
-                "xp-boost-content": "There are several ways to further boost the amount of your XP accrual per bet by having boosts from <bold>daily bet streaks, weekly bet streaks, amount of games in parlay, using THALES token as collateral,  flexing your bets on twitter and reaching XP levels for loyalty boosts!</bold>",
+                "xp-boost-content": "There are several ways to further boost the amount of your XP accrual per bet by having boosts from <bold>daily bet streaks, weekly bet streaks, amount of games in parlay, using OVER token as collateral,  flexing your bets on twitter and reaching XP levels for loyalty boosts!</bold>",
                 "daily-bonus": "Daily streak boost",
                 "weekly-boost": "Weekly streak boost",
                 "weekly-boost-content": "The conditions for the weekly streak boost to be activated for the ongoing week is to have any betting volume between Monday 00:00UTC and Sunday 23:59UTC for the ongoing week. The more weeks in a row this condition is met, the higher the <bold>Weekly Streak Boost</bold> on your baseline XP accrual!\n\n<bold>Weekly Streak Boost</bold> is applied to all bets made while the boost is active.\n\nIf you break your streak and miss out to drive volume one day, your <bold>Weekly Streak Boost</bold> is reset to +0%.",
                 "parlay-xp": "PARLAY BOOST",
                 "parlay-content": "Depending on how many individual games are within your parlay, you will get an additional boost on your XP accrual for that parlay! The number of games on a parlay for system bets equals the minimal number of games that need to hit.",
-                "positions-thales": "THALES BOOST",
+                "positions-over": "OVER BOOST",
                 "days": "days",
                 "days-content": "The conditions for the daily streak boost to be activated for the ongoing day is to have any betting volume between 00:00UTC and 23:59UTC for the ongoing day. The more days in a row this condition is met, the higher the <bold>Daily Streak Boost</bold> on your baseline XP accrual ! \n\n<bold>Daily Streak Boost</bold> is applied to all bets made while the boost is active. \n\nIf you break your streak and miss out to drive volume one day, <bold>your Daily Streak Boost is reset to +0%.</bold>",
                 "games-in-parlay": "games in parlay",
-                "position-thales-content": "All bets executed with  <bold>THALES</bold> as collateral will have <bold>+10% boost</bold> on baseline XP accrual for that specific bet!",
+                "position-over-content": "All bets executed with  <bold>OVER</bold> as collateral will have <bold>+10% boost</bold> on baseline XP accrual for that specific bet!",
                 "twitter-share-bonus": "twitter share boost",
                 "twitter-content": "If you share your Overtime bet on Twitter in the form of a <bold>Flex Card</bold>, you will activate a <bold>3 day long Twitter Flex Boost of +10%.</bold>  This specific boost is valid for all trades executed within those 72 hours. <bold>After the 72 hours</bold> have elapsed, the boost expires and you can activate it again by sharing a new flex card on Twitter under the same conditions.",
                 "loyalty-boost": "Loyalty boost",
@@ -1316,7 +1263,7 @@
             "total-bonus": "Total boost",
             "active-xp-bonus": "Active xp boost",
             "xp-history": "XP History",
-            "paragraph": "Check your currently active XP boosts below. Additional XP boosts are available on a per-bet basis when using THALES as collateral and/or increasing the number of games in a parlay.",
+            "paragraph": "Check your currently active XP boosts below. Additional XP boosts are available on a per-bet basis when using OVER as collateral and/or increasing the number of games in a parlay.",
             "no-results": "No results",
             "date-time": "Date | Time",
             "received": "Received",
@@ -1337,7 +1284,7 @@
             "gain-xp-label": "Gain XP, level up, earn rewards and farm  the airdrop!",
             "go-to-overdrop": "Go to overdrop",
             "congratulation": "Congratulations!",
-            "reached-level": "You have reached LEVEL {{ level }} and won {{ amount }} THALES free bet!",
+            "reached-level": "You have reached LEVEL {{ level }} and won {{ amount }} OVER free bet!",
             "unlocked-level": "You unlocked LEVEL {{ level }}!",
             "you-are-rocking": "You are rocking it!",
             "day-streak": "<bold>{{ days }}</bold><br/>day streak!",

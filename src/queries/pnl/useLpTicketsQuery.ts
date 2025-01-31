@@ -6,10 +6,11 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { ContractType } from 'enums/contract';
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 import { orderBy } from 'lodash';
+import { NetworkId } from 'thales-utils';
 import { Ticket } from 'types/markets';
 import { NetworkConfig } from 'types/network';
 import { getContractInstance } from 'utils/contract';
-import { getLpAddress } from 'utils/liquidityPool';
+import { getLpAddress, getRoundForOver } from 'utils/liquidityPool';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
 import { mapTicket } from 'utils/tickets';
 import { League } from '../../enums/sports';
@@ -39,10 +40,14 @@ const useLpTicketsQuery = (
                     openMarketsResponse,
                     ongoingMarketsResponse,
                 ] = await Promise.all([
-                    liquidityPoolDataContract.read.getRoundTickets([
-                        getLpAddress(networkConfig.networkId, lpCollateral),
-                        round,
-                    ]),
+                    networkConfig.networkId === NetworkId.Base && lpCollateral === LiquidityPoolCollateral.THALES
+                        ? []
+                        : liquidityPoolDataContract.read.getRoundTickets([
+                              getLpAddress(networkConfig.networkId, lpCollateral),
+                              lpCollateral === LiquidityPoolCollateral.OVER
+                                  ? getRoundForOver(round, networkConfig.networkId)
+                                  : round,
+                          ]),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, noCacheConfig),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/players-info`, noCacheConfig),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/live-scores`, noCacheConfig),
@@ -56,14 +61,13 @@ const useLpTicketsQuery = (
                     ),
                 ]);
 
-                const numberOfBatches = Math.trunc(lpTickets.length / BATCH_SIZE) + 1;
+                const tickets = Array.isArray(lpTickets) ? lpTickets : [lpTickets];
+                const numberOfBatches = Math.trunc(tickets.length / BATCH_SIZE) + 1;
 
                 const promises = [];
                 for (let i = 0; i < numberOfBatches; i++) {
                     promises.push(
-                        sportsAMMDataContract.read.getTicketsData([
-                            lpTickets.slice(i * BATCH_SIZE, (i + 1) * BATCH_SIZE),
-                        ])
+                        sportsAMMDataContract.read.getTicketsData([tickets.slice(i * BATCH_SIZE, (i + 1) * BATCH_SIZE)])
                     );
                 }
 

@@ -5,8 +5,7 @@ import { Address, decodeEventLog, DecodeEventLogParameters } from 'viem';
 import { TradeData } from '../types/markets';
 import { executeBiconomyTransaction } from './biconomy';
 import freeBetHolder from './contracts/freeBetHolder';
-import liveTradingProcessorContract from './contracts/liveTradingProcessorContract';
-import stakingThalesBettingProxy from './contracts/stakingThalesBettingProxy';
+import liquidityPoolDataContract from './contracts/liveTradingProcessorContract';
 import { convertFromBytes32 } from './formatters/string';
 
 export const getLiveTradingProcessorTransaction: any = async (
@@ -20,8 +19,6 @@ export const getLiveTradingProcessorTransaction: any = async (
     isAA: boolean,
     isFreeBet: boolean,
     freeBetHolderContract: ViemContract,
-    isStakedThales: boolean,
-    stakingThalesBettingProxyContract: ViemContract,
     networkId: SupportedNetwork
 ): Promise<any> => {
     const referralAddress = referral || ZERO_ADDRESS;
@@ -51,46 +48,6 @@ export const getLiveTradingProcessorTransaction: any = async (
             });
         } else {
             return freeBetHolderContract.write.tradeLive([
-                {
-                    _gameId: gameId,
-                    _sportId: tradeData[0].sportId,
-                    _typeId: tradeData[0].typeId,
-                    _line: tradeData[0].line,
-                    _position: tradeData[0].position,
-                    _buyInAmount: sUSDPaid,
-                    _expectedQuote: expectedQuote,
-                    _additionalSlippage: additionalSlippage,
-                    _referrer: referralAddress,
-                    _collateral: collateralAddress,
-                },
-            ]);
-        }
-    }
-
-    if (isStakedThales && stakingThalesBettingProxyContract) {
-        if (isAA) {
-            return executeBiconomyTransaction({
-                collateralAddress: collateralAddress as Address,
-                networkId,
-                contract: stakingThalesBettingProxyContract,
-                methodName: 'tradeLive',
-                data: [
-                    {
-                        _gameId: gameId,
-                        _sportId: tradeData[0].sportId,
-                        _typeId: tradeData[0].typeId,
-                        _line: tradeData[0].line,
-                        _position: tradeData[0].position,
-                        _buyInAmount: sUSDPaid,
-                        _expectedQuote: expectedQuote,
-                        _additionalSlippage: additionalSlippage,
-                        _referrer: referralAddress,
-                        _collateral: collateralAddress,
-                    },
-                ],
-            });
-        } else {
-            return stakingThalesBettingProxyContract.write.tradeLive([
                 {
                     _gameId: gameId,
                     _sportId: tradeData[0].sportId,
@@ -146,23 +103,19 @@ export const getLiveTradingProcessorTransaction: any = async (
     }
 };
 
-export const getRequestId = (txLogs: any, isFreeBet: boolean, isStakedThales: boolean) => {
+export const getRequestId = (txLogs: any, isFreeBet: boolean) => {
     const requestIdEvent = txLogs
         .map((log: any) => {
             try {
                 const decoded = decodeEventLog({
-                    abi: isFreeBet
-                        ? freeBetHolder.abi
-                        : isStakedThales
-                        ? stakingThalesBettingProxy.abi
-                        : liveTradingProcessorContract.abi,
+                    abi: isFreeBet ? freeBetHolder.abi : liquidityPoolDataContract.abi,
+
                     data: log.data,
                     topics: log.topics,
                 });
 
                 if (
                     (decoded as DecodeEventLogParameters)?.eventName == 'FreeBetLiveTradeRequested' ||
-                    (decoded as DecodeEventLogParameters)?.eventName == 'StakingTokensLiveTradeRequested' ||
                     (decoded as DecodeEventLogParameters)?.eventName == 'LiveTradeRequested'
                 ) {
                     return (decoded as any)?.args;

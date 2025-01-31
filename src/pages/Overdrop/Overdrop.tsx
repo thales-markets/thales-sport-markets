@@ -2,7 +2,6 @@ import BannerCarousel from 'components/BannerCarousel';
 import { OverdropTab } from 'enums/ui';
 import UserStatsV2 from 'pages/Profile/components/UserStatsV2';
 import React, { useEffect, useState } from 'react';
-
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
 import useQueryParam from 'utils/useQueryParams';

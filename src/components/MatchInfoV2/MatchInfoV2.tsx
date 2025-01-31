@@ -46,7 +46,7 @@ type MatchInfoProps = {
     setAcceptOdds?: (accept: boolean) => void;
     isLive?: boolean;
     applyPayoutMultiplier: boolean;
-    useThalesCollateral?: boolean;
+    useOverCollateral?: boolean;
 };
 
 const MatchInfo: React.FC<MatchInfoProps> = ({
@@ -58,7 +58,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
     setAcceptOdds,
     isLive,
     applyPayoutMultiplier,
-    useThalesCollateral,
+    useOverCollateral,
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -160,7 +160,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
                             selectedOddsType,
                             applyPayoutMultiplier
                                 ? getAddedPayoutOdds(
-                                      useThalesCollateral ? (CRYPTO_CURRENCY_MAP.THALES as Coins) : selectedCollateral,
+                                      useOverCollateral ? (CRYPTO_CURRENCY_MAP.OVER as Coins) : selectedCollateral,
                                       market.odd
                                   )
                                 : market.odd

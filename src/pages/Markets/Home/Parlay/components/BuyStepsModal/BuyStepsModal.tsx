@@ -20,15 +20,7 @@ type BuyStepsModalProps = {
     onlySwap?: boolean;
 };
 
-const BuyStepsModal: React.FC<BuyStepsModalProps> = ({
-    step,
-    isFailed,
-    currencyKey,
-    dstToken,
-    onSubmit,
-    onClose,
-    onlySwap,
-}) => {
+const BuyStepsModal: React.FC<BuyStepsModalProps> = ({ step, isFailed, currencyKey, onSubmit, onClose, onlySwap }) => {
     const { t } = useTranslation();
 
     const getLoader = () => (
@@ -51,7 +43,7 @@ const BuyStepsModal: React.FC<BuyStepsModalProps> = ({
                         <Text>
                             {t('markets.parlay.buy-steps.approve-swap', {
                                 src: currencyKey,
-                                dst: dstToken ? dstToken : CRYPTO_CURRENCY_MAP.THALES,
+                                dst: CRYPTO_CURRENCY_MAP.OVER,
                             })}
                             :
                         </Text>
@@ -60,11 +52,7 @@ const BuyStepsModal: React.FC<BuyStepsModalProps> = ({
                 )}
                 <FlexDivRow>
                     <Text>
-                        {t('markets.parlay.buy-steps.swap', {
-                            src: currencyKey,
-                            dst: dstToken ? dstToken : CRYPTO_CURRENCY_MAP.THALES,
-                        })}
-                        :
+                        {t('markets.parlay.buy-steps.swap', { src: currencyKey, dst: CRYPTO_CURRENCY_MAP.OVER })}:
                     </Text>
                     {step === BuyTicketStep.SWAP
                         ? statusFailedOrInProgress
@@ -76,10 +64,7 @@ const BuyStepsModal: React.FC<BuyStepsModalProps> = ({
                     <>
                         <FlexDivRow>
                             <Text>
-                                {t('markets.parlay.buy-steps.approve-buy', {
-                                    currencyKey: dstToken ? dstToken : CRYPTO_CURRENCY_MAP.THALES,
-                                })}
-                                :
+                                {t('markets.parlay.buy-steps.approve-buy', { currencyKey: CRYPTO_CURRENCY_MAP.OVER })}:
                             </Text>
                             {step === BuyTicketStep.APPROVE_BUY
                                 ? statusFailedOrInProgress
@@ -88,12 +73,7 @@ const BuyStepsModal: React.FC<BuyStepsModalProps> = ({
                                 : ''}
                         </FlexDivRow>
                         <FlexDivRow>
-                            <Text>
-                                {t('markets.parlay.buy-steps.buy', {
-                                    currencyKey: dstToken ? dstToken : CRYPTO_CURRENCY_MAP.THALES,
-                                })}
-                                :
-                            </Text>
+                            <Text>{t('markets.parlay.buy-steps.buy', { currencyKey: CRYPTO_CURRENCY_MAP.OVER })}:</Text>
                             {step === BuyTicketStep.BUY
                                 ? statusFailedOrInProgress
                                 : step > BuyTicketStep.BUY
