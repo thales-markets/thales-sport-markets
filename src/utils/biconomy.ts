@@ -144,8 +144,6 @@ export const executeBiconomyTransaction = async (params: {
     isEth?: boolean;
     buyInAmountParam?: bigint;
 }): Promise<any | undefined> => {
-    console.log(params);
-
     if (biconomyConnector.wallet && params.contract) {
         const encodedCall = encodeFunctionData({
             abi: getContractAbi(params.contract, params.networkId),
