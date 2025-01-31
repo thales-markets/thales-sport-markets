@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { Colors } from 'styles/common';
 import Zebra from 'assets/images/overtime-zebra.svg?react';
 import { activateOvertimeAccount } from 'utils/biconomy';
@@ -20,17 +20,19 @@ import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import FundModal from 'components/FundOvertimeAccountModal';
 import { RootState } from 'types/redux';
 import { Rates } from 'types/collateral';
+import Button from 'components/Button';
 
 const ActivateAccount: React.FC<any> = () => {
     const networkId = useChainId();
     const { t } = useTranslation();
-
+    const theme = useTheme();
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const client = useClient();
     const { address, isConnected } = useAccount();
     const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
     const [showSuccessfulDepositModal, setShowSuccessfulDepositModal] = useState<boolean>(false);
+    const [isMinimizedModal, setIsMinimized] = useState<boolean>(false);
     const [showFundModal, setShowFundModal] = useState<boolean>(false);
 
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(
@@ -104,40 +106,67 @@ const ActivateAccount: React.FC<any> = () => {
     return (
         <div>
             {showSuccessfulDepositModal && (
-                <Wrapper>
-                    <StyledBalanceIcon />
-                    <Header>{t('get-started.activate-account.deposit')}</Header>
-                    <SubTitle>{t('get-started.activate-account.activate')}</SubTitle>
-                    <Box>{t('get-started.activate-account.success')}</Box>
-                    <ActivateButton
-                        onClick={async () => {
-                            const toastId = toast.loading(t('market.toast-message.transaction-pending'));
-                            const txHash = await activateOvertimeAccount({
-                                networkId,
-                                collateralAddress: getCollateralAddress(
-                                    networkId,
-                                    getCollateralIndex(networkId, totalBalanceValue?.max.coin as Coins)
-                                ),
-                            });
-                            if (txHash) {
-                                const txReceipt = await waitForTransactionReceipt(client as Client, {
-                                    hash: txHash,
-                                });
+                <Wrapper show={!isMinimizedModal}>
+                    {!isMinimizedModal ? (
+                        <>
+                            <MinimizeIcon onClick={() => setIsMinimized(true)}> - </MinimizeIcon>
+                            <StyledBalanceIcon />
+                            <Header>{t('get-started.activate-account.deposit')}</Header>
+                            <SubTitle>{t('get-started.activate-account.activate')}</SubTitle>
+                            <Box>{t('get-started.activate-account.success')}</Box>
+                            <ActivateButton
+                                onClick={async () => {
+                                    const toastId = toast.loading(t('market.toast-message.transaction-pending'));
+                                    const txHash = await activateOvertimeAccount({
+                                        networkId,
+                                        collateralAddress: getCollateralAddress(
+                                            networkId,
+                                            getCollateralIndex(networkId, totalBalanceValue?.max.coin as Coins)
+                                        ),
+                                    });
+                                    if (txHash) {
+                                        const txReceipt = await waitForTransactionReceipt(client as Client, {
+                                            hash: txHash,
+                                        });
 
-                                if (txReceipt.status === 'success') {
+                                        if (txReceipt.status === 'success') {
+                                            toast.update(
+                                                toastId,
+                                                getSuccessToastOptions(t('market.toast-message.approve-success'))
+                                            );
+                                            setShowSuccessfulDepositModal(false);
+                                            return;
+                                        }
+                                    }
                                     toast.update(
                                         toastId,
-                                        getSuccessToastOptions(t('market.toast-message.approve-success'))
+                                        getErrorToastOptions(t('common.errors.unknown-error-try-again'))
                                     );
-                                    setShowSuccessfulDepositModal(false);
-                                    return;
-                                }
-                            }
-                            toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                        }}
-                    >
-                        {t('get-started.activate-account.activate-my-account')}
-                    </ActivateButton>
+                                }}
+                            >
+                                {t('get-started.activate-account.activate-my-account')}
+                            </ActivateButton>
+                        </>
+                    ) : (
+                        <>
+                            <Button
+                                backgroundColor={theme.button.background.quinary}
+                                textColor={theme.button.textColor.primary}
+                                borderColor={theme.button.borderColor.quinary}
+                                additionalStyles={{
+                                    borderRadius: '22px',
+                                    fontWeight: '800',
+                                    fontSize: '12px',
+                                    padding: '9px 20px',
+                                    width: '100px',
+                                    height: '28px',
+                                }}
+                                onClick={() => setIsMinimized(false)}
+                            >
+                                Activate
+                            </Button>
+                        </>
+                    )}
                 </Wrapper>
             )}
 
@@ -146,18 +175,55 @@ const ActivateAccount: React.FC<any> = () => {
     );
 };
 
-const Wrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+const Wrapper = styled.div<{ show: boolean }>`
     position: absolute;
     top: 0;
     right: -4px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
     background: ${Colors.GOLD};
     width: 480px;
     padding: 20px;
     border-radius: 16px;
-    z-index: 1000;
+
+    @media (max-width: 512px) {
+        width: auto;
+    }
+
+    ${(props) =>
+        props.show
+            ? `
+      
+                 z-index: 1000;
+               
+    `
+            : `
+            width: 100px;
+            height: 28px;
+            padding: 0;
+            transform: translateX(-390px);
+            transition: height 0.1s ease-out, padding 0.1s ease-out, width 0.1s ease-out,  transform 0.1s ease-in-out;
+            @media (max-width: 512px) {
+                position: relative;
+                transform: translateX(0);
+                width: 100px;
+                transition: none;
+            }
+   
+    `}
+`;
+
+const MinimizeIcon = styled.p`
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    font-size: 54px;
+    line-height: 10px;
+    color: black;
+    cursor: pointer;
 `;
 
 const StyledBalanceIcon = styled(Zebra)`

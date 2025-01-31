@@ -88,13 +88,15 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
 
                 <FlexDivCentered>
                     {getCollaterals(networkId).map((token, key) => {
-                        const ReactElem = COLLATERAL_ICONS[token];
-                        return (
-                            <CollateralWrapper key={key}>
-                                <ReactElem />
-                                <CollateralText>{token}</CollateralText>
-                            </CollateralWrapper>
-                        );
+                        if (COLLATERAL_ICONS[token]) {
+                            const ReactElem = COLLATERAL_ICONS[token];
+                            return (
+                                <CollateralWrapper key={key}>
+                                    <ReactElem />
+                                    <CollateralText>{token}</CollateralText>
+                                </CollateralWrapper>
+                            );
+                        }
                     })}
                 </FlexDivCentered>
 

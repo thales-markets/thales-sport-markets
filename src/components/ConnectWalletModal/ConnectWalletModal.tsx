@@ -170,13 +170,13 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                                 }
                             }}
                         />
-                        <FooterText>Use Overtime Account (!Recommended)</FooterText>
+                        <Label>Use Overtime Account (!Recommended)</Label>
                     </CheckboxContainer>
 
-                    <CheckboxContainer disabled={false}>
+                    <FooterContainer>
                         <Checkbox value={''} checked={termsAccepted} onChange={setTerms.bind(this, !termsAccepted)} />
-                        <FooterText>I Agree to the Terms and Conditions</FooterText>
-                    </CheckboxContainer>
+                        <Label>I Agree to the Terms and Conditions</Label>
+                    </FooterContainer>
 
                     <FooterContainer>
                         <FooterText>
@@ -268,14 +268,22 @@ const FooterText = styled(Subtitle)`
     text-align: justify;
 `;
 
+const Label = styled(Subtitle)`
+    margin-left: 8px;
+    color: ${(props) => props.theme.textColor.primary};
+`;
+
 const CheckboxContainer = styled(FlexDivStart)<{ disabled: boolean }>`
     margin-top: 20px;
     padding-top: 20px;
     border-top: 1px solid ${(props) => (props.disabled ? props.theme.borderColor.quaternary : 'transparent')};
+    align-items: center;
+    margin-bottom: 10px;
 `;
 
 const FooterContainer = styled(FlexDivCentered)`
-    padding-top: 10px;
+    justify-content: flex-start;
+    padding-top: 20px;
 `;
 const WalletIconsWrapper = styled(FlexDivCentered)`
     justify-content: center;

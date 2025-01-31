@@ -39,7 +39,7 @@ const App = () => {
 
     const { switchChain } = useSwitchChain();
     const { disconnect } = useDisconnect();
-    const { connectionStatus } = useParticleConnect();
+    const { connectionStatus, disconnect: particleDisconnect } = useParticleConnect();
     const { isConnected } = useAccount();
 
     queryConnector.setQueryClient();
@@ -86,11 +86,12 @@ const App = () => {
             dispatch(updateParticleState({ connectedViaParticle: true }));
         }
         if (connectionStatus === 'disconnected') {
+            particleDisconnect();
             dispatch(updateParticleState({ connectedViaParticle: false }));
             biconomyConnector.resetWallet();
             if (!isConnected) disconnect();
         }
-    }, [isConnected, connectionStatus, disconnect, networkId, dispatch]);
+    }, [isConnected, connectionStatus, disconnect, particleDisconnect, networkId, dispatch]);
 
     useEffect(() => {
         const handlePageResized = () => {

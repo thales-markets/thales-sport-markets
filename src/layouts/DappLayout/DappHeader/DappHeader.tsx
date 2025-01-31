@@ -30,6 +30,7 @@ import biconomyConnector from 'utils/biconomyWallet';
 import { buildHref } from 'utils/routes';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import {
+    ActivateContainer,
     BlockedGamesNotificationCount,
     Container,
     Count,
@@ -263,7 +264,7 @@ const DappHeader: React.FC = () => {
                             setNavMenuVisibility={(value: boolean | null) => setNavMenuVisibility(value)}
                             skipOutsideClickOnElement={menuImageRef}
                         />
-                        {isBiconomy && <ActivateAccount />}
+                        {isConnected && isBiconomy && <ActivateAccount />}
                     </RightContainer>
                 </Container>
             )}
@@ -325,9 +326,12 @@ const DappHeader: React.FC = () => {
                     </WrapperMobile>
 
                     {isConnected ? (
-                        <FlexDivCentered>
-                            <WalletInfo />
-                        </FlexDivCentered>
+                        <ActivateContainer>
+                            <FlexDivCentered>
+                                <WalletInfo />
+                            </FlexDivCentered>
+                            {isBiconomy && <ActivateAccount />}
+                        </ActivateContainer>
                     ) : (
                         <MobileButtonWrapper>
                             <Button
