@@ -8,16 +8,19 @@ import { SupportedNetwork } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { delay } from 'utils/timer';
 
+const DELAY_BETWEEN_CHECKS_SECONDS = 1; // 1s
+const UPDATE_STATUS_MESSAGE_PERIOD_SECONDS = 5 * DELAY_BETWEEN_CHECKS_SECONDS; // 5s - must be whole number multiplier of delay
+
 const checkFulfilledTx = async (
     networkId: SupportedNetwork,
     tradingContract: ViemContract,
     requestId: string,
-    isAdapterAllowed: boolean,
+    isFulfilledAdapterParam: boolean,
     toastId: string | number
 ) => {
-    let isFulfilledAdapter = isAdapterAllowed;
+    let isFulfilledAdapter = isFulfilledAdapterParam;
 
-    if (!isAdapterAllowed) {
+    if (!isFulfilledAdapter) {
         const adapterResponse = await axios.get(
             `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/live-trading/read-message/request/${requestId}`
         );
@@ -61,11 +64,14 @@ export const processTransaction = async (
         !isAdapterError &&
         Date.now() - startTime < secondsToMilliseconds(maxAllowedExecutionSec)
     ) {
-        if (counter / 5 === 1 && !isFulfilledAdapter) {
+        const isUpdateStatus = counter / UPDATE_STATUS_MESSAGE_PERIOD_SECONDS === DELAY_BETWEEN_CHECKS_SECONDS;
+        if (isUpdateStatus && !isFulfilledTx && isFulfilledAdapter) {
             toast.update(toastId, getLoadingToastOptions(t('market.toast-message.fulfilling-live-trade')));
         }
+
         counter++;
-        await delay(1000);
+        await delay(secondsToMilliseconds(DELAY_BETWEEN_CHECKS_SECONDS));
+
         const fulfilledResponse = await checkFulfilledTx(
             networkId,
             tradingContract,
