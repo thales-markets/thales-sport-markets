@@ -1,7 +1,7 @@
 import { ZERO_ADDRESS } from 'constants/network';
 import { SupportedNetwork } from 'types/network';
 import { ViemContract } from 'types/viem';
-import { Address, decodeEventLog, DecodeEventLogParameters } from 'viem';
+import { decodeEventLog, DecodeEventLogParameters } from 'viem';
 import { TradeData } from '../types/markets';
 import { executeBiconomyTransaction } from './biconomy';
 import freeBetHolder from './contracts/freeBetHolder';
@@ -16,18 +16,20 @@ export const getLiveTradingProcessorTransaction: any = async (
     expectedQuote: bigint,
     referral: string | null,
     additionalSlippage: bigint,
-    isAA: boolean,
+    isBiconomy: boolean,
     isFreeBet: boolean,
     freeBetHolderContract: ViemContract,
+    isStakedThales: boolean,
+    stakingThalesBettingProxyContract: ViemContract,
     networkId: SupportedNetwork
 ): Promise<any> => {
     const referralAddress = referral || ZERO_ADDRESS;
     const gameId = convertFromBytes32(tradeData[0].gameId);
 
     if (isFreeBet && freeBetHolderContract) {
-        if (isAA) {
-            return executeBiconomyTransaction({
-                collateralAddress: collateralAddress as Address,
+        if (isBiconomy) {
+            return await executeBiconomyTransaction({
+                collateralAddress: collateralAddress as any,
                 networkId,
                 contract: freeBetHolderContract,
                 methodName: 'tradeLive',
@@ -64,9 +66,26 @@ export const getLiveTradingProcessorTransaction: any = async (
         }
     }
 
-    if (isAA) {
-        return executeBiconomyTransaction({
-            collateralAddress: collateralAddress as Address,
+    if (isStakedThales && stakingThalesBettingProxyContract) {
+        return stakingThalesBettingProxyContract.write.tradeLive([
+            {
+                _gameId: gameId,
+                _sportId: tradeData[0].sportId,
+                _typeId: tradeData[0].typeId,
+                _line: tradeData[0].line,
+                _position: tradeData[0].position,
+                _buyInAmount: sUSDPaid,
+                _expectedQuote: expectedQuote,
+                _additionalSlippage: additionalSlippage,
+                _referrer: referralAddress,
+                _collateral: collateralAddress,
+            },
+        ]);
+    }
+
+    if (isBiconomy) {
+        return await executeBiconomyTransaction({
+            collateralAddress: collateralAddress as any,
             networkId,
             contract: liveTradingProcessorContract,
             methodName: 'requestLiveTrade',
@@ -75,8 +94,8 @@ export const getLiveTradingProcessorTransaction: any = async (
                     _gameId: gameId,
                     _sportId: tradeData[0].sportId,
                     _typeId: tradeData[0].typeId,
-                    _line: tradeData[0].line,
                     _position: tradeData[0].position,
+                    _line: tradeData[0].line,
                     _buyInAmount: sUSDPaid,
                     _expectedQuote: expectedQuote,
                     _additionalSlippage: additionalSlippage,
@@ -109,13 +128,13 @@ export const getRequestId = (txLogs: any, isFreeBet: boolean) => {
             try {
                 const decoded = decodeEventLog({
                     abi: isFreeBet ? freeBetHolder.abi : liquidityPoolDataContract.abi,
-
                     data: log.data,
                     topics: log.topics,
                 });
 
                 if (
                     (decoded as DecodeEventLogParameters)?.eventName == 'FreeBetLiveTradeRequested' ||
+                    (decoded as DecodeEventLogParameters)?.eventName == 'StakingTokensLiveTradeRequested' ||
                     (decoded as DecodeEventLogParameters)?.eventName == 'LiveTradeRequested'
                 ) {
                     return (decoded as any)?.args;

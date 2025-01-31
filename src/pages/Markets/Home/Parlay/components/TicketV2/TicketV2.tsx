@@ -1439,7 +1439,10 @@ const Ticket: React.FC<TicketProps> = ({
                             additionalSlippage,
                             isBiconomy,
                             isFreeBetActive,
-                            freeBetHolderContract
+                            freeBetHolderContract,
+                            false,
+                            undefined,
+                            networkId
                         );
                     }
                 } else {
