@@ -55,7 +55,7 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose }) => {
     const [fromToken, setFromToken] = useState<Coins>('USDC');
     const [fromAmount, setFromAmount] = useState<string | number>('');
 
-    const [toToken, setToToken] = useState<Coins>('THALES');
+    const [toToken, setToToken] = useState<Coins>('OVER');
     const [toAmount, setToAmount] = useState<string | number>('');
 
     const [isBuying, setIsBuying] = useState(false);
