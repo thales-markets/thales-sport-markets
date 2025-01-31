@@ -1,5 +1,4 @@
 import ShareTicketModalV2 from 'components/ShareTicketModalV2';
-import { ShareTicketModalProps } from 'components/ShareTicketModalV2/ShareTicketModalV2';
 import Table from 'components/Table';
 import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
@@ -24,6 +23,7 @@ import {
 } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { SportMarket, Ticket } from 'types/markets';
+import { ShareTicketModalProps } from 'types/tickets';
 import { ThemeInterface } from 'types/ui';
 import { getDefaultCollateral } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';

@@ -19,27 +19,13 @@ import styled, { useTheme } from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
 import { Coins, isFirefox, isIos, isMetamask } from 'thales-utils';
 import { Rates } from 'types/collateral';
-import { SystemBetData, TicketMarket } from 'types/markets';
 import { RootState } from 'types/redux';
+import { ShareTicketModalProps } from 'types/tickets';
 import { ThemeInterface } from 'types/ui';
 import { isStableCurrency } from 'utils/collaterals';
 import { refetchOverdropMultipliers } from 'utils/queryConnector';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import MyTicket from './components/MyTicket';
-
-export type ShareTicketModalProps = {
-    markets: TicketMarket[];
-    multiSingle: boolean;
-    paid: number;
-    payout: number;
-    onClose: () => void;
-    isTicketLost: boolean;
-    collateral: Coins;
-    isLive: boolean;
-    applyPayoutMultiplier: boolean;
-    isTicketOpen: boolean;
-    systemBetData?: SystemBetData;
-};
 
 const PARLAY_IMAGE_NAME = 'ParlayImage.png';
 const TWITTER_MESSAGES_TEXT = [

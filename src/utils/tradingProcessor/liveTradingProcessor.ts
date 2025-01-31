@@ -2,12 +2,12 @@ import { ZERO_ADDRESS } from 'constants/network';
 import { SupportedNetwork } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { decodeEventLog, DecodeEventLogParameters } from 'viem';
-import { TradeData } from '../types/markets';
-import { executeBiconomyTransaction } from './biconomy';
-import freeBetHolder from './contracts/freeBetHolder';
-import liquidityPoolDataContract from './contracts/liveTradingProcessorContract';
-import stakingThalesBettingProxy from './contracts/stakingThalesBettingProxy';
-import { convertFromBytes32 } from './formatters/string';
+import { TradeData } from '../../types/markets';
+import { executeBiconomyTransaction } from '../biconomy';
+import freeBetHolder from '../contracts/freeBetHolder';
+import liquidityPoolDataContract from '../contracts/liveTradingProcessorContract';
+import stakingThalesBettingProxy from '../contracts/stakingThalesBettingProxy';
+import { convertFromBytes32 } from '../formatters/string';
 
 export const getLiveTradingProcessorTransaction: any = async (
     collateralAddress: string,

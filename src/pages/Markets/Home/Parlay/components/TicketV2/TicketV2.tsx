@@ -1,22 +1,18 @@
-import axios from 'axios';
 import ApprovalModal from 'components/ApprovalModal';
 import Button from 'components/Button';
 import CollateralSelector from 'components/CollateralSelector';
 import OutsideClickHandler from 'components/OutsideClick';
 import SelectInput from 'components/SelectInput';
 import ShareTicketModalV2 from 'components/ShareTicketModalV2';
-import { ShareTicketModalProps } from 'components/ShareTicketModalV2/ShareTicketModalV2';
 import Toggle from 'components/Toggle';
 import Tooltip from 'components/Tooltip';
 import Checkbox from 'components/fields/Checkbox';
 import NumericInput from 'components/fields/NumericInput';
-import { generalConfig } from 'config/general';
 import { getErrorToastOptions, getLoadingToastOptions, getSuccessToastOptions } from 'config/toast';
 import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
 import {
     APPROVAL_BUFFER,
-    BATCH_SIZE,
     COINGECKO_SWAP_TO_THALES_QUOTE_SLIPPAGE,
     SGP_BET_MINIMUM_MARKETS,
     SWAP_APPROVAL_BUFFER,
@@ -91,6 +87,7 @@ import { SportsAmmData, TicketMarket, TradeData } from 'types/markets';
 import { OverdropMultiplier, OverdropUserData } from 'types/overdrop';
 import { RootState } from 'types/redux';
 import { SportsbookData } from 'types/sgp';
+import { ShareTicketModalProps } from 'types/tickets';
 import { OverdropLevel, ThemeInterface } from 'types/ui';
 import { ViemContract } from 'types/viem';
 import { executeBiconomyTransaction, getPaymasterData } from 'utils/biconomy';
@@ -112,7 +109,6 @@ import { getContractInstance } from 'utils/contract';
 import multipleCollateral from 'utils/contracts/multipleCollateralContract';
 import sportsAMMV2Contract from 'utils/contracts/sportsAMMV2Contract';
 import { isErrorExcluded, logErrorToDiscord } from 'utils/discord';
-import { getLiveTradingProcessorTransaction, getRequestId } from 'utils/liveTradingProcessor';
 import { formatMarketOdds } from 'utils/markets';
 import { getTradeData } from 'utils/marketsV2';
 import { checkAllowance } from 'utils/network';
@@ -136,8 +132,10 @@ import {
     getSwapParams,
     sendTransaction,
 } from 'utils/swap';
-import { getAddedPayoutOdds, getSystemBetData } from 'utils/tickets';
+import { getAddedPayoutOdds, getShareTicketModalData, getSystemBetData, getSystemBetDataObject } from 'utils/tickets';
 import { delay } from 'utils/timer';
+import { getLiveTradingProcessorTransaction, getRequestId } from 'utils/tradingProcessor/liveTradingProcessor';
+import { processTransaction } from 'utils/tradingProcessor/tradingProcessor';
 import { getKeepSelectionFromStorage, setKeepSelectionToStorage } from 'utils/ui';
 import { Address, Client, maxUint256, parseEther } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
@@ -484,8 +482,8 @@ const Ticket: React.FC<TicketProps> = ({
     const maxAllowedExecutionDelay = useMemo(
         () =>
             liveTradingProcessorDataQuery.isSuccess && liveTradingProcessorDataQuery.data
-                ? liveTradingProcessorDataQuery.data.maxAllowedExecutionDelay
-                : 10,
+                ? liveTradingProcessorDataQuery.data.maxAllowedExecutionDelay + 10
+                : 20,
         [liveTradingProcessorDataQuery.isSuccess, liveTradingProcessorDataQuery.data]
     );
 
@@ -1399,8 +1397,6 @@ const Ticket: React.FC<TicketProps> = ({
 
         const sportsAMMV2Contract = getContractInstance(ContractType.SPORTS_AMM_V2, networkConfig);
         const liveTradingProcessorContract = getContractInstance(ContractType.LIVE_TRADING_PROCESSOR, networkConfig);
-        const sportsAMMDataContract = getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig);
-        const sportsAMMV2ManagerContract = getContractInstance(ContractType.SPORTS_AMM_V2_MANAGER, networkConfig);
         const freeBetHolderContract = getContractInstance(ContractType.FREE_BET_HOLDER, networkConfig);
         const stakingThalesBettingProxyContract = getContractInstance(
             ContractType.STAKING_THALES_BETTING_PROXY,
@@ -1562,158 +1558,66 @@ const Ticket: React.FC<TicketProps> = ({
                             },
                         }
                     );
-                    if (!tradeData[0].live) {
-                        refetchBalances(walletAddress, networkId);
 
-                        const modalData: ShareTicketModalProps = {
-                            markets: [...markets],
-                            multiSingle: false,
-                            paid:
-                                !collateralHasLp || (isDefaultCollateral && !swapToThales)
-                                    ? Number(buyInAmountInDefaultCollateral)
-                                    : swapToThales
-                                    ? swappedThalesToReceive
-                                    : Number(buyInAmount),
-                            payout: payout,
-                            onClose: () => {
-                                if (!keepSelection) dispatch(removeAll());
-                                onModalClose();
-                                onSuccess && onSuccess();
-                            },
-                            isTicketLost: false,
-                            collateral: collateralHasLp ? usedCollateralForBuy : defaultCollateral,
-                            isLive: false,
-                            applyPayoutMultiplier: true,
-                            isTicketOpen: true,
-                            systemBetData: isSystemBet
-                                ? {
-                                      systemBetDenominator,
-                                      numberOfCombination: numberOfSystemBetCombination,
-                                      buyInPerCombination: Number(buyInAmount) / numberOfSystemBetCombination,
-                                      minPayout:
-                                          Number(buyInAmount) /
-                                          numberOfSystemBetCombination /
-                                          systemData.systemBetMinimumQuote,
-                                      maxPayout: payout,
-                                      numberOfWinningCombinations: 0,
-                                  }
-                                : undefined,
-                        };
-                        setShareTicketModalData(modalData);
-                        setShowShareTicketModal(true);
+                    const shareTicketOnClose = () => {
+                        if (!keepSelection) dispatch(removeAll());
+                        onModalClose();
+                        onSuccess && onSuccess();
+                    };
+                    const shareTicketPaid =
+                        !collateralHasLp || (isDefaultCollateral && !swapToThales)
+                            ? !tradeData[0].live
+                                ? Number(buyInAmountInDefaultCollateral)
+                                : 0 // get from last ticket for live
+                            : swapToThales
+                            ? swappedThalesToReceive
+                            : Number(buyInAmount);
 
-                        setBuyStep(BuyTicketStep.COMPLETED);
-                        setOpenBuyStepsModal(false);
-
-                        toast.update(toastId, getSuccessToastOptions(t('market.toast-message.buy-success')));
-                        setIsBuying(false);
-                        setCollateralAmount('');
-                    } else if (sportsAMMV2OrLiveContract) {
-                        let counter = 0;
-                        let adapterAllowed = false;
-
+                    if (tradeData[0].live) {
                         const requestId = getRequestId(txReceipt.logs, isFreeBetActive, isStakedThales);
                         if (!requestId) {
                             throw new Error('Request ID not found');
                         }
 
-                        const startTime = Date.now();
-                        const checkFulfilled = async () => {
-                            counter++;
-                            if (!adapterAllowed) {
-                                const adapterResponse = await axios.get(
-                                    `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/live-trading/read-message/request/${requestId}`
-                                );
-
-                                if (!!adapterResponse.data) {
-                                    if (adapterResponse.data.allow) {
-                                        adapterAllowed = true;
-                                        toast.update(toastId, getLoadingToastOptions(adapterResponse.data.message));
-                                    } else {
-                                        setIsBuying(false);
-                                        refetchBalances(walletAddress, networkId);
-                                        toast.update(toastId, getErrorToastOptions(adapterResponse.data.message));
-                                        return;
-                                    }
-                                }
-                            }
-
-                            const isFulfilled = await sportsAMMV2OrLiveContract.read.requestIdToFulfillAllowed([
+                        if (sportsAMMV2OrLiveContract) {
+                            toast.update(
+                                toastId,
+                                getLoadingToastOptions(t('market.toast-message.live-trade-requested'))
+                            );
+                            await delay(2000);
+                            const { isFulfilledTx, isAdapterError } = await processTransaction(
+                                networkId,
+                                sportsAMMV2OrLiveContract,
                                 requestId,
-                            ]);
-                            if (!isFulfilled) {
-                                if (Date.now() - startTime >= secondsToMilliseconds(maxAllowedExecutionDelay + 10)) {
-                                    setIsBuying(false);
-                                    refetchBalances(walletAddress, networkId);
-                                    toast.update(toastId, getErrorToastOptions(t('markets.parlay.odds-changed-error')));
-                                } else {
-                                    if (counter / 5 === 1 && !adapterAllowed) {
-                                        toast.update(
-                                            toastId,
-                                            getLoadingToastOptions(t('market.toast-message.fulfilling-live-trade'))
-                                        );
-                                    }
-                                    setTimeout(checkFulfilled, 1000);
-                                }
+                                maxAllowedExecutionDelay,
+                                toastId
+                            );
+
+                            if (isAdapterError) {
+                                setIsBuying(false);
+                                refetchBalances(walletAddress, networkId);
+                            } else if (!isFulfilledTx) {
+                                setIsBuying(false);
+                                refetchBalances(walletAddress, networkId);
+                                toast.update(toastId, getErrorToastOptions(t('markets.parlay.odds-changed-error'))); // TODO: check this
                             } else {
                                 refetchBalances(walletAddress, networkId);
-                                if (
-                                    sportsAMMDataContract &&
-                                    sportsAMMV2ManagerContract &&
-                                    freeBetHolderContract &&
-                                    stakingThalesBettingProxyContract
-                                ) {
-                                    const numOfActiveTicketsPerUser = isFreeBetActive
-                                        ? await freeBetHolderContract.read.numOfActiveTicketsPerUser([walletAddress])
-                                        : isStakedThales
-                                        ? await stakingThalesBettingProxyContract.read.numOfActiveTicketsPerUser([
-                                              walletAddress,
-                                          ])
-                                        : await sportsAMMV2ManagerContract.read.numOfActiveTicketsPerUser([
-                                              walletAddress,
-                                          ]);
-                                    const userTickets = await sportsAMMDataContract.read.getActiveTicketsDataPerUser([
-                                        walletAddress,
-                                        Number(numOfActiveTicketsPerUser) - 1,
-                                        BATCH_SIZE,
-                                    ]);
-                                    const lastTicket = isFreeBetActive
-                                        ? userTickets.freeBetsData[userTickets.freeBetsData.length - 1]
-                                        : isStakedThales
-                                        ? userTickets.stakingBettingProxyData[
-                                              userTickets.stakingBettingProxyData.length - 1
-                                          ]
-                                        : userTickets.ticketsData[userTickets.ticketsData.length - 1];
-                                    const lastTicketPaid =
-                                        !collateralHasLp || (isDefaultCollateral && !swapToThales)
-                                            ? coinFormatter(lastTicket.buyInAmount, networkId)
-                                            : swapToThales
-                                            ? swappedThalesToReceive
-                                            : Number(buyInAmount);
-                                    const lastTicketPayout = lastTicketPaid / bigNumberFormatter(lastTicket.totalQuote);
 
-                                    const modalData: ShareTicketModalProps = {
-                                        markets: [
-                                            {
-                                                ...markets[0],
-                                                odd: bigNumberFormatter(lastTicket.totalQuote),
-                                            },
-                                        ],
-                                        multiSingle: false,
-                                        paid: lastTicketPaid,
-                                        payout: lastTicketPayout,
-                                        onClose: () => {
-                                            if (!keepSelection) dispatch(removeAll());
-                                            onModalClose();
-                                            onSuccess && onSuccess();
-                                        },
-                                        isTicketLost: false,
-                                        collateral: collateralHasLp ? selectedCollateral : defaultCollateral,
-                                        isLive: true,
-                                        applyPayoutMultiplier: false,
-                                        isTicketOpen: true,
-                                        systemBetData: undefined,
-                                    };
+                                const modalData = await getShareTicketModalData(
+                                    markets,
+                                    collateralHasLp ? usedCollateralForBuy : defaultCollateral,
+                                    shareTicketPaid,
+                                    0,
+                                    shareTicketOnClose,
+                                    true,
+                                    isFreeBetActive,
+                                    isStakedThales,
+                                    undefined,
+                                    networkConfig,
+                                    walletAddress
+                                );
+
+                                if (modalData) {
                                     setShareTicketModalData(modalData);
                                     setShowShareTicketModal(true);
                                 }
@@ -1725,9 +1629,41 @@ const Ticket: React.FC<TicketProps> = ({
                                 setIsBuying(false);
                                 setCollateralAmount('');
                             }
-                        };
-                        toast.update(toastId, getLoadingToastOptions(t('market.toast-message.live-trade-requested')));
-                        setTimeout(checkFulfilled, 2000);
+                        }
+                    } else {
+                        refetchBalances(walletAddress, networkId);
+
+                        const systemBetData = isSystemBet
+                            ? getSystemBetDataObject(
+                                  systemBetDenominator,
+                                  numberOfSystemBetCombination,
+                                  Number(buyInAmount),
+                                  systemData.systemBetMinimumQuote,
+                                  payout
+                              )
+                            : undefined;
+
+                        const modalData = await getShareTicketModalData(
+                            [...markets],
+                            collateralHasLp ? usedCollateralForBuy : defaultCollateral,
+                            shareTicketPaid,
+                            payout,
+                            shareTicketOnClose,
+                            false,
+                            isFreeBetActive,
+                            isStakedThales,
+                            systemBetData
+                        );
+
+                        setShareTicketModalData(modalData);
+                        setShowShareTicketModal(true);
+
+                        setBuyStep(BuyTicketStep.COMPLETED);
+                        setOpenBuyStepsModal(false);
+
+                        toast.update(toastId, getSuccessToastOptions(t('market.toast-message.buy-success')));
+                        setIsBuying(false);
+                        setCollateralAmount('');
                     }
 
                     if (isFreeBetActive) {
@@ -2078,35 +2014,36 @@ const Ticket: React.FC<TicketProps> = ({
     }, []);
 
     const twitterShareDisabled = submitDisabled || !hasAllowance;
-    const onTwitterIconClick = () => {
-        //create data copy to avoid modal re-render while opened
-        const modalData: ShareTicketModalProps = {
-            markets: [...markets],
-            multiSingle: false,
-            paid:
-                !collateralHasLp || (isDefaultCollateral && !swapToThales)
-                    ? Number(buyInAmountInDefaultCollateral)
-                    : swapToThales
-                    ? swappedThalesToReceive
-                    : Number(buyInAmount),
-            payout: payout,
-            onClose: onModalClose,
-            isTicketLost: false,
-            collateral: collateralHasLp ? selectedCollateral : defaultCollateral,
-            isLive: !!markets[0].live,
-            applyPayoutMultiplier: true,
-            isTicketOpen: true,
-            systemBetData: isSystemBet
-                ? {
-                      systemBetDenominator,
-                      numberOfCombination: numberOfSystemBetCombination,
-                      buyInPerCombination: Number(buyInAmount) / numberOfSystemBetCombination,
-                      minPayout: Number(buyInAmount) / numberOfSystemBetCombination / systemData.systemBetMinimumQuote,
-                      maxPayout: payout,
-                      numberOfWinningCombinations: 0,
-                  }
-                : undefined,
-        };
+    const onTwitterIconClick = async () => {
+        const shareTicketPaid =
+            !collateralHasLp || (isDefaultCollateral && !swapToThales)
+                ? Number(buyInAmountInDefaultCollateral)
+                : swapToThales
+                ? swappedThalesToReceive
+                : Number(buyInAmount);
+        const systemBetData = isSystemBet
+            ? getSystemBetDataObject(
+                  systemBetDenominator,
+                  numberOfSystemBetCombination,
+                  Number(buyInAmount),
+                  systemData.systemBetMinimumQuote,
+                  payout
+              )
+            : undefined;
+
+        // create data copy to avoid modal re-render while opened
+        const modalData = await getShareTicketModalData(
+            [...markets],
+            collateralHasLp ? usedCollateralForBuy : defaultCollateral,
+            shareTicketPaid,
+            payout,
+            onModalClose,
+            false,
+            isFreeBetActive,
+            isStakedThales,
+            systemBetData
+        );
+
         setShareTicketModalData(modalData);
         setShowShareTicketModal(!twitterShareDisabled);
     };
