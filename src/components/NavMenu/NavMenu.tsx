@@ -21,7 +21,7 @@ import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
 import { getNetworkIconClassNameByNetworkId, getNetworkNameByNetworkId } from 'utils/network';
 import { buildHref } from 'utils/routes';
-import { useAccount, useChainId, useClient } from 'wagmi';
+import { useAccount, useChainId, useClient, useDisconnect } from 'wagmi';
 import {
     CloseIcon,
     Count,
@@ -55,6 +55,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
+    const { disconnect } = useDisconnect();
     const walletAddress = address || '';
 
     const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
@@ -208,6 +209,20 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                     })}
                 </ItemsContainer>
                 <FooterContainer>
+                    {isConnected && (
+                        <Button
+                            borderColor={theme.button.borderColor.secondary}
+                            backgroundColor="transparent"
+                            textColor={theme.button.textColor.quaternary}
+                            width="100%"
+                            margin="10px 0"
+                            onClick={() => {
+                                disconnect();
+                            }}
+                        >
+                            {t('markets.nav-menu.buttons.disconnect')}
+                        </Button>
+                    )}
                     <Button
                         borderColor={theme.button.borderColor.secondary}
                         backgroundColor="transparent"
