@@ -456,7 +456,7 @@ export const getShareTicketModalData = async (
     paid: number,
     payout: number,
     onClose: () => void,
-    isModalForLive: boolean,
+    isModalForLive: boolean, // not the same as isLive indicator
     isFreeBet: boolean,
     isStakedThales: boolean,
     systemBetData?: SystemBetData,
@@ -467,6 +467,7 @@ export const getShareTicketModalData = async (
     const isLive = !!markets[0].live;
 
     if (isModalForLive && networkConfig) {
+        // TODO: Check for SGP
         const sportsAMMDataContract = getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig);
         const sportsAMMV2ManagerContract = getContractInstance(ContractType.SPORTS_AMM_V2_MANAGER, networkConfig);
         const freeBetHolderContract = getContractInstance(ContractType.FREE_BET_HOLDER, networkConfig);

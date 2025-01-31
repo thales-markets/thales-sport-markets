@@ -12,6 +12,7 @@ import multiCall from 'utils/contracts/multiCallContract';
 import multiCollateralOnOffRamp from 'utils/contracts/multiCollateralOnOffRampContract';
 import multiCollateral from 'utils/contracts/multipleCollateralContract';
 import priceFeed from 'utils/contracts/priceFeedContract';
+import sgpTradingProcessor from 'utils/contracts/sgpTradingProcessorContract';
 import sportsAMMData from 'utils/contracts/sportsAMMDataContract';
 import sportsAMMV2 from 'utils/contracts/sportsAMMV2Contract';
 import sportsAMMV2Manager from 'utils/contracts/sportsAMMV2ManagerContract';
@@ -99,6 +100,8 @@ export const getContractInstance = (
             return getContractWithModifiedResponse(sportsAMMV2ResultManager, networkConfig);
         case ContractType.LIVE_TRADING_PROCESSOR:
             return getContractWithModifiedResponse(liveTradingProcessor, networkConfig);
+        case ContractType.SGP_TRADING_PROCESSOR:
+            return getContractWithModifiedResponse(sgpTradingProcessor, networkConfig);
         case ContractType.FREE_BET_HOLDER:
             return getContractWithModifiedResponse(freeBetHolder, networkConfig);
         case ContractType.SPORTS_AMM_V2_MANAGER:

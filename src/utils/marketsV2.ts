@@ -427,8 +427,7 @@ export const getTradeData = (markets: TicketMarket[]): TradeData[] =>
                     line: combinedPosition.line * 100,
                 }))
             ),
-            live: market.live,
-        };
+        } as TradeData;
     });
 
 export const isOddValid = (odd: number) => odd < 1 && odd != 0;
