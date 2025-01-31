@@ -1,10 +1,12 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import { localStore } from 'thales-utils';
 import { RootState, WalletSliceState } from 'types/redux';
 
 const sliceName = 'wallet';
 
 const initialState: WalletSliceState = {
-    isBiconomy: true,
+    isBiconomy: localStore.get(LOCAL_STORAGE_KEYS.USE_BICONOMY) ?? true,
     isParticleReady: false,
     connectedViaParticle: false,
     walletConnectModal: {
