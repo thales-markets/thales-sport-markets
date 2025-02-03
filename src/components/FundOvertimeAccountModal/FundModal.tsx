@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
-import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
+import { FlexDivCentered, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { truncateAddress } from 'thales-utils';
 import { RootState } from 'types/redux';
 import biconomyConnector from 'utils/biconomyWallet';
@@ -18,7 +18,6 @@ import { getCollaterals } from 'utils/collaterals';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import { getOnRamperUrl } from 'utils/particleWallet/utils';
 import { useAccount, useChainId } from 'wagmi';
-import SandTime from 'assets/images/sand-time.svg?react';
 
 type FundModalProps = {
     onClose: () => void;
@@ -47,8 +46,6 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
 
     const apiKey = import.meta.env.VITE_APP_ONRAMPER_KEY || '';
 
-    console.log(getCollaterals(networkId));
-
     const onramperUrl = useMemo(() => {
         return getOnRamperUrl(apiKey, walletAddress, networkId);
     }, [walletAddress, networkId, apiKey]);
@@ -69,14 +66,17 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
             onClose={onClose}
         >
             <Wrapper>
-                <Title>
-                    <Trans
-                        i18nKey="get-started.fund-account.title"
-                        components={{
-                            icon: <OvertimeIcon className="icon icon--overtime" />,
-                        }}
-                    />
-                </Title>
+                <FlexDivRow>
+                    <Title>
+                        <Trans
+                            i18nKey="get-started.fund-account.title"
+                            components={{
+                                icon: <OvertimeIcon className="icon icon--overtime" />,
+                            }}
+                        />
+                    </Title>
+                    <FlexDivRow>{<CloseIcon onClick={onClose} />}</FlexDivRow>
+                </FlexDivRow>
 
                 <SubTitle>
                     {t('get-started.fund-account.subtitle')}
@@ -162,12 +162,6 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                         </Box>
                     </Tooltip>
                 </Container>
-                <CollateralWrapper>
-                    <SandTime />
-                    <YellowText>{t('get-started.fund-account.wait-deposit')}</YellowText>
-                </CollateralWrapper>
-
-                <SkipText onClick={onClose}>{t('get-started.fund-account.skip')}</SkipText>
             </Wrapper>
             {showQRModal && (
                 <QRCodeModal title="" onClose={() => setShowQRModal(false)} walletAddress={walletAddress} />
@@ -235,7 +229,6 @@ const AddressContainer = styled.div`
 
 const Container = styled(FlexDivCentered)`
     margin-top: 14px;
-    margin-bottom: 43px;
     gap: 16px;
     @media (max-width: 850px) {
         flex-direction: column;
@@ -302,15 +295,6 @@ const Icon = styled.i`
     color: ${(props) => props.theme.textColor.quaternary};
 `;
 
-const SkipText = styled.p`
-    color: ${(props) => props.theme.textColor.secondary};
-    text-align: center;
-    font-size: 14px;
-    font-weight: 600;
-    margin-top: 30px;
-    cursor: pointer;
-`;
-
 const CollateralText = styled.p`
     color: ${(props) => props.theme.textColor.primary};
     font-size: 14px;
@@ -331,6 +315,15 @@ const NetworkWrapper = styled(FlexDivCentered)`
     margin-top: 30px;
     margin-bottom: 16px;
     gap: 2px;
+`;
+
+const CloseIcon = styled.i.attrs({ className: 'icon icon--close' })`
+    color: white;
+    font-size: 14px;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    cursor: pointer;
 `;
 
 export default FundModal;
