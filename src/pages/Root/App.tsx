@@ -10,6 +10,7 @@ import Theme from 'layouts/Theme';
 import Deposit from 'pages/AARelatedPages/Deposit';
 import GetStarted from 'pages/AARelatedPages/GetStarted';
 import Withdraw from 'pages/AARelatedPages/Withdraw';
+import FreeBets from 'pages/FreeBets';
 import LiquidityPool from 'pages/LiquidityPool';
 import Markets from 'pages/Markets/Home';
 import Market from 'pages/Markets/Market';
@@ -171,6 +172,11 @@ const App = () => {
                     <Route exact path={ROUTES.PnL}>
                         <DappLayout>
                             <PnL />
+                        </DappLayout>
+                    </Route>
+                    <Route exact path={ROUTES.FreeBets}>
+                        <DappLayout>
+                            <FreeBets />
                         </DappLayout>
                     </Route>
                     <Route exact path={ROUTES.ResolveBlocker}>
