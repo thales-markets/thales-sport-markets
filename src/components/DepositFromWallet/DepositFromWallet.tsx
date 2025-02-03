@@ -22,7 +22,7 @@ import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { ContractType } from 'enums/contract';
 import { toast } from 'react-toastify';
 import { getContractInstance } from 'utils/contract';
-import { Client } from 'viem';
+import { Address, Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 
 type DepositFromWalletProps = {
@@ -88,14 +88,24 @@ const DepositFromWallet: React.FC<DepositFromWalletProps> = ({ onClose }) => {
         const token = getCollaterals(networkId)[selectedToken];
         const parsedAmount = coinParser('' + amount, networkId, token);
         const id = toast.loading(t('deposit.toast-messages.pending'));
-        const collateralContractWithSigner = getContractInstance(
-            ContractType.MULTICOLLATERAL,
-            { client: walletClient.data, networkId },
-            getCollateralIndex(networkId, token)
-        );
+        let txHash;
         try {
-            const txHash = await collateralContractWithSigner?.write.transfer([walletAddress, parsedAmount]);
+            if (token === 'ETH') {
+                const transaction = {
+                    to: walletAddress as Address,
+                    value: parsedAmount,
+                };
 
+                txHash = await walletClient.data?.sendTransaction(transaction);
+            } else {
+                const collateralContractWithSigner = getContractInstance(
+                    ContractType.MULTICOLLATERAL,
+                    { client: walletClient.data, networkId },
+                    getCollateralIndex(networkId, token)
+                );
+
+                txHash = await collateralContractWithSigner?.write.transfer([walletAddress, parsedAmount]);
+            }
             const txReceipt = await waitForTransactionReceipt(client as Client, {
                 hash: txHash,
             });
@@ -165,7 +175,7 @@ const DepositFromWallet: React.FC<DepositFromWalletProps> = ({ onClose }) => {
                                 <NumericInput
                                     value={amount}
                                     onChange={(e) => {
-                                        setAmount(Number(e.target.value) === 0 ? '' : Number(e.target.value));
+                                        setAmount(Number(e.target.value));
                                     }}
                                     inputFontWeight="700"
                                     inputPadding="5px 10px"
