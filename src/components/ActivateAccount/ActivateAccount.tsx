@@ -49,6 +49,9 @@ const ActivateAccount: React.FC<any> = () => {
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
     const totalBalanceValue = useMemo(() => {
+        if (!walletAddress || exchangeRates === null || !multipleCollateralBalances.isSuccess) {
+            return undefined;
+        }
         let total = 0;
         try {
             if (exchangeRates && multipleCollateralBalances.data) {
@@ -67,7 +70,13 @@ const ActivateAccount: React.FC<any> = () => {
         } catch (e) {
             return undefined;
         }
-    }, [exchangeRates, multipleCollateralBalances.data, networkId]);
+    }, [
+        exchangeRates,
+        multipleCollateralBalances.data,
+        multipleCollateralBalances.isSuccess,
+        networkId,
+        walletAddress,
+    ]);
 
     useEffect(() => {
         if (isConnected && isBiconomy) {
