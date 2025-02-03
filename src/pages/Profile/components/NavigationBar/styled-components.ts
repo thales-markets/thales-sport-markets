@@ -46,7 +46,7 @@ export const NotificationCount = styled.div`
     position: absolute;
     border-radius: 50%;
     top: -6px;
-    right: 4px;
+    left: -4px;
     display: flex;
     align-items: center;
     text-align: center;
