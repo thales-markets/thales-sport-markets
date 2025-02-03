@@ -7,9 +7,8 @@ import { SUPPORTED_PARTICAL_CONNECTORS_MODAL, SUPPORTED_WALLET_CONNECTORS_MODAL 
 import React, { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { getIsBiconomy, setIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { Colors, FlexDiv, FlexDivCentered, FlexDivStart } from 'styles/common';
 import { RootState } from 'types/redux';
@@ -26,8 +25,6 @@ import Coinbase from 'assets/images/logins-icons/coinbase.svg?react';
 
 import { ParticalTypes, WalletConnections } from 'types/wallet';
 import Checkbox from 'components/fields/Checkbox';
-import { localStore } from 'thales-utils';
-import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 
 ReactModal.setAppElement('#root');
 
@@ -63,8 +60,6 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
     const { t } = useTranslation();
     const { connectors, isPending, isSuccess, connect } = useConnect();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
-    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
-    const dispatch = useDispatch();
     const { openConnectModal } = useConnectModal();
     const [termsAccepted, setTerms] = useState(false);
 
@@ -157,26 +152,9 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                     </ButtonsContainer>
 
                     <CheckboxContainer disabled={!termsAccepted}>
-                        <Checkbox
-                            value={''}
-                            checked={isBiconomy}
-                            onChange={() => {
-                                if (isBiconomy) {
-                                    dispatch(setIsBiconomy(false));
-                                    localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, false);
-                                } else {
-                                    dispatch(setIsBiconomy(true));
-                                    localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, true);
-                                }
-                            }}
-                        />
-                        <Label>Use Overtime Account (!Recommended)</Label>
-                    </CheckboxContainer>
-
-                    <FooterContainer>
                         <Checkbox value={''} checked={termsAccepted} onChange={setTerms.bind(this, !termsAccepted)} />
                         <Label>I Agree to the Terms and Conditions</Label>
-                    </FooterContainer>
+                    </CheckboxContainer>
 
                     <FooterContainer>
                         <FooterText>
@@ -263,13 +241,16 @@ const Link = styled.a`
 `;
 
 const FooterText = styled(Subtitle)`
+    font-size: 12px;
     font-weight: 400;
     margin: auto;
     text-align: justify;
 `;
 
 const Label = styled(Subtitle)`
-    margin-left: 8px;
+    font-size: 12px;
+    margin-left: 4px;
+    line-height: 19px;
     color: ${(props) => props.theme.textColor.primary};
 `;
 
@@ -278,13 +259,12 @@ const CheckboxContainer = styled(FlexDivStart)<{ disabled: boolean }>`
     padding-top: 20px;
     border-top: 1px solid ${(props) => (props.disabled ? props.theme.borderColor.quaternary : 'transparent')};
     align-items: center;
-    margin-bottom: 10px;
 `;
 
-const FooterContainer = styled(FlexDivCentered)`
-    justify-content: flex-start;
-    padding-top: 20px;
+const FooterContainer = styled(FlexDivStart)`
+    padding-top: 8px;
 `;
+
 const WalletIconsWrapper = styled(FlexDivCentered)`
     justify-content: center;
     align-items: center;
