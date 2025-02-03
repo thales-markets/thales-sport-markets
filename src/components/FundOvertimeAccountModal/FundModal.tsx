@@ -1,8 +1,11 @@
+import DepositFromWallet from 'components/DepositFromWallet/DepositFromWallet';
 import Modal from 'components/Modal';
 import Tooltip from 'components/Tooltip';
 import { getInfoToastOptions, getErrorToastOptions } from 'config/toast';
 import { COLLATERAL_ICONS } from 'constants/currency';
 import QRCodeModal from 'pages/AARelatedPages/Deposit/components/QRCodeModal';
+import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
+import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -12,12 +15,13 @@ import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { truncateAddress } from 'thales-utils';
+import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import biconomyConnector from 'utils/biconomyWallet';
 import { getCollaterals } from 'utils/collaterals';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import { getOnRamperUrl } from 'utils/particleWallet/utils';
-import { useAccount, useChainId } from 'wagmi';
+import { useAccount, useChainId, useClient } from 'wagmi';
 
 type FundModalProps = {
     onClose: () => void;
@@ -27,12 +31,43 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const { t } = useTranslation();
-    const { address } = useAccount();
+
+    const client = useClient();
+    const { address, isConnected } = useAccount();
     const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
     const theme = useTheme();
     const networkId = useChainId();
 
     const [showQRModal, setShowQRModal] = useState<boolean>(false);
+    const [showDepositFromWallet, setShowDepositFromWallet] = useState<boolean>(false);
+
+    const multipleCollateralBalances = useMultipleCollateralBalanceQuery(
+        address as string,
+        { networkId, client },
+        {
+            enabled: isConnected,
+        }
+    );
+
+    const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
+
+    const exchangeRates: Rates | null =
+        exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
+
+    const totalBalanceValue = useMemo(() => {
+        let total = 0;
+        try {
+            if (exchangeRates && multipleCollateralBalances.data) {
+                getCollaterals(networkId).forEach((token) => {
+                    total += multipleCollateralBalances.data[token] * (exchangeRates[token] ? exchangeRates[token] : 1);
+                });
+            }
+
+            return total;
+        } catch (e) {
+            return 0;
+        }
+    }, [exchangeRates, multipleCollateralBalances.data, networkId]);
 
     const handleCopy = () => {
         const id = toast.loading(t('deposit.copying-address'));
@@ -147,7 +182,12 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                         customIconStyling={{ color: theme.textColor.secondary }}
                         overlay={t('get-started.fund-account.tooltip-4')}
                     >
-                        <Box>
+                        <Box
+                            disabled={totalBalanceValue === 0}
+                            onClick={() => {
+                                totalBalanceValue > 0 && setShowDepositFromWallet(!showDepositFromWallet);
+                            }}
+                        >
                             <FieldHeader>{t('get-started.fund-account.from-wallet')}</FieldHeader>
                             <Icon className="icon icon--wallet-connected" />
                         </Box>
@@ -166,6 +206,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
             {showQRModal && (
                 <QRCodeModal title="" onClose={() => setShowQRModal(false)} walletAddress={walletAddress} />
             )}
+            {showDepositFromWallet && <DepositFromWallet onClose={() => setShowDepositFromWallet(false)} />}
         </Modal>
     );
 };

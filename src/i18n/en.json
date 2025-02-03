@@ -932,6 +932,9 @@
         }
     },
     "deposit": {
+        "title": "Deposit from wallet",
+        "address": "Your Deposit Address",
+        "subtitle": "Send supported crypto to the address below",
         "deposit-crypto": "Deposit crypto",
         "description": "To trade on Overtime you have to fund your account. Carefully follow the steps below and deposit the selected cryptocurrency into the generated address.",
         "or-buy-with": "Or buy with",
@@ -945,11 +948,17 @@
         "all-set": "You are all set!",
         "ready-to-use": "Your account is topped up and ready to start using Overtime Markets! You can place trades with ETH or you can deposit other tokens now visible on the deposit page.",
         "go": "Let's go!",
+        "button-label-deposit": "Deposit funds",
         "tutorials": {
             "title": "Deposit Guides",
             "coinbase": "Deposit from Coinbase",
             "binance-mobile": "Deposit from Binance Mobile App",
             "binance": "Deposit from Binance Website"
+        },
+        "toast-messages": {
+            "pending": "Transaction pending...",
+            "error": "Some error occurred while depositing funds.",
+            "success": "Successfully deposited"
         }
     },
     "withdraw": {
