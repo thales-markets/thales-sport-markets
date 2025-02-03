@@ -1,3 +1,4 @@
+import ActivateAccount from 'components/ActivateAccount';
 import Button from 'components/Button';
 import Logo from 'components/Logo';
 import NavMenu from 'components/NavMenu';
@@ -6,10 +7,13 @@ import NetworkSwitcher from 'components/NetworkSwitcher';
 import SPAAnchor from 'components/SPAAnchor';
 import Search from 'components/Search';
 import ThalesToOverMigrationModal from 'components/ThalesToOverMigrationModal';
+import Tooltip from 'components/Tooltip';
 import WalletInfo from 'components/WalletInfo';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
 import ROUTES from 'constants/routes';
+import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import useInterval from 'hooks/useInterval';
+import useLocalStorage from 'hooks/useLocalStorage';
 import useClaimablePositionCountV2Query from 'queries/markets/useClaimablePositionCountV2Query';
 import useBlockedGamesQuery from 'queries/resolveBlocker/useBlockedGamesQuery';
 import useWhitelistedForUnblock from 'queries/resolveBlocker/useWhitelistedForUnblock';
@@ -52,7 +56,6 @@ import {
     SmallBadgeImage,
     WrapperMobile,
 } from './styled-components';
-import ActivateAccount from 'components/ActivateAccount';
 
 const PULSING_COUNT = 10;
 
@@ -83,6 +86,8 @@ const DappHeader: React.FC = () => {
     const dispatch = useDispatch();
     const location = useLocation();
     const theme: ThemeInterface = useTheme();
+
+    const [freeBet] = useLocalStorage<string | undefined>(LOCAL_STORAGE_KEYS.FREE_BET_ID, undefined);
 
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
@@ -226,29 +231,35 @@ const DappHeader: React.FC = () => {
 
                     <RightContainer>
                         {!isConnected && (
-                            <Button
-                                backgroundColor={theme.button.background.quinary}
-                                textColor={theme.button.textColor.primary}
-                                borderColor={theme.button.borderColor.quinary}
-                                additionalStyles={{
-                                    borderRadius: '22px',
-                                    fontWeight: '800',
-                                    fontSize: '12px',
-                                    padding: '9px 20px',
-                                    width: '100px',
-                                    height: '28px',
-                                }}
-                                onClick={() =>
-                                    dispatch(
-                                        setWalletConnectModalVisibility({
-                                            visibility: true,
-                                            origin: 'sign-up',
-                                        })
-                                    )
-                                }
+                            <Tooltip
+                                overlay={t('get-started.sing-in-to-claim-free-bet')}
+                                visible={!!freeBet}
+                                showArrow={false}
                             >
-                                {t('get-started.sign-up')}
-                            </Button>
+                                <Button
+                                    backgroundColor={theme.button.background.quinary}
+                                    textColor={theme.button.textColor.primary}
+                                    borderColor={theme.button.borderColor.quinary}
+                                    additionalStyles={{
+                                        borderRadius: '22px',
+                                        fontWeight: '800',
+                                        fontSize: '12px',
+                                        padding: '9px 20px',
+                                        width: '100px',
+                                        height: '28px',
+                                    }}
+                                    onClick={() =>
+                                        dispatch(
+                                            setWalletConnectModalVisibility({
+                                                visibility: true,
+                                                origin: 'sign-up',
+                                            })
+                                        )
+                                    }
+                                >
+                                    {t('get-started.sign-up')}
+                                </Button>
+                            </Tooltip>
                         )}
                         <WalletInfo />
                         <MenuIconContainer>

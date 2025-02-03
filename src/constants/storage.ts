@@ -33,4 +33,5 @@ export const LOCAL_STORAGE_KEYS = {
     SYSTEM_BET_DENOMINATOR: 'systemBetDenominator',
     ERROR_RELOAD_TIME: 'errorReloadTime',
     USE_BICONOMY: 'isBiconomy',
+    FREE_BET_ID: 'freeBetId',
 };

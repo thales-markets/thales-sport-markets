@@ -1,14 +1,18 @@
 import DepositFromWallet from 'components/DepositFromWallet/DepositFromWallet';
 import Modal from 'components/Modal';
 import Tooltip from 'components/Tooltip';
-import { getInfoToastOptions, getErrorToastOptions } from 'config/toast';
+import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
 import { COLLATERAL_ICONS } from 'constants/currency';
+import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import useLocalStorage from 'hooks/useLocalStorage';
 import QRCodeModal from 'pages/AARelatedPages/Deposit/components/QRCodeModal';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
-import React, { useMemo, useState } from 'react';
+import queryString from 'query-string';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
 import { getIsBiconomy } from 'redux/modules/wallet';
@@ -19,6 +23,7 @@ import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import biconomyConnector from 'utils/biconomyWallet';
 import { getCollaterals } from 'utils/collaterals';
+import { claimFreeBet } from 'utils/freeBet';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import { getOnRamperUrl } from 'utils/particleWallet/utils';
 import { useAccount, useChainId, useClient } from 'wagmi';
@@ -28,6 +33,13 @@ type FundModalProps = {
 };
 
 const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
+    const queryParams: { freeBet?: string } = queryString.parse(location.search);
+    const [freeBet, setFreeBet] = useLocalStorage<string | undefined>(
+        LOCAL_STORAGE_KEYS.FREE_BET_ID,
+        queryParams.freeBet
+    );
+    const history = useHistory();
+
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const { t } = useTranslation();
@@ -84,6 +96,14 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
     const onramperUrl = useMemo(() => {
         return getOnRamperUrl(apiKey, walletAddress, networkId);
     }, [walletAddress, networkId, apiKey]);
+
+    const onClaimFreeBet = useCallback(() => claimFreeBet(walletAddress, freeBet, networkId, setFreeBet, history), [
+        walletAddress,
+        freeBet,
+        setFreeBet,
+        history,
+        networkId,
+    ]);
 
     return (
         <Modal
@@ -178,6 +198,12 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                         <FieldHeader>{t('get-started.fund-account.buy-crypto')}</FieldHeader>
                         <Icon className="icon icon--card" />
                     </Box>
+                    {!!freeBet && (
+                        <Box onClick={onClaimFreeBet}>
+                            <FieldHeader>{t('get-started.fund-account.claim-free-bet')}</FieldHeader>
+                            <Icon className="currency-icon currency-icon--over" />
+                        </Box>
+                    )}
                     <Tooltip
                         customIconStyling={{ color: theme.textColor.secondary }}
                         overlay={t('get-started.fund-account.tooltip-4')}

@@ -1,7 +1,9 @@
 import axios from 'axios';
 import MetaData from 'components/MetaData';
 import { generalConfig } from 'config/general';
+import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { Theme } from 'enums/ui';
+import useLocalStorage from 'hooks/useLocalStorage';
 import useWidgetBotScript from 'hooks/useWidgetBotScript';
 import ModalWrapper from 'pages/Overdrop/components/ModalWrapper';
 import queryString from 'query-string';
@@ -28,7 +30,11 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
     const dispatch = useDispatch();
     const location = useLocation();
 
-    const queryParams: { referralId?: string; referrerId?: string } = queryString.parse(location.search);
+    const queryParams: { referralId?: string; referrerId?: string; freeBet?: string } = queryString.parse(
+        location.search
+    );
+
+    const [, setFreeBet] = useLocalStorage<string | undefined>(LOCAL_STORAGE_KEYS.FREE_BET_ID, undefined);
 
     const [preventDiscordWidgetLoad, setPreventDiscordWidgetLoad] = useState(true);
 
@@ -52,7 +58,10 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
             };
             fetchIdAddress();
         }
-    }, [queryParams.referralId, queryParams.referrerId]);
+        if (queryParams.freeBet) {
+            setFreeBet(queryParams.freeBet);
+        }
+    }, [queryParams.referralId, queryParams.referrerId, queryParams.freeBet, setFreeBet]);
 
     useEffect(() => {
         dispatch(setTheme(Theme.DARK));

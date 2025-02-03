@@ -1,16 +1,24 @@
 import Button from 'components/Button';
 import FundModal from 'components/FundOvertimeAccountModal';
+import SwapModal from 'components/SwapModal/SwapModal';
 import { COLLATERAL_ICONS, OVER_SIGH, USD_SIGN } from 'constants/currency';
+import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import useLocalStorage from 'hooks/useLocalStorage';
+import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
+import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
-import React, { useMemo, useState } from 'react';
+import queryString from 'query-string';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { getIsBiconomy, setIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import {
     Colors,
     FlexDivCentered,
+    FlexDivColumn,
     FlexDivColumnCentered,
     FlexDivColumnStart,
     FlexDivEnd,
@@ -22,12 +30,9 @@ import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import biconomyConnector from 'utils/biconomyWallet';
 import { getCollaterals, mapMultiCollateralBalances } from 'utils/collaterals';
-import { useChainId, useClient, useAccount } from 'wagmi';
+import { claimFreeBet } from 'utils/freeBet';
+import { useAccount, useChainId, useClient } from 'wagmi';
 import WithdrawModal from '../WithdrawModal';
-import SwapModal from 'components/SwapModal/SwapModal';
-import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
-import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
 
 const OverToken = COLLATERAL_ICONS['OVER'];
 
@@ -35,6 +40,13 @@ const Account: React.FC = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+
+    const queryParams: { freeBet?: string } = queryString.parse(location.search);
+    const [freeBet, setFreeBet] = useLocalStorage<string | undefined>(
+        LOCAL_STORAGE_KEYS.FREE_BET_ID,
+        queryParams.freeBet
+    );
+    const history = useHistory();
 
     const networkId = useChainId();
     const client = useClient();
@@ -137,6 +149,14 @@ const Account: React.FC = () => {
         };
     }, [multipleCollateralBalances.data, exchangeRates]);
 
+    const onClaimFreeBet = useCallback(() => claimFreeBet(walletAddress, freeBet, networkId, setFreeBet, history), [
+        walletAddress,
+        freeBet,
+        setFreeBet,
+        history,
+        networkId,
+    ]);
+
     return (
         <div>
             <Header>
@@ -144,6 +164,21 @@ const Account: React.FC = () => {
                     <Label>Portfolio Balance</Label>
                     <Value>{totalBalanceValue}</Value>
                 </FlexDivColumnStart>
+                <FlexDivColumn>
+                    {!!freeBet && (
+                        <Button
+                            onClick={onClaimFreeBet}
+                            borderColor="none"
+                            height="42px"
+                            width="160px"
+                            lineHeight="16px"
+                            padding="0"
+                            backgroundColor={Colors.BLUE}
+                        >
+                            {t('profile.account-summary.claim-free-bet')}
+                        </Button>
+                    )}
+                </FlexDivColumn>
                 <FlexDivEnd gap={20}>
                     <FlexDivColumnStart gap={4}>
                         <GrayLabel>Active Tickets</GrayLabel>

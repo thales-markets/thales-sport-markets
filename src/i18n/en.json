@@ -346,7 +346,8 @@
             "withdraw": "Withdraw",
             "use-eoa": "Switch to your EOA wallet",
             "use-smart": "Switch to your Overtime Account",
-            "best-odds": "Bet with OVER token for best odds!!"
+            "best-odds": "Bet with OVER token for best odds!!",
+            "claim-free-bet": "Claim free bet"
         },
         "stats": {
             "profile-data": "Profile data",
@@ -1004,6 +1005,7 @@
         "sign-out": "Sign out",
         "get-started": "Get started",
         "title": "Get Started on Overtime",
+        "sing-in-to-claim-free-bet": "Sing in to claim free bet",
         "steps": {
             "title": {
                 "sign-up": "Sign in",
@@ -1042,7 +1044,8 @@
             "skip": "Skip Creating Overtime Account!",
             "copy": "Copy",
             "qr": "QR code",
-            "wait-deposit": "Waiting for deposit..."
+            "wait-deposit": "Waiting for deposit...",
+            "claim-free-bet": "Claim free bet"
         },
         "withdraw": {
             "title": "Withdraw from <icon/> account",

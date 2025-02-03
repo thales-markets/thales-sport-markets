@@ -6,6 +6,7 @@ import { LINKS } from 'constants/links';
 import ROUTES from 'constants/routes';
 import DappLayout from 'layouts/DappLayout';
 import Theme from 'layouts/Theme';
+import FreeBets from 'pages/FreeBets';
 import LiquidityPool from 'pages/LiquidityPool';
 import Markets from 'pages/Markets/Home';
 import Market from 'pages/Markets/Market';
@@ -154,6 +155,11 @@ const App = () => {
                     <Route exact path={ROUTES.PnL}>
                         <DappLayout>
                             <PnL />
+                        </DappLayout>
+                    </Route>
+                    <Route exact path={ROUTES.FreeBets}>
+                        <DappLayout>
+                            <FreeBets />
                         </DappLayout>
                     </Route>
                     <Route exact path={ROUTES.ResolveBlocker}>
