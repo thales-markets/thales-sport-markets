@@ -133,7 +133,7 @@ const Account: React.FC = () => {
                     }
                 }}
             >
-                {t('get-started.fund-account.skip')}
+                {isBiconomy ? t('profile.account-summary.use-eoa') : t('profile.account-summary.use-smart')}
             </SkipText>
             {showFundModal && <FundModal onClose={() => setShowFundModal(false)} />}
             {showWithdrawModal && <WithdrawModal onClose={() => setShowWithdrawModal(false)} />}
