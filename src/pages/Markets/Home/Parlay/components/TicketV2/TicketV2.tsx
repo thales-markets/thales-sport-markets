@@ -1692,14 +1692,14 @@ const Ticket: React.FC<TicketProps> = ({
                 refetchBalances(walletAddress, networkId);
                 toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
                 if (!isErrorExcluded(e as Error)) {
-                    logErrorToDiscord(e as Error, {
-                        componentStack: `BUY error for params:\nnetworkId=${networkId}\nisParticle=${isParticle}\nisSgp=${isSgp}\nisLive=${isLiveTicket}\nliveOdds=${JSON.stringify(
-                            tradeData[0]?.odds
-                        )}\nlivePosition=${tradeData[0]?.position}\nbuyInAmount=${(swapToThales
-                            ? thalesAmount
-                            : buyInAmount
-                        ).toString()}\ncollateral=${usedCollateralForBuy}\nisSwapToThales=${swapToThales}`,
-                    });
+                    const data = `BUY error for params:\nnetworkId=${networkId}\nisParticle=${isParticle}\nisSgp=${isSgp}\nisLive=${isLiveTicket}\nliveOdds=${JSON.stringify(
+                        tradeData[0]?.odds
+                    )}\nlivePosition=${tradeData[0]?.position}\nbuyInAmount=${(swapToThales
+                        ? thalesAmount
+                        : buyInAmount
+                    ).toString()}\ncollateral=${usedCollateralForBuy}\nisSwapToThales=${swapToThales}`;
+
+                    logErrorToDiscord(e as Error, { componentStack: '' }, data);
                 }
             }
         }
