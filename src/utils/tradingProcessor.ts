@@ -3,7 +3,6 @@ import { generalConfig } from 'config/general';
 import { getErrorToastOptions, getLoadingToastOptions } from 'config/toast';
 import { ZERO_ADDRESS } from 'constants/network';
 import { secondsToMilliseconds } from 'date-fns';
-import { t } from 'i18next';
 import { toast } from 'react-toastify';
 import { TradeData } from 'types/markets';
 import { SupportedNetwork } from 'types/network';
@@ -12,7 +11,8 @@ import { delay } from 'utils/timer';
 import { decodeEventLog, DecodeEventLogParameters } from 'viem';
 import { executeBiconomyTransaction } from './biconomy';
 import freeBetHolder from './contracts/freeBetHolder';
-import liquidityPoolDataContract from './contracts/liveTradingProcessorContract';
+import liveTradingProcessorContract from './contracts/liveTradingProcessorContract';
+import sgpTradingProcessorContract from './contracts/sgpTradingProcessorContract';
 import stakingThalesBettingProxy from './contracts/stakingThalesBettingProxy';
 import { convertFromBytes32 } from './formatters/string';
 
@@ -54,7 +54,8 @@ export const processTransaction = async (
     tradingContract: ViemContract,
     requestId: string,
     maxAllowedExecutionSec: number,
-    toastId: string | number
+    toastId: string | number,
+    toastMessage: string
 ) => {
     let counter = 0;
     const startTime = Date.now();
@@ -72,9 +73,9 @@ export const processTransaction = async (
         !isAdapterError &&
         Date.now() - startTime < secondsToMilliseconds(maxAllowedExecutionSec)
     ) {
-        const isUpdateStatus = counter / UPDATE_STATUS_MESSAGE_PERIOD_SECONDS === DELAY_BETWEEN_CHECKS_SECONDS;
-        if (isUpdateStatus && !isFulfilledTx && isFulfilledAdapter) {
-            toast.update(toastId, getLoadingToastOptions(t('market.toast-message.fulfilling-live-trade')));
+        const isUpdateStatusReady = counter / UPDATE_STATUS_MESSAGE_PERIOD_SECONDS === DELAY_BETWEEN_CHECKS_SECONDS;
+        if (isUpdateStatusReady && !isFulfilledTx && isFulfilledAdapter) {
+            toast.update(toastId, getLoadingToastOptions(toastMessage));
         }
 
         counter++;
@@ -95,7 +96,7 @@ export const processTransaction = async (
     return { isFulfilledTx, isFulfilledAdapter, isAdapterError };
 };
 
-export const getRequestId = (txLogs: any, isFreeBet: boolean, isStakedThales: boolean) => {
+export const getRequestId = (txLogs: any, isFreeBet: boolean, isStakedThales: boolean, isSgp: boolean) => {
     const requestIdEvent = txLogs
         .map((log: any) => {
             try {
@@ -104,15 +105,19 @@ export const getRequestId = (txLogs: any, isFreeBet: boolean, isStakedThales: bo
                         ? freeBetHolder.abi
                         : isStakedThales
                         ? stakingThalesBettingProxy.abi
-                        : liquidityPoolDataContract.abi,
+                        : isSgp
+                        ? sgpTradingProcessorContract.abi
+                        : liveTradingProcessorContract.abi,
                     data: log.data,
                     topics: log.topics,
                 });
 
                 if (
                     (decoded as DecodeEventLogParameters)?.eventName == 'FreeBetLiveTradeRequested' ||
+                    (decoded as DecodeEventLogParameters)?.eventName == 'FreeBetSGPTradeRequested' ||
                     (decoded as DecodeEventLogParameters)?.eventName == 'StakingTokensLiveTradeRequested' ||
-                    (decoded as DecodeEventLogParameters)?.eventName == 'LiveTradeRequested'
+                    (decoded as DecodeEventLogParameters)?.eventName == 'LiveTradeRequested' ||
+                    (decoded as DecodeEventLogParameters)?.eventName == 'SGPTradeRequested'
                 ) {
                     return (decoded as any)?.args;
                 }
@@ -188,17 +193,18 @@ export const getTradingProcessorTransaction: any = async (
 
         if (isFreeBet && freeBetHolderContract) {
             return isSgp
-                ? freeBetHolderContract.write.tradeSgp([txParams])
+                ? freeBetHolderContract.write.tradeSGP([txParams])
                 : freeBetHolderContract.write.tradeLive([txParams]);
         }
 
         if (isStakedThales && stakingThalesBettingProxyContract) {
             return isSgp
-                ? stakingThalesBettingProxyContract.write.tradeSgp([txParams])
+                ? stakingThalesBettingProxyContract.write.tradeSGP([txParams])
                 : stakingThalesBettingProxyContract.write.tradeLive([txParams]);
         }
+
         return isSgp
-            ? tradingProcessorContract.write.requestSgpTrade([txParams])
+            ? tradingProcessorContract.write.requestSGPTrade([txParams])
             : tradingProcessorContract.write.requestLiveTrade([txParams]);
     }
 };

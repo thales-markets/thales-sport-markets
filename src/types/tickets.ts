@@ -10,6 +10,7 @@ export type ShareTicketModalProps = {
     isTicketLost: boolean;
     collateral: Coins;
     isLive: boolean;
+    isSgp: boolean;
     applyPayoutMultiplier: boolean;
     isTicketOpen: boolean;
     systemBetData?: SystemBetData;

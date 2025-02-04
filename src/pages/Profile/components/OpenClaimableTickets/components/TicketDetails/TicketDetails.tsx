@@ -212,6 +212,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
         isTicketLost: ticket.isLost,
         collateral: ticket.collateral,
         isLive: ticket.isLive,
+        isSgp: ticket.isSgp,
         applyPayoutMultiplier: false,
         isTicketOpen: ticket.isOpen,
         systemBetData: ticket.systemBetData,
@@ -260,9 +261,11 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
     return (
         <Container>
             <OverviewWrapper>
-                <LiveSystemIndicatorContainer isLive={ticket.isLive} isSystem={ticket.isSystemBet}>
+                <LiveSystemIndicatorContainer isLive={ticket.isLive} isSgp={ticket.isSgp} isSystem={ticket.isSystemBet}>
                     {ticket.isLive ? (
                         <Label>{t('profile.card.live')}</Label>
+                    ) : ticket.isSgp ? (
+                        <Label>{t('profile.card.sgp')}</Label>
                     ) : ticket.isSystemBet ? (
                         <Label>{t('profile.card.system')}</Label>
                     ) : (
@@ -493,6 +496,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
                     isTicketLost={shareTicketModalData.isTicketLost}
                     collateral={shareTicketModalData.collateral}
                     isLive={shareTicketModalData.isLive}
+                    isSgp={shareTicketModalData.isSgp}
                     applyPayoutMultiplier={shareTicketModalData.applyPayoutMultiplier}
                     systemBetData={shareTicketModalData.systemBetData}
                     isTicketOpen={shareTicketModalData.isTicketOpen}

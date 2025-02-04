@@ -34,6 +34,7 @@ import {
     OddChangeUp,
     PositionInfo,
     PositionText,
+    SgpTag,
     Wrong,
 } from './styled-components';
 
@@ -45,6 +46,7 @@ type MatchInfoProps = {
     acceptOdds?: boolean;
     setAcceptOdds?: (accept: boolean) => void;
     isLive?: boolean;
+    isSgp?: boolean;
     applyPayoutMultiplier: boolean;
     useThalesCollateral?: boolean;
 };
@@ -57,6 +59,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
     acceptOdds,
     setAcceptOdds,
     isLive,
+    isSgp,
     applyPayoutMultiplier,
     useThalesCollateral,
 }) => {
@@ -126,6 +129,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
         <>
             <LeftContainer>
                 {isLiveTicket && <LiveTag readOnly={readOnly}>{t(`markets.market-card.live`)}</LiveTag>}
+                {isSgp && <SgpTag readOnly={readOnly}>{t(`markets.market-card.sgp`)}</SgpTag>}
                 <MatchLogosV2
                     market={market}
                     width={readOnly && isLiveTicket ? '52px' : '55px'}

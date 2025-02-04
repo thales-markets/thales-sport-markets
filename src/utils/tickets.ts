@@ -75,6 +75,7 @@ export const mapTicket = (
         isOpen: !ticket.resolved && !ticket.isExercisable,
         finalPayout: coinFormatter(ticket.finalPayout, networkId, collateral),
         isLive: ticket.isLive,
+        isSgp: ticket.isSGP,
         isFreeBet:
             ticket.ticketOwner.toLowerCase() == freeBetHolder.addresses[networkId as SupportedNetwork].toLowerCase(),
         isSystemBet: ticket.isSystem,
@@ -457,6 +458,7 @@ export const getShareTicketModalData = async (
     payout: number,
     onClose: () => void,
     isModalForLive: boolean, // not the same as isLive indicator
+    isSgp: boolean,
     isFreeBet: boolean,
     isStakedThales: boolean,
     systemBetData?: SystemBetData,
@@ -467,7 +469,6 @@ export const getShareTicketModalData = async (
     const isLive = !!markets[0].live;
 
     if (isModalForLive && networkConfig) {
-        // TODO: Check for SGP
         const sportsAMMDataContract = getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig);
         const sportsAMMV2ManagerContract = getContractInstance(ContractType.SPORTS_AMM_V2_MANAGER, networkConfig);
         const freeBetHolderContract = getContractInstance(ContractType.FREE_BET_HOLDER, networkConfig);
@@ -503,13 +504,17 @@ export const getShareTicketModalData = async (
             const lastTicketPaid = paid ? paid : coinFormatter(lastTicket.buyInAmount, networkConfig.networkId);
             const lastTicketPayout = lastTicketPaid / bigNumberFormatter(lastTicket.totalQuote);
 
+            const liveOrOtherMarkets = isLive
+                ? [
+                      {
+                          ...markets[0],
+                          odd: bigNumberFormatter(lastTicket.totalQuote),
+                      },
+                  ]
+                : markets;
+
             modalData = {
-                markets: [
-                    {
-                        ...markets[0],
-                        odd: bigNumberFormatter(lastTicket.totalQuote),
-                    },
-                ],
+                markets: liveOrOtherMarkets,
                 multiSingle: false,
                 paid: lastTicketPaid,
                 payout: lastTicketPayout,
@@ -517,6 +522,7 @@ export const getShareTicketModalData = async (
                 isTicketLost: false,
                 collateral,
                 isLive,
+                isSgp,
                 applyPayoutMultiplier: false,
                 isTicketOpen: true,
                 systemBetData,
@@ -532,6 +538,7 @@ export const getShareTicketModalData = async (
             isTicketLost: false,
             collateral,
             isLive,
+            isSgp,
             applyPayoutMultiplier: true,
             isTicketOpen: true,
             systemBetData,

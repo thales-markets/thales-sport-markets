@@ -127,6 +127,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
             isTicketLost: ticket.isLost,
             collateral: ticket.collateral,
             isLive: ticket.isLive,
+            isSgp: ticket.isSgp,
             applyPayoutMultiplier: false,
             isTicketOpen: ticket.isOpen,
             systemBetData: ticket.systemBetData,
@@ -173,10 +174,13 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                     <>
                         <LiveSystemIndicatorContainer
                             isLive={cellProps.row.original.isLive}
+                            isSgp={cellProps.row.original.isSgp}
                             isSystem={cellProps.row.original.isSystemBet}
                         >
                             {cellProps.row.original.isLive ? (
                                 <LiveSystemLabel>{t('profile.card.live')}</LiveSystemLabel>
+                            ) : cellProps.row.original.isSgp ? (
+                                <LiveSystemLabel>{t('profile.card.sgp')}</LiveSystemLabel>
                             ) : cellProps.row.original.isSystemBet ? (
                                 <LiveSystemLabel>{t('profile.card.system-short')}</LiveSystemLabel>
                             ) : (
@@ -497,6 +501,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                     isTicketLost={shareTicketModalData.isTicketLost}
                     collateral={shareTicketModalData.collateral}
                     isLive={shareTicketModalData.isLive}
+                    isSgp={shareTicketModalData.isSgp}
                     applyPayoutMultiplier={shareTicketModalData.applyPayoutMultiplier}
                     systemBetData={shareTicketModalData.systemBetData}
                     isTicketOpen={shareTicketModalData.isTicketOpen}

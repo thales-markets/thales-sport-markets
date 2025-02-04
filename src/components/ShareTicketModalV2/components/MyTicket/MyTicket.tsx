@@ -27,6 +27,7 @@ type MyTicketProps = {
     isTicketLost: boolean;
     collateral: Coins;
     isLive: boolean;
+    isSgp: boolean;
     applyPayoutMultiplier: boolean;
     isTicketOpen: boolean;
     systemBetData?: SystemBetData;
@@ -40,6 +41,7 @@ const MyTicket: React.FC<MyTicketProps> = ({
     isTicketLost,
     collateral,
     isLive,
+    isSgp,
     applyPayoutMultiplier,
     isTicketOpen,
     systemBetData,
@@ -91,8 +93,9 @@ const MyTicket: React.FC<MyTicketProps> = ({
                             <RowMarket>
                                 <MatchInfoV2
                                     market={market}
-                                    readOnly={true}
+                                    readOnly
                                     isLive={isLive}
+                                    isSgp={isSgp}
                                     applyPayoutMultiplier={applyPayoutMultiplier}
                                 />
                             </RowMarket>

@@ -88,7 +88,11 @@ export const InfoContainerColumn = styled(FlexDivColumnNative)<{ isOpen?: boolea
     }
 `;
 
-export const LiveSystemIndicatorContainer = styled(FlexDivStart)<{ isLive?: boolean; isSystem?: boolean }>`
+export const LiveSystemIndicatorContainer = styled(FlexDivStart)<{
+    isLive?: boolean;
+    isSgp?: boolean;
+    isSystem?: boolean;
+}>`
     min-width: 12px;
     max-width: 12px;
     height: 100%;
@@ -96,6 +100,8 @@ export const LiveSystemIndicatorContainer = styled(FlexDivStart)<{ isLive?: bool
     background: ${(props) =>
         props.isLive
             ? props.theme.status.live
+            : props.isSgp
+            ? props.theme.status.sgp
             : props.isSystem
             ? props.theme.status.system
             : props.theme.background.secondary};

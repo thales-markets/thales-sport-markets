@@ -188,6 +188,7 @@ export type Ticket = {
     isOpen: boolean;
     finalPayout: number;
     isLive: boolean;
+    isSgp: boolean;
     isFreeBet: boolean;
     isSystemBet: boolean;
     systemBetData?: SystemBetData;

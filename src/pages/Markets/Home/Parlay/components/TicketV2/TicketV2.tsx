@@ -1475,7 +1475,8 @@ const Ticket: React.FC<TicketProps> = ({
                 if (isLiveTicket || isSgp) {
                     const liveTradeDataOdds = tradeData[0].odds;
                     const liveTradeDataPosition = tradeData[0].position;
-                    const liveTotalQuote = BigInt(Number(liveTradeDataOdds[liveTradeDataPosition]));
+                    const liveTotalQuote = BigInt(liveTradeDataOdds[liveTradeDataPosition]);
+                    const sgpTotalQuote = parseEther(totalQuote.toString());
 
                     if (isEth && !swapToThales) {
                         const WETHContractWithSigner = getContractInstance(
@@ -1499,7 +1500,7 @@ const Ticket: React.FC<TicketProps> = ({
                                     liveOrSgpTradingProcessorContract,
                                     tradeData,
                                     parsedBuyInAmount,
-                                    isLiveTicket ? liveTotalQuote : BigInt(totalQuote),
+                                    isLiveTicket ? liveTotalQuote : sgpTotalQuote,
                                     referralId,
                                     additionalSlippage,
                                     isBiconomy,
@@ -1519,7 +1520,7 @@ const Ticket: React.FC<TicketProps> = ({
                             liveOrSgpTradingProcessorContract,
                             tradeData,
                             parsedBuyInAmount,
-                            isLiveTicket ? liveTotalQuote : BigInt(totalQuote),
+                            isLiveTicket ? liveTotalQuote : sgpTotalQuote,
                             referralId,
                             additionalSlippage,
                             isBiconomy,
@@ -1590,7 +1591,7 @@ const Ticket: React.FC<TicketProps> = ({
                             : Number(buyInAmount);
 
                     if (isLiveTicket || isSgp) {
-                        const requestId = getRequestId(txReceipt.logs, isFreeBetActive, isStakedThales);
+                        const requestId = getRequestId(txReceipt.logs, isFreeBetActive, isStakedThales, isSgp);
                         if (!requestId) {
                             throw new Error('Request ID not found');
                         }
@@ -1598,7 +1599,9 @@ const Ticket: React.FC<TicketProps> = ({
                         if (liveOrSgpTradingProcessorContract) {
                             toast.update(
                                 toastId,
-                                getLoadingToastOptions(t('market.toast-message.live-trade-requested'))
+                                getLoadingToastOptions(
+                                    t(`market.toast-message.${isSgp ? 'sgp-trade-requested' : 'live-trade-requested'}`)
+                                )
                             );
                             await delay(2000);
                             const { isFulfilledTx, isAdapterError } = await processTransaction(
@@ -1606,7 +1609,8 @@ const Ticket: React.FC<TicketProps> = ({
                                 liveOrSgpTradingProcessorContract,
                                 requestId,
                                 maxAllowedExecutionDelay,
-                                toastId
+                                toastId,
+                                t(`market.toast-message.${isSgp ? 'fulfilling-sgp-trade' : 'fulfilling-live-trade'}`)
                             );
 
                             if (isAdapterError) {
@@ -1615,17 +1619,18 @@ const Ticket: React.FC<TicketProps> = ({
                             } else if (!isFulfilledTx) {
                                 setIsBuying(false);
                                 refetchBalances(walletAddress, networkId);
-                                toast.update(toastId, getErrorToastOptions(t('markets.parlay.odds-changed-error'))); // TODO: check this
+                                toast.update(toastId, getErrorToastOptions(t('markets.parlay.trade-fulfilling-error')));
                             } else {
                                 refetchBalances(walletAddress, networkId);
 
                                 const modalData = await getShareTicketModalData(
-                                    markets,
+                                    [...markets],
                                     collateralHasLp ? usedCollateralForBuy : defaultCollateral,
                                     shareTicketPaid,
                                     0,
                                     shareTicketOnClose,
                                     true, // isModalForLive
+                                    isSgp,
                                     isFreeBetActive,
                                     isStakedThales,
                                     undefined,
@@ -1666,6 +1671,7 @@ const Ticket: React.FC<TicketProps> = ({
                             payout,
                             shareTicketOnClose,
                             false, // isModalForLive
+                            isSgp,
                             isFreeBetActive,
                             isStakedThales,
                             systemBetData
@@ -2053,6 +2059,7 @@ const Ticket: React.FC<TicketProps> = ({
             payout,
             onModalClose,
             false, // isModalForLive
+            isSgp,
             isFreeBetActive,
             isStakedThales,
             systemBetData
@@ -2719,6 +2726,7 @@ const Ticket: React.FC<TicketProps> = ({
                     isTicketLost={shareTicketModalData.isTicketLost}
                     collateral={shareTicketModalData.collateral}
                     isLive={shareTicketModalData.isLive}
+                    isSgp={shareTicketModalData.isSgp}
                     applyPayoutMultiplier={shareTicketModalData.applyPayoutMultiplier}
                     systemBetData={shareTicketModalData.systemBetData}
                     isTicketOpen={shareTicketModalData.isTicketOpen}

@@ -235,7 +235,9 @@
             "metamask-not-supported": "Metamask browser doesn't support image download! Please use another browser to share image",
             "ios-not-supported": "Sharing images not supported on iOS devices. If you want to share the image please use desktop version",
             "live-trade-requested": "Live trade requested",
-            "fulfilling-live-trade": "Fulfilling live trade"
+            "sgp-trade-requested": "SGP trade requested",
+            "fulfilling-live-trade": "Fulfilling live trade",
+            "fulfilling-sgp-trade": "Fulfilling SGP trade"
         },
         "filter-label": {
             "global": {
@@ -383,6 +385,7 @@
         "card": {
             "ticket-id": "Ticket ID",
             "live": "Live",
+            "sgp": "SGP",
             "system": "System",
             "system-short": "Sys",
             "claim-batch-tooltip": "Claim all your pending positions in one transaction.",
@@ -498,6 +501,7 @@
             "open": "Open",
             "started": "Started",
             "live": "Live",
+            "sgp": "SGP",
             "time": "Time",
             "canceled": "Cancelled",
             "pending-resolution": "Pending resolution",
@@ -794,7 +798,7 @@
             "empty-description": "Add position, choose a market and make your selection.",
             "accept-odds-changes": "Accept odds changes",
             "odds-changed-description": "Odds changed. Accept changes in order to buy.",
-            "odds-changed-error": "Odds changed while fulfilling the order. Try increasing the slippage.",
+            "trade-fulfilling-error": "Trade fulfilling is taking too long. Please try again.",
             "info": {
                 "min-quote": "Minimal TOTAL QUOTE supported is {{value}}",
                 "max-quote": "Maximal TOTAL QUOTE supported is {{value}}",
@@ -820,7 +824,7 @@
                 "not-supported": "Not supported validation error: {{error}}",
                 "futures-combining-not-supported": "Combining futures on parlay is not supported",
                 "system-bet-min-markets-validation": "System bet requires minimum {{minMarkets}} games",
-                "sgp-bet-min-markets-validation": "SGP bet requires minimum {{minMarkets}} games",
+                "sgp-bet-min-markets-validation": "SGP bet requires minimum {{minMarkets}} markets",
                 "sgp-different-game": "It is not supported to combine different games in the same game parlay",
                 "sgp-no-odds": "Missing odds from provider"
             },

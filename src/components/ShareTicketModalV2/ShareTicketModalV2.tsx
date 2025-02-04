@@ -65,6 +65,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
     isTicketLost,
     collateral,
     isLive,
+    isSgp,
     applyPayoutMultiplier,
     isTicketOpen,
     systemBetData,
@@ -111,7 +112,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
         overlay: {
             backgroundColor: 'rgba(0, 0, 0, 0.5)',
             backdropFilter: 'blur(10px)',
-            zIndex: '1501', // .MuiTooltip-popper has 1500 and validation message pops up from background
+            zIndex: '1502', // .rc-tooltip has 1501 and validation message pops up from background
         },
     };
 
@@ -340,6 +341,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                         convertToStableValue && isNonStableCollateral ? (CRYPTO_CURRENCY_MAP.USDC as Coins) : collateral
                     }
                     isLive={isLive}
+                    isSgp={isSgp}
                     applyPayoutMultiplier={applyPayoutMultiplier}
                     systemBetData={
                         systemBetData && convertToStableValue && isNonStableCollateral && exchangeRates
