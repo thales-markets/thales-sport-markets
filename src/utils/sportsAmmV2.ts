@@ -20,8 +20,6 @@ export const getSportsAMMV2Transaction: any = async (
     additionalSlippage: bigint,
     isAA: boolean,
     isFreeBet: boolean,
-    isStakedThales: boolean,
-    stakingThalesBettingProxyContract: ViemContract,
     client: Client,
     isSystemBet: boolean,
     systemBetDenominator: number
@@ -118,53 +116,6 @@ export const getSportsAMMV2Transaction: any = async (
                 });
             }
         }
-    }
-
-    if (isStakedThales && stakingThalesBettingProxyContract) {
-        if (isSystemBet) {
-            const encodedData = encodeFunctionData({
-                abi: stakingThalesBettingProxyContract.abi,
-                functionName: 'tradeSystemBet',
-                args: [
-                    tradeData,
-                    buyInAmount,
-                    expectedQuote,
-                    additionalSlippage,
-                    referralAddress,
-                    systemBetDenominator,
-                ],
-            });
-
-            const estimation = await estimateGas(client, {
-                to: stakingThalesBettingProxyContract.address as Address,
-                data: encodedData,
-            });
-
-            finalEstimation = BigInt(Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER));
-
-            return stakingThalesBettingProxyContract.write.tradeSystemBet(
-                [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress, systemBetDenominator],
-                { gas: finalEstimation }
-            );
-        }
-
-        const encodedData = encodeFunctionData({
-            abi: stakingThalesBettingProxyContract.abi,
-            functionName: 'trade',
-            args: [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress],
-        });
-
-        const estimation = await estimateGas(client, {
-            to: stakingThalesBettingProxyContract.address as Address,
-            data: encodedData,
-        });
-
-        finalEstimation = BigInt(Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER));
-
-        return stakingThalesBettingProxyContract.write.trade(
-            [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress],
-            { gas: finalEstimation }
-        );
     }
 
     if (isSystemBet) {
