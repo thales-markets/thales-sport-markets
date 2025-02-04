@@ -19,8 +19,6 @@ export const getLiveTradingProcessorTransaction: any = async (
     isBiconomy: boolean,
     isFreeBet: boolean,
     freeBetHolderContract: ViemContract,
-    isStakedThales: boolean,
-    stakingThalesBettingProxyContract: ViemContract,
     networkId: SupportedNetwork
 ): Promise<any> => {
     const referralAddress = referral || ZERO_ADDRESS;
@@ -64,23 +62,6 @@ export const getLiveTradingProcessorTransaction: any = async (
                 },
             ]);
         }
-    }
-
-    if (isStakedThales && stakingThalesBettingProxyContract) {
-        return stakingThalesBettingProxyContract.write.tradeLive([
-            {
-                _gameId: gameId,
-                _sportId: tradeData[0].sportId,
-                _typeId: tradeData[0].typeId,
-                _line: tradeData[0].line,
-                _position: tradeData[0].position,
-                _buyInAmount: sUSDPaid,
-                _expectedQuote: expectedQuote,
-                _additionalSlippage: additionalSlippage,
-                _referrer: referralAddress,
-                _collateral: collateralAddress,
-            },
-        ]);
     }
 
     if (isBiconomy) {
