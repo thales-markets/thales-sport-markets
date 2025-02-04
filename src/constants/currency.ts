@@ -15,6 +15,7 @@ import ARB from 'assets/currencies/ARB.svg?react';
 import { FunctionComponent, SVGProps } from 'react';
 
 export const USD_SIGN = '$';
+export const OVER_SIGH = '$OVER';
 
 const CRYPTO_CURRENCY = [
     'sUSD',

@@ -341,11 +341,12 @@
         "account-summary": {
             "title": "Account Summary",
             "balance": "Total balance",
-            "deposit": "Add funds",
-            "swap": "Swap",
+            "deposit": "Deposit",
+            "swap": "Buy",
             "withdraw": "Withdraw",
             "use-eoa": "Switch to your EOA wallet",
-            "use-smart": "Switch to your Overtime Account"
+            "use-smart": "Switch to your Overtime Account",
+            "best-odds": "Bet with OVER token for best odds!!"
         },
         "stats": {
             "profile-data": "Profile data",

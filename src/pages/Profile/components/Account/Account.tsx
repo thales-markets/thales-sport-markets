@@ -1,6 +1,6 @@
 import Button from 'components/Button';
 import FundModal from 'components/FundOvertimeAccountModal';
-import { USD_SIGN } from 'constants/currency';
+import { COLLATERAL_ICONS, OVER_SIGH, USD_SIGN } from 'constants/currency';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useMemo, useState } from 'react';
@@ -8,8 +8,16 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsBiconomy, setIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
-import { Colors, FlexDivCentered, FlexDivSpaceBetween } from 'styles/common';
-import { formatCurrencyWithKey, localStore } from 'thales-utils';
+import {
+    Colors,
+    FlexDivCentered,
+    FlexDivColumnCentered,
+    FlexDivColumnStart,
+    FlexDivEnd,
+    FlexDivSpaceBetween,
+    FlexDivStart,
+} from 'styles/common';
+import { formatCurrencyWithKey, formatCurrencyWithSign, localStore } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import biconomyConnector from 'utils/biconomyWallet';
@@ -19,6 +27,9 @@ import WithdrawModal from '../WithdrawModal';
 import SwapModal from 'components/SwapModal/SwapModal';
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
+
+const OverToken = COLLATERAL_ICONS['OVER'];
 
 const Account: React.FC = () => {
     const { t } = useTranslation();
@@ -72,56 +83,133 @@ const Account: React.FC = () => {
                 balanceList.forEach((data) => (total += data.balanceDollarValue));
             }
 
-            return total ? formatCurrencyWithKey(USD_SIGN, total, 2) : 'N/A';
+            return total ? formatCurrencyWithSign(USD_SIGN, total, 2) : 'N/A';
         } catch (e) {
             return 'N/A';
         }
     }, [exchangeRates, multipleCollateralBalances.data, networkId, balanceList]);
 
+    const userTicketsQuery = useUserTicketsQuery(
+        walletAddress,
+        { networkId, client },
+        {
+            enabled: isConnected,
+        }
+    );
+
+    const userTicketsByStatus = useMemo(() => {
+        if (exchangeRates && userTicketsQuery.isSuccess) {
+            const userTickets = userTicketsQuery.isSuccess && userTicketsQuery.data ? userTicketsQuery.data : [];
+            let [tickets, potentialWin] = [0, 0];
+
+            userTickets.forEach((ticket) => {
+                if (ticket.isOpen) {
+                    console.log(ticket);
+                    tickets++;
+                    potentialWin += ticket.payout * exchangeRates[ticket.collateral];
+                }
+            });
+
+            const data = {
+                tickets,
+                potentialWin,
+            };
+            return data;
+        }
+
+        return {
+            tickets: 0,
+            potentialWin: 0,
+        };
+    }, [userTicketsQuery.isSuccess, userTicketsQuery.data, exchangeRates]);
+
+    const OverBalance = useMemo(() => {
+        if (multipleCollateralBalances.data && exchangeRates) {
+            return {
+                balance: multipleCollateralBalances.data['OVER'],
+                value: multipleCollateralBalances.data['OVER'] * exchangeRates['OVER'],
+            };
+        }
+
+        return {
+            balance: 0,
+            value: 0,
+        };
+    }, [multipleCollateralBalances.data, exchangeRates]);
+
     return (
         <div>
-            <Box>
-                <Title>{t('profile.account-summary.title')}</Title>
-                <FlexDivSpaceBetween>
-                    <Label>{t('profile.account-summary.balance')}</Label>
+            <Header>
+                <FlexDivColumnStart gap={4}>
+                    <Label>Portfolio Balance</Label>
                     <Value>{totalBalanceValue}</Value>
+                </FlexDivColumnStart>
+                <FlexDivEnd gap={20}>
+                    <FlexDivColumnStart gap={4}>
+                        <GrayLabel>Active Tickets</GrayLabel>
+                        <YellowValue>
+                            {userTicketsByStatus.tickets} <ParlayIcon />
+                        </YellowValue>
+                    </FlexDivColumnStart>
+                    <FlexDivColumnStart gap={4}>
+                        <GrayLabel>Potential Win</GrayLabel>
+                        <YellowValue>
+                            {formatCurrencyWithSign(USD_SIGN, userTicketsByStatus.potentialWin, 2)}
+                        </YellowValue>
+                    </FlexDivColumnStart>
+                </FlexDivEnd>
+            </Header>
+            <FlexDivSpaceBetween>
+                <FlexDivStart>
+                    <FlexDivCentered>
+                        <OverToken />
+                    </FlexDivCentered>
+                    <FlexDivColumnCentered gap={4}>
+                        <FlexDivSpaceBetween>
+                            <Label2> {formatCurrencyWithKey(OVER_SIGH, OverBalance.balance, 2)}</Label2>
+                            <Value2>{formatCurrencyWithSign(USD_SIGN, OverBalance.value, 2)}</Value2>
+                        </FlexDivSpaceBetween>
+                        <FlexDivCentered>
+                            <YellowValue2>{t('profile.account-summary.best-odds')}</YellowValue2>
+                        </FlexDivCentered>
+                    </FlexDivColumnCentered>
+                </FlexDivStart>
+                <FlexDivSpaceBetween>
+                    <ButtonContainer>
+                        <Button
+                            onClick={() => setShowFundModal(true)}
+                            borderColor="none"
+                            height="42px"
+                            width="120px"
+                            lineHeight="16px"
+                            backgroundColor={Colors.BLUE}
+                        >
+                            {t('profile.account-summary.deposit')}
+                        </Button>
+                        <Button
+                            onClick={() => setShowSwapModal(true)}
+                            borderColor="none"
+                            height="42px"
+                            width="120px"
+                            lineHeight="16px"
+                            backgroundColor={Colors.WHITE}
+                        >
+                            {t('profile.account-summary.swap')}
+                        </Button>
+                        <Button
+                            onClick={() => setShowWithdrawModal(true)}
+                            borderColor="none"
+                            height="42px"
+                            width="120px"
+                            lineHeight="16px"
+                            backgroundColor={Colors.YELLOW}
+                        >
+                            {t('profile.account-summary.withdraw')}
+                        </Button>
+                    </ButtonContainer>
                 </FlexDivSpaceBetween>
-            </Box>
-            <ButtonContainer>
-                <Button
-                    onClick={() => setShowFundModal(true)}
-                    borderColor="none"
-                    height="48px"
-                    width="100%"
-                    lineHeight="16px"
-                    backgroundColor={Colors.BLUE}
-                >
-                    <Icon className="icon icon--wallet2" />
-                    {t('profile.account-summary.deposit')}
-                </Button>
-                <Button
-                    onClick={() => setShowSwapModal(true)}
-                    borderColor="none"
-                    height="48px"
-                    width="100%"
-                    lineHeight="16px"
-                    backgroundColor={Colors.WHITE}
-                >
-                    <Icon className="icon icon--exchange" />
-                    {t('profile.account-summary.swap')}
-                </Button>
-                <Button
-                    onClick={() => setShowWithdrawModal(true)}
-                    borderColor="none"
-                    height="48px"
-                    width="100%"
-                    lineHeight="16px"
-                    backgroundColor={Colors.YELLOW}
-                >
-                    <Icon className="icon icon--logged-in" />
-                    {t('profile.account-summary.withdraw')}
-                </Button>
-            </ButtonContainer>
+            </FlexDivSpaceBetween>
+
             <SkipText
                 onClick={() => {
                     if (isBiconomy) {
@@ -142,39 +230,12 @@ const Account: React.FC = () => {
     );
 };
 
-const Box = styled.div`
-    border-radius: 12px;
-    width: 100%;
-    background: ${(props) => props.theme.background.quinary};
-    padding: 24px;
-    padding-bottom: 37px;
-`;
-
-const Title = styled.p`
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 20px;
-`;
-
-const Label = styled.span`
-    color: ${(props) => props.theme.textColor.secondary};
-    font-size: 16px;
-    font-weight: 400;
-`;
-const Value = styled.span`
-    color: #3fffff;
-    font-size: 16px;
-    font-weight: 600;
+const Header = styled(FlexDivSpaceBetween)`
+    margin-bottom: 28px;
 `;
 
 const ButtonContainer = styled(FlexDivCentered)`
-    margin-top: 14px;
     gap: 18px;
-`;
-
-const Icon = styled.i`
-    text-transform: lowercase;
-    margin-right: 4px;
 `;
 
 const SkipText = styled.p`
@@ -184,6 +245,52 @@ const SkipText = styled.p`
     font-weight: 600;
     margin-top: 30px;
     cursor: pointer;
+`;
+
+const Label = styled.p`
+    color: ${(props) => props.theme.textColor.primary};
+    font-size: 14px;
+    font-weight: 500;
+    white-space: pre;
+`;
+
+const GrayLabel = styled(Label)`
+    color: ${(props) => props.theme.button.textColor.senary};
+`;
+
+const Value = styled.p`
+    color: ${(props) => props.theme.textColor.quaternary};
+    font-size: 24px;
+    font-weight: 700;
+    white-space: pre;
+`;
+
+const YellowValue = styled(Value)`
+    color: ${(props) => props.theme.overdrop.textColor.primary};
+    display: flex;
+    align-items: center;
+`;
+
+const ParlayIcon = styled.i.attrs({ className: 'icon icon--parlay' })`
+    font-size: 16px;
+`;
+
+const Label2 = styled.p`
+    color: ${(props) => props.theme.textColor.primary};
+    font-size: 16px;
+    font-weight: 500;
+    white-space: pre;
+`;
+
+const Value2 = styled.p`
+    color: ${(props) => props.theme.textColor.quaternary};
+    font-size: 16px;
+    font-weight: 700;
+    white-space: pre;
+`;
+
+const YellowValue2 = styled(Value2)`
+    color: ${(props) => props.theme.overdrop.textColor.primary};
 `;
 
 export default Account;
