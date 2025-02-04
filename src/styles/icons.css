@@ -469,10 +469,6 @@
     content: '\011A';
 }
 
-.icon--gift:before {
-    content: '\00FB';
-}
-
 .icon--waterpolo:before {
     content: '\00FD';
 }

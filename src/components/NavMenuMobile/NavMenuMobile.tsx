@@ -23,7 +23,7 @@ import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
 import { getNetworkIconClassNameByNetworkId, getNetworkNameByNetworkId } from 'utils/network';
 import { buildHref } from 'utils/routes';
-import { useAccount, useChainId, useClient } from 'wagmi';
+import { useAccount, useChainId, useClient, useDisconnect } from 'wagmi';
 import {
     ButtonWrapper,
     CloseIcon,
@@ -50,7 +50,7 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
     const { t } = useTranslation();
     const location = useLocation();
     const theme: ThemeInterface = useTheme();
-
+    const { disconnect } = useDisconnect();
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
@@ -190,17 +190,19 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                             </SPAAnchor>
                         );
                     })}
-                    <ButtonWrapper>
-                        <Button
-                            borderColor={theme.button.borderColor.secondary}
-                            backgroundColor="transparent"
-                            textColor={theme.button.textColor.quaternary}
-                            width="100%"
-                            onClick={() => setOpenFreeBetModal(!openFreeBetModal)}
-                        >
-                            {t('profile.send-free-bet')}
-                        </Button>
-                    </ButtonWrapper>
+                    {isConnected && (
+                        <ButtonWrapper>
+                            <Button
+                                borderColor={theme.button.borderColor.secondary}
+                                backgroundColor="transparent"
+                                textColor={theme.button.textColor.quaternary}
+                                width="100%"
+                                onClick={() => disconnect()}
+                            >
+                                {t('markets.nav-menu.buttons.disconnect')}
+                            </Button>
+                        </ButtonWrapper>
+                    )}
                 </ItemsContainer>
 
                 <FooterContainer>

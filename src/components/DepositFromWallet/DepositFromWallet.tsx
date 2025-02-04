@@ -1,7 +1,6 @@
 import Button from 'components/Button';
 import CollateralSelector from 'components/CollateralSelector';
 import NumericInput from 'components/fields/NumericInput';
-import TextInput from 'components/fields/TextInput';
 import Modal from 'components/Modal';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
@@ -158,16 +157,7 @@ const DepositFromWallet: React.FC<DepositFromWalletProps> = ({ onClose }) => {
                     <SubTitle>{t('deposit.subtitle')}</SubTitle>
                     <FormContainer>
                         <InputContainer>
-                            <TextInput
-                                value={walletAddress}
-                                borderColor="none"
-                                height="44px"
-                                inputFontSize="16px"
-                                background={theme.textColor.primary}
-                                fontWeight="700"
-                                disabled={true}
-                                color={theme.textColor.tertiary}
-                            />
+                            <WalletAddress>{walletAddress}</WalletAddress>
                         </InputContainer>
 
                         <InputContainer ref={inputRef}>
@@ -279,6 +269,20 @@ const WalletContainer = styled(FlexDivColumnCentered)`
 
 const ButtonContainer = styled(FlexDivColumnCentered)`
     margin-top: 30px;
+`;
+
+const WalletAddress = styled.p`
+    background: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.textColor.senary};
+    padding: 5px 10px;
+    border-radius: 4px;
+    height: 44px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.8;
+    margin-bottom: 10px;
+    font-size: 14px;
 `;
 
 export default DepositFromWallet;

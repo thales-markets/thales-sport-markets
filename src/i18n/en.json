@@ -762,7 +762,7 @@
             },
             "buttons": {
                 "switch": "Switch",
-                "disconnect": "Disconnect",
+                "disconnect": "Log Out",
                 "particle-wallet": "Particle Wallet"
             }
         },

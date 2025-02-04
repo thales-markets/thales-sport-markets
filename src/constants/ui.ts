@@ -51,6 +51,13 @@ export const NAV_MENU_THIRD_SECTION: NavMenuItem[] = [
         route: ROUTES.Promotions.Home,
         supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.Base, Network.OptimismSepolia],
     },
+    {
+        i18label: 'profile.send-free-bet',
+        iconClass: 'icon icon--gift',
+        name: 'promotions',
+        route: '',
+        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.Base, Network.OptimismSepolia],
+    },
 ];
 
 export const NAV_MENU_FOURTH_SECTION: NavMenuItem[] = [

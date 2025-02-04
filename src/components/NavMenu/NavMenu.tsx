@@ -175,6 +175,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                             </SPAAnchor>
                         );
                     })}
+
                     <Separator />
                     {NAV_MENU_THIRD_SECTION.map((item, index) => {
                         if (!item.supportedNetworks.includes(networkId)) return;
@@ -223,15 +224,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                             {t('markets.nav-menu.buttons.disconnect')}
                         </Button>
                     )}
-                    <Button
-                        borderColor={theme.button.borderColor.secondary}
-                        backgroundColor="transparent"
-                        textColor={theme.button.textColor.quaternary}
-                        width="100%"
-                        onClick={() => setOpenFreeBetModal(!openFreeBetModal)}
-                    >
-                        {t('profile.send-free-bet')}
-                    </Button>
+
                     {openFreeBetModal && <FreeBetFundModal onClose={() => setOpenFreeBetModal(false)} />}
                     {isConnectedViaParticle && (
                         <Button
