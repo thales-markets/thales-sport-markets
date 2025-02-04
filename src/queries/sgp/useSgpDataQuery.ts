@@ -45,8 +45,7 @@ const useSgpDataQuery = (
                     sgpData = sgpResponse.data;
                 }
             } catch (e: any) {
-                console.log(e);
-                sgpData.data.selectedSportsbook.error = e.response.data.error;
+                console.error(e.response.data);
             }
 
             return sgpData;
