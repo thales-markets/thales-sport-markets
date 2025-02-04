@@ -174,6 +174,10 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                             </SPAAnchor>
                         );
                     })}
+                    <ItemContainer onClick={() => setOpenFreeBetModal(true)}>
+                        <NavIcon className={`icon icon--gift`} />
+                        <NavLabel>{t('profile.send-free-bet')}</NavLabel>
+                    </ItemContainer>
                     <Separator />
                     {NAV_MENU_FOURTH_SECTION.map((item, index) => {
                         if (!item.supportedNetworks.includes(networkId)) return;
