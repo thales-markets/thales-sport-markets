@@ -168,7 +168,7 @@ const useMultipleCollateralBalanceQuery = (
                             : bigNumberFormatter(THALESBalance, COLLATERAL_DECIMALS.THALES)
                         : 0,
                     sTHALES: 0,
-                    cbBTC: cbBTCBalance ? bigNumberFormatter(cbBTCBalance, COLLATERAL_DECIMALS.ARB) : 0,
+                    cbBTC: cbBTCBalance ? bigNumberFormatter(cbBTCBalance, COLLATERAL_DECIMALS.cbBTC) : 0,
                 };
             } catch (e) {
                 console.log('e ', e);
