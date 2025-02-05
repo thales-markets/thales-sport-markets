@@ -141,7 +141,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                     ></Tooltip>
                 </SubTitle>
 
-                <FlexDivCentered gap={14}>
+                <CollateralsWrapper gap={14}>
                     {getCollaterals(networkId).map((token, key) => {
                         if (COLLATERAL_ICONS[token]) {
                             const ReactElem = COLLATERAL_ICONS[token];
@@ -153,7 +153,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                             );
                         }
                     })}
-                </FlexDivCentered>
+                </CollateralsWrapper>
 
                 <NetworkWrapper>
                     <FieldHeader>Current Network: </FieldHeader>
@@ -367,6 +367,10 @@ const CollateralText = styled.p`
     font-size: 14px;
     font-weight: 800;
     letter-spacing: 0.42px;
+`;
+
+const CollateralsWrapper = styled(FlexDivCentered)`
+    flex-wrap: wrap;
 `;
 
 const CollateralWrapper = styled(FlexDivColumnCentered)`
