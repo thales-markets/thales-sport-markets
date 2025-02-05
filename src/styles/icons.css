@@ -520,3 +520,7 @@
 .icon--sorting::before {
     content: '\0192';
 }
+
+.icon--hands-coins::before {
+    content: '\0124';
+}
