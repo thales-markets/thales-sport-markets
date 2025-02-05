@@ -40,9 +40,10 @@ import { sendBiconomyTransaction } from 'utils/biconomy';
 
 type FundModalProps = {
     onClose: () => void;
+    preSelectedToken?: number;
 };
 
-const SwapModal: React.FC<FundModalProps> = ({ onClose }) => {
+const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
     const theme = useTheme();
     const networkId = useChainId();
     const { address, isConnected } = useAccount();
@@ -52,10 +53,12 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose }) => {
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
-    const [fromToken, setFromToken] = useState<Coins>('USDC');
+    const [fromToken, setFromToken] = useState<Coins>(
+        preSelectedToken ? getCollaterals(networkId)[preSelectedToken] : 'USDC'
+    );
     const [fromAmount, setFromAmount] = useState<string | number>('');
 
-    const [toToken, setToToken] = useState<Coins>('OVER');
+    const [toToken] = useState<Coins>('OVER');
     const [toAmount, setToAmount] = useState<string | number>('');
 
     const [isBuying, setIsBuying] = useState(false);
@@ -413,15 +416,14 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose }) => {
                             borderColor="none"
                             collateralArray={getCollaterals(networkId)}
                             selectedItem={getCollateralIndex(networkId, toToken)}
-                            onChangeCollateral={(index) => {
-                                setToToken(getCollaterals(networkId)[index]);
-                            }}
+                            onChangeCollateral={() => {}}
                             isDetailedView
                             collateralBalances={multiCollateralBalances}
                             exchangeRates={exchangeRates}
                             background={theme.textColor.primary}
                             color={theme.textColor.tertiary}
                             topPosition="50px"
+                            disabled
                         />
                     }
                     label="To"

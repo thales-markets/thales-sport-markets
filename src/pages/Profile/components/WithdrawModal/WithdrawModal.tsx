@@ -18,7 +18,6 @@ import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
 import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateral, getCollaterals } from 'utils/collaterals';
-import { getQueryStringVal } from 'utils/useQueryParams';
 import { isAddress } from 'viem';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import WithdrawalConfirmationModal from './components/WithdrawalConfirmationModal';
@@ -26,6 +25,7 @@ import { AmountToBuyContainer } from 'pages/Markets/Home/Parlay/components/style
 
 type WithdrawModalProps = {
     onClose: () => void;
+    preSelectedToken?: number;
 };
 
 type FormValidation = {
@@ -33,7 +33,7 @@ type FormValidation = {
     amount: boolean;
 };
 
-const WithdrawModal: React.FC<WithdrawModalProps> = ({ onClose }) => {
+const WithdrawModal: React.FC<WithdrawModalProps> = ({ onClose, preSelectedToken }) => {
     const { t } = useTranslation();
     const networkId = useChainId();
     const client = useClient();
@@ -41,18 +41,13 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onClose }) => {
     const { address, isConnected } = useAccount();
     const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
-    const [selectedToken, setSelectedToken] = useState<number>(0);
+    const [selectedToken, setSelectedToken] = useState<number>(preSelectedToken ?? 0);
+    console.log(selectedToken);
     const [amount, setAmount] = useState<string | number>('');
     const [showWithdrawalConfirmationModal, setWithdrawalConfirmationModalVisibility] = useState<boolean>(false);
     const theme: ThemeInterface = useTheme();
     const [withdrawalWalletAddress, setWithdrawalWalletAddress] = useState<string>('');
     const [validation, setValidation] = useState<FormValidation>({ walletAddress: false, amount: false });
-
-    const selectedTokenFromUrl = getQueryStringVal('coin-index');
-
-    useEffect(() => {
-        setSelectedToken(Number(selectedTokenFromUrl));
-    }, [selectedTokenFromUrl]);
 
     const inputRef = useRef<HTMLDivElement>(null);
 
@@ -163,7 +158,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onClose }) => {
                                             collateralArray={getCollaterals(networkId)}
                                             selectedItem={selectedToken}
                                             onChangeCollateral={(index) => {
-                                                setAmount(0);
+                                                setAmount('');
                                                 setSelectedToken(index);
                                             }}
                                             isDetailedView

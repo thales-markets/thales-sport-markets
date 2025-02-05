@@ -168,12 +168,6 @@ const UserStats: React.FC = () => {
         return sortedBalances;
     }, [exchangeRates, freeBetBalances, networkId]);
 
-    const multiCollateralsSorted = useMemo(() => {
-        const sortedBalances = sortCollateralBalances(multiCollateralBalances, exchangeRates, networkId, 'desc');
-
-        return sortedBalances;
-    }, [exchangeRates, multiCollateralBalances, networkId]);
-
     const paymentTokenBalance: number = useMemo(() => {
         if (multiCollateralBalances) {
             return multiCollateralBalances[selectedCollateral];
@@ -494,45 +488,6 @@ const UserStats: React.FC = () => {
                                     </Section>
                                 ) : (
                                     <Fragment key={`${currencyKey}-freebet`} />
-                                );
-                            })}
-                    </SectionWrapper>
-                )}
-                {multiCollateralBalances && (
-                    <SectionWrapper>
-                        <SubHeaderWrapper>
-                            <SubHeader>
-                                <SubHeaderIcon className="icon icon--wallet-connected" />
-                                {t('profile.stats.wallet')}
-                            </SubHeader>
-                        </SubHeaderWrapper>
-                        {freeBetBalances &&
-                            Object.keys(multiCollateralsSorted).map((currencyKey) => {
-                                return multiCollateralBalances[currencyKey as Coins] ? (
-                                    <Section key={currencyKey}>
-                                        <SubLabel>
-                                            <CurrencyIcon
-                                                className={COLLATERAL_ICONS_CLASS_NAMES[currencyKey as Coins]}
-                                            />
-                                            {currencyKey}
-                                        </SubLabel>
-                                        <SubValue>
-                                            {formatCurrencyWithSign(
-                                                null,
-                                                multiCollateralBalances
-                                                    ? multiCollateralBalances[currencyKey as Coins]
-                                                    : 0
-                                            )}
-                                            {!exchangeRates?.[currencyKey] && !isStableCurrency(currencyKey as Coins)
-                                                ? '...'
-                                                : ` (${formatCurrencyWithSign(
-                                                      USD_SIGN,
-                                                      getUSDForCollateral(currencyKey as Coins)
-                                                  )})`}
-                                        </SubValue>
-                                    </Section>
-                                ) : (
-                                    <Fragment key={currencyKey} />
                                 );
                             })}
                     </SectionWrapper>

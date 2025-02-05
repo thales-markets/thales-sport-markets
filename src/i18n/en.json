@@ -344,7 +344,7 @@
             "deposit": "Deposit",
             "swap": "Buy",
             "withdraw": "Withdraw",
-            "use-eoa": "Switch to your EOA wallet",
+            "use-eoa": "Switch to EOA mode",
             "use-smart": "Switch to your Overtime Account",
             "best-odds": "Bet with OVER token for best odds!!",
             "claim-free-bet": "Claim free bet"

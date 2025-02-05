@@ -15,7 +15,7 @@ import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsBiconomy, setIsBiconomy } from 'redux/modules/wallet';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import {
     Colors,
     FlexDivCentered,
@@ -25,11 +25,11 @@ import {
     FlexDivSpaceBetween,
     FlexDivStart,
 } from 'styles/common';
-import { formatCurrencyWithKey, formatCurrencyWithSign, localStore } from 'thales-utils';
+import { Coins, formatCurrencyWithKey, formatCurrencyWithSign, localStore } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import biconomyConnector from 'utils/biconomyWallet';
-import { getCollaterals, mapMultiCollateralBalances } from 'utils/collaterals';
+import { getCollateralIndex, getCollaterals, mapMultiCollateralBalances } from 'utils/collaterals';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import WithdrawModal from '../WithdrawModal';
 
@@ -39,6 +39,7 @@ const Account: React.FC = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+    const theme = useTheme();
 
     const networkId = useChainId();
     const client = useClient();
@@ -49,7 +50,10 @@ const Account: React.FC = () => {
     const [showWithdrawModal, setShowWithdrawModal] = useState<boolean>(false);
     const [showSwapModal, setShowSwapModal] = useState<boolean>(false);
 
-    const [showZeroBalance, setShowZeroBalance] = useState<boolean>(false);
+    const [withdrawalToken, setWithdrawalToken] = useState(0);
+    const [convertToken, setConvertToken] = useState(0);
+
+    const [showZeroBalance, setShowZeroBalance] = useState<boolean>(true);
 
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(
         walletAddress,
@@ -99,7 +103,7 @@ const Account: React.FC = () => {
         try {
             if (exchangeRates && multipleCollateralBalances.data) {
                 const result: Array<{
-                    asset: string;
+                    asset: Coins;
                     balance: number;
                     value: number;
                 }> = [];
@@ -215,7 +219,7 @@ const Account: React.FC = () => {
                     <ButtonContainer>
                         <Button
                             onClick={() => setShowFundModal(true)}
-                            borderColor="none"
+                            borderColor="transparent"
                             height="42px"
                             width="120px"
                             lineHeight="16px"
@@ -225,7 +229,7 @@ const Account: React.FC = () => {
                         </Button>
                         <Button
                             onClick={() => setShowSwapModal(true)}
-                            borderColor="none"
+                            borderColor="transparent"
                             height="42px"
                             width="120px"
                             lineHeight="16px"
@@ -235,7 +239,7 @@ const Account: React.FC = () => {
                         </Button>
                         <Button
                             onClick={() => setShowWithdrawModal(true)}
-                            borderColor="none"
+                            borderColor="transparent"
                             height="42px"
                             width="120px"
                             lineHeight="16px"
@@ -248,13 +252,19 @@ const Account: React.FC = () => {
             </FlexDivSpaceBetween>
 
             <GridContainer>
-                <TableHeader>Assets</TableHeader>
-                <TableHeader2>Amount</TableHeader2>
-                <TableHeader2>Value(USD)</TableHeader2>
-                <ZeroBalanceWrapper>
-                    <TableHeader2>Show zero balance</TableHeader2>
-                    <Toggle active={showZeroBalance} handleClick={() => setShowZeroBalance(!showZeroBalance)} />
-                </ZeroBalanceWrapper>
+                <AssetContainer>
+                    <TableHeader>Assets</TableHeader>
+                    <TableHeader2>Amount</TableHeader2>
+                    <TableHeader2>Value(USD)</TableHeader2>
+                    <ZeroBalanceWrapper>
+                        <TableHeader2>Show zero balance</TableHeader2>
+                        <Toggle
+                            dotBackground={showZeroBalance ? theme.borderColor.tertiary : ''}
+                            active={showZeroBalance}
+                            handleClick={() => setShowZeroBalance(!showZeroBalance)}
+                        />
+                    </ZeroBalanceWrapper>
+                </AssetContainer>
 
                 {usersAssets?.map((assetData, index) => {
                     const Icon = COLLATERAL_ICONS[assetData.asset];
@@ -269,13 +279,23 @@ const Account: React.FC = () => {
                             </AssetWrapper>
                             <Label2>{formatCurrencyWithKey('', assetData.balance)}</Label2>
                             <Label2>{formatCurrencyWithKey(USD_SIGN, assetData.value, 2)}</Label2>
-                            <Deposit>
+                            <Deposit onClick={() => setShowFundModal(true)}>
                                 Deposit <DepositIcon />
                             </Deposit>
-                            <Convert>
+                            <Convert
+                                onClick={() => {
+                                    setConvertToken(getCollateralIndex(networkId, assetData.asset));
+                                    setShowSwapModal(true);
+                                }}
+                            >
                                 Convert <ConvertIcon />
                             </Convert>
-                            <Withdraw>
+                            <Withdraw
+                                onClick={() => {
+                                    setWithdrawalToken(getCollateralIndex(networkId, assetData.asset));
+                                    setShowWithdrawModal(true);
+                                }}
+                            >
                                 Withdraw <WithdrawIcon />
                             </Withdraw>
                         </AssetContainer>
@@ -297,8 +317,10 @@ const Account: React.FC = () => {
                 {isBiconomy ? t('profile.account-summary.use-eoa') : t('profile.account-summary.use-smart')}
             </SkipText>
             {showFundModal && <FundModal onClose={() => setShowFundModal(false)} />}
-            {showWithdrawModal && <WithdrawModal onClose={() => setShowWithdrawModal(false)} />}
-            {showSwapModal && <SwapModal onClose={() => setShowSwapModal(false)} />}
+            {showWithdrawModal && (
+                <WithdrawModal preSelectedToken={withdrawalToken} onClose={() => setShowWithdrawModal(false)} />
+            )}
+            {showSwapModal && <SwapModal preSelectedToken={convertToken} onClose={() => setShowSwapModal(false)} />}
         </div>
     );
 };
@@ -376,13 +398,7 @@ const YellowValue2 = styled(Value2)`
 `;
 
 const GridContainer = styled.div`
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 14px;
     margin-top: 20px;
-    padding-top: 20px;
-    grid-template-rows: auto;
-    border-top: 2px solid ${(props) => props.theme.background.senary};
 `;
 
 const TableHeader = styled(AlignedParagraph)`
@@ -408,10 +424,12 @@ const ZeroBalanceWrapper = styled.div`
 `;
 
 const AssetContainer = styled.div`
-    display: contents;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
     grid-column: 1;
     grid-column-end: 7;
     border-top: 1px solid ${(props) => props.theme.background.senary};
+    padding: 14px 0;
 `;
 
 const Deposit = styled(Value)`
@@ -420,7 +438,7 @@ const Deposit = styled(Value)`
 `;
 
 const Convert = styled(YellowValue)`
-    color: white;
+    color: ${(props) => props.theme.textColor.septenary};
     cursor: pointer;
     font-size: 14px;
 `;
