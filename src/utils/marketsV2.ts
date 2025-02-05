@@ -404,8 +404,7 @@ export const isSameMarket = (market: SportMarket | TicketPosition, ticketPositio
     market.leagueId === ticketPosition.leagueId &&
     market.typeId === ticketPosition.typeId &&
     market.playerProps.playerId === ticketPosition.playerId &&
-    market.line === ticketPosition.line &&
-    (isSgp || areSameCombinedPositions(market, ticketPosition));
+    (isSgp || (market.line === ticketPosition.line && areSameCombinedPositions(market, ticketPosition)));
 
 export const getTradeData = (markets: TicketMarket[]): TradeData[] =>
     markets.map((market) => {
