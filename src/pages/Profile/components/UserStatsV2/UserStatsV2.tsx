@@ -5,22 +5,26 @@ import SimpleLoader from 'components/SimpleLoader';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { COLLATERAL_ICONS_CLASS_NAMES, CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
 import { SWAP_APPROVAL_BUFFER } from 'constants/markets';
+import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { secondsToMilliseconds } from 'date-fns';
 import { ContractType } from 'enums/contract';
 import { BuyTicketStep } from 'enums/tickets';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import useInterval from 'hooks/useInterval';
+import useLocalStorage from 'hooks/useLocalStorage';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import useUsersStatsV2Query from 'queries/wallet/useUsersStatsV2Query';
+import queryString from 'query-string';
 import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
-import { FlexDiv, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
+import { Colors, FlexDiv, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import {
     bigNumberFormatter,
     coinParser,
@@ -46,6 +50,7 @@ import {
     sortCollateralBalances,
 } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
+import { claimFreeBet } from 'utils/freeBet';
 import {
     buildTxForApproveTradeWithRouter,
     buildTxForSwap,
@@ -85,6 +90,13 @@ const UserStats: React.FC = () => {
     const [buyStep, setBuyStep] = useState(BuyTicketStep.APPROVE_SWAP);
     const [openBuyStepsModal, setOpenBuyStepsModal] = useState(false);
     const [swapCollateralIndex, setSwapCollateralIndex] = useState(0);
+
+    const queryParams: { freeBet?: string } = queryString.parse(location.search);
+    const [freeBet, setFreeBet] = useLocalStorage<string | undefined>(
+        LOCAL_STORAGE_KEYS.FREE_BET_ID,
+        queryParams.freeBet
+    );
+    const history = useHistory();
 
     const swapCollateralArray = useMemo(
         () => getCollaterals(networkId).filter((collateral) => !isOverCurrency(collateral)),
@@ -410,6 +422,14 @@ const UserStats: React.FC = () => {
         return getButton(t('profile.stats.get-over-label'), isButtonDisabled);
     };
 
+    const onClaimFreeBet = useCallback(() => claimFreeBet(walletAddress, freeBet, networkId, setFreeBet, history), [
+        walletAddress,
+        freeBet,
+        setFreeBet,
+        history,
+        networkId,
+    ]);
+
     return (
         <>
             <Wrapper>
@@ -516,6 +536,19 @@ const UserStats: React.FC = () => {
                                 );
                             })}
                     </SectionWrapper>
+                )}
+                {!!freeBet && (
+                    <Button
+                        onClick={onClaimFreeBet}
+                        borderColor="none"
+                        height="42px"
+                        lineHeight="16px"
+                        padding="0"
+                        backgroundColor={Colors.YELLOW}
+                    >
+                        {t('profile.account-summary.claim-free-bet')}
+                        <HandsIcon className="icon icon--hands-coins" />
+                    </Button>
                 )}
             </Wrapper>
             <Wrapper>
@@ -722,6 +755,13 @@ const LoaderContainer = styled.div`
     position: relative;
     width: 16px;
     margin-left: auto;
+`;
+
+const HandsIcon = styled.i`
+    font-weight: 500;
+    margin-left: 5px;
+    font-size: 22px;
+    color: ${(props) => props.theme.textColor.tertiary};
 `;
 
 export default UserStats;
