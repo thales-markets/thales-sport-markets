@@ -81,6 +81,11 @@ const useMultipleCollateralBalanceQuery = (
                         getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.OVER as Coins)
                     ) as ViemContract,
                     THALES: getContractInstance(ContractType.THALES, networkConfig) as ViemContract,
+                    cbBTC: getContractInstance(
+                        ContractType.MULTICOLLATERAL,
+                        networkConfig,
+                        getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.cbBTC as Coins)
+                    ) as ViemContract,
                 };
 
                 if (!walletAddress || !networkConfig.networkId) {
@@ -100,6 +105,7 @@ const useMultipleCollateralBalanceQuery = (
                     ARBBalance,
                     OVERBalance,
                     THALESBalance,
+                    cbBTCBalance,
                 ] = await Promise.all([
                     multipleCollateralObject?.sUSD && multipleCollateralObject?.sUSD?.address !== TBD_ADDRESS
                         ? multipleCollateralObject.sUSD.read.balanceOf([walletAddress])
@@ -135,6 +141,9 @@ const useMultipleCollateralBalanceQuery = (
                     multipleCollateralObject?.THALES && multipleCollateralObject?.THALES?.address !== TBD_ADDRESS
                         ? multipleCollateralObject.THALES.read.balanceOf([walletAddress])
                         : 0,
+                    multipleCollateralObject?.cbBTC && multipleCollateralObject?.cbBTC?.address !== TBD_ADDRESS
+                        ? multipleCollateralObject.cbBTC.read.balanceOf([walletAddress])
+                        : 0,
                 ]);
 
                 collateralsBalance = {
@@ -159,6 +168,7 @@ const useMultipleCollateralBalanceQuery = (
                             : bigNumberFormatter(THALESBalance, COLLATERAL_DECIMALS.THALES)
                         : 0,
                     sTHALES: 0,
+                    cbBTC: cbBTCBalance ? bigNumberFormatter(cbBTCBalance, COLLATERAL_DECIMALS.ARB) : 0,
                 };
             } catch (e) {
                 console.log('e ', e);

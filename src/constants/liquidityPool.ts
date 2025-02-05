@@ -68,6 +68,11 @@ export const LiquidityPoolMap: Record<
             address: '0xe2FCBAC654970bAd1d88B4F6e10d0Ac6152c584E',
             collateral: CRYPTO_CURRENCY_MAP.OVER as Coins,
         },
+        [LiquidityPoolCollateral.cbBTC]: {
+            name: 'cbBTC LP',
+            address: '0x8d4f838327DedFc735e202731358AcFc260c207a',
+            collateral: CRYPTO_CURRENCY_MAP.cbBTC as Coins,
+        },
     },
     [NetworkId.OptimismSepolia]: {
         [LiquidityPoolCollateral.USDC]: {

@@ -771,6 +771,15 @@ const liquidityPoolContractV2: Record<LiquidityPoolCollateral, ContractData> = {
         },
         abi: ABI,
     },
+    [LiquidityPoolCollateral.cbBTC]: {
+        addresses: {
+            [Network.OptimismMainnet]: TBD_ADDRESS,
+            [Network.Arbitrum]: TBD_ADDRESS,
+            [Network.Base]: '0x8d4f838327DedFc735e202731358AcFc260c207a',
+            [Network.OptimismSepolia]: TBD_ADDRESS,
+        },
+        abi: ABI,
+    },
 };
 
 export default liquidityPoolContractV2;

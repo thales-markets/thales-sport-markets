@@ -874,6 +874,15 @@ const multipleCollateral: Record<Coins, ContractData> = {
         },
         abi,
     },
+    cbBTC: {
+        addresses: {
+            [Network.OptimismMainnet]: TBD_ADDRESS,
+            [Network.Arbitrum]: TBD_ADDRESS,
+            [Network.Base]: '0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf',
+            [Network.OptimismSepolia]: TBD_ADDRESS,
+        },
+        abi,
+    },
 };
 
 export default multipleCollateral;
