@@ -32,7 +32,6 @@ const AssetBalance: React.FC<Props> = ({
     setWithdrawalToken,
 }) => {
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
-
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
@@ -117,6 +116,7 @@ const AssetBalance: React.FC<Props> = ({
                         </AssetWrapper>
                         <Label>{formatCurrencyWithKey('', assetData.balance)}</Label>
                         <Label>{formatCurrencyWithKey(USD_SIGN, assetData.value, 2)}</Label>
+
                         <Deposit onClick={() => setShowFundModal(true)}>
                             Deposit <DepositIcon />
                         </Deposit>
@@ -155,13 +155,15 @@ const AlignedParagraph = styled.p`
 
 const TableHeader = styled(AlignedParagraph)`
     justify-content: flex-start;
+
     color: ${(props) => props.theme.textColor.primary};
     font-size: 20px;
     font-weight: 700;
     white-space: pre;
 `;
 
-const TableHeader2 = styled(AlignedParagraph)`
+const TableHeader2 = styled(TableHeader)`
+    justify-content: center;
     color: ${(props) => props.theme.button.textColor.senary};
     font-size: 14px;
     font-weight: 700;
@@ -169,6 +171,9 @@ const TableHeader2 = styled(AlignedParagraph)`
 `;
 
 const ZeroBalanceWrapper = styled.div`
+    @media (max-width: 700px) {
+        display: none;
+    }
     display: flex;
     align-items: center;
     grid-column-start: 5;
@@ -180,6 +185,12 @@ const AssetContainer = styled.div`
     grid-template-columns: repeat(6, 1fr);
     grid-column: 1;
     grid-column-end: 7;
+    @media (max-width: 700px) {
+        grid-template-columns: repeat(3, 1fr);
+        grid-column: 1;
+        grid-column-end: 4;
+    }
+
     border-top: 1px solid ${(props) => props.theme.background.senary};
     padding: 14px 0;
 `;
@@ -197,6 +208,9 @@ const TableButton = styled(AlignedParagraph)`
     cursor: pointer;
     font-size: 14px;
     gap: 4px;
+    @media (max-width: 700px) {
+        display: none;
+    }
 `;
 
 const Deposit = styled(TableButton)`

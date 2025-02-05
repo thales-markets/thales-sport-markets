@@ -11,7 +11,7 @@ import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsBiconomy, setIsBiconomy } from 'redux/modules/wallet';
-import styled from 'styled-components';
+import styled, { CSSProperties } from 'styled-components';
 import {
     Colors,
     FlexDivCentered,
@@ -184,8 +184,7 @@ const Account: React.FC = () => {
                     <Button
                         onClick={() => setShowFundModal(true)}
                         borderColor="transparent"
-                        height="42px"
-                        width="120px"
+                        additionalStyles={ButtonCSS}
                         lineHeight="16px"
                         backgroundColor={Colors.BLUE}
                     >
@@ -194,8 +193,7 @@ const Account: React.FC = () => {
                     <Button
                         onClick={() => setShowSwapModal(true)}
                         borderColor="transparent"
-                        height="42px"
-                        width="120px"
+                        additionalStyles={ButtonCSS}
                         lineHeight="16px"
                         backgroundColor={Colors.WHITE}
                     >
@@ -204,8 +202,7 @@ const Account: React.FC = () => {
                     <Button
                         onClick={() => setShowWithdrawModal(true)}
                         borderColor="transparent"
-                        height="42px"
-                        width="120px"
+                        additionalStyles={ButtonCSS}
                         lineHeight="16px"
                         backgroundColor={Colors.YELLOW}
                     >
@@ -257,9 +254,11 @@ const Container = styled(FlexDivSpaceBetween)`
 `;
 
 const ButtonContainer = styled(FlexDivCentered)`
-    gap: 18px;
+    gap: 16px;
     @media (max-width: 800px) {
         justify-content: flex-start;
+        width: 100%;
+        gap: 10px;
     }
 `;
 
@@ -321,5 +320,12 @@ const Value2 = styled(AlignedParagraph)`
 const YellowValue2 = styled(Value2)`
     color: ${(props) => props.theme.overdrop.textColor.primary};
 `;
+
+const ButtonCSS: CSSProperties = {
+    maxWidth: '120px',
+    width: '100%',
+    height: '42px',
+    padding: '3px 24px',
+};
 
 export default Account;
