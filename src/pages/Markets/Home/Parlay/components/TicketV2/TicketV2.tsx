@@ -1652,10 +1652,10 @@ const Ticket: React.FC<TicketProps> = ({
                             markets[0]?.live
                         }\nliveOdds=${JSON.stringify(tradeData[0]?.odds)}\nlivePosition=${
                             tradeData[0]?.position
-                        }\nbuyInAmount=${(swapToThales
-                            ? thalesAmount
+                        }\nbuyInAmount=${(swapToOver
+                            ? overAmount
                             : buyInAmount
-                        ).toString()}\ncollateral=${usedCollateralForBuy}\nisSwapToThales=${swapToThales}`,
+                        ).toString()}\ncollateral=${usedCollateralForBuy}\nisSwapToThales=${swapToOver}`,
                     });
                 }
             }
