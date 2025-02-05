@@ -141,7 +141,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                     ></Tooltip>
                 </SubTitle>
 
-                <FlexDivCentered>
+                <FlexDivCentered gap={14}>
                     {getCollaterals(networkId).map((token, key) => {
                         if (COLLATERAL_ICONS[token]) {
                             const ReactElem = COLLATERAL_ICONS[token];
@@ -371,6 +371,7 @@ const CollateralText = styled.p`
 
 const CollateralWrapper = styled(FlexDivColumnCentered)`
     align-items: center;
+    flex: 0;
     gap: 8px;
 `;
 
