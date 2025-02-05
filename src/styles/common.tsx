@@ -90,7 +90,7 @@ export const Colors = {
     NAVY_BLUE_EXTRA_DARK: '#111325',
 
     TORY_BLUE: '#3C498A',
-    TORY_BLUE_LIGHT: '#4E5FB1',
+    TORY_BLUE_LIGHT: '#5E8DF0',
 
     // Overdrop
     YELLOW: '#F1BA20',
