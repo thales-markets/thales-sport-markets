@@ -3,7 +3,6 @@ import Button from 'components/Button';
 import Logo from 'components/Logo';
 import NavMenu from 'components/NavMenu';
 import NavMenuMobile from 'components/NavMenuMobile';
-import NetworkSwitcher from 'components/NetworkSwitcher';
 import SPAAnchor from 'components/SPAAnchor';
 import Search from 'components/Search';
 import ThalesToOverMigrationModal from 'components/ThalesToOverMigrationModal';
@@ -24,14 +23,13 @@ import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
 import { getOverdropUIState, getStopPulsing, setStopPulsing } from 'redux/modules/ui';
 import { getIsBiconomy, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
-import { FlexDivCentered, FlexDivEnd } from 'styles/common';
+import { FlexDivCentered } from 'styles/common';
 import { RootState } from 'types/redux';
 import { OverdropLevel, ThemeInterface } from 'types/ui';
 import biconomyConnector from 'utils/biconomyWallet';
 import { buildHref } from 'utils/routes';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import {
-    ActivateContainer,
     BlockedGamesNotificationCount,
     Container,
     Count,
@@ -42,7 +40,6 @@ import {
     MenuIcon,
     MenuIconContainer,
     MiddleContainer,
-    MobileButtonWrapper,
     NotificationCount,
     OverdropButtonContainer,
     OverdropIcon,
@@ -220,7 +217,6 @@ const DappHeader: React.FC = () => {
                                         dispatch(
                                             setWalletConnectModalVisibility({
                                                 visibility: true,
-                                                origin: 'sign-up',
                                             })
                                         )
                                     }
@@ -250,19 +246,63 @@ const DappHeader: React.FC = () => {
             {isMobile && (
                 <>
                     <WrapperMobile>
+                        <MenuIconContainer>
+                            <MenuIcon onClick={() => setNavMenuVisibility(true)} />
+                            {claimablePositionCount && (
+                                <NotificationCount>
+                                    <Count>{claimablePositionCount}</Count>
+                                </NotificationCount>
+                            )}
+                            {blockedGamesCount > 0 && (
+                                <BlockedGamesNotificationCount>
+                                    <Count>{blockedGamesCount}</Count>
+                                </BlockedGamesNotificationCount>
+                            )}
+                            <NavMenuMobile
+                                visibility={navMenuVisibility}
+                                setNavMenuVisibility={(value: boolean | null) => setNavMenuVisibility(value)}
+                            />
+                        </MenuIconContainer>
+
                         <LogoContainer>
                             <Logo width={150} />
-                            <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
-                                {levelItem.level > 0 ? (
-                                    <OverdropButtonContainer>
-                                        <SmallBadgeImage src={levelItem.smallBadge} />
-                                        {`LVL ${levelItem.level} ${levelItem.levelName}`}
-                                    </OverdropButtonContainer>
-                                ) : (
-                                    <OverdropIcon />
-                                )}
-                            </SPAAnchor>
+                            {!isConnected ? (
+                                <Button
+                                    backgroundColor={theme.button.background.quinary}
+                                    textColor={theme.button.textColor.primary}
+                                    borderColor={theme.button.borderColor.quinary}
+                                    additionalStyles={{
+                                        borderRadius: '22px',
+                                        fontWeight: '800',
+                                        fontSize: '12px',
+                                        padding: '9px 20px',
+                                        width: '100px',
+                                        height: '30px',
+                                    }}
+                                    onClick={() =>
+                                        dispatch(
+                                            setWalletConnectModalVisibility({
+                                                visibility: true,
+                                            })
+                                        )
+                                    }
+                                >
+                                    {t('get-started.sign-up')}
+                                </Button>
+                            ) : (
+                                <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
+                                    {levelItem.level > 0 ? (
+                                        <OverdropButtonContainer>
+                                            <SmallBadgeImage src={levelItem.smallBadge} />
+                                            {`LVL ${levelItem.level} ${levelItem.levelName}`}
+                                        </OverdropButtonContainer>
+                                    ) : (
+                                        <OverdropIcon />
+                                    )}
+                                </SPAAnchor>
+                            )}
                         </LogoContainer>
+
                         <SearchIconContainer>
                             <IconWrapper>
                                 <SearchIcon onClick={() => setShowSearchModal(true)} />
@@ -285,79 +325,8 @@ const DappHeader: React.FC = () => {
                                 </SearchContainer>
                             </ReactModal>
                         </SearchIconContainer>
-                        <MenuIconContainer>
-                            <MenuIcon onClick={() => setNavMenuVisibility(true)} />
-                            {claimablePositionCount && (
-                                <NotificationCount>
-                                    <Count>{claimablePositionCount}</Count>
-                                </NotificationCount>
-                            )}
-                            {blockedGamesCount > 0 && (
-                                <BlockedGamesNotificationCount>
-                                    <Count>{blockedGamesCount}</Count>
-                                </BlockedGamesNotificationCount>
-                            )}
-                            <NavMenuMobile
-                                visibility={navMenuVisibility}
-                                setNavMenuVisibility={(value: boolean | null) => setNavMenuVisibility(value)}
-                            />
-                        </MenuIconContainer>
                     </WrapperMobile>
-
-                    {isConnected ? (
-                        <ActivateContainer>
-                            <FlexDivCentered>
-                                <WalletInfo />
-                            </FlexDivCentered>
-                            {isBiconomy && <ActivateAccount />}
-                        </ActivateContainer>
-                    ) : (
-                        <MobileButtonWrapper>
-                            <Button
-                                backgroundColor={theme.button.background.quaternary}
-                                textColor={theme.button.textColor.primary}
-                                borderColor={theme.button.borderColor.secondary}
-                                fontWeight="400"
-                                additionalStyles={{
-                                    maxWidth: 400,
-                                    borderRadius: '15.5px',
-                                    fontWeight: '600',
-                                    fontSize: '12px',
-                                    textTransform: 'capitalize',
-                                    whiteSpace: 'nowrap',
-                                }}
-                                width="100%"
-                                height="30px"
-                                onClick={() =>
-                                    dispatch(
-                                        setWalletConnectModalVisibility({
-                                            visibility: true,
-                                        })
-                                    )
-                                }
-                            >
-                                {t('get-started.sign-up')}
-                            </Button>
-                            <FlexDivEnd>
-                                <NetworkSwitcher />
-                            </FlexDivEnd>
-                        </MobileButtonWrapper>
-                    )}
-
-                    {isConnected && (
-                        <Button
-                            onClick={() => setShowThalesToOverMigrationModal(true)}
-                            backgroundColor={theme.button.textColor.quaternary}
-                            borderColor={theme.button.textColor.quaternary}
-                            fontSize="14px"
-                            height="30px"
-                            padding="2px 15px"
-                            margin="10px 0 0 0"
-                        >
-                            Migrate <CurrencyIcon className="currency-icon currency-icon--thales" /> to{' '}
-                            <CurrencyIcon className="currency-icon currency-icon--over" />
-                        </Button>
-                    )}
+                    {isBiconomy && <ActivateAccount />}
                 </>
             )}
             {showThalesToOverMigrationModal && (

@@ -70,15 +70,14 @@ export const OverdropIcon = styled.img.attrs({ src: overdrop })`
 export const WrapperMobile = styled(FlexDivRow)`
     width: 100%;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    margin-top: 10px;
+    margin-bottom: 6px;
 `;
 
 export const SearchIconContainer = styled.div`
-    width: 50%;
     display: flex;
     justify-content: end;
-    position: absolute;
-    right: 12px;
 `;
 
 export const MenuIconContainer = styled.div`
@@ -86,11 +85,8 @@ export const MenuIconContainer = styled.div`
     position: relative;
     margin-right: 0px !important;
     @media (max-width: 950px) {
-        width: 50%;
         display: flex;
         justify-content: start;
-        position: absolute;
-        left: 12px;
     }
 `;
 
@@ -106,16 +102,10 @@ export const IconWrapper = styled.div`
     border-radius: 30px;
     width: 28px;
     height: 28px;
-    position: absolute;
-    top: -15px;
 `;
 
 export const SearchIcon = styled.i`
     font-size: 25px;
-    cursor: pointer;
-    position: absolute;
-    top: 0px;
-    left: 0px;
     &:before {
         font-family: OvertimeIconsV2 !important;
         content: '\\00E5';

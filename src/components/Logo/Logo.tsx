@@ -19,10 +19,6 @@ const Logo: React.FC<LogoParams> = ({ width }) => (
 
 const Container = styled.div`
     z-index: 1;
-    @media (max-width: 767px) {
-        margin-top: 15px;
-        margin-bottom: 10px;
-    }
 `;
 
 const StyledLogo = styled(LogoIcon)`

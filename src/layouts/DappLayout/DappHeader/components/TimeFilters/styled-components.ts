@@ -4,13 +4,11 @@ import { FlexDiv } from 'styles/common';
 export const FilterTypeContainer = styled(FlexDiv)<{ isMobile?: boolean }>`
     padding: 10px;
     justify-content: space-around;
-    @media (max-width: 950px) {
-        margin-bottom: 70px;
-    }
 `;
 
 export const TimeFilterContainer = styled(FlexDiv)<{ selected: boolean }>`
     gap: 2px;
+    align-items: center;
     cursor: pointer;
     div {
         background-color: ${(props) => (props.selected ? props.theme.textColor.quaternary : '')};

@@ -22,6 +22,8 @@ import { Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient } from 'wagmi';
 
+const isSmallDevice = window.innerWidth < 512;
+
 const ActivateAccount: React.FC<any> = () => {
     const networkId = useChainId();
     const { t } = useTranslation();
@@ -113,7 +115,7 @@ const ActivateAccount: React.FC<any> = () => {
     }, [totalBalanceValue, networkId, isConnected, isBiconomy]);
 
     return (
-        <div>
+        <>
             {showSuccessfulDepositModal && (
                 <Wrapper show={!isMinimizedModal}>
                     {!isMinimizedModal ? (
@@ -167,7 +169,7 @@ const ActivateAccount: React.FC<any> = () => {
                                     fontWeight: '800',
                                     fontSize: '12px',
                                     padding: '9px 20px',
-                                    width: '100px',
+                                    width: isSmallDevice ? '100%' : '100px',
                                     height: '30px',
                                 }}
                                 onClick={() => setIsMinimized(false)}
@@ -180,7 +182,7 @@ const ActivateAccount: React.FC<any> = () => {
             )}
 
             {showFundModal && <FundModal onClose={() => setShowFundModal(false)} />}
-        </div>
+        </>
     );
 };
 
@@ -215,10 +217,10 @@ const Wrapper = styled.div<{ show: boolean }>`
             padding: 0;
             transform: translateX(-390px);
             transition: height 0.1s ease-out, padding 0.1s ease-out, width 0.1s ease-out,  transform 0.1s ease-in-out;
-            @media (max-width: 512px) {
+            @media (max-width: 950px) {
                 position: relative;
                 transform: translateX(0);
-                width: 100px;
+                width: 100%;
                 transition: none;
             }
    
