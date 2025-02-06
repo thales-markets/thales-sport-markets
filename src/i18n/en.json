@@ -366,6 +366,7 @@
             "over-to-receive": "OVER TO RECEIVE"
         },
         "swap": {
+            "title": "Swap to $OVER",
             "swap": "GET {{token}}",
             "token-price": "{{token}} PRICE",
             "token-to-receive": "{{token}} TO RECEIVE"

@@ -3,6 +3,7 @@ import ReactModal from 'react-modal';
 import styled, { CSSProperties } from 'styled-components';
 import { FlexDiv, FlexDivRow } from 'styles/common';
 import { convertCssToStyledProperties } from 'thales-utils';
+import { isSmallDevice } from 'utils/device';
 
 type ModalProps = {
     title: string;
@@ -21,18 +22,32 @@ type ModalProps = {
 ReactModal.setAppElement('#root');
 
 const defaultCustomStyles = {
-    content: {
-        top: '50%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        marginRight: '-48%',
-        transform: 'translate(-50%, -50%)',
-        padding: '0px',
-        background: 'transparent',
-        border: 'none',
-        overflow: 'auto',
-    },
+    content: !isSmallDevice
+        ? {
+              top: '50%',
+              left: '50%',
+              right: 'auto',
+              bottom: 'auto',
+              marginRight: '-48%',
+              transform: 'translate(-50%, -50%)',
+              padding: '0px',
+              background: 'transparent',
+              border: 'none',
+              overflow: 'auto',
+          }
+        : {
+              top: '0',
+              left: '0',
+              right: 'auto',
+              bottom: 'auto',
+              marginRight: '0',
+              transform: 'none',
+              width: '100%',
+              padding: '0px',
+              background: 'transparent',
+              border: 'none',
+              overflow: 'auto',
+          },
     overlay: {
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         zIndex: 2000,
@@ -82,6 +97,9 @@ const Container = styled.div<{ mobileStyle?: CSSProperties; containerStyle?: CSS
     padding: 25px 30px 35px 30px;
     border-radius: 23px;
     @media (max-width: 575px) {
+        max-height: unset;
+        height: auto;
+        border-radius: 0;
         overflow: auto;
         ${(props) =>
             props.mobileStyle ? convertCssToStyledProperties(props.mobileStyle) : 'padding: 20px 15px 30px 15px;'}

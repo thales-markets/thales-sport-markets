@@ -18,11 +18,10 @@ import { RootState } from 'types/redux';
 import { activateOvertimeAccount } from 'utils/biconomy';
 import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateralAddress, getCollateralIndex, getCollaterals } from 'utils/collaterals';
+import { isSmallDevice } from 'utils/device';
 import { Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient } from 'wagmi';
-
-const isSmallDevice = window.innerWidth < 512;
 
 const ActivateAccount: React.FC<any> = () => {
     const networkId = useChainId();

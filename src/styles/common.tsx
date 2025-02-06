@@ -53,6 +53,15 @@ export const BoldContent = styled.span`
     font-weight: 600;
 `;
 
+export const CloseIcon = styled.i.attrs({ className: 'icon icon--close' })`
+    color: white;
+    font-size: 14px;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    cursor: pointer;
+`;
+
 export const Colors = {
     GRAY: '#303656',
     GRAY_LIGHT: '#5F6180',

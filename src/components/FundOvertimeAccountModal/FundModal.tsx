@@ -108,32 +108,6 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
     return (
         <Modal
             customStyle={{
-                content: !isMobile
-                    ? {
-                          top: '50%',
-                          left: '50%',
-                          right: 'auto',
-                          bottom: 'auto',
-                          marginRight: '-48%',
-                          transform: 'translate(-50%, -50%)',
-                          padding: '0px',
-                          background: 'transparent',
-                          border: 'none',
-                          overflow: 'auto',
-                      }
-                    : {
-                          top: '0',
-                          left: '0',
-                          right: 'auto',
-                          bottom: 'auto',
-                          marginRight: '0',
-                          transform: 'none',
-                          width: '100%',
-                          padding: '0px',
-                          background: 'transparent',
-                          border: 'none',
-                          overflow: 'auto',
-                      },
                 overlay: {
                     zIndex: 1000,
                 },
@@ -156,7 +130,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                             }}
                         />
                     </Title>
-                    <FlexDivRow>{<CloseIcon onClick={onClose} />}</FlexDivRow>
+                    <FlexDivRow>{<CloseIcon onClick={onClose} />}</FlexDivRow>{' '}
                 </FlexDivRow>
 
                 <SubTitle>

@@ -1,25 +1,31 @@
+import Button from 'components/Button';
 import CollateralSelector from 'components/CollateralSelector';
 import NumericInput from 'components/fields/NumericInput';
 import Modal from 'components/Modal';
+import SimpleLoader from 'components/SimpleLoader';
+import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { SWAP_APPROVAL_BUFFER } from 'constants/markets';
 import { ContractType } from 'enums/contract';
 import { BuyTicketStep } from 'enums/tickets';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import { t } from 'i18next';
+import BuyStepsModal from 'pages/Markets/Home/Parlay/components/BuyStepsModal';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
+import { CloseIcon, FlexDiv, FlexDivColumn, FlexDivRow } from 'styles/common';
 import { bigNumberFormatter, coinParser, Coins, formatCurrency, formatCurrencyWithKey } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
+import { sendBiconomyTransaction } from 'utils/biconomy';
 import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateralAddress, getCollateralIndex, getCollaterals } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
-import { toast } from 'react-toastify';
 import {
     buildTxForApproveTradeWithRouter,
     buildTxForSwap,
@@ -31,12 +37,6 @@ import {
 import { delay } from 'utils/timer';
 import { Address } from 'viem';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
-import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import Button from 'components/Button';
-import { FlexDiv, FlexDivColumn } from 'styles/common';
-import SimpleLoader from 'components/SimpleLoader';
-import BuyStepsModal from 'pages/Markets/Home/Parlay/components/BuyStepsModal';
-import { sendBiconomyTransaction } from 'utils/biconomy';
 
 type FundModalProps = {
     onClose: () => void;
@@ -354,6 +354,10 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
             onClose={onClose}
         >
             <Wrapper>
+                <FlexDivRow>
+                    <Title>{t('profile.swap.title')}</Title>
+                    <FlexDivRow>{<CloseIcon onClick={onClose} />}</FlexDivRow>
+                </FlexDivRow>
                 <InputContainer ref={inputRef}>
                     <NumericInput
                         value={fromAmount}
@@ -499,6 +503,16 @@ const LoaderContainer = styled.div`
     position: relative;
     width: 16px;
     margin-left: auto;
+`;
+
+const Title = styled.h1`
+    font-size: 24px;
+    font-weight: 500;
+    color: ${(props) => props.theme.textColor.primary};
+    width: 100%;
+    text-align: center;
+    margin-bottom: 15px;
+    text-transform: uppercase;
 `;
 
 const Section = styled.div`

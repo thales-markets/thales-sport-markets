@@ -12,19 +12,19 @@ import { getIsMobile } from 'redux/modules/app';
 import styled from 'styled-components';
 import { Colors, FlexDiv, FlexDivCentered, FlexDivStart } from 'styles/common';
 import { RootState } from 'types/redux';
-import { getWalletLabel, getSpecificConnectorFromConnectorsArray } from 'utils/particleWallet/utils';
+import { getSpecificConnectorFromConnectorsArray, getWalletLabel } from 'utils/particleWallet/utils';
 import { Connector, useConnect } from 'wagmi';
 
 import Discord from 'assets/images/logins-icons/discord.svg?react';
 import Google from 'assets/images/logins-icons/google.svg?react';
 import Twitter from 'assets/images/logins-icons/twitter.svg?react';
 
+import Coinbase from 'assets/images/logins-icons/coinbase.svg?react';
 import Metamask from 'assets/images/logins-icons/metamask.svg?react';
 import WalletConnect from 'assets/images/logins-icons/walletConnect.svg?react';
-import Coinbase from 'assets/images/logins-icons/coinbase.svg?react';
 
-import { ParticalTypes, WalletConnections } from 'types/wallet';
 import Checkbox from 'components/fields/Checkbox';
+import { ParticalTypes, WalletConnections } from 'types/wallet';
 
 ReactModal.setAppElement('#root');
 
@@ -39,7 +39,7 @@ const getDefaultStyle = (isMobile: boolean) => ({
         backgroundColor: '#1F274D',
         border: `none`,
         width: isMobile ? '100%' : '480px',
-        borderRadius: '15px',
+        borderRadius: isMobile ? '0' : '15px',
         marginRight: isMobile ? 'unset' : '-48%',
         transform: isMobile ? 'unset' : 'translate(-50%, -50%)',
         overflow: 'auto',

@@ -3,7 +3,7 @@ import CollateralSelector from 'components/CollateralSelector';
 import NumericInput from 'components/fields/NumericInput';
 import TextInput from 'components/fields/TextInput';
 import Modal from 'components/Modal';
-import { FormContainer, InputContainer } from './styled-components';
+import { AmountToBuyContainer } from 'pages/Markets/Home/Parlay/components/styled-components';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
@@ -11,7 +11,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
-import { FlexDivColumnCentered } from 'styles/common';
+import { CloseIcon, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { formatCurrencyWithKey } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
@@ -21,7 +21,7 @@ import { getCollateral, getCollaterals } from 'utils/collaterals';
 import { isAddress } from 'viem';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import WithdrawalConfirmationModal from './components/WithdrawalConfirmationModal';
-import { AmountToBuyContainer } from 'pages/Markets/Home/Parlay/components/styled-components';
+import { FormContainer, InputContainer } from './styled-components';
 
 type WithdrawModalProps = {
     onClose: () => void;
@@ -91,10 +91,6 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onClose, preSelectedToken
                 overlay: {
                     zIndex: 1000,
                 },
-                content: {
-                    transform: 'translate(-50%, -50%)',
-                    overflow: 'unset',
-                },
             }}
             containerStyle={{
                 background: theme.background.secondary,
@@ -105,14 +101,17 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onClose, preSelectedToken
             onClose={onClose}
         >
             <Wrapper>
-                <Title>
-                    <Trans
-                        i18nKey="get-started.withdraw.title"
-                        components={{
-                            icon: <OvertimeIcon className="icon icon--overtime" />,
-                        }}
-                    />
-                </Title>
+                <FlexDivRow>
+                    <Title>
+                        <Trans
+                            i18nKey="get-started.withdraw.title"
+                            components={{
+                                icon: <OvertimeIcon className="icon icon--overtime" />,
+                            }}
+                        />
+                    </Title>
+                    <FlexDivRow>{<CloseIcon onClick={onClose} />}</FlexDivRow>
+                </FlexDivRow>
 
                 <WalletContainer>
                     <FieldHeader>{t('get-started.withdraw.address')}</FieldHeader>
