@@ -97,7 +97,6 @@ const Container = styled.div<{ mobileStyle?: CSSProperties; containerStyle?: CSS
     padding: 25px 30px 35px 30px;
     border-radius: 23px;
     @media (max-width: 575px) {
-        max-height: unset;
         height: auto;
         border-radius: 0;
         overflow: auto;
