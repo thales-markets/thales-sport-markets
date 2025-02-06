@@ -21,10 +21,10 @@ import { localStore } from 'thales-utils';
 import { isDeployError, logErrorToDiscord } from 'utils/discord';
 import { PARTICLE_STYLE } from 'utils/particleWallet/utils';
 import queryConnector from 'utils/queryConnector';
+import { arbitrum, optimism, optimismSepolia } from 'viem/chains';
 import { WagmiProvider } from 'wagmi';
 import enTranslation from '../../i18n/en.json';
 import { wagmiConfig } from './wagmiConfig';
-import { arbitrum, optimism, optimismSepolia } from 'viem/chains';
 
 window.Buffer = window.Buffer || buffer;
 
@@ -35,7 +35,7 @@ type RootProps = {
 const theme = getDefaultTheme();
 const rainbowCustomTheme = merge(darkTheme(), {
     colors: {
-        modalBackground: ThemeMap[theme].background.primary,
+        modalBackground: ThemeMap[theme].background.secondary,
     },
     shadows: { dialog: ThemeMap[theme].borderColor.primary },
     radii: { menuButton: '8px' },
