@@ -1,3 +1,6 @@
+import ConvertIcon from 'assets/images/svgs/convert.svg?react';
+import DepositIcon from 'assets/images/svgs/deposit.svg?react';
+import WithdrawIcon from 'assets/images/svgs/withdraw.svg?react';
 import Toggle from 'components/Toggle';
 import { COLLATERAL_ICONS, USD_SIGN } from 'constants/currency';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
@@ -11,10 +14,7 @@ import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateralIndex, getCollaterals } from 'utils/collaterals';
-import { useChainId, useClient, useAccount } from 'wagmi';
-import ConvertIcon from 'assets/images/svgs/convert.svg?react';
-import DepositIcon from 'assets/images/svgs/deposit.svg?react';
-import WithdrawIcon from 'assets/images/svgs/withdraw.svg?react';
+import { useAccount, useChainId, useClient } from 'wagmi';
 
 type Props = {
     setConvertToken: React.Dispatch<React.SetStateAction<number>>;
@@ -105,14 +105,11 @@ const AssetBalance: React.FC<Props> = ({
 
             {usersAssets.map((assetData, index) => {
                 const Icon = COLLATERAL_ICONS[assetData.asset];
-                const StyledIcon = styled(Icon)`
-                    height: 24px;
-                    width: 30px;
-                `;
+
                 return (
                     <AssetContainer key={index}>
                         <AssetWrapper>
-                            {<StyledIcon />} {assetData.asset}
+                            {<Icon style={{ height: '24px', width: '30px' }} />} {assetData.asset}
                         </AssetWrapper>
                         <Label>{formatCurrencyWithKey('', assetData.balance)}</Label>
                         <Label>{formatCurrencyWithKey(USD_SIGN, assetData.value, 2)}</Label>

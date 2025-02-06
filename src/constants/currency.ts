@@ -3,15 +3,15 @@ import { keyBy } from 'lodash';
 import { Coins } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
 
+import ARB from 'assets/currencies/ARB.svg?react';
+import DAI from 'assets/currencies/DAI.svg?react';
+import ETH from 'assets/currencies/ETH.svg?react';
+import OP from 'assets/currencies/OP.svg?react';
 import OVER from 'assets/currencies/OVER.svg?react';
+import sUSD from 'assets/currencies/sUSD.svg?react';
 import USDC from 'assets/currencies/USDC.svg?react';
 import USDT from 'assets/currencies/USDT.svg?react';
-import DAI from 'assets/currencies/DAI.svg?react';
-import sUSD from 'assets/currencies/sUSD.svg?react';
-import ETH from 'assets/currencies/ETH.svg?react';
 import WETH from 'assets/currencies/WETH.svg?react';
-import OP from 'assets/currencies/OP.svg?react';
-import ARB from 'assets/currencies/ARB.svg?react';
 import { FunctionComponent, SVGProps } from 'react';
 
 export const USD_SIGN = '$';
