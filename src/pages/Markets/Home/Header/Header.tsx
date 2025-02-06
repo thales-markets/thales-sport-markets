@@ -1,15 +1,18 @@
 import OutsideClickHandler from 'components/OutsideClick';
 import Tooltip from 'components/Tooltip';
+import { ODDS_TYPES } from 'constants/markets';
 import {
     MarketTypeGroupsBySport,
     MarketTypePlayerPropsGroupsBySport,
     MarketTypesBySportFilter,
 } from 'constants/marketTypes';
-import { SortType, SportFilter } from 'enums/markets';
+import { OddsType, SortType, SportFilter } from 'enums/markets';
 import { MarketType, MarketTypeGroup } from 'enums/marketTypes';
+import { t } from 'i18next';
+import TimeFilters from 'layouts/DappLayout/DappHeader/components/TimeFilters';
 import { uniq } from 'lodash';
-import React, { useContext, useMemo, useState } from 'react';
-import { ScrollMenu, VisibilityContext, publicApiType } from 'react-horizontal-scrolling-menu';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
+import { publicApiType, ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import 'react-horizontal-scrolling-menu/dist/styles.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
@@ -25,14 +28,23 @@ import {
     setMarketTypeGroupFilter,
     setSortType,
 } from 'redux/modules/market';
+import { getOddsType, setOddsType } from 'redux/modules/ui';
+import { FlexDivCentered } from 'styles/common';
 import { SportMarket } from 'types/markets';
 import { getMarketTypeName, isPlayerPropsMarket } from 'utils/markets';
 import {
     ArrowIcon,
     Container,
+    DropDown,
+    DropdownContainer,
+    DropDownItem,
+    FilterContainer,
     FilterIcon,
+    HeaderIcon,
+    Label,
     MarketTypeButton,
     NoScrollbarContainer,
+    SettingsContainer,
     SortIndicator,
     SortMenu,
     SortMenuItem,
@@ -83,6 +95,7 @@ const RightArrow: React.FC = () => {
 const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitch, allMarkets, isMainPageView }) => {
     const dispatch = useDispatch();
 
+    const selectedOddsType = useSelector(getOddsType);
     const isThreeWayView = useSelector(getIsThreeWayView);
     const marketTypeFilter = useSelector(getMarketTypeFilter);
     const marketTypeGroupFilter = useSelector(getMarketTypeGroupFilter);
@@ -92,6 +105,8 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitc
     const selectedSortType = useSelector(getSortType);
 
     const [openSortMenu, setOpenSortMenu] = useState(false);
+    const [dropdownIsOpen, setDropdownIsOpen] = useState<boolean>(false);
+    const [timeFiltersOpen, setTimeFiltersOpen] = useState<boolean>(false);
 
     const isPlayerPropsFilter = useMemo(() => sportFilter == SportFilter.PlayerProps, [sportFilter]);
     const marketToCheck = useMemo(() => market || selectedMarket, [market, selectedMarket]);
@@ -153,6 +168,13 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitc
                 : [];
         }
     }, [marketToCheck, market, availableMarketTypes, sportFilter, allMarkets, isPlayerPropsFilter, isMobile]);
+
+    const setSelectedOddsType = useCallback(
+        (oddsType: OddsType) => {
+            return dispatch(setOddsType(oddsType));
+        },
+        [dispatch]
+    );
 
     return (
         <Container>
@@ -224,57 +246,104 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitc
                     })}
                 </ScrollMenu>
             </NoScrollbarContainer>
-
-            {isMainPageView && (
-                <SortSelector>
-                    <OutsideClickHandler onOutsideClick={() => setOpenSortMenu(false)}>
-                        <Tooltip overlay={isMobile ? '' : 'Select games sorting'}>
-                            <SortIndicator
-                                className={'icon icon--sorting'}
-                                onClick={() => setOpenSortMenu(!openSortMenu)}
+            <FilterContainer>
+                {!hideSwitch && !selectedMarket && marketTypeFilter === undefined && (
+                    <SwitchContainer>
+                        <Tooltip overlay={isThreeWayView ? 'Switch to standard view' : 'Switch to three column view'}>
+                            <ThreeWayIcon
+                                onClick={() => {
+                                    if (!selectedMarket && marketTypeFilter === undefined) {
+                                        dispatch(setIsThreeWayView(!isThreeWayView));
+                                    }
+                                }}
+                                fontSize={isThreeWayView ? 20 : 28}
+                                className={`icon ${isThreeWayView ? 'icon--list' : 'icon--three-column'}`}
+                                disabled={!!selectedMarket || marketTypeFilter !== undefined}
                             />
                         </Tooltip>
-                        {openSortMenu && (
-                            <SortMenu>
-                                {Object.values(SortType)
-                                    .filter((_, i) => i < Object.values(SortType).length)
-                                    .map((sortType, index) => {
-                                        const isSelected = selectedSortType === (sortType as SortType);
-                                        return (
-                                            <SortMenuItem
-                                                key={`sortMenuItem${index}`}
-                                                isSelected={isSelected}
-                                                onClick={() => {
-                                                    !isSelected && dispatch(setSortType(sortType as SortType));
-                                                    setOpenSortMenu(false);
-                                                }}
-                                            >
-                                                {sortType}
-                                            </SortMenuItem>
-                                        );
-                                    })}
-                            </SortMenu>
-                        )}
-                    </OutsideClickHandler>
-                </SortSelector>
-            )}
+                    </SwitchContainer>
+                )}
+                {isMainPageView && (
+                    <SortSelector>
+                        <OutsideClickHandler onOutsideClick={() => setOpenSortMenu(false)}>
+                            <Tooltip overlay={isMobile ? '' : 'Select games sorting'}>
+                                <SortIndicator
+                                    className={'icon icon--sorting'}
+                                    onClick={() => setOpenSortMenu(!openSortMenu)}
+                                />
+                            </Tooltip>
+                            {openSortMenu && (
+                                <SortMenu>
+                                    {Object.values(SortType)
+                                        .filter((_, i) => i < Object.values(SortType).length)
+                                        .map((sortType, index) => {
+                                            const isSelected = selectedSortType === (sortType as SortType);
+                                            return (
+                                                <SortMenuItem
+                                                    key={`sortMenuItem${index}`}
+                                                    isSelected={isSelected}
+                                                    onClick={() => {
+                                                        !isSelected && dispatch(setSortType(sortType as SortType));
+                                                        setOpenSortMenu(false);
+                                                    }}
+                                                >
+                                                    {sortType}
+                                                </SortMenuItem>
+                                            );
+                                        })}
+                                </SortMenu>
+                            )}
+                        </OutsideClickHandler>
+                    </SortSelector>
+                )}
 
-            {!hideSwitch && !selectedMarket && marketTypeFilter === undefined && (
-                <SwitchContainer>
-                    <Tooltip overlay={isThreeWayView ? 'Switch to standard view' : 'Switch to three column view'}>
-                        <ThreeWayIcon
-                            onClick={() => {
-                                if (!selectedMarket && marketTypeFilter === undefined) {
-                                    dispatch(setIsThreeWayView(!isThreeWayView));
-                                }
-                            }}
-                            fontSize={isThreeWayView ? 20 : 28}
-                            className={`icon ${isThreeWayView ? 'icon--list' : 'icon--three-column'}`}
-                            disabled={!!selectedMarket || marketTypeFilter !== undefined}
-                        />
-                    </Tooltip>
-                </SwitchContainer>
-            )}
+                <OutsideClickHandler onOutsideClick={() => setTimeFiltersOpen(false)}>
+                    <SettingsContainer
+                        onClick={() => {
+                            setTimeFiltersOpen(!timeFiltersOpen);
+                        }}
+                    >
+                        <HeaderIcon className="icon icon--clock" />
+                        {timeFiltersOpen && (
+                            <DropdownContainer>
+                                <DropDown>
+                                    <TimeFilters />
+                                </DropDown>
+                            </DropdownContainer>
+                        )}
+                    </SettingsContainer>
+                </OutsideClickHandler>
+
+                <OutsideClickHandler onOutsideClick={() => setDropdownIsOpen(false)}>
+                    <SettingsContainer
+                        onClick={() => {
+                            setDropdownIsOpen(!dropdownIsOpen);
+                        }}
+                    >
+                        <HeaderIcon className="icon icon--settings" />
+                        {dropdownIsOpen && (
+                            <DropdownContainer>
+                                <DropDown>
+                                    {ODDS_TYPES.map((item: OddsType, index: number) => (
+                                        <DropDownItem
+                                            key={index}
+                                            isSelected={selectedOddsType === item}
+                                            onClick={() => {
+                                                setSelectedOddsType(item);
+                                                setDropdownIsOpen(false);
+                                            }}
+                                        >
+                                            <FlexDivCentered>
+                                                <Label> {t(`common.odds.${item}`)}</Label>
+                                            </FlexDivCentered>
+                                        </DropDownItem>
+                                    ))}
+                                </DropDown>
+                            </DropdownContainer>
+                        )}
+                    </SettingsContainer>
+                </OutsideClickHandler>
+            </FilterContainer>
         </Container>
     );
 };

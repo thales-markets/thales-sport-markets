@@ -2,7 +2,7 @@ import burger from 'assets/images/burger.svg';
 import OverdropButtonBackground from 'assets/images/overdrop/overdrop-button-background.webp';
 import overdrop from 'assets/images/overdrop/overdrop-nav.webp';
 import styled from 'styled-components';
-import { FlexDiv, FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
+import { FlexDiv, FlexDivColumnCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 
 export const Container = styled(FlexDivRowCentered)`
     width: 100%;
@@ -216,71 +216,9 @@ export const SmallBadgeImage = styled.img`
     }
 `;
 
-export const SettingsContainer = styled(FlexDivRowCentered)`
-    padding-right: 5px;
-    position: relative;
-    margin: 0 10px;
-    cursor: pointer;
-`;
-
 export const ActivateContainer = styled(FlexDivColumnCentered)`
     align-items: center;
     gap: 8px;
-`;
-
-export const HeaderIcon = styled.i<{
-    iconSize?: number;
-    iconColor?: string;
-}>`
-    margin-right: 5px;
-    font-size: ${(props) => (props.iconSize ? props.iconSize : '20')}px;
-    color: ${(props) => (props.iconColor ? props.iconColor : props.theme.textColor.secondary)};
-`;
-
-export const HeaderLabel = styled.span`
-    font-weight: 600;
-    font-size: 12px;
-    color: ${(props) => props.theme.textColor.secondary};
-    text-transform: uppercase;
-`;
-
-export const DropdownContainer = styled.div`
-    position: absolute;
-    width: 180px;
-    top: 24px;
-    right: 0;
-    z-index: 1000;
-`;
-
-export const DropDown = styled(FlexDivColumn)`
-    border: 1px solid ${(props) => props.theme.borderColor.primary};
-    background: ${(props) => props.theme.background.secondary};
-    color: white;
-    border-radius: 5px;
-    position: absolute;
-    margin-top: 2px;
-    padding: 4px;
-    width: 100%;
-    gap: 2px;
-`;
-
-export const DropDownItem = styled(FlexDiv)<{ isSelected: boolean }>`
-    padding: 7px 10px;
-    cursor: ${(props) => (props.isSelected ? 'default' : 'pointer')};
-    ${(props) => (props.isSelected ? `background: ${props.theme.dropDown.menuItem.selectedColor.primary};` : '')}
-    border-radius: 5px;
-    &:hover {
-        ${(props) => (props.isSelected ? '' : `background: ${props.theme.dropDown.menuItem.hoverColor.primary};`)}
-    }
-`;
-
-export const Label = styled.div`
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 14px;
-    color: white;
-    display: block;
-    text-transform: capitalize;
 `;
 
 export const CurrencyIcon = styled.i`
