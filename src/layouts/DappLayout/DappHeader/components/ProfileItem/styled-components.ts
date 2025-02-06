@@ -30,7 +30,10 @@ export const ProfileIcon = styled.i.attrs({ className: 'icon icon--profile2' })<
     color: ${(props) => (props.iconColor ? props.iconColor : props.theme.textColor.secondary)};
 `;
 
-export const NotificationCount = styled.div`
+export const NotificationCount = styled.div<{ top?: string; left?: string }>`
+    position: absolute;
+    top: ${(props) => (props.top ? props.top : '-14px')};
+    left: ${(props) => (props.left ? props.left : '-20px')};
     border-radius: 50%;
     display: flex;
     align-items: center;

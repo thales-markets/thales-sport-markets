@@ -137,9 +137,10 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                                 >
                                     {isConnected && item.name == 'profile' ? (
                                         <ProfileIconWidget
+                                            top="-10px"
+                                            left="-10px"
                                             avatarSize={25}
                                             iconColor={theme.textColor.primary}
-                                            marginRight="10px"
                                         />
                                     ) : (
                                         <>
