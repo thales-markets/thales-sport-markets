@@ -42,7 +42,6 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onClose, preSelectedToken
     const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
     const [selectedToken, setSelectedToken] = useState<number>(preSelectedToken ?? 0);
-    console.log(selectedToken);
     const [amount, setAmount] = useState<string | number>('');
     const [showWithdrawalConfirmationModal, setWithdrawalConfirmationModalVisibility] = useState<boolean>(false);
     const theme: ThemeInterface = useTheme();
