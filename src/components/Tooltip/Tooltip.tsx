@@ -18,7 +18,6 @@ type TooltipProps = {
     isValidation?: boolean;
     isWarning?: boolean;
     open?: boolean;
-    visible?: boolean;
     showArrow?: boolean;
 };
 
@@ -35,7 +34,6 @@ const Tooltip: React.FC<TooltipProps> = ({
     isValidation,
     isWarning,
     open,
-    visible,
     showArrow,
 }) => {
     const theme: ThemeInterface = useTheme();
@@ -64,7 +62,6 @@ const Tooltip: React.FC<TooltipProps> = ({
             overlayClassName={`${overlayClassName || ''} override-validation-arrow`}
             overlayInnerStyle={{ ...overlayInnerStyle, ...getValidationStyle(theme, !!isWarning) }}
             arrowContent={<ValidationArrow isWarning={!!isWarning} />}
-            popupVisible={visible}
             showArrow={showArrow}
         >
             <div ref={validationChildRef}>{children}</div>
@@ -75,7 +72,6 @@ const Tooltip: React.FC<TooltipProps> = ({
             placement="top"
             overlayClassName={overlayClassName}
             overlayInnerStyle={overlayInnerStyle}
-            visible={visible}
             showArrow={showArrow}
         >
             {children ? (

@@ -11,9 +11,7 @@ import Tooltip from 'components/Tooltip';
 import WalletInfo from 'components/WalletInfo';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
 import ROUTES from 'constants/routes';
-import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import useInterval from 'hooks/useInterval';
-import useLocalStorage from 'hooks/useLocalStorage';
 import useClaimablePositionCountV2Query from 'queries/markets/useClaimablePositionCountV2Query';
 import useBlockedGamesQuery from 'queries/resolveBlocker/useBlockedGamesQuery';
 import useWhitelistedForUnblock from 'queries/resolveBlocker/useWhitelistedForUnblock';
@@ -86,8 +84,6 @@ const DappHeader: React.FC = () => {
     const dispatch = useDispatch();
     const location = useLocation();
     const theme: ThemeInterface = useTheme();
-
-    const [freeBet] = useLocalStorage<string | undefined>(LOCAL_STORAGE_KEYS.FREE_BET_ID, undefined);
 
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
@@ -231,11 +227,7 @@ const DappHeader: React.FC = () => {
 
                     <RightContainer>
                         {!isConnected && (
-                            <Tooltip
-                                overlay={t('get-started.sing-in-to-claim-free-bet')}
-                                visible={!!freeBet}
-                                showArrow={false}
-                            >
+                            <Tooltip overlay={t('get-started.sing-in-to-claim-free-bet')} showArrow={false}>
                                 <Button
                                     backgroundColor={theme.button.background.quinary}
                                     textColor={theme.button.textColor.primary}
