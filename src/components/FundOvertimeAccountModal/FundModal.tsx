@@ -14,11 +14,9 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { getIsMobile } from 'redux/modules/app';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
-import { truncateAddress } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import biconomyConnector from 'utils/biconomyWallet';
@@ -41,7 +39,6 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
     const history = useHistory();
 
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
-    const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const { t } = useTranslation();
 
     const client = useClient();
@@ -171,7 +168,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                         ></Tooltip>
                     </FieldHeader>
                     <AddressContainer>
-                        <Field>{isMobile ? truncateAddress(walletAddress, 8, 5) : walletAddress}</Field>
+                        <Field>{walletAddress}</Field>
                         <ButtonsContainer>
                             <BlueField onClick={handleCopy}>
                                 <QRIcon className="icon icon--copy" />
@@ -325,6 +322,9 @@ const Field = styled.div`
     background: ${(props) => props.theme.textColor.primary};
     border-radius: 8px;
     padding: 10px;
+    @media (max-width: 575px) {
+        font-size: 12px;
+    }
     font-size: 14px;
     width: 100%;
     display: flex;
