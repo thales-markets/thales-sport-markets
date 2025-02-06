@@ -84,7 +84,7 @@ const MarketsList: React.FC<MarketsListProps> = ({ markets, league, language }) 
                             <ArrowIcon down={true} className={`icon icon--caret-down`} />
                         )}
                     </LeagueInfo>
-                    {!isMarketSelected ? (
+                    {!isMarketSelected && (
                         <>
                             <IncentivizedLeague league={selectedLeagueId} />
                             <StarIcon
@@ -94,8 +94,6 @@ const MarketsList: React.FC<MarketsListProps> = ({ markets, league, language }) 
                                 className={`icon icon--${isFavourite ? 'star-full selected' : 'favourites'} `}
                             />
                         </>
-                    ) : (
-                        <></>
                     )}
                 </LeagueCard>
             )}

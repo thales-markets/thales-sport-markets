@@ -399,12 +399,13 @@ const areSameCombinedPositions = (market: SportMarket | TicketPosition, ticketPo
     return true;
 };
 
-export const isSameMarket = (market: SportMarket | TicketPosition, ticketPosition: TicketPosition, isSgp = false) =>
+export const isSameMarket = (market: SportMarket | TicketPosition, ticketPosition: TicketPosition, byType = false) =>
     market.gameId === ticketPosition.gameId &&
     market.leagueId === ticketPosition.leagueId &&
     market.typeId === ticketPosition.typeId &&
     market.playerProps.playerId === ticketPosition.playerId &&
-    (isSgp || (market.line === ticketPosition.line && areSameCombinedPositions(market, ticketPosition)));
+    market.line === ticketPosition.line &&
+    (byType || areSameCombinedPositions(market, ticketPosition));
 
 export const getTradeData = (markets: TicketMarket[]): TradeData[] =>
     markets.map((market) => {

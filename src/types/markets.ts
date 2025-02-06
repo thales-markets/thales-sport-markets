@@ -83,6 +83,7 @@ export type SportMarket = {
     positionNames?: string[];
     errorMessage?: string;
     numberOfMarkets?: number;
+    sgpSportsbooks?: string[];
 };
 
 type OmitDistributive<T, K extends PropertyKey> = T extends any

@@ -10,13 +10,15 @@ import Checkbox from 'components/fields/Checkbox/Checkbox';
 import { MarketTypePlayerPropsGroupsBySport } from 'constants/marketTypes';
 import { RESET_STATE } from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import { minutesToMilliseconds } from 'date-fns';
 import { SportFilter, StatusFilter } from 'enums/markets';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
-import { groupBy, orderBy } from 'lodash';
+import { groupBy, intersection, orderBy } from 'lodash';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
+import useSportMarketSgpQuery from 'queries/sgp/useSportMarketSgpQuery';
 import React, { Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
@@ -40,13 +42,14 @@ import {
     setStatusFilter,
     setTagFilter,
 } from 'redux/modules/market';
+import { getIsSgp, getTicket } from 'redux/modules/ticket';
 import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled, { CSSProperties, useTheme } from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { addHoursToCurrentDate, localStore } from 'thales-utils';
 import { MarketsCache, SportMarket, SportMarkets, TagInfo, Tags } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
-import { getDefaultPlayerPropsLeague } from 'utils/marketsV2';
+import { getDefaultPlayerPropsLeague, isSameMarket } from 'utils/marketsV2';
 import { history } from 'utils/routes';
 import { getScrollMainContainerToTop } from 'utils/scroll';
 import useQueryParam from 'utils/useQueryParams';
@@ -94,6 +97,8 @@ const Home: React.FC = () => {
     const isMobile = useSelector(getIsMobile);
     const isMarketSelected = useSelector(getIsMarketSelected);
     const selectedMarket = useSelector(getSelectedMarket);
+    const ticket = useSelector(getTicket);
+    const isSgp = useSelector(getIsSgp);
 
     const [showBurger, setShowBurger] = useState<boolean>(false);
     const [playerPropsCountPerTag, setPlayerPropsCountPerTag] = useState<Record<string, number>>({});
@@ -216,7 +221,7 @@ const Home: React.FC = () => {
         }
     }, [playerPropsCountPerTag, sportFilter, setTagParam]);
 
-    const sportMarketsQueryNew = useSportsMarketsV2Query(statusFilter, false, { networkId }, undefined);
+    const sportMarketsQuery = useSportsMarketsV2Query(statusFilter, false, { networkId }, undefined);
 
     const liveSportMarketsQuery = useLiveSportsMarketsQuery(sportFilter === SportFilter.Live, { networkId });
 
@@ -227,8 +232,8 @@ const Home: React.FC = () => {
             return [];
         }
         const allMarkets: MarketsCache =
-            sportMarketsQueryNew.isSuccess && sportMarketsQueryNew.data
-                ? sportMarketsQueryNew.data
+            sportMarketsQuery.isSuccess && sportMarketsQuery.data
+                ? sportMarketsQuery.data
                 : {
                       [StatusFilter.OPEN_MARKETS]: [],
                       [StatusFilter.ONGOING_MARKETS]: [],
@@ -377,8 +382,8 @@ const Home: React.FC = () => {
 
         return filteredMarkets;
     }, [
-        sportMarketsQueryNew.isSuccess,
-        sportMarketsQueryNew.data,
+        sportMarketsQuery.isSuccess,
+        sportMarketsQuery.data,
         liveSportMarketsQuery.isSuccess,
         liveSportMarketsQuery.data,
         gameMultipliersQuery.isSuccess,
@@ -397,7 +402,7 @@ const Home: React.FC = () => {
     ]);
 
     const marketsLoading =
-        sportFilter === SportFilter.Live ? liveSportMarketsQuery.isLoading : sportMarketsQueryNew.isLoading;
+        sportFilter === SportFilter.Live ? liveSportMarketsQuery.isLoading : sportMarketsQuery.isLoading;
 
     useEffect(() => {
         if (sportFilter == SportFilter.Favourites) {
@@ -533,6 +538,22 @@ const Home: React.FC = () => {
         return liveMarketsCount;
     }, [liveMarketsCountPerTag, favouriteLeagues]);
 
+    const isSgpEnabled = useMemo(() => isSgp && !!ticket.length, [isSgp, ticket.length]);
+
+    const marketsAvailableForSgpQuery = useSportMarketSgpQuery(
+        ticket[0],
+        { networkId },
+        { enabled: isSgpEnabled, refetchInterval: minutesToMilliseconds(1) }
+    );
+
+    const marketAvailableForSgp = useMemo(
+        () =>
+            marketsAvailableForSgpQuery.isSuccess && marketsAvailableForSgpQuery.data
+                ? marketsAvailableForSgpQuery.data
+                : undefined,
+        [marketsAvailableForSgpQuery.data, marketsAvailableForSgpQuery.isSuccess]
+    );
+
     const selectedMarketData = useMemo(() => {
         if (selectedMarket) {
             if (selectedMarket.live) {
@@ -549,9 +570,38 @@ const Home: React.FC = () => {
                         ? openSportMarketsQuery.data[StatusFilter.OPEN_MARKETS]
                         : [];
 
-                return openSportMarkets.find(
-                    (market) => market.gameId.toLowerCase() === selectedMarket.gameId.toLowerCase()
-                );
+                let openSportMarket;
+                if (isSgpEnabled) {
+                    if (marketAvailableForSgp) {
+                        // filter SGP available markets by ticket common sportsbooks
+                        // markets from API already filtered by first ticket market, so starting index is 1
+                        const marketAvailableForSgpCopy = { ...marketAvailableForSgp };
+                        if (ticket.length > 1) {
+                            const ticketCommonSportsbooks: string[] = [];
+                            for (let i = 1; i < ticket.length; i++) {
+                                const sgpChildMarket = marketAvailableForSgpCopy.childMarkets.find((childMarket) =>
+                                    isSameMarket(childMarket, ticket[i])
+                                );
+                                const sgpSportsbooks = sgpChildMarket?.sgpSportsbooks || [];
+                                const commonSportsbooks =
+                                    i == 1 ? sgpSportsbooks : intersection(ticketCommonSportsbooks, sgpSportsbooks);
+                                ticketCommonSportsbooks.push(...commonSportsbooks);
+                            }
+                            openSportMarket = marketAvailableForSgpCopy;
+                            openSportMarket.childMarkets = marketAvailableForSgpCopy.childMarkets.filter(
+                                (sgpMarket) => intersection(sgpMarket.sgpSportsbooks, ticketCommonSportsbooks).length
+                            );
+                        } else {
+                            openSportMarket = marketAvailableForSgpCopy;
+                        }
+                    }
+                } else {
+                    openSportMarket = openSportMarkets.find(
+                        (market) => market.gameId.toLowerCase() === selectedMarket.gameId.toLowerCase()
+                    );
+                }
+
+                return openSportMarket;
             }
         }
     }, [
@@ -560,6 +610,9 @@ const Home: React.FC = () => {
         liveSportMarketsQuery.data,
         liveSportMarketsQuery.isSuccess,
         selectedMarket,
+        isSgpEnabled,
+        marketAvailableForSgp,
+        ticket,
     ]);
 
     const resetFilters = useCallback(() => {

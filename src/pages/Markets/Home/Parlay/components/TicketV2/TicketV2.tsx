@@ -744,10 +744,17 @@ const Ticket: React.FC<TicketProps> = ({
         totalQuote,
     ]);
 
-    const isInvalidSgpTotalQuote = useMemo(
-        () => isSgp && isValidSgpBet && (totalQuote === 0 || totalQuote === sportsAmmData?.maxSupportedOdds),
-        [isSgp, isValidSgpBet, sportsAmmData?.maxSupportedOdds, totalQuote]
-    );
+    const isMaxSgpTotalQuote = useMemo(() => isSgp && isValidSgpBet && totalQuote === sportsAmmData?.maxSupportedOdds, [
+        isSgp,
+        isValidSgpBet,
+        sportsAmmData?.maxSupportedOdds,
+        totalQuote,
+    ]);
+    const isInvalidSgpTotalQuote = useMemo(() => isSgp && isValidSgpBet && totalQuote === 0, [
+        isSgp,
+        isValidSgpBet,
+        totalQuote,
+    ]);
 
     const isInvalidSystemTotalQuote = useMemo(
         () => isSystemBet && isValidSystemBet && totalQuote === sportsAmmData?.maxSupportedOdds,
@@ -1972,7 +1979,8 @@ const Ticket: React.FC<TicketProps> = ({
     const inputRef = useRef<HTMLDivElement>(null);
     const inputRefVisible = !!inputRef?.current?.getBoundingClientRect().width;
     const isQuoteTooltipEnabled =
-        inputRefVisible && (isInvalidRegularTotalQuote || isInvalidSystemTotalQuote || isInvalidSgpTotalQuote);
+        inputRefVisible &&
+        (isInvalidRegularTotalQuote || isInvalidSystemTotalQuote || isInvalidSgpTotalQuote || isMaxSgpTotalQuote);
     const isQuoteTooltipError = isSgp && !!sgpData && !!sgpData.error;
 
     const getQuoteTooltipText = () => {

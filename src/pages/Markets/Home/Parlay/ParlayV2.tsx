@@ -102,7 +102,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
         if (sgpDataQuery.isSuccess && sgpDataQuery.data) {
             const selectedSportsbookData = sgpDataQuery.data.data.selectedSportsbook;
 
-            return selectedSportsbookData.priceWithSpread || selectedSportsbookData.error
+            return selectedSportsbookData?.priceWithSpread || selectedSportsbookData?.error
                 ? selectedSportsbookData
                 : {
                       error: t('markets.parlay.validation.sgp-no-odds'),
