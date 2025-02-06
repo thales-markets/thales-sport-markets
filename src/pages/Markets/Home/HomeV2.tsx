@@ -57,7 +57,6 @@ import { League, Sport } from '../../../enums/sports';
 import TimeFilters from '../../../layouts/DappLayout/DappHeader/components/TimeFilters';
 import { getSportLeagueIds, isBoxingLeague } from '../../../utils/sports';
 import FilterTagsMobile from '../components/FilterTagsMobile';
-import SportFilterMobile from '../components/SportFilter/SportFilterMobile';
 import SportTags from '../components/SportTags';
 import GlobalFilters from '../components/StatusFilters';
 import Breadcrumbs from './Breadcrumbs';
@@ -772,15 +771,6 @@ const Home: React.FC = () => {
                 <MainContainer>
                     {isMobile && (
                         <>
-                            <SportFilterMobile
-                                playerPropsCountPerTag={playerPropsCountPerTag}
-                                setAvailableTags={setAvailableTags}
-                                tagsList={tagsList}
-                                openMarketsCountPerSport={openMarketsCountPerSport}
-                                boostedMarketsCount={boostedMarketsCount}
-                                liveMarketsCountPerSport={liveMarketsCountPerSport}
-                                showActive={showActive}
-                            />
                             {!marketsLoading &&
                                 finalMarkets.length > 0 &&
                                 (statusFilter === StatusFilter.OPEN_MARKETS || sportFilter === SportFilter.Live) && (
@@ -899,7 +889,7 @@ const Container = styled(FlexDivColumnCentered)`
     width: 100%;
     margin-top: 15px;
     @media (max-width: 767px) {
-        margin-top: 20px;
+        margin-top: 10px;
     }
 `;
 
