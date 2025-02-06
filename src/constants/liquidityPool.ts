@@ -51,6 +51,11 @@ export const LiquidityPoolMap: Record<
             address: '0x796B7361F0E818f5D8446f11Be633D60e2B00898',
             collateral: CRYPTO_CURRENCY_MAP.OVER as Coins,
         },
+        [LiquidityPoolCollateral.wBTC]: {
+            name: 'wBTC LP',
+            address: '0xbD08D8F8c17C22fb0a12Fe490F38f40c59B60d2A',
+            collateral: CRYPTO_CURRENCY_MAP.wBTC as Coins,
+        },
     },
     [NetworkId.Base]: {
         [LiquidityPoolCollateral.USDC]: {

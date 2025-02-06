@@ -44,6 +44,7 @@ const useExchangeRatesQuery = (
                     }
                     if (currencyName === CRYPTO_CURRENCY_MAP.BTC) {
                         exchangeRates[`cb${currencyName}`] = bigNumberFormatter(rates[idx]);
+                        exchangeRates[`w${currencyName}`] = bigNumberFormatter(rates[idx]);
                     }
                 });
                 exchangeRates[THALES_CONTRACT_RATE_KEY] = exchangeRates['THALES'];

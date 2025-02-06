@@ -33,6 +33,7 @@ const useCoingeckoRatesQuery = (options?: Omit<UseQueryOptions<any>, 'queryKey' 
                 sTHALES: 0,
                 OVER: 0,
                 cbBTC: 0,
+                wBTC: 0,
             };
 
             const url =

@@ -74,6 +74,7 @@ const useLpUsersPnlQuery = (
                     }
                     if (currencyName === CRYPTO_CURRENCY_MAP.BTC) {
                         exchangeRates[`cb${currencyName}`] = bigNumberFormatter(rates[idx]);
+                        exchangeRates[`w${currencyName}`] = bigNumberFormatter(rates[idx]);
                     }
                 });
                 exchangeRates['THALES'] = Number(thalesPriceResponse.data);

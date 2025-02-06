@@ -76,7 +76,7 @@ const Wrapper = styled.button<{
     width: ${(props) => props.width || 'auto'};
     min-height: ${(props) => props.height || '28px'};
     border: 1px solid ${(props) => props.borderColor || props.theme.button.borderColor.primary};
-    border-radius: 5px;
+    border-radius: 8px;
     ${(props) => (props.style?.fontFamily ? `font-family: ${props.style?.fontFamily};` : '')}
     font-weight: ${(props) => props.fontWeight || '600'};
     font-size: ${(props) => props.fontSize || '15px'};
