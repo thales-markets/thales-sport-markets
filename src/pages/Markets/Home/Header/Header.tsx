@@ -256,8 +256,7 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitc
                                         dispatch(setIsThreeWayView(!isThreeWayView));
                                     }
                                 }}
-                                fontSize={isThreeWayView ? 20 : 28}
-                                className={`icon ${isThreeWayView ? 'icon--list' : 'icon--three-column'}`}
+                                className={`icon ${isThreeWayView ? 'icon--list' : 'icon--grid'}`}
                                 disabled={!!selectedMarket || marketTypeFilter !== undefined}
                             />
                         </Tooltip>

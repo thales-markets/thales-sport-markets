@@ -89,9 +89,9 @@ export const FilterContainer = styled.div`
     gap: 8px;
 `;
 
-export const ThreeWayIcon = styled.i<{ disabled: boolean; fontSize: number }>`
+export const ThreeWayIcon = styled.i<{ disabled: boolean }>`
     cursor: ${(props) => (props.disabled ? 'deafult' : 'pointer')};
-    font-size: ${(props) => props.fontSize}px;
+    font-size: 20px;
     color: ${(props) => props.theme.textColor.secondary};
     opacity: ${(props) => (props.disabled ? '0.2' : '1')};
 `;
