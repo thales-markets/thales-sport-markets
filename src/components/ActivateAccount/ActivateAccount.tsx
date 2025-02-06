@@ -1,26 +1,26 @@
+import Zebra from 'assets/images/overtime-zebra.svg?react';
+import Button from 'components/Button';
+import FundModal from 'components/FundOvertimeAccountModal';
+import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
+import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
+import { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { Colors } from 'styles/common';
-import Zebra from 'assets/images/overtime-zebra.svg?react';
-import { activateOvertimeAccount } from 'utils/biconomy';
-import { useAccount, useChainId, useClient } from 'wagmi';
-import { useEffect, useMemo, useState } from 'react';
-import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
-import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
-import biconomyConnector from 'utils/biconomyWallet';
-import { useSelector } from 'react-redux';
-import { getIsBiconomy } from 'redux/modules/wallet';
-import { getCollateralAddress, getCollateralIndex, getCollaterals } from 'utils/collaterals';
-import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { Coins, localStore } from 'thales-utils';
-import { toast } from 'react-toastify';
-import { useTranslation } from 'react-i18next';
-import { waitForTransactionReceipt } from 'viem/actions';
-import { Client } from 'viem';
-import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import FundModal from 'components/FundOvertimeAccountModal';
-import { RootState } from 'types/redux';
 import { Rates } from 'types/collateral';
-import Button from 'components/Button';
+import { RootState } from 'types/redux';
+import { activateOvertimeAccount } from 'utils/biconomy';
+import biconomyConnector from 'utils/biconomyWallet';
+import { getCollateralAddress, getCollateralIndex, getCollaterals } from 'utils/collaterals';
+import { Client } from 'viem';
+import { waitForTransactionReceipt } from 'viem/actions';
+import { useAccount, useChainId, useClient } from 'wagmi';
 
 const ActivateAccount: React.FC<any> = () => {
     const networkId = useChainId();
@@ -168,7 +168,7 @@ const ActivateAccount: React.FC<any> = () => {
                                     fontSize: '12px',
                                     padding: '9px 20px',
                                     width: '100px',
-                                    height: '28px',
+                                    height: '30px',
                                 }}
                                 onClick={() => setIsMinimized(false)}
                             >
@@ -211,7 +211,7 @@ const Wrapper = styled.div<{ show: boolean }>`
     `
             : `
             width: 100px;
-            height: 28px;
+            height: 30px;
             padding: 0;
             transform: translateX(-390px);
             transition: height 0.1s ease-out, padding 0.1s ease-out, width 0.1s ease-out,  transform 0.1s ease-in-out;

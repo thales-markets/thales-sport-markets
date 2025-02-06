@@ -19,7 +19,6 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
 import { getIsMobile } from 'redux/modules/app';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
 import { getOverdropUIState, getStopPulsing, setStopPulsing } from 'redux/modules/ui';
@@ -82,7 +81,6 @@ const DappHeader: React.FC = () => {
     const { t } = useTranslation();
 
     const dispatch = useDispatch();
-    const location = useLocation();
     const theme: ThemeInterface = useTheme();
 
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
@@ -167,28 +165,6 @@ const DappHeader: React.FC = () => {
 
     const menuImageRef = useRef<HTMLImageElement>(null);
 
-    const getGetStartedButton = () => (
-        <SPAAnchor style={{ width: isMobile ? '100%' : 'fit-content' }} href={buildHref(ROUTES.Wizard)}>
-            <Button
-                backgroundColor={theme.background.primary}
-                textColor={theme.button.textColor.quaternary}
-                borderColor={theme.button.borderColor.secondary}
-                width="100%"
-                fontWeight="400"
-                additionalStyles={{
-                    borderRadius: '20px',
-                    fontWeight: '600',
-                    fontSize: isMobile ? '12px' : '14px',
-                    textTransform: 'capitalize',
-                    whiteSpace: 'nowrap',
-                }}
-                height="28px"
-            >
-                {t('get-started.get-started')}
-            </Button>
-        </SPAAnchor>
-    );
-
     return (
         <>
             {!isMobile && (
@@ -216,7 +192,7 @@ const DappHeader: React.FC = () => {
                                 backgroundColor={theme.button.textColor.quaternary}
                                 borderColor={theme.button.textColor.quaternary}
                                 fontSize="14px"
-                                height="24px"
+                                height="30px"
                                 padding="2px 15px"
                             >
                                 Migrate <CurrencyIcon className="currency-icon currency-icon--thales" /> to{' '}
@@ -238,7 +214,7 @@ const DappHeader: React.FC = () => {
                                         fontSize: '12px',
                                         padding: '9px 20px',
                                         width: '100px',
-                                        height: '28px',
+                                        height: '30px',
                                     }}
                                     onClick={() =>
                                         dispatch(
@@ -351,7 +327,7 @@ const DappHeader: React.FC = () => {
                                     whiteSpace: 'nowrap',
                                 }}
                                 width="100%"
-                                height="28px"
+                                height="30px"
                                 onClick={() =>
                                     dispatch(
                                         setWalletConnectModalVisibility({
@@ -362,7 +338,6 @@ const DappHeader: React.FC = () => {
                             >
                                 {t('get-started.sign-up')}
                             </Button>
-                            {location.pathname !== ROUTES.Wizard && getGetStartedButton()}
                             <FlexDivEnd>
                                 <NetworkSwitcher />
                             </FlexDivEnd>
@@ -375,7 +350,7 @@ const DappHeader: React.FC = () => {
                             backgroundColor={theme.button.textColor.quaternary}
                             borderColor={theme.button.textColor.quaternary}
                             fontSize="14px"
-                            height="24px"
+                            height="30px"
                             padding="2px 15px"
                             margin="10px 0 0 0"
                         >

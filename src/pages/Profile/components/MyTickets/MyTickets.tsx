@@ -12,11 +12,11 @@ import { buildHref, navigateTo } from 'utils/routes';
 import { useAccount } from 'wagmi';
 import SearchField from '../../components/SearchField';
 import UserVaults from '../../components/UserVaults';
+import Account from '../Account';
 import NavigationBar from '../NavigationBar';
 import OpenClaimableTickets from '../OpenClaimableTickets';
 import TicketTransactions from '../TicketTransactions';
 import UserStatsV2 from '../UserStatsV2';
-import Account from '../Account';
 
 type MyTicketsProps = {
     selectedTab: ProfileTab;
@@ -100,7 +100,7 @@ const RightSidebarContainer = styled(SidebarContainer)`
 
 const MainContainer = styled(FlexDivColumn)`
     width: 100%;
-    max-width: 806px;
+
     flex-grow: 1;
     margin: 0 25px;
     @media (max-width: 1499px) {

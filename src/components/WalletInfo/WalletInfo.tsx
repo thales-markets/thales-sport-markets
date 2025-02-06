@@ -161,7 +161,7 @@ const Wrapper = styled.div<{ displayPadding?: boolean }>`
     display: flex;
     border-radius: 20px;
     border: 1px solid ${(props) => props.theme.borderColor.primary};
-    height: 28px;
+    height: 30px;
     justify-content: space-between;
     align-items: center;
     padding-left: ${(props) => (props.displayPadding ? '10px' : '')};

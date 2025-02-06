@@ -32,7 +32,7 @@ export const MainContainer = styled(FlexDivRow)<{
 }>`
     position: relative;
     width: 100%;
-    padding: ${(props) => (props.isBoosted ? '20px 12px 10px 12px' : '10px 12px')};
+    padding: 10px 12px;
     cursor: ${(props) => (props.isGameOpen ? 'default' : 'pointer')};
     @media (max-width: 950px) {
         flex-direction: ${(props) => (props.isGameOpen ? 'column' : 'row')};
@@ -64,16 +64,10 @@ export const MatchInfo = styled(FlexDivStart)<{
 
 export const GameOfLabel = styled.span<{ selected?: boolean; isLive?: boolean }>`
     color: ${(props) => (props.selected ? 'inherit' : props.theme.overdrop.textColor.primary)};
-    font-size: 10px;
-    position: absolute;
-    top: 6px;
-    left: 48px;
+    font-size: 12px;
     text-transform: uppercase;
     @media (max-width: 600px) {
-        top: 10px;
         text-align: center;
-        left: ${(props) => (props.isLive ? '55px' : '0')};
-        right: 0px;
     }
 `;
 
