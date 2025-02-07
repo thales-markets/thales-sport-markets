@@ -224,6 +224,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                             margin="10px 0"
                             onClick={() => {
                                 disconnect();
+                                setNavMenuVisibility(null);
                             }}
                         >
                             {t('markets.nav-menu.buttons.disconnect')}
