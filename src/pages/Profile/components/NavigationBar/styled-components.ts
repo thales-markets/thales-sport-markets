@@ -4,15 +4,15 @@ import { FlexDivRow } from 'styles/common';
 export const Wrapper = styled(FlexDivRow)`
     width: 100%;
     align-items: center;
-    justify-content: center;
+    justify-content: space-evenly;
     padding: 6px;
     border-radius: 5px;
 `;
 
 export const ItemWrapper = styled.div`
     position: relative;
-    padding: 0 20px;
     text-align: start;
+    white-space: pre;
     @media (max-width: 767px) {
         padding: 0 10px;
         width: fit-content;
@@ -46,7 +46,7 @@ export const NotificationCount = styled.div`
     position: absolute;
     border-radius: 50%;
     top: -6px;
-    right: 4px;
+    left: -4px;
     display: flex;
     align-items: center;
     text-align: center;

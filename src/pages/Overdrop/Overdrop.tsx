@@ -1,11 +1,7 @@
 import BannerCarousel from 'components/BannerCarousel';
 import { OverdropTab } from 'enums/ui';
-import StakingModal from 'pages/Profile/components/StakingModal';
 import UserStatsV2 from 'pages/Profile/components/UserStatsV2';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { getIsStakingModalMuted } from 'redux/modules/ui';
-import { getIsConnectedViaParticle } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
 import useQueryParam from 'utils/useQueryParams';
@@ -18,10 +14,6 @@ import XPDetails from './pages/XPDetails';
 const Overdrop: React.FC = () => {
     const [selectedTabParam, setSelectedTabParam] = useQueryParam('selected-tab', OverdropTab.OVERDROP_HOME);
     const [selectedTab, setSelectedTab] = useState<OverdropTab>(OverdropTab.OVERDROP_HOME);
-    const [openStakingModal, setOpenStakingModal] = useState<boolean>(false);
-
-    const isParticle = useSelector(getIsConnectedViaParticle);
-    const isStakingModalMuted = useSelector(getIsStakingModalMuted);
 
     useEffect(() => {
         if (Object.values(OverdropTab).includes(selectedTabParam.toLowerCase() as OverdropTab)) {
@@ -51,16 +43,8 @@ const Overdrop: React.FC = () => {
                 {selectedTab == OverdropTab.LEADERBOARD && <Leaderboard />}
             </MainContainer>
             <RightSidebarContainer>
-                <UserStatsV2 setForceOpenStakingModal={setOpenStakingModal} />
+                <UserStatsV2 />
             </RightSidebarContainer>
-            {openStakingModal && !isStakingModalMuted && !isParticle && (
-                <StakingModal
-                    defaultAmount={0}
-                    onClose={() => {
-                        setOpenStakingModal(false);
-                    }}
-                />
-            )}
         </RowContainer>
     );
 };
@@ -70,6 +54,7 @@ const RowContainer = styled(FlexDivRow)`
     flex: 1 1 0%;
     flex-direction: row;
     justify-content: center;
+    margin-top: 15px;
     @media (max-width: 767px) {
         padding-top: 20px;
     }
@@ -99,7 +84,7 @@ const RightSidebarContainer = styled(SidebarContainer)`
 
 const MainContainer = styled(FlexDivColumn)`
     width: 100%;
-    max-width: 806px;
+
     flex-grow: 1;
     margin: 0px 25px;
     @media (max-width: 1499px) {

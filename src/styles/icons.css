@@ -469,10 +469,6 @@
     content: '\011A';
 }
 
-.icon--gift:before {
-    content: '\00FB';
-}
-
 .icon--waterpolo:before {
     content: '\00FD';
 }
@@ -523,4 +519,8 @@
 
 .icon--sorting::before {
     content: '\0192';
+}
+
+.icon--hands-coins::before {
+    content: '\0124';
 }

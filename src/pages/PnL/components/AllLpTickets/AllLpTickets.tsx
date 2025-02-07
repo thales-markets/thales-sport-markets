@@ -34,6 +34,10 @@ const lpOptions = [
         value: 3,
         label: 'THALES',
     },
+    {
+        value: 4,
+        label: 'OVER',
+    },
 ];
 
 type AllLpTicketsProps = {
@@ -67,6 +71,10 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
         networkId,
         client,
     });
+    const overLpTicketsQuery = useLpTicketsQuery(LiquidityPoolCollateral.OVER, round, leagueId, onlyPP, {
+        networkId,
+        client,
+    });
 
     const lpTickets: Ticket[] = useMemo(() => {
         let lpTickets: Ticket[] = [];
@@ -77,12 +85,15 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
             wethLpTicketsQuery.data &&
             wethLpTicketsQuery.isSuccess &&
             thalesLpTicketsQuery.data &&
-            thalesLpTicketsQuery.isSuccess
+            thalesLpTicketsQuery.isSuccess &&
+            overLpTicketsQuery.data &&
+            overLpTicketsQuery.isSuccess
         ) {
             lpTickets = [
                 ...(usdcLpTicketsQuery.data || []),
                 ...(wethLpTicketsQuery.data || []),
                 ...(thalesLpTicketsQuery.data || []),
+                ...(overLpTicketsQuery.data || []),
             ];
         }
 
@@ -118,6 +129,8 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
         );
     }, [
         lp,
+        overLpTicketsQuery.data,
+        overLpTicketsQuery.isSuccess,
         showOnlyLiveTickets,
         showOnlyOpenTickets,
         showOnlyPendingTickets,

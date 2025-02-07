@@ -23,21 +23,36 @@ type ProfileItemProperties = {
     avatarSize?: number;
     iconColor?: string;
     marginRight?: string;
+    top?: string;
+    left?: string;
 };
 
-const ProfileItem: React.FC<ProfileItemProperties> = ({ labelHidden, avatarSize }) => {
+const ProfileItem: React.FC<ProfileItemProperties> = ({ labelHidden, avatarSize, top, left }) => {
     const { t } = useTranslation();
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     return (
         <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Profile)}>
             <ProfileContainer>
-                <ProfileIconWidget avatarSize={avatarSize} />
-                {!labelHidden && <ProfileLabel>{t('markets.nav-menu.items.profile')}</ProfileLabel>}
+                <ProfileIconWidget top={top} left={left} avatarSize={avatarSize} />
+                {!labelHidden && (
+                    <ProfileLabel>
+                        {isBiconomy
+                            ? t('markets.nav-menu.items.profile-smart')
+                            : t('markets.nav-menu.items.profile-wallet')}
+                    </ProfileLabel>
+                )}
             </ProfileContainer>
         </SPAAnchor>
     );
 };
 
-export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({ avatarSize, iconColor, marginRight }) => {
+export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({
+    avatarSize,
+    iconColor,
+    marginRight,
+    top,
+    left,
+}) => {
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
     const networkId = useChainId();
@@ -63,7 +78,7 @@ export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({ avatarSize,
         <>
             <ProfileIconContainer marginRight={marginRight}>
                 {!!notificationsCount && (
-                    <NotificationCount>
+                    <NotificationCount top={top} left={left}>
                         <Count>{notificationsCount}</Count>
                     </NotificationCount>
                 )}

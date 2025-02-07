@@ -4,7 +4,6 @@ import ShareTicketModalV2 from 'components/ShareTicketModalV2';
 import { ShareTicketModalProps } from 'components/ShareTicketModalV2/ShareTicketModalV2';
 import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { ZERO_ADDRESS } from 'constants/network';
 import { ContractType } from 'enums/contract';
 import React, { useMemo, useState } from 'react';
@@ -14,7 +13,7 @@ import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsBiconomy } from 'redux/modules/wallet';
-import { Coins, formatCurrencyWithKey, getEtherscanAddressLink, truncateAddress } from 'thales-utils';
+import { formatCurrencyWithKey, getEtherscanAddressLink, truncateAddress } from 'thales-utils';
 import { Ticket } from 'types/markets';
 import { RootState } from 'types/redux';
 import { executeBiconomyTransaction } from 'utils/biconomy';
@@ -30,7 +29,7 @@ import { getContractInstance } from 'utils/contract';
 import { getIsMultiCollateralSupported } from 'utils/network';
 import { refetchAfterClaim, refetchBalances } from 'utils/queryConnector';
 import { formatTicketOdds, getTicketMarketOdd } from 'utils/tickets';
-import { Client } from 'viem';
+import { Address, Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 import TicketMarketDetails from '../TicketMarketDetails';
@@ -70,15 +69,9 @@ type TicketDetailsProps = {
     ticket: Ticket;
     claimCollateralIndex: number;
     setClaimCollateralIndex: any;
-    onThalesClaim: (thalesClaimed: number) => void;
 };
 
-const TicketDetails: React.FC<TicketDetailsProps> = ({
-    ticket,
-    claimCollateralIndex,
-    setClaimCollateralIndex,
-    onThalesClaim,
-}) => {
+const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIndex, setClaimCollateralIndex }) => {
     const { t } = useTranslation();
     const selectedOddsType = useSelector(getOddsType);
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -135,28 +128,28 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
         if (sportsAMMV2ContractWithSigner) {
             setIsSubmitting(true);
             try {
-                let txReceipt;
+                let hash;
                 if (isBiconomy) {
-                    txReceipt =
+                    hash =
                         isClaimCollateralDefaultCollateral ||
                         (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral) ||
                         ticket.isFreeBet
-                            ? await executeBiconomyTransaction(
+                            ? await executeBiconomyTransaction({
+                                  collateralAddress: getCollateralAddress(networkId, 0),
                                   networkId,
-                                  claimCollateralAddress,
-                                  sportsAMMV2ContractWithSigner,
-                                  'exerciseTicket',
-                                  [ticketAddress]
-                              )
-                            : await executeBiconomyTransaction(
+                                  contract: sportsAMMV2ContractWithSigner,
+                                  methodName: 'exerciseTicket',
+                                  data: [ticketAddress],
+                              })
+                            : await executeBiconomyTransaction({
+                                  collateralAddress: claimCollateralAddress as Address,
                                   networkId,
-                                  claimCollateralAddress,
-                                  sportsAMMV2ContractWithSigner,
-                                  'exerciseTicketOffRamp',
-                                  [ticketAddress, claimCollateralAddress, isEth]
-                              );
+                                  contract: sportsAMMV2ContractWithSigner,
+                                  methodName: 'exerciseTicketOffRamp',
+                                  data: [ticketAddress, claimCollateralAddress, isEth],
+                              });
                 } else {
-                    const hash =
+                    hash =
                         isClaimCollateralDefaultCollateral ||
                         (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral) ||
                         ticket.isFreeBet
@@ -166,19 +159,16 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
                                   claimCollateralAddress,
                                   isEth,
                               ]);
-                    txReceipt = await waitForTransactionReceipt(client as Client, {
-                        hash,
-                    });
                 }
+                const txReceipt = await waitForTransactionReceipt(client as Client, {
+                    hash,
+                });
 
                 if (txReceipt.status === 'success') {
                     toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
                     if (setShareTicketModalData && setShowShareTicketModal) {
                         setShareTicketModalData(shareTicketData);
                         setShowShareTicketModal(true);
-                    }
-                    if (ticket.collateral === (CRYPTO_CURRENCY_MAP.THALES as Coins)) {
-                        onThalesClaim(ticket.isFreeBet ? ticket.payout - ticket.buyInAmount : ticket.payout);
                     }
                     refetchAfterClaim(walletAddress, networkId);
                     refetchBalances(walletAddress, networkId);

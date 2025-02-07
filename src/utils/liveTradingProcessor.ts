@@ -6,7 +6,6 @@ import { TradeData } from '../types/markets';
 import { executeBiconomyTransaction } from './biconomy';
 import freeBetHolder from './contracts/freeBetHolder';
 import liquidityPoolDataContract from './contracts/liveTradingProcessorContract';
-import stakingThalesBettingProxy from './contracts/stakingThalesBettingProxy';
 import { convertFromBytes32 } from './formatters/string';
 
 export const getLiveTradingProcessorTransaction: any = async (
@@ -17,37 +16,37 @@ export const getLiveTradingProcessorTransaction: any = async (
     expectedQuote: bigint,
     referral: string | null,
     additionalSlippage: bigint,
-    isAA: boolean,
+    isBiconomy: boolean,
     isFreeBet: boolean,
     freeBetHolderContract: ViemContract,
-    isStakedThales: boolean,
-    stakingThalesBettingProxyContract: ViemContract,
     networkId: SupportedNetwork
 ): Promise<any> => {
     const referralAddress = referral || ZERO_ADDRESS;
     const gameId = convertFromBytes32(tradeData[0].gameId);
 
-    if (isAA) {
-        return executeBiconomyTransaction(
-            networkId,
-            collateralAddress,
-            liveTradingProcessorContract,
-            'requestLiveTrade',
-            [
-                gameId,
-                tradeData[0].sportId,
-                tradeData[0].typeId,
-                tradeData[0].position,
-                tradeData[0].line,
-                sUSDPaid,
-                expectedQuote,
-                additionalSlippage,
-                referralAddress,
-                collateralAddress,
-            ]
-        );
-    } else {
-        if (isFreeBet && freeBetHolderContract) {
+    if (isFreeBet && freeBetHolderContract) {
+        if (isBiconomy) {
+            return await executeBiconomyTransaction({
+                collateralAddress: collateralAddress as any,
+                networkId,
+                contract: freeBetHolderContract,
+                methodName: 'tradeLive',
+                data: [
+                    {
+                        _gameId: gameId,
+                        _sportId: tradeData[0].sportId,
+                        _typeId: tradeData[0].typeId,
+                        _line: tradeData[0].line,
+                        _position: tradeData[0].position,
+                        _buyInAmount: sUSDPaid,
+                        _expectedQuote: expectedQuote,
+                        _additionalSlippage: additionalSlippage,
+                        _referrer: referralAddress,
+                        _collateral: collateralAddress,
+                    },
+                ],
+            });
+        } else {
             return freeBetHolderContract.write.tradeLive([
                 {
                     _gameId: gameId,
@@ -63,23 +62,30 @@ export const getLiveTradingProcessorTransaction: any = async (
                 },
             ]);
         }
+    }
 
-        if (isStakedThales && stakingThalesBettingProxyContract) {
-            return stakingThalesBettingProxyContract.write.tradeLive([
+    if (isBiconomy) {
+        return await executeBiconomyTransaction({
+            collateralAddress: collateralAddress as any,
+            networkId,
+            contract: liveTradingProcessorContract,
+            methodName: 'requestLiveTrade',
+            data: [
                 {
                     _gameId: gameId,
                     _sportId: tradeData[0].sportId,
                     _typeId: tradeData[0].typeId,
-                    _line: tradeData[0].line,
                     _position: tradeData[0].position,
+                    _line: tradeData[0].line,
                     _buyInAmount: sUSDPaid,
                     _expectedQuote: expectedQuote,
                     _additionalSlippage: additionalSlippage,
                     _referrer: referralAddress,
                     _collateral: collateralAddress,
                 },
-            ]);
-        }
+            ],
+        });
+    } else {
         return liveTradingProcessorContract.write.requestLiveTrade([
             {
                 _gameId: gameId,
@@ -97,16 +103,12 @@ export const getLiveTradingProcessorTransaction: any = async (
     }
 };
 
-export const getRequestId = (txLogs: any, isFreeBet: boolean, isStakedThales: boolean) => {
+export const getRequestId = (txLogs: any, isFreeBet: boolean) => {
     const requestIdEvent = txLogs
         .map((log: any) => {
             try {
                 const decoded = decodeEventLog({
-                    abi: isFreeBet
-                        ? freeBetHolder.abi
-                        : isStakedThales
-                        ? stakingThalesBettingProxy.abi
-                        : liquidityPoolDataContract.abi,
+                    abi: isFreeBet ? freeBetHolder.abi : liquidityPoolDataContract.abi,
                     data: log.data,
                     topics: log.topics,
                 });
