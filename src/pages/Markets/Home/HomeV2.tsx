@@ -47,7 +47,7 @@ import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled, { CSSProperties, useTheme } from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { addHoursToCurrentDate, localStore } from 'thales-utils';
-import { MarketsCache, SportMarket, SportMarkets, TagInfo, Tags } from 'types/markets';
+import { MarketsCache, SportMarket, SportMarkets, TagInfo, Tags, TicketPosition } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { getDefaultPlayerPropsLeague, isSameMarket } from 'utils/marketsV2';
 import { history } from 'utils/routes';
@@ -565,6 +565,7 @@ const Home: React.FC = () => {
                     (market) => market.gameId.toLowerCase() === selectedMarket.gameId.toLowerCase()
                 );
             } else {
+                // Non-live
                 const openSportMarkets: SportMarkets =
                     openSportMarketsQuery.isSuccess && openSportMarketsQuery.data
                         ? openSportMarketsQuery.data[StatusFilter.OPEN_MARKETS]
@@ -574,19 +575,26 @@ const Home: React.FC = () => {
                 if (isSgpEnabled) {
                     if (marketAvailableForSgp) {
                         // filter SGP available markets by ticket common sportsbooks
-                        // markets from API already filtered by first ticket market, so starting index is 1
                         const marketAvailableForSgpCopy = { ...marketAvailableForSgp };
+                        // markets from API already filtered by first ticket market
                         if (ticket.length > 1) {
-                            const ticketCommonSportsbooks: string[] = [];
-                            for (let i = 1; i < ticket.length; i++) {
+                            let ticketCommonSportsbooks: string[] = [];
+                            ticket.forEach((ticketPosition: TicketPosition, index) => {
+                                const isMoneyline = ticketPosition.typeId === 0;
                                 const sgpChildMarket = marketAvailableForSgpCopy.childMarkets.find((childMarket) =>
-                                    isSameMarket(childMarket, ticket[i])
+                                    isSameMarket(childMarket, ticketPosition)
                                 );
-                                const sgpSportsbooks = sgpChildMarket?.sgpSportsbooks || [];
-                                const commonSportsbooks =
-                                    i == 1 ? sgpSportsbooks : intersection(ticketCommonSportsbooks, sgpSportsbooks);
-                                ticketCommonSportsbooks.push(...commonSportsbooks);
-                            }
+                                const sgpSportsbooks =
+                                    (isMoneyline
+                                        ? marketAvailableForSgpCopy.sgpSportsbooks
+                                        : sgpChildMarket?.sgpSportsbooks) || [];
+                                if (index === 0) {
+                                    ticketCommonSportsbooks = sgpSportsbooks;
+                                } else {
+                                    const commonSportsbooks = intersection(ticketCommonSportsbooks, sgpSportsbooks);
+                                    ticketCommonSportsbooks = commonSportsbooks;
+                                }
+                            });
                             openSportMarket = marketAvailableForSgpCopy;
                             openSportMarket.childMarkets = marketAvailableForSgpCopy.childMarkets.filter(
                                 (sgpMarket) => intersection(sgpMarket.sgpSportsbooks, ticketCommonSportsbooks).length
