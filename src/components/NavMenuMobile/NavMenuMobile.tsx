@@ -18,8 +18,11 @@ import useBlockedGamesQuery from 'queries/resolveBlocker/useBlockedGamesQuery';
 import useWhitelistedForUnblock from 'queries/resolveBlocker/useWhitelistedForUnblock';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
+import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
 import { getNetworkIconClassNameByNetworkId, getNetworkNameByNetworkId } from 'utils/network';
 import { buildHref } from 'utils/routes';
@@ -49,6 +52,7 @@ type NavMenuMobileProps = {
 const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVisibility }) => {
     const { t } = useTranslation();
     const location = useLocation();
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const theme: ThemeInterface = useTheme();
     const { disconnect } = useDisconnect();
     const networkId = useChainId();
@@ -137,7 +141,7 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                                             />
                                         </>
                                     )}
-                                    <NavLabel>{t(item.i18label)}</NavLabel>
+                                    <NavLabel>{!isBiconomy ? t(item.i18label) : t(item.i18labelSmart as any)}</NavLabel>
                                 </ItemContainer>
                             </SPAAnchor>
                         );

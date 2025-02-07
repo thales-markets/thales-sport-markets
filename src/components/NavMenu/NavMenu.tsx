@@ -15,7 +15,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { getIsConnectedViaParticle } from 'redux/modules/wallet';
+import { getIsBiconomy, getIsConnectedViaParticle } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
 import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
@@ -51,7 +51,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
     const { t } = useTranslation();
     const location = useLocation();
     const theme: ThemeInterface = useTheme();
-
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
@@ -155,7 +155,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                                             />
                                         </>
                                     )}
-                                    <NavLabel>{t(item.i18label)}</NavLabel>
+                                    <NavLabel>{!isBiconomy ? t(item.i18label) : t(item.i18labelSmart as any)}</NavLabel>
                                 </ItemContainer>
                             </SPAAnchor>
                         );

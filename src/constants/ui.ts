@@ -11,7 +11,8 @@ export const ThemeMap: Record<Theme, ThemeInterface> = {
 
 export const NAV_MENU_FIRST_SECTION: NavMenuItem[] = [
     {
-        i18label: 'markets.nav-menu.items.profile',
+        i18label: 'markets.nav-menu.items.profile-wallet',
+        i18labelSmart: 'markets.nav-menu.items.profile-smart',
         iconClass: 'icon icon--profile2',
         name: 'profile',
         route: ROUTES.Profile,
