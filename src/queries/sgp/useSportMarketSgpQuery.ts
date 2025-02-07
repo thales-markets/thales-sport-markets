@@ -12,14 +12,14 @@ const useSportMarketSgpQuery = (
     networkConfig: NetworkConfig,
     options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<SportMarket | undefined>({
+    return useQuery<SportMarket | null>({
         queryKey: QUERY_KEYS.SportMarketSgp(
             networkConfig.networkId,
             ticketPosition?.gameId,
             `${ticketPosition?.position},${ticketPosition?.typeId},${ticketPosition?.line},${ticketPosition?.playerId}`
         ),
         queryFn: async () => {
-            let mappedMarket;
+            let mappedMarket = null;
 
             const marketAddress = ticketPosition?.gameId;
             const position = ticketPosition?.position;

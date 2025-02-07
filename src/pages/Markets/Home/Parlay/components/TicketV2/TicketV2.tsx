@@ -322,8 +322,10 @@ const Ticket: React.FC<TicketProps> = ({
         if (isLiveTicket) {
             dispatch(setIsSystemBet(false));
             dispatch(setIsSgp(false));
+        } else if (isSgp) {
+            dispatch(setIsSystemBet(false));
         }
-    }, [dispatch, isSystemBet, isLiveTicket]);
+    }, [dispatch, isSystemBet, isLiveTicket, isSgp]);
 
     useEffect(() => {
         if (markets.length <= systemBetDenominator) {
