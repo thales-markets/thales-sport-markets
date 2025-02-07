@@ -20,7 +20,7 @@ import { FlexDivCentered, FlexDivColumnCentered, FlexDivRow } from 'styles/commo
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import biconomyConnector from 'utils/biconomyWallet';
-import { getCollaterals } from 'utils/collaterals';
+import { getCollateralAddress, getCollateralIndex, getCollaterals } from 'utils/collaterals';
 import { claimFreeBet } from 'utils/freeBet';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import { getOnRamperUrl } from 'utils/particleWallet/utils';
@@ -143,10 +143,25 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                         if (COLLATERAL_ICONS[token]) {
                             const ReactElem = COLLATERAL_ICONS[token];
                             return (
-                                <CollateralWrapper key={key}>
-                                    <ReactElem />
-                                    <CollateralText>{token}</CollateralText>
-                                </CollateralWrapper>
+                                <Tooltip
+                                    overlay={
+                                        <div>
+                                            {token}:
+                                            <TooltipText>
+                                                {`${getCollateralAddress(
+                                                    networkId,
+                                                    getCollateralIndex(networkId, token)
+                                                )}`}
+                                            </TooltipText>
+                                        </div>
+                                    }
+                                    key={key}
+                                >
+                                    <CollateralWrapper>
+                                        <ReactElem />
+                                        <CollateralText>{token}</CollateralText>
+                                    </CollateralWrapper>
+                                </Tooltip>
                             );
                         }
                     })}
@@ -268,6 +283,10 @@ const FieldHeader = styled.p`
     font-weight: 600;
     line-height: 16px;
     color: ${(props) => props.theme.textColor.primary};
+    white-space: pre;
+`;
+
+const TooltipText = styled.span`
     white-space: pre;
 `;
 
