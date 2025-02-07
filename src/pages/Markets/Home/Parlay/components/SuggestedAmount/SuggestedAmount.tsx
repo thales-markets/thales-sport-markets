@@ -3,9 +3,14 @@ import { THALES_CONTRACT_RATE_KEY } from 'constants/markets';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
-import { formatCurrencyWithKey } from 'thales-utils';
+import {
+    ceilNumberToDecimals,
+    DEFAULT_CURRENCY_DECIMALS,
+    formatCurrencyWithKey,
+    LONG_CURRENCY_DECIMALS,
+} from 'thales-utils';
 import { Rates } from 'types/collateral';
-import { convertFromStableToCollateral, getCollateral, isThalesCurrency } from 'utils/collaterals';
+import { convertFromStableToCollateral, getCollateral, isStableCurrency, isThalesCurrency } from 'utils/collaterals';
 import { useChainId } from 'wagmi';
 
 const AMOUNTS = [3, 10, 50, 100, 500];
@@ -69,7 +74,9 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
         updatedMap.set(amountIndex, increasedAmountClicks);
         setAmountIndexClickedTimesMap(updatedMap);
 
-        changeAmount(increasedAmountClicks * buyAmount);
+        const decimals = isStableCurrency(collateral) ? DEFAULT_CURRENCY_DECIMALS : LONG_CURRENCY_DECIMALS;
+        const changedAmount = ceilNumberToDecimals(increasedAmountClicks * buyAmount, decimals);
+        changeAmount(changedAmount);
     };
 
     return (
