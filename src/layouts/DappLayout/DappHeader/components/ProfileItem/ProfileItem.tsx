@@ -29,11 +29,18 @@ type ProfileItemProperties = {
 
 const ProfileItem: React.FC<ProfileItemProperties> = ({ labelHidden, avatarSize, top, left }) => {
     const { t } = useTranslation();
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     return (
         <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Profile)}>
             <ProfileContainer>
                 <ProfileIconWidget top={top} left={left} avatarSize={avatarSize} />
-                {!labelHidden && <ProfileLabel>{t('markets.nav-menu.items.profile')}</ProfileLabel>}
+                {!labelHidden && (
+                    <ProfileLabel>
+                        {isBiconomy
+                            ? t('markets.nav-menu.items.profile-smart')
+                            : t('markets.nav-menu.items.profile-wallet')}
+                    </ProfileLabel>
+                )}
             </ProfileContainer>
         </SPAAnchor>
     );

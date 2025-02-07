@@ -1,6 +1,7 @@
 import Button from 'components/Button';
 import FundModal from 'components/FundOvertimeAccountModal';
 import SwapModal from 'components/SwapModal/SwapModal';
+import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
 import { COLLATERAL_ICONS, OVER_SIGH, USD_SIGN } from 'constants/currency';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
@@ -10,6 +11,7 @@ import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollate
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { getIsBiconomy, setIsBiconomy } from 'redux/modules/wallet';
 import styled, { CSSProperties } from 'styled-components';
 import {
@@ -21,14 +23,14 @@ import {
     FlexDivSpaceBetween,
     FlexDivStart,
 } from 'styles/common';
-import { formatCurrencyWithKey, formatCurrencyWithSign, localStore } from 'thales-utils';
+import { formatCurrencyWithKey, formatCurrencyWithSign, localStore, truncateAddress } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import biconomyConnector from 'utils/biconomyWallet';
 import { getCollaterals, mapMultiCollateralBalances } from 'utils/collaterals';
 import { useAccount, useChainId, useClient } from 'wagmi';
-import WithdrawModal from '../WithdrawModal';
 import AssetBalance from '../AssetBalance/AssetBalance';
+import WithdrawModal from '../WithdrawModal';
 
 const OverToken = COLLATERAL_ICONS['OVER'];
 
@@ -142,13 +144,32 @@ const Account: React.FC = () => {
         };
     }, [multipleCollateralBalances.data, exchangeRates]);
 
+    const handleCopy = () => {
+        const id = toast.loading(t('deposit.copying-address'), { autoClose: 1000 });
+        try {
+            navigator.clipboard.writeText(walletAddress);
+            toast.update(id, { ...getInfoToastOptions(t('deposit.copied')), autoClose: 2000 });
+        } catch (e) {
+            toast.update(id, getErrorToastOptions('Error'));
+        }
+    };
+
     return (
         <div>
             <Header>
-                <FlexDivColumnStart gap={4}>
-                    <Label>Portfolio Balance</Label>
-                    <Value>{totalBalanceValue}</Value>
-                </FlexDivColumnStart>
+                <FlexDivStart gap={20}>
+                    <FlexDivColumnStart gap={4}>
+                        <Label>Portfolio Balance</Label>
+                        <Value>{totalBalanceValue}</Value>
+                    </FlexDivColumnStart>
+                    <FlexDivColumnStart gap={4}>
+                        <GrayLabel>Your address</GrayLabel>
+                        <YellowValue>
+                            {truncateAddress(walletAddress, 6, 4)}{' '}
+                            <CopyIcon onClick={handleCopy} className="icon icon--copy" />
+                        </YellowValue>
+                    </FlexDivColumnStart>
+                </FlexDivStart>
                 <FlexDivEnd gap={20}>
                     <FlexDivColumnStart gap={4}>
                         <GrayLabel>Active Tickets</GrayLabel>
@@ -243,6 +264,11 @@ const Account: React.FC = () => {
 
 const Header = styled(FlexDivSpaceBetween)`
     margin-bottom: 28px;
+    @media (max-width: 800px) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
 `;
 
 const Container = styled(FlexDivSpaceBetween)`
@@ -327,5 +353,15 @@ const ButtonCSS: CSSProperties = {
     height: '42px',
     padding: '3px 24px',
 };
+
+const CopyIcon = styled.i`
+    font-size: 24px;
+    cursor: pointer;
+    font-weight: 400;
+    color: ${(props) => props.theme.overdrop.textColor.primary};
+    @media (max-width: 575px) {
+        font-size: 20px;
+    }
+`;
 
 export default Account;
