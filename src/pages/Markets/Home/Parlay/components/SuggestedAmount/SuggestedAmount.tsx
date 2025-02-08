@@ -79,6 +79,8 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
         changeAmount(changedAmount);
     };
 
+    const isAnyAmountClicked = amountIndexClickedTimesMap.values().some((n) => n > 0);
+
     return (
         <Container>
             {AMOUNTS.map((amount, index) => {
@@ -86,12 +88,18 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
                 const buyAmount = minAmount && index === 0 && minAmount > convertedAmount ? minAmount : convertedAmount;
 
                 const isCurrentAmountClicked = (amountIndexClickedTimesMap.get(index) || 0) > 0;
-                const isAnyAmountClicked = amountIndexClickedTimesMap.values().some((n) => n > 0);
+                const isAmountMatchedWithInsertedAmount = Number(insertedAmount) === buyAmount;
+                if (!isAnyAmountClicked && isAmountMatchedWithInsertedAmount) {
+                    const updatedMap = new Map(amountIndexClickedTimesMap);
+                    updatedMap.set(index, 1);
+                    setAmountIndexClickedTimesMap(updatedMap);
+                }
+                const isActive = isCurrentAmountClicked || (!isAnyAmountClicked && isAmountMatchedWithInsertedAmount);
 
                 return (
                     <AmountContainer
                         key={`amount-${index}`}
-                        active={isCurrentAmountClicked || (!isAnyAmountClicked && Number(insertedAmount) === buyAmount)}
+                        active={isActive}
                         onClick={() => onAmountClickHandler(index, buyAmount)}
                     >
                         {`${isCurrentAmountClicked ? '+' : ''} ${formatCurrencyWithKey(USD_SIGN, amount, 1, true)}`}
