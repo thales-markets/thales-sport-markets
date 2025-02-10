@@ -79,7 +79,7 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
         changeAmount(changedAmount);
     };
 
-    const isAnyAmountClicked = amountIndexClickedTimesMap.values().some((n) => n > 0);
+    const isAnyAmountClicked = Array.from(amountIndexClickedTimesMap.values()).some((n) => n > 0);
 
     return (
         <Container>
