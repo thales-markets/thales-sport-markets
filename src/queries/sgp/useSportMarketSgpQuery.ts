@@ -10,7 +10,7 @@ import { packMarket } from 'utils/marketsV2';
 const useSportMarketSgpQuery = (
     ticketPosition: TicketPosition,
     networkConfig: NetworkConfig,
-    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
+    options?: Omit<UseQueryOptions<SportMarket | null>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<SportMarket | null>({
         queryKey: QUERY_KEYS.SportMarketSgp(
