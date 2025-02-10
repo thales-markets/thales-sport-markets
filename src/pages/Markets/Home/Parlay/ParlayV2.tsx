@@ -327,10 +327,11 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                                     <RowMarket key={index} outOfLiquidity={outOfLiquidity}>
                                         <MatchInfoV2
                                             market={market}
-                                            showOddUpdates
+                                            showOddUpdates={!isSgp}
                                             setOddsChanged={setOddsChanged}
                                             acceptOdds={acceptOdds}
                                             setAcceptOdds={setAcceptOdds}
+                                            isSgp={isSgp}
                                             applyPayoutMultiplier={true}
                                             useThalesCollateral={useThalesCollateral}
                                         />

@@ -1,3 +1,4 @@
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import styled, { CSSProperties } from 'styled-components';
 import { FlexDivColumn, FlexDivColumnNative, FlexDivRow, FlexDivStart } from 'styles/common';
 
@@ -261,6 +262,9 @@ export const additionalClaimButtonStyleMobile: CSSProperties = {
 export const FreeBetWrapper = styled(FlexDivRow)`
     align-items: center;
     margin-right: 5px;
+    @media (min-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        margin-left: -20px;
+    }
 `;
 
 export const FreeBetIcon = styled.i`

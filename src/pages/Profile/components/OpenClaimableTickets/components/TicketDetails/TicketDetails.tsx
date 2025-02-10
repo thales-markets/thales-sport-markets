@@ -331,14 +331,14 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
                                     <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
                                 </InfoContainerColumn>
                             </PayoutWrapper>
-                            {isClaimable && isMultiCollateralSupported && !ticket.isFreeBet && (
+                            {isClaimable && isMultiCollateralSupported && (
                                 <InfoContainerColumn
                                     onClick={(e) => {
                                         e.preventDefault();
                                         e.stopPropagation();
                                     }}
                                 >
-                                    {isTicketCollateralDefaultCollateral && (
+                                    {isTicketCollateralDefaultCollateral && !ticket.isFreeBet && (
                                         <>
                                             <WinLabel>{t('profile.card.payout-in')}:</WinLabel>
                                             <CollateralSelector
@@ -391,7 +391,14 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
             <CollapsableContainer show={showDetails}>
                 <TicketMarketsContainer>
                     {ticket.sportMarkets.map((market, index) => {
-                        return <TicketMarketDetails market={market} key={index} isLive={ticket.isLive} />;
+                        return (
+                            <TicketMarketDetails
+                                market={market}
+                                key={index}
+                                isLive={ticket.isLive}
+                                isSgp={ticket.isSgp}
+                            />
+                        );
                     })}
                 </TicketMarketsContainer>
                 {ticket.isSystemBet ? (

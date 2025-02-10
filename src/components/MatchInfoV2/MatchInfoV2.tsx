@@ -156,19 +156,23 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
                 </MarketTypeInfo>
                 <PositionInfo>
                     <PositionText>{positionText}</PositionText>
-                    <Odd>
-                        <OddChangeUp id="odd-change-up" />
-                        <OddChangeDown id="odd-change-down" />
-                        {formatMarketOdds(
-                            selectedOddsType,
-                            applyPayoutMultiplier
-                                ? getAddedPayoutOdds(
-                                      useThalesCollateral ? (CRYPTO_CURRENCY_MAP.THALES as Coins) : selectedCollateral,
-                                      market.odd
-                                  )
-                                : market.odd
-                        )}
-                    </Odd>
+                    {!isSgp && (
+                        <Odd>
+                            <OddChangeUp id="odd-change-up" />
+                            <OddChangeDown id="odd-change-down" />
+                            {formatMarketOdds(
+                                selectedOddsType,
+                                applyPayoutMultiplier
+                                    ? getAddedPayoutOdds(
+                                          useThalesCollateral
+                                              ? (CRYPTO_CURRENCY_MAP.THALES as Coins)
+                                              : selectedCollateral,
+                                          market.odd
+                                      )
+                                    : market.odd
+                            )}
+                        </Odd>
+                    )}
                 </PositionInfo>
             </MarketPositionContainer>
             {readOnly && (
