@@ -696,10 +696,14 @@ const Ticket: React.FC<TicketProps> = ({
                           quote: getSystemBetData(markets, systemBetDenominator, usedCollateralForBuy).systemBetQuote,
                           basicQuote: getSystemBetData(markets, systemBetDenominator, 'USDC' as Coins).systemBetQuote,
                       }
-                    : {
-                          quote: 0,
-                          basicQuote: 0,
+                    : { quote: 1, basicQuote: 1 }
+                : isSgp
+                ? isValidSgpBet
+                    ? {
+                          quote: getAddedPayoutOdds(usedCollateralForBuy, sgpData?.priceWithSpread || 0),
+                          basicQuote: sgpData?.priceWithSpread || 0,
                       }
+                    : { quote: 1, basicQuote: 1 }
                 : markets.reduce(
                       (partialQuote, market) => {
                           return {
@@ -730,6 +734,9 @@ const Ticket: React.FC<TicketProps> = ({
         swapToThales,
         systemBetDenominator,
         usedCollateralForBuy,
+        isSgp,
+        isValidSgpBet,
+        sgpData?.priceWithSpread,
     ]);
 
     const numberOfSystemBetCombination = useMemo(() => {
