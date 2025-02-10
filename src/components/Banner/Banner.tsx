@@ -2,6 +2,7 @@ import React from 'react';
 import { Trans } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
+import { buildSpeedMarketsBannerHref } from 'utils/routes';
 import SPAAnchor from '../SPAAnchor';
 
 const IS_VISIBLE = true;
@@ -10,11 +11,11 @@ const Banner: React.FC = () => {
     return !IS_VISIBLE ? (
         <></>
     ) : (
-        <SPAAnchor href="https://dune.com/leifu/overtimes-nfl-playoff-galore">
+        <SPAAnchor href={buildSpeedMarketsBannerHref()}>
             <Container>
                 <Label>
                     <Trans
-                        i18nKey={'banner.nfl-playoff-text'}
+                        i18nKey={'banner.speed-text'}
                         components={{
                             highlight: <HightlightLabel />,
                         }}
