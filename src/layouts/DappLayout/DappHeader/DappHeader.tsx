@@ -50,7 +50,6 @@ import {
     MenuIcon,
     MenuIconContainer,
     MiddleContainer,
-    MiddleRightContainer,
     MobileButtonWrapper,
     NotificationCount,
     OverdropButtonContainer,
@@ -217,7 +216,7 @@ const DappHeader: React.FC = () => {
                     <MiddleContainer>
                         <div>{!isConnected ? getGetStartedButton() : isBiconomy ? <TopUp /> : <></>}</div>
                         {isMarketsPage && <TimeFilters />}
-                        <MiddleRightContainer>
+                        <FlexDivCentered>
                             <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
                                 {levelItem.level > 0 ? (
                                     <OverdropButtonContainer>
@@ -259,7 +258,7 @@ const DappHeader: React.FC = () => {
                                     )}
                                 </SettingsContainer>
                             </OutsideClickHandler>
-                        </MiddleRightContainer>
+                        </FlexDivCentered>
                     </MiddleContainer>
 
                     <RightContainer>

@@ -1,4 +1,3 @@
-import { SupportedLanguages } from 'enums/languages';
 import { League } from 'enums/sports';
 import { LeagueMap } from '../constants/sports';
 import { fixOneSideMarketCompetitorName } from './formatters/string';
@@ -74,25 +73,6 @@ export const getErrorImage = (league: League) => {
 
 export const getLeagueLogoClass = (league: League) => {
     return LeagueMap[league]?.logoClass || 'icon-homepage league--overtime';
-};
-
-export const getLanguageFlagSource = (language: SupportedLanguages | any) => {
-    switch (language) {
-        case SupportedLanguages.ENGLISH:
-            return `/logos/Countries/united-kingdom.svg`;
-        case SupportedLanguages.CHINESE:
-            return `/logos/Countries/china.svg`;
-        case SupportedLanguages.FRENCH:
-            return `/logos/Countries/france.svg`;
-        case SupportedLanguages.GERMAN:
-            return `/logos/Countries/germany.svg`;
-        case SupportedLanguages.SPANISH:
-            return `/logos/Countries/spain.svg`;
-        case SupportedLanguages.THAI:
-            return `/logos/Countries/thailand.svg`;
-        default:
-            return `/logos/Countries/united-kingdom.svg`;
-    }
 };
 
 export const getLeagueFlagSource = (tagId: number | any) => {
