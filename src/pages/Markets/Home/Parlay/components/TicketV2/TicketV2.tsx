@@ -1492,7 +1492,7 @@ const Ticket: React.FC<TicketProps> = ({
                     const liveTradeDataOdds = tradeData[0].odds;
                     const liveTradeDataPosition = tradeData[0].position;
                     const liveTotalQuote = BigInt(liveTradeDataOdds[liveTradeDataPosition]);
-                    const sgpTotalQuote = parseEther(totalQuote.toString());
+                    const sgpTotalQuote = parseEther((sgpData?.priceWithSpread || 0).toString());
 
                     if (isEth && !swapToThales) {
                         const WETHContractWithSigner = getContractInstance(
