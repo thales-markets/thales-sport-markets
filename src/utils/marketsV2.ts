@@ -440,7 +440,7 @@ export const updateTotalQuoteAndPayout = (tickets: Ticket[]): Ticket[] => {
         }
         if (ticket.isSgp) {
             const isSomeMarketCancelled = ticket.sportMarkets.some((market) => market.isCancelled);
-            if (isSomeMarketCancelled) {
+            if (isSomeMarketCancelled && !ticket.isLost) {
                 ticket.isCancelled = true;
                 ticket.totalQuote = 1;
                 ticket.payout = ticket.buyInAmount;
