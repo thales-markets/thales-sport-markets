@@ -49,7 +49,6 @@ import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common'
 import { addHoursToCurrentDate, localStore } from 'thales-utils';
 import { MarketsCache, SportMarket, SportMarkets, TagInfo, Tags, TicketPosition } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
-import { isTotalOrSpreadWithWholeLine } from 'utils/markets';
 import { getDefaultPlayerPropsLeague, isSameMarket } from 'utils/marketsV2';
 import { history } from 'utils/routes';
 import { getScrollMainContainerToTop } from 'utils/scroll';
@@ -574,12 +573,8 @@ const Home: React.FC = () => {
 
                 let openSportMarket = null;
                 if (isSgpEnabled && marketAvailableForSgp && selectedMarket.gameId === marketAvailableForSgp.gameId) {
-                    // filter SGP total/spread markets by lines which are not whole number
-                    const filteredChildMarkets = marketAvailableForSgp.childMarkets.filter(
-                        (sgpMarket) => !isTotalOrSpreadWithWholeLine(sgpMarket.typeId, sgpMarket.line)
-                    );
                     // filter SGP available markets by ticket common sportsbooks
-                    const marketAvailableForSgpCopy = { ...marketAvailableForSgp, childMarkets: filteredChildMarkets };
+                    const marketAvailableForSgpCopy = { ...marketAvailableForSgp };
                     if (ticket.length > 1) {
                         // markets from API already filtered by first ticket market
                         let ticketCommonSportsbooks: string[] = [];
@@ -919,12 +914,18 @@ const Home: React.FC = () => {
                                                 shouldCloseOnOverlayClick={false}
                                                 style={getCustomModalStyles(theme, '10')}
                                             >
-                                                <SelectedMarket market={selectedMarketData} />
+                                                <SelectedMarket
+                                                    market={selectedMarketData}
+                                                    isLoading={marketsAvailableForSgpQuery.isLoading}
+                                                />
                                             </ReactModal>
                                         ) : (
                                             isMarketSelected &&
                                             (statusFilter === StatusFilter.OPEN_MARKETS || !!selectedMarket?.live) && (
-                                                <SelectedMarket market={selectedMarketData} />
+                                                <SelectedMarket
+                                                    market={selectedMarketData}
+                                                    isLoading={marketsAvailableForSgpQuery.isLoading}
+                                                />
                                             )
                                         )}
                                     </FlexDivRow>

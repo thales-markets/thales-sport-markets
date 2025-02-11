@@ -4,6 +4,7 @@ import CollateralSelector from 'components/CollateralSelector';
 import OutsideClickHandler from 'components/OutsideClick';
 import SelectInput from 'components/SelectInput';
 import ShareTicketModalV2 from 'components/ShareTicketModalV2';
+import SimpleLoader from 'components/SimpleLoader';
 import Toggle from 'components/Toggle';
 import Tooltip from 'components/Tooltip';
 import Checkbox from 'components/fields/Checkbox';
@@ -66,7 +67,7 @@ import {
 import { getOddsType } from 'redux/modules/ui';
 import { getIsBiconomy, getIsConnectedViaParticle, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
-import { BoldContent, FlexDiv, FlexDivCentered } from 'styles/common';
+import { BoldContent, FlexDiv, FlexDivCentered, FlexDivColumn } from 'styles/common';
 import {
     Coins,
     DEFAULT_CURRENCY_DECIMALS,
@@ -2272,19 +2273,25 @@ const Ticket: React.FC<TicketProps> = ({
                     <SummaryLabel>
                         {isSystemBet ? t('markets.parlay.max-quote') : t('markets.parlay.total-quote')}:
                     </SummaryLabel>
-                    <Tooltip
-                        open={isQuoteTooltipEnabled}
-                        overlay={getQuoteTooltipText()}
-                        isValidation
-                        isWarning={!isQuoteTooltipError}
-                    >
-                        <SummaryValue fontSize={12}>
-                            {formatMarketOdds(
-                                selectedOddsType,
-                                isSystemBet ? systemData.systemBetQuotePerCombination : totalQuote
-                            )}
-                        </SummaryValue>
-                    </Tooltip>
+                    {isSgp && isValidSgpBet && !sgpData ? (
+                        <LoaderContainer>
+                            <SimpleLoader size={20} strokeWidth={4} />
+                        </LoaderContainer>
+                    ) : (
+                        <Tooltip
+                            open={isQuoteTooltipEnabled}
+                            overlay={getQuoteTooltipText()}
+                            isValidation
+                            isWarning={!isQuoteTooltipError}
+                        >
+                            <SummaryValue fontSize={12}>
+                                {formatMarketOdds(
+                                    selectedOddsType,
+                                    isSystemBet ? systemData.systemBetQuotePerCombination : totalQuote
+                                )}
+                            </SummaryValue>
+                        </Tooltip>
+                    )}
                     {oddsChanged && isTotalQuoteIncreased && <OddChangeUp />}
                     {oddsChanged && !isTotalQuoteIncreased && <OddChangeDown />}
                     {!isSystemBet && (
@@ -2791,5 +2798,11 @@ const FreeBetIcon = styled.i`
 `;
 
 const ToggleContainer = styled(FlexDiv)``;
+
+const LoaderContainer = styled(FlexDivColumn)`
+    position: relative;
+    max-width: 30px;
+    max-height: 30px;
+`;
 
 export default Ticket;
