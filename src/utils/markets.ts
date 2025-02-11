@@ -195,3 +195,6 @@ export const isWithinSlippage = (originalOdd: number, newOdd: number, slippage: 
 export const isFuturesMarket = (marketType: MarketType) => {
     return FUTURES_MARKET_TYPES.includes(marketType);
 };
+
+export const isTotalOrSpreadWithWholeLine = (marketType: MarketType, line: number) =>
+    (isTotalMarket(marketType) || isSpreadMarket(marketType)) && line % 1 === 0;

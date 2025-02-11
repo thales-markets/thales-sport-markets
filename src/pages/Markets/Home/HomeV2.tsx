@@ -49,6 +49,7 @@ import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common'
 import { addHoursToCurrentDate, localStore } from 'thales-utils';
 import { MarketsCache, SportMarket, SportMarkets, TagInfo, Tags, TicketPosition } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
+import { isTotalOrSpreadWithWholeLine } from 'utils/markets';
 import { getDefaultPlayerPropsLeague, isSameMarket } from 'utils/marketsV2';
 import { history } from 'utils/routes';
 import { getScrollMainContainerToTop } from 'utils/scroll';
@@ -538,7 +539,7 @@ const Home: React.FC = () => {
         return liveMarketsCount;
     }, [liveMarketsCountPerTag, favouriteLeagues]);
 
-    const isSgpEnabled = useMemo(() => isSgp && !!ticket.length, [isSgp, ticket.length]);
+    const isSgpEnabled = useMemo(() => isSgp && ticket.length > 0, [isSgp, ticket.length]);
 
     const marketsAvailableForSgpQuery = useSportMarketSgpQuery(
         ticket[0],
@@ -571,37 +572,39 @@ const Home: React.FC = () => {
                         ? openSportMarketsQuery.data[StatusFilter.OPEN_MARKETS]
                         : [];
 
-                let openSportMarket;
-                if (isSgpEnabled) {
-                    if (marketAvailableForSgp) {
-                        // filter SGP available markets by ticket common sportsbooks
-                        const marketAvailableForSgpCopy = { ...marketAvailableForSgp };
-                        // markets from API already filtered by first ticket market
-                        if (ticket.length > 1) {
-                            let ticketCommonSportsbooks: string[] = [];
-                            ticket.forEach((ticketPosition: TicketPosition, index) => {
-                                const isMoneyline = ticketPosition.typeId === 0;
-                                const sgpChildMarket = marketAvailableForSgpCopy.childMarkets.find((childMarket) =>
-                                    isSameMarket(childMarket, ticketPosition)
-                                );
-                                const sgpSportsbooks =
-                                    (isMoneyline
-                                        ? marketAvailableForSgpCopy.sgpSportsbooks
-                                        : sgpChildMarket?.sgpSportsbooks) || [];
-                                if (index === 0) {
-                                    ticketCommonSportsbooks = sgpSportsbooks;
-                                } else {
-                                    const commonSportsbooks = intersection(ticketCommonSportsbooks, sgpSportsbooks);
-                                    ticketCommonSportsbooks = commonSportsbooks;
-                                }
-                            });
-                            openSportMarket = marketAvailableForSgpCopy;
-                            openSportMarket.childMarkets = marketAvailableForSgpCopy.childMarkets.filter(
-                                (sgpMarket) => intersection(sgpMarket.sgpSportsbooks, ticketCommonSportsbooks).length
+                let openSportMarket = null;
+                if (isSgpEnabled && marketAvailableForSgp && selectedMarket.gameId === marketAvailableForSgp.gameId) {
+                    // filter SGP total/spread markets by lines which are not whole number
+                    const filteredChildMarkets = marketAvailableForSgp.childMarkets.filter(
+                        (sgpMarket) => !isTotalOrSpreadWithWholeLine(sgpMarket.typeId, sgpMarket.line)
+                    );
+                    // filter SGP available markets by ticket common sportsbooks
+                    const marketAvailableForSgpCopy = { ...marketAvailableForSgp, childMarkets: filteredChildMarkets };
+                    // markets from API already filtered by first ticket market
+                    if (ticket.length > 1) {
+                        let ticketCommonSportsbooks: string[] = [];
+                        ticket.forEach((ticketPosition: TicketPosition, index) => {
+                            const isMoneyline = ticketPosition.typeId === 0;
+                            const sgpChildMarket = marketAvailableForSgpCopy.childMarkets.find((childMarket) =>
+                                isSameMarket(childMarket, ticketPosition)
                             );
-                        } else {
-                            openSportMarket = marketAvailableForSgpCopy;
-                        }
+                            const sgpSportsbooks =
+                                (isMoneyline
+                                    ? marketAvailableForSgpCopy.sgpSportsbooks
+                                    : sgpChildMarket?.sgpSportsbooks) || [];
+                            if (index === 0) {
+                                ticketCommonSportsbooks = sgpSportsbooks;
+                            } else {
+                                const commonSportsbooks = intersection(ticketCommonSportsbooks, sgpSportsbooks);
+                                ticketCommonSportsbooks = commonSportsbooks;
+                            }
+                        });
+                        openSportMarket = marketAvailableForSgpCopy;
+                        openSportMarket.childMarkets = marketAvailableForSgpCopy.childMarkets.filter(
+                            (sgpMarket) => intersection(sgpMarket.sgpSportsbooks, ticketCommonSportsbooks).length
+                        );
+                    } else {
+                        openSportMarket = marketAvailableForSgpCopy;
                     }
                 } else {
                     openSportMarket = openSportMarkets.find(
