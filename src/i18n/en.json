@@ -799,7 +799,7 @@
             "empty-description": "Add position, choose a market and make your selection.",
             "accept-odds-changes": "Accept odds changes",
             "odds-changed-description": "Odds changed. Accept changes in order to buy.",
-            "trade-fulfilling-error": "Trade fulfilling is taking too long. Please try again.",
+            "odds-changed-error": "Odds changed while fulfilling the order. Try increasing the slippage.",
             "info": {
                 "min-quote": "Minimal TOTAL QUOTE supported is {{value}}",
                 "max-quote": "Maximal TOTAL QUOTE supported is {{value}}",

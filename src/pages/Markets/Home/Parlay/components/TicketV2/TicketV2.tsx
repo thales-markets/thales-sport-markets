@@ -1635,7 +1635,7 @@ const Ticket: React.FC<TicketProps> = ({
                             } else if (!isFulfilledTx) {
                                 setIsBuying(false);
                                 refetchBalances(walletAddress, networkId);
-                                toast.update(toastId, getErrorToastOptions(t('markets.parlay.trade-fulfilling-error')));
+                                toast.update(toastId, getErrorToastOptions(t('markets.parlay.odds-changed-error')));
                             } else {
                                 refetchBalances(walletAddress, networkId);
 
