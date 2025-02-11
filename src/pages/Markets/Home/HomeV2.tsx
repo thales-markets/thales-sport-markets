@@ -580,8 +580,8 @@ const Home: React.FC = () => {
                     );
                     // filter SGP available markets by ticket common sportsbooks
                     const marketAvailableForSgpCopy = { ...marketAvailableForSgp, childMarkets: filteredChildMarkets };
-                    // markets from API already filtered by first ticket market
                     if (ticket.length > 1) {
+                        // markets from API already filtered by first ticket market
                         let ticketCommonSportsbooks: string[] = [];
                         ticket.forEach((ticketPosition: TicketPosition, index) => {
                             const isMoneyline = ticketPosition.typeId === 0;
