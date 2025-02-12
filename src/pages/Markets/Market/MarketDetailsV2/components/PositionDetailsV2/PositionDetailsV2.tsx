@@ -12,7 +12,7 @@ import { getMarketTypeFilter, getSportFilter } from 'redux/modules/market';
 import { getTicket, removeFromTicket, updateTicket } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import { SportMarket, TicketPosition } from 'types/markets';
-import { formatMarketOdds, getPositionOrder, isFuturesMarket } from 'utils/markets';
+import { formatMarketOdds, getPositionOrder, isFuturesMarket, isTotalExactMarket } from 'utils/markets';
 import { getMatchLabel, getPositionTextV2, isSameMarket, sportMarketAsSerializable } from 'utils/marketsV2';
 import { Container, Odd, Status, Text } from './styled-components';
 
@@ -73,7 +73,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
         <Container
             hide={
                 ((showOdd && noOdd) || (!!isMainPageView && displayPosition >= FUTURES_MAIN_VIEW_DISPLAY_COUNT)) &&
-                (isFutures || isCorrectScore)
+                (isFutures || isCorrectScore || isTotalExactMarket(market.typeId))
             }
             disabled={disabledPosition}
             selected={isAddedToTicket}

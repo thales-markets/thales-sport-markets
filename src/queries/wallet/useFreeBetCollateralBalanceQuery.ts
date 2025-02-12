@@ -21,7 +21,6 @@ const useFreeBetCollateralBalanceQuery = (
 
                 if (!walletAddress || !networkConfig.networkId || !freeBetHolderContract || !multipleCollateral) {
                     return {
-                        sUSD: 0,
                         DAI: 0,
                         USDCe: 0,
                         USDT: 0,
@@ -36,7 +35,6 @@ const useFreeBetCollateralBalanceQuery = (
                 }
 
                 const [
-                    sUSDBalance,
                     DAIBalance,
                     USDCBalance,
                     USDCeBalance,
@@ -47,16 +45,6 @@ const useFreeBetCollateralBalanceQuery = (
                     USDbCBalance,
                     OVERBalance,
                 ] = await Promise.all([
-                    multipleCollateral[CRYPTO_CURRENCY_MAP.sUSD as Coins]?.addresses[
-                        networkConfig.networkId as SupportedNetwork
-                    ] !== TBD_ADDRESS
-                        ? freeBetHolderContract?.read.balancePerUserAndCollateral([
-                              walletAddress,
-                              multipleCollateral[CRYPTO_CURRENCY_MAP.sUSD as Coins]?.addresses[
-                                  networkConfig.networkId as SupportedNetwork
-                              ],
-                          ])
-                        : undefined,
                     multipleCollateral[CRYPTO_CURRENCY_MAP.DAI as Coins]?.addresses[
                         networkConfig.networkId as SupportedNetwork
                     ] !== TBD_ADDRESS
@@ -150,7 +138,6 @@ const useFreeBetCollateralBalanceQuery = (
                 ]);
 
                 return {
-                    sUSD: sUSDBalance ? bigNumberFormatter(sUSDBalance, COLLATERAL_DECIMALS.sUSD) : 0,
                     DAI: DAIBalance ? bigNumberFormatter(DAIBalance, COLLATERAL_DECIMALS.DAI) : 0,
                     USDC: USDCBalance ? bigNumberFormatter(USDCBalance, COLLATERAL_DECIMALS.USDC) : 0,
                     USDCe: USDCeBalance ? bigNumberFormatter(USDCeBalance, COLLATERAL_DECIMALS.USDCe) : 0,
@@ -165,7 +152,6 @@ const useFreeBetCollateralBalanceQuery = (
             } catch (e) {
                 console.log('e ', e);
                 return {
-                    sUSD: 0,
                     DAI: 0,
                     USDCe: 0,
                     USDT: 0,

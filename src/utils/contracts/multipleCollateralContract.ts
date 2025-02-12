@@ -757,15 +757,6 @@ const abi = [
 ];
 
 const multipleCollateral: Record<Coins, ContractData> = {
-    sUSD: {
-        addresses: {
-            [Network.OptimismMainnet]: '0x8c6f28f2F1A3C87F0f938b96d27520d9751ec8d9', // sUSD
-            [Network.Arbitrum]: TBD_ADDRESS,
-            [Network.Base]: TBD_ADDRESS,
-            [Network.OptimismSepolia]: TBD_ADDRESS,
-        },
-        abi,
-    },
     DAI: {
         addresses: {
             [Network.OptimismMainnet]: '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1',

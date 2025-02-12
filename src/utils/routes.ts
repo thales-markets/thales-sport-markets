@@ -27,7 +27,7 @@ export const buildDepositOrWithdrawLink = (language: string, page: string, coinI
 };
 
 export const buildSpeedMarketsBannerHref = () =>
-    `${LINKS.SpeedMarkets}/speed-markets?utm_source=internal&utm_medium=ot_banner&utm_campaign=speed_markets_jan_2025`;
+    `${LINKS.SpeedMarkets}/speed-markets?utm_source=internal&utm_medium=ot_banner&utm_campaign=speed_markets_feb_2025`;
 
 export const getMetaRouteItem = (pathName: string) => {
     if (pathName.includes(ROUTES.Markets.Home + '/')) return MetaRoutes.SingleMarket;

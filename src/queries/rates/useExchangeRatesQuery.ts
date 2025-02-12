@@ -36,9 +36,6 @@ const useExchangeRatesQuery = (
                     if (currencyName === CRYPTO_CURRENCY_MAP.USDC) {
                         exchangeRates[`${currencyName}e`] = bigNumberFormatter(rates[idx]);
                     }
-                    if (currencyName === 'SUSD') {
-                        exchangeRates[`sUSD`] = bigNumberFormatter(rates[idx]);
-                    }
                     if (currencyName === CRYPTO_CURRENCY_MAP.ETH) {
                         exchangeRates[`W${currencyName}`] = bigNumberFormatter(rates[idx]);
                     }

@@ -6,7 +6,6 @@ import { SupportedNetwork } from 'types/network';
 export const USD_SIGN = '$';
 
 const CRYPTO_CURRENCY = [
-    'sUSD',
     'DAI',
     'USDCe',
     'USDC',
@@ -27,7 +26,6 @@ const CRYPTO_CURRENCY = [
 export const CRYPTO_CURRENCY_MAP = keyBy(CRYPTO_CURRENCY);
 
 export const STABLE_COINS = [
-    CRYPTO_CURRENCY_MAP.sUSD as Coins,
     CRYPTO_CURRENCY_MAP.DAI as Coins,
     CRYPTO_CURRENCY_MAP.USDCe as Coins,
     CRYPTO_CURRENCY_MAP.USDC as Coins,
@@ -39,7 +37,6 @@ export const COLLATERALS: Record<SupportedNetwork, Coins[]> = {
     [Network.OptimismMainnet]: [
         CRYPTO_CURRENCY_MAP.USDC as Coins,
         CRYPTO_CURRENCY_MAP.OVER as Coins,
-        CRYPTO_CURRENCY_MAP.sUSD as Coins,
         CRYPTO_CURRENCY_MAP.USDCe as Coins,
         CRYPTO_CURRENCY_MAP.DAI as Coins,
         CRYPTO_CURRENCY_MAP.USDT as Coins,
@@ -80,7 +77,6 @@ export const FREE_BET_COLLATERALS: Record<SupportedNetwork, Coins[]> = {
     [Network.OptimismMainnet]: [
         CRYPTO_CURRENCY_MAP.USDC as Coins,
         CRYPTO_CURRENCY_MAP.OVER as Coins,
-        CRYPTO_CURRENCY_MAP.sUSD as Coins,
         CRYPTO_CURRENCY_MAP.USDCe as Coins,
         CRYPTO_CURRENCY_MAP.DAI as Coins,
         CRYPTO_CURRENCY_MAP.USDT as Coins,
@@ -112,7 +108,6 @@ export const FREE_BET_COLLATERALS: Record<SupportedNetwork, Coins[]> = {
 };
 
 export const COLLATERAL_ICONS_CLASS_NAMES: Record<Coins, string> = {
-    sUSD: 'currency-icon currency-icon--susd',
     DAI: 'currency-icon currency-icon--dai',
     USDCe: 'currency-icon currency-icon--usdce',
     USDC: 'currency-icon currency-icon--usdc',
@@ -130,7 +125,6 @@ export const COLLATERAL_ICONS_CLASS_NAMES: Record<Coins, string> = {
 };
 
 export const DEFAULT_MULTI_COLLATERAL_BALANCE = {
-    sUSD: 0,
     DAI: 0,
     USDCe: 0,
     USDbC: 0,

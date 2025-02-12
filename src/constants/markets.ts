@@ -10,7 +10,6 @@ export const APPROVAL_BUFFER = 0.01;
 export const SWAP_APPROVAL_BUFFER = 0.03;
 
 export const ALTCOIN_CONVERSION_BUFFER_PERCENTAGE = 0.025; // 2.5%
-export const SUSD_CONVERSION_BUFFER_PERCENTAGE = 0.03; // 3%
 export const COINGECKO_SWAP_TO_OVER_QUOTE_SLIPPAGE: Record<SupportedNetwork, number> = {
     [NetworkId.OptimismMainnet]: 0.03, // 3%
     [NetworkId.OptimismSepolia]: 0.03,

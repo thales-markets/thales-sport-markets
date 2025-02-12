@@ -23,7 +23,6 @@ const useCoingeckoRatesQuery = (options?: Omit<UseQueryOptions<any>, 'queryKey' 
                 OP: 0,
                 ETH: 0,
                 WETH: 0,
-                sUSD: 1,
                 DAI: 1,
                 USDCe: 1,
                 USDC: 1,

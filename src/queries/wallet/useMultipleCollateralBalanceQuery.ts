@@ -25,11 +25,6 @@ const useMultipleCollateralBalanceQuery = (
             let collateralsBalance: CollateralsBalance = DEFAULT_MULTI_COLLATERAL_BALANCE;
             try {
                 const multipleCollateralObject = {
-                    sUSD: getContractInstance(
-                        ContractType.MULTICOLLATERAL,
-                        networkConfig,
-                        getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.sUSD as Coins)
-                    ) as ViemContract,
                     DAI: getContractInstance(
                         ContractType.MULTICOLLATERAL,
                         networkConfig,
@@ -98,7 +93,6 @@ const useMultipleCollateralBalanceQuery = (
                 }
 
                 const [
-                    sUSDBalance,
                     DAIBalance,
                     USDCBalance,
                     USDCeBalance,
@@ -113,9 +107,6 @@ const useMultipleCollateralBalanceQuery = (
                     cbBTCBalance,
                     wBTCBalance,
                 ] = await Promise.all([
-                    multipleCollateralObject?.sUSD && multipleCollateralObject?.sUSD?.address !== TBD_ADDRESS
-                        ? multipleCollateralObject.sUSD.read.balanceOf([walletAddress])
-                        : 0,
                     multipleCollateralObject?.DAI && multipleCollateralObject?.DAI?.address !== TBD_ADDRESS
                         ? multipleCollateralObject.DAI.read.balanceOf([walletAddress])
                         : 0,
@@ -156,7 +147,6 @@ const useMultipleCollateralBalanceQuery = (
                 ]);
 
                 collateralsBalance = {
-                    sUSD: sUSDBalance ? bigNumberFormatter(sUSDBalance, COLLATERAL_DECIMALS.sUSD) : 0,
                     DAI: DAIBalance ? bigNumberFormatter(DAIBalance, COLLATERAL_DECIMALS.DAI) : 0,
                     USDC: USDCBalance ? bigNumberFormatter(USDCBalance, COLLATERAL_DECIMALS.USDC) : 0,
                     USDCe: USDCeBalance ? bigNumberFormatter(USDCeBalance, COLLATERAL_DECIMALS.USDCe) : 0,
