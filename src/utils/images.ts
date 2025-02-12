@@ -89,6 +89,7 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.NFL_FUTURES:
         case League.NBA_FUTURES:
         case League.NHL_FUTURES:
+        case League.USA_NWSL:
             return `/logos/Countries/united-states-of-america.svg`;
         case League.EPL:
         case League.ENGLAND_CHAMPIONSHIP:
@@ -175,6 +176,8 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.CHINA_SUPER_LEAGUE:
             return `/logos/Countries/china.svg`;
         case League.AUSTRALIA_A_LEAGUE:
+        case League.AUSTRALIA_NBL:
+        case League.AUSTRALIA_A_LEAGUE_WOMEN:
             return `/logos/Countries/australia.svg`;
         case League.SWITZERLAND_SUPER_LEAGUE:
             return `/logos/Countries/switzerland.svg`;
@@ -239,8 +242,6 @@ export const getLeagueFlagSource = (tagId: number | any) => {
             return '/logos/Countries/south-america.webp';
         case League.CHINA_CBA:
             return `/logos/Countries/china.svg`;
-        case League.AUSTRALIA_NBL:
-            return `/logos/Countries/australia.svg`;
         case League.AFC_CHAMPIONS_LEAGUE:
             return `/logos/Countries/afc-champions-league.webp`;
         case League.THAILAND_LEAGUE_1:
