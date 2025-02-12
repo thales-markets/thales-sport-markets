@@ -96,6 +96,7 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.ENGLAND_LEGAUE_1:
         case League.EPL_FUTURES:
         case League.ENGLAND_FA_CUP:
+        case League.ENGLAND_SUPER_LEAGUE_WOMEN:
             return `/logos/Countries/england.svg`;
         case League.LIGUE_ONE:
         case League.LIGUE_2:
@@ -103,24 +104,28 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.LIGUE_ONE_FUTURES:
         case League.FRANCE_SUPER_CUP:
         case League.FRANCE_CUP:
+        case League.FRANCE_PREMIERE_LIGUE_WOMEN:
             return `/logos/Countries/france.svg`;
         case League.BUNDESLIGA:
         case League.BUNDESLIGA_2:
         case League.GERMANY_BBL:
         case League.BUNDESLIGA_FUTURES:
         case League.GERMANY_SUPER_CUP:
+        case League.GERMANY_BUNDESLIGA_WOMEN:
             return `/logos/Countries/germany.svg`;
         case League.LA_LIGA:
         case League.LA_LIGA_2:
         case League.SPAIN_LIGA_ACB:
         case League.LA_LIGA_FUTURES:
         case League.SPAIN_SUPER_CUP:
+        case League.SPAIN_LIGA_F_WOMEN:
             return `/logos/Countries/spain.svg`;
         case League.SERIE_A:
         case League.SERIE_B:
         case League.ITALY_LEGA_BASKET_SERIE_A:
         case League.SERIE_A_FUTURES:
         case League.ITALY_SUPER_CUP:
+        case League.ITALY_SERIE_A_WOMEN:
             return `/logos/Countries/italy.svg`;
         case League.J1_LEAGUE:
             return `/logos/Countries/japan.svg`;
@@ -128,6 +133,7 @@ export const getLeagueFlagSource = (tagId: number | any) => {
             return `/logos/Countries/india.svg`;
         case League.EREDIVISIE:
         case League.NETHERLANDS_CUP:
+        case League.NETHERLANDS_EREDIVISIE_WOMEN:
             return `/logos/Countries/netherlands.svg`;
         case League.PRIMEIRA_LIGA:
         case League.PORTUGAL_LEAGUE_CUP:
@@ -145,6 +151,7 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.SCOTLAND_PREMIERSHIP:
             return `/logos/Countries/scotland.svg`;
         case League.BELGIUM_LEAGUE:
+        case League.BELGIUM_SUPER_LEAGUE_WOMEN:
             return `/logos/Countries/belgium.svg`;
         case League.CZECH_LEAGUE:
             return `/logos/Countries/czech-republic.svg`;
@@ -195,6 +202,7 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.UEFA_SUPER_CUP:
         case League.UEFA_CHAMPIONS_LEAGUE_FUTURES:
         case League.EUROLEAGUE_FUTURES:
+        case League.UEFA_CHAMPIONS_LEAGUE_WOMEN:
             return `/logos/Countries/europe.svg`;
         case League.EUROLEAGUE:
         case League.EUROCUP:
