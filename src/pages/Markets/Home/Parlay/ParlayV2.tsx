@@ -369,20 +369,18 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                     />
                 </>
             ) : (
-                <>
-                    <Empty>
-                        <EmptyLabel>{t('markets.parlay.empty-title')}</EmptyLabel>
-                        <StyledParlayEmptyIcon
-                            style={{
-                                marginTop: 10,
-                                marginBottom: 20,
-                                width: '100px',
-                                height: '100px',
-                            }}
-                        />
-                        <EmptyDesc>{t('markets.parlay.empty-description')}</EmptyDesc>
-                    </Empty>
-                </>
+                <Empty>
+                    <EmptyLabel>{t('markets.parlay.empty-title')}</EmptyLabel>
+                    <StyledParlayEmptyIcon
+                        style={{
+                            marginTop: 10,
+                            marginBottom: 20,
+                            width: '100px',
+                            height: '100px',
+                        }}
+                    />
+                    <EmptyDesc>{t('markets.parlay.empty-description')}</EmptyDesc>
+                </Empty>
             )}
             {hasTicketError && <ValidationModal onClose={onCloseValidationModal} />}
         </Container>

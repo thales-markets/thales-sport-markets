@@ -323,10 +323,12 @@ const Ticket: React.FC<TicketProps> = ({
         if (isLiveTicket) {
             dispatch(setIsSystemBet(false));
             dispatch(setIsSgp(false));
+            acceptOddChanges && acceptOddChanges(false); // reset odds changes
         } else if (isSgp) {
             dispatch(setIsSystemBet(false));
+            acceptOddChanges && acceptOddChanges(false); // reset odds changes
         }
-    }, [dispatch, isSystemBet, isLiveTicket, isSgp]);
+    }, [dispatch, acceptOddChanges, isSystemBet, isLiveTicket, isSgp]);
 
     useEffect(() => {
         if (markets.length <= systemBetDenominator) {
@@ -2292,8 +2294,8 @@ const Ticket: React.FC<TicketProps> = ({
                             </SummaryValue>
                         </Tooltip>
                     )}
-                    {oddsChanged && isTotalQuoteIncreased && <OddChangeUp />}
-                    {oddsChanged && !isTotalQuoteIncreased && <OddChangeDown />}
+                    {isSgp && oddsChanged && isTotalQuoteIncreased && <OddChangeUp />}
+                    {isSgp && oddsChanged && !isTotalQuoteIncreased && <OddChangeDown />}
                     {!isSystemBet && (
                         <ClearLabel alignRight={true} onClick={() => dispatch(removeAll())}>
                             {t('markets.parlay.clear')}
