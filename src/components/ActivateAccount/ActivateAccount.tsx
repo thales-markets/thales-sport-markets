@@ -19,6 +19,7 @@ import { activateOvertimeAccount } from 'utils/biconomy';
 import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateralAddress, getCollateralIndex, getCollaterals } from 'utils/collaterals';
 import { isSmallDevice } from 'utils/device';
+import { getShowFundModal } from 'utils/fundModal';
 import { Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient } from 'wagmi';
@@ -103,8 +104,9 @@ const ActivateAccount: React.FC<any> = () => {
                     } else {
                         setShowSuccessfulDepositModal(true);
                     }
-                } else {
+                } else if (getShowFundModal()) {
                     setShowSuccessfulDepositModal(true);
+                    setShowFundModal(false);
                 }
             } else {
                 setShowFundModal(true);
