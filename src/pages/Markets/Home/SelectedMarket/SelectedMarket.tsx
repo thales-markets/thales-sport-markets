@@ -83,10 +83,10 @@ const SelectedMarket: React.FC<{ market: SportMarket | undefined; isLoading: boo
                         }}
                     />
                 </HeaderContainer>
-                {market && !isLoading ? (
+                {market ? (
                     !isMarketPaused ? (
                         <>
-                            <SelectedMarketDetails market={market} />
+                            <SelectedMarketDetails market={market} isLoading={isLoading} />
                             {isMobile && <TicketTransactions market={market} isOnSelectedMarket />}
                         </>
                     ) : (

@@ -1,10 +1,14 @@
 import Button from 'components/Button';
 import Scroll from 'components/Scroll';
+import SimpleLoader from 'components/SimpleLoader';
 import { MarketTypeGroupsBySport, PLAYER_PROPS_MARKET_TYPES } from 'constants/marketTypes';
+import { SportFilter } from 'enums/markets';
 import { MarketType } from 'enums/marketTypes';
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import { t } from 'i18next';
 import { groupBy } from 'lodash';
-import React, { useMemo, useReducer } from 'react';
+import React, { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import Scrollbars from 'react-custom-scrollbars-2';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import {
@@ -13,7 +17,8 @@ import {
     getSportFilter,
     setMarketTypeGroupFilter,
 } from 'redux/modules/market';
-import { useTheme } from 'styled-components';
+import styled, { useTheme } from 'styled-components';
+import { FlexDivCentered } from 'styles/common';
 import { SportMarket } from 'types/markets';
 import { isOddValid } from 'utils/marketsV2';
 import { League } from '../../../../enums/sports';
@@ -21,13 +26,15 @@ import { ThemeInterface } from '../../../../types/ui';
 import { isFuturesMarket } from '../../../../utils/markets';
 import PositionsV2 from '../../Market/MarketDetailsV2/components/PositionsV2';
 import { NoMarketsContainer, NoMarketsLabel, Wrapper } from './styled-components';
-import { SportFilter } from 'enums/markets';
 
 type SelectedMarketProps = {
     market: SportMarket;
+    isLoading?: boolean;
 };
 
-const SelectedMarket: React.FC<SelectedMarketProps> = ({ market }) => {
+const LINE_HEIGHT_FOR_SCROLL_DIFF = 53;
+
+const SelectedMarket: React.FC<SelectedMarketProps> = ({ market, isLoading }) => {
     const theme: ThemeInterface = useTheme();
     const dispatch = useDispatch();
     const isGameStarted = market.maturityDate < new Date();
@@ -36,6 +43,9 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ market }) => {
     const isMobile = useSelector(getIsMobile);
     const sportFilter = useSelector(getSportFilter);
     const selectedMarket = useSelector(getSelectedMarket);
+
+    const [scrollRef, setScrollRef] = useState<Scrollbars | undefined>(undefined);
+    const [lastScrollTopPosition, setLastScrollTopPosition] = useState(0);
 
     const playerName = useMemo(() => selectedMarket?.playerName, [selectedMarket?.playerName]);
 
@@ -91,9 +101,41 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ market }) => {
 
     const hideGame = isGameOpen && !areOddsValid && !areChildMarketsOddsValid;
 
+    const onRefChange = useCallback(
+        (scroll: Scrollbars) => {
+            if (scroll) {
+                setScrollRef(scroll);
+            }
+        },
+        [setScrollRef]
+    );
+
+    // when markets are reloaded keep scroll to the same selected line
+    const prevIsLoading = useRef<boolean>(!!isLoading);
+    const prevNumberOfMarkets = useRef(numberOfMarkets);
+    useEffect(() => {
+        if (prevIsLoading.current && !isLoading) {
+            const positionDiff = (prevNumberOfMarkets.current - numberOfMarkets) * LINE_HEIGHT_FOR_SCROLL_DIFF;
+            scrollRef?.scrollTop(lastScrollTopPosition - positionDiff);
+        }
+        prevIsLoading.current = !!isLoading;
+        prevNumberOfMarkets.current = numberOfMarkets;
+    }, [isLoading, scrollRef, lastScrollTopPosition, numberOfMarkets]);
+
     return (
-        <Scroll height={`calc(100vh - ${isMobile ? 0 : market.leagueId === League.US_ELECTION ? 280 : 194}px)`}>
-            <Wrapper hideGame={hideGame}>
+        <Scroll
+            innerRef={onRefChange}
+            height={`calc(100vh - ${isMobile ? 0 : market.leagueId === League.US_ELECTION ? 280 : 194}px)`}
+            onScrollStop={() => {
+                !isLoading && setLastScrollTopPosition(scrollRef?.getScrollTop() || 0);
+            }}
+        >
+            {isLoading && (
+                <LoaderContainer>
+                    <SimpleLoader />
+                </LoaderContainer>
+            )}
+            <Wrapper hideGame={hideGame || !!isLoading}>
                 {numberOfMarkets === 0 ? (
                     <NoMarketsContainer>
                         <NoMarketsLabel>{`${t('market.no-markets-found')} ${marketTypeGroupFilter}`}</NoMarketsLabel>
@@ -141,5 +183,17 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ market }) => {
         </Scroll>
     );
 };
+
+const LoaderContainer = styled(FlexDivCentered)`
+    position: relative;
+    width: 100%;
+    min-height: 600px;
+    background-color: ${(props) => props.theme.background.quinary};
+    border-radius: 0 0 8px 8px;
+    flex: 1;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        min-height: 400px;
+    }
+`;
 
 export default SelectedMarket;
