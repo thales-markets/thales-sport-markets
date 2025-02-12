@@ -10,7 +10,7 @@ import Checkbox from 'components/fields/Checkbox/Checkbox';
 import { MarketTypePlayerPropsGroupsBySport } from 'constants/marketTypes';
 import { RESET_STATE } from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { minutesToMilliseconds } from 'date-fns';
+import { secondsToMilliseconds } from 'date-fns';
 import { SportFilter, StatusFilter } from 'enums/markets';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
@@ -543,7 +543,7 @@ const Home: React.FC = () => {
     const marketsAvailableForSgpQuery = useSportMarketSgpQuery(
         ticket[0],
         { networkId },
-        { enabled: isSgpEnabled, refetchInterval: minutesToMilliseconds(1) }
+        { enabled: isSgpEnabled, refetchInterval: secondsToMilliseconds(30) }
     );
 
     const marketAvailableForSgp = useMemo(
