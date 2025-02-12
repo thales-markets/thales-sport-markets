@@ -1,9 +1,9 @@
-let showFundModal = true;
+let fundModalShown = true;
 
-export const setShowFundModal = (value: boolean) => {
-    showFundModal = value;
+export const setFundModalShown = (value: boolean) => {
+    fundModalShown = value;
 };
 
-export const getShowFundModal = () => {
-    return showFundModal;
+export const getFundModalShown = () => {
+    return fundModalShown;
 };
