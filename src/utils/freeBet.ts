@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { generalConfig } from 'config/general';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { Network } from 'enums/network';
 import { t } from 'i18next';
@@ -16,9 +17,8 @@ export const claimFreeBet = async (
     if (walletAddress) {
         try {
             const response = await axios.post(
-                // `${generalConfig.API_URL}/overtime-v2/networks/${Network.OptimismMainnet}/claim-free-bet`,
-                // hardcode optimisim for now
-                `http://localhost:3002/overtime-v2/networks/${
+                // hardcode optimism for now
+                `${generalConfig.API_URL}/overtime-v2/networks/${
                     networkId !== Network.OptimismMainnet && networkId !== Network.OptimismSepolia
                         ? Network.OptimismMainnet
                         : networkId

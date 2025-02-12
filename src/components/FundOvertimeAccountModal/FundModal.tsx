@@ -1,3 +1,4 @@
+import Button from 'components/Button';
 import DepositFromWallet from 'components/DepositFromWallet/DepositFromWallet';
 import Modal from 'components/Modal';
 import Tooltip from 'components/Tooltip';
@@ -16,7 +17,7 @@ import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
-import { FlexDivCentered, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
+import { Colors, FlexDivCentered, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import biconomyConnector from 'utils/biconomyWallet';
@@ -210,12 +211,6 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                         <FieldHeader>{t('get-started.fund-account.buy-crypto')}</FieldHeader>
                         <Icon className="icon icon--card" />
                     </Box>
-                    {!!freeBet && (
-                        <Box onClick={onClaimFreeBet}>
-                            <FieldHeader>{t('get-started.fund-account.claim-free-bet')}</FieldHeader>
-                            <Icon className="currency-icon currency-icon--over" />
-                        </Box>
-                    )}
                     <Tooltip
                         customIconStyling={{ color: theme.textColor.secondary }}
                         overlay={t('get-started.fund-account.tooltip-4')}
@@ -239,6 +234,21 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                             <Icon className="icon icon--affiliate" />
                         </Box>
                     </Tooltip>
+                </Container>
+                <Container>
+                    {!!freeBet && (
+                        <ClaimBetButton
+                            onClick={onClaimFreeBet}
+                            borderColor="none"
+                            height="42px"
+                            lineHeight="16px"
+                            padding="0"
+                            backgroundColor={Colors.YELLOW}
+                        >
+                            {t('get-started.fund-account.claim-free-bet')}
+                            <HandsIcon className="icon icon--hands-coins" />
+                        </ClaimBetButton>
+                    )}
                 </Container>
             </Wrapper>
             {showQRModal && (
@@ -415,6 +425,32 @@ const CloseIcon = styled.i.attrs({ className: 'icon icon--close' })`
     top: 15px;
     right: 15px;
     cursor: pointer;
+`;
+
+const HandsIcon = styled.i`
+    font-weight: 500;
+    margin-left: 5px;
+    font-size: 22px;
+    color: ${(props) => props.theme.textColor.tertiary};
+`;
+
+const ClaimBetButton = styled(Button)`
+    width: 100%;
+    &.pulse {
+        animation: pulsing 1.5s ease-in;
+        animation-iteration-count: infinite;
+        @keyframes pulsing {
+            0% {
+                box-shadow: 0 0 0 0px rgba(237, 185, 41, 0.6);
+            }
+            50% {
+                box-shadow: 0 0 0 0px rgba(237, 185, 41, 0.4);
+            }
+            100% {
+                box-shadow: 0 0 0 20px rgba(237, 185, 41, 0);
+            }
+        }
+    }
 `;
 
 export default FundModal;

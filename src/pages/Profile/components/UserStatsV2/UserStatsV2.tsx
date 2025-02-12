@@ -493,17 +493,18 @@ const UserStats: React.FC = () => {
                     </SectionWrapper>
                 )}
                 {!!freeBet && (
-                    <Button
+                    <ClaimBetButton
                         onClick={onClaimFreeBet}
                         borderColor="none"
                         height="42px"
                         lineHeight="16px"
                         padding="0"
                         backgroundColor={Colors.YELLOW}
+                        className="pulse"
                     >
                         {t('profile.account-summary.claim-free-bet')}
                         <HandsIcon className="icon icon--hands-coins" />
-                    </Button>
+                    </ClaimBetButton>
                 )}
             </Wrapper>
             <Wrapper>
@@ -717,6 +718,24 @@ const HandsIcon = styled.i`
     margin-left: 5px;
     font-size: 22px;
     color: ${(props) => props.theme.textColor.tertiary};
+`;
+
+const ClaimBetButton = styled(Button)`
+    &.pulse {
+        animation: pulsing 1.5s ease-in;
+        animation-iteration-count: infinite;
+        @keyframes pulsing {
+            0% {
+                box-shadow: 0 0 0 0px rgba(237, 185, 41, 0.6);
+            }
+            50% {
+                box-shadow: 0 0 0 0px rgba(237, 185, 41, 0.4);
+            }
+            100% {
+                box-shadow: 0 0 0 20px rgba(237, 185, 41, 0);
+            }
+        }
+    }
 `;
 
 export default UserStats;

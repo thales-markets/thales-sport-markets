@@ -6,7 +6,6 @@ import NavMenuMobile from 'components/NavMenuMobile';
 import SPAAnchor from 'components/SPAAnchor';
 import Search from 'components/Search';
 import ThalesToOverMigrationModal from 'components/ThalesToOverMigrationModal';
-import Tooltip from 'components/Tooltip';
 import WalletInfo from 'components/WalletInfo';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
 import ROUTES from 'constants/routes';
@@ -200,30 +199,28 @@ const DappHeader: React.FC = () => {
 
                     <RightContainer>
                         {!isConnected && (
-                            <Tooltip overlay={t('get-started.sing-in-to-claim-free-bet')} showArrow={false}>
-                                <Button
-                                    backgroundColor={theme.button.background.quinary}
-                                    textColor={theme.button.textColor.primary}
-                                    borderColor={theme.button.borderColor.quinary}
-                                    additionalStyles={{
-                                        borderRadius: '22px',
-                                        fontWeight: '800',
-                                        fontSize: '12px',
-                                        padding: '9px 20px',
-                                        width: '100px',
-                                        height: '30px',
-                                    }}
-                                    onClick={() =>
-                                        dispatch(
-                                            setWalletConnectModalVisibility({
-                                                visibility: true,
-                                            })
-                                        )
-                                    }
-                                >
-                                    {t('get-started.sign-up')}
-                                </Button>
-                            </Tooltip>
+                            <Button
+                                backgroundColor={theme.button.background.quinary}
+                                textColor={theme.button.textColor.primary}
+                                borderColor={theme.button.borderColor.quinary}
+                                additionalStyles={{
+                                    borderRadius: '22px',
+                                    fontWeight: '800',
+                                    fontSize: '12px',
+                                    padding: '9px 20px',
+                                    width: '100px',
+                                    height: '30px',
+                                }}
+                                onClick={() =>
+                                    dispatch(
+                                        setWalletConnectModalVisibility({
+                                            visibility: true,
+                                        })
+                                    )
+                                }
+                            >
+                                {t('get-started.sign-up')}
+                            </Button>
                         )}
                         <WalletInfo />
                         <MenuIconContainer>

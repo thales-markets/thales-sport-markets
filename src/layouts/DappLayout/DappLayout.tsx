@@ -1,23 +1,29 @@
 import axios from 'axios';
 import MetaData from 'components/MetaData';
 import { generalConfig } from 'config/general';
+import ROUTES from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { Theme } from 'enums/ui';
 import useLocalStorage from 'hooks/useLocalStorage';
 import useWidgetBotScript from 'hooks/useWidgetBotScript';
 import ModalWrapper from 'pages/Overdrop/components/ModalWrapper';
 import queryString from 'query-string';
-import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { setTheme } from 'redux/modules/ui';
+import { getIsBiconomy, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
 import { isAndroid, isMetamask } from 'thales-utils';
+import { RootState } from 'types/redux';
+import biconomyConnector from 'utils/biconomyWallet';
 import { isMobile } from 'utils/device';
 import { setReferralId } from 'utils/referral';
+import { navigateTo } from 'utils/routes';
+import { useAccount } from 'wagmi';
 import Banner from '../../components/Banner';
 import DappFooter from './DappFooter';
 import DappHeader from './DappHeader';
@@ -34,9 +40,42 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
         location.search
     );
 
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+
+    const history = useHistory();
+    const { address } = useAccount();
+
+    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+    const walletRef = useRef(walletAddress);
+    walletRef.current = walletAddress;
+
     const [, setFreeBet] = useLocalStorage<string | undefined>(LOCAL_STORAGE_KEYS.FREE_BET_ID, undefined);
 
     const [preventDiscordWidgetLoad, setPreventDiscordWidgetLoad] = useState(true);
+
+    useEffect(() => {
+        setTimeout(() => {
+            if (queryParams.freeBet) {
+                setFreeBet(queryParams.freeBet);
+                if (!walletRef.current) {
+                    dispatch(
+                        setWalletConnectModalVisibility({
+                            visibility: true,
+                        })
+                    );
+                } else {
+                    navigateTo(ROUTES.Profile);
+                }
+                const urlSearchParams = new URLSearchParams(location.search);
+                if (urlSearchParams.has('freeBet')) {
+                    urlSearchParams.delete('freeBet');
+                    history.replace({
+                        search: urlSearchParams.toString(),
+                    });
+                }
+            }
+        }, 2000);
+    }, [walletAddress, dispatch, queryParams.freeBet, history, location.search, setFreeBet]);
 
     useEffect(() => {
         if (queryParams.referralId) {
@@ -58,10 +97,7 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
             };
             fetchIdAddress();
         }
-        if (queryParams.freeBet) {
-            setFreeBet(queryParams.freeBet);
-        }
-    }, [queryParams.referralId, queryParams.referrerId, queryParams.freeBet, setFreeBet]);
+    }, [queryParams.referralId, queryParams.referrerId]);
 
     useEffect(() => {
         dispatch(setTheme(Theme.DARK));

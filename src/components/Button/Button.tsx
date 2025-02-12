@@ -16,6 +16,7 @@ type ButtonProps = {
     disabled?: boolean;
     additionalStyles?: CSSProperties;
     children?: any;
+    className?: string;
 };
 
 const Button: React.FC<ButtonProps> = ({

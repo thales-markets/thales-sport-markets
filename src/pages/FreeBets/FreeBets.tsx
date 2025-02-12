@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Button from 'components/Button';
 import NumericInput from 'components/fields/NumericInput';
+import { generalConfig } from 'config/general';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { t } from 'i18next';
 import { useCallback, useState } from 'react';
@@ -24,8 +25,7 @@ const FreeBets: React.FC = () => {
         if (walletAddress && signature) {
             try {
                 const response = await axios.post(
-                    // `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/generate-free-bets`,
-                    `http://localhost:3002/overtime-v2/networks/${networkId}/generate-free-bets`,
+                    `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/generate-free-bets`,
                     {
                         betAmount,
                         numberOfBets,
