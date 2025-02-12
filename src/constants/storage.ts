@@ -33,7 +33,6 @@ export const LOCAL_STORAGE_KEYS = {
         [NetworkId.Arbitrum]: 'sessionValidUntil_42161',
         [NetworkId.OptimismSepolia]: 'sessionValidUntil_11155420',
     } as Record<SupportedNetwork, string>,
-    STAKING_MODAL_MUTE_END: 'stakingModalMuteEnd',
     IS_SYSTEM_BET: 'isSystemBet',
     SYSTEM_BET_DENOMINATOR: 'systemBetDenominator',
     ERROR_RELOAD_TIME: 'errorReloadTime',
