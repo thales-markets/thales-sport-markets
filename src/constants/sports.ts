@@ -1427,7 +1427,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
     [League.SPAIN_LIGA_F_WOMEN]: {
         sport: Sport.SOCCER,
         id: League.SPAIN_LIGA_F_WOMEN,
-        label: 'Spain - Liga F Women',
+        label: 'Spain Liga F Women',
         scoringType: ScoringType.GOALS,
         matchResolveType: MatchResolveType.REGULAR,
         periodType: PeriodType.HALF,
