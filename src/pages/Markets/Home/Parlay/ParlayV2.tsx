@@ -110,6 +110,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                       legs: null,
                       price: null,
                       priceWithSpread: null,
+                      maxImpliedSupportedOdds: 0,
                   };
         }
         return undefined;

@@ -25,6 +25,7 @@ const useSgpDataQuery = (
                         legs: null,
                         price: null,
                         priceWithSpread: null,
+                        maxImpliedSupportedOdds: 0,
                     },
                 },
             };
