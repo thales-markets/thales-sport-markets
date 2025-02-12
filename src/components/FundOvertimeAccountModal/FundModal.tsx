@@ -1,6 +1,7 @@
 import Button from 'components/Button';
 import DepositFromWallet from 'components/DepositFromWallet/DepositFromWallet';
 import Modal from 'components/Modal';
+import NetworkSwitcher from 'components/NetworkSwitcher';
 import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
 import { COLLATERAL_ICONS } from 'constants/currency';
@@ -44,9 +45,14 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
 
     const client = useClient();
     const { address, isConnected } = useAccount();
-    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+
     const theme = useTheme();
     const networkId = useChainId();
+
+    const walletAddress = useMemo(() => (isBiconomy ? biconomyConnector.address : address) || '', [
+        isBiconomy,
+        address,
+    ]);
 
     const [showQRModal, setShowQRModal] = useState<boolean>(false);
     const [showDepositFromWallet, setShowDepositFromWallet] = useState<boolean>(false);
@@ -170,7 +176,9 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
 
                 <NetworkWrapper>
                     <FieldHeader>Current Network: </FieldHeader>
-                    <YellowText>{getNetworkNameByNetworkId(networkId, true)}</YellowText>
+                    <NetworkSwitcherWrapper>
+                        <NetworkSwitcher />
+                    </NetworkSwitcherWrapper>
                 </NetworkWrapper>
 
                 <WalletContainer>
@@ -408,14 +416,14 @@ const CollateralWrapper = styled(FlexDivColumnCentered)`
     gap: 8px;
 `;
 
-const YellowText = styled(FieldText)`
-    color: ${(props) => props.theme.button.background.quinary};
-`;
-
 const NetworkWrapper = styled(FlexDivCentered)`
     margin-top: 30px;
     margin-bottom: 16px;
     gap: 2px;
+`;
+
+const NetworkSwitcherWrapper = styled.div`
+    position: relative;
 `;
 
 const CloseIcon = styled.i.attrs({ className: 'icon icon--close' })`
