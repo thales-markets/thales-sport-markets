@@ -25,7 +25,6 @@ const useSgpDataQuery = (
                         legs: null,
                         price: null,
                         priceWithSpread: null,
-                        maxImpliedSupportedOdds: 0,
                     },
                 },
             };
@@ -37,7 +36,7 @@ const useSgpDataQuery = (
 
             try {
                 const sgpResponse = await axios.get(
-                    `${generalConfig.API_URL}/overtime-v2/networks/${networkConfig.networkId}/sgp/quote?gameId=${sgpParams.gameId}&positions=${positions}&typeIds=${typeIds}&lines=${lines}&playerIds=${playerIds}&maxSupportedOdds=0`,
+                    `${generalConfig.API_URL}/overtime-v2/networks/${networkConfig.networkId}/sgp/quote?gameId=${sgpParams.gameId}&positions=${positions}&typeIds=${typeIds}&lines=${lines}&playerIds=${playerIds}&includeMaxSupportedOdds=false`,
                     noCacheConfig
                 );
 

@@ -19,7 +19,7 @@ export type SportsbookData = {
     legs: SgpQuoteData[] | null;
     price: number | null;
     priceWithSpread: number | null;
-    maxImpliedSupportedOdds: number;
+    maxImpliedSupportedOdds?: number;
 };
 
 export type SgpData = {
