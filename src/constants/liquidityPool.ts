@@ -26,7 +26,7 @@ export const LiquidityPoolMap: Record<
         },
         [LiquidityPoolCollateral.OVER]: {
             name: 'OVER LP',
-            address: '0xAeb2B8a262D7118322C43449909eEFEe07BbBD7D',
+            address: '0x59a7A8Ae9d58D69a69b6A24770EC771110647226',
             collateral: CRYPTO_CURRENCY_MAP.OVER as Coins,
         },
     },
@@ -48,7 +48,7 @@ export const LiquidityPoolMap: Record<
         },
         [LiquidityPoolCollateral.OVER]: {
             name: 'OVER LP',
-            address: '0x796B7361F0E818f5D8446f11Be633D60e2B00898',
+            address: '0xc5f5186b46c84bF63a9e166bfa2175D9bc391ce2',
             collateral: CRYPTO_CURRENCY_MAP.OVER as Coins,
         },
         [LiquidityPoolCollateral.wBTC]: {
@@ -70,7 +70,7 @@ export const LiquidityPoolMap: Record<
         },
         [LiquidityPoolCollateral.OVER]: {
             name: 'OVER LP',
-            address: '0xe2FCBAC654970bAd1d88B4F6e10d0Ac6152c584E',
+            address: '0xB4199DC163F3206643649E117A816ad0DECb6C3B',
             collateral: CRYPTO_CURRENCY_MAP.OVER as Coins,
         },
         [LiquidityPoolCollateral.cbBTC]: {
