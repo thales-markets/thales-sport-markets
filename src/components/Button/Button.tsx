@@ -8,6 +8,7 @@ type ButtonProps = {
     margin?: string;
     textColor?: string;
     backgroundColor?: string;
+    hoverColor?: string;
     borderColor?: string;
     onClick?: any;
     fontSize?: string;
@@ -25,6 +26,7 @@ const Button: React.FC<ButtonProps> = ({
     padding,
     textColor,
     backgroundColor,
+    hoverColor,
     borderColor,
     margin,
     onClick,
@@ -44,6 +46,7 @@ const Button: React.FC<ButtonProps> = ({
             margin={margin}
             textColor={textColor}
             backgroundColor={backgroundColor}
+            hoverColor={hoverColor}
             borderColor={borderColor}
             onClick={onClick}
             disabled={disabled}
@@ -65,6 +68,7 @@ const Wrapper = styled.button<{
     margin?: string;
     textColor?: string;
     backgroundColor?: string;
+    hoverColor?: string;
     borderColor?: string;
     fontSize?: string;
     fontWeight?: string;
@@ -91,6 +95,10 @@ const Wrapper = styled.button<{
     &:disabled {
         opacity: 0.5;
         cursor: default;
+    }
+
+    &:hover {
+        background: ${(props) => props.hoverColor || props.backgroundColor || props.theme.button.background.primary};
     }
 `;
 
