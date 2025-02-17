@@ -41,7 +41,6 @@ export type UISliceState = {
     overdropState: OverdropUIState[];
     overdropWelcomeModal: boolean;
     overdropPreventMultipliersModal: boolean;
-    stakingModalMuteEnd: number;
 };
 
 export type WalletSliceState = {

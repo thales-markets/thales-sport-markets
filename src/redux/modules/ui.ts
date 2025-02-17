@@ -49,11 +49,6 @@ const getDefaultValueForPreventOverdropModals = (): boolean => {
     return lsPreventDefaultFlag ? (lsPreventDefaultFlag as boolean) : false;
 };
 
-const getStakingModalMuteEnd = (): number => {
-    const stakingModalMuteEnd = localStore.get(LOCAL_STORAGE_KEYS.STAKING_MODAL_MUTE_END);
-    return stakingModalMuteEnd as number;
-};
-
 const initialState: UISliceState = {
     theme: getDefaultTheme(),
     oddsType: getDefaultOddsType(),
@@ -62,7 +57,6 @@ const initialState: UISliceState = {
     overdropState: getDefaultOverdropState(),
     overdropPreventMultipliersModal: getDefaultValueForPreventOverdropModals(),
     overdropWelcomeModal: getDefaultValueForOverdropWelcomeModal(),
-    stakingModalMuteEnd: getStakingModalMuteEnd(),
 };
 
 const uiSlice = createSlice({
@@ -134,10 +128,6 @@ const uiSlice = createSlice({
             state.overdropPreventMultipliersModal = action.payload.preventFlag;
             localStore.set(LOCAL_STORAGE_KEYS.OVERDROP_PREVENT_DAILY_MODAL, action.payload.preventFlag);
         },
-        setStakingModalMuteEnd: (state, action: PayloadAction<number>) => {
-            state.stakingModalMuteEnd = action.payload;
-            localStore.set(LOCAL_STORAGE_KEYS.STAKING_MODAL_MUTE_END, action.payload);
-        },
     },
 });
 
@@ -150,7 +140,6 @@ export const {
     setDefaultOverdropState,
     setWelcomeModalVisibility,
     setPreventOverdropModalValue,
-    setStakingModalMuteEnd,
 } = uiSlice.actions;
 
 const getUIState = (state: RootState) => state[sliceName];
@@ -161,7 +150,5 @@ export const getFavouriteLeagues = (state: RootState) => getUIState(state).favou
 export const getOverdropUIState = (state: RootState) => getUIState(state).overdropState;
 export const getOverdropWelcomeModalFlag = (state: RootState) => getUIState(state).overdropWelcomeModal;
 export const getOverdropPreventShowingModal = (state: RootState) => getUIState(state).overdropPreventMultipliersModal;
-export const getIsStakingModalMuted = (state: RootState) =>
-    getUIState(state).stakingModalMuteEnd > new Date().getTime();
 
 export default uiSlice.reducer;
