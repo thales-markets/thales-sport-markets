@@ -20,6 +20,7 @@ import sportsAMMV2RiskManager from 'utils/contracts/sportsAMMV2RiskManagerContra
 import stakingThalesBettingProxy from 'utils/contracts/stakingThalesBettingProxy';
 import stakingThales from 'utils/contracts/stakingThalesContract';
 import liquidityPoolContractV2 from './contracts/liquidityPoolContractV2';
+import { marchMadnessContract } from './contracts/marchMadnessContract';
 import resolveBlockerContract from './contracts/resolveBlockerContract';
 
 export const prepareContractWithModifiedResponse = (props: { abi: any; address: Address; client: any }) => {
@@ -114,6 +115,8 @@ export const getContractInstance = (
             return getContractWithModifiedResponse(liquidityPoolContractV2[lpCollateral], networkConfig);
         case ContractType.RESOLVE_BLOCKER:
             return getContractWithModifiedResponse(resolveBlockerContract, networkConfig);
+        case ContractType.MARCH_MADNESS:
+            return getContractWithModifiedResponse(marchMadnessContract, networkConfig);
         default:
             return undefined;
     }

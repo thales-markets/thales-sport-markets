@@ -11,9 +11,11 @@ import { MarketTypePlayerPropsGroupsBySport } from 'constants/marketTypes';
 import { RESET_STATE } from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { SportFilter, StatusFilter } from 'enums/markets';
+import { Network } from 'enums/network';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
 import { groupBy, orderBy } from 'lodash';
+import SidebarMMLeaderboard from 'pages/MarchMadness/components/SidebarLeaderboard';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
@@ -764,6 +766,9 @@ const Home: React.FC = () => {
                         <SportFiltersContainer>
                             {getStatusFilters()}
                             {getSportFilters()}
+                            <Suspense fallback={<Loader />}>
+                                {networkId == Network.Arbitrum && <SidebarMMLeaderboard />}
+                            </Suspense>
                         </SportFiltersContainer>
                     </Scroll>
                 </LeftSidebarContainer>

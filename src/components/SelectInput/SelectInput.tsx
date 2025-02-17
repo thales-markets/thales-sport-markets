@@ -14,6 +14,7 @@ type SelectInputProps = {
     handleChange: (value: number | undefined | null) => void;
     defaultValue?: number;
     value?: SelectOption;
+    placeholder?: string;
     width?: number;
     isDisabled?: boolean;
     style?: any;
@@ -25,6 +26,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
     handleChange,
     defaultValue,
     value,
+    placeholder,
     width,
     isDisabled,
     style,
@@ -174,9 +176,18 @@ const SelectInput: React.FC<SelectInputProps> = ({
         }),
     };
 
+    // TODO:
+    // when there are no options but there is a placeholder
+    // useEffect(() => {
+    //     if (!defaultOption && placeholder) {
+    //         handleChange(Number(defaultValue));
+    //     }
+    // }, [defaultOption, defaultValue, handleChange, placeholder]);
+
     return (
         <Select
             value={selectedValue}
+            placeholder={placeholder}
             options={options}
             styles={isPaginationStyle ? paginationStyle : customStyled}
             onChange={(props: any) => {

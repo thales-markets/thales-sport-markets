@@ -6,9 +6,10 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { setWalletConnectModalVisibility } from 'redux/modules/wallet';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
 import { bigNumberFormatter, coinParser } from 'thales-utils';
+import { ThemeInterface } from 'types/ui';
 import { getCollateral } from 'utils/collaterals';
 import { maxUint256 } from 'viem';
 import { useAccount, useChainId } from 'wagmi';
@@ -32,6 +33,7 @@ const ApprovalModal: React.FC<ApprovalModalProps> = ({
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
+    const theme: ThemeInterface = useTheme();
 
     const { isConnected } = useAccount();
     const networkId = useChainId();
@@ -54,6 +56,7 @@ const ApprovalModal: React.FC<ApprovalModalProps> = ({
         if (!isConnected) {
             return (
                 <Button
+                    additionalStyles={{ background: theme.marchMadness.button.background.senary, border: 'none' }} // TODO: remove when marchMadness is removed
                     onClick={() =>
                         dispatch(
                             setWalletConnectModalVisibility({
@@ -67,10 +70,21 @@ const ApprovalModal: React.FC<ApprovalModalProps> = ({
             );
         }
         if (!approveAll && !isAmountEntered) {
-            return <Button disabled={true}>{t(`common.errors.enter-amount`)}</Button>;
+            return (
+                <Button
+                    additionalStyles={{ background: theme.marchMadness.button.background.senary, border: 'none' }} // TODO: remove when marchMadness is removed
+                    disabled={true}
+                >
+                    {t(`common.errors.enter-amount`)}
+                </Button>
+            );
         }
         return (
-            <Button disabled={isButtonDisabled} onClick={() => onSubmit(approveAll ? maxUint256 : amountConverted)}>
+            <Button
+                additionalStyles={{ background: theme.marchMadness.button.background.senary, border: 'none' }} // TODO: remove when marchMadness is removed
+                disabled={isButtonDisabled}
+                onClick={() => onSubmit(approveAll ? maxUint256 : amountConverted)}
+            >
                 {!isAllowing
                     ? t('common.enable-wallet-access.approve-label', { currencyKey: tokenSymbol })
                     : t('common.enable-wallet-access.approve-progress-label', {

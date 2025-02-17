@@ -11,6 +11,7 @@ import Deposit from 'pages/AARelatedPages/Deposit';
 import GetStarted from 'pages/AARelatedPages/GetStarted';
 import Withdraw from 'pages/AARelatedPages/Withdraw';
 import LiquidityPool from 'pages/LiquidityPool';
+import MarchMadness from 'pages/MarchMadness';
 import Markets from 'pages/Markets/Home';
 import Market from 'pages/Markets/Market';
 import Overdrop from 'pages/Overdrop';
@@ -205,6 +206,11 @@ const App = () => {
                                 <GetStarted />
                             </DappLayout>
                         </Suspense>
+                    </Route>
+                    <Route exact path={ROUTES.MarchMadness}>
+                        <DappLayout>
+                            <MarchMadness />
+                        </DappLayout>
                     </Route>
                     {isRouteAvailableForNetwork(ROUTES.LiquidityPool, networkId) && (
                         <Route exact path={ROUTES.LiquidityPool}>

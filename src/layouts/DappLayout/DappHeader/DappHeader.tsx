@@ -1,3 +1,5 @@
+import marchMadnessLeftIcon from 'assets/images/march-madness/mm-button-icon-1.svg';
+import marchMadnessRightIcon from 'assets/images/march-madness/mm-button-icon-2.svg';
 import Button from 'components/Button';
 import Logo from 'components/Logo';
 import NavMenu from 'components/NavMenu';
@@ -13,6 +15,7 @@ import useInterval from 'hooks/useInterval';
 import useClaimablePositionCountV2Query from 'queries/markets/useClaimablePositionCountV2Query';
 import useBlockedGamesQuery from 'queries/resolveBlocker/useBlockedGamesQuery';
 import useWhitelistedForUnblock from 'queries/resolveBlocker/useWhitelistedForUnblock';
+import Tooltip from 'rc-tooltip';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
@@ -22,11 +25,12 @@ import { getIsMobile } from 'redux/modules/app';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
 import { getOddsType, getOverdropUIState, getStopPulsing, setOddsType, setStopPulsing } from 'redux/modules/ui';
 import { getIsBiconomy, setWalletConnectModalVisibility } from 'redux/modules/wallet';
-import { useTheme } from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivEnd } from 'styles/common';
 import { RootState } from 'types/redux';
 import { OverdropLevel, ThemeInterface } from 'types/ui';
 import biconomyConnector from 'utils/biconomyWallet';
+import { isMarchMadnessAvailableForNetworkId } from 'utils/marchMadness';
 import { buildHref } from 'utils/routes';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import { ODDS_TYPES } from '../../../constants/markets';
@@ -183,6 +187,35 @@ const DappHeader: React.FC = () => {
 
     const menuImageRef = useRef<HTMLImageElement>(null);
 
+    const getMarchMadnessButton = () => (
+        <MarchMadnessWrapper>
+            <SPAAnchor href={buildHref(ROUTES.MarchMadness)}>
+                <Button
+                    fontSize="18px"
+                    width={isMobile ? '100%' : '240px'}
+                    additionalStyles={{
+                        background: `url(${marchMadnessLeftIcon}) left ${
+                            isMobile ? 70 : 20
+                        }px center no-repeat, url(${marchMadnessRightIcon}) right ${
+                            isMobile ? 70 : 20
+                        }px center no-repeat`,
+                        backgroundColor: theme.marchMadness.button.background.primary,
+                        backgroundSize: '28px, 28px',
+                        border: 'none',
+                        borderRadius: isMobile ? '20px' : undefined,
+                        fontFamily: "'NCAA' !important",
+                        letterSpacing: '2px',
+                        textTransform: 'uppercase',
+                        color: theme.marchMadness.button.textColor.secondary,
+                    }}
+                >
+                    {t('markets.nav-menu.labels.march-madness')}
+                </Button>
+            </SPAAnchor>
+        </MarchMadnessWrapper>
+    );
+
+    const showGetStartedButton = false; // TODO: show Get Started after March Madness
     const getGetStartedButton = () => (
         <SPAAnchor style={{ width: isMobile ? '100%' : 'fit-content' }} href={buildHref(ROUTES.Wizard)}>
             <Button
@@ -214,7 +247,17 @@ const DappHeader: React.FC = () => {
                     </LeftContainer>
 
                     <MiddleContainer>
-                        <div>{!isConnected ? getGetStartedButton() : isBiconomy ? <TopUp /> : <></>}</div>
+                        {location.pathname !== ROUTES.MarchMadness &&
+                            (isMarchMadnessAvailableForNetworkId(networkId) ? (
+                                getMarchMadnessButton()
+                            ) : (
+                                <Tooltip overlay={t('march-madness.header-button-tooltip')}>
+                                    {getMarchMadnessButton()}
+                                </Tooltip>
+                            ))}
+                        {showGetStartedButton && (
+                            <div>{!isConnected ? getGetStartedButton() : isBiconomy ? <TopUp /> : <></>}</div>
+                        )}
                         {isMarketsPage && <TimeFilters />}
                         <FlexDivCentered>
                             <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
@@ -447,23 +490,32 @@ const DappHeader: React.FC = () => {
                             >
                                 {t('get-started.sign-up')}
                             </Button>
-                            {location.pathname !== ROUTES.Wizard && getGetStartedButton()}
+                            {showGetStartedButton && location.pathname !== ROUTES.Wizard && getGetStartedButton()}
                             <FlexDivEnd>
                                 <NetworkSwitcher />
                             </FlexDivEnd>
                         </MobileButtonWrapper>
                     ) : (
-                        isBiconomy && (
+                        (isBiconomy || showGetStartedButton) && (
                             <MobileButtonWrapper>
                                 {location.pathname !== ROUTES.Wizard && getGetStartedButton()}
                                 <TopUp />
                             </MobileButtonWrapper>
                         )
                     )}
+
+                    {location.pathname !== ROUTES.MarchMadness && getMarchMadnessButton()}
                 </>
             )}
         </>
     );
 };
+
+const MarchMadnessWrapper = styled.div`
+    @media (max-width: 767px) {
+        width: 100%;
+        margin: 10px 0 0 0;
+    }
+`;
 
 export default DappHeader;

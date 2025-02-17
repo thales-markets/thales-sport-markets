@@ -26,7 +26,11 @@ export const ProfileIcon = styled.i.attrs({ className: 'icon icon--profile2' })<
 }>`
     font-size: ${(props) => (props.avatarSize ? props.avatarSize : '20')}px;
     font-weight: 400;
-    color: ${(props) => (props.iconColor ? props.iconColor : props.theme.textColor.secondary)};
+    color: ${(props) =>
+        props.iconColor
+            ? props.iconColor
+            : props.theme.background
+                  .tertiary}; // TODO: March Madness fix, revert background.tertiary to textColor.secondary
 `;
 
 export const NotificationCount = styled.div`
