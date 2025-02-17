@@ -118,17 +118,23 @@ const AssetBalance: React.FC<Props> = ({
                             Deposit <DepositIcon />
                         </Deposit>
                         <Convert
+                            disabled={assetData.balance == 0}
                             onClick={() => {
-                                setConvertToken(getCollateralIndex(networkId, assetData.asset));
-                                setShowSwapModal(true);
+                                if (assetData.balance > 0) {
+                                    setConvertToken(getCollateralIndex(networkId, assetData.asset));
+                                    setShowSwapModal(true);
+                                }
                             }}
                         >
                             Convert <ConvertIcon />
                         </Convert>
                         <Withdraw
+                            disabled={assetData.balance == 0}
                             onClick={() => {
-                                setWithdrawalToken(getCollateralIndex(networkId, assetData.asset));
-                                setShowWithdrawModal(true);
+                                if (assetData.balance > 0) {
+                                    setWithdrawalToken(getCollateralIndex(networkId, assetData.asset));
+                                    setShowWithdrawModal(true);
+                                }
                             }}
                         >
                             Withdraw <WithdrawIcon />
@@ -201,13 +207,15 @@ const AssetWrapper = styled(AlignedParagraph)`
     gap: 8px;
 `;
 
-const TableButton = styled(AlignedParagraph)`
+const TableButton = styled(AlignedParagraph)<{ disabled?: boolean }>`
     cursor: pointer;
     font-size: 14px;
     gap: 4px;
     @media (max-width: 700px) {
         display: none;
     }
+
+    ${(props) => (props.disabled ? `opacity: 0.7; cursor: not-allowed;` : ``)}
 `;
 
 const Deposit = styled(TableButton)`
