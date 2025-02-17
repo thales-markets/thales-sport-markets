@@ -203,15 +203,6 @@ const Account: React.FC = () => {
 
                 <ButtonContainer>
                     <Button
-                        onClick={() => setShowFundModal(true)}
-                        borderColor="transparent"
-                        additionalStyles={ButtonCSS}
-                        lineHeight="16px"
-                        backgroundColor={Colors.BLUE}
-                    >
-                        {t('profile.account-summary.deposit')}
-                    </Button>
-                    <Button
                         onClick={() => setShowSwapModal(true)}
                         borderColor="transparent"
                         additionalStyles={ButtonCSS}
@@ -220,6 +211,16 @@ const Account: React.FC = () => {
                     >
                         {t('profile.account-summary.swap')}
                     </Button>
+                    <Button
+                        onClick={() => setShowFundModal(true)}
+                        borderColor="transparent"
+                        additionalStyles={ButtonCSS}
+                        lineHeight="16px"
+                        backgroundColor={Colors.BLUE}
+                    >
+                        {t('profile.account-summary.deposit')}
+                    </Button>
+
                     <Button
                         onClick={() => setShowWithdrawModal(true)}
                         borderColor="transparent"
@@ -331,19 +332,20 @@ const ParlayIcon = styled.i.attrs({ className: 'icon icon--parlay' })`
 
 const Label2 = styled(AlignedParagraph)`
     color: ${(props) => props.theme.textColor.primary};
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 500;
     white-space: pre;
 `;
 
 const Value2 = styled(AlignedParagraph)`
     color: ${(props) => props.theme.textColor.quaternary};
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 700;
     white-space: pre;
 `;
 
 const YellowValue2 = styled(Value2)`
+    font-size: 14px;
     color: ${(props) => props.theme.overdrop.textColor.primary};
 `;
 
@@ -352,6 +354,7 @@ const ButtonCSS: CSSProperties = {
     width: '100%',
     height: '42px',
     padding: '3px 24px',
+    whiteSpace: 'pre',
 };
 
 const CopyIcon = styled.i`

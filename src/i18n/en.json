@@ -342,11 +342,11 @@
             "title": "Account Summary",
             "balance": "Total balance",
             "deposit": "Deposit",
-            "swap": "Buy",
+            "swap": "Buy $OVER",
             "withdraw": "Withdraw",
             "use-eoa": "Switch to EOA mode",
             "use-smart": "Switch to your Overtime Account",
-            "best-odds": "Bet with OVER token for best odds!!!",
+            "best-odds": "Bet with OVER token for best odds.",
             "claim-free-bet": "Claim free bet"
         },
         "stats": {
