@@ -1,12 +1,10 @@
 import ParlayEmptyIcon from 'assets/images/parlay-empty.svg?react';
-import Checkbox from 'components/fields/Checkbox';
+import RadioButton from 'components/fields/RadioButton';
 import MatchInfoV2 from 'components/MatchInfoV2';
 import MatchUnavailableInfo from 'components/MatchUnavailableInfo';
-import Toggle from 'components/Toggle';
 import Tooltip from 'components/Tooltip';
 import { secondsToMilliseconds } from 'date-fns';
 import { SportFilter, StatusFilter } from 'enums/markets';
-import { ScreenSizeBreakpoint } from 'enums/ui';
 import { isEqual } from 'lodash';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsAmmDataQuery from 'queries/markets/useSportsAmmDataQuery';
@@ -28,11 +26,10 @@ import {
     setIsSystemBet,
     setMaxTicketSize,
 } from 'redux/modules/ticket';
-import styled, { useTheme } from 'styled-components';
-import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivSpaceBetween } from 'styles/common';
+import styled from 'styled-components';
+import { FlexDivCentered, FlexDivColumn, FlexDivSpaceBetween } from 'styles/common';
 import { SportMarket, SportMarkets, TicketMarket, TicketPosition } from 'types/markets';
 import { SgpParams, SportsbookData } from 'types/sgp';
-import { ThemeInterface } from 'types/ui';
 import { isSameMarket } from 'utils/marketsV2';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import TicketV2 from './components/TicketV2';
@@ -46,7 +43,6 @@ type ParlayProps = {
 const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
-    const theme: ThemeInterface = useTheme();
     const isMobile = useSelector(getIsMobile);
 
     const networkId = useChainId();
@@ -66,6 +62,12 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     const [acceptOdds, setAcceptOdds] = useState<boolean>(false);
     const [outOfLiquidityMarkets, setOutOfLiquidityMarkets] = useState<number[]>([]);
     const [useThalesCollateral, setUseThalesCollateral] = useState(false);
+
+    const isLive = useMemo(() => !!ticket[0]?.live, [ticket]);
+
+    const isSgpDisabled = useMemo(() => !ticket.every((ticketPosition) => ticketPosition.gameId === ticket[0].gameId), [
+        ticket,
+    ]);
 
     const previousTicketOdds = useRef<{ position: number; odd: number; gameId: string; proof: string[] }[]>([]);
 
@@ -260,17 +262,16 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     }, [sportMarkets, ticket, dispatch, isLiveFilterSelected]);
 
     useEffect(() => {
-        if (ticket[0] && ticket[0].live && !isLiveFilterSelected) {
+        if (isLive && !isLiveFilterSelected) {
             dispatch(removeAll());
-        } else if (ticket[0] && !ticket[0].live && isLiveFilterSelected) {
+        } else if (!isLive && isLiveFilterSelected) {
             dispatch(removeAll());
         }
-    }, [isLiveFilterSelected, dispatch, ticket]);
+    }, [isLiveFilterSelected, dispatch, isLive]);
 
     const onCloseValidationModal = useCallback(() => dispatch(resetTicketError()), [dispatch]);
 
     const hasParlayMarkets = ticketMarkets.length > 0 || unavailableMarkets.length > 0;
-    const isSgpSupported = !ticket[0]?.live;
 
     return (
         <Container isMobile={isMobile} isWalletConnected={isConnected}>
@@ -282,38 +283,48 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                             <Count>{ticket.length}</Count>
                         </Title>
                     )}
-                    {isSgpSupported && (
+                    {!isLive && (
                         <BetTypeContainer>
-                            <Tooltip overlay={t('markets.parlay.sgp')}>
-                                <CheckboxContainer>
-                                    <Checkbox
-                                        checked={isSgp}
-                                        value={isSgp.toString()}
-                                        onChange={() => dispatch(setIsSgp(!isSgp))}
-                                        label={'SGP'}
+                            <Tooltip overlay={t('markets.parlay.tooltip.regular')}>
+                                <RadioButtonContainer>
+                                    <RadioButton
+                                        checked={!isSystemBet && !isSgp}
+                                        value={'true'}
+                                        onChange={() => {
+                                            dispatch(setIsSystemBet(false));
+                                            dispatch(setIsSgp(false));
+                                        }}
+                                        label={t('markets.parlay.regular')}
                                     />
-                                </CheckboxContainer>
+                                </RadioButtonContainer>
                             </Tooltip>
-                            <ToggleContainer>
-                                <Toggle
-                                    label={{
-                                        firstLabel: t('markets.parlay.regular'),
-                                        secondLabel: t('markets.parlay.system'),
-                                        fontSize: '14px',
-                                    }}
-                                    width="46px"
-                                    height="24px"
-                                    active={isSystemBet}
-                                    disabled={isSgp}
-                                    dotSize="16px"
-                                    dotBackground={theme.background.secondary}
-                                    dotBorder={`3px solid ${theme.borderColor.quaternary}`}
-                                    dotMargin="3px"
-                                    handleClick={() => {
-                                        dispatch(setIsSystemBet(!isSystemBet));
-                                    }}
-                                />
-                            </ToggleContainer>
+                            <Tooltip overlay={t('markets.parlay.tooltip.system')}>
+                                <RadioButtonContainer>
+                                    <RadioButton
+                                        checked={isSystemBet}
+                                        value={'false'}
+                                        onChange={() => {
+                                            dispatch(setIsSystemBet(true));
+                                            dispatch(setIsSgp(false));
+                                        }}
+                                        label={t('markets.parlay.system')}
+                                    />
+                                </RadioButtonContainer>
+                            </Tooltip>
+                            <Tooltip overlay={t('markets.parlay.tooltip.sgp')}>
+                                <RadioButtonContainer>
+                                    <RadioButton
+                                        checked={isSgp}
+                                        disabled={isSgpDisabled}
+                                        value={'false'}
+                                        onChange={() => {
+                                            dispatch(setIsSystemBet(false));
+                                            dispatch(setIsSgp(true));
+                                        }}
+                                        label={t('markets.parlay.sgp')}
+                                    />
+                                </RadioButtonContainer>
+                            </Tooltip>
                         </BetTypeContainer>
                     )}
                     <ThalesBonusContainer>
@@ -572,28 +583,31 @@ const StyledParlayEmptyIcon = styled(ParlayEmptyIcon)`
     }
 `;
 
-const ToggleContainer = styled(FlexDiv)`
-    font-weight: 600;
-    width: 100%;
-    text-transform: uppercase;
-`;
+const BetTypeContainer = styled(FlexDivSpaceBetween)``;
 
-const BetTypeContainer = styled(FlexDivSpaceBetween)`
-    position: relative;
-    margin-bottom: 5px;
-`;
-
-const CheckboxContainer = styled(FlexDivSpaceBetween)`
-    position: absolute;
-    z-index: 1;
+const RadioButtonContainer = styled.div`
     label {
-        align-self: center;
+        padding-left: 26px;
         font-size: 14px;
-        font-weight: 600;
-        text-transform: none;
+        line-height: 20px;
+        min-height: 24px;
+        text-transform: uppercase;
+        margin-bottom: 0px;
+        :first-child {
+            margin-bottom: 4px;
+        }
     }
-    @media (max-width: ${ScreenSizeBreakpoint.EXTRA_LARGE}px) {
-        position: unset;
+    .checkmark {
+        height: 18px;
+        width: 18px;
+        border: 2px solid ${(props) => props.theme.borderColor.quaternary};
+        :after {
+            left: 3px;
+            top: 3px;
+            width: 8px;
+            height: 8px;
+            background: ${(props) => props.theme.borderColor.quaternary};
+        }
     }
 `;
 

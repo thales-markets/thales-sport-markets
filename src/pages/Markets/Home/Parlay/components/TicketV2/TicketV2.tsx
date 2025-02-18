@@ -2321,7 +2321,7 @@ const Ticket: React.FC<TicketProps> = ({
                         </SummaryValue>
                         <SummaryLabel>
                             <Tooltip
-                                overlay={<>{t(`markets.parlay.thales-bonus-tooltip`)}</>}
+                                overlay={t('markets.parlay.tooltip.thales-bonus')}
                                 iconFontSize={14}
                                 marginLeft={3}
                             />
@@ -2416,7 +2416,7 @@ const Ticket: React.FC<TicketProps> = ({
                             <Tooltip
                                 overlay={
                                     <Trans
-                                        i18nKey="markets.parlay.swap-thales-tooltip"
+                                        i18nKey="markets.parlay.tooltip.swap-thales"
                                         components={{
                                             bold: <BoldContent />,
                                         }}
@@ -2480,7 +2480,7 @@ const Ticket: React.FC<TicketProps> = ({
                 <GasSummary>
                     <SummaryLabel>
                         {t('markets.parlay.total-gas')}:
-                        <Tooltip overlay={<> {t('markets.parlay.gas-tooltip')}</>} iconFontSize={14} marginLeft={3} />
+                        <Tooltip overlay={t('markets.parlay.tooltip.gas')} iconFontSize={14} marginLeft={3} />
                     </SummaryLabel>
                     <SummaryValue isCollateralInfo={true}>
                         {gas === 0 ? '-' : formatCurrencyWithSign(USD_SIGN, gas as number, 2, true)}
@@ -2604,7 +2604,7 @@ const Ticket: React.FC<TicketProps> = ({
                     <SummaryLabel>
                         {t('markets.parlay.persist-games')}
                         <Tooltip
-                            overlay={<>{t(`markets.parlay.keep-selection-tooltip`)}</>}
+                            overlay={t('markets.parlay.tooltip.keep-selection')}
                             iconFontSize={14}
                             marginLeft={3}
                         />
