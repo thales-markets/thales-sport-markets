@@ -94,6 +94,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onClose, preSelectedToken
             containerStyle={{
                 background: theme.background.secondary,
                 border: 'none',
+                padding: '30px 50px',
             }}
             hideHeader
             title=""

@@ -1,4 +1,3 @@
-import Button from 'components/Button';
 import FundModal from 'components/FundOvertimeAccountModal';
 import SwapModal from 'components/SwapModal/SwapModal';
 import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
@@ -13,9 +12,8 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsBiconomy, setIsBiconomy } from 'redux/modules/wallet';
-import styled, { CSSProperties } from 'styled-components';
+import styled from 'styled-components';
 import {
-    Colors,
     FlexDivCentered,
     FlexDivColumnCentered,
     FlexDivColumnStart,
@@ -202,34 +200,10 @@ const Account: React.FC = () => {
                 </FlexDivStart>
 
                 <ButtonContainer>
-                    <Button
-                        onClick={() => setShowSwapModal(true)}
-                        borderColor="transparent"
-                        additionalStyles={ButtonCSS}
-                        lineHeight="16px"
-                        backgroundColor={Colors.WHITE}
-                    >
-                        {t('profile.account-summary.swap')}
-                    </Button>
-                    <Button
-                        onClick={() => setShowFundModal(true)}
-                        borderColor="transparent"
-                        additionalStyles={ButtonCSS}
-                        lineHeight="16px"
-                        backgroundColor={Colors.BLUE}
-                    >
-                        {t('profile.account-summary.deposit')}
-                    </Button>
+                    <Button onClick={() => setShowSwapModal(true)}>{t('profile.account-summary.swap')}</Button>
+                    <Button onClick={() => setShowFundModal(true)}>{t('profile.account-summary.deposit')}</Button>
 
-                    <Button
-                        onClick={() => setShowWithdrawModal(true)}
-                        borderColor="transparent"
-                        additionalStyles={ButtonCSS}
-                        lineHeight="16px"
-                        backgroundColor={Colors.YELLOW}
-                    >
-                        {t('profile.account-summary.withdraw')}
-                    </Button>
+                    <Button onClick={() => setShowWithdrawModal(true)}>{t('profile.account-summary.withdraw')}</Button>
                 </ButtonContainer>
             </Container>
 
@@ -349,14 +323,6 @@ const YellowValue2 = styled(Value2)`
     color: ${(props) => props.theme.overdrop.textColor.primary};
 `;
 
-const ButtonCSS: CSSProperties = {
-    maxWidth: '120px',
-    width: '100%',
-    height: '42px',
-    padding: '3px 24px',
-    whiteSpace: 'pre',
-};
-
 const CopyIcon = styled.i`
     font-size: 24px;
     cursor: pointer;
@@ -365,6 +331,26 @@ const CopyIcon = styled.i`
     @media (max-width: 575px) {
         font-size: 20px;
     }
+`;
+
+const Button = styled(FlexDivCentered)<{ active?: boolean }>`
+    border-radius: 8px;
+    width: 100%;
+    height: 42px;
+    border: 1px ${(props) => props.theme.borderColor.primary} solid;
+    color: ${(props) => props.theme.textColor.primary};
+
+    font-size: 14px;
+    font-weight: 600;
+
+    text-transform: uppercase;
+    cursor: pointer;
+    &:hover {
+        background-color: ${(props) => props.theme.connectWalletModal.hover};
+        color: ${(props) => props.theme.button.textColor.primary};
+    }
+    white-space: pre;
+    padding: 3px 24px;
 `;
 
 export default Account;

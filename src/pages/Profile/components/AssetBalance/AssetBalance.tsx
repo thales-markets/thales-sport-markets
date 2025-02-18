@@ -96,7 +96,7 @@ const AssetBalance: React.FC<Props> = ({
                 <ZeroBalanceWrapper>
                     <TableHeader2>Show zero balance</TableHeader2>
                     <Toggle
-                        dotBackground={showZeroBalance ? theme.borderColor.tertiary : ''}
+                        dotBackground={showZeroBalance ? theme.borderColor.quaternary : ''}
                         active={showZeroBalance}
                         handleClick={() => setShowZeroBalance(!showZeroBalance)}
                     />
