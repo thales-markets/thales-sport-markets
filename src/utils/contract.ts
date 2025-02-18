@@ -23,7 +23,7 @@ import stakingThales from 'utils/contracts/stakingThalesContract';
 import liquidityPoolContractV2 from './contracts/liquidityPoolContractV2';
 import resolveBlockerContract from './contracts/resolveBlockerContract';
 
-export const prepareContractWithModifiedResponse = (props: { abi: any; address: Address; client: any }) => {
+const prepareContractWithModifiedResponse = (props: { abi: any; address: Address; client: any }) => {
     const contract = getContract(props) as ViemContract;
 
     if (typeof contract.read !== 'object' || contract.read === null) {
