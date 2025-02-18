@@ -34,6 +34,9 @@ export const INCENTIVIZED_LEAGUES: Record<number, any> = {
         link: 'https://www.overtimemarkets.xyz/promotions/march-madness-2024',
         tooltipKey: 'markets.incentivized-tooltip-mm',
         availableOnNetworks: [Network.Arbitrum],
+        rewards: {
+            [Network.Arbitrum]: '45,000 ARB + 50,000 THALES',
+        },
     },
 };
 

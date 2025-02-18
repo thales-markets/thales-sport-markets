@@ -87,6 +87,7 @@ const MarchMadness: React.FC = () => {
                         customStylingContainer={{
                             position: 'absolute',
                             marginTop: '20px',
+                            marginLeft: '-36px',
                             textTransform: 'uppercase',
                             fontFamily: 'Oswald',
                             lineHeight: '24px',
@@ -104,10 +105,10 @@ const MarchMadness: React.FC = () => {
 };
 
 const Container = styled.div<{ showBackground: boolean }>`
-    width: 100%;
+    width: 1350px;
     ${(props) => (props.showBackground ? `background-image: url('${backgrounBall}');` : '')}
     ${(props) => (props.showBackground ? 'background-size: 1900px;' : '')}
-    ${(props) => (props.showBackground ? 'background-position: -277px -58px;' : '')}
+    ${(props) => (props.showBackground ? 'background-position: -210px -58px;' : '')}
     ${(props) => (props.showBackground ? 'background-repeat: no-repeat;' : '')}
 `;
 

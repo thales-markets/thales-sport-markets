@@ -8,6 +8,7 @@ import NetworkSwitcher from 'components/NetworkSwitcher';
 import OutsideClickHandler from 'components/OutsideClick';
 import SPAAnchor from 'components/SPAAnchor';
 import Search from 'components/Search';
+import Tooltip from 'components/Tooltip';
 import WalletInfo from 'components/WalletInfo';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
 import ROUTES from 'constants/routes';
@@ -15,7 +16,6 @@ import useInterval from 'hooks/useInterval';
 import useClaimablePositionCountV2Query from 'queries/markets/useClaimablePositionCountV2Query';
 import useBlockedGamesQuery from 'queries/resolveBlocker/useBlockedGamesQuery';
 import useWhitelistedForUnblock from 'queries/resolveBlocker/useWhitelistedForUnblock';
-import Tooltip from 'rc-tooltip';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
@@ -255,9 +255,17 @@ const DappHeader: React.FC = () => {
                                     {getMarchMadnessButton()}
                                 </Tooltip>
                             ))}
-                        {showGetStartedButton && (
-                            <div>{!isConnected ? getGetStartedButton() : isBiconomy ? <TopUp /> : <></>}</div>
-                        )}
+                        <div>
+                            {showGetStartedButton ? (
+                                ''
+                            ) : !isConnected ? (
+                                getGetStartedButton()
+                            ) : isBiconomy ? (
+                                <TopUp />
+                            ) : (
+                                <></>
+                            )}
+                        </div>
                         {isMarketsPage && <TimeFilters />}
                         <FlexDivCentered>
                             <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>

@@ -42,9 +42,13 @@ const useMarchMadnessDataQuery = (
                     if (marchMadnessContract) {
                         const now = Date.now();
                         if (walletAddress !== '') {
-                            const tokenIds: bigint[] = await marchMadnessContract.read.getAddressToTokenIds([
-                                walletAddress,
-                            ]);
+                            const tokenIdsResponse:
+                                | bigint[]
+                                | bigint = await marchMadnessContract.read.getAddressToTokenIds([walletAddress]);
+
+                            const tokenIds: bigint[] = Array.isArray(tokenIdsResponse)
+                                ? tokenIdsResponse
+                                : [tokenIdsResponse];
 
                             const [mintingPrice, canNotMintOrUpdateAfter, results] = await Promise.all([
                                 await marchMadnessContract.read.mintingPrice(),

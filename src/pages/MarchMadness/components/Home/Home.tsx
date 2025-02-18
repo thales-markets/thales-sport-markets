@@ -412,7 +412,7 @@ const LabelArrowWrapper = styled(FlexDivSpaceBetween)`
 
 const DropdownLabel = styled.h3`
     color: ${(props) => props.theme.marchMadness.textColor.primary};
-    font-family: ${(props) => props.theme.fontFamily.tertiary};
+    font-family: "'Inter' !important";
     font-size: 24px;
     font-style: normal;
     font-weight: 400;
@@ -427,7 +427,7 @@ const ListWrapper = styled.ul`
 
 const ListItem = styled.li`
     color: ${(props) => props.theme.marchMadness.textColor.primary};
-    font-family: ${(props) => props.theme.fontFamily.tertiary};
+    font-family: "'Inter' !important";
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
@@ -441,8 +441,8 @@ const BoldContent = styled.span`
 `;
 
 const Link = styled.span`
-    /* text-decoration: underline;
-    cursor: pointer; */
+    text-decoration: underline;
+    cursor: pointer;
 `;
 
 const LinkAvailable = styled.span`

@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import { getWalletConnectModalOrigin } from 'redux/modules/wallet';
 import styled from 'styled-components';
-import { Colors, FlexDiv, FlexDivCentered, FlexDivRow } from 'styles/common';
+import { FlexDiv, FlexDivCentered, FlexDivRow } from 'styles/common';
 import { RootState } from 'types/redux';
 import {
     getClassNameForParticalLogin,
@@ -252,7 +252,7 @@ const FooterContainer = styled(FlexDivCentered)<{ disabled: boolean }>`
         margin: 0px 40px;
         margin-top: 28px;
     }
-    border-top: 1px solid ${(props) => (props.disabled ? Colors.BLUE : 'transparent')}; // TODO: After MM revert to props.theme.borderColor.quaternary
+    border-top: 1px solid ${(props) => (props.disabled ? props.theme.borderColor.quaternary : 'transparent')};
 `;
 const WalletIconsWrapper = styled(FlexDivCentered)`
     justify-content: center;

@@ -84,6 +84,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
         placeholder: (provided: any) => ({
             ...provided,
             color: theme.textColor.primary,
+            fontFamily: theme.fontFamily.primary,
             ...style?.placeholderStyle,
         }),
         singleValue: (provided: CSSObjectWithLabel) => ({

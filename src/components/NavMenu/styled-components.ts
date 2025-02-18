@@ -82,11 +82,9 @@ export const ItemContainer = styled.div<{ active?: boolean }>`
     ${(props) => (props.active ? `color: ${props.theme.textColor.quaternary};` : '')}
     :hover {
         i {
-            color: ${(props) =>
-                props.theme.background.quaternary}!important; // TODO: March Madness fix, revert background to textColor
+            color: ${(props) => props.theme.textColor.quaternary} !important;
         }
-        color: ${(props) =>
-            props.theme.background.quaternary}!important; // TODO: March Madness fix, revert background to textColor
+        color: ${(props) => props.theme.textColor.quaternary} !important;
     }
 `;
 

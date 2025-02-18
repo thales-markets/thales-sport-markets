@@ -205,7 +205,7 @@ const Container = styled(FlexDivCentered)<{ walletConnected?: boolean }>`
 const Wrapper = styled.div<{ displayPadding?: boolean }>`
     display: flex;
     border-radius: 20px;
-    border: 1px solid ${(props) => props.theme.background.quaternary}; // TODO: March Madness fix, revert background.quaternary to borderColor.primary
+    border: 1px solid ${(props) => props.theme.borderColor.primary};
     height: 28px;
     justify-content: space-between;
     align-items: center;
@@ -243,7 +243,7 @@ const WalletAddressInfo = styled.div<{ isConnected: boolean; isClickable?: boole
 
 const WalletBalanceInfo = styled.div`
     justify-content: center;
-    border-left: 2px solid ${(props) => props.theme.background.quaternary}; // TODO: March Madness fix, revert background.quaternary to borderColor.primary
+    border-left: 2px solid ${(props) => props.theme.borderColor.primary};
     padding-left: 7px;
     padding-right: 7px;
     height: 70%;
@@ -255,9 +255,7 @@ const Text = styled.span`
     font-weight: 600;
     font-size: 10.8px;
     line-height: 12px;
-    color: ${(props) =>
-        props.theme.background
-            .quaternary}; // TODO: March Madness fix, revert background.quaternary to textColor.secondary
+    color: ${(props) => props.theme.textColor.secondary};
 `;
 
 const FreeBetIcon = styled.i`
