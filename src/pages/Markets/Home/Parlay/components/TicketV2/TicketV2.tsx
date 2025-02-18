@@ -1776,7 +1776,7 @@ const Ticket: React.FC<TicketProps> = ({
             return;
         }
 
-        if (isSgp && isInvalidSgpTotalQuote) {
+        if (isSgp && (!isValidSgpBet || isInvalidSgpTotalQuote)) {
             setSubmitDisabled(true);
             return;
         }
@@ -1805,6 +1805,7 @@ const Ticket: React.FC<TicketProps> = ({
         isSystemBet,
         isInvalidSystemTotalQuote,
         isValidSystemBet,
+        isValidSgpBet,
         isInvalidSgpTotalQuote,
     ]);
 
