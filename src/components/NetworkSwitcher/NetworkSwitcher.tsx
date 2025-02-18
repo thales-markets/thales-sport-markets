@@ -67,8 +67,7 @@ const NetworkSwitcher: React.FC = () => {
 const NetworkIconWrapper = styled.div<{ isConnected: boolean; isMultiChain: boolean }>`
     background: ${(props) => (props.isConnected ? props.theme.background.tertiary : 'transparent')};
     height: 30px;
-    border-radius: 20px;
-    border-radius: 20px;
+    border-radius: 8px;
     border: 1px solid ${(props) => props.theme.background.tertiary};
     display: flex;
     justify-content: center;
@@ -107,7 +106,7 @@ const NetworkDropDown = styled.div`
     right: 0px;
     display: flex;
     flex-direction: column;
-    border-radius: 20px;
+    border-radius: 8px;
     background: ${(props) => props.theme.background.tertiary};
     width: 130px;
     padding: 10px;
