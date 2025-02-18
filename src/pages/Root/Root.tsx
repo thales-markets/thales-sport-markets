@@ -21,7 +21,7 @@ import { localStore } from 'thales-utils';
 import { isDeployError, logErrorToDiscord } from 'utils/discord';
 import { PARTICLE_STYLE } from 'utils/particleWallet/utils';
 import queryConnector from 'utils/queryConnector';
-import { arbitrum, optimism, optimismSepolia } from 'viem/chains';
+import { arbitrum, base, optimism, optimismSepolia } from 'viem/chains';
 import { WagmiProvider } from 'wagmi';
 import enTranslation from '../../i18n/en.json';
 import { wagmiConfig } from './wagmiConfig';
@@ -95,7 +95,7 @@ const Root: React.FC<RootProps> = ({ store }) => {
                             wallet: {
                                 visible: false,
                             },
-                            chains: [optimism, arbitrum, optimismSepolia],
+                            chains: [optimism, arbitrum, base, optimismSepolia],
                             themeType: 'dark',
                             customStyle: PARTICLE_STYLE,
                         }}
