@@ -204,11 +204,11 @@ const DappHeader: React.FC = () => {
                                 textColor={theme.button.textColor.primary}
                                 borderColor={theme.button.borderColor.quinary}
                                 additionalStyles={{
-                                    borderRadius: '22px',
+                                    borderRadius: '8px',
                                     fontWeight: '800',
                                     fontSize: '12px',
                                     padding: '9px 20px',
-                                    width: '100px',
+                                    width: '120px',
                                     height: '30px',
                                 }}
                                 onClick={() =>
@@ -269,11 +269,11 @@ const DappHeader: React.FC = () => {
                                     textColor={theme.button.textColor.primary}
                                     borderColor={theme.button.borderColor.quinary}
                                     additionalStyles={{
-                                        borderRadius: '22px',
+                                        borderRadius: '8px',
                                         fontWeight: '800',
                                         fontSize: '12px',
                                         padding: '9px 20px',
-                                        width: '100px',
+                                        width: '120px',
                                         height: '30px',
                                     }}
                                     onClick={() =>

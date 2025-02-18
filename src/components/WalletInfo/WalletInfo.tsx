@@ -159,8 +159,8 @@ const Container = styled(FlexDivCentered)<{ walletConnected?: boolean }>`
 
 const Wrapper = styled.div<{ displayPadding?: boolean }>`
     display: flex;
-    border-radius: 20px;
-    border: 1px solid ${(props) => props.theme.borderColor.primary};
+    border-radius: 8px;
+    border: 1px solid ${(props) => (!props.displayPadding ? 'none' : props.theme.borderColor.primary)};
     height: 30px;
     justify-content: space-between;
     align-items: center;

@@ -50,8 +50,8 @@ export const RightContainer = styled(FlexDivRowCentered)`
 
 export const MenuIcon = styled.img.attrs({ src: burger })`
     cursor: pointer;
-    height: 25px;
-    width: 35px;
+    height: 26px;
+    width: 50px;
     filter: invert(39%) sepia(9%) saturate(1318%) hue-rotate(199deg) brightness(71%) contrast(88%);
 `;
 
