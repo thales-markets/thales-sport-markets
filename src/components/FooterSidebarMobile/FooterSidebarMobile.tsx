@@ -54,8 +54,8 @@ const FooterSidebarMobile: React.FC<FooterSidebarMobileProps> = ({ setParlayMobi
             {setShowBurger && (
                 <ItemContainer>
                     <ItemIcon
-                        className="icon icon--sports"
-                        fontSize={44}
+                        className="icon icon--filters2"
+                        fontSize={40}
                         onClick={() => {
                             setShowBurger(true);
                         }}

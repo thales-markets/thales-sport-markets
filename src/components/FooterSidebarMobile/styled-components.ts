@@ -3,14 +3,13 @@ import { FlexDiv, FlexDivColumn } from 'styles/common';
 
 export const Container = styled(FlexDiv)`
     position: fixed;
-    bottom: 3%;
-    width: 90%;
+    bottom: 0;
+    width: 100%;
     left: 50%;
     transform: translateX(-50%);
     height: 40px;
     color: ${(props) => props.theme.background.primary};
     background: ${(props) => props.theme.background.septenary};
-    border-radius: 40px;
     justify-content: space-around;
     z-index: 11;
 `;
