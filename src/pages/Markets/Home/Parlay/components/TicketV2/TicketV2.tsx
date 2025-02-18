@@ -2286,8 +2286,9 @@ const Ticket: React.FC<TicketProps> = ({
                         </LoaderContainer>
                     ) : (
                         <Tooltip
-                            open={isQuoteTooltipEnabled}
                             overlay={getQuoteTooltipText()}
+                            placement={isQuoteTooltipError ? 'bottom' : undefined}
+                            open={isQuoteTooltipEnabled}
                             isValidation
                             isWarning={!isQuoteTooltipError}
                         >
