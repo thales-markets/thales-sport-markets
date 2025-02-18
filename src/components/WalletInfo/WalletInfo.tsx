@@ -126,9 +126,9 @@ const WalletInfo: React.FC = ({}) => {
                             <Text>{totalBalanceValue}</Text>
                         </WalletBalanceInfo>
                     )}
+                    <NetworkSwitcher />
                 </Wrapper>
             </FlexDivColumn>
-            <NetworkSwitcher />
             {connectWalletModalVisibility && (
                 <ConnectWalletModal
                     isOpen={connectWalletModalVisibility}
@@ -150,7 +150,6 @@ const Container = styled(FlexDivCentered)<{ walletConnected?: boolean }>`
     color: ${(props) => props.theme.textColor.secondary};
     border-radius: 5px;
     position: relative;
-    gap: 8px;
     justify-content: end;
     min-width: fit-content;
     @media (max-width: 767px) {
@@ -171,10 +170,6 @@ const Wrapper = styled.div<{ displayPadding?: boolean }>`
     }
     & > div:last-child {
         flex: 0.2;
-    }
-    &:hover {
-        background-color: ${(props) => props.theme.connectWalletModal.hover};
-        color: ${(props) => props.theme.button.textColor.primary};
     }
 `;
 
