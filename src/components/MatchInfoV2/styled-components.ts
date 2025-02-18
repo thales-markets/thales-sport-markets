@@ -80,19 +80,6 @@ export const LiveTag = styled.span<{ readOnly?: boolean }>`
     margin-bottom: ${(props) => (props.readOnly ? '4px' : '5px')};
 `;
 
-export const SgpTag = styled.span<{ readOnly?: boolean }>`
-    background: ${(props) => props.theme.status.sgp};
-    color: ${(props) => props.theme.textColor.primary};
-    border-radius: 3px;
-    font-weight: 600;
-    font-size: 10px;
-    height: 12px;
-    line-height: 11px;
-    padding: ${(props) => (props.readOnly ? '0 10px' : '0 12px')};
-    width: fit-content;
-    margin-bottom: ${(props) => (props.readOnly ? '4px' : '5px')};
-`;
-
 export const MarketPositionContainer = styled(FlexDivColumn)<{ readOnly?: boolean }>`
     display: block;
     width: 100%;
