@@ -202,7 +202,6 @@ const Account: React.FC = () => {
                 <ButtonContainer>
                     <Button onClick={() => setShowSwapModal(true)}>{t('profile.account-summary.swap')}</Button>
                     <Button onClick={() => setShowFundModal(true)}>{t('profile.account-summary.deposit')}</Button>
-
                     <Button onClick={() => setShowWithdrawModal(true)}>{t('profile.account-summary.withdraw')}</Button>
                 </ButtonContainer>
             </Container>
@@ -259,7 +258,7 @@ const ButtonContainer = styled(FlexDivCentered)`
     @media (max-width: 800px) {
         justify-content: flex-start;
         width: 100%;
-        gap: 10px;
+        gap: 6px;
     }
 `;
 
@@ -351,6 +350,10 @@ const Button = styled(FlexDivCentered)<{ active?: boolean }>`
     }
     white-space: pre;
     padding: 3px 24px;
+    @media (max-width: 575px) {
+        font-size: 12px;
+        padding: 3px 12px;
+    }
 `;
 
 export default Account;
