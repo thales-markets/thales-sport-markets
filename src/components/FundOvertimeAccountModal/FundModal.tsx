@@ -175,7 +175,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                 </CollateralsWrapper>
 
                 <NetworkWrapper>
-                    <FieldHeader>Current Network: </FieldHeader>
+                    <FieldHeader>{t('get-started.fund-account.current-network')}</FieldHeader>
                     <NetworkSwitcherWrapper>
                         <NetworkSwitcher />
                     </NetworkSwitcherWrapper>
@@ -184,13 +184,13 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                 <WalletContainer>
                     <FieldHeader>
                         {t('get-started.fund-account.address')}
-                        <Tooltip
-                            customIconStyling={{ color: theme.textColor.secondary }}
-                            overlay={t('get-started.fund-account.tooltip-2', {
+                        <FieldDesc>
+                            {t('get-started.fund-account.tooltip-2', {
                                 network: getNetworkNameByNetworkId(networkId),
                             })}
-                        ></Tooltip>
+                        </FieldDesc>
                     </FieldHeader>
+
                     <AddressContainer>
                         <Field>{walletAddress}</Field>
                         <ButtonsContainer>
@@ -304,6 +304,14 @@ const FieldHeader = styled.p`
     white-space: pre;
 `;
 
+const FieldDesc = styled.p`
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 4px;
+    color: ${(props) => props.theme.textColor.secondary};
+    white-space: break-spaces;
+`;
+
 const TooltipText = styled.span`
     white-space: pre;
 `;
@@ -364,6 +372,7 @@ const Field = styled.div`
     }
     font-size: 14px;
     width: 100%;
+    font-weight: 600;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -374,7 +383,7 @@ const BlueField = styled(Field)`
     background: ${(props) => props.theme.textColor.quaternary};
     color: ${(props) => props.theme.textColor.senary};
     flex: 1;
-    font-weight: 600;
+
     cursor: pointer;
 `;
 
