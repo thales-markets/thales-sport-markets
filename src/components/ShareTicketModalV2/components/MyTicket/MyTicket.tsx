@@ -105,6 +105,21 @@ const MyTicket: React.FC<MyTicketProps> = ({
                 })}
             </MarketsContainer>
             <HorizontalLine />
+            {isSgp && (
+                <InfoWrapper>
+                    <InfoDiv isWinning={!isTicketOpen && !isTicketLost} isLost={!isTicketOpen && isTicketLost}>
+                        <InfoLabel>{t('markets.parlay.sgp')}:</InfoLabel>
+                        <InfoValue>
+                            {!isTicketOpen &&
+                                (isTicketLost ? (
+                                    <Wrong className="icon icon--wrong" />
+                                ) : (
+                                    <Correct className="icon icon--correct" />
+                                ))}
+                        </InfoValue>
+                    </InfoDiv>
+                </InfoWrapper>
+            )}
             {systemBetData && (
                 <InfoWrapper>
                     <InfoDiv isWinning={!isTicketOpen && !isTicketLost} isLost={!isTicketOpen && isTicketLost}>
