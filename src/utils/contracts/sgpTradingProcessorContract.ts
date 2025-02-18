@@ -6,7 +6,7 @@ const sgpTradingProcessorContract: ContractData = {
     addresses: {
         [Network.OptimismMainnet]: '0x',
         [Network.Arbitrum]: '0x',
-        [Network.OptimismSepolia]: '0xA6eE50312254Bf0d6390c5a510420c70387CCBe5',
+        [Network.OptimismSepolia]: '0x1B3b991Da49DBCAbf5b5DA401E8a13946bBedEBD',
     },
     abi: [
         {
