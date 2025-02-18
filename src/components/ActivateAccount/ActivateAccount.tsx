@@ -4,6 +4,7 @@ import FundModal from 'components/FundOvertimeAccountModal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
+import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -17,7 +18,12 @@ import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import { activateOvertimeAccount } from 'utils/biconomy';
 import biconomyConnector from 'utils/biconomyWallet';
-import { getCollateralAddress, getCollateralIndex, getCollaterals } from 'utils/collaterals';
+import {
+    getCollateralAddress,
+    getCollateralIndex,
+    getCollaterals,
+    mapMultiCollateralBalances,
+} from 'utils/collaterals';
 import { isSmallDevice } from 'utils/device';
 import { getFundModalShown, setFundModalShown } from 'utils/fundModal';
 import { Client } from 'viem';
@@ -50,13 +56,28 @@ const ActivateAccount: React.FC<any> = () => {
     const exchangeRates: Rates | null =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
+    const freeBetCollateralBalancesQuery = useFreeBetCollateralBalanceQuery(
+        walletAddress,
+        { networkId, client },
+        {
+            enabled: isConnected,
+        }
+    );
+
+    const freeBetCollateralBalances =
+        freeBetCollateralBalancesQuery?.isSuccess && freeBetCollateralBalancesQuery.data
+            ? freeBetCollateralBalancesQuery?.data
+            : undefined;
+
+    const balanceList = mapMultiCollateralBalances(freeBetCollateralBalances, exchangeRates, networkId);
+
     const totalBalanceValue = useMemo(() => {
         if (!walletAddress || exchangeRates === null || !multipleCollateralBalances.isSuccess) {
             return undefined;
         }
         let total = 0;
         try {
-            if (exchangeRates && multipleCollateralBalances.data) {
+            if (exchangeRates && multipleCollateralBalances.data && balanceList) {
                 let max = { value: 0, coin: '' };
                 getCollaterals(networkId).forEach((token) => {
                     const balance =
@@ -66,6 +87,7 @@ const ActivateAccount: React.FC<any> = () => {
                     }
                     total += multipleCollateralBalances.data[token] * (exchangeRates[token] ? exchangeRates[token] : 1);
                 });
+                balanceList.forEach((data) => (total += data.balanceDollarValue));
                 return { total, max };
             }
             return undefined;
@@ -78,6 +100,7 @@ const ActivateAccount: React.FC<any> = () => {
         multipleCollateralBalances.isSuccess,
         networkId,
         walletAddress,
+        balanceList,
     ]);
 
     useEffect(() => {
