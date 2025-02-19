@@ -2,6 +2,7 @@ import ParlayEmptyIcon from 'assets/images/parlay-empty.svg?react';
 import RadioButton from 'components/fields/RadioButton';
 import MatchInfoV2 from 'components/MatchInfoV2';
 import MatchUnavailableInfo from 'components/MatchUnavailableInfo';
+import Scroll from 'components/Scroll';
 import Tooltip from 'components/Tooltip';
 import { LeagueMap } from 'constants/sports';
 import { secondsToMilliseconds } from 'date-fns';
@@ -42,6 +43,9 @@ type ParlayProps = {
     onSuccess?: () => void;
     openMarkets?: SportMarkets;
 };
+
+const TICKET_MARKETS_LIST_MAX_HEIGHT = 565;
+const TICKET_MARKETS_LIST_MAX_HEIGHT_MOBILE = 325;
 
 const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     const { t } = useTranslation();
@@ -290,6 +294,14 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
 
     const hasParlayMarkets = ticketMarkets.length > 0 || unavailableMarkets.length > 0;
 
+    const marketsList = useRef<HTMLDivElement>(null);
+    const marketsListHeight = marketsList.current?.getBoundingClientRect().height;
+    const scrollHeight = Math.min(
+        isMobile ? TICKET_MARKETS_LIST_MAX_HEIGHT_MOBILE : TICKET_MARKETS_LIST_MAX_HEIGHT,
+        marketsListHeight || Number.MAX_VALUE
+    );
+    const isScrollVisible = !isMobile && (marketsListHeight || 0) > TICKET_MARKETS_LIST_MAX_HEIGHT;
+
     return (
         <Container isMobile={isMobile} isWalletConnected={isConnected}>
             {hasParlayMarkets ? (
@@ -357,40 +369,44 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                     <ThalesBonusContainer>
                         <ThalesBonus>{t('markets.parlay.thales-bonus-info')}</ThalesBonus>
                     </ThalesBonusContainer>
-                    <ListContainer>
-                        {ticketMarkets.length > 0 &&
-                            ticketMarkets.map((market, index) => {
-                                const outOfLiquidity = outOfLiquidityMarkets.includes(index);
-                                return (
-                                    <RowMarket key={index} outOfLiquidity={outOfLiquidity}>
-                                        <MatchInfoV2
-                                            market={market}
-                                            showOddUpdates={!isSgp}
-                                            setOddsChanged={setOddsChanged}
-                                            acceptOdds={acceptOdds}
-                                            setAcceptOdds={setAcceptOdds}
-                                            isSgp={isSgp}
-                                            applyPayoutMultiplier={true}
-                                            useThalesCollateral={useThalesCollateral}
-                                        />
-                                    </RowMarket>
-                                );
-                            })}
-                        {unavailableMarkets.length > 0 &&
-                            unavailableMarkets.map((market, index) => {
-                                return (
-                                    <RowMarket key={index} outOfLiquidity={false} notOpened={true}>
-                                        <MatchUnavailableInfo
-                                            market={market}
-                                            showOddUpdates
-                                            acceptOdds={acceptOdds}
-                                            setAcceptOdds={setAcceptOdds}
-                                            applyPayoutMultiplier={true}
-                                        />
-                                    </RowMarket>
-                                );
-                            })}
-                    </ListContainer>
+                    <ScrollContainer>
+                        <Scroll height={`${scrollHeight}px`}>
+                            <ListContainer ref={marketsList} isScrollVisible={isScrollVisible}>
+                                {ticketMarkets.length > 0 &&
+                                    ticketMarkets.map((market, index) => {
+                                        const outOfLiquidity = outOfLiquidityMarkets.includes(index);
+                                        return (
+                                            <RowMarket key={index} outOfLiquidity={outOfLiquidity}>
+                                                <MatchInfoV2
+                                                    market={market}
+                                                    showOddUpdates={!isSgp}
+                                                    setOddsChanged={setOddsChanged}
+                                                    acceptOdds={acceptOdds}
+                                                    setAcceptOdds={setAcceptOdds}
+                                                    isSgp={isSgp}
+                                                    applyPayoutMultiplier={true}
+                                                    useThalesCollateral={useThalesCollateral}
+                                                />
+                                            </RowMarket>
+                                        );
+                                    })}
+                                {unavailableMarkets.length > 0 &&
+                                    unavailableMarkets.map((market, index) => {
+                                        return (
+                                            <RowMarket key={index} outOfLiquidity={false} notOpened={true}>
+                                                <MatchUnavailableInfo
+                                                    market={market}
+                                                    showOddUpdates
+                                                    acceptOdds={acceptOdds}
+                                                    setAcceptOdds={setAcceptOdds}
+                                                    applyPayoutMultiplier={true}
+                                                />
+                                            </RowMarket>
+                                        );
+                                    })}
+                            </ListContainer>
+                        </Scroll>
+                    </ScrollContainer>
                     <TicketV2
                         markets={ticketMarkets}
                         setMarketsOutOfLiquidity={setOutOfLiquidityMarkets}
@@ -501,7 +517,13 @@ const ThalesBonus = styled.span`
     }
 `;
 
-const ListContainer = styled(FlexDivColumn)``;
+const ScrollContainer = styled.div`
+    margin-bottom: 11px;
+`;
+
+const ListContainer = styled(FlexDivColumn)<{ isScrollVisible: boolean }>`
+    ${(props) => (props.isScrollVisible ? 'padding-right: 10px;' : '')}
+`;
 
 const RowMarket = styled.div<{ outOfLiquidity: boolean; notOpened?: boolean }>`
     display: flex;
@@ -523,6 +545,7 @@ const RowMarket = styled.div<{ outOfLiquidity: boolean; notOpened?: boolean }>`
     }
     :last-child {
         border-radius: 0 0 5px 5px;
+        margin-bottom: 0;
     }
     :first-child:last-child {
         border-radius: 5px;
