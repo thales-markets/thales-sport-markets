@@ -2272,8 +2272,8 @@ const Ticket: React.FC<TicketProps> = ({
                             {formatMarketOdds(selectedOddsType, systemData.systemBetMinimumQuote)}
                         </SummaryValue>
                         <ClearLabel alignRight={true} onClick={() => dispatch(removeAll())}>
-                            {t('markets.parlay.clear')}
-                            <XButton margin={'0 0 4px 5px'} className={`icon icon--clear`} />
+                            {t('markets.parlay.clear').toUpperCase()}
+                            <XButton margin={'0 0 4px 5px'} className={`icon icon--close`} />
                         </ClearLabel>
                     </RowContainer>
                 )}
@@ -2305,8 +2305,8 @@ const Ticket: React.FC<TicketProps> = ({
                     {isSgp && oddsChanged && !isTotalQuoteIncreased && <OddChangeDown />}
                     {!isSystemBet && (
                         <ClearLabel alignRight={true} onClick={() => dispatch(removeAll())}>
-                            {t('markets.parlay.clear')}
-                            <XButton margin={'0 0 4px 5px'} className={`icon icon--clear`} />
+                            {t('markets.parlay.clear').toUpperCase()}
+                            <XButton margin={'0 0 4px 5px'} className={`icon icon--close`} />
                         </ClearLabel>
                     )}
                 </RowContainer>

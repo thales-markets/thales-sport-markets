@@ -185,7 +185,7 @@ export const BalanceValue = styled.span`
 `;
 
 export const XButton = styled.i<{ margin?: string }>`
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
     color: ${(props) => props.theme.textColor.septenary};
     ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
