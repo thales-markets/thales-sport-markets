@@ -32,6 +32,7 @@ const QUERY_KEYS = {
         isLive,
     ],
     SportsAmmData: (networkId: Network) => ['sportsAmmData', networkId],
+    SportsAmmRiskManager: (networkId: Network, league: League) => ['sportsAmmRiskManager', networkId, league],
     TicketLiquidity: (
         gameIds: string,
         typeIds: string,

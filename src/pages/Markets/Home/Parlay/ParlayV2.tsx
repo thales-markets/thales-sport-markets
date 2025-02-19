@@ -3,12 +3,15 @@ import RadioButton from 'components/fields/RadioButton';
 import MatchInfoV2 from 'components/MatchInfoV2';
 import MatchUnavailableInfo from 'components/MatchUnavailableInfo';
 import Tooltip from 'components/Tooltip';
+import { LeagueMap } from 'constants/sports';
 import { secondsToMilliseconds } from 'date-fns';
 import { SportFilter, StatusFilter } from 'enums/markets';
+import { League } from 'enums/sports';
 import { isEqual } from 'lodash';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsAmmDataQuery from 'queries/markets/useSportsAmmDataQuery';
 import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
+import useSportsAmmRiskManagerQuery from 'queries/riskManagement/useSportsAmmRiskManagerQuery';
 import useSgpDataQuery from 'queries/sgp/useSgpDataQuery';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -65,10 +68,6 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
 
     const isLive = useMemo(() => !!ticket[0]?.live, [ticket]);
 
-    const isSgpDisabled = useMemo(() => !ticket.every((ticketPosition) => ticketPosition.gameId === ticket[0].gameId), [
-        ticket,
-    ]);
-
     const previousTicketOdds = useRef<{ position: number; odd: number; gameId: string; proof: string[] }[]>([]);
 
     const sportsAmmDataQuery = useSportsAmmDataQuery({ networkId, client });
@@ -82,6 +81,12 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     });
 
     const liveSportMarketsQuery = useLiveSportsMarketsQuery(isLiveFilterSelected, { networkId });
+
+    const sportsAmmRiskManagerQuery = useSportsAmmRiskManagerQuery(
+        ticketMarkets[0]?.subLeagueId || 0,
+        { networkId, client },
+        { enabled: !!ticketMarkets.length }
+    );
 
     const sgpParams: SgpParams =
         ticketMarkets.length > 1
@@ -116,6 +121,18 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
         }
         return undefined;
     }, [sgpDataQuery.isSuccess, sgpDataQuery.data, t]);
+
+    const isDifferentGamesCombined = useMemo(
+        () => !ticket.every((ticketPosition) => ticketPosition.gameId === ticket[0].gameId),
+        [ticket]
+    );
+    const isSgpSportDisabled = useMemo(
+        () =>
+            sportsAmmRiskManagerQuery.isSuccess && sportsAmmRiskManagerQuery.data
+                ? !sportsAmmRiskManagerQuery.data
+                : true,
+        [sportsAmmRiskManagerQuery.isSuccess, sportsAmmRiskManagerQuery.data]
+    );
 
     useEffect(() => {
         if (sportsAmmDataQuery.isSuccess && sportsAmmDataQuery.data) {
@@ -311,11 +328,21 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                                     />
                                 </RadioButtonContainer>
                             </Tooltip>
-                            <Tooltip overlay={t('markets.parlay.tooltip.sgp')}>
+                            <Tooltip
+                                overlay={
+                                    isDifferentGamesCombined
+                                        ? t('markets.parlay.tooltip.sgp-different-game')
+                                        : isSgpSportDisabled
+                                        ? t('markets.parlay.tooltip.sgp-sport-disabled', {
+                                              league: LeagueMap[ticketMarkets[0].subLeagueId as League].label,
+                                          })
+                                        : t('markets.parlay.tooltip.sgp')
+                                }
+                            >
                                 <RadioButtonContainer>
                                     <RadioButton
                                         checked={isSgp}
-                                        disabled={isSgpDisabled}
+                                        disabled={isDifferentGamesCombined || isSgpSportDisabled}
                                         value={'false'}
                                         onChange={() => {
                                             dispatch(setIsSystemBet(false));
