@@ -1,4 +1,3 @@
-import { PaymasterMode } from '@biconomy/account';
 import { getWalletClient } from '@wagmi/core';
 import Zebra from 'assets/images/overtime-zebra.svg?react';
 import Modal from 'components/Modal';
@@ -64,15 +63,16 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
                         value: parsedAmount,
                     };
                     if (biconomyConnector && biconomyConnector.wallet) {
-                        const { wait } = await biconomyConnector.wallet.sendTransaction(transaction, {
-                            paymasterServiceData: {
-                                mode: PaymasterMode.SPONSORED,
-                            },
+                        // biconomyConnector.wallet.setActiveValidationModule(biconomyConnector.wallet.defaultValidationModule);
+                        const hash = await biconomyConnector.wallet.sendTransaction({
+                            calls: [transaction],
                         });
 
                         const {
                             receipt: { transactionHash },
-                        } = await wait();
+                        } = await biconomyConnector.wallet.waitForConfirmedUserOperationReceipt({
+                            hash: hash,
+                        });
 
                         txHash = transactionHash;
                     }
