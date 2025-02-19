@@ -101,9 +101,9 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ market, isLoading }) =>
     const lastSelectedGroupRef = useRef<HTMLDivElement | null>(null);
     useEffect(() => {
         if (lastSelectedGroupRef?.current) {
-            const mainScrollPosition = window.scrollY;
+            const mainScrollYPosition = window.scrollY;
             lastSelectedGroupRef.current.scrollIntoView();
-            window.scrollTo(0, mainScrollPosition);
+            window.scrollTo(0, mainScrollYPosition);
         }
     }, [groupedChildMarkets]);
 
