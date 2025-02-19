@@ -87,9 +87,9 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     const liveSportMarketsQuery = useLiveSportsMarketsQuery(isLiveFilterSelected, { networkId });
 
     const sportsAmmRiskManagerQuery = useSportsAmmRiskManagerQuery(
-        ticketMarkets[0]?.subLeagueId || 0,
+        ticket[0]?.leagueId || 0,
         { networkId, client },
-        { enabled: !!ticketMarkets.length }
+        { enabled: !!ticket.length }
     );
 
     const sgpParams: SgpParams =
@@ -346,7 +346,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                                         ? t('markets.parlay.tooltip.sgp-different-game')
                                         : isSgpSportDisabled
                                         ? t('markets.parlay.tooltip.sgp-sport-disabled', {
-                                              league: LeagueMap[ticketMarkets[0].subLeagueId as League].label,
+                                              league: LeagueMap[ticket[0]?.leagueId as League]?.label,
                                           })
                                         : t('markets.parlay.tooltip.sgp')
                                 }
