@@ -833,6 +833,7 @@
                 "system-bet-min-markets-validation": "System bet requires minimum {{minMarkets}} games",
                 "sgp-bet-min-markets-validation": "SGP bet requires minimum {{minMarkets}} markets",
                 "sgp-different-game": "It is not supported to combine different games in the same game parlay",
+                "sgp-sport-disabled": "{{league}} is currently not supported. Switching to Regular bet.",
                 "sgp-no-odds": "Missing odds from provider"
             },
             "share-ticket": {

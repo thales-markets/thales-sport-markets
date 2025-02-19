@@ -6,7 +6,7 @@ import Scroll from 'components/Scroll';
 import Tooltip from 'components/Tooltip';
 import { LeagueMap } from 'constants/sports';
 import { secondsToMilliseconds } from 'date-fns';
-import { SportFilter, StatusFilter } from 'enums/markets';
+import { SportFilter, StatusFilter, TicketErrorCode } from 'enums/markets';
 import { League } from 'enums/sports';
 import { isEqual } from 'lodash';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
@@ -29,6 +29,7 @@ import {
     setIsSgp,
     setIsSystemBet,
     setMaxTicketSize,
+    setTicketError,
 } from 'redux/modules/ticket';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivSpaceBetween } from 'styles/common';
@@ -133,7 +134,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     const isSgpSportDisabled = useMemo(
         () =>
             sportsAmmRiskManagerQuery.isSuccess && sportsAmmRiskManagerQuery.data
-                ? !sportsAmmRiskManagerQuery.data
+                ? !sportsAmmRiskManagerQuery.data.sgpOnLeagueIdEnabled
                 : true,
         [sportsAmmRiskManagerQuery.isSuccess, sportsAmmRiskManagerQuery.data]
     );
@@ -143,6 +144,18 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
             dispatch(setMaxTicketSize(sportsAmmDataQuery.data.maxTicketSize));
         }
     }, [dispatch, sportsAmmDataQuery.isSuccess, sportsAmmDataQuery.data]);
+
+    useEffect(() => {
+        if (isSgp && sportsAmmRiskManagerQuery.data) {
+            if (isSgpSportDisabled) {
+                const disabledLeagueName = LeagueMap[ticket[0].leagueId as League]?.label;
+                dispatch(setTicketError({ code: TicketErrorCode.SGP_LEAGUE_DISABLED, data: disabledLeagueName }));
+                dispatch(setIsSgp(false));
+            } else {
+                dispatch(resetTicketError());
+            }
+        }
+    }, [dispatch, sportsAmmRiskManagerQuery.data, isSgp, isSgpSportDisabled, ticket]);
 
     // Reset states when empty ticket
     useEffect(() => {

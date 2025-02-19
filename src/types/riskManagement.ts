@@ -21,3 +21,7 @@ type RiskManagementBookmaker = {
     secondaryBookmaker: string;
     tertiaryBookmaker: string;
 };
+
+export type SportsAmmRiskManagerData = {
+    sgpOnLeagueIdEnabled: boolean;
+};

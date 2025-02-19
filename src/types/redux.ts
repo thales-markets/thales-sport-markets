@@ -1,9 +1,10 @@
-import { OddsType, SortType, SportFilter, StatusFilter, TicketErrorCode } from 'enums/markets';
+import { OddsType, SortType, SportFilter, StatusFilter } from 'enums/markets';
 import { MarketType, MarketTypeGroup } from 'enums/marketTypes';
 import { Theme } from 'enums/ui';
 import { ParlayPayment, Tags, TicketPosition } from './markets';
 import { SelectedMarket } from './marketTypes';
 import { OverdropUIState } from './overdrop';
+import { TicketError } from './tickets';
 
 export type AppSliceState = {
     isMobile: boolean;
@@ -30,7 +31,7 @@ export type TicketSliceState = {
     isFreeBetDisabledByUser: boolean;
     isSystemBet: boolean;
     isSgp: boolean;
-    error: { code: TicketErrorCode; data: string };
+    error: TicketError;
 };
 
 export type UISliceState = {

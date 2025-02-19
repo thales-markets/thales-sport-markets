@@ -6,6 +6,7 @@ import { WritableDraft } from 'immer/dist/internal';
 import { localStore } from 'thales-utils';
 import { ParlayPayment, SerializableSportMarket, TicketPosition } from 'types/markets';
 import { RootState, TicketSliceState } from 'types/redux';
+import { TicketError } from 'types/tickets';
 import { isFuturesMarket, isPlayerPropsMarket } from '../../utils/markets';
 import { isSameMarket, serializableSportMarketAsSportMarket } from '../../utils/marketsV2';
 import { isPlayerPropsCombiningEnabled } from '../../utils/sports';
@@ -48,7 +49,7 @@ const getDefaultIsSgp = (): boolean => {
     return lsIsSgp !== undefined ? (lsIsSgp as boolean) : false;
 };
 
-const getDefaultError = () => {
+const getDefaultError = (): TicketError => {
     return { code: TicketErrorCode.NO_ERROS, data: '' };
 };
 
@@ -181,7 +182,6 @@ const ticketSlice = createSlice({
         },
         setLiveBetSlippage: (state, action: PayloadAction<number>) => {
             state.liveBetSlippage = action.payload;
-
             localStore.set(LOCAL_STORAGE_KEYS.LIVE_BET_SLIPPAGE, action.payload);
         },
         setPaymentSelectedCollateralIndex: (
@@ -217,6 +217,9 @@ const ticketSlice = createSlice({
             state.isSgp = action.payload;
             localStore.set(LOCAL_STORAGE_KEYS.IS_SGP, action.payload);
         },
+        setTicketError: (state, action: PayloadAction<TicketError>) => {
+            state.error = action.payload;
+        },
         resetTicketError: (state) => {
             state.error = getDefaultError();
         },
@@ -229,12 +232,13 @@ export const {
     removeAll,
     setPaymentSelectedCollateralIndex,
     setPaymentAmountToBuy,
-    resetTicketError,
     setMaxTicketSize,
     setLiveBetSlippage,
     setIsFreeBetDisabledByUser,
     setIsSystemBet,
     setIsSgp,
+    setTicketError,
+    resetTicketError,
 } = ticketSlice.actions;
 
 const getTicketState = (state: RootState) => state[sliceName];
