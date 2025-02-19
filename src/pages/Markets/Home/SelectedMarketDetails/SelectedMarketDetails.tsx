@@ -7,8 +7,7 @@ import { MarketType } from 'enums/marketTypes';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import { t } from 'i18next';
 import { groupBy } from 'lodash';
-import React, { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
-import Scrollbars from 'react-custom-scrollbars-2';
+import React, { useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import {
@@ -32,8 +31,6 @@ type SelectedMarketProps = {
     isLoading?: boolean;
 };
 
-const LINE_HEIGHT_FOR_SCROLL_DIFF = 53;
-
 const SelectedMarket: React.FC<SelectedMarketProps> = ({ market, isLoading }) => {
     const theme: ThemeInterface = useTheme();
     const dispatch = useDispatch();
@@ -44,8 +41,7 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ market, isLoading }) =>
     const sportFilter = useSelector(getSportFilter);
     const selectedMarket = useSelector(getSelectedMarket);
 
-    const [scrollRef, setScrollRef] = useState<Scrollbars | undefined>(undefined);
-    const [lastScrollTopPosition, setLastScrollTopPosition] = useState(0);
+    const [lastClickedTypeId, setLastClickedTypeId] = useState(0);
 
     const playerName = useMemo(() => selectedMarket?.playerName, [selectedMarket?.playerName]);
 
@@ -101,35 +97,18 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ market, isLoading }) =>
 
     const hideGame = isGameOpen && !areOddsValid && !areChildMarketsOddsValid;
 
-    const onRefChange = useCallback(
-        (scroll: Scrollbars) => {
-            if (scroll) {
-                setScrollRef(scroll);
-            }
-        },
-        [setScrollRef]
-    );
-
-    // when markets are reloaded keep scroll to the same selected line
-    const prevIsLoading = useRef<boolean>(!!isLoading);
-    const prevNumberOfMarkets = useRef(numberOfMarkets);
+    // when markets are filtered keep scroll to the last selected type group
+    const lastSelectedGroupRef = useRef<HTMLDivElement | null>(null);
     useEffect(() => {
-        if (prevIsLoading.current && !isLoading) {
-            const positionDiff = (prevNumberOfMarkets.current - numberOfMarkets) * LINE_HEIGHT_FOR_SCROLL_DIFF;
-            scrollRef?.scrollTop(lastScrollTopPosition - positionDiff);
+        if (lastSelectedGroupRef?.current) {
+            const mainScrollPosition = window.scrollY;
+            lastSelectedGroupRef.current.scrollIntoView();
+            window.scrollTo(0, mainScrollPosition);
         }
-        prevIsLoading.current = !!isLoading;
-        prevNumberOfMarkets.current = numberOfMarkets;
-    }, [isLoading, scrollRef, lastScrollTopPosition, numberOfMarkets]);
+    }, [groupedChildMarkets]);
 
     return (
-        <Scroll
-            innerRef={onRefChange}
-            height={`calc(100vh - ${isMobile ? 0 : market.leagueId === League.US_ELECTION ? 280 : 194}px)`}
-            onScrollStop={() => {
-                !isLoading && setLastScrollTopPosition(scrollRef?.getScrollTop() || 0);
-            }}
-        >
+        <Scroll height={`calc(100vh - ${isMobile ? 0 : market.leagueId === League.US_ELECTION ? 280 : 194}px)`}>
             {isLoading && (
                 <LoaderContainer>
                     <SimpleLoader />
@@ -153,28 +132,35 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ market, isLoading }) =>
                 ) : (
                     <>
                         {(!marketTypesFilter.length || marketTypesFilter.includes(MarketType.WINNER)) && (
-                            <PositionsV2
-                                markets={[market]}
-                                marketType={market.typeId}
-                                isGameOpen={isGameOpen}
-                                onAccordionClick={refreshScroll}
-                                hidePlayerName={sportFilter === SportFilter.PlayerProps}
-                                alignHeader={sportFilter === SportFilter.PlayerProps}
-                            />
-                        )}
-                        {Object.keys(groupedChildMarkets).map((key, index) => {
-                            const typeId = Number(key);
-                            const childMarkets = groupedChildMarkets[typeId];
-                            return (
+                            <div onClick={() => setLastClickedTypeId(0)}>
                                 <PositionsV2
-                                    key={index}
-                                    markets={childMarkets}
-                                    marketType={typeId}
+                                    markets={[market]}
+                                    marketType={market.typeId}
                                     isGameOpen={isGameOpen}
                                     onAccordionClick={refreshScroll}
                                     hidePlayerName={sportFilter === SportFilter.PlayerProps}
                                     alignHeader={sportFilter === SportFilter.PlayerProps}
                                 />
+                            </div>
+                        )}
+                        {Object.keys(groupedChildMarkets).map((key, index) => {
+                            const typeId = Number(key);
+                            const childMarkets = groupedChildMarkets[typeId];
+                            return (
+                                <div
+                                    key={`div-${index}`}
+                                    ref={lastClickedTypeId === typeId ? lastSelectedGroupRef : null}
+                                    onClick={() => setLastClickedTypeId(typeId)}
+                                >
+                                    <PositionsV2
+                                        markets={childMarkets}
+                                        marketType={typeId}
+                                        isGameOpen={isGameOpen}
+                                        onAccordionClick={refreshScroll}
+                                        hidePlayerName={sportFilter === SportFilter.PlayerProps}
+                                        alignHeader={sportFilter === SportFilter.PlayerProps}
+                                    />
+                                </div>
                             );
                         })}
                     </>
