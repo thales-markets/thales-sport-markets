@@ -1,16 +1,16 @@
-import { BiconomySmartAccountV2 } from '@biconomy/account';
+import { NexusClient } from '@biconomy/abstractjs';
 
 type BiconomyConnector = {
-    wallet: BiconomySmartAccountV2 | null;
+    wallet: NexusClient | null;
     address: string;
-    setWallet: (wallet: BiconomySmartAccountV2 | null, address: string) => void;
+    setWallet: (wallet: NexusClient | null, address: string) => void;
     resetWallet: () => void;
 };
 
 const biconomyConnector: BiconomyConnector = {
     wallet: null,
     address: '',
-    setWallet: function (wallet: BiconomySmartAccountV2 | null, address: string) {
+    setWallet: function (wallet: NexusClient | null, address: string) {
         this.wallet = wallet;
         this.address = address;
     },

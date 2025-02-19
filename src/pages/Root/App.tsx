@@ -1,4 +1,4 @@
-import { createSmartAccountClient } from '@biconomy/account';
+import { createBicoPaymasterClient, createSmartAccountClient, toNexusAccount } from '@biconomy/abstractjs';
 import { useConnect as useParticleConnect } from '@particle-network/authkit';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import Loader from 'components/Loader';
@@ -28,10 +28,12 @@ import { SupportedNetwork } from 'types/network';
 import { SeoArticleProps } from 'types/ui';
 import biconomyConnector from 'utils/biconomyWallet';
 import { isMobile } from 'utils/device';
-import { isNetworkSupported, isRouteAvailableForNetwork } from 'utils/network';
+import { getTransport, isNetworkSupported, isRouteAvailableForNetwork } from 'utils/network';
 import queryConnector from 'utils/queryConnector';
 import { history } from 'utils/routes';
-import { useAccount, useChainId, useDisconnect, useSwitchChain, useWalletClient } from 'wagmi';
+import { extractChain } from 'viem';
+import { arbitrum, base, optimism, optimismSepolia } from 'viem/chains';
+import { http, useAccount, useChainId, useDisconnect, useSwitchChain, useWalletClient } from 'wagmi';
 
 const App = () => {
     const dispatch = useDispatch();
@@ -62,18 +64,31 @@ const App = () => {
 
         if (walletClient) {
             const bundlerUrl = `${LINKS.Biconomy.Bundler}${networkId}/${import.meta.env.VITE_APP_BICONOMY_BUNDLE_KEY}`;
+            const paymasterUrl = `${LINKS.Biconomy.Paymaster}${networkId}/${
+                import.meta.env['VITE_APP_PAYMASTER_KEY_' + networkId]
+            }`;
+
+            console.log('paymasterUrl: ', paymasterUrl);
 
             const createSmartAccount = async () => {
-                const PAYMASTER_API_KEY = import.meta.env['VITE_APP_PAYMASTER_KEY_' + networkId];
-                const smartAccount = await createSmartAccountClient({
-                    signer: walletClient,
-                    bundlerUrl: bundlerUrl,
-                    biconomyPaymasterApiKey: PAYMASTER_API_KEY,
+                const nexusClient = createSmartAccountClient({
+                    account: await toNexusAccount({
+                        signer: walletClient,
+                        chain: extractChain({
+                            chains: [arbitrum, base, optimism, optimismSepolia],
+                            id: networkId,
+                        }),
+                        transport: getTransport(networkId),
+                    }),
+                    transport: http(bundlerUrl),
+                    paymaster: createBicoPaymasterClient({ paymasterUrl }),
                 });
-                const smartAddress = await smartAccount.getAccountAddress();
+
+                const smartAddress = nexusClient.account.address;
 
                 if (!biconomyConnector.address || biconomyConnector.address === smartAddress) {
-                    biconomyConnector.setWallet(smartAccount, smartAddress);
+                    biconomyConnector.setWallet(nexusClient, smartAddress);
+                    console.log(biconomyConnector.wallet);
                 }
             };
 

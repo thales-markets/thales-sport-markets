@@ -1,7 +1,9 @@
-import { SUPPORTED_NETWORKS, SUPPORTED_NETWORKS_PARAMS } from 'constants/network';
+import { RPC_LIST, SUPPORTED_NETWORKS, SUPPORTED_NETWORKS_PARAMS } from 'constants/network';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { Network } from 'enums/network';
-import { localStore } from 'thales-utils';
+import { localStore, NetworkId } from 'thales-utils';
+import { fallback, http } from 'viem';
+import { arbitrum, base, optimism, optimismSepolia } from 'viem/chains';
 import { SupportedNetwork } from '../types/network';
 import { getCollaterals } from './collaterals';
 import { getNavItemFromRoute } from './ui';
@@ -50,3 +52,20 @@ export const getDefaultCollateralIndexForNetworkId = (networkId: SupportedNetwor
 
 export const getIsMultiCollateralSupported = (networkId: SupportedNetwork): boolean =>
     getCollaterals(networkId).length > 1;
+
+export const getTransport = (networkId: SupportedNetwork) => {
+    switch (networkId) {
+        case optimism.id:
+            return fallback([http(RPC_LIST.INFURA[NetworkId.OptimismMainnet]), http()]);
+
+        case base.id:
+            return fallback([http(RPC_LIST.INFURA[NetworkId.Base]), http()]);
+
+        case arbitrum.id:
+            return fallback([http(RPC_LIST.INFURA[NetworkId.Arbitrum]), http()]);
+
+        case optimismSepolia.id:
+            return fallback([http(RPC_LIST.INFURA[NetworkId.OptimismSepolia]), http()]);
+    }
+    return http();
+};
