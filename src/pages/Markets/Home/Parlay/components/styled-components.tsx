@@ -44,14 +44,12 @@ export const SummaryLabel = styled.span<{
 
 export const ClearLabel = styled(SummaryLabel)`
     font-weight: 600;
-    color: ${(props) => props.theme.textColor.septenary};
+    color: ${(props) => props.theme.textColor.quaternary};
     text-transform: none;
     cursor: pointer;
-    &:hover {
+
+    i {
         color: ${(props) => props.theme.textColor.quaternary};
-        i {
-            color: ${(props) => props.theme.textColor.quaternary};
-        }
     }
 `;
 
