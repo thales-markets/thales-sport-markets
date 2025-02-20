@@ -113,6 +113,7 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.BUNDESLIGA_FUTURES:
         case League.GERMANY_SUPER_CUP:
         case League.GERMANY_BUNDESLIGA_WOMEN:
+        case League.GERMANY_DEL:
             return `/logos/Countries/germany.svg`;
         case League.LA_LIGA:
         case League.LA_LIGA_2:
@@ -155,14 +156,17 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.BELGIUM_SUPER_LEAGUE_WOMEN:
             return `/logos/Countries/belgium.svg`;
         case League.CZECH_LEAGUE:
+        case League.CZECH_REPUBLIC_EXTRALIGA:
             return `/logos/Countries/czech-republic.svg`;
         case League.CHILE_PRIMERA:
             return `/logos/Countries/chile.svg`;
         case League.FINLAND_LEAGUE:
+        case League.FINLAND_SM_LIIGA:
             return `/logos/Countries/finland.svg`;
         case League.ARGENTINA_PRIMERA:
             return `/logos/Countries/argentina.svg`;
         case League.RUSSIA_PREMIER:
+        case League.RUSSIA_KHL:
             return `/logos/Countries/russia.svg`;
         case League.TURKEY_SUPER_LEAGUE:
             return `/logos/Countries/turkey.svg`;
@@ -180,14 +184,17 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.AUSTRALIA_A_LEAGUE_WOMEN:
             return `/logos/Countries/australia.svg`;
         case League.SWITZERLAND_SUPER_LEAGUE:
+        case League.SWITZETLAND_NATIONAL_LEAGUE:
             return `/logos/Countries/switzerland.svg`;
         case League.AUSTRIA_BUNDESLIGA:
+        case League.AUSTRIA_ICE_HOCKEY_LEAGUE:
             return `/logos/Countries/austria.svg`;
         case League.DENMARK_SUPER_LEAGUE:
             return `/logos/Countries/denmark.svg`;
         case League.POLAND_LEAGUE:
             return `/logos/Countries/poland.svg`;
         case League.SWEDEN_LEAGUE:
+        case League.SWEDEN_SHL:
             return `/logos/Countries/sweden.svg`;
         case League.COLOMBIA_PRIMERA_A:
             return `/logos/Countries/colombia.svg`;
