@@ -91,7 +91,7 @@ export default defineConfig(({ mode }) => {
                         redux: ['react-redux'],
                         select: ['react-select'],
                         // TODO: Test biconomy and particle
-                        biconomy: ['@biconomy/account'],
+                        biconomy: ['@biconomy/abstractjs'],
                         // particle: ['@particle-network/auth-core-modal'],
                         googleTrans: ['@google-cloud/translate'],
                         tanstack: ['@tanstack/react-query', '@tanstack/react-table'],
