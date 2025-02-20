@@ -99,12 +99,15 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ market, isLoading }) =>
 
     // when markets are filtered keep scroll to the last selected type group
     const lastSelectedGroupRef = useRef<HTMLDivElement | null>(null);
+    const prevNumOfgroupedChildMarkets = useRef(Object.keys(groupedChildMarkets).length);
     useEffect(() => {
-        if (lastSelectedGroupRef?.current) {
+        const isNumOfMarketsDecreased = Object.keys(groupedChildMarkets).length < prevNumOfgroupedChildMarkets.current;
+        if (lastSelectedGroupRef?.current && isNumOfMarketsDecreased) {
             const mainScrollYPosition = window.scrollY;
             lastSelectedGroupRef.current.scrollIntoView();
             window.scrollTo(0, mainScrollYPosition);
         }
+        prevNumOfgroupedChildMarkets.current = Object.keys(groupedChildMarkets).length;
     }, [groupedChildMarkets]);
 
     return (
