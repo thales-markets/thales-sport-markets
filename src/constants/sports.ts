@@ -1739,6 +1739,18 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         priority: 1802,
         hidden: false,
     },
+    [League.NCAAB_FUTURES]: {
+        sport: Sport.FUTURES,
+        id: League.NCAAB_FUTURES,
+        label: 'NCAAB Futures',
+        logoClass: 'icon-homepage league--ncaa',
+        scoringType: ScoringType.EMPTY,
+        matchResolveType: MatchResolveType.EMPTY,
+        periodType: PeriodType.EMPTY,
+        isDrawAvailable: false,
+        priority: 1805,
+        hidden: false,
+    },
     [League.EPL_FUTURES]: {
         sport: Sport.FUTURES,
         id: League.EPL_FUTURES,
