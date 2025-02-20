@@ -52,6 +52,8 @@ export const getTeamImageSource = (team: string, league: League) => {
         ? `/logos/Countries/ao.webp`
         : league == League.NETHERLANDS_CUP
         ? `/logos/Eredivisie/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : league == League.NCAAB_FUTURES
+        ? `/logos/NCAA Basketball/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : `/logos/${leagueLabel}/${team.trim().replaceAll(' ', '-').replaceAll('/', '-').toLowerCase()}.webp`;
 };
 
@@ -90,6 +92,7 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.NBA_FUTURES:
         case League.NHL_FUTURES:
         case League.USA_NWSL:
+        case League.NCAAB_FUTURES:
             return `/logos/Countries/united-states-of-america.svg`;
         case League.EPL:
         case League.ENGLAND_CHAMPIONSHIP:
