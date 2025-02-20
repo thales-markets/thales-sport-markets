@@ -101,8 +101,10 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ market, isLoading }) =>
     const lastSelectedGroupRef = useRef<HTMLDivElement | null>(null);
     const prevNumOfgroupedChildMarkets = useRef(Object.keys(groupedChildMarkets).length);
     useEffect(() => {
+        const top = lastSelectedGroupRef?.current?.getBoundingClientRect().top || 0;
+        const isInViewport = top >= 0 && top <= window.innerHeight;
         const isNumOfMarketsDecreased = Object.keys(groupedChildMarkets).length < prevNumOfgroupedChildMarkets.current;
-        if (lastSelectedGroupRef?.current && isNumOfMarketsDecreased) {
+        if (lastSelectedGroupRef?.current && isNumOfMarketsDecreased && !isInViewport) {
             const mainScrollYPosition = window.scrollY;
             lastSelectedGroupRef.current.scrollIntoView();
             window.scrollTo(0, mainScrollYPosition);
