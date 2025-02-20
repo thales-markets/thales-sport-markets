@@ -122,7 +122,13 @@ import {
     getParlayMultiplier,
     getTooltipKey,
 } from 'utils/overdrop';
-import { refetchBalances, refetchCoingeckoRates, refetchFreeBetBalance, refetchProofs } from 'utils/queryConnector';
+import {
+    refetchBalances,
+    refetchCoingeckoRates,
+    refetchFreeBetBalance,
+    refetchProofs,
+    refetchTicketLiquidity,
+} from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import { getSportsAMMV2QuoteMethod, getSportsAMMV2Transaction } from 'utils/sportsAmmV2';
 import {
@@ -687,6 +693,15 @@ const Ticket: React.FC<TicketProps> = ({
         previousUsedCollateral.current = usedCollateralForBuy;
     }, [isSgp, totalQuote, markets, usedCollateralForBuy, setOddsChanged, acceptOddChanges]);
 
+    const isSgpDataLoading = useMemo(() => isSgp && isValidSgpBet && !sgpData, [isSgp, isValidSgpBet, sgpData]);
+
+    // Refresh SGP ticket liquidity when quote is fetched
+    useEffect(() => {
+        if (totalQuote > 0) {
+            refetchTicketLiquidity(networkId, isSystemBet, systemBetDenominator, isSgp, totalQuote, markets);
+        }
+    }, [networkId, isSystemBet, systemBetDenominator, isSgp, totalQuote, markets]);
+
     const totalBonus = useMemo(() => {
         const bonus = {
             percentage: 0,
@@ -781,7 +796,15 @@ const Ticket: React.FC<TicketProps> = ({
         [isSystemBet, numberOfSystemBetCombination, sportsAmmData?.maxAllowedSystemCombinations]
     );
 
-    const ticketLiquidityQuery = useTicketLiquidityQuery(markets, { networkId, client }, { enabled: !noProofs });
+    const ticketLiquidityQuery = useTicketLiquidityQuery(
+        markets,
+        isSystemBet,
+        systemBetDenominator,
+        isSgp,
+        totalQuote,
+        { networkId, client },
+        { enabled: !noProofs }
+    );
 
     const ticketLiquidity: number | undefined = useMemo(() => {
         if (ticketLiquidityQuery.isSuccess && ticketLiquidityQuery.data !== undefined) {
@@ -1716,6 +1739,8 @@ const Ticket: React.FC<TicketProps> = ({
                         refetchFreeBetBalance(walletAddress, networkId);
                         setIsFreeBetInitialized(false);
                     }
+
+                    refetchTicketLiquidity(networkId, isSystemBet, systemBetDenominator, isSgp, totalQuote, markets);
                 }
             } catch (e) {
                 setIsBuying(false);
@@ -1963,6 +1988,7 @@ const Ticket: React.FC<TicketProps> = ({
                 if (Number(buyInAmount) === 0) {
                     setFinalQuotes([]);
                     setMarketsOutOfLiquidity([]);
+                    setBuyInAmountInDefaultCollateral(0);
                 }
             }
             setIsFetching(false);
@@ -2281,7 +2307,7 @@ const Ticket: React.FC<TicketProps> = ({
                     <SummaryLabel>
                         {isSystemBet ? t('markets.parlay.max-quote') : t('markets.parlay.total-quote')}:
                     </SummaryLabel>
-                    {isSgp && isValidSgpBet && !sgpData ? (
+                    {isSgpDataLoading ? (
                         <LoaderContainer>
                             <SimpleLoader size={20} strokeWidth={4} />
                         </LoaderContainer>
@@ -2452,7 +2478,9 @@ const Ticket: React.FC<TicketProps> = ({
                 <InfoWrapper>
                     <InfoLabel>{t('markets.parlay.liquidity')}:</InfoLabel>
                     <InfoValue>
-                        {ticketLiquidity ? formatCurrencyWithSign(USD_SIGN, ticketLiquidity, 0, true) : '-'}
+                        {ticketLiquidity && !isSgpDataLoading
+                            ? formatCurrencyWithSign(USD_SIGN, ticketLiquidity, 0, true)
+                            : '-'}
                     </InfoValue>
                 </InfoWrapper>
                 {(isLiveTicket || isSgp) && (
