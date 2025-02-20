@@ -11,10 +11,10 @@ import { Address, Client, createWalletClient, encodeFunctionData, getContract, h
 import { generatePrivateKey, privateKeyToAccount } from 'viem/accounts';
 import biconomyConnector from './biconomyWallet';
 import { getContractAbi } from './contracts/abi';
+import liveTradingProcessorContract from './contracts/liveTradingProcessorContract';
 import multipleCollateral from './contracts/multipleCollateralContract';
 import sessionValidationContract from './contracts/sessionValidationContract';
 import sportsAMMV2Contract from './contracts/sportsAMMV2Contract';
-import liveTradingProcessorContract from './contracts/liveTradingProcessorContract';
 
 export const ETH_PAYMASTER = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'; // used for paying gas in ETH by AA
 
@@ -207,26 +207,85 @@ export const executeBiconomyTransaction = async (params: {
                     return transactionHash;
                 }
             } catch (error) {
-                const { wait } = await biconomyConnector.wallet.sendTransaction(transactionArray, {
-                    paymasterServiceData: {
-                        mode: PaymasterMode.ERC20,
-                        preferredToken: params.collateralAddress,
-                    },
-                    params: {
-                        sessionSigner: sessionSigner,
-                        sessionValidationModule: sessionValidationContract.addresses[params.networkId],
-                    },
-                });
+                if (error && (error as any).message && (error as any).message.includes('SessionNotApproved')) {
+                    await activateOvertimeAccount({
+                        networkId: params.networkId,
+                        collateralAddress: params.collateralAddress as any,
+                    });
 
-                const {
-                    receipt: { transactionHash },
-                    success,
-                } = await wait();
+                    const sessionSigner = await getSessionSigner(params.networkId);
+                    const transactionArray = [];
+                    if (params.isEth) {
+                        // swap eth to weth
+                        const client = getPublicClient(wagmiConfig, { chainId: params.networkId });
 
-                if (success === 'false') {
-                    throw new Error('tx failed');
+                        const wethContractWithSigner = getContract({
+                            abi: multipleCollateral.WETH.abi,
+                            address: multipleCollateral.WETH.addresses[params.networkId],
+                            client: client as Client,
+                        });
+
+                        const encodedCallWrapEth = encodeFunctionData({
+                            abi: wethContractWithSigner.abi,
+                            functionName: 'deposit',
+                            args: [],
+                        });
+
+                        const wrapEthTx = {
+                            to: wethContractWithSigner.address,
+                            data: encodedCallWrapEth,
+                            value: params.buyInAmountParam,
+                        };
+                        transactionArray.push(wrapEthTx);
+                    }
+                    transactionArray.push(transaction);
+
+                    try {
+                        const { wait } = await biconomyConnector.wallet.sendTransaction(transactionArray, {
+                            paymasterServiceData: {
+                                mode: PaymasterMode.SPONSORED,
+                            },
+                            params: {
+                                sessionSigner: sessionSigner,
+                                sessionValidationModule: sessionValidationContract.addresses[params.networkId],
+                            },
+                        });
+
+                        const {
+                            receipt: { transactionHash },
+                            success,
+                        } = await wait();
+
+                        if (success === 'false') {
+                            throw new Error('tx failed');
+                        } else {
+                            return transactionHash;
+                        }
+                    } catch (e) {
+                        console.log(e);
+                    }
                 } else {
-                    return transactionHash;
+                    const { wait } = await biconomyConnector.wallet.sendTransaction(transactionArray, {
+                        paymasterServiceData: {
+                            mode: PaymasterMode.ERC20,
+                            preferredToken: params.collateralAddress,
+                        },
+                        params: {
+                            sessionSigner: sessionSigner,
+                            sessionValidationModule: sessionValidationContract.addresses[params.networkId],
+                        },
+                    });
+
+                    const {
+                        receipt: { transactionHash },
+                        success,
+                    } = await wait();
+
+                    if (success === 'false') {
+                        throw new Error('tx failed');
+                    } else {
+                        return transactionHash;
+                    }
                 }
             }
         } catch (e) {
@@ -238,6 +297,7 @@ export const executeBiconomyTransaction = async (params: {
 
 export const activateOvertimeAccount = async (params: { networkId: SupportedNetwork; collateralAddress: string }) => {
     if (biconomyConnector.wallet) {
+        biconomyConnector.wallet.setActiveValidationModule(biconomyConnector.wallet.defaultValidationModule);
         try {
             const { wait } = await biconomyConnector.wallet.sendTransaction(
                 [...(await getCreateSessionTxs(params.networkId)), ...getApprovalTxs(params.networkId)],
