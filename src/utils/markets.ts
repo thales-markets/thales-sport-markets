@@ -44,8 +44,11 @@ export const formatMarketOdds = (oddsType: OddsType, odds: number | undefined) =
     }
 };
 
-export const isOneSideMarket = (league: number) =>
-    getLeagueSport(league) === Sport.MOTOSPORT || league == League.GOLF_WINNER || league == League.US_ELECTION;
+export const isOneSideMarket = (league: number, marketType: MarketType) =>
+    getLeagueSport(league) === Sport.MOTOSPORT ||
+    league == League.GOLF_WINNER ||
+    league == League.US_ELECTION ||
+    marketType === MarketType.TO_MAKE_FINAL_FOUR;
 
 export const isPlayerPropsMarket = (marketType: MarketType) => {
     return PLAYER_PROPS_MARKET_TYPES.includes(marketType);
