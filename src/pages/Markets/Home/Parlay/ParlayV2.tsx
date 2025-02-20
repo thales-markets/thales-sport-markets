@@ -383,7 +383,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                         <ThalesBonus>{t('markets.parlay.thales-bonus-info')}</ThalesBonus>
                     </ThalesBonusContainer>
                     <ScrollContainer>
-                        <Scroll height={`${scrollHeight}px`}>
+                        <Scroll height={`${scrollHeight}px`} renderOnlyChildren={!isScrollVisible}>
                             <ListContainer ref={marketsList} isScrollVisible={isScrollVisible}>
                                 {ticketMarkets.length > 0 &&
                                     ticketMarkets.map((market, index) => {
