@@ -12,7 +12,7 @@ const useTicketLiquidityQuery = (
     isSystemBet: boolean,
     systemBetDenominator: number,
     isSgp: boolean,
-    totalQuote: number,
+    sgpQuote: number,
     networkConfig: NetworkConfig,
     options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
@@ -22,7 +22,7 @@ const useTicketLiquidityQuery = (
             isSystemBet,
             systemBetDenominator,
             isSgp,
-            totalQuote,
+            sgpQuote,
             markets.map((market) => market.gameId).join(','),
             markets.map((market) => market.typeId).join(','),
             markets.map((market) => market.playerProps.playerId).join(','),
@@ -142,7 +142,7 @@ const useTicketLiquidityQuery = (
                     }
 
                     // SGP Liquidity based on total risk and spent on game
-                    if (isSgp && totalQuote > 0) {
+                    if (isSgp && sgpQuote > 0) {
                         const formattedTotalRisk = bigNumberFormatter(
                             totalRisks[0],
                             getDefaultDecimalsForNetwork(networkConfig.networkId)
@@ -152,7 +152,7 @@ const useTicketLiquidityQuery = (
                             getDefaultDecimalsForNetwork(networkConfig.networkId)
                         );
                         const sgpAvailableLiquidity = Math.floor(
-                            (formattedTotalRisk / dividerToUse - formattedSpentOnGame) / (1 / totalQuote - 1)
+                            (formattedTotalRisk / dividerToUse - formattedSpentOnGame) / (1 / sgpQuote - 1)
                         );
                         ticketLiquidity = Math.min(sgpAvailableLiquidity, ticketLiquidity);
                     }
