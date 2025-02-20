@@ -695,13 +695,6 @@ const Ticket: React.FC<TicketProps> = ({
 
     const isSgpDataLoading = useMemo(() => isSgp && isValidSgpBet && !sgpData, [isSgp, isValidSgpBet, sgpData]);
 
-    // Refresh SGP ticket liquidity when quote is fetched
-    useEffect(() => {
-        if (totalQuote > 0) {
-            refetchTicketLiquidity(networkId, isSystemBet, systemBetDenominator, isSgp, totalQuote, markets);
-        }
-    }, [networkId, isSystemBet, systemBetDenominator, isSgp, totalQuote, markets]);
-
     const totalBonus = useMemo(() => {
         const bonus = {
             percentage: 0,
