@@ -141,8 +141,6 @@ const useTicketLiquidityQuery = (
                         ticketLiquidity = Math.min(marketLiquidity, availableLiquidity, ticketLiquidity);
                     }
 
-                    console.log(isSgp, totalQuote);
-
                     // SGP Liquidity based on total risk and spent on game
                     if (isSgp && totalQuote > 0) {
                         const formattedTotalRisk = bigNumberFormatter(
