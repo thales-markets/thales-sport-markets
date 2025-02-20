@@ -13,22 +13,17 @@ import { toast } from 'react-toastify';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { Colors } from 'styles/common';
-import { Coins, localStore } from 'thales-utils';
+import { localStore } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import { activateOvertimeAccount } from 'utils/biconomy';
 import biconomyConnector from 'utils/biconomyWallet';
-import {
-    getCollateralAddress,
-    getCollateralIndex,
-    getCollaterals,
-    mapMultiCollateralBalances,
-} from 'utils/collaterals';
+import { getCollaterals, mapMultiCollateralBalances } from 'utils/collaterals';
 import { isSmallDevice } from 'utils/device';
 import { getFundModalShown, setFundModalShown } from 'utils/fundModal';
 import { Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
-import { useAccount, useChainId, useClient } from 'wagmi';
+import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 
 const ActivateAccount: React.FC<any> = () => {
     const networkId = useChainId();
@@ -36,6 +31,7 @@ const ActivateAccount: React.FC<any> = () => {
     const theme = useTheme();
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const client = useClient();
+    const { data: walletClient } = useWalletClient();
     const { address, isConnected } = useAccount();
     const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
@@ -152,13 +148,9 @@ const ActivateAccount: React.FC<any> = () => {
                             <ActivateButton
                                 onClick={async () => {
                                     const toastId = toast.loading(t('market.toast-message.transaction-pending'));
-                                    const txHash = await activateOvertimeAccount({
-                                        networkId,
-                                        collateralAddress: getCollateralAddress(
-                                            networkId,
-                                            getCollateralIndex(networkId, totalBalanceValue?.max.coin as Coins)
-                                        ),
-                                    });
+                                    console.log('walletClient: ', walletClient);
+                                    const txHash = await activateOvertimeAccount({ walletClient, networkId });
+                                    console.log('pls: ', txHash);
                                     if (txHash) {
                                         const txReceipt = await waitForTransactionReceipt(client as Client, {
                                             hash: txHash,
