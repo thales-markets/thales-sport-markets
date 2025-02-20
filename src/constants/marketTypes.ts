@@ -921,6 +921,12 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         key: 'stealsBlocks',
         name: 'Steals + Blocks',
     },
+    [MarketType.PLAYER_PROPS_LONGEST_RUSH]: {
+        id: MarketType.PLAYER_PROPS_LONGEST_RUSH,
+        key: 'longestRush',
+        name: 'Longest rush',
+        tooltipKey: 'longest-rush',
+    },
 
     [MarketType.PLAYER_PROPS_CARD_RECEIVER]: {
         id: MarketType.PLAYER_PROPS_CARD_RECEIVER,
@@ -964,8 +970,8 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         key: 'breakPointsWon',
         name: 'Break points won',
     },
-    [MarketType.Player_PROPS_DOUBLE_FAULTS]: {
-        id: MarketType.Player_PROPS_DOUBLE_FAULTS,
+    [MarketType.PLAYER_PROPS_DOUBLE_FAULTS]: {
+        id: MarketType.PLAYER_PROPS_DOUBLE_FAULTS,
         key: 'doubleFaults',
         name: 'Double faults',
     },
@@ -1319,6 +1325,7 @@ export const PLAYER_PROPS_MARKET_TYPES = [
     MarketType.PLAYER_PROPS_REBOUNDS_ASSISTS,
     MarketType.PLAYER_PROPS_STEALS,
     MarketType.PLAYER_PROPS_STEALS_BLOCKS,
+    MarketType.PLAYER_PROPS_LONGEST_RUSH,
     MarketType.PLAYER_PROPS_CARD_RECEIVER,
     MarketType.PLAYER_PROPS_RED_CARD_RECEIVER,
     MarketType.PLAYER_PROPS_FIRST_SCORER,
@@ -1327,7 +1334,7 @@ export const PLAYER_PROPS_MARKET_TYPES = [
     MarketType.PLAYER_PROPS_TOTAL_SHOTS,
     MarketType.PLAYER_PROPS_ACES,
     MarketType.PLAYER_PROPS_BREAK_POINTS_WON,
-    MarketType.Player_PROPS_DOUBLE_FAULTS,
+    MarketType.PLAYER_PROPS_DOUBLE_FAULTS,
 ];
 
 export const ONE_SIDE_PLAYER_PROPS_MARKET_TYPES = [
@@ -1945,6 +1952,7 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
             MarketType.PLAYER_PROPS_RUSHING_YARDS,
             MarketType.PLAYER_PROPS_PASSING_RUSHING,
             MarketType.PLAYER_PROPS_RUSHING_RECEIVING,
+            MarketType.PLAYER_PROPS_LONGEST_RUSH,
         ],
         [MarketTypeGroup.PLAYER_RECEIVING]: [
             MarketType.PLAYER_PROPS_RECEIVING_YARDS,
@@ -2263,6 +2271,7 @@ export const MarketTypePlayerPropsGroupsBySport: Record<Sport, Partial<Record<Ma
             MarketType.PLAYER_PROPS_RUSHING_YARDS,
             MarketType.PLAYER_PROPS_PASSING_RUSHING,
             MarketType.PLAYER_PROPS_RUSHING_RECEIVING,
+            MarketType.PLAYER_PROPS_LONGEST_RUSH,
         ],
         [MarketTypeGroup.PLAYER_RECEIVING]: [
             MarketType.PLAYER_PROPS_RECEIVING_YARDS,
