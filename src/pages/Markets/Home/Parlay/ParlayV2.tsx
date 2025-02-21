@@ -296,9 +296,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     }, [sportMarkets, ticket, dispatch, isLiveFilterSelected]);
 
     useEffect(() => {
-        if (isLive && !isLiveFilterSelected) {
-            dispatch(removeAll());
-        } else if (!isLive && isLiveFilterSelected) {
+        if (isLive !== isLiveFilterSelected) {
             dispatch(removeAll());
         }
     }, [isLiveFilterSelected, dispatch, isLive]);
