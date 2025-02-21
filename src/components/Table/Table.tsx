@@ -46,6 +46,7 @@ type TableProps = {
     noResultsMessage?: React.ReactNode;
     tableRowHeadStyles?: CSSProperties;
     tableRowStyles?: CSSProperties;
+    highlightRowsToId?: number;
     tableHeadCellStyles?: CSSProperties;
     tableHeadTitleStyles?: CSSProperties;
     tableRowCellStyles?: CSSProperties;
@@ -73,6 +74,7 @@ const Table: React.FC<TableProps> = ({
     isLoading = false,
     tableRowHeadStyles = {},
     tableRowStyles = {},
+    highlightRowsToId,
     tableHeadCellStyles = {},
     tableHeadTitleStyles = {},
     tableRowCellStyles = {},
@@ -195,7 +197,14 @@ const Table: React.FC<TableProps> = ({
                                     ) : (
                                         <TableRow
                                             isCard={isMobile && mobileCards}
-                                            style={tableRowStyles}
+                                            customStyle={{
+                                                ...tableRowStyles,
+                                                background: highlightRowsToId
+                                                    ? row.id < highlightRowsToId
+                                                        ? tableRowStyles.background
+                                                        : undefined
+                                                    : tableRowStyles.background,
+                                            }}
                                             cursorPointer={!!onTableRowClick}
                                             onClick={onTableRowClick ? () => onTableRowClick(row) : undefined}
                                         >
@@ -313,8 +322,12 @@ const TableBody = styled.div<{ height?: string; padding?: string }>`
     }
 `;
 
-export const TableRow = styled(FlexDiv)<{ cursorPointer?: boolean; isCard?: boolean }>`
-    flex-direction: ${(props) => (props.isCard ? 'column' : '')};
+export const TableRow = styled(FlexDiv)<{
+    cursorPointer?: boolean;
+    isCard?: boolean;
+    customStyle?: CSSProperties;
+}>`
+    ${(props) => (props.isCard ? 'flex-direction: column;' : '')}
     cursor: ${(props) => (props.cursorPointer ? 'pointer' : 'default')};
     min-height: 38px;
     font-weight: 600;
@@ -325,6 +338,8 @@ export const TableRow = styled(FlexDiv)<{ cursorPointer?: boolean; isCard?: bool
     ${(props) =>
         props.isCard &&
         `border: 1px solid #7983a9; border-radius: 8px; & > div:last-child {justify-content: flex-end;}`};
+
+    ${(props) => props.customStyle && { ...props.customStyle }}
 `;
 
 const TableRowHead = styled(TableRow)`

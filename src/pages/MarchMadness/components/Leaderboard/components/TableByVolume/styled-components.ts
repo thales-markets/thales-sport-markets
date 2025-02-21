@@ -1,11 +1,6 @@
 import styled from 'styled-components';
 import { FlexDivStart } from 'styles/common';
 
-export const Table = styled.table`
-    font-family: 'Oswald' !important;
-    width: 100%;
-`;
-
 export const OverlayContainer = styled.div`
     text-align: center;
     font-family: 'Oswald' !important;
@@ -13,37 +8,7 @@ export const OverlayContainer = styled.div`
     font-size: 12px;
 `;
 
-export const TableHeaderCell = styled.th`
-    color: #fff;
-    font-family: ${(props) => props.theme.fontFamily.primary};
-    text-transform: uppercase;
-    padding: 5px 0px;
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 150%;
-    letter-spacing: 0.3px;
-`;
-
-export const NoDataContainer = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 150px;
-    height: 60px;
-    margin-top: 100px;
-`;
-
-export const NoDataLabel = styled.span`
-    font-family: ${(props) => props.theme.fontFamily.primary};
-    font-size: 25px;
-    line-height: 40px;
-    color: ${(props) => props.theme.marchMadness.textColor.senary};
-    text-align: center;
-    text-transform: uppercase;
-`;
-
-export const TableRow = styled(FlexDivStart)<{ hideBorder?: boolean; topTen?: boolean; myScore?: boolean }>`
+const TableRow = styled(FlexDivStart)<{ hideBorder?: boolean; topTen?: boolean; myScore?: boolean }>`
     height: 40px;
     font-family: ${(props) => props.theme.fontFamily.primary};
     font-size: 14px;
@@ -87,13 +52,6 @@ export const TableHeaderContainer = styled.div`
     border: 2px solid ${(props) => props.theme.marchMadness.borderColor.secondary};
     border-bottom: 0px;
     width: 100%;
-`;
-
-export const TableContainer = styled(TableHeaderContainer)<{ isEmpty: boolean }>`
-    flex-direction: column;
-    justify-content: flex-start;
-    border: 2px solid ${(props) => props.theme.marchMadness.borderColor.secondary};
-    ${(props) => (props.isEmpty ? 'min-height: 450px;' : '')}
 `;
 
 export const TableHeader = styled.span`

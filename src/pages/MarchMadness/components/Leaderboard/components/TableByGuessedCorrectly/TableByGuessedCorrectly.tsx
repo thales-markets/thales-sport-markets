@@ -28,7 +28,7 @@ type TableByGuessedCorrectlyProps = {
     searchText: string;
 };
 
-// const NUMBER_OF_POSITIONS_TO_HIGHLIGHT = 20; // TODO: highlight first 20
+const NUMBER_OF_POSITIONS_TO_HIGHLIGHT = 20;
 
 const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searchText }) => {
     const { t } = useTranslation();
@@ -180,14 +180,19 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                 noResultsMessage={t('march-madness.leaderboard.no-data')}
                 showPagination
                 tableHeight={filteredData.length ? 'unset' : '450px'}
+                tableHeadTitleStyles={{ fontFamily: theme.fontFamily.primary, fontSize: '12px' }}
                 tableRowHeadStyles={{
                     border: `2px solid ${theme.marchMadness.borderColor.secondary}`,
                     borderRadius: 'unset',
                     background: 'transparent',
                 }}
-                tableHeadTitleStyles={{ fontFamily: theme.fontFamily.primary, fontSize: '12px' }}
                 tableStyle={`border: 2px solid ${theme.marchMadness.borderColor.secondary};  border-top: 0px;`}
                 tableBodyPadding="0px"
+                tableRowStyles={{
+                    background: `${theme.marchMadness.background.senary}`,
+                    borderBottom: `1px solid ${theme.borderColor.secondary}`,
+                }}
+                highlightRowsToId={NUMBER_OF_POSITIONS_TO_HIGHLIGHT}
                 tableRowCellStyles={{
                     fontFamily: theme.fontFamily.primary,
                     padding: '10px 0px',
