@@ -532,6 +532,41 @@ const sportsAMMV2RiskManagerContract: ContractData = {
             stateMutability: 'view',
             type: 'function',
         },
+        {
+            inputs: [
+                {
+                    components: [
+                        { internalType: 'bytes32', name: 'gameId', type: 'bytes32' },
+                        { internalType: 'uint16', name: 'sportId', type: 'uint16' },
+                        { internalType: 'uint16', name: 'typeId', type: 'uint16' },
+                        { internalType: 'uint256', name: 'maturity', type: 'uint256' },
+                        { internalType: 'uint8', name: 'status', type: 'uint8' },
+                        { internalType: 'int24', name: 'line', type: 'int24' },
+                        { internalType: 'uint24', name: 'playerId', type: 'uint24' },
+                        { internalType: 'uint256[]', name: 'odds', type: 'uint256[]' },
+                        { internalType: 'bytes32[]', name: 'merkleProof', type: 'bytes32[]' },
+                        { internalType: 'uint8', name: 'position', type: 'uint8' },
+                        {
+                            components: [
+                                { internalType: 'uint16', name: 'typeId', type: 'uint16' },
+                                { internalType: 'uint8', name: 'position', type: 'uint8' },
+                                { internalType: 'int24', name: 'line', type: 'int24' },
+                            ],
+                            internalType: 'struct ISportsAMMV2.CombinedPosition[][]',
+                            name: 'combinedPositions',
+                            type: 'tuple[][]',
+                        },
+                    ],
+                    internalType: 'struct ISportsAMMV2.TradeData[]',
+                    name: 'trades',
+                    type: 'tuple[]',
+                },
+            ],
+            name: 'getSGPCombinationRisk',
+            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
         { inputs: [], name: 'initNonReentrant', outputs: [], stateMutability: 'nonpayable', type: 'function' },
         {
             inputs: [
@@ -958,6 +993,13 @@ const sportsAMMV2RiskManagerContract: ContractData = {
             inputs: [{ internalType: 'uint16', name: '', type: 'uint16' }],
             name: 'sgpOnSportIdEnabled',
             outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
+            name: 'sgpRiskPerCombination',
+            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
             stateMutability: 'view',
             type: 'function',
         },

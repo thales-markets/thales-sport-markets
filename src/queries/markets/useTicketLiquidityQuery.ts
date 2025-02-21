@@ -6,6 +6,7 @@ import { TicketMarket } from 'types/markets';
 import { NetworkConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { getContractInstance } from 'utils/contract';
+import { getTradeData } from 'utils/marketsV2';
 
 const useTicketLiquidityQuery = (
     markets: TicketMarket[],
@@ -94,17 +95,6 @@ const useTicketLiquidityQuery = (
                         ? [await sportsAMMV2RiskManagerContract.read.sgpSpentOnGame([markets[0].gameId])]
                         : await Promise.all(spentOnGamePromises);
 
-                    // when SGP cap divider is 0 use 2 and when not SGP use 1 which is not affecting anything
-                    let dividerToUse = isSgp ? 2 : 1;
-                    if (isSgp) {
-                        const sgpCapDivider = await sportsAMMV2RiskManagerContract.read.sgpCapDivider();
-                        const formattedSgpCapDivider = bigNumberFormatter(
-                            sgpCapDivider,
-                            getDefaultDecimalsForNetwork(networkConfig.networkId)
-                        );
-                        dividerToUse = formattedSgpCapDivider > 0 ? formattedSgpCapDivider : dividerToUse;
-                    }
-
                     let ticketLiquidity = 0;
                     for (let i = 0; i < markets.length; i++) {
                         const market = markets[i];
@@ -130,7 +120,7 @@ const useTicketLiquidityQuery = (
                                 getDefaultDecimalsForNetwork(networkConfig.networkId)
                             );
                             availableLiquidity = Math.floor(
-                                ((formattedTotalRisk / dividerToUse - formattedSpentOnGame) / (1 / market.odd - 1)) *
+                                ((formattedTotalRisk - formattedSpentOnGame) / (1 / market.odd - 1)) *
                                     (isSystemBet ? systemBetDenominator / markets.length : 1)
                             );
                         }
@@ -141,8 +131,19 @@ const useTicketLiquidityQuery = (
                         ticketLiquidity = Math.min(marketLiquidity, availableLiquidity, ticketLiquidity);
                     }
 
-                    // SGP Liquidity based on total risk and spent on game
+                    // SGP Liquidity based on:
+                    // 1. total risk and spent on game
+                    // 2. per combination risk and spent per combination
                     if (isSgp && sgpQuote > 0) {
+                        // when SGP cap divider is 0 use 2 as default on contract
+                        const sgpCapDivider = await sportsAMMV2RiskManagerContract.read.sgpCapDivider();
+                        const formattedSgpCapDivider = bigNumberFormatter(
+                            sgpCapDivider,
+                            getDefaultDecimalsForNetwork(networkConfig.networkId)
+                        );
+                        const sgpDivider = formattedSgpCapDivider > 0 ? formattedSgpCapDivider : 2;
+
+                        // 1. Total risk
                         const formattedTotalRisk = bigNumberFormatter(
                             totalRisks[0],
                             getDefaultDecimalsForNetwork(networkConfig.networkId)
@@ -152,9 +153,36 @@ const useTicketLiquidityQuery = (
                             getDefaultDecimalsForNetwork(networkConfig.networkId)
                         );
                         const sgpAvailableLiquidity = Math.floor(
-                            (formattedTotalRisk / dividerToUse - formattedSpentOnGame) / (1 / sgpQuote - 1)
+                            (formattedTotalRisk / sgpDivider - formattedSpentOnGame) / (1 / sgpQuote - 1)
                         );
-                        ticketLiquidity = Math.min(sgpAvailableLiquidity, ticketLiquidity);
+
+                        // 2. Combination risk
+                        const combinationRisk = await sportsAMMV2RiskManagerContract.read.calculateCapToBeUsed([
+                            markets[0].gameId,
+                            markets[0].subLeagueId,
+                            0,
+                            0,
+                            0,
+                            markets[0].maturity,
+                            false,
+                        ]);
+                        const spentOnCombination = await sportsAMMV2RiskManagerContract.read.getSGPCombinationRisk([
+                            getTradeData(markets),
+                        ]);
+
+                        const formattedCombinationRisk = bigNumberFormatter(
+                            combinationRisk,
+                            getDefaultDecimalsForNetwork(networkConfig.networkId)
+                        );
+                        const formattedSpentOnCombination = bigNumberFormatter(
+                            spentOnCombination,
+                            getDefaultDecimalsForNetwork(networkConfig.networkId)
+                        );
+                        const sgpCombinationLiquidity = Math.floor(
+                            (formattedCombinationRisk - formattedSpentOnCombination) / (1 / sgpQuote - 1)
+                        );
+
+                        ticketLiquidity = Math.min(sgpAvailableLiquidity, sgpCombinationLiquidity, ticketLiquidity);
                     }
 
                     return ticketLiquidity;
