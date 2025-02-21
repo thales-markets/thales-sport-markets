@@ -106,6 +106,13 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                         <TextCollateral color={color} isDetailedView={isDetailedView} isSelectedCollateral={true}>
                             {!hideCollateralNameOnInput && collateralArray[selectedItem]}
                             {showNetworkName && ` (${getNetworkNameByNetworkId(networkId, true)})`}
+                            {!exchangeRates?.[collateralArray[selectedItem]] &&
+                            !isStableCurrency(collateralArray[selectedItem] as Coins)
+                                ? '...'
+                                : ` (${formatCurrencyWithSign(
+                                      null,
+                                      collateralBalances ? collateralBalances[collateralArray[selectedItem]] : 0
+                                  )})`}
                         </TextCollateral>
                     </TextCollateralWrapper>
                     <Arrow

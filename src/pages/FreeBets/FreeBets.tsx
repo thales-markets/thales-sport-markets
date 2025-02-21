@@ -3,18 +3,27 @@ import Button from 'components/Button';
 import CollateralSelector from 'components/CollateralSelector';
 import NumericInput from 'components/fields/NumericInput';
 import { generalConfig } from 'config/general';
-import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { getErrorToastOptions, getInfoToastOptions, getSuccessToastOptions } from 'config/toast';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { t } from 'i18next';
+import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
+import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import { useCallback, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getTicketPayment } from 'redux/modules/ticket';
-import { useTheme } from 'styled-components';
-import { FlexDiv, FlexDivCentered, FlexDivColumnCentered, FlexDivColumnNative } from 'styles/common';
+import styled, { useTheme } from 'styled-components';
+import {
+    FlexDiv,
+    FlexDivCentered,
+    FlexDivColumnCentered,
+    FlexDivColumnNative,
+    FlexDivEnd,
+    FlexDivSpaceBetween,
+} from 'styles/common';
 import { ThemeInterface } from 'types/ui';
 import { getFreeBetCollaterals } from 'utils/collaterals';
-import { useAccount, useChainId, useSignMessage } from 'wagmi';
+import { useAccount, useChainId, useClient, useSignMessage } from 'wagmi';
 import multipleCollateral from '../../utils/contracts/multipleCollateralContract';
 
 const FreeBets: React.FC = () => {
@@ -22,23 +31,36 @@ const FreeBets: React.FC = () => {
     const networkId = useChainId();
     const { signMessageAsync } = useSignMessage();
     const theme: ThemeInterface = useTheme();
+    const client = useClient();
 
     const ticketPayment = useSelector(getTicketPayment);
     const selectedCollateralIndex = ticketPayment.selectedCollateralIndex;
     const [betAmount, setBetAmount] = useState<number | string>('');
     const [numberOfBets, setNumberOfBets] = useState<number | string>('');
-    const [generatedIds, setGeneratedIds] = useState<number[]>([]);
+    const [generatedIds, setGeneratedIds] = useState<string[]>(['adsasd', 'adsasd', 'adsasd', 'adsasd']);
     const supportedCollaterals = useMemo(() => [...getFreeBetCollaterals(networkId), CRYPTO_CURRENCY_MAP.THALES], [
         networkId,
     ]);
+    const selectedCollateral = useMemo(() => supportedCollaterals[selectedCollateralIndex], [
+        selectedCollateralIndex,
+        supportedCollaterals,
+    ]);
     const selectedCollateralAddress = useMemo(
-        () =>
-            multipleCollateral[supportedCollaterals[selectedCollateralIndex] as keyof typeof multipleCollateral]
-                ?.addresses[networkId],
-        [networkId, selectedCollateralIndex, supportedCollaterals]
+        () => multipleCollateral[selectedCollateral as keyof typeof multipleCollateral]?.addresses[networkId],
+        [networkId, selectedCollateral]
     );
 
-    console.log(selectedCollateralAddress);
+    const multipleCollateralBalancesQuery = useMultipleCollateralBalanceQuery(
+        '0x23Ea88E828188377DCB4663ff2FE419B1fC71F88',
+        {
+            networkId,
+            client,
+        }
+    );
+    const multipleCollateralBalances: { [key: string]: number } = multipleCollateralBalancesQuery?.data || {};
+
+    const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
+    const exchangeRates = exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
     const onSubmit = useCallback(async () => {
         const toastId = toast.loading(t('market.toast-message.transaction-pending'));
@@ -78,11 +100,20 @@ const FreeBets: React.FC = () => {
         selectedCollateralAddress,
     ]);
 
+    const submitDisabled =
+        !betAmount ||
+        !numberOfBets ||
+        selectedCollateralIndex > supportedCollaterals.length - 1 ||
+        !multipleCollateralBalances[selectedCollateral] ||
+        +betAmount * +numberOfBets > multipleCollateralBalances[selectedCollateral];
+
     return (
         <>
             <FlexDivColumnNative>
                 <FlexDivColumnCentered>
-                    <span> Make sure free bet wallet is funded before generating free bets</span>
+                    <span> Balances displayed are for fund wallet</span>
+                    <br />
+                    <span> 0x23Ea88E828188377DCB4663ff2FE419B1fC71F88</span>
                     <br />
                     <FlexDiv>
                         <NumericInput
@@ -97,12 +128,13 @@ const FreeBets: React.FC = () => {
                             currencyComponent={
                                 <CollateralSelector
                                     collateralArray={supportedCollaterals}
+                                    collateralBalances={multipleCollateralBalances}
                                     selectedItem={selectedCollateralIndex}
                                     onChangeCollateral={() => {
                                         setBetAmount('');
                                     }}
                                     isDetailedView
-                                    hideBalance
+                                    exchangeRates={exchangeRates}
                                 />
                             }
                         />
@@ -118,27 +150,64 @@ const FreeBets: React.FC = () => {
                         />
                     </FlexDiv>
                     <FlexDivCentered>
-                        <Button
-                            disabled={
-                                !betAmount || !numberOfBets || selectedCollateralIndex > supportedCollaterals.length - 1
-                            }
-                            onClick={onSubmit}
-                        >
+                        <Button disabled={submitDisabled} onClick={onSubmit}>
                             Generate
                         </Button>
                     </FlexDivCentered>
                 </FlexDivColumnCentered>
                 <br />
-                <FlexDivColumnCentered>
-                    {generatedIds.map((id) => (
-                        <FlexDiv key={id}>
-                            <span>{`https://overtimemarkets.xyz/profile?freeBet=${id}`}</span>
-                        </FlexDiv>
-                    ))}
+                <FlexDivColumnCentered gap={10}>
+                    <FlexDivEnd>
+                        <FlexDivCentered gap={5}>
+                            Copy All
+                            <CopyIcon
+                                onClick={() => {
+                                    const toastId = toast.loading('Copying', { autoClose: 1000 });
+                                    navigator.clipboard.writeText(
+                                        generatedIds
+                                            .map((id) => `https://overtimemarkets.xyz/profile?freeBet=${id}`)
+                                            .join('\n')
+                                    );
+                                    toast.update(toastId, { ...getInfoToastOptions('Copied all'), autoClose: 1000 });
+                                }}
+                                className="icon icon--copy"
+                            />
+                        </FlexDivCentered>
+                    </FlexDivEnd>
+                    <FlexDivColumnCentered gap={5}>
+                        {generatedIds.map((id) => (
+                            <FlexDivSpaceBetween key={id}>
+                                <span>{`https://overtimemarkets.xyz/profile?freeBet=${id}`}</span>
+                                <CopyIcon
+                                    onClick={() => {
+                                        const toastId = toast.loading('Copying', { autoClose: 1000 });
+                                        navigator.clipboard.writeText(
+                                            `https://overtimemarkets.xyz/profile?freeBet=${id}`
+                                        );
+                                        toast.update(toastId, {
+                                            ...getInfoToastOptions('Copied ' + id),
+                                            autoClose: 1000,
+                                        });
+                                    }}
+                                    className="icon icon--copy"
+                                />
+                            </FlexDivSpaceBetween>
+                        ))}
+                    </FlexDivColumnCentered>
                 </FlexDivColumnCentered>
             </FlexDivColumnNative>
         </>
     );
 };
+
+const CopyIcon = styled.i`
+    font-size: 24px;
+    cursor: pointer;
+    font-weight: 400;
+    color: ${(props) => props.theme.overdrop.textColor.primary};
+    @media (max-width: 575px) {
+        font-size: 20px;
+    }
+`;
 
 export default FreeBets;
