@@ -16,7 +16,7 @@ const Leaderboard: React.FC = () => {
             <SearchContainer>
                 <Search
                     text={searchText}
-                    customPlaceholder={t('quiz.leaderboard.search-placeholder')}
+                    customPlaceholder={t('common.search')}
                     handleChange={(e) => setSearchText(e)}
                     width={230}
                 />

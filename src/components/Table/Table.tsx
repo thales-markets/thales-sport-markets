@@ -48,6 +48,7 @@ type TableProps = {
     tableRowStyles?: CSSProperties;
     tableHeadCellStyles?: CSSProperties;
     tableRowCellStyles?: CSSProperties;
+    noResultsStyle?: CSSProperties;
     initialState?: any;
     rowsPerPage?: number;
     tableHeight?: string;
@@ -72,6 +73,7 @@ const Table: React.FC<TableProps> = ({
     tableRowStyles = {},
     tableHeadCellStyles = {},
     tableRowCellStyles = {},
+    noResultsStyle = {},
     initialState = {},
     rowsPerPage,
     expandedRow,
@@ -169,7 +171,7 @@ const Table: React.FC<TableProps> = ({
                         <SimpleLoader />
                     </LoaderContainer>
                 ) : noResultsMessage !== null && !data?.length && !stickyRow ? (
-                    <NoResultContainer>{noResultsMessage}</NoResultContainer>
+                    <NoResultContainer style={noResultsStyle}>{noResultsMessage}</NoResultContainer>
                 ) : (
                     <TableBody height={tableHeight}>
                         {stickyRow ?? <></>}
@@ -399,13 +401,14 @@ const LoaderContainer = styled(FlexDivCentered)`
     width: 100%;
 `;
 
-const NoResultContainer = styled(TableRow)`
+const NoResultContainer = styled(TableRow)<{ style?: CSSProperties }>`
     height: 60px;
     padding-top: 20px;
     padding-left: 18px;
     font-size: 14px;
     border: none;
     margin: auto;
+    ${(props) => props.style && { ...props.style }}
 `;
 
 const SortIcon = styled.i<{ selected: boolean; sortDirection: SortDirection }>`

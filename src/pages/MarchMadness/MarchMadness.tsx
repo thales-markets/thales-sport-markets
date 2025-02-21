@@ -108,7 +108,7 @@ const Container = styled.div<{ showBackground: boolean }>`
     width: 1350px;
     ${(props) => (props.showBackground ? `background-image: url('${backgrounBall}');` : '')}
     ${(props) => (props.showBackground ? 'background-size: 1900px;' : '')}
-    ${(props) => (props.showBackground ? 'background-position: -210px -58px;' : '')}
+    ${(props) => (props.showBackground ? 'background-position: -270px -58px;' : '')}
     ${(props) => (props.showBackground ? 'background-repeat: no-repeat;' : '')}
 `;
 

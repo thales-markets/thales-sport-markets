@@ -175,17 +175,29 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
             <TableHeaderContainer>
                 <TableHeader>{t('march-madness.leaderboard.by-guessed-correctly')}</TableHeader>
             </TableHeaderContainer>
-            {filteredData?.length > 0 && (
-                <Table
-                    data={filteredData}
-                    columns={columns as any}
-                    stickyRow={stickyRow}
-                    rowsPerPage={20}
-                    isLoading={leaderboardQuery.isLoading}
-                    noResultsMessage={t('march-madness.leaderboard.no-data')}
-                    showPagination
-                />
-            )}
+            <Table
+                data={filteredData}
+                columns={columns as any}
+                stickyRow={stickyRow}
+                rowsPerPage={20}
+                isLoading={leaderboardQuery.isLoading}
+                noResultsMessage={t('march-madness.leaderboard.no-data')}
+                showPagination
+                tableHeight="450px"
+                tableRowHeadStyles={{ display: 'none' }}
+                tableStyle={`border: 2px solid ${theme.marchMadness.borderColor.secondary};`}
+                noResultsStyle={{
+                    fontFamily: theme.fontFamily.primary,
+                    fontSize: '25px',
+                    lineHeight: '40px',
+                    color: theme.marchMadness.textColor.senary,
+                    textTransform: 'uppercase',
+                    width: '150px',
+                    textAlign: 'center',
+                    height: 'unset',
+                    padding: 0,
+                }}
+            />
         </Container>
     );
 };

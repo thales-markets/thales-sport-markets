@@ -2,6 +2,7 @@
     "common": {
         "filters": "Filters",
         "status": "Status",
+        "search": "Search",
         "settings": "Settings",
         "winner": "Winner",
         "buy-side": "BUY",
