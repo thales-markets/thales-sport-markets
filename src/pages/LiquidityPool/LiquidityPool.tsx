@@ -43,7 +43,7 @@ import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 import SPAAnchor from '../../components/SPAAnchor';
 import ROUTES from '../../constants/routes';
 import useMultipleCollateralBalanceQuery from '../../queries/wallet/useMultipleCollateralBalanceQuery';
-import { getCollateralIndex } from '../../utils/collaterals';
+import { getCollateralAddress, getCollateralIndex } from '../../utils/collaterals';
 import { getDefaultLpCollateral, getLiquidityPools, getLpAddress, getLpCollateral } from '../../utils/liquidityPool';
 import { buildHref } from '../../utils/routes';
 import PnL from './PnL';
@@ -87,6 +87,7 @@ import {
     Wrapper,
     defaultButtonProps,
 } from './styled-components';
+import { executeBiconomyTransactionWithConfirmation } from 'utils/biconomy';
 
 const WETH_COLLATERALS = [CRYPTO_CURRENCY_MAP.WETH as Coins, CRYPTO_CURRENCY_MAP.ETH as Coins];
 
@@ -333,8 +334,14 @@ const LiquidityPool: React.FC = () => {
             setIsAllowing(true);
 
             try {
-                console.log(approveAmount.toString(), collateral);
-                const hash = await multiCollateralWithSigner?.write.approve([liquidityPoolAddress, approveAmount]);
+                const hash = isBiconomy
+                    ? await executeBiconomyTransactionWithConfirmation({
+                          collateralAddress: multiCollateralWithSigner.address,
+                          contract: multiCollateralWithSigner,
+                          methodName: 'approve',
+                          data: [liquidityPoolAddress, approveAmount],
+                      })
+                    : await multiCollateralWithSigner?.write.approve([liquidityPoolAddress, approveAmount]);
                 setOpenApprovalModal(false);
 
                 const txReceipt = await waitForTransactionReceipt(client as Client, {
@@ -379,14 +386,28 @@ const LiquidityPool: React.FC = () => {
                 WETHContractWithSigner &&
                 selectedCollateralIndex === 1
             ) {
-                const wrapTxHash = await WETHContractWithSigner.write.deposit([parsedAmount]);
+                const wrapTxHash = isBiconomy
+                    ? await executeBiconomyTransactionWithConfirmation({
+                          collateralAddress: WETHContractWithSigner.address,
+                          contract: WETHContractWithSigner,
+                          methodName: 'deposit',
+                          data: [parsedAmount],
+                      })
+                    : await WETHContractWithSigner.write.deposit([parsedAmount]);
 
                 const wrapTxReceipt = await waitForTransactionReceipt(client as Client, {
                     hash: wrapTxHash,
                 });
 
                 if (wrapTxReceipt.status === 'success') {
-                    const txHash = await liquidityPoolContractWithSigner.write.deposit(parsedAmount);
+                    const txHash = isBiconomy
+                        ? await executeBiconomyTransactionWithConfirmation({
+                              collateralAddress: getCollateralAddress(networkId, collateralIndex),
+                              contract: liquidityPoolContractWithSigner,
+                              methodName: 'deposit',
+                              data: [parsedAmount],
+                          })
+                        : await liquidityPoolContractWithSigner.write.deposit(parsedAmount);
 
                     const txReceipt = await waitForTransactionReceipt(client as Client, {
                         hash: txHash,
@@ -404,7 +425,14 @@ const LiquidityPool: React.FC = () => {
                     }
                 }
             } else {
-                const txHash = await liquidityPoolContractWithSigner.write.deposit([parsedAmount]);
+                const txHash = isBiconomy
+                    ? await executeBiconomyTransactionWithConfirmation({
+                          collateralAddress: getCollateralAddress(networkId, collateralIndex),
+                          contract: liquidityPoolContractWithSigner,
+                          methodName: 'deposit',
+                          data: [parsedAmount],
+                      })
+                    : await liquidityPoolContractWithSigner.write.deposit([parsedAmount]);
 
                 const txReceipt = await waitForTransactionReceipt(client as Client, {
                     hash: txHash,
@@ -437,7 +465,14 @@ const LiquidityPool: React.FC = () => {
             ) as ViemContract;
             const parsedPercentage = parseUnits((Number(withdrawalPercentage) / 100).toString(), 18);
 
-            const txHash = withdrawAll
+            const txHash = isBiconomy
+                ? await executeBiconomyTransactionWithConfirmation({
+                      collateralAddress: getCollateralAddress(networkId, collateralIndex),
+                      contract: liquidityPoolContractWithSigner,
+                      methodName: withdrawAll ? 'withdrawalRequest' : 'partialWithdrawalRequest',
+                      data: withdrawAll ? undefined : [parsedPercentage],
+                  })
+                : withdrawAll
                 ? await liquidityPoolContractWithSigner.write.withdrawalRequest()
                 : await liquidityPoolContractWithSigner.write.partialWithdrawalRequest([parsedPercentage]);
 
@@ -480,11 +515,14 @@ const LiquidityPool: React.FC = () => {
             if (canCloseCurrentRound) {
                 try {
                     if (!roundClosingPrepared) {
-                        const txHash = await liquidityPoolContractWithSigner.write.prepareRoundClosing([
-                            undefined,
-                            undefined,
-                            2,
-                        ]);
+                        const txHash = isBiconomy
+                            ? await executeBiconomyTransactionWithConfirmation({
+                                  collateralAddress: getCollateralAddress(networkId, collateralIndex),
+                                  contract: liquidityPoolContractWithSigner,
+                                  methodName: 'prepareRoundClosing',
+                                  data: [],
+                              })
+                            : await liquidityPoolContractWithSigner.write.prepareRoundClosing([]);
 
                         const txReceipt = await waitForTransactionReceipt(client as Client, {
                             hash: txHash,
@@ -498,11 +536,14 @@ const LiquidityPool: React.FC = () => {
                     }
 
                     while (usersProcessedInRound.toString() < getUsersCountInCurrentRound.toString()) {
-                        const txHash = await liquidityPoolContractWithSigner.write.processRoundClosingBatch([
-                            undefined,
-                            100,
-                            2,
-                        ]);
+                        const txHash = isBiconomy
+                            ? await executeBiconomyTransactionWithConfirmation({
+                                  collateralAddress: getCollateralAddress(networkId, collateralIndex),
+                                  contract: liquidityPoolContractWithSigner,
+                                  methodName: 'processRoundClosingBatch',
+                                  data: [100],
+                              })
+                            : await liquidityPoolContractWithSigner.write.processRoundClosingBatch([100]);
 
                         const txReceipt = await waitForTransactionReceipt(client as Client, {
                             hash: txHash,
@@ -517,7 +558,14 @@ const LiquidityPool: React.FC = () => {
                         usersProcessedInRound = await liquidityPoolContractWithSigner.read.usersProcessedInRound();
                     }
 
-                    const tx = await liquidityPoolContractWithSigner.write.closeRound([undefined, undefined, 2]);
+                    const tx = isBiconomy
+                        ? await executeBiconomyTransactionWithConfirmation({
+                              collateralAddress: getCollateralAddress(networkId, collateralIndex),
+                              contract: liquidityPoolContractWithSigner,
+                              methodName: 'closeRound',
+                              data: [],
+                          })
+                        : await liquidityPoolContractWithSigner.write.closeRound([]);
                     const txReceipt = await waitForTransactionReceipt(client as Client, {
                         hash: tx,
                     });
@@ -1155,9 +1203,10 @@ const LiquidityPool: React.FC = () => {
                                     </WarningContentInfo>
                                 )}
                             </ContentInfoContainer>
-                            {paramCollateral !== LiquidityPoolCollateral.THALES && (
-                                <Return liquidityPoolAddress={liquidityPoolAddress} />
-                            )}
+                            {paramCollateral !== LiquidityPoolCollateral.THALES &&
+                                paramCollateral !== LiquidityPoolCollateral.OVER && (
+                                    <Return liquidityPoolAddress={liquidityPoolAddress} />
+                                )}
                         </MainContentContainer>
                         <MainContentContainer>
                             {liquidityPoolData && (

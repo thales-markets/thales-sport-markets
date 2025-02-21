@@ -49,7 +49,6 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
 
     const [openClaimable, setClaimableState] = useState<boolean>(true);
     const [openOpenPositions, setOpenState] = useState<boolean>(true);
-
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
     const networkId = useChainId();

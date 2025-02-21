@@ -353,7 +353,7 @@ const RowContainer = styled(FlexDivRow)`
 
 const MainContainer = styled(FlexDivColumn)<{ isGameOpen: boolean }>`
     width: 100%;
-    max-width: 806px;
+
     margin-right: ${(props) => (props.isGameOpen ? 10 : 0)}px;
     @media (max-width: 575px) {
         margin-right: 0;

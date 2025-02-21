@@ -24,10 +24,5 @@ export type NetworkConfig = {
 
 export type SupportedNetwork = Exclude<
     Network,
-    | Network.Mainnet
-    | Network.PolygonMainnet
-    | Network.Base
-    | Network.ZkSync
-    | Network.ZkSyncSepolia
-    | Network.BlastSepolia
+    Network.Mainnet | Network.PolygonMainnet | Network.ZkSync | Network.ZkSyncSepolia | Network.BlastSepolia
 >;

@@ -11,6 +11,11 @@ import { Count, Icon, Item, ItemWrapper, NotificationCount, Wrapper } from './st
 
 const navItems = [
     {
+        id: ProfileTab.ACCOUNT,
+        i18Label: 'profile.account',
+        icon: 'icon icon--logo',
+    },
+    {
         id: ProfileTab.OPEN_CLAIMABLE,
         i18Label: 'profile.open-claimable',
         icon: 'icon icon--ticket-horizontal',

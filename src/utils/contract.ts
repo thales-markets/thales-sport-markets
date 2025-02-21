@@ -18,9 +18,11 @@ import sportsAMMV2Manager from 'utils/contracts/sportsAMMV2ManagerContract';
 import sportsAMMV2ResultManager from 'utils/contracts/sportsAMMV2ResultManagerContract';
 import sportsAMMV2RiskManager from 'utils/contracts/sportsAMMV2RiskManagerContract';
 import stakingThalesBettingProxy from 'utils/contracts/stakingThalesBettingProxy';
-import stakingThales from 'utils/contracts/stakingThalesContract';
+import { TBD_ADDRESS } from '../constants/network';
 import liquidityPoolContractV2 from './contracts/liquidityPoolContractV2';
 import resolveBlockerContract from './contracts/resolveBlockerContract';
+import thalesContract from './contracts/thalesContract';
+import thalesToOverMigrationContract from './contracts/thalesToOverMigrationContract';
 
 export const prepareContractWithModifiedResponse = (props: { abi: any; address: Address; client: any }) => {
     const contract = getContract(props) as ViemContract;
@@ -63,6 +65,7 @@ export const prepareContractWithModifiedResponse = (props: { abi: any; address: 
 
 const getContractWithModifiedResponse = (contractData: ContractData, networkConfig: NetworkConfig) => {
     if (!networkConfig) return;
+    if (contractData.addresses[networkConfig?.networkId] === TBD_ADDRESS) return undefined;
     return prepareContractWithModifiedResponse({
         abi: contractData.abi,
         address: contractData.addresses[networkConfig?.networkId],
@@ -105,8 +108,6 @@ export const getContractInstance = (
             return getContractWithModifiedResponse(sportsAMMV2Manager, networkConfig);
         case ContractType.MULTICALL:
             return getContractWithModifiedResponse(multiCall, networkConfig);
-        case ContractType.STAKING_THALES:
-            return getContractWithModifiedResponse(stakingThales, networkConfig);
         case ContractType.STAKING_THALES_BETTING_PROXY:
             return getContractWithModifiedResponse(stakingThalesBettingProxy, networkConfig);
         case ContractType.LIQUIDITY_POOL:
@@ -114,6 +115,10 @@ export const getContractInstance = (
             return getContractWithModifiedResponse(liquidityPoolContractV2[lpCollateral], networkConfig);
         case ContractType.RESOLVE_BLOCKER:
             return getContractWithModifiedResponse(resolveBlockerContract, networkConfig);
+        case ContractType.THALES_TO_OVER_MIGRATION:
+            return getContractWithModifiedResponse(thalesToOverMigrationContract, networkConfig);
+        case ContractType.THALES:
+            return getContractWithModifiedResponse(thalesContract, networkConfig);
         default:
             return undefined;
     }
