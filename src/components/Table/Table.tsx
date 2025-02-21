@@ -47,12 +47,14 @@ type TableProps = {
     tableRowHeadStyles?: CSSProperties;
     tableRowStyles?: CSSProperties;
     tableHeadCellStyles?: CSSProperties;
+    tableHeadTitleStyles?: CSSProperties;
     tableRowCellStyles?: CSSProperties;
     noResultsStyle?: CSSProperties;
     initialState?: any;
     rowsPerPage?: number;
     tableHeight?: string;
     tableStyle?: string;
+    tableBodyPadding?: string;
     expandedRow?: (row: Row<any>) => JSX.Element;
     stickyRow?: JSX.Element;
     mobileCards?: boolean;
@@ -72,6 +74,7 @@ const Table: React.FC<TableProps> = ({
     tableRowHeadStyles = {},
     tableRowStyles = {},
     tableHeadCellStyles = {},
+    tableHeadTitleStyles = {},
     tableRowCellStyles = {},
     noResultsStyle = {},
     initialState = {},
@@ -80,6 +83,7 @@ const Table: React.FC<TableProps> = ({
     stickyRow,
     tableHeight,
     tableStyle,
+    tableBodyPadding,
     mobileCards,
     expandAll,
     showPagination,
@@ -144,7 +148,7 @@ const Table: React.FC<TableProps> = ({
                                     width={header.getSize()}
                                     id={header.id}
                                 >
-                                    <HeaderTitle cssProp={header.headTitleStyle}>
+                                    <HeaderTitle cssProp={header.headTitleStyle} customStyle={tableHeadTitleStyles}>
                                         {flexRender(header.column.columnDef.header, header.getContext())}
                                     </HeaderTitle>
                                     {isSortEnabled && (
@@ -171,9 +175,9 @@ const Table: React.FC<TableProps> = ({
                         <SimpleLoader />
                     </LoaderContainer>
                 ) : noResultsMessage !== null && !data?.length && !stickyRow ? (
-                    <NoResultContainer style={noResultsStyle}>{noResultsMessage}</NoResultContainer>
+                    <NoResultContainer customStyle={noResultsStyle}>{noResultsMessage}</NoResultContainer>
                 ) : (
-                    <TableBody height={tableHeight}>
+                    <TableBody height={tableHeight} padding={tableBodyPadding}>
                         {stickyRow ?? <></>}
                         {tableInstance.getPaginationRowModel().rows.map((row: any, rowIndex: any) => {
                             return (
@@ -207,7 +211,7 @@ const Table: React.FC<TableProps> = ({
                                                     </TableRowMobile>
                                                 ) : (
                                                     <TableCell
-                                                        style={tableRowCellStyles}
+                                                        customStyle={tableRowCellStyles}
                                                         key={cellIndex}
                                                         width={cell.column.getSize()}
                                                         id={cell.column.id}
@@ -298,14 +302,14 @@ const ReactTable = styled.div<{ height?: string; tabelStyle?: string }>`
     ${(props) => props.tabelStyle}
 `;
 
-const TableBody = styled.div<{ height?: string }>`
+const TableBody = styled.div<{ height?: string; padding?: string }>`
     display: flex;
     overflow: auto;
     flex-direction: column;
     width: 100%;
-    padding-right: ${(props) => (props.height ? '10px' : '0')};
+    ${(props) => (props.padding ? `padding: ${props.padding}` : `padding-right: ${props.height ? '10px' : '0'}`)};
     @media (max-width: 767px) {
-        padding-right: ${(props) => (props.height ? '5px' : '0')};
+        ${(props) => (props.padding ? `padding: ${props.padding}` : `padding-right: ${props.height ? '5px' : '0'}`)};
     }
 `;
 
@@ -335,17 +339,22 @@ export const TableCell = styled(FlexDivCentered)<{
     id: string;
     minWidth?: number;
     isCard?: boolean;
+    customStyle?: CSSProperties;
 }>`
     flex: 1;
     max-width: ${(props) => (props.width ? `${props.width}px` : 'initial')};
     min-width: ${(props) => (props.minWidth ? `${props.minWidth}px` : '0px')};
     justify-content: ${(props) => (props.isCard ? 'right' : CellAlignment[props.id] || 'left')};
+
     &:first-child {
         padding-left: 18px;
     }
     &:last-child {
         padding-right: 18px;
     }
+
+    ${(props) => props.customStyle && { ...props.customStyle }}
+
     @media (max-width: 767px) {
         min-width: auto;
         font-size: 12px;
@@ -383,8 +392,11 @@ const TableCellHead = styled(TableCell)<{ cssProp?: CSSPropertiesWithMedia }>`
     user-select: none;
 `;
 
-const HeaderTitle = styled.span<{ cssProp?: CSSPropertiesWithMedia }>`
+const HeaderTitle = styled.span<{ cssProp?: CSSPropertiesWithMedia; customStyle?: CSSProperties }>`
     text-transform: uppercase;
+
+    ${(props) => props.customStyle && { ...props.customStyle }}
+
     @media (max-width: ${(props) => (props.cssProp ? props.cssProp.mediaMaxWidth : '600px')}) {
         ${(props) => (props.cssProp ? { ...props.cssProp.cssProperties } : '')}
     }
@@ -401,14 +413,14 @@ const LoaderContainer = styled(FlexDivCentered)`
     width: 100%;
 `;
 
-const NoResultContainer = styled(TableRow)<{ style?: CSSProperties }>`
+const NoResultContainer = styled(TableRow)<{ customStyle?: CSSProperties }>`
     height: 60px;
     padding-top: 20px;
     padding-left: 18px;
     font-size: 14px;
     border: none;
     margin: auto;
-    ${(props) => props.style && { ...props.style }}
+    ${(props) => props.customStyle && { ...props.customStyle }}
 `;
 
 const SortIcon = styled.i<{ selected: boolean; sortDirection: SortDirection }>`

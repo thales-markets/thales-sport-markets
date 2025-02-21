@@ -54,7 +54,7 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                             target="_blank"
                             rel="noreferrer"
                         >
-                            <Arrow />
+                            <Arrow className={'icon icon--arrow-external'} />
                         </a>
                     </WalletAddress>
                 ),
@@ -137,17 +137,34 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
             <TableHeaderContainer>
                 <TableHeader>{t('march-madness.leaderboard.by-volume')}</TableHeader>
             </TableHeaderContainer>
-            {filteredData?.length > 0 && (
-                <Table
-                    data={filteredData}
-                    columns={columns as any}
-                    stickyRow={stickyRow}
-                    rowsPerPage={20}
-                    isLoading={leaderboardQuery.isLoading}
-                    noResultsMessage={t('march-madness.leaderboard.no-data')}
-                    showPagination
-                />
-            )}
+            <Table
+                data={filteredData}
+                columns={columns as any}
+                stickyRow={stickyRow}
+                rowsPerPage={20}
+                isLoading={leaderboardQuery.isLoading}
+                noResultsMessage={t('march-madness.leaderboard.no-data')}
+                showPagination
+                tableHeight={filteredData.length ? 'unset' : '450px'}
+                tableRowHeadStyles={{
+                    border: `2px solid ${theme.marchMadness.borderColor.secondary}`,
+                    borderRadius: 'unset',
+                    background: 'transparent',
+                }}
+                tableStyle={`border: 2px solid ${theme.marchMadness.borderColor.secondary}; border-top: 0px;`}
+                tableBodyPadding="0px"
+                noResultsStyle={{
+                    fontFamily: theme.fontFamily.primary,
+                    fontSize: '25px',
+                    lineHeight: '40px',
+                    color: theme.marchMadness.textColor.senary,
+                    textTransform: 'uppercase',
+                    width: '150px',
+                    textAlign: 'center',
+                    height: 'unset',
+                    padding: 0,
+                }}
+            />
         </Container>
     );
 };

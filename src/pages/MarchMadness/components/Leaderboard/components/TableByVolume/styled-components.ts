@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { FlexDivStart } from 'styles/common';
 
 export const Table = styled.table`
     font-family: 'Oswald' !important;
@@ -20,7 +21,7 @@ export const TableHeaderCell = styled.th`
     font-size: 12px;
     font-style: normal;
     font-weight: 700;
-    line-height: 150%; /* 18px */
+    line-height: 150%;
     letter-spacing: 0.3px;
 `;
 
@@ -42,8 +43,9 @@ export const NoDataLabel = styled.span`
     text-transform: uppercase;
 `;
 
-export const TableRow = styled.tr<{ hideBorder?: boolean; topTen?: boolean; myScore?: boolean }>`
-    font-family: 'Oswald' !important;
+export const TableRow = styled(FlexDivStart)<{ hideBorder?: boolean; topTen?: boolean; myScore?: boolean }>`
+    height: 40px;
+    font-family: ${(props) => props.theme.fontFamily.primary};
     font-size: 14px;
     font-weight: 600;
     ${(props) => (props?.hideBorder == true ? `border-bottom: '';` : ``)}
@@ -55,17 +57,22 @@ export const TableRow = styled.tr<{ hideBorder?: boolean; topTen?: boolean; mySc
     ${(props) => (props?.myScore == true ? `background-color: ${props.theme.marchMadness.borderColor.secondary};` : ``)}
 `;
 
-export const TableRowCell = styled.td<{ noTextTransform?: boolean }>`
+export const TableRowCell = styled.span<{ width?: string; noTextTransform?: boolean }>`
+    ${(props) => (props.width ? `width: ${props.width};` : '')}
     padding: 10px 0px;
     color: #fff;
-    text-align: center;
+    text-align: left;
     font-family: ${(props) => props.theme.fontFamily.primary};
     font-size: 14px;
     font-style: normal;
     font-weight: 600;
-    line-height: 150%; /* 21px */
+    line-height: 150%;
     letter-spacing: 0.21px;
     ${(props) => (props.noTextTransform ? '' : 'text-transform: uppercase;')}
+
+    &:first-child {
+        padding-left: 18px;
+    }
 `;
 
 export const Container = styled.div`
@@ -105,13 +112,8 @@ export const Arrow = styled.i`
     font-size: 14px;
     margin-left: 8px;
     text-transform: none;
-    transform: rotate(225deg);
     color: white;
     font-weight: 400;
-    &:before {
-        font-family: OvertimeIcons !important;
-        content: '\\006C';
-    }
 `;
 
 export const StickyRow = styled(TableRow)`

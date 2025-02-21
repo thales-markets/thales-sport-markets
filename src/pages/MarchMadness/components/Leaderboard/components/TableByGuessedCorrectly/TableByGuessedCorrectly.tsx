@@ -40,13 +40,13 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
     const { address } = useAccount();
     const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
-    const columns = useMemo(() => {
-        return [
+    const columns = useMemo(
+        () => [
             {
                 header: <>{''}</>,
                 accessorKey: 'rank',
+                size: 100,
             },
-
             {
                 header: <>{t('march-madness.leaderboard.bracket-id')}</>,
                 accessorKey: 'bracketId',
@@ -63,20 +63,17 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                             target="_blank"
                             rel="noreferrer"
                         >
-                            <Arrow />
+                            <Arrow className={'icon icon--arrow-external'} />
                         </a>
                     </WalletAddress>
                 ),
+                size: 200,
             },
             {
                 header: () => (
                     <>
                         {t('march-madness.leaderboard.guessed-games')}
                         <Tooltip
-                            overlayInnerStyle={{
-                                backgroundColor: theme.marchMadness.background.secondary,
-                                border: `1px solid ${theme.marchMadness.borderColor.primary}`,
-                            }}
                             overlay={
                                 <OverlayContainer>
                                     {t('march-madness.leaderboard.tooltip-correct-correct-table')}
@@ -95,10 +92,6 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                     <>
                         {t('march-madness.leaderboard.rewards')}
                         <Tooltip
-                            overlayInnerStyle={{
-                                backgroundColor: theme.marchMadness.background.secondary,
-                                border: `1px solid ${theme.marchMadness.borderColor.primary}`,
-                            }}
                             overlay={
                                 <OverlayContainer>
                                     {t('march-madness.leaderboard.tooltip-rewards-correct-table')}
@@ -122,8 +115,9 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                     );
                 },
             },
-        ];
-    }, [t, networkId, theme.marchMadness.borderColor.primary, theme.marchMadness.background.secondary]);
+        ],
+        [t, networkId]
+    );
 
     const leaderboardQuery = useLeaderboardByGuessedCorrectlyQuery(networkId);
 
@@ -158,17 +152,19 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
         if (myScore?.length) {
             return (
                 <StickyRowTopTable myScore={true}>
-                    <TableRowCell>{myScore[0].rank}</TableRowCell>
-                    <TableRowCell>#{myScore[0].bracketId}</TableRowCell>
-                    <TableRowCell>{t('march-madness.leaderboard.my-rewards-bracket').toUpperCase()}</TableRowCell>
-                    <TableRowCell>{myScore[0].totalPoints}</TableRowCell>
-                    <TableRowCell>
+                    <TableRowCell width={`${columns[0].size || 150}px`}>{myScore[0].rank}</TableRowCell>
+                    <TableRowCell width={`${columns[1].size || 150}px`}>#{myScore[0].bracketId}</TableRowCell>
+                    <TableRowCell width={`${columns[2].size || 150}px`}>
+                        {t('march-madness.leaderboard.my-rewards-bracket').toUpperCase()}
+                    </TableRowCell>
+                    <TableRowCell width={`${columns[3].size || 150}px`}>{myScore[0].totalPoints}</TableRowCell>
+                    <TableRowCell width={`${columns[4].size || 150}px`}>
                         {getFormattedRewardsAmount(myScore[0].stableRewards, myScore[0].tokenRewards)}
                     </TableRowCell>
                 </StickyRowTopTable>
             );
         }
-    }, [myScore, t]);
+    }, [myScore, t, columns]);
 
     return (
         <Container>
@@ -183,9 +179,23 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                 isLoading={leaderboardQuery.isLoading}
                 noResultsMessage={t('march-madness.leaderboard.no-data')}
                 showPagination
-                tableHeight="450px"
-                tableRowHeadStyles={{ display: 'none' }}
-                tableStyle={`border: 2px solid ${theme.marchMadness.borderColor.secondary};`}
+                tableHeight={filteredData.length ? 'unset' : '450px'}
+                tableRowHeadStyles={{
+                    border: `2px solid ${theme.marchMadness.borderColor.secondary}`,
+                    borderRadius: 'unset',
+                    background: 'transparent',
+                }}
+                tableHeadTitleStyles={{ fontFamily: theme.fontFamily.primary, fontSize: '12px' }}
+                tableStyle={`border: 2px solid ${theme.marchMadness.borderColor.secondary};  border-top: 0px;`}
+                tableBodyPadding="0px"
+                tableRowCellStyles={{
+                    fontFamily: theme.fontFamily.primary,
+                    padding: '10px 0px',
+                    fontSize: '14px',
+                    fontWeight: 600,
+                    lineHeight: '150%',
+                    letterSpacing: '0.21px',
+                }}
                 noResultsStyle={{
                     fontFamily: theme.fontFamily.primary,
                     fontSize: '25px',
