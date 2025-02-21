@@ -325,7 +325,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                     )}
                     {!isLive && (
                         <BetTypeContainer>
-                            <Tooltip overlay={t('markets.parlay.tooltip.regular')}>
+                            <Tooltip overlay={t('markets.parlay.tooltip.regular')} mouseEnterDelay={0.3}>
                                 <RadioButtonContainer>
                                     <RadioButton
                                         checked={!isSystemBet && !isSgp}
@@ -338,7 +338,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                                     />
                                 </RadioButtonContainer>
                             </Tooltip>
-                            <Tooltip overlay={t('markets.parlay.tooltip.system')}>
+                            <Tooltip overlay={t('markets.parlay.tooltip.system')} mouseEnterDelay={0.3}>
                                 <RadioButtonContainer>
                                     <RadioButton
                                         checked={isSystemBet}
@@ -361,6 +361,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                                           })
                                         : t('markets.parlay.tooltip.sgp')
                                 }
+                                mouseEnterDelay={0.3}
                             >
                                 <RadioButtonContainer>
                                     <RadioButton

@@ -8,6 +8,7 @@ import { ThemeInterface } from 'types/ui';
 type TooltipProps = {
     overlay: any;
     placement?: string;
+    mouseEnterDelay?: number;
     iconFontSize?: number;
     customIconStyling?: CSSProperties;
     overlayInnerStyle?: CSSProperties;
@@ -24,6 +25,7 @@ type TooltipProps = {
 const Tooltip: React.FC<TooltipProps> = ({
     overlay,
     placement,
+    mouseEnterDelay,
     iconFontSize,
     customIconStyling,
     overlayInnerStyle,
@@ -74,6 +76,7 @@ const Tooltip: React.FC<TooltipProps> = ({
             placement={placement || 'top'}
             overlayClassName={overlayClassName}
             overlayInnerStyle={overlayInnerStyle}
+            mouseEnterDelay={mouseEnterDelay}
         >
             {children ? (
                 children

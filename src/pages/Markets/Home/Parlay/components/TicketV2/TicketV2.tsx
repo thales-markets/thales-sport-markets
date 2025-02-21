@@ -2371,6 +2371,7 @@ const Ticket: React.FC<TicketProps> = ({
                             {t('markets.parlay.use-free-bet')}
                             <Tooltip
                                 overlay={<>{t('profile.free-bet.claim-btn')}</>}
+                                mouseEnterDelay={0.3}
                                 iconFontSize={14}
                                 marginLeft={3}
                             />
