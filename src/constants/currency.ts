@@ -55,6 +55,7 @@ export const COLLATERALS: Record<SupportedNetwork, Coins[]> = {
         CRYPTO_CURRENCY_MAP.OP as Coins,
         CRYPTO_CURRENCY_MAP.WETH as Coins,
         CRYPTO_CURRENCY_MAP.ETH as Coins,
+        CRYPTO_CURRENCY_MAP.THALES as Coins,
     ],
     [Network.Arbitrum]: [
         CRYPTO_CURRENCY_MAP.USDC as Coins,
@@ -172,4 +173,5 @@ export const COLLATERAL_ICONS: Record<
     ARB,
     USDC,
     OVER,
+    THALES: OVER,
 };

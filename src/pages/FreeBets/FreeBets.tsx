@@ -38,6 +38,8 @@ const FreeBets: React.FC = () => {
         [networkId, selectedCollateralIndex, supportedCollaterals]
     );
 
+    console.log(selectedCollateralAddress);
+
     const onSubmit = useCallback(async () => {
         const toastId = toast.loading(t('market.toast-message.transaction-pending'));
         const signature = await signMessageAsync({ message: JSON.stringify({ betAmount, numberOfBets }) });

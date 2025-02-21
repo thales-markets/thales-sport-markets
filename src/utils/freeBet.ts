@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { generalConfig } from 'config/general';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { Network } from 'enums/network';
 import { t } from 'i18next';
 import { toast } from 'react-toastify';
@@ -31,6 +32,7 @@ export const claimFreeBet = async (
             if (response.status === 200) {
                 toast.update(toastId, getSuccessToastOptions(response.data));
                 setFreeBet(undefined);
+                localStorage.removeItem(LOCAL_STORAGE_KEYS.FREE_BET_ID);
                 const queryParams = new URLSearchParams(location.search);
                 if (queryParams.has('freeBet')) {
                     queryParams.delete('freeBet');
