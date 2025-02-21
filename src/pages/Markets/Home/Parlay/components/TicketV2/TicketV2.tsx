@@ -1941,7 +1941,7 @@ const Ticket: React.FC<TicketProps> = ({
                                 ? swappedThalesToReceive
                                 : Number(buyInAmount)
                             : parlayAmmQuote.buyInAmountInDefaultCollateralNumber;
-                        setPayout((1 / totalQuote) * buyIn);
+                        totalQuote > 0 && setPayout((1 / totalQuote) * buyIn);
                     } else {
                         const payout = coinFormatter(
                             parlayAmmQuote[1],
