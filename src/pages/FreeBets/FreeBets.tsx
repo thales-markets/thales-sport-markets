@@ -37,7 +37,7 @@ const FreeBets: React.FC = () => {
     const selectedCollateralIndex = ticketPayment.selectedCollateralIndex;
     const [betAmount, setBetAmount] = useState<number | string>('');
     const [numberOfBets, setNumberOfBets] = useState<number | string>('');
-    const [generatedIds, setGeneratedIds] = useState<string[]>(['adsasd', 'adsasd', 'adsasd', 'adsasd']);
+    const [generatedIds, setGeneratedIds] = useState<string[]>([]);
     const supportedCollaterals = useMemo(() => [...getFreeBetCollaterals(networkId), CRYPTO_CURRENCY_MAP.THALES], [
         networkId,
     ]);
@@ -157,23 +157,28 @@ const FreeBets: React.FC = () => {
                 </FlexDivColumnCentered>
                 <br />
                 <FlexDivColumnCentered gap={10}>
-                    <FlexDivEnd>
-                        <FlexDivCentered gap={5}>
-                            Copy All
-                            <CopyIcon
-                                onClick={() => {
-                                    const toastId = toast.loading('Copying', { autoClose: 1000 });
-                                    navigator.clipboard.writeText(
-                                        generatedIds
-                                            .map((id) => `https://overtimemarkets.xyz/profile?freeBet=${id}`)
-                                            .join('\n')
-                                    );
-                                    toast.update(toastId, { ...getInfoToastOptions('Copied all'), autoClose: 1000 });
-                                }}
-                                className="icon icon--copy"
-                            />
-                        </FlexDivCentered>
-                    </FlexDivEnd>
+                    {!!generatedIds.length && (
+                        <FlexDivEnd>
+                            <FlexDivCentered gap={5}>
+                                Copy All
+                                <CopyIcon
+                                    onClick={() => {
+                                        const toastId = toast.loading('Copying', { autoClose: 1000 });
+                                        navigator.clipboard.writeText(
+                                            generatedIds
+                                                .map((id) => `https://overtimemarkets.xyz/profile?freeBet=${id}`)
+                                                .join('\n')
+                                        );
+                                        toast.update(toastId, {
+                                            ...getInfoToastOptions('Copied all'),
+                                            autoClose: 1000,
+                                        });
+                                    }}
+                                    className="icon icon--copy"
+                                />
+                            </FlexDivCentered>
+                        </FlexDivEnd>
+                    )}
                     <FlexDivColumnCentered gap={5}>
                         {generatedIds.map((id) => (
                             <FlexDivSpaceBetween key={id}>
