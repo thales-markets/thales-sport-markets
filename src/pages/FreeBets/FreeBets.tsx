@@ -4,6 +4,7 @@ import CollateralSelector from 'components/CollateralSelector';
 import NumericInput from 'components/fields/NumericInput';
 import { generalConfig } from 'config/general';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { t } from 'i18next';
 import { useCallback, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -12,8 +13,9 @@ import { getTicketPayment } from 'redux/modules/ticket';
 import { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumnCentered, FlexDivColumnNative } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
-import { getCollateralAddress, getFreeBetCollaterals } from 'utils/collaterals';
+import { getFreeBetCollaterals } from 'utils/collaterals';
 import { useAccount, useChainId, useSignMessage } from 'wagmi';
+import multipleCollateral from '../../utils/contracts/multipleCollateralContract';
 
 const FreeBets: React.FC = () => {
     const walletAddress = useAccount()?.address || '';
@@ -26,11 +28,15 @@ const FreeBets: React.FC = () => {
     const [betAmount, setBetAmount] = useState<number | string>('');
     const [numberOfBets, setNumberOfBets] = useState<number | string>('');
     const [generatedIds, setGeneratedIds] = useState<number[]>([]);
-    const selectedCollateralAddress = useMemo(() => getCollateralAddress(networkId, selectedCollateralIndex), [
+    const supportedCollaterals = useMemo(() => [...getFreeBetCollaterals(networkId), CRYPTO_CURRENCY_MAP.THALES], [
         networkId,
-        selectedCollateralIndex,
     ]);
-    const supportedCollaterals = getFreeBetCollaterals(networkId);
+    const selectedCollateralAddress = useMemo(
+        () =>
+            multipleCollateral[supportedCollaterals[selectedCollateralIndex] as keyof typeof multipleCollateral]
+                ?.addresses[networkId],
+        [networkId, selectedCollateralIndex, supportedCollaterals]
+    );
 
     const onSubmit = useCallback(async () => {
         const toastId = toast.loading(t('market.toast-message.transaction-pending'));
@@ -94,6 +100,7 @@ const FreeBets: React.FC = () => {
                                         setBetAmount('');
                                     }}
                                     isDetailedView
+                                    hideBalance
                                 />
                             }
                         />
