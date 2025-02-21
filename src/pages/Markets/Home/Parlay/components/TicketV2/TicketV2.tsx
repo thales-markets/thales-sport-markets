@@ -162,6 +162,7 @@ import {
     InfoWrapper,
     InputContainer,
     LeftLevel,
+    MarketsValidation,
     OddChangeDown,
     OddChangeUp,
     OverdropLabel,
@@ -181,7 +182,6 @@ import {
     SlippageDropdownContainer,
     SummaryLabel,
     SummaryValue,
-    SystemBetValidation,
     TwitterIcon,
     XButton,
     defaultButtonProps,
@@ -2264,24 +2264,27 @@ const Ticket: React.FC<TicketProps> = ({
                         </>
                     ) : (
                         <RowContainer>
-                            <SystemBetValidation>
+                            <MarketsValidation>
                                 {t('markets.parlay.validation.system-bet-min-markets-validation', {
                                     minMarkets: SYSTEM_BET_MINIMUM_MARKETS,
                                 })}
-                            </SystemBetValidation>
+                            </MarketsValidation>
                         </RowContainer>
                     )}
-                    {isSystemBet && <HorizontalLine />}
+                    <HorizontalLine />
                 </>
             )}
             {isSgp && !isValidSgpBet && (
-                <RowContainer>
-                    <SystemBetValidation>
-                        {t('markets.parlay.validation.sgp-bet-min-markets-validation', {
-                            minMarkets: SGP_BET_MINIMUM_MARKETS,
-                        })}
-                    </SystemBetValidation>
-                </RowContainer>
+                <>
+                    <RowContainer>
+                        <MarketsValidation>
+                            {t('markets.parlay.validation.sgp-bet-min-markets-validation', {
+                                minMarkets: SGP_BET_MINIMUM_MARKETS,
+                            })}
+                        </MarketsValidation>
+                    </RowContainer>
+                    <HorizontalLine />
+                </>
             )}
             <RowSummary columnDirection={true}>
                 {isSystemBet && (

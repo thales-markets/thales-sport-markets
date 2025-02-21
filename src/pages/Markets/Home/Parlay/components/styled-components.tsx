@@ -183,7 +183,7 @@ export const BalanceValue = styled.span`
 `;
 
 export const XButton = styled.i<{ margin?: string }>`
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 600;
     color: ${(props) => props.theme.textColor.septenary};
     ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
@@ -438,7 +438,7 @@ export const SelectContainer = styled(FlexDivEnd)`
     width: 100%;
 `;
 
-export const SystemBetValidation = styled(FlexDivCentered)`
+export const MarketsValidation = styled(FlexDivCentered)`
     font-size: 13px;
     color: ${(props) => props.theme.warning.textColor.primary};
     border: 2px solid ${(props) => props.theme.warning.borderColor.primary};
