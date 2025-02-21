@@ -756,6 +756,7 @@ const Home: React.FC = () => {
                             }
                             showActive={showActive}
                             tags={tagsList}
+                            setSportParam={setSportParam}
                             setTagParam={setTagParam}
                             openMarketsCountPerTag={openMarketsCountPerTag}
                             liveMarketsCountPerTag={liveMarketsCountPerTag}
@@ -859,7 +860,7 @@ const Home: React.FC = () => {
                         </LoaderContainer>
                     ) : (
                         <>
-                            {!isMobile && <Breadcrumbs />}
+                            {!isMobile && <Breadcrumbs setTagParam={setTagParam} />}
                             {finalMarkets.length === 0 ? (
                                 <NoMarketsContainer>
                                     <NoMarketsLabel>
