@@ -1,5 +1,5 @@
 import { USD_SIGN } from 'constants/currency';
-import { PRIZE_POOL, PRIZE_POOL_BONUS } from 'constants/marchMadness';
+import { PRIZE_POOL_BONUS } from 'constants/marchMadness';
 import { minutesToMilliseconds } from 'date-fns';
 import useMarchMadnessStatsQuery from 'queries/marchMadness/useMarchMadnessStatsQuery';
 import React from 'react';
@@ -42,7 +42,10 @@ const Stats: React.FC<{ disableMobileView?: boolean }> = ({ disableMobileView })
                 <Separator disableMobileView={disableMobileView} />
                 <Pair>
                     <Text>{t('march-madness.stats.pool-size')}:</Text>
-                    <Value>{`${formatCurrencyWithKey(USD_SIGN, PRIZE_POOL)} + ${PRIZE_POOL_BONUS}`}</Value>
+                    <Value>{`${PRIZE_POOL_BONUS} + ${formatCurrencyWithKey(
+                        USD_SIGN,
+                        marchMadnessStatsData.poolSize // TODO: use PRIZE_POOL when all funds are transfered from contract
+                    )}`}</Value>
                 </Pair>
             </Data>
         </Container>
