@@ -1,15 +1,5 @@
-import ArbitrumLogo from 'assets/images/arbitrum-logo.svg?react';
-import OPLogo from 'assets/images/optimism-logo.svg?react';
-import ThalesLogo from 'assets/images/thales-logo-small-white.svg?react';
 import styled from 'styled-components';
-import {
-    FlexDiv,
-    FlexDivCentered,
-    FlexDivColumn,
-    FlexDivColumnCentered,
-    FlexDivRow,
-    FlexDivRowCentered,
-} from 'styles/common';
+import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 
 export const LeaderboardWrapper = styled(FlexDiv)`
     margin-top: 30px;
@@ -100,65 +90,6 @@ export const ColumnWrapper = styled(FlexDiv)<{ padding?: string; width?: string 
     &:last-child {
         margin-right: 5px;
     }
-`;
-
-export const ArrowIcon = styled.i`
-    font-size: 9px;
-    display: flex;
-    align-items: center;
-    margin-right: 2px;
-    margin-left: 4px;
-`;
-
-export const ExpandedRow = styled(FlexDivColumnCentered)``;
-
-export const ParlayRow = styled(FlexDivRowCentered)`
-    margin-top: 8px;
-    &:last-child {
-        margin-bottom: 10px;
-    }
-`;
-
-export const QuoteText = styled.span`
-    font-weight: 300;
-    font-size: 12px;
-    text-align: left;
-    white-space: nowrap;
-    display: flex;
-`;
-
-export const ParlayRowMatch = styled(QuoteText)`
-    max-width: 165px;
-    padding-left: 7px;
-`;
-
-export const ParlayRowResult = styled(QuoteText)`
-    padding-right: 7px;
-`;
-
-export const ParlayRowTeam = styled.span`
-    white-space: nowrap;
-    width: 165px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-`;
-
-export const OPLogoWrapper = styled(OPLogo)`
-    width: 15px;
-    height: 15px;
-    margin-left: 5px;
-`;
-
-export const ArbitrumLogoWrapper = styled(ArbitrumLogo)`
-    width: 17px;
-    height: 17px;
-    margin-left: 5px;
-`;
-
-export const ThalesLogoWrapper = styled(ThalesLogo)`
-    width: 15px;
-    height: 15px;
-    margin-left: 5px;
 `;
 
 export const LoaderContainer = styled(FlexDivCentered)`
