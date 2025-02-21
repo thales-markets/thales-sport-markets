@@ -93,6 +93,7 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.NHL_FUTURES:
         case League.USA_NWSL:
         case League.NCAAB_FUTURES:
+        case League.NCAAW:
             return `/logos/Countries/united-states-of-america.svg`;
         case League.EPL:
         case League.ENGLAND_CHAMPIONSHIP:
@@ -258,6 +259,14 @@ export const getLeagueFlagSource = (tagId: number | any) => {
             return `/logos/Countries/thailand.svg`;
         case League.ATP_FUTURES:
             return `/logos/Countries/atp.webp`;
+        case League.FIBA_EUROBASKET_QUALIFIERS:
+            return `/logos/Countries/eurobasket.png`;
+        case League.FIBA_AMERICUP_QUALIFIERS:
+            return `/logos/Countries/americup.png`;
+        case League.FIBA_ASIA_CUP_QUALIFIERS:
+            return `/logos/Countries/asia-cup.png`;
+        case League.FIBA_WORLD_CUP_QUALIFIERS:
+            return `/logos/Countries/fiba-world-cup.png`;
         default:
             return `/logos/Countries/world.svg`;
     }
