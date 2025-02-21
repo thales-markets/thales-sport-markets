@@ -283,6 +283,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
         if (isFutures) {
             marketsCount += market.odds.filter((odd) => odd).length - FUTURES_MAIN_VIEW_DISPLAY_COUNT;
         }
+        marketsCount = marketsCount < 0 ? 0 : marketsCount;
 
         const leagueTooltipKey = getLeagueTooltipKey(market.leagueId);
 

@@ -1123,6 +1123,11 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         key: 'cupWinner',
         name: 'Cup winner',
     },
+    [MarketType.TO_MAKE_FINAL_FOUR]: {
+        id: MarketType.TO_MAKE_FINAL_FOUR,
+        key: 'toMakeFinalFour',
+        name: 'To make final four',
+    },
 
     // Spread (handicap) corners
     [MarketType.SPREAD_CORNERS]: {
@@ -1671,6 +1676,7 @@ export const OTHER_YES_NO_MARKET_TYPES = [
     MarketType.GO_THE_DISTANCE,
     MarketType.WILL_FIGHT_END_IN_FIRST_MINUTE,
     MarketType.WILL_POINT_BE_DEDUCTED,
+    MarketType.TO_MAKE_FINAL_FOUR,
 ];
 
 export const UFC_SPECIFIC_MARKET_TYPES = [
@@ -1679,7 +1685,12 @@ export const UFC_SPECIFIC_MARKET_TYPES = [
     MarketType.METHOD_OF_VICTORY,
 ];
 
-export const FUTURES_MARKET_TYPES = [MarketType.LEAGUE_WINNER, MarketType.MVP, MarketType.CUP_WINNER];
+export const FUTURES_MARKET_TYPES = [
+    MarketType.LEAGUE_WINNER,
+    MarketType.MVP,
+    MarketType.CUP_WINNER,
+    MarketType.TO_MAKE_FINAL_FOUR,
+];
 
 export const CORNERS_MARKET_TYPES = [
     MarketType.SPREAD_CORNERS,
