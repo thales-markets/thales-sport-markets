@@ -179,7 +179,7 @@ const useTicketLiquidityQuery = (
                             getDefaultDecimalsForNetwork(networkConfig.networkId)
                         );
                         const sgpCombinationLiquidity = Math.floor(
-                            (formattedCombinationRisk - formattedSpentOnCombination) / (1 / sgpQuote - 1)
+                            (formattedCombinationRisk / sgpDivider - formattedSpentOnCombination) / (1 / sgpQuote - 1)
                         );
 
                         ticketLiquidity = Math.min(sgpAvailableLiquidity, sgpCombinationLiquidity, ticketLiquidity);
