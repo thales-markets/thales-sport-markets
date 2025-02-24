@@ -23,7 +23,7 @@ type ShareModalProps = {
 };
 
 const IMAGE_NAME = 'BracketImage.png';
-const TWITTER_MESSAGE = '%0AI picked the {{winnerTeam}} to cut the nets down in Phoenix! How about you, anon?';
+const TWITTER_MESSAGE = '%0AI picked the {{winnerTeam}} to cut the nets down in San Antonio! How about you, anon?';
 const TWITTER_MESSAGE_PASTE = '%0A<PASTE YOUR IMAGE>';
 const TWITTER_MESSAGE_UPLOAD = `%0A<UPLOAD YOUR ${IMAGE_NAME}>`;
 
@@ -38,9 +38,10 @@ const ShareModal: React.FC<ShareModalProps> = ({ final4Matches, handleClose }) =
     const winnerTeamId = finalMatch.matchData.isHomeTeamSelected
         ? finalMatch.matchData.homeTeamId
         : finalMatch.matchData.awayTeamId;
-    const winnerTeamName = teamsData.find((team) => team?.id === winnerTeamId)?.name;
+    const winnerTeam = teamsData.find((team) => team?.id === winnerTeamId);
+    const winnerTeamName = winnerTeam?.name;
 
-    const [winnerLogoSrc, setWinnerLogoSrc] = useState(getTeamImageSource(winnerTeamName || '', League.NCAAB));
+    const [winnerLogoSrc, setWinnerLogoSrc] = useState(getTeamImageSource(winnerTeam?.displayName || '', League.NCAAB));
     const [isLoading, setIsLoading] = useState(false);
     const [toastId, setToastId] = useState<string | number>(0);
 
