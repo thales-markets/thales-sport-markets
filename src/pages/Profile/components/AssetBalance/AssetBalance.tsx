@@ -4,6 +4,7 @@ import WithdrawIcon from 'assets/images/svgs/withdraw.svg?react';
 import Toggle from 'components/Toggle';
 import { COLLATERAL_ICONS, USD_SIGN } from 'constants/currency';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
+import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -13,7 +14,7 @@ import { Coins, formatCurrencyWithKey } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import biconomyConnector from 'utils/biconomyWallet';
-import { getCollateralIndex, getCollaterals } from 'utils/collaterals';
+import { getCollateralIndex, getCollaterals, mapMultiCollateralBalances } from 'utils/collaterals';
 import { useAccount, useChainId, useClient } from 'wagmi';
 
 type Props = {
@@ -53,6 +54,21 @@ const AssetBalance: React.FC<Props> = ({
     const exchangeRates: Rates | null =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
+    const freeBetCollateralBalancesQuery = useFreeBetCollateralBalanceQuery(
+        walletAddress,
+        { networkId, client },
+        {
+            enabled: isConnected,
+        }
+    );
+
+    const freeBetCollateralBalances =
+        freeBetCollateralBalancesQuery?.isSuccess && freeBetCollateralBalancesQuery.data
+            ? freeBetCollateralBalancesQuery?.data
+            : undefined;
+
+    const balanceList = mapMultiCollateralBalances(freeBetCollateralBalances, exchangeRates, networkId);
+
     const usersAssets = useMemo(() => {
         try {
             if (exchangeRates && multipleCollateralBalances.data) {
@@ -60,6 +76,7 @@ const AssetBalance: React.FC<Props> = ({
                     asset: Coins;
                     balance: number;
                     value: number;
+                    freeBet: boolean;
                 }> = [];
                 getCollaterals(networkId).forEach((token) => {
                     result.push({
@@ -67,8 +84,22 @@ const AssetBalance: React.FC<Props> = ({
                         balance: multipleCollateralBalances.data[token],
                         value:
                             multipleCollateralBalances.data[token] * (exchangeRates[token] ? exchangeRates[token] : 1),
+                        freeBet: false,
                     });
                 });
+
+                if (balanceList) {
+                    balanceList.forEach((data) => {
+                        if (data.balance > 0)
+                            result.push({
+                                asset: data.collateralKey,
+                                balance: data.balance,
+                                value: data.balanceDollarValue,
+                                freeBet: true,
+                            });
+                    });
+                }
+
                 return result
                     .sort((a, b) => {
                         return b.value - a.value;
@@ -85,7 +116,7 @@ const AssetBalance: React.FC<Props> = ({
         } catch (e) {
             return [];
         }
-    }, [exchangeRates, multipleCollateralBalances.data, networkId, showZeroBalance]);
+    }, [exchangeRates, multipleCollateralBalances.data, networkId, showZeroBalance, balanceList]);
 
     return (
         <GridContainer>
@@ -109,18 +140,22 @@ const AssetBalance: React.FC<Props> = ({
                 return (
                     <AssetContainer key={index}>
                         <AssetWrapper>
+                            {assetData.freeBet && <SubHeaderIcon className="icon icon--gift" />}
                             {<Icon style={{ height: '24px', width: '30px' }} />} {assetData.asset}
                         </AssetWrapper>
                         <Label>{formatCurrencyWithKey('', assetData.balance)}</Label>
                         <Label>{formatCurrencyWithKey(USD_SIGN, assetData.value, 2)}</Label>
 
-                        <Deposit onClick={() => setShowFundModal(true)}>
+                        <Deposit
+                            disabled={assetData.freeBet}
+                            onClick={() => !assetData.freeBet && setShowFundModal(true)}
+                        >
                             Deposit <DepositIcon />
                         </Deposit>
                         <Convert
-                            disabled={assetData.balance == 0}
+                            disabled={assetData.freeBet || assetData.balance == 0}
                             onClick={() => {
-                                if (assetData.balance > 0) {
+                                if (!assetData.freeBet && assetData.balance > 0) {
                                     setConvertToken(getCollateralIndex(networkId, assetData.asset));
                                     setShowSwapModal(true);
                                 }
@@ -129,9 +164,9 @@ const AssetBalance: React.FC<Props> = ({
                             Convert <ConvertIcon />
                         </Convert>
                         <Withdraw
-                            disabled={assetData.balance == 0}
+                            disabled={assetData.freeBet || assetData.balance == 0}
                             onClick={() => {
-                                if (assetData.balance > 0) {
+                                if (!assetData.freeBet && assetData.balance > 0) {
                                     setWithdrawalToken(getCollateralIndex(networkId, assetData.asset));
                                     setShowWithdrawModal(true);
                                 }
@@ -192,6 +227,7 @@ const AssetContainer = styled.div`
         grid-template-columns: repeat(3, 1fr);
         grid-column: 1;
         grid-column-end: 4;
+        padding-left: 8px;
     }
 
     border-top: 1px solid ${(props) => props.theme.background.senary};
@@ -199,6 +235,7 @@ const AssetContainer = styled.div`
 `;
 
 const AssetWrapper = styled(AlignedParagraph)`
+    position: relative;
     color: ${(props) => props.theme.textColor.primary};
     font-size: 16px;
     font-weight: 500;
@@ -235,6 +272,15 @@ const Label = styled(AlignedParagraph)`
     font-size: 16px;
     font-weight: 500;
     white-space: pre;
+`;
+
+const SubHeaderIcon = styled.i`
+    position: absolute;
+    top: -6px;
+    left: -8px;
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: none;
 `;
 
 export default AssetBalance;
