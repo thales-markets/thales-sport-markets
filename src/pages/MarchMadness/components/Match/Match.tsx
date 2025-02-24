@@ -43,13 +43,13 @@ const Match: React.FC<MatchProps> = ({
     const homeTeam = teamsData.find((team) => team.id === matchData?.homeTeamId);
     const awayTeam = teamsData.find((team) => team.id === matchData?.awayTeamId);
 
-    const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(homeTeam?.displayName || '', League.NCAAB));
-    const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(awayTeam?.displayName || '', League.NCAAB));
+    const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(homeTeam?.name || '', League.NCAAB));
+    const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(awayTeam?.name || '', League.NCAAB));
 
     useEffect(() => {
-        setHomeLogoSrc(getTeamImageSource(homeTeam?.displayName || '', League.NCAAB));
-        setAwayLogoSrc(getTeamImageSource(awayTeam?.displayName || '', League.NCAAB));
-    }, [homeTeam?.displayName, awayTeam?.displayName]);
+        setHomeLogoSrc(getTeamImageSource(homeTeam?.name || '', League.NCAAB));
+        setAwayLogoSrc(getTeamImageSource(awayTeam?.name || '', League.NCAAB));
+    }, [homeTeam?.name, awayTeam?.name]);
 
     useEffect(() => {
         if (matchData?.isHomeTeamSelected !== isHomeTeamSelected) {

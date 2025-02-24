@@ -29,9 +29,9 @@ export const INCENTIVIZED_LEAGUES: Record<number, any> = {
         },
     },
     [League.NCAAB]: {
-        startDate: new Date(Date.UTC(2023, 2, 18, 0, 0, 0)), // TODO: update dates and link
-        endDate: new Date(Date.UTC(2024, 3, 9, 4, 0, 0)),
-        link: 'https://www.overtimemarkets.xyz/promotions/march-madness-2024',
+        startDate: new Date(Date.UTC(2024, 2, 17, 0, 0, 0)),
+        endDate: new Date(Date.UTC(2025, 3, 8, 4, 0, 0)),
+        link: 'https://www.overtimemarkets.xyz/promotions/march-madness-2024', // TODO: update
         tooltipKey: 'markets.incentivized-tooltip-mm',
         availableOnNetworks: [Network.Arbitrum],
         rewards: {

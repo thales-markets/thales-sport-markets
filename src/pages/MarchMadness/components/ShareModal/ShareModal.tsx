@@ -38,10 +38,9 @@ const ShareModal: React.FC<ShareModalProps> = ({ final4Matches, handleClose }) =
     const winnerTeamId = finalMatch.matchData.isHomeTeamSelected
         ? finalMatch.matchData.homeTeamId
         : finalMatch.matchData.awayTeamId;
-    const winnerTeam = teamsData.find((team) => team?.id === winnerTeamId);
-    const winnerTeamName = winnerTeam?.name;
+    const winnerTeamName = teamsData.find((team) => team?.id === winnerTeamId)?.name;
 
-    const [winnerLogoSrc, setWinnerLogoSrc] = useState(getTeamImageSource(winnerTeam?.displayName || '', League.NCAAB));
+    const [winnerLogoSrc, setWinnerLogoSrc] = useState(getTeamImageSource(winnerTeamName || '', League.NCAAB));
     const [isLoading, setIsLoading] = useState(false);
     const [toastId, setToastId] = useState<string | number>(0);
 
