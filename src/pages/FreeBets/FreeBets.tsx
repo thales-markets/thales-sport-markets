@@ -134,6 +134,7 @@ const FreeBets: React.FC = () => {
                                         setBetAmount('');
                                     }}
                                     isDetailedView
+                                    displayTokenBalance
                                     exchangeRates={exchangeRates}
                                 />
                             }

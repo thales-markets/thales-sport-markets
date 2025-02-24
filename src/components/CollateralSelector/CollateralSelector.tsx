@@ -37,6 +37,7 @@ type CollateralSelectorProps = {
     topPosition?: string;
     borderColor?: string;
     hideZeroBalance?: boolean;
+    displayTokenBalance?: boolean;
 };
 
 const CollateralSelector: React.FC<CollateralSelectorProps> = ({
@@ -59,6 +60,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
     topPosition,
     borderColor,
     hideZeroBalance,
+    displayTokenBalance,
 }) => {
     const dispatch = useDispatch();
 
@@ -106,13 +108,14 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                         <TextCollateral color={color} isDetailedView={isDetailedView} isSelectedCollateral={true}>
                             {!hideCollateralNameOnInput && collateralArray[selectedItem]}
                             {showNetworkName && ` (${getNetworkNameByNetworkId(networkId, true)})`}
-                            {!exchangeRates?.[collateralArray[selectedItem]] &&
-                            !isStableCurrency(collateralArray[selectedItem] as Coins)
-                                ? '...'
-                                : ` (${formatCurrencyWithSign(
-                                      null,
-                                      collateralBalances ? collateralBalances[collateralArray[selectedItem]] : 0
-                                  )})`}
+                            {!!displayTokenBalance &&
+                                (!exchangeRates?.[collateralArray[selectedItem]] &&
+                                !isStableCurrency(collateralArray[selectedItem] as Coins)
+                                    ? '...'
+                                    : ` (${formatCurrencyWithSign(
+                                          null,
+                                          collateralBalances ? collateralBalances[collateralArray[selectedItem]] : 0
+                                      )})`)}
                         </TextCollateral>
                     </TextCollateralWrapper>
                     <Arrow
