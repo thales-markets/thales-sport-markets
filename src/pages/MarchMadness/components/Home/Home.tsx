@@ -106,7 +106,7 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
 
     const buttonClickHandler = async () => {
         if (isConnected) {
-            if (networkId !== Network.Arbitrum) {
+            if (!isMarchMadnessAvailableForNetworkId(networkId)) {
                 switchChain?.({ chainId: Network.Arbitrum });
             } else {
                 if (isMintingStarted) {

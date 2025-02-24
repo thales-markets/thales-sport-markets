@@ -1272,14 +1272,14 @@ const Brackets: React.FC = () => {
                                 homeTeam={wildCardTeams[0].displayName}
                                 awayTeam={wildCardTeams[1].displayName}
                                 position={wildCardTeams[0].position}
-                                isHomeTeamWon={false}
+                                isHomeTeamWon={undefined}
                                 margin="0 2px 0 0"
                             />
                             <WildCardMatch
                                 homeTeam={wildCardTeams[4].displayName}
                                 awayTeam={wildCardTeams[5].displayName}
                                 position={wildCardTeams[4].position}
-                                isHomeTeamWon={true}
+                                isHomeTeamWon={undefined}
                             />
                             <Region isSideLeft={false} isVertical={false}>
                                 {t('march-madness.regions.midwest')}
@@ -1293,14 +1293,14 @@ const Brackets: React.FC = () => {
                                 homeTeam={wildCardTeams[2].displayName}
                                 awayTeam={wildCardTeams[3].displayName}
                                 position={wildCardTeams[2].position}
-                                isHomeTeamWon={true}
+                                isHomeTeamWon={undefined}
                                 margin="0 2px 0 0"
                             />
                             <WildCardMatch
                                 homeTeam={wildCardTeams[6].displayName}
                                 awayTeam={wildCardTeams[7].displayName}
                                 position={wildCardTeams[6].position}
-                                isHomeTeamWon={true}
+                                isHomeTeamWon={undefined}
                             />
                             <Region isSideLeft={false} isVertical={false}>
                                 {t('march-madness.regions.midwest')}
