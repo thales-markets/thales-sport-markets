@@ -6,10 +6,10 @@ export const ProfileContainer = styled(FlexDivRow)`
     cursor: pointer;
     margin-right: 5px;
 `;
-export const ProfileLabel = styled.span`
+export const ProfileLabel = styled.span<{ color?: string }>`
     font-weight: 600;
-    font-size: 12px;
-    color: ${(props) => props.theme.textColor.secondary};
+    font-size: 14px;
+    color: ${(props) => (props.color ? props.color : props.theme.textColor.secondary)};
     text-transform: uppercase;
     white-space: pre;
 `;

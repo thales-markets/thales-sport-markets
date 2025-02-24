@@ -139,7 +139,7 @@ const ActivateAccount: React.FC<any> = () => {
     }, [totalBalanceValue, networkId, isConnected, isBiconomy]);
 
     return (
-        <>
+        <Container>
             {showSuccessfulDepositModal && (
                 <Wrapper show={!isMinimizedModal}>
                     {!isMinimizedModal ? (
@@ -189,7 +189,7 @@ const ActivateAccount: React.FC<any> = () => {
                                 textColor={theme.button.textColor.primary}
                                 borderColor={theme.button.borderColor.quinary}
                                 additionalStyles={{
-                                    borderRadius: '22px',
+                                    borderRadius: '8px',
                                     fontWeight: '800',
                                     fontSize: '12px',
                                     padding: '9px 20px',
@@ -206,14 +206,19 @@ const ActivateAccount: React.FC<any> = () => {
             )}
 
             {showFundModal && <FundModal onClose={() => setShowFundModal(false)} />}
-        </>
+        </Container>
     );
 };
 
+const Container = styled.div`
+    @media (max-width: 512px) {
+        width: 100%;
+    }
+    width: 100px;
+`;
+
 const Wrapper = styled.div<{ show: boolean }>`
-    position: absolute;
-    top: 0;
-    right: -4px;
+    position: relative;
 
     display: flex;
     flex-direction: column;
@@ -222,7 +227,7 @@ const Wrapper = styled.div<{ show: boolean }>`
     background: ${Colors.GOLD};
     width: 480px;
     padding: 20px;
-    border-radius: 16px;
+    border-radius: 8px;
 
     @media (max-width: 512px) {
         width: auto;
@@ -232,15 +237,18 @@ const Wrapper = styled.div<{ show: boolean }>`
         props.show
             ? `
       
-                 z-index: 1000;
+                    z-index: 1000;
+                    position: absolute;
+                    top: 0;
+                    right: 0;
                
     `
             : `
             width: 100px;
             height: 30px;
             padding: 0;
-            transform: translateX(-390px);
-            transition: height 0.1s ease-out, padding 0.1s ease-out, width 0.1s ease-out,  transform 0.1s ease-in-out;
+         
+   
             @media (max-width: 950px) {
                 position: relative;
                 transform: translateX(0);
@@ -302,7 +310,7 @@ const Box = styled.div`
 `;
 
 const ActivateButton = styled.div`
-    border-radius: 12px;
+    border-radius: 8px;
     background: ${(props) => props.theme.textColor.primary};
     color: ${(props) => props.theme.overdrop.textColor.quaternary};
     text-align: center;

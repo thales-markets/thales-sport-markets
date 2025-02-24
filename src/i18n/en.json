@@ -350,7 +350,12 @@
             "claim-free-bet": "Claim free bet"
         },
         "stats": {
-            "profile-data": "Profile data",
+            "profile-data": "Stats",
+            "overtime-account": "Overtime Account",
+            "eoa": "EOA Address",
+            "name": "Name",
+            "email": "Email",
+            "account-info": "Account info",
             "free-bet": "Free bet",
             "total-volume": "Total volume",
             "trades": "Trades",

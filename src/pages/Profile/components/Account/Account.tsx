@@ -1,6 +1,5 @@
 import FundModal from 'components/FundOvertimeAccountModal';
 import SwapModal from 'components/SwapModal/SwapModal';
-import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
 import { COLLATERAL_ICONS, OVER_SIGH, USD_SIGN } from 'constants/currency';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
@@ -10,7 +9,6 @@ import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollate
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import { getIsBiconomy, setIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import {
@@ -21,7 +19,7 @@ import {
     FlexDivSpaceBetween,
     FlexDivStart,
 } from 'styles/common';
-import { formatCurrencyWithKey, formatCurrencyWithSign, localStore, truncateAddress } from 'thales-utils';
+import { formatCurrencyWithKey, formatCurrencyWithSign, localStore } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import biconomyConnector from 'utils/biconomyWallet';
@@ -142,32 +140,13 @@ const Account: React.FC = () => {
         };
     }, [multipleCollateralBalances.data, exchangeRates]);
 
-    const handleCopy = () => {
-        const id = toast.loading(t('deposit.copying-address'), { autoClose: 1000 });
-        try {
-            navigator.clipboard.writeText(walletAddress);
-            toast.update(id, { ...getInfoToastOptions(t('deposit.copied')), autoClose: 2000 });
-        } catch (e) {
-            toast.update(id, getErrorToastOptions('Error'));
-        }
-    };
-
     return (
         <div>
             <Header>
-                <FlexDivStart gap={20}>
-                    <FlexDivColumnStart gap={4}>
-                        <Label>Portfolio Balance</Label>
-                        <Value>{totalBalanceValue}</Value>
-                    </FlexDivColumnStart>
-                    <FlexDivColumnStart gap={4}>
-                        <GrayLabel>Your address</GrayLabel>
-                        <YellowValue>
-                            {truncateAddress(walletAddress, 6, 4)}{' '}
-                            <CopyIcon onClick={handleCopy} className="icon icon--copy" />
-                        </YellowValue>
-                    </FlexDivColumnStart>
-                </FlexDivStart>
+                <FlexDivColumnStart gap={4}>
+                    <Label>Portfolio Balance</Label>
+                    <Value>{totalBalanceValue}</Value>
+                </FlexDivColumnStart>
                 <FlexDivEnd gap={20}>
                     <FlexDivColumnStart gap={4}>
                         <GrayLabel>Active Tickets</GrayLabel>
@@ -237,12 +216,7 @@ const Account: React.FC = () => {
 };
 
 const Header = styled(FlexDivSpaceBetween)`
-    margin-bottom: 28px;
-    @media (max-width: 800px) {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 20px;
-    }
+    margin-bottom: 18px;
 `;
 
 const Container = styled(FlexDivSpaceBetween)`
@@ -284,15 +258,15 @@ const Label = styled(AlignedParagraph)`
     white-space: pre;
 `;
 
-const GrayLabel = styled(Label)`
-    color: ${(props) => props.theme.button.textColor.senary};
-`;
-
 const Value = styled(AlignedParagraph)`
     color: ${(props) => props.theme.textColor.quaternary};
     font-size: 24px;
     font-weight: 700;
     white-space: pre;
+`;
+
+const GrayLabel = styled(Label)`
+    color: ${(props) => props.theme.button.textColor.senary};
 `;
 
 const YellowValue = styled(Value)`
@@ -320,16 +294,6 @@ const Value2 = styled(AlignedParagraph)`
 const YellowValue2 = styled(Value2)`
     font-size: 14px;
     color: ${(props) => props.theme.overdrop.textColor.primary};
-`;
-
-const CopyIcon = styled.i`
-    font-size: 24px;
-    cursor: pointer;
-    font-weight: 400;
-    color: ${(props) => props.theme.overdrop.textColor.primary};
-    @media (max-width: 575px) {
-        font-size: 20px;
-    }
 `;
 
 const Button = styled(FlexDivCentered)<{ active?: boolean }>`

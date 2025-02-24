@@ -45,7 +45,7 @@ export const MiddleContainer = styled(FlexDivRowCentered)`
 
 export const RightContainer = styled(FlexDivRowCentered)`
     position: relative;
-    gap: 15px;
+    gap: 8px;
 `;
 
 export const MenuIcon = styled.img.attrs({ src: burger })`

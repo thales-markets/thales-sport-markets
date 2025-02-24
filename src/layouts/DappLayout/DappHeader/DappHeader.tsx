@@ -189,7 +189,7 @@ const DappHeader: React.FC = () => {
                                 borderColor={theme.button.textColor.quaternary}
                                 fontSize="14px"
                                 height="30px"
-                                padding="2px 15px"
+                                padding="2px 10px"
                             >
                                 Migrate <CurrencyIcon className="currency-icon currency-icon--thales" /> to{' '}
                                 <CurrencyIcon className="currency-icon currency-icon--over" />
@@ -222,6 +222,7 @@ const DappHeader: React.FC = () => {
                                 {t('get-started.sign-up')}
                             </Button>
                         )}
+                        {isConnected && isBiconomy && <ActivateAccount />}
                         <WalletInfo />
                         <MenuIconContainer>
                             <MenuIcon ref={menuImageRef} onClick={() => setNavMenuVisibility(true)} />
@@ -236,7 +237,6 @@ const DappHeader: React.FC = () => {
                             setNavMenuVisibility={(value: boolean | null) => setNavMenuVisibility(value)}
                             skipOutsideClickOnElement={menuImageRef}
                         />
-                        {isConnected && isBiconomy && <ActivateAccount />}
                     </RightContainer>
                 </Container>
             )}
