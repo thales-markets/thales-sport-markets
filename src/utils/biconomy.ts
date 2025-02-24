@@ -25,10 +25,8 @@ import {
 import { LINKS } from 'constants/links';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { addMonths } from 'date-fns';
-import { Network } from 'enums/network';
 import { localStore } from 'thales-utils';
 import { generatePrivateKey, privateKeyToAccount } from 'viem/accounts';
-import freeBetHolder from './contracts/freeBetHolder';
 import liveTradingProcessorContract from './contracts/liveTradingProcessorContract';
 import multipleCollateral from './contracts/multipleCollateralContract';
 import sportsAMMV2Contract from './contracts/sportsAMMV2Contract';
@@ -230,26 +228,29 @@ export const activateOvertimeAccount = async (params: { networkId: SupportedNetw
             const privateKey = generatePrivateKey();
             const sessionKeyEOA = privateKeyToAccount(privateKey);
 
-            console.log(biconomyConnector.wallet);
-
             const sessionsModule = toSmartSessionsValidator({
                 account: biconomyConnector.wallet.account,
                 signer: biconomyConnector.wallet.account.signer,
             });
-
-            console.log(
-                'isInstalled: ',
-                await biconomyConnector.wallet.isModuleInstalled({ module: sessionsModule.moduleInitData })
-            );
-
-            // Install the smart sessions module on the Nexus client's smart contract account
-            const hash = await biconomyConnector.wallet.installModule({
+            const isModuleInstalled = await biconomyConnector.wallet.isModuleInstalled({
                 module: sessionsModule.moduleInitData,
             });
 
-            const { success } = await biconomyConnector.wallet.waitForUserOperationReceipt({ hash });
-            console.log(success);
+            console.log('isModuleInstalled: ', isModuleInstalled);
+            if (!isModuleInstalled) {
+                // Install the smart sessions module on the Nexus client's smart contract account
+                const hash = await biconomyConnector.wallet.installModule({
+                    module: sessionsModule.moduleInitData,
+                });
 
+                const {
+                    success,
+                    reason,
+                    receipt: { transactionHash },
+                } = await biconomyConnector.wallet.waitForUserOperationReceipt({ hash });
+
+                console.log('success: ', success, reason, transactionHash);
+            }
             const dateAfter = new Date();
             const dateUntil = new Date();
             const sixMonths = addMonths(Number(dateUntil), 6);
@@ -273,6 +274,11 @@ export const activateOvertimeAccount = async (params: { networkId: SupportedNetw
                     ],
                 });
             console.log('response: ', response);
+
+            const { success, reason } = await biconomyConnector.wallet.waitForUserOperationReceipt({
+                hash: response.userOpHash,
+            });
+            console.log(success, reason);
 
             const sessionData: SessionData = {
                 granter: biconomyConnector.address as `0x${string}`,
@@ -298,184 +304,49 @@ export const activateOvertimeAccount = async (params: { networkId: SupportedNetw
 
             localStore.set(LOCAL_STORAGE_KEYS.SESSION_P_KEY[params.networkId], JSON.stringify([...retrievedMap]));
 
-            const approvalHash = await biconomyConnector.wallet.sendUserOperation({
+            const bundlerUrl = `${LINKS.Biconomy.Bundler}${params.networkId}/${
+                import.meta.env.VITE_APP_BICONOMY_BUNDLE_KEY
+            }`;
+            const paymasterUrl = `${LINKS.Biconomy.Paymaster}${params.networkId}/${
+                import.meta.env['VITE_APP_PAYMASTER_KEY_' + params.networkId]
+            }`;
+
+            // 2. Create a Nexus Client for Using the Session
+            const smartSessionNexusClient = createSmartAccountClient({
+                account: await toNexusAccount({
+                    signer: sessionKeyEOA,
+                    chain: getChain(params.networkId),
+                    transport: getTransport(params.networkId),
+                }),
+                transport: http(bundlerUrl),
+                paymaster: createBicoPaymasterClient({ paymasterUrl }),
+            });
+
+            // 3. Create a Smart Sessions Module for the Session Key
+            const usePermissionsModule = toSmartSessionsValidator({
+                account: smartSessionNexusClient.account,
+                signer: sessionKeyEOA,
+                moduleData: sessionData.moduleData,
+            });
+
+            const useSmartSessionNexusClient = smartSessionNexusClient.extend(
+                smartSessionUseActions(usePermissionsModule)
+            );
+
+            const approvalHash = await useSmartSessionNexusClient.sendUserOperation({
                 calls: getApprovalTxs(params.networkId),
             });
 
             const {
+                success: trySuccess,
                 receipt: { transactionHash: approvalTx },
             } = await biconomyConnector.wallet.waitForConfirmedUserOperationReceipt({ hash: approvalHash });
-
+            console.log('trySuccess: ', trySuccess);
             return approvalTx;
         } catch (e) {
             console.log('e: ', e);
         }
     }
-};
-
-export const activateOvertimeAccount1 = async (params: { networkId: SupportedNetwork; collateralAddress: string }) => {
-    if (biconomyConnector.wallet) {
-        try {
-            const hash = await biconomyConnector.wallet.sendTransaction({
-                calls: [...(await getCreateSessionTxs(params.networkId)), ...getApprovalTxs(params.networkId)],
-            });
-
-            const {
-                receipt: { transactionHash },
-                success,
-            } = await biconomyConnector.wallet.waitForConfirmedUserOperationReceipt({
-                hash: hash,
-            });
-            if (success) {
-                return transactionHash;
-            } else {
-                return null;
-            }
-        } catch (e) {
-            console.log(e);
-            try {
-                const hash = await biconomyConnector.wallet.sendTokenPaymasterUserOp({
-                    calls: [...(await getCreateSessionTxs(params.networkId)), ...getApprovalTxs(params.networkId)],
-                    feeTokenAddress: params.collateralAddress as any,
-                });
-
-                const {
-                    receipt: { transactionHash },
-                    success,
-                } = await biconomyConnector.wallet.waitForConfirmedUserOperationReceipt({
-                    hash: hash,
-                });
-                if (success) {
-                    return transactionHash;
-                } else {
-                    return null;
-                }
-            } catch (e) {
-                console.log(e);
-                const storedMapString: any = localStore.get(LOCAL_STORAGE_KEYS.SESSION_P_KEY[params.networkId]);
-
-                const retrievedMap = storedMapString ? new Map(JSON.parse(storedMapString)) : new Map();
-                retrievedMap.delete(biconomyConnector.address);
-                localStore.set(LOCAL_STORAGE_KEYS.SESSION_P_KEY[params.networkId], JSON.stringify([...retrievedMap]));
-                return null;
-            }
-        }
-    }
-};
-
-const getCreateSessionTxs = async (networkId: SupportedNetwork) => {
-    if (biconomyConnector.wallet) {
-        const privateKey = generatePrivateKey();
-        const sessionKeyEOA = privateKeyToAccount(privateKey);
-
-        const sessionsModule = toSmartSessionsValidator({
-            account: biconomyConnector.wallet.account,
-            signer: sessionKeyEOA,
-        });
-        console.log(sessionsModule);
-
-        const hash = await biconomyConnector.wallet.installModule({
-            module: sessionsModule.moduleInitData,
-        });
-        const { success } = await biconomyConnector.wallet.waitForUserOperationReceipt({ hash });
-
-        const dateAfter = new Date();
-        const dateUntil = new Date();
-        const sixMonths = addMonths(Number(dateUntil), 6);
-
-        if (success) {
-            const response = await biconomyConnector.wallet
-                .extend(smartSessionCreateActions(sessionsModule))
-                .grantPermission({
-                    sessionRequestedInfo: [
-                        {
-                            actionPoliciesInfo: [
-                                {
-                                    contractAddress: sportsAMMV2Contract.addresses[Network.OptimismMainnet],
-                                    abi: sportsAMMV2Contract.abi,
-                                    sudo: true,
-                                },
-                                {
-                                    contractAddress: liveTradingProcessorContract.addresses[Network.OptimismMainnet],
-                                    abi: liveTradingProcessorContract.abi,
-                                    sudo: true,
-                                },
-                                {
-                                    contractAddress: freeBetHolder.addresses[Network.OptimismMainnet],
-                                    abi: freeBetHolder.abi,
-                                    sudo: true,
-                                },
-                            ],
-                            sessionValidUntil: Math.floor(sixMonths.getTime() / 1000),
-                            sessionValidAfter: Math.floor(dateAfter.getTime() / 1000),
-                            sessionPublicKey: sessionKeyEOA.address as Address,
-                            chainIds: [BigInt(Network.OptimismMainnet)],
-                        },
-                        {
-                            actionPoliciesInfo: [
-                                {
-                                    contractAddress: sportsAMMV2Contract.addresses[Network.Arbitrum],
-                                    abi: sportsAMMV2Contract.abi,
-                                    sudo: true,
-                                },
-                                {
-                                    contractAddress: liveTradingProcessorContract.addresses[Network.Arbitrum],
-                                    abi: liveTradingProcessorContract.abi,
-                                    sudo: true,
-                                },
-                                {
-                                    contractAddress: freeBetHolder.addresses[Network.Arbitrum],
-                                    abi: freeBetHolder.abi,
-                                    sudo: true,
-                                },
-                            ],
-                            sessionValidUntil: Math.floor(sixMonths.getTime() / 1000),
-                            sessionValidAfter: Math.floor(dateAfter.getTime() / 1000),
-                            sessionPublicKey: sessionKeyEOA.address as Address,
-                            chainIds: [BigInt(Network.Arbitrum)],
-                        },
-                        {
-                            actionPoliciesInfo: [
-                                {
-                                    contractAddress: sportsAMMV2Contract.addresses[Network.Base],
-                                    abi: sportsAMMV2Contract.abi,
-                                    sudo: true,
-                                },
-                                {
-                                    contractAddress: liveTradingProcessorContract.addresses[Network.Base],
-                                    abi: liveTradingProcessorContract.abi,
-                                    sudo: true,
-                                },
-                                {
-                                    contractAddress: freeBetHolder.addresses[Network.Base],
-                                    abi: freeBetHolder.abi,
-                                    sudo: true,
-                                },
-                            ],
-                            sessionValidUntil: Math.floor(sixMonths.getTime() / 1000),
-                            sessionValidAfter: Math.floor(dateAfter.getTime() / 1000),
-                            sessionPublicKey: sessionKeyEOA.address as Address,
-                            chainIds: [BigInt(Network.Base)],
-                        },
-                    ],
-                });
-            console.log('response: ', response);
-            const storedMapString: any = localStore.get(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId]);
-
-            const retrievedMap = storedMapString ? new Map(JSON.parse(storedMapString)) : new Map();
-
-            retrievedMap.set(biconomyConnector.address, {
-                privateKey,
-                moduleData: response,
-                validUntil: Math.floor(sixMonths.getTime() / 1000).toString(),
-            });
-
-            localStore.set(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId], JSON.stringify([...retrievedMap]));
-        }
-
-        return [];
-    }
-    return [];
 };
 
 const getApprovalTxs = (networkId: SupportedNetwork) => {
@@ -517,7 +388,6 @@ const getSessionSigner = async (networkId: SupportedNetwork) => {
         const retrievedMap = new Map(JSON.parse(storedMapString));
         const sessionData = retrievedMap.get(biconomyConnector.address) as any;
         const sessionOwner = privateKeyToAccount(sessionData.privateKey);
-        console.log(sessionData);
 
         const bundlerUrl = `${LINKS.Biconomy.Bundler}${networkId}/${import.meta.env.VITE_APP_BICONOMY_BUNDLE_KEY}`;
         const paymasterUrl = `${LINKS.Biconomy.Paymaster}${networkId}/${
@@ -535,7 +405,7 @@ const getSessionSigner = async (networkId: SupportedNetwork) => {
             paymaster: createBicoPaymasterClient({ paymasterUrl }),
         });
 
-        const sessionDataParsed = parse(sessionData.moduleData);
+        const sessionDataParsed = parse(sessionData.sessionData);
 
         // 3. Create a Smart Sessions Module for the Session Key
         const usePermissionsModule = toSmartSessionsValidator({
