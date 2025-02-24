@@ -9,7 +9,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTicketPayment, setPaymentSelectedCollateralIndex } from 'redux/modules/ticket';
 import { getIsBiconomy, getWalletConnectModalVisibility, setWalletConnectModalVisibility } from 'redux/modules/wallet';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 import { formatCurrencyWithKey } from 'thales-utils';
 import { RootState } from 'types/redux';
@@ -22,7 +22,7 @@ const WalletInfo: React.FC = ({}) => {
     const dispatch = useDispatch();
 
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
-
+    const theme = useTheme();
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
@@ -113,22 +113,21 @@ const WalletInfo: React.FC = ({}) => {
     }, [dispatch, networkId, isFreeBetInitialized]);
 
     return (
-        <Container walletConnected={isConnected}>
+        <Container walletConnected={isConnected} gap={8}>
             <FlexDivColumn>
-                <Wrapper displayPadding={isConnected}>
-                    {isConnected && (
+                {isConnected && (
+                    <Button>
                         <WalletAddressInfo isConnected={isConnected} isClickable={true}>
-                            <ProfileItem avatarSize={16} />
+                            <ProfileItem color={theme.button.textColor.primary} avatarSize={18} />
                         </WalletAddressInfo>
-                    )}
-                    {isConnected && (
+
                         <WalletBalanceInfo>
                             <Text>{totalBalanceValue}</Text>
                         </WalletBalanceInfo>
-                    )}
-                    <NetworkSwitcher />
-                </Wrapper>
+                    </Button>
+                )}
             </FlexDivColumn>
+            <NetworkSwitcher />
             {connectWalletModalVisibility && (
                 <ConnectWalletModal
                     isOpen={connectWalletModalVisibility}
@@ -154,22 +153,6 @@ const Container = styled(FlexDivCentered)<{ walletConnected?: boolean }>`
     min-width: fit-content;
     @media (max-width: 767px) {
         min-width: auto;
-    }
-`;
-
-const Wrapper = styled.div<{ displayPadding?: boolean }>`
-    display: flex;
-    border-radius: 8px;
-    border: 1px solid ${(props) => (!props.displayPadding ? 'none' : props.theme.borderColor.primary)};
-    height: 30px;
-    justify-content: space-between;
-    align-items: center;
-    padding-left: ${(props) => (props.displayPadding ? '10px' : '')};
-    & > div {
-        flex: 0.6;
-    }
-    & > div:last-child {
-        flex: 0.2;
     }
 `;
 
@@ -208,10 +191,32 @@ const WalletBalanceInfo = styled.div`
 
 const Text = styled.span`
     font-weight: 600;
-    font-size: 12px;
+    font-size: 14px;
     white-space: pre;
     line-height: 12px;
-    color: ${(props) => props.theme.textColor.secondary};
+    color: ${(props) => props.theme.button.textColor.primary};
+`;
+
+const Button = styled(FlexDivCentered)<{ active?: boolean }>`
+    border-radius: 8px;
+    width: 100%;
+    height: 30px;
+    border: 1px ${(props) => props.theme.borderColor.primary} solid;
+    color: ${(props) => props.theme.textColor.primary};
+    background-color: ${(props) => props.theme.connectWalletModal.hover};
+    color: ${(props) => props.theme.button.textColor.primary};
+    font-size: 14px;
+    font-weight: 600;
+
+    text-transform: uppercase;
+    cursor: pointer;
+
+    white-space: pre;
+    padding: 3px 10px;
+    @media (max-width: 575px) {
+        font-size: 12px;
+        padding: 3px 12px;
+    }
 `;
 
 export default WalletInfo;

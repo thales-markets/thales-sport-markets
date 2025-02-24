@@ -140,7 +140,11 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                                             top="-10px"
                                             left="-10px"
                                             avatarSize={25}
-                                            iconColor={theme.textColor.primary}
+                                            color={
+                                                location.pathname === item.route
+                                                    ? theme.textColor.quaternary
+                                                    : theme.textColor.primary
+                                            }
                                         />
                                     ) : (
                                         <>

@@ -21,21 +21,21 @@ import {
 type ProfileItemProperties = {
     labelHidden?: boolean;
     avatarSize?: number;
-    iconColor?: string;
+    color?: string;
     marginRight?: string;
     top?: string;
     left?: string;
 };
 
-const ProfileItem: React.FC<ProfileItemProperties> = ({ labelHidden, avatarSize, top, left }) => {
+const ProfileItem: React.FC<ProfileItemProperties> = ({ labelHidden, avatarSize, top, left, color }) => {
     const { t } = useTranslation();
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     return (
         <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Profile)}>
             <ProfileContainer>
-                <ProfileIconWidget top={top} left={left} avatarSize={avatarSize} />
+                <ProfileIconWidget top={top} left={left} avatarSize={avatarSize} color={color} />
                 {!labelHidden && (
-                    <ProfileLabel>
+                    <ProfileLabel color={color}>
                         {isBiconomy
                             ? t('markets.nav-menu.items.profile-smart')
                             : t('markets.nav-menu.items.profile-wallet')}
@@ -46,13 +46,7 @@ const ProfileItem: React.FC<ProfileItemProperties> = ({ labelHidden, avatarSize,
     );
 };
 
-export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({
-    avatarSize,
-    iconColor,
-    marginRight,
-    top,
-    left,
-}) => {
+export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({ avatarSize, color, marginRight, top, left }) => {
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
     const networkId = useChainId();
@@ -82,7 +76,7 @@ export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({
                         <Count>{notificationsCount}</Count>
                     </NotificationCount>
                 )}
-                <ProfileIcon avatarSize={avatarSize} iconColor={iconColor} />
+                <ProfileIcon avatarSize={avatarSize} iconColor={color} />
             </ProfileIconContainer>
         </>
     );

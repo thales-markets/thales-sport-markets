@@ -127,7 +127,7 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                                     onClick={() => setNavMenuVisibility(false)}
                                 >
                                     {isConnected && item.name == 'profile' ? (
-                                        <ProfileIconWidget avatarSize={25} iconColor={theme.textColor.primary} />
+                                        <ProfileIconWidget avatarSize={25} color={theme.textColor.primary} />
                                     ) : (
                                         <>
                                             {item.name == 'resolve-blocker' && blockedGamesCount > 0 && (
