@@ -10,7 +10,7 @@ import { Rates } from 'types/collateral';
 import { NetworkConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { getContractInstance } from 'utils/contract';
-import { THALES_CONTRACT_RATE_KEY } from '../../constants/markets';
+import { OVER_CONTRACT_RATE_KEY, THALES_CONTRACT_RATE_KEY } from '../../constants/markets';
 
 const useExchangeRatesQuery = (
     networkConfig: NetworkConfig,
@@ -46,6 +46,9 @@ const useExchangeRatesQuery = (
                 exchangeRates[THALES_CONTRACT_RATE_KEY] = exchangeRates['THALES'];
                 exchangeRates['THALES'] = Number(thalesPriceResponse.data);
                 exchangeRates['sTHALES'] = Number(thalesPriceResponse.data);
+                // TODO hardcode OVER price
+                exchangeRates[OVER_CONTRACT_RATE_KEY] = exchangeRates['THALES'];
+                exchangeRates['OVER'] = Number(thalesPriceResponse.data);
             }
 
             return exchangeRates;

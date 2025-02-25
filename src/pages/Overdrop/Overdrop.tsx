@@ -54,6 +54,7 @@ const RowContainer = styled(FlexDivRow)`
     flex: 1 1 0%;
     flex-direction: row;
     justify-content: center;
+    margin-top: 15px;
     @media (max-width: 767px) {
         padding-top: 20px;
     }
@@ -83,7 +84,7 @@ const RightSidebarContainer = styled(SidebarContainer)`
 
 const MainContainer = styled(FlexDivColumn)`
     width: 100%;
-    max-width: 806px;
+
     flex-grow: 1;
     margin: 0px 25px;
     @media (max-width: 1499px) {

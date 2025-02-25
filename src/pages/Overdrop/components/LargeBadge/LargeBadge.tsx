@@ -1,4 +1,4 @@
-import ThalesAmountImage from 'assets/images/overdrop/thales_voucher.png';
+import OverAmountImage from 'assets/images/overdrop/over_voucher.png';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
 import React from 'react';
@@ -42,11 +42,11 @@ const LargeBadge: React.FC<LargeBadgeProps> = ({
             <Level active={reached}>{level}</Level>
             <LevelName active={reached}>{levelName}</LevelName>
             {!!voucherAmount && (
-                <ThalesAmount>
+                <OverAmount>
                     <VoucherAmount>
-                        {formatCurrencyWithKey(CRYPTO_CURRENCY_MAP.THALES, voucherAmount, 1, true)}
+                        {formatCurrencyWithKey(CRYPTO_CURRENCY_MAP.OVER, voucherAmount, 1, true)}
                     </VoucherAmount>
-                </ThalesAmount>
+                </OverAmount>
             )}
         </Wrapper>
     );
@@ -128,10 +128,10 @@ const LevelName = styled(XPLabel)`
     font-size: 11px;
 `;
 
-const ThalesAmount = styled(FlexDiv)`
+const OverAmount = styled(FlexDiv)`
     position: absolute;
     bottom: -25px;
-    background-image: url(${ThalesAmountImage});
+    background-image: url(${OverAmountImage});
     background-repeat: no-repeat;
     width: 100%;
     height: 50px;

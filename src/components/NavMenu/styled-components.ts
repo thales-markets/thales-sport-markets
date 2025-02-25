@@ -93,6 +93,7 @@ export const NavLabel = styled.span<{ active?: boolean }>`
     font-weight: ${(props) => (props.active ? '600' : '400')};
     line-height: 120%;
     text-transform: uppercase;
+    white-space: pre;
 `;
 
 export const NavIcon = styled.i<{ active?: boolean }>`

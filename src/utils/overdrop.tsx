@@ -97,7 +97,7 @@ export const getMultiplierValueFromQuery = (data: OverdropMultiplier[] | undefin
     return multiplierItem?.multiplier ? multiplierItem.multiplier : 0;
 };
 
-export const getNextThalesRewardLevel = (points?: number) => {
+export const getNextOverRewardLevel = (points?: number) => {
     const levelItemsWithVoucher = OVERDROP_LEVELS.filter((item) => item.voucherAmount);
 
     if (!points) return levelItemsWithVoucher[0] as OverdropLevel;

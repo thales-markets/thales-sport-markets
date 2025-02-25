@@ -12,6 +12,7 @@ import { buildHref, navigateTo } from 'utils/routes';
 import { useAccount } from 'wagmi';
 import SearchField from '../../components/SearchField';
 import UserVaults from '../../components/UserVaults';
+import Account from '../Account';
 import NavigationBar from '../NavigationBar';
 import OpenClaimableTickets from '../OpenClaimableTickets';
 import TicketTransactions from '../TicketTransactions';
@@ -59,6 +60,7 @@ const MyTickets: React.FC<MyTicketsProps> = ({ selectedTab, setSelectedTab }) =>
                 {selectedTab == ProfileTab.OPEN_CLAIMABLE && <OpenClaimableTickets searchText={searchText} />}
                 {selectedTab == ProfileTab.TRANSACTION_HISTORY && <TicketTransactions searchText={searchText} />}
                 {selectedTab == ProfileTab.LP && <UserVaults />}
+                {selectedTab == ProfileTab.ACCOUNT && <Account />}
             </MainContainer>
             <RightSidebarContainer>
                 <UserStatsV2 />
@@ -98,7 +100,7 @@ const RightSidebarContainer = styled(SidebarContainer)`
 
 const MainContainer = styled(FlexDivColumn)`
     width: 100%;
-    max-width: 806px;
+
     flex-grow: 1;
     margin: 0 25px;
     @media (max-width: 1499px) {
