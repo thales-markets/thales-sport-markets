@@ -1,4 +1,5 @@
 import Search from 'components/Search';
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
@@ -9,6 +10,9 @@ import TableByVolume from './components/TableByVolume';
 const Leaderboard: React.FC = () => {
     const { t } = useTranslation();
     const [searchText, setSearchText] = useState<string>('');
+
+    const [guessedCorrectlyTableDataLength, setGuessedCorrectlyTableDataLength] = useState(0);
+    const [volumeTableDataLength, setVolumeTableDataLength] = useState(0);
 
     return (
         <>
@@ -22,8 +26,16 @@ const Leaderboard: React.FC = () => {
                 />
             </SearchContainer>
             <TablesContainer>
-                <TableByGuessedCorrectly searchText={searchText} />
-                <TableByVolume searchText={searchText} />
+                <TableByGuessedCorrectly
+                    searchText={searchText}
+                    isMainHeight={guessedCorrectlyTableDataLength >= volumeTableDataLength}
+                    setLength={setGuessedCorrectlyTableDataLength}
+                />
+                <TableByVolume
+                    searchText={searchText}
+                    isMainHeight={guessedCorrectlyTableDataLength < volumeTableDataLength}
+                    setLength={setVolumeTableDataLength}
+                />
             </TablesContainer>
         </>
     );
@@ -34,6 +46,9 @@ const SearchContainer = styled.div`
     align-items: flex-end;
     justify-content: flex-end;
     margin: 0 0 20px 0;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        height: 36px;
+    }
 `;
 
 const TablesContainer = styled.div`

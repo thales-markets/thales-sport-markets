@@ -140,7 +140,7 @@ const Table: React.FC<TableProps> = ({
                                     {...{
                                         onClick: isSortEnabled ? header.column.getToggleSortingHandler() : undefined,
                                     }}
-                                    cssProp={header.headStyle}
+                                    cssProp={header.column.columnDef.headStyle}
                                     key={headerIndex}
                                     style={
                                         isSortEnabled
@@ -150,7 +150,10 @@ const Table: React.FC<TableProps> = ({
                                     width={header.getSize()}
                                     id={header.id}
                                 >
-                                    <HeaderTitle cssProp={header.headTitleStyle} customStyle={tableHeadTitleStyles}>
+                                    <HeaderTitle
+                                        cssProp={header.column.columnDef.headTitleStyle}
+                                        customStyle={tableHeadTitleStyles}
+                                    >
                                         {flexRender(header.column.columnDef.header, header.getContext())}
                                     </HeaderTitle>
                                     {isSortEnabled && (
@@ -379,6 +382,7 @@ export const TableCell = styled(FlexDivCentered)<{
         &:last-child {
             padding-right: 6px;
         }
+        ${(props) => props.customStyle && { ...props.customStyle }}
     }
     @media (max-width: 575px) {
         font-size: 10px;
@@ -388,6 +392,7 @@ export const TableCell = styled(FlexDivCentered)<{
         &:last-child {
             padding-right: 0;
         }
+        ${(props) => props.customStyle && { ...props.customStyle }}
     }
 `;
 
@@ -398,7 +403,8 @@ const TableCellHead = styled(TableCell)<{ cssProp?: CSSPropertiesWithMedia }>`
     @media (max-width: 767px) {
         font-size: 10px;
     }
-    @media (max-width: ${(props) => (props.cssProp ? props.cssProp.mediaMaxWidth : '600px')}) {
+    @media (max-width: ${(props) =>
+            props.cssProp && props.cssProp.mediaMaxWidth ? props.cssProp.mediaMaxWidth : '600px'}) {
         ${(props) => (props.cssProp ? { ...props.cssProp.cssProperties } : '')}
     }
     @media (max-width: 575px) {
@@ -412,7 +418,8 @@ const HeaderTitle = styled.span<{ cssProp?: CSSPropertiesWithMedia; customStyle?
 
     ${(props) => props.customStyle && { ...props.customStyle }}
 
-    @media (max-width: ${(props) => (props.cssProp ? props.cssProp.mediaMaxWidth : '600px')}) {
+    @media (max-width: ${(props) =>
+        props.cssProp && props.cssProp.mediaMaxWidth ? props.cssProp.mediaMaxWidth : '600px'}) {
         ${(props) => (props.cssProp ? { ...props.cssProp.cssProperties } : '')}
     }
 `;

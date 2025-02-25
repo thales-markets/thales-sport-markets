@@ -3,11 +3,13 @@ import Tooltip from 'components/Tooltip';
 import useLeaderboardByGuessedCorrectlyQuery, {
     LeaderboardByGuessedCorrectlyResponse,
 } from 'queries/marchMadness/useLeaderboardByGuessedCorrectlyQuery';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { getIsMobile } from 'redux/modules/app';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
+import { FlexDivColumnNative } from 'styles/common';
 import { getEtherscanAddressLink } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
 import biconomyConnector from 'utils/biconomyWallet';
@@ -26,14 +28,17 @@ import {
 
 type TableByGuessedCorrectlyProps = {
     searchText: string;
+    isMainHeight: boolean;
+    setLength: (length: number) => void;
 };
 
 const NUMBER_OF_POSITIONS_TO_HIGHLIGHT = 20;
 
-const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searchText }) => {
+const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searchText, isMainHeight, setLength }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
 
+    const isMobile = useSelector(getIsMobile);
     const isBiconomy = useSelector(getIsBiconomy);
 
     const networkId = useChainId();
@@ -45,7 +50,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
             {
                 header: <>{''}</>,
                 accessorKey: 'rank',
-                size: 100,
+                size: isMobile ? 30 : 100,
             },
             {
                 header: <>{t('march-madness.leaderboard.bracket-id')}</>,
@@ -68,6 +73,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                     </WalletAddress>
                 ),
                 size: 200,
+                headStyle: { cssProperties: { minWidth: '130px' } },
             },
             {
                 header: () => (
@@ -116,7 +122,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                 },
             },
         ],
-        [t, networkId]
+        [t, networkId, isMobile]
     );
 
     const leaderboardQuery = useLeaderboardByGuessedCorrectlyQuery(networkId);
@@ -166,6 +172,10 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
         }
     }, [myScore, t, columns]);
 
+    useEffect(() => {
+        setLength(filteredData.length);
+    }, [setLength, filteredData.length]);
+
     return (
         <Container>
             <TableHeaderContainer>
@@ -174,19 +184,23 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
             <Table
                 data={filteredData}
                 columns={columns as any}
+                columnsDeps={[isMobile]}
                 stickyRow={stickyRow}
                 rowsPerPage={20}
                 isLoading={leaderboardQuery.isLoading}
                 noResultsMessage={t('march-madness.leaderboard.no-data')}
                 showPagination
-                tableHeight={filteredData.length ? 'unset' : '450px'}
+                tableHeight={isMainHeight ? 'unset' : filteredData.length ? '100%' : 'calc(100% - 114px)'}
                 tableHeadTitleStyles={{ fontFamily: theme.fontFamily.primary, fontSize: '12px' }}
                 tableRowHeadStyles={{
                     border: `2px solid ${theme.marchMadness.borderColor.secondary}`,
                     borderRadius: 'unset',
                     background: 'transparent',
                 }}
-                tableStyle={`border: 2px solid ${theme.marchMadness.borderColor.secondary};  border-top: 0px;`}
+                tableHeadCellStyles={{ justifyContent: isMobile ? 'center' : 'left' }}
+                tableStyle={`border: 2px solid ${theme.marchMadness.borderColor.secondary};  border-top: 0px; ${
+                    isMainHeight || !filteredData.length ? 'min-height: 450px;' : ''
+                }`}
                 tableBodyPadding="0px"
                 tableRowStyles={{
                     background: `${theme.marchMadness.background.senary}`,
@@ -200,6 +214,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                     fontWeight: 600,
                     lineHeight: '150%',
                     letterSpacing: '0.21px',
+                    justifyContent: isMobile ? 'center' : 'left',
                 }}
                 noResultsStyle={{
                     fontFamily: theme.fontFamily.primary,
@@ -217,7 +232,8 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
     );
 };
 
-const Container = styled.div`
+const Container = styled(FlexDivColumnNative)`
+    height: auto;
     flex: 8;
 `;
 

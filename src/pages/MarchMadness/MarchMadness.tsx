@@ -1,7 +1,7 @@
 import backgrounBall from 'assets/images/march-madness/background-marchmadness-ball.png';
 import Loader from 'components/Loader';
 import ROUTES from 'constants/routes';
-import { Theme } from 'enums/ui';
+import { ScreenSizeBreakpoint, Theme } from 'enums/ui';
 import BackToLink from 'pages/Markets/components/BackToLink';
 import useMarchMadnessDataQuery from 'queries/marchMadness/useMarchMadnessDataQuery';
 import queryString from 'query-string';
@@ -9,6 +9,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import { getIsMobile } from 'redux/modules/app';
 import { setTheme } from 'redux/modules/ui';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
@@ -27,6 +28,7 @@ const MarchMadness: React.FC = () => {
     const dispatch = useDispatch();
     const location = useLocation();
 
+    const isMobile = useSelector(getIsMobile);
     const isBiconomy = useSelector(getIsBiconomy);
 
     const networkId = useChainId();
@@ -87,7 +89,7 @@ const MarchMadness: React.FC = () => {
                         customStylingContainer={{
                             position: 'absolute',
                             marginTop: '20px',
-                            marginLeft: '-36px',
+                            marginLeft: isMobile ? '0px' : '-36px',
                             textTransform: 'uppercase',
                             fontFamily: 'Oswald',
                             lineHeight: '24px',
@@ -110,6 +112,9 @@ const Container = styled.div<{ showBackground: boolean }>`
     ${(props) => (props.showBackground ? 'background-size: 1900px;' : '')}
     ${(props) => (props.showBackground ? 'background-position: -270px -58px;' : '')}
     ${(props) => (props.showBackground ? 'background-repeat: no-repeat;' : '')}
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        width: 100%;
+    }
 `;
 
 export default MarchMadness;

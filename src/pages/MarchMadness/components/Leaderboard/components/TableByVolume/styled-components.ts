@@ -1,5 +1,6 @@
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import styled from 'styled-components';
-import { FlexDivStart } from 'styles/common';
+import { FlexDivColumnNative, FlexDivStart } from 'styles/common';
 
 export const OverlayContainer = styled.div`
     text-align: center;
@@ -9,7 +10,7 @@ export const OverlayContainer = styled.div`
 `;
 
 const TableRow = styled(FlexDivStart)<{ hideBorder?: boolean; topTen?: boolean; myScore?: boolean }>`
-    height: 40px;
+    height: auto;
     font-family: ${(props) => props.theme.fontFamily.primary};
     font-size: 14px;
     font-weight: 600;
@@ -22,8 +23,10 @@ const TableRow = styled(FlexDivStart)<{ hideBorder?: boolean; topTen?: boolean; 
     ${(props) => (props?.myScore == true ? `background-color: ${props.theme.marchMadness.borderColor.secondary};` : ``)}
 `;
 
-export const TableRowCell = styled.span<{ width?: string; noTextTransform?: boolean }>`
-    ${(props) => (props.width ? `width: ${props.width};` : '')}
+export const TableRowCell = styled.div<{ width?: string; noTextTransform?: boolean }>`
+    flex: 1;
+    min-width: auto;
+    ${(props) => (props.width ? `max-width: ${props.width};` : '')}
     padding: 10px 0px;
     color: #fff;
     text-align: left;
@@ -38,9 +41,30 @@ export const TableRowCell = styled.span<{ width?: string; noTextTransform?: bool
     &:first-child {
         padding-left: 18px;
     }
+    &:last-child {
+        padding-right: 18px;
+    }
+
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        text-align: center;
+        white-space: nowrap;
+
+        &:first-child {
+            padding-left: 6px;
+        }
+        &:last-child {
+            padding-right: 6px;
+        }
+    }
+
+    @media (max-width: ${ScreenSizeBreakpoint.EXTRA_SMALL}px) {
+        &:last-child {
+            padding-right: 0px;
+        }
+    }
 `;
 
-export const Container = styled.div`
+export const Container = styled(FlexDivColumnNative)`
     height: auto;
     flex: 5;
 `;
@@ -72,11 +96,14 @@ export const Arrow = styled.i`
     text-transform: none;
     color: white;
     font-weight: 400;
+
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        font-size: 12px;
+    }
 `;
 
 export const StickyRow = styled(TableRow)`
     width: 100%;
-    height: 35px !important;
 `;
 
 export const StickyRowTopTable = styled(TableRow)`
@@ -85,4 +112,5 @@ export const StickyRowTopTable = styled(TableRow)`
 
 export const WalletAddress = styled.span`
     text-transform: lowercase;
+    white-space: nowrap;
 `;

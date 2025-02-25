@@ -1,10 +1,11 @@
 import Table from 'components/Table';
 import Tooltip from 'components/Tooltip';
-import { USD_SIGN } from 'constants/currency';
+import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
 import useLeaderboardByVolumeQuery, { LeaderboardByVolumeData } from 'queries/marchMadness/useLeaderboardByVolumeQuery';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { getIsMobile } from 'redux/modules/app';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
 import { formatCurrencyWithKey, getEtherscanAddressLink } from 'thales-utils';
@@ -25,23 +26,27 @@ import {
 
 type TableByVolumeProps = {
     searchText: string;
+    isMainHeight: boolean;
+    setLength: (length: number) => void;
 };
 
-const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
+const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText, isMainHeight, setLength }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
 
+    const isMobile = useSelector(getIsMobile);
     const isBiconomy = useSelector(getIsBiconomy);
 
     const networkId = useChainId();
     const { address } = useAccount();
     const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
-    const columns = useMemo(() => {
-        return [
+    const columns = useMemo(
+        () => [
             {
                 header: <>{''}</>,
                 accessorKey: 'rank',
+                size: isMobile ? 30 : 60,
             },
             {
                 header: <>{t('march-madness.leaderboard.address')}</>,
@@ -58,21 +63,19 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                         </a>
                     </WalletAddress>
                 ),
+                size: isMobile ? 140 : 180,
             },
             {
                 header: <>{t('march-madness.leaderboard.volume')}</>,
                 accessorKey: 'volume',
                 cell: (cellProps: any) => <>{formatCurrencyWithKey(USD_SIGN, cellProps.cell.getValue(), 2)}</>,
+                size: isMobile ? 90 : 140,
             },
             {
                 header: () => (
                     <>
                         {t('march-madness.leaderboard.rewards')}
                         <Tooltip
-                            overlayInnerStyle={{
-                                backgroundColor: theme.marchMadness.background.secondary,
-                                border: `1px solid ${theme.marchMadness.borderColor.primary}`,
-                            }}
                             overlay={
                                 <OverlayContainer>
                                     {t('march-madness.leaderboard.tooltip-rewards-volume-table')}
@@ -85,10 +88,14 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                     </>
                 ),
                 accessorKey: 'estimatedRewards',
-                cell: (cellProps: any) => <>{formatCurrencyWithKey('ARB', cellProps.cell.getValue(), 2)}</>,
+                cell: (cellProps: any) => (
+                    <>{formatCurrencyWithKey(CRYPTO_CURRENCY_MAP.ARB, cellProps.cell.getValue(), 2)}</>
+                ),
+                size: isMobile ? 100 : 140,
             },
-        ];
-    }, [networkId, t, theme.marchMadness.borderColor.primary, theme.marchMadness.background.secondary]);
+        ],
+        [networkId, t, isMobile]
+    );
 
     const leaderboardQuery = useLeaderboardByVolumeQuery(networkId);
 
@@ -123,14 +130,24 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
         if (myScore?.length) {
             return (
                 <StickyRow myScore={true}>
-                    <TableRowCell>{myScore[0].rank}</TableRowCell>
-                    <TableRowCell>{t('march-madness.leaderboard.my-rewards').toUpperCase()}</TableRowCell>
-                    <TableRowCell>{formatCurrencyWithKey(USD_SIGN, myScore[0].volume, 2)}</TableRowCell>
-                    <TableRowCell> {formatCurrencyWithKey('ARB', myScore[0].estimatedRewards, 2)}</TableRowCell>
+                    <TableRowCell width={`${columns[0].size || 150}px`}>{myScore[0].rank}</TableRowCell>
+                    <TableRowCell width={`${columns[1].size || 150}px`}>
+                        {t('march-madness.leaderboard.my-rewards').toUpperCase()}
+                    </TableRowCell>
+                    <TableRowCell width={`${columns[2].size || 150}px`}>
+                        {formatCurrencyWithKey(USD_SIGN, myScore[0].volume, 2)}
+                    </TableRowCell>
+                    <TableRowCell width={`${columns[3].size || 150}px`}>
+                        {formatCurrencyWithKey(CRYPTO_CURRENCY_MAP.ARB, myScore[0].estimatedRewards, 2)}
+                    </TableRowCell>
                 </StickyRow>
             );
         }
-    }, [myScore, t]);
+    }, [myScore, t, columns]);
+
+    useEffect(() => {
+        setLength(filteredData.length);
+    }, [setLength, filteredData.length]);
 
     return (
         <Container>
@@ -140,19 +157,36 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
             <Table
                 data={filteredData}
                 columns={columns as any}
+                columnsDeps={[isMobile]}
                 stickyRow={stickyRow}
                 rowsPerPage={20}
                 isLoading={leaderboardQuery.isLoading}
                 noResultsMessage={t('march-madness.leaderboard.no-data')}
                 showPagination
-                tableHeight={filteredData.length ? 'unset' : '450px'}
+                tableHeight={isMainHeight ? 'unset' : filteredData.length ? '100%' : 'calc(100% - 114px)'}
+                tableHeadTitleStyles={{ fontFamily: theme.fontFamily.primary, fontSize: '12px' }}
                 tableRowHeadStyles={{
                     border: `2px solid ${theme.marchMadness.borderColor.secondary}`,
                     borderRadius: 'unset',
                     background: 'transparent',
                 }}
-                tableStyle={`border: 2px solid ${theme.marchMadness.borderColor.secondary}; border-top: 0px;`}
+                tableHeadCellStyles={{ justifyContent: isMobile ? 'center' : 'left' }}
+                tableStyle={`border: 2px solid ${theme.marchMadness.borderColor.secondary};  border-top: 0px; ${
+                    isMainHeight || !filteredData.length ? 'min-height: 450px;' : ''
+                }`}
                 tableBodyPadding="0px"
+                tableRowStyles={{
+                    borderBottom: `1px solid ${theme.borderColor.secondary}`,
+                }}
+                tableRowCellStyles={{
+                    fontFamily: theme.fontFamily.primary,
+                    padding: '10px 0px',
+                    fontSize: '14px',
+                    fontWeight: 600,
+                    lineHeight: '150%',
+                    letterSpacing: '0.21px',
+                    justifyContent: isMobile ? 'center' : 'left',
+                }}
                 noResultsStyle={{
                     fontFamily: theme.fontFamily.primary,
                     fontSize: '25px',
