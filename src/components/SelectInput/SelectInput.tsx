@@ -177,14 +177,6 @@ const SelectInput: React.FC<SelectInputProps> = ({
         }),
     };
 
-    // TODO:
-    // when there are no options but there is a placeholder
-    // useEffect(() => {
-    //     if (!defaultOption && placeholder) {
-    //         handleChange(Number(defaultValue));
-    //     }
-    // }, [defaultOption, defaultValue, handleChange, placeholder]);
-
     return (
         <Select
             value={selectedValue}
