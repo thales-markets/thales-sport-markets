@@ -856,6 +856,19 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         hidden: false,
         tooltipKey: 'common.football-tooltip',
     },
+    [League.UEFA_NATIONS_LEAGUE_WOMEN]: {
+        sport: Sport.SOCCER,
+        id: League.UEFA_NATIONS_LEAGUE_WOMEN,
+        label: 'UEFA Nations League Women',
+        logoClass: 'icon-homepage league--uefa-nations',
+        scoringType: ScoringType.GOALS,
+        matchResolveType: MatchResolveType.REGULAR,
+        periodType: PeriodType.HALF,
+        isDrawAvailable: true,
+        priority: 108,
+        hidden: false,
+        tooltipKey: 'common.football-tooltip',
+    },
     [League.CONCACAF_NATIONS_LEAGUE]: {
         sport: Sport.SOCCER,
         id: League.CONCACAF_NATIONS_LEAGUE,
@@ -1656,6 +1669,17 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         priority: 313,
         hidden: false,
     },
+    [League.GREECE_A1_LEAGUE]: {
+        sport: Sport.BASKETBALL,
+        id: League.GREECE_A1_LEAGUE,
+        label: 'Greece A1 League',
+        scoringType: ScoringType.POINTS,
+        matchResolveType: MatchResolveType.OVERTIME,
+        periodType: PeriodType.QUARTER,
+        isDrawAvailable: false,
+        priority: 314,
+        hidden: false,
+    },
     [League.NCAAW]: {
         sport: Sport.BASKETBALL,
         id: League.NCAAW,
@@ -1709,6 +1733,17 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.QUARTER,
         isDrawAvailable: false,
         priority: 318,
+        hidden: false,
+    },
+    [League.FIBA_AFRO_BASKET_QUALIFIERS]: {
+        sport: Sport.BASKETBALL,
+        id: League.FIBA_AFRO_BASKET_QUALIFIERS,
+        label: 'FIBA AfroBasket Qualifiers',
+        scoringType: ScoringType.POINTS,
+        matchResolveType: MatchResolveType.OVERTIME,
+        periodType: PeriodType.QUARTER,
+        isDrawAvailable: false,
+        priority: 319,
         hidden: false,
     },
     [League.ROCKET_LEAGUE]: {
@@ -1974,6 +2009,8 @@ export const INTERNATIONAL_LEAGUES = [
     League.FIBA_ASIA_CUP_QUALIFIERS,
     League.FIBA_EUROBASKET_QUALIFIERS,
     League.FIBA_WORLD_CUP_QUALIFIERS,
+    League.FIBA_AFRO_BASKET_QUALIFIERS,
+    League.UEFA_NATIONS_LEAGUE_WOMEN,
 ];
 
 export const OLYMPIC_LEAGUES = [
