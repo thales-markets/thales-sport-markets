@@ -29,19 +29,29 @@ import { SeoArticleProps } from 'types/ui';
 import biconomyConnector from 'utils/biconomyWallet';
 import { isMobile } from 'utils/device';
 import { isNetworkSupported, isRouteAvailableForNetwork } from 'utils/network';
+import { getSpecificConnectorFromConnectorsArray } from 'utils/particleWallet/utils';
 import queryConnector from 'utils/queryConnector';
 import { history } from 'utils/routes';
-import { useAccount, useChainId, useDisconnect, useSwitchChain, useWalletClient } from 'wagmi';
+import {
+    useAccount,
+    useChainId,
+    useConnect,
+    useConnectors,
+    useDisconnect,
+    useSwitchChain,
+    useWalletClient,
+} from 'wagmi';
 
 const App = () => {
     const dispatch = useDispatch();
     const networkId = useChainId();
     const { data: walletClient } = useWalletClient();
-
     const { switchChain } = useSwitchChain();
     const { disconnect } = useDisconnect();
     const { connectionStatus, disconnect: particleDisconnect } = useParticleConnect();
     const { isConnected } = useAccount();
+    const connectors = useConnectors();
+    const { connect } = useConnect();
 
     queryConnector.setQueryClient();
 
@@ -82,8 +92,10 @@ const App = () => {
     }, [dispatch, switchChain, networkId, disconnect, walletClient]);
 
     useEffect(() => {
-        console.log(connectionStatus);
         if (connectionStatus === 'connected') {
+            connect({
+                connector: getSpecificConnectorFromConnectorsArray(connectors, 'particleWalletSDK', true) as any,
+            });
             dispatch(updateParticleState({ connectedViaParticle: true }));
         }
         if (connectionStatus === 'disconnected') {
@@ -92,7 +104,7 @@ const App = () => {
             biconomyConnector.resetWallet();
             if (!isConnected) disconnect();
         }
-    }, [isConnected, connectionStatus, disconnect, particleDisconnect, networkId, dispatch]);
+    }, [isConnected, connectors, connect, connectionStatus, disconnect, particleDisconnect, networkId, dispatch]);
 
     useEffect(() => {
         const handlePageResized = () => {
