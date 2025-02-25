@@ -106,7 +106,12 @@ const getSimplePositionText = (
     positionNames?: string[],
     odds?: number[]
 ) => {
-    if (isFuturesMarket(marketType) && positionNames && positionNames[position]) {
+    if (
+        isFuturesMarket(marketType) &&
+        marketType !== MarketType.TO_MAKE_FINAL_FOUR &&
+        positionNames &&
+        positionNames[position]
+    ) {
         return positionNames[position];
     }
 
@@ -145,7 +150,7 @@ const getSimplePositionText = (
         return text;
     }
     if (
-        isOneSideMarket(marketType) ||
+        isOneSideMarket(leagueId, marketType) ||
         isOneSidePlayerPropsMarket(marketType) ||
         isYesNoPlayerPropsMarket(marketType) ||
         isBothsTeamsToScoreMarket(marketType) ||
@@ -594,7 +599,7 @@ export const packMarket = (
         isResolved: market.status === MarketStatus.RESOLVED,
         isCancelled: market.status === MarketStatus.CANCELLED,
         isPaused: market.status === MarketStatus.PAUSED,
-        isOneSideMarket: isOneSideMarket(leagueId),
+        isOneSideMarket: isOneSideMarket(leagueId, market.typeId),
         isPlayerPropsMarket: isPlayerPropsMarket(market.typeId),
         isOneSidePlayerPropsMarket: isOneSidePlayerPropsMarket(market.typeId),
         isYesNoPlayerPropsMarket: isYesNoPlayerPropsMarket(market.typeId),

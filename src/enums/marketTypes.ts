@@ -267,6 +267,7 @@ export enum MarketType {
     LEAGUE_WINNER = 13001,
     MVP = 13002,
     CUP_WINNER = 13003,
+    TO_MAKE_FINAL_FOUR = 13005,
 
     // Spread (handicap) corners
     SPREAD_CORNERS = 10221,

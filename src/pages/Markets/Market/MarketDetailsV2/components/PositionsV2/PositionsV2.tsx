@@ -144,7 +144,6 @@ const Positions: React.FC<PositionsProps> = ({
                         });
                         const sortedOddsInfo = orderBy(oddsInfo, ['odd', 'position'], ['desc', 'asc']);
                         const isFutures = isFuturesMarket(market.typeId);
-                        const isCorrectScore = market.typeId === MarketType.CORRECT_SCORE;
 
                         const oddsForDisplay = isFutures ? sortedOddsInfo : oddsInfo;
 
@@ -168,14 +167,13 @@ const Positions: React.FC<PositionsProps> = ({
                                     isPlayerProps={!!isPlayerPropsMarket}
                                 >
                                     {filteredOdds.map((_, index) => {
-                                        const position =
-                                            isFutures || isCorrectScore
-                                                ? oddsInfo.findIndex(
-                                                      (oddInfo) =>
-                                                          market.positionNames &&
-                                                          oddInfo.positionName === filteredOdds[index].positionName
-                                                  )
-                                                : index;
+                                        const position = isFutures
+                                            ? oddsInfo.findIndex(
+                                                  (oddInfo) =>
+                                                      market.positionNames &&
+                                                      oddInfo.positionName === filteredOdds[index].positionName
+                                              )
+                                            : index;
 
                                         return (
                                             <PositionDetailsV2

@@ -151,7 +151,7 @@ export const mapTicket = (
                     isCancelled: marketStatus === TicketMarketStatus.CANCELLED,
                     isWinning: marketStatus === TicketMarketStatus.WINNING,
                     isPaused: false,
-                    isOneSideMarket: isOneSideMarket(leagueId),
+                    isOneSideMarket: isOneSideMarket(leagueId, typeId),
                     line: line / 100,
                     isPlayerPropsMarket: isPlayerProps,
                     isOneSidePlayerPropsMarket: isOneSidePlayerPropsMarket(typeId),
