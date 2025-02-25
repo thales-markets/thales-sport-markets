@@ -46,6 +46,7 @@ const Ticket: React.FC = () => {
                     isTicketLost={lastValidTicket.isLost}
                     collateral={lastValidTicket.collateral}
                     isLive={lastValidTicket.isLive}
+                    isSgp={lastValidTicket.isSgp}
                     applyPayoutMultiplier={false}
                     systemBetData={lastValidTicket.systemBetData}
                     isTicketOpen={lastValidTicket.isOpen}

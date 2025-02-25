@@ -24,7 +24,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
     ...rest
 }) => {
     return (
-        <Container className={`${className} ${disabled ? 'disabled' : ''}`} fontSize={labelFontSize}>
+        <Container className={`${className || ''} ${disabled ? 'disabled' : ''}`} fontSize={labelFontSize}>
             {label}
             <Input
                 {...rest}

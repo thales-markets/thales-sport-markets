@@ -2,6 +2,7 @@ import { QueryClient } from '@tanstack/react-query';
 import QUERY_KEYS from 'constants/queryKeys';
 import { StatusFilter } from 'enums/markets';
 import { Network } from 'enums/network';
+import { TicketMarket } from 'types/markets';
 
 type QueryConnector = {
     queryClient: QueryClient;
@@ -66,6 +67,38 @@ export const refetchLiquidityPoolData = (walletAddress: string, networkId: Netwo
     });
     queryConnector.queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.LiquidityPool.UserTransactions(networkId, liquidityPoolAddress),
+    });
+};
+
+export const refetchTicketLiquidity = (
+    networkId: Network,
+    isSystemBet: boolean,
+    systemBetDenominator: number,
+    isSgp: boolean,
+    totalQuote: number,
+    markets: TicketMarket[]
+) => {
+    const gameIds = markets.map((market) => market.gameId).join(',');
+    const typeIds = markets.map((market) => market.typeId).join(',');
+    const playerIds = markets.map((market) => market.playerProps.playerId).join(',');
+    const lines = markets.map((market) => market.line).join(',');
+    const positions = markets.map((market) => market.position).join(',');
+    const lives = markets.map((market) => market.live).join(',');
+
+    queryConnector.queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.TicketLiquidity(
+            networkId,
+            isSystemBet,
+            systemBetDenominator,
+            isSgp,
+            totalQuote,
+            gameIds,
+            typeIds,
+            playerIds,
+            lines,
+            positions,
+            lives
+        ),
     });
 };
 

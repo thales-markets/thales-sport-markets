@@ -88,7 +88,8 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
                 const buyAmount = minAmount && index === 0 && minAmount > convertedAmount ? minAmount : convertedAmount;
 
                 const isCurrentAmountClicked = (amountIndexClickedTimesMap.get(index) || 0) > 0;
-                const isAmountMatchedWithInsertedAmount = Number(insertedAmount) === buyAmount;
+                const isAmountMatchedWithInsertedAmount =
+                    Number(insertedAmount) > 0 && Number(insertedAmount) === buyAmount;
                 if (!isAnyAmountClicked && isAmountMatchedWithInsertedAmount) {
                     const updatedMap = new Map(amountIndexClickedTimesMap);
                     updatedMap.set(index, 1);

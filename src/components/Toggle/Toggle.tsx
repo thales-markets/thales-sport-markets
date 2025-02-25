@@ -115,7 +115,7 @@ const Wrapper = styled.div<{ margin?: string; disabled?: boolean }>`
     align-items: center;
     justify-content: center;
     width: 100%;
-    cursor: ${(props: any) => (props.disabled ? 'not-allowed' : 'default')};
+    cursor: default;
 `;
 
 const Label = styled.span<{ fontSize?: string; fontWeight?: string; lineHeight?: string }>`
@@ -131,7 +131,7 @@ const SwitchContainer = styled.div<SwitchContainerProps>`
     display: flex;
     align-items: center;
     position: relative;
-    cursor: ${(props: any) => (props.disabled ? 'not-allowed' : 'pointer')};
+    cursor: ${(props: any) => (props.disabled ? 'default' : 'pointer')};
     border-width: ${(props: any) => (props.borderWidth ? props.borderWidth : '2px')};
     border-style: solid;
     border-color: ${(props: any) => (props.borderColor ? props.borderColor : props.theme.borderColor.primary)};

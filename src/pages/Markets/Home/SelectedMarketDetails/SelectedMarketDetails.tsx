@@ -1,10 +1,13 @@
 import Button from 'components/Button';
 import Scroll from 'components/Scroll';
+import SimpleLoader from 'components/SimpleLoader';
 import { MarketTypeGroupsBySport, PLAYER_PROPS_MARKET_TYPES } from 'constants/marketTypes';
+import { SportFilter } from 'enums/markets';
 import { MarketType } from 'enums/marketTypes';
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import { t } from 'i18next';
 import { groupBy } from 'lodash';
-import React, { useMemo, useReducer } from 'react';
+import React, { useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import {
@@ -13,7 +16,8 @@ import {
     getSportFilter,
     setMarketTypeGroupFilter,
 } from 'redux/modules/market';
-import { useTheme } from 'styled-components';
+import styled, { useTheme } from 'styled-components';
+import { FlexDivCentered } from 'styles/common';
 import { SportMarket } from 'types/markets';
 import { isOddValid } from 'utils/marketsV2';
 import { League } from '../../../../enums/sports';
@@ -21,13 +25,13 @@ import { ThemeInterface } from '../../../../types/ui';
 import { isFuturesMarket } from '../../../../utils/markets';
 import PositionsV2 from '../../Market/MarketDetailsV2/components/PositionsV2';
 import { NoMarketsContainer, NoMarketsLabel, Wrapper } from './styled-components';
-import { SportFilter } from 'enums/markets';
 
 type SelectedMarketProps = {
     market: SportMarket;
+    isLoading?: boolean;
 };
 
-const SelectedMarket: React.FC<SelectedMarketProps> = ({ market }) => {
+const SelectedMarket: React.FC<SelectedMarketProps> = ({ market, isLoading }) => {
     const theme: ThemeInterface = useTheme();
     const dispatch = useDispatch();
     const isGameStarted = market.maturityDate < new Date();
@@ -36,6 +40,8 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ market }) => {
     const isMobile = useSelector(getIsMobile);
     const sportFilter = useSelector(getSportFilter);
     const selectedMarket = useSelector(getSelectedMarket);
+
+    const [lastClickedTypeId, setLastClickedTypeId] = useState(0);
 
     const playerName = useMemo(() => selectedMarket?.playerName, [selectedMarket?.playerName]);
 
@@ -91,9 +97,29 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ market }) => {
 
     const hideGame = isGameOpen && !areOddsValid && !areChildMarketsOddsValid;
 
+    // when markets are filtered keep scroll to the last selected type group
+    const lastSelectedGroupRef = useRef<HTMLDivElement | null>(null);
+    const prevNumOfgroupedChildMarkets = useRef(Object.keys(groupedChildMarkets).length);
+    useEffect(() => {
+        const top = lastSelectedGroupRef?.current?.getBoundingClientRect().top || 0;
+        const isInViewport = top >= 0 && top <= window.innerHeight;
+        const isNumOfMarketsDecreased = Object.keys(groupedChildMarkets).length < prevNumOfgroupedChildMarkets.current;
+        if (lastSelectedGroupRef?.current && isNumOfMarketsDecreased && !isInViewport) {
+            const mainScrollYPosition = window.scrollY;
+            lastSelectedGroupRef.current.scrollIntoView();
+            window.scrollTo(0, mainScrollYPosition);
+        }
+        prevNumOfgroupedChildMarkets.current = Object.keys(groupedChildMarkets).length;
+    }, [groupedChildMarkets]);
+
     return (
         <Scroll height={`calc(100vh - ${isMobile ? 0 : market.leagueId === League.US_ELECTION ? 280 : 194}px)`}>
-            <Wrapper hideGame={hideGame}>
+            {isLoading && (
+                <LoaderContainer>
+                    <SimpleLoader />
+                </LoaderContainer>
+            )}
+            <Wrapper hideGame={hideGame || !!isLoading}>
                 {numberOfMarkets === 0 ? (
                     <NoMarketsContainer>
                         <NoMarketsLabel>{`${t('market.no-markets-found')} ${marketTypeGroupFilter}`}</NoMarketsLabel>
@@ -111,28 +137,35 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ market }) => {
                 ) : (
                     <>
                         {(!marketTypesFilter.length || marketTypesFilter.includes(MarketType.WINNER)) && (
-                            <PositionsV2
-                                markets={[market]}
-                                marketType={market.typeId}
-                                isGameOpen={isGameOpen}
-                                onAccordionClick={refreshScroll}
-                                hidePlayerName={sportFilter === SportFilter.PlayerProps}
-                                alignHeader={sportFilter === SportFilter.PlayerProps}
-                            />
-                        )}
-                        {Object.keys(groupedChildMarkets).map((key, index) => {
-                            const typeId = Number(key);
-                            const childMarkets = groupedChildMarkets[typeId];
-                            return (
+                            <div onClick={() => setLastClickedTypeId(0)}>
                                 <PositionsV2
-                                    key={index}
-                                    markets={childMarkets}
-                                    marketType={typeId}
+                                    markets={[market]}
+                                    marketType={market.typeId}
                                     isGameOpen={isGameOpen}
                                     onAccordionClick={refreshScroll}
                                     hidePlayerName={sportFilter === SportFilter.PlayerProps}
                                     alignHeader={sportFilter === SportFilter.PlayerProps}
                                 />
+                            </div>
+                        )}
+                        {Object.keys(groupedChildMarkets).map((key, index) => {
+                            const typeId = Number(key);
+                            const childMarkets = groupedChildMarkets[typeId];
+                            return (
+                                <div
+                                    key={`div-${index}`}
+                                    ref={lastClickedTypeId === typeId ? lastSelectedGroupRef : null}
+                                    onClick={() => setLastClickedTypeId(typeId)}
+                                >
+                                    <PositionsV2
+                                        markets={childMarkets}
+                                        marketType={typeId}
+                                        isGameOpen={isGameOpen}
+                                        onAccordionClick={refreshScroll}
+                                        hidePlayerName={sportFilter === SportFilter.PlayerProps}
+                                        alignHeader={sportFilter === SportFilter.PlayerProps}
+                                    />
+                                </div>
                             );
                         })}
                     </>
@@ -141,5 +174,17 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ market }) => {
         </Scroll>
     );
 };
+
+const LoaderContainer = styled(FlexDivCentered)`
+    position: relative;
+    width: 100%;
+    min-height: 600px;
+    background-color: ${(props) => props.theme.background.quinary};
+    border-radius: 0 0 8px 8px;
+    flex: 1;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        min-height: 400px;
+    }
+`;
 
 export default SelectedMarket;

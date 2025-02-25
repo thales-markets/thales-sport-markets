@@ -13,6 +13,7 @@ type SportTagsProps = {
     sportCount: number;
     showActive: boolean;
     tags: Tags;
+    setSportParam: (param: SportFilter) => void;
     setTagParam: any;
     openMarketsCountPerTag: any;
     liveMarketsCountPerTag: any;
@@ -25,6 +26,7 @@ const SportTags: React.FC<SportTagsProps> = ({
     sportCount,
     showActive,
     tags,
+    setSportParam,
     setTagParam,
     openMarketsCountPerTag,
     liveMarketsCountPerTag,
@@ -64,6 +66,7 @@ const SportTags: React.FC<SportTagsProps> = ({
                 key={sport + '1'}
                 tags={tags}
                 tagFilter={tagFilter}
+                setSportParam={setSportParam}
                 setTagFilter={(tagFilter: Tags) => dispatch(setTagFilter(tagFilter))}
                 setTagParam={setTagParam}
                 openMarketsCountPerTag={openMarketsCountPerTag}
