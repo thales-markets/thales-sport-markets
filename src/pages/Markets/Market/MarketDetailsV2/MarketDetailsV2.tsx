@@ -353,7 +353,7 @@ const RowContainer = styled(FlexDivRow)`
 
 const MainContainer = styled(FlexDivColumn)<{ isGameOpen: boolean }>`
     width: 100%;
-
+    max-width: 806px;
     margin-right: ${(props) => (props.isGameOpen ? 10 : 0)}px;
     @media (max-width: 575px) {
         margin-right: 0;
@@ -362,9 +362,11 @@ const MainContainer = styled(FlexDivColumn)<{ isGameOpen: boolean }>`
 `;
 
 const SidebarContainer = styled(FlexDivColumn)`
+    min-width: 360px;
     max-width: 360px;
     @media (max-width: 1299px) {
         max-width: 320px;
+        min-width: 320px;
     }
     @media (max-width: 950px) {
         display: none;
