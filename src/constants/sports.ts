@@ -1182,7 +1182,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 160,
-        hidden: true,
+        hidden: false,
     },
     [League.INDIA_PREMIER]: {
         sport: Sport.SOCCER,
