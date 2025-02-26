@@ -177,6 +177,7 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.SERBIA_SUPER_LEAGUE:
             return `/logos/Countries/serbia.svg`;
         case League.GREECE_SUPER_LEAGUE:
+        case League.GREECE_A1_LEAGUE:
             return `/logos/Countries/greece.svg`;
         case League.INDIA_PREMIER:
         case League.INDIA_SUPER_LEAGUE:
@@ -267,6 +268,8 @@ export const getLeagueFlagSource = (tagId: number | any) => {
             return `/logos/Countries/asia-cup.png`;
         case League.FIBA_WORLD_CUP_QUALIFIERS:
             return `/logos/Countries/fiba-world-cup.png`;
+        case League.FIBA_AFRO_BASKET_QUALIFIERS:
+            return `/logos/Countries/afrobasket.jpg`;
         default:
             return `/logos/Countries/world.svg`;
     }
