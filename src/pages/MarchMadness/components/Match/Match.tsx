@@ -1,4 +1,4 @@
-import { teamsData } from 'constants/marchMadness';
+import { REGION_BOTTOM_LEFT, REGION_UPPER_LEFT, teamsData } from 'constants/marchMadness';
 import { League } from 'enums/sports';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -33,7 +33,7 @@ const Match: React.FC<MatchProps> = ({
     const { t } = useTranslation();
 
     const isBracketsLeftSide = useMemo(
-        () => isMatchInRegion(matchData.id, 'East') || isMatchInRegion(matchData.id, 'West'),
+        () => isMatchInRegion(matchData.id, REGION_UPPER_LEFT) || isMatchInRegion(matchData.id, REGION_BOTTOM_LEFT),
         [matchData.id]
     );
 

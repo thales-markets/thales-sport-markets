@@ -248,7 +248,7 @@ export default {
     },
     marchMadness: {
         background: {
-            primary: Colors.ORANGE_MARCH_MADNESS,
+            primary: Colors.MAIN_MARCH_MADNESS,
             secondary: '',
             tertiary: '',
             quaternary: '',
@@ -273,7 +273,7 @@ export default {
         },
         button: {
             background: {
-                primary: Colors.ORANGE_MARCH_MADNESS,
+                primary: Colors.MAIN_MARCH_MADNESS,
                 secondary: Colors.BLUE_GRADIENT_1,
                 tertiary: '',
                 quaternary: '',

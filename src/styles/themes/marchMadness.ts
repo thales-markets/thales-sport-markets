@@ -21,16 +21,16 @@ export default {
     },
     borderColor: {
         ...darkTheme.borderColor,
-        quaternary: Colors.ORANGE_MARCH_MADNESS,
+        quaternary: Colors.MAIN_MARCH_MADNESS,
     },
     input: {
         ...darkTheme.input,
         borderColor: {
             ...darkTheme.input.borderColor,
-            primary: Colors.ORANGE_MARCH_MADNESS,
-            tertiary: Colors.ORANGE_MARCH_MADNESS,
+            primary: Colors.MAIN_MARCH_MADNESS,
+            tertiary: Colors.MAIN_MARCH_MADNESS,
             focus: {
-                primary: Colors.ORANGE_MARCH_MADNESS,
+                primary: Colors.MAIN_MARCH_MADNESS,
             },
         },
     },
@@ -41,7 +41,7 @@ export default {
             tertiary: Colors.GRAY_SECOND,
             quaternary: Colors.RED_GRADIENT_1,
             quinary: Colors.GRAY_GRADIENT_5,
-            senary: Colors.ORANGE_MARCH_MADNESS,
+            senary: Colors.MAIN_MARCH_MADNESS,
         },
         textColor: {
             primary: Colors.WHITE,
@@ -49,7 +49,7 @@ export default {
             tertiary: Colors.BLUE_DARK,
             quaternary: Colors.RED_GRADIENT_1,
             quinary: Colors.GRAY_GRADIENT_5,
-            senary: Colors.ORANGE_MARCH_MADNESS,
+            senary: Colors.MAIN_MARCH_MADNESS,
         },
         borderColor: {
             primary: Colors.BLUE_GRADIENT_1,
@@ -57,7 +57,7 @@ export default {
             tertiary: Colors.WHITE,
             quaternary: Colors.BLUE_DARK,
             quinary: Colors.GRAY_GRADIENT_5,
-            senary: Colors.ORANGE_MARCH_MADNESS,
+            senary: Colors.MAIN_MARCH_MADNESS,
         },
         button: {
             background: {
@@ -66,7 +66,7 @@ export default {
                 tertiary: Colors.GRAY_LIGHT,
                 quaternary: Colors.GRAY_GRADIENT_6,
                 quinary: Colors.BLUE_LIGHT,
-                senary: Colors.ORANGE_MARCH_MADNESS,
+                senary: Colors.MAIN_MARCH_MADNESS,
             },
             textColor: {
                 primary: Colors.BLUE_DARK,

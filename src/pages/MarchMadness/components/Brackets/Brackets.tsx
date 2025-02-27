@@ -25,6 +25,10 @@ import {
     MAX_TOTAL_POINTS,
     NUMBER_OF_MATCHES,
     NUMBER_OF_ROUNDS,
+    REGION_BOTTOM_LEFT,
+    REGION_BOTTOM_RIGHT,
+    REGION_UPPER_LEFT,
+    REGION_UPPER_RIGHT,
     SECOND_ROUND_BOTTOM_LEFT_MATCH_IDS,
     SECOND_ROUND_BOTTOM_RIGHT_MATCH_IDS,
     SECOND_ROUND_MATCH_IDS,
@@ -1122,7 +1126,7 @@ const Brackets: React.FC = () => {
                         )}
                         <RowHalf>
                             <Region isSideLeft={true} isVertical={true}>
-                                {t('march-madness.regions.east')}
+                                {t(`march-madness.regions.${REGION_UPPER_LEFT.toLowerCase()}`)}
                             </Region>
                             <LeftQuarter>
                                 <FirstRound>{getMatchesPerIdRange(FIRST_ROUND_UPPER_LEFT_MATCH_IDS)}</FirstRound>
@@ -1145,7 +1149,7 @@ const Brackets: React.FC = () => {
                                 <FirstRound>{getMatchesPerIdRange(FIRST_ROUND_UPPER_RIGHT_MATCH_IDS)}</FirstRound>
                             </RightQuarter>
                             <Region isSideLeft={false} isVertical={true}>
-                                {t('march-madness.regions.south')}
+                                {t(`march-madness.regions.${REGION_UPPER_RIGHT.toLowerCase()}`)}
                             </Region>
                         </RowHalf>
                         <SemiFinals>
@@ -1235,7 +1239,7 @@ const Brackets: React.FC = () => {
 
                         <RowHalf>
                             <Region isSideLeft={true} isVertical={true}>
-                                {t('march-madness.regions.west')}
+                                {t(`march-madness.regions.${REGION_BOTTOM_LEFT.toLowerCase()}`)}
                             </Region>
                             <LeftQuarter>
                                 <FirstRound>{getMatchesPerIdRange(FIRST_ROUND_BOTTOM_LEFT_MATCH_IDS)}</FirstRound>
@@ -1258,7 +1262,7 @@ const Brackets: React.FC = () => {
                                 <FirstRound>{getMatchesPerIdRange(FIRST_ROUND_BOTTOM_RIGHT_MATCH_IDS)}</FirstRound>
                             </RightQuarter>
                             <Region isSideLeft={false} isVertical={true}>
-                                {t('march-madness.regions.midwest')}
+                                {t(`march-madness.regions.${REGION_BOTTOM_RIGHT.toLowerCase()}`)}
                             </Region>
                         </RowHalf>
                     </BracketsWrapper>
@@ -1266,7 +1270,7 @@ const Brackets: React.FC = () => {
                         <WildCardsHeader>{'Wild Cards'}</WildCardsHeader>
                         <WildCardsRow>
                             <Region isSideLeft={true} isVertical={false}>
-                                {t('march-madness.regions.west')}
+                                {t(`march-madness.regions.${wildCardTeams[0].region.toLowerCase()}`)}
                             </Region>
                             <WildCardMatch
                                 homeTeam={wildCardTeams[0].displayName}
@@ -1282,12 +1286,12 @@ const Brackets: React.FC = () => {
                                 isHomeTeamWon={undefined}
                             />
                             <Region isSideLeft={false} isVertical={false}>
-                                {t('march-madness.regions.midwest')}
+                                {t(`march-madness.regions.${wildCardTeams[4].region.toLowerCase()}`)}
                             </Region>
                         </WildCardsRow>
                         <WildCardsRow>
                             <Region isSideLeft={true} isVertical={false}>
-                                {t('march-madness.regions.south')}
+                                {t(`march-madness.regions.${wildCardTeams[2].region.toLowerCase()}`)}
                             </Region>
                             <WildCardMatch
                                 homeTeam={wildCardTeams[2].displayName}
@@ -1303,7 +1307,7 @@ const Brackets: React.FC = () => {
                                 isHomeTeamWon={undefined}
                             />
                             <Region isSideLeft={false} isVertical={false}>
-                                {t('march-madness.regions.midwest')}
+                                {t(`march-madness.regions.${wildCardTeams[6].region.toLowerCase()}`)}
                             </Region>
                         </WildCardsRow>
                     </WildCardsContainer>

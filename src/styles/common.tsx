@@ -99,6 +99,7 @@ export const Colors = {
     GOLD: '#E9B008',
 
     // March Madness
+    MAIN_MARCH_MADNESS: '#F25623', // #1a9b9e // #f68d1e // #F25623
     GRAY_GRADIENT_4: '#606A78',
     GRAY_GRADIENT_5: '#9AAEB1',
     GRAY_GRADIENT_6: '#363f4c',
@@ -111,7 +112,6 @@ export const Colors = {
     BLUE_GRADIENT_2: '#0E94CB',
     RED_GRADIENT_1: '#C12B34',
     RED_GRADIENT_2: '#CA4C53',
-    ORANGE_MARCH_MADNESS: '#F25623',
     PURPLE_GRADIENT_1: '#4d21db',
     BLACK_GRADIENT_1: '#000E21',
     BLACK_GRADIENT_2: '#191C33',

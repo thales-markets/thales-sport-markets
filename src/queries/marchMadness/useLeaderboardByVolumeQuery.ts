@@ -1,14 +1,17 @@
 import { UseQueryOptions, useQuery } from '@tanstack/react-query';
 import { generalConfig } from 'config/general';
+import { ARB_VOLUME_REWARDS } from 'constants/marchMadness';
 import QUERY_KEYS from 'constants/queryKeys';
 import { NetworkId } from 'thales-utils';
 
-export type LeaderboardByVolumeData = {
+type VolumeData = {
+    rank: number;
     walletAddress: string;
     volume: number;
-    rank: number;
     estimatedRewards: number;
-}[];
+};
+
+export type LeaderboardByVolumeData = VolumeData[];
 
 const useLeaderboardByVolumeQuery = (
     networkId: NetworkId,
@@ -21,7 +24,18 @@ const useLeaderboardByVolumeQuery = (
                 const rawResponse = await fetch(`${generalConfig.API_URL}/march-madness/${networkId}`);
                 const response = JSON.parse(await rawResponse.text());
 
-                return response.dataByVolume;
+                const volumeData = response.dataByVolume.map((data: any) => {
+                    const estimatedRewards = (data.volume / data.totalVolume) * ARB_VOLUME_REWARDS;
+                    const mappedData: VolumeData = {
+                        rank: data.rank,
+                        walletAddress: data.wallet,
+                        volume: data.volume,
+                        estimatedRewards,
+                    };
+                    return mappedData;
+                });
+
+                return volumeData;
             } catch (e) {
                 console.log('E ', e);
                 return null;
