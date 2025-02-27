@@ -327,6 +327,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                         <GameOfLabel
                             isLive={isGameLive}
                             selected={selected}
+                            isLeagueInfoVisible={showLeagueInfo}
                         >{`Game of the ${overdropGameMultiplier.type}`}</GameOfLabel>
                     )}
                     <MatchInfo selected={selected}>

@@ -62,12 +62,12 @@ export const MatchInfo = styled(FlexDivStart)<{
     }
 `;
 
-export const GameOfLabel = styled.span<{ selected?: boolean; isLive?: boolean }>`
+export const GameOfLabel = styled.span<{ selected?: boolean; isLive?: boolean; isLeagueInfoVisible?: boolean }>`
     color: ${(props) => (props.selected ? 'inherit' : props.theme.overdrop.textColor.primary)};
     font-size: 10px;
     position: absolute;
     top: 6px;
-    left: 48px;
+    left: ${(props) => (props.isLeagueInfoVisible ? '48px' : '12px')};
     text-transform: uppercase;
     @media (max-width: 600px) {
         top: 10px;
