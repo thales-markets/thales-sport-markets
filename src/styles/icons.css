@@ -5,6 +5,10 @@
     font-size: 20px;
 }
 
+.icon--overtime-sportsbook:before {
+    content: '\0022';
+}
+
 .icon--politics:before {
     content: '\002E';
 }
@@ -82,7 +86,7 @@
 }
 
 .icon--overtime:before {
-    content: '\0041';
+    content: '\0102';
 }
 
 .icon--logo:before {

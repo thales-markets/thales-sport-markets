@@ -1009,6 +1009,10 @@ const LogoContainer = styled.div`
     margin-top: 30px;
     margin-bottom: 20px;
     text-align: center;
+    svg {
+        height: 25px;
+        width: 100%;
+    }
 `;
 
 const FiltersIcon = styled.i`

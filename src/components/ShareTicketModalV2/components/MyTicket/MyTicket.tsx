@@ -217,8 +217,8 @@ const BoldContent = styled.span`
 `;
 
 const TicketLabel = styled.span`
-    font-size: 34px;
-    line-height: 27px;
+    font-size: 32px;
+    line-height: 26px;
     letter-spacing: 0.3em;
     font-weight: 400;
     text-transform: uppercase;
@@ -232,6 +232,7 @@ const TicketLabel = styled.span`
 
 const OvertimeLogo = styled(OvertimeLogoIcon)`
     fill: ${(props) => props.theme.textColor.primary};
+    height: 26px;
 `;
 
 const PayoutWrapper = styled.div`
