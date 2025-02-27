@@ -2035,7 +2035,7 @@ export const OLYMPIC_LEAGUES = [
     League.SUMMER_OLYMPICS_TABLE_TENNIS,
 ];
 
-export const PLAYER_PROPS_COMBINING_ENABLED_LEAGUES = [League.NBA, League.WNBA, League.EUROLEAGUE];
+export const PLAYER_PROPS_COMBINING_ENABLED_LEAGUES: League[] = []; // disable all leagues to combine on regular bet
 
 export const PLAYER_PROPS_MARKETS_PER_SPORT_MAP: Record<Sport, MarketType[]> = {
     [Sport.SOCCER]: [
