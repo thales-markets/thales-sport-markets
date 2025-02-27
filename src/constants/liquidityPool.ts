@@ -1,8 +1,7 @@
-import { NetworkId } from 'thales-utils';
+import { Coins, NetworkId } from 'thales-utils';
 import { LiquidityPoolCollateral } from '../enums/liquidityPool';
 import { LiquidityPool } from '../types/liquidityPool';
 import { SupportedNetwork } from '../types/network';
-import { Coins } from 'thales-utils';
 import { CRYPTO_CURRENCY_MAP } from './currency';
 
 export const LiquidityPoolMap: Record<
@@ -26,7 +25,23 @@ export const LiquidityPoolMap: Record<
             collateral: CRYPTO_CURRENCY_MAP.THALES as Coins,
         },
     },
-    // [NetworkId.Base]: undefined,
+    [NetworkId.Base]: {
+        [LiquidityPoolCollateral.USDC]: {
+            name: 'USDC LP',
+            address: '0xf86e90412F52fDad8aD8D1aa2dA5B2C9a7e5f018',
+            collateral: CRYPTO_CURRENCY_MAP.USDC as Coins,
+        },
+        [LiquidityPoolCollateral.WETH]: {
+            name: 'WETH LP',
+            address: '0xcc4ED8cD7101B512B134360ED3cCB759caB33f17',
+            collateral: CRYPTO_CURRENCY_MAP.WETH as Coins,
+        },
+        [LiquidityPoolCollateral.cbBTC]: {
+            name: 'cbBTC LP',
+            address: '0x8d4f838327DedFc735e202731358AcFc260c207a',
+            collateral: CRYPTO_CURRENCY_MAP.cbBTC as Coins,
+        },
+    },
     [NetworkId.Arbitrum]: {
         [LiquidityPoolCollateral.USDC]: {
             name: 'USDC LP',
@@ -60,5 +75,14 @@ export const LiquidityPoolMap: Record<
             address: '0x93ca60840984348f8Dc4d81e274a12CAaDDC59aE',
             collateral: CRYPTO_CURRENCY_MAP.THALES as Coins,
         },
+    },
+};
+
+export const RoundOffsetMap: Partial<Record<LiquidityPoolCollateral, Record<SupportedNetwork, number>>> = {
+    [LiquidityPoolCollateral.cbBTC]: {
+        [NetworkId.OptimismMainnet]: 0,
+        [NetworkId.Arbitrum]: 0,
+        [NetworkId.Base]: 4,
+        [NetworkId.OptimismSepolia]: 0,
     },
 };

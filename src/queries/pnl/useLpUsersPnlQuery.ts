@@ -7,13 +7,13 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { ContractType } from 'enums/contract';
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 import { orderBy } from 'lodash';
-import { bigNumberFormatter, Coins, parseBytes32String } from 'thales-utils';
+import { bigNumberFormatter, Coins, NetworkId, parseBytes32String } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { LpUsersPnl, Ticket } from 'types/markets';
 import { NetworkConfig } from 'types/network';
 import { isLpSupported, isStableCurrency } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
-import { getLpAddress } from 'utils/liquidityPool';
+import { getLpAddress, getRoundWithOffset, isLpAvailableForNetwork } from 'utils/liquidityPool';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
 import { mapTicket } from 'utils/tickets';
 import { League } from '../../enums/sports';
@@ -39,7 +39,7 @@ const useLpUsersPnlQuery = (
                 networkConfig
             );
 
-            if (sportsAMMDataContract && liquidityPoolDataContract && priceFeedContract && stakingThalesBettingProxy) {
+            if (sportsAMMDataContract && liquidityPoolDataContract && priceFeedContract) {
                 const [
                     lpTickets,
                     gamesInfoResponse,
@@ -49,10 +49,12 @@ const useLpUsersPnlQuery = (
                     rates,
                     thalesPriceResponse,
                 ] = await Promise.all([
-                    liquidityPoolDataContract.read.getRoundTickets([
-                        getLpAddress(networkConfig.networkId, lpCollateral),
-                        round,
-                    ]),
+                    isLpAvailableForNetwork(networkConfig.networkId, lpCollateral)
+                        ? liquidityPoolDataContract.read.getRoundTickets([
+                              getLpAddress(networkConfig.networkId, lpCollateral),
+                              getRoundWithOffset(round, networkConfig.networkId, lpCollateral),
+                          ])
+                        : [],
                     axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, noCacheConfig),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/players-info`, noCacheConfig),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/live-scores`, noCacheConfig),
@@ -68,17 +70,19 @@ const useLpUsersPnlQuery = (
                     if (currencyName === CRYPTO_CURRENCY_MAP.ETH) {
                         exchangeRates[`W${currencyName}`] = bigNumberFormatter(rates[idx]);
                     }
+                    if (currencyName === CRYPTO_CURRENCY_MAP.BTC) {
+                        exchangeRates[`cb${currencyName}`] = bigNumberFormatter(rates[idx]);
+                    }
                 });
                 exchangeRates['THALES'] = Number(thalesPriceResponse.data);
 
-                const numberOfBatches = Math.trunc(lpTickets.length / BATCH_SIZE) + 1;
+                const tickets = Array.isArray(lpTickets) ? lpTickets : [lpTickets];
+                const numberOfBatches = Math.trunc(tickets.length / BATCH_SIZE) + 1;
 
                 const promises = [];
                 for (let i = 0; i < numberOfBatches; i++) {
                     promises.push(
-                        sportsAMMDataContract.read.getTicketsData([
-                            lpTickets.slice(i * BATCH_SIZE, (i + 1) * BATCH_SIZE),
-                        ])
+                        sportsAMMDataContract.read.getTicketsData([tickets.slice(i * BATCH_SIZE, (i + 1) * BATCH_SIZE)])
                     );
                 }
 
@@ -95,14 +99,18 @@ const useLpUsersPnlQuery = (
                     )
                 );
 
-                const stakingTickets = mappedTickets.filter(
-                    (ticket) => ticket.account.toLowerCase() === stakingThalesBettingProxy.address.toLowerCase()
-                );
+                const stakingTickets =
+                    networkConfig.networkId === NetworkId.Base
+                        ? []
+                        : mappedTickets.filter(
+                              (ticket) =>
+                                  ticket.account.toLowerCase() === stakingThalesBettingProxy?.address.toLowerCase()
+                          );
 
                 let stakingPromises = [];
                 const stakingTicketsData: any = [];
                 for (let i = 0; i < stakingTickets.length; i++) {
-                    stakingPromises.push(stakingThalesBettingProxy.read.ticketToUser([stakingTickets[i].id]));
+                    stakingPromises.push(stakingThalesBettingProxy?.read.ticketToUser([stakingTickets[i].id]));
                     if ((i + 1) % STAKING_TICKETS_BATCH_SIZE == 0 || i == stakingTickets.length - 1) {
                         const stakingPromisesResult = await Promise.all(stakingPromises);
                         stakingTicketsData.push(...stakingPromisesResult.flat(1));

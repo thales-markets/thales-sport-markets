@@ -1,11 +1,13 @@
 import { PnlTab } from 'enums/ui';
 import React from 'react';
+import { NetworkId } from 'thales-utils';
+import { useChainId } from 'wagmi';
 import { Icon, Item, ItemWrapper, Wrapper } from './styled-components';
 
 const navItems = [
     {
         id: PnlTab.LP_STATS,
-        label: 'LP Stats',
+        label: 'LP STATS',
         icon: 'icon icon--yield',
     },
     {
@@ -22,6 +24,11 @@ const navItems = [
         id: PnlTab.THALES_USERS_PNL,
         label: 'THALES',
         icon: 'currency-icon currency-icon--thales',
+    },
+    {
+        id: PnlTab.CBBTC_USERS_PNL,
+        label: 'cbBTC',
+        icon: 'currency-icon currency-icon--cbbtc',
     },
     // {
     //     id: PnlTab.USDC_TICKETS,
@@ -51,18 +58,26 @@ type NavigationBarProps = {
 };
 
 const NavigationBar: React.FC<NavigationBarProps> = ({ selectedTab, setSelectedTab }) => {
+    const networkId = useChainId();
+
     return (
         <Wrapper>
-            {navItems.map((item, index) => {
-                return (
-                    <ItemWrapper key={index}>
-                        <Item key={index} selected={item.id == selectedTab} onClick={() => setSelectedTab(item.id)}>
-                            <Icon className={item.icon} />
-                            {item.label}
-                        </Item>
-                    </ItemWrapper>
-                );
-            })}
+            {navItems
+                .filter(
+                    (item) =>
+                        (networkId === NetworkId.Base && item.id !== PnlTab.THALES_USERS_PNL) ||
+                        (networkId !== NetworkId.Base && item.id !== PnlTab.CBBTC_USERS_PNL)
+                )
+                .map((item, index) => {
+                    return (
+                        <ItemWrapper key={index}>
+                            <Item key={index} selected={item.id == selectedTab} onClick={() => setSelectedTab(item.id)}>
+                                <Icon className={item.icon} />
+                                {item.label}
+                            </Item>
+                        </ItemWrapper>
+                    );
+                })}
         </Wrapper>
     );
 };

@@ -42,6 +42,10 @@
     content: '\00B6';
 }
 
+.currency-icon--cbbtc::before {
+    content: '\00B7';
+}
+
 .currency-icon--susd::before {
     content: '\00F8';
 }

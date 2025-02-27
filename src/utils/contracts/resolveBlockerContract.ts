@@ -1,3 +1,4 @@
+import { TBD_ADDRESS } from 'constants/network';
 import { Network } from 'enums/network';
 import { ContractData } from 'types/viem';
 
@@ -5,6 +6,7 @@ const resolveBlockerContract: ContractData = {
     addresses: {
         [Network.OptimismMainnet]: '0xA5232A7AFE810bf453e2d13DdAf0689bbED31f60',
         [Network.Arbitrum]: '0x758c0fb1F629d0597b195B1653e2D656c5A55f53',
+        [Network.Base]: TBD_ADDRESS,
         [Network.OptimismSepolia]: '0x13488544345346d6a61b4408eF5f936ec5C8c027',
     },
     abi: [
