@@ -7,9 +7,9 @@ export const Container = styled(FlexDiv)`
     width: 100%;
     left: 50%;
     transform: translateX(-50%);
-    height: 40px;
-    color: ${(props) => props.theme.background.primary};
-    background: ${(props) => props.theme.background.septenary};
+    height: 48px;
+    color: ${(props) => props.theme.textColor.primary};
+    background: ${(props) => props.theme.background.secondary};
     justify-content: space-around;
     z-index: 11;
 `;
@@ -24,7 +24,7 @@ export const ItemIcon = styled.i<{ parlay?: boolean; iteration?: number; fontSiz
     font-size: ${(props) => props.fontSize || 33}px;
     font-weight: 400;
     text-transform: none;
-    color: ${(props) => props.theme.background.primary};
+    color: ${(props) => props.theme.textColor.primary};
 
     &.pulse {
         animation: pulsing 1s ease-in;
