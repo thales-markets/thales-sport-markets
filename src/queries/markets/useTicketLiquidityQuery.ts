@@ -44,6 +44,8 @@ const useTicketLiquidityQuery = (
                     const totalRiskPromises = [];
                     const spentOnGamePromises = [];
 
+                    const liveMarketMaturity = Math.round(new Date().getTime() / 1000) + 60;
+
                     for (let i = 0; i < markets.length; i++) {
                         const market = markets[i];
                         riskPromises.push(
@@ -61,7 +63,7 @@ const useTicketLiquidityQuery = (
                                 market.typeId,
                                 market.playerProps.playerId,
                                 market.line * 100,
-                                market.live ? Math.round(new Date().getTime() / 1000) + 60 : market.maturity,
+                                market.live ? liveMarketMaturity : market.maturity,
                                 !!market.live,
                             ])
                         );
@@ -71,7 +73,7 @@ const useTicketLiquidityQuery = (
                                 sportsAMMV2RiskManagerContract.read.calculateTotalRiskOnGame([
                                     market.gameId,
                                     market.subLeagueId,
-                                    market.maturity,
+                                    market.live ? liveMarketMaturity : market.maturity,
                                 ])
                             );
                             spentOnGamePromises.push(sportsAMMV2RiskManagerContract.read.spentOnGame([market.gameId]));
