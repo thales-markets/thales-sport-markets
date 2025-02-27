@@ -62,7 +62,7 @@ export const wagmiConfig = createConfig({
             },
         ],
         {
-            appName: 'Overtime Markets',
+            appName: 'Overtime Sportsbook',
             projectId: import.meta.env.VITE_APP_WALLET_CONNECT_PROJECT_ID || '',
         }
     ),
