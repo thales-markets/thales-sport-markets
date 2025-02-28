@@ -134,6 +134,7 @@ const QUERY_KEYS = {
         GameMultipliers: () => ['gameMultipliers'],
         Price: () => ['price'],
     },
+    FreeBet: (freeBetId: string, networkId: Network) => ['freeBet', freeBetId, networkId],
     RiskManagementConfig: (networkId: Network, configType: RiskManagementConfig) => [
         'riskManagementConfig',
         networkId,

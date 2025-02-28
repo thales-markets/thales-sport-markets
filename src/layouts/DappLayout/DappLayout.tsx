@@ -1,4 +1,5 @@
 import axios from 'axios';
+import ClaimFreeBetModal from 'components/ClaimFreeBetModal/ClaimFreeBetModal';
 import MetaData from 'components/MetaData';
 import { generalConfig } from 'config/general';
 import ROUTES from 'constants/routes';
@@ -7,14 +8,15 @@ import { Theme } from 'enums/ui';
 import useLocalStorage from 'hooks/useLocalStorage';
 import useWidgetBotScript from 'hooks/useWidgetBotScript';
 import ModalWrapper from 'pages/Overdrop/components/ModalWrapper';
+import useGetFreeBetQuery from 'queries/freeBets/useGetFreeBetQuery';
 import queryString from 'query-string';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { setTheme } from 'redux/modules/ui';
-import { getIsBiconomy, setWalletConnectModalVisibility } from 'redux/modules/wallet';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
 import { isAndroid, isMetamask } from 'thales-utils';
@@ -23,7 +25,7 @@ import biconomyConnector from 'utils/biconomyWallet';
 import { isMobile } from 'utils/device';
 import { setReferralId } from 'utils/referral';
 import { navigateTo } from 'utils/routes';
-import { useAccount } from 'wagmi';
+import { useAccount, useChainId } from 'wagmi';
 import Banner from '../../components/Banner';
 import DappFooter from './DappFooter';
 import DappHeader from './DappHeader';
@@ -35,6 +37,7 @@ type DappLayoutProps = {
 const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
     const dispatch = useDispatch();
     const location = useLocation();
+    const networkId = useChainId();
 
     const queryParams: { referralId?: string; referrerId?: string; freeBet?: string } = queryString.parse(
         location.search
@@ -49,21 +52,26 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
     const walletRef = useRef(walletAddress);
     walletRef.current = walletAddress;
 
-    const [, setFreeBet] = useLocalStorage<string | undefined>(LOCAL_STORAGE_KEYS.FREE_BET_ID, undefined);
+    const [freeBetModalParam, setFreeBetModalParam] = useState(queryParams.freeBet);
+
+    const [, setFreeBet] = useLocalStorage<any | undefined>(LOCAL_STORAGE_KEYS.FREE_BET_ID, undefined);
 
     const [preventDiscordWidgetLoad, setPreventDiscordWidgetLoad] = useState(true);
 
+    const freeBetQuery = useGetFreeBetQuery(freeBetModalParam || '', networkId, { enabled: !!freeBetModalParam });
+
+    const freeBetFromServer = useMemo(
+        () =>
+            freeBetQuery.isSuccess && freeBetQuery.data && freeBetModalParam
+                ? { ...freeBetQuery.data, id: freeBetModalParam }
+                : null,
+        [freeBetQuery.data, freeBetQuery.isSuccess, freeBetModalParam]
+    );
+
     useEffect(() => {
-        setTimeout(() => {
-            if (queryParams.freeBet) {
-                setFreeBet(queryParams.freeBet);
-                if (!walletRef.current) {
-                    dispatch(
-                        setWalletConnectModalVisibility({
-                            visibility: true,
-                        })
-                    );
-                } else {
+        setTimeout(async () => {
+            if (queryParams.freeBet && freeBetFromServer) {
+                if (walletRef.current) {
                     navigateTo(ROUTES.Profile);
                 }
                 const urlSearchParams = new URLSearchParams(location.search);
@@ -73,9 +81,19 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
                         search: urlSearchParams.toString(),
                     });
                 }
+                setFreeBet(freeBetFromServer);
             }
         }, 2000);
-    }, [walletAddress, dispatch, queryParams.freeBet, history, location.search, setFreeBet]);
+    }, [
+        walletAddress,
+        dispatch,
+        queryParams.freeBet,
+        history,
+        location.search,
+        setFreeBet,
+        networkId,
+        freeBetFromServer,
+    ]);
 
     useEffect(() => {
         if (queryParams.referralId) {
@@ -127,6 +145,14 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
                     <DappFooter />
                 </Wrapper>
                 <ToastContainer theme={'colored'} />
+                {freeBetFromServer && (
+                    <ClaimFreeBetModal
+                        onClose={() => {
+                            setFreeBetModalParam(undefined);
+                        }}
+                        freeBet={freeBetFromServer}
+                    />
+                )}
             </Background>
         </>
     );
