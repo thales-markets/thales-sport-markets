@@ -131,6 +131,11 @@ const UserStats: React.FC = () => {
         }
     };
 
+    const claimFreeBetButtonVisible =
+        !!freeBet &&
+        !freeBet?.claimSuccess &&
+        (!freeBet.claimAddress || freeBet.claimAddress.toLowerCase() === walletAddress.toLowerCase());
+
     return (
         <>
             <Wrapper>
@@ -241,7 +246,7 @@ const UserStats: React.FC = () => {
                             })}
                     </SectionWrapper>
                 )}
-                {!!freeBet && !freeBet?.claimSuccess && (
+                {claimFreeBetButtonVisible && (
                     <ClaimBetButton
                         onClick={onClaimFreeBet}
                         borderColor="none"

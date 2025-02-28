@@ -105,6 +105,11 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
         networkId,
     ]);
 
+    const claimFreeBetButtonVisible =
+        !!freeBet &&
+        !freeBet?.claimSuccess &&
+        (!freeBet.claimAddress || freeBet.claimAddress.toLowerCase() === walletAddress.toLowerCase());
+
     return (
         <Modal
             customStyle={{
@@ -240,7 +245,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                     </Tooltip>
                 </Container>
                 <Container>
-                    {!!freeBet && !freeBet?.claimSuccess && (
+                    {claimFreeBetButtonVisible && (
                         <ClaimBetButton
                             onClick={onClaimFreeBet}
                             borderColor="none"
