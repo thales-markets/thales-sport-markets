@@ -10,7 +10,6 @@ import useLocalStorage from 'hooks/useLocalStorage';
 import QRCodeModal from 'pages/AARelatedPages/Deposit/components/QRCodeModal';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
-import queryString from 'query-string';
 import React, { useCallback, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -20,6 +19,7 @@ import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { Colors, FlexDivCentered, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { Rates } from 'types/collateral';
+import { FreeBet } from 'types/freeBet';
 import { RootState } from 'types/redux';
 import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateralAddress, getCollateralIndex, getCollaterals } from 'utils/collaterals';
@@ -33,11 +33,7 @@ type FundModalProps = {
 };
 
 const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
-    const queryParams: { freeBet?: string } = queryString.parse(location.search);
-    const [freeBet, setFreeBet] = useLocalStorage<string | undefined>(
-        LOCAL_STORAGE_KEYS.FREE_BET_ID,
-        queryParams.freeBet
-    );
+    const [freeBet, setFreeBet] = useLocalStorage<FreeBet | undefined>(LOCAL_STORAGE_KEYS.FREE_BET_ID, undefined);
     const history = useHistory();
 
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
@@ -101,7 +97,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
         return getOnRamperUrl(apiKey, walletAddress, networkId);
     }, [walletAddress, networkId, apiKey]);
 
-    const onClaimFreeBet = useCallback(() => claimFreeBet(walletAddress, freeBet, networkId, setFreeBet, history), [
+    const onClaimFreeBet = useCallback(() => claimFreeBet(walletAddress, freeBet?.id, networkId, setFreeBet, history), [
         walletAddress,
         freeBet,
         setFreeBet,
@@ -244,7 +240,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                     </Tooltip>
                 </Container>
                 <Container>
-                    {!!freeBet && (
+                    {!!freeBet && !freeBet?.claimSuccess && (
                         <ClaimBetButton
                             onClick={onClaimFreeBet}
                             borderColor="none"

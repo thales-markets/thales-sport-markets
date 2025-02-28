@@ -1,6 +1,7 @@
 import { MultiplierType } from 'enums/overdrop';
 import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
 import useUserMultipliersQuery from 'queries/overdrop/useUserMultipliersQuery';
+import queryString from 'query-string';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -21,6 +22,8 @@ import WelcomeModal from '../WelcomeModal';
 
 const ModalWrapper: React.FC = () => {
     const dispatch = useDispatch();
+
+    const queryParams: { freeBet?: string } = queryString.parse(location.search);
 
     const { address: walletAddress, isConnected } = useAccount();
 
@@ -55,7 +58,7 @@ const ModalWrapper: React.FC = () => {
 
     // Handle welcome modal visibility
     useEffect(() => {
-        if (overdropWelcomeModalFlag == false) {
+        if (overdropWelcomeModalFlag == false && !queryParams.freeBet) {
             setShowWelcomeModal(true);
             dispatch(setWelcomeModalVisibility({ showWelcomeModal: true }));
         }

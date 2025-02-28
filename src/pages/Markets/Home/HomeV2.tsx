@@ -17,6 +17,7 @@ import { groupBy, orderBy } from 'lodash';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
+import queryString from 'query-string';
 import React, { Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
@@ -102,6 +103,8 @@ const Home: React.FC = () => {
     const [availableMarketTypes, setAvailableMarketTypes] = useState<MarketType[]>([]);
     const getSelectedOddsType = localStore.get(LOCAL_STORAGE_KEYS.ODDS_TYPE);
 
+    const queryParams: { freeBet?: string } = queryString.parse(location.search);
+
     const tagsList: Tags = useMemo(
         () =>
             orderBy(
@@ -118,10 +121,10 @@ const Home: React.FC = () => {
     );
 
     useEffect(() => {
-        if (getSelectedOddsType == undefined) {
+        if (getSelectedOddsType == undefined && !queryParams.freeBet) {
             setShowOddsSelectorModal(true);
         }
-    }, [getSelectedOddsType]);
+    }, [getSelectedOddsType, queryParams.freeBet]);
 
     const favouriteLeagues = useSelector(getFavouriteLeagues);
 

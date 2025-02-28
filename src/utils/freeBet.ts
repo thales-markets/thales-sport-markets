@@ -5,12 +5,13 @@ import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { Network } from 'enums/network';
 import { t } from 'i18next';
 import { toast } from 'react-toastify';
+import { FreeBet } from 'types/freeBet';
 
 export const claimFreeBet = async (
     walletAddress: string,
     freeBet: string | undefined,
     networkId: Network,
-    setFreeBet: (betId: string | undefined) => void,
+    setFreeBet: (freeBet: FreeBet | undefined) => void,
     history: any
 ) => {
     const toastId = toast.loading(t('market.toast-message.transaction-pending'));

@@ -98,7 +98,7 @@ const ClaimFreeBetModal: React.FC<ClaimFreeBetModalProps> = ({ freeBet, onClose 
                                     Bet!
                                 </span>
                             </Message>
-                        ) : (
+                        ) : freeBet.claimAddress.toLowerCase() === walletAddress.toLowerCase() ? (
                             <Message>
                                 You just claimed a{' '}
                                 <span>
@@ -106,6 +106,8 @@ const ClaimFreeBetModal: React.FC<ClaimFreeBetModalProps> = ({ freeBet, onClose 
                                     Bet!
                                 </span>
                             </Message>
+                        ) : (
+                            <Message>Bet already claimed!</Message>
                         )}
                         {!walletAddress && <SubMessage>Sign in to Overtime to claim.</SubMessage>}
                     </MainContainer>

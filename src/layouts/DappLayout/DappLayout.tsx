@@ -69,8 +69,15 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
     );
 
     useEffect(() => {
+        if (freeBetFromServer?.claimSuccess) {
+            setFreeBet(undefined);
+            localStorage.removeItem(LOCAL_STORAGE_KEYS.FREE_BET_ID);
+        }
+    }, [freeBetFromServer, setFreeBet]);
+
+    useEffect(() => {
         setTimeout(async () => {
-            if (queryParams.freeBet && freeBetFromServer) {
+            if (queryParams.freeBet && freeBetFromServer && freeBetModalParam) {
                 if (walletRef.current) {
                     navigateTo(ROUTES.Profile);
                 }
@@ -81,7 +88,7 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
                         search: urlSearchParams.toString(),
                     });
                 }
-                setFreeBet(freeBetFromServer);
+                setFreeBet({ ...freeBetFromServer, id: freeBetModalParam });
             }
         }, 2000);
     }, [
@@ -93,6 +100,7 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
         setFreeBet,
         networkId,
         freeBetFromServer,
+        freeBetModalParam,
     ]);
 
     useEffect(() => {
