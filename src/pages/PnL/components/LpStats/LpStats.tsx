@@ -31,7 +31,7 @@ const LpStats: React.FC<LpStatsProps> = ({ round, leagueId, onlyPP }) => {
                     </SubHeader>
                 </SubHeaderWrapper>
                 {lpStats.map((stats, index) => {
-                    const statsName = stats.name === 'CBBTC' ? 'cbBTC' : stats.name;
+                    const statsName = stats.name === 'CBBTC' ? 'cbBTC' : stats.name === 'WBTC' ? 'wBTC' : stats.name;
                     return index === lpStats.length - 1 ? (
                         <Section key={`total-${statsName}-${index}-${networkId}-lp`}>
                             <Label>
@@ -63,7 +63,7 @@ const LpStats: React.FC<LpStatsProps> = ({ round, leagueId, onlyPP }) => {
                     </SubHeader>
                 </SubHeaderWrapper>
                 {lpStats.map((stats, index) => {
-                    const statsName = stats.name === 'CBBTC' ? 'cbBTC' : stats.name;
+                    const statsName = stats.name === 'CBBTC' ? 'cbBTC' : stats.name === 'WBTC' ? 'wBTC' : stats.name;
                     return index === lpStats.length - 1 ? (
                         <Section key={`total-${statsName}-${index}-${networkId}-fees`}>
                             <Label>
@@ -95,7 +95,7 @@ const LpStats: React.FC<LpStatsProps> = ({ round, leagueId, onlyPP }) => {
                     </SubHeader>
                 </SubHeaderWrapper>
                 {lpStats.map((stats, index) => {
-                    const statsName = stats.name === 'CBBTC' ? 'cbBTC' : stats.name;
+                    const statsName = stats.name === 'CBBTC' ? 'cbBTC' : stats.name === 'WBTC' ? 'wBTC' : stats.name;
                     return index === lpStats.length - 1 ? (
                         <Section key={`total-${statsName}-${index}-${networkId}-user`}>
                             <Label>

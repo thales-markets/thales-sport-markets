@@ -45,5 +45,10 @@ export const getRoundWithOffset = (
 };
 
 export const isLpAvailableForNetwork = (networkId: SupportedNetwork, lpCollateral: LiquidityPoolCollateral) =>
-    (networkId === NetworkId.Base && lpCollateral !== LiquidityPoolCollateral.THALES) ||
-    (networkId !== NetworkId.Base && lpCollateral !== LiquidityPoolCollateral.cbBTC);
+    (networkId === NetworkId.Base &&
+        lpCollateral !== LiquidityPoolCollateral.THALES &&
+        lpCollateral !== LiquidityPoolCollateral.wBTC) ||
+    (networkId === NetworkId.Arbitrum && lpCollateral !== LiquidityPoolCollateral.cbBTC) ||
+    (networkId === NetworkId.OptimismMainnet &&
+        lpCollateral !== LiquidityPoolCollateral.cbBTC &&
+        lpCollateral !== LiquidityPoolCollateral.wBTC);

@@ -53,6 +53,10 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
         networkId,
         client,
     });
+    const wbtcLpTicketsQuery = useLpTicketsQuery(LiquidityPoolCollateral.wBTC, round, leagueId, onlyPP, {
+        networkId,
+        client,
+    });
 
     const lpOptions = useMemo(() => {
         const lpOptions = [
@@ -75,6 +79,13 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
             label: networkId === Network.Base ? 'cbBTC' : 'THALES',
         });
 
+        if (networkId === Network.Arbitrum) {
+            lpOptions.push({
+                value: 4,
+                label: 'wBTC',
+            });
+        }
+
         return lpOptions;
     }, [networkId]);
 
@@ -89,13 +100,16 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
             thalesLpTicketsQuery.data &&
             thalesLpTicketsQuery.isSuccess &&
             cbbtcLpTicketsQuery.data &&
-            cbbtcLpTicketsQuery.isSuccess
+            cbbtcLpTicketsQuery.isSuccess &&
+            wbtcLpTicketsQuery.data &&
+            wbtcLpTicketsQuery.isSuccess
         ) {
             lpTickets = [
                 ...(usdcLpTicketsQuery.data || []),
                 ...(wethLpTicketsQuery.data || []),
                 ...(thalesLpTicketsQuery.data || []),
                 ...(cbbtcLpTicketsQuery.data || []),
+                ...(wbtcLpTicketsQuery.data || []),
             ];
         }
 
@@ -144,6 +158,8 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
         thalesLpTicketsQuery.isSuccess,
         usdcLpTicketsQuery.data,
         usdcLpTicketsQuery.isSuccess,
+        wbtcLpTicketsQuery.data,
+        wbtcLpTicketsQuery.isSuccess,
         wethLpTicketsQuery.data,
         wethLpTicketsQuery.isSuccess,
     ]);

@@ -58,6 +58,11 @@ export const LiquidityPoolMap: Record<
             address: '0x9733AB157f5A89f0AD7460d08F869956aE2018dA',
             collateral: CRYPTO_CURRENCY_MAP.THALES as Coins,
         },
+        [LiquidityPoolCollateral.wBTC]: {
+            name: 'wBTC LP',
+            address: '0xbD08D8F8c17C22fb0a12Fe490F38f40c59B60d2A',
+            collateral: CRYPTO_CURRENCY_MAP.wBTC as Coins,
+        },
     },
     [NetworkId.OptimismSepolia]: {
         [LiquidityPoolCollateral.USDC]: {
@@ -83,6 +88,12 @@ export const RoundOffsetMap: Partial<Record<LiquidityPoolCollateral, Record<Supp
         [NetworkId.OptimismMainnet]: 0,
         [NetworkId.Arbitrum]: 0,
         [NetworkId.Base]: 4,
+        [NetworkId.OptimismSepolia]: 0,
+    },
+    [LiquidityPoolCollateral.wBTC]: {
+        [NetworkId.OptimismMainnet]: 0,
+        [NetworkId.Arbitrum]: 27,
+        [NetworkId.Base]: 0,
         [NetworkId.OptimismSepolia]: 0,
     },
 };

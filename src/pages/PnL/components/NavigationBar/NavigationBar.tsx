@@ -30,6 +30,11 @@ const navItems = [
         label: 'cbBTC',
         icon: 'currency-icon currency-icon--cbbtc',
     },
+    {
+        id: PnlTab.WBTC_USERS_PNL,
+        label: 'wBTC',
+        icon: 'currency-icon currency-icon--wbtc',
+    },
     // {
     //     id: PnlTab.USDC_TICKETS,
     //     label: 'USDC TICKETS',
@@ -65,8 +70,13 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ selectedTab, setSelectedT
             {navItems
                 .filter(
                     (item) =>
-                        (networkId === NetworkId.Base && item.id !== PnlTab.THALES_USERS_PNL) ||
-                        (networkId !== NetworkId.Base && item.id !== PnlTab.CBBTC_USERS_PNL)
+                        (networkId === NetworkId.Base &&
+                            item.id !== PnlTab.THALES_USERS_PNL &&
+                            item.id !== PnlTab.WBTC_USERS_PNL) ||
+                        (networkId === NetworkId.Arbitrum && item.id !== PnlTab.CBBTC_USERS_PNL) ||
+                        (networkId === NetworkId.OptimismMainnet &&
+                            item.id !== PnlTab.CBBTC_USERS_PNL &&
+                            item.id !== PnlTab.WBTC_USERS_PNL)
                 )
                 .map((item, index) => {
                     return (

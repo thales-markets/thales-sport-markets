@@ -106,6 +106,7 @@ const useLpStatsQuery = (
                     wethTickets,
                     thalesTickets,
                     cbbtcTickets,
+                    wbtcTickets,
                     currencies,
                     rates,
                     thalesPriceResponse,
@@ -124,11 +125,16 @@ const useLpStatsQuery = (
                               getRoundWithOffset(round, networkConfig.networkId, LiquidityPoolCollateral.THALES),
                           ])
                         : [],
-
                     isLpAvailableForNetwork(networkConfig.networkId, LiquidityPoolCollateral.cbBTC)
                         ? liquidityPoolDataContract.read.getRoundTickets([
                               getLpAddress(networkConfig.networkId, LiquidityPoolCollateral.cbBTC),
                               getRoundWithOffset(round, networkConfig.networkId, LiquidityPoolCollateral.cbBTC),
+                          ])
+                        : [],
+                    isLpAvailableForNetwork(networkConfig.networkId, LiquidityPoolCollateral.wBTC)
+                        ? liquidityPoolDataContract.read.getRoundTickets([
+                              getLpAddress(networkConfig.networkId, LiquidityPoolCollateral.wBTC),
+                              getRoundWithOffset(round, networkConfig.networkId, LiquidityPoolCollateral.wBTC),
                           ])
                         : [],
                     priceFeedContract.read.getCurrencies(),
@@ -145,6 +151,7 @@ const useLpStatsQuery = (
                     }
                     if (currencyName === CRYPTO_CURRENCY_MAP.BTC) {
                         exchangeRates[`cb${currencyName}`] = bigNumberFormatter(rates[idx]);
+                        exchangeRates[`w${currencyName}`] = bigNumberFormatter(rates[idx]);
                     }
                 });
                 exchangeRates['THALES'] = Number(thalesPriceResponse.data);
@@ -185,6 +192,15 @@ const useLpStatsQuery = (
                     onlyPP,
                     LiquidityPoolCollateral.cbBTC
                 );
+                const wbtcLpStats = await getLpStats(
+                    Array.isArray(wbtcTickets) ? wbtcTickets : [wbtcTickets],
+                    sportsAMMDataContract,
+                    networkConfig.networkId,
+                    exchangeRates,
+                    leagueId,
+                    onlyPP,
+                    LiquidityPoolCollateral.wBTC
+                );
 
                 const totalLpStats: LpStats = {
                     name: 'TOTAL',
@@ -192,27 +208,32 @@ const useLpStatsQuery = (
                         usdcLpStats.numberOfTickets +
                         wethLpStats.numberOfTickets +
                         thalesLpStats.numberOfTickets +
-                        cbbtcLpStats.numberOfTickets,
+                        cbbtcLpStats.numberOfTickets +
+                        wbtcLpStats.numberOfTickets,
                     pnl:
                         usdcLpStats.pnlInUsd +
                         wethLpStats.pnlInUsd +
                         thalesLpStats.pnlInUsd +
-                        cbbtcLpStats.numberOfTickets,
+                        cbbtcLpStats.pnlInUsd +
+                        wbtcLpStats.pnlInUsd,
                     fees:
                         usdcLpStats.feesInUsd +
                         wethLpStats.feesInUsd +
                         thalesLpStats.feesInUsd +
-                        cbbtcLpStats.numberOfTickets,
+                        cbbtcLpStats.feesInUsd +
+                        wbtcLpStats.feesInUsd,
                     pnlInUsd:
                         usdcLpStats.pnlInUsd +
                         wethLpStats.pnlInUsd +
                         thalesLpStats.pnlInUsd +
-                        cbbtcLpStats.numberOfTickets,
+                        cbbtcLpStats.pnlInUsd +
+                        wbtcLpStats.pnlInUsd,
                     feesInUsd:
                         usdcLpStats.feesInUsd +
                         wethLpStats.feesInUsd +
                         thalesLpStats.feesInUsd +
-                        cbbtcLpStats.numberOfTickets,
+                        cbbtcLpStats.feesInUsd +
+                        wbtcLpStats.feesInUsd,
                 };
 
                 const lpStats = [usdcLpStats, wethLpStats];
@@ -221,6 +242,9 @@ const useLpStatsQuery = (
                 }
                 if (isLpAvailableForNetwork(networkConfig.networkId, LiquidityPoolCollateral.cbBTC)) {
                     lpStats.push(cbbtcLpStats);
+                }
+                if (isLpAvailableForNetwork(networkConfig.networkId, LiquidityPoolCollateral.wBTC)) {
+                    lpStats.push(wbtcLpStats);
                 }
                 lpStats.push(totalLpStats);
 
