@@ -7,6 +7,7 @@ export enum ProfileTab {
     TRANSACTION_HISTORY = 'transaction-history',
     LP = 'lp',
     ACCOUNT = 'account',
+    STATS = 'user-stats',
 }
 
 export enum PnlTab {

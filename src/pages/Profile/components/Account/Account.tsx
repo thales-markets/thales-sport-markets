@@ -1,6 +1,7 @@
 import FundModal from 'components/FundOvertimeAccountModal';
 import SwapModal from 'components/SwapModal/SwapModal';
-import { COLLATERAL_ICONS, OVER_SIGH, USD_SIGN } from 'constants/currency';
+import Tooltip from 'components/Tooltip';
+import { COLLATERAL_ICONS, USD_SIGN } from 'constants/currency';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
@@ -17,7 +18,6 @@ import {
     FlexDivColumnStart,
     FlexDivEnd,
     FlexDivSpaceBetween,
-    FlexDivStart,
 } from 'styles/common';
 import { formatCurrencyWithKey, formatCurrencyWithSign, localStore } from 'thales-utils';
 import { Rates } from 'types/collateral';
@@ -129,8 +129,8 @@ const Account: React.FC = () => {
     const OverBalance = useMemo(() => {
         if (multipleCollateralBalances.data && exchangeRates) {
             return {
-                balance: multipleCollateralBalances.data['OVER'],
-                value: multipleCollateralBalances.data['OVER'] * exchangeRates['OVER'],
+                balance: multipleCollateralBalances.data['THALES'],
+                value: multipleCollateralBalances.data['THALES'] * exchangeRates['THALES'],
             };
         }
 
@@ -163,20 +163,21 @@ const Account: React.FC = () => {
                 </FlexDivEnd>
             </Header>
             <Container>
-                <FlexDivStart>
-                    <FlexDivCentered>
-                        <OverToken />
-                    </FlexDivCentered>
+                <OverBalanceWrapper>
                     <FlexDivColumnCentered gap={4}>
-                        <FlexDivSpaceBetween>
-                            <Label2> {formatCurrencyWithKey(OVER_SIGH, OverBalance.balance, 2)}</Label2>
-                            <Value2>{formatCurrencyWithSign(USD_SIGN, OverBalance.value, 2)}</Value2>
-                        </FlexDivSpaceBetween>
-                        <FlexDivCentered>
-                            <YellowValue2>{t('profile.account-summary.best-odds')}</YellowValue2>
-                        </FlexDivCentered>
+                        <Tooltip overlay={t('profile.account-summary.best-odds')}>
+                            <FlexDivSpaceBetween>
+                                <Label2>
+                                    {OverBalance.balance === 0
+                                        ? `N/A`
+                                        : formatCurrencyWithKey('', OverBalance.balance, 2)}
+                                    <OverTokenIcon />
+                                </Label2>
+                                <Value2>{formatCurrencyWithSign(USD_SIGN, OverBalance.value, 2)}</Value2>
+                            </FlexDivSpaceBetween>
+                        </Tooltip>
                     </FlexDivColumnCentered>
-                </FlexDivStart>
+                </OverBalanceWrapper>
 
                 <ButtonContainer>
                     <Button onClick={() => setShowSwapModal(true)}>{t('profile.account-summary.swap')}</Button>
@@ -263,6 +264,9 @@ const Value = styled(AlignedParagraph)`
     font-size: 24px;
     font-weight: 700;
     white-space: pre;
+    @media (max-width: 575px) {
+        font-size: 20px;
+    }
 `;
 
 const GrayLabel = styled(Label)`
@@ -279,21 +283,37 @@ const ParlayIcon = styled.i.attrs({ className: 'icon icon--parlay' })`
 
 const Label2 = styled(AlignedParagraph)`
     color: ${(props) => props.theme.textColor.primary};
-    font-size: 18px;
+    font-size: 28px;
     font-weight: 500;
     white-space: pre;
+    @media (max-width: 575px) {
+        font-size: 20px;
+    }
+`;
+
+const OverTokenIcon = styled(OverToken)`
+    margin-left: 2px;
+    width: 40px;
+    height: 30px;
+    @media (max-width: 575px) {
+        width: 30px;
+        height: 20px;
+    }
 `;
 
 const Value2 = styled(AlignedParagraph)`
     color: ${(props) => props.theme.textColor.quaternary};
-    font-size: 18px;
+    font-size: 28px;
     font-weight: 700;
     white-space: pre;
+    @media (max-width: 575px) {
+        font-size: 20px;
+    }
 `;
 
-const YellowValue2 = styled(Value2)`
-    font-size: 14px;
-    color: ${(props) => props.theme.overdrop.textColor.primary};
+const OverBalanceWrapper = styled(FlexDivSpaceBetween)`
+    width: 100%;
+    margin-right: 20px;
 `;
 
 const Button = styled(FlexDivCentered)<{ active?: boolean }>`

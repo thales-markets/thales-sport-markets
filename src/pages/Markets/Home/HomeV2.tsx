@@ -888,8 +888,8 @@ const Home: React.FC = () => {
 const Container = styled(FlexDivColumnCentered)`
     width: 100%;
     margin-top: 15px;
-    @media (max-width: 767px) {
-        margin-top: 10px;
+    @media (max-width: 950px) {
+        margin-top: 0;
     }
 `;
 
