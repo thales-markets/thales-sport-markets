@@ -18,6 +18,13 @@ const QUERY_KEYS = {
         lines: string
     ) => ['sportMarketsV2', statusFilter, networkId, includeProofs, gameIds, typeIds, playerIds, lines],
     LiveSportMarkets: (networkId: Network) => ['liveSportMarkets', networkId],
+    SgpData: (networkId: Network, gameId: string, params: string) => ['sgpData', networkId, gameId, params],
+    SportMarketSgp: (networkId: Network, gameId: string, params: string) => [
+        'sportMarketSgp',
+        networkId,
+        gameId,
+        params,
+    ],
     SportMarketV2: (address: string, networkId: Network, isLive: boolean) => [
         'sportMarketV2',
         address,
@@ -25,15 +32,33 @@ const QUERY_KEYS = {
         isLive,
     ],
     SportsAmmData: (networkId: Network) => ['sportsAmmData', networkId],
+    SportsAmmRiskManager: (networkId: Network, league: League) => ['sportsAmmRiskManager', networkId, league],
     TicketLiquidity: (
+        networkId: Network,
+        isSystemBet: boolean,
+        systemBetDenominator: number,
+        isSgp: boolean,
+        sgpQuote: number,
         gameIds: string,
         typeIds: string,
         playerIds: string,
         lines: string,
         positions: string,
-        lives: string,
-        networkId: Network
-    ) => ['ticketLiquidity', gameIds, typeIds, playerIds, lines, positions, lives, networkId],
+        lives: string
+    ) => [
+        'ticketLiquidity',
+        networkId,
+        isSystemBet,
+        systemBetDenominator,
+        isSgp,
+        sgpQuote,
+        gameIds,
+        typeIds,
+        playerIds,
+        lines,
+        positions,
+        lives,
+    ],
     LiveTradingProcessorData: (networkId: Network) => ['liveTradingProcessorData', networkId],
     ClaimableCountV2: (walletAddress: string, networkId: Network) => ['claimable', 'countV2', walletAddress, networkId],
     Wallet: {

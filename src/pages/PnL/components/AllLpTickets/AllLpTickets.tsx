@@ -3,6 +3,7 @@ import SelectInput from 'components/SelectInput';
 import { hoursToMilliseconds } from 'date-fns';
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 import { League } from 'enums/sports';
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import { t } from 'i18next';
 import { orderBy } from 'lodash';
 import useLpTicketsQuery from 'queries/pnl/useLpTicketsQuery';
@@ -50,6 +51,7 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
     const [lp, setLp] = useState<number>(0);
     const [showOnlyOpenTickets, setShowOnlyOpenTickets] = useState<boolean>(false);
     const [showOnlyLiveTickets, setShowOnlyLiveTickets] = useState<boolean>(false);
+    const [showOnlySgpTickets, setShowOnlySgpTickets] = useState<boolean>(false);
     const [showOnlyPendingTickets, setShowOnlyPendingTickets] = useState<boolean>(false);
     const [showOnlySystemBets, setShowOnlySystemBets] = useState<boolean>(false);
     const [showOnlyUnresolved, setShowOnlyUnresolved] = useState<boolean>(false);
@@ -93,6 +95,7 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
                     ((lp !== 0 && ticket.collateral === lpOptions.find((lpOption) => lpOption.value === lp)?.label) ||
                         lp === 0) &&
                     ((ticket.isLive && showOnlyLiveTickets) || !showOnlyLiveTickets) &&
+                    ((ticket.isSgp && showOnlySgpTickets) || !showOnlySgpTickets) &&
                     ((ticket.isOpen &&
                         ticket.sportMarkets.length === 1 &&
                         ticket.sportMarkets.some(
@@ -119,6 +122,7 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
     }, [
         lp,
         showOnlyLiveTickets,
+        showOnlySgpTickets,
         showOnlyOpenTickets,
         showOnlyPendingTickets,
         showOnlySystemBets,
@@ -134,38 +138,58 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
     return (
         <>
             <CheckboxContainer>
-                <Checkbox
-                    checked={showOnlyOpenTickets}
-                    value={showOnlyOpenTickets.toString()}
-                    onChange={(e: any) => setShowOnlyOpenTickets(e.target.checked || false)}
-                    label={t(`liquidity-pool.user-transactions.only-open-tickets${isMobile ? '-short' : ''}`)}
-                />
-                <Checkbox
-                    checked={showOnlyLiveTickets}
-                    value={showOnlyLiveTickets.toString()}
-                    onChange={(e: any) => setShowOnlyLiveTickets(e.target.checked || false)}
-                    label={t(`liquidity-pool.user-transactions.only-live-tickets${isMobile ? '-short' : ''}`)}
-                />
-                <Checkbox
-                    checked={showOnlyPendingTickets}
-                    value={showOnlyPendingTickets.toString()}
-                    onChange={(e: any) => setShowOnlyPendingTickets(e.target.checked || false)}
-                    label={t(`liquidity-pool.user-transactions.only-pending-tickets${isMobile ? '-short' : ''}`)}
-                />
+                <CheckboxWrapper>
+                    <Checkbox
+                        checked={showOnlyOpenTickets}
+                        value={showOnlyOpenTickets.toString()}
+                        onChange={(e: any) => setShowOnlyOpenTickets(e.target.checked || false)}
+                        label={t(`liquidity-pool.user-transactions.only-open-tickets${isMobile ? '-short' : ''}`)}
+                    />
+                </CheckboxWrapper>
+                <CheckboxWrapper>
+                    <Checkbox
+                        checked={showOnlyLiveTickets}
+                        value={showOnlyLiveTickets.toString()}
+                        onChange={(e: any) => setShowOnlyLiveTickets(e.target.checked || false)}
+                        label={t(`liquidity-pool.user-transactions.only-live-tickets${isMobile ? '-short' : ''}`)}
+                    />
+                </CheckboxWrapper>
+                <CheckboxWrapper>
+                    <Checkbox
+                        checked={showOnlyPendingTickets}
+                        value={showOnlyPendingTickets.toString()}
+                        onChange={(e: any) => setShowOnlyPendingTickets(e.target.checked || false)}
+                        label={t(`liquidity-pool.user-transactions.only-pending-tickets${isMobile ? '-short' : ''}`)}
+                    />
+                </CheckboxWrapper>
             </CheckboxContainer>
             <CheckboxContainer>
-                <Checkbox
-                    checked={showOnlySystemBets}
-                    value={showOnlySystemBets.toString()}
-                    onChange={(e: any) => setShowOnlySystemBets(e.target.checked || false)}
-                    label={t(`liquidity-pool.user-transactions.only-system-bets`)}
-                />
-                <Checkbox
-                    checked={showOnlyUnresolved}
-                    value={showOnlyUnresolved.toString()}
-                    onChange={(e: any) => setShowOnlyUnresolved(e.target.checked || false)}
-                    label={t(`liquidity-pool.user-transactions.only-unresolved`, { hours: UNRESOLVED_PERIOD_IN_HOURS })}
-                />
+                <CheckboxWrapper>
+                    <Checkbox
+                        checked={showOnlySystemBets}
+                        value={showOnlySystemBets.toString()}
+                        onChange={(e: any) => setShowOnlySystemBets(e.target.checked || false)}
+                        label={t(`liquidity-pool.user-transactions.only-system-bets`)}
+                    />
+                </CheckboxWrapper>
+                <CheckboxWrapper>
+                    <Checkbox
+                        checked={showOnlySgpTickets}
+                        value={showOnlySgpTickets.toString()}
+                        onChange={(e: any) => setShowOnlySgpTickets(e.target.checked || false)}
+                        label={t(`liquidity-pool.user-transactions.only-sgp-tickets${isMobile ? '-short' : ''}`)}
+                    />
+                </CheckboxWrapper>
+                <CheckboxWrapper>
+                    <Checkbox
+                        checked={showOnlyUnresolved}
+                        value={showOnlyUnresolved.toString()}
+                        onChange={(e: any) => setShowOnlyUnresolved(e.target.checked || false)}
+                        label={t(`liquidity-pool.user-transactions.only-unresolved`, {
+                            hours: UNRESOLVED_PERIOD_IN_HOURS,
+                        })}
+                    />
+                </CheckboxWrapper>
             </CheckboxContainer>
             <FlexDivSpaceBetween>
                 <ExpandAllContainer onClick={() => setExpandAll(!expandAll)}>
@@ -211,16 +235,27 @@ const SelectContainer = styled.div`
     width: 150px;
 `;
 
+const CheckboxWrapper = styled.div`
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        margin-bottom: 5px;
+    }
+`;
+
 const CheckboxContainer = styled(FlexDivSpaceBetween)`
     label {
         align-self: center;
         font-size: 18px;
         text-transform: none;
     }
-    @media (max-width: 575px) {
-        font-size: 14px;
-    }
     margin-bottom: 10px;
+
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        font-size: 14px;
+        flex-direction: column;
+        align-items: start;
+        justify-content: start;
+        margin-bottom: 0;
+    }
 `;
 
 const ArrowIcon = styled.i`

@@ -7,7 +7,11 @@ import { getSportFilter, getTagFilter, setTagFilter } from 'redux/modules/market
 import { RootState } from 'types/redux';
 import { Breadcrumb, BreadcrumbsContainer } from './styled-components';
 
-const Breadcrumbs: React.FC = () => {
+type BreadcrumbsProps = {
+    setTagParam: (param: string) => void;
+};
+
+const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ setTagParam }) => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
     const sportFilter = useSelector((state: RootState) => getSportFilter(state));
@@ -20,6 +24,7 @@ const Breadcrumbs: React.FC = () => {
                 onClick={() => {
                     if (sportFilter !== SportFilter.PlayerProps) {
                         dispatch(setTagFilter([]));
+                        setTagParam('');
                     }
                 }}
             >

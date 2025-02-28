@@ -45,7 +45,11 @@ import {
     Wrapper,
 } from './styled-components';
 
-const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean }> = ({ market, isLive }) => {
+const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean; isSgp: boolean }> = ({
+    market,
+    isLive,
+    isSgp,
+}) => {
     const theme: ThemeInterface = useTheme();
     const isMobile = useSelector(getIsMobile);
     const selectedOddsType = useSelector(getOddsType);
@@ -140,7 +144,7 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean }> =
                 <MarketTypeInfo>{getTitleText(market)}</MarketTypeInfo>
                 <PositionInfo>
                     <PositionText>{getPositionTextV2(market, market.position, true)}</PositionText>
-                    <Odd>{formatMarketOdds(selectedOddsType, parlayItemQuote)}</Odd>
+                    {!isSgp && <Odd>{formatMarketOdds(selectedOddsType, parlayItemQuote)}</Odd>}
                 </PositionInfo>
             </SelectionInfoContainer>
             {market.isCancelled ? (

@@ -35,9 +35,15 @@ type TicketMarketRowProps = {
     ticketMarket: TicketMarket;
     isCurrentMarket: boolean;
     isWitelistedForResolve: boolean;
+    isSgp: boolean;
 };
 
-const TicketMarketRow: React.FC<TicketMarketRowProps> = ({ ticketMarket, isCurrentMarket, isWitelistedForResolve }) => {
+const TicketMarketRow: React.FC<TicketMarketRowProps> = ({
+    ticketMarket,
+    isCurrentMarket,
+    isWitelistedForResolve,
+    isSgp,
+}) => {
     const language = i18n.language;
     const theme: ThemeInterface = useTheme();
     const isMobile = useSelector(getIsMobile);
@@ -66,7 +72,7 @@ const TicketMarketRow: React.FC<TicketMarketRowProps> = ({ ticketMarket, isCurre
                 <MarketTypeInfo>{getTitleText(ticketMarket)}</MarketTypeInfo>
                 <PositionInfo>
                     <PositionText>{getPositionTextV2(ticketMarket, ticketMarket.position, true)}</PositionText>
-                    <Odd>{formatMarketOdds(selectedOddsType, getTicketMarketOdd(ticketMarket))}</Odd>
+                    {!isSgp && <Odd>{formatMarketOdds(selectedOddsType, getTicketMarketOdd(ticketMarket))}</Odd>}
                 </PositionInfo>
             </SelectionInfoContainer>
             <MarketStatus

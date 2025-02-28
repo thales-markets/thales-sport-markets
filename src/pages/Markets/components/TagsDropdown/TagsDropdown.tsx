@@ -1,4 +1,5 @@
 import { SportFilter } from 'enums/markets';
+import { Sport } from 'enums/sports';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,15 +11,15 @@ import { FlexDivCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { TagInfo, Tags } from 'types/markets';
 import { getLeagueFlagSource } from 'utils/images';
 import { getScrollMainContainerToTop } from 'utils/scroll';
+import { getSportLeagueIds } from 'utils/sports';
 import IncentivizedLeague from '../../../../components/IncentivizedLeague';
 import { LeagueMap } from '../../../../constants/sports';
-import { getSportLeagueIds } from 'utils/sports';
-import { Sport } from 'enums/sports';
 
 type TagsDropdownProps = {
     open: boolean;
     tags: Tags;
     tagFilter: Tags;
+    setSportParam: (param: SportFilter) => void;
     setTagFilter: any;
     setTagParam: any;
     openMarketsCountPerTag: any;
@@ -33,6 +34,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
     open,
     tags,
     tagFilter,
+    setSportParam,
     setTagFilter,
     setTagParam,
     openMarketsCountPerTag,
@@ -123,6 +125,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                 if (tagFilterIds.includes(tag.id)) {
                                                     if (sportFilter !== sport) {
                                                         dispatch(setSportFilter(sport));
+                                                        setSportParam(sport);
                                                         setTagFilter([tag]);
                                                         setTagParam([tag].map((tagInfo) => tagInfo.label).toString());
                                                     } else {
@@ -152,6 +155,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                     } else {
                                                         if (sportFilter !== sport) {
                                                             dispatch(setSportFilter(sport));
+                                                            setSportParam(sport);
                                                             setTagFilter([tag]);
                                                             setTagParam(
                                                                 [tag].map((tagInfo) => tagInfo.label).toString()

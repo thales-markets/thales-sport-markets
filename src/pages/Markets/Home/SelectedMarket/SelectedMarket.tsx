@@ -19,8 +19,8 @@ import TicketTransactions from '../../Market/MarketDetailsV2/components/TicketTr
 import Header from '../Header';
 import SelectedMarketDetails from '../SelectedMarketDetails';
 
-const SelectedMarket: React.FC<{ market: SportMarket | undefined }> = memo(
-    ({ market }) => {
+const SelectedMarket: React.FC<{ market: SportMarket | undefined; isLoading: boolean }> = memo(
+    ({ market, isLoading }) => {
         const dispatch = useDispatch();
         const isMobile = useSelector(getIsMobile);
         const sportFilter = useSelector(getSportFilter);
@@ -86,7 +86,7 @@ const SelectedMarket: React.FC<{ market: SportMarket | undefined }> = memo(
                 {market ? (
                     !isMarketPaused ? (
                         <>
-                            <SelectedMarketDetails market={market} />
+                            <SelectedMarketDetails market={market} isLoading={isLoading} />
                             {isMobile && <TicketTransactions market={market} isOnSelectedMarket />}
                         </>
                     ) : (

@@ -1,4 +1,4 @@
-export type RiskManagementData = RiskManagementLeaguesAndTypes | RiskManagementBookmakers | {};
+export type RiskManagementData = RiskManagementLeaguesAndTypes | RiskManagementBookmakers | object;
 
 export type RiskManagementLeaguesAndTypes = {
     leagues: RiskManagementLeague[];
@@ -20,4 +20,8 @@ type RiskManagementBookmaker = {
     primaryBookmaker: string;
     secondaryBookmaker: string;
     tertiaryBookmaker: string;
+};
+
+export type SportsAmmRiskManagerData = {
+    sgpOnLeagueIdEnabled: boolean;
 };
