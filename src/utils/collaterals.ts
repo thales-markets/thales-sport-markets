@@ -55,6 +55,7 @@ export const isLpSupported = (currencyKey: Coins) => {
         currencyKey === CRYPTO_CURRENCY_MAP.USDC ||
         currencyKey === CRYPTO_CURRENCY_MAP.WETH ||
         currencyKey === CRYPTO_CURRENCY_MAP.ETH ||
+        currencyKey === CRYPTO_CURRENCY_MAP.cbBTC ||
         isThalesCurrency(currencyKey)
     );
 };
