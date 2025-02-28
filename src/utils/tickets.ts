@@ -9,11 +9,11 @@ import { SupportedNetwork } from 'types/network';
 import futuresPositionNamesMap from '../assets/json/futuresPositionNamesMap.json';
 import positionNamesMap from '../assets/json/positionNamesMap.json';
 import { CRYPTO_CURRENCY_MAP } from '../constants/currency';
-import { THALES_ADDED_PAYOUT_PERCENTAGE } from '../constants/markets';
+import { OVER_ADDED_PAYOUT_PERCENTAGE } from '../constants/markets';
 import { UFC_LEAGUE_IDS } from '../constants/sports';
 import { League } from '../enums/sports';
 import { TicketMarketStatus } from '../enums/tickets';
-import { getCollateralByAddress } from './collaterals';
+import { getCollateralByAddress, isOverCurrency } from './collaterals';
 import freeBetHolder from './contracts/freeBetHolder';
 import stakingThalesBettingProxy from './contracts/stakingThalesBettingProxy';
 import {
@@ -240,8 +240,8 @@ export const formatTicketOdds = (oddsType: OddsType, paid: number, payout: numbe
 export const getTicketMarketOdd = (market: TicketMarket) => (market.isCancelled ? 1 : market.odd);
 
 export const getAddedPayoutOdds = (currencyKey: Coins, odds: number) =>
-    currencyKey === CRYPTO_CURRENCY_MAP.THALES || currencyKey === CRYPTO_CURRENCY_MAP.sTHALES
-        ? odds / (1 + THALES_ADDED_PAYOUT_PERCENTAGE - THALES_ADDED_PAYOUT_PERCENTAGE * odds)
+    isOverCurrency(currencyKey)
+        ? odds / (1 + OVER_ADDED_PAYOUT_PERCENTAGE - OVER_ADDED_PAYOUT_PERCENTAGE * odds)
         : odds;
 
 // Order asc: 1,2,3,4; desc: 4,3,2,1;

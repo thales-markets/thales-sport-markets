@@ -18,12 +18,15 @@ import useBlockedGamesQuery from 'queries/resolveBlocker/useBlockedGamesQuery';
 import useWhitelistedForUnblock from 'queries/resolveBlocker/useWhitelistedForUnblock';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
+import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
 import { getNetworkIconClassNameByNetworkId, getNetworkNameByNetworkId } from 'utils/network';
 import { buildHref } from 'utils/routes';
-import { useAccount, useChainId, useClient } from 'wagmi';
+import { useAccount, useChainId, useClient, useDisconnect } from 'wagmi';
 import {
     ButtonWrapper,
     CloseIcon,
@@ -49,8 +52,9 @@ type NavMenuMobileProps = {
 const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVisibility }) => {
     const { t } = useTranslation();
     const location = useLocation();
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const theme: ThemeInterface = useTheme();
-
+    const { disconnect } = useDisconnect();
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
@@ -113,7 +117,7 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                 <ItemsContainer>
                     {NAV_MENU_FIRST_SECTION.map((item, index) => {
                         if (!item.supportedNetworks.includes(networkId)) return;
-                        if (item.name == 'profile' && !isConnected) return;
+                        if (item.name == 'profile') return;
                         if (item.name == 'resolve-blocker' && !isWitelistedForUnblock) return;
                         return (
                             <SPAAnchor key={index} href={buildHref(item.route)}>
@@ -123,7 +127,7 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                                     onClick={() => setNavMenuVisibility(false)}
                                 >
                                     {isConnected && item.name == 'profile' ? (
-                                        <ProfileIconWidget avatarSize={25} iconColor={theme.textColor.primary} />
+                                        <ProfileIconWidget avatarSize={25} color={theme.textColor.primary} />
                                     ) : (
                                         <>
                                             {item.name == 'resolve-blocker' && blockedGamesCount > 0 && (
@@ -137,7 +141,7 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                                             />
                                         </>
                                     )}
-                                    <NavLabel>{t(item.i18label)}</NavLabel>
+                                    <NavLabel>{!isBiconomy ? t(item.i18label) : t(item.i18labelSmart as any)}</NavLabel>
                                 </ItemContainer>
                             </SPAAnchor>
                         );
@@ -174,6 +178,10 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                             </SPAAnchor>
                         );
                     })}
+                    <ItemContainer onClick={() => setOpenFreeBetModal(true)}>
+                        <NavIcon className={`icon icon--gift`} />
+                        <NavLabel>{t('profile.send-free-bet')}</NavLabel>
+                    </ItemContainer>
                     <Separator />
                     {NAV_MENU_FOURTH_SECTION.map((item, index) => {
                         if (!item.supportedNetworks.includes(networkId)) return;
@@ -190,17 +198,19 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                             </SPAAnchor>
                         );
                     })}
-                    <ButtonWrapper>
-                        <Button
-                            borderColor={theme.button.borderColor.secondary}
-                            backgroundColor="transparent"
-                            textColor={theme.button.textColor.quaternary}
-                            width="100%"
-                            onClick={() => setOpenFreeBetModal(!openFreeBetModal)}
-                        >
-                            {t('profile.send-free-bet')}
-                        </Button>
-                    </ButtonWrapper>
+                    {isConnected && (
+                        <ButtonWrapper>
+                            <Button
+                                borderColor={theme.button.borderColor.secondary}
+                                backgroundColor="transparent"
+                                textColor={theme.button.textColor.quaternary}
+                                width="100%"
+                                onClick={() => disconnect()}
+                            >
+                                {t('markets.nav-menu.buttons.disconnect')}
+                            </Button>
+                        </ButtonWrapper>
+                    )}
                 </ItemsContainer>
 
                 <FooterContainer>

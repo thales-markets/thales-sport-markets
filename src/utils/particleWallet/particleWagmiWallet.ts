@@ -1,10 +1,16 @@
-import { ConnectParam, EIP1193Provider } from '@particle-network/auth-core';
-import type { EVMProvider } from '@particle-network/auth-core-modal/dist/context/evmProvider';
-import { ChainNotConfiguredError, createConnector } from '@wagmi/core';
-import { ProviderRpcErrorType, SwitchChainError, UserRejectedRequestError, getAddress, numberToHex } from 'viem';
+import { EVMProvider } from '@particle-network/authkit';
+import { ChainNotConfiguredError, ConnectParameters, createConnector } from '@wagmi/core';
+import {
+    EIP1193Provider,
+    ProviderRpcErrorType,
+    SwitchChainError,
+    UserRejectedRequestError,
+    getAddress,
+    numberToHex,
+} from 'viem';
 
 particleWagmiWallet.type = 'particleWallet' as const;
-export function particleWagmiWallet(param: ConnectParam & { socialType: string; id: string }) {
+export function particleWagmiWallet(param: ConnectParameters & { socialType: string; id: string }) {
     type Provider = EIP1193Provider;
     type Properties = any;
 
@@ -16,7 +22,7 @@ export function particleWagmiWallet(param: ConnectParam & { socialType: string; 
             async connect({ chainId }: { chainId: number }) {
                 try {
                     const provider = await this.getProvider();
-                    const accounts = (await (provider as EVMProvider).connect(param)).map((x) => getAddress(x));
+                    const accounts = (await (provider as EVMProvider).connect(param as any)).map((x) => getAddress(x));
 
                     provider.on('accountsChanged', this.onAccountsChanged);
                     provider.on('chainChanged', this.onChainChanged);
