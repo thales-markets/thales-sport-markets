@@ -209,36 +209,36 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                 </WalletContainer>
 
                 <Container>
-                    <Box
+                    <ButtonLocal
                         onClick={() => {
                             window.open(onramperUrl, '_blank');
                         }}
                     >
-                        <FieldHeader>{t('get-started.fund-account.buy-crypto')}</FieldHeader>
+                        <ButtonText>{t('get-started.fund-account.buy-crypto')}</ButtonText>
                         <Icon className="icon icon--card" />
-                    </Box>
+                    </ButtonLocal>
                     <Tooltip
                         customIconStyling={{ color: theme.textColor.secondary }}
                         overlay={t('get-started.fund-account.tooltip-4')}
                     >
-                        <Box
+                        <ButtonLocal
                             disabled={totalBalanceValue === 0}
                             onClick={() => {
                                 totalBalanceValue > 0 && setShowDepositFromWallet(!showDepositFromWallet);
                             }}
                         >
-                            <FieldHeader>{t('get-started.fund-account.from-wallet')}</FieldHeader>
+                            <ButtonText>{t('get-started.fund-account.from-wallet')}</ButtonText>
                             <Icon className="icon icon--wallet-connected" />
-                        </Box>
+                        </ButtonLocal>
                     </Tooltip>
                     <Tooltip
                         customIconStyling={{ color: theme.textColor.secondary }}
                         overlay={t('get-started.fund-account.tooltip-3')}
                     >
-                        <Box disabled>
-                            <FieldHeader>{t('get-started.fund-account.from-exchange')}</FieldHeader>
+                        <ButtonLocal disabled>
+                            <ButtonText>{t('get-started.fund-account.from-exchange')}</ButtonText>
                             <Icon className="icon icon--affiliate" />
-                        </Box>
+                        </ButtonLocal>
                     </Tooltip>
                 </Container>
                 <Container>
@@ -302,6 +302,14 @@ const FieldHeader = styled.p`
     white-space: pre;
 `;
 
+const ButtonText = styled.p`
+    font-size: 16px;
+
+    font-weight: 600;
+    line-height: 16px;
+    white-space: pre;
+`;
+
 const FieldDesc = styled.p`
     font-size: 12px;
     font-weight: 600;
@@ -347,19 +355,6 @@ const WalletContainer = styled(FlexDivColumnCentered)`
     gap: 14px;
 `;
 
-const Box = styled(FlexDivCentered)<{ disabled?: boolean }>`
-    border: 1px solid ${(props) => props.theme.textColor.secondary};
-    border-radius: 8px;
-    padding: 14px;
-    gap: 14px;
-    justify-content: space-between;
-    min-width: 200px;
-    height: 60px;
-    width: 100%;
-    cursor: pointer;
-    opacity: ${(props) => (props.disabled ? 0.5 : 1)};
-`;
-
 const Field = styled.div`
     height: 44px;
     background: ${(props) => props.theme.textColor.primary};
@@ -403,7 +398,6 @@ const QRIcon = styled.i`
 const Icon = styled.i`
     font-weight: 400;
     font-size: 20px;
-    color: ${(props) => props.theme.textColor.quaternary};
 `;
 
 const CollateralText = styled.p`
@@ -466,6 +460,42 @@ const ClaimBetButton = styled(Button)`
             }
         }
     }
+`;
+
+const ButtonLocal = styled(FlexDivCentered)<{ disabled?: boolean }>`
+    border-radius: 8px;
+    width: 100%;
+    height: 54px;
+    border: 1px ${(props) => props.theme.borderColor.primary} solid;
+    color: ${(props) => props.theme.textColor.primary};
+    gap: 8px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    text-transform: uppercase;
+    cursor: pointer;
+
+    white-space: pre;
+    padding: 3px 24px;
+    @media (max-width: 575px) {
+        font-size: 12px;
+        padding: 3px 12px;
+    }
+
+    i {
+        color: ${(props) => props.theme.textColor.quaternary};
+    }
+
+    &:hover {
+        background-color: ${(props) => props.theme.connectWalletModal.hover};
+        color: ${(props) => props.theme.button.textColor.primary};
+        i {
+            color: ${(props) => props.theme.button.textColor.primary};
+        }
+    }
+
+    opacity: ${(props) => (props.disabled ? '0.5' : '1')};
 `;
 
 export default FundModal;
