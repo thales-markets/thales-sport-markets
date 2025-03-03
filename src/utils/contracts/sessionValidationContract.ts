@@ -5,10 +5,10 @@ import { Network } from '../../enums/network';
 
 const sessionValidationContract: ContractData = {
     addresses: {
-        [NetworkId.OptimismMainnet]: '0x5851C89881735dE46bd7edDf04E0e0DD51CC6dc5',
+        [NetworkId.OptimismMainnet]: '0x867072511E55479E4c9A8f2C470FbCf3a37De0F7',
         [NetworkId.OptimismSepolia]: ZERO_ADDRESS,
-        [NetworkId.Arbitrum]: '0x37bc5a3E8a6ff55edA325ba51Ba8a5d83a52e939',
-        [Network.Base]: '0x1610092C69914A52456e819FB61F3d3041B29349',
+        [NetworkId.Arbitrum]: '0xA530B2bB8894c02fdC0fD97D4B46fe3570Cb8752',
+        [Network.Base]: '0x16C9A5AB1f4Ae48329DD5481174336DE52a55bc5',
     },
     abi: [
         {
