@@ -18,6 +18,7 @@ const CRYPTO_CURRENCY = [
     'USDbC',
     'THALES',
     'sTHALES',
+    'OVER',
 ];
 
 export const CRYPTO_CURRENCY_MAP = keyBy(CRYPTO_CURRENCY);

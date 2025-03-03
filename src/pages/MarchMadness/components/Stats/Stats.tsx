@@ -1,12 +1,11 @@
-import { USD_SIGN } from 'constants/currency';
-import { PRIZE_POOL_BONUS } from 'constants/marchMadness';
+import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
 import { minutesToMilliseconds } from 'date-fns';
 import useMarchMadnessStatsQuery from 'queries/marchMadness/useMarchMadnessStatsQuery';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivRowCentered } from 'styles/common';
-import { formatCurrencyWithKey } from 'thales-utils';
+import { formatCurrencyWithKey, formatCurrencyWithSign } from 'thales-utils';
 import { isMarchMadnessAvailableForNetworkId } from 'utils/marchMadness';
 import { useChainId, useClient } from 'wagmi';
 
@@ -42,9 +41,12 @@ const Stats: React.FC<{ disableMobileView?: boolean }> = ({ disableMobileView })
                 <Separator disableMobileView={disableMobileView} />
                 <Pair>
                     <Text>{t('march-madness.stats.pool-size')}:</Text>
-                    <Value>{`${PRIZE_POOL_BONUS} + ${formatCurrencyWithKey(
+                    <Value>{`${formatCurrencyWithSign(
                         USD_SIGN,
                         marchMadnessStatsData.poolSize // TODO: use PRIZE_POOL when all funds are transfered from contract
+                    )} + ${formatCurrencyWithKey(
+                        CRYPTO_CURRENCY_MAP.OVER,
+                        2 * marchMadnessStatsData.poolSize
                     )}`}</Value>
                 </Pair>
             </Data>

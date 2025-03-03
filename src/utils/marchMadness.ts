@@ -1,7 +1,7 @@
 import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
 import { FINAL_MATCH_ID, initialBracketsData, NUMBER_OF_TEAMS, START_MINTING_DATE } from 'constants/marchMadness';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { formatCurrencyWithKey, NetworkId } from 'thales-utils';
+import { formatCurrencyWithKey, formatCurrencyWithSign, NetworkId } from 'thales-utils';
 
 export const getLocalStorageKey = (bracketId: number, networkId: NetworkId, walletAddress: string) =>
     `${LOCAL_STORAGE_KEYS.BRACKETS}id=${bracketId}network=${networkId}wallet=${walletAddress}`;
@@ -99,10 +99,10 @@ export const getIsMintingStarted = () => Date.now() > START_MINTING_DATE;
 
 export const getFormattedRewardsAmount = (stableAmount: number, tokenAmount: number) => {
     if (!tokenAmount && !stableAmount) return 'N/A';
-    return ` ${formatCurrencyWithKey(
-        CRYPTO_CURRENCY_MAP.ARB,
+    return `${formatCurrencyWithSign(USD_SIGN, stableAmount ? stableAmount : 0)} + ${formatCurrencyWithKey(
+        CRYPTO_CURRENCY_MAP.OVER,
         tokenAmount ? tokenAmount : 0,
         0,
         true
-    )} + ${formatCurrencyWithKey(USD_SIGN, stableAmount ? stableAmount : 0)}`;
+    )}`;
 };

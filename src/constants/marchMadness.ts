@@ -1221,6 +1221,5 @@ export const START_MINTING_DATE = Date.UTC(2025, 1, 17); // 17th March (TODO: te
 export const END_MINTING_DATE = 1742486400; // (20th March, 16:00 UTC) timestamp from marchMadness contract in seconds - used only for unsupported networks
 
 export const PRIZE_POOL = 19428.57; // Used after minting is finished instead of contract balance in order to transfer all funds from contract
-export const PRIZE_POOL_BONUS = '5,450 ARB';
 
 export const ARB_VOLUME_REWARDS = 30000;
