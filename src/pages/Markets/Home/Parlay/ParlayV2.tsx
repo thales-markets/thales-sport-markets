@@ -3,6 +3,7 @@ import MatchInfoV2 from 'components/MatchInfoV2';
 import MatchUnavailableInfo from 'components/MatchUnavailableInfo';
 import Toggle from 'components/Toggle';
 import { SportFilter, StatusFilter } from 'enums/markets';
+import { Network } from 'enums/network';
 import { isEqual } from 'lodash';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsAmmDataQuery from 'queries/markets/useSportsAmmDataQuery';
@@ -259,9 +260,11 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                             />
                         </ToggleContainer>
                     )}
-                    <ThalesBonusContainer>
-                        <ThalesBonus>{t('markets.parlay.thales-bonus-info')}</ThalesBonus>
-                    </ThalesBonusContainer>
+                    {networkId !== Network.Base && (
+                        <ThalesBonusContainer>
+                            <ThalesBonus>{t('markets.parlay.thales-bonus-info')}</ThalesBonus>
+                        </ThalesBonusContainer>
+                    )}
                     <ListContainer>
                         {ticketMarkets.length > 0 &&
                             ticketMarkets.map((market, index) => {
