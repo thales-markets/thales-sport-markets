@@ -12,10 +12,10 @@ import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { FreeBet } from 'types/freeBet';
 import { RootState } from 'types/redux';
-import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateralByAddress } from 'utils/collaterals';
 import { claimFreeBet } from 'utils/freeBet';
 import { refetchGetFreeBet } from 'utils/queryConnector';
+import useBiconomy from 'utils/useBiconomy';
 import { useAccount, useChainId } from 'wagmi';
 
 type ClaimFreeBetModalProps = {
@@ -35,7 +35,8 @@ const ClaimFreeBetModal: React.FC<ClaimFreeBetModalProps> = ({ freeBet, onClose 
 
     const { address } = useAccount();
 
-    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+    const smartAddres = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddres : address) || '';
 
     const onButtonClick = useCallback(async () => {
         if (freeBet.claimSuccess) {
