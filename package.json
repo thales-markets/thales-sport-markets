@@ -44,7 +44,7 @@
         "recharts": "^2.1.16",
         "redux": "^4.1.2",
         "styled-components": "^5.3.3",
-        "thales-data": "^3.0.26",
+        "thales-data": "^3.0.19",
         "thales-utils": "^1.2.4-only-cbbtc-3",
         "typescript": "^5.0.4",
         "viem": "^2.7.19",
