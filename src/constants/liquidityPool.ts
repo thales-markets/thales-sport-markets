@@ -25,23 +25,6 @@ export const LiquidityPoolMap: Record<
             collateral: CRYPTO_CURRENCY_MAP.THALES as Coins,
         },
     },
-    [NetworkId.Base]: {
-        [LiquidityPoolCollateral.USDC]: {
-            name: 'USDC LP',
-            address: '0xf86e90412F52fDad8aD8D1aa2dA5B2C9a7e5f018',
-            collateral: CRYPTO_CURRENCY_MAP.USDC as Coins,
-        },
-        [LiquidityPoolCollateral.WETH]: {
-            name: 'WETH LP',
-            address: '0xcc4ED8cD7101B512B134360ED3cCB759caB33f17',
-            collateral: CRYPTO_CURRENCY_MAP.WETH as Coins,
-        },
-        [LiquidityPoolCollateral.cbBTC]: {
-            name: 'cbBTC LP',
-            address: '0x8d4f838327DedFc735e202731358AcFc260c207a',
-            collateral: CRYPTO_CURRENCY_MAP.cbBTC as Coins,
-        },
-    },
     [NetworkId.Arbitrum]: {
         [LiquidityPoolCollateral.USDC]: {
             name: 'USDC LP',
@@ -62,6 +45,23 @@ export const LiquidityPoolMap: Record<
             name: 'wBTC LP',
             address: '0xbD08D8F8c17C22fb0a12Fe490F38f40c59B60d2A',
             collateral: CRYPTO_CURRENCY_MAP.wBTC as Coins,
+        },
+    },
+    [NetworkId.Base]: {
+        [LiquidityPoolCollateral.USDC]: {
+            name: 'USDC LP',
+            address: '0xf86e90412F52fDad8aD8D1aa2dA5B2C9a7e5f018',
+            collateral: CRYPTO_CURRENCY_MAP.USDC as Coins,
+        },
+        [LiquidityPoolCollateral.WETH]: {
+            name: 'WETH LP',
+            address: '0xcc4ED8cD7101B512B134360ED3cCB759caB33f17',
+            collateral: CRYPTO_CURRENCY_MAP.WETH as Coins,
+        },
+        [LiquidityPoolCollateral.cbBTC]: {
+            name: 'cbBTC LP',
+            address: '0x8d4f838327DedFc735e202731358AcFc260c207a',
+            collateral: CRYPTO_CURRENCY_MAP.cbBTC as Coins,
         },
     },
     [NetworkId.OptimismSepolia]: {
