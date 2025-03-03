@@ -140,74 +140,80 @@ const ActivateAccount: React.FC<any> = () => {
     }, [totalBalanceValue, networkId, isConnected, isBiconomy, smartAddres]);
 
     return (
-        <Container>
+        <>
             {showSuccessfulDepositModal && (
-                <Wrapper show={!isMinimizedModal}>
-                    {!isMinimizedModal ? (
-                        <>
-                            <MinimizeIcon onClick={() => setIsMinimized(true)}> - </MinimizeIcon>
-                            <StyledBalanceIcon />
-                            <Header>{t('get-started.activate-account.deposit')}</Header>
-                            <SubTitle>{t('get-started.activate-account.activate')}</SubTitle>
-                            <Box>{t('get-started.activate-account.success')}</Box>
-                            <ActivateButton
-                                onClick={async () => {
-                                    const toastId = toast.loading(t('market.toast-message.transaction-pending'));
-                                    const txHash = await activateOvertimeAccount({
-                                        networkId,
-                                        collateralAddress: getCollateralAddress(
+                <Container>
+                    <Wrapper show={!isMinimizedModal}>
+                        {!isMinimizedModal ? (
+                            <>
+                                <MinimizeIcon onClick={() => setIsMinimized(true)}> - </MinimizeIcon>
+                                <StyledBalanceIcon />
+                                <Header>{t('get-started.activate-account.deposit')}</Header>
+                                <SubTitle>{t('get-started.activate-account.activate')}</SubTitle>
+                                <Box>{t('get-started.activate-account.success')}</Box>
+                                <ActivateButton
+                                    onClick={async () => {
+                                        const toastId = toast.loading(t('market.toast-message.transaction-pending'));
+                                        const txHash = await activateOvertimeAccount({
                                             networkId,
-                                            getCollateralIndex(networkId, totalBalanceValue?.max.coin as Coins)
-                                        ),
-                                    });
-                                    if (txHash) {
-                                        const txReceipt = await waitForTransactionReceipt(client as Client, {
-                                            hash: txHash,
+                                            collateralAddress: getCollateralAddress(
+                                                networkId,
+                                                getCollateralIndex(networkId, totalBalanceValue?.max.coin as Coins)
+                                            ),
                                         });
+                                        if (txHash) {
+                                            const txReceipt = await waitForTransactionReceipt(client as Client, {
+                                                hash: txHash,
+                                            });
 
-                                        if (txReceipt.status === 'success') {
-                                            toast.update(
-                                                toastId,
-                                                getSuccessToastOptions(t('market.toast-message.approve-success'))
-                                            );
-                                            setShowSuccessfulDepositModal(false);
-                                            return;
+                                            if (txReceipt.status === 'success') {
+                                                toast.update(
+                                                    toastId,
+                                                    getSuccessToastOptions(t('market.toast-message.approve-success'))
+                                                );
+                                                setShowSuccessfulDepositModal(false);
+                                                return;
+                                            }
                                         }
-                                    }
-                                    toast.update(
-                                        toastId,
-                                        getErrorToastOptions(t('common.errors.unknown-error-try-again'))
-                                    );
-                                }}
-                            >
-                                {t('get-started.activate-account.activate-my-account')}
-                            </ActivateButton>
-                        </>
-                    ) : (
-                        <>
-                            <Button
-                                backgroundColor={theme.button.background.quinary}
-                                textColor={theme.button.textColor.primary}
-                                borderColor={theme.button.borderColor.quinary}
-                                additionalStyles={{
-                                    borderRadius: '8px',
-                                    fontWeight: '800',
-                                    fontSize: '12px',
-                                    padding: '9px 20px',
-                                    width: isSmallDevice ? '100%' : '100px',
-                                    height: '30px',
-                                }}
-                                onClick={() => setIsMinimized(false)}
-                            >
-                                Activate
-                            </Button>
-                        </>
-                    )}
-                </Wrapper>
+                                        toast.update(
+                                            toastId,
+                                            getErrorToastOptions(t('common.errors.unknown-error-try-again'))
+                                        );
+                                    }}
+                                >
+                                    {t('get-started.activate-account.activate-my-account')}
+                                </ActivateButton>
+                            </>
+                        ) : (
+                            <>
+                                <Button
+                                    backgroundColor={theme.button.background.quinary}
+                                    textColor={theme.button.textColor.primary}
+                                    borderColor={theme.button.borderColor.quinary}
+                                    additionalStyles={{
+                                        borderRadius: '8px',
+                                        fontWeight: '800',
+                                        fontSize: '12px',
+                                        padding: '9px 20px',
+                                        width: isSmallDevice ? '100%' : '100px',
+                                        height: '30px',
+                                    }}
+                                    onClick={() => setIsMinimized(false)}
+                                >
+                                    Activate
+                                </Button>
+                            </>
+                        )}
+                    </Wrapper>
+                </Container>
             )}
-
-            {showFundModal && <FundModal onClose={() => setShowFundModal(false)} />}
-        </Container>
+            {showFundModal && (
+                <Container>
+                    {' '}
+                    <FundModal onClose={() => setShowFundModal(false)} />{' '}
+                </Container>
+            )}
+        </>
     );
 };
 

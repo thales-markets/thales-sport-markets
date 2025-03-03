@@ -127,7 +127,7 @@ export const NotificationCount = styled.div`
     position: absolute;
     border-radius: 50%;
     bottom: -8px;
-    left: 24px;
+    left: 0;
     display: flex;
     align-items: center;
     text-align: center;

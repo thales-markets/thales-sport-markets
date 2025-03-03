@@ -1041,6 +1041,7 @@
             "subtitle": "Add funds to your Overtime Account to get started.",
             "tooltip-1": "To activate your Overtime Account, fund it via one of these methods: send crypto to the Deposit Address, deposit from a connected wallet, buy crypto with fiat, or transfer from an exchange.",
             "tooltip-2": "Send/Withdraw supported tokens to the address below. Make sure you select {{ network }} when sending.",
+            "tooltip-3": "Onramper integration, coming soon.",
             "tooltip-4": "Send funds from your wallet to your Overtime Account.",
             "powered-by": "Powered by <icon/>",
             "current-network": "Current Network: ",
