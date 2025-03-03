@@ -22,8 +22,8 @@ import {
 import { formatCurrencyWithKey, formatCurrencyWithSign, localStore } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
-import biconomyConnector from 'utils/biconomyWallet';
 import { getCollaterals, mapMultiCollateralBalances } from 'utils/collaterals';
+import useBiconomy from 'utils/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import AssetBalance from '../AssetBalance/AssetBalance';
 import WithdrawModal from '../WithdrawModal';
@@ -38,7 +38,8 @@ const Account: React.FC = () => {
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
-    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+    const smartAddres = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddres : address) || '';
 
     const [showFundModal, setShowFundModal] = useState<boolean>(false);
     const [showWithdrawModal, setShowWithdrawModal] = useState<boolean>(false);

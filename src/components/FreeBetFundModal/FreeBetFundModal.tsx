@@ -24,11 +24,11 @@ import { coinParser, floorNumberToDecimals, formatCurrencyWithKey, getPrecision 
 import { CollateralsBalance, Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
-import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateral, getCollateralAddress, getCollateralIndex, getFreeBetCollaterals } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import freeBetHolder from 'utils/contracts/freeBetHolder';
 import { checkAllowance, getDefaultCollateralIndexForNetworkId } from 'utils/network';
+import useBiconomy from 'utils/useBiconomy';
 import { Client, isAddress } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
@@ -49,7 +49,8 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
     const walletClient = useWalletClient();
 
     const { address, isConnected } = useAccount();
-    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+    const smartAddres = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddres : address) || '';
 
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 

@@ -1,8 +1,6 @@
-import { createSmartAccountClient } from '@biconomy/account';
 import { useConnect as useParticleConnect } from '@particle-network/authkit';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import Loader from 'components/Loader';
-import { LINKS } from 'constants/links';
 import ROUTES from 'constants/routes';
 import DappLayout from 'layouts/DappLayout';
 import Theme from 'layouts/Theme';
@@ -26,7 +24,6 @@ import { setMobileState } from 'redux/modules/app';
 import { updateParticleState } from 'redux/modules/wallet';
 import { SupportedNetwork } from 'types/network';
 import { SeoArticleProps } from 'types/ui';
-import biconomyConnector from 'utils/biconomyWallet';
 import { isMobile } from 'utils/device';
 import { isNetworkSupported, isRouteAvailableForNetwork } from 'utils/network';
 import { getSpecificConnectorFromConnectorsArray } from 'utils/particleWallet/utils';
@@ -69,26 +66,6 @@ const App = () => {
                 switchChain({ chainId: ethereumChainId as SupportedNetwork });
             });
         }
-
-        if (walletClient) {
-            const bundlerUrl = `${LINKS.Biconomy.Bundler}${networkId}/${import.meta.env.VITE_APP_BICONOMY_BUNDLE_KEY}`;
-
-            const createSmartAccount = async () => {
-                const PAYMASTER_API_KEY = import.meta.env['VITE_APP_PAYMASTER_KEY_' + networkId];
-                const smartAccount = await createSmartAccountClient({
-                    signer: walletClient,
-                    bundlerUrl: bundlerUrl,
-                    biconomyPaymasterApiKey: PAYMASTER_API_KEY,
-                });
-                const smartAddress = await smartAccount.getAccountAddress();
-
-                if (!biconomyConnector.address || biconomyConnector.address === smartAddress) {
-                    biconomyConnector.setWallet(smartAccount, smartAddress);
-                }
-            };
-
-            createSmartAccount();
-        }
     }, [dispatch, switchChain, networkId, disconnect, walletClient]);
 
     useEffect(() => {
@@ -101,7 +78,6 @@ const App = () => {
         if (connectionStatus === 'disconnected') {
             particleDisconnect();
             dispatch(updateParticleState({ connectedViaParticle: false }));
-            biconomyConnector.resetWallet();
             if (!isConnected) disconnect();
         }
     }, [isConnected, connectors, connect, connectionStatus, disconnect, particleDisconnect, networkId, dispatch]);

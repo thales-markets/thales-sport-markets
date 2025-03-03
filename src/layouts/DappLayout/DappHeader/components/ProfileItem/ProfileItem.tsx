@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import { RootState } from 'types/redux';
-import biconomyConnector from 'utils/biconomyWallet';
 import { buildHref } from 'utils/routes';
+import useBiconomy from 'utils/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import {
     Count,
@@ -52,7 +52,8 @@ export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({ avatarSize,
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
-    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+    const smartAddres = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddres : address) || '';
 
     const claimablePositionsCountQuery = useClaimablePositionCountV2Query(
         walletAddress,

@@ -29,10 +29,10 @@ import { Rates } from 'types/collateral';
 import { FreeBet } from 'types/freeBet';
 import { RootState } from 'types/redux';
 
-import biconomyConnector from 'utils/biconomyWallet';
 import { isStableCurrency, sortCollateralBalances } from 'utils/collaterals';
 
 import { claimFreeBet } from 'utils/freeBet';
+import useBiconomy from 'utils/useBiconomy';
 
 import { useAccount, useChainId, useClient } from 'wagmi';
 
@@ -47,7 +47,8 @@ const UserStats: React.FC = () => {
     const { userInfo } = useAuthCore();
 
     const { address, isConnected } = useAccount();
-    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+    const smartAddres = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddres : address) || '';
 
     const [freeBet, setFreeBet] = useLocalStorage<FreeBet | undefined>(LOCAL_STORAGE_KEYS.FREE_BET_ID, undefined);
 
@@ -163,9 +164,9 @@ const UserStats: React.FC = () => {
                             <FlexDivColumnStart gap={2}>
                                 <Label>{t('profile.stats.overtime-account')}</Label>
                                 <Value>
-                                    {truncateAddress(biconomyConnector.address, 14, 14)}
+                                    {truncateAddress(smartAddres, 14, 14)}
                                     <CopyIcon
-                                        onClick={handleCopy.bind(this, biconomyConnector.address)}
+                                        onClick={handleCopy.bind(this, smartAddres)}
                                         className="icon icon--copy"
                                     />
                                 </Value>

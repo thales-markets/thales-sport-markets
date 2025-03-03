@@ -13,9 +13,9 @@ import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 import { formatCurrencyWithKey } from 'thales-utils';
 import { RootState } from 'types/redux';
-import biconomyConnector from 'utils/biconomyWallet';
 import { getCollaterals, mapMultiCollateralBalances } from 'utils/collaterals';
 import { getDefaultCollateralIndexForNetworkId } from 'utils/network';
+import useBiconomy from 'utils/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
 
 const WalletInfo: React.FC = ({}) => {
@@ -26,7 +26,8 @@ const WalletInfo: React.FC = ({}) => {
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
-    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+    const smartAddres = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddres : address) || '';
 
     const connectWalletModalVisibility = useSelector((state: RootState) => getWalletConnectModalVisibility(state));
     const ticketPayment = useSelector(getTicketPayment);

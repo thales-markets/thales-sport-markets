@@ -23,7 +23,6 @@ import { bigNumberFormatter, coinParser, Coins, formatCurrency, formatCurrencyWi
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import { sendBiconomyTransaction } from 'utils/biconomy';
-import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateralAddress, getCollateralIndex, getCollaterals } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import {
@@ -35,6 +34,7 @@ import {
     sendTransaction,
 } from 'utils/swap';
 import { delay } from 'utils/timer';
+import useBiconomy from 'utils/useBiconomy';
 import { Address } from 'viem';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 
@@ -51,7 +51,8 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
     const walletClient = useWalletClient();
 
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
-    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+    const smartAddres = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddres : address) || '';
 
     const [fromToken, setFromToken] = useState<Coins>(
         preSelectedToken ? getCollaterals(networkId)[preSelectedToken] : 'USDC'

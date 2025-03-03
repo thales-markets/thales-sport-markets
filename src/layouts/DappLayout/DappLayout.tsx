@@ -21,10 +21,10 @@ import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
 import { isAndroid, isMetamask } from 'thales-utils';
 import { RootState } from 'types/redux';
-import biconomyConnector from 'utils/biconomyWallet';
 import { isMobile } from 'utils/device';
 import { setReferralId } from 'utils/referral';
 import { navigateTo } from 'utils/routes';
+import useBiconomy from 'utils/useBiconomy';
 import { useAccount, useChainId } from 'wagmi';
 import Banner from '../../components/Banner';
 import DappFooter from './DappFooter';
@@ -48,7 +48,8 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
     const history = useHistory();
     const { address } = useAccount();
 
-    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+    const smartAddres = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddres : address) || '';
     const walletRef = useRef(walletAddress);
     walletRef.current = walletAddress;
 

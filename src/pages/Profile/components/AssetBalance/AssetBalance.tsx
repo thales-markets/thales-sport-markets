@@ -13,8 +13,8 @@ import styled, { useTheme } from 'styled-components';
 import { Coins, formatCurrencyWithKey } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
-import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateralIndex, getCollaterals, mapMultiCollateralBalances } from 'utils/collaterals';
+import useBiconomy from 'utils/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
 
 type Props = {
@@ -36,7 +36,8 @@ const AssetBalance: React.FC<Props> = ({
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
-    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+    const smartAddres = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddres : address) || '';
     const theme = useTheme();
 
     const [showZeroBalance, setShowZeroBalance] = useState<boolean>(true);

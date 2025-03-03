@@ -17,7 +17,6 @@ import { Coins, localStore } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import { activateOvertimeAccount } from 'utils/biconomy';
-import biconomyConnector from 'utils/biconomyWallet';
 import {
     getCollateralAddress,
     getCollateralIndex,
@@ -26,6 +25,7 @@ import {
 } from 'utils/collaterals';
 import { isSmallDevice } from 'utils/device';
 import { getFundModalShown, setFundModalShown } from 'utils/fundModal';
+import useBiconomy from 'utils/useBiconomy';
 import { Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient } from 'wagmi';
@@ -37,7 +37,8 @@ const ActivateAccount: React.FC<any> = () => {
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const client = useClient();
     const { address, isConnected } = useAccount();
-    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+    const smartAddres = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddres : address) || '';
 
     const [showSuccessfulDepositModal, setShowSuccessfulDepositModal] = useState<boolean>(false);
     const [isMinimizedModal, setIsMinimized] = useState<boolean>(false);
@@ -115,7 +116,7 @@ const ActivateAccount: React.FC<any> = () => {
 
                 if (storedMapString) {
                     const retrievedMap = new Map(JSON.parse(storedMapString));
-                    const sessionData = retrievedMap.get(biconomyConnector.address) as any;
+                    const sessionData = retrievedMap.get(smartAddres) as any;
                     if (sessionData) {
                         const dateUntilValid = new Date(Number(sessionData.validUntil) * 1000);
                         const nowDate = new Date();
@@ -136,7 +137,7 @@ const ActivateAccount: React.FC<any> = () => {
                 setFundModalShown(false);
             }
         }
-    }, [totalBalanceValue, networkId, isConnected, isBiconomy]);
+    }, [totalBalanceValue, networkId, isConnected, isBiconomy, smartAddres]);
 
     return (
         <Container>

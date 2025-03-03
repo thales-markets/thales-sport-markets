@@ -32,11 +32,12 @@ import { LiquidityPoolData, UserLiquidityPoolData } from 'types/liquidityPool';
 import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
 import { ViemContract } from 'types/viem';
-import biconomyConnector from 'utils/biconomyWallet';
+import { executeBiconomyTransactionWithConfirmation } from 'utils/biconomy';
 import { getContractInstance } from 'utils/contract';
 import { checkAllowance } from 'utils/network';
 import { refetchLiquidityPoolData } from 'utils/queryConnector';
 import { delay } from 'utils/timer';
+import useBiconomy from 'utils/useBiconomy';
 import { Client, parseUnits } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
@@ -87,7 +88,6 @@ import {
     Wrapper,
     defaultButtonProps,
 } from './styled-components';
-import { executeBiconomyTransactionWithConfirmation } from 'utils/biconomy';
 
 const WETH_COLLATERALS = [CRYPTO_CURRENCY_MAP.WETH as Coins, CRYPTO_CURRENCY_MAP.ETH as Coins];
 
@@ -104,7 +104,8 @@ const LiquidityPool: React.FC = () => {
     const walletClient = useWalletClient();
 
     const { address, isConnected } = useAccount();
-    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+    const smartAddres = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddres : address) || '';
 
     const [selectedCollateralIndex, setSelectedCollateralIndex] = useState<number>(0);
     const [amount, setAmount] = useState<number | string>('');

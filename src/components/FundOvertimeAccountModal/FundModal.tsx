@@ -21,11 +21,11 @@ import { Colors, FlexDivCentered, FlexDivColumnCentered, FlexDivRow } from 'styl
 import { Rates } from 'types/collateral';
 import { FreeBet } from 'types/freeBet';
 import { RootState } from 'types/redux';
-import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateralAddress, getCollateralIndex, getCollaterals } from 'utils/collaterals';
 import { claimFreeBet } from 'utils/freeBet';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import { getOnRamperUrl } from 'utils/particleWallet/utils';
+import useBiconomy from 'utils/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
 
 type FundModalProps = {
@@ -44,11 +44,8 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
 
     const theme = useTheme();
     const networkId = useChainId();
-
-    const walletAddress = useMemo(() => (isBiconomy ? biconomyConnector.address : address) || '', [
-        isBiconomy,
-        address,
-    ]);
+    const smartAddres = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddres : address) || '';
 
     const [showQRModal, setShowQRModal] = useState<boolean>(false);
     const [showDepositFromWallet, setShowDepositFromWallet] = useState<boolean>(false);

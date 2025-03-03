@@ -90,7 +90,6 @@ import { RootState } from 'types/redux';
 import { OverdropLevel, ThemeInterface } from 'types/ui';
 import { ViemContract } from 'types/viem';
 import { executeBiconomyTransaction } from 'utils/biconomy';
-import biconomyConnector from 'utils/biconomyWallet';
 import {
     convertFromStableToCollateral,
     getCollateral,
@@ -135,6 +134,7 @@ import {
 import { getAddedPayoutOdds, getSystemBetData } from 'utils/tickets';
 import { delay } from 'utils/timer';
 import { getKeepSelectionFromStorage, setKeepSelectionToStorage } from 'utils/ui';
+import useBiconomy from 'utils/useBiconomy';
 import { Address, Client, maxUint256, parseEther } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
@@ -221,7 +221,8 @@ const Ticket: React.FC<TicketProps> = ({
     const walletClient = useWalletClient();
 
     const { address, isConnected } = useAccount();
-    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+    const smartAddres = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddres : address) || '';
 
     const selectedOddsType = useSelector(getOddsType);
     const ticketPayment = useSelector(getTicketPayment);
