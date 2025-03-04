@@ -5,6 +5,7 @@ const stakingThalesContract: ContractData = {
     addresses: {
         [Network.OptimismMainnet]: '0xC392133eEa695603B51a5d5de73655d571c2CE51',
         [Network.Arbitrum]: '0x160Ca569999601bca06109D42d561D85D6Bb4b57',
+        [Network.Base]: '0x84aB38e42D8Da33b480762cCa543eEcA6135E040',
         [Network.OptimismSepolia]: '0x02b9aE5a116450BE67AABF0d7EF5D06bda9dc962',
     },
     abi: [

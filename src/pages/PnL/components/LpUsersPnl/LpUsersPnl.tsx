@@ -37,7 +37,11 @@ const LpUsersPnl: React.FC<LpUsersPnlProps> = ({ lpCollateral, round, leagueId, 
                         <Section key={lpUserPnl.account}>
                             <Label>{lpUserPnl.account}</Label>
                             <Value>{`${formatCurrencyWithKey(
-                                lpCollateral.toUpperCase(),
+                                lpCollateral === 'cbbtc'
+                                    ? 'cbBTC'
+                                    : lpCollateral === 'wbtc'
+                                    ? 'wBTC'
+                                    : lpCollateral.toUpperCase(),
                                 lpUserPnl.pnl,
                                 2
                             )} (${formatCurrencyWithSign(USD_SIGN, lpUserPnl.pnlInUsd, 2)})`}</Value>

@@ -18,6 +18,9 @@ const CRYPTO_CURRENCY = [
     'USDbC',
     'THALES',
     'sTHALES',
+    'cbBTC',
+    'BTC',
+    'wBTC',
 ];
 
 export const CRYPTO_CURRENCY_MAP = keyBy(CRYPTO_CURRENCY);
@@ -54,6 +57,16 @@ export const COLLATERALS: Record<SupportedNetwork, Coins[]> = {
         CRYPTO_CURRENCY_MAP.ARB as Coins,
         CRYPTO_CURRENCY_MAP.WETH as Coins,
         CRYPTO_CURRENCY_MAP.ETH as Coins,
+        CRYPTO_CURRENCY_MAP.wBTC as Coins,
+    ],
+    [Network.Base]: [
+        CRYPTO_CURRENCY_MAP.USDC as Coins,
+        CRYPTO_CURRENCY_MAP.USDbC as Coins,
+        CRYPTO_CURRENCY_MAP.DAI as Coins,
+        CRYPTO_CURRENCY_MAP.USDT as Coins,
+        CRYPTO_CURRENCY_MAP.WETH as Coins,
+        CRYPTO_CURRENCY_MAP.ETH as Coins,
+        CRYPTO_CURRENCY_MAP.cbBTC as Coins,
     ],
     [Network.OptimismSepolia]: [
         CRYPTO_CURRENCY_MAP.USDC as Coins,
@@ -85,6 +98,13 @@ export const FREE_BET_COLLATERALS: Record<SupportedNetwork, Coins[]> = {
         CRYPTO_CURRENCY_MAP.ARB as Coins,
         CRYPTO_CURRENCY_MAP.WETH as Coins,
     ],
+    [Network.Base]: [
+        CRYPTO_CURRENCY_MAP.USDC as Coins,
+        CRYPTO_CURRENCY_MAP.USDbC as Coins,
+        CRYPTO_CURRENCY_MAP.DAI as Coins,
+        CRYPTO_CURRENCY_MAP.USDT as Coins,
+        CRYPTO_CURRENCY_MAP.WETH as Coins,
+    ],
     [Network.OptimismSepolia]: [
         CRYPTO_CURRENCY_MAP.USDC as Coins,
         CRYPTO_CURRENCY_MAP.USDT as Coins,
@@ -106,6 +126,8 @@ export const COLLATERAL_ICONS_CLASS_NAMES: Record<Coins, string> = {
     ARB: 'currency-icon currency-icon--arb',
     THALES: 'currency-icon currency-icon--thales',
     sTHALES: 'currency-icon currency-icon--thales',
+    cbBTC: 'currency-icon currency-icon--cbbtc',
+    wBTC: 'currency-icon currency-icon--wbtc',
 };
 
 export const DEFAULT_MULTI_COLLATERAL_BALANCE = {
@@ -121,4 +143,6 @@ export const DEFAULT_MULTI_COLLATERAL_BALANCE = {
     USDC: 0,
     THALES: 0,
     sTHALES: 0,
+    cbBTC: 0,
+    wBTC: 0,
 };
