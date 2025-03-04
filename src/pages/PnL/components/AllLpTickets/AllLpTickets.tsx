@@ -2,6 +2,7 @@ import Checkbox from 'components/fields/Checkbox';
 import SelectInput from 'components/SelectInput';
 import { hoursToMilliseconds } from 'date-fns';
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
+import { Network } from 'enums/network';
 import { League } from 'enums/sports';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import { t } from 'i18next';
@@ -17,25 +18,6 @@ import { useChainId, useClient } from 'wagmi';
 import TicketTransactionsTable from '../../../Markets/Market/MarketDetailsV2/components/TicketTransactionsTable';
 
 const UNRESOLVED_PERIOD_IN_HOURS = 8;
-
-const lpOptions = [
-    {
-        value: 0,
-        label: 'All LPs',
-    },
-    {
-        value: 1,
-        label: 'USDC',
-    },
-    {
-        value: 2,
-        label: 'WETH',
-    },
-    {
-        value: 3,
-        label: 'THALES',
-    },
-];
 
 type AllLpTicketsProps = {
     round: number;
@@ -69,6 +51,45 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
         networkId,
         client,
     });
+    const cbbtcLpTicketsQuery = useLpTicketsQuery(LiquidityPoolCollateral.cbBTC, round, leagueId, onlyPP, {
+        networkId,
+        client,
+    });
+    const wbtcLpTicketsQuery = useLpTicketsQuery(LiquidityPoolCollateral.wBTC, round, leagueId, onlyPP, {
+        networkId,
+        client,
+    });
+
+    const lpOptions = useMemo(() => {
+        const lpOptions = [
+            {
+                value: 0,
+                label: 'All LPs',
+            },
+            {
+                value: 1,
+                label: 'USDC',
+            },
+            {
+                value: 2,
+                label: 'WETH',
+            },
+        ];
+
+        lpOptions.push({
+            value: 3,
+            label: networkId === Network.Base ? 'cbBTC' : 'THALES',
+        });
+
+        if (networkId === Network.Arbitrum) {
+            lpOptions.push({
+                value: 4,
+                label: 'wBTC',
+            });
+        }
+
+        return lpOptions;
+    }, [networkId]);
 
     const lpTickets: Ticket[] = useMemo(() => {
         let lpTickets: Ticket[] = [];
@@ -79,12 +100,18 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
             wethLpTicketsQuery.data &&
             wethLpTicketsQuery.isSuccess &&
             thalesLpTicketsQuery.data &&
-            thalesLpTicketsQuery.isSuccess
+            thalesLpTicketsQuery.isSuccess &&
+            cbbtcLpTicketsQuery.data &&
+            cbbtcLpTicketsQuery.isSuccess &&
+            wbtcLpTicketsQuery.data &&
+            wbtcLpTicketsQuery.isSuccess
         ) {
             lpTickets = [
                 ...(usdcLpTicketsQuery.data || []),
                 ...(wethLpTicketsQuery.data || []),
                 ...(thalesLpTicketsQuery.data || []),
+                ...(cbbtcLpTicketsQuery.data || []),
+                ...(wbtcLpTicketsQuery.data || []),
             ];
         }
 
@@ -92,7 +119,8 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
             lpTickets.filter(
                 (ticket) =>
                     ((ticket.isOpen && showOnlyOpenTickets) || !showOnlyOpenTickets) &&
-                    ((lp !== 0 && ticket.collateral === lpOptions.find((lpOption) => lpOption.value === lp)?.label) ||
+                    ((lp !== 0 &&
+                        ticket.collateral === lpOptions.find((lpOption: any) => lpOption.value === lp)?.label) ||
                         lp === 0) &&
                     ((ticket.isLive && showOnlyLiveTickets) || !showOnlyLiveTickets) &&
                     ((ticket.isSgp && showOnlySgpTickets) || !showOnlySgpTickets) &&
@@ -120,7 +148,10 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
             ['desc']
         );
     }, [
+        cbbtcLpTicketsQuery.data,
+        cbbtcLpTicketsQuery.isSuccess,
         lp,
+        lpOptions,
         showOnlyLiveTickets,
         showOnlySgpTickets,
         showOnlyOpenTickets,
@@ -131,6 +162,8 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
         thalesLpTicketsQuery.isSuccess,
         usdcLpTicketsQuery.data,
         usdcLpTicketsQuery.isSuccess,
+        wbtcLpTicketsQuery.data,
+        wbtcLpTicketsQuery.isSuccess,
         wethLpTicketsQuery.data,
         wethLpTicketsQuery.isSuccess,
     ]);

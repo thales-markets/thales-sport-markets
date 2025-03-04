@@ -5,6 +5,7 @@ const sportsAMMDataContract: ContractData = {
     addresses: {
         [Network.OptimismMainnet]: '0x71CE219942FFD9C1d8B67d6C35C39Ae04C4F647B',
         [Network.Arbitrum]: '0x04386f9b2b4f713984Fe0425E46a376201641649',
+        [Network.Base]: '0x99D318b6402cE95B6B46F40f752eA96430A2Ead0',
         [Network.OptimismSepolia]: '0xe4d8d605874443f952fBdc03Dd1C69761230A7f0',
     },
     abi: [

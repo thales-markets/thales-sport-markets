@@ -5,6 +5,7 @@ import { BATCH_SIZE } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
 import { ContractType } from 'enums/contract';
 import { orderBy } from 'lodash';
+import { NetworkId } from 'thales-utils';
 import { Ticket } from 'types/markets';
 import { NetworkConfig } from 'types/network';
 import { getContractInstance } from 'utils/contract';
@@ -35,12 +36,7 @@ export const useUserTicketsQuery = (
                     networkConfig
                 );
 
-                if (
-                    sportsAMMDataContract &&
-                    sportsAMMV2ManagerContract &&
-                    freeBetHolderContract &&
-                    stakingThalesBettingProxy
-                ) {
+                if (sportsAMMDataContract && sportsAMMV2ManagerContract && freeBetHolderContract) {
                     const [
                         numOfActiveTicketsPerUser,
                         numOfResolvedTicketsPerUser,
@@ -53,8 +49,12 @@ export const useUserTicketsQuery = (
                         sportsAMMV2ManagerContract.read.numOfResolvedTicketsPerUser([walletAddress]),
                         freeBetHolderContract.read.numOfActiveTicketsPerUser([walletAddress]),
                         freeBetHolderContract.read.numOfResolvedTicketsPerUser([walletAddress]),
-                        stakingThalesBettingProxy.read.numOfActiveTicketsPerUser([walletAddress]),
-                        stakingThalesBettingProxy.read.numOfResolvedTicketsPerUser([walletAddress]),
+                        networkConfig.networkId === NetworkId.Base
+                            ? 0
+                            : stakingThalesBettingProxy?.read.numOfActiveTicketsPerUser([walletAddress]),
+                        networkConfig.networkId === NetworkId.Base
+                            ? 0
+                            : stakingThalesBettingProxy?.read.numOfResolvedTicketsPerUser([walletAddress]),
                     ]);
 
                     const numberOfActiveBatches =

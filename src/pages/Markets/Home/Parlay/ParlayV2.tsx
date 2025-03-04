@@ -7,6 +7,7 @@ import Tooltip from 'components/Tooltip';
 import { LeagueMap } from 'constants/sports';
 import { secondsToMilliseconds } from 'date-fns';
 import { SportFilter, StatusFilter, TicketErrorCode } from 'enums/markets';
+import { Network } from 'enums/network';
 import { League } from 'enums/sports';
 import { isEqual } from 'lodash';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
@@ -378,9 +379,11 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                             </Tooltip>
                         </BetTypeContainer>
                     )}
-                    <ThalesBonusContainer>
-                        <ThalesBonus>{t('markets.parlay.thales-bonus-info')}</ThalesBonus>
-                    </ThalesBonusContainer>
+                    {networkId !== Network.Base && (
+                        <ThalesBonusContainer>
+                            <ThalesBonus>{t('markets.parlay.thales-bonus-info')}</ThalesBonus>
+                        </ThalesBonusContainer>
+                    )}
                     <ScrollContainer>
                         <Scroll height={`${scrollHeight}px`} renderOnlyChildren={!isScrollVisible}>
                             <ListContainer ref={marketsList} isScrollVisible={isScrollVisible}>

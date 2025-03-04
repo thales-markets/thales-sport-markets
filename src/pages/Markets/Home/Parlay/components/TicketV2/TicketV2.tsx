@@ -27,6 +27,7 @@ import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { secondsToMilliseconds } from 'date-fns';
 import { ContractType } from 'enums/contract';
 import { OddsType } from 'enums/markets';
+import { Network } from 'enums/network';
 import { BuyTicketStep } from 'enums/tickets';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import useInterval from 'hooks/useInterval';
@@ -483,7 +484,7 @@ const Ticket: React.FC<TicketProps> = ({
     }, [coingeckoRatesQuery, selectedCollateral, buyInAmount, networkId]);
 
     const selectedCollateralCurrencyRate =
-        exchangeRates && exchangeRates !== null ? exchangeRates[usedCollateralForBuy] : 1;
+        exchangeRates && exchangeRates !== null && !isDefaultCollateral ? exchangeRates[usedCollateralForBuy] : 1;
     const thalesContractCurrencyRate =
         exchangeRates && exchangeRates !== null ? exchangeRates[THALES_CONTRACT_RATE_KEY] : 1;
 
@@ -2432,7 +2433,7 @@ const Ticket: React.FC<TicketProps> = ({
                     />
                 </AmountToBuyContainer>
             </InputContainer>
-            {!isThales && !isFreeBetActive && (
+            {!isThales && !isFreeBetActive && networkId !== Network.Base && (
                 <RowSummary>
                     <RowContainer>
                         <SummaryLabel isBonus>
