@@ -14,6 +14,8 @@ export enum PnlTab {
     USDC_USERS_PNL = 'usdc',
     WETH_USERS_PNL = 'weth',
     THALES_USERS_PNL = 'thales',
+    CBBTC_USERS_PNL = 'cbbtc',
+    WBTC_USERS_PNL = 'wbtc',
     OVER_USERS_PNL = 'over',
     USDC_TICKETS = 'usdc-tickets',
     WETH_TICKETS = 'weth-tickets',

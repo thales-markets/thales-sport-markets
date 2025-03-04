@@ -98,9 +98,23 @@ export const LiquidityPoolMap: Record<
     },
 };
 
-export const OverRoundOffsetMap: Record<SupportedNetwork, number> = {
-    [NetworkId.OptimismMainnet]: 33,
-    [NetworkId.Arbitrum]: 23,
-    [NetworkId.Base]: 0,
-    [NetworkId.OptimismSepolia]: 0,
+export const RoundOffsetMap: Partial<Record<LiquidityPoolCollateral, Record<SupportedNetwork, number>>> = {
+    [LiquidityPoolCollateral.OVER]: {
+        [NetworkId.OptimismMainnet]: 37,
+        [NetworkId.Arbitrum]: 27,
+        [NetworkId.Base]: 5,
+        [NetworkId.OptimismSepolia]: 0,
+    },
+    [LiquidityPoolCollateral.cbBTC]: {
+        [NetworkId.OptimismMainnet]: 0,
+        [NetworkId.Arbitrum]: 0,
+        [NetworkId.Base]: 4,
+        [NetworkId.OptimismSepolia]: 0,
+    },
+    [LiquidityPoolCollateral.wBTC]: {
+        [NetworkId.OptimismMainnet]: 0,
+        [NetworkId.Arbitrum]: 27,
+        [NetworkId.Base]: 0,
+        [NetworkId.OptimismSepolia]: 0,
+    },
 };

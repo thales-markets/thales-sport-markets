@@ -1,7 +1,7 @@
+import { TBD_ADDRESS } from 'constants/network';
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 import { Network } from 'enums/network';
 import { ContractData } from 'types/viem';
-import { TBD_ADDRESS } from '../../constants/network';
 
 const ABI = [
     { inputs: [{ internalType: 'address', name: 'target', type: 'address' }], name: 'AddressEmptyCode', type: 'error' },

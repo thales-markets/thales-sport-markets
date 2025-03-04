@@ -13,7 +13,7 @@ import { LpUsersPnl, Ticket } from 'types/markets';
 import { NetworkConfig } from 'types/network';
 import { isLpSupported, isStableCurrency } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
-import { getLpAddress, getRoundForOver } from 'utils/liquidityPool';
+import { getLpAddress, getRoundWithOffset, isLpAvailableForNetwork } from 'utils/liquidityPool';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
 import { mapTicket } from 'utils/tickets';
 import { League } from '../../enums/sports';
@@ -49,14 +49,12 @@ const useLpUsersPnlQuery = (
                     rates,
                     thalesPriceResponse,
                 ] = await Promise.all([
-                    networkConfig.networkId === NetworkId.Base && lpCollateral === LiquidityPoolCollateral.THALES
-                        ? []
-                        : liquidityPoolDataContract.read.getRoundTickets([
+                    isLpAvailableForNetwork(networkConfig.networkId, lpCollateral)
+                        ? liquidityPoolDataContract.read.getRoundTickets([
                               getLpAddress(networkConfig.networkId, lpCollateral),
-                              lpCollateral === LiquidityPoolCollateral.OVER
-                                  ? getRoundForOver(round, networkConfig.networkId)
-                                  : round,
-                          ]),
+                              getRoundWithOffset(round, networkConfig.networkId, lpCollateral),
+                          ])
+                        : [],
                     axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, noCacheConfig),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/players-info`, noCacheConfig),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/live-scores`, noCacheConfig),

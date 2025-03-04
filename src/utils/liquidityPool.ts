@@ -1,4 +1,5 @@
-import { LiquidityPoolMap, OverRoundOffsetMap } from '../constants/liquidityPool';
+import { NetworkId } from 'thales-utils';
+import { LiquidityPoolMap, RoundOffsetMap } from '../constants/liquidityPool';
 import { LiquidityPoolCollateral } from '../enums/liquidityPool';
 import { SupportedNetwork } from '../types/network';
 
@@ -31,6 +32,27 @@ export const getLiquidityPools = (networkId: SupportedNetwork) => {
     return lpPerNetwork ? Object.values(lpPerNetwork) : [];
 };
 
+export const getRoundWithOffset = (
+    round: number,
+    networkId: SupportedNetwork,
+    lpCollateral: LiquidityPoolCollateral
+) => {
+    const collateralOffset = RoundOffsetMap[lpCollateral];
+    if (!collateralOffset) return round;
+
+    const roundWithOffset = round - collateralOffset[networkId];
+    return roundWithOffset > 0 ? roundWithOffset : 0;
+};
+
+export const isLpAvailableForNetwork = (networkId: SupportedNetwork, lpCollateral: LiquidityPoolCollateral) =>
+    (networkId === NetworkId.Base &&
+        lpCollateral !== LiquidityPoolCollateral.THALES &&
+        lpCollateral !== LiquidityPoolCollateral.wBTC) ||
+    (networkId === NetworkId.Arbitrum && lpCollateral !== LiquidityPoolCollateral.cbBTC) ||
+    (networkId === NetworkId.OptimismMainnet &&
+        lpCollateral !== LiquidityPoolCollateral.cbBTC &&
+        lpCollateral !== LiquidityPoolCollateral.wBTC);
+
 export const hidePnl = (liquidityPoolAddress: string, networkId: SupportedNetwork) => {
     const lpPerNetwork = LiquidityPoolMap[networkId];
     if (lpPerNetwork) {
@@ -40,9 +62,4 @@ export const hidePnl = (liquidityPoolAddress: string, networkId: SupportedNetwor
         );
     }
     return false;
-};
-
-export const getRoundForOver = (round: number, networkId: SupportedNetwork) => {
-    const overRound = round - OverRoundOffsetMap[networkId];
-    return overRound > 0 ? overRound : 0;
 };
