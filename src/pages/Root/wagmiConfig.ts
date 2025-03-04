@@ -23,7 +23,7 @@ import {
     particleWallet,
 } from 'utils/particleWallet';
 import { createConfig, fallback, http } from 'wagmi';
-import { arbitrum, optimism, optimismSepolia } from 'wagmi/chains';
+import { arbitrum, base, optimism, optimismSepolia } from 'wagmi/chains';
 
 const wallets = [
     metaMaskWallet,
@@ -49,7 +49,7 @@ const socialWallets = [
 !isMobile() && wallets.push(injectedWallet);
 
 export const wagmiConfig = createConfig({
-    chains: [optimism, arbitrum, optimismSepolia],
+    chains: [optimism, arbitrum, optimismSepolia, base],
     connectors: connectorsForWallets(
         [
             {
@@ -70,6 +70,7 @@ export const wagmiConfig = createConfig({
         [optimism.id]: fallback([http(RPC_LIST.INFURA[NetworkId.OptimismMainnet]), http()]),
         [arbitrum.id]: fallback([http(RPC_LIST.INFURA[NetworkId.Arbitrum]), http()]),
         [optimismSepolia.id]: fallback([http(RPC_LIST.INFURA[NetworkId.OptimismSepolia]), http()]),
+        [base.id]: fallback([http(RPC_LIST.INFURA[NetworkId.Base]), http()]),
     },
 });
 

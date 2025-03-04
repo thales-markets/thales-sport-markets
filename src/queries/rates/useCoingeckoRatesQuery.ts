@@ -30,6 +30,8 @@ const useCoingeckoRatesQuery = (options?: Omit<UseQueryOptions<any>, 'queryKey' 
                 USDbC: 1,
                 THALES: 0,
                 sTHALES: 0,
+                cbBTC: 0,
+                wBTC: 0,
             };
 
             const url =

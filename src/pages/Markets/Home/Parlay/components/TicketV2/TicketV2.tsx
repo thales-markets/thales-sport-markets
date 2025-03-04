@@ -29,6 +29,7 @@ import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { secondsToMilliseconds } from 'date-fns';
 import { ContractType } from 'enums/contract';
 import { OddsType } from 'enums/markets';
+import { Network } from 'enums/network';
 import { BuyTicketStep } from 'enums/tickets';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import useInterval from 'hooks/useInterval';
@@ -2319,7 +2320,7 @@ const Ticket: React.FC<TicketProps> = ({
                     />
                 </AmountToBuyContainer>
             </InputContainer>
-            {!isThales && !isFreeBetActive && (
+            {!isThales && !isFreeBetActive && networkId !== Network.Base && (
                 <RowSummary>
                     <RowContainer>
                         <SummaryLabel isBonus>

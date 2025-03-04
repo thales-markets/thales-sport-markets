@@ -26,11 +26,13 @@ export const LOCAL_STORAGE_KEYS = {
     SESSION_P_KEY: {
         [NetworkId.OptimismMainnet]: 'sessionPKey_10',
         [NetworkId.Arbitrum]: 'sessionPKey_42161',
+        [NetworkId.Base]: 'sessionPKey_8453',
         [NetworkId.OptimismSepolia]: 'sessionPKey_11155420',
     } as Record<SupportedNetwork, string>,
     SESSION_VALID_UNTIL: {
         [NetworkId.OptimismMainnet]: 'sessionValidUntil_10',
         [NetworkId.Arbitrum]: 'sessionValidUntil_42161',
+        [NetworkId.Base]: 'sessionValidUntil_8453',
         [NetworkId.OptimismSepolia]: 'sessionValidUntil_11155420',
     } as Record<SupportedNetwork, string>,
     IS_SYSTEM_BET: 'isSystemBet',
