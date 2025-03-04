@@ -275,10 +275,14 @@ export const activateOvertimeAccount = async (params: { networkId: SupportedNetw
                 });
             console.log('response: ', response);
 
-            const { success, reason } = await biconomyConnector.wallet.waitForUserOperationReceipt({
+            const {
+                success,
+                reason,
+                receipt: { transactionHash },
+            } = await biconomyConnector.wallet.waitForUserOperationReceipt({
                 hash: response.userOpHash,
             });
-            console.log(success, reason);
+            console.log(success, reason, transactionHash);
 
             const sessionData: SessionData = {
                 granter: biconomyConnector.address as `0x${string}`,
@@ -304,36 +308,7 @@ export const activateOvertimeAccount = async (params: { networkId: SupportedNetw
 
             localStore.set(LOCAL_STORAGE_KEYS.SESSION_P_KEY[params.networkId], JSON.stringify([...retrievedMap]));
 
-            const bundlerUrl = `${LINKS.Biconomy.Bundler}${params.networkId}/${
-                import.meta.env.VITE_APP_BICONOMY_BUNDLE_KEY
-            }`;
-            const paymasterUrl = `${LINKS.Biconomy.Paymaster}${params.networkId}/${
-                import.meta.env['VITE_APP_PAYMASTER_KEY_' + params.networkId]
-            }`;
-
-            // 2. Create a Nexus Client for Using the Session
-            const smartSessionNexusClient = createSmartAccountClient({
-                account: await toNexusAccount({
-                    signer: sessionKeyEOA,
-                    chain: getChain(params.networkId),
-                    transport: getTransport(params.networkId),
-                }),
-                transport: http(bundlerUrl),
-                paymaster: createBicoPaymasterClient({ paymasterUrl }),
-            });
-
-            // 3. Create a Smart Sessions Module for the Session Key
-            const usePermissionsModule = toSmartSessionsValidator({
-                account: smartSessionNexusClient.account,
-                signer: sessionKeyEOA,
-                moduleData: sessionData.moduleData,
-            });
-
-            const useSmartSessionNexusClient = smartSessionNexusClient.extend(
-                smartSessionUseActions(usePermissionsModule)
-            );
-
-            const approvalHash = await useSmartSessionNexusClient.sendUserOperation({
+            const approvalHash = await biconomyConnector.wallet.sendUserOperation({
                 calls: getApprovalTxs(params.networkId),
             });
 
