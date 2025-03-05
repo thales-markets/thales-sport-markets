@@ -247,4 +247,12 @@ export default {
         trackColor: Colors.GREEN,
         thumbColor: Colors.WHITE,
     },
+    tag: {
+        background: {
+            primary: Colors.GREEN_LIGHT,
+        },
+        textColor: {
+            primary: Colors.WHITE,
+        },
+    },
 };

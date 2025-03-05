@@ -108,7 +108,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     const sgpDataQuery = useSgpDataQuery(
         sgpParams,
         { networkId },
-        { enabled: ticketMarkets.length > 1, refetchInterval: secondsToMilliseconds(10) }
+        { enabled: isSgp && ticketMarkets.length > 1, refetchInterval: secondsToMilliseconds(10) }
     );
 
     const sportsbookData: SportsbookData | undefined = useMemo(() => {
@@ -334,6 +334,9 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                                         onChange={() => {
                                             dispatch(setIsSystemBet(false));
                                             dispatch(setIsSgp(false));
+                                            // reset odds changes
+                                            setAcceptOdds(true);
+                                            setOddsChanged(false);
                                         }}
                                         label={t('markets.parlay.regular')}
                                     />
@@ -347,6 +350,9 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                                         onChange={() => {
                                             dispatch(setIsSystemBet(true));
                                             dispatch(setIsSgp(false));
+                                            // reset odds changes
+                                            setAcceptOdds(true);
+                                            setOddsChanged(false);
                                         }}
                                         label={t('markets.parlay.system')}
                                     />
@@ -365,6 +371,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                                 mouseEnterDelay={0.3}
                             >
                                 <RadioButtonContainer>
+                                    <BetaTag>beta</BetaTag>
                                     <RadioButton
                                         checked={isSgp}
                                         disabled={isDifferentGamesCombined || isSgpSportDisabled}
@@ -372,6 +379,9 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                                         onChange={() => {
                                             dispatch(setIsSystemBet(false));
                                             dispatch(setIsSgp(true));
+                                            // reset odds changes
+                                            setAcceptOdds(true);
+                                            setOddsChanged(false);
                                         }}
                                         label={t('markets.parlay.sgp')}
                                     />
@@ -651,6 +661,8 @@ const StyledParlayEmptyIcon = styled(ParlayEmptyIcon)`
 const BetTypeContainer = styled(FlexDivSpaceBetween)``;
 
 const RadioButtonContainer = styled.div`
+    position: relative;
+
     label {
         padding-left: 26px;
         font-size: 14px;
@@ -674,6 +686,19 @@ const RadioButtonContainer = styled.div`
             background: ${(props) => props.theme.borderColor.quaternary};
         }
     }
+`;
+
+const BetaTag = styled.div`
+    position: absolute;
+    top: -14px;
+    right: 0;
+    background-color: ${(props) => props.theme.tag.background.primary};
+    border-radius: 5px;
+    color: ${(props) => props.theme.tag.textColor.primary};
+    display: inline-block;
+    font-size: 10px;
+    line-height: 10px;
+    padding: 2px 4px;
 `;
 
 export default Parlay;

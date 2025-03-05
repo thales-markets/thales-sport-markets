@@ -213,7 +213,7 @@ const ticketSlice = createSlice({
             localStore.set(LOCAL_STORAGE_KEYS.IS_SYSTEM_BET, action.payload);
         },
         setIsSgp: (state, action: PayloadAction<boolean>) => {
-            if (state.ticket.length > 1) {
+            if (state.isSgp && state.ticket.length > 1) {
                 const firstTicketGameId = state.ticket[0].gameId;
                 const isDifferentGame = state.ticket.some((ticket) => ticket.gameId !== firstTicketGameId);
                 isDifferentGame && _removeAll(state);

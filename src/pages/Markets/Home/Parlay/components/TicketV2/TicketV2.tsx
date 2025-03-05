@@ -22,6 +22,7 @@ import {
     SYSTEM_BET_MINIMUM_MARKETS,
     THALES_CONTRACT_RATE_KEY,
 } from 'constants/markets';
+import { ZERO_ADDRESS } from 'constants/network';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { secondsToMilliseconds } from 'date-fns';
@@ -328,14 +329,14 @@ const Ticket: React.FC<TicketProps> = ({
 
     useEffect(() => {
         if (isLiveTicket) {
-            dispatch(setIsSystemBet(false));
-            dispatch(setIsSgp(false));
-            acceptOddChanges && acceptOddChanges(false); // reset odds changes
-        } else if (isSgp) {
-            dispatch(setIsSystemBet(false));
-            acceptOddChanges && acceptOddChanges(false); // reset odds changes
+            if (isSystemBet) {
+                dispatch(setIsSystemBet(false));
+            }
+            if (isSgp) {
+                dispatch(setIsSgp(false));
+            }
         }
-    }, [dispatch, acceptOddChanges, isSystemBet, isLiveTicket, isSgp]);
+    }, [dispatch, isSystemBet, isLiveTicket, isSgp]);
 
     useEffect(() => {
         if (markets.length <= systemBetDenominator) {
@@ -983,6 +984,39 @@ const Ticket: React.FC<TicketProps> = ({
         ]
     );
 
+    // validate SGP proofs
+    useInterval(
+        async () => {
+            if (isSgp) {
+                const sportsAMMV2Contract = getContractInstance(ContractType.SPORTS_AMM_V2, { client, networkId });
+
+                if (sportsAMMV2Contract) {
+                    const tradeData = getTradeData(markets);
+
+                    try {
+                        await sportsAMMV2Contract.read.tradeQuote([
+                            [tradeData[0]],
+                            coinParser(minBuyInAmount.toString(), networkId, usedCollateralForBuy),
+                            isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
+                            false,
+                        ]);
+                    } catch (e: any) {
+                        console.log(e);
+                        if (e && e.toString().includes(TicketErrorMessage.PROOF_IS_NOT_VALID)) {
+                            const gameIds = markets.map((market) => market.gameId).join(',');
+                            const typeIds = markets.map((market) => market.typeId).join(',');
+                            const playerIds = markets.map((market) => market.playerProps.playerId).join(',');
+                            const lines = markets.map((market) => market.line).join(',');
+                            console.log('refetchProofs');
+                            refetchProofs(networkId, gameIds, typeIds, playerIds, lines);
+                        }
+                    }
+                }
+            }
+        },
+        isSgp ? secondsToMilliseconds(5) : null
+    );
+
     const swapToThalesParams = useMemo(
         () =>
             getSwapParams(
@@ -1445,7 +1479,7 @@ const Ticket: React.FC<TicketProps> = ({
         if (
             (sportsAMMV2Contract && !isLiveTicket) ||
             (liveTradingProcessorContract && isLiveTicket) ||
-            (sgpTradingProcessorContract && isSgp) ||
+            (sgpTradingProcessorContract && sportsAMMV2Contract && isSgp) ||
             (stakingThalesBettingProxyContract && isStakedThales)
         ) {
             setIsBuying(true);
@@ -1492,6 +1526,32 @@ const Ticket: React.FC<TicketProps> = ({
                     : sgpTradingProcessorContract;
 
                 tradeData = getTradeData(markets);
+
+                if (isSgp && sportsAMMV2Contract) {
+                    // validate SGP proofs
+                    try {
+                        sportsAMMV2Contract.read.tradeQuote([
+                            [tradeData[0]],
+                            coinParser(minBuyInAmount.toString(), networkId, usedCollateralForBuy),
+                            isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
+                            false,
+                        ]);
+                    } catch (e: any) {
+                        console.log(e);
+                        if (e && e.toString().includes(TicketErrorMessage.PROOF_IS_NOT_VALID)) {
+                            const gameIds = markets.map((market) => market.gameId).join(',');
+                            const typeIds = markets.map((market) => market.typeId).join(',');
+                            const playerIds = markets.map((market) => market.playerProps.playerId).join(',');
+                            const lines = markets.map((market) => market.line).join(',');
+                            console.log('refetchProofs');
+                            refetchProofs(networkId, gameIds, typeIds, playerIds, lines);
+
+                            toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+                            setIsBuying(false);
+                            return;
+                        }
+                    }
+                }
 
                 const referralId =
                     walletAddress && getReferralId()?.toLowerCase() !== walletAddress.toLowerCase()
