@@ -987,7 +987,7 @@ const Ticket: React.FC<TicketProps> = ({
     // validate SGP proofs
     useInterval(
         async () => {
-            if (isSgp) {
+            if (isSgp && markets.length) {
                 const sportsAMMV2Contract = getContractInstance(ContractType.SPORTS_AMM_V2, { client, networkId });
 
                 if (sportsAMMV2Contract) {
