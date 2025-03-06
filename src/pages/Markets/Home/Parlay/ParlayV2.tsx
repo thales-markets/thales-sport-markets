@@ -332,6 +332,9 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                                         checked={!isSystemBet && !isSgp}
                                         value={'true'}
                                         onChange={() => {
+                                            if (isSgp && ticket.length > 1) {
+                                                dispatch(removeAll());
+                                            }
                                             dispatch(setIsSystemBet(false));
                                             dispatch(setIsSgp(false));
                                             // reset odds changes
@@ -348,6 +351,9 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                                         checked={isSystemBet}
                                         value={'false'}
                                         onChange={() => {
+                                            if (isSgp && ticket.length > 1) {
+                                                dispatch(removeAll());
+                                            }
                                             dispatch(setIsSystemBet(true));
                                             dispatch(setIsSgp(false));
                                             // reset odds changes
