@@ -3,9 +3,9 @@ import { ContractData } from 'types/viem';
 
 const sgpTradingProcessorContract: ContractData = {
     addresses: {
-        [Network.OptimismMainnet]: '0xc685436615B831030208c3DcfD147816b0Da0391',
-        [Network.Arbitrum]: '0xEA9363f4739F1d45F88c584940b6709a9cF6bbe5',
-        [Network.Base]: '0xef780c362cA89fee6e7d3Ddf20564B9288E01ac6',
+        [Network.OptimismMainnet]: '0x27A4403ba34d5FB8dA30bCBA455837FbF9aa1666',
+        [Network.Arbitrum]: '0xcC2e7b42cB21386FD71dECB22ebd429754B505F2',
+        [Network.Base]: '0xB908ED8efA7E37304602f2782674eE0B6CD19D47',
         [Network.OptimismSepolia]: '0x1B3b991Da49DBCAbf5b5DA401E8a13946bBedEBD',
     },
     abi: [
