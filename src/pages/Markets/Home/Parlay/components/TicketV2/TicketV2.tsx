@@ -1527,32 +1527,6 @@ const Ticket: React.FC<TicketProps> = ({
 
                 tradeData = getTradeData(markets);
 
-                if (isSgp && sportsAMMV2Contract) {
-                    // validate SGP proofs
-                    try {
-                        sportsAMMV2Contract.read.tradeQuote([
-                            [tradeData[0]],
-                            coinParser(minBuyInAmount.toString(), networkId, usedCollateralForBuy),
-                            isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
-                            false,
-                        ]);
-                    } catch (e: any) {
-                        console.log(e);
-                        if (e && e.toString().includes(TicketErrorMessage.PROOF_IS_NOT_VALID)) {
-                            const gameIds = markets.map((market) => market.gameId).join(',');
-                            const typeIds = markets.map((market) => market.typeId).join(',');
-                            const playerIds = markets.map((market) => market.playerProps.playerId).join(',');
-                            const lines = markets.map((market) => market.line).join(',');
-                            console.log('refetchProofs');
-                            refetchProofs(networkId, gameIds, typeIds, playerIds, lines);
-
-                            toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                            setIsBuying(false);
-                            return;
-                        }
-                    }
-                }
-
                 const referralId =
                     walletAddress && getReferralId()?.toLowerCase() !== walletAddress.toLowerCase()
                         ? getReferralId()
@@ -1594,43 +1568,93 @@ const Ticket: React.FC<TicketProps> = ({
                             });
 
                             if (txReceipt.status === 'success') {
-                                tx = await getTradingProcessorTransaction(
-                                    isLiveTicket,
-                                    isSgp,
-                                    collateralAddress,
-                                    liveOrSgpTradingProcessorContract,
-                                    tradeData,
-                                    parsedBuyInAmount,
-                                    isLiveTicket ? liveTotalQuote : sgpTotalQuote,
-                                    referralId,
-                                    additionalSlippage,
-                                    isBiconomy,
-                                    false, // isFreeBet
-                                    undefined, // freeBetHolderContract
-                                    isStakedThales,
-                                    stakingThalesBettingProxyContract,
-                                    networkId
-                                );
+                                try {
+                                    tx = await getTradingProcessorTransaction(
+                                        isLiveTicket,
+                                        isSgp,
+                                        collateralAddress,
+                                        liveOrSgpTradingProcessorContract,
+                                        tradeData,
+                                        parsedBuyInAmount,
+                                        isLiveTicket ? liveTotalQuote : sgpTotalQuote,
+                                        referralId,
+                                        additionalSlippage,
+                                        isBiconomy,
+                                        false, // isFreeBet
+                                        undefined, // freeBetHolderContract
+                                        isStakedThales,
+                                        stakingThalesBettingProxyContract,
+                                        networkId
+                                    );
+                                } catch (e: any) {
+                                    // validate SGP proofs
+                                    if (isSgp) {
+                                        console.log(e);
+                                        if (e && e.toString().includes(TicketErrorMessage.PROOF_IS_NOT_VALID)) {
+                                            const gameIds = markets.map((market) => market.gameId).join(',');
+                                            const typeIds = markets.map((market) => market.typeId).join(',');
+                                            const playerIds = markets
+                                                .map((market) => market.playerProps.playerId)
+                                                .join(',');
+                                            const lines = markets.map((market) => market.line).join(',');
+                                            console.log('refetchProofs');
+                                            refetchProofs(networkId, gameIds, typeIds, playerIds, lines);
+
+                                            toast.update(
+                                                toastId,
+                                                getErrorToastOptions(t('common.errors.unknown-error-try-again'))
+                                            );
+                                            setIsBuying(false);
+                                            return;
+                                        }
+                                    } else {
+                                        throw e;
+                                    }
+                                }
                             }
                         }
                     } else {
-                        tx = await getTradingProcessorTransaction(
-                            isLiveTicket,
-                            isSgp,
-                            swapToThales ? thalesCollateralAddress : collateralAddress,
-                            liveOrSgpTradingProcessorContract,
-                            tradeData,
-                            parsedBuyInAmount,
-                            isLiveTicket ? liveTotalQuote : sgpTotalQuote,
-                            referralId,
-                            additionalSlippage,
-                            isBiconomy,
-                            isFreeBetActive,
-                            freeBetHolderContract,
-                            isStakedThales,
-                            stakingThalesBettingProxyContract,
-                            networkId
-                        );
+                        try {
+                            tx = await getTradingProcessorTransaction(
+                                isLiveTicket,
+                                isSgp,
+                                swapToThales ? thalesCollateralAddress : collateralAddress,
+                                liveOrSgpTradingProcessorContract,
+                                tradeData,
+                                parsedBuyInAmount,
+                                isLiveTicket ? liveTotalQuote : sgpTotalQuote,
+                                referralId,
+                                additionalSlippage,
+                                isBiconomy,
+                                isFreeBetActive,
+                                freeBetHolderContract,
+                                isStakedThales,
+                                stakingThalesBettingProxyContract,
+                                networkId
+                            );
+                        } catch (e: any) {
+                            // validate SGP proofs
+                            if (isSgp) {
+                                console.log(e);
+                                if (e && e.toString().includes(TicketErrorMessage.PROOF_IS_NOT_VALID)) {
+                                    const gameIds = markets.map((market) => market.gameId).join(',');
+                                    const typeIds = markets.map((market) => market.typeId).join(',');
+                                    const playerIds = markets.map((market) => market.playerProps.playerId).join(',');
+                                    const lines = markets.map((market) => market.line).join(',');
+                                    console.log('refetchProofs');
+                                    refetchProofs(networkId, gameIds, typeIds, playerIds, lines);
+
+                                    toast.update(
+                                        toastId,
+                                        getErrorToastOptions(t('common.errors.unknown-error-try-again'))
+                                    );
+                                    setIsBuying(false);
+                                    return;
+                                }
+                            } else {
+                                throw e;
+                            }
+                        }
                     }
                 } else {
                     tx = await getSportsAMMV2Transaction(
