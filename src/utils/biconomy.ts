@@ -19,6 +19,7 @@ import sportsAMMV2Contract from './contracts/sportsAMMV2Contract';
 export const ETH_PAYMASTER = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'; // used for paying gas in ETH by AA
 
 export const sendBiconomyTransaction = async (params: {
+    networkId: SupportedNetwork;
     transaction: any;
     collateralAddress: string;
 }): Promise<any | undefined> => {
@@ -28,6 +29,9 @@ export const sendBiconomyTransaction = async (params: {
             const { wait } = await biconomyConnector.wallet.sendTransaction(params.transaction, {
                 paymasterServiceData: {
                     mode: PaymasterMode.SPONSORED,
+                    webhookData: {
+                        networkId: params.networkId,
+                    },
                 },
             });
 
@@ -69,6 +73,7 @@ export const sendBiconomyTransaction = async (params: {
 };
 
 export const executeBiconomyTransactionWithConfirmation = async (params: {
+    networkId: SupportedNetwork;
     contract: ViemContract | undefined;
     collateralAddress?: string;
     methodName: string;
@@ -93,6 +98,9 @@ export const executeBiconomyTransactionWithConfirmation = async (params: {
             const { wait } = await biconomyConnector.wallet.sendTransaction(transaction, {
                 paymasterServiceData: {
                     mode: PaymasterMode.SPONSORED,
+                    webhookData: {
+                        networkId: params.networkId,
+                    },
                 },
             });
 
@@ -189,6 +197,9 @@ export const executeBiconomyTransaction = async (params: {
                 const { wait } = await biconomyConnector.wallet.sendTransaction(transactionArray, {
                     paymasterServiceData: {
                         mode: PaymasterMode.SPONSORED,
+                        webhookData: {
+                            networkId: params.networkId,
+                        },
                     },
                     params: {
                         sessionSigner: sessionSigner,
@@ -200,6 +211,8 @@ export const executeBiconomyTransaction = async (params: {
                     receipt: { transactionHash },
                     success,
                 } = await wait();
+
+                console.log('Tx: ', transactionHash);
 
                 if (success === 'false') {
                     throw new Error('tx failed');
@@ -244,6 +257,9 @@ export const executeBiconomyTransaction = async (params: {
                         const { wait } = await biconomyConnector.wallet.sendTransaction(transactionArray, {
                             paymasterServiceData: {
                                 mode: PaymasterMode.SPONSORED,
+                                webhookData: {
+                                    networkId: params.networkId,
+                                },
                             },
                             params: {
                                 sessionSigner: sessionSigner,
@@ -304,6 +320,9 @@ export const activateOvertimeAccount = async (params: { networkId: SupportedNetw
                 {
                     paymasterServiceData: {
                         mode: PaymasterMode.SPONSORED,
+                        webhookData: {
+                            networkId: params.networkId,
+                        },
                     },
                 }
             );
@@ -312,6 +331,8 @@ export const activateOvertimeAccount = async (params: { networkId: SupportedNetw
                 receipt: { transactionHash },
                 success,
             } = await wait();
+
+            console.log('Tx: ', transactionHash);
 
             if (success === 'false') {
                 return null;

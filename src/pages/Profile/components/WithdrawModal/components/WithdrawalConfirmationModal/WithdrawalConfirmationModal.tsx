@@ -84,6 +84,7 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
                     );
 
                     txHash = await executeBiconomyTransactionWithConfirmation({
+                        networkId,
                         collateralAddress: collateralContractWithSigner?.address,
                         contract: collateralContractWithSigner,
                         methodName: 'transfer',

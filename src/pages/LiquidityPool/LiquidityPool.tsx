@@ -337,6 +337,7 @@ const LiquidityPool: React.FC = () => {
             try {
                 const hash = isBiconomy
                     ? await executeBiconomyTransactionWithConfirmation({
+                          networkId,
                           collateralAddress: multiCollateralWithSigner.address,
                           contract: multiCollateralWithSigner,
                           methodName: 'approve',
@@ -389,6 +390,7 @@ const LiquidityPool: React.FC = () => {
             ) {
                 const wrapTxHash = isBiconomy
                     ? await executeBiconomyTransactionWithConfirmation({
+                          networkId,
                           collateralAddress: WETHContractWithSigner.address,
                           contract: WETHContractWithSigner,
                           methodName: 'deposit',
@@ -403,6 +405,7 @@ const LiquidityPool: React.FC = () => {
                 if (wrapTxReceipt.status === 'success') {
                     const txHash = isBiconomy
                         ? await executeBiconomyTransactionWithConfirmation({
+                              networkId,
                               collateralAddress: getCollateralAddress(networkId, collateralIndex),
                               contract: liquidityPoolContractWithSigner,
                               methodName: 'deposit',
@@ -428,6 +431,7 @@ const LiquidityPool: React.FC = () => {
             } else {
                 const txHash = isBiconomy
                     ? await executeBiconomyTransactionWithConfirmation({
+                          networkId,
                           collateralAddress: getCollateralAddress(networkId, collateralIndex),
                           contract: liquidityPoolContractWithSigner,
                           methodName: 'deposit',
@@ -468,6 +472,7 @@ const LiquidityPool: React.FC = () => {
 
             const txHash = isBiconomy
                 ? await executeBiconomyTransactionWithConfirmation({
+                      networkId,
                       collateralAddress: getCollateralAddress(networkId, collateralIndex),
                       contract: liquidityPoolContractWithSigner,
                       methodName: withdrawAll ? 'withdrawalRequest' : 'partialWithdrawalRequest',
@@ -518,6 +523,7 @@ const LiquidityPool: React.FC = () => {
                     if (!roundClosingPrepared) {
                         const txHash = isBiconomy
                             ? await executeBiconomyTransactionWithConfirmation({
+                                  networkId,
                                   collateralAddress: getCollateralAddress(networkId, collateralIndex),
                                   contract: liquidityPoolContractWithSigner,
                                   methodName: 'prepareRoundClosing',
@@ -539,6 +545,7 @@ const LiquidityPool: React.FC = () => {
                     while (usersProcessedInRound.toString() < getUsersCountInCurrentRound.toString()) {
                         const txHash = isBiconomy
                             ? await executeBiconomyTransactionWithConfirmation({
+                                  networkId,
                                   collateralAddress: getCollateralAddress(networkId, collateralIndex),
                                   contract: liquidityPoolContractWithSigner,
                                   methodName: 'processRoundClosingBatch',
@@ -561,6 +568,7 @@ const LiquidityPool: React.FC = () => {
 
                     const tx = isBiconomy
                         ? await executeBiconomyTransactionWithConfirmation({
+                              networkId,
                               collateralAddress: getCollateralAddress(networkId, collateralIndex),
                               contract: liquidityPoolContractWithSigner,
                               methodName: 'closeRound',
