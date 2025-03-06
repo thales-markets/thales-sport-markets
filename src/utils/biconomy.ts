@@ -1,5 +1,5 @@
 import { createSessionKeyManagerModule, DEFAULT_SESSION_KEY_MANAGER_MODULE } from '@biconomy/modules';
-import { PaymasterMode } from '@biconomy/paymaster';
+import { PaymasterFeeQuote, PaymasterMode } from '@biconomy/paymaster';
 import { getPublicClient } from '@wagmi/core';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { addMonths } from 'date-fns';
@@ -17,6 +17,7 @@ import sessionValidationContract from './contracts/sessionValidationContract';
 import sportsAMMV2Contract from './contracts/sportsAMMV2Contract';
 
 export const ETH_PAYMASTER = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'; // used for paying gas in ETH by AA
+export const GAS_LIMIT = 0.3;
 
 export const sendBiconomyTransaction = async (params: {
     networkId: SupportedNetwork;
@@ -491,4 +492,43 @@ const getSessionSigner = async (networkId: SupportedNetwork) => {
         transport: http(biconomyConnector.wallet?.rpcProvider.transport.url),
     });
     return sessionSigner;
+};
+
+export const getPaymasterData = async (
+    networkId: SupportedNetwork,
+    contract: ViemContract | undefined,
+    methodName: string,
+    data?: ReadonlyArray<any>,
+    value?: any
+): Promise<PaymasterFeeQuote | undefined> => {
+    if (biconomyConnector.wallet && contract) {
+        try {
+            biconomyConnector.wallet.setActiveValidationModule(biconomyConnector.wallet.defaultValidationModule);
+
+            const encodedCall = encodeFunctionData({
+                abi: getContractAbi(contract, networkId),
+                functionName: methodName,
+                args: data ? data : ([] as any),
+            });
+
+            const transaction = {
+                to: contract.address,
+                data: encodedCall,
+                value,
+            };
+
+            const feeQuotesData = await biconomyConnector.wallet.getTokenFees(transaction, {
+                paymasterServiceData: {
+                    mode: PaymasterMode.ERC20,
+                },
+            });
+
+            const quotes = feeQuotesData.feeQuotes?.filter((feeQuote) => feeQuote.symbol === 'USDC');
+            if (quotes) {
+                return quotes[0];
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
 };

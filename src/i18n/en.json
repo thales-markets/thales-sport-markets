@@ -800,6 +800,7 @@
             "positions": "Positions",
             "total-gas": "Gas Fee(ESTIMATED)",
             "gas-tooltip": "Current Gas Fee required by the blockchain to settle the transaction",
+            "gas-warning": "Sponsored transactions are currently disabled, you will pay ~ {{ gas }} for transaction gas",
             "total-to-pay": "Total to pay",
             "payout": "Payout",
             "potential-profit": "Potential profit",

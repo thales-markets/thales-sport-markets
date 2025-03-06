@@ -24,6 +24,7 @@ import {
     SYSTEM_BET_MINIMUM_DENOMINATOR,
     SYSTEM_BET_MINIMUM_MARKETS,
 } from 'constants/markets';
+import { ZERO_ADDRESS } from 'constants/network';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { secondsToMilliseconds } from 'date-fns';
@@ -89,7 +90,7 @@ import { OverdropMultiplier, OverdropUserData } from 'types/overdrop';
 import { RootState } from 'types/redux';
 import { OverdropLevel, ThemeInterface } from 'types/ui';
 import { ViemContract } from 'types/viem';
-import { executeBiconomyTransaction } from 'utils/biconomy';
+import { GAS_LIMIT, executeBiconomyTransaction, getPaymasterData } from 'utils/biconomy';
 import {
     convertFromStableToCollateral,
     getCollateral,
@@ -107,6 +108,7 @@ import { getContractInstance } from 'utils/contract';
 import multipleCollateral from 'utils/contracts/multipleCollateralContract';
 import sportsAMMV2Contract from 'utils/contracts/sportsAMMV2Contract';
 import { isErrorExcluded, logErrorToDiscord } from 'utils/discord';
+import { convertFromBytes32 } from 'utils/formatters/string';
 import { getLiveTradingProcessorTransaction, getRequestId } from 'utils/liveTradingProcessor';
 import { formatMarketOdds } from 'utils/markets';
 import { getTradeData } from 'utils/marketsV2';
@@ -146,6 +148,7 @@ import {
     CheckboxContainer,
     ClearLabel,
     CurrentLevelProgressLineContainer,
+    GasWarning,
     HorizontalLine,
     InfoContainer,
     InfoLabel,
@@ -247,6 +250,7 @@ const Ticket: React.FC<TicketProps> = ({
     const [tooltipTextBuyInAmount, setTooltipTextBuyInAmount] = useState<string>('');
     const [isFreeBetActive, setIsFreeBetActive] = useState<boolean>(false);
     const [isOverdropSummaryOpen, setIsOverdropSummaryOpen] = useState<boolean>(false);
+    const [gas, setGas] = useState(0);
 
     const [openApprovalModal, setOpenApprovalModal] = useState(false);
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
@@ -1665,6 +1669,115 @@ const Ticket: React.FC<TicketProps> = ({
         }
     };
 
+    useMemo(async () => {
+        if (isBiconomy) {
+            console.log('fetch gas: ');
+            const networkConfig = {
+                client: walletClient.data,
+                networkId,
+            };
+
+            const sportsAMMV2Contract = getContractInstance(ContractType.SPORTS_AMM_V2, networkConfig);
+            const liveTradingProcessorContract = getContractInstance(
+                ContractType.LIVE_TRADING_PROCESSOR,
+                networkConfig
+            );
+            const freeBetHolderContract = getContractInstance(ContractType.FREE_BET_HOLDER, networkConfig);
+
+            // TODO: separate logic for regular and live markets
+            if ((sportsAMMV2Contract && !markets[0].live) || (liveTradingProcessorContract && markets[0].live)) {
+                const sportsAMMV2OrLiveContract = markets[0].live ? liveTradingProcessorContract : sportsAMMV2Contract;
+                let tradeData: TradeData[] = [];
+
+                try {
+                    tradeData = getTradeData(markets);
+                    const parsedBuyInAmount = coinParser(buyInAmount.toString(), networkId, usedCollateralForBuy);
+                    const parsedTotalQuote = parseEther(floorNumberToDecimals(totalQuote, 18).toString());
+                    const additionalSlippage = parseEther(tradeData[0].live ? liveBetSlippage / 100 + '' : '0.02');
+
+                    if (tradeData[0].live) {
+                        const liveTradeDataOdds = tradeData[0].odds;
+                        const liveTradeDataPosition = tradeData[0].position;
+                        const liveTotalQuote = liveTradeDataOdds[liveTradeDataPosition];
+
+                        const feeQuotes = await getPaymasterData(
+                            networkId,
+                            isFreeBetActive ? freeBetHolderContract : sportsAMMV2OrLiveContract,
+                            isFreeBetActive ? 'tradeLive' : 'requestLiveTrade',
+                            [
+                                {
+                                    _gameId: convertFromBytes32(tradeData[0].gameId),
+                                    _sportId: tradeData[0].sportId,
+                                    _typeId: tradeData[0].typeId,
+                                    _line: tradeData[0].line,
+                                    _position: tradeData[0].position,
+                                    _buyInAmount: parsedBuyInAmount,
+                                    _expectedQuote: liveTotalQuote,
+                                    _additionalSlippage: additionalSlippage,
+                                    _referrer: ZERO_ADDRESS,
+                                    _collateral: collateralAddress,
+                                },
+                            ]
+                        );
+
+                        if (feeQuotes) {
+                            setGas(feeQuotes.maxGasFee);
+                        }
+                    } else {
+                        const feeQuotes = await getPaymasterData(
+                            networkId,
+                            sportsAMMV2OrLiveContract,
+                            isSystemBet ? 'tradeSystemBet' : 'trade',
+                            isSystemBet
+                                ? [
+                                      tradeData,
+                                      parsedBuyInAmount,
+                                      parsedTotalQuote,
+                                      additionalSlippage,
+                                      ZERO_ADDRESS,
+                                      collateralAddress,
+                                      isEth,
+                                      systemBetDenominator,
+                                  ]
+                                : [
+                                      tradeData,
+                                      parsedBuyInAmount,
+                                      parsedTotalQuote,
+                                      additionalSlippage,
+                                      ZERO_ADDRESS,
+                                      collateralAddress,
+                                      isEth,
+                                  ]
+                        );
+
+                        if (feeQuotes) {
+                            setGas(feeQuotes.maxGasFee);
+                        }
+                    }
+                } catch (e) {
+                    console.log(e);
+                    setGas(0);
+                }
+            } else {
+                setGas(0);
+            }
+        }
+    }, [
+        isEth,
+        buyInAmount,
+        collateralAddress,
+        isFreeBetActive,
+        isSystemBet,
+        liveBetSlippage,
+        markets,
+        networkId,
+        systemBetDenominator,
+        totalQuote,
+        usedCollateralForBuy,
+        isBiconomy,
+        walletClient.data,
+    ]);
+
     // Button validations
     useEffect(() => {
         if (isAMMPaused) {
@@ -2527,6 +2640,11 @@ const Ticket: React.FC<TicketProps> = ({
                 </>
             )}
             {!oddsChanged && <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>}
+            {gas >= GAS_LIMIT && (
+                <GasWarning>
+                    {t('markets.parlay.gas-warning', { gas: formatCurrencyWithSign(USD_SIGN, gas, 4) })}
+                </GasWarning>
+            )}
             <ShareWrapper disabled={twitterShareDisabled} onClick={onTwitterIconClick}>
                 <SummaryLabel disabled={twitterShareDisabled}>{t('markets.parlay.share-ticket.label')}</SummaryLabel>
                 <TwitterIcon disabled={twitterShareDisabled} />
