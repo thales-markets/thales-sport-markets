@@ -7,7 +7,7 @@
 }
 
 .currency-icon--over::before {
-    content: '\0042';
+    content: '\0021';
 }
 
 .currency-icon--usdc::before {
@@ -44,6 +44,14 @@
 
 .currency-icon--op::before {
     content: '\00B6';
+}
+
+.currency-icon--cbbtc::before {
+    content: '\00B7';
+}
+
+.currency-icon--wbtc::before {
+    content: '\00B7';
 }
 
 .currency-icon--susd::before {

@@ -1,7 +1,7 @@
+import { TBD_ADDRESS } from 'constants/network';
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 import { Network } from 'enums/network';
 import { ContractData } from 'types/viem';
-import { TBD_ADDRESS } from '../../constants/network';
 
 const ABI = [
     { inputs: [{ internalType: 'address', name: 'target', type: 'address' }], name: 'AddressEmptyCode', type: 'error' },
@@ -764,9 +764,27 @@ const liquidityPoolContractV2: Record<LiquidityPoolCollateral, ContractData> = {
     },
     [LiquidityPoolCollateral.OVER]: {
         addresses: {
-            [Network.OptimismMainnet]: '0xAeb2B8a262D7118322C43449909eEFEe07BbBD7D',
-            [Network.Arbitrum]: '0x796B7361F0E818f5D8446f11Be633D60e2B00898',
-            [Network.Base]: '0xe2FCBAC654970bAd1d88B4F6e10d0Ac6152c584E',
+            [Network.OptimismMainnet]: '0x59a7A8Ae9d58D69a69b6A24770EC771110647226',
+            [Network.Arbitrum]: '0xc5f5186b46c84bF63a9e166bfa2175D9bc391ce2',
+            [Network.Base]: '0xB4199DC163F3206643649E117A816ad0DECb6C3B',
+            [Network.OptimismSepolia]: TBD_ADDRESS,
+        },
+        abi: ABI,
+    },
+    [LiquidityPoolCollateral.cbBTC]: {
+        addresses: {
+            [Network.OptimismMainnet]: TBD_ADDRESS,
+            [Network.Arbitrum]: TBD_ADDRESS,
+            [Network.Base]: '0x8d4f838327DedFc735e202731358AcFc260c207a',
+            [Network.OptimismSepolia]: TBD_ADDRESS,
+        },
+        abi: ABI,
+    },
+    [LiquidityPoolCollateral.wBTC]: {
+        addresses: {
+            [Network.OptimismMainnet]: TBD_ADDRESS,
+            [Network.Arbitrum]: '0xbD08D8F8c17C22fb0a12Fe490F38f40c59B60d2A',
+            [Network.Base]: TBD_ADDRESS,
             [Network.OptimismSepolia]: TBD_ADDRESS,
         },
         abi: ABI,

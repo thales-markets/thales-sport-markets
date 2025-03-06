@@ -25,11 +25,6 @@ const useMultipleCollateralBalanceQuery = (
             let collateralsBalance: CollateralsBalance = DEFAULT_MULTI_COLLATERAL_BALANCE;
             try {
                 const multipleCollateralObject = {
-                    sUSD: getContractInstance(
-                        ContractType.MULTICOLLATERAL,
-                        networkConfig,
-                        getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.sUSD as Coins)
-                    ) as ViemContract,
                     DAI: getContractInstance(
                         ContractType.MULTICOLLATERAL,
                         networkConfig,
@@ -81,6 +76,16 @@ const useMultipleCollateralBalanceQuery = (
                         getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.OVER as Coins)
                     ) as ViemContract,
                     THALES: getContractInstance(ContractType.THALES, networkConfig) as ViemContract,
+                    cbBTC: getContractInstance(
+                        ContractType.MULTICOLLATERAL,
+                        networkConfig,
+                        getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.cbBTC as Coins)
+                    ) as ViemContract,
+                    wBTC: getContractInstance(
+                        ContractType.MULTICOLLATERAL,
+                        networkConfig,
+                        getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.wBTC as Coins)
+                    ) as ViemContract,
                 };
 
                 if (!walletAddress || !networkConfig.networkId) {
@@ -88,7 +93,6 @@ const useMultipleCollateralBalanceQuery = (
                 }
 
                 const [
-                    sUSDBalance,
                     DAIBalance,
                     USDCBalance,
                     USDCeBalance,
@@ -100,10 +104,9 @@ const useMultipleCollateralBalanceQuery = (
                     ARBBalance,
                     OVERBalance,
                     THALESBalance,
+                    cbBTCBalance,
+                    wBTCBalance,
                 ] = await Promise.all([
-                    multipleCollateralObject?.sUSD && multipleCollateralObject?.sUSD?.address !== TBD_ADDRESS
-                        ? multipleCollateralObject.sUSD.read.balanceOf([walletAddress])
-                        : 0,
                     multipleCollateralObject?.DAI && multipleCollateralObject?.DAI?.address !== TBD_ADDRESS
                         ? multipleCollateralObject.DAI.read.balanceOf([walletAddress])
                         : 0,
@@ -135,10 +138,15 @@ const useMultipleCollateralBalanceQuery = (
                     multipleCollateralObject?.THALES && multipleCollateralObject?.THALES?.address !== TBD_ADDRESS
                         ? multipleCollateralObject.THALES.read.balanceOf([walletAddress])
                         : 0,
+                    multipleCollateralObject?.cbBTC && multipleCollateralObject?.cbBTC?.address !== TBD_ADDRESS
+                        ? multipleCollateralObject.cbBTC.read.balanceOf([walletAddress])
+                        : 0,
+                    multipleCollateralObject?.wBTC && multipleCollateralObject?.wBTC?.address !== TBD_ADDRESS
+                        ? multipleCollateralObject.wBTC.read.balanceOf([walletAddress])
+                        : 0,
                 ]);
 
                 collateralsBalance = {
-                    sUSD: sUSDBalance ? bigNumberFormatter(sUSDBalance, COLLATERAL_DECIMALS.sUSD) : 0,
                     DAI: DAIBalance ? bigNumberFormatter(DAIBalance, COLLATERAL_DECIMALS.DAI) : 0,
                     USDC: USDCBalance ? bigNumberFormatter(USDCBalance, COLLATERAL_DECIMALS.USDC) : 0,
                     USDCe: USDCeBalance ? bigNumberFormatter(USDCeBalance, COLLATERAL_DECIMALS.USDCe) : 0,
@@ -159,6 +167,8 @@ const useMultipleCollateralBalanceQuery = (
                             : bigNumberFormatter(THALESBalance, COLLATERAL_DECIMALS.THALES)
                         : 0,
                     sTHALES: 0,
+                    cbBTC: cbBTCBalance ? bigNumberFormatter(cbBTCBalance, COLLATERAL_DECIMALS.cbBTC) : 0,
+                    wBTC: wBTCBalance ? bigNumberFormatter(wBTCBalance, COLLATERAL_DECIMALS.cbBTC) : 0,
                 };
             } catch (e) {
                 console.log('e ', e);

@@ -11,7 +11,7 @@ export const Wrapper = styled(FlexDivRow)`
 
 export const ItemWrapper = styled.div`
     position: relative;
-    padding: 0 50px;
+    padding: 0 40px;
     text-align: start;
     @media (max-width: 767px) {
         padding: 0 10px;
@@ -23,7 +23,6 @@ export const Item = styled.span<{ selected: boolean }>`
     color: ${(props) => (props.selected ? props.theme.textColor.quaternary : props.theme.textColor.secondary)};
     font-size: 12px;
     font-weight: 600;
-    text-transform: uppercase;
     cursor: pointer;
     white-space: nowrap;
     i {

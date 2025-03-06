@@ -7,14 +7,14 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { ContractType } from 'enums/contract';
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 import { orderBy } from 'lodash';
-import { bigNumberFormatter, Coins, NetworkId, parseBytes32String } from 'thales-utils';
+import { bigNumberFormatter, Coins, parseBytes32String } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { LpStats, Ticket } from 'types/markets';
 import { NetworkConfig, SupportedNetwork } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { isLpSupported, isStableCurrency } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
-import { getLpAddress, getRoundForOver } from 'utils/liquidityPool';
+import { getLpAddress, getRoundWithOffset, isLpAvailableForNetwork } from 'utils/liquidityPool';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
 import { mapTicket } from 'utils/tickets';
 import { League } from '../../enums/sports';
@@ -106,28 +106,44 @@ const useLpStatsQuery = (
                     wethTickets,
                     thalesTickets,
                     overTickets,
+                    cbbtcTickets,
+                    wbtcTickets,
                     currencies,
                     rates,
                     thalesPriceResponse,
                 ] = await Promise.all([
                     liquidityPoolDataContract.read.getRoundTickets([
                         getLpAddress(networkConfig.networkId, LiquidityPoolCollateral.USDC),
-                        round,
+                        getRoundWithOffset(round, networkConfig.networkId, LiquidityPoolCollateral.USDC),
                     ]),
                     liquidityPoolDataContract.read.getRoundTickets([
                         getLpAddress(networkConfig.networkId, LiquidityPoolCollateral.WETH),
-                        round,
+                        getRoundWithOffset(round, networkConfig.networkId, LiquidityPoolCollateral.WETH),
                     ]),
-                    networkConfig.networkId === NetworkId.Base
-                        ? []
-                        : liquidityPoolDataContract.read.getRoundTickets([
+                    isLpAvailableForNetwork(networkConfig.networkId, LiquidityPoolCollateral.THALES)
+                        ? liquidityPoolDataContract.read.getRoundTickets([
                               getLpAddress(networkConfig.networkId, LiquidityPoolCollateral.THALES),
-                              round,
-                          ]),
-                    liquidityPoolDataContract.read.getRoundTickets([
-                        getLpAddress(networkConfig.networkId, LiquidityPoolCollateral.OVER),
-                        getRoundForOver(round, networkConfig.networkId),
-                    ]),
+                              getRoundWithOffset(round, networkConfig.networkId, LiquidityPoolCollateral.THALES),
+                          ])
+                        : [],
+                    isLpAvailableForNetwork(networkConfig.networkId, LiquidityPoolCollateral.OVER)
+                        ? liquidityPoolDataContract.read.getRoundTickets([
+                              getLpAddress(networkConfig.networkId, LiquidityPoolCollateral.OVER),
+                              getRoundWithOffset(round, networkConfig.networkId, LiquidityPoolCollateral.OVER),
+                          ])
+                        : [],
+                    isLpAvailableForNetwork(networkConfig.networkId, LiquidityPoolCollateral.cbBTC)
+                        ? liquidityPoolDataContract.read.getRoundTickets([
+                              getLpAddress(networkConfig.networkId, LiquidityPoolCollateral.cbBTC),
+                              getRoundWithOffset(round, networkConfig.networkId, LiquidityPoolCollateral.cbBTC),
+                          ])
+                        : [],
+                    isLpAvailableForNetwork(networkConfig.networkId, LiquidityPoolCollateral.wBTC)
+                        ? liquidityPoolDataContract.read.getRoundTickets([
+                              getLpAddress(networkConfig.networkId, LiquidityPoolCollateral.wBTC),
+                              getRoundWithOffset(round, networkConfig.networkId, LiquidityPoolCollateral.wBTC),
+                          ])
+                        : [],
                     priceFeedContract.read.getCurrencies(),
                     priceFeedContract.read.getRates(),
                     axios.get(`${generalConfig.API_URL}/token/price`),
@@ -139,6 +155,10 @@ const useLpStatsQuery = (
                     exchangeRates[currencyName] = bigNumberFormatter(rates[idx]);
                     if (currencyName === CRYPTO_CURRENCY_MAP.ETH) {
                         exchangeRates[`W${currencyName}`] = bigNumberFormatter(rates[idx]);
+                    }
+                    if (currencyName === CRYPTO_CURRENCY_MAP.BTC) {
+                        exchangeRates[`cb${currencyName}`] = bigNumberFormatter(rates[idx]);
+                        exchangeRates[`w${currencyName}`] = bigNumberFormatter(rates[idx]);
                     }
                 });
                 exchangeRates['THALES'] = Number(thalesPriceResponse.data);
@@ -181,24 +201,77 @@ const useLpStatsQuery = (
                     onlyPP,
                     LiquidityPoolCollateral.OVER
                 );
+                const cbbtcLpStats = await getLpStats(
+                    Array.isArray(cbbtcTickets) ? cbbtcTickets : [cbbtcTickets],
+                    sportsAMMDataContract,
+                    networkConfig.networkId,
+                    exchangeRates,
+                    leagueId,
+                    onlyPP,
+                    LiquidityPoolCollateral.cbBTC
+                );
+                const wbtcLpStats = await getLpStats(
+                    Array.isArray(wbtcTickets) ? wbtcTickets : [wbtcTickets],
+                    sportsAMMDataContract,
+                    networkConfig.networkId,
+                    exchangeRates,
+                    leagueId,
+                    onlyPP,
+                    LiquidityPoolCollateral.wBTC
+                );
 
-                const lpStats: LpStats = {
+                const totalLpStats: LpStats = {
                     name: 'TOTAL',
                     numberOfTickets:
                         usdcLpStats.numberOfTickets +
                         wethLpStats.numberOfTickets +
                         thalesLpStats.numberOfTickets +
-                        overLpStats.numberOfTickets,
-                    pnl: usdcLpStats.pnlInUsd + wethLpStats.pnlInUsd + thalesLpStats.pnlInUsd + overLpStats.pnlInUsd,
+                        overLpStats.numberOfTickets +
+                        cbbtcLpStats.numberOfTickets +
+                        wbtcLpStats.numberOfTickets,
+                    pnl:
+                        usdcLpStats.pnlInUsd +
+                        wethLpStats.pnlInUsd +
+                        thalesLpStats.pnlInUsd +
+                        overLpStats.pnlInUsd +
+                        cbbtcLpStats.pnlInUsd +
+                        wbtcLpStats.pnlInUsd,
                     fees:
-                        usdcLpStats.feesInUsd + wethLpStats.feesInUsd + thalesLpStats.feesInUsd + overLpStats.feesInUsd,
+                        usdcLpStats.feesInUsd +
+                        wethLpStats.feesInUsd +
+                        thalesLpStats.feesInUsd +
+                        overLpStats.feesInUsd +
+                        cbbtcLpStats.feesInUsd +
+                        wbtcLpStats.feesInUsd,
                     pnlInUsd:
-                        usdcLpStats.pnlInUsd + wethLpStats.pnlInUsd + thalesLpStats.pnlInUsd + overLpStats.pnlInUsd,
+                        usdcLpStats.pnlInUsd +
+                        wethLpStats.pnlInUsd +
+                        thalesLpStats.pnlInUsd +
+                        overLpStats.pnlInUsd +
+                        cbbtcLpStats.pnlInUsd +
+                        wbtcLpStats.pnlInUsd,
                     feesInUsd:
-                        usdcLpStats.feesInUsd + wethLpStats.feesInUsd + thalesLpStats.feesInUsd + overLpStats.feesInUsd,
+                        usdcLpStats.feesInUsd +
+                        wethLpStats.feesInUsd +
+                        thalesLpStats.feesInUsd +
+                        overLpStats.feesInUsd +
+                        cbbtcLpStats.feesInUsd +
+                        wbtcLpStats.feesInUsd,
                 };
 
-                return [usdcLpStats, wethLpStats, thalesLpStats, overLpStats, lpStats];
+                const lpStats = [usdcLpStats, wethLpStats, overLpStats];
+                if (isLpAvailableForNetwork(networkConfig.networkId, LiquidityPoolCollateral.THALES)) {
+                    lpStats.push(thalesLpStats);
+                }
+                if (isLpAvailableForNetwork(networkConfig.networkId, LiquidityPoolCollateral.cbBTC)) {
+                    lpStats.push(cbbtcLpStats);
+                }
+                if (isLpAvailableForNetwork(networkConfig.networkId, LiquidityPoolCollateral.wBTC)) {
+                    lpStats.push(wbtcLpStats);
+                }
+                lpStats.push(totalLpStats);
+
+                return lpStats;
             }
 
             return [];

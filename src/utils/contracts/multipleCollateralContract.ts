@@ -757,15 +757,6 @@ const abi = [
 ];
 
 const multipleCollateral: Record<Coins, ContractData> = {
-    sUSD: {
-        addresses: {
-            [Network.OptimismMainnet]: '0x8c6f28f2F1A3C87F0f938b96d27520d9751ec8d9', // sUSD
-            [Network.Arbitrum]: TBD_ADDRESS,
-            [Network.Base]: TBD_ADDRESS,
-            [Network.OptimismSepolia]: TBD_ADDRESS,
-        },
-        abi,
-    },
     DAI: {
         addresses: {
             [Network.OptimismMainnet]: '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1',
@@ -867,9 +858,27 @@ const multipleCollateral: Record<Coins, ContractData> = {
     },
     OVER: {
         addresses: {
-            [Network.OptimismMainnet]: '0x409B3dcAb04B476918e40e186BC77e1CfD2Ce482',
-            [Network.Arbitrum]: '0x774ede9cd936118e89f0ca786a007c9db899f3f5',
-            [Network.Base]: '0x1527d463cC46686f815551314BD0E5Af253d58C0',
+            [Network.OptimismMainnet]: '0xedf38688b27036816a50185caa430d5479e1c63e',
+            [Network.Arbitrum]: '0x5829d6fe7528bc8e92c4e81cc8f20a528820b51a',
+            [Network.Base]: '0x7750c092e284e2c7366f50c8306f43c7eb2e82a2',
+            [Network.OptimismSepolia]: TBD_ADDRESS,
+        },
+        abi,
+    },
+    cbBTC: {
+        addresses: {
+            [Network.OptimismMainnet]: TBD_ADDRESS,
+            [Network.Arbitrum]: TBD_ADDRESS,
+            [Network.Base]: '0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf',
+            [Network.OptimismSepolia]: TBD_ADDRESS,
+        },
+        abi,
+    },
+    wBTC: {
+        addresses: {
+            [Network.OptimismMainnet]: TBD_ADDRESS,
+            [Network.Arbitrum]: '0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f',
+            [Network.Base]: TBD_ADDRESS,
             [Network.OptimismSepolia]: TBD_ADDRESS,
         },
         abi,

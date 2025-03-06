@@ -26,7 +26,7 @@ export const LiquidityPoolMap: Record<
         },
         [LiquidityPoolCollateral.OVER]: {
             name: 'OVER LP',
-            address: '0xAeb2B8a262D7118322C43449909eEFEe07BbBD7D',
+            address: '0x59a7A8Ae9d58D69a69b6A24770EC771110647226',
             collateral: CRYPTO_CURRENCY_MAP.OVER as Coins,
         },
     },
@@ -48,8 +48,13 @@ export const LiquidityPoolMap: Record<
         },
         [LiquidityPoolCollateral.OVER]: {
             name: 'OVER LP',
-            address: '0x796B7361F0E818f5D8446f11Be633D60e2B00898',
+            address: '0xc5f5186b46c84bF63a9e166bfa2175D9bc391ce2',
             collateral: CRYPTO_CURRENCY_MAP.OVER as Coins,
+        },
+        [LiquidityPoolCollateral.wBTC]: {
+            name: 'wBTC LP',
+            address: '0xbD08D8F8c17C22fb0a12Fe490F38f40c59B60d2A',
+            collateral: CRYPTO_CURRENCY_MAP.wBTC as Coins,
         },
     },
     [NetworkId.Base]: {
@@ -65,8 +70,13 @@ export const LiquidityPoolMap: Record<
         },
         [LiquidityPoolCollateral.OVER]: {
             name: 'OVER LP',
-            address: '0xe2FCBAC654970bAd1d88B4F6e10d0Ac6152c584E',
+            address: '0xB4199DC163F3206643649E117A816ad0DECb6C3B',
             collateral: CRYPTO_CURRENCY_MAP.OVER as Coins,
+        },
+        [LiquidityPoolCollateral.cbBTC]: {
+            name: 'cbBTC LP',
+            address: '0x8d4f838327DedFc735e202731358AcFc260c207a',
+            collateral: CRYPTO_CURRENCY_MAP.cbBTC as Coins,
         },
     },
     [NetworkId.OptimismSepolia]: {
@@ -88,9 +98,23 @@ export const LiquidityPoolMap: Record<
     },
 };
 
-export const OverRoundOffsetMap: Record<SupportedNetwork, number> = {
-    [NetworkId.OptimismMainnet]: 33,
-    [NetworkId.Arbitrum]: 23,
-    [NetworkId.Base]: 0,
-    [NetworkId.OptimismSepolia]: 0,
+export const RoundOffsetMap: Partial<Record<LiquidityPoolCollateral, Record<SupportedNetwork, number>>> = {
+    [LiquidityPoolCollateral.OVER]: {
+        [NetworkId.OptimismMainnet]: 37,
+        [NetworkId.Arbitrum]: 27,
+        [NetworkId.Base]: 5,
+        [NetworkId.OptimismSepolia]: 0,
+    },
+    [LiquidityPoolCollateral.cbBTC]: {
+        [NetworkId.OptimismMainnet]: 0,
+        [NetworkId.Arbitrum]: 0,
+        [NetworkId.Base]: 4,
+        [NetworkId.OptimismSepolia]: 0,
+    },
+    [LiquidityPoolCollateral.wBTC]: {
+        [NetworkId.OptimismMainnet]: 0,
+        [NetworkId.Arbitrum]: 27,
+        [NetworkId.Base]: 0,
+        [NetworkId.OptimismSepolia]: 0,
+    },
 };

@@ -263,7 +263,7 @@ const DappHeader: React.FC = () => {
                         </MenuIconContainer>
 
                         <LogoContainer>
-                            <Logo width={150} />
+                            <Logo />
                             {!isConnected ? (
                                 <Button
                                     backgroundColor={theme.button.background.quinary}

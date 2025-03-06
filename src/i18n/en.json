@@ -189,12 +189,12 @@
             "normalized-odds": "Normalized implied odds (e.g. 0.40)",
             "save": "Save",
             "info": "*You can always change the odds type in Settings",
-            "title": "Welcome to Overtime Markets"
+            "title": "Welcome to Overtime Sportsbook"
         },
         "new": "new"
     },
     "footer": {
-        "all-rights-reserved": "© {{year}} Overtime Markets ALL RIGHTS RESERVED.",
+        "all-rights-reserved": "© {{year}} Overtime Sportsbook ALL RIGHTS RESERVED.",
         "twitter": "Twitter",
         "discord": "Discord",
         "docs": "Docs",
@@ -204,7 +204,9 @@
         "github": "GitHub",
         "instagram": "Instagram",
         "reddit": "Reddit",
-        "disclaimer": "This frontend is hosted decentrally on IPFS (InterPlanetary File System). It serves to visualise the blockchain data and help users interact with the Overtime contracts that belong to Overtime DAO. By doing so it helps users understand the risks of using those smart contracts and what the specific interactions entail. The frontend does not facilitate anything else apart from interacting with those contracts in a visually comprehensive way. In doing so, it is no different than the functionality provided by Etherscan or RPCs (Remote Procedure Calls). The frontend itself does not belong to Overtime DAO or any individual. It stores no user data and has no dedicated backend or database. All code is uploaded statically directly to the IPFS. Just as the blockchain does no geo-fencing and no KYC, neither can this frontend do so. However, by interacting with Overtime DAO contracts, you commit to have read, understood and accepted <disclaimer>Overtime DAO’s terms of use</disclaimer> and you take full liability in case you have not adhered to those terms. Overtime DAO uses the decentralised sUSD token as collateral for all its transactions. In doing so it inherits all the usage rules from Synthetix DAO with regards to collateral and does not introduce its own.To get familiar with Overtime rules and trading guidelines, please visit the <guidelines>Sports Trading Guidelines page</guidelines> in the Overtime docs."
+        "disclaimer": "This frontend is hosted decentrally on IPFS (InterPlanetary File System). It serves to visualise the blockchain data and help users interact with the Overtime contracts that belong to Overtime DAO. By doing so it helps users understand the risks of using those smart contracts and what the specific interactions entail. The frontend does not facilitate anything else apart from interacting with those contracts in a visually comprehensive way. In doing so, it is no different than the functionality provided by Etherscan or RPCs (Remote Procedure Calls). The frontend itself does not belong to Overtime DAO or any individual. It stores no user data and has no dedicated backend or database. All code is uploaded statically directly to the IPFS. Just as the blockchain does no geo-fencing and no KYC, neither can this frontend do so. However, by interacting with Overtime DAO contracts, you commit to have read, understood and accepted <disclaimer>Overtime DAO’s terms of use</disclaimer> and you take full liability in case you have not adhered to those terms. Overtime DAO uses the decentralised sUSD token as collateral for all its transactions. In doing so it inherits all the usage rules from Synthetix DAO with regards to collateral and does not introduce its own.To get familiar with Overtime rules and trading guidelines, please visit the <guidelines>Sports Trading Guidelines page</guidelines> in the Overtime docs.",
+        "built-using": "Built using",
+        "protocol": "Protocol"
     },
     "market": {
         "match-time": "Match time",
@@ -956,7 +958,7 @@
         "copied": "Address copied!",
         "qr-modal-title": "Send {{ token }} ({{ network }})",
         "all-set": "You are all set!",
-        "ready-to-use": "Your account is topped up and ready to start using Overtime Markets! You can place trades with ETH or you can deposit other tokens now visible on the deposit page.",
+        "ready-to-use": "Your account is topped up and ready to start using Overtime Sportsbook! You can place trades with ETH or you can deposit other tokens now visible on the deposit page.",
         "go": "Let's go!",
         "button-label-deposit": "Deposit funds",
         "tutorials": {
@@ -1019,7 +1021,7 @@
                 "sign-up": "Sign in",
                 "logged-in": "Logged in",
                 "deposit": "Deposit ETH",
-                "trade": "Start using Overtime Markets!"
+                "trade": "Start using Overtime Sportsbook!"
             },
             "description": {
                 "sign-up": "Click on the Sign in button and choose your Log In method of choice.",
@@ -1172,32 +1174,32 @@
     },
     "seo": {
         "home": {
-            "title": "Overtime Markets: The Premier Web3 Sportsbook",
+            "title": "Overtime Sportsbook: The Premier Web3 Sportsbook",
             "description": "Enter the world of the premier on-chain web3 sportsbook. Secure positions in 12+ sports and 40+ leagues."
         },
         "markets": {
-            "title": "Overtime Markets: Web3 Sportsbook Markets for 40+ Leagues",
+            "title": "Overtime Sportsbook: Web3 Sportsbook Markets for 40+ Leagues",
             "description": "Join the best web3 sportsbook on the market. Secure positions in the top leagues like the NFL, NBA, UCL, EPL, and more."
         },
         "parlay-leaderboard": {
-            "title": "Overtime Markets: Earn Parlay Rewards Every 2 Weeks",
-            "description": "Overtime Markets is a web3 sportsbook with the best biweekly bonuses on the market for parlay players! Check out the leaderboard and if you qualified here."
+            "title": "Overtime Sportsbook: Earn Parlay Rewards Every 2 Weeks",
+            "description": "Overtime Sportsbook is a web3 sportsbook with the best biweekly bonuses on the market for parlay players! Check out the leaderboard and if you qualified here."
         },
         "profile": {
-            "title": "Overtime Market: User Profile",
+            "title": "Overtime Sportsbook: User Profile",
             "description": "Claim your winnings, review your performance, and track deposits you've made to the Overtime Market Vaults."
         },
         "liquidity-pool": {
-            "title": "Overtime Markets: Be the House with our Liquidity Pool",
+            "title": "Overtime Sportsbook: Be the House with our Liquidity Pool",
             "description": "Be the Overtime Market house! Deposit stablecoin collateral into the liquidity pool for a chance to earn a percentage of the PnL every week."
         },
         "single-market": {
-            "title": "Overtime Markets Web3 Sportsbook: {{dynamicTitle}}",
+            "title": "Overtime Sportsbook: {{dynamicTitle}}",
             "description": "{{dynamicTitle}}: Enjoy the best Web3 sportsbook odds on the market. No registration needed. Fully decentralized sports markets."
         },
         "page": {
             "title": "Resources and guides",
-            "content": "Learn about the best strategies and ways to bet on different sports, how to find the best games and odds, and how to get started on Overtime Markets.",
+            "content": "Learn about the best strategies and ways to bet on different sports, how to find the best games and odds, and how to get started on Overtime Sportsbook.",
             "start-using-overtime": "Start using Overtime"
         }
     },
@@ -1209,7 +1211,7 @@
     },
     "promotions": {
         "title": "Promotions and Incentives",
-        "description": "Overtime Markets regularly offers you various types of kickbacks, rewards, and similar incentives on Optimism, Arbitrum, and Base. You can use this page to keep track of ongoing promotions and see how you can qualify for them. Good luck!",
+        "description": "Overtime Sportsbook regularly offers you various types of kickbacks, rewards, and similar incentives on Optimism, Arbitrum, and Base. You can use this page to keep track of ongoing promotions and see how you can qualify for them. Good luck!",
         "nav-items": {
             "all": "All",
             "ongoing": "Ongoing",

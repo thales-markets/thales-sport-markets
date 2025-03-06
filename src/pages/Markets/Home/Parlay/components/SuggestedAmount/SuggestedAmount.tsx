@@ -43,7 +43,6 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
     const convertFromStable = useCallback(
         (value: number) => {
             const rate = exchangeRates?.[isOver ? OVER_CONTRACT_RATE_KEY : collateral] || 0;
-
             return convertFromStableToCollateral(collateral, value, rate, networkId);
         },
         [collateral, networkId, exchangeRates, isOver]

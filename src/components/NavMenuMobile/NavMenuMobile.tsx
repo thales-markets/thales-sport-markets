@@ -94,7 +94,7 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
             <Wrapper show={visibility}>
                 <HeaderContainer>
                     <LogoContainer>
-                        <Logo width={150} />
+                        <Logo />
                         <SPAAnchor
                             onClick={() => setNavMenuVisibility(false)}
                             style={{ display: 'flex' }}

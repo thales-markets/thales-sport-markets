@@ -31,21 +31,22 @@ const LpStats: React.FC<LpStatsProps> = ({ round, leagueId, onlyPP }) => {
                     </SubHeader>
                 </SubHeaderWrapper>
                 {lpStats.map((stats, index) => {
+                    const statsName = stats.name === 'CBBTC' ? 'cbBTC' : stats.name === 'WBTC' ? 'wBTC' : stats.name;
                     return index === lpStats.length - 1 ? (
-                        <Section key={`total-${stats.name}-${index}-${networkId}-lp`}>
+                        <Section key={`total-${statsName}-${index}-${networkId}-lp`}>
                             <Label>
                                 <CurrencyIcon className="icon icon--yield" />
-                                {stats.name}
+                                {statsName}
                             </Label>
                             <Value>{formatCurrencyWithSign(USD_SIGN, stats.pnlInUsd, 2)}</Value>
                         </Section>
                     ) : (
-                        <Section key={`${stats.name}-${index}-${networkId}-lp`}>
+                        <Section key={`${statsName}-${index}-${networkId}-lp`}>
                             <Label>
-                                <CurrencyIcon className={COLLATERAL_ICONS_CLASS_NAMES[stats.name as Coins]} />{' '}
-                                {stats.name}
+                                <CurrencyIcon className={COLLATERAL_ICONS_CLASS_NAMES[statsName as Coins]} />{' '}
+                                {statsName}
                             </Label>
-                            <Value>{`${formatCurrencyWithKey(stats.name, stats.pnl, 2)} (${formatCurrencyWithSign(
+                            <Value>{`${formatCurrencyWithKey(statsName, stats.pnl, 2)} (${formatCurrencyWithSign(
                                 USD_SIGN,
                                 stats.pnlInUsd,
                                 2
@@ -62,21 +63,22 @@ const LpStats: React.FC<LpStatsProps> = ({ round, leagueId, onlyPP }) => {
                     </SubHeader>
                 </SubHeaderWrapper>
                 {lpStats.map((stats, index) => {
+                    const statsName = stats.name === 'CBBTC' ? 'cbBTC' : stats.name === 'WBTC' ? 'wBTC' : stats.name;
                     return index === lpStats.length - 1 ? (
-                        <Section key={`total-${stats.name}-${index}-${networkId}-fees`}>
+                        <Section key={`total-${statsName}-${index}-${networkId}-fees`}>
                             <Label>
                                 <CurrencyIcon className="icon icon--yield" />
-                                {stats.name}
+                                {statsName}
                             </Label>
                             <Value>{formatCurrencyWithSign(USD_SIGN, stats.feesInUsd, 2)}</Value>
                         </Section>
                     ) : (
-                        <Section key={`${stats.name}-${index}-${networkId}-fees`}>
+                        <Section key={`${statsName}-${index}-${networkId}-fees`}>
                             <Label>
-                                <CurrencyIcon className={COLLATERAL_ICONS_CLASS_NAMES[stats.name as Coins]} />{' '}
-                                {stats.name}
+                                <CurrencyIcon className={COLLATERAL_ICONS_CLASS_NAMES[statsName as Coins]} />{' '}
+                                {statsName}
                             </Label>
-                            <Value>{`${formatCurrencyWithKey(stats.name, stats.fees, 2)} (${formatCurrencyWithSign(
+                            <Value>{`${formatCurrencyWithKey(statsName, stats.fees, 2)} (${formatCurrencyWithSign(
                                 USD_SIGN,
                                 stats.feesInUsd,
                                 2
@@ -93,22 +95,23 @@ const LpStats: React.FC<LpStatsProps> = ({ round, leagueId, onlyPP }) => {
                     </SubHeader>
                 </SubHeaderWrapper>
                 {lpStats.map((stats, index) => {
+                    const statsName = stats.name === 'CBBTC' ? 'cbBTC' : stats.name === 'WBTC' ? 'wBTC' : stats.name;
                     return index === lpStats.length - 1 ? (
-                        <Section key={`total-${stats.name}-${index}-${networkId}-user`}>
+                        <Section key={`total-${statsName}-${index}-${networkId}-user`}>
                             <Label>
                                 <CurrencyIcon className="icon icon--yield" />
-                                {stats.name}
+                                {statsName}
                             </Label>
                             <Value>{formatCurrencyWithSign(USD_SIGN, -stats.feesInUsd - stats.pnlInUsd, 2)}</Value>
                         </Section>
                     ) : (
-                        <Section key={`${stats.name}-${index}-${networkId}-user`}>
+                        <Section key={`${statsName}-${index}-${networkId}-user`}>
                             <Label>
-                                <CurrencyIcon className={COLLATERAL_ICONS_CLASS_NAMES[stats.name as Coins]} />{' '}
-                                {stats.name}
+                                <CurrencyIcon className={COLLATERAL_ICONS_CLASS_NAMES[statsName as Coins]} />{' '}
+                                {statsName}
                             </Label>
                             <Value>{`${formatCurrencyWithKey(
-                                stats.name,
+                                statsName,
                                 -stats.fees - stats.pnl,
                                 2
                             )} (${formatCurrencyWithSign(USD_SIGN, -stats.feesInUsd - stats.pnlInUsd, 2)})`}</Value>
@@ -152,7 +155,6 @@ const Label = styled.span`
     font-size: 12px;
     line-height: 20px;
     letter-spacing: 0.025em;
-    text-transform: uppercase;
     color: ${(props) => props.theme.textColor.quaternary};
     @media (max-width: 950px) {
         line-height: 24px;
