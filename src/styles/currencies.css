@@ -7,7 +7,7 @@
 }
 
 .currency-icon--over::before {
-    content: '\0021';
+    content: '\0107';
 }
 
 .currency-icon--usdc::before {
