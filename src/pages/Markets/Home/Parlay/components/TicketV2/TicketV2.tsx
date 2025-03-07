@@ -1669,9 +1669,8 @@ const Ticket: React.FC<TicketProps> = ({
         }
     };
 
-    useMemo(async () => {
-        if (isBiconomy) {
-            console.log('fetch gas: ');
+    useDebouncedEffect(() => {
+        const setGasValue = async () => {
             const networkConfig = {
                 client: walletClient.data,
                 networkId,
@@ -1761,7 +1760,9 @@ const Ticket: React.FC<TicketProps> = ({
             } else {
                 setGas(0);
             }
-        }
+        };
+
+        if (isBiconomy) setGasValue();
     }, [
         isEth,
         buyInAmount,
