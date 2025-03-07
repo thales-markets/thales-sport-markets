@@ -105,7 +105,6 @@ const Account: React.FC = () => {
 
             userTickets.forEach((ticket) => {
                 if (ticket.isOpen) {
-                    console.log(ticket);
                     tickets++;
                     potentialWin +=
                         ticket.payout * (exchangeRates[ticket.collateral] ? exchangeRates[ticket.collateral] : 1);
