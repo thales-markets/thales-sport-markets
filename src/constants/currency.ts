@@ -3,17 +3,6 @@ import { keyBy } from 'lodash';
 import { Coins } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
 
-import ARB from 'assets/currencies/ARB.svg?react';
-import DAI from 'assets/currencies/DAI.svg?react';
-import ETH from 'assets/currencies/ETH.svg?react';
-import OP from 'assets/currencies/OP.svg?react';
-import OVER from 'assets/currencies/OVER.svg?react';
-import sUSD from 'assets/currencies/sUSD.svg?react';
-import USDC from 'assets/currencies/USDC.svg?react';
-import USDT from 'assets/currencies/USDT.svg?react';
-import WETH from 'assets/currencies/WETH.svg?react';
-import { FunctionComponent, SVGProps } from 'react';
-
 export const USD_SIGN = '$';
 export const OVER_SIGH = '$OVER';
 
@@ -152,29 +141,4 @@ export const DEFAULT_MULTI_COLLATERAL_BALANCE = {
     OVER: 0,
     cbBTC: 0,
     wBTC: 0,
-};
-
-export const COLLATERAL_ICONS: Record<
-    any, // todo: revert to Coins when all collateral are fixed
-    FunctionComponent<
-        SVGProps<SVGSVGElement> & {
-            title?: string;
-            titleId?: string;
-            desc?: string;
-            descId?: string;
-        }
-    >
-> = {
-    sUSD,
-    DAI,
-    USDCe: USDC,
-    USDbC: USDC,
-    USDT,
-    OP,
-    WETH,
-    ETH,
-    ARB,
-    USDC,
-    OVER,
-    THALES: OVER,
 };

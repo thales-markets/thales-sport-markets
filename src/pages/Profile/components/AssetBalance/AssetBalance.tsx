@@ -2,7 +2,7 @@ import ConvertIcon from 'assets/images/svgs/convert.svg?react';
 import DepositIcon from 'assets/images/svgs/deposit.svg?react';
 import WithdrawIcon from 'assets/images/svgs/withdraw.svg?react';
 import Toggle from 'components/Toggle';
-import { COLLATERAL_ICONS, USD_SIGN } from 'constants/currency';
+import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from 'constants/currency';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
@@ -136,13 +136,15 @@ const AssetBalance: React.FC<Props> = ({
             </AssetContainer>
 
             {usersAssets.map((assetData, index) => {
-                const Icon = COLLATERAL_ICONS[assetData.asset];
-
                 return (
                     <AssetContainer key={index}>
                         <AssetWrapper>
                             {assetData.freeBet && <SubHeaderIcon className="icon icon--gift" />}
-                            {<Icon style={{ height: '24px', width: '30px' }} />} {assetData.asset}
+                            <Asset
+                                fontSize={assetData.asset === 'OVER' ? '30px' : '24px'}
+                                className={COLLATERAL_ICONS_CLASS_NAMES[assetData.asset]}
+                            />
+                            {assetData.asset}
                         </AssetWrapper>
                         <Label>{formatCurrencyWithKey('', assetData.balance)}</Label>
                         <Label>{formatCurrencyWithKey(USD_SIGN, assetData.value, 2)}</Label>
@@ -282,6 +284,13 @@ const SubHeaderIcon = styled.i`
     font-size: 16px;
     font-weight: 600;
     text-transform: none;
+`;
+
+const Asset = styled.i<{ fontSize?: string }>`
+    font-size: ${(props) => (props.fontSize ? props.fontSize : '34px')};
+    line-height: 24px;
+    width: 30px;
+    color: ${(props) => props.theme.textColor.secondary};
 `;
 
 export default AssetBalance;

@@ -1,7 +1,7 @@
 import FundModal from 'components/FundOvertimeAccountModal';
 import SwapModal from 'components/SwapModal/SwapModal';
 import Tooltip from 'components/Tooltip';
-import { COLLATERAL_ICONS, USD_SIGN } from 'constants/currency';
+import { USD_SIGN } from 'constants/currency';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
@@ -27,8 +27,6 @@ import useBiconomy from 'utils/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import AssetBalance from '../AssetBalance/AssetBalance';
 import WithdrawModal from '../WithdrawModal';
-
-const OverToken = COLLATERAL_ICONS['OVER'];
 
 const Account: React.FC = () => {
     const { t } = useTranslation();
@@ -292,13 +290,14 @@ const Label2 = styled(AlignedParagraph)`
     }
 `;
 
-const OverTokenIcon = styled(OverToken)`
+const OverTokenIcon = styled.i.attrs({ className: 'currency-icon currency-icon--over' })`
+    color: ${(props) => props.theme.textColor.secondary};
     margin-left: 2px;
-    width: 40px;
-    height: 30px;
+    font-size: 40px;
+    line-height: 30px;
     @media (max-width: 575px) {
-        width: 30px;
-        height: 20px;
+        font-size: 30px;
+        line-height: 20px;
     }
 `;
 

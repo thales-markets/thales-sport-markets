@@ -4,7 +4,7 @@ import Modal from 'components/Modal';
 import NetworkSwitcher from 'components/NetworkSwitcher';
 import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
-import { COLLATERAL_ICONS } from 'constants/currency';
+import { COLLATERAL_ICONS_CLASS_NAMES } from 'constants/currency';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import useLocalStorage from 'hooks/useLocalStorage';
 import QRCodeModal from 'pages/AARelatedPages/Deposit/components/QRCodeModal';
@@ -145,30 +145,27 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
 
                 <CollateralsWrapper gap={14}>
                     {getCollaterals(networkId).map((token, key) => {
-                        if (COLLATERAL_ICONS[token]) {
-                            const ReactElem = COLLATERAL_ICONS[token];
-                            return (
-                                <Tooltip
-                                    overlay={
-                                        <div>
-                                            {token}:
-                                            <TooltipText>
-                                                {`${getCollateralAddress(
-                                                    networkId,
-                                                    getCollateralIndex(networkId, token)
-                                                )}`}
-                                            </TooltipText>
-                                        </div>
-                                    }
-                                    key={key}
-                                >
-                                    <CollateralWrapper>
-                                        <ReactElem />
-                                        <CollateralText>{token}</CollateralText>
-                                    </CollateralWrapper>
-                                </Tooltip>
-                            );
-                        }
+                        return (
+                            <Tooltip
+                                overlay={
+                                    <div>
+                                        {token}:
+                                        <TooltipText>
+                                            {`${getCollateralAddress(networkId, getCollateralIndex(networkId, token))}`}
+                                        </TooltipText>
+                                    </div>
+                                }
+                                key={key}
+                            >
+                                <CollateralWrapper>
+                                    <Asset
+                                        fontSize={token === 'OVER' ? '50px' : '40px'}
+                                        className={COLLATERAL_ICONS_CLASS_NAMES[token]}
+                                    />
+                                    <CollateralText>{token}</CollateralText>
+                                </CollateralWrapper>
+                            </Tooltip>
+                        );
                     })}
                 </CollateralsWrapper>
 
@@ -496,6 +493,12 @@ const ButtonLocal = styled(FlexDivCentered)<{ disabled?: boolean }>`
     }
 
     opacity: ${(props) => (props.disabled ? '0.5' : '1')};
+`;
+
+const Asset = styled.i<{ fontSize?: string }>`
+    font-size: ${(props) => (props.fontSize ? props.fontSize : '40px')};
+    line-height: 40px;
+    color: ${(props) => props.theme.textColor.secondary};
 `;
 
 export default FundModal;
