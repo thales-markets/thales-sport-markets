@@ -10,8 +10,7 @@ export const APPROVAL_BUFFER = 0.01;
 export const SWAP_APPROVAL_BUFFER = 0.03;
 
 export const ALTCOIN_CONVERSION_BUFFER_PERCENTAGE = 0.025; // 2.5%
-export const SUSD_CONVERSION_BUFFER_PERCENTAGE = 0.03; // 3%
-export const COINGECKO_SWAP_TO_THALES_QUOTE_SLIPPAGE: Record<SupportedNetwork, number> = {
+export const COINGECKO_SWAP_TO_OVER_QUOTE_SLIPPAGE: Record<SupportedNetwork, number> = {
     [NetworkId.OptimismMainnet]: 0.03, // 3%
     [NetworkId.OptimismSepolia]: 0.03,
     [NetworkId.Arbitrum]: 0.1,
@@ -63,8 +62,9 @@ export const GameStatusKey: Record<GameStatus, string> = {
 export const BATCH_SIZE = 10;
 
 export const THALES_CONTRACT_RATE_KEY = 'THALES-CONTRACT';
+export const OVER_CONTRACT_RATE_KEY = 'OVER-CONTRACT';
 
-export const THALES_ADDED_PAYOUT_PERCENTAGE = 0.02;
+export const OVER_ADDED_PAYOUT_PERCENTAGE = 0.02;
 
 export const FUTURES_MAIN_VIEW_DISPLAY_COUNT = 2;
 

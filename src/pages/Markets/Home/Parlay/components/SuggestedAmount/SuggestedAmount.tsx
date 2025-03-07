@@ -1,5 +1,5 @@
 import { USD_SIGN } from 'constants/currency';
-import { THALES_CONTRACT_RATE_KEY } from 'constants/markets';
+import { OVER_CONTRACT_RATE_KEY } from 'constants/markets';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
@@ -10,7 +10,7 @@ import {
     LONG_CURRENCY_DECIMALS,
 } from 'thales-utils';
 import { Rates } from 'types/collateral';
-import { convertFromStableToCollateral, getCollateral, isStableCurrency, isThalesCurrency } from 'utils/collaterals';
+import { convertFromStableToCollateral, getCollateral, isOverCurrency, isStableCurrency } from 'utils/collaterals';
 import { useChainId } from 'wagmi';
 
 const AMOUNTS = [3, 10, 50, 100, 500];
@@ -38,14 +38,14 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
     const [isAmountClicked, setIsAmountClicked] = useState(false);
 
     const collateral = useMemo(() => getCollateral(networkId, collateralIndex), [networkId, collateralIndex]);
-    const isThales = isThalesCurrency(collateral);
+    const isOver = isOverCurrency(collateral);
 
     const convertFromStable = useCallback(
         (value: number) => {
-            const rate = exchangeRates?.[isThales ? THALES_CONTRACT_RATE_KEY : collateral] || 0;
+            const rate = exchangeRates?.[isOver ? OVER_CONTRACT_RATE_KEY : collateral] || 0;
             return convertFromStableToCollateral(collateral, value, rate, networkId);
         },
-        [collateral, networkId, exchangeRates, isThales]
+        [collateral, networkId, exchangeRates, isOver]
     );
 
     // Reset clicked times for all amounts

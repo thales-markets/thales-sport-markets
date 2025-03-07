@@ -22,8 +22,8 @@ const Header: React.FC = () => {
                 <RightContainer>
                     <SPAAnchor href={buildHref(ROUTES.Home)}>
                         <Button
-                            borderColor={theme.button.background.quinary}
-                            backgroundColor={theme.button.background.quinary}
+                            borderColor={theme.button.background.quaternary}
+                            backgroundColor={theme.button.background.quaternary}
                             textColor={theme.button.textColor.primary}
                             additionalStyles={{ borderRadius: '5px' }}
                         >

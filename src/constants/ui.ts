@@ -11,7 +11,8 @@ export const ThemeMap: Record<Theme, ThemeInterface> = {
 
 export const NAV_MENU_FIRST_SECTION: NavMenuItem[] = [
     {
-        i18label: 'markets.nav-menu.items.profile',
+        i18label: 'markets.nav-menu.items.profile-wallet',
+        i18labelSmart: 'markets.nav-menu.items.profile-smart',
         iconClass: 'icon icon--profile2',
         name: 'profile',
         route: ROUTES.Profile,
@@ -102,6 +103,3 @@ export const PROMOTION_SANITIZE_PROPS = {
 };
 
 export const SEO_ARTICLES_PER_PAGE = 12;
-
-const STAKING_MODAL_MUTE_PERIOD_IN_DAYS = 7;
-export const STAKING_MODAL_MUTE_PERIOD_IN_MS = STAKING_MODAL_MUTE_PERIOD_IN_DAYS * 24 * 60 * 60 * 1000;

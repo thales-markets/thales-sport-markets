@@ -3,14 +3,13 @@ import { FlexDiv, FlexDivColumn } from 'styles/common';
 
 export const Container = styled(FlexDiv)`
     position: fixed;
-    bottom: 3%;
-    width: 90%;
+    bottom: 0;
+    width: 100%;
     left: 50%;
     transform: translateX(-50%);
-    height: 40px;
-    color: ${(props) => props.theme.background.primary};
-    background: ${(props) => props.theme.background.septenary};
-    border-radius: 40px;
+    height: 48px;
+    color: ${(props) => props.theme.textColor.primary};
+    background: ${(props) => props.theme.background.secondary};
     justify-content: space-around;
     z-index: 11;
 `;
@@ -25,7 +24,7 @@ export const ItemIcon = styled.i<{ parlay?: boolean; iteration?: number; fontSiz
     font-size: ${(props) => props.fontSize || 33}px;
     font-weight: 400;
     text-transform: none;
-    color: ${(props) => props.theme.background.primary};
+    color: ${(props) => props.theme.textColor.primary};
 
     &.pulse {
         animation: pulsing 1s ease-in;

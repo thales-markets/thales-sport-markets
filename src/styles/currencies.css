@@ -6,6 +6,10 @@
     color: #ffffff;
 }
 
+.currency-icon--over::before {
+    content: '\0021';
+}
+
 .currency-icon--usdc::before {
     content: '\00B0';
 }

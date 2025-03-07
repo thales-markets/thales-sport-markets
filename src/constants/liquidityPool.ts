@@ -24,6 +24,11 @@ export const LiquidityPoolMap: Record<
             address: '0xE59206b08cC96Da0818522C75eE3Fd4EBB7c0A47',
             collateral: CRYPTO_CURRENCY_MAP.THALES as Coins,
         },
+        [LiquidityPoolCollateral.OVER]: {
+            name: 'OVER LP',
+            address: '0x59a7A8Ae9d58D69a69b6A24770EC771110647226',
+            collateral: CRYPTO_CURRENCY_MAP.OVER as Coins,
+        },
     },
     [NetworkId.Arbitrum]: {
         [LiquidityPoolCollateral.USDC]: {
@@ -41,6 +46,11 @@ export const LiquidityPoolMap: Record<
             address: '0x9733AB157f5A89f0AD7460d08F869956aE2018dA',
             collateral: CRYPTO_CURRENCY_MAP.THALES as Coins,
         },
+        [LiquidityPoolCollateral.OVER]: {
+            name: 'OVER LP',
+            address: '0xc5f5186b46c84bF63a9e166bfa2175D9bc391ce2',
+            collateral: CRYPTO_CURRENCY_MAP.OVER as Coins,
+        },
         [LiquidityPoolCollateral.wBTC]: {
             name: 'wBTC LP',
             address: '0xbD08D8F8c17C22fb0a12Fe490F38f40c59B60d2A',
@@ -57,6 +67,11 @@ export const LiquidityPoolMap: Record<
             name: 'WETH LP',
             address: '0xcc4ED8cD7101B512B134360ED3cCB759caB33f17',
             collateral: CRYPTO_CURRENCY_MAP.WETH as Coins,
+        },
+        [LiquidityPoolCollateral.OVER]: {
+            name: 'OVER LP',
+            address: '0xB4199DC163F3206643649E117A816ad0DECb6C3B',
+            collateral: CRYPTO_CURRENCY_MAP.OVER as Coins,
         },
         [LiquidityPoolCollateral.cbBTC]: {
             name: 'cbBTC LP',
@@ -84,6 +99,12 @@ export const LiquidityPoolMap: Record<
 };
 
 export const RoundOffsetMap: Partial<Record<LiquidityPoolCollateral, Record<SupportedNetwork, number>>> = {
+    [LiquidityPoolCollateral.OVER]: {
+        [NetworkId.OptimismMainnet]: 37,
+        [NetworkId.Arbitrum]: 27,
+        [NetworkId.Base]: 5,
+        [NetworkId.OptimismSepolia]: 0,
+    },
     [LiquidityPoolCollateral.cbBTC]: {
         [NetworkId.OptimismMainnet]: 0,
         [NetworkId.Arbitrum]: 0,

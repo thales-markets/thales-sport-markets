@@ -8,11 +8,12 @@ export const RowSummary = styled.div<{ columnDirection?: boolean }>`
     ${(props) => (props.columnDirection ? `flex-direction: column;` : '')}
 `;
 
-export const GasSummary = styled(RowSummary)<{ columnDirection?: boolean }>`
-    border-top: 2px solid ${(props) => props.theme.background.tertiary};
-    border-bottom: 2px solid ${(props) => props.theme.background.tertiary};
-    margin-top: 2px;
-    margin-bottom: 2px;
+export const GasWarning = styled(RowSummary)<{ columnDirection?: boolean }>`
+    font-weight: 400;
+    font-size: 12px;
+    color: ${(props) => props.color || props.theme.overdrop.textColor.primary};
+    margin-top: 4px;
+    line-height: 14px;
 `;
 
 export const RowContainer = styled(FlexDiv)`

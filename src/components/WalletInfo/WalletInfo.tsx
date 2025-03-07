@@ -1,45 +1,40 @@
-import { ConnectButton as RainbowConnectButton } from '@rainbow-me/rainbowkit';
 import ConnectWalletModal from 'components/ConnectWalletModal';
 import NetworkSwitcher from 'components/NetworkSwitcher';
-import { COLLATERALS } from 'constants/currency';
+import { COLLATERALS, USD_SIGN } from 'constants/currency';
+import ProfileItem from 'layouts/DappLayout/DappHeader/components/ProfileItem';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { getIsFreeBetDisabledByUser, getTicketPayment, setPaymentSelectedCollateralIndex } from 'redux/modules/ticket';
+import { getTicketPayment, setPaymentSelectedCollateralIndex } from 'redux/modules/ticket';
 import { getIsBiconomy, getWalletConnectModalVisibility, setWalletConnectModalVisibility } from 'redux/modules/wallet';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
-import { formatCurrencyWithKey, truncateAddress } from 'thales-utils';
+import { formatCurrencyWithKey } from 'thales-utils';
 import { RootState } from 'types/redux';
-import biconomyConnector from 'utils/biconomyWallet';
-import { getCollateral, getMaxCollateralDollarValue, mapMultiCollateralBalances } from 'utils/collaterals';
+import { getCollaterals, mapMultiCollateralBalances } from 'utils/collaterals';
 import { getDefaultCollateralIndexForNetworkId } from 'utils/network';
+import useBiconomy from 'utils/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
 
-const MIN_BUYIN_DOLLAR = 3;
-
 const WalletInfo: React.FC = ({}) => {
-    const { t } = useTranslation();
     const dispatch = useDispatch();
 
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
-
+    const theme = useTheme();
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
-    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+    const smartAddres = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddres : address) || '';
 
     const connectWalletModalVisibility = useSelector((state: RootState) => getWalletConnectModalVisibility(state));
     const ticketPayment = useSelector(getTicketPayment);
-    const isFreeBetDisabledByUser = useSelector(getIsFreeBetDisabledByUser);
 
     const selectedCollateralIndex = ticketPayment.selectedCollateralIndex;
 
     const [isFreeBetInitialized, setIsFreeBetInitialized] = useState(false);
-    const [freeBetBalance, setFreeBetBalance] = useState(0);
 
     const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
     const exchangeRates = exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
@@ -57,13 +52,6 @@ const WalletInfo: React.FC = ({}) => {
             ? multipleCollateralBalancesQuery.data
             : undefined;
 
-    const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
-        networkId,
-        selectedCollateralIndex,
-    ]);
-
-    const selectedCollateralBalance = multiCollateralBalances ? multiCollateralBalances[selectedCollateral] : 0;
-
     const freeBetCollateralBalancesQuery = useFreeBetCollateralBalanceQuery(
         walletAddress,
         { networkId, client },
@@ -78,9 +66,22 @@ const WalletInfo: React.FC = ({}) => {
             : undefined;
 
     const balanceList = mapMultiCollateralBalances(freeBetCollateralBalances, exchangeRates, networkId);
-    const maxBalanceItem = balanceList ? getMaxCollateralDollarValue(balanceList) : undefined;
-    const isFreeBet =
-        !isFreeBetDisabledByUser && maxBalanceItem && maxBalanceItem.balanceDollarValue >= MIN_BUYIN_DOLLAR;
+
+    const totalBalanceValue = useMemo(() => {
+        let total = 0;
+        try {
+            if (exchangeRates && multiCollateralBalances && balanceList) {
+                getCollaterals(networkId).forEach((token) => {
+                    total += multiCollateralBalances[token] * (exchangeRates[token] ? exchangeRates[token] : 1);
+                });
+                balanceList.forEach((data) => (total += data.balanceDollarValue));
+            }
+
+            return total ? formatCurrencyWithKey(USD_SIGN, total, 2) : 'N/A';
+        } catch (e) {
+            return 'N/A';
+        }
+    }, [exchangeRates, multiCollateralBalances, networkId, balanceList]);
 
     // Invalidate default selectedCollateralIndex
     useEffect(() => {
@@ -112,68 +113,22 @@ const WalletInfo: React.FC = ({}) => {
         }
     }, [dispatch, networkId, isFreeBetInitialized]);
 
-    // Initialize free bet collateral
-    useEffect(() => {
-        if (isFreeBet && !isFreeBetInitialized && maxBalanceItem.balanceDollarValue >= MIN_BUYIN_DOLLAR) {
-            dispatch(
-                setPaymentSelectedCollateralIndex({
-                    selectedCollateralIndex: maxBalanceItem.index,
-                    networkId,
-                })
-            );
-            setIsFreeBetInitialized(true);
-            setFreeBetBalance(maxBalanceItem.balance);
-        } else {
-            setFreeBetBalance(balanceList?.find((b) => b.collateralKey === selectedCollateral)?.balance || 0);
-        }
-    }, [
-        dispatch,
-        networkId,
-        isFreeBet,
-        maxBalanceItem,
-        selectedCollateralIndex,
-        isFreeBetInitialized,
-        balanceList,
-        selectedCollateral,
-    ]);
-
     return (
-        <Container walletConnected={isConnected}>
+        <Container walletConnected={isConnected} gap={8}>
             <FlexDivColumn>
-                <RainbowConnectButton.Custom>
-                    {({ openAccountModal }) => {
-                        return (
-                            <Wrapper displayPadding={isConnected}>
-                                {isConnected && (
-                                    <WalletAddressInfo
-                                        isConnected={isConnected}
-                                        isClickable={true}
-                                        onClick={openAccountModal}
-                                    >
-                                        <Text className="wallet-info">
-                                            {isConnected
-                                                ? truncateAddress(walletAddress, 5, 5)
-                                                : t('common.wallet.connect-your-wallet')}
-                                        </Text>
-                                    </WalletAddressInfo>
-                                )}
-                                {isConnected && (
-                                    <WalletBalanceInfo>
-                                        {isFreeBet && <FreeBetIcon className="icon icon--gift" />}
-                                        <Text>
-                                            {formatCurrencyWithKey(
-                                                selectedCollateral,
-                                                isFreeBet ? freeBetBalance : selectedCollateralBalance
-                                            )}
-                                        </Text>
-                                    </WalletBalanceInfo>
-                                )}
-                                <NetworkSwitcher />
-                            </Wrapper>
-                        );
-                    }}
-                </RainbowConnectButton.Custom>
+                {isConnected && (
+                    <Button>
+                        <WalletAddressInfo isConnected={isConnected} isClickable={true}>
+                            <ProfileItem color={theme.button.textColor.primary} avatarSize={18} />
+                        </WalletAddressInfo>
+
+                        <WalletBalanceInfo>
+                            <Text>{totalBalanceValue}</Text>
+                        </WalletBalanceInfo>
+                    </Button>
+                )}
             </FlexDivColumn>
+            <NetworkSwitcher />
             {connectWalletModalVisibility && (
                 <ConnectWalletModal
                     isOpen={connectWalletModalVisibility}
@@ -199,22 +154,6 @@ const Container = styled(FlexDivCentered)<{ walletConnected?: boolean }>`
     min-width: fit-content;
     @media (max-width: 767px) {
         min-width: auto;
-    }
-`;
-
-const Wrapper = styled.div<{ displayPadding?: boolean }>`
-    display: flex;
-    border-radius: 20px;
-    border: 1px solid ${(props) => props.theme.borderColor.primary};
-    height: 28px;
-    justify-content: space-between;
-    align-items: center;
-    padding-left: ${(props) => (props.displayPadding ? '10px' : '')};
-    & > div {
-        flex: 0.6;
-    }
-    & > div:last-child {
-        flex: 0.2;
     }
 `;
 
@@ -253,18 +192,32 @@ const WalletBalanceInfo = styled.div`
 
 const Text = styled.span`
     font-weight: 600;
-    font-size: 10.8px;
+    font-size: 14px;
+    white-space: pre;
     line-height: 12px;
-    color: ${(props) => props.theme.textColor.secondary};
+    color: ${(props) => props.theme.button.textColor.primary};
 `;
 
-const FreeBetIcon = styled.i`
-    font-size: 13px;
-    margin-left: 5px;
-    font-family: OvertimeIconsV2 !important;
-    text-transform: none !important;
-    margin-right: 3px;
-    color: ${(props) => props.theme.textColor.quaternary} !important;
+const Button = styled(FlexDivCentered)<{ active?: boolean }>`
+    border-radius: 8px;
+    width: 100%;
+    height: 30px;
+    border: 1px ${(props) => props.theme.borderColor.primary} solid;
+    color: ${(props) => props.theme.textColor.primary};
+    background-color: ${(props) => props.theme.connectWalletModal.hover};
+    color: ${(props) => props.theme.button.textColor.primary};
+    font-size: 14px;
+    font-weight: 600;
+
+    text-transform: uppercase;
+    cursor: pointer;
+
+    white-space: pre;
+    padding: 3px 10px;
+    @media (max-width: 575px) {
+        font-size: 12px;
+        padding: 3px 12px;
+    }
 `;
 
 export default WalletInfo;

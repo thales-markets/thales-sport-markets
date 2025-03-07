@@ -3,7 +3,6 @@ import MatchInfoV2 from 'components/MatchInfoV2';
 import MatchUnavailableInfo from 'components/MatchUnavailableInfo';
 import Toggle from 'components/Toggle';
 import { SportFilter, StatusFilter } from 'enums/markets';
-import { Network } from 'enums/network';
 import { isEqual } from 'lodash';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsAmmDataQuery from 'queries/markets/useSportsAmmDataQuery';
@@ -57,7 +56,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     const [oddsChanged, setOddsChanged] = useState<boolean>(false);
     const [acceptOdds, setAcceptOdds] = useState<boolean>(false);
     const [outOfLiquidityMarkets, setOutOfLiquidityMarkets] = useState<number[]>([]);
-    const [useThalesCollateral, setUseThalesCollateral] = useState(false);
+    const [useOverCollateral, setUseOverCollateral] = useState(false);
 
     const previousTicketOdds = useRef<{ position: number; odd: number; gameId: string; proof: string[] }[]>([]);
 
@@ -85,7 +84,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
             setOddsChanged(false);
             setUnavailableMarkets([]);
             setOutOfLiquidityMarkets([]);
-            setUseThalesCollateral(false);
+            setUseOverCollateral(false);
         }
     }, [ticket]);
 
@@ -260,11 +259,9 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                             />
                         </ToggleContainer>
                     )}
-                    {networkId !== Network.Base && (
-                        <ThalesBonusContainer>
-                            <ThalesBonus>{t('markets.parlay.thales-bonus-info')}</ThalesBonus>
-                        </ThalesBonusContainer>
-                    )}
+                    <OverBonusContainer>
+                        <OverBonus>{t('markets.parlay.over-bonus-info')}</OverBonus>
+                    </OverBonusContainer>
                     <ListContainer>
                         {ticketMarkets.length > 0 &&
                             ticketMarkets.map((market, index) => {
@@ -278,7 +275,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                                             acceptOdds={acceptOdds}
                                             setAcceptOdds={setAcceptOdds}
                                             applyPayoutMultiplier={true}
-                                            useThalesCollateral={useThalesCollateral}
+                                            useOverCollateral={useOverCollateral}
                                         />
                                     </RowMarket>
                                 );
@@ -309,7 +306,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                         }}
                         onSuccess={onSuccess}
                         submitButtonDisabled={!!unavailableMarkets.length}
-                        setUseThalesCollateral={setUseThalesCollateral}
+                        setUseOverCollateral={setUseOverCollateral}
                     />
                 </>
             ) : (
@@ -367,7 +364,7 @@ const Count = styled(FlexDivCentered)`
     margin-left: 6px;
 `;
 
-const ThalesBonusContainer = styled(FlexDivCentered)`
+const OverBonusContainer = styled(FlexDivCentered)`
     background: ${(props) => props.theme.background.quaternary};
     color: ${(props) => props.theme.textColor.tertiary};
     min-width: 100%;
@@ -376,7 +373,7 @@ const ThalesBonusContainer = styled(FlexDivCentered)`
     margin-bottom: 10px;
 `;
 
-const ThalesBonus = styled.span`
+const OverBonus = styled.span`
     font-size: 12px;
     line-height: 16px;
     font-weight: 600;
@@ -393,7 +390,7 @@ const ThalesBonus = styled.span`
             width: 0;
         }
         to {
-            width: 320px;
+            width: 300px;
         }
     }
 

@@ -2,7 +2,7 @@ import burger from 'assets/images/burger.svg';
 import OverdropButtonBackground from 'assets/images/overdrop/overdrop-button-background.webp';
 import overdrop from 'assets/images/overdrop/overdrop-nav.webp';
 import styled from 'styled-components';
-import { FlexDiv, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
+import { FlexDiv, FlexDivColumnCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 
 export const Container = styled(FlexDivRowCentered)`
     width: 100%;
@@ -40,30 +40,18 @@ export const LeftContainer = styled(FlexDivRowCentered)`
 export const MiddleContainer = styled(FlexDivRowCentered)`
     width: 100%;
     max-width: 821px;
+    justify-content: center;
 `;
 
 export const RightContainer = styled(FlexDivRowCentered)`
     position: relative;
-    width: 100%;
-    max-width: 360px;
-    @media (max-width: 767px) {
-        flex-direction: column;
-    }
-    > div {
-        :not(:last-child) {
-            margin-right: 20px;
-            @media (max-width: 767px) {
-                margin-right: 0px;
-                margin-bottom: 10px;
-            }
-        }
-    }
+    gap: 8px;
 `;
 
 export const MenuIcon = styled.img.attrs({ src: burger })`
     cursor: pointer;
-    height: 25px;
-    width: 35px;
+    height: 26px;
+    width: 50px;
     filter: invert(39%) sepia(9%) saturate(1318%) hue-rotate(199deg) brightness(71%) contrast(88%);
 `;
 
@@ -82,15 +70,14 @@ export const OverdropIcon = styled.img.attrs({ src: overdrop })`
 export const WrapperMobile = styled(FlexDivRow)`
     width: 100%;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    margin-top: 10px;
+    margin-bottom: 6px;
 `;
 
 export const SearchIconContainer = styled.div`
-    width: 50%;
     display: flex;
     justify-content: end;
-    position: absolute;
-    right: 12px;
 `;
 
 export const MenuIconContainer = styled.div`
@@ -98,11 +85,8 @@ export const MenuIconContainer = styled.div`
     position: relative;
     margin-right: 0px !important;
     @media (max-width: 950px) {
-        width: 50%;
         display: flex;
         justify-content: start;
-        position: absolute;
-        left: 12px;
     }
 `;
 
@@ -118,16 +102,10 @@ export const IconWrapper = styled.div`
     border-radius: 30px;
     width: 28px;
     height: 28px;
-    position: absolute;
-    top: -15px;
 `;
 
 export const SearchIcon = styled.i`
     font-size: 25px;
-    cursor: pointer;
-    position: absolute;
-    top: 0px;
-    left: 0px;
     &:before {
         font-family: OvertimeIconsV2 !important;
         content: '\\00E5';
@@ -149,7 +127,7 @@ export const NotificationCount = styled.div`
     position: absolute;
     border-radius: 50%;
     bottom: -8px;
-    left: 24px;
+    left: 0;
     display: flex;
     align-items: center;
     text-align: center;
@@ -228,64 +206,14 @@ export const SmallBadgeImage = styled.img`
     }
 `;
 
-export const SettingsContainer = styled(FlexDivRowCentered)`
-    padding-right: 5px;
-    position: relative;
-    margin: 0 10px;
-    cursor: pointer;
+export const ActivateContainer = styled(FlexDivColumnCentered)`
+    align-items: center;
+    gap: 8px;
 `;
 
-export const HeaderIcon = styled.i<{
-    iconSize?: number;
-    iconColor?: string;
-}>`
-    margin-right: 5px;
-    font-size: ${(props) => (props.iconSize ? props.iconSize : '20')}px;
-    color: ${(props) => (props.iconColor ? props.iconColor : props.theme.textColor.secondary)};
-`;
-
-export const HeaderLabel = styled.span`
-    font-weight: 600;
-    font-size: 12px;
-    color: ${(props) => props.theme.textColor.secondary};
-    text-transform: uppercase;
-`;
-
-export const DropdownContainer = styled.div`
-    position: absolute;
-    width: 180px;
-    top: 24px;
-    right: 0;
-    z-index: 1000;
-`;
-
-export const DropDown = styled(FlexDivColumn)`
-    border: 1px solid ${(props) => props.theme.borderColor.primary};
-    background: ${(props) => props.theme.background.secondary};
-    color: white;
-    border-radius: 5px;
-    position: absolute;
-    margin-top: 2px;
-    padding: 4px;
-    width: 100%;
-    gap: 2px;
-`;
-
-export const DropDownItem = styled(FlexDiv)<{ isSelected: boolean }>`
-    padding: 7px 10px;
-    cursor: ${(props) => (props.isSelected ? 'default' : 'pointer')};
-    ${(props) => (props.isSelected ? `background: ${props.theme.dropDown.menuItem.selectedColor.primary};` : '')}
-    border-radius: 5px;
-    &:hover {
-        ${(props) => (props.isSelected ? '' : `background: ${props.theme.dropDown.menuItem.hoverColor.primary};`)}
-    }
-`;
-
-export const Label = styled.div`
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 14px;
-    color: white;
-    display: block;
-    text-transform: capitalize;
+export const CurrencyIcon = styled.i`
+    text-transform: none;
+    font-size: 16px;
+    margin: 0 4px;
+    color: ${(props) => props.theme.button.textColor.primary};
 `;

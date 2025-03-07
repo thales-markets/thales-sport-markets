@@ -130,6 +130,14 @@ const Stats: React.FC<StatsProps> = ({ selectedTab, setSelectedTab, currentRound
                         onlyPP={showOnlyPP}
                     />
                 )}
+                {selectedTab == PnlTab.OVER_USERS_PNL && (
+                    <LpUsersPnl
+                        lpCollateral={LiquidityPoolCollateral.OVER}
+                        round={round}
+                        leagueId={leagueOptionsMap[league]}
+                        onlyPP={showOnlyPP}
+                    />
+                )}
                 {selectedTab == PnlTab.WBTC_USERS_PNL && (
                     <LpUsersPnl
                         lpCollateral={LiquidityPoolCollateral.wBTC}

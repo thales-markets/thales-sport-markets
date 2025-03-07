@@ -105,6 +105,7 @@ const useLpStatsQuery = (
                     usdcTickets,
                     wethTickets,
                     thalesTickets,
+                    overTickets,
                     cbbtcTickets,
                     wbtcTickets,
                     currencies,
@@ -123,6 +124,12 @@ const useLpStatsQuery = (
                         ? liquidityPoolDataContract.read.getRoundTickets([
                               getLpAddress(networkConfig.networkId, LiquidityPoolCollateral.THALES),
                               getRoundWithOffset(round, networkConfig.networkId, LiquidityPoolCollateral.THALES),
+                          ])
+                        : [],
+                    isLpAvailableForNetwork(networkConfig.networkId, LiquidityPoolCollateral.OVER)
+                        ? liquidityPoolDataContract.read.getRoundTickets([
+                              getLpAddress(networkConfig.networkId, LiquidityPoolCollateral.OVER),
+                              getRoundWithOffset(round, networkConfig.networkId, LiquidityPoolCollateral.OVER),
                           ])
                         : [],
                     isLpAvailableForNetwork(networkConfig.networkId, LiquidityPoolCollateral.cbBTC)
@@ -155,6 +162,8 @@ const useLpStatsQuery = (
                     }
                 });
                 exchangeRates['THALES'] = Number(thalesPriceResponse.data);
+                // TODO hardcode OVER price
+                exchangeRates['OVER'] = Number(thalesPriceResponse.data);
 
                 const usdcLpStats = await getLpStats(
                     Array.isArray(usdcTickets) ? usdcTickets : [usdcTickets],
@@ -183,6 +192,15 @@ const useLpStatsQuery = (
                     onlyPP,
                     LiquidityPoolCollateral.THALES
                 );
+                const overLpStats = await getLpStats(
+                    Array.isArray(overTickets) ? overTickets : [overTickets],
+                    sportsAMMDataContract,
+                    networkConfig.networkId,
+                    exchangeRates,
+                    leagueId,
+                    onlyPP,
+                    LiquidityPoolCollateral.OVER
+                );
                 const cbbtcLpStats = await getLpStats(
                     Array.isArray(cbbtcTickets) ? cbbtcTickets : [cbbtcTickets],
                     sportsAMMDataContract,
@@ -208,35 +226,40 @@ const useLpStatsQuery = (
                         usdcLpStats.numberOfTickets +
                         wethLpStats.numberOfTickets +
                         thalesLpStats.numberOfTickets +
+                        overLpStats.numberOfTickets +
                         cbbtcLpStats.numberOfTickets +
                         wbtcLpStats.numberOfTickets,
                     pnl:
                         usdcLpStats.pnlInUsd +
                         wethLpStats.pnlInUsd +
                         thalesLpStats.pnlInUsd +
+                        overLpStats.pnlInUsd +
                         cbbtcLpStats.pnlInUsd +
                         wbtcLpStats.pnlInUsd,
                     fees:
                         usdcLpStats.feesInUsd +
                         wethLpStats.feesInUsd +
                         thalesLpStats.feesInUsd +
+                        overLpStats.feesInUsd +
                         cbbtcLpStats.feesInUsd +
                         wbtcLpStats.feesInUsd,
                     pnlInUsd:
                         usdcLpStats.pnlInUsd +
                         wethLpStats.pnlInUsd +
                         thalesLpStats.pnlInUsd +
+                        overLpStats.pnlInUsd +
                         cbbtcLpStats.pnlInUsd +
                         wbtcLpStats.pnlInUsd,
                     feesInUsd:
                         usdcLpStats.feesInUsd +
                         wethLpStats.feesInUsd +
                         thalesLpStats.feesInUsd +
+                        overLpStats.feesInUsd +
                         cbbtcLpStats.feesInUsd +
                         wbtcLpStats.feesInUsd,
                 };
 
-                const lpStats = [usdcLpStats, wethLpStats];
+                const lpStats = [usdcLpStats, wethLpStats, overLpStats];
                 if (isLpAvailableForNetwork(networkConfig.networkId, LiquidityPoolCollateral.THALES)) {
                     lpStats.push(thalesLpStats);
                 }

@@ -26,6 +26,11 @@ const navItems = [
         icon: 'currency-icon currency-icon--thales',
     },
     {
+        id: PnlTab.OVER_USERS_PNL,
+        label: 'OVER',
+        icon: 'currency-icon currency-icon--over',
+    },
+    {
         id: PnlTab.CBBTC_USERS_PNL,
         label: 'cbBTC',
         icon: 'currency-icon currency-icon--cbbtc',

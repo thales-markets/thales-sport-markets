@@ -6,11 +6,12 @@ export const ProfileContainer = styled(FlexDivRow)`
     cursor: pointer;
     margin-right: 5px;
 `;
-export const ProfileLabel = styled.span`
+export const ProfileLabel = styled.span<{ color?: string }>`
     font-weight: 600;
-    font-size: 12px;
-    color: ${(props) => props.theme.textColor.secondary};
+    font-size: 14px;
+    color: ${(props) => (props.color ? props.color : props.theme.textColor.secondary)};
     text-transform: uppercase;
+    white-space: pre;
 `;
 
 export const ProfileIconContainer = styled.div<{ marginRight?: string }>`
@@ -29,7 +30,10 @@ export const ProfileIcon = styled.i.attrs({ className: 'icon icon--profile2' })<
     color: ${(props) => (props.iconColor ? props.iconColor : props.theme.textColor.secondary)};
 `;
 
-export const NotificationCount = styled.div`
+export const NotificationCount = styled.div<{ top?: string; left?: string }>`
+    position: absolute;
+    top: ${(props) => (props.top ? props.top : '-14px')};
+    left: ${(props) => (props.left ? props.left : '-20px')};
     border-radius: 50%;
     display: flex;
     align-items: center;
