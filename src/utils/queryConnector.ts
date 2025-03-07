@@ -24,13 +24,12 @@ export const refetchBalances = (walletAddress: string, networkId: Network) => {
     });
 };
 
-export const refetchProofs = (
-    networkId: Network,
-    gameIds: string,
-    typeIds: string,
-    playerIds: string,
-    lines: string
-) => {
+export const refetchProofs = (networkId: Network, markets: TicketMarket[]) => {
+    const gameIds = markets.map((market) => market.gameId).join(',');
+    const typeIds = markets.map((market) => market.typeId).join(',');
+    const playerIds = markets.map((market) => market.playerProps.playerId).join(',');
+    const lines = markets.map((market) => market.line).join(',');
+
     queryConnector.queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.SportMarketsV2(
             StatusFilter.OPEN_MARKETS,
