@@ -221,10 +221,9 @@ export const executeBiconomyTransaction = async (params: {
                     return transactionHash;
                 }
             } catch (error) {
-                console.log('Error in biconomy tx: ', error);
                 if (
                     (error && (error as any).message && (error as any).message.includes('SessionNotApproved')) ||
-                    (error as any).error.includes('Session not found')
+                    (error && (error as any).Error && (error as any).Error.includes('Session not found'))
                 ) {
                     await activateOvertimeAccount({
                         networkId: params.networkId,
