@@ -62,7 +62,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                 accessorKey: 'owner',
                 cell: (cellProps: any) => (
                     <WalletAddress>
-                        {truncateAddress(cellProps.cell.getValue(), 5)}
+                        {isMobile ? truncateAddress(cellProps.cell.getValue(), 5) : cellProps.cell.getValue()}
                         <a
                             href={getEtherscanAddressLink(networkId, cellProps.cell.getValue())}
                             target="_blank"
@@ -72,7 +72,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                         </a>
                     </WalletAddress>
                 ),
-                size: 200,
+                size: isMobile ? 200 : 500,
                 headStyle: { cssProperties: { minWidth: '130px' } },
             },
             {
