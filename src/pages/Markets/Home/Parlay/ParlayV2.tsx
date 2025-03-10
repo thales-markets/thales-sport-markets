@@ -369,7 +369,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                                     isDifferentGamesCombined
                                         ? t('markets.parlay.tooltip.sgp-different-game')
                                         : isSgpSportDisabled
-                                        ? t('markets.parlay.tooltip.sgp-sport-disabled', {
+                                        ? t('markets.parlay.tooltip.sgp-league-disabled', {
                                               league: LeagueMap[ticket[0]?.leagueId as League]?.label,
                                           })
                                         : t('markets.parlay.tooltip.sgp')

@@ -77,12 +77,17 @@ const ValidationModal: React.FC<ValidationModalProps> = ({ onClose }) => {
                         {/* {getMaxMatchesAnimation()} */}
                     </>
                 )}
+                {ticketError.code === TicketErrorCode.SGP_MAX_MARKETS && (
+                    <ErrorMessage>
+                        {t('markets.parlay.validation.sgp-bet-max-markets-validation', { max: ticketError.data })}
+                    </ErrorMessage>
+                )}
                 {ticketError.code === TicketErrorCode.SGP_DIFFERENT_GAME && (
                     <ErrorMessage>{t('markets.parlay.validation.sgp-different-game')}</ErrorMessage>
                 )}
                 {ticketError.code === TicketErrorCode.SGP_LEAGUE_DISABLED && (
                     <ErrorMessage>
-                        {t('markets.parlay.validation.sgp-sport-disabled', { league: ticketError.data })}
+                        {t('markets.parlay.validation.sgp-league-disabled', { league: ticketError.data })}
                     </ErrorMessage>
                 )}
                 {ticketError.code === TicketErrorCode.OTHER_TYPES_WITH_PLAYER_PROPS && (
