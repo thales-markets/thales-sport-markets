@@ -7,12 +7,21 @@ type ScrollProps = {
     innerRef?: LegacyRef<Scrollbars>;
     height: string;
     children: React.ReactNode;
+    renderOnlyChildren?: boolean;
     onScroll?: () => void;
     onScrollStart?: () => void;
     onScrollStop?: () => void;
 };
 
-const Scroll: React.FC<ScrollProps> = ({ children, height, onScrollStart, onScrollStop, onScroll, innerRef }) => {
+const Scroll: React.FC<ScrollProps> = ({
+    children,
+    renderOnlyChildren,
+    height,
+    onScrollStart,
+    onScrollStop,
+    onScroll,
+    innerRef,
+}) => {
     const theme: ThemeInterface = useTheme();
 
     const renderThumb = ({ style, ...props }: any) => {
@@ -35,7 +44,9 @@ const Scroll: React.FC<ScrollProps> = ({ children, height, onScrollStart, onScro
         return <div style={{ ...style, ...trackStyle }} {...props} />;
     };
 
-    return (
+    return renderOnlyChildren ? (
+        <>{children}</>
+    ) : (
         <Scrollbars
             ref={innerRef}
             hideTracksWhenNotNeeded

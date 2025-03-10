@@ -24,6 +24,7 @@ type TagsDropdownProps = {
     open: boolean;
     tags: Tags;
     tagFilter: Tags;
+    setSportParam: (param: SportFilter) => void;
     setTagFilter: any;
     setTagParam: any;
     openMarketsCountPerTag: any;
@@ -39,6 +40,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
     open,
     tags,
     tagFilter,
+    setSportParam,
     setTagFilter,
     setTagParam,
     openMarketsCountPerTag,
@@ -134,6 +136,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                 if (tagFilterIds.includes(tag.id)) {
                                                     if (sportFilter !== sport) {
                                                         dispatch(setSportFilter(sport));
+                                                        setSportParam(sport);
                                                         setTagFilter([tag]);
                                                         setTagParam([tag].map((tagInfo) => tagInfo.label).toString());
                                                     } else {
@@ -163,6 +166,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                     } else {
                                                         if (sportFilter !== sport) {
                                                             dispatch(setSportFilter(sport));
+                                                            setSportParam(sport);
                                                             setTagFilter([tag]);
                                                             setTagParam(
                                                                 [tag].map((tagInfo) => tagInfo.label).toString()

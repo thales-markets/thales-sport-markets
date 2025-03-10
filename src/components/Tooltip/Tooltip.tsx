@@ -7,6 +7,8 @@ import { ThemeInterface } from 'types/ui';
 
 type TooltipProps = {
     overlay: any;
+    placement?: string;
+    mouseEnterDelay?: number;
     iconFontSize?: number;
     customIconStyling?: CSSProperties;
     overlayInnerStyle?: CSSProperties;
@@ -22,6 +24,8 @@ type TooltipProps = {
 
 const Tooltip: React.FC<TooltipProps> = ({
     overlay,
+    placement,
+    mouseEnterDelay,
     iconFontSize,
     customIconStyling,
     overlayInnerStyle,
@@ -54,21 +58,25 @@ const Tooltip: React.FC<TooltipProps> = ({
         <>{children}</>
     ) : isValidationOrWarn ? (
         <ReactTooltip
-            visible={validationChildRefPositionTop === validationPositionTop}
+            visible={
+                validationChildRefPositionTop !== undefined && validationChildRefPositionTop === validationPositionTop
+            }
             overlay={overlay}
-            placement="top"
+            placement={placement || 'top'}
             overlayClassName={`${overlayClassName || ''} override-validation-arrow`}
             overlayInnerStyle={{ ...overlayInnerStyle, ...getValidationStyle(theme, !!isWarning) }}
-            arrowContent={<ValidationArrow isWarning={!!isWarning} />}
+            arrowContent={<ValidationArrow isWarning={!!isWarning} placement={placement || 'top'} />}
+            align={placement === 'bottom' ? { offset: [-2, -2] } : undefined}
         >
             <div ref={validationChildRef}>{children}</div>
         </ReactTooltip>
     ) : (
         <ReactTooltip
             overlay={overlay}
-            placement="top"
+            placement={placement || 'top'}
             overlayClassName={overlayClassName}
             overlayInnerStyle={overlayInnerStyle}
+            mouseEnterDelay={mouseEnterDelay}
         >
             {children ? (
                 children
@@ -114,15 +122,15 @@ const getValidationStyle = (theme: ThemeInterface, isWarning: boolean): React.CS
     textTransform: 'uppercase',
 });
 
-const ValidationArrow = styled.div<{ isWarning: boolean }>`
+const ValidationArrow = styled.div<{ isWarning: boolean; placement: string }>`
     &:before {
         content: '';
         display: block;
         width: 100%;
         height: 100%;
         margin: auto;
-        transform-origin: 100% 0;
-        transform: rotate(45deg);
+        transform-origin: 100% ${(props) => (props.placement === 'bottom' ? '100%' : '0%')};
+        transform: rotate(${(props) => (props.placement === 'bottom' ? '-45deg' : '45deg')});
         border: 1.5px solid
             ${(props) =>
                 props.isWarning ? props.theme.warning.borderColor.primary : props.theme.error.borderColor.primary};
@@ -133,7 +141,7 @@ const ValidationArrow = styled.div<{ isWarning: boolean }>`
     overflow: hidden;
     width: 13px;
     height: 10px;
-    bottom: -4px;
+    bottom: ${(props) => (props.placement === 'bottom' ? '-6' : '-4')}px;
     top: auto;
     right: -7px;
     @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {

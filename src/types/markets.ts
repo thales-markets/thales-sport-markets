@@ -1,4 +1,4 @@
-import { GameStatus, Position, StatusFilter } from 'enums/markets';
+import { GameStatus, StatusFilter } from 'enums/markets';
 import { Coins } from 'thales-utils';
 import { MarketType } from '../enums/marketTypes';
 import { Network } from '../enums/network';
@@ -83,6 +83,7 @@ export type SportMarket = {
     positionNames?: string[];
     errorMessage?: string;
     numberOfMarkets?: number;
+    sgpSportsbooks?: string[];
 };
 
 type OmitDistributive<T, K extends PropertyKey> = T extends any
@@ -124,7 +125,7 @@ export type TicketPosition = {
 };
 
 export type TicketMarket = SportMarket & {
-    position: Position;
+    position: number;
     odd: number;
     isWinning?: boolean;
 };
@@ -154,7 +155,6 @@ export type TradeData = {
     merkleProof: string[];
     position: number;
     combinedPositions: CombinedPositions[];
-    live?: boolean;
 };
 
 export type SystemBetData = {
@@ -189,6 +189,7 @@ export type Ticket = {
     isOpen: boolean;
     finalPayout: number;
     isLive: boolean;
+    isSgp: boolean;
     isFreeBet: boolean;
     isSystemBet: boolean;
     systemBetData?: SystemBetData;
@@ -221,10 +222,4 @@ export type LpUsersPnl = {
 export type Team = {
     name: string;
     isHome: boolean;
-};
-
-export type StakingData = {
-    isPaused: boolean;
-    isUnstaking: boolean;
-    apy: number;
 };
