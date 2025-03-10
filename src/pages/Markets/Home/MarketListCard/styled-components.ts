@@ -29,14 +29,16 @@ export const Wrapper = styled(FlexDivColumn)<{
 export const MainContainer = styled(FlexDivRow)<{
     isGameOpen: boolean;
     isBoosted?: boolean;
+    hasTournamentName?: boolean;
 }>`
     position: relative;
     width: 100%;
-    padding: ${(props) => (props.isBoosted ? '20px 12px 10px 12px' : '10px 12px')};
+    padding: ${(props) =>
+        props.isBoosted ? '20px 12px 10px 12px' : props.hasTournamentName ? '0 12px 10px 12px' : '10px 12px'};
     cursor: ${(props) => (props.isGameOpen ? 'default' : 'pointer')};
     @media (max-width: 950px) {
         flex-direction: ${(props) => (props.isGameOpen ? 'column' : 'row')};
-        padding: 8px 8px 4px 8px;
+        padding: ${(props) => (props.hasTournamentName ? '0 8px 4px 8px' : '8px 8px 4px 8px')};
     }
 `;
 
@@ -92,10 +94,28 @@ export const MatchInfoLabel = styled.label<{ selected?: boolean }>`
     }
 `;
 
-export const LeagueFlag = styled.img`
+export const TournamentNameLabel = styled.label<{ isBoosted?: boolean; isLeagueInfoVisible?: boolean }>`
+    color: ${(props) => props.theme.textColor.quinary};
+    padding-left: ${(props) => (props.isLeagueInfoVisible ? '48px' : '12px')};
+    padding-top: ${(props) => (props.isBoosted ? '16px' : '10px')};
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 14px;
+    text-transform: uppercase;
+    width: fit-content;
+    margin-right: 2px;
+    white-space: nowrap;
+    z-index: 2;
+    @media (max-width: 950px) {
+        padding-left: ${(props) => (props.isLeagueInfoVisible ? '36px' : '8px')};
+        padding-top: 8px;
+    }
+`;
+
+export const LeagueFlag = styled.img<{ hasTournamentName?: boolean }>`
     width: 24px;
     height: 24px;
-    margin-top: -5px;
+    margin-top: ${(props) => (props.hasTournamentName ? '-11px' : '-5px')};
     margin-left: 1px;
     margin-right: 11px;
     cursor: pointer;
