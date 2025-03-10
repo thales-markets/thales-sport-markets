@@ -478,12 +478,7 @@ export const getShareTicketModalData = async (
             networkConfig
         );
 
-        if (
-            sportsAMMDataContract &&
-            sportsAMMV2ManagerContract &&
-            freeBetHolderContract &&
-            (!isStakedThalesSupported || stakingThalesBettingProxyContract)
-        ) {
+        if (sportsAMMDataContract && sportsAMMV2ManagerContract && freeBetHolderContract) {
             const numOfActiveTicketsPerUser = isFreeBet
                 ? await freeBetHolderContract.read.numOfActiveTicketsPerUser([walletAddress])
                 : isStakedThales && isStakedThalesSupported && stakingThalesBettingProxyContract
