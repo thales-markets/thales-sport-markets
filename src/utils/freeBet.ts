@@ -6,6 +6,7 @@ import { Network } from 'enums/network';
 import { t } from 'i18next';
 import { toast } from 'react-toastify';
 import { FreeBet } from 'types/freeBet';
+import { refetchFreeBetBalance, refetchGetFreeBet } from './queryConnector';
 
 export const claimFreeBet = async (
     walletAddress: string,
@@ -16,7 +17,7 @@ export const claimFreeBet = async (
 ) => {
     const toastId = toast.loading(t('market.toast-message.transaction-pending'));
 
-    if (walletAddress) {
+    if (walletAddress && freeBet) {
         try {
             const response = await axios.post(
                 // hardcode optimism for now
@@ -41,6 +42,8 @@ export const claimFreeBet = async (
                         search: queryParams.toString(),
                     });
                 }
+                refetchGetFreeBet(freeBet, networkId);
+                refetchFreeBetBalance(walletAddress, networkId);
             } else {
                 toast.update(toastId, getErrorToastOptions(response.data));
             }
