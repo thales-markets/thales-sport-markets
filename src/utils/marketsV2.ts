@@ -1,3 +1,4 @@
+import { NOT_AVAILABLE } from 'constants/markets';
 import { secondsToMilliseconds } from 'date-fns';
 import { MarketType, MarketTypeGroup } from 'enums/marketTypes';
 import { GameStatus, MarketStatus, Position } from 'enums/markets';
@@ -615,7 +616,8 @@ export const packMarket = (
     if (!parentMarket) {
         packedMarket = {
             ...packedMarket,
-            tournamentName: gameInfo?.tournamentName,
+            tournamentName:
+                gameInfo?.tournamentName || market?.tournamentName !== NOT_AVAILABLE ? market?.tournamentName : '',
             tournamentRound: gameInfo?.tournamentRound,
             homeScore,
             awayScore,
