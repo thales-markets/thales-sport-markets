@@ -8,6 +8,7 @@ import { COLLATERAL_ICONS_CLASS_NAMES } from 'constants/currency';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import useLocalStorage from 'hooks/useLocalStorage';
 import QRCodeModal from 'pages/AARelatedPages/Deposit/components/QRCodeModal';
+import useGetFreeBetQuery from 'queries/freeBets/useGetFreeBetQuery';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useCallback, useMemo, useState } from 'react';
@@ -58,6 +59,16 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
         }
     );
 
+    const freeBetQuery = useGetFreeBetQuery(freeBet?.id || '', networkId, { enabled: !!freeBet?.id });
+
+    const freeBetFromServer = useMemo(
+        () =>
+            freeBetQuery.isSuccess && freeBetQuery.data && freeBet?.id
+                ? { ...freeBetQuery.data, id: freeBet?.id }
+                : null,
+        [freeBetQuery.data, freeBetQuery.isSuccess, freeBet?.id]
+    );
+
     const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
 
     const exchangeRates: Rates | null =
@@ -103,9 +114,10 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
     ]);
 
     const claimFreeBetButtonVisible =
-        !!freeBet &&
-        !freeBet?.claimSuccess &&
-        (!freeBet.claimAddress || freeBet.claimAddress.toLowerCase() === walletAddress.toLowerCase());
+        !!freeBetFromServer &&
+        !freeBetFromServer?.claimSuccess &&
+        (!freeBetFromServer.claimAddress ||
+            freeBetFromServer.claimAddress.toLowerCase() === walletAddress.toLowerCase());
 
     return (
         <Modal

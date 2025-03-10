@@ -14,7 +14,6 @@ import { FreeBet } from 'types/freeBet';
 import { RootState } from 'types/redux';
 import { getCollateralByAddress } from 'utils/collaterals';
 import { claimFreeBet } from 'utils/freeBet';
-import { refetchGetFreeBet } from 'utils/queryConnector';
 import useBiconomy from 'utils/useBiconomy';
 import { useAccount, useChainId } from 'wagmi';
 
@@ -43,7 +42,6 @@ const ClaimFreeBetModal: React.FC<ClaimFreeBetModalProps> = ({ freeBet, onClose 
             onClose();
         } else if (walletAddress) {
             await claimFreeBet(walletAddress, freeBet.id, networkId, setFreeBet, history);
-            refetchGetFreeBet(freeBet.id, networkId);
         } else {
             dispatch(
                 setWalletConnectModalVisibility({
@@ -78,7 +76,7 @@ const ClaimFreeBetModal: React.FC<ClaimFreeBetModalProps> = ({ freeBet, onClose 
                     <CloseContainer>{<CloseIcon onClick={onClose} />}</CloseContainer>
                     <FlexDivCentered>
                         <Title>
-                            <span>WELCOME TO</span>
+                            <WelcomeToText>WELCOME TO</WelcomeToText>
                             <FreeBetLogo />
                         </Title>
                     </FlexDivCentered>
@@ -112,25 +110,38 @@ const ClaimFreeBetModal: React.FC<ClaimFreeBetModalProps> = ({ freeBet, onClose 
                         )}
                         {!walletAddress && <SubMessage>Sign in to Overtime to claim.</SubMessage>}
                     </MainContainer>
-                    <FlexDiv>
-                        <Button
-                            onClick={onButtonClick}
-                            padding="8px 0"
-                            width="100%"
-                            backgroundColor={theme.background.quaternary}
-                            borderColor={theme.background.quaternary}
-                        >
-                            {!walletAddress ? (
-                                'Sign in'
-                            ) : !freeBet.claimSuccess ? (
-                                <>
-                                    Claim free bet <HandsIcon className="icon icon--hands-coins" />
-                                </>
-                            ) : (
-                                `Let's bet!`
-                            )}
-                        </Button>
-                    </FlexDiv>
+                    <BottomContainer>
+                        {!!walletAddress && (
+                            <Explainer>
+                                <div>Guide on how to use your Free Bet:</div>
+                                <div>
+                                    Free Bet rules:{' '}
+                                    <a rel="noreferrer" target="_blank" href="https://docs.overtime.io/free-bet">
+                                        docs.overtime.io/free-bet
+                                    </a>
+                                </div>
+                            </Explainer>
+                        )}
+                        <FlexDiv>
+                            <Button
+                                onClick={onButtonClick}
+                                padding="8px 0"
+                                width="100%"
+                                backgroundColor={theme.background.quaternary}
+                                borderColor={theme.background.quaternary}
+                            >
+                                {!walletAddress ? (
+                                    'Sign in'
+                                ) : !freeBet.claimSuccess ? (
+                                    <>
+                                        Claim free bet <HandsIcon className="icon icon--hands-coins" />
+                                    </>
+                                ) : (
+                                    `Let's bet!`
+                                )}
+                            </Button>
+                        </FlexDiv>
+                    </BottomContainer>
                 </ContentContainer>
             </Container>
         </Modal>
@@ -208,6 +219,29 @@ const HandsIcon = styled.i`
     font-weight: 500;
     font-size: 22px;
     color: ${(props) => props.theme.textColor.tertiary};
+`;
+
+const WelcomeToText = styled.span`
+    margin-top: 4px;
+`;
+
+const BottomContainer = styled(FlexDiv)`
+    flex-direction: column;
+    gap: 20px;
+`;
+
+const Explainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border: 1px solid ${(props) => props.theme.button.borderColor.senary};
+    border-radius: 12px;
+    font-weight: 300;
+    padding: 16px;
+    color: ${(props) => props.theme.textColor.primary};
+    a {
+        color: ${(props) => props.theme.textColor.quaternary};
+    }
 `;
 
 export default ClaimFreeBetModal;

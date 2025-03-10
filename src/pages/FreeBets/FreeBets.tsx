@@ -26,6 +26,8 @@ import { getFreeBetCollaterals } from 'utils/collaterals';
 import { useAccount, useChainId, useClient, useSignMessage } from 'wagmi';
 import multipleCollateral from '../../utils/contracts/multipleCollateralContract';
 
+const FUND_WALLET_ADDRESS = '0x23Ea88E828188377DCB4663ff2FE419B1fC71F88';
+
 const FreeBets: React.FC = () => {
     const walletAddress = useAccount()?.address || '';
     const networkId = useChainId();
@@ -50,13 +52,10 @@ const FreeBets: React.FC = () => {
         [networkId, selectedCollateral]
     );
 
-    const multipleCollateralBalancesQuery = useMultipleCollateralBalanceQuery(
-        '0x23Ea88E828188377DCB4663ff2FE419B1fC71F88',
-        {
-            networkId,
-            client,
-        }
-    );
+    const multipleCollateralBalancesQuery = useMultipleCollateralBalanceQuery(FUND_WALLET_ADDRESS, {
+        networkId,
+        client,
+    });
     const multipleCollateralBalances: { [key: string]: number } = multipleCollateralBalancesQuery?.data || {};
 
     const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
@@ -113,7 +112,9 @@ const FreeBets: React.FC = () => {
                 <FlexDivColumnCentered>
                     <span> Balances displayed are for fund wallet</span>
                     <br />
-                    <span> 0x23Ea88E828188377DCB4663ff2FE419B1fC71F88</span>
+                    <span> {FUND_WALLET_ADDRESS}</span>
+                    <br />
+                    <span>Available gas: {multipleCollateralBalances.ETH} ETH</span>
                     <br />
                     <FlexDiv>
                         <NumericInput

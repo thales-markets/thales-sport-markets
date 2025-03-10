@@ -4,6 +4,7 @@ import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
 import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from 'constants/currency';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import useLocalStorage from 'hooks/useLocalStorage';
+import useGetFreeBetQuery from 'queries/freeBets/useGetFreeBetQuery';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
@@ -66,6 +67,16 @@ const UserStats: React.FC = () => {
     );
     const freeBetBalances =
         freeBetBalancesQuery.isSuccess && freeBetBalancesQuery.data ? freeBetBalancesQuery.data : undefined;
+
+    const freeBetQuery = useGetFreeBetQuery(freeBet?.id || '', networkId, { enabled: !!freeBet?.id });
+
+    const freeBetFromServer = useMemo(
+        () =>
+            freeBetQuery.isSuccess && freeBetQuery.data && freeBet?.id
+                ? { ...freeBetQuery.data, id: freeBet?.id }
+                : null,
+        [freeBetQuery.data, freeBetQuery.isSuccess, freeBet?.id]
+    );
 
     const isFreeBetExists = freeBetBalances && !!Object.values(freeBetBalances).find((balance) => !!balance);
 
@@ -133,9 +144,10 @@ const UserStats: React.FC = () => {
     };
 
     const claimFreeBetButtonVisible =
-        !!freeBet &&
-        !freeBet?.claimSuccess &&
-        (!freeBet.claimAddress || freeBet.claimAddress.toLowerCase() === walletAddress.toLowerCase());
+        !!freeBetFromServer &&
+        !freeBetFromServer?.claimSuccess &&
+        (!freeBetFromServer.claimAddress ||
+            freeBetFromServer.claimAddress.toLowerCase() === walletAddress.toLowerCase());
 
     return (
         <>
