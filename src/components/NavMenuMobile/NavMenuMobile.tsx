@@ -12,7 +12,6 @@ import {
     NAV_MENU_SECOND_SECTION,
     NAV_MENU_THIRD_SECTION,
 } from 'constants/ui';
-import { ProfileIconWidget } from 'layouts/DappLayout/DappHeader/components/ProfileItem/ProfileItem';
 import { LogoContainer, OverdropIcon } from 'layouts/DappLayout/DappHeader/styled-components';
 import useBlockedGamesQuery from 'queries/resolveBlocker/useBlockedGamesQuery';
 import useWhitelistedForUnblock from 'queries/resolveBlocker/useWhitelistedForUnblock';
@@ -110,7 +109,7 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                             <NetworkName>{getNetworkNameByNetworkId(networkId)}</NetworkName>
                         </Network>
                     </NetworkWrapper>
-                    <WalletWrapper>
+                    <WalletWrapper onClick={() => setNavMenuVisibility(false)}>
                         <WalletInfo />
                     </WalletWrapper>
                 </HeaderContainer>
@@ -126,21 +125,13 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                                 href={buildHref(item.route)}
                             >
                                 <ItemContainer key={index} active={location.pathname === item.route}>
-                                    {isConnected && item.name == 'profile' ? (
-                                        <ProfileIconWidget avatarSize={25} color={theme.textColor.primary} />
-                                    ) : (
-                                        <>
-                                            {item.name == 'resolve-blocker' && blockedGamesCount > 0 && (
-                                                <NotificationCount>
-                                                    <Count>{blockedGamesCount}</Count>
-                                                </NotificationCount>
-                                            )}
-                                            <NavIcon
-                                                className={item.iconClass}
-                                                active={location.pathname === item.route}
-                                            />
-                                        </>
+                                    {item.name == 'resolve-blocker' && blockedGamesCount > 0 && (
+                                        <NotificationCount>
+                                            <Count>{blockedGamesCount}</Count>
+                                        </NotificationCount>
                                     )}
+                                    <NavIcon className={item.iconClass} active={location.pathname === item.route} />
+
                                     <NavLabel>{!isBiconomy ? t(item.i18label) : t(item.i18labelSmart as any)}</NavLabel>
                                 </ItemContainer>
                             </SPAAnchor>
