@@ -405,13 +405,13 @@ const areSameCombinedPositions = (market: SportMarket | TicketPosition, ticketPo
     return true;
 };
 
-export const isSameMarket = (market: SportMarket | TicketPosition, ticketPosition: TicketPosition) =>
+export const isSameMarket = (market: SportMarket | TicketPosition, ticketPosition: TicketPosition, byType = false) =>
     market.gameId === ticketPosition.gameId &&
     market.leagueId === ticketPosition.leagueId &&
     market.typeId === ticketPosition.typeId &&
     market.playerProps.playerId === ticketPosition.playerId &&
     market.line === ticketPosition.line &&
-    areSameCombinedPositions(market, ticketPosition);
+    (byType || areSameCombinedPositions(market, ticketPosition));
 
 export const getTradeData = (markets: TicketMarket[]): TradeData[] =>
     markets.map((market) => {
@@ -433,8 +433,7 @@ export const getTradeData = (markets: TicketMarket[]): TradeData[] =>
                     line: combinedPosition.line * 100,
                 }))
             ),
-            live: market.live,
-        };
+        } as TradeData;
     });
 
 export const isOddValid = (odd: number) => odd < 1 && odd != 0;
@@ -443,6 +442,15 @@ export const updateTotalQuoteAndPayout = (tickets: Ticket[]): Ticket[] => {
     const modifiedTickets = tickets.map((ticket: Ticket) => {
         // Skip system bet, payout is updated in separate function due to different logic and quote is not used
         if (ticket.isSystemBet) {
+            return ticket;
+        }
+        if (ticket.isSgp) {
+            const isSomeMarketCancelled = ticket.sportMarkets.some((market) => market.isCancelled);
+            if (isSomeMarketCancelled && !ticket.isLost) {
+                ticket.isCancelled = true;
+                ticket.totalQuote = 1;
+                ticket.payout = ticket.buyInAmount;
+            }
             return ticket;
         }
         let totalQuote = ticket.totalQuote;

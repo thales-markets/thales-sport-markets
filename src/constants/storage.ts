@@ -36,6 +36,7 @@ export const LOCAL_STORAGE_KEYS = {
         [NetworkId.OptimismSepolia]: 'sessionValidUntil_11155420',
     } as Record<SupportedNetwork, string>,
     IS_SYSTEM_BET: 'isSystemBet',
+    IS_SGP: 'isSGP',
     SYSTEM_BET_DENOMINATOR: 'systemBetDenominator',
     ERROR_RELOAD_TIME: 'errorReloadTime',
 };

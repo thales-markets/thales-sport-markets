@@ -348,7 +348,7 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
                             walletAddress,
                             freeBetHolderContractAddress
                         );
-                        console.log('allowance', allowance);
+
                         setAllowance(allowance);
                     } catch (e) {
                         console.log(e);

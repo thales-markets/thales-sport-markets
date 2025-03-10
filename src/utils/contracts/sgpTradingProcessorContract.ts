@@ -1,12 +1,12 @@
 import { Network } from 'enums/network';
 import { ContractData } from 'types/viem';
 
-const liveTradingProcessorContract: ContractData = {
+const sgpTradingProcessorContract: ContractData = {
     addresses: {
-        [Network.OptimismMainnet]: '0x330c4c4Bcde91aDC17c0293A90dC05a046ce3FE4',
-        [Network.Arbitrum]: '0xa5567Cd13F3a0c71B4a85E3a0DdAbfeeCB409339',
-        [Network.Base]: '0x64598450396494faDd5ebaC9906CF5169a2B3e0a',
-        [Network.OptimismSepolia]: '0x01546a60C30CaCAe105210381a11449F430489Cf',
+        [Network.OptimismMainnet]: '0x27A4403ba34d5FB8dA30bCBA455837FbF9aa1666',
+        [Network.Arbitrum]: '0xcC2e7b42cB21386FD71dECB22ebd429754B505F2',
+        [Network.Base]: '0xB908ED8efA7E37304602f2782674eE0B6CD19D47',
+        [Network.OptimismSepolia]: '0x1B3b991Da49DBCAbf5b5DA401E8a13946bBedEBD',
     },
     abi: [
         {
@@ -20,8 +20,19 @@ const liveTradingProcessorContract: ContractData = {
             stateMutability: 'nonpayable',
             type: 'constructor',
         },
+        {
+            inputs: [{ internalType: 'address', name: 'target', type: 'address' }],
+            name: 'AddressEmptyCode',
+            type: 'error',
+        },
+        {
+            inputs: [{ internalType: 'address', name: 'account', type: 'address' }],
+            name: 'AddressInsufficientBalance',
+            type: 'error',
+        },
         { inputs: [], name: 'EnforcedPause', type: 'error' },
         { inputs: [], name: 'ExpectedPause', type: 'error' },
+        { inputs: [], name: 'FailedInnerCall', type: 'error' },
         {
             inputs: [{ internalType: 'address', name: 'owner', type: 'address' }],
             name: 'OwnableInvalidOwner',
@@ -30,6 +41,11 @@ const liveTradingProcessorContract: ContractData = {
         {
             inputs: [{ internalType: 'address', name: 'account', type: 'address' }],
             name: 'OwnableUnauthorizedAccount',
+            type: 'error',
+        },
+        {
+            inputs: [{ internalType: 'address', name: 'token', type: 'address' }],
+            name: 'SafeERC20FailedOperation',
             type: 'error',
         },
         {
@@ -65,43 +81,6 @@ const liveTradingProcessorContract: ContractData = {
         {
             anonymous: false,
             inputs: [
-                { indexed: false, internalType: 'address', name: 'requester', type: 'address' },
-                { indexed: false, internalType: 'bytes32', name: 'requestId', type: 'bytes32' },
-                { indexed: false, internalType: 'bool', name: '_allow', type: 'bool' },
-                { indexed: false, internalType: 'bytes32', name: '_gameId', type: 'bytes32' },
-                { indexed: false, internalType: 'uint16', name: '_sportId', type: 'uint16' },
-                { indexed: false, internalType: 'uint16', name: '_typeId', type: 'uint16' },
-                { indexed: false, internalType: 'int24', name: '_line', type: 'int24' },
-                { indexed: false, internalType: 'uint8', name: '_position', type: 'uint8' },
-                { indexed: false, internalType: 'uint256', name: '_buyInAmount', type: 'uint256' },
-                { indexed: false, internalType: 'uint256', name: '_expectedQuote', type: 'uint256' },
-                { indexed: false, internalType: 'address', name: '_collateral', type: 'address' },
-                { indexed: false, internalType: 'uint256', name: 'timestamp', type: 'uint256' },
-            ],
-            name: 'LiveTradeFulfilled',
-            type: 'event',
-        },
-        {
-            anonymous: false,
-            inputs: [
-                { indexed: false, internalType: 'address', name: 'requester', type: 'address' },
-                { indexed: false, internalType: 'uint256', name: 'requestCounter', type: 'uint256' },
-                { indexed: false, internalType: 'bytes32', name: 'requestId', type: 'bytes32' },
-                { indexed: false, internalType: 'bytes32', name: '_gameId', type: 'bytes32' },
-                { indexed: false, internalType: 'uint16', name: '_sportId', type: 'uint16' },
-                { indexed: false, internalType: 'uint16', name: '_typeId', type: 'uint16' },
-                { indexed: false, internalType: 'int24', name: '_line', type: 'int24' },
-                { indexed: false, internalType: 'uint8', name: '_position', type: 'uint8' },
-                { indexed: false, internalType: 'uint256', name: '_buyInAmount', type: 'uint256' },
-                { indexed: false, internalType: 'uint256', name: '_expectedQuote', type: 'uint256' },
-                { indexed: false, internalType: 'address', name: '_collateral', type: 'address' },
-            ],
-            name: 'LiveTradeRequested',
-            type: 'event',
-        },
-        {
-            anonymous: false,
-            inputs: [
                 { indexed: true, internalType: 'address', name: 'previousOwner', type: 'address' },
                 { indexed: true, internalType: 'address', name: 'newOwner', type: 'address' },
             ],
@@ -116,6 +95,108 @@ const liveTradingProcessorContract: ContractData = {
         },
         {
             anonymous: false,
+            inputs: [
+                { indexed: false, internalType: 'address', name: 'requester', type: 'address' },
+                { indexed: false, internalType: 'bytes32', name: 'requestId', type: 'bytes32' },
+                { indexed: false, internalType: 'bool', name: '_allow', type: 'bool' },
+                {
+                    components: [
+                        {
+                            components: [
+                                { internalType: 'bytes32', name: 'gameId', type: 'bytes32' },
+                                { internalType: 'uint16', name: 'sportId', type: 'uint16' },
+                                { internalType: 'uint16', name: 'typeId', type: 'uint16' },
+                                { internalType: 'uint256', name: 'maturity', type: 'uint256' },
+                                { internalType: 'uint8', name: 'status', type: 'uint8' },
+                                { internalType: 'int24', name: 'line', type: 'int24' },
+                                { internalType: 'uint24', name: 'playerId', type: 'uint24' },
+                                { internalType: 'uint256[]', name: 'odds', type: 'uint256[]' },
+                                { internalType: 'bytes32[]', name: 'merkleProof', type: 'bytes32[]' },
+                                { internalType: 'uint8', name: 'position', type: 'uint8' },
+                                {
+                                    components: [
+                                        { internalType: 'uint16', name: 'typeId', type: 'uint16' },
+                                        { internalType: 'uint8', name: 'position', type: 'uint8' },
+                                        { internalType: 'int24', name: 'line', type: 'int24' },
+                                    ],
+                                    internalType: 'struct ISportsAMMV2.CombinedPosition[][]',
+                                    name: 'combinedPositions',
+                                    type: 'tuple[][]',
+                                },
+                            ],
+                            internalType: 'struct ISportsAMMV2.TradeData[]',
+                            name: '_tradeData',
+                            type: 'tuple[]',
+                        },
+                        { internalType: 'uint256', name: '_buyInAmount', type: 'uint256' },
+                        { internalType: 'uint256', name: '_expectedQuote', type: 'uint256' },
+                        { internalType: 'uint256', name: '_additionalSlippage', type: 'uint256' },
+                        { internalType: 'address', name: '_referrer', type: 'address' },
+                        { internalType: 'address', name: '_collateral', type: 'address' },
+                    ],
+                    indexed: false,
+                    internalType: 'struct ISGPTradingProcessor.SGPTradeData',
+                    name: 'sgpTradeData',
+                    type: 'tuple',
+                },
+                { indexed: false, internalType: 'uint256', name: '_approvedQuote', type: 'uint256' },
+                { indexed: false, internalType: 'uint256', name: 'timestamp', type: 'uint256' },
+            ],
+            name: 'SGPTradeFulfilled',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                { indexed: false, internalType: 'address', name: 'requester', type: 'address' },
+                { indexed: false, internalType: 'uint256', name: 'requestCounter', type: 'uint256' },
+                { indexed: false, internalType: 'bytes32', name: 'requestId', type: 'bytes32' },
+                {
+                    components: [
+                        {
+                            components: [
+                                { internalType: 'bytes32', name: 'gameId', type: 'bytes32' },
+                                { internalType: 'uint16', name: 'sportId', type: 'uint16' },
+                                { internalType: 'uint16', name: 'typeId', type: 'uint16' },
+                                { internalType: 'uint256', name: 'maturity', type: 'uint256' },
+                                { internalType: 'uint8', name: 'status', type: 'uint8' },
+                                { internalType: 'int24', name: 'line', type: 'int24' },
+                                { internalType: 'uint24', name: 'playerId', type: 'uint24' },
+                                { internalType: 'uint256[]', name: 'odds', type: 'uint256[]' },
+                                { internalType: 'bytes32[]', name: 'merkleProof', type: 'bytes32[]' },
+                                { internalType: 'uint8', name: 'position', type: 'uint8' },
+                                {
+                                    components: [
+                                        { internalType: 'uint16', name: 'typeId', type: 'uint16' },
+                                        { internalType: 'uint8', name: 'position', type: 'uint8' },
+                                        { internalType: 'int24', name: 'line', type: 'int24' },
+                                    ],
+                                    internalType: 'struct ISportsAMMV2.CombinedPosition[][]',
+                                    name: 'combinedPositions',
+                                    type: 'tuple[][]',
+                                },
+                            ],
+                            internalType: 'struct ISportsAMMV2.TradeData[]',
+                            name: '_tradeData',
+                            type: 'tuple[]',
+                        },
+                        { internalType: 'uint256', name: '_buyInAmount', type: 'uint256' },
+                        { internalType: 'uint256', name: '_expectedQuote', type: 'uint256' },
+                        { internalType: 'uint256', name: '_additionalSlippage', type: 'uint256' },
+                        { internalType: 'address', name: '_referrer', type: 'address' },
+                        { internalType: 'address', name: '_collateral', type: 'address' },
+                    ],
+                    indexed: false,
+                    internalType: 'struct ISGPTradingProcessor.SGPTradeData',
+                    name: 'sgpTradeData',
+                    type: 'tuple',
+                },
+            ],
+            name: 'SGPTradeRequested',
+            type: 'event',
+        },
+        {
+            anonymous: false,
             inputs: [{ indexed: false, internalType: 'address', name: '_freeBetsHolder', type: 'address' }],
             name: 'SetFreeBetsHolder',
             type: 'event',
@@ -124,12 +205,6 @@ const liveTradingProcessorContract: ContractData = {
             anonymous: false,
             inputs: [{ indexed: false, internalType: 'uint256', name: '_maxAllowedExecutionDelay', type: 'uint256' }],
             name: 'SetMaxAllowedExecutionDelay',
-            type: 'event',
-        },
-        {
-            anonymous: false,
-            inputs: [{ indexed: false, internalType: 'address', name: '_stakingThalesBettingProxy', type: 'address' }],
-            name: 'SetStakingThalesBettingProxy',
             type: 'event',
         },
         {
@@ -151,7 +226,7 @@ const liveTradingProcessorContract: ContractData = {
                 { internalType: 'bool', name: '_allow', type: 'bool' },
                 { internalType: 'uint256', name: '_approvedQuote', type: 'uint256' },
             ],
-            name: 'fulfillLiveTrade',
+            name: 'fulfillSGPTrade',
             outputs: [],
             stateMutability: 'nonpayable',
             type: 'function',
@@ -224,11 +299,6 @@ const liveTradingProcessorContract: ContractData = {
             inputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
             name: 'requestIdToTradeData',
             outputs: [
-                { internalType: 'string', name: '_gameId', type: 'string' },
-                { internalType: 'uint16', name: '_sportId', type: 'uint16' },
-                { internalType: 'uint16', name: '_typeId', type: 'uint16' },
-                { internalType: 'int24', name: '_line', type: 'int24' },
-                { internalType: 'uint8', name: '_position', type: 'uint8' },
                 { internalType: 'uint256', name: '_buyInAmount', type: 'uint256' },
                 { internalType: 'uint256', name: '_expectedQuote', type: 'uint256' },
                 { internalType: 'uint256', name: '_additionalSlippage', type: 'uint256' },
@@ -242,23 +312,45 @@ const liveTradingProcessorContract: ContractData = {
             inputs: [
                 {
                     components: [
-                        { internalType: 'string', name: '_gameId', type: 'string' },
-                        { internalType: 'uint16', name: '_sportId', type: 'uint16' },
-                        { internalType: 'uint16', name: '_typeId', type: 'uint16' },
-                        { internalType: 'int24', name: '_line', type: 'int24' },
-                        { internalType: 'uint8', name: '_position', type: 'uint8' },
+                        {
+                            components: [
+                                { internalType: 'bytes32', name: 'gameId', type: 'bytes32' },
+                                { internalType: 'uint16', name: 'sportId', type: 'uint16' },
+                                { internalType: 'uint16', name: 'typeId', type: 'uint16' },
+                                { internalType: 'uint256', name: 'maturity', type: 'uint256' },
+                                { internalType: 'uint8', name: 'status', type: 'uint8' },
+                                { internalType: 'int24', name: 'line', type: 'int24' },
+                                { internalType: 'uint24', name: 'playerId', type: 'uint24' },
+                                { internalType: 'uint256[]', name: 'odds', type: 'uint256[]' },
+                                { internalType: 'bytes32[]', name: 'merkleProof', type: 'bytes32[]' },
+                                { internalType: 'uint8', name: 'position', type: 'uint8' },
+                                {
+                                    components: [
+                                        { internalType: 'uint16', name: 'typeId', type: 'uint16' },
+                                        { internalType: 'uint8', name: 'position', type: 'uint8' },
+                                        { internalType: 'int24', name: 'line', type: 'int24' },
+                                    ],
+                                    internalType: 'struct ISportsAMMV2.CombinedPosition[][]',
+                                    name: 'combinedPositions',
+                                    type: 'tuple[][]',
+                                },
+                            ],
+                            internalType: 'struct ISportsAMMV2.TradeData[]',
+                            name: '_tradeData',
+                            type: 'tuple[]',
+                        },
                         { internalType: 'uint256', name: '_buyInAmount', type: 'uint256' },
                         { internalType: 'uint256', name: '_expectedQuote', type: 'uint256' },
                         { internalType: 'uint256', name: '_additionalSlippage', type: 'uint256' },
                         { internalType: 'address', name: '_referrer', type: 'address' },
                         { internalType: 'address', name: '_collateral', type: 'address' },
                     ],
-                    internalType: 'struct ILiveTradingProcessor.LiveTradeData',
-                    name: '_liveTradeData',
+                    internalType: 'struct ISGPTradingProcessor.SGPTradeData',
+                    name: '_sgpTradeData',
                     type: 'tuple',
                 },
             ],
-            name: 'requestLiveTrade',
+            name: 'requestSGPTrade',
             outputs: [{ internalType: 'bytes32', name: 'requestId', type: 'bytes32' }],
             stateMutability: 'nonpayable',
             type: 'function',
@@ -298,23 +390,9 @@ const liveTradingProcessorContract: ContractData = {
             type: 'function',
         },
         {
-            inputs: [{ internalType: 'address', name: '_stakingThalesBettingProxy', type: 'address' }],
-            name: 'setStakingThalesBettingProxy',
-            outputs: [],
-            stateMutability: 'nonpayable',
-            type: 'function',
-        },
-        {
             inputs: [],
             name: 'sportsAMM',
             outputs: [{ internalType: 'contract ISportsAMMV2', name: '', type: 'address' }],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [],
-            name: 'stakingThalesBettingProxy',
-            outputs: [{ internalType: 'address', name: '', type: 'address' }],
             stateMutability: 'view',
             type: 'function',
         },
@@ -332,7 +410,17 @@ const liveTradingProcessorContract: ContractData = {
             stateMutability: 'nonpayable',
             type: 'function',
         },
+        {
+            inputs: [
+                { internalType: 'address', name: 'collateral', type: 'address' },
+                { internalType: 'address', name: 'recipient', type: 'address' },
+            ],
+            name: 'withdrawCollateral',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
     ],
 };
 
-export default liveTradingProcessorContract;
+export default sgpTradingProcessorContract;

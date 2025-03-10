@@ -11,7 +11,7 @@ import { League, PeriodType, Sport } from 'enums/sports';
 import _, { isEqual } from 'lodash';
 import Lottie from 'lottie-react';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
-import useRiskManagementConfigQuery from 'queries/riskManagement/riskManagementConfig';
+import useRiskManagementConfigQuery from 'queries/riskManagement/useRiskManagementConfig';
 import React, { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -107,9 +107,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
         const riskManagementLeaguesQuery = useRiskManagementConfigQuery(
             RiskManagementConfig.LEAGUES,
             { networkId },
-            {
-                enabled: !!market.live,
-            }
+            { enabled: !!market.live }
         );
 
         const riskManagementLeaguesWithTypes = useMemo(() => {
