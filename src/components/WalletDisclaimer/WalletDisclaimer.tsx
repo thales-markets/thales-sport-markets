@@ -1,8 +1,7 @@
 // @ts-ignore
-import React from 'react';
-import disclaimer from 'assets/docs/overtime-markets-disclaimer.pdf';
-import termsOfUse from 'assets/docs/thales-terms-of-use.pdf';
 import { DisclaimerComponent } from '@rainbow-me/rainbowkit';
+import disclaimer from 'assets/docs/overtime-markets-disclaimer.pdf';
+import termsOfUse from 'assets/docs/overtime-terms-of-use.pdf';
 import { Trans } from 'react-i18next';
 import styled from 'styled-components';
 

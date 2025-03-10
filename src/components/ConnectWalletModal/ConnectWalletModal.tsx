@@ -1,6 +1,6 @@
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import disclaimer from 'assets/docs/overtime-markets-disclaimer.pdf';
-import termsOfUse from 'assets/docs/thales-terms-of-use.pdf';
+import termsOfUse from 'assets/docs/overtime-terms-of-use.pdf';
 import SimpleLoader from 'components/SimpleLoader';
 import Checkbox from 'components/fields/Checkbox';
 import ROUTES from 'constants/routes';

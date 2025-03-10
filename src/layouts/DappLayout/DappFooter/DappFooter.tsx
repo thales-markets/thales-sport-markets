@@ -1,4 +1,4 @@
-import termsOfUse from 'assets/docs/thales-terms-of-use.pdf';
+import termsOfUse from 'assets/docs/overtime-terms-of-use.pdf';
 import { LINKS } from 'constants/links';
 import ROUTES from 'constants/routes';
 import React from 'react';
