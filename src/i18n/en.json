@@ -236,7 +236,9 @@
             "metamask-not-supported": "Metamask browser doesn't support image download! Please use another browser to share image",
             "ios-not-supported": "Sharing images not supported on iOS devices. If you want to share the image please use desktop version",
             "live-trade-requested": "Live trade requested",
-            "fulfilling-live-trade": "Fulfilling live trade"
+            "sgp-trade-requested": "SGP trade requested",
+            "fulfilling-live-trade": "Fulfilling live trade",
+            "fulfilling-sgp-trade": "Fulfilling SGP trade"
         },
         "filter-label": {
             "global": {
@@ -384,6 +386,7 @@
         "card": {
             "ticket-id": "Ticket ID",
             "live": "Live",
+            "sgp": "SGP",
             "system": "System",
             "system-short": "Sys",
             "claim-batch-tooltip": "Claim all your pending positions in one transaction.",
@@ -765,6 +768,7 @@
             "ticket-slip": "Ticket slip",
             "regular": "Regular",
             "system": "System",
+            "sgp": "SGP",
             "thales-bonus-info": "Use THALES and get 2% bonus payout for each game.",
             "min-quote": "Min quote",
             "max-quote": "Max quote",
@@ -772,17 +776,13 @@
             "total-quote": "Total quote",
             "total-bonus": "Total bonus",
             "persist-games": "Keep selection after submit",
-            "keep-selection-tooltip": "By default, the parlay builder is reset after successful submission. Tick this if you want to keep current context after submission.",
-            "thales-bonus-tooltip": "Users placing trades with THALES will get 2% extra payouts for each game they have in their ticket (already calculated in Total quote and Payout).",
             "swap-thales": "Use THALES for better odds",
-            "swap-thales-tooltip": "<bold>Boost your winnings with THALES!</bold> With just a simple click, you can automatically swap to THALES and enjoy improved betting quotes instantly! Payout is in THALES.",
             "clear": "Clear all",
             "buy-in": "Buy-in",
             "parlay-fee": "Parlay fee",
             "safebox-fee": "SafeBox fee",
             "positions": "Positions",
             "total-gas": "Gas Fee(ESTIMATED)",
-            "gas-tooltip": "Current Gas Fee required by the blockchain to settle the transaction",
             "total-to-pay": "Total to pay",
             "payout": "Payout",
             "potential-profit": "Potential profit",
@@ -799,6 +799,17 @@
             "accept-odds-changes": "Accept odds changes",
             "odds-changed-description": "Odds changed. Accept changes in order to buy.",
             "odds-changed-error": "Odds changed while fulfilling the order. Try increasing the slippage.",
+            "tooltip": {
+                "regular": "Build your bet slip with singles, parlays or live bets.",
+                "system": "Create system bets that cover multiple combinations of selections. Even if some picks lose, you can still win.",
+                "sgp": "Build a Same Game Parlay (SGP) by combining multiple bets from the same event for bigger payouts.",
+                "sgp-different-game": "It is not supported to combine different games in the Same Game Parlay.",
+                "sgp-sport-disabled": "{{league}} is currently not supported.",
+                "thales-bonus": "Users placing trades with THALES will get 2% extra payouts for each game they have in their ticket (already calculated in Total quote and Payout).",
+                "swap-thales": "<bold>Boost your winnings with THALES!</bold> With just a simple click, you can automatically swap to THALES and enjoy improved betting quotes instantly! Payout is in THALES.",
+                "keep-selection": "By default, the parlay builder is reset after successful submission. Tick this if you want to keep current context after submission.",
+                "gas": "Current Gas Fee required by the blockchain to settle the transaction"
+            },
             "info": {
                 "min-quote": "Minimal TOTAL QUOTE supported is {{value}}",
                 "max-quote": "Maximal TOTAL QUOTE supported is {{value}}",
@@ -822,7 +833,12 @@
                 "no-funds": "Please ensure your wallet has enough funds",
                 "no-funds-multi-collateral": "Please ensure your wallet has enough funds (buy-in amount plus {{percentage}}%)",
                 "not-supported": "Not supported validation error: {{error}}",
-                "futures-combining-not-supported": "Combining futures on parlay is not supported"
+                "futures-combining-not-supported": "Combining futures on parlay is not supported",
+                "system-bet-min-markets-validation": "System bet requires minimum {{minMarkets}} games",
+                "sgp-bet-min-markets-validation": "SGP bet requires minimum {{minMarkets}} markets",
+                "sgp-different-game": "It is not supported to combine different games in the same game parlay",
+                "sgp-sport-disabled": "{{league}} is currently not supported for SGP. Switching to Regular bet.",
+                "sgp-no-odds": "Missing odds from provider"
             },
             "share-ticket": {
                 "label": "Share for Twitter boost",
@@ -892,8 +908,7 @@
             "buy-in-per-combination": "Buy-in per combination",
             "min-payout": "Min payout",
             "max-payout": "Max payout",
-            "min-max-payout": "Min/max payout",
-            "system-bet-min-markets-validation": "System bet requires minimum {{minMarkets}} games"
+            "min-max-payout": "Min/max payout"
         },
         "zero-odds-tooltip": "Odds unavailable at the moment.",
         "low-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",
@@ -1137,12 +1152,14 @@
             "default-round-label": "Default round",
             "only-open-tickets": "Only open tickets",
             "only-live-tickets": "Only LIVE tickets",
+            "only-sgp-tickets": "Only SGP tickets",
             "only-pending-tickets": "Only pending tickets (singles)",
             "only-system-bets": "Only system bets",
             "only-unresolved": "Only unresolved ({{hours}} hours)",
             "only-pp": "Only PP tickets",
             "only-open-tickets-short": "Only open",
             "only-live-tickets-short": "Only LIVE",
+            "only-sgp-tickets-short": "Only SGP",
             "only-pending-tickets-short": "Only pending (singles)",
             "only-pp-short": "Only PP",
             "expand-all": "Expand All",

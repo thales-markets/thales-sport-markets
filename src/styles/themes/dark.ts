@@ -148,6 +148,7 @@ export default {
         canceled: Colors.RED,
         paused: Colors.RED,
         live: Colors.RED_DARK,
+        sgp: Colors.GREEN,
         system: Colors.ORANGE,
         sold: Colors.NAVY_BLUE_LIGHT,
         comingSoon: Colors.ORANGE,
@@ -314,6 +315,14 @@ export default {
             wrong: '',
             selected: '',
             share: '',
+        },
+    },
+    tag: {
+        background: {
+            primary: Colors.GREEN_LIGHT,
+        },
+        textColor: {
+            primary: Colors.WHITE,
         },
     },
 };

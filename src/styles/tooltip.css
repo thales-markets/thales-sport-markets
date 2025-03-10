@@ -195,7 +195,7 @@
     .rc-tooltip-placement-bottom,
     .rc-tooltip-placement-bottomLeft,
     .rc-tooltip-placement-bottomRight {
-        padding: 1px 0 3px 0;
+        padding: 5px 0 3px 0;
     }
     .rc-tooltip-placement-left,
     .rc-tooltip-placement-leftTop,
