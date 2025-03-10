@@ -5,7 +5,8 @@ import { ContractData } from 'types/viem';
 export const marchMadnessContract: ContractData = {
     addresses: {
         [Network.OptimismMainnet]: TBD_ADDRESS,
-        [Network.Arbitrum]: '0x6e598eebF9Aba224c59F0C9Aa2AFe38d51933B51',
+        [Network.Arbitrum]: '0xb3b8F1d9525A5128F2A4C6Da657c08ecd210ad79',
+        [Network.Base]: TBD_ADDRESS,
         [Network.OptimismSepolia]: '0x748aCe6036061D965566d62ae103a56efE86C23d',
     },
     abi: [

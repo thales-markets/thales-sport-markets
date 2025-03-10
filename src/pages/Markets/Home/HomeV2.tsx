@@ -11,7 +11,6 @@ import { MarketTypePlayerPropsGroupsBySport } from 'constants/marketTypes';
 import { RESET_STATE } from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { SportFilter, StatusFilter } from 'enums/markets';
-import { Network } from 'enums/network';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
 import { groupBy, orderBy } from 'lodash';
@@ -48,6 +47,7 @@ import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common'
 import { addHoursToCurrentDate, localStore } from 'thales-utils';
 import { MarketsCache, SportMarket, SportMarkets, TagInfo, Tags } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
+import { isMarchMadnessAvailableForNetworkId } from 'utils/marchMadness';
 import { getDefaultPlayerPropsLeague } from 'utils/marketsV2';
 import { history } from 'utils/routes';
 import { getScrollMainContainerToTop } from 'utils/scroll';
@@ -775,7 +775,7 @@ const Home: React.FC = () => {
                             {getStatusFilters()}
                             {getSportFilters()}
                             <Suspense fallback={<Loader />}>
-                                {networkId == Network.Arbitrum && <SidebarMMLeaderboard />}
+                                {isMarchMadnessAvailableForNetworkId(networkId) && <SidebarMMLeaderboard />}
                             </Suspense>
                         </SportFiltersContainer>
                     </Scroll>

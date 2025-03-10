@@ -7,6 +7,8 @@ import Stats from '../Stats';
 import TableByGuessedCorrectly from './components/TableByGuessedCorrectly';
 import TableByVolume from './components/TableByVolume';
 
+const IS_VOLUME_REWARDS_AVAILABLE = false;
+
 const Leaderboard: React.FC = () => {
     const { t } = useTranslation();
     const [searchText, setSearchText] = useState<string>('');
@@ -31,11 +33,13 @@ const Leaderboard: React.FC = () => {
                     isMainHeight={guessedCorrectlyTableDataLength >= volumeTableDataLength}
                     setLength={setGuessedCorrectlyTableDataLength}
                 />
-                <TableByVolume
-                    searchText={searchText}
-                    isMainHeight={guessedCorrectlyTableDataLength < volumeTableDataLength}
-                    setLength={setVolumeTableDataLength}
-                />
+                {IS_VOLUME_REWARDS_AVAILABLE && (
+                    <TableByVolume
+                        searchText={searchText}
+                        isMainHeight={guessedCorrectlyTableDataLength < volumeTableDataLength}
+                        setLength={setVolumeTableDataLength}
+                    />
+                )}
             </TablesContainer>
         </>
     );

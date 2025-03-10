@@ -251,7 +251,10 @@ const DappHeader: React.FC = () => {
                             (isMarchMadnessAvailableForNetworkId(networkId) ? (
                                 getMarchMadnessButton()
                             ) : (
-                                <Tooltip overlay={t('march-madness.header-button-tooltip')}>
+                                <Tooltip
+                                    overlay={t('march-madness.header-button-tooltip')}
+                                    open={isMarchMadnessAvailableForNetworkId(networkId)}
+                                >
                                     {getMarchMadnessButton()}
                                 </Tooltip>
                             ))}
