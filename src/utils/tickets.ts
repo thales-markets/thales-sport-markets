@@ -4,7 +4,7 @@ import { ContractType } from 'enums/contract';
 import { MarketType } from 'enums/marketTypes';
 import { OddsType } from 'enums/markets';
 import { t } from 'i18next';
-import { bigNumberFormatter, coinFormatter, Coins, formatDateWithTime } from 'thales-utils';
+import { bigNumberFormatter, coinFormatter, Coins, formatDateWithTime, NetworkId } from 'thales-utils';
 import { CombinedPosition, SystemBetData, Team, Ticket, TicketMarket } from 'types/markets';
 import { NetworkConfig, SupportedNetwork } from 'types/network';
 import { ShareTicketModalProps } from 'types/tickets';
@@ -467,6 +467,7 @@ export const getShareTicketModalData = async (
 ) => {
     let modalData: ShareTicketModalProps | undefined = undefined;
     const isLive = !!markets[0].live;
+    const isStakedThalesSupported = networkConfig && networkConfig.networkId !== NetworkId.Base;
 
     if (isModalForLive && networkConfig) {
         const sportsAMMDataContract = getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig);
@@ -481,11 +482,11 @@ export const getShareTicketModalData = async (
             sportsAMMDataContract &&
             sportsAMMV2ManagerContract &&
             freeBetHolderContract &&
-            stakingThalesBettingProxyContract
+            (!isStakedThalesSupported || stakingThalesBettingProxyContract)
         ) {
             const numOfActiveTicketsPerUser = isFreeBet
                 ? await freeBetHolderContract.read.numOfActiveTicketsPerUser([walletAddress])
-                : isStakedThales
+                : isStakedThales && isStakedThalesSupported && stakingThalesBettingProxyContract
                 ? await stakingThalesBettingProxyContract.read.numOfActiveTicketsPerUser([walletAddress])
                 : await sportsAMMV2ManagerContract.read.numOfActiveTicketsPerUser([walletAddress]);
 
@@ -497,7 +498,7 @@ export const getShareTicketModalData = async (
 
             const lastTicket = isFreeBet
                 ? userTickets.freeBetsData[userTickets.freeBetsData.length - 1]
-                : isStakedThales
+                : isStakedThales && isStakedThalesSupported
                 ? userTickets.stakingBettingProxyData[userTickets.stakingBettingProxyData.length - 1]
                 : userTickets.ticketsData[userTickets.ticketsData.length - 1];
 
