@@ -221,6 +221,8 @@ export const executeBiconomyTransaction = async (params: {
                     return transactionHash;
                 }
             } catch (error) {
+                const errorMessage = (error as any).toString();
+                console.log('errorMessage: ', errorMessage);
                 if (
                     (error && (error as any).message && (error as any).message.includes('SessionNotApproved')) ||
                     (error && (error as any).Error && (error as any).Error.includes('Session not found'))

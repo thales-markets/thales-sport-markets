@@ -120,12 +120,12 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                         if (item.name == 'profile') return;
                         if (item.name == 'resolve-blocker' && !isWitelistedForUnblock) return;
                         return (
-                            <SPAAnchor key={index} href={buildHref(item.route)}>
-                                <ItemContainer
-                                    key={index}
-                                    active={location.pathname === item.route}
-                                    onClick={() => setNavMenuVisibility(false)}
-                                >
+                            <SPAAnchor
+                                key={index}
+                                onClick={() => setNavMenuVisibility(false)}
+                                href={buildHref(item.route)}
+                            >
+                                <ItemContainer key={index} active={location.pathname === item.route}>
                                     {isConnected && item.name == 'profile' ? (
                                         <ProfileIconWidget avatarSize={25} color={theme.textColor.primary} />
                                     ) : (
@@ -150,12 +150,12 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                     {NAV_MENU_SECOND_SECTION.map((item, index) => {
                         if (!item.supportedNetworks.includes(networkId)) return;
                         return (
-                            <SPAAnchor key={index} href={buildHref(item.route)}>
-                                <ItemContainer
-                                    key={index}
-                                    active={location.pathname === item.route}
-                                    onClick={() => setNavMenuVisibility(false)}
-                                >
+                            <SPAAnchor
+                                onClick={() => setNavMenuVisibility(false)}
+                                key={index}
+                                href={buildHref(item.route)}
+                            >
+                                <ItemContainer key={index} active={location.pathname === item.route}>
                                     <NavIcon className={item.iconClass} active={location.pathname === item.route} />
                                     <NavLabel>{t(item.i18label)}</NavLabel>
                                 </ItemContainer>
@@ -166,12 +166,12 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                     {NAV_MENU_THIRD_SECTION.map((item, index) => {
                         if (!item.supportedNetworks.includes(networkId)) return;
                         return (
-                            <SPAAnchor key={index} href={buildHref(item.route)}>
-                                <ItemContainer
-                                    key={index}
-                                    active={location.pathname === item.route}
-                                    onClick={() => setNavMenuVisibility(false)}
-                                >
+                            <SPAAnchor
+                                onClick={() => setNavMenuVisibility(false)}
+                                key={index}
+                                href={buildHref(item.route)}
+                            >
+                                <ItemContainer key={index} active={location.pathname === item.route}>
                                     <NavIcon className={item.iconClass} active={location.pathname === item.route} />
                                     <NavLabel>{t(item.i18label)}</NavLabel>
                                 </ItemContainer>
@@ -186,12 +186,12 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                     {NAV_MENU_FOURTH_SECTION.map((item, index) => {
                         if (!item.supportedNetworks.includes(networkId)) return;
                         return (
-                            <SPAAnchor key={index} href={buildHref(item.route)}>
-                                <ItemContainer
-                                    key={index}
-                                    active={location.pathname === item.route}
-                                    onClick={() => setNavMenuVisibility(false)}
-                                >
+                            <SPAAnchor
+                                onClick={() => setNavMenuVisibility(false)}
+                                key={index}
+                                href={buildHref(item.route)}
+                            >
+                                <ItemContainer key={index} active={location.pathname === item.route}>
                                     <NavIcon className={item.iconClass} active={location.pathname === item.route} />
                                     <NavLabel>{t(item.i18label)}</NavLabel>
                                 </ItemContainer>
@@ -205,7 +205,10 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                                 backgroundColor="transparent"
                                 textColor={theme.button.textColor.quaternary}
                                 width="100%"
-                                onClick={() => disconnect()}
+                                onClick={() => {
+                                    disconnect();
+                                    setNavMenuVisibility(false);
+                                }}
                             >
                                 {t('markets.nav-menu.buttons.disconnect')}
                             </Button>
