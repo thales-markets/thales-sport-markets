@@ -1447,11 +1447,6 @@ const Ticket: React.FC<TicketProps> = ({
             setIsBuying(true);
             const toastId = toast.loading(t('market.toast-message.transaction-pending'));
 
-            if (isSgp) {
-                refetchProofs(networkId, markets);
-                await delay(1500);
-            }
-
             let step = buyStep;
             let thalesAmount = swappedThalesToReceive;
             if (swapToThales) {
