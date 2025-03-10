@@ -2,6 +2,7 @@ import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { BATCH_SIZE } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
 import { ContractType } from 'enums/contract';
+import { NetworkId } from 'thales-utils';
 import { NetworkConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { getContractInstance } from 'utils/contract';
@@ -29,12 +30,7 @@ const useClaimablePositionCountQuery = (
                     stakingThalesBettingProxy,
                 ] = contractInstances;
 
-                if (
-                    sportsAMMDataContract &&
-                    sportsAMMV2ManagerContract &&
-                    freeBetHolderContract &&
-                    stakingThalesBettingProxy
-                ) {
+                if (sportsAMMDataContract && sportsAMMV2ManagerContract && freeBetHolderContract) {
                     const [
                         numOfActiveTicketsPerUser,
                         numOfActiveFreeBetTicketsPerUser,
@@ -42,7 +38,9 @@ const useClaimablePositionCountQuery = (
                     ] = await Promise.all([
                         sportsAMMV2ManagerContract.read.numOfActiveTicketsPerUser([user]),
                         freeBetHolderContract.read.numOfActiveTicketsPerUser([user]),
-                        stakingThalesBettingProxy.read.numOfActiveTicketsPerUser([user]),
+                        networkConfig.networkId === NetworkId.Base
+                            ? 0
+                            : stakingThalesBettingProxy?.read.numOfActiveTicketsPerUser([user]),
                     ]);
                     const numberOfActiveBatches =
                         Math.trunc(

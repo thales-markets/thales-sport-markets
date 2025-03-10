@@ -305,7 +305,14 @@ const Home: React.FC = () => {
                     ) {
                         return false;
                     }
-                } else if (!tagFilter.map((tag) => tag.id).includes(market.leagueId)) {
+                } else if (
+                    !tagFilter.find(
+                        (tag) =>
+                            tag.id === market.leagueId ||
+                            (tag.label === SportFilter.Favourites &&
+                                favouriteLeagues.find((tag) => tag.id === market.leagueId))
+                    )
+                ) {
                     return false;
                 }
             }
@@ -504,7 +511,7 @@ const Home: React.FC = () => {
                 liveMarketsCountPerTag[key] = groupedMarkets[key].length;
             }
         });
-        Object.values(SportFilter);
+
         return liveMarketsCountPerTag;
     }, [liveSportMarketsQuery]);
 
@@ -702,6 +709,7 @@ const Home: React.FC = () => {
                             setTagParam={setTagParam}
                             openMarketsCountPerTag={openMarketsCountPerTag}
                             liveMarketsCountPerTag={liveMarketsCountPerTag}
+                            liveMarketsCountPerSport={liveMarketsCountPerSport}
                             playerPropsMarketsCountPerTag={playerPropsCountPerTag}
                         />
                     );

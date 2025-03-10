@@ -5,6 +5,7 @@ import { ContractData, ViemContract } from 'types/viem';
 import { Address, getContract } from 'viem';
 import { getCollaterals } from './collaterals';
 // Contract import
+import { TBD_ADDRESS } from 'constants/network';
 import freeBetHolder from 'utils/contracts/freeBetHolder';
 import liquidityPoolDataContract from 'utils/contracts/liquidityPoolDataContractV2';
 import liveTradingProcessor from 'utils/contracts/liveTradingProcessorContract';
@@ -63,7 +64,7 @@ export const prepareContractWithModifiedResponse = (props: { abi: any; address: 
 };
 
 const getContractWithModifiedResponse = (contractData: ContractData, networkConfig: NetworkConfig) => {
-    if (!networkConfig) return;
+    if (contractData.addresses[networkConfig?.networkId] === TBD_ADDRESS) return undefined;
     return prepareContractWithModifiedResponse({
         abi: contractData.abi,
         address: contractData.addresses[networkConfig?.networkId],

@@ -17,14 +17,14 @@ export const NAV_MENU_FIRST_SECTION: NavMenuItem[] = [
         iconClass: 'icon icon--profile2',
         name: 'profile',
         route: ROUTES.Profile,
-        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.OptimismSepolia],
+        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.Base, Network.OptimismSepolia],
     },
     {
         i18label: 'markets.nav-menu.items.resolve-blocker',
         iconClass: 'icon icon--cross-button',
         name: 'resolve-blocker',
         route: ROUTES.ResolveBlocker,
-        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.OptimismSepolia],
+        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.Base, Network.OptimismSepolia],
     },
 ];
 
@@ -34,7 +34,7 @@ export const NAV_MENU_SECOND_SECTION: NavMenuItem[] = [
         iconClass: 'icon icon--logo',
         name: 'markets',
         route: ROUTES.Markets.Home,
-        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.OptimismSepolia],
+        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.Base, Network.OptimismSepolia],
     },
     {
         i18label: 'markets.nav-menu.labels.march-madness',
@@ -48,7 +48,7 @@ export const NAV_MENU_SECOND_SECTION: NavMenuItem[] = [
         iconClass: 'icon icon--liquidity-pool',
         name: 'liquidity-pool',
         route: ROUTES.LiquidityPool,
-        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.OptimismSepolia],
+        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.Base, Network.OptimismSepolia],
     },
 ];
 
@@ -58,7 +58,7 @@ export const NAV_MENU_THIRD_SECTION: NavMenuItem[] = [
         iconClass: 'icon icon--promotions',
         name: 'promotions',
         route: ROUTES.Promotions.Home,
-        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.OptimismSepolia],
+        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.Base, Network.OptimismSepolia],
     },
 ];
 
@@ -68,14 +68,14 @@ export const NAV_MENU_FOURTH_SECTION: NavMenuItem[] = [
         iconClass: 'sidebar-icon sidebar-icon--speed-markets',
         name: 'speed-markets',
         route: LINKS.SpeedMarkets,
-        supportedNetworks: [Network.OptimismMainnet, Network.OptimismSepolia, Network.Arbitrum],
+        supportedNetworks: [Network.OptimismMainnet, Network.OptimismSepolia, Network.Arbitrum, Network.Base],
     },
     {
         i18label: 'markets.nav-menu.items.digital-options',
         iconClass: 'sidebar-icon sidebar-icon--markets',
         name: 'digital-options',
         route: LINKS.Thales,
-        supportedNetworks: [Network.OptimismMainnet, Network.OptimismSepolia, Network.Arbitrum],
+        supportedNetworks: [Network.OptimismMainnet, Network.OptimismSepolia, Network.Arbitrum, Network.Base],
     },
 ];
 
