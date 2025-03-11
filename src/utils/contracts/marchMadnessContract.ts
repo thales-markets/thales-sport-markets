@@ -5,7 +5,7 @@ export const marchMadnessContract: ContractData = {
     addresses: {
         [Network.OptimismMainnet]: '0x74A498769a6B9E5c6C89bd28a4720c52C904b81f',
         [Network.Arbitrum]: '0xb3b8F1d9525A5128F2A4C6Da657c08ecd210ad79',
-        [Network.Base]: '0xd56e477a63C5b20959E1B93bB436cBF0179e2F19o',
+        [Network.Base]: '0xd56e477a63C5b20959E1B93bB436cBF0179e2F19',
         [Network.OptimismSepolia]: '0x748aCe6036061D965566d62ae103a56efE86C23d',
     },
     abi: [
