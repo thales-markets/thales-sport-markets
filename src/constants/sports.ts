@@ -2107,4 +2107,8 @@ export const LEAGUES_SORT_PRIORITY = [
     League.BELGIUM_LEAGUE,
     League.NCAAF,
     League.NCAAB,
+    League.SUMMER_OLYMPICS_TENNIS,
+    League.TENNIS_GS,
+    League.TENNIS_MASTERS,
+    League.TENNIS_WTA,
 ];
