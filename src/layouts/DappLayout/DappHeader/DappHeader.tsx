@@ -258,17 +258,9 @@ const DappHeader: React.FC = () => {
                                     {getMarchMadnessButton()}
                                 </Tooltip>
                             ))}
-                        <div>
-                            {showGetStartedButton ? (
-                                ''
-                            ) : !isConnected ? (
-                                getGetStartedButton()
-                            ) : isBiconomy ? (
-                                <TopUp />
-                            ) : (
-                                <></>
-                            )}
-                        </div>
+                        {showGetStartedButton && (
+                            <div>{!isConnected ? getGetStartedButton() : isBiconomy ? <TopUp /> : <></>}</div>
+                        )}
                         {isMarketsPage && <TimeFilters />}
                         <FlexDivCentered>
                             <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>

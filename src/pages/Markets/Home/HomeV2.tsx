@@ -69,6 +69,8 @@ import Breadcrumbs from './Breadcrumbs';
 import Header from './Header';
 import SelectedMarket from './SelectedMarket';
 
+const SHOW_MM_SIDEBAR_LEADERBOARD = false; // TODO: remove after march madness
+
 const Parlay = lazy(() => import(/* webpackChunkName: "Parlay" */ './Parlay'));
 
 const TicketMobileModal = lazy(
@@ -834,9 +836,11 @@ const Home: React.FC = () => {
                         <SportFiltersContainer>
                             {getStatusFilters()}
                             {getSportFilters()}
-                            <Suspense fallback={<Loader />}>
-                                {isMarchMadnessAvailableForNetworkId(networkId) && <SidebarMMLeaderboard />}
-                            </Suspense>
+                            {SHOW_MM_SIDEBAR_LEADERBOARD && (
+                                <Suspense fallback={<Loader />}>
+                                    {isMarchMadnessAvailableForNetworkId(networkId) && <SidebarMMLeaderboard />}
+                                </Suspense>
+                            )}
                         </SportFiltersContainer>
                     </Scroll>
                 </LeftSidebarContainer>

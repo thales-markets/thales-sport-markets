@@ -75,7 +75,7 @@ const SidebarMMLeaderboard: React.FC = () => {
                             <SimpleLoader />
                         </LoaderContainer>
                     ) : dataByPoints.length === 0 ? (
-                        <NoResultContainer>{t('parlay-leaderboard.no-parlays')}</NoResultContainer>
+                        <NoResultContainer>{t('march-madness.side-leaderboard.no-parlays')}</NoResultContainer>
                     ) : (
                         dataByPoints.map((item, index) => {
                             return (

@@ -1421,7 +1421,8 @@
             "bracket-id": "Bracket",
             "points": "Points",
             "points-leaderboard": "Points Leaderboard",
-            "rewards": "Rewards"
+            "rewards": "Rewards",
+            "no-parlays": "No brackets"
         },
         "brackets": {
             "team-1": "Team 1",
