@@ -12,14 +12,16 @@ import { Rates } from 'types/collateral';
 import { SupportedNetwork } from 'types/network';
 import multipleCollateral from './contracts/multipleCollateralContract';
 
-export const getDefaultCollateral = (networkId: SupportedNetwork) => COLLATERALS[networkId][0];
+export const getDefaultCollateral = (networkId: SupportedNetwork, collaterals?: Coins[]) =>
+    (collaterals || COLLATERALS[networkId])[0];
 
 export const getCollateral = (networkId: SupportedNetwork, index: number, collaterals?: Coins[]) => {
     const collats = collaterals || COLLATERALS[networkId];
     return index < collats.length ? collats[index] : collats[0];
 };
 
-export const getCollaterals = (networkId: SupportedNetwork) => COLLATERALS[networkId];
+export const getCollaterals = (networkId: SupportedNetwork, collaterals?: Coins[]) =>
+    collaterals || COLLATERALS[networkId];
 
 export const getFreeBetCollaterals = (networkId: SupportedNetwork) => FREE_BET_COLLATERALS[networkId];
 

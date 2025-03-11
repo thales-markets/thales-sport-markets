@@ -5,7 +5,7 @@ import Loader from 'components/Loader';
 import SelectInput from 'components/SelectInput';
 import Checkbox from 'components/fields/Checkbox';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
+import { CRYPTO_CURRENCY_MAP, MARCH_MADNESS_COLLATERALS, USD_SIGN } from 'constants/currency';
 import {
     APPROVE_MULTIPLIER,
     DEFAULT_BRACKET_ID,
@@ -56,7 +56,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getTicketPayment } from 'redux/modules/ticket';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivRowCentered } from 'styles/common';
@@ -158,9 +157,6 @@ const Brackets: React.FC = () => {
     const client = useClient();
     const walletClient = useWalletClient();
 
-    const ticketPayment = useSelector(getTicketPayment);
-    const selectedCollateralIndex = ticketPayment.selectedCollateralIndex;
-
     const [selectedBracketId, setSelectedBracketId] = useState<number>(DEFAULT_BRACKET_ID);
     const [isBracketMinted, setIsBracketMinted] = useState(false);
     const [bracketsData, setBracketsData] = useState(initialBracketsData);
@@ -203,6 +199,10 @@ const Brackets: React.FC = () => {
         [marchMadnessData, selectedBracketId]
     );
 
+    const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
+    const exchangeRates: Rates | null =
+        exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
+
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(
         walletAddress,
         { networkId, client },
@@ -216,21 +216,37 @@ const Brackets: React.FC = () => {
         [multipleCollateralBalances]
     );
 
-    const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
-    const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
+    const selectedCollateralIndex = useMemo(() => {
+        if (multipleCollateralBalancesData) {
+            const maxCoin = Object.keys(multipleCollateralBalancesData).reduce((a, b) => {
+                const coinA = a as Coins;
+                const coinB = b as Coins;
+                const usdBalanceA =
+                    multipleCollateralBalancesData[coinA] * (isStableCurrency(coinA) ? 1 : exchangeRates?.[coinA] || 0);
+                const usdBalanceB =
+                    multipleCollateralBalancesData[coinB] * (isStableCurrency(coinB) ? 1 : exchangeRates?.[coinB] || 0);
+
+                return usdBalanceA > usdBalanceB ? coinA : coinB;
+            }) as Coins;
+
+            return getCollateralIndex(networkId, maxCoin, MARCH_MADNESS_COLLATERALS[networkId]);
+        }
+        return 0;
+    }, [multipleCollateralBalancesData, networkId, exchangeRates]);
+
+    const defaultCollateral = useMemo(() => getDefaultCollateral(networkId, MARCH_MADNESS_COLLATERALS[networkId]), [
         networkId,
-        selectedCollateralIndex,
     ]);
-    const collateralAddress = useMemo(() => getCollateralAddress(networkId, selectedCollateralIndex), [
-        networkId,
-        selectedCollateralIndex,
-    ]);
+    const selectedCollateral = useMemo(
+        () => getCollateral(networkId, selectedCollateralIndex, MARCH_MADNESS_COLLATERALS[networkId]),
+        [networkId, selectedCollateralIndex]
+    );
+    const collateralAddress = useMemo(
+        () => getCollateralAddress(networkId, selectedCollateralIndex, MARCH_MADNESS_COLLATERALS[networkId]),
+        [networkId, selectedCollateralIndex]
+    );
     const isEth = selectedCollateral === CRYPTO_CURRENCY_MAP.ETH;
     const isDefaultCollateral = selectedCollateral === defaultCollateral;
-
-    const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
-    const exchangeRates: Rates | null =
-        exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
     const convertFromStable = useCallback(
         (value: number) => {
@@ -457,10 +473,11 @@ const Brackets: React.FC = () => {
         const collateralIndex = getCollateralIndex(
             networkId,
             isDefaultCollateral
-                ? getDefaultCollateral(networkId)
+                ? getDefaultCollateral(networkId, MARCH_MADNESS_COLLATERALS[networkId])
                 : isEth
                 ? (CRYPTO_CURRENCY_MAP.WETH as Coins)
-                : selectedCollateral
+                : selectedCollateral,
+            MARCH_MADNESS_COLLATERALS[networkId]
         );
 
         const collateralContractWithSigner = getContractInstance(
@@ -520,10 +537,11 @@ const Brackets: React.FC = () => {
             const collateralIndex = getCollateralIndex(
                 networkId,
                 isDefaultCollateral
-                    ? getDefaultCollateral(networkId)
+                    ? getDefaultCollateral(networkId, MARCH_MADNESS_COLLATERALS[networkId])
                     : isEth
                     ? (CRYPTO_CURRENCY_MAP.WETH as Coins)
-                    : selectedCollateral
+                    : selectedCollateral,
+                MARCH_MADNESS_COLLATERALS[networkId]
             );
 
             const collateralContractWithSigner = getContractInstance(
@@ -1194,12 +1212,15 @@ const Brackets: React.FC = () => {
                                             <CollateralWrapper isDisabled={isCollateralDropdownDisabled}>
                                                 <CollateralSeparator isDisabled={isCollateralDropdownDisabled} />
                                                 <CollateralSelector
-                                                    collateralArray={getCollaterals(networkId)}
+                                                    collateralArray={getCollaterals(
+                                                        networkId,
+                                                        MARCH_MADNESS_COLLATERALS[networkId]
+                                                    )}
                                                     selectedItem={selectedCollateralIndex}
                                                     disabled={isCollateralDropdownDisabled}
                                                     onChangeCollateral={() => {}}
                                                     isDetailedView
-                                                    collateralBalances={multipleCollateralBalances.data}
+                                                    collateralBalances={multipleCollateralBalancesData}
                                                     exchangeRates={exchangeRates}
                                                     dropDownWidth="260px"
                                                 />
