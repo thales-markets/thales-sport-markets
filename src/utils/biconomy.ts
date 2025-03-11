@@ -14,6 +14,7 @@ import { getContractAbi } from './contracts/abi';
 import liveTradingProcessorContract from './contracts/liveTradingProcessorContract';
 import multipleCollateral from './contracts/multipleCollateralContract';
 import sessionValidationContract from './contracts/sessionValidationContract';
+import sgpTradingProcessorContract from './contracts/sgpTradingProcessorContract';
 import sportsAMMV2Contract from './contracts/sportsAMMV2Contract';
 
 export const ETH_PAYMASTER = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'; // used for paying gas in ETH by AA
@@ -443,6 +444,12 @@ const getApprovalTxs = (networkId: SupportedNetwork) => {
                 args: [liveTradingProcessorContract.addresses[networkId], maxUint256],
             });
 
+            const eanbleSGP = encodeFunctionData({
+                abi: value.abi,
+                functionName: 'approve',
+                args: [sgpTradingProcessorContract.addresses[networkId], maxUint256],
+            });
+
             transactionArray.push(
                 {
                     to: value.addresses[networkId],
@@ -451,6 +458,10 @@ const getApprovalTxs = (networkId: SupportedNetwork) => {
                 {
                     to: value.addresses[networkId],
                     data: enableLiveTrading,
+                },
+                {
+                    to: value.addresses[networkId],
+                    data: eanbleSGP,
                 }
             );
         });
