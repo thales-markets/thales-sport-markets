@@ -139,60 +139,65 @@ export const getTradingProcessorTransaction: any = async (
     isAA: boolean,
     isFreeBet: boolean,
     freeBetHolderContract: ViemContract,
-    networkId: SupportedNetwork
+    networkId: SupportedNetwork,
+    isEth?: boolean
 ): Promise<any> => {
     const referralAddress = referral || ZERO_ADDRESS;
     const gameId = convertFromBytes32(tradeData[0].gameId);
 
-    if (isAA) {
-        // TODO: add SGP
-        return executeBiconomyTransaction(networkId, collateralAddress, tradingProcessorContract, 'requestLiveTrade', [
-            gameId,
-            tradeData[0].sportId,
-            tradeData[0].typeId,
-            tradeData[0].position,
-            tradeData[0].line,
-            buyInAmount,
-            expectedQuote,
-            additionalSlippage,
-            referralAddress,
-            collateralAddress,
-        ]);
-    } else if (isLive || isSgp) {
-        let txParams = {};
+    let txParams = {};
 
-        if (isLive) {
-            txParams = {
-                _gameId: gameId,
-                _sportId: tradeData[0].sportId,
-                _typeId: tradeData[0].typeId,
-                _line: tradeData[0].line,
-                _position: tradeData[0].position,
-                _buyInAmount: buyInAmount,
-                _expectedQuote: expectedQuote,
-                _additionalSlippage: additionalSlippage,
-                _referrer: referralAddress,
-                _collateral: collateralAddress,
-            };
-        } else if (isSgp) {
-            txParams = {
-                _tradeData: tradeData,
-                _buyInAmount: buyInAmount,
-                _expectedQuote: expectedQuote,
-                _additionalSlippage: additionalSlippage,
-                _referrer: referralAddress,
-                _collateral: collateralAddress,
-            };
-        }
+    if (isLive) {
+        txParams = {
+            _gameId: gameId,
+            _sportId: tradeData[0].sportId,
+            _typeId: tradeData[0].typeId,
+            _line: tradeData[0].line,
+            _position: tradeData[0].position,
+            _buyInAmount: buyInAmount,
+            _expectedQuote: expectedQuote,
+            _additionalSlippage: additionalSlippage,
+            _referrer: referralAddress,
+            _collateral: collateralAddress,
+        };
+    } else if (isSgp) {
+        txParams = {
+            _tradeData: tradeData,
+            _buyInAmount: buyInAmount,
+            _expectedQuote: expectedQuote,
+            _additionalSlippage: additionalSlippage,
+            _referrer: referralAddress,
+            _collateral: collateralAddress,
+        };
+    }
 
-        if (isFreeBet && freeBetHolderContract) {
+    if (isFreeBet && freeBetHolderContract) {
+        if (isAA) {
+            return await executeBiconomyTransaction({
+                collateralAddress: collateralAddress as any,
+                networkId,
+                contract: freeBetHolderContract,
+                methodName: isSgp ? 'tradeSGP' : 'tradeLive',
+                data: [txParams],
+                isEth,
+            });
+        } else
             return isSgp
                 ? freeBetHolderContract.write.tradeSGP([txParams])
                 : freeBetHolderContract.write.tradeLive([txParams]);
-        }
+    }
 
+    if (isAA) {
+        return await executeBiconomyTransaction({
+            collateralAddress: collateralAddress as any,
+            networkId,
+            contract: tradingProcessorContract,
+            methodName: isSgp ? 'requestSGPTrade' : 'requestLiveTrade',
+            data: [txParams],
+            isEth,
+        });
+    } else
         return isSgp
             ? tradingProcessorContract.write.requestSGPTrade([txParams])
             : tradingProcessorContract.write.requestLiveTrade([txParams]);
-    }
 };

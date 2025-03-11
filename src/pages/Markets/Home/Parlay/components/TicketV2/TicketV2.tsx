@@ -1512,7 +1512,7 @@ const Ticket: React.FC<TicketProps> = ({
                     );
                     const sgpTotalQuote = parseEther(maxSupportedOdds.toString());
 
-                    if (isEth && !swapToOver) {
+                    if (isEth && !swapToOver && !isBiconomy) {
                         const WETHContractWithSigner = getContractInstance(
                             ContractType.MULTICOLLATERAL,
                             { client: walletClient.data, networkId },
@@ -1558,7 +1558,8 @@ const Ticket: React.FC<TicketProps> = ({
                             isBiconomy,
                             isFreeBetActive,
                             freeBetHolderContract,
-                            networkId
+                            networkId,
+                            isEth
                         );
                     }
                 } else {
@@ -1769,9 +1770,9 @@ const Ticket: React.FC<TicketProps> = ({
                     tradeData = getTradeData(markets);
                     const parsedBuyInAmount = coinParser(buyInAmount.toString(), networkId, usedCollateralForBuy);
                     const parsedTotalQuote = parseEther(floorNumberToDecimals(totalQuote, 18).toString());
-                    const additionalSlippage = parseEther(tradeData[0].live ? liveBetSlippage / 100 + '' : '0.02');
+                    const additionalSlippage = parseEther(isLiveTicket ? liveBetSlippage / 100 + '' : '0.02');
 
-                    if (tradeData[0].live) {
+                    if (isLiveTicket) {
                         const liveTradeDataOdds = tradeData[0].odds;
                         const liveTradeDataPosition = tradeData[0].position;
                         const liveTotalQuote = liveTradeDataOdds[liveTradeDataPosition];
@@ -1854,6 +1855,7 @@ const Ticket: React.FC<TicketProps> = ({
         usedCollateralForBuy,
         isBiconomy,
         walletClient.data,
+        isLiveTicket,
     ]);
 
     // Button validations
