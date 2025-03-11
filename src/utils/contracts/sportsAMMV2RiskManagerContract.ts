@@ -115,6 +115,15 @@ const sportsAMMV2RiskManagerContract: ContractData = {
         {
             anonymous: false,
             inputs: [
+                { indexed: false, internalType: 'uint16', name: '_sportId', type: 'uint16' },
+                { indexed: false, internalType: 'bool', name: '_isFuture', type: 'bool' },
+            ],
+            name: 'SetIsSportIdFuture',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
                 { indexed: false, internalType: 'uint256', name: '_sportId', type: 'uint256' },
                 { indexed: false, internalType: 'uint256', name: '_divider', type: 'uint256' },
             ],
@@ -166,6 +175,21 @@ const sportsAMMV2RiskManagerContract: ContractData = {
         },
         {
             anonymous: false,
+            inputs: [{ indexed: false, internalType: 'uint256', name: '_divider', type: 'uint256' }],
+            name: 'SetSGPCapDivider',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                { indexed: false, internalType: 'uint16', name: '_sportId', type: 'uint16' },
+                { indexed: false, internalType: 'bool', name: '_isEnabled', type: 'bool' },
+            ],
+            name: 'SetSGPEnabledOnSport',
+            type: 'event',
+        },
+        {
+            anonymous: false,
             inputs: [{ indexed: false, internalType: 'address', name: 'sportsAMM', type: 'address' }],
             name: 'SetSportsAMM',
             type: 'event',
@@ -183,6 +207,7 @@ const sportsAMMV2RiskManagerContract: ContractData = {
                 { indexed: false, internalType: 'uint256', name: 'maxTicketSize', type: 'uint256' },
                 { indexed: false, internalType: 'uint256', name: 'maxSupportedAmount', type: 'uint256' },
                 { indexed: false, internalType: 'uint256', name: 'maxSupportedOdds', type: 'uint256' },
+                { indexed: false, internalType: 'uint256', name: 'maxAllowedSystemCombinations', type: 'uint256' },
             ],
             name: 'TicketParamsUpdated',
             type: 'event',
@@ -296,7 +321,10 @@ const sportsAMMV2RiskManagerContract: ContractData = {
                     type: 'tuple[]',
                 },
                 { internalType: 'uint256', name: '_buyInAmount', type: 'uint256' },
+                { internalType: 'uint256', name: '_payout', type: 'uint256' },
                 { internalType: 'bool', name: '_isLive', type: 'bool' },
+                { internalType: 'uint8', name: '_systemBetDenominator', type: 'uint8' },
+                { internalType: 'bool', name: '_isSGP', type: 'bool' },
             ],
             name: 'checkAndUpdateRisks',
             outputs: [],
@@ -310,6 +338,7 @@ const sportsAMMV2RiskManagerContract: ContractData = {
                 { internalType: 'uint256', name: '_payout', type: 'uint256' },
                 { internalType: 'uint256', name: '_expectedPayout', type: 'uint256' },
                 { internalType: 'uint256', name: '_additionalSlippage', type: 'uint256' },
+                { internalType: 'uint256', name: '_ticketSize', type: 'uint256' },
             ],
             name: 'checkLimits',
             outputs: [],
@@ -347,6 +376,7 @@ const sportsAMMV2RiskManagerContract: ContractData = {
                 },
                 { internalType: 'uint256', name: '_buyInAmount', type: 'uint256' },
                 { internalType: 'bool', name: '_isLive', type: 'bool' },
+                { internalType: 'uint8', name: '_systemBetDenominator', type: 'uint8' },
             ],
             name: 'checkRisks',
             outputs: [
@@ -407,6 +437,57 @@ const sportsAMMV2RiskManagerContract: ContractData = {
         },
         {
             inputs: [
+                { internalType: 'uint8', name: 'n', type: 'uint8' },
+                { internalType: 'uint8', name: 'k', type: 'uint8' },
+            ],
+            name: 'generateCombinations',
+            outputs: [{ internalType: 'uint8[][]', name: '', type: 'uint8[][]' }],
+            stateMutability: 'pure',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    components: [
+                        { internalType: 'bytes32', name: 'gameId', type: 'bytes32' },
+                        { internalType: 'uint16', name: 'sportId', type: 'uint16' },
+                        { internalType: 'uint16', name: 'typeId', type: 'uint16' },
+                        { internalType: 'uint256', name: 'maturity', type: 'uint256' },
+                        { internalType: 'uint8', name: 'status', type: 'uint8' },
+                        { internalType: 'int24', name: 'line', type: 'int24' },
+                        { internalType: 'uint24', name: 'playerId', type: 'uint24' },
+                        { internalType: 'uint256[]', name: 'odds', type: 'uint256[]' },
+                        { internalType: 'bytes32[]', name: 'merkleProof', type: 'bytes32[]' },
+                        { internalType: 'uint8', name: 'position', type: 'uint8' },
+                        {
+                            components: [
+                                { internalType: 'uint16', name: 'typeId', type: 'uint16' },
+                                { internalType: 'uint8', name: 'position', type: 'uint8' },
+                                { internalType: 'int24', name: 'line', type: 'int24' },
+                            ],
+                            internalType: 'struct ISportsAMMV2.CombinedPosition[][]',
+                            name: 'combinedPositions',
+                            type: 'tuple[][]',
+                        },
+                    ],
+                    internalType: 'struct ISportsAMMV2.TradeData[]',
+                    name: '_tradeData',
+                    type: 'tuple[]',
+                },
+                { internalType: 'uint8', name: '_systemBetDenominator', type: 'uint8' },
+                { internalType: 'uint256', name: '_buyInAmount', type: 'uint256' },
+                { internalType: 'uint256', name: '_addedPayoutPercentage', type: 'uint256' },
+            ],
+            name: 'getMaxSystemBetPayout',
+            outputs: [
+                { internalType: 'uint256', name: 'systemBetPayout', type: 'uint256' },
+                { internalType: 'uint256', name: 'systemBetQuote', type: 'uint256' },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
                 { internalType: 'uint256[]', name: '_sportIds', type: 'uint256[]' },
                 { internalType: 'uint256[]', name: '_typeIds', type: 'uint256[]' },
             ],
@@ -452,6 +533,41 @@ const sportsAMMV2RiskManagerContract: ContractData = {
             stateMutability: 'view',
             type: 'function',
         },
+        {
+            inputs: [
+                {
+                    components: [
+                        { internalType: 'bytes32', name: 'gameId', type: 'bytes32' },
+                        { internalType: 'uint16', name: 'sportId', type: 'uint16' },
+                        { internalType: 'uint16', name: 'typeId', type: 'uint16' },
+                        { internalType: 'uint256', name: 'maturity', type: 'uint256' },
+                        { internalType: 'uint8', name: 'status', type: 'uint8' },
+                        { internalType: 'int24', name: 'line', type: 'int24' },
+                        { internalType: 'uint24', name: 'playerId', type: 'uint24' },
+                        { internalType: 'uint256[]', name: 'odds', type: 'uint256[]' },
+                        { internalType: 'bytes32[]', name: 'merkleProof', type: 'bytes32[]' },
+                        { internalType: 'uint8', name: 'position', type: 'uint8' },
+                        {
+                            components: [
+                                { internalType: 'uint16', name: 'typeId', type: 'uint16' },
+                                { internalType: 'uint8', name: 'position', type: 'uint8' },
+                                { internalType: 'int24', name: 'line', type: 'int24' },
+                            ],
+                            internalType: 'struct ISportsAMMV2.CombinedPosition[][]',
+                            name: 'combinedPositions',
+                            type: 'tuple[][]',
+                        },
+                    ],
+                    internalType: 'struct ISportsAMMV2.TradeData[]',
+                    name: 'trades',
+                    type: 'tuple[]',
+                },
+            ],
+            name: 'getSGPCombinationRisk',
+            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
         { inputs: [], name: 'initNonReentrant', outputs: [], stateMutability: 'nonpayable', type: 'function' },
         {
             inputs: [
@@ -466,6 +582,13 @@ const sportsAMMV2RiskManagerContract: ContractData = {
             name: 'initialize',
             outputs: [],
             stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'uint16', name: '', type: 'uint16' }],
+            name: 'isSportIdFuture',
+            outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+            stateMutability: 'view',
             type: 'function',
         },
         {
@@ -496,6 +619,13 @@ const sportsAMMV2RiskManagerContract: ContractData = {
             inputs: [],
             name: 'manager',
             outputs: [{ internalType: 'contract ISportsAMMV2Manager', name: '', type: 'address' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'maxAllowedSystemCombinations',
+            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
             stateMutability: 'view',
             type: 'function',
         },
@@ -612,6 +742,17 @@ const sportsAMMV2RiskManagerContract: ContractData = {
         {
             inputs: [
                 { internalType: 'uint256[]', name: '_sportIds', type: 'uint256[]' },
+                { internalType: 'uint256[]', name: '_typeIds', type: 'uint256[]' },
+                { internalType: 'bool', name: '_enabled', type: 'bool' },
+            ],
+            name: 'setBatchLiveTradingPerSportAndTypeEnabled',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                { internalType: 'uint256[]', name: '_sportIds', type: 'uint256[]' },
                 { internalType: 'uint256[]', name: '_capsPerSport', type: 'uint256[]' },
                 { internalType: 'uint256[]', name: '_sportIdsForChild', type: 'uint256[]' },
                 { internalType: 'uint256[]', name: '_capsPerSportChild', type: 'uint256[]' },
@@ -708,6 +849,16 @@ const sportsAMMV2RiskManagerContract: ContractData = {
         },
         {
             inputs: [
+                { internalType: 'uint16', name: '_sportId', type: 'uint16' },
+                { internalType: 'bool', name: '_isFuture', type: 'bool' },
+            ],
+            name: 'setIsSportIdFuture',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
                 { internalType: 'uint256', name: '_sportId', type: 'uint256' },
                 { internalType: 'uint256', name: '_divider', type: 'uint256' },
             ],
@@ -779,6 +930,23 @@ const sportsAMMV2RiskManagerContract: ContractData = {
             type: 'function',
         },
         {
+            inputs: [{ internalType: 'uint256', name: '_divider', type: 'uint256' }],
+            name: 'setSGPCapDivider',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                { internalType: 'uint16[]', name: '_sportIds', type: 'uint16[]' },
+                { internalType: 'bool', name: '_isEnabled', type: 'bool' },
+            ],
+            name: 'setSGPEnabledOnSportIds',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
             inputs: [{ internalType: 'address', name: '_sportsAMM', type: 'address' }],
             name: 'setSportsAMM',
             outputs: [],
@@ -798,6 +966,7 @@ const sportsAMMV2RiskManagerContract: ContractData = {
                 { internalType: 'uint256', name: '_maxTicketSize', type: 'uint256' },
                 { internalType: 'uint256', name: '_maxSupportedAmount', type: 'uint256' },
                 { internalType: 'uint256', name: '_maxSupportedOdds', type: 'uint256' },
+                { internalType: 'uint256', name: '_maxAllowedSystemCombinations', type: 'uint256' },
             ],
             name: 'setTicketParams',
             outputs: [],
@@ -812,6 +981,34 @@ const sportsAMMV2RiskManagerContract: ContractData = {
             name: 'setTimes',
             outputs: [],
             stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'sgpCapDivider',
+            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'uint16', name: '', type: 'uint16' }],
+            name: 'sgpOnSportIdEnabled',
+            outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
+            name: 'sgpRiskPerCombination',
+            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
+            name: 'sgpSpentOnGame',
+            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            stateMutability: 'view',
             type: 'function',
         },
         {

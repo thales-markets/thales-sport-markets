@@ -1,4 +1,5 @@
 import { SportFilter } from 'enums/markets';
+import { Sport } from 'enums/sports';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,19 +11,25 @@ import { FlexDivCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { TagInfo, Tags } from 'types/markets';
 import { getLeagueFlagSource } from 'utils/images';
 import { getScrollMainContainerToTop } from 'utils/scroll';
+import { getSportLeagueIds } from 'utils/sports';
 import IncentivizedLeague from '../../../../components/IncentivizedLeague';
 import { LeagueMap } from '../../../../constants/sports';
-import { getSportLeagueIds } from 'utils/sports';
-import { Sport } from 'enums/sports';
+
+const favouritesTag = {
+    id: -1,
+    label: SportFilter.Favourites,
+};
 
 type TagsDropdownProps = {
     open: boolean;
     tags: Tags;
     tagFilter: Tags;
+    setSportParam: (param: SportFilter) => void;
     setTagFilter: any;
     setTagParam: any;
     openMarketsCountPerTag: any;
     liveMarketsCountPerTag: any;
+    liveMarketsCountPerSport: any;
     playerPropsMarketsCountPerTag: any;
     showActive: boolean;
     showLive: boolean;
@@ -33,10 +40,12 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
     open,
     tags,
     tagFilter,
+    setSportParam,
     setTagFilter,
     setTagParam,
     openMarketsCountPerTag,
     liveMarketsCountPerTag,
+    liveMarketsCountPerSport,
     playerPropsMarketsCountPerTag,
     showActive,
     showLive,
@@ -48,6 +57,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
     const tagFilterIds = tagFilter.map((tag) => tag.id);
     const isPlayerPropsTag = sport == SportFilter.PlayerProps;
     const isFavouritesTag = sport == SportFilter.Favourites;
+    const isLiveTag = sport == SportFilter.Live;
     const tagsPerSport = getSportLeagueIds((sport as unknown) as Sport);
     const sportFilter = useSelector(getSportFilter);
 
@@ -55,10 +65,10 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
         <>
             {open && (
                 <Container>
-                    {(isFavouritesTag ? favouriteLeagues : tags)
+                    {(isFavouritesTag ? favouriteLeagues : isLiveTag ? [...tags, favouritesTag] : tags)
                         .filter((tag: TagInfo) => {
                             if (showLive) {
-                                return !!liveMarketsCountPerTag[tag.id];
+                                return !!liveMarketsCountPerTag[tag.id] || tag.label === SportFilter.Favourites;
                             } else if (isPlayerPropsTag) {
                                 return !!playerPropsMarketsCountPerTag[tag.id];
                             } else {
@@ -69,6 +79,9 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                             }
                         })
                         .sort((a: TagInfo, b: TagInfo) => {
+                            if (a.label === SportFilter.Favourites) {
+                                return -1;
+                            }
                             let numberOfGamesA;
                             let numberOfGamesB;
                             if (showLive) {
@@ -123,6 +136,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                 if (tagFilterIds.includes(tag.id)) {
                                                     if (sportFilter !== sport) {
                                                         dispatch(setSportFilter(sport));
+                                                        setSportParam(sport);
                                                         setTagFilter([tag]);
                                                         setTagParam([tag].map((tagInfo) => tagInfo.label).toString());
                                                     } else {
@@ -152,6 +166,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                     } else {
                                                         if (sportFilter !== sport) {
                                                             dispatch(setSportFilter(sport));
+                                                            setSportParam(sport);
                                                             setTagFilter([tag]);
                                                             setTagParam(
                                                                 [tag].map((tagInfo) => tagInfo.label).toString()
@@ -170,23 +185,39 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                 }
                                             }}
                                         >
-                                            <LeagueFlag alt={tag.id.toString()} src={getLeagueFlagSource(tag.id)} />
+                                            {tag.label === SportFilter.Favourites ? (
+                                                <StarIcon
+                                                    size={19}
+                                                    isMobile={isMobile}
+                                                    className={`icon icon--favourites`}
+                                                />
+                                            ) : (
+                                                <LeagueFlag alt={tag.id.toString()} src={getLeagueFlagSource(tag.id)} />
+                                            )}
                                             <Label isMobile={isMobile}>{label}</Label>
                                             <IncentivizedLeague league={tag.id} onlyLogo />
                                         </LabelContainer>
                                     </LeftContainer>
-                                    {showLive
-                                        ? !!liveMarketsCountPerTag[tag.id] && (
-                                              <Count isMobile={isMobile}>{liveMarketsCountPerTag[tag.id]}</Count>
-                                          )
-                                        : isPlayerPropsTag
-                                        ? !!playerPropsMarketsCountPerTag[tag.id] && (
-                                              <Count isMobile={isMobile}>{playerPropsMarketsCountPerTag[tag.id]}</Count>
-                                          )
-                                        : !!openMarketsCountPerTag[tag.id] && (
-                                              <Count isMobile={isMobile}>{openMarketsCountPerTag[tag.id]}</Count>
-                                          )}
+                                    {tag.label === SportFilter.Favourites ? (
+                                        <Count isMobile={isMobile}>
+                                            {liveMarketsCountPerSport[SportFilter.Favourites]}
+                                        </Count>
+                                    ) : showLive ? (
+                                        !!liveMarketsCountPerTag[tag.id] && (
+                                            <Count isMobile={isMobile}>{liveMarketsCountPerTag[tag.id]}</Count>
+                                        )
+                                    ) : isPlayerPropsTag ? (
+                                        !!playerPropsMarketsCountPerTag[tag.id] && (
+                                            <Count isMobile={isMobile}>{playerPropsMarketsCountPerTag[tag.id]}</Count>
+                                        )
+                                    ) : (
+                                        !!openMarketsCountPerTag[tag.id] && (
+                                            <Count isMobile={isMobile}>{openMarketsCountPerTag[tag.id]}</Count>
+                                        )
+                                    )}
                                     <StarIcon
+                                        hidden={tag.label === SportFilter.Favourites}
+                                        hasMargin
                                         isMobile={isMobile}
                                         onClick={() => {
                                             dispatch(setFavouriteLeague(tag.id));
@@ -248,9 +279,10 @@ const Label = styled.div<{ isMobile: boolean }>`
     user-select: none;
 `;
 
-const StarIcon = styled.i<{ isMobile: boolean }>`
-    font-size: 15px;
-    margin-left: ${(props) => (props.isMobile ? '5px' : '5px')};
+const StarIcon = styled.i<{ isMobile: boolean; hasMargin?: boolean; size?: number; hidden?: boolean }>`
+    visibility: ${(props) => (props.hidden ? 'hidden' : 'visible')};
+    font-size: ${(props) => (props.size ? `${props.size}px` : '15px')};
+    margin-left: ${(props) => (props.hasMargin ? '5px' : '0')};
     &.selected,
     &:hover {
         color: ${(props) => props.theme.button.textColor.tertiary};

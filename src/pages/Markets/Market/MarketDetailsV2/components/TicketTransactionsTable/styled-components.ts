@@ -16,13 +16,23 @@ export const TableText = styled.span`
     }
 `;
 
-export const LiveSystemIndicatorContainer = styled(FlexDivStart)<{ isLive?: boolean; isSystem?: boolean }>`
+export const LiveSystemIndicatorContainer = styled(FlexDivStart)<{
+    isLive?: boolean;
+    isSgp?: boolean;
+    isSystem?: boolean;
+}>`
     min-width: 10px;
     max-width: 10px;
     height: 30px;
     border-radius: 3px;
     background: ${(props) =>
-        props.isLive ? props.theme.status.live : props.isSystem ? props.theme.status.system : 'transparent'};
+        props.isLive
+            ? props.theme.status.live
+            : props.isSgp
+            ? props.theme.status.sgp
+            : props.isSystem
+            ? props.theme.status.system
+            : 'transparent'};
     color: ${(props) => props.theme.textColor.secondary};
     align-items: center;
     justify-content: center;

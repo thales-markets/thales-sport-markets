@@ -13,9 +13,11 @@ type SportTagsProps = {
     sportCount: number;
     showActive: boolean;
     tags: Tags;
+    setSportParam: (param: SportFilter) => void;
     setTagParam: any;
     openMarketsCountPerTag: any;
     liveMarketsCountPerTag: any;
+    liveMarketsCountPerSport: any;
     playerPropsMarketsCountPerTag: any;
 };
 
@@ -25,10 +27,12 @@ const SportTags: React.FC<SportTagsProps> = ({
     sportCount,
     showActive,
     tags,
+    setSportParam,
     setTagParam,
     openMarketsCountPerTag,
     liveMarketsCountPerTag,
     playerPropsMarketsCountPerTag,
+    liveMarketsCountPerSport,
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -64,10 +68,12 @@ const SportTags: React.FC<SportTagsProps> = ({
                 key={sport + '1'}
                 tags={tags}
                 tagFilter={tagFilter}
+                setSportParam={setSportParam}
                 setTagFilter={(tagFilter: Tags) => dispatch(setTagFilter(tagFilter))}
                 setTagParam={setTagParam}
                 openMarketsCountPerTag={openMarketsCountPerTag}
                 liveMarketsCountPerTag={liveMarketsCountPerTag}
+                liveMarketsCountPerSport={liveMarketsCountPerSport}
                 playerPropsMarketsCountPerTag={playerPropsMarketsCountPerTag}
                 showActive={showActive}
                 showLive={sport == SportFilter.Live}

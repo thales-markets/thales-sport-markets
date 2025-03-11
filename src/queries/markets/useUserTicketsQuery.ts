@@ -17,11 +17,13 @@ import { mapTicket } from 'utils/tickets';
 export const useUserTicketsQuery = (
     walletAddress: string,
     networkConfig: NetworkConfig,
-    options?: Omit<UseQueryOptions<Ticket[] | undefined>, 'queryKey' | 'queryFn'>
+    options?: Omit<UseQueryOptions<Ticket[] | null>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<Ticket[] | undefined>({
+    return useQuery<Ticket[] | null>({
         queryKey: QUERY_KEYS.UserTickets(networkConfig.networkId, walletAddress),
         queryFn: async () => {
+            let userTickets = null;
+
             try {
                 const sportsAMMDataContract = getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig);
                 const sportsAMMV2ManagerContract = getContractInstance(
@@ -132,12 +134,13 @@ export const useUserTicketsQuery = (
                         )
                     );
 
-                    return orderBy(updateTotalQuoteAndPayout(mappedTickets), ['timestamp'], ['desc']);
+                    userTickets = orderBy(updateTotalQuoteAndPayout(mappedTickets), ['timestamp'], ['desc']);
                 }
-                return undefined;
             } catch (e) {
                 console.log('E ', e);
             }
+
+            return userTickets;
         },
         ...options,
     });
