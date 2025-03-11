@@ -1,3 +1,5 @@
+import marchMadnessLeftIcon from 'assets/images/march-madness/mm-button-icon-1.svg';
+import marchMadnessRightIcon from 'assets/images/march-madness/mm-button-icon-2.svg';
 import Button from 'components/Button';
 import Logo from 'components/Logo';
 import NavMenu from 'components/NavMenu';
@@ -31,7 +33,6 @@ import biconomyConnector from 'utils/biconomyWallet';
 import { isMarchMadnessAvailableForNetworkId } from 'utils/marchMadness';
 import { buildHref } from 'utils/routes';
 import { useAccount, useChainId, useClient } from 'wagmi';
-import marchMadnessLeftIcon from '../../../assets/images/march-madness/mm-button-icon-1.svg';
 import { ODDS_TYPES } from '../../../constants/markets';
 import { OddsType } from '../../../enums/markets';
 import ProfileItem from './components/ProfileItem';
@@ -65,7 +66,6 @@ import {
     SmallBadgeImage,
     WrapperMobile,
 } from './styled-components';
-import marchMadnessRightIcon from '/march-madness/mm-button-icon-2.svg';
 
 const PULSING_COUNT = 10;
 
@@ -194,7 +194,7 @@ const DappHeader: React.FC = () => {
                     fontSize="18px"
                     width={isMobile ? '100%' : '240px'}
                     additionalStyles={{
-                        backgroundImage: `url(${marchMadnessLeftIcon}), url(${marchMadnessRightIcon})`,
+                        backgroundImage: `url('${marchMadnessLeftIcon}'), url('${marchMadnessRightIcon}')`,
                         backgroundPosition: `left ${isMobile ? 70 : 20}px center, right ${isMobile ? 70 : 20}px center`,
                         backgroundRepeat: 'no-repeat, no-repeat',
                         backgroundColor: theme.marchMadness.button.background.primary,
