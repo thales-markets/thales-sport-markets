@@ -82,7 +82,7 @@ const ResolveModal: React.FC<ResolveModalProps> = ({ ticketMarket: market, onClo
                               [market.gameId],
                               [market.typeId],
                               [market.playerProps.playerId],
-                              [[result]],
+                              [result.split(',')],
                           ]);
 
                 const txReceipt = await waitForTransactionReceipt(client as Client, {

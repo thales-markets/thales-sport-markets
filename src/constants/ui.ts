@@ -101,5 +101,3 @@ export const PROMOTION_SANITIZE_PROPS = {
     ],
     ALLOWED_ATTR: ['href', 'target', 'style', 'src', 'alt'],
 };
-
-export const SEO_ARTICLES_PER_PAGE = 12;

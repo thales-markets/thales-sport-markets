@@ -21,48 +21,54 @@ const NetworkSwitcher: React.FC = () => {
 
     return (
         <OutsideClickHandler onOutsideClick={() => setDropDownOpen(false)}>
-            <NetworkIconWrapper
-                onClick={() => {
-                    if (supportedNetworks.length > 1) setDropDownOpen(!dropDownOpen);
-                }}
-                isConnected={isConnected}
-                isMultiChain={supportedNetworks.length > 1}
-            >
-                <NetworkIcon className={selectedNetwork.iconClassName} isConnected={isConnected} />
-                {supportedNetworks.length > 1 && (
-                    <DownIcon isConnected={isConnected} className={`icon icon--arrow-down`} />
+            <NetworkIconContainer>
+                <NetworkIconWrapper
+                    onClick={() => {
+                        if (supportedNetworks.length > 1) setDropDownOpen(!dropDownOpen);
+                    }}
+                    isConnected={isConnected}
+                    isMultiChain={supportedNetworks.length > 1}
+                >
+                    <NetworkIcon className={selectedNetwork.iconClassName} isConnected={isConnected} />
+                    {supportedNetworks.length > 1 && (
+                        <DownIcon isConnected={isConnected} className={`icon icon--arrow-down`} />
+                    )}
+                </NetworkIconWrapper>
+                {dropDownOpen && (
+                    <NetworkDropDown>
+                        {Object.keys(SUPPORTED_NETWORKS_PARAMS)
+                            .map((key) => {
+                                return {
+                                    id: Number(key),
+                                    ...SUPPORTED_NETWORKS_PARAMS[Number(key)],
+                                };
+                            })
+                            .sort((a, b) => a.order - b.order)
+                            .map((network, index) => (
+                                <NetworkWrapper
+                                    key={index}
+                                    onClick={async () => {
+                                        setDropDownOpen(false);
+                                        switchChain?.({ chainId: network.id as SupportedNetwork });
+                                    }}
+                                >
+                                    <NetworkIcon isConnected={true} className={network.iconClassName} />
+                                    <NetworkText>
+                                        {networkId === network.id && <NetworkSelectedIndicator />}
+                                        {network.shortChainName}
+                                    </NetworkText>
+                                </NetworkWrapper>
+                            ))}
+                    </NetworkDropDown>
                 )}
-            </NetworkIconWrapper>
-            {dropDownOpen && (
-                <NetworkDropDown>
-                    {Object.keys(SUPPORTED_NETWORKS_PARAMS)
-                        .map((key) => {
-                            return {
-                                id: Number(key),
-                                ...SUPPORTED_NETWORKS_PARAMS[Number(key)],
-                            };
-                        })
-                        .sort((a, b) => a.order - b.order)
-                        .map((network, index) => (
-                            <NetworkWrapper
-                                key={index}
-                                onClick={async () => {
-                                    setDropDownOpen(false);
-                                    switchChain?.({ chainId: network.id as SupportedNetwork });
-                                }}
-                            >
-                                <NetworkIcon isConnected={true} className={network.iconClassName} />
-                                <NetworkText>
-                                    {networkId === network.id && <NetworkSelectedIndicator />}
-                                    {network.shortChainName}
-                                </NetworkText>
-                            </NetworkWrapper>
-                        ))}
-                </NetworkDropDown>
-            )}
+            </NetworkIconContainer>
         </OutsideClickHandler>
     );
 };
+
+const NetworkIconContainer = styled.div`
+    position: relative;
+`;
 
 const NetworkIconWrapper = styled.div<{ isConnected: boolean; isMultiChain: boolean }>`
     background: ${(props) => (props.isConnected ? props.theme.background.tertiary : 'transparent')};

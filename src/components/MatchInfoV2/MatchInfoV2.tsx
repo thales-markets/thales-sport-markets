@@ -45,6 +45,7 @@ type MatchInfoProps = {
     acceptOdds?: boolean;
     setAcceptOdds?: (accept: boolean) => void;
     isLive?: boolean;
+    isSgp?: boolean;
     applyPayoutMultiplier: boolean;
     useOverCollateral?: boolean;
 };
@@ -57,6 +58,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
     acceptOdds,
     setAcceptOdds,
     isLive,
+    isSgp,
     applyPayoutMultiplier,
     useOverCollateral,
 }) => {
@@ -73,7 +75,6 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
     ]);
     const positionText = getPositionTextV2(market, market.position, true);
 
-    // used only for live ticket
     const previousMarket = useRef<TicketMarket>(market);
     const firstClickMarket = useRef<TicketMarket>(market);
 
@@ -153,19 +154,21 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
                 </MarketTypeInfo>
                 <PositionInfo>
                     <PositionText>{positionText}</PositionText>
-                    <Odd>
-                        <OddChangeUp id="odd-change-up" />
-                        <OddChangeDown id="odd-change-down" />
-                        {formatMarketOdds(
-                            selectedOddsType,
-                            applyPayoutMultiplier
-                                ? getAddedPayoutOdds(
-                                      useOverCollateral ? (CRYPTO_CURRENCY_MAP.OVER as Coins) : selectedCollateral,
-                                      market.odd
-                                  )
-                                : market.odd
-                        )}
-                    </Odd>
+                    {!isSgp && (
+                        <Odd>
+                            <OddChangeUp id="odd-change-up" />
+                            <OddChangeDown id="odd-change-down" />
+                            {formatMarketOdds(
+                                selectedOddsType,
+                                applyPayoutMultiplier
+                                    ? getAddedPayoutOdds(
+                                          useOverCollateral ? (CRYPTO_CURRENCY_MAP.OVER as Coins) : selectedCollateral,
+                                          market.odd
+                                      )
+                                    : market.odd
+                            )}
+                        </Odd>
+                    )}
                 </PositionInfo>
             </MarketPositionContainer>
             {readOnly && (

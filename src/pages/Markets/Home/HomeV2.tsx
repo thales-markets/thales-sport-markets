@@ -10,13 +10,15 @@ import Checkbox from 'components/fields/Checkbox/Checkbox';
 import { MarketTypePlayerPropsGroupsBySport } from 'constants/marketTypes';
 import { RESET_STATE } from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import { secondsToMilliseconds } from 'date-fns';
 import { SportFilter, StatusFilter } from 'enums/markets';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
-import { groupBy, orderBy } from 'lodash';
+import { groupBy, intersection, orderBy } from 'lodash';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
+import useSportMarketSgpQuery from 'queries/sgp/useSportMarketSgpQuery';
 import queryString from 'query-string';
 import React, { Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -41,13 +43,14 @@ import {
     setStatusFilter,
     setTagFilter,
 } from 'redux/modules/market';
+import { getIsSgp, getTicket } from 'redux/modules/ticket';
 import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled, { CSSProperties, useTheme } from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { addHoursToCurrentDate, localStore } from 'thales-utils';
-import { MarketsCache, SportMarket, SportMarkets, TagInfo, Tags } from 'types/markets';
+import { MarketsCache, SportMarket, SportMarkets, TagInfo, Tags, TicketPosition } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
-import { getDefaultPlayerPropsLeague } from 'utils/marketsV2';
+import { getDefaultPlayerPropsLeague, isSameMarket } from 'utils/marketsV2';
 import { history } from 'utils/routes';
 import { getScrollMainContainerToTop } from 'utils/scroll';
 import useQueryParam from 'utils/useQueryParams';
@@ -94,6 +97,8 @@ const Home: React.FC = () => {
     const isMobile = useSelector(getIsMobile);
     const isMarketSelected = useSelector(getIsMarketSelected);
     const selectedMarket = useSelector(getSelectedMarket);
+    const ticket = useSelector(getTicket);
+    const isSgp = useSelector(getIsSgp);
 
     const [showBurger, setShowBurger] = useState<boolean>(false);
     const [playerPropsCountPerTag, setPlayerPropsCountPerTag] = useState<Record<string, number>>({});
@@ -218,7 +223,7 @@ const Home: React.FC = () => {
         }
     }, [playerPropsCountPerTag, sportFilter, setTagParam]);
 
-    const sportMarketsQueryNew = useSportsMarketsV2Query(statusFilter, false, { networkId }, undefined);
+    const sportMarketsQuery = useSportsMarketsV2Query(statusFilter, false, { networkId }, undefined);
 
     const liveSportMarketsQuery = useLiveSportsMarketsQuery(sportFilter === SportFilter.Live, { networkId });
 
@@ -229,8 +234,8 @@ const Home: React.FC = () => {
             return [];
         }
         const allMarkets: MarketsCache =
-            sportMarketsQueryNew.isSuccess && sportMarketsQueryNew.data
-                ? sportMarketsQueryNew.data
+            sportMarketsQuery.isSuccess && sportMarketsQuery.data
+                ? sportMarketsQuery.data
                 : {
                       [StatusFilter.OPEN_MARKETS]: [],
                       [StatusFilter.ONGOING_MARKETS]: [],
@@ -305,7 +310,14 @@ const Home: React.FC = () => {
                     ) {
                         return false;
                     }
-                } else if (!tagFilter.map((tag) => tag.id).includes(market.leagueId)) {
+                } else if (
+                    !tagFilter.find(
+                        (tag) =>
+                            tag.id === market.leagueId ||
+                            (tag.label === SportFilter.Favourites &&
+                                favouriteLeagues.find((tag) => tag.id === market.leagueId))
+                    )
+                ) {
                     return false;
                 }
             }
@@ -379,8 +391,8 @@ const Home: React.FC = () => {
 
         return filteredMarkets;
     }, [
-        sportMarketsQueryNew.isSuccess,
-        sportMarketsQueryNew.data,
+        sportMarketsQuery.isSuccess,
+        sportMarketsQuery.data,
         liveSportMarketsQuery.isSuccess,
         liveSportMarketsQuery.data,
         gameMultipliersQuery.isSuccess,
@@ -399,7 +411,7 @@ const Home: React.FC = () => {
     ]);
 
     const marketsLoading =
-        sportFilter === SportFilter.Live ? liveSportMarketsQuery.isLoading : sportMarketsQueryNew.isLoading;
+        sportFilter === SportFilter.Live ? liveSportMarketsQuery.isLoading : sportMarketsQuery.isLoading;
 
     useEffect(() => {
         if (sportFilter == SportFilter.Favourites) {
@@ -504,7 +516,7 @@ const Home: React.FC = () => {
                 liveMarketsCountPerTag[key] = groupedMarkets[key].length;
             }
         });
-        Object.values(SportFilter);
+
         return liveMarketsCountPerTag;
     }, [liveSportMarketsQuery]);
 
@@ -535,6 +547,22 @@ const Home: React.FC = () => {
         return liveMarketsCount;
     }, [liveMarketsCountPerTag, favouriteLeagues]);
 
+    const isSgpEnabled = useMemo(() => isSgp && ticket.length > 0, [isSgp, ticket.length]);
+
+    const marketsAvailableForSgpQuery = useSportMarketSgpQuery(
+        ticket[0],
+        { networkId },
+        { enabled: isSgpEnabled, refetchInterval: secondsToMilliseconds(30) }
+    );
+
+    const marketAvailableForSgp = useMemo(
+        () =>
+            marketsAvailableForSgpQuery.isSuccess && marketsAvailableForSgpQuery.data
+                ? marketsAvailableForSgpQuery.data
+                : undefined,
+        [marketsAvailableForSgpQuery.data, marketsAvailableForSgpQuery.isSuccess]
+    );
+
     const selectedMarketData = useMemo(() => {
         if (selectedMarket) {
             if (selectedMarket.live) {
@@ -546,14 +574,49 @@ const Home: React.FC = () => {
                     (market) => market.gameId.toLowerCase() === selectedMarket.gameId.toLowerCase()
                 );
             } else {
+                // Non-live
                 const openSportMarkets: SportMarkets =
                     openSportMarketsQuery.isSuccess && openSportMarketsQuery.data
                         ? openSportMarketsQuery.data[StatusFilter.OPEN_MARKETS]
                         : [];
 
-                return openSportMarkets.find(
-                    (market) => market.gameId.toLowerCase() === selectedMarket.gameId.toLowerCase()
-                );
+                let openSportMarket = null;
+                if (isSgpEnabled && marketAvailableForSgp && selectedMarket.gameId === marketAvailableForSgp.gameId) {
+                    // filter SGP available markets by ticket common sportsbooks
+                    const marketAvailableForSgpCopy = { ...marketAvailableForSgp };
+                    if (ticket.length > 1) {
+                        // markets from API already filtered by first ticket market
+                        let ticketCommonSportsbooks: string[] = [];
+                        ticket.forEach((ticketPosition: TicketPosition, index) => {
+                            const isMoneyline = ticketPosition.typeId === 0;
+                            const sgpChildMarket = marketAvailableForSgpCopy.childMarkets.find((childMarket) =>
+                                isSameMarket(childMarket, ticketPosition)
+                            );
+                            const sgpSportsbooks =
+                                (isMoneyline
+                                    ? marketAvailableForSgpCopy.sgpSportsbooks
+                                    : sgpChildMarket?.sgpSportsbooks) || [];
+                            if (index === 0) {
+                                ticketCommonSportsbooks = sgpSportsbooks;
+                            } else {
+                                const commonSportsbooks = intersection(ticketCommonSportsbooks, sgpSportsbooks);
+                                ticketCommonSportsbooks = commonSportsbooks;
+                            }
+                        });
+                        openSportMarket = marketAvailableForSgpCopy;
+                        openSportMarket.childMarkets = marketAvailableForSgpCopy.childMarkets.filter(
+                            (sgpMarket) => intersection(sgpMarket.sgpSportsbooks, ticketCommonSportsbooks).length
+                        );
+                    } else {
+                        openSportMarket = marketAvailableForSgpCopy;
+                    }
+                } else {
+                    openSportMarket = openSportMarkets.find(
+                        (market) => market.gameId.toLowerCase() === selectedMarket.gameId.toLowerCase()
+                    );
+                }
+
+                return openSportMarket;
             }
         }
     }, [
@@ -562,6 +625,9 @@ const Home: React.FC = () => {
         liveSportMarketsQuery.data,
         liveSportMarketsQuery.isSuccess,
         selectedMarket,
+        isSgpEnabled,
+        marketAvailableForSgp,
+        ticket,
     ]);
 
     const resetFilters = useCallback(() => {
@@ -699,9 +765,11 @@ const Home: React.FC = () => {
                             }
                             showActive={showActive}
                             tags={tagsList}
+                            setSportParam={setSportParam}
                             setTagParam={setTagParam}
                             openMarketsCountPerTag={openMarketsCountPerTag}
                             liveMarketsCountPerTag={liveMarketsCountPerTag}
+                            liveMarketsCountPerSport={liveMarketsCountPerSport}
                             playerPropsMarketsCountPerTag={playerPropsCountPerTag}
                         />
                     );
@@ -793,7 +861,7 @@ const Home: React.FC = () => {
                         </LoaderContainer>
                     ) : (
                         <>
-                            {!isMobile && <Breadcrumbs />}
+                            {!isMobile && <Breadcrumbs setTagParam={setTagParam} />}
                             {finalMarkets.length === 0 ? (
                                 <NoMarketsContainer>
                                     <NoMarketsLabel>
@@ -848,12 +916,18 @@ const Home: React.FC = () => {
                                                 shouldCloseOnOverlayClick={false}
                                                 style={getCustomModalStyles(theme, '10')}
                                             >
-                                                <SelectedMarket market={selectedMarketData} />
+                                                <SelectedMarket
+                                                    market={selectedMarketData}
+                                                    isLoading={marketsAvailableForSgpQuery.isLoading}
+                                                />
                                             </ReactModal>
                                         ) : (
                                             isMarketSelected &&
                                             (statusFilter === StatusFilter.OPEN_MARKETS || !!selectedMarket?.live) && (
-                                                <SelectedMarket market={selectedMarketData} />
+                                                <SelectedMarket
+                                                    market={selectedMarketData}
+                                                    isLoading={marketsAvailableForSgpQuery.isLoading}
+                                                />
                                             )
                                         )}
                                     </FlexDivRow>

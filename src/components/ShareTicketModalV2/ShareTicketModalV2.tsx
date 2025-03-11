@@ -19,28 +19,14 @@ import styled, { useTheme } from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
 import { Coins, isFirefox, isIos, isMetamask } from 'thales-utils';
 import { Rates } from 'types/collateral';
-import { SystemBetData, TicketMarket } from 'types/markets';
 import { RootState } from 'types/redux';
+import { ShareTicketModalProps } from 'types/tickets';
 import { ThemeInterface } from 'types/ui';
 import { isStableCurrency } from 'utils/collaterals';
 import { refetchOverdropMultipliers } from 'utils/queryConnector';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import { isOverCurrency } from '../../utils/collaterals';
 import MyTicket from './components/MyTicket';
-
-export type ShareTicketModalProps = {
-    markets: TicketMarket[];
-    multiSingle: boolean;
-    paid: number;
-    payout: number;
-    onClose: () => void;
-    isTicketLost: boolean;
-    collateral: Coins;
-    isLive: boolean;
-    applyPayoutMultiplier: boolean;
-    isTicketOpen: boolean;
-    systemBetData?: SystemBetData;
-};
 
 const PARLAY_IMAGE_NAME = 'ParlayImage.png';
 const TWITTER_MESSAGES_TEXT = [
@@ -80,6 +66,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
     isTicketLost,
     collateral,
     isLive,
+    isSgp,
     applyPayoutMultiplier,
     isTicketOpen,
     systemBetData,
@@ -123,7 +110,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
         overlay: {
             backgroundColor: 'rgba(0, 0, 0, 0.5)',
             backdropFilter: 'blur(10px)',
-            zIndex: '1501', // .MuiTooltip-popper has 1500 and validation message pops up from background
+            zIndex: '1502', // .rc-tooltip has 1501 and validation message pops up from background
         },
     };
 
@@ -352,6 +339,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                         convertToStableValue && isNonStableCollateral ? (CRYPTO_CURRENCY_MAP.USDC as Coins) : collateral
                     }
                     isLive={isLive}
+                    isSgp={isSgp}
                     applyPayoutMultiplier={applyPayoutMultiplier}
                     systemBetData={
                         systemBetData && convertToStableValue && isNonStableCollateral && exchangeRates

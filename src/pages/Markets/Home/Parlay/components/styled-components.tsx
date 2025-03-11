@@ -45,14 +45,12 @@ export const SummaryLabel = styled.span<{
 
 export const ClearLabel = styled(SummaryLabel)`
     font-weight: 600;
-    color: ${(props) => props.theme.textColor.septenary};
+    color: ${(props) => props.theme.textColor.quaternary};
     text-transform: none;
     cursor: pointer;
-    &:hover {
+
+    i {
         color: ${(props) => props.theme.textColor.quaternary};
-        i {
-            color: ${(props) => props.theme.textColor.quaternary};
-        }
     }
 `;
 
@@ -186,7 +184,7 @@ export const BalanceValue = styled.span`
 `;
 
 export const XButton = styled.i<{ margin?: string }>`
-    font-size: 15px;
+    font-size: 12px;
     font-weight: 600;
     color: ${(props) => props.theme.textColor.septenary};
     ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
@@ -441,7 +439,7 @@ export const SelectContainer = styled(FlexDivEnd)`
     width: 100%;
 `;
 
-export const SystemBetValidation = styled(FlexDivCentered)`
+export const MarketsValidation = styled(FlexDivCentered)`
     font-size: 13px;
     color: ${(props) => props.theme.warning.textColor.primary};
     border: 2px solid ${(props) => props.theme.warning.borderColor.primary};
@@ -458,3 +456,53 @@ export const systemDropdownStyle = {
     optionStyle: { fontSize: '14px', fontWeight: 600 },
     indicatorSeparatorStyle: { marginBottom: '5px', marginTop: '5px' },
 };
+
+export const OddChangeUp = styled.span`
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 5px;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid ${(props) => props.theme.borderColor.tertiary};
+
+    animation-name: up;
+    animation-duration: 0.8s;
+    animation-iteration-count: 3;
+
+    @keyframes up {
+        0% {
+            transform: scale(1) translateY(2px);
+            opacity: 1;
+        }
+        100% {
+            transform: scale(0.9) translateY(-3px);
+            opacity: 0.5;
+        }
+    }
+`;
+
+export const OddChangeDown = styled.span`
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 5px;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid ${(props) => props.theme.borderColor.septenary};
+
+    animation-name: down;
+    animation-duration: 0.8s;
+    animation-iteration-count: 3;
+
+    @keyframes down {
+        0% {
+            transform: scale(1) translateY(-3px);
+            opacity: 1;
+        }
+        100% {
+            transform: scale(0.9) translateY(2px);
+            opacity: 0.5;
+        }
+    }
+`;

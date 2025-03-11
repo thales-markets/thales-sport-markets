@@ -81,6 +81,7 @@ export const Colors = {
     BLACK: '#000000',
 
     GREEN: '#5FC694',
+    GREEN_LIGHT: '#3CB55B',
 
     BLUE: '#3FFFFF',
 

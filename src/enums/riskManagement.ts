@@ -3,6 +3,7 @@ export enum RiskManagementConfig {
     BOOKMAKERS = 'bookmakers',
     SPREADS = 'spreads',
     LEAGUES = 'leagues',
+    SGP_BLOCKERS = 'sgpBlockers',
 }
 
 export enum RiskManagementRole {

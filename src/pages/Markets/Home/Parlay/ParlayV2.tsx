@@ -1,12 +1,19 @@
 import ParlayEmptyIcon from 'assets/images/parlay-empty.svg?react';
+import RadioButton from 'components/fields/RadioButton';
 import MatchInfoV2 from 'components/MatchInfoV2';
 import MatchUnavailableInfo from 'components/MatchUnavailableInfo';
-import Toggle from 'components/Toggle';
-import { SportFilter, StatusFilter } from 'enums/markets';
+import Scroll from 'components/Scroll';
+import Tooltip from 'components/Tooltip';
+import { LeagueMap } from 'constants/sports';
+import { secondsToMilliseconds } from 'date-fns';
+import { SportFilter, StatusFilter, TicketErrorCode } from 'enums/markets';
+import { League } from 'enums/sports';
 import { isEqual } from 'lodash';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsAmmDataQuery from 'queries/markets/useSportsAmmDataQuery';
 import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
+import useSportsAmmRiskManagerQuery from 'queries/riskManagement/useSportsAmmRiskManagerQuery';
+import useSgpDataQuery from 'queries/sgp/useSgpDataQuery';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,17 +21,20 @@ import { getIsMobile } from 'redux/modules/app';
 import { getSportFilter } from 'redux/modules/market';
 import {
     getHasTicketError,
+    getIsSgp,
     getIsSystemBet,
     getTicket,
     removeAll,
     resetTicketError,
+    setIsSgp,
     setIsSystemBet,
     setMaxTicketSize,
+    setTicketError,
 } from 'redux/modules/ticket';
-import styled, { useTheme } from 'styled-components';
-import { FlexDiv, FlexDivCentered, FlexDivColumn } from 'styles/common';
+import styled from 'styled-components';
+import { FlexDivCentered, FlexDivColumn, FlexDivSpaceBetween } from 'styles/common';
 import { SportMarket, SportMarkets, TicketMarket, TicketPosition } from 'types/markets';
-import { ThemeInterface } from 'types/ui';
+import { SgpParams, SportsbookData } from 'types/sgp';
 import { isSameMarket } from 'utils/marketsV2';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import TicketV2 from './components/TicketV2';
@@ -35,10 +45,12 @@ type ParlayProps = {
     openMarkets?: SportMarkets;
 };
 
+const TICKET_MARKETS_LIST_MAX_HEIGHT = 565;
+const TICKET_MARKETS_LIST_MAX_HEIGHT_MOBILE = 325;
+
 const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
-    const theme: ThemeInterface = useTheme();
     const isMobile = useSelector(getIsMobile);
 
     const networkId = useChainId();
@@ -47,6 +59,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
 
     const ticket = useSelector(getTicket);
     const isSystemBet = useSelector(getIsSystemBet);
+    const isSgp = useSelector(getIsSgp);
     const hasTicketError = useSelector(getHasTicketError);
     const sportFilter = useSelector(getSportFilter);
     const isLiveFilterSelected = sportFilter == SportFilter.Live;
@@ -57,6 +70,8 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     const [acceptOdds, setAcceptOdds] = useState<boolean>(false);
     const [outOfLiquidityMarkets, setOutOfLiquidityMarkets] = useState<number[]>([]);
     const [useOverCollateral, setUseOverCollateral] = useState(false);
+
+    const isLive = useMemo(() => !!ticket[0]?.live, [ticket]);
 
     const previousTicketOdds = useRef<{ position: number; odd: number; gameId: string; proof: string[] }[]>([]);
 
@@ -72,11 +87,75 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
 
     const liveSportMarketsQuery = useLiveSportsMarketsQuery(isLiveFilterSelected, { networkId });
 
+    const sportsAmmRiskManagerQuery = useSportsAmmRiskManagerQuery(
+        ticket[0]?.leagueId || 0,
+        { networkId, client },
+        { enabled: !!ticket.length }
+    );
+
+    const sgpParams: SgpParams =
+        ticketMarkets.length > 1
+            ? {
+                  gameId: ticketMarkets[0].gameId,
+                  positions: ticketMarkets.map((market) => market.position),
+                  typeIds: ticketMarkets.map((market) => market.typeId),
+                  lines: ticketMarkets.map((market) => market.line),
+                  playerIds: ticketMarkets.map((market) => market.playerProps.playerId),
+              }
+            : { gameId: '', positions: [], typeIds: [], lines: [], playerIds: [] };
+
+    const sgpDataQuery = useSgpDataQuery(
+        sgpParams,
+        { networkId },
+        { enabled: isSgp && ticketMarkets.length > 1, refetchInterval: secondsToMilliseconds(10) }
+    );
+
+    const sportsbookData: SportsbookData | undefined = useMemo(() => {
+        if (sgpDataQuery.isSuccess && sgpDataQuery.data) {
+            const selectedSportsbookData = sgpDataQuery.data.data.selectedSportsbook;
+
+            return selectedSportsbookData?.priceWithSpread || selectedSportsbookData?.error
+                ? selectedSportsbookData
+                : {
+                      error: t('markets.parlay.validation.sgp-no-odds'),
+                      missingEntries: null,
+                      legs: null,
+                      price: null,
+                      priceWithSpread: null,
+                  };
+        }
+        return undefined;
+    }, [sgpDataQuery.isSuccess, sgpDataQuery.data, t]);
+
+    const isDifferentGamesCombined = useMemo(
+        () => !ticket.every((ticketPosition) => ticketPosition.gameId === ticket[0].gameId),
+        [ticket]
+    );
+    const isSgpSportDisabled = useMemo(
+        () =>
+            sportsAmmRiskManagerQuery.isSuccess && sportsAmmRiskManagerQuery.data
+                ? !sportsAmmRiskManagerQuery.data.sgpOnLeagueIdEnabled
+                : true,
+        [sportsAmmRiskManagerQuery.isSuccess, sportsAmmRiskManagerQuery.data]
+    );
+
     useEffect(() => {
         if (sportsAmmDataQuery.isSuccess && sportsAmmDataQuery.data) {
             dispatch(setMaxTicketSize(sportsAmmDataQuery.data.maxTicketSize));
         }
     }, [dispatch, sportsAmmDataQuery.isSuccess, sportsAmmDataQuery.data]);
+
+    useEffect(() => {
+        if (isSgp && sportsAmmRiskManagerQuery.data) {
+            if (isSgpSportDisabled) {
+                const disabledLeagueName = LeagueMap[ticket[0].leagueId as League]?.label;
+                dispatch(setTicketError({ code: TicketErrorCode.SGP_LEAGUE_DISABLED, data: disabledLeagueName }));
+                dispatch(setIsSgp(false));
+            } else {
+                dispatch(resetTicketError());
+            }
+        }
+    }, [dispatch, sportsAmmRiskManagerQuery.data, isSgp, isSgpSportDisabled, ticket]);
 
     // Reset states when empty ticket
     useEffect(() => {
@@ -217,16 +296,22 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     }, [sportMarkets, ticket, dispatch, isLiveFilterSelected]);
 
     useEffect(() => {
-        if (ticket[0] && ticket[0].live && !isLiveFilterSelected) {
-            dispatch(removeAll());
-        } else if (ticket[0] && !ticket[0].live && isLiveFilterSelected) {
+        if (isLive !== isLiveFilterSelected) {
             dispatch(removeAll());
         }
-    }, [isLiveFilterSelected, dispatch, ticket]);
+    }, [isLiveFilterSelected, dispatch, isLive]);
 
     const onCloseValidationModal = useCallback(() => dispatch(resetTicketError()), [dispatch]);
 
     const hasParlayMarkets = ticketMarkets.length > 0 || unavailableMarkets.length > 0;
+
+    const marketsList = useRef<HTMLDivElement>(null);
+    const marketsListHeight = marketsList.current?.getBoundingClientRect().height;
+    const scrollHeight = Math.min(
+        isMobile ? TICKET_MARKETS_LIST_MAX_HEIGHT_MOBILE : TICKET_MARKETS_LIST_MAX_HEIGHT,
+        marketsListHeight || Number.MAX_VALUE
+    );
+    const isScrollVisible = !isMobile && (marketsListHeight || 0) > TICKET_MARKETS_LIST_MAX_HEIGHT;
 
     return (
         <Container isMobile={isMobile} isWalletConnected={isConnected}>
@@ -238,68 +323,123 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                             <Count>{ticket.length}</Count>
                         </Title>
                     )}
-                    {!ticket[0]?.live && (
-                        <ToggleContainer>
-                            <Toggle
-                                label={{
-                                    firstLabel: t('markets.parlay.regular'),
-                                    secondLabel: t('markets.parlay.system'),
-                                    fontSize: '14px',
-                                }}
-                                width="46px"
-                                height="24px"
-                                active={isSystemBet}
-                                dotSize="16px"
-                                dotBackground={theme.background.secondary}
-                                dotBorder={`3px solid ${theme.borderColor.quaternary}`}
-                                dotMargin="3px"
-                                handleClick={() => {
-                                    dispatch(setIsSystemBet(!isSystemBet));
-                                }}
-                            />
-                        </ToggleContainer>
+                    {!isLive && (
+                        <BetTypeContainer>
+                            <Tooltip overlay={t('markets.parlay.tooltip.regular')} mouseEnterDelay={0.3}>
+                                <RadioButtonContainer>
+                                    <RadioButton
+                                        checked={!isSystemBet && !isSgp}
+                                        value={'true'}
+                                        onChange={() => {
+                                            if (isSgp && ticket.length > 1) {
+                                                dispatch(removeAll());
+                                            }
+                                            dispatch(setIsSystemBet(false));
+                                            dispatch(setIsSgp(false));
+                                            // reset odds changes
+                                            setAcceptOdds(true);
+                                            setOddsChanged(false);
+                                        }}
+                                        label={t('markets.parlay.regular')}
+                                    />
+                                </RadioButtonContainer>
+                            </Tooltip>
+                            <Tooltip overlay={t('markets.parlay.tooltip.system')} mouseEnterDelay={0.3}>
+                                <RadioButtonContainer>
+                                    <RadioButton
+                                        checked={isSystemBet}
+                                        value={'false'}
+                                        onChange={() => {
+                                            if (isSgp && ticket.length > 1) {
+                                                dispatch(removeAll());
+                                            }
+                                            dispatch(setIsSystemBet(true));
+                                            dispatch(setIsSgp(false));
+                                            // reset odds changes
+                                            setAcceptOdds(true);
+                                            setOddsChanged(false);
+                                        }}
+                                        label={t('markets.parlay.system')}
+                                    />
+                                </RadioButtonContainer>
+                            </Tooltip>
+                            <Tooltip
+                                overlay={
+                                    isDifferentGamesCombined
+                                        ? t('markets.parlay.tooltip.sgp-different-game')
+                                        : isSgpSportDisabled
+                                        ? t('markets.parlay.tooltip.sgp-sport-disabled', {
+                                              league: LeagueMap[ticket[0]?.leagueId as League]?.label,
+                                          })
+                                        : t('markets.parlay.tooltip.sgp')
+                                }
+                                mouseEnterDelay={0.3}
+                            >
+                                <RadioButtonContainer>
+                                    <BetaTag>beta</BetaTag>
+                                    <RadioButton
+                                        checked={isSgp}
+                                        disabled={isDifferentGamesCombined || isSgpSportDisabled}
+                                        value={'false'}
+                                        onChange={() => {
+                                            dispatch(setIsSystemBet(false));
+                                            dispatch(setIsSgp(true));
+                                            // reset odds changes
+                                            setAcceptOdds(true);
+                                            setOddsChanged(false);
+                                        }}
+                                        label={t('markets.parlay.sgp')}
+                                    />
+                                </RadioButtonContainer>
+                            </Tooltip>
+                        </BetTypeContainer>
                     )}
                     <OverBonusContainer>
                         <OverBonus>{t('markets.parlay.over-bonus-info')}</OverBonus>
                     </OverBonusContainer>
-                    <ListContainer>
-                        {ticketMarkets.length > 0 &&
-                            ticketMarkets.map((market, index) => {
-                                const outOfLiquidity = outOfLiquidityMarkets.includes(index);
-                                return (
-                                    <RowMarket key={index} outOfLiquidity={outOfLiquidity}>
-                                        <MatchInfoV2
-                                            market={market}
-                                            showOddUpdates
-                                            setOddsChanged={setOddsChanged}
-                                            acceptOdds={acceptOdds}
-                                            setAcceptOdds={setAcceptOdds}
-                                            applyPayoutMultiplier={true}
-                                            useOverCollateral={useOverCollateral}
-                                        />
-                                    </RowMarket>
-                                );
-                            })}
-                        {unavailableMarkets.length > 0 &&
-                            unavailableMarkets.map((market, index) => {
-                                return (
-                                    <RowMarket key={index} outOfLiquidity={false} notOpened={true}>
-                                        <MatchUnavailableInfo
-                                            market={market}
-                                            showOddUpdates
-                                            setOddsChanged={setOddsChanged}
-                                            acceptOdds={acceptOdds}
-                                            setAcceptOdds={setAcceptOdds}
-                                            applyPayoutMultiplier={true}
-                                        />
-                                    </RowMarket>
-                                );
-                            })}
-                    </ListContainer>
+                    <ScrollContainer>
+                        <Scroll height={`${scrollHeight}px`} renderOnlyChildren={!isScrollVisible}>
+                            <ListContainer ref={marketsList} isScrollVisible={isScrollVisible}>
+                                {ticketMarkets.length > 0 &&
+                                    ticketMarkets.map((market, index) => {
+                                        const outOfLiquidity = outOfLiquidityMarkets.includes(index);
+                                        return (
+                                            <RowMarket key={index} outOfLiquidity={outOfLiquidity}>
+                                                <MatchInfoV2
+                                                    market={market}
+                                                    showOddUpdates={!isSgp}
+                                                    setOddsChanged={setOddsChanged}
+                                                    acceptOdds={acceptOdds}
+                                                    setAcceptOdds={setAcceptOdds}
+                                                    isSgp={isSgp}
+                                                    applyPayoutMultiplier={true}
+                                                    useOverCollateral={useOverCollateral}
+                                                />
+                                            </RowMarket>
+                                        );
+                                    })}
+                                {unavailableMarkets.length > 0 &&
+                                    unavailableMarkets.map((market, index) => {
+                                        return (
+                                            <RowMarket key={index} outOfLiquidity={false} notOpened={true}>
+                                                <MatchUnavailableInfo
+                                                    market={market}
+                                                    showOddUpdates
+                                                    acceptOdds={acceptOdds}
+                                                    setAcceptOdds={setAcceptOdds}
+                                                    applyPayoutMultiplier={true}
+                                                />
+                                            </RowMarket>
+                                        );
+                                    })}
+                            </ListContainer>
+                        </Scroll>
+                    </ScrollContainer>
                     <TicketV2
                         markets={ticketMarkets}
                         setMarketsOutOfLiquidity={setOutOfLiquidityMarkets}
                         oddsChanged={oddsChanged}
+                        setOddsChanged={setOddsChanged}
                         acceptOddChanges={(changed: boolean) => {
                             setAcceptOdds(true);
                             setOddsChanged(changed);
@@ -307,23 +447,22 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                         onSuccess={onSuccess}
                         submitButtonDisabled={!!unavailableMarkets.length}
                         setUseOverCollateral={setUseOverCollateral}
+                        sgpData={isSgp ? sportsbookData : undefined}
                     />
                 </>
             ) : (
-                <>
-                    <Empty>
-                        <EmptyLabel>{t('markets.parlay.empty-title')}</EmptyLabel>
-                        <StyledParlayEmptyIcon
-                            style={{
-                                marginTop: 10,
-                                marginBottom: 20,
-                                width: '100px',
-                                height: '100px',
-                            }}
-                        />
-                        <EmptyDesc>{t('markets.parlay.empty-description')}</EmptyDesc>
-                    </Empty>
-                </>
+                <Empty>
+                    <EmptyLabel>{t('markets.parlay.empty-title')}</EmptyLabel>
+                    <StyledParlayEmptyIcon
+                        style={{
+                            marginTop: 10,
+                            marginBottom: 20,
+                            width: '100px',
+                            height: '100px',
+                        }}
+                    />
+                    <EmptyDesc>{t('markets.parlay.empty-description')}</EmptyDesc>
+                </Empty>
             )}
             {hasTicketError && <ValidationModal onClose={onCloseValidationModal} />}
         </Container>
@@ -406,7 +545,13 @@ const OverBonus = styled.span`
     }
 `;
 
-const ListContainer = styled(FlexDivColumn)``;
+const ScrollContainer = styled.div`
+    margin-bottom: 11px;
+`;
+
+const ListContainer = styled(FlexDivColumn)<{ isScrollVisible: boolean }>`
+    ${(props) => (props.isScrollVisible ? 'padding-right: 10px;' : '')}
+`;
 
 const RowMarket = styled.div<{ outOfLiquidity: boolean; notOpened?: boolean }>`
     display: flex;
@@ -428,6 +573,7 @@ const RowMarket = styled.div<{ outOfLiquidity: boolean; notOpened?: boolean }>`
     }
     :last-child {
         border-radius: 0 0 5px 5px;
+        margin-bottom: 0;
     }
     :first-child:last-child {
         border-radius: 5px;
@@ -515,11 +661,47 @@ const StyledParlayEmptyIcon = styled(ParlayEmptyIcon)`
     }
 `;
 
-const ToggleContainer = styled(FlexDiv)`
-    font-weight: 600;
-    width: 100%;
-    margin-bottom: 5px;
-    text-transform: uppercase;
+const BetTypeContainer = styled(FlexDivSpaceBetween)``;
+
+const RadioButtonContainer = styled.div`
+    position: relative;
+
+    label {
+        padding-left: 26px;
+        font-size: 14px;
+        line-height: 20px;
+        min-height: 24px;
+        text-transform: uppercase;
+        margin-bottom: 0px;
+        :first-child {
+            margin-bottom: 4px;
+        }
+    }
+    .checkmark {
+        height: 18px;
+        width: 18px;
+        border: 2px solid ${(props) => props.theme.borderColor.quaternary};
+        :after {
+            left: 3px;
+            top: 3px;
+            width: 8px;
+            height: 8px;
+            background: ${(props) => props.theme.borderColor.quaternary};
+        }
+    }
+`;
+
+const BetaTag = styled.div`
+    position: absolute;
+    top: -14px;
+    right: 0;
+    background-color: ${(props) => props.theme.tag.background.primary};
+    border-radius: 5px;
+    color: ${(props) => props.theme.tag.textColor.primary};
+    display: inline-block;
+    font-size: 10px;
+    line-height: 10px;
+    padding: 2px 4px;
 `;
 
 export default Parlay;
