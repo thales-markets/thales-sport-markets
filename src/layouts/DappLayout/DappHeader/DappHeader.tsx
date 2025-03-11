@@ -1,5 +1,3 @@
-import marchMadnessLeftIcon from 'assets/images/march-madness/mm-button-icon-1.svg?react';
-import marchMadnessRightIcon from 'assets/images/march-madness/mm-button-icon-2.svg?react';
 import Button from 'components/Button';
 import Logo from 'components/Logo';
 import NavMenu from 'components/NavMenu';
@@ -33,6 +31,7 @@ import biconomyConnector from 'utils/biconomyWallet';
 import { isMarchMadnessAvailableForNetworkId } from 'utils/marchMadness';
 import { buildHref } from 'utils/routes';
 import { useAccount, useChainId, useClient } from 'wagmi';
+import marchMadnessLeftIcon from '../../../assets/images/march-madness/mm-button-icon-1.svg';
 import { ODDS_TYPES } from '../../../constants/markets';
 import { OddsType } from '../../../enums/markets';
 import ProfileItem from './components/ProfileItem';
@@ -66,6 +65,7 @@ import {
     SmallBadgeImage,
     WrapperMobile,
 } from './styled-components';
+import marchMadnessRightIcon from '/march-madness/mm-button-icon-2.svg';
 
 const PULSING_COUNT = 10;
 
