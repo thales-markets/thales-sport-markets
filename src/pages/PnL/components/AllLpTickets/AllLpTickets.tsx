@@ -1,4 +1,5 @@
 import Checkbox from 'components/fields/Checkbox';
+import NumericInput from 'components/fields/NumericInput';
 import SelectInput from 'components/SelectInput';
 import { hoursToMilliseconds } from 'date-fns';
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
@@ -8,12 +9,17 @@ import { ScreenSizeBreakpoint } from 'enums/ui';
 import { t } from 'i18next';
 import { orderBy } from 'lodash';
 import useLpTicketsQuery from 'queries/pnl/useLpTicketsQuery';
+import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import styled from 'styled-components';
-import { FlexDivCentered, FlexDivSpaceBetween } from 'styles/common';
+import styled, { useTheme } from 'styled-components';
+import { FlexDivCentered, FlexDivSpaceBetween, FlexDivStart } from 'styles/common';
+import { Coins } from 'thales-utils';
+import { Rates } from 'types/collateral';
 import { Ticket } from 'types/markets';
+import { ThemeInterface } from 'types/ui';
+import { getDefaultCollateral } from 'utils/collaterals';
 import { useChainId, useClient } from 'wagmi';
 import TicketTransactionsTable from '../../../Markets/Market/MarketDetailsV2/components/TicketTransactionsTable';
 
@@ -28,6 +34,7 @@ type AllLpTicketsProps = {
 const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) => {
     const networkId = useChainId();
     const client = useClient();
+    const theme: ThemeInterface = useTheme();
 
     const isMobile = useSelector(getIsMobile);
     const [lp, setLp] = useState<number>(0);
@@ -38,6 +45,8 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
     const [showOnlySystemBets, setShowOnlySystemBets] = useState<boolean>(false);
     const [showOnlyUnresolved, setShowOnlyUnresolved] = useState<boolean>(false);
     const [expandAll, setExpandAll] = useState<boolean>(false);
+    const [minBuyInAmount, setMinBuyInAmount] = useState<number | string>('');
+    const [minPayoutAmount, setMinPayoutAmount] = useState<number | string>('');
 
     const usdcLpTicketsQuery = useLpTicketsQuery(LiquidityPoolCollateral.USDC, round, leagueId, onlyPP, {
         networkId,
@@ -63,6 +72,10 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
         networkId,
         client,
     });
+
+    const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
+    const exchangeRates: Rates | undefined =
+        exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : undefined;
 
     const lpOptions = useMemo(() => {
         const lpOptions = [
@@ -102,6 +115,13 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
 
     const lpTickets: Ticket[] = useMemo(() => {
         let lpTickets: Ticket[] = [];
+        const defaultCollateral = getDefaultCollateral(networkId);
+        const getValueInUsd = (collateral: Coins, value: number) => {
+            if (defaultCollateral === collateral) {
+                return value;
+            }
+            return (!!exchangeRates ? exchangeRates[collateral] || 1 : 1) * value;
+        };
 
         if (
             usdcLpTicketsQuery.data &&
@@ -155,32 +175,39 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
                                 !market.isCancelled
                         ) &&
                         showOnlyUnresolved) ||
-                        !showOnlyUnresolved)
+                        !showOnlyUnresolved) &&
+                    (getValueInUsd(ticket.collateral, ticket.buyInAmount) >= Number(minBuyInAmount) ||
+                        !minBuyInAmount) &&
+                    (getValueInUsd(ticket.collateral, ticket.payout) >= Number(minPayoutAmount) || !minPayoutAmount)
             ),
             ['timestamp'],
             ['desc']
         );
     }, [
+        networkId,
+        usdcLpTicketsQuery.data,
+        usdcLpTicketsQuery.isSuccess,
+        wethLpTicketsQuery.data,
+        wethLpTicketsQuery.isSuccess,
+        thalesLpTicketsQuery.data,
+        thalesLpTicketsQuery.isSuccess,
         cbbtcLpTicketsQuery.data,
         cbbtcLpTicketsQuery.isSuccess,
+        wbtcLpTicketsQuery.data,
+        wbtcLpTicketsQuery.isSuccess,
+        exchangeRates,
+        showOnlyOpenTickets,
         lp,
         overLpTicketsQuery.data,
         overLpTicketsQuery.isSuccess,
         lpOptions,
         showOnlyLiveTickets,
         showOnlySgpTickets,
-        showOnlyOpenTickets,
         showOnlyPendingTickets,
         showOnlySystemBets,
         showOnlyUnresolved,
-        thalesLpTicketsQuery.data,
-        thalesLpTicketsQuery.isSuccess,
-        usdcLpTicketsQuery.data,
-        usdcLpTicketsQuery.isSuccess,
-        wbtcLpTicketsQuery.data,
-        wbtcLpTicketsQuery.isSuccess,
-        wethLpTicketsQuery.data,
-        wethLpTicketsQuery.isSuccess,
+        minBuyInAmount,
+        minPayoutAmount,
     ]);
 
     return (
@@ -239,6 +266,35 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
                     />
                 </CheckboxWrapper>
             </CheckboxContainer>
+            <FlexDivStart>
+                <InputLabel>{t(`liquidity-pool.user-transactions.min-buy-in`)}:</InputLabel>
+                <NumericInput
+                    value={minBuyInAmount}
+                    onChange={(e) => {
+                        setMinBuyInAmount(e.target.value);
+                    }}
+                    inputFontWeight="600"
+                    inputPadding="5px 10px"
+                    borderColor={theme.input.borderColor.tertiary}
+                    placeholder={t(`liquidity-pool.deposit-amount-placeholder`)}
+                    width="200px"
+                    containerWidth="200px"
+                    margin="0 30px 0 0"
+                />
+                <InputLabel>{t(`liquidity-pool.user-transactions.min-payout`)}:</InputLabel>
+                <NumericInput
+                    value={minPayoutAmount}
+                    onChange={(e) => {
+                        setMinPayoutAmount(e.target.value);
+                    }}
+                    inputFontWeight="600"
+                    inputPadding="5px 10px"
+                    borderColor={theme.input.borderColor.tertiary}
+                    placeholder={t(`liquidity-pool.deposit-amount-placeholder`)}
+                    width="200px"
+                    containerWidth="200px"
+                />
+            </FlexDivStart>
             <FlexDivSpaceBetween>
                 <ExpandAllContainer onClick={() => setExpandAll(!expandAll)}>
                     {expandAll
@@ -311,6 +367,11 @@ const ArrowIcon = styled.i`
     display: flex;
     align-items: center;
     margin-left: 10px;
+`;
+
+const InputLabel = styled.span`
+    font-size: 18px;
+    padding: 5px 10px 0 0;
 `;
 
 export default AllLpTickets;

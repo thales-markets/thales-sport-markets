@@ -1116,7 +1116,9 @@
                 "deposit": "Deposit",
                 "withdrawalRequest": "Withdrawal Request",
                 "claim": "Withdrawal Claim"
-            }
+            },
+            "min-buy-in": "Min buy-in",
+            "min-payout": "Min payout"
         }
     },
     "seo": {
