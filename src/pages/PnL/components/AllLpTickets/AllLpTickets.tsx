@@ -1,18 +1,25 @@
 import Checkbox from 'components/fields/Checkbox';
+import NumericInput from 'components/fields/NumericInput';
 import SelectInput from 'components/SelectInput';
 import { hoursToMilliseconds } from 'date-fns';
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 import { Network } from 'enums/network';
 import { League } from 'enums/sports';
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import { t } from 'i18next';
 import { orderBy } from 'lodash';
 import useLpTicketsQuery from 'queries/pnl/useLpTicketsQuery';
+import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import styled from 'styled-components';
-import { FlexDivCentered, FlexDivSpaceBetween } from 'styles/common';
+import styled, { useTheme } from 'styled-components';
+import { FlexDivCentered, FlexDivSpaceBetween, FlexDivStart } from 'styles/common';
+import { Coins } from 'thales-utils';
+import { Rates } from 'types/collateral';
 import { Ticket } from 'types/markets';
+import { ThemeInterface } from 'types/ui';
+import { getDefaultCollateral } from 'utils/collaterals';
 import { useChainId, useClient } from 'wagmi';
 import TicketTransactionsTable from '../../../Markets/Market/MarketDetailsV2/components/TicketTransactionsTable';
 
@@ -27,15 +34,19 @@ type AllLpTicketsProps = {
 const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) => {
     const networkId = useChainId();
     const client = useClient();
+    const theme: ThemeInterface = useTheme();
 
     const isMobile = useSelector(getIsMobile);
     const [lp, setLp] = useState<number>(0);
     const [showOnlyOpenTickets, setShowOnlyOpenTickets] = useState<boolean>(false);
     const [showOnlyLiveTickets, setShowOnlyLiveTickets] = useState<boolean>(false);
+    const [showOnlySgpTickets, setShowOnlySgpTickets] = useState<boolean>(false);
     const [showOnlyPendingTickets, setShowOnlyPendingTickets] = useState<boolean>(false);
     const [showOnlySystemBets, setShowOnlySystemBets] = useState<boolean>(false);
     const [showOnlyUnresolved, setShowOnlyUnresolved] = useState<boolean>(false);
     const [expandAll, setExpandAll] = useState<boolean>(false);
+    const [minBuyInAmount, setMinBuyInAmount] = useState<number | string>('');
+    const [minPayoutAmount, setMinPayoutAmount] = useState<number | string>('');
 
     const usdcLpTicketsQuery = useLpTicketsQuery(LiquidityPoolCollateral.USDC, round, leagueId, onlyPP, {
         networkId,
@@ -57,6 +68,10 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
         networkId,
         client,
     });
+
+    const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
+    const exchangeRates: Rates | undefined =
+        exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : undefined;
 
     const lpOptions = useMemo(() => {
         const lpOptions = [
@@ -91,6 +106,13 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
 
     const lpTickets: Ticket[] = useMemo(() => {
         let lpTickets: Ticket[] = [];
+        const defaultCollateral = getDefaultCollateral(networkId);
+        const getValueInUsd = (collateral: Coins, value: number) => {
+            if (defaultCollateral === collateral) {
+                return value;
+            }
+            return (!!exchangeRates ? exchangeRates[collateral] || 1 : 1) * value;
+        };
 
         if (
             usdcLpTicketsQuery.data &&
@@ -121,6 +143,7 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
                         ticket.collateral === lpOptions.find((lpOption: any) => lpOption.value === lp)?.label) ||
                         lp === 0) &&
                     ((ticket.isLive && showOnlyLiveTickets) || !showOnlyLiveTickets) &&
+                    ((ticket.isSgp && showOnlySgpTickets) || !showOnlySgpTickets) &&
                     ((ticket.isOpen &&
                         ticket.sportMarkets.length === 1 &&
                         ticket.sportMarkets.some(
@@ -139,67 +162,124 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
                                 !market.isCancelled
                         ) &&
                         showOnlyUnresolved) ||
-                        !showOnlyUnresolved)
+                        !showOnlyUnresolved) &&
+                    (getValueInUsd(ticket.collateral, ticket.buyInAmount) >= Number(minBuyInAmount) ||
+                        !minBuyInAmount) &&
+                    (getValueInUsd(ticket.collateral, ticket.payout) >= Number(minPayoutAmount) || !minPayoutAmount)
             ),
             ['timestamp'],
             ['desc']
         );
     }, [
+        networkId,
+        usdcLpTicketsQuery.data,
+        usdcLpTicketsQuery.isSuccess,
+        wethLpTicketsQuery.data,
+        wethLpTicketsQuery.isSuccess,
+        thalesLpTicketsQuery.data,
+        thalesLpTicketsQuery.isSuccess,
         cbbtcLpTicketsQuery.data,
         cbbtcLpTicketsQuery.isSuccess,
+        wbtcLpTicketsQuery.data,
+        wbtcLpTicketsQuery.isSuccess,
+        exchangeRates,
+        showOnlyOpenTickets,
         lp,
         lpOptions,
         showOnlyLiveTickets,
-        showOnlyOpenTickets,
+        showOnlySgpTickets,
         showOnlyPendingTickets,
         showOnlySystemBets,
         showOnlyUnresolved,
-        thalesLpTicketsQuery.data,
-        thalesLpTicketsQuery.isSuccess,
-        usdcLpTicketsQuery.data,
-        usdcLpTicketsQuery.isSuccess,
-        wbtcLpTicketsQuery.data,
-        wbtcLpTicketsQuery.isSuccess,
-        wethLpTicketsQuery.data,
-        wethLpTicketsQuery.isSuccess,
+        minBuyInAmount,
+        minPayoutAmount,
     ]);
 
     return (
         <>
             <CheckboxContainer>
-                <Checkbox
-                    checked={showOnlyOpenTickets}
-                    value={showOnlyOpenTickets.toString()}
-                    onChange={(e: any) => setShowOnlyOpenTickets(e.target.checked || false)}
-                    label={t(`liquidity-pool.user-transactions.only-open-tickets${isMobile ? '-short' : ''}`)}
-                />
-                <Checkbox
-                    checked={showOnlyLiveTickets}
-                    value={showOnlyLiveTickets.toString()}
-                    onChange={(e: any) => setShowOnlyLiveTickets(e.target.checked || false)}
-                    label={t(`liquidity-pool.user-transactions.only-live-tickets${isMobile ? '-short' : ''}`)}
-                />
-                <Checkbox
-                    checked={showOnlyPendingTickets}
-                    value={showOnlyPendingTickets.toString()}
-                    onChange={(e: any) => setShowOnlyPendingTickets(e.target.checked || false)}
-                    label={t(`liquidity-pool.user-transactions.only-pending-tickets${isMobile ? '-short' : ''}`)}
-                />
+                <CheckboxWrapper>
+                    <Checkbox
+                        checked={showOnlyOpenTickets}
+                        value={showOnlyOpenTickets.toString()}
+                        onChange={(e: any) => setShowOnlyOpenTickets(e.target.checked || false)}
+                        label={t(`liquidity-pool.user-transactions.only-open-tickets${isMobile ? '-short' : ''}`)}
+                    />
+                </CheckboxWrapper>
+                <CheckboxWrapper>
+                    <Checkbox
+                        checked={showOnlyLiveTickets}
+                        value={showOnlyLiveTickets.toString()}
+                        onChange={(e: any) => setShowOnlyLiveTickets(e.target.checked || false)}
+                        label={t(`liquidity-pool.user-transactions.only-live-tickets${isMobile ? '-short' : ''}`)}
+                    />
+                </CheckboxWrapper>
+                <CheckboxWrapper>
+                    <Checkbox
+                        checked={showOnlyPendingTickets}
+                        value={showOnlyPendingTickets.toString()}
+                        onChange={(e: any) => setShowOnlyPendingTickets(e.target.checked || false)}
+                        label={t(`liquidity-pool.user-transactions.only-pending-tickets${isMobile ? '-short' : ''}`)}
+                    />
+                </CheckboxWrapper>
             </CheckboxContainer>
             <CheckboxContainer>
-                <Checkbox
-                    checked={showOnlySystemBets}
-                    value={showOnlySystemBets.toString()}
-                    onChange={(e: any) => setShowOnlySystemBets(e.target.checked || false)}
-                    label={t(`liquidity-pool.user-transactions.only-system-bets`)}
-                />
-                <Checkbox
-                    checked={showOnlyUnresolved}
-                    value={showOnlyUnresolved.toString()}
-                    onChange={(e: any) => setShowOnlyUnresolved(e.target.checked || false)}
-                    label={t(`liquidity-pool.user-transactions.only-unresolved`, { hours: UNRESOLVED_PERIOD_IN_HOURS })}
-                />
+                <CheckboxWrapper>
+                    <Checkbox
+                        checked={showOnlySystemBets}
+                        value={showOnlySystemBets.toString()}
+                        onChange={(e: any) => setShowOnlySystemBets(e.target.checked || false)}
+                        label={t(`liquidity-pool.user-transactions.only-system-bets`)}
+                    />
+                </CheckboxWrapper>
+                <CheckboxWrapper>
+                    <Checkbox
+                        checked={showOnlySgpTickets}
+                        value={showOnlySgpTickets.toString()}
+                        onChange={(e: any) => setShowOnlySgpTickets(e.target.checked || false)}
+                        label={t(`liquidity-pool.user-transactions.only-sgp-tickets${isMobile ? '-short' : ''}`)}
+                    />
+                </CheckboxWrapper>
+                <CheckboxWrapper>
+                    <Checkbox
+                        checked={showOnlyUnresolved}
+                        value={showOnlyUnresolved.toString()}
+                        onChange={(e: any) => setShowOnlyUnresolved(e.target.checked || false)}
+                        label={t(`liquidity-pool.user-transactions.only-unresolved`, {
+                            hours: UNRESOLVED_PERIOD_IN_HOURS,
+                        })}
+                    />
+                </CheckboxWrapper>
             </CheckboxContainer>
+            <FlexDivStart>
+                <InputLabel>{t(`liquidity-pool.user-transactions.min-buy-in`)}:</InputLabel>
+                <NumericInput
+                    value={minBuyInAmount}
+                    onChange={(e) => {
+                        setMinBuyInAmount(e.target.value);
+                    }}
+                    inputFontWeight="600"
+                    inputPadding="5px 10px"
+                    borderColor={theme.input.borderColor.tertiary}
+                    placeholder={t(`liquidity-pool.deposit-amount-placeholder`)}
+                    width="200px"
+                    containerWidth="200px"
+                    margin="0 30px 0 0"
+                />
+                <InputLabel>{t(`liquidity-pool.user-transactions.min-payout`)}:</InputLabel>
+                <NumericInput
+                    value={minPayoutAmount}
+                    onChange={(e) => {
+                        setMinPayoutAmount(e.target.value);
+                    }}
+                    inputFontWeight="600"
+                    inputPadding="5px 10px"
+                    borderColor={theme.input.borderColor.tertiary}
+                    placeholder={t(`liquidity-pool.deposit-amount-placeholder`)}
+                    width="200px"
+                    containerWidth="200px"
+                />
+            </FlexDivStart>
             <FlexDivSpaceBetween>
                 <ExpandAllContainer onClick={() => setExpandAll(!expandAll)}>
                     {expandAll
@@ -244,16 +324,27 @@ const SelectContainer = styled.div`
     width: 150px;
 `;
 
+const CheckboxWrapper = styled.div`
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        margin-bottom: 5px;
+    }
+`;
+
 const CheckboxContainer = styled(FlexDivSpaceBetween)`
     label {
         align-self: center;
         font-size: 18px;
         text-transform: none;
     }
-    @media (max-width: 575px) {
-        font-size: 14px;
-    }
     margin-bottom: 10px;
+
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        font-size: 14px;
+        flex-direction: column;
+        align-items: start;
+        justify-content: start;
+        margin-bottom: 0;
+    }
 `;
 
 const ArrowIcon = styled.i`
@@ -261,6 +352,11 @@ const ArrowIcon = styled.i`
     display: flex;
     align-items: center;
     margin-left: 10px;
+`;
+
+const InputLabel = styled.span`
+    font-size: 18px;
+    padding: 5px 10px 0 0;
 `;
 
 export default AllLpTickets;

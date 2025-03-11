@@ -1,4 +1,10 @@
-export type RiskManagementData = RiskManagementLeaguesAndTypes | RiskManagementBookmakers | {};
+import { SgpBlocker } from 'overtime-utils';
+
+export type RiskManagementData =
+    | RiskManagementLeaguesAndTypes
+    | RiskManagementBookmakers
+    | RiskManagementSgpBlockers
+    | object;
 
 export type RiskManagementLeaguesAndTypes = {
     leagues: RiskManagementLeague[];
@@ -20,4 +26,10 @@ type RiskManagementBookmaker = {
     primaryBookmaker: string;
     secondaryBookmaker: string;
     tertiaryBookmaker: string;
+};
+
+export type RiskManagementSgpBlockers = SgpBlocker[];
+
+export type SportsAmmRiskManagerData = {
+    sgpOnLeagueIdEnabled: boolean;
 };

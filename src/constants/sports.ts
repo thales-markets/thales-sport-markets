@@ -2035,7 +2035,7 @@ export const OLYMPIC_LEAGUES = [
     League.SUMMER_OLYMPICS_TABLE_TENNIS,
 ];
 
-export const PLAYER_PROPS_COMBINING_ENABLED_LEAGUES = [League.NBA, League.WNBA, League.EUROLEAGUE];
+export const PLAYER_PROPS_COMBINING_ENABLED_LEAGUES: League[] = []; // disable all leagues to combine on regular bet
 
 export const PLAYER_PROPS_MARKETS_PER_SPORT_MAP: Record<Sport, MarketType[]> = {
     [Sport.SOCCER]: [
@@ -2076,12 +2076,12 @@ export const PLAYER_PROPS_MARKETS_PER_PROP_MAP: Record<number, MarketType[]> = {
     [MarketType.PLAYER_PROPS_PASSING_YARDS]: [
         MarketType.PLAYER_PROPS_PASSING_YARDS,
         MarketType.PLAYER_PROPS_PASSING_TOUCHDOWNS,
-        MarketType.PLAYER_PROPS_TOUCHDOWN_SCORER,
+        MarketType.PLAYER_PROPS_TOUCHDOWNS_SCORER,
     ],
     [MarketType.PLAYER_PROPS_RECEIVING_YARDS]: [
         MarketType.PLAYER_PROPS_RUSHING_YARDS,
         MarketType.PLAYER_PROPS_RECEIVING_YARDS,
-        MarketType.PLAYER_PROPS_TOUCHDOWN_SCORER,
+        MarketType.PLAYER_PROPS_TOUCHDOWNS_SCORER,
     ],
 };
 
@@ -2107,4 +2107,8 @@ export const LEAGUES_SORT_PRIORITY = [
     League.BELGIUM_LEAGUE,
     League.NCAAF,
     League.NCAAB,
+    League.SUMMER_OLYMPICS_TENNIS,
+    League.TENNIS_GS,
+    League.TENNIS_MASTERS,
+    League.TENNIS_WTA,
 ];
