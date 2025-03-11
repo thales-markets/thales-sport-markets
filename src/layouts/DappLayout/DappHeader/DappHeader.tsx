@@ -1,5 +1,5 @@
-import marchMadnessLeftIcon from 'assets/images/march-madness/mm-button-icon-1.svg?react';
-import marchMadnessRightIcon from 'assets/images/march-madness/mm-button-icon-2.svg?react';
+import marchMadnessLeftIcon from 'assets/images/march-madness/mm-button-icon-1.svg';
+import marchMadnessRightIcon from 'assets/images/march-madness/mm-button-icon-2.svg';
 import Button from 'components/Button';
 import Logo from 'components/Logo';
 import NavMenu from 'components/NavMenu';
@@ -258,9 +258,19 @@ const DappHeader: React.FC = () => {
                                     {getMarchMadnessButton()}
                                 </Tooltip>
                             ))}
-                        {showGetStartedButton && (
-                            <div>{!isConnected ? getGetStartedButton() : isBiconomy ? <TopUp /> : <></>}</div>
-                        )}
+                        <div>
+                            {location.pathname === ROUTES.MarchMadness ? (
+                                !isConnected ? (
+                                    getGetStartedButton()
+                                ) : isBiconomy ? (
+                                    <TopUp />
+                                ) : (
+                                    <></>
+                                )
+                            ) : (
+                                <></>
+                            )}
+                        </div>
                         {isMarketsPage && <TimeFilters />}
                         <FlexDivCentered>
                             <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
