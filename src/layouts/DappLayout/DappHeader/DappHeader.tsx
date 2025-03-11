@@ -194,11 +194,9 @@ const DappHeader: React.FC = () => {
                     fontSize="18px"
                     width={isMobile ? '100%' : '240px'}
                     additionalStyles={{
-                        background: `url(${marchMadnessLeftIcon}) left ${
-                            isMobile ? 70 : 20
-                        }px center no-repeat, url(${marchMadnessRightIcon}) right ${
-                            isMobile ? 70 : 20
-                        }px center no-repeat`,
+                        backgroundImage: `url(${marchMadnessLeftIcon}), url(${marchMadnessRightIcon})`,
+                        backgroundPosition: `left ${isMobile ? 70 : 20}px center, right ${isMobile ? 70 : 20}px center`,
+                        backgroundRepeat: 'no-repeat, no-repeat',
                         backgroundColor: theme.marchMadness.button.background.primary,
                         backgroundSize: '28px, 28px',
                         border: 'none',
