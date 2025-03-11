@@ -143,6 +143,13 @@ export const executeBiconomyTransactionWithConfirmation = async (params: {
     }
 };
 
+/**
+ * Method for executing smart account transaction(User Operation).
+ * On the first try method will be executed using sponsored session execution.
+ * If the first try fails because of 'SessionNotApproved' or 'Session not found.' error
+ * then we create a new session for the user and execute the transaction.
+ * If this also fails we will try and execute the transaction without sponsoring the gas as the error maybe in the paymaster infrastructure.
+ */
 export const executeBiconomyTransaction = async (params: {
     collateralAddress?: Address;
     networkId: SupportedNetwork;
@@ -166,33 +173,34 @@ export const executeBiconomyTransaction = async (params: {
             value: params.value,
         };
 
+        const transactionArray = [];
+        // swap eth to weth
+        if (params.isEth) {
+            const client = getPublicClient(wagmiConfig, { chainId: params.networkId });
+
+            const wethContractWithSigner = getContract({
+                abi: multipleCollateral.WETH.abi,
+                address: multipleCollateral.WETH.addresses[params.networkId],
+                client: client as Client,
+            });
+
+            const encodedCallWrapEth = encodeFunctionData({
+                abi: wethContractWithSigner.abi,
+                functionName: 'deposit',
+                args: [],
+            });
+
+            const wrapEthTx = {
+                to: wethContractWithSigner.address,
+                data: encodedCallWrapEth,
+                value: params.buyInAmountParam,
+            };
+            transactionArray.push(wrapEthTx);
+        }
+        transactionArray.push(transaction);
+
         try {
             const sessionSigner = await getSessionSigner(params.networkId);
-            const transactionArray = [];
-            if (params.isEth) {
-                // swap eth to weth
-                const client = getPublicClient(wagmiConfig, { chainId: params.networkId });
-
-                const wethContractWithSigner = getContract({
-                    abi: multipleCollateral.WETH.abi,
-                    address: multipleCollateral.WETH.addresses[params.networkId],
-                    client: client as Client,
-                });
-
-                const encodedCallWrapEth = encodeFunctionData({
-                    abi: wethContractWithSigner.abi,
-                    functionName: 'deposit',
-                    args: [],
-                });
-
-                const wrapEthTx = {
-                    to: wethContractWithSigner.address,
-                    data: encodedCallWrapEth,
-                    value: params.buyInAmountParam,
-                };
-                transactionArray.push(wrapEthTx);
-            }
-            transactionArray.push(transaction);
 
             try {
                 const { wait } = await biconomyConnector.wallet.sendTransaction(transactionArray, {
@@ -213,8 +221,6 @@ export const executeBiconomyTransaction = async (params: {
                     success,
                 } = await wait();
 
-                console.log('Tx: ', transactionHash);
-
                 if (success === 'false') {
                     throw new Error('tx failed');
                 } else {
@@ -231,31 +237,6 @@ export const executeBiconomyTransaction = async (params: {
                     });
 
                     const sessionSigner = await getSessionSigner(params.networkId);
-                    const transactionArray = [];
-                    if (params.isEth) {
-                        // swap eth to weth
-                        const client = getPublicClient(wagmiConfig, { chainId: params.networkId });
-
-                        const wethContractWithSigner = getContract({
-                            abi: multipleCollateral.WETH.abi,
-                            address: multipleCollateral.WETH.addresses[params.networkId],
-                            client: client as Client,
-                        });
-
-                        const encodedCallWrapEth = encodeFunctionData({
-                            abi: wethContractWithSigner.abi,
-                            functionName: 'deposit',
-                            args: [],
-                        });
-
-                        const wrapEthTx = {
-                            to: wethContractWithSigner.address,
-                            data: encodedCallWrapEth,
-                            value: params.buyInAmountParam,
-                        };
-                        transactionArray.push(wrapEthTx);
-                    }
-                    transactionArray.push(transaction);
 
                     try {
                         const { wait } = await biconomyConnector.wallet.sendTransaction(transactionArray, {
