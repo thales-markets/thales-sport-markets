@@ -29,16 +29,6 @@ export const INCENTIVIZED_LEAGUES: Record<number, any> = {
             [Network.Arbitrum]: '30,000 ARB',
         },
     },
-    [League.NCAAB]: {
-        startDate: new Date(Date.UTC(2025, 2, 17, 0, 0, 0)),
-        endDate: new Date(Date.UTC(2025, 3, 8, 4, 0, 0)),
-        link: 'https://www.overtimemarkets.xyz/promotions/march-madness-2025',
-        tooltipKey: 'markets.incentivized-tooltip-mm',
-        availableOnNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.Base],
-        rewards: {
-            [Network.Arbitrum]: '45,000 ARB + 50,000 THALES',
-        },
-    },
 };
 
 export const MEDIUM_ODDS = 0.52;
