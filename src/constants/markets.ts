@@ -34,7 +34,7 @@ export const INCENTIVIZED_LEAGUES: Record<number, any> = {
         endDate: new Date(Date.UTC(2025, 3, 8, 4, 0, 0)),
         link: 'https://www.overtimemarkets.xyz/promotions/march-madness-2025',
         tooltipKey: 'markets.incentivized-tooltip-mm',
-        availableOnNetworks: [Network.Arbitrum],
+        availableOnNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.Base],
         rewards: {
             [Network.Arbitrum]: '45,000 ARB + 50,000 THALES',
         },
