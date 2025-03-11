@@ -10,6 +10,7 @@ export type LeaderboardByGuessedCorrectlyResponse = {
     rank: number;
     tokenRewards: number;
     stableRewards: number;
+    network: number;
 }[];
 
 const useLeaderboardByGuessedCorrectlyQuery = (

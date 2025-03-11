@@ -1,5 +1,6 @@
 import Table from 'components/Table';
 import Tooltip from 'components/Tooltip';
+import { SUPPORTED_NETWORKS_NAMES } from 'constants/network';
 import useLeaderboardByGuessedCorrectlyQuery, {
     LeaderboardByGuessedCorrectlyResponse,
 } from 'queries/marchMadness/useLeaderboardByGuessedCorrectlyQuery';
@@ -11,6 +12,7 @@ import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivColumnNative } from 'styles/common';
 import { getEtherscanAddressLink } from 'thales-utils';
+import { SupportedNetwork } from 'types/network';
 import { ThemeInterface } from 'types/ui';
 import biconomyConnector from 'utils/biconomyWallet';
 import { truncateAddress } from 'utils/formatters/string';
@@ -46,82 +48,95 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
     const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
     const columns = useMemo(
-        () => [
-            {
-                header: <>{''}</>,
-                accessorKey: 'rank',
-                size: isMobile ? 30 : 100,
-            },
-            {
-                header: <>{t('march-madness.leaderboard.bracket-id')}</>,
-                accessorKey: 'bracketId',
-                cell: (cellProps: any) => <>#{cellProps.cell.getValue()}</>,
-            },
-            {
-                header: <>{t('march-madness.leaderboard.owner')}</>,
-                accessorKey: 'owner',
-                cell: (cellProps: any) => (
-                    <WalletAddress>
-                        {isMobile ? truncateAddress(cellProps.cell.getValue(), 5) : cellProps.cell.getValue()}
-                        <a
-                            href={getEtherscanAddressLink(networkId, cellProps.cell.getValue())}
-                            target="_blank"
-                            rel="noreferrer"
-                        >
-                            <Arrow className={'icon icon--arrow-external'} />
-                        </a>
-                    </WalletAddress>
-                ),
-                size: isMobile ? 200 : 500,
-                headStyle: { cssProperties: { minWidth: '130px' } },
-            },
-            {
-                header: () => (
-                    <>
-                        {t('march-madness.leaderboard.guessed-games')}
-                        <Tooltip
-                            overlay={
-                                <OverlayContainer>
-                                    {t('march-madness.leaderboard.tooltip-correct-correct-table')}
-                                </OverlayContainer>
-                            }
-                            iconFontSize={14}
-                            marginLeft={2}
-                            top={0}
-                        />
-                    </>
-                ),
-                accessorKey: 'totalPoints',
-            },
-            {
-                header: () => (
-                    <>
-                        {t('march-madness.leaderboard.rewards')}
-                        <Tooltip
-                            overlay={
-                                <OverlayContainer>
-                                    {t('march-madness.leaderboard.tooltip-rewards-correct-table')}
-                                </OverlayContainer>
-                            }
-                            iconFontSize={14}
-                            marginLeft={2}
-                            top={0}
-                        />
-                    </>
-                ),
-                accessorKey: 'tokenRewards',
-                cell: (cell: any) => {
-                    return (
-                        <>
-                            {getFormattedRewardsAmount(
-                                (cell.row.original as any).stableRewards,
-                                (cell.row.original as any).tokenRewards
-                            )}
-                        </>
-                    );
+        () =>
+            [
+                {
+                    header: <>{''}</>,
+                    accessorKey: 'rank',
+                    size: isMobile ? 30 : 100,
                 },
-            },
-        ],
+                {
+                    header: <>{t('march-madness.leaderboard.network')}</>,
+                    accessorKey: 'network',
+                    cell: (cellProps: any) => (
+                        <>{SUPPORTED_NETWORKS_NAMES[cellProps.cell.getValue() as SupportedNetwork].shortName}</>
+                    ),
+                },
+                {
+                    header: <>{t('march-madness.leaderboard.bracket-id')}</>,
+                    accessorKey: 'bracketId',
+                    cell: (cellProps: any) => {
+                        const supportedNetworkName =
+                            SUPPORTED_NETWORKS_NAMES[(cellProps.row.original as any).network as SupportedNetwork];
+                        const networkName = isMobile ? supportedNetworkName.shorthand : '';
+                        return <>{`${networkName} #${cellProps.cell.getValue()}`}</>;
+                    },
+                },
+                {
+                    header: <>{t('march-madness.leaderboard.owner')}</>,
+                    accessorKey: 'owner',
+                    cell: (cellProps: any) => (
+                        <WalletAddress>
+                            {isMobile ? truncateAddress(cellProps.cell.getValue(), 5) : cellProps.cell.getValue()}
+                            <a
+                                href={getEtherscanAddressLink(networkId, cellProps.cell.getValue())}
+                                target="_blank"
+                                rel="noreferrer"
+                            >
+                                <Arrow className={'icon icon--arrow-external'} />
+                            </a>
+                        </WalletAddress>
+                    ),
+                    size: isMobile ? 200 : 500,
+                    headStyle: { cssProperties: { minWidth: '130px' } },
+                },
+                {
+                    header: () => (
+                        <>
+                            {t('march-madness.leaderboard.guessed-games')}
+                            <Tooltip
+                                overlay={
+                                    <OverlayContainer>
+                                        {t('march-madness.leaderboard.tooltip-correct-correct-table')}
+                                    </OverlayContainer>
+                                }
+                                iconFontSize={14}
+                                marginLeft={2}
+                                top={0}
+                            />
+                        </>
+                    ),
+                    accessorKey: 'totalPoints',
+                },
+                {
+                    header: () => (
+                        <>
+                            {t('march-madness.leaderboard.rewards')}
+                            <Tooltip
+                                overlay={
+                                    <OverlayContainer>
+                                        {t('march-madness.leaderboard.tooltip-rewards-correct-table')}
+                                    </OverlayContainer>
+                                }
+                                iconFontSize={14}
+                                marginLeft={2}
+                                top={0}
+                            />
+                        </>
+                    ),
+                    accessorKey: 'tokenRewards',
+                    cell: (cell: any) => {
+                        return (
+                            <>
+                                {getFormattedRewardsAmount(
+                                    (cell.row.original as any).stableRewards,
+                                    (cell.row.original as any).tokenRewards
+                                )}
+                            </>
+                        );
+                    },
+                },
+            ].filter((column: any) => !isMobile || column.accessorKey !== 'network'),
         [t, networkId, isMobile]
     );
 
@@ -156,21 +171,29 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
 
     const stickyRow = useMemo(() => {
         if (myScore?.length) {
+            const indexOffset = isMobile ? 1 : 0; // one column less for mobile view
+            const supportedNetworkName = SUPPORTED_NETWORKS_NAMES[myScore[0].network as SupportedNetwork];
+            const networkName = isMobile ? supportedNetworkName.shorthand : supportedNetworkName.shortName;
             return (
                 <StickyRowTopTable myScore={true}>
                     <TableRowCell width={`${columns[0].size || 150}px`}>{myScore[0].rank}</TableRowCell>
-                    <TableRowCell width={`${columns[1].size || 150}px`}>#{myScore[0].bracketId}</TableRowCell>
-                    <TableRowCell width={`${columns[2].size || 150}px`}>
+                    {!isMobile && <TableRowCell width={`${columns[1].size || 150}px`}>{networkName}</TableRowCell>}
+                    <TableRowCell width={`${columns[2 - indexOffset].size || 150}px`}>
+                        {`${isMobile ? `${networkName} ` : ''}#${myScore[0].bracketId}`}
+                    </TableRowCell>
+                    <TableRowCell width={`${columns[3 - indexOffset].size || 150}px`}>
                         {t('march-madness.leaderboard.my-rewards-bracket').toUpperCase()}
                     </TableRowCell>
-                    <TableRowCell width={`${columns[3].size || 150}px`}>{myScore[0].totalPoints}</TableRowCell>
-                    <TableRowCell width={`${columns[4].size || 150}px`}>
+                    <TableRowCell width={`${columns[4 - indexOffset].size || 150}px`}>
+                        {myScore[0].totalPoints}
+                    </TableRowCell>
+                    <TableRowCell width={`${columns[5 - indexOffset].size || 150}px`}>
                         {getFormattedRewardsAmount(myScore[0].stableRewards, myScore[0].tokenRewards)}
                     </TableRowCell>
                 </StickyRowTopTable>
             );
         }
-    }, [myScore, t, columns]);
+    }, [myScore, t, columns, isMobile]);
 
     useEffect(() => {
         setLength(filteredData.length);

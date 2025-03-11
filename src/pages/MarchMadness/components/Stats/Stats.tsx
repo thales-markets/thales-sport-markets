@@ -43,7 +43,7 @@ const Stats: React.FC<{ disableMobileView?: boolean }> = ({ disableMobileView })
                     <Text>{t('march-madness.stats.pool-size')}:</Text>
                     <Value>{`${formatCurrencyWithSign(
                         USD_SIGN,
-                        marchMadnessStatsData.poolSize // TODO: use PRIZE_POOL when all funds are transfered from contract
+                        marchMadnessStatsData.poolSize
                     )} + ${formatCurrencyWithKey(
                         CRYPTO_CURRENCY_MAP.OVER,
                         2 * marchMadnessStatsData.poolSize

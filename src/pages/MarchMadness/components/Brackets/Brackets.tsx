@@ -822,12 +822,12 @@ const Brackets: React.FC = () => {
     const rankByGames = useMemo(() => {
         if (leaderboardByGuessedGamesQuery.isSuccess && leaderboardByGuessedGamesQuery.data) {
             const leaderboardData = leaderboardByGuessedGamesQuery.data.find(
-                (data) => data.bracketId === selectedBracketId
+                (data) => data.network === networkId && data.bracketId === selectedBracketId
             );
             return leaderboardData ? leaderboardData.rank : 0;
         }
         return undefined;
-    }, [leaderboardByGuessedGamesQuery.data, leaderboardByGuessedGamesQuery.isSuccess, selectedBracketId]);
+    }, [leaderboardByGuessedGamesQuery.data, leaderboardByGuessedGamesQuery.isSuccess, selectedBracketId, networkId]);
 
     const getMyStats = () => {
         const isFirstMatchFinished = winnerTeamIds.find((id) => id !== 0) !== undefined;

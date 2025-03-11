@@ -35,7 +35,7 @@ const COMP_RULES = [
     'march-madness.home.comp-rules-5',
     'march-madness.home.comp-rules-6',
     'march-madness.home.comp-rules-7',
-    'march-madness.home.comp-rules-8',
+    // 'march-madness.home.comp-rules-8',
     'march-madness.home.comp-rules-9',
 ];
 
@@ -55,6 +55,8 @@ const BRACKETS_INCETIVES_RULES = [
     'march-madness.home.brackets-points-rules-6',
     'march-madness.home.brackets-points-rules-7',
 ];
+
+const SHOW_VOLUME_REWARDS = false;
 
 const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
     const { t } = useTranslation();
@@ -273,32 +275,38 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                         )}
                     </DropdownWrapper>
 
-                    <DropdownWrapper>
-                        <LabelArrowWrapper
-                            onClick={() => {
-                                setShowVolumeIncentives(!showVolumeIncentives);
-                            }}
-                        >
-                            <DropdownLabel>{t('march-madness.home.volume-incetives-label')}</DropdownLabel>
-                            <i className={`icon icon--arrow-${showVolumeIncentives ? 'up' : 'down'}`} />
-                        </LabelArrowWrapper>
-                        {showVolumeIncentives && (
-                            <ListWrapper>
-                                {VOLUME__INCETIVES_RULES.map((text: string, index: number) => (
-                                    <ListItem key={index}>
-                                        <Trans
-                                            i18nKey={text}
-                                            components={{
-                                                b: <BoldContent />,
-                                                a: <Link onClick={switchToLeaderboard} />,
-                                                p: <LinkAvailable onClick={() => navigateTo(ROUTES.Promotions.Home)} />,
-                                            }}
-                                        />
-                                    </ListItem>
-                                ))}
-                            </ListWrapper>
-                        )}
-                    </DropdownWrapper>
+                    {SHOW_VOLUME_REWARDS && (
+                        <DropdownWrapper>
+                            <LabelArrowWrapper
+                                onClick={() => {
+                                    setShowVolumeIncentives(!showVolumeIncentives);
+                                }}
+                            >
+                                <DropdownLabel>{t('march-madness.home.volume-incetives-label')}</DropdownLabel>
+                                <i className={`icon icon--arrow-${showVolumeIncentives ? 'up' : 'down'}`} />
+                            </LabelArrowWrapper>
+                            {showVolumeIncentives && (
+                                <ListWrapper>
+                                    {VOLUME__INCETIVES_RULES.map((text: string, index: number) => (
+                                        <ListItem key={index}>
+                                            <Trans
+                                                i18nKey={text}
+                                                components={{
+                                                    b: <BoldContent />,
+                                                    a: <Link onClick={switchToLeaderboard} />,
+                                                    p: (
+                                                        <LinkAvailable
+                                                            onClick={() => navigateTo(ROUTES.Promotions.Home)}
+                                                        />
+                                                    ),
+                                                }}
+                                            />
+                                        </ListItem>
+                                    ))}
+                                </ListWrapper>
+                            )}
+                        </DropdownWrapper>
+                    )}
 
                     {(!isConnected || !isBracketsLocked || !isMarchMadnessAvailableForNetworkId(networkId)) && (
                         <Button
