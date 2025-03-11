@@ -1,4 +1,5 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { SGP_BET_MAX_MARKETS } from 'constants/markets';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { TicketErrorCode } from 'enums/markets';
 import { Network } from 'enums/network';
@@ -83,19 +84,24 @@ const ticketSlice = createSlice({
             if (action.payload.live) {
                 state.ticket = [action.payload];
             } else if (state.isSgp && state.ticket.length) {
-                const isDifferentGame = state.ticket[0].gameId !== action.payload.gameId;
-                if (isDifferentGame) {
-                    state.error.code = TicketErrorCode.SGP_DIFFERENT_GAME;
-                } else {
-                    const existingPositionIndex = state.ticket.findIndex((el) =>
-                        isSameMarket(el, action.payload, true)
-                    );
-                    if (existingPositionIndex === -1) {
-                        state.ticket.push(action.payload);
+                if (state.ticket.length < SGP_BET_MAX_MARKETS) {
+                    const isDifferentGame = state.ticket[0].gameId !== action.payload.gameId;
+                    if (isDifferentGame) {
+                        state.error.code = TicketErrorCode.SGP_DIFFERENT_GAME;
                     } else {
-                        ticketCopy[existingPositionIndex] = action.payload;
-                        state.ticket = [...ticketCopy];
+                        const existingPositionIndex = state.ticket.findIndex((el) =>
+                            isSameMarket(el, action.payload, true)
+                        );
+                        if (existingPositionIndex === -1) {
+                            state.ticket.push(action.payload);
+                        } else {
+                            ticketCopy[existingPositionIndex] = action.payload;
+                            state.ticket = [...ticketCopy];
+                        }
                     }
+                } else {
+                    state.error.code = TicketErrorCode.SGP_MAX_MARKETS;
+                    state.error.data = SGP_BET_MAX_MARKETS.toString();
                 }
             } else if (existingGameIdIndex === -1) {
                 if (state.ticket.length < state.maxTicketSize) {
