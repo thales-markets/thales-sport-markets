@@ -18,7 +18,7 @@ import sgpTradingProcessorContract from './contracts/sgpTradingProcessorContract
 import sportsAMMV2Contract from './contracts/sportsAMMV2Contract';
 
 export const ETH_PAYMASTER = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'; // used for paying gas in ETH by AA
-export const GAS_LIMIT = 0.3;
+export const GAS_LIMIT = 0.1;
 
 export const sendBiconomyTransaction = async (params: {
     networkId: SupportedNetwork;
