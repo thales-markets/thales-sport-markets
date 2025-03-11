@@ -1,5 +1,5 @@
-import marchMadnessLeftIcon from 'assets/images/march-madness/mm-button-icon-1.svg';
-import marchMadnessRightIcon from 'assets/images/march-madness/mm-button-icon-2.svg';
+import marchMadnessLeftIcon from 'assets/images/march-madness/mm-button-icon-1.svg?react';
+import marchMadnessRightIcon from 'assets/images/march-madness/mm-button-icon-2.svg?react';
 import Button from 'components/Button';
 import Logo from 'components/Logo';
 import NavMenu from 'components/NavMenu';
