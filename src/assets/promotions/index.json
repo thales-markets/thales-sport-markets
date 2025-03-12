@@ -134,8 +134,8 @@
     {
         "title": "Compete for 20 prizes in the 2025 March Madness Bracket Competition!",
         "description": "Outsmart other Zebros to earn up to 20 prizes in our March Madness prediction bracket rewards pool. The more game results you guess, the higher your total points.",
-        "startDate": 1742259664,
-        "endDate": 1744063264,
+        "startDate": 1742169600,
+        "endDate": 1744084800,
         "displayCountdown": true,
         "promotionId": "march-madness-2025",
         "promotionUrl": "/promotions/march-madness-2025",
