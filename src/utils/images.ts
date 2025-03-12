@@ -94,6 +94,8 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.USA_NWSL:
         case League.NCAAB_FUTURES:
         case League.NCAAW:
+        case League.COLLEGE_BASEBALL:
+        case League.USA_AHL:
             return `/logos/Countries/united-states-of-america.svg`;
         case League.EPL:
         case League.ENGLAND_CHAMPIONSHIP:
@@ -102,6 +104,7 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.EPL_FUTURES:
         case League.ENGLAND_FA_CUP:
         case League.ENGLAND_SUPER_LEAGUE_WOMEN:
+        case League.ENGLAND_SUPER_LEAGUE:
             return `/logos/Countries/england.svg`;
         case League.LIGUE_ONE:
         case League.LIGUE_2:
@@ -134,6 +137,7 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.ITALY_SERIE_A_WOMEN:
             return `/logos/Countries/italy.svg`;
         case League.J1_LEAGUE:
+        case League.NPB:
             return `/logos/Countries/japan.svg`;
         case League.IPL:
             return `/logos/Countries/india.svg`;
@@ -187,6 +191,7 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.AUSTRALIA_A_LEAGUE:
         case League.AUSTRALIA_NBL:
         case League.AUSTRALIA_A_LEAGUE_WOMEN:
+        case League.AUSTRALIA_NRL:
             return `/logos/Countries/australia.svg`;
         case League.SWITZERLAND_SUPER_LEAGUE:
         case League.SWITZETLAND_NATIONAL_LEAGUE:
@@ -218,6 +223,7 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.UEFA_CHAMPIONS_LEAGUE_FUTURES:
         case League.EUROLEAGUE_FUTURES:
         case League.UEFA_CHAMPIONS_LEAGUE_WOMEN:
+        case League.FIBA_CHAMPIONS_LEAGUE:
             return `/logos/Countries/europe.svg`;
         case League.EUROLEAGUE:
         case League.EUROCUP:
@@ -270,6 +276,12 @@ export const getLeagueFlagSource = (tagId: number | any) => {
             return `/logos/Countries/fiba-world-cup.png`;
         case League.FIBA_AFRO_BASKET_QUALIFIERS:
             return `/logos/Countries/afrobasket.jpg`;
+        case League.CPBL:
+            return `/logos/Countries/taiwan.svg`;
+        case League.KBO:
+            return `/logos/Countries/south-korea.svg`;
+        case League.CANADA_PREMIER_LEAGUE:
+            return `/logos/Countries/canada.svg`;
         default:
             return `/logos/Countries/world.svg`;
     }
