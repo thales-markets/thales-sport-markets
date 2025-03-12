@@ -75,14 +75,7 @@ import { BracketMatch } from 'types/marchMadness';
 import { ThemeInterface } from 'types/ui';
 import { executeBiconomyTransaction } from 'utils/biconomy';
 import biconomyConnector from 'utils/biconomyWallet';
-import {
-    getCollateral,
-    getCollateralAddress,
-    getCollateralIndex,
-    getCollaterals,
-    getDefaultCollateral,
-    isStableCurrency,
-} from 'utils/collaterals';
+import { getCollateral, getCollateralAddress, getCollateralIndex, isStableCurrency } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import { marchMadnessContract } from 'utils/contracts/marchMadnessContract';
 import {
@@ -226,9 +219,7 @@ const Brackets: React.FC = () => {
         [multipleCollateralBalances]
     );
 
-    const defaultCollateral = useMemo(() => getDefaultCollateral(networkId, MARCH_MADNESS_COLLATERALS[networkId]), [
-        networkId,
-    ]);
+    const defaultCollateral = useMemo(() => MARCH_MADNESS_COLLATERALS[networkId][0], [networkId]);
     const selectedCollateral = useMemo(
         () => getCollateral(networkId, selectedCollateralIndex, MARCH_MADNESS_COLLATERALS[networkId]),
         [networkId, selectedCollateralIndex]
@@ -465,7 +456,7 @@ const Brackets: React.FC = () => {
         const collateralIndex = getCollateralIndex(
             networkId,
             isDefaultCollateral
-                ? getDefaultCollateral(networkId, MARCH_MADNESS_COLLATERALS[networkId])
+                ? MARCH_MADNESS_COLLATERALS[networkId][0]
                 : isEth
                 ? (CRYPTO_CURRENCY_MAP.WETH as Coins)
                 : selectedCollateral,
@@ -529,7 +520,7 @@ const Brackets: React.FC = () => {
             const collateralIndex = getCollateralIndex(
                 networkId,
                 isDefaultCollateral
-                    ? getDefaultCollateral(networkId, MARCH_MADNESS_COLLATERALS[networkId])
+                    ? MARCH_MADNESS_COLLATERALS[networkId][0]
                     : isEth
                     ? (CRYPTO_CURRENCY_MAP.WETH as Coins)
                     : selectedCollateral,
@@ -1204,10 +1195,7 @@ const Brackets: React.FC = () => {
                                             <CollateralWrapper isDisabled={isCollateralDropdownDisabled}>
                                                 <CollateralSeparator isDisabled={isCollateralDropdownDisabled} />
                                                 <CollateralSelector
-                                                    collateralArray={getCollaterals(
-                                                        networkId,
-                                                        MARCH_MADNESS_COLLATERALS[networkId]
-                                                    )}
+                                                    collateralArray={MARCH_MADNESS_COLLATERALS[networkId]}
                                                     selectedItem={selectedCollateralIndex}
                                                     disabled={isCollateralDropdownDisabled}
                                                     preventPaymentCollateralChange
