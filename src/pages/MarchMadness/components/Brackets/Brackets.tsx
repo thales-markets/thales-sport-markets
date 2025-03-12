@@ -640,6 +640,10 @@ const Brackets: React.FC = () => {
                     setIsBracketReady(false);
                     setIsUpdating(false);
                     setIsMinting(false);
+                } else {
+                    toastId && toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+                    setIsUpdating(false);
+                    setIsMinting(false);
                 }
             } catch (e) {
                 toastId && toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
