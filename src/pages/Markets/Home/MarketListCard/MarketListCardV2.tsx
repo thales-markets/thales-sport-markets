@@ -303,6 +303,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
             <>
                 {showHeaderTournamentName && (
                     <TournamentNameLabel
+                        selected={selected}
                         isLeagueInfoVisible={showLeagueInfo}
                         isBoosted={!isPlayerPropsMarket && !!overdropGameMultiplier}
                     >
@@ -724,13 +725,13 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                         isLeagueInfoVisible={showLeagueInfo}
                     >{`Game of the ${overdropGameMultiplier.type}`}</GameOfLabel>
                 )}
-                {!isPlayerPropsMarket && !!overdropGameMultiplier && (
+                {!selectedMarket?.gameId && !isPlayerPropsMarket && !!overdropGameMultiplier && (
                     <FireContainer gap={2}>
                         <Fire className={'icon icon--fire'} />
                         <FireText>{`+${overdropGameMultiplier.multiplier}% XP`}</FireText>
                     </FireContainer>
                 )}
-                {!isMobile && (
+                {!selectedMarket?.gameId && !isMobile && (
                     <SPAAnchor
                         href={buildMarketLink(
                             market.gameId,
