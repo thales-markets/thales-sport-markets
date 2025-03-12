@@ -865,7 +865,7 @@
             },
             "share-ticket": {
                 "label": "Share for Twitter boost",
-                "header": "Web3 Sport markets on",
+                "header": "Ticket slip - {{betType}} bet",
                 "parlay": "ticket",
                 "potential-payout": "Potential payout",
                 "total-quote": "Total quote",
@@ -875,6 +875,9 @@
                 "download": "Download",
                 "winner": "Winner",
                 "loser": "Loser",
+                "the-best": "The best",
+                "decentralized": "Decentralized",
+                "crypto-sportsbook": "Crypto sportsbook",
                 "options": {
                     "title": "Display options",
                     "view-details": "Detailed",

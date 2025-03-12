@@ -1,3 +1,4 @@
+import Background545 from 'assets/images/flex-600-800.png';
 import axios from 'axios';
 import Button from 'components/Button';
 import { Input } from 'components/fields/common';
@@ -16,7 +17,7 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
 import styled, { useTheme } from 'styled-components';
-import { FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
+import { FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
 import { Coins, isFirefox, isIos, isMetamask } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
@@ -96,7 +97,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
 
     const customStyles = {
         content: {
-            top: isMobile ? '35px' : '40%',
+            top: isMobile ? '35px' : '45%',
             left: '50%',
             right: 'auto',
             bottom: 'auto',
@@ -315,12 +316,10 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
             contentElement={(props, children) => (
                 <>
                     <div {...props}>{children}</div>
-                    {isMobile && <CloseIcon className={`icon icon--close`} onClick={onClose} />}
                 </>
             )}
         >
             <Container ref={ref}>
-                {!isMobile && <CloseIcon className={`icon icon--close`} onClick={onClose} />}
                 <MyTicket
                     markets={markets}
                     multiSingle={multiSingle}
@@ -355,21 +354,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                 />
 
                 <ButtonsWrapper toggleVisible={isNonStableCollateral}>
-                    <ShareButton disabled={isLoading} onClick={() => onTwitterShareClick()}>
-                        <TwitterIcon disabled={isLoading} fontSize={'22px'} />
-                        <ButtonLabel>{t('markets.parlay.share-ticket.share')}</ButtonLabel>
-                    </ShareButton>
-                    <ShareButton disabled={isLoading} onClick={() => onTwitterShareClick(true)}>
-                        {!useDownloadImage && <CopyIcon disabled={isLoading} fontSize={'22px'} />}
-                        <ButtonLabel>
-                            {useDownloadImage
-                                ? t('markets.parlay.share-ticket.download')
-                                : t('markets.parlay.share-ticket.copy')}
-                        </ButtonLabel>
-                    </ShareButton>
-                </ButtonsWrapper>
-                {isNonStableCollateral && (
-                    <SwitchWrapper>
+                    <SwitchWrapper show={isNonStableCollateral}>
                         <Toggle
                             height="20px"
                             active={convertToStableValue}
@@ -384,15 +369,28 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                             }}
                         />
                     </SwitchWrapper>
-                )}
+                    <ShareButton disabled={isLoading} onClick={() => onTwitterShareClick()}>
+                        <TwitterIcon disabled={isLoading} fontSize={'22px'} />
+                        <ButtonLabel>{t('markets.parlay.share-ticket.share')}</ButtonLabel>
+                    </ShareButton>
+                    <ShareButton disabled={isLoading} onClick={() => onTwitterShareClick(true)}>
+                        {!useDownloadImage && <CopyIcon disabled={isLoading} fontSize={'22px'} />}
+                        <ButtonLabel>
+                            {useDownloadImage
+                                ? t('markets.parlay.share-ticket.download')
+                                : t('markets.parlay.share-ticket.copy')}
+                        </ButtonLabel>
+                    </ShareButton>
+                </ButtonsWrapper>
                 <ShareWrapper toggleVisible={isNonStableCollateral}>
-                    <Label>{t('markets.parlay.share-ticket.submit-url')}</Label>
                     <Input
                         height="32px"
                         minHeight="32px" // fix for iOS
+                        width="auto"
                         disabled={isLoading}
                         value={tweetUrl}
                         onChange={(e) => setTweetUrl(e.target.value)}
+                        placeholder={t('markets.parlay.share-ticket.submit-url')}
                     />
                     <Button height="32px" disabled={isLoading} margin="8px 0" onClick={onSubmit}>
                         {t('common.submit')}
@@ -406,32 +404,25 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
 // Aspect ratio is important for Twitter: horizontal (Simple View) 2:1 and vertical min 3:4
 const Container = styled(FlexDivColumnCentered)`
     position: relative;
-    width: 386px;
-    // max-height: 600px;
-    padding: 15px;
+    aspect-ratio: 3/4;
+    max-height: 800px;
+    max-width: 600px;
+    min-width: 545px;
+    padding: 10px;
     flex: none;
-    background: linear-gradient(180deg, #303656 0%, #1a1c2b 100%);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url(${Background545});
+    background-repeat: no-repeat;
     border-radius: 10px;
     @media (max-width: 950px) {
-        width: 357px;
-        // max-height: 476px;
+        transform: scale(0.65);
     }
-`;
-
-const CloseIcon = styled.i`
-    position: absolute;
-    top: -20px;
-    right: -20px;
-    font-size: 20px;
-    cursor: pointer;
-    color: ${(props) => props.theme.textColor.primary};
-    @media (max-width: 950px) {
-        top: 10px;
-        right: 10px;
+    @media (max-height: 900px) {
+        transform: scale(0.8);
     }
 `;
 
 const ShareButton = styled(FlexDivRowCentered)<{ disabled?: boolean }>`
+    width: 145px;
     height: 32px;
     font-size: 15px;
     align-items: center;
@@ -440,13 +431,12 @@ const ShareButton = styled(FlexDivRowCentered)<{ disabled?: boolean }>`
     cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
     opacity: ${(props) => (props.disabled ? '0.4' : '1')};
     justify-content: center;
-    flex: 1;
 `;
 
 const ButtonsWrapper = styled(FlexDivRowCentered)<{ toggleVisible?: boolean }>`
     left: 0;
     right: 0;
-    bottom: ${(props) => (props?.toggleVisible ? '-72px' : '-46px')};
+    bottom: -35px;
     height: 32px;
     position: absolute;
     gap: 10px;
@@ -492,31 +482,28 @@ const CopyIcon = styled.i<{ disabled?: boolean; fontSize?: string; padding?: str
     }
 `;
 
-const SwitchWrapper = styled(FlexDivRowCentered)`
+const SwitchWrapper = styled(FlexDivRowCentered)<{ show?: boolean }>`
+    visibility: ${(props) => (props.show ? 'visible' : 'hidden')};
+    flex: 2;
+    & > div {
+        justify-content: flex-start;
+    }
+`;
+
+const ShareWrapper = styled(FlexDivRowCentered)<{ toggleVisible?: boolean }>`
     position: absolute;
     left: 0;
     right: 0;
-    height: 0px;
-    bottom: -17px;
-    width: 100%;
-    justify-content: space-between;
-`;
-
-const ShareWrapper = styled(FlexDivColumn)<{ toggleVisible?: boolean }>`
-    position: absolute;
-    left: 0;
-    right: 0;
-    height: 0px;
-    bottom: ${(props) => (props?.toggleVisible ? '-80px' : '-60px')};
-`;
-
-const Label = styled.span`
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 20px;
-    letter-spacing: 0.025em;
-    text-transform: uppercase;
-    color: ${(props) => props.theme.textColor.quaternary};
+    height: 30px;
+    bottom: -75px;
+    gap: 10px;
+    button {
+        width: 145px;
+        border-radius: 5px;
+    }
+    input {
+        flex: 1;
+    }
 `;
 
 export default React.memo(ShareTicketModal);
