@@ -56,6 +56,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { getTicketPayment } from 'redux/modules/ticket';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivRowCentered } from 'styles/common';
@@ -157,6 +158,15 @@ const Brackets: React.FC = () => {
     const client = useClient();
     const walletClient = useWalletClient();
 
+    const ticketPayment = useSelector(getTicketPayment);
+    const selectedPaymentCollateralIndex = ticketPayment.selectedCollateralIndex;
+    const collateralName = getCollateral(networkId, selectedPaymentCollateralIndex);
+    const collateralIndex = getCollateralIndex(networkId, collateralName, MARCH_MADNESS_COLLATERALS[networkId]);
+
+    const [selectedCollateralIndex, setSelectedCollateralIndex] = useState(
+        collateralIndex !== -1 ? collateralIndex : 0
+    );
+
     const [selectedBracketId, setSelectedBracketId] = useState<number>(DEFAULT_BRACKET_ID);
     const [isBracketMinted, setIsBracketMinted] = useState(false);
     const [bracketsData, setBracketsData] = useState(initialBracketsData);
@@ -215,24 +225,6 @@ const Brackets: React.FC = () => {
                 : null,
         [multipleCollateralBalances]
     );
-
-    const selectedCollateralIndex = useMemo(() => {
-        if (multipleCollateralBalancesData) {
-            const maxCoin = Object.keys(multipleCollateralBalancesData).reduce((a, b) => {
-                const coinA = a as Coins;
-                const coinB = b as Coins;
-                const usdBalanceA =
-                    multipleCollateralBalancesData[coinA] * (isStableCurrency(coinA) ? 1 : exchangeRates?.[coinA] || 0);
-                const usdBalanceB =
-                    multipleCollateralBalancesData[coinB] * (isStableCurrency(coinB) ? 1 : exchangeRates?.[coinB] || 0);
-
-                return usdBalanceA > usdBalanceB ? coinA : coinB;
-            }) as Coins;
-
-            return getCollateralIndex(networkId, maxCoin, MARCH_MADNESS_COLLATERALS[networkId]);
-        }
-        return 0;
-    }, [multipleCollateralBalancesData, networkId, exchangeRates]);
 
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId, MARCH_MADNESS_COLLATERALS[networkId]), [
         networkId,
@@ -1218,7 +1210,8 @@ const Brackets: React.FC = () => {
                                                     )}
                                                     selectedItem={selectedCollateralIndex}
                                                     disabled={isCollateralDropdownDisabled}
-                                                    onChangeCollateral={() => {}}
+                                                    preventPaymentCollateralChange
+                                                    onChangeCollateral={(index) => setSelectedCollateralIndex(index)}
                                                     isDetailedView
                                                     collateralBalances={multipleCollateralBalancesData}
                                                     exchangeRates={exchangeRates}
