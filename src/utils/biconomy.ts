@@ -19,6 +19,7 @@ import sportsAMMV2Contract from './contracts/sportsAMMV2Contract';
 
 export const ETH_PAYMASTER = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'; // used for paying gas in ETH by AA
 export const GAS_LIMIT = 0.1;
+const ERROR_SESSION_NOT_FOUND = 'Error: Session not found.';
 
 export const sendBiconomyTransaction = async (params: {
     networkId: SupportedNetwork;
@@ -202,75 +203,48 @@ export const executeBiconomyTransaction = async (params: {
 
         try {
             const sessionSigner = await getSessionSigner(params.networkId);
+            const { wait } = await biconomyConnector.wallet.sendTransaction(transactionArray, {
+                paymasterServiceData: {
+                    mode: PaymasterMode.SPONSORED,
+                    webhookData: {
+                        networkId: params.networkId,
+                    },
+                },
+                params: {
+                    sessionSigner: sessionSigner,
+                    sessionValidationModule: sessionValidationContract.addresses[params.networkId],
+                },
+            });
 
-            try {
-                const { wait } = await biconomyConnector.wallet.sendTransaction(transactionArray, {
-                    paymasterServiceData: {
-                        mode: PaymasterMode.SPONSORED,
-                        webhookData: {
-                            networkId: params.networkId,
-                        },
-                    },
-                    params: {
-                        sessionSigner: sessionSigner,
-                        sessionValidationModule: sessionValidationContract.addresses[params.networkId],
-                    },
+            const {
+                receipt: { transactionHash },
+                success,
+            } = await wait();
+
+            if (success === 'false') {
+                throw new Error('tx failed');
+            } else {
+                return transactionHash;
+            }
+        } catch (error) {
+            if (
+                (error && (error as any).message && (error as any).message.includes('SessionNotApproved')) ||
+                (error as any).toString() === ERROR_SESSION_NOT_FOUND
+            ) {
+                await activateOvertimeAccount({
+                    networkId: params.networkId,
+                    collateralAddress: params.collateralAddress as any,
                 });
 
-                const {
-                    receipt: { transactionHash },
-                    success,
-                } = await wait();
+                const sessionSigner = await getSessionSigner(params.networkId);
 
-                if (success === 'false') {
-                    throw new Error('tx failed');
-                } else {
-                    return transactionHash;
-                }
-            } catch (error) {
-                if (
-                    (error && (error as any).message && (error as any).message.includes('SessionNotApproved')) ||
-                    (error as any).toString() === 'Error: Session not found.'
-                ) {
-                    await activateOvertimeAccount({
-                        networkId: params.networkId,
-                        collateralAddress: params.collateralAddress as any,
-                    });
-
-                    const sessionSigner = await getSessionSigner(params.networkId);
-
-                    try {
-                        const { wait } = await biconomyConnector.wallet.sendTransaction(transactionArray, {
-                            paymasterServiceData: {
-                                mode: PaymasterMode.SPONSORED,
-                                webhookData: {
-                                    networkId: params.networkId,
-                                },
-                            },
-                            params: {
-                                sessionSigner: sessionSigner,
-                                sessionValidationModule: sessionValidationContract.addresses[params.networkId],
-                            },
-                        });
-
-                        const {
-                            receipt: { transactionHash },
-                            success,
-                        } = await wait();
-
-                        if (success === 'false') {
-                            throw new Error('tx failed');
-                        } else {
-                            return transactionHash;
-                        }
-                    } catch (e) {
-                        console.log(e);
-                    }
-                } else {
+                try {
                     const { wait } = await biconomyConnector.wallet.sendTransaction(transactionArray, {
                         paymasterServiceData: {
-                            mode: PaymasterMode.ERC20,
-                            preferredToken: params.collateralAddress,
+                            mode: PaymasterMode.SPONSORED,
+                            webhookData: {
+                                networkId: params.networkId,
+                            },
                         },
                         params: {
                             sessionSigner: sessionSigner,
@@ -288,11 +262,33 @@ export const executeBiconomyTransaction = async (params: {
                     } else {
                         return transactionHash;
                     }
+                } catch (e) {
+                    console.log(e);
+                }
+            } else {
+                const sessionSigner = await getSessionSigner(params.networkId);
+                const { wait } = await biconomyConnector.wallet.sendTransaction(transactionArray, {
+                    paymasterServiceData: {
+                        mode: PaymasterMode.ERC20,
+                        preferredToken: params.collateralAddress,
+                    },
+                    params: {
+                        sessionSigner: sessionSigner,
+                        sessionValidationModule: sessionValidationContract.addresses[params.networkId],
+                    },
+                });
+
+                const {
+                    receipt: { transactionHash },
+                    success,
+                } = await wait();
+
+                if (success === 'false') {
+                    throw new Error('tx failed');
+                } else {
+                    return transactionHash;
                 }
             }
-        } catch (e) {
-            console.log(e);
-            throw new Error('tx failed');
         }
     }
 };
@@ -469,24 +465,28 @@ const getApprovalTxs = (networkId: SupportedNetwork) => {
 };
 
 const getSessionSigner = async (networkId: SupportedNetwork) => {
-    // try executing via Session module, if its not passing then enable session and execute with signing
-    // generate sessionModule
-    const sessionModule = await createSessionKeyManagerModule({
-        moduleAddress: DEFAULT_SESSION_KEY_MANAGER_MODULE,
-        smartAccountAddress: biconomyConnector.address,
-    });
-    biconomyConnector.wallet?.setActiveValidationModule(sessionModule);
-    const storedMapString: any = localStore.get(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId]);
-    const retrievedMap = new Map(JSON.parse(storedMapString));
-    const sessionData = retrievedMap.get(biconomyConnector.address) as any;
+    try {
+        // try executing via Session module, if its not passing then enable session and execute with signing
+        // generate sessionModule
+        const sessionModule = await createSessionKeyManagerModule({
+            moduleAddress: DEFAULT_SESSION_KEY_MANAGER_MODULE,
+            smartAccountAddress: biconomyConnector.address,
+        });
+        biconomyConnector.wallet?.setActiveValidationModule(sessionModule);
+        const storedMapString: any = localStore.get(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId]);
+        const retrievedMap = new Map(JSON.parse(storedMapString));
+        const sessionData = retrievedMap.get(biconomyConnector.address) as any;
 
-    const sessionAccount = privateKeyToAccount(sessionData.privateKey);
-    const sessionSigner = createWalletClient({
-        account: sessionAccount,
-        chain: networkId as any,
-        transport: http(biconomyConnector.wallet?.rpcProvider.transport.url),
-    });
-    return sessionSigner;
+        const sessionAccount = privateKeyToAccount(sessionData.privateKey);
+        const sessionSigner = createWalletClient({
+            account: sessionAccount,
+            chain: networkId as any,
+            transport: http(biconomyConnector.wallet?.rpcProvider.transport.url),
+        });
+        return sessionSigner;
+    } catch (e) {
+        throw ERROR_SESSION_NOT_FOUND;
+    }
 };
 
 export const getPaymasterData = async (
