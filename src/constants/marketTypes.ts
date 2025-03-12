@@ -407,6 +407,67 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         key: 'secondPeriodTotalAwayTeam',
         name: 'Total 2nd',
     },
+    [MarketType.THIRD_PERIOD_TOTAL_HOME_TEAM]: {
+        id: MarketType.THIRD_PERIOD_TOTAL_HOME_TEAM,
+        key: 'thirdPeriodTotalHomeTeam',
+        name: 'Total 3rd',
+    },
+    [MarketType.THIRD_PERIOD_TOTAL_AWAY_TEAM]: {
+        id: MarketType.THIRD_PERIOD_TOTAL_AWAY_TEAM,
+        key: 'thirdPeriodTotalAwayTeam',
+        name: 'Total 3st',
+    },
+    [MarketType.FOURTH_PERIOD_TOTAL_HOME_TEAM]: {
+        id: MarketType.FOURTH_PERIOD_TOTAL_HOME_TEAM,
+        key: 'fourthPeriodTotalHomeTeam',
+        name: 'Total 4th',
+    },
+    [MarketType.FOURTH_PERIOD_TOTAL_AWAY_TEAM]: {
+        id: MarketType.FOURTH_PERIOD_TOTAL_AWAY_TEAM,
+        key: 'fourthPeriodTotalAwayTeam',
+        name: 'Total 4st',
+    },
+    [MarketType.FIFTH_PERIOD_TOTAL_HOME_TEAM]: {
+        id: MarketType.FIFTH_PERIOD_TOTAL_HOME_TEAM,
+        key: 'fifthPeriodTotalHomeTeam',
+        name: 'Total 5th',
+    },
+    [MarketType.FIFTH_PERIOD_TOTAL_AWAY_TEAM]: {
+        id: MarketType.FIFTH_PERIOD_TOTAL_AWAY_TEAM,
+        key: 'fifthPeriodTotalAwayTeam',
+        name: 'Total 5th',
+    },
+    [MarketType.SIXTH_PERIOD_TOTAL_HOME_TEAM]: {
+        id: MarketType.SIXTH_PERIOD_TOTAL_HOME_TEAM,
+        key: 'sixthPeriodTotalHomeTeam',
+        name: 'Total 6st',
+    },
+    [MarketType.SIXTH_PERIOD_TOTAL_AWAY_TEAM]: {
+        id: MarketType.SIXTH_PERIOD_TOTAL_AWAY_TEAM,
+        key: 'sixthPeriodTotalAwayTeam',
+        name: 'Total 6th',
+    },
+    [MarketType.SEVENTH_PERIOD_TOTAL_HOME_TEAM]: {
+        id: MarketType.SEVENTH_PERIOD_TOTAL_HOME_TEAM,
+        key: 'seventhPeriodTotalHomeTeam',
+        name: 'Total 7th',
+    },
+    [MarketType.SEVENTH_PERIOD_TOTAL_AWAY_TEAM]: {
+        id: MarketType.SEVENTH_PERIOD_TOTAL_AWAY_TEAM,
+        key: 'seventhPeriodTotalAwayTeam',
+        name: 'Total 7th',
+    },
+    [MarketType.EIGHT_PERIOD_TOTAL_HOME_TEAM]: {
+        id: MarketType.EIGHT_PERIOD_TOTAL_HOME_TEAM,
+        key: 'eightPeriodTotalHomeTeam',
+        name: 'Total 8th',
+    },
+    [MarketType.EIGHT_PERIOD_TOTAL_AWAY_TEAM]: {
+        id: MarketType.EIGHT_PERIOD_TOTAL_AWAY_TEAM,
+        key: 'eightPeriodTotalAwayTeam',
+        name: 'Total 8th',
+    },
+
     // Total per team period - half for basketball
     [MarketType.FIRST_PERIOD_TOTAL2_HOME_TEAM]: {
         id: MarketType.FIRST_PERIOD_TOTAL2_HOME_TEAM,
@@ -1243,8 +1304,8 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         name: 'Total cards',
     },
     // Total red cards
-    [MarketType.TOTA_RED_CARDS]: {
-        id: MarketType.TOTA_RED_CARDS,
+    [MarketType.TOTAL_RED_CARDS]: {
+        id: MarketType.TOTAL_RED_CARDS,
         key: 'totalRedCards',
         name: 'Total red cards',
     },
@@ -1272,6 +1333,58 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         name: '',
         description: undefined,
         tooltipKey: undefined,
+    },
+
+    // Baseball innings market types
+    [MarketType.FIRST_THREE_INNINGS_WINNER]: {
+        id: MarketType.FIRST_THREE_INNINGS_WINNER,
+        key: 'firstThreeInningsWinner',
+        name: 'Winner 1st 3 innings',
+    },
+    [MarketType.FIRST_THREE_INNINGS_TOTAL]: {
+        id: MarketType.FIRST_THREE_INNINGS_TOTAL,
+        key: 'firstThreeInningsTotal',
+        name: 'Total 1st 3 innings',
+    },
+    [MarketType.FIRST_THREE_INNINGS_SPREAD]: {
+        id: MarketType.FIRST_THREE_INNINGS_SPREAD,
+        key: 'firstThreeInningsSpread',
+        name: 'Handicap 1st 3 innings',
+    },
+    [MarketType.FIRST_THREE_INNINGS_TOTAL_HOME_TEAM]: {
+        id: MarketType.FIRST_THREE_INNINGS_TOTAL_HOME_TEAM,
+        key: 'firstThreeInningsTotalHomeTeam',
+        name: 'Total 1st 3 innings',
+    },
+    [MarketType.FIRST_THREE_INNINGS_TOTAL_AWAY_TEAM]: {
+        id: MarketType.FIRST_THREE_INNINGS_WINNER,
+        key: 'firstThreeInningsTotalAwayTeam',
+        name: 'Total 1st 3 innings',
+    },
+    [MarketType.FIRST_SEVEN_INNINGS_WINNER]: {
+        id: MarketType.FIRST_SEVEN_INNINGS_WINNER,
+        key: 'firstSevenInningsWinner',
+        name: 'Winner 1st 7 innings',
+    },
+    [MarketType.FIRST_SEVEN_INNINGS_TOTAL]: {
+        id: MarketType.FIRST_SEVEN_INNINGS_TOTAL,
+        key: 'firstSevenInningsTotal',
+        name: 'Total 1st 7 innings',
+    },
+    [MarketType.FIRST_SEVEN_INNINGS_SPREAD]: {
+        id: MarketType.FIRST_SEVEN_INNINGS_SPREAD,
+        key: 'firstSevenInningsSpread',
+        name: 'Handicap 1st 7 innings',
+    },
+    [MarketType.FIRST_SEVEN_INNINGS_TOTAL_HOME_TEAM]: {
+        id: MarketType.FIRST_SEVEN_INNINGS_TOTAL_HOME_TEAM,
+        key: 'firstSevenInningsTotalHomeTeam',
+        name: 'Total 1st 7 innings',
+    },
+    [MarketType.FIRST_SEVEN_INNINGS_TOTAL_AWAY_TEAM]: {
+        id: MarketType.FIRST_SEVEN_INNINGS_WINNER,
+        key: 'firstSevenInningsTotalAwayTeam',
+        name: 'Total 1st 7 innings',
     },
 };
 
@@ -1385,6 +1498,18 @@ export const TOTAL_MARKET_TYPES = [
     MarketType.FIRST_PERIOD_TOTAL_AWAY_TEAM,
     MarketType.SECOND_PERIOD_TOTAL_HOME_TEAM,
     MarketType.SECOND_PERIOD_TOTAL_AWAY_TEAM,
+    MarketType.THIRD_PERIOD_TOTAL_HOME_TEAM,
+    MarketType.THIRD_PERIOD_TOTAL_AWAY_TEAM,
+    MarketType.FOURTH_PERIOD_TOTAL_HOME_TEAM,
+    MarketType.FOURTH_PERIOD_TOTAL_AWAY_TEAM,
+    MarketType.FIFTH_PERIOD_TOTAL_HOME_TEAM,
+    MarketType.FIFTH_PERIOD_TOTAL_AWAY_TEAM,
+    MarketType.SIXTH_PERIOD_TOTAL_HOME_TEAM,
+    MarketType.SIXTH_PERIOD_TOTAL_AWAY_TEAM,
+    MarketType.SEVENTH_PERIOD_TOTAL_HOME_TEAM,
+    MarketType.SEVENTH_PERIOD_TOTAL_AWAY_TEAM,
+    MarketType.EIGHT_PERIOD_TOTAL_HOME_TEAM,
+    MarketType.EIGHT_PERIOD_TOTAL_AWAY_TEAM,
     MarketType.FIRST_PERIOD_TOTAL2_HOME_TEAM,
     MarketType.FIRST_PERIOD_TOTAL2_AWAY_TEAM,
     MarketType.SECOND_PERIOD_TOTAL2_HOME_TEAM,
@@ -1401,7 +1526,13 @@ export const TOTAL_MARKET_TYPES = [
     MarketType.TOTAL_CARDS,
     MarketType.TOTAL_CARDS_HOME_TEAM,
     MarketType.TOTAL_CARDS_AWAY_TEAM,
-    MarketType.TOTA_RED_CARDS,
+    MarketType.TOTAL_RED_CARDS,
+    MarketType.FIRST_THREE_INNINGS_TOTAL,
+    MarketType.FIRST_SEVEN_INNINGS_TOTAL,
+    MarketType.FIRST_THREE_INNINGS_TOTAL_HOME_TEAM,
+    MarketType.FIRST_THREE_INNINGS_TOTAL_AWAY_TEAM,
+    MarketType.FIRST_SEVEN_INNINGS_TOTAL_HOME_TEAM,
+    MarketType.FIRST_SEVEN_INNINGS_TOTAL_AWAY_TEAM,
 ];
 
 export const TOTAL_ODD_EVEN_MARKET_TYPES = [
@@ -1452,6 +1583,8 @@ export const SPREAD_MARKET_TYPES = [
     MarketType.FIRST_PERIOD_SPREAD_CORNERS,
     MarketType.SECOND_PERIOD_SPREAD_CORNERS,
     MarketType.SPREAD_CARDS,
+    MarketType.FIRST_THREE_INNINGS_SPREAD,
+    MarketType.FIRST_SEVEN_INNINGS_SPREAD,
 ];
 
 export const COMBINED_POSITIONS_MARKET_TYPES = [
@@ -1493,6 +1626,8 @@ export const WINNER_MARKET_TYPES = [
     MarketType.FIRST_PERIOD_MOST_CORNERS,
     MarketType.SECOND_PERIOD_MOST_CORNERS,
     MarketType.MOST_CARDS,
+    MarketType.FIRST_THREE_INNINGS_WINNER,
+    MarketType.FIRST_SEVEN_INNINGS_WINNER,
 ];
 
 export const BOTH_TEAMS_TO_SCORE_MARKET_TYPES = [
@@ -1567,6 +1702,8 @@ const THIRD_PERIOD_MARKET_TYPES = [
     MarketType.THIRD_PERIOD_TOTAL_ODD_EVEN,
     MarketType.THIRD_PERIOD_BOTH_TEAMS_TO_SCORE,
     MarketType.THIRD_PERIOD_DRAW_NO_BET,
+    MarketType.THIRD_PERIOD_TOTAL_HOME_TEAM,
+    MarketType.THIRD_PERIOD_TOTAL_AWAY_TEAM,
 ];
 
 const FOURTH_PERIOD_MARKET_TYPES = [
@@ -1576,6 +1713,8 @@ const FOURTH_PERIOD_MARKET_TYPES = [
     MarketType.FOURTH_PERIOD_TOTAL_ODD_EVEN,
     MarketType.FOURTH_PERIOD_BOTH_TEAMS_TO_SCORE,
     MarketType.FOURTH_PERIOD_DRAW_NO_BET,
+    MarketType.FOURTH_PERIOD_TOTAL_HOME_TEAM,
+    MarketType.FOURTH_PERIOD_TOTAL_AWAY_TEAM,
 ];
 
 const FIFTH_PERIOD_MARKET_TYPES = [
@@ -1584,6 +1723,8 @@ const FIFTH_PERIOD_MARKET_TYPES = [
     MarketType.FIFTH_PERIOD_SPREAD,
     MarketType.FIFTH_PERIOD_TOTAL_ODD_EVEN,
     MarketType.FIFTH_PERIOD_BOTH_TEAMS_TO_SCORE,
+    MarketType.FIFTH_PERIOD_TOTAL_HOME_TEAM,
+    MarketType.FIFTH_PERIOD_TOTAL_AWAY_TEAM,
 ];
 
 const SIXTH_PERIOD_MARKET_TYPES = [
@@ -1592,6 +1733,8 @@ const SIXTH_PERIOD_MARKET_TYPES = [
     MarketType.SIXTH_PERIOD_SPREAD,
     MarketType.SIXTH_PERIOD_TOTAL_ODD_EVEN,
     MarketType.SIXTH_PERIOD_BOTH_TEAMS_TO_SCORE,
+    MarketType.SIXTH_PERIOD_TOTAL_HOME_TEAM,
+    MarketType.SIXTH_PERIOD_TOTAL_AWAY_TEAM,
 ];
 
 const SEVENTH_PERIOD_MARKET_TYPES = [
@@ -1600,6 +1743,8 @@ const SEVENTH_PERIOD_MARKET_TYPES = [
     MarketType.SEVENTH_PERIOD_SPREAD,
     MarketType.SEVENTH_PERIOD_TOTAL_ODD_EVEN,
     MarketType.SEVENTH_PERIOD_BOTH_TEAMS_TO_SCORE,
+    MarketType.SEVENTH_PERIOD_TOTAL_HOME_TEAM,
+    MarketType.SEVENTH_PERIOD_TOTAL_AWAY_TEAM,
 ];
 
 const EIGHTH_PERIOD_MARKET_TYPES = [
@@ -1608,6 +1753,8 @@ const EIGHTH_PERIOD_MARKET_TYPES = [
     MarketType.EIGHTH_PERIOD_SPREAD,
     MarketType.EIGHTH_PERIOD_TOTAL_ODD_EVEN,
     MarketType.EIGHTH_PERIOD_BOTH_TEAMS_TO_SCORE,
+    MarketType.EIGHT_PERIOD_TOTAL_HOME_TEAM,
+    MarketType.EIGHT_PERIOD_TOTAL_AWAY_TEAM,
 ];
 
 const NINTH_PERIOD_MARKET_TYPES = [
@@ -1618,6 +1765,18 @@ const NINTH_PERIOD_MARKET_TYPES = [
     MarketType.NINTH_PERIOD_BOTH_TEAMS_TO_SCORE,
 ];
 
+export const PERIOD_MARKET_TYPES = [
+    ...FIRST_PERIOD_MARKET_TYPES,
+    ...SECOND_PERIOD_MARKET_TYPES,
+    ...THIRD_PERIOD_MARKET_TYPES,
+    ...FOURTH_PERIOD_MARKET_TYPES,
+    ...FIFTH_PERIOD_MARKET_TYPES,
+    ...SIXTH_PERIOD_MARKET_TYPES,
+    ...SEVENTH_PERIOD_MARKET_TYPES,
+    ...EIGHTH_PERIOD_MARKET_TYPES,
+    ...NINTH_PERIOD_MARKET_TYPES,
+];
+
 const FIRST_PERIOD_MARKET_TYPES2 = [
     MarketType.FIRST_PERIOD_WINNER2,
     MarketType.FIRST_PERIOD_TOTAL2,
@@ -1625,10 +1784,32 @@ const FIRST_PERIOD_MARKET_TYPES2 = [
     MarketType.FIRST_PERIOD_TOTAL2_ODD_EVEN,
 ];
 
+const FIRST_THREE_INNINGS_MARKET_TYPES = [
+    MarketType.FIRST_THREE_INNINGS_WINNER,
+    MarketType.FIRST_THREE_INNINGS_TOTAL,
+    MarketType.FIRST_THREE_INNINGS_SPREAD,
+    MarketType.FIRST_THREE_INNINGS_TOTAL_HOME_TEAM,
+    MarketType.FIRST_THREE_INNINGS_TOTAL_AWAY_TEAM,
+];
+
+const FIRST_SEVEN_INNINGS_MARKET_TYPES = [
+    MarketType.FIRST_SEVEN_INNINGS_WINNER,
+    MarketType.FIRST_SEVEN_INNINGS_TOTAL,
+    MarketType.FIRST_SEVEN_INNINGS_SPREAD,
+    MarketType.FIRST_SEVEN_INNINGS_TOTAL_HOME_TEAM,
+    MarketType.FIRST_SEVEN_INNINGS_TOTAL_AWAY_TEAM,
+];
+
 export const HOME_TEAM_MARKET_TYPES = [
     MarketType.TOTAL_HOME_TEAM,
     MarketType.FIRST_PERIOD_TOTAL_HOME_TEAM,
     MarketType.SECOND_PERIOD_TOTAL_HOME_TEAM,
+    MarketType.THIRD_PERIOD_TOTAL_HOME_TEAM,
+    MarketType.FOURTH_PERIOD_TOTAL_HOME_TEAM,
+    MarketType.FIFTH_PERIOD_TOTAL_HOME_TEAM,
+    MarketType.SIXTH_PERIOD_TOTAL_HOME_TEAM,
+    MarketType.SEVENTH_PERIOD_TOTAL_HOME_TEAM,
+    MarketType.EIGHT_PERIOD_TOTAL_HOME_TEAM,
     MarketType.FIRST_PERIOD_TOTAL2_HOME_TEAM,
     MarketType.SECOND_PERIOD_TOTAL2_HOME_TEAM,
     MarketType.CLEAN_SHEET_HOME_TEAM,
@@ -1639,12 +1820,20 @@ export const HOME_TEAM_MARKET_TYPES = [
     MarketType.FIRST_PERIOD_TOTAL_CORNERS_HOME_TEAM,
     MarketType.SECOND_PERIOD_TOTAL_CORNERS_HOME_TEAM,
     MarketType.TOTAL_CARDS_HOME_TEAM,
+    MarketType.FIRST_THREE_INNINGS_TOTAL_HOME_TEAM,
+    MarketType.FIRST_SEVEN_INNINGS_TOTAL_HOME_TEAM,
 ];
 
 export const AWAY_TEAM_MARKET_TYPES = [
     MarketType.TOTAL_AWAY_TEAM,
     MarketType.FIRST_PERIOD_TOTAL_AWAY_TEAM,
     MarketType.SECOND_PERIOD_TOTAL_AWAY_TEAM,
+    MarketType.THIRD_PERIOD_TOTAL_AWAY_TEAM,
+    MarketType.FOURTH_PERIOD_TOTAL_AWAY_TEAM,
+    MarketType.FIFTH_PERIOD_TOTAL_AWAY_TEAM,
+    MarketType.SIXTH_PERIOD_TOTAL_AWAY_TEAM,
+    MarketType.SEVENTH_PERIOD_TOTAL_AWAY_TEAM,
+    MarketType.EIGHT_PERIOD_TOTAL_AWAY_TEAM,
     MarketType.FIRST_PERIOD_TOTAL2_AWAY_TEAM,
     MarketType.SECOND_PERIOD_TOTAL2_AWAY_TEAM,
     MarketType.CLEAN_SHEET_AWAY_TEAM,
@@ -1655,6 +1844,8 @@ export const AWAY_TEAM_MARKET_TYPES = [
     MarketType.FIRST_PERIOD_TOTAL_CORNERS_AWAY_TEAM,
     MarketType.SECOND_PERIOD_TOTAL_CORNERS_AWAY_TEAM,
     MarketType.TOTAL_CARDS_AWAY_TEAM,
+    MarketType.FIRST_THREE_INNINGS_TOTAL_AWAY_TEAM,
+    MarketType.FIRST_SEVEN_INNINGS_TOTAL_AWAY_TEAM,
 ];
 
 export const SCORE_MARKET_TYPES = [MarketType.FIRST_SCORE, MarketType.LAST_SCORE];
@@ -1716,7 +1907,7 @@ export const CARDS_MARKET_TYPES = [
     MarketType.TOTAL_CARDS,
     MarketType.TOTAL_CARDS_HOME_TEAM,
     MarketType.TOTAL_CARDS_AWAY_TEAM,
-    MarketType.TOTA_RED_CARDS,
+    MarketType.TOTAL_RED_CARDS,
     MarketType.MOST_CARDS,
     MarketType.FIRST_CARD,
     MarketType.LAST_CARD,
@@ -2304,18 +2495,10 @@ export const MarketTypePlayerPropsGroupsBySport: Record<Sport, Partial<Record<Ma
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
         [MarketTypeGroup.HANDICAP]: SPREAD_MARKET_TYPES,
         [MarketTypeGroup.FIRST_INNING]: FIRST_PERIOD_MARKET_TYPES,
+        [MarketTypeGroup.FIRST_THREE_INNINGS]: FIRST_THREE_INNINGS_MARKET_TYPES,
         [MarketTypeGroup.FIRST_FIVE_INNINGS]: FIRST_PERIOD_MARKET_TYPES2,
-        [MarketTypeGroup.INNINGS]: [
-            ...FIRST_PERIOD_MARKET_TYPES,
-            ...SECOND_PERIOD_MARKET_TYPES,
-            ...THIRD_PERIOD_MARKET_TYPES,
-            ...FOURTH_PERIOD_MARKET_TYPES,
-            ...FIFTH_PERIOD_MARKET_TYPES,
-            ...SIXTH_PERIOD_MARKET_TYPES,
-            ...SEVENTH_PERIOD_MARKET_TYPES,
-            ...EIGHTH_PERIOD_MARKET_TYPES,
-            ...NINTH_PERIOD_MARKET_TYPES,
-        ],
+        [MarketTypeGroup.FIRST_SEVEN_INNINGS]: FIRST_SEVEN_INNINGS_MARKET_TYPES,
+        [MarketTypeGroup.INNINGS]: PERIOD_MARKET_TYPES,
         [MarketTypeGroup.PLAYER_BATTER]: [
             MarketType.PLAYER_PROPS_HOMERUNS,
             MarketType.PLAYER_PROPS_HITS_RECORDED,
