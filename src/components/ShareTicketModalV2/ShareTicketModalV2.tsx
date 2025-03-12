@@ -1,3 +1,4 @@
+import Background545 from 'assets/images/flex-545-725.png';
 import axios from 'axios';
 import Button from 'components/Button';
 import { Input } from 'components/fields/common';
@@ -315,12 +316,10 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
             contentElement={(props, children) => (
                 <>
                     <div {...props}>{children}</div>
-                    {isMobile && <CloseIcon className={`icon icon--close`} onClick={onClose} />}
                 </>
             )}
         >
             <Container ref={ref}>
-                {!isMobile && <CloseIcon className={`icon icon--close`} onClick={onClose} />}
                 <MyTicket
                     markets={markets}
                     multiSingle={multiSingle}
@@ -386,13 +385,13 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                     </SwitchWrapper>
                 )}
                 <ShareWrapper toggleVisible={isNonStableCollateral}>
-                    <Label>{t('markets.parlay.share-ticket.submit-url')}</Label>
                     <Input
                         height="32px"
                         minHeight="32px" // fix for iOS
                         disabled={isLoading}
                         value={tweetUrl}
                         onChange={(e) => setTweetUrl(e.target.value)}
+                        placeholder={t('markets.parlay.share-ticket.submit-url')}
                     />
                     <Button height="32px" disabled={isLoading} margin="8px 0" onClick={onSubmit}>
                         {t('common.submit')}
@@ -406,28 +405,16 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
 // Aspect ratio is important for Twitter: horizontal (Simple View) 2:1 and vertical min 3:4
 const Container = styled(FlexDivColumnCentered)`
     position: relative;
-    width: 386px;
+    aspect-ratio: 3 / 4;
     // max-height: 600px;
     padding: 15px;
     flex: none;
-    background: linear-gradient(180deg, #303656 0%, #1a1c2b 100%);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url(${Background545});
+    background-repeat: no-repeat;
     border-radius: 10px;
     @media (max-width: 950px) {
         width: 357px;
         // max-height: 476px;
-    }
-`;
-
-const CloseIcon = styled.i`
-    position: absolute;
-    top: -20px;
-    right: -20px;
-    font-size: 20px;
-    cursor: pointer;
-    color: ${(props) => props.theme.textColor.primary};
-    @media (max-width: 950px) {
-        top: 10px;
-        right: 10px;
     }
 `;
 
@@ -508,15 +495,6 @@ const ShareWrapper = styled(FlexDivColumn)<{ toggleVisible?: boolean }>`
     right: 0;
     height: 0px;
     bottom: ${(props) => (props?.toggleVisible ? '-80px' : '-60px')};
-`;
-
-const Label = styled.span`
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 20px;
-    letter-spacing: 0.025em;
-    text-transform: uppercase;
-    color: ${(props) => props.theme.textColor.quaternary};
 `;
 
 export default React.memo(ShareTicketModal);
