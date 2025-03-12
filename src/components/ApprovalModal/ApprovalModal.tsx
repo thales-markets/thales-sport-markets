@@ -3,7 +3,7 @@ import Modal from 'components/Modal';
 import Checkbox from 'components/fields/Checkbox';
 import NumericInput from 'components/fields/NumericInput';
 import React, { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
@@ -87,11 +87,19 @@ const ApprovalModal: React.FC<ApprovalModalProps> = ({
                 disabled={isButtonDisabled}
                 onClick={() => onSubmit(approveAll ? maxUint256 : amountConverted)}
             >
-                {!isAllowing
-                    ? t('common.enable-wallet-access.approve-label', { currencyKey: tokenSymbol })
-                    : t('common.enable-wallet-access.approve-progress-label', {
-                          currencyKey: tokenSymbol,
-                      })}
+                {!isAllowing ? (
+                    <Trans
+                        i18nKey="common.enable-wallet-access.approve-label"
+                        values={{ currencyKey: tokenSymbol }}
+                        components={{ currency: <CurrencyText /> }}
+                    />
+                ) : (
+                    <Trans
+                        i18nKey="common.enable-wallet-access.approve-progress-label"
+                        values={{ currencyKey: tokenSymbol }}
+                        components={{ currency: <CurrencyText /> }}
+                    />
+                )}
             </Button>
         );
     };
@@ -157,6 +165,11 @@ const OrText = styled(FlexDivCentered)`
     color: ${(props) => props.theme.textColor.primary};
     margin-top: 10px;
     margin-bottom: 15px;
+`;
+
+const CurrencyText = styled.span`
+    text-transform: none;
+    margin-left: 5px;
 `;
 
 export default ApprovalModal;
