@@ -98,7 +98,6 @@ export const MARCH_MADNESS_COLLATERALS: Record<SupportedNetwork, Coins[]> = {
         CRYPTO_CURRENCY_MAP.ARB as Coins,
         CRYPTO_CURRENCY_MAP.WETH as Coins,
         CRYPTO_CURRENCY_MAP.ETH as Coins,
-        CRYPTO_CURRENCY_MAP.wBTC as Coins,
     ],
     [Network.Base]: [
         CRYPTO_CURRENCY_MAP.USDC as Coins,
@@ -107,7 +106,6 @@ export const MARCH_MADNESS_COLLATERALS: Record<SupportedNetwork, Coins[]> = {
         CRYPTO_CURRENCY_MAP.USDT as Coins,
         CRYPTO_CURRENCY_MAP.WETH as Coins,
         CRYPTO_CURRENCY_MAP.ETH as Coins,
-        CRYPTO_CURRENCY_MAP.cbBTC as Coins,
     ],
     [Network.OptimismSepolia]: [
         CRYPTO_CURRENCY_MAP.USDC as Coins,
