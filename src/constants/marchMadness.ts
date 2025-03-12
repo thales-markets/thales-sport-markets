@@ -701,6 +701,8 @@ export const initialBracketsData: BracketMatch[] = [
     },
 ];
 
+// name: used for logos matching
+// displayName: max 13/14 chars
 export const teamsData: MarchMadTeam[] = [
     {
         id: 1,
@@ -774,7 +776,7 @@ export const teamsData: MarchMadTeam[] = [
     },
     {
         id: 11,
-        name: '',
+        name: 'Wild Card',
         displayName: 'Wild Card',
         region: REGION_UPPER_LEFT,
         position: 11,
@@ -809,7 +811,7 @@ export const teamsData: MarchMadTeam[] = [
     },
     {
         id: 16,
-        name: '',
+        name: 'Wild Card',
         displayName: 'Wild Card',
         region: REGION_UPPER_LEFT,
         position: 16,
@@ -998,7 +1000,7 @@ export const teamsData: MarchMadTeam[] = [
     },
     {
         id: 43,
-        name: '',
+        name: 'Wild Card',
         displayName: 'Wild Card',
         region: REGION_UPPER_RIGHT,
         position: 11,
@@ -1145,7 +1147,7 @@ export const teamsData: MarchMadTeam[] = [
     },
     {
         id: 64,
-        name: '',
+        name: 'Wild Card',
         displayName: 'Wild Card',
         region: REGION_BOTTOM_RIGHT,
         position: 16,
