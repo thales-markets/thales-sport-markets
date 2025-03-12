@@ -91,6 +91,7 @@
         "enable-wallet-access": {
             "approve": "Approve",
             "approve-progress": "Approving...",
+            "approve-label-text": "Approve {{currencyKey}}",
             "approve-label": "Approve <currency>{{currencyKey}}</currency>",
             "approve-progress-label": "Approving <currency>{{currencyKey}}</currency>...",
             "approve-all-label": "Approve all",

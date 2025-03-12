@@ -110,7 +110,7 @@ const ApprovalModal: React.FC<ApprovalModalProps> = ({
 
     return (
         <Modal
-            title={t('common.enable-wallet-access.approve-label', { currencyKey: tokenSymbol })}
+            title={t('common.enable-wallet-access.approve-label-text', { currencyKey: tokenSymbol })}
             onClose={onClose}
             shouldCloseOnOverlayClick={false}
             customStyle={{ overlay: { zIndex: 2000 } }}
