@@ -388,6 +388,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
                                 key={index}
                                 isLive={ticket.isLive}
                                 isSgp={ticket.isSgp}
+                                isSystem={ticket.isSystemBet}
                             />
                         );
                     })}
