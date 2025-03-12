@@ -63,6 +63,8 @@ import { FlexDivCentered, FlexDivRowCentered } from 'styles/common';
 import {
     COLLATERAL_DECIMALS,
     Coins,
+    DEFAULT_CURRENCY_DECIMALS,
+    LONG_CURRENCY_DECIMALS,
     coinFormatter,
     coinParser,
     formatCurrencyWithSign,
@@ -1331,7 +1333,10 @@ const Brackets: React.FC = () => {
                     {openApprovalModal && marchMadnessData && (
                         <ApprovalModal
                             defaultAmount={roundNumberToDecimals(
-                                convertFromStable(marchMadnessData.mintingPrice) * APPROVE_MULTIPLIER
+                                convertFromStable(marchMadnessData.mintingPrice) * APPROVE_MULTIPLIER,
+                                isStableCurrency(selectedCollateral)
+                                    ? DEFAULT_CURRENCY_DECIMALS
+                                    : LONG_CURRENCY_DECIMALS
                             )}
                             collateralArray={MARCH_MADNESS_COLLATERALS[networkId]}
                             collateralIndex={selectedCollateralIndex}
