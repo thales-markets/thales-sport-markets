@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 import { setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
-import { bigNumberFormatter, coinParser } from 'thales-utils';
+import { bigNumberFormatter, coinParser, Coins } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
 import { getCollateral } from 'utils/collaterals';
 import { maxUint256 } from 'viem';
@@ -21,6 +21,7 @@ type ApprovalModalProps = {
     isAllowing: boolean;
     onSubmit: (approveAmount: bigint) => void;
     onClose: () => void;
+    collateralArray?: Coins[];
 };
 
 const ApprovalModal: React.FC<ApprovalModalProps> = ({
@@ -30,6 +31,7 @@ const ApprovalModal: React.FC<ApprovalModalProps> = ({
     isAllowing,
     onSubmit,
     onClose,
+    collateralArray,
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -49,7 +51,7 @@ const ApprovalModal: React.FC<ApprovalModalProps> = ({
     const amountConverted = coinParser(
         Number(amount).toString(),
         networkId,
-        getCollateral(networkId, collateralIndex || 0)
+        getCollateral(networkId, collateralIndex || 0, collateralArray)
     );
 
     const getSubmitButton = () => {

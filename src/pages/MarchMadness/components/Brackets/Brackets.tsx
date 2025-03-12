@@ -75,7 +75,13 @@ import { BracketMatch } from 'types/marchMadness';
 import { ThemeInterface } from 'types/ui';
 import { executeBiconomyTransaction } from 'utils/biconomy';
 import biconomyConnector from 'utils/biconomyWallet';
-import { getCollateral, getCollateralAddress, getCollateralIndex, isStableCurrency } from 'utils/collaterals';
+import {
+    getCollateral,
+    getCollateralAddress,
+    getCollateralIndex,
+    getDefaultCollateral,
+    isStableCurrency,
+} from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import { marchMadnessContract } from 'utils/contracts/marchMadnessContract';
 import {
@@ -456,11 +462,10 @@ const Brackets: React.FC = () => {
         const collateralIndex = getCollateralIndex(
             networkId,
             isDefaultCollateral
-                ? MARCH_MADNESS_COLLATERALS[networkId][0]
+                ? getDefaultCollateral(networkId)
                 : isEth
                 ? (CRYPTO_CURRENCY_MAP.WETH as Coins)
-                : selectedCollateral,
-            MARCH_MADNESS_COLLATERALS[networkId]
+                : selectedCollateral
         );
 
         const collateralContractWithSigner = getContractInstance(
@@ -520,11 +525,10 @@ const Brackets: React.FC = () => {
             const collateralIndex = getCollateralIndex(
                 networkId,
                 isDefaultCollateral
-                    ? MARCH_MADNESS_COLLATERALS[networkId][0]
+                    ? getDefaultCollateral(networkId)
                     : isEth
                     ? (CRYPTO_CURRENCY_MAP.WETH as Coins)
-                    : selectedCollateral,
-                MARCH_MADNESS_COLLATERALS[networkId]
+                    : selectedCollateral
             );
 
             const collateralContractWithSigner = getContractInstance(
@@ -1329,6 +1333,7 @@ const Brackets: React.FC = () => {
                             defaultAmount={roundNumberToDecimals(
                                 convertFromStable(marchMadnessData.mintingPrice) * APPROVE_MULTIPLIER
                             )}
+                            collateralArray={MARCH_MADNESS_COLLATERALS[networkId]}
                             collateralIndex={selectedCollateralIndex}
                             tokenSymbol={selectedCollateral}
                             isAllowing={isAllowing}
