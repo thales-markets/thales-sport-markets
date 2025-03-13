@@ -54,8 +54,10 @@ export const MatchInfoContainer = styled(FlexDivColumn)`
 
 export const MatchInfo = styled(FlexDivStart)<{
     selected: boolean;
+    marginTop?: string;
 }>`
     z-index: 1;
+    ${(props) => props.marginTop && `margin-top: ${props.marginTop};`}
     color: ${(props) =>
         props.selected ? props.theme.oddsContainerBackground.tertiary : props.theme.textColor.quinary};
     i {
@@ -94,8 +96,12 @@ export const MatchInfoLabel = styled.label<{ selected?: boolean }>`
     }
 `;
 
-export const TournamentNameLabel = styled.label<{ isBoosted?: boolean; isLeagueInfoVisible?: boolean }>`
-    color: ${(props) => props.theme.textColor.quinary};
+export const TournamentNameLabel = styled.label<{
+    isBoosted?: boolean;
+    isLeagueInfoVisible?: boolean;
+    selected?: boolean;
+}>`
+    color: ${(props) => (props.selected ? props.theme.textColor.tertiary : props.theme.textColor.quinary)};
     padding-left: ${(props) => (props.isLeagueInfoVisible ? '48px' : '12px')};
     padding-top: ${(props) => (props.isBoosted ? '16px' : '10px')};
     font-size: 10px;
@@ -276,6 +282,7 @@ export const LiveIndicatorContainer = styled(FlexDivStart)`
     align-items: flex-start;
     color: ${(props) => props.theme.textColor.primary};
     margin-right: 10px;
+    margin-left: -7px;
     & > label {
         text-transform: none;
         margin-left: 25px;

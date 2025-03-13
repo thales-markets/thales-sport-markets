@@ -251,7 +251,7 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
                     />
                 </CheckboxWrapper>
             </CheckboxContainer>
-            <FlexDivStart>
+            <InputContainer>
                 <InputLabel>{t(`liquidity-pool.user-transactions.min-buy-in`)}:</InputLabel>
                 <NumericInput
                     value={minBuyInAmount}
@@ -279,7 +279,7 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
                     width="200px"
                     containerWidth="200px"
                 />
-            </FlexDivStart>
+            </InputContainer>
             <FlexDivSpaceBetween>
                 <ExpandAllContainer onClick={() => setExpandAll(!expandAll)}>
                     {expandAll
@@ -354,9 +354,19 @@ const ArrowIcon = styled.i`
     margin-left: 10px;
 `;
 
+const InputContainer = styled(FlexDivStart)`
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        flex-direction: column;
+    }
+`;
+
 const InputLabel = styled.span`
     font-size: 18px;
     padding: 5px 10px 0 0;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        font-size: 16px;
+        padding: 5px 10px 5px 0;
+    }
 `;
 
 export default AllLpTickets;
