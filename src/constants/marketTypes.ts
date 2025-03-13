@@ -415,7 +415,7 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
     [MarketType.THIRD_PERIOD_TOTAL_AWAY_TEAM]: {
         id: MarketType.THIRD_PERIOD_TOTAL_AWAY_TEAM,
         key: 'thirdPeriodTotalAwayTeam',
-        name: 'Total 3st',
+        name: 'Total 3rd',
     },
     [MarketType.FOURTH_PERIOD_TOTAL_HOME_TEAM]: {
         id: MarketType.FOURTH_PERIOD_TOTAL_HOME_TEAM,
@@ -425,7 +425,7 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
     [MarketType.FOURTH_PERIOD_TOTAL_AWAY_TEAM]: {
         id: MarketType.FOURTH_PERIOD_TOTAL_AWAY_TEAM,
         key: 'fourthPeriodTotalAwayTeam',
-        name: 'Total 4st',
+        name: 'Total 4th',
     },
     [MarketType.FIFTH_PERIOD_TOTAL_HOME_TEAM]: {
         id: MarketType.FIFTH_PERIOD_TOTAL_HOME_TEAM,
@@ -440,7 +440,7 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
     [MarketType.SIXTH_PERIOD_TOTAL_HOME_TEAM]: {
         id: MarketType.SIXTH_PERIOD_TOTAL_HOME_TEAM,
         key: 'sixthPeriodTotalHomeTeam',
-        name: 'Total 6st',
+        name: 'Total 6th',
     },
     [MarketType.SIXTH_PERIOD_TOTAL_AWAY_TEAM]: {
         id: MarketType.SIXTH_PERIOD_TOTAL_AWAY_TEAM,
