@@ -45,8 +45,9 @@ const useSgpDataQuery = (
                     sgpData = sgpResponse.data;
                 }
             } catch (e: any) {
-                console.error(e.response.data);
-                if (e.response.data.toLowerCase().includes('combination blocked')) {
+                const errorData = JSON.stringify(e.response.data);
+                console.error(errorData);
+                if (errorData.toLowerCase().includes('combination blocked')) {
                     sgpData.data.selectedSportsbook.error = e.response.data;
                 }
             }

@@ -2,7 +2,7 @@ import { NOT_AVAILABLE } from 'constants/markets';
 import { secondsToMilliseconds } from 'date-fns';
 import { MarketType, MarketTypeGroup } from 'enums/marketTypes';
 import { GameStatus, MarketStatus, Position } from 'enums/markets';
-import { League } from 'enums/sports';
+import { League, Sport } from 'enums/sports';
 import _ from 'lodash';
 import {
     SerializableSportMarket,
@@ -273,6 +273,7 @@ export const getTitleText = (market: SportMarket, useDescription?: boolean, shor
         return '';
     }
 
+    const sport = getLeagueSport(market.leagueId);
     const scoringType = getLeagueScoringType(market.leagueId);
     const marketTypeDescription = getMarketTypeDescription(marketType);
     const marketTypeName =
@@ -285,9 +286,11 @@ export const getTitleText = (market: SportMarket, useDescription?: boolean, shor
     let sufix = isPeriodMarket(marketType)
         ? ` ${getLeaguePeriodType(market.leagueId)}`
         : isPeriod2Market(marketType)
-        ? market.leagueId == League.MLB
+        ? sport === Sport.BASEBALL
             ? ' half (1st 5 innings)'
             : ' half'
+        : (marketType === MarketType.SPREAD2 || marketType === MarketType.TOTAL2) && sport === Sport.HOCKEY
+        ? ' (60 min)'
         : '';
 
     if (
