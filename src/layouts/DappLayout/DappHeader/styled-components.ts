@@ -213,7 +213,9 @@ export const ActivateContainer = styled(FlexDivColumnCentered)`
 
 export const CurrencyIcon = styled.i`
     text-transform: none;
-    font-size: 16px;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 20px;
     margin: 0 4px;
     color: ${(props) => props.theme.button.textColor.primary};
 `;
