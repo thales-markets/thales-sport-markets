@@ -93,7 +93,7 @@ import {
     isMarchMadnessAvailableForNetworkId,
 } from 'utils/marchMadness';
 import { checkAllowance } from 'utils/network';
-import { refetchAfterMarchMadnessMint } from 'utils/queryConnector';
+import { refetchAfterMarchMadnessMint, refetchBalances } from 'utils/queryConnector';
 import { Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
@@ -633,6 +633,7 @@ const Brackets: React.FC = () => {
                                     : t(`march-madness.brackets.confirmation-message`)
                             )
                         );
+                    refetchBalances(walletAddress, networkId);
                     refetchAfterMarchMadnessMint(walletAddress, networkId);
 
                     setShowMintNFTModal(true);

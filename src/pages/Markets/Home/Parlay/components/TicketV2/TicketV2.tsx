@@ -1652,14 +1652,10 @@ const Ticket: React.FC<TicketProps> = ({
 
                             if (isAdapterError) {
                                 setIsBuying(false);
-                                refetchBalances(walletAddress, networkId);
                             } else if (!isFulfilledTx) {
-                                setIsBuying(false);
-                                refetchBalances(walletAddress, networkId);
                                 toast.update(toastId, getErrorToastOptions(t('markets.parlay.odds-changed-error')));
+                                setIsBuying(false);
                             } else {
-                                refetchBalances(walletAddress, networkId);
-
                                 const modalData = await getShareTicketModalData(
                                     [...markets],
                                     collateralHasLp ? usedCollateralForBuy : defaultCollateral,
@@ -1687,6 +1683,7 @@ const Ticket: React.FC<TicketProps> = ({
                                 setIsBuying(false);
                                 setCollateralAmount('');
                             }
+                            refetchBalances(walletAddress, networkId);
                         }
                     } else {
                         refetchBalances(walletAddress, networkId);
