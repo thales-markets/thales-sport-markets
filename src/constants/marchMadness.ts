@@ -1222,4 +1222,5 @@ export const DEFAULT_CONVERSION_BUFFER_PERCENTAGE = 0.02; // 2%
 export const START_MINTING_DATE = Date.UTC(2025, 2, 17); // 17th March 2024. - after Selection Sunday
 export const END_MINTING_DATE = 1742486400; // (20th March, 16:00 UTC) timestamp from marchMadness contract in seconds - used only for unsupported networks
 
-export const ARB_VOLUME_REWARDS = 30000;
+export const OVER_TOKEN_REWARDS = 30000;
+export const ARB_VOLUME_REWARDS = 30000; // no volume rewards for 2025

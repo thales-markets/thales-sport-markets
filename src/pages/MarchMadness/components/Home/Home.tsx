@@ -56,6 +56,21 @@ const BRACKETS_INCETIVES_RULES = [
     'march-madness.home.brackets-points-rules-7',
 ];
 
+const BRACKETS_PRIZES = [
+    'march-madness.home.brackets-prize-1',
+    'march-madness.home.brackets-prize-2',
+    'march-madness.home.brackets-prize-3',
+    'march-madness.home.brackets-prize-4',
+    'march-madness.home.brackets-prize-5',
+    'march-madness.home.brackets-prize-6',
+    'march-madness.home.brackets-prize-7',
+    'march-madness.home.brackets-prize-8',
+    'march-madness.home.brackets-prize-9',
+    'march-madness.home.brackets-prize-10',
+    'march-madness.home.brackets-prize-11',
+    'march-madness.home.brackets-prize-12',
+];
+
 const SHOW_VOLUME_REWARDS = false;
 
 const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
@@ -207,7 +222,24 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                         </>
                     )}
 
-                    <Text>{t('march-madness.home.description')}</Text>
+                    <Text>
+                        {t('march-madness.home.description')}
+                        <Text style={{ margin: '12px 0', display: 'block' }}>
+                            {t('march-madness.home.brackets-prizes')}
+                        </Text>
+                        <ListWrapper>
+                            {BRACKETS_PRIZES.map((text: string, index: number) => (
+                                <ListItem2 key={index}>
+                                    <Trans
+                                        i18nKey={text}
+                                        components={{
+                                            b: <BoldContent />,
+                                        }}
+                                    />
+                                </ListItem2>
+                            ))}
+                        </ListWrapper>
+                    </Text>
 
                     <DropdownWrapper>
                         <LabelArrowWrapper
@@ -398,8 +430,8 @@ const Text = styled.span`
     font-style: normal;
     font-weight: 400;
     line-height: 18px;
-    margin-top: 30px;
-    margin-bottom: 50px;
+    margin-top: 20px;
+    margin-bottom: 20px;
     letter-spacing: 1.4px;
     white-space: break-spaces;
 `;
@@ -424,7 +456,7 @@ const DropdownLabel = styled.h3`
     font-size: 24px;
     font-style: normal;
     font-weight: 400;
-    line-height: 157%; /* 34.54px */
+    line-height: 157%;
     letter-spacing: 2px;
 `;
 
@@ -439,9 +471,13 @@ const ListItem = styled.li`
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
-    line-height: 157%; /* 34.54px */
+    line-height: 157%;
     letter-spacing: 1.2px;
     margin-top: 8px;
+`;
+
+const ListItem2 = styled(ListItem)`
+    margin-top: 0;
 `;
 
 const BoldContent = styled.span`
