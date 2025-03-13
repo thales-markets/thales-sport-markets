@@ -1,6 +1,6 @@
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import styled from 'styled-components';
-import { FlexDivColumnNative, FlexDivStart } from 'styles/common';
+import { FlexDivColumnNative, FlexDivRow, FlexDivStart } from 'styles/common';
 
 export const OverlayContainer = styled.div`
     text-align: center;
@@ -108,6 +108,13 @@ export const StickyRow = styled(TableRow)`
 
 export const StickyRowTopTable = styled(TableRow)`
     width: 100%;
+`;
+
+export const Owner = styled(FlexDivRow)`
+    width: 390px;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        width: auto;
+    }
 `;
 
 export const WalletAddress = styled.span`

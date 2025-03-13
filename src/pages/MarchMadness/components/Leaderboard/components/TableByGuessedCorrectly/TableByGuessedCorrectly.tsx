@@ -21,6 +21,7 @@ import { useAccount, useChainId } from 'wagmi';
 import {
     Arrow,
     OverlayContainer,
+    Owner,
     StickyRowTopTable,
     TableHeader,
     TableHeaderContainer,
@@ -76,8 +77,10 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                     header: <>{t('march-madness.leaderboard.owner')}</>,
                     accessorKey: 'owner',
                     cell: (cellProps: any) => (
-                        <WalletAddress>
-                            {isMobile ? truncateAddress(cellProps.cell.getValue(), 5) : cellProps.cell.getValue()}
+                        <Owner>
+                            <WalletAddress>
+                                {isMobile ? truncateAddress(cellProps.cell.getValue(), 5) : cellProps.cell.getValue()}
+                            </WalletAddress>
                             <a
                                 href={getEtherscanAddressLink(
                                     (cellProps.row.original as any).network as SupportedNetwork,
@@ -88,7 +91,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                             >
                                 <Arrow className={'icon icon--arrow-external'} />
                             </a>
-                        </WalletAddress>
+                        </Owner>
                     ),
                     size: isMobile ? 200 : 500,
                     headStyle: { cssProperties: { minWidth: '130px' } },
