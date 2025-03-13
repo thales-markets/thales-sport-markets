@@ -45,7 +45,7 @@ const Stats: React.FC<{ disableMobileView?: boolean }> = ({ disableMobileView })
                     <Value>{`${formatCurrencyWithSign(
                         USD_SIGN,
                         marchMadnessStatsData.poolSize
-                    )} + ${formatCurrencyWithKey(CRYPTO_CURRENCY_MAP.OVER, OVER_TOKEN_REWARDS)}`}</Value>
+                    )} + ${formatCurrencyWithKey(CRYPTO_CURRENCY_MAP.OVER, OVER_TOKEN_REWARDS, 0, true)}`}</Value>
                 </Pair>
             </Data>
         </Container>
