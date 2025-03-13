@@ -286,6 +286,20 @@ export const getLeagueFlagSource = (tagId: number | any) => {
             return `/logos/Countries/six-nations.png`;
         case League.SUPER_RUGBY:
             return `/logos/Countries/super-rugby.png`;
+        case League.DOTA2:
+            return `/logos/Countries/dota2.png`;
+        case League.CSGO:
+            return `/logos/Countries/cs2.webp`;
+        case League.LOL:
+            return `/logos/Countries/lol.png`;
+        case League.VALORANT:
+            return `/logos/Countries/valorant.png`;
+        case League.STARCRAFT:
+            return `/logos/Countries/starcraft.png`;
+        case League.ROCKET_LEAGUE:
+            return `/logos/Countries/rocket-league.png`;
+        case League.CALL_OF_DUTY:
+            return `/logos/Countries/call-of-duty.png`;
         default:
             return `/logos/Countries/world.svg`;
     }
