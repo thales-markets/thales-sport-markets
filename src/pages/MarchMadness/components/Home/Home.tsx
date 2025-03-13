@@ -223,7 +223,12 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                     )}
 
                     <Text>
-                        {t('march-madness.home.description')}
+                        <Trans
+                            i18nKey={'march-madness.home.description'}
+                            components={{
+                                b: <BoldContent />,
+                            }}
+                        />
                         <Text style={{ margin: '12px 0', display: 'block' }}>
                             {t('march-madness.home.brackets-prizes')}
                         </Text>
