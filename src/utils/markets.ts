@@ -7,6 +7,7 @@ import {
     HOME_TEAM_MARKET_TYPES,
     ONE_SIDE_PLAYER_PROPS_MARKET_TYPES,
     OTHER_YES_NO_MARKET_TYPES,
+    PERIOD_MARKET_TYPES,
     PLAYER_PROPS_MARKET_TYPES,
     SCORE_MARKET_TYPES,
     SPREAD_MARKET_TYPES,
@@ -99,29 +100,7 @@ export const isDoubleChanceMarket = (marketType: MarketType) => {
 };
 
 export const isPeriodMarket = (marketType: MarketType) => {
-    return (
-        (marketType >= MarketType.FIRST_PERIOD_WINNER && marketType <= MarketType.NINTH_PERIOD_WINNER) ||
-        (marketType >= MarketType.FIRST_PERIOD_TOTAL && marketType <= MarketType.NINTH_PERIOD_TOTAL) ||
-        (marketType >= MarketType.FIRST_PERIOD_SPREAD && marketType <= MarketType.NINTH_PERIOD_SPREAD) ||
-        (marketType >= MarketType.FIRST_PERIOD_DOUBLE_CHANCE && marketType <= MarketType.SECOND_PERIOD_DOUBLE_CHANCE) ||
-        (marketType >= MarketType.FIRST_PERIOD_TOTAL_ODD_EVEN &&
-            marketType <= MarketType.NINTH_PERIOD_TOTAL_ODD_EVEN) ||
-        (marketType >= MarketType.FIRST_PERIOD_BOTH_TEAMS_TO_SCORE &&
-            marketType <= MarketType.NINTH_PERIOD_BOTH_TEAMS_TO_SCORE) ||
-        (marketType >= MarketType.FIRST_PERIOD_TOTAL_HOME_TEAM &&
-            marketType <= MarketType.FIRST_PERIOD_TOTAL_AWAY_TEAM) ||
-        (marketType >= MarketType.SECOND_PERIOD_TOTAL_HOME_TEAM &&
-            marketType <= MarketType.SECOND_PERIOD_TOTAL_AWAY_TEAM) ||
-        (marketType >= MarketType.FIRST_PERIOD_DRAW_NO_BET && marketType <= MarketType.FOURTH_PERIOD_DRAW_NO_BET) ||
-        (marketType >= MarketType.FIRST_PERIOD_TOTAL_EXACT_HOME_TEAM &&
-            marketType <= MarketType.SECOND_PERIOD_TOTAL_EXACT_AWAY_TEAM) ||
-        (marketType >= MarketType.FIRST_PERIOD_TOTAL_CORNERS && marketType <= MarketType.SECOND_PERIOD_TOTAL_CORNERS) ||
-        (marketType >= MarketType.FIRST_PERIOD_TOTAL_CORNERS_HOME_TEAM &&
-            marketType <= MarketType.SECOND_PERIOD_TOTAL_CORNERS_AWAY_TEAM) ||
-        (marketType >= MarketType.FIRST_PERIOD_SPREAD_CORNERS &&
-            marketType <= MarketType.SECOND_PERIOD_SPREAD_CORNERS) ||
-        (marketType >= MarketType.FIRST_PERIOD_MOST_CORNERS && marketType <= MarketType.SECOND_PERIOD_MOST_CORNERS)
-    );
+    return PERIOD_MARKET_TYPES.includes(marketType);
 };
 
 export const isPeriod2Market = (marketType: MarketType) => {

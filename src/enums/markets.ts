@@ -100,4 +100,5 @@ export enum TicketErrorCode {
     FUTURES_COMBINING_NOT_SUPPORTED = 5,
     SGP_DIFFERENT_GAME = 6,
     SGP_LEAGUE_DISABLED = 7,
+    SGP_MAX_MARKETS = 8,
 }

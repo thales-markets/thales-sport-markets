@@ -91,8 +91,12 @@ export const MatchInfoLabel = styled.label<{ selected?: boolean }>`
     }
 `;
 
-export const TournamentNameLabel = styled.label<{ isBoosted?: boolean; isLeagueInfoVisible?: boolean }>`
-    color: ${(props) => props.theme.textColor.quinary};
+export const TournamentNameLabel = styled.label<{
+    isBoosted?: boolean;
+    isLeagueInfoVisible?: boolean;
+    selected?: boolean;
+}>`
+    color: ${(props) => (props.selected ? props.theme.textColor.tertiary : props.theme.textColor.quinary)};
     padding-left: ${(props) => (props.isLeagueInfoVisible ? '48px' : '12px')};
     padding-top: ${(props) => (props.isBoosted ? '16px' : '10px')};
     font-size: 10px;

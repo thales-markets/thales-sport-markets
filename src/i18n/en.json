@@ -827,7 +827,7 @@
                 "system": "Create system bets that cover multiple combinations of selections. Even if some picks lose, you can still win.",
                 "sgp": "Build a Same Game Parlay (SGP) by combining multiple bets from the same event for bigger payouts.",
                 "sgp-different-game": "It is not supported to combine different games in the Same Game Parlay.",
-                "sgp-sport-disabled": "{{league}} is currently not supported.",
+                "sgp-league-disabled": "{{league}} is currently not supported.",
                 "thales-bonus": "Users placing trades with THALES will get 2% extra payouts for each game they have in their ticket (already calculated in Total quote and Payout).",
                 "swap-thales": "<bold>Boost your winnings with THALES!</bold> With just a simple click, you can automatically swap to THALES and enjoy improved betting quotes instantly! Payout is in THALES.",
                 "keep-selection": "By default, the parlay builder is reset after successful submission. Tick this if you want to keep current context after submission.",
@@ -859,8 +859,9 @@
                 "futures-combining-not-supported": "Combining futures on parlay is not supported",
                 "system-bet-min-markets-validation": "System bet requires minimum {{minMarkets}} games",
                 "sgp-bet-min-markets-validation": "SGP bet requires minimum {{minMarkets}} markets",
+                "sgp-bet-max-markets-validation": "SGP bet supports maximum {{max}} markets",
                 "sgp-different-game": "It is not supported to combine different games in the same game parlay",
-                "sgp-sport-disabled": "{{league}} is currently not supported for SGP. Switching to Regular bet.",
+                "sgp-league-disabled": "{{league}} is currently not supported for SGP. Switching to Regular bet.",
                 "sgp-no-odds": "Missing odds from provider"
             },
             "share-ticket": {
@@ -1192,7 +1193,9 @@
                 "deposit": "Deposit",
                 "withdrawalRequest": "Withdrawal Request",
                 "claim": "Withdrawal Claim"
-            }
+            },
+            "min-buy-in": "Min buy-in",
+            "min-payout": "Min payout"
         }
     },
     "seo": {
