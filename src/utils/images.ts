@@ -282,6 +282,10 @@ export const getLeagueFlagSource = (tagId: number | any) => {
             return `/logos/Countries/south-korea.svg`;
         case League.CANADA_PREMIER_LEAGUE:
             return `/logos/Countries/canada.svg`;
+        case League.SIX_NATIONS:
+            return `/logos/Countries/six-nations.png`;
+        case League.SUPER_RUGBY:
+            return `/logos/Countries/super-rugby.png`;
         default:
             return `/logos/Countries/world.svg`;
     }
