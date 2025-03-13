@@ -1047,7 +1047,7 @@ const Brackets: React.FC = () => {
         selectedBracketId === DEFAULT_BRACKET_ID &&
         bracketsData.every((match) => match.isHomeTeamSelected === undefined);
     const isStatusComplete = bracketsData.every((match) => match.isHomeTeamSelected !== undefined);
-    const isSubmitDisabled = !isBracketReady || insufficientBalance;
+    const isSubmitDisabled = !isBracketReady || insufficientBalance || isMinting;
     const isCollateralDropdownDisabled = !isBracketReady;
 
     return (
