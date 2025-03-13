@@ -1,16 +1,11 @@
-import { isSocialAuthType } from '@particle-network/auth-core';
-import { CustomStyle } from '@particle-network/auth-core-modal';
-import { PARTICAL_LOGINS_CLASSNAMES, PARTICAL_WALLETS_LABELS } from 'constants/wallet';
+import { CustomStyle } from '@particle-network/authkit';
+import { WALLETS_LABELS } from 'constants/wallet';
+
 import { NetworkId } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
-import { ParticalTypes } from 'types/wallet';
+import { ParticalTypes, WalletConnections } from 'types/wallet';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import { Connector } from 'wagmi';
-
-export const getClassNameForParticalLogin = (socialId: ParticalTypes) => {
-    const label = PARTICAL_LOGINS_CLASSNAMES.find((item) => item.socialId == socialId)?.className;
-    return label ? label : '';
-};
 
 export const getSpecificConnectorFromConnectorsArray = (
     connectors: readonly Connector[],
@@ -23,8 +18,6 @@ export const getSpecificConnectorFromConnectorsArray = (
     return connectors.find((connector: any) => connector.id == name);
 };
 
-export const isSocialLogin = (authType: any) => isSocialAuthType(authType) || (authType as any) === 'twitterv1';
-
 export const getOnRamperUrl = (apiKey: string, walletAddress: string, networkId: SupportedNetwork) => {
     return `https://buy.onramper.com?apiKey=${apiKey}&mode=buy&onlyCryptos=${supportedOnramperTokens(
         networkId
@@ -32,13 +25,17 @@ export const getOnRamperUrl = (apiKey: string, walletAddress: string, networkId:
 };
 
 const supportedOnramperTokens = (networkId: SupportedNetwork) => {
+    const OP_TOKENS =
+        'usdc_optimism,usdt_optimism,dai_optimism,op_optimism,eth_optimism,thales_optimism,weth_optimism,deusdc_optimism';
+    const ARB_TOKENS =
+        'usdc_arbitrum,usdt_arbitrum,dai_arbitrum,arb_arbitrum,eth_arbitrum,weth_arbitrum,deusdc_arbitrum';
     switch (networkId) {
         case NetworkId.OptimismMainnet:
-            return 'usdc_optimism,usdt_optimism,dai_optimism,op_optimism,eth_optimism';
+            return OP_TOKENS;
         case NetworkId.Arbitrum:
-            return 'usdc_arbitrum,usdt_arbitrum,dai_arbitrum,arb_arbitrum,eth_arbitrum';
+            return ARB_TOKENS;
         default:
-            return 'usdc_optimism, usdt_optimism, dai_optimism, op_optimism, eth_optimism, usdc_arbitrum, usdt_arbitrum, dai_arbitrum, arb_arbitrum, eth_arbitrum, usdc_base, eth_base, usdc_polygon';
+            return OP_TOKENS + ',' + ARB_TOKENS;
     }
 };
 
@@ -80,7 +77,7 @@ export const PARTICLE_STYLE: CustomStyle = {
     cardBorderRadius: '8px',
 };
 
-export const getLabelForParticalLogin = (id: ParticalTypes) => {
-    const label = PARTICAL_WALLETS_LABELS.find((item) => item.id == id)?.labelKey;
+export const getWalletLabel = (id: ParticalTypes | WalletConnections) => {
+    const label = WALLETS_LABELS.find((item: any) => item.id == id)?.labelKey;
     return label ? label : '';
 };

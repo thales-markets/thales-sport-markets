@@ -25,6 +25,7 @@ import { ThemeInterface } from 'types/ui';
 import { isStableCurrency } from 'utils/collaterals';
 import { refetchOverdropMultipliers } from 'utils/queryConnector';
 import { useAccount, useChainId, useClient } from 'wagmi';
+import { isOverCurrency } from '../../utils/collaterals';
 import MyTicket from './components/MyTicket';
 
 const PARLAY_IMAGE_NAME = 'ParlayImage.png';
@@ -48,9 +49,9 @@ const TWITTER_MESSAGES_TEXT = [
     `Levelling up my game with @OvertimeMarkets! Are you ready to take the plunge? 🔥 ${LINKS.Overtime}`,
 ];
 
-const THALES_COLLATERAL_TWITTER_MESSAGES_TEXT = [
-    `Here to stack THALES and bets on @OvertimeMarkets – let’s gooo! 💥 ${LINKS.Overtime}`,
-    `Another day, another THALES bet locked in on @OvertimeMarkets – Who's joining the action? 🦓 ${LINKS.Overtime}`,
+const OVER_COLLATERAL_TWITTER_MESSAGES_TEXT = [
+    `Here to stack OVER and bets on @OvertimeMarkets – let’s gooo! 💥 ${LINKS.Overtime}`,
+    `Another day, another OVER bet locked in on @OvertimeMarkets – Who's joining the action? 🦓 ${LINKS.Overtime}`,
 ];
 
 const TWITTER_MESSAGE_PASTE = '%0A<PASTE YOUR IMAGE>';
@@ -85,10 +86,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
 
     const ref = useRef<HTMLDivElement>(null);
 
-    const isThalesCollateral = useMemo(
-        () => collateral === CRYPTO_CURRENCY_MAP.THALES || collateral === CRYPTO_CURRENCY_MAP.sTHALES,
-        [collateral]
-    );
+    const isOver = useMemo(() => isOverCurrency(collateral), [collateral]);
 
     const isNonStableCollateral = useMemo(() => !isStableCurrency(collateral), [collateral]);
 
@@ -194,9 +192,9 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
 
                     const twitterLinkWithStatusMessage =
                         LINKS.TwitterTweetStatus +
-                        (isThalesCollateral
-                            ? THALES_COLLATERAL_TWITTER_MESSAGES_TEXT[
-                                  Math.floor(Math.random() * THALES_COLLATERAL_TWITTER_MESSAGES_TEXT.length)
+                        (isOver
+                            ? OVER_COLLATERAL_TWITTER_MESSAGES_TEXT[
+                                  Math.floor(Math.random() * OVER_COLLATERAL_TWITTER_MESSAGES_TEXT.length)
                               ]
                             : TWITTER_MESSAGES_TEXT[Math.floor(Math.random() * TWITTER_MESSAGES_TEXT.length)]) +
                         (useDownloadImage ? TWITTER_MESSAGE_UPLOAD : TWITTER_MESSAGE_PASTE);
@@ -251,7 +249,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                 }
             }
         },
-        [isLoading, isMobile, isThalesCollateral, useDownloadImage]
+        [isLoading, isMobile, isOver, useDownloadImage]
     );
 
     const onTwitterShareClick = (copyOnly?: boolean) => {

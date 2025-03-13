@@ -19,6 +19,7 @@ import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery
 import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
 import useSportMarketSgpQuery from 'queries/sgp/useSportMarketSgpQuery';
+import queryString from 'query-string';
 import React, { Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
@@ -60,7 +61,6 @@ import { League, Sport } from '../../../enums/sports';
 import TimeFilters from '../../../layouts/DappLayout/DappHeader/components/TimeFilters';
 import { getSportLeagueIds, isBoxingLeague } from '../../../utils/sports';
 import FilterTagsMobile from '../components/FilterTagsMobile';
-import SportFilterMobile from '../components/SportFilter/SportFilterMobile';
 import SportTags from '../components/SportTags';
 import GlobalFilters from '../components/StatusFilters';
 import Breadcrumbs from './Breadcrumbs';
@@ -108,6 +108,8 @@ const Home: React.FC = () => {
     const [availableMarketTypes, setAvailableMarketTypes] = useState<MarketType[]>([]);
     const getSelectedOddsType = localStore.get(LOCAL_STORAGE_KEYS.ODDS_TYPE);
 
+    const queryParams: { freeBet?: string } = queryString.parse(location.search);
+
     const tagsList: Tags = useMemo(
         () =>
             orderBy(
@@ -124,10 +126,10 @@ const Home: React.FC = () => {
     );
 
     useEffect(() => {
-        if (getSelectedOddsType == undefined) {
+        if (getSelectedOddsType == undefined && !queryParams.freeBet) {
             setShowOddsSelectorModal(true);
         }
-    }, [getSelectedOddsType]);
+    }, [getSelectedOddsType, queryParams.freeBet]);
 
     const favouriteLeagues = useSelector(getFavouriteLeagues);
 
@@ -840,15 +842,6 @@ const Home: React.FC = () => {
                 <MainContainer>
                     {isMobile && (
                         <>
-                            <SportFilterMobile
-                                playerPropsCountPerTag={playerPropsCountPerTag}
-                                setAvailableTags={setAvailableTags}
-                                tagsList={tagsList}
-                                openMarketsCountPerSport={openMarketsCountPerSport}
-                                boostedMarketsCount={boostedMarketsCount}
-                                liveMarketsCountPerSport={liveMarketsCountPerSport}
-                                showActive={showActive}
-                            />
                             {!marketsLoading &&
                                 finalMarkets.length > 0 &&
                                 (statusFilter === StatusFilter.OPEN_MARKETS || sportFilter === SportFilter.Live) && (
@@ -972,8 +965,8 @@ const Home: React.FC = () => {
 const Container = styled(FlexDivColumnCentered)`
     width: 100%;
     margin-top: 15px;
-    @media (max-width: 767px) {
-        margin-top: 20px;
+    @media (max-width: 950px) {
+        margin-top: 0;
     }
 `;
 
@@ -1083,6 +1076,10 @@ const LogoContainer = styled.div`
     margin-top: 30px;
     margin-bottom: 20px;
     text-align: center;
+    svg {
+        height: 25px;
+        width: 100%;
+    }
 `;
 
 const FiltersIcon = styled.i`

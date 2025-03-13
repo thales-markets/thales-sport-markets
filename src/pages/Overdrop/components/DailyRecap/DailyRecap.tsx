@@ -5,12 +5,10 @@ import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
 import useUserMultipliersQuery from 'queries/overdrop/useUserMultipliersQuery';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { getIsBiconomy } from 'redux/modules/wallet';
+
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered } from 'styles/common';
-import { RootState } from 'types/redux';
-import biconomyConnector from 'utils/biconomyWallet';
+
 import { formattedDurationFull } from 'utils/formatters/date';
 import { getMultiplierValueFromQuery } from 'utils/overdrop';
 import { useAccount } from 'wagmi';
@@ -25,16 +23,13 @@ const dateTimeTranslationMap = {
 const DailyRecap: React.FC = () => {
     const { t } = useTranslation();
 
-    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
-
     const { address, isConnected } = useAccount();
-    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
-    const userMultipliersQuery = useUserMultipliersQuery(walletAddress, {
+    const userMultipliersQuery = useUserMultipliersQuery(address as string, {
         enabled: isConnected,
     });
 
-    const userDataQuery = useUserDataQuery(walletAddress, {
+    const userDataQuery = useUserDataQuery(address as string, {
         enabled: isConnected,
     });
 

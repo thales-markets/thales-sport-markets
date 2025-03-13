@@ -362,9 +362,11 @@ const MainContainer = styled(FlexDivColumn)<{ isGameOpen: boolean }>`
 `;
 
 const SidebarContainer = styled(FlexDivColumn)`
+    min-width: 360px;
     max-width: 360px;
     @media (max-width: 1299px) {
         max-width: 320px;
+        min-width: 320px;
     }
     @media (max-width: 950px) {
         display: none;

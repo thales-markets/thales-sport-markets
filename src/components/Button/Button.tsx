@@ -8,6 +8,7 @@ type ButtonProps = {
     margin?: string;
     textColor?: string;
     backgroundColor?: string;
+    hoverColor?: string;
     borderColor?: string;
     onClick?: any;
     fontSize?: string;
@@ -16,6 +17,7 @@ type ButtonProps = {
     disabled?: boolean;
     additionalStyles?: CSSProperties;
     children?: any;
+    className?: string;
 };
 
 const Button: React.FC<ButtonProps> = ({
@@ -24,6 +26,7 @@ const Button: React.FC<ButtonProps> = ({
     padding,
     textColor,
     backgroundColor,
+    hoverColor,
     borderColor,
     margin,
     onClick,
@@ -43,6 +46,7 @@ const Button: React.FC<ButtonProps> = ({
             margin={margin}
             textColor={textColor}
             backgroundColor={backgroundColor}
+            hoverColor={hoverColor}
             borderColor={borderColor}
             onClick={onClick}
             disabled={disabled}
@@ -64,6 +68,7 @@ const Wrapper = styled.button<{
     margin?: string;
     textColor?: string;
     backgroundColor?: string;
+    hoverColor?: string;
     borderColor?: string;
     fontSize?: string;
     fontWeight?: string;
@@ -76,7 +81,7 @@ const Wrapper = styled.button<{
     width: ${(props) => props.width || 'auto'};
     min-height: ${(props) => props.height || '28px'};
     border: 1px solid ${(props) => props.borderColor || props.theme.button.borderColor.primary};
-    border-radius: 5px;
+    border-radius: 8px;
     ${(props) => (props.style?.fontFamily ? `font-family: ${props.style?.fontFamily};` : '')}
     font-weight: ${(props) => props.fontWeight || '600'};
     font-size: ${(props) => props.fontSize || '15px'};
@@ -90,6 +95,10 @@ const Wrapper = styled.button<{
     &:disabled {
         opacity: 0.5;
         cursor: default;
+    }
+
+    &:hover {
+        background: ${(props) => props.hoverColor || props.backgroundColor || props.theme.button.background.primary};
     }
 `;
 

@@ -12,18 +12,20 @@ import {
     NAV_MENU_SECOND_SECTION,
     NAV_MENU_THIRD_SECTION,
 } from 'constants/ui';
-import { ProfileIconWidget } from 'layouts/DappLayout/DappHeader/components/ProfileItem/ProfileItem';
 import { LogoContainer, OverdropIcon } from 'layouts/DappLayout/DappHeader/styled-components';
 import useBlockedGamesQuery from 'queries/resolveBlocker/useBlockedGamesQuery';
 import useWhitelistedForUnblock from 'queries/resolveBlocker/useWhitelistedForUnblock';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
+import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
 import { getNetworkIconClassNameByNetworkId, getNetworkNameByNetworkId } from 'utils/network';
 import { buildHref } from 'utils/routes';
-import { useAccount, useChainId, useClient } from 'wagmi';
+import { useAccount, useChainId, useClient, useDisconnect } from 'wagmi';
 import {
     ButtonWrapper,
     CloseIcon,
@@ -49,8 +51,9 @@ type NavMenuMobileProps = {
 const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVisibility }) => {
     const { t } = useTranslation();
     const location = useLocation();
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const theme: ThemeInterface = useTheme();
-
+    const { disconnect } = useDisconnect();
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
@@ -90,7 +93,7 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
             <Wrapper show={visibility}>
                 <HeaderContainer>
                     <LogoContainer>
-                        <Logo width={150} />
+                        <Logo />
                         <SPAAnchor
                             onClick={() => setNavMenuVisibility(false)}
                             style={{ display: 'flex' }}
@@ -106,38 +109,30 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                             <NetworkName>{getNetworkNameByNetworkId(networkId)}</NetworkName>
                         </Network>
                     </NetworkWrapper>
-                    <WalletWrapper>
+                    <WalletWrapper onClick={() => setNavMenuVisibility(false)}>
                         <WalletInfo />
                     </WalletWrapper>
                 </HeaderContainer>
                 <ItemsContainer>
                     {NAV_MENU_FIRST_SECTION.map((item, index) => {
                         if (!item.supportedNetworks.includes(networkId)) return;
-                        if (item.name == 'profile' && !isConnected) return;
+                        if (item.name == 'profile') return;
                         if (item.name == 'resolve-blocker' && !isWitelistedForUnblock) return;
                         return (
-                            <SPAAnchor key={index} href={buildHref(item.route)}>
-                                <ItemContainer
-                                    key={index}
-                                    active={location.pathname === item.route}
-                                    onClick={() => setNavMenuVisibility(false)}
-                                >
-                                    {isConnected && item.name == 'profile' ? (
-                                        <ProfileIconWidget avatarSize={25} iconColor={theme.textColor.primary} />
-                                    ) : (
-                                        <>
-                                            {item.name == 'resolve-blocker' && blockedGamesCount > 0 && (
-                                                <NotificationCount>
-                                                    <Count>{blockedGamesCount}</Count>
-                                                </NotificationCount>
-                                            )}
-                                            <NavIcon
-                                                className={item.iconClass}
-                                                active={location.pathname === item.route}
-                                            />
-                                        </>
+                            <SPAAnchor
+                                key={index}
+                                onClick={() => setNavMenuVisibility(false)}
+                                href={buildHref(item.route)}
+                            >
+                                <ItemContainer key={index} active={location.pathname === item.route}>
+                                    {item.name == 'resolve-blocker' && blockedGamesCount > 0 && (
+                                        <NotificationCount>
+                                            <Count>{blockedGamesCount}</Count>
+                                        </NotificationCount>
                                     )}
-                                    <NavLabel>{t(item.i18label)}</NavLabel>
+                                    <NavIcon className={item.iconClass} active={location.pathname === item.route} />
+
+                                    <NavLabel>{!isBiconomy ? t(item.i18label) : t(item.i18labelSmart as any)}</NavLabel>
                                 </ItemContainer>
                             </SPAAnchor>
                         );
@@ -146,12 +141,12 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                     {NAV_MENU_SECOND_SECTION.map((item, index) => {
                         if (!item.supportedNetworks.includes(networkId)) return;
                         return (
-                            <SPAAnchor key={index} href={buildHref(item.route)}>
-                                <ItemContainer
-                                    key={index}
-                                    active={location.pathname === item.route}
-                                    onClick={() => setNavMenuVisibility(false)}
-                                >
+                            <SPAAnchor
+                                onClick={() => setNavMenuVisibility(false)}
+                                key={index}
+                                href={buildHref(item.route)}
+                            >
+                                <ItemContainer key={index} active={location.pathname === item.route}>
                                     <NavIcon className={item.iconClass} active={location.pathname === item.route} />
                                     <NavLabel>{t(item.i18label)}</NavLabel>
                                 </ItemContainer>
@@ -162,45 +157,54 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                     {NAV_MENU_THIRD_SECTION.map((item, index) => {
                         if (!item.supportedNetworks.includes(networkId)) return;
                         return (
-                            <SPAAnchor key={index} href={buildHref(item.route)}>
-                                <ItemContainer
-                                    key={index}
-                                    active={location.pathname === item.route}
-                                    onClick={() => setNavMenuVisibility(false)}
-                                >
+                            <SPAAnchor
+                                onClick={() => setNavMenuVisibility(false)}
+                                key={index}
+                                href={buildHref(item.route)}
+                            >
+                                <ItemContainer key={index} active={location.pathname === item.route}>
                                     <NavIcon className={item.iconClass} active={location.pathname === item.route} />
                                     <NavLabel>{t(item.i18label)}</NavLabel>
                                 </ItemContainer>
                             </SPAAnchor>
                         );
                     })}
+                    <ItemContainer onClick={() => setOpenFreeBetModal(true)}>
+                        <NavIcon className={`icon icon--gift`} />
+                        <NavLabel>{t('profile.send-free-bet')}</NavLabel>
+                    </ItemContainer>
                     <Separator />
                     {NAV_MENU_FOURTH_SECTION.map((item, index) => {
                         if (!item.supportedNetworks.includes(networkId)) return;
                         return (
-                            <SPAAnchor key={index} href={buildHref(item.route)}>
-                                <ItemContainer
-                                    key={index}
-                                    active={location.pathname === item.route}
-                                    onClick={() => setNavMenuVisibility(false)}
-                                >
+                            <SPAAnchor
+                                onClick={() => setNavMenuVisibility(false)}
+                                key={index}
+                                href={buildHref(item.route)}
+                            >
+                                <ItemContainer key={index} active={location.pathname === item.route}>
                                     <NavIcon className={item.iconClass} active={location.pathname === item.route} />
                                     <NavLabel>{t(item.i18label)}</NavLabel>
                                 </ItemContainer>
                             </SPAAnchor>
                         );
                     })}
-                    <ButtonWrapper>
-                        <Button
-                            borderColor={theme.button.borderColor.secondary}
-                            backgroundColor="transparent"
-                            textColor={theme.button.textColor.quaternary}
-                            width="100%"
-                            onClick={() => setOpenFreeBetModal(!openFreeBetModal)}
-                        >
-                            {t('profile.send-free-bet')}
-                        </Button>
-                    </ButtonWrapper>
+                    {isConnected && (
+                        <ButtonWrapper>
+                            <Button
+                                borderColor={theme.button.borderColor.secondary}
+                                backgroundColor="transparent"
+                                textColor={theme.button.textColor.quaternary}
+                                width="100%"
+                                onClick={() => {
+                                    disconnect();
+                                    setNavMenuVisibility(false);
+                                }}
+                            >
+                                {t('markets.nav-menu.buttons.disconnect')}
+                            </Button>
+                        </ButtonWrapper>
+                    )}
                 </ItemsContainer>
 
                 <FooterContainer>

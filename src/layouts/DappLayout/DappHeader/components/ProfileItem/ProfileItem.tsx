@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import { RootState } from 'types/redux';
-import biconomyConnector from 'utils/biconomyWallet';
 import { buildHref } from 'utils/routes';
+import useBiconomy from 'utils/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import {
     Count,
@@ -21,29 +21,39 @@ import {
 type ProfileItemProperties = {
     labelHidden?: boolean;
     avatarSize?: number;
-    iconColor?: string;
+    color?: string;
     marginRight?: string;
+    top?: string;
+    left?: string;
 };
 
-const ProfileItem: React.FC<ProfileItemProperties> = ({ labelHidden, avatarSize }) => {
+const ProfileItem: React.FC<ProfileItemProperties> = ({ labelHidden, avatarSize, top, left, color }) => {
     const { t } = useTranslation();
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     return (
         <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Profile)}>
             <ProfileContainer>
-                <ProfileIconWidget avatarSize={avatarSize} />
-                {!labelHidden && <ProfileLabel>{t('markets.nav-menu.items.profile')}</ProfileLabel>}
+                <ProfileIconWidget top={top} left={left} avatarSize={avatarSize} color={color} />
+                {!labelHidden && (
+                    <ProfileLabel color={color}>
+                        {isBiconomy
+                            ? t('markets.nav-menu.items.profile-smart')
+                            : t('markets.nav-menu.items.profile-wallet')}
+                    </ProfileLabel>
+                )}
             </ProfileContainer>
         </SPAAnchor>
     );
 };
 
-export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({ avatarSize, iconColor, marginRight }) => {
+export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({ avatarSize, color, marginRight, top, left }) => {
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
-    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+    const smartAddres = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddres : address) || '';
 
     const claimablePositionsCountQuery = useClaimablePositionCountV2Query(
         walletAddress,
@@ -63,11 +73,11 @@ export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({ avatarSize,
         <>
             <ProfileIconContainer marginRight={marginRight}>
                 {!!notificationsCount && (
-                    <NotificationCount>
+                    <NotificationCount top={top} left={left}>
                         <Count>{notificationsCount}</Count>
                     </NotificationCount>
                 )}
-                <ProfileIcon avatarSize={avatarSize} iconColor={iconColor} />
+                <ProfileIcon avatarSize={avatarSize} iconColor={color} />
             </ProfileIconContainer>
         </>
     );

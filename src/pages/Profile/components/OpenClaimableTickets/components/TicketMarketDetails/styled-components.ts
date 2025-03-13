@@ -115,6 +115,8 @@ export const MatchScoreContainer = styled(FlexDivRow)`
     min-width: 150px;
     flex: initial !important;
     justify-content: end;
+    align-items: center;
+    gap: 4px;
     @media (max-width: 767px) {
         margin-left: 5px;
         min-width: 80px;
@@ -177,6 +179,16 @@ export const TeamScoreLabel = styled.span<{ isResolved?: boolean }>`
         font-size: 10px;
         line-height: 12px;
     }
+`;
+
+const Icon = styled.i`
+    font-size: 10px;
+`;
+export const Correct = styled(Icon)`
+    color: ${(props) => props.theme.status.win};
+`;
+export const Wrong = styled(Icon)`
+    color: ${(props) => props.theme.status.loss};
 `;
 
 export const TicketMarketStatus = styled.span<{ color?: string }>`

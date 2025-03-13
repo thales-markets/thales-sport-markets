@@ -8,24 +8,20 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useSwipeable } from 'react-swipeable';
 import { getIsMobile } from 'redux/modules/app';
-import { getIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivRow } from 'styles/common';
 import { formatCurrencyWithKey, formatCurrencyWithSign } from 'thales-utils';
 import { OverdropUserData } from 'types/overdrop';
 import { RootState } from 'types/redux';
-import biconomyConnector from 'utils/biconomyWallet';
-import { formatPoints, getCurrentLevelByPoints, getNextThalesRewardLevel, getProgressLevel } from 'utils/overdrop';
+import { formatPoints, getCurrentLevelByPoints, getNextOverRewardLevel, getProgressLevel } from 'utils/overdrop';
 import { useAccount } from 'wagmi';
 import SmallBadge from '../SmallBadge';
 
 const BadgeOverview: React.FC = () => {
     const { t } = useTranslation();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
-    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
     const { address, isConnected } = useAccount();
-    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
     const [currentStep, setCurrentStep] = useState<number>(0);
     const [numberOfCards, setNumberOfCards] = useState<number>(isMobile ? 3 : 6);
@@ -34,7 +30,7 @@ const BadgeOverview: React.FC = () => {
         isMobile ? setNumberOfCards(4) : setNumberOfCards(6);
     }, [isMobile]);
 
-    const userDataQuery = useUserDataQuery(walletAddress, {
+    const userDataQuery = useUserDataQuery(address as string, {
         enabled: isConnected,
     });
 
@@ -46,7 +42,7 @@ const BadgeOverview: React.FC = () => {
         userDataQuery?.isSuccess && userDataQuery?.data ? userDataQuery.data : undefined;
 
     const levelItem = userData ? getCurrentLevelByPoints(userData.points) : OVERDROP_LEVELS[0];
-    const nextThalesRewardLevel = getNextThalesRewardLevel(userData?.points);
+    const nextOverRewardLevel = getNextOverRewardLevel(userData?.points);
 
     useEffect(() => {
         if (levelItem) {
@@ -78,7 +74,7 @@ const BadgeOverview: React.FC = () => {
     const progressLevel = getProgressLevel(
         userData?.points ?? 0,
         0,
-        nextThalesRewardLevel?.minimumPoints ?? OVERDROP_LEVELS[1].minimumPoints
+        nextOverRewardLevel?.minimumPoints ?? OVERDROP_LEVELS[1].minimumPoints
     );
 
     return (
@@ -132,15 +128,15 @@ const BadgeOverview: React.FC = () => {
                 </ItemContainer>
                 {levelItem.level !== OVERDROP_LEVELS.length - 1 && (
                     <ItemContainer>
-                        <Label>{t('overdrop.overdrop-home.next-thales-rewards-at')}</Label>
+                        <Label>{t('overdrop.overdrop-home.next-over-rewards-at')}</Label>
                         <ValueWrapper>
                             <ValueSecondary>
-                                {nextThalesRewardLevel
-                                    ? `${formatPoints(nextThalesRewardLevel?.minimumPoints)} @ LVL ${
-                                          nextThalesRewardLevel?.level
+                                {nextOverRewardLevel
+                                    ? `${formatPoints(nextOverRewardLevel?.minimumPoints)} @ LVL ${
+                                          nextOverRewardLevel?.level
                                       }  (${formatCurrencyWithKey(
-                                          'THALES',
-                                          nextThalesRewardLevel?.voucherAmount ?? 0,
+                                          CRYPTO_CURRENCY_MAP.OVER,
+                                          nextOverRewardLevel?.voucherAmount ?? 0,
                                           0,
                                           true
                                       )})`
@@ -154,7 +150,7 @@ const BadgeOverview: React.FC = () => {
                                 width="100%"
                                 height="18px"
                                 textBelow={`${formatPoints(userData?.points ?? 0)} / ${formatPoints(
-                                    nextThalesRewardLevel?.minimumPoints ?? OVERDROP_LEVELS[1].minimumPoints
+                                    nextOverRewardLevel?.minimumPoints ?? OVERDROP_LEVELS[1].minimumPoints
                                 )}`}
                             />
                         </ProgressContainer>

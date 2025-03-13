@@ -76,8 +76,11 @@ const useLpUsersPnlQuery = (
                     }
                 });
                 exchangeRates['THALES'] = Number(thalesPriceResponse.data);
+                // TODO hardcode OVER price
+                exchangeRates['OVER'] = Number(thalesPriceResponse.data);
 
                 const tickets = Array.isArray(lpTickets) ? lpTickets : [lpTickets];
+
                 const numberOfBatches = Math.trunc(tickets.length / BATCH_SIZE) + 1;
 
                 const promises = [];

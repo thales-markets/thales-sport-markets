@@ -75,7 +75,6 @@ const QUERY_KEYS = {
             networkId,
             walletAddress,
         ],
-        StakingData: (walletAddress: string, networkId: Network) => ['stakingData', walletAddress, networkId],
     },
     Pnl: {
         LpStats: (round: number, leagueId: League, onlyPP: boolean, networkId: Network) => [
@@ -160,6 +159,7 @@ const QUERY_KEYS = {
         GameMultipliers: () => ['gameMultipliers'],
         Price: () => ['price'],
     },
+    FreeBet: (freeBetId: string, networkId: Network) => ['freeBet', freeBetId, networkId],
     RiskManagementConfig: (networkId: Network, configType: RiskManagementConfig) => [
         'riskManagementConfig',
         networkId,
