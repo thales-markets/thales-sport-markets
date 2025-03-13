@@ -79,7 +79,10 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                         <WalletAddress>
                             {isMobile ? truncateAddress(cellProps.cell.getValue(), 5) : cellProps.cell.getValue()}
                             <a
-                                href={getEtherscanAddressLink(networkId, cellProps.cell.getValue())}
+                                href={getEtherscanAddressLink(
+                                    (cellProps.row.original as any).network as SupportedNetwork,
+                                    cellProps.cell.getValue()
+                                )}
                                 target="_blank"
                                 rel="noreferrer"
                             >
@@ -137,7 +140,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                     },
                 },
             ].filter((column: any) => !isMobile || column.accessorKey !== 'network'),
-        [t, networkId, isMobile]
+        [t, isMobile]
     );
 
     const leaderboardQuery = useLeaderboardByGuessedCorrectlyQuery(networkId);
