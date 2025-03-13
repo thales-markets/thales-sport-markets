@@ -1,4 +1,5 @@
 import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
+import { OVER_TOKEN_REWARDS } from 'constants/marchMadness';
 import { minutesToMilliseconds } from 'date-fns';
 import useMarchMadnessStatsQuery from 'queries/marchMadness/useMarchMadnessStatsQuery';
 import React from 'react';
@@ -44,10 +45,7 @@ const Stats: React.FC<{ disableMobileView?: boolean }> = ({ disableMobileView })
                     <Value>{`${formatCurrencyWithSign(
                         USD_SIGN,
                         marchMadnessStatsData.poolSize
-                    )} + ${formatCurrencyWithKey(
-                        CRYPTO_CURRENCY_MAP.OVER,
-                        2 * marchMadnessStatsData.poolSize
-                    )}`}</Value>
+                    )} + ${formatCurrencyWithKey(CRYPTO_CURRENCY_MAP.OVER, OVER_TOKEN_REWARDS)}`}</Value>
                 </Pair>
             </Data>
         </Container>
