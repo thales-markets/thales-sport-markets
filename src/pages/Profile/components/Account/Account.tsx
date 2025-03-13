@@ -292,7 +292,7 @@ const Label2 = styled(AlignedParagraph)`
 const OverTokenIcon = styled.i.attrs({ className: 'currency-icon currency-icon--over' })`
     color: ${(props) => props.theme.textColor.secondary};
     margin-left: 2px;
-    font-size: 40px;
+    font-size: 30px;
     line-height: 30px;
     @media (max-width: 575px) {
         font-size: 30px;

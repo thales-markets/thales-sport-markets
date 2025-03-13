@@ -140,10 +140,7 @@ const AssetBalance: React.FC<Props> = ({
                     <AssetContainer key={index}>
                         <AssetWrapper>
                             {assetData.freeBet && <SubHeaderIcon className="icon icon--gift" />}
-                            <Asset
-                                fontSize={assetData.asset === 'OVER' ? '30px' : '24px'}
-                                className={COLLATERAL_ICONS_CLASS_NAMES[assetData.asset]}
-                            />
+                            <Asset className={COLLATERAL_ICONS_CLASS_NAMES[assetData.asset]} />
                             {assetData.asset}
                         </AssetWrapper>
                         <Label>{formatCurrencyWithKey('', assetData.balance)}</Label>
@@ -286,8 +283,8 @@ const SubHeaderIcon = styled.i`
     text-transform: none;
 `;
 
-const Asset = styled.i<{ fontSize?: string }>`
-    font-size: ${(props) => (props.fontSize ? props.fontSize : '34px')};
+const Asset = styled.i`
+    font-size: 24px;
     line-height: 24px;
     width: 30px;
     color: ${(props) => props.theme.textColor.secondary};

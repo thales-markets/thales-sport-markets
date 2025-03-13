@@ -170,10 +170,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                                 key={key}
                             >
                                 <CollateralWrapper>
-                                    <Asset
-                                        fontSize={token === 'OVER' ? '50px' : '40px'}
-                                        className={COLLATERAL_ICONS_CLASS_NAMES[token]}
-                                    />
+                                    <Asset className={COLLATERAL_ICONS_CLASS_NAMES[token]} />
                                     <CollateralText>{token}</CollateralText>
                                 </CollateralWrapper>
                             </Tooltip>
@@ -508,7 +505,7 @@ const ButtonLocal = styled(FlexDivCentered)<{ disabled?: boolean }>`
 `;
 
 const Asset = styled.i<{ fontSize?: string }>`
-    font-size: ${(props) => (props.fontSize ? props.fontSize : '40px')};
+    font-size: 40px;
     line-height: 40px;
     color: ${(props) => props.theme.textColor.secondary};
 `;
