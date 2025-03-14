@@ -39,4 +39,5 @@ export const LOCAL_STORAGE_KEYS = {
     IS_SGP: 'isSGP',
     SYSTEM_BET_DENOMINATOR: 'systemBetDenominator',
     ERROR_RELOAD_TIME: 'errorReloadTime',
+    BRACKETS: 'brackets',
 };

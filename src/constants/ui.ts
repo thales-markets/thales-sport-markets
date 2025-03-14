@@ -1,12 +1,14 @@
 import { Network } from 'enums/network';
 import { Theme } from 'enums/ui';
 import darkTheme from 'styles/themes/dark';
+import marchMadnessTheme from 'styles/themes/marchMadness';
 import { NavMenuItem, ThemeInterface } from 'types/ui';
 import { LINKS } from './links';
 import ROUTES from './routes';
 
 export const ThemeMap: Record<Theme, ThemeInterface> = {
     [Theme.DARK]: darkTheme,
+    [Theme.MARCH_MADNESS]: marchMadnessTheme,
 };
 
 export const NAV_MENU_FIRST_SECTION: NavMenuItem[] = [
@@ -33,6 +35,13 @@ export const NAV_MENU_SECOND_SECTION: NavMenuItem[] = [
         name: 'markets',
         route: ROUTES.Markets.Home,
         supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.Base, Network.OptimismSepolia],
+    },
+    {
+        i18label: 'markets.nav-menu.labels.march-madness',
+        iconClass: 'icon icon--brackets',
+        name: 'march-madness',
+        route: ROUTES.MarchMadness,
+        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.OptimismSepolia],
     },
     {
         i18label: 'markets.nav-menu.items.liquidity-pool',

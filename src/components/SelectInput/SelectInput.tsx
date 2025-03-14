@@ -14,6 +14,7 @@ type SelectInputProps = {
     handleChange: (value: number | undefined | null) => void;
     defaultValue?: number;
     value?: SelectOption;
+    placeholder?: string;
     width?: number;
     isDisabled?: boolean;
     style?: any;
@@ -25,6 +26,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
     handleChange,
     defaultValue,
     value,
+    placeholder,
     width,
     isDisabled,
     style,
@@ -82,6 +84,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
         placeholder: (provided: any) => ({
             ...provided,
             color: theme.textColor.primary,
+            fontFamily: theme.fontFamily.primary,
             ...style?.placeholderStyle,
         }),
         singleValue: (provided: CSSObjectWithLabel) => ({
@@ -177,6 +180,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
     return (
         <Select
             value={selectedValue}
+            placeholder={placeholder}
             options={options}
             styles={isPaginationStyle ? paginationStyle : customStyled}
             onChange={(props: any) => {

@@ -69,7 +69,7 @@ const MyTicket: React.FC<MyTicketProps> = ({
                     <BoldContent>{' overtimemarkets.xyz'}</BoldContent>
                 </Header>
             )}
-            <ContentRow margin={'10px 0'}>
+            <ContentRow margin={'10px 0 13px 0'}>
                 <PayoutWrapper>
                     <PayoutRow>
                         <Square isLost={isTicketLost} />
@@ -349,7 +349,7 @@ const Wrong = styled(Icon)`
 
 const SgpTag = styled.span`
     position: absolute;
-    bottom: 0;
+    bottom: -14px;
     background: ${(props) => props.theme.status.sgp};
     color: ${(props) => props.theme.textColor.primary};
     border-radius: 3px;
