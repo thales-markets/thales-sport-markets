@@ -269,7 +269,7 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                                                     <LinkAvailable
                                                         onClick={() =>
                                                             window.open(
-                                                                'https://medium.com/@OvertimeMarkets.xyz/37663de78d28'
+                                                                'https://medium.com/@OvertimeMarkets.xyz/march-madness-2025-on-overtime-can-you-create-the-perfect-bracket-7d479fb5a2b6'
                                                             )
                                                         }
                                                     />
