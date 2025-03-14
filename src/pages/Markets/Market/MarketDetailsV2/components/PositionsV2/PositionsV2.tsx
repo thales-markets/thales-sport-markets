@@ -95,28 +95,33 @@ const Positions: React.FC<PositionsProps> = ({
 
     const getIsSgpCombinationBlocked = useCallback(
         (market: SportMarket, position: number) => {
-            const isSameGame = ticket[0].gameId === market.gameId;
-            const isAlreadyOnTicket = ticket.some((ticketPosition) => isSameMarket(market, ticketPosition));
-            if (isSgpEnabled && isSameGame && !isAlreadyOnTicket) {
-                const ticketBlockerMarkets: SgpBlockerMarket[] = ticket.map((ticketPosition) => ({
-                    leagueId: ticketPosition.leagueId,
-                    typeId: ticketPosition.typeId,
-                    playerId: ticketPosition.playerProps.playerId,
-                    line: ticketPosition.line,
-                    position: ticketPosition.position,
-                }));
-                const currentMarketPosition: SgpBlockerMarket = {
-                    leagueId: market.leagueId,
-                    typeId: market.typeId,
-                    playerId: market.playerProps.playerId,
-                    line: market.line,
-                    position,
-                };
-                const sgpBlockerMarkets = [...ticketBlockerMarkets, currentMarketPosition];
-                const combinationAllowance = getSgpMarketsCombinationAllowed(sgpBlockerMarkets, sgpBlockers);
-                return !combinationAllowance.isAllowed;
+            let isBlocked = false;
+
+            if (isSgpEnabled) {
+                const isSameGame = ticket[0].gameId === market.gameId;
+                const isAlreadyOnTicket = ticket.some((ticketPosition) => isSameMarket(market, ticketPosition));
+                if (isSameGame && !isAlreadyOnTicket) {
+                    const ticketBlockerMarkets: SgpBlockerMarket[] = ticket.map((ticketPosition) => ({
+                        leagueId: ticketPosition.leagueId,
+                        typeId: ticketPosition.typeId,
+                        playerId: ticketPosition.playerProps.playerId,
+                        line: ticketPosition.line,
+                        position: ticketPosition.position,
+                    }));
+                    const currentMarketPosition: SgpBlockerMarket = {
+                        leagueId: market.leagueId,
+                        typeId: market.typeId,
+                        playerId: market.playerProps.playerId,
+                        line: market.line,
+                        position,
+                    };
+                    const sgpBlockerMarkets = [...ticketBlockerMarkets, currentMarketPosition];
+                    const combinationAllowance = getSgpMarketsCombinationAllowed(sgpBlockerMarkets, sgpBlockers);
+                    isBlocked = !combinationAllowance.isAllowed;
+                }
             }
-            return false;
+
+            return isBlocked;
         },
         [isSgpEnabled, ticket, sgpBlockers]
     );
