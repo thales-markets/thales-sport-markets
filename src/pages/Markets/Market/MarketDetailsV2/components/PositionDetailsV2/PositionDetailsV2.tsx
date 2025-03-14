@@ -2,7 +2,7 @@ import Tooltip from 'components/Tooltip';
 import { oddToastOptions } from 'config/toast';
 import { FUTURES_MAIN_VIEW_DISPLAY_COUNT } from 'constants/markets';
 import { MarketType } from 'enums/marketTypes';
-import { Position, SportFilter } from 'enums/markets';
+import { SportFilter } from 'enums/markets';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,10 +18,11 @@ import { Container, Odd, Status, Text } from './styled-components';
 
 type PositionDetailsProps = {
     market: SportMarket;
-    position: Position;
+    position: number;
     isMainPageView?: boolean;
     isColumnView?: boolean;
     displayPosition: number;
+    isPositionBlocked?: boolean;
 };
 
 const PositionDetails: React.FC<PositionDetailsProps> = ({
@@ -30,9 +31,11 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
     isMainPageView,
     isColumnView,
     displayPosition,
+    isPositionBlocked,
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
+
     const selectedOddsType = useSelector(getOddsType);
     const isMobile = useSelector(getIsMobile);
     const ticket = useSelector(getTicket);
@@ -56,7 +59,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
     const odd = market.odds[position];
     const isZeroOdd = !odd || odd == 0 || market.typeId === MarketType.EMPTY;
     const noOdd = isZeroOdd || odd > 0.97;
-    const disabledPosition = noOdd || (!isGameOpen && !isGameLive);
+    const disabledPosition = noOdd || (!isGameOpen && !isGameLive) || !!isPositionBlocked;
 
     const showOdd = isGameOpen || isGameLive;
 
