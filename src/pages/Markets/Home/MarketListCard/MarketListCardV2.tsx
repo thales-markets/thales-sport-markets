@@ -340,7 +340,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                             }
                         }}
                     >
-                        <MatchInfo selected={selected}>
+                        <MatchInfo marginTop={isGameLive ? '3px' : ''} selected={selected}>
                             {showLeagueInfo && (
                                 <Tooltip overlay={getLeagueLabel(market.leagueId)}>
                                     <LeagueFlag
