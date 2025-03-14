@@ -1,18 +1,24 @@
 import Tooltip from 'components/Tooltip';
 import { SportFilter } from 'enums/markets';
 import { MarketType } from 'enums/marketTypes';
+import { RiskManagementConfig } from 'enums/riskManagement';
 import { League } from 'enums/sports';
 import { orderBy } from 'lodash';
-import React, { useMemo, useState } from 'react';
+import { getSgpMarketsCombinationAllowed, SgpBlockerMarket } from 'overtime-utils';
+import useRiskManagementConfigQuery from 'queries/riskManagement/useRiskManagementConfig';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import { getSportFilter } from 'redux/modules/market';
+import { getIsSgp, getTicket } from 'redux/modules/ticket';
 import styled from 'styled-components';
 import { SportMarket } from 'types/markets';
+import { RiskManagementSgpBlockers } from 'types/riskManagement';
 import { getMarketTypeTooltipKey, isFuturesMarket } from 'utils/markets';
-import { getSubtitleText, getTitleText } from 'utils/marketsV2';
+import { getSubtitleText, getTitleText, isSameMarket } from 'utils/marketsV2';
 import { getGridMinMaxPercentage } from 'utils/ui';
+import { useChainId } from 'wagmi';
 import PositionDetailsV2 from '../PositionDetailsV2';
 import {
     Arrow,
@@ -60,12 +66,60 @@ const Positions: React.FC<PositionsProps> = ({
 }) => {
     const { t } = useTranslation();
 
+    const networkId = useChainId();
+
+    const ticket = useSelector(getTicket);
+    const isSgp = useSelector(getIsSgp);
     const sportFilter = useSelector(getSportFilter);
     const isMobile = useSelector(getIsMobile);
 
     const isPlayerPropsMarket = useMemo(() => sportFilter === SportFilter.PlayerProps, [sportFilter]);
 
     const [isExpanded, setIsExpanded] = useState<boolean>(true);
+
+    const isSgpEnabled = useMemo(() => isSgp && ticket.length > 0, [isSgp, ticket.length]);
+
+    const riskManagementSgpBlockersQuery = useRiskManagementConfigQuery(
+        RiskManagementConfig.SGP_BLOCKERS,
+        { networkId },
+        { enabled: isSgpEnabled }
+    );
+
+    const sgpBlockers = useMemo(
+        () =>
+            riskManagementSgpBlockersQuery.isSuccess && riskManagementSgpBlockersQuery.data
+                ? (riskManagementSgpBlockersQuery.data as RiskManagementSgpBlockers)
+                : [],
+        [riskManagementSgpBlockersQuery.isSuccess, riskManagementSgpBlockersQuery.data]
+    );
+
+    const getIsSgpCombinationBlocked = useCallback(
+        (market: SportMarket, position: number) => {
+            const isSameGame = ticket[0].gameId === market.gameId;
+            const isAlreadyOnTicket = ticket.some((ticketPosition) => isSameMarket(market, ticketPosition));
+            if (isSgpEnabled && isSameGame && !isAlreadyOnTicket) {
+                const ticketBlockerMarkets: SgpBlockerMarket[] = ticket.map((ticketPosition) => ({
+                    leagueId: ticketPosition.leagueId,
+                    typeId: ticketPosition.typeId,
+                    playerId: ticketPosition.playerProps.playerId,
+                    line: ticketPosition.line,
+                    position: ticketPosition.position,
+                }));
+                const currentMarketPosition: SgpBlockerMarket = {
+                    leagueId: market.leagueId,
+                    typeId: market.typeId,
+                    playerId: market.playerProps.playerId,
+                    line: market.line,
+                    position,
+                };
+                const sgpBlockerMarkets = [...ticketBlockerMarkets, currentMarketPosition];
+                const combinationAllowance = getSgpMarketsCombinationAllowed(sgpBlockerMarkets, sgpBlockers);
+                return !combinationAllowance.isAllowed;
+            }
+            return false;
+        },
+        [isSgpEnabled, ticket, sgpBlockers]
+    );
 
     const hasOdds = markets.some((market) => market.odds.length);
 
@@ -136,12 +190,20 @@ const Positions: React.FC<PositionsProps> = ({
                     )}
                     {sortedMarkets.map((market, index) => {
                         const oddsInfo = market.odds.map((odd: number, index: number) => {
+                            const position = index;
+                            const isBlocked = getIsSgpCombinationBlocked(market, position);
                             return {
                                 odd,
-                                position: index,
-                                positionName: market.positionNames ? market.positionNames[index] : '',
+                                position,
+                                positionName: market.positionNames ? market.positionNames[position] : '',
+                                isBlocked,
                             };
                         });
+                        const isEveryPositionBlocked = oddsInfo.every((oddsData) => oddsData.isBlocked);
+                        if (isEveryPositionBlocked) {
+                            return <></>;
+                        }
+
                         const sortedOddsInfo = orderBy(oddsInfo, ['odd', 'position'], ['desc', 'asc']);
                         const isFutures = isFuturesMarket(market.typeId);
 
@@ -166,7 +228,7 @@ const Positions: React.FC<PositionsProps> = ({
                                     isColumnView={isColumnView}
                                     isPlayerProps={!!isPlayerPropsMarket}
                                 >
-                                    {filteredOdds.map((_, index) => {
+                                    {filteredOdds.map((oddsData, index) => {
                                         const position = isFutures
                                             ? oddsInfo.findIndex(
                                                   (oddInfo) =>
@@ -183,6 +245,7 @@ const Positions: React.FC<PositionsProps> = ({
                                                 isMainPageView={isMainPageView}
                                                 isColumnView={isColumnView}
                                                 displayPosition={index}
+                                                isPositionBlocked={oddsData.isBlocked}
                                             />
                                         );
                                     })}
