@@ -25,28 +25,56 @@ export const sendBiconomyTransaction = async (params: {
     networkId: SupportedNetwork;
     transaction: any;
     collateralAddress: string;
+    useSession?: boolean;
 }): Promise<any | undefined> => {
     if (biconomyConnector.wallet) {
         try {
-            biconomyConnector.wallet.setActiveValidationModule(biconomyConnector.wallet.defaultValidationModule);
-            const { wait } = await biconomyConnector.wallet.sendTransaction(params.transaction, {
-                paymasterServiceData: {
-                    mode: PaymasterMode.SPONSORED,
-                    webhookData: {
-                        networkId: params.networkId,
+            if (params.useSession) {
+                const sessionSigner = await getSessionSigner(params.networkId);
+                const { wait } = await biconomyConnector.wallet.sendTransaction(params.transaction, {
+                    paymasterServiceData: {
+                        mode: PaymasterMode.SPONSORED,
+                        webhookData: {
+                            networkId: params.networkId,
+                        },
                     },
-                },
-            });
+                    params: {
+                        sessionSigner: sessionSigner,
+                        sessionValidationModule: sessionValidationContract.addresses[params.networkId],
+                    },
+                });
 
-            const {
-                receipt: { transactionHash },
-                success,
-            } = await wait();
+                const {
+                    receipt: { transactionHash },
+                    success,
+                } = await wait();
 
-            if (success === 'false') {
-                throw new Error('tx failed');
+                if (success === 'false') {
+                    throw new Error('tx failed');
+                } else {
+                    return transactionHash;
+                }
             } else {
-                return transactionHash;
+                biconomyConnector.wallet.setActiveValidationModule(biconomyConnector.wallet.defaultValidationModule);
+                const { wait } = await biconomyConnector.wallet.sendTransaction(params.transaction, {
+                    paymasterServiceData: {
+                        mode: PaymasterMode.SPONSORED,
+                        webhookData: {
+                            networkId: params.networkId,
+                        },
+                    },
+                });
+
+                const {
+                    receipt: { transactionHash },
+                    success,
+                } = await wait();
+
+                if (success === 'false') {
+                    throw new Error('tx failed');
+                } else {
+                    return transactionHash;
+                }
             }
         } catch (e) {
             try {
