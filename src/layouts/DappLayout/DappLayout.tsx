@@ -1,6 +1,7 @@
 import axios from 'axios';
 import MetaData from 'components/MetaData';
 import { generalConfig } from 'config/general';
+import ROUTES from 'constants/routes';
 import { Theme } from 'enums/ui';
 import useWidgetBotScript from 'hooks/useWidgetBotScript';
 import ModalWrapper from 'pages/Overdrop/components/ModalWrapper';
@@ -55,8 +56,10 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
     }, [queryParams.referralId, queryParams.referrerId]);
 
     useEffect(() => {
-        dispatch(setTheme(Theme.DARK));
-    }, [dispatch]);
+        if (location.pathname !== ROUTES.MarchMadness) {
+            dispatch(setTheme(Theme.DARK));
+        }
+    }, [dispatch, location.pathname]);
 
     useEffect(() => {
         const checkMetamaskBrowser = async () => {

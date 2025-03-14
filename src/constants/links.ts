@@ -20,4 +20,8 @@ export const LINKS = {
     Biconomy: {
         Bundler: 'https://bundler.biconomy.io/api/v2/',
     },
+    MarchMadness: {
+        Medium:
+            'https://medium.com/@OvertimeMarkets.xyz/overtime-brings-the-bracket-to-the-blockchain-for-march-madness-66777956d87f',
+    },
 };

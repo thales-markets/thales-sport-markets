@@ -16,4 +16,5 @@ export enum ContractType {
     STAKING_THALES = 'stakingThalesContract',
     STAKING_THALES_BETTING_PROXY = 'stakingThalesBettingProxy',
     RESOLVE_BLOCKER = 'resolveBlockerContract',
+    MARCH_MADNESS = 'marchMadnessContract',
 }
