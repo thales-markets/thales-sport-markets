@@ -267,11 +267,10 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                                                 c: <Link onClick={switchToLeaderboard} />,
                                                 d: (
                                                     <LinkAvailable
-                                                        onClick={() =>
-                                                            window.open(
-                                                                'https://medium.com/@OvertimeMarkets.xyz/37663de78d28'
-                                                            )
+                                                        href={
+                                                            'https://medium.com/@OvertimeMarkets.xyz/march-madness-2025-on-overtime-can-you-create-the-perfect-bracket-7d479fb5a2b6'
                                                         }
+                                                        target={'_blank'}
                                                     />
                                                 ),
                                             }}
@@ -494,7 +493,8 @@ const Link = styled.span`
     cursor: pointer;
 `;
 
-const LinkAvailable = styled.span`
+const LinkAvailable = styled.a`
+    color: ${(props) => props.theme.marchMadness.textColor.primary};
     text-decoration: underline;
     cursor: pointer;
 `;
