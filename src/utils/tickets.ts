@@ -21,6 +21,8 @@ import freeBetHolder from './contracts/freeBetHolder';
 import stakingThalesBettingProxy from './contracts/stakingThalesBettingProxy';
 import {
     formatMarketOdds,
+    getPeriodsForResultView,
+    isContractResultView,
     isFuturesMarket,
     isOneSideMarket,
     isOneSidePlayerPropsMarket,
@@ -101,15 +103,28 @@ export const mapTicket = (
                 const apiMarket = openOngoingMarkets
                     ? openOngoingMarkets.find((m: any) => m.gameId === market.gameId)
                     : undefined;
+                const periodsForResultView = getPeriodsForResultView(typeId, leagueId);
 
                 const homeTeam = !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => team.isHome);
                 const homeTeamName = homeTeam?.name ?? 'Home Team';
-                const homeScore = homeTeam?.score;
+                const homeScore =
+                    homeTeam && periodsForResultView.length > 0
+                        ? periodsForResultView.reduce(
+                              (prev: number, curr: number) => prev + Number(homeTeam.scoreByPeriod[curr - 1]),
+                              0
+                          )
+                        : homeTeam?.score;
                 const homeScoreByPeriod = homeTeam ? homeTeam.scoreByPeriod : [];
 
                 const awayTeam = !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => !team.isHome);
                 const awayTeamName = awayTeam?.name ?? 'Away Team';
-                const awayScore = awayTeam?.score;
+                const awayScore =
+                    awayTeam && periodsForResultView.length > 0
+                        ? periodsForResultView.reduce(
+                              (prev: number, curr: number) => prev + Number(awayTeam.scoreByPeriod[curr - 1]),
+                              0
+                          )
+                        : awayTeam?.score;
                 const awayScoreByPeriod = awayTeam ? awayTeam.scoreByPeriod : [];
 
                 const playerInfo = playersInfo[market.playerId];
@@ -139,13 +154,14 @@ export const mapTicket = (
                     maturityDate: new Date(secondsToMilliseconds(Number(market.maturity))),
                     homeTeam: homeTeamName,
                     awayTeam: awayTeamName,
-                    homeScore: isPlayerProps
-                        ? isOneSidePlayerPropsMarket(typeId) || isYesNoPlayerPropsMarket(typeId)
-                            ? Number(marketResult.results[0]) / 100 === 1
-                                ? 'Yes'
-                                : 'No'
-                            : Number(marketResult.results[0]) / 100
-                        : homeScore,
+                    homeScore:
+                        isPlayerProps || isContractResultView(typeId)
+                            ? isOneSidePlayerPropsMarket(typeId) || isYesNoPlayerPropsMarket(typeId)
+                                ? Number(marketResult.results[0]) / 100 === 1
+                                    ? 'Yes'
+                                    : 'No'
+                                : Number(marketResult.results[0]) / 100
+                            : homeScore,
                     homeScoreByPeriod,
                     awayScore: isPlayerProps ? 0 : awayScore,
                     awayScoreByPeriod,
@@ -219,7 +235,7 @@ export const getTicketMarketStatus = (market: TicketMarket) => {
         return t('markets.market-card.canceled');
     }
     if (market.isResolved) {
-        if (market.isPlayerPropsMarket) {
+        if (market.isPlayerPropsMarket || isContractResultView(market.typeId)) {
             return market.homeScore;
         }
         return market.homeScore !== undefined

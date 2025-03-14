@@ -1,16 +1,31 @@
 import {
     AWAY_TEAM_MARKET_TYPES,
     BOTH_TEAMS_TO_SCORE_MARKET_TYPES,
+    CARDS_MARKET_TYPES,
     COMBINED_POSITIONS_MARKET_TYPES,
+    CORNERS_MARKET_TYPES,
     DOUBLE_CHANCE_MARKET_TYPES,
+    EIGHTH_PERIOD_MARKET_TYPES,
+    FIFTH_PERIOD_MARKET_TYPES,
+    FIRST_PERIOD_MARKET_TYPES,
+    FIRST_PERIOD_MARKET_TYPES2,
+    FIRST_SEVEN_INNINGS_MARKET_TYPES,
+    FIRST_THREE_INNINGS_MARKET_TYPES,
+    FOURTH_PERIOD_MARKET_TYPES,
     FUTURES_MARKET_TYPES,
     HOME_TEAM_MARKET_TYPES,
+    NINTH_PERIOD_MARKET_TYPES,
     ONE_SIDE_PLAYER_PROPS_MARKET_TYPES,
     OTHER_YES_NO_MARKET_TYPES,
     PERIOD_MARKET_TYPES,
     PLAYER_PROPS_MARKET_TYPES,
     SCORE_MARKET_TYPES,
+    SECOND_PERIOD_MARKET_TYPES,
+    SECOND_PERIOD_MARKET_TYPES2,
+    SEVENTH_PERIOD_MARKET_TYPES,
+    SIXTH_PERIOD_MARKET_TYPES,
     SPREAD_MARKET_TYPES,
+    THIRD_PERIOD_MARKET_TYPES,
     TOTAL_EXACT_MARKET_TYPES,
     TOTAL_MARKET_TYPES,
     TOTAL_ODD_EVEN_MARKET_TYPES,
@@ -176,4 +191,56 @@ export const isWithinSlippage = (originalOdd: number, newOdd: number, slippage: 
 
 export const isFuturesMarket = (marketType: MarketType) => {
     return FUTURES_MARKET_TYPES.includes(marketType);
+};
+
+export const isContractResultView = (marketType: MarketType) => {
+    return CORNERS_MARKET_TYPES.includes(marketType) || CARDS_MARKET_TYPES.includes(marketType);
+};
+
+export const getPeriodsForResultView = (marketType: MarketType, leagueId: League) => {
+    if (FIRST_PERIOD_MARKET_TYPES.includes(marketType)) {
+        return [1];
+    }
+    if (SECOND_PERIOD_MARKET_TYPES.includes(marketType)) {
+        return [2];
+    }
+    if (THIRD_PERIOD_MARKET_TYPES.includes(marketType)) {
+        return [3];
+    }
+    if (FOURTH_PERIOD_MARKET_TYPES.includes(marketType)) {
+        return [4];
+    }
+    if (FIFTH_PERIOD_MARKET_TYPES.includes(marketType)) {
+        return [5];
+    }
+    if (SIXTH_PERIOD_MARKET_TYPES.includes(marketType)) {
+        return [6];
+    }
+    if (SEVENTH_PERIOD_MARKET_TYPES.includes(marketType)) {
+        return [7];
+    }
+    if (EIGHTH_PERIOD_MARKET_TYPES.includes(marketType)) {
+        return [8];
+    }
+    if (NINTH_PERIOD_MARKET_TYPES.includes(marketType)) {
+        return [9];
+    }
+    if (FIRST_THREE_INNINGS_MARKET_TYPES.includes(marketType)) {
+        return [1, 2, 3];
+    }
+    if (FIRST_SEVEN_INNINGS_MARKET_TYPES.includes(marketType)) {
+        return [1, 2, 3, 4, 5, 6, 7];
+    }
+    if (FIRST_PERIOD_MARKET_TYPES2.includes(marketType)) {
+        const sport = getLeagueSport(leagueId);
+        if (sport === Sport.BASEBALL) {
+            return [1, 2, 3, 4, 5];
+        } else {
+            return [1, 2];
+        }
+    }
+    if (SECOND_PERIOD_MARKET_TYPES2.includes(marketType)) {
+        return [3, 4];
+    }
+    return [];
 };
