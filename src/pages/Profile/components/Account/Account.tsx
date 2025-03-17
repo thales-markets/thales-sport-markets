@@ -142,18 +142,18 @@ const Account: React.FC = () => {
         <div>
             <Header>
                 <FlexDivColumnStart gap={4}>
-                    <Label>Portfolio Balance</Label>
+                    <Label>{t('profile.account-summary.balance')}</Label>
                     <Value>{totalBalanceValue}</Value>
                 </FlexDivColumnStart>
                 <FlexDivEnd gap={20}>
                     <FlexDivColumnStart gap={4}>
-                        <GrayLabel>Active Tickets</GrayLabel>
+                        <GrayLabel>{t('profile.account-summary.active-tickets')}</GrayLabel>
                         <YellowValue>
                             {userTicketsByStatus.tickets} <ParlayIcon />
                         </YellowValue>
                     </FlexDivColumnStart>
                     <FlexDivColumnStart gap={4}>
-                        <GrayLabel>Potential Win</GrayLabel>
+                        <GrayLabel>{t('profile.account-summary.potential-win')}</GrayLabel>
                         <YellowValue>
                             {formatCurrencyWithSign(USD_SIGN, userTicketsByStatus.potentialWin, 2)}
                         </YellowValue>

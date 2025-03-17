@@ -344,14 +344,16 @@
     "profile": {
         "account-summary": {
             "title": "Account Summary",
-            "balance": "Total balance",
+            "balance": "Portfolio Balance",
             "deposit": "Deposit",
             "swap": "Buy $OVER",
             "withdraw": "Withdraw",
             "use-eoa": "Switch to EOA mode",
             "use-smart": "Switch to your Overtime Account",
             "best-odds": "Bet with $OVER token for best odds.",
-            "claim-free-bet": "Claim free bet"
+            "claim-free-bet": "Claim free bet",
+            "active-tickets": "Active Tickets",
+            "potential-win": "Potential Win"
         },
         "stats": {
             "profile-data": "Stats",
@@ -509,6 +511,15 @@
                 "migrate-label": "Migrate",
                 "migrate-progress-label": "Migrating"
             }
+        },
+        "asset-balance": {
+            "assets": "Assets",
+            "amount": "Amount",
+            "value": "Value(USD)",
+            "zero-balance": "Show zero balance",
+            "deposit": "Deposit",
+            "convert": "Swap to $OVER",
+            "withdraw": "Withdraw"
         }
     },
     "markets": {
