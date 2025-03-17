@@ -5,7 +5,7 @@ import { MarketType } from 'enums/marketTypes';
 import { OddsType } from 'enums/markets';
 import { t } from 'i18next';
 import { bigNumberFormatter, coinFormatter, Coins, formatDateWithTime, NetworkId } from 'thales-utils';
-import { CombinedPosition, SystemBetData, Team, Ticket, TicketMarket } from 'types/markets';
+import { CombinedPosition, SystemBetData, Team, Ticket, TicketMarket, TicketPosition } from 'types/markets';
 import { NetworkConfig, SupportedNetwork } from 'types/network';
 import { ShareTicketModalProps } from 'types/tickets';
 import futuresPositionNamesMap from '../assets/json/futuresPositionNamesMap.json';
@@ -29,7 +29,7 @@ import {
     isPlayerPropsMarket,
     isYesNoPlayerPropsMarket,
 } from './markets';
-import { getLeagueSport } from './sports';
+import { getLeagueSport, isPlayerPropsCombiningEnabled } from './sports';
 
 export const mapTicket = (
     ticket: any,
@@ -558,4 +558,48 @@ export const getShareTicketModalData = async (
     }
 
     return modalData;
+};
+
+export const isRegularTicketInvalid = (ticket: TicketPosition[], maxTicketSize: number) => {
+    if (ticket.length <= 1) {
+        return false;
+    }
+
+    // max ticket size
+    if (ticket.length >= maxTicketSize) {
+        return true;
+    }
+
+    const isSameGameTicket = ticket.some((ticketPosition, index, ticketPositions) => {
+        const sameGamePositions = ticketPositions.filter(
+            (position, i) => i !== index && position.gameId === ticketPosition.gameId
+        );
+        return sameGamePositions.length > 0;
+    });
+    if (isSameGameTicket) {
+        const isPPCombiningEnabled = ticket.some((position) => isPlayerPropsCombiningEnabled(position.leagueId));
+        const isDiffPPType =
+            ticket.some((position) => isPlayerPropsMarket(position.typeId)) &&
+            ticket.some((position) => !isPlayerPropsMarket(position.typeId));
+        if (isPPCombiningEnabled) {
+            if (isDiffPPType) {
+                // player props with other types from the same game
+                return true;
+            } else {
+                // different categories for the same player
+                const isSamePlayer = ticket.some((ticketPosition, index, ticketPositions) => {
+                    const samePlayerPositions = ticketPositions.filter(
+                        (position, i) => i !== index && position.playerId === ticketPosition.playerId
+                    );
+                    return samePlayerPositions.length > 0;
+                });
+                return isSamePlayer;
+            }
+        }
+    } else if (ticket.length > 0 && ticket.some((position) => isFuturesMarket(position.typeId))) {
+        // futures
+        return true;
+    }
+
+    return false;
 };
