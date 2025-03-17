@@ -4,16 +4,16 @@ import WithdrawIcon from 'assets/images/svgs/withdraw.svg?react';
 import Toggle from 'components/Toggle';
 import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from 'constants/currency';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
-import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { Coins, formatCurrencyWithKey } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
-import { getCollateralIndex, getCollaterals, mapMultiCollateralBalances } from 'utils/collaterals';
+import { getCollateralIndex, getCollaterals } from 'utils/collaterals';
 import useBiconomy from 'utils/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
 
@@ -32,6 +32,7 @@ const AssetBalance: React.FC<Props> = ({
     setShowWithdrawModal,
     setWithdrawalToken,
 }) => {
+    const { t } = useTranslation();
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const networkId = useChainId();
     const client = useClient();
@@ -55,21 +56,6 @@ const AssetBalance: React.FC<Props> = ({
     const exchangeRates: Rates | null =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
-    const freeBetCollateralBalancesQuery = useFreeBetCollateralBalanceQuery(
-        walletAddress,
-        { networkId, client },
-        {
-            enabled: isConnected,
-        }
-    );
-
-    const freeBetCollateralBalances =
-        freeBetCollateralBalancesQuery?.isSuccess && freeBetCollateralBalancesQuery.data
-            ? freeBetCollateralBalancesQuery?.data
-            : undefined;
-
-    const balanceList = mapMultiCollateralBalances(freeBetCollateralBalances, exchangeRates, networkId);
-
     const usersAssets = useMemo(() => {
         try {
             if (exchangeRates && multipleCollateralBalances.data) {
@@ -89,18 +75,6 @@ const AssetBalance: React.FC<Props> = ({
                     });
                 });
 
-                if (balanceList) {
-                    balanceList.forEach((data) => {
-                        if (data.balance > 0)
-                            result.push({
-                                asset: data.collateralKey,
-                                balance: data.balance,
-                                value: data.balanceDollarValue,
-                                freeBet: true,
-                            });
-                    });
-                }
-
                 return result
                     .sort((a, b) => {
                         return b.value - a.value;
@@ -117,16 +91,16 @@ const AssetBalance: React.FC<Props> = ({
         } catch (e) {
             return [];
         }
-    }, [exchangeRates, multipleCollateralBalances.data, networkId, showZeroBalance, balanceList]);
+    }, [exchangeRates, multipleCollateralBalances.data, networkId, showZeroBalance]);
 
     return (
         <GridContainer>
             <AssetContainer>
-                <TableHeader>Assets</TableHeader>
-                <TableHeader2>Amount</TableHeader2>
-                <TableHeader2>Value(USD)</TableHeader2>
+                <TableHeader> {t('profile.asset-balance.assets')}</TableHeader>
+                <TableHeader2> {t('profile.asset-balance.amount')}</TableHeader2>
+                <TableHeader2> {t('profile.asset-balance.value')}</TableHeader2>
                 <ZeroBalanceWrapper>
-                    <TableHeader2>Show zero balance</TableHeader2>
+                    <TableHeader2> {t('profile.asset-balance.zero-balance')}</TableHeader2>
                     <Toggle
                         dotBackground={showZeroBalance ? theme.borderColor.quaternary : ''}
                         active={showZeroBalance}
@@ -150,7 +124,7 @@ const AssetBalance: React.FC<Props> = ({
                             disabled={assetData.freeBet}
                             onClick={() => !assetData.freeBet && setShowFundModal(true)}
                         >
-                            Deposit <DepositIcon />
+                            {t('profile.asset-balance.deposit')} <DepositIcon />
                         </Deposit>
                         <Convert
                             disabled={assetData.freeBet || assetData.balance == 0}
@@ -161,7 +135,8 @@ const AssetBalance: React.FC<Props> = ({
                                 }
                             }}
                         >
-                            Convert <ConvertIcon />
+                            {t('profile.asset-balance.convert')}
+                            <ConvertIcon />
                         </Convert>
                         <Withdraw
                             disabled={assetData.freeBet || assetData.balance == 0}
@@ -172,7 +147,7 @@ const AssetBalance: React.FC<Props> = ({
                                 }
                             }}
                         >
-                            Withdraw <WithdrawIcon />
+                            {t('profile.asset-balance.withdraw')} <WithdrawIcon />
                         </Withdraw>
                     </AssetContainer>
                 );
