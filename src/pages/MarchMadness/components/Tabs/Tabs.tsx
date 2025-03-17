@@ -3,7 +3,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import { getIsMintingStarted, isMarchMadnessAvailableForNetworkId } from 'utils/marchMadness';
+import { isMarchMadnessAvailableForNetworkId } from 'utils/marchMadness';
 import { history } from 'utils/routes';
 import { useAccount, useChainId } from 'wagmi';
 
@@ -16,9 +16,10 @@ export enum MarchMadTabs {
 type TabsProps = {
     selectedTab: MarchMadTabs;
     setSelectedTab: (tab: MarchMadTabs) => void;
+    isMintingStarted: boolean;
 };
 
-const Tabs: React.FC<TabsProps> = ({ selectedTab, setSelectedTab }) => {
+const Tabs: React.FC<TabsProps> = ({ selectedTab, setSelectedTab, isMintingStarted }) => {
     const { t } = useTranslation();
     const location = useLocation();
 
@@ -38,7 +39,6 @@ const Tabs: React.FC<TabsProps> = ({ selectedTab, setSelectedTab }) => {
         setSelectedTab(tab);
     };
 
-    const isMintingStarted = getIsMintingStarted();
     const isTabAvailable = isMarchMadnessAvailableForNetworkId(networkId) && isMintingStarted;
 
     return (
