@@ -1,11 +1,14 @@
 import Button from 'components/Button';
+import Scroll from 'components/Scroll';
 import { MarketTypeGroupsBySport, PLAYER_PROPS_MARKET_TYPES } from 'constants/marketTypes';
 import { SportFilter } from 'enums/markets';
 import { MarketType } from 'enums/marketTypes';
+import { League } from 'enums/sports';
 import { t } from 'i18next';
 import { groupBy } from 'lodash';
 import React, { useMemo, useReducer } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { getIsMobile } from 'redux/modules/app';
 import {
     getMarketTypeGroupFilter,
     getSelectedMarket,
@@ -30,6 +33,7 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ market }) => {
     const isGameStarted = market.maturityDate < new Date();
     const isGameOpen = market.isOpen && !isGameStarted;
     const marketTypeGroupFilter = useSelector(getMarketTypeGroupFilter);
+    const isMobile = useSelector(getIsMobile);
     const sportFilter = useSelector(getSportFilter);
     const selectedMarket = useSelector(getSelectedMarket);
 
@@ -88,51 +92,53 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ market }) => {
     const hideGame = isGameOpen && !areOddsValid && !areChildMarketsOddsValid;
 
     return (
-        <Wrapper hideGame={hideGame}>
-            {numberOfMarkets === 0 ? (
-                <NoMarketsContainer>
-                    <NoMarketsLabel>{`${t('market.no-markets-found')} ${marketTypeGroupFilter}`}</NoMarketsLabel>
-                    <Button
-                        onClick={() => dispatch(setMarketTypeGroupFilter(undefined))}
-                        backgroundColor={theme.button.background.secondary}
-                        textColor={theme.button.textColor.quaternary}
-                        borderColor={theme.button.borderColor.secondary}
-                        height="24px"
-                        fontSize="12px"
-                    >
-                        {t('market.view-all-markets')}
-                    </Button>
-                </NoMarketsContainer>
-            ) : (
-                <>
-                    {(!marketTypesFilter.length || marketTypesFilter.includes(MarketType.WINNER)) && (
-                        <PositionsV2
-                            markets={[market]}
-                            marketType={market.typeId}
-                            isGameOpen={isGameOpen}
-                            onAccordionClick={refreshScroll}
-                            hidePlayerName={sportFilter === SportFilter.PlayerProps}
-                            alignHeader={sportFilter === SportFilter.PlayerProps}
-                        />
-                    )}
-                    {Object.keys(groupedChildMarkets).map((key, index) => {
-                        const typeId = Number(key);
-                        const childMarkets = groupedChildMarkets[typeId];
-                        return (
+        <Scroll height={`calc(100vh - ${isMobile ? 0 : market.leagueId === League.US_ELECTION ? 280 : 194}px)`}>
+            <Wrapper hideGame={hideGame}>
+                {numberOfMarkets === 0 ? (
+                    <NoMarketsContainer>
+                        <NoMarketsLabel>{`${t('market.no-markets-found')} ${marketTypeGroupFilter}`}</NoMarketsLabel>
+                        <Button
+                            onClick={() => dispatch(setMarketTypeGroupFilter(undefined))}
+                            backgroundColor={theme.button.background.secondary}
+                            textColor={theme.button.textColor.quaternary}
+                            borderColor={theme.button.borderColor.secondary}
+                            height="24px"
+                            fontSize="12px"
+                        >
+                            {t('market.view-all-markets')}
+                        </Button>
+                    </NoMarketsContainer>
+                ) : (
+                    <>
+                        {(!marketTypesFilter.length || marketTypesFilter.includes(MarketType.WINNER)) && (
                             <PositionsV2
-                                key={index}
-                                markets={childMarkets}
-                                marketType={typeId}
+                                markets={[market]}
+                                marketType={market.typeId}
                                 isGameOpen={isGameOpen}
                                 onAccordionClick={refreshScroll}
                                 hidePlayerName={sportFilter === SportFilter.PlayerProps}
                                 alignHeader={sportFilter === SportFilter.PlayerProps}
                             />
-                        );
-                    })}
-                </>
-            )}
-        </Wrapper>
+                        )}
+                        {Object.keys(groupedChildMarkets).map((key, index) => {
+                            const typeId = Number(key);
+                            const childMarkets = groupedChildMarkets[typeId];
+                            return (
+                                <PositionsV2
+                                    key={index}
+                                    markets={childMarkets}
+                                    marketType={typeId}
+                                    isGameOpen={isGameOpen}
+                                    onAccordionClick={refreshScroll}
+                                    hidePlayerName={sportFilter === SportFilter.PlayerProps}
+                                    alignHeader={sportFilter === SportFilter.PlayerProps}
+                                />
+                            );
+                        })}
+                    </>
+                )}
+            </Wrapper>
+        </Scroll>
     );
 };
 
