@@ -16,7 +16,6 @@ const DappFooter: React.FC = () => {
                     <LinkContent>
                         <LogoText>{t('footer.built-using')}</LogoText>
                         <LogoIcon className="icon icon--overtime" />
-                        <LogoText>{t('footer.protocol')}</LogoText>
                     </LinkContent>
                 </ThalesLink>
                 <LinksContainer>
@@ -24,7 +23,6 @@ const DappFooter: React.FC = () => {
                         <LinkContent>
                             <LogoText>{t('footer.built-using')}</LogoText>
                             <LogoIcon className="icon icon--overtime" />
-                            <LogoText>{t('footer.protocol')}</LogoText>
                         </LinkContent>
                     </ThalesLink>
                     <Link target="_blank" rel="noreferrer" href={LINKS.Footer.Medium}>
