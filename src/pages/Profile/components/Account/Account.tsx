@@ -124,11 +124,11 @@ const Account: React.FC = () => {
         };
     }, [userTicketsQuery.isSuccess, userTicketsQuery.data, exchangeRates]);
 
-    const OverBalance = useMemo(() => {
+    const overBalance = useMemo(() => {
         if (multipleCollateralBalances.data && exchangeRates) {
             return {
-                balance: multipleCollateralBalances.data['THALES'],
-                value: multipleCollateralBalances.data['THALES'] * exchangeRates['THALES'],
+                balance: multipleCollateralBalances.data['OVER'],
+                value: multipleCollateralBalances.data['OVER'] * exchangeRates['OVER'],
             };
         }
 
@@ -166,12 +166,12 @@ const Account: React.FC = () => {
                         <Tooltip overlay={t('profile.account-summary.best-odds')}>
                             <FlexDivSpaceBetween>
                                 <Label2>
-                                    {OverBalance.balance === 0
+                                    {overBalance.balance === 0
                                         ? `N/A`
-                                        : formatCurrencyWithKey('', OverBalance.balance, 2)}
+                                        : formatCurrencyWithKey('', overBalance.balance, 2)}
                                     <OverTokenIcon />
                                 </Label2>
-                                <Value2>{formatCurrencyWithSign(USD_SIGN, OverBalance.value, 2)}</Value2>
+                                <Value2>{formatCurrencyWithSign(USD_SIGN, overBalance.value, 2)}</Value2>
                             </FlexDivSpaceBetween>
                         </Tooltip>
                     </FlexDivColumnCentered>
