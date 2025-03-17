@@ -1,11 +1,13 @@
 import Tooltip from 'components/Tooltip';
+import { secondsToMilliseconds } from 'date-fns';
 import { SportFilter } from 'enums/markets';
 import { MarketType } from 'enums/marketTypes';
 import { RiskManagementConfig } from 'enums/riskManagement';
 import { League } from 'enums/sports';
-import { orderBy } from 'lodash';
-import { getSgpMarketsCombinationAllowed, SgpBlockerMarket } from 'overtime-utils';
+import { intersection, orderBy } from 'lodash';
+import { getSgpMarketsCombinationAllowed, isTotalOrSpreadWithWholeLine, SgpBlockerMarket } from 'overtime-utils';
 import useRiskManagementConfigQuery from 'queries/riskManagement/useRiskManagementConfig';
+import useSportMarketSgpQuery from 'queries/sgp/useSportMarketSgpQuery';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -13,10 +15,10 @@ import { getIsMobile } from 'redux/modules/app';
 import { getSportFilter } from 'redux/modules/market';
 import { getIsSgp, getTicket } from 'redux/modules/ticket';
 import styled from 'styled-components';
-import { SportMarket } from 'types/markets';
+import { SportMarket, TicketPosition } from 'types/markets';
 import { RiskManagementSgpBlockers } from 'types/riskManagement';
 import { getMarketTypeTooltipKey, isFuturesMarket } from 'utils/markets';
-import { getSubtitleText, getTitleText, isSameMarket } from 'utils/marketsV2';
+import { getSubtitleText, getTitleText, isSameMarket, sportMarketAsTicketPosition } from 'utils/marketsV2';
 import { getGridMinMaxPercentage } from 'utils/ui';
 import { useChainId } from 'wagmi';
 import PositionDetailsV2 from '../PositionDetailsV2';
@@ -93,7 +95,8 @@ const Positions: React.FC<PositionsProps> = ({
         [riskManagementSgpBlockersQuery.isSuccess, riskManagementSgpBlockersQuery.data]
     );
 
-    const getIsSgpCombinationBlocked = useCallback(
+    // check if postion is valid by SGP blocking rules
+    const isPositionBlockedBySgpCombination = useCallback(
         (market: SportMarket, position: number) => {
             let isBlocked = false;
 
@@ -124,6 +127,66 @@ const Positions: React.FC<PositionsProps> = ({
             return isBlocked;
         },
         [isSgpEnabled, ticket, sgpBlockers]
+    );
+
+    const marketsAvailableForSgpQuery = useSportMarketSgpQuery(
+        ticket[0],
+        { networkId },
+        { enabled: isSgpEnabled, refetchInterval: secondsToMilliseconds(30) }
+    );
+
+    const marketAvailableForSgp = useMemo(
+        () =>
+            marketsAvailableForSgpQuery.isSuccess && marketsAvailableForSgpQuery.data
+                ? marketsAvailableForSgpQuery.data
+                : undefined,
+        [marketsAvailableForSgpQuery.data, marketsAvailableForSgpQuery.isSuccess]
+    );
+
+    // check if position is supported by SGP sportsbooks
+    const isPositionUnsupportedBySgpSportsbooks = useCallback(
+        (market: SportMarket, position: number) => {
+            if (isSgpEnabled && marketAvailableForSgp && market.gameId === marketAvailableForSgp.gameId) {
+                const marketAvailableForSgpCopy = { ...marketAvailableForSgp };
+
+                let ticketCommonSportsbooks: string[] = [];
+                ticket.forEach((ticketPosition: TicketPosition, index) => {
+                    const isMoneyline = ticketPosition.typeId === MarketType.WINNER;
+                    const sgpChildMarket = marketAvailableForSgpCopy.childMarkets.find((childMarket) =>
+                        isSameMarket(childMarket, ticketPosition)
+                    );
+                    const sgpSportsbooks =
+                        (isMoneyline ? marketAvailableForSgpCopy.sgpSportsbooks : sgpChildMarket?.sgpSportsbooks) || [];
+
+                    if (index === 0) {
+                        ticketCommonSportsbooks = sgpSportsbooks;
+                    } else {
+                        const commonSportsbooks = intersection(ticketCommonSportsbooks, sgpSportsbooks);
+                        ticketCommonSportsbooks = commonSportsbooks;
+                    }
+                });
+
+                const selectedMarketSportsbooks =
+                    (market.typeId === MarketType.WINNER
+                        ? marketAvailableForSgpCopy.sgpSportsbooks
+                        : marketAvailableForSgpCopy.childMarkets.find((childMarket) =>
+                              isSameMarket(childMarket, sportMarketAsTicketPosition(market, position))
+                          )?.sgpSportsbooks) || [];
+
+                const isUnsupported = intersection(selectedMarketSportsbooks, ticketCommonSportsbooks).length === 0;
+
+                return isUnsupported;
+            }
+
+            return false;
+        },
+        [isSgpEnabled, marketAvailableForSgp, ticket]
+    );
+
+    // check for SGP if position is total/spread market which lines are not whole number
+    const isPositionUnsupportedBySgpType = useCallback(
+        (market: SportMarket) => isSgpEnabled && isTotalOrSpreadWithWholeLine(market.typeId, market.line),
+        [isSgpEnabled]
     );
 
     const hasOdds = markets.some((market) => market.odds.length);
@@ -196,7 +259,11 @@ const Positions: React.FC<PositionsProps> = ({
                     {sortedMarkets.map((market, index) => {
                         const oddsInfo = market.odds.map((odd: number, index: number) => {
                             const position = index;
-                            const isBlocked = getIsSgpCombinationBlocked(market, position);
+                            const isBlocked =
+                                isPositionBlockedBySgpCombination(market, position) ||
+                                isPositionUnsupportedBySgpType(market) ||
+                                isPositionUnsupportedBySgpSportsbooks(market, position);
+
                             return {
                                 odd,
                                 position,
@@ -204,10 +271,6 @@ const Positions: React.FC<PositionsProps> = ({
                                 isBlocked,
                             };
                         });
-                        const isEveryPositionBlocked = oddsInfo.every((oddsData) => oddsData.isBlocked);
-                        if (isEveryPositionBlocked) {
-                            return <></>;
-                        }
 
                         const sortedOddsInfo = orderBy(oddsInfo, ['odd', 'position'], ['desc', 'asc']);
                         const isFutures = isFuturesMarket(market.typeId);

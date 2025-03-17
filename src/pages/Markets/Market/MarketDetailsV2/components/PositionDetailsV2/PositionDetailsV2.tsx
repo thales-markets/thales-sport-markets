@@ -13,7 +13,13 @@ import { getTicket, removeFromTicket, updateTicket } from 'redux/modules/ticket'
 import { getOddsType } from 'redux/modules/ui';
 import { SportMarket, TicketPosition } from 'types/markets';
 import { formatMarketOdds, getPositionOrder, isFuturesMarket, isTotalExactMarket } from 'utils/markets';
-import { getMatchLabel, getPositionTextV2, isSameMarket, sportMarketAsSerializable } from 'utils/marketsV2';
+import {
+    getMatchLabel,
+    getPositionTextV2,
+    isSameMarket,
+    sportMarketAsSerializable,
+    sportMarketAsTicketPosition,
+} from 'utils/marketsV2';
 import { Container, Odd, Status, Text } from './styled-components';
 
 type PositionDetailsProps = {
@@ -90,22 +96,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
                     const serializableMarket = sportMarketAsSerializable(market);
                     dispatch(removeFromTicket(serializableMarket));
                 } else {
-                    const ticketPosition: TicketPosition = {
-                        gameId: market.gameId,
-                        leagueId: market.leagueId,
-                        typeId: market.typeId,
-                        playerId: market.playerProps.playerId,
-                        playerName: market.playerProps.playerName,
-                        line: market.line,
-                        position: position,
-                        combinedPositions: market.combinedPositions,
-                        live: market.live,
-                        isOneSideMarket: market.isOneSideMarket,
-                        isPlayerPropsMarket: market.isPlayerPropsMarket,
-                        homeTeam: market.homeTeam,
-                        awayTeam: market.awayTeam,
-                        playerProps: market.playerProps,
-                    };
+                    const ticketPosition: TicketPosition = sportMarketAsTicketPosition(market, position);
 
                     if (
                         !ticketPosition.live &&
