@@ -14,7 +14,7 @@ import { FlexDivCentered } from 'styles/common';
 import { formatDateWithTime } from 'thales-utils';
 import { SportMarket, SportMarketScore, TicketMarket } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
-import { formatMarketOdds } from 'utils/markets';
+import { formatMarketOdds, getPeriodsForResultView, isContractResultView } from 'utils/markets';
 import {
     getMatchTeams,
     getPositionTextV2,
@@ -63,6 +63,8 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean; isS
     const liveScore = market.liveScore;
 
     const leagueSport = getLeagueSport(market.leagueId);
+    const showContractResult = isContractResultView(market.typeId);
+    const showPeriodResult = getPeriodsForResultView(market.typeId, market.leagueId).length > 0;
 
     const getScoreComponent = (scoreData: SportMarket | SportMarketScore) =>
         showGameScore(scoreData.gameStatus) || !scoreData.gameStatus ? (
@@ -93,6 +95,7 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean; isS
                     </ScoreContainer>
                 )}
                 {!isMobile &&
+                    !showPeriodResult &&
                     // TODO check logic because of 0:0 results when isResolved == true, but isGameFinished == false
                     (market.isResolved || market.isGameFinished) &&
                     leagueSport !== Sport.CRICKET &&
@@ -149,9 +152,9 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean; isS
             </SelectionInfoContainer>
             {market.isCancelled ? (
                 <TicketMarketStatus>{t('profile.card.canceled')}</TicketMarketStatus>
-            ) : (market.isResolved || market.isGameFinished) && !market.isPlayerPropsMarket ? (
+            ) : (market.isResolved || market.isGameFinished) && !market.isPlayerPropsMarket && !showContractResult ? (
                 <MatchScoreContainer>{getScoreComponent(market)}</MatchScoreContainer>
-            ) : market.isResolved && market.isPlayerPropsMarket ? (
+            ) : market.isResolved && (market.isPlayerPropsMarket || showContractResult) ? (
                 <TicketMarketStatus>{market.homeScore}</TicketMarketStatus>
             ) : isPendingResolution || isLive ? (
                 liveScore ? (
