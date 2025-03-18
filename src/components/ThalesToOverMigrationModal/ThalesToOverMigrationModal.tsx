@@ -14,7 +14,6 @@ import { toast } from 'react-toastify';
 import { useTheme } from 'styled-components';
 import { Coins, formatCurrencyWithKey, truncToDecimals } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
-import { getCollateralIndex } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import { checkAllowance } from 'utils/network';
 import { Client, parseEther } from 'viem';
@@ -273,7 +272,6 @@ const ThalesToOverMigrationModal: React.FC<ThalesToOverMigrationModalProps> = ({
             {openApprovalModal && (
                 <ApprovalModal
                     defaultAmount={Number(amount)}
-                    collateralIndex={getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.THALES as Coins)}
                     tokenSymbol={CRYPTO_CURRENCY_MAP.THALES}
                     isAllowing={isAllowing}
                     onSubmit={handleAllowance}
