@@ -1,5 +1,5 @@
 import { REGION_BOTTOM_LEFT, REGION_UPPER_LEFT, teamsData } from 'constants/marchMadness';
-import { League } from 'enums/sports';
+import { League } from 'overtime-utils';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';

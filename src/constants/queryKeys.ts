@@ -1,8 +1,8 @@
 import { StatusFilter } from 'enums/markets';
 import { Network } from 'enums/network';
 import { RiskManagementConfig, RiskManagementRole } from 'enums/riskManagement';
+import { League } from 'overtime-utils';
 import { LiquidityPoolCollateral } from '../enums/liquidityPool';
-import { League } from '../enums/sports';
 
 const QUERY_KEYS = {
     Ticket: (networkId: Network, ticketAddress: string) => ['gameTickets', networkId, ticketAddress],

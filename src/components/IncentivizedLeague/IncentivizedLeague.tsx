@@ -3,11 +3,11 @@ import OPLogo from 'assets/images/optimism-logo.svg?react';
 import Tooltip from 'components/Tooltip';
 import { INCENTIVIZED_LEAGUES } from 'constants/markets';
 import { Network } from 'enums/network';
+import { League } from 'overtime-utils';
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { useChainId } from 'wagmi';
-import { League } from '../../enums/sports';
 
 type IncentivizedLeagueProps = {
     league: League;

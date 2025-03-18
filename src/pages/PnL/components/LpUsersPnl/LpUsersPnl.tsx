@@ -1,7 +1,7 @@
 import { USD_SIGN } from 'constants/currency';
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
-import { League } from 'enums/sports';
 import { t } from 'i18next';
+import { League } from 'overtime-utils';
 import useLpUsersPnlQuery from 'queries/pnl/useLpUsersPnlQuery';
 import React from 'react';
 import styled from 'styled-components';

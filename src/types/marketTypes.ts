@@ -1,14 +1,4 @@
-import { MarketType } from 'enums/marketTypes';
-import { Sport } from 'enums/sports';
-
-export type MarketTypeInfo = {
-    id: MarketType;
-    key: string;
-    name: string;
-    shortName?: string;
-    description?: string;
-    tooltipKey?: string;
-};
+import { Sport } from 'overtime-utils';
 
 export type SelectedMarket = {
     gameId: string;

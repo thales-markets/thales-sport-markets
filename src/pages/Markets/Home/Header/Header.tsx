@@ -6,8 +6,9 @@ import {
     MarketTypesBySportFilter,
 } from 'constants/marketTypes';
 import { SortType, SportFilter } from 'enums/markets';
-import { MarketType, MarketTypeGroup } from 'enums/marketTypes';
+import { MarketTypeGroup } from 'enums/marketTypes';
 import { uniq } from 'lodash';
+import { MarketType, isPlayerPropsMarket } from 'overtime-utils';
 import React, { useContext, useMemo, useState } from 'react';
 import { ScrollMenu, VisibilityContext, publicApiType } from 'react-horizontal-scrolling-menu';
 import 'react-horizontal-scrolling-menu/dist/styles.css';
@@ -26,7 +27,7 @@ import {
     setSortType,
 } from 'redux/modules/market';
 import { SportMarket } from 'types/markets';
-import { getMarketTypeName, isPlayerPropsMarket } from 'utils/markets';
+import { getMarketTypeName } from 'utils/markets';
 import {
     ArrowIcon,
     Container,

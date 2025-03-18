@@ -1,9 +1,19 @@
-import { MarketTypeMap } from 'constants/marketTypes';
 import { secondsToMilliseconds } from 'date-fns';
 import { ContractType } from 'enums/contract';
-import { MarketType } from 'enums/marketTypes';
 import { OddsType } from 'enums/markets';
 import { t } from 'i18next';
+import {
+    getLeagueSport,
+    isContractResultView,
+    isFuturesMarket,
+    isOneSideMarket,
+    isOneSidePlayerPropsMarket,
+    isPlayerPropsMarket,
+    isYesNoPlayerPropsMarket,
+    League,
+    MarketType,
+    MarketTypeMap,
+} from 'overtime-utils';
 import { bigNumberFormatter, coinFormatter, Coins, formatDateWithTime, NetworkId } from 'thales-utils';
 import { CombinedPosition, SystemBetData, Team, Ticket, TicketMarket, TicketPosition } from 'types/markets';
 import { NetworkConfig, SupportedNetwork } from 'types/network';
@@ -13,23 +23,13 @@ import positionNamesMap from '../assets/json/positionNamesMap.json';
 import { CRYPTO_CURRENCY_MAP } from '../constants/currency';
 import { BATCH_SIZE, THALES_ADDED_PAYOUT_PERCENTAGE } from '../constants/markets';
 import { UFC_LEAGUE_IDS } from '../constants/sports';
-import { League } from '../enums/sports';
 import { TicketMarketStatus } from '../enums/tickets';
 import { getCollateralByAddress } from './collaterals';
 import { getContractInstance } from './contract';
 import freeBetHolder from './contracts/freeBetHolder';
 import stakingThalesBettingProxy from './contracts/stakingThalesBettingProxy';
-import {
-    formatMarketOdds,
-    getPeriodsForResultView,
-    isContractResultView,
-    isFuturesMarket,
-    isOneSideMarket,
-    isOneSidePlayerPropsMarket,
-    isPlayerPropsMarket,
-    isYesNoPlayerPropsMarket,
-} from './markets';
-import { getLeagueSport, isPlayerPropsCombiningEnabled } from './sports';
+import { formatMarketOdds, getPeriodsForResultView } from './markets';
+import { isPlayerPropsCombiningEnabled } from './marketsV2';
 
 export const mapTicket = (
     ticket: any,
