@@ -29,7 +29,7 @@ const useSportMarketSgpQuery = (
 
             try {
                 const marketResponse = await axios.get(
-                    `${generalConfig.API_URL}/overtime-v2/networks/${networkConfig.networkId}/sgp/marketsTest/${marketAddress}?position=${position}&typeId=${typeId}&line=${line}&playerId=${playerId}`,
+                    `${generalConfig.API_URL}/overtime-v2/networks/${networkConfig.networkId}/sgp/markets/${marketAddress}?position=${position}&typeId=${typeId}&line=${line}&playerId=${playerId}`,
                     noCacheConfig
                 );
 
