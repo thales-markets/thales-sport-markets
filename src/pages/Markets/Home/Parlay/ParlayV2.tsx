@@ -24,6 +24,7 @@ import {
     getHasTicketError,
     getIsSgp,
     getIsSystemBet,
+    getMaxTicketSize,
     getTicket,
     removeAll,
     resetTicketError,
@@ -37,6 +38,7 @@ import { FlexDivCentered, FlexDivColumn, FlexDivSpaceBetween } from 'styles/comm
 import { SportMarket, SportMarkets, TicketMarket, TicketPosition } from 'types/markets';
 import { SgpParams, SportsbookData } from 'types/sgp';
 import { isSameMarket } from 'utils/marketsV2';
+import { isRegularTicketInvalid } from 'utils/tickets';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import TicketV2 from './components/TicketV2';
 import ValidationModal from './components/ValidationModal';
@@ -59,6 +61,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     const { isConnected } = useAccount();
 
     const ticket = useSelector(getTicket);
+    const maxTicketSize = useSelector(getMaxTicketSize);
     const isSystemBet = useSelector(getIsSystemBet);
     const isSgp = useSelector(getIsSgp);
     const hasTicketError = useSelector(getHasTicketError);
@@ -333,7 +336,9 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                                         value={'true'}
                                         onChange={() => {
                                             if (isSgp && ticket.length > 1) {
-                                                dispatch(removeAll());
+                                                if (isRegularTicketInvalid(ticket, maxTicketSize)) {
+                                                    dispatch(removeAll());
+                                                }
                                             }
                                             dispatch(setIsSystemBet(false));
                                             dispatch(setIsSgp(false));
@@ -352,7 +357,9 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                                         value={'false'}
                                         onChange={() => {
                                             if (isSgp && ticket.length > 1) {
-                                                dispatch(removeAll());
+                                                if (isRegularTicketInvalid(ticket, maxTicketSize)) {
+                                                    dispatch(removeAll());
+                                                }
                                             }
                                             dispatch(setIsSystemBet(true));
                                             dispatch(setIsSgp(false));
