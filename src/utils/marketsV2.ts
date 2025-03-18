@@ -539,6 +539,24 @@ export const ticketMarketAsTicketPosition = (market: TicketMarket) => {
     } as TicketPosition;
 };
 
+export const sportMarketAsTicketPosition = (market: SportMarket, position: number) =>
+    ({
+        gameId: market.gameId,
+        leagueId: market.leagueId,
+        typeId: market.typeId,
+        playerId: market.playerProps.playerId,
+        playerName: market.playerProps.playerName,
+        line: market.line,
+        position: position,
+        combinedPositions: market.combinedPositions,
+        live: market.live,
+        isOneSideMarket: market.isOneSideMarket,
+        isPlayerPropsMarket: market.isPlayerPropsMarket,
+        homeTeam: market.homeTeam,
+        awayTeam: market.awayTeam,
+        playerProps: market.playerProps,
+    } as TicketPosition);
+
 export const sportMarketAsSerializable = (market: SportMarket): SerializableSportMarket => {
     const serializableChildMarkets = market.childMarkets
         ? market.childMarkets.map((childMarket) => _.omit(childMarket, 'maturityDate'))
@@ -648,21 +666,21 @@ const getPlayerPropsEmptyMarkets = (market: SportMarket) => [
     {
         ...market,
         type: '',
-        typeId: -1,
+        typeId: MarketType.EMPTY,
         odds: [0],
         line: Infinity,
     },
     {
         ...market,
         type: '',
-        typeId: -1,
+        typeId: MarketType.EMPTY,
         odds: [0],
         line: Infinity,
     },
     {
         ...market,
         type: '',
-        typeId: -1,
+        typeId: MarketType.EMPTY,
         odds: [0],
         line: Infinity,
     },
