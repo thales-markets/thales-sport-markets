@@ -253,6 +253,7 @@ export const {
 
 const getTicketState = (state: RootState) => state[sliceName];
 export const getTicket = (state: RootState) => getTicketState(state).ticket;
+export const getMaxTicketSize = (state: RootState) => getTicketState(state).maxTicketSize;
 export const getTicketPayment = (state: RootState) => getTicketState(state).payment;
 export const getLiveBetSlippage = (state: RootState) => getTicketState(state).liveBetSlippage;
 export const getIsFreeBetDisabledByUser = (state: RootState) => getTicketState(state).isFreeBetDisabledByUser;
