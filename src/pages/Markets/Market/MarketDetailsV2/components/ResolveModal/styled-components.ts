@@ -61,10 +61,6 @@ export const InputContainer = styled.div`
     }
 `;
 
-export const CongratulationsTitle = styled(Title)`
-    color: ${(props) => props.theme.success.textColor.primary};
-`;
-
 export const ButtonContainer = styled(FlexDivSpaceBetween)<{ isCancel: boolean }>`
     gap: 10px;
     width: 100%;
@@ -111,10 +107,3 @@ export const defaultButtonProps = {
     width: '300px',
     margin: '10px 0 0 0',
 };
-
-export const StakingPageLink = styled.a`
-    color: ${(props) => props.theme.link.textColor.primary};
-    &:hover {
-        text-decoration: underline;
-    }
-`;

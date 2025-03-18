@@ -84,6 +84,16 @@ const useMultipleCollateralBalanceQuery = (
                         networkConfig,
                         getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.sTHALES as Coins)
                     ) as ViemContract,
+                    cbBTC: getContractInstance(
+                        ContractType.MULTICOLLATERAL,
+                        networkConfig,
+                        getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.cbBTC as Coins)
+                    ) as ViemContract,
+                    wBTC: getContractInstance(
+                        ContractType.MULTICOLLATERAL,
+                        networkConfig,
+                        getCollateralIndex(networkConfig.networkId, CRYPTO_CURRENCY_MAP.wBTC as Coins)
+                    ) as ViemContract,
                 };
 
                 const thalesStakingContract = getContractInstance(
@@ -108,6 +118,8 @@ const useMultipleCollateralBalanceQuery = (
                     ARBBalance,
                     THALESBalance,
                     sTHALESBalance,
+                    cbBTCBalance,
+                    wBTCBalance,
                 ] = await Promise.all([
                     multipleCollateralObject?.sUSD && multipleCollateralObject?.sUSD?.address !== TBD_ADDRESS
                         ? multipleCollateralObject.sUSD.read.balanceOf([walletAddress])
@@ -141,6 +153,12 @@ const useMultipleCollateralBalanceQuery = (
                         ? multipleCollateralObject.THALES.read.balanceOf([walletAddress])
                         : 0,
                     thalesStakingContract ? thalesStakingContract.read.stakedBalanceOf([walletAddress]) : 0,
+                    multipleCollateralObject?.cbBTC && multipleCollateralObject?.cbBTC?.address !== TBD_ADDRESS
+                        ? multipleCollateralObject.cbBTC.read.balanceOf([walletAddress])
+                        : 0,
+                    multipleCollateralObject?.wBTC && multipleCollateralObject?.wBTC?.address !== TBD_ADDRESS
+                        ? multipleCollateralObject.wBTC.read.balanceOf([walletAddress])
+                        : 0,
                 ]);
                 collateralsBalance = {
                     sUSD: sUSDBalance ? bigNumberFormatter(sUSDBalance, COLLATERAL_DECIMALS.sUSD) : 0,
@@ -159,6 +177,8 @@ const useMultipleCollateralBalanceQuery = (
                         sTHALESBalance && bigNumberFormatter(sTHALESBalance, COLLATERAL_DECIMALS.sTHALES) > 1
                             ? bigNumberFormatter(sTHALESBalance, COLLATERAL_DECIMALS.sTHALES) - 1
                             : 0,
+                    cbBTC: cbBTCBalance ? bigNumberFormatter(cbBTCBalance, COLLATERAL_DECIMALS.cbBTC) : 0,
+                    wBTC: wBTCBalance ? bigNumberFormatter(wBTCBalance, COLLATERAL_DECIMALS.cbBTC) : 0,
                 };
             } catch (e) {
                 console.log('e ', e);

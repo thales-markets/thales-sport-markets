@@ -5,6 +5,7 @@ import { ContractData, ViemContract } from 'types/viem';
 import { Address, getContract } from 'viem';
 import { getCollaterals } from './collaterals';
 // Contract import
+import { TBD_ADDRESS } from 'constants/network';
 import freeBetHolder from 'utils/contracts/freeBetHolder';
 import liquidityPoolDataContract from 'utils/contracts/liquidityPoolDataContractV2';
 import liveTradingProcessor from 'utils/contracts/liveTradingProcessorContract';
@@ -12,6 +13,7 @@ import multiCall from 'utils/contracts/multiCallContract';
 import multiCollateralOnOffRamp from 'utils/contracts/multiCollateralOnOffRampContract';
 import multiCollateral from 'utils/contracts/multipleCollateralContract';
 import priceFeed from 'utils/contracts/priceFeedContract';
+import sgpTradingProcessor from 'utils/contracts/sgpTradingProcessorContract';
 import sportsAMMData from 'utils/contracts/sportsAMMDataContract';
 import sportsAMMV2 from 'utils/contracts/sportsAMMV2Contract';
 import sportsAMMV2Manager from 'utils/contracts/sportsAMMV2ManagerContract';
@@ -20,9 +22,10 @@ import sportsAMMV2RiskManager from 'utils/contracts/sportsAMMV2RiskManagerContra
 import stakingThalesBettingProxy from 'utils/contracts/stakingThalesBettingProxy';
 import stakingThales from 'utils/contracts/stakingThalesContract';
 import liquidityPoolContractV2 from './contracts/liquidityPoolContractV2';
+import { marchMadnessContract } from './contracts/marchMadnessContract';
 import resolveBlockerContract from './contracts/resolveBlockerContract';
 
-export const prepareContractWithModifiedResponse = (props: { abi: any; address: Address; client: any }) => {
+const prepareContractWithModifiedResponse = (props: { abi: any; address: Address; client: any }) => {
     const contract = getContract(props) as ViemContract;
 
     if (typeof contract.read !== 'object' || contract.read === null) {
@@ -62,7 +65,7 @@ export const prepareContractWithModifiedResponse = (props: { abi: any; address: 
 };
 
 const getContractWithModifiedResponse = (contractData: ContractData, networkConfig: NetworkConfig) => {
-    if (!networkConfig) return;
+    if (contractData.addresses[networkConfig?.networkId] === TBD_ADDRESS) return undefined;
     return prepareContractWithModifiedResponse({
         abi: contractData.abi,
         address: contractData.addresses[networkConfig?.networkId],
@@ -99,6 +102,8 @@ export const getContractInstance = (
             return getContractWithModifiedResponse(sportsAMMV2ResultManager, networkConfig);
         case ContractType.LIVE_TRADING_PROCESSOR:
             return getContractWithModifiedResponse(liveTradingProcessor, networkConfig);
+        case ContractType.SGP_TRADING_PROCESSOR:
+            return getContractWithModifiedResponse(sgpTradingProcessor, networkConfig);
         case ContractType.FREE_BET_HOLDER:
             return getContractWithModifiedResponse(freeBetHolder, networkConfig);
         case ContractType.SPORTS_AMM_V2_MANAGER:
@@ -114,6 +119,8 @@ export const getContractInstance = (
             return getContractWithModifiedResponse(liquidityPoolContractV2[lpCollateral], networkConfig);
         case ContractType.RESOLVE_BLOCKER:
             return getContractWithModifiedResponse(resolveBlockerContract, networkConfig);
+        case ContractType.MARCH_MADNESS:
+            return getContractWithModifiedResponse(marchMadnessContract, networkConfig);
         default:
             return undefined;
     }

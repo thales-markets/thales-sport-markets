@@ -14,6 +14,7 @@ import { SportFilter, StatusFilter } from 'enums/markets';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
 import { groupBy, orderBy } from 'lodash';
+import SidebarMMLeaderboard from 'pages/MarchMadness/components/SidebarLeaderboard';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
@@ -46,6 +47,7 @@ import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common'
 import { addHoursToCurrentDate, localStore } from 'thales-utils';
 import { MarketsCache, SportMarket, SportMarkets, TagInfo, Tags } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
+import { isMarchMadnessAvailableForNetworkId } from 'utils/marchMadness';
 import { getDefaultPlayerPropsLeague } from 'utils/marketsV2';
 import { history } from 'utils/routes';
 import { getScrollMainContainerToTop } from 'utils/scroll';
@@ -63,6 +65,8 @@ import GlobalFilters from '../components/StatusFilters';
 import Breadcrumbs from './Breadcrumbs';
 import Header from './Header';
 import SelectedMarket from './SelectedMarket';
+
+const SHOW_MM_SIDEBAR_LEADERBOARD = false; // TODO: remove after march madness
 
 const Parlay = lazy(() => import(/* webpackChunkName: "Parlay" */ './Parlay'));
 
@@ -216,7 +220,7 @@ const Home: React.FC = () => {
         }
     }, [playerPropsCountPerTag, sportFilter, setTagParam]);
 
-    const sportMarketsQueryNew = useSportsMarketsV2Query(statusFilter, false, { networkId }, undefined);
+    const sportMarketsQuery = useSportsMarketsV2Query(statusFilter, false, { networkId }, undefined);
 
     const liveSportMarketsQuery = useLiveSportsMarketsQuery(sportFilter === SportFilter.Live, { networkId });
 
@@ -227,8 +231,8 @@ const Home: React.FC = () => {
             return [];
         }
         const allMarkets: MarketsCache =
-            sportMarketsQueryNew.isSuccess && sportMarketsQueryNew.data
-                ? sportMarketsQueryNew.data
+            sportMarketsQuery.isSuccess && sportMarketsQuery.data
+                ? sportMarketsQuery.data
                 : {
                       [StatusFilter.OPEN_MARKETS]: [],
                       [StatusFilter.ONGOING_MARKETS]: [],
@@ -303,7 +307,14 @@ const Home: React.FC = () => {
                     ) {
                         return false;
                     }
-                } else if (!tagFilter.map((tag) => tag.id).includes(market.leagueId)) {
+                } else if (
+                    !tagFilter.find(
+                        (tag) =>
+                            tag.id === market.leagueId ||
+                            (tag.label === SportFilter.Favourites &&
+                                favouriteLeagues.find((tag) => tag.id === market.leagueId))
+                    )
+                ) {
                     return false;
                 }
             }
@@ -377,8 +388,8 @@ const Home: React.FC = () => {
 
         return filteredMarkets;
     }, [
-        sportMarketsQueryNew.isSuccess,
-        sportMarketsQueryNew.data,
+        sportMarketsQuery.isSuccess,
+        sportMarketsQuery.data,
         liveSportMarketsQuery.isSuccess,
         liveSportMarketsQuery.data,
         gameMultipliersQuery.isSuccess,
@@ -397,7 +408,7 @@ const Home: React.FC = () => {
     ]);
 
     const marketsLoading =
-        sportFilter === SportFilter.Live ? liveSportMarketsQuery.isLoading : sportMarketsQueryNew.isLoading;
+        sportFilter === SportFilter.Live ? liveSportMarketsQuery.isLoading : sportMarketsQuery.isLoading;
 
     useEffect(() => {
         if (sportFilter == SportFilter.Favourites) {
@@ -502,7 +513,7 @@ const Home: React.FC = () => {
                 liveMarketsCountPerTag[key] = groupedMarkets[key].length;
             }
         });
-        Object.values(SportFilter);
+
         return liveMarketsCountPerTag;
     }, [liveSportMarketsQuery]);
 
@@ -544,6 +555,7 @@ const Home: React.FC = () => {
                     (market) => market.gameId.toLowerCase() === selectedMarket.gameId.toLowerCase()
                 );
             } else {
+                // Non-live
                 const openSportMarkets: SportMarkets =
                     openSportMarketsQuery.isSuccess && openSportMarketsQuery.data
                         ? openSportMarketsQuery.data[StatusFilter.OPEN_MARKETS]
@@ -697,9 +709,11 @@ const Home: React.FC = () => {
                             }
                             showActive={showActive}
                             tags={tagsList}
+                            setSportParam={setSportParam}
                             setTagParam={setTagParam}
                             openMarketsCountPerTag={openMarketsCountPerTag}
                             liveMarketsCountPerTag={liveMarketsCountPerTag}
+                            liveMarketsCountPerSport={liveMarketsCountPerSport}
                             playerPropsMarketsCountPerTag={playerPropsCountPerTag}
                         />
                     );
@@ -764,6 +778,11 @@ const Home: React.FC = () => {
                         <SportFiltersContainer>
                             {getStatusFilters()}
                             {getSportFilters()}
+                            {SHOW_MM_SIDEBAR_LEADERBOARD && (
+                                <Suspense fallback={<Loader />}>
+                                    {isMarchMadnessAvailableForNetworkId(networkId) && <SidebarMMLeaderboard />}
+                                </Suspense>
+                            )}
                         </SportFiltersContainer>
                     </Scroll>
                 </LeftSidebarContainer>
@@ -800,7 +819,7 @@ const Home: React.FC = () => {
                         </LoaderContainer>
                     ) : (
                         <>
-                            {!isMobile && <Breadcrumbs />}
+                            {!isMobile && <Breadcrumbs setTagParam={setTagParam} />}
                             {finalMarkets.length === 0 ? (
                                 <NoMarketsContainer>
                                     <NoMarketsLabel>

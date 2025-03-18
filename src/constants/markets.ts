@@ -15,6 +15,7 @@ export const COINGECKO_SWAP_TO_THALES_QUOTE_SLIPPAGE: Record<SupportedNetwork, n
     [NetworkId.OptimismMainnet]: 0.03, // 3%
     [NetworkId.OptimismSepolia]: 0.03,
     [NetworkId.Arbitrum]: 0.1,
+    [NetworkId.Base]: 0.1,
 };
 
 export const INCENTIVIZED_LEAGUES: Record<number, any> = {
@@ -70,3 +71,8 @@ export const FUTURES_MAIN_VIEW_DISPLAY_COUNT = 2;
 export const SYSTEM_BET_MINIMUM_MARKETS = 3;
 export const SYSTEM_BET_MINIMUM_DENOMINATOR = 2;
 export const SYSTEM_BET_MAX_ALLOWED_SYSTEM_COMBINATIONS = 10000;
+
+export const SGP_BET_MINIMUM_MARKETS = 2;
+export const SGP_BET_MAX_MARKETS = 10;
+
+export const NOT_AVAILABLE = 'N/A';

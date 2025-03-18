@@ -1,10 +1,8 @@
 import Button from 'components/Button/Button';
 import CollateralSelector from 'components/CollateralSelector';
 import ShareTicketModalV2 from 'components/ShareTicketModalV2';
-import { ShareTicketModalProps } from 'components/ShareTicketModalV2/ShareTicketModalV2';
 import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { ZERO_ADDRESS } from 'constants/network';
 import { ContractType } from 'enums/contract';
 import React, { useMemo, useState } from 'react';
@@ -14,9 +12,10 @@ import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsBiconomy } from 'redux/modules/wallet';
-import { Coins, formatCurrencyWithKey, getEtherscanAddressLink, truncateAddress } from 'thales-utils';
+import { formatCurrencyWithKey, getEtherscanAddressLink, truncateAddress } from 'thales-utils';
 import { Ticket } from 'types/markets';
 import { RootState } from 'types/redux';
+import { ShareTicketModalProps } from 'types/tickets';
 import { executeBiconomyTransaction } from 'utils/biconomy';
 import biconomyConnector from 'utils/biconomyWallet';
 import {
@@ -70,15 +69,9 @@ type TicketDetailsProps = {
     ticket: Ticket;
     claimCollateralIndex: number;
     setClaimCollateralIndex: any;
-    onThalesClaim: (thalesClaimed: number) => void;
 };
 
-const TicketDetails: React.FC<TicketDetailsProps> = ({
-    ticket,
-    claimCollateralIndex,
-    setClaimCollateralIndex,
-    onThalesClaim,
-}) => {
+const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIndex, setClaimCollateralIndex }) => {
     const { t } = useTranslation();
     const selectedOddsType = useSelector(getOddsType);
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -177,9 +170,6 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
                         setShareTicketModalData(shareTicketData);
                         setShowShareTicketModal(true);
                     }
-                    if (ticket.collateral === (CRYPTO_CURRENCY_MAP.THALES as Coins)) {
-                        onThalesClaim(ticket.isFreeBet ? ticket.payout - ticket.buyInAmount : ticket.payout);
-                    }
                     refetchAfterClaim(walletAddress, networkId);
                     refetchBalances(walletAddress, networkId);
                 }
@@ -212,6 +202,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
         isTicketLost: ticket.isLost,
         collateral: ticket.collateral,
         isLive: ticket.isLive,
+        isSgp: ticket.isSgp,
         applyPayoutMultiplier: false,
         isTicketOpen: ticket.isOpen,
         systemBetData: ticket.systemBetData,
@@ -260,9 +251,11 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
     return (
         <Container>
             <OverviewWrapper>
-                <LiveSystemIndicatorContainer isLive={ticket.isLive} isSystem={ticket.isSystemBet}>
+                <LiveSystemIndicatorContainer isLive={ticket.isLive} isSgp={ticket.isSgp} isSystem={ticket.isSystemBet}>
                     {ticket.isLive ? (
                         <Label>{t('profile.card.live')}</Label>
+                    ) : ticket.isSgp ? (
+                        <Label>{t('profile.card.sgp')}</Label>
                     ) : ticket.isSystemBet ? (
                         <Label>{t('profile.card.system')}</Label>
                     ) : (
@@ -328,14 +321,14 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
                                     <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
                                 </InfoContainerColumn>
                             </PayoutWrapper>
-                            {isClaimable && isMultiCollateralSupported && !ticket.isFreeBet && (
+                            {isClaimable && isMultiCollateralSupported && (
                                 <InfoContainerColumn
                                     onClick={(e) => {
                                         e.preventDefault();
                                         e.stopPropagation();
                                     }}
                                 >
-                                    {isTicketCollateralDefaultCollateral && (
+                                    {isTicketCollateralDefaultCollateral && !ticket.isFreeBet && (
                                         <>
                                             <WinLabel>{t('profile.card.payout-in')}:</WinLabel>
                                             <CollateralSelector
@@ -388,7 +381,14 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
             <CollapsableContainer show={showDetails}>
                 <TicketMarketsContainer>
                     {ticket.sportMarkets.map((market, index) => {
-                        return <TicketMarketDetails market={market} key={index} isLive={ticket.isLive} />;
+                        return (
+                            <TicketMarketDetails
+                                market={market}
+                                key={index}
+                                isLive={ticket.isLive}
+                                isSgp={ticket.isSgp}
+                            />
+                        );
                     })}
                 </TicketMarketsContainer>
                 {ticket.isSystemBet ? (
@@ -493,6 +493,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
                     isTicketLost={shareTicketModalData.isTicketLost}
                     collateral={shareTicketModalData.collateral}
                     isLive={shareTicketModalData.isLive}
+                    isSgp={shareTicketModalData.isSgp}
                     applyPayoutMultiplier={shareTicketModalData.applyPayoutMultiplier}
                     systemBetData={shareTicketModalData.systemBetData}
                     isTicketOpen={shareTicketModalData.isTicketOpen}

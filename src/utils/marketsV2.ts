@@ -1,7 +1,8 @@
+import { NOT_AVAILABLE } from 'constants/markets';
 import { secondsToMilliseconds } from 'date-fns';
 import { MarketType, MarketTypeGroup } from 'enums/marketTypes';
 import { GameStatus, MarketStatus, Position } from 'enums/markets';
-import { League } from 'enums/sports';
+import { League, Sport } from 'enums/sports';
 import _ from 'lodash';
 import {
     SerializableSportMarket,
@@ -106,7 +107,12 @@ const getSimplePositionText = (
     positionNames?: string[],
     odds?: number[]
 ) => {
-    if (isFuturesMarket(marketType) && positionNames && positionNames[position]) {
+    if (
+        isFuturesMarket(marketType) &&
+        marketType !== MarketType.TO_MAKE_FINAL_FOUR &&
+        positionNames &&
+        positionNames[position]
+    ) {
         return positionNames[position];
     }
 
@@ -145,7 +151,7 @@ const getSimplePositionText = (
         return text;
     }
     if (
-        isOneSideMarket(marketType) ||
+        isOneSideMarket(leagueId, marketType) ||
         isOneSidePlayerPropsMarket(marketType) ||
         isYesNoPlayerPropsMarket(marketType) ||
         isBothsTeamsToScoreMarket(marketType) ||
@@ -267,6 +273,7 @@ export const getTitleText = (market: SportMarket, useDescription?: boolean, shor
         return '';
     }
 
+    const sport = getLeagueSport(market.leagueId);
     const scoringType = getLeagueScoringType(market.leagueId);
     const marketTypeDescription = getMarketTypeDescription(marketType);
     const marketTypeName =
@@ -279,9 +286,11 @@ export const getTitleText = (market: SportMarket, useDescription?: boolean, shor
     let sufix = isPeriodMarket(marketType)
         ? ` ${getLeaguePeriodType(market.leagueId)}`
         : isPeriod2Market(marketType)
-        ? market.leagueId == League.MLB
+        ? sport === Sport.BASEBALL
             ? ' half (1st 5 innings)'
             : ' half'
+        : (marketType === MarketType.SPREAD2 || marketType === MarketType.TOTAL2) && sport === Sport.HOCKEY
+        ? ' (60 min)'
         : '';
 
     if (
@@ -399,13 +408,13 @@ const areSameCombinedPositions = (market: SportMarket | TicketPosition, ticketPo
     return true;
 };
 
-export const isSameMarket = (market: SportMarket | TicketPosition, ticketPosition: TicketPosition) =>
+export const isSameMarket = (market: SportMarket | TicketPosition, ticketPosition: TicketPosition, byType = false) =>
     market.gameId === ticketPosition.gameId &&
     market.leagueId === ticketPosition.leagueId &&
     market.typeId === ticketPosition.typeId &&
     market.playerProps.playerId === ticketPosition.playerId &&
     market.line === ticketPosition.line &&
-    areSameCombinedPositions(market, ticketPosition);
+    (byType || areSameCombinedPositions(market, ticketPosition));
 
 export const getTradeData = (markets: TicketMarket[]): TradeData[] =>
     markets.map((market) => {
@@ -427,8 +436,7 @@ export const getTradeData = (markets: TicketMarket[]): TradeData[] =>
                     line: combinedPosition.line * 100,
                 }))
             ),
-            live: market.live,
-        };
+        } as TradeData;
     });
 
 export const isOddValid = (odd: number) => odd < 1 && odd != 0;
@@ -437,6 +445,15 @@ export const updateTotalQuoteAndPayout = (tickets: Ticket[]): Ticket[] => {
     const modifiedTickets = tickets.map((ticket: Ticket) => {
         // Skip system bet, payout is updated in separate function due to different logic and quote is not used
         if (ticket.isSystemBet) {
+            return ticket;
+        }
+        if (ticket.isSgp) {
+            const isSomeMarketCancelled = ticket.sportMarkets.some((market) => market.isCancelled);
+            if (isSomeMarketCancelled && !ticket.isLost) {
+                ticket.isCancelled = true;
+                ticket.totalQuote = 1;
+                ticket.payout = ticket.buyInAmount;
+            }
             return ticket;
         }
         let totalQuote = ticket.totalQuote;
@@ -522,6 +539,24 @@ export const ticketMarketAsTicketPosition = (market: TicketMarket) => {
     } as TicketPosition;
 };
 
+export const sportMarketAsTicketPosition = (market: SportMarket, position: number) =>
+    ({
+        gameId: market.gameId,
+        leagueId: market.leagueId,
+        typeId: market.typeId,
+        playerId: market.playerProps.playerId,
+        playerName: market.playerProps.playerName,
+        line: market.line,
+        position: position,
+        combinedPositions: market.combinedPositions,
+        live: market.live,
+        isOneSideMarket: market.isOneSideMarket,
+        isPlayerPropsMarket: market.isPlayerPropsMarket,
+        homeTeam: market.homeTeam,
+        awayTeam: market.awayTeam,
+        playerProps: market.playerProps,
+    } as TicketPosition);
+
 export const sportMarketAsSerializable = (market: SportMarket): SerializableSportMarket => {
     const serializableChildMarkets = market.childMarkets
         ? market.childMarkets.map((childMarket) => _.omit(childMarket, 'maturityDate'))
@@ -594,7 +629,7 @@ export const packMarket = (
         isResolved: market.status === MarketStatus.RESOLVED,
         isCancelled: market.status === MarketStatus.CANCELLED,
         isPaused: market.status === MarketStatus.PAUSED,
-        isOneSideMarket: isOneSideMarket(leagueId),
+        isOneSideMarket: isOneSideMarket(leagueId, market.typeId),
         isPlayerPropsMarket: isPlayerPropsMarket(market.typeId),
         isOneSidePlayerPropsMarket: isOneSidePlayerPropsMarket(market.typeId),
         isYesNoPlayerPropsMarket: isYesNoPlayerPropsMarket(market.typeId),
@@ -610,7 +645,8 @@ export const packMarket = (
     if (!parentMarket) {
         packedMarket = {
             ...packedMarket,
-            tournamentName: gameInfo?.tournamentName,
+            tournamentName:
+                gameInfo?.tournamentName || market?.tournamentName !== NOT_AVAILABLE ? market?.tournamentName : '',
             tournamentRound: gameInfo?.tournamentRound,
             homeScore,
             awayScore,
@@ -630,21 +666,21 @@ const getPlayerPropsEmptyMarkets = (market: SportMarket) => [
     {
         ...market,
         type: '',
-        typeId: -1,
+        typeId: MarketType.EMPTY,
         odds: [0],
         line: Infinity,
     },
     {
         ...market,
         type: '',
-        typeId: -1,
+        typeId: MarketType.EMPTY,
         odds: [0],
         line: Infinity,
     },
     {
         ...market,
         type: '',
-        typeId: -1,
+        typeId: MarketType.EMPTY,
         odds: [0],
         line: Infinity,
     },

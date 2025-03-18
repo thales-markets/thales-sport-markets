@@ -27,6 +27,7 @@ type MyTicketProps = {
     isTicketLost: boolean;
     collateral: Coins;
     isLive: boolean;
+    isSgp: boolean;
     applyPayoutMultiplier: boolean;
     isTicketOpen: boolean;
     systemBetData?: SystemBetData;
@@ -40,6 +41,7 @@ const MyTicket: React.FC<MyTicketProps> = ({
     isTicketLost,
     collateral,
     isLive,
+    isSgp,
     applyPayoutMultiplier,
     isTicketOpen,
     systemBetData,
@@ -67,7 +69,7 @@ const MyTicket: React.FC<MyTicketProps> = ({
                     <BoldContent>{' overtimemarkets.xyz'}</BoldContent>
                 </Header>
             )}
-            <ContentRow margin={'10px 0'}>
+            <ContentRow margin={'10px 0 13px 0'}>
                 <PayoutWrapper>
                     <PayoutRow>
                         <Square isLost={isTicketLost} />
@@ -82,6 +84,7 @@ const MyTicket: React.FC<MyTicketProps> = ({
                         <PayoutValue isLost={isTicketLost}>{formatCurrencyWithKey(collateral, payout)}</PayoutValue>
                     </PayoutRow>
                 </PayoutWrapper>
+                {isSgp && <SgpTag>{t(`profile.card.sgp`)}</SgpTag>}
             </ContentRow>
             <HorizontalLine />
             <MarketsContainer>
@@ -91,8 +94,9 @@ const MyTicket: React.FC<MyTicketProps> = ({
                             <RowMarket>
                                 <MatchInfoV2
                                     market={market}
-                                    readOnly={true}
+                                    readOnly
                                     isLive={isLive}
+                                    isSgp={isSgp}
                                     applyPayoutMultiplier={applyPayoutMultiplier}
                                 />
                             </RowMarket>
@@ -186,6 +190,7 @@ const Container = styled(FlexDivColumnCentered)`
 `;
 
 const ContentRow = styled(FlexDivRowCentered)<{ margin?: string }>`
+    position: relative;
     width: 356px;
     ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
     @media (max-width: 950px) {
@@ -340,6 +345,21 @@ const Correct = styled(Icon)`
 
 const Wrong = styled(Icon)`
     color: ${(props) => props.theme.status.loss};
+`;
+
+const SgpTag = styled.span`
+    position: absolute;
+    bottom: -14px;
+    background: ${(props) => props.theme.status.sgp};
+    color: ${(props) => props.theme.textColor.primary};
+    border-radius: 3px;
+    font-weight: 600;
+    font-size: 10px;
+    height: 12px;
+    line-height: 11px;
+    padding: 0 10px;
+    width: fit-content;
+    margin-right: auto;
 `;
 
 export default MyTicket;

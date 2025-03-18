@@ -2,6 +2,7 @@
     "common": {
         "filters": "Filters",
         "status": "Status",
+        "search": "Search",
         "settings": "Settings",
         "winner": "Winner",
         "buy-side": "BUY",
@@ -90,8 +91,9 @@
         "enable-wallet-access": {
             "approve": "Approve",
             "approve-progress": "Approving...",
-            "approve-label": "Approve {{currencyKey}}",
-            "approve-progress-label": "Approving {{currencyKey}}...",
+            "approve-label-text": "Approve {{currencyKey}}",
+            "approve-label": "Approve <currency>{{currencyKey}}</currency>",
+            "approve-progress-label": "Approving <currency>{{currencyKey}}</currency>...",
             "approve-all-label": "Approve all",
             "custom-amount-label": "Approve amount of",
             "approve-swap": "Approve swap to {{currencyKey}}"
@@ -235,7 +237,9 @@
             "metamask-not-supported": "Metamask browser doesn't support image download! Please use another browser to share image",
             "ios-not-supported": "Sharing images not supported on iOS devices. If you want to share the image please use desktop version",
             "live-trade-requested": "Live trade requested",
-            "fulfilling-live-trade": "Fulfilling live trade"
+            "sgp-trade-requested": "SGP trade requested",
+            "fulfilling-live-trade": "Fulfilling live trade",
+            "fulfilling-sgp-trade": "Fulfilling SGP trade"
         },
         "filter-label": {
             "global": {
@@ -383,6 +387,7 @@
         "card": {
             "ticket-id": "Ticket ID",
             "live": "Live",
+            "sgp": "SGP",
             "system": "System",
             "system-short": "Sys",
             "claim-batch-tooltip": "Claim all your pending positions in one transaction.",
@@ -706,6 +711,7 @@
                 "extra-points": "A wager on whether a certain player's extra points will be over/under a certain amount.",
                 "tackles": "A wager on whether a certain player's number of tackles will be over/under a certain amount.",
                 "longest-reception": "A wager on whether a certain player's longest reception will be over/under a certain amount.",
+                "longest-rush": "A wager on whether a certain player's longest rush will be over/under a certain amount.",
                 "passing-rushing": "A wager on whether a certain player's passing + rushing yards will be over/under a certain amount.",
                 "rushing-receiving": "A wager on whether a certain player's rushing + receiving yards will be over/under a certain amount."
             },
@@ -754,12 +760,16 @@
                 "switch": "Switch",
                 "disconnect": "Disconnect",
                 "particle-wallet": "Particle Wallet"
+            },
+            "labels": {
+                "march-madness": "March Madness"
             }
         },
         "parlay": {
             "ticket-slip": "Ticket slip",
             "regular": "Regular",
             "system": "System",
+            "sgp": "SGP",
             "thales-bonus-info": "Use THALES and get 2% bonus payout for each game.",
             "min-quote": "Min quote",
             "max-quote": "Max quote",
@@ -767,17 +777,13 @@
             "total-quote": "Total quote",
             "total-bonus": "Total bonus",
             "persist-games": "Keep selection after submit",
-            "keep-selection-tooltip": "By default, the parlay builder is reset after successful submission. Tick this if you want to keep current context after submission.",
-            "thales-bonus-tooltip": "Users placing trades with THALES will get 2% extra payouts for each game they have in their ticket (already calculated in Total quote and Payout).",
             "swap-thales": "Use THALES for better odds",
-            "swap-thales-tooltip": "<bold>Boost your winnings with THALES!</bold> With just a simple click, you can automatically swap to THALES and enjoy improved betting quotes instantly! Payout is in THALES.",
             "clear": "Clear all",
             "buy-in": "Buy-in",
             "parlay-fee": "Parlay fee",
             "safebox-fee": "SafeBox fee",
             "positions": "Positions",
             "total-gas": "Gas Fee(ESTIMATED)",
-            "gas-tooltip": "Current Gas Fee required by the blockchain to settle the transaction",
             "total-to-pay": "Total to pay",
             "payout": "Payout",
             "potential-profit": "Potential profit",
@@ -794,6 +800,17 @@
             "accept-odds-changes": "Accept odds changes",
             "odds-changed-description": "Odds changed. Accept changes in order to buy.",
             "odds-changed-error": "Odds changed while fulfilling the order. Try increasing the slippage.",
+            "tooltip": {
+                "regular": "Build your bet slip with singles, parlays or live bets.",
+                "system": "Create system bets that cover multiple combinations of selections. Even if some picks lose, you can still win.",
+                "sgp": "Build a Same Game Parlay (SGP) by combining multiple bets from the same event for bigger payouts.",
+                "sgp-different-game": "It is not supported to combine different games in the Same Game Parlay.",
+                "sgp-league-disabled": "{{league}} is currently not supported.",
+                "thales-bonus": "Users placing trades with THALES will get 2% extra payouts for each game they have in their ticket (already calculated in Total quote and Payout).",
+                "swap-thales": "<bold>Boost your winnings with THALES!</bold> With just a simple click, you can automatically swap to THALES and enjoy improved betting quotes instantly! Payout is in THALES.",
+                "keep-selection": "By default, the parlay builder is reset after successful submission. Tick this if you want to keep current context after submission.",
+                "gas": "Current Gas Fee required by the blockchain to settle the transaction"
+            },
             "info": {
                 "min-quote": "Minimal TOTAL QUOTE supported is {{value}}",
                 "max-quote": "Maximal TOTAL QUOTE supported is {{value}}",
@@ -817,7 +834,13 @@
                 "no-funds": "Please ensure your wallet has enough funds",
                 "no-funds-multi-collateral": "Please ensure your wallet has enough funds (buy-in amount plus {{percentage}}%)",
                 "not-supported": "Not supported validation error: {{error}}",
-                "futures-combining-not-supported": "Combining futures on parlay is not supported"
+                "futures-combining-not-supported": "Combining futures on parlay is not supported",
+                "system-bet-min-markets-validation": "System bet requires minimum {{minMarkets}} games",
+                "sgp-bet-min-markets-validation": "SGP bet requires minimum {{minMarkets}} markets",
+                "sgp-bet-max-markets-validation": "SGP bet supports maximum {{max}} markets",
+                "sgp-different-game": "It is not supported to combine different games in the same game parlay",
+                "sgp-league-disabled": "{{league}} is currently not supported for SGP. Switching to Regular bet.",
+                "sgp-no-odds": "Missing odds from provider"
             },
             "share-ticket": {
                 "label": "Share for Twitter boost",
@@ -887,8 +910,7 @@
             "buy-in-per-combination": "Buy-in per combination",
             "min-payout": "Min payout",
             "max-payout": "Max payout",
-            "min-max-payout": "Min/max payout",
-            "system-bet-min-markets-validation": "System bet requires minimum {{minMarkets}} games"
+            "min-max-payout": "Min/max payout"
         },
         "zero-odds-tooltip": "Odds unavailable at the moment.",
         "low-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",
@@ -899,6 +921,7 @@
         "incentivized-tooltip-nfl-playoffs": "A whopping total of {{rewards}} will be distributed for the NFL Superbowl. Only volume on Arbitrum network will be calculated towards rewards! Check more details <detailsLink>here</detailsLink>.",
         "incentivized-tooltip-uefa": "A whopping total of {{rewards}} will be distributed for the UEFA competitions. Only volume on Arbitrum network will be calculated towards rewards! Check more details <detailsLink>here</detailsLink>.",
         "incentivized-tooltip-nhl-mlb": "A whopping total of {{rewards}} will be distributed for the rest of the MLB season, including the playoffs. Only volume on Arbitrum network will be calculated towards rewards! Check more details <detailsLink>here</detailsLink>.",
+        "incentivized-tooltip-mm": "Win {{rewards}} during March Madness. Only volume on Arbitrum network will be calculated towards rewards! More details <detailsLink>here</detailsLink>.",
         "superbowl-incentive": "10,000 ARB IN INCENTIVES",
         "incentivized-tooltip-euro-copa": "A whopping total of {{rewards}} will be distributed for the Euro 2024 and Copa America competitions. Check more details <detailsLink>here</detailsLink>.",
         "incentivized-tooltip-wimbledon": "Compete for {{rewards}} during Wimbledon 2024 on Overtime V1 and V2. Check more details <detailsLink>here</detailsLink>.",
@@ -1131,12 +1154,14 @@
             "default-round-label": "Default round",
             "only-open-tickets": "Only open tickets",
             "only-live-tickets": "Only LIVE tickets",
+            "only-sgp-tickets": "Only SGP tickets",
             "only-pending-tickets": "Only pending tickets (singles)",
             "only-system-bets": "Only system bets",
             "only-unresolved": "Only unresolved ({{hours}} hours)",
             "only-pp": "Only PP tickets",
             "only-open-tickets-short": "Only open",
             "only-live-tickets-short": "Only LIVE",
+            "only-sgp-tickets-short": "Only SGP",
             "only-pending-tickets-short": "Only pending (singles)",
             "only-pp-short": "Only PP",
             "expand-all": "Expand All",
@@ -1145,7 +1170,9 @@
                 "deposit": "Deposit",
                 "withdrawalRequest": "Withdrawal Request",
                 "claim": "Withdrawal Claim"
-            }
+            },
+            "min-buy-in": "Min buy-in",
+            "min-payout": "Min payout"
         }
     },
     "seo": {
@@ -1183,7 +1210,8 @@
         "v1-text": "<highlight>Welcome to Overtime V2!</highlight> If you are looking for the legacy V1 version, <highlight>click here</highlight>.",
         "elections-text": "Elections for Thales Council are now live, exercise your voting power <highlight>here</highlight>.",
         "speed-text": "Trade on Speed Markets, win 10,000 PYTH! <highlight>Learn more.</highlight>",
-        "nfl-playoff-text": "NFL Playoff: Win 10k OP, 10k ARB & 50k OVER in Free Bets! Learn more <highlight>here</highlight>."
+        "nfl-playoff-text": "NFL Playoff: Win 10k OP, 10k ARB & 50k OVER in Free Bets! Learn more <highlight>here</highlight>.",
+        "march-madness": "Join the March Madness bracket competition for a chance to earn <highlight>30,000 $OVER</highlight> tokens!"
     },
     "promotions": {
         "title": "Promotions and Incentives",
@@ -1313,6 +1341,166 @@
         "tab": {
             "blocked-games": "Blocked games",
             "unblocked-games": "Unblocked games"
+        }
+    },
+    "march-madness": {
+        "header-button-tooltip": "Only available on Arbitrum network.",
+        "back-to-markets": "Back to markets",
+        "tabs": {
+            "home": "Home",
+            "brackets": "Brackets",
+            "leaderboard": "Leaderboard",
+            "soon": "soon"
+        },
+        "home": {
+            "title": "Overtime March Madness",
+            "time-info": "Left to create your brackets",
+            "time-info-a": "Until bracket minting starts",
+            "text-1": "<bold>March Madness</bold> is here, and with <bold>Overtime</bold> you can mint your bracket. To celebrate we are rewarding users with <bold>{{reward}}</bold> for the duration of the NCAAB tournament. The bracket NFT will help holders boost their volume rewards while granting them an entry in the bracket leaderboard. Minting is free and open from March 12th to 16th, when the first round starts.",
+            "text-2": "Minting your <bold>March Madness bracket</bold> is done fully on-chain. While the NFT minted is soulbound, it gives the holder access to a reward boost plus participation to the bracket leaderboard. The March Madness campaign is incentivized with {{reward}} and separated into 2 pools.",
+            "text-3": "For the <bold>First pool</bold>, {{reward}} will be divided between all volume driven through March Madness games, including all market type and parlay with at least one NCAAB game. Holders of the March Madness bracket NFT are eligible for a trading boost. Each correct game is eligible for a tiered boost, with a maximum of 164%.",
+            "text-3a": "Championship - 20%",
+            "text-3b": "Final Four - 10%",
+            "text-3c": "Elite Eight - 7%",
+            "text-3d": "Sweet 16 - 4%",
+            "text-3e": "Second Round - 2%",
+            "text-3f": "First Round - 1%",
+            "text-4": "The <bold>second pool</bold> will be divided between the holders of the most accurate bracket with a {{volume}} volume benchmark on March Madness games. Holders that meet the volume requirement can track their position in the best bracket leaderboard where winners will split a {{reward}} reward pool.",
+            "text-5": "More detail in our <mediumLink>Medium blog post</mediumLink>.",
+            "button-create": "Mint bracket",
+            "button-connect": "Log in",
+            "button-switch": "Switch to Arbitrum",
+            "description": "Overtime is hosting a March Madness 2025 Bracket Competition! Predict the bracket results of the 2025 NCAA Men’s Division 1 Basketball Tournament by minting a Bracket NFT on Optimism, Arbitrum or Base Network. Compete with other brackets for a massive prize pool comprised of <b>100%</b> of minting fees and a bonus <b>30,000 $OVER</b> token Free Bets!",
+            "brackets-prizes": "The 20 winners will share the prize pot as follows:",
+            "brackets-prize-1": "1st place: 15% of prize pool + 4,500 $OVER Free Bet",
+            "brackets-prize-2": "2nd place: 12% of prize pool + 3,600 $OVER Free Bet",
+            "brackets-prize-3": "3rd place: 10% of prize pool + 3,000 $OVER Free Bet",
+            "brackets-prize-4": "4th place: 8% of prize pool + 2,400 $OVER Free Bet",
+            "brackets-prize-5": "5th place: 7% of prize pool + 2,100 $OVER Free Bet",
+            "brackets-prize-6": "6th place: 6% of prize pool + 1,800 $OVER Free Bet",
+            "brackets-prize-7": "7th place: 5% of prize pool + 1,500 $OVER Free Bet",
+            "brackets-prize-8": "8th place: 4% of prize pool + 1,200 $OVER Free Bet",
+            "brackets-prize-9": "9th place: 4% of prize pool + 1,200 $OVER Free Bet",
+            "brackets-prize-10": "10th place: 4% of prize pool + 1,200 $OVER Free Bet",
+            "brackets-prize-11": "Places 11–15: 3% of prize pool + 900 $OVER Free Bet each",
+            "brackets-prize-12": "Places 16–20: 2% of prize pool + 600 $OVER Free Bet each",
+            "bracket-comp-rules-label": "Brackets Competition Details",
+            "volume-incetives-label": "Volume Incentives",
+            "brackets-points-system-label": "Brackets Points System",
+            "comp-rules-0": "Bracket minting will start after the Selection Sunday is finished and the 1st round schedule is known, on early March 17th UTC.",
+            "comp-rules-0-a": "Bracket minting will last until the 1st round games start on March 20th.",
+            "comp-rules-1": "Building and minting Brackets is done on the <a>Brackets page after Selection Sunday</a>.",
+            "comp-rules-2": "The mint cost per bracket is <b>20$</b>, out of which <b>100%</b> goes to the prize pool.",
+            "comp-rules-3": "One wallet can mint unlimited brackets.",
+            "comp-rules-4": "Bracket creation time will be used as tiebreaker, where early mint will have an advantage.",
+            "comp-rules-5": "Identical brackets minted by the same wallet will be counted as one.",
+            "comp-rules-6": "Top 20 brackets by points accrued will share the large prize pool of accumulated mints plus <b>30,000 $OVER</b> tokens as Free Bets.",
+            "comp-rules-7": "Mint cost prize pool will be airdropped directly to winners, while $OVER rewards will be distributed as Overtime Free Bets. Rewards ratio per Top 20 placement can be found on the <c>Leaderboard page after Selection Sunday</c>.",
+            "comp-rules-8": "A perfect bracket with a total of 192 points will win a special prize of 50,000 THALES + 10,000 ARB. If there are multiple perfect brackets, the prize will be split.",
+            "comp-rules-9": "For more in-depth information on the March Madness 2025 campaign on Overtime, visit the <d>official blog post</d>.",
+            "volume-incetives-1": "30,000 ARB will be distributed to all traders of March Madness games on Overtime based on total volume.",
+            "volume-incetives-2": "Any buy-in volume that involves March Madness positions will count as volume, including parlays with a minimum of 1 March Madness position.",
+            "volume-incetives-3": "You can find the current standings of Volume Incentives rewards per wallet on the <a>Leaderboard page after Selection Sunday<a/>.",
+            "volume-incetives-4": "March Madness traders are also eligible for 2,500 ARB per week Parlay Competition and 10,000 ARB per two weeks of straight Volume Rewards from the STIP program. Visit <p>this Promotions Page</p> for additional information.",
+            "brackets-points-explanation": "The brackets will be ranked by points which are gained by predicting game winners correctly.",
+            "brackets-points-rules-1": "1st Round: 1 point per correct pick",
+            "brackets-points-rules-2": "2nd Round: 2 points per correct pick",
+            "brackets-points-rules-3": "Sweet 16: 4 points per correct pick",
+            "brackets-points-rules-4": "Elite Eight: 8 points per correct pick",
+            "brackets-points-rules-5": "Final Four: 16 points per correct pick",
+            "brackets-points-rules-6": "Final Game: 32 points for the correct pick",
+            "brackets-points-rules-7": "Max points: 192 (The Perfect Bracket)"
+        },
+        "leaderboard": {
+            "owner": "Owner",
+            "address": "Address",
+            "volume": "Volume",
+            "network": "Network",
+            "bracket-id": "Bracket ID",
+            "base-volume": "Base",
+            "bonus-volume": "Bonus",
+            "rewards": "Rewards",
+            "search-placeholder": "SEARCH WALLET ADDRESS",
+            "by-guessed-correctly": "Points Leaderboard",
+            "by-volume": "Volume rewards",
+            "player": "Player",
+            "guessed-games": "Points",
+            "rank": "Rank",
+            "no-data": "No data currently available",
+            "my-rewards": "YOU",
+            "my-rewards-bracket": "Your best bracket",
+            "tooltip-base-volume-table": "Volume driven through NCAA Basketball games",
+            "tooltip-bonus-volume-table": "Bonus volume calculated based on your bracket selections",
+            "tooltip-rewards-volume-table": "Estimated rewards based on current volume numbers. This number is subject to change until March Madness tournament is over. ",
+            "tooltip-correct-correct-table": "Total points accrued from correct predictions.",
+            "tooltip-rewards-correct-table": "Total rewards for this leaderboard placement"
+        },
+        "side-leaderboard": {
+            "title": "March Madness",
+            "bracket-id": "Bracket",
+            "points": "Points",
+            "points-leaderboard": "Points Leaderboard",
+            "rewards": "Rewards",
+            "no-parlays": "No brackets"
+        },
+        "brackets": {
+            "team-1": "Team 1",
+            "team-2": "Team 2",
+            "submit": "Mint Bracket",
+            "submit-progress": "Minting...",
+            "submit-modify": "Update Bracket",
+            "submit-modify-progress": "Updating...",
+            "submit-info": "*minting price {{value}}",
+            "round-0": "1st Round",
+            "round-1": "2nd Round",
+            "round-2": "Sweet 16",
+            "round-3": "Elite 8",
+            "round-4": "Final 4",
+            "round-5": "Final",
+            "bracket-id": "Bracket ID: #{{id}}",
+            "my-brackets": "My brackets",
+            "create-new": "Create new",
+            "keep-current": "Keep current selection",
+            "clear-all": "Clear all",
+            "random": "Random teams",
+            "error-minting-price": "Minting price can't be fetched!",
+            "confirmation-message": "Bracket successfully minted",
+            "update-message": "Bracket successfully updated",
+            "stats": {
+                "my-stats": "My stats",
+                "bracket": "Bracket",
+                "rank": "Rank",
+                "incomplete": "Incomplete",
+                "complete": "Complete",
+                "duplicate": "Duplicated",
+                "my-total-score": "My total score",
+                "points": "Points",
+                "total-points": "My total points"
+            },
+            "modal-mint": {
+                "hedaer": "Congratulations!",
+                "mint-text": "You just minted your March Madness Bracket!",
+                "footer-text": "You can always mint more to increase your chances.",
+                "update-text": "Your March Madness bracket NFT has been updated!",
+                "back": "Go back to brackets page"
+            },
+            "share": "Share this bracket",
+            "modal-share": {
+                "header": "My final 4 picks",
+                "user-selection": "I picked the {{team}} to cut the nets down in San Antonio!",
+                "share": "Share"
+            }
+        },
+        "stats": {
+            "live-stats": "Live stats",
+            "brackets-minted": "Brackets minted",
+            "pool-size": "Prize pool size"
+        },
+        "regions": {
+            "east": "East",
+            "west": "West",
+            "south": "South",
+            "midwest": "Midwest"
         }
     }
 }

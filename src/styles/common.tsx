@@ -67,6 +67,7 @@ export const Colors = {
     BLACK: '#000000',
 
     GREEN: '#5FC694',
+    GREEN_LIGHT: '#3CB55B',
 
     BLUE: '#3FFFFF',
 
@@ -97,4 +98,22 @@ export const Colors = {
     SMOKEY_TOPAZ: '#7C3810',
     OVERDROP_GREEN: '#82EB9F',
     GOLD: '#E9B008',
+
+    // March Madness
+    MAIN_MARCH_MADNESS: '#F25623', // #1a9b9e // #f68d1e // #F25623
+    GRAY_GRADIENT_4: '#606A78',
+    GRAY_GRADIENT_5: '#9AAEB1',
+    GRAY_GRADIENT_6: '#363f4c',
+    WHITE_DISABLED: '#ffffff1a',
+    WHITE_GRADIENT_1: '#f6f6fe',
+    GREEN_GRADIENT_1: '#00957E',
+    BLUE_DARK: '#021631',
+    BLUE_LIGHT: '#c4def2',
+    BLUE_GRADIENT_1: '#005EB8',
+    BLUE_GRADIENT_2: '#0E94CB',
+    RED_GRADIENT_1: '#C12B34',
+    RED_GRADIENT_2: '#CA4C53',
+    PURPLE_GRADIENT_1: '#4d21db',
+    BLACK_GRADIENT_1: '#000E21',
+    BLACK_GRADIENT_2: '#191C33',
 };

@@ -148,6 +148,7 @@ export default {
         canceled: Colors.RED,
         paused: Colors.RED,
         live: Colors.RED_DARK,
+        sgp: Colors.GREEN,
         system: Colors.ORANGE,
         sold: Colors.NAVY_BLUE_LIGHT,
         comingSoon: Colors.ORANGE,
@@ -245,5 +246,83 @@ export default {
     slider: {
         trackColor: Colors.GREEN,
         thumbColor: Colors.WHITE,
+    },
+    marchMadness: {
+        background: {
+            primary: Colors.MAIN_MARCH_MADNESS,
+            secondary: '',
+            tertiary: '',
+            quaternary: '',
+            quinary: '',
+            senary: '',
+        },
+        textColor: {
+            primary: Colors.GRAY_DARK,
+            secondary: '',
+            tertiary: '',
+            quaternary: '',
+            quinary: '',
+            senary: '',
+        },
+        borderColor: {
+            primary: '',
+            secondary: '',
+            tertiary: '',
+            quaternary: '',
+            quinary: '',
+            senary: '',
+        },
+        button: {
+            background: {
+                primary: Colors.MAIN_MARCH_MADNESS,
+                secondary: Colors.BLUE_GRADIENT_1,
+                tertiary: '',
+                quaternary: '',
+                quinary: '',
+                senary: Colors.GREEN,
+            },
+            textColor: {
+                primary: '',
+                secondary: Colors.WHITE,
+                tertiary: '',
+                quaternary: '',
+                quinary: '',
+            },
+            borderColor: {
+                primary: '',
+                secondary: '',
+                tertiary: '',
+            },
+        },
+        dropdown: {
+            textColor: { primary: Colors.GRAY_DARK },
+        },
+        link: {
+            textColor: {
+                primary: '',
+                secondary: '',
+            },
+        },
+        shadow: {
+            modal: '',
+            image: '',
+        },
+        status: {
+            notSelected: '',
+            win: '',
+            loss: '',
+            started: '',
+            wrong: '',
+            selected: '',
+            share: '',
+        },
+    },
+    tag: {
+        background: {
+            primary: Colors.GREEN_LIGHT,
+        },
+        textColor: {
+            primary: Colors.WHITE,
+        },
     },
 };

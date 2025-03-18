@@ -1,6 +1,6 @@
 import SelectInput from 'components/SelectInput';
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
-import { PnlTab } from 'enums/ui';
+import { PnlTab, ScreenSizeBreakpoint } from 'enums/ui';
 import { t } from 'i18next';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -130,6 +130,22 @@ const Stats: React.FC<StatsProps> = ({ selectedTab, setSelectedTab, currentRound
                         onlyPP={showOnlyPP}
                     />
                 )}
+                {selectedTab == PnlTab.WBTC_USERS_PNL && (
+                    <LpUsersPnl
+                        lpCollateral={LiquidityPoolCollateral.wBTC}
+                        round={round}
+                        leagueId={leagueOptionsMap[league]}
+                        onlyPP={showOnlyPP}
+                    />
+                )}
+                {selectedTab == PnlTab.CBBTC_USERS_PNL && (
+                    <LpUsersPnl
+                        lpCollateral={LiquidityPoolCollateral.cbBTC}
+                        round={round}
+                        leagueId={leagueOptionsMap[league]}
+                        onlyPP={showOnlyPP}
+                    />
+                )}
                 {selectedTab == PnlTab.USDC_TICKETS && (
                     <LpTickets
                         lpCollateral={LiquidityPoolCollateral.USDC}
@@ -201,7 +217,13 @@ const Header = styled(FlexDivRow)`
     }
 `;
 
-const FiltersContainer = styled(FlexDivSpaceBetween)``;
+const FiltersContainer = styled(FlexDivSpaceBetween)`
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        flex-direction: column;
+        align-items: start;
+        justify-content: start;
+    }
+`;
 
 const SelectContainer = styled.div<{ width?: string }>`
     margin: 10px 0;

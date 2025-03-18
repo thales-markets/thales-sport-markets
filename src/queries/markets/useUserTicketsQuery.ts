@@ -5,6 +5,7 @@ import { BATCH_SIZE } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
 import { ContractType } from 'enums/contract';
 import { orderBy } from 'lodash';
+import { NetworkId } from 'thales-utils';
 import { Ticket } from 'types/markets';
 import { NetworkConfig } from 'types/network';
 import { getContractInstance } from 'utils/contract';
@@ -16,11 +17,13 @@ import { mapTicket } from 'utils/tickets';
 export const useUserTicketsQuery = (
     walletAddress: string,
     networkConfig: NetworkConfig,
-    options?: Omit<UseQueryOptions<Ticket[] | undefined>, 'queryKey' | 'queryFn'>
+    options?: Omit<UseQueryOptions<Ticket[] | null>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<Ticket[] | undefined>({
+    return useQuery<Ticket[] | null>({
         queryKey: QUERY_KEYS.UserTickets(networkConfig.networkId, walletAddress),
         queryFn: async () => {
+            let userTickets = null;
+
             try {
                 const sportsAMMDataContract = getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig);
                 const sportsAMMV2ManagerContract = getContractInstance(
@@ -33,12 +36,7 @@ export const useUserTicketsQuery = (
                     networkConfig
                 );
 
-                if (
-                    sportsAMMDataContract &&
-                    sportsAMMV2ManagerContract &&
-                    freeBetHolderContract &&
-                    stakingThalesBettingProxy
-                ) {
+                if (sportsAMMDataContract && sportsAMMV2ManagerContract && freeBetHolderContract) {
                     const [
                         numOfActiveTicketsPerUser,
                         numOfResolvedTicketsPerUser,
@@ -51,8 +49,12 @@ export const useUserTicketsQuery = (
                         sportsAMMV2ManagerContract.read.numOfResolvedTicketsPerUser([walletAddress]),
                         freeBetHolderContract.read.numOfActiveTicketsPerUser([walletAddress]),
                         freeBetHolderContract.read.numOfResolvedTicketsPerUser([walletAddress]),
-                        stakingThalesBettingProxy.read.numOfActiveTicketsPerUser([walletAddress]),
-                        stakingThalesBettingProxy.read.numOfResolvedTicketsPerUser([walletAddress]),
+                        networkConfig.networkId === NetworkId.Base
+                            ? 0
+                            : stakingThalesBettingProxy?.read.numOfActiveTicketsPerUser([walletAddress]),
+                        networkConfig.networkId === NetworkId.Base
+                            ? 0
+                            : stakingThalesBettingProxy?.read.numOfResolvedTicketsPerUser([walletAddress]),
                     ]);
 
                     const numberOfActiveBatches =
@@ -132,12 +134,13 @@ export const useUserTicketsQuery = (
                         )
                     );
 
-                    return orderBy(updateTotalQuoteAndPayout(mappedTickets), ['timestamp'], ['desc']);
+                    userTickets = orderBy(updateTotalQuoteAndPayout(mappedTickets), ['timestamp'], ['desc']);
                 }
-                return undefined;
             } catch (e) {
                 console.log('E ', e);
             }
+
+            return userTickets;
         },
         ...options,
     });

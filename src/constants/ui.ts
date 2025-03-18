@@ -1,12 +1,14 @@
 import { Network } from 'enums/network';
 import { Theme } from 'enums/ui';
 import darkTheme from 'styles/themes/dark';
+import marchMadnessTheme from 'styles/themes/marchMadness';
 import { NavMenuItem, ThemeInterface } from 'types/ui';
 import { LINKS } from './links';
 import ROUTES from './routes';
 
 export const ThemeMap: Record<Theme, ThemeInterface> = {
     [Theme.DARK]: darkTheme,
+    [Theme.MARCH_MADNESS]: marchMadnessTheme,
 };
 
 export const NAV_MENU_FIRST_SECTION: NavMenuItem[] = [
@@ -15,14 +17,14 @@ export const NAV_MENU_FIRST_SECTION: NavMenuItem[] = [
         iconClass: 'icon icon--profile2',
         name: 'profile',
         route: ROUTES.Profile,
-        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.OptimismSepolia],
+        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.Base, Network.OptimismSepolia],
     },
     {
         i18label: 'markets.nav-menu.items.resolve-blocker',
         iconClass: 'icon icon--cross-button',
         name: 'resolve-blocker',
         route: ROUTES.ResolveBlocker,
-        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.OptimismSepolia],
+        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.Base, Network.OptimismSepolia],
     },
 ];
 
@@ -32,6 +34,13 @@ export const NAV_MENU_SECOND_SECTION: NavMenuItem[] = [
         iconClass: 'icon icon--logo',
         name: 'markets',
         route: ROUTES.Markets.Home,
+        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.Base, Network.OptimismSepolia],
+    },
+    {
+        i18label: 'markets.nav-menu.labels.march-madness',
+        iconClass: 'icon icon--brackets',
+        name: 'march-madness',
+        route: ROUTES.MarchMadness,
         supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.OptimismSepolia],
     },
     {
@@ -39,7 +48,7 @@ export const NAV_MENU_SECOND_SECTION: NavMenuItem[] = [
         iconClass: 'icon icon--liquidity-pool',
         name: 'liquidity-pool',
         route: ROUTES.LiquidityPool,
-        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.OptimismSepolia],
+        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.Base, Network.OptimismSepolia],
     },
 ];
 
@@ -49,7 +58,7 @@ export const NAV_MENU_THIRD_SECTION: NavMenuItem[] = [
         iconClass: 'icon icon--promotions',
         name: 'promotions',
         route: ROUTES.Promotions.Home,
-        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.OptimismSepolia],
+        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.Base, Network.OptimismSepolia],
     },
 ];
 
@@ -59,14 +68,14 @@ export const NAV_MENU_FOURTH_SECTION: NavMenuItem[] = [
         iconClass: 'sidebar-icon sidebar-icon--speed-markets',
         name: 'speed-markets',
         route: LINKS.SpeedMarkets,
-        supportedNetworks: [Network.OptimismMainnet, Network.OptimismSepolia, Network.Arbitrum],
+        supportedNetworks: [Network.OptimismMainnet, Network.OptimismSepolia, Network.Arbitrum, Network.Base],
     },
     {
         i18label: 'markets.nav-menu.items.digital-options',
         iconClass: 'sidebar-icon sidebar-icon--markets',
         name: 'digital-options',
         route: LINKS.Thales,
-        supportedNetworks: [Network.OptimismMainnet, Network.OptimismSepolia, Network.Arbitrum],
+        supportedNetworks: [Network.OptimismMainnet, Network.OptimismSepolia, Network.Arbitrum, Network.Base],
     },
 ];
 
@@ -100,8 +109,3 @@ export const PROMOTION_SANITIZE_PROPS = {
     ],
     ALLOWED_ATTR: ['href', 'target', 'style', 'src', 'alt'],
 };
-
-export const SEO_ARTICLES_PER_PAGE = 12;
-
-const STAKING_MODAL_MUTE_PERIOD_IN_DAYS = 7;
-export const STAKING_MODAL_MUTE_PERIOD_IN_MS = STAKING_MODAL_MUTE_PERIOD_IN_DAYS * 24 * 60 * 60 * 1000;

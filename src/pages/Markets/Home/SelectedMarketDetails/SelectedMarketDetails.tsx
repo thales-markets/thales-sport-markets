@@ -1,7 +1,9 @@
 import Button from 'components/Button';
 import Scroll from 'components/Scroll';
 import { MarketTypeGroupsBySport, PLAYER_PROPS_MARKET_TYPES } from 'constants/marketTypes';
+import { SportFilter } from 'enums/markets';
 import { MarketType } from 'enums/marketTypes';
+import { League } from 'enums/sports';
 import { t } from 'i18next';
 import { groupBy } from 'lodash';
 import React, { useMemo, useReducer } from 'react';
@@ -16,12 +18,10 @@ import {
 import { useTheme } from 'styled-components';
 import { SportMarket } from 'types/markets';
 import { isOddValid } from 'utils/marketsV2';
-import { League } from '../../../../enums/sports';
 import { ThemeInterface } from '../../../../types/ui';
 import { isFuturesMarket } from '../../../../utils/markets';
 import PositionsV2 from '../../Market/MarketDetailsV2/components/PositionsV2';
 import { NoMarketsContainer, NoMarketsLabel, Wrapper } from './styled-components';
-import { SportFilter } from 'enums/markets';
 
 type SelectedMarketProps = {
     market: SportMarket;

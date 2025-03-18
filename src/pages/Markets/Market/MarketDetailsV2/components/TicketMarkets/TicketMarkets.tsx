@@ -13,10 +13,11 @@ const TicketMarkets: React.FC<TicketMarketsProps> = ({ ticket, market, isWitelis
         const isCurrentMarket = market && ticketMarket.gameId === market.gameId;
         return (
             <TicketMarketRow
+                key={`m-${index}`}
                 ticketMarket={ticketMarket}
                 isCurrentMarket={!!isCurrentMarket}
                 isWitelistedForResolve={isWitelistedForResolve}
-                key={`m-${index}`}
+                isSgp={ticket.isSgp}
             />
         );
     });

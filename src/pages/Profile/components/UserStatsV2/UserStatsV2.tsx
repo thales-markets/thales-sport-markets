@@ -7,6 +7,7 @@ import { COLLATERAL_ICONS_CLASS_NAMES, CRYPTO_CURRENCY_MAP, USD_SIGN } from 'con
 import { SWAP_APPROVAL_BUFFER } from 'constants/markets';
 import { secondsToMilliseconds } from 'date-fns';
 import { ContractType } from 'enums/contract';
+import { Network } from 'enums/network';
 import { BuyTicketStep } from 'enums/tickets';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import useInterval from 'hooks/useInterval';
@@ -15,11 +16,10 @@ import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollatera
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import useUsersStatsV2Query from 'queries/wallet/useUsersStatsV2Query';
 import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { setStakingModalMuteEnd } from 'redux/modules/ui';
-import { getIsBiconomy, getIsConnectedViaParticle } from 'redux/modules/wallet';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import {
@@ -62,18 +62,12 @@ import BuyStepsModal from '../../../Markets/Home/Parlay/components/BuyStepsModal
 
 const SHOW_PNL = false;
 
-type UserStatsProps = {
-    setForceOpenStakingModal: (forceOpenStakingModal: boolean) => void;
-};
-
-const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
+const UserStats: React.FC = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const theme: ThemeInterface = useTheme();
 
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
-
-    const isParticle = useSelector(getIsConnectedViaParticle);
 
     const networkId = useChainId();
     const client = useClient();
@@ -169,7 +163,6 @@ const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
         return sortedBalances;
     }, [exchangeRates, multiCollateralBalances, networkId]);
 
-    const thalesBalance = multiCollateralBalances ? multiCollateralBalances[CRYPTO_CURRENCY_MAP.THALES as Coins] : 0;
     const paymentTokenBalance: number = useMemo(() => {
         if (multiCollateralBalances) {
             return multiCollateralBalances[selectedCollateral];
@@ -526,127 +519,83 @@ const UserStats: React.FC<UserStatsProps> = ({ setForceOpenStakingModal }) => {
                     </SectionWrapper>
                 )}
             </Wrapper>
-            <Wrapper>
-                <SectionWrapper>
-                    <Title>{t('profile.stats.buy-thales-title')}</Title>
-                    <InputContainer ref={inputRef}>
-                        <NumericInput
-                            value={buyInAmount}
-                            onChange={(e) => {
-                                setBuyInAmount(e.target.value);
-                            }}
-                            showValidation={inputRefVisible && !isAmountValid}
-                            validationMessage={t('common.errors.insufficient-balance-wallet', {
-                                currencyKey: selectedCollateral,
-                            })}
-                            inputFontWeight="600"
-                            inputPadding="5px 10px"
-                            borderColor={theme.input.borderColor.tertiary}
-                            disabled={isBuying}
-                            label={t('profile.stats.swap-to-thales-label')}
-                            placeholder={t('liquidity-pool.deposit-amount-placeholder')}
-                            currencyComponent={
-                                <CollateralSelector
-                                    collateralArray={swapCollateralArray}
-                                    selectedItem={swapCollateralIndex}
-                                    onChangeCollateral={(index: number) => {
-                                        setBuyInAmount('');
-                                        setSwapCollateralIndex(index);
-                                    }}
-                                    isDetailedView
-                                    collateralBalances={multiCollateralBalances}
-                                    exchangeRates={exchangeRates}
-                                    dropDownWidth={inputRef.current?.getBoundingClientRect().width + 'px'}
-                                    preventPaymentCollateralChange
-                                />
-                            }
-                            balance={formatCurrencyWithKey(selectedCollateral, paymentTokenBalance)}
-                            onMaxButton={() => setMaxAmount(paymentTokenBalance)}
-                        />
-                    </InputContainer>
-                    <Section>
-                        <SubLabel>{t('profile.stats.thales-price-label')}:</SubLabel>
-                        {isFetching ? (
-                            <LoaderContainer>
-                                <SimpleLoader size={16} strokeWidth={6} />
-                            </LoaderContainer>
-                        ) : (
-                            <Value>
-                                {Number(swapQuote) === 0
-                                    ? '-'
-                                    : formatCurrencyWithKey(selectedCollateral, 1 / swapQuote)}
-                            </Value>
-                        )}
-                    </Section>
-                    <Section>
-                        <SubLabel>{t('profile.stats.thales-to-receive')}:</SubLabel>
-                        {isFetching ? (
-                            <LoaderContainer>
-                                <SimpleLoader size={16} strokeWidth={6} />
-                            </LoaderContainer>
-                        ) : (
-                            <Value>{swappedThalesToReceive === 0 ? '-' : formatCurrency(swappedThalesToReceive)}</Value>
-                        )}
-                    </Section>
-                    {getSubmitButton()}
-                </SectionWrapper>
-                {openBuyStepsModal && (
-                    <BuyStepsModal
-                        step={(buyStep as unknown) as BuyTicketStep}
-                        isFailed={!isBuying}
-                        currencyKey={selectedCollateral}
-                        onSubmit={handleSubmit}
-                        onClose={() => setOpenBuyStepsModal(false)}
-                        onlySwap={true}
-                    />
-                )}
-            </Wrapper>
-            {!isParticle && thalesBalance > 1 && (
+            {networkId !== Network.Base && (
                 <Wrapper>
                     <SectionWrapper>
-                        <Title>{t('profile.stats.stake-title')}</Title>
-                        <Section>
-                            <SubLabel>
-                                <CurrencyIcon
-                                    className={COLLATERAL_ICONS_CLASS_NAMES[CRYPTO_CURRENCY_MAP.THALES as Coins]}
-                                />
-                                {CRYPTO_CURRENCY_MAP.THALES}
-                            </SubLabel>
-                            <SubValue>{formatCurrency(thalesBalance)}</SubValue>
-                        </Section>
-                        <Button
-                            backgroundColor={theme.button.textColor.tertiary}
-                            borderColor={theme.button.textColor.tertiary}
-                            height="24px"
-                            margin="10px 0 5px 0"
-                            padding="2px 40px"
-                            width="fit-content"
-                            fontSize="16px"
-                            fontWeight="800"
-                            lineHeight="16px"
-                            additionalStyles={additionalButtonStyles}
-                            onClick={() => {
-                                setForceOpenStakingModal(true);
-                                dispatch(setStakingModalMuteEnd(0));
-                            }}
-                        >
-                            {t('profile.stats.stake-label')}
-                        </Button>
-                        <Description>
-                            <Trans
-                                i18nKey={'profile.stats.weekly-rewards'}
-                                components={{
-                                    stakingPageLink: (
-                                        <StakingPageLink
-                                            href="https://www.thales.io/token/staking"
-                                            target="_blank"
-                                            rel="noreferrer"
-                                        />
-                                    ),
+                        <Title>{t('profile.stats.buy-thales-title')}</Title>
+                        <InputContainer ref={inputRef}>
+                            <NumericInput
+                                value={buyInAmount}
+                                onChange={(e) => {
+                                    setBuyInAmount(e.target.value);
                                 }}
+                                showValidation={inputRefVisible && !isAmountValid}
+                                validationMessage={t('common.errors.insufficient-balance-wallet', {
+                                    currencyKey: selectedCollateral,
+                                })}
+                                inputFontWeight="600"
+                                inputPadding="5px 10px"
+                                borderColor={theme.input.borderColor.tertiary}
+                                disabled={isBuying}
+                                label={t('profile.stats.swap-to-thales-label')}
+                                placeholder={t('liquidity-pool.deposit-amount-placeholder')}
+                                currencyComponent={
+                                    <CollateralSelector
+                                        collateralArray={swapCollateralArray}
+                                        selectedItem={swapCollateralIndex}
+                                        onChangeCollateral={(index: number) => {
+                                            setBuyInAmount('');
+                                            setSwapCollateralIndex(index);
+                                        }}
+                                        isDetailedView
+                                        collateralBalances={multiCollateralBalances}
+                                        exchangeRates={exchangeRates}
+                                        dropDownWidth={inputRef.current?.getBoundingClientRect().width + 'px'}
+                                        preventPaymentCollateralChange
+                                    />
+                                }
+                                balance={formatCurrencyWithKey(selectedCollateral, paymentTokenBalance)}
+                                onMaxButton={() => setMaxAmount(paymentTokenBalance)}
                             />
-                        </Description>
+                        </InputContainer>
+                        <Section>
+                            <SubLabel>{t('profile.stats.thales-price-label')}:</SubLabel>
+                            {isFetching ? (
+                                <LoaderContainer>
+                                    <SimpleLoader size={16} strokeWidth={6} />
+                                </LoaderContainer>
+                            ) : (
+                                <Value>
+                                    {Number(swapQuote) === 0
+                                        ? '-'
+                                        : formatCurrencyWithKey(selectedCollateral, 1 / swapQuote)}
+                                </Value>
+                            )}
+                        </Section>
+                        <Section>
+                            <SubLabel>{t('profile.stats.thales-to-receive')}:</SubLabel>
+                            {isFetching ? (
+                                <LoaderContainer>
+                                    <SimpleLoader size={16} strokeWidth={6} />
+                                </LoaderContainer>
+                            ) : (
+                                <Value>
+                                    {swappedThalesToReceive === 0 ? '-' : formatCurrency(swappedThalesToReceive)}
+                                </Value>
+                            )}
+                        </Section>
+                        {getSubmitButton()}
                     </SectionWrapper>
+                    {openBuyStepsModal && (
+                        <BuyStepsModal
+                            step={(buyStep as unknown) as BuyTicketStep}
+                            isFailed={!isBuying}
+                            currencyKey={selectedCollateral}
+                            onSubmit={handleSubmit}
+                            onClose={() => setOpenBuyStepsModal(false)}
+                            onlySwap={true}
+                        />
+                    )}
                 </Wrapper>
             )}
         </>
@@ -763,13 +712,6 @@ const CurrencyIcon = styled.i`
 
 const SectionWrapper = styled(FlexDivColumnCentered)`
     width: 100%;
-`;
-
-const StakingPageLink = styled.a`
-    color: ${(props) => props.theme.link.textColor.primary};
-    &:hover {
-        text-decoration: underline;
-    }
 `;
 
 const additionalButtonStyles = {

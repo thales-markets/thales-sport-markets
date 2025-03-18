@@ -14,7 +14,7 @@ import { FlexDivCentered } from 'styles/common';
 import { formatDateWithTime } from 'thales-utils';
 import { SportMarket, SportMarketScore, TicketMarket } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
-import { formatMarketOdds } from 'utils/markets';
+import { formatMarketOdds, getPeriodsForResultView, isContractResultView } from 'utils/markets';
 import {
     getMatchTeams,
     getPositionTextV2,
@@ -45,7 +45,11 @@ import {
     Wrapper,
 } from './styled-components';
 
-const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean }> = ({ market, isLive }) => {
+const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean; isSgp: boolean }> = ({
+    market,
+    isLive,
+    isSgp,
+}) => {
     const theme: ThemeInterface = useTheme();
     const isMobile = useSelector(getIsMobile);
     const selectedOddsType = useSelector(getOddsType);
@@ -59,6 +63,8 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean }> =
     const liveScore = market.liveScore;
 
     const leagueSport = getLeagueSport(market.leagueId);
+    const showContractResult = isContractResultView(market.typeId);
+    const showPeriodResult = getPeriodsForResultView(market.typeId, market.leagueId).length > 0;
 
     const getScoreComponent = (scoreData: SportMarket | SportMarketScore) =>
         showGameScore(scoreData.gameStatus) || !scoreData.gameStatus ? (
@@ -89,6 +95,7 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean }> =
                     </ScoreContainer>
                 )}
                 {!isMobile &&
+                    !showPeriodResult &&
                     // TODO check logic because of 0:0 results when isResolved == true, but isGameFinished == false
                     (market.isResolved || market.isGameFinished) &&
                     leagueSport !== Sport.CRICKET &&
@@ -140,14 +147,14 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean }> =
                 <MarketTypeInfo>{getTitleText(market)}</MarketTypeInfo>
                 <PositionInfo>
                     <PositionText>{getPositionTextV2(market, market.position, true)}</PositionText>
-                    <Odd>{formatMarketOdds(selectedOddsType, parlayItemQuote)}</Odd>
+                    {!isSgp && <Odd>{formatMarketOdds(selectedOddsType, parlayItemQuote)}</Odd>}
                 </PositionInfo>
             </SelectionInfoContainer>
             {market.isCancelled ? (
                 <TicketMarketStatus>{t('profile.card.canceled')}</TicketMarketStatus>
-            ) : (market.isResolved || market.isGameFinished) && !market.isPlayerPropsMarket ? (
+            ) : (market.isResolved || market.isGameFinished) && !market.isPlayerPropsMarket && !showContractResult ? (
                 <MatchScoreContainer>{getScoreComponent(market)}</MatchScoreContainer>
-            ) : market.isResolved && market.isPlayerPropsMarket ? (
+            ) : market.isResolved && (market.isPlayerPropsMarket || showContractResult) ? (
                 <TicketMarketStatus>{market.homeScore}</TicketMarketStatus>
             ) : isPendingResolution || isLive ? (
                 liveScore ? (

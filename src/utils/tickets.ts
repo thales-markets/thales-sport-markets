@@ -1,30 +1,35 @@
 import { MarketTypeMap } from 'constants/marketTypes';
 import { secondsToMilliseconds } from 'date-fns';
+import { ContractType } from 'enums/contract';
 import { MarketType } from 'enums/marketTypes';
 import { OddsType } from 'enums/markets';
 import { t } from 'i18next';
-import { bigNumberFormatter, coinFormatter, Coins, formatDateWithTime } from 'thales-utils';
-import { CombinedPosition, Team, Ticket, TicketMarket } from 'types/markets';
-import { SupportedNetwork } from 'types/network';
+import { bigNumberFormatter, coinFormatter, Coins, formatDateWithTime, NetworkId } from 'thales-utils';
+import { CombinedPosition, SystemBetData, Team, Ticket, TicketMarket, TicketPosition } from 'types/markets';
+import { NetworkConfig, SupportedNetwork } from 'types/network';
+import { ShareTicketModalProps } from 'types/tickets';
 import futuresPositionNamesMap from '../assets/json/futuresPositionNamesMap.json';
 import positionNamesMap from '../assets/json/positionNamesMap.json';
 import { CRYPTO_CURRENCY_MAP } from '../constants/currency';
-import { THALES_ADDED_PAYOUT_PERCENTAGE } from '../constants/markets';
+import { BATCH_SIZE, THALES_ADDED_PAYOUT_PERCENTAGE } from '../constants/markets';
 import { UFC_LEAGUE_IDS } from '../constants/sports';
 import { League } from '../enums/sports';
 import { TicketMarketStatus } from '../enums/tickets';
 import { getCollateralByAddress } from './collaterals';
+import { getContractInstance } from './contract';
 import freeBetHolder from './contracts/freeBetHolder';
 import stakingThalesBettingProxy from './contracts/stakingThalesBettingProxy';
 import {
     formatMarketOdds,
+    getPeriodsForResultView,
+    isContractResultView,
     isFuturesMarket,
     isOneSideMarket,
     isOneSidePlayerPropsMarket,
     isPlayerPropsMarket,
     isYesNoPlayerPropsMarket,
 } from './markets';
-import { getLeagueSport } from './sports';
+import { getLeagueSport, isPlayerPropsCombiningEnabled } from './sports';
 
 export const mapTicket = (
     ticket: any,
@@ -72,6 +77,7 @@ export const mapTicket = (
         isOpen: !ticket.resolved && !ticket.isExercisable,
         finalPayout: coinFormatter(ticket.finalPayout, networkId, collateral),
         isLive: ticket.isLive,
+        isSgp: ticket.isSGP,
         isFreeBet:
             ticket.ticketOwner.toLowerCase() == freeBetHolder.addresses[networkId as SupportedNetwork].toLowerCase(),
         isSystemBet: ticket.isSystem,
@@ -97,15 +103,28 @@ export const mapTicket = (
                 const apiMarket = openOngoingMarkets
                     ? openOngoingMarkets.find((m: any) => m.gameId === market.gameId)
                     : undefined;
+                const periodsForResultView = getPeriodsForResultView(typeId, leagueId);
 
                 const homeTeam = !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => team.isHome);
                 const homeTeamName = homeTeam?.name ?? 'Home Team';
-                const homeScore = homeTeam?.score;
+                const homeScore =
+                    homeTeam && periodsForResultView.length > 0
+                        ? periodsForResultView.reduce(
+                              (prev: number, curr: number) => prev + Number(homeTeam.scoreByPeriod[curr - 1]),
+                              0
+                          )
+                        : homeTeam?.score;
                 const homeScoreByPeriod = homeTeam ? homeTeam.scoreByPeriod : [];
 
                 const awayTeam = !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => !team.isHome);
                 const awayTeamName = awayTeam?.name ?? 'Away Team';
-                const awayScore = awayTeam?.score;
+                const awayScore =
+                    awayTeam && periodsForResultView.length > 0
+                        ? periodsForResultView.reduce(
+                              (prev: number, curr: number) => prev + Number(awayTeam.scoreByPeriod[curr - 1]),
+                              0
+                          )
+                        : awayTeam?.score;
                 const awayScoreByPeriod = awayTeam ? awayTeam.scoreByPeriod : [];
 
                 const playerInfo = playersInfo[market.playerId];
@@ -135,13 +154,14 @@ export const mapTicket = (
                     maturityDate: new Date(secondsToMilliseconds(Number(market.maturity))),
                     homeTeam: homeTeamName,
                     awayTeam: awayTeamName,
-                    homeScore: isPlayerProps
-                        ? isOneSidePlayerPropsMarket(typeId) || isYesNoPlayerPropsMarket(typeId)
-                            ? Number(marketResult.results[0]) / 100 === 1
-                                ? 'Yes'
-                                : 'No'
-                            : Number(marketResult.results[0]) / 100
-                        : homeScore,
+                    homeScore:
+                        isPlayerProps || isContractResultView(typeId)
+                            ? isOneSidePlayerPropsMarket(typeId) || isYesNoPlayerPropsMarket(typeId)
+                                ? Number(marketResult.results[0]) / 100 === 1
+                                    ? 'Yes'
+                                    : 'No'
+                                : Number(marketResult.results[0]) / 100
+                            : homeScore,
                     homeScoreByPeriod,
                     awayScore: isPlayerProps ? 0 : awayScore,
                     awayScoreByPeriod,
@@ -151,7 +171,7 @@ export const mapTicket = (
                     isCancelled: marketStatus === TicketMarketStatus.CANCELLED,
                     isWinning: marketStatus === TicketMarketStatus.WINNING,
                     isPaused: false,
-                    isOneSideMarket: isOneSideMarket(leagueId),
+                    isOneSideMarket: isOneSideMarket(leagueId, typeId),
                     line: line / 100,
                     isPlayerPropsMarket: isPlayerProps,
                     isOneSidePlayerPropsMarket: isOneSidePlayerPropsMarket(typeId),
@@ -215,7 +235,7 @@ export const getTicketMarketStatus = (market: TicketMarket) => {
         return t('markets.market-card.canceled');
     }
     if (market.isResolved) {
-        if (market.isPlayerPropsMarket) {
+        if (market.isPlayerPropsMarket || isContractResultView(market.typeId)) {
             return market.homeScore;
         }
         return market.homeScore !== undefined
@@ -429,4 +449,157 @@ const getSystemBetPayoutData = (
         buyinPerCombination,
         numberOfWinningCombinations: areAllMarketsResolved ? numberOfWinningCombinations : 0,
     };
+};
+
+export const getSystemBetDataObject = (
+    systemBetDenominator: number,
+    numberOfSystemBetCombination: number,
+    buyInAmount: number,
+    systemBetMinimumQuote: number,
+    maxPayout: number
+) =>
+    ({
+        systemBetDenominator,
+        numberOfCombination: numberOfSystemBetCombination,
+        buyInPerCombination: buyInAmount / numberOfSystemBetCombination,
+        minPayout: buyInAmount / numberOfSystemBetCombination / systemBetMinimumQuote,
+        maxPayout,
+        numberOfWinningCombinations: 0,
+    } as SystemBetData);
+
+export const getShareTicketModalData = async (
+    markets: TicketMarket[],
+    collateral: Coins,
+    paid: number,
+    payout: number,
+    onClose: () => void,
+    isModalForLive: boolean, // not the same as isLive indicator
+    isSgp: boolean,
+    isFreeBet: boolean,
+    isStakedThales: boolean,
+    systemBetData?: SystemBetData,
+    networkConfig?: NetworkConfig,
+    walletAddress?: string
+) => {
+    let modalData: ShareTicketModalProps | undefined = undefined;
+    const isLive = !!markets[0].live;
+    const isStakedThalesSupported = networkConfig && networkConfig.networkId !== NetworkId.Base;
+
+    if (isModalForLive && networkConfig) {
+        const sportsAMMDataContract = getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig);
+        const sportsAMMV2ManagerContract = getContractInstance(ContractType.SPORTS_AMM_V2_MANAGER, networkConfig);
+        const freeBetHolderContract = getContractInstance(ContractType.FREE_BET_HOLDER, networkConfig);
+        const stakingThalesBettingProxyContract = getContractInstance(
+            ContractType.STAKING_THALES_BETTING_PROXY,
+            networkConfig
+        );
+
+        if (sportsAMMDataContract && sportsAMMV2ManagerContract && freeBetHolderContract) {
+            const numOfActiveTicketsPerUser = isFreeBet
+                ? await freeBetHolderContract.read.numOfActiveTicketsPerUser([walletAddress])
+                : isStakedThales && isStakedThalesSupported && stakingThalesBettingProxyContract
+                ? await stakingThalesBettingProxyContract.read.numOfActiveTicketsPerUser([walletAddress])
+                : await sportsAMMV2ManagerContract.read.numOfActiveTicketsPerUser([walletAddress]);
+
+            const userTickets = await sportsAMMDataContract.read.getActiveTicketsDataPerUser([
+                walletAddress,
+                Number(numOfActiveTicketsPerUser) - 1,
+                BATCH_SIZE,
+            ]);
+
+            const lastTicket = isFreeBet
+                ? userTickets.freeBetsData[userTickets.freeBetsData.length - 1]
+                : isStakedThales && isStakedThalesSupported
+                ? userTickets.stakingBettingProxyData[userTickets.stakingBettingProxyData.length - 1]
+                : userTickets.ticketsData[userTickets.ticketsData.length - 1];
+
+            const lastTicketPaid = paid ? paid : coinFormatter(lastTicket.buyInAmount, networkConfig.networkId);
+            const lastTicketPayout = lastTicketPaid / bigNumberFormatter(lastTicket.totalQuote);
+
+            const liveOrOtherMarkets = isLive
+                ? [
+                      {
+                          ...markets[0],
+                          odd: bigNumberFormatter(lastTicket.totalQuote),
+                      },
+                  ]
+                : markets;
+
+            modalData = {
+                markets: liveOrOtherMarkets,
+                multiSingle: false,
+                paid: lastTicketPaid,
+                payout: lastTicketPayout,
+                onClose,
+                isTicketLost: false,
+                collateral,
+                isLive,
+                isSgp,
+                applyPayoutMultiplier: false,
+                isTicketOpen: true,
+                systemBetData,
+            };
+        }
+    } else {
+        modalData = {
+            markets,
+            multiSingle: false,
+            paid,
+            payout: payout,
+            onClose,
+            isTicketLost: false,
+            collateral,
+            isLive,
+            isSgp,
+            applyPayoutMultiplier: true,
+            isTicketOpen: true,
+            systemBetData,
+        };
+    }
+
+    return modalData;
+};
+
+export const isRegularTicketInvalid = (ticket: TicketPosition[], maxTicketSize: number) => {
+    if (ticket.length <= 1) {
+        return false;
+    }
+
+    // max ticket size
+    if (ticket.length >= maxTicketSize) {
+        return true;
+    }
+
+    const isSameGameTicket = ticket.some((ticketPosition, index, ticketPositions) => {
+        const sameGamePositions = ticketPositions.filter(
+            (position, i) => i !== index && position.gameId === ticketPosition.gameId
+        );
+        return sameGamePositions.length > 0;
+    });
+    if (isSameGameTicket) {
+        const isPPCombiningEnabled = ticket.some((position) => isPlayerPropsCombiningEnabled(position.leagueId));
+        const isDiffPPType =
+            ticket.some((position) => isPlayerPropsMarket(position.typeId)) &&
+            ticket.some((position) => !isPlayerPropsMarket(position.typeId));
+        if (isPPCombiningEnabled) {
+            if (isDiffPPType) {
+                // player props with other types from the same game
+                return true;
+            } else {
+                // different categories for the same player
+                const isSamePlayer = ticket.some((ticketPosition, index, ticketPositions) => {
+                    const samePlayerPositions = ticketPositions.filter(
+                        (position, i) => i !== index && position.playerId === ticketPosition.playerId
+                    );
+                    return samePlayerPositions.length > 0;
+                });
+                return isSamePlayer;
+            }
+        }
+    } else if (ticket.length > 0 && ticket.some((position) => isFuturesMarket(position.typeId))) {
+        // futures
+        return true;
+    }
+
+    return false;
 };

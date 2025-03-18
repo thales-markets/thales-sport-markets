@@ -1,5 +1,6 @@
 import IncentivizedLeague from 'components/IncentivizedLeague';
 import { SportFilter } from 'enums/markets';
+import { MarketType } from 'enums/marketTypes';
 import { groupBy, orderBy } from 'lodash';
 import React, { useMemo, useState } from 'react';
 import LazyLoad, { forceCheck } from 'react-lazyload';
@@ -44,7 +45,7 @@ const MarketsList: React.FC<MarketsListProps> = ({ markets, league, language }) 
         : '';
     const isFavourite = !!favouriteLeagues.find((favourite: TagInfo) => favourite.id == league);
 
-    const sortedMarkets = league ? sortWinnerMarkets(markets, league) : markets;
+    const sortedMarkets = league ? sortWinnerMarkets(markets, league, markets[0].typeId) : markets;
 
     const marketsMapByGame: Record<string, SportMarket[]> | null = useMemo(
         () => (isPlayerPropsSelected ? groupBy(markets, (market) => market.gameId) : null),
@@ -84,7 +85,7 @@ const MarketsList: React.FC<MarketsListProps> = ({ markets, league, language }) 
                             <ArrowIcon down={true} className={`icon icon--caret-down`} />
                         )}
                     </LeagueInfo>
-                    {!isMarketSelected ? (
+                    {!isMarketSelected && (
                         <>
                             <IncentivizedLeague league={selectedLeagueId} />
                             <StarIcon
@@ -94,8 +95,6 @@ const MarketsList: React.FC<MarketsListProps> = ({ markets, league, language }) 
                                 className={`icon icon--${isFavourite ? 'star-full selected' : 'favourites'} `}
                             />
                         </>
-                    ) : (
-                        <></>
                     )}
                 </LeagueCard>
             )}
@@ -120,8 +119,8 @@ const MarketsList: React.FC<MarketsListProps> = ({ markets, league, language }) 
     );
 };
 
-const sortWinnerMarkets = (markets: SportMarkets, leagueId: number) => {
-    if (isOneSideMarket(leagueId)) {
+const sortWinnerMarkets = (markets: SportMarkets, leagueId: number, typeId: MarketType) => {
+    if (isOneSideMarket(leagueId, typeId)) {
         return orderBy(markets, ['maturityDate', 'odds[0]'], ['asc', 'desc']);
     }
     return markets;
