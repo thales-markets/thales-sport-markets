@@ -132,7 +132,7 @@ const Filters: React.FC<FiltersProps> = ({ hideSwitch, isMainPageView }) => {
                                 iconColor={datePeriodFilter > 0 ? theme.textColor.quaternary : ''}
                                 className="icon icon--clock"
                             />
-                            {datePeriodFilter > 0 ? <Label active>{datePeriodFilter}H </Label> : <Label>All</Label>}
+                            {datePeriodFilter > 0 ? <Label active>{datePeriodFilter}H </Label> : <Label>ALL</Label>}
                         </FlexDivCentered>
                     </Tooltip>
 

@@ -137,6 +137,7 @@ export const HeaderIcon = styled.i<{
 
 export const TimeContainer = styled(FlexDivRowCentered)`
     position: relative;
+    width: 48px;
     cursor: pointer;
 `;
 
