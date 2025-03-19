@@ -36,10 +36,12 @@ const MarchMadness: React.FC = () => {
     const { isConnected, address } = useAccount();
     const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
+    const [isMintingStarted, setIsMintingStarted] = useState(getIsMintingStarted());
+
     const queryParamTab: MarchMadTabs = queryString.parse(location.search).tab as MarchMadTabs;
     const isTabAvailable =
         isMarchMadnessAvailableForNetworkId(networkId) &&
-        getIsMintingStarted() &&
+        isMintingStarted &&
         Object.values(MarchMadTabs).includes(queryParamTab);
 
     const marchMadnessDataQuery = useMarchMadnessDataQuery(
@@ -96,8 +98,18 @@ const MarchMadness: React.FC = () => {
                         }}
                         useArrow
                     />
-                    <Tabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
-                    {selectedTab === MarchMadTabs.HOME && <Home setSelectedTab={setSelectedTab} />}
+                    <Tabs
+                        selectedTab={selectedTab}
+                        setSelectedTab={setSelectedTab}
+                        isMintingStarted={isMintingStarted}
+                    />
+                    {selectedTab === MarchMadTabs.HOME && (
+                        <Home
+                            setSelectedTab={setSelectedTab}
+                            isMintingStarted={isMintingStarted}
+                            setIsMintingStarted={setIsMintingStarted}
+                        />
+                    )}
                     {selectedTab === MarchMadTabs.BRACKETS && <Brackets />}
                     {selectedTab === MarchMadTabs.LEADERBOARD && <Leaderboard />}
                 </>

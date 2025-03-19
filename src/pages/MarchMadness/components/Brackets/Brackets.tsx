@@ -42,6 +42,7 @@ import {
     SWEET16_ROUND_MATCH_IDS,
     SWEET16_ROUND_UPPER_LEFT_MATCH_IDS,
     SWEET16_ROUND_UPPER_RIGHT_MATCH_IDS,
+    WILD_CARD,
     initialBracketsData,
     wildCardTeams,
 } from 'constants/marchMadness';
@@ -91,6 +92,7 @@ import {
     getLocalStorageKey,
     getNumberOfMatchesPerRound,
     isMarchMadnessAvailableForNetworkId,
+    isWildCardTeamWinner,
 } from 'utils/marchMadness';
 import { checkAllowance } from 'utils/network';
 import { refetchAfterMarchMadnessMint, refetchBalances } from 'utils/queryConnector';
@@ -1280,7 +1282,7 @@ const Brackets: React.FC = () => {
                         </RowHalf>
                     </BracketsWrapper>
                     <WildCardsContainer>
-                        <WildCardsHeader>{'Wild Cards'}</WildCardsHeader>
+                        <WildCardsHeader>{WILD_CARD}</WildCardsHeader>
                         <WildCardsRow>
                             <Region isSideLeft={true} isVertical={false}>
                                 {t(`march-madness.regions.${wildCardTeams[0].region.toLowerCase()}`)}
@@ -1289,14 +1291,14 @@ const Brackets: React.FC = () => {
                                 homeTeam={wildCardTeams[0].displayName}
                                 awayTeam={wildCardTeams[1].displayName}
                                 position={wildCardTeams[0].position}
-                                isHomeTeamWon={undefined}
+                                isHomeTeamWon={isWildCardTeamWinner(wildCardTeams[0])}
                                 margin="0 2px 0 0"
                             />
                             <WildCardMatch
                                 homeTeam={wildCardTeams[4].displayName}
                                 awayTeam={wildCardTeams[5].displayName}
                                 position={wildCardTeams[4].position}
-                                isHomeTeamWon={undefined}
+                                isHomeTeamWon={isWildCardTeamWinner(wildCardTeams[4])}
                             />
                             <Region isSideLeft={false} isVertical={false}>
                                 {t(`march-madness.regions.${wildCardTeams[4].region.toLowerCase()}`)}
@@ -1310,14 +1312,14 @@ const Brackets: React.FC = () => {
                                 homeTeam={wildCardTeams[2].displayName}
                                 awayTeam={wildCardTeams[3].displayName}
                                 position={wildCardTeams[2].position}
-                                isHomeTeamWon={undefined}
+                                isHomeTeamWon={isWildCardTeamWinner(wildCardTeams[2])}
                                 margin="0 2px 0 0"
                             />
                             <WildCardMatch
                                 homeTeam={wildCardTeams[6].displayName}
                                 awayTeam={wildCardTeams[7].displayName}
                                 position={wildCardTeams[6].position}
-                                isHomeTeamWon={undefined}
+                                isHomeTeamWon={isWildCardTeamWinner(wildCardTeams[6])}
                             />
                             <Region isSideLeft={false} isVertical={false}>
                                 {t(`march-madness.regions.${wildCardTeams[6].region.toLowerCase()}`)}

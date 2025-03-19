@@ -141,6 +141,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                             </>
                         );
                     },
+                    size: isMobile ? 150 : 200,
                 },
             ].filter((column: any) => !isMobile || column.accessorKey !== 'network'),
         [t, isMobile]
