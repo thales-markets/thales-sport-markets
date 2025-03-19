@@ -127,3 +127,13 @@ export const TeamNames = styled(FlexDivCentered)<{ hideOnMobile: boolean }>`
         margin-bottom: 10px;
     }
 `;
+
+export const LeagueInfo = styled.span`
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 16px;
+    margin-bottom: 10px;
+    @media (max-width: 575px) {
+        margin-top: 10px;
+    }
+`;
