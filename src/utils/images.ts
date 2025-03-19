@@ -50,8 +50,12 @@ export const getTeamImageSource = (team: string, league: League) => {
         ? `/logos/Countries/ao.webp`
         : league == League.NETHERLANDS_CUP
         ? `/logos/Eredivisie/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : league == League.NCAAB_FUTURES
-        ? `/logos/NCAA Basketball/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : league == League.NCAAB ||
+          league == League.NCAAB_FUTURES ||
+          league == League.NCAAF ||
+          league == League.NCAAW ||
+          league == League.COLLEGE_BASEBALL
+        ? `/logos/NCAA/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : `/logos/${leagueLabel}/${team.trim().replaceAll(' ', '-').replaceAll('/', '-').toLowerCase()}.webp`;
 };
 
