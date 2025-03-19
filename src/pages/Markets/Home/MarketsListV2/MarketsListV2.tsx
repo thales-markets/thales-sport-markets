@@ -1,7 +1,7 @@
 import IncentivizedLeague from 'components/IncentivizedLeague';
 import { SportFilter } from 'enums/markets';
-import { MarketType } from 'enums/marketTypes';
 import { groupBy, orderBy } from 'lodash';
+import { getLeagueLabel, isOneSideMarket, MarketType } from 'overtime-utils';
 import React, { useMemo, useState } from 'react';
 import LazyLoad, { forceCheck } from 'react-lazyload';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,8 +9,6 @@ import { getIsMarketSelected, getSportFilter } from 'redux/modules/market';
 import { getFavouriteLeagues, setFavouriteLeague } from 'redux/modules/ui';
 import { SportMarket, SportMarkets, TagInfo } from 'types/markets';
 import { getLeagueFlagSource } from 'utils/images';
-import { isOneSideMarket } from 'utils/markets';
-import { getLeagueLabel } from '../../../../utils/sports';
 import MarketListCardV2 from '../MarketListCard';
 import GameList from './GameList';
 import {

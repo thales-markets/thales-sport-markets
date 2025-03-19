@@ -1,11 +1,10 @@
 import Button from 'components/Button';
 import Scroll from 'components/Scroll';
-import { MarketTypeGroupsBySport, PLAYER_PROPS_MARKET_TYPES } from 'constants/marketTypes';
+import { MarketTypeGroupsBySport } from 'constants/marketTypes';
 import { SportFilter } from 'enums/markets';
-import { MarketType } from 'enums/marketTypes';
-import { League } from 'enums/sports';
 import { t } from 'i18next';
 import { groupBy } from 'lodash';
+import { isFuturesMarket, League, MarketType, PLAYER_PROPS_MARKET_TYPES } from 'overtime-utils';
 import React, { useMemo, useReducer } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
@@ -19,7 +18,6 @@ import { useTheme } from 'styled-components';
 import { SportMarket } from 'types/markets';
 import { isOddValid } from 'utils/marketsV2';
 import { ThemeInterface } from '../../../../types/ui';
-import { isFuturesMarket } from '../../../../utils/markets';
 import PositionsV2 from '../../Market/MarketDetailsV2/components/PositionsV2';
 import { NoMarketsContainer, NoMarketsLabel, Wrapper } from './styled-components';
 

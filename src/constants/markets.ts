@@ -1,6 +1,6 @@
 import { GameStatus, OddsType } from 'enums/markets';
 import { Network } from 'enums/network';
-import { League } from 'enums/sports';
+import { League } from 'overtime-utils';
 import { NetworkId } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
 

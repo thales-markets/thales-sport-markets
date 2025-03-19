@@ -1,8 +1,7 @@
 import liveAnimationData from 'assets/lotties/live-markets-filter.json';
-import { LeagueMap } from 'constants/sports';
 import { SportFilter } from 'enums/markets';
-import { Sport } from 'enums/sports';
 import Lottie from 'lottie-react';
+import { LeagueMap, Sport, getSportLeagueIds } from 'overtime-utils';
 import React, { CSSProperties, Dispatch, SetStateAction, useContext } from 'react';
 import { ScrollMenu, VisibilityContext, publicApiType } from 'react-horizontal-scrolling-menu';
 import 'react-horizontal-scrolling-menu/dist/styles.css';
@@ -12,7 +11,6 @@ import styled, { useTheme } from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
 import { TagInfo, Tags } from 'types/markets';
 import { getDefaultPlayerPropsLeague } from 'utils/marketsV2';
-import { getSportLeagueIds } from 'utils/sports';
 import useQueryParam from '../../../../../utils/useQueryParams';
 
 type SportFilterMobileProps = {

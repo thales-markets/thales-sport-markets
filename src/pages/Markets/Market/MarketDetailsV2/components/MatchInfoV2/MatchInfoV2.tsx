@@ -1,12 +1,11 @@
 import Tooltip from 'components/Tooltip';
+import { getLeagueTooltipKey, isFuturesMarket } from 'overtime-utils';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarket } from 'types/markets';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getErrorImage, getLeagueLogoClass, getOnImageError, getTeamImageSource } from 'utils/images';
-import { isFuturesMarket } from 'utils/markets';
-import { getLeagueTooltipKey } from 'utils/sports';
 import {
     Container,
     LeagueLogo,

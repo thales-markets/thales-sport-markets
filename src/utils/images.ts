@@ -1,7 +1,5 @@
-import { League } from 'enums/sports';
-import { LeagueMap } from '../constants/sports';
+import { getLeagueLabel, isInternationalLeague, League, LeagueMap } from 'overtime-utils';
 import { fixOneSideMarketCompetitorName } from './formatters/string';
-import { getLeagueLabel, isInternationalLeague } from './sports';
 
 export const getTeamImageSource = (team: string, league: League) => {
     const leagueLabel = getLeagueLabel(league);
