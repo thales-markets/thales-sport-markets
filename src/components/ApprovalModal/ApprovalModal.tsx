@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 import { setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
-import { bigNumberFormatter, coinParser } from 'thales-utils';
+import { bigNumberFormatter, coinParser, Coins } from 'thales-utils';
 import { getCollateral } from 'utils/collaterals';
 import { maxUint256 } from 'viem';
 import { useAccount, useChainId } from 'wagmi';
@@ -47,7 +47,7 @@ const ApprovalModal: React.FC<ApprovalModalProps> = ({
     const amountConverted = coinParser(
         Number(amount).toString(),
         networkId,
-        getCollateral(networkId, collateralIndex || 0)
+        collateralIndex ? getCollateral(networkId, collateralIndex) : (tokenSymbol as Coins)
     );
 
     const getSubmitButton = () => {
