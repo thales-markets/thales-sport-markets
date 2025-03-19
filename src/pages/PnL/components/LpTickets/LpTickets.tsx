@@ -1,5 +1,5 @@
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
-import { League } from 'enums/sports';
+import { League } from 'overtime-utils';
 import useLpTicketsQuery from 'queries/pnl/useLpTicketsQuery';
 import React, { useMemo } from 'react';
 import { Ticket } from 'types/markets';

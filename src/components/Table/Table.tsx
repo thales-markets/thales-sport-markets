@@ -46,7 +46,7 @@ type TableProps = {
     noResultsMessage?: React.ReactNode;
     tableRowHeadStyles?: CSSProperties;
     tableRowStyles?: CSSProperties;
-    highlightRowsToId?: number;
+    highlightRowsByRank?: number;
     tableHeadCellStyles?: CSSProperties;
     tableHeadTitleStyles?: CSSProperties;
     tableRowCellStyles?: CSSProperties;
@@ -74,7 +74,7 @@ const Table: React.FC<TableProps> = ({
     isLoading = false,
     tableRowHeadStyles = {},
     tableRowStyles = {},
-    highlightRowsToId,
+    highlightRowsByRank,
     tableHeadCellStyles = {},
     tableHeadTitleStyles = {},
     tableRowCellStyles = {},
@@ -202,8 +202,8 @@ const Table: React.FC<TableProps> = ({
                                             isCard={isMobile && mobileCards}
                                             customStyle={{
                                                 ...tableRowStyles,
-                                                background: highlightRowsToId
-                                                    ? row.id < highlightRowsToId
+                                                background: highlightRowsByRank
+                                                    ? row.original.rank <= highlightRowsByRank
                                                         ? tableRowStyles.background
                                                         : undefined
                                                     : tableRowStyles.background,

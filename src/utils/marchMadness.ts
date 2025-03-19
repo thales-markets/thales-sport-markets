@@ -1,7 +1,15 @@
 import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
-import { FINAL_MATCH_ID, initialBracketsData, NUMBER_OF_TEAMS, START_MINTING_DATE } from 'constants/marchMadness';
+import {
+    FINAL_MATCH_ID,
+    initialBracketsData,
+    NUMBER_OF_TEAMS,
+    START_MINTING_DATE,
+    teamsData,
+    WILD_CARD,
+} from 'constants/marchMadness';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { formatCurrencyWithKey, formatCurrencyWithSign, NetworkId } from 'thales-utils';
+import { MarchMadTeam } from 'types/marchMadness';
 
 export const getLocalStorageKey = (bracketId: number, networkId: NetworkId, walletAddress: string) =>
     `${LOCAL_STORAGE_KEYS.BRACKETS}id=${bracketId}network=${networkId}wallet=${walletAddress}`;
@@ -17,6 +25,23 @@ export const getNumberOfMatchesPerRound = (round: number) => {
 
 export const getFirstMatchIndexInRound = (round: number) => {
     return NUMBER_OF_TEAMS - NUMBER_OF_TEAMS / Math.pow(2, round);
+};
+
+export const isWildCardTeamWinner = (wildCardTeam: MarchMadTeam) => {
+    const isWildCardTeamResolved =
+        teamsData.find(
+            (team) =>
+                team.region === wildCardTeam.region &&
+                team.position === wildCardTeam.position &&
+                team.name === WILD_CARD
+        ) === undefined;
+    const isWildCardTeamWinner = !!teamsData.find(
+        (team) =>
+            team.region === wildCardTeam.region &&
+            team.position === wildCardTeam.position &&
+            team.name === wildCardTeam.name
+    );
+    return isWildCardTeamResolved ? isWildCardTeamWinner : undefined;
 };
 
 export const isMarchMadnessAvailableForNetworkId = (networkId: NetworkId) => {

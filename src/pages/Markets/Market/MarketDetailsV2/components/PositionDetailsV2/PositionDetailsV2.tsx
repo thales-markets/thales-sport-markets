@@ -1,8 +1,8 @@
 import Tooltip from 'components/Tooltip';
 import { oddToastOptions } from 'config/toast';
 import { FUTURES_MAIN_VIEW_DISPLAY_COUNT } from 'constants/markets';
-import { MarketType } from 'enums/marketTypes';
 import { SportFilter } from 'enums/markets';
+import { MarketType, isFuturesMarket, isTotalExactMarket } from 'overtime-utils';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,7 +12,7 @@ import { getMarketTypeFilter, getSportFilter } from 'redux/modules/market';
 import { getTicket, removeFromTicket, updateTicket } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import { SportMarket, TicketPosition } from 'types/markets';
-import { formatMarketOdds, getPositionOrder, isFuturesMarket, isTotalExactMarket } from 'utils/markets';
+import { formatMarketOdds, getPositionOrder } from 'utils/markets';
 import {
     getMatchLabel,
     getPositionTextV2,

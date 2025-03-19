@@ -1,11 +1,16 @@
 import Tooltip from 'components/Tooltip';
 import { secondsToMilliseconds } from 'date-fns';
 import { SportFilter } from 'enums/markets';
-import { MarketType } from 'enums/marketTypes';
 import { RiskManagementConfig } from 'enums/riskManagement';
-import { League } from 'enums/sports';
 import { intersection, orderBy } from 'lodash';
-import { getSgpMarketsCombinationAllowed, isTotalOrSpreadWithWholeLine, SgpBlockerMarket } from 'overtime-utils';
+import {
+    getSgpMarketsCombinationAllowed,
+    isFuturesMarket,
+    isTotalOrSpreadWithWholeLine,
+    League,
+    MarketType,
+    SgpBlockerMarket,
+} from 'overtime-utils';
 import useRiskManagementConfigQuery from 'queries/riskManagement/useRiskManagementConfig';
 import useSportMarketSgpQuery from 'queries/sgp/useSportMarketSgpQuery';
 import React, { useCallback, useMemo, useState } from 'react';
@@ -17,7 +22,7 @@ import { getIsSgp, getTicket } from 'redux/modules/ticket';
 import styled from 'styled-components';
 import { SportMarket, TicketPosition } from 'types/markets';
 import { RiskManagementSgpBlockers } from 'types/riskManagement';
-import { getMarketTypeTooltipKey, isFuturesMarket } from 'utils/markets';
+import { getMarketTypeTooltipKey } from 'utils/markets';
 import { getSubtitleText, getTitleText, isSameMarket, sportMarketAsTicketPosition } from 'utils/marketsV2';
 import { getGridMinMaxPercentage } from 'utils/ui';
 import { useChainId } from 'wagmi';

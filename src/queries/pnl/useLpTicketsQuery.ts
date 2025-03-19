@@ -6,13 +6,13 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { ContractType } from 'enums/contract';
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 import { orderBy } from 'lodash';
+import { League } from 'overtime-utils';
 import { Ticket } from 'types/markets';
 import { NetworkConfig } from 'types/network';
 import { getContractInstance } from 'utils/contract';
 import { getLpAddress, getRoundWithOffset, isLpAvailableForNetwork } from 'utils/liquidityPool';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
 import { mapTicket } from 'utils/tickets';
-import { League } from '../../enums/sports';
 
 const useLpTicketsQuery = (
     lpCollateral: LiquidityPoolCollateral,

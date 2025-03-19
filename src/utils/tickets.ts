@@ -1,9 +1,19 @@
-import { MarketTypeMap } from 'constants/marketTypes';
 import { secondsToMilliseconds } from 'date-fns';
 import { ContractType } from 'enums/contract';
-import { MarketType } from 'enums/marketTypes';
 import { OddsType } from 'enums/markets';
 import { t } from 'i18next';
+import {
+    getLeagueSport,
+    isContractResultView,
+    isFuturesMarket,
+    isOneSideMarket,
+    isOneSidePlayerPropsMarket,
+    isPlayerPropsMarket,
+    isYesNoPlayerPropsMarket,
+    League,
+    MarketType,
+    MarketTypeMap,
+} from 'overtime-utils';
 import { bigNumberFormatter, coinFormatter, Coins, formatDateWithTime, NetworkId } from 'thales-utils';
 import { CombinedPosition, SystemBetData, Team, Ticket, TicketMarket, TicketPosition } from 'types/markets';
 import { NetworkConfig, SupportedNetwork } from 'types/network';
@@ -13,23 +23,13 @@ import positionNamesMap from '../assets/json/positionNamesMap.json';
 import { CRYPTO_CURRENCY_MAP } from '../constants/currency';
 import { BATCH_SIZE, THALES_ADDED_PAYOUT_PERCENTAGE } from '../constants/markets';
 import { UFC_LEAGUE_IDS } from '../constants/sports';
-import { League } from '../enums/sports';
 import { TicketMarketStatus } from '../enums/tickets';
 import { getCollateralByAddress } from './collaterals';
 import { getContractInstance } from './contract';
 import freeBetHolder from './contracts/freeBetHolder';
 import stakingThalesBettingProxy from './contracts/stakingThalesBettingProxy';
-import {
-    formatMarketOdds,
-    getPeriodsForResultView,
-    isContractResultView,
-    isFuturesMarket,
-    isOneSideMarket,
-    isOneSidePlayerPropsMarket,
-    isPlayerPropsMarket,
-    isYesNoPlayerPropsMarket,
-} from './markets';
-import { getLeagueSport, isPlayerPropsCombiningEnabled } from './sports';
+import { formatMarketOdds, getPeriodsForResultView } from './markets';
+import { isPlayerPropsCombiningEnabled } from './marketsV2';
 
 export const mapTicket = (
     ticket: any,
@@ -41,8 +41,9 @@ export const mapTicket = (
 ): Ticket => {
     // TODO - hardcode OVER as THALES until we release
     let collateral =
-        ticket.collateral.toLowerCase() === '0x409b3dcab04b476918e40e186bc77e1cfd2ce482' ||
-        ticket.collateral.toLowerCase() === '0x774ede9cd936118e89f0ca786a007c9db899f3f5'
+        ticket.collateral.toLowerCase() === '0xedf38688b27036816a50185caa430d5479e1c63e' ||
+        ticket.collateral.toLowerCase() === '0x5829d6fe7528bc8e92c4e81cc8f20a528820b51a' ||
+        ticket.collateral.toLowerCase() === '0x7750c092e284e2c7366f50c8306f43c7eb2e82a2'
             ? (CRYPTO_CURRENCY_MAP.sTHALES as Coins)
             : getCollateralByAddress(ticket.collateral, networkId);
     collateral =

@@ -14,6 +14,15 @@ import { SportFilter, StatusFilter } from 'enums/markets';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
 import { groupBy, orderBy } from 'lodash';
+import {
+    BOXING_LEAGUES,
+    League,
+    LeagueMap,
+    MarketType,
+    Sport,
+    getSportLeagueIds,
+    isBoxingLeague,
+} from 'overtime-utils';
 import SidebarMMLeaderboard from 'pages/MarchMadness/components/SidebarLeaderboard';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
@@ -53,11 +62,7 @@ import { history } from 'utils/routes';
 import { getScrollMainContainerToTop } from 'utils/scroll';
 import useQueryParam from 'utils/useQueryParams';
 import { useChainId } from 'wagmi';
-import { BOXING_LEAGUES, LeagueMap } from '../../../constants/sports';
-import { MarketType } from '../../../enums/marketTypes';
-import { League, Sport } from '../../../enums/sports';
 import TimeFilters from '../../../layouts/DappLayout/DappHeader/components/TimeFilters';
-import { getSportLeagueIds, isBoxingLeague } from '../../../utils/sports';
 import FilterTagsMobile from '../components/FilterTagsMobile';
 import SportFilterMobile from '../components/SportFilter/SportFilterMobile';
 import SportTags from '../components/SportTags';

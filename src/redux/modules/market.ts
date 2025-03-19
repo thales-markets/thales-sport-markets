@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { SortType, SportFilter, StatusFilter } from 'enums/markets';
-import { MarketType, MarketTypeGroup } from 'enums/marketTypes';
+import { MarketTypeGroup } from 'enums/marketTypes';
+import { MarketType } from 'overtime-utils';
 import { localStore } from 'thales-utils';
 import { Tags } from 'types/markets';
 import { SelectedMarket } from 'types/marketTypes';

@@ -1,11 +1,11 @@
 import Scroll from 'components/Scroll';
-import { BOXING_LEAGUES, LEAGUES_SORT_PRIORITY } from 'constants/sports';
+import { LEAGUES_SORT_PRIORITY } from 'constants/sports';
 import { format } from 'date-fns';
 import { SortType, StatusFilter } from 'enums/markets';
-import { League, Sport } from 'enums/sports';
 import i18n from 'i18n';
 import { groupBy, orderBy, sortBy, uniq } from 'lodash';
 import debounce from 'lodash/debounce';
+import { BOXING_LEAGUES, getLeagueSport, League, Sport } from 'overtime-utils';
 import React, { useCallback, useEffect } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
 import { forceCheck } from 'react-lazyload';
@@ -16,7 +16,6 @@ import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { SportMarket, SportMarkets } from 'types/markets';
 import { setScrollMainContainerToTop } from 'utils/scroll';
-import { getLeagueSport } from 'utils/sports';
 import MarketsListV2 from '../MarketsListV2';
 
 type MarketsGridProps = {

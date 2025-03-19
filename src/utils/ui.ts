@@ -1,13 +1,11 @@
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { NAV_MENU } from 'constants/ui';
 import { t } from 'i18next';
+import { getLeaguePeriodType, isCombinedPositionsMarket, isDoubleChanceMarket, PeriodType } from 'overtime-utils';
 import { localStore } from 'thales-utils';
 import { NavMenuItem, PromotionCardStatus, PromotionStatus } from 'types/ui';
 import { SportMarket } from '../types/markets';
 import { formatTimestampForPromotionDate } from './formatters/date';
-import { isCombinedPositionsMarket, isDoubleChanceMarket } from './markets';
-import { getLeaguePeriodType } from './sports';
-import { PeriodType } from 'enums/sports';
 
 export const getOrdinalNumberLabel = (num: number): string => {
     switch (num) {

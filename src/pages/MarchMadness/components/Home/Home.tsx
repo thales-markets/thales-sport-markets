@@ -23,6 +23,8 @@ import { MarchMadTabs } from '../Tabs/Tabs';
 
 type HomeProps = {
     setSelectedTab?: (tab: MarchMadTabs) => void;
+    isMintingStarted: boolean;
+    setIsMintingStarted: (isMintingStarted: boolean) => void;
 };
 
 const COMP_RULES = [
@@ -73,7 +75,7 @@ const BRACKETS_PRIZES = [
 
 const SHOW_VOLUME_REWARDS = false;
 
-const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
+const Home: React.FC<HomeProps> = ({ setSelectedTab, isMintingStarted, setIsMintingStarted }) => {
     const { t } = useTranslation();
 
     const theme: ThemeInterface = useTheme();
@@ -106,8 +108,6 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
     const isBracketsLocked = useMemo(() => (marchMadnessData ? !marchMadnessData.isMintAvailable : false), [
         marchMadnessData,
     ]);
-
-    const isMintingStarted = getIsMintingStarted();
 
     const buttonTitle = () => {
         if (isConnected) {
@@ -199,6 +199,7 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
             minutes: minutesToMint.toLocaleString(undefined, { minimumIntegerDigits: 2 }),
             seconds: secondsToMint.toLocaleString(undefined, { minimumIntegerDigits: 2 }),
         });
+        setIsMintingStarted(getIsMintingStarted());
     }, 1000);
 
     return (

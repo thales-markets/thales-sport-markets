@@ -68,6 +68,8 @@ const WILD_CARD_REGION_BOTTOM_LEFT = 'South';
 const WILD_CARD_REGION_UPPER_RIGHT = 'East';
 const WILD_CARD_REGION_BOTTOM_RIGHT = 'Midwest';
 
+export const WILD_CARD = 'Wild Card';
+
 export const initialBracketsData: BracketMatch[] = [
     {
         id: 0,
@@ -776,8 +778,8 @@ export const teamsData: MarchMadTeam[] = [
     },
     {
         id: 11,
-        name: 'Wild Card',
-        displayName: 'Wild Card',
+        name: 'North Carolina',
+        displayName: 'North Carolina',
         region: REGION_UPPER_LEFT,
         position: 11,
     },
@@ -811,8 +813,8 @@ export const teamsData: MarchMadTeam[] = [
     },
     {
         id: 16,
-        name: 'Wild Card',
-        displayName: 'Wild Card',
+        name: 'Alabama State',
+        displayName: 'Alabama St.',
         region: REGION_UPPER_LEFT,
         position: 16,
     },
@@ -1035,8 +1037,8 @@ export const teamsData: MarchMadTeam[] = [
     },
     {
         id: 48,
-        name: 'Wild Card',
-        displayName: 'Wild Card',
+        name: WILD_CARD,
+        displayName: WILD_CARD,
         region: REGION_UPPER_RIGHT,
         position: 16,
     },
@@ -1112,8 +1114,8 @@ export const teamsData: MarchMadTeam[] = [
     },
     {
         id: 59,
-        name: 'Wild Card',
-        displayName: 'Wild Card',
+        name: WILD_CARD,
+        displayName: WILD_CARD,
         region: REGION_BOTTOM_RIGHT,
         position: 11,
     },

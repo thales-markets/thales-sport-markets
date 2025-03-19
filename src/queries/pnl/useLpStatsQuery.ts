@@ -7,6 +7,7 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { ContractType } from 'enums/contract';
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 import { orderBy } from 'lodash';
+import { League } from 'overtime-utils';
 import { bigNumberFormatter, Coins, parseBytes32String } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { LpStats, Ticket } from 'types/markets';
@@ -17,7 +18,6 @@ import { getContractInstance } from 'utils/contract';
 import { getLpAddress, getRoundWithOffset, isLpAvailableForNetwork } from 'utils/liquidityPool';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
 import { mapTicket } from 'utils/tickets';
-import { League } from '../../enums/sports';
 
 const getLpStats = async (
     tickets: string[],
