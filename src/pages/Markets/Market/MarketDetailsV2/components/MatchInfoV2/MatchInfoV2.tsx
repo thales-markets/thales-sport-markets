@@ -1,5 +1,5 @@
 import Tooltip from 'components/Tooltip';
-import { getLeagueTooltipKey, isFuturesMarket } from 'overtime-utils';
+import { getLeagueLabel, getLeagueSport, getLeagueTooltipKey, isFuturesMarket } from 'overtime-utils';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatShortDateWithTime } from 'thales-utils';
@@ -8,6 +8,7 @@ import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getErrorImage, getLeagueLogoClass, getOnImageError, getTeamImageSource } from 'utils/images';
 import {
     Container,
+    LeagueInfo,
     LeagueLogo,
     LeagueLogoContainer,
     MatchTime,
@@ -40,6 +41,8 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
             : getErrorImage(market.leagueId)
     );
     const leagueLogo = getLeagueLogoClass(market.leagueId);
+    const leagueLabel = getLeagueLabel(market.leagueId);
+    const leagueSport = getLeagueSport(market.leagueId);
 
     const isGameRegularlyResolved = market.isResolved && !market.isCancelled;
 
@@ -62,6 +65,7 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
     return (
         <>
             <Wrapper>
+                <LeagueInfo>{`${leagueSport} / ${leagueLabel}`}</LeagueInfo>
                 <Container>
                     <LeagueLogoContainer>
                         <LeagueLogo className={leagueLogo} />
