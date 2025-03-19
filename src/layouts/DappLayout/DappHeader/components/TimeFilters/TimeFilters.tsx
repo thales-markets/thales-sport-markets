@@ -27,7 +27,7 @@ const TimeFilters: React.FC = () => {
                 }}
             >
                 <Circle isMobile={isMobile} />
-                <Label>12h</Label>
+                <Label>12H</Label>
             </TimeFilterContainer>
             <TimeFilterContainer
                 selected={datePeriodFilter == 24}
@@ -42,7 +42,7 @@ const TimeFilters: React.FC = () => {
                 }}
             >
                 <Circle isMobile={isMobile} />
-                <Label>24h</Label>
+                <Label>24H</Label>
             </TimeFilterContainer>
             <TimeFilterContainer
                 selected={datePeriodFilter == 72}
@@ -57,7 +57,7 @@ const TimeFilters: React.FC = () => {
                 }}
             >
                 <Circle isMobile={isMobile} />
-                <Label>3d</Label>
+                <Label>3D</Label>
             </TimeFilterContainer>
         </FilterTypeContainer>
     );

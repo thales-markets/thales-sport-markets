@@ -46,7 +46,7 @@ import {
 import { getIsSgp, getTicket } from 'redux/modules/ticket';
 import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled, { CSSProperties, useTheme } from 'styled-components';
-import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
+import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivSpaceBetween } from 'styles/common';
 import { addHoursToCurrentDate, localStore } from 'thales-utils';
 import { MarketsCache, SportMarket, SportMarkets, TagInfo, Tags, TicketPosition } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
@@ -64,6 +64,7 @@ import FilterTagsMobile from '../components/FilterTagsMobile';
 import SportTags from '../components/SportTags';
 import GlobalFilters from '../components/StatusFilters';
 import Breadcrumbs from './Breadcrumbs';
+import Filters from './Filters';
 import Header from './Header';
 import SelectedMarket from './SelectedMarket';
 
@@ -849,7 +850,6 @@ const Home: React.FC = () => {
                                         allMarkets={finalMarkets}
                                         availableMarketTypes={availableMarketTypes}
                                         market={selectedMarketData}
-                                        isMainPageView
                                     />
                                 )}
                             <FilterTagsMobile />
@@ -861,7 +861,12 @@ const Home: React.FC = () => {
                         </LoaderContainer>
                     ) : (
                         <>
-                            {!isMobile && <Breadcrumbs setTagParam={setTagParam} />}
+                            {!isMobile && (
+                                <FiltersContainer>
+                                    <Breadcrumbs setTagParam={setTagParam} />
+                                    <Filters isMainPageView />
+                                </FiltersContainer>
+                            )}
                             {finalMarkets.length === 0 ? (
                                 <NoMarketsContainer>
                                     <NoMarketsLabel>
@@ -888,7 +893,6 @@ const Home: React.FC = () => {
                                                 allMarkets={finalMarkets}
                                                 availableMarketTypes={availableMarketTypes}
                                                 market={selectedMarketData}
-                                                isMainPageView
                                             />
                                         )}
                                     <FlexDivRow>
@@ -1157,6 +1161,10 @@ const CheckboxContainer = styled.div<{ isMobile: boolean }>`
             border-width: 0 2px 2px 0;
         }
     }
+`;
+
+const FiltersContainer = styled(FlexDivSpaceBetween)`
+    margin-bottom: 10px;
 `;
 
 export default Home;

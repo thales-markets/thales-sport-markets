@@ -140,6 +140,12 @@ export const SettingsContainer = styled(FlexDivRowCentered)`
     cursor: pointer;
 `;
 
+export const Divider = styled.div`
+    width: 2px;
+    background-color: ${(props) => props.theme.textColor.secondary};
+    height: 24px;
+`;
+
 export const SortIndicator = styled.i`
     font-size: 18px;
     text-transform: none;
