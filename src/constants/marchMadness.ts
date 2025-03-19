@@ -778,8 +778,8 @@ export const teamsData: MarchMadTeam[] = [
     },
     {
         id: 11,
-        name: WILD_CARD,
-        displayName: WILD_CARD,
+        name: 'North Carolina',
+        displayName: 'North Carolina',
         region: REGION_UPPER_LEFT,
         position: 11,
     },
@@ -813,8 +813,8 @@ export const teamsData: MarchMadTeam[] = [
     },
     {
         id: 16,
-        name: WILD_CARD,
-        displayName: WILD_CARD,
+        name: 'Alabama State',
+        displayName: 'Alabama St.',
         region: REGION_UPPER_LEFT,
         position: 16,
     },
