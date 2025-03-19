@@ -23,14 +23,15 @@ import { bigNumberFormatter, coinParser, Coins, formatCurrency, formatCurrencyWi
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import { sendBiconomyTransaction } from 'utils/biconomy';
-import { getCollateralAddress, getCollateralIndex, getCollaterals } from 'utils/collaterals';
+import { getCollateralAddress, getCollateralByAddress, getCollateralIndex, getCollaterals } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
+import { checkAllowance } from 'utils/network';
 import {
     buildTxForApproveTradeWithRouter,
     buildTxForSwap,
-    checkSwapAllowance,
     getQuote,
     getSwapParams,
+    PARASWAP_TRANSFER_PROXY,
     sendTransaction,
 } from 'utils/swap';
 import { delay } from 'utils/timer';
@@ -137,11 +138,16 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
     useEffect(() => {
         if (isConnected && fromAmount) {
             const getSwapAllowance = async () => {
-                const allowance = await checkSwapAllowance(
-                    networkId,
-                    walletAddress as Address,
-                    getCollateralAddress(networkId, getCollateralIndex(networkId, fromToken)),
-                    coinParser(fromAmount.toString(), networkId, fromToken)
+                const collateralContractWithSigner = getContractInstance(
+                    ContractType.MULTICOLLATERAL,
+                    { client, networkId },
+                    getCollateralIndex(networkId, getCollateralByAddress(fromToken, networkId))
+                );
+                const allowance = await checkAllowance(
+                    coinParser(fromAmount.toString(), networkId, fromToken),
+                    collateralContractWithSigner,
+                    walletAddress,
+                    PARASWAP_TRANSFER_PROXY
                 );
 
                 setHasSwapAllowance(allowance);
@@ -149,7 +155,7 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
 
             getSwapAllowance();
         }
-    }, [walletAddress, isConnected, fromAmount, networkId, fromToken, isBuying]);
+    }, [walletAddress, isConnected, fromAmount, networkId, fromToken, isBuying, client]);
 
     // Reset buy step when collateral is changed
     useEffect(() => {
@@ -176,7 +182,6 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
                 );
                 const approveSwapRawTransaction = await buildTxForApproveTradeWithRouter(
                     networkId,
-                    walletAddress as Address,
                     getCollateralAddress(networkId, getCollateralIndex(networkId, fromToken)),
                     walletClient.data,
                     approveAmount.toString()
@@ -210,16 +215,16 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
 
         if (step === BuyTicketStep.SWAP) {
             try {
-                const swapRawTransaction = (await buildTxForSwap(networkId, swapParams)).tx;
+                const swapRawTransaction = (await buildTxForSwap(networkId, swapParams, walletAddress)).tx;
 
                 // check allowance again
                 if (!swapRawTransaction) {
                     await delay(1800);
-                    const hasRefreshedAllowance = await checkSwapAllowance(
-                        networkId,
-                        walletAddress as Address,
+                    const hasRefreshedAllowance = await checkAllowance(
+                        coinParser(fromAmount.toString(), networkId, fromToken),
                         getCollateralAddress(networkId, getCollateralIndex(networkId, fromToken)),
-                        coinParser(fromAmount.toString(), networkId, fromToken)
+                        walletAddress,
+                        PARASWAP_TRANSFER_PROXY
                     );
                     if (!hasRefreshedAllowance) {
                         step = BuyTicketStep.APPROVE_SWAP;

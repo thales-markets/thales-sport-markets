@@ -1,18 +1,21 @@
 import { getWalletClient } from '@wagmi/core';
+import axios from 'axios';
 import { generalConfig } from 'config/general';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { NATIVE_TOKEN_ADDRES, ZERO_ADDRESS } from 'constants/network';
+import { ContractType } from 'enums/contract';
 import { Network } from 'enums/network';
 import { wagmiConfig } from 'pages/Root/wagmiConfig';
-import { coinFormatter, Coins } from 'thales-utils';
+import { coinFormatter, Coins, COLLATERAL_DECIMALS } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
 import { SwapParams } from 'types/swap';
-import { Address, parseEther } from 'viem';
-import { estimateGas } from 'viem/actions';
+import { Address, encodeFunctionData } from 'viem';
+import { getCollateralByAddress, getCollateralIndex } from './collaterals';
+import { getContractInstance } from './contract';
 import multipleCollateralContract from './contracts/multipleCollateralContract';
 import { delay } from './timer';
 
-const REFERRER_ADDRESS = '0x1777C6d588fd931751762836811529c0073D6376';
+export const PARASWAP_TRANSFER_PROXY = '0x6a000f20005980200259b80c5102003040001068';
 
 export const getSwapParams = (
     networkId: SupportedNetwork,
@@ -47,24 +50,28 @@ const apiRequestUrl = (networkId: Network, methodName: string, queryParams: any)
 const MAX_RETRY_COUNT = 5;
 
 export const getQuote = async (networkId: SupportedNetwork, swapParams: SwapParams) => {
-    const url = apiRequestUrl(networkId, '/quote', { ...swapParams });
+    const API_URL = 'https://api.paraswap.io';
 
     try {
-        let response = await fetch(url);
-
-        let retryCount = 0;
-        while (response.status === 429 && retryCount < MAX_RETRY_COUNT) {
-            await delay(1200);
-            response = await fetch(url);
-            retryCount++;
-        }
-        const responseBody = response.ok ? await response.json() : Promise.resolve({ dstAmount: BigInt(0) });
-
-        return responseBody.dstAmount
-            ? coinFormatter(responseBody.dstAmount, networkId, CRYPTO_CURRENCY_MAP.OVER as Coins)
+        const { data: quote } = await axios.get(`${API_URL}/prices`, {
+            params: {
+                network: networkId,
+                srcToken: swapParams.src,
+                destToken: swapParams.dst,
+                amount: swapParams.amount, // 100 DAI
+                srcDecimals: COLLATERAL_DECIMALS[getCollateralByAddress(swapParams.src, networkId)],
+                destDecimals: COLLATERAL_DECIMALS[getCollateralByAddress(swapParams.dst, networkId)],
+                mode: 'delta',
+                side: 'SELL',
+                version: 6.2,
+            },
+        });
+        return quote.priceRoute.destAmount
+            ? coinFormatter(quote.priceRoute.destAmount, networkId, CRYPTO_CURRENCY_MAP.OVER as Coins)
             : 0;
     } catch (e) {
         console.log(e);
+
         return 0;
     }
 };
@@ -97,41 +104,29 @@ export const checkSwapAllowance = async (
 
 export const buildTxForApproveTradeWithRouter = async (
     networkId: SupportedNetwork,
-    walletAddress: Address,
     tokenAddress: Address,
     client: any,
-    amount?: string
+    amount: string
 ) => {
-    const url = apiRequestUrl(networkId, '/approve/transaction', amount ? { tokenAddress, amount } : { tokenAddress });
-
     try {
-        let response = await fetch(url);
-
-        let retryCount = 0;
-        while (response.status === 429 && retryCount < MAX_RETRY_COUNT) {
-            await delay(2000);
-            response = await fetch(url);
-            retryCount++;
-        }
-
-        const rawTransaction = await response.json();
-
-        const gasLimit = Number(
-            await estimateGas(client, {
-                account: rawTransaction?.from,
-                to: rawTransaction?.to,
-                data: rawTransaction?.data,
-                value: parseEther(rawTransaction?.value),
-            })
+        const collateralContractWithSigner = getContractInstance(
+            ContractType.MULTICOLLATERAL,
+            { client, networkId },
+            getCollateralIndex(networkId, getCollateralByAddress(tokenAddress, networkId))
         );
+        const encodedCall = encodeFunctionData({
+            abi: collateralContractWithSigner?.abi,
+            functionName: 'approve',
+            args: [PARASWAP_TRANSFER_PROXY, amount],
+        });
 
-        console.log(rawTransaction);
-
-        return {
-            ...rawTransaction,
-            gas: gasLimit,
-            from: walletAddress,
+        const transaction = {
+            to: collateralContractWithSigner?.address,
+            data: encodedCall,
+            value: '',
         };
+
+        return transaction;
     } catch (e) {
         console.log(e);
         return undefined;
@@ -141,23 +136,42 @@ export const buildTxForApproveTradeWithRouter = async (
 // Fetch the swap transaction details from the API (returns { dstAmount, tx })
 export const buildTxForSwap = async (
     networkId: SupportedNetwork,
-    swapParams: SwapParams
-): Promise<{ dstAmount: bigint; tx: string }> => {
-    const url = apiRequestUrl(networkId, '/swap', { ...swapParams, referrer: REFERRER_ADDRESS });
+    swapParams: SwapParams,
+    walletAddress: string
+): Promise<any> => {
+    const API_URL = 'https://api.paraswap.io';
 
     try {
-        let response = await fetch(url);
+        const { data: quote } = await axios.get(`${API_URL}/prices`, {
+            params: {
+                network: networkId,
+                srcToken: swapParams.src,
+                destToken: swapParams.dst,
+                amount: swapParams.amount, // 100 DAI
+                srcDecimals: COLLATERAL_DECIMALS[getCollateralByAddress(swapParams.src, networkId)],
+                destDecimals: COLLATERAL_DECIMALS[getCollateralByAddress(swapParams.dst, networkId)],
+                mode: 'delta',
+                side: 'SELL',
+                version: 6.2,
+            },
+        });
 
-        let retryCount = 0;
-        while (response.status === 429 && retryCount < MAX_RETRY_COUNT) {
-            await delay(2000);
-            response = await fetch(url);
-            retryCount++;
-        }
+        const response = await axios.post(`${API_URL}/transactions/${networkId}`, {
+            priceRoute: quote.priceRoute,
+            srcToken: swapParams.src,
+            destToken: swapParams.dst,
+            srcAmount: swapParams.amount, // 100 DAI
+            destAmount: quote.priceRoute.destAmount,
+            userAddress: walletAddress,
+        });
 
-        const responseBody = response.ok ? await response.json() : Promise.resolve({ dstAmount: BigInt(0), tx: '' });
+        const transaction = {
+            to: response.data.to,
+            data: response.data.data,
+            value: response.data.value,
+        };
 
-        return responseBody;
+        return Promise.resolve({ dstAmount: BigInt(quote.priceRoute.destAmount), tx: transaction });
     } catch (e) {
         console.log(e);
         return Promise.resolve({ dstAmount: BigInt(0), tx: '' });

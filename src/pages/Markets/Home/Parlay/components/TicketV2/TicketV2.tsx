@@ -133,9 +133,9 @@ import {
 import { getReferralId } from 'utils/referral';
 import { getSportsAMMV2QuoteMethod, getSportsAMMV2Transaction } from 'utils/sportsAmmV2';
 import {
+    PARASWAP_TRANSFER_PROXY,
     buildTxForApproveTradeWithRouter,
     buildTxForSwap,
-    checkSwapAllowance,
     getQuote,
     getSwapParams,
     sendTransaction,
@@ -1034,19 +1034,19 @@ const Ticket: React.FC<TicketProps> = ({
     useEffect(() => {
         if (isConnected && swapToOver && buyInAmount) {
             const getSwapAllowance = async () => {
-                const allowance = await checkSwapAllowance(
-                    networkId,
-                    walletAddress as Address,
-                    swapToOverParams.src,
-                    coinParser(buyInAmount.toString(), networkId, selectedCollateral)
+                const allowance = await checkAllowance(
+                    coinParser(buyInAmount.toString(), networkId, swapToOverParams.src as any),
+                    getCollateralAddress(networkId, getCollateralIndex(networkId, swapToOverParams.src as any)),
+                    walletAddress,
+                    PARASWAP_TRANSFER_PROXY
                 );
-
                 setHasSwapAllowance(allowance);
             };
 
             getSwapAllowance();
         }
     }, [
+        client,
         walletAddress,
         buyInAmount,
         networkId,
@@ -1301,7 +1301,6 @@ const Ticket: React.FC<TicketProps> = ({
                 );
                 const approveSwapRawTransaction = await buildTxForApproveTradeWithRouter(
                     networkId,
-                    walletAddress as Address,
                     swapToOverParams.src,
                     walletClient.data,
                     approveAmount.toString()
@@ -1326,16 +1325,16 @@ const Ticket: React.FC<TicketProps> = ({
 
         if (step === BuyTicketStep.SWAP) {
             try {
-                const swapRawTransaction = (await buildTxForSwap(networkId, swapToOverParams)).tx;
+                const swapRawTransaction = (await buildTxForSwap(networkId, swapToOverParams, walletAddress)).tx;
 
                 // check allowance again
                 if (!swapRawTransaction) {
                     await delay(1800);
-                    const hasRefreshedAllowance = await checkSwapAllowance(
-                        networkId,
-                        walletAddress as Address,
-                        swapToOverParams.src,
-                        coinParser(buyInAmount.toString(), networkId, selectedCollateral)
+                    const hasRefreshedAllowance = await checkAllowance(
+                        coinParser(buyInAmount.toString(), networkId, swapToOverParams.src as any),
+                        getCollateralAddress(networkId, getCollateralIndex(networkId, swapToOverParams.src as any)),
+                        walletAddress,
+                        PARASWAP_TRANSFER_PROXY
                     );
                     if (!hasRefreshedAllowance) {
                         step = BuyTicketStep.APPROVE_SWAP;
