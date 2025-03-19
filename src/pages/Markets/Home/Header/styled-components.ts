@@ -135,8 +135,14 @@ export const HeaderIcon = styled.i<{
     color: ${(props) => (props.iconColor ? props.iconColor : props.theme.textColor.secondary)};
 `;
 
+export const TimeContainer = styled(FlexDivRowCentered)`
+    position: relative;
+    cursor: pointer;
+`;
+
 export const SettingsContainer = styled(FlexDivRowCentered)`
     position: relative;
+    width: 130px;
     cursor: pointer;
 `;
 

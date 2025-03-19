@@ -1,9 +1,9 @@
 import OutsideClickHandler from 'components/OutsideClick';
+import Tooltip from 'components/Tooltip';
 import { ODDS_TYPES } from 'constants/markets';
 import { OddsType, SortType } from 'enums/markets';
 import { t } from 'i18next';
 import TimeFilters from 'layouts/DappLayout/DappHeader/components/TimeFilters';
-import Tooltip from 'rc-tooltip';
 import React, { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
@@ -33,6 +33,7 @@ import {
     SortSelector,
     SwitchContainer,
     ThreeWayIcon,
+    TimeContainer,
 } from '../Header/styled-components';
 
 type FiltersProps = {
@@ -50,8 +51,6 @@ const Filters: React.FC<FiltersProps> = ({ hideSwitch, isMainPageView }) => {
     const datePeriodFilter = useSelector(getDatePeriodFilter);
     const selectedMarket = useSelector(getSelectedMarket);
     const isMobile = useSelector(getIsMobile);
-
-    console.log(datePeriodFilter);
 
     const [openSortMenu, setOpenSortMenu] = useState(false);
     const [dropdownIsOpen, setDropdownIsOpen] = useState<boolean>(false);
@@ -122,18 +121,20 @@ const Filters: React.FC<FiltersProps> = ({ hideSwitch, isMainPageView }) => {
             )}
 
             <OutsideClickHandler onOutsideClick={() => setTimeFiltersOpen(false)}>
-                <SettingsContainer
+                <TimeContainer
                     onClick={() => {
                         setTimeFiltersOpen(!timeFiltersOpen);
                     }}
                 >
-                    <FlexDivCentered gap={2}>
-                        <HeaderIcon
-                            iconColor={datePeriodFilter > 0 ? theme.textColor.quaternary : ''}
-                            className="icon icon--clock"
-                        />
-                        {datePeriodFilter > 0 && <Label active>{datePeriodFilter}H </Label>}
-                    </FlexDivCentered>
+                    <Tooltip overlay={isMobile ? '' : 'Select date range'}>
+                        <FlexDivCentered gap={2}>
+                            <HeaderIcon
+                                iconColor={datePeriodFilter > 0 ? theme.textColor.quaternary : ''}
+                                className="icon icon--clock"
+                            />
+                            {datePeriodFilter > 0 ? <Label active>{datePeriodFilter}H </Label> : <Label>All</Label>}
+                        </FlexDivCentered>
+                    </Tooltip>
 
                     {timeFiltersOpen && (
                         <DropdownContainer>
@@ -142,7 +143,7 @@ const Filters: React.FC<FiltersProps> = ({ hideSwitch, isMainPageView }) => {
                             </DropDown>
                         </DropdownContainer>
                     )}
-                </SettingsContainer>
+                </TimeContainer>
             </OutsideClickHandler>
 
             <Divider />
@@ -153,10 +154,12 @@ const Filters: React.FC<FiltersProps> = ({ hideSwitch, isMainPageView }) => {
                         setDropdownIsOpen(!dropdownIsOpen);
                     }}
                 >
-                    <FlexDivCentered gap={2}>
-                        <HeaderIcon className="icon icon--settings" />
-                        <Label>{selectedOddsType} </Label>
-                    </FlexDivCentered>
+                    <Tooltip overlay={isMobile ? '' : 'Select odds format'}>
+                        <FlexDivCentered gap={2}>
+                            <HeaderIcon className="icon icon--settings" />
+                            <Label>{selectedOddsType} </Label>
+                        </FlexDivCentered>
+                    </Tooltip>
 
                     {dropdownIsOpen && (
                         <DropdownContainer>
@@ -194,6 +197,7 @@ const Label = styled.span<{ active?: boolean }>`
     color: ${(props) => (props.active ? props.theme.textColor.quaternary : props.theme.textColor.secondary)};
     display: block;
     text-transform: capitalize;
+    white-space: pre;
 `;
 
 const Odds = styled.div`
@@ -203,6 +207,7 @@ const Odds = styled.div`
     color: ${(props) => props.theme.textColor.primary};
     display: block;
     text-transform: capitalize;
+    white-space: pre;
 `;
 
 export default Filters;

@@ -166,7 +166,7 @@
         "odds": {
             "american-odds": "American Odds",
             "decimal-odds": "Decimal Odds",
-            "normalized-implied-odds": "Normalized Implied Odds"
+            "implied-odds": "Normalized Implied Odds"
         },
         "coming-soon": "Coming soon!",
         "h2h-tooltip": "This is a head-to-head market. The winner will be the driver who finished on a better place in the main race.",
