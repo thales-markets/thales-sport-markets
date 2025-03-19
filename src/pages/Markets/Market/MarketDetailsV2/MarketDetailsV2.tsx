@@ -270,7 +270,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                             />
                         </ToggleContainer>
                     )}
-                    <Header market={market} hideSwitch />
+                    <Header market={market} />
                     <PositionsContainer>
                         {numberOfMarkets === 0 ? (
                             <NoMarketsContainer>
