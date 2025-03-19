@@ -236,7 +236,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                     background: `${theme.marchMadness.background.senary}`,
                     borderBottom: `1px solid ${theme.borderColor.secondary}`,
                 }}
-                highlightRowsToId={NUMBER_OF_POSITIONS_TO_HIGHLIGHT}
+                highlightRowsByRank={NUMBER_OF_POSITIONS_TO_HIGHLIGHT}
                 tableRowCellStyles={{
                     fontFamily: theme.fontFamily.primary,
                     padding: '10px 0px',
