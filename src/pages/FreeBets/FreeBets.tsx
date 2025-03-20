@@ -4,7 +4,7 @@ import CollateralSelector from 'components/CollateralSelector';
 import NumericInput from 'components/fields/NumericInput';
 import { generalConfig } from 'config/general';
 import { getErrorToastOptions, getInfoToastOptions, getSuccessToastOptions } from 'config/toast';
-import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
+import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
 import { t } from 'i18next';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
@@ -21,8 +21,9 @@ import {
     FlexDivEnd,
     FlexDivSpaceBetween,
 } from 'styles/common';
+import { Coins, formatCurrency, formatCurrencyWithSign } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
-import { getFreeBetCollaterals } from 'utils/collaterals';
+import { getFreeBetCollaterals, isStableCurrency } from 'utils/collaterals';
 import { useAccount, useChainId, useClient, useSignMessage } from 'wagmi';
 import multipleCollateral from '../../utils/contracts/multipleCollateralContract';
 
@@ -56,7 +57,10 @@ const FreeBets: React.FC = () => {
         networkId,
         client,
     });
-    const multipleCollateralBalances: { [key: string]: number } = multipleCollateralBalancesQuery?.data || {};
+    const multipleCollateralBalances: { [key: string]: number } = useMemo(
+        () => multipleCollateralBalancesQuery?.data || {},
+        [multipleCollateralBalancesQuery?.data]
+    );
 
     const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
     const exchangeRates = exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
@@ -106,15 +110,28 @@ const FreeBets: React.FC = () => {
         !multipleCollateralBalances[selectedCollateral] ||
         +betAmount * +numberOfBets > multipleCollateralBalances[selectedCollateral];
 
+    const getUSDForCollateral = useCallback(
+        (collateral: Coins) =>
+            (multipleCollateralBalances ? multipleCollateralBalances[collateral] : 0) *
+            (isStableCurrency(collateral as Coins) ? 1 : exchangeRates?.[collateral] || 0),
+        [multipleCollateralBalances, exchangeRates]
+    );
+
     return (
         <>
             <FlexDivColumnNative>
                 <FlexDivColumnCentered>
-                    <span> Balances displayed are for fund wallet</span>
+                    <span> Balances displayed are for funding wallet</span>
                     <br />
                     <span> {FUND_WALLET_ADDRESS}</span>
                     <br />
-                    <span>Available gas: {multipleCollateralBalances.ETH} ETH</span>
+                    <span>
+                        Available gas: {formatCurrency(multipleCollateralBalances.ETH, 4)} ETH
+                        {` (${formatCurrencyWithSign(
+                            USD_SIGN,
+                            getUSDForCollateral(CRYPTO_CURRENCY_MAP.ETH as Coins)
+                        )})`}
+                    </span>
                     <br />
                     <FlexDiv>
                         <NumericInput
@@ -182,9 +199,9 @@ const FreeBets: React.FC = () => {
                         </FlexDivEnd>
                     )}
                     <FlexDivColumnCentered gap={5}>
-                        {generatedIds.map((id) => (
+                        {generatedIds.map((id, index) => (
                             <FlexDivSpaceBetween key={id}>
-                                <span>{`https://overtimemarkets.xyz/profile?freeBet=${id}`}</span>
+                                <span>{`${index}. https://overtimemarkets.xyz/profile?freeBet=${id}`}</span>
                                 <CopyIcon
                                     onClick={() => {
                                         const toastId = toast.loading('Copying', { autoClose: 1000 });
