@@ -5,6 +5,8 @@ export const BreadcrumbsContainer = styled.div`
 `;
 
 export const Breadcrumb = styled.span`
+    font-size: 12px;
+    font-weight: 600;
     cursor: pointer;
     :hover {
         text-decoration: underline;

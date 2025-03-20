@@ -1,14 +1,12 @@
-import SPAAnchor from 'components/SPAAnchor';
-import ROUTES from 'constants/routes';
 import useClaimablePositionCountV2Query from 'queries/markets/useClaimablePositionCountV2Query';
-import React from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsBiconomy } from 'redux/modules/wallet';
+import { truncateAddress } from 'thales-utils';
 import { RootState } from 'types/redux';
-import { buildHref } from 'utils/routes';
 import useBiconomy from 'utils/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
+import ProfileDropdown from './components/ProfileDropdown';
 import {
     Count,
     NotificationCount,
@@ -28,21 +26,20 @@ type ProfileItemProperties = {
 };
 
 const ProfileItem: React.FC<ProfileItemProperties> = ({ labelHidden, avatarSize, top, left, color }) => {
-    const { t } = useTranslation();
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+
+    const { address } = useAccount();
+    const smartAddres = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddres : address) || '';
+
+    const [showDropdown, setShowDropdown] = useState(false);
+
     return (
-        <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Profile)}>
-            <ProfileContainer>
-                <ProfileIconWidget top={top} left={left} avatarSize={avatarSize} color={color} />
-                {!labelHidden && (
-                    <ProfileLabel color={color}>
-                        {isBiconomy
-                            ? t('markets.nav-menu.items.profile-smart')
-                            : t('markets.nav-menu.items.profile-wallet')}
-                    </ProfileLabel>
-                )}
-            </ProfileContainer>
-        </SPAAnchor>
+        <ProfileContainer onClick={setShowDropdown.bind(this, !showDropdown)}>
+            <ProfileIconWidget top={top} left={left} avatarSize={avatarSize} color={color} />
+            {!labelHidden && <ProfileLabel color={color}>{truncateAddress(walletAddress, 6, 4)}</ProfileLabel>}
+            {showDropdown && <ProfileDropdown />}
+        </ProfileContainer>
     );
 };
 

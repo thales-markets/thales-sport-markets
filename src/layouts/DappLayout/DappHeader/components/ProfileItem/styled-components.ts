@@ -2,15 +2,16 @@ import styled from 'styled-components';
 import { FlexDivRow } from 'styles/common';
 
 export const ProfileContainer = styled(FlexDivRow)`
+    position: relative;
     align-items: center;
     cursor: pointer;
     margin-right: 5px;
 `;
 export const ProfileLabel = styled.span<{ color?: string }>`
     font-weight: 600;
-    font-size: 14px;
+    font-size: 12px;
     color: ${(props) => (props.color ? props.color : props.theme.textColor.secondary)};
-    text-transform: uppercase;
+    text-transform: lowercase;
     white-space: pre;
 `;
 
