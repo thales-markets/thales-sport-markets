@@ -1037,8 +1037,8 @@ export const teamsData: MarchMadTeam[] = [
     },
     {
         id: 48,
-        name: WILD_CARD,
-        displayName: WILD_CARD,
+        name: "Mount St. Mary's",
+        displayName: 'Mount St. Mar.',
         region: REGION_UPPER_RIGHT,
         position: 16,
     },
@@ -1114,8 +1114,8 @@ export const teamsData: MarchMadTeam[] = [
     },
     {
         id: 59,
-        name: WILD_CARD,
-        displayName: WILD_CARD,
+        name: 'Xavier',
+        displayName: 'Xavier',
         region: REGION_BOTTOM_RIGHT,
         position: 11,
     },
