@@ -737,7 +737,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                         <FireText>{`+${overdropGameMultiplier.multiplier}% XP`}</FireText>
                     </FireContainer>
                 )}
-                {!selectedMarket?.gameId && !isMobile && isGameOpen && (
+                {!selectedMarket?.gameId && !isMobile && (
                     <SPAAnchor
                         href={buildMarketLink(
                             market.gameId,
