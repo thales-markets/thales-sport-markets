@@ -192,11 +192,11 @@ const Filters: React.FC<FiltersProps> = ({ hideSwitch, isMainPageView }) => {
 
 const Label = styled.span<{ active?: boolean }>`
     font-weight: 600;
-    font-size: 14px;
-    line-height: 14px;
+    font-size: 12px;
+    line-height: 12px;
     color: ${(props) => (props.active ? props.theme.textColor.quaternary : props.theme.textColor.secondary)};
     display: block;
-    text-transform: capitalize;
+    text-transform: uppercase;
     white-space: pre;
 `;
 

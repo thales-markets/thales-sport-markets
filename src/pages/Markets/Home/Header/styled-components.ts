@@ -150,7 +150,7 @@ export const SettingsContainer = styled(FlexDivRowCentered)`
 export const Divider = styled.div`
     width: 2px;
     background-color: ${(props) => props.theme.textColor.secondary};
-    height: 24px;
+    height: 16px;
 `;
 
 export const SortIndicator = styled.i`
