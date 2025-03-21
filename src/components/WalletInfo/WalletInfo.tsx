@@ -131,7 +131,7 @@ const WalletInfo: React.FC = ({}) => {
                             </WalletBalanceInfo>
                         </Button>
                     )}
-                    {showDropdown && <ProfileDropdown />}
+                    {showDropdown && <ProfileDropdown setShowDropdown={setShowDropdown} />}
                 </WalletWrapper>
             </OutsideClickHandler>
 

@@ -14,12 +14,16 @@ import { buildHref } from 'utils/routes';
 import useBiconomy from 'utils/useBiconomy';
 import { useAccount, useDisconnect } from 'wagmi';
 
-const ProfileDropdown: React.FC = () => {
+type ProfileDropdownProps = {
+    setShowDropdown: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ setShowDropdown }) => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const { address } = useAccount();
-    const smartAddres = useBiconomy();
+    const smartAddress = useBiconomy();
     const { disconnect } = useDisconnect();
 
     const handleCopy = (address: string) => {
@@ -47,8 +51,13 @@ const ProfileDropdown: React.FC = () => {
                         <Text>{isBiconomy ? 'Overtime Account' : 'EOA Address'}</Text>
                     </Wrapper>
 
-                    <Wrapper onClick={handleCopy.bind(this, isBiconomy ? smartAddres : (address as any))}>
-                        <Address>{truncateAddress(isBiconomy ? smartAddres : (address as any), 6, 4)}</Address>
+                    <Wrapper
+                        onClick={() => {
+                            handleCopy(isBiconomy ? smartAddress : (address as any));
+                            setShowDropdown(false);
+                        }}
+                    >
+                        <Address>{truncateAddress(isBiconomy ? smartAddress : (address as any), 6, 4)}</Address>
                         <CopyIcon className="icon icon--copy" />
                     </Wrapper>
                 </Container>
@@ -63,6 +72,7 @@ const ProfileDropdown: React.FC = () => {
                                 dispatch(setIsBiconomy(true));
                                 localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, true);
                             }
+                            setShowDropdown(false);
                         }}
                         className="icon icon--exchange"
                     />
@@ -73,8 +83,13 @@ const ProfileDropdown: React.FC = () => {
                         <Text>{!isBiconomy ? 'Overtime Account' : 'EOA Address'}</Text>
                     </Wrapper>
 
-                    <Wrapper onClick={handleCopy.bind(this, isBiconomy ? (address as any) : smartAddres)}>
-                        <Address>{truncateAddress(isBiconomy ? (address as any) : smartAddres, 6, 4)}</Address>
+                    <Wrapper
+                        onClick={() => {
+                            handleCopy(!isBiconomy ? smartAddress : (address as any));
+                            setShowDropdown(false);
+                        }}
+                    >
+                        <Address>{truncateAddress(!isBiconomy ? smartAddress : (address as any), 6, 4)}</Address>
                         <CopyIcon className="icon icon--copy" />
                     </Wrapper>
                 </Container>
@@ -83,6 +98,7 @@ const ProfileDropdown: React.FC = () => {
             <LogOutWrapper
                 onClick={() => {
                     disconnect();
+                    setShowDropdown(false);
                 }}
             >
                 <WalletIcon className="icon icon--wallet-disconnected" />
