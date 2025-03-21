@@ -19,6 +19,7 @@ import {
     FlexDivColumnCentered,
     FlexDivColumnNative,
     FlexDivEnd,
+    FlexDivRow,
     FlexDivSpaceBetween,
 } from 'styles/common';
 import { Coins, formatCurrency, formatCurrencyWithSign } from 'thales-utils';
@@ -29,6 +30,22 @@ import multipleCollateral from '../../utils/contracts/multipleCollateralContract
 
 const FUND_WALLET_ADDRESS = '0x23Ea88E828188377DCB4663ff2FE419B1fC71F88';
 
+enum Tab {
+    GENERATE = 'generate',
+    STATS = 'stats',
+}
+
+const NavItems = [
+    {
+        id: Tab.GENERATE,
+        label: 'Generate',
+    },
+    {
+        id: Tab.STATS,
+        label: 'Stats',
+    },
+];
+
 const FreeBets: React.FC = () => {
     const walletAddress = useAccount()?.address || '';
     const networkId = useChainId();
@@ -38,6 +55,8 @@ const FreeBets: React.FC = () => {
 
     const ticketPayment = useSelector(getTicketPayment);
     const selectedCollateralIndex = ticketPayment.selectedCollateralIndex;
+
+    const [selectedTab, setSelectedTab] = useState<Tab>(Tab.GENERATE);
     const [betAmount, setBetAmount] = useState<number | string>('');
     const [numberOfBets, setNumberOfBets] = useState<number | string>('');
     const [generatedIds, setGeneratedIds] = useState<string[]>([]);
@@ -119,107 +138,125 @@ const FreeBets: React.FC = () => {
 
     return (
         <>
-            <FlexDivColumnNative>
-                <FlexDivColumnCentered>
-                    <span> Balances displayed are for funding wallet</span>
-                    <br />
-                    <span> {FUND_WALLET_ADDRESS}</span>
-                    <br />
-                    <span>
-                        Available gas: {formatCurrency(multipleCollateralBalances.ETH, 4)} ETH
-                        {` (${formatCurrencyWithSign(
-                            USD_SIGN,
-                            getUSDForCollateral(CRYPTO_CURRENCY_MAP.ETH as Coins)
-                        )})`}
-                    </span>
-                    <br />
-                    <FlexDiv>
-                        <NumericInput
-                            label="Bet Amount"
-                            value={betAmount}
-                            onChange={(e) => {
-                                setBetAmount(+e.target.value);
-                            }}
-                            inputFontWeight="600"
-                            inputPadding="5px 10px"
-                            borderColor={theme.input.borderColor.tertiary}
-                            currencyComponent={
-                                <CollateralSelector
-                                    collateralArray={supportedCollaterals}
-                                    collateralBalances={multipleCollateralBalances}
-                                    selectedItem={selectedCollateralIndex}
-                                    onChangeCollateral={() => {
-                                        setBetAmount('');
-                                    }}
-                                    isDetailedView
-                                    displayTokenBalance
-                                    exchangeRates={exchangeRates}
-                                />
-                            }
-                        />
-                    </FlexDiv>
-                    <FlexDiv>
-                        <NumericInput
-                            label="Number of Bets"
-                            value={numberOfBets}
-                            onChange={(e) => {
-                                setNumberOfBets(+e.target.value);
-                            }}
-                            borderColor={theme.input.borderColor.tertiary}
-                        />
-                    </FlexDiv>
-                    <FlexDivCentered>
-                        <Button disabled={submitDisabled} onClick={onSubmit}>
-                            Generate
-                        </Button>
-                    </FlexDivCentered>
-                </FlexDivColumnCentered>
-                <br />
-                <FlexDivColumnCentered gap={10}>
-                    {!!generatedIds.length && (
-                        <FlexDivEnd>
-                            <FlexDivCentered gap={5}>
-                                Copy All
-                                <CopyIcon
-                                    onClick={() => {
-                                        const toastId = toast.loading('Copying', { autoClose: 1000 });
-                                        navigator.clipboard.writeText(
-                                            generatedIds
-                                                .map((id) => `https://overtimemarkets.xyz/profile?freeBet=${id}`)
-                                                .join('\n')
-                                        );
-                                        toast.update(toastId, {
-                                            ...getInfoToastOptions('Copied all'),
-                                            autoClose: 1000,
-                                        });
-                                    }}
-                                    className="icon icon--copy"
-                                />
-                            </FlexDivCentered>
-                        </FlexDivEnd>
-                    )}
-                    <FlexDivColumnCentered gap={5}>
-                        {generatedIds.map((id, index) => (
-                            <FlexDivSpaceBetween key={id}>
-                                <span>{`${index}. https://overtimemarkets.xyz/profile?freeBet=${id}`}</span>
-                                <CopyIcon
-                                    onClick={() => {
-                                        const toastId = toast.loading('Copying', { autoClose: 1000 });
-                                        navigator.clipboard.writeText(
-                                            `https://overtimemarkets.xyz/profile?freeBet=${id}`
-                                        );
-                                        toast.update(toastId, {
-                                            ...getInfoToastOptions('Copied ' + id),
-                                            autoClose: 1000,
-                                        });
-                                    }}
-                                    className="icon icon--copy"
-                                />
-                            </FlexDivSpaceBetween>
+            <Header>
+                <NavWrapper>
+                    <NavItemWrapper>
+                        {NavItems.map((item) => (
+                            <NavItem
+                                key={item.id}
+                                selected={selectedTab === item.id}
+                                onClick={() => setSelectedTab(item.id)}
+                            >
+                                {item.label}
+                            </NavItem>
                         ))}
+                    </NavItemWrapper>
+                </NavWrapper>
+            </Header>
+
+            {selectedTab === Tab.GENERATE && (
+                <FlexDivColumnNative>
+                    <FlexDivColumnCentered>
+                        <span> Balances displayed are for funding wallet</span>
+                        <br />
+                        <span> {FUND_WALLET_ADDRESS}</span>
+                        <br />
+                        <span>
+                            Available gas: {formatCurrency(multipleCollateralBalances.ETH, 4)} ETH
+                            {` (${formatCurrencyWithSign(
+                                USD_SIGN,
+                                getUSDForCollateral(CRYPTO_CURRENCY_MAP.ETH as Coins)
+                            )})`}
+                        </span>
+                        <br />
+                        <FlexDiv>
+                            <NumericInput
+                                label="Bet Amount"
+                                value={betAmount}
+                                onChange={(e) => {
+                                    setBetAmount(+e.target.value);
+                                }}
+                                inputFontWeight="600"
+                                inputPadding="5px 10px"
+                                borderColor={theme.input.borderColor.tertiary}
+                                currencyComponent={
+                                    <CollateralSelector
+                                        collateralArray={supportedCollaterals}
+                                        collateralBalances={multipleCollateralBalances}
+                                        selectedItem={selectedCollateralIndex}
+                                        onChangeCollateral={() => {
+                                            setBetAmount('');
+                                        }}
+                                        isDetailedView
+                                        displayTokenBalance
+                                        exchangeRates={exchangeRates}
+                                    />
+                                }
+                            />
+                        </FlexDiv>
+                        <FlexDiv>
+                            <NumericInput
+                                label="Number of Bets"
+                                value={numberOfBets}
+                                onChange={(e) => {
+                                    setNumberOfBets(+e.target.value);
+                                }}
+                                borderColor={theme.input.borderColor.tertiary}
+                            />
+                        </FlexDiv>
+                        <FlexDivCentered>
+                            <Button disabled={submitDisabled} onClick={onSubmit}>
+                                Generate
+                            </Button>
+                        </FlexDivCentered>
                     </FlexDivColumnCentered>
-                </FlexDivColumnCentered>
-            </FlexDivColumnNative>
+                    <br />
+                    <FlexDivColumnCentered gap={10}>
+                        {!!generatedIds.length && (
+                            <FlexDivEnd>
+                                <FlexDivCentered gap={5}>
+                                    Copy All
+                                    <CopyIcon
+                                        onClick={() => {
+                                            const toastId = toast.loading('Copying', { autoClose: 1000 });
+                                            navigator.clipboard.writeText(
+                                                generatedIds
+                                                    .map((id) => `https://overtimemarkets.xyz/profile?freeBet=${id}`)
+                                                    .join('\n')
+                                            );
+                                            toast.update(toastId, {
+                                                ...getInfoToastOptions('Copied all'),
+                                                autoClose: 1000,
+                                            });
+                                        }}
+                                        className="icon icon--copy"
+                                    />
+                                </FlexDivCentered>
+                            </FlexDivEnd>
+                        )}
+                        <FlexDivColumnCentered gap={5}>
+                            {generatedIds.map((id, index) => (
+                                <FlexDivSpaceBetween key={id}>
+                                    <span>{`${index}. https://overtimemarkets.xyz/profile?freeBet=${id}`}</span>
+                                    <CopyIcon
+                                        onClick={() => {
+                                            const toastId = toast.loading('Copying', { autoClose: 1000 });
+                                            navigator.clipboard.writeText(
+                                                `https://overtimemarkets.xyz/profile?freeBet=${id}`
+                                            );
+                                            toast.update(toastId, {
+                                                ...getInfoToastOptions('Copied ' + id),
+                                                autoClose: 1000,
+                                            });
+                                        }}
+                                        className="icon icon--copy"
+                                    />
+                                </FlexDivSpaceBetween>
+                            ))}
+                        </FlexDivColumnCentered>
+                    </FlexDivColumnCentered>
+                </FlexDivColumnNative>
+            )}
         </>
     );
 };
@@ -231,6 +268,49 @@ const CopyIcon = styled.i`
     color: ${(props) => props.theme.overdrop.textColor.primary};
     @media (max-width: 575px) {
         font-size: 20px;
+    }
+`;
+
+const Header = styled(FlexDivRow)`
+    position: absolute;
+    top: 100px;
+    width: 100%;
+    @media (max-width: 950px) {
+        margin-bottom: 15px;
+    }
+`;
+
+const NavWrapper = styled(FlexDivRow)`
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    border-radius: 5px;
+`;
+
+const NavItemWrapper = styled(FlexDivRow)`
+    width: 200px;
+    position: relative;
+    padding: 0 40px;
+    text-align: start;
+    @media (max-width: 767px) {
+        padding: 0 10px;
+        width: fit-content;
+    }
+`;
+
+const NavItem = styled.span<{ selected: boolean }>`
+    color: ${(props) => (props.selected ? props.theme.textColor.quaternary : props.theme.textColor.secondary)};
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    i {
+        color: ${(props) => (props.selected ? props.theme.textColor.quaternary : props.theme.textColor.secondary)};
+    }
+    @media (max-width: 767px) {
+        font-size: 10px;
+        white-space: nowrap;
     }
 `;
 
