@@ -119,8 +119,8 @@ const WalletInfo: React.FC = ({}) => {
     return (
         <Container walletConnected={isConnected} gap={8}>
             <OutsideClickHandler onOutsideClick={setShowDropdown.bind(this, false)}>
-                <WalletWrapper>
-                    {isConnected && (
+                {isConnected && (
+                    <WalletWrapper>
                         <Button onClick={setShowDropdown.bind(this, !showDropdown)}>
                             <WalletAddressInfo isConnected={isConnected} isClickable={true}>
                                 <ProfileItem color={theme.button.textColor.primary} />
@@ -130,9 +130,9 @@ const WalletInfo: React.FC = ({}) => {
                                 <Text>{totalBalanceValue}</Text>
                             </WalletBalanceInfo>
                         </Button>
-                    )}
-                    {showDropdown && <ProfileDropdown setShowDropdown={setShowDropdown} />}
-                </WalletWrapper>
+                        {showDropdown && <ProfileDropdown setShowDropdown={setShowDropdown} />}
+                    </WalletWrapper>
+                )}
             </OutsideClickHandler>
 
             <NetworkSwitcher />
@@ -227,6 +227,8 @@ const Button = styled(FlexDivCentered)<{ active?: boolean }>`
     }
 `;
 
-const WalletWrapper = styled.div``;
+const WalletWrapper = styled.div`
+    min-width: 200px;
+`;
 
 export default WalletInfo;

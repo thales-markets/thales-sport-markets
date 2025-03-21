@@ -75,7 +75,6 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ setShowDropdown }) =>
                                 dispatch(setIsBiconomy(true));
                                 localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, true);
                             }
-                            setShowDropdown(false);
                         }}
                         className="icon icon--exchange"
                     />
@@ -121,7 +120,7 @@ const Dropdown = styled.div`
     flex-direction: column;
     border-radius: 8px;
     background: ${(props) => props.theme.background.tertiary};
-    width: 215px;
+    width: 200px;
     padding: 10px;
     justify-content: center;
     align-items: flex-start;
@@ -135,9 +134,8 @@ const SwitchContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border-top: 2px solid ${(props) => props.theme.background.secondary};
-    border-bottom: 2px solid ${(props) => props.theme.background.secondary};
-    padding: 16px 10px;
+    border: 2px solid ${(props) => props.theme.background.secondary};
+    border-radius: 8px;
 `;
 
 const CopyIcon = styled.i`
@@ -181,13 +179,16 @@ const Container = styled.div<{ disabled?: boolean }>`
     width: 100%;
     gap: 4px;
     opacity: ${(props) => (props.disabled ? 0.3 : 1)};
+    background: ${(props) => (props.disabled ? '' : props.theme.background.quaternary)};
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    padding: 10px 20px 20px 20px;
 `;
 
 const Separator = styled.p`
     position: relative;
     height: 2px;
     width: 100%;
-    margin: 20px 0;
     background: ${(props) => props.theme.background.secondary};
 `;
 
@@ -200,7 +201,7 @@ const SwitchIcon = styled.i`
     cursor: pointer;
     transform: rotate(90deg);
     background: ${(props) => props.theme.background.tertiary};
-
+    border-radius: 20px;
     color: ${(props) => props.theme.button.textColor.primary};
 `;
 
