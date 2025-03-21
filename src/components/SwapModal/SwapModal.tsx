@@ -23,7 +23,7 @@ import { bigNumberFormatter, coinParser, Coins, formatCurrency, formatCurrencyWi
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import { sendBiconomyTransaction } from 'utils/biconomy';
-import { getCollateralAddress, getCollateralByAddress, getCollateralIndex, getCollaterals } from 'utils/collaterals';
+import { getCollateralAddress, getCollateralIndex, getCollaterals } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import { checkAllowance } from 'utils/network';
 import {
@@ -141,7 +141,7 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
                 const collateralContractWithSigner = getContractInstance(
                     ContractType.MULTICOLLATERAL,
                     { client, networkId },
-                    getCollateralIndex(networkId, getCollateralByAddress(fromToken, networkId))
+                    getCollateralIndex(networkId, fromToken)
                 );
                 const allowance = await checkAllowance(
                     coinParser(fromAmount.toString(), networkId, fromToken),
