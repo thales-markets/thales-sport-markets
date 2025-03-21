@@ -97,6 +97,7 @@ import {
     convertFromStableToCollateral,
     getCollateral,
     getCollateralAddress,
+    getCollateralByAddress,
     getCollateralIndex,
     getCollaterals,
     getDefaultCollateral,
@@ -1034,9 +1035,15 @@ const Ticket: React.FC<TicketProps> = ({
     useEffect(() => {
         if (isConnected && swapToOver && buyInAmount) {
             const getSwapAllowance = async () => {
+                const collateral = getCollateralByAddress(swapToOverParams.src, networkId);
+                const collateralContractWithSigner = getContractInstance(
+                    ContractType.MULTICOLLATERAL,
+                    { client, networkId },
+                    getCollateralIndex(networkId, collateral)
+                );
                 const allowance = await checkAllowance(
-                    coinParser(buyInAmount.toString(), networkId, swapToOverParams.src as any),
-                    getCollateralAddress(networkId, getCollateralIndex(networkId, swapToOverParams.src as any)),
+                    coinParser(buyInAmount.toString(), networkId, collateral),
+                    collateralContractWithSigner,
                     walletAddress,
                     PARASWAP_TRANSFER_PROXY
                 );
