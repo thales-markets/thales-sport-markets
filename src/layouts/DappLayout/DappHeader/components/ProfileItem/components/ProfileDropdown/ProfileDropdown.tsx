@@ -30,7 +30,10 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ setShowDropdown }) =>
         const id = toast.loading(t('deposit.copying-address'), { autoClose: 1000 });
         try {
             navigator.clipboard.writeText(address);
-            toast.update(id, { ...getInfoToastOptions(t('deposit.copied')), autoClose: 2000 });
+            toast.update(id, {
+                ...getInfoToastOptions(t('deposit.copied') + ': ' + truncateAddress(address, 6, 4)),
+                autoClose: 2000,
+            });
         } catch (e) {
             toast.update(id, getErrorToastOptions('Error'));
         }
@@ -39,7 +42,7 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ setShowDropdown }) =>
     return (
         <Dropdown>
             <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Profile)}>
-                <Wrapper clickable>
+                <Wrapper onClick={setShowDropdown.bind(this, false)} clickable>
                     <CopyIcon className="icon icon--logo" /> <Text>Account</Text>
                 </Wrapper>
             </SPAAnchor>

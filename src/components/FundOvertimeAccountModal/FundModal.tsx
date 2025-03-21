@@ -19,6 +19,7 @@ import { toast } from 'react-toastify';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { Colors, FlexDivCentered, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
+import { truncateAddress } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { FreeBet } from 'types/freeBet';
 import { RootState } from 'types/redux';
@@ -93,7 +94,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
         const id = toast.loading(t('deposit.copying-address'));
         try {
             navigator.clipboard.writeText(walletAddress);
-            toast.update(id, getInfoToastOptions(t('deposit.copied')));
+            toast.update(id, getInfoToastOptions(t('deposit.copied') + ': ' + truncateAddress(walletAddress, 6, 4)));
         } catch (e) {
             toast.update(id, getErrorToastOptions('Error'));
         }
