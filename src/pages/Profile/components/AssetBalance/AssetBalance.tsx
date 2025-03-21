@@ -3,9 +3,11 @@ import DepositIcon from 'assets/images/svgs/deposit.svg?react';
 import WithdrawIcon from 'assets/images/svgs/withdraw.svg?react';
 import Toggle from 'components/Toggle';
 import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from 'constants/currency';
+import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import useLocalStorage from 'hooks/useLocalStorage';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsBiconomy } from 'redux/modules/wallet';
@@ -41,7 +43,7 @@ const AssetBalance: React.FC<Props> = ({
     const walletAddress = (isBiconomy ? smartAddres : address) || '';
     const theme = useTheme();
 
-    const [showZeroBalance, setShowZeroBalance] = useState<boolean>(true);
+    const [showZeroBalance, setShowZeroBalance] = useLocalStorage(LOCAL_STORAGE_KEYS.SHOW_ZERO_BALANCE, true);
 
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(
         walletAddress,

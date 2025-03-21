@@ -43,12 +43,12 @@ const ProfileDropdown: React.FC = () => {
             <SwitchContainer>
                 <Container>
                     <Wrapper>
-                        <WalletIcon className="icon icon--wallet-connected" />{' '}
+                        <WalletIcon className="icon icon--wallet-connected" />
                         <Text>{isBiconomy ? 'Overtime Account' : 'EOA Address'}</Text>
                     </Wrapper>
 
                     <Wrapper onClick={handleCopy.bind(this, isBiconomy ? smartAddres : (address as any))}>
-                        <Text>{truncateAddress(isBiconomy ? smartAddres : (address as any), 6, 4)}</Text>{' '}
+                        <Address>{truncateAddress(isBiconomy ? smartAddres : (address as any), 6, 4)}</Address>
                         <CopyIcon className="icon icon--copy" />
                     </Wrapper>
                 </Container>
@@ -69,12 +69,12 @@ const ProfileDropdown: React.FC = () => {
                 </Separator>
                 <Container disabled>
                     <Wrapper>
-                        <WalletIcon className="icon icon--wallet-connected" />{' '}
+                        <WalletIcon className="icon icon--wallet-connected" />
                         <Text>{!isBiconomy ? 'Overtime Account' : 'EOA Address'}</Text>
                     </Wrapper>
 
                     <Wrapper onClick={handleCopy.bind(this, isBiconomy ? (address as any) : smartAddres)}>
-                        <Text>{truncateAddress(isBiconomy ? (address as any) : smartAddres, 6, 4)}</Text>{' '}
+                        <Address>{truncateAddress(isBiconomy ? (address as any) : smartAddres, 6, 4)}</Address>
                         <CopyIcon className="icon icon--copy" />
                     </Wrapper>
                 </Container>
@@ -186,6 +186,10 @@ const SwitchIcon = styled.i`
 `;
 
 const LogOutWrapper = styled(Wrapper)`
+    cursor: pointer;
+`;
+
+const Address = styled(Text)`
     cursor: pointer;
 `;
 
