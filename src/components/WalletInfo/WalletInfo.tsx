@@ -1,7 +1,9 @@
 import ConnectWalletModal from 'components/ConnectWalletModal';
 import NetworkSwitcher from 'components/NetworkSwitcher';
+import OutsideClickHandler from 'components/OutsideClick';
 import { COLLATERALS, USD_SIGN } from 'constants/currency';
 import ProfileItem from 'layouts/DappLayout/DappHeader/components/ProfileItem';
+import ProfileDropdown from 'layouts/DappLayout/DappHeader/components/ProfileItem/components/ProfileDropdown';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
@@ -10,7 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getTicketPayment, setPaymentSelectedCollateralIndex } from 'redux/modules/ticket';
 import { getIsBiconomy, getWalletConnectModalVisibility, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
-import { FlexDivCentered, FlexDivColumn } from 'styles/common';
+import { FlexDivCentered } from 'styles/common';
 import { formatCurrencyWithKey } from 'thales-utils';
 import { RootState } from 'types/redux';
 import { getCollaterals, mapMultiCollateralBalances } from 'utils/collaterals';
@@ -35,6 +37,7 @@ const WalletInfo: React.FC = ({}) => {
     const selectedCollateralIndex = ticketPayment.selectedCollateralIndex;
 
     const [isFreeBetInitialized, setIsFreeBetInitialized] = useState(false);
+    const [showDropdown, setShowDropdown] = useState(false);
 
     const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
     const exchangeRates = exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
@@ -77,9 +80,9 @@ const WalletInfo: React.FC = ({}) => {
                 balanceList.forEach((data) => (total += data.balanceDollarValue));
             }
 
-            return total ? formatCurrencyWithKey(USD_SIGN, total, 2) : 'N/A';
+            return total ? formatCurrencyWithKey(USD_SIGN, total, 2) : '0$';
         } catch (e) {
-            return 'N/A';
+            return '0$';
         }
     }, [exchangeRates, multiCollateralBalances, networkId, balanceList]);
 
@@ -115,19 +118,23 @@ const WalletInfo: React.FC = ({}) => {
 
     return (
         <Container walletConnected={isConnected} gap={8}>
-            <FlexDivColumn>
-                {isConnected && (
-                    <Button>
-                        <WalletAddressInfo isConnected={isConnected} isClickable={true}>
-                            <ProfileItem color={theme.button.textColor.primary} avatarSize={18} />
-                        </WalletAddressInfo>
+            <OutsideClickHandler onOutsideClick={setShowDropdown.bind(this, !showDropdown)}>
+                <WalletWrapper>
+                    {isConnected && (
+                        <Button onClick={setShowDropdown.bind(this, !showDropdown)}>
+                            <WalletAddressInfo isConnected={isConnected} isClickable={true}>
+                                <ProfileItem color={theme.button.textColor.primary} avatarSize={18} />
+                            </WalletAddressInfo>
 
-                        <WalletBalanceInfo>
-                            <Text>{totalBalanceValue}</Text>
-                        </WalletBalanceInfo>
-                    </Button>
-                )}
-            </FlexDivColumn>
+                            <WalletBalanceInfo>
+                                <Text>{totalBalanceValue}</Text>
+                            </WalletBalanceInfo>
+                        </Button>
+                    )}
+                    {showDropdown && <ProfileDropdown />}
+                </WalletWrapper>
+            </OutsideClickHandler>
+
             <NetworkSwitcher />
             {connectWalletModalVisibility && (
                 <ConnectWalletModal
@@ -218,6 +225,10 @@ const Button = styled(FlexDivCentered)<{ active?: boolean }>`
         font-size: 12px;
         padding: 3px 12px;
     }
+`;
+
+const WalletWrapper = styled.div`
+    min-width: 200px;
 `;
 
 export default WalletInfo;

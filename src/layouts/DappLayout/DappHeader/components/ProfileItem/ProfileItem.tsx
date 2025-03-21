@@ -1,12 +1,11 @@
 import useClaimablePositionCountV2Query from 'queries/markets/useClaimablePositionCountV2Query';
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import { truncateAddress } from 'thales-utils';
 import { RootState } from 'types/redux';
 import useBiconomy from 'utils/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
-import ProfileDropdown from './components/ProfileDropdown';
 import {
     Count,
     NotificationCount,
@@ -32,13 +31,10 @@ const ProfileItem: React.FC<ProfileItemProperties> = ({ labelHidden, avatarSize,
     const smartAddres = useBiconomy();
     const walletAddress = (isBiconomy ? smartAddres : address) || '';
 
-    const [showDropdown, setShowDropdown] = useState(false);
-
     return (
-        <ProfileContainer onClick={setShowDropdown.bind(this, !showDropdown)}>
+        <ProfileContainer>
             <ProfileIconWidget top={top} left={left} avatarSize={avatarSize} color={color} />
             {!labelHidden && <ProfileLabel color={color}>{truncateAddress(walletAddress, 6, 4)}</ProfileLabel>}
-            {showDropdown && <ProfileDropdown />}
         </ProfileContainer>
     );
 };

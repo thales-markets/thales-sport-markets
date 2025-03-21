@@ -35,50 +35,51 @@ const ProfileDropdown: React.FC = () => {
     return (
         <Dropdown>
             <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Profile)}>
-                <Wrapper>
-                    <i className="icon icon--logo" /> <Text>Account</Text>
+                <Wrapper clickable>
+                    <CopyIcon className="icon icon--logo" /> <Text>Account</Text>
                 </Wrapper>
             </SPAAnchor>
 
-            <Container>
-                <Wrapper>
-                    <WalletIcon className="icon icon--wallet-connected" />{' '}
-                    <Text>{isBiconomy ? 'Overtime Account' : 'EOA Address'}</Text>
-                </Wrapper>
+            <SwitchContainer>
+                <Container>
+                    <Wrapper>
+                        <WalletIcon className="icon icon--wallet-connected" />{' '}
+                        <Text>{isBiconomy ? 'Overtime Account' : 'EOA Address'}</Text>
+                    </Wrapper>
 
-                <Wrapper onClick={handleCopy.bind(this, isBiconomy ? smartAddres : (address as any))}>
-                    <Text>{truncateAddress(isBiconomy ? smartAddres : (address as any), 6, 4)}</Text>{' '}
-                    <CopyIcon className="icon icon--copy" />
-                </Wrapper>
-            </Container>
+                    <Wrapper onClick={handleCopy.bind(this, isBiconomy ? smartAddres : (address as any))}>
+                        <Text>{truncateAddress(isBiconomy ? smartAddres : (address as any), 6, 4)}</Text>{' '}
+                        <CopyIcon className="icon icon--copy" />
+                    </Wrapper>
+                </Container>
 
-            <Separator>
-                <SwitchIcon
-                    onClick={() => {
-                        if (isBiconomy) {
-                            dispatch(setIsBiconomy(false));
-                            localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, false);
-                        } else {
-                            dispatch(setIsBiconomy(true));
-                            localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, true);
-                        }
-                    }}
-                    className="icon icon--exchange"
-                />
-            </Separator>
-            <Container disabled>
-                <Wrapper>
-                    <WalletIcon className="icon icon--wallet-connected" />{' '}
-                    <Text>{!isBiconomy ? 'Overtime Account' : 'EOA Address'}</Text>
-                </Wrapper>
+                <Separator>
+                    <SwitchIcon
+                        onClick={() => {
+                            if (isBiconomy) {
+                                dispatch(setIsBiconomy(false));
+                                localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, false);
+                            } else {
+                                dispatch(setIsBiconomy(true));
+                                localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, true);
+                            }
+                        }}
+                        className="icon icon--exchange"
+                    />
+                </Separator>
+                <Container disabled>
+                    <Wrapper>
+                        <WalletIcon className="icon icon--wallet-connected" />{' '}
+                        <Text>{!isBiconomy ? 'Overtime Account' : 'EOA Address'}</Text>
+                    </Wrapper>
 
-                <Wrapper onClick={handleCopy.bind(this, isBiconomy ? (address as any) : smartAddres)}>
-                    <Text>{truncateAddress(isBiconomy ? (address as any) : smartAddres, 6, 4)}</Text>{' '}
-                    <CopyIcon className="icon icon--copy" />
-                </Wrapper>
-            </Container>
+                    <Wrapper onClick={handleCopy.bind(this, isBiconomy ? (address as any) : smartAddres)}>
+                        <Text>{truncateAddress(isBiconomy ? (address as any) : smartAddres, 6, 4)}</Text>{' '}
+                        <CopyIcon className="icon icon--copy" />
+                    </Wrapper>
+                </Container>
+            </SwitchContainer>
 
-            <Separator />
             <LogOutWrapper
                 onClick={() => {
                     disconnect();
@@ -96,7 +97,7 @@ const Dropdown = styled.div`
     z-index: 1000;
     position: absolute;
     top: 32px;
-    left: -10px;
+    left: 0;
     display: flex;
     flex-direction: column;
     border-radius: 8px;
@@ -109,14 +110,29 @@ const Dropdown = styled.div`
     font-weight: 400;
 `;
 
+const SwitchContainer = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-top: 2px solid ${(props) => props.theme.background.secondary};
+    border-bottom: 2px solid ${(props) => props.theme.background.secondary};
+    padding: 16px 10px;
+`;
+
 const CopyIcon = styled.i`
     cursor: pointer;
     text-transform: lowercase;
+
+    color: ${(props) => props.theme.button.textColor.primary};
 `;
 
 const WalletIcon = styled.i`
     font-size: 18px;
     width: 20px;
+
+    color: ${(props) => props.theme.button.textColor.primary};
 `;
 
 const Text = styled.span`
@@ -129,12 +145,13 @@ const Text = styled.span`
     text-align: left;
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ clickable?: boolean }>`
     display: flex;
     justify-content: start;
     align-items: center;
     gap: 2px;
     width: 100%;
+    cursor: ${(props) => (props.clickable ? 'pointer' : 'default')};
 `;
 
 const Container = styled.div<{ disabled?: boolean }>`
@@ -142,6 +159,7 @@ const Container = styled.div<{ disabled?: boolean }>`
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
+    width: 100%;
     gap: 4px;
     opacity: ${(props) => (props.disabled ? 0.3 : 1)};
 `;
@@ -150,11 +168,8 @@ const Separator = styled.p`
     position: relative;
     height: 2px;
     width: 100%;
-    margin: 4px 0;
+    margin: 20px 0;
     background: ${(props) => props.theme.background.secondary};
-    &:last-of-type {
-        margin: 0;
-    }
 `;
 
 const SwitchIcon = styled.i`
@@ -166,6 +181,8 @@ const SwitchIcon = styled.i`
     cursor: pointer;
     transform: rotate(90deg);
     background: ${(props) => props.theme.background.tertiary};
+
+    color: ${(props) => props.theme.button.textColor.primary};
 `;
 
 const LogOutWrapper = styled(Wrapper)`
