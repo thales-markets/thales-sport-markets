@@ -32,11 +32,13 @@ import {
     League,
     MarketType,
     MarketTypeMap,
+    SgpBuilder,
     Sport,
 } from 'overtime-utils';
 import {
     SerializableSportMarket,
     SportMarket,
+    SportMarkets,
     Team,
     Ticket,
     TicketMarket,
@@ -258,6 +260,11 @@ export const getPositionTextV2 = (market: SportMarket, position: number, extende
     if (market.typeId === MarketType.EMPTY) {
         return '-';
     }
+
+    if (market.typeId === MarketType.SGP_BUILDER) {
+        return market.homeTeam;
+    }
+
     return isCombinedPositionsMarket(market.typeId)
         ? getCombinedPositionsText(market, position)
         : getSimplePositionText(
@@ -274,9 +281,13 @@ export const getPositionTextV2 = (market: SportMarket, position: number, extende
 };
 
 export const getTitleText = (market: SportMarket, useDescription?: boolean, shortName?: boolean) => {
-    const marketType = market.typeId as MarketType;
+    const marketType = market.typeId;
     if (marketType === MarketType.EMPTY) {
         return '';
+    }
+
+    if (marketType === MarketType.SGP_BUILDER) {
+        return market.type;
     }
 
     const sport = getLeagueSport(market.leagueId);
@@ -671,6 +682,46 @@ export const packMarket = (
 
     return packedMarket;
 };
+
+export const addSgpBuilderMarkets = (markets: SportMarkets, sgpBuilders: SgpBuilder[]): SportMarkets =>
+    markets.map((market) => {
+        const sgpMarket = {
+            gameId: market.gameId,
+            sport: market.sport,
+            leagueId: market.leagueId,
+            leagueName: market.leagueName,
+            subLeagueId: market.subLeagueId,
+            typeId: MarketType.SGP_BUILDER,
+            type: sgpBuilders.length ? sgpBuilders[0].groupName : '',
+            maturity: market.maturity,
+            maturityDate: market.maturityDate,
+            homeTeam: sgpBuilders.length ? sgpBuilders[0].name : '',
+            awayTeam: '',
+            homeScoreByPeriod: [],
+            awayScoreByPeriod: [],
+            winningPositions: [],
+            status: market.status,
+            isResolved: market.isResolved,
+            isOpen: market.isOpen,
+            isCancelled: market.isCancelled,
+            isPaused: market.isPaused,
+            line: market.line, // TODO:
+            isOneSideMarket: false,
+            isPlayerPropsMarket: false,
+            isOneSidePlayerPropsMarket: false,
+            isYesNoPlayerPropsMarket: false,
+            playerProps: {
+                playerId: 0,
+                playerName: '',
+            },
+            odds: [0.5], // TODO:
+            proof: [],
+            childMarkets: [],
+            combinedPositions: [],
+        } as SportMarket;
+
+        return { ...market, childMarkets: [...market.childMarkets, sgpMarket] };
+    });
 
 const getPlayerPropsEmptyMarkets = (market: SportMarket) => [
     {

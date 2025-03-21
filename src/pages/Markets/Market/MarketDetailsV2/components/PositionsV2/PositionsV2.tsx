@@ -206,11 +206,7 @@ const Positions: React.FC<PositionsProps> = ({
 
     const tooltipKey = getMarketTypeTooltipKey(marketType);
 
-    const liveMarketErrorMessage =
-        markets[0].live && markets[0].errorMessage
-            ? // TODO: if we want to remove teams add .replace(` ${markets[0].homeTeam} - ${markets[0].awayTeam}`, '');
-              markets[0].errorMessage
-            : '';
+    const liveMarketErrorMessage = markets[0].live && markets[0].errorMessage ? markets[0].errorMessage : '';
 
     return showContainer ? (
         <Container

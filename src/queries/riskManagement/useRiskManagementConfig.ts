@@ -4,7 +4,13 @@ import { generalConfig, noCacheConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
 import { RiskManagementConfig } from 'enums/riskManagement';
 import { NetworkConfig } from 'types/network';
-import { RiskManagementData, RiskManagementLeaguesAndTypes, RiskManagementSgpBlockers } from 'types/riskManagement';
+import {
+    RiskManagementData,
+    RiskManagementLeaguesAndTypes,
+    RiskManagementSgp,
+    RiskManagementSgpBlockers,
+    RiskManagementSgpBuilders,
+} from 'types/riskManagement';
 
 const useRiskManagementConfigQuery = (
     configType: RiskManagementConfig,
@@ -38,6 +44,12 @@ const useRiskManagementConfigQuery = (
                         break;
                     case RiskManagementConfig.SGP_BLOCKERS:
                         config = configData as RiskManagementSgpBlockers;
+                        break;
+                    case RiskManagementConfig.SGP_BUILDERS:
+                        config = configData as RiskManagementSgpBuilders;
+                        break;
+                    case RiskManagementConfig.SGP:
+                        config = configData as RiskManagementSgp;
                         break;
                     default:
                         config = {};
