@@ -1417,6 +1417,7 @@
             "volume": "Volume",
             "network": "Network",
             "bracket-id": "Bracket ID",
+            "bracket-champion": "Champion",
             "base-volume": "Base",
             "bonus-volume": "Bonus",
             "rewards": "Rewards",

@@ -50,6 +50,8 @@ export const isMarchMadnessAvailableForNetworkId = (networkId: NetworkId) => {
     );
 };
 
+export const getTeamNameById = (id: number) => teamsData.find((team) => team.id === id)?.displayName || '';
+
 const getRoundNameById = (roundId: number) => {
     let round = '';
     switch (roundId) {

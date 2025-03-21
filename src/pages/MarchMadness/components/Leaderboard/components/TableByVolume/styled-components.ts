@@ -28,7 +28,7 @@ export const TableRowCell = styled.div<{ width?: string; noTextTransform?: boole
     min-width: auto;
     ${(props) => (props.width ? `max-width: ${props.width};` : '')}
     padding: 10px 0px;
-    color: #fff;
+    color: ${(props) => props.theme.textColor.primary};
     text-align: left;
     font-family: ${(props) => props.theme.fontFamily.primary};
     font-size: 14px;
@@ -79,7 +79,7 @@ export const TableHeaderContainer = styled.div`
 `;
 
 export const TableHeader = styled.span`
-    color: #fff;
+    color: ${(props) => props.theme.textColor.primary};
     text-align: center;
     font-family: ${(props) => props.theme.fontFamily.primary};
     font-size: 16px;
@@ -111,7 +111,7 @@ export const StickyRowTopTable = styled(TableRow)`
 `;
 
 export const Owner = styled(FlexDivRow)`
-    width: 390px;
+    width: 350px;
     @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         width: auto;
     }
@@ -120,4 +120,11 @@ export const Owner = styled(FlexDivRow)`
 export const WalletAddress = styled.span`
     text-transform: lowercase;
     white-space: nowrap;
+    font-family: ${(props) => props.theme.fontFamily.primary};
+`;
+
+export const Champion = styled.span`
+    text-transform: uppercase;
+    white-space: nowrap;
+    font-family: ${(props) => props.theme.fontFamily.primary};
 `;
