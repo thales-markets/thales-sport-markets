@@ -34,6 +34,7 @@ import {
     SwitchContainer,
     ThreeWayIcon,
     TimeContainer,
+    TimeFiltersDropdown,
 } from '../Header/styled-components';
 
 type FiltersProps = {
@@ -137,11 +138,11 @@ const Filters: React.FC<FiltersProps> = ({ hideSwitch, isMainPageView }) => {
                     </Tooltip>
 
                     {timeFiltersOpen && (
-                        <DropdownContainer>
+                        <TimeFiltersDropdown>
                             <DropDown>
                                 <TimeFilters />
                             </DropDown>
-                        </DropdownContainer>
+                        </TimeFiltersDropdown>
                     )}
                 </TimeContainer>
             </OutsideClickHandler>

@@ -168,6 +168,10 @@ export const DropdownContainer = styled.div`
     z-index: 1000;
 `;
 
+export const TimeFiltersDropdown = styled(DropdownContainer)`
+    width: 90px;
+`;
+
 export const DropDown = styled(FlexDivColumn)`
     border: 1px solid ${(props) => props.theme.borderColor.primary};
     background: ${(props) => props.theme.background.secondary};

@@ -4,6 +4,8 @@ import { FlexDiv } from 'styles/common';
 export const FilterTypeContainer = styled(FlexDiv)<{ isMobile?: boolean }>`
     padding: 10px;
     justify-content: space-around;
+    flex-direction: column;
+    gap: 8px;
 `;
 
 export const TimeFilterContainer = styled(FlexDiv)<{ selected: boolean }>`

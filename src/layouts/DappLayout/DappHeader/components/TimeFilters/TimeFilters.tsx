@@ -15,6 +15,16 @@ const TimeFilters: React.FC = () => {
     return (
         <FilterTypeContainer isMobile={isMobile}>
             <TimeFilterContainer
+                selected={datePeriodFilter == 0}
+                onClick={() => {
+                    setDateParam('');
+                    dispatch(setDatePeriodFilter(0));
+                }}
+            >
+                <Circle isMobile={isMobile} />
+                <Label>ALL</Label>
+            </TimeFilterContainer>
+            <TimeFilterContainer
                 selected={datePeriodFilter == 12}
                 onClick={() => {
                     if (datePeriodFilter == 12) {
