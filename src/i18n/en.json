@@ -62,7 +62,7 @@
             "approve-parlay": "Approve ParlayAMM",
             "approve-sports": "Approve SportsAMM",
             "get-usd-progress": "Minting {{amount}}...",
-            "disclaimer": "By signing in to Overtimemarkets <terms>Terms of Use</terms> and Privacy Policy you acknowledge that you have read and understand the Overtime DAO protocol <disclaimer>disclaimer</disclaimer>.",
+            "disclaimer": "By signing in to Overtime <terms>Terms of Use</terms> and Privacy Policy you acknowledge that you have read and understand the Overtime DAO protocol <disclaimer>disclaimer</disclaimer>.",
             "particle-logins": {
                 "google": "Continue with Google",
                 "twitter": "Continue with Twitter",
