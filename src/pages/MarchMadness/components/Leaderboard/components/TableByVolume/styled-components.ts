@@ -23,7 +23,7 @@ const TableRow = styled(FlexDivStart)<{ hideBorder?: boolean; topTen?: boolean; 
     ${(props) => (props?.myScore == true ? `background-color: ${props.theme.marchMadness.borderColor.secondary};` : ``)}
 `;
 
-export const TableRowCell = styled.div<{ width?: string; noTextTransform?: boolean }>`
+export const TableRowCell = styled.div<{ width?: string; noTextTransform?: boolean; wrap?: boolean }>`
     flex: 1;
     min-width: auto;
     ${(props) => (props.width ? `max-width: ${props.width};` : '')}
@@ -47,7 +47,7 @@ export const TableRowCell = styled.div<{ width?: string; noTextTransform?: boole
 
     @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         text-align: center;
-        white-space: nowrap;
+        white-space: ${(props) => (props.wrap ? 'break-spaces' : 'nowrap')};
 
         &:first-child {
             padding-left: 6px;
@@ -99,6 +99,7 @@ export const Arrow = styled.i`
 
     @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         font-size: 12px;
+        margin-left: 4px;
     }
 `;
 
