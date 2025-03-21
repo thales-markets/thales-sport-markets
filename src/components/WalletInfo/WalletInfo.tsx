@@ -227,8 +227,6 @@ const Button = styled(FlexDivCentered)<{ active?: boolean }>`
     }
 `;
 
-const WalletWrapper = styled.div`
-    min-width: 200px;
-`;
+const WalletWrapper = styled.div``;
 
 export default WalletInfo;
