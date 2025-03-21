@@ -61,10 +61,8 @@ const useCoingeckoRatesQuery = (options?: Omit<UseQueryOptions<any>, 'queryKey' 
                 rates[CRYPTO_CURRENCY_MAP.sTHALES as Coins] = Number(
                     body[COINGECKO_CURRENCY_ID_MAP[CRYPTO_CURRENCY_MAP.THALES]].usd
                 );
-                // TODO hardcode OVER rate to THALES rate until we have a proper rate
-                rates[CRYPTO_CURRENCY_MAP.OVER as Coins] = Number(
-                    body[COINGECKO_CURRENCY_ID_MAP[CRYPTO_CURRENCY_MAP.THALES]].usd
-                );
+                // TODO hardcode OVER rate until we have a proper rate
+                rates[CRYPTO_CURRENCY_MAP.OVER as Coins] = 0.1053;
             } catch (err) {
                 console.error('Coingecko price error:' + err);
             }
