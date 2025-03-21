@@ -28,6 +28,7 @@ import { OverdropLevel, ThemeInterface } from 'types/ui';
 import { buildHref } from 'utils/routes';
 import useBiconomy from 'utils/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
+import { ProfileIconWidget } from './components/ProfileItem/ProfileItem';
 import {
     BlockedGamesNotificationCount,
     Container,
@@ -42,6 +43,7 @@ import {
     NotificationCount,
     OverdropButtonContainer,
     OverdropIcon,
+    ProfileLabel,
     RightContainer,
     SearchContainer,
     SearchIcon,
@@ -224,6 +226,13 @@ const DappHeader: React.FC = () => {
                             </Button>
                         )}
                         {isConnected && isBiconomy && <ActivateAccount />}
+                        {isConnected && (
+                            <SPAAnchor href={ROUTES.Profile + '?selected-tab=open-claimable'}>
+                                <FlexDivCentered>
+                                    <ProfileIconWidget /> <ProfileLabel>{t('common.profile')}</ProfileLabel>
+                                </FlexDivCentered>
+                            </SPAAnchor>
+                        )}
                         <WalletInfo />
                         <MenuIconContainer>
                             <MenuIcon ref={menuImageRef} onClick={() => setNavMenuVisibility(true)} />

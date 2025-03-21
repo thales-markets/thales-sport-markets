@@ -1,5 +1,6 @@
 {
     "common": {
+        "profile": "Profile",
         "overtime-account": "<icon/> account",
         "filters": "Filters",
         "status": "Status",

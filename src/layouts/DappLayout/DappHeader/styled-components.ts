@@ -104,6 +104,14 @@ export const IconWrapper = styled.div`
     height: 28px;
 `;
 
+export const ProfileLabel = styled.p`
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: ${(props) => props.theme.textColor.secondary};
+    cursor: pointer;
+`;
+
 export const SearchIcon = styled.i`
     font-size: 25px;
     &:before {

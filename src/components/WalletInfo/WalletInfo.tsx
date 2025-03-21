@@ -123,7 +123,7 @@ const WalletInfo: React.FC = ({}) => {
                     {isConnected && (
                         <Button onClick={setShowDropdown.bind(this, !showDropdown)}>
                             <WalletAddressInfo isConnected={isConnected} isClickable={true}>
-                                <ProfileItem color={theme.button.textColor.primary} avatarSize={18} />
+                                <ProfileItem color={theme.button.textColor.primary} />
                             </WalletAddressInfo>
 
                             <WalletBalanceInfo>

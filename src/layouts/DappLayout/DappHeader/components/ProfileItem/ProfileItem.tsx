@@ -24,7 +24,7 @@ type ProfileItemProperties = {
     left?: string;
 };
 
-const ProfileItem: React.FC<ProfileItemProperties> = ({ labelHidden, avatarSize, top, left, color }) => {
+const ProfileItem: React.FC<ProfileItemProperties> = ({ color }) => {
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
     const { address } = useAccount();
@@ -33,8 +33,7 @@ const ProfileItem: React.FC<ProfileItemProperties> = ({ labelHidden, avatarSize,
 
     return (
         <ProfileContainer>
-            <ProfileIconWidget top={top} left={left} avatarSize={avatarSize} color={color} />
-            {!labelHidden && <ProfileLabel color={color}>{truncateAddress(walletAddress, 6, 4)}</ProfileLabel>}
+            <ProfileLabel color={color}>{truncateAddress(walletAddress, 6, 4)}</ProfileLabel>
         </ProfileContainer>
     );
 };
