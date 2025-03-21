@@ -7,7 +7,7 @@ import { SUPPORTED_PARTICAL_CONNECTORS_MODAL, SUPPORTED_WALLET_CONNECTORS_MODAL 
 import React, { useEffect } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import styled from 'styled-components';
 import { Colors, FlexDiv, FlexDivCentered, FlexDivStart } from 'styles/common';
@@ -26,6 +26,8 @@ import WalletConnect from 'assets/images/logins-icons/walletConnect.svg?react';
 import Checkbox from 'components/fields/Checkbox';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import useLocalStorage from 'hooks/useLocalStorage';
+import { getIsBiconomy, setIsBiconomy } from 'redux/modules/wallet';
+import { localStore } from 'thales-utils';
 import { ParticalTypes, WalletConnections } from 'types/wallet';
 
 ReactModal.setAppElement('#root');
@@ -60,9 +62,12 @@ type ConnectWalletModalProps = {
 
 const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose }) => {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
     const { connectors, isPending, isSuccess, connect } = useConnect();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const { openConnectModal } = useConnectModal();
+
     const [termsAccepted, setTerms] = useLocalStorage(LOCAL_STORAGE_KEYS.TERMS_AND_CONDITIONS, false);
 
     const handleConnect = (connector: Connector) => {
@@ -93,12 +98,7 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                 <>
                     <HeaderContainer>
                         <Title>
-                            <Trans
-                                i18nKey="common.overtime-account"
-                                components={{
-                                    icon: <OvertimeIcon className="icon icon--overtime" />,
-                                }}
-                            />
+                            <OvertimeIcon className="icon icon--overtime" />
                         </Title>
                         <Subtitle>{t('common.wallet.connect-wallet-modal-subtitle')}</Subtitle>
                     </HeaderContainer>
@@ -153,7 +153,37 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                         </WalletIconsWrapper>
                     </ButtonsContainer>
 
-                    <CheckboxContainer disabled={!termsAccepted}>
+                    <BiconomyContainer disabled={!termsAccepted}>
+                        <Checkbox
+                            value={''}
+                            checked={isBiconomy}
+                            onChange={() => {
+                                if (isBiconomy) {
+                                    dispatch(setIsBiconomy(false));
+                                    localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, false);
+                                } else {
+                                    dispatch(setIsBiconomy(true));
+                                    localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, true);
+                                }
+                            }}
+                        />
+                        <Label
+                            onClick={() => {
+                                if (isBiconomy) {
+                                    dispatch(setIsBiconomy(false));
+                                    localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, false);
+                                } else {
+                                    dispatch(setIsBiconomy(true));
+                                    localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, true);
+                                }
+                            }}
+                        >
+                            Use Overtime Account
+                        </Label>
+                        <LearnMore href={disclaimer}>(Gas free & 1-click transactions)</LearnMore>
+                    </BiconomyContainer>
+
+                    <CheckboxContainer disabled={false}>
                         <Checkbox value={''} checked={termsAccepted} onChange={setTerms.bind(this, !termsAccepted)} />
                         <Label onClick={setTerms.bind(this, !termsAccepted)}>I Agree to the Terms and Conditions</Label>
                     </CheckboxContainer>
@@ -213,9 +243,9 @@ const CloseIcon = styled.i`
 `;
 
 const OvertimeIcon = styled.i`
-    font-size: 124px;
+    font-size: 200px;
     font-weight: 400;
-    line-height: 28px;
+    line-height: 30px;
 `;
 
 const Title = styled.h1`
@@ -239,11 +269,20 @@ const Subtitle = styled.h2`
     line-height: 16px; /* 100% */
 `;
 
-const Link = styled.a`
+const Link = styled.a.attrs({
+    target: '_blank',
+    rel: 'noopener noreferrer',
+})`
     color: ${Colors.BLUE};
     text-decoration: underline;
     text-decoration-color: ${Colors.BLUE};
     line-height: 18px;
+`;
+
+const LearnMore = styled(Link)`
+    font-size: 12px;
+    margin-left: 4px;
+    white-space: pre;
 `;
 
 const FooterText = styled(Subtitle)`
@@ -254,17 +293,23 @@ const FooterText = styled(Subtitle)`
 `;
 
 const Label = styled(Subtitle)`
+    cursor: pointer;
     font-size: 12px;
     margin-left: 4px;
     line-height: 19px;
     color: ${(props) => props.theme.textColor.primary};
+    white-space: pre;
 `;
 
 const CheckboxContainer = styled(FlexDivStart)<{ disabled: boolean }>`
-    margin-top: 20px;
-    padding-top: 20px;
     border-top: 1px solid ${(props) => (props.disabled ? props.theme.borderColor.quaternary : 'transparent')};
     align-items: center;
+`;
+
+const BiconomyContainer = styled(CheckboxContainer)`
+    margin-top: 20px;
+    margin-bottom: 10px;
+    padding-top: 20px;
 `;
 
 const FooterContainer = styled(FlexDivStart)`
