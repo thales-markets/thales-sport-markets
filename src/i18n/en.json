@@ -42,7 +42,7 @@
         },
         "wallet": {
             "connect-wallet-modal-title": "Log in to OvertimeMarkets",
-            "connect-wallet-modal-subtitle": "Choose how you want to log in",
+            "connect-wallet-modal-subtitle": "Choose how you want to sign in",
             "or-connect-with": "or connect via wallet",
             "connect-your-wallet": "Connect wallet",
             "connect-with-wallet": "Connect with wallet",
@@ -62,7 +62,7 @@
             "approve-parlay": "Approve ParlayAMM",
             "approve-sports": "Approve SportsAMM",
             "get-usd-progress": "Minting {{amount}}...",
-            "disclaimer": "By signing up to Overtimemarkets <terms>Terms of Use</terms> and Privacy Policy you acknowledge that you have read and understand the Overtime DAO protocol <disclaimer>disclaimer</disclaimer>.",
+            "disclaimer": "By signing in to Overtimemarkets <terms>Terms of Use</terms> and Privacy Policy you acknowledge that you have read and understand the Overtime DAO protocol <disclaimer>disclaimer</disclaimer>.",
             "particle-logins": {
                 "google": "Continue with Google",
                 "twitter": "Continue with Twitter",

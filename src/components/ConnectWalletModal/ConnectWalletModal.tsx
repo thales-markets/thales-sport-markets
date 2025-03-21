@@ -4,7 +4,7 @@ import termsOfUse from 'assets/docs/overtime-terms-of-use.pdf';
 import SimpleLoader from 'components/SimpleLoader';
 
 import { SUPPORTED_PARTICAL_CONNECTORS_MODAL, SUPPORTED_WALLET_CONNECTORS_MODAL } from 'constants/wallet';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import { useSelector } from 'react-redux';
@@ -24,6 +24,8 @@ import Metamask from 'assets/images/logins-icons/metamask.svg?react';
 import WalletConnect from 'assets/images/logins-icons/walletConnect.svg?react';
 
 import Checkbox from 'components/fields/Checkbox';
+import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import useLocalStorage from 'hooks/useLocalStorage';
 import { ParticalTypes, WalletConnections } from 'types/wallet';
 
 ReactModal.setAppElement('#root');
@@ -61,7 +63,7 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
     const { connectors, isPending, isSuccess, connect } = useConnect();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const { openConnectModal } = useConnectModal();
-    const [termsAccepted, setTerms] = useState(false);
+    const [termsAccepted, setTerms] = useLocalStorage(LOCAL_STORAGE_KEYS.TERMS_AND_CONDITIONS, false);
 
     const handleConnect = (connector: Connector) => {
         try {
@@ -217,6 +219,10 @@ const OvertimeIcon = styled.i`
 `;
 
 const Title = styled.h1`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
     font-size: 24px;
     font-weight: 500;
     color: ${(props) => props.theme.textColor.primary};

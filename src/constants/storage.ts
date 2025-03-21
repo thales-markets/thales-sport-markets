@@ -35,4 +35,6 @@ export const LOCAL_STORAGE_KEYS = {
     ERROR_RELOAD_TIME: 'errorReloadTime',
     USE_BICONOMY: 'isBiconomy',
     FREE_BET_ID: 'freeBetId',
+    TERMS_AND_CONDITIONS: 'terms&Conditions',
+    SHOW_ZERO_BALANCE: 'showZeroBalance',
 };
