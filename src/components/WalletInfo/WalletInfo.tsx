@@ -118,7 +118,7 @@ const WalletInfo: React.FC = ({}) => {
 
     return (
         <Container walletConnected={isConnected} gap={8}>
-            <OutsideClickHandler onOutsideClick={setShowDropdown.bind(this, !showDropdown)}>
+            <OutsideClickHandler onOutsideClick={setShowDropdown.bind(this, false)}>
                 <WalletWrapper>
                     {isConnected && (
                         <Button onClick={setShowDropdown.bind(this, !showDropdown)}>
