@@ -16,10 +16,11 @@ import { SupportedNetwork } from 'types/network';
 import { ThemeInterface } from 'types/ui';
 import biconomyConnector from 'utils/biconomyWallet';
 import { truncateAddress } from 'utils/formatters/string';
-import { getFormattedRewardsAmount } from 'utils/marchMadness';
+import { getFormattedRewardsAmount, getTeamNameById } from 'utils/marchMadness';
 import { useAccount, useChainId } from 'wagmi';
 import {
     Arrow,
+    Champion,
     OverlayContainer,
     Owner,
     StickyRowTopTable,
@@ -36,6 +37,7 @@ type TableByGuessedCorrectlyProps = {
 };
 
 const NUMBER_OF_POSITIONS_TO_HIGHLIGHT = 20;
+const HIDDEN_COLUMNS_MOBILE = ['network', 'bracketWinnerTeamId'];
 
 const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searchText, isMainHeight, setLength }) => {
     const { t } = useTranslation();
@@ -47,6 +49,19 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
     const networkId = useChainId();
     const { address } = useAccount();
     const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+
+    const getMobileTokenRewardsColumn = (value: string) => {
+        const parts = value.split('+');
+        return parts.length > 1 ? (
+            <>
+                {parts[0].replace(' ', ' +')}
+                <br />
+                {parts[1].replace(' ', '')}
+            </>
+        ) : (
+            <>{parts[0]}</>
+        );
+    };
 
     const columns = useMemo(
         () =>
@@ -62,6 +77,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                     cell: (cellProps: any) => (
                         <>{SUPPORTED_NETWORKS_NAMES[cellProps.cell.getValue() as SupportedNetwork].shortName}</>
                     ),
+                    size: 100,
                 },
                 {
                     header: <>{t('march-madness.leaderboard.bracket-id')}</>,
@@ -72,6 +88,12 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                         const networkName = isMobile ? supportedNetworkName.shorthand : '';
                         return <>{`${networkName} #${cellProps.cell.getValue()}`}</>;
                     },
+                    size: isMobile ? 65 : 100,
+                },
+                {
+                    header: <>{t('march-madness.leaderboard.bracket-champion')}</>,
+                    accessorKey: 'bracketWinnerTeamId',
+                    cell: (cellProps: any) => <Champion>{getTeamNameById(cellProps.cell.getValue())}</Champion>,
                 },
                 {
                     header: <>{t('march-madness.leaderboard.owner')}</>,
@@ -93,7 +115,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                             </a>
                         </Owner>
                     ),
-                    size: isMobile ? 200 : 500,
+                    size: isMobile ? 120 : 500,
                     headStyle: { cssProperties: { minWidth: '130px' } },
                 },
                 {
@@ -113,6 +135,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                         </>
                     ),
                     accessorKey: 'totalPoints',
+                    size: isMobile ? 50 : 150,
                 },
                 {
                     header: () => (
@@ -132,18 +155,15 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                     ),
                     accessorKey: 'tokenRewards',
                     cell: (cell: any) => {
-                        return (
-                            <>
-                                {getFormattedRewardsAmount(
-                                    (cell.row.original as any).stableRewards,
-                                    (cell.row.original as any).tokenRewards
-                                )}
-                            </>
+                        const formattedRewards = getFormattedRewardsAmount(
+                            (cell.row.original as any).stableRewards,
+                            (cell.row.original as any).tokenRewards
                         );
+                        return isMobile ? getMobileTokenRewardsColumn(formattedRewards) : <>{formattedRewards}</>;
                     },
-                    size: isMobile ? 150 : 200,
+                    size: isMobile ? 100 : 200,
                 },
-            ].filter((column: any) => !isMobile || column.accessorKey !== 'network'),
+            ].filter((column: any) => !isMobile || !HIDDEN_COLUMNS_MOBILE.includes(column.accessorKey)),
         [t, isMobile]
     );
 
@@ -154,7 +174,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
         return [];
     }, [leaderboardQuery.data, leaderboardQuery.isSuccess]);
 
-    const myScore = useMemo(() => {
+    const myScores = useMemo(() => {
         if (data) {
             return data.filter((user) => user.owner.toLowerCase() == walletAddress?.toLowerCase());
         }
@@ -177,30 +197,39 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
     }, [data, searchText]);
 
     const stickyRow = useMemo(() => {
-        if (myScore?.length) {
-            const indexOffset = isMobile ? 1 : 0; // one column less for mobile view
-            const supportedNetworkName = SUPPORTED_NETWORKS_NAMES[myScore[0].network as SupportedNetwork];
+        if (myScores?.length) {
+            const myScore = myScores[0];
+            const supportedNetworkName = SUPPORTED_NETWORKS_NAMES[myScore.network as SupportedNetwork];
             const networkName = isMobile ? supportedNetworkName.shorthand : supportedNetworkName.shortName;
+            const getColumnSize = (accessorKey: string) =>
+                columns.find((column) => column.accessorKey === accessorKey)?.size || 150;
             return (
                 <StickyRowTopTable myScore={true}>
-                    <TableRowCell width={`${columns[0].size || 150}px`}>{myScore[0].rank}</TableRowCell>
-                    {!isMobile && <TableRowCell width={`${columns[1].size || 150}px`}>{networkName}</TableRowCell>}
-                    <TableRowCell width={`${columns[2 - indexOffset].size || 150}px`}>
-                        {`${isMobile ? `${networkName} ` : ''}#${myScore[0].bracketId}`}
+                    <TableRowCell width={`${getColumnSize('rank')}px`}>{myScore.rank}</TableRowCell>
+                    {!isMobile && <TableRowCell width={`${getColumnSize('network')}px`}>{networkName}</TableRowCell>}
+                    <TableRowCell width={`${getColumnSize('bracketId')}px`}>
+                        {`${isMobile ? `${networkName} ` : ''}#${myScore.bracketId}`}
                     </TableRowCell>
-                    <TableRowCell width={`${columns[3 - indexOffset].size || 150}px`}>
+                    {!isMobile && (
+                        <TableRowCell width={`${getColumnSize('bracketWinnerTeamId')}px`}>
+                            {getTeamNameById(myScore.bracketWinnerTeamId)}
+                        </TableRowCell>
+                    )}
+                    <TableRowCell width={`${getColumnSize('owner')}px`}>
                         {t('march-madness.leaderboard.my-rewards-bracket').toUpperCase()}
                     </TableRowCell>
-                    <TableRowCell width={`${columns[4 - indexOffset].size || 150}px`}>
-                        {myScore[0].totalPoints}
-                    </TableRowCell>
-                    <TableRowCell width={`${columns[5 - indexOffset].size || 150}px`}>
-                        {getFormattedRewardsAmount(myScore[0].stableRewards, myScore[0].tokenRewards)}
+                    <TableRowCell width={`${getColumnSize('totalPoints')}px`}>{myScore.totalPoints}</TableRowCell>
+                    <TableRowCell width={`${getColumnSize('tokenRewards')}px`} wrap={isMobile}>
+                        {isMobile
+                            ? getMobileTokenRewardsColumn(
+                                  getFormattedRewardsAmount(myScore.stableRewards, myScore.tokenRewards)
+                              )
+                            : getFormattedRewardsAmount(myScore.stableRewards, myScore.tokenRewards)}
                     </TableRowCell>
                 </StickyRowTopTable>
             );
         }
-    }, [myScore, t, columns, isMobile]);
+    }, [myScores, t, columns, isMobile]);
 
     useEffect(() => {
         setLength(filteredData.length);

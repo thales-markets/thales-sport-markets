@@ -23,12 +23,12 @@ const TableRow = styled(FlexDivStart)<{ hideBorder?: boolean; topTen?: boolean; 
     ${(props) => (props?.myScore == true ? `background-color: ${props.theme.marchMadness.borderColor.secondary};` : ``)}
 `;
 
-export const TableRowCell = styled.div<{ width?: string; noTextTransform?: boolean }>`
+export const TableRowCell = styled.div<{ width?: string; noTextTransform?: boolean; wrap?: boolean }>`
     flex: 1;
     min-width: auto;
     ${(props) => (props.width ? `max-width: ${props.width};` : '')}
     padding: 10px 0px;
-    color: #fff;
+    color: ${(props) => props.theme.textColor.primary};
     text-align: left;
     font-family: ${(props) => props.theme.fontFamily.primary};
     font-size: 14px;
@@ -47,7 +47,7 @@ export const TableRowCell = styled.div<{ width?: string; noTextTransform?: boole
 
     @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         text-align: center;
-        white-space: nowrap;
+        white-space: ${(props) => (props.wrap ? 'break-spaces' : 'nowrap')};
 
         &:first-child {
             padding-left: 6px;
@@ -79,7 +79,7 @@ export const TableHeaderContainer = styled.div`
 `;
 
 export const TableHeader = styled.span`
-    color: #fff;
+    color: ${(props) => props.theme.textColor.primary};
     text-align: center;
     font-family: ${(props) => props.theme.fontFamily.primary};
     font-size: 16px;
@@ -99,6 +99,7 @@ export const Arrow = styled.i`
 
     @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         font-size: 12px;
+        margin-left: 4px;
     }
 `;
 
@@ -111,7 +112,7 @@ export const StickyRowTopTable = styled(TableRow)`
 `;
 
 export const Owner = styled(FlexDivRow)`
-    width: 390px;
+    width: 350px;
     @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         width: auto;
     }
@@ -120,4 +121,11 @@ export const Owner = styled(FlexDivRow)`
 export const WalletAddress = styled.span`
     text-transform: lowercase;
     white-space: nowrap;
+    font-family: ${(props) => props.theme.fontFamily.primary};
+`;
+
+export const Champion = styled.span`
+    text-transform: uppercase;
+    white-space: nowrap;
+    font-family: ${(props) => props.theme.fontFamily.primary};
 `;

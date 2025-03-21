@@ -9,6 +9,7 @@ export type LeaderboardByGuessedCorrectlyResponse = {
     owner: string;
     totalPoints: number;
     bracketId: number;
+    bracketWinnerTeamId: number;
     rank: number;
     tokenRewards: number;
     stableRewards: number;
