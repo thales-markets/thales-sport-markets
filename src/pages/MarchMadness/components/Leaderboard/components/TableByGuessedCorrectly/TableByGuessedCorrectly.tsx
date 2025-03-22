@@ -116,7 +116,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                         </Owner>
                     ),
                     size: isMobile ? 120 : 500,
-                    headStyle: { cssProperties: { minWidth: '130px' } },
+                    headStyle: { cssProperties: { minWidth: isMobile ? '100px' : '130px' } },
                 },
                 {
                     header: () => (
