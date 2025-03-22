@@ -17,9 +17,10 @@ type TabsProps = {
     selectedTab: MarchMadTabs;
     setSelectedTab: (tab: MarchMadTabs) => void;
     isMintingStarted: boolean;
+    isMintingFinished: boolean;
 };
 
-const Tabs: React.FC<TabsProps> = ({ selectedTab, setSelectedTab, isMintingStarted }) => {
+const Tabs: React.FC<TabsProps> = ({ selectedTab, setSelectedTab, isMintingStarted, isMintingFinished }) => {
     const { t } = useTranslation();
     const location = useLocation();
 
@@ -27,7 +28,7 @@ const Tabs: React.FC<TabsProps> = ({ selectedTab, setSelectedTab, isMintingStart
     const { isConnected } = useAccount();
 
     const tabClickHandler = (tab: MarchMadTabs) => {
-        if (tab === MarchMadTabs.BRACKETS && !isConnected) {
+        if (tab === MarchMadTabs.BRACKETS && !isConnected && !isMintingFinished) {
             return;
         }
         history.push({
@@ -53,7 +54,7 @@ const Tabs: React.FC<TabsProps> = ({ selectedTab, setSelectedTab, isMintingStart
             </Tab>
             <Tab
                 active={selectedTab === MarchMadTabs.BRACKETS}
-                isClickable={isConnected && isTabAvailable}
+                isClickable={(isConnected || isMintingFinished) && isTabAvailable}
                 onClick={() => isTabAvailable && tabClickHandler(MarchMadTabs.BRACKETS)}
             >
                 {t('march-madness.tabs.brackets')}

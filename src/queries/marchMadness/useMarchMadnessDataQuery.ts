@@ -41,33 +41,26 @@ const useMarchMadnessDataQuery = (
 
                     if (marchMadnessContract) {
                         const now = Date.now();
-                        if (walletAddress !== '') {
-                            const tokenIdsResponse:
-                                | bigint[]
-                                | bigint = await marchMadnessContract.read.getAddressToTokenIds([walletAddress]);
+                        const tokenIdsResponse: bigint[] | bigint =
+                            walletAddress !== ''
+                                ? await marchMadnessContract.read.getAddressToTokenIds([walletAddress])
+                                : [];
 
-                            const tokenIds: bigint[] = Array.isArray(tokenIdsResponse)
-                                ? tokenIdsResponse
-                                : [tokenIdsResponse];
+                        const tokenIds: bigint[] = Array.isArray(tokenIdsResponse)
+                            ? tokenIdsResponse
+                            : [tokenIdsResponse];
 
-                            const [mintingPrice, canNotMintOrUpdateAfter, results] = await Promise.all([
-                                await marchMadnessContract.read.mintingPrice(),
-                                await marchMadnessContract.read.canNotMintOrUpdateAfter(), // timestamp in seconds
-                                await marchMadnessContract.read.getResults(),
-                            ]);
+                        const [mintingPrice, canNotMintOrUpdateAfter, results] = await Promise.all([
+                            await marchMadnessContract.read.mintingPrice(),
+                            await marchMadnessContract.read.canNotMintOrUpdateAfter(), // timestamp in seconds
+                            await marchMadnessContract.read.getResults(),
+                        ]);
 
-                            marchMadnessData.mintingPrice = coinFormatter(mintingPrice, networkConfig.networkId);
-                            marchMadnessData.mintEndingDate = Number(canNotMintOrUpdateAfter);
-                            marchMadnessData.isMintAvailable =
-                                now < secondsToMilliseconds(Number(canNotMintOrUpdateAfter));
-                            marchMadnessData.bracketsIds = tokenIds.map((tokenId) => Number(tokenId));
-                            marchMadnessData.winnerTeamIdsPerMatch = results.map((value: any) => Number(value));
-                        } else {
-                            const canNotMintOrUpdateAfter = await marchMadnessContract.read.canNotMintOrUpdateAfter(); // timestamp in seconds
-                            marchMadnessData.isMintAvailable =
-                                now < secondsToMilliseconds(Number(canNotMintOrUpdateAfter));
-                            marchMadnessData.mintEndingDate = Number(canNotMintOrUpdateAfter);
-                        }
+                        marchMadnessData.mintingPrice = coinFormatter(mintingPrice, networkConfig.networkId);
+                        marchMadnessData.mintEndingDate = Number(canNotMintOrUpdateAfter);
+                        marchMadnessData.isMintAvailable = now < secondsToMilliseconds(Number(canNotMintOrUpdateAfter));
+                        marchMadnessData.bracketsIds = tokenIds.map((tokenId) => Number(tokenId));
+                        marchMadnessData.winnerTeamIdsPerMatch = results.map((value: any) => Number(value));
                     }
 
                     return marchMadnessData;
