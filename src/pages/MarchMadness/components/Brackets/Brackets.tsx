@@ -413,6 +413,8 @@ const Brackets: React.FC = () => {
         if (marchMadnessData && marchMadnessData.bracketsIds.length && (!isDefaultBracketPresent || isBracketsLocked)) {
             const lastBracketId = Math.max(...marchMadnessData.bracketsIds);
             setSelectedBracketId(lastBracketId);
+        } else if (isBracketsLocked) {
+            setSelectedBracketId(DEFAULT_BRACKET_ID);
         }
     }, [marchMadnessData, networkId, walletAddress, isBracketsLocked]);
 
@@ -859,7 +861,9 @@ const Brackets: React.FC = () => {
                         <StatsText lineHeight={16}>{t('march-madness.brackets.stats.bracket')}:</StatsText>
                         <StatsText margin="0 15px 0 auto" fontWeight={700}>
                             {isBracketsLocked && rankByGames === 0
-                                ? t('march-madness.brackets.stats.duplicate')
+                                ? selectedBracketId !== DEFAULT_BRACKET_ID
+                                    ? t('march-madness.brackets.stats.duplicate')
+                                    : '-'
                                 : isStatusComplete
                                 ? t('march-madness.brackets.stats.complete')
                                 : t('march-madness.brackets.stats.incomplete')}
