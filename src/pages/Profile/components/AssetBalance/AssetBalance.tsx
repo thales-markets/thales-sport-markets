@@ -160,6 +160,9 @@ const AssetBalance: React.FC<Props> = ({
 
 const GridContainer = styled.div`
     margin-top: 20px;
+    padding: 14px;
+    background: ${(props) => props.theme.background.secondary};
+    border-radius: 8px;
 `;
 
 const AlignedParagraph = styled.p`

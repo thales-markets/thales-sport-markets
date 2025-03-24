@@ -216,9 +216,13 @@ const Account: React.FC = () => {
 
 const Header = styled(FlexDivSpaceBetween)`
     margin-bottom: 18px;
+    background: ${(props) => props.theme.background.secondary};
+    padding: 14px;
+    border-radius: 8px;
 `;
 
 const Container = styled(FlexDivSpaceBetween)`
+    padding: 0 14px;
     @media (max-width: 800px) {
         flex-direction: column;
         align-items: flex-start;
