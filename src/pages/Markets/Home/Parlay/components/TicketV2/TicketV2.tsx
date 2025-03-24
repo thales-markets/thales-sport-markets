@@ -486,7 +486,9 @@ const Ticket: React.FC<TicketProps> = ({
     }, [coingeckoRatesQuery, selectedCollateral, buyInAmount, networkId]);
 
     const selectedCollateralCurrencyRate =
-        exchangeRates && exchangeRates !== null && !isDefaultCollateral ? exchangeRates[usedCollateralForBuy] : 1;
+        exchangeRates && exchangeRates !== null && (!isDefaultCollateral || swapToOver)
+            ? exchangeRates[usedCollateralForBuy]
+            : 1;
     const overContractCurrencyRate =
         exchangeRates && exchangeRates !== null ? exchangeRates[OVER_CONTRACT_RATE_KEY] : 1;
 
@@ -986,10 +988,14 @@ const Ticket: React.FC<TicketProps> = ({
             getSwapParams(
                 networkId,
                 walletAddress as Address,
-                coinParser(buyInAmount.toString(), networkId, selectedCollateral),
+                coinParser(
+                    (Number(buyInAmount) > 0 ? buyInAmount : minBuyInAmount).toString(),
+                    networkId,
+                    selectedCollateral
+                ),
                 collateralAddress as Address
             ),
-        [buyInAmount, collateralAddress, networkId, selectedCollateral, walletAddress]
+        [buyInAmount, collateralAddress, minBuyInAmount, networkId, selectedCollateral, walletAddress]
     );
 
     // Set OVER swap receive
@@ -999,12 +1005,12 @@ const Ticket: React.FC<TicketProps> = ({
             setUseOverCollateral(false);
             setSwappedOverToReceive(0);
             setSwapQuote(0);
-        } else if (swapToOver && Number(buyInAmount)) {
+        } else if (swapToOver) {
             const getSwapQuote = async () => {
                 const quote = await getQuote(networkId, swapToOverParams);
 
                 setSwappedOverToReceive(quote);
-                setSwapQuote(quote / Number(buyInAmount));
+                setSwapQuote(quote / (Number(buyInAmount) > 0 ? Number(buyInAmount) : minBuyInAmount));
             };
 
             getSwapQuote();
