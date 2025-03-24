@@ -6,6 +6,7 @@ import { generalConfig } from 'config/general';
 import { getErrorToastOptions, getInfoToastOptions, getSuccessToastOptions } from 'config/toast';
 import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
 import { t } from 'i18next';
+import useGetIsWhitelistedQuery from 'queries/freeBets/useGetIsWhitelistedQuery';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import { useCallback, useMemo, useState } from 'react';
@@ -27,6 +28,7 @@ import { ThemeInterface } from 'types/ui';
 import { getFreeBetCollaterals, isStableCurrency } from 'utils/collaterals';
 import { useAccount, useChainId, useClient, useSignMessage } from 'wagmi';
 import multipleCollateral from '../../utils/contracts/multipleCollateralContract';
+import StatsTable from './StatsTable';
 
 const FUND_WALLET_ADDRESS = '0x23Ea88E828188377DCB4663ff2FE419B1fC71F88';
 
@@ -84,7 +86,10 @@ const FreeBets: React.FC = () => {
     const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
     const exchangeRates = exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
-    const onSubmit = useCallback(async () => {
+    const isWhitelistedQuery = useGetIsWhitelistedQuery(walletAddress, networkId);
+    const isWhitelisted = isWhitelistedQuery.isSuccess && isWhitelistedQuery.data;
+
+    const onGenerateBets = useCallback(async () => {
         const toastId = toast.loading(t('market.toast-message.transaction-pending'));
         const signature = await signMessageAsync({ message: JSON.stringify({ betAmount, numberOfBets }) });
 
@@ -123,6 +128,8 @@ const FreeBets: React.FC = () => {
     ]);
 
     const submitDisabled =
+        !walletAddress ||
+        !isWhitelisted ||
         !betAmount ||
         !numberOfBets ||
         selectedCollateralIndex > supportedCollaterals.length - 1 ||
@@ -205,7 +212,7 @@ const FreeBets: React.FC = () => {
                             />
                         </FlexDiv>
                         <FlexDivCentered>
-                            <Button disabled={submitDisabled} onClick={onSubmit}>
+                            <Button disabled={submitDisabled} onClick={onGenerateBets}>
                                 Generate
                             </Button>
                         </FlexDivCentered>
@@ -257,6 +264,7 @@ const FreeBets: React.FC = () => {
                     </FlexDivColumnCentered>
                 </FlexDivColumnNative>
             )}
+            {selectedTab === Tab.STATS && <StatsTable />}
         </>
     );
 };
