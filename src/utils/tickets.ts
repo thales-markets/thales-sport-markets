@@ -39,13 +39,7 @@ export const mapTicket = (
     liveScores: any,
     openOngoingMarkets?: any
 ): Ticket => {
-    // TODO - hardcode OVER as THALES until we release
-    let collateral =
-        ticket.collateral.toLowerCase() === '0xedf38688b27036816a50185caa430d5479e1c63e' ||
-        ticket.collateral.toLowerCase() === '0x5829d6fe7528bc8e92c4e81cc8f20a528820b51a' ||
-        ticket.collateral.toLowerCase() === '0x7750c092e284e2c7366f50c8306f43c7eb2e82a2'
-            ? (CRYPTO_CURRENCY_MAP.sTHALES as Coins)
-            : getCollateralByAddress(ticket.collateral, networkId);
+    let collateral = getCollateralByAddress(ticket.collateral, networkId);
     collateral =
         collateral === CRYPTO_CURRENCY_MAP.sTHALES &&
         ticket.ticketOwner.toLowerCase() !==
