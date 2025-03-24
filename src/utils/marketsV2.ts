@@ -286,10 +286,6 @@ export const getTitleText = (market: SportMarket, useDescription?: boolean, shor
         return '';
     }
 
-    if (marketType === MarketType.SGP_BUILDER) {
-        return market.type;
-    }
-
     const sport = getLeagueSport(market.leagueId);
     const scoringType = getLeagueScoringType(market.leagueId);
     const marketTypeDescription = getMarketTypeDescription(marketType);
@@ -685,42 +681,45 @@ export const packMarket = (
 
 export const addSgpBuilderMarkets = (markets: SportMarkets, sgpBuilders: SgpBuilder[]): SportMarkets =>
     markets.map((market) => {
-        const sgpMarket = {
-            gameId: market.gameId,
-            sport: market.sport,
-            leagueId: market.leagueId,
-            leagueName: market.leagueName,
-            subLeagueId: market.subLeagueId,
-            typeId: MarketType.SGP_BUILDER,
-            type: sgpBuilders.length ? sgpBuilders[0].groupName : '',
-            maturity: market.maturity,
-            maturityDate: market.maturityDate,
-            homeTeam: sgpBuilders.length ? sgpBuilders[0].name : '',
-            awayTeam: '',
-            homeScoreByPeriod: [],
-            awayScoreByPeriod: [],
-            winningPositions: [],
-            status: market.status,
-            isResolved: market.isResolved,
-            isOpen: market.isOpen,
-            isCancelled: market.isCancelled,
-            isPaused: market.isPaused,
-            line: market.line, // TODO:
-            isOneSideMarket: false,
-            isPlayerPropsMarket: false,
-            isOneSidePlayerPropsMarket: false,
-            isYesNoPlayerPropsMarket: false,
-            playerProps: {
-                playerId: 0,
-                playerName: '',
-            },
-            odds: [0.5], // TODO:
-            proof: [],
-            childMarkets: [],
-            combinedPositions: [],
-        } as SportMarket;
+        const sgpMarkets = sgpBuilders.map(
+            (sgpMarket) =>
+                ({
+                    gameId: market.gameId,
+                    sport: market.sport,
+                    leagueId: market.leagueId,
+                    leagueName: market.leagueName,
+                    subLeagueId: market.subLeagueId,
+                    typeId: sgpMarket.typeId,
+                    type: '',
+                    maturity: market.maturity,
+                    maturityDate: market.maturityDate,
+                    homeTeam: sgpMarket.name,
+                    awayTeam: '',
+                    homeScoreByPeriod: [],
+                    awayScoreByPeriod: [],
+                    winningPositions: [],
+                    status: market.status,
+                    isResolved: market.isResolved,
+                    isOpen: market.isOpen,
+                    isCancelled: market.isCancelled,
+                    isPaused: market.isPaused,
+                    line: market.line, // TODO:
+                    isOneSideMarket: false,
+                    isPlayerPropsMarket: false,
+                    isOneSidePlayerPropsMarket: false,
+                    isYesNoPlayerPropsMarket: false,
+                    playerProps: {
+                        playerId: 0,
+                        playerName: '',
+                    },
+                    odds: [0.5], // TODO:
+                    proof: [],
+                    childMarkets: [],
+                    combinedPositions: [],
+                } as SportMarket)
+        );
 
-        return { ...market, childMarkets: [...market.childMarkets, sgpMarket] };
+        return { ...market, childMarkets: [...market.childMarkets, ...sgpMarkets] };
     });
 
 const getPlayerPropsEmptyMarkets = (market: SportMarket) => [
