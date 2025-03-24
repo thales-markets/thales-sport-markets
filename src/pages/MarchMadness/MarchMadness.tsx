@@ -1,11 +1,12 @@
 import backgrounBall from 'assets/images/march-madness/background-marchmadness-ball.png';
 import Loader from 'components/Loader';
 import ROUTES from 'constants/routes';
+import { secondsToMilliseconds } from 'date-fns';
 import { ScreenSizeBreakpoint, Theme } from 'enums/ui';
 import BackToLink from 'pages/Markets/components/BackToLink';
 import useMarchMadnessDataQuery from 'queries/marchMadness/useMarchMadnessDataQuery';
 import queryString from 'query-string';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
@@ -56,8 +57,13 @@ const MarchMadness: React.FC = () => {
 
     const [selectedTab, setSelectedTab] = useState(defaultTab);
 
+    const isMintingFinished = useMemo(
+        () => !!marchMadnessData?.mintEndingDate && secondsToMilliseconds(marchMadnessData.mintEndingDate) < Date.now(),
+        [marchMadnessData?.mintEndingDate]
+    );
+
     useEffect(() => {
-        if ((!isConnected || !isTabAvailable) && queryParamTab === MarchMadTabs.BRACKETS) {
+        if ((!isConnected || !isTabAvailable) && !isMintingFinished && queryParamTab === MarchMadTabs.BRACKETS) {
             const queryParams = queryString.parse(location.search);
             if (queryParams.tab) {
                 delete queryParams.tab;
@@ -73,6 +79,7 @@ const MarchMadness: React.FC = () => {
         isConnected,
         location.search,
         isTabAvailable,
+        isMintingFinished,
     ]);
 
     useEffect(() => {
@@ -102,6 +109,7 @@ const MarchMadness: React.FC = () => {
                         selectedTab={selectedTab}
                         setSelectedTab={setSelectedTab}
                         isMintingStarted={isMintingStarted}
+                        isMintingFinished={isMintingFinished}
                     />
                     {selectedTab === MarchMadTabs.HOME && (
                         <Home
