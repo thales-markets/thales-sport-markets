@@ -484,7 +484,9 @@ const Ticket: React.FC<TicketProps> = ({
     }, [coingeckoRatesQuery, selectedCollateral, buyInAmount, networkId]);
 
     const selectedCollateralCurrencyRate =
-        exchangeRates && exchangeRates !== null && !isDefaultCollateral ? exchangeRates[usedCollateralForBuy] : 1;
+        exchangeRates && exchangeRates !== null && (!isDefaultCollateral || swapToThales)
+            ? exchangeRates[usedCollateralForBuy]
+            : 1;
     const thalesContractCurrencyRate =
         exchangeRates && exchangeRates !== null ? exchangeRates[THALES_CONTRACT_RATE_KEY] : 1;
 
