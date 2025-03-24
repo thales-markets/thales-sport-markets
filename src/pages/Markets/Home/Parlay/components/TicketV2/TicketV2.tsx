@@ -986,10 +986,14 @@ const Ticket: React.FC<TicketProps> = ({
             getSwapParams(
                 networkId,
                 walletAddress as Address,
-                coinParser(buyInAmount.toString(), networkId, selectedCollateral),
+                coinParser(
+                    (Number(buyInAmount) > 0 ? buyInAmount : minBuyInAmount).toString(),
+                    networkId,
+                    selectedCollateral
+                ),
                 collateralAddress as Address
             ),
-        [buyInAmount, collateralAddress, networkId, selectedCollateral, walletAddress]
+        [buyInAmount, collateralAddress, minBuyInAmount, networkId, selectedCollateral, walletAddress]
     );
 
     // Set THALES swap receive
@@ -999,12 +1003,12 @@ const Ticket: React.FC<TicketProps> = ({
             setUseThalesCollateral(false);
             setSwappedThalesToReceive(0);
             setSwapQuote(0);
-        } else if (swapToThales && Number(buyInAmount) > 0) {
+        } else if (swapToThales) {
             const getSwapQuote = async () => {
                 const quote = await getQuote(networkId, swapToThalesParams);
 
                 setSwappedThalesToReceive(quote);
-                setSwapQuote(quote / Number(buyInAmount));
+                setSwapQuote(quote / (Number(buyInAmount) > 0 ? Number(buyInAmount) : minBuyInAmount));
             };
 
             getSwapQuote();
