@@ -197,12 +197,10 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                     </FieldHeader>
 
                     <AddressContainer>
-                        <Field>{walletAddress}</Field>
+                        <Field onClick={handleCopy}>
+                            {walletAddress} <QRIcon className="icon icon--copy" />
+                        </Field>
                         <ButtonsContainer>
-                            <BlueField onClick={handleCopy}>
-                                <QRIcon className="icon icon--copy" />
-                                <FieldText>{t('get-started.fund-account.copy')}</FieldText>
-                            </BlueField>
                             <BlueField
                                 onClick={() => {
                                     setShowQRModal(!showQRModal);
@@ -214,6 +212,22 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                         </ButtonsContainer>
                     </AddressContainer>
                 </WalletContainer>
+                {claimFreeBetButtonVisible && (
+                    <Container>
+                        <ClaimBetButton
+                            onClick={onClaimFreeBet}
+                            borderColor="none"
+                            height="42px"
+                            lineHeight="16px"
+                            padding="0"
+                            backgroundColor={Colors.YELLOW}
+                            className="pulse"
+                        >
+                            {t('get-started.fund-account.claim-free-bet')}
+                            <HandsIcon className="icon icon--hands-coins" />
+                        </ClaimBetButton>
+                    </Container>
+                )}
 
                 <Container>
                     <ButtonLocal
@@ -248,21 +262,6 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                         </ButtonLocal>
                     </Tooltip>
                 </Container>
-                <Container>
-                    {claimFreeBetButtonVisible && (
-                        <ClaimBetButton
-                            onClick={onClaimFreeBet}
-                            borderColor="none"
-                            height="42px"
-                            lineHeight="16px"
-                            padding="0"
-                            backgroundColor={Colors.YELLOW}
-                        >
-                            {t('get-started.fund-account.claim-free-bet')}
-                            <HandsIcon className="icon icon--hands-coins" />
-                        </ClaimBetButton>
-                    )}
-                </Container>
             </Wrapper>
             {showQRModal && (
                 <QRCodeModal title="" onClose={() => setShowQRModal(false)} walletAddress={walletAddress} />
@@ -272,7 +271,9 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
     );
 };
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+    max-width: 480px;
+`;
 
 const OvertimeIcon = styled.i`
     font-size: 124px;
@@ -351,11 +352,10 @@ const AddressContainer = styled.div`
 
 const Container = styled(FlexDivCentered)`
     margin-top: 14px;
-    gap: 16px;
-    @media (max-width: 850px) {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+    gap: 14px;
+
+    flex-direction: column;
+    align-items: flex-start;
 `;
 
 const WalletContainer = styled(FlexDivColumnCentered)`
@@ -370,7 +370,7 @@ const Field = styled.div`
     @media (max-width: 575px) {
         font-size: 12px;
     }
-    font-size: 14px;
+    font-size: 12px;
     width: 100%;
     font-weight: 600;
     display: flex;
@@ -391,12 +391,14 @@ const FieldText = styled.p`
     font-size: 16px;
     font-weight: 700;
     color: ${(props) => props.theme.textColor.senary};
+    white-space: pre;
 `;
 
 const QRIcon = styled.i`
     font-size: 24px;
     font-weight: 400;
     color: ${(props) => props.theme.textColor.senary};
+    cursor: pointer;
     @media (max-width: 575px) {
         font-size: 20px;
     }
@@ -472,7 +474,7 @@ const ClaimBetButton = styled(Button)`
 const ButtonLocal = styled(FlexDivCentered)<{ disabled?: boolean }>`
     border-radius: 8px;
     width: 100%;
-    height: 54px;
+    height: 42px;
     border: 1px ${(props) => props.theme.borderColor.primary} solid;
     color: ${(props) => props.theme.textColor.primary};
     gap: 8px;
@@ -494,13 +496,18 @@ const ButtonLocal = styled(FlexDivCentered)<{ disabled?: boolean }>`
         color: ${(props) => props.theme.textColor.quaternary};
     }
 
-    &:hover {
-        background-color: ${(props) => props.theme.connectWalletModal.hover};
-        color: ${(props) => props.theme.button.textColor.primary};
-        i {
-            color: ${(props) => props.theme.button.textColor.primary};
-        }
+    ${(props) =>
+        !props.disabled
+            ? `
+        &:hover {
+            background-color: ${props.theme.connectWalletModal.hover};
+            color: ${props.theme.button.textColor.primary};
+            i {
+                color: ${props.theme.button.textColor.primary};
+            }
     }
+    `
+            : ''}
 
     opacity: ${(props) => (props.disabled ? '0.5' : '1')};
 `;

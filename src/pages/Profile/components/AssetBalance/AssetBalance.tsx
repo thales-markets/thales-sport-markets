@@ -161,7 +161,7 @@ const AssetBalance: React.FC<Props> = ({
 const GridContainer = styled.div`
     margin-top: 20px;
     padding: 14px;
-    background: ${(props) => props.theme.background.secondary};
+    background: ${(props) => props.theme.background.quinary};
     border-radius: 8px;
 `;
 
@@ -228,6 +228,7 @@ const TableButton = styled(AlignedParagraph)<{ disabled?: boolean }>`
     cursor: pointer;
     font-size: 14px;
     gap: 4px;
+    white-space: pre;
     @media (max-width: 700px) {
         display: none;
     }

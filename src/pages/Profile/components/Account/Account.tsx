@@ -216,7 +216,7 @@ const Account: React.FC = () => {
 
 const Header = styled(FlexDivSpaceBetween)`
     margin-bottom: 18px;
-    background: ${(props) => props.theme.background.secondary};
+    background: ${(props) => props.theme.background.quinary};
     padding: 14px;
     border-radius: 8px;
 `;

@@ -193,6 +193,7 @@ const Separator = styled.p`
 `;
 
 const SwitchIcon = styled.i`
+    z-index: 10;
     position: absolute;
     top: -11px;
     left: calc(50% - 12px);
