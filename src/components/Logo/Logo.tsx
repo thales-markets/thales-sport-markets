@@ -14,17 +14,6 @@ const Logo: React.FC = () => (
 
 const Container = styled.div`
     z-index: 1;
-    @media (max-width: 767px) {
-        margin-top: 15px;
-        margin-bottom: 10px;
-        width: 165px;
-    }
-    @media (max-width: 400px) {
-        width: 135px;
-    }
-    @media (max-width: 375px) {
-        width: 115px;
-    }
 `;
 
 const LogoIcon = styled.i`
@@ -36,24 +25,6 @@ const LogoIcon = styled.i`
     @media (max-width: 767px) {
         font-size: 170px;
     }
-    @media (max-width: 400px) {
-        font-size: 140px;
-    }
-    @media (max-width: 375px) {
-        font-size: 120px;
-    }
 `;
-
-// const StyledLogo = styled(LogoIcon)`
-//     fill: ${(props) => props.theme.textColor.primary};
-//     cursor: pointer;
-//     height: 35px;
-//     @media (max-width: 400px) {
-//         width: 130px;
-//     }
-//     @media (max-width: 375px) {
-//         width: 115px;
-//     }
-// `;
 
 export default Logo;
