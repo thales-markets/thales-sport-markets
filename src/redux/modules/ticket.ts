@@ -4,13 +4,16 @@ import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { TicketErrorCode } from 'enums/markets';
 import { Network } from 'enums/network';
 import { WritableDraft } from 'immer/dist/internal';
+import { isFuturesMarket, isPlayerPropsMarket } from 'overtime-utils';
 import { localStore } from 'thales-utils';
 import { ParlayPayment, SerializableSportMarket, TicketPosition } from 'types/markets';
 import { RootState, TicketSliceState } from 'types/redux';
 import { TicketError } from 'types/tickets';
-import { isFuturesMarket, isPlayerPropsMarket } from '../../utils/markets';
-import { isSameMarket, serializableSportMarketAsSportMarket } from '../../utils/marketsV2';
-import { isPlayerPropsCombiningEnabled } from '../../utils/sports';
+import {
+    isPlayerPropsCombiningEnabled,
+    isSameMarket,
+    serializableSportMarketAsSportMarket,
+} from '../../utils/marketsV2';
 
 const sliceName = 'ticket';
 
@@ -253,6 +256,7 @@ export const {
 
 const getTicketState = (state: RootState) => state[sliceName];
 export const getTicket = (state: RootState) => getTicketState(state).ticket;
+export const getMaxTicketSize = (state: RootState) => getTicketState(state).maxTicketSize;
 export const getTicketPayment = (state: RootState) => getTicketState(state).payment;
 export const getLiveBetSlippage = (state: RootState) => getTicketState(state).liveBetSlippage;
 export const getIsFreeBetDisabledByUser = (state: RootState) => getTicketState(state).isFreeBetDisabledByUser;

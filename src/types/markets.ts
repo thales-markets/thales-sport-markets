@@ -1,8 +1,7 @@
 import { GameStatus, StatusFilter } from 'enums/markets';
+import { League, MarketType, Sport } from 'overtime-utils';
 import { Coins } from 'thales-utils';
-import { MarketType } from '../enums/marketTypes';
 import { Network } from '../enums/network';
-import { League, Sport } from '../enums/sports';
 
 export type TagInfo = {
     id: League;

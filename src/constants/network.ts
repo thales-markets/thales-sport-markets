@@ -14,15 +14,18 @@ export const SUPPORTED_NETWORKS: Record<SupportedNetwork, string> = {
     [Network.OptimismSepolia]: 'SEPOLIA-OPTIMISM',
 };
 
-const SUPPORTED_NETWORKS_NAMES: Record<SupportedNetwork, string> = {
-    [Network.OptimismMainnet]: 'OPTIMISM MAINNET',
-    [Network.Arbitrum]: 'ARBITRUM ONE',
-    [Network.Base]: 'BASE MAINNET',
-    [Network.OptimismSepolia]: 'OPTIMISM SEPOLIA',
+export const SUPPORTED_NETWORKS_NAMES: Record<
+    SupportedNetwork,
+    { name: string; shortName: string; shorthand: string }
+> = {
+    [Network.OptimismMainnet]: { name: 'OPTIMISM MAINNET', shortName: 'OPTIMISM', shorthand: 'OP' },
+    [Network.Arbitrum]: { name: 'ARBITRUM ONE', shortName: 'ARBITRUM', shorthand: 'ARB' },
+    [Network.Base]: { name: 'BASE MAINNET', shortName: 'BASE', shorthand: 'BASE' },
+    [Network.OptimismSepolia]: { name: 'OPTIMISM SEPOLIA', shortName: 'SEPOLIA', shorthand: 'SEP' },
 };
 
 export const DEFAULT_NETWORK: { name: string; networkId: SupportedNetwork } = {
-    name: SUPPORTED_NETWORKS_NAMES[Network.OptimismMainnet],
+    name: SUPPORTED_NETWORKS_NAMES[Network.OptimismMainnet].name,
     networkId: Network.OptimismMainnet,
 };
 

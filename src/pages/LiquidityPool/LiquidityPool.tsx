@@ -57,6 +57,7 @@ import {
     ContentInfo,
     ContentInfoContainer,
     CopyContainer,
+    CurrencyText,
     Description,
     InputButtonContainer,
     LiquidityPoolFilledGraphicContainer,
@@ -633,22 +634,38 @@ const LiquidityPool: React.FC = () => {
                             disabled={isAllowing}
                             onClick={() => setOpenApprovalModal(true)}
                         >
-                            {!isAllowing
-                                ? t('common.enable-wallet-access.approve-label', { currencyKey: collateral })
-                                : t('common.enable-wallet-access.approve-progress-label', {
-                                      currencyKey: collateral,
-                                  })}
+                            {!isAllowing ? (
+                                <Trans
+                                    i18nKey="common.enable-wallet-access.approve-label"
+                                    values={{ currencyKey: collateral }}
+                                    components={{ currency: <CurrencyText /> }}
+                                />
+                            ) : (
+                                <Trans
+                                    i18nKey="common.enable-wallet-access.approve-progress-label"
+                                    values={{ currencyKey: collateral }}
+                                    components={{ currency: <CurrencyText /> }}
+                                />
+                            )}
                         </Button>
                     </Tooltip>
                 );
             } else {
                 return (
                     <Button {...defaultButtonProps} disabled={isAllowing} onClick={() => setOpenApprovalModal(true)}>
-                        {!isAllowing
-                            ? t('common.enable-wallet-access.approve-label', { currencyKey: collateral })
-                            : t('common.enable-wallet-access.approve-progress-label', {
-                                  currencyKey: collateral,
-                              })}
+                        {!isAllowing ? (
+                            <Trans
+                                i18nKey="common.enable-wallet-access.approve-label"
+                                values={{ currencyKey: collateral }}
+                                components={{ currency: <CurrencyText /> }}
+                            />
+                        ) : (
+                            <Trans
+                                i18nKey="common.enable-wallet-access.approve-progress-label"
+                                values={{ currencyKey: collateral }}
+                                components={{ currency: <CurrencyText /> }}
+                            />
+                        )}
                     </Button>
                 );
             }

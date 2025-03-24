@@ -62,16 +62,14 @@ export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({ avatarSize,
     const notificationsCount = claimablePositionCount || 0;
 
     return (
-        <>
-            <ProfileIconContainer marginRight={marginRight}>
-                {!!notificationsCount && (
-                    <NotificationCount top={top} left={left}>
-                        <Count>{notificationsCount}</Count>
-                    </NotificationCount>
-                )}
-                <ProfileIcon avatarSize={avatarSize} iconColor={color} />
-            </ProfileIconContainer>
-        </>
+        <ProfileIconContainer marginRight={marginRight}>
+            {!!notificationsCount && (
+                <NotificationCount top={top} left={left}>
+                    <Count>{notificationsCount}</Count>
+                </NotificationCount>
+            )}
+            <ProfileIcon avatarSize={avatarSize} iconColor={color} />
+        </ProfileIconContainer>
     );
 };
 

@@ -415,3 +415,8 @@ export const NavigationItem = styled(FlexDivRow)`
         color: ${(props) => props.theme.textColor.secondary};
     }
 `;
+
+export const CurrencyText = styled.span`
+    text-transform: none;
+    margin-left: 5px;
+`;

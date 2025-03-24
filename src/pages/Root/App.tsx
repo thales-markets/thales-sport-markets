@@ -6,6 +6,7 @@ import DappLayout from 'layouts/DappLayout';
 import Theme from 'layouts/Theme';
 import FreeBets from 'pages/FreeBets';
 import LiquidityPool from 'pages/LiquidityPool';
+import MarchMadness from 'pages/MarchMadness';
 import Markets from 'pages/Markets/Home';
 import Market from 'pages/Markets/Market';
 import Overdrop from 'pages/Overdrop';
@@ -161,6 +162,11 @@ const App = () => {
                                 <Overdrop />
                             </DappLayout>
                         </Suspense>
+                    </Route>
+                    <Route exact path={ROUTES.MarchMadness}>
+                        <DappLayout>
+                            <MarchMadness />
+                        </DappLayout>
                     </Route>
                     {isRouteAvailableForNetwork(ROUTES.LiquidityPool, networkId) && (
                         <Route exact path={ROUTES.LiquidityPool}>

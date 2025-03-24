@@ -1,31 +1,15 @@
 import { NOT_AVAILABLE } from 'constants/markets';
 import { secondsToMilliseconds } from 'date-fns';
-import { MarketType, MarketTypeGroup } from 'enums/marketTypes';
+import { MarketTypeGroup } from 'enums/marketTypes';
 import { GameStatus, MarketStatus, Position } from 'enums/markets';
-import { League, Sport } from 'enums/sports';
 import _ from 'lodash';
 import {
-    SerializableSportMarket,
-    SportMarket,
-    Team,
-    Ticket,
-    TicketMarket,
-    TicketPosition,
-    TradeData,
-} from 'types/markets';
-import { parseEther } from 'viem';
-import { MarketTypeMap, MarketTypePlayerPropsGroupsBySport } from '../constants/marketTypes';
-import {
-    PLAYER_PROPS_MARKETS_PER_PROP_MAP,
-    PLAYER_PROPS_MARKETS_PER_SPORT_MAP,
-    UFC_LEAGUE_IDS,
-} from '../constants/sports';
-import { fixOneSideMarketCompetitorName } from './formatters/string';
-import {
-    getMarketTypeDescription,
-    getMarketTypeName,
+    getLeagueLabel,
+    getLeaguePeriodType,
+    getLeagueScoringType,
+    getLeagueSport,
     isAwayTeamMarket,
-    isBothsTeamsToScoreMarket,
+    isBothTeamsToScoreMarket,
     isCombinedPositionsMarket,
     isDoubleChanceMarket,
     isFuturesMarket,
@@ -45,8 +29,30 @@ import {
     isUfcSpecificMarket,
     isWinnerMarket,
     isYesNoPlayerPropsMarket,
-} from './markets';
-import { getLeagueLabel, getLeaguePeriodType, getLeagueScoringType, getLeagueSport } from './sports';
+    League,
+    MarketType,
+    MarketTypeMap,
+    Sport,
+} from 'overtime-utils';
+import {
+    SerializableSportMarket,
+    SportMarket,
+    Team,
+    Ticket,
+    TicketMarket,
+    TicketPosition,
+    TradeData,
+} from 'types/markets';
+import { parseEther } from 'viem';
+import { MarketTypePlayerPropsGroupsBySport } from '../constants/marketTypes';
+import {
+    PLAYER_PROPS_COMBINING_ENABLED_LEAGUES,
+    PLAYER_PROPS_MARKETS_PER_PROP_MAP,
+    PLAYER_PROPS_MARKETS_PER_SPORT_MAP,
+    UFC_LEAGUE_IDS,
+} from '../constants/sports';
+import { fixOneSideMarketCompetitorName } from './formatters/string';
+import { getMarketTypeDescription, getMarketTypeName } from './markets';
 
 const getUfcSpecificPositionText = (marketType: number, position: number, homeTeam: string, awayTeam: string) => {
     if (marketType === MarketType.WINNING_ROUND) {
@@ -154,7 +160,7 @@ const getSimplePositionText = (
         isOneSideMarket(leagueId, marketType) ||
         isOneSidePlayerPropsMarket(marketType) ||
         isYesNoPlayerPropsMarket(marketType) ||
-        isBothsTeamsToScoreMarket(marketType) ||
+        isBothTeamsToScoreMarket(marketType) ||
         isOtherYesNoMarket(marketType)
     ) {
         return position === 0 ? 'Yes' : 'No';
@@ -408,6 +414,10 @@ const areSameCombinedPositions = (market: SportMarket | TicketPosition, ticketPo
     return true;
 };
 
+export const isPlayerPropsCombiningEnabled = (league: League) => {
+    return PLAYER_PROPS_COMBINING_ENABLED_LEAGUES.includes(league);
+};
+
 export const isSameMarket = (market: SportMarket | TicketPosition, ticketPosition: TicketPosition, byType = false) =>
     market.gameId === ticketPosition.gameId &&
     market.leagueId === ticketPosition.leagueId &&
@@ -539,6 +549,24 @@ export const ticketMarketAsTicketPosition = (market: TicketMarket) => {
     } as TicketPosition;
 };
 
+export const sportMarketAsTicketPosition = (market: SportMarket, position: number) =>
+    ({
+        gameId: market.gameId,
+        leagueId: market.leagueId,
+        typeId: market.typeId,
+        playerId: market.playerProps.playerId,
+        playerName: market.playerProps.playerName,
+        line: market.line,
+        position: position,
+        combinedPositions: market.combinedPositions,
+        live: market.live,
+        isOneSideMarket: market.isOneSideMarket,
+        isPlayerPropsMarket: market.isPlayerPropsMarket,
+        homeTeam: market.homeTeam,
+        awayTeam: market.awayTeam,
+        playerProps: market.playerProps,
+    } as TicketPosition);
+
 export const sportMarketAsSerializable = (market: SportMarket): SerializableSportMarket => {
     const serializableChildMarkets = market.childMarkets
         ? market.childMarkets.map((childMarket) => _.omit(childMarket, 'maturityDate'))
@@ -648,21 +676,21 @@ const getPlayerPropsEmptyMarkets = (market: SportMarket) => [
     {
         ...market,
         type: '',
-        typeId: -1,
+        typeId: MarketType.EMPTY,
         odds: [0],
         line: Infinity,
     },
     {
         ...market,
         type: '',
-        typeId: -1,
+        typeId: MarketType.EMPTY,
         odds: [0],
         line: Infinity,
     },
     {
         ...market,
         type: '',
-        typeId: -1,
+        typeId: MarketType.EMPTY,
         odds: [0],
         line: Infinity,
     },

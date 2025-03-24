@@ -1,8 +1,8 @@
 import { StatusFilter } from 'enums/markets';
 import { Network } from 'enums/network';
 import { RiskManagementConfig, RiskManagementRole } from 'enums/riskManagement';
+import { League } from 'overtime-utils';
 import { LiquidityPoolCollateral } from '../enums/liquidityPool';
-import { League } from '../enums/sports';
 
 const QUERY_KEYS = {
     Ticket: (networkId: Network, ticketAddress: string) => ['gameTickets', networkId, ticketAddress],
@@ -171,6 +171,19 @@ const QUERY_KEYS = {
         walletAddress,
         role,
     ],
+    MarchMadness: {
+        Data: (walletAddress: string, networkId: Network) => ['marchMadness', 'data', walletAddress, networkId],
+        Bracket: (tokenId: number, networkId: Network) => ['marchMadness', 'bracket', tokenId, networkId],
+        Stats: (networkId: Network) => ['marchMadness', 'stats', networkId],
+        Competition: {
+            LeaderboardByVolume: (networkId: Network) => ['marchMadness', 'leaderboardByVolume', networkId],
+            LeaderboardByNumberOfCorrectPredictions: (networkId: Network) => [
+                'marchMadness',
+                'leaderboardByCorrectPred',
+                networkId,
+            ],
+        },
+    },
 };
 
 export default QUERY_KEYS;

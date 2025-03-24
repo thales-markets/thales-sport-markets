@@ -54,8 +54,10 @@ export const MatchInfoContainer = styled(FlexDivColumn)`
 
 export const MatchInfo = styled(FlexDivStart)<{
     selected: boolean;
+    marginTop?: string;
 }>`
     z-index: 1;
+    ${(props) => props.marginTop && `margin-top: ${props.marginTop};`}
     color: ${(props) =>
         props.selected ? props.theme.oddsContainerBackground.tertiary : props.theme.textColor.quinary};
     i {
@@ -277,6 +279,7 @@ export const LiveIndicatorContainer = styled(FlexDivStart)`
     align-items: flex-start;
     color: ${(props) => props.theme.textColor.primary};
     margin-right: 10px;
+    margin-left: -7px;
     & > label {
         text-transform: none;
         margin-left: 25px;

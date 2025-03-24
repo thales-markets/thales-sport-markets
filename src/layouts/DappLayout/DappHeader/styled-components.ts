@@ -184,6 +184,7 @@ export const OverdropButtonContainer = styled(FlexDiv)`
     cursor: pointer;
     width: 160px;
     height: 20px;
+    margin-left: 25px;
     font-size: 10px;
     font-weight: 600;
     text-transform: uppercase;

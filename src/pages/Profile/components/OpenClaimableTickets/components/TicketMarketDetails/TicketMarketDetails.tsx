@@ -2,9 +2,9 @@ import MatchLogosV2 from 'components/MatchLogosV2';
 import SPAAnchor from 'components/SPAAnchor';
 import { GameStatusKey } from 'constants/markets';
 import { GameStatus } from 'enums/markets';
-import { League, Sport } from 'enums/sports';
 import i18n from 'i18n';
 import { t } from 'i18next';
+import { getLeaguePeriodType, getLeagueSport, isContractResultView, League, Sport } from 'overtime-utils';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
@@ -14,7 +14,7 @@ import { FlexDivCentered } from 'styles/common';
 import { formatDateWithTime } from 'thales-utils';
 import { SportMarket, SportMarketScore, TicketMarket } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
-import { formatMarketOdds } from 'utils/markets';
+import { formatMarketOdds, getPeriodsForResultView } from 'utils/markets';
 import {
     getMatchTeams,
     getPositionTextV2,
@@ -24,7 +24,6 @@ import {
     showLiveInfo,
 } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
-import { getLeaguePeriodType, getLeagueSport } from 'utils/sports';
 import { getOrdinalNumberLabel } from 'utils/ui';
 import {
     Correct,
@@ -66,6 +65,8 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean; isS
     const liveScore = market.liveScore;
 
     const leagueSport = getLeagueSport(market.leagueId);
+    const showContractResult = isContractResultView(market.typeId);
+    const showPeriodResult = getPeriodsForResultView(market.typeId, market.leagueId).length > 0;
 
     const getScoreComponent = (scoreData: SportMarket | SportMarketScore) =>
         showGameScore(scoreData.gameStatus) || !scoreData.gameStatus ? (
@@ -96,6 +97,7 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean; isS
                     </ScoreContainer>
                 )}
                 {!isMobile &&
+                    !showPeriodResult &&
                     // TODO check logic because of 0:0 results when isResolved == true, but isGameFinished == false
                     (market.isResolved || market.isGameFinished) &&
                     leagueSport !== Sport.CRICKET &&
@@ -152,7 +154,7 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean; isS
             </SelectionInfoContainer>
             {market.isCancelled ? (
                 <TicketMarketStatus>{t('profile.card.canceled')}</TicketMarketStatus>
-            ) : (market.isResolved || market.isGameFinished) && !market.isPlayerPropsMarket ? (
+            ) : (market.isResolved || market.isGameFinished) && !market.isPlayerPropsMarket && !showContractResult ? (
                 <MatchScoreContainer>
                     {isSystem && (
                         <>
@@ -165,7 +167,7 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean; isS
                     )}
                     {getScoreComponent(market)}
                 </MatchScoreContainer>
-            ) : market.isResolved && market.isPlayerPropsMarket ? (
+            ) : market.isResolved && (market.isPlayerPropsMarket || showContractResult) ? (
                 <TicketMarketStatus>{market.homeScore}</TicketMarketStatus>
             ) : isPendingResolution || isLive ? (
                 liveScore ? (

@@ -10,15 +10,23 @@ import Checkbox from 'components/fields/Checkbox/Checkbox';
 import { MarketTypePlayerPropsGroupsBySport } from 'constants/marketTypes';
 import { RESET_STATE } from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { secondsToMilliseconds } from 'date-fns';
 import { SportFilter, StatusFilter } from 'enums/markets';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
-import { groupBy, intersection, orderBy } from 'lodash';
+import { groupBy, orderBy } from 'lodash';
+import {
+    BOXING_LEAGUES,
+    League,
+    LeagueMap,
+    MarketType,
+    Sport,
+    getSportLeagueIds,
+    isBoxingLeague,
+} from 'overtime-utils';
+import SidebarMMLeaderboard from 'pages/MarchMadness/components/SidebarLeaderboard';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
-import useSportMarketSgpQuery from 'queries/sgp/useSportMarketSgpQuery';
 import queryString from 'query-string';
 import React, { Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -43,23 +51,19 @@ import {
     setStatusFilter,
     setTagFilter,
 } from 'redux/modules/market';
-import { getIsSgp, getTicket } from 'redux/modules/ticket';
 import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled, { CSSProperties, useTheme } from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivSpaceBetween } from 'styles/common';
 import { addHoursToCurrentDate, localStore } from 'thales-utils';
-import { MarketsCache, SportMarket, SportMarkets, TagInfo, Tags, TicketPosition } from 'types/markets';
+import { MarketsCache, SportMarket, SportMarkets, TagInfo, Tags } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
-import { getDefaultPlayerPropsLeague, isSameMarket } from 'utils/marketsV2';
+import { isMarchMadnessAvailableForNetworkId } from 'utils/marchMadness';
+import { getDefaultPlayerPropsLeague } from 'utils/marketsV2';
 import { history } from 'utils/routes';
 import { getScrollMainContainerToTop } from 'utils/scroll';
 import useQueryParam from 'utils/useQueryParams';
 import { useChainId } from 'wagmi';
-import { BOXING_LEAGUES, LeagueMap } from '../../../constants/sports';
-import { MarketType } from '../../../enums/marketTypes';
-import { League, Sport } from '../../../enums/sports';
 import TimeFilters from '../../../layouts/DappLayout/DappHeader/components/TimeFilters';
-import { getSportLeagueIds, isBoxingLeague } from '../../../utils/sports';
 import FilterTagsMobile from '../components/FilterTagsMobile';
 import SportTags from '../components/SportTags';
 import GlobalFilters from '../components/StatusFilters';
@@ -67,6 +71,8 @@ import Breadcrumbs from './Breadcrumbs';
 import Filters from './Filters';
 import Header from './Header';
 import SelectedMarket from './SelectedMarket';
+
+const SHOW_MM_SIDEBAR_LEADERBOARD = false; // TODO: remove after march madness
 
 const Parlay = lazy(() => import(/* webpackChunkName: "Parlay" */ './Parlay'));
 
@@ -98,8 +104,6 @@ const Home: React.FC = () => {
     const isMobile = useSelector(getIsMobile);
     const isMarketSelected = useSelector(getIsMarketSelected);
     const selectedMarket = useSelector(getSelectedMarket);
-    const ticket = useSelector(getTicket);
-    const isSgp = useSelector(getIsSgp);
 
     const [showBurger, setShowBurger] = useState<boolean>(false);
     const [playerPropsCountPerTag, setPlayerPropsCountPerTag] = useState<Record<string, number>>({});
@@ -548,22 +552,6 @@ const Home: React.FC = () => {
         return liveMarketsCount;
     }, [liveMarketsCountPerTag, favouriteLeagues]);
 
-    const isSgpEnabled = useMemo(() => isSgp && ticket.length > 0, [isSgp, ticket.length]);
-
-    const marketsAvailableForSgpQuery = useSportMarketSgpQuery(
-        ticket[0],
-        { networkId },
-        { enabled: isSgpEnabled, refetchInterval: secondsToMilliseconds(30) }
-    );
-
-    const marketAvailableForSgp = useMemo(
-        () =>
-            marketsAvailableForSgpQuery.isSuccess && marketsAvailableForSgpQuery.data
-                ? marketsAvailableForSgpQuery.data
-                : undefined,
-        [marketsAvailableForSgpQuery.data, marketsAvailableForSgpQuery.isSuccess]
-    );
-
     const selectedMarketData = useMemo(() => {
         if (selectedMarket) {
             if (selectedMarket.live) {
@@ -581,43 +569,9 @@ const Home: React.FC = () => {
                         ? openSportMarketsQuery.data[StatusFilter.OPEN_MARKETS]
                         : [];
 
-                let openSportMarket = null;
-                if (isSgpEnabled && marketAvailableForSgp && selectedMarket.gameId === marketAvailableForSgp.gameId) {
-                    // filter SGP available markets by ticket common sportsbooks
-                    const marketAvailableForSgpCopy = { ...marketAvailableForSgp };
-                    if (ticket.length > 1) {
-                        // markets from API already filtered by first ticket market
-                        let ticketCommonSportsbooks: string[] = [];
-                        ticket.forEach((ticketPosition: TicketPosition, index) => {
-                            const isMoneyline = ticketPosition.typeId === 0;
-                            const sgpChildMarket = marketAvailableForSgpCopy.childMarkets.find((childMarket) =>
-                                isSameMarket(childMarket, ticketPosition)
-                            );
-                            const sgpSportsbooks =
-                                (isMoneyline
-                                    ? marketAvailableForSgpCopy.sgpSportsbooks
-                                    : sgpChildMarket?.sgpSportsbooks) || [];
-                            if (index === 0) {
-                                ticketCommonSportsbooks = sgpSportsbooks;
-                            } else {
-                                const commonSportsbooks = intersection(ticketCommonSportsbooks, sgpSportsbooks);
-                                ticketCommonSportsbooks = commonSportsbooks;
-                            }
-                        });
-                        openSportMarket = marketAvailableForSgpCopy;
-                        openSportMarket.childMarkets = marketAvailableForSgpCopy.childMarkets.filter(
-                            (sgpMarket) => intersection(sgpMarket.sgpSportsbooks, ticketCommonSportsbooks).length
-                        );
-                    } else {
-                        openSportMarket = marketAvailableForSgpCopy;
-                    }
-                } else {
-                    openSportMarket = openSportMarkets.find(
-                        (market) => market.gameId.toLowerCase() === selectedMarket.gameId.toLowerCase()
-                    );
-                }
-
-                return openSportMarket;
+                return openSportMarkets.find(
+                    (market) => market.gameId.toLowerCase() === selectedMarket.gameId.toLowerCase()
+                );
             }
         }
     }, [
@@ -626,9 +580,6 @@ const Home: React.FC = () => {
         liveSportMarketsQuery.data,
         liveSportMarketsQuery.isSuccess,
         selectedMarket,
-        isSgpEnabled,
-        marketAvailableForSgp,
-        ticket,
     ]);
 
     const resetFilters = useCallback(() => {
@@ -835,6 +786,11 @@ const Home: React.FC = () => {
                         <SportFiltersContainer>
                             {getStatusFilters()}
                             {getSportFilters()}
+                            {SHOW_MM_SIDEBAR_LEADERBOARD && (
+                                <Suspense fallback={<Loader />}>
+                                    {isMarchMadnessAvailableForNetworkId(networkId) && <SidebarMMLeaderboard />}
+                                </Suspense>
+                            )}
                         </SportFiltersContainer>
                     </Scroll>
                 </LeftSidebarContainer>
@@ -920,18 +876,12 @@ const Home: React.FC = () => {
                                                 shouldCloseOnOverlayClick={false}
                                                 style={getCustomModalStyles(theme, '10')}
                                             >
-                                                <SelectedMarket
-                                                    market={selectedMarketData}
-                                                    isLoading={marketsAvailableForSgpQuery.isLoading}
-                                                />
+                                                <SelectedMarket market={selectedMarketData} />
                                             </ReactModal>
                                         ) : (
                                             isMarketSelected &&
                                             (statusFilter === StatusFilter.OPEN_MARKETS || !!selectedMarket?.live) && (
-                                                <SelectedMarket
-                                                    market={selectedMarketData}
-                                                    isLoading={marketsAvailableForSgpQuery.isLoading}
-                                                />
+                                                <SelectedMarket market={selectedMarketData} />
                                             )
                                         )}
                                     </FlexDivRow>

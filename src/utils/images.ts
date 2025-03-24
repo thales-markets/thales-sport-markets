@@ -1,7 +1,5 @@
-import { League } from 'enums/sports';
-import { LeagueMap } from '../constants/sports';
+import { getLeagueLabel, isInternationalLeague, League, LeagueMap } from 'overtime-utils';
 import { fixOneSideMarketCompetitorName } from './formatters/string';
-import { getLeagueLabel, isInternationalLeague } from './sports';
 
 export const getTeamImageSource = (team: string, league: League) => {
     const leagueLabel = getLeagueLabel(league);
@@ -52,8 +50,12 @@ export const getTeamImageSource = (team: string, league: League) => {
         ? `/logos/Countries/ao.webp`
         : league == League.NETHERLANDS_CUP
         ? `/logos/Eredivisie/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : league == League.NCAAB_FUTURES
-        ? `/logos/NCAA Basketball/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : league == League.NCAAB ||
+          league == League.NCAAB_FUTURES ||
+          league == League.NCAAF ||
+          league == League.NCAAW ||
+          league == League.COLLEGE_BASEBALL
+        ? `/logos/NCAA/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : `/logos/${leagueLabel}/${team.trim().replaceAll(' ', '-').replaceAll('/', '-').toLowerCase()}.webp`;
 };
 
@@ -282,6 +284,24 @@ export const getLeagueFlagSource = (tagId: number | any) => {
             return `/logos/Countries/south-korea.svg`;
         case League.CANADA_PREMIER_LEAGUE:
             return `/logos/Countries/canada.svg`;
+        case League.SIX_NATIONS:
+            return `/logos/Countries/six-nations.png`;
+        case League.SUPER_RUGBY:
+            return `/logos/Countries/super-rugby.png`;
+        case League.DOTA2:
+            return `/logos/Countries/dota2.png`;
+        case League.CSGO:
+            return `/logos/Countries/cs2.webp`;
+        case League.LOL:
+            return `/logos/Countries/lol.png`;
+        case League.VALORANT:
+            return `/logos/Countries/valorant.png`;
+        case League.STARCRAFT:
+            return `/logos/Countries/starcraft.png`;
+        case League.ROCKET_LEAGUE:
+            return `/logos/Countries/rocket-league.png`;
+        case League.CALL_OF_DUTY:
+            return `/logos/Countries/call-of-duty.png`;
         default:
             return `/logos/Countries/world.svg`;
     }

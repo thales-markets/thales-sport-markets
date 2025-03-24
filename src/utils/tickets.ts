@@ -1,11 +1,21 @@
-import { MarketTypeMap } from 'constants/marketTypes';
 import { secondsToMilliseconds } from 'date-fns';
 import { ContractType } from 'enums/contract';
-import { MarketType } from 'enums/marketTypes';
 import { OddsType } from 'enums/markets';
 import { t } from 'i18next';
+import {
+    getLeagueSport,
+    isContractResultView,
+    isFuturesMarket,
+    isOneSideMarket,
+    isOneSidePlayerPropsMarket,
+    isPlayerPropsMarket,
+    isYesNoPlayerPropsMarket,
+    League,
+    MarketType,
+    MarketTypeMap,
+} from 'overtime-utils';
 import { bigNumberFormatter, coinFormatter, Coins, formatDateWithTime } from 'thales-utils';
-import { CombinedPosition, SystemBetData, Team, Ticket, TicketMarket } from 'types/markets';
+import { CombinedPosition, SystemBetData, Team, Ticket, TicketMarket, TicketPosition } from 'types/markets';
 import { NetworkConfig, SupportedNetwork } from 'types/network';
 import { ShareTicketModalProps } from 'types/tickets';
 import futuresPositionNamesMap from '../assets/json/futuresPositionNamesMap.json';
@@ -13,21 +23,13 @@ import positionNamesMap from '../assets/json/positionNamesMap.json';
 import { CRYPTO_CURRENCY_MAP } from '../constants/currency';
 import { BATCH_SIZE, OVER_ADDED_PAYOUT_PERCENTAGE } from '../constants/markets';
 import { UFC_LEAGUE_IDS } from '../constants/sports';
-import { League } from '../enums/sports';
 import { TicketMarketStatus } from '../enums/tickets';
 import { getCollateralByAddress, isOverCurrency } from './collaterals';
 import { getContractInstance } from './contract';
 import freeBetHolder from './contracts/freeBetHolder';
 import stakingThalesBettingProxy from './contracts/stakingThalesBettingProxy';
-import {
-    formatMarketOdds,
-    isFuturesMarket,
-    isOneSideMarket,
-    isOneSidePlayerPropsMarket,
-    isPlayerPropsMarket,
-    isYesNoPlayerPropsMarket,
-} from './markets';
-import { getLeagueSport } from './sports';
+import { formatMarketOdds, getPeriodsForResultView } from './markets';
+import { isPlayerPropsCombiningEnabled } from './marketsV2';
 
 export const mapTicket = (
     ticket: any,
@@ -39,8 +41,9 @@ export const mapTicket = (
 ): Ticket => {
     // TODO - hardcode OVER as THALES until we release
     let collateral =
-        ticket.collateral.toLowerCase() === '0x409b3dcab04b476918e40e186bc77e1cfd2ce482' ||
-        ticket.collateral.toLowerCase() === '0x774ede9cd936118e89f0ca786a007c9db899f3f5'
+        ticket.collateral.toLowerCase() === '0xedf38688b27036816a50185caa430d5479e1c63e' ||
+        ticket.collateral.toLowerCase() === '0x5829d6fe7528bc8e92c4e81cc8f20a528820b51a' ||
+        ticket.collateral.toLowerCase() === '0x7750c092e284e2c7366f50c8306f43c7eb2e82a2'
             ? (CRYPTO_CURRENCY_MAP.sTHALES as Coins)
             : getCollateralByAddress(ticket.collateral, networkId);
     collateral =
@@ -101,15 +104,28 @@ export const mapTicket = (
                 const apiMarket = openOngoingMarkets
                     ? openOngoingMarkets.find((m: any) => m.gameId === market.gameId)
                     : undefined;
+                const periodsForResultView = getPeriodsForResultView(typeId, leagueId);
 
                 const homeTeam = !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => team.isHome);
                 const homeTeamName = homeTeam?.name ?? 'Home Team';
-                const homeScore = homeTeam?.score;
+                const homeScore =
+                    homeTeam && periodsForResultView.length > 0
+                        ? periodsForResultView.reduce(
+                              (prev: number, curr: number) => prev + Number(homeTeam.scoreByPeriod[curr - 1]),
+                              0
+                          )
+                        : homeTeam?.score;
                 const homeScoreByPeriod = homeTeam ? homeTeam.scoreByPeriod : [];
 
                 const awayTeam = !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => !team.isHome);
                 const awayTeamName = awayTeam?.name ?? 'Away Team';
-                const awayScore = awayTeam?.score;
+                const awayScore =
+                    awayTeam && periodsForResultView.length > 0
+                        ? periodsForResultView.reduce(
+                              (prev: number, curr: number) => prev + Number(awayTeam.scoreByPeriod[curr - 1]),
+                              0
+                          )
+                        : awayTeam?.score;
                 const awayScoreByPeriod = awayTeam ? awayTeam.scoreByPeriod : [];
 
                 const playerInfo = playersInfo[market.playerId];
@@ -139,13 +155,14 @@ export const mapTicket = (
                     maturityDate: new Date(secondsToMilliseconds(Number(market.maturity))),
                     homeTeam: homeTeamName,
                     awayTeam: awayTeamName,
-                    homeScore: isPlayerProps
-                        ? isOneSidePlayerPropsMarket(typeId) || isYesNoPlayerPropsMarket(typeId)
-                            ? Number(marketResult.results[0]) / 100 === 1
-                                ? 'Yes'
-                                : 'No'
-                            : Number(marketResult.results[0]) / 100
-                        : homeScore,
+                    homeScore:
+                        isPlayerProps || isContractResultView(typeId)
+                            ? isOneSidePlayerPropsMarket(typeId) || isYesNoPlayerPropsMarket(typeId)
+                                ? Number(marketResult.results[0]) / 100 === 1
+                                    ? 'Yes'
+                                    : 'No'
+                                : Number(marketResult.results[0]) / 100
+                            : homeScore,
                     homeScoreByPeriod,
                     awayScore: isPlayerProps ? 0 : awayScore,
                     awayScoreByPeriod,
@@ -219,7 +236,7 @@ export const getTicketMarketStatus = (market: TicketMarket) => {
         return t('markets.market-card.canceled');
     }
     if (market.isResolved) {
-        if (market.isPlayerPropsMarket) {
+        if (market.isPlayerPropsMarket || isContractResultView(market.typeId)) {
             return market.homeScore;
         }
         return market.homeScore !== undefined
@@ -532,4 +549,48 @@ export const getShareTicketModalData = async (
     }
 
     return modalData;
+};
+
+export const isRegularTicketInvalid = (ticket: TicketPosition[], maxTicketSize: number) => {
+    if (ticket.length <= 1) {
+        return false;
+    }
+
+    // max ticket size
+    if (ticket.length >= maxTicketSize) {
+        return true;
+    }
+
+    const isSameGameTicket = ticket.some((ticketPosition, index, ticketPositions) => {
+        const sameGamePositions = ticketPositions.filter(
+            (position, i) => i !== index && position.gameId === ticketPosition.gameId
+        );
+        return sameGamePositions.length > 0;
+    });
+    if (isSameGameTicket) {
+        const isPPCombiningEnabled = ticket.some((position) => isPlayerPropsCombiningEnabled(position.leagueId));
+        const isDiffPPType =
+            ticket.some((position) => isPlayerPropsMarket(position.typeId)) &&
+            ticket.some((position) => !isPlayerPropsMarket(position.typeId));
+        if (isPPCombiningEnabled) {
+            if (isDiffPPType) {
+                // player props with other types from the same game
+                return true;
+            } else {
+                // different categories for the same player
+                const isSamePlayer = ticket.some((ticketPosition, index, ticketPositions) => {
+                    const samePlayerPositions = ticketPositions.filter(
+                        (position, i) => i !== index && position.playerId === ticketPosition.playerId
+                    );
+                    return samePlayerPositions.length > 0;
+                });
+                return isSamePlayer;
+            }
+        }
+    } else if (ticket.length > 0 && ticket.some((position) => isFuturesMarket(position.typeId))) {
+        // futures
+        return true;
+    }
+
+    return false;
 };

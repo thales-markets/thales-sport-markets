@@ -21,6 +21,7 @@ import sportsAMMV2ResultManager from 'utils/contracts/sportsAMMV2ResultManagerCo
 import sportsAMMV2RiskManager from 'utils/contracts/sportsAMMV2RiskManagerContract';
 import stakingThalesBettingProxy from 'utils/contracts/stakingThalesBettingProxy';
 import liquidityPoolContractV2 from './contracts/liquidityPoolContractV2';
+import { marchMadnessContract } from './contracts/marchMadnessContract';
 import resolveBlockerContract from './contracts/resolveBlockerContract';
 import thalesContract from './contracts/thalesContract';
 import thalesToOverMigrationContract from './contracts/thalesToOverMigrationContract';
@@ -118,6 +119,8 @@ export const getContractInstance = (
             return getContractWithModifiedResponse(liquidityPoolContractV2[lpCollateral], networkConfig);
         case ContractType.RESOLVE_BLOCKER:
             return getContractWithModifiedResponse(resolveBlockerContract, networkConfig);
+        case ContractType.MARCH_MADNESS:
+            return getContractWithModifiedResponse(marchMadnessContract, networkConfig);
         case ContractType.THALES_TO_OVER_MIGRATION:
             return getContractWithModifiedResponse(thalesToOverMigrationContract, networkConfig);
         case ContractType.THALES:

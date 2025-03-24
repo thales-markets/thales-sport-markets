@@ -114,6 +114,11 @@ export const refetchResolveBlocker = (networkId: Network) => {
     });
 };
 
+export const refetchAfterMarchMadnessMint = (walletAddress: string, networkId: Network) => {
+    queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MarchMadness.Data(walletAddress, networkId) });
+    queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MarchMadness.Stats(networkId) });
+};
+
 export const refetchGetFreeBet = (freeBetId: string, networkId: Network) => {
     queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.FreeBet(freeBetId, networkId) });
 };
