@@ -484,7 +484,9 @@ const Ticket: React.FC<TicketProps> = ({
     }, [coingeckoRatesQuery, selectedCollateral, buyInAmount, networkId]);
 
     const selectedCollateralCurrencyRate =
-        exchangeRates && exchangeRates !== null && !isDefaultCollateral ? exchangeRates[usedCollateralForBuy] : 1;
+        exchangeRates && exchangeRates !== null && (!isDefaultCollateral || swapToThales)
+            ? exchangeRates[usedCollateralForBuy]
+            : 1;
     const thalesContractCurrencyRate =
         exchangeRates && exchangeRates !== null ? exchangeRates[THALES_CONTRACT_RATE_KEY] : 1;
 
@@ -984,10 +986,14 @@ const Ticket: React.FC<TicketProps> = ({
             getSwapParams(
                 networkId,
                 walletAddress as Address,
-                coinParser(buyInAmount.toString(), networkId, selectedCollateral),
+                coinParser(
+                    (Number(buyInAmount) > 0 ? buyInAmount : minBuyInAmount).toString(),
+                    networkId,
+                    selectedCollateral
+                ),
                 collateralAddress as Address
             ),
-        [buyInAmount, collateralAddress, networkId, selectedCollateral, walletAddress]
+        [buyInAmount, collateralAddress, minBuyInAmount, networkId, selectedCollateral, walletAddress]
     );
 
     // Set THALES swap receive
@@ -997,12 +1003,12 @@ const Ticket: React.FC<TicketProps> = ({
             setUseThalesCollateral(false);
             setSwappedThalesToReceive(0);
             setSwapQuote(0);
-        } else if (swapToThales && Number(buyInAmount) > 0) {
+        } else if (swapToThales) {
             const getSwapQuote = async () => {
                 const quote = await getQuote(networkId, swapToThalesParams);
 
                 setSwappedThalesToReceive(quote);
-                setSwapQuote(quote / Number(buyInAmount));
+                setSwapQuote(quote / (Number(buyInAmount) > 0 ? Number(buyInAmount) : minBuyInAmount));
             };
 
             getSwapQuote();
