@@ -255,6 +255,7 @@ const DappHeader: React.FC = () => {
                                     padding: '9px 20px',
                                     width: '120px',
                                     height: '30px',
+                                    whiteSpace: 'pre',
                                 }}
                                 onClick={() =>
                                     dispatch(

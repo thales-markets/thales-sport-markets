@@ -80,28 +80,35 @@ const WalletInfo: React.FC = ({}) => {
         }
     };
 
-    return (
-        <Container walletConnected={isConnected}>
-            <OutsideClickHandler onOutsideClick={setShowDropdown.bind(this, false)}>
+    return isConnected ? (
+        <>
+            <Container walletConnected={isConnected}>
                 {isConnected && (
-                    <WalletWrapper>
-                        <Icon onClick={setShowDropdown.bind(this, !showDropdown)} className="icon icon--arrow-down" />
-                        <Divider />
-                        <WalletAddressInfo onClick={setShowDropdown.bind(this, !showDropdown)}>
-                            <Text>Overtime Account</Text>
-                        </WalletAddressInfo>
-                        <Divider />
-                        <WalletAddressInfo onClick={handleCopy.bind(this, walletAddress)}>
-                            <ProfileItem color={theme.textColor.secondary} />
-                        </WalletAddressInfo>
+                    <OutsideClickHandler onOutsideClick={setShowDropdown.bind(this, false)}>
+                        <WalletWrapper>
+                            <Icon
+                                onClick={setShowDropdown.bind(this, !showDropdown)}
+                                className="icon icon--arrow-down"
+                            />
+                            <Divider />
+                            <WalletAddressInfo onClick={setShowDropdown.bind(this, !showDropdown)}>
+                                <Text>Overtime Account</Text>
+                            </WalletAddressInfo>
+                            <Divider />
+                            <WalletAddressInfo onClick={handleCopy.bind(this, walletAddress)}>
+                                <ProfileItem color={theme.textColor.secondary} />
+                            </WalletAddressInfo>
 
-                        <NetworkSwitcher />
+                            <NetworkSwitcher />
 
-                        {showDropdown && <ProfileDropdown setShowDropdown={setShowDropdown} />}
-                    </WalletWrapper>
+                            {showDropdown && <ProfileDropdown setShowDropdown={setShowDropdown} />}
+                        </WalletWrapper>
+                    </OutsideClickHandler>
                 )}
-            </OutsideClickHandler>
-
+            </Container>
+        </>
+    ) : (
+        <>
             {connectWalletModalVisibility && (
                 <ConnectWalletModal
                     isOpen={connectWalletModalVisibility}
@@ -114,7 +121,7 @@ const WalletInfo: React.FC = ({}) => {
                     }}
                 />
             )}
-        </Container>
+        </>
     );
 };
 
