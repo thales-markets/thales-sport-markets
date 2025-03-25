@@ -47,7 +47,7 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ setShowDropdown }) =>
 
                 <Toggle
                     height="24px"
-                    active={isBiconomy}
+                    active={!isBiconomy}
                     handleClick={() => {
                         if (isBiconomy) {
                             dispatch(setIsBiconomy(false));
