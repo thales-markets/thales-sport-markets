@@ -28,14 +28,17 @@ const supportedOnramperTokens = (networkId: SupportedNetwork) => {
     const OP_TOKENS =
         'usdc_optimism,usdt_optimism,dai_optimism,op_optimism,eth_optimism,thales_optimism,weth_optimism,deusdc_optimism';
     const ARB_TOKENS =
-        'usdc_arbitrum,usdt_arbitrum,dai_arbitrum,arb_arbitrum,eth_arbitrum,weth_arbitrum,deusdc_arbitrum';
+        'usdc_arbitrum,usdt_arbitrum,dai_arbitrum,arb_arbitrum,eth_arbitrum,weth_arbitrum,deusdc_arbitrum,wbtc_arbitrum';
+    const BASE_TOKENS = 'usdc_base,dai_base,cbbtc_base';
     switch (networkId) {
         case NetworkId.OptimismMainnet:
             return OP_TOKENS;
         case NetworkId.Arbitrum:
             return ARB_TOKENS;
+        case NetworkId.Base:
+            return BASE_TOKENS;
         default:
-            return OP_TOKENS + ',' + ARB_TOKENS;
+            return OP_TOKENS + ',' + ARB_TOKENS + ',' + BASE_TOKENS;
     }
 };
 
