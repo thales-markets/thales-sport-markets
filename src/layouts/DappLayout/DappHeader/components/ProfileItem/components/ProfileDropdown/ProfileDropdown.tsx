@@ -1,4 +1,5 @@
 import SPAAnchor from 'components/SPAAnchor';
+import Toggle from 'components/Toggle';
 import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
 import ROUTES from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
@@ -41,63 +42,65 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ setShowDropdown }) =>
 
     return (
         <Dropdown>
-            <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Profile)}>
-                <Wrapper onClick={setShowDropdown.bind(this, false)} clickable>
-                    <CopyIcon className="icon icon--logo" /> <Text>Account</Text>
-                </Wrapper>
-            </SPAAnchor>
+            <Wrapper>
+                <Address>Overtime Account</Address>
 
-            <SwitchContainer>
+                <Toggle
+                    height="24px"
+                    active={isBiconomy}
+                    handleClick={() => {
+                        if (isBiconomy) {
+                            dispatch(setIsBiconomy(false));
+                            localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, false);
+                        } else {
+                            dispatch(setIsBiconomy(true));
+                            localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, true);
+                        }
+                    }}
+                />
+                <Address>EOA Address</Address>
+            </Wrapper>
+            <Separator />
+            <Wrapper
+                onClick={() => {
+                    handleCopy(smartAddress);
+                    setShowDropdown(false);
+                }}
+            >
                 <Container>
-                    <Wrapper>
-                        <WalletIcon className="icon icon--wallet-connected" />
-                        <Text>{isBiconomy ? 'Overtime Account' : 'EOA Address'}</Text>
-                    </Wrapper>
-
-                    <Wrapper
-                        onClick={() => {
-                            handleCopy(isBiconomy ? smartAddress : (address as any));
-                            setShowDropdown(false);
-                        }}
-                    >
-                        <Address>{truncateAddress(isBiconomy ? smartAddress : (address as any), 6, 4)}</Address>
-                        <CopyIcon className="icon icon--copy" />
-                    </Wrapper>
+                    <WalletIcon className="icon icon--wallet-connected" />
+                    <Text>Overtime Account</Text>
                 </Container>
-
-                <Separator>
-                    <SwitchIcon
-                        onClick={() => {
-                            if (isBiconomy) {
-                                dispatch(setIsBiconomy(false));
-                                localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, false);
-                            } else {
-                                dispatch(setIsBiconomy(true));
-                                localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, true);
-                            }
-                        }}
-                        className="icon icon--exchange"
-                    />
-                </Separator>
-                <Container disabled>
-                    <Wrapper>
-                        <WalletIcon className="icon icon--wallet-connected" />
-                        <Text>{!isBiconomy ? 'Overtime Account' : 'EOA Address'}</Text>
-                    </Wrapper>
-
-                    <Wrapper
-                        onClick={() => {
-                            handleCopy(!isBiconomy ? smartAddress : (address as any));
-                            setShowDropdown(false);
-                        }}
-                    >
-                        <Address>{truncateAddress(!isBiconomy ? smartAddress : (address as any), 6, 4)}</Address>
-                        <CopyIcon className="icon icon--copy" />
-                    </Wrapper>
+                <Container>
+                    <Address>{truncateAddress(smartAddress, 6, 4)}</Address>
+                    <CopyIcon className="icon icon--copy" />
                 </Container>
-            </SwitchContainer>
+            </Wrapper>
 
-            <LogOutWrapper
+            <Wrapper
+                onClick={() => {
+                    handleCopy(address as any);
+                    setShowDropdown(false);
+                }}
+            >
+                <Container>
+                    <WalletIcon className="icon icon--wallet-connected" />
+                    <Text>EOA Address</Text>
+                </Container>
+                <Container>
+                    <Address>{truncateAddress(address as any, 6, 4)}</Address>
+                    <CopyIcon className="icon icon--copy" />
+                </Container>
+            </Wrapper>
+
+            <Separator />
+
+            <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Profile)}>
+                <Container onClick={setShowDropdown.bind(this, false)}>
+                    <CopyIcon className="icon icon--logo" /> <Text>Account</Text>
+                </Container>
+            </SPAAnchor>
+            <Container
                 onClick={() => {
                     disconnect();
                     setShowDropdown(false);
@@ -105,7 +108,7 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ setShowDropdown }) =>
             >
                 <WalletIcon className="icon icon--wallet-disconnected" />
                 <Text>Log out</Text>
-            </LogOutWrapper>
+            </Container>
         </Dropdown>
     );
 };
@@ -119,37 +122,26 @@ const Dropdown = styled.div`
     display: flex;
     flex-direction: column;
     border-radius: 8px;
-    background: ${(props) => props.theme.background.tertiary};
-    width: 200px;
-    padding: 10px;
+    background-color: ${(props) => props.theme.background.secondary};
+    padding: 16px 20px;
     justify-content: center;
     align-items: flex-start;
     gap: 10px;
     font-weight: 400;
 `;
 
-const SwitchContainer = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border: 2px solid ${(props) => props.theme.background.secondary};
-    border-radius: 8px;
-`;
-
 const CopyIcon = styled.i`
     cursor: pointer;
     text-transform: lowercase;
 
-    color: ${(props) => props.theme.button.textColor.primary};
+    color: ${(props) => props.theme.textColor.primary};
 `;
 
 const WalletIcon = styled.i`
     font-size: 18px;
     width: 20px;
 
-    color: ${(props) => props.theme.button.textColor.primary};
+    color: ${(props) => props.theme.textColor.primary};
 `;
 
 const Text = styled.span`
@@ -157,57 +149,32 @@ const Text = styled.span`
     font-weight: 600;
     font-size: 12px;
     line-height: 13px;
-
-    color: ${(props) => props.theme.button.textColor.primary};
+    white-space: pre;
+    color: ${(props) => props.theme.textColor.primary};
     text-align: left;
 `;
 
 const Wrapper = styled.div<{ clickable?: boolean }>`
     display: flex;
-    justify-content: start;
+    justify-content: space-between;
     align-items: center;
-    gap: 2px;
+    gap: 10px;
     width: 100%;
     cursor: ${(props) => (props.clickable ? 'pointer' : 'default')};
 `;
 
-const Container = styled.div<{ disabled?: boolean }>`
+const Container = styled.div`
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    width: 100%;
+    align-items: center;
+    cursor: pointer;
     gap: 4px;
-    opacity: ${(props) => (props.disabled ? 0.3 : 1)};
-    background: ${(props) => (props.disabled ? '' : props.theme.background.quaternary)};
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    padding: 10px 20px 20px 20px;
 `;
 
 const Separator = styled.p`
     position: relative;
     height: 2px;
     width: 100%;
-    background: ${(props) => props.theme.background.secondary};
-`;
-
-const SwitchIcon = styled.i`
-    z-index: 10;
-    position: absolute;
-    top: -11px;
-    left: calc(50% - 12px);
-    font-size: 24px;
-    font-weight: 600;
-    cursor: pointer;
-    transform: rotate(90deg);
-    background: ${(props) => props.theme.background.tertiary};
-    border-radius: 20px;
-    color: ${(props) => props.theme.button.textColor.primary};
-`;
-
-const LogOutWrapper = styled(Wrapper)`
-    cursor: pointer;
+    background: ${(props) => props.theme.background.senary};
 `;
 
 const Address = styled(Text)`

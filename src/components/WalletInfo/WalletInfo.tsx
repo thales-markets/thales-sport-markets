@@ -1,32 +1,30 @@
 import ConnectWalletModal from 'components/ConnectWalletModal';
 import NetworkSwitcher from 'components/NetworkSwitcher';
 import OutsideClickHandler from 'components/OutsideClick';
-import { COLLATERALS, USD_SIGN } from 'constants/currency';
+import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
+import { COLLATERALS } from 'constants/currency';
 import ProfileItem from 'layouts/DappLayout/DappHeader/components/ProfileItem';
 import ProfileDropdown from 'layouts/DappLayout/DappHeader/components/ProfileItem/components/ProfileDropdown';
-import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
-import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
-import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { getTicketPayment, setPaymentSelectedCollateralIndex } from 'redux/modules/ticket';
 import { getIsBiconomy, getWalletConnectModalVisibility, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered } from 'styles/common';
-import { formatCurrencyWithKey } from 'thales-utils';
+import { truncateAddress } from 'thales-utils';
 import { RootState } from 'types/redux';
-import { getCollaterals, mapMultiCollateralBalances } from 'utils/collaterals';
 import { getDefaultCollateralIndexForNetworkId } from 'utils/network';
 import useBiconomy from 'utils/useBiconomy';
-import { useAccount, useChainId, useClient } from 'wagmi';
+import { useAccount, useChainId } from 'wagmi';
 
 const WalletInfo: React.FC = ({}) => {
     const dispatch = useDispatch();
-
+    const { t } = useTranslation();
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const theme = useTheme();
     const networkId = useChainId();
-    const client = useClient();
     const { address, isConnected } = useAccount();
     const smartAddres = useBiconomy();
     const walletAddress = (isBiconomy ? smartAddres : address) || '';
@@ -38,53 +36,6 @@ const WalletInfo: React.FC = ({}) => {
 
     const [isFreeBetInitialized, setIsFreeBetInitialized] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
-
-    const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
-    const exchangeRates = exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
-
-    const multipleCollateralBalancesQuery = useMultipleCollateralBalanceQuery(
-        walletAddress,
-        { networkId, client },
-        {
-            enabled: isConnected,
-        }
-    );
-
-    const multiCollateralBalances =
-        multipleCollateralBalancesQuery?.isSuccess && multipleCollateralBalancesQuery?.data
-            ? multipleCollateralBalancesQuery.data
-            : undefined;
-
-    const freeBetCollateralBalancesQuery = useFreeBetCollateralBalanceQuery(
-        walletAddress,
-        { networkId, client },
-        {
-            enabled: isConnected,
-        }
-    );
-
-    const freeBetCollateralBalances =
-        freeBetCollateralBalancesQuery?.isSuccess && freeBetCollateralBalancesQuery.data
-            ? freeBetCollateralBalancesQuery?.data
-            : undefined;
-
-    const balanceList = mapMultiCollateralBalances(freeBetCollateralBalances, exchangeRates, networkId);
-
-    const totalBalanceValue = useMemo(() => {
-        let total = 0;
-        try {
-            if (exchangeRates && multiCollateralBalances && balanceList) {
-                getCollaterals(networkId).forEach((token) => {
-                    total += multiCollateralBalances[token] * (exchangeRates[token] ? exchangeRates[token] : 1);
-                });
-                balanceList.forEach((data) => (total += data.balanceDollarValue));
-            }
-
-            return total ? formatCurrencyWithKey(USD_SIGN, total, 2) : '0$';
-        } catch (e) {
-            return '0$';
-        }
-    }, [exchangeRates, multiCollateralBalances, networkId, balanceList]);
 
     // Invalidate default selectedCollateralIndex
     useEffect(() => {
@@ -116,26 +67,41 @@ const WalletInfo: React.FC = ({}) => {
         }
     }, [dispatch, networkId, isFreeBetInitialized]);
 
+    const handleCopy = (address: string) => {
+        const id = toast.loading(t('deposit.copying-address'), { autoClose: 1000 });
+        try {
+            navigator.clipboard.writeText(address);
+            toast.update(id, {
+                ...getInfoToastOptions(t('deposit.copied') + ': ' + truncateAddress(address, 6, 4)),
+                autoClose: 2000,
+            });
+        } catch (e) {
+            toast.update(id, getErrorToastOptions('Error'));
+        }
+    };
+
     return (
-        <Container walletConnected={isConnected} gap={8}>
+        <Container walletConnected={isConnected}>
             <OutsideClickHandler onOutsideClick={setShowDropdown.bind(this, false)}>
                 {isConnected && (
                     <WalletWrapper>
-                        <Button onClick={setShowDropdown.bind(this, !showDropdown)}>
-                            <WalletAddressInfo isConnected={isConnected} isClickable={true}>
-                                <ProfileItem color={theme.button.textColor.primary} />
-                            </WalletAddressInfo>
+                        <Icon onClick={setShowDropdown.bind(this, !showDropdown)} className="icon icon--arrow-down" />
+                        <Divider />
+                        <WalletAddressInfo onClick={setShowDropdown.bind(this, !showDropdown)}>
+                            <Text>Overtime Account</Text>
+                        </WalletAddressInfo>
+                        <Divider />
+                        <WalletAddressInfo onClick={handleCopy.bind(this, walletAddress)}>
+                            <ProfileItem color={theme.textColor.secondary} />
+                        </WalletAddressInfo>
 
-                            <WalletBalanceInfo>
-                                <Text>{totalBalanceValue}</Text>
-                            </WalletBalanceInfo>
-                        </Button>
+                        <NetworkSwitcher />
+
                         {showDropdown && <ProfileDropdown setShowDropdown={setShowDropdown} />}
                     </WalletWrapper>
                 )}
             </OutsideClickHandler>
 
-            <NetworkSwitcher />
             {connectWalletModalVisibility && (
                 <ConnectWalletModal
                     isOpen={connectWalletModalVisibility}
@@ -153,33 +119,21 @@ const WalletInfo: React.FC = ({}) => {
 };
 
 const Container = styled(FlexDivCentered)<{ walletConnected?: boolean }>`
-    width: ${(props) => (props.walletConnected ? '100%' : 'auto')};
+    width: 100%;
     color: ${(props) => props.theme.textColor.secondary};
     border-radius: 5px;
     position: relative;
     justify-content: end;
-    min-width: fit-content;
     @media (max-width: 767px) {
         min-width: auto;
     }
 `;
 
-const WalletAddressInfo = styled.div<{ isConnected: boolean; isClickable?: boolean }>`
-    justify-content: center;
-    cursor: ${(props) => (props.isClickable ? 'pointer' : 'default')};
-    height: 100%;
-    align-items: center;
+const WalletAddressInfo = styled.div`
     display: flex;
-
-    .wallet-info-hover {
-        display: none;
-    }
-    :hover {
-        .wallet-info-hover {
-            display: inline;
-            width: fit-content;
-        }
-    }
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
 
     @media (max-width: 950px) {
         border-right: none;
@@ -187,48 +141,37 @@ const WalletAddressInfo = styled.div<{ isConnected: boolean; isClickable?: boole
     }
 `;
 
-const WalletBalanceInfo = styled.div`
-    justify-content: center;
-    border-left: 2px solid ${(props) => props.theme.borderColor.primary};
-    padding-left: 7px;
-    padding-right: 7px;
-    height: 70%;
-    align-items: center;
+const WalletWrapper = styled.div`
     display: flex;
+    align-items: center;
+    width: 100%;
+    padding-left: 6px;
+    border: 1px ${(props) => props.theme.borderColor.primary} solid;
+    border-radius: 8px;
+    gap: 6px;
+`;
+
+const Divider = styled.div`
+    height: 22px;
+    width: 2px;
+    background-color: ${(props) => props.theme.background.secondary};
 `;
 
 const Text = styled.span`
+    cursor: pointer;
     font-weight: 600;
     font-size: 12px;
     white-space: pre;
     line-height: 12px;
-    color: ${(props) => props.theme.button.textColor.primary};
+    color: ${(props) => props.theme.textColor.secondary};
 `;
 
-const Button = styled(FlexDivCentered)<{ active?: boolean }>`
-    border-radius: 8px;
-    width: 100%;
-    height: 30px;
-    border: 1px ${(props) => props.theme.borderColor.primary} solid;
-    color: ${(props) => props.theme.textColor.primary};
-    background-color: ${(props) => props.theme.connectWalletModal.hover};
-    color: ${(props) => props.theme.button.textColor.primary};
-    font-size: 14px;
-    font-weight: 600;
-
-    text-transform: uppercase;
+const Icon = styled.i`
     cursor: pointer;
-
-    white-space: pre;
-    padding: 3px 10px;
-    @media (max-width: 575px) {
-        font-size: 12px;
-        padding: 3px 12px;
-    }
-`;
-
-const WalletWrapper = styled.div`
-    min-width: 200px;
+    font-weight: 600;
+    font-size: 16px;
+    padding: 0 2px;
+    color: ${(props) => props.theme.textColor.secondary};
 `;
 
 export default WalletInfo;

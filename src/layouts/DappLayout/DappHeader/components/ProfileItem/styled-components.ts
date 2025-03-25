@@ -10,6 +10,7 @@ export const ProfileContainer = styled(FlexDivRow)`
 export const ProfileLabel = styled.span<{ color?: string }>`
     font-weight: 600;
     font-size: 12px;
+    width: 82px;
     color: ${(props) => (props.color ? props.color : props.theme.textColor.secondary)};
     text-transform: lowercase;
     white-space: pre;
