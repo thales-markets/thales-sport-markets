@@ -345,6 +345,12 @@
         "incentivized-market": "INCENTIVIZED MARKET"
     },
     "profile": {
+        "dropdown": {
+            "account": "Overtime Account",
+            "eoa": "EOA Wallet",
+            "logout": "Log Out",
+            "profile": "Account"
+        },
         "account-summary": {
             "title": "Account Summary",
             "balance": "Portfolio Balance",
@@ -779,8 +785,8 @@
         "nav-menu": {
             "items": {
                 "markets": "Markets",
-                "profile-smart": "Overtime Account",
-                "profile-wallet": "Wallet Account",
+                "profile": "Profile",
+                "account": "Account",
                 "resolve-blocker": "Resolve blocker",
                 "history": "History",
                 "liquidity-pool": "Provide Liquidity",

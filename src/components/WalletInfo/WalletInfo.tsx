@@ -92,7 +92,7 @@ const WalletInfo: React.FC = ({}) => {
                             />
                             <Divider />
                             <WalletAddressInfo onClick={setShowDropdown.bind(this, !showDropdown)}>
-                                <Text>Overtime Account</Text>
+                                <Text>{isBiconomy ? t('profile.dropdown.account') : t('profile.dropdown.eoa')}</Text>
                             </WalletAddressInfo>
                             <Divider />
                             <WalletAddressInfo onClick={handleCopy.bind(this, walletAddress)}>
@@ -127,10 +127,11 @@ const WalletInfo: React.FC = ({}) => {
 
 const Container = styled(FlexDivCentered)<{ walletConnected?: boolean }>`
     width: 100%;
+    width: 318px;
     color: ${(props) => props.theme.textColor.secondary};
     border-radius: 5px;
     position: relative;
-    justify-content: end;
+    justify-content: space-between;
     @media (max-width: 767px) {
         min-width: auto;
     }
@@ -151,6 +152,7 @@ const WalletAddressInfo = styled.div`
 const WalletWrapper = styled.div`
     display: flex;
     align-items: center;
+    justify-content: space-between;
     width: 100%;
     padding-left: 6px;
     border: 1px ${(props) => props.theme.borderColor.primary} solid;

@@ -58,13 +58,13 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ setShowDropdown }) =>
                         }
                     }}
                 />
-                <Text>EOA Address</Text>
+                <Text>{t('profile.dropdown.eoa')}</Text>
             </Wrapper>
             <Separator />
             <Wrapper>
                 <Container>
                     <WalletIcon className="icon icon--wallet-connected" />
-                    <Text>Overtime Account</Text>
+                    <Text>{t('profile.dropdown.account')}</Text>
                 </Container>
                 <Container
                     onClick={() => {
@@ -79,7 +79,7 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ setShowDropdown }) =>
             <Wrapper>
                 <Container>
                     <WalletIcon className="icon icon--wallet-connected" />
-                    <Text>EOA Address</Text>
+                    <Text>{t('profile.dropdown.eoa')}</Text>
                 </Container>
                 <Container
                     onClick={() => {
@@ -95,7 +95,7 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ setShowDropdown }) =>
 
             <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Profile)}>
                 <Container clickable onClick={setShowDropdown.bind(this, false)}>
-                    <CopyIcon className="icon icon--logo" /> <Text>Account</Text>
+                    <CopyIcon className="icon icon--logo" /> <Text>{t('profile.dropdown.profile')}</Text>
                 </Container>
             </SPAAnchor>
             <Container
@@ -106,7 +106,7 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ setShowDropdown }) =>
                 }}
             >
                 <WalletIcon className="icon icon--wallet-disconnected" />
-                <Text>Log out</Text>
+                <Text>{t('profile.dropdown.logout')}</Text>
             </Container>
         </Dropdown>
     );
@@ -166,6 +166,12 @@ const Container = styled.div<{ clickable?: boolean }>`
     align-items: center;
     gap: 4px;
     cursor: ${(props) => (props.clickable ? 'pointer' : 'default')};
+    &:hover {
+        i,
+        span {
+            color: ${(props) => (props.clickable ? props.theme.textColor.quaternary : '')};
+        }
+    }
 `;
 
 const Separator = styled.p`
