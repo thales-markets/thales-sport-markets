@@ -1092,6 +1092,7 @@
             "tooltip-2": "Send/Withdraw supported tokens to the address below. Make sure you select {{ network }} when sending.",
             "tooltip-3": "Onramper integration, coming soon.",
             "tooltip-4": "Send funds from your wallet to your Overtime Account.",
+            "tooltip-5": "Buy Crypto using your credit card or wire transfer",
             "powered-by": "Powered by <icon/>",
             "current-network": "Current Network: ",
             "address": "Your Deposit Address",

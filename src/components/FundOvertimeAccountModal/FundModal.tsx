@@ -230,14 +230,19 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                 )}
 
                 <Container>
-                    <ButtonLocal
-                        onClick={() => {
-                            window.open(onramperUrl, '_blank');
-                        }}
+                    <Tooltip
+                        customIconStyling={{ color: theme.textColor.secondary }}
+                        overlay={t('get-started.fund-account.tooltip-5')}
                     >
-                        <ButtonText>{t('get-started.fund-account.buy-crypto')}</ButtonText>
-                        <Icon className="icon icon--card" />
-                    </ButtonLocal>
+                        <ButtonLocal
+                            onClick={() => {
+                                window.open(onramperUrl, '_blank');
+                            }}
+                        >
+                            <ButtonText>{t('get-started.fund-account.buy-crypto')}</ButtonText>
+                            <Icon className="icon icon--card" />
+                        </ButtonLocal>
+                    </Tooltip>
                     <Tooltip
                         customIconStyling={{ color: theme.textColor.secondary }}
                         overlay={t('get-started.fund-account.tooltip-4')}
