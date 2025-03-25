@@ -109,7 +109,7 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                             <NetworkName>{getNetworkNameByNetworkId(networkId)}</NetworkName>
                         </Network>
                     </NetworkWrapper>
-                    <WalletWrapper onClick={() => setNavMenuVisibility(false)}>
+                    <WalletWrapper>
                         <WalletInfo />
                     </WalletWrapper>
                 </HeaderContainer>

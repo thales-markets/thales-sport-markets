@@ -43,7 +43,7 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ setShowDropdown }) =>
     return (
         <Dropdown>
             <Wrapper>
-                <Address>Overtime Account</Address>
+                <Text>Overtime Account</Text>
 
                 <Toggle
                     height="24px"
@@ -58,36 +58,34 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ setShowDropdown }) =>
                         }
                     }}
                 />
-                <Address>EOA Address</Address>
+                <Text>EOA Address</Text>
             </Wrapper>
             <Separator />
-            <Wrapper
-                onClick={() => {
-                    handleCopy(smartAddress);
-                    setShowDropdown(false);
-                }}
-            >
+            <Wrapper>
                 <Container>
                     <WalletIcon className="icon icon--wallet-connected" />
                     <Text>Overtime Account</Text>
                 </Container>
-                <Container>
+                <Container
+                    onClick={() => {
+                        handleCopy(smartAddress);
+                    }}
+                >
                     <Address>{truncateAddress(smartAddress, 6, 4)}</Address>
                     <CopyIcon className="icon icon--copy" />
                 </Container>
             </Wrapper>
 
-            <Wrapper
-                onClick={() => {
-                    handleCopy(address as any);
-                    setShowDropdown(false);
-                }}
-            >
+            <Wrapper>
                 <Container>
                     <WalletIcon className="icon icon--wallet-connected" />
                     <Text>EOA Address</Text>
                 </Container>
-                <Container>
+                <Container
+                    onClick={() => {
+                        handleCopy(address as any);
+                    }}
+                >
                     <Address>{truncateAddress(address as any, 6, 4)}</Address>
                     <CopyIcon className="icon icon--copy" />
                 </Container>
@@ -96,11 +94,12 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ setShowDropdown }) =>
             <Separator />
 
             <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Profile)}>
-                <Container onClick={setShowDropdown.bind(this, false)}>
+                <Container clickable onClick={setShowDropdown.bind(this, false)}>
                     <CopyIcon className="icon icon--logo" /> <Text>Account</Text>
                 </Container>
             </SPAAnchor>
             <Container
+                clickable
                 onClick={() => {
                     disconnect();
                     setShowDropdown(false);
@@ -154,20 +153,19 @@ const Text = styled.span`
     text-align: left;
 `;
 
-const Wrapper = styled.div<{ clickable?: boolean }>`
+const Wrapper = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 10px;
     width: 100%;
-    cursor: ${(props) => (props.clickable ? 'pointer' : 'default')};
 `;
 
-const Container = styled.div`
+const Container = styled.div<{ clickable?: boolean }>`
     display: flex;
     align-items: center;
-    cursor: pointer;
     gap: 4px;
+    cursor: ${(props) => (props.clickable ? 'pointer' : 'default')};
 `;
 
 const Separator = styled.p`
