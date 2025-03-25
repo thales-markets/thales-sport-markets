@@ -127,6 +127,9 @@ const Dropdown = styled.div`
     align-items: flex-start;
     gap: 10px;
     font-weight: 400;
+    @media (max-width: 767px) {
+        border: 1px solid;
+    }
 `;
 
 const CopyIcon = styled.i`

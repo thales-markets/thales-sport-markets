@@ -128,12 +128,13 @@ const WalletInfo: React.FC = ({}) => {
 const Container = styled(FlexDivCentered)<{ walletConnected?: boolean }>`
     width: 100%;
     width: 318px;
+    z-index: 10;
     color: ${(props) => props.theme.textColor.secondary};
     border-radius: 5px;
     position: relative;
     justify-content: space-between;
     @media (max-width: 767px) {
-        min-width: auto;
+        width: 330px;
     }
 `;
 
