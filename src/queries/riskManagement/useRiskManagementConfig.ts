@@ -43,10 +43,10 @@ const useRiskManagementConfigQuery = (
                         } as RiskManagementLeaguesAndTypes;
                         break;
                     case RiskManagementConfig.SGP_BLOCKERS:
-                        config = configData as RiskManagementSgpBlockers;
+                        config = (configData as RiskManagementSgpBlockers).filter((sgpBlocker) => sgpBlocker.enabled);
                         break;
                     case RiskManagementConfig.SGP_BUILDERS:
-                        config = configData as RiskManagementSgpBuilders;
+                        config = (configData as RiskManagementSgpBuilders).filter((sgpBuilder) => sgpBuilder.enabled);
                         break;
                     case RiskManagementConfig.SGP:
                         config = configData as RiskManagementSgp;

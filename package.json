@@ -22,7 +22,7 @@
         "lodash": "^4.17.21",
         "lottie-react": "^2.3.1",
         "ordinal": "^1.0.3",
-        "overtime-utils": "^0.0.19-rc1",
+        "overtime-utils": "^0.0.21",
         "plausible-tracker": "^0.3.8",
         "rc-tooltip": "^5.1.1",
         "react": "18.2.0",

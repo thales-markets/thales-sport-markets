@@ -11,7 +11,6 @@ import { MarketTypePlayerPropsGroupsBySport } from 'constants/marketTypes';
 import { RESET_STATE } from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { SportFilter, StatusFilter } from 'enums/markets';
-import { RiskManagementConfig } from 'enums/riskManagement';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
 import { groupBy, orderBy } from 'lodash';
@@ -28,7 +27,6 @@ import SidebarMMLeaderboard from 'pages/MarchMadness/components/SidebarLeaderboa
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
-import useRiskManagementConfigQuery from 'queries/riskManagement/useRiskManagementConfig';
 import React, { Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
@@ -52,16 +50,14 @@ import {
     setStatusFilter,
     setTagFilter,
 } from 'redux/modules/market';
-import { getIsSgp } from 'redux/modules/ticket';
 import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled, { CSSProperties, useTheme } from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { addHoursToCurrentDate, localStore } from 'thales-utils';
 import { MarketsCache, SportMarket, SportMarkets, TagInfo, Tags } from 'types/markets';
-import { RiskManagementSgpBuilders } from 'types/riskManagement';
 import { ThemeInterface } from 'types/ui';
 import { isMarchMadnessAvailableForNetworkId } from 'utils/marchMadness';
-import { addSgpBuilderMarkets, getDefaultPlayerPropsLeague } from 'utils/marketsV2';
+import { getDefaultPlayerPropsLeague } from 'utils/marketsV2';
 import { history } from 'utils/routes';
 import { getScrollMainContainerToTop } from 'utils/scroll';
 import useQueryParam from 'utils/useQueryParams';
@@ -107,7 +103,6 @@ const Home: React.FC = () => {
     const isMobile = useSelector(getIsMobile);
     const isMarketSelected = useSelector(getIsMarketSelected);
     const selectedMarket = useSelector(getSelectedMarket);
-    const isSgp = useSelector(getIsSgp);
 
     const [showBurger, setShowBurger] = useState<boolean>(false);
     const [playerPropsCountPerTag, setPlayerPropsCountPerTag] = useState<Record<string, number>>({});
@@ -236,20 +231,6 @@ const Home: React.FC = () => {
 
     const gameMultipliersQuery = useGameMultipliersQuery();
 
-    const riskManagementSgpBuildersQuery = useRiskManagementConfigQuery(
-        RiskManagementConfig.SGP_BUILDERS,
-        { networkId },
-        { enabled: isSgp }
-    );
-
-    const sgpBuilders = useMemo(
-        () =>
-            riskManagementSgpBuildersQuery.isSuccess && riskManagementSgpBuildersQuery.data
-                ? (riskManagementSgpBuildersQuery.data as RiskManagementSgpBuilders)
-                : [],
-        [riskManagementSgpBuildersQuery.isSuccess, riskManagementSgpBuildersQuery.data]
-    );
-
     const finalMarkets = useMemo(() => {
         if (showBurger) {
             return [];
@@ -264,8 +245,6 @@ const Home: React.FC = () => {
                       [StatusFilter.PAUSED_MARKETS]: [],
                       [StatusFilter.CANCELLED_MARKETS]: [],
                   };
-
-        allMarkets.OpenMarkets = addSgpBuilderMarkets(allMarkets.OpenMarkets, sgpBuilders);
 
         const marketTypes = new Set<MarketType>();
         const allLiveMarkets =
@@ -432,7 +411,6 @@ const Home: React.FC = () => {
         selectedMarket,
         showBurger,
         dispatch,
-        sgpBuilders,
     ]);
 
     const marketsLoading =

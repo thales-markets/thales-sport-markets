@@ -129,6 +129,12 @@ export type TicketMarket = SportMarket & {
     isWinning?: boolean;
 };
 
+export type SgpTicket = {
+    typeId: MarketType;
+    position: number;
+    ticketPositions: TicketPosition[];
+};
+
 export type SportsAmmData = {
     minBuyInAmount: number;
     maxTicketSize: number;

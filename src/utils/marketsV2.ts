@@ -11,6 +11,7 @@ import {
     isAwayTeamMarket,
     isBothTeamsToScoreMarket,
     isCombinedPositionsMarket,
+    isCorrectScoreMarket,
     isDoubleChanceMarket,
     isFuturesMarket,
     isHomeTeamMarket,
@@ -22,6 +23,7 @@ import {
     isPeriodMarket,
     isPlayerPropsMarket,
     isScoreMarket,
+    isSgpBuilderMarket,
     isSpreadMarket,
     isTotalExactMarket,
     isTotalMarket,
@@ -38,7 +40,6 @@ import {
 import {
     SerializableSportMarket,
     SportMarket,
-    SportMarkets,
     Team,
     Ticket,
     TicketMarket,
@@ -134,7 +135,7 @@ const getSimplePositionText = (
             ? text.split(' ')[marketType === MarketType.US_ELECTION_WINNING_PARTY_NORTH_CAROLINA ? 2 : 1]
             : text;
     }
-    if (marketType === MarketType.CORRECT_SCORE && positionNames && positionNames[position]) {
+    if (isCorrectScoreMarket(marketType) && positionNames && positionNames[position]) {
         let text = (position < positionNames.length - 1
             ? positionNames[position].slice(positionNames[position].length - 3)
             : positionNames[position]
@@ -150,6 +151,9 @@ const getSimplePositionText = (
                 ? `${awayTeam} ${text}`
                 : text;
         return text;
+    }
+    if (isSgpBuilderMarket(marketType) && positionNames && positionNames[position]) {
+        return positionNames[position];
     }
     if (isTotalExactMarket(marketType) && positionNames && positionNames[position]) {
         const text =
@@ -259,10 +263,6 @@ const getCombinedPositionsText = (market: SportMarket, position: number) => {
 export const getPositionTextV2 = (market: SportMarket, position: number, extendedText?: boolean) => {
     if (market.typeId === MarketType.EMPTY) {
         return '-';
-    }
-
-    if (market.typeId === MarketType.SGP_BUILDER) {
-        return market.homeTeam;
     }
 
     return isCombinedPositionsMarket(market.typeId)
@@ -679,48 +679,52 @@ export const packMarket = (
     return packedMarket;
 };
 
-export const addSgpBuilderMarkets = (markets: SportMarkets, sgpBuilders: SgpBuilder[]): SportMarkets =>
-    markets.map((market) => {
-        const sgpMarkets = sgpBuilders.map(
-            (sgpMarket) =>
-                ({
-                    gameId: market.gameId,
-                    sport: market.sport,
-                    leagueId: market.leagueId,
-                    leagueName: market.leagueName,
-                    subLeagueId: market.subLeagueId,
-                    typeId: sgpMarket.typeId,
-                    type: '',
-                    maturity: market.maturity,
-                    maturityDate: market.maturityDate,
-                    homeTeam: sgpMarket.name,
-                    awayTeam: '',
-                    homeScoreByPeriod: [],
-                    awayScoreByPeriod: [],
-                    winningPositions: [],
-                    status: market.status,
-                    isResolved: market.isResolved,
-                    isOpen: market.isOpen,
-                    isCancelled: market.isCancelled,
-                    isPaused: market.isPaused,
-                    line: market.line, // TODO:
-                    isOneSideMarket: false,
-                    isPlayerPropsMarket: false,
-                    isOneSidePlayerPropsMarket: false,
-                    isYesNoPlayerPropsMarket: false,
-                    playerProps: {
-                        playerId: 0,
-                        playerName: '',
-                    },
-                    odds: [0.5], // TODO:
-                    proof: [],
-                    childMarkets: [],
-                    combinedPositions: [],
-                } as SportMarket)
-        );
+export const getTicketPositionsFogSgpBuilder = (market: SportMarket, sgpBuilder: SgpBuilder): TicketPosition[] => {
+    let ticketPositions: TicketPosition[] = [];
 
-        return { ...market, childMarkets: [...market.childMarkets, ...sgpMarkets] };
-    });
+    for (let i = 0; i < sgpBuilder.size; i++) {
+        const typeId = sgpBuilder.combinedTypeIds[i];
+        const playerId = sgpBuilder.combinedPlayerIds[i];
+        const line = sgpBuilder.combinedLines[i];
+        const position = sgpBuilder.combinedPositions[i];
+
+        const combinedMarket =
+            typeId === MarketType.WINNER
+                ? market
+                : market.childMarkets.find(
+                      (childMarket) =>
+                          childMarket.typeId === typeId &&
+                          (playerId === null || childMarket.playerProps.playerId === playerId) &&
+                          (line === null || childMarket.line === line)
+                  );
+
+        if (combinedMarket) {
+            const ticketPosition = {
+                gameId: combinedMarket.gameId,
+                leagueId: combinedMarket.leagueId,
+                typeId: combinedMarket.typeId,
+                playerId: combinedMarket.playerProps.playerId,
+                playerName: combinedMarket.playerProps.playerName,
+                line: combinedMarket.line,
+                position: position,
+                combinedPositions: combinedMarket.combinedPositions,
+                live: false,
+                isOneSideMarket: combinedMarket.isOneSideMarket,
+                isPlayerPropsMarket: combinedMarket.isPlayerPropsMarket,
+                homeTeam: combinedMarket.homeTeam,
+                awayTeam: combinedMarket.awayTeam,
+                playerProps: combinedMarket.playerProps,
+            } as TicketPosition;
+
+            ticketPositions.push(ticketPosition);
+        } else {
+            ticketPositions = [];
+            break;
+        }
+    }
+
+    return ticketPositions;
+};
 
 const getPlayerPropsEmptyMarkets = (market: SportMarket) => [
     {

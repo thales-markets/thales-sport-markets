@@ -20,7 +20,7 @@ import { getIsMobile } from 'redux/modules/app';
 import { getSportFilter } from 'redux/modules/market';
 import { getIsSgp, getTicket } from 'redux/modules/ticket';
 import styled from 'styled-components';
-import { SportMarket, TicketPosition } from 'types/markets';
+import { SgpTicket, SportMarket, TicketPosition } from 'types/markets';
 import { RiskManagementSgpBlockers } from 'types/riskManagement';
 import { getMarketTypeTooltipKey } from 'utils/markets';
 import { getSubtitleText, getTitleText, isSameMarket, sportMarketAsTicketPosition } from 'utils/marketsV2';
@@ -54,6 +54,7 @@ type PositionsProps = {
     floatingOddsTitles?: boolean;
     width?: string;
     onAccordionClick?: () => void;
+    sgpTickets?: SgpTicket[];
 };
 
 const Positions: React.FC<PositionsProps> = ({
@@ -70,6 +71,7 @@ const Positions: React.FC<PositionsProps> = ({
     oddsTitlesHidden,
     floatingOddsTitles,
     width,
+    sgpTickets,
 }) => {
     const { t } = useTranslation();
 
@@ -315,6 +317,7 @@ const Positions: React.FC<PositionsProps> = ({
                                                 isColumnView={isColumnView}
                                                 displayPosition={index}
                                                 isPositionBlocked={oddsData.isBlocked}
+                                                sgpTickets={sgpTickets}
                                             />
                                         );
                                     })}

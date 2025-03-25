@@ -2,16 +2,30 @@ import Tooltip from 'components/Tooltip';
 import { oddToastOptions } from 'config/toast';
 import { FUTURES_MAIN_VIEW_DISPLAY_COUNT } from 'constants/markets';
 import { SportFilter } from 'enums/markets';
-import { MarketType, isFuturesMarket, isTotalExactMarket } from 'overtime-utils';
+import {
+    MarketType,
+    isCorrectScoreMarket,
+    isFuturesMarket,
+    isSgpBuilderMarket,
+    isTotalExactMarket,
+} from 'overtime-utils';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
 import { getMarketTypeFilter, getSportFilter } from 'redux/modules/market';
-import { getTicket, removeFromTicket, updateTicket } from 'redux/modules/ticket';
+import {
+    getIsSgp,
+    getTicket,
+    removeAll,
+    removeFromTicket,
+    setIsSgp,
+    setIsSystemBet,
+    updateTicket,
+} from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
-import { SportMarket, TicketPosition } from 'types/markets';
+import { SgpTicket, SportMarket, TicketPosition } from 'types/markets';
 import { formatMarketOdds, getPositionOrder } from 'utils/markets';
 import {
     getMatchLabel,
@@ -29,6 +43,7 @@ type PositionDetailsProps = {
     isColumnView?: boolean;
     displayPosition: number;
     isPositionBlocked?: boolean;
+    sgpTickets?: SgpTicket[];
 };
 
 const PositionDetails: React.FC<PositionDetailsProps> = ({
@@ -38,6 +53,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
     isColumnView,
     displayPosition,
     isPositionBlocked,
+    sgpTickets,
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -47,9 +63,29 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
     const ticket = useSelector(getTicket);
     const marketTypeFilter = useSelector(getMarketTypeFilter);
     const sportFilter = useSelector(getSportFilter);
+    const isSgp = useSelector(getIsSgp);
 
-    const addedToTicket = ticket.filter((position: any) => isSameMarket(market, position))[0];
-    const isAddedToTicket = addedToTicket && addedToTicket.position == position;
+    const sgpTicketPositions = useMemo(() => {
+        if (isSgpBuilderMarket(market.typeId) && !!sgpTickets?.length) {
+            return (
+                sgpTickets.find((sgpTicket) => sgpTicket.typeId === market.typeId && sgpTicket.position === position)
+                    ?.ticketPositions || []
+            );
+        }
+        return [];
+    }, [market.typeId, position, sgpTickets]);
+
+    const isSgpBuilderAddedToTicket =
+        isSgpBuilderMarket(market.typeId) &&
+        !!ticket.length &&
+        ticket.length === sgpTicketPositions.length &&
+        ticket.filter((position, i) => isSameMarket(sgpTicketPositions[i], position)).length ===
+            sgpTicketPositions.length &&
+        ticket[0].position === position;
+
+    const addedToTicket = ticket.filter((position) => isSameMarket(market, position))[0];
+    const isAddedToTicket = (addedToTicket && addedToTicket.position == position) || isSgpBuilderAddedToTicket;
+
     const isPlayerPropsMarket = useMemo(() => sportFilter === SportFilter.PlayerProps, [sportFilter]);
 
     const isGameStarted = market.maturityDate < new Date();
@@ -65,9 +101,10 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
     const odd = market.odds[position];
     const isZeroOdd = !odd || odd == 0 || market.typeId === MarketType.EMPTY;
     const noOdd = isZeroOdd || odd > 0.97;
-    const disabledPosition = noOdd || (!isGameOpen && !isGameLive) || (!!isPositionBlocked && !isAddedToTicket);
-
-    const showOdd = isGameOpen || isGameLive;
+    const disabledPosition = isSgpBuilderMarket(market.typeId)
+        ? !sgpTicketPositions.length
+        : noOdd || (!isGameOpen && !isGameLive) || (!!isPositionBlocked && !isAddedToTicket);
+    const showOdd = (isGameOpen || isGameLive) && !isSgpBuilderMarket(market.typeId);
 
     const positionText = getPositionTextV2(
         market,
@@ -76,7 +113,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
     );
 
     const isFutures = isFuturesMarket(market.typeId);
-    const isCorrectScore = market.typeId === MarketType.CORRECT_SCORE;
+    const isCorrectScore = isCorrectScoreMarket(market.typeId);
 
     const getDetails = () => (
         <Container
@@ -93,23 +130,44 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
             onClick={() => {
                 if (disabledPosition) return;
                 if (isAddedToTicket) {
-                    const serializableMarket = sportMarketAsSerializable(market);
-                    dispatch(removeFromTicket(serializableMarket));
-                } else {
-                    const ticketPosition: TicketPosition = sportMarketAsTicketPosition(market, position);
-
-                    if (
-                        !ticketPosition.live &&
-                        (ticket.some((position) => position.live) || (ticket.length && market.live))
-                    ) {
-                        toast(t('markets.market-card.odds-live-limitation-message'), { type: 'error' });
+                    if (isSgpBuilderMarket(market.typeId)) {
+                        dispatch(removeAll());
                     } else {
-                        dispatch(updateTicket(ticketPosition));
+                        const serializableMarket = sportMarketAsSerializable(market);
+                        dispatch(removeFromTicket(serializableMarket));
                     }
-                    if (isMobile) {
-                        // TODO: temporary solution
-                        toast(`${getMatchLabel(market)} added to the ticket`, oddToastOptions);
+                } else {
+                    let ticketPositions: TicketPosition[] = [];
+
+                    if (isSgpBuilderMarket(market.typeId)) {
+                        // multiple ticket positions
+                        ticketPositions = sgpTicketPositions;
+
+                        if (!isSgp) {
+                            dispatch(removeAll());
+                            dispatch(setIsSystemBet(false));
+                            dispatch(setIsSgp(true));
+                        } else if (ticket.length > 0) {
+                            dispatch(removeAll());
+                        }
+                    } else {
+                        ticketPositions.push(sportMarketAsTicketPosition(market, position));
                     }
+
+                    ticketPositions.forEach((ticketPosition) => {
+                        if (
+                            !ticketPosition.live &&
+                            (ticket.some((position) => position.live) || (ticket.length && market.live))
+                        ) {
+                            toast(t('markets.market-card.odds-live-limitation-message'), { type: 'error' });
+                        } else {
+                            dispatch(updateTicket(ticketPosition));
+                        }
+                        if (isMobile) {
+                            // TODO: temporary solution
+                            toast(`${getMatchLabel(market)} added to the ticket`, oddToastOptions);
+                        }
+                    });
                 }
             }}
         >
