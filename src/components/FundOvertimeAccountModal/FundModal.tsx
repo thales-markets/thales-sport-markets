@@ -272,16 +272,20 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
 };
 
 const Wrapper = styled.div`
-    max-width: 480px;
+    max-width: 520px;
 `;
 
 const OvertimeIcon = styled.i`
-    font-size: 124px;
+    font-size: 128px;
     font-weight: 400;
     line-height: 28px;
 `;
 
 const Title = styled.h1`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     font-size: 24px;
     font-weight: 500;
     color: ${(props) => props.theme.textColor.primary};
