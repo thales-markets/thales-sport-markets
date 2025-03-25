@@ -160,6 +160,11 @@ const QUERY_KEYS = {
         Price: () => ['price'],
     },
     FreeBet: (freeBetId: string, networkId: Network) => ['freeBet', freeBetId, networkId],
+    IsWhitelistedForFreeBets: (walletAddress: string, networkId: Network) => [
+        'isWhitelistedForFreeBets',
+        walletAddress,
+        networkId,
+    ],
     RiskManagementConfig: (networkId: Network, configType: RiskManagementConfig) => [
         'riskManagementConfig',
         networkId,
