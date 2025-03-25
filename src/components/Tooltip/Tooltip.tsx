@@ -81,6 +81,7 @@ const Tooltip: React.FC<TooltipProps> = ({
             overlayInnerStyle={overlayInnerStyle}
             showArrow={showArrow}
             mouseEnterDelay={mouseEnterDelay}
+            mouseLeaveDelay={0}
         >
             {children ? (
                 children
