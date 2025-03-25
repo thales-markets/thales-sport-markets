@@ -1,5 +1,6 @@
 import { useAuthCore } from '@particle-network/authkit';
 import Button from 'components/Button';
+import Toggle from 'components/Toggle';
 import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
 import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from 'constants/currency';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
@@ -11,10 +12,10 @@ import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollate
 import useUsersStatsV2Query from 'queries/wallet/useUsersStatsV2Query';
 import React, { Fragment, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { getIsBiconomy } from 'redux/modules/wallet';
+import { getIsBiconomy, setIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import {
     Colors,
@@ -25,7 +26,7 @@ import {
     FlexDivSpaceBetween,
     FlexDivStart,
 } from 'styles/common';
-import { Coins, formatCurrencyWithSign, truncateAddress } from 'thales-utils';
+import { Coins, formatCurrencyWithSign, localStore, truncateAddress } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { FreeBet } from 'types/freeBet';
 import { RootState } from 'types/redux';
@@ -39,7 +40,7 @@ import { useAccount, useChainId, useClient } from 'wagmi';
 
 const UserStats: React.FC = () => {
     const { t } = useTranslation();
-
+    const dispatch = useDispatch();
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
     const networkId = useChainId();
@@ -196,6 +197,24 @@ const UserStats: React.FC = () => {
                                     />
                                 </Value>
                             </FlexDivColumnStart>
+                            <Switch>
+                                <Label>{t('profile.dropdown.account')}</Label>
+
+                                <Toggle
+                                    height="24px"
+                                    active={!isBiconomy}
+                                    handleClick={() => {
+                                        if (isBiconomy) {
+                                            dispatch(setIsBiconomy(false));
+                                            localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, false);
+                                        } else {
+                                            dispatch(setIsBiconomy(true));
+                                            localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, true);
+                                        }
+                                    }}
+                                />
+                                <Label>{t('profile.dropdown.eoa')}</Label>
+                            </Switch>
                         </FlexDivColumnStart>
                     </FlexDivStart>
                 </SectionWrapper>
@@ -412,6 +431,13 @@ const CopyIcon = styled.i`
     @media (max-width: 575px) {
         font-size: 20px;
     }
+`;
+
+const Switch = styled.div`
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 20px;
 `;
 
 export default UserStats;

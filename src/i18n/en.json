@@ -367,7 +367,7 @@
         "stats": {
             "profile-data": "Stats",
             "overtime-account": "Overtime Account",
-            "eoa": "EOA Address",
+            "eoa": "EOA Wallet",
             "name": "Name",
             "email": "Email",
             "account-info": "Account info",
@@ -528,6 +528,8 @@
             "zero-balance": "Show zero balance",
             "deposit": "Deposit",
             "convert": "Swap to $OVER",
+            "migrate": "Migrate to $OVER",
+            "transfer": "Deposit to Overtime Account",
             "withdraw": "Withdraw"
         }
     },

@@ -43,7 +43,7 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ setShowDropdown }) =>
     return (
         <Dropdown>
             <Wrapper>
-                <Text>Overtime Account</Text>
+                <Text>{t('profile.dropdown.account')}</Text>
 
                 <Toggle
                     height="24px"
