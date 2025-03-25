@@ -15,7 +15,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { getIsBiconomy, getIsConnectedViaParticle } from 'redux/modules/wallet';
+import { getIsConnectedViaParticle } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
 import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
@@ -51,7 +51,6 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
     const { t } = useTranslation();
     const location = useLocation();
     const theme: ThemeInterface = useTheme();
-    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
@@ -139,6 +138,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                                         <ProfileIconWidget
                                             top="-10px"
                                             left="-10px"
+                                            marginRight="10px"
                                             avatarSize={25}
                                             color={
                                                 location.pathname === item.route
@@ -159,7 +159,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                                             />
                                         </>
                                     )}
-                                    <NavLabel>{!isBiconomy ? t(item.i18label) : t(item.i18labelSmart as any)}</NavLabel>
+                                    <NavLabel>{t(item.i18label)}</NavLabel>
                                 </ItemContainer>
                             </SPAAnchor>
                         );

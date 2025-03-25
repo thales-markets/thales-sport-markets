@@ -13,10 +13,16 @@ export const ThemeMap: Record<Theme, ThemeInterface> = {
 
 export const NAV_MENU_FIRST_SECTION: NavMenuItem[] = [
     {
-        i18label: 'markets.nav-menu.items.profile-wallet',
-        i18labelSmart: 'markets.nav-menu.items.profile-smart',
+        i18label: 'markets.nav-menu.items.profile',
         iconClass: 'icon icon--profile2',
         name: 'profile',
+        route: `${ROUTES.Profile}?selected-tab=open-claimable`,
+        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.Base, Network.OptimismSepolia],
+    },
+    {
+        i18label: 'markets.nav-menu.items.account',
+        iconClass: 'icon icon--logo',
+        name: 'account',
         route: ROUTES.Profile,
         supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.Base, Network.OptimismSepolia],
     },
