@@ -69,10 +69,7 @@ const Filters: React.FC<FiltersProps> = ({ hideSwitch, isMainPageView }) => {
             {!hideSwitch && !selectedMarket && marketTypeFilter === undefined && (
                 <>
                     <SwitchContainer>
-                        <Tooltip
-                            placement="bottom"
-                            overlay={isThreeWayView ? 'Switch to standard view' : 'Switch to three column view'}
-                        >
+                        <Tooltip overlay={isThreeWayView ? 'Switch to standard view' : 'Switch to three column view'}>
                             <ThreeWayIcon
                                 onClick={() => {
                                     if (!selectedMarket && marketTypeFilter === undefined) {
@@ -91,7 +88,7 @@ const Filters: React.FC<FiltersProps> = ({ hideSwitch, isMainPageView }) => {
                 <>
                     <SortSelector>
                         <OutsideClickHandler onOutsideClick={() => setOpenSortMenu(false)}>
-                            <Tooltip placement="bottom" overlay={isMobile ? '' : 'Select games sorting'}>
+                            <Tooltip overlay={isMobile ? '' : 'Select games sorting'}>
                                 <SortIndicator
                                     className={'icon icon--sorting'}
                                     onClick={() => setOpenSortMenu(!openSortMenu)}
@@ -130,7 +127,7 @@ const Filters: React.FC<FiltersProps> = ({ hideSwitch, isMainPageView }) => {
                         setTimeFiltersOpen(!timeFiltersOpen);
                     }}
                 >
-                    <Tooltip placement="bottom" overlay={isMobile ? '' : 'Select date range'}>
+                    <Tooltip overlay={isMobile ? '' : 'Select date range'}>
                         <FlexDivCentered gap={2}>
                             <HeaderIcon
                                 iconColor={datePeriodFilter > 0 ? theme.textColor.quaternary : ''}
@@ -158,7 +155,7 @@ const Filters: React.FC<FiltersProps> = ({ hideSwitch, isMainPageView }) => {
                         setDropdownIsOpen(!dropdownIsOpen);
                     }}
                 >
-                    <Tooltip placement="bottom" overlay={isMobile ? '' : 'Select odds format'}>
+                    <Tooltip overlay={isMobile ? '' : 'Select odds format'}>
                         <FlexDivCentered gap={2}>
                             <HeaderIcon className="icon icon--settings" />
                             <Label>{selectedOddsType} </Label>
