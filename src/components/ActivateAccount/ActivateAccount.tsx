@@ -197,6 +197,7 @@ const ActivateAccount: React.FC<any> = () => {
                                         padding: '9px 20px',
                                         width: isSmallDevice ? '100%' : '100px',
                                         height: '30px',
+                                        zIndex: 1000,
                                     }}
                                     onClick={() => setIsMinimized(false)}
                                 >
@@ -218,6 +219,7 @@ const ActivateAccount: React.FC<any> = () => {
 };
 
 const Container = styled.div`
+    z-index: 100;
     @media (max-width: 512px) {
         width: 100%;
     }
