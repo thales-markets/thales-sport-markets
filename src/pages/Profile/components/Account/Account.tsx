@@ -2,15 +2,14 @@ import FundModal from 'components/FundOvertimeAccountModal';
 import SwapModal from 'components/SwapModal/SwapModal';
 import Tooltip from 'components/Tooltip';
 import { USD_SIGN } from 'constants/currency';
-import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { getIsBiconomy, setIsBiconomy } from 'redux/modules/wallet';
+import { useSelector } from 'react-redux';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import {
     FlexDivCentered,
@@ -19,7 +18,7 @@ import {
     FlexDivEnd,
     FlexDivSpaceBetween,
 } from 'styles/common';
-import { formatCurrencyWithKey, formatCurrencyWithSign, localStore } from 'thales-utils';
+import { formatCurrencyWithKey, formatCurrencyWithSign } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import { getCollaterals, mapMultiCollateralBalances } from 'utils/collaterals';
@@ -30,7 +29,6 @@ import WithdrawModal from '../WithdrawModal';
 
 const Account: React.FC = () => {
     const { t } = useTranslation();
-    const dispatch = useDispatch();
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
     const networkId = useChainId();
@@ -192,19 +190,6 @@ const Account: React.FC = () => {
                 setWithdrawalToken={setWithdrawalToken}
             />
 
-            <SkipText
-                onClick={() => {
-                    if (isBiconomy) {
-                        dispatch(setIsBiconomy(false));
-                        localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, false);
-                    } else {
-                        dispatch(setIsBiconomy(true));
-                        localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, true);
-                    }
-                }}
-            >
-                {isBiconomy ? t('profile.account-summary.use-eoa') : t('profile.account-summary.use-smart')}
-            </SkipText>
             {showFundModal && <FundModal onClose={() => setShowFundModal(false)} />}
             {showWithdrawModal && (
                 <WithdrawModal preSelectedToken={withdrawalToken} onClose={() => setShowWithdrawModal(false)} />
@@ -243,15 +228,6 @@ const AlignedParagraph = styled.p`
     display: flex;
     align-items: center;
     justify-content: center;
-`;
-
-const SkipText = styled(AlignedParagraph)`
-    color: ${(props) => props.theme.textColor.quaternary};
-    text-align: center;
-    font-size: 14px;
-    font-weight: 600;
-    margin-top: 30px;
-    cursor: pointer;
 `;
 
 const Label = styled(AlignedParagraph)`
