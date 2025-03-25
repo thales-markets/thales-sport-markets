@@ -684,7 +684,7 @@ export const getTicketPositionsFogSgpBuilder = (market: SportMarket, sgpBuilder:
 
     for (let i = 0; i < sgpBuilder.size; i++) {
         const typeId = sgpBuilder.combinedTypeIds[i];
-        const playerId = sgpBuilder.combinedPlayerIds[i];
+        const playerIds = sgpBuilder.combinedPlayerIds[i];
         const line = sgpBuilder.combinedLines[i];
         const position = sgpBuilder.combinedPositions[i];
 
@@ -694,7 +694,7 @@ export const getTicketPositionsFogSgpBuilder = (market: SportMarket, sgpBuilder:
                 : market.childMarkets.find(
                       (childMarket) =>
                           childMarket.typeId === typeId &&
-                          (playerId === null || childMarket.playerProps.playerId === playerId) &&
+                          (!playerIds.length || playerIds.includes(childMarket.playerProps.playerId)) &&
                           (line === null || childMarket.line === line)
                   );
 

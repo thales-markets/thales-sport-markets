@@ -147,7 +147,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
                             dispatch(removeAll());
                             dispatch(setIsSystemBet(false));
                             dispatch(setIsSgp(true));
-                        } else if (ticket.length > 0) {
+                        } else if (ticket.length > 0 && ticket[0].gameId === ticketPositions[0].gameId) {
                             dispatch(removeAll());
                         }
                     } else {
