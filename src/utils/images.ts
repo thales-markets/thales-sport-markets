@@ -98,6 +98,7 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.NCAAW:
         case League.COLLEGE_BASEBALL:
         case League.USA_AHL:
+        case League.USA_MAJOR_LEAGUE_CRICKET:
             return `/logos/Countries/united-states-of-america.svg`;
         case League.EPL:
         case League.ENGLAND_CHAMPIONSHIP:
@@ -194,6 +195,8 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.AUSTRALIA_NBL:
         case League.AUSTRALIA_A_LEAGUE_WOMEN:
         case League.AUSTRALIA_NRL:
+        case League.AUSTRALIA_BIG_BASH_LEAGUE:
+        case League.AUSTRALIA_BIG_BASH_LEAGUE_WOMEN:
             return `/logos/Countries/australia.svg`;
         case League.SWITZERLAND_SUPER_LEAGUE:
         case League.SWITZETLAND_NATIONAL_LEAGUE:
