@@ -724,7 +724,7 @@ export const getTicketPositionsFogSgpBuilder = (market: SportMarket, sgpBuilder:
         }
 
         // find first player if non is found
-        if (!combinedChildMarket && !playerIds.length) {
+        if (!combinedChildMarket && playerIds.length > 0) {
             combinedChildMarket = combinedChildMarketsByType.find(
                 (childMarket) => line === null || childMarket.line === line
             );
