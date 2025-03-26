@@ -65,23 +65,29 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
     const sportFilter = useSelector(getSportFilter);
     const isSgp = useSelector(getIsSgp);
 
-    const sgpTicketPositions = useMemo(() => {
+    const currentSgpTicket = useMemo(() => {
         if (isSgpBuilderMarket(market.typeId) && !!sgpTickets?.length) {
-            return (
-                sgpTickets.find((sgpTicket) => sgpTicket.typeId === market.typeId && sgpTicket.position === position)
-                    ?.ticketPositions || []
+            return sgpTickets.find(
+                (sgpTicket) =>
+                    sgpTicket.sgpBuilder.typeId === market.typeId && sgpTicket.sgpBuilder.positionIndex === position
             );
         }
-        return [];
+        return undefined;
     }, [market.typeId, position, sgpTickets]);
+
+    const sgpTicketPositions = useMemo(() => (currentSgpTicket ? currentSgpTicket.ticketPositions : []), [
+        currentSgpTicket,
+    ]);
 
     const isSgpBuilderAddedToTicket =
         isSgpBuilderMarket(market.typeId) &&
-        !!ticket.length &&
+        ticket.length > 0 &&
         ticket.length === sgpTicketPositions.length &&
-        ticket.filter((position, i) => isSameMarket(sgpTicketPositions[i], position)).length ===
-            sgpTicketPositions.length &&
-        ticket[0].position === position;
+        ticket.every(
+            (ticketPosition, i) =>
+                isSameMarket(sgpTicketPositions[i], ticketPosition) &&
+                ticket[i].position === currentSgpTicket?.sgpBuilder.combinedPositions[i]
+        );
 
     const addedToTicket = ticket.filter((position) => isSameMarket(market, position))[0];
     const isAddedToTicket = (addedToTicket && addedToTicket.position == position) || isSgpBuilderAddedToTicket;

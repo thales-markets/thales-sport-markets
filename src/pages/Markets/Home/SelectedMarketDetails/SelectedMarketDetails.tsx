@@ -141,8 +141,7 @@ const SelectedMarketDetails: React.FC<SelectedMarketDetailsProps> = ({ market })
                             const childMarkets = groupedChildMarkets[typeId];
                             const sgpBuildersWithTicketPositions = isSgpBuilderMarket(typeId)
                                 ? sgpBuilders.map((sgpBuilder) => ({
-                                      typeId: sgpBuilder.typeId,
-                                      position: sgpBuilder.positionIndex,
+                                      sgpBuilder,
                                       ticketPositions: getTicketPositionsFogSgpBuilder(market, sgpBuilder),
                                   }))
                                 : [];

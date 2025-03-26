@@ -688,15 +688,49 @@ export const getTicketPositionsFogSgpBuilder = (market: SportMarket, sgpBuilder:
         const line = sgpBuilder.combinedLines[i];
         const position = sgpBuilder.combinedPositions[i];
 
-        const combinedMarket =
-            typeId === MarketType.WINNER
-                ? market
-                : market.childMarkets.find(
-                      (childMarket) =>
-                          childMarket.typeId === typeId &&
-                          (!playerIds.length || playerIds.includes(childMarket.playerProps.playerId)) &&
+        const combinedChildMarketsByType = market.childMarkets.filter((childMarket) => childMarket.typeId === typeId);
+
+        let combinedChildMarket = undefined;
+        switch (typeId) {
+            case MarketType.PLAYER_PROPS_POINTS:
+                const maxLine = Math.max(...combinedChildMarketsByType.map((childMarket) => childMarket.line));
+                combinedChildMarket = combinedChildMarketsByType.find((childMarket) =>
+                    !playerIds.length && line === null
+                        ? childMarket.line === maxLine
+                        : (!playerIds.length || playerIds.includes(childMarket.playerProps.playerId)) &&
                           (line === null || childMarket.line === line)
-                  );
+                );
+                break;
+            case MarketType.PLAYER_PROPS_TRIPLE_DOUBLE:
+            case MarketType.PLAYER_PROPS_DOUBLE_DOUBLE:
+                const maxOdds = Math.max(
+                    ...combinedChildMarketsByType.map((childMarket) =>
+                        position !== null ? childMarket.odds[position] : 0
+                    )
+                );
+                combinedChildMarket = combinedChildMarketsByType.find((childMarket) =>
+                    !playerIds.length && line === null
+                        ? position !== null && childMarket.odds[position] === maxOdds
+                        : (!playerIds.length || playerIds.includes(childMarket.playerProps.playerId)) &&
+                          (line === null || childMarket.line === line)
+                );
+                break;
+            default:
+                combinedChildMarket = combinedChildMarketsByType.find(
+                    (childMarket) =>
+                        (!playerIds.length || playerIds.includes(childMarket.playerProps.playerId)) &&
+                        (line === null || childMarket.line === line)
+                );
+        }
+
+        // find first player if non is found
+        if (!combinedChildMarket && !playerIds.length) {
+            combinedChildMarket = combinedChildMarketsByType.find(
+                (childMarket) => line === null || childMarket.line === line
+            );
+        }
+
+        const combinedMarket = typeId === MarketType.WINNER ? market : combinedChildMarket;
 
         if (combinedMarket) {
             const ticketPosition = {
