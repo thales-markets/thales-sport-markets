@@ -1,23 +1,15 @@
-import FundModal from 'components/FundOvertimeAccountModal';
-import SwapModal from 'components/SwapModal/SwapModal';
 import Tooltip from 'components/Tooltip';
 import { USD_SIGN } from 'constants/currency';
 import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
-import {
-    FlexDivCentered,
-    FlexDivColumnCentered,
-    FlexDivColumnStart,
-    FlexDivEnd,
-    FlexDivSpaceBetween,
-} from 'styles/common';
+import { FlexDivColumnCentered, FlexDivColumnStart, FlexDivEnd, FlexDivSpaceBetween } from 'styles/common';
 import { formatCurrencyWithKey, formatCurrencyWithSign } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
@@ -25,7 +17,6 @@ import { getCollaterals, mapMultiCollateralBalances } from 'utils/collaterals';
 import useBiconomy from 'utils/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import AssetBalance from '../AssetBalance/AssetBalance';
-import WithdrawModal from '../WithdrawModal';
 
 const Account: React.FC = () => {
     const { t } = useTranslation();
@@ -36,12 +27,6 @@ const Account: React.FC = () => {
     const { address, isConnected } = useAccount();
     const smartAddres = useBiconomy();
     const walletAddress = (isBiconomy ? smartAddres : address) || '';
-
-    const [showFundModal, setShowFundModal] = useState<boolean>(false);
-    const [showWithdrawModal, setShowWithdrawModal] = useState<boolean>(false);
-    const [showSwapModal, setShowSwapModal] = useState<boolean>(false);
-
-    const [convertToken, setConvertToken] = useState(0);
 
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(
         walletAddress,
@@ -173,19 +158,9 @@ const Account: React.FC = () => {
                         </Tooltip>
                     </FlexDivColumnCentered>
                 </OverBalanceWrapper>
-
-                <ButtonContainer>
-                    <Button onClick={() => setShowSwapModal(true)}>{t('profile.account-summary.swap')}</Button>
-                    <Button onClick={() => setShowFundModal(true)}>{t('profile.account-summary.deposit')}</Button>
-                    <Button onClick={() => setShowWithdrawModal(true)}>{t('profile.account-summary.withdraw')}</Button>
-                </ButtonContainer>
             </Container>
 
-            <AssetBalance setConvertToken={setConvertToken} setShowSwapModal={setShowSwapModal} />
-
-            {showFundModal && <FundModal onClose={() => setShowFundModal(false)} />}
-            {showWithdrawModal && <WithdrawModal onClose={() => setShowWithdrawModal(false)} />}
-            {showSwapModal && <SwapModal preSelectedToken={convertToken} onClose={() => setShowSwapModal(false)} />}
+            <AssetBalance />
         </div>
     );
 };
@@ -203,15 +178,6 @@ const Container = styled(FlexDivSpaceBetween)`
         flex-direction: column;
         align-items: flex-start;
         gap: 20px;
-    }
-`;
-
-const ButtonContainer = styled(FlexDivCentered)`
-    gap: 16px;
-    @media (max-width: 800px) {
-        justify-content: flex-start;
-        width: 100%;
-        gap: 6px;
     }
 `;
 
@@ -284,30 +250,6 @@ const Value2 = styled(AlignedParagraph)`
 const OverBalanceWrapper = styled(FlexDivSpaceBetween)`
     width: 100%;
     margin-right: 20px;
-`;
-
-const Button = styled(FlexDivCentered)<{ active?: boolean }>`
-    border-radius: 8px;
-    width: 100%;
-    height: 42px;
-    border: 1px ${(props) => props.theme.borderColor.primary} solid;
-    color: ${(props) => props.theme.textColor.primary};
-
-    font-size: 14px;
-    font-weight: 600;
-
-    text-transform: uppercase;
-    cursor: pointer;
-    &:hover {
-        background-color: ${(props) => props.theme.connectWalletModal.hover};
-        color: ${(props) => props.theme.button.textColor.primary};
-    }
-    white-space: pre;
-    padding: 3px 24px;
-    @media (max-width: 575px) {
-        font-size: 12px;
-        padding: 3px 12px;
-    }
 `;
 
 export default Account;

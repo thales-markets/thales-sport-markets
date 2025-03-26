@@ -1,5 +1,6 @@
 import ConvertIcon from 'assets/images/svgs/convert.svg?react';
-import TransferIcon from 'assets/images/svgs/withdraw.svg?react';
+import FundModal from 'components/FundOvertimeAccountModal';
+import SwapModal from 'components/SwapModal/SwapModal';
 import ThalesToOverMigrationModal from 'components/ThalesToOverMigrationModal';
 import Toggle from 'components/Toggle';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
@@ -15,6 +16,7 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
+import { FlexDivCentered, FlexDivEnd } from 'styles/common';
 import { coinParser, Coins, formatCurrencyWithKey } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
@@ -25,13 +27,9 @@ import useBiconomy from 'utils/useBiconomy';
 import { Address, Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
+import WithdrawModal from '../WithdrawModal';
 
-type Props = {
-    setConvertToken: React.Dispatch<React.SetStateAction<number>>;
-    setShowSwapModal: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-const AssetBalance: React.FC<Props> = ({ setConvertToken, setShowSwapModal }) => {
+const AssetBalance: React.FC = () => {
     const { t } = useTranslation();
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const networkId = useChainId();
@@ -41,6 +39,11 @@ const AssetBalance: React.FC<Props> = ({ setConvertToken, setShowSwapModal }) =>
     const smartAddres = useBiconomy();
     const theme = useTheme();
     const [showThalesToOverMigrationModal, setShowThalesToOverMigrationModal] = useState<boolean>(false);
+    const [showFundModal, setShowFundModal] = useState<boolean>(false);
+    const [showWithdrawModal, setShowWithdrawModal] = useState<boolean>(false);
+    const [showSwapModal, setShowSwapModal] = useState<boolean>(false);
+
+    const [convertToken, setConvertToken] = useState(0);
 
     const [showZeroBalance, setShowZeroBalance] = useLocalStorage(LOCAL_STORAGE_KEYS.SHOW_ZERO_BALANCE, true);
 
@@ -191,6 +194,12 @@ const AssetBalance: React.FC<Props> = ({ setConvertToken, setShowSwapModal }) =>
 
     return (
         <GridContainer>
+            <ButtonContainer>
+                <Button onClick={() => setShowSwapModal(true)}>{t('profile.account-summary.swap')}</Button>
+                <Button onClick={() => setShowFundModal(true)}>{t('profile.account-summary.deposit')}</Button>
+                <Button onClick={() => setShowWithdrawModal(true)}>{t('profile.account-summary.withdraw')}</Button>
+            </ButtonContainer>
+
             <AssetContainer>
                 <TableHeader> {t('profile.asset-balance.assets')}</TableHeader>
                 <TableHeader2> {t('profile.asset-balance.amount')}</TableHeader2>
@@ -284,7 +293,6 @@ const AssetBalance: React.FC<Props> = ({ setConvertToken, setShowSwapModal }) =>
                                   }}
                               >
                                   {t('profile.asset-balance.transfer')}
-                                  <TransferIcon />
                               </Transfer>
                           </AssetContainer>
                       );
@@ -311,7 +319,6 @@ const AssetBalance: React.FC<Props> = ({ setConvertToken, setShowSwapModal }) =>
                                     }}
                                 >
                                     {t('profile.asset-balance.transfer')}
-                                    <TransferIcon />
                                 </Transfer>
                             </AssetContainer>
                         );
@@ -322,6 +329,9 @@ const AssetBalance: React.FC<Props> = ({ setConvertToken, setShowSwapModal }) =>
             {showThalesToOverMigrationModal && (
                 <ThalesToOverMigrationModal onClose={() => setShowThalesToOverMigrationModal(false)} />
             )}
+            {showFundModal && <FundModal onClose={() => setShowFundModal(false)} />}
+            {showWithdrawModal && <WithdrawModal onClose={() => setShowWithdrawModal(false)} />}
+            {showSwapModal && <SwapModal preSelectedToken={convertToken} onClose={() => setShowSwapModal(false)} />}
         </GridContainer>
     );
 };
@@ -433,6 +443,7 @@ const EoaContainer = styled.div`
     position: relative;
     border-right: 20px solid white;
     border-radius: 8px;
+
     &:after {
         transform: rotate(90deg);
         position: absolute;
@@ -440,6 +451,45 @@ const EoaContainer = styled.div`
         color: black;
         top: calc(50% - 8px);
         right: -26px;
+    }
+
+    ${AssetContainer} {
+        width: calc(100% + 20px);
+    }
+`;
+
+const ButtonContainer = styled(FlexDivEnd)`
+    justify-content: flex-start;
+    margin-bottom: 16px;
+    gap: 16px;
+    @media (max-width: 800px) {
+        justify-content: flex-start;
+        width: 100%;
+        gap: 6px;
+    }
+`;
+
+const Button = styled(FlexDivCentered)<{ active?: boolean }>`
+    border-radius: 8px;
+    width: 120px;
+    height: 42px;
+    border: 1px ${(props) => props.theme.borderColor.primary} solid;
+    color: ${(props) => props.theme.textColor.primary};
+
+    font-size: 14px;
+    font-weight: 600;
+
+    text-transform: uppercase;
+    cursor: pointer;
+    &:hover {
+        background-color: ${(props) => props.theme.connectWalletModal.hover};
+        color: ${(props) => props.theme.button.textColor.primary};
+    }
+    white-space: pre;
+    padding: 3px 24px;
+    @media (max-width: 575px) {
+        font-size: 12px;
+        padding: 3px 12px;
     }
 `;
 
