@@ -452,10 +452,6 @@ const EoaContainer = styled.div`
         top: calc(50% - 8px);
         right: -26px;
     }
-
-    ${AssetContainer} {
-        width: calc(100% + 20px);
-    }
 `;
 
 const ButtonContainer = styled(FlexDivEnd)`
