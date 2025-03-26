@@ -63,31 +63,31 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ setShowDropdown }) =>
             <Separator />
             <Wrapper>
                 <Container>
-                    <WalletIcon className="icon icon--wallet-connected" />
-                    <Text>{t('profile.dropdown.account')}</Text>
+                    <WalletIcon active={isBiconomy} className="icon icon--wallet-connected" />
+                    <Text active={isBiconomy}>{t('profile.dropdown.account')}</Text>
                 </Container>
                 <Container
                     onClick={() => {
                         handleCopy(smartAddress);
                     }}
                 >
-                    <Address>{truncateAddress(smartAddress, 6, 4)}</Address>
-                    <CopyIcon className="icon icon--copy" />
+                    <Address active={isBiconomy}>{truncateAddress(smartAddress, 6, 4)}</Address>
+                    <CopyIcon active={isBiconomy} className="icon icon--copy" />
                 </Container>
             </Wrapper>
 
             <Wrapper>
                 <Container>
-                    <WalletIcon className="icon icon--wallet-connected" />
-                    <Text>{t('profile.dropdown.eoa')}</Text>
+                    <WalletIcon active={!isBiconomy} className="icon icon--wallet-connected" />
+                    <Text active={!isBiconomy}>{t('profile.dropdown.eoa')}</Text>
                 </Container>
                 <Container
                     onClick={() => {
                         handleCopy(address as any);
                     }}
                 >
-                    <Address>{truncateAddress(address as any, 6, 4)}</Address>
-                    <CopyIcon className="icon icon--copy" />
+                    <Address active={!isBiconomy}>{truncateAddress(address as any, 6, 4)}</Address>
+                    <CopyIcon active={!isBiconomy} className="icon icon--copy" />
                 </Container>
             </Wrapper>
 
@@ -132,28 +132,26 @@ const Dropdown = styled.div`
     }
 `;
 
-const CopyIcon = styled.i`
+const CopyIcon = styled.i<{ active?: boolean }>`
     cursor: pointer;
     text-transform: lowercase;
-
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => (props.active ? props.theme.textColor.quaternary : props.theme.textColor.primary)};
 `;
 
-const WalletIcon = styled.i`
+const WalletIcon = styled.i<{ active?: boolean }>`
     font-size: 18px;
     width: 20px;
-
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => (props.active ? props.theme.textColor.quaternary : props.theme.textColor.primary)};
 `;
 
-const Text = styled.span`
+const Text = styled.span<{ active?: boolean }>`
     position: relative;
     font-weight: 600;
     font-size: 12px;
     line-height: 13px;
     white-space: pre;
-    color: ${(props) => props.theme.textColor.primary};
     text-align: left;
+    color: ${(props) => (props.active ? props.theme.textColor.quaternary : props.theme.textColor.primary)};
 `;
 
 const Wrapper = styled.div`
@@ -184,8 +182,9 @@ const Separator = styled.p`
     background: ${(props) => props.theme.background.senary};
 `;
 
-const Address = styled(Text)`
+const Address = styled(Text)<{ active: boolean }>`
     cursor: pointer;
+    color: ${(props) => (props.active ? props.theme.textColor.quaternary : props.theme.textColor.primary)};
 `;
 
 export default ProfileDropdown;
