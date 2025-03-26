@@ -1,52 +1,58 @@
 import ConvertIcon from 'assets/images/svgs/convert.svg?react';
-import DepositIcon from 'assets/images/svgs/deposit.svg?react';
-import WithdrawIcon from 'assets/images/svgs/withdraw.svg?react';
+import TransferIcon from 'assets/images/svgs/withdraw.svg?react';
+import ThalesToOverMigrationModal from 'components/ThalesToOverMigrationModal';
 import Toggle from 'components/Toggle';
+import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from 'constants/currency';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import { ContractType } from 'enums/contract';
 import useLocalStorage from 'hooks/useLocalStorage';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
-import { Coins, formatCurrencyWithKey } from 'thales-utils';
+import { coinParser, Coins, formatCurrencyWithKey } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import { getCollateralIndex, getCollaterals } from 'utils/collaterals';
+import { getContractInstance } from 'utils/contract';
 import useBiconomy from 'utils/useBiconomy';
-import { useAccount, useChainId, useClient } from 'wagmi';
+import { Address, Client } from 'viem';
+import { waitForTransactionReceipt } from 'viem/actions';
+import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 
 type Props = {
     setConvertToken: React.Dispatch<React.SetStateAction<number>>;
-    setWithdrawalToken: React.Dispatch<React.SetStateAction<number>>;
     setShowSwapModal: React.Dispatch<React.SetStateAction<boolean>>;
-    setShowWithdrawModal: React.Dispatch<React.SetStateAction<boolean>>;
-    setShowFundModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const AssetBalance: React.FC<Props> = ({
-    setConvertToken,
-    setShowFundModal,
-    setShowSwapModal,
-    setShowWithdrawModal,
-    setWithdrawalToken,
-}) => {
+const AssetBalance: React.FC<Props> = ({ setConvertToken, setShowSwapModal }) => {
     const { t } = useTranslation();
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const networkId = useChainId();
     const client = useClient();
+    const walletClient = useWalletClient();
     const { address, isConnected } = useAccount();
     const smartAddres = useBiconomy();
-    const walletAddress = (isBiconomy ? smartAddres : address) || '';
     const theme = useTheme();
+    const [showThalesToOverMigrationModal, setShowThalesToOverMigrationModal] = useState<boolean>(false);
 
     const [showZeroBalance, setShowZeroBalance] = useLocalStorage(LOCAL_STORAGE_KEYS.SHOW_ZERO_BALANCE, true);
 
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(
-        walletAddress,
+        smartAddres,
+        { networkId, client },
+        {
+            enabled: isConnected,
+        }
+    );
+
+    const multipleCollateralBalancesEOA = useMultipleCollateralBalanceQuery(
+        address as any,
         { networkId, client },
         {
             enabled: isConnected,
@@ -60,40 +66,125 @@ const AssetBalance: React.FC<Props> = ({
 
     const usersAssets = useMemo(() => {
         try {
-            if (exchangeRates && multipleCollateralBalances.data) {
-                const result: Array<{
+            if (exchangeRates && multipleCollateralBalances.data && multipleCollateralBalancesEOA.data) {
+                const smartAssets: Array<{
                     asset: Coins;
                     balance: number;
                     value: number;
-                    freeBet: boolean;
+                    isBiconomy: boolean;
+                }> = [];
+                const eoaAssets: Array<{
+                    asset: Coins;
+                    balance: number;
+                    value: number;
+                    isBiconomy: boolean;
                 }> = [];
                 getCollaterals(networkId).forEach((token) => {
-                    result.push({
+                    smartAssets.push({
                         asset: token,
                         balance: multipleCollateralBalances.data[token],
                         value:
                             multipleCollateralBalances.data[token] * (exchangeRates[token] ? exchangeRates[token] : 1),
-                        freeBet: false,
+                        isBiconomy: true,
+                    });
+                    eoaAssets.push({
+                        asset: token,
+                        balance: multipleCollateralBalancesEOA.data[token],
+                        value:
+                            multipleCollateralBalancesEOA.data[token] *
+                            (exchangeRates[token] ? exchangeRates[token] : 1),
+                        isBiconomy: false,
                     });
                 });
 
-                return result
-                    .sort((a, b) => {
-                        return b.value - a.value;
-                    })
-                    .filter((tokenData) => {
-                        if (showZeroBalance) {
-                            return true;
-                        } else {
-                            return tokenData.value !== 0;
-                        }
-                    });
+                return {
+                    smartAssets: smartAssets
+                        .sort((a, b) => {
+                            return b.value - a.value;
+                        })
+                        .filter((tokenData) => {
+                            if (showZeroBalance) {
+                                return true;
+                            } else {
+                                return tokenData.value !== 0;
+                            }
+                        }),
+                    eoaAssets: eoaAssets
+                        .sort((a, b) => {
+                            return b.value - a.value;
+                        })
+                        .filter((tokenData) => {
+                            if (showZeroBalance) {
+                                return true;
+                            } else {
+                                return tokenData.value !== 0;
+                            }
+                        }),
+                };
             }
-            return [];
+
+            return { smartAssets: [], eoaAssets: [] };
         } catch (e) {
-            return [];
+            return { smartAssets: [], eoaAssets: [] };
         }
-    }, [exchangeRates, multipleCollateralBalances.data, networkId, showZeroBalance]);
+    }, [
+        exchangeRates,
+        multipleCollateralBalancesEOA.data,
+        multipleCollateralBalances.data,
+        networkId,
+        showZeroBalance,
+    ]);
+
+    const thalesBalance = useMemo(() => {
+        if (!isBiconomy && multipleCollateralBalancesEOA && multipleCollateralBalancesEOA.data && exchangeRates)
+            return {
+                asset: 'THALES',
+                balance: multipleCollateralBalancesEOA.data['THALES'],
+                value:
+                    multipleCollateralBalancesEOA.data['THALES'] *
+                    (exchangeRates['THALES'] ? exchangeRates['THALES'] : 1),
+            };
+    }, [exchangeRates, isBiconomy, multipleCollateralBalancesEOA]);
+
+    const transferFunds = async (token: Coins, amount: number) => {
+        const reduceAmount = amount * 0.9999999999;
+        const parsedAmount = coinParser('' + reduceAmount, networkId, token);
+        const id = toast.loading(t('deposit.toast-messages.pending'));
+        let txHash;
+        try {
+            if (token === 'ETH') {
+                const transaction = {
+                    to: smartAddres as Address,
+                    value: parsedAmount,
+                };
+
+                txHash = await walletClient.data?.sendTransaction(transaction);
+            } else {
+                const collateralContractWithSigner = getContractInstance(
+                    ContractType.MULTICOLLATERAL,
+                    { client: walletClient.data, networkId },
+                    getCollateralIndex(networkId, token)
+                );
+
+                txHash = await collateralContractWithSigner?.write.transfer([smartAddres, parsedAmount]);
+            }
+            const txReceipt = await waitForTransactionReceipt(client as Client, {
+                hash: txHash,
+            });
+
+            if (txReceipt.status === 'success') {
+                toast.update(id, getSuccessToastOptions(t('deposit.toast-messages.success')));
+                return;
+            } else {
+                toast.update(id, getErrorToastOptions(t('deposit.toast-messages.error')));
+                return;
+            }
+        } catch (e) {
+            console.log(e);
+            toast.update(id, getErrorToastOptions(t('deposit.toast-messages.error')));
+            return;
+        }
+    };
 
     return (
         <GridContainer>
@@ -111,49 +202,123 @@ const AssetBalance: React.FC<Props> = ({
                 </ZeroBalanceWrapper>
             </AssetContainer>
 
-            {usersAssets.map((assetData, index) => {
-                return (
-                    <AssetContainer key={index}>
-                        <AssetWrapper>
-                            {assetData.freeBet && <SubHeaderIcon className="icon icon--gift" />}
-                            <Asset className={COLLATERAL_ICONS_CLASS_NAMES[assetData.asset]} />
-                            {assetData.asset}
-                        </AssetWrapper>
-                        <Label>{formatCurrencyWithKey('', assetData.balance)}</Label>
-                        <Label>{formatCurrencyWithKey(USD_SIGN, assetData.value, 2)}</Label>
+            {thalesBalance && thalesBalance.balance > 0 && (
+                <AssetContainer>
+                    <AssetWrapper>
+                        <Asset className={COLLATERAL_ICONS_CLASS_NAMES['THALES']} />
+                        {thalesBalance.asset}
+                    </AssetWrapper>
+                    <Label>{formatCurrencyWithKey('', thalesBalance.balance)}</Label>
+                    <Label>{formatCurrencyWithKey(USD_SIGN, thalesBalance.value, 2)}</Label>
+                    <Convert
+                        onClick={() => {
+                            if (thalesBalance.balance > 0) {
+                                setShowThalesToOverMigrationModal(true);
+                            }
+                        }}
+                    >
+                        {t('profile.asset-balance.migrate')}
+                        <ConvertIcon />
+                    </Convert>
+                </AssetContainer>
+            )}
 
-                        <Deposit
-                            disabled={assetData.freeBet}
-                            onClick={() => !assetData.freeBet && setShowFundModal(true)}
-                        >
-                            {t('profile.asset-balance.deposit')} <DepositIcon />
-                        </Deposit>
-                        <Convert
-                            disabled={assetData.freeBet || assetData.balance == 0}
-                            onClick={() => {
-                                if (!assetData.freeBet && assetData.balance > 0) {
-                                    setConvertToken(getCollateralIndex(networkId, assetData.asset));
-                                    setShowSwapModal(true);
-                                }
-                            }}
-                        >
-                            {t('profile.asset-balance.convert')}
-                            <ConvertIcon />
-                        </Convert>
-                        <Withdraw
-                            disabled={assetData.freeBet || assetData.balance == 0}
-                            onClick={() => {
-                                if (!assetData.freeBet && assetData.balance > 0) {
-                                    setWithdrawalToken(getCollateralIndex(networkId, assetData.asset));
-                                    setShowWithdrawModal(true);
-                                }
-                            }}
-                        >
-                            {t('profile.asset-balance.withdraw')} <WithdrawIcon />
-                        </Withdraw>
-                    </AssetContainer>
-                );
-            })}
+            {isBiconomy
+                ? usersAssets.smartAssets.map((assetData, index) => {
+                      return (
+                          <AssetContainer key={index}>
+                              <AssetWrapper>
+                                  <Asset className={COLLATERAL_ICONS_CLASS_NAMES[assetData.asset]} />
+                                  {assetData.asset}
+                              </AssetWrapper>
+                              <Label>{formatCurrencyWithKey('', assetData.balance)}</Label>
+                              <Label>{formatCurrencyWithKey(USD_SIGN, assetData.value, 2)}</Label>
+
+                              <Convert
+                                  disabled={assetData.balance == 0 || assetData.asset === 'OVER'}
+                                  onClick={() => {
+                                      if (assetData.balance > 0 && assetData.asset !== 'OVER') {
+                                          setConvertToken(getCollateralIndex(networkId, assetData.asset));
+                                          setShowSwapModal(true);
+                                      }
+                                  }}
+                              >
+                                  {t('profile.asset-balance.convert')}
+                                  <ConvertIcon />
+                              </Convert>
+                          </AssetContainer>
+                      );
+                  })
+                : usersAssets.eoaAssets.map((assetData, index) => {
+                      return (
+                          <AssetContainer key={index}>
+                              <AssetWrapper>
+                                  <Asset className={COLLATERAL_ICONS_CLASS_NAMES[assetData.asset]} />
+                                  {assetData.asset}
+                              </AssetWrapper>
+                              <Label>{formatCurrencyWithKey('', assetData.balance)}</Label>
+                              <Label>{formatCurrencyWithKey(USD_SIGN, assetData.value, 2)}</Label>
+
+                              <Convert
+                                  disabled={assetData.balance == 0 || assetData.asset === 'OVER'}
+                                  onClick={() => {
+                                      if (assetData.balance > 0 && assetData.asset !== 'OVER') {
+                                          setConvertToken(getCollateralIndex(networkId, assetData.asset));
+                                          setShowSwapModal(true);
+                                      }
+                                  }}
+                              >
+                                  {t('profile.asset-balance.convert')}
+                                  <ConvertIcon />
+                              </Convert>
+
+                              <Transfer
+                                  disabled={assetData.balance == 0}
+                                  onClick={() => {
+                                      if (assetData.balance > 0) {
+                                          transferFunds(assetData.asset, assetData.balance);
+                                      }
+                                  }}
+                              >
+                                  {t('profile.asset-balance.transfer')}
+                                  <TransferIcon />
+                              </Transfer>
+                          </AssetContainer>
+                      );
+                  })}
+
+            {isBiconomy && (
+                <EoaContainer>
+                    {usersAssets.eoaAssets.map((assetData, index) => {
+                        return (
+                            <AssetContainer key={index}>
+                                <AssetWrapper>
+                                    <Asset className={COLLATERAL_ICONS_CLASS_NAMES[assetData.asset]} />
+                                    {assetData.asset}
+                                </AssetWrapper>
+                                <Label>{formatCurrencyWithKey('', assetData.balance)}</Label>
+                                <Label>{formatCurrencyWithKey(USD_SIGN, assetData.value, 2)}</Label>
+
+                                <Transfer
+                                    disabled={assetData.balance == 0}
+                                    onClick={() => {
+                                        if (assetData.balance > 0) {
+                                            transferFunds(assetData.asset, assetData.balance);
+                                        }
+                                    }}
+                                >
+                                    {t('profile.asset-balance.transfer')}
+                                    <TransferIcon />
+                                </Transfer>
+                            </AssetContainer>
+                        );
+                    })}
+                </EoaContainer>
+            )}
+
+            {showThalesToOverMigrationModal && (
+                <ThalesToOverMigrationModal onClose={() => setShowThalesToOverMigrationModal(false)} />
+            )}
         </GridContainer>
     );
 };
@@ -236,15 +401,14 @@ const TableButton = styled(AlignedParagraph)<{ disabled?: boolean }>`
     ${(props) => (props.disabled ? `opacity: 0.7; cursor: not-allowed;` : ``)}
 `;
 
-const Deposit = styled(TableButton)`
-    color: ${(props) => props.theme.textColor.quaternary};
-`;
-
 const Convert = styled(TableButton)`
+    grid-column-start: 4;
     color: ${(props) => props.theme.textColor.septenary};
 `;
 
-const Withdraw = styled(TableButton)`
+const Transfer = styled(TableButton)`
+    grid-column-start: 5;
+    grid-column-end: 7;
     color: ${(props) => props.theme.overdrop.textColor.primary};
 `;
 
@@ -255,20 +419,25 @@ const Label = styled(AlignedParagraph)`
     white-space: pre;
 `;
 
-const SubHeaderIcon = styled.i`
-    position: absolute;
-    top: -6px;
-    left: -8px;
-    font-size: 16px;
-    font-weight: 600;
-    text-transform: none;
-`;
-
 const Asset = styled.i`
     font-size: 24px;
     line-height: 24px;
     width: 30px;
     color: ${(props) => props.theme.textColor.secondary};
+`;
+
+const EoaContainer = styled.div`
+    position: relative;
+    border-right: 20px solid white;
+    border-radius: 8px;
+    &:after {
+        transform: rotate(90deg);
+        position: absolute;
+        content: 'EOA';
+        color: black;
+        top: calc(50% - 8px);
+        right: -26px;
+    }
 `;
 
 export default AssetBalance;

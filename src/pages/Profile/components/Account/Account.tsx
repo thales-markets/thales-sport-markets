@@ -41,7 +41,6 @@ const Account: React.FC = () => {
     const [showWithdrawModal, setShowWithdrawModal] = useState<boolean>(false);
     const [showSwapModal, setShowSwapModal] = useState<boolean>(false);
 
-    const [withdrawalToken, setWithdrawalToken] = useState(0);
     const [convertToken, setConvertToken] = useState(0);
 
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(
@@ -182,18 +181,10 @@ const Account: React.FC = () => {
                 </ButtonContainer>
             </Container>
 
-            <AssetBalance
-                setConvertToken={setConvertToken}
-                setShowFundModal={setShowFundModal}
-                setShowSwapModal={setShowSwapModal}
-                setShowWithdrawModal={setShowWithdrawModal}
-                setWithdrawalToken={setWithdrawalToken}
-            />
+            <AssetBalance setConvertToken={setConvertToken} setShowSwapModal={setShowSwapModal} />
 
             {showFundModal && <FundModal onClose={() => setShowFundModal(false)} />}
-            {showWithdrawModal && (
-                <WithdrawModal preSelectedToken={withdrawalToken} onClose={() => setShowWithdrawModal(false)} />
-            )}
+            {showWithdrawModal && <WithdrawModal onClose={() => setShowWithdrawModal(false)} />}
             {showSwapModal && <SwapModal preSelectedToken={convertToken} onClose={() => setShowSwapModal(false)} />}
         </div>
     );
