@@ -20,6 +20,7 @@ import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import { getCollateralIndex, getCollaterals } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
+import { refetchBalances } from 'utils/queryConnector';
 import useBiconomy from 'utils/useBiconomy';
 import { Address, Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
@@ -174,6 +175,8 @@ const AssetBalance: React.FC<Props> = ({ setConvertToken, setShowSwapModal }) =>
 
             if (txReceipt.status === 'success') {
                 toast.update(id, getSuccessToastOptions(t('deposit.toast-messages.success')));
+                refetchBalances(smartAddres, networkId);
+                refetchBalances(address as any, networkId);
                 return;
             } else {
                 toast.update(id, getErrorToastOptions(t('deposit.toast-messages.error')));
