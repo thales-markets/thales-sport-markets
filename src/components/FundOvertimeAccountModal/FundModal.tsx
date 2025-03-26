@@ -136,6 +136,12 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
             onClose={onClose}
         >
             <Wrapper>
+                <NetworkWrapper>
+                    <NetworkHeader>{t('get-started.fund-account.current-network')}</NetworkHeader>
+                    <NetworkSwitcherWrapper>
+                        <NetworkSwitcher />
+                    </NetworkSwitcherWrapper>
+                </NetworkWrapper>
                 <FlexDivRow>
                     <Title>
                         <Trans
@@ -147,7 +153,6 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                     </Title>
                     <FlexDivRow>{<CloseIcon onClick={onClose} />}</FlexDivRow>{' '}
                 </FlexDivRow>
-
                 <SubTitle>
                     {t('get-started.fund-account.subtitle')}
                     <Tooltip
@@ -179,20 +184,19 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                     })}
                 </CollateralsWrapper>
 
-                <NetworkWrapper>
-                    <FieldHeader>{t('get-started.fund-account.current-network')}</FieldHeader>
-                    <NetworkSwitcherWrapper>
-                        <NetworkSwitcher />
-                    </NetworkSwitcherWrapper>
-                </NetworkWrapper>
-
                 <WalletContainer>
                     <FieldHeader>
                         {t('get-started.fund-account.address')}
                         <FieldDesc>
-                            {t('get-started.fund-account.tooltip-2', {
-                                network: getNetworkNameByNetworkId(networkId),
-                            })}
+                            <Trans
+                                i18nKey="get-started.fund-account.tooltip-2"
+                                components={{
+                                    span: <span />,
+                                }}
+                                values={{
+                                    network: getNetworkNameByNetworkId(networkId),
+                                }}
+                            />
                         </FieldDesc>
                     </FieldHeader>
 
@@ -206,8 +210,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                                     setShowQRModal(!showQRModal);
                                 }}
                             >
-                                <QRIcon className="icon icon--qr-code" />{' '}
-                                <FieldText>{t('get-started.fund-account.qr')}</FieldText>
+                                <QRIcon className="icon icon--qr-code" />
                             </BlueField>
                         </ButtonsContainer>
                     </AddressContainer>
@@ -312,27 +315,33 @@ const SubTitle = styled.h1`
 
 const FieldHeader = styled.p`
     font-size: 16px;
-
     font-weight: 600;
     line-height: 16px;
     color: ${(props) => props.theme.textColor.primary};
     white-space: pre;
 `;
 
+const NetworkHeader = styled(FieldHeader)`
+    color: ${(props) => props.theme.textColor.secondary};
+`;
+
 const ButtonText = styled.p`
     font-size: 16px;
-
     font-weight: 600;
     line-height: 16px;
     white-space: pre;
 `;
 
 const FieldDesc = styled.p`
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 600;
-    margin-top: 4px;
+    margin-top: 10px;
+    line-height: 16px;
     color: ${(props) => props.theme.textColor.secondary};
     white-space: break-spaces;
+    span {
+        color: ${(props) => props.theme.warning.textColor.primary};
+    }
 `;
 
 const TooltipText = styled.span`
@@ -341,16 +350,19 @@ const TooltipText = styled.span`
 
 const ButtonsContainer = styled.div`
     display: flex;
-    width: 100%;
+    width: 60px;
     align-items: center;
     justify-content: center;
-    gap: 20px;
+    gap: 10px;
+    @media (max-width: 850px) {
+        width: 100%;
+    }
 `;
 
 const AddressContainer = styled.div`
     display: flex;
     justify-content: space-between;
-    gap: 20px;
+    gap: 10px;
 
     @media (max-width: 850px) {
         flex-direction: column;
@@ -379,12 +391,12 @@ const Field = styled.div`
     @media (max-width: 575px) {
         font-size: 12px;
     }
-    font-size: 12px;
+    font-size: 14px;
     width: 100%;
     font-weight: 600;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
 `;
 
 const BlueField = styled(Field)`
@@ -392,24 +404,17 @@ const BlueField = styled(Field)`
     background: ${(props) => props.theme.textColor.quaternary};
     color: ${(props) => props.theme.textColor.senary};
     flex: 1;
-
     cursor: pointer;
-`;
-
-const FieldText = styled.p`
-    font-size: 16px;
-    font-weight: 700;
-    color: ${(props) => props.theme.textColor.senary};
-    white-space: pre;
+    justify-content: center;
 `;
 
 const QRIcon = styled.i`
-    font-size: 24px;
+    font-size: 30px;
     font-weight: 400;
     color: ${(props) => props.theme.textColor.senary};
     cursor: pointer;
     @media (max-width: 575px) {
-        font-size: 20px;
+        font-size: 24px;
     }
 `;
 
@@ -427,6 +432,7 @@ const CollateralText = styled.p`
 
 const CollateralsWrapper = styled(FlexDivCentered)`
     flex-wrap: wrap;
+    margin-bottom: 60px;
 `;
 
 const CollateralWrapper = styled(FlexDivColumnCentered)`
@@ -436,7 +442,7 @@ const CollateralWrapper = styled(FlexDivColumnCentered)`
 `;
 
 const NetworkWrapper = styled(FlexDivCentered)`
-    margin-top: 30px;
+    margin-top: 10px;
     margin-bottom: 16px;
     gap: 2px;
 `;
