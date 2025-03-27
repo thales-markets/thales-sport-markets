@@ -49,8 +49,8 @@ const UserStats: React.FC = () => {
     const { userInfo } = useAuthCore();
 
     const { address, isConnected } = useAccount();
-    const smartAddres = useBiconomy();
-    const walletAddress = (isBiconomy ? smartAddres : address) || '';
+    const smartAddress = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const [freeBet, setFreeBet] = useLocalStorage<FreeBet | undefined>(LOCAL_STORAGE_KEYS.FREE_BET_ID, undefined);
 
@@ -154,149 +154,156 @@ const UserStats: React.FC = () => {
             freeBetFromServer.claimAddress.toLowerCase() === walletAddress.toLowerCase());
 
     return (
-        <>
-            <Wrapper>
-                <SectionWrapper>
-                    <Header>
-                        <ProfileIcon className="icon icon--profile3" />
-                        {t('profile.stats.account-info')}
-                    </Header>
+        <Wrapper>
+            <SectionWrapper>
+                <Header>
+                    <ProfileIcon className="icon icon--profile3" />
+                    {t('profile.stats.account-info')}
+                </Header>
 
-                    <FlexDivStart gap={8}>
-                        <FlexDivColumnStart gap={10}>
-                            {userLoginInfo && (
-                                <>
-                                    <FlexDivColumnStart gap={2}>
-                                        <Label> {t('profile.stats.email')}</Label>
-                                        <Value>{userLoginInfo.email}</Value>
-                                    </FlexDivColumnStart>
-                                    <FlexDivColumnStart gap={2}>
-                                        <Label>{t('profile.stats.name')}</Label>
-                                        <Value>{userLoginInfo.name}</Value>
-                                    </FlexDivColumnStart>
-                                </>
-                            )}
+                <FlexDivStart gap={8}>
+                    <FlexDivColumnStart gap={10}>
+                        <Section>
+                            <Text>{t('profile.dropdown.account')}</Text>
 
-                            <FlexDivColumnStart gap={2}>
-                                <Label>{t('profile.stats.overtime-account')}</Label>
-                                <Value>
-                                    {truncateAddress(smartAddres, 14, 14)}
-                                    <CopyIcon
-                                        onClick={handleCopy.bind(this, smartAddres)}
-                                        className="icon icon--copy"
-                                    />
-                                </Value>
-                            </FlexDivColumnStart>
-                            <FlexDivColumnStart gap={2}>
-                                <Label>{t('profile.stats.eoa')}</Label>
-                                <Value>
-                                    {truncateAddress(address as any, 14, 14)}
-                                    <CopyIcon
-                                        onClick={handleCopy.bind(this, address as any)}
-                                        className="icon icon--copy"
-                                    />
-                                </Value>
-                            </FlexDivColumnStart>
-                            <Switch>
-                                <Label>{t('profile.dropdown.account')}</Label>
+                            <Toggle
+                                height="24px"
+                                active={!isBiconomy}
+                                handleClick={() => {
+                                    if (isBiconomy) {
+                                        dispatch(setIsBiconomy(false));
+                                        localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, false);
+                                    } else {
+                                        dispatch(setIsBiconomy(true));
+                                        localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, true);
+                                    }
+                                }}
+                            />
+                            <Text>{t('profile.dropdown.eoa')}</Text>
+                        </Section>
+                        <Separator />
+                        <Section>
+                            <Container>
+                                <WalletIcon active={isBiconomy} className="icon icon--wallet-connected" />
+                                <Text active={isBiconomy}>{t('profile.dropdown.account')}</Text>
+                            </Container>
+                            <Container
+                                onClick={() => {
+                                    handleCopy(smartAddress);
+                                }}
+                            >
+                                <Address active={isBiconomy}>{truncateAddress(smartAddress, 6, 4)}</Address>
+                                <CopyIcon active={isBiconomy} className="icon icon--copy" />
+                            </Container>
+                        </Section>
 
-                                <Toggle
-                                    height="24px"
-                                    active={!isBiconomy}
-                                    handleClick={() => {
-                                        if (isBiconomy) {
-                                            dispatch(setIsBiconomy(false));
-                                            localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, false);
-                                        } else {
-                                            dispatch(setIsBiconomy(true));
-                                            localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, true);
-                                        }
-                                    }}
-                                />
-                                <Label>{t('profile.dropdown.eoa')}</Label>
-                            </Switch>
-                        </FlexDivColumnStart>
-                    </FlexDivStart>
-                </SectionWrapper>
+                        <Section>
+                            <Container>
+                                <WalletIcon active={!isBiconomy} className="icon icon--wallet-connected" />
+                                <Text active={!isBiconomy}>{t('profile.dropdown.eoa')}</Text>
+                            </Container>
+                            <Container
+                                onClick={() => {
+                                    handleCopy(address as any);
+                                }}
+                            >
+                                <Address active={!isBiconomy}>{truncateAddress(address as any, 6, 4)}</Address>
+                                <CopyIcon active={!isBiconomy} className="icon icon--copy" />
+                            </Container>
+                        </Section>
 
+                        {userLoginInfo && (
+                            <>
+                                <Separator />
+                                <Section>
+                                    <Label> {t('profile.stats.email')}:</Label>
+                                    <Value>{userLoginInfo.email}</Value>
+                                </Section>
+                                <Section>
+                                    <Label>{t('profile.stats.name')}:</Label>
+                                    <Value>{userLoginInfo.name}</Value>
+                                </Section>
+                            </>
+                        )}
+                    </FlexDivColumnStart>
+                </FlexDivStart>
+            </SectionWrapper>
+
+            <SectionWrapper>
+                <SubHeaderWrapper>
+                    <SubHeader>
+                        <ProfileIcon className="icon icon--resources" />
+                        {t('profile.stats.profile-data')}
+                    </SubHeader>
+                </SubHeaderWrapper>
+
+                <Section>
+                    <Label>{t('profile.stats.total-volume')}</Label>
+                    <Value>{!userStats ? '-' : formatCurrencyWithSign(USD_SIGN, userStats.volume)}</Value>
+                </Section>
+                <Section>
+                    <Label>{t('profile.stats.trades')}</Label>
+                    <Value>{!userStats ? '-' : userStats.trades}</Value>
+                </Section>
+                <Section>
+                    <Label>{t('profile.stats.highest-win')}</Label>
+                    <Value>{!userStats ? '-' : formatCurrencyWithSign(USD_SIGN, userStats.highestWin)}</Value>
+                </Section>
+                <Section>
+                    <Label>{t('profile.stats.lifetime-wins')}</Label>
+                    <Value>{!userStats ? '-' : userStats.lifetimeWins}</Value>
+                </Section>
+            </SectionWrapper>
+            {isFreeBetExists && (
                 <SectionWrapper>
                     <SubHeaderWrapper>
                         <SubHeader>
-                            <ProfileIcon className="icon icon--resources" />
-                            {t('profile.stats.profile-data')}
+                            <SubHeaderIcon className="icon icon--gift" />
+                            {t('profile.stats.free-bet')}
                         </SubHeader>
                     </SubHeaderWrapper>
-
-                    <Section>
-                        <Label>{t('profile.stats.total-volume')}</Label>
-                        <Value>{!userStats ? '-' : formatCurrencyWithSign(USD_SIGN, userStats.volume)}</Value>
-                    </Section>
-                    <Section>
-                        <Label>{t('profile.stats.trades')}</Label>
-                        <Value>{!userStats ? '-' : userStats.trades}</Value>
-                    </Section>
-                    <Section>
-                        <Label>{t('profile.stats.highest-win')}</Label>
-                        <Value>{!userStats ? '-' : formatCurrencyWithSign(USD_SIGN, userStats.highestWin)}</Value>
-                    </Section>
-                    <Section>
-                        <Label>{t('profile.stats.lifetime-wins')}</Label>
-                        <Value>{!userStats ? '-' : userStats.lifetimeWins}</Value>
-                    </Section>
+                    {freeBetBalances &&
+                        Object.keys(freeBetCollateralsSorted).map((currencyKey) => {
+                            return freeBetBalances[currencyKey] ? (
+                                <Section key={`${currencyKey}-freebet`}>
+                                    <SubLabel>
+                                        <CurrencyIcon className={COLLATERAL_ICONS_CLASS_NAMES[currencyKey as Coins]} />
+                                        {currencyKey}
+                                    </SubLabel>
+                                    <SubValue>
+                                        {formatCurrencyWithSign(
+                                            null,
+                                            freeBetBalances ? freeBetBalances[currencyKey] : 0
+                                        )}
+                                        {!exchangeRates?.[currencyKey] && !isStableCurrency(currencyKey as Coins)
+                                            ? '...'
+                                            : ` (${formatCurrencyWithSign(
+                                                  USD_SIGN,
+                                                  getUSDForCollateral(currencyKey as Coins, true)
+                                              )})`}
+                                    </SubValue>
+                                </Section>
+                            ) : (
+                                <Fragment key={`${currencyKey}-freebet`} />
+                            );
+                        })}
                 </SectionWrapper>
-                {isFreeBetExists && (
-                    <SectionWrapper>
-                        <SubHeaderWrapper>
-                            <SubHeader>
-                                <SubHeaderIcon className="icon icon--gift" />
-                                {t('profile.stats.free-bet')}
-                            </SubHeader>
-                        </SubHeaderWrapper>
-                        {freeBetBalances &&
-                            Object.keys(freeBetCollateralsSorted).map((currencyKey) => {
-                                return freeBetBalances[currencyKey] ? (
-                                    <Section key={`${currencyKey}-freebet`}>
-                                        <SubLabel>
-                                            <CurrencyIcon
-                                                className={COLLATERAL_ICONS_CLASS_NAMES[currencyKey as Coins]}
-                                            />
-                                            {currencyKey}
-                                        </SubLabel>
-                                        <SubValue>
-                                            {formatCurrencyWithSign(
-                                                null,
-                                                freeBetBalances ? freeBetBalances[currencyKey] : 0
-                                            )}
-                                            {!exchangeRates?.[currencyKey] && !isStableCurrency(currencyKey as Coins)
-                                                ? '...'
-                                                : ` (${formatCurrencyWithSign(
-                                                      USD_SIGN,
-                                                      getUSDForCollateral(currencyKey as Coins, true)
-                                                  )})`}
-                                        </SubValue>
-                                    </Section>
-                                ) : (
-                                    <Fragment key={`${currencyKey}-freebet`} />
-                                );
-                            })}
-                    </SectionWrapper>
-                )}
-                {claimFreeBetButtonVisible && (
-                    <ClaimBetButton
-                        onClick={onClaimFreeBet}
-                        borderColor="none"
-                        height="42px"
-                        lineHeight="16px"
-                        padding="0"
-                        backgroundColor={Colors.YELLOW}
-                        className="pulse"
-                    >
-                        {t('profile.account-summary.claim-free-bet')}
-                        <HandsIcon className="icon icon--hands-coins" />
-                    </ClaimBetButton>
-                )}
-            </Wrapper>
-        </>
+            )}
+            {claimFreeBetButtonVisible && (
+                <ClaimBetButton
+                    onClick={onClaimFreeBet}
+                    borderColor="none"
+                    height="42px"
+                    lineHeight="16px"
+                    padding="0"
+                    backgroundColor={Colors.YELLOW}
+                    className="pulse"
+                >
+                    {t('profile.account-summary.claim-free-bet')}
+                    <HandsIcon className="icon icon--hands-coins" />
+                </ClaimBetButton>
+            )}
+        </Wrapper>
     );
 };
 
@@ -322,6 +329,7 @@ const Wrapper = styled(FlexDivColumn)`
 
 const Section = styled(FlexDivSpaceBetween)`
     position: relative;
+    width: 100%;
 `;
 
 const AlignedParagraph = styled.p`
@@ -423,21 +431,52 @@ const ClaimBetButton = styled(Button)`
     }
 `;
 
-const CopyIcon = styled.i`
-    font-size: 18px;
+const CopyIcon = styled.i<{ active?: boolean }>`
     cursor: pointer;
-    font-weight: 400;
-    color: ${(props) => props.theme.textColor.quaternary};
-    @media (max-width: 575px) {
-        font-size: 20px;
+    text-transform: lowercase;
+    color: ${(props) => (props.active ? props.theme.textColor.quaternary : props.theme.textColor.primary)};
+`;
+
+const WalletIcon = styled.i<{ active?: boolean }>`
+    font-size: 18px;
+    width: 20px;
+    color: ${(props) => (props.active ? props.theme.textColor.quaternary : props.theme.textColor.primary)};
+`;
+
+const Text = styled.span<{ active?: boolean }>`
+    position: relative;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 14px;
+    white-space: pre;
+    text-align: left;
+    color: ${(props) => (props.active ? props.theme.textColor.quaternary : props.theme.textColor.primary)};
+`;
+
+const Container = styled.div<{ clickable?: boolean }>`
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: ${(props) => (props.clickable ? 'pointer' : 'default')};
+    &:hover {
+        i,
+        span {
+            color: ${(props) => (props.clickable ? props.theme.textColor.quaternary : '')};
+        }
     }
 `;
 
-const Switch = styled.div`
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    gap: 20px;
+const Separator = styled.p`
+    position: relative;
+    height: 2px;
+    margin: 10px 0;
+    width: 100%;
+    background: ${(props) => props.theme.background.senary};
+`;
+
+const Address = styled(Text)<{ active: boolean }>`
+    cursor: pointer;
+    color: ${(props) => (props.active ? props.theme.textColor.quaternary : props.theme.textColor.primary)};
 `;
 
 export default UserStats;
