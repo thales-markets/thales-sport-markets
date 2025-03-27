@@ -98,7 +98,7 @@ const Container = styled.div<{ mobileStyle?: CSSProperties; containerStyle?: CSS
     border-radius: 23px;
     @media (max-width: 575px) {
         height: auto;
-        border-radius: 0;
+        border-radius: 10px;
         overflow: auto;
         ${(props) =>
             props.mobileStyle ? convertCssToStyledProperties(props.mobileStyle) : 'padding: 20px 15px 30px 15px;'}

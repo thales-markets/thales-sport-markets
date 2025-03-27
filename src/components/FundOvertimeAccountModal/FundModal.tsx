@@ -388,15 +388,15 @@ const Field = styled.div`
     background: ${(props) => props.theme.textColor.primary};
     border-radius: 8px;
     padding: 10px;
-    @media (max-width: 575px) {
-        font-size: 12px;
-    }
     font-size: 14px;
     width: 100%;
     font-weight: 600;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    @media (max-width: 575px) {
+        font-size: 12px;
+    }
 `;
 
 const BlueField = styled(Field)`

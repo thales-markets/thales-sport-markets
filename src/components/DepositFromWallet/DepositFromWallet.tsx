@@ -249,7 +249,6 @@ const DepositFromWallet: React.FC<DepositFromWalletProps> = ({ onClose }) => {
 const Wrapper = styled.div`
     flex-direction: column;
     display: flex;
-    max-width: 420px;
 `;
 
 const OvertimeIcon = styled.i`
@@ -315,6 +314,9 @@ const WalletAddress = styled.p`
     font-weight: 600;
     width: 100%;
     text-align: left;
+    @media (max-width: 575px) {
+        font-size: 12px;
+    }
 `;
 
 const CloseIcon = styled.i.attrs({ className: 'icon icon--close' })`
