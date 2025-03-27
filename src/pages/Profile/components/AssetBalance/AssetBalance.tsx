@@ -151,7 +151,7 @@ const AssetBalance: React.FC = () => {
     }, [exchangeRates, isBiconomy, multipleCollateralBalancesEOA]);
 
     const transferFunds = async (token: Coins, amount: number) => {
-        const reduceAmount = amount * 0.9999999999;
+        const reduceAmount = amount;
         const parsedAmount = coinParser('' + reduceAmount, networkId, token);
         const id = toast.loading(t('deposit.toast-messages.pending'));
         let txHash;
