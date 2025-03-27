@@ -191,10 +191,10 @@ const DepositFromWallet: React.FC<DepositFromWalletProps> = ({ onClose }) => {
                                     inputPadding="5px 10px"
                                     height="44px"
                                     inputFontSize="16px"
-                                    background={theme.textColor.primary}
-                                    borderColor={theme.textColor.primary}
+                                    background={theme.background.quinary}
+                                    borderColor={theme.background.quinary}
                                     fontWeight="700"
-                                    color={theme.textColor.tertiary}
+                                    color={theme.textColor.primary}
                                     label={t('deposit.deposit-amount')}
                                     placeholder={t('liquidity-pool.deposit-amount-placeholder')}
                                     currencyComponent={
@@ -210,8 +210,8 @@ const DepositFromWallet: React.FC<DepositFromWalletProps> = ({ onClose }) => {
                                             collateralBalances={multipleCollateralBalances.data}
                                             exchangeRates={exchangeRates}
                                             dropDownWidth={inputRef.current?.getBoundingClientRect().width + 'px'}
-                                            background={theme.textColor.primary}
-                                            color={theme.textColor.tertiary}
+                                            background={theme.background.quinary}
+                                            color={theme.textColor.primary}
                                             topPosition="50px"
                                             hideZeroBalance
                                         />
