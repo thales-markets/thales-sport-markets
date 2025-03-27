@@ -197,7 +197,9 @@ const AssetBalance: React.FC = () => {
             <ButtonContainer>
                 <Button onClick={() => setShowSwapModal(true)}>{t('profile.account-summary.swap')}</Button>
                 <Button onClick={() => setShowFundModal(true)}>{t('profile.account-summary.deposit')}</Button>
-                <Button onClick={() => setShowWithdrawModal(true)}>{t('profile.account-summary.withdraw')}</Button>
+                {isBiconomy && (
+                    <Button onClick={() => setShowWithdrawModal(true)}>{t('profile.account-summary.withdraw')}</Button>
+                )}
             </ButtonContainer>
 
             <AssetContainer>
