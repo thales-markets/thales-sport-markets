@@ -10,6 +10,7 @@ type ButtonProps = {
     backgroundColor?: string;
     hoverColor?: string;
     borderColor?: string;
+    borderRadius?: string;
     onClick?: any;
     fontSize?: string;
     fontWeight?: string;
@@ -28,6 +29,7 @@ const Button: React.FC<ButtonProps> = ({
     backgroundColor,
     hoverColor,
     borderColor,
+    borderRadius,
     margin,
     onClick,
     disabled,
@@ -48,6 +50,7 @@ const Button: React.FC<ButtonProps> = ({
             backgroundColor={backgroundColor}
             hoverColor={hoverColor}
             borderColor={borderColor}
+            borderRadius={borderRadius}
             onClick={onClick}
             disabled={disabled}
             fontSize={fontSize}
@@ -70,6 +73,7 @@ const Wrapper = styled.button<{
     backgroundColor?: string;
     hoverColor?: string;
     borderColor?: string;
+    borderRadius?: string;
     fontSize?: string;
     fontWeight?: string;
     lineHeight?: string;
@@ -81,7 +85,7 @@ const Wrapper = styled.button<{
     width: ${(props) => props.width || 'auto'};
     min-height: ${(props) => props.height || '28px'};
     border: 1px solid ${(props) => props.borderColor || props.theme.button.borderColor.primary};
-    border-radius: 5px;
+    border-radius: ${(props) => props.borderRadius || '5px'};
     ${(props) => (props.style?.fontFamily ? `font-family: ${props.style?.fontFamily};` : '')}
     font-weight: ${(props) => props.fontWeight || '600'};
     font-size: ${(props) => props.fontSize || '15px'};

@@ -42,7 +42,7 @@ export const PrimaryHeading = styled.h1`
 export const InputContainer = styled(FlexDiv)`
     position: relative;
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 `;
 
 export const CollateralContainer = styled.div`

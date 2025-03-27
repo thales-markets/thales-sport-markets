@@ -218,7 +218,7 @@ const MaxButton = styled.button`
 const BalanceContainer = styled(FlexDivCentered)<{ bottom?: string }>`
     position: absolute;
     right: 0;
-    bottom: ${(props) => (props.bottom ? props.bottom : '36px')};
+    bottom: calc(${(props) => (props.bottom ? props.bottom : '30px')} + 6px);
     font-weight: normal;
     font-size: 11px;
     line-height: 15px;

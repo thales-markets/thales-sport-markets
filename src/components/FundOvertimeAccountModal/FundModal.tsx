@@ -452,7 +452,7 @@ const NetworkSwitcherWrapper = styled.div`
 `;
 
 const CloseIcon = styled.i.attrs({ className: 'icon icon--close' })`
-    color: white;
+    color: ${(props) => props.theme.textColor.secondary};
     font-size: 14px;
     position: absolute;
     top: 15px;
