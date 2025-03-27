@@ -230,29 +230,50 @@ export const executeBiconomyTransaction = async (params: {
         transactionArray.push(transaction);
 
         try {
-            const sessionSigner = await getSessionSigner(params.networkId);
-            const { wait } = await biconomyConnector.wallet.sendTransaction(transactionArray, {
-                paymasterServiceData: {
-                    mode: PaymasterMode.SPONSORED,
-                    webhookData: {
-                        networkId: params.networkId,
+            if (params.isEth) {
+                const { wait } = await biconomyConnector.wallet.sendTransaction(transactionArray, {
+                    paymasterServiceData: {
+                        mode: PaymasterMode.SPONSORED,
+                        webhookData: {
+                            networkId: params.networkId,
+                        },
                     },
-                },
-                params: {
-                    sessionSigner: sessionSigner,
-                    sessionValidationModule: sessionValidationContract.addresses[params.networkId],
-                },
-            });
+                });
+                const {
+                    receipt: { transactionHash },
+                    success,
+                } = await wait();
 
-            const {
-                receipt: { transactionHash },
-                success,
-            } = await wait();
-
-            if (success === 'false') {
-                throw new Error('tx failed');
+                if (success === 'false') {
+                    throw new Error('tx failed');
+                } else {
+                    return transactionHash;
+                }
             } else {
-                return transactionHash;
+                const sessionSigner = await getSessionSigner(params.networkId);
+
+                const { wait } = await biconomyConnector.wallet.sendTransaction(transactionArray, {
+                    paymasterServiceData: {
+                        mode: PaymasterMode.SPONSORED,
+                        webhookData: {
+                            networkId: params.networkId,
+                        },
+                    },
+                    params: {
+                        sessionSigner: sessionSigner,
+                        sessionValidationModule: sessionValidationContract.addresses[params.networkId],
+                    },
+                });
+                const {
+                    receipt: { transactionHash },
+                    success,
+                } = await wait();
+
+                if (success === 'false') {
+                    throw new Error('tx failed');
+                } else {
+                    return transactionHash;
+                }
             }
         } catch (error) {
             if (
