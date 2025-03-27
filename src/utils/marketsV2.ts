@@ -688,18 +688,23 @@ export const getTicketPositionsFogSgpBuilder = (market: SportMarket, sgpBuilder:
         const line = sgpBuilder.combinedLines[i];
         const position = sgpBuilder.combinedPositions[i];
 
+        const isDefaultCondition = playerIds.length > 0 || line !== null;
+        const getDefaultCondition = (marketPlayerId: number, marketLine: number) =>
+            (!playerIds.length || playerIds.includes(marketPlayerId)) && (line === null || marketLine === line);
+
         const combinedChildMarketsByType = market.childMarkets.filter((childMarket) => childMarket.typeId === typeId);
 
         let combinedChildMarket = undefined;
         switch (typeId) {
             case MarketType.PLAYER_PROPS_POINTS:
                 const maxLine = Math.max(...combinedChildMarketsByType.map((childMarket) => childMarket.line));
-                combinedChildMarket = combinedChildMarketsByType.find((childMarket) =>
-                    !playerIds.length && line === null
-                        ? childMarket.line === maxLine
-                        : (!playerIds.length || playerIds.includes(childMarket.playerProps.playerId)) &&
-                          (line === null || childMarket.line === line)
-                );
+                combinedChildMarket = combinedChildMarketsByType.find((childMarket) => {
+                    const typeSpecifiedCondition = childMarket.line === maxLine;
+                    return isDefaultCondition
+                        ? getDefaultCondition(childMarket.playerProps.playerId, childMarket.line) ||
+                              typeSpecifiedCondition
+                        : typeSpecifiedCondition;
+                });
                 break;
             case MarketType.PLAYER_PROPS_TRIPLE_DOUBLE:
             case MarketType.PLAYER_PROPS_DOUBLE_DOUBLE:
@@ -708,26 +713,18 @@ export const getTicketPositionsFogSgpBuilder = (market: SportMarket, sgpBuilder:
                         position !== null ? childMarket.odds[position] : 0
                     )
                 );
-                combinedChildMarket = combinedChildMarketsByType.find((childMarket) =>
-                    !playerIds.length && line === null
-                        ? position !== null && childMarket.odds[position] === maxOdds
-                        : (!playerIds.length || playerIds.includes(childMarket.playerProps.playerId)) &&
-                          (line === null || childMarket.line === line)
-                );
+                combinedChildMarket = combinedChildMarketsByType.find((childMarket) => {
+                    const typeSpecifiedCondition = position !== null && childMarket.odds[position] === maxOdds;
+                    return isDefaultCondition
+                        ? getDefaultCondition(childMarket.playerProps.playerId, childMarket.line) ||
+                              typeSpecifiedCondition
+                        : typeSpecifiedCondition;
+                });
                 break;
             default:
-                combinedChildMarket = combinedChildMarketsByType.find(
-                    (childMarket) =>
-                        (!playerIds.length || playerIds.includes(childMarket.playerProps.playerId)) &&
-                        (line === null || childMarket.line === line)
+                combinedChildMarket = combinedChildMarketsByType.find((childMarket) =>
+                    getDefaultCondition(childMarket.playerProps.playerId, childMarket.line)
                 );
-        }
-
-        // find first player if non is found
-        if (!combinedChildMarket && playerIds.length > 0) {
-            combinedChildMarket = combinedChildMarketsByType.find(
-                (childMarket) => line === null || childMarket.line === line
-            );
         }
 
         const combinedMarket = typeId === MarketType.WINNER ? market : combinedChildMarket;
