@@ -1,17 +1,18 @@
 import { PaymasterMode } from '@biconomy/account';
-import { getWalletClient } from '@wagmi/core';
 import Zebra from 'assets/images/overtime-zebra.svg?react';
 import Modal from 'components/Modal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { ContractType } from 'enums/contract';
 import { Network } from 'enums/network';
-import { wagmiConfig } from 'pages/Root/wagmiConfig';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { Colors, FlexDiv } from 'styles/common';
 import { coinParser, Coins, formatCurrencyWithKey } from 'thales-utils';
+import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
 import { executeBiconomyTransactionWithConfirmation } from 'utils/biconomy';
 import biconomyConnector from 'utils/biconomyWallet';
@@ -20,7 +21,7 @@ import { getContractInstance } from 'utils/contract';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import { Address, Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
-import { useChainId, useClient } from 'wagmi';
+import { useChainId, useClient, useWalletClient } from 'wagmi';
 
 type WithdrawalConfirmationModalProps = {
     amount: number;
@@ -39,6 +40,8 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
 }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+    const walletClient = useWalletClient();
     const networkId = useChainId();
     const client = useClient();
 
@@ -54,15 +57,14 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
         const id = toast.loading(t('withdraw.toast-messages.pending'));
 
         try {
-            const walletClient = await getWalletClient(wagmiConfig);
+            let txHash;
 
-            if (walletClient) {
-                let txHash;
-                if (token === 'ETH') {
-                    const transaction = {
-                        to: withdrawalAddress as Address,
-                        value: parsedAmount,
-                    };
+            if (token === 'ETH') {
+                const transaction = {
+                    to: withdrawalAddress as Address,
+                    value: parsedAmount,
+                };
+                if (isBiconomy) {
                     if (biconomyConnector && biconomyConnector.wallet) {
                         const { wait } = await biconomyConnector.wallet.sendTransaction(transaction, {
                             paymasterServiceData: {
@@ -77,12 +79,16 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
                         txHash = transactionHash;
                     }
                 } else {
-                    const collateralContractWithSigner = getContractInstance(
-                        ContractType.MULTICOLLATERAL,
-                        { client: walletClient, networkId },
-                        getCollateralIndex(networkId, token)
-                    );
+                    txHash = await walletClient.data?.sendTransaction(transaction);
+                }
+            } else {
+                const collateralContractWithSigner = getContractInstance(
+                    ContractType.MULTICOLLATERAL,
+                    { client: walletClient, networkId },
+                    getCollateralIndex(networkId, token)
+                );
 
+                if (isBiconomy) {
                     txHash = await executeBiconomyTransactionWithConfirmation({
                         networkId,
                         collateralAddress: collateralContractWithSigner?.address,
@@ -90,18 +96,21 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
                         methodName: 'transfer',
                         data: [withdrawalAddress, parsedAmount],
                     });
-                }
-
-                const txReceipt = await waitForTransactionReceipt(client as Client, {
-                    hash: txHash,
-                });
-
-                if (txReceipt.status === 'success') {
-                    toast.update(id, getSuccessToastOptions(t('withdraw.toast-messages.success')));
-                    onClose();
-                    return;
+                } else {
+                    txHash = await collateralContractWithSigner?.write.transfer([withdrawalAddress, parsedAmount]);
                 }
             }
+
+            const txReceipt = await waitForTransactionReceipt(client as Client, {
+                hash: txHash,
+            });
+
+            if (txReceipt.status === 'success') {
+                toast.update(id, getSuccessToastOptions(t('withdraw.toast-messages.success')));
+                onClose();
+                return;
+            }
+
             toast.update(id, getErrorToastOptions(t('withdraw.toast-messages.error')));
         } catch (e) {
             console.log('Error ', e);
