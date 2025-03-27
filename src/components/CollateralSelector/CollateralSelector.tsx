@@ -80,7 +80,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
             .map((collateral, index) => ({ name: collateral as Coins, index }))
             .filter((collateral) => {
                 if (hideZeroBalance) {
-                    if (collateralBalances[collateral.name] === 0) return false;
+                    if (!collateralBalances || collateralBalances[collateral.name] === 0) return false;
                 }
                 return true;
             });

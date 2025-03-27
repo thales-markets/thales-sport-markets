@@ -3,6 +3,7 @@ import CollateralSelector from 'components/CollateralSelector';
 import NumericInput from 'components/fields/NumericInput';
 import TextInput from 'components/fields/TextInput';
 import Modal from 'components/Modal';
+import NetworkSwitcher from 'components/NetworkSwitcher';
 import { AmountToBuyContainer } from 'pages/Markets/Home/Parlay/components/styled-components';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
@@ -11,13 +12,14 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
-import { CloseIcon, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
+import { CloseIcon, FlexDivCentered, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { formatCurrencyWithKey } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
 import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateral, getCollaterals } from 'utils/collaterals';
+import { getNetworkNameByNetworkId } from 'utils/network';
 import { isAddress } from 'viem';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import WithdrawalConfirmationModal from './components/WithdrawalConfirmationModal';
@@ -94,13 +96,18 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onClose, preSelectedToken
             containerStyle={{
                 background: theme.background.secondary,
                 border: 'none',
-                padding: '30px 50px',
             }}
             hideHeader
             title=""
             onClose={onClose}
         >
             <Wrapper>
+                <NetworkWrapper>
+                    <NetworkHeader>{t('get-started.fund-account.current-network')}</NetworkHeader>
+                    <NetworkSwitcherWrapper>
+                        <NetworkSwitcher />
+                    </NetworkSwitcherWrapper>
+                </NetworkWrapper>
                 <FlexDivRow>
                     <Title>
                         <Trans
@@ -115,7 +122,18 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onClose, preSelectedToken
 
                 <WalletContainer>
                     <FieldHeader>{t('get-started.withdraw.address')}</FieldHeader>
-                    <SubTitle>{t('get-started.withdraw.subtitle')}</SubTitle>
+
+                    <SubTitle>
+                        <Trans
+                            i18nKey="get-started.withdraw.subtitle"
+                            components={{
+                                span: <span />,
+                            }}
+                            values={{
+                                network: getNetworkNameByNetworkId(networkId),
+                            }}
+                        />
+                    </SubTitle>
                     <FormContainer>
                         <InputContainer>
                             <TextInput
@@ -123,7 +141,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onClose, preSelectedToken
                                 onChange={(el: { target: { value: React.SetStateAction<string> } }) =>
                                     setWithdrawalWalletAddress(el.target.value)
                                 }
-                                borderColor="none"
+                                borderColor={theme.textColor.primary}
                                 placeholder={t('withdraw.paste-address')}
                                 showValidation={!validation.walletAddress && !!withdrawalWalletAddress}
                                 validationMessage={t('withdraw.validation.wallet-address')}
@@ -147,9 +165,10 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onClose, preSelectedToken
                                     height="44px"
                                     inputFontSize="16px"
                                     background={theme.textColor.primary}
-                                    borderColor="none"
+                                    borderColor={theme.textColor.primary}
                                     fontWeight="700"
                                     color={theme.textColor.tertiary}
+                                    label={t('get-started.withdraw.withdraw-amount')}
                                     placeholder={t('liquidity-pool.deposit-amount-placeholder')}
                                     currencyComponent={
                                         <CollateralSelector
@@ -183,11 +202,13 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onClose, preSelectedToken
                 <ButtonContainer>
                     <Button
                         backgroundColor={theme.overdrop.borderColor.tertiary}
-                        disabled={!validation.amount || !validation.walletAddress}
-                        borderColor="none"
+                        disabled={!validation.amount}
+                        borderColor={theme.overdrop.borderColor.tertiary}
                         textColor={theme.button.textColor.primary}
-                        height="48px"
-                        fontSize="22px"
+                        height="44px"
+                        fontSize="16px"
+                        fontWeight="700"
+                        borderRadius="8px"
                         onClick={() => setWithdrawalConfirmationModalVisibility(true)}
                     >
                         {t('withdraw.button-label-withdraw')}
@@ -236,11 +257,16 @@ const Title = styled.h1`
 const SubTitle = styled.h1`
     position: relative;
     font-weight: 600;
-    font-size: 16px;
+    font-size: 14px;
     color: ${(props) => props.theme.textColor.secondary};
     width: 100%;
     text-align: left;
-    margin-bottom: 6px;
+    margin-top: 6px;
+    margin-bottom: 10px;
+    line-height: 16px;
+    span {
+        color: ${(props) => props.theme.warning.textColor.primary};
+    }
 `;
 
 const FieldHeader = styled.p`
@@ -258,6 +284,20 @@ const WalletContainer = styled(FlexDivColumnCentered)`
 
 const ButtonContainer = styled(FlexDivColumnCentered)`
     margin-top: 30px;
+`;
+
+const NetworkWrapper = styled(FlexDivCentered)`
+    margin-top: 10px;
+    margin-bottom: 16px;
+    gap: 2px;
+`;
+
+const NetworkHeader = styled(FieldHeader)`
+    color: ${(props) => props.theme.textColor.secondary};
+`;
+
+const NetworkSwitcherWrapper = styled.div`
+    position: relative;
 `;
 
 export default WithdrawModal;

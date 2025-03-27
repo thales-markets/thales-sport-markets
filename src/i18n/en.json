@@ -1111,8 +1111,9 @@
         },
         "withdraw": {
             "title": "Withdraw from <icon/> account",
-            "address": "Your Withdraw Address",
-            "subtitle": "Send supported crypto to the address below"
+            "address": "Your withdraw address",
+            "subtitle": "Send supported crypto to the address below on <span>{{ network }}</span> network",
+            "withdraw-amount": "Withdraw amount"
         },
         "activate-account": {
             "deposit": "Deposit received!",
