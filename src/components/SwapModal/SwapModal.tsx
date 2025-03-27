@@ -390,7 +390,7 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
                         currencyComponent={
                             <CollateralSelector
                                 borderColor="none"
-                                collateralArray={getCollaterals(networkId)}
+                                collateralArray={getCollaterals(networkId).filter((coin) => coin !== 'OVER')}
                                 selectedItem={getCollateralIndex(networkId, fromToken)}
                                 onChangeCollateral={(index: number) => {
                                     setFromAmount('');
