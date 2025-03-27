@@ -3,8 +3,7 @@ import CollateralSelector from 'components/CollateralSelector';
 import NumericInput from 'components/fields/NumericInput';
 import Modal from 'components/Modal';
 import SimpleLoader from 'components/SimpleLoader';
-import { getSuccessToastOptions } from 'config/toast';
-import console from 'console';
+import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { SWAP_APPROVAL_BUFFER } from 'constants/markets';
 import { ContractType } from 'enums/contract';
 import { BuyTicketStep } from 'enums/tickets';
@@ -26,7 +25,6 @@ import { sendBiconomyTransaction } from 'utils/biconomy';
 import { getCollateralAddress, getCollateralIndex, getCollaterals } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import { checkAllowance } from 'utils/network';
-import { refetchBalances } from 'utils/queryConnector';
 import {
     buildTxForApproveTradeWithRouter,
     buildTxForSwap,
@@ -35,9 +33,9 @@ import {
     PARASWAP_TRANSFER_PROXY,
     sendTransaction,
 } from 'utils/swap';
+import { delay } from 'utils/timer';
 import useBiconomy from 'utils/useBiconomy';
-import { Address, Client } from 'viem';
-import { waitForTransactionReceipt } from 'viem/actions';
+import { Address } from 'viem';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 
 type FundModalProps = {
@@ -163,8 +161,11 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
         setBuyStep(BuyTicketStep.APPROVE_SWAP);
     }, [fromToken]);
 
-    const handleSwap = async (initialStep: BuyTicketStep): Promise<any> => {
+    const handleBuyWithThalesSteps = async (
+        initialStep: BuyTicketStep
+    ): Promise<{ step: BuyTicketStep; amount: number | string }> => {
         let step = initialStep;
+        toAmount;
 
         if (step <= BuyTicketStep.SWAP) {
             if (!hasSwapAllowance) {
@@ -186,7 +187,7 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
                 );
 
                 try {
-                    isBiconomy
+                    const approveTxHash = isBiconomy
                         ? await sendBiconomyTransaction({
                               networkId,
                               transaction: approveSwapRawTransaction,
@@ -197,8 +198,11 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
                           })
                         : await sendTransaction(approveSwapRawTransaction);
 
-                    step = BuyTicketStep.SWAP;
-                    setBuyStep(step);
+                    if (approveTxHash) {
+                        await delay(3000); // wait for 1inch API to read correct approval
+                        step = BuyTicketStep.SWAP;
+                        setBuyStep(step);
+                    }
                 } catch (e) {
                     console.log('Approve swap failed', e);
                 }
@@ -212,38 +216,61 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
             try {
                 const swapRawTransaction = (await buildTxForSwap(networkId, swapParams, walletAddress)).tx;
 
-                const txHash = isBiconomy
-                    ? await sendBiconomyTransaction({
-                          networkId,
-                          transaction: swapRawTransaction,
-                          collateralAddress: getCollateralAddress(networkId, getCollateralIndex(networkId, fromToken)),
-                      })
-                    : await sendTransaction(swapRawTransaction);
-                return txHash;
+                // check allowance again
+                if (!swapRawTransaction) {
+                    await delay(1800);
+                    const hasRefreshedAllowance = await checkAllowance(
+                        coinParser(fromAmount.toString(), networkId, fromToken),
+                        getCollateralAddress(networkId, getCollateralIndex(networkId, fromToken)),
+                        walletAddress,
+                        PARASWAP_TRANSFER_PROXY
+                    );
+                    if (!hasRefreshedAllowance) {
+                        step = BuyTicketStep.APPROVE_SWAP;
+                        setBuyStep(step);
+                    }
+                }
+
+                const swapTxHash = swapRawTransaction
+                    ? isBiconomy
+                        ? await sendBiconomyTransaction({
+                              networkId,
+                              transaction: swapRawTransaction,
+                              collateralAddress: getCollateralAddress(
+                                  networkId,
+                                  getCollateralIndex(networkId, fromToken)
+                              ),
+                          })
+                        : await sendTransaction(swapRawTransaction)
+                    : undefined;
+
+                if (swapTxHash) {
+                    step = BuyTicketStep.COMPLETED;
+                    setBuyStep(step);
+
+                    await delay(3000); // wait for THALES balance to increase
+                }
             } catch (e) {
                 console.log('Swap tx failed', e);
             }
         }
 
-        return;
+        return { step, amount: toAmount };
     };
 
     const handleSubmit = async () => {
         setIsBuying(true);
         const toastId = toast.loading(t('market.toast-message.transaction-pending'));
 
+        let step = buyStep;
         setOpenBuyStepsModal(true);
-        const tx = await handleSwap(buyStep);
-        if (tx) {
-            const txReceipt = await waitForTransactionReceipt(client as Client, {
-                hash: tx,
-            });
+        ({ step } = await handleBuyWithThalesSteps(step));
 
-            if (txReceipt.status === 'success') {
-                toast.update(toastId, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
-            }
+        if (step !== BuyTicketStep.COMPLETED) {
+            toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+            setIsBuying(false);
+            return;
         }
-
         setIsBuying(false);
         setOpenBuyStepsModal(false);
         setFromAmount('');
@@ -254,8 +281,6 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
                 t('profile.stats.swap-success', { amount: formatCurrency(toAmount, 4), token: toToken })
             )
         );
-
-        refetchBalances(walletAddress, networkId);
     };
 
     const getButton = (text: string, isDisabled: boolean) => {
