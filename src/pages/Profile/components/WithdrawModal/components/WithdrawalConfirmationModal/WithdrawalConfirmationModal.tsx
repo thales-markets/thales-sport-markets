@@ -19,9 +19,11 @@ import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateralIndex } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import { getNetworkNameByNetworkId } from 'utils/network';
+import { refetchBalances } from 'utils/queryConnector';
+import useBiconomy from 'utils/useBiconomy';
 import { Address, Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
-import { useChainId, useClient, useWalletClient } from 'wagmi';
+import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 
 type WithdrawalConfirmationModalProps = {
     amount: number;
@@ -44,6 +46,10 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
     const walletClient = useWalletClient();
     const networkId = useChainId();
     const client = useClient();
+
+    const { address } = useAccount();
+    const smartAddres = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddres : address) || '';
 
     const networkName = useMemo(() => {
         return getNetworkNameByNetworkId(network);
@@ -84,7 +90,7 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
             } else {
                 const collateralContractWithSigner = getContractInstance(
                     ContractType.MULTICOLLATERAL,
-                    { client: walletClient, networkId },
+                    { client: walletClient.data, networkId },
                     getCollateralIndex(networkId, token)
                 );
 
@@ -107,6 +113,7 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
 
             if (txReceipt.status === 'success') {
                 toast.update(id, getSuccessToastOptions(t('withdraw.toast-messages.success')));
+                refetchBalances(walletAddress, networkId);
                 onClose();
                 return;
             }
