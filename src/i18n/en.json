@@ -1113,7 +1113,7 @@
             "title": "Withdraw from <icon/> account",
             "address": "Your withdraw address",
             "subtitle": "Send supported crypto to the address below on <span>{{ network }}</span> network",
-            "withdraw-amount": "Withdraw amount"
+            "withdraw-amount": "Withdrawal amount"
         },
         "activate-account": {
             "deposit": "Deposit received!",
