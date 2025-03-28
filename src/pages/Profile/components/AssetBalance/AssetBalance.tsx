@@ -196,19 +196,20 @@ const AssetBalance: React.FC = () => {
                               </AssetWrapper>
                               <Label>{formatCurrencyWithKey('', assetData.balance)}</Label>
                               <Label>{formatCurrencyWithKey(USD_SIGN, assetData.value, 2)}</Label>
-
-                              <Convert
-                                  disabled={assetData.balance == 0 || assetData.asset === 'OVER'}
-                                  onClick={() => {
-                                      if (assetData.balance > 0 && assetData.asset !== 'OVER') {
-                                          setConvertToken(getCollateralIndex(networkId, assetData.asset));
-                                          setShowSwapModal(true);
-                                      }
-                                  }}
-                              >
-                                  {t('profile.asset-balance.convert')}
-                                  <ConvertIcon />
-                              </Convert>
+                              {assetData.asset !== 'OVER' && (
+                                  <Convert
+                                      disabled={assetData.balance == 0}
+                                      onClick={() => {
+                                          if (assetData.balance > 0) {
+                                              setConvertToken(getCollateralIndex(networkId, assetData.asset));
+                                              setShowSwapModal(true);
+                                          }
+                                      }}
+                                  >
+                                      {t('profile.asset-balance.convert')}
+                                      <ConvertIcon />
+                                  </Convert>
+                              )}
                           </AssetContainer>
                       );
                   })
@@ -221,19 +222,20 @@ const AssetBalance: React.FC = () => {
                               </AssetWrapper>
                               <Label>{formatCurrencyWithKey('', assetData.balance)}</Label>
                               <Label>{formatCurrencyWithKey(USD_SIGN, assetData.value, 2)}</Label>
-
-                              <Convert
-                                  disabled={assetData.balance == 0 || assetData.asset === 'OVER'}
-                                  onClick={() => {
-                                      if (assetData.balance > 0 && assetData.asset !== 'OVER') {
-                                          setConvertToken(getCollateralIndex(networkId, assetData.asset));
-                                          setShowSwapModal(true);
-                                      }
-                                  }}
-                              >
-                                  {t('profile.asset-balance.convert')}
-                                  <ConvertIcon />
-                              </Convert>
+                              {assetData.asset !== 'OVER' && (
+                                  <Convert
+                                      disabled={assetData.balance == 0}
+                                      onClick={() => {
+                                          if (assetData.balance > 0) {
+                                              setConvertToken(getCollateralIndex(networkId, assetData.asset));
+                                              setShowSwapModal(true);
+                                          }
+                                      }}
+                                  >
+                                      {t('profile.asset-balance.convert')}
+                                      <ConvertIcon />
+                                  </Convert>
+                              )}
 
                               <Transfer
                                   disabled={assetData.balance == 0}
