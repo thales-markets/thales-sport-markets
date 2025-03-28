@@ -35,8 +35,8 @@ export const ProfileIcon = styled.i.attrs({ className: 'icon icon--profile2' })<
 
 export const NotificationCount = styled.div<{ top?: string; left?: string }>`
     position: absolute;
-    top: ${(props) => (props.top ? props.top : '-14px')};
-    left: ${(props) => (props.left ? props.left : '-20px')};
+    top: ${(props) => (props.top ? props.top : '-10px')};
+    left: ${(props) => (props.left ? props.left : '-10px')};
     border-radius: 50%;
     display: flex;
     align-items: center;
