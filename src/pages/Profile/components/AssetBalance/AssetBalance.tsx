@@ -134,7 +134,7 @@ const AssetBalance: React.FC = () => {
     ]);
 
     const thalesBalance = useMemo(() => {
-        if (!isBiconomy && multipleCollateralBalancesEOA && multipleCollateralBalancesEOA.data && exchangeRates)
+        if (multipleCollateralBalancesEOA && multipleCollateralBalancesEOA.data && exchangeRates)
             return {
                 asset: 'THALES',
                 balance: multipleCollateralBalancesEOA.data['THALES'],
@@ -142,7 +142,7 @@ const AssetBalance: React.FC = () => {
                     multipleCollateralBalancesEOA.data['THALES'] *
                     (exchangeRates['THALES'] ? exchangeRates['THALES'] : 1),
             };
-    }, [exchangeRates, isBiconomy, multipleCollateralBalancesEOA]);
+    }, [exchangeRates, multipleCollateralBalancesEOA]);
 
     return (
         <GridContainer>
@@ -166,7 +166,7 @@ const AssetBalance: React.FC = () => {
                 </ZeroBalanceWrapper>
             </AssetContainer>
 
-            {thalesBalance && thalesBalance.balance > 0 && (
+            {!isBiconomy && thalesBalance && thalesBalance.balance > 0 && (
                 <AssetContainer>
                     <AssetWrapper>
                         <Asset className={COLLATERAL_ICONS_CLASS_NAMES['THALES']} />
@@ -253,6 +253,26 @@ const AssetBalance: React.FC = () => {
 
             {isBiconomy && (
                 <EoaContainer>
+                    {thalesBalance && thalesBalance.balance > 0 && (
+                        <AssetContainer>
+                            <AssetWrapper>
+                                <Asset className={COLLATERAL_ICONS_CLASS_NAMES['THALES']} />
+                                {thalesBalance.asset}
+                            </AssetWrapper>
+                            <Label>{formatCurrencyWithKey('', thalesBalance.balance)}</Label>
+                            <Label>{formatCurrencyWithKey(USD_SIGN, thalesBalance.value, 2)}</Label>
+                            <Convert
+                                onClick={() => {
+                                    if (thalesBalance.balance > 0) {
+                                        setShowThalesToOverMigrationModal(true);
+                                    }
+                                }}
+                            >
+                                {t('profile.asset-balance.migrate')}
+                                <ConvertIcon />
+                            </Convert>
+                        </AssetContainer>
+                    )}
                     {usersAssets.eoaAssets.map((assetData, index) => {
                         return (
                             <AssetContainer key={index}>
@@ -373,6 +393,7 @@ const TableButton = styled(AlignedParagraph)<{ disabled?: boolean }>`
 
 const Convert = styled(TableButton)`
     grid-column-start: 4;
+    grid-column-end: 5;
     color: ${(props) => props.theme.textColor.septenary};
 `;
 
