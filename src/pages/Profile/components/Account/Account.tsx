@@ -68,9 +68,9 @@ const Account: React.FC = () => {
                 balanceList.forEach((data) => (total += data.balanceDollarValue));
             }
 
-            return total ? formatCurrencyWithSign(USD_SIGN, total, 2) : 'N/A';
+            return total ? formatCurrencyWithSign(USD_SIGN, total, 2) : '$0';
         } catch (e) {
-            return 'N/A';
+            return '$0';
         }
     }, [exchangeRates, multipleCollateralBalances.data, networkId, balanceList]);
 

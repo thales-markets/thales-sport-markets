@@ -292,7 +292,7 @@ const AssetBalance: React.FC = () => {
                 )}
             </GridContainer>
 
-            {isBiconomy && (
+            {isBiconomy && usersAssets.eoaAssets.length > 0 && (
                 <GridContainer>
                     <WalletContainer>
                         <AssetWrapper>
@@ -307,14 +307,6 @@ const AssetBalance: React.FC = () => {
                         <TableHeader> {t('profile.asset-balance.assets')}</TableHeader>
                         <TableHeader2> {t('profile.asset-balance.amount')}</TableHeader2>
                         <TableHeader2> {t('profile.asset-balance.value')}</TableHeader2>
-                        <ZeroBalanceWrapper>
-                            <TableHeader2> {t('profile.asset-balance.zero-balance')}</TableHeader2>
-                            <Toggle
-                                dotBackground={showZeroBalance ? theme.borderColor.quaternary : ''}
-                                active={showZeroBalance}
-                                handleClick={() => setShowZeroBalance(!showZeroBalance)}
-                            />
-                        </ZeroBalanceWrapper>
                     </AssetContainer>
 
                     {thalesBalance && thalesBalance.balance > 0 && (
