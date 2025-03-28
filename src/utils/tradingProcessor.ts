@@ -13,7 +13,6 @@ import { executeBiconomyTransaction } from './biconomy';
 import freeBetHolder from './contracts/freeBetHolder';
 import liveTradingProcessorContract from './contracts/liveTradingProcessorContract';
 import sgpTradingProcessorContract from './contracts/sgpTradingProcessorContract';
-import stakingThalesBettingProxy from './contracts/stakingThalesBettingProxy';
 import { convertFromBytes32 } from './formatters/string';
 
 const DELAY_BETWEEN_CHECKS_SECONDS = 1; // 1s
@@ -96,15 +95,13 @@ export const processTransaction = async (
     return { isFulfilledTx, isFulfilledAdapter, isAdapterError };
 };
 
-export const getRequestId = (txLogs: any, isFreeBet: boolean, isStakedThales: boolean, isSgp: boolean) => {
+export const getRequestId = (txLogs: any, isFreeBet: boolean, isSgp: boolean) => {
     const requestIdEvent = txLogs
         .map((log: any) => {
             try {
                 const decoded = decodeEventLog({
                     abi: isFreeBet
                         ? freeBetHolder.abi
-                        : isStakedThales
-                        ? stakingThalesBettingProxy.abi
                         : isSgp
                         ? sgpTradingProcessorContract.abi
                         : liveTradingProcessorContract.abi,
@@ -115,7 +112,6 @@ export const getRequestId = (txLogs: any, isFreeBet: boolean, isStakedThales: bo
                 if (
                     (decoded as DecodeEventLogParameters)?.eventName == 'FreeBetLiveTradeRequested' ||
                     (decoded as DecodeEventLogParameters)?.eventName == 'FreeBetSGPTradeRequested' ||
-                    (decoded as DecodeEventLogParameters)?.eventName == 'StakingTokensLiveTradeRequested' ||
                     (decoded as DecodeEventLogParameters)?.eventName == 'LiveTradeRequested' ||
                     (decoded as DecodeEventLogParameters)?.eventName == 'SGPTradeRequested'
                 ) {
@@ -143,68 +139,65 @@ export const getTradingProcessorTransaction: any = async (
     isAA: boolean,
     isFreeBet: boolean,
     freeBetHolderContract: ViemContract,
-    isStakedThales: boolean,
-    stakingThalesBettingProxyContract: ViemContract,
-    networkId: SupportedNetwork
+    networkId: SupportedNetwork,
+    isEth?: boolean
 ): Promise<any> => {
     const referralAddress = referral || ZERO_ADDRESS;
     const gameId = convertFromBytes32(tradeData[0].gameId);
 
-    if (isAA) {
-        // TODO: add SGP
-        return executeBiconomyTransaction(networkId, collateralAddress, tradingProcessorContract, 'requestLiveTrade', [
-            gameId,
-            tradeData[0].sportId,
-            tradeData[0].typeId,
-            tradeData[0].position,
-            tradeData[0].line,
-            buyInAmount,
-            expectedQuote,
-            additionalSlippage,
-            referralAddress,
-            collateralAddress,
-        ]);
-    } else if (isLive || isSgp) {
-        let txParams = {};
+    let txParams = {};
 
-        if (isLive) {
-            txParams = {
-                _gameId: gameId,
-                _sportId: tradeData[0].sportId,
-                _typeId: tradeData[0].typeId,
-                _line: tradeData[0].line,
-                _position: tradeData[0].position,
-                _buyInAmount: buyInAmount,
-                _expectedQuote: expectedQuote,
-                _additionalSlippage: additionalSlippage,
-                _referrer: referralAddress,
-                _collateral: collateralAddress,
-            };
-        } else if (isSgp) {
-            txParams = {
-                _tradeData: tradeData,
-                _buyInAmount: buyInAmount,
-                _expectedQuote: expectedQuote,
-                _additionalSlippage: additionalSlippage,
-                _referrer: referralAddress,
-                _collateral: collateralAddress,
-            };
-        }
+    if (isLive) {
+        txParams = {
+            _gameId: gameId,
+            _sportId: tradeData[0].sportId,
+            _typeId: tradeData[0].typeId,
+            _line: tradeData[0].line,
+            _position: tradeData[0].position,
+            _buyInAmount: buyInAmount,
+            _expectedQuote: expectedQuote,
+            _additionalSlippage: additionalSlippage,
+            _referrer: referralAddress,
+            _collateral: collateralAddress,
+        };
+    } else if (isSgp) {
+        txParams = {
+            _tradeData: tradeData,
+            _buyInAmount: buyInAmount,
+            _expectedQuote: expectedQuote,
+            _additionalSlippage: additionalSlippage,
+            _referrer: referralAddress,
+            _collateral: collateralAddress,
+        };
+    }
 
-        if (isFreeBet && freeBetHolderContract) {
+    if (isFreeBet && freeBetHolderContract) {
+        if (isAA) {
+            return await executeBiconomyTransaction({
+                collateralAddress: collateralAddress as any,
+                networkId,
+                contract: freeBetHolderContract,
+                methodName: isSgp ? 'tradeSGP' : 'tradeLive',
+                data: [txParams],
+                isEth,
+            });
+        } else
             return isSgp
                 ? freeBetHolderContract.write.tradeSGP([txParams])
                 : freeBetHolderContract.write.tradeLive([txParams]);
-        }
+    }
 
-        if (isStakedThales && stakingThalesBettingProxyContract) {
-            return isSgp
-                ? stakingThalesBettingProxyContract.write.tradeSGP([txParams])
-                : stakingThalesBettingProxyContract.write.tradeLive([txParams]);
-        }
-
+    if (isAA) {
+        return await executeBiconomyTransaction({
+            collateralAddress: collateralAddress as any,
+            networkId,
+            contract: tradingProcessorContract,
+            methodName: isSgp ? 'requestSGPTrade' : 'requestLiveTrade',
+            data: [txParams],
+            isEth,
+        });
+    } else
         return isSgp
             ? tradingProcessorContract.write.requestSGPTrade([txParams])
             : tradingProcessorContract.write.requestLiveTrade([txParams]);
-    }
 };

@@ -47,7 +47,7 @@ export enum SportFilter {
 export enum OddsType {
     AMERICAN = 'american-odds',
     DECIMAL = 'decimal-odds',
-    AMM = 'normalized-implied-odds',
+    AMM = 'implied-odds',
 }
 
 export enum Position {

@@ -267,7 +267,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                             />
                         </ToggleContainer>
                     )}
-                    <Header market={market} hideSwitch />
+                    <Header market={market} />
                     <PositionsContainer>
                         {numberOfMarkets === 0 ? (
                             <NoMarketsContainer>
@@ -359,9 +359,11 @@ const MainContainer = styled(FlexDivColumn)<{ isGameOpen: boolean }>`
 `;
 
 const SidebarContainer = styled(FlexDivColumn)`
+    min-width: 360px;
     max-width: 360px;
     @media (max-width: 1299px) {
         max-width: 320px;
+        min-width: 320px;
     }
     @media (max-width: 950px) {
         display: none;

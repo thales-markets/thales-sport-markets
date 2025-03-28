@@ -8,7 +8,9 @@ type ButtonProps = {
     margin?: string;
     textColor?: string;
     backgroundColor?: string;
+    hoverColor?: string;
     borderColor?: string;
+    borderRadius?: string;
     onClick?: any;
     fontSize?: string;
     fontWeight?: string;
@@ -16,6 +18,7 @@ type ButtonProps = {
     disabled?: boolean;
     additionalStyles?: CSSProperties;
     children?: any;
+    className?: string;
 };
 
 const Button: React.FC<ButtonProps> = ({
@@ -24,7 +27,9 @@ const Button: React.FC<ButtonProps> = ({
     padding,
     textColor,
     backgroundColor,
+    hoverColor,
     borderColor,
+    borderRadius,
     margin,
     onClick,
     disabled,
@@ -43,7 +48,9 @@ const Button: React.FC<ButtonProps> = ({
             margin={margin}
             textColor={textColor}
             backgroundColor={backgroundColor}
+            hoverColor={hoverColor}
             borderColor={borderColor}
+            borderRadius={borderRadius}
             onClick={onClick}
             disabled={disabled}
             fontSize={fontSize}
@@ -64,7 +71,9 @@ const Wrapper = styled.button<{
     margin?: string;
     textColor?: string;
     backgroundColor?: string;
+    hoverColor?: string;
     borderColor?: string;
+    borderRadius?: string;
     fontSize?: string;
     fontWeight?: string;
     lineHeight?: string;
@@ -76,7 +85,7 @@ const Wrapper = styled.button<{
     width: ${(props) => props.width || 'auto'};
     min-height: ${(props) => props.height || '28px'};
     border: 1px solid ${(props) => props.borderColor || props.theme.button.borderColor.primary};
-    border-radius: 5px;
+    border-radius: ${(props) => props.borderRadius || '5px'};
     ${(props) => (props.style?.fontFamily ? `font-family: ${props.style?.fontFamily};` : '')}
     font-weight: ${(props) => props.fontWeight || '600'};
     font-size: ${(props) => props.fontSize || '15px'};
@@ -90,6 +99,10 @@ const Wrapper = styled.button<{
     &:disabled {
         opacity: 0.5;
         cursor: default;
+    }
+
+    &:hover {
+        background: ${(props) => props.hoverColor || props.backgroundColor || props.theme.button.background.primary};
     }
 `;
 

@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import { Ticket } from 'types/markets';
 import { RootState } from 'types/redux';
-import biconomyConnector from 'utils/biconomyWallet';
+import useBiconomy from 'utils/useBiconomy';
 import { isAddress } from 'viem';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import TicketTransactionsTable from '../../../Markets/Market/MarketDetailsV2/components/TicketTransactionsTable';
@@ -15,7 +15,8 @@ const TicketTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
-    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+    const smartAddres = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddres : address) || '';
 
     const isSearchTextWalletAddress = searchText && isAddress(searchText);
 

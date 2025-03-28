@@ -112,7 +112,6 @@ const Wrapper = styled(FlexDivColumn)`
     border-radius: 8px;
     flex: 1 1 0;
     height: auto;
-    margin-right: 15px;
     @media (max-width: 950px) {
         position: fixed;
         top: 0;

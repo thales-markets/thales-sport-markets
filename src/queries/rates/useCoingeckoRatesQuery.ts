@@ -11,6 +11,7 @@ const COINGECKO_CURRENCY_ID_MAP = {
     [CRYPTO_CURRENCY_MAP.ETH]: 'ethereum',
     [CRYPTO_CURRENCY_MAP.WETH]: 'weth',
     [CRYPTO_CURRENCY_MAP.THALES]: 'thales',
+    [CRYPTO_CURRENCY_MAP.OVER]: 'over',
 };
 
 const useCoingeckoRatesQuery = (options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
@@ -22,7 +23,6 @@ const useCoingeckoRatesQuery = (options?: Omit<UseQueryOptions<any>, 'queryKey' 
                 OP: 0,
                 ETH: 0,
                 WETH: 0,
-                sUSD: 1,
                 DAI: 1,
                 USDCe: 1,
                 USDC: 1,
@@ -30,6 +30,7 @@ const useCoingeckoRatesQuery = (options?: Omit<UseQueryOptions<any>, 'queryKey' 
                 USDbC: 1,
                 THALES: 0,
                 sTHALES: 0,
+                OVER: 0,
                 cbBTC: 0,
                 wBTC: 0,
             };
@@ -60,6 +61,8 @@ const useCoingeckoRatesQuery = (options?: Omit<UseQueryOptions<any>, 'queryKey' 
                 rates[CRYPTO_CURRENCY_MAP.sTHALES as Coins] = Number(
                     body[COINGECKO_CURRENCY_ID_MAP[CRYPTO_CURRENCY_MAP.THALES]].usd
                 );
+                // TODO hardcode OVER rate until we have a proper rate
+                rates[CRYPTO_CURRENCY_MAP.OVER as Coins] = 0.1053;
             } catch (err) {
                 console.error('Coingecko price error:' + err);
             }
