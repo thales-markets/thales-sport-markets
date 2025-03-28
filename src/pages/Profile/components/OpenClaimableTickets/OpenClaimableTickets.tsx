@@ -16,6 +16,7 @@ import { RootState } from 'types/redux';
 import { sendBiconomyTransaction } from 'utils/biconomy';
 import { getCollateral, getCollaterals, getDefaultCollateral, isLpSupported } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
+import { refetchAfterClaim } from 'utils/queryConnector';
 import useBiconomy from 'utils/useBiconomy';
 import { Address, Client, encodeFunctionData, isAddress } from 'viem';
 import { estimateContractGas, waitForTransactionReceipt } from 'viem/actions';
@@ -170,6 +171,7 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
 
                     if (txReceipt.status === 'success') {
                         toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
+                        refetchAfterClaim(walletAddress, networkId);
                     }
                 } else {
                     if (multiCallContractWithSigner) {
@@ -193,6 +195,7 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
 
                         if (txReceipt.status === 'success') {
                             toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
+                            refetchAfterClaim(walletAddress, networkId);
                         }
                     }
                 }
