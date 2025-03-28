@@ -1,11 +1,15 @@
 import OutsideClickHandler from 'components/OutsideClick';
 import { DEFAULT_NETWORK, SUPPORTED_NETWORKS_PARAMS } from 'constants/network';
 import { useMemo, useState } from 'react';
-import styled from 'styled-components';
+import styled, { CSSProperties } from 'styled-components';
 import { SupportedNetwork } from 'types/network';
 import { useAccount, useChainId, useSwitchChain } from 'wagmi';
 
-const NetworkSwitcher: React.FC = () => {
+type NetworkSwitcherProps = {
+    containerStyle?: CSSProperties;
+};
+
+const NetworkSwitcher: React.FC<NetworkSwitcherProps> = ({ containerStyle }) => {
     const networkId = useChainId();
     const { isConnected } = useAccount();
 
@@ -23,6 +27,7 @@ const NetworkSwitcher: React.FC = () => {
         <OutsideClickHandler onOutsideClick={() => setDropDownOpen(false)}>
             <NetworkIconContainer>
                 <NetworkIconWrapper
+                    style={containerStyle}
                     onClick={() => {
                         if (supportedNetworks.length > 1) setDropDownOpen(!dropDownOpen);
                     }}

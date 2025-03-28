@@ -122,7 +122,7 @@ const Dropdown = styled.div`
     flex-direction: column;
     border-radius: 8px;
     background-color: ${(props) => props.theme.background.secondary};
-    padding: 16px 20px;
+    padding: 16px 26px;
     justify-content: center;
     align-items: flex-start;
     gap: 10px;

@@ -99,7 +99,7 @@ const WalletInfo: React.FC = ({}) => {
                                 <ProfileItem color={theme.textColor.secondary} />
                             </WalletAddressInfo>
 
-                            <NetworkSwitcher />
+                            <NetworkSwitcher containerStyle={{ minWidth: 52, gap: 3 }} />
 
                             {showDropdown && <ProfileDropdown setShowDropdown={setShowDropdown} />}
                         </WalletWrapper>
@@ -127,7 +127,7 @@ const WalletInfo: React.FC = ({}) => {
 
 const Container = styled(FlexDivCentered)<{ walletConnected?: boolean }>`
     width: 100%;
-    width: 318px;
+    width: 302px;
     z-index: 10;
     color: ${(props) => props.theme.textColor.secondary};
     border-radius: 5px;
