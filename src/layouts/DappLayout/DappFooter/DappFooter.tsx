@@ -55,12 +55,6 @@ const DappFooter: React.FC = () => {
                             <LinkText>{t('footer.resources')}</LinkText>
                         </LinkContent>
                     </Link>
-                    <Link target="_blank" rel="noreferrer" href={LINKS.Footer.Tutorial}>
-                        <LinkContent>
-                            <YoutubeIcon />
-                            <LinkText>{t('footer.tutorial')}</LinkText>
-                        </LinkContent>
-                    </Link>
                     <Link target="_blank" rel="noreferrer" href={LINKS.Footer.GitHub}>
                         <LinkContent>
                             <GithubIcon />
@@ -205,14 +199,6 @@ const DocsIcon = styled.i`
     &:before {
         font-family: HomepageIconsV2 !important;
         content: '\\0025';
-    }
-`;
-
-const YoutubeIcon = styled.i`
-    color: ${(props) => props.theme.textColor.secondary};
-    &:before {
-        font-family: OvertimeIconsV2 !important;
-        content: '\\0119';
     }
 `;
 
