@@ -123,11 +123,7 @@ const DepositFromWallet: React.FC<DepositFromWalletProps> = ({ onClose, preSelec
         <Modal
             customStyle={{
                 overlay: {
-                    zIndex: 1000,
-                },
-                content: {
-                    transform: 'translate(-50%, -50%)',
-                    overflow: 'unset',
+                    zIndex: 30,
                 },
             }}
             containerStyle={{
