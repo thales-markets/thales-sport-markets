@@ -474,7 +474,7 @@
             "single-lp": "Single LP",
             "parlay-lp": "Parlay LP",
             "deposit": "Deposit",
-            "withdrawalRequest": "Withdrawal Request",
+            "withdrawalRequest": "Withdrawal request",
             "claim": "Withdrawal Claim"
         },
         "voucher-title": "Claim Overtime vouchers",
@@ -1027,13 +1027,13 @@
         "address-input-label": "Your personal {{ token }} withdrawal address on {{ network }}",
         "description": "Use this page to withdraw funds from your Overtime account. Carefully follow the steps below and make sure to double check everything.",
         "amount": "Amount",
-        "request": "Withdrawal Request",
+        "request": "Withdrawal request",
         "heading-withdraw": "Withdraw crypto",
         "paste-address": "Paste your wallet address here",
         "warning": "Double check the Withdrawal Address and make sure it accepts {{ token }} on {{ network }}",
         "button-label-withdraw": "Withdraw",
         "confirmation-modal": {
-            "title": "Withdrawal Requested",
+            "title": "Withdrawal requested",
             "correct-address": "Make sure the address is correct and that it accepts {{ token }} on {{ network }}",
             "withdrawal-transaction-warning": "Withdraw transactions can not be cancelled",
             "withdrawal-fee": "Withdrawal fee",
@@ -1117,7 +1117,7 @@
         },
         "activate-account": {
             "deposit": "Deposit received!",
-            "activate": "Activate Your Overtime Account for this device.",
+            "activate": "Activate your Overtime Account for this device.",
             "success": "Your first deposit is received in your Overtime Account successfully. Now it's time to Activate your account by clicking on the button below and you are all set!",
             "activate-my-account": "Activate My Account"
         }

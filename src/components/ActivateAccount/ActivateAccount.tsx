@@ -1,4 +1,3 @@
-import Zebra from 'assets/images/overtime-zebra.svg?react';
 import Button from 'components/Button';
 import FundModal from 'components/FundOvertimeAccountModal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
@@ -12,7 +11,7 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
-import { Colors } from 'styles/common';
+import { Colors, FlexDivRow } from 'styles/common';
 import { Coins, localStore } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
@@ -146,8 +145,8 @@ const ActivateAccount: React.FC<any> = () => {
                     <Wrapper show={!isMinimizedModal}>
                         {!isMinimizedModal ? (
                             <>
-                                <MinimizeIcon onClick={() => setIsMinimized(true)}> - </MinimizeIcon>
-                                <StyledBalanceIcon />
+                                <FlexDivRow>{<CloseIcon onClick={() => setIsMinimized(true)} />}</FlexDivRow>
+                                <LogoIcon className="icon icon--overtime" />
                                 <Header>{t('get-started.activate-account.deposit')}</Header>
                                 <SubTitle>{t('get-started.activate-account.activate')}</SubTitle>
                                 <Box>{t('get-started.activate-account.success')}</Box>
@@ -268,25 +267,6 @@ const Wrapper = styled.div<{ show: boolean }>`
     `}
 `;
 
-const MinimizeIcon = styled.p`
-    position: absolute;
-    top: 10px;
-    left: 20px;
-    font-size: 54px;
-    line-height: 10px;
-    color: black;
-    cursor: pointer;
-`;
-
-const StyledBalanceIcon = styled(Zebra)`
-    text-align: center;
-    height: 55px;
-    width: 255px;
-    path {
-        fill: ${(props) => props.theme.textColor.senary};
-    }
-`;
-
 const Header = styled.h2`
     color: ${(props) => props.theme.overdrop.textColor.quaternary};
     text-align: center;
@@ -294,7 +274,10 @@ const Header = styled.h2`
     line-height: 24px;
     font-weight: 600;
     margin-top: 13px;
-    margin-bottom: 3px;
+    margin-bottom: 10px;
+    @media (max-width: 575px) {
+        font-size: 20px;
+    }
 `;
 
 const SubTitle = styled.p`
@@ -303,6 +286,9 @@ const SubTitle = styled.p`
     font-size: 16px;
     font-weight: 600;
     line-height: 16px;
+    @media (max-width: 575px) {
+        font-size: 14px;
+    }
 `;
 
 const Box = styled.div`
@@ -316,6 +302,10 @@ const Box = styled.div`
     text-align: left;
     margin-top: 25px;
     margin-bottom: 24px;
+    @media (max-width: 575px) {
+        width: 100%;
+        padding: 10px;
+    }
 `;
 
 const ActivateButton = styled.div`
@@ -325,9 +315,29 @@ const ActivateButton = styled.div`
     text-align: center;
     font-size: 16px;
     font-weight: 700;
-    height: 56px;
-    padding: 18px;
+    height: 44px;
+    padding: 14px;
     width: 100%;
+    cursor: pointer;
+    text-transform: uppercase;
+`;
+
+const LogoIcon = styled.i`
+    font-size: 250px;
+    line-height: 56px;
+    color: ${(props) => props.theme.textColor.senary};
+    @media (max-width: 575px) {
+        font-size: 200px;
+        line-height: 48px;
+    }
+`;
+
+const CloseIcon = styled.i.attrs({ className: 'icon icon--close' })`
+    color: ${(props) => props.theme.textColor.senary};
+    font-size: 14px;
+    position: absolute;
+    top: 15px;
+    right: 15px;
     cursor: pointer;
 `;
 

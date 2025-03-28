@@ -1,5 +1,4 @@
 import { PaymasterMode } from '@biconomy/account';
-import Zebra from 'assets/images/overtime-zebra.svg?react';
 import Modal from 'components/Modal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { ContractType } from 'enums/contract';
@@ -10,7 +9,7 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
-import { Colors, FlexDiv } from 'styles/common';
+import { Colors, FlexDiv, FlexDivRow } from 'styles/common';
 import { coinParser, Coins, formatCurrencyWithKey } from 'thales-utils';
 import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
@@ -136,7 +135,8 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
             onClose={() => onClose()}
         >
             <MainContainer>
-                <ZebraIcon />
+                <FlexDivRow>{<CloseIcon onClick={onClose} />}</FlexDivRow>
+                <LogoIcon className="icon icon--overtime" />
                 <Header>{t('withdraw.request')}</Header>
                 <SubTitle>
                     {t('withdraw.confirmation-modal.correct-address', {
@@ -184,6 +184,9 @@ const TokenIcon = styled.i`
     font-size: 25px;
     margin-right: 5px;
     color: ${(props) => props.theme.textColor.senary};
+    @media (max-width: 575px) {
+        font-size: 18px;
+    }
 `;
 
 const Header = styled.h2`
@@ -193,7 +196,10 @@ const Header = styled.h2`
     line-height: 24px;
     font-weight: 600;
     margin-top: 13px;
-    margin-bottom: 3px;
+    margin-bottom: 10px;
+    @media (max-width: 575px) {
+        font-size: 20px;
+    }
 `;
 
 const SubTitle = styled.p`
@@ -203,6 +209,9 @@ const SubTitle = styled.p`
     font-size: 16px;
     font-weight: 600;
     line-height: 16px;
+    @media (max-width: 575px) {
+        font-size: 14px;
+    }
 `;
 
 const Box = styled.div`
@@ -216,6 +225,10 @@ const Box = styled.div`
     text-align: left;
     margin-top: 12px;
     margin-bottom: 24px;
+    @media (max-width: 575px) {
+        width: 100%;
+        padding: 5px 5px;
+    }
 `;
 
 const ItemContainer = styled(FlexDiv)`
@@ -226,13 +239,21 @@ const ItemContainer = styled(FlexDiv)`
     justify-content: space-between;
     margin: 5px 0px;
     color: ${(props) => props.theme.textColor.senary};
+    @media (max-width: 575px) {
+        flex-direction: column;
+    }
 `;
 
 const ItemLabel = styled(FlexDiv)`
     align-items: center;
-    font-size: 16px;
-    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
     margin-right: 15px;
+    font-weight: 700;
+    @media (max-width: 575px) {
+        font-size: 12px;
+        line-height: 18px;
+    }
 `;
 
 const ItemDescription = styled.div`
@@ -240,7 +261,13 @@ const ItemDescription = styled.div`
     align-items: center;
     overflow-wrap: break-word;
     width: fit-content;
+    font-size: 14px;
+    line-height: 20px;
     font-weight: 500;
+    @media (max-width: 575px) {
+        font-size: 12px;
+        line-height: 18px;
+    }
 `;
 
 const ButtonContainer = styled(FlexDiv)`
@@ -249,25 +276,36 @@ const ButtonContainer = styled(FlexDiv)`
     width: 100%;
 `;
 
-const ZebraIcon = styled(Zebra)`
-    text-align: center;
-    height: 55px;
-    width: 255px;
-    path {
-        fill: ${(props) => props.theme.textColor.senary};
-    }
-`;
-
 const ActivateButton = styled.div`
-    border-radius: 12px;
+    border-radius: 8px;
     background: ${(props) => props.theme.textColor.primary};
     color: ${(props) => props.theme.overdrop.textColor.quaternary};
     text-align: center;
     font-size: 16px;
     font-weight: 700;
-    height: 56px;
-    padding: 18px;
+    height: 44px;
+    padding: 14px;
     width: 100%;
+    cursor: pointer;
+    text-transform: uppercase;
+`;
+
+const LogoIcon = styled.i`
+    font-size: 250px;
+    line-height: 56px;
+    color: ${(props) => props.theme.textColor.senary};
+    @media (max-width: 575px) {
+        font-size: 200px;
+        line-height: 48px;
+    }
+`;
+
+const CloseIcon = styled.i.attrs({ className: 'icon icon--close' })`
+    color: ${(props) => props.theme.textColor.senary};
+    font-size: 14px;
+    position: absolute;
+    top: 15px;
+    right: 15px;
     cursor: pointer;
 `;
 
