@@ -13,6 +13,7 @@ import BuyStepsModal from 'pages/Markets/Home/Parlay/components/BuyStepsModal';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { Trans } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsBiconomy } from 'redux/modules/wallet';
@@ -286,14 +287,14 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
     const getButton = (text: string, isDisabled: boolean) => {
         return (
             <Button
-                backgroundColor={theme.button.background.quaternary}
-                borderColor={theme.button.borderColor.secondary}
-                height="48px"
-                padding="2px 40px"
+                margin="10px 0 0 0"
                 width="100%"
+                height="44px"
                 fontSize="16px"
-                fontWeight="700"
-                lineHeight="16px"
+                backgroundColor={theme.background.quaternary}
+                borderRadius="8px"
+                borderColor={theme.borderColor.quaternary}
+                textColor={theme.textColor.tertiary}
                 additionalStyles={{
                     alignSelf: 'center',
                 }}
@@ -348,9 +349,17 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
         >
             <Wrapper>
                 <FlexDivRow>
-                    <Title>{t('profile.swap.title')}</Title>
+                    <Title>
+                        <Trans
+                            i18nKey="profile.swap.title"
+                            components={{
+                                icon: <OvertimeIcon className="icon icon--overtime" />,
+                            }}
+                        />
+                    </Title>
                     <FlexDivRow>{<CloseIcon onClick={onClose} />}</FlexDivRow>
                 </FlexDivRow>
+                <Note>{t('profile.swap.note')}</Note>
                 <InputContainer ref={inputRef}>
                     <NumericInput
                         value={fromAmount}
@@ -364,13 +373,13 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
                         disabled={isBuying}
                         label="from"
                         inputFontWeight="700"
-                        inputPadding="5px 10px"
                         height="44px"
                         inputFontSize="16px"
-                        background={theme.textColor.primary}
-                        borderColor="none"
+                        background={theme.background.quinary}
+                        borderColor={theme.background.quinary}
                         fontWeight="700"
-                        color={theme.textColor.tertiary}
+                        color={theme.textColor.primary}
+                        width="100%"
                         placeholder={t('liquidity-pool.deposit-amount-placeholder')}
                         currencyComponent={
                             <CollateralSelector
@@ -384,8 +393,9 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
                                 isDetailedView
                                 collateralBalances={multiCollateralBalances}
                                 exchangeRates={exchangeRates}
-                                background={theme.textColor.primary}
-                                color={theme.textColor.tertiary}
+                                dropDownWidth={inputRef.current?.getBoundingClientRect().width + 'px'}
+                                background={theme.background.quinary}
+                                color={theme.textColor.primary}
                                 topPosition="50px"
                                 hideZeroBalance
                             />
@@ -394,38 +404,6 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
                         onMaxButton={() => setFromAmount(tokenBalance.fromTokenBalance)}
                     />
                 </InputContainer>
-                <NumericInput
-                    value={toAmount}
-                    onChange={(e) => {
-                        setToAmount(Number(e.target.value) === 0 ? '' : Number(e.target.value));
-                    }}
-                    inputFontWeight="700"
-                    inputPadding="5px 10px"
-                    height="44px"
-                    inputFontSize="16px"
-                    background={theme.textColor.primary}
-                    borderColor="none"
-                    fontWeight="700"
-                    color={theme.textColor.tertiary}
-                    placeholder={t('liquidity-pool.deposit-amount-placeholder')}
-                    currencyComponent={
-                        <CollateralSelector
-                            borderColor="none"
-                            collateralArray={getCollaterals(networkId)}
-                            selectedItem={getCollateralIndex(networkId, toToken)}
-                            onChangeCollateral={() => {}}
-                            isDetailedView
-                            collateralBalances={multiCollateralBalances}
-                            exchangeRates={exchangeRates}
-                            background={theme.textColor.primary}
-                            color={theme.textColor.tertiary}
-                            topPosition="50px"
-                            disabled
-                        />
-                    }
-                    label="To"
-                />
-
                 <InfoBox>
                     <Section>
                         <SubLabel>{t('profile.swap.token-price', { token: toToken })}:</SubLabel>
@@ -471,16 +449,20 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     gap: 10px;
-    width: 360px;
+    width: 420px;
+    @media (max-width: 575px) {
+        width: 100%;
+    }
 `;
 
 const InputContainer = styled(FlexDiv)`
     margin-top: 10px;
     margin-bottom: 5px;
+    position: relative;
+    width: 100%;
 `;
 
 const InfoBox = styled(FlexDivColumn)<{ disabled?: boolean }>`
-    border: 1px solid ${(props) => props.theme.textColor.secondary};
     background: ${(props) => props.theme.background.primary};
     border-radius: 8px;
     padding: 14px;
@@ -499,12 +481,12 @@ const LoaderContainer = styled.div`
 `;
 
 const Title = styled.h1`
-    font-size: 24px;
+    margin-top: 10px;
+    font-size: 25px;
     font-weight: 500;
     color: ${(props) => props.theme.textColor.primary};
     width: 100%;
     text-align: center;
-    margin-bottom: 15px;
     text-transform: uppercase;
 `;
 
@@ -517,29 +499,47 @@ const Section = styled.div`
 const Label = styled.span`
     display: flex;
     align-items: center;
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 20px;
     letter-spacing: 0.025em;
     text-transform: uppercase;
-    color: ${(props) => props.theme.textColor.quaternary};
+    color: ${(props) => props.theme.textColor.secondary};
     @media (max-width: 950px) {
         line-height: 24px;
     }
 `;
 
 const SubLabel = styled(Label)`
-    font-weight: 400;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
     text-transform: none;
 `;
 
 const Value = styled.span`
     font-weight: 600;
-    font-size: 12px;
+    font-size: 16px;
     line-height: 20px;
     letter-spacing: 0.025em;
     margin-left: auto;
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.textColor.secondary};
+`;
+
+const OvertimeIcon = styled.i`
+    font-size: 130px;
+    font-weight: 400;
+    line-height: 28px;
+    margin-top: -4px;
+`;
+
+const Note = styled.div`
+    color: ${(props) => props.theme.textColor.secondary};
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 16px;
+    margin-bottom: 20px;
+    @media (max-width: 575px) {
+        font-size: 14px;
+    }
 `;
 
 export default SwapModal;
