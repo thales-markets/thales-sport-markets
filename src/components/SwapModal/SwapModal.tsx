@@ -137,23 +137,25 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
     // Check swap allowance
     useEffect(() => {
         if (isConnected && fromAmount) {
-            const getSwapAllowance = async () => {
-                const collateralContractWithSigner = getContractInstance(
-                    ContractType.MULTICOLLATERAL,
-                    { client, networkId },
-                    getCollateralIndex(networkId, fromToken)
-                );
-                const allowance = await checkAllowance(
-                    coinParser(fromAmount.toString(), networkId, fromToken),
-                    collateralContractWithSigner,
-                    walletAddress,
-                    PARASWAP_TRANSFER_PROXY
-                );
+            if (fromToken !== 'ETH') {
+                const getSwapAllowance = async () => {
+                    const collateralContractWithSigner = getContractInstance(
+                        ContractType.MULTICOLLATERAL,
+                        { client, networkId },
+                        getCollateralIndex(networkId, fromToken)
+                    );
+                    const allowance = await checkAllowance(
+                        coinParser(fromAmount.toString(), networkId, fromToken),
+                        collateralContractWithSigner,
+                        walletAddress,
+                        PARASWAP_TRANSFER_PROXY
+                    );
 
-                setHasSwapAllowance(allowance);
-            };
+                    setHasSwapAllowance(allowance);
+                };
 
-            getSwapAllowance();
+                getSwapAllowance();
+            }
         }
     }, [walletAddress, isConnected, fromAmount, networkId, fromToken, isBuying, client]);
 
@@ -169,7 +171,7 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
         toAmount;
 
         if (step <= BuyTicketStep.SWAP) {
-            if (!hasSwapAllowance) {
+            if (!hasSwapAllowance && fromToken !== 'ETH') {
                 if (step !== BuyTicketStep.APPROVE_SWAP) {
                     step = BuyTicketStep.APPROVE_SWAP;
                     setBuyStep(BuyTicketStep.APPROVE_SWAP);
@@ -274,14 +276,19 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
         }
         setIsBuying(false);
         setOpenBuyStepsModal(false);
-        setFromAmount('');
-        setBuyStep(BuyTicketStep.APPROVE_SWAP);
         toast.update(
             toastId,
             getSuccessToastOptions(
-                t('profile.stats.swap-success', { amount: formatCurrency(toAmount, 4), token: toToken })
+                t('profile.stats.swap-success', {
+                    fromAmount: formatCurrency(fromAmount, 4),
+                    fromToken: fromToken,
+                    toAmount: formatCurrency(toAmount, 2),
+                    toToken: toToken,
+                })
             )
         );
+        setFromAmount('');
+        setBuyStep(BuyTicketStep.APPROVE_SWAP);
     };
 
     const getButton = (text: string, isDisabled: boolean) => {
@@ -431,6 +438,8 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
                 {getSubmitButton()}
                 {openBuyStepsModal && (
                     <BuyStepsModal
+                        fromAmount={Number(fromAmount)}
+                        toAmount={Number(toAmount)}
                         step={(buyStep as unknown) as BuyTicketStep}
                         isFailed={!isBuying}
                         currencyKey={fromToken}

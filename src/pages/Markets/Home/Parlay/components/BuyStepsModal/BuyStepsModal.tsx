@@ -5,9 +5,9 @@ import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { BuyTicketStep } from 'enums/tickets';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
-import { Coins } from 'thales-utils';
+import { Coins, formatCurrency } from 'thales-utils';
 import { defaultButtonProps } from '../styled-components';
 
 type BuyStepsModalProps = {
@@ -18,9 +18,21 @@ type BuyStepsModalProps = {
     onSubmit: () => void;
     onClose: () => void;
     onlySwap?: boolean;
+    fromAmount: number;
+    toAmount: number;
 };
 
-const BuyStepsModal: React.FC<BuyStepsModalProps> = ({ step, isFailed, currencyKey, onSubmit, onClose, onlySwap }) => {
+const BuyStepsModal: React.FC<BuyStepsModalProps> = ({
+    step,
+    isFailed,
+    currencyKey,
+    onSubmit,
+    onClose,
+    onlySwap,
+    fromAmount,
+    toAmount,
+}) => {
+    const theme = useTheme();
     const { t } = useTranslation();
 
     const getLoader = () => (
@@ -36,14 +48,27 @@ const BuyStepsModal: React.FC<BuyStepsModalProps> = ({ step, isFailed, currencyK
     const isEth = currencyKey === CRYPTO_CURRENCY_MAP.ETH;
 
     return (
-        <Modal title={''} onClose={onClose} shouldCloseOnOverlayClick={false}>
+        <Modal
+            customStyle={{
+                overlay: {
+                    zIndex: 1000,
+                },
+            }}
+            containerStyle={{
+                background: theme.background.secondary,
+                border: 'none',
+            }}
+            title=""
+            shouldCloseOnOverlayClick={false}
+            onClose={onClose}
+        >
             <Container>
                 {!isEth && (
                     <FlexDivRow>
                         <Text>
                             {t('markets.parlay.buy-steps.approve-swap', {
                                 src: currencyKey,
-                                dst: CRYPTO_CURRENCY_MAP.OVER,
+                                amount: formatCurrency(fromAmount, 4),
                             })}
                             :
                         </Text>
@@ -52,7 +77,13 @@ const BuyStepsModal: React.FC<BuyStepsModalProps> = ({ step, isFailed, currencyK
                 )}
                 <FlexDivRow>
                     <Text>
-                        {t('markets.parlay.buy-steps.swap', { src: currencyKey, dst: CRYPTO_CURRENCY_MAP.OVER })}:
+                        {t('markets.parlay.buy-steps.swap', {
+                            src: currencyKey,
+                            dst: CRYPTO_CURRENCY_MAP.OVER,
+                            fromAmount: formatCurrency(fromAmount, 4),
+                            toAmount: formatCurrency(toAmount, 2),
+                        })}
+                        :
                     </Text>
                     {step === BuyTicketStep.SWAP
                         ? statusFailedOrInProgress
@@ -95,7 +126,7 @@ const BuyStepsModal: React.FC<BuyStepsModalProps> = ({ step, isFailed, currencyK
 };
 
 const Container = styled(FlexDivColumnCentered)`
-    width: 300px;
+    width: 420px;
     gap: 20px;
     margin: 0 30px;
     @media (max-width: 575px) {

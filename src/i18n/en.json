@@ -383,7 +383,7 @@
             "buy-over-title": "You get better odds when betting with OVER",
             "swap-to-over-label": "Swap to OVER",
             "get-over-label": "Get OVER",
-            "swap-success": "Successfully swapped to OVER",
+            "swap-success": "Successfully swapped {{ fromAmount }} {{ fromToken }} to {{ toAmount}} ${{ toToken }}",
             "over-price-label": "OVER PRICE",
             "over-to-receive": "OVER TO RECEIVE"
         },
@@ -949,8 +949,8 @@
                 }
             },
             "buy-steps": {
-                "approve-swap": "Approve swap {{src}} to {{dst}}",
-                "swap": "Swap {{src}} to {{dst}}",
+                "approve-swap": "Approve swaping {{amount}} {{src}}",
+                "swap": "Swap {{fromAmount}} {{src}} to {{toAmount}}  ${{dst}}",
                 "approve-buy": "Approve buy with {{currencyKey}}",
                 "buy": "Buy with {{currencyKey}}"
             },

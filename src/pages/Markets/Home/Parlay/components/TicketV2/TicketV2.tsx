@@ -92,7 +92,7 @@ import { SportsbookData } from 'types/sgp';
 import { ShareTicketModalProps } from 'types/tickets';
 import { OverdropLevel, ThemeInterface } from 'types/ui';
 import { ViemContract } from 'types/viem';
-import { GAS_LIMIT, executeBiconomyTransaction, getPaymasterData } from 'utils/biconomy';
+import { GAS_LIMIT, executeBiconomyTransaction, getPaymasterData, sendBiconomyTransaction } from 'utils/biconomy';
 import {
     convertFromStableToCollateral,
     getCollateral,
@@ -1320,7 +1320,13 @@ const Ticket: React.FC<TicketProps> = ({
                 );
 
                 try {
-                    const approveTxHash = await sendTransaction(approveSwapRawTransaction);
+                    const approveTxHash = isBiconomy
+                        ? await sendBiconomyTransaction({
+                              networkId,
+                              transaction: approveSwapRawTransaction,
+                              collateralAddress: swapToOverParams.src,
+                          })
+                        : await sendTransaction(approveSwapRawTransaction);
 
                     if (approveTxHash) {
                         await delay(3000); // wait for 1inch API to read correct approval
@@ -1358,7 +1364,15 @@ const Ticket: React.FC<TicketProps> = ({
                 const balanceBefore = multipleCollateralBalances?.data
                     ? multipleCollateralBalances.data[CRYPTO_CURRENCY_MAP.OVER as Coins]
                     : 0;
-                const swapTxHash = swapRawTransaction ? await sendTransaction(swapRawTransaction) : undefined;
+                const swapTxHash = swapRawTransaction
+                    ? isBiconomy
+                        ? await sendBiconomyTransaction({
+                              networkId,
+                              transaction: swapRawTransaction,
+                              collateralAddress: swapToOverParams.src,
+                          })
+                        : await sendTransaction(swapRawTransaction)
+                    : undefined;
 
                 if (swapTxHash) {
                     step = BuyTicketStep.APPROVE_BUY;
@@ -2824,6 +2838,8 @@ const Ticket: React.FC<TicketProps> = ({
             )}
             {openBuyStepsModal && (
                 <BuyStepsModal
+                    fromAmount={Number(buyInAmount)}
+                    toAmount={Number(swappedOverToReceive)}
                     step={buyStep}
                     isFailed={!isBuying}
                     currencyKey={selectedCollateral}
