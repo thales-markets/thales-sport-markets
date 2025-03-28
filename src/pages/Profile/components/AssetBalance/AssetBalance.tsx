@@ -4,6 +4,7 @@ import FundModal from 'components/FundOvertimeAccountModal';
 import SwapModal from 'components/SwapModal/SwapModal';
 import ThalesToOverMigrationModal from 'components/ThalesToOverMigrationModal';
 import Toggle from 'components/Toggle';
+import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
 import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from 'constants/currency';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import useLocalStorage from 'hooks/useLocalStorage';
@@ -12,10 +13,11 @@ import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollate
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivEnd } from 'styles/common';
-import { Coins, formatCurrencyWithKey } from 'thales-utils';
+import { Coins, formatCurrencyWithKey, truncateAddress } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import { getCollateralIndex, getCollaterals } from 'utils/collaterals';
@@ -144,116 +146,177 @@ const AssetBalance: React.FC = () => {
             };
     }, [exchangeRates, multipleCollateralBalancesEOA]);
 
+    const handleCopy = (address: string) => {
+        const id = toast.loading(t('deposit.copying-address'), { autoClose: 1000 });
+        try {
+            navigator.clipboard.writeText(address);
+            toast.update(id, {
+                ...getInfoToastOptions(t('deposit.copied') + ': ' + truncateAddress(address, 6, 4)),
+                autoClose: 2000,
+            });
+        } catch (e) {
+            toast.update(id, getErrorToastOptions('Error'));
+        }
+    };
+
     return (
-        <GridContainer>
-            <ButtonContainer>
-                <Button onClick={() => setShowFundModal(true)}>{t('profile.account-summary.deposit')}</Button>
-                <Button onClick={() => setShowWithdrawModal(true)}>{t('profile.account-summary.withdraw')}</Button>
-            </ButtonContainer>
-
-            <AssetContainer>
-                <TableHeader> {t('profile.asset-balance.assets')}</TableHeader>
-                <TableHeader2> {t('profile.asset-balance.amount')}</TableHeader2>
-                <TableHeader2> {t('profile.asset-balance.value')}</TableHeader2>
-                <ZeroBalanceWrapper>
-                    <TableHeader2> {t('profile.asset-balance.zero-balance')}</TableHeader2>
-                    <Toggle
-                        dotBackground={showZeroBalance ? theme.borderColor.quaternary : ''}
-                        active={showZeroBalance}
-                        handleClick={() => setShowZeroBalance(!showZeroBalance)}
-                    />
-                </ZeroBalanceWrapper>
-            </AssetContainer>
-
-            {!isBiconomy && thalesBalance && thalesBalance.balance > 0 && (
-                <AssetContainer>
+        <>
+            <GridContainer>
+                <WalletContainer>
                     <AssetWrapper>
-                        <Asset className={COLLATERAL_ICONS_CLASS_NAMES['THALES']} />
-                        {thalesBalance.asset}
+                        <Asset className="icon icon--wallet-connected" />
+                        {isBiconomy ? t('profile.dropdown.account') : t('profile.dropdown.eoa')}
                     </AssetWrapper>
-                    <Label>{formatCurrencyWithKey('', thalesBalance.balance)}</Label>
-                    <Label>{formatCurrencyWithKey(USD_SIGN, thalesBalance.value, 2)}</Label>
-                    <Convert
-                        onClick={() => {
-                            if (thalesBalance.balance > 0) {
-                                setShowThalesToOverMigrationModal(true);
-                            }
-                        }}
-                    >
-                        {t('profile.asset-balance.migrate')}
-                        <ConvertIcon />
-                    </Convert>
+                    <AssetWrapper clickable onClick={() => handleCopy(isBiconomy ? smartAddres : (address as any))}>
+                        {truncateAddress(isBiconomy ? smartAddres : (address as any), 6, 4)}{' '}
+                        <Asset className="icon icon--copy" />
+                    </AssetWrapper>
+                </WalletContainer>
+                <ButtonContainer>
+                    <Button onClick={() => setShowFundModal(true)}>{t('profile.account-summary.deposit')}</Button>
+                    <Button onClick={() => setShowWithdrawModal(true)}>{t('profile.account-summary.withdraw')}</Button>
+                </ButtonContainer>
+
+                <AssetContainer>
+                    <TableHeader> {t('profile.asset-balance.assets')}</TableHeader>
+                    <TableHeader2> {t('profile.asset-balance.amount')}</TableHeader2>
+                    <TableHeader2> {t('profile.asset-balance.value')}</TableHeader2>
+                    <ZeroBalanceWrapper>
+                        <TableHeader2> {t('profile.asset-balance.zero-balance')}</TableHeader2>
+                        <Toggle
+                            dotBackground={showZeroBalance ? theme.borderColor.quaternary : ''}
+                            active={showZeroBalance}
+                            handleClick={() => setShowZeroBalance(!showZeroBalance)}
+                        />
+                    </ZeroBalanceWrapper>
                 </AssetContainer>
-            )}
 
-            {isBiconomy
-                ? usersAssets.smartAssets.map((assetData, index) => {
-                      return (
-                          <AssetContainer key={index}>
-                              <AssetWrapper>
-                                  <Asset className={COLLATERAL_ICONS_CLASS_NAMES[assetData.asset]} />
-                                  {assetData.asset}
-                              </AssetWrapper>
-                              <Label>{formatCurrencyWithKey('', assetData.balance)}</Label>
-                              <Label>{formatCurrencyWithKey(USD_SIGN, assetData.value, 2)}</Label>
-                              {assetData.asset !== 'OVER' && (
-                                  <Convert
+                {!isBiconomy && thalesBalance && thalesBalance.balance > 0 && (
+                    <AssetContainer>
+                        <AssetWrapper>
+                            <Asset className={COLLATERAL_ICONS_CLASS_NAMES['THALES']} />
+                            {thalesBalance.asset}
+                        </AssetWrapper>
+                        <Label>{formatCurrencyWithKey('', thalesBalance.balance)}</Label>
+                        <Label>{formatCurrencyWithKey(USD_SIGN, thalesBalance.value, 2)}</Label>
+                        <Convert
+                            onClick={() => {
+                                if (thalesBalance.balance > 0) {
+                                    setShowThalesToOverMigrationModal(true);
+                                }
+                            }}
+                        >
+                            {t('profile.asset-balance.migrate')}
+                            <ConvertIcon />
+                        </Convert>
+                    </AssetContainer>
+                )}
+
+                {isBiconomy
+                    ? usersAssets.smartAssets.map((assetData, index) => {
+                          return (
+                              <AssetContainer key={index}>
+                                  <AssetWrapper>
+                                      <Asset className={COLLATERAL_ICONS_CLASS_NAMES[assetData.asset]} />
+                                      {assetData.asset}
+                                  </AssetWrapper>
+                                  <Label>{formatCurrencyWithKey('', assetData.balance)}</Label>
+                                  <Label>{formatCurrencyWithKey(USD_SIGN, assetData.value, 2)}</Label>
+                                  {assetData.asset !== 'OVER' && (
+                                      <Convert
+                                          disabled={assetData.balance == 0}
+                                          onClick={() => {
+                                              if (assetData.balance > 0) {
+                                                  setConvertToken(getCollateralIndex(networkId, assetData.asset));
+                                                  setShowSwapModal(true);
+                                              }
+                                          }}
+                                      >
+                                          {t('profile.asset-balance.convert')}
+                                          <ConvertIcon />
+                                      </Convert>
+                                  )}
+                              </AssetContainer>
+                          );
+                      })
+                    : usersAssets.eoaAssets.map((assetData, index) => {
+                          return (
+                              <AssetContainer key={index}>
+                                  <AssetWrapper>
+                                      <Asset className={COLLATERAL_ICONS_CLASS_NAMES[assetData.asset]} />
+                                      {assetData.asset}
+                                  </AssetWrapper>
+                                  <Label>{formatCurrencyWithKey('', assetData.balance)}</Label>
+                                  <Label>{formatCurrencyWithKey(USD_SIGN, assetData.value, 2)}</Label>
+                                  {assetData.asset !== 'OVER' && (
+                                      <Convert
+                                          disabled={assetData.balance == 0}
+                                          onClick={() => {
+                                              if (assetData.balance > 0) {
+                                                  setConvertToken(getCollateralIndex(networkId, assetData.asset));
+                                                  setShowSwapModal(true);
+                                              }
+                                          }}
+                                      >
+                                          {t('profile.asset-balance.convert')}
+                                          <ConvertIcon />
+                                      </Convert>
+                                  )}
+
+                                  <Transfer
                                       disabled={assetData.balance == 0}
                                       onClick={() => {
                                           if (assetData.balance > 0) {
                                               setConvertToken(getCollateralIndex(networkId, assetData.asset));
-                                              setShowSwapModal(true);
+                                              setShowDepositFromWallet(true);
                                           }
                                       }}
                                   >
-                                      {t('profile.asset-balance.convert')}
-                                      <ConvertIcon />
-                                  </Convert>
-                              )}
-                          </AssetContainer>
-                      );
-                  })
-                : usersAssets.eoaAssets.map((assetData, index) => {
-                      return (
-                          <AssetContainer key={index}>
-                              <AssetWrapper>
-                                  <Asset className={COLLATERAL_ICONS_CLASS_NAMES[assetData.asset]} />
-                                  {assetData.asset}
-                              </AssetWrapper>
-                              <Label>{formatCurrencyWithKey('', assetData.balance)}</Label>
-                              <Label>{formatCurrencyWithKey(USD_SIGN, assetData.value, 2)}</Label>
-                              {assetData.asset !== 'OVER' && (
-                                  <Convert
-                                      disabled={assetData.balance == 0}
-                                      onClick={() => {
-                                          if (assetData.balance > 0) {
-                                              setConvertToken(getCollateralIndex(networkId, assetData.asset));
-                                              setShowSwapModal(true);
-                                          }
-                                      }}
-                                  >
-                                      {t('profile.asset-balance.convert')}
-                                      <ConvertIcon />
-                                  </Convert>
-                              )}
+                                      {t('profile.asset-balance.transfer')}
+                                  </Transfer>
+                              </AssetContainer>
+                          );
+                      })}
 
-                              <Transfer
-                                  disabled={assetData.balance == 0}
-                                  onClick={() => {
-                                      if (assetData.balance > 0) {
-                                          setConvertToken(getCollateralIndex(networkId, assetData.asset));
-                                          setShowDepositFromWallet(true);
-                                      }
-                                  }}
-                              >
-                                  {t('profile.asset-balance.transfer')}
-                              </Transfer>
-                          </AssetContainer>
-                      );
-                  })}
+                {showThalesToOverMigrationModal && (
+                    <ThalesToOverMigrationModal onClose={() => setShowThalesToOverMigrationModal(false)} />
+                )}
+                {showFundModal && <FundModal onClose={() => setShowFundModal(false)} />}
+                {showWithdrawModal && <WithdrawModal onClose={() => setShowWithdrawModal(false)} />}
+                {showSwapModal && <SwapModal preSelectedToken={convertToken} onClose={() => setShowSwapModal(false)} />}
+                {showDepositFromWallet && (
+                    <DepositFromWallet
+                        preSelectedToken={convertToken}
+                        onClose={() => setShowDepositFromWallet(false)}
+                    />
+                )}
+            </GridContainer>
 
             {isBiconomy && (
-                <EoaContainer>
+                <GridContainer>
+                    <WalletContainer>
+                        <AssetWrapper>
+                            <Asset className="icon icon--wallet-connected" />
+                            {t('profile.dropdown.eoa')}
+                        </AssetWrapper>
+                        <AssetWrapper clickable={true} onClick={() => handleCopy(address as any)}>
+                            {truncateAddress(address as any, 6, 4)} <Asset className="icon icon--copy" />
+                        </AssetWrapper>
+                    </WalletContainer>
+                    <AssetContainer>
+                        <TableHeader> {t('profile.asset-balance.assets')}</TableHeader>
+                        <TableHeader2> {t('profile.asset-balance.amount')}</TableHeader2>
+                        <TableHeader2> {t('profile.asset-balance.value')}</TableHeader2>
+                        <ZeroBalanceWrapper>
+                            <TableHeader2> {t('profile.asset-balance.zero-balance')}</TableHeader2>
+                            <Toggle
+                                dotBackground={showZeroBalance ? theme.borderColor.quaternary : ''}
+                                active={showZeroBalance}
+                                handleClick={() => setShowZeroBalance(!showZeroBalance)}
+                            />
+                        </ZeroBalanceWrapper>
+                    </AssetContainer>
+
                     {thalesBalance && thalesBalance.balance > 0 && (
                         <AssetContainer>
                             <AssetWrapper>
@@ -298,19 +361,9 @@ const AssetBalance: React.FC = () => {
                             </AssetContainer>
                         );
                     })}
-                </EoaContainer>
+                </GridContainer>
             )}
-
-            {showThalesToOverMigrationModal && (
-                <ThalesToOverMigrationModal onClose={() => setShowThalesToOverMigrationModal(false)} />
-            )}
-            {showFundModal && <FundModal onClose={() => setShowFundModal(false)} />}
-            {showWithdrawModal && <WithdrawModal onClose={() => setShowWithdrawModal(false)} />}
-            {showSwapModal && <SwapModal preSelectedToken={convertToken} onClose={() => setShowSwapModal(false)} />}
-            {showDepositFromWallet && (
-                <DepositFromWallet preSelectedToken={convertToken} onClose={() => setShowDepositFromWallet(false)} />
-            )}
-        </GridContainer>
+        </>
     );
 };
 
@@ -370,13 +423,14 @@ const AssetContainer = styled.div`
     padding: 14px 0;
 `;
 
-const AssetWrapper = styled(AlignedParagraph)`
+const AssetWrapper = styled(AlignedParagraph)<{ clickable?: boolean }>`
     position: relative;
     color: ${(props) => props.theme.textColor.primary};
     font-size: 16px;
     font-weight: 500;
     white-space: pre;
     justify-content: flex-start;
+    cursor: ${(props) => (props.clickable ? 'pointer' : '')};
     gap: 8px;
 `;
 
@@ -418,19 +472,12 @@ const Asset = styled.i`
     color: ${(props) => props.theme.textColor.secondary};
 `;
 
-const EoaContainer = styled.div`
-    position: relative;
-    border-right: 20px solid white;
-    border-radius: 8px;
-
-    &:after {
-        transform: rotate(90deg);
-        position: absolute;
-        content: 'EOA';
-        color: black;
-        top: calc(50% - 8px);
-        right: -26px;
-    }
+const WalletContainer = styled.div`
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 20px;
 `;
 
 const ButtonContainer = styled(FlexDivEnd)`
@@ -459,6 +506,7 @@ const Button = styled(FlexDivCentered)<{ active?: boolean }>`
     &:hover {
         background-color: ${(props) => props.theme.connectWalletModal.hover};
         color: ${(props) => props.theme.button.textColor.primary};
+        border: none;
     }
     white-space: pre;
     padding: 3px 24px;

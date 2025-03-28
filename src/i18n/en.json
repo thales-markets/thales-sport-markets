@@ -527,6 +527,7 @@
         },
         "asset-balance": {
             "assets": "Assets",
+            "eoa-assets": "Assets in EOA Wallet",
             "amount": "Amount",
             "value": "Value(USD)",
             "zero-balance": "Show zero balance",
