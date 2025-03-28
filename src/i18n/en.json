@@ -387,7 +387,7 @@
         },
         "swap": {
             "title": "<icon /> swap",
-            "swap": "GET {{token}}",
+            "swap": "GET ${{token}}",
             "note": "Swap your crypto to $OVER",
             "token-price": "${{token}} price",
             "token-to-receive": "${{token}} to receive"
