@@ -5,8 +5,8 @@ export const LINKS = {
     TwitterTweetStatus: 'https://twitter.com/intent/tweet?text=',
     Footer: {
         Twitter: 'https://twitter.com/OvertimeMarkets',
-        Discord: 'https://discord.gg/thales',
-        Docs: 'https://docs.overtimemarkets.xyz/',
+        Discord: 'https://discord.gg/z5xFxMccsu',
+        Docs: 'https://docs.overtime.io/',
         Medium: 'https://medium.com/@OvertimeMarkets.xyz',
         Tutorial: 'https://youtu.be/fk05qbqbuZo?si=zkaHBogLqB850pV3',
         GitHub: 'https://github.com/thales-markets/thales-sport-markets',

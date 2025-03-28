@@ -386,10 +386,11 @@
             "over-to-receive": "OVER TO RECEIVE"
         },
         "swap": {
-            "title": "Swap to $OVER",
-            "swap": "GET {{token}}",
-            "token-price": "{{token}} PRICE",
-            "token-to-receive": "{{token}} TO RECEIVE"
+            "title": "<icon /> swap",
+            "swap": "BUY ${{token}}",
+            "note": "Swap your crypto to $OVER",
+            "token-price": "${{token}} price",
+            "token-to-receive": "${{token}} to receive"
         },
         "wrapper-nav": {
             "my-tickets": "My tickets",
@@ -514,8 +515,8 @@
             "title": "Migrate <thalesIcon /> to <overtimeIcon />",
             "description": "<p>Thales DAO has officially migrated to Overtime DAO. You can migrate your $THALES tokens to $OVER tokens here.</p>",
             "info-description": "<p>1 $THALES = 1 $OVER</p><p>More details on the migration in <tipLink>TIP-238</tipLink>.</p>",
-            "amount-label": "THALES to migrate",
-            "over-to-receive": "OVER to receive",
+            "amount-label": "$THALES to migrate",
+            "over-to-receive": "$OVER to receive",
             "migration-confirmation-message": "THALES successfully migrated to OVER",
             "button": {
                 "migrate-label": "Migrate",
