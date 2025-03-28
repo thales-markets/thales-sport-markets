@@ -1,15 +1,15 @@
-import Background from 'assets/images/free-bet-logo-bckg.svg?react';
-import FreeBetLogo from 'assets/images/free-bet-logo.svg?react';
 import Button from 'components/Button';
 import Modal from 'components/Modal';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import useLocalStorage from 'hooks/useLocalStorage';
+import { t } from 'i18next';
 import { useCallback } from 'react';
+import { Trans } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { getIsBiconomy, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
-import { FlexDiv, FlexDivCentered, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
+import { FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { FreeBet } from 'types/freeBet';
 import { RootState } from 'types/redux';
 import { getCollateralByAddress } from 'utils/collaterals';
@@ -55,94 +55,106 @@ const ClaimFreeBetModal: React.FC<ClaimFreeBetModalProps> = ({ freeBet, onClose 
         <Modal
             customStyle={{
                 overlay: {
-                    zIndex: 10,
+                    zIndex: 31,
                 },
             }}
             containerStyle={{
                 background: theme.background.secondary,
-                width: '800px',
-                height: '450px',
                 border: 'none',
             }}
-            title={''}
-            onClose={onClose}
             hideHeader
+            title=""
+            onClose={onClose}
         >
             <Container>
-                <BackgroundContainer>
-                    <Background />
-                </BackgroundContainer>
-                <ContentContainer>
-                    <CloseContainer>{<CloseIcon onClick={onClose} />}</CloseContainer>
-                    <FlexDivCentered>
-                        <Title>
-                            <WelcomeToText>WELCOME TO</WelcomeToText>
-                            <FreeBetLogo />
-                        </Title>
-                    </FlexDivCentered>
-                    <MainContainer>
-                        {!walletAddress ? (
-                            <Message>
-                                You have been gifted a{' '}
-                                <span>
-                                    {freeBet.betAmount} {getCollateralByAddress(freeBet.collateral, networkId)}
-                                </span>{' '}
-                                free bet.
-                            </Message>
-                        ) : !freeBet.claimSuccess ? (
-                            <Message>
-                                Claim a{' '}
-                                <span>
-                                    {freeBet.betAmount} {getCollateralByAddress(freeBet.collateral, networkId)} Free
-                                    Bet!
-                                </span>
-                            </Message>
-                        ) : freeBet.claimAddress.toLowerCase() === walletAddress.toLowerCase() ? (
-                            <Message>
-                                You just claimed a{' '}
-                                <span>
-                                    {freeBet.betAmount} {getCollateralByAddress(freeBet.collateral, networkId)} Free
-                                    Bet!
-                                </span>
-                            </Message>
-                        ) : (
-                            <Message>Bet already claimed!</Message>
-                        )}
-                        {!walletAddress && <SubMessage>Sign in to Overtime to claim.</SubMessage>}
-                    </MainContainer>
-                    <BottomContainer>
-                        {!!walletAddress && (
-                            <Explainer>
-                                <div>Guide on how to use your Free Bet:</div>
-                                <div>
-                                    Free Bet rules:{' '}
-                                    <a rel="noreferrer" target="_blank" href="https://docs.overtime.io/free-bet">
-                                        docs.overtime.io/free-bet
-                                    </a>
-                                </div>
-                            </Explainer>
-                        )}
-                        <FlexDiv>
-                            <Button
-                                onClick={onButtonClick}
-                                padding="8px 0"
-                                width="100%"
-                                backgroundColor={theme.background.quaternary}
-                                borderColor={theme.background.quaternary}
-                            >
-                                {!walletAddress ? (
-                                    'Sign in'
-                                ) : !freeBet.claimSuccess ? (
-                                    <>
-                                        Claim free bet <HandsIcon className="icon icon--hands-coins" />
-                                    </>
-                                ) : (
-                                    `Let's bet!`
-                                )}
-                            </Button>
-                        </FlexDiv>
-                    </BottomContainer>
-                </ContentContainer>
+                <FlexDivRow>
+                    <Title>
+                        <Trans
+                            i18nKey="free-bet.claim-modal.title"
+                            components={{
+                                icon: <OvertimeIcon className="icon icon--overtime" />,
+                            }}
+                        />
+                    </Title>
+                    <FlexDivRow>{<CloseIcon onClick={onClose} />}</FlexDivRow>
+                </FlexDivRow>
+                {!walletAddress ? (
+                    <Message>
+                        <Trans
+                            i18nKey="free-bet.claim-modal.gifted-free-bet"
+                            components={{
+                                span: <span />,
+                            }}
+                            values={{
+                                amount: `${freeBet.betAmount} ${getCollateralByAddress(freeBet.collateral, networkId)}`,
+                            }}
+                        />
+                    </Message>
+                ) : !freeBet.claimSuccess ? (
+                    <Message>
+                        <Trans
+                            i18nKey="free-bet.claim-modal.claim-free-bet"
+                            components={{
+                                span: <span />,
+                            }}
+                            values={{
+                                amount: `${freeBet.betAmount} ${getCollateralByAddress(freeBet.collateral, networkId)}`,
+                            }}
+                        />
+                    </Message>
+                ) : freeBet.claimAddress.toLowerCase() === walletAddress.toLowerCase() ? (
+                    <Message>
+                        <Trans
+                            i18nKey="free-bet.claim-modal.claimed-free-bet"
+                            components={{
+                                span: <span />,
+                            }}
+                            values={{
+                                amount: `${freeBet.betAmount} ${getCollateralByAddress(freeBet.collateral, networkId)}`,
+                            }}
+                        />
+                    </Message>
+                ) : (
+                    <Message>{t('free-bet.claim-modal.already-claimed-free-bet')}</Message>
+                )}
+                {!walletAddress && <Explainer>{t('free-bet.claim-modal.sign-in')}</Explainer>}
+                {!!walletAddress && (
+                    <Explainer>
+                        <Trans
+                            i18nKey="free-bet.claim-modal.explainer"
+                            components={{
+                                docsLink: (
+                                    <DocsLink
+                                        href="https://docs.overtime.io/free-bet"
+                                        target="_blank"
+                                        rel="noreferrer"
+                                    />
+                                ),
+                            }}
+                        />
+                    </Explainer>
+                )}
+                <Button
+                    onClick={onButtonClick}
+                    margin="20px 0 0 0"
+                    width="100%"
+                    height="44px"
+                    fontSize="16px"
+                    backgroundColor={theme.background.quaternary}
+                    borderRadius="8px"
+                    borderColor={theme.borderColor.quaternary}
+                    textColor={theme.textColor.tertiary}
+                >
+                    {!walletAddress ? (
+                        t('free-bet.claim-modal.sign-in-button')
+                    ) : !freeBet.claimSuccess ? (
+                        <>
+                            {t('free-bet.claim-modal.claim-button')} <HandsIcon className="icon icon--hands-coins" />
+                        </>
+                    ) : (
+                        t('free-bet.claim-modal.lets-bet-button')
+                    )}
+                </Button>
             </Container>
         </Modal>
     );
@@ -150,67 +162,46 @@ const ClaimFreeBetModal: React.FC<ClaimFreeBetModalProps> = ({ freeBet, onClose 
 
 const Container = styled(FlexDivColumnCentered)`
     height: 100%;
-    justify-content: space-between;
-`;
-
-const BackgroundContainer = styled(FlexDivCentered)`
-    z-index: 0;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-`;
-
-const ContentContainer = styled(FlexDivColumnCentered)`
-    z-index: 1;
-    height: 100%;
-    justify-content: space-between;
-`;
-
-const CloseContainer = styled(FlexDivRow)`
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    width: 100%;
-    justify-content: flex-end;
-`;
-
-const Title = styled.div`
-    display: flex;
     align-items: center;
-    gap: 12px;
-    font-size: 24px;
-    color: ${({ theme }) => theme.textColor.primary};
+    min-width: 400px;
+    @media (max-width: 575px) {
+        min-width: 100px;
+    }
 `;
 
-const MainContainer = styled(FlexDivColumnCentered)`
-    flex: none;
-    align-items: center;
-    gap: 25px;
+const Title = styled.h1`
+    margin-top: 10px;
+    font-size: 25px;
+    font-weight: 500;
+    color: ${(props) => props.theme.textColor.primary};
+    width: 100%;
+    text-align: center;
+    text-transform: uppercase;
 `;
 
 const Message = styled.div`
     font-size: 24px;
     font-weight: 600;
+    line-height: 24px;
+    margin-top: 50px;
     color: ${({ theme }) => theme.textColor.primary};
+    text-align: center;
     span {
         color: ${({ theme }) => theme.textColor.quaternary};
     }
-`;
-
-const SubMessage = styled.div`
-    font-size: 16px;
-    color: ${({ theme }) => theme.textColor.primary};
+    @media (max-width: 575px) {
+        font-size: 18px;
+    }
 `;
 
 const CloseIcon = styled.i.attrs({ className: 'icon icon--close' })`
-    color: white;
+    color: ${(props) => props.theme.textColor.secondary};
     font-size: 14px;
     position: absolute;
     top: 15px;
     right: 15px;
     cursor: pointer;
+    text-transform: none;
 `;
 
 const HandsIcon = styled.i`
@@ -221,26 +212,33 @@ const HandsIcon = styled.i`
     color: ${(props) => props.theme.textColor.tertiary};
 `;
 
-const WelcomeToText = styled.span`
-    margin-top: 4px;
-`;
-
-const BottomContainer = styled(FlexDiv)`
-    flex-direction: column;
-    gap: 20px;
+const OvertimeIcon = styled.i`
+    font-size: 130px;
+    font-weight: 400;
+    line-height: 28px;
+    margin-top: -4px;
 `;
 
 const Explainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    border: 1px solid ${(props) => props.theme.button.borderColor.senary};
+    width: 100%;
     border-radius: 12px;
-    font-weight: 300;
-    padding: 16px;
-    color: ${(props) => props.theme.textColor.primary};
+    font-size: 14px;
+    line-height: 16px;
+    letter-spacing: 0.025em;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    color: ${(props) => props.theme.textColor.secondary};
+    font-weight: 600;
     a {
         color: ${(props) => props.theme.textColor.quaternary};
+    }
+`;
+
+export const DocsLink = styled.a`
+    color: ${(props) => props.theme.link.textColor.primary};
+    &:hover {
+        text-decoration: underline;
     }
 `;
 

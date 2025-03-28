@@ -1068,6 +1068,20 @@
         "top-up-eth": "Top up ETH",
         "top-up-eth-tooltip": "Your ETH gas balance is low.\n\nPlease deposit more ETH or swap other deposited tokens for more ETH"
     },
+    "free-bet": {
+        "claim-modal": {
+            "title": "Welcome to <icon />",
+            "explainer": "More details on how to use Free Bet <docsLink>here</docsLink>.",
+            "gifted-free-bet": "You have been gifted a <span>{{amount}}</span> Free Bet.",
+            "claim-free-bet": "Claim a <span>{{amount}}</span> Free Bet.",
+            "claimed-free-bet": "You just claimed a <span>{{amount}}</span> Free Bet.",
+            "already-claimed-free-bet": "Bet already claimed!",
+            "sign-in": "Sign in to Overtime to claim.",
+            "claim-button": "Claim free bet",
+            "sign-in-button": "Sign in",
+            "lets-bet-button": "Let's bet!"
+        }
+    },
     "get-started": {
         "start-tour": "Start tour",
         "sign-up": "Sign in",

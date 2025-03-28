@@ -18,7 +18,7 @@ import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
-import { Colors, FlexDivCentered, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
+import { FlexDivCentered, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { truncateAddress } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { FreeBet } from 'types/freeBet';
@@ -124,7 +124,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
         <Modal
             customStyle={{
                 overlay: {
-                    zIndex: 1000,
+                    zIndex: 30,
                 },
             }}
             containerStyle={{
@@ -219,11 +219,13 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                     <Container>
                         <ClaimBetButton
                             onClick={onClaimFreeBet}
-                            borderColor="none"
-                            height="42px"
-                            lineHeight="16px"
-                            padding="0"
-                            backgroundColor={Colors.YELLOW}
+                            backgroundColor={theme.overdrop.borderColor.tertiary}
+                            borderColor={theme.overdrop.borderColor.tertiary}
+                            textColor={theme.button.textColor.primary}
+                            height="44px"
+                            fontSize="16px"
+                            fontWeight="700"
+                            borderRadius="8px"
                             className="pulse"
                         >
                             {t('get-started.fund-account.claim-free-bet')}
