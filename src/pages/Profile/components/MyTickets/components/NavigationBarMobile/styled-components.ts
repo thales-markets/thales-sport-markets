@@ -48,7 +48,7 @@ export const NotificationCount = styled.div`
     position: absolute;
     border-radius: 50%;
     top: -6px;
-    left: -4px;
+    right: -8px;
     display: flex;
     align-items: center;
     text-align: center;
@@ -60,7 +60,7 @@ export const NotificationCount = styled.div`
     @media (max-width: 767px) {
         height: 12px;
         width: 12px;
-        right: -2px;
+        right: 0;
         top: -4px;
     }
 `;

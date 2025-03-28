@@ -1,9 +1,11 @@
 import SPAAnchor from 'components/SPAAnchor';
 import ROUTES from 'constants/routes';
 import { secondsToMilliseconds } from 'date-fns';
+import { ProfileIconWidget } from 'layouts/DappLayout/DappHeader/components/ProfileItem/ProfileItem';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getTicket } from 'redux/modules/ticket';
+import { useTheme } from 'styled-components';
 import { buildHref } from 'utils/routes';
 import { useAccount } from 'wagmi';
 import { Container, ItemContainer, ItemIcon, ParlayNumber } from './styled-components';
@@ -15,7 +17,7 @@ type FooterSidebarMobileProps = {
 
 const FooterSidebarMobile: React.FC<FooterSidebarMobileProps> = ({ setParlayMobileVisibility, setShowBurger }) => {
     const { isConnected } = useAccount();
-
+    const theme = useTheme();
     const ticket = useSelector(getTicket);
 
     const [pulse, setPulse] = useState(false);
@@ -39,7 +41,7 @@ const FooterSidebarMobile: React.FC<FooterSidebarMobileProps> = ({ setParlayMobi
             {isConnected && (
                 <ItemContainer>
                     <SPAAnchor href={buildHref(ROUTES.Profile)}>
-                        <ItemIcon className="icon icon--profile2" />
+                        <ProfileIconWidget avatarSize={32} color={theme.textColor.primary} />
                     </SPAAnchor>
                 </ItemContainer>
             )}
