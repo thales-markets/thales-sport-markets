@@ -95,7 +95,7 @@ const Container = styled.div<{ mobileStyle?: CSSProperties; containerStyle?: CSS
     border: 1px solid ${(props) => props.theme.borderColor.primary};
     background: ${(props) => props.theme.background.primary};
     padding: 25px 30px 35px 30px;
-    border-radius: 23px;
+    border-radius: 16px;
     @media (max-width: 575px) {
         height: auto;
         border-radius: 10px;

@@ -1051,6 +1051,11 @@
             "amount": "Amount is not valid"
         }
     },
+    "qr-code": {
+        "title": "Your Ovetime Account address",
+        "description": "Scan to receive funds",
+        "your-address": "Your address"
+    },
     "my-portfolio": {
         "estimated-balance": "Estimated balance",
         "deposit": "Deposit",

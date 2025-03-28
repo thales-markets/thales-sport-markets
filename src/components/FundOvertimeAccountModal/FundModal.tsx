@@ -271,9 +271,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                     </Tooltip>
                 </Container>
             </Wrapper>
-            {showQRModal && (
-                <QRCodeModal title="" onClose={() => setShowQRModal(false)} walletAddress={walletAddress} />
-            )}
+            {showQRModal && <QRCodeModal onClose={() => setShowQRModal(false)} walletAddress={walletAddress} />}
             {showDepositFromWallet && <DepositFromWallet onClose={() => setShowDepositFromWallet(false)} />}
         </Modal>
     );
