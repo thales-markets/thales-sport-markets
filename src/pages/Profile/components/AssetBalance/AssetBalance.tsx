@@ -1,32 +1,26 @@
 import ConvertIcon from 'assets/images/svgs/convert.svg?react';
+import DepositFromWallet from 'components/DepositFromWallet/DepositFromWallet';
 import FundModal from 'components/FundOvertimeAccountModal';
 import SwapModal from 'components/SwapModal/SwapModal';
 import ThalesToOverMigrationModal from 'components/ThalesToOverMigrationModal';
 import Toggle from 'components/Toggle';
-import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from 'constants/currency';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { ContractType } from 'enums/contract';
 import useLocalStorage from 'hooks/useLocalStorage';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivEnd } from 'styles/common';
-import { coinParser, Coins, formatCurrencyWithKey } from 'thales-utils';
+import { Coins, formatCurrencyWithKey } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import { getCollateralIndex, getCollaterals } from 'utils/collaterals';
-import { getContractInstance } from 'utils/contract';
-import { refetchBalances } from 'utils/queryConnector';
 import useBiconomy from 'utils/useBiconomy';
-import { Address, Client } from 'viem';
-import { waitForTransactionReceipt } from 'viem/actions';
-import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
+import { useAccount, useChainId, useClient } from 'wagmi';
 import WithdrawModal from '../WithdrawModal';
 
 const AssetBalance: React.FC = () => {
@@ -34,7 +28,6 @@ const AssetBalance: React.FC = () => {
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const networkId = useChainId();
     const client = useClient();
-    const walletClient = useWalletClient();
     const { address, isConnected } = useAccount();
     const smartAddres = useBiconomy();
     const theme = useTheme();
@@ -42,6 +35,7 @@ const AssetBalance: React.FC = () => {
     const [showFundModal, setShowFundModal] = useState<boolean>(false);
     const [showWithdrawModal, setShowWithdrawModal] = useState<boolean>(false);
     const [showSwapModal, setShowSwapModal] = useState<boolean>(false);
+    const [showDepositFromWallet, setShowDepositFromWallet] = useState<boolean>(false);
 
     const [convertToken, setConvertToken] = useState(0);
 
@@ -150,48 +144,6 @@ const AssetBalance: React.FC = () => {
             };
     }, [exchangeRates, isBiconomy, multipleCollateralBalancesEOA]);
 
-    const transferFunds = async (token: Coins, amount: number) => {
-        const reduceAmount = amount;
-        const parsedAmount = coinParser('' + reduceAmount, networkId, token);
-        const id = toast.loading(t('deposit.toast-messages.pending'));
-        let txHash;
-        try {
-            if (token === 'ETH') {
-                const transaction = {
-                    to: smartAddres as Address,
-                    value: parsedAmount,
-                };
-
-                txHash = await walletClient.data?.sendTransaction(transaction);
-            } else {
-                const collateralContractWithSigner = getContractInstance(
-                    ContractType.MULTICOLLATERAL,
-                    { client: walletClient.data, networkId },
-                    getCollateralIndex(networkId, token)
-                );
-
-                txHash = await collateralContractWithSigner?.write.transfer([smartAddres, parsedAmount]);
-            }
-            const txReceipt = await waitForTransactionReceipt(client as Client, {
-                hash: txHash,
-            });
-
-            if (txReceipt.status === 'success') {
-                toast.update(id, getSuccessToastOptions(t('deposit.toast-messages.success')));
-                refetchBalances(smartAddres, networkId);
-                refetchBalances(address as any, networkId);
-                return;
-            } else {
-                toast.update(id, getErrorToastOptions(t('deposit.toast-messages.error')));
-                return;
-            }
-        } catch (e) {
-            console.log(e);
-            toast.update(id, getErrorToastOptions(t('deposit.toast-messages.error')));
-            return;
-        }
-    };
-
     return (
         <GridContainer>
             <ButtonContainer>
@@ -288,7 +240,8 @@ const AssetBalance: React.FC = () => {
                                   disabled={assetData.balance == 0}
                                   onClick={() => {
                                       if (assetData.balance > 0) {
-                                          transferFunds(assetData.asset, assetData.balance);
+                                          setConvertToken(getCollateralIndex(networkId, assetData.asset));
+                                          setShowDepositFromWallet(true);
                                       }
                                   }}
                               >
@@ -314,7 +267,8 @@ const AssetBalance: React.FC = () => {
                                     disabled={assetData.balance == 0}
                                     onClick={() => {
                                         if (assetData.balance > 0) {
-                                            transferFunds(assetData.asset, assetData.balance);
+                                            setConvertToken(getCollateralIndex(networkId, assetData.asset));
+                                            setShowDepositFromWallet(true);
                                         }
                                     }}
                                 >
@@ -332,6 +286,9 @@ const AssetBalance: React.FC = () => {
             {showFundModal && <FundModal onClose={() => setShowFundModal(false)} />}
             {showWithdrawModal && <WithdrawModal onClose={() => setShowWithdrawModal(false)} />}
             {showSwapModal && <SwapModal preSelectedToken={convertToken} onClose={() => setShowSwapModal(false)} />}
+            {showDepositFromWallet && (
+                <DepositFromWallet preSelectedToken={convertToken} onClose={() => setShowDepositFromWallet(false)} />
+            )}
         </GridContainer>
     );
 };

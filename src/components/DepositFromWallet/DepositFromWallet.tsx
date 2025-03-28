@@ -21,20 +21,20 @@ import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateral, getCollateralIndex, getCollaterals } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import { getNetworkNameByNetworkId } from 'utils/network';
-import { getQueryStringVal } from 'utils/useQueryParams';
 import { Address, Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 
 type DepositFromWalletProps = {
     onClose: () => void;
+    preSelectedToken?: number;
 };
 
 type FormValidation = {
     amount: boolean;
 };
 
-const DepositFromWallet: React.FC<DepositFromWalletProps> = ({ onClose }) => {
+const DepositFromWallet: React.FC<DepositFromWalletProps> = ({ onClose, preSelectedToken }) => {
     const { t } = useTranslation();
     const networkId = useChainId();
     const client = useClient();
@@ -43,16 +43,10 @@ const DepositFromWallet: React.FC<DepositFromWalletProps> = ({ onClose }) => {
 
     const walletAddress = biconomyConnector?.address || '';
 
-    const [selectedToken, setSelectedToken] = useState<number>(0);
+    const [selectedToken, setSelectedToken] = useState<number>(preSelectedToken ? preSelectedToken : 0);
     const [amount, setAmount] = useState<string | number>('');
     const theme: ThemeInterface = useTheme();
     const [validation, setValidation] = useState<FormValidation>({ amount: false });
-
-    const selectedTokenFromUrl = getQueryStringVal('coin-index');
-
-    useEffect(() => {
-        setSelectedToken(Number(selectedTokenFromUrl));
-    }, [selectedTokenFromUrl]);
 
     const inputRef = useRef<HTMLDivElement>(null);
 
