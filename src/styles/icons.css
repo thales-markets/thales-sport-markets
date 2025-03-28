@@ -528,3 +528,11 @@
 .icon--hands-coins::before {
     content: '\0124';
 }
+
+.icon--thales:before {
+    content: '\0104';
+}
+
+.icon--over:before {
+    content: '\0125';
+}

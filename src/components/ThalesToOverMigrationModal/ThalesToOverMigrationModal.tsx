@@ -2,6 +2,7 @@ import { useConnectModal } from '@rainbow-me/rainbowkit';
 import ApprovalModal from 'components/ApprovalModal';
 import Button from 'components/Button';
 import NumericInput from 'components/fields/NumericInput';
+import Modal from 'components/Modal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { LINKS } from 'constants/links';
@@ -9,7 +10,6 @@ import { ContractType } from 'enums/contract';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import ReactModal from 'react-modal';
 import { toast } from 'react-toastify';
 import { useTheme } from 'styled-components';
 import { Coins, formatCurrencyWithKey, truncToDecimals } from 'thales-utils';
@@ -23,13 +23,14 @@ import {
     ButtonContainer,
     CloseIcon,
     Container,
-    defaultButtonProps,
-    defaultCustomStyles,
     Description,
+    InfoDescription,
     InputContainer,
+    OvertimeIcon,
     Summary,
     SummaryLabel,
     SummaryValue,
+    ThalesIcon,
     TipLink,
     Title,
 } from './styled-components';
@@ -175,48 +176,53 @@ const ThalesToOverMigrationModal: React.FC<ThalesToOverMigrationModalProps> = ({
         }
     };
 
+    const getButton = (text: string, isDisabled: boolean, onClick: any) => {
+        return (
+            <Button
+                backgroundColor={theme.overdrop.borderColor.tertiary}
+                borderColor={theme.overdrop.borderColor.tertiary}
+                textColor={theme.button.textColor.primary}
+                height="44px"
+                fontSize="16px"
+                fontWeight="700"
+                borderRadius="8px"
+                width="100%"
+                onClick={async () => {
+                    onClick();
+                }}
+                disabled={isDisabled}
+            >
+                {text}
+            </Button>
+        );
+    };
+
     const getSubmitButton = () => {
         if (!isConnected) {
-            return (
-                <Button onClick={openConnectModal} {...defaultButtonProps}>
-                    {t('common.wallet.connect-your-wallet')}
-                </Button>
-            );
+            return getButton(t('common.wallet.connect-your-wallet'), false, () => openConnectModal?.());
         }
         if (insufficientBalance) {
-            return (
-                <Button disabled={true} {...defaultButtonProps}>
-                    {t(`common.errors.insufficient-balance`)}
-                </Button>
-            );
+            return getButton(t(`common.errors.insufficient-balance`), true, () => {});
         }
         if (!isAmountEntered) {
-            return (
-                <Button disabled={true} {...defaultButtonProps}>
-                    {t(`common.errors.enter-amount`)}
-                </Button>
-            );
+            return getButton(t(`common.errors.enter-amount`), true, () => {});
         }
         if (!hasAllowance) {
-            return (
-                <Button disabled={isAllowing} onClick={() => setOpenApprovalModal(true)} {...defaultButtonProps}>
-                    {t('common.wallet.approve')}
-                </Button>
-            );
+            return getButton(t(`common.wallet.approve`), isAllowing, () => setOpenApprovalModal(true));
         }
 
-        return (
-            <Button disabled={isButtonDisabled} onClick={handleMigration} {...defaultButtonProps}>
-                {!isMigrating
-                    ? `${t('profile.migration-modal.button.migrate-label')} ${formatCurrencyWithKey(
-                          CRYPTO_CURRENCY_MAP.THALES,
-                          amount
-                      )}    `
-                    : `${t('profile.migration-modal.button.migrate-progress-label')} ${formatCurrencyWithKey(
-                          CRYPTO_CURRENCY_MAP.THALES,
-                          amount
-                      )}...`}
-            </Button>
+        return getButton(
+            !isMigrating
+                ? `${t('profile.migration-modal.button.migrate-label')} ${formatCurrencyWithKey(
+                      CRYPTO_CURRENCY_MAP.THALES,
+                      amount
+                  )}    `
+                : `${t('profile.migration-modal.button.migrate-progress-label')} ${formatCurrencyWithKey(
+                      CRYPTO_CURRENCY_MAP.THALES,
+                      amount
+                  )}...`,
+            isButtonDisabled,
+            () => handleMigration()
         );
     };
 
@@ -225,24 +231,48 @@ const ThalesToOverMigrationModal: React.FC<ThalesToOverMigrationModalProps> = ({
     };
 
     return (
-        <ReactModal
-            isOpen
-            onRequestClose={() => onClose()}
-            shouldCloseOnOverlayClick={false}
-            style={defaultCustomStyles}
+        <Modal
+            customStyle={{
+                overlay: {
+                    zIndex: 1000,
+                },
+            }}
+            containerStyle={{
+                background: theme.background.secondary,
+                border: 'none',
+            }}
+            hideHeader
+            title=""
+            onClose={onClose}
         >
             <Container>
                 <CloseIcon className="icon icon--close" onClick={() => onClose()} />
-                <Title>{t('profile.migration-modal.title')}</Title>
+                <Title>
+                    <Trans
+                        i18nKey="profile.migration-modal.title"
+                        components={{
+                            thalesIcon: <ThalesIcon className="icon icon--thales" />,
+                            overtimeIcon: <OvertimeIcon className="icon icon--over" />,
+                        }}
+                    />
+                </Title>
                 <Description>
                     <Trans
                         i18nKey={'profile.migration-modal.description'}
                         components={{
                             p: <p />,
-                            tipLink: <TipLink href={LINKS.Tip238} target="_blank" rel="noreferrer" />,
                         }}
                     />
                 </Description>
+                <InfoDescription>
+                    <Trans
+                        i18nKey={'profile.migration-modal.info-description'}
+                        components={{
+                            p: <p />,
+                            tipLink: <TipLink href={LINKS.Tip238} target="_blank" rel="noreferrer" />,
+                        }}
+                    />
+                </InfoDescription>
                 <InputContainer>
                     <NumericInput
                         value={amount}
@@ -258,9 +288,13 @@ const ThalesToOverMigrationModal: React.FC<ThalesToOverMigrationModalProps> = ({
                         validationPlacement="bottom"
                         balance={formatCurrencyWithKey(CRYPTO_CURRENCY_MAP.THALES, thalesBalance)}
                         onMaxButton={onMaxClick}
-                        inputFontWeight="600"
-                        inputPadding="5px 10px"
-                        borderColor={theme.input.borderColor.tertiary}
+                        inputFontWeight="700"
+                        height="44px"
+                        inputFontSize="16px"
+                        background={theme.background.quinary}
+                        borderColor={theme.background.quinary}
+                        fontWeight="700"
+                        color={theme.textColor.primary}
                     />
                 </InputContainer>
                 <Summary>
@@ -278,7 +312,7 @@ const ThalesToOverMigrationModal: React.FC<ThalesToOverMigrationModalProps> = ({
                     onClose={() => setOpenApprovalModal(false)}
                 />
             )}
-        </ReactModal>
+        </Modal>
     );
 };
 
