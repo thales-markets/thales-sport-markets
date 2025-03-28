@@ -147,7 +147,6 @@ const AssetBalance: React.FC = () => {
     return (
         <GridContainer>
             <ButtonContainer>
-                <Button onClick={() => setShowSwapModal(true)}>{t('profile.account-summary.swap')}</Button>
                 <Button onClick={() => setShowFundModal(true)}>{t('profile.account-summary.deposit')}</Button>
                 <Button onClick={() => setShowWithdrawModal(true)}>{t('profile.account-summary.withdraw')}</Button>
             </ButtonContainer>
@@ -445,9 +444,9 @@ const ButtonContainer = styled(FlexDivEnd)`
 
 const Button = styled(FlexDivCentered)<{ active?: boolean }>`
     border-radius: 8px;
-    width: 120px;
-    height: 42px;
-    border: 1px ${(props) => props.theme.borderColor.primary} solid;
+    width: 214px;
+    height: 31px;
+    border: 2px ${(props) => props.theme.borderColor.primary} solid;
     color: ${(props) => props.theme.textColor.primary};
 
     font-size: 14px;
