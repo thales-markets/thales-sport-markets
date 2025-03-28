@@ -1,6 +1,7 @@
 // @ts-ignore
 import { DisclaimerComponent } from '@rainbow-me/rainbowkit';
 import disclaimer from 'assets/docs/overtime-markets-disclaimer.pdf';
+import privacyPolicy from 'assets/docs/overtime-privacy-policy.pdf';
 import termsOfUse from 'assets/docs/overtime-terms-of-use.pdf';
 import { Trans } from 'react-i18next';
 import styled from 'styled-components';
@@ -14,6 +15,11 @@ const WalletDisclaimer: DisclaimerComponent = ({ Text, Link }) => {
                     components={{
                         disclaimer: (
                             <Link href={disclaimer}>
+                                <></>
+                            </Link>
+                        ),
+                        privacyPolicy: (
+                            <Link href={privacyPolicy}>
                                 <></>
                             </Link>
                         ),

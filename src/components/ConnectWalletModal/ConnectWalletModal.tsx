@@ -1,34 +1,31 @@
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import disclaimer from 'assets/docs/overtime-markets-disclaimer.pdf';
+import privacyPolicy from 'assets/docs/overtime-privacy-policy.pdf';
 import termsOfUse from 'assets/docs/overtime-terms-of-use.pdf';
+import Coinbase from 'assets/images/logins-icons/coinbase.svg?react';
+import Discord from 'assets/images/logins-icons/discord.svg?react';
+import Google from 'assets/images/logins-icons/google.svg?react';
+import Metamask from 'assets/images/logins-icons/metamask.svg?react';
+import Twitter from 'assets/images/logins-icons/twitter.svg?react';
+import WalletConnect from 'assets/images/logins-icons/walletConnect.svg?react';
+import Checkbox from 'components/fields/Checkbox';
 import SimpleLoader from 'components/SimpleLoader';
-
+import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { SUPPORTED_PARTICAL_CONNECTORS_MODAL, SUPPORTED_WALLET_CONNECTORS_MODAL } from 'constants/wallet';
+import useLocalStorage from 'hooks/useLocalStorage';
 import React, { useEffect } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
+import { getIsBiconomy, setIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { Colors, FlexDiv, FlexDivCentered, FlexDivStart } from 'styles/common';
+import { localStore } from 'thales-utils';
 import { RootState } from 'types/redux';
+import { ParticalTypes, WalletConnections } from 'types/wallet';
 import { getSpecificConnectorFromConnectorsArray, getWalletLabel } from 'utils/particleWallet/utils';
 import { Connector, useConnect } from 'wagmi';
-
-import Discord from 'assets/images/logins-icons/discord.svg?react';
-import Google from 'assets/images/logins-icons/google.svg?react';
-import Twitter from 'assets/images/logins-icons/twitter.svg?react';
-
-import Coinbase from 'assets/images/logins-icons/coinbase.svg?react';
-import Metamask from 'assets/images/logins-icons/metamask.svg?react';
-import WalletConnect from 'assets/images/logins-icons/walletConnect.svg?react';
-
-import Checkbox from 'components/fields/Checkbox';
-import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import useLocalStorage from 'hooks/useLocalStorage';
-import { getIsBiconomy, setIsBiconomy } from 'redux/modules/wallet';
-import { localStore } from 'thales-utils';
-import { ParticalTypes, WalletConnections } from 'types/wallet';
 
 ReactModal.setAppElement('#root');
 
@@ -195,6 +192,11 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                                 components={{
                                     disclaimer: (
                                         <Link href={disclaimer}>
+                                            <></>
+                                        </Link>
+                                    ),
+                                    privacyPolicy: (
+                                        <Link href={privacyPolicy}>
                                             <></>
                                         </Link>
                                     ),
