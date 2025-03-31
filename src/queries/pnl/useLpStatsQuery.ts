@@ -111,6 +111,7 @@ const useLpStatsQuery = (
                     currencies,
                     rates,
                     thalesPriceResponse,
+                    overPriceResponse,
                 ] = await Promise.all([
                     liquidityPoolDataContract.read.getRoundTickets([
                         getLpAddress(networkConfig.networkId, LiquidityPoolCollateral.USDC),
@@ -147,6 +148,7 @@ const useLpStatsQuery = (
                     priceFeedContract.read.getCurrencies(),
                     priceFeedContract.read.getRates(),
                     axios.get(`${generalConfig.API_URL}/token/price`),
+                    axios.get(`${generalConfig.API_URL}/over-token/price`),
                 ]);
 
                 const exchangeRates: Rates = {};
@@ -162,8 +164,7 @@ const useLpStatsQuery = (
                     }
                 });
                 exchangeRates['THALES'] = Number(thalesPriceResponse.data);
-                // TODO hardcode OVER price
-                exchangeRates['OVER'] = Number(thalesPriceResponse.data);
+                exchangeRates['OVER'] = Number(overPriceResponse.data);
 
                 const usdcLpStats = await getLpStats(
                     Array.isArray(usdcTickets) ? usdcTickets : [usdcTickets],

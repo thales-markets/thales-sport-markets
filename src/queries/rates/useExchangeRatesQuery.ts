@@ -24,10 +24,11 @@ const useExchangeRatesQuery = (
             const priceFeedContract = getContractInstance(ContractType.PRICE_FEED, networkConfig) as ViemContract;
 
             if (priceFeedContract) {
-                const [currencies, rates, thalesPriceResponse] = await Promise.all([
+                const [currencies, rates, thalesPriceResponse, overPriceResponse] = await Promise.all([
                     priceFeedContract.read.getCurrencies(),
                     priceFeedContract.read.getRates(),
                     axios.get(`${generalConfig.API_URL}/token/price`),
+                    axios.get(`${generalConfig.API_URL}/over-token/price`),
                 ]);
 
                 currencies.forEach((currency: string, idx: number) => {
@@ -48,8 +49,7 @@ const useExchangeRatesQuery = (
                 exchangeRates['THALES'] = Number(thalesPriceResponse.data);
                 exchangeRates['sTHALES'] = Number(thalesPriceResponse.data);
                 exchangeRates[OVER_CONTRACT_RATE_KEY] = exchangeRates['OVER'];
-                // TODO hardcode OVER price
-                exchangeRates['OVER'] = Number(thalesPriceResponse.data);
+                exchangeRates['OVER'] = Number(overPriceResponse.data);
             }
 
             return exchangeRates;

@@ -87,6 +87,7 @@ const useUsersStatsV2Query = (
                 promises.push(priceFeedContract.read.getCurrencies());
                 promises.push(priceFeedContract.read.getRates());
                 promises.push(axios.get(`${generalConfig.API_URL}/token/price`));
+                promises.push(axios.get(`${generalConfig.API_URL}/over-token/price`));
 
                 const promisesResult = await Promise.all(promises);
                 const promisesLength = promises.length;
@@ -100,9 +101,10 @@ const useUsersStatsV2Query = (
                     ])
                     .flat(1);
 
-                const currencies = promisesResult[promisesLength - 3];
-                const rates = promisesResult[promisesLength - 2];
-                const thalesPriceResponse = promisesResult[promisesLength - 1];
+                const currencies = promisesResult[promisesLength - 4];
+                const rates = promisesResult[promisesLength - 3];
+                const thalesPriceResponse = promisesResult[promisesLength - 2];
+                const overPriceResponse = promisesResult[promisesLength - 1];
 
                 const exchangeRates: Rates = {};
                 currencies.forEach((currency: string, idx: number) => {
@@ -118,6 +120,7 @@ const useUsersStatsV2Query = (
                 });
                 exchangeRates['THALES'] = Number(thalesPriceResponse.data);
                 exchangeRates['sTHALES'] = Number(thalesPriceResponse.data);
+                exchangeRates['OVER'] = Number(overPriceResponse.data);
 
                 let volume = 0;
                 let highestWin = 0;

@@ -11,7 +11,7 @@ const COINGECKO_CURRENCY_ID_MAP = {
     [CRYPTO_CURRENCY_MAP.ETH]: 'ethereum',
     [CRYPTO_CURRENCY_MAP.WETH]: 'weth',
     [CRYPTO_CURRENCY_MAP.THALES]: 'thales',
-    [CRYPTO_CURRENCY_MAP.OVER]: 'over',
+    [CRYPTO_CURRENCY_MAP.OVER]: 'overtime',
 };
 
 const useCoingeckoRatesQuery = (options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
@@ -36,7 +36,7 @@ const useCoingeckoRatesQuery = (options?: Omit<UseQueryOptions<any>, 'queryKey' 
             };
 
             const url =
-                'https://api.coingecko.com/api/v3/simple/price?ids=thales,ethereum,weth,optimism,arbitrum&vs_currencies=usd&precision=2';
+                'https://api.coingecko.com/api/v3/simple/price?ids=thales,ethereum,weth,optimism,arbitrum,overtime&vs_currencies=usd&precision=2';
             const options = { method: 'GET', headers: { accept: 'application/json' } };
 
             try {
@@ -62,7 +62,9 @@ const useCoingeckoRatesQuery = (options?: Omit<UseQueryOptions<any>, 'queryKey' 
                     body[COINGECKO_CURRENCY_ID_MAP[CRYPTO_CURRENCY_MAP.THALES]].usd
                 );
                 // TODO hardcode OVER rate until we have a proper rate
-                rates[CRYPTO_CURRENCY_MAP.OVER as Coins] = 0.1053;
+                rates[CRYPTO_CURRENCY_MAP.OVER as Coins] = Number(
+                    body[COINGECKO_CURRENCY_ID_MAP[CRYPTO_CURRENCY_MAP.OVER]].usd
+                );
             } catch (err) {
                 console.error('Coingecko price error:' + err);
             }

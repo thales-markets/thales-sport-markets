@@ -48,6 +48,7 @@ const useLpUsersPnlQuery = (
                     currencies,
                     rates,
                     thalesPriceResponse,
+                    overPriceResponse,
                 ] = await Promise.all([
                     isLpAvailableForNetwork(networkConfig.networkId, lpCollateral)
                         ? liquidityPoolDataContract.read.getRoundTickets([
@@ -61,6 +62,7 @@ const useLpUsersPnlQuery = (
                     priceFeedContract.read.getCurrencies(),
                     priceFeedContract.read.getRates(),
                     axios.get(`${generalConfig.API_URL}/token/price`),
+                    axios.get(`${generalConfig.API_URL}/over-token/price`),
                 ]);
 
                 const exchangeRates: Rates = {};
@@ -76,8 +78,7 @@ const useLpUsersPnlQuery = (
                     }
                 });
                 exchangeRates['THALES'] = Number(thalesPriceResponse.data);
-                // TODO hardcode OVER price
-                exchangeRates['OVER'] = Number(thalesPriceResponse.data);
+                exchangeRates['OVER'] = Number(overPriceResponse.data);
 
                 const tickets = Array.isArray(lpTickets) ? lpTickets : [lpTickets];
 
