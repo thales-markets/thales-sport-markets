@@ -7,8 +7,8 @@ import Discord from 'assets/images/logins-icons/discord.svg?react';
 import Google from 'assets/images/logins-icons/google.svg?react';
 import Metamask from 'assets/images/logins-icons/metamask.svg?react';
 import Rabby from 'assets/images/logins-icons/rabby.svg?react';
-import Twitter from 'assets/images/logins-icons/twitter.svg?react';
 import WalletConnect from 'assets/images/logins-icons/walletConnect.svg?react';
+import X from 'assets/images/logins-icons/x.svg?react';
 import Checkbox from 'components/fields/Checkbox';
 import SimpleLoader from 'components/SimpleLoader';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
@@ -419,7 +419,7 @@ const getIcon = (socialId: ParticalTypes | WalletConnections): any => {
         case ParticalTypes.TWITTER:
             return (
                 <IconHolder>
-                    <Twitter />
+                    <X />
                 </IconHolder>
             );
 
