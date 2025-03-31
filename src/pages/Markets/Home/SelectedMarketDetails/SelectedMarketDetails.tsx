@@ -41,14 +41,14 @@ const SelectedMarketDetails: React.FC<SelectedMarketDetailsProps> = ({ market })
     const sportFilter = useSelector(getSportFilter);
     const selectedMarket = useSelector(getSelectedMarket);
 
-    const riskManagementSgpBuildersQuery = useRiskManagementConfigQuery(RiskManagementConfig.SGP_BUILDERS, {
+    const riskManagementSgpBuildersQuery = useRiskManagementConfigQuery([RiskManagementConfig.SGP_BUILDERS], {
         networkId,
     });
 
     const sgpBuilders = useMemo(
         () =>
             riskManagementSgpBuildersQuery.isSuccess && riskManagementSgpBuildersQuery.data
-                ? (riskManagementSgpBuildersQuery.data as RiskManagementSgpBuilders)
+                ? (riskManagementSgpBuildersQuery.data as RiskManagementSgpBuilders).sgpBuilders
                 : [],
         [riskManagementSgpBuildersQuery.isSuccess, riskManagementSgpBuildersQuery.data]
     );

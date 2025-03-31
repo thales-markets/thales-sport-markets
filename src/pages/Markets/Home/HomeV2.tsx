@@ -22,6 +22,7 @@ import {
     Sport,
     getSportLeagueIds,
     isBoxingLeague,
+    isSgpBuilderMarket,
 } from 'overtime-utils';
 import SidebarMMLeaderboard from 'pages/MarchMadness/components/SidebarLeaderboard';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
@@ -106,6 +107,7 @@ const Home: React.FC = () => {
 
     const [showBurger, setShowBurger] = useState<boolean>(false);
     const [playerPropsCountPerTag, setPlayerPropsCountPerTag] = useState<Record<string, number>>({});
+    const [quickSgpCountPerTag, setQuickSgpCountPerTag] = useState<Partial<Record<League, number>>>({});
     const [showActive, setShowActive] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_ACTIVE, true);
     const [showTicketMobileModal, setShowTicketMobileModal] = useState<boolean>(false);
     const [showOddsSelectorModal, setShowOddsSelectorModal] = useState<boolean>(false);
@@ -336,6 +338,10 @@ const Home: React.FC = () => {
                     if (!market.childMarkets.length) {
                         return false;
                     }
+                } else if (sportFilter === SportFilter.QuickSgp) {
+                    if (!market.childMarkets.some((childMarket) => isSgpBuilderMarket(childMarket.typeId))) {
+                        return false;
+                    }
                 } else if (sportFilter === SportFilter.Boosted) {
                     if (!gameMultipliers.find((multiplier) => multiplier.gameId === market.gameId)) {
                         return false;
@@ -436,7 +442,9 @@ const Home: React.FC = () => {
 
         const openMarketsCountPerTag: any = {};
         const ppMarketsCountPerTag: any = {};
+        const quickSgpMarketsCountPerTag: Partial<Record<League, number>> = {};
         Object.keys(groupedMarkets).forEach((key: string) => {
+            let gameIdCounted = '';
             const playerMarketMap = groupedMarkets[key].reduce(
                 (prev: Record<string, SportMarket>, curr: SportMarket) => {
                     const playerMap = { ...prev };
@@ -455,6 +463,11 @@ const Home: React.FC = () => {
                                     childMarkets: [childMarket],
                                 };
                             }
+                        } else if (gameIdCounted !== childMarket.gameId && isSgpBuilderMarket(childMarket.typeId)) {
+                            const leagueId = Number(key) as League;
+                            const count = quickSgpMarketsCountPerTag[leagueId] || 0;
+                            quickSgpMarketsCountPerTag[leagueId] = count + 1;
+                            gameIdCounted = childMarket.gameId;
                         }
                     });
                     return playerMap;
@@ -473,6 +486,7 @@ const Home: React.FC = () => {
             }
         });
         setPlayerPropsCountPerTag(ppMarketsCountPerTag);
+        setQuickSgpCountPerTag(quickSgpMarketsCountPerTag);
         return openMarketsCountPerTag;
     }, [openSportMarkets]);
 
@@ -496,6 +510,10 @@ const Home: React.FC = () => {
             (prev: number, curr: string) => prev + playerPropsCountPerTag[curr],
             0
         );
+        openMarketsCount[SportFilter.QuickSgp] = Object.keys(quickSgpCountPerTag).reduce(
+            (prev: number, curr: string) => prev + (quickSgpCountPerTag[Number(curr) as League] || 0),
+            0
+        );
         let favouriteCount = 0;
         favouriteLeagues.forEach((tag: TagInfo) => {
             favouriteCount += openMarketsCountPerTag[tag.id] || 0;
@@ -503,7 +521,7 @@ const Home: React.FC = () => {
         openMarketsCount[SportFilter.Favourites] = favouriteCount;
 
         return openMarketsCount;
-    }, [favouriteLeagues, openMarketsCountPerTag, playerPropsCountPerTag]);
+    }, [favouriteLeagues, openMarketsCountPerTag, playerPropsCountPerTag, quickSgpCountPerTag]);
 
     const liveMarketsCountPerTag = useMemo(() => {
         const liveSportMarkets: SportMarkets =
@@ -721,6 +739,7 @@ const Home: React.FC = () => {
                             liveMarketsCountPerTag={liveMarketsCountPerTag}
                             liveMarketsCountPerSport={liveMarketsCountPerSport}
                             playerPropsMarketsCountPerTag={playerPropsCountPerTag}
+                            quickSgpMarketsCountPerTag={quickSgpCountPerTag}
                         />
                     );
                 })}

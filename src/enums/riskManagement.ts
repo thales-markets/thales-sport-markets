@@ -3,7 +3,6 @@ export enum RiskManagementConfig {
     BOOKMAKERS = 'bookmakers',
     SPREADS = 'spreads',
     LEAGUES = 'leagues',
-    SGP = 'sgp',
     SGP_BLOCKERS = 'sgpBlockers',
     SGP_BUILDERS = 'sgpBuilders',
 }

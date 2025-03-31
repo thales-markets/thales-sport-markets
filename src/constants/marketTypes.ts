@@ -20,7 +20,7 @@ import {
     PLAYER_PROPS_MARKET_TYPES,
     SECOND_PERIOD_MARKET_TYPES,
     SEVENTH_PERIOD_MARKET_TYPES,
-    SGP_BUILDER_TYPES,
+    SGP_BUILDER_MARKET_TYPES,
     SIXTH_PERIOD_MARKET_TYPES,
     Sport,
     SPREAD_MARKET_TYPES,
@@ -79,6 +79,7 @@ export const MarketTypesBySportFilter: Record<SportFilter, MarketType[]> = {
     ],
     [SportFilter.Futures]: FUTURES_MARKET_TYPES,
     [SportFilter.PlayerProps]: PLAYER_PROPS_MARKET_TYPES,
+    [SportFilter.QuickSgp]: SGP_BUILDER_MARKET_TYPES,
 };
 
 export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGroup, MarketType[]>>> = {
@@ -100,7 +101,7 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
         [MarketTypeGroup.HANDICAP]: SPREAD_MARKET_TYPES,
-        [MarketTypeGroup.QUICK_SGP]: [...SGP_BUILDER_TYPES],
+        [MarketTypeGroup.QUICK_SGP]: [...SGP_BUILDER_MARKET_TYPES],
         [MarketTypeGroup.SGP]: [MarketType.WINNER_TOTAL],
         [MarketTypeGroup.QUARTERS]: [
             ...FIRST_PERIOD_MARKET_TYPES,

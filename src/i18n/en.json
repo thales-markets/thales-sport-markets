@@ -283,7 +283,8 @@
                 "tabletennis": "Table tennis",
                 "politics": "Politics",
                 "futures": "Futures",
-                "playerprops": "Player Props"
+                "playerprops": "Player Props",
+                "quicksgp": "Quick SGP"
             },
             "all": "All",
             "datepicker": {

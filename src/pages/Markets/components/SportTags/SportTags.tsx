@@ -1,4 +1,5 @@
 import { SportFilter } from 'enums/markets';
+import { League } from 'overtime-utils';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,6 +20,7 @@ type SportTagsProps = {
     liveMarketsCountPerTag: any;
     liveMarketsCountPerSport: any;
     playerPropsMarketsCountPerTag: any;
+    quickSgpMarketsCountPerTag: Partial<Record<League, number>>;
 };
 
 const SportTags: React.FC<SportTagsProps> = ({
@@ -32,6 +34,7 @@ const SportTags: React.FC<SportTagsProps> = ({
     openMarketsCountPerTag,
     liveMarketsCountPerTag,
     playerPropsMarketsCountPerTag,
+    quickSgpMarketsCountPerTag,
     liveMarketsCountPerSport,
 }) => {
     const { t } = useTranslation();
@@ -75,6 +78,7 @@ const SportTags: React.FC<SportTagsProps> = ({
                 liveMarketsCountPerTag={liveMarketsCountPerTag}
                 liveMarketsCountPerSport={liveMarketsCountPerSport}
                 playerPropsMarketsCountPerTag={playerPropsMarketsCountPerTag}
+                quickSgpMarketsCountPerTag={quickSgpMarketsCountPerTag}
                 showActive={showActive}
                 showLive={sport == SportFilter.Live}
                 sport={sport}

@@ -93,6 +93,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
     const isAddedToTicket = (addedToTicket && addedToTicket.position == position) || isSgpBuilderAddedToTicket;
 
     const isPlayerPropsMarket = useMemo(() => sportFilter === SportFilter.PlayerProps, [sportFilter]);
+    const isQuickSgpMarket = useMemo(() => sportFilter === SportFilter.QuickSgp, [sportFilter]);
 
     const isGameStarted = market.maturityDate < new Date();
     const isGameLive = !!market.live && isGameStarted;
@@ -177,7 +178,9 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
                 }
             }}
         >
-            <Text isColumnView={isColumnView}>{positionText}</Text>
+            <Text isColumnView={isColumnView} maxWidth={isQuickSgpMarket ? '270px' : undefined}>
+                {positionText}
+            </Text>
             {showOdd ? (
                 <Odd selected={isAddedToTicket} isMainPageView={isMainPageView}>
                     {isZeroOdd ? '-' : formatMarketOdds(selectedOddsType, odd)}

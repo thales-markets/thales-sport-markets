@@ -13,6 +13,7 @@ import {
     getLeaguePeriodType,
     getLeagueTooltipKey,
     isFuturesMarket,
+    isSgpBuilderMarket,
     League,
     MarketType,
     PeriodType,
@@ -102,6 +103,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
         const isMobile = useSelector(getIsMobile);
 
         const isPlayerPropsMarket = useMemo(() => sportFilter === SportFilter.PlayerProps, [sportFilter]);
+        const isQuickSgpMarket = useMemo(() => sportFilter === SportFilter.QuickSgp, [sportFilter]);
 
         const [homeLogoSrc, setHomeLogoSrc] = useState(
             getTeamImageSource(isPlayerPropsMarket ? market.playerProps.playerName : market.homeTeam, market.leagueId)
@@ -111,7 +113,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
         );
 
         const riskManagementLeaguesQuery = useRiskManagementConfigQuery(
-            RiskManagementConfig.LEAGUES,
+            [RiskManagementConfig.LEAGUES],
             { networkId },
             { enabled: !!market.live }
         );
@@ -304,6 +306,97 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
 
         const showHeaderTournamentName =
             market?.tournamentName && (isColumnView || isMarketSelected || isMobile) && !isPlayerPropsMarket;
+
+        const getPlayerPropsPositions = (playerPropsMarkets: SportMarket[]) => {
+            return (
+                <>
+                    <PositionsV2
+                        markets={[marketTypeFilterMarket ? marketTypeFilterMarket : playerPropsMarkets[0]]}
+                        marketType={marketTypeFilter && marketTypeFilterMarket ? marketTypeFilter : market.typeId}
+                        isGameOpen={isGameOpen}
+                        isMainPageView
+                        isColumnView={isColumnView}
+                        hidePlayerName
+                        oddsTitlesHidden={oddsTitlesHidden}
+                        floatingOddsTitles={floatingOddsTitles}
+                    />
+                    {isColumnView && !isMobile && playerPropsMarkets[1] && (
+                        <PositionsV2
+                            markets={[playerPropsMarkets[1]]}
+                            marketType={market.typeId}
+                            isGameOpen={isGameOpen}
+                            isMainPageView
+                            isColumnView={isColumnView}
+                            hidePlayerName
+                            oddsTitlesHidden={oddsTitlesHidden}
+                            floatingOddsTitles={floatingOddsTitles}
+                        />
+                    )}
+                    {isColumnView && !isMobile && playerPropsMarkets[2] && (
+                        <PositionsV2
+                            markets={[playerPropsMarkets[2]]}
+                            marketType={market.typeId}
+                            isGameOpen={isGameOpen}
+                            isMainPageView
+                            isColumnView={isColumnView}
+                            hidePlayerName
+                            oddsTitlesHidden={oddsTitlesHidden}
+                            floatingOddsTitles={floatingOddsTitles}
+                        />
+                    )}
+                </>
+            );
+        };
+
+        const getQuickSgpPositions = (sportMarket: SportMarket) => {
+            const quickSgpMarkets = sportMarket.childMarkets.filter((childMarket) =>
+                isSgpBuilderMarket(childMarket.typeId)
+            );
+            const NUM_OF_COLUMN_MARKETS = 2;
+            const getColumnMarket = (columnIndex: number) => {
+                return quickSgpMarkets[columnIndex] && quickSgpMarkets[columnIndex].positionNames
+                    ? {
+                          ...quickSgpMarkets[columnIndex],
+                          positionNames: quickSgpMarkets[columnIndex].positionNames.slice(0, NUM_OF_COLUMN_MARKETS),
+                          odds: quickSgpMarkets[columnIndex].odds.slice(0, NUM_OF_COLUMN_MARKETS),
+                      }
+                    : null;
+            };
+            const firstColumnMarket = getColumnMarket(0);
+            const secondColumnMarket = getColumnMarket(1);
+            return (
+                <>
+                    <PositionsV2
+                        markets={
+                            marketTypeFilterMarket
+                                ? [marketTypeFilterMarket]
+                                : firstColumnMarket
+                                ? [firstColumnMarket]
+                                : []
+                        }
+                        marketType={
+                            marketTypeFilter && marketTypeFilterMarket
+                                ? marketTypeFilter
+                                : firstColumnMarket
+                                ? firstColumnMarket.typeId
+                                : MarketType.SGP_BUILDER
+                        }
+                        isGameOpen={isGameOpen}
+                        isMainPageView
+                        isColumnView={isColumnView}
+                    />
+                    {isColumnView && !isMobile && secondColumnMarket && (
+                        <PositionsV2
+                            markets={[secondColumnMarket]}
+                            marketType={secondColumnMarket.typeId}
+                            isGameOpen={isGameOpen}
+                            isMainPageView
+                            isColumnView={isColumnView}
+                        />
+                    )}
+                </>
+            );
+        };
 
         const getMainContainerContent = () => (
             <>
@@ -602,50 +695,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                             ) : isGameOpen ? (
                                 <>
                                     {isPlayerPropsMarket && playerPropsMarkets ? (
-                                        <>
-                                            <PositionsV2
-                                                markets={[
-                                                    marketTypeFilterMarket
-                                                        ? marketTypeFilterMarket
-                                                        : playerPropsMarkets[0],
-                                                ]}
-                                                marketType={
-                                                    marketTypeFilter && marketTypeFilterMarket
-                                                        ? marketTypeFilter
-                                                        : market.typeId
-                                                }
-                                                isGameOpen={isGameOpen}
-                                                isMainPageView
-                                                isColumnView={isColumnView}
-                                                hidePlayerName
-                                                oddsTitlesHidden={oddsTitlesHidden}
-                                                floatingOddsTitles={floatingOddsTitles}
-                                            />
-                                            {isColumnView && !isMobile && playerPropsMarkets[1] && (
-                                                <PositionsV2
-                                                    markets={[playerPropsMarkets[1]]}
-                                                    marketType={market.typeId}
-                                                    isGameOpen={isGameOpen}
-                                                    isMainPageView
-                                                    isColumnView={isColumnView}
-                                                    hidePlayerName
-                                                    oddsTitlesHidden={oddsTitlesHidden}
-                                                    floatingOddsTitles={floatingOddsTitles}
-                                                />
-                                            )}
-                                            {isColumnView && !isMobile && playerPropsMarkets[2] && (
-                                                <PositionsV2
-                                                    markets={[playerPropsMarkets[2]]}
-                                                    marketType={market.typeId}
-                                                    isGameOpen={isGameOpen}
-                                                    isMainPageView
-                                                    isColumnView={isColumnView}
-                                                    hidePlayerName
-                                                    oddsTitlesHidden={oddsTitlesHidden}
-                                                    floatingOddsTitles={floatingOddsTitles}
-                                                />
-                                            )}
-                                        </>
+                                        getPlayerPropsPositions(playerPropsMarkets)
+                                    ) : isQuickSgpMarket ? (
+                                        getQuickSgpPositions(market)
                                     ) : (
                                         <>
                                             <PositionsV2

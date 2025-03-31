@@ -9,7 +9,7 @@ import { SortType, SportFilter } from 'enums/markets';
 import { MarketTypeGroup } from 'enums/marketTypes';
 import { uniq } from 'lodash';
 import { MarketType, isPlayerPropsMarket } from 'overtime-utils';
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { ScrollMenu, VisibilityContext, publicApiType } from 'react-horizontal-scrolling-menu';
 import 'react-horizontal-scrolling-menu/dist/styles.css';
 import { useDispatch, useSelector } from 'react-redux';
@@ -95,6 +95,8 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitc
     const [openSortMenu, setOpenSortMenu] = useState(false);
 
     const isPlayerPropsFilter = useMemo(() => sportFilter == SportFilter.PlayerProps, [sportFilter]);
+    const isQuickSgpFilter = useMemo(() => sportFilter === SportFilter.QuickSgp, [sportFilter]);
+
     const marketToCheck = useMemo(() => market || selectedMarket, [market, selectedMarket]);
 
     const marketTypes = useMemo(() => {
@@ -154,6 +156,12 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitc
                 : [];
         }
     }, [marketToCheck, market, availableMarketTypes, sportFilter, allMarkets, isPlayerPropsFilter, isMobile]);
+
+    useEffect(() => {
+        if (isQuickSgpFilter) {
+            dispatch(setMarketTypeGroupFilter(MarketTypeGroup.QUICK_SGP));
+        }
+    }, [isQuickSgpFilter, dispatch, marketToCheck]);
 
     return (
         <Container>

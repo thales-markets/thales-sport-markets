@@ -329,6 +329,10 @@
     content: '\00C2';
 }
 
+.icon--quicksgp:before {
+    content: '\00C2';
+}
+
 .icon--clear:before {
     content: '\00D4';
 }
