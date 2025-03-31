@@ -48,7 +48,7 @@
             "or-connect-with": "or connect via wallet",
             "connect-your-wallet": "Connect wallet",
             "connect-with-wallet": "Connect with wallet",
-            "view-all-wallets": "View All Wallets",
+            "view-all-wallets": "View all wallets",
             "please-connect": "please, connect wallet to start using overtime.xyz",
 
             "view-more-options": "View more options",
@@ -72,8 +72,7 @@
                 "github": "Continue with GitHub",
                 "discord": "Continue with Discord",
                 "apple": "Continue with Apple",
-
-                "metamask": "Connect with Metamask",
+                "browser-wallet": "Connect with Browser Wallet",
                 "coinbase": "Connect with Coinbase Wallet",
                 "wallet-connect": "WalletConnect"
             }

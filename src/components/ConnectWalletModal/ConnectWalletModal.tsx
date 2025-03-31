@@ -6,6 +6,7 @@ import Coinbase from 'assets/images/logins-icons/coinbase.svg?react';
 import Discord from 'assets/images/logins-icons/discord.svg?react';
 import Google from 'assets/images/logins-icons/google.svg?react';
 import Metamask from 'assets/images/logins-icons/metamask.svg?react';
+import Rabby from 'assets/images/logins-icons/rabby.svg?react';
 import Twitter from 'assets/images/logins-icons/twitter.svg?react';
 import WalletConnect from 'assets/images/logins-icons/walletConnect.svg?react';
 import Checkbox from 'components/fields/Checkbox';
@@ -367,11 +368,8 @@ const Button = styled(FlexDivCentered)<{ oneButtoninRow?: boolean; active?: bool
     height: 50px;
     border: 1px ${(props) => props.theme.borderColor.primary} solid;
     color: ${(props) => props.theme.textColor.primary};
-
     font-size: 16px;
     font-weight: 500;
-
-    text-transform: capitalize;
     cursor: pointer;
     &:hover {
         background-color: ${(props) => (props.oneButtoninRow ? props.theme.connectWalletModal.hover : '')};
@@ -388,6 +386,14 @@ const LoaderContainer = styled.div`
 
 const IconHolder = styled.div`
     margin-right: 12px;
+    display: flex;
+    flex-direction: row;
+    svg {
+        height: 20px;
+        :first-child:not(:last-child) {
+            margin-right: 6px;
+        }
+    }
 `;
 
 const DownIcon = styled.i`
@@ -417,10 +423,11 @@ const getIcon = (socialId: ParticalTypes | WalletConnections): any => {
                 </IconHolder>
             );
 
-        case WalletConnections.METAMASK:
+        case WalletConnections.INJECTED:
             return (
                 <IconHolder>
                     <Metamask />
+                    <Rabby />
                 </IconHolder>
             );
         case WalletConnections.WALLET_CONNECT:
