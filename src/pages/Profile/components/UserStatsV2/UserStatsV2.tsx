@@ -16,9 +16,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { getIsBiconomy, setIsBiconomy } from 'redux/modules/wallet';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import {
-    Colors,
     FlexDivColumn,
     FlexDivColumnCentered,
     FlexDivColumnStart,
@@ -50,6 +49,7 @@ const UserStats: React.FC = () => {
 
     const { address, isConnected } = useAccount();
     const smartAddress = useBiconomy();
+    const theme = useTheme();
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const [freeBet, setFreeBet] = useLocalStorage<FreeBet | undefined>(LOCAL_STORAGE_KEYS.FREE_BET_ID, undefined);
@@ -292,12 +292,15 @@ const UserStats: React.FC = () => {
             {claimFreeBetButtonVisible && (
                 <ClaimBetButton
                     onClick={onClaimFreeBet}
-                    borderColor="none"
+                    backgroundColor={theme.overdrop.borderColor.tertiary}
+                    borderColor={theme.overdrop.borderColor.tertiary}
+                    textColor={theme.button.textColor.primary}
                     height="42px"
-                    lineHeight="16px"
-                    padding="0"
-                    backgroundColor={Colors.YELLOW}
+                    fontSize="16px"
+                    fontWeight="700"
+                    borderRadius="8px"
                     className="pulse"
+                    margin="10px 0 0 0 "
                 >
                     {t('profile.account-summary.claim-free-bet')}
                     <HandsIcon className="icon icon--hands-coins" />
