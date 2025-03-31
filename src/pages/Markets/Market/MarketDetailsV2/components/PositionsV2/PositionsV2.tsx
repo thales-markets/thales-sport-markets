@@ -83,6 +83,7 @@ const Positions: React.FC<PositionsProps> = ({
     const isMobile = useSelector(getIsMobile);
 
     const isPlayerPropsMarket = useMemo(() => sportFilter === SportFilter.PlayerProps, [sportFilter]);
+    const isQuickSgpMarket = useMemo(() => sportFilter === SportFilter.QuickSgp, [sportFilter]);
 
     const [isExpanded, setIsExpanded] = useState<boolean>(true);
 
@@ -200,11 +201,39 @@ const Positions: React.FC<PositionsProps> = ({
 
     const showContainer = !isGameOpen || hasOdds || showInvalid;
 
-    const sortedMarkets = useMemo(() => orderBy(markets, ['line', 'odds'], ['asc', 'desc']), [markets]);
+    const filteredQuickSgpMarkets = useMemo(
+        () =>
+            isQuickSgpMarket && markets[0].childMarkets
+                ? markets[0].childMarkets.filter((childMarket) => childMarket.typeId === marketType)
+                : [],
+        [isQuickSgpMarket, markets, marketType]
+    );
 
-    const positionText0 = markets[0] ? getSubtitleText(markets[0], 0) : undefined;
-    const positionText1 = markets[0] ? getSubtitleText(markets[0], 1) : undefined;
-    const titleText = getTitleText(markets[0], !isPlayerPropsMarket, isPlayerPropsMarket);
+    const sortedMarkets = useMemo(() => {
+        if (isQuickSgpMarket) {
+            let displaySgpMarkets = markets;
+            let maxQuickSgpMarkets = 4;
+            if (filteredQuickSgpMarkets.length > 0) {
+                maxQuickSgpMarkets = 2;
+                displaySgpMarkets = filteredQuickSgpMarkets.map((market) => ({
+                    ...market,
+                    odds: market.odds.slice(0, maxQuickSgpMarkets),
+                    positionNames: market.positionNames?.slice(0, maxQuickSgpMarkets),
+                }));
+            }
+            return displaySgpMarkets;
+        } else {
+            return orderBy(markets, ['line', 'odds'], ['asc', 'desc']);
+        }
+    }, [markets, isQuickSgpMarket, filteredQuickSgpMarkets]);
+
+    const positionText0 = !filteredQuickSgpMarkets.length && markets[0] ? getSubtitleText(markets[0], 0) : undefined;
+    const positionText1 = !filteredQuickSgpMarkets.length && markets[0] ? getSubtitleText(markets[0], 1) : undefined;
+    const titleText = getTitleText(
+        !!filteredQuickSgpMarkets.length ? filteredQuickSgpMarkets[0] : markets[0],
+        !isPlayerPropsMarket,
+        isPlayerPropsMarket
+    );
 
     const tooltipKey = getMarketTypeTooltipKey(marketType);
 

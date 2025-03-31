@@ -5,6 +5,7 @@ import Tooltip from 'components/Tooltip';
 import { FUTURES_MAIN_VIEW_DISPLAY_COUNT, MEDIUM_ODDS } from 'constants/markets';
 import { PLAYER_PROPS_SPECIAL_SPORTS } from 'constants/sports';
 import { SportFilter } from 'enums/markets';
+import { MarketTypeGroup } from 'enums/marketTypes';
 import { RiskManagementConfig } from 'enums/riskManagement';
 import _, { isEqual } from 'lodash';
 import Lottie from 'lottie-react';
@@ -13,7 +14,6 @@ import {
     getLeaguePeriodType,
     getLeagueTooltipKey,
     isFuturesMarket,
-    isSgpBuilderMarket,
     League,
     MarketType,
     PeriodType,
@@ -32,17 +32,20 @@ import {
     getMarketTypeGroupFilter,
     getSelectedMarket,
     getSportFilter,
+    setMarketTypeGroupFilter,
     setSelectedMarket,
 } from 'redux/modules/market';
+import { getTicket } from 'redux/modules/ticket';
 import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarket } from 'types/markets';
-import { RiskManagementLeaguesAndTypes } from 'types/riskManagement';
+import { RiskManagementLeaguesAndTypes, RiskManagementSgpBuilders } from 'types/riskManagement';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getLeagueFlagSource, getOnImageError, getOnPlayerImageError, getTeamImageSource } from 'utils/images';
 import {
     getMarketPlayerPropsMarketsForGroupFilter,
     getMarketPlayerPropsMarketsForProp,
     getMarketPlayerPropsMarketsForSport,
+    getTicketPositionsFogSgpBuilder,
     isOddValid,
 } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
@@ -100,6 +103,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
         const marketTypeFilter = useSelector(getMarketTypeFilter);
         const marketTypeGroupFilter = useSelector(getMarketTypeGroupFilter);
         const sportFilter = useSelector(getSportFilter);
+        const ticket = useSelector(getTicket);
         const isMobile = useSelector(getIsMobile);
 
         const isPlayerPropsMarket = useMemo(() => sportFilter === SportFilter.PlayerProps, [sportFilter]);
@@ -139,6 +143,20 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                 return { leagues: [], spreadTypes: [], totalTypes: [] };
             }
         }, [riskManagementLeaguesQuery.isSuccess, riskManagementLeaguesQuery.data, market.leagueId]);
+
+        const riskManagementSgpBuildersQuery = useRiskManagementConfigQuery(
+            [RiskManagementConfig.SGP_BUILDERS],
+            { networkId },
+            { enabled: isQuickSgpMarket }
+        );
+
+        const sgpBuilders = useMemo(
+            () =>
+                riskManagementSgpBuildersQuery.isSuccess && riskManagementSgpBuildersQuery.data
+                    ? (riskManagementSgpBuildersQuery.data as RiskManagementSgpBuilders).sgpBuilders
+                    : [],
+            [riskManagementSgpBuildersQuery.isSuccess, riskManagementSgpBuildersQuery.data]
+        );
 
         useEffect(() => {
             setHomeLogoSrc(
@@ -349,53 +367,59 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
         };
 
         const getQuickSgpPositions = (sportMarket: SportMarket) => {
-            const quickSgpMarkets = sportMarket.childMarkets.filter((childMarket) =>
-                isSgpBuilderMarket(childMarket.typeId)
-            );
-            const NUM_OF_COLUMN_MARKETS = 2;
-            const getColumnMarket = (columnIndex: number) => {
-                return quickSgpMarkets[columnIndex] && quickSgpMarkets[columnIndex].positionNames
-                    ? {
-                          ...quickSgpMarkets[columnIndex],
-                          positionNames: quickSgpMarkets[columnIndex].positionNames.slice(0, NUM_OF_COLUMN_MARKETS),
-                          odds: quickSgpMarkets[columnIndex].odds.slice(0, NUM_OF_COLUMN_MARKETS),
-                      }
-                    : null;
-            };
-            const firstColumnMarket = getColumnMarket(0);
-            const secondColumnMarket = getColumnMarket(1);
+            const sgpBuildersWithTicketPositions = sgpBuilders.map((sgpBuilder) => ({
+                sgpBuilder,
+                ticketPositions: getTicketPositionsFogSgpBuilder(sportMarket, sgpBuilder),
+            }));
+
             return (
                 <>
                     <PositionsV2
-                        markets={
-                            marketTypeFilterMarket
-                                ? [marketTypeFilterMarket]
-                                : firstColumnMarket
-                                ? [firstColumnMarket]
-                                : []
-                        }
+                        markets={marketTypeFilterMarket ? [marketTypeFilterMarket] : [sportMarket]}
                         marketType={
-                            marketTypeFilter && marketTypeFilterMarket
-                                ? marketTypeFilter
-                                : firstColumnMarket
-                                ? firstColumnMarket.typeId
-                                : MarketType.SGP_BUILDER
+                            marketTypeFilter && marketTypeFilterMarket ? marketTypeFilter : MarketType.SGP_BUILDER
                         }
                         isGameOpen={isGameOpen}
                         isMainPageView
                         isColumnView={isColumnView}
+                        sgpTickets={sgpBuildersWithTicketPositions}
                     />
-                    {isColumnView && !isMobile && secondColumnMarket && (
+                    {isColumnView && !isMobile && (
                         <PositionsV2
-                            markets={[secondColumnMarket]}
-                            marketType={secondColumnMarket.typeId}
+                            markets={[sportMarket]}
+                            marketType={MarketType.SGP_BUILDER_1}
                             isGameOpen={isGameOpen}
                             isMainPageView
                             isColumnView={isColumnView}
+                            sgpTickets={sgpBuildersWithTicketPositions}
                         />
                     )}
                 </>
             );
+        };
+
+        const openSelectedMarket = () => {
+            if (isPlayerPropsMarket) {
+                dispatch(
+                    setSelectedMarket({
+                        gameId: market.gameId,
+                        sport: market.sport,
+                        live: market.live,
+                        playerName: market.playerProps.playerName,
+                    })
+                );
+            } else {
+                dispatch(
+                    setSelectedMarket({
+                        gameId: market.gameId,
+                        sport: market.sport,
+                        live: market.live,
+                    })
+                );
+                if (isQuickSgpMarket && !ticket.length) {
+                    dispatch(setMarketTypeGroupFilter(MarketTypeGroup.QUICK_SGP));
+                }
+            }
         };
 
         const getMainContainerContent = () => (
@@ -418,24 +442,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                         onClick={(event) => {
                             const isMobileLeagueFlagClick = isMobile && event.target === leagueFlagRef.current;
                             if (!isMobileLeagueFlagClick && (isGameOpen || isGameLive)) {
-                                if (isPlayerPropsMarket) {
-                                    dispatch(
-                                        setSelectedMarket({
-                                            gameId: market.gameId,
-                                            sport: market.sport,
-                                            live: market.live,
-                                            playerName: market.playerProps.playerName,
-                                        })
-                                    );
-                                } else {
-                                    dispatch(
-                                        setSelectedMarket({
-                                            gameId: market.gameId,
-                                            sport: market.sport,
-                                            live: market.live,
-                                        })
-                                    );
-                                }
+                                openSelectedMarket();
                             }
                         }}
                     >
@@ -665,28 +672,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                                         />
                                     )}
                                     {marketsCount > 0 && (
-                                        <MarketsCountWrapper
-                                            onClick={() => {
-                                                if (isPlayerPropsMarket) {
-                                                    dispatch(
-                                                        setSelectedMarket({
-                                                            gameId: market.gameId,
-                                                            sport: market.sport,
-                                                            live: market.live,
-                                                            playerName: market.playerProps.playerName,
-                                                        })
-                                                    );
-                                                } else {
-                                                    dispatch(
-                                                        setSelectedMarket({
-                                                            gameId: market.gameId,
-                                                            sport: market.sport,
-                                                            live: market.live,
-                                                        })
-                                                    );
-                                                }
-                                            }}
-                                        >
+                                        <MarketsCountWrapper onClick={() => openSelectedMarket()}>
                                             {`+${marketsCount}`}
                                             {!isMobile && <Arrow className={'icon icon--arrow-down'} />}
                                         </MarketsCountWrapper>
@@ -745,26 +731,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                                     <MarketsCountWrapper
                                         hidden={marketsCount === 0}
                                         isPlayerPropsMarket={isPlayerPropsMarket}
-                                        onClick={() => {
-                                            if (isPlayerPropsMarket) {
-                                                dispatch(
-                                                    setSelectedMarket({
-                                                        gameId: market.gameId,
-                                                        sport: market.sport,
-                                                        live: market.live,
-                                                        playerName: market.playerProps.playerName,
-                                                    })
-                                                );
-                                            } else {
-                                                dispatch(
-                                                    setSelectedMarket({
-                                                        gameId: market.gameId,
-                                                        sport: market.sport,
-                                                        live: market.live,
-                                                    })
-                                                );
-                                            }
-                                        }}
+                                        onClick={() => openSelectedMarket()}
                                     >
                                         {`+${marketsCount}`}
                                         {!isMobile && <Arrow className={'icon icon--arrow-down'} />}
