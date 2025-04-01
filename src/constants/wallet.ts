@@ -7,7 +7,7 @@ export const SUPPORTED_PARTICAL_CONNECTORS_MODAL: ParticalTypes[] = [
 ];
 
 export const SUPPORTED_WALLET_CONNECTORS_MODAL: WalletConnections[] = [
-    WalletConnections.INJECTED,
+    WalletConnections.METAMASK,
     WalletConnections.COINBASE,
     WalletConnections.WALLET_CONNECT,
 ];
@@ -35,7 +35,7 @@ export const WALLETS_LABELS: { id: ParticalTypes | WalletConnections; labelKey: 
     },
 
     {
-        id: WalletConnections.INJECTED,
+        id: WalletConnections.METAMASK,
         labelKey: 'common.wallet.particle-logins.browser-wallet',
     },
     {

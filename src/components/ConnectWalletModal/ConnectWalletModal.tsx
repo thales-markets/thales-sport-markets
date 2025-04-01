@@ -423,7 +423,7 @@ const getIcon = (socialId: ParticalTypes | WalletConnections): any => {
                 </IconHolder>
             );
 
-        case WalletConnections.INJECTED:
+        case WalletConnections.METAMASK:
             return (
                 <IconHolder>
                     <Metamask />
