@@ -136,6 +136,10 @@ const Container = styled(FlexDivCentered)<{ walletConnected?: boolean }>`
     @media (max-width: 767px) {
         width: 330px;
     }
+
+    @media (max-width: 420px) {
+        width: 100%;
+    }
 `;
 
 const WalletAddressInfo = styled.div`

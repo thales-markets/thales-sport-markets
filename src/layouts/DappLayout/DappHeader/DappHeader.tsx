@@ -376,9 +376,8 @@ const DappHeader: React.FC = () => {
                             </ReactModal>
                         </SearchIconContainer>
                     </WrapperMobile>
+                    <WalletInfo />
                     {isBiconomy && <ActivateAccount />}
-
-                    {location.pathname !== ROUTES.MarchMadness && getMarchMadnessButton()}
                 </>
             )}
             {showThalesToOverMigrationModal && (
