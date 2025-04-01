@@ -47,7 +47,6 @@ export type UISliceState = {
 
 export type WalletSliceState = {
     isBiconomy: boolean;
-    isParticleReady: boolean;
     connectedViaParticle: boolean;
     walletConnectModal: {
         visibility: boolean;

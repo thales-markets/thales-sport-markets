@@ -99,35 +99,3 @@ export const particleAppleWallet = (): Wallet => ({
                 } as any)
         ),
 });
-
-export const particleEmailWallet = (): Wallet => ({
-    id: 'particle_email',
-    name: 'Email',
-    iconUrl: async () => '',
-    iconBackground: Colors.WHITE,
-    installed: true,
-    createConnector: (walletDetails: WalletDetailsParams) =>
-        createConnector(
-            (config) =>
-                ({
-                    ...particleWagmiWallet({ socialType: 'email', id: 'email' } as any)(config),
-                    ...walletDetails,
-                } as any)
-        ),
-});
-
-export const particlePhoneWallet = (): Wallet => ({
-    id: 'particle_phone',
-    name: 'Phone',
-    iconUrl: async () => '',
-    installed: true,
-    iconBackground: Colors.WHITE,
-    createConnector: (walletDetails: WalletDetailsParams) =>
-        createConnector(
-            (config) =>
-                ({
-                    ...particleWagmiWallet({ socialType: 'phone', id: 'phone' } as any)(config),
-                    ...walletDetails,
-                } as any)
-        ),
-});

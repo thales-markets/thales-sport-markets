@@ -241,7 +241,7 @@ const Explainer = styled.div`
     }
 `;
 
-export const DocsLink = styled.a`
+const DocsLink = styled.a`
     color: ${(props) => props.theme.link.textColor.primary};
     &:hover {
         text-decoration: underline;
