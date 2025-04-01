@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FlexDiv, FlexDivColumn } from 'styles/common';
+import { FlexDiv } from 'styles/common';
 
 export const Container = styled(FlexDiv)`
     position: fixed;
@@ -50,43 +50,6 @@ export const ItemIcon = styled.i<{ parlay?: boolean; iteration?: number; fontSiz
             }
         }
     }
-`;
-
-export const DropdownContainer = styled.div`
-    position: absolute;
-    width: 180px;
-    left: 20px;
-    bottom: 146px;
-    z-index: 1000;
-`;
-
-export const DropDown = styled(FlexDivColumn)`
-    border: 1px solid ${(props) => props.theme.borderColor.primary};
-    background: ${(props) => props.theme.background.secondary};
-    color: white;
-    border-radius: 5px;
-    position: absolute;
-    margin-top: 2px;
-    padding: 4px;
-    width: 100%;
-`;
-
-export const DropDownItem = styled(FlexDiv)`
-    padding: 7px 10px 9px 10px;
-    cursor: pointer;
-    &:hover {
-        background: ${(props) => props.theme.background.tertiary};
-        border-radius: 5px;
-    }
-`;
-
-export const Label = styled.div`
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 14px;
-    color: white;
-    display: block;
-    text-transform: capitalize;
 `;
 
 export const ParlayNumber = styled.span`

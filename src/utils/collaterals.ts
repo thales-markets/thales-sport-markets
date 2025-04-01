@@ -46,10 +46,6 @@ export const isStableCurrency = (currencyKey: Coins) => {
     return STABLE_COINS.includes(currencyKey);
 };
 
-export const isThalesCurrency = (currencyKey: Coins) => {
-    return currencyKey === CRYPTO_CURRENCY_MAP.THALES || currencyKey === CRYPTO_CURRENCY_MAP.sTHALES;
-};
-
 export const isOverCurrency = (currencyKey: Coins) => {
     return currencyKey === CRYPTO_CURRENCY_MAP.OVER;
 };

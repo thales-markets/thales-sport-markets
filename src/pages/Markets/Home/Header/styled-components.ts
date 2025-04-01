@@ -193,12 +193,3 @@ export const DropDownItem = styled(FlexDiv)<{ isSelected: boolean }>`
         ${(props) => (props.isSelected ? '' : `background: ${props.theme.dropDown.menuItem.hoverColor.primary};`)}
     }
 `;
-
-export const Label = styled.div`
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 14px;
-    color: white;
-    display: block;
-    text-transform: capitalize;
-`;

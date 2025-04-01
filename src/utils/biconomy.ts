@@ -17,7 +17,6 @@ import sessionValidationContract from './contracts/sessionValidationContract';
 import sgpTradingProcessorContract from './contracts/sgpTradingProcessorContract';
 import sportsAMMV2Contract from './contracts/sportsAMMV2Contract';
 
-export const ETH_PAYMASTER = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'; // used for paying gas in ETH by AA
 export const GAS_LIMIT = 0.2;
 const ERROR_SESSION_NOT_FOUND = 'Error: Session not found.';
 

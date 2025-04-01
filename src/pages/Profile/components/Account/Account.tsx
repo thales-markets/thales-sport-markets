@@ -16,7 +16,7 @@ import { RootState } from 'types/redux';
 import { getCollaterals, mapMultiCollateralBalances } from 'utils/collaterals';
 import useBiconomy from 'utils/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
-import AssetBalance from '../AssetBalance/AssetBalance';
+import AssetBalance from '../AssetBalance';
 
 const Account: React.FC = () => {
     const { t } = useTranslation();

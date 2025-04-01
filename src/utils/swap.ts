@@ -1,10 +1,8 @@
 import { getWalletClient } from '@wagmi/core';
 import axios from 'axios';
-import { generalConfig } from 'config/general';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { NATIVE_TOKEN_ADDRES, ZERO_ADDRESS } from 'constants/network';
 import { ContractType } from 'enums/contract';
-import { Network } from 'enums/network';
 import { wagmiConfig } from 'pages/Root/wagmiConfig';
 import { coinFormatter, Coins, COLLATERAL_DECIMALS } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
@@ -13,7 +11,6 @@ import { Address, encodeFunctionData } from 'viem';
 import { getCollateralByAddress, getCollateralIndex } from './collaterals';
 import { getContractInstance } from './contract';
 import multipleCollateralContract from './contracts/multipleCollateralContract';
-import { delay } from './timer';
 
 export const PARASWAP_TRANSFER_PROXY = '0x6a000f20005980200259b80c5102003040001068';
 
@@ -39,16 +36,6 @@ export const getSwapParams = (
     };
 };
 
-// Construct full API request URL
-const apiRequestUrl = (networkId: Network, methodName: string, queryParams: any) => {
-    return (
-        generalConfig.API_URL +
-        `/1inch-proxy/swap/v6.0/${networkId}${methodName}?${new URLSearchParams(queryParams).toString()}`
-    );
-};
-
-const MAX_RETRY_COUNT = 5;
-
 export const getQuote = async (networkId: SupportedNetwork, swapParams: SwapParams) => {
     const API_URL = 'https://api.paraswap.io';
 
@@ -73,32 +60,6 @@ export const getQuote = async (networkId: SupportedNetwork, swapParams: SwapPara
         console.log(e);
 
         return 0;
-    }
-};
-
-export const checkSwapAllowance = async (
-    networkId: SupportedNetwork,
-    walletAddress: Address,
-    tokenAddress: Address,
-    amount: bigint
-) => {
-    const url = apiRequestUrl(networkId, '/approve/allowance', { tokenAddress, walletAddress });
-
-    try {
-        let response = await fetch(url, { cache: 'no-cache' });
-
-        let retryCount = 0;
-        while (response.status === 429 && retryCount < MAX_RETRY_COUNT) {
-            await delay(2400);
-            response = await fetch(url);
-            retryCount++;
-        }
-
-        const data = response.ok ? await response.json() : { allowance: 0 };
-        return BigInt(data.allowance) >= amount;
-    } catch (e) {
-        console.log(e);
-        return false;
     }
 };
 

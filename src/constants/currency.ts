@@ -4,7 +4,6 @@ import { Coins } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
 
 export const USD_SIGN = '$';
-export const OVER_SIGH = '$OVER';
 
 const CRYPTO_CURRENCY = [
     'DAI',
