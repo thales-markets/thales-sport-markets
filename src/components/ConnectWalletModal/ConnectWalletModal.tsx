@@ -103,7 +103,7 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                     <ButtonsContainer disabled={!termsAccepted}>
                         <SocialLoginWrapper>
                             {SUPPORTED_PARTICAL_CONNECTORS_MODAL.map((item, index) => {
-                                const connector = getSpecificConnectorFromConnectorsArray(connectors, item, true);
+                                const connector = getSpecificConnectorFromConnectorsArray(connectors, item);
                                 if (connector) {
                                     return (
                                         <Button
@@ -123,7 +123,7 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                         </BoxForLabel>
                         <SocialLoginWrapper>
                             {SUPPORTED_WALLET_CONNECTORS_MODAL.map((item, index) => {
-                                const connector = getSpecificConnectorFromConnectorsArray(connectors, item, false);
+                                const connector = getSpecificConnectorFromConnectorsArray(connectors, item);
                                 if (connector) {
                                     return (
                                         <Button
