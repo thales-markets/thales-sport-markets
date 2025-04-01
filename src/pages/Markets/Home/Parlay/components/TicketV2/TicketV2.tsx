@@ -228,7 +228,7 @@ const Ticket: React.FC<TicketProps> = ({
     const dispatch = useDispatch();
 
     const isLiveTicket = useMemo(() => {
-        return markets?.[0]?.live;
+        return !!markets?.[0]?.live;
     }, [markets]);
 
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));

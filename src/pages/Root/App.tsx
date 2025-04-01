@@ -72,7 +72,7 @@ const App = () => {
     useEffect(() => {
         if (connectionStatus === 'connected') {
             connect({
-                connector: getSpecificConnectorFromConnectorsArray(connectors, 'particleWalletSDK', true) as any,
+                connector: getSpecificConnectorFromConnectorsArray(connectors, 'particleWalletSDK') as any,
             });
             dispatch(updateParticleState({ connectedViaParticle: true }));
         }

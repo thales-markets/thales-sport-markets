@@ -9,11 +9,10 @@ import { Connector } from 'wagmi';
 
 export const getSpecificConnectorFromConnectorsArray = (
     connectors: readonly Connector[],
-    name: string,
-    particle?: boolean
+    name: string
 ): Connector | undefined => {
-    if (particle) {
-        return connectors.find((connector: any) => connector?.id == name);
+    if (name == WalletConnections.WALLET_CONNECT) {
+        return connectors.find((connector: any) => connector.id == name && connector.rkDetails.id == name);
     }
     return connectors.find((connector: any) => connector.id == name);
 };
