@@ -5,11 +5,11 @@ import NumericInput from 'components/fields/NumericInput';
 import { generalConfig } from 'config/general';
 import { getErrorToastOptions, getInfoToastOptions, getSuccessToastOptions } from 'config/toast';
 import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
-import { t } from 'i18next';
 import useGetIsWhitelistedQuery from 'queries/freeBets/useGetIsWhitelistedQuery';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getTicketPayment } from 'redux/modules/ticket';
@@ -49,6 +49,7 @@ const NavItems = [
 ];
 
 const FreeBets: React.FC = () => {
+    const { t } = useTranslation();
     const walletAddress = useAccount()?.address || '';
     const networkId = useChainId();
     const { signMessageAsync } = useSignMessage();
@@ -117,15 +118,7 @@ const FreeBets: React.FC = () => {
                 console.log(e);
             }
         }
-    }, [
-        betAmount,
-        numberOfBets,
-        signMessageAsync,
-        walletAddress,
-        networkId,
-        setGeneratedIds,
-        selectedCollateralAddress,
-    ]);
+    }, [t, signMessageAsync, betAmount, numberOfBets, walletAddress, networkId, selectedCollateralAddress]);
 
     const submitDisabled =
         !walletAddress ||
@@ -162,14 +155,14 @@ const FreeBets: React.FC = () => {
             </Header>
 
             {selectedTab === Tab.GENERATE && (
-                <FlexDivColumnNative>
+                <GenerateContainer>
                     <FlexDivColumnCentered>
-                        <span> Balances displayed are for funding wallet</span>
+                        <span>{t('free-bet.admin.disclaimer')}</span>
                         <br />
                         <span> {FUND_WALLET_ADDRESS}</span>
                         <br />
                         <span>
-                            Available gas: {formatCurrency(multipleCollateralBalances.ETH, 4)} ETH
+                            {t('free-bet.admin.available-gas')}: {formatCurrency(multipleCollateralBalances.ETH, 4)} ETH
                             {` (${formatCurrencyWithSign(
                                 USD_SIGN,
                                 getUSDForCollateral(CRYPTO_CURRENCY_MAP.ETH as Coins)
@@ -178,11 +171,15 @@ const FreeBets: React.FC = () => {
                         <br />
                         <FlexDiv>
                             <NumericInput
-                                label="Bet Amount"
+                                label={t('free-bet.admin.bet-amount')}
                                 value={betAmount}
                                 onChange={(e) => {
                                     setBetAmount(+e.target.value);
                                 }}
+                                balance={`${formatCurrencyWithSign(
+                                    null,
+                                    multipleCollateralBalances[selectedCollateral]
+                                )}`}
                                 inputFontWeight="600"
                                 inputPadding="5px 10px"
                                 borderColor={theme.input.borderColor.tertiary}
@@ -195,7 +192,6 @@ const FreeBets: React.FC = () => {
                                             setBetAmount('');
                                         }}
                                         isDetailedView
-                                        displayTokenBalance
                                         exchangeRates={exchangeRates}
                                     />
                                 }
@@ -203,7 +199,7 @@ const FreeBets: React.FC = () => {
                         </FlexDiv>
                         <FlexDiv>
                             <NumericInput
-                                label="Number of Bets"
+                                label={t('free-bet.admin.number-of-bets')}
                                 value={numberOfBets}
                                 onChange={(e) => {
                                     setNumberOfBets(+e.target.value);
@@ -213,7 +209,7 @@ const FreeBets: React.FC = () => {
                         </FlexDiv>
                         <FlexDivCentered>
                             <Button disabled={submitDisabled} onClick={onGenerateBets}>
-                                Generate
+                                {t('free-bet.admin.generate')}
                             </Button>
                         </FlexDivCentered>
                     </FlexDivColumnCentered>
@@ -222,17 +218,19 @@ const FreeBets: React.FC = () => {
                         {!!generatedIds.length && (
                             <FlexDivEnd>
                                 <FlexDivCentered gap={5}>
-                                    Copy All
+                                    {t('free-bet.admin.copy-all')}
                                     <CopyIcon
                                         onClick={() => {
-                                            const toastId = toast.loading('Copying', { autoClose: 1000 });
+                                            const toastId = toast.loading(t('free-bet.admin.copying'), {
+                                                autoClose: 1000,
+                                            });
                                             navigator.clipboard.writeText(
                                                 generatedIds
                                                     .map((id) => `https://overtimemarkets.xyz/profile?freeBet=${id}`)
                                                     .join('\n')
                                             );
                                             toast.update(toastId, {
-                                                ...getInfoToastOptions('Copied all'),
+                                                ...getInfoToastOptions(t('free-bet.admin.copied-all')),
                                                 autoClose: 1000,
                                             });
                                         }}
@@ -247,12 +245,14 @@ const FreeBets: React.FC = () => {
                                     <span>{`${index}. https://overtimemarkets.xyz/profile?freeBet=${id}`}</span>
                                     <CopyIcon
                                         onClick={() => {
-                                            const toastId = toast.loading('Copying', { autoClose: 1000 });
+                                            const toastId = toast.loading(t('free-bet.admin.copying'), {
+                                                autoClose: 1000,
+                                            });
                                             navigator.clipboard.writeText(
                                                 `https://overtimemarkets.xyz/profile?freeBet=${id}`
                                             );
                                             toast.update(toastId, {
-                                                ...getInfoToastOptions('Copied ' + id),
+                                                ...getInfoToastOptions(t('free-bet.admin.copied') + ' ' + id),
                                                 autoClose: 1000,
                                             });
                                         }}
@@ -262,12 +262,16 @@ const FreeBets: React.FC = () => {
                             ))}
                         </FlexDivColumnCentered>
                     </FlexDivColumnCentered>
-                </FlexDivColumnNative>
+                </GenerateContainer>
             )}
             {selectedTab === Tab.STATS && <StatsTable />}
         </>
     );
 };
+
+const GenerateContainer = styled(FlexDivColumnNative)`
+    margin-top: 100px;
+`;
 
 const CopyIcon = styled.i`
     font-size: 24px;

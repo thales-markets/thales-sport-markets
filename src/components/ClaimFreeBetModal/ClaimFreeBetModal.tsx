@@ -98,7 +98,10 @@ const ClaimFreeBetModal: React.FC<ClaimFreeBetModalProps> = ({ freeBet, onClose 
                                 span: <span />,
                             }}
                             values={{
-                                amount: `${freeBet.betAmount} ${getCollateralByAddress(freeBet.collateral, networkId)}`,
+                                amount: `${freeBet.betAmount} $${getCollateralByAddress(
+                                    freeBet.collateral,
+                                    networkId
+                                )}`,
                             }}
                         />
                     </Message>
@@ -110,7 +113,10 @@ const ClaimFreeBetModal: React.FC<ClaimFreeBetModalProps> = ({ freeBet, onClose 
                                 span: <span />,
                             }}
                             values={{
-                                amount: `${freeBet.betAmount} ${getCollateralByAddress(freeBet.collateral, networkId)}`,
+                                amount: `${freeBet.betAmount} $${getCollateralByAddress(
+                                    freeBet.collateral,
+                                    networkId
+                                )}`,
                             }}
                         />
                     </Message>

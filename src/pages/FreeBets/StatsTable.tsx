@@ -57,12 +57,14 @@ const columns = [
         accessorKey: 'claimer',
         cell: (cellProps: any) => <p>{cellProps.cell.getValue()}</p>,
         size: 400,
+        enableSorting: true,
     },
     {
         header: <>Claimed</>,
         accessorKey: 'claimSuccess',
         cell: (cellProps: any) => <p>{cellProps.cell.getValue().toString()}</p>,
         size: 50,
+        enableSorting: true,
     },
 ];
 
@@ -99,7 +101,7 @@ const StatsTable: React.FC = () => {
             }
         }
     }, [signMessageAsync, walletAddress, networkId]);
-    console.log(tableData);
+
     return (
         <Container>
             {!tableData.length && (
@@ -128,6 +130,7 @@ const Container = styled.div`
     display: flex;
     justify-content: center;
     width: 100%;
+    margin-top: 100px;
 `;
 
 const TableContainer = styled.div`

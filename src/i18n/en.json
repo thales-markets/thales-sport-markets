@@ -1069,6 +1069,17 @@
         "top-up-eth-tooltip": "Your ETH gas balance is low.\n\nPlease deposit more ETH or swap other deposited tokens for more ETH"
     },
     "free-bet": {
+        "admin": {
+            "disclaimer": "Balances displayed are for funding wallet",
+            "available-gas": "Available gas",
+            "bet-amount": "Bet amount",
+            "number-of-bets": "Number of bets",
+            "generate": "Generate",
+            "copy-all": "Copy all",
+            "copying": "Copying",
+            "copied-all": "Copied all",
+            "copied": "Copied"
+        },
         "claim-modal": {
             "title": "Welcome to <icon />",
             "explainer": "More details on how to use Free Bet <docsLink>here</docsLink>.",
