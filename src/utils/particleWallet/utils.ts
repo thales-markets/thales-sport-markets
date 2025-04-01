@@ -12,6 +12,7 @@ export const getSpecificConnectorFromConnectorsArray = (
     name: string,
     particle?: boolean
 ): Connector | undefined => {
+    console.log('connectors: ', connectors);
     if (particle) {
         return connectors.find((connector: any) => connector?.id == name);
     }
