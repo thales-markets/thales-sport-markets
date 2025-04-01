@@ -30,28 +30,34 @@ import MyTicket from './components/MyTicket';
 
 const PARLAY_IMAGE_NAME = 'ParlayImage.png';
 const TWITTER_MESSAGES_TEXT = [
-    `I just placed this bet on @OvertimeMarkets! %0ATry it yourself on ${LINKS.Overtime}`,
-    `This is my @OvertimeMarkets bet. Let's get it! %0ATry it yourself on ${LINKS.Overtime}`,
-    `Just flexing my @OvertimeMarkets bet! %0ATake a shot yourself at ${LINKS.Overtime}`,
-    `Peep my @OvertimeMarkets onchain bet! %0ATry your luck as well on ${LINKS.Overtime}`,
     `Another day, another bet locked in on @OvertimeMarkets. Let’s ride this one out! 🌪️ ${LINKS.Overtime}`,
     `If this bet cashes, beers on me! 💰 Come join the action on @OvertimeMarkets: ${LINKS.Overtime}`,
     `Smokin’ odds, guaranteed payouts, and I keep my privacy? @OvertimeMarkets is where it’s at. 👀 ${LINKS.Overtime}`,
     `I’m running it up on @OvertimeMarkets. No bans, no limits, just straight betting 🔥 ${LINKS.Overtime}`,
     `Just placed my bet on @OvertimeMarkets. No sweat, smart contracts got me covered! 💸 ${LINKS.Overtime}`,
     `Made this bet on @OvertimeMarkets, and I’m ready to flex hard. Who’s joining? 💪 ${LINKS.Overtime}`,
-    `Betting where it counts ${LINKS.Overtime}  On-chain and guaranteed payouts with @OvertimeMarkets. 🙌`,
+    `Betting where it counts. On-chain, guaranteed payouts, and the best odds with @OvertimeMarkets. 🙌 ${LINKS.Overtime}`,
     `Just secured another bet on @OvertimeMarkets. Let’s cash this in and flex hard! 💪 ${LINKS.Overtime}`,
     `This bet hits, and it’s beers all weekend! 🍻 @OvertimeMarkets making it easy to stay winning. ${LINKS.Overtime}`,
     `Running the odds like a boss on @OvertimeMarkets – no bans, all gains. 💥 ${LINKS.Overtime}`,
     `Great odds, smart contracts, and I’m fully in. You betting on @OvertimeMarkets yet? 💪 ${LINKS.Overtime}`,
     `Taking my betting game to the next level with @OvertimeMarkets. Join the movement! ⚡ ${LINKS.Overtime}`,
-    `Levelling up my game with @OvertimeMarkets! Are you ready to take the plunge? 🔥 ${LINKS.Overtime}`,
+    `Leveling up my game with @OvertimeMarkets! Are you ready to take the plunge? 🔥 ${LINKS.Overtime}`,
+    `The betting revolution is here. Best odds, full control, no limits. Welcome to @OvertimeMarkets. 🔥 ${LINKS.Overtime}`,
+    `Seamless on-chain betting + the best odds in the game = an absolute no-brainer. 🚀 ${LINKS.Overtime}`,
+    `Revolutionizing sports betting one bet at a time. The best odds are now on-chain. 🚀 ${LINKS.Overtime}`,
+    `A new era for sports betting. Best odds, full transparency, and a token built to change the industry. 🔥 ${LINKS.Overtime}`,
+    `Winning is great. Winning with a system that actually benefits bettors? Even better. 💥 ${LINKS.Overtime}`,
 ];
 
 const OVER_COLLATERAL_TWITTER_MESSAGES_TEXT = [
-    `Here to stack OVER and bets on @OvertimeMarkets – let’s gooo! 💥 ${LINKS.Overtime}`,
-    `Another day, another OVER bet locked in on @OvertimeMarkets – Who's joining the action? 🦓 ${LINKS.Overtime}`,
+    `Betting with $OVER = better odds, bigger wins, and a new way to play. 🚀 ${LINKS.Overtime}`,
+    `A token built to change the sports betting industry. Betting with $OVER just hits different. 📈 ${LINKS.Overtime}`,
+    `With $OVER, every bet isn’t just a bet—it’s a stake in the future of sports betting. 💰 ${LINKS.Overtime}`,
+    `The future of betting is here. With $OVER, you're not just betting—you’re leading the game. 🏆 ${LINKS.Overtime}`,
+    `A new standard for sports betting. Built for the players, powered by $OVER. 🚀 ${LINKS.Overtime}`,
+    `Here to stack $OVER and bets on @OvertimeMarkets – let’s gooo! 💥 ${LINKS.Overtime}`,
+    `Another day, another $OVER bet locked in on @OvertimeMarkets – Who’s joining the action? 🦓 ${LINKS.Overtime}`,
 ];
 
 const TWITTER_MESSAGE_PASTE = '%0A<PASTE YOUR IMAGE>';
