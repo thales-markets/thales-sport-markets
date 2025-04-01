@@ -69,6 +69,6 @@ export const ParlayNumber = styled.span`
     display: block;
     text-transform: capitalize;
     position: absolute;
-    bottom: 20px;
+    bottom: 19px;
     left: 8px;
 `;
