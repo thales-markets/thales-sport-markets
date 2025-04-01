@@ -5,6 +5,7 @@ import { generalConfig } from 'config/general';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { t } from 'i18next';
 import { orderBy } from 'lodash';
+import useGetIsWhitelistedQuery from 'queries/freeBets/useGetIsWhitelistedQuery';
 import { useCallback, useState } from 'react';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
@@ -75,6 +76,11 @@ const StatsTable: React.FC = () => {
 
     const [tableData, setTableData] = useState<any[]>([]);
 
+    const isWhitelistedQuery = useGetIsWhitelistedQuery(walletAddress, networkId);
+    const isWhitelisted = isWhitelistedQuery.isSuccess && isWhitelistedQuery.data;
+
+    const generateDisabled = !walletAddress || !isWhitelisted;
+
     const onGetAllBets = useCallback(async () => {
         const toastId = toast.loading(t('market.toast-message.transaction-pending'));
         const signature = await signMessageAsync({ message: 'Free bets' });
@@ -106,7 +112,9 @@ const StatsTable: React.FC = () => {
         <Container>
             {!tableData.length && (
                 <FlexDivCentered>
-                    <Button onClick={onGetAllBets}>Get</Button>
+                    <Button disabled={generateDisabled} onClick={onGetAllBets}>
+                        Get
+                    </Button>
                 </FlexDivCentered>
             )}
             {!!tableData.length && (

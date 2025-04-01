@@ -10,7 +10,8 @@ import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import useUsersStatsV2Query from 'queries/wallet/useUsersStatsV2Query';
-import React, { Fragment, useCallback, useMemo } from 'react';
+import queryString from 'query-string';
+import React, { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -29,18 +30,17 @@ import { Coins, formatCurrencyWithSign, localStore, truncateAddress } from 'thal
 import { Rates } from 'types/collateral';
 import { FreeBet } from 'types/freeBet';
 import { RootState } from 'types/redux';
-
 import { getCollateralByAddress, isStableCurrency, sortCollateralBalances } from 'utils/collaterals';
-
 import { claimFreeBet } from 'utils/freeBet';
 import useBiconomy from 'utils/useBiconomy';
-
 import { useAccount, useChainId, useClient } from 'wagmi';
 
 const UserStats: React.FC = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+
+    const queryParams: { freeBet?: string } = queryString.parse(location.search);
 
     const networkId = useChainId();
     const client = useClient();
@@ -69,14 +69,16 @@ const UserStats: React.FC = () => {
     const freeBetBalances =
         freeBetBalancesQuery.isSuccess && freeBetBalancesQuery.data ? freeBetBalancesQuery.data : undefined;
 
-    const freeBetQuery = useGetFreeBetQuery(freeBet?.id || '', networkId, { enabled: !!freeBet?.id });
+    const [freeBetId, setFreeBetId] = useState(freeBet?.id || queryParams.freeBet || '');
+
+    const freeBetQuery = useGetFreeBetQuery(freeBetId || queryParams.freeBet || '', networkId, {
+        enabled: !!(freeBetId || queryParams.freeBet),
+    });
 
     const freeBetFromServer = useMemo(
         () =>
-            freeBetQuery.isSuccess && freeBetQuery.data && freeBet?.id
-                ? { ...freeBetQuery.data, id: freeBet?.id }
-                : null,
-        [freeBetQuery.data, freeBetQuery.isSuccess, freeBet?.id]
+            freeBetQuery.isSuccess && freeBetQuery.data && freeBetId ? { ...freeBetQuery.data, id: freeBetId } : null,
+        [freeBetQuery.data, freeBetQuery.isSuccess, freeBetId]
     );
 
     const isFreeBetExists = freeBetBalances && !!Object.values(freeBetBalances).find((balance) => !!balance);
@@ -119,9 +121,9 @@ const UserStats: React.FC = () => {
         return sortedBalances;
     }, [exchangeRates, freeBetBalances, networkId]);
 
-    const onClaimFreeBet = useCallback(() => claimFreeBet(walletAddress, freeBet?.id, networkId, setFreeBet, history), [
+    const onClaimFreeBet = useCallback(() => claimFreeBet(walletAddress, freeBetId, networkId, setFreeBet, history), [
         walletAddress,
-        freeBet,
+        freeBetId,
         setFreeBet,
         history,
         networkId,
@@ -152,6 +154,12 @@ const UserStats: React.FC = () => {
         !freeBetFromServer?.claimSuccess &&
         (!freeBetFromServer.claimAddress ||
             freeBetFromServer.claimAddress.toLowerCase() === walletAddress.toLowerCase());
+
+    useEffect(() => {
+        if (queryParams.freeBet) {
+            setFreeBetId(queryParams.freeBet as string);
+        }
+    }, [freeBet, queryParams.freeBet]);
 
     return (
         <Wrapper>

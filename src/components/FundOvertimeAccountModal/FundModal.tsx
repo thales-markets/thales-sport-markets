@@ -11,7 +11,8 @@ import QRCodeModal from 'pages/AARelatedPages/Deposit/components/QRCodeModal';
 import useGetFreeBetQuery from 'queries/freeBets/useGetFreeBetQuery';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
-import React, { useCallback, useMemo, useState } from 'react';
+import queryString from 'query-string';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -38,6 +39,9 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
     const [freeBet, setFreeBet] = useLocalStorage<FreeBet | undefined>(LOCAL_STORAGE_KEYS.FREE_BET_ID, undefined);
     const history = useHistory();
 
+    const queryParams: { freeBet?: string } = queryString.parse(location.search);
+
+    const [freeBetId, setFreeBetId] = useState(freeBet?.id || queryParams.freeBet || '');
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const { t } = useTranslation();
 
@@ -60,14 +64,12 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
         }
     );
 
-    const freeBetQuery = useGetFreeBetQuery(freeBet?.id || '', networkId, { enabled: !!freeBet?.id });
+    const freeBetQuery = useGetFreeBetQuery(freeBetId || '', networkId, { enabled: !!freeBetId });
 
     const freeBetFromServer = useMemo(
         () =>
-            freeBetQuery.isSuccess && freeBetQuery.data && freeBet?.id
-                ? { ...freeBetQuery.data, id: freeBet?.id }
-                : null,
-        [freeBetQuery.data, freeBetQuery.isSuccess, freeBet?.id]
+            freeBetQuery.isSuccess && freeBetQuery.data && freeBetId ? { ...freeBetQuery.data, id: freeBetId } : null,
+        [freeBetQuery.data, freeBetQuery.isSuccess, freeBetId]
     );
 
     const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
@@ -106,9 +108,9 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
         return getOnRamperUrl(apiKey, walletAddress, networkId);
     }, [walletAddress, networkId, apiKey]);
 
-    const onClaimFreeBet = useCallback(() => claimFreeBet(walletAddress, freeBet?.id, networkId, setFreeBet, history), [
+    const onClaimFreeBet = useCallback(() => claimFreeBet(walletAddress, freeBetId, networkId, setFreeBet, history), [
         walletAddress,
-        freeBet,
+        freeBetId,
         setFreeBet,
         history,
         networkId,
@@ -119,6 +121,12 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
         !freeBetFromServer?.claimSuccess &&
         (!freeBetFromServer.claimAddress ||
             freeBetFromServer.claimAddress.toLowerCase() === walletAddress.toLowerCase());
+
+    useEffect(() => {
+        if (queryParams.freeBet) {
+            setFreeBetId(queryParams.freeBet as string);
+        }
+    }, [freeBet, queryParams.freeBet]);
 
     return (
         <Modal
