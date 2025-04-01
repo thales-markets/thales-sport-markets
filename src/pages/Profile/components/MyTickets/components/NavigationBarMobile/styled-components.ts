@@ -58,7 +58,7 @@ export const NotificationCount = styled.div`
     position: absolute;
     border-radius: 50%;
     top: -6px;
-    right: -8px;
+    right: -2px;
     display: flex;
     align-items: center;
     text-align: center;
@@ -68,10 +68,8 @@ export const NotificationCount = styled.div`
     background-color: ${(props) => props.theme.background.quaternary};
     box-shadow: ${(props) => props.theme.shadow.notification};
     @media (max-width: 767px) {
-        height: 12px;
-        width: 12px;
-        right: 0;
-        top: -4px;
+        top: -6px;
+        right: 8px;
     }
 `;
 

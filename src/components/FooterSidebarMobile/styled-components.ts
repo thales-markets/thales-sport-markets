@@ -28,7 +28,7 @@ export const ItemLabel = styled.p`
 `;
 
 export const ItemIcon = styled.i<{ parlay?: boolean; iteration?: number; fontSize?: number }>`
-    font-size: ${(props) => props.fontSize || 20}px;
+    font-size: ${(props) => props.fontSize || 22}px;
     font-weight: 400;
     text-transform: none;
     margin: auto;
@@ -64,12 +64,11 @@ export const ParlayNumber = styled.span`
     font-weight: 600;
     font-size: 12px;
     line-height: 12px;
-    color: ${(props) => props.theme.background.primary};
+    color: ${(props) => props.theme.textColor.primary};
+    background: ${(props) => props.theme.background.secondary};
     display: block;
     text-transform: capitalize;
     position: absolute;
-    bottom: 15px;
-    left: 6px;
-    background: ${(props) => props.theme.background.septenary};
-    padding: 3px 5px;
+    bottom: 18px;
+    left: 8px;
 `;

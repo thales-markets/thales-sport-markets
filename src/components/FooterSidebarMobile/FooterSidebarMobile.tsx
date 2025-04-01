@@ -41,7 +41,7 @@ const FooterSidebarMobile: React.FC<FooterSidebarMobileProps> = ({ setParlayMobi
             {isConnected && (
                 <ItemContainer>
                     <SPAAnchor href={buildHref(ROUTES.Profile)}>
-                        <ProfileIconWidget margin="auto" avatarSize={18} color={theme.textColor.primary} />
+                        <ProfileIconWidget margin="auto" avatarSize={20} color={theme.textColor.primary} />
                     </SPAAnchor>
                     <ItemLabel>Account</ItemLabel>
                 </ItemContainer>
