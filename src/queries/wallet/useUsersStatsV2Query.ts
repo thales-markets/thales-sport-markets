@@ -93,7 +93,7 @@ const useUsersStatsV2Query = (
                 const promisesLength = promises.length;
 
                 const tickets = promisesResult
-                    .slice(0, promisesLength - 3)
+                    .slice(0, promisesLength - 4)
                     .map((allData) => [
                         ...allData.ticketsData,
                         ...allData.freeBetsData,
