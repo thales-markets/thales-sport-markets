@@ -8,7 +8,7 @@ import { getTicket } from 'redux/modules/ticket';
 import { useTheme } from 'styled-components';
 import { buildHref } from 'utils/routes';
 import { useAccount } from 'wagmi';
-import { Container, ItemContainer, ItemIcon, ParlayNumber } from './styled-components';
+import { Container, ItemContainer, ItemIcon, ItemLabel, ParlayNumber } from './styled-components';
 
 type FooterSidebarMobileProps = {
     setParlayMobileVisibility: (value: boolean) => void;
@@ -41,27 +41,27 @@ const FooterSidebarMobile: React.FC<FooterSidebarMobileProps> = ({ setParlayMobi
             {isConnected && (
                 <ItemContainer>
                     <SPAAnchor href={buildHref(ROUTES.Profile)}>
-                        <ProfileIconWidget avatarSize={32} color={theme.textColor.primary} />
+                        <ProfileIconWidget margin="auto" avatarSize={18} color={theme.textColor.primary} />
                     </SPAAnchor>
+                    <ItemLabel>Account</ItemLabel>
                 </ItemContainer>
             )}
             <ItemContainer onClick={() => setParlayMobileVisibility(true)}>
-                <ItemIcon
-                    fontSize={36}
-                    iteration={ticketLength}
-                    className={`icon icon--ticket-horizontal ${pulse ? 'pulse' : ''}`}
-                />
-                <ParlayNumber>{ticketLength || ''}</ParlayNumber>
+                <ItemIcon iteration={ticketLength} className={`icon icon--ticket-horizontal ${pulse ? 'pulse' : ''}`} />
+                {ticketLength > 0 && <ParlayNumber>{ticketLength || ''}</ParlayNumber>}
+
+                <ItemLabel>Parlay</ItemLabel>
             </ItemContainer>
             {setShowBurger && (
                 <ItemContainer>
                     <ItemIcon
                         className="icon icon--filters2"
-                        fontSize={40}
+                        fontSize={22}
                         onClick={() => {
                             setShowBurger(true);
                         }}
                     />
+                    <ItemLabel>Filters</ItemLabel>
                 </ItemContainer>
             )}
         </Container>

@@ -16,6 +16,9 @@ export const Wrapper = styled(FlexDivRow)`
 `;
 
 export const ItemWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
     position: relative;
     text-align: start;
     white-space: pre;
@@ -25,7 +28,14 @@ export const ItemWrapper = styled.div`
     }
 `;
 
+export const ItemLabel = styled.p<{ selected?: boolean }>`
+    font-size: 10px;
+    font-weight: 600;
+    color: ${(props) => (props.selected ? props.theme.textColor.quaternary : props.theme.textColor.primary)};
+`;
+
 export const Item = styled.span`
+    text-align: center;
     color: ${(props) => props.theme.textColor.primary};
     font-size: 12px;
     font-weight: 600;
@@ -37,8 +47,8 @@ export const Item = styled.span`
     }
 `;
 
-export const Icon = styled.i<{ fontSize?: number; selected?: boolean }>`
-    font-size: ${(props) => props.fontSize || 28}px;
+export const Icon = styled.i<{ selected?: boolean }>`
+    font-size: 20px;
     font-weight: 400;
     text-transform: none;
     color: ${(props) => (props.selected ? props.theme.textColor.quaternary : props.theme.textColor.primary)};
