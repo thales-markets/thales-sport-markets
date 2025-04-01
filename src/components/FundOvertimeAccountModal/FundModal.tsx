@@ -23,7 +23,7 @@ import { truncateAddress } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { FreeBet } from 'types/freeBet';
 import { RootState } from 'types/redux';
-import { getCollateralAddress, getCollateralIndex, getCollaterals } from 'utils/collaterals';
+import { getCollateralAddress, getCollateralByAddress, getCollateralIndex, getCollaterals } from 'utils/collaterals';
 import { claimFreeBet } from 'utils/freeBet';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import { getOnRamperUrl } from 'utils/particleWallet/utils';
@@ -228,7 +228,12 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                             borderRadius="8px"
                             className="pulse"
                         >
-                            {t('get-started.fund-account.claim-free-bet')}
+                            {t('get-started.fund-account.claim-free-bet', {
+                                amount: `${freeBetFromServer?.betAmount} $${getCollateralByAddress(
+                                    freeBetFromServer.collateral,
+                                    networkId
+                                )}`,
+                            })}
                             <HandsIcon className="icon icon--hands-coins" />
                         </ClaimBetButton>
                     </Container>

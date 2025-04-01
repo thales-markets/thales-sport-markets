@@ -30,7 +30,7 @@ import { Rates } from 'types/collateral';
 import { FreeBet } from 'types/freeBet';
 import { RootState } from 'types/redux';
 
-import { isStableCurrency, sortCollateralBalances } from 'utils/collaterals';
+import { getCollateralByAddress, isStableCurrency, sortCollateralBalances } from 'utils/collaterals';
 
 import { claimFreeBet } from 'utils/freeBet';
 import useBiconomy from 'utils/useBiconomy';
@@ -302,7 +302,12 @@ const UserStats: React.FC = () => {
                     className="pulse"
                     margin="10px 0 0 0 "
                 >
-                    {t('profile.account-summary.claim-free-bet')}
+                    {t('profile.account-summary.claim-free-bet', {
+                        amount: `${freeBetFromServer?.betAmount} $${getCollateralByAddress(
+                            freeBetFromServer.collateral,
+                            networkId
+                        )}`,
+                    })}
                     <HandsIcon className="icon icon--hands-coins" />
                 </ClaimBetButton>
             )}
@@ -417,6 +422,8 @@ const HandsIcon = styled.i`
 `;
 
 const ClaimBetButton = styled(Button)`
+    font-size: 15px;
+    padding: 3px 15px;
     &.pulse {
         animation: pulsing 1.5s ease-in;
         animation-iteration-count: infinite;
