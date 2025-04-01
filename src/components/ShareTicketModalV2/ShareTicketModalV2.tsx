@@ -29,28 +29,28 @@ import MyTicket from './components/MyTicket';
 
 const PARLAY_IMAGE_NAME = 'ParlayImage.png';
 const TWITTER_MESSAGES_TEXT = [
-    `I just placed this bet on @OvertimeMarkets! %0ATry it yourself on ${LINKS.Overtime}`,
-    `This is my @OvertimeMarkets bet. Let's get it! %0ATry it yourself on ${LINKS.Overtime}`,
-    `Just flexing my @OvertimeMarkets bet! %0ATake a shot yourself at ${LINKS.Overtime}`,
-    `Peep my @OvertimeMarkets onchain bet! %0ATry your luck as well on ${LINKS.Overtime}`,
-    `Another day, another bet locked in on @OvertimeMarkets. Let’s ride this one out! 🌪️ ${LINKS.Overtime}`,
-    `If this bet cashes, beers on me! 💰 Come join the action on @OvertimeMarkets: ${LINKS.Overtime}`,
-    `Smokin’ odds, guaranteed payouts, and I keep my privacy? @OvertimeMarkets is where it’s at. 👀 ${LINKS.Overtime}`,
-    `I’m running it up on @OvertimeMarkets. No bans, no limits, just straight betting 🔥 ${LINKS.Overtime}`,
-    `Just placed my bet on @OvertimeMarkets. No sweat, smart contracts got me covered! 💸 ${LINKS.Overtime}`,
-    `Made this bet on @OvertimeMarkets, and I’m ready to flex hard. Who’s joining? 💪 ${LINKS.Overtime}`,
-    `Betting where it counts ${LINKS.Overtime}  On-chain and guaranteed payouts with @OvertimeMarkets. 🙌`,
-    `Just secured another bet on @OvertimeMarkets. Let’s cash this in and flex hard! 💪 ${LINKS.Overtime}`,
-    `This bet hits, and it’s beers all weekend! 🍻 @OvertimeMarkets making it easy to stay winning. ${LINKS.Overtime}`,
-    `Running the odds like a boss on @OvertimeMarkets – no bans, all gains. 💥 ${LINKS.Overtime}`,
-    `Great odds, smart contracts, and I’m fully in. You betting on @OvertimeMarkets yet? 💪 ${LINKS.Overtime}`,
-    `Taking my betting game to the next level with @OvertimeMarkets. Join the movement! ⚡ ${LINKS.Overtime}`,
-    `Levelling up my game with @OvertimeMarkets! Are you ready to take the plunge? 🔥 ${LINKS.Overtime}`,
+    `I just placed this bet on @Overtime_io! %0ATry it yourself on ${LINKS.Overtime}`,
+    `This is my @Overtime_io bet. Let's get it! %0ATry it yourself on ${LINKS.Overtime}`,
+    `Just flexing my @Overtime_io bet! %0ATake a shot yourself at ${LINKS.Overtime}`,
+    `Peep my @Overtime_io onchain bet! %0ATry your luck as well on ${LINKS.Overtime}`,
+    `Another day, another bet locked in on @Overtime_io. Let’s ride this one out! 🌪️ ${LINKS.Overtime}`,
+    `If this bet cashes, beers on me! 💰 Come join the action on @Overtime_io: ${LINKS.Overtime}`,
+    `Smokin’ odds, guaranteed payouts, and I keep my privacy? @Overtime_io is where it’s at. 👀 ${LINKS.Overtime}`,
+    `I’m running it up on @Overtime_io. No bans, no limits, just straight betting 🔥 ${LINKS.Overtime}`,
+    `Just placed my bet on @Overtime_io. No sweat, smart contracts got me covered! 💸 ${LINKS.Overtime}`,
+    `Made this bet on @Overtime_io, and I’m ready to flex hard. Who’s joining? 💪 ${LINKS.Overtime}`,
+    `Betting where it counts ${LINKS.Overtime}  On-chain and guaranteed payouts with @Overtime_io. 🙌`,
+    `Just secured another bet on @Overtime_io. Let’s cash this in and flex hard! 💪 ${LINKS.Overtime}`,
+    `This bet hits, and it’s beers all weekend! 🍻 @Overtime_io making it easy to stay winning. ${LINKS.Overtime}`,
+    `Running the odds like a boss on @Overtime_io – no bans, all gains. 💥 ${LINKS.Overtime}`,
+    `Great odds, smart contracts, and I’m fully in. You betting on @Overtime_io yet? 💪 ${LINKS.Overtime}`,
+    `Taking my betting game to the next level with @Overtime_io. Join the movement! ⚡ ${LINKS.Overtime}`,
+    `Levelling up my game with @Overtime_io! Are you ready to take the plunge? 🔥 ${LINKS.Overtime}`,
 ];
 
 const THALES_COLLATERAL_TWITTER_MESSAGES_TEXT = [
-    `Here to stack THALES and bets on @OvertimeMarkets – let’s gooo! 💥 ${LINKS.Overtime}`,
-    `Another day, another THALES bet locked in on @OvertimeMarkets – Who's joining the action? 🦓 ${LINKS.Overtime}`,
+    `Here to stack THALES and bets on @Overtime_io – let’s gooo! 💥 ${LINKS.Overtime}`,
+    `Another day, another THALES bet locked in on @Overtime_io – Who's joining the action? 🦓 ${LINKS.Overtime}`,
 ];
 
 const TWITTER_MESSAGE_PASTE = '%0A<PASTE YOUR IMAGE>';
