@@ -12,13 +12,14 @@ const navItems = [
     {
         id: ProfileTab.STATS,
         icon: 'icon icon--logo',
-        name: 'Stats',
+        name: 'Info',
     },
     {
         id: ProfileTab.ACCOUNT,
         icon: 'icon icon--wallet2',
         name: 'Account',
     },
+
     {
         id: ProfileTab.OPEN_CLAIMABLE,
         icon: 'icon icon--ticket-horizontal',
