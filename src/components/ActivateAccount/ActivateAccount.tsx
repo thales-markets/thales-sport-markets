@@ -140,7 +140,7 @@ const ActivateAccount: React.FC<any> = () => {
 
     return (
         <>
-            {!showSuccessfulDepositModal && (
+            {showSuccessfulDepositModal && (
                 <Container show={!isMinimizedModal}>
                     <Wrapper show={!isMinimizedModal}>
                         {!isMinimizedModal ? (
