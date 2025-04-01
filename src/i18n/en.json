@@ -1153,7 +1153,7 @@
         "activate-account": {
             "deposit": "Deposit received!",
             "activate": "Activate your Overtime Account for this device.",
-            "success": "Your first deposit is received in your Overtime Account successfully. Now it's time to Activate your account by clicking on the button below and you are all set!",
+            "success": "Your first deposit is received in your Overtime Account successfully. Click on the button bellow, sign the message pop-up and you are all set!",
             "activate-my-account": "Activate My Account"
         }
     },
