@@ -77,6 +77,20 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
     };
 
     useEffect(() => {
+        const isBiconomyLocalStorage = localStore.get(LOCAL_STORAGE_KEYS.USE_BICONOMY);
+        if (isBiconomyLocalStorage === undefined) {
+            const overdropState = localStore.get(LOCAL_STORAGE_KEYS.OVERDROP_STATE);
+            if (overdropState === undefined) {
+                dispatch(setIsBiconomy(true));
+                localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, true);
+            } else {
+                dispatch(setIsBiconomy(false));
+                localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, false);
+            }
+        }
+    }, [dispatch]);
+
+    useEffect(() => {
         if (isSuccess) {
             onClose();
         }
