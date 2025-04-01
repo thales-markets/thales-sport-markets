@@ -1599,6 +1599,11 @@ const Ticket: React.FC<TicketProps> = ({
 
                 if (!txHash) {
                     // there are scenarios when waitForTransactionReceipt is failing because tx hash doesn't exist
+                    logErrorToDiscord(
+                        { message: 'Transaction hash not received' } as Error,
+                        { componentStack: '' },
+                        `txHash=${txHash}`
+                    );
                     setIsBuying(false);
                     refetchBalances(walletAddress, networkId);
                     toast.update(toastId, getErrorToastOptions(t('markets.parlay.tx-not-received')));
