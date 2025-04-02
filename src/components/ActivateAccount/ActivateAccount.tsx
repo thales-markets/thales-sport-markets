@@ -5,6 +5,7 @@ import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
+import queryString from 'query-string';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -23,6 +24,7 @@ import {
     mapMultiCollateralBalances,
 } from 'utils/collaterals';
 import { isSmallDevice } from 'utils/device';
+import { getFreeBetModalShown } from 'utils/freeBet';
 import { getFundModalShown, setFundModalShown } from 'utils/fundModal';
 import useBiconomy from 'utils/useBiconomy';
 import { Client } from 'viem';
@@ -38,6 +40,8 @@ const ActivateAccount: React.FC<any> = () => {
     const { address, isConnected } = useAccount();
     const smartAddres = useBiconomy();
     const walletAddress = (isBiconomy ? smartAddres : address) || '';
+
+    const queryParams: { freeBet?: string } = queryString.parse(location.search);
 
     const [showSuccessfulDepositModal, setShowSuccessfulDepositModal] = useState<boolean>(false);
     const [isMinimizedModal, setIsMinimized] = useState<boolean>(false);
@@ -104,8 +108,8 @@ const ActivateAccount: React.FC<any> = () => {
     ]);
 
     useEffect(() => {
-        if (isConnected && isBiconomy) {
-            if (totalBalanceValue?.total === undefined) {
+        if (isConnected && isBiconomy && !queryParams.freeBet) {
+            if (totalBalanceValue?.total === undefined || getFreeBetModalShown()) {
                 return;
             }
             if (totalBalanceValue && totalBalanceValue?.total > 3) {
@@ -136,7 +140,7 @@ const ActivateAccount: React.FC<any> = () => {
                 setFundModalShown(false);
             }
         }
-    }, [totalBalanceValue, networkId, isConnected, isBiconomy, smartAddres]);
+    }, [totalBalanceValue, networkId, isConnected, isBiconomy, smartAddres, queryParams.freeBet]);
 
     return (
         <>

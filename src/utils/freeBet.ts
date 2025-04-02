@@ -58,3 +58,11 @@ export const claimFreeBet = async (
         }
     }
 };
+
+let freeBetModalShown = false;
+
+export const setFreeBetModalShown = (value: boolean) => {
+    freeBetModalShown = value;
+};
+
+export const getFreeBetModalShown = () => freeBetModalShown;

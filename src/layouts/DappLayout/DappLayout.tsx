@@ -22,6 +22,7 @@ import { FlexDivColumn } from 'styles/common';
 import { isAndroid, isMetamask } from 'thales-utils';
 import { RootState } from 'types/redux';
 import { isMobile } from 'utils/device';
+import { setFreeBetModalShown } from 'utils/freeBet';
 import { setReferralId } from 'utils/referral';
 import { navigateTo } from 'utils/routes';
 import useBiconomy from 'utils/useBiconomy';
@@ -77,6 +78,9 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
     }, [freeBetFromServer, setFreeBet]);
 
     useEffect(() => {
+        if (freeBetModalParam) {
+            setFreeBetModalShown(true);
+        }
         setTimeout(async () => {
             if (queryParams.freeBet && freeBetFromServer && freeBetModalParam) {
                 if (walletRef.current) {
@@ -160,6 +164,7 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
                     <ClaimFreeBetModal
                         onClose={() => {
                             setFreeBetModalParam(undefined);
+                            setFreeBetModalShown(false);
                         }}
                         freeBet={freeBetFromServer}
                     />
