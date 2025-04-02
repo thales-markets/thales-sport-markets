@@ -17,7 +17,7 @@ import sessionValidationContract from './contracts/sessionValidationContract';
 import sgpTradingProcessorContract from './contracts/sgpTradingProcessorContract';
 import sportsAMMV2Contract from './contracts/sportsAMMV2Contract';
 
-export const GAS_LIMIT = 0.2;
+export const GAS_LIMIT = 1;
 const ERROR_SESSION_NOT_FOUND = 'Error: Session not found.';
 
 export const sendBiconomyTransaction = async (params: {
