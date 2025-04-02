@@ -74,7 +74,10 @@ export const GameOfLabel = styled.span<{ selected?: boolean; isLive?: boolean; i
     left: ${(props) => (props.isLeagueInfoVisible ? '48px' : '12px')};
     text-transform: uppercase;
     @media (max-width: 600px) {
+        top: 10px;
         text-align: center;
+        left: ${(props) => (props.isLive ? '55px' : '0')};
+        right: 0px;
     }
 `;
 
