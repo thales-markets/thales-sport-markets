@@ -75,7 +75,7 @@ const customModalStyles = {
         backdropFilter: 'unset',
         WebkitBackdropFilter: 'unset',
         webkitBackdropFilter: 'unset',
-        zIndex: '5',
+        zIndex: '10',
     },
 };
 
