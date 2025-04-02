@@ -27,6 +27,7 @@ import {
     FilterContainer,
     HeaderIcon,
     SettingsContainer,
+    SettingsWrapper,
     SortIndicator,
     SortMenu,
     SortMenuItem,
@@ -127,23 +128,25 @@ const Filters: React.FC<FiltersProps> = ({ hideSwitch, isMainPageView }) => {
                         setTimeFiltersOpen(!timeFiltersOpen);
                     }}
                 >
-                    <Tooltip overlay={isMobile ? '' : 'Select date range'}>
-                        <FlexDivCentered gap={2}>
-                            <HeaderIcon
-                                iconColor={datePeriodFilter > 0 ? theme.textColor.quaternary : ''}
-                                className="icon icon--clock"
-                            />
-                            {datePeriodFilter > 0 ? <Label active>{datePeriodFilter}H </Label> : <Label>ALL</Label>}
-                        </FlexDivCentered>
-                    </Tooltip>
+                    <SettingsWrapper>
+                        <Tooltip overlay={isMobile ? '' : 'Select date range'}>
+                            <FlexDivCentered gap={2}>
+                                <HeaderIcon
+                                    iconColor={datePeriodFilter > 0 ? theme.textColor.quaternary : ''}
+                                    className="icon icon--clock"
+                                />
+                                {datePeriodFilter > 0 ? <Label active>{datePeriodFilter}H </Label> : <Label>ALL</Label>}
+                            </FlexDivCentered>
+                        </Tooltip>
 
-                    {timeFiltersOpen && (
-                        <TimeFiltersDropdown>
-                            <DropDown>
-                                <TimeFilters />
-                            </DropDown>
-                        </TimeFiltersDropdown>
-                    )}
+                        {timeFiltersOpen && (
+                            <TimeFiltersDropdown>
+                                <DropDown>
+                                    <TimeFilters />
+                                </DropDown>
+                            </TimeFiltersDropdown>
+                        )}
+                    </SettingsWrapper>
                 </TimeContainer>
             </OutsideClickHandler>
 
@@ -155,35 +158,37 @@ const Filters: React.FC<FiltersProps> = ({ hideSwitch, isMainPageView }) => {
                         setDropdownIsOpen(!dropdownIsOpen);
                     }}
                 >
-                    <Tooltip overlay={isMobile ? '' : 'Select odds format'}>
-                        <FlexDivCentered gap={2}>
-                            <HeaderIcon className="icon icon--settings" />
-                            <Label>{selectedOddsType} </Label>
-                        </FlexDivCentered>
-                    </Tooltip>
+                    <SettingsWrapper>
+                        <Tooltip overlay={isMobile ? '' : 'Select odds format'}>
+                            <FlexDivCentered gap={2}>
+                                <HeaderIcon className="icon icon--settings" />
+                                <Label>{t(`common.odds.${selectedOddsType}`)}</Label>
+                            </FlexDivCentered>
+                        </Tooltip>
 
-                    {dropdownIsOpen && (
-                        <DropdownContainer>
-                            <DropDown>
-                                {ODDS_TYPES.map((item: OddsType, index: number) => {
-                                    return (
-                                        <DropDownItem
-                                            key={index}
-                                            isSelected={selectedOddsType === item}
-                                            onClick={() => {
-                                                setSelectedOddsType(item);
-                                                setDropdownIsOpen(false);
-                                            }}
-                                        >
-                                            <FlexDivCentered>
-                                                <Odds> {t(`common.odds.${item}`)}</Odds>
-                                            </FlexDivCentered>
-                                        </DropDownItem>
-                                    );
-                                })}
-                            </DropDown>
-                        </DropdownContainer>
-                    )}
+                        {dropdownIsOpen && (
+                            <DropdownContainer>
+                                <DropDown>
+                                    {ODDS_TYPES.map((item: OddsType, index: number) => {
+                                        return (
+                                            <DropDownItem
+                                                key={index}
+                                                isSelected={selectedOddsType === item}
+                                                onClick={() => {
+                                                    setSelectedOddsType(item);
+                                                    setDropdownIsOpen(false);
+                                                }}
+                                            >
+                                                <FlexDivCentered>
+                                                    <Odds>{t(`common.odds.${item}`)}</Odds>
+                                                </FlexDivCentered>
+                                            </DropDownItem>
+                                        );
+                                    })}
+                                </DropDown>
+                            </DropdownContainer>
+                        )}
+                    </SettingsWrapper>
                 </SettingsContainer>
             </OutsideClickHandler>
         </FilterContainer>

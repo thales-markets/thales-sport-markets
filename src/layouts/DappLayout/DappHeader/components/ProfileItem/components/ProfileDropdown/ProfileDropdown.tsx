@@ -94,7 +94,7 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ setShowDropdown }) =>
             <Separator />
 
             <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Profile)}>
-                <Container clickable onClick={setShowDropdown.bind(this, false)}>
+                <Container clickable onClick={() => setShowDropdown(false)}>
                     <CopyIcon className="icon icon--logo" /> <Text>{t('profile.dropdown.profile')}</Text>
                 </Container>
             </SPAAnchor>
@@ -117,7 +117,7 @@ const Dropdown = styled.div`
     cursor: default;
     z-index: 1000;
     position: absolute;
-    top: 32px;
+    top: 36px;
     left: 0;
     display: flex;
     flex-direction: column;

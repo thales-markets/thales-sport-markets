@@ -220,8 +220,8 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                     </BiconomyContainer>
 
                     <CheckboxContainer disabled={false}>
-                        <Checkbox value={''} checked={termsAccepted} onChange={setTerms.bind(this, !termsAccepted)} />
-                        <Label onClick={setTerms.bind(this, !termsAccepted)}>{t('common.wallet.agree-terms')}</Label>
+                        <Checkbox value={''} checked={termsAccepted} onChange={() => setTerms(!termsAccepted)} />
+                        <Label onClick={() => setTerms(!termsAccepted)}>{t('common.wallet.agree-terms')}</Label>
                     </CheckboxContainer>
 
                     <FooterContainer>
