@@ -122,8 +122,8 @@ export const buildTxForSwap = async (
             srcToken: swapParams.src,
             destToken: swapParams.dst,
             srcAmount: swapParams.amount, // 100 DAI
-            destAmount: quote.priceRoute.destAmount,
             userAddress: walletAddress,
+            slippage: 200, // Eg: for 2.5% slippage, set the value to 2.5 * 100 = 250; for 10% = 1000.
         });
 
         const transaction = {
