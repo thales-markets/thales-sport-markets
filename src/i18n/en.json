@@ -170,7 +170,7 @@
         "odds": {
             "american-odds": "American Odds",
             "decimal-odds": "Decimal Odds",
-            "implied-odds": "Normalized Implied Odds"
+            "implied-odds": "Implied Odds"
         },
         "coming-soon": "Coming soon!",
         "h2h-tooltip": "This is a head-to-head market. The winner will be the driver who finished on a better place in the main race.",
@@ -519,6 +519,7 @@
         "migration-modal": {
             "title": "Migrate <thalesIcon /> to <overtimeIcon />",
             "description": "<p>Thales DAO has officially migrated to Overtime DAO. You can migrate your $THALES tokens to $OVER tokens here.</p>",
+            "unstake-description": "<p>Still staking $THALES? Unstake or vest $THALES <stakingLink>here</stakingLink>.</p><p>Staking THALES/WETH LP tokens? Unstake <lpStakingLink>here</lpStakingLink>.</p>",
             "info-description": "<p>1 $THALES = 1 $OVER</p><p>More details on the migration in <tipLink>TIP-238</tipLink>.</p>",
             "amount-label": "$THALES to migrate",
             "over-to-receive": "$OVER to receive",

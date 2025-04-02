@@ -302,7 +302,7 @@ const DetailedDropdown = styled(FlexDivColumnCentered)<{
     borderColor?: string;
 }>`
     position: absolute;
-    top: ${(props) => (props.top ? props.top : '35px')};
+    top: ${(props) => (props.top ? props.top : '34px')};
     right: 0px;
     width: ${(props) => (props.width ? props.width : '350px')};
     padding: 5px 3px;

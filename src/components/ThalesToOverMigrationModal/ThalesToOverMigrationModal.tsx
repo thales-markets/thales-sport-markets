@@ -271,6 +271,16 @@ const ThalesToOverMigrationModal: React.FC<ThalesToOverMigrationModalProps> = ({
                         }}
                     />
                 </InfoDescription>
+                <Description>
+                    <Trans
+                        i18nKey={'profile.migration-modal.unstake-description'}
+                        components={{
+                            p: <p />,
+                            stakingLink: <TipLink href={LINKS.UnstakingThales} target="_blank" rel="noreferrer" />,
+                            lpStakingLink: <TipLink href={LINKS.UnstakingLp} target="_blank" rel="noreferrer" />,
+                        }}
+                    />
+                </Description>
                 <InputContainer>
                     <NumericInput
                         value={amount}

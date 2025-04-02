@@ -147,6 +147,10 @@ export const SettingsContainer = styled(FlexDivRowCentered)`
     cursor: pointer;
 `;
 
+export const SettingsWrapper = styled.div`
+    position: relative;
+`;
+
 export const Divider = styled.div`
     width: 2px;
     background-color: ${(props) => props.theme.textColor.secondary};
@@ -178,7 +182,6 @@ export const DropDown = styled(FlexDivColumn)`
     color: white;
     border-radius: 5px;
     position: absolute;
-    margin-top: 2px;
     padding: 4px;
     width: 100%;
     gap: 2px;
