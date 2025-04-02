@@ -1525,7 +1525,7 @@ const Ticket: React.FC<TicketProps> = ({
                 const parsedTotalQuote = parseEther(floorNumberToDecimals(totalQuote, 18).toString());
                 const additionalSlippage = parseEther(isLiveTicket || isSgp ? liveBetSlippage / 100 + '' : '0.02');
 
-                let tx;
+                let txHash;
 
                 if (isLiveTicket || isSgp) {
                     const liveTradeDataOdds = tradeData[0].odds;
@@ -1553,7 +1553,7 @@ const Ticket: React.FC<TicketProps> = ({
                             });
 
                             if (txReceipt.status === 'success') {
-                                tx = await getTradingProcessorTransaction(
+                                txHash = await getTradingProcessorTransaction(
                                     isLiveTicket,
                                     isSgp,
                                     collateralAddress,
@@ -1571,7 +1571,7 @@ const Ticket: React.FC<TicketProps> = ({
                             }
                         }
                     } else {
-                        tx = await getTradingProcessorTransaction(
+                        txHash = await getTradingProcessorTransaction(
                             isLiveTicket,
                             isSgp,
                             swapToOver ? overCollateralAddress : collateralAddress,
@@ -1589,7 +1589,7 @@ const Ticket: React.FC<TicketProps> = ({
                         );
                     }
                 } else {
-                    tx = await getSportsAMMV2Transaction(
+                    txHash = await getSportsAMMV2Transaction(
                         swapToOver ? overCollateralAddress : collateralAddress,
                         isDefaultCollateral && !swapToOver,
                         isEth && !swapToOver,
@@ -1609,8 +1609,21 @@ const Ticket: React.FC<TicketProps> = ({
                     );
                 }
 
+                if (!txHash) {
+                    // there are scenarios when waitForTransactionReceipt is failing because tx hash doesn't exist
+                    logErrorToDiscord(
+                        { message: 'Transaction hash not received' } as Error,
+                        { componentStack: '' },
+                        `txHash=${txHash}`
+                    );
+                    setIsBuying(false);
+                    refetchBalances(walletAddress, networkId);
+                    toast.update(toastId, getErrorToastOptions(t('markets.parlay.tx-not-received')));
+                    return;
+                }
+
                 const txReceipt = await waitForTransactionReceipt(client as Client, {
-                    hash: tx,
+                    hash: txHash,
                 });
 
                 if (txReceipt.status === 'success') {
@@ -1671,7 +1684,7 @@ const Ticket: React.FC<TicketProps> = ({
                             if (isAdapterError) {
                                 setIsBuying(false);
                             } else if (!isFulfilledTx) {
-                                toast.update(toastId, getErrorToastOptions(t('markets.parlay.odds-changed-error')));
+                                toast.update(toastId, getErrorToastOptions(t('markets.parlay.tx-not-received')));
                                 setIsBuying(false);
                             } else {
                                 const modalData = await getShareTicketModalData(
