@@ -74,6 +74,9 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
                         const { wait } = await biconomyConnector.wallet.sendTransaction(transaction, {
                             paymasterServiceData: {
                                 mode: PaymasterMode.SPONSORED,
+                                webhookData: {
+                                    networkId: networkId,
+                                },
                             },
                         });
 

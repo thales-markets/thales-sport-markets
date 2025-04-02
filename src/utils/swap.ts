@@ -108,7 +108,7 @@ export const buildTxForSwap = async (
                 network: networkId,
                 srcToken: swapParams.src,
                 destToken: swapParams.dst,
-                amount: swapParams.amount, // 100 DAI
+                amount: swapParams.amount,
                 srcDecimals: COLLATERAL_DECIMALS[getCollateralByAddress(swapParams.src, networkId)],
                 destDecimals: COLLATERAL_DECIMALS[getCollateralByAddress(swapParams.dst, networkId)],
                 mode: 'delta',
@@ -121,9 +121,9 @@ export const buildTxForSwap = async (
             priceRoute: quote.priceRoute,
             srcToken: swapParams.src,
             destToken: swapParams.dst,
-            srcAmount: swapParams.amount, // 100 DAI
-            destAmount: quote.priceRoute.destAmount,
+            srcAmount: swapParams.amount,
             userAddress: walletAddress,
+            slippage: 200, // Eg: for 2.5% slippage, set the value to 2.5 * 100 = 250; for 10% = 1000.
         });
 
         const transaction = {
