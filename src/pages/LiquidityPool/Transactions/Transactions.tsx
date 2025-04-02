@@ -11,7 +11,7 @@ import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/comm
 import { Coins } from 'thales-utils';
 import { LiquidityPoolUserTransaction, LiquidityPoolUserTransactions } from 'types/liquidityPool';
 import { RootState } from 'types/redux';
-import biconomyConnector from 'utils/biconomyWallet';
+import useBiconomy from 'utils/useBiconomy';
 import { useAccount, useChainId } from 'wagmi';
 import UserTransactionsTable from '../UserTransactionsTable';
 
@@ -27,8 +27,8 @@ const Transactions: React.FC<TransactionsProps> = ({ currentRound, liquidityPool
 
     const networkId = useChainId();
     const { address } = useAccount();
-    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
-
+    const smartAddres = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddres : address) || '';
     const [liquidityPoolUserTransactions, setLiquidityPoolUserTransactions] = useState<LiquidityPoolUserTransactions>(
         []
     );

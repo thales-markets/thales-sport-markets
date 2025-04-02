@@ -44,8 +44,22 @@ export const FlexDivColumnCentered = styled(FlexDivColumn)`
     justify-content: center;
 `;
 
+export const FlexDivColumnStart = styled(FlexDivColumn)`
+    justify-content: center;
+    align-items: flex-start;
+`;
+
 export const BoldContent = styled.span`
     font-weight: 600;
+`;
+
+export const CloseIcon = styled.i.attrs({ className: 'icon icon--close' })`
+    color: white;
+    font-size: 14px;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    cursor: pointer;
 `;
 
 export const Colors = {
@@ -86,10 +100,11 @@ export const Colors = {
     NAVY_BLUE_EXTRA_DARK: '#111325',
 
     TORY_BLUE: '#3C498A',
-    TORY_BLUE_LIGHT: '#4E5FB1',
+    TORY_BLUE_LIGHT: '#5E8DF0',
 
     // Overdrop
     YELLOW: '#F1BA20',
+    YELLOW_LIGHT: '#F1BA2099',
     LIGHTNING_YELLOW: '#F8C914',
     METALIC_YELLOW: '#FBCD0F',
     CHINESE_BLUE: '#5764A3',

@@ -14,7 +14,7 @@ export const particleWallet = (): Wallet => ({
         createConnector(
             (config) =>
                 ({
-                    ...particleWagmiWallet({ socialType: 'particle', id: 'particleWalletSDK' })(config),
+                    ...particleWagmiWallet({ socialType: 'particle', id: 'particleWalletSDK' } as any)(config),
                     ...walletDetails,
                 } as any)
         ),
@@ -30,7 +30,7 @@ export const particleGoogleWallet = (): Wallet => ({
         createConnector(
             (config) =>
                 ({
-                    ...particleWagmiWallet({ socialType: 'google', id: 'particleWalletSDKGoogle' })(config),
+                    ...particleWagmiWallet({ socialType: 'google', id: 'google' } as any)(config),
                     ...walletDetails,
                 } as any)
         ),
@@ -46,7 +46,7 @@ export const particleTwitterWallet = (): Wallet => ({
         createConnector(
             (config) =>
                 ({
-                    ...particleWagmiWallet({ socialType: 'twitter', id: 'particleWalletSDKTwitter' })(config),
+                    ...particleWagmiWallet({ socialType: 'twitter', id: 'twitter' } as any)(config),
                     ...walletDetails,
                 } as any)
         ),
@@ -62,7 +62,7 @@ export const particleGithubWallet = (): Wallet => ({
         createConnector(
             (config) =>
                 ({
-                    ...particleWagmiWallet({ socialType: 'github', id: 'particleWalletGithub' })(config),
+                    ...particleWagmiWallet({ socialType: 'github', id: 'github' } as any)(config),
                     ...walletDetails,
                 } as any)
         ),
@@ -78,7 +78,7 @@ export const particleDiscordWallet = (): Wallet => ({
         createConnector(
             (config) =>
                 ({
-                    ...particleWagmiWallet({ socialType: 'discord', id: 'particleWalletSDKDiscord' })(config),
+                    ...particleWagmiWallet({ socialType: 'discord', id: 'discord' } as any)(config),
                     ...walletDetails,
                 } as any)
         ),
@@ -94,7 +94,7 @@ export const particleAppleWallet = (): Wallet => ({
         createConnector(
             (config) =>
                 ({
-                    ...particleWagmiWallet({ socialType: 'apple', id: 'particleWalletSDKApple' })(config),
+                    ...particleWagmiWallet({ socialType: 'apple', id: 'apple' } as any)(config),
                     ...walletDetails,
                 } as any)
         ),

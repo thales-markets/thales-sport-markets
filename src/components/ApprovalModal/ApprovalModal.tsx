@@ -51,7 +51,7 @@ const ApprovalModal: React.FC<ApprovalModalProps> = ({
     const amountConverted = coinParser(
         Number(amount).toString(),
         networkId,
-        getCollateral(networkId, collateralIndex || 0, collateralArray)
+        collateralIndex ? getCollateral(networkId, collateralIndex, collateralArray) : (tokenSymbol as Coins)
     );
 
     const getSubmitButton = () => {

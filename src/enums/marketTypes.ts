@@ -17,6 +17,7 @@ export enum MarketTypeGroup {
     PLAYER_POINTS = 'Player points',
     PLAYER_REBOUNDS = 'Player rebounds',
     PLAYER_ASSISTS = 'Player assists',
+    PLAYER_TURNOVERS = 'Player turnovers',
     PLAYER_THRESS = 'Player threes',
     PLAYER_BLOCKS = 'Player blocks',
     PLAYER_STEALS = 'Player steals',

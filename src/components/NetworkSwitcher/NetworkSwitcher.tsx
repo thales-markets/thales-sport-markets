@@ -1,11 +1,15 @@
 import OutsideClickHandler from 'components/OutsideClick';
 import { DEFAULT_NETWORK, SUPPORTED_NETWORKS_PARAMS } from 'constants/network';
 import { useMemo, useState } from 'react';
-import styled from 'styled-components';
+import styled, { CSSProperties } from 'styled-components';
 import { SupportedNetwork } from 'types/network';
 import { useAccount, useChainId, useSwitchChain } from 'wagmi';
 
-const NetworkSwitcher: React.FC = () => {
+type NetworkSwitcherProps = {
+    containerStyle?: CSSProperties;
+};
+
+const NetworkSwitcher: React.FC<NetworkSwitcherProps> = ({ containerStyle }) => {
     const networkId = useChainId();
     const { isConnected } = useAccount();
 
@@ -23,6 +27,7 @@ const NetworkSwitcher: React.FC = () => {
         <OutsideClickHandler onOutsideClick={() => setDropDownOpen(false)}>
             <NetworkIconContainer>
                 <NetworkIconWrapper
+                    style={containerStyle}
                     onClick={() => {
                         if (supportedNetworks.length > 1) setDropDownOpen(!dropDownOpen);
                     }}
@@ -68,13 +73,13 @@ const NetworkSwitcher: React.FC = () => {
 
 const NetworkIconContainer = styled.div`
     position: relative;
+    z-index: 101;
 `;
 
 const NetworkIconWrapper = styled.div<{ isConnected: boolean; isMultiChain: boolean }>`
     background: ${(props) => (props.isConnected ? props.theme.background.tertiary : 'transparent')};
-    height: 28px;
-    border-radius: 20px;
-    border-radius: 20px;
+    height: 30px;
+    border-radius: 8px;
     border: 1px solid ${(props) => props.theme.background.tertiary};
     display: flex;
     justify-content: center;
@@ -109,11 +114,11 @@ const DownIcon = styled.i<{ isConnected: boolean }>`
 const NetworkDropDown = styled.div`
     z-index: 1000;
     position: absolute;
-    top: 30px;
+    top: 32px;
     right: 0px;
     display: flex;
     flex-direction: column;
-    border-radius: 20px;
+    border-radius: 8px;
     background: ${(props) => props.theme.background.tertiary};
     width: 130px;
     padding: 10px;

@@ -17,7 +17,6 @@ import { Ticket } from 'types/markets';
 import { RootState } from 'types/redux';
 import { ShareTicketModalProps } from 'types/tickets';
 import { executeBiconomyTransaction } from 'utils/biconomy';
-import biconomyConnector from 'utils/biconomyWallet';
 import {
     getCollateral,
     getCollateralAddress,
@@ -29,7 +28,8 @@ import { getContractInstance } from 'utils/contract';
 import { getIsMultiCollateralSupported } from 'utils/network';
 import { refetchAfterClaim, refetchBalances } from 'utils/queryConnector';
 import { formatTicketOdds, getTicketMarketOdd } from 'utils/tickets';
-import { Client } from 'viem';
+import useBiconomy from 'utils/useBiconomy';
+import { Address, Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 import TicketMarketDetails from '../TicketMarketDetails';
@@ -83,7 +83,8 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
     const walletClient = useWalletClient();
 
     const { address } = useAccount();
-    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+    const smartAddres = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddres : address) || '';
 
     const [showDetails, setShowDetails] = useState<boolean>(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -128,28 +129,28 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
         if (sportsAMMV2ContractWithSigner) {
             setIsSubmitting(true);
             try {
-                let txReceipt;
+                let hash;
                 if (isBiconomy) {
-                    txReceipt =
+                    hash =
                         isClaimCollateralDefaultCollateral ||
                         (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral) ||
                         ticket.isFreeBet
-                            ? await executeBiconomyTransaction(
+                            ? await executeBiconomyTransaction({
+                                  collateralAddress: getCollateralAddress(networkId, 0),
                                   networkId,
-                                  claimCollateralAddress,
-                                  sportsAMMV2ContractWithSigner,
-                                  'exerciseTicket',
-                                  [ticketAddress]
-                              )
-                            : await executeBiconomyTransaction(
+                                  contract: sportsAMMV2ContractWithSigner,
+                                  methodName: 'exerciseTicket',
+                                  data: [ticketAddress],
+                              })
+                            : await executeBiconomyTransaction({
+                                  collateralAddress: claimCollateralAddress as Address,
                                   networkId,
-                                  claimCollateralAddress,
-                                  sportsAMMV2ContractWithSigner,
-                                  'exerciseTicketOffRamp',
-                                  [ticketAddress, claimCollateralAddress, isEth]
-                              );
+                                  contract: sportsAMMV2ContractWithSigner,
+                                  methodName: 'exerciseTicketOffRamp',
+                                  data: [ticketAddress, claimCollateralAddress, isEth],
+                              });
                 } else {
-                    const hash =
+                    hash =
                         isClaimCollateralDefaultCollateral ||
                         (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral) ||
                         ticket.isFreeBet
@@ -159,10 +160,10 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
                                   claimCollateralAddress,
                                   isEth,
                               ]);
-                    txReceipt = await waitForTransactionReceipt(client as Client, {
-                        hash,
-                    });
                 }
+                const txReceipt = await waitForTransactionReceipt(client as Client, {
+                    hash,
+                });
 
                 if (txReceipt.status === 'success') {
                     toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
@@ -387,6 +388,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
                                 key={index}
                                 isLive={ticket.isLive}
                                 isSgp={ticket.isSgp}
+                                isSystem={ticket.isSystemBet}
                             />
                         );
                     })}

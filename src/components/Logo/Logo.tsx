@@ -1,39 +1,34 @@
-import LogoIcon from 'assets/images/overtime-logo.svg?react';
 import SPAAnchor from 'components/SPAAnchor';
 import ROUTES, { RESET_STATE } from 'constants/routes';
 import React from 'react';
 import styled from 'styled-components';
 import { buildHref } from 'utils/routes';
 
-type LogoParams = {
-    width?: number;
-};
-
-const Logo: React.FC<LogoParams> = ({ width }) => (
+const Logo: React.FC = () => (
     <Container>
         <SPAAnchor href={buildHref(ROUTES.Markets.Home)} state={RESET_STATE}>
-            <StyledLogo width={width} />
+            <LogoIcon className="icon icon--overtime" />
         </SPAAnchor>
     </Container>
 );
 
 const Container = styled.div`
     z-index: 1;
-    @media (max-width: 767px) {
-        margin-top: 15px;
-        margin-bottom: 10px;
-    }
 `;
 
-const StyledLogo = styled(LogoIcon)`
-    fill: ${(props) => props.theme.textColor.primary};
+const LogoIcon = styled.i`
+    font-weight: 400;
+    font-size: 220px;
+    line-height: 37px;
     cursor: pointer;
-    height: 35px;
-    @media (max-width: 400px) {
-        width: 130px;
+    color: ${(props) => props.theme.textColor.primary};
+    @media (max-width: 767px) {
+        font-size: 170px;
     }
-    @media (max-width: 375px) {
-        width: 115px;
+
+    @media (max-width: 420px) {
+        font-size: 140px;
+        line-height: 32px;
     }
 `;
 

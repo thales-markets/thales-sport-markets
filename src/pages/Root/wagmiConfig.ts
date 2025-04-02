@@ -62,15 +62,15 @@ export const wagmiConfig = createConfig({
             },
         ],
         {
-            appName: 'Overtime Markets',
+            appName: 'Overtime Sportsbook',
             projectId: import.meta.env.VITE_APP_WALLET_CONNECT_PROJECT_ID || '',
         }
     ),
     transports: {
         [optimism.id]: fallback([http(RPC_LIST.INFURA[NetworkId.OptimismMainnet]), http()]),
         [arbitrum.id]: fallback([http(RPC_LIST.INFURA[NetworkId.Arbitrum]), http()]),
-        [optimismSepolia.id]: fallback([http(RPC_LIST.INFURA[NetworkId.OptimismSepolia]), http()]),
         [base.id]: fallback([http(RPC_LIST.INFURA[NetworkId.Base]), http()]),
+        [optimismSepolia.id]: fallback([http(RPC_LIST.INFURA[NetworkId.OptimismSepolia]), http()]),
     },
 });
 
