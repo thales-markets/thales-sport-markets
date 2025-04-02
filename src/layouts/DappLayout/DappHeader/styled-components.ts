@@ -37,9 +37,8 @@ export const LeftContainer = styled(FlexDivRow)`
 `;
 
 export const MiddleContainer = styled(FlexDivRowCentered)`
-    width: 100%;
-    width: 806px;
-    justify-content: justify;
+    width: calc(100% - 263px - 360px - 50px);
+    justify-content: space-between;
 `;
 
 export const RightContainer = styled(FlexDivRowCentered)`
