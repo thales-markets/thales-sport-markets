@@ -2,11 +2,11 @@ import burger from 'assets/images/burger.svg';
 import OverdropButtonBackground from 'assets/images/overdrop/overdrop-button-background.webp';
 import overdrop from 'assets/images/overdrop/overdrop-nav.webp';
 import styled from 'styled-components';
-import { FlexDiv, FlexDivRow, FlexDivRowCentered } from 'styles/common';
+import { FlexDiv, FlexDivEnd, FlexDivRow, FlexDivRowCentered, FlexDivStart } from 'styles/common';
 
 export const Container = styled(FlexDivRowCentered)`
     width: 100%;
-    gap: 10px;
+
     @media (max-width: 767px) {
         flex-direction: column;
     }
@@ -30,23 +30,28 @@ export const Container = styled(FlexDivRowCentered)`
     }
 `;
 
-export const LeftContainer = styled(FlexDivRowCentered)`
+export const LeftContainer = styled(FlexDivRow)`
     width: 100%;
-    max-width: 278px;
+    width: 263px;
     justify-content: center;
-    padding-right: 15px;
 `;
 
 export const MiddleContainer = styled(FlexDivRowCentered)`
     width: 100%;
-    max-width: 821px;
-    justify-content: center;
+    width: 806px;
+    justify-content: justify;
 `;
 
 export const RightContainer = styled(FlexDivRowCentered)`
     position: relative;
-    gap: 8px;
+    width: 360px;
 `;
+
+export const MiddleContainerSectionLeft = styled(FlexDivStart)`
+    gap: 10px;
+`;
+
+export const MiddleContainerSectionRight = styled(FlexDivEnd)``;
 
 export const MenuIcon = styled.img.attrs({ src: burger })`
     cursor: pointer;
@@ -61,7 +66,6 @@ export const MenuIcon = styled.img.attrs({ src: burger })`
 export const OverdropIcon = styled.img.attrs({ src: overdrop })`
     height: 75px;
     cursor: pointer;
-    margin-right: 20px;
     margin-top: -27px;
     margin-bottom: -27px;
     @media (max-width: 576px) {
@@ -185,7 +189,7 @@ export const OverdropButtonContainer = styled(FlexDiv)`
         font-size: 8px;
         width: 140px;
         height: 30px;
-        margin-left: 20px;
+        margin-left: 10px;
     }
 
     @media (max-width: 767px) {
