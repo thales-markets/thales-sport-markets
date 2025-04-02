@@ -1,4 +1,4 @@
-import SwapModal from 'components/SwapModal/SwapModal';
+import SwapModal from 'components/SwapModal';
 import { USD_SIGN } from 'constants/currency';
 import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
