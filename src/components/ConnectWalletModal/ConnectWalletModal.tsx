@@ -11,6 +11,7 @@ import WalletConnect from 'assets/images/logins-icons/walletConnect.svg?react';
 import X from 'assets/images/logins-icons/x.svg?react';
 import Checkbox from 'components/fields/Checkbox';
 import SimpleLoader from 'components/SimpleLoader';
+import { LINKS } from 'constants/links';
 import { DEFAULT_NETWORK } from 'constants/network';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { SUPPORTED_PARTICAL_CONNECTORS_MODAL, SUPPORTED_WALLET_CONNECTORS_MODAL } from 'constants/wallet';
@@ -213,14 +214,14 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                                 }
                             }}
                         >
-                            Use Overtime Account
+                            {t('common.wallet.use-biconomy')}
                         </Label>
-                        <LearnMore href={disclaimer}>(Gas free & 1-click transactions)</LearnMore>
+                        <LearnMore href={LINKS.OvertimeAccount}>({t('common.wallet.use-biconomy-info')})</LearnMore>
                     </BiconomyContainer>
 
                     <CheckboxContainer disabled={false}>
                         <Checkbox value={''} checked={termsAccepted} onChange={setTerms.bind(this, !termsAccepted)} />
-                        <Label onClick={setTerms.bind(this, !termsAccepted)}>I Agree to the Terms and Conditions</Label>
+                        <Label onClick={setTerms.bind(this, !termsAccepted)}>{t('common.wallet.agree-terms')}</Label>
                     </CheckboxContainer>
 
                     <FooterContainer>

@@ -50,7 +50,9 @@
             "connect-with-wallet": "Connect with wallet",
             "view-all-wallets": "View all wallets",
             "please-connect": "please, connect wallet to start using overtime.xyz",
-
+            "use-biconomy": "Use Overtime Account",
+            "use-biconomy-info": "Gas free & 1-click transactions",
+            "agree-terms": "I Agree to the Terms and Conditions",
             "view-more-options": "View more options",
             "view-less-options": "View less options",
             "metamask": "Metamask",
