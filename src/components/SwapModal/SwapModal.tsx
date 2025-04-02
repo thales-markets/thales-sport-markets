@@ -202,7 +202,7 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
                         : await sendTransaction(approveSwapRawTransaction);
 
                     if (approveTxHash) {
-                        await delay(3000); // wait for 1inch API to read correct approval
+                        await delay(3000); // wait for PARASAWAP API to read correct approval
                         step = BuyTicketStep.SWAP;
                         setBuyStep(step);
                     }
@@ -251,7 +251,7 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
                     step = BuyTicketStep.COMPLETED;
                     setBuyStep(step);
 
-                    await delay(3000); // wait for THALES balance to increase
+                    await delay(3000); // wait for OVER balance to increase
                 }
             } catch (e) {
                 console.log('Swap tx failed', e);

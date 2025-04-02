@@ -11,10 +11,12 @@ import WalletConnect from 'assets/images/logins-icons/walletConnect.svg?react';
 import X from 'assets/images/logins-icons/x.svg?react';
 import Checkbox from 'components/fields/Checkbox';
 import SimpleLoader from 'components/SimpleLoader';
+import { LINKS } from 'constants/links';
+import { DEFAULT_NETWORK } from 'constants/network';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { SUPPORTED_PARTICAL_CONNECTORS_MODAL, SUPPORTED_WALLET_CONNECTORS_MODAL } from 'constants/wallet';
 import useLocalStorage from 'hooks/useLocalStorage';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
@@ -25,6 +27,7 @@ import { Colors, FlexDiv, FlexDivCentered, FlexDivStart } from 'styles/common';
 import { localStore } from 'thales-utils';
 import { RootState } from 'types/redux';
 import { ParticalTypes, WalletConnections } from 'types/wallet';
+import { isNetworkSupported } from 'utils/network';
 import { getSpecificConnectorFromConnectorsArray, getWalletLabel } from 'utils/particleWallet/utils';
 import { Connector, useConnect } from 'wagmi';
 
@@ -49,7 +52,7 @@ const getDefaultStyle = (isMobile: boolean) => ({
     },
     overlay: {
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        zIndex: 40,
+        zIndex: 2000,
     },
 });
 
@@ -68,12 +71,29 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
 
     const [termsAccepted, setTerms] = useLocalStorage(LOCAL_STORAGE_KEYS.TERMS_AND_CONDITIONS, false);
 
-    const handleConnect = (connector: Connector) => {
+    const [isConnecting, setIsConnecting] = useState(false);
+
+    const handleParticleConnect = (connector: Connector) => {
         try {
             connect({ connector });
         } catch (e) {
             console.log('Error occurred');
         }
+    };
+
+    const handleConnect = async (connector: Connector) => {
+        try {
+            const walletChainId = await connector.getChainId();
+            await connector.disconnect();
+            if (!isNetworkSupported(walletChainId) && connector.switchChain) {
+                await connector.switchChain({ chainId: DEFAULT_NETWORK.networkId });
+            }
+            setIsConnecting(true);
+            await connector.connect();
+        } catch (e) {
+            console.log('Error occurred', e);
+        }
+        setIsConnecting(false);
     };
 
     useEffect(() => {
@@ -106,7 +126,11 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
             <CloseIconContainer>
                 <CloseIcon onClick={onClose} />
             </CloseIconContainer>
-            {!isPending && (
+            {isPending || isConnecting ? (
+                <LoaderContainer>
+                    <SimpleLoader />
+                </LoaderContainer>
+            ) : (
                 <>
                     <HeaderContainer>
                         <Title>
@@ -122,7 +146,7 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                                     return (
                                         <Button
                                             key={index}
-                                            onClick={() => handleConnect(connector)}
+                                            onClick={() => handleParticleConnect(connector)}
                                             oneButtoninRow={true}
                                         >
                                             {<> {getIcon(item)}</>}
@@ -190,14 +214,14 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                                 }
                             }}
                         >
-                            Use Overtime Account
+                            {t('common.wallet.use-biconomy')}
                         </Label>
-                        <LearnMore href={disclaimer}>(Gas free & 1-click transactions)</LearnMore>
+                        <LearnMore href={LINKS.OvertimeAccount}>({t('common.wallet.use-biconomy-info')})</LearnMore>
                     </BiconomyContainer>
 
                     <CheckboxContainer disabled={false}>
                         <Checkbox value={''} checked={termsAccepted} onChange={setTerms.bind(this, !termsAccepted)} />
-                        <Label onClick={setTerms.bind(this, !termsAccepted)}>I Agree to the Terms and Conditions</Label>
+                        <Label onClick={setTerms.bind(this, !termsAccepted)}>{t('common.wallet.agree-terms')}</Label>
                     </CheckboxContainer>
 
                     <FooterContainer>
@@ -225,11 +249,6 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                         </FooterText>
                     </FooterContainer>
                 </>
-            )}
-            {isPending && (
-                <LoaderContainer>
-                    <SimpleLoader />
-                </LoaderContainer>
             )}
         </ReactModal>
     );

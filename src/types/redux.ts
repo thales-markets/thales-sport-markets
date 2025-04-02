@@ -50,7 +50,6 @@ export type WalletSliceState = {
     connectedViaParticle: boolean;
     walletConnectModal: {
         visibility: boolean;
-        origin?: 'sign-up' | 'sign-in' | undefined;
     };
 };
 

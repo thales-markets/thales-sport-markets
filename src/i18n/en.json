@@ -50,7 +50,9 @@
             "connect-with-wallet": "Connect with wallet",
             "view-all-wallets": "View all wallets",
             "please-connect": "please, connect wallet to start using overtime.xyz",
-
+            "use-biconomy": "Use Overtime Account",
+            "use-biconomy-info": "Gas free & 1-click transactions",
+            "agree-terms": "I Agree to the Terms and Conditions",
             "view-more-options": "View more options",
             "view-less-options": "View less options",
             "metamask": "Metamask",
@@ -206,7 +208,7 @@
         "github": "GitHub",
         "instagram": "Instagram",
         "reddit": "Reddit",
-        "disclaimer": "This frontend is hosted decentrally on IPFS (InterPlanetary File System). It serves to visualise the blockchain data and help users interact with the Overtime contracts that belong to Overtime DAO. By doing so it helps users understand the risks of using those smart contracts and what the specific interactions entail. The frontend does not facilitate anything else apart from interacting with those contracts in a visually comprehensive way. In doing so, it is no different than the functionality provided by Etherscan or RPCs (Remote Procedure Calls). The frontend itself does not belong to Overtime DAO or any individual. It stores no user data and has no dedicated backend or database. All code is uploaded statically directly to the IPFS. Just as the blockchain does no geo-fencing and no KYC, neither can this frontend do so. However, by interacting with Overtime DAO contracts, you commit to have read, understood and accepted <disclaimer>Overtime DAO’s terms of use</disclaimer> and you take full liability in case you have not adhered to those terms. Overtime DAO uses the decentralised sUSD token as collateral for all its transactions. In doing so it inherits all the usage rules from Synthetix DAO with regards to collateral and does not introduce its own.To get familiar with Overtime rules and trading guidelines, please visit the <guidelines>Sports Trading Guidelines page</guidelines> in the Overtime docs.",
+        "disclaimer": "This frontend is hosted decentrally on IPFS (InterPlanetary File System). It serves to visualise the blockchain data and help users interact with the Overtime contracts that belong to Overtime DAO. By doing so it helps users understand the risks of using those smart contracts and what the specific interactions entail. The frontend does not facilitate anything else apart from interacting with those contracts in a visually comprehensive way. In doing so, it is no different than the functionality provided by Etherscan or RPCs (Remote Procedure Calls). The frontend itself does not belong to Overtime DAO or any individual. It stores no user data and has no dedicated backend or database. All code is uploaded statically directly to the IPFS. Just as the blockchain does no geo-fencing and no KYC, neither can this frontend do so. However, by interacting with Overtime DAO contracts, you commit to have read, understood and accepted <disclaimer>Overtime DAO’s terms of use</disclaimer> and you take full liability in case you have not adhered to those terms. To get familiar with Overtime rules and trading guidelines, please visit the <guidelines>Sports Trading Guidelines page</guidelines> in the Overtime docs.",
         "built-using": "Built using",
         "protocol": "Protocol"
     },
@@ -1154,7 +1156,8 @@
             "deposit": "Deposit received!",
             "activate": "Activate your Overtime Account for this device.",
             "success": "Your first deposit is received in your Overtime Account successfully. Click on the button bellow, sign the message pop-up and you are all set!",
-            "activate-my-account": "Activate My Account"
+            "activate-my-account": "Activate My Account",
+            "action": "Activate"
         }
     },
     "liquidity-pool": {
@@ -1299,7 +1302,8 @@
         "elections-text": "Elections for Overtime Council are now live, exercise your voting power <highlight>here</highlight>.",
         "speed-text": "Trade on Speed Markets, win 10,000 PYTH! <highlight>Learn more.</highlight>",
         "nfl-playoff-text": "NFL Playoff: Win 10k OP, 10k ARB & 50k OVER in Free Bets! Learn more <highlight>here</highlight>.",
-        "march-madness": "Join the March Madness bracket competition for a chance to earn <highlight>30,000 $OVER</highlight> tokens!"
+        "march-madness": "Join the March Madness bracket competition for a chance to earn <highlight>30,000 $OVER</highlight> tokens!",
+        "migration-message": "Thales DAO has rebraned to Overtime DAO alongside a token migration. Check the new DAO website for more details."
     },
     "promotions": {
         "title": "Promotions and Incentives",

@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
-import { Colors, FlexDivRow } from 'styles/common';
+import { FlexDivRow } from 'styles/common';
 import { Coins, localStore } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
@@ -121,13 +121,7 @@ const ActivateAccount: React.FC<any> = () => {
                     const retrievedMap = new Map(JSON.parse(storedMapString));
                     const sessionData = retrievedMap.get(smartAddres) as any;
                     if (sessionData) {
-                        const dateUntilValid = new Date(Number(sessionData.validUntil) * 1000);
-                        const nowDate = new Date();
-                        if (Number(nowDate) > Number(dateUntilValid)) {
-                            setShowSuccessfulDepositModal(true);
-                        } else {
-                            setShowSuccessfulDepositModal(false);
-                        }
+                        setShowSuccessfulDepositModal(false);
                     } else {
                         setShowSuccessfulDepositModal(true);
                     }
@@ -204,7 +198,7 @@ const ActivateAccount: React.FC<any> = () => {
                                     }}
                                     onClick={() => setIsMinimized(false)}
                                 >
-                                    Activate
+                                    {t('get-started.activate-account.action')}
                                 </Button>
                             </>
                         )}
@@ -213,8 +207,7 @@ const ActivateAccount: React.FC<any> = () => {
             )}
             {showFundModal && (
                 <Container>
-                    {' '}
-                    <FundModal onClose={() => setShowFundModal(false)} />{' '}
+                    <FundModal onClose={() => setShowFundModal(false)} />
                 </Container>
             )}
         </>
@@ -237,7 +230,7 @@ const Wrapper = styled.div<{ show: boolean }>`
     flex-direction: column;
     align-items: center;
 
-    background: ${Colors.GOLD};
+    background: ${(props) => props.theme.button.background.quinary};
     width: 480px;
     padding: 20px;
     border-radius: 8px;

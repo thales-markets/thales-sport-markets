@@ -19,10 +19,10 @@ import SEO from 'pages/SEO/Home';
 import SeoArticle from 'pages/SEO/SeoArticle';
 import Ticket from 'pages/Ticket';
 import { Suspense, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Route, Router, Switch } from 'react-router-dom';
 import { setMobileState } from 'redux/modules/app';
-import { updateParticleState } from 'redux/modules/wallet';
+import { getIsConnectedViaParticle, setWalletConnectModalVisibility, updateParticleState } from 'redux/modules/wallet';
 import { SupportedNetwork } from 'types/network';
 import { SeoArticleProps } from 'types/ui';
 import { isMobile } from 'utils/device';
@@ -50,6 +50,7 @@ const App = () => {
     const { isConnected } = useAccount();
     const connectors = useConnectors();
     const { connect } = useConnect();
+    const isParticleConnected = useSelector(getIsConnectedViaParticle);
 
     queryConnector.setQueryClient();
 
@@ -63,6 +64,7 @@ const App = () => {
                 if (!isNetworkSupported(ethereumChainId)) {
                     // when network changed from browser wallet disconnect wallet otherwise wallet is unusable (e.g. wallet options doesn't react)
                     disconnect();
+                    dispatch(setWalletConnectModalVisibility({ visibility: true }));
                 }
                 switchChain({ chainId: ethereumChainId as SupportedNetwork });
             });
@@ -76,12 +78,22 @@ const App = () => {
             });
             dispatch(updateParticleState({ connectedViaParticle: true }));
         }
-        if (connectionStatus === 'disconnected') {
+        if (isParticleConnected && connectionStatus === 'disconnected') {
             particleDisconnect();
             dispatch(updateParticleState({ connectedViaParticle: false }));
             if (!isConnected) disconnect();
         }
-    }, [isConnected, connectors, connect, connectionStatus, disconnect, particleDisconnect, networkId, dispatch]);
+    }, [
+        isConnected,
+        connectors,
+        connect,
+        connectionStatus,
+        disconnect,
+        particleDisconnect,
+        networkId,
+        dispatch,
+        isParticleConnected,
+    ]);
 
     useEffect(() => {
         const handlePageResized = () => {

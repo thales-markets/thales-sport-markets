@@ -290,7 +290,7 @@ const Ticket: React.FC<TicketProps> = ({
     );
     const [isTotalQuoteIncreased, setIsTotalQuoteIncreased] = useState(false);
 
-    const userMultipliersQuery = useUserMultipliersQuery(walletAddress, { enabled: isConnected });
+    const userMultipliersQuery = useUserMultipliersQuery(address as any, { enabled: isConnected });
 
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
     const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
@@ -502,7 +502,7 @@ const Ticket: React.FC<TicketProps> = ({
         [liveTradingProcessorDataQuery.isSuccess, liveTradingProcessorDataQuery.data]
     );
 
-    const userDataQuery = useUserDataQuery(walletAddress, { enabled: isConnected });
+    const userDataQuery = useUserDataQuery(address as any, { enabled: isConnected });
 
     const userData: OverdropUserData | undefined = useMemo(() => {
         if (userDataQuery?.isSuccess && userDataQuery?.data) {
