@@ -22,6 +22,7 @@ type ProfileItemProperties = {
     marginRight?: string;
     top?: string;
     left?: string;
+    margin?: string;
 };
 
 const ProfileItem: React.FC<ProfileItemProperties> = ({ color }) => {
@@ -38,7 +39,14 @@ const ProfileItem: React.FC<ProfileItemProperties> = ({ color }) => {
     );
 };
 
-export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({ avatarSize, color, marginRight, top, left }) => {
+export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({
+    avatarSize,
+    color,
+    marginRight,
+    top,
+    left,
+    margin,
+}) => {
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
     const networkId = useChainId();
@@ -62,7 +70,7 @@ export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({ avatarSize,
     const notificationsCount = claimablePositionCount || 0;
 
     return (
-        <ProfileIconContainer marginRight={marginRight}>
+        <ProfileIconContainer marginRight={marginRight} margin={margin}>
             {!!notificationsCount && (
                 <NotificationCount top={top} left={left}>
                     <Count>{notificationsCount}</Count>

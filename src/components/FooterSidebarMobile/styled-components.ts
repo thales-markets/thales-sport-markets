@@ -15,15 +15,23 @@ export const Container = styled(FlexDiv)`
 `;
 
 export const ItemContainer = styled(FlexDiv)`
+    flex-direction: column;
+    gap: 4px;
     justify-content: center;
     align-self: center;
     position: relative;
 `;
 
+export const ItemLabel = styled.p`
+    font-size: 10px;
+    font-weight: 600;
+`;
+
 export const ItemIcon = styled.i<{ parlay?: boolean; iteration?: number; fontSize?: number }>`
-    font-size: ${(props) => props.fontSize || 33}px;
+    font-size: ${(props) => props.fontSize || 22}px;
     font-weight: 400;
     text-transform: none;
+    margin: auto;
     color: ${(props) => props.theme.textColor.primary};
 
     &.pulse {
@@ -54,14 +62,13 @@ export const ItemIcon = styled.i<{ parlay?: boolean; iteration?: number; fontSiz
 
 export const ParlayNumber = styled.span`
     font-weight: 600;
-    font-size: 14px;
-    line-height: 14px;
-    color: ${(props) => props.theme.background.primary};
+    font-size: 12px;
+    line-height: 12px;
+    color: ${(props) => props.theme.textColor.primary};
+    background: ${(props) => props.theme.background.secondary};
     display: block;
     text-transform: capitalize;
     position: absolute;
-    bottom: 11px;
+    bottom: 19px;
     left: 8px;
-    background: ${(props) => props.theme.background.septenary};
-    padding: 0 2px;
 `;

@@ -130,6 +130,10 @@ const Dropdown = styled.div`
     @media (max-width: 767px) {
         border: 1px solid;
     }
+
+    @media (max-width: 420px) {
+        width: 100%;
+    }
 `;
 
 const CopyIcon = styled.i<{ active?: boolean }>`

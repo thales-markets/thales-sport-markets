@@ -6,28 +6,34 @@ import { getIsBiconomy } from 'redux/modules/wallet';
 import { RootState } from 'types/redux';
 import useBiconomy from 'utils/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
-import { Count, Icon, Item, ItemWrapper, NotificationCount, Wrapper } from './styled-components';
+import { Count, Icon, Item, ItemLabel, ItemWrapper, NotificationCount, Wrapper } from './styled-components';
 
 const navItems = [
     {
         id: ProfileTab.STATS,
         icon: 'icon icon--logo',
+        name: 'Info',
     },
     {
         id: ProfileTab.ACCOUNT,
         icon: 'icon icon--wallet2',
+        name: 'Account',
     },
+
     {
         id: ProfileTab.OPEN_CLAIMABLE,
         icon: 'icon icon--ticket-horizontal',
+        name: 'Tickets',
     },
     {
         id: ProfileTab.TRANSACTION_HISTORY,
         icon: 'icon icon--history',
+        name: 'History',
     },
     {
         id: ProfileTab.LP,
         icon: 'icon icon--yield',
+        name: 'LP',
     },
 ];
 
@@ -70,6 +76,7 @@ const NavigationBarMobile: React.FC<NavigationBarProps> = ({ selectedTab, setSel
                                 <Count>{notificationsCount}</Count>
                             </NotificationCount>
                         )}
+                        <ItemLabel selected={item.id == selectedTab}>{item.name}</ItemLabel>
                     </ItemWrapper>
                 );
             })}

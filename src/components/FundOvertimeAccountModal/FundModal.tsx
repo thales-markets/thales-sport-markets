@@ -132,7 +132,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
         <Modal
             customStyle={{
                 overlay: {
-                    zIndex: 30,
+                    zIndex: 100,
                 },
             }}
             containerStyle={{
@@ -300,13 +300,22 @@ const OvertimeIcon = styled.i`
     font-size: 128px;
     font-weight: 400;
     line-height: 28px;
+    @media (max-width: 512px) {
+        font-size: 100px;
+        line-height: 20px;
+    }
+
+    @media (max-width: 412px) {
+        font-size: 96px;
+        line-height: 18px;
+    }
 `;
 
 const Title = styled.h1`
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 6px;
     font-size: 24px;
     font-weight: 500;
     color: ${(props) => props.theme.textColor.primary};
@@ -314,6 +323,16 @@ const Title = styled.h1`
     text-align: center;
     margin-bottom: 15px;
     text-transform: uppercase;
+    white-space: pre;
+    @media (max-width: 512px) {
+        font-size: 20px;
+        white-space: pre;
+        gap: 2px;
+    }
+    @media (max-width: 412px) {
+        font-size: 18px;
+        line-height: 18px;
+    }
 `;
 
 const SubTitle = styled.h1`

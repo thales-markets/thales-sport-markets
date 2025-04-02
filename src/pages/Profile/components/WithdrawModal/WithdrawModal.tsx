@@ -238,6 +238,15 @@ const OvertimeIcon = styled.i`
     font-size: 128px;
     font-weight: 400;
     line-height: 28px;
+    @media (max-width: 512px) {
+        font-size: 100px;
+        line-height: 20px;
+    }
+
+    @media (max-width: 412px) {
+        font-size: 96px;
+        line-height: 18px;
+    }
 `;
 
 const Title = styled.h1`
@@ -252,6 +261,15 @@ const Title = styled.h1`
     text-align: center;
     margin-bottom: 15px;
     text-transform: uppercase;
+    @media (max-width: 512px) {
+        font-size: 20px;
+        white-space: pre;
+        gap: 2px;
+    }
+    @media (max-width: 412px) {
+        font-size: 18px;
+        line-height: 18px;
+    }
 `;
 
 const SubTitle = styled.h1`

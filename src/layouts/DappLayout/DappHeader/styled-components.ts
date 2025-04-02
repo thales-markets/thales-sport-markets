@@ -53,6 +53,9 @@ export const MenuIcon = styled.img.attrs({ src: burger })`
     height: 26px;
     width: 50px;
     filter: invert(39%) sepia(9%) saturate(1318%) hue-rotate(199deg) brightness(71%) contrast(88%);
+    @media (max-width: 420px) {
+        width: 36px;
+    }
 `;
 
 export const OverdropIcon = styled.img.attrs({ src: overdrop })`
@@ -65,6 +68,10 @@ export const OverdropIcon = styled.img.attrs({ src: overdrop })`
         height: 70px;
         margin-right: 0;
     }
+
+    @media (max-width: 420px) {
+        height: 65px;
+    }
 `;
 
 export const WrapperMobile = styled(FlexDivRow)`
@@ -72,7 +79,7 @@ export const WrapperMobile = styled(FlexDivRow)`
     align-items: center;
     justify-content: space-between;
     margin-top: 10px;
-    margin-bottom: 6px;
+    margin-bottom: 10px;
 `;
 
 export const SearchIconContainer = styled.div`

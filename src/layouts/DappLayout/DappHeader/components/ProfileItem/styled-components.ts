@@ -16,11 +16,12 @@ export const ProfileLabel = styled.span<{ color?: string }>`
     white-space: pre;
 `;
 
-export const ProfileIconContainer = styled.div<{ marginRight?: string }>`
+export const ProfileIconContainer = styled.div<{ marginRight?: string; margin?: string }>`
     display: flex;
     align-items: center;
     position: relative;
     margin-right: ${(props) => props.marginRight || '5px'};
+    margin: ${(props) => (props.margin ? props.margin : '')};
 `;
 
 export const ProfileIcon = styled.i.attrs({ className: 'icon icon--profile2' })<{

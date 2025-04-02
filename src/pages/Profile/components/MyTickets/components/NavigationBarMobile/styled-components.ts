@@ -16,6 +16,9 @@ export const Wrapper = styled(FlexDivRow)`
 `;
 
 export const ItemWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
     position: relative;
     text-align: start;
     white-space: pre;
@@ -25,7 +28,14 @@ export const ItemWrapper = styled.div`
     }
 `;
 
+export const ItemLabel = styled.p<{ selected?: boolean }>`
+    font-size: 10px;
+    font-weight: 600;
+    color: ${(props) => (props.selected ? props.theme.textColor.quaternary : props.theme.textColor.primary)};
+`;
+
 export const Item = styled.span`
+    text-align: center;
     color: ${(props) => props.theme.textColor.primary};
     font-size: 12px;
     font-weight: 600;
@@ -37,8 +47,8 @@ export const Item = styled.span`
     }
 `;
 
-export const Icon = styled.i<{ fontSize?: number; selected?: boolean }>`
-    font-size: ${(props) => props.fontSize || 28}px;
+export const Icon = styled.i<{ selected?: boolean }>`
+    font-size: 20px;
     font-weight: 400;
     text-transform: none;
     color: ${(props) => (props.selected ? props.theme.textColor.quaternary : props.theme.textColor.primary)};
@@ -48,7 +58,7 @@ export const NotificationCount = styled.div`
     position: absolute;
     border-radius: 50%;
     top: -6px;
-    right: -8px;
+    right: -2px;
     display: flex;
     align-items: center;
     text-align: center;
@@ -58,10 +68,8 @@ export const NotificationCount = styled.div`
     background-color: ${(props) => props.theme.background.quaternary};
     box-shadow: ${(props) => props.theme.shadow.notification};
     @media (max-width: 767px) {
-        height: 12px;
-        width: 12px;
-        right: 0;
-        top: -4px;
+        top: -6px;
+        right: 8px;
     }
 `;
 

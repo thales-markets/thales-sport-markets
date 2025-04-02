@@ -65,6 +65,7 @@ import useQueryParam from 'utils/useQueryParams';
 import { useChainId } from 'wagmi';
 import TimeFilters from '../../../layouts/DappLayout/DappHeader/components/TimeFilters';
 import FilterTagsMobile from '../components/FilterTagsMobile';
+import SportFilterMobile from '../components/SportFilter/SportFilterMobile';
 import SportTags from '../components/SportTags';
 import GlobalFilters from '../components/StatusFilters';
 import Breadcrumbs from './Breadcrumbs';
@@ -799,6 +800,15 @@ const Home: React.FC = () => {
                 <MainContainer>
                     {isMobile && (
                         <>
+                            <SportFilterMobile
+                                playerPropsCountPerTag={playerPropsCountPerTag}
+                                setAvailableTags={setAvailableTags}
+                                tagsList={tagsList}
+                                openMarketsCountPerSport={openMarketsCountPerSport}
+                                boostedMarketsCount={boostedMarketsCount}
+                                liveMarketsCountPerSport={liveMarketsCountPerSport}
+                                showActive={showActive}
+                            />
                             {!marketsLoading &&
                                 finalMarkets.length > 0 &&
                                 (statusFilter === StatusFilter.OPEN_MARKETS || sportFilter === SportFilter.Live) && (

@@ -141,7 +141,7 @@ const ActivateAccount: React.FC<any> = () => {
     return (
         <>
             {showSuccessfulDepositModal && (
-                <Container>
+                <Container show={!isMinimizedModal}>
                     <Wrapper show={!isMinimizedModal}>
                         {!isMinimizedModal ? (
                             <>
@@ -217,10 +217,11 @@ const ActivateAccount: React.FC<any> = () => {
     );
 };
 
-const Container = styled.div`
-    z-index: 100;
+const Container = styled.div<{ show?: boolean }>`
     @media (max-width: 512px) {
         width: 100%;
+
+        z-index: ${(props) => (props.show ? 100 : 9)};
     }
     width: 100px;
 `;
@@ -262,6 +263,7 @@ const Wrapper = styled.div<{ show: boolean }>`
                 transform: translateX(0);
                 width: 100%;
                 transition: none;
+                margin-top: 10px;
             }
    
     `}

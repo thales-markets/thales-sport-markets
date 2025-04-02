@@ -25,6 +25,11 @@ const LogoIcon = styled.i`
     @media (max-width: 767px) {
         font-size: 170px;
     }
+
+    @media (max-width: 420px) {
+        font-size: 140px;
+        line-height: 32px;
+    }
 `;
 
 export default Logo;
