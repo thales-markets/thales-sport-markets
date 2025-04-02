@@ -46,12 +46,10 @@ export type UISliceState = {
 };
 
 export type WalletSliceState = {
-    isBiconomy?: boolean;
-    isParticleReady: boolean;
+    isBiconomy: boolean;
     connectedViaParticle: boolean;
     walletConnectModal: {
         visibility: boolean;
-        origin?: 'sign-up' | 'sign-in' | undefined;
     };
 };
 

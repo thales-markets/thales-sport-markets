@@ -20,12 +20,6 @@ export const buildMarketLink = (marketAddress: string, language: string, exclude
         title ? `&title=${title}` : ''
     }`;
 
-export const buildDepositOrWithdrawLink = (language: string, page: string, coinIndex: number, excludeSlash = false) => {
-    return `${ifIpfsDeployment && !excludeSlash ? '#' : ''}${
-        page == 'withdraw' ? ROUTES.Withdraw : ROUTES.Deposit
-    }?lang=${language}&coin-index=${coinIndex}`;
-};
-
 export const buildSpeedMarketsBannerHref = () =>
     `${LINKS.SpeedMarkets}/speed-markets?utm_source=internal&utm_medium=ot_banner&utm_campaign=speed_markets_feb_2025`;
 

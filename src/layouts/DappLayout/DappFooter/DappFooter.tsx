@@ -1,5 +1,4 @@
-import termsOfUse from 'assets/docs/thales-terms-of-use.pdf';
-import ThalesLogo from 'assets/images/thales-logo.svg?react';
+import termsOfUse from 'assets/docs/overtime-terms-of-use.pdf';
 import { LINKS } from 'constants/links';
 import ROUTES from 'constants/routes';
 import React from 'react';
@@ -15,13 +14,15 @@ const DappFooter: React.FC = () => {
             <Container>
                 <ThalesLink mobile={true} target="_blank" rel="noreferrer" href={LINKS.Thales}>
                     <LinkContent>
-                        <StyledLogo />
+                        <LogoText>{t('footer.built-using')}</LogoText>
+                        <LogoIcon className="icon icon--overtime" />
                     </LinkContent>
                 </ThalesLink>
                 <LinksContainer>
                     <ThalesLink mobile={false} target="_blank" rel="noreferrer" href={LINKS.Thales}>
                         <LinkContent>
-                            <StyledLogo />
+                            <LogoText>{t('footer.built-using')}</LogoText>
+                            <LogoIcon className="icon icon--overtime" />
                         </LinkContent>
                     </ThalesLink>
                     <Link target="_blank" rel="noreferrer" href={LINKS.Footer.Medium}>
@@ -54,12 +55,6 @@ const DappFooter: React.FC = () => {
                             <LinkText>{t('footer.resources')}</LinkText>
                         </LinkContent>
                     </Link>
-                    <Link target="_blank" rel="noreferrer" href={LINKS.Footer.Tutorial}>
-                        <LinkContent>
-                            <YoutubeIcon />
-                            <LinkText>{t('footer.tutorial')}</LinkText>
-                        </LinkContent>
-                    </Link>
                     <Link target="_blank" rel="noreferrer" href={LINKS.Footer.GitHub}>
                         <LinkContent>
                             <GithubIcon />
@@ -87,7 +82,7 @@ const DappFooter: React.FC = () => {
                         disclaimer: <DisclaimerLink href={termsOfUse} rel="noreferrer" target="_blank" />,
                         guidelines: (
                             <DisclaimerLink
-                                href={'https://docs.overtimemarkets.xyz/sports-trading-guidelines'}
+                                href={'https://docs.overtime.io/sports-trading-guidelines'}
                                 rel="noreferrer"
                                 target="_blank"
                             />
@@ -138,11 +133,10 @@ const ThalesLink = styled.a<{ mobile?: boolean }>`
     }
 `;
 
-const StyledLogo = styled(ThalesLogo)`
-    margin-left: 6px;
-    fill: ${(props) => props.theme.textColor.secondary};
-    height: 40px;
-    width: 85px;
+const LogoIcon = styled.i`
+    font-size: 100px;
+    line-height: 16px;
+    color: ${(props) => props.theme.textColor.secondary};
 `;
 
 const LinksContainer = styled(FlexDivRowCentered)`
@@ -169,8 +163,15 @@ const LinkContent = styled(FlexDivColumnCentered)`
     align-items: center;
 `;
 
+const LogoText = styled.span`
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 15px;
+    color: ${(props) => props.theme.textColor.secondary};
+    text-transform: uppercase;
+`;
+
 const LinkText = styled(FlexDivCentered)`
-    font-style: normal;
     font-weight: 400;
     font-size: 14px;
     line-height: 15px;
@@ -198,14 +199,6 @@ const DocsIcon = styled.i`
     &:before {
         font-family: HomepageIconsV2 !important;
         content: '\\0025';
-    }
-`;
-
-const YoutubeIcon = styled.i`
-    color: ${(props) => props.theme.textColor.secondary};
-    &:before {
-        font-family: OvertimeIconsV2 !important;
-        content: '\\0119';
     }
 `;
 

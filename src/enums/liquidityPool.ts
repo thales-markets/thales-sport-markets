@@ -17,6 +17,7 @@ export enum LiquidityPoolCollateral {
     USDC = 'usdc',
     WETH = 'weth',
     THALES = 'thales',
+    OVER = 'over',
     cbBTC = 'cbbtc',
     wBTC = 'wbtc',
 }

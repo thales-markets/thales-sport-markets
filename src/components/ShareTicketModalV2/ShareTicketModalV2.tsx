@@ -25,32 +25,39 @@ import { ThemeInterface } from 'types/ui';
 import { isStableCurrency } from 'utils/collaterals';
 import { refetchOverdropMultipliers } from 'utils/queryConnector';
 import { useAccount, useChainId, useClient } from 'wagmi';
+import { isOverCurrency } from '../../utils/collaterals';
 import MyTicket from './components/MyTicket';
 
 const PARLAY_IMAGE_NAME = 'ParlayImage.png';
 const TWITTER_MESSAGES_TEXT = [
-    `I just placed this bet on @OvertimeMarkets! %0ATry it yourself on ${LINKS.Overtime}`,
-    `This is my @OvertimeMarkets bet. Let's get it! %0ATry it yourself on ${LINKS.Overtime}`,
-    `Just flexing my @OvertimeMarkets bet! %0ATake a shot yourself at ${LINKS.Overtime}`,
-    `Peep my @OvertimeMarkets onchain bet! %0ATry your luck as well on ${LINKS.Overtime}`,
-    `Another day, another bet locked in on @OvertimeMarkets. Let’s ride this one out! 🌪️ ${LINKS.Overtime}`,
-    `If this bet cashes, beers on me! 💰 Come join the action on @OvertimeMarkets: ${LINKS.Overtime}`,
-    `Smokin’ odds, guaranteed payouts, and I keep my privacy? @OvertimeMarkets is where it’s at. 👀 ${LINKS.Overtime}`,
-    `I’m running it up on @OvertimeMarkets. No bans, no limits, just straight betting 🔥 ${LINKS.Overtime}`,
-    `Just placed my bet on @OvertimeMarkets. No sweat, smart contracts got me covered! 💸 ${LINKS.Overtime}`,
-    `Made this bet on @OvertimeMarkets, and I’m ready to flex hard. Who’s joining? 💪 ${LINKS.Overtime}`,
-    `Betting where it counts ${LINKS.Overtime}  On-chain and guaranteed payouts with @OvertimeMarkets. 🙌`,
-    `Just secured another bet on @OvertimeMarkets. Let’s cash this in and flex hard! 💪 ${LINKS.Overtime}`,
-    `This bet hits, and it’s beers all weekend! 🍻 @OvertimeMarkets making it easy to stay winning. ${LINKS.Overtime}`,
-    `Running the odds like a boss on @OvertimeMarkets – no bans, all gains. 💥 ${LINKS.Overtime}`,
-    `Great odds, smart contracts, and I’m fully in. You betting on @OvertimeMarkets yet? 💪 ${LINKS.Overtime}`,
-    `Taking my betting game to the next level with @OvertimeMarkets. Join the movement! ⚡ ${LINKS.Overtime}`,
-    `Levelling up my game with @OvertimeMarkets! Are you ready to take the plunge? 🔥 ${LINKS.Overtime}`,
+    `Another day, another bet locked in on @Overtime_io. Let’s ride this one out! 🌪️ ${LINKS.Overtime}`,
+    `If this bet cashes, beers on me! 💰 Come join the action on @Overtime_io: ${LINKS.Overtime}`,
+    `Smokin’ odds, guaranteed payouts, and I keep my privacy? @Overtime_io is where it’s at. 👀 ${LINKS.Overtime}`,
+    `I’m running it up on @Overtime_io. No bans, no limits, just straight betting 🔥 ${LINKS.Overtime}`,
+    `Just placed my bet on @Overtime_io. No sweat, smart contracts got me covered! 💸 ${LINKS.Overtime}`,
+    `Made this bet on @Overtime_io, and I’m ready to flex hard. Who’s joining? 💪 ${LINKS.Overtime}`,
+    `Betting where it counts. On-chain, guaranteed payouts, and the best odds with @Overtime_io. 🙌 ${LINKS.Overtime}`,
+    `Just secured another bet on @Overtime_io. Let’s cash this in and flex hard! 💪 ${LINKS.Overtime}`,
+    `This bet hits, and it’s beers all weekend! 🍻 @Overtime_io making it easy to stay winning. ${LINKS.Overtime}`,
+    `Running the odds like a boss on @Overtime_io – no bans, all gains. 💥 ${LINKS.Overtime}`,
+    `Great odds, smart contracts, and I’m fully in. You betting on @Overtime_io yet? 💪 ${LINKS.Overtime}`,
+    `Taking my betting game to the next level with @Overtime_io. Join the movement! ⚡ ${LINKS.Overtime}`,
+    `Leveling up my game with @Overtime_io! Are you ready to take the plunge? 🔥 ${LINKS.Overtime}`,
+    `The betting revolution is here. Best odds, full control, no limits. Welcome to @Overtime_io. 🔥 ${LINKS.Overtime}`,
+    `Seamless on-chain betting @Overtime_io + the best odds in the game = an absolute no-brainer. 🚀 ${LINKS.Overtime}`,
+    `Revolutionizing sports betting one bet at a time @Overtime_io. The best odds are now on-chain. 🚀 ${LINKS.Overtime}`,
+    `A new era for sports betting. Best odds, full transparency, and a token built to change the industry. You betting on @Overtime_io yet? 🔥 ${LINKS.Overtime}`,
+    `Winning is great. Winning with a system that actually benefits bettors? Even better. 💥 Only with @Overtime_io ${LINKS.Overtime}`,
 ];
 
-const THALES_COLLATERAL_TWITTER_MESSAGES_TEXT = [
-    `Here to stack THALES and bets on @OvertimeMarkets – let’s gooo! 💥 ${LINKS.Overtime}`,
-    `Another day, another THALES bet locked in on @OvertimeMarkets – Who's joining the action? 🦓 ${LINKS.Overtime}`,
+const OVER_COLLATERAL_TWITTER_MESSAGES_TEXT = [
+    `Betting with $OVER = better odds, bigger wins, and a new way to play. @Overtime_io is where it’s at. 🚀 ${LINKS.Overtime}`,
+    `A token built to change the sports betting industry @Overtime_io. Betting with $OVER just hits different. 📈 ${LINKS.Overtime}`,
+    `With $OVER, every bet isn’t just a bet—it’s a stake in the future of sports betting. 💰 @Overtime_io ${LINKS.Overtime}`,
+    `The future of betting is here @Overtime_io. With $OVER, you're not just betting—you’re leading the game. 🏆 ${LINKS.Overtime}`,
+    `A new standard for sports betting. Built for the players, powered by $OVER. 🚀 Come join the action on @Overtime_io:${LINKS.Overtime}`,
+    `Here to stack $OVER and bets on @Overtime_io – let’s gooo! 💥 ${LINKS.Overtime}`,
+    `Another day, another $OVER bet locked in on @Overtime_io – Who’s joining the action? 🦓 ${LINKS.Overtime}`,
 ];
 
 const TWITTER_MESSAGE_PASTE = '%0A<PASTE YOUR IMAGE>';
@@ -85,10 +92,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
 
     const ref = useRef<HTMLDivElement>(null);
 
-    const isThalesCollateral = useMemo(
-        () => collateral === CRYPTO_CURRENCY_MAP.THALES || collateral === CRYPTO_CURRENCY_MAP.sTHALES,
-        [collateral]
-    );
+    const isOver = useMemo(() => isOverCurrency(collateral), [collateral]);
 
     const isNonStableCollateral = useMemo(() => !isStableCurrency(collateral), [collateral]);
 
@@ -194,9 +198,9 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
 
                     const twitterLinkWithStatusMessage =
                         LINKS.TwitterTweetStatus +
-                        (isThalesCollateral
-                            ? THALES_COLLATERAL_TWITTER_MESSAGES_TEXT[
-                                  Math.floor(Math.random() * THALES_COLLATERAL_TWITTER_MESSAGES_TEXT.length)
+                        (isOver
+                            ? OVER_COLLATERAL_TWITTER_MESSAGES_TEXT[
+                                  Math.floor(Math.random() * OVER_COLLATERAL_TWITTER_MESSAGES_TEXT.length)
                               ]
                             : TWITTER_MESSAGES_TEXT[Math.floor(Math.random() * TWITTER_MESSAGES_TEXT.length)]) +
                         (useDownloadImage ? TWITTER_MESSAGE_UPLOAD : TWITTER_MESSAGE_PASTE);
@@ -251,7 +255,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                 }
             }
         },
-        [isLoading, isMobile, isThalesCollateral, useDownloadImage]
+        [isLoading, isMobile, isOver, useDownloadImage]
     );
 
     const onTwitterShareClick = (copyOnly?: boolean) => {

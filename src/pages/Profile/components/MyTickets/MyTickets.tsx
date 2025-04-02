@@ -12,10 +12,12 @@ import { buildHref, navigateTo } from 'utils/routes';
 import { useAccount } from 'wagmi';
 import SearchField from '../../components/SearchField';
 import UserVaults from '../../components/UserVaults';
-import NavigationBar from '../NavigationBar';
+import Account from '../Account';
 import OpenClaimableTickets from '../OpenClaimableTickets';
 import TicketTransactions from '../TicketTransactions';
 import UserStatsV2 from '../UserStatsV2';
+import NavigationBar from './components/NavigationBar';
+import NavigationBarMobile from './components/NavigationBarMobile';
 
 type MyTicketsProps = {
     selectedTab: ProfileTab;
@@ -54,11 +56,13 @@ const MyTickets: React.FC<MyTicketsProps> = ({ selectedTab, setSelectedTab }) =>
                             handleChange={(value) => setSearchText(value)}
                         />
                     </Header>
-                    {isMobile && <NavigationBar selectedTab={selectedTab} setSelectedTab={setSelectedTab} />}
+                    {isMobile && <NavigationBarMobile selectedTab={selectedTab} setSelectedTab={setSelectedTab} />}
                 </NavigationWrapper>
                 {selectedTab == ProfileTab.OPEN_CLAIMABLE && <OpenClaimableTickets searchText={searchText} />}
                 {selectedTab == ProfileTab.TRANSACTION_HISTORY && <TicketTransactions searchText={searchText} />}
                 {selectedTab == ProfileTab.LP && <UserVaults />}
+                {selectedTab == ProfileTab.ACCOUNT && <Account />}
+                {selectedTab == ProfileTab.STATS && <UserStatsV2 />}
             </MainContainer>
             <RightSidebarContainer>
                 <UserStatsV2 />
@@ -98,7 +102,7 @@ const RightSidebarContainer = styled(SidebarContainer)`
 
 const MainContainer = styled(FlexDivColumn)`
     width: 100%;
-    max-width: 806px;
+
     flex-grow: 1;
     margin: 0 25px;
     @media (max-width: 1499px) {
@@ -119,12 +123,18 @@ const NavigationWrapper = styled(FlexDivRow)`
     @media (max-width: 950px) {
         flex-direction: column;
     }
+    @media (max-width: 512px) {
+        margin-bottom: 14px;
+    }
 `;
 
 const Header = styled(FlexDivRow)`
     width: 100%;
     @media (max-width: 950px) {
         margin-bottom: 15px;
+    }
+    @media (max-width: 512px) {
+        margin-bottom: 0;
     }
 `;
 

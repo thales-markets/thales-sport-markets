@@ -13,8 +13,9 @@ export enum ContractType {
     FREE_BET_HOLDER = 'freeBetHolderContract',
     SPORTS_AMM_V2_MANAGER = 'sportsAMMV2ManagerContract',
     MULTICALL = 'multiCallContract',
-    STAKING_THALES = 'stakingThalesContract',
     STAKING_THALES_BETTING_PROXY = 'stakingThalesBettingProxy',
     RESOLVE_BLOCKER = 'resolveBlockerContract',
     MARCH_MADNESS = 'marchMadnessContract',
+    THALES_TO_OVER_MIGRATION = 'thalvesToOverMigrationContract',
+    THALES = 'thalvesContract',
 }

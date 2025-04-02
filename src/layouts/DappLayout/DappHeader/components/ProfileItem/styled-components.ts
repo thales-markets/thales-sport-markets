@@ -2,22 +2,26 @@ import styled from 'styled-components';
 import { FlexDivRow } from 'styles/common';
 
 export const ProfileContainer = styled(FlexDivRow)`
+    position: relative;
     align-items: center;
     cursor: pointer;
     margin-right: 5px;
 `;
-export const ProfileLabel = styled.span`
+export const ProfileLabel = styled.span<{ color?: string }>`
     font-weight: 600;
     font-size: 12px;
-    color: ${(props) => props.theme.textColor.secondary};
-    text-transform: uppercase;
+    width: 82px;
+    color: ${(props) => (props.color ? props.color : props.theme.textColor.secondary)};
+    text-transform: lowercase;
+    white-space: pre;
 `;
 
-export const ProfileIconContainer = styled.div<{ marginRight?: string }>`
+export const ProfileIconContainer = styled.div<{ marginRight?: string; margin?: string }>`
     display: flex;
     align-items: center;
     position: relative;
     margin-right: ${(props) => props.marginRight || '5px'};
+    margin: ${(props) => (props.margin ? props.margin : '')};
 `;
 
 export const ProfileIcon = styled.i.attrs({ className: 'icon icon--profile2' })<{
@@ -27,9 +31,13 @@ export const ProfileIcon = styled.i.attrs({ className: 'icon icon--profile2' })<
     font-size: ${(props) => (props.avatarSize ? props.avatarSize : '20')}px;
     font-weight: 400;
     color: ${(props) => (props.iconColor ? props.iconColor : props.theme.textColor.secondary)};
+    cursor: pointer;
 `;
 
-export const NotificationCount = styled.div`
+export const NotificationCount = styled.div<{ top?: string; left?: string }>`
+    position: absolute;
+    top: ${(props) => (props.top ? props.top : '-10px')};
+    left: ${(props) => (props.left ? props.left : '-10px')};
     border-radius: 50%;
     display: flex;
     align-items: center;

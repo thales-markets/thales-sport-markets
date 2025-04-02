@@ -14,17 +14,17 @@ import {
     MarketType,
     MarketTypeMap,
 } from 'overtime-utils';
-import { bigNumberFormatter, coinFormatter, Coins, formatDateWithTime, NetworkId } from 'thales-utils';
+import { bigNumberFormatter, coinFormatter, Coins, formatDateWithTime } from 'thales-utils';
 import { CombinedPosition, SystemBetData, Team, Ticket, TicketMarket, TicketPosition } from 'types/markets';
 import { NetworkConfig, SupportedNetwork } from 'types/network';
 import { ShareTicketModalProps } from 'types/tickets';
 import futuresPositionNamesMap from '../assets/json/futuresPositionNamesMap.json';
 import positionNamesMap from '../assets/json/positionNamesMap.json';
 import { CRYPTO_CURRENCY_MAP } from '../constants/currency';
-import { BATCH_SIZE, THALES_ADDED_PAYOUT_PERCENTAGE } from '../constants/markets';
+import { BATCH_SIZE, OVER_ADDED_PAYOUT_PERCENTAGE } from '../constants/markets';
 import { UFC_LEAGUE_IDS } from '../constants/sports';
 import { TicketMarketStatus } from '../enums/tickets';
-import { getCollateralByAddress } from './collaterals';
+import { getCollateralByAddress, isOverCurrency } from './collaterals';
 import { getContractInstance } from './contract';
 import freeBetHolder from './contracts/freeBetHolder';
 import stakingThalesBettingProxy from './contracts/stakingThalesBettingProxy';
@@ -39,13 +39,7 @@ export const mapTicket = (
     liveScores: any,
     openOngoingMarkets?: any
 ): Ticket => {
-    // TODO - hardcode OVER as THALES until we release
-    let collateral =
-        ticket.collateral.toLowerCase() === '0xedf38688b27036816a50185caa430d5479e1c63e' ||
-        ticket.collateral.toLowerCase() === '0x5829d6fe7528bc8e92c4e81cc8f20a528820b51a' ||
-        ticket.collateral.toLowerCase() === '0x7750c092e284e2c7366f50c8306f43c7eb2e82a2'
-            ? (CRYPTO_CURRENCY_MAP.sTHALES as Coins)
-            : getCollateralByAddress(ticket.collateral, networkId);
+    let collateral = getCollateralByAddress(ticket.collateral, networkId);
     collateral =
         collateral === CRYPTO_CURRENCY_MAP.sTHALES &&
         ticket.ticketOwner.toLowerCase() !==
@@ -261,8 +255,8 @@ export const formatTicketOdds = (oddsType: OddsType, paid: number, payout: numbe
 export const getTicketMarketOdd = (market: TicketMarket) => (market.isCancelled ? 1 : market.odd);
 
 export const getAddedPayoutOdds = (currencyKey: Coins, odds: number) =>
-    currencyKey === CRYPTO_CURRENCY_MAP.THALES || currencyKey === CRYPTO_CURRENCY_MAP.sTHALES
-        ? odds / (1 + THALES_ADDED_PAYOUT_PERCENTAGE - THALES_ADDED_PAYOUT_PERCENTAGE * odds)
+    isOverCurrency(currencyKey)
+        ? odds / (1 + OVER_ADDED_PAYOUT_PERCENTAGE - OVER_ADDED_PAYOUT_PERCENTAGE * odds)
         : odds;
 
 // Order asc: 1,2,3,4; desc: 4,3,2,1;
@@ -477,29 +471,21 @@ export const getShareTicketModalData = async (
     isModalForLive: boolean, // not the same as isLive indicator
     isSgp: boolean,
     isFreeBet: boolean,
-    isStakedThales: boolean,
     systemBetData?: SystemBetData,
     networkConfig?: NetworkConfig,
     walletAddress?: string
 ) => {
     let modalData: ShareTicketModalProps | undefined = undefined;
     const isLive = !!markets[0].live;
-    const isStakedThalesSupported = networkConfig && networkConfig.networkId !== NetworkId.Base;
 
     if (isModalForLive && networkConfig) {
         const sportsAMMDataContract = getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig);
         const sportsAMMV2ManagerContract = getContractInstance(ContractType.SPORTS_AMM_V2_MANAGER, networkConfig);
         const freeBetHolderContract = getContractInstance(ContractType.FREE_BET_HOLDER, networkConfig);
-        const stakingThalesBettingProxyContract = getContractInstance(
-            ContractType.STAKING_THALES_BETTING_PROXY,
-            networkConfig
-        );
 
         if (sportsAMMDataContract && sportsAMMV2ManagerContract && freeBetHolderContract) {
             const numOfActiveTicketsPerUser = isFreeBet
                 ? await freeBetHolderContract.read.numOfActiveTicketsPerUser([walletAddress])
-                : isStakedThales && isStakedThalesSupported && stakingThalesBettingProxyContract
-                ? await stakingThalesBettingProxyContract.read.numOfActiveTicketsPerUser([walletAddress])
                 : await sportsAMMV2ManagerContract.read.numOfActiveTicketsPerUser([walletAddress]);
 
             const userTickets = await sportsAMMDataContract.read.getActiveTicketsDataPerUser([
@@ -510,8 +496,6 @@ export const getShareTicketModalData = async (
 
             const lastTicket = isFreeBet
                 ? userTickets.freeBetsData[userTickets.freeBetsData.length - 1]
-                : isStakedThales && isStakedThalesSupported
-                ? userTickets.stakingBettingProxyData[userTickets.stakingBettingProxyData.length - 1]
                 : userTickets.ticketsData[userTickets.ticketsData.length - 1];
 
             const lastTicketPaid = paid ? paid : coinFormatter(lastTicket.buyInAmount, networkConfig.networkId);

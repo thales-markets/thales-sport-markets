@@ -1,22 +1,20 @@
-import ROUTES from 'constants/routes';
 import React from 'react';
 import { Trans } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
-import { buildHref } from 'utils/routes';
 import SPAAnchor from '../SPAAnchor';
 
-const IS_VISIBLE = false;
+const IS_VISIBLE = true;
 
 const Banner: React.FC = () => {
     return !IS_VISIBLE ? (
         <></>
     ) : (
-        <SPAAnchor href={buildHref(ROUTES.MarchMadness)}>
+        <SPAAnchor href={'https://overtime.io'}>
             <Container>
                 <Label>
                     <Trans
-                        i18nKey={'banner.march-madness'}
+                        i18nKey={'banner.migration-message'}
                         components={{
                             highlight: <HightlightLabel />,
                         }}

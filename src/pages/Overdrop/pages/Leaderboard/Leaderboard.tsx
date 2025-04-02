@@ -7,12 +7,9 @@ import useOverdropLeaderboardQuery from 'queries/overdrop/useOverdropLeaderboard
 import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { getIsBiconomy } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
 import { formatCurrency, getEtherscanAddressLink, truncateAddress } from 'thales-utils';
-import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
-import biconomyConnector from 'utils/biconomyWallet';
 import { getCurrentLevelByPoints } from 'utils/overdrop';
 import { useAccount, useChainId } from 'wagmi';
 import {
@@ -33,11 +30,8 @@ import {
 const Leaderboard: React.FC = () => {
     const isMobile = useSelector(getIsMobile);
 
-    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
-
     const networkId = useChainId();
     const { address } = useAccount();
-    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
 
     const theme: ThemeInterface = useTheme();
 
@@ -59,7 +53,7 @@ const Leaderboard: React.FC = () => {
     );
 
     const stickyRow = useMemo(() => {
-        const data = leaderboard.find((row) => row.address.toLowerCase() == walletAddress?.toLowerCase());
+        const data = leaderboard.find((row) => row.address.toLowerCase() == address?.toLowerCase());
         if (!data) return undefined;
         return isMobile ? (
             <StickyRowCardContainer>
@@ -144,7 +138,7 @@ const Leaderboard: React.FC = () => {
                 </StickyContainer>
             </StickyRow>
         );
-    }, [isMobile, leaderboard, networkId, walletAddress]);
+    }, [isMobile, leaderboard, networkId, address]);
 
     const columns = [
         {

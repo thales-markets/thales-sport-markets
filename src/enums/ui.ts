@@ -7,7 +7,8 @@ export enum ProfileTab {
     OPEN_CLAIMABLE = 'open-claimable',
     TRANSACTION_HISTORY = 'transaction-history',
     LP = 'lp',
-    MY_PORTFOLIO = 'my-portfolio',
+    ACCOUNT = 'account',
+    STATS = 'user-stats',
 }
 
 export enum PnlTab {
@@ -17,6 +18,7 @@ export enum PnlTab {
     THALES_USERS_PNL = 'thales',
     CBBTC_USERS_PNL = 'cbbtc',
     WBTC_USERS_PNL = 'wbtc',
+    OVER_USERS_PNL = 'over',
     USDC_TICKETS = 'usdc-tickets',
     WETH_TICKETS = 'weth-tickets',
     THALES_TICKETS = 'thales-tickets',
