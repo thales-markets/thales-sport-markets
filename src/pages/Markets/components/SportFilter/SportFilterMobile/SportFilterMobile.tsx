@@ -180,6 +180,7 @@ const Container = styled(FlexDivRowCentered)`
     margin-bottom: 5px;
     justify-content: space-around;
     width: 100%;
+    margin-top: 10px;
 `;
 
 const LabelContainer = styled(FlexDivColumn)`

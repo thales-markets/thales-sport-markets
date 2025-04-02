@@ -27,6 +27,7 @@ import SidebarMMLeaderboard from 'pages/MarchMadness/components/SidebarLeaderboa
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
+import queryString from 'query-string';
 import React, { Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
@@ -52,7 +53,7 @@ import {
 } from 'redux/modules/market';
 import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled, { CSSProperties, useTheme } from 'styled-components';
-import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
+import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivSpaceBetween } from 'styles/common';
 import { addHoursToCurrentDate, localStore } from 'thales-utils';
 import { MarketsCache, SportMarket, SportMarkets, TagInfo, Tags } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
@@ -68,6 +69,7 @@ import SportFilterMobile from '../components/SportFilter/SportFilterMobile';
 import SportTags from '../components/SportTags';
 import GlobalFilters from '../components/StatusFilters';
 import Breadcrumbs from './Breadcrumbs';
+import Filters from './Filters';
 import Header from './Header';
 import SelectedMarket from './SelectedMarket';
 
@@ -112,6 +114,8 @@ const Home: React.FC = () => {
     const [availableMarketTypes, setAvailableMarketTypes] = useState<MarketType[]>([]);
     const getSelectedOddsType = localStore.get(LOCAL_STORAGE_KEYS.ODDS_TYPE);
 
+    const queryParams: { freeBet?: string } = queryString.parse(location.search);
+
     const tagsList: Tags = useMemo(
         () =>
             orderBy(
@@ -128,10 +132,10 @@ const Home: React.FC = () => {
     );
 
     useEffect(() => {
-        if (getSelectedOddsType == undefined) {
+        if (getSelectedOddsType == undefined && !queryParams.freeBet) {
             setShowOddsSelectorModal(true);
         }
-    }, [getSelectedOddsType]);
+    }, [getSelectedOddsType, queryParams.freeBet]);
 
     const favouriteLeagues = useSelector(getFavouriteLeagues);
 
@@ -812,7 +816,6 @@ const Home: React.FC = () => {
                                         allMarkets={finalMarkets}
                                         availableMarketTypes={availableMarketTypes}
                                         market={selectedMarketData}
-                                        isMainPageView
                                     />
                                 )}
                             <FilterTagsMobile />
@@ -824,7 +827,12 @@ const Home: React.FC = () => {
                         </LoaderContainer>
                     ) : (
                         <>
-                            {!isMobile && <Breadcrumbs setTagParam={setTagParam} />}
+                            {!isMobile && (
+                                <FiltersContainer>
+                                    <Breadcrumbs setTagParam={setTagParam} />
+                                    <Filters isMainPageView />
+                                </FiltersContainer>
+                            )}
                             {finalMarkets.length === 0 ? (
                                 <NoMarketsContainer>
                                     <NoMarketsLabel>
@@ -851,7 +859,6 @@ const Home: React.FC = () => {
                                                 allMarkets={finalMarkets}
                                                 availableMarketTypes={availableMarketTypes}
                                                 market={selectedMarketData}
-                                                isMainPageView
                                             />
                                         )}
                                     <FlexDivRow>
@@ -922,8 +929,8 @@ const Home: React.FC = () => {
 const Container = styled(FlexDivColumnCentered)`
     width: 100%;
     margin-top: 15px;
-    @media (max-width: 767px) {
-        margin-top: 20px;
+    @media (max-width: 950px) {
+        margin-top: 0;
     }
 `;
 
@@ -1033,6 +1040,10 @@ const LogoContainer = styled.div`
     margin-top: 30px;
     margin-bottom: 20px;
     text-align: center;
+    svg {
+        height: 25px;
+        width: 100%;
+    }
 `;
 
 const FiltersIcon = styled.i`
@@ -1110,6 +1121,10 @@ const CheckboxContainer = styled.div<{ isMobile: boolean }>`
             border-width: 0 2px 2px 0;
         }
     }
+`;
+
+const FiltersContainer = styled(FlexDivSpaceBetween)`
+    margin-bottom: 10px;
 `;
 
 export default Home;

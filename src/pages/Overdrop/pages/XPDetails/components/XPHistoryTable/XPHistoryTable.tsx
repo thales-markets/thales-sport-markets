@@ -8,9 +8,9 @@ import { formatPoints } from 'utils/overdrop';
 import { useAccount } from 'wagmi';
 
 const XPHistoryTable: React.FC = () => {
-    const walletAddress = useAccount()?.address || '';
+    const { address, isConnected } = useAccount();
 
-    const userXPHistoryQuery = useUserXPHistoryQuery(walletAddress);
+    const userXPHistoryQuery = useUserXPHistoryQuery(address as string, { enabled: isConnected });
 
     const userXPHistory = useMemo(() => {
         if (userXPHistoryQuery?.isSuccess && userXPHistoryQuery?.data) {

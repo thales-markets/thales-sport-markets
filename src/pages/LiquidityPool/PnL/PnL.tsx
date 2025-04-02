@@ -20,6 +20,7 @@ import { formatPercentageWithSign } from 'thales-utils';
 import { LiquidityPoolPnls } from 'types/liquidityPool';
 import { ThemeInterface } from 'types/ui';
 import { useChainId } from 'wagmi';
+import { hidePnl } from '../../../utils/liquidityPool';
 
 type PnlProps = {
     lifetimePnl: number;
@@ -40,9 +41,7 @@ const PnL: React.FC<PnlProps> = ({ lifetimePnl, type, liquidityPoolAddress }) =>
         liquidityPoolAddress,
         { networkId },
         {
-            enabled:
-                liquidityPoolAddress !== '0xE59206b08cC96Da0818522C75eE3Fd4EBB7c0A47' &&
-                liquidityPoolAddress !== '0x9733AB157f5A89f0AD7460d08F869956aE2018dA',
+            enabled: !hidePnl(liquidityPoolAddress, networkId),
         }
     );
 
@@ -101,8 +100,7 @@ const PnL: React.FC<PnlProps> = ({ lifetimePnl, type, liquidityPoolAddress }) =>
                 <Title>{t(`liquidity-pool.pnl.${type}.title`)}</Title>
                 {type === LiquidityPoolPnlType.CUMULATIVE_PNL &&
                     // TODO temp disable THALES PnL
-                    liquidityPoolAddress !== '0xE59206b08cC96Da0818522C75eE3Fd4EBB7c0A47' &&
-                    liquidityPoolAddress !== '0x9733AB157f5A89f0AD7460d08F869956aE2018dA' && (
+                    !hidePnl(liquidityPoolAddress, networkId) && (
                         <LifetimePnlContainer>
                             <LifetimePnlLabel>{t('liquidity-pool.pnl.lifetime-pnl')}:</LifetimePnlLabel>
                             <LifetimePnl

@@ -52,3 +52,14 @@ export const isLpAvailableForNetwork = (networkId: SupportedNetwork, lpCollatera
     (networkId === NetworkId.OptimismMainnet &&
         lpCollateral !== LiquidityPoolCollateral.cbBTC &&
         lpCollateral !== LiquidityPoolCollateral.wBTC);
+
+export const hidePnl = (liquidityPoolAddress: string, networkId: SupportedNetwork) => {
+    const lpPerNetwork = LiquidityPoolMap[networkId];
+    if (lpPerNetwork) {
+        return (
+            liquidityPoolAddress.toLowerCase() === lpPerNetwork[LiquidityPoolCollateral.OVER]?.address.toLowerCase() ||
+            liquidityPoolAddress.toLowerCase() === lpPerNetwork[LiquidityPoolCollateral.THALES]?.address.toLowerCase()
+        );
+    }
+    return false;
+};

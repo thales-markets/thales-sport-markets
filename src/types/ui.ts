@@ -10,6 +10,7 @@ export type NavMenuItem = {
     name: string;
     route: string;
     supportedNetworks: Network[];
+    i18labelSmart?: string;
 };
 
 type PromotionCardData = {

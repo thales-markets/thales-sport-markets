@@ -35,7 +35,7 @@ export default {
             secondary: Colors.NAVY_BLUE,
             tertiary: Colors.NAVY_BLUE_LIGHT,
             quaternary: Colors.BLUE,
-            quinary: Colors.BLUE,
+            quinary: Colors.GOLD,
             senary: Colors.TORY_BLUE,
             septenary: Colors.RED,
             octonary: Colors.GRAY_TRANSPARENT,
@@ -190,7 +190,7 @@ export default {
     },
     overdrop: {
         background: {
-            secondary: '#F1BA2099',
+            secondary: Colors.YELLOW_LIGHT,
             tertiary: 'rgba(60, 73, 138, 0.15)',
             quaternary: Colors.METALIC_BLUE,
             quinary: Colors.NAVY_BLUE_EXTRA_DARK,

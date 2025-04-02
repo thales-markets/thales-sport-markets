@@ -6,7 +6,6 @@ import Scroll from 'components/Scroll';
 import Tooltip from 'components/Tooltip';
 import { secondsToMilliseconds } from 'date-fns';
 import { SportFilter, StatusFilter, TicketErrorCode } from 'enums/markets';
-import { Network } from 'enums/network';
 import { isEqual } from 'lodash';
 import { League, LeagueMap } from 'overtime-utils';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
@@ -72,7 +71,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     const [oddsChanged, setOddsChanged] = useState<boolean>(false);
     const [acceptOdds, setAcceptOdds] = useState<boolean>(false);
     const [outOfLiquidityMarkets, setOutOfLiquidityMarkets] = useState<number[]>([]);
-    const [useThalesCollateral, setUseThalesCollateral] = useState(false);
+    const [useOverCollateral, setUseOverCollateral] = useState(false);
 
     const isLive = useMemo(() => !!ticket[0]?.live, [ticket]);
 
@@ -166,7 +165,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
             setOddsChanged(false);
             setUnavailableMarkets([]);
             setOutOfLiquidityMarkets([]);
-            setUseThalesCollateral(false);
+            setUseOverCollateral(false);
         }
     }, [ticket]);
 
@@ -401,11 +400,9 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                             </Tooltip>
                         </BetTypeContainer>
                     )}
-                    {networkId !== Network.Base && (
-                        <ThalesBonusContainer>
-                            <ThalesBonus>{t('markets.parlay.thales-bonus-info')}</ThalesBonus>
-                        </ThalesBonusContainer>
-                    )}
+                    <OverBonusContainer>
+                        <OverBonus>{t('markets.parlay.over-bonus-info')}</OverBonus>
+                    </OverBonusContainer>
                     <ScrollContainer>
                         <Scroll height={`${scrollHeight}px`} renderOnlyChildren={!isScrollVisible}>
                             <ListContainer ref={marketsList} isScrollVisible={isScrollVisible}>
@@ -422,7 +419,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                                                     setAcceptOdds={setAcceptOdds}
                                                     isSgp={isSgp}
                                                     applyPayoutMultiplier={true}
-                                                    useThalesCollateral={useThalesCollateral}
+                                                    useOverCollateral={useOverCollateral}
                                                 />
                                             </RowMarket>
                                         );
@@ -455,7 +452,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                         }}
                         onSuccess={onSuccess}
                         submitButtonDisabled={!!unavailableMarkets.length}
-                        setUseThalesCollateral={setUseThalesCollateral}
+                        setUseOverCollateral={setUseOverCollateral}
                         sgpData={isSgp ? sportsbookData : undefined}
                     />
                 </>
@@ -512,7 +509,7 @@ const Count = styled(FlexDivCentered)`
     margin-left: 6px;
 `;
 
-const ThalesBonusContainer = styled(FlexDivCentered)`
+const OverBonusContainer = styled(FlexDivCentered)`
     background: ${(props) => props.theme.background.quaternary};
     color: ${(props) => props.theme.textColor.tertiary};
     min-width: 100%;
@@ -521,7 +518,7 @@ const ThalesBonusContainer = styled(FlexDivCentered)`
     margin-bottom: 10px;
 `;
 
-const ThalesBonus = styled.span`
+const OverBonus = styled.span`
     font-size: 12px;
     line-height: 16px;
     font-weight: 600;
@@ -538,7 +535,7 @@ const ThalesBonus = styled.span`
             width: 0;
         }
         to {
-            width: 320px;
+            width: 300px;
         }
     }
 

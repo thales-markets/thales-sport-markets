@@ -1,13 +1,10 @@
-import SPAAnchor from 'components/SPAAnchor';
-import ROUTES from 'constants/routes';
 import useClaimablePositionCountV2Query from 'queries/markets/useClaimablePositionCountV2Query';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsBiconomy } from 'redux/modules/wallet';
+import { truncateAddress } from 'thales-utils';
 import { RootState } from 'types/redux';
-import biconomyConnector from 'utils/biconomyWallet';
-import { buildHref } from 'utils/routes';
+import useBiconomy from 'utils/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import {
     Count,
@@ -21,29 +18,42 @@ import {
 type ProfileItemProperties = {
     labelHidden?: boolean;
     avatarSize?: number;
-    iconColor?: string;
+    color?: string;
     marginRight?: string;
+    top?: string;
+    left?: string;
+    margin?: string;
 };
 
-const ProfileItem: React.FC<ProfileItemProperties> = ({ labelHidden, avatarSize }) => {
-    const { t } = useTranslation();
+const ProfileItem: React.FC<ProfileItemProperties> = ({ color }) => {
+    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+
+    const { address } = useAccount();
+    const smartAddres = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddres : address) || '';
+
     return (
-        <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Profile)}>
-            <ProfileContainer>
-                <ProfileIconWidget avatarSize={avatarSize} />
-                {!labelHidden && <ProfileLabel>{t('markets.nav-menu.items.profile')}</ProfileLabel>}
-            </ProfileContainer>
-        </SPAAnchor>
+        <ProfileContainer>
+            <ProfileLabel color={color}>{truncateAddress(walletAddress, 6, 4)}</ProfileLabel>
+        </ProfileContainer>
     );
 };
 
-export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({ avatarSize, iconColor, marginRight }) => {
+export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({
+    avatarSize,
+    color,
+    marginRight,
+    top,
+    left,
+    margin,
+}) => {
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
-    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+    const smartAddres = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddres : address) || '';
 
     const claimablePositionsCountQuery = useClaimablePositionCountV2Query(
         walletAddress,
@@ -60,13 +70,13 @@ export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({ avatarSize,
     const notificationsCount = claimablePositionCount || 0;
 
     return (
-        <ProfileIconContainer marginRight={marginRight}>
+        <ProfileIconContainer marginRight={marginRight} margin={margin}>
             {!!notificationsCount && (
-                <NotificationCount>
+                <NotificationCount top={top} left={left}>
                     <Count>{notificationsCount}</Count>
                 </NotificationCount>
             )}
-            <ProfileIcon avatarSize={avatarSize} iconColor={iconColor} />
+            <ProfileIcon avatarSize={avatarSize} iconColor={color} />
         </ProfileIconContainer>
     );
 };
