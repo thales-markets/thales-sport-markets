@@ -2,6 +2,7 @@ import { useConnect as useParticleConnect } from '@particle-network/authkit';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import Loader from 'components/Loader';
 import ROUTES from 'constants/routes';
+import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import DappLayout from 'layouts/DappLayout';
 import Theme from 'layouts/Theme';
 import FreeBets from 'pages/FreeBets';
@@ -22,7 +23,13 @@ import { Suspense, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Route, Router, Switch } from 'react-router-dom';
 import { setMobileState } from 'redux/modules/app';
-import { getIsConnectedViaParticle, setWalletConnectModalVisibility, updateParticleState } from 'redux/modules/wallet';
+import {
+    getIsConnectedViaParticle,
+    setIsBiconomy,
+    setWalletConnectModalVisibility,
+    updateParticleState,
+} from 'redux/modules/wallet';
+import { localStore } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
 import { SeoArticleProps } from 'types/ui';
 import { isMobile } from 'utils/device';
@@ -70,6 +77,20 @@ const App = () => {
             });
         }
     }, [dispatch, switchChain, networkId, disconnect, walletClient]);
+
+    useEffect(() => {
+        const isBiconomyLocalStorage = localStore.get(LOCAL_STORAGE_KEYS.USE_BICONOMY);
+        if (isBiconomyLocalStorage === undefined) {
+            const overdropState = localStore.get(LOCAL_STORAGE_KEYS.OVERDROP_STATE);
+            if (overdropState === undefined) {
+                dispatch(setIsBiconomy(true));
+                localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, true);
+            } else {
+                dispatch(setIsBiconomy(false));
+                localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, false);
+            }
+        }
+    }, [dispatch]);
 
     useEffect(() => {
         if (connectionStatus === 'connected') {
