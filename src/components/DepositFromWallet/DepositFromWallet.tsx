@@ -174,9 +174,7 @@ const DepositFromWallet: React.FC<DepositFromWalletProps> = ({ onClose, preSelec
                             <AmountToBuyContainer>
                                 <NumericInput
                                     value={amount}
-                                    onChange={(e) => {
-                                        setAmount(Number(e.target.value));
-                                    }}
+                                    onChange={(_, value) => setAmount(value)}
                                     inputFontWeight="700"
                                     inputPadding="5px 10px"
                                     height="44px"
