@@ -104,6 +104,7 @@ export const Colors = {
 
     // Overdrop
     YELLOW: '#F1BA20',
+    YELLOW_LIGHT: '#F1BA2099',
     LIGHTNING_YELLOW: '#F8C914',
     METALIC_YELLOW: '#FBCD0F',
     CHINESE_BLUE: '#5764A3',

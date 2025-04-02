@@ -309,9 +309,9 @@ const Link = styled.a.attrs({
     target: '_blank',
     rel: 'noopener noreferrer',
 })`
-    color: ${(props) => props.theme.textColor.quaternary};
+    color: ${(props) => props.theme.link.textColor.primary};
     text-decoration: underline;
-    text-decoration-color: ${(props) => props.theme.textColor.quaternary};
+    text-decoration-color: ${(props) => props.theme.link.textColor.primary};
     line-height: 18px;
 `;
 

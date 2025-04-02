@@ -190,7 +190,7 @@ export default {
     },
     overdrop: {
         background: {
-            secondary: '#F1BA2099',
+            secondary: Colors.YELLOW_LIGHT,
             tertiary: 'rgba(60, 73, 138, 0.15)',
             quaternary: Colors.METALIC_BLUE,
             quinary: Colors.NAVY_BLUE_EXTRA_DARK,
