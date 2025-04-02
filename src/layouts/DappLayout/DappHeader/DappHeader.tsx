@@ -257,13 +257,7 @@ const DappHeader: React.FC = () => {
                                     height: '30px',
                                     whiteSpace: 'pre',
                                 }}
-                                onClick={() =>
-                                    dispatch(
-                                        setWalletConnectModalVisibility({
-                                            visibility: true,
-                                        })
-                                    )
-                                }
+                                onClick={() => dispatch(setWalletConnectModalVisibility({ visibility: true }))}
                             >
                                 {t('get-started.sign-up')}
                             </Button>

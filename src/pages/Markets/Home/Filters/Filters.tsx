@@ -166,7 +166,6 @@ const Filters: React.FC<FiltersProps> = ({ hideSwitch, isMainPageView }) => {
                         <DropdownContainer>
                             <DropDown>
                                 {ODDS_TYPES.map((item: OddsType, index: number) => {
-                                    console.log(item);
                                     return (
                                         <DropDownItem
                                             key={index}

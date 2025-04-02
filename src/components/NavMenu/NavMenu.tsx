@@ -13,9 +13,9 @@ import useBlockedGamesQuery from 'queries/resolveBlocker/useBlockedGamesQuery';
 import useWhitelistedForUnblock from 'queries/resolveBlocker/useWhitelistedForUnblock';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { getIsConnectedViaParticle } from 'redux/modules/wallet';
+import { getIsConnectedViaParticle, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
 import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
@@ -50,6 +50,7 @@ const PARTICLE_WALLET = 'https://wallet.particle.network/';
 const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, skipOutsideClickOnElement }) => {
     const { t } = useTranslation();
     const location = useLocation();
+    const dispatch = useDispatch();
     const theme: ThemeInterface = useTheme();
     const networkId = useChainId();
     const client = useClient();
@@ -229,6 +230,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                             onClick={() => {
                                 disconnect();
                                 setNavMenuVisibility(null);
+                                dispatch(setWalletConnectModalVisibility({ visibility: true }));
                             }}
                         >
                             {t('markets.nav-menu.buttons.disconnect')}

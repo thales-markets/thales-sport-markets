@@ -81,43 +81,34 @@ const WalletInfo: React.FC = ({}) => {
     };
 
     return isConnected ? (
-        <>
-            <Container walletConnected={isConnected}>
-                {isConnected && (
-                    <OutsideClickHandler onOutsideClick={setShowDropdown.bind(this, false)}>
-                        <WalletWrapper>
-                            <Icon
-                                onClick={setShowDropdown.bind(this, !showDropdown)}
-                                className="icon icon--arrow-down"
-                            />
-                            <Divider />
-                            <WalletAddressInfo onClick={setShowDropdown.bind(this, !showDropdown)}>
-                                <Text>{isBiconomy ? t('profile.dropdown.account') : t('profile.dropdown.eoa')}</Text>
-                            </WalletAddressInfo>
-                            <Divider />
-                            <WalletAddressInfo onClick={handleCopy.bind(this, walletAddress)}>
-                                <ProfileItem color={theme.textColor.secondary} />
-                            </WalletAddressInfo>
+        <Container walletConnected={isConnected}>
+            {isConnected && (
+                <OutsideClickHandler onOutsideClick={setShowDropdown.bind(this, false)}>
+                    <WalletWrapper>
+                        <Icon onClick={setShowDropdown.bind(this, !showDropdown)} className="icon icon--arrow-down" />
+                        <Divider />
+                        <WalletAddressInfo onClick={setShowDropdown.bind(this, !showDropdown)}>
+                            <Text>{isBiconomy ? t('profile.dropdown.account') : t('profile.dropdown.eoa')}</Text>
+                        </WalletAddressInfo>
+                        <Divider />
+                        <WalletAddressInfo onClick={handleCopy.bind(this, walletAddress)}>
+                            <ProfileItem color={theme.textColor.secondary} />
+                        </WalletAddressInfo>
 
-                            <NetworkSwitcher containerStyle={{ minWidth: 52, gap: 3 }} />
+                        <NetworkSwitcher containerStyle={{ minWidth: 52, gap: 3 }} />
 
-                            {showDropdown && <ProfileDropdown setShowDropdown={setShowDropdown} />}
-                        </WalletWrapper>
-                    </OutsideClickHandler>
-                )}
-            </Container>
-        </>
+                        {showDropdown && <ProfileDropdown setShowDropdown={setShowDropdown} />}
+                    </WalletWrapper>
+                </OutsideClickHandler>
+            )}
+        </Container>
     ) : (
         <>
             {connectWalletModalVisibility && (
                 <ConnectWalletModal
                     isOpen={connectWalletModalVisibility}
                     onClose={() => {
-                        dispatch(
-                            setWalletConnectModalVisibility({
-                                visibility: false,
-                            })
-                        );
+                        dispatch(setWalletConnectModalVisibility({ visibility: false }));
                     }}
                 />
             )}

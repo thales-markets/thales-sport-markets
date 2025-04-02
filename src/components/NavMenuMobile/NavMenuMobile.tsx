@@ -17,7 +17,9 @@ import useBlockedGamesQuery from 'queries/resolveBlocker/useBlockedGamesQuery';
 import useWhitelistedForUnblock from 'queries/resolveBlocker/useWhitelistedForUnblock';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import { setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
 import { getNetworkIconClassNameByNetworkId, getNetworkNameByNetworkId } from 'utils/network';
@@ -48,6 +50,7 @@ type NavMenuMobileProps = {
 const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVisibility }) => {
     const { t } = useTranslation();
     const location = useLocation();
+    const dispatch = useDispatch();
     const theme: ThemeInterface = useTheme();
     const { disconnect } = useDisconnect();
     const networkId = useChainId();
@@ -194,6 +197,7 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                                 onClick={() => {
                                     disconnect();
                                     setNavMenuVisibility(false);
+                                    dispatch(setWalletConnectModalVisibility({ visibility: true }));
                                 }}
                             >
                                 {t('markets.nav-menu.buttons.disconnect')}

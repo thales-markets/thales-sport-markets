@@ -7,7 +7,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getIsBiconomy, setIsBiconomy } from 'redux/modules/wallet';
+import { getIsBiconomy, setIsBiconomy, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { localStore, truncateAddress } from 'thales-utils';
 import { RootState } from 'types/redux';
@@ -103,6 +103,7 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ setShowDropdown }) =>
                 onClick={() => {
                     disconnect();
                     setShowDropdown(false);
+                    dispatch(setWalletConnectModalVisibility({ visibility: true }));
                 }}
             >
                 <WalletIcon className="icon icon--wallet-disconnected" />
