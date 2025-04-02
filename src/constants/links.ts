@@ -4,7 +4,7 @@ export const LINKS = {
     SpeedMarkets: 'https://www.speedmarkets.xyz',
     TwitterTweetStatus: 'https://twitter.com/intent/tweet?text=',
     Footer: {
-        Twitter: 'https://twitter.com/OvertimeMarkets',
+        Twitter: 'https://x.com/overtime_io',
         Discord: 'https://discord.gg/z5xFxMccsu',
         Docs: 'https://docs.overtime.io/',
         Medium: 'https://medium.com/@OvertimeMarkets.xyz',
