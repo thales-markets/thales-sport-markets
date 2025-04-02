@@ -146,8 +146,6 @@ const ThalesToOverMigrationModal: React.FC<ThalesToOverMigrationModalProps> = ({
             networkId,
         });
 
-        console.log(thalesToOverMigrationContract);
-
         if (thalesToOverMigrationContract) {
             const toastId = toast.loading(t('market.toast-message.transaction-pending'));
             try {
