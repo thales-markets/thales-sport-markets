@@ -83,19 +83,22 @@ const WalletInfo: React.FC = ({}) => {
     return isConnected ? (
         <Container walletConnected={isConnected}>
             {isConnected && (
-                <OutsideClickHandler onOutsideClick={setShowDropdown.bind(this, false)}>
+                <OutsideClickHandler onOutsideClick={() => setShowDropdown(false)}>
                     <WalletWrapper>
-                        <Icon onClick={setShowDropdown.bind(this, !showDropdown)} className="icon icon--arrow-down" />
+                        <Icon onClick={() => setShowDropdown(!showDropdown)} className="icon icon--arrow-down" />
                         <Divider />
-                        <WalletAddressInfo onClick={setShowDropdown.bind(this, !showDropdown)}>
+                        <WalletAddressInfo onClick={() => setShowDropdown(!showDropdown)}>
                             <Text>{isBiconomy ? t('profile.dropdown.account') : t('profile.dropdown.eoa')}</Text>
                         </WalletAddressInfo>
                         <Divider />
-                        <WalletAddressInfo onClick={handleCopy.bind(this, walletAddress)}>
+                        <WalletAddressInfo onClick={() => handleCopy(walletAddress)}>
                             <ProfileItem color={theme.textColor.secondary} />
                         </WalletAddressInfo>
 
-                        <NetworkSwitcher containerStyle={{ minWidth: 52, gap: 3 }} />
+                        <NetworkSwitcher
+                            containerStyle={{ minWidth: 52, gap: 3 }}
+                            onClick={() => setShowDropdown(false)}
+                        />
 
                         {showDropdown && <ProfileDropdown setShowDropdown={setShowDropdown} />}
                     </WalletWrapper>

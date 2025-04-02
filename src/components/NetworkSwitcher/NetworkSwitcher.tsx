@@ -7,9 +7,10 @@ import { useAccount, useChainId, useSwitchChain } from 'wagmi';
 
 type NetworkSwitcherProps = {
     containerStyle?: CSSProperties;
+    onClick?: () => void;
 };
 
-const NetworkSwitcher: React.FC<NetworkSwitcherProps> = ({ containerStyle }) => {
+const NetworkSwitcher: React.FC<NetworkSwitcherProps> = ({ containerStyle, onClick }) => {
     const networkId = useChainId();
     const { isConnected } = useAccount();
 
@@ -30,6 +31,7 @@ const NetworkSwitcher: React.FC<NetworkSwitcherProps> = ({ containerStyle }) => 
                     style={containerStyle}
                     onClick={() => {
                         if (supportedNetworks.length > 1) setDropDownOpen(!dropDownOpen);
+                        onClick && onClick();
                     }}
                     isConnected={isConnected}
                     isMultiChain={supportedNetworks.length > 1}
@@ -114,7 +116,7 @@ const DownIcon = styled.i<{ isConnected: boolean }>`
 const NetworkDropDown = styled.div`
     z-index: 1000;
     position: absolute;
-    top: 32px;
+    top: 36px;
     right: 0px;
     display: flex;
     flex-direction: column;
