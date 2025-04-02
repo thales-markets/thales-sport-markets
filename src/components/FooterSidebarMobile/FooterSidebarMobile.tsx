@@ -50,7 +50,7 @@ const FooterSidebarMobile: React.FC<FooterSidebarMobileProps> = ({ setParlayMobi
                 <ItemIcon iteration={ticketLength} className={`icon icon--ticket-horizontal ${pulse ? 'pulse' : ''}`} />
                 {ticketLength > 0 && <ParlayNumber>{ticketLength || ''}</ParlayNumber>}
 
-                <ItemLabel>Parlay</ItemLabel>
+                <ItemLabel>Bet Slip</ItemLabel>
             </ItemContainer>
             {setShowBurger && (
                 <ItemContainer>
