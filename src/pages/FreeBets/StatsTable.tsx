@@ -63,7 +63,10 @@ const columns = [
     {
         header: <>Claimed</>,
         accessorKey: 'claimSuccess',
-        cell: (cellProps: any) => <p>{cellProps.cell.getValue().toString()}</p>,
+        cell: (cellProps: any) => {
+            const value = cellProps.cell.getValue().toString();
+            return <p className={value}>{value}</p>;
+        },
         size: 50,
         enableSorting: true,
     },
