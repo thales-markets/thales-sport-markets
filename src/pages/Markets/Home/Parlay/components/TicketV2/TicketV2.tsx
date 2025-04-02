@@ -22,7 +22,7 @@ import {
     SYSTEM_BET_MINIMUM_DENOMINATOR,
     SYSTEM_BET_MINIMUM_MARKETS,
 } from 'constants/markets';
-import { ZERO_ADDRESS } from 'constants/network';
+import { POLLING_INTERVAL_FOR_TX, ZERO_ADDRESS } from 'constants/network';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { secondsToMilliseconds } from 'date-fns';
@@ -1275,6 +1275,7 @@ const Ticket: React.FC<TicketProps> = ({
 
             const txReceipt = await waitForTransactionReceipt(client as Client, {
                 hash: txHash,
+                pollingInterval: POLLING_INTERVAL_FOR_TX,
             });
 
             if (txReceipt.status === 'success') {
@@ -1432,6 +1433,7 @@ const Ticket: React.FC<TicketProps> = ({
 
                     const txReceipt = await waitForTransactionReceipt(client as Client, {
                         hash: txHash,
+                        pollingInterval: POLLING_INTERVAL_FOR_TX,
                     });
 
                     if (txReceipt.status === 'success') {
@@ -1550,6 +1552,7 @@ const Ticket: React.FC<TicketProps> = ({
 
                             const txReceipt = await waitForTransactionReceipt(client as Client, {
                                 hash: wrapTx,
+                                pollingInterval: POLLING_INTERVAL_FOR_TX,
                             });
 
                             if (txReceipt.status === 'success') {
@@ -1624,6 +1627,7 @@ const Ticket: React.FC<TicketProps> = ({
 
                 const txReceipt = await waitForTransactionReceipt(client as Client, {
                     hash: txHash,
+                    pollingInterval: POLLING_INTERVAL_FOR_TX,
                 });
 
                 if (txReceipt.status === 'success') {

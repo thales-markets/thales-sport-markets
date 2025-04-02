@@ -6,6 +6,7 @@ import Modal from 'components/Modal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { LINKS } from 'constants/links';
+import { POLLING_INTERVAL_FOR_TX } from 'constants/network';
 import { ContractType } from 'enums/contract';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useEffect, useState } from 'react';
@@ -125,6 +126,7 @@ const ThalesToOverMigrationModal: React.FC<ThalesToOverMigrationModalProps> = ({
 
                 const txReceipt = await waitForTransactionReceipt(client as Client, {
                     hash: txHash,
+                    pollingInterval: POLLING_INTERVAL_FOR_TX,
                 });
 
                 if (txReceipt.status === 'success') {
@@ -156,6 +158,7 @@ const ThalesToOverMigrationModal: React.FC<ThalesToOverMigrationModalProps> = ({
 
                 const txReceipt = await waitForTransactionReceipt(client as Client, {
                     hash: txHash,
+                    pollingInterval: POLLING_INTERVAL_FOR_TX,
                 });
                 if (txReceipt.status === 'success') {
                     toast.update(

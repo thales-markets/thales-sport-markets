@@ -13,6 +13,7 @@ import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { LINKS } from 'constants/links';
+import { POLLING_INTERVAL_FOR_TX } from 'constants/network';
 import { ContractType } from 'enums/contract';
 import { LiquidityPoolCollateral, LiquidityPoolPnlType, LiquidityPoolTab } from 'enums/liquidityPool';
 import useLiquidityPoolDataQuery from 'queries/liquidityPool/useLiquidityPoolDataQuery';
@@ -349,6 +350,7 @@ const LiquidityPool: React.FC = () => {
 
                 const txReceipt = await waitForTransactionReceipt(client as Client, {
                     hash,
+                    pollingInterval: POLLING_INTERVAL_FOR_TX,
                 });
 
                 if (txReceipt.status === 'success') {
@@ -401,6 +403,7 @@ const LiquidityPool: React.FC = () => {
 
                 const wrapTxReceipt = await waitForTransactionReceipt(client as Client, {
                     hash: wrapTxHash,
+                    pollingInterval: POLLING_INTERVAL_FOR_TX,
                 });
 
                 if (wrapTxReceipt.status === 'success') {
@@ -416,6 +419,7 @@ const LiquidityPool: React.FC = () => {
 
                     const txReceipt = await waitForTransactionReceipt(client as Client, {
                         hash: txHash,
+                        pollingInterval: POLLING_INTERVAL_FOR_TX,
                     });
 
                     if (txReceipt.status === 'success') {
@@ -442,6 +446,7 @@ const LiquidityPool: React.FC = () => {
 
                 const txReceipt = await waitForTransactionReceipt(client as Client, {
                     hash: txHash,
+                    pollingInterval: POLLING_INTERVAL_FOR_TX,
                 });
 
                 if (txReceipt.status === 'success') {
@@ -485,6 +490,7 @@ const LiquidityPool: React.FC = () => {
 
             const txReceipt = await waitForTransactionReceipt(client as Client, {
                 hash: txHash,
+                pollingInterval: POLLING_INTERVAL_FOR_TX,
             });
 
             if (txReceipt.status === 'success') {
@@ -534,6 +540,7 @@ const LiquidityPool: React.FC = () => {
 
                         const txReceipt = await waitForTransactionReceipt(client as Client, {
                             hash: txHash,
+                            pollingInterval: POLLING_INTERVAL_FOR_TX,
                         });
 
                         if (txReceipt.status === 'success') {
@@ -556,6 +563,7 @@ const LiquidityPool: React.FC = () => {
 
                         const txReceipt = await waitForTransactionReceipt(client as Client, {
                             hash: txHash,
+                            pollingInterval: POLLING_INTERVAL_FOR_TX,
                         });
 
                         if (txReceipt.status === 'success') {
@@ -578,6 +586,7 @@ const LiquidityPool: React.FC = () => {
                         : await liquidityPoolContractWithSigner.write.closeRound([]);
                     const txReceipt = await waitForTransactionReceipt(client as Client, {
                         hash: tx,
+                        pollingInterval: POLLING_INTERVAL_FOR_TX,
                     });
 
                     if (txReceipt.status === 'success') {

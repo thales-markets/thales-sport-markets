@@ -4,6 +4,7 @@ import NumericInput from 'components/fields/NumericInput';
 import Modal from 'components/Modal';
 import NetworkSwitcher from 'components/NetworkSwitcher';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { POLLING_INTERVAL_FOR_TX } from 'constants/network';
 import { ContractType } from 'enums/contract';
 import { AmountToBuyContainer } from 'pages/Markets/Home/Parlay/components/styled-components';
 import { FormContainer, InputContainer } from 'pages/Profile/components/WithdrawModal/styled-components';
@@ -103,6 +104,7 @@ const DepositFromWallet: React.FC<DepositFromWalletProps> = ({ onClose, preSelec
             }
             const txReceipt = await waitForTransactionReceipt(client as Client, {
                 hash: txHash,
+                pollingInterval: POLLING_INTERVAL_FOR_TX,
             });
 
             if (txReceipt.status === 'success') {

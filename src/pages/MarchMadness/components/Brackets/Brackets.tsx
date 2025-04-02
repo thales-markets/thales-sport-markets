@@ -46,6 +46,7 @@ import {
     initialBracketsData,
     wildCardTeams,
 } from 'constants/marchMadness';
+import { POLLING_INTERVAL_FOR_TX } from 'constants/network';
 import { ContractType } from 'enums/contract';
 import { TwitterIcon } from 'pages/Markets/Home/Parlay/components/styled-components';
 import useLeaderboardByGuessedCorrectlyQuery from 'queries/marchMadness/useLeaderboardByGuessedCorrectlyQuery';
@@ -548,6 +549,7 @@ const Brackets: React.FC = () => {
 
             const txReceipt = await waitForTransactionReceipt(client as Client, {
                 hash: txHash,
+                pollingInterval: POLLING_INTERVAL_FOR_TX,
             });
 
             if (txReceipt.status === 'success') {
@@ -612,6 +614,7 @@ const Brackets: React.FC = () => {
 
                 const txReceipt = await waitForTransactionReceipt(client as Client, {
                     hash: txHash,
+                    pollingInterval: POLLING_INTERVAL_FOR_TX,
                 });
 
                 if (txReceipt.status === 'success') {

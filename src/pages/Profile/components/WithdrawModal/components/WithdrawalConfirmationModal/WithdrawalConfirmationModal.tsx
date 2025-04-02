@@ -1,6 +1,7 @@
 import { PaymasterMode } from '@biconomy/account';
 import Modal from 'components/Modal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { POLLING_INTERVAL_FOR_TX } from 'constants/network';
 import { ContractType } from 'enums/contract';
 import { Network } from 'enums/network';
 import React, { useMemo } from 'react';
@@ -111,6 +112,7 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
 
             const txReceipt = await waitForTransactionReceipt(client as Client, {
                 hash: txHash,
+                pollingInterval: POLLING_INTERVAL_FOR_TX,
             });
 
             if (txReceipt.status === 'success') {

@@ -3,6 +3,7 @@ import Button from 'components/Button';
 import Tooltip from 'components/Tooltip';
 import TextInput from 'components/fields/TextInput';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { POLLING_INTERVAL_FOR_TX } from 'constants/network';
 import { ContractType } from 'enums/contract';
 import { ResolveType } from 'enums/resultManagement';
 import React, { useState } from 'react';
@@ -87,6 +88,7 @@ const ResolveModal: React.FC<ResolveModalProps> = ({ ticketMarket: market, onClo
 
                 const txReceipt = await waitForTransactionReceipt(client as Client, {
                     hash: txHash,
+                    pollingInterval: POLLING_INTERVAL_FOR_TX,
                 });
                 if (txReceipt.status === 'success') {
                     toast.update(

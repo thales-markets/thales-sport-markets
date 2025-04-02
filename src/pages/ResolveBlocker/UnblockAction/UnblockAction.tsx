@@ -2,6 +2,7 @@ import { useConnectModal } from '@rainbow-me/rainbowkit';
 import Button from 'components/Button';
 import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { POLLING_INTERVAL_FOR_TX } from 'constants/network';
 import { ContractType } from 'enums/contract';
 import { FC, memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -60,6 +61,7 @@ const UnblockAction: FC<UnblockActionProps> = memo(({ gameId, isWitelistedForUnb
                 const txHash = await resolveBlockerContractWithSigner.write.unblockGames([[gameId]]);
                 const txReceipt = await waitForTransactionReceipt(client as Client, {
                     hash: txHash,
+                    pollingInterval: POLLING_INTERVAL_FOR_TX,
                 });
 
                 if (txReceipt.status === 'success') {

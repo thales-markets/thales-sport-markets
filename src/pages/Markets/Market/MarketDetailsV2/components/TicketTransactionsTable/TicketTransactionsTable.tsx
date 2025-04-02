@@ -3,6 +3,7 @@ import Table from 'components/Table';
 import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { USD_SIGN } from 'constants/currency';
+import { POLLING_INTERVAL_FOR_TX } from 'constants/network';
 import { ContractType } from 'enums/contract';
 import { RiskManagementRole } from 'enums/riskManagement';
 import useWhitelistedAddressQuery from 'queries/markets/useWhitelistedAddressQuery';
@@ -149,6 +150,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
 
                 const txReceipt = await waitForTransactionReceipt(client as Client, {
                     hash: txHash,
+                    pollingInterval: POLLING_INTERVAL_FOR_TX,
                 });
                 if (txReceipt.status === 'success') {
                     toast.update(

@@ -6,7 +6,7 @@ import { NetworkParams, SupportedNetwork } from '../types/network';
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000' as Address;
 export const NATIVE_TOKEN_ADDRES = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 export const TBD_ADDRESS = '0xTBD' as Address;
-
+export const POLLING_INTERVAL_FOR_TX = 1000;
 export const SUPPORTED_NETWORKS: Record<SupportedNetwork, string> = {
     [Network.OptimismMainnet]: 'OPTIMISTIC',
     [Network.Arbitrum]: 'ARBITRUM-ONE',

@@ -8,6 +8,7 @@ import NumericInput from 'components/fields/NumericInput';
 import TextArea from 'components/fields/TextArea';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { DEFAULT_MULTI_COLLATERAL_BALANCE } from 'constants/currency';
+import { POLLING_INTERVAL_FOR_TX } from 'constants/network';
 import { ContractType } from 'enums/contract';
 import _ from 'lodash';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
@@ -161,6 +162,7 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
                 setOpenApprovalModal(false);
                 const txReceipt = await waitForTransactionReceipt(client as Client, {
                     hash,
+                    pollingInterval: POLLING_INTERVAL_FOR_TX,
                 });
 
                 if (txReceipt.status === 'success') {
@@ -277,6 +279,7 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
 
                 const txReceipt = await waitForTransactionReceipt(client as Client, {
                     hash,
+                    pollingInterval: POLLING_INTERVAL_FOR_TX,
                 });
 
                 if (txReceipt.status === 'success') {

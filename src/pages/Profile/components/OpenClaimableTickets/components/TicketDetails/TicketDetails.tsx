@@ -3,7 +3,7 @@ import CollateralSelector from 'components/CollateralSelector';
 import ShareTicketModalV2 from 'components/ShareTicketModalV2';
 import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import { ZERO_ADDRESS } from 'constants/network';
+import { POLLING_INTERVAL_FOR_TX, ZERO_ADDRESS } from 'constants/network';
 import { ContractType } from 'enums/contract';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -163,6 +163,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
                 }
                 const txReceipt = await waitForTransactionReceipt(client as Client, {
                     hash,
+                    pollingInterval: POLLING_INTERVAL_FOR_TX,
                 });
 
                 if (txReceipt.status === 'success') {

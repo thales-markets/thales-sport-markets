@@ -1,6 +1,7 @@
 import Button from 'components/Button';
 import Checkbox from 'components/fields/Checkbox';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { POLLING_INTERVAL_FOR_TX } from 'constants/network';
 import { ResolveBlockerTab } from 'enums/resolveBlocker';
 import { t } from 'i18next';
 import useBlockedGamesQuery from 'queries/resolveBlocker/useBlockedGamesQuery';
@@ -106,6 +107,7 @@ const ResolveBlocker: React.FC = () => {
                 const txHash = await resolveBlockerContractWithSigner.write.unblockGames([gamesForUnblock]);
                 const txReceipt = await waitForTransactionReceipt(client as Client, {
                     hash: txHash,
+                    pollingInterval: POLLING_INTERVAL_FOR_TX,
                 });
 
                 if (txReceipt.status === 'success') {

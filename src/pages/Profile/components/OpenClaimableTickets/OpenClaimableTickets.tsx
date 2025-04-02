@@ -2,7 +2,7 @@ import Button from 'components/Button';
 import SimpleLoader from 'components/SimpleLoader';
 import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import { GAS_ESTIMATION_BUFFER_CLAIM_ALL } from 'constants/network';
+import { GAS_ESTIMATION_BUFFER_CLAIM_ALL, POLLING_INTERVAL_FOR_TX } from 'constants/network';
 import { ContractType } from 'enums/contract';
 import { LoaderContainer } from 'pages/Markets/Home/HomeV2';
 import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
@@ -167,6 +167,7 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
 
                     const txReceipt = await waitForTransactionReceipt(client as Client, {
                         hash: txHash,
+                        pollingInterval: POLLING_INTERVAL_FOR_TX,
                     });
 
                     if (txReceipt.status === 'success') {
@@ -191,6 +192,7 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
 
                         const txReceipt = await waitForTransactionReceipt(client as Client, {
                             hash: txHash,
+                            pollingInterval: POLLING_INTERVAL_FOR_TX,
                         });
 
                         if (txReceipt.status === 'success') {

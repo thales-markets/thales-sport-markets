@@ -1,6 +1,7 @@
 import Button from 'components/Button';
 import FundModal from 'components/FundOvertimeAccountModal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { POLLING_INTERVAL_FOR_TX } from 'constants/network';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
@@ -161,6 +162,7 @@ const ActivateAccount: React.FC<any> = () => {
                                         if (txHash) {
                                             const txReceipt = await waitForTransactionReceipt(client as Client, {
                                                 hash: txHash,
+                                                pollingInterval: POLLING_INTERVAL_FOR_TX,
                                             });
 
                                             if (txReceipt.status === 'success') {
