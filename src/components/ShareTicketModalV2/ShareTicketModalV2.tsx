@@ -44,18 +44,18 @@ const TWITTER_MESSAGES_TEXT = [
     `Taking my betting game to the next level with @Overtime_io. Join the movement! ⚡ ${LINKS.Overtime}`,
     `Leveling up my game with @Overtime_io! Are you ready to take the plunge? 🔥 ${LINKS.Overtime}`,
     `The betting revolution is here. Best odds, full control, no limits. Welcome to @Overtime_io. 🔥 ${LINKS.Overtime}`,
-    `Seamless on-chain betting + the best odds in the game = an absolute no-brainer. 🚀 ${LINKS.Overtime}`,
-    `Revolutionizing sports betting one bet at a time. The best odds are now on-chain. 🚀 ${LINKS.Overtime}`,
-    `A new era for sports betting. Best odds, full transparency, and a token built to change the industry. 🔥 ${LINKS.Overtime}`,
-    `Winning is great. Winning with a system that actually benefits bettors? Even better. 💥 ${LINKS.Overtime}`,
+    `Seamless on-chain betting @Overtime_io + the best odds in the game = an absolute no-brainer. 🚀 ${LINKS.Overtime}`,
+    `Revolutionizing sports betting one bet at a time @Overtime_io. The best odds are now on-chain. 🚀 ${LINKS.Overtime}`,
+    `A new era for sports betting. Best odds, full transparency, and a token built to change the industry. You betting on @Overtime_io yet? 🔥 ${LINKS.Overtime}`,
+    `Winning is great. Winning with a system that actually benefits bettors? Even better. 💥 Only with @Overtime_io ${LINKS.Overtime}`,
 ];
 
 const OVER_COLLATERAL_TWITTER_MESSAGES_TEXT = [
-    `Betting with $OVER = better odds, bigger wins, and a new way to play. 🚀 ${LINKS.Overtime}`,
-    `A token built to change the sports betting industry. Betting with $OVER just hits different. 📈 ${LINKS.Overtime}`,
-    `With $OVER, every bet isn’t just a bet—it’s a stake in the future of sports betting. 💰 ${LINKS.Overtime}`,
-    `The future of betting is here. With $OVER, you're not just betting—you’re leading the game. 🏆 ${LINKS.Overtime}`,
-    `A new standard for sports betting. Built for the players, powered by $OVER. 🚀 ${LINKS.Overtime}`,
+    `Betting with $OVER = better odds, bigger wins, and a new way to play. @Overtime_io is where it’s at. 🚀 ${LINKS.Overtime}`,
+    `A token built to change the sports betting industry @Overtime_io. Betting with $OVER just hits different. 📈 ${LINKS.Overtime}`,
+    `With $OVER, every bet isn’t just a bet—it’s a stake in the future of sports betting. 💰 @Overtime_io ${LINKS.Overtime}`,
+    `The future of betting is here @Overtime_io. With $OVER, you're not just betting—you’re leading the game. 🏆 ${LINKS.Overtime}`,
+    `A new standard for sports betting. Built for the players, powered by $OVER. 🚀 Come join the action on @Overtime_io:${LINKS.Overtime}`,
     `Here to stack $OVER and bets on @Overtime_io – let’s gooo! 💥 ${LINKS.Overtime}`,
     `Another day, another $OVER bet locked in on @Overtime_io – Who’s joining the action? 🦓 ${LINKS.Overtime}`,
 ];

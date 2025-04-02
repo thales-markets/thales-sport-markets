@@ -82,7 +82,7 @@ const DappFooter: React.FC = () => {
                         disclaimer: <DisclaimerLink href={termsOfUse} rel="noreferrer" target="_blank" />,
                         guidelines: (
                             <DisclaimerLink
-                                href={'https://docs.overtimemarkets.xyz/sports-trading-guidelines'}
+                                href={'https://docs.overtime.io/sports-trading-guidelines'}
                                 rel="noreferrer"
                                 target="_blank"
                             />

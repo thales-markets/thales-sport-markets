@@ -1,5 +1,5 @@
 import axios from 'axios';
-import ClaimFreeBetModal from 'components/ClaimFreeBetModal/ClaimFreeBetModal';
+import ClaimFreeBetModal from 'components/ClaimFreeBetModal';
 import MetaData from 'components/MetaData';
 import { generalConfig } from 'config/general';
 import ROUTES from 'constants/routes';

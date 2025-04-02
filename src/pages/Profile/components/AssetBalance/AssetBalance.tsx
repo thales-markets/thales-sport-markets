@@ -1,7 +1,7 @@
 import ConvertIcon from 'assets/images/svgs/convert.svg?react';
-import DepositFromWallet from 'components/DepositFromWallet/DepositFromWallet';
+import DepositFromWallet from 'components/DepositFromWallet';
 import FundModal from 'components/FundOvertimeAccountModal';
-import SwapModal from 'components/SwapModal/SwapModal';
+import SwapModal from 'components/SwapModal';
 import ThalesToOverMigrationModal from 'components/ThalesToOverMigrationModal';
 import Toggle from 'components/Toggle';
 import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';

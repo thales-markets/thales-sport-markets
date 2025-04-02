@@ -1,5 +1,5 @@
 import Button from 'components/Button';
-import DepositFromWallet from 'components/DepositFromWallet/DepositFromWallet';
+import DepositFromWallet from 'components/DepositFromWallet';
 import Modal from 'components/Modal';
 import NetworkSwitcher from 'components/NetworkSwitcher';
 import Tooltip from 'components/Tooltip';
