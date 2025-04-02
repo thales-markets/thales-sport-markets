@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
-import { Colors, FlexDiv, FlexDivRow } from 'styles/common';
+import { FlexDiv, FlexDivRow } from 'styles/common';
 import { coinParser, Coins, formatCurrencyWithKey } from 'thales-utils';
 import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
@@ -176,7 +176,7 @@ const MainContainer = styled(FlexDiv)`
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: ${Colors.GOLD};
+    color: ${(props) => props.theme.button.background.quinary};
     z-index: 1000;
 `;
 

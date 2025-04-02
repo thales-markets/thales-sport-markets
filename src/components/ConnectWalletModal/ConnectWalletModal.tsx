@@ -23,7 +23,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import { getIsBiconomy, setIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
-import { Colors, FlexDiv, FlexDivCentered, FlexDivStart } from 'styles/common';
+import { FlexDiv, FlexDivCentered, FlexDivStart } from 'styles/common';
 import { localStore } from 'thales-utils';
 import { RootState } from 'types/redux';
 import { ParticalTypes, WalletConnections } from 'types/wallet';
@@ -309,9 +309,9 @@ const Link = styled.a.attrs({
     target: '_blank',
     rel: 'noopener noreferrer',
 })`
-    color: ${Colors.BLUE};
+    color: ${(props) => props.theme.textColor.quaternary};
     text-decoration: underline;
-    text-decoration-color: ${Colors.BLUE};
+    text-decoration-color: ${(props) => props.theme.textColor.quaternary};
     line-height: 18px;
 `;
 
