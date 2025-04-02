@@ -21,6 +21,10 @@ type TextInputProps = {
     iconClass?: string;
     onIconClick?: () => void;
     validationPlacement?: string;
+    background?: string;
+    fontWeight?: string;
+    color?: string;
+    borderColor?: string;
 };
 
 const TextInput: React.FC<TextInputProps> = ({

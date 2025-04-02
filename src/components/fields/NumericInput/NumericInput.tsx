@@ -38,6 +38,9 @@ type NumericInputProps = {
     borderColor?: string;
     containerWidth?: string;
     validationTooltipZIndex?: number;
+    background?: string;
+    fontWeight?: string;
+    color?: string;
 };
 
 const INVALID_CHARS = ['-', '+', 'e'];
@@ -98,7 +101,7 @@ const NumericInput: React.FC<NumericInputProps> = ({
                 </FieldLabel>
             )}
             {balance && (
-                <BalanceContainer>
+                <BalanceContainer bottom={height}>
                     <StyledBalanceIcon />
                     {isBalanceLoading ? '-' : balance}
                 </BalanceContainer>
@@ -147,6 +150,7 @@ const NumericInput: React.FC<NumericInputProps> = ({
                     <CurrencyLabel
                         className={disabled ? 'currency-label disabled' : 'currency-label'}
                         hasSeparator={onMaxButton}
+                        color={rest.color}
                     >
                         {currencyLabel}
                     </CurrencyLabel>
@@ -155,6 +159,7 @@ const NumericInput: React.FC<NumericInputProps> = ({
                     <CurrencyComponentContainer
                         className={disabled && !enableCurrencyComponentOnly ? 'disabled' : ''}
                         hasSeparator={onMaxButton}
+                        color={rest.color}
                     >
                         {currencyComponent}
                     </CurrencyComponentContainer>
@@ -177,8 +182,13 @@ const RightContainer = styled(FlexDivCentered)<{ height?: string; currencyLabel?
     padding-right: ${(props) => (props.currencyLabel ? '10px' : '0px')};
 `;
 
-const CurrencyLabel = styled.label<{ hasSeparator?: boolean }>`
-    border-left: ${(props) => (props.hasSeparator ? `2px solid ${props.theme.input.borderColor.tertiary}` : 'none')};
+const CurrencyLabel = styled.label<{ hasSeparator?: boolean; color?: string }>`
+    border-left: ${(props) =>
+        props.color
+            ? `2px solid ${props.color}`
+            : props.hasSeparator
+            ? `2px solid ${props.theme.input.borderColor.tertiary}`
+            : ''};
     font-size: 15px;
     line-height: 20px;
     color: ${(props) => props.theme.input.textColor.tertiary};
@@ -205,10 +215,10 @@ const MaxButton = styled.button`
     }
 `;
 
-const BalanceContainer = styled(FlexDivCentered)`
+const BalanceContainer = styled(FlexDivCentered)<{ bottom?: string }>`
     position: absolute;
     right: 0;
-    bottom: 36px;
+    bottom: calc(${(props) => (props.bottom ? props.bottom : '30px')} + 6px);
     font-weight: normal;
     font-size: 11px;
     line-height: 15px;
@@ -223,8 +233,13 @@ const StyledBalanceIcon = styled(BalanceIcon)`
     }
 `;
 
-const CurrencyComponentContainer = styled(FlexDivCentered)<{ hasSeparator?: boolean }>`
-    ${(props) => (props.hasSeparator ? `border-left: 2px solid ${props.theme.input.borderColor.tertiary};` : '')}
+const CurrencyComponentContainer = styled(FlexDivCentered)<{ hasSeparator?: boolean; color?: string }>`
+    border-left: ${(props) =>
+        props.color
+            ? `2px solid ${props.color}`
+            : props.hasSeparator
+            ? `2px solid ${props.theme.input.borderColor.tertiary}`
+            : ''};
     line-height: 22px;
     &.disabled {
         opacity: 0.4;

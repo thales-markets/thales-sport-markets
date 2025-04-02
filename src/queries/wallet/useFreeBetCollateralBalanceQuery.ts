@@ -21,7 +21,6 @@ const useFreeBetCollateralBalanceQuery = (
 
                 if (!walletAddress || !networkConfig.networkId || !freeBetHolderContract || !multipleCollateral) {
                     return {
-                        sUSD: 0,
                         DAI: 0,
                         USDCe: 0,
                         USDT: 0,
@@ -31,12 +30,11 @@ const useFreeBetCollateralBalanceQuery = (
                         ARB: 0,
                         USDC: 0,
                         USDbC: 0,
-                        THALES: 0,
+                        OVER: 0,
                     };
                 }
 
                 const [
-                    sUSDBalance,
                     DAIBalance,
                     USDCBalance,
                     USDCeBalance,
@@ -45,18 +43,8 @@ const useFreeBetCollateralBalanceQuery = (
                     WETHBalance,
                     ARBBalance,
                     USDbCBalance,
-                    THALESBalance,
+                    OVERBalance,
                 ] = await Promise.all([
-                    multipleCollateral[CRYPTO_CURRENCY_MAP.sUSD as Coins]?.addresses[
-                        networkConfig.networkId as SupportedNetwork
-                    ] !== TBD_ADDRESS
-                        ? freeBetHolderContract?.read.balancePerUserAndCollateral([
-                              walletAddress,
-                              multipleCollateral[CRYPTO_CURRENCY_MAP.sUSD as Coins]?.addresses[
-                                  networkConfig.networkId as SupportedNetwork
-                              ],
-                          ])
-                        : undefined,
                     multipleCollateral[CRYPTO_CURRENCY_MAP.DAI as Coins]?.addresses[
                         networkConfig.networkId as SupportedNetwork
                     ] !== TBD_ADDRESS
@@ -137,12 +125,12 @@ const useFreeBetCollateralBalanceQuery = (
                               ],
                           ])
                         : undefined,
-                    multipleCollateral[CRYPTO_CURRENCY_MAP.THALES as Coins]?.addresses[
+                    multipleCollateral[CRYPTO_CURRENCY_MAP.OVER as Coins]?.addresses[
                         networkConfig.networkId as SupportedNetwork
                     ] !== TBD_ADDRESS
                         ? freeBetHolderContract?.read.balancePerUserAndCollateral([
                               walletAddress,
-                              multipleCollateral[CRYPTO_CURRENCY_MAP.THALES as Coins]?.addresses[
+                              multipleCollateral[CRYPTO_CURRENCY_MAP.OVER as Coins]?.addresses[
                                   networkConfig.networkId as SupportedNetwork
                               ],
                           ])
@@ -150,7 +138,6 @@ const useFreeBetCollateralBalanceQuery = (
                 ]);
 
                 return {
-                    sUSD: sUSDBalance ? bigNumberFormatter(sUSDBalance, COLLATERAL_DECIMALS.sUSD) : 0,
                     DAI: DAIBalance ? bigNumberFormatter(DAIBalance, COLLATERAL_DECIMALS.DAI) : 0,
                     USDC: USDCBalance ? bigNumberFormatter(USDCBalance, COLLATERAL_DECIMALS.USDC) : 0,
                     USDCe: USDCeBalance ? bigNumberFormatter(USDCeBalance, COLLATERAL_DECIMALS.USDCe) : 0,
@@ -160,12 +147,11 @@ const useFreeBetCollateralBalanceQuery = (
                     ETH: 0,
                     ARB: ARBBalance ? bigNumberFormatter(ARBBalance, COLLATERAL_DECIMALS.ARB) : 0,
                     USDbC: USDbCBalance ? bigNumberFormatter(USDbCBalance, COLLATERAL_DECIMALS.USDbC) : 0,
-                    THALES: THALESBalance ? bigNumberFormatter(THALESBalance, COLLATERAL_DECIMALS.THALES) : 0,
+                    OVER: OVERBalance ? bigNumberFormatter(OVERBalance, COLLATERAL_DECIMALS.OVER) : 0,
                 };
             } catch (e) {
                 console.log('e ', e);
                 return {
-                    sUSD: 0,
                     DAI: 0,
                     USDCe: 0,
                     USDT: 0,
@@ -175,6 +161,7 @@ const useFreeBetCollateralBalanceQuery = (
                     ARB: 0,
                     USDC: 0,
                     USDbC: 0,
+                    OVER: 0,
                 };
             }
         },

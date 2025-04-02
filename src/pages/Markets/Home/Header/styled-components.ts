@@ -1,8 +1,7 @@
 import styled from 'styled-components';
-import { FlexDiv, FlexDivCentered, FlexDivColumn } from 'styles/common';
+import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivRowCentered } from 'styles/common';
 
 export const Container = styled(FlexDiv)`
-    max-width: 806px;
     margin-bottom: 10px;
     align-items: center;
     @media (max-width: 950px) {
@@ -77,17 +76,22 @@ export const FilterIcon = styled.i`
 `;
 
 export const SwitchContainer = styled(FlexDiv)`
-    min-width: 30px;
     justify-content: center;
-    margin-left: 10px;
     @media (max-width: 950px) {
         display: none;
     }
 `;
 
-export const ThreeWayIcon = styled.i<{ disabled: boolean; fontSize: number }>`
+export const FilterContainer = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+`;
+
+export const ThreeWayIcon = styled.i<{ disabled: boolean }>`
     cursor: ${(props) => (props.disabled ? 'deafult' : 'pointer')};
-    font-size: ${(props) => props.fontSize}px;
+    font-size: 20px;
     color: ${(props) => props.theme.textColor.secondary};
     opacity: ${(props) => (props.disabled ? '0.2' : '1')};
 `;
@@ -123,9 +127,69 @@ export const SortMenuItem = styled.div<{ isSelected: boolean }>`
     }
 `;
 
+export const HeaderIcon = styled.i<{
+    iconSize?: number;
+    iconColor?: string;
+}>`
+    font-size: ${(props) => (props.iconSize ? props.iconSize : '20')}px;
+    color: ${(props) => (props.iconColor ? props.iconColor : props.theme.textColor.secondary)};
+`;
+
+export const TimeContainer = styled(FlexDivRowCentered)`
+    position: relative;
+    width: 48px;
+    cursor: pointer;
+`;
+
+export const SettingsContainer = styled(FlexDivRowCentered)`
+    position: relative;
+    width: 130px;
+    cursor: pointer;
+`;
+
+export const Divider = styled.div`
+    width: 2px;
+    background-color: ${(props) => props.theme.textColor.secondary};
+    height: 16px;
+`;
+
 export const SortIndicator = styled.i`
     font-size: 18px;
     text-transform: none;
     color: ${(props) => props.theme.dropDown.indicatorColor.primary};
     cursor: pointer;
+`;
+
+export const DropdownContainer = styled.div`
+    position: absolute;
+    width: 180px;
+    top: 24px;
+    right: 0;
+    z-index: 1000;
+`;
+
+export const TimeFiltersDropdown = styled(DropdownContainer)`
+    width: 90px;
+`;
+
+export const DropDown = styled(FlexDivColumn)`
+    border: 1px solid ${(props) => props.theme.borderColor.primary};
+    background: ${(props) => props.theme.background.secondary};
+    color: white;
+    border-radius: 5px;
+    position: absolute;
+    margin-top: 2px;
+    padding: 4px;
+    width: 100%;
+    gap: 2px;
+`;
+
+export const DropDownItem = styled(FlexDiv)<{ isSelected: boolean }>`
+    padding: 7px 10px;
+    cursor: ${(props) => (props.isSelected ? 'default' : 'pointer')};
+    ${(props) => (props.isSelected ? `background: ${props.theme.dropDown.menuItem.selectedColor.primary};` : '')}
+    border-radius: 5px;
+    &:hover {
+        ${(props) => (props.isSelected ? '' : `background: ${props.theme.dropDown.menuItem.hoverColor.primary};`)}
+    }
 `;

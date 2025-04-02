@@ -26,6 +26,7 @@ import {
 import { buildMarketLink } from 'utils/routes';
 import { getOrdinalNumberLabel } from 'utils/ui';
 import {
+    Correct,
     MarketTypeInfo,
     MatchInfo,
     MatchPeriodContainer,
@@ -42,12 +43,14 @@ import {
     TeamScoreLabel,
     TicketMarketStatus,
     Wrapper,
+    Wrong,
 } from './styled-components';
 
-const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean; isSgp: boolean }> = ({
+const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean; isSgp: boolean; isSystem: boolean }> = ({
     market,
     isLive,
     isSgp,
+    isSystem,
 }) => {
     const theme: ThemeInterface = useTheme();
     const isMobile = useSelector(getIsMobile);
@@ -152,7 +155,18 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean; isS
             {market.isCancelled ? (
                 <TicketMarketStatus>{t('profile.card.canceled')}</TicketMarketStatus>
             ) : (market.isResolved || market.isGameFinished) && !market.isPlayerPropsMarket && !showContractResult ? (
-                <MatchScoreContainer>{getScoreComponent(market)}</MatchScoreContainer>
+                <MatchScoreContainer>
+                    {isSystem && (
+                        <>
+                            {market.isWinning ? (
+                                <Correct className="icon icon--correct" />
+                            ) : (
+                                <Wrong className="icon icon--wrong" />
+                            )}
+                        </>
+                    )}
+                    {getScoreComponent(market)}
+                </MatchScoreContainer>
             ) : market.isResolved && (market.isPlayerPropsMarket || showContractResult) ? (
                 <TicketMarketStatus>{market.homeScore}</TicketMarketStatus>
             ) : isPendingResolution || isLive ? (

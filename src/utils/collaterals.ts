@@ -1,5 +1,5 @@
 import { COLLATERALS, CRYPTO_CURRENCY_MAP, FREE_BET_COLLATERALS, STABLE_COINS } from 'constants/currency';
-import { ALTCOIN_CONVERSION_BUFFER_PERCENTAGE, SUSD_CONVERSION_BUFFER_PERCENTAGE } from 'constants/markets';
+import { ALTCOIN_CONVERSION_BUFFER_PERCENTAGE } from 'constants/markets';
 import _ from 'lodash';
 import {
     COLLATERAL_DECIMALS,
@@ -46,8 +46,8 @@ export const isStableCurrency = (currencyKey: Coins) => {
     return STABLE_COINS.includes(currencyKey);
 };
 
-export const isThalesCurrency = (currencyKey: Coins) => {
-    return currencyKey === CRYPTO_CURRENCY_MAP.THALES || currencyKey === CRYPTO_CURRENCY_MAP.sTHALES;
+export const isOverCurrency = (currencyKey: Coins) => {
+    return currencyKey === CRYPTO_CURRENCY_MAP.OVER;
 };
 
 export const isLpSupported = (currencyKey: Coins) => {
@@ -57,7 +57,8 @@ export const isLpSupported = (currencyKey: Coins) => {
         currencyKey === CRYPTO_CURRENCY_MAP.ETH ||
         currencyKey === CRYPTO_CURRENCY_MAP.cbBTC ||
         currencyKey === CRYPTO_CURRENCY_MAP.wBTC ||
-        isThalesCurrency(currencyKey)
+        currencyKey === CRYPTO_CURRENCY_MAP.THALES ||
+        isOverCurrency(currencyKey)
     );
 };
 
@@ -115,11 +116,7 @@ export const convertFromStableToCollateral = (
     if (dstCollateral == defaultCollateral) {
         return amount;
     } else {
-        const priceFeedBuffer =
-            1 -
-            (dstCollateral === CRYPTO_CURRENCY_MAP.sUSD
-                ? SUSD_CONVERSION_BUFFER_PERCENTAGE
-                : ALTCOIN_CONVERSION_BUFFER_PERCENTAGE);
+        const priceFeedBuffer = 1 - ALTCOIN_CONVERSION_BUFFER_PERCENTAGE;
         return rate
             ? ceilNumberToDecimals(
                   Math.ceil((amount / (rate * priceFeedBuffer)) * 10 ** COLLATERAL_DECIMALS[dstCollateral]) /

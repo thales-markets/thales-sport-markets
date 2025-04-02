@@ -76,7 +76,6 @@ import {
 import { Rates } from 'types/collateral';
 import { BracketMatch } from 'types/marchMadness';
 import { ThemeInterface } from 'types/ui';
-import { executeBiconomyTransaction } from 'utils/biconomy';
 import biconomyConnector from 'utils/biconomyWallet';
 import {
     getCollateral,
@@ -544,19 +543,8 @@ const Brackets: React.FC = () => {
             );
 
             const addressToApprove = marchMadnessContract.addresses[networkId];
-            let txHash;
-            if (isBiconomy) {
-                txHash = await executeBiconomyTransaction(
-                    networkId,
-                    collateralContractWithSigner?.address ?? '',
-                    collateralContractWithSigner,
-                    'approve',
-                    [addressToApprove, approveAmount]
-                );
-            } else {
-                txHash = await collateralContractWithSigner?.write.approve([addressToApprove, approveAmount]);
-                setOpenApprovalModal(false);
-            }
+            const txHash = await collateralContractWithSigner?.write.approve([addressToApprove, approveAmount]);
+            setOpenApprovalModal(false);
 
             const txReceipt = await waitForTransactionReceipt(client as Client, {
                 hash: txHash,

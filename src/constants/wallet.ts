@@ -1,14 +1,18 @@
-import { ParticalTypes } from 'types/wallet';
+import { ParticalTypes, WalletConnections } from 'types/wallet';
 
-export const SUPPORTED_PARTICAL_CONNECTORS: ParticalTypes[] = [
+export const SUPPORTED_PARTICAL_CONNECTORS_MODAL: ParticalTypes[] = [
     ParticalTypes.GOOGLE,
     ParticalTypes.TWITTER,
     ParticalTypes.DISCORD,
-    ParticalTypes.GITHUB,
-    ParticalTypes.APPLE,
 ];
 
-export const PARTICAL_WALLETS_LABELS: { id: ParticalTypes; labelKey: string }[] = [
+export const SUPPORTED_WALLET_CONNECTORS_MODAL: WalletConnections[] = [
+    WalletConnections.METAMASK,
+    WalletConnections.COINBASE,
+    WalletConnections.WALLET_CONNECT,
+];
+
+export const WALLETS_LABELS: { id: ParticalTypes | WalletConnections; labelKey: string }[] = [
     {
         id: ParticalTypes.GOOGLE,
         labelKey: 'common.wallet.particle-logins.google',
@@ -29,27 +33,19 @@ export const PARTICAL_WALLETS_LABELS: { id: ParticalTypes; labelKey: string }[] 
         id: ParticalTypes.APPLE,
         labelKey: 'common.wallet.particle-logins.apple',
     },
+
+    {
+        id: WalletConnections.METAMASK,
+        labelKey: 'common.wallet.particle-logins.browser-wallet',
+    },
+    {
+        id: WalletConnections.COINBASE,
+        labelKey: 'common.wallet.particle-logins.coinbase',
+    },
+    {
+        id: WalletConnections.WALLET_CONNECT,
+        labelKey: 'common.wallet.particle-logins.wallet-connect',
+    },
 ];
 
-export const PARTICAL_LOGINS_CLASSNAMES: { socialId: ParticalTypes; className: string }[] = [
-    {
-        socialId: ParticalTypes.APPLE,
-        className: 'icon icon--apple',
-    },
-    {
-        socialId: ParticalTypes.DISCORD,
-        className: 'icon icon--discord',
-    },
-    {
-        socialId: ParticalTypes.GITHUB,
-        className: 'icon icon--github',
-    },
-    {
-        socialId: ParticalTypes.GOOGLE,
-        className: 'icon icon--google',
-    },
-    {
-        socialId: ParticalTypes.TWITTER,
-        className: 'icon-homepage icon--x',
-    },
-];
+export const BALANCE_THRESHOLD = 0.00000001;

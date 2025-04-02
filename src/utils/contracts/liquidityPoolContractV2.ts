@@ -762,6 +762,15 @@ const liquidityPoolContractV2: Record<LiquidityPoolCollateral, ContractData> = {
         },
         abi: ABI,
     },
+    [LiquidityPoolCollateral.OVER]: {
+        addresses: {
+            [Network.OptimismMainnet]: '0x59a7A8Ae9d58D69a69b6A24770EC771110647226',
+            [Network.Arbitrum]: '0xc5f5186b46c84bF63a9e166bfa2175D9bc391ce2',
+            [Network.Base]: '0xB4199DC163F3206643649E117A816ad0DECb6C3B',
+            [Network.OptimismSepolia]: TBD_ADDRESS,
+        },
+        abi: ABI,
+    },
     [LiquidityPoolCollateral.cbBTC]: {
         addresses: {
             [Network.OptimismMainnet]: TBD_ADDRESS,
