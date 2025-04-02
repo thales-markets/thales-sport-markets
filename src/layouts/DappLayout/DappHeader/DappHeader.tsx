@@ -17,7 +17,7 @@ import useClaimablePositionCountV2Query from 'queries/markets/useClaimablePositi
 import useBlockedGamesQuery from 'queries/resolveBlocker/useBlockedGamesQuery';
 import useWhitelistedForUnblock from 'queries/resolveBlocker/useWhitelistedForUnblock';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
@@ -44,6 +44,8 @@ import {
     MenuIcon,
     MenuIconContainer,
     MiddleContainer,
+    MiddleContainerSectionLeft,
+    MiddleContainerSectionRight,
     NotificationCount,
     OverdropButtonContainer,
     OverdropIcon,
@@ -174,7 +176,6 @@ const DappHeader: React.FC = () => {
                 <Button
                     fontSize="18px"
                     width={isMobile ? '100%' : '240px'}
-                    margin="0 10px 0 0"
                     additionalStyles={{
                         backgroundImage: `url("${marchMadnessLeftIcon}"), url("${marchMadnessRightIcon}")`,
                         backgroundPosition: `left ${isMobile ? 70 : 20}px center, right ${isMobile ? 70 : 20}px center`,
@@ -204,41 +205,61 @@ const DappHeader: React.FC = () => {
                     </LeftContainer>
 
                     <MiddleContainer>
-                        {location.pathname !== ROUTES.MarchMadness &&
-                            (isMarchMadnessAvailableForNetworkId(networkId) ? (
-                                getMarchMadnessButton()
-                            ) : (
-                                <Tooltip
-                                    overlay={t('march-madness.header-button-tooltip')}
-                                    open={isMarchMadnessAvailableForNetworkId(networkId)}
-                                >
-                                    {getMarchMadnessButton()}
-                                </Tooltip>
-                            ))}
-                        <FlexDivCentered>
-                            <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
-                                {levelItem.level > 0 ? (
-                                    <OverdropButtonContainer>
-                                        <SmallBadgeImage src={levelItem.smallBadge} />
-                                        {`LVL ${levelItem.level} ${levelItem.levelName}`}
-                                    </OverdropButtonContainer>
+                        <MiddleContainerSectionLeft>
+                            {location.pathname !== ROUTES.MarchMadness &&
+                                (isMarchMadnessAvailableForNetworkId(networkId) ? (
+                                    getMarchMadnessButton()
                                 ) : (
-                                    <OverdropIcon />
-                                )}
-                            </SPAAnchor>
-                        </FlexDivCentered>
+                                    <Tooltip
+                                        overlay={t('march-madness.header-button-tooltip')}
+                                        open={isMarchMadnessAvailableForNetworkId(networkId)}
+                                    >
+                                        {getMarchMadnessButton()}
+                                    </Tooltip>
+                                ))}
+                            <FlexDivCentered>
+                                <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
+                                    {levelItem.level > 0 ? (
+                                        <OverdropButtonContainer>
+                                            <SmallBadgeImage src={levelItem.smallBadge} />
+                                            {`LVL ${levelItem.level} ${levelItem.levelName}`}
+                                        </OverdropButtonContainer>
+                                    ) : (
+                                        <OverdropIcon />
+                                    )}
+                                </SPAAnchor>
+                            </FlexDivCentered>
+                            {isConnected && (
+                                <Button
+                                    onClick={() => setShowThalesToOverMigrationModal(true)}
+                                    backgroundColor={theme.button.textColor.quaternary}
+                                    borderColor={theme.button.textColor.quaternary}
+                                    fontSize="14px"
+                                    height="30px"
+                                    padding="2px 10px"
+                                >
+                                    <Trans
+                                        i18nKey="profile.migration-modal.title"
+                                        components={{
+                                            thalesIcon: (
+                                                <CurrencyIcon className="currency-icon currency-icon--thales" />
+                                            ),
+                                            overtimeIcon: (
+                                                <CurrencyIcon className="currency-icon currency-icon--over" />
+                                            ),
+                                        }}
+                                    />
+                                </Button>
+                            )}
+                        </MiddleContainerSectionLeft>
                         {isConnected && (
-                            <Button
-                                onClick={() => setShowThalesToOverMigrationModal(true)}
-                                backgroundColor={theme.button.textColor.quaternary}
-                                borderColor={theme.button.textColor.quaternary}
-                                fontSize="14px"
-                                height="30px"
-                                padding="2px 10px"
-                            >
-                                Migrate <CurrencyIcon className="currency-icon currency-icon--thales" /> to{' '}
-                                <CurrencyIcon className="currency-icon currency-icon--over" />
-                            </Button>
+                            <MiddleContainerSectionRight>
+                                <SPAAnchor href={ROUTES.Profile + '?selected-tab=open-claimable'}>
+                                    <FlexDivCentered>
+                                        <ProfileIconWidget /> <ProfileLabel>{t('common.profile')}</ProfileLabel>
+                                    </FlexDivCentered>
+                                </SPAAnchor>
+                            </MiddleContainerSectionRight>
                         )}
                     </MiddleContainer>
 
@@ -255,6 +276,7 @@ const DappHeader: React.FC = () => {
                                     padding: '9px 20px',
                                     width: '120px',
                                     height: '30px',
+                                    marginLeft: 'auto',
                                     whiteSpace: 'pre',
                                 }}
                                 onClick={() => dispatch(setWalletConnectModalVisibility({ visibility: true }))}
@@ -263,13 +285,6 @@ const DappHeader: React.FC = () => {
                             </Button>
                         )}
                         {isConnected && isBiconomy && <ActivateAccount />}
-                        {isConnected && (
-                            <SPAAnchor href={ROUTES.Profile + '?selected-tab=open-claimable'}>
-                                <FlexDivCentered>
-                                    <ProfileIconWidget /> <ProfileLabel>{t('common.profile')}</ProfileLabel>
-                                </FlexDivCentered>
-                            </SPAAnchor>
-                        )}
                         <WalletInfo />
                         <MenuIconContainer>
                             <MenuIcon ref={menuImageRef} onClick={() => setNavMenuVisibility(true)} />
