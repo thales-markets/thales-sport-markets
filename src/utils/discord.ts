@@ -18,7 +18,7 @@ export const isDeployError = (errorMessage: string) =>
 
 export const logErrorToDiscord = (error: Error, info: ErrorInfo, data?: string) => {
     const content = `IsMobile: ${isMobile()}\n${data ? `${data}\n` : ''}Error:\n${
-        error.message + '\n' + error.stack || ''
+        error.message + '\n' + (error.stack || '')
     }\n${info.componentStack ? `ErrorInfo:\n${info.componentStack}` : ''}`;
 
     fetch(`${generalConfig.API_URL}/discord/log-error`, {

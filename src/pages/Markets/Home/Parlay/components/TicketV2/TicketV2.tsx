@@ -141,7 +141,13 @@ import {
     getSwapParams,
     sendTransaction,
 } from 'utils/swap';
-import { getAddedPayoutOdds, getShareTicketModalData, getSystemBetData, getSystemBetDataObject } from 'utils/tickets';
+import {
+    getAddedPayoutOdds,
+    getLogData,
+    getShareTicketModalData,
+    getSystemBetData,
+    getSystemBetDataObject,
+} from 'utils/tickets';
 import { delay } from 'utils/timer';
 import { getRequestId, getTradingProcessorTransaction, processTransaction } from 'utils/tradingProcessor';
 import { getKeepSelectionFromStorage, setKeepSelectionToStorage } from 'utils/ui';
@@ -1611,10 +1617,22 @@ const Ticket: React.FC<TicketProps> = ({
 
                 if (!txHash) {
                     // there are scenarios when waitForTransactionReceipt is failing because tx hash doesn't exist
+                    const data = getLogData({
+                        networkId,
+                        isParticle,
+                        isBiconomy,
+                        isSgp,
+                        isLiveTicket,
+                        tradeData,
+                        swapToOver,
+                        overAmount,
+                        buyInAmount,
+                        usedCollateralForBuy,
+                    });
                     logErrorToDiscord(
                         { message: 'Transaction hash not received' } as Error,
                         { componentStack: '' },
-                        `txHash=${txHash}`
+                        data
                     );
                     setIsBuying(false);
                     refetchBalances(walletAddress, networkId);
@@ -1770,12 +1788,18 @@ const Ticket: React.FC<TicketProps> = ({
                 refetchBalances(walletAddress, networkId);
                 toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
                 if (!isErrorExcluded(e as Error)) {
-                    const data = `BUY error for params:\nnetworkId=${networkId}\nisParticle=${isParticle}\nisSgp=${isSgp}\nisLive=${isLiveTicket}\nliveOdds=${JSON.stringify(
-                        tradeData[0]?.odds
-                    )}\nlivePosition=${tradeData[0]?.position}\nbuyInAmount=${(swapToOver
-                        ? overAmount
-                        : buyInAmount
-                    ).toString()}\ncollateral=${usedCollateralForBuy}\nisSwapToThales=${swapToOver}`;
+                    const data = getLogData({
+                        networkId,
+                        isParticle,
+                        isBiconomy,
+                        isSgp,
+                        isLiveTicket,
+                        tradeData,
+                        swapToOver,
+                        overAmount,
+                        buyInAmount,
+                        usedCollateralForBuy,
+                    });
 
                     logErrorToDiscord(e as Error, { componentStack: '' }, data);
                 }
