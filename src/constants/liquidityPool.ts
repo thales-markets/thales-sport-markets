@@ -100,8 +100,8 @@ export const LiquidityPoolMap: Record<
 
 export const RoundOffsetMap: Partial<Record<LiquidityPoolCollateral, Record<SupportedNetwork, number>>> = {
     [LiquidityPoolCollateral.OVER]: {
-        [NetworkId.OptimismMainnet]: 37,
-        [NetworkId.Arbitrum]: 27,
+        [NetworkId.OptimismMainnet]: 38,
+        [NetworkId.Arbitrum]: 28,
         [NetworkId.Base]: 5,
         [NetworkId.OptimismSepolia]: 0,
     },
