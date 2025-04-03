@@ -4,7 +4,6 @@
     "private": true,
     "dependencies": {
         "@biconomy/account": "4.1.1",
-        "@google-cloud/translate": "^6.3.0",
         "@particle-network/authkit": "^2.0.19",
         "@rainbow-me/rainbowkit": "^2.0.0",
         "@reduxjs/toolkit": "^1.7.2",
