@@ -46,6 +46,7 @@ export const ClaimableTicketsNotificationCount = styled.div<{ top?: string; left
     justify-content: center;
     width: 18px;
     height: 18px;
+    cursor: pointer;
     background-color: ${(props) => props.theme.background.quaternary};
     box-shadow: ${(props) => props.theme.shadow.notification};
 

@@ -1,3 +1,4 @@
+import Tooltip from 'components/Tooltip';
 import usePositionCountV2Query from 'queries/markets/usePositionCountV2Query';
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
@@ -70,14 +71,18 @@ export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({
     return (
         <ProfileIconContainer marginRight={marginRight} margin={margin}>
             {!!claimablePositionCount && (
-                <ClaimableTicketsNotificationCount top={top} left={left}>
-                    <Count>{claimablePositionCount}</Count>
-                </ClaimableTicketsNotificationCount>
+                <Tooltip open={true} overlay={'Claimable tickets'}>
+                    <ClaimableTicketsNotificationCount top={top} left={left}>
+                        <Count>{claimablePositionCount}</Count>
+                    </ClaimableTicketsNotificationCount>
+                </Tooltip>
             )}
             {!!openPositionCount && (
-                <OpenTicketsNotificationCount>
-                    <Count>{openPositionCount}</Count>
-                </OpenTicketsNotificationCount>
+                <Tooltip open={true} overlay={'Open tickets'}>
+                    <OpenTicketsNotificationCount>
+                        <Count>{openPositionCount}</Count>
+                    </OpenTicketsNotificationCount>
+                </Tooltip>
             )}
             <ProfileIcon avatarSize={avatarSize} iconColor={color} />
         </ProfileIconContainer>
