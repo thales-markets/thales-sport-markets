@@ -1,7 +1,7 @@
 import Button from 'components/Button';
 import FreeBetFundModal from 'components/FreeBetFundModal';
 import Logo from 'components/Logo';
-import { Count, NotificationCount, Separator } from 'components/NavMenu/styled-components';
+import { BlockedGamesNotificationCount, Count, Separator } from 'components/NavMenu/styled-components';
 import OutsideClickHandler from 'components/OutsideClick';
 import SPAAnchor from 'components/SPAAnchor';
 import WalletInfo from 'components/WalletInfo';
@@ -12,13 +12,14 @@ import {
     NAV_MENU_SECOND_SECTION,
     NAV_MENU_THIRD_SECTION,
 } from 'constants/ui';
+import { ProfileTab } from 'enums/ui';
+import { ProfileIconWidget } from 'layouts/DappLayout/DappHeader/components/ProfileItem/ProfileItem';
 import { LogoContainer, OverdropIcon } from 'layouts/DappLayout/DappHeader/styled-components';
 import useBlockedGamesQuery from 'queries/resolveBlocker/useBlockedGamesQuery';
 import useWhitelistedForUnblock from 'queries/resolveBlocker/useWhitelistedForUnblock';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { useLocation } from 'react-router-dom';
 import { setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
@@ -49,7 +50,6 @@ type NavMenuMobileProps = {
 
 const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVisibility }) => {
     const { t } = useTranslation();
-    const location = useLocation();
     const dispatch = useDispatch();
     const theme: ThemeInterface = useTheme();
     const { disconnect } = useDisconnect();
@@ -63,22 +63,14 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
     const whitelistedForUnblockQuery = useWhitelistedForUnblock(
         walletAddress,
         { networkId, client },
-        {
-            enabled: isConnected,
-        }
+        { enabled: isConnected }
     );
     const isWitelistedForUnblock = useMemo(
         () => whitelistedForUnblockQuery.isSuccess && whitelistedForUnblockQuery.data,
         [whitelistedForUnblockQuery.data, whitelistedForUnblockQuery.isSuccess]
     );
 
-    const blockedGamesQuery = useBlockedGamesQuery(
-        false,
-        { networkId, client },
-        {
-            enabled: isWitelistedForUnblock,
-        }
-    );
+    const blockedGamesQuery = useBlockedGamesQuery(false, { networkId, client }, { enabled: isWitelistedForUnblock });
     const blockedGamesCount = useMemo(
         () =>
             blockedGamesQuery.isSuccess && blockedGamesQuery.data && isWitelistedForUnblock
@@ -116,20 +108,41 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                     {NAV_MENU_FIRST_SECTION.map((item, index) => {
                         if (!item.supportedNetworks.includes(networkId)) return;
                         if (item.name == 'resolve-blocker' && !isWitelistedForUnblock) return;
+
+                        const isProfileAccountTab = [
+                            `${ROUTES.Profile}`,
+                            `${ROUTES.Profile}?selected-tab=${ProfileTab.ACCOUNT}`,
+                        ].includes(`${location.pathname}${location.search}`);
+                        const isOtherProfileTab = location.pathname === ROUTES.Profile && !isProfileAccountTab;
+
+                        const isActive =
+                            `${location.pathname}${location.search}` === item.route ||
+                            (item.name === 'account' && isProfileAccountTab) ||
+                            (item.name === 'profile' && isOtherProfileTab);
+
                         return (
                             <SPAAnchor
                                 key={index}
                                 onClick={() => setNavMenuVisibility(false)}
                                 href={buildHref(item.route)}
                             >
-                                <ItemContainer key={index} active={location.pathname === item.route}>
-                                    {item.name == 'resolve-blocker' && blockedGamesCount > 0 && (
-                                        <NotificationCount>
-                                            <Count>{blockedGamesCount}</Count>
-                                        </NotificationCount>
+                                <ItemContainer key={index} active={isActive}>
+                                    {isConnected && item.name == 'profile' ? (
+                                        <ProfileIconWidget
+                                            marginRight="10px"
+                                            avatarSize={25}
+                                            color={isActive ? theme.textColor.quaternary : theme.textColor.primary}
+                                        />
+                                    ) : (
+                                        <>
+                                            {item.name == 'resolve-blocker' && blockedGamesCount > 0 && (
+                                                <BlockedGamesNotificationCount>
+                                                    <Count>{blockedGamesCount}</Count>
+                                                </BlockedGamesNotificationCount>
+                                            )}
+                                            <NavIcon className={item.iconClass} active={isActive} />
+                                        </>
                                     )}
-                                    <NavIcon className={item.iconClass} active={location.pathname === item.route} />
-
                                     <NavLabel>{t(item.i18label)}</NavLabel>
                                 </ItemContainer>
                             </SPAAnchor>

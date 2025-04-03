@@ -58,10 +58,10 @@ const MyTickets: React.FC<MyTicketsProps> = ({ selectedTab, setSelectedTab }) =>
                     </Header>
                     {isMobile && <NavigationBarMobile selectedTab={selectedTab} setSelectedTab={setSelectedTab} />}
                 </NavigationWrapper>
+                {selectedTab == ProfileTab.ACCOUNT && <Account />}
                 {selectedTab == ProfileTab.OPEN_CLAIMABLE && <OpenClaimableTickets searchText={searchText} />}
                 {selectedTab == ProfileTab.TRANSACTION_HISTORY && <TicketTransactions searchText={searchText} />}
                 {selectedTab == ProfileTab.LP && <UserVaults />}
-                {selectedTab == ProfileTab.ACCOUNT && <Account />}
                 {selectedTab == ProfileTab.STATS && <UserStatsV2 />}
             </MainContainer>
             <RightSidebarContainer>

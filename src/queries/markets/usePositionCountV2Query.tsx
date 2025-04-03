@@ -7,14 +7,16 @@ import { NetworkConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { getContractInstance } from 'utils/contract';
 
-const useClaimablePositionCountQuery = (
+const usePositionCountV2Query = (
     user: string,
     networkConfig: NetworkConfig,
     options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<number | null>({
+    return useQuery<{ claimable: number; open: number }>({
         queryKey: QUERY_KEYS.ClaimableCountV2(user, networkConfig.networkId),
         queryFn: async () => {
+            const positionsCount = { claimable: 0, open: 0 };
+
             try {
                 const contractInstances = [
                     getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig),
@@ -69,17 +71,18 @@ const useClaimablePositionCountQuery = (
                         ])
                         .flat(1);
 
-                    const count = tickets.filter((ticket) => ticket.isUserTheWinner && !ticket.resolved).length;
-                    return count;
+                    positionsCount.claimable = tickets.filter(
+                        (ticket) => ticket.isUserTheWinner && !ticket.resolved
+                    ).length;
+                    positionsCount.open = tickets.filter((ticket) => !ticket.isExercisable && !ticket.resolved).length;
                 }
-                return null;
             } catch (e) {
                 console.log(e);
-                return null;
             }
+            return positionsCount;
         },
         ...options,
     });
 };
 
-export default useClaimablePositionCountQuery;
+export default usePositionCountV2Query;

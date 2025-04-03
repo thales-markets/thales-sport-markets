@@ -29,14 +29,18 @@ import {
     CategoryContainer,
     CategoryDisclaimer,
     CategoryIcon,
+    CategoryIconWrapper,
     CategoryInfo,
     CategoryLabel,
+    ClaimableTicketsNotificationCount,
     ClaimAllContainer,
     Container,
+    Count,
     EmptyContainer,
     EmptySubtitle,
     EmptyTitle,
     ListContainer,
+    OpenTicketsNotificationCount,
     StyledParlayEmptyIcon,
 } from './styled-components';
 
@@ -81,9 +85,7 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
     const userTicketsQuery = useUserTicketsQuery(
         isSearchTextWalletAddress ? searchText : walletAddress,
         { networkId, client },
-        {
-            enabled: isConnected,
-        }
+        { enabled: isConnected }
     );
 
     const marketDuration = Math.floor(90);
@@ -211,7 +213,14 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
         <Container>
             <CategoryContainer onClick={() => setClaimableState(!openClaimable)}>
                 <CategoryInfo>
-                    <CategoryIcon className="icon icon--claimable-ticket" />
+                    <CategoryIconWrapper>
+                        {userTicketsByStatus.claimable.length > 0 && (
+                            <ClaimableTicketsNotificationCount>
+                                <Count>{userTicketsByStatus.claimable.length}</Count>
+                            </ClaimableTicketsNotificationCount>
+                        )}
+                        <CategoryIcon className="icon icon--claimable-ticket" />
+                    </CategoryIconWrapper>
                     <CategoryLabel>{t('profile.categories.claimable')}</CategoryLabel>
                 </CategoryInfo>
                 <CategoryDisclaimer>
@@ -276,7 +285,14 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
             )}
             <CategoryContainer onClick={() => setOpenState(!openOpenPositions)}>
                 <CategoryInfo>
-                    <CategoryIcon className="icon icon--open-ticket" />
+                    <CategoryIconWrapper>
+                        {userTicketsByStatus.open.length > 0 && (
+                            <OpenTicketsNotificationCount>
+                                <Count>{userTicketsByStatus.open.length}</Count>
+                            </OpenTicketsNotificationCount>
+                        )}
+                        <CategoryIcon className="icon icon--open-ticket" />
+                    </CategoryIconWrapper>
                     <CategoryLabel>{t('profile.categories.open')}</CategoryLabel>
                 </CategoryInfo>
                 <Arrow className={openOpenPositions ? 'icon icon--caret-up' : 'icon icon--caret-down'} />
