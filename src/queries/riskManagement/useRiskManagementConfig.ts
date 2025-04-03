@@ -20,6 +20,22 @@ const useRiskManagementConfigQuery = (
         queryKey: QUERY_KEYS.RiskManagementConfig(networkConfig.networkId, configTypes.join()),
         queryFn: async () => {
             let config: RiskManagementData = {};
+
+            // init values
+            configTypes.forEach((configType) => {
+                switch (configType) {
+                    case RiskManagementConfig.LEAGUES:
+                        config = { ...config, leagues: [], spreadTypes: [], totalTypes: [] };
+                        break;
+                    case RiskManagementConfig.SGP_BLOCKERS:
+                        config = { ...config, sgpBlockers: [] };
+                        break;
+                    case RiskManagementConfig.SGP_BUILDERS:
+                        config = { ...config, sgpBuilders: [] };
+                        break;
+                }
+            });
+
             try {
                 const configResponse = await axios.get(
                     `${generalConfig.API_URL}/overtime-v2/networks/${

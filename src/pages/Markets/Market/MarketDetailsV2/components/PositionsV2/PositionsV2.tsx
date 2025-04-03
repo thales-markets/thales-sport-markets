@@ -221,7 +221,7 @@ const Positions: React.FC<PositionsProps> = ({
                     positionNames: market.positionNames?.slice(0, maxQuickSgpMarkets),
                 }));
             }
-            return displaySgpMarkets;
+            return orderBy(displaySgpMarkets, ['line', 'odds'], ['asc', 'desc']);
         } else {
             return orderBy(markets, ['line', 'odds'], ['asc', 'desc']);
         }

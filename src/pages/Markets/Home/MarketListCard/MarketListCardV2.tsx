@@ -35,7 +35,6 @@ import {
     setMarketTypeGroupFilter,
     setSelectedMarket,
 } from 'redux/modules/market';
-import { getTicket } from 'redux/modules/ticket';
 import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarket } from 'types/markets';
 import { RiskManagementLeaguesAndTypes, RiskManagementSgpBuilders } from 'types/riskManagement';
@@ -103,7 +102,6 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
         const marketTypeFilter = useSelector(getMarketTypeFilter);
         const marketTypeGroupFilter = useSelector(getMarketTypeGroupFilter);
         const sportFilter = useSelector(getSportFilter);
-        const ticket = useSelector(getTicket);
         const isMobile = useSelector(getIsMobile);
 
         const isPlayerPropsMarket = useMemo(() => sportFilter === SportFilter.PlayerProps, [sportFilter]);
@@ -416,7 +414,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                         live: market.live,
                     })
                 );
-                if (isQuickSgpMarket && !ticket.length) {
+                if (isQuickSgpMarket) {
                     dispatch(setMarketTypeGroupFilter(MarketTypeGroup.QUICK_SGP));
                 }
             }
