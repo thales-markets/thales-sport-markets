@@ -11,6 +11,7 @@ import {
     isAwayTeamMarket,
     isBothTeamsToScoreMarket,
     isCombinedPositionsMarket,
+    isCorrectScoreMarket,
     isDoubleChanceMarket,
     isFuturesMarket,
     isHomeTeamMarket,
@@ -22,6 +23,7 @@ import {
     isPeriodMarket,
     isPlayerPropsMarket,
     isScoreMarket,
+    isSgpBuilderMarket,
     isSpreadMarket,
     isTotalExactMarket,
     isTotalMarket,
@@ -32,6 +34,7 @@ import {
     League,
     MarketType,
     MarketTypeMap,
+    SgpBuilder,
     Sport,
 } from 'overtime-utils';
 import {
@@ -132,7 +135,7 @@ const getSimplePositionText = (
             ? text.split(' ')[marketType === MarketType.US_ELECTION_WINNING_PARTY_NORTH_CAROLINA ? 2 : 1]
             : text;
     }
-    if (marketType === MarketType.CORRECT_SCORE && positionNames && positionNames[position]) {
+    if (isCorrectScoreMarket(marketType) && positionNames && positionNames[position]) {
         let text = (position < positionNames.length - 1
             ? positionNames[position].slice(positionNames[position].length - 3)
             : positionNames[position]
@@ -148,6 +151,9 @@ const getSimplePositionText = (
                 ? `${awayTeam} ${text}`
                 : text;
         return text;
+    }
+    if (isSgpBuilderMarket(marketType) && positionNames && positionNames[position]) {
+        return positionNames[position];
     }
     if (isTotalExactMarket(marketType) && positionNames && positionNames[position]) {
         const text =
@@ -258,6 +264,7 @@ export const getPositionTextV2 = (market: SportMarket, position: number, extende
     if (market.typeId === MarketType.EMPTY) {
         return '-';
     }
+
     return isCombinedPositionsMarket(market.typeId)
         ? getCombinedPositionsText(market, position)
         : getSimplePositionText(
@@ -274,7 +281,7 @@ export const getPositionTextV2 = (market: SportMarket, position: number, extende
 };
 
 export const getTitleText = (market: SportMarket, useDescription?: boolean, shortName?: boolean) => {
-    const marketType = market.typeId as MarketType;
+    const marketType = market.typeId;
     if (marketType === MarketType.EMPTY) {
         return '';
     }
@@ -670,6 +677,84 @@ export const packMarket = (
     }
 
     return packedMarket;
+};
+
+export const getTicketPositionsFogSgpBuilder = (market: SportMarket, sgpBuilder: SgpBuilder): TicketPosition[] => {
+    let ticketPositions: TicketPosition[] = [];
+
+    for (let i = 0; i < sgpBuilder.size; i++) {
+        const typeId = sgpBuilder.combinedTypeIds[i];
+        const playerIds = sgpBuilder.combinedPlayerIds[i];
+        const line = sgpBuilder.combinedLines[i];
+        const position = sgpBuilder.combinedPositions[i];
+
+        const isDefaultCondition = playerIds.length > 0 || line !== null;
+        const getDefaultCondition = (marketPlayerId: number, marketLine: number) =>
+            (!playerIds.length || playerIds.includes(marketPlayerId)) && (line === null || marketLine === line);
+
+        const combinedChildMarketsByType = market.childMarkets.filter((childMarket) => childMarket.typeId === typeId);
+
+        let combinedChildMarket = undefined;
+        switch (typeId) {
+            case MarketType.PLAYER_PROPS_POINTS:
+                const maxLine = Math.max(...combinedChildMarketsByType.map((childMarket) => childMarket.line));
+                combinedChildMarket = combinedChildMarketsByType.find((childMarket) => {
+                    const typeSpecifiedCondition = childMarket.line === maxLine;
+                    return isDefaultCondition
+                        ? getDefaultCondition(childMarket.playerProps.playerId, childMarket.line) ||
+                              typeSpecifiedCondition
+                        : typeSpecifiedCondition;
+                });
+                break;
+            case MarketType.PLAYER_PROPS_TRIPLE_DOUBLE:
+            case MarketType.PLAYER_PROPS_DOUBLE_DOUBLE:
+                const maxOdds = Math.max(
+                    ...combinedChildMarketsByType.map((childMarket) =>
+                        position !== null ? childMarket.odds[position] : 0
+                    )
+                );
+                combinedChildMarket = combinedChildMarketsByType.find((childMarket) => {
+                    const typeSpecifiedCondition = position !== null && childMarket.odds[position] === maxOdds;
+                    return isDefaultCondition
+                        ? getDefaultCondition(childMarket.playerProps.playerId, childMarket.line) ||
+                              typeSpecifiedCondition
+                        : typeSpecifiedCondition;
+                });
+                break;
+            default:
+                combinedChildMarket = combinedChildMarketsByType.find((childMarket) =>
+                    getDefaultCondition(childMarket.playerProps.playerId, childMarket.line)
+                );
+        }
+
+        const combinedMarket = typeId === MarketType.WINNER ? market : combinedChildMarket;
+
+        if (combinedMarket) {
+            const ticketPosition = {
+                gameId: combinedMarket.gameId,
+                leagueId: combinedMarket.leagueId,
+                typeId: combinedMarket.typeId,
+                playerId: combinedMarket.playerProps.playerId,
+                playerName: combinedMarket.playerProps.playerName,
+                line: combinedMarket.line,
+                position: position,
+                combinedPositions: combinedMarket.combinedPositions,
+                live: false,
+                isOneSideMarket: combinedMarket.isOneSideMarket,
+                isPlayerPropsMarket: combinedMarket.isPlayerPropsMarket,
+                homeTeam: combinedMarket.homeTeam,
+                awayTeam: combinedMarket.awayTeam,
+                playerProps: combinedMarket.playerProps,
+            } as TicketPosition;
+
+            ticketPositions.push(ticketPosition);
+        } else {
+            ticketPositions = [];
+            break;
+        }
+    }
+
+    return ticketPositions;
 };
 
 const getPlayerPropsEmptyMarkets = (market: SportMarket) => [
