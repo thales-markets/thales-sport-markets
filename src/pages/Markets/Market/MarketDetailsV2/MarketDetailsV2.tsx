@@ -5,10 +5,9 @@ import Toggle from 'components/Toggle';
 import { MarketTypeGroupsBySport } from 'constants/marketTypes';
 import { GameStatusKey } from 'constants/markets';
 import ROUTES from 'constants/routes';
-import { MarketType } from 'enums/marketTypes';
 import { GameStatus } from 'enums/markets';
-import { League, Sport } from 'enums/sports';
 import { groupBy } from 'lodash';
+import { getLeaguePeriodType, getLeagueSport, isFuturesMarket, League, MarketType, Sport } from 'overtime-utils';
 import { ToggleContainer } from 'pages/LiquidityPool/styled-components';
 import Parlay from 'pages/Markets/Home/Parlay';
 import TicketMobileModal from 'pages/Markets/Home/Parlay/components/TicketMobileModal';
@@ -26,10 +25,8 @@ import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
 import { showGameScore, showLiveInfo } from 'utils/marketsV2';
 import { buildHref } from 'utils/routes';
-import { getLeaguePeriodType, getLeagueSport } from 'utils/sports';
 import { getOrdinalNumberLabel } from 'utils/ui';
 import useQueryParam from 'utils/useQueryParams';
-import { isFuturesMarket } from '../../../../utils/markets';
 import Header from '../../Home/Header';
 import MatchInfoV2 from './components/MatchInfoV2';
 import PositionsV2 from './components/PositionsV2';
@@ -270,7 +267,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                             />
                         </ToggleContainer>
                     )}
-                    <Header market={market} hideSwitch />
+                    <Header market={market} />
                     <PositionsContainer>
                         {numberOfMarkets === 0 ? (
                             <NoMarketsContainer>
@@ -362,9 +359,11 @@ const MainContainer = styled(FlexDivColumn)<{ isGameOpen: boolean }>`
 `;
 
 const SidebarContainer = styled(FlexDivColumn)`
+    min-width: 360px;
     max-width: 360px;
     @media (max-width: 1299px) {
         max-width: 320px;
+        min-width: 320px;
     }
     @media (max-width: 950px) {
         display: none;

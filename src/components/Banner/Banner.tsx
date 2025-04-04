@@ -2,20 +2,19 @@ import React from 'react';
 import { Trans } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
-import { buildSpeedMarketsBannerHref } from 'utils/routes';
 import SPAAnchor from '../SPAAnchor';
 
-const IS_VISIBLE = false;
+const IS_VISIBLE = true;
 
 const Banner: React.FC = () => {
     return !IS_VISIBLE ? (
         <></>
     ) : (
-        <SPAAnchor href={buildSpeedMarketsBannerHref()}>
+        <SPAAnchor href={'https://overtime.io'}>
             <Container>
                 <Label>
                     <Trans
-                        i18nKey={'banner.speed-text'}
+                        i18nKey={'banner.migration-message'}
                         components={{
                             highlight: <HightlightLabel />,
                         }}

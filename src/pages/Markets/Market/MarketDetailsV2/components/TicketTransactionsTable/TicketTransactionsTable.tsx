@@ -193,13 +193,13 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
             },
         },
         {
-            header: <>{t('profile.table.id')}</>,
-            accessorKey: 'id',
+            header: <>{t('profile.table.owner')}</>,
+            accessorKey: 'account',
             enableSorting: false,
             cell: (cellProps: any) => {
                 return (
                     <ExternalLink
-                        href={getEtherscanAddressLink(networkId, cellProps.cell.getValue())}
+                        href={getEtherscanAddressLink(networkId, cellProps.row.original.id)}
                         target={'_blank'}
                     >
                         <TableText>{truncateAddress(cellProps.cell.getValue())}</TableText>

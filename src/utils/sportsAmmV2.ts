@@ -20,8 +20,6 @@ export const getSportsAMMV2Transaction: any = async (
     additionalSlippage: bigint,
     isAA: boolean,
     isFreeBet: boolean,
-    isStakedThales: boolean,
-    stakingThalesBettingProxyContract: ViemContract,
     client: Client,
     isSystemBet: boolean,
     systemBetDenominator: number
@@ -29,33 +27,23 @@ export const getSportsAMMV2Transaction: any = async (
     let finalEstimation = null;
     const referralAddress = referral || ZERO_ADDRESS;
 
-    if (isAA) {
-        return executeBiconomyTransaction(networkId, collateralAddress, sportsAMMV2Contract, 'trade', [
-            tradeData,
-            buyInAmount,
-            expectedQuote,
-            additionalSlippage,
-            referralAddress,
-            collateralAddress,
-            isEth,
-        ]);
-    } else {
-        if (isFreeBet && freeBetHolderContract) {
-            if (isSystemBet) {
-                const encodedData = encodeFunctionData({
-                    abi: freeBetHolderContract.abi,
-                    functionName: 'tradeSystemBet',
-                    args: [
-                        tradeData,
-                        buyInAmount,
-                        expectedQuote,
-                        additionalSlippage,
-                        referralAddress,
-                        collateralAddress,
-                        systemBetDenominator,
-                    ],
-                });
+    if (isFreeBet && freeBetHolderContract) {
+        if (isSystemBet) {
+            const encodedData = encodeFunctionData({
+                abi: freeBetHolderContract.abi,
+                functionName: 'tradeSystemBet',
+                args: [
+                    tradeData,
+                    buyInAmount,
+                    expectedQuote,
+                    additionalSlippage,
+                    referralAddress,
+                    collateralAddress,
+                    systemBetDenominator,
+                ],
+            });
 
+            if (!isAA) {
                 const estimation = await estimateGas(client, {
                     to: freeBetHolderContract.address as Address,
                     data: encodedData,
@@ -75,90 +63,78 @@ export const getSportsAMMV2Transaction: any = async (
                     ],
                     { value: BigInt(0), gas: finalEstimation }
                 );
-            }
-
+            } else
+                return await executeBiconomyTransaction({
+                    networkId,
+                    contract: freeBetHolderContract,
+                    methodName: 'tradeSystemBet',
+                    collateralAddress: collateralAddress as any,
+                    data: [
+                        tradeData,
+                        buyInAmount,
+                        expectedQuote,
+                        additionalSlippage,
+                        referralAddress,
+                        collateralAddress,
+                        systemBetDenominator,
+                    ],
+                });
+        } else {
             const encodedData = encodeFunctionData({
                 abi: freeBetHolderContract.abi,
                 functionName: 'trade',
                 args: [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress, collateralAddress],
             });
 
-            const estimation = await estimateGas(client, {
-                to: freeBetHolderContract.address as Address,
-                data: encodedData,
-            });
-
-            finalEstimation = BigInt(Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER));
-
-            return freeBetHolderContract.write.trade(
-                [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress, collateralAddress],
-                { value: BigInt(0), gas: finalEstimation }
-            );
-        }
-
-        if (isStakedThales && stakingThalesBettingProxyContract) {
-            if (isSystemBet) {
-                const encodedData = encodeFunctionData({
-                    abi: stakingThalesBettingProxyContract.abi,
-                    functionName: 'tradeSystemBet',
-                    args: [
-                        tradeData,
-                        buyInAmount,
-                        expectedQuote,
-                        additionalSlippage,
-                        referralAddress,
-                        systemBetDenominator,
-                    ],
-                });
-
+            if (!isAA) {
                 const estimation = await estimateGas(client, {
-                    to: stakingThalesBettingProxyContract.address as Address,
+                    to: freeBetHolderContract.address as Address,
                     data: encodedData,
                 });
 
                 finalEstimation = BigInt(Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER));
 
-                return stakingThalesBettingProxyContract.write.tradeSystemBet(
-                    [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress, systemBetDenominator],
-                    { gas: finalEstimation }
+                return freeBetHolderContract.write.trade(
+                    [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress, collateralAddress],
+                    { value: BigInt(0), gas: finalEstimation }
                 );
+            } else {
+                console.log('this should be executed');
+                return await executeBiconomyTransaction({
+                    collateralAddress: collateralAddress as Address,
+                    networkId,
+                    contract: freeBetHolderContract,
+                    methodName: 'trade',
+                    data: [
+                        tradeData,
+                        buyInAmount,
+                        expectedQuote,
+                        additionalSlippage,
+                        referralAddress,
+                        collateralAddress,
+                    ],
+                });
             }
-
-            const encodedData = encodeFunctionData({
-                abi: stakingThalesBettingProxyContract.abi,
-                functionName: 'trade',
-                args: [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress],
-            });
-
-            const estimation = await estimateGas(client, {
-                to: stakingThalesBettingProxyContract.address as Address,
-                data: encodedData,
-            });
-
-            finalEstimation = BigInt(Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER));
-
-            return stakingThalesBettingProxyContract.write.trade(
-                [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress],
-                { gas: finalEstimation }
-            );
         }
+    }
 
-        if (isSystemBet) {
-            const encodedData = encodeFunctionData({
-                abi: sportsAMMV2Contract.abi,
-                functionName: 'tradeSystemBet',
-                args: [
-                    tradeData,
-                    buyInAmount,
-                    expectedQuote,
-                    additionalSlippage,
-                    referralAddress,
-                    collateralAddress,
-                    isEth,
-                    systemBetDenominator,
-                ],
-            });
+    if (isSystemBet) {
+        const encodedData = encodeFunctionData({
+            abi: sportsAMMV2Contract.abi,
+            functionName: 'tradeSystemBet',
+            args: [
+                tradeData,
+                buyInAmount,
+                expectedQuote,
+                additionalSlippage,
+                referralAddress,
+                collateralAddress,
+                isEth,
+                systemBetDenominator,
+            ],
+        });
 
+        if (!isAA) {
             const estimation = await estimateGas(client, {
                 to: sportsAMMV2Contract.address as Address,
                 data: encodedData,
@@ -180,8 +156,26 @@ export const getSportsAMMV2Transaction: any = async (
                 ],
                 { value: isEth ? buyInAmount : BigInt(0), gas: finalEstimation }
             );
+        } else {
+            return await executeBiconomyTransaction({
+                networkId,
+                collateralAddress: collateralAddress as any,
+                contract: sportsAMMV2Contract,
+                methodName: 'tradeSystemBet',
+                data: [
+                    tradeData,
+                    buyInAmount,
+                    expectedQuote,
+                    additionalSlippage,
+                    referralAddress,
+                    isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
+                    isEth,
+                    systemBetDenominator,
+                ],
+                value: isEth ? buyInAmount : BigInt(0),
+            });
         }
-
+    } else {
         const encodedData = encodeFunctionData({
             abi: sportsAMMV2Contract.abi,
             functionName: 'trade',
@@ -196,26 +190,45 @@ export const getSportsAMMV2Transaction: any = async (
             ],
         });
 
-        const estimation = await estimateGas(client, {
-            to: sportsAMMV2Contract.address as Address,
-            data: encodedData,
-            value: isEth ? buyInAmount : BigInt(0),
-        });
+        if (!isAA) {
+            const estimation = await estimateGas(client, {
+                to: sportsAMMV2Contract.address as Address,
+                data: encodedData,
+                value: isEth ? buyInAmount : BigInt(0),
+            });
 
-        finalEstimation = BigInt(Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER));
+            finalEstimation = BigInt(Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER));
 
-        return sportsAMMV2Contract.write.trade(
-            [
-                tradeData,
-                buyInAmount,
-                expectedQuote,
-                additionalSlippage,
-                referralAddress,
-                isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
-                isEth,
-            ],
-            { value: isEth ? buyInAmount : BigInt(0), gas: finalEstimation }
-        );
+            return sportsAMMV2Contract.write.trade(
+                [
+                    tradeData,
+                    buyInAmount,
+                    expectedQuote,
+                    additionalSlippage,
+                    referralAddress,
+                    isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
+                    isEth,
+                ],
+                { value: isEth ? buyInAmount : BigInt(0), gas: finalEstimation }
+            );
+        } else {
+            return await executeBiconomyTransaction({
+                networkId,
+                collateralAddress: collateralAddress as any,
+                contract: sportsAMMV2Contract,
+                methodName: 'trade',
+                data: [
+                    tradeData,
+                    buyInAmount,
+                    expectedQuote,
+                    additionalSlippage,
+                    referralAddress,
+                    isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
+                    isEth,
+                ],
+                value: isEth ? buyInAmount : BigInt(0),
+            });
+        }
     }
 };
 

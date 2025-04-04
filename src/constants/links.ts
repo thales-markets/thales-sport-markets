@@ -4,9 +4,9 @@ export const LINKS = {
     SpeedMarkets: 'https://www.speedmarkets.xyz',
     TwitterTweetStatus: 'https://twitter.com/intent/tweet?text=',
     Footer: {
-        Twitter: 'https://twitter.com/OvertimeMarkets',
-        Discord: 'https://discord.gg/thales',
-        Docs: 'https://docs.overtimemarkets.xyz/',
+        Twitter: 'https://x.com/overtime_io',
+        Discord: 'https://discord.gg/z5xFxMccsu',
+        Docs: 'https://docs.overtime.io/',
         Medium: 'https://medium.com/@OvertimeMarkets.xyz',
         Tutorial: 'https://youtu.be/fk05qbqbuZo?si=zkaHBogLqB850pV3',
         GitHub: 'https://github.com/thales-markets/thales-sport-markets',
@@ -20,4 +20,13 @@ export const LINKS = {
     Biconomy: {
         Bundler: 'https://bundler.biconomy.io/api/v2/',
     },
+    MarchMadness: {
+        Medium:
+            'https://medium.com/@OvertimeMarkets.xyz/overtime-brings-the-bracket-to-the-blockchain-for-march-madness-66777956d87f',
+    },
+    Tip238:
+        'https://www.thales.io/dao/thalesgov.eth/0xe77747ec77bf8b41c7bc0101d5103e06ed972860e9438a9e429d4a866648e5a4',
+    OvertimeAccount: 'https://docs.overtime.io/about-overtime-sportsbook/overtime-account',
+    UnstakingThales: 'https://www.overtime.io/token/staking',
+    UnstakingLp: 'https://www.overtime.io/token/lp-staking',
 };

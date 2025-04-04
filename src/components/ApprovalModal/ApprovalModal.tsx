@@ -3,12 +3,13 @@ import Modal from 'components/Modal';
 import Checkbox from 'components/fields/Checkbox';
 import NumericInput from 'components/fields/NumericInput';
 import React, { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { setWalletConnectModalVisibility } from 'redux/modules/wallet';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
-import { bigNumberFormatter, coinParser } from 'thales-utils';
+import { bigNumberFormatter, coinParser, Coins } from 'thales-utils';
+import { ThemeInterface } from 'types/ui';
 import { getCollateral } from 'utils/collaterals';
 import { maxUint256 } from 'viem';
 import { useAccount, useChainId } from 'wagmi';
@@ -20,6 +21,7 @@ type ApprovalModalProps = {
     isAllowing: boolean;
     onSubmit: (approveAmount: bigint) => void;
     onClose: () => void;
+    collateralArray?: Coins[];
 };
 
 const ApprovalModal: React.FC<ApprovalModalProps> = ({
@@ -29,9 +31,11 @@ const ApprovalModal: React.FC<ApprovalModalProps> = ({
     isAllowing,
     onSubmit,
     onClose,
+    collateralArray,
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
+    const theme: ThemeInterface = useTheme();
 
     const { isConnected } = useAccount();
     const networkId = useChainId();
@@ -47,13 +51,14 @@ const ApprovalModal: React.FC<ApprovalModalProps> = ({
     const amountConverted = coinParser(
         Number(amount).toString(),
         networkId,
-        getCollateral(networkId, collateralIndex || 0)
+        collateralIndex ? getCollateral(networkId, collateralIndex, collateralArray) : (tokenSymbol as Coins)
     );
 
     const getSubmitButton = () => {
         if (!isConnected) {
             return (
                 <Button
+                    additionalStyles={{ background: theme.marchMadness.button.background.senary, border: 'none' }} // TODO: remove when marchMadness is removed
                     onClick={() =>
                         dispatch(
                             setWalletConnectModalVisibility({
@@ -67,15 +72,34 @@ const ApprovalModal: React.FC<ApprovalModalProps> = ({
             );
         }
         if (!approveAll && !isAmountEntered) {
-            return <Button disabled={true}>{t(`common.errors.enter-amount`)}</Button>;
+            return (
+                <Button
+                    additionalStyles={{ background: theme.marchMadness.button.background.senary, border: 'none' }} // TODO: remove when marchMadness is removed
+                    disabled={true}
+                >
+                    {t(`common.errors.enter-amount`)}
+                </Button>
+            );
         }
         return (
-            <Button disabled={isButtonDisabled} onClick={() => onSubmit(approveAll ? maxUint256 : amountConverted)}>
-                {!isAllowing
-                    ? t('common.enable-wallet-access.approve-label', { currencyKey: tokenSymbol })
-                    : t('common.enable-wallet-access.approve-progress-label', {
-                          currencyKey: tokenSymbol,
-                      })}
+            <Button
+                additionalStyles={{ background: theme.marchMadness.button.background.senary, border: 'none' }} // TODO: remove when marchMadness is removed
+                disabled={isButtonDisabled}
+                onClick={() => onSubmit(approveAll ? maxUint256 : amountConverted)}
+            >
+                {!isAllowing ? (
+                    <Trans
+                        i18nKey="common.enable-wallet-access.approve-label"
+                        values={{ currencyKey: tokenSymbol }}
+                        components={{ currency: <CurrencyText /> }}
+                    />
+                ) : (
+                    <Trans
+                        i18nKey="common.enable-wallet-access.approve-progress-label"
+                        values={{ currencyKey: tokenSymbol }}
+                        components={{ currency: <CurrencyText /> }}
+                    />
+                )}
             </Button>
         );
     };
@@ -86,7 +110,7 @@ const ApprovalModal: React.FC<ApprovalModalProps> = ({
 
     return (
         <Modal
-            title={t('common.enable-wallet-access.approve-label', { currencyKey: tokenSymbol })}
+            title={t('common.enable-wallet-access.approve-label-text', { currencyKey: tokenSymbol })}
             onClose={onClose}
             shouldCloseOnOverlayClick={false}
             customStyle={{ overlay: { zIndex: 2000 } }}
@@ -141,6 +165,11 @@ const OrText = styled(FlexDivCentered)`
     color: ${(props) => props.theme.textColor.primary};
     margin-top: 10px;
     margin-bottom: 15px;
+`;
+
+const CurrencyText = styled.span`
+    text-transform: none;
+    margin-left: 5px;
 `;
 
 export default ApprovalModal;

@@ -32,18 +32,19 @@ import { LiquidityPoolData, UserLiquidityPoolData } from 'types/liquidityPool';
 import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
 import { ViemContract } from 'types/viem';
-import biconomyConnector from 'utils/biconomyWallet';
+import { executeBiconomyTransactionWithConfirmation } from 'utils/biconomy';
 import { getContractInstance } from 'utils/contract';
 import { checkAllowance } from 'utils/network';
 import { refetchLiquidityPoolData } from 'utils/queryConnector';
 import { delay } from 'utils/timer';
+import useBiconomy from 'utils/useBiconomy';
 import { Client, parseUnits } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 import SPAAnchor from '../../components/SPAAnchor';
 import ROUTES from '../../constants/routes';
 import useMultipleCollateralBalanceQuery from '../../queries/wallet/useMultipleCollateralBalanceQuery';
-import { getCollateralIndex } from '../../utils/collaterals';
+import { getCollateralAddress, getCollateralIndex } from '../../utils/collaterals';
 import { getDefaultLpCollateral, getLiquidityPools, getLpAddress, getLpCollateral } from '../../utils/liquidityPool';
 import { buildHref } from '../../utils/routes';
 import PnL from './PnL';
@@ -56,6 +57,7 @@ import {
     ContentInfo,
     ContentInfoContainer,
     CopyContainer,
+    CurrencyText,
     Description,
     InputButtonContainer,
     LiquidityPoolFilledGraphicContainer,
@@ -103,7 +105,8 @@ const LiquidityPool: React.FC = () => {
     const walletClient = useWalletClient();
 
     const { address, isConnected } = useAccount();
-    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+    const smartAddres = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddres : address) || '';
 
     const [selectedCollateralIndex, setSelectedCollateralIndex] = useState<number>(0);
     const [amount, setAmount] = useState<number | string>('');
@@ -333,8 +336,15 @@ const LiquidityPool: React.FC = () => {
             setIsAllowing(true);
 
             try {
-                console.log(approveAmount.toString(), collateral);
-                const hash = await multiCollateralWithSigner?.write.approve([liquidityPoolAddress, approveAmount]);
+                const hash = isBiconomy
+                    ? await executeBiconomyTransactionWithConfirmation({
+                          networkId,
+                          collateralAddress: multiCollateralWithSigner.address,
+                          contract: multiCollateralWithSigner,
+                          methodName: 'approve',
+                          data: [liquidityPoolAddress, approveAmount],
+                      })
+                    : await multiCollateralWithSigner?.write.approve([liquidityPoolAddress, approveAmount]);
                 setOpenApprovalModal(false);
 
                 const txReceipt = await waitForTransactionReceipt(client as Client, {
@@ -379,14 +389,30 @@ const LiquidityPool: React.FC = () => {
                 WETHContractWithSigner &&
                 selectedCollateralIndex === 1
             ) {
-                const wrapTxHash = await WETHContractWithSigner.write.deposit([parsedAmount]);
+                const wrapTxHash = isBiconomy
+                    ? await executeBiconomyTransactionWithConfirmation({
+                          networkId,
+                          collateralAddress: WETHContractWithSigner.address,
+                          contract: WETHContractWithSigner,
+                          methodName: 'deposit',
+                          data: [parsedAmount],
+                      })
+                    : await WETHContractWithSigner.write.deposit([parsedAmount]);
 
                 const wrapTxReceipt = await waitForTransactionReceipt(client as Client, {
                     hash: wrapTxHash,
                 });
 
                 if (wrapTxReceipt.status === 'success') {
-                    const txHash = await liquidityPoolContractWithSigner.write.deposit(parsedAmount);
+                    const txHash = isBiconomy
+                        ? await executeBiconomyTransactionWithConfirmation({
+                              networkId,
+                              collateralAddress: getCollateralAddress(networkId, collateralIndex),
+                              contract: liquidityPoolContractWithSigner,
+                              methodName: 'deposit',
+                              data: [parsedAmount],
+                          })
+                        : await liquidityPoolContractWithSigner.write.deposit(parsedAmount);
 
                     const txReceipt = await waitForTransactionReceipt(client as Client, {
                         hash: txHash,
@@ -404,7 +430,15 @@ const LiquidityPool: React.FC = () => {
                     }
                 }
             } else {
-                const txHash = await liquidityPoolContractWithSigner.write.deposit([parsedAmount]);
+                const txHash = isBiconomy
+                    ? await executeBiconomyTransactionWithConfirmation({
+                          networkId,
+                          collateralAddress: getCollateralAddress(networkId, collateralIndex),
+                          contract: liquidityPoolContractWithSigner,
+                          methodName: 'deposit',
+                          data: [parsedAmount],
+                      })
+                    : await liquidityPoolContractWithSigner.write.deposit([parsedAmount]);
 
                 const txReceipt = await waitForTransactionReceipt(client as Client, {
                     hash: txHash,
@@ -437,7 +471,15 @@ const LiquidityPool: React.FC = () => {
             ) as ViemContract;
             const parsedPercentage = parseUnits((Number(withdrawalPercentage) / 100).toString(), 18);
 
-            const txHash = withdrawAll
+            const txHash = isBiconomy
+                ? await executeBiconomyTransactionWithConfirmation({
+                      networkId,
+                      collateralAddress: getCollateralAddress(networkId, collateralIndex),
+                      contract: liquidityPoolContractWithSigner,
+                      methodName: withdrawAll ? 'withdrawalRequest' : 'partialWithdrawalRequest',
+                      data: withdrawAll ? undefined : [parsedPercentage],
+                  })
+                : withdrawAll
                 ? await liquidityPoolContractWithSigner.write.withdrawalRequest()
                 : await liquidityPoolContractWithSigner.write.partialWithdrawalRequest([parsedPercentage]);
 
@@ -480,7 +522,15 @@ const LiquidityPool: React.FC = () => {
             if (canCloseCurrentRound) {
                 try {
                     if (!roundClosingPrepared) {
-                        const txHash = await liquidityPoolContractWithSigner.write.prepareRoundClosing([]);
+                        const txHash = isBiconomy
+                            ? await executeBiconomyTransactionWithConfirmation({
+                                  networkId,
+                                  collateralAddress: getCollateralAddress(networkId, collateralIndex),
+                                  contract: liquidityPoolContractWithSigner,
+                                  methodName: 'prepareRoundClosing',
+                                  data: [],
+                              })
+                            : await liquidityPoolContractWithSigner.write.prepareRoundClosing([]);
 
                         const txReceipt = await waitForTransactionReceipt(client as Client, {
                             hash: txHash,
@@ -494,7 +544,15 @@ const LiquidityPool: React.FC = () => {
                     }
 
                     while (usersProcessedInRound.toString() < getUsersCountInCurrentRound.toString()) {
-                        const txHash = await liquidityPoolContractWithSigner.write.processRoundClosingBatch([100]);
+                        const txHash = isBiconomy
+                            ? await executeBiconomyTransactionWithConfirmation({
+                                  networkId,
+                                  collateralAddress: getCollateralAddress(networkId, collateralIndex),
+                                  contract: liquidityPoolContractWithSigner,
+                                  methodName: 'processRoundClosingBatch',
+                                  data: [100],
+                              })
+                            : await liquidityPoolContractWithSigner.write.processRoundClosingBatch([100]);
 
                         const txReceipt = await waitForTransactionReceipt(client as Client, {
                             hash: txHash,
@@ -509,7 +567,15 @@ const LiquidityPool: React.FC = () => {
                         usersProcessedInRound = await liquidityPoolContractWithSigner.read.usersProcessedInRound();
                     }
 
-                    const tx = await liquidityPoolContractWithSigner.write.closeRound([]);
+                    const tx = isBiconomy
+                        ? await executeBiconomyTransactionWithConfirmation({
+                              networkId,
+                              collateralAddress: getCollateralAddress(networkId, collateralIndex),
+                              contract: liquidityPoolContractWithSigner,
+                              methodName: 'closeRound',
+                              data: [],
+                          })
+                        : await liquidityPoolContractWithSigner.write.closeRound([]);
                     const txReceipt = await waitForTransactionReceipt(client as Client, {
                         hash: tx,
                     });
@@ -568,22 +634,38 @@ const LiquidityPool: React.FC = () => {
                             disabled={isAllowing}
                             onClick={() => setOpenApprovalModal(true)}
                         >
-                            {!isAllowing
-                                ? t('common.enable-wallet-access.approve-label', { currencyKey: collateral })
-                                : t('common.enable-wallet-access.approve-progress-label', {
-                                      currencyKey: collateral,
-                                  })}
+                            {!isAllowing ? (
+                                <Trans
+                                    i18nKey="common.enable-wallet-access.approve-label"
+                                    values={{ currencyKey: collateral }}
+                                    components={{ currency: <CurrencyText /> }}
+                                />
+                            ) : (
+                                <Trans
+                                    i18nKey="common.enable-wallet-access.approve-progress-label"
+                                    values={{ currencyKey: collateral }}
+                                    components={{ currency: <CurrencyText /> }}
+                                />
+                            )}
                         </Button>
                     </Tooltip>
                 );
             } else {
                 return (
                     <Button {...defaultButtonProps} disabled={isAllowing} onClick={() => setOpenApprovalModal(true)}>
-                        {!isAllowing
-                            ? t('common.enable-wallet-access.approve-label', { currencyKey: collateral })
-                            : t('common.enable-wallet-access.approve-progress-label', {
-                                  currencyKey: collateral,
-                              })}
+                        {!isAllowing ? (
+                            <Trans
+                                i18nKey="common.enable-wallet-access.approve-label"
+                                values={{ currencyKey: collateral }}
+                                components={{ currency: <CurrencyText /> }}
+                            />
+                        ) : (
+                            <Trans
+                                i18nKey="common.enable-wallet-access.approve-progress-label"
+                                values={{ currencyKey: collateral }}
+                                components={{ currency: <CurrencyText /> }}
+                            />
+                        )}
                     </Button>
                 );
             }
@@ -1147,9 +1229,10 @@ const LiquidityPool: React.FC = () => {
                                     </WarningContentInfo>
                                 )}
                             </ContentInfoContainer>
-                            {paramCollateral !== LiquidityPoolCollateral.THALES && (
-                                <Return liquidityPoolAddress={liquidityPoolAddress} />
-                            )}
+                            {paramCollateral !== LiquidityPoolCollateral.THALES &&
+                                paramCollateral !== LiquidityPoolCollateral.OVER && (
+                                    <Return liquidityPoolAddress={liquidityPoolAddress} />
+                                )}
                         </MainContentContainer>
                         <MainContentContainer>
                             {liquidityPoolData && (

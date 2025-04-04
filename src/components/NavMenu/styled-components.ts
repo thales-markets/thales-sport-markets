@@ -82,7 +82,7 @@ export const ItemContainer = styled.div<{ active?: boolean }>`
     ${(props) => (props.active ? `color: ${props.theme.textColor.quaternary};` : '')}
     :hover {
         i {
-            color: ${(props) => props.theme.textColor.quaternary}!important;
+            color: ${(props) => props.theme.textColor.quaternary} !important;
         }
         color: ${(props) => props.theme.textColor.quaternary} !important;
     }
@@ -93,6 +93,7 @@ export const NavLabel = styled.span<{ active?: boolean }>`
     font-weight: ${(props) => (props.active ? '600' : '400')};
     line-height: 120%;
     text-transform: uppercase;
+    white-space: pre;
 `;
 
 export const NavIcon = styled.i<{ active?: boolean }>`

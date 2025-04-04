@@ -35,7 +35,7 @@ export default {
             secondary: Colors.NAVY_BLUE,
             tertiary: Colors.NAVY_BLUE_LIGHT,
             quaternary: Colors.BLUE,
-            quinary: Colors.BLUE,
+            quinary: Colors.GOLD,
             senary: Colors.TORY_BLUE,
             septenary: Colors.RED,
             octonary: Colors.GRAY_TRANSPARENT,
@@ -190,7 +190,7 @@ export default {
     },
     overdrop: {
         background: {
-            secondary: '#F1BA2099',
+            secondary: Colors.YELLOW_LIGHT,
             tertiary: 'rgba(60, 73, 138, 0.15)',
             quaternary: Colors.METALIC_BLUE,
             quinary: Colors.NAVY_BLUE_EXTRA_DARK,
@@ -246,6 +246,76 @@ export default {
     slider: {
         trackColor: Colors.GREEN,
         thumbColor: Colors.WHITE,
+    },
+    marchMadness: {
+        background: {
+            primary: Colors.MAIN_MARCH_MADNESS,
+            secondary: '',
+            tertiary: '',
+            quaternary: '',
+            quinary: '',
+            senary: '',
+        },
+        textColor: {
+            primary: Colors.GRAY_DARK,
+            secondary: '',
+            tertiary: '',
+            quaternary: '',
+            quinary: '',
+            senary: '',
+        },
+        borderColor: {
+            primary: '',
+            secondary: '',
+            tertiary: '',
+            quaternary: '',
+            quinary: '',
+            senary: '',
+        },
+        button: {
+            background: {
+                primary: Colors.MAIN_MARCH_MADNESS,
+                secondary: Colors.BLUE_GRADIENT_1,
+                tertiary: '',
+                quaternary: '',
+                quinary: '',
+                senary: Colors.GREEN,
+            },
+            textColor: {
+                primary: '',
+                secondary: Colors.WHITE,
+                tertiary: '',
+                quaternary: '',
+                quinary: '',
+            },
+            borderColor: {
+                primary: '',
+                secondary: '',
+                tertiary: '',
+            },
+        },
+        dropdown: {
+            textColor: { primary: Colors.GRAY_DARK },
+        },
+        link: {
+            textColor: {
+                primary: '',
+                secondary: '',
+            },
+        },
+        shadow: {
+            modal: '',
+            image: '',
+        },
+        status: {
+            notSelected: '',
+            win: '',
+            loss: '',
+            started: '',
+            wrong: '',
+            selected: '',
+            share: '',
+        },
     },
     tag: {
         background: {

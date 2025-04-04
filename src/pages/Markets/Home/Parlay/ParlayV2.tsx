@@ -4,12 +4,10 @@ import MatchInfoV2 from 'components/MatchInfoV2';
 import MatchUnavailableInfo from 'components/MatchUnavailableInfo';
 import Scroll from 'components/Scroll';
 import Tooltip from 'components/Tooltip';
-import { LeagueMap } from 'constants/sports';
 import { secondsToMilliseconds } from 'date-fns';
 import { SportFilter, StatusFilter, TicketErrorCode } from 'enums/markets';
-import { Network } from 'enums/network';
-import { League } from 'enums/sports';
 import { isEqual } from 'lodash';
+import { League, LeagueMap } from 'overtime-utils';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsAmmDataQuery from 'queries/markets/useSportsAmmDataQuery';
 import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
@@ -24,6 +22,7 @@ import {
     getHasTicketError,
     getIsSgp,
     getIsSystemBet,
+    getMaxTicketSize,
     getTicket,
     removeAll,
     resetTicketError,
@@ -37,6 +36,7 @@ import { FlexDivCentered, FlexDivColumn, FlexDivSpaceBetween } from 'styles/comm
 import { SportMarket, SportMarkets, TicketMarket, TicketPosition } from 'types/markets';
 import { SgpParams, SportsbookData } from 'types/sgp';
 import { isSameMarket } from 'utils/marketsV2';
+import { isRegularTicketInvalid } from 'utils/tickets';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import TicketV2 from './components/TicketV2';
 import ValidationModal from './components/ValidationModal';
@@ -59,6 +59,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     const { isConnected } = useAccount();
 
     const ticket = useSelector(getTicket);
+    const maxTicketSize = useSelector(getMaxTicketSize);
     const isSystemBet = useSelector(getIsSystemBet);
     const isSgp = useSelector(getIsSgp);
     const hasTicketError = useSelector(getHasTicketError);
@@ -70,7 +71,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     const [oddsChanged, setOddsChanged] = useState<boolean>(false);
     const [acceptOdds, setAcceptOdds] = useState<boolean>(false);
     const [outOfLiquidityMarkets, setOutOfLiquidityMarkets] = useState<number[]>([]);
-    const [useThalesCollateral, setUseThalesCollateral] = useState(false);
+    const [useOverCollateral, setUseOverCollateral] = useState(false);
 
     const isLive = useMemo(() => !!ticket[0]?.live, [ticket]);
 
@@ -164,7 +165,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
             setOddsChanged(false);
             setUnavailableMarkets([]);
             setOutOfLiquidityMarkets([]);
-            setUseThalesCollateral(false);
+            setUseOverCollateral(false);
         }
     }, [ticket]);
 
@@ -333,7 +334,9 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                                         value={'true'}
                                         onChange={() => {
                                             if (isSgp && ticket.length > 1) {
-                                                dispatch(removeAll());
+                                                if (isRegularTicketInvalid(ticket, maxTicketSize)) {
+                                                    dispatch(removeAll());
+                                                }
                                             }
                                             dispatch(setIsSystemBet(false));
                                             dispatch(setIsSgp(false));
@@ -352,7 +355,9 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                                         value={'false'}
                                         onChange={() => {
                                             if (isSgp && ticket.length > 1) {
-                                                dispatch(removeAll());
+                                                if (isRegularTicketInvalid(ticket, maxTicketSize)) {
+                                                    dispatch(removeAll());
+                                                }
                                             }
                                             dispatch(setIsSystemBet(true));
                                             dispatch(setIsSgp(false));
@@ -395,11 +400,9 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                             </Tooltip>
                         </BetTypeContainer>
                     )}
-                    {networkId !== Network.Base && (
-                        <ThalesBonusContainer>
-                            <ThalesBonus>{t('markets.parlay.thales-bonus-info')}</ThalesBonus>
-                        </ThalesBonusContainer>
-                    )}
+                    <OverBonusContainer>
+                        <OverBonus>{t('markets.parlay.over-bonus-info')}</OverBonus>
+                    </OverBonusContainer>
                     <ScrollContainer>
                         <Scroll height={`${scrollHeight}px`} renderOnlyChildren={!isScrollVisible}>
                             <ListContainer ref={marketsList} isScrollVisible={isScrollVisible}>
@@ -416,7 +419,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                                                     setAcceptOdds={setAcceptOdds}
                                                     isSgp={isSgp}
                                                     applyPayoutMultiplier={true}
-                                                    useThalesCollateral={useThalesCollateral}
+                                                    useOverCollateral={useOverCollateral}
                                                 />
                                             </RowMarket>
                                         );
@@ -449,7 +452,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                         }}
                         onSuccess={onSuccess}
                         submitButtonDisabled={!!unavailableMarkets.length}
-                        setUseThalesCollateral={setUseThalesCollateral}
+                        setUseOverCollateral={setUseOverCollateral}
                         sgpData={isSgp ? sportsbookData : undefined}
                     />
                 </>
@@ -506,7 +509,7 @@ const Count = styled(FlexDivCentered)`
     margin-left: 6px;
 `;
 
-const ThalesBonusContainer = styled(FlexDivCentered)`
+const OverBonusContainer = styled(FlexDivCentered)`
     background: ${(props) => props.theme.background.quaternary};
     color: ${(props) => props.theme.textColor.tertiary};
     min-width: 100%;
@@ -515,7 +518,7 @@ const ThalesBonusContainer = styled(FlexDivCentered)`
     margin-bottom: 10px;
 `;
 
-const ThalesBonus = styled.span`
+const OverBonus = styled.span`
     font-size: 12px;
     line-height: 16px;
     font-weight: 600;
@@ -532,7 +535,7 @@ const ThalesBonus = styled.span`
             width: 0;
         }
         to {
-            width: 320px;
+            width: 300px;
         }
     }
 

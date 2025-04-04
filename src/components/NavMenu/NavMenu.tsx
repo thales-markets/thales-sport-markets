@@ -13,15 +13,15 @@ import useBlockedGamesQuery from 'queries/resolveBlocker/useBlockedGamesQuery';
 import useWhitelistedForUnblock from 'queries/resolveBlocker/useWhitelistedForUnblock';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { getIsConnectedViaParticle } from 'redux/modules/wallet';
+import { getIsConnectedViaParticle, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
 import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
 import { getNetworkIconClassNameByNetworkId, getNetworkNameByNetworkId } from 'utils/network';
 import { buildHref } from 'utils/routes';
-import { useAccount, useChainId, useClient } from 'wagmi';
+import { useAccount, useChainId, useClient, useDisconnect } from 'wagmi';
 import {
     CloseIcon,
     Count,
@@ -50,11 +50,12 @@ const PARTICLE_WALLET = 'https://wallet.particle.network/';
 const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, skipOutsideClickOnElement }) => {
     const { t } = useTranslation();
     const location = useLocation();
+    const dispatch = useDispatch();
     const theme: ThemeInterface = useTheme();
-
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
+    const { disconnect } = useDisconnect();
     const walletAddress = address || '';
 
     const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
@@ -136,9 +137,15 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                                 >
                                     {isConnected && item.name == 'profile' ? (
                                         <ProfileIconWidget
-                                            avatarSize={25}
-                                            iconColor={theme.textColor.primary}
+                                            top="-10px"
+                                            left="-10px"
                                             marginRight="10px"
+                                            avatarSize={25}
+                                            color={
+                                                location.pathname === item.route
+                                                    ? theme.textColor.quaternary
+                                                    : theme.textColor.primary
+                                            }
                                         />
                                     ) : (
                                         <>
@@ -174,6 +181,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                             </SPAAnchor>
                         );
                     })}
+
                     <Separator />
                     {NAV_MENU_THIRD_SECTION.map((item, index) => {
                         if (!item.supportedNetworks.includes(networkId)) return;
@@ -190,6 +198,10 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                             </SPAAnchor>
                         );
                     })}
+                    <ItemContainer onClick={() => setOpenFreeBetModal(true)}>
+                        <NavIcon className={`icon icon--gift`} />
+                        <NavLabel>{t('profile.send-free-bet')}</NavLabel>
+                    </ItemContainer>
                     <Separator />
                     {NAV_MENU_FOURTH_SECTION.map((item, index) => {
                         if (!item.supportedNetworks.includes(networkId)) return;
@@ -208,16 +220,23 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                     })}
                 </ItemsContainer>
                 <FooterContainer>
-                    <Button
-                        borderColor={theme.button.borderColor.secondary}
-                        backgroundColor="transparent"
-                        textColor={theme.button.textColor.quaternary}
-                        width="100%"
-                        margin={isConnectedViaParticle ? '0 0 5px 0' : ''}
-                        onClick={() => setOpenFreeBetModal(!openFreeBetModal)}
-                    >
-                        {t('profile.send-free-bet')}
-                    </Button>
+                    {isConnected && (
+                        <Button
+                            borderColor={theme.button.borderColor.secondary}
+                            backgroundColor="transparent"
+                            textColor={theme.button.textColor.quaternary}
+                            width="100%"
+                            margin="10px 0"
+                            onClick={() => {
+                                disconnect();
+                                setNavMenuVisibility(null);
+                                dispatch(setWalletConnectModalVisibility({ visibility: true }));
+                            }}
+                        >
+                            {t('markets.nav-menu.buttons.disconnect')}
+                        </Button>
+                    )}
+
                     {openFreeBetModal && <FreeBetFundModal onClose={() => setOpenFreeBetModal(false)} />}
                     {isConnectedViaParticle && (
                         <Button
@@ -231,6 +250,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                                 fontSize: '14px',
                                 textTransform: 'capitalize',
                                 padding: '3px 20px',
+                                marginTop: '8px',
                             }}
                             height="28px"
                             onClick={() => {

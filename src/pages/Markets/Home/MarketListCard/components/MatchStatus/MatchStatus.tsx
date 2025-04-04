@@ -1,7 +1,7 @@
 import Tooltip from 'components/Tooltip';
 import { GameStatusKey } from 'constants/markets';
 import { GameStatus, SportFilter } from 'enums/markets';
-import { League, Sport } from 'enums/sports';
+import { getLeaguePeriodType, getLeagueSport, League, Sport } from 'overtime-utils';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -12,7 +12,6 @@ import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDiv
 import { SportMarket, SportMarketScore } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { showGameScore, showLiveInfo } from 'utils/marketsV2';
-import { getLeaguePeriodType, getLeagueSport } from 'utils/sports';
 import { getOrdinalNumberLabel } from 'utils/ui';
 
 type MatchStatusProps = {

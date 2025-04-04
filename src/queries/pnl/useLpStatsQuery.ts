@@ -7,6 +7,7 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { ContractType } from 'enums/contract';
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 import { orderBy } from 'lodash';
+import { League } from 'overtime-utils';
 import { bigNumberFormatter, Coins, parseBytes32String } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { LpStats, Ticket } from 'types/markets';
@@ -17,7 +18,6 @@ import { getContractInstance } from 'utils/contract';
 import { getLpAddress, getRoundWithOffset, isLpAvailableForNetwork } from 'utils/liquidityPool';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
 import { mapTicket } from 'utils/tickets';
-import { League } from '../../enums/sports';
 
 const getLpStats = async (
     tickets: string[],
@@ -105,11 +105,13 @@ const useLpStatsQuery = (
                     usdcTickets,
                     wethTickets,
                     thalesTickets,
+                    overTickets,
                     cbbtcTickets,
                     wbtcTickets,
                     currencies,
                     rates,
                     thalesPriceResponse,
+                    overPriceResponse,
                 ] = await Promise.all([
                     liquidityPoolDataContract.read.getRoundTickets([
                         getLpAddress(networkConfig.networkId, LiquidityPoolCollateral.USDC),
@@ -123,6 +125,12 @@ const useLpStatsQuery = (
                         ? liquidityPoolDataContract.read.getRoundTickets([
                               getLpAddress(networkConfig.networkId, LiquidityPoolCollateral.THALES),
                               getRoundWithOffset(round, networkConfig.networkId, LiquidityPoolCollateral.THALES),
+                          ])
+                        : [],
+                    isLpAvailableForNetwork(networkConfig.networkId, LiquidityPoolCollateral.OVER)
+                        ? liquidityPoolDataContract.read.getRoundTickets([
+                              getLpAddress(networkConfig.networkId, LiquidityPoolCollateral.OVER),
+                              getRoundWithOffset(round, networkConfig.networkId, LiquidityPoolCollateral.OVER),
                           ])
                         : [],
                     isLpAvailableForNetwork(networkConfig.networkId, LiquidityPoolCollateral.cbBTC)
@@ -140,6 +148,7 @@ const useLpStatsQuery = (
                     priceFeedContract.read.getCurrencies(),
                     priceFeedContract.read.getRates(),
                     axios.get(`${generalConfig.API_URL}/token/price`),
+                    axios.get(`${generalConfig.API_URL}/over-token/price`),
                 ]);
 
                 const exchangeRates: Rates = {};
@@ -155,6 +164,7 @@ const useLpStatsQuery = (
                     }
                 });
                 exchangeRates['THALES'] = Number(thalesPriceResponse.data);
+                exchangeRates['OVER'] = Number(overPriceResponse.data);
 
                 const usdcLpStats = await getLpStats(
                     Array.isArray(usdcTickets) ? usdcTickets : [usdcTickets],
@@ -183,6 +193,15 @@ const useLpStatsQuery = (
                     onlyPP,
                     LiquidityPoolCollateral.THALES
                 );
+                const overLpStats = await getLpStats(
+                    Array.isArray(overTickets) ? overTickets : [overTickets],
+                    sportsAMMDataContract,
+                    networkConfig.networkId,
+                    exchangeRates,
+                    leagueId,
+                    onlyPP,
+                    LiquidityPoolCollateral.OVER
+                );
                 const cbbtcLpStats = await getLpStats(
                     Array.isArray(cbbtcTickets) ? cbbtcTickets : [cbbtcTickets],
                     sportsAMMDataContract,
@@ -208,35 +227,40 @@ const useLpStatsQuery = (
                         usdcLpStats.numberOfTickets +
                         wethLpStats.numberOfTickets +
                         thalesLpStats.numberOfTickets +
+                        overLpStats.numberOfTickets +
                         cbbtcLpStats.numberOfTickets +
                         wbtcLpStats.numberOfTickets,
                     pnl:
                         usdcLpStats.pnlInUsd +
                         wethLpStats.pnlInUsd +
                         thalesLpStats.pnlInUsd +
+                        overLpStats.pnlInUsd +
                         cbbtcLpStats.pnlInUsd +
                         wbtcLpStats.pnlInUsd,
                     fees:
                         usdcLpStats.feesInUsd +
                         wethLpStats.feesInUsd +
                         thalesLpStats.feesInUsd +
+                        overLpStats.feesInUsd +
                         cbbtcLpStats.feesInUsd +
                         wbtcLpStats.feesInUsd,
                     pnlInUsd:
                         usdcLpStats.pnlInUsd +
                         wethLpStats.pnlInUsd +
                         thalesLpStats.pnlInUsd +
+                        overLpStats.pnlInUsd +
                         cbbtcLpStats.pnlInUsd +
                         wbtcLpStats.pnlInUsd,
                     feesInUsd:
                         usdcLpStats.feesInUsd +
                         wethLpStats.feesInUsd +
                         thalesLpStats.feesInUsd +
+                        overLpStats.feesInUsd +
                         cbbtcLpStats.feesInUsd +
                         wbtcLpStats.feesInUsd,
                 };
 
-                const lpStats = [usdcLpStats, wethLpStats];
+                const lpStats = [usdcLpStats, wethLpStats, overLpStats];
                 if (isLpAvailableForNetwork(networkConfig.networkId, LiquidityPoolCollateral.THALES)) {
                     lpStats.push(thalesLpStats);
                 }

@@ -71,8 +71,10 @@ export const Input = styled.input<{
     height?: string;
     minHeight?: string;
     borderColor?: string;
+    background?: string;
+    color?: string;
 }>`
-    background: ${(props) => props.theme.input.background.tertiary};
+    background: ${(props) => props.background || props.theme.input.background.tertiary};
     border: 2px solid ${(props) => props.borderColor || props.theme.input.borderColor.primary};
     box-sizing: border-box;
     mix-blend-mode: normal;
@@ -87,14 +89,14 @@ export const Input = styled.input<{
     font-size: ${(props) => props.fontSize || '15px'};
     text-align: ${(props) => props.textAlign || 'start'};
     line-height: 18px;
-    color: ${(props) => props.theme.input.textColor.tertiary};
+    color: ${(props) => props.color || props.theme.input.textColor.tertiary};
     text-overflow: ellipsis;
     overflow: hidden;
     &::selection {
         background: ${(props) => props.theme.input.background.selection.primary};
     }
     &:focus {
-        border: 2px solid ${(props) => props.theme.input.borderColor.focus.primary};
+        border: 2px solid ${(props) => props.borderColor || props.theme.input.borderColor.focus.primary};
         box-sizing: border-box;
     }
     &:disabled {

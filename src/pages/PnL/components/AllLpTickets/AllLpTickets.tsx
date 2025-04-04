@@ -4,10 +4,10 @@ import SelectInput from 'components/SelectInput';
 import { hoursToMilliseconds } from 'date-fns';
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 import { Network } from 'enums/network';
-import { League } from 'enums/sports';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import { t } from 'i18next';
 import { orderBy } from 'lodash';
+import { League } from 'overtime-utils';
 import useLpTicketsQuery from 'queries/pnl/useLpTicketsQuery';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import React, { useMemo, useState } from 'react';
@@ -60,6 +60,10 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
         networkId,
         client,
     });
+    const overLpTicketsQuery = useLpTicketsQuery(LiquidityPoolCollateral.OVER, round, leagueId, onlyPP, {
+        networkId,
+        client,
+    });
     const cbbtcLpTicketsQuery = useLpTicketsQuery(LiquidityPoolCollateral.cbBTC, round, leagueId, onlyPP, {
         networkId,
         client,
@@ -91,12 +95,17 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
 
         lpOptions.push({
             value: 3,
+            label: 'OVER',
+        });
+
+        lpOptions.push({
+            value: 4,
             label: networkId === Network.Base ? 'cbBTC' : 'THALES',
         });
 
         if (networkId === Network.Arbitrum) {
             lpOptions.push({
-                value: 4,
+                value: 5,
                 label: 'wBTC',
             });
         }
@@ -121,6 +130,9 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
             wethLpTicketsQuery.isSuccess &&
             thalesLpTicketsQuery.data &&
             thalesLpTicketsQuery.isSuccess &&
+            overLpTicketsQuery.data &&
+            overLpTicketsQuery.isSuccess &&
+            thalesLpTicketsQuery.isSuccess &&
             cbbtcLpTicketsQuery.data &&
             cbbtcLpTicketsQuery.isSuccess &&
             wbtcLpTicketsQuery.data &&
@@ -130,6 +142,7 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
                 ...(usdcLpTicketsQuery.data || []),
                 ...(wethLpTicketsQuery.data || []),
                 ...(thalesLpTicketsQuery.data || []),
+                ...(overLpTicketsQuery.data || []),
                 ...(cbbtcLpTicketsQuery.data || []),
                 ...(wbtcLpTicketsQuery.data || []),
             ];
@@ -185,6 +198,8 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
         exchangeRates,
         showOnlyOpenTickets,
         lp,
+        overLpTicketsQuery.data,
+        overLpTicketsQuery.isSuccess,
         lpOptions,
         showOnlyLiveTickets,
         showOnlySgpTickets,

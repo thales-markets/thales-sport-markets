@@ -4,12 +4,11 @@ import { ThemeMap } from 'constants/ui';
 import { OddsType } from 'enums/markets';
 import { Theme } from 'enums/ui';
 import { uniqBy } from 'lodash';
+import { League, LeagueMap } from 'overtime-utils';
 import { localStore } from 'thales-utils';
 import { TagInfo, Tags } from 'types/markets';
 import { OverdropUIState } from 'types/overdrop';
 import { RootState, UISliceState } from 'types/redux';
-import { LeagueMap } from '../../constants/sports';
-import { League } from '../../enums/sports';
 
 const sliceName = 'ui';
 

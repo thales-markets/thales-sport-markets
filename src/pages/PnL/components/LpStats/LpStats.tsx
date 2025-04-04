@@ -1,6 +1,6 @@
 import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from 'constants/currency';
-import { League } from 'enums/sports';
 import { t } from 'i18next';
+import { League } from 'overtime-utils';
 import useLpStatsQuery from 'queries/pnl/useLpStatsQuery';
 import React from 'react';
 import styled from 'styled-components';

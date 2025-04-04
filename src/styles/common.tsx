@@ -44,8 +44,22 @@ export const FlexDivColumnCentered = styled(FlexDivColumn)`
     justify-content: center;
 `;
 
+export const FlexDivColumnStart = styled(FlexDivColumn)`
+    justify-content: center;
+    align-items: flex-start;
+`;
+
 export const BoldContent = styled.span`
     font-weight: 600;
+`;
+
+export const CloseIcon = styled.i.attrs({ className: 'icon icon--close' })`
+    color: white;
+    font-size: 14px;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    cursor: pointer;
 `;
 
 export const Colors = {
@@ -86,10 +100,11 @@ export const Colors = {
     NAVY_BLUE_EXTRA_DARK: '#111325',
 
     TORY_BLUE: '#3C498A',
-    TORY_BLUE_LIGHT: '#4E5FB1',
+    TORY_BLUE_LIGHT: '#5E8DF0',
 
     // Overdrop
     YELLOW: '#F1BA20',
+    YELLOW_LIGHT: '#F1BA2099',
     LIGHTNING_YELLOW: '#F8C914',
     METALIC_YELLOW: '#FBCD0F',
     CHINESE_BLUE: '#5764A3',
@@ -98,4 +113,22 @@ export const Colors = {
     SMOKEY_TOPAZ: '#7C3810',
     OVERDROP_GREEN: '#82EB9F',
     GOLD: '#E9B008',
+
+    // March Madness
+    MAIN_MARCH_MADNESS: '#F25623', // #1a9b9e // #f68d1e // #F25623
+    GRAY_GRADIENT_4: '#606A78',
+    GRAY_GRADIENT_5: '#9AAEB1',
+    GRAY_GRADIENT_6: '#363f4c',
+    WHITE_DISABLED: '#ffffff1a',
+    WHITE_GRADIENT_1: '#f6f6fe',
+    GREEN_GRADIENT_1: '#00957E',
+    BLUE_DARK: '#021631',
+    BLUE_LIGHT: '#c4def2',
+    BLUE_GRADIENT_1: '#005EB8',
+    BLUE_GRADIENT_2: '#0E94CB',
+    RED_GRADIENT_1: '#C12B34',
+    RED_GRADIENT_2: '#CA4C53',
+    PURPLE_GRADIENT_1: '#4d21db',
+    BLACK_GRADIENT_1: '#000E21',
+    BLACK_GRADIENT_2: '#191C33',
 };

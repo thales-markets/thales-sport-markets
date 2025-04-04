@@ -322,12 +322,6 @@ export const LiquidityPoolInfo = styled.span`
     white-space: nowrap;
 `;
 
-export const GetStakeThalesIcon = styled.i`
-    font-size: 21px;
-    margin-left: 4px;
-    vertical-align: initial;
-`;
-
 export const TextLink = styled.a`
     color: ${(props) => props.theme.link.textColor.primary};
     &:hover {
@@ -420,4 +414,9 @@ export const NavigationItem = styled(FlexDivRow)`
         cursor: pointer;
         color: ${(props) => props.theme.textColor.secondary};
     }
+`;
+
+export const CurrencyText = styled.span`
+    text-transform: none;
+    margin-left: 5px;
 `;

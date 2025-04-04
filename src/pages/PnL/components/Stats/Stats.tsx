@@ -2,13 +2,13 @@ import SelectInput from 'components/SelectInput';
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 import { PnlTab, ScreenSizeBreakpoint } from 'enums/ui';
 import { t } from 'i18next';
+import { League } from 'overtime-utils';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow, FlexDivSpaceBetween } from 'styles/common';
 import Checkbox from '../../../../components/fields/Checkbox';
-import { League } from '../../../../enums/sports';
 import AllLpTickets from '../AllLpTickets';
 import LpPnl from '../LpStats';
 import LpTickets from '../LpTickets';
@@ -125,6 +125,14 @@ const Stats: React.FC<StatsProps> = ({ selectedTab, setSelectedTab, currentRound
                 {selectedTab == PnlTab.THALES_USERS_PNL && (
                     <LpUsersPnl
                         lpCollateral={LiquidityPoolCollateral.THALES}
+                        round={round}
+                        leagueId={leagueOptionsMap[league]}
+                        onlyPP={showOnlyPP}
+                    />
+                )}
+                {selectedTab == PnlTab.OVER_USERS_PNL && (
+                    <LpUsersPnl
+                        lpCollateral={LiquidityPoolCollateral.OVER}
                         round={round}
                         leagueId={leagueOptionsMap[league]}
                         onlyPP={showOnlyPP}

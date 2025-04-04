@@ -1,6 +1,7 @@
 import { OddsType, SortType, SportFilter, StatusFilter } from 'enums/markets';
-import { MarketType, MarketTypeGroup } from 'enums/marketTypes';
+import { MarketTypeGroup } from 'enums/marketTypes';
 import { Theme } from 'enums/ui';
+import { MarketType } from 'overtime-utils';
 import { ParlayPayment, Tags, TicketPosition } from './markets';
 import { SelectedMarket } from './marketTypes';
 import { OverdropUIState } from './overdrop';
@@ -45,12 +46,10 @@ export type UISliceState = {
 };
 
 export type WalletSliceState = {
-    isBiconomy?: boolean;
-    isParticleReady: boolean;
+    isBiconomy: boolean;
     connectedViaParticle: boolean;
     walletConnectModal: {
         visibility: boolean;
-        origin?: 'sign-up' | 'sign-in' | undefined;
     };
 };
 

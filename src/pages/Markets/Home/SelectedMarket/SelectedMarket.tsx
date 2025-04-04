@@ -4,6 +4,7 @@ import SimpleLoader from 'components/SimpleLoader';
 import { SportFilter } from 'enums/markets';
 import { t } from 'i18next';
 import { isEqual } from 'lodash';
+import { League } from 'overtime-utils';
 import { Message } from 'pages/Markets/Market/MarketDetailsV2/components/PositionsV2/styled-components';
 import React, { memo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,13 +15,12 @@ import { FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
 import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarket } from 'types/markets';
 import { getMatchLabel } from 'utils/marketsV2';
-import { League } from '../../../../enums/sports';
 import TicketTransactions from '../../Market/MarketDetailsV2/components/TicketTransactions';
 import Header from '../Header';
 import SelectedMarketDetails from '../SelectedMarketDetails';
 
-const SelectedMarket: React.FC<{ market: SportMarket | undefined; isLoading: boolean }> = memo(
-    ({ market, isLoading }) => {
+const SelectedMarket: React.FC<{ market: SportMarket | undefined }> = memo(
+    ({ market }) => {
         const dispatch = useDispatch();
         const isMobile = useSelector(getIsMobile);
         const sportFilter = useSelector(getSportFilter);
@@ -86,7 +86,7 @@ const SelectedMarket: React.FC<{ market: SportMarket | undefined; isLoading: boo
                 {market ? (
                     !isMarketPaused ? (
                         <>
-                            <SelectedMarketDetails market={market} isLoading={isLoading} />
+                            <SelectedMarketDetails market={market} />
                             {isMobile && <TicketTransactions market={market} isOnSelectedMarket />}
                         </>
                     ) : (
@@ -112,7 +112,6 @@ const Wrapper = styled(FlexDivColumn)`
     border-radius: 8px;
     flex: 1 1 0;
     height: auto;
-    margin-right: 15px;
     @media (max-width: 950px) {
         position: fixed;
         top: 0;

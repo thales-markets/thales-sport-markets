@@ -1,86 +1,41 @@
-import { ConnectButton as RainbowConnectButton } from '@rainbow-me/rainbowkit';
 import ConnectWalletModal from 'components/ConnectWalletModal';
 import NetworkSwitcher from 'components/NetworkSwitcher';
+import OutsideClickHandler from 'components/OutsideClick';
+import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
 import { COLLATERALS } from 'constants/currency';
-import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
-import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
-import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
-import React, { useEffect, useMemo, useState } from 'react';
+import ProfileItem from 'layouts/DappLayout/DappHeader/components/ProfileItem';
+import ProfileDropdown from 'layouts/DappLayout/DappHeader/components/ProfileItem/components/ProfileDropdown';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { getIsFreeBetDisabledByUser, getTicketPayment, setPaymentSelectedCollateralIndex } from 'redux/modules/ticket';
+import { toast } from 'react-toastify';
+import { getTicketPayment, setPaymentSelectedCollateralIndex } from 'redux/modules/ticket';
 import { getIsBiconomy, getWalletConnectModalVisibility, setWalletConnectModalVisibility } from 'redux/modules/wallet';
-import styled from 'styled-components';
-import { FlexDivCentered, FlexDivColumn } from 'styles/common';
-import { formatCurrencyWithKey, truncateAddress } from 'thales-utils';
+import styled, { useTheme } from 'styled-components';
+import { FlexDivCentered } from 'styles/common';
+import { truncateAddress } from 'thales-utils';
 import { RootState } from 'types/redux';
-import biconomyConnector from 'utils/biconomyWallet';
-import { getCollateral, getMaxCollateralDollarValue, mapMultiCollateralBalances } from 'utils/collaterals';
 import { getDefaultCollateralIndexForNetworkId } from 'utils/network';
-import { useAccount, useChainId, useClient } from 'wagmi';
-
-const MIN_BUYIN_DOLLAR = 3;
+import useBiconomy from 'utils/useBiconomy';
+import { useAccount, useChainId } from 'wagmi';
 
 const WalletInfo: React.FC = ({}) => {
-    const { t } = useTranslation();
     const dispatch = useDispatch();
-
+    const { t } = useTranslation();
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
-
+    const theme = useTheme();
     const networkId = useChainId();
-    const client = useClient();
     const { address, isConnected } = useAccount();
-    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+    const smartAddres = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddres : address) || '';
 
     const connectWalletModalVisibility = useSelector((state: RootState) => getWalletConnectModalVisibility(state));
     const ticketPayment = useSelector(getTicketPayment);
-    const isFreeBetDisabledByUser = useSelector(getIsFreeBetDisabledByUser);
 
     const selectedCollateralIndex = ticketPayment.selectedCollateralIndex;
 
     const [isFreeBetInitialized, setIsFreeBetInitialized] = useState(false);
-    const [freeBetBalance, setFreeBetBalance] = useState(0);
-
-    const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
-    const exchangeRates = exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
-
-    const multipleCollateralBalancesQuery = useMultipleCollateralBalanceQuery(
-        walletAddress,
-        { networkId, client },
-        {
-            enabled: isConnected,
-        }
-    );
-
-    const multiCollateralBalances =
-        multipleCollateralBalancesQuery?.isSuccess && multipleCollateralBalancesQuery?.data
-            ? multipleCollateralBalancesQuery.data
-            : undefined;
-
-    const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
-        networkId,
-        selectedCollateralIndex,
-    ]);
-
-    const selectedCollateralBalance = multiCollateralBalances ? multiCollateralBalances[selectedCollateral] : 0;
-
-    const freeBetCollateralBalancesQuery = useFreeBetCollateralBalanceQuery(
-        walletAddress,
-        { networkId, client },
-        {
-            enabled: isConnected,
-        }
-    );
-
-    const freeBetCollateralBalances =
-        freeBetCollateralBalancesQuery?.isSuccess && freeBetCollateralBalancesQuery.data
-            ? freeBetCollateralBalancesQuery?.data
-            : undefined;
-
-    const balanceList = mapMultiCollateralBalances(freeBetCollateralBalances, exchangeRates, networkId);
-    const maxBalanceItem = balanceList ? getMaxCollateralDollarValue(balanceList) : undefined;
-    const isFreeBet =
-        !isFreeBetDisabledByUser && maxBalanceItem && maxBalanceItem.balanceDollarValue >= MIN_BUYIN_DOLLAR;
+    const [showDropdown, setShowDropdown] = useState(false);
 
     // Invalidate default selectedCollateralIndex
     useEffect(() => {
@@ -112,128 +67,80 @@ const WalletInfo: React.FC = ({}) => {
         }
     }, [dispatch, networkId, isFreeBetInitialized]);
 
-    // Initialize free bet collateral
-    useEffect(() => {
-        if (isFreeBet && !isFreeBetInitialized && maxBalanceItem.balanceDollarValue >= MIN_BUYIN_DOLLAR) {
-            dispatch(
-                setPaymentSelectedCollateralIndex({
-                    selectedCollateralIndex: maxBalanceItem.index,
-                    networkId,
-                })
-            );
-            setIsFreeBetInitialized(true);
-            setFreeBetBalance(maxBalanceItem.balance);
-        } else {
-            setFreeBetBalance(balanceList?.find((b) => b.collateralKey === selectedCollateral)?.balance || 0);
+    const handleCopy = (address: string) => {
+        const id = toast.loading(t('deposit.copying-address'), { autoClose: 1000 });
+        try {
+            navigator.clipboard.writeText(address);
+            toast.update(id, {
+                ...getInfoToastOptions(t('deposit.copied') + ': ' + truncateAddress(address, 6, 4)),
+                autoClose: 2000,
+            });
+        } catch (e) {
+            toast.update(id, getErrorToastOptions('Error'));
         }
-    }, [
-        dispatch,
-        networkId,
-        isFreeBet,
-        maxBalanceItem,
-        selectedCollateralIndex,
-        isFreeBetInitialized,
-        balanceList,
-        selectedCollateral,
-    ]);
+    };
 
-    return (
+    return isConnected ? (
         <Container walletConnected={isConnected}>
-            <FlexDivColumn>
-                <RainbowConnectButton.Custom>
-                    {({ openAccountModal }) => {
-                        return (
-                            <Wrapper displayPadding={isConnected}>
-                                {isConnected && (
-                                    <WalletAddressInfo
-                                        isConnected={isConnected}
-                                        isClickable={true}
-                                        onClick={openAccountModal}
-                                    >
-                                        <Text className="wallet-info">
-                                            {isConnected
-                                                ? truncateAddress(walletAddress, 5, 5)
-                                                : t('common.wallet.connect-your-wallet')}
-                                        </Text>
-                                    </WalletAddressInfo>
-                                )}
-                                {isConnected && (
-                                    <WalletBalanceInfo>
-                                        {isFreeBet && <FreeBetIcon className="icon icon--gift" />}
-                                        <Text>
-                                            {formatCurrencyWithKey(
-                                                selectedCollateral,
-                                                isFreeBet ? freeBetBalance : selectedCollateralBalance
-                                            )}
-                                        </Text>
-                                    </WalletBalanceInfo>
-                                )}
-                                <NetworkSwitcher />
-                            </Wrapper>
-                        );
-                    }}
-                </RainbowConnectButton.Custom>
-            </FlexDivColumn>
+            {isConnected && (
+                <OutsideClickHandler onOutsideClick={() => setShowDropdown(false)}>
+                    <WalletWrapper>
+                        <Icon onClick={() => setShowDropdown(!showDropdown)} className="icon icon--arrow-down" />
+                        <Divider />
+                        <WalletAddressInfo onClick={() => setShowDropdown(!showDropdown)}>
+                            <Text>{isBiconomy ? t('profile.dropdown.account') : t('profile.dropdown.eoa')}</Text>
+                        </WalletAddressInfo>
+                        <Divider />
+                        <WalletAddressInfo onClick={() => handleCopy(walletAddress)}>
+                            <ProfileItem color={theme.textColor.secondary} />
+                        </WalletAddressInfo>
+
+                        <NetworkSwitcher
+                            containerStyle={{ minWidth: 52, gap: 3 }}
+                            onClick={() => setShowDropdown(false)}
+                        />
+
+                        {showDropdown && <ProfileDropdown setShowDropdown={setShowDropdown} />}
+                    </WalletWrapper>
+                </OutsideClickHandler>
+            )}
+        </Container>
+    ) : (
+        <>
             {connectWalletModalVisibility && (
                 <ConnectWalletModal
                     isOpen={connectWalletModalVisibility}
                     onClose={() => {
-                        dispatch(
-                            setWalletConnectModalVisibility({
-                                visibility: false,
-                            })
-                        );
+                        dispatch(setWalletConnectModalVisibility({ visibility: false }));
                     }}
                 />
             )}
-        </Container>
+        </>
     );
 };
 
 const Container = styled(FlexDivCentered)<{ walletConnected?: boolean }>`
-    width: ${(props) => (props.walletConnected ? '100%' : 'auto')};
+    width: 100%;
+    width: 302px;
+    z-index: 10;
     color: ${(props) => props.theme.textColor.secondary};
     border-radius: 5px;
     position: relative;
-    justify-content: end;
-    min-width: fit-content;
-    @media (max-width: 767px) {
-        min-width: auto;
-    }
-`;
-
-const Wrapper = styled.div<{ displayPadding?: boolean }>`
-    display: flex;
-    border-radius: 20px;
-    border: 1px solid ${(props) => props.theme.borderColor.primary};
-    height: 28px;
     justify-content: space-between;
-    align-items: center;
-    padding-left: ${(props) => (props.displayPadding ? '10px' : '')};
-    & > div {
-        flex: 0.6;
+    @media (max-width: 767px) {
+        width: 330px;
     }
-    & > div:last-child {
-        flex: 0.2;
+
+    @media (max-width: 420px) {
+        width: 100%;
     }
 `;
 
-const WalletAddressInfo = styled.div<{ isConnected: boolean; isClickable?: boolean }>`
-    justify-content: center;
-    cursor: ${(props) => (props.isClickable ? 'pointer' : 'default')};
-    height: 100%;
-    align-items: center;
+const WalletAddressInfo = styled.div`
     display: flex;
-
-    .wallet-info-hover {
-        display: none;
-    }
-    :hover {
-        .wallet-info-hover {
-            display: inline;
-            width: fit-content;
-        }
-    }
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
 
     @media (max-width: 950px) {
         border-right: none;
@@ -241,30 +148,38 @@ const WalletAddressInfo = styled.div<{ isConnected: boolean; isClickable?: boole
     }
 `;
 
-const WalletBalanceInfo = styled.div`
-    justify-content: center;
-    border-left: 2px solid ${(props) => props.theme.borderColor.primary};
-    padding-left: 7px;
-    padding-right: 7px;
-    height: 70%;
-    align-items: center;
+const WalletWrapper = styled.div`
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding-left: 6px;
+    border: 1px ${(props) => props.theme.borderColor.primary} solid;
+    border-radius: 8px;
+    gap: 6px;
+`;
+
+const Divider = styled.div`
+    height: 22px;
+    width: 2px;
+    background-color: ${(props) => props.theme.background.secondary};
 `;
 
 const Text = styled.span`
+    cursor: pointer;
     font-weight: 600;
-    font-size: 10.8px;
+    font-size: 12px;
+    white-space: pre;
     line-height: 12px;
     color: ${(props) => props.theme.textColor.secondary};
 `;
 
-const FreeBetIcon = styled.i`
-    font-size: 13px;
-    margin-left: 5px;
-    font-family: OvertimeIconsV2 !important;
-    text-transform: none !important;
-    margin-right: 3px;
-    color: ${(props) => props.theme.textColor.quaternary} !important;
+const Icon = styled.i`
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 16px;
+    padding: 0 2px;
+    color: ${(props) => props.theme.textColor.secondary};
 `;
 
 export default WalletInfo;

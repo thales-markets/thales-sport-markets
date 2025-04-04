@@ -1,6 +1,6 @@
 import { SportFilter } from 'enums/markets';
-import { Sport } from 'enums/sports';
 import { ScreenSizeBreakpoint } from 'enums/ui';
+import { getSportLeagueIds, LeagueMap, Sport } from 'overtime-utils';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
@@ -11,9 +11,7 @@ import { FlexDivCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { TagInfo, Tags } from 'types/markets';
 import { getLeagueFlagSource } from 'utils/images';
 import { getScrollMainContainerToTop } from 'utils/scroll';
-import { getSportLeagueIds } from 'utils/sports';
 import IncentivizedLeague from '../../../../components/IncentivizedLeague';
-import { LeagueMap } from '../../../../constants/sports';
 
 const favouritesTag = {
     id: -1,

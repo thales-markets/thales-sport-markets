@@ -1,8 +1,8 @@
+import { isFuturesMarket } from 'overtime-utils';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { SportMarket, TicketPosition } from 'types/markets';
 import { getOnImageError, getOnPlayerImageError, getTeamImageSource } from 'utils/images';
-import { isFuturesMarket } from 'utils/markets';
 
 type MatchLogosProps = {
     market: SportMarket | TicketPosition;

@@ -1,7 +1,7 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import QUERY_KEYS from 'constants/queryKeys';
 import { ContractType } from 'enums/contract';
-import { League } from 'enums/sports';
+import { League } from 'overtime-utils';
 import { NetworkConfig } from 'types/network';
 import { SportsAmmRiskManagerData } from 'types/riskManagement';
 import { ViemContract } from 'types/viem';

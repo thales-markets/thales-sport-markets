@@ -12,8 +12,8 @@ import { formatCurrency } from 'thales-utils';
 import { LiquidityPool } from 'types/liquidityPool';
 import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
-import biconomyConnector from 'utils/biconomyWallet';
 import { buildHref } from 'utils/routes';
+import useBiconomy from 'utils/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
 
 type UserLPProps = {
@@ -31,7 +31,8 @@ const UserLP: React.FC<UserLPProps> = ({ lp }) => {
     const networkId = useChainId();
     const client = useClient();
     const { isConnected, address } = useAccount();
-    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+    const smartAddres = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddres : address) || '';
 
     const userLpQuery = useLiquidityPoolUserDataQuery(
         lp.address,

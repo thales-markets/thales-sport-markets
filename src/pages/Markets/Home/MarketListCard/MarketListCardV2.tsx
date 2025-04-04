@@ -5,11 +5,19 @@ import Tooltip from 'components/Tooltip';
 import { FUTURES_MAIN_VIEW_DISPLAY_COUNT, MEDIUM_ODDS } from 'constants/markets';
 import { PLAYER_PROPS_SPECIAL_SPORTS } from 'constants/sports';
 import { SportFilter } from 'enums/markets';
-import { MarketType } from 'enums/marketTypes';
 import { RiskManagementConfig } from 'enums/riskManagement';
-import { League, PeriodType, Sport } from 'enums/sports';
 import _, { isEqual } from 'lodash';
 import Lottie from 'lottie-react';
+import {
+    getLeagueLabel,
+    getLeaguePeriodType,
+    getLeagueTooltipKey,
+    isFuturesMarket,
+    League,
+    MarketType,
+    PeriodType,
+    Sport,
+} from 'overtime-utils';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
 import useRiskManagementConfigQuery from 'queries/riskManagement/useRiskManagementConfig';
 import React, { memo, useEffect, useMemo, useRef, useState } from 'react';
@@ -30,7 +38,6 @@ import { SportMarket } from 'types/markets';
 import { RiskManagementLeaguesAndTypes } from 'types/riskManagement';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getLeagueFlagSource, getOnImageError, getOnPlayerImageError, getTeamImageSource } from 'utils/images';
-import { isFuturesMarket } from 'utils/markets';
 import {
     getMarketPlayerPropsMarketsForGroupFilter,
     getMarketPlayerPropsMarketsForProp,
@@ -38,7 +45,6 @@ import {
     isOddValid,
 } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
-import { getLeagueLabel, getLeaguePeriodType, getLeagueTooltipKey } from 'utils/sports';
 import { displayGameClock, displayGamePeriod } from 'utils/ui';
 import { useChainId } from 'wagmi';
 import PositionsV2 from '../../Market/MarketDetailsV2/components/PositionsV2';
