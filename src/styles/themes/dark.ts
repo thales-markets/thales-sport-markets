@@ -10,6 +10,7 @@ export default {
         quinary: Colors.NAVY_BLUE_DARK,
         senary: Colors.TORY_BLUE,
         septenary: Colors.PURPLE_LIGHT,
+        octonary: Colors.YELLOW,
     },
     textColor: {
         primary: Colors.WHITE,
@@ -136,6 +137,7 @@ export default {
         navBar: '-64px 0px 38px 3px rgba(0,0,0,0.41)',
         toggle: `0px 0px 40px ${Colors.BLUE}`,
         notification: '0px 0px 20px rgba(63, 177, 213, 0.96)',
+        notificationOpen: '0px 0px 20px rgba(241, 186, 32, 0.96)',
         positionWinner: '0px 0px 15px -7px rgba(63,209,255,1)',
         winner: '0px 0px 33px -7px rgba(63,209,255,1)',
         errorNotification: '0px 0px 20px rgba(226, 106, 120, 0.96)',
@@ -190,7 +192,7 @@ export default {
     },
     overdrop: {
         background: {
-            secondary: Colors.YELLOW_LIGHT,
+            secondary: Colors.YELLOW_OPACITY_60,
             tertiary: 'rgba(60, 73, 138, 0.15)',
             quaternary: Colors.METALIC_BLUE,
             quinary: Colors.NAVY_BLUE_EXTRA_DARK,

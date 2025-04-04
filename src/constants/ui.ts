@@ -1,5 +1,5 @@
 import { Network } from 'enums/network';
-import { Theme } from 'enums/ui';
+import { ProfileTab, Theme } from 'enums/ui';
 import darkTheme from 'styles/themes/dark';
 import marchMadnessTheme from 'styles/themes/marchMadness';
 import { NavMenuItem, ThemeInterface } from 'types/ui';
@@ -16,7 +16,7 @@ export const NAV_MENU_FIRST_SECTION: NavMenuItem[] = [
         i18label: 'markets.nav-menu.items.profile',
         iconClass: 'icon icon--profile2',
         name: 'profile',
-        route: `${ROUTES.Profile}?selected-tab=open-claimable`,
+        route: `${ROUTES.Profile}?selected-tab=${ProfileTab.OPEN_CLAIMABLE}`,
         supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.Base, Network.OptimismSepolia],
     },
     {

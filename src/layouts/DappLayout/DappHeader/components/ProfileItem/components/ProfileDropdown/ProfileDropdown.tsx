@@ -3,6 +3,7 @@ import Toggle from 'components/Toggle';
 import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
 import ROUTES from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import { ProfileTab } from 'enums/ui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -93,7 +94,10 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ setShowDropdown }) =>
 
             <Separator />
 
-            <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Profile)}>
+            <SPAAnchor
+                style={{ display: 'flex' }}
+                href={buildHref(`${ROUTES.Profile}?selected-tab=${ProfileTab.ACCOUNT}`)}
+            >
                 <Container clickable onClick={() => setShowDropdown(false)}>
                     <CopyIcon className="icon icon--logo" /> <Text>{t('profile.dropdown.profile')}</Text>
                 </Container>

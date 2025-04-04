@@ -1,8 +1,10 @@
 import SPAAnchor from 'components/SPAAnchor';
 import ROUTES from 'constants/routes';
 import { secondsToMilliseconds } from 'date-fns';
+import { ProfileTab } from 'enums/ui';
 import { ProfileIconWidget } from 'layouts/DappLayout/DappHeader/components/ProfileItem/ProfileItem';
 import React, { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getTicket } from 'redux/modules/ticket';
 import { useTheme } from 'styled-components';
@@ -16,6 +18,7 @@ type FooterSidebarMobileProps = {
 };
 
 const FooterSidebarMobile: React.FC<FooterSidebarMobileProps> = ({ setParlayMobileVisibility, setShowBurger }) => {
+    const { t } = useTranslation();
     const { isConnected } = useAccount();
     const theme = useTheme();
     const ticket = useSelector(getTicket);
@@ -39,18 +42,26 @@ const FooterSidebarMobile: React.FC<FooterSidebarMobileProps> = ({ setParlayMobi
     return (
         <Container>
             {isConnected && (
-                <ItemContainer>
-                    <SPAAnchor href={buildHref(ROUTES.Profile)}>
-                        <ProfileIconWidget margin="auto" avatarSize={20} color={theme.textColor.primary} />
+                <>
+                    <SPAAnchor href={buildHref(`${ROUTES.Profile}?selected-tab=${ProfileTab.OPEN_CLAIMABLE}`)}>
+                        <ItemContainer>
+                            <ProfileIconWidget margin="auto" avatarSize={20} color={theme.textColor.primary} />
+                            <ItemLabel>{t('markets.nav-menu.items.profile')}</ItemLabel>
+                        </ItemContainer>
                     </SPAAnchor>
-                    <ItemLabel>Account</ItemLabel>
-                </ItemContainer>
+                    <SPAAnchor href={buildHref(`${ROUTES.Profile}?selected-tab=${ProfileTab.ACCOUNT}`)}>
+                        <ItemContainer>
+                            <ItemIcon className={'icon icon--logo'} />
+                            <ItemLabel>{t('markets.nav-menu.items.account')}</ItemLabel>
+                        </ItemContainer>
+                    </SPAAnchor>
+                </>
             )}
             <ItemContainer onClick={() => setParlayMobileVisibility(true)}>
                 <ItemIcon iteration={ticketLength} className={`icon icon--ticket-horizontal ${pulse ? 'pulse' : ''}`} />
                 {ticketLength > 0 && <ParlayNumber>{ticketLength || ''}</ParlayNumber>}
 
-                <ItemLabel>Bet Slip</ItemLabel>
+                <ItemLabel>{t('markets.nav-menu.items.ticket-slip')}</ItemLabel>
             </ItemContainer>
             {setShowBurger && (
                 <ItemContainer>
@@ -61,7 +72,7 @@ const FooterSidebarMobile: React.FC<FooterSidebarMobileProps> = ({ setParlayMobi
                             setShowBurger(true);
                         }}
                     />
-                    <ItemLabel>Filters</ItemLabel>
+                    <ItemLabel>{t('common.filters')}</ItemLabel>
                 </ItemContainer>
             )}
         </Container>

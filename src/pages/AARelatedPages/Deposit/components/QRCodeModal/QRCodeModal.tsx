@@ -1,5 +1,4 @@
 import Modal from 'components/Modal';
-import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
 import { t } from 'i18next';
 import React from 'react';
 import QRCode from 'react-qr-code';
@@ -17,12 +16,11 @@ const QRCodeModal: React.FC<QRCodeModalProps> = ({ onClose, walletAddress }) => 
     const theme = useTheme();
 
     const handleCopy = () => {
-        const id = toast.loading(t('deposit.copying-address'));
         try {
             navigator.clipboard.writeText(walletAddress);
-            toast.update(id, getInfoToastOptions(t('deposit.copied') + ': ' + truncateAddress(walletAddress, 6, 4)));
+            toast.info(`${t('deposit.copied')}: ${truncateAddress(walletAddress, 6, 4)}`);
         } catch (e) {
-            toast.update(id, getErrorToastOptions('Error'));
+            toast.error('Error');
         }
     };
 

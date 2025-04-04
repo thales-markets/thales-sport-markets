@@ -5,8 +5,9 @@ import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { GAS_ESTIMATION_BUFFER_CLAIM_ALL } from 'constants/network';
 import { ContractType } from 'enums/contract';
 import { LoaderContainer } from 'pages/Markets/Home/HomeV2';
+import usePositionCountV2Query from 'queries/markets/usePositionCountV2Query';
 import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -30,14 +31,18 @@ import {
     CategoryContainer,
     CategoryDisclaimer,
     CategoryIcon,
+    CategoryIconWrapper,
     CategoryInfo,
     CategoryLabel,
+    ClaimableTicketsNotificationCount,
     ClaimAllContainer,
     Container,
+    Count,
     EmptyContainer,
     EmptySubtitle,
     EmptyTitle,
     ListContainer,
+    OpenTicketsNotificationCount,
     StyledParlayEmptyIcon,
 } from './styled-components';
 
@@ -79,12 +84,21 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
         claimCollateralIndex,
     ]);
 
+    const positionsCountQuery = usePositionCountV2Query(walletAddress, { networkId, client }, { enabled: isConnected });
+
+    const claimablePositionCount = useMemo(
+        () => (positionsCountQuery.isSuccess && positionsCountQuery.data ? positionsCountQuery.data.claimable : 0),
+        [positionsCountQuery.isSuccess, positionsCountQuery.data]
+    );
+    const openPositionCount = useMemo(
+        () => (positionsCountQuery.isSuccess && positionsCountQuery.data ? positionsCountQuery.data.open : 0),
+        [positionsCountQuery.isSuccess, positionsCountQuery.data]
+    );
+
     const userTicketsQuery = useUserTicketsQuery(
         isSearchTextWalletAddress ? searchText : walletAddress,
         { networkId, client },
-        {
-            enabled: isConnected,
-        }
+        { enabled: isConnected }
     );
 
     const marketDuration = Math.floor(90);
@@ -108,7 +122,14 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
         return data;
     }, [userTicketsQuery.isSuccess, userTicketsQuery.data, searchText]);
 
-    const isLoading = userTicketsQuery.isLoading;
+    useEffect(() => {
+        if (
+            claimablePositionCount !== userTicketsByStatus.claimable.length ||
+            openPositionCount !== userTicketsByStatus.open.length
+        ) {
+            refetchAfterClaim(walletAddress, networkId);
+        }
+    }, [claimablePositionCount, openPositionCount, userTicketsByStatus, walletAddress, networkId]);
 
     const claimBatch = async () => {
         const sportsAMMV2ContractWithSigner = getContractInstance(ContractType.SPORTS_AMM_V2, {
@@ -208,7 +229,14 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
         <Container>
             <CategoryContainer onClick={() => setClaimableState(!openClaimable)}>
                 <CategoryInfo>
-                    <CategoryIcon className="icon icon--claimable-ticket" />
+                    <CategoryIconWrapper>
+                        {userTicketsByStatus.claimable.length > 0 && (
+                            <ClaimableTicketsNotificationCount>
+                                <Count>{userTicketsByStatus.claimable.length}</Count>
+                            </ClaimableTicketsNotificationCount>
+                        )}
+                        <CategoryIcon className="icon icon--claimable-ticket" />
+                    </CategoryIconWrapper>
                     <CategoryLabel>{t('profile.categories.claimable')}</CategoryLabel>
                 </CategoryInfo>
                 <CategoryDisclaimer>
@@ -218,7 +246,7 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
             </CategoryContainer>
             {openClaimable && (
                 <ListContainer>
-                    {isLoading ? (
+                    {userTicketsQuery.isLoading ? (
                         <LoaderContainer>
                             <SimpleLoader />
                         </LoaderContainer>
@@ -273,7 +301,14 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
             )}
             <CategoryContainer onClick={() => setOpenState(!openOpenPositions)}>
                 <CategoryInfo>
-                    <CategoryIcon className="icon icon--open-ticket" />
+                    <CategoryIconWrapper>
+                        {userTicketsByStatus.open.length > 0 && (
+                            <OpenTicketsNotificationCount>
+                                <Count>{userTicketsByStatus.open.length}</Count>
+                            </OpenTicketsNotificationCount>
+                        )}
+                        <CategoryIcon className="icon icon--open-ticket" />
+                    </CategoryIconWrapper>
                     <CategoryLabel>{t('profile.categories.open')}</CategoryLabel>
                 </CategoryInfo>
                 <Arrow className={openOpenPositions ? 'icon icon--caret-up' : 'icon icon--caret-down'} />

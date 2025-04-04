@@ -3,7 +3,6 @@ import DepositFromWallet from 'components/DepositFromWallet';
 import Modal from 'components/Modal';
 import NetworkSwitcher from 'components/NetworkSwitcher';
 import Tooltip from 'components/Tooltip';
-import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
 import { COLLATERAL_ICONS_CLASS_NAMES } from 'constants/currency';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { ScreenSizeBreakpoint } from 'enums/ui';
@@ -94,12 +93,11 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
     }, [exchangeRates, multipleCollateralBalances.data, networkId]);
 
     const handleCopy = () => {
-        const id = toast.loading(t('deposit.copying-address'));
         try {
             navigator.clipboard.writeText(walletAddress);
-            toast.update(id, getInfoToastOptions(t('deposit.copied') + ': ' + truncateAddress(walletAddress, 6, 4)));
+            toast.info(`${t('deposit.copied')}: ${truncateAddress(walletAddress, 6, 4)}`);
         } catch (e) {
-            toast.update(id, getErrorToastOptions('Error'));
+            toast.error('Error');
         }
     };
 
