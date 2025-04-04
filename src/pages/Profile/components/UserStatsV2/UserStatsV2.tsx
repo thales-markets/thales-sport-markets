@@ -263,6 +263,12 @@ const UserStats: React.FC = () => {
                     <Label>{t('profile.stats.lifetime-wins')}</Label>
                     <Value>{!userStats ? '-' : userStats.lifetimeWins}</Value>
                 </Section>
+                {SHOW_PNL && (
+                    <Section>
+                        <Label>{t('profile.stats.pnl')}</Label>
+                        <Value>{!userStats ? '-' : formatCurrencyWithSign(USD_SIGN, userStats.pnl, 2)}</Value>
+                    </Section>
+                )}
             </SectionWrapper>
             {isFreeBetExists && (
                 <SectionWrapper>
