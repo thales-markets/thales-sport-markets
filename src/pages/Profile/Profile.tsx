@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { Container } from './styled-components';
 import { ProfileTab } from 'enums/ui';
+import React, { useEffect, useState } from 'react';
 import useQueryParam from 'utils/useQueryParams';
 import MyTickets from './components/MyTickets';
+import { Container } from './styled-components';
 
 const Profile: React.FC = () => {
     const [selectedTabParam, setSelectedTabParam] = useQueryParam('selected-tab', ProfileTab.ACCOUNT);

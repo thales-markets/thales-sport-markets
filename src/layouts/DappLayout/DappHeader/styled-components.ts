@@ -141,7 +141,7 @@ export const SearchContainer = styled.div`
     }
 `;
 
-export const NotificationCount = styled.div`
+const NotificationCount = styled.div`
     position: absolute;
     border-radius: 50%;
     bottom: -8px;
@@ -157,7 +157,6 @@ export const NotificationCount = styled.div`
 `;
 
 export const BlockedGamesNotificationCount = styled(NotificationCount)`
-    left: -5px;
     background-color: ${(props) => props.theme.error.textColor.primary};
     box-shadow: ${(props) => props.theme.shadow.errorNotification};
 `;

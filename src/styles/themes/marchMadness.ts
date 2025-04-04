@@ -16,7 +16,6 @@ export default {
     },
     textColor: {
         ...darkTheme.textColor,
-        // secondary: Colors.BLUE_GRADIENT_1,
         quaternary: Colors.WHITE,
     },
     borderColor: {
