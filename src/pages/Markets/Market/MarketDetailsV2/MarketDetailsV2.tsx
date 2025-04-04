@@ -97,6 +97,10 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
 
     const leagueSport = getLeagueSport(market.leagueId);
 
+    const isLiveScoreStatusHalfTime =
+        liveScore &&
+        (liveScore.gameStatus == GameStatus.RUNDOWN_HALF_TIME || liveScore.gameStatus == GameStatus.OPTICODDS_HALF);
+
     return (
         <RowContainer>
             <MainContainer isGameOpen={isGameOpen}>
@@ -200,28 +204,36 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                                 )}
                                             </ResultLabel>
                                         )}
-                                        {showLiveInfo(liveScore.gameStatus, liveScore.period) && (
-                                            <PeriodsContainer>
-                                                {liveScore.gameStatus == GameStatus.RUNDOWN_HALF_TIME ||
-                                                liveScore.gameStatus == GameStatus.OPTICODDS_HALF ? (
-                                                    <InfoLabel>{t('markets.market-card.half-time')}</InfoLabel>
-                                                ) : (
-                                                    <>
-                                                        <InfoLabel>
-                                                            {` ${getOrdinalNumberLabel(Number(liveScore.period))} ${t(
-                                                                `markets.market-card.${getLeaguePeriodType(
-                                                                    market.leagueId
-                                                                )}`
-                                                            )}`}
-                                                        </InfoLabel>
-                                                        <InfoLabel className="red">
-                                                            {liveScore.displayClock?.replaceAll("'", '')}
-                                                            <InfoLabel className="blink">&prime;</InfoLabel>
-                                                        </InfoLabel>
-                                                    </>
-                                                )}
-                                            </PeriodsContainer>
-                                        )}
+                                        {showLiveInfo(liveScore.gameStatus, liveScore.period) &&
+                                            (isLiveScoreStatusHalfTime ||
+                                                !!liveScore.period ||
+                                                !!liveScore.displayClock) && (
+                                                <PeriodsContainer>
+                                                    {isLiveScoreStatusHalfTime ? (
+                                                        <InfoLabel>{t('markets.market-card.half-time')}</InfoLabel>
+                                                    ) : (
+                                                        <>
+                                                            {!!liveScore.period && (
+                                                                <InfoLabel>
+                                                                    {` ${getOrdinalNumberLabel(
+                                                                        Number(liveScore.period)
+                                                                    )} ${t(
+                                                                        `markets.market-card.${getLeaguePeriodType(
+                                                                            market.leagueId
+                                                                        )}`
+                                                                    )}`}
+                                                                </InfoLabel>
+                                                            )}
+                                                            {!!liveScore.displayClock && (
+                                                                <InfoLabel className="red">
+                                                                    {liveScore.displayClock?.replaceAll("'", '')}
+                                                                    <InfoLabel className="blink">&prime;</InfoLabel>
+                                                                </InfoLabel>
+                                                            )}
+                                                        </>
+                                                    )}
+                                                </PeriodsContainer>
+                                            )}
                                         {leagueSport !== Sport.SOCCER && leagueSport !== Sport.CRICKET && (
                                             <FlexDivRow>
                                                 {liveScore.homeScoreByPeriod.map((_, index) => {
