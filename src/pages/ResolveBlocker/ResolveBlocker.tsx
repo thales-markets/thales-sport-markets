@@ -9,9 +9,8 @@ import { toast } from 'react-toastify';
 import { useTheme } from 'styled-components';
 import { BlockedGame, BlockedGames, SelectedBlockedGames } from 'types/resolveBlocker';
 import { ThemeInterface } from 'types/ui';
+import { waitForTransactionViaSocket } from 'utils/listener';
 import { refetchResolveBlocker } from 'utils/queryConnector';
-import { Client } from 'viem';
-import { waitForTransactionReceipt } from 'viem/actions';
 import { useChainId, useClient, useWalletClient } from 'wagmi';
 import { ContractType } from '../../enums/contract';
 import { getContractInstance } from '../../utils/contract';
@@ -104,9 +103,7 @@ const ResolveBlocker: React.FC = () => {
                     }
                 });
                 const txHash = await resolveBlockerContractWithSigner.write.unblockGames([gamesForUnblock]);
-                const txReceipt = await waitForTransactionReceipt(client as Client, {
-                    hash: txHash,
-                });
+                const txReceipt = await waitForTransactionViaSocket(txHash, networkId);
 
                 if (txReceipt.status === 'success') {
                     {

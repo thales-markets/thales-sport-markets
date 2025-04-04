@@ -27,10 +27,10 @@ import { ThemeInterface } from 'types/ui';
 import { getCollateral, getCollateralAddress, getCollateralIndex, getFreeBetCollaterals } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import freeBetHolder from 'utils/contracts/freeBetHolder';
+import { waitForTransactionViaSocket } from 'utils/listener';
 import { checkAllowance, getDefaultCollateralIndexForNetworkId } from 'utils/network';
 import useBiconomy from 'utils/useBiconomy';
-import { Client, isAddress } from 'viem';
-import { waitForTransactionReceipt } from 'viem/actions';
+import { isAddress } from 'viem';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 
 type FreeBetFundModalProps = {
@@ -159,9 +159,7 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
                     approveAmount,
                 ]);
                 setOpenApprovalModal(false);
-                const txReceipt = await waitForTransactionReceipt(client as Client, {
-                    hash,
-                });
+                const txReceipt = await waitForTransactionViaSocket(hash, networkId);
 
                 if (txReceipt.status === 'success') {
                     toast.update(
@@ -275,9 +273,7 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
                       ]);
                 setOpenApprovalModal(false);
 
-                const txReceipt = await waitForTransactionReceipt(client as Client, {
-                    hash,
-                });
+                const txReceipt = await waitForTransactionViaSocket(hash, networkId);
 
                 if (txReceipt.status === 'success') {
                     toast.update(

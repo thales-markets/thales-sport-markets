@@ -27,9 +27,8 @@ import { ShareTicketModalProps } from 'types/tickets';
 import { ThemeInterface } from 'types/ui';
 import { getDefaultCollateral } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
+import { waitForTransactionViaSocket } from 'utils/listener';
 import { formatTicketOdds, getTicketMarketOdd, tableSortByStatus } from 'utils/tickets';
-import { Client } from 'viem';
-import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 import TicketMarkets from '../TicketMarkets';
 import {
@@ -147,9 +146,8 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
             try {
                 const txHash = await sportAmmContract?.write?.cancelTicket([ticketAddress]);
 
-                const txReceipt = await waitForTransactionReceipt(client as Client, {
-                    hash: txHash,
-                });
+                const txReceipt = await waitForTransactionViaSocket(txHash, networkId);
+
                 if (txReceipt.status === 'success') {
                     toast.update(
                         toastId,

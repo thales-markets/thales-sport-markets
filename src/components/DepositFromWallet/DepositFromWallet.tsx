@@ -20,9 +20,10 @@ import { ThemeInterface } from 'types/ui';
 import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateral, getCollateralIndex, getCollaterals } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
+import { waitForTransactionViaSocket } from 'utils/listener';
 import { getNetworkNameByNetworkId } from 'utils/network';
-import { Address, Client } from 'viem';
-import { waitForTransactionReceipt } from 'viem/actions';
+import { Address } from 'viem';
+
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 
 type DepositFromWalletProps = {
@@ -101,9 +102,7 @@ const DepositFromWallet: React.FC<DepositFromWalletProps> = ({ onClose, preSelec
 
                 txHash = await collateralContractWithSigner?.write.transfer([walletAddress, parsedAmount]);
             }
-            const txReceipt = await waitForTransactionReceipt(client as Client, {
-                hash: txHash,
-            });
+            const txReceipt = await waitForTransactionViaSocket(txHash, networkId);
 
             if (txReceipt.status === 'success') {
                 toast.update(id, getSuccessToastOptions(t('deposit.toast-messages.success')));

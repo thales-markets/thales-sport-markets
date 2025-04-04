@@ -9,9 +9,8 @@ import { toast } from 'react-toastify';
 import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
 import { getContractInstance } from 'utils/contract';
-import { Client } from 'viem';
-import { waitForTransactionReceipt } from 'viem/actions';
-import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
+import { waitForTransactionViaSocket } from 'utils/listener';
+import { useAccount, useChainId, useWalletClient } from 'wagmi';
 import { refetchResolveBlocker } from '../../../utils/queryConnector';
 
 type UnblockActionProps = {
@@ -24,7 +23,6 @@ const UnblockAction: FC<UnblockActionProps> = memo(({ gameId, isWitelistedForUnb
     const { openConnectModal } = useConnectModal();
     const theme: ThemeInterface = useTheme();
     const networkId = useChainId();
-    const client = useClient();
     const walletClient = useWalletClient();
     const { isConnected } = useAccount();
     const [isUnblocking, setIsUnblocking] = useState<boolean>(false);
@@ -58,9 +56,7 @@ const UnblockAction: FC<UnblockActionProps> = memo(({ gameId, isWitelistedForUnb
                 setIsUnblocking(true);
 
                 const txHash = await resolveBlockerContractWithSigner.write.unblockGames([[gameId]]);
-                const txReceipt = await waitForTransactionReceipt(client as Client, {
-                    hash: txHash,
-                });
+                const txReceipt = await waitForTransactionViaSocket(txHash, networkId);
 
                 if (txReceipt.status === 'success') {
                     toast.update(toastId, getSuccessToastOptions(t('resolve-blocker.unblock-confirmation-message')));

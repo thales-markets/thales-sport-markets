@@ -25,13 +25,13 @@ import {
     isLpSupported,
 } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
+import { waitForTransactionViaSocket } from 'utils/listener';
 import { getIsMultiCollateralSupported } from 'utils/network';
 import { refetchAfterClaim, refetchBalances } from 'utils/queryConnector';
 import { formatTicketOdds, getTicketMarketOdd } from 'utils/tickets';
 import useBiconomy from 'utils/useBiconomy';
 import { Address, Client } from 'viem';
-import { waitForTransactionReceipt } from 'viem/actions';
-import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
+import { useAccount, useChainId, useWalletClient } from 'wagmi';
 import TicketMarketDetails from '../TicketMarketDetails';
 import {
     ArrowIcon,
@@ -79,7 +79,6 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
     const networkId = useChainId();
-    const client = useClient();
     const walletClient = useWalletClient();
 
     const { address } = useAccount();
@@ -161,9 +160,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
                                   isEth,
                               ]);
                 }
-                const txReceipt = await waitForTransactionReceipt(client as Client, {
-                    hash,
-                });
+                const txReceipt = await waitForTransactionViaSocket(hash, networkId);
 
                 if (txReceipt.status === 'success') {
                     toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));

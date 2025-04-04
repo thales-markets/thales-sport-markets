@@ -34,12 +34,12 @@ import { ThemeInterface } from 'types/ui';
 import { ViemContract } from 'types/viem';
 import { executeBiconomyTransactionWithConfirmation } from 'utils/biconomy';
 import { getContractInstance } from 'utils/contract';
+import { waitForTransactionViaSocket } from 'utils/listener';
 import { checkAllowance } from 'utils/network';
 import { refetchLiquidityPoolData } from 'utils/queryConnector';
 import { delay } from 'utils/timer';
 import useBiconomy from 'utils/useBiconomy';
-import { Client, parseUnits } from 'viem';
-import { waitForTransactionReceipt } from 'viem/actions';
+import { parseUnits } from 'viem';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 import SPAAnchor from '../../components/SPAAnchor';
 import ROUTES from '../../constants/routes';
@@ -347,9 +347,7 @@ const LiquidityPool: React.FC = () => {
                     : await multiCollateralWithSigner?.write.approve([liquidityPoolAddress, approveAmount]);
                 setOpenApprovalModal(false);
 
-                const txReceipt = await waitForTransactionReceipt(client as Client, {
-                    hash,
-                });
+                const txReceipt = await waitForTransactionViaSocket(hash, networkId);
 
                 if (txReceipt.status === 'success') {
                     toast.update(
@@ -399,9 +397,7 @@ const LiquidityPool: React.FC = () => {
                       })
                     : await WETHContractWithSigner.write.deposit([parsedAmount]);
 
-                const wrapTxReceipt = await waitForTransactionReceipt(client as Client, {
-                    hash: wrapTxHash,
-                });
+                const wrapTxReceipt = await waitForTransactionViaSocket(wrapTxHash, networkId);
 
                 if (wrapTxReceipt.status === 'success') {
                     const txHash = isBiconomy
@@ -414,10 +410,7 @@ const LiquidityPool: React.FC = () => {
                           })
                         : await liquidityPoolContractWithSigner.write.deposit(parsedAmount);
 
-                    const txReceipt = await waitForTransactionReceipt(client as Client, {
-                        hash: txHash,
-                    });
-
+                    const txReceipt = await waitForTransactionViaSocket(txHash, networkId);
                     if (txReceipt.status === 'success') {
                         PLAUSIBLE.trackEvent(PLAUSIBLE_KEYS.depositLp);
                         toast.update(
@@ -440,9 +433,7 @@ const LiquidityPool: React.FC = () => {
                       })
                     : await liquidityPoolContractWithSigner.write.deposit([parsedAmount]);
 
-                const txReceipt = await waitForTransactionReceipt(client as Client, {
-                    hash: txHash,
-                });
+                const txReceipt = await waitForTransactionViaSocket(txHash, networkId);
 
                 if (txReceipt.status === 'success') {
                     PLAUSIBLE.trackEvent(PLAUSIBLE_KEYS.depositLp);
@@ -483,9 +474,7 @@ const LiquidityPool: React.FC = () => {
                 ? await liquidityPoolContractWithSigner.write.withdrawalRequest()
                 : await liquidityPoolContractWithSigner.write.partialWithdrawalRequest([parsedPercentage]);
 
-            const txReceipt = await waitForTransactionReceipt(client as Client, {
-                hash: txHash,
-            });
+            const txReceipt = await waitForTransactionViaSocket(txHash, networkId);
 
             if (txReceipt.status === 'success') {
                 toast.update(
@@ -532,9 +521,7 @@ const LiquidityPool: React.FC = () => {
                               })
                             : await liquidityPoolContractWithSigner.write.prepareRoundClosing([]);
 
-                        const txReceipt = await waitForTransactionReceipt(client as Client, {
-                            hash: txHash,
-                        });
+                        const txReceipt = await waitForTransactionViaSocket(txHash, networkId);
 
                         if (txReceipt.status === 'success') {
                             console.log('prepareRoundClosing closed');
@@ -554,9 +541,7 @@ const LiquidityPool: React.FC = () => {
                               })
                             : await liquidityPoolContractWithSigner.write.processRoundClosingBatch([100]);
 
-                        const txReceipt = await waitForTransactionReceipt(client as Client, {
-                            hash: txHash,
-                        });
+                        const txReceipt = await waitForTransactionViaSocket(txHash, networkId);
 
                         if (txReceipt.status === 'success') {
                             console.log('Closing batch round');
@@ -576,9 +561,7 @@ const LiquidityPool: React.FC = () => {
                               data: [],
                           })
                         : await liquidityPoolContractWithSigner.write.closeRound([]);
-                    const txReceipt = await waitForTransactionReceipt(client as Client, {
-                        hash: tx,
-                    });
+                    const txReceipt = await waitForTransactionViaSocket(tx, networkId);
 
                     if (txReceipt.status === 'success') {
                         toast.update(

@@ -17,12 +17,12 @@ import { executeBiconomyTransactionWithConfirmation } from 'utils/biconomy';
 import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateralIndex } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
+import { waitForTransactionViaSocket } from 'utils/listener';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import { refetchBalances } from 'utils/queryConnector';
 import useBiconomy from 'utils/useBiconomy';
-import { Address, Client } from 'viem';
-import { waitForTransactionReceipt } from 'viem/actions';
-import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
+import { Address } from 'viem';
+import { useAccount, useChainId, useWalletClient } from 'wagmi';
 
 type WithdrawalConfirmationModalProps = {
     amount: number;
@@ -44,7 +44,6 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const walletClient = useWalletClient();
     const networkId = useChainId();
-    const client = useClient();
 
     const { address } = useAccount();
     const smartAddres = useBiconomy();
@@ -109,9 +108,7 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
                 }
             }
 
-            const txReceipt = await waitForTransactionReceipt(client as Client, {
-                hash: txHash,
-            });
+            const txReceipt = await waitForTransactionViaSocket(txHash, networkId);
 
             if (txReceipt.status === 'success') {
                 toast.update(id, getSuccessToastOptions(t('withdraw.toast-messages.success')));
