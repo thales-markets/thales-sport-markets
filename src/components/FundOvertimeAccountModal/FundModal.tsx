@@ -6,6 +6,7 @@ import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
 import { COLLATERAL_ICONS_CLASS_NAMES } from 'constants/currency';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import useLocalStorage from 'hooks/useLocalStorage';
 import QRCodeModal from 'pages/AARelatedPages/Deposit/components/QRCodeModal';
 import useGetFreeBetQuery from 'queries/freeBets/useGetFreeBetQuery';
@@ -460,11 +461,17 @@ const CollateralText = styled.p`
     font-size: 14px;
     font-weight: 800;
     letter-spacing: 0.42px;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        font-size: 10px;
+    }
 `;
 
 const CollateralsWrapper = styled(FlexDivCentered)`
     flex-wrap: wrap;
     margin-bottom: 60px;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        gap: 10px;
+    }
 `;
 
 const CollateralWrapper = styled(FlexDivColumnCentered)`
@@ -563,6 +570,10 @@ const Asset = styled.i<{ fontSize?: string }>`
     font-size: 40px;
     line-height: 40px;
     color: ${(props) => props.theme.textColor.secondary};
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        font-size: 24px;
+        line-height: 24px;
+    }
 `;
 
 export default FundModal;
