@@ -12,6 +12,7 @@ import { getCollateralByAddress, getCollateralIndex } from './collaterals';
 import { getContractInstance } from './contract';
 import multipleCollateralContract from './contracts/multipleCollateralContract';
 
+const API_URL = 'https://api.paraswap.io';
 export const PARASWAP_TRANSFER_PROXY = '0x6a000f20005980200259b80c5102003040001068';
 
 export const getSwapParams = (
@@ -37,8 +38,6 @@ export const getSwapParams = (
 };
 
 export const getQuote = async (networkId: SupportedNetwork, swapParams: SwapParams) => {
-    const API_URL = 'https://api.paraswap.io';
-
     try {
         const { data: quote } = await axios.get(`${API_URL}/prices`, {
             params: {
@@ -100,8 +99,6 @@ export const buildTxForSwap = async (
     swapParams: SwapParams,
     walletAddress: string
 ): Promise<any> => {
-    const API_URL = 'https://api.paraswap.io';
-
     try {
         const { data: quote } = await axios.get(`${API_URL}/prices`, {
             params: {

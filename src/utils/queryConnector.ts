@@ -18,6 +18,10 @@ const queryConnector: QueryConnector = {
     },
 };
 
+export const refetchPositionsCount = (walletAddress: string, networkId: Network) => {
+    queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PositionsCountV2(walletAddress, networkId) });
+};
+
 export const refetchBalances = (walletAddress: string, networkId: Network) => {
     queryConnector.queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.Wallet.MultipleCollateral(walletAddress, networkId),
@@ -50,7 +54,7 @@ export const refetchFreeBetBalance = (walletAddress: string, networkId: Network)
 };
 
 export const refetchAfterClaim = (walletAddress: string, networkId: Network) => {
-    queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.ClaimableCountV2(walletAddress, networkId) });
+    queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PositionsCountV2(walletAddress, networkId) });
     queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.UserTickets(networkId, walletAddress) });
 };
 
@@ -58,7 +62,7 @@ export const refetchAfterBuy = (walletAddress: string, networkId: Network) => {
     queryConnector.queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.Wallet.MultipleCollateral(walletAddress, networkId),
     });
-    queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.ClaimableCountV2(walletAddress, networkId) });
+    queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PositionsCountV2(walletAddress, networkId) });
 };
 
 export const refetchLiquidityPoolData = (walletAddress: string, networkId: Network, liquidityPoolAddress: string) => {

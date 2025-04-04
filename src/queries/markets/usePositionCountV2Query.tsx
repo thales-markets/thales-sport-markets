@@ -1,6 +1,7 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { BATCH_SIZE } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
+import { minutesToMilliseconds } from 'date-fns';
 import { ContractType } from 'enums/contract';
 import { NetworkId } from 'thales-utils';
 import { NetworkConfig } from 'types/network';
@@ -13,7 +14,7 @@ const usePositionCountV2Query = (
     options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<{ claimable: number; open: number }>({
-        queryKey: QUERY_KEYS.ClaimableCountV2(user, networkConfig.networkId),
+        queryKey: QUERY_KEYS.PositionsCountV2(user, networkConfig.networkId),
         queryFn: async () => {
             const positionsCount = { claimable: 0, open: 0 };
 
@@ -81,6 +82,7 @@ const usePositionCountV2Query = (
             }
             return positionsCount;
         },
+        refetchInterval: minutesToMilliseconds(5),
         ...options,
     });
 };

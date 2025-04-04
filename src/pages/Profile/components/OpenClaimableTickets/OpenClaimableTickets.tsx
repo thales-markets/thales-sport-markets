@@ -16,7 +16,7 @@ import { RootState } from 'types/redux';
 import { sendBiconomyTransaction } from 'utils/biconomy';
 import { getCollateral, getCollaterals, getDefaultCollateral, isLpSupported } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
-import { refetchAfterClaim } from 'utils/queryConnector';
+import { refetchAfterClaim, refetchPositionsCount } from 'utils/queryConnector';
 import useBiconomy from 'utils/useBiconomy';
 import { Address, Client, encodeFunctionData, isAddress } from 'viem';
 import { estimateContractGas, waitForTransactionReceipt } from 'viem/actions';
@@ -101,15 +101,14 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
                 )
             );
         }
+        refetchPositionsCount(walletAddress, networkId);
 
         const data = {
             open: userTickets.filter((ticket) => ticket.isOpen),
             claimable: userTickets.filter((ticket) => ticket.isClaimable),
         };
         return data;
-    }, [userTicketsQuery.isSuccess, userTicketsQuery.data, searchText]);
-
-    const isLoading = userTicketsQuery.isLoading;
+    }, [userTicketsQuery.isSuccess, userTicketsQuery.data, searchText, walletAddress, networkId]);
 
     const claimBatch = async () => {
         const sportsAMMV2ContractWithSigner = getContractInstance(ContractType.SPORTS_AMM_V2, {
@@ -230,7 +229,7 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
             </CategoryContainer>
             {openClaimable && (
                 <ListContainer>
-                    {isLoading ? (
+                    {userTicketsQuery.isLoading ? (
                         <LoaderContainer>
                             <SimpleLoader />
                         </LoaderContainer>

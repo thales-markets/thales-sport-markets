@@ -60,7 +60,7 @@ const QUERY_KEYS = {
         lives,
     ],
     LiveTradingProcessorData: (networkId: Network) => ['liveTradingProcessorData', networkId],
-    ClaimableCountV2: (walletAddress: string, networkId: Network) => ['claimable', 'countV2', walletAddress, networkId],
+    PositionsCountV2: (walletAddress: string, networkId: Network) => ['positions', 'countV2', walletAddress, networkId],
     Wallet: {
         MultipleCollateral: (walletAddress: string, networkId: Network) => [
             'multipleCollateral',

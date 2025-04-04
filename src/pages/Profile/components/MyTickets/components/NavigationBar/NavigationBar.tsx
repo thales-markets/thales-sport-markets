@@ -1,3 +1,4 @@
+import Tooltip from 'components/Tooltip';
 import { ProfileTab } from 'enums/ui';
 import usePositionCountV2Query from 'queries/markets/usePositionCountV2Query';
 import React, { useMemo } from 'react';
@@ -79,14 +80,18 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ selectedTab, setSelectedT
                         <Item selected={item.id == selectedTab}>
                             <Icon className={item.icon} />
                             {hasClaimableNotification && (
-                                <ClaimableTicketsNotificationCount>
-                                    <Count>{claimablePositionCount}</Count>
-                                </ClaimableTicketsNotificationCount>
+                                <Tooltip open={true} overlay={t('profile.categories.claimable')}>
+                                    <ClaimableTicketsNotificationCount>
+                                        <Count>{claimablePositionCount}</Count>
+                                    </ClaimableTicketsNotificationCount>
+                                </Tooltip>
                             )}
                             {hasOpenNotification && (
-                                <OpenTicketsNotificationCount>
-                                    <Count>{openPositionCount}</Count>
-                                </OpenTicketsNotificationCount>
+                                <Tooltip open={true} overlay={t('profile.categories.open')}>
+                                    <OpenTicketsNotificationCount>
+                                        <Count>{openPositionCount}</Count>
+                                    </OpenTicketsNotificationCount>
+                                </Tooltip>
                             )}
                         </Item>
                         <ItemLabel selected={item.id == selectedTab}>{t(item.i18Label)}</ItemLabel>
