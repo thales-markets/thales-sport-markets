@@ -112,6 +112,7 @@ import multipleCollateral from 'utils/contracts/multipleCollateralContract';
 import sportsAMMV2Contract from 'utils/contracts/sportsAMMV2Contract';
 import { isErrorExcluded, logErrorToDiscord } from 'utils/discord';
 import { convertFromBytes32 } from 'utils/formatters/string';
+import { waitForTransactionViaSocket } from 'utils/listener';
 import { formatMarketOdds } from 'utils/markets';
 import { getTradeData } from 'utils/marketsV2';
 import { checkAllowance } from 'utils/network';
@@ -152,8 +153,7 @@ import { delay } from 'utils/timer';
 import { getRequestId, getTradingProcessorTransaction, processTransaction } from 'utils/tradingProcessor';
 import { getKeepSelectionFromStorage, setKeepSelectionToStorage } from 'utils/ui';
 import useBiconomy from 'utils/useBiconomy';
-import { Address, Client, maxUint256, parseEther } from 'viem';
-import { waitForTransactionReceipt } from 'viem/actions';
+import { Address, maxUint256, parseEther } from 'viem';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 import BuyStepsModal from '../BuyStepsModal';
 import SuggestedAmount from '../SuggestedAmount';
@@ -1279,9 +1279,7 @@ const Ticket: React.FC<TicketProps> = ({
                 setOpenApprovalModal(false);
             }
 
-            const txReceipt = await waitForTransactionReceipt(client as Client, {
-                hash: txHash,
-            });
+            const txReceipt = await waitForTransactionViaSocket(txHash, networkId);
 
             if (txReceipt.status === 'success') {
                 setIsAllowing(false);
@@ -1436,9 +1434,7 @@ const Ticket: React.FC<TicketProps> = ({
                         txHash = await collateralContractWithSigner?.write.approve([addressToApprove, approveAmount]);
                     }
 
-                    const txReceipt = await waitForTransactionReceipt(client as Client, {
-                        hash: txHash,
-                    });
+                    const txReceipt = await waitForTransactionViaSocket(txHash, networkId);
 
                     if (txReceipt.status === 'success') {
                         step = BuyTicketStep.BUY;
@@ -1554,9 +1550,7 @@ const Ticket: React.FC<TicketProps> = ({
                         if (WETHContractWithSigner) {
                             const wrapTx = await WETHContractWithSigner.write.deposit({ value: parsedBuyInAmount });
 
-                            const txReceipt = await waitForTransactionReceipt(client as Client, {
-                                hash: wrapTx,
-                            });
+                            const txReceipt = await waitForTransactionViaSocket(wrapTx, networkId);
 
                             if (txReceipt.status === 'success') {
                                 txHash = await getTradingProcessorTransaction(
@@ -1640,9 +1634,9 @@ const Ticket: React.FC<TicketProps> = ({
                     return;
                 }
 
-                const txReceipt = await waitForTransactionReceipt(client as Client, {
-                    hash: txHash,
-                });
+                const txReceipt = await waitForTransactionViaSocket(txHash, networkId);
+
+                console.log('txReceipt: ', txReceipt);
 
                 if (txReceipt.status === 'success') {
                     PLAUSIBLE.trackEvent(

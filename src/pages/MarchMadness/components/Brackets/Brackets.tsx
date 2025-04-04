@@ -86,6 +86,7 @@ import {
 } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import { marchMadnessContract } from 'utils/contracts/marchMadnessContract';
+import { waitForTransactionViaSocket } from 'utils/listener';
 import {
     getFirstMatchIndexInRound,
     getLocalStorageKey,
@@ -95,8 +96,6 @@ import {
 } from 'utils/marchMadness';
 import { checkAllowance } from 'utils/network';
 import { refetchAfterMarchMadnessMint, refetchBalances } from 'utils/queryConnector';
-import { Client } from 'viem';
-import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 import Match from '../Match';
 import { MatchProps } from '../Match/Match';
@@ -546,9 +545,7 @@ const Brackets: React.FC = () => {
             const txHash = await collateralContractWithSigner?.write.approve([addressToApprove, approveAmount]);
             setOpenApprovalModal(false);
 
-            const txReceipt = await waitForTransactionReceipt(client as Client, {
-                hash: txHash,
-            });
+            const txReceipt = await waitForTransactionViaSocket(txHash, networkId);
 
             if (txReceipt.status === 'success') {
                 setIsAllowing(false);
@@ -609,10 +606,7 @@ const Brackets: React.FC = () => {
                               ]);
                     }
                 }
-
-                const txReceipt = await waitForTransactionReceipt(client as Client, {
-                    hash: txHash,
-                });
+                const txReceipt = await waitForTransactionViaSocket(txHash, networkId);
 
                 if (txReceipt.status === 'success') {
                     window.localStorage.removeItem(getLocalStorageKey(DEFAULT_BRACKET_ID, networkId, walletAddress));

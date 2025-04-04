@@ -15,9 +15,9 @@ import { useTheme } from 'styled-components';
 import { Coins, formatCurrencyWithKey, truncToDecimals } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
 import { getContractInstance } from 'utils/contract';
+import { waitForTransactionViaSocket } from 'utils/listener';
 import { checkAllowance } from 'utils/network';
-import { Client, parseEther } from 'viem';
-import { waitForTransactionReceipt } from 'viem/actions';
+import { parseEther } from 'viem';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 import {
     ButtonContainer,
@@ -123,10 +123,7 @@ const ThalesToOverMigrationModal: React.FC<ThalesToOverMigrationModalProps> = ({
                     approveAmount,
                 ]);
 
-                const txReceipt = await waitForTransactionReceipt(client as Client, {
-                    hash: txHash,
-                });
-
+                const txReceipt = await waitForTransactionViaSocket(txHash, networkId);
                 if (txReceipt.status === 'success') {
                     toast.update(id, getSuccessToastOptions(t('market.toast-message.approve-success')));
                     setOpenApprovalModal(false);
@@ -154,9 +151,7 @@ const ThalesToOverMigrationModal: React.FC<ThalesToOverMigrationModalProps> = ({
                 const parsedAmount = parseEther(amount.toString());
                 const txHash = await thalesToOverMigrationContract?.write?.migrateThalesToOver([parsedAmount]);
 
-                const txReceipt = await waitForTransactionReceipt(client as Client, {
-                    hash: txHash,
-                });
+                const txReceipt = await waitForTransactionViaSocket(txHash, networkId);
                 if (txReceipt.status === 'success') {
                     toast.update(
                         toastId,

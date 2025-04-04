@@ -16,10 +16,11 @@ import { RootState } from 'types/redux';
 import { sendBiconomyTransaction } from 'utils/biconomy';
 import { getCollateral, getCollaterals, getDefaultCollateral, isLpSupported } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
+import { waitForTransactionViaSocket } from 'utils/listener';
 import { refetchAfterClaim } from 'utils/queryConnector';
 import useBiconomy from 'utils/useBiconomy';
 import { Address, Client, encodeFunctionData, isAddress } from 'viem';
-import { estimateContractGas, waitForTransactionReceipt } from 'viem/actions';
+import { estimateContractGas } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 import TicketDetails from './components/TicketDetails';
 import {
@@ -165,9 +166,7 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
                         useSession: true,
                     });
 
-                    const txReceipt = await waitForTransactionReceipt(client as Client, {
-                        hash: txHash,
-                    });
+                    const txReceipt = await waitForTransactionViaSocket(txHash, networkId);
 
                     if (txReceipt.status === 'success') {
                         toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
@@ -189,9 +188,7 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
                             gas: gasEstimationWithBuffer,
                         });
 
-                        const txReceipt = await waitForTransactionReceipt(client as Client, {
-                            hash: txHash,
-                        });
+                        const txReceipt = await waitForTransactionViaSocket(txHash, networkId);
 
                         if (txReceipt.status === 'success') {
                             toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));

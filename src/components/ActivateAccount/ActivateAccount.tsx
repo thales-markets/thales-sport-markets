@@ -26,9 +26,8 @@ import {
 import { isSmallDevice } from 'utils/device';
 import { getFreeBetModalShown } from 'utils/freeBet';
 import { getFundModalShown, setFundModalShown } from 'utils/fundModal';
+import { waitForTransactionViaSocket } from 'utils/listener';
 import useBiconomy from 'utils/useBiconomy';
-import { Client } from 'viem';
-import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient } from 'wagmi';
 
 const ActivateAccount: React.FC<any> = () => {
@@ -159,9 +158,7 @@ const ActivateAccount: React.FC<any> = () => {
                                             ),
                                         });
                                         if (txHash) {
-                                            const txReceipt = await waitForTransactionReceipt(client as Client, {
-                                                hash: txHash,
-                                            });
+                                            const txReceipt = await waitForTransactionViaSocket(txHash, networkId);
 
                                             if (txReceipt.status === 'success') {
                                                 toast.update(

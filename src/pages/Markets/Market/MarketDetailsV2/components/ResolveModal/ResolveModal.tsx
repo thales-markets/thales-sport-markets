@@ -13,10 +13,9 @@ import { useTheme } from 'styled-components';
 import { TicketMarket } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { getContractInstance } from 'utils/contract';
+import { waitForTransactionViaSocket } from 'utils/listener';
 import { getTitleText } from 'utils/marketsV2';
-import { Client } from 'viem';
-import { waitForTransactionReceipt } from 'viem/actions';
-import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
+import { useAccount, useChainId, useWalletClient } from 'wagmi';
 import {
     ButtonContainer,
     CloseIcon,
@@ -41,7 +40,6 @@ const ResolveModal: React.FC<ResolveModalProps> = ({ ticketMarket: market, onClo
     const { openConnectModal } = useConnectModal();
 
     const networkId = useChainId();
-    const client = useClient();
     const walletClient = useWalletClient();
     const { isConnected } = useAccount();
 
@@ -85,9 +83,8 @@ const ResolveModal: React.FC<ResolveModalProps> = ({ ticketMarket: market, onClo
                               [result.split(',')],
                           ]);
 
-                const txReceipt = await waitForTransactionReceipt(client as Client, {
-                    hash: txHash,
-                });
+                const txReceipt = await waitForTransactionViaSocket(txHash, networkId);
+
                 if (txReceipt.status === 'success') {
                     toast.update(
                         toastId,
