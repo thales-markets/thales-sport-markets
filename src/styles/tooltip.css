@@ -55,7 +55,7 @@
 }
 .rc-tooltip {
     position: absolute;
-    z-index: 1501;
+    z-index: 3001;
     display: block;
     visibility: visible;
 }

@@ -125,7 +125,7 @@ import {
     getTooltipKey,
 } from 'utils/overdrop';
 import {
-    refetchBalances,
+    refetchAfterBuy,
     refetchCoingeckoRates,
     refetchFreeBetBalance,
     refetchProofs,
@@ -1635,7 +1635,7 @@ const Ticket: React.FC<TicketProps> = ({
                         data
                     );
                     setIsBuying(false);
-                    refetchBalances(walletAddress, networkId);
+                    refetchAfterBuy(walletAddress, networkId);
                     toast.update(toastId, getErrorToastOptions(t('markets.parlay.tx-not-received')));
                     return;
                 }
@@ -1731,10 +1731,10 @@ const Ticket: React.FC<TicketProps> = ({
                                 setIsBuying(false);
                                 setCollateralAmount('');
                             }
-                            refetchBalances(walletAddress, networkId);
+                            refetchAfterBuy(walletAddress, networkId);
                         }
                     } else {
-                        refetchBalances(walletAddress, networkId);
+                        refetchAfterBuy(walletAddress, networkId);
 
                         const systemBetData = isSystemBet
                             ? getSystemBetDataObject(
@@ -1785,7 +1785,7 @@ const Ticket: React.FC<TicketProps> = ({
                 }
             } catch (e) {
                 setIsBuying(false);
-                refetchBalances(walletAddress, networkId);
+                refetchAfterBuy(walletAddress, networkId);
                 toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
                 if (!isErrorExcluded(e as Error)) {
                     const data = getLogData({

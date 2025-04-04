@@ -79,12 +79,13 @@ export const ItemContainer = styled.div<{ active?: boolean }>`
     margin-top: 15px;
     cursor: pointer;
     padding: 0px 5px;
-    ${(props) => (props.active ? `color: ${props.theme.textColor.quaternary};` : '')}
+    ${(props) => (props.active ? `color: ${props.theme.link.textColor.primary};` : '')}
+
     :hover {
         i {
-            color: ${(props) => props.theme.textColor.quaternary} !important;
+            color: ${(props) => props.theme.link.textColor.primary} !important;
         }
-        color: ${(props) => props.theme.textColor.quaternary} !important;
+        color: ${(props) => props.theme.link.textColor.primary} !important;
     }
 `;
 
@@ -99,7 +100,8 @@ export const NavLabel = styled.span<{ active?: boolean }>`
 export const NavIcon = styled.i<{ active?: boolean }>`
     font-size: 25px;
     margin-right: 10px;
-    color: ${(props) => (props.active ? `${props.theme.textColor.quaternary}` : `${props.theme.textColor.primary}`)};
+    color: ${(props) =>
+        props.active ? `${props.theme.link.textColor.primary}` : `${props.theme.link.textColor.secondary}`};
 `;
 
 export const FooterContainer = styled(FlexDivColumnNative)`
@@ -139,7 +141,7 @@ export const CloseIcon = styled.i.attrs({ className: 'icon icon--close' })`
     cursor: pointer;
 `;
 
-export const NotificationCount = styled.div`
+export const BlockedGamesNotificationCount = styled.div`
     border-radius: 50%;
     display: flex;
     align-items: center;
