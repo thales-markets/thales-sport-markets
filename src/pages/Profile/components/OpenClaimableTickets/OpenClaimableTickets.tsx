@@ -5,8 +5,9 @@ import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { GAS_ESTIMATION_BUFFER_CLAIM_ALL } from 'constants/network';
 import { ContractType } from 'enums/contract';
 import { LoaderContainer } from 'pages/Markets/Home/HomeV2';
+import usePositionCountV2Query from 'queries/markets/usePositionCountV2Query';
 import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -16,7 +17,7 @@ import { RootState } from 'types/redux';
 import { sendBiconomyTransaction } from 'utils/biconomy';
 import { getCollateral, getCollaterals, getDefaultCollateral, isLpSupported } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
-import { refetchAfterClaim, refetchPositionsCount } from 'utils/queryConnector';
+import { refetchAfterClaim } from 'utils/queryConnector';
 import useBiconomy from 'utils/useBiconomy';
 import { Address, Client, encodeFunctionData, isAddress } from 'viem';
 import { estimateContractGas, waitForTransactionReceipt } from 'viem/actions';
@@ -82,6 +83,17 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
         claimCollateralIndex,
     ]);
 
+    const positionsCountQuery = usePositionCountV2Query(walletAddress, { networkId, client }, { enabled: isConnected });
+
+    const claimablePositionCount = useMemo(
+        () => (positionsCountQuery.isSuccess && positionsCountQuery.data ? positionsCountQuery.data.claimable : 0),
+        [positionsCountQuery.isSuccess, positionsCountQuery.data]
+    );
+    const openPositionCount = useMemo(
+        () => (positionsCountQuery.isSuccess && positionsCountQuery.data ? positionsCountQuery.data.open : 0),
+        [positionsCountQuery.isSuccess, positionsCountQuery.data]
+    );
+
     const userTicketsQuery = useUserTicketsQuery(
         isSearchTextWalletAddress ? searchText : walletAddress,
         { networkId, client },
@@ -101,14 +113,22 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
                 )
             );
         }
-        refetchPositionsCount(walletAddress, networkId);
 
         const data = {
             open: userTickets.filter((ticket) => ticket.isOpen),
             claimable: userTickets.filter((ticket) => ticket.isClaimable),
         };
         return data;
-    }, [userTicketsQuery.isSuccess, userTicketsQuery.data, searchText, walletAddress, networkId]);
+    }, [userTicketsQuery.isSuccess, userTicketsQuery.data, searchText]);
+
+    useEffect(() => {
+        if (
+            claimablePositionCount !== userTicketsByStatus.claimable.length ||
+            openPositionCount !== userTicketsByStatus.open.length
+        ) {
+            refetchAfterClaim(walletAddress, networkId);
+        }
+    }, [claimablePositionCount, openPositionCount, userTicketsByStatus, walletAddress, networkId]);
 
     const claimBatch = async () => {
         const sportsAMMV2ContractWithSigner = getContractInstance(ContractType.SPORTS_AMM_V2, {

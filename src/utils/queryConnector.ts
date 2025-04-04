@@ -18,10 +18,6 @@ const queryConnector: QueryConnector = {
     },
 };
 
-export const refetchPositionsCount = (walletAddress: string, networkId: Network) => {
-    queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PositionsCountV2(walletAddress, networkId) });
-};
-
 export const refetchBalances = (walletAddress: string, networkId: Network) => {
     queryConnector.queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.Wallet.MultipleCollateral(walletAddress, networkId),
