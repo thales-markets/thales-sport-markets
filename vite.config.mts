@@ -93,7 +93,6 @@ export default defineConfig(({ mode }) => {
                         // TODO: Test biconomy and particle
                         biconomy: ['@biconomy/account'],
                         // particle: ['@particle-network/auth-core-modal'],
-                        googleTrans: ['@google-cloud/translate'],
                         tanstack: ['@tanstack/react-query', '@tanstack/react-table'],
                         recharts: ['recharts'],
                         scrollbars: ['react-custom-scrollbars-2', 'react-horizontal-scrolling-menu'],

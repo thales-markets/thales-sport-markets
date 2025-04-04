@@ -15,7 +15,7 @@ import {
     MarketTypeMap,
 } from 'overtime-utils';
 import { bigNumberFormatter, coinFormatter, Coins, formatDateWithTime } from 'thales-utils';
-import { CombinedPosition, SystemBetData, Team, Ticket, TicketMarket, TicketPosition } from 'types/markets';
+import { CombinedPosition, SystemBetData, Team, Ticket, TicketMarket, TicketPosition, TradeData } from 'types/markets';
 import { NetworkConfig, SupportedNetwork } from 'types/network';
 import { ShareTicketModalProps } from 'types/tickets';
 import futuresPositionNamesMap from '../assets/json/futuresPositionNamesMap.json';
@@ -588,3 +588,24 @@ export const isRegularTicketInvalid = (ticket: TicketPosition[], maxTicketSize: 
 
     return false;
 };
+
+export const getLogData = (data: {
+    networkId: SupportedNetwork;
+    isParticle: boolean;
+    isBiconomy: boolean;
+    isSgp: boolean;
+    isLiveTicket: boolean;
+    tradeData: TradeData[];
+    swapToOver: boolean;
+    overAmount: number;
+    buyInAmount: number | string;
+    usedCollateralForBuy: Coins;
+}) =>
+    `BUY error for params:\nnetworkId=${data.networkId}\nisParticle=${data.isParticle}\nisBiconomy=${
+        data.isBiconomy
+    }\nisSgp=${data.isSgp}\nisLive=${data.isLiveTicket}\nliveOdds=${JSON.stringify(
+        data.tradeData[0]?.odds
+    )}\nlivePosition=${data.tradeData[0]?.position}\nbuyInAmount=${(data.swapToOver
+        ? data.overAmount
+        : data.buyInAmount
+    ).toString()}\ncollateral=${data.usedCollateralForBuy}\nisSwapToOver=${data.swapToOver}`;
