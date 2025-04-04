@@ -1,6 +1,7 @@
 import { createSessionKeyManagerModule, DEFAULT_SESSION_KEY_MANAGER_MODULE } from '@biconomy/modules';
 import { PaymasterFeeQuote, PaymasterMode } from '@biconomy/paymaster';
 import { getPublicClient } from '@wagmi/core';
+import { RPC_LIST } from 'constants/network';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { addMonths } from 'date-fns';
 import { wagmiConfig } from 'pages/Root/wagmiConfig';
@@ -16,6 +17,7 @@ import multipleCollateral from './contracts/multipleCollateralContract';
 import sessionValidationContract from './contracts/sessionValidationContract';
 import sgpTradingProcessorContract from './contracts/sgpTradingProcessorContract';
 import sportsAMMV2Contract from './contracts/sportsAMMV2Contract';
+import { waitForTransactionViaSocket } from './listener';
 
 export const GAS_LIMIT = 1;
 const ERROR_SESSION_NOT_FOUND = 'Error: Session not found.';
@@ -204,7 +206,6 @@ export const executeBiconomyTransaction = async (params: {
                 return transactionHash;
             } else {
                 const sessionSigner = await getSessionSigner(params.networkId);
-
                 const { waitForTxHash } = await biconomyConnector.wallet.sendTransaction(transactionArray, {
                     paymasterServiceData: {
                         mode: PaymasterMode.SPONSORED,
@@ -217,7 +218,6 @@ export const executeBiconomyTransaction = async (params: {
                         sessionValidationModule: sessionValidationContract.addresses[params.networkId],
                     },
                 });
-
                 const { transactionHash } = await waitForTxHash();
 
                 return transactionHash;
@@ -227,10 +227,12 @@ export const executeBiconomyTransaction = async (params: {
                 (error && (error as any).message && (error as any).message.includes('SessionNotApproved')) ||
                 (error as any).toString() === ERROR_SESSION_NOT_FOUND
             ) {
-                await activateOvertimeAccount({
+                const hash = await activateOvertimeAccount({
                     networkId: params.networkId,
                     collateralAddress: params.collateralAddress as any,
                 });
+
+                await waitForTransactionViaSocket(hash as any, params.networkId);
 
                 const sessionSigner = await getSessionSigner(params.networkId);
 
@@ -447,7 +449,7 @@ const getSessionSigner = async (networkId: SupportedNetwork) => {
         const sessionSigner = createWalletClient({
             account: sessionAccount,
             chain: networkId as any,
-            transport: http(biconomyConnector.wallet?.rpcProvider.transport.url),
+            transport: http(RPC_LIST.INFURA[networkId].http),
         });
         return sessionSigner;
     } catch (e) {
