@@ -178,17 +178,21 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean; isS
                                 <TicketMarketStatus>{t('markets.market-card.half-time')}</TicketMarketStatus>
                             ) : (
                                 <MatchPeriodContainer>
-                                    <MatchPeriodLabel>{`${getOrdinalNumberLabel(Number(liveScore.period))}${
-                                        isMobile
-                                            ? ''
-                                            : ` ${t(`markets.market-card.${getLeaguePeriodType(market.leagueId)}`)}`
-                                    }`}</MatchPeriodLabel>
-                                    <FlexDivCentered>
-                                        <MatchPeriodLabel className="red">
-                                            {liveScore.displayClock?.replaceAll("'", '')}
-                                            <MatchPeriodLabel className="blink">&prime;</MatchPeriodLabel>
-                                        </MatchPeriodLabel>
-                                    </FlexDivCentered>
+                                    {!!liveScore.period && (
+                                        <MatchPeriodLabel>{`${getOrdinalNumberLabel(Number(liveScore.period))}${
+                                            isMobile
+                                                ? ''
+                                                : ` ${t(`markets.market-card.${getLeaguePeriodType(market.leagueId)}`)}`
+                                        }`}</MatchPeriodLabel>
+                                    )}
+                                    {!!liveScore.displayClock && (
+                                        <FlexDivCentered>
+                                            <MatchPeriodLabel className="red">
+                                                {liveScore.displayClock?.replaceAll("'", '')}
+                                                <MatchPeriodLabel className="blink">&prime;</MatchPeriodLabel>
+                                            </MatchPeriodLabel>
+                                        </FlexDivCentered>
+                                    )}
                                 </MatchPeriodContainer>
                             ))}
                         {getScoreComponent(liveScore)}
