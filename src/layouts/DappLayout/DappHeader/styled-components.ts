@@ -40,7 +40,7 @@ export const MiddleContainer = styled(FlexDivRowCentered)`
     width: calc(100% - 263px - 360px - 50px);
     justify-content: space-between;
     gap: 10px;
-    // TODO: After March Madness change EXTRA_LARGE to MEDIUM
+    // TODO: After March Madness change EXTRA_LARGE to LARGE
     @media (max-width: ${ScreenSizeBreakpoint.EXTRA_LARGE}px) {
         width: unset;
     }
