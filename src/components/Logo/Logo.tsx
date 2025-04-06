@@ -1,5 +1,6 @@
 import SPAAnchor from 'components/SPAAnchor';
 import ROUTES, { RESET_STATE } from 'constants/routes';
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import React from 'react';
 import styled from 'styled-components';
 import { buildHref } from 'utils/routes';
@@ -26,7 +27,7 @@ const LogoIcon = styled.i`
     text-align: center;
     cursor: pointer;
     color: ${(props) => props.theme.textColor.primary};
-    @media (max-width: 767px) {
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         font-size: 170px;
         width: 150px;
     }

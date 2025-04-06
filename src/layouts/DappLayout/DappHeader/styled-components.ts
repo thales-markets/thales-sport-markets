@@ -1,13 +1,14 @@
 import burger from 'assets/images/burger.svg';
 import OverdropButtonBackground from 'assets/images/overdrop/overdrop-button-background.webp';
 import overdrop from 'assets/images/overdrop/overdrop-nav.webp';
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivEnd, FlexDivRow, FlexDivRowCentered, FlexDivStart } from 'styles/common';
 
 export const Container = styled(FlexDivRowCentered)`
     width: 100%;
 
-    @media (max-width: 767px) {
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         flex-direction: column;
     }
     @keyframes pulsing {
@@ -17,7 +18,7 @@ export const Container = styled(FlexDivRowCentered)`
         }
         50% {
             transform: scale(1.2);
-            @media (max-width: 767px) {
+            @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
                 transform: scale(1.1);
             }
 
@@ -38,6 +39,11 @@ export const LeftContainer = styled(FlexDivRow)`
 export const MiddleContainer = styled(FlexDivRowCentered)`
     width: calc(100% - 263px - 360px - 50px);
     justify-content: space-between;
+
+    @media (max-width: ${ScreenSizeBreakpoint.EXTRA_LARGE}px) {
+        width: min-content;
+        flex-wrap: wrap;
+    }
 `;
 
 export const RightContainer = styled(FlexDivRowCentered)`
@@ -189,7 +195,7 @@ export const OverdropButtonContainer = styled(FlexDiv)`
         margin-left: 10px;
     }
 
-    @media (max-width: 767px) {
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         font-size: 8px;
         width: 120px;
         height: 30px;
@@ -201,7 +207,7 @@ export const SmallBadgeImage = styled.img`
     left: -25px;
     width: 50px;
     height: 50px;
-    @media (max-width: 767px) {
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         width: 30px;
         height: 30px;
         left: -10px;
