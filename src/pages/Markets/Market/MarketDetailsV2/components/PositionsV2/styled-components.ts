@@ -98,7 +98,7 @@ export const Arrow = styled.i`
     right: 0px;
     margin-right: 2px;
     cursor: pointer;
-    z-index: 2;
+    z-index: 3;
 `;
 
 export const Message = styled.span`
