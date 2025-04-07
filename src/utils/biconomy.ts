@@ -16,6 +16,7 @@ import multipleCollateral from './contracts/multipleCollateralContract';
 import sessionValidationContract from './contracts/sessionValidationContract';
 import sgpTradingProcessorContract from './contracts/sgpTradingProcessorContract';
 import sportsAMMV2Contract from './contracts/sportsAMMV2Contract';
+import { waitForTransactionViaSocket } from './listener';
 
 export const GAS_LIMIT = 1;
 const ERROR_SESSION_NOT_FOUND = 'Error: Session not found.';
@@ -55,7 +56,7 @@ export const sendBiconomyTransaction = async (params: {
                 }
             } else {
                 biconomyConnector.wallet.setActiveValidationModule(biconomyConnector.wallet.defaultValidationModule);
-                const { wait } = await biconomyConnector.wallet.sendTransaction(params.transaction, {
+                const { waitForTxHash } = await biconomyConnector.wallet.sendTransaction(params.transaction, {
                     paymasterServiceData: {
                         mode: PaymasterMode.SPONSORED,
                         webhookData: {
@@ -63,36 +64,37 @@ export const sendBiconomyTransaction = async (params: {
                         },
                     },
                 });
+                const { transactionHash } = await waitForTxHash();
 
-                const {
-                    receipt: { transactionHash },
-                    success,
-                } = await wait();
+                if (!transactionHash) throw new Error('tx failed');
 
-                if (success === 'false') {
-                    throw new Error('tx failed');
-                } else {
+                const txReceipt = await waitForTransactionViaSocket(transactionHash as any, params.networkId);
+
+                if (txReceipt.status === 'success') {
                     return transactionHash;
+                } else {
+                    throw new Error('tx failed');
                 }
             }
         } catch (e) {
             try {
-                const { wait } = await biconomyConnector.wallet.sendTransaction(params.transaction, {
+                const { waitForTxHash } = await biconomyConnector.wallet.sendTransaction(params.transaction, {
                     paymasterServiceData: {
                         mode: PaymasterMode.ERC20,
                         preferredToken: params.collateralAddress,
                     },
                 });
 
-                const {
-                    receipt: { transactionHash },
-                    success,
-                } = await wait();
+                const { transactionHash } = await waitForTxHash();
 
-                if (success === 'false') {
-                    throw new Error('tx failed');
-                } else {
+                if (!transactionHash) throw new Error('tx failed');
+
+                const txReceipt = await waitForTransactionViaSocket(transactionHash as any, params.networkId);
+
+                if (txReceipt.status === 'success') {
                     return transactionHash;
+                } else {
+                    throw new Error('tx failed');
                 }
             } catch (e) {
                 console.log(e);
@@ -125,7 +127,7 @@ export const executeBiconomyTransactionWithConfirmation = async (params: {
 
         try {
             biconomyConnector.wallet.setActiveValidationModule(biconomyConnector.wallet.defaultValidationModule);
-            const { wait } = await biconomyConnector.wallet.sendTransaction(transaction, {
+            const { waitForTxHash } = await biconomyConnector.wallet.sendTransaction(transaction, {
                 paymasterServiceData: {
                     mode: PaymasterMode.SPONSORED,
                     webhookData: {
@@ -134,35 +136,37 @@ export const executeBiconomyTransactionWithConfirmation = async (params: {
                 },
             });
 
-            const {
-                receipt: { transactionHash },
-                success,
-            } = await wait();
+            const { transactionHash } = await waitForTxHash();
 
-            if (success === 'false') {
-                throw new Error('tx failed');
-            } else {
+            if (!transactionHash) throw new Error('tx failed');
+
+            const txReceipt = await waitForTransactionViaSocket(transactionHash as any, params.networkId);
+
+            if (txReceipt.status === 'success') {
                 return transactionHash;
+            } else {
+                throw new Error('tx failed');
             }
         } catch (e) {
             try {
                 biconomyConnector.wallet.setActiveValidationModule(biconomyConnector.wallet.defaultValidationModule);
-                const { wait } = await biconomyConnector.wallet.sendTransaction(transaction, {
+                const { waitForTxHash } = await biconomyConnector.wallet.sendTransaction(transaction, {
                     paymasterServiceData: {
                         mode: PaymasterMode.ERC20,
                         preferredToken: params.collateralAddress,
                     },
                 });
 
-                const {
-                    receipt: { transactionHash },
-                    success,
-                } = await wait();
+                const { transactionHash } = await waitForTxHash();
 
-                if (success === 'false') {
-                    throw new Error('tx failed');
-                } else {
+                if (!transactionHash) throw new Error('tx failed');
+
+                const txReceipt = await waitForTransactionViaSocket(transactionHash as any, params.networkId);
+
+                if (txReceipt.status === 'success') {
                     return transactionHash;
+                } else {
+                    throw new Error('tx failed');
                 }
             } catch (e) {
                 console.log(e);
@@ -230,7 +234,7 @@ export const executeBiconomyTransaction = async (params: {
 
         try {
             if (params.isEth) {
-                const { wait } = await biconomyConnector.wallet.sendTransaction(transactionArray, {
+                const { waitForTxHash } = await biconomyConnector.wallet.sendTransaction(transactionArray, {
                     paymasterServiceData: {
                         mode: PaymasterMode.SPONSORED,
                         webhookData: {
@@ -238,20 +242,21 @@ export const executeBiconomyTransaction = async (params: {
                         },
                     },
                 });
-                const {
-                    receipt: { transactionHash },
-                    success,
-                } = await wait();
+                const { transactionHash } = await waitForTxHash();
 
-                if (success === 'false') {
-                    throw new Error('tx failed');
-                } else {
+                if (!transactionHash) throw new Error('tx failed');
+
+                const txReceipt = await waitForTransactionViaSocket(transactionHash as any, params.networkId);
+
+                if (txReceipt.status === 'success') {
                     return transactionHash;
+                } else {
+                    throw new Error('tx failed');
                 }
             } else {
                 const sessionSigner = await getSessionSigner(params.networkId);
 
-                const { wait } = await biconomyConnector.wallet.sendTransaction(transactionArray, {
+                const { waitForTxHash } = await biconomyConnector.wallet.sendTransaction(transactionArray, {
                     paymasterServiceData: {
                         mode: PaymasterMode.SPONSORED,
                         webhookData: {
@@ -263,15 +268,16 @@ export const executeBiconomyTransaction = async (params: {
                         sessionValidationModule: sessionValidationContract.addresses[params.networkId],
                     },
                 });
-                const {
-                    receipt: { transactionHash },
-                    success,
-                } = await wait();
+                const { transactionHash } = await waitForTxHash();
 
-                if (success === 'false') {
-                    throw new Error('tx failed');
-                } else {
+                if (!transactionHash) throw new Error('tx failed');
+
+                const txReceipt = await waitForTransactionViaSocket(transactionHash as any, params.networkId);
+
+                if (txReceipt.status === 'success') {
                     return transactionHash;
+                } else {
+                    throw new Error('tx failed');
                 }
             }
         } catch (error) {
@@ -287,7 +293,7 @@ export const executeBiconomyTransaction = async (params: {
                 const sessionSigner = await getSessionSigner(params.networkId);
 
                 try {
-                    const { wait } = await biconomyConnector.wallet.sendTransaction(transactionArray, {
+                    const { waitForTxHash } = await biconomyConnector.wallet.sendTransaction(transactionArray, {
                         paymasterServiceData: {
                             mode: PaymasterMode.SPONSORED,
                             webhookData: {
@@ -300,22 +306,23 @@ export const executeBiconomyTransaction = async (params: {
                         },
                     });
 
-                    const {
-                        receipt: { transactionHash },
-                        success,
-                    } = await wait();
+                    const { transactionHash } = await waitForTxHash();
 
-                    if (success === 'false') {
-                        throw new Error('tx failed');
-                    } else {
+                    if (!transactionHash) throw new Error('tx failed');
+
+                    const txReceipt = await waitForTransactionViaSocket(transactionHash as any, params.networkId);
+
+                    if (txReceipt.status === 'success') {
                         return transactionHash;
+                    } else {
+                        throw new Error('tx failed');
                     }
                 } catch (e) {
                     console.log(e);
                 }
             } else {
                 const sessionSigner = await getSessionSigner(params.networkId);
-                const { wait } = await biconomyConnector.wallet.sendTransaction(transactionArray, {
+                const { waitForTxHash } = await biconomyConnector.wallet.sendTransaction(transactionArray, {
                     paymasterServiceData: {
                         mode: PaymasterMode.ERC20,
                         preferredToken: params.collateralAddress,
@@ -326,15 +333,16 @@ export const executeBiconomyTransaction = async (params: {
                     },
                 });
 
-                const {
-                    receipt: { transactionHash },
-                    success,
-                } = await wait();
+                const { transactionHash } = await waitForTxHash();
 
-                if (success === 'false') {
-                    throw new Error('tx failed');
-                } else {
+                if (!transactionHash) throw new Error('tx failed');
+
+                const txReceipt = await waitForTransactionViaSocket(transactionHash as any, params.networkId);
+
+                if (txReceipt.status === 'success') {
                     return transactionHash;
+                } else {
+                    throw new Error('tx failed');
                 }
             }
         }
@@ -345,7 +353,7 @@ export const activateOvertimeAccount = async (params: { networkId: SupportedNetw
     if (biconomyConnector.wallet) {
         biconomyConnector.wallet.setActiveValidationModule(biconomyConnector.wallet.defaultValidationModule);
         try {
-            const { wait } = await biconomyConnector.wallet.sendTransaction(
+            const { waitForTxHash } = await biconomyConnector.wallet.sendTransaction(
                 [...(await getCreateSessionTxs(params.networkId)), ...getApprovalTxs(params.networkId)],
                 {
                     paymasterServiceData: {
@@ -357,21 +365,20 @@ export const activateOvertimeAccount = async (params: { networkId: SupportedNetw
                 }
             );
 
-            const {
-                receipt: { transactionHash },
-                success,
-            } = await wait();
+            const { transactionHash } = await waitForTxHash();
 
-            console.log('Tx: ', transactionHash);
+            if (!transactionHash) throw new Error('tx failed');
 
-            if (success === 'false') {
-                return null;
-            } else {
+            const txReceipt = await waitForTransactionViaSocket(transactionHash as any, params.networkId);
+
+            if (txReceipt.status === 'success') {
                 return transactionHash;
+            } else {
+                throw new Error('tx failed');
             }
         } catch (e) {
             try {
-                const { wait } = await biconomyConnector.wallet.sendTransaction(
+                const { waitForTxHash } = await biconomyConnector.wallet.sendTransaction(
                     [...(await getCreateSessionTxs(params.networkId)), ...getApprovalTxs(params.networkId)],
                     {
                         paymasterServiceData: {
@@ -381,15 +388,16 @@ export const activateOvertimeAccount = async (params: { networkId: SupportedNetw
                     }
                 );
 
-                const {
-                    receipt: { transactionHash },
-                    success,
-                } = await wait();
+                const { transactionHash } = await waitForTxHash();
 
-                if (success === 'false') {
-                    return null;
-                } else {
+                if (!transactionHash) throw new Error('tx failed');
+
+                const txReceipt = await waitForTransactionViaSocket(transactionHash as any, params.networkId);
+
+                if (txReceipt.status === 'success') {
                     return transactionHash;
+                } else {
+                    throw new Error('tx failed');
                 }
             } catch (e) {
                 const storedMapString: any = localStore.get(LOCAL_STORAGE_KEYS.SESSION_P_KEY[params.networkId]);

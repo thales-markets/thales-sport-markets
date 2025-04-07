@@ -160,7 +160,7 @@ const ActivateAccount: React.FC<any> = () => {
                                         });
                                         if (txHash) {
                                             const txReceipt = await waitForTransactionReceipt(client as Client, {
-                                                hash: txHash,
+                                                hash: txHash as any,
                                             });
 
                                             if (txReceipt.status === 'success') {
