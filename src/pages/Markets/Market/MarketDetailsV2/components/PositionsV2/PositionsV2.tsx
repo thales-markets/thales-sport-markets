@@ -230,7 +230,7 @@ const Positions: React.FC<PositionsProps> = ({
                 alignHeader={alignHeader && (!!positionText0 || !!positionText1) && isExpanded && !isMobile}
                 hidden={oddsTitlesHidden}
                 float={floatingOddsTitles}
-                isSticky={!floatingOddsTitles && !isPlayerPropsMarket && markets.length > 1}
+                isSticky={!floatingOddsTitles && !isPlayerPropsMarket}
             >
                 {((isMobile && !isMainPageView) || !isMobile || isPlayerPropsMarket) && (
                     <Title isExpanded={isExpanded} isMainPageView={isMainPageView} isColumnView={isColumnView}>
