@@ -46,6 +46,7 @@ import {
     MiddleContainer,
     MiddleContainerSectionLeft,
     MiddleContainerSectionRight,
+    MobileButtonWrapper,
     OverdropButtonContainer,
     OverdropIcon,
     ProfileLabel,
@@ -298,41 +299,16 @@ const DappHeader: React.FC = () => {
 
                         <LogoContainer>
                             <Logo />
-                            {!isConnected ? (
-                                <Button
-                                    backgroundColor={theme.button.background.quinary}
-                                    textColor={theme.button.textColor.primary}
-                                    borderColor={theme.button.borderColor.quinary}
-                                    additionalStyles={{
-                                        borderRadius: '8px',
-                                        fontWeight: '800',
-                                        fontSize: '12px',
-                                        padding: '9px 20px',
-                                        width: '120px',
-                                        height: '30px',
-                                    }}
-                                    onClick={() =>
-                                        dispatch(
-                                            setWalletConnectModalVisibility({
-                                                visibility: true,
-                                            })
-                                        )
-                                    }
-                                >
-                                    {t('get-started.sign-up')}
-                                </Button>
-                            ) : (
-                                <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
-                                    {levelItem.level > 0 ? (
-                                        <OverdropButtonContainer>
-                                            <SmallBadgeImage src={levelItem.smallBadge} />
-                                            {`LVL ${levelItem.level} ${levelItem.levelName}`}
-                                        </OverdropButtonContainer>
-                                    ) : (
-                                        <OverdropIcon />
-                                    )}
-                                </SPAAnchor>
-                            )}
+                            <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
+                                {levelItem.level > 0 ? (
+                                    <OverdropButtonContainer>
+                                        <SmallBadgeImage src={levelItem.smallBadge} />
+                                        {`LVL ${levelItem.level} ${levelItem.levelName}`}
+                                    </OverdropButtonContainer>
+                                ) : (
+                                    <OverdropIcon />
+                                )}
+                            </SPAAnchor>
                         </LogoContainer>
 
                         <SearchIconContainer>
@@ -358,7 +334,26 @@ const DappHeader: React.FC = () => {
                             </ReactModal>
                         </SearchIconContainer>
                     </WrapperMobile>
-                    <WalletInfo />
+                    <MobileButtonWrapper>
+                        <Button
+                            backgroundColor={theme.button.background.quinary}
+                            textColor={theme.button.textColor.primary}
+                            borderColor={theme.button.borderColor.quinary}
+                            additionalStyles={{
+                                borderRadius: '8px',
+                                fontWeight: '800',
+                                fontSize: '12px',
+                                padding: '9px 20px',
+                                width: '120px',
+                                height: '30px',
+                                whiteSpace: 'pre',
+                            }}
+                            onClick={() => dispatch(setWalletConnectModalVisibility({ visibility: true }))}
+                        >
+                            {t('get-started.sign-up')}
+                        </Button>
+                        <WalletInfo />
+                    </MobileButtonWrapper>
                     {isBiconomy && <ActivateAccount />}
                 </>
             )}

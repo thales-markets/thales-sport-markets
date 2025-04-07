@@ -76,6 +76,10 @@ const Section = styled.div`
     position: relative;
     display: flex;
     align-items: center;
+    @media (max-width: 950px) {
+        align-items: start;
+        flex-direction: column;
+    }
 `;
 
 const Label = styled.span`
