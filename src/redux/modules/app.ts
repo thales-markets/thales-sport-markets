@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppSliceState, RootState } from 'types/redux';
+import { isMobile } from 'utils/device';
 
 const initialState: AppSliceState = {
-    isMobile: window.innerWidth < 950,
+    isMobile: isMobile(),
 };
 
 const appSlice = createSlice({

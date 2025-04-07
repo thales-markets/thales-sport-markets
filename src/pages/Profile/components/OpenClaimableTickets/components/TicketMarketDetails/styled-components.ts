@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
+import { FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 
 export const Wrapper = styled(FlexDivRowCentered)`
     padding: 5px 5px;
@@ -127,7 +127,7 @@ export const MatchScoreContainer = styled(FlexDivRow)`
     }
 `;
 
-export const MatchPeriodContainer = styled(FlexDivColumnCentered)`
+export const MatchPeriodContainer = styled(FlexDivColumn)`
     align-items: center;
 `;
 

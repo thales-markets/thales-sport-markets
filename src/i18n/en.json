@@ -381,6 +381,8 @@
             "my-portfolio": "My portfolio"
         },
         "open-claimable": "Tickets",
+        "claimable-tickets": "Claimable tickets",
+        "open-tickets": "Open tickets",
         "transaction-history": "History",
         "lp": "LP",
         "account": "Account",
@@ -778,6 +780,7 @@
                 "markets": "Markets",
                 "profile": "Profile",
                 "account": "Account",
+                "ticket-slip": "Ticket Slip",
                 "resolve-blocker": "Resolve blocker",
                 "history": "History",
                 "liquidity-pool": "Provide Liquidity",

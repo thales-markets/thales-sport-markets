@@ -12,8 +12,8 @@ import Tooltip from 'components/Tooltip';
 import WalletInfo from 'components/WalletInfo';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
 import ROUTES from 'constants/routes';
+import { ProfileTab } from 'enums/ui';
 import useInterval from 'hooks/useInterval';
-import useClaimablePositionCountV2Query from 'queries/markets/useClaimablePositionCountV2Query';
 import useBlockedGamesQuery from 'queries/resolveBlocker/useBlockedGamesQuery';
 import useWhitelistedForUnblock from 'queries/resolveBlocker/useWhitelistedForUnblock';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
@@ -46,7 +46,7 @@ import {
     MiddleContainer,
     MiddleContainerSectionLeft,
     MiddleContainerSectionRight,
-    NotificationCount,
+    MobileButtonWrapper,
     OverdropButtonContainer,
     OverdropIcon,
     ProfileLabel,
@@ -106,38 +106,17 @@ const DappHeader: React.FC = () => {
     const [showSearchModal, setShowSearchModal] = useState<boolean>(false);
     const [showThalesToOverMigrationModal, setShowThalesToOverMigrationModal] = useState<boolean>(false);
 
-    const claimablePositionsCountQuery = useClaimablePositionCountV2Query(
-        walletAddress,
-        { networkId, client },
-        {
-            enabled: isConnected,
-        }
-    );
-
-    const claimablePositionCount =
-        claimablePositionsCountQuery.isSuccess && claimablePositionsCountQuery.data
-            ? claimablePositionsCountQuery.data
-            : null;
-
     const whitelistedForUnblockQuery = useWhitelistedForUnblock(
         walletAddress,
         { networkId, client },
-        {
-            enabled: isConnected,
-        }
+        { enabled: isConnected }
     );
     const isWitelistedForUnblock = useMemo(
         () => whitelistedForUnblockQuery.isSuccess && whitelistedForUnblockQuery.data,
         [whitelistedForUnblockQuery.data, whitelistedForUnblockQuery.isSuccess]
     );
 
-    const blockedGamesQuery = useBlockedGamesQuery(
-        false,
-        { networkId, client },
-        {
-            enabled: isWitelistedForUnblock,
-        }
-    );
+    const blockedGamesQuery = useBlockedGamesQuery(false, { networkId, client }, { enabled: isWitelistedForUnblock });
     const blockedGamesCount = useMemo(
         () =>
             blockedGamesQuery.isSuccess && blockedGamesQuery.data && isWitelistedForUnblock
@@ -254,7 +233,7 @@ const DappHeader: React.FC = () => {
                         </MiddleContainerSectionLeft>
                         {isConnected && (
                             <MiddleContainerSectionRight>
-                                <SPAAnchor href={ROUTES.Profile + '?selected-tab=open-claimable'}>
+                                <SPAAnchor href={`${ROUTES.Profile}?selected-tab=${ProfileTab.OPEN_CLAIMABLE}`}>
                                     <FlexDivCentered>
                                         <ProfileIconWidget /> <ProfileLabel>{t('common.profile')}</ProfileLabel>
                                     </FlexDivCentered>
@@ -307,11 +286,6 @@ const DappHeader: React.FC = () => {
                     <WrapperMobile>
                         <MenuIconContainer>
                             <MenuIcon onClick={() => setNavMenuVisibility(true)} />
-                            {claimablePositionCount && (
-                                <NotificationCount>
-                                    <Count>{claimablePositionCount}</Count>
-                                </NotificationCount>
-                            )}
                             {blockedGamesCount > 0 && (
                                 <BlockedGamesNotificationCount>
                                     <Count>{blockedGamesCount}</Count>
@@ -325,41 +299,16 @@ const DappHeader: React.FC = () => {
 
                         <LogoContainer>
                             <Logo />
-                            {!isConnected ? (
-                                <Button
-                                    backgroundColor={theme.button.background.quinary}
-                                    textColor={theme.button.textColor.primary}
-                                    borderColor={theme.button.borderColor.quinary}
-                                    additionalStyles={{
-                                        borderRadius: '8px',
-                                        fontWeight: '800',
-                                        fontSize: '12px',
-                                        padding: '9px 20px',
-                                        width: '120px',
-                                        height: '30px',
-                                    }}
-                                    onClick={() =>
-                                        dispatch(
-                                            setWalletConnectModalVisibility({
-                                                visibility: true,
-                                            })
-                                        )
-                                    }
-                                >
-                                    {t('get-started.sign-up')}
-                                </Button>
-                            ) : (
-                                <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
-                                    {levelItem.level > 0 ? (
-                                        <OverdropButtonContainer>
-                                            <SmallBadgeImage src={levelItem.smallBadge} />
-                                            {`LVL ${levelItem.level} ${levelItem.levelName}`}
-                                        </OverdropButtonContainer>
-                                    ) : (
-                                        <OverdropIcon />
-                                    )}
-                                </SPAAnchor>
-                            )}
+                            <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
+                                {levelItem.level > 0 ? (
+                                    <OverdropButtonContainer>
+                                        <SmallBadgeImage src={levelItem.smallBadge} />
+                                        {`LVL ${levelItem.level} ${levelItem.levelName}`}
+                                    </OverdropButtonContainer>
+                                ) : (
+                                    <OverdropIcon />
+                                )}
+                            </SPAAnchor>
                         </LogoContainer>
 
                         <SearchIconContainer>
@@ -385,7 +334,26 @@ const DappHeader: React.FC = () => {
                             </ReactModal>
                         </SearchIconContainer>
                     </WrapperMobile>
-                    <WalletInfo />
+                    <MobileButtonWrapper>
+                        <Button
+                            backgroundColor={theme.button.background.quinary}
+                            textColor={theme.button.textColor.primary}
+                            borderColor={theme.button.borderColor.quinary}
+                            additionalStyles={{
+                                borderRadius: '8px',
+                                fontWeight: '800',
+                                fontSize: '12px',
+                                padding: '9px 20px',
+                                width: '120px',
+                                height: '30px',
+                                whiteSpace: 'pre',
+                            }}
+                            onClick={() => dispatch(setWalletConnectModalVisibility({ visibility: true }))}
+                        >
+                            {t('get-started.sign-up')}
+                        </Button>
+                        <WalletInfo />
+                    </MobileButtonWrapper>
                     {isBiconomy && <ActivateAccount />}
                 </>
             )}

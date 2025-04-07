@@ -22,29 +22,25 @@ export const ItemWrapper = styled.div`
     position: relative;
     text-align: start;
     white-space: pre;
-    @media (max-width: 767px) {
-        padding: 0 10px;
-        width: fit-content;
-    }
+    padding: 0 10px;
+    width: fit-content;
 `;
 
 export const ItemLabel = styled.p<{ selected?: boolean }>`
     font-size: 10px;
     font-weight: 600;
     color: ${(props) => (props.selected ? props.theme.textColor.quaternary : props.theme.textColor.primary)};
+    text-align: center;
 `;
 
 export const Item = styled.span`
     text-align: center;
     color: ${(props) => props.theme.textColor.primary};
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 600;
     text-transform: uppercase;
     cursor: pointer;
-    @media (max-width: 767px) {
-        font-size: 10px;
-        white-space: nowrap;
-    }
+    white-space: nowrap;
 `;
 
 export const Icon = styled.i<{ selected?: boolean }>`
@@ -54,23 +50,26 @@ export const Icon = styled.i<{ selected?: boolean }>`
     color: ${(props) => (props.selected ? props.theme.textColor.quaternary : props.theme.textColor.primary)};
 `;
 
-export const NotificationCount = styled.div`
+export const ClaimableTicketsNotificationCount = styled.div`
+    display: flex;
     position: absolute;
     border-radius: 50%;
     top: -6px;
-    right: -2px;
-    display: flex;
+    left: 8px;
     align-items: center;
     text-align: center;
     justify-content: center;
-    height: 14px;
     width: 14px;
+    height: 14px;
     background-color: ${(props) => props.theme.background.quaternary};
     box-shadow: ${(props) => props.theme.shadow.notification};
-    @media (max-width: 767px) {
-        top: -6px;
-        right: 8px;
-    }
+`;
+
+export const OpenTicketsNotificationCount = styled(ClaimableTicketsNotificationCount)`
+    left: unset;
+    right: 8px;
+    background-color: ${(props) => props.theme.background.octonary};
+    box-shadow: ${(props) => props.theme.shadow.notificationOpen};
 `;
 
 export const Count = styled.span`
