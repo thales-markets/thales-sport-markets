@@ -107,6 +107,10 @@ const WalletInfo: React.FC = ({}) => {
         </Container>
     ) : (
         <>
+            <NetworkSwitcher
+                containerStyle={{ margin: '0px 0px 0px 5px', minWidth: 52, gap: 3 }}
+                onClick={() => setShowDropdown(false)}
+            />
             {connectWalletModalVisibility && (
                 <ConnectWalletModal
                     isOpen={connectWalletModalVisibility}

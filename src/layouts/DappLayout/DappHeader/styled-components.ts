@@ -222,3 +222,8 @@ export const CurrencyIcon = styled.i`
     margin: 0 4px;
     color: ${(props) => props.theme.button.textColor.primary};
 `;
+
+export const MobileButtonWrapper = styled(FlexDivRowCentered)`
+    gap: 6px;
+    min-height: 28px;
+`;

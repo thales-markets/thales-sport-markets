@@ -7,6 +7,10 @@ export const Wrapper = styled(FlexDivRow)`
     justify-content: center;
     padding: 6px;
     border-radius: 5px;
+    @media (max-width: 767px) {
+        flex-wrap: wrap;
+        width: fit-content;
+    }
 `;
 
 export const ItemWrapper = styled.div`
@@ -14,7 +18,7 @@ export const ItemWrapper = styled.div`
     padding: 0 40px;
     text-align: start;
     @media (max-width: 767px) {
-        padding: 0 10px;
+        padding: 8px 10px;
         width: fit-content;
     }
 `;
@@ -27,10 +31,6 @@ export const Item = styled.span<{ selected: boolean }>`
     white-space: nowrap;
     i {
         color: ${(props) => (props.selected ? props.theme.textColor.quaternary : props.theme.textColor.secondary)};
-    }
-    @media (max-width: 767px) {
-        font-size: 10px;
-        white-space: nowrap;
     }
 `;
 
