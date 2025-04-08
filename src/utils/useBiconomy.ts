@@ -1,5 +1,6 @@
 import { createSmartAccountClient } from '@biconomy/account';
 import { LINKS } from 'constants/links';
+import { Network } from 'enums/network';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useAccount, useChainId, useDisconnect, useSwitchChain, useWalletClient } from 'wagmi';
@@ -23,6 +24,8 @@ function useBiconomy() {
                 const PAYMASTER_API_KEY =
                     networkId === 10
                         ? 'kLy65xRLe.af1a2221-2aa0-4a22-9460-36c6738ed240'
+                        : networkId === Network.Arbitrum
+                        ? 'rCU9Kaemu.0c7dc090-9d1e-4de0-bd08-05ff99938a3d'
                         : import.meta.env['VITE_APP_PAYMASTER_KEY_' + networkId];
                 const smartAccount = await createSmartAccountClient({
                     signer: walletClient,
