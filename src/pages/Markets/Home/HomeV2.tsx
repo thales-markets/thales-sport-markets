@@ -862,18 +862,18 @@ const Home: React.FC = () => {
                                                 market={selectedMarketData}
                                             />
                                         )}
+
                                     <FlexDivRow>
-                                        {((isMobile && !isMarketSelected && !showTicketMobileModal) || !isMobile) && (
-                                            <Suspense
-                                                fallback={
-                                                    <LoaderContainer>
-                                                        <Loader />
-                                                    </LoaderContainer>
-                                                }
-                                            >
-                                                <MarketsGridV2 markets={finalMarkets} />
-                                            </Suspense>
-                                        )}
+                                        <Suspense
+                                            fallback={
+                                                <LoaderContainer>
+                                                    <Loader />
+                                                </LoaderContainer>
+                                            }
+                                        >
+                                            <MarketsGridV2 markets={finalMarkets} />
+                                        </Suspense>
+
                                         {isMobile ? (
                                             <ReactModal
                                                 isOpen={

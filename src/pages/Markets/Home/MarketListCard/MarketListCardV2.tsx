@@ -403,7 +403,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                                 )
                             )}
                             <MatchInfoLabel>
-                                {!isColumnView && !isMarketSelected && !isMobile && (
+                                {!isColumnView && !isMarketSelected && !isMobile && !isPlayerPropsMarket && (
                                     <>{`${market.tournamentName ? ` | ${market.tournamentName}` : ''}${
                                         market.tournamentRound ? ` | ${market.tournamentRound}` : ''
                                     }`}</>
