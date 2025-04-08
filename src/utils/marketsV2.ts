@@ -300,10 +300,7 @@ export const getTitleText = (market: SportMarket, useDescription?: boolean, shor
         : '';
 
     if (
-        (market.leagueId == League.TENNIS_WTA ||
-            market.leagueId == League.TENNIS_GS ||
-            market.leagueId == League.TENNIS_MASTERS ||
-            market.leagueId == League.SUMMER_OLYMPICS_TENNIS) &&
+        sport === Sport.TENNIS &&
         (isTotalMarket(marketType) || isTotalOddEvenMarket(marketType) || isSpreadMarket(marketType))
     ) {
         sufix = `${sufix}${

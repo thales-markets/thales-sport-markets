@@ -155,6 +155,7 @@ const DappHeader: React.FC = () => {
                 <Button
                     fontSize="18px"
                     width={isMobile ? '100%' : '240px'}
+                    height="100%"
                     additionalStyles={{
                         backgroundImage: `url("${marchMadnessLeftIcon}"), url("${marchMadnessRightIcon}")`,
                         backgroundPosition: `left ${isMobile ? 70 : 20}px center, right ${isMobile ? 70 : 20}px center`,
@@ -238,6 +239,7 @@ const DappHeader: React.FC = () => {
                                         <ProfileIconWidget /> <ProfileLabel>{t('common.profile')}</ProfileLabel>
                                     </FlexDivCentered>
                                 </SPAAnchor>
+                                {isConnected && isBiconomy && <ActivateAccount />}
                             </MiddleContainerSectionRight>
                         )}
                     </MiddleContainer>
@@ -263,7 +265,6 @@ const DappHeader: React.FC = () => {
                                 {t('get-started.sign-up')}
                             </Button>
                         )}
-                        {isConnected && isBiconomy && <ActivateAccount />}
                         <WalletInfo />
                         <MenuIconContainer>
                             <MenuIcon ref={menuImageRef} onClick={() => setNavMenuVisibility(true)} />
