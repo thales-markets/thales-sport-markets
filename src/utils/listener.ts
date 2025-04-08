@@ -13,16 +13,12 @@ export const waitForTransactionViaSocket: (hash: string, networkId: SupportedNet
                 chain: getChain(networkId),
                 transport: webSocket(RPC_LIST.INFURA[networkId].wss),
             });
-
-            console.log('lets watch blocks');
             let unsubscribe: any = null;
 
             unsubscribe = ClientLocal.watchBlocks({
-                onBlock: async (blockNumber) => {
-                    console.log('New block:', blockNumber);
+                onBlock: async () => {
                     const receipt = await ClientLocal.getTransactionReceipt({ hash: hash as any });
                     if (receipt) {
-                        console.log('Transaction confirmed via WebSocket:', receipt);
                         resolve(receipt);
                         unsubscribe();
                     }
