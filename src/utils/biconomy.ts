@@ -20,7 +20,7 @@ import { waitForTransactionViaSocket } from './listener';
 
 export const GAS_LIMIT = 1;
 const ERROR_SESSION_NOT_FOUND = 'Error: Session not found.';
-const USER_REJECTED_ERROR = 'The user rejected the request';
+const USER_REJECTED_ERROR = 'user rejected the request';
 
 export const sendBiconomyTransaction = async (params: {
     networkId: SupportedNetwork;
@@ -78,8 +78,8 @@ export const sendBiconomyTransaction = async (params: {
                 }
             }
         } catch (e) {
-            if ((e as any).details && (e as any).details === USER_REJECTED_ERROR) {
-                return;
+            if ((e as any).toString().toLowerCase().includes(USER_REJECTED_ERROR)) {
+                throw new Error('Tx rejected');
             }
             try {
                 const { waitForTxHash } = await biconomyConnector.wallet.sendTransaction(params.transaction, {
@@ -152,8 +152,8 @@ export const executeBiconomyTransactionWithConfirmation = async (params: {
                 throw new Error('tx failed');
             }
         } catch (e) {
-            if ((e as any).details && (e as any).details === USER_REJECTED_ERROR) {
-                return;
+            if ((e as any).toString().toLowerCase().includes(USER_REJECTED_ERROR)) {
+                throw new Error('tx rejected');
             }
             try {
                 biconomyConnector.wallet.setActiveValidationModule(biconomyConnector.wallet.defaultValidationModule);
@@ -288,7 +288,7 @@ export const executeBiconomyTransaction = async (params: {
                 }
             }
         } catch (error) {
-            if ((error as any).details && (error as any).details === USER_REJECTED_ERROR) {
+            if ((error as any).toString().toLowerCase().includes(USER_REJECTED_ERROR)) {
                 return;
             }
             if (
@@ -387,10 +387,10 @@ export const activateOvertimeAccount = async (params: { networkId: SupportedNetw
                 throw new Error('tx failed');
             }
         } catch (e) {
-            if ((e as any).details && (e as any).details === USER_REJECTED_ERROR) {
-                return;
-            }
             try {
+                if ((e as any).toString().toLowerCase().includes(USER_REJECTED_ERROR)) {
+                    throw new Error('tx rejected');
+                }
                 const { waitForTxHash } = await biconomyConnector.wallet.sendTransaction(
                     [...(await getCreateSessionTxs(params.networkId)), ...getApprovalTxs(params.networkId)],
                     {
