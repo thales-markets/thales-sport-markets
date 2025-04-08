@@ -223,8 +223,8 @@ export const CurrencyIcon = styled.i`
     color: ${(props) => props.theme.button.textColor.primary};
 `;
 
-export const MobileButtonWrapper = styled(FlexDivRowCentered)`
-    width: 100%;
+export const MobileButtonWrapper = styled(FlexDivRowCentered)<{ isFullWidth?: boolean }>`
+    ${(props) => props.isFullWidth && 'width: 100%;'}
     min-height: 28px;
     gap: 6px;
 `;
