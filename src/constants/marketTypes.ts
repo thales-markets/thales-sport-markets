@@ -70,7 +70,15 @@ export const MarketTypesBySportFilter: Record<SportFilter, MarketType[]> = {
         MarketType.TOTAL_ODD_EVEN,
     ],
     [SportFilter.Waterpolo]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
-    [SportFilter.Cricket]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
+    [SportFilter.Cricket]: [
+        MarketType.WINNER,
+        MarketType.TOTAL_FOURS,
+        MarketType.TOTAL_SIXES,
+        MarketType.TOTAL_RUNS_OUTS,
+        MarketType.MOST_FOURS,
+        MarketType.MOST_SIXES,
+        MarketType.MOST_RUNS_OUTS,
+    ],
     [SportFilter.Politics]: [
         MarketType.WINNER,
         MarketType.US_ELECTION_POPULAR_VOTE_WINNER,
@@ -389,6 +397,7 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
     [Sport.CRICKET]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
+        [MarketTypeGroup.PLAYER_PROPS]: PLAYER_PROPS_MARKET_TYPES,
     },
     [Sport.GOLF]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,

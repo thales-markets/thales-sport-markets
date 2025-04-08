@@ -6,7 +6,8 @@ export const getTeamImageSource = (team: string, league: League) => {
     return league == League.TENNIS_WTA ||
         league == League.TENNIS_GS ||
         league == League.TENNIS_MASTERS ||
-        league == League.SUMMER_OLYMPICS_TENNIS
+        league == League.SUMMER_OLYMPICS_TENNIS ||
+        league == League.TENNIS_ATP_CHALLENGER
         ? `/logos/Tennis/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.FORMULA1 || league == League.MOTOGP
         ? `/logos/${leagueLabel}/${fixOneSideMarketCompetitorName(team).replaceAll(' ', '-').toLowerCase()}.webp`
