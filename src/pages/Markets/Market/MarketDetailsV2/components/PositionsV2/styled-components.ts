@@ -53,7 +53,6 @@ export const SubTitleContainer = styled(FlexDiv)`
     font-size: 12px;
     line-height: 14px;
     color: ${(props) => props.theme.textColor.quinary};
-    z-index: 2;
 `;
 
 export const SubTitle = styled.span`
