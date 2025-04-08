@@ -949,6 +949,9 @@
             "max-payout": "Max payout",
             "min-max-payout": "Min/max payout"
         },
+        "parlay-related-markets": {
+            "title": "Your other tickets on this game"
+        },
         "zero-odds-tooltip": "Odds unavailable at the moment.",
         "low-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",
         "discounted-per": "Discounted as per",

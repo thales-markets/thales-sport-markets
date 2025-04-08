@@ -6,6 +6,7 @@ import Scroll from 'components/Scroll';
 import Tooltip from 'components/Tooltip';
 import { secondsToMilliseconds } from 'date-fns';
 import { SportFilter, StatusFilter, TicketErrorCode } from 'enums/markets';
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import { isEqual } from 'lodash';
 import { League, LeagueMap } from 'overtime-utils';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
@@ -37,7 +38,8 @@ import { SportMarket, SportMarkets, TicketMarket, TicketPosition } from 'types/m
 import { SgpParams, SportsbookData } from 'types/sgp';
 import { isSameMarket } from 'utils/marketsV2';
 import { isRegularTicketInvalid } from 'utils/tickets';
-import { useAccount, useChainId, useClient } from 'wagmi';
+import { useChainId, useClient } from 'wagmi';
+import ParlayRelatedMarkets from './components/ParlayRelatedMarkets';
 import TicketV2 from './components/TicketV2';
 import ValidationModal from './components/ValidationModal';
 
@@ -56,7 +58,6 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
 
     const networkId = useChainId();
     const client = useClient();
-    const { isConnected } = useAccount();
 
     const ticket = useSelector(getTicket);
     const maxTicketSize = useSelector(getMaxTicketSize);
@@ -316,166 +317,169 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     const isScrollVisible = !isMobile && (marketsListHeight || 0) > TICKET_MARKETS_LIST_MAX_HEIGHT;
 
     return (
-        <Container isMobile={isMobile} isWalletConnected={isConnected}>
-            {hasParlayMarkets ? (
-                <>
-                    {!isMobile && (
-                        <Title>
-                            {t('markets.parlay.ticket-slip')}
-                            <Count>{ticket.length}</Count>
-                        </Title>
-                    )}
-                    {!isLive && (
-                        <BetTypeContainer>
-                            <Tooltip overlay={t('markets.parlay.tooltip.regular')} mouseEnterDelay={0.3}>
-                                <RadioButtonContainer>
-                                    <RadioButton
-                                        checked={!isSystemBet && !isSgp}
-                                        value={'true'}
-                                        onChange={() => {
-                                            if (isSgp && ticket.length > 1) {
-                                                if (isRegularTicketInvalid(ticket, maxTicketSize)) {
-                                                    dispatch(removeAll());
+        <Container>
+            <ParlayContainer>
+                {hasParlayMarkets ? (
+                    <>
+                        {!isMobile && (
+                            <Title>
+                                {t('markets.parlay.ticket-slip')}
+                                <Count>{ticket.length}</Count>
+                            </Title>
+                        )}
+                        {!isLive && (
+                            <BetTypeContainer>
+                                <Tooltip overlay={t('markets.parlay.tooltip.regular')} mouseEnterDelay={0.3}>
+                                    <RadioButtonContainer>
+                                        <RadioButton
+                                            checked={!isSystemBet && !isSgp}
+                                            value={'true'}
+                                            onChange={() => {
+                                                if (isSgp && ticket.length > 1) {
+                                                    if (isRegularTicketInvalid(ticket, maxTicketSize)) {
+                                                        dispatch(removeAll());
+                                                    }
                                                 }
-                                            }
-                                            dispatch(setIsSystemBet(false));
-                                            dispatch(setIsSgp(false));
-                                            // reset odds changes
-                                            setAcceptOdds(true);
-                                            setOddsChanged(false);
-                                        }}
-                                        label={t('markets.parlay.regular')}
-                                    />
-                                </RadioButtonContainer>
-                            </Tooltip>
-                            <Tooltip overlay={t('markets.parlay.tooltip.system')} mouseEnterDelay={0.3}>
-                                <RadioButtonContainer>
-                                    <RadioButton
-                                        checked={isSystemBet}
-                                        value={'false'}
-                                        onChange={() => {
-                                            if (isSgp && ticket.length > 1) {
-                                                if (isRegularTicketInvalid(ticket, maxTicketSize)) {
-                                                    dispatch(removeAll());
+                                                dispatch(setIsSystemBet(false));
+                                                dispatch(setIsSgp(false));
+                                                // reset odds changes
+                                                setAcceptOdds(true);
+                                                setOddsChanged(false);
+                                            }}
+                                            label={t('markets.parlay.regular')}
+                                        />
+                                    </RadioButtonContainer>
+                                </Tooltip>
+                                <Tooltip overlay={t('markets.parlay.tooltip.system')} mouseEnterDelay={0.3}>
+                                    <RadioButtonContainer>
+                                        <RadioButton
+                                            checked={isSystemBet}
+                                            value={'false'}
+                                            onChange={() => {
+                                                if (isSgp && ticket.length > 1) {
+                                                    if (isRegularTicketInvalid(ticket, maxTicketSize)) {
+                                                        dispatch(removeAll());
+                                                    }
                                                 }
-                                            }
-                                            dispatch(setIsSystemBet(true));
-                                            dispatch(setIsSgp(false));
-                                            // reset odds changes
-                                            setAcceptOdds(true);
-                                            setOddsChanged(false);
-                                        }}
-                                        label={t('markets.parlay.system')}
-                                    />
-                                </RadioButtonContainer>
-                            </Tooltip>
-                            <Tooltip
-                                overlay={
-                                    isDifferentGamesCombined
-                                        ? t('markets.parlay.tooltip.sgp-different-game')
-                                        : isSgpSportDisabled
-                                        ? t('markets.parlay.tooltip.sgp-league-disabled', {
-                                              league: LeagueMap[ticket[0]?.leagueId as League]?.label,
-                                          })
-                                        : t('markets.parlay.tooltip.sgp')
-                                }
-                                mouseEnterDelay={0.3}
-                            >
-                                <RadioButtonContainer>
-                                    <BetaTag>beta</BetaTag>
-                                    <RadioButton
-                                        checked={isSgp}
-                                        disabled={isDifferentGamesCombined || isSgpSportDisabled}
-                                        value={'false'}
-                                        onChange={() => {
-                                            dispatch(setIsSystemBet(false));
-                                            dispatch(setIsSgp(true));
-                                            // reset odds changes
-                                            setAcceptOdds(true);
-                                            setOddsChanged(false);
-                                        }}
-                                        label={t('markets.parlay.sgp')}
-                                    />
-                                </RadioButtonContainer>
-                            </Tooltip>
-                        </BetTypeContainer>
-                    )}
-                    <OverBonusContainer>
-                        <OverBonus>{t('markets.parlay.over-bonus-info')}</OverBonus>
-                    </OverBonusContainer>
-                    <ScrollContainer>
-                        <Scroll height={`${scrollHeight}px`} renderOnlyChildren={!isScrollVisible}>
-                            <ListContainer ref={marketsList} isScrollVisible={isScrollVisible}>
-                                {ticketMarkets.length > 0 &&
-                                    ticketMarkets.map((market, index) => {
-                                        const outOfLiquidity = outOfLiquidityMarkets.includes(index);
-                                        return (
-                                            <RowMarket key={index} outOfLiquidity={outOfLiquidity}>
-                                                <MatchInfoV2
-                                                    market={market}
-                                                    showOddUpdates={!isSgp}
-                                                    setOddsChanged={setOddsChanged}
-                                                    acceptOdds={acceptOdds}
-                                                    setAcceptOdds={setAcceptOdds}
-                                                    isSgp={isSgp}
-                                                    applyPayoutMultiplier={true}
-                                                    useOverCollateral={useOverCollateral}
-                                                />
-                                            </RowMarket>
-                                        );
-                                    })}
-                                {unavailableMarkets.length > 0 &&
-                                    unavailableMarkets.map((market, index) => {
-                                        return (
-                                            <RowMarket key={index} outOfLiquidity={false} notOpened={true}>
-                                                <MatchUnavailableInfo
-                                                    market={market}
-                                                    showOddUpdates
-                                                    acceptOdds={acceptOdds}
-                                                    setAcceptOdds={setAcceptOdds}
-                                                    applyPayoutMultiplier={true}
-                                                />
-                                            </RowMarket>
-                                        );
-                                    })}
-                            </ListContainer>
-                        </Scroll>
-                    </ScrollContainer>
-                    <TicketV2
-                        markets={ticketMarkets}
-                        setMarketsOutOfLiquidity={setOutOfLiquidityMarkets}
-                        oddsChanged={oddsChanged}
-                        setOddsChanged={setOddsChanged}
-                        acceptOddChanges={(changed: boolean) => {
-                            setAcceptOdds(true);
-                            setOddsChanged(changed);
-                        }}
-                        onSuccess={onSuccess}
-                        submitButtonDisabled={!!unavailableMarkets.length}
-                        setUseOverCollateral={setUseOverCollateral}
-                        sgpData={isSgp ? sportsbookData : undefined}
-                    />
-                </>
-            ) : (
-                <Empty>
-                    <EmptyLabel>{t('markets.parlay.empty-title')}</EmptyLabel>
-                    <StyledParlayEmptyIcon
-                        style={{
-                            marginTop: 10,
-                            marginBottom: 20,
-                            width: '100px',
-                            height: '100px',
-                        }}
-                    />
-                    <EmptyDesc>{t('markets.parlay.empty-description')}</EmptyDesc>
-                </Empty>
-            )}
-            {hasTicketError && <ValidationModal onClose={onCloseValidationModal} />}
+                                                dispatch(setIsSystemBet(true));
+                                                dispatch(setIsSgp(false));
+                                                // reset odds changes
+                                                setAcceptOdds(true);
+                                                setOddsChanged(false);
+                                            }}
+                                            label={t('markets.parlay.system')}
+                                        />
+                                    </RadioButtonContainer>
+                                </Tooltip>
+                                <Tooltip
+                                    overlay={
+                                        isDifferentGamesCombined
+                                            ? t('markets.parlay.tooltip.sgp-different-game')
+                                            : isSgpSportDisabled
+                                            ? t('markets.parlay.tooltip.sgp-league-disabled', {
+                                                  league: LeagueMap[ticket[0]?.leagueId as League]?.label,
+                                              })
+                                            : t('markets.parlay.tooltip.sgp')
+                                    }
+                                    mouseEnterDelay={0.3}
+                                >
+                                    <RadioButtonContainer>
+                                        <BetaTag>beta</BetaTag>
+                                        <RadioButton
+                                            checked={isSgp}
+                                            disabled={isDifferentGamesCombined || isSgpSportDisabled}
+                                            value={'false'}
+                                            onChange={() => {
+                                                dispatch(setIsSystemBet(false));
+                                                dispatch(setIsSgp(true));
+                                                // reset odds changes
+                                                setAcceptOdds(true);
+                                                setOddsChanged(false);
+                                            }}
+                                            label={t('markets.parlay.sgp')}
+                                        />
+                                    </RadioButtonContainer>
+                                </Tooltip>
+                            </BetTypeContainer>
+                        )}
+                        <OverBonusContainer>
+                            <OverBonus>{t('markets.parlay.over-bonus-info')}</OverBonus>
+                        </OverBonusContainer>
+                        <ScrollContainer>
+                            <Scroll height={`${scrollHeight}px`} renderOnlyChildren={!isScrollVisible}>
+                                <ListContainer ref={marketsList} isScrollVisible={isScrollVisible}>
+                                    {ticketMarkets.length > 0 &&
+                                        ticketMarkets.map((market, index) => {
+                                            const outOfLiquidity = outOfLiquidityMarkets.includes(index);
+                                            return (
+                                                <RowMarket key={index} outOfLiquidity={outOfLiquidity}>
+                                                    <MatchInfoV2
+                                                        market={market}
+                                                        showOddUpdates={!isSgp}
+                                                        setOddsChanged={setOddsChanged}
+                                                        acceptOdds={acceptOdds}
+                                                        setAcceptOdds={setAcceptOdds}
+                                                        isSgp={isSgp}
+                                                        applyPayoutMultiplier={true}
+                                                        useOverCollateral={useOverCollateral}
+                                                    />
+                                                </RowMarket>
+                                            );
+                                        })}
+                                    {unavailableMarkets.length > 0 &&
+                                        unavailableMarkets.map((market, index) => {
+                                            return (
+                                                <RowMarket key={index} outOfLiquidity={false} notOpened={true}>
+                                                    <MatchUnavailableInfo
+                                                        market={market}
+                                                        showOddUpdates
+                                                        acceptOdds={acceptOdds}
+                                                        setAcceptOdds={setAcceptOdds}
+                                                        applyPayoutMultiplier={true}
+                                                    />
+                                                </RowMarket>
+                                            );
+                                        })}
+                                </ListContainer>
+                            </Scroll>
+                        </ScrollContainer>
+                        <TicketV2
+                            markets={ticketMarkets}
+                            setMarketsOutOfLiquidity={setOutOfLiquidityMarkets}
+                            oddsChanged={oddsChanged}
+                            setOddsChanged={setOddsChanged}
+                            acceptOddChanges={(changed: boolean) => {
+                                setAcceptOdds(true);
+                                setOddsChanged(changed);
+                            }}
+                            onSuccess={onSuccess}
+                            submitButtonDisabled={!!unavailableMarkets.length}
+                            setUseOverCollateral={setUseOverCollateral}
+                            sgpData={isSgp ? sportsbookData : undefined}
+                        />
+                    </>
+                ) : (
+                    <Empty>
+                        <EmptyLabel>{t('markets.parlay.empty-title')}</EmptyLabel>
+                        <StyledParlayEmptyIcon />
+                        <EmptyDesc>{t('markets.parlay.empty-description')}</EmptyDesc>
+                    </Empty>
+                )}
+                {hasTicketError && <ValidationModal onClose={onCloseValidationModal} />}
+            </ParlayContainer>
+            {isLive && hasParlayMarkets && <ParlayRelatedMarkets />}
         </Container>
     );
 };
 
-const Container = styled(FlexDivColumn)<{ isMobile: boolean; isWalletConnected?: boolean }>`
+const Container = styled(FlexDivColumn)`
+    gap: 10px;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        padding-bottom: 40px;
+    }
+`;
+
+const ParlayContainer = styled(FlexDivColumn)`
     max-width: 360px;
     padding: 12px;
     flex: none;
@@ -486,11 +490,10 @@ const Container = styled(FlexDivColumn)<{ isMobile: boolean; isWalletConnected?:
     }
     @media (max-width: 950px) {
         max-width: 100%;
-        padding-bottom: 40px;
     }
 `;
 
-const Title = styled(FlexDivCentered)`
+export const Title = styled(FlexDivCentered)`
     color: ${(props) => props.theme.textColor.septenary};
     font-weight: 600;
     font-size: 14px;
@@ -500,7 +503,7 @@ const Title = styled(FlexDivCentered)`
     margin-bottom: 10px;
 `;
 
-const Count = styled(FlexDivCentered)`
+export const Count = styled(FlexDivCentered)`
     border-radius: 8px;
     min-width: 20px;
     color: ${(props) => props.theme.textColor.tertiary};
@@ -658,8 +661,8 @@ const EmptyDesc = styled.span`
 `;
 
 const StyledParlayEmptyIcon = styled(ParlayEmptyIcon)`
-    margin-top: 10;
-    margin-bottom: 20;
+    margin-top: 10px;
+    margin-bottom: 20px;
     width: 100px;
     height: 100px;
     path {

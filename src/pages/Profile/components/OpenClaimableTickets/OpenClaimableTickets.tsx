@@ -54,7 +54,7 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
 
     const [openClaimable, setClaimableState] = useState<boolean>(true);
     const [openOpenPositions, setOpenState] = useState<boolean>(true);
-    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+    const isBiconomy = useSelector(getIsBiconomy);
 
     const networkId = useChainId();
     const client = useClient();
@@ -99,8 +99,6 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
         { networkId, client },
         { enabled: isConnected }
     );
-
-    const marketDuration = Math.floor(90);
 
     const userTicketsByStatus = useMemo(() => {
         let userTickets = userTicketsQuery.isSuccess && userTicketsQuery.data ? userTicketsQuery.data : [];
@@ -227,6 +225,8 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
             return;
         }
     };
+
+    const marketDuration = Math.floor(90);
 
     return (
         <Container>

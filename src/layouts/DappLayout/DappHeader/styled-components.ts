@@ -224,6 +224,7 @@ export const CurrencyIcon = styled.i`
 `;
 
 export const MobileButtonWrapper = styled(FlexDivRowCentered)`
-    gap: 6px;
+    width: 100%;
     min-height: 28px;
+    gap: 6px;
 `;

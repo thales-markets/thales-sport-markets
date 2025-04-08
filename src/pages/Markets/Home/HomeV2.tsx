@@ -11,6 +11,7 @@ import { MarketTypePlayerPropsGroupsBySport } from 'constants/marketTypes';
 import { RESET_STATE } from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { SportFilter, StatusFilter } from 'enums/markets';
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
 import { groupBy, orderBy } from 'lodash';
@@ -783,7 +784,7 @@ const Home: React.FC = () => {
                         width={263}
                     />
                     {getShowActiveCheckbox()}
-                    <Scroll height="calc(100vh - 430px)">
+                    <Scroll height="calc(100vh - 418px)">
                         <SportFiltersContainer>
                             {getStatusFilters()}
                             {getSportFilters()}
@@ -973,7 +974,7 @@ const LeftSidebarContainer = styled(SidebarContainer)`
 
 const RightSidebarContainer = styled(SidebarContainer)`
     max-width: 360px;
-    @media (max-width: 1199px) {
+    @media (max-width: ${ScreenSizeBreakpoint.LARGE}px) {
         max-width: 320px;
     }
 `;

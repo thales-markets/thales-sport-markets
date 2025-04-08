@@ -59,6 +59,7 @@ export const refetchAfterBuy = (walletAddress: string, networkId: Network) => {
         queryKey: QUERY_KEYS.Wallet.MultipleCollateral(walletAddress, networkId),
     });
     queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PositionsCountV2(walletAddress, networkId) });
+    queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.UserTickets(networkId, walletAddress) });
 };
 
 export const refetchLiquidityPoolData = (walletAddress: string, networkId: Network, liquidityPoolAddress: string) => {
