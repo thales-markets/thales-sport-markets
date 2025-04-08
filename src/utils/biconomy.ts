@@ -20,6 +20,7 @@ import { waitForTransactionViaSocket } from './listener';
 
 export const GAS_LIMIT = 1;
 const ERROR_SESSION_NOT_FOUND = 'Error: Session not found.';
+const USER_REJECTED_ERROR = 'The user rejected the request';
 
 export const sendBiconomyTransaction = async (params: {
     networkId: SupportedNetwork;
@@ -77,6 +78,9 @@ export const sendBiconomyTransaction = async (params: {
                 }
             }
         } catch (e) {
+            if ((e as any).details && (e as any).details === USER_REJECTED_ERROR) {
+                return;
+            }
             try {
                 const { waitForTxHash } = await biconomyConnector.wallet.sendTransaction(params.transaction, {
                     paymasterServiceData: {
@@ -148,6 +152,9 @@ export const executeBiconomyTransactionWithConfirmation = async (params: {
                 throw new Error('tx failed');
             }
         } catch (e) {
+            if ((e as any).details && (e as any).details === USER_REJECTED_ERROR) {
+                return;
+            }
             try {
                 biconomyConnector.wallet.setActiveValidationModule(biconomyConnector.wallet.defaultValidationModule);
                 const { waitForTxHash } = await biconomyConnector.wallet.sendTransaction(transaction, {
@@ -281,6 +288,9 @@ export const executeBiconomyTransaction = async (params: {
                 }
             }
         } catch (error) {
+            if ((error as any).details && (error as any).details === USER_REJECTED_ERROR) {
+                return;
+            }
             if (
                 (error && (error as any).message && (error as any).message.includes('SessionNotApproved')) ||
                 (error as any).toString() === ERROR_SESSION_NOT_FOUND
@@ -377,6 +387,9 @@ export const activateOvertimeAccount = async (params: { networkId: SupportedNetw
                 throw new Error('tx failed');
             }
         } catch (e) {
+            if ((e as any).details && (e as any).details === USER_REJECTED_ERROR) {
+                return;
+            }
             try {
                 const { waitForTxHash } = await biconomyConnector.wallet.sendTransaction(
                     [...(await getCreateSessionTxs(params.networkId)), ...getApprovalTxs(params.networkId)],
