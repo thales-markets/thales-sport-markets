@@ -402,10 +402,16 @@ export const NavigationContainer = styled(FlexDivRow)`
     gap: 30px;
     font-size: 20px;
     font-weight: 600;
+    @media (max-width: 575px) {
+        flex-wrap: wrap;
+        gap: 15px;
+        justify-content: center;
+    }
 `;
 
 export const NavigationItem = styled(FlexDivRow)`
     color: ${(props) => props.theme.textColor.primary};
+    white-space: nowrap;
     &.selected {
         transition: 0.2s;
         color: ${(props) => props.theme.textColor.quaternary};
@@ -413,6 +419,9 @@ export const NavigationItem = styled(FlexDivRow)`
     &:hover:not(.selected) {
         cursor: pointer;
         color: ${(props) => props.theme.textColor.secondary};
+    }
+    @media (max-width: 575px) {
+        font-size: 14px;
     }
 `;
 

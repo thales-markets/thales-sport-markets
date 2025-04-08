@@ -44,7 +44,9 @@ export const formatMarketOdds = (oddsType: OddsType, odds: number | undefined) =
 };
 
 const getIsDrawAvailable = (leagueId: number, marketType: MarketType) =>
-    (getLeagueIsDrawAvailable(leagueId) || getLeagueSport(leagueId) === Sport.BASEBALL) &&
+    (getLeagueIsDrawAvailable(leagueId) ||
+        getLeagueSport(leagueId) === Sport.BASEBALL ||
+        getLeagueSport(leagueId) === Sport.CRICKET) &&
     isDrawAvailableMarket(marketType);
 
 export const getPositionOrder = (leagueId: number, marketType: MarketType, position: number) =>

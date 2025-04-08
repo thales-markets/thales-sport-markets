@@ -215,12 +215,17 @@ const ActivateAccount: React.FC<any> = () => {
 };
 
 const Container = styled.div<{ show?: boolean }>`
+    position: relative;
+    width: 100px;
+    height: 30px;
+    margin-left: 5px;
+
     @media (max-width: 512px) {
         width: 100%;
-
+        height: unset;
+        margin-left: 0;
         z-index: ${(props) => (props.show ? 100 : 9)};
     }
-    width: 100px;
 `;
 
 const Wrapper = styled.div<{ show: boolean }>`

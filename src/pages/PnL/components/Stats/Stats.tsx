@@ -220,9 +220,6 @@ const NavigationWrapper = styled(FlexDivRow)`
 
 const Header = styled(FlexDivRow)`
     width: 100%;
-    @media (max-width: 950px) {
-        margin-bottom: 15px;
-    }
 `;
 
 const FiltersContainer = styled(FlexDivSpaceBetween)`
