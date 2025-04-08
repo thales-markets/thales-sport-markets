@@ -22,10 +22,11 @@ import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import { getIsBiconomy, setIsBiconomy } from 'redux/modules/wallet';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivStart } from 'styles/common';
 import { localStore } from 'thales-utils';
 import { RootState } from 'types/redux';
+import { ThemeInterface } from 'types/ui';
 import { ParticalTypes, WalletConnections } from 'types/wallet';
 import { isNetworkSupported } from 'utils/network';
 import { getSpecificConnectorFromConnectorsArray, getWalletLabel } from 'utils/particleWallet/utils';
@@ -33,7 +34,7 @@ import { Connector, useConnect } from 'wagmi';
 
 ReactModal.setAppElement('#root');
 
-const getDefaultStyle = (isMobile: boolean) => ({
+const getDefaultStyle = (isMobile: boolean, theme: ThemeInterface) => ({
     content: {
         top: isMobile ? '0' : '50%',
         left: isMobile ? '0' : '50%',
@@ -41,7 +42,7 @@ const getDefaultStyle = (isMobile: boolean) => ({
         bottom: 'auto',
         padding: isMobile ? '20px 5px' : '32px',
         paddingTop: '16px',
-        backgroundColor: '#1F274D',
+        backgroundColor: theme.background.secondary,
         border: `none`,
         width: isMobile ? '100%' : '480px',
         borderRadius: isMobile ? '0' : '15px',
@@ -63,6 +64,7 @@ type ConnectWalletModalProps = {
 
 const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose }) => {
     const { t } = useTranslation();
+    const theme: ThemeInterface = useTheme();
     const dispatch = useDispatch();
     const { connectors, isPending, isSuccess, connect } = useConnect();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -121,7 +123,7 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
             isOpen={isOpen}
             onRequestClose={onClose}
             shouldCloseOnOverlayClick={true}
-            style={getDefaultStyle(isMobile)}
+            style={getDefaultStyle(isMobile, theme)}
         >
             <CloseIconContainer>
                 <CloseIcon onClick={onClose} />

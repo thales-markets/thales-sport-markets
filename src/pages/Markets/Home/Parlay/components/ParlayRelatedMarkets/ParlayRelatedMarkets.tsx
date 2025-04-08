@@ -10,8 +10,8 @@ import { getTicket } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
-import { FlexDivCentered, FlexDivColumn, FlexDivRow, FlexDivStart } from 'styles/common';
-import { formatCurrencyWithKey, formatHoursAndMinutesFromTimestamp } from 'thales-utils';
+import { FlexDivCentered, FlexDivColumn, FlexDivRowCentered, FlexDivStart } from 'styles/common';
+import { formatCurrencyWithKey, formatDateWithTime } from 'thales-utils';
 import { Ticket } from 'types/markets';
 import { formatMarketOdds } from 'utils/markets';
 import { getPositionTextV2, getTitleText } from 'utils/marketsV2';
@@ -44,9 +44,7 @@ const ParlayRelatedMarkets: React.FC = ({}) => {
             userTicketsQuery.isSuccess && userTicketsQuery.data
                 ? userTicketsQuery.data.filter(
                       (userTicket) =>
-                          userTicket.isLive &&
-                          userTicket.sportMarkets[0] &&
-                          userTicket.sportMarkets[0].gameId === ticket[0]?.gameId
+                          userTicket.sportMarkets[0] && userTicket.sportMarkets[0].gameId === ticket[0]?.gameId
                   )
                 : [],
         [userTicketsQuery.isSuccess, userTicketsQuery.data, ticket]
@@ -63,14 +61,16 @@ const ParlayRelatedMarkets: React.FC = ({}) => {
                 </Title>
 
                 {!!gameRelatedTickets.length ? (
-                    gameRelatedTickets.map((otherTicket, i) => {
-                        const isLastRow = i === gameRelatedTickets.length - 1;
-                        return (
-                            <div key={`row-${i}`}>
-                                <ExpandableRow ticket={otherTicket} isLastRow={isLastRow} />
-                            </div>
-                        );
-                    })
+                    <RelatedTickets>
+                        {gameRelatedTickets.map((relatedTicket, i) => {
+                            const isLastRow = i === gameRelatedTickets.length - 1;
+                            return (
+                                <RelatedTicket key={`row-${i}`}>
+                                    <ExpandableRow ticket={relatedTicket} isLastRow={isLastRow} />
+                                </RelatedTicket>
+                            );
+                        })}
+                    </RelatedTickets>
                 ) : (
                     <Empty>
                         <StyledParlayEmptyIcon />
@@ -96,7 +96,7 @@ const ExpandableRow: React.FC<{ ticket: Ticket; isLastRow: boolean }> = ({ ticke
         <>
             <TicketRow hasSeparator={!isLastRow && !isExpanded} onClick={() => setIsExpanded(!isExpanded)}>
                 <TimeInfo>
-                    <Text>{formatHoursAndMinutesFromTimestamp(ticket.timestamp)}</Text>
+                    <TimeText>{formatDateWithTime(ticket.timestamp)}</TimeText>
                 </TimeInfo>
                 <MarketTypeInfo>
                     <Text>{getTitleText(market)}</Text>
@@ -137,34 +137,42 @@ const Container = styled(FlexDivColumn)`
     }
 `;
 
-const Row = styled(FlexDivRow)<{ hasSeparator?: boolean }>`
-    ${(props) => props.hasSeparator && `border-bottom: 2px dashed ${props.theme.borderColor.senary};`}
+const RelatedTickets = styled(FlexDivColumn)`
+    gap: 5px;
+`;
+
+const RelatedTicket = styled.div`
+    background: ${(props) => props.theme.background.secondary + '80'}; // 50% opacity
+    border-radius: 5px;
+`;
+
+const Row = styled(FlexDivRowCentered)<{ hasSeparator?: boolean }>`
+    padding: 6px 8px;
 `;
 
 const TicketRow = styled(Row)`
-    padding: 8px 0;
+    background: ${(props) => props.theme.background.secondary};
+    border-radius: 5px;
     cursor: pointer;
 `;
 
-const TicketDetailsRow = styled(Row)`
-    padding-bottom: 8px;
-`;
+const TicketDetailsRow = styled(Row)``;
 
 const Info = styled(FlexDivStart)`
     margin-right: 5px;
 `;
 
 const TimeInfo = styled(Info)`
-    width: 36px;
+    width: 39px;
 `;
 
 const MarketTypeInfo = styled(Info)`
-    width: 144px;
+    width: 126px;
     color: ${(props) => props.theme.textColor.quinary};
 `;
 
 const PositionInfo = styled(Info)`
-    width: 146px;
+    width: 128px;
 `;
 
 const ArrowIcon = styled.i`
@@ -186,10 +194,15 @@ const PayoutInfo = styled(FlexDivStart)`
 `;
 
 const Text = styled.span<{ isLabel?: boolean }>`
-    font-weight: 600;
+    font-weight: 400;
     font-size: 12px;
-    line-height: 12px;
+    line-height: 14px;
     ${(props) => props.isLabel && 'margin-right: 5px;'}
+`;
+
+const TimeText = styled(Text)`
+    font-size: 10px;
+    line-height: 12px;
 `;
 
 const PositionText = styled(Text)`
