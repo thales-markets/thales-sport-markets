@@ -9,6 +9,22 @@
     content: '\0022';
 }
 
+.icon--brackets::before {
+    content: '\0023';
+}
+
+.icon--thales-logo::before {
+    content: '\0026';
+}
+
+.icon--wrong-full::before {
+    content: '\0028';
+}
+
+.icon--correct-full::before {
+    content: '\0029';
+}
+
 .icon--politics:before {
     content: '\002E';
 }
@@ -295,22 +311,6 @@
 
 .icon--card::before {
     content: '\007E';
-}
-
-.icon--correct-full::before {
-    content: '\0080';
-}
-
-.icon--wrong-full::before {
-    content: '\0081';
-}
-
-.icon--thales-logo::before {
-    content: '\0083';
-}
-
-.icon--brackets::before {
-    content: '\0086';
 }
 
 .icon--op-rewards::before {
