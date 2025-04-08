@@ -953,6 +953,9 @@ const MainContainer = styled(FlexDivColumn)`
     @media (max-width: 950px) {
         max-width: 100%;
     }
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        margin-right: 0;
+    }
 `;
 
 const SidebarContainer = styled(FlexDivColumn)`
