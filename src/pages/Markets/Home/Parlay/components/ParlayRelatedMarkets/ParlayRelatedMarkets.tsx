@@ -10,7 +10,7 @@ import { getTicket } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
-import { FlexDivCentered, FlexDivColumn, FlexDivRowCentered, FlexDivStart } from 'styles/common';
+import { FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered, FlexDivStart } from 'styles/common';
 import { formatCurrencyWithKey, formatDateWithTime } from 'thales-utils';
 import { Ticket } from 'types/markets';
 import { formatMarketOdds } from 'utils/markets';
@@ -74,6 +74,7 @@ const ParlayRelatedMarkets: React.FC = ({}) => {
                 ) : (
                     <Empty>
                         <StyledParlayEmptyIcon />
+                        <EmptyLabel>{t('markets.parlay-related-markets.empty')}</EmptyLabel>
                     </Empty>
                 )}
             </Container>
@@ -213,12 +214,23 @@ const PayoutText = styled(Text)`
     color: ${(props) => props.theme.status.win};
 `;
 
-const Empty = styled(FlexDivCentered)`
+const Empty = styled(FlexDivColumnCentered)`
+    align-items: center;
     position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
+`;
+
+const EmptyLabel = styled.span`
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 38px;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+    color: ${(props) => props.theme.textColor.quaternary};
+    text-align: center;
 `;
 
 const StyledParlayEmptyIcon = styled(ParlayEmptyIcon)`

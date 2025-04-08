@@ -951,6 +951,7 @@
         },
         "parlay-related-markets": {
             "title": "Your other tickets on this game",
+            "empty": "No tickets",
             "total-quote": "Total quote",
             "paid": "Paid",
             "payout": "Payout"
