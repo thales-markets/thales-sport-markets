@@ -14,7 +14,7 @@ import {
 } from 'constants/ui';
 import { ProfileTab } from 'enums/ui';
 import { ProfileIconWidget } from 'layouts/DappLayout/DappHeader/components/ProfileItem/ProfileItem';
-import { LogoContainer, OverdropIcon } from 'layouts/DappLayout/DappHeader/styled-components';
+import { LogoContainer, OverdropIcon, OverdropIconWrapper } from 'layouts/DappLayout/DappHeader/styled-components';
 import useBlockedGamesQuery from 'queries/resolveBlocker/useBlockedGamesQuery';
 import useWhitelistedForUnblock from 'queries/resolveBlocker/useWhitelistedForUnblock';
 import React, { useMemo, useState } from 'react';
@@ -90,7 +90,9 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                             style={{ display: 'flex' }}
                             href={buildHref(ROUTES.Overdrop)}
                         >
-                            <OverdropIcon />
+                            <OverdropIconWrapper>
+                                <OverdropIcon />
+                            </OverdropIconWrapper>
                         </SPAAnchor>
                     </LogoContainer>
 
