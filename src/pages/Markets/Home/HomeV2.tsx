@@ -2,7 +2,6 @@ import Logo from 'assets/images/overtime-logo.svg?react';
 import BannerCarousel from 'components/BannerCarousel';
 import Button from 'components/Button';
 import Loader from 'components/Loader';
-import OddsSelectorModal from 'components/OddsSelectorModal';
 import Scroll from 'components/Scroll';
 import Search from 'components/Search';
 import SimpleLoader from 'components/SimpleLoader';
@@ -27,7 +26,6 @@ import SidebarMMLeaderboard from 'pages/MarchMadness/components/SidebarLeaderboa
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
-import queryString from 'query-string';
 import React, { Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
@@ -54,7 +52,7 @@ import {
 import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled, { CSSProperties, useTheme } from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivSpaceBetween } from 'styles/common';
-import { addHoursToCurrentDate, localStore } from 'thales-utils';
+import { addHoursToCurrentDate } from 'thales-utils';
 import { MarketsCache, SportMarket, SportMarkets, TagInfo, Tags } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { isMarchMadnessAvailableForNetworkId } from 'utils/marchMadness';
@@ -110,11 +108,7 @@ const Home: React.FC = () => {
     const [playerPropsCountPerTag, setPlayerPropsCountPerTag] = useState<Record<string, number>>({});
     const [showActive, setShowActive] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_ACTIVE, true);
     const [showTicketMobileModal, setShowTicketMobileModal] = useState<boolean>(false);
-    const [showOddsSelectorModal, setShowOddsSelectorModal] = useState<boolean>(false);
     const [availableMarketTypes, setAvailableMarketTypes] = useState<MarketType[]>([]);
-    const getSelectedOddsType = localStore.get(LOCAL_STORAGE_KEYS.ODDS_TYPE);
-
-    const queryParams: { freeBet?: string } = queryString.parse(location.search);
 
     const tagsList: Tags = useMemo(
         () =>
@@ -130,12 +124,6 @@ const Home: React.FC = () => {
             }),
         []
     );
-
-    useEffect(() => {
-        if (getSelectedOddsType == undefined && !queryParams.freeBet) {
-            setShowOddsSelectorModal(true);
-        }
-    }, [getSelectedOddsType, queryParams.freeBet]);
 
     const favouriteLeagues = useSelector(getFavouriteLeagues);
 
@@ -734,7 +722,6 @@ const Home: React.FC = () => {
 
     return (
         <Container>
-            {showOddsSelectorModal && <OddsSelectorModal onClose={() => setShowOddsSelectorModal(false)} />}
             <ReactModal
                 isOpen={showBurger && isMobile}
                 onRequestClose={() => {
