@@ -40,36 +40,36 @@ const ParlayRelatedMarkets: React.FC = ({}) => {
         { enabled: isConnected && !!ticket.length }
     );
 
-    const gameRelatedTickets = useMemo(
+    const gameRelatedSingleTickets = useMemo(
         () =>
             userTicketsQuery.isSuccess && userTicketsQuery.data
                 ? userTicketsQuery.data.filter(
                       (userTicket) =>
-                          userTicket.sportMarkets.length === 1 && // show only single tickets
+                          userTicket.sportMarkets.length === 1 && // filter only single tickets
                           userTicket.sportMarkets[0].gameId === ticket[0]?.gameId
                   )
                 : [],
         [userTicketsQuery.isSuccess, userTicketsQuery.data, ticket]
     );
 
-    const showMarkets = !isMobile || !!gameRelatedTickets.length;
+    const showMarkets = !isMobile || !!gameRelatedSingleTickets.length;
 
     return showMarkets ? (
         <Scroll height="100%" renderOnlyChildren={isMobile}>
             <Container>
                 <Title>
                     {t('markets.parlay-related-markets.title')}
-                    <Count>{gameRelatedTickets.length}</Count>
+                    <Count>{gameRelatedSingleTickets.length}</Count>
                 </Title>
 
                 {userTicketsQuery.isLoading ? (
                     <LoaderContainer>
                         <SimpleLoader />
                     </LoaderContainer>
-                ) : !!gameRelatedTickets.length ? (
+                ) : !!gameRelatedSingleTickets.length ? (
                     <RelatedTickets>
-                        {gameRelatedTickets.map((relatedTicket, i) => {
-                            const isLastRow = i === gameRelatedTickets.length - 1;
+                        {gameRelatedSingleTickets.map((relatedTicket, i) => {
+                            const isLastRow = i === gameRelatedSingleTickets.length - 1;
                             return (
                                 <RelatedTicket key={`row-${i}`}>
                                     <ExpandableRow ticket={relatedTicket} isLastRow={isLastRow} />
