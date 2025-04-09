@@ -299,6 +299,7 @@ const DappHeader: React.FC = () => {
                             <NavMenuMobile
                                 visibility={navMenuVisibility}
                                 setNavMenuVisibility={(value: boolean | null) => setNavMenuVisibility(value)}
+                                overdropLevelItem={levelItem}
                             />
                         </MenuIconContainer>
 

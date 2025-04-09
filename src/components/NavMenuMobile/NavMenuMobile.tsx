@@ -14,7 +14,13 @@ import {
 } from 'constants/ui';
 import { ProfileTab } from 'enums/ui';
 import { ProfileIconWidget } from 'layouts/DappLayout/DappHeader/components/ProfileItem/ProfileItem';
-import { LogoContainer, OverdropIcon, OverdropIconWrapper } from 'layouts/DappLayout/DappHeader/styled-components';
+import {
+    LogoContainer,
+    OverdropButtonContainer,
+    OverdropIcon,
+    OverdropIconWrapper,
+    SmallBadgeImage,
+} from 'layouts/DappLayout/DappHeader/styled-components';
 import useBlockedGamesQuery from 'queries/resolveBlocker/useBlockedGamesQuery';
 import useWhitelistedForUnblock from 'queries/resolveBlocker/useWhitelistedForUnblock';
 import React, { useMemo, useState } from 'react';
@@ -22,7 +28,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
-import { ThemeInterface } from 'types/ui';
+import { OverdropLevel, ThemeInterface } from 'types/ui';
 import { getNetworkIconClassNameByNetworkId, getNetworkNameByNetworkId } from 'utils/network';
 import { buildHref } from 'utils/routes';
 import { useAccount, useChainId, useClient, useDisconnect } from 'wagmi';
@@ -46,9 +52,10 @@ import {
 type NavMenuMobileProps = {
     visibility?: boolean | null;
     setNavMenuVisibility: (value: boolean) => void;
+    overdropLevelItem: OverdropLevel;
 };
 
-const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVisibility }) => {
+const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVisibility, overdropLevelItem }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const theme: ThemeInterface = useTheme();
@@ -90,9 +97,16 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                             style={{ display: 'flex' }}
                             href={buildHref(ROUTES.Overdrop)}
                         >
-                            <OverdropIconWrapper>
-                                <OverdropIcon />
-                            </OverdropIconWrapper>
+                            {overdropLevelItem.level > 0 ? (
+                                <OverdropButtonContainer>
+                                    <SmallBadgeImage src={overdropLevelItem.smallBadge} />
+                                    {`LVL ${overdropLevelItem.level} ${overdropLevelItem.levelName}`}
+                                </OverdropButtonContainer>
+                            ) : (
+                                <OverdropIconWrapper>
+                                    <OverdropIcon />
+                                </OverdropIconWrapper>
+                            )}
                         </SPAAnchor>
                     </LogoContainer>
 
