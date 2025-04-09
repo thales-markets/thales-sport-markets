@@ -56,7 +56,7 @@ export const MatchInfo = styled(FlexDivStart)<{
     selected: boolean;
     marginTop?: string;
 }>`
-    z-index: 1;
+    z-index: 2;
     ${(props) => props.marginTop && `margin-top: ${props.marginTop};`}
     color: ${(props) =>
         props.selected ? props.theme.oddsContainerBackground.tertiary : props.theme.textColor.quinary};
