@@ -45,7 +45,8 @@ const ParlayRelatedMarkets: React.FC = ({}) => {
             userTicketsQuery.isSuccess && userTicketsQuery.data
                 ? userTicketsQuery.data.filter(
                       (userTicket) =>
-                          userTicket.sportMarkets[0] && userTicket.sportMarkets[0].gameId === ticket[0]?.gameId
+                          userTicket.sportMarkets.length === 1 && // show only single tickets
+                          userTicket.sportMarkets[0].gameId === ticket[0]?.gameId
                   )
                 : [],
         [userTicketsQuery.isSuccess, userTicketsQuery.data, ticket]
