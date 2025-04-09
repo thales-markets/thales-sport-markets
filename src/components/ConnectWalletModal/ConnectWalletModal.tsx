@@ -52,7 +52,7 @@ const getDefaultStyle = (isMobile: boolean, isLoading: boolean) => ({
     },
     overlay: {
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        zIndex: isLoading ? 3 : 2000,
+        zIndex: isMobile || isLoading ? 3 : 4000, // validations tooltips has 3001
     },
 });
 
