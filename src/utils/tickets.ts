@@ -18,7 +18,6 @@ import { bigNumberFormatter, coinFormatter, Coins, formatDateWithTime } from 'th
 import { CombinedPosition, SystemBetData, Team, Ticket, TicketMarket, TicketPosition, TradeData } from 'types/markets';
 import { NetworkConfig, SupportedNetwork } from 'types/network';
 import { ShareTicketModalProps } from 'types/tickets';
-import futuresPositionNamesMap from '../assets/json/futuresPositionNamesMap.json';
 import positionNamesMap from '../assets/json/positionNamesMap.json';
 import { CRYPTO_CURRENCY_MAP } from '../constants/currency';
 import { BATCH_SIZE, OVER_ADDED_PAYOUT_PERCENTAGE } from '../constants/markets';
@@ -129,8 +128,8 @@ export const mapTicket = (
                 const marketStatus = Number(marketResult.status);
 
                 const positionNames = isFuturesMarket(typeId)
-                    ? (futuresPositionNamesMap as any)[leagueId]
-                        ? (futuresPositionNamesMap as any)[leagueId][typeId]
+                    ? !!gameInfo
+                        ? gameInfo.positionNames
                         : undefined
                     : (positionNamesMap as any)[typeId];
 
