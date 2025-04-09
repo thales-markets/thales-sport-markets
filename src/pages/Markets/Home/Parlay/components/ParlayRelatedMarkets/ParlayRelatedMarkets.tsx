@@ -1,5 +1,6 @@
 import ParlayEmptyIcon from 'assets/images/parlay-empty.svg?react';
 import Scroll from 'components/Scroll';
+import SimpleLoader from 'components/SimpleLoader';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
 import { useMemo, useState } from 'react';
@@ -10,7 +11,7 @@ import { getTicket } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
-import { FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered, FlexDivStart } from 'styles/common';
+import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered, FlexDivStart } from 'styles/common';
 import { formatCurrencyWithKey, formatDateWithTime } from 'thales-utils';
 import { Ticket } from 'types/markets';
 import { formatMarketOdds } from 'utils/markets';
@@ -60,7 +61,11 @@ const ParlayRelatedMarkets: React.FC = ({}) => {
                     <Count>{gameRelatedTickets.length}</Count>
                 </Title>
 
-                {!!gameRelatedTickets.length ? (
+                {userTicketsQuery.isLoading ? (
+                    <LoaderContainer>
+                        <SimpleLoader />
+                    </LoaderContainer>
+                ) : !!gameRelatedTickets.length ? (
                     <RelatedTickets>
                         {gameRelatedTickets.map((relatedTicket, i) => {
                             const isLastRow = i === gameRelatedTickets.length - 1;
@@ -241,6 +246,14 @@ const StyledParlayEmptyIcon = styled(ParlayEmptyIcon)`
     path {
         fill: ${(props) => props.theme.textColor.quaternary};
     }
+`;
+
+const LoaderContainer = styled(FlexDivCentered)`
+    position: relative;
+    width: 100%;
+    background-color: ${(props) => props.theme.background.quinary};
+    border-radius: 0 0 8px 8px;
+    flex: 1;
 `;
 
 export default ParlayRelatedMarkets;
