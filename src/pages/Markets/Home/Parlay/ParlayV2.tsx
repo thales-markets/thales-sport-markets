@@ -497,7 +497,7 @@ const ParlayContainer = styled(FlexDivColumn)`
 export const Title = styled(FlexDivCentered)`
     color: ${(props) => props.theme.textColor.septenary};
     font-weight: 600;
-    font-size: 13px;
+    font-size: 14px;
     line-height: 16px;
     text-transform: uppercase;
     height: 20px;
