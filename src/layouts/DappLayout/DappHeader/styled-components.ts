@@ -3,7 +3,7 @@ import OverdropButtonBackground from 'assets/images/overdrop/overdrop-button-bac
 import overdrop from 'assets/images/overdrop/overdrop-nav.webp';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import styled from 'styled-components';
-import { FlexDiv, FlexDivEnd, FlexDivRow, FlexDivRowCentered, FlexDivStart } from 'styles/common';
+import { FlexDiv, FlexDivCentered, FlexDivEnd, FlexDivRow, FlexDivRowCentered, FlexDivStart } from 'styles/common';
 
 export const Container = styled(FlexDivRowCentered)`
     width: 100%;
@@ -67,14 +67,20 @@ export const MenuIcon = styled.img.attrs({ src: burger })`
     }
 `;
 
+export const OverdropIconWrapper = styled.div`
+    height: 40px;
+    overflow: hidden;
+`;
+
 export const OverdropIcon = styled.img.attrs({ src: overdrop })`
     height: 75px;
     cursor: pointer;
-    margin-top: -27px;
-    margin-bottom: -27px;
-    @media (max-width: 576px) {
+    margin-top: -18px;
+
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         height: 70px;
         margin-right: 0;
+        margin-top: -12px;
     }
 
     @media (max-width: 420px) {
@@ -170,6 +176,10 @@ export const Count = styled.span`
     color: ${(props) => props.theme.button.textColor.primary};
     font-weight: 600;
     font-size: 12px;
+`;
+
+export const OverdropWrapper = styled(FlexDivCentered)`
+    height: 30px;
 `;
 
 export const OverdropButtonContainer = styled(FlexDiv)`

@@ -49,6 +49,8 @@ import {
     MobileButtonWrapper,
     OverdropButtonContainer,
     OverdropIcon,
+    OverdropIconWrapper,
+    OverdropWrapper,
     ProfileLabel,
     RightContainer,
     SearchContainer,
@@ -197,7 +199,7 @@ const DappHeader: React.FC = () => {
                                         {getMarchMadnessButton()}
                                     </Tooltip>
                                 ))}
-                            <FlexDivCentered>
+                            <OverdropWrapper>
                                 <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
                                     {levelItem.level > 0 ? (
                                         <OverdropButtonContainer>
@@ -205,10 +207,12 @@ const DappHeader: React.FC = () => {
                                             {`LVL ${levelItem.level} ${levelItem.levelName}`}
                                         </OverdropButtonContainer>
                                     ) : (
-                                        <OverdropIcon />
+                                        <OverdropIconWrapper>
+                                            <OverdropIcon />
+                                        </OverdropIconWrapper>
                                     )}
                                 </SPAAnchor>
-                            </FlexDivCentered>
+                            </OverdropWrapper>
                             {isConnected && (
                                 <Button
                                     onClick={() => setShowThalesToOverMigrationModal(true)}
@@ -295,6 +299,7 @@ const DappHeader: React.FC = () => {
                             <NavMenuMobile
                                 visibility={navMenuVisibility}
                                 setNavMenuVisibility={(value: boolean | null) => setNavMenuVisibility(value)}
+                                overdropLevelItem={levelItem}
                             />
                         </MenuIconContainer>
 
@@ -307,7 +312,9 @@ const DappHeader: React.FC = () => {
                                         {`LVL ${levelItem.level} ${levelItem.levelName}`}
                                     </OverdropButtonContainer>
                                 ) : (
-                                    <OverdropIcon />
+                                    <OverdropIconWrapper>
+                                        <OverdropIcon />
+                                    </OverdropIconWrapper>
                                 )}
                             </SPAAnchor>
                         </LogoContainer>

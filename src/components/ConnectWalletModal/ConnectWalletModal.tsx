@@ -34,7 +34,7 @@ import { Connector, useConnect } from 'wagmi';
 
 ReactModal.setAppElement('#root');
 
-const getDefaultStyle = (isMobile: boolean, theme: ThemeInterface) => ({
+const getDefaultStyle = (theme: ThemeInterface, isMobile: boolean, isLoading: boolean) => ({
     content: {
         top: isMobile ? '0' : '50%',
         left: isMobile ? '0' : '50%',
@@ -53,7 +53,7 @@ const getDefaultStyle = (isMobile: boolean, theme: ThemeInterface) => ({
     },
     overlay: {
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        zIndex: 2000,
+        zIndex: isMobile || isLoading ? 3 : 4000, // validations tooltips has 3001
     },
 });
 
@@ -66,7 +66,7 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
     const dispatch = useDispatch();
-    const { connectors, isPending, isSuccess, connect } = useConnect();
+    const { connectors, isPending, connect } = useConnect();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const { openConnectModal } = useConnectModal();
@@ -78,6 +78,7 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
     const handleParticleConnect = (connector: Connector) => {
         try {
             connect({ connector });
+            onClose();
         } catch (e) {
             console.log('Error occurred');
         }
@@ -85,13 +86,17 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
 
     const handleConnect = async (connector: Connector) => {
         try {
+            setIsConnecting(true);
+
+            await connector.connect();
+
             const walletChainId = await connector.getChainId();
-            await connector.disconnect();
             if (!isNetworkSupported(walletChainId) && connector.switchChain) {
                 await connector.switchChain({ chainId: DEFAULT_NETWORK.networkId });
             }
-            setIsConnecting(true);
-            await connector.connect();
+
+            connect({ connector });
+            onClose();
         } catch (e) {
             console.log('Error occurred', e);
         }
@@ -112,18 +117,12 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
         }
     }, [dispatch]);
 
-    useEffect(() => {
-        if (isSuccess) {
-            onClose();
-        }
-    }, [isSuccess, onClose]);
-
     return (
         <ReactModal
             isOpen={isOpen}
             onRequestClose={onClose}
             shouldCloseOnOverlayClick={true}
-            style={getDefaultStyle(isMobile, theme)}
+            style={getDefaultStyle(theme, isMobile, isPending || isConnecting)}
         >
             <CloseIconContainer>
                 <CloseIcon onClick={onClose} />
