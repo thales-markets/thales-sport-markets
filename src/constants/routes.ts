@@ -26,7 +26,6 @@ const ROUTES = {
         Home: '/resources',
         SeoArticle: '/resources/:seoId',
     },
-    MarchMadness: '/march-madness',
 };
 
 export const PAGE_NAME_TO_META_DATA_KEYS: {

@@ -24,7 +24,6 @@ import {
     getSportLeagueIds,
     isBoxingLeague,
 } from 'overtime-utils';
-import SidebarMMLeaderboard from 'pages/MarchMadness/components/SidebarLeaderboard';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
@@ -58,7 +57,6 @@ import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivSpaceBetween }
 import { addHoursToCurrentDate, localStore } from 'thales-utils';
 import { MarketsCache, SportMarket, SportMarkets, TagInfo, Tags } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
-import { isMarchMadnessAvailableForNetworkId } from 'utils/marchMadness';
 import { getDefaultPlayerPropsLeague } from 'utils/marketsV2';
 import { history } from 'utils/routes';
 import { getScrollMainContainerToTop } from 'utils/scroll';
@@ -73,8 +71,6 @@ import Breadcrumbs from './Breadcrumbs';
 import Filters from './Filters';
 import Header from './Header';
 import SelectedMarket from './SelectedMarket';
-
-const SHOW_MM_SIDEBAR_LEADERBOARD = false; // TODO: remove after march madness
 
 const Parlay = lazy(() => import(/* webpackChunkName: "Parlay" */ './Parlay'));
 
@@ -788,11 +784,6 @@ const Home: React.FC = () => {
                         <SportFiltersContainer>
                             {getStatusFilters()}
                             {getSportFilters()}
-                            {SHOW_MM_SIDEBAR_LEADERBOARD && (
-                                <Suspense fallback={<Loader />}>
-                                    {isMarchMadnessAvailableForNetworkId(networkId) && <SidebarMMLeaderboard />}
-                                </Suspense>
-                            )}
                         </SportFiltersContainer>
                     </Scroll>
                 </LeftSidebarContainer>
