@@ -313,6 +313,8 @@ export const getLeagueFlagSource = (tagId: number | any) => {
             return `/logos/leagueLogos/f1.webp`;
         case League.PGA_FUTURES:
             return `/logos/leagueLogos/pga.webp`;
+        case League.PAKISTAN_SUPER_LEAGUE:
+            return `/logos/Countries/pakistan.svg`;
         default:
             return `/logos/Countries/world.svg`;
     }
