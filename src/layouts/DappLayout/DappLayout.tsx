@@ -2,7 +2,6 @@ import axios from 'axios';
 import ClaimFreeBetModal from 'components/ClaimFreeBetModal';
 import MetaData from 'components/MetaData';
 import { generalConfig } from 'config/general';
-import ROUTES from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { Network } from 'enums/network';
 import { Theme } from 'enums/ui';
@@ -128,10 +127,8 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
     }, [queryParams.referralId, queryParams.referrerId]);
 
     useEffect(() => {
-        if (location.pathname !== ROUTES.MarchMadness) {
-            dispatch(setTheme(Theme.DARK));
-        }
-    }, [dispatch, location.pathname]);
+        dispatch(setTheme(Theme.DARK));
+    }, [dispatch]);
 
     useEffect(() => {
         const checkMetamaskBrowser = async () => {

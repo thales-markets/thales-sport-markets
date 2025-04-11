@@ -6,6 +6,7 @@ import useGetFreeBetQuery from 'queries/freeBets/useGetFreeBetQuery';
 import queryString from 'query-string';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { FreeBet } from 'types/freeBet';
@@ -31,6 +32,7 @@ const ClaimFreeBetButton: React.FC<ClaimFreeBetButtonProps> = ({ pulsate, onClai
     const networkId = useChainId();
     const { address } = useAccount();
     const smartAddress = useBiconomy();
+    const history = useHistory();
     const theme = useTheme();
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
@@ -51,7 +53,7 @@ const ClaimFreeBetButton: React.FC<ClaimFreeBetButtonProps> = ({ pulsate, onClai
     const onClaimFreeBet = useCallback(async () => {
         await claimFreeBet(walletAddress, freeBetId, networkId, setFreeBet, history, switchChain);
         onClaim?.();
-    }, [walletAddress, freeBetId, networkId, setFreeBet, switchChain, onClaim]);
+    }, [walletAddress, freeBetId, networkId, setFreeBet, history, switchChain, onClaim]);
 
     useEffect(() => {
         if (queryParams.freeBet) {

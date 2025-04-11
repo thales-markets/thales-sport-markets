@@ -22,10 +22,11 @@ import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import { getIsBiconomy, setIsBiconomy } from 'redux/modules/wallet';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivStart } from 'styles/common';
 import { localStore } from 'thales-utils';
 import { RootState } from 'types/redux';
+import { ThemeInterface } from 'types/ui';
 import { ParticalTypes, WalletConnections } from 'types/wallet';
 import { isNetworkSupported } from 'utils/network';
 import { getSpecificConnectorFromConnectorsArray, getWalletLabel } from 'utils/particleWallet/utils';
@@ -33,7 +34,7 @@ import { Connector, useConnect } from 'wagmi';
 
 ReactModal.setAppElement('#root');
 
-const getDefaultStyle = (isMobile: boolean) => ({
+const getDefaultStyle = (theme: ThemeInterface, isMobile: boolean, isLoading: boolean) => ({
     content: {
         top: isMobile ? '0' : '50%',
         left: isMobile ? '0' : '50%',
@@ -41,7 +42,7 @@ const getDefaultStyle = (isMobile: boolean) => ({
         bottom: 'auto',
         padding: isMobile ? '20px 5px' : '32px',
         paddingTop: '16px',
-        backgroundColor: '#1F274D',
+        backgroundColor: theme.background.secondary,
         border: `none`,
         width: isMobile ? '100%' : '480px',
         borderRadius: isMobile ? '0' : '15px',
@@ -52,7 +53,7 @@ const getDefaultStyle = (isMobile: boolean) => ({
     },
     overlay: {
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        zIndex: 2000,
+        zIndex: isMobile || isLoading ? 3 : 4000, // validations tooltips has 3001
     },
 });
 
@@ -63,19 +64,21 @@ type ConnectWalletModalProps = {
 
 const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose }) => {
     const { t } = useTranslation();
+    const theme: ThemeInterface = useTheme();
     const dispatch = useDispatch();
-    const { connectors, isPending, isSuccess, connect } = useConnect();
+    const { connectors, isPending, connect } = useConnect();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const { openConnectModal } = useConnectModal();
 
-    const [termsAccepted, setTerms] = useLocalStorage(LOCAL_STORAGE_KEYS.TERMS_AND_CONDITIONS, true);
+    const [termsAccepted, setTerms] = useLocalStorage(LOCAL_STORAGE_KEYS.TERMS_AND_CONDITIONS, false);
 
     const [isConnecting, setIsConnecting] = useState(false);
 
     const handleParticleConnect = (connector: Connector) => {
         try {
             connect({ connector });
+            onClose();
         } catch (e) {
             console.log('Error occurred');
         }
@@ -83,13 +86,17 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
 
     const handleConnect = async (connector: Connector) => {
         try {
+            setIsConnecting(true);
+
+            await connector.connect();
+
             const walletChainId = await connector.getChainId();
-            await connector.disconnect();
             if (!isNetworkSupported(walletChainId) && connector.switchChain) {
                 await connector.switchChain({ chainId: DEFAULT_NETWORK.networkId });
             }
-            setIsConnecting(true);
-            await connector.connect();
+
+            connect({ connector });
+            onClose();
         } catch (e) {
             console.log('Error occurred', e);
         }
@@ -110,18 +117,12 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
         }
     }, [dispatch]);
 
-    useEffect(() => {
-        if (isSuccess) {
-            onClose();
-        }
-    }, [isSuccess, onClose]);
-
     return (
         <ReactModal
             isOpen={isOpen}
             onRequestClose={onClose}
             shouldCloseOnOverlayClick={true}
-            style={getDefaultStyle(isMobile)}
+            style={getDefaultStyle(theme, isMobile, isPending || isConnecting)}
         >
             <CloseIconContainer>
                 <CloseIcon onClick={onClose} />

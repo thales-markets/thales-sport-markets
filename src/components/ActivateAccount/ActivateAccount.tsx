@@ -16,6 +16,7 @@ import { FlexDivRow } from 'styles/common';
 import { Coins, localStore } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
+import { ThemeInterface } from 'types/ui';
 import { activateOvertimeAccount } from 'utils/biconomy';
 import {
     getCollateralAddress,
@@ -34,7 +35,7 @@ import { useAccount, useChainId, useClient } from 'wagmi';
 const ActivateAccount: React.FC<any> = () => {
     const networkId = useChainId();
     const { t } = useTranslation();
-    const theme = useTheme();
+    const theme: ThemeInterface = useTheme();
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const client = useClient();
     const { address, isConnected } = useAccount();
