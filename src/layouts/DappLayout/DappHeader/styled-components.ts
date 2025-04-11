@@ -70,6 +70,9 @@ export const MenuIcon = styled.img.attrs({ src: burger })`
 export const OverdropIconWrapper = styled.div`
     height: 40px;
     overflow: hidden;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        height: 34px;
+    }
 `;
 
 export const OverdropIcon = styled.img.attrs({ src: overdrop })`
@@ -78,13 +81,9 @@ export const OverdropIcon = styled.img.attrs({ src: overdrop })`
     margin-top: -18px;
 
     @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
-        height: 70px;
+        height: 64px;
         margin-right: 0;
-        margin-top: -12px;
-    }
-
-    @media (max-width: 420px) {
-        height: 65px;
+        margin-top: -15px;
     }
 `;
 
