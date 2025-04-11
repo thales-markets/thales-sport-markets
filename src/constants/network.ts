@@ -81,10 +81,25 @@ const INFURA_PROJECT_ID = import.meta.env.VITE_APP_INFURA_PROJECT_ID;
 
 export const RPC_LIST = {
     INFURA: {
-        [NetworkId.OptimismMainnet]: `https://optimism-mainnet.infura.io/v3/${INFURA_PROJECT_ID}`,
-        [NetworkId.Arbitrum]: `https://arbitrum-mainnet.infura.io/v3/${INFURA_PROJECT_ID}`,
-        [NetworkId.Base]: `https://base-mainnet.infura.io/v3/${INFURA_PROJECT_ID}`,
-        [NetworkId.PolygonMainnet]: `https://polygon-mainnet.infura.io/v3/${INFURA_PROJECT_ID}`,
-        [NetworkId.OptimismSepolia]: `https://optimism-sepolia.infura.io/v3/${INFURA_PROJECT_ID}`,
+        [NetworkId.OptimismMainnet]: {
+            http: `https://optimism-mainnet.infura.io/v3/${INFURA_PROJECT_ID}`,
+            wss: `wss://optimism-mainnet.infura.io/ws/v3/${INFURA_PROJECT_ID}`,
+        },
+        [NetworkId.Arbitrum]: {
+            http: `https://arbitrum-mainnet.infura.io/v3/${INFURA_PROJECT_ID}`,
+            wss: `wss://arbitrum-mainnet.infura.io/ws/v3/${INFURA_PROJECT_ID}`,
+        },
+        [NetworkId.Base]: {
+            http: `https://base-mainnet.infura.io/v3/${INFURA_PROJECT_ID}`,
+            wss: `wss://base-mainnet.infura.io/ws/v3/${INFURA_PROJECT_ID}`,
+        },
+        [NetworkId.PolygonMainnet]: {
+            http: `https://polygon-mainnet.infura.io/v3/${INFURA_PROJECT_ID}`,
+            wss: `wss://polygon-mainnet.infura.io/ws/v3/${INFURA_PROJECT_ID}`,
+        },
+        [NetworkId.OptimismSepolia]: {
+            http: `https://optimism-sepolia.infura.io/v3/${INFURA_PROJECT_ID}`,
+            wss: `wss://optimism-sepolia.infura.io/ws/v3/${INFURA_PROJECT_ID}`,
+        },
     },
 };
