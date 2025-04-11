@@ -14,10 +14,7 @@ export const SUPPORTED_NETWORKS: Record<SupportedNetwork, string> = {
     [Network.OptimismSepolia]: 'SEPOLIA-OPTIMISM',
 };
 
-export const SUPPORTED_NETWORKS_NAMES: Record<
-    SupportedNetwork,
-    { name: string; shortName: string; shorthand: string }
-> = {
+const SUPPORTED_NETWORKS_NAMES: Record<SupportedNetwork, { name: string; shortName: string; shorthand: string }> = {
     [Network.OptimismMainnet]: { name: 'OPTIMISM MAINNET', shortName: 'OPTIMISM', shorthand: 'OP' },
     [Network.Arbitrum]: { name: 'ARBITRUM ONE', shortName: 'ARBITRUM', shorthand: 'ARB' },
     [Network.Base]: { name: 'BASE MAINNET', shortName: 'BASE', shorthand: 'BASE' },

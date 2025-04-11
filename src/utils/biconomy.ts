@@ -79,31 +79,67 @@ export const sendBiconomyTransaction = async (params: {
             }
         } catch (e) {
             if ((e as any).toString().toLowerCase().includes(USER_REJECTED_ERROR)) {
-                throw new Error('Tx rejected');
+                return;
             }
             try {
-                const { waitForTxHash } = await biconomyConnector.wallet.sendTransaction(params.transaction, {
-                    paymasterServiceData: {
-                        mode: PaymasterMode.ERC20,
-                        preferredToken: params.collateralAddress,
-                    },
-                });
+                if (
+                    (e && (e as any).message && (e as any).message.includes('SessionNotApproved')) ||
+                    (e as any).toString() === ERROR_SESSION_NOT_FOUND
+                ) {
+                    await activateOvertimeAccount({
+                        networkId: params.networkId,
+                        collateralAddress: params.collateralAddress as any,
+                    });
 
-                const { transactionHash } = await waitForTxHash();
+                    const sessionSigner = await getSessionSigner(params.networkId);
 
-                if (!transactionHash) throw new Error('tx failed');
+                    const { waitForTxHash } = await biconomyConnector.wallet.sendTransaction(params.transaction, {
+                        paymasterServiceData: {
+                            mode: PaymasterMode.SPONSORED,
+                            webhookData: {
+                                networkId: params.networkId,
+                            },
+                        },
+                        params: {
+                            sessionSigner: sessionSigner,
+                            sessionValidationModule: sessionValidationContract.addresses[params.networkId],
+                        },
+                    });
 
-                const txReceipt = await waitForTransactionViaSocket(transactionHash as any, params.networkId);
+                    const { transactionHash } = await waitForTxHash();
 
-                if (txReceipt.status === 'success') {
-                    return transactionHash;
+                    if (!transactionHash) throw new Error('waitForTxHash did not return transactionHash');
+
+                    const txReceipt = await waitForTransactionViaSocket(transactionHash as any, params.networkId);
+
+                    if (txReceipt.status === 'success') {
+                        return transactionHash;
+                    } else {
+                        throw new Error(`user op failed internally, check txHash: ${transactionHash}`);
+                    }
                 } else {
-                    throw new Error('tx failed');
+                    const { waitForTxHash } = await biconomyConnector.wallet.sendTransaction(params.transaction, {
+                        paymasterServiceData: {
+                            mode: PaymasterMode.ERC20,
+                            preferredToken: params.collateralAddress,
+                        },
+                    });
+
+                    const { transactionHash } = await waitForTxHash();
+
+                    if (!transactionHash) throw new Error('waitForTxHash did not return transactionHash');
+
+                    const txReceipt = await waitForTransactionViaSocket(transactionHash as any, params.networkId);
+
+                    if (txReceipt.status === 'success') {
+                        return transactionHash;
+                    } else {
+                        throw new Error(`user op failed internally, check txHash: ${transactionHash}`);
+                    }
                 }
             } catch (e) {
                 console.log(e);
             }
-            console.log(e);
         }
     }
 };
@@ -142,14 +178,14 @@ export const executeBiconomyTransactionWithConfirmation = async (params: {
 
             const { transactionHash } = await waitForTxHash();
 
-            if (!transactionHash) throw new Error('tx failed');
+            if (!transactionHash) throw new Error('waitForTxHash did not return transactionHash');
 
             const txReceipt = await waitForTransactionViaSocket(transactionHash as any, params.networkId);
 
             if (txReceipt.status === 'success') {
                 return transactionHash;
             } else {
-                throw new Error('tx failed');
+                throw new Error(`user op failed internally, check txHash: ${transactionHash}`);
             }
         } catch (e) {
             if ((e as any).toString().toLowerCase().includes(USER_REJECTED_ERROR)) {
@@ -166,14 +202,14 @@ export const executeBiconomyTransactionWithConfirmation = async (params: {
 
                 const { transactionHash } = await waitForTxHash();
 
-                if (!transactionHash) throw new Error('tx failed');
+                if (!transactionHash) throw new Error('waitForTxHash did not return transactionHash');
 
                 const txReceipt = await waitForTransactionViaSocket(transactionHash as any, params.networkId);
 
                 if (txReceipt.status === 'success') {
                     return transactionHash;
                 } else {
-                    throw new Error('tx failed');
+                    throw new Error(`user op failed internally, check txHash: ${transactionHash}`);
                 }
             } catch (e) {
                 console.log(e);
@@ -251,7 +287,7 @@ export const executeBiconomyTransaction = async (params: {
                 });
                 const { transactionHash } = await waitForTxHash();
 
-                if (!transactionHash) throw new Error('tx failed');
+                if (!transactionHash) throw new Error('waitForTxHash did not return transactionHash');
 
                 const txReceipt = await waitForTransactionViaSocket(transactionHash as any, params.networkId);
 
@@ -277,7 +313,7 @@ export const executeBiconomyTransaction = async (params: {
                 });
                 const { transactionHash } = await waitForTxHash();
 
-                if (!transactionHash) throw new Error('tx failed');
+                if (!transactionHash) throw new Error('waitForTxHash did not return transactionHash');
 
                 const txReceipt = await waitForTransactionViaSocket(transactionHash as any, params.networkId);
 
@@ -318,7 +354,7 @@ export const executeBiconomyTransaction = async (params: {
 
                     const { transactionHash } = await waitForTxHash();
 
-                    if (!transactionHash) throw new Error('tx failed');
+                    if (!transactionHash) throw new Error('waitForTxHash did not return transactionHash');
 
                     const txReceipt = await waitForTransactionViaSocket(transactionHash as any, params.networkId);
 
@@ -345,7 +381,7 @@ export const executeBiconomyTransaction = async (params: {
 
                 const { transactionHash } = await waitForTxHash();
 
-                if (!transactionHash) throw new Error('tx failed');
+                if (!transactionHash) throw new Error('waitForTxHash did not return transactionHash');
 
                 const txReceipt = await waitForTransactionViaSocket(transactionHash as any, params.networkId);
 
@@ -377,7 +413,7 @@ export const activateOvertimeAccount = async (params: { networkId: SupportedNetw
 
             const { transactionHash } = await waitForTxHash();
 
-            if (!transactionHash) throw new Error('tx failed');
+            if (!transactionHash) throw new Error('waitForTxHash did not return transactionHash');
 
             const txReceipt = await waitForTransactionViaSocket(transactionHash as any, params.networkId);
 
@@ -403,7 +439,7 @@ export const activateOvertimeAccount = async (params: { networkId: SupportedNetw
 
                 const { transactionHash } = await waitForTxHash();
 
-                if (!transactionHash) throw new Error('tx failed');
+                if (!transactionHash) throw new Error('waitForTxHash did not return transactionHash');
 
                 const txReceipt = await waitForTransactionViaSocket(transactionHash as any, params.networkId);
 

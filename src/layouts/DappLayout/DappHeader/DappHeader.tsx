@@ -1,5 +1,3 @@
-import marchMadnessLeftIcon from 'assets/images/march-madness/mm-button-icon-1.svg';
-import marchMadnessRightIcon from 'assets/images/march-madness/mm-button-icon-2.svg';
 import ActivateAccount from 'components/ActivateAccount';
 import Button from 'components/Button';
 import Logo from 'components/Logo';
@@ -8,7 +6,6 @@ import NavMenuMobile from 'components/NavMenuMobile';
 import SPAAnchor from 'components/SPAAnchor';
 import Search from 'components/Search';
 import ThalesToOverMigrationModal from 'components/ThalesToOverMigrationModal';
-import Tooltip from 'components/Tooltip';
 import WalletInfo from 'components/WalletInfo';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
 import ROUTES from 'constants/routes';
@@ -24,11 +21,10 @@ import { getIsMobile } from 'redux/modules/app';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
 import { getOverdropUIState, getStopPulsing, setStopPulsing } from 'redux/modules/ui';
 import { getIsBiconomy, setWalletConnectModalVisibility } from 'redux/modules/wallet';
-import styled, { useTheme } from 'styled-components';
+import { useTheme } from 'styled-components';
 import { FlexDivCentered } from 'styles/common';
 import { RootState } from 'types/redux';
 import { OverdropLevel, ThemeInterface } from 'types/ui';
-import { isMarchMadnessAvailableForNetworkId } from 'utils/marchMadness';
 import { buildHref } from 'utils/routes';
 import useBiconomy from 'utils/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
@@ -49,6 +45,8 @@ import {
     MobileButtonWrapper,
     OverdropButtonContainer,
     OverdropIcon,
+    OverdropIconWrapper,
+    OverdropWrapper,
     ProfileLabel,
     RightContainer,
     SearchContainer,
@@ -149,33 +147,6 @@ const DappHeader: React.FC = () => {
 
     const menuImageRef = useRef<HTMLImageElement>(null);
 
-    const getMarchMadnessButton = () => (
-        <MarchMadnessWrapper>
-            <SPAAnchor href={buildHref(ROUTES.MarchMadness)}>
-                <Button
-                    fontSize="18px"
-                    width={isMobile ? '100%' : '240px'}
-                    height="100%"
-                    additionalStyles={{
-                        backgroundImage: `url("${marchMadnessLeftIcon}"), url("${marchMadnessRightIcon}")`,
-                        backgroundPosition: `left ${isMobile ? 70 : 20}px center, right ${isMobile ? 70 : 20}px center`,
-                        backgroundRepeat: 'no-repeat, no-repeat',
-                        backgroundColor: theme.marchMadness.button.background.primary,
-                        backgroundSize: '28px, 28px',
-                        border: 'none',
-                        borderRadius: isMobile ? '20px' : undefined,
-                        fontFamily: "'NCAA' !important",
-                        letterSpacing: '2px',
-                        textTransform: 'uppercase',
-                        color: theme.marchMadness.button.textColor.secondary,
-                    }}
-                >
-                    {t('markets.nav-menu.labels.march-madness')}
-                </Button>
-            </SPAAnchor>
-        </MarchMadnessWrapper>
-    );
-
     return (
         <>
             {!isMobile && (
@@ -186,18 +157,7 @@ const DappHeader: React.FC = () => {
 
                     <MiddleContainer>
                         <MiddleContainerSectionLeft>
-                            {location.pathname !== ROUTES.MarchMadness &&
-                                (isMarchMadnessAvailableForNetworkId(networkId) ? (
-                                    getMarchMadnessButton()
-                                ) : (
-                                    <Tooltip
-                                        overlay={t('march-madness.header-button-tooltip')}
-                                        open={isMarchMadnessAvailableForNetworkId(networkId)}
-                                    >
-                                        {getMarchMadnessButton()}
-                                    </Tooltip>
-                                ))}
-                            <FlexDivCentered>
+                            <OverdropWrapper>
                                 <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
                                     {levelItem.level > 0 ? (
                                         <OverdropButtonContainer>
@@ -205,10 +165,12 @@ const DappHeader: React.FC = () => {
                                             {`LVL ${levelItem.level} ${levelItem.levelName}`}
                                         </OverdropButtonContainer>
                                     ) : (
-                                        <OverdropIcon />
+                                        <OverdropIconWrapper>
+                                            <OverdropIcon />
+                                        </OverdropIconWrapper>
                                     )}
                                 </SPAAnchor>
-                            </FlexDivCentered>
+                            </OverdropWrapper>
                             {isConnected && (
                                 <Button
                                     onClick={() => setShowThalesToOverMigrationModal(true)}
@@ -295,6 +257,7 @@ const DappHeader: React.FC = () => {
                             <NavMenuMobile
                                 visibility={navMenuVisibility}
                                 setNavMenuVisibility={(value: boolean | null) => setNavMenuVisibility(value)}
+                                overdropLevelItem={levelItem}
                             />
                         </MenuIconContainer>
 
@@ -307,7 +270,9 @@ const DappHeader: React.FC = () => {
                                         {`LVL ${levelItem.level} ${levelItem.levelName}`}
                                     </OverdropButtonContainer>
                                 ) : (
-                                    <OverdropIcon />
+                                    <OverdropIconWrapper>
+                                        <OverdropIcon />
+                                    </OverdropIconWrapper>
                                 )}
                             </SPAAnchor>
                         </LogoContainer>
@@ -335,7 +300,7 @@ const DappHeader: React.FC = () => {
                             </ReactModal>
                         </SearchIconContainer>
                     </WrapperMobile>
-                    <MobileButtonWrapper>
+                    <MobileButtonWrapper isFullWidth={isConnected}>
                         {!isConnected && (
                             <Button
                                 backgroundColor={theme.button.background.quinary}
@@ -366,12 +331,5 @@ const DappHeader: React.FC = () => {
         </>
     );
 };
-
-const MarchMadnessWrapper = styled.div`
-    @media (max-width: 767px) {
-        width: 100%;
-        margin: 10px 0 0 0;
-    }
-`;
 
 export default DappHeader;

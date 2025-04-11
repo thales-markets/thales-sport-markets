@@ -1,14 +1,4 @@
 @font-face {
-    font-family: 'Jost';
-    src: local('Jost'), url(../assets/fonts/Jost/Jost.ttf) format('truetype');
-}
-
-@font-face {
-    font-family: 'JostExtraBold';
-    src: local('JostExtraBold'), url(../assets/fonts/Jost/Jost-ExtraBold.ttf) format('truetype');
-}
-
-@font-face {
     font-family: 'Nunito';
     src: local('Nunito'), url(../assets/fonts/Nunito/Nunito.ttf) format('truetype');
 }
@@ -38,16 +28,6 @@
 }
 
 @font-face {
-    font-family: 'Geogrotesque';
-    src: local('Geogrotesque'), url(../assets/fonts/Geogrotesque/Geogrotesque.ttf) format('truetype');
-}
-
-@font-face {
-    font-family: 'GeogrotesqueReg';
-    src: local('GeogrotesqueReg'), url(../assets/fonts/Geogrotesque/GeogrotesqueCyr-Regular.ttf) format('truetype');
-}
-
-@font-face {
     font-family: 'HomepageIconsV2';
     src: local('HomepageIconsV2'), url(../assets/fonts/HomepageIconsV2/HomepageIconsV2.ttf) format('truetype');
 }
@@ -55,12 +35,6 @@
 @font-face {
     font-family: 'OvertimeIconsV2';
     src: local('OvertimeIconsV2'), url(../assets/fonts/OvertimeIconsV2/OvertimeIconsV2.ttf) format('truetype');
-}
-
-@font-face {
-    font-family: 'Montserrat';
-    src: local('Montserrat'), url(../assets/fonts/Montserrat/Montserrat-VariableFont_wght.ttf) format('truetype');
-    font-weight: 100 900;
 }
 
 @font-face {
@@ -73,15 +47,3 @@
     font-family: 'ThalesSidebarIcons';
     src: local('ThalesSidebarIcons'), url(../assets/fonts/ThalesSidebarIcons/ThalesSidebarIcons.ttf) format('truetype');
 }
-
-/* March Madness */
-@font-face {
-    font-family: 'Legacy';
-    src: local('Legacy'), url(../assets/fonts/Legacy/Legacy.ttf) format('truetype');
-}
-
-@font-face {
-    font-family: 'NCAA';
-    src: local('NCAA'), url(../assets/fonts/NCAA/NCAA_Colorado_Buffs_Boulder_Bold.ttf) format('truetype');
-}
-/* March Madness */

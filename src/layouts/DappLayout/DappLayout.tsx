@@ -131,10 +131,8 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
     }, [queryParams.referralId, queryParams.referrerId]);
 
     useEffect(() => {
-        if (location.pathname !== ROUTES.MarchMadness) {
-            dispatch(setTheme(Theme.DARK));
-        }
-    }, [dispatch, location.pathname]);
+        dispatch(setTheme(Theme.DARK));
+    }, [dispatch]);
 
     useEffect(() => {
         const checkMetamaskBrowser = async () => {

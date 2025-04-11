@@ -73,42 +73,6 @@ export const COLLATERALS: Record<SupportedNetwork, Coins[]> = {
     ],
 };
 
-// TODO: remove after MM
-export const MARCH_MADNESS_COLLATERALS: Record<SupportedNetwork, Coins[]> = {
-    [Network.OptimismMainnet]: [
-        CRYPTO_CURRENCY_MAP.USDC as Coins,
-        CRYPTO_CURRENCY_MAP.USDCe as Coins,
-        CRYPTO_CURRENCY_MAP.DAI as Coins,
-        CRYPTO_CURRENCY_MAP.USDT as Coins,
-        CRYPTO_CURRENCY_MAP.OP as Coins,
-        CRYPTO_CURRENCY_MAP.WETH as Coins,
-        CRYPTO_CURRENCY_MAP.ETH as Coins,
-    ],
-    [Network.Arbitrum]: [
-        CRYPTO_CURRENCY_MAP.USDC as Coins,
-        CRYPTO_CURRENCY_MAP.USDCe as Coins,
-        CRYPTO_CURRENCY_MAP.DAI as Coins,
-        CRYPTO_CURRENCY_MAP.USDT as Coins,
-        CRYPTO_CURRENCY_MAP.ARB as Coins,
-        CRYPTO_CURRENCY_MAP.WETH as Coins,
-        CRYPTO_CURRENCY_MAP.ETH as Coins,
-    ],
-    [Network.Base]: [
-        CRYPTO_CURRENCY_MAP.USDC as Coins,
-        CRYPTO_CURRENCY_MAP.USDbC as Coins,
-        CRYPTO_CURRENCY_MAP.DAI as Coins,
-        CRYPTO_CURRENCY_MAP.USDT as Coins,
-        CRYPTO_CURRENCY_MAP.WETH as Coins,
-        CRYPTO_CURRENCY_MAP.ETH as Coins,
-    ],
-    [Network.OptimismSepolia]: [
-        CRYPTO_CURRENCY_MAP.USDC as Coins,
-        CRYPTO_CURRENCY_MAP.USDT as Coins,
-        CRYPTO_CURRENCY_MAP.WETH as Coins,
-        CRYPTO_CURRENCY_MAP.ETH as Coins,
-    ],
-};
-
 export const FREE_BET_COLLATERALS: Record<SupportedNetwork, Coins[]> = {
     [Network.OptimismMainnet]: [
         CRYPTO_CURRENCY_MAP.USDC as Coins,
