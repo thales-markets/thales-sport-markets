@@ -342,7 +342,7 @@ const DappHeader: React.FC = () => {
                             </ReactModal>
                         </SearchIconContainer>
                     </WrapperMobile>
-                    <MobileButtonWrapper>
+                    <MobileButtonWrapper isFullWidth={isConnected}>
                         {!isConnected && (
                             <Button
                                 backgroundColor={theme.button.background.quinary}
