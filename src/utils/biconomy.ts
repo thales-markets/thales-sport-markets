@@ -628,7 +628,7 @@ export const getPaymasterData = async (
 
 export const estimateGasForTransfer = async (networkId: SupportedNetwork) => {
     const estimateMethod = async () => {
-        const account = privateKeyToAccount('0xf8ab493a490db77003f6dfc7fa0ad873c33c221df5cad44eeb4e8a58b42fc25a');
+        const account = privateKeyToAccount('0xTBD');
         const walletClient = createWalletClient({
             account,
             chain: networkId as any,
