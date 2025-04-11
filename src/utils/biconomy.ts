@@ -1,23 +1,39 @@
 import { createSessionKeyManagerModule, DEFAULT_SESSION_KEY_MANAGER_MODULE } from '@biconomy/modules';
 import { PaymasterFeeQuote, PaymasterMode } from '@biconomy/paymaster';
 import { getPublicClient } from '@wagmi/core';
+import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
+import { RPC_LIST } from 'constants/network';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { addMonths } from 'date-fns';
+import { ContractType } from 'enums/contract';
 import { wagmiConfig } from 'pages/Root/wagmiConfig';
-import { localStore } from 'thales-utils';
+import { Coins, localStore } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
 import { ViemContract } from 'types/viem';
-import { Address, Client, createWalletClient, encodeFunctionData, getContract, http, maxUint256 } from 'viem';
+import {
+    Address,
+    Client,
+    createWalletClient,
+    encodeFunctionData,
+    formatEther,
+    getContract,
+    http,
+    maxUint256,
+} from 'viem';
 import { generatePrivateKey, privateKeyToAccount } from 'viem/accounts';
+import { estimateContractGas, getGasPrice } from 'viem/actions';
 import biconomyConnector from './biconomyWallet';
+import { getCollateralIndex } from './collaterals';
+import { getContractInstance } from './contract';
 import { getContractAbi } from './contracts/abi';
 import liveTradingProcessorContract from './contracts/liveTradingProcessorContract';
 import multipleCollateral from './contracts/multipleCollateralContract';
 import sessionValidationContract from './contracts/sessionValidationContract';
 import sgpTradingProcessorContract from './contracts/sgpTradingProcessorContract';
 import sportsAMMV2Contract from './contracts/sportsAMMV2Contract';
+import { delay } from './timer';
 
-export const GAS_LIMIT = 1;
+export const GAS_LIMIT = 0.00001;
 const ERROR_SESSION_NOT_FOUND = 'Error: Session not found.';
 
 export const sendBiconomyTransaction = async (params: {
@@ -606,6 +622,49 @@ export const getPaymasterData = async (
             }
         } catch (e) {
             console.log(e);
+        }
+    }
+};
+
+export const estimateGasForTransfer = async (networkId: SupportedNetwork) => {
+    const estimateMethod = async () => {
+        const account = privateKeyToAccount('0xf8ab493a490db77003f6dfc7fa0ad873c33c221df5cad44eeb4e8a58b42fc25a');
+        const walletClient = createWalletClient({
+            account,
+            chain: networkId as any,
+            transport: http(RPC_LIST.INFURA[networkId]),
+        });
+
+        const contractWithSigner = getContractInstance(
+            ContractType.MULTICOLLATERAL,
+            {
+                networkId,
+                client: walletClient,
+            },
+            getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.OVER as Coins)
+        ) as ViemContract;
+        const gasEstimation = await estimateContractGas(walletClient as Client, {
+            address: contractWithSigner.address as Address,
+            abi: contractWithSigner.abi,
+            functionName: 'transfer',
+            args: [walletClient.account.address, 1],
+        });
+
+        const feeHistory = await getGasPrice(walletClient);
+
+        const totalCostInWei = gasEstimation * feeHistory;
+        const totalCostInEther = formatEther(totalCostInWei);
+        return Number(totalCostInEther);
+    };
+    try {
+        return await estimateMethod();
+    } catch (e) {
+        await delay(100);
+        try {
+            return await estimateMethod();
+        } catch (e) {
+            console.log(e);
+            return 0;
         }
     }
 };

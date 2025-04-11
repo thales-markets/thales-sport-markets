@@ -28,6 +28,7 @@ import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { secondsToMilliseconds } from 'date-fns';
 import { ContractType } from 'enums/contract';
 import { OddsType } from 'enums/markets';
+import { Network } from 'enums/network';
 import { BuyTicketStep } from 'enums/tickets';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import useInterval from 'hooks/useInterval';
@@ -92,7 +93,13 @@ import { SportsbookData } from 'types/sgp';
 import { ShareTicketModalProps } from 'types/tickets';
 import { OverdropLevel, ThemeInterface } from 'types/ui';
 import { ViemContract } from 'types/viem';
-import { GAS_LIMIT, executeBiconomyTransaction, getPaymasterData, sendBiconomyTransaction } from 'utils/biconomy';
+import {
+    GAS_LIMIT,
+    estimateGasForTransfer,
+    executeBiconomyTransaction,
+    getPaymasterData,
+    sendBiconomyTransaction,
+} from 'utils/biconomy';
 import {
     convertFromStableToCollateral,
     getCollateral,
@@ -272,7 +279,7 @@ const Ticket: React.FC<TicketProps> = ({
     const [tooltipTextBuyInAmount, setTooltipTextBuyInAmount] = useState<string>('');
     const [isFreeBetActive, setIsFreeBetActive] = useState<boolean>(false);
     const [isOverdropSummaryOpen, setIsOverdropSummaryOpen] = useState<boolean>(false);
-    const [gas, setGas] = useState(0);
+    const [gas, setGas] = useState({ quote: 0, limit: 0 });
 
     const [openApprovalModal, setOpenApprovalModal] = useState(false);
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
@@ -1836,71 +1843,80 @@ const Ticket: React.FC<TicketProps> = ({
                         const liveTradeDataOdds = tradeData[0].odds;
                         const liveTradeDataPosition = tradeData[0].position;
                         const liveTotalQuote = liveTradeDataOdds[liveTradeDataPosition];
-
-                        const feeQuotes = await getPaymasterData(
-                            networkId,
-                            isFreeBetActive ? freeBetHolderContract : sportsAMMV2OrLiveContract,
-                            isFreeBetActive ? 'tradeLive' : 'requestLiveTrade',
-                            [
-                                {
-                                    _gameId: convertFromBytes32(tradeData[0].gameId),
-                                    _sportId: tradeData[0].sportId,
-                                    _typeId: tradeData[0].typeId,
-                                    _line: tradeData[0].line,
-                                    _position: tradeData[0].position,
-                                    _buyInAmount: parsedBuyInAmount,
-                                    _expectedQuote: liveTotalQuote,
-                                    _additionalSlippage: additionalSlippage,
-                                    _referrer: ZERO_ADDRESS,
-                                    _collateral: collateralAddress,
-                                },
-                            ]
-                        );
+                        const [feeQuotes, gasEstimation] = await Promise.all([
+                            getPaymasterData(
+                                networkId,
+                                isFreeBetActive ? freeBetHolderContract : sportsAMMV2OrLiveContract,
+                                isFreeBetActive ? 'tradeLive' : 'requestLiveTrade',
+                                [
+                                    {
+                                        _gameId: convertFromBytes32(tradeData[0].gameId),
+                                        _sportId: tradeData[0].sportId,
+                                        _typeId: tradeData[0].typeId,
+                                        _line: tradeData[0].line,
+                                        _position: tradeData[0].position,
+                                        _buyInAmount: parsedBuyInAmount,
+                                        _expectedQuote: liveTotalQuote,
+                                        _additionalSlippage: additionalSlippage,
+                                        _referrer: ZERO_ADDRESS,
+                                        _collateral: collateralAddress,
+                                    },
+                                ]
+                            ),
+                            estimateGasForTransfer(networkId),
+                        ]);
 
                         if (feeQuotes) {
-                            setGas(feeQuotes.maxGasFee);
+                            setGas({ quote: feeQuotes.maxGasFee, limit: gasEstimation });
                         }
                     } else {
-                        const feeQuotes = await getPaymasterData(
-                            networkId,
-                            sportsAMMV2OrLiveContract,
-                            isSystemBet ? 'tradeSystemBet' : 'trade',
-                            isSystemBet
-                                ? [
-                                      tradeData,
-                                      parsedBuyInAmount,
-                                      parsedTotalQuote,
-                                      additionalSlippage,
-                                      ZERO_ADDRESS,
-                                      collateralAddress,
-                                      isEth,
-                                      systemBetDenominator,
-                                  ]
-                                : [
-                                      tradeData,
-                                      parsedBuyInAmount,
-                                      parsedTotalQuote,
-                                      additionalSlippage,
-                                      ZERO_ADDRESS,
-                                      collateralAddress,
-                                      isEth,
-                                  ]
-                        );
+                        const [feeQuotes, gasEstimation] = await Promise.all([
+                            getPaymasterData(
+                                networkId,
+                                sportsAMMV2OrLiveContract,
+                                isSystemBet ? 'tradeSystemBet' : 'trade',
+                                isSystemBet
+                                    ? [
+                                          tradeData,
+                                          parsedBuyInAmount,
+                                          parsedTotalQuote,
+                                          additionalSlippage,
+                                          ZERO_ADDRESS,
+                                          collateralAddress,
+                                          isEth,
+                                          systemBetDenominator,
+                                      ]
+                                    : [
+                                          tradeData,
+                                          parsedBuyInAmount,
+                                          parsedTotalQuote,
+                                          additionalSlippage,
+                                          ZERO_ADDRESS,
+                                          collateralAddress,
+                                          isEth,
+                                      ]
+                            ),
+                            estimateGasForTransfer(networkId),
+                        ]);
 
                         if (feeQuotes) {
-                            setGas(feeQuotes.maxGasFee);
+                            setGas({ quote: feeQuotes.maxGasFee, limit: gasEstimation });
                         }
                     }
                 } catch (e) {
                     console.log(e);
-                    setGas(0);
+                    setGas({ quote: 0, limit: 0 });
                 }
             } else {
-                setGas(0);
+                setGas({ quote: 0, limit: 0 });
             }
         };
 
-        if (isBiconomy) setGasValue();
+        if (isBiconomy && networkId === Network.Arbitrum) {
+            setGasValue();
+        } else {
+            setGas({ quote: 0, limit: 0 });
+        }
     }, [
         isEth,
         buyInAmount,
@@ -2834,9 +2850,9 @@ const Ticket: React.FC<TicketProps> = ({
                 </>
             )}
             {!oddsChanged && <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>}
-            {gas >= GAS_LIMIT && (
+            {gas.limit >= GAS_LIMIT && (
                 <GasWarning>
-                    {t('markets.parlay.gas-warning', { gas: formatCurrencyWithSign(USD_SIGN, gas, 4) })}
+                    {t('markets.parlay.gas-warning', { gas: formatCurrencyWithSign(USD_SIGN, gas.quote, 4) })}
                 </GasWarning>
             )}
             <ShareWrapper disabled={twitterShareDisabled} onClick={onTwitterIconClick}>
