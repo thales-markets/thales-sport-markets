@@ -1071,6 +1071,7 @@
         },
         "claim-modal": {
             "title": "Welcome to <icon />",
+            "subtitle": "Best decentralized sportsbook",
             "explainer": "More details on how to use Free Bet <docsLink>here</docsLink>.",
             "gifted-free-bet": "You have been gifted a <span>{{amount}}</span> Free Bet.",
             "claim-free-bet": "Claim a <span>{{amount}}</span> Free Bet.",

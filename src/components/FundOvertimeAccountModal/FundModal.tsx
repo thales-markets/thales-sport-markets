@@ -1,33 +1,29 @@
 import Button from 'components/Button';
+import ClaimFreeBetButton from 'components/ClaimFreeBetButton';
 import DepositFromWallet from 'components/DepositFromWallet';
 import Modal from 'components/Modal';
 import NetworkSwitcher from 'components/NetworkSwitcher';
 import Tooltip from 'components/Tooltip';
 import { COLLATERAL_ICONS_CLASS_NAMES } from 'constants/currency';
-import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import ROUTES from 'constants/routes';
 import { ScreenSizeBreakpoint } from 'enums/ui';
-import useLocalStorage from 'hooks/useLocalStorage';
 import QRCodeModal from 'pages/AARelatedPages/Deposit/components/QRCodeModal';
-import useGetFreeBetQuery from 'queries/freeBets/useGetFreeBetQuery';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
-import queryString from 'query-string';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { truncateAddress } from 'thales-utils';
 import { Rates } from 'types/collateral';
-import { FreeBet } from 'types/freeBet';
 import { RootState } from 'types/redux';
-import { getCollateralAddress, getCollateralByAddress, getCollateralIndex, getCollaterals } from 'utils/collaterals';
-import { claimFreeBet } from 'utils/freeBet';
+import { getCollateralAddress, getCollateralIndex, getCollaterals } from 'utils/collaterals';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import { getOnRamperUrl } from 'utils/particleWallet/utils';
+import { navigateTo } from 'utils/routes';
 import useBiconomy from 'utils/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
 
@@ -36,12 +32,7 @@ type FundModalProps = {
 };
 
 const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
-    const [freeBet, setFreeBet] = useLocalStorage<FreeBet | undefined>(LOCAL_STORAGE_KEYS.FREE_BET_ID, undefined);
-    const history = useHistory();
-
-    const queryParams: { freeBet?: string } = queryString.parse(location.search);
-
-    const [freeBetId, setFreeBetId] = useState(freeBet?.id || queryParams.freeBet || '');
+    const [showLetsBetButton, setShowLetsBetButton] = useState(false);
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const { t } = useTranslation();
 
@@ -62,14 +53,6 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
         {
             enabled: isConnected,
         }
-    );
-
-    const freeBetQuery = useGetFreeBetQuery(freeBetId || '', networkId, { enabled: !!freeBetId });
-
-    const freeBetFromServer = useMemo(
-        () =>
-            freeBetQuery.isSuccess && freeBetQuery.data && freeBetId ? { ...freeBetQuery.data, id: freeBetId } : null,
-        [freeBetQuery.data, freeBetQuery.isSuccess, freeBetId]
     );
 
     const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
@@ -106,26 +89,6 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
     const onramperUrl = useMemo(() => {
         return getOnRamperUrl(apiKey, walletAddress, networkId);
     }, [walletAddress, networkId, apiKey]);
-
-    const onClaimFreeBet = useCallback(() => claimFreeBet(walletAddress, freeBetId, networkId, setFreeBet, history), [
-        walletAddress,
-        freeBetId,
-        setFreeBet,
-        history,
-        networkId,
-    ]);
-
-    const claimFreeBetButtonVisible =
-        !!freeBetFromServer &&
-        !freeBetFromServer?.claimSuccess &&
-        (!freeBetFromServer.claimAddress ||
-            freeBetFromServer.claimAddress.toLowerCase() === walletAddress.toLowerCase());
-
-    useEffect(() => {
-        if (queryParams.freeBet) {
-            setFreeBetId(queryParams.freeBet as string);
-        }
-    }, [freeBet, queryParams.freeBet]);
 
     return (
         <Modal
@@ -222,27 +185,24 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                         </ButtonsContainer>
                     </AddressContainer>
                 </WalletContainer>
-                {claimFreeBetButtonVisible && (
+                <ClaimFreeBetButton styles={{ marginTop: '14px' }} onClaim={() => setShowLetsBetButton(true)} />
+                {showLetsBetButton && (
                     <Container>
-                        <ClaimBetButton
-                            onClick={onClaimFreeBet}
-                            backgroundColor={theme.overdrop.borderColor.tertiary}
-                            borderColor={theme.overdrop.borderColor.tertiary}
-                            textColor={theme.button.textColor.primary}
+                        <Button
+                            onClick={() => {
+                                setShowLetsBetButton(false);
+                                navigateTo(ROUTES.Markets.Home);
+                            }}
+                            width="100%"
                             height="44px"
                             fontSize="16px"
-                            fontWeight="700"
+                            backgroundColor={theme.background.quaternary}
                             borderRadius="8px"
-                            className="pulse"
+                            borderColor={theme.borderColor.quaternary}
+                            textColor={theme.textColor.tertiary}
                         >
-                            {t('get-started.fund-account.claim-free-bet', {
-                                amount: `${freeBetFromServer?.betAmount} $${getCollateralByAddress(
-                                    freeBetFromServer.collateral,
-                                    networkId
-                                )}`,
-                            })}
-                            <HandsIcon className="icon icon--hands-coins" />
-                        </ClaimBetButton>
+                            {t('free-bet.claim-modal.lets-bet-button')}
+                        </Button>
                     </Container>
                 )}
 
@@ -405,7 +365,6 @@ const AddressContainer = styled.div`
 const Container = styled(FlexDivCentered)`
     margin-top: 14px;
     gap: 14px;
-
     flex-direction: column;
     align-items: flex-start;
 `;
@@ -495,32 +454,6 @@ const CloseIcon = styled.i.attrs({ className: 'icon icon--close' })`
     top: 15px;
     right: 15px;
     cursor: pointer;
-`;
-
-const HandsIcon = styled.i`
-    font-weight: 500;
-    margin-left: 5px;
-    font-size: 22px;
-    color: ${(props) => props.theme.textColor.tertiary};
-`;
-
-const ClaimBetButton = styled(Button)`
-    width: 100%;
-    &.pulse {
-        animation: pulsing 1.5s ease-in;
-        animation-iteration-count: infinite;
-        @keyframes pulsing {
-            0% {
-                box-shadow: 0 0 0 0px rgba(237, 185, 41, 0.6);
-            }
-            50% {
-                box-shadow: 0 0 0 0px rgba(237, 185, 41, 0.4);
-            }
-            100% {
-                box-shadow: 0 0 0 20px rgba(237, 185, 41, 0);
-            }
-        }
-    }
 `;
 
 const ButtonLocal = styled(FlexDivCentered)<{ disabled?: boolean }>`

@@ -2,7 +2,7 @@ import axios from 'axios';
 import Button from 'components/Button';
 import Table from 'components/Table';
 import { generalConfig } from 'config/general';
-import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { getErrorToastOptions, getInfoToastOptions, getSuccessToastOptions } from 'config/toast';
 import { t } from 'i18next';
 import { orderBy } from 'lodash';
 import useGetIsWhitelistedQuery from 'queries/freeBets/useGetIsWhitelistedQuery';
@@ -14,6 +14,7 @@ import { formatTxTimestamp, NetworkId } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
 import { getCollateralByAddress } from 'utils/collaterals';
 import { useAccount, useChainId, useSignMessage } from 'wagmi';
+import { CopyIcon } from './FreeBets';
 
 const columns = [
     {
@@ -39,7 +40,7 @@ const columns = [
                 {getCollateralByAddress(cellProps.row.original.collateral, cellProps.row.original.network)}
             </p>
         ),
-        size: 100,
+        size: 80,
         enableSorting: true,
     },
     {
@@ -67,8 +68,31 @@ const columns = [
             const value = cellProps.cell.getValue().toString();
             return <p className={value}>{value}</p>;
         },
-        size: 50,
+        size: 80,
         enableSorting: true,
+    },
+    {
+        header: <></>,
+        accessorKey: 'id',
+        cell: (cellProps: any) => {
+            const id = cellProps.cell.getValue().toString();
+            return (
+                <CopyIcon
+                    onClick={() => {
+                        const toastId = toast.loading(t('free-bet.admin.copying'), {
+                            autoClose: 1000,
+                        });
+                        navigator.clipboard.writeText(`https://overtimemarkets.xyz/markets?freeBet=${id}`);
+                        toast.update(toastId, {
+                            ...getInfoToastOptions(t('free-bet.admin.copied') + ' ' + id),
+                            autoClose: 1000,
+                        });
+                    }}
+                    className="icon icon--copy"
+                />
+            );
+        },
+        size: 20,
     },
 ];
 
