@@ -1,6 +1,5 @@
 export enum Theme {
     DARK,
-    MARCH_MADNESS,
 }
 
 export enum ProfileTab {

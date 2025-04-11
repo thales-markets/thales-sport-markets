@@ -59,6 +59,7 @@ export const refetchAfterBuy = (walletAddress: string, networkId: Network) => {
         queryKey: QUERY_KEYS.Wallet.MultipleCollateral(walletAddress, networkId),
     });
     queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PositionsCountV2(walletAddress, networkId) });
+    queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.UserTickets(networkId, walletAddress) });
 };
 
 export const refetchLiquidityPoolData = (walletAddress: string, networkId: Network, liquidityPoolAddress: string) => {
@@ -119,11 +120,6 @@ export const refetchResolveBlocker = (networkId: Network) => {
     queryConnector.queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.ResolveBlocker.BlockedGames(false, networkId),
     });
-};
-
-export const refetchAfterMarchMadnessMint = (walletAddress: string, networkId: Network) => {
-    queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MarchMadness.Data(walletAddress, networkId) });
-    queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MarchMadness.Stats(networkId) });
 };
 
 export const refetchGetFreeBet = (freeBetId: string, networkId: Network) => {

@@ -40,8 +40,8 @@ export const MiddleContainer = styled(FlexDivRowCentered)`
     width: calc(100% - 263px - 360px - 50px);
     justify-content: space-between;
     gap: 10px;
-    // TODO: After March Madness change EXTRA_LARGE to LARGE
-    @media (max-width: ${ScreenSizeBreakpoint.EXTRA_LARGE}px) {
+
+    @media (max-width: ${ScreenSizeBreakpoint.LARGE}px) {
         width: unset;
     }
 `;
@@ -70,6 +70,9 @@ export const MenuIcon = styled.img.attrs({ src: burger })`
 export const OverdropIconWrapper = styled.div`
     height: 40px;
     overflow: hidden;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        height: 34px;
+    }
 `;
 
 export const OverdropIcon = styled.img.attrs({ src: overdrop })`
@@ -78,13 +81,9 @@ export const OverdropIcon = styled.img.attrs({ src: overdrop })`
     margin-top: -18px;
 
     @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
-        height: 70px;
+        height: 64px;
         margin-right: 0;
-        margin-top: -12px;
-    }
-
-    @media (max-width: 420px) {
-        height: 65px;
+        margin-top: -15px;
     }
 `;
 
@@ -233,7 +232,8 @@ export const CurrencyIcon = styled.i`
     color: ${(props) => props.theme.button.textColor.primary};
 `;
 
-export const MobileButtonWrapper = styled(FlexDivRowCentered)`
-    gap: 6px;
+export const MobileButtonWrapper = styled(FlexDivRowCentered)<{ isFullWidth?: boolean }>`
+    ${(props) => props.isFullWidth && 'width: 100%;'}
     min-height: 28px;
+    gap: 6px;
 `;
