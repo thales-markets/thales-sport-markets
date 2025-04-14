@@ -1,8 +1,11 @@
 import Button from 'components/Button';
 import Modal from 'components/Modal';
+import { USD_SIGN } from 'constants/currency';
+import ROUTES from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import useLocalStorage from 'hooks/useLocalStorage';
 import { t } from 'i18next';
+import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import { useCallback } from 'react';
 import { Trans } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,12 +13,14 @@ import { useHistory } from 'react-router-dom';
 import { getIsBiconomy, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivColumnCentered, FlexDivRow } from 'styles/common';
+import { Coins, formatCurrencyWithSign } from 'thales-utils';
 import { FreeBet } from 'types/freeBet';
 import { RootState } from 'types/redux';
 import { getCollateralByAddress } from 'utils/collaterals';
 import { claimFreeBet } from 'utils/freeBet';
+import { navigateTo } from 'utils/routes';
 import useBiconomy from 'utils/useBiconomy';
-import { useAccount, useChainId } from 'wagmi';
+import { useAccount, useChainId, useClient, useSwitchChain } from 'wagmi';
 
 type ClaimFreeBetModalProps = {
     freeBet: FreeBet & { id: string };
@@ -27,6 +32,8 @@ const ClaimFreeBetModal: React.FC<ClaimFreeBetModalProps> = ({ freeBet, onClose 
     const networkId = useChainId();
     const dispatch = useDispatch();
     const history = useHistory();
+    const client = useClient();
+    const { switchChain } = useSwitchChain();
 
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
@@ -40,8 +47,9 @@ const ClaimFreeBetModal: React.FC<ClaimFreeBetModalProps> = ({ freeBet, onClose 
     const onButtonClick = useCallback(async () => {
         if (freeBet.claimSuccess) {
             onClose();
+            navigateTo(ROUTES.Markets.Home);
         } else if (walletAddress) {
-            await claimFreeBet(walletAddress, freeBet.id, networkId, setFreeBet, history);
+            await claimFreeBet(walletAddress, freeBet.id, networkId, setFreeBet, history, switchChain);
         } else {
             dispatch(
                 setWalletConnectModalVisibility({
@@ -49,7 +57,22 @@ const ClaimFreeBetModal: React.FC<ClaimFreeBetModalProps> = ({ freeBet, onClose 
                 })
             );
         }
-    }, [walletAddress, dispatch, freeBet.id, freeBet.claimSuccess, networkId, setFreeBet, history, onClose]);
+    }, [
+        walletAddress,
+        dispatch,
+        freeBet.id,
+        freeBet.claimSuccess,
+        networkId,
+        setFreeBet,
+        history,
+        onClose,
+        switchChain,
+    ]);
+
+    const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
+    const exchangeRates = exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
+
+    const collateralName = getCollateralByAddress(freeBet.collateral, networkId);
 
     return (
         <Modal
@@ -78,6 +101,11 @@ const ClaimFreeBetModal: React.FC<ClaimFreeBetModalProps> = ({ freeBet, onClose 
                     </Title>
                     <FlexDivRow>{<CloseIcon onClick={onClose} />}</FlexDivRow>
                 </FlexDivRow>
+                <FlexDivRow>
+                    <Subtitle>
+                        <Trans i18nKey="free-bet.claim-modal.subtitle" />
+                    </Subtitle>
+                </FlexDivRow>
                 {!walletAddress ? (
                     <Message>
                         <Trans
@@ -86,7 +114,15 @@ const ClaimFreeBetModal: React.FC<ClaimFreeBetModalProps> = ({ freeBet, onClose 
                                 span: <span />,
                             }}
                             values={{
-                                amount: `${freeBet.betAmount} ${getCollateralByAddress(freeBet.collateral, networkId)}`,
+                                amount: `${freeBet.betAmount} $${collateralName} ${
+                                    exchangeRates
+                                        ? `(${formatCurrencyWithSign(
+                                              USD_SIGN,
+                                              +freeBet.betAmount * (exchangeRates?.[collateralName as Coins] || 0),
+                                              2
+                                          )})`
+                                        : ''
+                                }`,
                             }}
                         />
                     </Message>
@@ -98,10 +134,15 @@ const ClaimFreeBetModal: React.FC<ClaimFreeBetModalProps> = ({ freeBet, onClose 
                                 span: <span />,
                             }}
                             values={{
-                                amount: `${freeBet.betAmount} $${getCollateralByAddress(
-                                    freeBet.collateral,
-                                    networkId
-                                )}`,
+                                amount: `${freeBet.betAmount} $${collateralName} ${
+                                    exchangeRates
+                                        ? `(${formatCurrencyWithSign(
+                                              USD_SIGN,
+                                              +freeBet.betAmount * (exchangeRates?.[collateralName as Coins] || 0),
+                                              2
+                                          )})`
+                                        : ''
+                                }`,
                             }}
                         />
                     </Message>
@@ -113,10 +154,15 @@ const ClaimFreeBetModal: React.FC<ClaimFreeBetModalProps> = ({ freeBet, onClose 
                                 span: <span />,
                             }}
                             values={{
-                                amount: `${freeBet.betAmount} $${getCollateralByAddress(
-                                    freeBet.collateral,
-                                    networkId
-                                )}`,
+                                amount: `${freeBet.betAmount} $${collateralName} ${
+                                    exchangeRates
+                                        ? `(${formatCurrencyWithSign(
+                                              USD_SIGN,
+                                              +freeBet.betAmount * (exchangeRates?.[collateralName as Coins] || 0),
+                                              2
+                                          )})`
+                                        : ''
+                                }`,
                             }}
                         />
                     </Message>
@@ -185,6 +231,16 @@ const Title = styled.h1`
     text-transform: uppercase;
 `;
 
+const Subtitle = styled.h1`
+    margin-top: 5px;
+    font-size: 16px;
+    font-weight: 600;
+    color: ${(props) => props.theme.textColor.primary};
+    width: 100%;
+    text-align: center;
+    color: ${(props) => props.theme.textColor.secondary};
+`;
+
 const Message = styled.div`
     font-size: 24px;
     font-weight: 600;
@@ -228,11 +284,11 @@ const OvertimeIcon = styled.i`
 const Explainer = styled.div`
     width: 100%;
     border-radius: 12px;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 16px;
     letter-spacing: 0.025em;
     text-align: center;
-    margin-top: 10px;
+    margin-top: 5px;
     margin-bottom: 30px;
     color: ${(props) => props.theme.textColor.secondary};
     font-weight: 600;

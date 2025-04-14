@@ -3,7 +3,7 @@ import Toggle from 'components/Toggle';
 import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
 import ROUTES from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { ProfileTab } from 'enums/ui';
+import { ProfileTab, ScreenSizeBreakpoint } from 'enums/ui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -132,11 +132,8 @@ const Dropdown = styled.div`
     align-items: flex-start;
     gap: 10px;
     font-weight: 400;
-    @media (max-width: 767px) {
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         border: 1px solid;
-    }
-
-    @media (max-width: 420px) {
         width: 100%;
     }
 `;

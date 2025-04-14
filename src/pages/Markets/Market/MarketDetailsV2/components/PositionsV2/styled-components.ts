@@ -32,7 +32,7 @@ export const Header = styled(FlexDivColumnCentered)<{
     position: ${(props) => (props.float ? 'absolute' : props.isSticky ? 'sticky' : 'relative')};
     ${(props) => props.float && 'top: -35px; left: 50%; transform: translateX(-50%);'}
     ${(props) => props.isSticky && `top: 0; background: ${props.theme.background.quinary}; z-index: 1;`}
-    max-height: ${(props) => (props.isMainPageView && !props.isColumnView ? 'auto' : '25px')};
+    ${(props) => (props.isMainPageView && !props.isColumnView ? '' : 'max-height: 25px;')}
     margin-bottom: ${(props) => (props.alignHeader ? '-19px' : '0')};
     flex: none;
     ${(props) => props.isMainPageView && 'width: 90%'};
@@ -53,7 +53,6 @@ export const SubTitleContainer = styled(FlexDiv)`
     font-size: 12px;
     line-height: 14px;
     color: ${(props) => props.theme.textColor.quinary};
-    z-index: 2;
 `;
 
 export const SubTitle = styled.span`

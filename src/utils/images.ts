@@ -6,7 +6,8 @@ export const getTeamImageSource = (team: string, league: League) => {
     return league == League.TENNIS_WTA ||
         league == League.TENNIS_GS ||
         league == League.TENNIS_MASTERS ||
-        league == League.SUMMER_OLYMPICS_TENNIS
+        league == League.SUMMER_OLYMPICS_TENNIS ||
+        league == League.TENNIS_ATP_CHALLENGER
         ? `/logos/Tennis/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.FORMULA1 || league == League.MOTOGP
         ? `/logos/${leagueLabel}/${fixOneSideMarketCompetitorName(team).replaceAll(' ', '-').toLowerCase()}.webp`
@@ -56,6 +57,8 @@ export const getTeamImageSource = (team: string, league: League) => {
           league == League.NCAAW ||
           league == League.COLLEGE_BASEBALL
         ? `/logos/NCAA/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : league == League.PGA_FUTURES
+        ? `/logos/leagueLogos/pga.webp`
         : `/logos/${leagueLabel}/${team.trim().replaceAll(' ', '-').replaceAll('/', '-').toLowerCase()}.webp`;
 };
 
@@ -99,6 +102,7 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.COLLEGE_BASEBALL:
         case League.USA_AHL:
         case League.USA_MAJOR_LEAGUE_CRICKET:
+        case League.MLB_FUTURES:
             return `/logos/Countries/united-states-of-america.svg`;
         case League.EPL:
         case League.ENGLAND_CHAMPIONSHIP:
@@ -307,6 +311,10 @@ export const getLeagueFlagSource = (tagId: number | any) => {
             return `/logos/Countries/call-of-duty.png`;
         case League.FORMULA1_FUTURES:
             return `/logos/leagueLogos/f1.webp`;
+        case League.PGA_FUTURES:
+            return `/logos/leagueLogos/pga.webp`;
+        case League.PAKISTAN_SUPER_LEAGUE:
+            return `/logos/Countries/pakistan.svg`;
         default:
             return `/logos/Countries/world.svg`;
     }

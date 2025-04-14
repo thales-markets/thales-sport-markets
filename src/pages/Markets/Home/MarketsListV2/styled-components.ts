@@ -3,10 +3,11 @@ import { FlexDiv, FlexDivColumnCentered } from 'styles/common';
 
 export const LeagueCard = styled.div<{ isMarketSelected: boolean }>`
     display: flex;
-    position: relative;
+    position: sticky;
+    top: 0;
+    z-index: 2;
     flex-direction: row;
     padding: 0px 12px 10px 12px;
-    border-radius: 5px;
     align-items: center;
     background-color: ${(props) => props.theme.background.primary};
     justify-content: space-between;

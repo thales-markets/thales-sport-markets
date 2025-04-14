@@ -3,7 +3,7 @@ import OverdropButtonBackground from 'assets/images/overdrop/overdrop-button-bac
 import overdrop from 'assets/images/overdrop/overdrop-nav.webp';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import styled from 'styled-components';
-import { FlexDiv, FlexDivEnd, FlexDivRow, FlexDivRowCentered, FlexDivStart } from 'styles/common';
+import { FlexDiv, FlexDivCentered, FlexDivEnd, FlexDivRow, FlexDivRowCentered, FlexDivStart } from 'styles/common';
 
 export const Container = styled(FlexDivRowCentered)`
     width: 100%;
@@ -40,8 +40,8 @@ export const MiddleContainer = styled(FlexDivRowCentered)`
     width: calc(100% - 263px - 360px - 50px);
     justify-content: space-between;
     gap: 10px;
-    // TODO: After March Madness change EXTRA_LARGE to LARGE
-    @media (max-width: ${ScreenSizeBreakpoint.EXTRA_LARGE}px) {
+
+    @media (max-width: ${ScreenSizeBreakpoint.LARGE}px) {
         width: unset;
     }
 `;
@@ -67,18 +67,23 @@ export const MenuIcon = styled.img.attrs({ src: burger })`
     }
 `;
 
+export const OverdropIconWrapper = styled.div`
+    height: 40px;
+    overflow: hidden;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        height: 34px;
+    }
+`;
+
 export const OverdropIcon = styled.img.attrs({ src: overdrop })`
     height: 75px;
     cursor: pointer;
-    margin-top: -27px;
-    margin-bottom: -27px;
-    @media (max-width: 576px) {
-        height: 70px;
-        margin-right: 0;
-    }
+    margin-top: -18px;
 
-    @media (max-width: 420px) {
-        height: 65px;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        height: 64px;
+        margin-right: 0;
+        margin-top: -15px;
     }
 `;
 
@@ -172,6 +177,10 @@ export const Count = styled.span`
     font-size: 12px;
 `;
 
+export const OverdropWrapper = styled(FlexDivCentered)`
+    height: 30px;
+`;
+
 export const OverdropButtonContainer = styled(FlexDiv)`
     position: relative;
     background-image: url(${OverdropButtonBackground});
@@ -223,7 +232,11 @@ export const CurrencyIcon = styled.i`
     color: ${(props) => props.theme.button.textColor.primary};
 `;
 
-export const MobileButtonWrapper = styled(FlexDivRowCentered)`
-    gap: 6px;
+export const MobileButtonWrapper = styled(FlexDivRowCentered)<{ isFullWidth?: boolean }>`
+    ${(props) => props.isFullWidth && 'width: 100%;'}
     min-height: 28px;
+    gap: 6px;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) and (min-width: ${ScreenSizeBreakpoint.XXS}px) {
+        width: unset;
+    }
 `;

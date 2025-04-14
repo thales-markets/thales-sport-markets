@@ -1,16 +1,13 @@
 import { MultiplierType } from 'enums/overdrop';
 import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
 import useUserMultipliersQuery from 'queries/overdrop/useUserMultipliersQuery';
-import queryString from 'query-string';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     getOverdropPreventShowingModal,
     getOverdropUIState,
-    getOverdropWelcomeModalFlag,
     setDefaultOverdropState,
     setOverdropState,
-    setWelcomeModalVisibility,
 } from 'redux/modules/ui';
 import { OverdropUIState, OverdropUserData } from 'types/overdrop';
 import { RootState } from 'types/redux';
@@ -18,22 +15,17 @@ import { getCurrentLevelByPoints, getMultiplierValueFromQuery } from 'utils/over
 import { useAccount } from 'wagmi';
 import DailyModal from '../DailyModal';
 import LevelUpModal from '../LevelUpModal';
-import WelcomeModal from '../WelcomeModal';
 
 const ModalWrapper: React.FC = () => {
     const dispatch = useDispatch();
 
-    const queryParams: { freeBet?: string } = queryString.parse(location.search);
-
     const { address: walletAddress, isConnected } = useAccount();
 
     const overdropUIState = useSelector((state: RootState) => getOverdropUIState(state));
-    const overdropWelcomeModalFlag = useSelector((state: RootState) => getOverdropWelcomeModalFlag(state));
     const preventShowingModal = useSelector((state: RootState) => getOverdropPreventShowingModal(state));
 
     const [levelChanged, setLevelChanged] = useState<boolean>(false);
     const [dailyMultiplierChanged, setDailyMultiplierChanged] = useState<boolean>(false);
-    const [showWelcomeModal, setShowWelcomeModal] = useState<boolean>(false);
 
     const [overdropStateByWallet, setOverdropStateByWallet] = useState<OverdropUIState | undefined>(undefined);
 
@@ -55,15 +47,6 @@ const ModalWrapper: React.FC = () => {
 
     const userMultipliers =
         userMultipliersQuery.isSuccess && userMultipliersQuery.data ? userMultipliersQuery.data : undefined;
-
-    // Handle welcome modal visibility
-    useEffect(() => {
-        if (overdropWelcomeModalFlag == false && !queryParams.freeBet) {
-            setShowWelcomeModal(true);
-            dispatch(setWelcomeModalVisibility({ showWelcomeModal: true }));
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch]);
 
     // Handle prevent showing multipliers modal
     useEffect(() => {
@@ -140,9 +123,7 @@ const ModalWrapper: React.FC = () => {
 
     return (
         <>
-            {showWelcomeModal ? (
-                <WelcomeModal onClose={() => setShowWelcomeModal(false)} />
-            ) : levelChanged && userData && showLevelUpModal ? (
+            {levelChanged && userData && showLevelUpModal ? (
                 <LevelUpModal
                     currentLevel={getCurrentLevelByPoints(userData?.points).level}
                     onClose={() => setShowLevelUpModal(false)}

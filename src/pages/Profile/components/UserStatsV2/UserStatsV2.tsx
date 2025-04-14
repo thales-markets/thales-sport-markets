@@ -1,23 +1,19 @@
 import { useAuthCore } from '@particle-network/authkit';
-import Button from 'components/Button';
+import ClaimFreeBetButton from 'components/ClaimFreeBetButton';
 import Toggle from 'components/Toggle';
 import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
 import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from 'constants/currency';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import useLocalStorage from 'hooks/useLocalStorage';
-import useGetFreeBetQuery from 'queries/freeBets/useGetFreeBetQuery';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import useUsersStatsV2Query from 'queries/wallet/useUsersStatsV2Query';
-import queryString from 'query-string';
-import React, { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { Fragment, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { getIsBiconomy, setIsBiconomy } from 'redux/modules/wallet';
-import styled, { useTheme } from 'styled-components';
+import styled from 'styled-components';
 import {
     FlexDivColumn,
     FlexDivColumnCentered,
@@ -28,10 +24,8 @@ import {
 } from 'styles/common';
 import { Coins, formatCurrencyWithSign, localStore, truncateAddress } from 'thales-utils';
 import { Rates } from 'types/collateral';
-import { FreeBet } from 'types/freeBet';
 import { RootState } from 'types/redux';
-import { getCollateralByAddress, isStableCurrency, sortCollateralBalances } from 'utils/collaterals';
-import { claimFreeBet } from 'utils/freeBet';
+import { isStableCurrency, sortCollateralBalances } from 'utils/collaterals';
 import useBiconomy from 'utils/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
 
@@ -42,8 +36,6 @@ const UserStats: React.FC = () => {
     const dispatch = useDispatch();
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
-    const queryParams: { freeBet?: string } = queryString.parse(location.search);
-
     const networkId = useChainId();
     const client = useClient();
 
@@ -51,12 +43,7 @@ const UserStats: React.FC = () => {
 
     const { address, isConnected } = useAccount();
     const smartAddress = useBiconomy();
-    const theme = useTheme();
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
-
-    const [freeBet, setFreeBet] = useLocalStorage<FreeBet | undefined>(LOCAL_STORAGE_KEYS.FREE_BET_ID, undefined);
-
-    const history = useHistory();
 
     const userStatsQuery = useUsersStatsV2Query(walletAddress, { networkId, client }, { enabled: isConnected });
     const userStats = userStatsQuery.isSuccess && userStatsQuery.data ? userStatsQuery.data : undefined;
@@ -70,18 +57,6 @@ const UserStats: React.FC = () => {
     );
     const freeBetBalances =
         freeBetBalancesQuery.isSuccess && freeBetBalancesQuery.data ? freeBetBalancesQuery.data : undefined;
-
-    const [freeBetId, setFreeBetId] = useState(freeBet?.id || queryParams.freeBet || '');
-
-    const freeBetQuery = useGetFreeBetQuery(freeBetId || queryParams.freeBet || '', networkId, {
-        enabled: !!(freeBetId || queryParams.freeBet),
-    });
-
-    const freeBetFromServer = useMemo(
-        () =>
-            freeBetQuery.isSuccess && freeBetQuery.data && freeBetId ? { ...freeBetQuery.data, id: freeBetId } : null,
-        [freeBetQuery.data, freeBetQuery.isSuccess, freeBetId]
-    );
 
     const isFreeBetExists = freeBetBalances && !!Object.values(freeBetBalances).find((balance) => !!balance);
 
@@ -123,14 +98,6 @@ const UserStats: React.FC = () => {
         return sortedBalances;
     }, [exchangeRates, freeBetBalances, networkId]);
 
-    const onClaimFreeBet = useCallback(() => claimFreeBet(walletAddress, freeBetId, networkId, setFreeBet, history), [
-        walletAddress,
-        freeBetId,
-        setFreeBet,
-        history,
-        networkId,
-    ]);
-
     const userLoginInfo = useMemo(() => {
         if (userInfo && userInfo.thirdparty_user_info && userInfo.thirdparty_user_info.user_info) {
             return userInfo.thirdparty_user_info.user_info;
@@ -150,18 +117,6 @@ const UserStats: React.FC = () => {
             toast.update(id, getErrorToastOptions('Error'));
         }
     };
-
-    const claimFreeBetButtonVisible =
-        !!freeBetFromServer &&
-        !freeBetFromServer?.claimSuccess &&
-        (!freeBetFromServer.claimAddress ||
-            freeBetFromServer.claimAddress.toLowerCase() === walletAddress.toLowerCase());
-
-    useEffect(() => {
-        if (queryParams.freeBet) {
-            setFreeBetId(queryParams.freeBet as string);
-        }
-    }, [freeBet, queryParams.freeBet]);
 
     return (
         <Wrapper>
@@ -305,28 +260,7 @@ const UserStats: React.FC = () => {
                         })}
                 </SectionWrapper>
             )}
-            {claimFreeBetButtonVisible && (
-                <ClaimBetButton
-                    onClick={onClaimFreeBet}
-                    backgroundColor={theme.overdrop.borderColor.tertiary}
-                    borderColor={theme.overdrop.borderColor.tertiary}
-                    textColor={theme.button.textColor.primary}
-                    height="42px"
-                    fontSize="16px"
-                    fontWeight="700"
-                    borderRadius="8px"
-                    className="pulse"
-                    margin="10px 0 0 0 "
-                >
-                    {t('profile.account-summary.claim-free-bet', {
-                        amount: `${freeBetFromServer?.betAmount} $${getCollateralByAddress(
-                            freeBetFromServer.collateral,
-                            networkId
-                        )}`,
-                    })}
-                    <HandsIcon className="icon icon--hands-coins" />
-                </ClaimBetButton>
-            )}
+            <ClaimFreeBetButton pulsate />
         </Wrapper>
     );
 };
@@ -428,33 +362,6 @@ const CurrencyIcon = styled.i`
 const SectionWrapper = styled(FlexDivColumnCentered)`
     width: 100%;
     gap: 8px;
-`;
-
-const HandsIcon = styled.i`
-    font-weight: 500;
-    margin-left: 5px;
-    font-size: 22px;
-    color: ${(props) => props.theme.textColor.tertiary};
-`;
-
-const ClaimBetButton = styled(Button)`
-    font-size: 15px;
-    padding: 3px 15px;
-    &.pulse {
-        animation: pulsing 1.5s ease-in;
-        animation-iteration-count: infinite;
-        @keyframes pulsing {
-            0% {
-                box-shadow: 0 0 0 0px rgba(237, 185, 41, 0.6);
-            }
-            50% {
-                box-shadow: 0 0 0 0px rgba(237, 185, 41, 0.4);
-            }
-            100% {
-                box-shadow: 0 0 0 20px rgba(237, 185, 41, 0);
-            }
-        }
-    }
 `;
 
 const CopyIcon = styled.i<{ active?: boolean }>`

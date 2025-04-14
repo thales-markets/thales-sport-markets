@@ -3,6 +3,7 @@ import NetworkSwitcher from 'components/NetworkSwitcher';
 import OutsideClickHandler from 'components/OutsideClick';
 import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
 import { COLLATERALS } from 'constants/currency';
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import ProfileItem from 'layouts/DappLayout/DappHeader/components/ProfileItem';
 import ProfileDropdown from 'layouts/DappLayout/DappHeader/components/ProfileItem/components/ProfileDropdown';
 import React, { useEffect, useState } from 'react';
@@ -131,11 +132,11 @@ const Container = styled(FlexDivCentered)<{ walletConnected?: boolean }>`
     border-radius: 5px;
     position: relative;
     justify-content: space-between;
-    @media (max-width: 767px) {
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         width: 330px;
     }
 
-    @media (max-width: 420px) {
+    @media (max-width: ${ScreenSizeBreakpoint.XXS}px) {
         width: 100%;
     }
 `;

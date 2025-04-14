@@ -1,6 +1,5 @@
 export enum Theme {
     DARK,
-    MARCH_MADNESS,
 }
 
 export enum ProfileTab {
@@ -38,4 +37,5 @@ export enum ScreenSizeBreakpoint {
     MEDIUM = 1024,
     SMALL = 767,
     EXTRA_SMALL = 512,
+    XXS = 420,
 }
