@@ -2,15 +2,15 @@ import axios from 'axios';
 import ClaimFreeBetModal from 'components/ClaimFreeBetModal';
 import MetaData from 'components/MetaData';
 import { generalConfig } from 'config/general';
-import ROUTES from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import { Network } from 'enums/network';
 import { Theme } from 'enums/ui';
 import useLocalStorage from 'hooks/useLocalStorage';
 import useWidgetBotScript from 'hooks/useWidgetBotScript';
 import ModalWrapper from 'pages/Overdrop/components/ModalWrapper';
 import useGetFreeBetQuery from 'queries/freeBets/useGetFreeBetQuery';
 import queryString from 'query-string';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -22,11 +22,10 @@ import { FlexDivColumn } from 'styles/common';
 import { isAndroid, isMetamask } from 'thales-utils';
 import { RootState } from 'types/redux';
 import { isMobile } from 'utils/device';
-import { setFreeBetModalShown } from 'utils/freeBet';
+import { getFreeBetModalShown, setFreeBetModalShown } from 'utils/freeBet';
 import { setReferralId } from 'utils/referral';
-import { navigateTo } from 'utils/routes';
 import useBiconomy from 'utils/useBiconomy';
-import { useAccount, useChainId } from 'wagmi';
+import { useAccount, useChainId, useSwitchChain } from 'wagmi';
 import Banner from '../../components/Banner';
 import DappFooter from './DappFooter';
 import DappHeader from './DappHeader';
@@ -39,6 +38,7 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
     const dispatch = useDispatch();
     const location = useLocation();
     const networkId = useChainId();
+    const { switchChain } = useSwitchChain();
 
     const queryParams: { referralId?: string; referrerId?: string; freeBet?: string } = queryString.parse(
         location.search
@@ -51,8 +51,6 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
 
     const smartAddres = useBiconomy();
     const walletAddress = (isBiconomy ? smartAddres : address) || '';
-    const walletRef = useRef(walletAddress);
-    walletRef.current = walletAddress;
 
     const [freeBetModalParam, setFreeBetModalParam] = useState(queryParams.freeBet);
 
@@ -78,21 +76,18 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
     }, [freeBetFromServer, setFreeBet]);
 
     useEffect(() => {
-        if (freeBetModalParam) {
-            setFreeBetModalShown(true);
+        if (freeBetModalParam && switchChain) {
+            switchChain(
+                { chainId: Network.OptimismMainnet },
+                {
+                    onSuccess: () => {
+                        setFreeBetModalShown(true);
+                    },
+                }
+            );
         }
         setTimeout(async () => {
             if (queryParams.freeBet && freeBetFromServer && freeBetModalParam) {
-                if (walletRef.current) {
-                    navigateTo(ROUTES.Profile);
-                }
-                const urlSearchParams = new URLSearchParams(location.search);
-                if (urlSearchParams.has('freeBet')) {
-                    urlSearchParams.delete('freeBet');
-                    history.replace({
-                        search: urlSearchParams.toString(),
-                    });
-                }
                 setFreeBet({ ...freeBetFromServer, id: freeBetModalParam });
             }
         }, 2000);
@@ -106,6 +101,7 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
         networkId,
         freeBetFromServer,
         freeBetModalParam,
+        switchChain,
     ]);
 
     useEffect(() => {
@@ -158,7 +154,7 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
                     <DappFooter />
                 </Wrapper>
                 <ToastContainer theme={'colored'} />
-                {freeBetFromServer && (
+                {freeBetFromServer && getFreeBetModalShown() && (
                     <ClaimFreeBetModal
                         onClose={() => {
                             setFreeBetModalParam(undefined);
