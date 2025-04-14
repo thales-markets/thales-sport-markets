@@ -236,4 +236,7 @@ export const MobileButtonWrapper = styled(FlexDivRowCentered)<{ isFullWidth?: bo
     ${(props) => props.isFullWidth && 'width: 100%;'}
     min-height: 28px;
     gap: 6px;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) and (min-width: ${ScreenSizeBreakpoint.XXS}px) {
+        width: unset;
+    }
 `;
