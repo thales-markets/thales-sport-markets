@@ -40,14 +40,14 @@ export const Container = styled(FlexDivRow)<{
     }
 `;
 
-export const Text = styled.span<{ isColumnView?: boolean }>`
+export const Text = styled.span<{ isColumnView?: boolean; maxWidth?: string }>`
     font-weight: 600;
     font-size: 12px;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
     width: 100%;
-    ${(props) => (props.isColumnView ? 'max-width: 200px;' : '')}
+    ${(props) => (props.maxWidth ? `max-width: ${props.maxWidth};` : props.isColumnView ? 'max-width: 200px;' : '')}
 `;
 
 export const Odd = styled.span<{

@@ -33,11 +33,7 @@ const MatchStatus: React.FC<MatchStatusProps> = ({ market }) => {
 
     const leagueSport = getLeagueSport(market.leagueId);
 
-    const liveMarketErrorMessage =
-        market.live && market.errorMessage
-            ? // TODO: if we want to remove teams add .replace(` ${markets[0].homeTeam} - ${markets[0].awayTeam}`, '');
-              market.errorMessage
-            : '';
+    const liveMarketErrorMessage = market.live && market.errorMessage ? market.errorMessage : '';
 
     const getScoreComponent = (scoreData: SportMarket | SportMarketScore) =>
         showGameScore(scoreData.gameStatus) || !scoreData.gameStatus ? (

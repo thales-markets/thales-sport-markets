@@ -20,7 +20,7 @@ import { getIsMobile } from 'redux/modules/app';
 import { getSportFilter } from 'redux/modules/market';
 import { getIsSgp, getTicket } from 'redux/modules/ticket';
 import styled from 'styled-components';
-import { SportMarket, TicketPosition } from 'types/markets';
+import { SgpTicket, SportMarket, TicketPosition } from 'types/markets';
 import { RiskManagementSgpBlockers } from 'types/riskManagement';
 import { getMarketTypeTooltipKey } from 'utils/markets';
 import { getSubtitleText, getTitleText, isSameMarket, sportMarketAsTicketPosition } from 'utils/marketsV2';
@@ -54,6 +54,7 @@ type PositionsProps = {
     floatingOddsTitles?: boolean;
     width?: string;
     onAccordionClick?: () => void;
+    sgpTickets?: SgpTicket[];
 };
 
 const Positions: React.FC<PositionsProps> = ({
@@ -70,6 +71,7 @@ const Positions: React.FC<PositionsProps> = ({
     oddsTitlesHidden,
     floatingOddsTitles,
     width,
+    sgpTickets,
 }) => {
     const { t } = useTranslation();
 
@@ -81,13 +83,14 @@ const Positions: React.FC<PositionsProps> = ({
     const isMobile = useSelector(getIsMobile);
 
     const isPlayerPropsMarket = useMemo(() => sportFilter === SportFilter.PlayerProps, [sportFilter]);
+    const isQuickSgpMarket = useMemo(() => sportFilter === SportFilter.QuickSgp, [sportFilter]);
 
     const [isExpanded, setIsExpanded] = useState<boolean>(true);
 
     const isSgpEnabled = useMemo(() => isSgp && ticket.length > 0, [isSgp, ticket.length]);
 
     const riskManagementSgpBlockersQuery = useRiskManagementConfigQuery(
-        RiskManagementConfig.SGP_BLOCKERS,
+        [RiskManagementConfig.SGP_BLOCKERS],
         { networkId },
         { enabled: isSgpEnabled }
     );
@@ -95,7 +98,7 @@ const Positions: React.FC<PositionsProps> = ({
     const sgpBlockers = useMemo(
         () =>
             riskManagementSgpBlockersQuery.isSuccess && riskManagementSgpBlockersQuery.data
-                ? (riskManagementSgpBlockersQuery.data as RiskManagementSgpBlockers)
+                ? (riskManagementSgpBlockersQuery.data as RiskManagementSgpBlockers).sgpBlockers
                 : [],
         [riskManagementSgpBlockersQuery.isSuccess, riskManagementSgpBlockersQuery.data]
     );
@@ -198,19 +201,43 @@ const Positions: React.FC<PositionsProps> = ({
 
     const showContainer = !isGameOpen || hasOdds || showInvalid;
 
-    const sortedMarkets = useMemo(() => orderBy(markets, ['line', 'odds'], ['asc', 'desc']), [markets]);
+    const filteredQuickSgpMarkets = useMemo(
+        () =>
+            isQuickSgpMarket && markets[0].childMarkets
+                ? markets[0].childMarkets.filter((childMarket) => childMarket.typeId === marketType)
+                : [],
+        [isQuickSgpMarket, markets, marketType]
+    );
 
-    const positionText0 = markets[0] ? getSubtitleText(markets[0], 0) : undefined;
-    const positionText1 = markets[0] ? getSubtitleText(markets[0], 1) : undefined;
-    const titleText = getTitleText(markets[0], !isPlayerPropsMarket, isPlayerPropsMarket);
+    const sortedMarkets = useMemo(() => {
+        if (isQuickSgpMarket) {
+            let displaySgpMarkets = markets;
+            let maxQuickSgpMarkets = 4;
+            if (filteredQuickSgpMarkets.length > 0) {
+                maxQuickSgpMarkets = 2;
+                displaySgpMarkets = filteredQuickSgpMarkets.map((market) => ({
+                    ...market,
+                    odds: market.odds.slice(0, maxQuickSgpMarkets),
+                    positionNames: market.positionNames?.slice(0, maxQuickSgpMarkets),
+                }));
+            }
+            return orderBy(displaySgpMarkets, ['line', 'odds'], ['asc', 'desc']);
+        } else {
+            return orderBy(markets, ['line', 'odds'], ['asc', 'desc']);
+        }
+    }, [markets, isQuickSgpMarket, filteredQuickSgpMarkets]);
+
+    const positionText0 = !filteredQuickSgpMarkets.length && markets[0] ? getSubtitleText(markets[0], 0) : undefined;
+    const positionText1 = !filteredQuickSgpMarkets.length && markets[0] ? getSubtitleText(markets[0], 1) : undefined;
+    const titleText = getTitleText(
+        !!filteredQuickSgpMarkets.length ? filteredQuickSgpMarkets[0] : markets[0],
+        !isPlayerPropsMarket,
+        isPlayerPropsMarket
+    );
 
     const tooltipKey = getMarketTypeTooltipKey(marketType);
 
-    const liveMarketErrorMessage =
-        markets[0].live && markets[0].errorMessage
-            ? // TODO: if we want to remove teams add .replace(` ${markets[0].homeTeam} - ${markets[0].awayTeam}`, '');
-              markets[0].errorMessage
-            : '';
+    const liveMarketErrorMessage = markets[0].live && markets[0].errorMessage ? markets[0].errorMessage : '';
 
     return showContainer ? (
         <Container
@@ -321,6 +348,7 @@ const Positions: React.FC<PositionsProps> = ({
                                                 isColumnView={isColumnView}
                                                 displayPosition={index}
                                                 isPositionBlocked={oddsData.isBlocked}
+                                                sgpTickets={sgpTickets}
                                             />
                                         );
                                     })}

@@ -1,9 +1,10 @@
-import { SgpBlocker } from 'overtime-utils';
+import { SgpBlocker, SgpBuilder } from 'overtime-utils';
 
 export type RiskManagementData =
     | RiskManagementLeaguesAndTypes
     | RiskManagementBookmakers
     | RiskManagementSgpBlockers
+    | RiskManagementSgpBuilders
     | object;
 
 export type RiskManagementLeaguesAndTypes = {
@@ -28,7 +29,8 @@ type RiskManagementBookmaker = {
     tertiaryBookmaker: string;
 };
 
-export type RiskManagementSgpBlockers = SgpBlocker[];
+export type RiskManagementSgpBlockers = { sgpBlockers: SgpBlocker[] };
+export type RiskManagementSgpBuilders = { sgpBuilders: SgpBuilder[] };
 
 export type SportsAmmRiskManagerData = {
     sgpOnLeagueIdEnabled: boolean;
