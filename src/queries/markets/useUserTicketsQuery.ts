@@ -6,7 +6,7 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { ContractType } from 'enums/contract';
 import { orderBy } from 'lodash';
 import { NetworkId } from 'thales-utils';
-import { Ticket } from 'types/markets';
+import { Ticket, TicketWithGamesInfo } from 'types/markets';
 import { NetworkConfig } from 'types/network';
 import { getContractInstance } from 'utils/contract';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
@@ -17,12 +17,13 @@ import { mapTicket } from 'utils/tickets';
 export const useUserTicketsQuery = (
     walletAddress: string,
     networkConfig: NetworkConfig,
-    options?: Omit<UseQueryOptions<Ticket[] | null>, 'queryKey' | 'queryFn'>
+    getGamesInfo: boolean,
+    options?: Omit<UseQueryOptions<Ticket[] | TicketWithGamesInfo | null>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<Ticket[] | null>({
+    return useQuery<Ticket[] | TicketWithGamesInfo | null>({
         queryKey: QUERY_KEYS.UserTickets(networkConfig.networkId, walletAddress),
         queryFn: async () => {
-            let userTickets = null;
+            let data = null;
 
             try {
                 const sportsAMMDataContract = getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig);
@@ -134,13 +135,15 @@ export const useUserTicketsQuery = (
                         )
                     );
 
-                    userTickets = orderBy(updateTotalQuoteAndPayout(mappedTickets), ['timestamp'], ['desc']);
+                    const userTickets = orderBy(updateTotalQuoteAndPayout(mappedTickets), ['timestamp'], ['desc']);
+
+                    data = getGamesInfo ? { tickets: userTickets, gamesInfo: gamesInfoResponse.data } : userTickets;
                 }
             } catch (e) {
                 console.log('E ', e);
             }
 
-            return userTickets;
+            return data;
         },
         ...options,
     });

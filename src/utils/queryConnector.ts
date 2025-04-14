@@ -62,6 +62,12 @@ export const refetchAfterBuy = (walletAddress: string, networkId: Network) => {
     queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.UserTickets(networkId, walletAddress) });
 };
 
+export const refetchLiveTradingData = (walletAddress: string, networkId: Network) => {
+    queryConnector.queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.LiveTradingProcessorData(walletAddress, networkId),
+    });
+};
+
 export const refetchLiquidityPoolData = (walletAddress: string, networkId: Network, liquidityPoolAddress: string) => {
     queryConnector.queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.LiquidityPool.Data(liquidityPoolAddress, networkId),

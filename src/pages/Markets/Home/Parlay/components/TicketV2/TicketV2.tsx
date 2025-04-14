@@ -36,7 +36,7 @@ import Slippage from 'pages/Markets/Home/Parlay/components/Slippage';
 import CurrentLevelProgressLine from 'pages/Overdrop/components/CurrentLevelProgressLine';
 import { OverdropIcon } from 'pages/Overdrop/components/styled-components';
 import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
-import useLiveTradingProcessorDataQuery from 'queries/markets/useLiveTradingProcessorDataQuery';
+import useLiveTradingProcessorQuery from 'queries/markets/useLiveTradingProcessorQuery';
 import useSportsAmmDataQuery from 'queries/markets/useSportsAmmDataQuery';
 import useTicketLiquidityQuery from 'queries/markets/useTicketLiquidityQuery';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
@@ -128,6 +128,7 @@ import {
     refetchAfterBuy,
     refetchCoingeckoRates,
     refetchFreeBetBalance,
+    refetchLiveTradingData,
     refetchProofs,
     refetchTicketLiquidity,
 } from 'utils/queryConnector';
@@ -498,14 +499,14 @@ const Ticket: React.FC<TicketProps> = ({
     const overContractCurrencyRate =
         exchangeRates && exchangeRates !== null ? exchangeRates[OVER_CONTRACT_RATE_KEY] : 1;
 
-    const liveTradingProcessorDataQuery = useLiveTradingProcessorDataQuery({ networkId, client });
+    const liveTradingProcessorQuery = useLiveTradingProcessorQuery({ networkId, client });
 
     const maxAllowedExecutionDelay = useMemo(
         () =>
-            liveTradingProcessorDataQuery.isSuccess && liveTradingProcessorDataQuery.data
-                ? liveTradingProcessorDataQuery.data.maxAllowedExecutionDelay + 10
+            liveTradingProcessorQuery.isSuccess && liveTradingProcessorQuery.data
+                ? liveTradingProcessorQuery.data.maxAllowedExecutionDelay + 10
                 : 20,
-        [liveTradingProcessorDataQuery.isSuccess, liveTradingProcessorDataQuery.data]
+        [liveTradingProcessorQuery.isSuccess, liveTradingProcessorQuery.data]
     );
 
     const userDataQuery = useUserDataQuery(address as any, { enabled: isConnected });
@@ -1635,7 +1636,6 @@ const Ticket: React.FC<TicketProps> = ({
                         data
                     );
                     setIsBuying(false);
-                    refetchAfterBuy(walletAddress, networkId);
                     toast.update(toastId, getErrorToastOptions(t('markets.parlay.tx-not-received')));
                     return;
                 }
@@ -1643,6 +1643,8 @@ const Ticket: React.FC<TicketProps> = ({
                 const txReceipt = await waitForTransactionReceipt(client as Client, {
                     hash: txHash,
                 });
+
+                if (isLiveTicket) refetchLiveTradingData(walletAddress, networkId);
 
                 if (txReceipt.status === 'success') {
                     PLAUSIBLE.trackEvent(
@@ -1732,6 +1734,7 @@ const Ticket: React.FC<TicketProps> = ({
                                 setCollateralAmount('');
                             }
                             refetchAfterBuy(walletAddress, networkId);
+                            refetchLiveTradingData(walletAddress, networkId);
                         }
                     } else {
                         refetchAfterBuy(walletAddress, networkId);
@@ -1786,6 +1789,7 @@ const Ticket: React.FC<TicketProps> = ({
             } catch (e) {
                 setIsBuying(false);
                 refetchAfterBuy(walletAddress, networkId);
+                refetchLiveTradingData(walletAddress, networkId);
                 toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
                 if (!isErrorExcluded(e as Error)) {
                     const data = getLogData({

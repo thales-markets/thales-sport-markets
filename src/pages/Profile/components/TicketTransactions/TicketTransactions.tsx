@@ -23,16 +23,15 @@ const TicketTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
     const userTicketsQuery = useUserTicketsQuery(
         isSearchTextWalletAddress ? searchText : walletAddress,
         { networkId, client },
-        {
-            enabled: isConnected,
-        }
+        false,
+        { enabled: isConnected }
     );
 
     const userTickets: Ticket[] = useMemo(() => {
         let userTickets: Ticket[] = [];
 
         if (userTicketsQuery.data && userTicketsQuery.isSuccess) {
-            userTickets = userTicketsQuery.data || [];
+            userTickets = (userTicketsQuery.data as Ticket[]) || [];
         }
 
         if (searchText && !isSearchTextWalletAddress) {

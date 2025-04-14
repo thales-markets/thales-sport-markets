@@ -1,27 +1,35 @@
 import ParlayEmptyIcon from 'assets/images/parlay-empty.svg?react';
 import Scroll from 'components/Scroll';
 import SimpleLoader from 'components/SimpleLoader';
+import Tooltip from 'components/Tooltip';
+import { secondsToMilliseconds } from 'date-fns';
+import { LiveTradingRequestStatus } from 'enums/markets';
 import { ScreenSizeBreakpoint } from 'enums/ui';
+import useLiveTradingProcessorDataQuery from 'queries/markets/useLiveTradingProcessorDataQuery';
 import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import { getTicket } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsBiconomy } from 'redux/modules/wallet';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered, FlexDivStart } from 'styles/common';
 import { formatCurrencyWithKey, formatDateWithTime } from 'thales-utils';
-import { Ticket } from 'types/markets';
+import { LiveTradingProcessorData, LiveTradingRequest, Ticket, TicketWithGamesInfo } from 'types/markets';
+import { ThemeInterface } from 'types/ui';
 import { formatMarketOdds } from 'utils/markets';
-import { getPositionTextV2, getTitleText } from 'utils/marketsV2';
+import { getPositionTextV2, getTitleText, liveTradingRequestAsSportMarket } from 'utils/marketsV2';
+import { refetchAfterBuy, refetchLiveTradingData } from 'utils/queryConnector';
+import { delay } from 'utils/timer';
 import useBiconomy from 'utils/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import { Count, Title } from '../../ParlayV2';
 
-const ParlayRelatedMarkets: React.FC = ({}) => {
+const ParlayRelatedMarkets: React.FC = () => {
     const { t } = useTranslation();
+    const theme: ThemeInterface = useTheme();
 
     const ticket = useSelector(getTicket);
     const isBiconomy = useSelector(getIsBiconomy);
@@ -34,16 +42,32 @@ const ParlayRelatedMarkets: React.FC = ({}) => {
     const smartAddres = useBiconomy();
     const walletAddress = (isBiconomy ? smartAddres : address) || '';
 
-    const userTicketsQuery = useUserTicketsQuery(
+    const isLive = useMemo(() => !!ticket[0]?.live, [ticket]);
+
+    const liveTradingProcessorDataQuery = useLiveTradingProcessorDataQuery(
         walletAddress,
         { networkId, client },
-        { enabled: isConnected && !!ticket.length }
+        { enabled: isConnected && isLive }
     );
+
+    const liveTradingRequests = useMemo(
+        () =>
+            liveTradingProcessorDataQuery.isSuccess && liveTradingProcessorDataQuery.data
+                ? (liveTradingProcessorDataQuery.data as LiveTradingProcessorData).requests.filter(
+                      (request) => request.gameId === ticket[0]?.gameId
+                  )
+                : [],
+        [liveTradingProcessorDataQuery.isSuccess, liveTradingProcessorDataQuery.data, ticket]
+    );
+
+    const userTicketsQuery = useUserTicketsQuery(walletAddress, { networkId, client }, true, {
+        enabled: isConnected && !!ticket.length,
+    });
 
     const gameRelatedSingleTickets = useMemo(
         () =>
             userTicketsQuery.isSuccess && userTicketsQuery.data
-                ? userTicketsQuery.data.filter(
+                ? (userTicketsQuery.data as TicketWithGamesInfo).tickets.filter(
                       (userTicket) =>
                           userTicket.sportMarkets.length === 1 && // filter only single tickets
                           userTicket.sportMarkets[0].gameId === ticket[0]?.gameId
@@ -52,31 +76,92 @@ const ParlayRelatedMarkets: React.FC = ({}) => {
         [userTicketsQuery.isSuccess, userTicketsQuery.data, ticket]
     );
 
-    const showMarkets = !isMobile || !!gameRelatedSingleTickets.length;
+    const gamesInfo = useMemo(
+        () =>
+            userTicketsQuery.isSuccess && userTicketsQuery.data
+                ? (userTicketsQuery.data as TicketWithGamesInfo).gamesInfo
+                : {},
+        [userTicketsQuery.isSuccess, userTicketsQuery.data]
+    );
+
+    const markets: (LiveTradingRequest | Ticket)[] = useMemo(() => {
+        const requestAndTickets = [...liveTradingRequests, ...gameRelatedSingleTickets];
+        return requestAndTickets;
+    }, [liveTradingRequests, gameRelatedSingleTickets]);
+
+    useEffect(() => {
+        const checkPendingRequests = async () => {
+            const isPendingRequests = liveTradingRequests.some(
+                (market) => market.requestId && market.status === LiveTradingRequestStatus.PENDING
+            );
+            while (isPendingRequests) {
+                refetchAfterBuy(walletAddress, networkId);
+                refetchLiveTradingData(walletAddress, networkId);
+                await delay(secondsToMilliseconds(5));
+            }
+        };
+
+        checkPendingRequests();
+    }, [liveTradingRequests, walletAddress, networkId]);
+
+    const isLoading = liveTradingProcessorDataQuery.isLoading || userTicketsQuery.isLoading;
+    const showMarkets = !isMobile || !!markets.length;
+
+    const getRequestedMarket = (request: LiveTradingRequest) => {
+        const relatedSportMarket = liveTradingRequestAsSportMarket(request, gamesInfo);
+
+        return relatedSportMarket ? (
+            <TicketRow>
+                <TimeInfo>
+                    <TimeText>{formatDateWithTime(new Date(request.timestamp))}</TimeText>
+                </TimeInfo>
+                <MarketTypeInfo>
+                    <Text>{getTitleText(relatedSportMarket)}</Text>
+                </MarketTypeInfo>
+                <PositionInfo>
+                    <PositionText>{getPositionTextV2(relatedSportMarket, request.position, true)}</PositionText>
+                </PositionInfo>
+                <Tooltip overlay={t(getRequestStatusStyle(request.status, theme).tooltipKey)}>
+                    <Icon
+                        className={getRequestStatusStyle(request.status, theme).className}
+                        color={getRequestStatusStyle(request.status, theme).color}
+                    />
+                </Tooltip>
+            </TicketRow>
+        ) : (
+            <></>
+        );
+    };
 
     return showMarkets ? (
         <Scroll height="100%" renderOnlyChildren={isMobile}>
             <Container>
                 <Title>
-                    {t('markets.parlay-related-markets.title')}
+                    {isLive
+                        ? t('markets.parlay-related-markets.title-live')
+                        : t('markets.parlay-related-markets.title')}
                     <Count>{gameRelatedSingleTickets.length}</Count>
                 </Title>
 
-                {userTicketsQuery.isLoading ? (
+                {isLoading ? (
                     <LoaderContainer>
                         <SimpleLoader />
                     </LoaderContainer>
-                ) : !!gameRelatedSingleTickets.length ? (
-                    <RelatedTickets>
-                        {gameRelatedSingleTickets.map((relatedTicket, i) => {
-                            const isLastRow = i === gameRelatedSingleTickets.length - 1;
+                ) : !!markets.length ? (
+                    <RelatedMarkets>
+                        {markets.map((relatedMarket: LiveTradingRequest | Ticket, i) => {
+                            const isTicketCreated = !!(relatedMarket as Ticket)?.id;
                             return (
-                                <RelatedTicket key={`row-${i}`}>
-                                    <ExpandableRow ticket={relatedTicket} isLastRow={isLastRow} />
-                                </RelatedTicket>
+                                <RelatedMarket key={`row-${i}`}>
+                                    {isTicketCreated ? (
+                                        <ExpandableRow ticket={relatedMarket as Ticket} />
+                                    ) : (
+                                        getRequestedMarket(relatedMarket as LiveTradingRequest)
+                                    )}
+                                </RelatedMarket>
                             );
                         })}
-                    </RelatedTickets>
+                    </RelatedMarkets>
                 ) : (
                     <Empty>
                         <StyledParlayEmptyIcon />
@@ -90,7 +175,7 @@ const ParlayRelatedMarkets: React.FC = ({}) => {
     );
 };
 
-const ExpandableRow: React.FC<{ ticket: Ticket; isLastRow: boolean }> = ({ ticket, isLastRow }) => {
+const ExpandableRow: React.FC<{ ticket: Ticket }> = ({ ticket }) => {
     const { t } = useTranslation();
 
     const selectedOddsType = useSelector(getOddsType);
@@ -101,7 +186,7 @@ const ExpandableRow: React.FC<{ ticket: Ticket; isLastRow: boolean }> = ({ ticke
 
     return (
         <>
-            <TicketRow hasSeparator={!isLastRow && !isExpanded} onClick={() => setIsExpanded(!isExpanded)}>
+            <TicketRow onClick={() => setIsExpanded(!isExpanded)}>
                 <TimeInfo>
                     <TimeText>{formatDateWithTime(ticket.timestamp)}</TimeText>
                 </TimeInfo>
@@ -111,10 +196,10 @@ const ExpandableRow: React.FC<{ ticket: Ticket; isLastRow: boolean }> = ({ ticke
                 <PositionInfo>
                     <PositionText>{getPositionTextV2(market, market.position, true)}</PositionText>
                 </PositionInfo>
-                <ArrowIcon className={`icon ${isExpanded ? 'icon--arrow-up' : 'icon--arrow-down'}`} />
+                <Icon className={`icon ${isExpanded ? 'icon--arrow-up' : 'icon--arrow-down'}`} />
             </TicketRow>
             {isExpanded && (
-                <TicketDetailsRow hasSeparator={!isLastRow}>
+                <TicketDetailsRow>
                     <OddsInfo>
                         <PositionText isLabel>{t('markets.parlay-related-markets.total-quote')}:</PositionText>
                         <PositionText>{formatMarketOdds(selectedOddsType, market.odd)}</PositionText>
@@ -144,16 +229,16 @@ const Container = styled(FlexDivColumn)`
     }
 `;
 
-const RelatedTickets = styled(FlexDivColumn)`
+const RelatedMarkets = styled(FlexDivColumn)`
     gap: 5px;
 `;
 
-const RelatedTicket = styled.div`
+const RelatedMarket = styled.div`
     background: ${(props) => props.theme.background.secondary + '80'}; // 50% opacity
     border-radius: 5px;
 `;
 
-const Row = styled(FlexDivRowCentered)<{ hasSeparator?: boolean }>`
+const Row = styled(FlexDivRowCentered)`
     padding: 6px 8px;
 `;
 
@@ -182,10 +267,36 @@ const PositionInfo = styled(Info)`
     width: 128px;
 `;
 
-const ArrowIcon = styled.i`
+const getRequestStatusStyle = (status: LiveTradingRequestStatus, theme: ThemeInterface) => {
+    let color = '';
+    let className = '';
+    let tooltipKey = '';
+
+    switch (status) {
+        case LiveTradingRequestStatus.PENDING:
+            color = theme.textColor.primary;
+            className = 'icon icon--ongoing';
+            tooltipKey = 'markets.parlay-related-markets.tooltip.pending';
+            break;
+        case LiveTradingRequestStatus.SUCCESS:
+            color = theme.success.textColor.primary;
+            className = 'icon icon--correct-full';
+            tooltipKey = 'markets.parlay-related-markets.tooltip.success';
+            break;
+        case LiveTradingRequestStatus.FAILED:
+            color = theme.error.textColor.primary;
+            className = 'icon icon--wrong-full';
+            tooltipKey = 'markets.parlay-related-markets.tooltip.failed';
+            break;
+    }
+    return { color, className, tooltipKey };
+};
+
+const Icon = styled.i<{ color?: string }>`
     display: flex;
     align-items: center;
     font-size: 10px;
+    ${(props) => props.color && `color: ${props.color};`}
 `;
 
 const OddsInfo = styled(Info)`

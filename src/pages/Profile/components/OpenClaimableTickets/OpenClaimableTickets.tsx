@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
 import { getIsBiconomy } from 'redux/modules/wallet';
+import { Ticket } from 'types/markets';
 import { RootState } from 'types/redux';
 import { sendBiconomyTransaction } from 'utils/biconomy';
 import { getCollateral, getCollaterals, getDefaultCollateral, isLpSupported } from 'utils/collaterals';
@@ -97,11 +98,13 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
     const userTicketsQuery = useUserTicketsQuery(
         isSearchTextWalletAddress ? searchText : walletAddress,
         { networkId, client },
+        false,
         { enabled: isConnected }
     );
 
     const userTicketsByStatus = useMemo(() => {
-        let userTickets = userTicketsQuery.isSuccess && userTicketsQuery.data ? userTicketsQuery.data : [];
+        let userTickets =
+            userTicketsQuery.isSuccess && userTicketsQuery.data ? (userTicketsQuery.data as Ticket[]) : [];
         if (searchText && !isAddress(searchText)) {
             userTickets = userTickets.filter((ticket) =>
                 ticket.sportMarkets.some(

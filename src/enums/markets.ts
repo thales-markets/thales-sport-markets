@@ -102,3 +102,9 @@ export enum TicketErrorCode {
     SGP_LEAGUE_DISABLED = 7,
     SGP_MAX_MARKETS = 8,
 }
+
+export enum LiveTradingRequestStatus {
+    PENDING = 0,
+    SUCCESS = 1,
+    FAILED = 2,
+}
