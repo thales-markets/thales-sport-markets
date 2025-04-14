@@ -28,11 +28,7 @@ const LogoIcon = styled.i`
     cursor: pointer;
     color: ${(props) => props.theme.textColor.primary};
     @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
-        font-size: 170px;
         width: 150px;
-    }
-
-    @media (max-width: 420px) {
         font-size: 140px;
         line-height: 32px;
         height: 32px;

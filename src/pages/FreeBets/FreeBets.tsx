@@ -226,7 +226,7 @@ const FreeBets: React.FC = () => {
                                             });
                                             navigator.clipboard.writeText(
                                                 generatedIds
-                                                    .map((id) => `https://overtimemarkets.xyz/profile?freeBet=${id}`)
+                                                    .map((id) => `https://overtimemarkets.xyz/markets?freeBet=${id}`)
                                                     .join('\n')
                                             );
                                             toast.update(toastId, {
@@ -242,14 +242,14 @@ const FreeBets: React.FC = () => {
                         <FlexDivColumnCentered gap={5}>
                             {generatedIds.map((id, index) => (
                                 <FlexDivSpaceBetween key={id}>
-                                    <span>{`${index}. https://overtimemarkets.xyz/profile?freeBet=${id}`}</span>
+                                    <span>{`${index}. https://overtimemarkets.xyz/markets?freeBet=${id}`}</span>
                                     <CopyIcon
                                         onClick={() => {
                                             const toastId = toast.loading(t('free-bet.admin.copying'), {
                                                 autoClose: 1000,
                                             });
                                             navigator.clipboard.writeText(
-                                                `https://overtimemarkets.xyz/profile?freeBet=${id}`
+                                                `https://overtimemarkets.xyz/markets?freeBet=${id}`
                                             );
                                             toast.update(toastId, {
                                                 ...getInfoToastOptions(t('free-bet.admin.copied') + ' ' + id),
@@ -273,7 +273,7 @@ const GenerateContainer = styled(FlexDivColumnNative)`
     margin-top: 100px;
 `;
 
-const CopyIcon = styled.i`
+export const CopyIcon = styled.i`
     font-size: 24px;
     cursor: pointer;
     font-weight: 400;
