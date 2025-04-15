@@ -65,7 +65,9 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
     return (
         <>
             <Wrapper>
-                <LeagueInfo>{`${leagueSport} / ${leagueLabel}`}</LeagueInfo>
+                <LeagueInfo>{`${t(
+                    `market.filter-label.sport.${leagueSport.toLowerCase()}`
+                )} / ${leagueLabel}`}</LeagueInfo>
                 <Container>
                     <LeagueLogoContainer>
                         <LeagueLogo className={leagueLogo} />
