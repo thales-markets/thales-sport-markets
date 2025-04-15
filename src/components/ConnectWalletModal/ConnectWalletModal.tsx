@@ -53,7 +53,7 @@ const getDefaultStyle = (theme: ThemeInterface, isMobile: boolean, isLoading: bo
     },
     overlay: {
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        zIndex: isMobile ? 33 : isLoading ? 3 : 4000, // validations tooltips has 3001, wallet connect modal has 89 and claim free bet has 32
+        zIndex: isLoading ? 3 : isMobile ? 33 : 4000, // validations tooltips has 3001, wallet connect modal has 89 and claim free bet has 32
     },
 });
 
