@@ -25,6 +25,10 @@
     content: '\0029';
 }
 
+.icon--aussierules:before {
+    content: '\002A';
+}
+
 .icon--politics:before {
     content: '\002E';
 }

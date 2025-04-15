@@ -55,6 +55,7 @@ import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivSpaceBetween }
 import { addHoursToCurrentDate } from 'thales-utils';
 import { MarketsCache, SportMarket, SportMarkets, TagInfo, Tags } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
+import { getCaseAccentInsensitiveString } from 'utils/formatters/string';
 import { getDefaultPlayerPropsLeague } from 'utils/marketsV2';
 import { history } from 'utils/routes';
 import { getScrollMainContainerToTop } from 'utils/scroll';
@@ -281,13 +282,16 @@ const Home: React.FC = () => {
 
         const filteredMarkets = marketsToFilter.filter((market: SportMarket) => {
             if (marketSearch) {
+                const normalizedMarketSearch = getCaseAccentInsensitiveString(marketSearch);
                 if (sportFilter == SportFilter.PlayerProps) {
-                    if (!market.playerProps.playerName.toLowerCase().includes(marketSearch.toLowerCase())) {
+                    if (
+                        !getCaseAccentInsensitiveString(market.playerProps.playerName).includes(normalizedMarketSearch)
+                    ) {
                         return false;
                     }
                 } else if (
-                    !market.homeTeam.toLowerCase().includes(marketSearch.toLowerCase()) &&
-                    !market.awayTeam.toLowerCase().includes(marketSearch.toLowerCase())
+                    !getCaseAccentInsensitiveString(market.homeTeam).includes(normalizedMarketSearch) &&
+                    !getCaseAccentInsensitiveString(market.awayTeam).includes(normalizedMarketSearch)
                 ) {
                     return false;
                 }
