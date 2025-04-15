@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import { Ticket } from 'types/markets';
 import { RootState } from 'types/redux';
+import { getCaseAccentInsensitiveString } from 'utils/formatters/string';
 import useBiconomy from 'utils/useBiconomy';
 import { isAddress } from 'viem';
 import { useAccount, useChainId, useClient } from 'wagmi';
@@ -35,11 +36,12 @@ const TicketTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
         }
 
         if (searchText && !isSearchTextWalletAddress) {
+            const normalizedSearch = getCaseAccentInsensitiveString(searchText);
             userTickets = userTickets.filter((item) => {
                 const marketWithSearchTextIncluded = item.sportMarkets.find(
                     (item) =>
-                        item.homeTeam.toLowerCase().includes(searchText.toLowerCase()) ||
-                        item.awayTeam.toLowerCase().includes(searchText.toLowerCase())
+                        getCaseAccentInsensitiveString(item.homeTeam).includes(normalizedSearch) ||
+                        getCaseAccentInsensitiveString(item.awayTeam).includes(normalizedSearch)
                 );
 
                 if (marketWithSearchTextIncluded) return item;

@@ -17,6 +17,7 @@ import { RootState } from 'types/redux';
 import { sendBiconomyTransaction } from 'utils/biconomy';
 import { getCollateral, getCollaterals, getDefaultCollateral, isLpSupported } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
+import { getCaseAccentInsensitiveString } from 'utils/formatters/string';
 import { refetchAfterClaim } from 'utils/queryConnector';
 import useBiconomy from 'utils/useBiconomy';
 import { Address, Client, encodeFunctionData, isAddress } from 'viem';
@@ -104,11 +105,12 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
     const userTicketsByStatus = useMemo(() => {
         let userTickets = userTicketsQuery.isSuccess && userTicketsQuery.data ? userTicketsQuery.data.tickets : [];
         if (searchText && !isAddress(searchText)) {
+            const normalizedSearch = getCaseAccentInsensitiveString(searchText);
             userTickets = userTickets.filter((ticket) =>
                 ticket.sportMarkets.some(
                     (market) =>
-                        market.homeTeam.toLowerCase().includes(searchText.toLowerCase()) ||
-                        market.awayTeam.toLowerCase().includes(searchText.toLowerCase())
+                        getCaseAccentInsensitiveString(market.homeTeam).includes(normalizedSearch) ||
+                        getCaseAccentInsensitiveString(market.awayTeam).includes(normalizedSearch)
                 )
             );
         }

@@ -176,6 +176,7 @@ const groupBySortedMarketsKeys = (marketsKeys: number[], usePriority: boolean) =
     const tableTennisKeys: number[] = [];
     const eSportsKeys: number[] = [];
     const rugbyKeys: number[] = [];
+    const aussieRulesKeys: number[] = [];
     const volleyballKeys: number[] = [];
     const handballKeys: number[] = [];
     const waterpoloKeys: number[] = [];
@@ -227,6 +228,9 @@ const groupBySortedMarketsKeys = (marketsKeys: number[], usePriority: boolean) =
             if (leagueSport === Sport.RUGBY) {
                 rugbyKeys.push(tag);
             }
+            if (leagueSport === Sport.AUSSIE_RULES) {
+                aussieRulesKeys.push(tag);
+            }
             if (leagueSport === Sport.VOLLEYBALL) {
                 volleyballKeys.push(tag);
             }
@@ -272,6 +276,7 @@ const groupBySortedMarketsKeys = (marketsKeys: number[], usePriority: boolean) =
         ...tableTennisKeys,
         ...eSportsKeys,
         ...rugbyKeys,
+        ...aussieRulesKeys,
         ...volleyballKeys,
         ...handballKeys,
         ...waterpoloKeys,

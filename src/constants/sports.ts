@@ -33,6 +33,7 @@ export const PLAYER_PROPS_MARKETS_PER_SPORT_MAP: Record<Sport, MarketType[]> = {
     [Sport.TABLE_TENNIS]: [],
     [Sport.ESPORTS]: [],
     [Sport.RUGBY]: [],
+    [Sport.AUSSIE_RULES]: [],
     [Sport.VOLLEYBALL]: [],
     [Sport.HANDBALL]: [],
     [Sport.WATERPOLO]: [],

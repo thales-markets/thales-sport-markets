@@ -121,6 +121,7 @@ body {
         env(safe-area-inset-left, 0);
     overflow-x: hidden !important;
     padding-right: 0 !important;
+    --wcm-z-index: 9999; /* Z index for wallet connect modal opened through rainbowkit sign in */
 }
 ol,
 ul {
