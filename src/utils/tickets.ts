@@ -4,6 +4,7 @@ import { OddsType } from 'enums/markets';
 import { t } from 'i18next';
 import {
     getLeagueSport,
+    getPeriodsForResultView,
     isContractResultView,
     isFuturesMarket,
     isOneSideMarket,
@@ -27,7 +28,7 @@ import { getCollateralByAddress, isOverCurrency } from './collaterals';
 import { getContractInstance } from './contract';
 import freeBetHolder from './contracts/freeBetHolder';
 import stakingThalesBettingProxy from './contracts/stakingThalesBettingProxy';
-import { formatMarketOdds, getPeriodsForResultView } from './markets';
+import { formatMarketOdds } from './markets';
 import { isPlayerPropsCombiningEnabled } from './marketsV2';
 
 export const mapTicket = (

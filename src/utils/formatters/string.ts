@@ -8,3 +8,10 @@ export const convertFromBytes32 = (value: string) => {
     const result = bytes32({ input: value });
     return result.replace(/\0/g, '');
 };
+
+export const getCaseAccentInsensitiveString = (value: string) => {
+    return value
+        .normalize('NFD') // Normalize accented characters
+        .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
+        .toLowerCase(); // Case-insensitive
+};
