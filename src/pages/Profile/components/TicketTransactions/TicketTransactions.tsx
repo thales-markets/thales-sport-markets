@@ -31,7 +31,7 @@ const TicketTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
         let userTickets: Ticket[] = [];
 
         if (userTicketsQuery.data && userTicketsQuery.isSuccess) {
-            userTickets = (userTicketsQuery.data as Ticket[]) || [];
+            userTickets = userTicketsQuery.data.tickets || [];
         }
 
         if (searchText && !isSearchTextWalletAddress) {

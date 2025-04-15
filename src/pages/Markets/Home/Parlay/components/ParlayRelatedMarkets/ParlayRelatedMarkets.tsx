@@ -2,12 +2,11 @@ import ParlayEmptyIcon from 'assets/images/parlay-empty.svg?react';
 import Scroll from 'components/Scroll';
 import SimpleLoader from 'components/SimpleLoader';
 import Tooltip from 'components/Tooltip';
-import { secondsToMilliseconds } from 'date-fns';
 import { LiveTradingRequestStatus } from 'enums/markets';
 import { ScreenSizeBreakpoint } from 'enums/ui';
-import useLiveTradingProcessorDataQuery from 'queries/markets/useLiveTradingProcessorDataQuery';
+import { orderBy } from 'lodash';
 import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
@@ -15,14 +14,19 @@ import { getTicket } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
-import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered, FlexDivStart } from 'styles/common';
+import {
+    FlexDivCentered,
+    FlexDivColumn,
+    FlexDivColumnCentered,
+    FlexDivColumnNative,
+    FlexDivRowCentered,
+    FlexDivStart,
+} from 'styles/common';
 import { formatCurrencyWithKey, formatDateWithTime } from 'thales-utils';
-import { LiveTradingProcessorData, LiveTradingRequest, Ticket, TicketWithGamesInfo } from 'types/markets';
+import { LiveTradingRequest, Ticket, TicketsWithGamesInfo } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { formatMarketOdds } from 'utils/markets';
 import { getPositionTextV2, getTitleText, liveTradingRequestAsSportMarket } from 'utils/marketsV2';
-import { refetchAfterBuy, refetchLiveTradingData } from 'utils/queryConnector';
-import { delay } from 'utils/timer';
 import useBiconomy from 'utils/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import { Count, Title } from '../../ParlayV2';
@@ -44,30 +48,14 @@ const ParlayRelatedMarkets: React.FC = () => {
 
     const isLive = useMemo(() => !!ticket[0]?.live, [ticket]);
 
-    const liveTradingProcessorDataQuery = useLiveTradingProcessorDataQuery(
-        walletAddress,
-        { networkId, client },
-        { enabled: isConnected && isLive }
-    );
-
-    const liveTradingRequests = useMemo(
-        () =>
-            liveTradingProcessorDataQuery.isSuccess && liveTradingProcessorDataQuery.data
-                ? (liveTradingProcessorDataQuery.data as LiveTradingProcessorData).requests.filter(
-                      (request) => request.gameId === ticket[0]?.gameId
-                  )
-                : [],
-        [liveTradingProcessorDataQuery.isSuccess, liveTradingProcessorDataQuery.data, ticket]
-    );
-
-    const userTicketsQuery = useUserTicketsQuery(walletAddress, { networkId, client }, true, {
-        enabled: isConnected && !!ticket.length,
+    const userTicketsQuery = useUserTicketsQuery(walletAddress, { networkId, client }, isLive, {
+        enabled: isConnected && ticket.length > 0,
     });
 
     const gameRelatedSingleTickets = useMemo(
         () =>
             userTicketsQuery.isSuccess && userTicketsQuery.data
-                ? (userTicketsQuery.data as TicketWithGamesInfo).tickets.filter(
+                ? (userTicketsQuery.data as TicketsWithGamesInfo).tickets.filter(
                       (userTicket) =>
                           userTicket.sportMarkets.length === 1 && // filter only single tickets
                           userTicket.sportMarkets[0].gameId === ticket[0]?.gameId
@@ -76,42 +64,37 @@ const ParlayRelatedMarkets: React.FC = () => {
         [userTicketsQuery.isSuccess, userTicketsQuery.data, ticket]
     );
 
+    const liveTradingRequests = useMemo(
+        () =>
+            userTicketsQuery.isSuccess && userTicketsQuery.data
+                ? userTicketsQuery.data.liveRequests.filter(
+                      (request) =>
+                          request.gameId === ticket[0]?.gameId && request.status !== LiveTradingRequestStatus.SUCCESS
+                  )
+                : [],
+        [userTicketsQuery.isSuccess, userTicketsQuery.data, ticket]
+    );
+
     const gamesInfo = useMemo(
         () =>
             userTicketsQuery.isSuccess && userTicketsQuery.data
-                ? (userTicketsQuery.data as TicketWithGamesInfo).gamesInfo
+                ? (userTicketsQuery.data as TicketsWithGamesInfo).gamesInfo
                 : {},
         [userTicketsQuery.isSuccess, userTicketsQuery.data]
     );
 
     const markets: (LiveTradingRequest | Ticket)[] = useMemo(() => {
         const requestAndTickets = [...liveTradingRequests, ...gameRelatedSingleTickets];
-        return requestAndTickets;
+        return orderBy(requestAndTickets, ['timestamp'], ['desc']);
     }, [liveTradingRequests, gameRelatedSingleTickets]);
 
-    useEffect(() => {
-        const checkPendingRequests = async () => {
-            const isPendingRequests = liveTradingRequests.some(
-                (market) => market.requestId && market.status === LiveTradingRequestStatus.PENDING
-            );
-            while (isPendingRequests) {
-                refetchAfterBuy(walletAddress, networkId);
-                refetchLiveTradingData(walletAddress, networkId);
-                await delay(secondsToMilliseconds(5));
-            }
-        };
-
-        checkPendingRequests();
-    }, [liveTradingRequests, walletAddress, networkId]);
-
-    const isLoading = liveTradingProcessorDataQuery.isLoading || userTicketsQuery.isLoading;
     const showMarkets = !isMobile || !!markets.length;
 
     const getRequestedMarket = (request: LiveTradingRequest) => {
         const relatedSportMarket = liveTradingRequestAsSportMarket(request, gamesInfo);
 
         return relatedSportMarket ? (
-            <TicketRow>
+            <TicketRow isClikable={false}>
                 <TimeInfo>
                     <TimeText>{formatDateWithTime(new Date(request.timestamp))}</TimeText>
                 </TimeInfo>
@@ -140,10 +123,10 @@ const ParlayRelatedMarkets: React.FC = () => {
                     {isLive
                         ? t('markets.parlay-related-markets.title-live')
                         : t('markets.parlay-related-markets.title')}
-                    <Count>{gameRelatedSingleTickets.length}</Count>
+                    <Count>{markets.length}</Count>
                 </Title>
 
-                {isLoading ? (
+                {userTicketsQuery.isLoading ? (
                     <LoaderContainer>
                         <SimpleLoader />
                     </LoaderContainer>
@@ -177,6 +160,7 @@ const ParlayRelatedMarkets: React.FC = () => {
 
 const ExpandableRow: React.FC<{ ticket: Ticket }> = ({ ticket }) => {
     const { t } = useTranslation();
+    const theme: ThemeInterface = useTheme();
 
     const selectedOddsType = useSelector(getOddsType);
 
@@ -186,7 +170,7 @@ const ExpandableRow: React.FC<{ ticket: Ticket }> = ({ ticket }) => {
 
     return (
         <>
-            <TicketRow onClick={() => setIsExpanded(!isExpanded)}>
+            <TicketRow onClick={() => setIsExpanded(!isExpanded)} isClikable>
                 <TimeInfo>
                     <TimeText>{formatDateWithTime(ticket.timestamp)}</TimeText>
                 </TimeInfo>
@@ -196,7 +180,15 @@ const ExpandableRow: React.FC<{ ticket: Ticket }> = ({ ticket }) => {
                 <PositionInfo>
                     <PositionText>{getPositionTextV2(market, market.position, true)}</PositionText>
                 </PositionInfo>
-                <Icon className={`icon ${isExpanded ? 'icon--arrow-up' : 'icon--arrow-down'}`} />
+                <FlexDivColumnNative>
+                    <Tooltip overlay={t(getRequestStatusStyle(LiveTradingRequestStatus.SUCCESS, theme).tooltipKey)}>
+                        <Icon
+                            className={getRequestStatusStyle(LiveTradingRequestStatus.SUCCESS, theme).className}
+                            color={getRequestStatusStyle(LiveTradingRequestStatus.SUCCESS, theme).color}
+                        />
+                    </Tooltip>
+                    <Icon className={`icon ${isExpanded ? 'icon--arrow-up' : 'icon--arrow-down'}`} />
+                </FlexDivColumnNative>
             </TicketRow>
             {isExpanded && (
                 <TicketDetailsRow>
@@ -242,10 +234,10 @@ const Row = styled(FlexDivRowCentered)`
     padding: 6px 8px;
 `;
 
-const TicketRow = styled(Row)`
+const TicketRow = styled(Row)<{ isClikable: boolean }>`
     background: ${(props) => props.theme.background.secondary};
     border-radius: 5px;
-    cursor: pointer;
+    cursor: ${(props) => (props.isClikable ? 'pointer' : 'default')};
 `;
 
 const TicketDetailsRow = styled(Row)``;
@@ -297,6 +289,7 @@ const Icon = styled.i<{ color?: string }>`
     align-items: center;
     font-size: 10px;
     ${(props) => props.color && `color: ${props.color};`}
+    cursor: pointer;
 `;
 
 const OddsInfo = styled(Info)`

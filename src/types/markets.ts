@@ -157,10 +157,6 @@ export type LiveTradingRequest = {
     status: LiveTradingRequestStatus;
 };
 
-export type LiveTradingProcessorData = {
-    requests: LiveTradingRequest[];
-};
-
 export type TradeData = {
     gameId: string;
     sportId: number;
@@ -213,7 +209,11 @@ export type Ticket = {
     systemBetData?: SystemBetData;
 };
 
-export type TicketWithGamesInfo = { tickets: Ticket[]; gamesInfo: any };
+export type TicketsWithGamesInfo = {
+    tickets: Ticket[];
+    liveRequests: LiveTradingRequest[];
+    gamesInfo: any;
+};
 
 export type UserStats = {
     id: string;

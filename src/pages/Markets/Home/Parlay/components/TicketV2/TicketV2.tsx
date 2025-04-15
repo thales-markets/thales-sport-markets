@@ -128,9 +128,9 @@ import {
     refetchAfterBuy,
     refetchCoingeckoRates,
     refetchFreeBetBalance,
-    refetchLiveTradingData,
     refetchProofs,
     refetchTicketLiquidity,
+    refetchUserTickets,
 } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import { getSportsAMMV2QuoteMethod, getSportsAMMV2Transaction } from 'utils/sportsAmmV2';
@@ -1644,7 +1644,7 @@ const Ticket: React.FC<TicketProps> = ({
                     hash: txHash,
                 });
 
-                if (isLiveTicket) refetchLiveTradingData(walletAddress, networkId);
+                if (isLiveTicket) refetchUserTickets(walletAddress, networkId);
 
                 if (txReceipt.status === 'success') {
                     PLAUSIBLE.trackEvent(
@@ -1734,7 +1734,6 @@ const Ticket: React.FC<TicketProps> = ({
                                 setCollateralAmount('');
                             }
                             refetchAfterBuy(walletAddress, networkId);
-                            refetchLiveTradingData(walletAddress, networkId);
                         }
                     } else {
                         refetchAfterBuy(walletAddress, networkId);
@@ -1789,7 +1788,6 @@ const Ticket: React.FC<TicketProps> = ({
             } catch (e) {
                 setIsBuying(false);
                 refetchAfterBuy(walletAddress, networkId);
-                refetchLiveTradingData(walletAddress, networkId);
                 toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
                 if (!isErrorExcluded(e as Error)) {
                     const data = getLogData({

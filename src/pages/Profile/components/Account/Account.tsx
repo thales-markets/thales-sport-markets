@@ -12,7 +12,6 @@ import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumnStart, FlexDivEnd, FlexDivSpaceBetween, FlexDivStart } from 'styles/common';
 import { formatCurrencyWithKey, formatCurrencyWithSign } from 'thales-utils';
 import { Rates } from 'types/collateral';
-import { Ticket } from 'types/markets';
 import { RootState } from 'types/redux';
 import { getCollaterals, mapMultiCollateralBalances } from 'utils/collaterals';
 import useBiconomy from 'utils/useBiconomy';
@@ -34,9 +33,7 @@ const Account: React.FC = () => {
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(
         walletAddress,
         { networkId, client },
-        {
-            enabled: isConnected,
-        }
+        { enabled: isConnected }
     );
 
     const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
@@ -79,8 +76,7 @@ const Account: React.FC = () => {
 
     const userTicketsByStatus = useMemo(() => {
         if (exchangeRates && userTicketsQuery.isSuccess) {
-            const userTickets =
-                userTicketsQuery.isSuccess && userTicketsQuery.data ? (userTicketsQuery.data as Ticket[]) : [];
+            const userTickets = userTicketsQuery.data ? userTicketsQuery.data.tickets : [];
             let [tickets, potentialWin] = [0, 0];
 
             userTickets.forEach((ticket) => {
