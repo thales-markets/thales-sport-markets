@@ -144,6 +144,8 @@ const DappHeader: React.FC = () => {
                 ? OVERDROP_LEVELS.find((item) => item.level == overdropStateItem?.currentLevel)
                 : OVERDROP_LEVELS[0];
             if (currentLevelItem) setLevelItem(currentLevelItem);
+        } else {
+            setLevelItem(OVERDROP_LEVELS[0]);
         }
     }, [dispatch, address, overdropUIState]);
 
