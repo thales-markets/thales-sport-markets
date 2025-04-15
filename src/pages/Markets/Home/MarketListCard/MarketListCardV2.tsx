@@ -571,33 +571,32 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                                             isColumnView={isColumnView}
                                         />
                                     )}
-                                    {marketsCount > 0 && (
-                                        <MarketsCountWrapper
-                                            onClick={() => {
-                                                if (isPlayerPropsMarket) {
-                                                    dispatch(
-                                                        setSelectedMarket({
-                                                            gameId: market.gameId,
-                                                            sport: market.sport,
-                                                            live: market.live,
-                                                            playerName: market.playerProps.playerName,
-                                                        })
-                                                    );
-                                                } else {
-                                                    dispatch(
-                                                        setSelectedMarket({
-                                                            gameId: market.gameId,
-                                                            sport: market.sport,
-                                                            live: market.live,
-                                                        })
-                                                    );
-                                                }
-                                            }}
-                                        >
-                                            {`+${marketsCount}`}
-                                            {!isMobile && <Arrow className={'icon icon--arrow-down'} />}
-                                        </MarketsCountWrapper>
-                                    )}
+                                    <MarketsCountWrapper
+                                        hidden={marketsCount === 0}
+                                        onClick={() => {
+                                            if (isPlayerPropsMarket) {
+                                                dispatch(
+                                                    setSelectedMarket({
+                                                        gameId: market.gameId,
+                                                        sport: market.sport,
+                                                        live: market.live,
+                                                        playerName: market.playerProps.playerName,
+                                                    })
+                                                );
+                                            } else {
+                                                dispatch(
+                                                    setSelectedMarket({
+                                                        gameId: market.gameId,
+                                                        sport: market.sport,
+                                                        live: market.live,
+                                                    })
+                                                );
+                                            }
+                                        }}
+                                    >
+                                        {`+${marketsCount}`}
+                                        {!isMobile && <Arrow className={'icon icon--arrow-down'} />}
+                                    </MarketsCountWrapper>
                                 </>
                             ) : isGameOpen ? (
                                 <>
