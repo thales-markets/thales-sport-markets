@@ -566,7 +566,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                                     })}
                             </SectionWrapper>
                         )}
-                        <ClaimFreeBetButton styles={{ marginBottom: '-30px', marginTop: '20px' }} />
+                        {isConnected && <ClaimFreeBetButton styles={{ marginBottom: '-30px', marginTop: '20px' }} />}
                     </Empty>
                 )}
                 {hasTicketError && <ValidationModal onClose={onCloseValidationModal} />}

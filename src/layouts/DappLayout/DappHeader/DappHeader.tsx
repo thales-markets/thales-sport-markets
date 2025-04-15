@@ -1,5 +1,6 @@
 import ActivateAccount from 'components/ActivateAccount';
 import Button from 'components/Button';
+import ConnectWalletModal from 'components/ConnectWalletModal';
 import Logo from 'components/Logo';
 import NavMenu from 'components/NavMenu';
 import NavMenuMobile from 'components/NavMenuMobile';
@@ -20,7 +21,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
 import { getOverdropUIState, getStopPulsing, setStopPulsing } from 'redux/modules/ui';
-import { getIsBiconomy, setWalletConnectModalVisibility } from 'redux/modules/wallet';
+import { getIsBiconomy, getWalletConnectModalVisibility, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
 import { FlexDivCentered } from 'styles/common';
 import { RootState } from 'types/redux';
@@ -97,6 +98,7 @@ const DappHeader: React.FC = () => {
     const stopPulsing = useSelector(getStopPulsing);
     const isMobile = useSelector(getIsMobile);
     const overdropUIState = useSelector(getOverdropUIState);
+    const connectWalletModalVisibility = useSelector((state: RootState) => getWalletConnectModalVisibility(state));
 
     const [levelItem, setLevelItem] = useState<OverdropLevel>(OVERDROP_LEVELS[0]);
     const [currentPulsingCount, setCurrentPulsingCount] = useState<number>(0);
@@ -142,6 +144,8 @@ const DappHeader: React.FC = () => {
                 ? OVERDROP_LEVELS.find((item) => item.level == overdropStateItem?.currentLevel)
                 : OVERDROP_LEVELS[0];
             if (currentLevelItem) setLevelItem(currentLevelItem);
+        } else {
+            setLevelItem(OVERDROP_LEVELS[0]);
         }
     }, [dispatch, address, overdropUIState]);
 
@@ -327,6 +331,14 @@ const DappHeader: React.FC = () => {
             )}
             {showThalesToOverMigrationModal && (
                 <ThalesToOverMigrationModal onClose={() => setShowThalesToOverMigrationModal(false)} />
+            )}
+            {connectWalletModalVisibility && (
+                <ConnectWalletModal
+                    isOpen={connectWalletModalVisibility}
+                    onClose={() => {
+                        dispatch(setWalletConnectModalVisibility({ visibility: false }));
+                    }}
+                />
             )}
         </>
     );
