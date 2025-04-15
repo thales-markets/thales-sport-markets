@@ -1,4 +1,3 @@
-import ConnectWalletModal from 'components/ConnectWalletModal';
 import NetworkSwitcher from 'components/NetworkSwitcher';
 import OutsideClickHandler from 'components/OutsideClick';
 import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
@@ -11,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getTicketPayment, setPaymentSelectedCollateralIndex } from 'redux/modules/ticket';
-import { getIsBiconomy, getWalletConnectModalVisibility, setWalletConnectModalVisibility } from 'redux/modules/wallet';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered } from 'styles/common';
 import { truncateAddress } from 'thales-utils';
@@ -30,7 +29,6 @@ const WalletInfo: React.FC = ({}) => {
     const smartAddres = useBiconomy();
     const walletAddress = (isBiconomy ? smartAddres : address) || '';
 
-    const connectWalletModalVisibility = useSelector((state: RootState) => getWalletConnectModalVisibility(state));
     const ticketPayment = useSelector(getTicketPayment);
 
     const selectedCollateralIndex = ticketPayment.selectedCollateralIndex;
@@ -112,14 +110,6 @@ const WalletInfo: React.FC = ({}) => {
                 containerStyle={{ margin: '0px 0px 0px 5px', minWidth: 52, gap: 3 }}
                 onClick={() => setShowDropdown(false)}
             />
-            {connectWalletModalVisibility && (
-                <ConnectWalletModal
-                    isOpen={connectWalletModalVisibility}
-                    onClose={() => {
-                        dispatch(setWalletConnectModalVisibility({ visibility: false }));
-                    }}
-                />
-            )}
         </>
     );
 };
