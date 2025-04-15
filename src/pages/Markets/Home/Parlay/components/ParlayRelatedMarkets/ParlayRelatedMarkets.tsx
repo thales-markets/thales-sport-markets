@@ -181,12 +181,14 @@ const ExpandableRow: React.FC<{ ticket: Ticket }> = ({ ticket }) => {
                     <PositionText>{getPositionTextV2(market, market.position, true)}</PositionText>
                 </PositionInfo>
                 <FlexDivColumnNative>
-                    <Tooltip overlay={t(getRequestStatusStyle(LiveTradingRequestStatus.SUCCESS, theme).tooltipKey)}>
-                        <Icon
-                            className={getRequestStatusStyle(LiveTradingRequestStatus.SUCCESS, theme).className}
-                            color={getRequestStatusStyle(LiveTradingRequestStatus.SUCCESS, theme).color}
-                        />
-                    </Tooltip>
+                    {ticket.isLive && (
+                        <Tooltip overlay={t(getRequestStatusStyle(LiveTradingRequestStatus.SUCCESS, theme).tooltipKey)}>
+                            <Icon
+                                className={getRequestStatusStyle(LiveTradingRequestStatus.SUCCESS, theme).className}
+                                color={getRequestStatusStyle(LiveTradingRequestStatus.SUCCESS, theme).color}
+                            />
+                        </Tooltip>
+                    )}
                     <Icon className={`icon ${isExpanded ? 'icon--arrow-up' : 'icon--arrow-down'}`} />
                 </FlexDivColumnNative>
             </TicketRow>
