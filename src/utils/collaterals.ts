@@ -58,6 +58,7 @@ export const isLpSupported = (currencyKey: Coins) => {
         currencyKey === CRYPTO_CURRENCY_MAP.cbBTC ||
         currencyKey === CRYPTO_CURRENCY_MAP.wBTC ||
         currencyKey === CRYPTO_CURRENCY_MAP.THALES ||
+        currencyKey === CRYPTO_CURRENCY_MAP.sTHALES ||
         isOverCurrency(currencyKey)
     );
 };

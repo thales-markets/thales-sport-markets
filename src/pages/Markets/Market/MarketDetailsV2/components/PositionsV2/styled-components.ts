@@ -35,7 +35,6 @@ export const Header = styled(FlexDivColumnCentered)<{
     ${(props) => (props.isMainPageView && !props.isColumnView ? '' : 'max-height: 25px;')}
     margin-bottom: ${(props) => (props.alignHeader ? '-19px' : '0')};
     flex: none;
-    ${(props) => props.isMainPageView && 'width: 90%'};
     @media (max-width: 950px) {
         ${(props) => props.float && 'top: -50px;'}
     }

@@ -41,7 +41,6 @@ export type UISliceState = {
     stopPulsing: boolean;
     favouriteLeagues: Tags;
     overdropState: OverdropUIState[];
-    overdropWelcomeModal: boolean;
     overdropPreventMultipliersModal: boolean;
 };
 
