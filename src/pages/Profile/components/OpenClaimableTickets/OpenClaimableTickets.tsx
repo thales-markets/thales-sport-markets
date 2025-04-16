@@ -127,7 +127,7 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
             claimablePositionCount !== userTicketsByStatus.claimable.length ||
             openPositionCount !== userTicketsByStatus.open.length
         ) {
-            refetchAfterClaim(walletAddress, networkId);
+            refetchAfterClaim(walletAddress, networkId, false);
         }
     }, [claimablePositionCount, openPositionCount, userTicketsByStatus, walletAddress, networkId]);
 
@@ -193,7 +193,7 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
 
                     if (txReceipt.status === 'success') {
                         toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
-                        refetchAfterClaim(walletAddress, networkId);
+                        refetchAfterClaim(walletAddress, networkId, false);
                     }
                 } else {
                     if (multiCallContractWithSigner) {
@@ -217,7 +217,7 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
 
                         if (txReceipt.status === 'success') {
                             toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
-                            refetchAfterClaim(walletAddress, networkId);
+                            refetchAfterClaim(walletAddress, networkId, false);
                         }
                     }
                 }

@@ -2,8 +2,10 @@ import ParlayEmptyIcon from 'assets/images/parlay-empty.svg?react';
 import Scroll from 'components/Scroll';
 import SimpleLoader from 'components/SimpleLoader';
 import Tooltip from 'components/Tooltip';
+import { secondsToMilliseconds } from 'date-fns';
 import { LiveTradingRequestStatus } from 'enums/markets';
 import { ScreenSizeBreakpoint } from 'enums/ui';
+import useInterval from 'hooks/useInterval';
 import { orderBy } from 'lodash';
 import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
 import { useMemo, useState } from 'react';
@@ -27,6 +29,7 @@ import { LiveTradingRequest, Ticket, TicketsWithGamesInfo } from 'types/markets'
 import { ThemeInterface } from 'types/ui';
 import { formatMarketOdds } from 'utils/markets';
 import { getPositionTextV2, getTitleText, liveTradingRequestAsSportMarket } from 'utils/marketsV2';
+import { refetchUserTickets } from 'utils/queryConnector';
 import useBiconomy from 'utils/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import { Count, Title } from '../../ParlayV2';
@@ -87,6 +90,17 @@ const ParlayRelatedMarkets: React.FC = () => {
         const requestAndTickets = [...liveTradingRequests, ...gameRelatedSingleTickets];
         return orderBy(requestAndTickets, ['timestamp'], ['desc']);
     }, [liveTradingRequests, gameRelatedSingleTickets]);
+
+    // Refresh pending status on every 5s
+    useInterval(() => {
+        const isPendingRequests = liveTradingRequests.some(
+            (market) => market.requestId && market.status === LiveTradingRequestStatus.PENDING
+        );
+
+        if (isPendingRequests) {
+            refetchUserTickets(walletAddress, networkId, true);
+        }
+    }, secondsToMilliseconds(5));
 
     const showMarkets = !isMobile || !!markets.length;
 
@@ -215,6 +229,7 @@ const ExpandableRow: React.FC<{ ticket: Ticket }> = ({ ticket }) => {
 const Container = styled(FlexDivColumn)`
     position: relative;
     height: 100%;
+    max-height: 545px;
     padding: 12px;
     background: ${(props) => props.theme.background.quinary};
     border-radius: 7px;

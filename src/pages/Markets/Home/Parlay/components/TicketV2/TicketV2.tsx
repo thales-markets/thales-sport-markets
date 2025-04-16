@@ -1644,7 +1644,7 @@ const Ticket: React.FC<TicketProps> = ({
                     hash: txHash,
                 });
 
-                if (isLiveTicket) refetchUserTickets(walletAddress, networkId);
+                if (isLiveTicket) refetchUserTickets(walletAddress, networkId, true);
 
                 if (txReceipt.status === 'success') {
                     PLAUSIBLE.trackEvent(
@@ -1733,10 +1733,10 @@ const Ticket: React.FC<TicketProps> = ({
                                 setIsBuying(false);
                                 setCollateralAmount('');
                             }
-                            refetchAfterBuy(walletAddress, networkId);
+                            refetchAfterBuy(walletAddress, networkId, isLiveTicket);
                         }
                     } else {
-                        refetchAfterBuy(walletAddress, networkId);
+                        refetchAfterBuy(walletAddress, networkId, isLiveTicket);
 
                         const systemBetData = isSystemBet
                             ? getSystemBetDataObject(
@@ -1787,7 +1787,7 @@ const Ticket: React.FC<TicketProps> = ({
                 }
             } catch (e) {
                 setIsBuying(false);
-                refetchAfterBuy(walletAddress, networkId);
+                refetchAfterBuy(walletAddress, networkId, isLiveTicket);
                 toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
                 if (!isErrorExcluded(e as Error)) {
                     const data = getLogData({

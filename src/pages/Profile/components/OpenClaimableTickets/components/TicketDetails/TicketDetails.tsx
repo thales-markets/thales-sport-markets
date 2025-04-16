@@ -171,7 +171,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
                         setShareTicketModalData(shareTicketData);
                         setShowShareTicketModal(true);
                     }
-                    refetchAfterClaim(walletAddress, networkId);
+                    refetchAfterClaim(walletAddress, networkId, false);
                     refetchBalances(walletAddress, networkId);
                 }
             } catch (e) {

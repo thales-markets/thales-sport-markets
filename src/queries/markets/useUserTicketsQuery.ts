@@ -23,7 +23,7 @@ export const useUserTicketsQuery = (
     options?: Omit<UseQueryOptions<TicketsWithGamesInfo>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<TicketsWithGamesInfo>({
-        queryKey: QUERY_KEYS.UserTickets(networkConfig.networkId, walletAddress),
+        queryKey: QUERY_KEYS.UserTickets(networkConfig.networkId, walletAddress, fetchLiveRequests),
         queryFn: async () => {
             const data: TicketsWithGamesInfo = { tickets: [], liveRequests: [], gamesInfo: {} };
 
@@ -158,6 +158,17 @@ export const useUserTicketsQuery = (
                             [walletAddress, LIVE_REQUETS_BATCH_SIZE, LATEST_LIVE_REQUESTS_SIZE]
                         );
 
+                        const allRequestIds = latestRequestsDataPerUser
+                            .filter((request: any) => Number(request.timestamp) !== 0)
+                            .map((request: any) => request.requestId);
+
+                        const adapterRequestsResponse = await fetch(
+                            `${generalConfig.API_URL}/overtime-v2/networks/${
+                                networkConfig.networkId
+                            }/live-trading/read-message/request/${allRequestIds[0]}?requestIds=${allRequestIds.join()}`
+                        );
+                        const adapterRequestsStatus = await adapterRequestsResponse.json();
+
                         latestRequestsDataPerUser
                             .filter((request: any) => Number(request.timestamp) !== 0)
                             .map((request: any) => {
@@ -165,9 +176,14 @@ export const useUserTicketsQuery = (
                                 const timestamp = secondsToMilliseconds(Number(request.timestamp));
                                 const maturityTimestamp = secondsToMilliseconds(Number(request.maturityTimestamp));
 
+                                const adapterRequestStatus = adapterRequestsStatus.find(
+                                    (response: any) => response?.requestId === request.requestId
+                                );
+                                const isAdapterFailed = adapterRequestStatus && adapterRequestStatus.allow === false;
+
                                 const status = isFulfilled
                                     ? LiveTradingRequestStatus.SUCCESS
-                                    : Date.now() > maturityTimestamp
+                                    : isAdapterFailed || Date.now() > maturityTimestamp
                                     ? LiveTradingRequestStatus.FAILED
                                     : LiveTradingRequestStatus.PENDING;
 
