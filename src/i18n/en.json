@@ -167,15 +167,6 @@
         "yes": "YES",
         "no": "NO",
         "tennis-tooltip": "In case of a walkover, match will be treated as canceled. In case of retirement / disqualification during the match, it will be treated as a win for the player advancing to the next round",
-        "odds-modal": {
-            "description": "Choose odds display format",
-            "american-odds": "American odds (e.g. +150)",
-            "decimal-odds": "Decimal odds (e.g. 2.5)",
-            "normalized-odds": "Normalized implied odds (e.g. 0.40)",
-            "save": "Save",
-            "info": "*You can always change the odds type in Settings",
-            "title": "Welcome to Overtime Sportsbook"
-        },
         "new": "new"
     },
     "footer": {
@@ -1395,9 +1386,6 @@
             }
         },
         "modal": {
-            "check-out": "Check out<br/>overdrop league!",
-            "gain-xp-label": "Gain XP, level up, earn rewards and farm  the airdrop!",
-            "go-to-overdrop": "Go to overdrop",
             "congratulation": "Congratulations!",
             "reached-level": "You have reached LEVEL {{ level }} and won {{ amount }} OVER free bet!",
             "unlocked-level": "You unlocked LEVEL {{ level }}!",

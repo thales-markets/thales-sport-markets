@@ -20,7 +20,6 @@ export const LOCAL_STORAGE_KEYS = {
     SORT_TYPE: 'sortType',
     LIVE_BET_SLIPPAGE: 'liveBetSlippage',
     COLLATERAL_CHANGED: 'collateralChanged',
-    OVERDROP_WELCOME_MODAL_FLAG: 'overdropWelcomeModalFlag',
     OVERDROP_PREVENT_DAILY_MODAL: 'overdropPreventDailyModal',
     OVERDROP_STATE: 'overdropState',
     SESSION_P_KEY: {
@@ -33,7 +32,6 @@ export const LOCAL_STORAGE_KEYS = {
     IS_SGP: 'isSGP',
     SYSTEM_BET_DENOMINATOR: 'systemBetDenominator',
     ERROR_RELOAD_TIME: 'errorReloadTime',
-    BRACKETS: 'brackets',
     USE_BICONOMY: 'isBiconomy',
     FREE_BET_ID: 'freeBetId',
     TERMS_AND_CONDITIONS: 'terms&Conditions',
