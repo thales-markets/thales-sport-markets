@@ -946,9 +946,9 @@
             "paid": "Paid",
             "payout": "Payout",
             "tooltip": {
-                "pending": "Ticket creation is pending",
+                "pending": "Ticket creation pending",
                 "success": "Ticket created",
-                "failed": "Ticket creation is failed"
+                "failed": "Ticket creation failed"
             }
         },
         "zero-odds-tooltip": "Odds unavailable at the moment.",
