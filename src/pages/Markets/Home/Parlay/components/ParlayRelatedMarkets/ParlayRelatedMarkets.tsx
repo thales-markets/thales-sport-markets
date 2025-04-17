@@ -102,8 +102,6 @@ const ParlayRelatedMarkets: React.FC = () => {
         }
     }, secondsToMilliseconds(5));
 
-    const showMarkets = !isMobile || !!markets.length;
-
     const getRequestedMarket = (request: LiveTradingRequest) => {
         const relatedSportMarket = liveTradingRequestAsSportMarket(request, gamesInfo);
 
@@ -130,8 +128,8 @@ const ParlayRelatedMarkets: React.FC = () => {
         );
     };
 
-    return showMarkets ? (
-        <Scroll height="100%" renderOnlyChildren={isMobile}>
+    return (
+        <Scroll height={isMobile ? '545px' : '100%'}>
             <Container>
                 <Title>
                     {isLive
@@ -167,8 +165,6 @@ const ParlayRelatedMarkets: React.FC = () => {
                 )}
             </Container>
         </Scroll>
-    ) : (
-        <></>
     );
 };
 
@@ -234,7 +230,7 @@ const Container = styled(FlexDivColumn)`
     background: ${(props) => props.theme.background.quinary};
     border-radius: 7px;
     @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
-        height: unset;
+        min-height: 250px;
     }
 `;
 
