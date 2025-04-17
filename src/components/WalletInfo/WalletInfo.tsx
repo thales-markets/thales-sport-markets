@@ -1,7 +1,6 @@
 import NetworkSwitcher from 'components/NetworkSwitcher';
 import OutsideClickHandler from 'components/OutsideClick';
 import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
-import { COLLATERALS } from 'constants/currency';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import ProfileItem from 'layouts/DappLayout/DappHeader/components/ProfileItem';
 import ProfileDropdown from 'layouts/DappLayout/DappHeader/components/ProfileItem/components/ProfileDropdown';
@@ -9,7 +8,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getTicketPayment, setPaymentSelectedCollateralIndex } from 'redux/modules/ticket';
+import { setPaymentSelectedCollateralIndex } from 'redux/modules/ticket';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered } from 'styles/common';
@@ -29,25 +28,8 @@ const WalletInfo: React.FC = ({}) => {
     const smartAddres = useBiconomy();
     const walletAddress = (isBiconomy ? smartAddres : address) || '';
 
-    const ticketPayment = useSelector(getTicketPayment);
-
-    const selectedCollateralIndex = ticketPayment.selectedCollateralIndex;
-
     const [isFreeBetInitialized, setIsFreeBetInitialized] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
-
-    // Invalidate default selectedCollateralIndex
-    useEffect(() => {
-        const maxCollateralIndex = COLLATERALS[networkId].length - 1;
-        if (selectedCollateralIndex > maxCollateralIndex) {
-            dispatch(
-                setPaymentSelectedCollateralIndex({
-                    selectedCollateralIndex: maxCollateralIndex,
-                    networkId,
-                })
-            );
-        }
-    }, [dispatch, networkId, selectedCollateralIndex]);
 
     // Refresh free bet on wallet and network change
     useEffect(() => {

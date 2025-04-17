@@ -35,6 +35,7 @@ import {
     Sport,
 } from 'overtime-utils';
 import {
+    LiveTradingRequest,
     SerializableSportMarket,
     SportMarket,
     Team,
@@ -563,6 +564,65 @@ export const sportMarketAsTicketPosition = (market: SportMarket, position: numbe
         awayTeam: market.awayTeam,
         playerProps: market.playerProps,
     } as TicketPosition);
+
+export const liveTradingRequestAsSportMarket = (request: LiveTradingRequest, gamesInfo: any) => {
+    const leagueId = `${request.leagueId}`.startsWith('152')
+        ? League.TENNIS_WTA
+        : `${request.leagueId}`.startsWith('153')
+        ? League.TENNIS_GS
+        : `${request.leagueId}`.startsWith('156')
+        ? League.TENNIS_MASTERS
+        : UFC_LEAGUE_IDS.includes(request.leagueId)
+        ? League.UFC
+        : Number(request.leagueId);
+    const isPlayerProps = isPlayerPropsMarket(request.typeId);
+    const type = MarketTypeMap[request.typeId];
+
+    const gameInfo = gamesInfo[request.gameId];
+
+    const homeTeam = !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => team.isHome);
+    const homeTeamName = homeTeam?.name ?? 'Home Team';
+    const homeScoreByPeriod = homeTeam ? homeTeam.scoreByPeriod : [];
+
+    const awayTeam = !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => !team.isHome);
+    const awayTeamName = awayTeam?.name ?? 'Away Team';
+    const awayScoreByPeriod = awayTeam ? awayTeam.scoreByPeriod : [];
+
+    return {
+        gameId: request.gameId,
+        sport: getLeagueSport(leagueId),
+        leagueId: leagueId,
+        subLeagueId: request.leagueId,
+        leagueName: '',
+        typeId: request.typeId,
+        type: type ? type.key : '',
+        maturity: 0,
+        maturityDate: new Date(),
+        homeTeam: homeTeamName,
+        awayTeam: awayTeamName,
+        homeScoreByPeriod,
+        awayScoreByPeriod,
+        status: 0,
+        isOpen: true,
+        isResolved: false,
+        isCancelled: false,
+        isPaused: false,
+        isOneSideMarket: isOneSideMarket(leagueId, request.typeId),
+        line: request.line,
+        isPlayerPropsMarket: isPlayerProps,
+        isOneSidePlayerPropsMarket: isOneSidePlayerPropsMarket(request.typeId),
+        isYesNoPlayerPropsMarket: isYesNoPlayerPropsMarket(request.typeId),
+        playerProps: {
+            playerId: 0,
+            playerName: '',
+        },
+        combinedPositions: [],
+        odds: [],
+        proof: [],
+        childMarkets: [],
+        winningPositions: [],
+    } as SportMarket;
+};
 
 export const sportMarketAsSerializable = (market: SportMarket): SerializableSportMarket => {
     const serializableChildMarkets = market.childMarkets

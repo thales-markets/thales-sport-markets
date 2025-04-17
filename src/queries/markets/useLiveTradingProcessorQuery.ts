@@ -1,19 +1,19 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import QUERY_KEYS from 'constants/queryKeys';
 import { ContractType } from 'enums/contract';
-import { LiveTradingProcessorData } from 'types/markets';
+import { LiveTradingProcessor } from 'types/markets';
 import { NetworkConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { getContractInstance } from 'utils/contract';
 
-const useLiveTradingProcessorDataQuery = (
+const useLiveTradingProcessorQuery = (
     networkConfig: NetworkConfig,
     options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<LiveTradingProcessorData | undefined>({
-        queryKey: QUERY_KEYS.LiveTradingProcessorData(networkConfig.networkId),
+    return useQuery<LiveTradingProcessor | null>({
+        queryKey: QUERY_KEYS.LiveTradingProcessor(networkConfig.networkId),
         queryFn: async () => {
-            const data: LiveTradingProcessorData = {
+            const data: LiveTradingProcessor = {
                 maxAllowedExecutionDelay: 10,
             };
 
@@ -33,4 +33,4 @@ const useLiveTradingProcessorDataQuery = (
     });
 };
 
-export default useLiveTradingProcessorDataQuery;
+export default useLiveTradingProcessorQuery;

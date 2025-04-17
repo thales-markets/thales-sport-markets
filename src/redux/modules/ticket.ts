@@ -25,13 +25,10 @@ const getDefaultTicket = (): TicketPosition[] => {
 };
 
 const getDefaultPayment = (): ParlayPayment => {
-    const lsSelectedCollateralIndex = localStore.get(
-        `${LOCAL_STORAGE_KEYS.COLLATERAL_INDEX}${Network.OptimismMainnet}`
-    );
     const lsForceCollateralChange = localStore.get(LOCAL_STORAGE_KEYS.COLLATERAL_CHANGED);
 
     return {
-        selectedCollateralIndex: lsSelectedCollateralIndex !== undefined ? (lsSelectedCollateralIndex as number) : 0,
+        selectedCollateralIndex: 0,
         amountToBuy: '',
         networkId: Network.OptimismMainnet,
         forceChangeCollateral: lsForceCollateralChange !== undefined ? (lsForceCollateralChange as boolean) : false,

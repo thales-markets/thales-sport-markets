@@ -1,4 +1,4 @@
-import { GameStatus, StatusFilter } from 'enums/markets';
+import { GameStatus, LiveTradingRequestStatus, StatusFilter } from 'enums/markets';
 import { League, MarketType, Sport } from 'overtime-utils';
 import { Coins } from 'thales-utils';
 import { Network } from '../enums/network';
@@ -138,8 +138,23 @@ export type SportsAmmData = {
     maxAllowedSystemCombinations: number;
 };
 
-export type LiveTradingProcessorData = {
+export type LiveTradingProcessor = {
     maxAllowedExecutionDelay: number;
+};
+
+export type LiveTradingRequest = {
+    user: string;
+    requestId: string;
+    isFulfilled: boolean;
+    timestamp: number;
+    maturityTimestamp: number;
+    gameId: string;
+    leagueId: League;
+    typeId: MarketType;
+    line: number;
+    position: number;
+    buyInAmount: number;
+    status: LiveTradingRequestStatus;
 };
 
 export type TradeData = {
@@ -192,6 +207,12 @@ export type Ticket = {
     isFreeBet: boolean;
     isSystemBet: boolean;
     systemBetData?: SystemBetData;
+};
+
+export type TicketsWithRequestsInfo = {
+    tickets: Ticket[];
+    liveRequests: LiveTradingRequest[];
+    gamesInfo: any;
 };
 
 export type UserStats = {

@@ -49,17 +49,27 @@ export const refetchFreeBetBalance = (walletAddress: string, networkId: Network)
     });
 };
 
-export const refetchAfterClaim = (walletAddress: string, networkId: Network) => {
+export const refetchAfterClaim = (walletAddress: string, networkId: Network, fetchLiveRequests: boolean) => {
     queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PositionsCountV2(walletAddress, networkId) });
-    queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.UserTickets(networkId, walletAddress) });
+    queryConnector.queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.UserTickets(networkId, walletAddress, fetchLiveRequests),
+    });
 };
 
-export const refetchAfterBuy = (walletAddress: string, networkId: Network) => {
+export const refetchAfterBuy = (walletAddress: string, networkId: Network, fetchLiveRequests: boolean) => {
     queryConnector.queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.Wallet.MultipleCollateral(walletAddress, networkId),
     });
     queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PositionsCountV2(walletAddress, networkId) });
-    queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.UserTickets(networkId, walletAddress) });
+    queryConnector.queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.UserTickets(networkId, walletAddress, fetchLiveRequests),
+    });
+};
+
+export const refetchUserTickets = (walletAddress: string, networkId: Network, fetchLiveRequests: boolean) => {
+    queryConnector.queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.UserTickets(networkId, walletAddress, fetchLiveRequests),
+    });
 };
 
 export const refetchLiquidityPoolData = (walletAddress: string, networkId: Network, liquidityPoolAddress: string) => {

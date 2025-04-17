@@ -1,28 +1,31 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import axios from 'axios';
 import { generalConfig, noCacheConfig } from 'config/general';
-import { BATCH_SIZE } from 'constants/markets';
+import { BATCH_SIZE, LATEST_LIVE_REQUESTS_SIZE, LIVE_REQUETS_BATCH_SIZE } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
+import { secondsToMilliseconds } from 'date-fns';
 import { ContractType } from 'enums/contract';
+import { LiveTradingRequestStatus } from 'enums/markets';
 import { orderBy } from 'lodash';
-import { NetworkId } from 'thales-utils';
-import { Ticket } from 'types/markets';
+import { bigNumberFormatter, getDefaultDecimalsForNetwork, NetworkId } from 'thales-utils';
+import { LiveTradingRequest, Ticket, TicketsWithRequestsInfo } from 'types/markets';
 import { NetworkConfig } from 'types/network';
 import { getContractInstance } from 'utils/contract';
+import { convertFromBytes32 } from 'utils/formatters/string';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
 import { isTestNetwork } from 'utils/network';
-
 import { mapTicket } from 'utils/tickets';
 
 export const useUserTicketsQuery = (
     walletAddress: string,
     networkConfig: NetworkConfig,
-    options?: Omit<UseQueryOptions<Ticket[] | null>, 'queryKey' | 'queryFn'>
+    fetchLiveRequests: boolean,
+    options?: Omit<UseQueryOptions<TicketsWithRequestsInfo>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<Ticket[] | null>({
-        queryKey: QUERY_KEYS.UserTickets(networkConfig.networkId, walletAddress),
+    return useQuery<TicketsWithRequestsInfo>({
+        queryKey: QUERY_KEYS.UserTickets(networkConfig.networkId, walletAddress, fetchLiveRequests),
         queryFn: async () => {
-            let userTickets = null;
+            const data: TicketsWithRequestsInfo = { tickets: [], liveRequests: [], gamesInfo: {} };
 
             try {
                 const sportsAMMDataContract = getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig);
@@ -67,16 +70,17 @@ export const useUserTicketsQuery = (
                                 ? Number(numOfActiveFreeBetTicketsPerUser)
                                 : Number(numOfActiveStakedThalesTicketsPerUser)) / BATCH_SIZE
                         ) + 1;
-                    const numberOfResolvedBatches =
-                        Math.trunc(
-                            (Number(numOfResolvedTicketsPerUser) > Number(numOfResolvedFreeBetTicketsPerUser) &&
-                            Number(numOfResolvedTicketsPerUser) > Number(numOfResolvedStakedThalesTicketsPerUser)
-                                ? Number(numOfResolvedTicketsPerUser)
-                                : Number(numOfResolvedFreeBetTicketsPerUser) >
-                                  Number(numOfResolvedStakedThalesTicketsPerUser)
-                                ? Number(numOfResolvedFreeBetTicketsPerUser)
-                                : Number(numOfResolvedStakedThalesTicketsPerUser)) / BATCH_SIZE
-                        ) + 1;
+                    const numberOfResolvedBatches = fetchLiveRequests
+                        ? 0
+                        : Math.trunc(
+                              (Number(numOfResolvedTicketsPerUser) > Number(numOfResolvedFreeBetTicketsPerUser) &&
+                              Number(numOfResolvedTicketsPerUser) > Number(numOfResolvedStakedThalesTicketsPerUser)
+                                  ? Number(numOfResolvedTicketsPerUser)
+                                  : Number(numOfResolvedFreeBetTicketsPerUser) >
+                                    Number(numOfResolvedStakedThalesTicketsPerUser)
+                                  ? Number(numOfResolvedFreeBetTicketsPerUser)
+                                  : Number(numOfResolvedStakedThalesTicketsPerUser)) / BATCH_SIZE
+                          ) + 1;
 
                     const playersInfoQueryParam = `isTestnet=${isTestNetwork(networkConfig.networkId)}`;
 
@@ -134,13 +138,83 @@ export const useUserTicketsQuery = (
                         )
                     );
 
-                    userTickets = orderBy(updateTotalQuoteAndPayout(mappedTickets), ['timestamp'], ['desc']);
+                    const updatedTickets = updateTotalQuoteAndPayout(mappedTickets);
+                    // don't sort when live requests are fetched as it will be combined and sorted after
+                    const userTickets = fetchLiveRequests
+                        ? updatedTickets
+                        : orderBy(updatedTickets, ['timestamp'], ['desc']);
+
+                    data.tickets = userTickets;
+                    data.gamesInfo = gamesInfoResponse.data;
+                }
+
+                if (fetchLiveRequests) {
+                    const liveTradingProcessorDataContract = getContractInstance(
+                        ContractType.LIVE_TRADING_PROCESSOR_DATA,
+                        networkConfig
+                    );
+
+                    if (liveTradingProcessorDataContract) {
+                        const latestRequestsDataPerUser = await liveTradingProcessorDataContract.read.getLatestRequestsDataPerUser(
+                            [walletAddress, LIVE_REQUETS_BATCH_SIZE, LATEST_LIVE_REQUESTS_SIZE]
+                        );
+
+                        const allRequestIds = latestRequestsDataPerUser
+                            .filter((request: any) => Number(request.timestamp) !== 0)
+                            .map((request: any) => request.requestId);
+
+                        const adapterRequestsResponse = await fetch(
+                            `${generalConfig.API_URL}/overtime-v2/networks/${
+                                networkConfig.networkId
+                            }/live-trading/read-message/request/${allRequestIds[0]}?requestIds=${allRequestIds.join()}`
+                        );
+                        const adapterRequestsStatus = await adapterRequestsResponse.json();
+
+                        latestRequestsDataPerUser
+                            .filter((request: any) => Number(request.timestamp) !== 0)
+                            .map((request: any) => {
+                                const isFulfilled = request.isFulfilled;
+                                const timestamp = secondsToMilliseconds(Number(request.timestamp));
+                                const maturityTimestamp = secondsToMilliseconds(Number(request.maturityTimestamp));
+
+                                const adapterRequestStatus = adapterRequestsStatus.find(
+                                    (response: any) => response?.requestId === request.requestId
+                                );
+                                const isAdapterFailed = adapterRequestStatus && adapterRequestStatus.allow === false;
+
+                                const status = isFulfilled
+                                    ? LiveTradingRequestStatus.SUCCESS
+                                    : isAdapterFailed || Date.now() > maturityTimestamp
+                                    ? LiveTradingRequestStatus.FAILED
+                                    : LiveTradingRequestStatus.PENDING;
+
+                                const liveTradingRequest = {
+                                    user: request.user,
+                                    requestId: request.requestId,
+                                    isFulfilled,
+                                    timestamp,
+                                    maturityTimestamp,
+                                    gameId: convertFromBytes32(request.gameId),
+                                    leagueId: request.sportId,
+                                    typeId: request.typeId,
+                                    line: request.line / 100,
+                                    position: request.position,
+                                    buyInAmount: bigNumberFormatter(
+                                        request.buyInAmount,
+                                        getDefaultDecimalsForNetwork(networkConfig.networkId)
+                                    ),
+                                    status,
+                                } as LiveTradingRequest;
+
+                                data.liveRequests.push(liveTradingRequest);
+                            });
+                    }
                 }
             } catch (e) {
                 console.log('E ', e);
             }
 
-            return userTickets;
+            return data;
         },
         ...options,
     });

@@ -36,7 +36,7 @@ import Slippage from 'pages/Markets/Home/Parlay/components/Slippage';
 import CurrentLevelProgressLine from 'pages/Overdrop/components/CurrentLevelProgressLine';
 import { OverdropIcon } from 'pages/Overdrop/components/styled-components';
 import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
-import useLiveTradingProcessorDataQuery from 'queries/markets/useLiveTradingProcessorDataQuery';
+import useLiveTradingProcessorQuery from 'queries/markets/useLiveTradingProcessorQuery';
 import useSportsAmmDataQuery from 'queries/markets/useSportsAmmDataQuery';
 import useTicketLiquidityQuery from 'queries/markets/useTicketLiquidityQuery';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
@@ -130,6 +130,7 @@ import {
     refetchFreeBetBalance,
     refetchProofs,
     refetchTicketLiquidity,
+    refetchUserTickets,
 } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import { getSportsAMMV2QuoteMethod, getSportsAMMV2Transaction } from 'utils/sportsAmmV2';
@@ -498,14 +499,14 @@ const Ticket: React.FC<TicketProps> = ({
     const overContractCurrencyRate =
         exchangeRates && exchangeRates !== null ? exchangeRates[OVER_CONTRACT_RATE_KEY] : 1;
 
-    const liveTradingProcessorDataQuery = useLiveTradingProcessorDataQuery({ networkId, client });
+    const liveTradingProcessorQuery = useLiveTradingProcessorQuery({ networkId, client });
 
     const maxAllowedExecutionDelay = useMemo(
         () =>
-            liveTradingProcessorDataQuery.isSuccess && liveTradingProcessorDataQuery.data
-                ? liveTradingProcessorDataQuery.data.maxAllowedExecutionDelay + 10
+            liveTradingProcessorQuery.isSuccess && liveTradingProcessorQuery.data
+                ? liveTradingProcessorQuery.data.maxAllowedExecutionDelay + 10
                 : 20,
-        [liveTradingProcessorDataQuery.isSuccess, liveTradingProcessorDataQuery.data]
+        [liveTradingProcessorQuery.isSuccess, liveTradingProcessorQuery.data]
     );
 
     const userDataQuery = useUserDataQuery(address as any, { enabled: isConnected });
@@ -1634,8 +1635,8 @@ const Ticket: React.FC<TicketProps> = ({
                         { componentStack: '' },
                         data
                     );
+                    refetchAfterBuy(walletAddress, networkId, isLiveTicket);
                     setIsBuying(false);
-                    refetchAfterBuy(walletAddress, networkId);
                     toast.update(toastId, getErrorToastOptions(t('markets.parlay.tx-not-received')));
                     return;
                 }
@@ -1643,6 +1644,11 @@ const Ticket: React.FC<TicketProps> = ({
                 const txReceipt = await waitForTransactionReceipt(client as Client, {
                     hash: txHash,
                 });
+
+                if (isLiveTicket) {
+                    refetchUserTickets(walletAddress, networkId, true);
+                    setIsBuying(false);
+                }
 
                 if (txReceipt.status === 'success') {
                     PLAUSIBLE.trackEvent(
@@ -1731,10 +1737,10 @@ const Ticket: React.FC<TicketProps> = ({
                                 setIsBuying(false);
                                 setCollateralAmount('');
                             }
-                            refetchAfterBuy(walletAddress, networkId);
+                            refetchAfterBuy(walletAddress, networkId, isLiveTicket);
                         }
                     } else {
-                        refetchAfterBuy(walletAddress, networkId);
+                        refetchAfterBuy(walletAddress, networkId, isLiveTicket);
 
                         const systemBetData = isSystemBet
                             ? getSystemBetDataObject(
@@ -1785,7 +1791,7 @@ const Ticket: React.FC<TicketProps> = ({
                 }
             } catch (e) {
                 setIsBuying(false);
-                refetchAfterBuy(walletAddress, networkId);
+                refetchAfterBuy(walletAddress, networkId, isLiveTicket);
                 toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
                 if (!isErrorExcluded(e as Error)) {
                     const data = getLogData({
@@ -2816,7 +2822,7 @@ const Ticket: React.FC<TicketProps> = ({
                     </OverdropProgressWrapper>
                 </OverdropSummary>
             )}
-            {!isBuying && oddsChanged && (
+            {!isBuying && oddsChanged ? (
                 <>
                     <FlexDivCentered>
                         <OddsChangedDiv>{t('markets.parlay.odds-changed-description')}</OddsChangedDiv>
@@ -2832,8 +2838,9 @@ const Ticket: React.FC<TicketProps> = ({
                         </Button>
                     </FlexDivCentered>
                 </>
+            ) : (
+                <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>
             )}
-            {!oddsChanged && <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>}
             {gas >= GAS_LIMIT && (
                 <GasWarning>
                     {t('markets.parlay.gas-warning', { gas: formatCurrencyWithSign(USD_SIGN, gas, 4) })}
