@@ -1644,7 +1644,10 @@ const Ticket: React.FC<TicketProps> = ({
                     hash: txHash,
                 });
 
-                if (isLiveTicket) refetchUserTickets(walletAddress, networkId, true);
+                if (isLiveTicket) {
+                    refetchUserTickets(walletAddress, networkId, true);
+                    setIsBuying(false);
+                }
 
                 if (txReceipt.status === 'success') {
                     PLAUSIBLE.trackEvent(
@@ -2818,7 +2821,7 @@ const Ticket: React.FC<TicketProps> = ({
                     </OverdropProgressWrapper>
                 </OverdropSummary>
             )}
-            {!isBuying && oddsChanged && (
+            {!isBuying && oddsChanged ? (
                 <>
                     <FlexDivCentered>
                         <OddsChangedDiv>{t('markets.parlay.odds-changed-description')}</OddsChangedDiv>
@@ -2834,8 +2837,9 @@ const Ticket: React.FC<TicketProps> = ({
                         </Button>
                     </FlexDivCentered>
                 </>
+            ) : (
+                <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>
             )}
-            {!oddsChanged && <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>}
             {gas >= GAS_LIMIT && (
                 <GasWarning>
                     {t('markets.parlay.gas-warning', { gas: formatCurrencyWithSign(USD_SIGN, gas, 4) })}

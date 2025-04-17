@@ -70,16 +70,17 @@ export const useUserTicketsQuery = (
                                 ? Number(numOfActiveFreeBetTicketsPerUser)
                                 : Number(numOfActiveStakedThalesTicketsPerUser)) / BATCH_SIZE
                         ) + 1;
-                    const numberOfResolvedBatches =
-                        Math.trunc(
-                            (Number(numOfResolvedTicketsPerUser) > Number(numOfResolvedFreeBetTicketsPerUser) &&
-                            Number(numOfResolvedTicketsPerUser) > Number(numOfResolvedStakedThalesTicketsPerUser)
-                                ? Number(numOfResolvedTicketsPerUser)
-                                : Number(numOfResolvedFreeBetTicketsPerUser) >
-                                  Number(numOfResolvedStakedThalesTicketsPerUser)
-                                ? Number(numOfResolvedFreeBetTicketsPerUser)
-                                : Number(numOfResolvedStakedThalesTicketsPerUser)) / BATCH_SIZE
-                        ) + 1;
+                    const numberOfResolvedBatches = fetchLiveRequests
+                        ? 0
+                        : Math.trunc(
+                              (Number(numOfResolvedTicketsPerUser) > Number(numOfResolvedFreeBetTicketsPerUser) &&
+                              Number(numOfResolvedTicketsPerUser) > Number(numOfResolvedStakedThalesTicketsPerUser)
+                                  ? Number(numOfResolvedTicketsPerUser)
+                                  : Number(numOfResolvedFreeBetTicketsPerUser) >
+                                    Number(numOfResolvedStakedThalesTicketsPerUser)
+                                  ? Number(numOfResolvedFreeBetTicketsPerUser)
+                                  : Number(numOfResolvedStakedThalesTicketsPerUser)) / BATCH_SIZE
+                          ) + 1;
 
                     const playersInfoQueryParam = `isTestnet=${isTestNetwork(networkConfig.networkId)}`;
 
