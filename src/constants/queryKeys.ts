@@ -65,11 +65,6 @@ const QUERY_KEYS = {
         lives,
     ],
     LiveTradingProcessor: (networkId: Network) => ['liveTradingProcessor', networkId],
-    LiveTradingProcessorData: (walletAddress: string, networkId: Network) => [
-        'liveTradingProcessorData',
-        walletAddress,
-        networkId,
-    ],
     PositionsCountV2: (walletAddress: string, networkId: Network) => ['positions', 'countV2', walletAddress, networkId],
     Wallet: {
         MultipleCollateral: (walletAddress: string, networkId: Network) => [
