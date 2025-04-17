@@ -1635,6 +1635,7 @@ const Ticket: React.FC<TicketProps> = ({
                         { componentStack: '' },
                         data
                     );
+                    refetchAfterBuy(walletAddress, networkId, isLiveTicket);
                     setIsBuying(false);
                     toast.update(toastId, getErrorToastOptions(t('markets.parlay.tx-not-received')));
                     return;
