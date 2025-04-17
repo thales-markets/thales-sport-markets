@@ -8,7 +8,7 @@ import { ContractType } from 'enums/contract';
 import { LiveTradingRequestStatus } from 'enums/markets';
 import { orderBy } from 'lodash';
 import { bigNumberFormatter, getDefaultDecimalsForNetwork, NetworkId } from 'thales-utils';
-import { LiveTradingRequest, Ticket, TicketsWithGamesInfo } from 'types/markets';
+import { LiveTradingRequest, Ticket, TicketsWithRequestsInfo } from 'types/markets';
 import { NetworkConfig } from 'types/network';
 import { getContractInstance } from 'utils/contract';
 import { convertFromBytes32 } from 'utils/formatters/string';
@@ -20,12 +20,12 @@ export const useUserTicketsQuery = (
     walletAddress: string,
     networkConfig: NetworkConfig,
     fetchLiveRequests: boolean,
-    options?: Omit<UseQueryOptions<TicketsWithGamesInfo>, 'queryKey' | 'queryFn'>
+    options?: Omit<UseQueryOptions<TicketsWithRequestsInfo>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<TicketsWithGamesInfo>({
+    return useQuery<TicketsWithRequestsInfo>({
         queryKey: QUERY_KEYS.UserTickets(networkConfig.networkId, walletAddress, fetchLiveRequests),
         queryFn: async () => {
-            const data: TicketsWithGamesInfo = { tickets: [], liveRequests: [], gamesInfo: {} };
+            const data: TicketsWithRequestsInfo = { tickets: [], liveRequests: [], gamesInfo: {} };
 
             try {
                 const sportsAMMDataContract = getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig);

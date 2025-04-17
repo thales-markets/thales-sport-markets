@@ -209,7 +209,7 @@ export type Ticket = {
     systemBetData?: SystemBetData;
 };
 
-export type TicketsWithGamesInfo = {
+export type TicketsWithRequestsInfo = {
     tickets: Ticket[];
     liveRequests: LiveTradingRequest[];
     gamesInfo: any;

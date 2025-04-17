@@ -25,7 +25,7 @@ import {
     FlexDivStart,
 } from 'styles/common';
 import { formatCurrencyWithKey, formatDateWithTime } from 'thales-utils';
-import { LiveTradingRequest, Ticket, TicketsWithGamesInfo } from 'types/markets';
+import { LiveTradingRequest, Ticket, TicketsWithRequestsInfo } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { formatMarketOdds } from 'utils/markets';
 import { getPositionTextV2, getTitleText, liveTradingRequestAsSportMarket } from 'utils/marketsV2';
@@ -58,7 +58,7 @@ const ParlayRelatedMarkets: React.FC = () => {
     const gameRelatedSingleTickets = useMemo(
         () =>
             userTicketsQuery.isSuccess && userTicketsQuery.data
-                ? (userTicketsQuery.data as TicketsWithGamesInfo).tickets.filter(
+                ? (userTicketsQuery.data as TicketsWithRequestsInfo).tickets.filter(
                       (userTicket) =>
                           userTicket.sportMarkets.length === 1 && // filter only single tickets
                           userTicket.sportMarkets[0].gameId === ticket[0]?.gameId
@@ -81,7 +81,7 @@ const ParlayRelatedMarkets: React.FC = () => {
     const gamesInfo = useMemo(
         () =>
             userTicketsQuery.isSuccess && userTicketsQuery.data
-                ? (userTicketsQuery.data as TicketsWithGamesInfo).gamesInfo
+                ? (userTicketsQuery.data as TicketsWithRequestsInfo).gamesInfo
                 : {},
         [userTicketsQuery.isSuccess, userTicketsQuery.data]
     );
