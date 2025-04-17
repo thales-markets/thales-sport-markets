@@ -143,28 +143,26 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
     useWidgetBotScript(preventDiscordWidgetLoad);
 
     return (
-        <>
-            <Background>
-                <ModalWrapper />
-                <Banner />
-                <Wrapper>
-                    <MetaData />
-                    <DappHeader />
-                    {children}
-                    <DappFooter />
-                </Wrapper>
-                <ToastContainer theme={'colored'} />
-                {freeBetFromServer && getFreeBetModalShown() && (
-                    <ClaimFreeBetModal
-                        onClose={() => {
-                            setFreeBetModalParam(undefined);
-                            setFreeBetModalShown(false);
-                        }}
-                        freeBet={freeBetFromServer}
-                    />
-                )}
-            </Background>
-        </>
+        <Background>
+            <ModalWrapper />
+            <Banner />
+            <Wrapper>
+                <MetaData />
+                <DappHeader />
+                {children}
+                <DappFooter />
+            </Wrapper>
+            <ToastContainer theme={'colored'} />
+            {freeBetFromServer && getFreeBetModalShown() && (
+                <ClaimFreeBetModal
+                    onClose={() => {
+                        setFreeBetModalParam(undefined);
+                        setFreeBetModalShown(false);
+                    }}
+                    freeBet={freeBetFromServer}
+                />
+            )}
+        </Background>
     );
 };
 
