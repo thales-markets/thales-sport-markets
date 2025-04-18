@@ -123,7 +123,7 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                 <ItemsContainer>
                     {NAV_MENU_FIRST_SECTION.map((item, index) => {
                         if (!item.supportedNetworks.includes(networkId)) return;
-                        if ((item.name == 'profile' || item.name == 'account') && !isConnected) return;
+                        if (item.name == 'account' && !isConnected) return;
                         if (item.name == 'resolve-blocker' && !isWitelistedForUnblock) return;
 
                         const isProfileAccountTab = [
