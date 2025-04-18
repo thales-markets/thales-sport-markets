@@ -1,4 +1,5 @@
 import { createSmartAccountClient } from '@biconomy/account';
+import { UniversalAccount } from '@GDdark/universal-account';
 import { LINKS } from 'constants/links';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -28,12 +29,20 @@ function useBiconomy() {
                 });
                 const smartAddressNew = await smartAccount.getAccountAddress();
 
+                const universalAccount = new UniversalAccount({
+                    projectId: import.meta.env['VITE_APP_UA_PROJECT_ID'],
+                    ownerAddress: walletClient.account.address,
+                });
+
+                const smartAccountOptions = await universalAccount.getSmartAccountOptions();
+                console.log('smartAccountOptions: ', smartAccountOptions);
+
                 if (smartAddress === '') {
-                    biconomyConnector.setWallet(smartAccount, smartAddressNew);
+                    biconomyConnector.setWallet(smartAccount, smartAddressNew, universalAccount);
                     setSmartAddress(smartAddressNew);
                 } else {
                     if (smartAddress !== smartAddressNew) {
-                        biconomyConnector.setWallet(smartAccount, smartAddressNew);
+                        biconomyConnector.setWallet(smartAccount, smartAddressNew, universalAccount);
                         setSmartAddress(smartAddressNew);
                     }
                 }
