@@ -126,7 +126,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                 <ItemsContainer>
                     {NAV_MENU_FIRST_SECTION.map((item, index) => {
                         if (!item.supportedNetworks.includes(networkId)) return;
-                        if (item.name == 'profile' && !isConnected) return;
+                        if ((item.name == 'profile' || item.name == 'account') && !isConnected) return;
                         if (item.name == 'resolve-blocker' && !isWitelistedForUnblock) return;
 
                         const isProfileAccountTab = [
