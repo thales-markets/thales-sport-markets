@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
 import { getIsBiconomy } from 'redux/modules/wallet';
+import { FlexDivCentered } from 'styles/common';
 import { RootState } from 'types/redux';
 import { sendBiconomyTransaction } from 'utils/biconomy';
 import { getCollateral, getCollaterals, getDefaultCollateral, isLpSupported } from 'utils/collaterals';
@@ -41,6 +42,7 @@ import {
     EmptyContainer,
     EmptySubtitle,
     EmptyTitle,
+    Expand,
     ListContainer,
     OpenTicketsNotificationCount,
     StyledParlayEmptyIcon,
@@ -67,6 +69,7 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
     const isSearchTextWalletAddress = searchText && isAddress(searchText);
     const [claimCollateralIndex, setClaimCollateralIndex] = useState(0);
     const [openClaimable, setClaimableState] = useState<boolean>(true);
+    const [showDetails, setShowDetails] = useState<boolean>(false);
     const [openOpenPositions, setOpenState] = useState<boolean>(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -310,7 +313,7 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
                     )}
                 </ListContainer>
             )}
-            <CategoryContainer onClick={() => setOpenState(!openOpenPositions)}>
+            <CategoryContainer>
                 <CategoryInfo>
                     <CategoryIconWrapper>
                         {userTicketsByStatus.open.length > 0 && (
@@ -322,7 +325,15 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
                     </CategoryIconWrapper>
                     <CategoryLabel>{t('profile.categories.open')}</CategoryLabel>
                 </CategoryInfo>
-                <Arrow className={openOpenPositions ? 'icon icon--caret-up' : 'icon icon--caret-down'} />
+                <FlexDivCentered>
+                    <Expand active={showDetails} onClick={() => setShowDetails(!showDetails)}>
+                        {showDetails ? '-' : '+'}
+                    </Expand>
+                    <Arrow
+                        onClick={() => setOpenState(!openOpenPositions)}
+                        className={openOpenPositions ? 'icon icon--caret-up' : 'icon icon--caret-down'}
+                    />
+                </FlexDivCentered>
             </CategoryContainer>
             {openOpenPositions && (
                 <ListContainer>
@@ -341,6 +352,7 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
                                                 key={index}
                                                 claimCollateralIndex={claimCollateralIndex}
                                                 setClaimCollateralIndex={setClaimCollateralIndex}
+                                                showDetailsExplicit={showDetails}
                                             />
                                         );
                                     })}
