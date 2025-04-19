@@ -3,6 +3,7 @@ import { PaymasterFeeQuote, PaymasterMode } from '@biconomy/paymaster';
 import { getPublicClient } from '@wagmi/core';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { addMonths } from 'date-fns';
+import { cloneDeep } from 'lodash';
 import { wagmiConfig } from 'pages/Root/wagmiConfig';
 import { localStore } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
@@ -328,6 +329,16 @@ export const activateOvertimeAccount = async (params: { networkId: SupportedNetw
 
             const { transactionHash } = await waitForTxHash();
 
+            if (biconomyConnector.sessionModules) {
+                const sessionModule = await createSessionKeyManagerModule({
+                    moduleAddress: DEFAULT_SESSION_KEY_MANAGER_MODULE,
+                    smartAccountAddress: biconomyConnector.address,
+                });
+
+                const cloneOfSessionModule = cloneDeep(sessionModule);
+                biconomyConnector.sessionModules[params.networkId as 10 | 42161 | 8453] = cloneOfSessionModule;
+            }
+
             return await validateTx(transactionHash, params.networkId);
         } catch (e) {
             try {
@@ -345,6 +356,16 @@ export const activateOvertimeAccount = async (params: { networkId: SupportedNetw
                 );
 
                 const { transactionHash } = await waitForTxHash();
+
+                if (biconomyConnector.sessionModules) {
+                    const sessionModule = await createSessionKeyManagerModule({
+                        moduleAddress: DEFAULT_SESSION_KEY_MANAGER_MODULE,
+                        smartAccountAddress: biconomyConnector.address,
+                    });
+
+                    const cloneOfSessionModule = cloneDeep(sessionModule);
+                    biconomyConnector.sessionModules[params.networkId as 10 | 42161 | 8453] = cloneOfSessionModule;
+                }
 
                 return await validateTx(transactionHash, params.networkId);
             } catch (e) {
@@ -476,7 +497,7 @@ const getSessionSigner = async (networkId: SupportedNetwork) => {
             moduleAddress: DEFAULT_SESSION_KEY_MANAGER_MODULE,
             smartAccountAddress: biconomyConnector.address,
         });
-        biconomyConnector.wallet?.setActiveValidationModule(sessionModule);
+
         const storedMapString: any = localStore.get(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId]);
         const retrievedMap = new Map(JSON.parse(storedMapString));
         const sessionData = retrievedMap.get(biconomyConnector.address) as any;
@@ -487,6 +508,13 @@ const getSessionSigner = async (networkId: SupportedNetwork) => {
             chain: networkId as any,
             transport: http(biconomyConnector.wallet?.rpcProvider.transport.url),
         });
+
+        if (biconomyConnector.sessionModules && biconomyConnector.sessionModules[networkId]) {
+            biconomyConnector.wallet?.setActiveValidationModule(biconomyConnector.sessionModules[networkId]);
+        } else {
+            biconomyConnector.wallet?.setActiveValidationModule(sessionModule);
+        }
+
         return sessionSigner;
     } catch (e) {
         throw ERROR_SESSION_NOT_FOUND;

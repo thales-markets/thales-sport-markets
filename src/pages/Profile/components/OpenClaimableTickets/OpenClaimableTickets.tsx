@@ -53,10 +53,7 @@ type OpenClaimableTicketsProps = {
 const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText }) => {
     const { t } = useTranslation();
 
-    const [openClaimable, setClaimableState] = useState<boolean>(true);
-    const [openOpenPositions, setOpenState] = useState<boolean>(true);
     const isBiconomy = useSelector(getIsBiconomy);
-
     const networkId = useChainId();
     const client = useClient();
     const walletClient = useWalletClient();
@@ -69,6 +66,9 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
 
     const isSearchTextWalletAddress = searchText && isAddress(searchText);
     const [claimCollateralIndex, setClaimCollateralIndex] = useState(0);
+    const [openClaimable, setClaimableState] = useState<boolean>(true);
+    const [openOpenPositions, setOpenState] = useState<boolean>(true);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
     const claimCollateralArray = useMemo(
@@ -141,6 +141,7 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
         });
 
         const id = toast.loading(t('market.toast-message.transaction-pending'));
+        setIsSubmitting(true);
 
         const calls: { target: string; allowFailure: boolean; callData: any }[] = [];
         const claimTxs = [];
@@ -220,10 +221,13 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
                         }
                     }
                 }
+                setIsSubmitting(false);
             }
         } catch (e) {
             toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+            setIsSubmitting(false);
             console.log('Error ', e);
+
             return;
         }
     };
@@ -273,7 +277,9 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
                                             fontSize={isMobile ? '9px' : undefined}
                                             height={isMobile ? '19px' : '24px'}
                                         >
-                                            {t('profile.card.claim-all')}
+                                            {isSubmitting
+                                                ? t('profile.card.claim-progress')
+                                                : t('profile.card.claim-all')}
                                         </Button>
                                         <Tooltip
                                             overlay={t('profile.card.claim-batch-tooltip')}

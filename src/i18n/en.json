@@ -1137,6 +1137,7 @@
             "activate": "Activate your Overtime Account for this device.",
             "success": "Your first deposit is received in your Overtime Account successfully. Click on the button bellow, sign the message pop-up and you are all set!",
             "activate-my-account": "Activate My Account",
+            "activate-progress": "Activating...",
             "action": "Activate"
         }
     },

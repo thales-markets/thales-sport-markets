@@ -47,6 +47,7 @@ const ActivateAccount: React.FC<any> = () => {
     const [showSuccessfulDepositModal, setShowSuccessfulDepositModal] = useState<boolean>(false);
     const [isMinimizedModal, setIsMinimized] = useState<boolean>(false);
     const [showFundModal, setShowFundModal] = useState<boolean>(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(
         walletAddress,
@@ -151,6 +152,7 @@ const ActivateAccount: React.FC<any> = () => {
                                 <Box>{t('get-started.activate-account.success')}</Box>
                                 <ActivateButton
                                     onClick={async () => {
+                                        setIsSubmitting(true);
                                         const toastId = toast.loading(t('market.toast-message.transaction-pending'));
                                         const txHash = await activateOvertimeAccount({
                                             networkId,
@@ -170,6 +172,7 @@ const ActivateAccount: React.FC<any> = () => {
                                                     getSuccessToastOptions(t('market.toast-message.approve-success'))
                                                 );
                                                 setShowSuccessfulDepositModal(false);
+                                                setIsSubmitting(false);
                                                 return;
                                             }
                                         }
@@ -177,9 +180,12 @@ const ActivateAccount: React.FC<any> = () => {
                                             toastId,
                                             getErrorToastOptions(t('common.errors.unknown-error-try-again'))
                                         );
+                                        setIsSubmitting(false);
                                     }}
                                 >
-                                    {t('get-started.activate-account.activate-my-account')}
+                                    {isSubmitting
+                                        ? t('get-started.activate-account.activate-progress')
+                                        : t('get-started.activate-account.activate-my-account')}
                                 </ActivateButton>
                             </>
                         ) : (
@@ -323,6 +329,7 @@ const ActivateButton = styled.div`
     height: 44px;
     padding: 14px;
     width: 100%;
+    user-select: none;
     cursor: pointer;
     text-transform: uppercase;
 `;

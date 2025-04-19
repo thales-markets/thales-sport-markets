@@ -73,6 +73,11 @@ const NavigationBarMobile: React.FC<NavigationBarProps> = ({ selectedTab, setSel
     return (
         <Wrapper>
             {navItems.map((item, index) => {
+                if (
+                    !isConnected &&
+                    (item.id === ProfileTab.ACCOUNT || item.id === ProfileTab.LP || item.id === ProfileTab.STATS)
+                )
+                    return;
                 const hasClaimableNotification =
                     item.id === ProfileTab.OPEN_CLAIMABLE ? claimablePositionCount > 0 : false;
                 const hasOpenNotification = item.id === ProfileTab.OPEN_CLAIMABLE ? openPositionCount > 0 : false;

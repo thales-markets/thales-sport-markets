@@ -801,6 +801,7 @@ const Home: React.FC = () => {
                                         market={selectedMarketData}
                                     />
                                 )}
+                            <Filters isMainPageView />
                             <FilterTagsMobile />
                         </>
                     )}
