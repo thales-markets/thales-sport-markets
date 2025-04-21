@@ -2,6 +2,7 @@ import Button from 'components/Button';
 import FundModal from 'components/FundOvertimeAccountModal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import localforage from 'localforage';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
@@ -13,7 +14,7 @@ import { toast } from 'react-toastify';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivRow } from 'styles/common';
-import { Coins, localStore } from 'thales-utils';
+import { Coins } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
@@ -117,19 +118,18 @@ const ActivateAccount: React.FC<any> = () => {
             if (totalBalanceValue && totalBalanceValue?.total > 3) {
                 setShowFundModal(false);
 
-                const storedMapString: any = localStore.get(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId]);
-
-                if (storedMapString) {
-                    const retrievedMap = new Map(JSON.parse(storedMapString));
-                    const sessionData = retrievedMap.get(smartAddres) as any;
-                    if (sessionData) {
-                        setShowSuccessfulDepositModal(false);
+                localforage.getItem(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId]).then((retrievedMap: any) => {
+                    if (retrievedMap) {
+                        const sessionData = retrievedMap.get(smartAddres) as any;
+                        if (sessionData) {
+                            setShowSuccessfulDepositModal(false);
+                        } else {
+                            setShowSuccessfulDepositModal(true);
+                        }
                     } else {
                         setShowSuccessfulDepositModal(true);
                     }
-                } else {
-                    setShowSuccessfulDepositModal(true);
-                }
+                });
             } else if (getFundModalShown()) {
                 setShowFundModal(true);
                 setShowSuccessfulDepositModal(false);
