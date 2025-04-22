@@ -939,16 +939,24 @@
             "min-max-payout": "Min/max payout"
         },
         "parlay-related-markets": {
-            "title": "Your other singles on this game",
+            "type": {
+                "live": "Live",
+                "other": "Other"
+            },
             "title-live": "Your recent live tickets",
+            "title-other": "Your other singles on this game",
             "empty": "No tickets",
             "total-quote": "Total quote",
             "paid": "Paid",
             "payout": "Payout",
-            "tooltip": {
-                "pending": "Ticket creation pending",
-                "success": "Ticket created",
-                "failed": "Ticket creation failed"
+            "status-label": "Status",
+            "status": {
+                "pending": "Transaction pending",
+                "requested": "Live trade requested",
+                "approved": "Live trade request approved",
+                "fulfilling": "Fulfilling live trade",
+                "failed": "Ticket creation failed",
+                "success": "Ticket created"
             }
         },
         "zero-odds-tooltip": "Odds unavailable at the moment.",

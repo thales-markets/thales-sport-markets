@@ -6,7 +6,7 @@ import { Network } from 'enums/network';
 import { WritableDraft } from 'immer/dist/internal';
 import { isFuturesMarket, isPlayerPropsMarket } from 'overtime-utils';
 import { localStore } from 'thales-utils';
-import { ParlayPayment, SerializableSportMarket, TicketPosition } from 'types/markets';
+import { ParlayPayment, SerializableSportMarket, TicketPosition, TicketRequest } from 'types/markets';
 import { RootState, TicketSliceState } from 'types/redux';
 import { TicketError } from 'types/tickets';
 import {
@@ -56,6 +56,7 @@ const getDefaultError = (): TicketError => {
 
 const initialState: TicketSliceState = {
     ticket: getDefaultTicket(),
+    ticketRequestById: {},
     payment: getDefaultPayment(),
     maxTicketSize: DEFAULT_MAX_TICKET_SIZE,
     liveBetSlippage: getDefaultLiveSlippage(),
@@ -186,6 +187,23 @@ const ticketSlice = createSlice({
         removeAll: (state) => {
             _removeAll(state);
         },
+        updateTicketRequestStatus: (state, action: PayloadAction<TicketRequest>) => {
+            let requestId = action.payload.requestId;
+            if (requestId) {
+                delete state.ticketRequestById[action.payload.initialRequestId];
+            } else {
+                requestId = action.payload.initialRequestId;
+            }
+
+            state.ticketRequestById[requestId] = {
+                ...state.ticketRequestById[requestId],
+                status: action.payload.status,
+                ticket: action.payload.ticket,
+            };
+            if (!state.ticketRequestById[requestId].timestamp) {
+                state.ticketRequestById[requestId].timestamp = Date.now();
+            }
+        },
         setLiveBetSlippage: (state, action: PayloadAction<number>) => {
             state.liveBetSlippage = action.payload;
             localStore.set(LOCAL_STORAGE_KEYS.LIVE_BET_SLIPPAGE, action.payload);
@@ -240,6 +258,7 @@ export const {
     updateTicket,
     removeFromTicket,
     removeAll,
+    updateTicketRequestStatus,
     setPaymentSelectedCollateralIndex,
     setPaymentAmountToBuy,
     setMaxTicketSize,
@@ -254,6 +273,7 @@ export const {
 const getTicketState = (state: RootState) => state[sliceName];
 export const getTicket = (state: RootState) => getTicketState(state).ticket;
 export const getMaxTicketSize = (state: RootState) => getTicketState(state).maxTicketSize;
+export const getTicketRequestStatus = (state: RootState) => getTicketState(state).ticketRequestById;
 export const getTicketPayment = (state: RootState) => getTicketState(state).payment;
 export const getLiveBetSlippage = (state: RootState) => getTicketState(state).liveBetSlippage;
 export const getIsFreeBetDisabledByUser = (state: RootState) => getTicketState(state).isFreeBetDisabledByUser;

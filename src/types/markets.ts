@@ -1,4 +1,4 @@
-import { GameStatus, LiveTradingRequestStatus, StatusFilter } from 'enums/markets';
+import { GameStatus, LiveTradingTicketStatus, StatusFilter } from 'enums/markets';
 import { League, MarketType, Sport } from 'overtime-utils';
 import { Coins } from 'thales-utils';
 import { Network } from '../enums/network';
@@ -95,6 +95,7 @@ type OmitRecursively<T, K extends PropertyKey> = Omit<{ [P in keyof T]: OmitDist
 
 // Omit all non-serializable values from SportMarket (maturityDate)
 export type SerializableSportMarket = OmitRecursively<SportMarket, 'maturityDate'>;
+export type SerializableTicketMarket = OmitRecursively<TicketMarket, 'maturityDate'>;
 
 export type SportMarkets = SportMarket[];
 
@@ -154,7 +155,7 @@ export type LiveTradingRequest = {
     line: number;
     position: number;
     buyInAmount: number;
-    status: LiveTradingRequestStatus;
+    status: LiveTradingTicketStatus;
 };
 
 export type TradeData = {
@@ -214,6 +215,28 @@ export type TicketsWithRequestsInfo = {
     liveRequests: LiveTradingRequest[];
     gamesInfo: any;
 };
+
+export type TicketRequest = {
+    initialRequestId: string;
+    requestId: string;
+    status: LiveTradingTicketStatus;
+    ticket: SerializableTicketMarket;
+};
+export type TicketRequestData = {
+    initialRequestId: string;
+    requestId: string;
+    status: LiveTradingTicketStatus;
+    ticket: SerializableTicketMarket;
+    timestamp: number;
+};
+export type TicketMarketRequestData = {
+    initialRequestId: string;
+    requestId: string;
+    status: LiveTradingTicketStatus;
+    ticket: TicketMarket;
+    timestamp: number;
+};
+export type TicketRequestById = Record<string, TicketRequestData>;
 
 export type UserStats = {
     id: string;

@@ -37,6 +37,7 @@ import {
 import {
     LiveTradingRequest,
     SerializableSportMarket,
+    SerializableTicketMarket,
     SportMarket,
     Team,
     Ticket,
@@ -649,6 +650,33 @@ export const serializableSportMarketAsSportMarket = (market: SerializableSportMa
     } as SportMarket;
 
     return sportMarket;
+};
+
+export const ticketMarketAsSerializable = (market: TicketMarket): SerializableTicketMarket => {
+    const serializableChildMarkets = market.childMarkets
+        ? market.childMarkets.map((childMarket) => _.omit(childMarket, 'maturityDate'))
+        : market.childMarkets;
+    const serializableTicketMarket = {
+        ..._.omit(market, 'maturityDate'),
+        childMarkets: serializableChildMarkets,
+    };
+    return serializableTicketMarket;
+};
+
+export const serializableTicketMarketAsTicketMarket = (market: SerializableTicketMarket): TicketMarket => {
+    const childMarkets = market.childMarkets
+        ? market.childMarkets.map((childMarket) => ({
+              ...childMarket,
+              maturityDate: new Date(secondsToMilliseconds(childMarket.maturity)),
+          }))
+        : market.childMarkets;
+    const ticketMarket = {
+        ...market,
+        maturityDate: new Date(secondsToMilliseconds(market.maturity)),
+        childMarkets,
+    } as TicketMarket;
+
+    return ticketMarket;
 };
 
 export const packMarket = (

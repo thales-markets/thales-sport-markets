@@ -62,7 +62,7 @@ export const GameStatusKey: Record<GameStatus, string> = {
 export const BATCH_SIZE = 10;
 
 export const LIVE_REQUETS_BATCH_SIZE = 1000;
-export const LATEST_LIVE_REQUESTS_SIZE = 20;
+export const LATEST_LIVE_REQUESTS_SIZE = 10;
 
 export const THALES_CONTRACT_RATE_KEY = 'THALES-CONTRACT';
 export const OVER_CONTRACT_RATE_KEY = 'OVER-CONTRACT';

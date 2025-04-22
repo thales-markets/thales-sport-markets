@@ -776,7 +776,7 @@ const StyledParlayEmptyIcon = styled(ParlayEmptyIcon)`
 
 const BetTypeContainer = styled(FlexDivSpaceBetween)``;
 
-const RadioButtonContainer = styled.div`
+export const RadioButtonContainer = styled.div`
     position: relative;
 
     label {

@@ -27,7 +27,7 @@ import { OVERDROP_LEVELS } from 'constants/overdrop';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { secondsToMilliseconds } from 'date-fns';
 import { ContractType } from 'enums/contract';
-import { OddsType } from 'enums/markets';
+import { LiveTradingTicketStatus, OddsType } from 'enums/markets';
 import { BuyTicketStep } from 'enums/tickets';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import useInterval from 'hooks/useInterval';
@@ -64,6 +64,7 @@ import {
     setLiveBetSlippage,
     setPaymentAmountToBuy,
     setPaymentSelectedCollateralIndex,
+    updateTicketRequestStatus,
 } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsBiconomy, getIsConnectedViaParticle, setWalletConnectModalVisibility } from 'redux/modules/wallet';
@@ -113,7 +114,7 @@ import sportsAMMV2Contract from 'utils/contracts/sportsAMMV2Contract';
 import { isErrorExcluded, logErrorToDiscord } from 'utils/discord';
 import { convertFromBytes32 } from 'utils/formatters/string';
 import { formatMarketOdds } from 'utils/markets';
-import { getTradeData } from 'utils/marketsV2';
+import { getTradeData, ticketMarketAsSerializable } from 'utils/marketsV2';
 import { checkAllowance } from 'utils/network';
 import {
     formatPoints,
@@ -1477,6 +1478,18 @@ const Ticket: React.FC<TicketProps> = ({
             setIsBuying(true);
             const toastId = toast.loading(t('market.toast-message.transaction-pending'));
 
+            const initialRequestId = `initialRequestId${Date.now()}`;
+            if (isLiveTicket) {
+                dispatch(
+                    updateTicketRequestStatus({
+                        initialRequestId,
+                        requestId: '',
+                        status: LiveTradingTicketStatus.PENDING,
+                        ticket: ticketMarketAsSerializable(markets[0]),
+                    })
+                );
+            }
+
             let step = buyStep;
             let overAmount = swappedOverToReceive;
             if (swapToOver) {
@@ -1689,6 +1702,16 @@ const Ticket: React.FC<TicketProps> = ({
                         }
 
                         if (liveOrSgpTradingProcessorContract) {
+                            if (isLiveTicket) {
+                                dispatch(
+                                    updateTicketRequestStatus({
+                                        initialRequestId,
+                                        requestId,
+                                        status: LiveTradingTicketStatus.REQUESTED,
+                                        ticket: ticketMarketAsSerializable(markets[0]),
+                                    })
+                                );
+                            }
                             toast.update(
                                 toastId,
                                 getLoadingToastOptions(
@@ -1702,7 +1725,9 @@ const Ticket: React.FC<TicketProps> = ({
                                 requestId,
                                 maxAllowedExecutionDelay,
                                 toastId,
-                                t(`market.toast-message.${isSgp ? 'fulfilling-sgp-trade' : 'fulfilling-live-trade'}`)
+                                t(`market.toast-message.${isSgp ? 'fulfilling-sgp-trade' : 'fulfilling-live-trade'}`),
+                                isLiveTicket ? dispatch : undefined,
+                                markets[0]
                             );
 
                             if (isAdapterError) {
@@ -1711,6 +1736,17 @@ const Ticket: React.FC<TicketProps> = ({
                                 toast.update(toastId, getErrorToastOptions(t('markets.parlay.tx-not-received')));
                                 setIsBuying(false);
                             } else {
+                                if (isLiveTicket) {
+                                    dispatch(
+                                        updateTicketRequestStatus({
+                                            initialRequestId,
+                                            requestId,
+                                            status: LiveTradingTicketStatus.SUCCESS,
+                                            ticket: ticketMarketAsSerializable(markets[0]),
+                                        })
+                                    );
+                                }
+
                                 const modalData = await getShareTicketModalData(
                                     [...markets],
                                     collateralHasLp ? usedCollateralForBuy : defaultCollateral,

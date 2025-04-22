@@ -5,7 +5,7 @@ import { BATCH_SIZE, LATEST_LIVE_REQUESTS_SIZE, LIVE_REQUETS_BATCH_SIZE } from '
 import QUERY_KEYS from 'constants/queryKeys';
 import { secondsToMilliseconds } from 'date-fns';
 import { ContractType } from 'enums/contract';
-import { LiveTradingRequestStatus } from 'enums/markets';
+import { LiveTradingTicketStatus } from 'enums/markets';
 import { orderBy } from 'lodash';
 import { bigNumberFormatter, getDefaultDecimalsForNetwork, NetworkId } from 'thales-utils';
 import { LiveTradingRequest, Ticket, TicketsWithRequestsInfo } from 'types/markets';
@@ -181,12 +181,15 @@ export const useUserTicketsQuery = (
                                     (response: any) => response?.requestId === request.requestId
                                 );
                                 const isAdapterFailed = adapterRequestStatus && adapterRequestStatus.allow === false;
+                                const isAdapterApproved = adapterRequestStatus && adapterRequestStatus.allow === true;
 
                                 const status = isFulfilled
-                                    ? LiveTradingRequestStatus.SUCCESS
+                                    ? LiveTradingTicketStatus.SUCCESS
                                     : isAdapterFailed || Date.now() > maturityTimestamp
-                                    ? LiveTradingRequestStatus.FAILED
-                                    : LiveTradingRequestStatus.PENDING;
+                                    ? LiveTradingTicketStatus.FAILED
+                                    : isAdapterApproved
+                                    ? LiveTradingTicketStatus.APPROVED
+                                    : LiveTradingTicketStatus.REQUESTED;
 
                                 const liveTradingRequest = {
                                     user: request.user,

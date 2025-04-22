@@ -104,8 +104,11 @@ export enum TicketErrorCode {
     SGP_MAX_MARKETS = 8,
 }
 
-export enum LiveTradingRequestStatus {
-    PENDING = 0,
-    SUCCESS = 1,
-    FAILED = 2,
+export enum LiveTradingTicketStatus {
+    PENDING = 'pending',
+    REQUESTED = 'requested',
+    APPROVED = 'approved',
+    FULFILLING = 'fulfilling',
+    FAILED = 'failed',
+    SUCCESS = 'success',
 }
