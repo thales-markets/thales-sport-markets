@@ -482,7 +482,6 @@ const getSessionSigner = async (networkId: SupportedNetwork) => {
         });
 
         const retrievedMap: any = await localforage.getItem(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId]);
-        console.log(retrievedMap);
         const sessionData = retrievedMap.get(biconomyConnector.address) as any;
 
         sessionModule.merkleTree.resetTree();
