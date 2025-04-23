@@ -2,6 +2,7 @@ import Button from 'components/Button';
 import FundModal from 'components/FundOvertimeAccountModal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import localforage from 'localforage';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
@@ -13,7 +14,7 @@ import { toast } from 'react-toastify';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivRow } from 'styles/common';
-import { Coins, localStore } from 'thales-utils';
+import { Coins } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
@@ -47,6 +48,7 @@ const ActivateAccount: React.FC<any> = () => {
     const [showSuccessfulDepositModal, setShowSuccessfulDepositModal] = useState<boolean>(false);
     const [isMinimizedModal, setIsMinimized] = useState<boolean>(false);
     const [showFundModal, setShowFundModal] = useState<boolean>(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(
         walletAddress,
@@ -116,19 +118,18 @@ const ActivateAccount: React.FC<any> = () => {
             if (totalBalanceValue && totalBalanceValue?.total > 3) {
                 setShowFundModal(false);
 
-                const storedMapString: any = localStore.get(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId]);
-
-                if (storedMapString) {
-                    const retrievedMap = new Map(JSON.parse(storedMapString));
-                    const sessionData = retrievedMap.get(smartAddres) as any;
-                    if (sessionData) {
-                        setShowSuccessfulDepositModal(false);
+                localforage.getItem(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId]).then((retrievedMap: any) => {
+                    if (retrievedMap) {
+                        const sessionData = retrievedMap.get(smartAddres) as any;
+                        if (sessionData) {
+                            setShowSuccessfulDepositModal(false);
+                        } else {
+                            setShowSuccessfulDepositModal(true);
+                        }
                     } else {
                         setShowSuccessfulDepositModal(true);
                     }
-                } else {
-                    setShowSuccessfulDepositModal(true);
-                }
+                });
             } else if (getFundModalShown()) {
                 setShowFundModal(true);
                 setShowSuccessfulDepositModal(false);
@@ -151,6 +152,7 @@ const ActivateAccount: React.FC<any> = () => {
                                 <Box>{t('get-started.activate-account.success')}</Box>
                                 <ActivateButton
                                     onClick={async () => {
+                                        setIsSubmitting(true);
                                         const toastId = toast.loading(t('market.toast-message.transaction-pending'));
                                         const txHash = await activateOvertimeAccount({
                                             networkId,
@@ -170,6 +172,7 @@ const ActivateAccount: React.FC<any> = () => {
                                                     getSuccessToastOptions(t('market.toast-message.approve-success'))
                                                 );
                                                 setShowSuccessfulDepositModal(false);
+                                                setIsSubmitting(false);
                                                 return;
                                             }
                                         }
@@ -177,9 +180,12 @@ const ActivateAccount: React.FC<any> = () => {
                                             toastId,
                                             getErrorToastOptions(t('common.errors.unknown-error-try-again'))
                                         );
+                                        setIsSubmitting(false);
                                     }}
                                 >
-                                    {t('get-started.activate-account.activate-my-account')}
+                                    {isSubmitting
+                                        ? t('get-started.activate-account.activate-progress')
+                                        : t('get-started.activate-account.activate-my-account')}
                                 </ActivateButton>
                             </>
                         ) : (
@@ -323,6 +329,7 @@ const ActivateButton = styled.div`
     height: 44px;
     padding: 14px;
     width: 100%;
+    user-select: none;
     cursor: pointer;
     text-transform: uppercase;
 `;

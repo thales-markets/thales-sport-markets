@@ -3,8 +3,8 @@ import { PaymasterFeeQuote, PaymasterMode } from '@biconomy/paymaster';
 import { getPublicClient } from '@wagmi/core';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { addMonths } from 'date-fns';
+import localforage from 'localforage';
 import { wagmiConfig } from 'pages/Root/wagmiConfig';
-import { localStore } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { Address, Client, createWalletClient, encodeFunctionData, getContract, http, maxUint256 } from 'viem';
@@ -330,6 +330,7 @@ export const activateOvertimeAccount = async (params: { networkId: SupportedNetw
 
             return await validateTx(transactionHash, params.networkId);
         } catch (e) {
+            console.log(e);
             try {
                 if ((e as any).toString().toLowerCase().includes(USER_REJECTED_ERROR)) {
                     throw new Error('Transaction rejected by user.');
@@ -348,11 +349,13 @@ export const activateOvertimeAccount = async (params: { networkId: SupportedNetw
 
                 return await validateTx(transactionHash, params.networkId);
             } catch (e) {
-                const storedMapString: any = localStore.get(LOCAL_STORAGE_KEYS.SESSION_P_KEY[params.networkId]);
+                const storedMapString: any = await localforage.getItem(
+                    LOCAL_STORAGE_KEYS.SESSION_P_KEY[params.networkId]
+                );
 
-                const retrievedMap = storedMapString ? new Map(JSON.parse(storedMapString)) : new Map();
+                const retrievedMap = storedMapString ?? new Map();
                 retrievedMap.delete(biconomyConnector.address);
-                localStore.set(LOCAL_STORAGE_KEYS.SESSION_P_KEY[params.networkId], JSON.stringify([...retrievedMap]));
+                await localforage.setItem(LOCAL_STORAGE_KEYS.SESSION_P_KEY[params.networkId], retrievedMap);
                 return null;
             }
         }
@@ -409,16 +412,17 @@ const getCreateSessionTxs = async (networkId: SupportedNetwork) => {
             data: sessionTxData.data,
         };
 
-        const storedMapString: any = localStore.get(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId]);
+        const storedMapString: any = await localforage.getItem(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId]);
 
-        const retrievedMap = storedMapString ? new Map(JSON.parse(storedMapString)) : new Map();
+        const retrievedMap = storedMapString ?? new Map();
 
         retrievedMap.set(biconomyConnector.address, {
             privateKey,
             validUntil: Math.floor(sixMonths.getTime() / 1000).toString(),
+            leaves: sessionModule.merkleTree.getLeaves(),
         });
 
-        localStore.set(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId], JSON.stringify([...retrievedMap]));
+        await localforage.setItem(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId], retrievedMap);
 
         transactionArray.push(setSessiontrx);
 
@@ -476,10 +480,12 @@ const getSessionSigner = async (networkId: SupportedNetwork) => {
             moduleAddress: DEFAULT_SESSION_KEY_MANAGER_MODULE,
             smartAccountAddress: biconomyConnector.address,
         });
-        biconomyConnector.wallet?.setActiveValidationModule(sessionModule);
-        const storedMapString: any = localStore.get(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId]);
-        const retrievedMap = new Map(JSON.parse(storedMapString));
+
+        const retrievedMap: any = await localforage.getItem(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId]);
         const sessionData = retrievedMap.get(biconomyConnector.address) as any;
+
+        sessionModule.merkleTree.resetTree();
+        sessionModule.merkleTree.addLeaves(sessionData.leaves);
 
         const sessionAccount = privateKeyToAccount(sessionData.privateKey);
         const sessionSigner = createWalletClient({
@@ -487,6 +493,9 @@ const getSessionSigner = async (networkId: SupportedNetwork) => {
             chain: networkId as any,
             transport: http(biconomyConnector.wallet?.rpcProvider.transport.url),
         });
+
+        biconomyConnector.wallet?.setActiveValidationModule(sessionModule);
+
         return sessionSigner;
     } catch (e) {
         throw ERROR_SESSION_NOT_FOUND;
