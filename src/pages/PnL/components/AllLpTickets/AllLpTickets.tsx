@@ -23,7 +23,7 @@ import { getDefaultCollateral } from 'utils/collaterals';
 import { useChainId, useClient } from 'wagmi';
 import TicketTransactionsTable from '../../../Markets/Market/MarketDetailsV2/components/TicketTransactionsTable';
 
-const UNRESOLVED_PERIOD_IN_HOURS = 8;
+const UNRESOLVED_PERIOD_IN_HOURS = 6;
 
 type AllLpTicketsProps = {
     round: number;

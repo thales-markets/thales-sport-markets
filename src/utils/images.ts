@@ -333,6 +333,7 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.HUNGARY_HNB_I:
             return `/logos/Countries/hungary.svg`;
         case League.NORWAY_HB_1_DIVISJON:
+        case League.NORWAY_ELITESERIEN:
             return `/logos/Countries/norway.svg`;
         case League.ICELAND_URVALSDEILD:
             return `/logos/Countries/iceland.svg`;

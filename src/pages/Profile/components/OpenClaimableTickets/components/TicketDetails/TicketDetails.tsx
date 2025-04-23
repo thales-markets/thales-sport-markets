@@ -5,7 +5,7 @@ import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { ZERO_ADDRESS } from 'constants/network';
 import { ContractType } from 'enums/contract';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -69,9 +69,15 @@ type TicketDetailsProps = {
     ticket: Ticket;
     claimCollateralIndex: number;
     setClaimCollateralIndex: any;
+    showDetailsExplicit?: boolean;
 };
 
-const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIndex, setClaimCollateralIndex }) => {
+const TicketDetails: React.FC<TicketDetailsProps> = ({
+    ticket,
+    claimCollateralIndex,
+    setClaimCollateralIndex,
+    showDetailsExplicit,
+}) => {
     const { t } = useTranslation();
     const selectedOddsType = useSelector(getOddsType);
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -86,7 +92,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
     const smartAddres = useBiconomy();
     const walletAddress = (isBiconomy ? smartAddres : address) || '';
 
-    const [showDetails, setShowDetails] = useState<boolean>(false);
+    const [showDetails, setShowDetails] = useState<boolean>(showDetailsExplicit ?? false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
     const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps | undefined>(undefined);
@@ -117,6 +123,10 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
     const isEth = claimCollateralAddress === ZERO_ADDRESS;
 
     const isClaimable = ticket.isClaimable;
+
+    useEffect(() => {
+        if (showDetailsExplicit !== undefined) setShowDetails(showDetailsExplicit);
+    }, [showDetailsExplicit]);
 
     const claimTicket = async (ticketAddress: string) => {
         const id = toast.loading(t('market.toast-message.transaction-pending'));

@@ -67,7 +67,7 @@ const Filters: React.FC<FiltersProps> = ({ hideSwitch, isMainPageView }) => {
 
     return (
         <FilterContainer>
-            {!hideSwitch && !selectedMarket && marketTypeFilter === undefined && (
+            {!isMobile && !hideSwitch && !selectedMarket && marketTypeFilter === undefined && (
                 <>
                     <SwitchContainer>
                         <Tooltip overlay={isThreeWayView ? 'Switch to standard view' : 'Switch to three column view'}>
