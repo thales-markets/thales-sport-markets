@@ -72,9 +72,15 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ selectedTab, setSelectedT
     return (
         <Wrapper>
             {navItems.map((item, index) => {
+                if (
+                    !isConnected &&
+                    (item.id === ProfileTab.ACCOUNT || item.id === ProfileTab.LP || item.id === ProfileTab.STATS)
+                )
+                    return;
                 const hasClaimableNotification =
                     item.id === ProfileTab.OPEN_CLAIMABLE ? claimablePositionCount > 0 : false;
                 const hasOpenNotification = item.id === ProfileTab.OPEN_CLAIMABLE ? openPositionCount > 0 : false;
+
                 return (
                     <ItemWrapper key={index} onClick={() => setSelectedTab(item.id)}>
                         <Item selected={item.id == selectedTab}>
