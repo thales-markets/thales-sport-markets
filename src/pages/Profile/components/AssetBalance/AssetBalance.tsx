@@ -31,7 +31,7 @@ const AssetBalance: React.FC = () => {
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
-    const smartAddres = useBiconomy();
+    const { smartAddress } = useBiconomy();
     const theme = useTheme();
     const [showThalesToOverMigrationModal, setShowThalesToOverMigrationModal] = useState<boolean>(false);
     const [showFundModal, setShowFundModal] = useState<boolean>(false);
@@ -44,7 +44,7 @@ const AssetBalance: React.FC = () => {
     const [showZeroBalance, setShowZeroBalance] = useLocalStorage(LOCAL_STORAGE_KEYS.SHOW_ZERO_BALANCE, true);
 
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(
-        smartAddres,
+        smartAddress,
         { networkId, client },
         {
             enabled: isConnected,
@@ -167,8 +167,8 @@ const AssetBalance: React.FC = () => {
                         <Asset className="icon icon--wallet-connected" />
                         {isBiconomy ? t('profile.dropdown.account') : t('profile.dropdown.eoa')}
                     </AssetWrapper>
-                    <AssetWrapper clickable onClick={() => handleCopy(isBiconomy ? smartAddres : (address as any))}>
-                        {truncateAddress(isBiconomy ? smartAddres : (address as any), 6, 4)}{' '}
+                    <AssetWrapper clickable onClick={() => handleCopy(isBiconomy ? smartAddress : (address as any))}>
+                        {truncateAddress(isBiconomy ? smartAddress : (address as any), 6, 4)}{' '}
                         <Asset className="icon icon--copy" />
                     </AssetWrapper>
                 </WalletContainer>

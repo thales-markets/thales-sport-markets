@@ -1,14 +1,19 @@
 import { createSmartAccountClient } from '@biconomy/account';
-import { UniversalAccount } from '@GDdark/universal-account';
+import { IAssetsResponse, UniversalAccount } from '@GDdark/universal-account';
 import { LINKS } from 'constants/links';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useAccount, useChainId, useDisconnect, useSwitchChain, useWalletClient } from 'wagmi';
 import biconomyConnector from './biconomyWallet';
 
-// Hook for biconomy
+// Singleton state outside the hook
+let smartAddressSingleton = '';
+let universalAddressSingleton = '';
+let universalBalanceSingleton: IAssetsResponse | undefined;
+let initialized = false;
+
 function useBiconomy() {
-    const [smartAddress, setSmartAddress] = useState('');
+    const [, forceUpdate] = useState({});
     const dispatch = useDispatch();
     const networkId = useChainId();
     const { data: walletClient } = useWalletClient();
@@ -17,45 +22,55 @@ function useBiconomy() {
     const { isConnected } = useAccount();
 
     useEffect(() => {
-        if (walletClient && isConnected) {
+        if (isConnected) {
             const bundlerUrl = `${LINKS.Biconomy.Bundler}${networkId}/${import.meta.env.VITE_APP_BICONOMY_BUNDLE_KEY}`;
 
             const createSmartAccount = async () => {
                 const PAYMASTER_API_KEY = import.meta.env['VITE_APP_PAYMASTER_KEY_' + networkId];
                 const smartAccount = await createSmartAccountClient({
-                    signer: walletClient,
+                    signer: walletClient as any,
                     bundlerUrl: bundlerUrl,
                     biconomyPaymasterApiKey: PAYMASTER_API_KEY,
                 });
-                const smartAddressNew = await smartAccount.getAccountAddress();
 
                 const universalAccount = new UniversalAccount({
                     projectId: import.meta.env['VITE_APP_UA_PROJECT_ID'],
-                    ownerAddress: walletClient.account.address,
+                    ownerAddress: walletClient?.account.address as any,
                 });
 
-                const smartAccountOptions = await universalAccount.getSmartAccountOptions();
-                console.log('smartAccountOptions: ', smartAccountOptions);
+                const [smartAddressNew, smartAccountOptions, assets] = await Promise.all([
+                    smartAccount.getAccountAddress(),
+                    universalAccount.getSmartAccountOptions(),
+                    universalAccount.getPrimaryAssets(),
+                ]);
 
-                if (smartAddress === '') {
+                if (!initialized) {
+                    smartAddressSingleton = smartAddressNew;
+                    universalAddressSingleton = smartAccountOptions.smartAccountAddress ?? '';
+                    universalBalanceSingleton = assets;
+                    initialized = true;
+
                     biconomyConnector.setWallet(smartAccount, smartAddressNew, universalAccount);
-                    setSmartAddress(smartAddressNew);
-                } else {
-                    if (smartAddress !== smartAddressNew) {
-                        biconomyConnector.setWallet(smartAccount, smartAddressNew, universalAccount);
-                        setSmartAddress(smartAddressNew);
-                    }
+                    forceUpdate({}); // Trigger re-render
                 }
             };
 
-            createSmartAccount();
-        } else {
+            if (walletClient) createSmartAccount();
+        } else if (initialized) {
             biconomyConnector.resetWallet();
-            setSmartAddress('');
+            smartAddressSingleton = '';
+            universalAddressSingleton = '';
+            universalBalanceSingleton = undefined;
+            initialized = false;
+            forceUpdate({}); // Trigger re-render
         }
-    }, [dispatch, switchChain, networkId, disconnect, walletClient, isConnected, smartAddress]);
+    }, [dispatch, switchChain, networkId, disconnect, walletClient, isConnected]);
 
-    return smartAddress;
+    return {
+        smartAddress: smartAddressSingleton,
+        universalAddress: universalAddressSingleton,
+        universalBalance: universalBalanceSingleton,
+    };
 }
 
 export default useBiconomy;

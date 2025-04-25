@@ -7,6 +7,7 @@ import NavMenuMobile from 'components/NavMenuMobile';
 import SPAAnchor from 'components/SPAAnchor';
 import Search from 'components/Search';
 import ThalesToOverMigrationModal from 'components/ThalesToOverMigrationModal';
+import UniversalModal from 'components/UniversalModal';
 import WalletInfo from 'components/WalletInfo';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
 import ROUTES from 'constants/routes';
@@ -91,8 +92,8 @@ const DappHeader: React.FC = () => {
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
-    const smartAddres = useBiconomy();
-    const walletAddress = (isBiconomy ? smartAddres : address) || '';
+    const { smartAddress } = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const marketSearch = useSelector(getMarketSearch);
     const stopPulsing = useSelector(getStopPulsing);
@@ -104,6 +105,7 @@ const DappHeader: React.FC = () => {
     const [currentPulsingCount, setCurrentPulsingCount] = useState<number>(0);
     const [navMenuVisibility, setNavMenuVisibility] = useState<boolean | null>(null);
     const [showSearchModal, setShowSearchModal] = useState<boolean>(false);
+    const [showUniversalModal, setShowUniversalModal] = useState<boolean>(false);
     const [showThalesToOverMigrationModal, setShowThalesToOverMigrationModal] = useState<boolean>(false);
 
     const whitelistedForUnblockQuery = useWhitelistedForUnblock(
@@ -200,6 +202,23 @@ const DappHeader: React.FC = () => {
                         </MiddleContainerSectionLeft>
                         {isConnected && (
                             <MiddleContainerSectionRight>
+                                <Button
+                                    backgroundColor={theme.textColor.octonary}
+                                    textColor={theme.button.textColor.primary}
+                                    borderColor={theme.button.borderColor.quinary}
+                                    additionalStyles={{
+                                        borderRadius: '8px',
+                                        fontWeight: '800',
+                                        fontSize: '12px',
+                                        padding: '9px 20px',
+                                        height: '30px',
+                                        marginLeft: 'auto',
+                                        whiteSpace: 'pre',
+                                    }}
+                                    onClick={() => setShowUniversalModal(true)}
+                                >
+                                    Universal Account
+                                </Button>
                                 <SPAAnchor href={`${ROUTES.Profile}?selected-tab=${ProfileTab.OPEN_CLAIMABLE}`}>
                                     <FlexDivCentered>
                                         <ProfileIconWidget /> <ProfileLabel>{t('common.profile')}</ProfileLabel>
@@ -337,6 +356,13 @@ const DappHeader: React.FC = () => {
                     isOpen={connectWalletModalVisibility}
                     onClose={() => {
                         dispatch(setWalletConnectModalVisibility({ visibility: false }));
+                    }}
+                />
+            )}
+            {showUniversalModal && (
+                <UniversalModal
+                    onClose={() => {
+                        setShowUniversalModal(false);
                     }}
                 />
             )}

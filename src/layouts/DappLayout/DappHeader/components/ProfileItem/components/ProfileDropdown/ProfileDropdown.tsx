@@ -25,7 +25,7 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ setShowDropdown }) =>
     const { t } = useTranslation();
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const { address } = useAccount();
-    const smartAddress = useBiconomy();
+    const { smartAddress } = useBiconomy();
     const { disconnect } = useDisconnect();
 
     const handleCopy = (address: string) => {

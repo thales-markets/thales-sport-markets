@@ -1139,6 +1139,15 @@
             "activate-my-account": "Activate My Account",
             "activate-progress": "Activating...",
             "action": "Activate"
+        },
+        "universal-account": {
+            "title": "<icon/> Universal account",
+            "address": "Your Universal address",
+            "subtitle": "Send supported crypto to the address below on supported chains",
+            "amount": "Amount",
+            "transfer-pending": "Transfer to Overtime Account pending",
+            "success": "Transfed funds to Overtime Account successfully",
+            "error": "Some error occurred while transfering funds."
         }
     },
     "liquidity-pool": {

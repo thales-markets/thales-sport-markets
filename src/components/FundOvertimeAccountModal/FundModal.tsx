@@ -41,8 +41,8 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
 
     const theme = useTheme();
     const networkId = useChainId();
-    const smartAddres = useBiconomy();
-    const walletAddress = (isBiconomy ? smartAddres : address) || '';
+    const { smartAddress } = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const [showQRModal, setShowQRModal] = useState<boolean>(false);
     const [showDepositFromWallet, setShowDepositFromWallet] = useState<boolean>(false);

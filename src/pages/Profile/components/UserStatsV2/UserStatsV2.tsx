@@ -40,7 +40,7 @@ const UserStats: React.FC = () => {
     const { userInfo } = useAuthCore();
 
     const { address, isConnected } = useAccount();
-    const smartAddress = useBiconomy();
+    const { smartAddress } = useBiconomy();
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const userStatsQuery = useUsersStatsV2Query(walletAddress, { networkId, client }, { enabled: isConnected });
