@@ -147,7 +147,6 @@ const ActivateAccount: React.FC<any> = () => {
                             <>
                                 <FlexDivRow>{<CloseIcon onClick={() => setIsMinimized(true)} />}</FlexDivRow>
                                 <LogoIcon className="icon icon--overtime" />
-                                <Header>{t('get-started.activate-account.deposit')}</Header>
                                 <SubTitle>{t('get-started.activate-account.activate')}</SubTitle>
                                 <Box>{t('get-started.activate-account.success')}</Box>
                                 <ActivateButton
@@ -276,19 +275,6 @@ const Wrapper = styled.div<{ show: boolean }>`
             }
    
     `}
-`;
-
-const Header = styled.h2`
-    color: ${(props) => props.theme.overdrop.textColor.quaternary};
-    text-align: center;
-    font-size: 24px;
-    line-height: 24px;
-    font-weight: 600;
-    margin-top: 13px;
-    margin-bottom: 10px;
-    @media (max-width: 575px) {
-        font-size: 20px;
-    }
 `;
 
 const SubTitle = styled.p`
