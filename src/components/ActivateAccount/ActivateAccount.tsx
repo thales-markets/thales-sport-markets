@@ -45,8 +45,8 @@ const ActivateAccount: React.FC<any> = () => {
 
     const queryParams: { freeBet?: string } = queryString.parse(location.search);
 
-    const [showSuccessfulDepositModal, setShowSuccessfulDepositModal] = useState<boolean>(false);
-    const [isMinimizedModal, setIsMinimized] = useState<boolean>(false);
+    const [showActivateAccount, setShowActivateAccount] = useState<boolean>(false);
+    const [isMinimizedModal, setIsMinimized] = useState<boolean>(true);
     const [showFundModal, setShowFundModal] = useState<boolean>(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -122,17 +122,17 @@ const ActivateAccount: React.FC<any> = () => {
                     if (retrievedMap) {
                         const sessionData = retrievedMap.get(smartAddres) as any;
                         if (sessionData) {
-                            setShowSuccessfulDepositModal(false);
+                            setShowActivateAccount(false);
                         } else {
-                            setShowSuccessfulDepositModal(true);
+                            setShowActivateAccount(true);
                         }
                     } else {
-                        setShowSuccessfulDepositModal(true);
+                        setShowActivateAccount(true);
                     }
                 });
             } else if (getFundModalShown()) {
                 setShowFundModal(true);
-                setShowSuccessfulDepositModal(false);
+                setShowActivateAccount(false);
                 setFundModalShown(false);
             }
         }
@@ -140,7 +140,7 @@ const ActivateAccount: React.FC<any> = () => {
 
     return (
         <>
-            {showSuccessfulDepositModal && (
+            {showActivateAccount && (
                 <Container show={!isMinimizedModal}>
                     <Wrapper show={!isMinimizedModal}>
                         {!isMinimizedModal ? (
@@ -171,7 +171,7 @@ const ActivateAccount: React.FC<any> = () => {
                                                     toastId,
                                                     getSuccessToastOptions(t('market.toast-message.approve-success'))
                                                 );
-                                                setShowSuccessfulDepositModal(false);
+                                                setShowActivateAccount(false);
                                                 setIsSubmitting(false);
                                                 return;
                                             }
