@@ -137,6 +137,7 @@ export const EmptyTitle = styled.span`
 `;
 
 export const StyledParlayEmptyIcon = styled(OvertimeTicket)`
+    height: 78px;
     path {
         fill: ${(props) => props.theme.textColor.quaternary};
     }
