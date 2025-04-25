@@ -25,7 +25,7 @@ const TicketTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
         isSearchTextWalletAddress ? searchText : walletAddress,
         { networkId, client },
         {
-            enabled: isConnected,
+            enabled: isSearchTextWalletAddress || isConnected,
         }
     );
 
