@@ -20,14 +20,14 @@ type UniversalModal = {
 const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
     const { t } = useTranslation();
 
-    const { universalAddress, universalBalance } = useBiconomy();
+    const { universalAddress, universalSolanaAddress, universalBalance } = useBiconomy();
 
     const theme: ThemeInterface = useTheme();
 
-    const handleCopy = () => {
+    const handleCopy = (address: string) => {
         try {
-            navigator.clipboard.writeText(universalAddress);
-            toast.info(`${t('deposit.copied')}: ${truncateAddress(universalAddress, 6, 4)}`);
+            navigator.clipboard.writeText(address);
+            toast.info(`${t('deposit.copied')}: ${truncateAddress(address, 6, 4)}`);
         } catch (e) {
             toast.error('Error');
         }
@@ -65,8 +65,18 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
                     <FieldHeader>{t('get-started.universal-account.address')}</FieldHeader>
 
                     <AddressContainer>
-                        <Field onClick={handleCopy}>
+                        <Field onClick={() => handleCopy(universalAddress)}>
                             {universalAddress} <CopyIcon className="icon icon--copy" />
+                        </Field>
+                    </AddressContainer>
+                </WalletContainer>
+
+                <WalletContainer>
+                    <FieldHeader>{t('get-started.universal-account.address')}</FieldHeader>
+
+                    <AddressContainer>
+                        <Field onClick={() => handleCopy(universalSolanaAddress)}>
+                            {universalSolanaAddress} <CopyIcon className="icon icon--copy" />
                         </Field>
                     </AddressContainer>
                 </WalletContainer>

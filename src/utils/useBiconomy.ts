@@ -9,6 +9,7 @@ import biconomyConnector from './biconomyWallet';
 // Singleton state outside the hook
 let smartAddressSingleton = '';
 let universalAddressSingleton = '';
+let universalSolanaAddressSingleton = '';
 let universalBalanceSingleton: IAssetsResponse | undefined;
 let initialized = false;
 
@@ -47,6 +48,7 @@ function useBiconomy() {
                 if (!initialized) {
                     smartAddressSingleton = smartAddressNew;
                     universalAddressSingleton = smartAccountOptions.smartAccountAddress ?? '';
+                    universalSolanaAddressSingleton = smartAccountOptions.solanaSmartAccountAddress ?? '';
                     universalBalanceSingleton = assets;
                     initialized = true;
 
@@ -60,6 +62,7 @@ function useBiconomy() {
             biconomyConnector.resetWallet();
             smartAddressSingleton = '';
             universalAddressSingleton = '';
+            universalSolanaAddressSingleton = '';
             universalBalanceSingleton = undefined;
             initialized = false;
             forceUpdate({}); // Trigger re-render
@@ -70,6 +73,7 @@ function useBiconomy() {
         smartAddress: smartAddressSingleton,
         universalAddress: universalAddressSingleton,
         universalBalance: universalBalanceSingleton,
+        universalSolanaAddress: universalSolanaAddressSingleton,
     };
 }
 
