@@ -101,7 +101,7 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
     const userTicketsQuery = useUserTicketsQuery(
         isSearchTextWalletAddress ? searchText : walletAddress,
         { networkId, client },
-        { enabled: isConnected }
+        { enabled: isSearchTextWalletAddress || isConnected }
     );
 
     const userTicketsByStatus = useMemo(() => {
