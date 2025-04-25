@@ -86,17 +86,20 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
                     <div></div>
                     <Label>{formatCurrencyWithKey(USD_SIGN, universalBalance?.totalAmountInUSD ?? 0, 2)}</Label>
                 </BalanceContainer>
-
-                {universalBalance?.assets.map((data) => (
-                    <AssetContainer key={data.tokenType}>
-                        <AssetWrapper>
-                            <Asset className={COLLATERAL_ICONS_CLASS_NAMES[data.tokenType.toUpperCase() as Coins]} />
-                            {data.tokenType}
-                        </AssetWrapper>
-                        <Label>{formatCurrencyWithKey('', data.amount)}</Label>
-                        <Label>{formatCurrencyWithKey(USD_SIGN, data.amountInUSD, 2)}</Label>
-                    </AssetContainer>
-                ))}
+                <AssetDiv>
+                    {universalBalance?.assets.map((data) => (
+                        <AssetContainer key={data.tokenType}>
+                            <AssetWrapper>
+                                <Asset
+                                    className={COLLATERAL_ICONS_CLASS_NAMES[data.tokenType.toUpperCase() as Coins]}
+                                />
+                                {data.tokenType}
+                            </AssetWrapper>
+                            <Label>{formatCurrencyWithKey('', data.amount)}</Label>
+                            <Label>{formatCurrencyWithKey(USD_SIGN, data.amountInUSD, 2)}</Label>
+                        </AssetContainer>
+                    ))}
+                </AssetDiv>
 
                 <ButtonContainer>
                     <Button
@@ -150,6 +153,11 @@ const OvertimeIcon = styled.img`
         font-size: 96px;
         line-height: 18px;
     }
+`;
+
+const AssetDiv = styled.div`
+    background: ${(props) => props.theme.background.quinary};
+    border-radius: 8px;
 `;
 
 const Title = styled.h1`
@@ -253,6 +261,9 @@ const AssetContainer = styled.div`
     grid-column-end: 4;
 
     border-top: 1px solid ${(props) => props.theme.background.senary};
+    &:first-child {
+        border-top: none;
+    }
     padding: 14px 0;
     padding-left: 20px;
 `;

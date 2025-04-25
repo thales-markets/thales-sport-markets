@@ -1,9 +1,11 @@
+import particle from 'assets/images/particle.png';
 import Button from 'components/Button';
 import ClaimFreeBetButton from 'components/ClaimFreeBetButton';
 import DepositFromWallet from 'components/DepositFromWallet';
 import Modal from 'components/Modal';
 import NetworkSwitcher from 'components/NetworkSwitcher';
 import Tooltip from 'components/Tooltip';
+import UniversalModal from 'components/UniversalModal';
 import { COLLATERAL_ICONS_CLASS_NAMES } from 'constants/currency';
 import ROUTES from 'constants/routes';
 import { ScreenSizeBreakpoint } from 'enums/ui';
@@ -46,6 +48,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
 
     const [showQRModal, setShowQRModal] = useState<boolean>(false);
     const [showDepositFromWallet, setShowDepositFromWallet] = useState<boolean>(false);
+    const [showUniversalModal, setShowUniversalModal] = useState<boolean>(false);
 
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(
         address as string,
@@ -209,6 +212,19 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                 <Container>
                     <Tooltip
                         customIconStyling={{ color: theme.textColor.secondary }}
+                        overlay={t('get-started.fund-account.tooltip-4')}
+                    >
+                        <ButtonLocal
+                            onClick={() => {
+                                setShowUniversalModal(true);
+                            }}
+                        >
+                            <ButtonText>Universal account</ButtonText>
+                            <img src={particle} />
+                        </ButtonLocal>
+                    </Tooltip>
+                    <Tooltip
+                        customIconStyling={{ color: theme.textColor.secondary }}
                         overlay={t('get-started.fund-account.tooltip-5')}
                     >
                         <ButtonLocal
@@ -234,6 +250,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                             <Icon className="icon icon--wallet-connected" />
                         </ButtonLocal>
                     </Tooltip>
+
                     <Tooltip
                         customIconStyling={{ color: theme.textColor.secondary }}
                         overlay={t('get-started.fund-account.tooltip-3')}
@@ -247,6 +264,13 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
             </Wrapper>
             {showQRModal && <QRCodeModal onClose={() => setShowQRModal(false)} walletAddress={walletAddress} />}
             {showDepositFromWallet && <DepositFromWallet onClose={() => setShowDepositFromWallet(false)} />}
+            {showUniversalModal && (
+                <UniversalModal
+                    onClose={() => {
+                        setShowUniversalModal(false);
+                    }}
+                />
+            )}
         </Modal>
     );
 };
