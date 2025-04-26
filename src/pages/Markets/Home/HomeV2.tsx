@@ -7,13 +7,14 @@ import Search from 'components/Search';
 import SimpleLoader from 'components/SimpleLoader';
 import Checkbox from 'components/fields/Checkbox/Checkbox';
 import { MarketTypePlayerPropsGroupsBySport } from 'constants/marketTypes';
+import { SPORTS_BY_TOURNAMENTS } from 'constants/markets';
 import { RESET_STATE } from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { SportFilter, StatusFilter } from 'enums/markets';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
-import { groupBy, orderBy } from 'lodash';
+import { groupBy, isEqual, orderBy, uniqWith } from 'lodash';
 import {
     BOXING_LEAGUES,
     League,
@@ -42,18 +43,20 @@ import {
     getSportFilter,
     getStatusFilter,
     getTagFilter,
+    getTournamentFilter,
     setDatePeriodFilter,
     setMarketSearch,
     setSelectedMarket,
     setSportFilter,
     setStatusFilter,
     setTagFilter,
+    setTournamentFilter,
 } from 'redux/modules/market';
 import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled, { CSSProperties, useTheme } from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivSpaceBetween } from 'styles/common';
 import { addHoursToCurrentDate } from 'thales-utils';
-import { MarketsCache, SportMarket, SportMarkets, TagInfo, Tags } from 'types/markets';
+import { MarketsCache, SportMarket, SportMarkets, TagInfo, Tags, Tournament } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { getCaseAccentInsensitiveString } from 'utils/formatters/string';
 import { getDefaultPlayerPropsLeague } from 'utils/marketsV2';
@@ -95,6 +98,7 @@ const Home: React.FC = () => {
     const statusFilter = useSelector(getStatusFilter);
     const sportFilter = useSelector(getSportFilter);
     const tagFilter = useSelector(getTagFilter);
+    const tournamentFilter = useSelector(getTournamentFilter);
     const marketTypeFilter = useSelector(getMarketTypeFilter);
     const marketTypeGroupFilter = useSelector(getMarketTypeGroupFilter);
     const location = useLocation();
@@ -134,6 +138,7 @@ const Home: React.FC = () => {
     const [tagParam, setTagParam] = useQueryParam('tag', '');
     const [selectedLanguage, setSelectedLanguage] = useQueryParam('lang', '');
     const [activeParam, setActiveParam] = useQueryParam('showActive', '');
+    const [tournamentParam, setTournamentParam] = useQueryParam('tournament', '');
 
     const calculateDate = (hours: number, endOfDay?: boolean) => {
         return addHoursToCurrentDate(hours, endOfDay).getTime();
@@ -184,6 +189,15 @@ const Home: React.FC = () => {
                 }
             }
 
+            if (tournamentParam != '') {
+                const tournamentParamsSplitted = tournamentParam.split(';');
+                tournamentParamsSplitted.length > 0
+                    ? dispatch(setTournamentFilter(tournamentParamsSplitted))
+                    : dispatch(setTournamentFilter([]));
+            } else {
+                setTournamentParam(tournamentFilter.map((filter) => filter).join(';'));
+            }
+
             searchParam != '' ? dispatch(setMarketSearch(searchParam)) : '';
 
             selectedLanguage == '' ? setSelectedLanguage(i18n.language) : '';
@@ -219,7 +233,81 @@ const Home: React.FC = () => {
 
     const liveSportMarketsQuery = useLiveSportsMarketsQuery(sportFilter === SportFilter.Live, { networkId });
 
+    const liveSportMarkets = useMemo(() => {
+        if (liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data) {
+            return liveSportMarketsQuery.data.live;
+        }
+        return undefined;
+    }, [liveSportMarketsQuery.data, liveSportMarketsQuery.isSuccess]);
+
     const gameMultipliersQuery = useGameMultipliersQuery();
+
+    const openSportMarketsQuery = useSportsMarketsV2Query(StatusFilter.OPEN_MARKETS, false, { networkId }, undefined);
+
+    const openSportMarkets = useMemo(() => {
+        if (openSportMarketsQuery.isSuccess && openSportMarketsQuery.data) {
+            return openSportMarketsQuery.data[StatusFilter.OPEN_MARKETS];
+        }
+        return undefined;
+    }, [openSportMarketsQuery.data, openSportMarketsQuery.isSuccess]);
+
+    const { openTournamentsByLeague, openMarketsCountPerTournament } = useMemo(() => {
+        if (openSportMarkets) {
+            const tournaments: Tournament[] = [];
+            const marketsCountPerTournament: any = {};
+            openSportMarkets.forEach((market) => {
+                if (market.tournamentName && SPORTS_BY_TOURNAMENTS.includes(market.sport)) {
+                    tournaments.push({
+                        leagueId: market.leagueId,
+                        leageueName: market.leagueName,
+                        name: market.tournamentName,
+                    });
+                    if (marketsCountPerTournament[`${market.leagueId}-${market.tournamentName}`]) {
+                        marketsCountPerTournament[`${market.leagueId}-${market.tournamentName}`] += 1;
+                    } else {
+                        marketsCountPerTournament[`${market.leagueId}-${market.tournamentName}`] = 1;
+                    }
+                }
+            });
+            return {
+                openTournamentsByLeague: groupBy(
+                    uniqWith(tournaments, isEqual) as any,
+                    (tournament) => tournament.leagueId
+                ) as any,
+                openMarketsCountPerTournament: marketsCountPerTournament,
+            };
+        }
+        return { openTournamentsByLeague: {}, openMarketsCountPerTournament: {} };
+    }, [openSportMarkets]);
+
+    const { liveTournamentsByLeague, liveMarketsCountPerTournament } = useMemo(() => {
+        if (liveSportMarkets) {
+            const tournaments: Tournament[] = [];
+            const marketsCountPerTournament: any = {};
+            liveSportMarkets.forEach((market) => {
+                if (market.tournamentName && SPORTS_BY_TOURNAMENTS.includes(market.sport)) {
+                    tournaments.push({
+                        leagueId: market.leagueId,
+                        leageueName: market.leagueName,
+                        name: market.tournamentName,
+                    });
+                    if (marketsCountPerTournament[`${market.leagueId}-${market.tournamentName}`]) {
+                        marketsCountPerTournament[`${market.leagueId}-${market.tournamentName}`] += 1;
+                    } else {
+                        marketsCountPerTournament[`${market.leagueId}-${market.tournamentName}`] = 1;
+                    }
+                }
+            });
+            return {
+                liveTournamentsByLeague: groupBy(
+                    uniqWith(tournaments, isEqual) as any,
+                    (tournament) => tournament.leagueId
+                ) as any,
+                liveMarketsCountPerTournament: marketsCountPerTournament,
+            };
+        }
+        return { liveTournamentsByLeague: {}, liveMarketsCountPerTournament: {} };
+    }, [liveSportMarkets]);
 
     const finalMarkets = useMemo(() => {
         if (showBurger) {
@@ -293,6 +381,12 @@ const Home: React.FC = () => {
                     !getCaseAccentInsensitiveString(market.homeTeam).includes(normalizedMarketSearch) &&
                     !getCaseAccentInsensitiveString(market.awayTeam).includes(normalizedMarketSearch)
                 ) {
+                    return false;
+                }
+            }
+
+            if (tournamentFilter.length > 0) {
+                if (!tournamentFilter.find((tournament) => tournament === market.tournamentName)) {
                     return false;
                 }
             }
@@ -403,6 +497,7 @@ const Home: React.FC = () => {
         selectedMarket,
         showBurger,
         dispatch,
+        tournamentFilter,
     ]);
 
     const marketsLoading =
@@ -413,15 +508,6 @@ const Home: React.FC = () => {
             setAvailableTags(favouriteLeagues);
         }
     }, [favouriteLeagues, sportFilter, showActive]);
-
-    const openSportMarketsQuery = useSportsMarketsV2Query(StatusFilter.OPEN_MARKETS, false, { networkId }, undefined);
-
-    const openSportMarkets = useMemo(() => {
-        if (openSportMarketsQuery.isSuccess && openSportMarketsQuery.data) {
-            return openSportMarketsQuery.data[StatusFilter.OPEN_MARKETS];
-        }
-        return undefined;
-    }, [openSportMarketsQuery.data, openSportMarketsQuery.isSuccess]);
 
     const openMarketsCountPerTag = useMemo(() => {
         const groupedMarkets = groupBy(openSportMarkets || [], (market) => market.leagueId);
@@ -583,7 +669,9 @@ const Home: React.FC = () => {
         setTagParam('');
         setSearchParam('');
         dispatch(setMarketSearch(''));
-    }, [dispatch, setDateParam, setStatusParam, setSearchParam, setSportParam, setTagParam]);
+        dispatch(setTournamentFilter([]));
+        setTournamentParam('');
+    }, [dispatch, setStatusParam, setSportParam, setDateParam, setTagParam, setSearchParam, setTournamentParam]);
 
     useEffect(() => {
         if (location.state === RESET_STATE) {
@@ -642,7 +730,7 @@ const Home: React.FC = () => {
                 .map((filterItem: any, index) => {
                     return (
                         <SportTags
-                            key={index}
+                            key={`${filterItem}-${index}`}
                             onSportClick={() => {
                                 if (filterItem !== sportFilter) {
                                     const scrollMainToTop = getScrollMainContainerToTop();
@@ -661,6 +749,8 @@ const Home: React.FC = () => {
                                             ? LeagueMap[getDefaultPlayerPropsLeague(playerPropsCountPerTag)].label
                                             : ''
                                     );
+                                    dispatch(setTournamentFilter([]));
+                                    setTournamentParam('');
                                     if (filterItem === SportFilter.All || filterItem === SportFilter.PlayerProps) {
                                         dispatch(setDatePeriodFilter(0));
                                         setDateParam('');
@@ -694,6 +784,8 @@ const Home: React.FC = () => {
                                     if (filterItem !== SportFilter.PlayerProps) {
                                         dispatch(setTagFilter([]));
                                         setTagParam('');
+                                        dispatch(setTournamentFilter([]));
+                                        setTournamentParam('');
                                     }
                                 }
                             }}
@@ -707,12 +799,18 @@ const Home: React.FC = () => {
                             }
                             showActive={showActive}
                             tags={tagsList}
-                            setSportParam={setSportParam}
-                            setTagParam={setTagParam}
                             openMarketsCountPerTag={openMarketsCountPerTag}
                             liveMarketsCountPerTag={liveMarketsCountPerTag}
                             liveMarketsCountPerSport={liveMarketsCountPerSport}
                             playerPropsMarketsCountPerTag={playerPropsCountPerTag}
+                            tournamentsByLeague={
+                                filterItem == SportFilter.Live ? liveTournamentsByLeague : openTournamentsByLeague
+                            }
+                            marketsCountPerTournament={
+                                filterItem == SportFilter.Live
+                                    ? liveMarketsCountPerTournament
+                                    : openMarketsCountPerTournament
+                            }
                         />
                     );
                 })}
@@ -812,7 +910,7 @@ const Home: React.FC = () => {
                         <>
                             {!isMobile && (
                                 <FiltersContainer>
-                                    <Breadcrumbs setTagParam={setTagParam} />
+                                    <Breadcrumbs />
                                     <Filters isMainPageView />
                                 </FiltersContainer>
                             )}
