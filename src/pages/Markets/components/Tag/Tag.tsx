@@ -322,9 +322,6 @@ const Count = styled(FlexDivCentered)<{ isMobile: boolean }>`
 
 const TournamentCount = styled(Count)`
     margin-right: 26px;
-    @media (max-width: 950px) {
-        margin-right: 25px;
-    }
 `;
 
 const ArrowIcon = styled.i`
