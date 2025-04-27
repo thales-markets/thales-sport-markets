@@ -177,6 +177,7 @@ const HeaderAddresses = styled.span`
     font-size: 14px;
     font-weight: 600;
     line-height: 14px; /* 100% */
+    margin-top: 10px;
 `;
 
 const FieldHeader = styled.p`

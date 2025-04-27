@@ -212,7 +212,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                 <Container>
                     <Tooltip
                         customIconStyling={{ color: theme.textColor.secondary }}
-                        overlay={t('get-started.fund-account.tooltip-4')}
+                        overlay={t('get-started.fund-account.tooltip-universal')}
                     >
                         <ButtonLocal
                             onClick={() => {
@@ -220,7 +220,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                             }}
                         >
                             <ButtonText>{t('get-started.fund-account.universal-deposit')}</ButtonText>
-                            <img src={particle} />
+                            <ParticleLogo src={particle} />
                             <BetaTag>Beta</BetaTag>
                         </ButtonLocal>
                     </Tooltip>
@@ -436,6 +436,10 @@ const QRIcon = styled.i`
 const Icon = styled.i`
     font-weight: 400;
     font-size: 20px;
+`;
+
+const ParticleLogo = styled.img`
+    height: 24px;
 `;
 
 const CollateralText = styled.p`
