@@ -1141,8 +1141,11 @@
             "action": "Activate"
         },
         "universal-account": {
-            "title": "<icon/> Universal account",
-            "address": "Your Universal address",
+            "title": "Fund your universal account",
+            "address": "Your addresses",
+            "supported-chains": "Supported chains",
+            "evm": "EVM address",
+            "solana": "Solana address",
             "subtitle": "Send supported crypto to the address below on supported chains",
             "amount": "Amount",
             "transfer-pending": "Transfer to Overtime Account pending",

@@ -1,13 +1,13 @@
-import particle from 'assets/images/particle.png';
 import Button from 'components/Button';
 import Modal from 'components/Modal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from 'constants/currency';
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import React from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import styled, { useTheme } from 'styled-components';
-import { CloseIcon, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
+import { FlexDivColumnCentered, FlexDivRow, FlexDivStart } from 'styles/common';
 import { Coins, formatCurrencyWithKey, truncateAddress } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
 import { sendUniversalTranser } from 'utils/biconomy';
@@ -44,62 +44,60 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
                 background: theme.background.secondary,
                 border: 'none',
             }}
-            hideHeader
             title=""
             onClose={onClose}
         >
             <Wrapper>
                 <FlexDivRow>
-                    <Title>
-                        <Trans
-                            i18nKey="get-started.universal-account.title"
-                            components={{
-                                icon: <OvertimeIcon src={particle} />,
-                            }}
-                        />
-                    </Title>
-                    <FlexDivRow>{<CloseIcon onClick={onClose} />}</FlexDivRow>
+                    <Title>{t('get-started.universal-account.title')}</Title>
                 </FlexDivRow>
 
-                <WalletContainer>
-                    <FieldHeader>{t('get-started.universal-account.address')}</FieldHeader>
-
+                <HeaderAddresses>{t('get-started.universal-account.address')}</HeaderAddresses>
+                <DarkBackgroundWrapper>
+                    <ChainWrapper>
+                        <Asset className="currency-icon currency-icon--eth" />
+                        <FieldHeader>{t('get-started.universal-account.evm')}</FieldHeader>
+                    </ChainWrapper>
                     <AddressContainer>
                         <Field onClick={() => handleCopy(universalAddress)}>
                             {universalAddress} <CopyIcon className="icon icon--copy" />
                         </Field>
                     </AddressContainer>
-                </WalletContainer>
+                </DarkBackgroundWrapper>
 
-                <WalletContainer>
-                    <FieldHeader>{t('get-started.universal-account.address')}</FieldHeader>
-
+                <DarkBackgroundWrapper>
+                    <ChainWrapper>
+                        <Asset className="currency-icon currency-icon--sol" />
+                        <FieldHeader>{t('get-started.universal-account.solana')}</FieldHeader>
+                    </ChainWrapper>
                     <AddressContainer>
                         <Field onClick={() => handleCopy(universalSolanaAddress)}>
                             {universalSolanaAddress} <CopyIcon className="icon icon--copy" />
                         </Field>
                     </AddressContainer>
-                </WalletContainer>
+                </DarkBackgroundWrapper>
 
-                <BalanceContainer>
-                    <FieldHeader>Total Balance</FieldHeader>
-                    <div></div>
-                    <Label>{formatCurrencyWithKey(USD_SIGN, universalBalance?.totalAmountInUSD ?? 0, 2)}</Label>
-                </BalanceContainer>
-                <AssetDiv>
-                    {universalBalance?.assets.map((data) => (
-                        <AssetContainer key={data.tokenType}>
-                            <AssetWrapper>
-                                <Asset
-                                    className={COLLATERAL_ICONS_CLASS_NAMES[data.tokenType.toUpperCase() as Coins]}
-                                />
-                                {data.tokenType}
-                            </AssetWrapper>
-                            <Label>{formatCurrencyWithKey('', data.amount)}</Label>
-                            <Label>{formatCurrencyWithKey(USD_SIGN, data.amountInUSD, 2)}</Label>
-                        </AssetContainer>
-                    ))}
-                </AssetDiv>
+                <BalanceWrapper>
+                    <BalanceContainer>
+                        <FieldHeader>Total Balance</FieldHeader>
+                        <div></div>
+                        <Balance>{formatCurrencyWithKey(USD_SIGN, universalBalance?.totalAmountInUSD ?? 0, 2)}</Balance>
+                    </BalanceContainer>
+                    {universalBalance?.assets
+                        .filter((data) => data.tokenType !== 'btc')
+                        .map((data) => (
+                            <AssetContainer key={data.tokenType}>
+                                <AssetWrapper>
+                                    <Asset
+                                        className={COLLATERAL_ICONS_CLASS_NAMES[data.tokenType.toUpperCase() as Coins]}
+                                    />
+                                    {data.tokenType}
+                                </AssetWrapper>
+                                <Label>{formatCurrencyWithKey('', data.amount)}</Label>
+                                <Label>{formatCurrencyWithKey(USD_SIGN, data.amountInUSD, 2)}</Label>
+                            </AssetContainer>
+                        ))}
+                </BalanceWrapper>
 
                 <ButtonContainer>
                     <Button
@@ -110,6 +108,7 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
                         fontSize="16px"
                         fontWeight="700"
                         borderRadius="8px"
+                        additionalStyles={{ whiteSpace: 'pre' }}
                         onClick={async () => {
                             if (universalBalance?.totalAmountInUSD && universalBalance?.totalAmountInUSD > 3) {
                                 const id = toast.loading(t('get-started.universal-account.transfer-pending'));
@@ -140,24 +139,13 @@ const Wrapper = styled.div`
     display: flex;
 `;
 
-const OvertimeIcon = styled.img`
-    font-size: 128px;
-    font-weight: 400;
-    line-height: 28px;
-    @media (max-width: 512px) {
-        font-size: 100px;
-        line-height: 20px;
-    }
-
-    @media (max-width: 412px) {
-        font-size: 96px;
-        line-height: 18px;
-    }
-`;
-
-const AssetDiv = styled.div`
+const DarkBackgroundWrapper = styled(FlexDivColumnCentered)`
+    padding: 18px;
     background: ${(props) => props.theme.background.quinary};
     border-radius: 8px;
+    gap: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 `;
 
 const Title = styled.h1`
@@ -167,7 +155,7 @@ const Title = styled.h1`
     gap: 8px;
     font-size: 24px;
     font-weight: 500;
-    color: ${(props) => props.theme.textColor.octonary};
+    color: ${(props) => props.theme.textColor.primary};
     width: 100%;
     text-align: center;
     margin-bottom: 15px;
@@ -183,30 +171,24 @@ const Title = styled.h1`
     }
 `;
 
+const HeaderAddresses = styled.span`
+    color: ${(props) => props.theme.textColor.quaternary};
+    white-space: pre;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 14px; /* 100% */
+`;
+
 const FieldHeader = styled.p`
     font-size: 16px;
-    font-weight: 700;
+    font-weight: 500;
     line-height: 16px;
     color: ${(props) => props.theme.textColor.primary};
     white-space: pre;
 `;
 
-const WalletContainer = styled(FlexDivColumnCentered)`
-    margin-top: 40px;
-    gap: 4px;
-`;
-
 const ButtonContainer = styled(FlexDivColumnCentered)`
     margin-top: 30px;
-`;
-
-const BalanceContainer = styled.div`
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-column: 1;
-    grid-column-end: 4;
-    margin-top: 20px;
-    margin-bottom: 10px;
 `;
 
 const AddressContainer = styled.div`
@@ -232,8 +214,12 @@ const Field = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    @media (max-width: 575px) {
+    @media (max-width: ${ScreenSizeBreakpoint.EXTRA_SMALL}px) {
         font-size: 12px;
+    }
+
+    @media (max-width: ${ScreenSizeBreakpoint.XXS}px) {
+        font-size: 10px;
     }
 `;
 
@@ -260,11 +246,10 @@ const AssetContainer = styled.div`
     grid-column: 1;
     grid-column-end: 4;
 
-    border-top: 1px solid ${(props) => props.theme.background.senary};
     &:first-child {
         border-top: none;
     }
-    padding: 14px 0;
+    padding: 10px 0;
     padding-left: 20px;
 `;
 
@@ -275,11 +260,16 @@ const AssetWrapper = styled.p<{ clickable?: boolean }>`
     position: relative;
     color: ${(props) => props.theme.textColor.primary};
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 700;
     white-space: pre;
+    text-transform: uppercase;
 
     cursor: ${(props) => (props.clickable ? 'pointer' : '')};
     gap: 8px;
+`;
+
+const ChainWrapper = styled(FlexDivStart)`
+    align-items: center;
 `;
 const Label = styled.p`
     display: flex;
@@ -294,8 +284,41 @@ const Label = styled.p`
 const Asset = styled.i`
     font-size: 24px;
     line-height: 24px;
+    font-weight: 100;
     width: 30px;
     color: ${(props) => props.theme.textColor.secondary};
+`;
+
+const BalanceWrapper = styled(DarkBackgroundWrapper)`
+    padding: 0;
+    gap: 0;
+`;
+
+const Balance = styled.p`
+    color: ${(props) => props.theme.textColor.quaternary};
+    font-size: 20px;
+    font-weight: 700;
+    display: flex;
+    height: 44px;
+    padding: 10px 8px 10px 13px;
+    justify-content: flex-end;
+    align-items: center;
+    border-radius: 12px;
+    border: 0px solid #e5e7eb;
+    background: rgba(63, 255, 255, 0.1);
+    margin-right: 10px;
+    white-space: pre;
+`;
+
+const BalanceContainer = styled.div`
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-column: 1;
+    grid-column-end: 4;
+    padding: 14px 0;
+    padding-left: 20px;
+    border-bottom: 1px solid ${(props) => props.theme.textColor.secondary};
+    align-items: center;
 `;
 
 export default UniversalModal;
