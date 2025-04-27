@@ -219,8 +219,9 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                                 setShowUniversalModal(true);
                             }}
                         >
-                            <ButtonText>Universal account</ButtonText>
+                            <ButtonText>{t('get-started.fund-account.universal-deposit')}</ButtonText>
                             <img src={particle} />
+                            <BetaTag>Beta</BetaTag>
                         </ButtonLocal>
                     </Tooltip>
                     <Tooltip
@@ -481,6 +482,7 @@ const CloseIcon = styled.i.attrs({ className: 'icon icon--close' })`
 `;
 
 const ButtonLocal = styled(FlexDivCentered)<{ disabled?: boolean }>`
+    position: relative;
     border-radius: 8px;
     width: 100%;
     height: 42px;
@@ -514,11 +516,24 @@ const ButtonLocal = styled(FlexDivCentered)<{ disabled?: boolean }>`
             i {
                 color: ${props.theme.button.textColor.primary};
             }
+
+            span {
+             color: ${props.theme.button.textColor.primary};
+            }
     }
     `
             : ''}
 
     opacity: ${(props) => (props.disabled ? '0.5' : '1')};
+`;
+
+const BetaTag = styled.span`
+    position: absolute;
+    right: 10px;
+    top: 12px;
+    color: ${(props) => props.theme.textColor.primary};
+    text-transform: capitalize;
+    font-size: 14px;
 `;
 
 const Asset = styled.i<{ fontSize?: string }>`

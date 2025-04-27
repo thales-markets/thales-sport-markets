@@ -80,7 +80,7 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
                 <BalanceWrapper>
                     <BalanceContainer>
                         <FieldHeader>Total Balance</FieldHeader>
-                        <div></div>
+
                         <Balance>{formatCurrencyWithKey(USD_SIGN, universalBalance?.totalAmountInUSD ?? 0, 2)}</Balance>
                     </BalanceContainer>
                     {universalBalance?.assets
@@ -188,7 +188,7 @@ const FieldHeader = styled.p`
 `;
 
 const ButtonContainer = styled(FlexDivColumnCentered)`
-    margin-top: 30px;
+    margin-top: 8px;
 `;
 
 const AddressContainer = styled.div`
@@ -311,14 +311,14 @@ const Balance = styled.p`
 `;
 
 const BalanceContainer = styled.div`
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-column: 1;
-    grid-column-end: 4;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
     padding: 14px 0;
     padding-left: 20px;
+    margin-bottom: 10px;
     border-bottom: 1px solid ${(props) => props.theme.textColor.secondary};
-    align-items: center;
 `;
 
 export default UniversalModal;

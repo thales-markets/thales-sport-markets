@@ -1124,7 +1124,8 @@
             "copy": "Copy",
             "qr": "QR",
             "wait-deposit": "Waiting for deposit...",
-            "claim-free-bet": "Claim a {{amount}} Free Bet."
+            "claim-free-bet": "Claim a {{amount}} Free Bet.",
+            "universal-deposit": "Universal deposit"
         },
         "withdraw": {
             "title": "Withdraw from <icon/> account",
