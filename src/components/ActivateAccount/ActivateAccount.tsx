@@ -45,8 +45,8 @@ const ActivateAccount: React.FC<any> = () => {
 
     const queryParams: { freeBet?: string } = queryString.parse(location.search);
 
-    const [showSuccessfulDepositModal, setShowSuccessfulDepositModal] = useState<boolean>(false);
-    const [isMinimizedModal, setIsMinimized] = useState<boolean>(false);
+    const [showActivateAccount, setShowActivateAccount] = useState<boolean>(false);
+    const [isMinimizedModal, setIsMinimized] = useState<boolean>(true);
     const [showFundModal, setShowFundModal] = useState<boolean>(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -122,17 +122,17 @@ const ActivateAccount: React.FC<any> = () => {
                     if (retrievedMap) {
                         const sessionData = retrievedMap.get(smartAddress) as any;
                         if (sessionData) {
-                            setShowSuccessfulDepositModal(false);
+                            setShowActivateAccount(false);
                         } else {
-                            setShowSuccessfulDepositModal(true);
+                            setShowActivateAccount(true);
                         }
                     } else {
-                        setShowSuccessfulDepositModal(true);
+                        setShowActivateAccount(true);
                     }
                 });
             } else if (getFundModalShown()) {
                 setShowFundModal(true);
-                setShowSuccessfulDepositModal(false);
+                setShowActivateAccount(false);
                 setFundModalShown(false);
             }
         }
@@ -140,14 +140,13 @@ const ActivateAccount: React.FC<any> = () => {
 
     return (
         <>
-            {showSuccessfulDepositModal && (
+            {showActivateAccount && (
                 <Container show={!isMinimizedModal}>
                     <Wrapper show={!isMinimizedModal}>
                         {!isMinimizedModal ? (
                             <>
                                 <FlexDivRow>{<CloseIcon onClick={() => setIsMinimized(true)} />}</FlexDivRow>
                                 <LogoIcon className="icon icon--overtime" />
-                                <Header>{t('get-started.activate-account.deposit')}</Header>
                                 <SubTitle>{t('get-started.activate-account.activate')}</SubTitle>
                                 <Box>{t('get-started.activate-account.success')}</Box>
                                 <ActivateButton
@@ -171,7 +170,7 @@ const ActivateAccount: React.FC<any> = () => {
                                                     toastId,
                                                     getSuccessToastOptions(t('market.toast-message.approve-success'))
                                                 );
-                                                setShowSuccessfulDepositModal(false);
+                                                setShowActivateAccount(false);
                                                 setIsSubmitting(false);
                                                 return;
                                             }
@@ -276,19 +275,6 @@ const Wrapper = styled.div<{ show: boolean }>`
             }
    
     `}
-`;
-
-const Header = styled.h2`
-    color: ${(props) => props.theme.overdrop.textColor.quaternary};
-    text-align: center;
-    font-size: 24px;
-    line-height: 24px;
-    font-weight: 600;
-    margin-top: 13px;
-    margin-bottom: 10px;
-    @media (max-width: 575px) {
-        font-size: 20px;
-    }
 `;
 
 const SubTitle = styled.p`
