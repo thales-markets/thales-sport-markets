@@ -109,6 +109,6 @@ export enum LiveTradingTicketStatus {
     REQUESTED = 'requested',
     APPROVED = 'approved',
     FULFILLING = 'fulfilling',
-    FAILED = 'failed',
+    ERROR = 'error',
     SUCCESS = 'success',
 }

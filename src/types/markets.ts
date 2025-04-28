@@ -156,6 +156,7 @@ export type LiveTradingRequest = {
     position: number;
     buyInAmount: number;
     status: LiveTradingTicketStatus;
+    errorReason: string;
 };
 
 export type TradeData = {
@@ -220,19 +221,17 @@ export type TicketRequest = {
     initialRequestId: string;
     requestId: string;
     status: LiveTradingTicketStatus;
+    errorReason: string;
     ticket: SerializableTicketMarket;
 };
-export type TicketRequestData = {
-    initialRequestId: string;
-    requestId: string;
-    status: LiveTradingTicketStatus;
-    ticket: SerializableTicketMarket;
+export type TicketRequestData = TicketRequest & {
     timestamp: number;
 };
 export type TicketMarketRequestData = {
     initialRequestId: string;
     requestId: string;
     status: LiveTradingTicketStatus;
+    errorReason: string;
     ticket: TicketMarket;
     timestamp: number;
 };

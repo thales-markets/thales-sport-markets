@@ -955,7 +955,7 @@
                 "requested": "Live trade requested",
                 "approved": "Live trade request approved",
                 "fulfilling": "Fulfilling live trade",
-                "failed": "Ticket creation failed",
+                "error": "Ticket creation failed",
                 "success": "Ticket created"
             }
         },

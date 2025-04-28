@@ -1485,6 +1485,7 @@ const Ticket: React.FC<TicketProps> = ({
                         initialRequestId,
                         requestId: '',
                         status: LiveTradingTicketStatus.PENDING,
+                        errorReason: '',
                         ticket: ticketMarketAsSerializable(markets[0]),
                     })
                 );
@@ -1708,6 +1709,7 @@ const Ticket: React.FC<TicketProps> = ({
                                         initialRequestId,
                                         requestId,
                                         status: LiveTradingTicketStatus.REQUESTED,
+                                        errorReason: '',
                                         ticket: ticketMarketAsSerializable(markets[0]),
                                     })
                                 );
@@ -1733,6 +1735,17 @@ const Ticket: React.FC<TicketProps> = ({
                             if (isAdapterError) {
                                 setIsBuying(false);
                             } else if (!isFulfilledTx) {
+                                if (isLiveTicket) {
+                                    dispatch(
+                                        updateTicketRequestStatus({
+                                            initialRequestId,
+                                            requestId,
+                                            status: LiveTradingTicketStatus.ERROR,
+                                            errorReason: t('markets.parlay.tx-not-received'),
+                                            ticket: ticketMarketAsSerializable(markets[0]),
+                                        })
+                                    );
+                                }
                                 toast.update(toastId, getErrorToastOptions(t('markets.parlay.tx-not-received')));
                                 setIsBuying(false);
                             } else {
@@ -1742,6 +1755,7 @@ const Ticket: React.FC<TicketProps> = ({
                                             initialRequestId,
                                             requestId,
                                             status: LiveTradingTicketStatus.SUCCESS,
+                                            errorReason: '',
                                             ticket: ticketMarketAsSerializable(markets[0]),
                                         })
                                     );
@@ -1828,6 +1842,17 @@ const Ticket: React.FC<TicketProps> = ({
             } catch (e) {
                 setIsBuying(false);
                 refetchAfterBuy(walletAddress, networkId, isLiveTicket);
+                if (isLiveTicket) {
+                    dispatch(
+                        updateTicketRequestStatus({
+                            initialRequestId,
+                            requestId: '',
+                            status: LiveTradingTicketStatus.ERROR,
+                            errorReason: t('common.errors.unknown-error-try-again'),
+                            ticket: ticketMarketAsSerializable(markets[0]),
+                        })
+                    );
+                }
                 toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
                 if (!isErrorExcluded(e as Error)) {
                     const data = getLogData({

@@ -186,12 +186,15 @@ export const useUserTicketsQuery = (
                                 const status = isFulfilled
                                     ? LiveTradingTicketStatus.SUCCESS
                                     : isAdapterFailed || Date.now() > maturityTimestamp
-                                    ? LiveTradingTicketStatus.FAILED
+                                    ? LiveTradingTicketStatus.ERROR
                                     : isAdapterApproved
                                     ? LiveTradingTicketStatus.APPROVED
                                     : LiveTradingTicketStatus.REQUESTED;
 
-                                const liveTradingRequest = {
+                                const errorReason =
+                                    status === LiveTradingTicketStatus.ERROR ? adapterRequestStatus.message : '';
+
+                                const liveTradingRequest: LiveTradingRequest = {
                                     user: request.user,
                                     requestId: request.requestId,
                                     isFulfilled,
@@ -207,7 +210,8 @@ export const useUserTicketsQuery = (
                                         getDefaultDecimalsForNetwork(networkConfig.networkId)
                                     ),
                                     status,
-                                } as LiveTradingRequest;
+                                    errorReason,
+                                };
 
                                 data.liveRequests.push(liveTradingRequest);
                             });

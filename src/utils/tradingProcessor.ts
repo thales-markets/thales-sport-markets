@@ -47,6 +47,7 @@ const checkFulfilledTx = async (
                             initialRequestId: '',
                             requestId,
                             status: LiveTradingTicketStatus.APPROVED,
+                            errorReason: '',
                             ticket: ticketMarketAsSerializable(ticketMarket),
                         })
                     );
@@ -59,7 +60,8 @@ const checkFulfilledTx = async (
                         updateTicketRequestStatus({
                             initialRequestId: '',
                             requestId,
-                            status: LiveTradingTicketStatus.FAILED,
+                            status: LiveTradingTicketStatus.ERROR,
+                            errorReason: adapterResponse.data.message,
                             ticket: ticketMarketAsSerializable(ticketMarket),
                         })
                     );
@@ -111,6 +113,7 @@ export const processTransaction = async (
                         initialRequestId: '',
                         requestId,
                         status: LiveTradingTicketStatus.FULFILLING,
+                        errorReason: '',
                         ticket: ticketMarketAsSerializable(ticketMarket),
                     })
                 );

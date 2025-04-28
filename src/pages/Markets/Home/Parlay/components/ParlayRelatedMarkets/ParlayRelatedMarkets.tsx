@@ -2,6 +2,7 @@ import ParlayEmptyIcon from 'assets/images/parlay-empty.svg?react';
 import RadioButton from 'components/fields/RadioButton';
 import Scroll from 'components/Scroll';
 import SimpleLoader from 'components/SimpleLoader';
+import Tooltip from 'components/Tooltip';
 import { LATEST_LIVE_REQUESTS_SIZE } from 'constants/markets';
 import { secondsToMilliseconds } from 'date-fns';
 import { LiveTradingTicketStatus } from 'enums/markets';
@@ -117,7 +118,7 @@ const ParlayRelatedMarkets: React.FC = () => {
     // Refresh pending requests on every 5s
     useInterval(() => {
         const isPendingRequests = liveTradingRequests.some(
-            (market) => market.requestId && market.status !== LiveTradingTicketStatus.FAILED
+            (market) => market.requestId && market.status !== LiveTradingTicketStatus.ERROR
         );
 
         if (isPendingRequests) {
@@ -276,6 +277,12 @@ const MarketInfo: React.FC<{
         ? LiveTradingTicketStatus.SUCCESS
         : (data as TicketMarketRequestData).status;
 
+    const errorReason = isRequest
+        ? (data as LiveTradingRequest).errorReason
+        : isTicketCreated
+        ? ''
+        : (data as TicketMarketRequestData).errorReason;
+
     return (
         <>
             <TimeInfo>
@@ -295,6 +302,7 @@ const MarketInfo: React.FC<{
                     <StatusInfo>
                         <Text isLabel>{t('markets.parlay-related-markets.status-label')}:</Text>
                         <Text>{t(`markets.parlay-related-markets.status.${status}`)}</Text>
+                        <Tooltip overlay={errorReason} marginLeft={5} iconFontSize={12} />
                     </StatusInfo>
                 )}
             </Market>
