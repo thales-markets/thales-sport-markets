@@ -161,7 +161,7 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
                         fontSize="16px"
                         fontWeight="700"
                         borderRadius="8px"
-                        additionalStyles={{ whiteSpace: 'pre' }}
+                        additionalStyles={{ whiteSpace: 'pre', marginTop: 10 }}
                         disabled={isButtonDisable}
                         onClick={async () => {
                             if (!isButtonDisable) {
