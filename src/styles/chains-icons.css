@@ -3,6 +3,7 @@
     font-family: Chains !important;
     vertical-align: middle;
     font-size: 20px;
+    font-weight: 500;
 }
 
 .chain-icon--eth:before {
@@ -63,4 +64,8 @@
 
 .chain-icon--sol:before {
     content: '\0039';
+}
+
+.chain-icon--manta:before {
+    content: '\004E';
 }
