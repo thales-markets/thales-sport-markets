@@ -112,6 +112,8 @@ const ParlayRelatedMarkets: React.FC = () => {
         return orderBy(requestAndTickets, ['timestamp'], ['desc']).slice(0, LATEST_LIVE_REQUESTS_SIZE);
     }, [tempLiveTradingRequests, liveTradingRequests, gameRelatedSingleTickets]);
 
+    const isEmpty = !markets.length;
+
     // Refresh pending requests on every 5s
     useInterval(() => {
         const isPendingRequests = liveTradingRequests.some(
@@ -146,63 +148,64 @@ const ParlayRelatedMarkets: React.FC = () => {
     };
 
     return (
-        <Scroll height={isMobile ? '545px' : '100%'}>
-            <Container>
-                <MarketsTypeContainer>
-                    <RadioButtonContainer>
-                        <RadioButton
-                            checked={isLiveTypeSelected}
-                            value={'true'}
-                            onChange={() => setIsLiveTypeSelected(true)}
-                            label={t('markets.parlay-related-markets.type.live')}
-                        />
-                    </RadioButtonContainer>
-                    <RadioButtonContainer>
-                        <RadioButton
-                            checked={!isLiveTypeSelected}
-                            value={'false'}
-                            onChange={() => setIsLiveTypeSelected(false)}
-                            label={t('markets.parlay-related-markets.type.other')}
-                        />
-                    </RadioButtonContainer>
-                </MarketsTypeContainer>
-                <Title>
-                    {isLiveTypeSelected
-                        ? t('markets.parlay-related-markets.title-live')
-                        : t('markets.parlay-related-markets.title-other')}
-                    <Count>{markets.length}</Count>
-                </Title>
-
-                {userTicketsQuery.isLoading ? (
-                    <LoaderContainer>
-                        <SimpleLoader />
-                    </LoaderContainer>
-                ) : !!markets.length ? (
-                    <RelatedMarkets>
-                        {markets.map((relatedMarket: TicketMarketRequestData | LiveTradingRequest | Ticket, i) => {
-                            const isTicketCreated = !!(relatedMarket as Ticket)?.id;
-                            const isRequest = !!(relatedMarket as LiveTradingRequest)?.requestId;
-                            return (
-                                <RelatedMarket key={`row-${i}`}>
-                                    {isTicketCreated ? (
-                                        <ExpandableRow ticket={relatedMarket as Ticket} />
-                                    ) : isRequest ? (
-                                        getRequestedMarket(relatedMarket as LiveTradingRequest)
-                                    ) : (
-                                        getTempRequestedMarket(relatedMarket as TicketMarketRequestData)
-                                    )}
-                                </RelatedMarket>
-                            );
-                        })}
-                    </RelatedMarkets>
-                ) : (
-                    <Empty>
-                        <StyledParlayEmptyIcon />
-                        <EmptyLabel>{t('markets.parlay-related-markets.empty')}</EmptyLabel>
-                    </Empty>
-                )}
-            </Container>
-        </Scroll>
+        <Container>
+            <MarketsTypeContainer>
+                <RadioButtonContainer>
+                    <RadioButton
+                        checked={isLiveTypeSelected}
+                        value={'true'}
+                        onChange={() => setIsLiveTypeSelected(true)}
+                        label={t('markets.parlay-related-markets.type.live')}
+                    />
+                </RadioButtonContainer>
+                <RadioButtonContainer>
+                    <RadioButton
+                        checked={!isLiveTypeSelected}
+                        value={'false'}
+                        onChange={() => setIsLiveTypeSelected(false)}
+                        label={t('markets.parlay-related-markets.type.other')}
+                    />
+                </RadioButtonContainer>
+            </MarketsTypeContainer>
+            <Title>
+                {isLiveTypeSelected
+                    ? t('markets.parlay-related-markets.title-live')
+                    : t('markets.parlay-related-markets.title-other')}
+                <Count>{markets.length}</Count>
+            </Title>
+            <Scroll height={isMobile ? (isEmpty ? '200px' : '545px') : '100%'}>
+                <MarketsContainer>
+                    {userTicketsQuery.isLoading ? (
+                        <LoaderContainer>
+                            <SimpleLoader />
+                        </LoaderContainer>
+                    ) : !isEmpty ? (
+                        <RelatedMarkets>
+                            {markets.map((relatedMarket: TicketMarketRequestData | LiveTradingRequest | Ticket, i) => {
+                                const isTicketCreated = !!(relatedMarket as Ticket)?.id;
+                                const isRequest = !!(relatedMarket as LiveTradingRequest)?.requestId;
+                                return (
+                                    <RelatedMarket key={`row-${i}`}>
+                                        {isTicketCreated ? (
+                                            <ExpandableRow ticket={relatedMarket as Ticket} />
+                                        ) : isRequest ? (
+                                            getRequestedMarket(relatedMarket as LiveTradingRequest)
+                                        ) : (
+                                            getTempRequestedMarket(relatedMarket as TicketMarketRequestData)
+                                        )}
+                                    </RelatedMarket>
+                                );
+                            })}
+                        </RelatedMarkets>
+                    ) : (
+                        <Empty>
+                            <StyledParlayEmptyIcon />
+                            <EmptyLabel>{t('markets.parlay-related-markets.empty')}</EmptyLabel>
+                        </Empty>
+                    )}
+                </MarketsContainer>
+            </Scroll>
+        </Container>
     );
 };
 
@@ -307,12 +310,18 @@ const Container = styled(FlexDivColumn)`
     position: relative;
     height: 100%;
     max-height: 545px;
-    padding: 12px;
+    padding: 12px 0 12px 12px;
     background: ${(props) => props.theme.background.quinary};
     border-radius: 7px;
     @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         min-height: 250px;
     }
+`;
+
+const MarketsContainer = styled(FlexDivColumn)`
+    position: relative;
+    height: 100%;
+    margin-right: 12px;
 `;
 
 const MarketsTypeContainer = styled(FlexDivCentered)`
