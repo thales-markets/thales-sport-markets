@@ -1,3 +1,4 @@
+import particleLogo from 'assets/images/particle_logo.svg?react';
 import Button from 'components/Button';
 import Modal from 'components/Modal';
 import Tooltip from 'components/Tooltip';
@@ -45,6 +46,7 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
             containerStyle={{
                 background: theme.background.secondary,
                 border: 'none',
+                paddingBottom: 0,
             }}
             title=""
             onClose={onClose}
@@ -63,13 +65,14 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
                                     {SUPPORTED_NETWORKS_UNIVERSAL_DEPOSIT.map((chain, index) => {
                                         return (
                                             <Chain key={index}>
+                                                {/* <i className={`icon icon--${chain.iconName}`} /> */}
                                                 {chain.name}
-                                                {/* <i className={`currency-icon currency-icon--${chain.iconName}`} /> */}
                                             </Chain>
                                         );
                                     })}
                                 </ChainContainer>
                             }
+                            overlayInnerStyle={{ maxWidth: 400 }}
                             iconFontSize={14}
                             marginLeft={3}
                             iconColor={theme.textColor.secondary}
@@ -153,6 +156,7 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
                         Transfer to <OvertimeAcc className="icon icon--overtime" /> account
                     </Button>
                 </ButtonContainer>
+                <ParticleLogo />
             </Wrapper>
         </Modal>
     );
@@ -161,6 +165,10 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
 const Wrapper = styled.div`
     flex-direction: column;
     display: flex;
+`;
+
+const ParticleLogo = styled(particleLogo)`
+    margin: 10px auto;
 `;
 
 const DarkBackgroundWrapper = styled(FlexDivColumnCentered)`
@@ -281,6 +289,7 @@ const AssetContainer = styled.div`
 
 const ChainContainer = styled(AssetContainer)`
     padding: 10px 0;
+    gap: 10px;
 `;
 
 const AssetWrapper = styled.p<{ clickable?: boolean }>`
@@ -313,6 +322,8 @@ const Label = styled.p`
 
 const Chain = styled(Label)`
     font-size: 12px;
+    gap: 2px;
+    justify-content: flex-start;
     i {
         font-size: 14px;
         color: ${(props) => props.theme.textColor.secondary};
