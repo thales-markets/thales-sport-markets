@@ -1143,7 +1143,7 @@
             "action": "Activate"
         },
         "universal-account": {
-            "title": "Fund your universal account",
+            "title": "Universal deposit",
             "address": "Your addresses",
             "supported-chains": "Supported chains",
             "evm": "EVM address",
