@@ -46,7 +46,7 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
             containerStyle={{
                 background: theme.background.secondary,
                 border: 'none',
-                paddingBottom: 0,
+                padding: '0px !important',
             }}
             title=""
             onClose={onClose}
@@ -165,6 +165,11 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
 const Wrapper = styled.div`
     flex-direction: column;
     display: flex;
+    background: ${(props) => props.theme.background.secondary};
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        padding: 20px 15px 0 15px;
+    }
+    padding: 25px 30px 0 30px;
 `;
 
 const ParticleLogo = styled(particleLogo)`
@@ -192,12 +197,12 @@ const Title = styled.h1`
     text-align: center;
     margin-bottom: 15px;
     text-transform: uppercase;
-    @media (max-width: 512px) {
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         font-size: 20px;
         white-space: pre;
         gap: 2px;
     }
-    @media (max-width: 412px) {
+    @media (max-width: ${ScreenSizeBreakpoint.XXS}px) {
         font-size: 18px;
         line-height: 18px;
     }
