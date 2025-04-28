@@ -95,6 +95,18 @@ export const Arrow = styled.i`
     }
 `;
 
+export const Expand = styled(Arrow)<{ active: boolean }>`
+    line-height: 14px;
+    font-size: ${(props) => (!props.active ? '24px' : '30px')};
+    margin-right: 10px;
+    font-weight: 800;
+
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        line-height: 16px;
+        font-size: ${(props) => (!props.active ? '16px' : '20px')};
+    }
+`;
+
 export const CategoryDisclaimer = styled.div`
     font-weight: 600;
     font-size: 12px;
@@ -125,6 +137,7 @@ export const EmptyTitle = styled.span`
 `;
 
 export const StyledParlayEmptyIcon = styled(OvertimeTicket)`
+    height: 78px;
     path {
         fill: ${(props) => props.theme.textColor.quaternary};
     }

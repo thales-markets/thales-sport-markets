@@ -2,6 +2,7 @@ import Button from 'components/Button';
 import FundModal from 'components/FundOvertimeAccountModal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import localforage from 'localforage';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
@@ -13,7 +14,7 @@ import { toast } from 'react-toastify';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivRow } from 'styles/common';
-import { Coins, localStore } from 'thales-utils';
+import { Coins } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
@@ -44,9 +45,10 @@ const ActivateAccount: React.FC<any> = () => {
 
     const queryParams: { freeBet?: string } = queryString.parse(location.search);
 
-    const [showSuccessfulDepositModal, setShowSuccessfulDepositModal] = useState<boolean>(false);
-    const [isMinimizedModal, setIsMinimized] = useState<boolean>(false);
+    const [showActivateAccount, setShowActivateAccount] = useState<boolean>(false);
+    const [isMinimizedModal, setIsMinimized] = useState<boolean>(true);
     const [showFundModal, setShowFundModal] = useState<boolean>(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(
         walletAddress,
@@ -116,22 +118,21 @@ const ActivateAccount: React.FC<any> = () => {
             if (totalBalanceValue && totalBalanceValue?.total > 3) {
                 setShowFundModal(false);
 
-                const storedMapString: any = localStore.get(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId]);
-
-                if (storedMapString) {
-                    const retrievedMap = new Map(JSON.parse(storedMapString));
-                    const sessionData = retrievedMap.get(smartAddres) as any;
-                    if (sessionData) {
-                        setShowSuccessfulDepositModal(false);
+                localforage.getItem(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId]).then((retrievedMap: any) => {
+                    if (retrievedMap) {
+                        const sessionData = retrievedMap.get(smartAddres) as any;
+                        if (sessionData) {
+                            setShowActivateAccount(false);
+                        } else {
+                            setShowActivateAccount(true);
+                        }
                     } else {
-                        setShowSuccessfulDepositModal(true);
+                        setShowActivateAccount(true);
                     }
-                } else {
-                    setShowSuccessfulDepositModal(true);
-                }
+                });
             } else if (getFundModalShown()) {
                 setShowFundModal(true);
-                setShowSuccessfulDepositModal(false);
+                setShowActivateAccount(false);
                 setFundModalShown(false);
             }
         }
@@ -139,18 +140,18 @@ const ActivateAccount: React.FC<any> = () => {
 
     return (
         <>
-            {showSuccessfulDepositModal && (
+            {showActivateAccount && (
                 <Container show={!isMinimizedModal}>
                     <Wrapper show={!isMinimizedModal}>
                         {!isMinimizedModal ? (
                             <>
                                 <FlexDivRow>{<CloseIcon onClick={() => setIsMinimized(true)} />}</FlexDivRow>
                                 <LogoIcon className="icon icon--overtime" />
-                                <Header>{t('get-started.activate-account.deposit')}</Header>
                                 <SubTitle>{t('get-started.activate-account.activate')}</SubTitle>
                                 <Box>{t('get-started.activate-account.success')}</Box>
                                 <ActivateButton
                                     onClick={async () => {
+                                        setIsSubmitting(true);
                                         const toastId = toast.loading(t('market.toast-message.transaction-pending'));
                                         const txHash = await activateOvertimeAccount({
                                             networkId,
@@ -169,7 +170,8 @@ const ActivateAccount: React.FC<any> = () => {
                                                     toastId,
                                                     getSuccessToastOptions(t('market.toast-message.approve-success'))
                                                 );
-                                                setShowSuccessfulDepositModal(false);
+                                                setShowActivateAccount(false);
+                                                setIsSubmitting(false);
                                                 return;
                                             }
                                         }
@@ -177,9 +179,12 @@ const ActivateAccount: React.FC<any> = () => {
                                             toastId,
                                             getErrorToastOptions(t('common.errors.unknown-error-try-again'))
                                         );
+                                        setIsSubmitting(false);
                                     }}
                                 >
-                                    {t('get-started.activate-account.activate-my-account')}
+                                    {isSubmitting
+                                        ? t('get-started.activate-account.activate-progress')
+                                        : t('get-started.activate-account.activate-my-account')}
                                 </ActivateButton>
                             </>
                         ) : (
@@ -272,19 +277,6 @@ const Wrapper = styled.div<{ show: boolean }>`
     `}
 `;
 
-const Header = styled.h2`
-    color: ${(props) => props.theme.overdrop.textColor.quaternary};
-    text-align: center;
-    font-size: 24px;
-    line-height: 24px;
-    font-weight: 600;
-    margin-top: 13px;
-    margin-bottom: 10px;
-    @media (max-width: 575px) {
-        font-size: 20px;
-    }
-`;
-
 const SubTitle = styled.p`
     color: ${(props) => props.theme.overdrop.textColor.quaternary};
     text-align: center;
@@ -323,6 +315,7 @@ const ActivateButton = styled.div`
     height: 44px;
     padding: 14px;
     width: 100%;
+    user-select: none;
     cursor: pointer;
     text-transform: uppercase;
 `;
