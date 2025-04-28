@@ -1,7 +1,5 @@
-import { COUNTRY_BASED_TOURNAMENTS } from 'constants/markets';
 import { SportFilter } from 'enums/markets';
 import { ScreenSizeBreakpoint } from 'enums/ui';
-import { getLeagueSport } from 'overtime-utils';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
@@ -19,6 +17,7 @@ import styled from 'styled-components';
 import { FlexDivCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { TagInfo, Tournament } from 'types/markets';
 import { getLeagueFlagSource } from 'utils/images';
+import { getCountryFromTournament } from 'utils/markets';
 import { getScrollMainContainerToTop } from 'utils/scroll';
 import useQueryParam from 'utils/useQueryParams';
 import IncentivizedLeague from '../../../../components/IncentivizedLeague';
@@ -167,12 +166,7 @@ const Tag: React.FC<TagProps> = ({
             </TagContainer>
             {isOpen &&
                 tournaments.map((tournament) => {
-                    const leagueSport = getLeagueSport(tag.id);
-                    const tournamentNameSplit = tournament.name.split(',');
-                    const tournamentCountry =
-                        tournamentNameSplit.length > 0 && COUNTRY_BASED_TOURNAMENTS.includes(leagueSport)
-                            ? tournamentNameSplit[tournamentNameSplit.length - 1].trim()
-                            : '';
+                    const tournamentCountry = getCountryFromTournament(tournament.name, tag.id);
 
                     return (
                         <TagContainer key={tournament.name} isMobile={isMobile}>

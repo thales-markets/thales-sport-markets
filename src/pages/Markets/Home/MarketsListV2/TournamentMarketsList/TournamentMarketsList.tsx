@@ -1,5 +1,3 @@
-import { COUNTRY_BASED_TOURNAMENTS } from 'constants/markets';
-import { getLeagueSport } from 'overtime-utils';
 import React, { useState } from 'react';
 import LazyLoad, { forceCheck } from 'react-lazyload';
 import { useSelector } from 'react-redux';
@@ -7,6 +5,7 @@ import { getIsMarketSelected } from 'redux/modules/market';
 import { FlexDivRowCentered } from 'styles/common';
 import { SportMarket, SportMarkets } from 'types/markets';
 import { getLeagueFlagSource } from 'utils/images';
+import { getCountryFromTournament } from 'utils/markets';
 import MarketListCardV2 from '../../MarketListCard';
 import {
     ArrowIcon,
@@ -28,12 +27,7 @@ const TournamentMarketsList: React.FC<TournamentMarketsListProps> = ({ markets, 
     const isMarketSelected = useSelector(getIsMarketSelected);
     const [hideTournament, setHideTournament] = useState<boolean>(false);
 
-    const leagueSport = getLeagueSport(leagueId);
-    const tournamentNameSplit = tournament.split(',');
-    const tournamentCountry =
-        tournamentNameSplit.length > 0 && COUNTRY_BASED_TOURNAMENTS.includes(leagueSport)
-            ? tournamentNameSplit[tournamentNameSplit.length - 1].trim()
-            : '';
+    const tournamentCountry = getCountryFromTournament(tournament, leagueId);
 
     return (
         <>
