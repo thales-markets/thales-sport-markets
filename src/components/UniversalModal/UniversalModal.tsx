@@ -77,7 +77,7 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
                                     {SUPPORTED_NETWORKS_UNIVERSAL_DEPOSIT.map((chain, index) => {
                                         return (
                                             <Chain key={index}>
-                                                <i className={`chain-icon chain-icon--${chain.iconName}`} />
+                                                <ChainIcon className={`chain-icon chain-icon--${chain.iconName}`} />
                                                 {chain.name}
                                             </Chain>
                                         );
@@ -343,6 +343,12 @@ const AssetWrapper = styled.p<{ clickable?: boolean }>`
     gap: 8px;
 `;
 
+const ChainIcon = styled.i`
+    font-size: 16px;
+    font-weight: 100;
+    color: ${(props) => props.theme.textColor.secondary};
+`;
+
 const ChainWrapper = styled(FlexDivStart)`
     align-items: center;
 `;
@@ -360,10 +366,6 @@ const Chain = styled(Label)`
     font-size: 12px;
     gap: 2px;
     justify-content: flex-start;
-    i {
-        font-size: 14px;
-        color: ${(props) => props.theme.textColor.secondary};
-    }
 `;
 
 const Asset = styled.i`
