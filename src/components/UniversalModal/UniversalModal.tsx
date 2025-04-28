@@ -65,7 +65,7 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
                                     {SUPPORTED_NETWORKS_UNIVERSAL_DEPOSIT.map((chain, index) => {
                                         return (
                                             <Chain key={index}>
-                                                {/* <i className={`icon icon--${chain.iconName}`} /> */}
+                                                <i className={`chain-icon chain-icon--${chain.iconName}`} />
                                                 {chain.name}
                                             </Chain>
                                         );
