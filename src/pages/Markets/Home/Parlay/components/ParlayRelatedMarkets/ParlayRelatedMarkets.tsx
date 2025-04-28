@@ -65,7 +65,7 @@ const ParlayRelatedMarkets: React.FC = () => {
         enabled: isConnected && ticket.length > 0,
     });
 
-    const gameRelatedSingleTickets: Ticket[] = useMemo(
+    const createdSingleTickets: Ticket[] = useMemo(
         () =>
             userTicketsQuery.isSuccess && userTicketsQuery.data
                 ? (userTicketsQuery.data as TicketsWithRequestsInfo).tickets.filter(
@@ -73,7 +73,7 @@ const ParlayRelatedMarkets: React.FC = () => {
                           userTicket.sportMarkets.length === 1 && // filter only single tickets
                           (isLiveTypeSelected
                               ? userTicket.isLive
-                              : userTicket.sportMarkets[0].gameId === ticket[0]?.gameId)
+                              : !userTicket.isLive && userTicket.sportMarkets[0].gameId === ticket[0]?.gameId)
                   )
                 : [],
         [userTicketsQuery.isSuccess, userTicketsQuery.data, ticket, isLiveTypeSelected]
@@ -90,28 +90,37 @@ const ParlayRelatedMarkets: React.FC = () => {
     const liveTradingRequests: LiveTradingRequest[] = useMemo(
         () =>
             isLiveTypeSelected && userTicketsQuery.isSuccess && userTicketsQuery.data
-                ? userTicketsQuery.data.liveRequests.filter(
-                      (request) =>
-                          request.status !== LiveTradingTicketStatus.SUCCESS &&
-                          ticketRequestStatusById[request.requestId] === undefined
-                  )
+                ? userTicketsQuery.data.liveRequests
                 : [],
-        [userTicketsQuery.isSuccess, userTicketsQuery.data, isLiveTypeSelected, ticketRequestStatusById]
+        [userTicketsQuery.isSuccess, userTicketsQuery.data, isLiveTypeSelected]
     );
 
     const tempLiveTradingRequests: TicketMarketRequestData[] = useMemo(
         () =>
-            Object.keys(ticketRequestStatusById).map((requestId) => ({
-                ...ticketRequestStatusById[requestId],
-                ticket: serializableTicketMarketAsTicketMarket(ticketRequestStatusById[requestId].ticket),
-            })),
-        [ticketRequestStatusById]
+            Object.keys(ticketRequestStatusById)
+                .filter(
+                    (requestId) =>
+                        !liveTradingRequests.some(
+                            (request) =>
+                                request.status === LiveTradingTicketStatus.SUCCESS && request.requestId === requestId
+                        )
+                )
+                .map((requestId) => ({
+                    ...ticketRequestStatusById[requestId],
+                    ticket: serializableTicketMarketAsTicketMarket(ticketRequestStatusById[requestId].ticket),
+                })),
+        [ticketRequestStatusById, liveTradingRequests]
     );
 
     const markets: (TicketMarketRequestData | LiveTradingRequest | Ticket)[] = useMemo(() => {
-        const requestAndTickets = [...tempLiveTradingRequests, ...liveTradingRequests, ...gameRelatedSingleTickets];
+        const failedLiveTradingRequests = liveTradingRequests.filter(
+            (request) =>
+                request.status !== LiveTradingTicketStatus.SUCCESS &&
+                ticketRequestStatusById[request.requestId] === undefined // not in temp requests
+        );
+        const requestAndTickets = [...tempLiveTradingRequests, ...failedLiveTradingRequests, ...createdSingleTickets];
         return orderBy(requestAndTickets, ['timestamp'], ['desc']).slice(0, LATEST_LIVE_REQUESTS_SIZE);
-    }, [tempLiveTradingRequests, liveTradingRequests, gameRelatedSingleTickets]);
+    }, [tempLiveTradingRequests, liveTradingRequests, createdSingleTickets, ticketRequestStatusById]);
 
     const isEmpty = useMemo(() => !markets.length, [markets]);
 

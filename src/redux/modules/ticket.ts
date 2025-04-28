@@ -198,6 +198,7 @@ const ticketSlice = createSlice({
             state.ticketRequestById[requestId] = {
                 ...state.ticketRequestById[requestId],
                 status: action.payload.status,
+                errorReason: action.payload.errorReason,
                 ticket: action.payload.ticket,
             };
             if (!state.ticketRequestById[requestId].timestamp) {
