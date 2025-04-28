@@ -1,5 +1,6 @@
 import Button from 'components/Button';
 import Modal from 'components/Modal';
+import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from 'constants/currency';
 import { ScreenSizeBreakpoint } from 'enums/ui';
@@ -7,10 +8,11 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import styled, { useTheme } from 'styled-components';
-import { FlexDivColumnCentered, FlexDivRow, FlexDivStart } from 'styles/common';
+import { FlexDivColumnCentered, FlexDivRow, FlexDivSpaceBetween, FlexDivStart } from 'styles/common';
 import { Coins, formatCurrencyWithKey, truncateAddress } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
 import { sendUniversalTranser } from 'utils/biconomy';
+import { SUPPORTED_NETWORKS_UNIVERSAL_DEPOSIT } from 'utils/particleWallet/utils';
 import useBiconomy from 'utils/useBiconomy';
 
 type UniversalModal = {
@@ -51,8 +53,30 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
                 <FlexDivRow>
                     <Title>{t('get-started.universal-account.title')}</Title>
                 </FlexDivRow>
+                <FlexDivSpaceBetween>
+                    <HeaderAddresses>{t('get-started.universal-account.address')}</HeaderAddresses>
+                    <SupportedChains>
+                        {t('get-started.universal-account.supported-chains')}
+                        <Tooltip
+                            overlay={
+                                <ChainContainer>
+                                    {SUPPORTED_NETWORKS_UNIVERSAL_DEPOSIT.map((chain, index) => {
+                                        return (
+                                            <Chain key={index}>
+                                                {chain.name}
+                                                {/* <i className={`currency-icon currency-icon--${chain.iconName}`} /> */}
+                                            </Chain>
+                                        );
+                                    })}
+                                </ChainContainer>
+                            }
+                            iconFontSize={14}
+                            marginLeft={3}
+                            iconColor={theme.textColor.secondary}
+                        />
+                    </SupportedChains>
+                </FlexDivSpaceBetween>
 
-                <HeaderAddresses>{t('get-started.universal-account.address')}</HeaderAddresses>
                 <DarkBackgroundWrapper>
                     <ChainWrapper>
                         <Asset className="currency-icon currency-icon--eth" />
@@ -180,6 +204,10 @@ const HeaderAddresses = styled.span`
     margin-top: 10px;
 `;
 
+const SupportedChains = styled(HeaderAddresses)`
+    color: ${(props) => props.theme.textColor.secondary};
+`;
+
 const FieldHeader = styled.p`
     font-size: 16px;
     font-weight: 500;
@@ -247,11 +275,12 @@ const AssetContainer = styled.div`
     grid-column: 1;
     grid-column-end: 4;
 
-    &:first-child {
-        border-top: none;
-    }
     padding: 10px 0;
     padding-left: 20px;
+`;
+
+const ChainContainer = styled(AssetContainer)`
+    padding: 10px 0;
 `;
 
 const AssetWrapper = styled.p<{ clickable?: boolean }>`
@@ -280,6 +309,14 @@ const Label = styled.p`
     font-size: 16px;
     font-weight: 500;
     white-space: pre;
+`;
+
+const Chain = styled(Label)`
+    font-size: 12px;
+    i {
+        font-size: 14px;
+        color: ${(props) => props.theme.textColor.secondary};
+    }
 `;
 
 const Asset = styled.i`
