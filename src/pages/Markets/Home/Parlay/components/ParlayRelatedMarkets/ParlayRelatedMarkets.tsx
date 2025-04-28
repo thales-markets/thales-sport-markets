@@ -112,7 +112,7 @@ const ParlayRelatedMarkets: React.FC = () => {
         return orderBy(requestAndTickets, ['timestamp'], ['desc']).slice(0, LATEST_LIVE_REQUESTS_SIZE);
     }, [tempLiveTradingRequests, liveTradingRequests, gameRelatedSingleTickets]);
 
-    const isEmpty = !markets.length;
+    const isEmpty = useMemo(() => !markets.length, [markets]);
 
     // Refresh pending requests on every 5s
     useInterval(() => {
@@ -173,13 +173,18 @@ const ParlayRelatedMarkets: React.FC = () => {
                     : t('markets.parlay-related-markets.title-other')}
                 <Count>{markets.length}</Count>
             </Title>
-            <Scroll height={isMobile ? (isEmpty ? '200px' : '545px') : '100%'}>
-                <MarketsContainer>
-                    {userTicketsQuery.isLoading ? (
-                        <LoaderContainer>
-                            <SimpleLoader />
-                        </LoaderContainer>
-                    ) : !isEmpty ? (
+            <MarketsContainer>
+                {userTicketsQuery.isLoading ? (
+                    <LoaderContainer>
+                        <SimpleLoader />
+                    </LoaderContainer>
+                ) : isEmpty ? (
+                    <Empty>
+                        <StyledParlayEmptyIcon />
+                        <EmptyLabel>{t('markets.parlay-related-markets.empty')}</EmptyLabel>
+                    </Empty>
+                ) : (
+                    <Scroll height={isMobile ? '467px' : '100%'}>
                         <RelatedMarkets>
                             {markets.map((relatedMarket: TicketMarketRequestData | LiveTradingRequest | Ticket, i) => {
                                 const isTicketCreated = !!(relatedMarket as Ticket)?.id;
@@ -197,14 +202,9 @@ const ParlayRelatedMarkets: React.FC = () => {
                                 );
                             })}
                         </RelatedMarkets>
-                    ) : (
-                        <Empty>
-                            <StyledParlayEmptyIcon />
-                            <EmptyLabel>{t('markets.parlay-related-markets.empty')}</EmptyLabel>
-                        </Empty>
-                    )}
-                </MarketsContainer>
-            </Scroll>
+                    </Scroll>
+                )}
+            </MarketsContainer>
         </Container>
     );
 };
@@ -321,7 +321,6 @@ const Container = styled(FlexDivColumn)`
 const MarketsContainer = styled(FlexDivColumn)`
     position: relative;
     height: 100%;
-    margin-right: 12px;
 `;
 
 const MarketsTypeContainer = styled(FlexDivCentered)`
@@ -331,6 +330,7 @@ const MarketsTypeContainer = styled(FlexDivCentered)`
 
 const RelatedMarkets = styled(FlexDivColumn)`
     gap: 5px;
+    margin-right: 12px;
 `;
 
 const RelatedMarket = styled.div`
