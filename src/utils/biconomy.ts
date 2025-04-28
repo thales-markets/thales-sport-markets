@@ -2,25 +2,15 @@ import { createSessionKeyManagerModule, DEFAULT_SESSION_KEY_MANAGER_MODULE } fro
 import { PaymasterFeeQuote, PaymasterMode } from '@biconomy/paymaster';
 import { SUPPORTED_TOKEN_TYPE } from '@GDdark/universal-account';
 import { getPublicClient } from '@wagmi/core';
-import { USD_SIGN } from 'constants/currency';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { addMonths } from 'date-fns';
 import { Network } from 'enums/network';
 import localforage from 'localforage';
 import { wagmiConfig } from 'pages/Root/wagmiConfig';
-import { coinParser, formatCurrencyWithKey } from 'thales-utils';
+import { coinParser } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
 import { ViemContract } from 'types/viem';
-import {
-    Address,
-    Client,
-    createWalletClient,
-    encodeFunctionData,
-    formatUnits,
-    getContract,
-    http,
-    maxUint256,
-} from 'viem';
+import { Address, Client, createWalletClient, encodeFunctionData, getContract, http, maxUint256 } from 'viem';
 import { generatePrivateKey, privateKeyToAccount } from 'viem/accounts';
 import biconomyConnector from './biconomyWallet';
 import { getContractAbi } from './contracts/abi';
@@ -567,7 +557,7 @@ const validateTx = async (transactionHash: string | undefined, networkId: Suppor
 };
 
 export const sendUniversalTranser = async (amount: string) => {
-    const testAmount = Number(amount) - 0.3;
+    const testAmount = Number(amount);
     const encodedCall = encodeFunctionData({
         abi: multipleCollateral.USDT.abi,
         functionName: 'transfer',
@@ -585,34 +575,9 @@ export const sendUniversalTranser = async (amount: string) => {
         transactions: [transactionLocal],
     });
 
-    const feeQuotes = transaction.feeQuotes[0];
-    const totals = feeQuotes.fees.totals;
-
-    console.log(totals);
-
-    const feesAmount = formatUnits(Number(totals.feeTokenAmountInUSD) as any, 18);
-    console.log(formatCurrencyWithKey(USD_SIGN, feesAmount, 4));
-    const finalAmount = Number(amount) - (Number(feesAmount) > 0.3 ? Number(feesAmount) * 1.01 : 0.3);
-    console.log('finalAmount: ', finalAmount);
-    const encodedCall2 = encodeFunctionData({
-        abi: multipleCollateral.USDT.abi,
-        functionName: 'transfer',
-        args: [biconomyConnector.address, coinParser('' + finalAmount, Network.OptimismMainnet, 'USDT')],
-    });
-
-    const transactionLocal2 = {
-        to: multipleCollateral.USDT.addresses[Network.OptimismMainnet],
-        data: encodedCall2,
-    };
-
-    const transaction2 = await biconomyConnector.universalAccount?.createUniversalTransaction({
-        expectTokens: [{ type: SUPPORTED_TOKEN_TYPE.USDT, amount: finalAmount + '' }],
-        chainId: Network.OptimismMainnet,
-        transactions: [transactionLocal2],
-    });
-    const signature = await biconomyConnector.wallet?.signMessage(transaction2.rootHash);
+    const signature = await biconomyConnector.wallet?.signMessage(transaction.rootHash);
     if (signature) {
-        const result = await biconomyConnector.universalAccount?.sendTransaction(transaction2, signature);
+        const result = await biconomyConnector.universalAccount?.sendTransaction(transaction, signature);
 
         console.log('Explorer URL:', `https://universalx.app/activity/details?id=${result.transactionId}`);
     }

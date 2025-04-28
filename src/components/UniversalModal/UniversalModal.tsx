@@ -1,11 +1,13 @@
 import particleLogo from 'assets/images/particle_logo.svg?react';
 import Button from 'components/Button';
+import NumericInput from 'components/fields/NumericInput';
 import Modal from 'components/Modal';
 import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from 'constants/currency';
+import { Network } from 'enums/network';
 import { ScreenSizeBreakpoint } from 'enums/ui';
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import styled, { useTheme } from 'styled-components';
@@ -13,7 +15,9 @@ import { FlexDivColumnCentered, FlexDivRow, FlexDivSpaceBetween, FlexDivStart } 
 import { Coins, formatCurrencyWithKey, truncateAddress } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
 import { sendUniversalTranser } from 'utils/biconomy';
+import biconomyConnector from 'utils/biconomyWallet';
 import { SUPPORTED_NETWORKS_UNIVERSAL_DEPOSIT } from 'utils/particleWallet/utils';
+import { refetchBalances } from 'utils/queryConnector';
 import useBiconomy from 'utils/useBiconomy';
 
 type UniversalModal = {
@@ -27,6 +31,8 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
 
     const theme: ThemeInterface = useTheme();
 
+    const [amount, setAmount] = useState<string | number>('');
+
     const handleCopy = (address: string) => {
         try {
             navigator.clipboard.writeText(address);
@@ -35,6 +41,12 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
             toast.error('Error');
         }
     };
+
+    const isButtonDisable =
+        !universalBalance?.totalAmountInUSD ||
+        universalBalance?.totalAmountInUSD === 0 ||
+        Number(amount as any) <= 0 ||
+        Number(amount as any) > universalBalance?.totalAmountInUSD;
 
     return (
         <Modal
@@ -127,6 +139,20 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
                 </BalanceWrapper>
 
                 <ButtonContainer>
+                    <NumericInput
+                        value={amount}
+                        onChange={(_, value) => setAmount(value)}
+                        inputFontWeight="700"
+                        inputPadding="5px 10px"
+                        height="44px"
+                        inputFontSize="16px"
+                        background={theme.background.quinary}
+                        borderColor={theme.background.quinary}
+                        fontWeight="700"
+                        color={theme.textColor.primary}
+                        placeholder={t('liquidity-pool.deposit-amount-placeholder')}
+                        onMaxButton={() => setAmount(universalBalance?.totalAmountInUSD || 0)}
+                    />
                     <Button
                         backgroundColor={theme.overdrop.borderColor.tertiary}
                         borderColor={theme.overdrop.borderColor.tertiary}
@@ -136,15 +162,17 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
                         fontWeight="700"
                         borderRadius="8px"
                         additionalStyles={{ whiteSpace: 'pre' }}
+                        disabled={isButtonDisable}
                         onClick={async () => {
-                            if (universalBalance?.totalAmountInUSD && universalBalance?.totalAmountInUSD > 3) {
+                            if (!isButtonDisable) {
                                 const id = toast.loading(t('get-started.universal-account.transfer-pending'));
                                 try {
-                                    await sendUniversalTranser(universalBalance?.totalAmountInUSD + '');
+                                    await sendUniversalTranser(amount as any);
                                     toast.update(
                                         id,
                                         getSuccessToastOptions(t('get-started.universal-account.success'))
                                     );
+                                    refetchBalances(biconomyConnector.address, Network.OptimismMainnet);
                                     onClose();
                                 } catch (e) {
                                     toast.update(id, getErrorToastOptions(t('get-started.universal-account.error')));
