@@ -27,7 +27,7 @@ type UniversalModal = {
 const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
     const { t } = useTranslation();
 
-    const { universalAddress, universalSolanaAddress, universalBalance } = useBiconomy();
+    const { universalAddress, universalSolanaAddress, universalBalance, refetchUnifyBalance } = useBiconomy();
 
     const theme: ThemeInterface = useTheme();
 
@@ -168,11 +168,14 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
                                 const id = toast.loading(t('get-started.universal-account.transfer-pending'));
                                 try {
                                     await sendUniversalTranser(amount as any);
+
+                                    refetchBalances(biconomyConnector.address, Network.OptimismMainnet);
+
+                                    await refetchUnifyBalance();
                                     toast.update(
                                         id,
                                         getSuccessToastOptions(t('get-started.universal-account.success'))
                                     );
-                                    refetchBalances(biconomyConnector.address, Network.OptimismMainnet);
                                     onClose();
                                 } catch (e) {
                                     toast.update(id, getErrorToastOptions(t('get-started.universal-account.error')));

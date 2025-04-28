@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useAccount, useChainId, useDisconnect, useSwitchChain, useWalletClient } from 'wagmi';
 import biconomyConnector from './biconomyWallet';
+import { delay } from './timer';
 
 // Singleton state outside the hook
 let smartAddressSingleton = '';
@@ -69,11 +70,30 @@ function useBiconomy() {
         }
     }, [dispatch, switchChain, networkId, disconnect, walletClient, isConnected]);
 
+    const refetchUnifyBalance = async () => {
+        const universalAccount = new UniversalAccount({
+            projectId: import.meta.env['VITE_APP_UA_PROJECT_ID'],
+            ownerAddress: walletClient?.account.address as any,
+        });
+
+        const assets = await universalAccount.getPrimaryAssets();
+        if (assets.totalAmountInUSD === universalBalanceSingleton?.totalAmountInUSD) {
+            await delay(4000);
+            const assets2 = await universalAccount.getPrimaryAssets();
+            universalBalanceSingleton = assets2;
+        } else {
+            universalBalanceSingleton = assets;
+        }
+
+        forceUpdate({}); // Trigger re-render
+    };
+
     return {
         smartAddress: smartAddressSingleton,
         universalAddress: universalAddressSingleton,
         universalBalance: universalBalanceSingleton,
         universalSolanaAddress: universalSolanaAddressSingleton,
+        refetchUnifyBalance,
     };
 }
 
