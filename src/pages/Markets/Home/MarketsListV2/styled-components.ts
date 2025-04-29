@@ -14,6 +14,11 @@ export const LeagueCard = styled.div<{ isMarketSelected: boolean }>`
     padding-right: ${(props) => (props.isMarketSelected ? '0px' : '40px')};
 `;
 
+export const TournamentCard = styled(LeagueCard)`
+    top: 34px;
+    padding: 0px 12px 5px 12px;
+`;
+
 export const LeagueInfo = styled.div`
     display: flex;
     position: relative;
@@ -29,6 +34,13 @@ export const LeagueInfo = styled.div`
             color: ${(props) => props.theme.textColor.primary};
         }
     }
+`;
+
+export const TournamentInfo = styled(LeagueInfo)`
+    margin-left: 10px;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
 `;
 
 export const GamesContainer = styled.div<{ hidden?: boolean }>`

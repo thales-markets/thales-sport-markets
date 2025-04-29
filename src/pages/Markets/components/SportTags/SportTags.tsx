@@ -1,9 +1,9 @@
 import { SportFilter } from 'enums/markets';
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSportFilter, getTagFilter, setTagFilter } from 'redux/modules/market';
-import { Tags } from 'types/markets';
+import { Tags, Tournament } from 'types/markets';
 import SportFilterDetails from '../SportFilter';
 import TagsDropdown from '../TagsDropdown';
 
@@ -13,12 +13,12 @@ type SportTagsProps = {
     sportCount: number;
     showActive: boolean;
     tags: Tags;
-    setSportParam: (param: SportFilter) => void;
-    setTagParam: any;
     openMarketsCountPerTag: any;
     liveMarketsCountPerTag: any;
     liveMarketsCountPerSport: any;
     playerPropsMarketsCountPerTag: any;
+    tournamentsByLeague: Record<number, Tournament[]>;
+    marketsCountPerTournament: any;
 };
 
 const SportTags: React.FC<SportTagsProps> = ({
@@ -27,20 +27,19 @@ const SportTags: React.FC<SportTagsProps> = ({
     sportCount,
     showActive,
     tags,
-    setSportParam,
-    setTagParam,
     openMarketsCountPerTag,
     liveMarketsCountPerTag,
     playerPropsMarketsCountPerTag,
     liveMarketsCountPerSport,
+    tournamentsByLeague,
+    marketsCountPerTournament,
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const sportFilter = useSelector(getSportFilter);
     const tagFilter = useSelector(getTagFilter);
 
-    const [isOpen, setIsOpen] = useState(sport == sportFilter && sport !== SportFilter.All);
-    const open = useMemo(() => sport !== SportFilter.All && isOpen, [isOpen, sport]);
+    const [isOpen, setIsOpen] = useState(sport == sportFilter);
 
     return (
         <React.Fragment>
@@ -48,29 +47,26 @@ const SportTags: React.FC<SportTagsProps> = ({
                 selected={sportFilter === sport}
                 sport={sport}
                 onClick={() => {
-                    if (tagFilter.length == 0 || sportFilter === SportFilter.PlayerProps) {
-                        setIsOpen(!open);
-                    }
                     onSportClick();
+                    if ((tagFilter.length == 0 && sport === sportFilter) || (sport !== sportFilter && !isOpen)) {
+                        setIsOpen(!isOpen);
+                    }
                 }}
                 onArrowClick={(e) => {
                     e.stopPropagation();
-                    setIsOpen(!open);
+                    setIsOpen(!isOpen);
                 }}
                 key={sport}
                 count={sportCount}
-                open={open}
+                open={isOpen}
             >
                 {t(`market.filter-label.sport.${sport.toLowerCase()}`)}
             </SportFilterDetails>
             <TagsDropdown
-                open={open}
+                open={isOpen}
                 key={sport + '1'}
                 tags={tags}
-                tagFilter={tagFilter}
-                setSportParam={setSportParam}
                 setTagFilter={(tagFilter: Tags) => dispatch(setTagFilter(tagFilter))}
-                setTagParam={setTagParam}
                 openMarketsCountPerTag={openMarketsCountPerTag}
                 liveMarketsCountPerTag={liveMarketsCountPerTag}
                 liveMarketsCountPerSport={liveMarketsCountPerSport}
@@ -78,6 +74,8 @@ const SportTags: React.FC<SportTagsProps> = ({
                 showActive={showActive}
                 showLive={sport == SportFilter.Live}
                 sport={sport}
+                tournamentsByLeague={tournamentsByLeague}
+                marketsCountPerTournament={marketsCountPerTournament}
             ></TagsDropdown>
         </React.Fragment>
     );
