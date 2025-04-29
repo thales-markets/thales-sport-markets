@@ -170,13 +170,11 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
                                     const result = await sendUniversalTranser(amount as any);
                                     if (result?.success) {
                                         refetchBalances(biconomyConnector.address, Network.OptimismMainnet);
-
                                         await refetchUnifyBalance();
                                         toast.update(
                                             id,
                                             getSuccessToastOptions(t('get-started.universal-account.success'))
                                         );
-                                        onClose();
                                     } else {
                                         toast.update(id, getErrorToastOptions(result?.message));
                                     }
