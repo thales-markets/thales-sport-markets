@@ -17,6 +17,7 @@ import {
     COINGECKO_SWAP_TO_OVER_QUOTE_SLIPPAGE,
     OVER_CONTRACT_RATE_KEY,
     SGP_BET_MINIMUM_MARKETS,
+    SLIPPAGE_PERCENTAGES,
     SWAP_APPROVAL_BUFFER,
     SYSTEM_BET_MAX_ALLOWED_SYSTEM_COMBINATIONS,
     SYSTEM_BET_MINIMUM_DENOMINATOR,
@@ -216,8 +217,6 @@ const TicketErrorMessage = {
     SAME_TEAM_IN_PARLAY: 'SameTeamOnParlay',
     PROOF_IS_NOT_VALID: 'Proof is not valid',
 };
-
-const SLIPPAGE_PERCENTAGES = [0.5, 1, 2];
 
 const Ticket: React.FC<TicketProps> = ({
     markets,

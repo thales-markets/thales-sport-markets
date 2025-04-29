@@ -1,5 +1,5 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { SGP_BET_MAX_MARKETS } from 'constants/markets';
+import { SGP_BET_MAX_MARKETS, SLIPPAGE_PERCENTAGES } from 'constants/markets';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { TicketErrorCode } from 'enums/markets';
 import { Network } from 'enums/network';
@@ -37,7 +37,7 @@ const getDefaultPayment = (): ParlayPayment => {
 
 const getDefaultLiveSlippage = (): number => {
     const slippage = localStore.get<number>(LOCAL_STORAGE_KEYS.LIVE_BET_SLIPPAGE);
-    return slippage !== undefined ? slippage : 1;
+    return slippage !== undefined ? slippage : SLIPPAGE_PERCENTAGES[1];
 };
 
 const getDefaultIsSystemBet = (): boolean => {
