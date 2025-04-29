@@ -265,3 +265,9 @@ export type Team = {
     name: string;
     isHome: boolean;
 };
+
+export type Tournament = {
+    leagueId: League;
+    leageueName: string;
+    name: string;
+};

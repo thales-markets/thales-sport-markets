@@ -6,12 +6,12 @@ import React, { CSSProperties, Dispatch, SetStateAction, useContext } from 'reac
 import { ScrollMenu, VisibilityContext, publicApiType } from 'react-horizontal-scrolling-menu';
 import 'react-horizontal-scrolling-menu/dist/styles.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSportFilter, setSportFilter, setTagFilter } from 'redux/modules/market';
+import { getSportFilter, setSportFilter, setTagFilter, setTournamentFilter } from 'redux/modules/market';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
 import { TagInfo, Tags } from 'types/markets';
 import { getDefaultPlayerPropsLeague } from 'utils/marketsV2';
-import useQueryParam from '../../../../../utils/useQueryParams';
+import useQueryParam from 'utils/useQueryParams';
 
 type SportFilterMobileProps = {
     tagsList: Tags;
@@ -63,6 +63,7 @@ const SportFilterMobile: React.FC<SportFilterMobileProps> = ({
     const sportFilter = useSelector(getSportFilter);
     const [, setSportParam] = useQueryParam('sport', '');
     const [, setTagParam] = useQueryParam('tag', '');
+    const [, setTournamentParam] = useQueryParam('tournament', '');
 
     const theme = useTheme();
 
@@ -110,6 +111,8 @@ const SportFilterMobile: React.FC<SportFilterMobileProps> = ({
                                                           .label
                                                     : ''
                                             );
+                                            dispatch(setTournamentFilter([]));
+                                            setTournamentParam('');
                                             if (
                                                 filterItem === SportFilter.All ||
                                                 filterItem === SportFilter.PlayerProps
@@ -131,6 +134,8 @@ const SportFilterMobile: React.FC<SportFilterMobileProps> = ({
                                             setSportParam(SportFilter.All);
                                             dispatch(setTagFilter([]));
                                             setTagParam('');
+                                            dispatch(setTournamentFilter([]));
+                                            setTournamentParam('');
                                             setAvailableTags(tagsList);
                                         }
                                     }}

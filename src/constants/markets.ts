@@ -1,6 +1,6 @@
 import { GameStatus, OddsType } from 'enums/markets';
 import { Network } from 'enums/network';
-import { League } from 'overtime-utils';
+import { League, Sport } from 'overtime-utils';
 import { NetworkId } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
 
@@ -81,3 +81,7 @@ export const SGP_BET_MINIMUM_MARKETS = 2;
 export const SGP_BET_MAX_MARKETS = 10;
 
 export const NOT_AVAILABLE = 'N/A';
+
+export const SPORTS_BY_TOURNAMENTS = [Sport.TENNIS, Sport.ESPORTS];
+
+export const COUNTRY_BASED_TOURNAMENTS = [Sport.TENNIS];

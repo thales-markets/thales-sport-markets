@@ -22,6 +22,7 @@ export type MarketSliceState = {
     selectedMarket: SelectedMarket | undefined;
     isThreeWayView: boolean;
     sortType: SortType;
+    tournamentFilter: string[];
 };
 
 export type TicketSliceState = {
