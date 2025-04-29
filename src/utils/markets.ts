@@ -57,7 +57,7 @@ export const getMarketTypeTooltipKey = (marketType: MarketType) => {
     return marketTypeInfo ? marketTypeInfo.tooltipKey : undefined;
 };
 
-export const isOddsDroppedWithinSlippage = (originalOdd: number, newOdd: number, slippage: number): boolean => {
+export const isOddsChangeAllowed = (originalOdd: number, newOdd: number, slippage: number): boolean => {
     if (originalOdd >= newOdd) {
         // new quote is better
         return true;

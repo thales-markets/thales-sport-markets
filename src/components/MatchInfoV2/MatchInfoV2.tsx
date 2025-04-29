@@ -7,7 +7,7 @@ import { getOddsType } from 'redux/modules/ui';
 import { Coins } from 'thales-utils';
 import { TicketMarket } from 'types/markets';
 import { getCollateral } from 'utils/collaterals';
-import { formatMarketOdds, isOddsDroppedWithinSlippage } from 'utils/markets';
+import { formatMarketOdds, isOddsChangeAllowed } from 'utils/markets';
 import {
     getMatchLabel,
     getPositionTextV2,
@@ -109,7 +109,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
 
                     setOddsChanged &&
                         setOddsChanged(
-                            !isOddsDroppedWithinSlippage(
+                            !isOddsChangeAllowed(
                                 firstClickMarket.current.odd,
                                 market.odd,
                                 market.live ? liveBetSlippage : 0

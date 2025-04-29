@@ -113,7 +113,7 @@ import multipleCollateral from 'utils/contracts/multipleCollateralContract';
 import sportsAMMV2Contract from 'utils/contracts/sportsAMMV2Contract';
 import { isErrorExcluded, logErrorToDiscord } from 'utils/discord';
 import { convertFromBytes32 } from 'utils/formatters/string';
-import { formatMarketOdds, isOddsDroppedWithinSlippage } from 'utils/markets';
+import { formatMarketOdds, isOddsChangeAllowed } from 'utils/markets';
 import { getTradeData, ticketMarketAsSerializable } from 'utils/marketsV2';
 import { checkAllowance } from 'utils/network';
 import {
@@ -702,9 +702,7 @@ const Ticket: React.FC<TicketProps> = ({
                 !isQuoteChangedDueThalesBonus
             ) {
                 setOddsChanged &&
-                    setOddsChanged(
-                        !isOddsDroppedWithinSlippage(initialSgpTotalQuote.current, totalQuote, liveBetSlippage)
-                    );
+                    setOddsChanged(!isOddsChangeAllowed(initialSgpTotalQuote.current, totalQuote, liveBetSlippage));
                 setSgpOddsChanged(true);
                 setIsTotalQuoteIncreased(totalQuote < previousTotalQuote.current); // smaller implied odds => higher quote
             } else if (totalQuote === 0 || isMarketsUpdated) {
