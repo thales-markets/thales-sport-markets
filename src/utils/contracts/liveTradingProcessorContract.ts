@@ -6,7 +6,7 @@ const liveTradingProcessorContract: ContractData = {
         [Network.OptimismMainnet]: '0x330c4c4Bcde91aDC17c0293A90dC05a046ce3FE4',
         [Network.Arbitrum]: '0xa5567Cd13F3a0c71B4a85E3a0DdAbfeeCB409339',
         [Network.Base]: '0x64598450396494faDd5ebaC9906CF5169a2B3e0a',
-        [Network.OptimismSepolia]: '0x01546a60C30CaCAe105210381a11449F430489Cf',
+        [Network.OptimismSepolia]: '0x3e7a5a531423e03abf835F776636F31621EB1B8D',
     },
     abi: [
         {
