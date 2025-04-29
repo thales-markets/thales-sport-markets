@@ -314,7 +314,12 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
             <TicketTransactionsTable
                 ticketTransactions={lpTickets}
                 isLoading={
-                    usdcLpTicketsQuery.isLoading || wethLpTicketsQuery.isLoading || thalesLpTicketsQuery.isLoading
+                    usdcLpTicketsQuery.isLoading ||
+                    wethLpTicketsQuery.isLoading ||
+                    thalesLpTicketsQuery.isLoading ||
+                    overLpTicketsQuery.isLoading ||
+                    cbbtcLpTicketsQuery.isLoading ||
+                    wbtcLpTicketsQuery.isLoading
                 }
                 tableHeight="auto"
                 ticketsPerPage={100}

@@ -46,6 +46,11 @@ const getDefaultSortType = (): SortType => {
     return lsSortType !== undefined ? (lsSortType as SortType) : SortType.DEFAULT;
 };
 
+const getDefaultTournamentFilter = (): string[] => {
+    const lsTournamentFilter = localStore.get(LOCAL_STORAGE_KEYS.FILTER_TOURNAMENT);
+    return lsTournamentFilter !== undefined ? (lsTournamentFilter as string[]) : [];
+};
+
 const initialState: MarketSliceState = {
     marketSearch: getDefaultMarketSearch(),
     datePeriodFilter: getDefaultDatePeriodFilter(),
@@ -57,6 +62,7 @@ const initialState: MarketSliceState = {
     selectedMarket: undefined,
     isThreeWayView: getDefaultIsThreeWayView(),
     sortType: getDefaultSortType(),
+    tournamentFilter: getDefaultTournamentFilter(),
 };
 
 const marketSlice = createSlice({
@@ -128,6 +134,12 @@ const marketSlice = createSlice({
             state.sortType = action.payload;
             localStore.set(LOCAL_STORAGE_KEYS.SORT_TYPE, action.payload);
         },
+        setTournamentFilter: (state, action: PayloadAction<string[]>) => {
+            state.tournamentFilter = action.payload;
+            localStore.set(LOCAL_STORAGE_KEYS.FILTER_TOURNAMENT, action.payload);
+
+            state.selectedMarket = undefined;
+        },
     },
 });
 
@@ -142,6 +154,7 @@ export const {
     setMarketTypeFilter,
     setMarketTypeGroupFilter,
     setSortType,
+    setTournamentFilter,
 } = marketSlice.actions;
 
 const getMarketState = (state: RootState) => state[sliceName];
@@ -156,5 +169,6 @@ export const getSelectedMarket = (state: RootState) => getMarketState(state).sel
 export const getIsMarketSelected = (state: RootState) => !!getMarketState(state).selectedMarket;
 export const getIsThreeWayView = (state: RootState) => getMarketState(state).isThreeWayView;
 export const getSortType = (state: RootState) => getMarketState(state).sortType;
+export const getTournamentFilter = (state: RootState) => getMarketState(state).tournamentFilter;
 
 export default marketSlice.reducer;

@@ -82,7 +82,10 @@ export const getLeagueLogoClass = (league: League) => {
     return LeagueMap[league]?.logoClass || 'icon-homepage league--overtime';
 };
 
-export const getLeagueFlagSource = (tagId: number | any) => {
+export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
+    if (country) {
+        return `/logos/Countries/${country.trim().replaceAll(' ', '-').toLowerCase()}.svg`;
+    }
     switch (tagId) {
         case League.NCAAF:
         case League.NFL:
@@ -340,6 +343,12 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.CZECH_REPUBLIC_TT_CUP_MEN:
         case League.CZECH_REPUBLIC_TT_LIGA_PRO_MEN:
             return `/logos/Countries/czech-republic.svg`;
+        case League.TENNIS_MASTERS:
+            return `/logos/Countries/atp.png`;
+        case League.TENNIS_WTA:
+            return `/logos/Countries/wta.png`;
+        case League.TENNIS_ATP_CHALLENGER:
+            return `/logos/Countries/atp-challenger.jpg`;
         default:
             return `/logos/Countries/world.svg`;
     }

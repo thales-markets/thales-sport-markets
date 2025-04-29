@@ -1,22 +1,29 @@
 import { SportFilter } from 'enums/markets';
-import { uniqBy } from 'lodash';
+import { uniq, uniqBy } from 'lodash';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSportFilter, getTagFilter, setTagFilter } from 'redux/modules/market';
-import { RootState } from 'types/redux';
+import {
+    getSportFilter,
+    getTagFilter,
+    getTournamentFilter,
+    setTagFilter,
+    setTournamentFilter,
+} from 'redux/modules/market';
+import useQueryParam from 'utils/useQueryParams';
 import { Breadcrumb, BreadcrumbsContainer } from './styled-components';
 
-type BreadcrumbsProps = {
-    setTagParam: (param: string) => void;
-};
-
-const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ setTagParam }) => {
+const Breadcrumbs: React.FC = () => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
-    const sportFilter = useSelector((state: RootState) => getSportFilter(state));
-    const tagFilter = useSelector((state: RootState) => getTagFilter(state));
+    const sportFilter = useSelector(getSportFilter);
+    const tagFilter = useSelector(getTagFilter);
+    const tournamentFilter = useSelector(getTournamentFilter);
+    const [, setTagParam] = useQueryParam('tag', '');
+    const [, setTournamentParam] = useQueryParam('tournament', '');
+
     const uniqueTagFilter = uniqBy(tagFilter, 'label');
+    const uniqueTournamentFilter = uniq(tournamentFilter);
 
     return (
         <BreadcrumbsContainer>
@@ -25,6 +32,8 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ setTagParam }) => {
                     if (sportFilter !== SportFilter.PlayerProps) {
                         dispatch(setTagFilter([]));
                         setTagParam('');
+                        dispatch(setTournamentFilter([]));
+                        setTournamentParam('');
                     }
                 }}
             >
@@ -36,8 +45,28 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ setTagParam }) => {
                     return (
                         <React.Fragment key={tag.label}>
                             {index === 0 ? ' / ' : ''}
-                            <Breadcrumb onClick={() => dispatch(setTagFilter([tag]))}>{tag.label}</Breadcrumb>
+                            <Breadcrumb
+                                onClick={() => {
+                                    dispatch(setTagFilter([tag]));
+                                    dispatch(setTournamentFilter([]));
+                                    setTournamentParam('');
+                                }}
+                            >
+                                {tag.label}
+                            </Breadcrumb>
                             {index === uniqueTagFilter.length - 1 ? '' : ', '}
+                        </React.Fragment>
+                    );
+                })}
+            {!!tournamentFilter.length &&
+                uniqueTournamentFilter.map((tournament, index) => {
+                    return (
+                        <React.Fragment key={tournament}>
+                            {index === 0 ? ' / ' : ''}
+                            <Breadcrumb onClick={() => dispatch(setTournamentFilter([tournament]))}>
+                                {tournament}
+                            </Breadcrumb>
+                            {index === uniqueTournamentFilter.length - 1 ? '' : ', '}
                         </React.Fragment>
                     );
                 })}
