@@ -563,18 +563,18 @@ export const sendUniversalTranser = async (amount: string) => {
     try {
         const testAmount = Number(amount);
         const encodedCall = encodeFunctionData({
-            abi: multipleCollateral.USDT.abi,
+            abi: multipleCollateral.USDC.abi,
             functionName: 'transfer',
-            args: [biconomyConnector.address, coinParser('' + testAmount, Network.OptimismMainnet, 'USDT')],
+            args: [biconomyConnector.address, coinParser('' + testAmount, Network.OptimismMainnet, 'USDC')],
         });
 
         const transactionLocal = {
-            to: multipleCollateral.USDT.addresses[Network.OptimismMainnet],
+            to: multipleCollateral.USDC.addresses[Network.OptimismMainnet],
             data: encodedCall,
         };
 
         const transaction = await biconomyConnector.universalAccount?.createUniversalTransaction({
-            expectTokens: [{ type: SUPPORTED_TOKEN_TYPE.USDT, amount: testAmount + '' }],
+            expectTokens: [{ type: SUPPORTED_TOKEN_TYPE.USDC, amount: testAmount + '' }],
             chainId: Network.OptimismMainnet,
             transactions: [transactionLocal],
         });
@@ -588,6 +588,7 @@ export const sendUniversalTranser = async (amount: string) => {
             };
         }
     } catch (e: any) {
+        console.log(e);
         if (e.message == UNIVERSAL_BALANCE_NOT_ENOUGH || e.message == UNIVERSAL_BALANCE_NOT_SUFFICIENT) {
             return {
                 success: false,
