@@ -1,6 +1,7 @@
 import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from 'constants/currency';
 import { t } from 'i18next';
-import { League } from 'overtime-utils';
+import { getLeagueLabel, League } from 'overtime-utils';
+import useLpPpStatsByLeagueQuery from 'queries/pnl/useLpPpStatsByLeagueQuery';
 import useLpStatsQuery from 'queries/pnl/useLpStatsQuery';
 import React from 'react';
 import styled from 'styled-components';
@@ -21,6 +22,22 @@ const LpStats: React.FC<LpStatsProps> = ({ round, leagueId, onlyPP }) => {
     const lpStatsQuery = useLpStatsQuery(round, leagueId, onlyPP, { networkId, client });
     const lpStats = lpStatsQuery.isSuccess && lpStatsQuery.data ? lpStatsQuery.data : [];
 
+    for (let index = 0; index < 10; index++) {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        const lpPpStatsQuery = useLpPpStatsByLeagueQuery(round - index, leagueId, { networkId, client });
+        const lpPpStats = lpPpStatsQuery.isSuccess && lpPpStatsQuery.data ? lpPpStatsQuery.data : [];
+
+        Object.keys(lpPpStats).forEach((key: string) => {
+            const leagueId = parseInt(key, 10);
+            const stats = lpPpStats[leagueId][lpPpStats[leagueId].length - 1];
+            console.log(
+                `Round: ${round - index + 33}, ${getLeagueLabel(leagueId)}, ${stats.pnlInUsd}, ${stats.feesInUsd}, ${
+                    -stats.feesInUsd - stats.pnlInUsd
+                }`
+            );
+        });
+    }
+
     return (
         <Wrapper>
             <SectionWrapper>
@@ -30,7 +47,7 @@ const LpStats: React.FC<LpStatsProps> = ({ round, leagueId, onlyPP }) => {
                         {t('liquidity-pool.pnl.lp-pnl')}
                     </SubHeader>
                 </SubHeaderWrapper>
-                {lpStats.map((stats, index) => {
+                {lpStats.map((stats: any, index: any) => {
                     const statsName = stats.name === 'CBBTC' ? 'cbBTC' : stats.name === 'WBTC' ? 'wBTC' : stats.name;
                     return index === lpStats.length - 1 ? (
                         <Section key={`total-${statsName}-${index}-${networkId}-lp`}>
@@ -62,7 +79,7 @@ const LpStats: React.FC<LpStatsProps> = ({ round, leagueId, onlyPP }) => {
                         {t('liquidity-pool.pnl.fees')}
                     </SubHeader>
                 </SubHeaderWrapper>
-                {lpStats.map((stats, index) => {
+                {lpStats.map((stats: any, index: any) => {
                     const statsName = stats.name === 'CBBTC' ? 'cbBTC' : stats.name === 'WBTC' ? 'wBTC' : stats.name;
                     return index === lpStats.length - 1 ? (
                         <Section key={`total-${statsName}-${index}-${networkId}-fees`}>
@@ -94,7 +111,7 @@ const LpStats: React.FC<LpStatsProps> = ({ round, leagueId, onlyPP }) => {
                         {t('liquidity-pool.pnl.users-pnl')}
                     </SubHeader>
                 </SubHeaderWrapper>
-                {lpStats.map((stats, index) => {
+                {lpStats.map((stats: any, index: any) => {
                     const statsName = stats.name === 'CBBTC' ? 'cbBTC' : stats.name === 'WBTC' ? 'wBTC' : stats.name;
                     return index === lpStats.length - 1 ? (
                         <Section key={`total-${statsName}-${index}-${networkId}-user`}>

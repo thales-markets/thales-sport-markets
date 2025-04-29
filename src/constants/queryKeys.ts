@@ -85,6 +85,13 @@ const QUERY_KEYS = {
             onlyPP,
             networkId,
         ],
+        LpPpStatsByLeague: (round: number, leagueId: League, networkId: Network) => [
+            'pnl',
+            'lpPpStatsByLeague',
+            round,
+            leagueId,
+            networkId,
+        ],
         LpTickets: (
             lpCollateral: LiquidityPoolCollateral,
             round: number,
