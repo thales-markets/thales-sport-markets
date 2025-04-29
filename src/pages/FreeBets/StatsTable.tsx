@@ -9,7 +9,7 @@ import useGetIsWhitelistedQuery from 'queries/freeBets/useGetIsWhitelistedQuery'
 import { useCallback, useState } from 'react';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
-import { FlexDivCentered } from 'styles/common';
+import { FlexDivCentered, FlexDivColumnNative } from 'styles/common';
 import { formatTxTimestamp, NetworkId } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
 import { getCollateralByAddress } from 'utils/collaterals';
@@ -57,7 +57,17 @@ const columns = [
     {
         header: <>Claimer</>,
         accessorKey: 'claimer',
-        cell: (cellProps: any) => <p>{cellProps.cell.getValue()}</p>,
+        cell: (cellProps: any) => {
+            const isSmartAccount = !!cellProps.row.original.EOA;
+            return isSmartAccount ? (
+                <FlexDivColumnNative gap={3}>
+                    <p>EOA: {cellProps.row.original.EOA}</p>
+                    <p>SA: {cellProps.cell.getValue()}</p>
+                </FlexDivColumnNative>
+            ) : (
+                <p>{cellProps.cell.getValue()}</p>
+            );
+        },
         size: 400,
         enableSorting: true,
     },
