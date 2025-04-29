@@ -167,16 +167,19 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
                             if (!isButtonDisable) {
                                 const id = toast.loading(t('get-started.universal-account.transfer-pending'));
                                 try {
-                                    await sendUniversalTranser(amount as any);
+                                    const result = await sendUniversalTranser(amount as any);
+                                    if (result?.success) {
+                                        refetchBalances(biconomyConnector.address, Network.OptimismMainnet);
 
-                                    refetchBalances(biconomyConnector.address, Network.OptimismMainnet);
-
-                                    await refetchUnifyBalance();
-                                    toast.update(
-                                        id,
-                                        getSuccessToastOptions(t('get-started.universal-account.success'))
-                                    );
-                                    onClose();
+                                        await refetchUnifyBalance();
+                                        toast.update(
+                                            id,
+                                            getSuccessToastOptions(t('get-started.universal-account.success'))
+                                        );
+                                        onClose();
+                                    } else {
+                                        toast.update(id, getErrorToastOptions(result?.message));
+                                    }
                                 } catch (e) {
                                     toast.update(id, getErrorToastOptions(t('get-started.universal-account.error')));
                                     console.log(e);

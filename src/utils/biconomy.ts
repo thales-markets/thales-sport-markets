@@ -24,6 +24,9 @@ import { waitForTransactionViaSocket } from './listener';
 export const GAS_LIMIT = 1;
 const ERROR_SESSION_NOT_FOUND = 'Error: Session not found.';
 const USER_REJECTED_ERROR = 'user rejected the request';
+const UNIVERSAL_BALANCE_NOT_ENOUGH =
+    'Rest balance is not enough to cover the fee. Please reduce the amount and try again.';
+const UNIVERSAL_BALANCE_NOT_SUFFICIENT = 'Your balance is insufficient';
 
 export const sendBiconomyTransaction = async (params: {
     networkId: SupportedNetwork;
@@ -557,28 +560,40 @@ const validateTx = async (transactionHash: string | undefined, networkId: Suppor
 };
 
 export const sendUniversalTranser = async (amount: string) => {
-    const testAmount = Number(amount);
-    const encodedCall = encodeFunctionData({
-        abi: multipleCollateral.USDT.abi,
-        functionName: 'transfer',
-        args: [biconomyConnector.address, coinParser('' + testAmount, Network.OptimismMainnet, 'USDT')],
-    });
+    try {
+        const testAmount = Number(amount);
+        const encodedCall = encodeFunctionData({
+            abi: multipleCollateral.USDT.abi,
+            functionName: 'transfer',
+            args: [biconomyConnector.address, coinParser('' + testAmount, Network.OptimismMainnet, 'USDT')],
+        });
 
-    const transactionLocal = {
-        to: multipleCollateral.USDT.addresses[Network.OptimismMainnet],
-        data: encodedCall,
-    };
+        const transactionLocal = {
+            to: multipleCollateral.USDT.addresses[Network.OptimismMainnet],
+            data: encodedCall,
+        };
 
-    const transaction = await biconomyConnector.universalAccount?.createUniversalTransaction({
-        expectTokens: [{ type: SUPPORTED_TOKEN_TYPE.USDT, amount: testAmount + '' }],
-        chainId: Network.OptimismMainnet,
-        transactions: [transactionLocal],
-    });
+        const transaction = await biconomyConnector.universalAccount?.createUniversalTransaction({
+            expectTokens: [{ type: SUPPORTED_TOKEN_TYPE.USDT, amount: testAmount + '' }],
+            chainId: Network.OptimismMainnet,
+            transactions: [transactionLocal],
+        });
 
-    const signature = await biconomyConnector.wallet?.signMessage(transaction.rootHash);
-    if (signature) {
-        const result = await biconomyConnector.universalAccount?.sendTransaction(transaction, signature);
-
-        console.log('Explorer URL:', `https://universalx.app/activity/details?id=${result.transactionId}`);
+        const signature = await biconomyConnector.wallet?.signMessage(transaction.rootHash);
+        if (signature) {
+            const result = await biconomyConnector.universalAccount?.sendTransaction(transaction, signature);
+            return {
+                success: true,
+                hash: result.transactionId,
+            };
+        }
+    } catch (e: any) {
+        if (e.message == UNIVERSAL_BALANCE_NOT_ENOUGH || e.message == UNIVERSAL_BALANCE_NOT_SUFFICIENT) {
+            return {
+                success: false,
+                message: UNIVERSAL_BALANCE_NOT_ENOUGH,
+            };
+        }
+        throw e;
     }
 };

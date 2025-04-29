@@ -2,10 +2,8 @@ import { createSmartAccountClient } from '@biconomy/account';
 import { IAssetsResponse, UniversalAccount } from '@GDdark/universal-account';
 import { LINKS } from 'constants/links';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useAccount, useChainId, useDisconnect, useSwitchChain, useWalletClient } from 'wagmi';
+import { useAccount, useChainId, useDisconnect, useWalletClient } from 'wagmi';
 import biconomyConnector from './biconomyWallet';
-import { delay } from './timer';
 
 // Singleton state outside the hook
 let smartAddressSingleton = '';
@@ -16,10 +14,8 @@ let initialized = false;
 
 function useBiconomy() {
     const [, forceUpdate] = useState({});
-    const dispatch = useDispatch();
     const networkId = useChainId();
     const { data: walletClient } = useWalletClient();
-    const { switchChain } = useSwitchChain();
     const { disconnect } = useDisconnect();
     const { isConnected } = useAccount();
 
@@ -35,25 +31,13 @@ function useBiconomy() {
                     biconomyPaymasterApiKey: PAYMASTER_API_KEY,
                 });
 
-                const universalAccount = new UniversalAccount({
-                    projectId: import.meta.env['VITE_APP_UA_PROJECT_ID'],
-                    ownerAddress: walletClient?.account.address as any,
-                });
-
-                const [smartAddressNew, smartAccountOptions, assets] = await Promise.all([
-                    smartAccount.getAccountAddress(),
-                    universalAccount.getSmartAccountOptions(),
-                    universalAccount.getPrimaryAssets(),
-                ]);
+                const [smartAddressNew] = await Promise.all([smartAccount.getAccountAddress()]);
 
                 if (!initialized) {
                     smartAddressSingleton = smartAddressNew;
-                    universalAddressSingleton = smartAccountOptions.smartAccountAddress ?? '';
-                    universalSolanaAddressSingleton = smartAccountOptions.solanaSmartAccountAddress ?? '';
-                    universalBalanceSingleton = assets;
                     initialized = true;
 
-                    biconomyConnector.setWallet(smartAccount, smartAddressNew, universalAccount);
+                    biconomyConnector.setWallet(smartAccount, smartAddressNew);
                     forceUpdate({}); // Trigger re-render
                 }
             };
@@ -68,7 +52,32 @@ function useBiconomy() {
             initialized = false;
             forceUpdate({}); // Trigger re-render
         }
-    }, [dispatch, switchChain, networkId, disconnect, walletClient, isConnected]);
+    }, [networkId, disconnect, walletClient, isConnected]);
+
+    useEffect(() => {
+        if (isConnected) {
+            const createUniversalAccount = async () => {
+                const universalAccount = new UniversalAccount({
+                    projectId: import.meta.env['VITE_APP_UA_PROJECT_ID'],
+                    ownerAddress: walletClient?.account.address as any,
+                });
+
+                const [smartAccountOptions, assets] = await Promise.all([
+                    universalAccount.getSmartAccountOptions(),
+                    universalAccount.getPrimaryAssets(),
+                ]);
+
+                universalAddressSingleton = smartAccountOptions.smartAccountAddress ?? '';
+                universalSolanaAddressSingleton = smartAccountOptions.solanaSmartAccountAddress ?? '';
+                universalBalanceSingleton = assets;
+
+                biconomyConnector.setUniversalAccount(universalAccount);
+                forceUpdate({}); // Trigger re-render
+            };
+
+            if (walletClient) createUniversalAccount();
+        }
+    }, [disconnect, walletClient, isConnected]);
 
     const refetchUnifyBalance = async () => {
         const universalAccount = new UniversalAccount({
@@ -77,13 +86,8 @@ function useBiconomy() {
         });
 
         const assets = await universalAccount.getPrimaryAssets();
-        if (assets.totalAmountInUSD === universalBalanceSingleton?.totalAmountInUSD) {
-            await delay(4000);
-            const assets2 = await universalAccount.getPrimaryAssets();
-            universalBalanceSingleton = assets2;
-        } else {
-            universalBalanceSingleton = assets;
-        }
+
+        universalBalanceSingleton = assets;
 
         forceUpdate({}); // Trigger re-render
     };
