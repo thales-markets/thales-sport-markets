@@ -7,6 +7,7 @@ import { SupportedNetwork } from 'types/network';
 export const ODDS_TYPES = [OddsType.AMERICAN, OddsType.AMM, OddsType.DECIMAL];
 
 export const SLIPPAGE_PERCENTAGES = [1, 5, 10];
+export const DEFAULT_SLIPPAGE_PERCENTAGE = SLIPPAGE_PERCENTAGES[1];
 
 export const APPROVAL_BUFFER = 0.01;
 export const SWAP_APPROVAL_BUFFER = 0.03;

@@ -900,6 +900,7 @@
             "slippage": {
                 "slippage": "Slippage",
                 "label": "Accept trade if odds drop by:",
+                "any-odds-label": "Accept any odds",
                 "enter-value": "Enter value",
                 "invalid-value": "Invalid value"
             },

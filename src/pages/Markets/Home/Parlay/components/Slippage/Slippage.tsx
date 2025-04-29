@@ -1,6 +1,7 @@
 import Tooltip from 'components/Tooltip';
 import Checkbox from 'components/fields/Checkbox';
 import NumericInput from 'components/fields/NumericInput';
+import { DEFAULT_SLIPPAGE_PERCENTAGE } from 'constants/markets';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled, { useTheme } from 'styled-components';
@@ -27,8 +28,9 @@ const Slippage: React.FC<SlippageProps> = ({ fixed, defaultValue, onChangeHandle
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
 
+    const [acceptAnyOdds, setAcceptAnyOdds] = useState(defaultValue === MAX_VALUE);
     const [slippage, setSlippage] = useState<number | string>(defaultValue || '');
-    const [slippageEnabled, setSlippageEnabled] = useState<boolean>(defaultValue !== 0);
+    const [slippageEnabled, setSlippageEnabled] = useState<boolean>(![MIN_VALUE, MAX_VALUE].includes(defaultValue));
 
     const max = maxValue || MAX_VALUE;
 
@@ -42,7 +44,7 @@ const Slippage: React.FC<SlippageProps> = ({ fixed, defaultValue, onChangeHandle
             return;
         }
 
-        if (numValue >= 0 && numValue <= max) {
+        if (numValue >= MIN_VALUE && numValue <= max) {
             setSlippage(value);
         } else if (numValue < MIN_VALUE) {
             setSlippage(MIN_VALUE);
@@ -56,11 +58,24 @@ const Slippage: React.FC<SlippageProps> = ({ fixed, defaultValue, onChangeHandle
             <Text>
                 <Checkbox
                     className="small-checkbox"
+                    value="acceptAnyOdds"
+                    checked={acceptAnyOdds}
+                    onChange={(e: any) => {
+                        setAcceptAnyOdds(!acceptAnyOdds);
+                        setSlippageEnabled(!e.target.checked);
+                        setSlippage(e.target.checked ? MAX_VALUE : DEFAULT_SLIPPAGE_PERCENTAGE);
+                    }}
+                />
+                {t('markets.parlay.slippage.any-odds-label')}
+            </Text>
+            <Text>
+                <Checkbox
+                    className="small-checkbox"
                     value="slippage"
                     checked={slippageEnabled}
                     onChange={(e: any) => {
                         setSlippageEnabled(!slippageEnabled);
-                        setSlippage(e.target.checked ? 1 : 0);
+                        setSlippage(e.target.checked ? DEFAULT_SLIPPAGE_PERCENTAGE : MIN_VALUE);
                     }}
                 />
                 {t('markets.parlay.slippage.label')}
@@ -110,11 +125,12 @@ const Slippage: React.FC<SlippageProps> = ({ fixed, defaultValue, onChangeHandle
 
 const HEIGHT = '30px';
 
-const Container = styled(FlexDivColumnCentered)``;
+const Container = styled(FlexDivColumnCentered)`
+    gap: 10px;
+`;
 
 const Row = styled(FlexDivRowCentered)`
     width: 100%;
-    margin-top: 10px;
 `;
 
 const Value = styled(FlexDivColumnCentered)<{ isSelected: boolean; disabled?: boolean }>`
