@@ -7,7 +7,7 @@ import { getOddsType } from 'redux/modules/ui';
 import { Coins } from 'thales-utils';
 import { TicketMarket } from 'types/markets';
 import { getCollateral } from 'utils/collaterals';
-import { formatMarketOdds, isWithinSlippage } from 'utils/markets';
+import { formatMarketOdds, isOddsDroppedWithinSlippage } from 'utils/markets';
 import {
     getMatchLabel,
     getPositionTextV2,
@@ -106,11 +106,15 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
                             document.getElementById('odd-change-down')?.classList.add('descend');
                         });
                     }
-                    if (
-                        !isWithinSlippage(firstClickMarket.current.odd, market.odd, market.live ? liveBetSlippage : 0)
-                    ) {
-                        setOddsChanged && setOddsChanged(true);
-                    }
+
+                    setOddsChanged &&
+                        setOddsChanged(
+                            !isOddsDroppedWithinSlippage(
+                                firstClickMarket.current.odd,
+                                market.odd,
+                                market.live ? liveBetSlippage : 0
+                            )
+                        );
                 }
             } else {
                 firstClickMarket.current = market;

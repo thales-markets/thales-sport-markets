@@ -113,7 +113,7 @@ import multipleCollateral from 'utils/contracts/multipleCollateralContract';
 import sportsAMMV2Contract from 'utils/contracts/sportsAMMV2Contract';
 import { isErrorExcluded, logErrorToDiscord } from 'utils/discord';
 import { convertFromBytes32 } from 'utils/formatters/string';
-import { formatMarketOdds } from 'utils/markets';
+import { formatMarketOdds, isOddsDroppedWithinSlippage } from 'utils/markets';
 import { getTradeData, ticketMarketAsSerializable } from 'utils/marketsV2';
 import { checkAllowance } from 'utils/network';
 import {
@@ -296,6 +296,7 @@ const Ticket: React.FC<TicketProps> = ({
         LOCAL_STORAGE_KEYS.SYSTEM_BET_DENOMINATOR,
         SYSTEM_BET_MINIMUM_DENOMINATOR
     );
+    const [sgpOddsChanged, setSgpOddsChanged] = useState(false);
     const [isTotalQuoteIncreased, setIsTotalQuoteIncreased] = useState(false);
 
     const userMultipliersQuery = useUserMultipliersQuery(address as any, { enabled: isConnected });
@@ -668,6 +669,7 @@ const Ticket: React.FC<TicketProps> = ({
         sgpData?.priceWithSpread,
     ]);
 
+    const initialSgpTotalQuote = useRef<number>(totalQuote);
     const previousTotalQuote = useRef<number>(totalQuote);
     const previousMarkets = useRef<TicketMarket[]>(markets);
     const previousUsedCollateral = useRef<Coins>(usedCollateralForBuy);
@@ -688,6 +690,10 @@ const Ticket: React.FC<TicketProps> = ({
                 (isOverCurrency(usedCollateralForBuy) || isOverCurrency(previousUsedCollateral.current)) &&
                 isOverCurrency(usedCollateralForBuy) !== isOverCurrency(previousUsedCollateral.current);
 
+            if (initialSgpTotalQuote.current === 0) {
+                initialSgpTotalQuote.current = totalQuote;
+            }
+
             if (
                 totalQuote &&
                 previousTotalQuote.current &&
@@ -695,16 +701,22 @@ const Ticket: React.FC<TicketProps> = ({
                 !isMarketsUpdated &&
                 !isQuoteChangedDueThalesBonus
             ) {
-                setOddsChanged && setOddsChanged(true);
+                setOddsChanged &&
+                    setOddsChanged(
+                        !isOddsDroppedWithinSlippage(initialSgpTotalQuote.current, totalQuote, liveBetSlippage)
+                    );
+                setSgpOddsChanged(true);
                 setIsTotalQuoteIncreased(totalQuote < previousTotalQuote.current); // smaller implied odds => higher quote
-            } else if (totalQuote === 0) {
+            } else if (totalQuote === 0 || isMarketsUpdated) {
                 acceptOddChanges && acceptOddChanges(false);
+                setSgpOddsChanged(false);
+                initialSgpTotalQuote.current = totalQuote;
             }
         }
         previousTotalQuote.current = totalQuote;
         previousMarkets.current = markets;
         previousUsedCollateral.current = usedCollateralForBuy;
-    }, [isSgp, totalQuote, markets, usedCollateralForBuy, setOddsChanged, acceptOddChanges]);
+    }, [isSgp, totalQuote, liveBetSlippage, markets, usedCollateralForBuy, setOddsChanged, acceptOddChanges]);
 
     const isSgpDataLoading = useMemo(() => isSgp && isValidSgpBet && !sgpData, [isSgp, isValidSgpBet, sgpData]);
 
@@ -2470,8 +2482,8 @@ const Ticket: React.FC<TicketProps> = ({
                             </SummaryValue>
                         </Tooltip>
                     )}
-                    {isSgp && oddsChanged && isTotalQuoteIncreased && <OddChangeUp />}
-                    {isSgp && oddsChanged && !isTotalQuoteIncreased && <OddChangeDown />}
+                    {isSgp && sgpOddsChanged && isTotalQuoteIncreased && <OddChangeUp />}
+                    {isSgp && sgpOddsChanged && !isTotalQuoteIncreased && <OddChangeDown />}
                     {!isSystemBet && (
                         <ClearLabel alignRight={true} onClick={() => dispatch(removeAll())}>
                             {t('markets.parlay.clear').toUpperCase()}
@@ -2890,7 +2902,11 @@ const Ticket: React.FC<TicketProps> = ({
                     </FlexDivCentered>
                     <FlexDivCentered>
                         <Button
-                            onClick={() => acceptOddChanges(false)}
+                            onClick={() => {
+                                acceptOddChanges(false);
+                                setSgpOddsChanged(false);
+                                initialSgpTotalQuote.current = totalQuote;
+                            }}
                             borderColor="transparent"
                             backgroundColor={theme.button.background.septenary}
                             {...defaultButtonProps}
