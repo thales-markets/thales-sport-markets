@@ -4,6 +4,7 @@ import { LINKS } from 'constants/links';
 import { useEffect, useState } from 'react';
 import { useAccount, useChainId, useDisconnect, useWalletClient } from 'wagmi';
 import biconomyConnector from './biconomyWallet';
+import { delay } from './timer';
 
 // Singleton state outside the hook
 let smartAddressSingleton = '';
@@ -55,7 +56,7 @@ function useBiconomy() {
     }, [networkId, disconnect, walletClient, isConnected]);
 
     useEffect(() => {
-        if (isConnected) {
+        if (isConnected && universalAddressSingleton === '') {
             const createUniversalAccount = async () => {
                 const universalAccount = new UniversalAccount({
                     projectId: import.meta.env['VITE_APP_UA_PROJECT_ID'],
@@ -80,14 +81,22 @@ function useBiconomy() {
     }, [disconnect, walletClient, isConnected]);
 
     const refetchUnifyBalance = async () => {
+        let RETRY_COUNT = 0;
         const universalAccount = new UniversalAccount({
             projectId: import.meta.env['VITE_APP_UA_PROJECT_ID'],
             ownerAddress: walletClient?.account.address as any,
         });
 
-        const assets = await universalAccount.getPrimaryAssets();
-
-        universalBalanceSingleton = assets;
+        while (RETRY_COUNT <= 10) {
+            const assets = await universalAccount.getPrimaryAssets();
+            if (assets.totalAmountInUSD !== universalBalanceSingleton?.totalAmountInUSD) {
+                universalBalanceSingleton = assets;
+                break;
+            } else {
+                RETRY_COUNT++;
+                await delay(1000);
+            }
+        }
 
         forceUpdate({}); // Trigger re-render
     };
