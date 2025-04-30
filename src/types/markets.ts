@@ -155,6 +155,9 @@ export type LiveTradingRequest = {
     line: number;
     position: number;
     buyInAmount: number;
+    expectedQuote: number;
+    payout: number;
+    collateral: Coins;
     status: LiveTradingTicketStatus;
     errorReason: string;
 };

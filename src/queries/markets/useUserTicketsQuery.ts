@@ -7,9 +7,10 @@ import { secondsToMilliseconds } from 'date-fns';
 import { ContractType } from 'enums/contract';
 import { LiveTradingTicketStatus } from 'enums/markets';
 import { orderBy } from 'lodash';
-import { bigNumberFormatter, getDefaultDecimalsForNetwork, NetworkId } from 'thales-utils';
+import { bigNumberFormatter, coinFormatter, getDefaultDecimalsForNetwork, NetworkId } from 'thales-utils';
 import { LiveTradingRequest, Ticket, TicketsWithRequestsInfo } from 'types/markets';
 import { NetworkConfig } from 'types/network';
+import { getCollateralByAddress } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import { convertFromBytes32 } from 'utils/formatters/string';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
@@ -209,6 +210,14 @@ export const useUserTicketsQuery = (
                                         request.buyInAmount,
                                         getDefaultDecimalsForNetwork(networkConfig.networkId)
                                     ),
+                                    expectedQuote: bigNumberFormatter(request.expectedQuote),
+                                    payout:
+                                        coinFormatter(
+                                            request.buyInAmount,
+                                            networkConfig.networkId,
+                                            request.collateral
+                                        ) / bigNumberFormatter(request.expectedQuote),
+                                    collateral: getCollateralByAddress(request.collateral, networkConfig.networkId),
                                     status,
                                     errorReason,
                                 };
