@@ -24,6 +24,12 @@ export enum PnlTab {
     TICKETS = 'tickets',
 }
 
+export enum LpStatsTab {
+    BY_LP = 'by-lp',
+    BY_LEAGUE = 'by-league',
+    BY_TYPE = 'by-type',
+}
+
 export enum OverdropTab {
     OVERDROP_HOME = 'overdrop-home',
     XP_CALCULATOR = 'xp-calculator',
