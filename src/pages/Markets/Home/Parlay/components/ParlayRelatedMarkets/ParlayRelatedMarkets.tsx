@@ -135,22 +135,10 @@ const ParlayRelatedMarkets: React.FC = () => {
         }
     }, secondsToMilliseconds(5));
 
-    const getRequestedMarket = (request: LiveTradingRequest) => {
-        const relatedSportMarket = liveTradingRequestAsSportMarket(request, gamesInfo);
-
-        return relatedSportMarket ? (
+    const getRequestedMarketInfo = (request: TicketMarketRequestData | LiveTradingRequest) => {
+        return request ? (
             <TicketRow isClickable={false}>
                 <MarketInfo data={request} isExpandable={false} gamesInfo={gamesInfo} />
-            </TicketRow>
-        ) : (
-            <></>
-        );
-    };
-
-    const getTempRequestedMarket = (ticketRequest: TicketMarketRequestData) => {
-        return ticketRequest ? (
-            <TicketRow isClickable={false}>
-                <MarketInfo data={ticketRequest} isExpandable={false} gamesInfo={gamesInfo} />
             </TicketRow>
         ) : (
             <></>
@@ -199,14 +187,15 @@ const ParlayRelatedMarkets: React.FC = () => {
                             {markets.map((relatedMarket: TicketMarketRequestData | LiveTradingRequest | Ticket, i) => {
                                 const isTicketCreated = !!(relatedMarket as Ticket)?.id;
                                 const isRequest = !!(relatedMarket as LiveTradingRequest)?.requestId;
+                                const requestedMarket = isRequest
+                                    ? (relatedMarket as LiveTradingRequest)
+                                    : (relatedMarket as TicketMarketRequestData);
                                 return (
                                     <RelatedMarket key={`row-${i}`}>
                                         {isTicketCreated ? (
                                             <ExpandableRow ticket={relatedMarket as Ticket} />
-                                        ) : isRequest ? (
-                                            getRequestedMarket(relatedMarket as LiveTradingRequest)
                                         ) : (
-                                            getTempRequestedMarket(relatedMarket as TicketMarketRequestData)
+                                            getRequestedMarketInfo(requestedMarket)
                                         )}
                                     </RelatedMarket>
                                 );
