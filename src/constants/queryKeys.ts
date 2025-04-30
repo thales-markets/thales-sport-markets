@@ -85,11 +85,20 @@ const QUERY_KEYS = {
             onlyPP,
             networkId,
         ],
-        LpPpStatsByLeague: (round: number, leagueId: League, networkId: Network) => [
+        LpPpStatsByType: (round: number, leagueId: League, onlyPP: boolean, networkId: Network) => [
+            'pnl',
+            'lpPpStatsByType',
+            round,
+            leagueId,
+            onlyPP,
+            networkId,
+        ],
+        LpPpStatsByLeague: (round: number, leagueId: League, onlyPP: boolean, networkId: Network) => [
             'pnl',
             'lpPpStatsByLeague',
             round,
             leagueId,
+            onlyPP,
             networkId,
         ],
         LpTickets: (

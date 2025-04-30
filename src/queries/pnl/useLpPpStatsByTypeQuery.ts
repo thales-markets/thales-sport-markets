@@ -43,25 +43,28 @@ const getLpStats = async (
     const finalTickets: Ticket[] = orderBy(
         updateTotalQuoteAndPayout(mappedTickets).filter(
             (ticket) =>
-                ticket.sportMarkets.length === 1 &&
-                ((ticket.sportMarkets[0].leagueId === leagueId && !!leagueId) || !leagueId) &&
-                ((ticket.sportMarkets[0].isPlayerPropsMarket && !!onlyPP) || !onlyPP)
+                ((ticket.sportMarkets.length === 1 && ticket.sportMarkets[0].leagueId === leagueId && !!leagueId) ||
+                    !leagueId) &&
+                ((ticket.sportMarkets.length === 1 && ticket.sportMarkets[0].isPlayerPropsMarket && !!onlyPP) ||
+                    !onlyPP)
         ),
         ['timestamp'],
         ['desc']
     );
 
-    const finalTicketsByLeague = groupBy(finalTickets, (ticket) => ticket.sportMarkets[0].leagueId);
+    const finalTicketsByType = groupBy(finalTickets, (ticket) =>
+        ticket.sportMarkets.length === 1 ? 'SINGLES' : 'PARLAYS'
+    );
 
-    const lpStatsByLeague: Record<number, LpStats> = {};
+    const lpStatsByType: Record<string, LpStats> = {};
 
-    Object.keys(finalTicketsByLeague).forEach((league) => {
+    Object.keys(finalTicketsByType).forEach((type) => {
         let pnl = 0;
         let fees = 0;
         let convertAmount = false;
         let collateral = '' as Coins;
 
-        const ticketsByLeague = finalTicketsByLeague[league];
+        const ticketsByLeague = finalTicketsByType[type];
 
         for (let index = 0; index < ticketsByLeague.length; index++) {
             const ticket = ticketsByLeague[index];
@@ -87,21 +90,21 @@ const getLpStats = async (
             feesInUsd: convertAmount ? fees * exchangeRates[collateral] : fees,
         };
 
-        lpStatsByLeague[Number(league)] = lpStats;
+        lpStatsByType[type] = lpStats;
     });
 
-    return lpStatsByLeague;
+    return lpStatsByType;
 };
 
-const useLpPpStatsByLeagueQuery = (
+const useLpPpStatsByTypeQuery = (
     round: number,
     leagueId: League,
     onlyPP: boolean,
     networkConfig: NetworkConfig,
-    options?: Omit<UseQueryOptions<Record<number, LpStats[]>>, 'queryKey' | 'queryFn'>
+    options?: Omit<UseQueryOptions<Record<string, LpStats[]>>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<Record<number, LpStats[]>>({
-        queryKey: QUERY_KEYS.Pnl.LpPpStatsByLeague(round, leagueId, onlyPP, networkConfig.networkId),
+    return useQuery<Record<string, LpStats[]>>({
+        queryKey: QUERY_KEYS.Pnl.LpPpStatsByType(round, leagueId, onlyPP, networkConfig.networkId),
         queryFn: async () => {
             try {
                 const [sportsAMMDataContract, liquidityPoolDataContract, priceFeedContract] = [
@@ -241,15 +244,15 @@ const useLpPpStatsByLeagueQuery = (
                         )
                     );
 
-                    const lpStatsByLeague: Record<number, LpStats[]> = {};
+                    const lpStatsByType: Record<string, LpStats[]> = {};
 
-                    allLeagues.forEach((league) => {
-                        const usdcLpStatsLeague = usdcLpStats[Number(league)];
-                        const wethLpStatsLeague = wethLpStats[Number(league)];
-                        const thalesLpStatsLeague = thalesLpStats[Number(league)];
-                        const overLpStatsLeague = overLpStats[Number(league)];
-                        const cbbtcLpStatsLeague = cbbtcLpStats[Number(league)];
-                        const wbtcLpStatsLeague = wbtcLpStats[Number(league)];
+                    allLeagues.forEach((type) => {
+                        const usdcLpStatsLeague = usdcLpStats[type];
+                        const wethLpStatsLeague = wethLpStats[type];
+                        const thalesLpStatsLeague = thalesLpStats[type];
+                        const overLpStatsLeague = overLpStats[type];
+                        const cbbtcLpStatsLeague = cbbtcLpStats[type];
+                        const wbtcLpStatsLeague = wbtcLpStats[type];
 
                         const totalLpStats: LpStats = {
                             name: 'TOTAL',
@@ -302,10 +305,10 @@ const useLpPpStatsByLeagueQuery = (
                         }
                         lpStats.push(totalLpStats);
 
-                        lpStatsByLeague[Number(league)] = lpStats;
+                        lpStatsByType[type] = lpStats;
                     });
 
-                    return lpStatsByLeague;
+                    return lpStatsByType;
                 }
 
                 return {};
@@ -318,4 +321,4 @@ const useLpPpStatsByLeagueQuery = (
     });
 };
 
-export default useLpPpStatsByLeagueQuery;
+export default useLpPpStatsByTypeQuery;

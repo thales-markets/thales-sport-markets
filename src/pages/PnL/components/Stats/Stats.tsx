@@ -10,7 +10,7 @@ import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow, FlexDivSpaceBetween } from 'styles/common';
 import Checkbox from '../../../../components/fields/Checkbox';
 import AllLpTickets from '../AllLpTickets';
-import LpPnl from '../LpStats';
+import LpStats from '../LpStats';
 import LpTickets from '../LpTickets';
 import LpUsersPnl from '../LpUsersPnl';
 import NavigationBar from '../NavigationBar';
@@ -104,7 +104,7 @@ const Stats: React.FC<StatsProps> = ({ selectedTab, setSelectedTab, currentRound
                     {isMobile && <NavigationBar selectedTab={selectedTab} setSelectedTab={setSelectedTab} />}
                 </NavigationWrapper>
                 {selectedTab == PnlTab.LP_STATS && (
-                    <LpPnl round={round} leagueId={leagueOptionsMap[league]} onlyPP={showOnlyPP} />
+                    <LpStats round={round} leagueId={leagueOptionsMap[league]} onlyPP={showOnlyPP} />
                 )}
                 {selectedTab == PnlTab.USDC_USERS_PNL && (
                     <LpUsersPnl
