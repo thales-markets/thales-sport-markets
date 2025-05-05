@@ -74,7 +74,7 @@ const getLpStats = async (
 
     const lpStats: LpStats = {
         name: name.toUpperCase(),
-        numberOfTickets: tickets.length,
+        numberOfTickets: finalTickets.length,
         pnl,
         fees,
         pnlInUsd: convertAmount ? pnl * exchangeRates[collateral] : pnl,

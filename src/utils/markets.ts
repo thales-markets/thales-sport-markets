@@ -1,8 +1,10 @@
+import { COUNTRY_BASED_TOURNAMENTS } from 'constants/markets';
 import { OddsType } from 'enums/markets';
 import {
     getLeagueIsDrawAvailable,
     getLeagueSport,
     isDrawAvailableMarket,
+    League,
     MarketType,
     MarketTypeMap,
     Sport,
@@ -21,7 +23,7 @@ export const formatMarketOdds = (oddsType: OddsType, odds: number | undefined) =
             if (decimal >= 2) {
                 return `+${formatCurrency((decimal - 1) * 100, 0)}`;
             } else {
-                return `-${formatCurrency(100 / (decimal - 1), 0)}`;
+                return decimal === 1 ? '-' : `-${formatCurrency(100 / (decimal - 1), 0)}`;
             }
         case OddsType.AMM:
         default:
@@ -63,4 +65,21 @@ export const isWithinSlippage = (originalOdd: number, newOdd: number, slippage: 
     }
     const allowedChange = (originalOdd * slippage) / 100;
     return newOdd < originalOdd ? newOdd >= originalOdd - allowedChange : newOdd <= originalOdd + allowedChange;
+};
+
+export const getCountryFromTournament = (tournament: string, leagueId: League): string => {
+    const leagueSport = getLeagueSport(leagueId);
+    const tournamentNameSplit = tournament.split(',');
+
+    const countryIndex =
+        tournamentNameSplit.length > 0 &&
+        tournamentNameSplit[tournamentNameSplit.length - 1].trim().toLowerCase() === 'qualifying'
+            ? tournamentNameSplit.length - 2
+            : tournamentNameSplit.length - 1;
+
+    const country =
+        countryIndex >= 0 && COUNTRY_BASED_TOURNAMENTS.includes(leagueSport)
+            ? tournamentNameSplit[countryIndex].trim()
+            : '';
+    return country;
 };
