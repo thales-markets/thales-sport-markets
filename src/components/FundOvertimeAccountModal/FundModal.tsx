@@ -27,6 +27,7 @@ import { getNetworkNameByNetworkId } from 'utils/network';
 import { getOnRamperUrl } from 'utils/particleWallet/utils';
 import { navigateTo } from 'utils/routes';
 import useBiconomy from 'utils/useBiconomy';
+import useUniversalAccount from 'utils/useUniversalAccount';
 import { useAccount, useChainId, useClient } from 'wagmi';
 
 type FundModalProps = {
@@ -37,6 +38,9 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
     const [showLetsBetButton, setShowLetsBetButton] = useState(false);
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const { t } = useTranslation();
+
+    const { universalAddress } = useUniversalAccount();
+    console.log(universalAddress);
 
     const client = useClient();
     const { address, isConnected } = useAccount();

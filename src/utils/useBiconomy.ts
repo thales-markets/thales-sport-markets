@@ -1,113 +1,52 @@
 import { createSmartAccountClient } from '@biconomy/account';
-import { IAssetsResponse, UniversalAccount } from '@GDdark/universal-account';
 import { LINKS } from 'constants/links';
 import { useEffect, useState } from 'react';
-import { useAccount, useChainId, useDisconnect, useWalletClient } from 'wagmi';
+import { useDispatch } from 'react-redux';
+import { useAccount, useChainId, useDisconnect, useSwitchChain, useWalletClient } from 'wagmi';
 import biconomyConnector from './biconomyWallet';
-import { delay } from './timer';
 
-// Singleton state outside the hook
-let smartAddressSingleton = '';
-let universalAddressSingleton = '';
-let universalSolanaAddressSingleton = '';
-let universalBalanceSingleton: IAssetsResponse | undefined;
-let initialized = false;
-
+// Hook for biconomy
 function useBiconomy() {
-    const [, forceUpdate] = useState({});
+    const [smartAddress, setSmartAddress] = useState('');
+    const dispatch = useDispatch();
     const networkId = useChainId();
     const { data: walletClient } = useWalletClient();
+    const { switchChain } = useSwitchChain();
     const { disconnect } = useDisconnect();
     const { isConnected } = useAccount();
 
     useEffect(() => {
-        if (isConnected) {
+        if (walletClient && isConnected) {
             const bundlerUrl = `${LINKS.Biconomy.Bundler}${networkId}/${import.meta.env.VITE_APP_BICONOMY_BUNDLE_KEY}`;
 
             const createSmartAccount = async () => {
                 const PAYMASTER_API_KEY = import.meta.env['VITE_APP_PAYMASTER_KEY_' + networkId];
                 const smartAccount = await createSmartAccountClient({
-                    signer: walletClient as any,
+                    signer: walletClient,
                     bundlerUrl: bundlerUrl,
                     biconomyPaymasterApiKey: PAYMASTER_API_KEY,
                 });
+                const smartAddressNew = await smartAccount.getAccountAddress();
 
-                const [smartAddressNew] = await Promise.all([smartAccount.getAccountAddress()]);
-
-                if (!initialized) {
-                    smartAddressSingleton = smartAddressNew;
-                    initialized = true;
-
+                if (smartAddress === '') {
                     biconomyConnector.setWallet(smartAccount, smartAddressNew);
-                    forceUpdate({}); // Trigger re-render
+                    setSmartAddress(smartAddressNew);
+                } else {
+                    if (smartAddress !== smartAddressNew) {
+                        biconomyConnector.setWallet(smartAccount, smartAddressNew);
+                        setSmartAddress(smartAddressNew);
+                    }
                 }
             };
 
-            if (walletClient) createSmartAccount();
-        } else if (initialized) {
+            createSmartAccount();
+        } else {
             biconomyConnector.resetWallet();
-            smartAddressSingleton = '';
-            universalAddressSingleton = '';
-            universalSolanaAddressSingleton = '';
-            universalBalanceSingleton = undefined;
-            initialized = false;
-            forceUpdate({}); // Trigger re-render
+            setSmartAddress('');
         }
-    }, [networkId, disconnect, walletClient, isConnected]);
+    }, [dispatch, switchChain, networkId, disconnect, walletClient, isConnected, smartAddress]);
 
-    useEffect(() => {
-        if (isConnected && universalAddressSingleton === '') {
-            const createUniversalAccount = async () => {
-                const universalAccount = new UniversalAccount({
-                    projectId: import.meta.env['VITE_APP_UA_PROJECT_ID'],
-                    ownerAddress: walletClient?.account.address as any,
-                });
-
-                const [smartAccountOptions, assets] = await Promise.all([
-                    universalAccount.getSmartAccountOptions(),
-                    universalAccount.getPrimaryAssets(),
-                ]);
-
-                universalAddressSingleton = smartAccountOptions.smartAccountAddress ?? '';
-                universalSolanaAddressSingleton = smartAccountOptions.solanaSmartAccountAddress ?? '';
-                universalBalanceSingleton = assets;
-
-                biconomyConnector.setUniversalAccount(universalAccount);
-                forceUpdate({}); // Trigger re-render
-            };
-
-            if (walletClient) createUniversalAccount();
-        }
-    }, [disconnect, walletClient, isConnected]);
-
-    const refetchUnifyBalance = async () => {
-        let RETRY_COUNT = 0;
-        const universalAccount = new UniversalAccount({
-            projectId: import.meta.env['VITE_APP_UA_PROJECT_ID'],
-            ownerAddress: walletClient?.account.address as any,
-        });
-
-        while (RETRY_COUNT <= 10) {
-            const assets = await universalAccount.getPrimaryAssets();
-            if (assets.totalAmountInUSD !== universalBalanceSingleton?.totalAmountInUSD) {
-                universalBalanceSingleton = assets;
-                break;
-            } else {
-                RETRY_COUNT++;
-                await delay(1000);
-            }
-        }
-
-        forceUpdate({}); // Trigger re-render
-    };
-
-    return {
-        smartAddress: smartAddressSingleton,
-        universalAddress: universalAddressSingleton,
-        universalBalance: universalBalanceSingleton,
-        universalSolanaAddress: universalSolanaAddressSingleton,
-        refetchUnifyBalance,
-    };
+    return { smartAddress };
 }
 
 export default useBiconomy;

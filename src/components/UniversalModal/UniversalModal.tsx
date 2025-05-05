@@ -18,7 +18,7 @@ import { sendUniversalTranser } from 'utils/biconomy';
 import biconomyConnector from 'utils/biconomyWallet';
 import { SUPPORTED_NETWORKS_UNIVERSAL_DEPOSIT } from 'utils/particleWallet/utils';
 import { refetchBalances } from 'utils/queryConnector';
-import useBiconomy from 'utils/useBiconomy';
+import useUniversalAccount from 'utils/useUniversalAccount';
 
 type UniversalModal = {
     onClose: () => void;
@@ -27,7 +27,7 @@ type UniversalModal = {
 const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
     const { t } = useTranslation();
 
-    const { universalAddress, universalSolanaAddress, universalBalance, refetchUnifyBalance } = useBiconomy();
+    const { universalAddress, universalSolanaAddress, universalBalance, refetchUnifyBalance } = useUniversalAccount();
 
     const theme: ThemeInterface = useTheme();
 
