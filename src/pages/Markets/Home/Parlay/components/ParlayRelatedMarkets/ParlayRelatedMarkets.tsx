@@ -10,11 +10,11 @@ import { ScreenSizeBreakpoint } from 'enums/ui';
 import useInterval from 'hooks/useInterval';
 import { orderBy } from 'lodash';
 import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { getTicket, getTicketRequestStatus } from 'redux/modules/ticket';
+import { getTicket, getTicketRequestStatus, removeTicketRequestById } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
@@ -43,6 +43,7 @@ import { Count, RadioButtonContainer, Title } from '../../ParlayV2';
 
 const ParlayRelatedMarkets: React.FC = () => {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
 
     const ticket = useSelector(getTicket);
     const ticketRequestStatusById = useSelector(getTicketRequestStatus);
@@ -87,6 +88,7 @@ const ParlayRelatedMarkets: React.FC = () => {
         [userTicketsQuery.isSuccess, userTicketsQuery.data]
     );
 
+    const prevLiveTradingRequests = useRef<LiveTradingRequest[]>([]);
     const liveTradingRequests: LiveTradingRequest[] = useMemo(
         () =>
             isLiveTypeSelected && userTicketsQuery.isSuccess && userTicketsQuery.data
@@ -101,16 +103,11 @@ const ParlayRelatedMarkets: React.FC = () => {
                 ? Object.keys(ticketRequestStatusById)
                       .filter(
                           (requestId) =>
+                              // remove those which are present in created tickets
                               !liveTradingRequests.some(
                                   (request) =>
-                                      (request.status === LiveTradingTicketStatus.SUCCESS &&
-                                          request.requestId === requestId) ||
-                                      // scenario when receipt not received, local status pending but maybe ticket is created or failed
-                                      (ticketRequestStatusById[requestId].status === LiveTradingTicketStatus.PENDING &&
-                                          (LiveTradingTicketStatus.ERROR, LiveTradingTicketStatus.SUCCESS).includes(
-                                              request.status
-                                          ) &&
-                                          request.timestamp > ticketRequestStatusById[requestId].timestamp)
+                                      request.status === LiveTradingTicketStatus.SUCCESS &&
+                                      request.requestId === requestId
                               )
                       )
                       .map((requestId) => ({
@@ -127,9 +124,40 @@ const ParlayRelatedMarkets: React.FC = () => {
                 request.status !== LiveTradingTicketStatus.SUCCESS &&
                 ticketRequestStatusById[request.requestId] === undefined // not in temp requests
         );
-        const requestsAndTickets = [...tempLiveTradingRequests, ...failedLiveTradingRequests, ...createdSingleTickets];
+
+        // Detect new liveTradingRequests and if there are new ones remove those pending from temp requests
+        let refreshedTempLiveTradingRequests = tempLiveTradingRequests;
+        if (!prevLiveTradingRequests.current.length) {
+            prevLiveTradingRequests.current = liveTradingRequests;
+        } else {
+            const diffCount = liveTradingRequests.filter(
+                (request) =>
+                    !prevLiveTradingRequests.current.some((prevRequest) => prevRequest.requestId === request.requestId)
+            ).length;
+            if (diffCount > 0) {
+                let removedCount = 0;
+                refreshedTempLiveTradingRequests = refreshedTempLiveTradingRequests.filter((request) => {
+                    const isPending = request.status === LiveTradingTicketStatus.PENDING;
+                    if (isPending) {
+                        removedCount++;
+                    }
+                    const keepRequest = !isPending || removedCount > diffCount;
+                    if (!keepRequest) {
+                        dispatch(removeTicketRequestById(request.initialRequestId));
+                    }
+                    return keepRequest;
+                });
+            }
+            prevLiveTradingRequests.current = liveTradingRequests;
+        }
+
+        const requestsAndTickets = [
+            ...refreshedTempLiveTradingRequests,
+            ...failedLiveTradingRequests,
+            ...createdSingleTickets,
+        ];
         return orderBy(requestsAndTickets, ['timestamp'], ['desc']).slice(0, LATEST_LIVE_REQUESTS_SIZE);
-    }, [tempLiveTradingRequests, liveTradingRequests, createdSingleTickets, ticketRequestStatusById]);
+    }, [tempLiveTradingRequests, liveTradingRequests, createdSingleTickets, ticketRequestStatusById, dispatch]);
 
     const isEmpty = useMemo(() => !markets.length, [markets]);
 
@@ -216,7 +244,7 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
     const [isExpanded, setIsExpanded] = useState(false);
 
     const isTicketCreated = !!(data as Ticket)?.id;
-    const isRequest = !!(data as LiveTradingRequest)?.requestId;
+    const isLiveTradingRequest = !!(data as LiveTradingRequest)?.user;
 
     let status = LiveTradingTicketStatus.PENDING;
     let odds = 0;
@@ -230,7 +258,7 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
         collateral = ticket.collateral;
         buyInAmount = ticket.buyInAmount;
         payout = ticket.payout;
-    } else if (isRequest) {
+    } else if (isLiveTradingRequest) {
         const requestedMarket = data as LiveTradingRequest;
         status = requestedMarket.status;
         odds = requestedMarket.expectedQuote;
@@ -281,32 +309,33 @@ const MarketInfo: React.FC<{
 }> = ({ data, isExpandable, isExpanded, gamesInfo }) => {
     const { t } = useTranslation();
 
-    const isRequest = !!(data as LiveTradingRequest)?.requestId;
+    const isLiveTradingRequest = !!(data as LiveTradingRequest)?.user;
     const isTicketCreated = !!(data as Ticket)?.id;
 
-    const timestamp = isRequest
+    const timestamp = isLiveTradingRequest
         ? new Date((data as LiveTradingRequest).timestamp)
         : isTicketCreated
         ? (data as Ticket).timestamp
         : (data as TicketMarketRequestData).timestamp;
 
-    const market: SportMarket | TicketMarket = isRequest
+    const market: SportMarket | TicketMarket = isLiveTradingRequest
         ? liveTradingRequestAsSportMarket(data as LiveTradingRequest, gamesInfo)
         : isTicketCreated
         ? (data as Ticket).sportMarkets[0]
         : (data as TicketMarketRequestData).ticket;
 
-    const position = isRequest ? (data as LiveTradingRequest).position : (market as TicketMarket).position;
+    const position = isLiveTradingRequest ? (data as LiveTradingRequest).position : (market as TicketMarket).position;
     const isLive =
-        isRequest || (isTicketCreated ? (data as Ticket).isLive : !!(data as TicketMarketRequestData).ticket.live);
+        isLiveTradingRequest ||
+        (isTicketCreated ? (data as Ticket).isLive : !!(data as TicketMarketRequestData).ticket.live);
 
-    const status = isRequest
+    const status = isLiveTradingRequest
         ? (data as LiveTradingRequest).status
         : isTicketCreated
         ? LiveTradingTicketStatus.SUCCESS
         : (data as TicketMarketRequestData).status;
 
-    const errorReason = isRequest
+    const errorReason = isLiveTradingRequest
         ? (data as LiveTradingRequest).errorReason
         : isTicketCreated
         ? ''

@@ -505,7 +505,7 @@ const Ticket: React.FC<TicketProps> = ({
     const maxAllowedExecutionDelay = useMemo(
         () =>
             liveTradingProcessorQuery.isSuccess && liveTradingProcessorQuery.data
-                ? liveTradingProcessorQuery.data.maxAllowedExecutionDelay + 10
+                ? liveTradingProcessorQuery.data.maxAllowedExecutionDelay
                 : 20,
         [liveTradingProcessorQuery.isSuccess, liveTradingProcessorQuery.data]
     );

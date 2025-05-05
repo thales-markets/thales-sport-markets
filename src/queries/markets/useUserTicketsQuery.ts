@@ -7,7 +7,7 @@ import { secondsToMilliseconds } from 'date-fns';
 import { ContractType } from 'enums/contract';
 import { LiveTradingTicketStatus } from 'enums/markets';
 import { orderBy } from 'lodash';
-import { bigNumberFormatter, coinFormatter, getDefaultDecimalsForNetwork, NetworkId } from 'thales-utils';
+import { bigNumberFormatter, coinFormatter, NetworkId } from 'thales-utils';
 import { LiveTradingRequest, Ticket, TicketsWithRequestsInfo } from 'types/markets';
 import { NetworkConfig } from 'types/network';
 import { getCollateralByAddress } from 'utils/collaterals';
@@ -200,6 +200,14 @@ export const useUserTicketsQuery = (
                                 const errorReason =
                                     status === LiveTradingTicketStatus.ERROR ? adapterRequest.message : '';
 
+                                const expectedQuote = bigNumberFormatter(request.expectedQuote);
+                                const collateral = getCollateralByAddress(request.collateral, networkConfig.networkId);
+                                const buyInAmount = coinFormatter(
+                                    request.buyInAmount,
+                                    networkConfig.networkId,
+                                    collateral
+                                );
+
                                 const liveTradingRequest: LiveTradingRequest = {
                                     user: request.user,
                                     requestId: request.requestId,
@@ -211,18 +219,10 @@ export const useUserTicketsQuery = (
                                     typeId: request.typeId,
                                     line: request.line / 100,
                                     position: request.position,
-                                    buyInAmount: bigNumberFormatter(
-                                        request.buyInAmount,
-                                        getDefaultDecimalsForNetwork(networkConfig.networkId)
-                                    ),
-                                    expectedQuote: bigNumberFormatter(request.expectedQuote),
-                                    payout:
-                                        coinFormatter(
-                                            request.buyInAmount,
-                                            networkConfig.networkId,
-                                            request.collateral
-                                        ) / bigNumberFormatter(request.expectedQuote),
-                                    collateral: getCollateralByAddress(request.collateral, networkConfig.networkId),
+                                    buyInAmount,
+                                    expectedQuote,
+                                    payout: buyInAmount / expectedQuote,
+                                    collateral,
                                     status,
                                     errorReason,
                                 };

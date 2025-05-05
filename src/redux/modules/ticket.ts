@@ -196,17 +196,21 @@ const ticketSlice = createSlice({
             }
 
             state.ticketRequestById[requestId] = {
-                ...state.ticketRequestById[requestId],
+                initialRequestId: action.payload.initialRequestId,
+                requestId,
                 status: action.payload.status,
                 errorReason: action.payload.errorReason,
                 ticket: action.payload.ticket,
                 buyInAmount: action.payload.buyInAmount,
                 payout: action.payload.payout,
                 collateral: action.payload.collateral,
+                timestamp: !state.ticketRequestById[requestId]?.timestamp
+                    ? Date.now()
+                    : state.ticketRequestById[requestId].timestamp,
             };
-            if (!state.ticketRequestById[requestId].timestamp) {
-                state.ticketRequestById[requestId].timestamp = Date.now();
-            }
+        },
+        removeTicketRequestById: (state, action: PayloadAction<string>) => {
+            delete state.ticketRequestById[action.payload];
         },
         setLiveBetSlippage: (state, action: PayloadAction<number>) => {
             state.liveBetSlippage = action.payload;
@@ -263,6 +267,7 @@ export const {
     removeFromTicket,
     removeAll,
     updateTicketRequestStatus,
+    removeTicketRequestById,
     setPaymentSelectedCollateralIndex,
     setPaymentAmountToBuy,
     setMaxTicketSize,
