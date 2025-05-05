@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import SPAAnchor from '../SPAAnchor';
 
-const IS_VISIBLE = true;
+const IS_VISIBLE = false; // Set to true to show the banner
 
 const Banner: React.FC = () => {
     return !IS_VISIBLE ? (

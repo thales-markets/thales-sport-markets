@@ -1,11 +1,12 @@
 export const LINKS = {
-    Overtime: 'https://overtimemarkets.xyz/',
+    Overtime: 'https://overtime.io/',
+    OvertimeMarkets: 'https://overtimemarkets.xyz/',
     Thales: 'https://thalesmarket.io/',
     SpeedMarkets: 'https://www.speedmarkets.xyz',
     TwitterTweetStatus: 'https://twitter.com/intent/tweet?text=',
     Footer: {
         Twitter: 'https://x.com/overtime_io',
-        Discord: 'https://discord.gg/z5xFxMccsu',
+        Discord: 'http://discord.gg/overtime-io',
         Docs: 'https://docs.overtime.io/',
         Medium: 'https://medium.com/@OvertimeMarkets.xyz',
         Tutorial: 'https://youtu.be/fk05qbqbuZo?si=zkaHBogLqB850pV3',
