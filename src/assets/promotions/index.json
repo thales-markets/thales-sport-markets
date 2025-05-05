@@ -353,11 +353,11 @@
     },
     {
         "title": "Use OVER to boost winnings by 2% for every market added to parlay",
-        "description": "using OVER as collateral on Overtime boosts your winnings by 2% per match/market added to your parlay. This makes it possible to boost your profits by a huge margin easily!",
+        "description": "Using OVER as collateral on Overtime boosts your winnings by 2% per match/market added to your parlay. This makes it possible to boost your profits by a huge margin easily!",
         "startDate": 1718187817,
         "endDate": 0,
-        "promotionId": "overtime-v2-thales-boost",
-        "promotionUrl": "/promotions/overtime-v2-thales-boost",
+        "promotionId": "overtime-v2-over-boost",
+        "promotionUrl": "/promotions/overtime-v2-over-boost",
         "backgroundImageUrl": "/promotions/thales-new.webp",
         "callToActionButton": "How to earn",
         "availableOnNetworks": [10, 42161],
@@ -365,7 +365,7 @@
             "coverImageUrl": "/promotions/thales-stakers.webp",
             "headerHtml": "<h1><span><span><span>Use OVER to boost winnings by 2% for every market added to parlay</span></span></span></h1>",
             "ctaSection": {
-                "sectionHtml": "<p> <span> <span> <span>using OVER as collateral on Overtime boosts your winnings by 2% per match/market added to your parlay. </p>",
+                "sectionHtml": "<p> <span> <span> <span>Using OVER as collateral on Overtime boosts your winnings by 2% per match/market added to your parlay. </p>",
                 "ctaButtonLink": "https://www.overtimemarkets.xyz/?lang=en&sport=All&status=OpenMarkets&showActive=true",
                 "ctaButtonLabel": "Play now"
             },
