@@ -97,26 +97,28 @@ const ParlayRelatedMarkets: React.FC = () => {
 
     const tempLiveTradingRequests: TicketMarketRequestData[] = useMemo(
         () =>
-            Object.keys(ticketRequestStatusById)
-                .filter(
-                    (requestId) =>
-                        !liveTradingRequests.some(
-                            (request) =>
-                                (request.status === LiveTradingTicketStatus.SUCCESS &&
-                                    request.requestId === requestId) ||
-                                // scenario when receipt not received, local status pending but maybe ticket is created or failed
-                                (ticketRequestStatusById[requestId].status === LiveTradingTicketStatus.PENDING &&
-                                    (LiveTradingTicketStatus.ERROR, LiveTradingTicketStatus.SUCCESS).includes(
-                                        request.status
-                                    ) &&
-                                    request.timestamp > ticketRequestStatusById[requestId].timestamp)
-                        )
-                )
-                .map((requestId) => ({
-                    ...ticketRequestStatusById[requestId],
-                    ticket: serializableTicketMarketAsTicketMarket(ticketRequestStatusById[requestId].ticket),
-                })),
-        [ticketRequestStatusById, liveTradingRequests]
+            isLiveTypeSelected
+                ? Object.keys(ticketRequestStatusById)
+                      .filter(
+                          (requestId) =>
+                              !liveTradingRequests.some(
+                                  (request) =>
+                                      (request.status === LiveTradingTicketStatus.SUCCESS &&
+                                          request.requestId === requestId) ||
+                                      // scenario when receipt not received, local status pending but maybe ticket is created or failed
+                                      (ticketRequestStatusById[requestId].status === LiveTradingTicketStatus.PENDING &&
+                                          (LiveTradingTicketStatus.ERROR, LiveTradingTicketStatus.SUCCESS).includes(
+                                              request.status
+                                          ) &&
+                                          request.timestamp > ticketRequestStatusById[requestId].timestamp)
+                              )
+                      )
+                      .map((requestId) => ({
+                          ...ticketRequestStatusById[requestId],
+                          ticket: serializableTicketMarketAsTicketMarket(ticketRequestStatusById[requestId].ticket),
+                      }))
+                : [],
+        [ticketRequestStatusById, liveTradingRequests, isLiveTypeSelected]
     );
 
     const markets: (TicketMarketRequestData | LiveTradingRequest | Ticket)[] = useMemo(() => {
