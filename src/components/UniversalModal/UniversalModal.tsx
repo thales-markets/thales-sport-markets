@@ -5,6 +5,7 @@ import Modal from 'components/Modal';
 import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from 'constants/currency';
+import { LINKS } from 'constants/links';
 import { Network } from 'enums/network';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import React, { useState } from 'react';
@@ -93,6 +94,7 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
                 </FlexDivSpaceBetween>
 
                 <DarkBackgroundWrapper>
+                    <FieldLabel>{t('get-started.universal-account.evm-label')}</FieldLabel>
                     <ChainWrapper>
                         <Asset className="currency-icon currency-icon--eth" />
                         <FieldHeader>{t('get-started.universal-account.evm')}</FieldHeader>
@@ -105,6 +107,7 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
                 </DarkBackgroundWrapper>
 
                 <DarkBackgroundWrapper>
+                    <FieldLabel>{t('get-started.universal-account.solana-label')}</FieldLabel>
                     <ChainWrapper>
                         <Asset className="currency-icon currency-icon--sol" />
                         <FieldHeader>{t('get-started.universal-account.solana')}</FieldHeader>
@@ -188,7 +191,7 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
                         Transfer to <OvertimeAcc className="icon icon--overtime" /> account
                     </Button>
                 </ButtonContainer>
-                <ParticleLogo />
+                <ParticleLogo onClick={() => window.open(LINKS.Particle, '_blank')} />
             </Wrapper>
         </Modal>
     );
@@ -206,6 +209,7 @@ const Wrapper = styled.div`
 
 const ParticleLogo = styled(particleLogo)`
     margin: 10px auto;
+    cursor: pointer;
 `;
 
 const DarkBackgroundWrapper = styled(FlexDivColumnCentered)`
@@ -259,6 +263,10 @@ const FieldHeader = styled.p`
     line-height: 16px;
     color: ${(props) => props.theme.textColor.primary};
     white-space: pre;
+`;
+
+const FieldLabel = styled(FieldHeader)`
+    font-size: 12px;
 `;
 
 const ButtonContainer = styled(FlexDivColumnCentered)`

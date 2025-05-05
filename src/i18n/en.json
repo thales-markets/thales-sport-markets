@@ -1112,7 +1112,7 @@
             "tooltip-2": "Deposit supported tokens to the address below. Make sure you select <span>{{ network }}</span> network when sending.",
             "tooltip-3": "Onramper integration, coming soon.",
             "tooltip-4": "Send funds from your wallet to your Overtime Account.",
-            "tooltip-universal": "Use brand new Particle's Universal Account to bridge funds from any chain to Overtime Account",
+            "tooltip-universal": "Use this option to fund your Overtime Account from any network or chain with ETH, USDC, USDT, SOL or BNB",
             "tooltip-5": "Buy Crypto using your credit card or wire transfer",
             "powered-by": "Powered by <icon/>",
             "current-network": "Current network: ",
@@ -1152,7 +1152,10 @@
             "amount": "Transfer amount",
             "transfer-pending": "Transfer to Overtime Account pending",
             "success": "Transfed funds to Overtime Account successfully",
-            "error": "Some error occurred while transfering funds."
+            "error": "Some error occurred while transfering funds.",
+            "warning": "Ethereum has high deposit fees. We recommend using any other network when possible.",
+            "evm-label": "Send ETH, USDC, USDT or BNB to this address",
+            "solana-label": "Send SOL to this address"
         }
     },
     "liquidity-pool": {
