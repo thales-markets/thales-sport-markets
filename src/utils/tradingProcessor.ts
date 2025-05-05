@@ -7,7 +7,7 @@ import { secondsToMilliseconds } from 'date-fns';
 import { LiveTradingTicketStatus } from 'enums/markets';
 import { toast } from 'react-toastify';
 import { updateTicketRequestStatus } from 'redux/modules/ticket';
-import { TicketMarket, TicketRequest, TradeData } from 'types/markets';
+import { TicketRequest, TradeData } from 'types/markets';
 import { SupportedNetwork } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { delay } from 'utils/timer';
@@ -17,7 +17,6 @@ import freeBetHolder from './contracts/freeBetHolder';
 import liveTradingProcessorContract from './contracts/liveTradingProcessorContract';
 import sgpTradingProcessorContract from './contracts/sgpTradingProcessorContract';
 import { convertFromBytes32 } from './formatters/string';
-import { ticketMarketAsSerializable } from './marketsV2';
 
 const DELAY_BETWEEN_CHECKS_SECONDS = 1; // 1s
 const UPDATE_STATUS_MESSAGE_PERIOD_SECONDS = 5 * DELAY_BETWEEN_CHECKS_SECONDS; // 5s - must be whole number multiplier of delay
@@ -29,7 +28,7 @@ const checkFulfilledTx = async (
     isFulfilledAdapterParam: boolean,
     toastId: string | number,
     dispatch?: Dispatch<PayloadAction<TicketRequest>>,
-    ticketMarket?: TicketMarket
+    liveTicketRequestData?: TicketRequest
 ) => {
     let isFulfilledAdapter = isFulfilledAdapterParam;
 
@@ -41,28 +40,23 @@ const checkFulfilledTx = async (
         if (!!adapterResponse.data) {
             if (adapterResponse.data.allow) {
                 dispatch &&
-                    ticketMarket &&
+                    liveTicketRequestData &&
                     dispatch(
                         updateTicketRequestStatus({
-                            initialRequestId: '',
-                            requestId,
+                            ...liveTicketRequestData,
                             status: LiveTradingTicketStatus.APPROVED,
-                            errorReason: '',
-                            ticket: ticketMarketAsSerializable(ticketMarket),
                         })
                     );
                 isFulfilledAdapter = true;
                 toast.update(toastId, getLoadingToastOptions(adapterResponse.data.message));
             } else {
                 dispatch &&
-                    ticketMarket &&
+                    liveTicketRequestData &&
                     dispatch(
                         updateTicketRequestStatus({
-                            initialRequestId: '',
-                            requestId,
+                            ...liveTicketRequestData,
                             status: LiveTradingTicketStatus.ERROR,
                             errorReason: adapterResponse.data.message,
-                            ticket: ticketMarketAsSerializable(ticketMarket),
                         })
                     );
                 toast.update(toastId, getErrorToastOptions(adapterResponse.data.message));
@@ -84,7 +78,7 @@ export const processTransaction = async (
     toastId: string | number,
     toastMessage: string,
     dispatch?: Dispatch<PayloadAction<TicketRequest>>,
-    ticketMarket?: TicketMarket
+    liveTicketRequestData?: TicketRequest
 ) => {
     let counter = 0;
     const startTime = Date.now();
@@ -96,7 +90,7 @@ export const processTransaction = async (
         false,
         toastId,
         dispatch,
-        ticketMarket
+        liveTicketRequestData
     );
 
     while (
@@ -107,14 +101,11 @@ export const processTransaction = async (
         const isUpdateStatusReady = counter / UPDATE_STATUS_MESSAGE_PERIOD_SECONDS === DELAY_BETWEEN_CHECKS_SECONDS;
         if (isUpdateStatusReady && !isFulfilledTx && isFulfilledAdapter) {
             dispatch &&
-                ticketMarket &&
+                liveTicketRequestData &&
                 dispatch(
                     updateTicketRequestStatus({
-                        initialRequestId: '',
-                        requestId,
+                        ...liveTicketRequestData,
                         status: LiveTradingTicketStatus.FULFILLING,
-                        errorReason: '',
-                        ticket: ticketMarketAsSerializable(ticketMarket),
                     })
                 );
             toast.update(toastId, getLoadingToastOptions(toastMessage));
@@ -130,7 +121,7 @@ export const processTransaction = async (
             isFulfilledAdapter,
             toastId,
             dispatch,
-            ticketMarket
+            liveTicketRequestData
         );
         isFulfilledTx = fulfilledResponse.isFulfilledTx;
         isFulfilledAdapter = fulfilledResponse.isFulfilledAdapter;

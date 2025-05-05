@@ -102,7 +102,14 @@ const ParlayRelatedMarkets: React.FC = () => {
                     (requestId) =>
                         !liveTradingRequests.some(
                             (request) =>
-                                request.status === LiveTradingTicketStatus.SUCCESS && request.requestId === requestId
+                                (request.status === LiveTradingTicketStatus.SUCCESS &&
+                                    request.requestId === requestId) ||
+                                // scenario when receipt not received, local status pending but maybe ticket is created or failed
+                                (ticketRequestStatusById[requestId].status === LiveTradingTicketStatus.PENDING &&
+                                    (LiveTradingTicketStatus.ERROR, LiveTradingTicketStatus.SUCCESS).includes(
+                                        request.status
+                                    ) &&
+                                    request.timestamp > ticketRequestStatusById[requestId].timestamp)
                         )
                 )
                 .map((requestId) => ({
@@ -118,8 +125,8 @@ const ParlayRelatedMarkets: React.FC = () => {
                 request.status !== LiveTradingTicketStatus.SUCCESS &&
                 ticketRequestStatusById[request.requestId] === undefined // not in temp requests
         );
-        const requestAndTickets = [...tempLiveTradingRequests, ...failedLiveTradingRequests, ...createdSingleTickets];
-        return orderBy(requestAndTickets, ['timestamp'], ['desc']).slice(0, LATEST_LIVE_REQUESTS_SIZE);
+        const requestsAndTickets = [...tempLiveTradingRequests, ...failedLiveTradingRequests, ...createdSingleTickets];
+        return orderBy(requestsAndTickets, ['timestamp'], ['desc']).slice(0, LATEST_LIVE_REQUESTS_SIZE);
     }, [tempLiveTradingRequests, liveTradingRequests, createdSingleTickets, ticketRequestStatusById]);
 
     const isEmpty = useMemo(() => !markets.length, [markets]);
@@ -127,23 +134,15 @@ const ParlayRelatedMarkets: React.FC = () => {
     // Refresh pending requests on every 5s
     useInterval(() => {
         const isPendingRequests = liveTradingRequests.some(
-            (market) => market.requestId && market.status !== LiveTradingTicketStatus.ERROR
+            (market) =>
+                market.requestId &&
+                ![LiveTradingTicketStatus.ERROR, LiveTradingTicketStatus.SUCCESS].includes(market.status)
         );
 
         if (isPendingRequests) {
             refetchUserTickets(walletAddress, networkId, true);
         }
     }, secondsToMilliseconds(5));
-
-    const getRequestedMarketInfo = (request: TicketMarketRequestData | LiveTradingRequest) => {
-        return request ? (
-            <TicketRow isClickable={false}>
-                <MarketInfo data={request} isExpandable={false} gamesInfo={gamesInfo} />
-            </TicketRow>
-        ) : (
-            <></>
-        );
-    };
 
     return (
         <Container>
@@ -185,18 +184,14 @@ const ParlayRelatedMarkets: React.FC = () => {
                     <Scroll height={isMobile ? '467px' : '100%'}>
                         <RelatedMarkets>
                             {markets.map((relatedMarket: TicketMarketRequestData | LiveTradingRequest | Ticket, i) => {
-                                const isTicketCreated = !!(relatedMarket as Ticket)?.id;
-                                const isRequest = !!(relatedMarket as LiveTradingRequest)?.requestId;
-                                const requestedMarket = isRequest
-                                    ? (relatedMarket as LiveTradingRequest)
-                                    : (relatedMarket as TicketMarketRequestData);
+                                const key =
+                                    (relatedMarket as Ticket)?.id ||
+                                    (relatedMarket as LiveTradingRequest)?.requestId ||
+                                    (relatedMarket as TicketMarketRequestData)?.initialRequestId ||
+                                    i;
                                 return (
-                                    <RelatedMarket key={`row-${i}`}>
-                                        {isTicketCreated ? (
-                                            <ExpandableRow ticket={relatedMarket as Ticket} />
-                                        ) : (
-                                            getRequestedMarketInfo(requestedMarket)
-                                        )}
+                                    <RelatedMarket key={key}>
+                                        <ExpandableRow data={relatedMarket} gamesInfo={gamesInfo} />
                                     </RelatedMarket>
                                 );
                             })}
@@ -208,33 +203,67 @@ const ParlayRelatedMarkets: React.FC = () => {
     );
 };
 
-const ExpandableRow: React.FC<{ ticket: Ticket }> = ({ ticket }) => {
+const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarketRequestData; gamesInfo: any }> = ({
+    data,
+    gamesInfo,
+}) => {
     const { t } = useTranslation();
 
     const selectedOddsType = useSelector(getOddsType);
 
     const [isExpanded, setIsExpanded] = useState(false);
 
-    const market = ticket.sportMarkets[0];
+    const isTicketCreated = !!(data as Ticket)?.id;
+    const isRequest = !!(data as LiveTradingRequest)?.requestId;
+
+    let status = LiveTradingTicketStatus.PENDING;
+    let odds = 0;
+    let collateral = '';
+    let buyInAmount = 0;
+    let payout = 0;
+    if (isTicketCreated) {
+        const ticket = data as Ticket;
+        status = LiveTradingTicketStatus.SUCCESS;
+        odds = ticket.sportMarkets[0].odd;
+        collateral = ticket.collateral;
+        buyInAmount = ticket.buyInAmount;
+        payout = ticket.payout;
+    } else if (isRequest) {
+        const requestedMarket = data as LiveTradingRequest;
+        status = requestedMarket.status;
+        odds = requestedMarket.expectedQuote;
+        collateral = requestedMarket.collateral;
+        buyInAmount = requestedMarket.buyInAmount;
+        payout = requestedMarket.payout;
+    } else {
+        const requestedMarket = data as TicketMarketRequestData;
+        status = requestedMarket.status;
+        odds = requestedMarket.ticket.odd;
+        collateral = requestedMarket.collateral;
+        buyInAmount = requestedMarket.buyInAmount;
+        payout = requestedMarket.payout;
+    }
+
+    const isExpandable = [LiveTradingTicketStatus.SUCCESS, LiveTradingTicketStatus.ERROR].includes(status);
 
     return (
         <>
-            <TicketRow onClick={() => setIsExpanded(!isExpanded)} isClickable>
-                <MarketInfo data={ticket} isExpandable isExpanded={isExpanded} />
+            <TicketRow onClick={() => setIsExpanded(!isExpanded)} isClickable={isExpandable}>
+                <MarketInfo data={data} isExpandable={isExpandable} isExpanded={isExpanded} gamesInfo={gamesInfo} />
             </TicketRow>
             {isExpanded && (
                 <TicketDetailsRow>
                     <OddsInfo>
                         <PositionText isLabel>{t('markets.parlay-related-markets.total-quote')}:</PositionText>
-                        <PositionText>{formatMarketOdds(selectedOddsType, market.odd)}</PositionText>
+                        <PositionText>{formatMarketOdds(selectedOddsType, odds)}</PositionText>
                     </OddsInfo>
                     <PaidInfo>
                         <Text isLabel>{t('markets.parlay-related-markets.paid')}:</Text>
-                        <Text>{formatCurrencyWithKey(ticket.collateral, ticket.buyInAmount)}</Text>
+                        <Text>{formatCurrencyWithKey(collateral, buyInAmount)}</Text>
                     </PaidInfo>
                     <PayoutInfo>
                         <PayoutText isLabel>{t('markets.parlay-related-markets.payout')}:</PayoutText>
-                        <PayoutText>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</PayoutText>
+                        <PayoutText>{formatCurrencyWithKey(collateral, payout)}</PayoutText>
                     </PayoutInfo>
                 </TicketDetailsRow>
             )}
@@ -327,6 +356,7 @@ const Container = styled(FlexDivColumn)`
 const MarketsContainer = styled(FlexDivColumn)`
     position: relative;
     height: 100%;
+    min-height: 150px;
 `;
 
 const MarketsTypeContainer = styled(FlexDivCentered)`

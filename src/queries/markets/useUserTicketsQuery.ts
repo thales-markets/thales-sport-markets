@@ -164,12 +164,17 @@ export const useUserTicketsQuery = (
                             .filter((request: any) => Number(request.timestamp) !== 0)
                             .map((request: any) => request.requestId);
 
-                        const adapterRequestsResponse = await fetch(
-                            `${generalConfig.API_URL}/overtime-v2/networks/${
-                                networkConfig.networkId
-                            }/live-trading/read-message/request/${allRequestIds[0]}?requestIds=${allRequestIds.join()}`
-                        );
-                        const adapterRequestsStatus = await adapterRequestsResponse.json();
+                        let adapterRequests = [];
+                        if (allRequestIds.length > 0) {
+                            const adapterRequestsResponse = await fetch(
+                                `${generalConfig.API_URL}/overtime-v2/networks/${
+                                    networkConfig.networkId
+                                }/live-trading/read-message/request/${
+                                    allRequestIds[0]
+                                }?requestIds=${allRequestIds.join()}`
+                            );
+                            adapterRequests = await adapterRequestsResponse.json();
+                        }
 
                         latestRequestsDataPerUser
                             .filter((request: any) => Number(request.timestamp) !== 0)
@@ -178,11 +183,11 @@ export const useUserTicketsQuery = (
                                 const timestamp = secondsToMilliseconds(Number(request.timestamp));
                                 const maturityTimestamp = secondsToMilliseconds(Number(request.maturityTimestamp));
 
-                                const adapterRequestStatus = adapterRequestsStatus.find(
+                                const adapterRequest = adapterRequests.find(
                                     (response: any) => response?.requestId === request.requestId
                                 );
-                                const isAdapterFailed = adapterRequestStatus && adapterRequestStatus.allow === false;
-                                const isAdapterApproved = adapterRequestStatus && adapterRequestStatus.allow === true;
+                                const isAdapterFailed = !!adapterRequest && adapterRequest.allow === false;
+                                const isAdapterApproved = !!adapterRequest && adapterRequest.allow === true;
 
                                 const status = isFulfilled
                                     ? LiveTradingTicketStatus.SUCCESS
@@ -193,7 +198,7 @@ export const useUserTicketsQuery = (
                                     : LiveTradingTicketStatus.REQUESTED;
 
                                 const errorReason =
-                                    status === LiveTradingTicketStatus.ERROR ? adapterRequestStatus.message : '';
+                                    status === LiveTradingTicketStatus.ERROR ? adapterRequest.message : '';
 
                                 const liveTradingRequest: LiveTradingRequest = {
                                     user: request.user,

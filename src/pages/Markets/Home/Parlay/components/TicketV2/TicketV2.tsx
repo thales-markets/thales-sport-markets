@@ -87,7 +87,7 @@ import {
     getPrecision,
     roundNumberToDecimals,
 } from 'thales-utils';
-import { SportsAmmData, TicketMarket, TradeData } from 'types/markets';
+import { SportsAmmData, TicketMarket, TicketRequest, TradeData } from 'types/markets';
 import { OverdropMultiplier, OverdropUserData } from 'types/overdrop';
 import { RootState } from 'types/redux';
 import { SportsbookData } from 'types/sgp';
@@ -1487,19 +1487,6 @@ const Ticket: React.FC<TicketProps> = ({
             setIsBuying(true);
             const toastId = toast.loading(t('market.toast-message.transaction-pending'));
 
-            const initialRequestId = `initialRequestId${Date.now()}`;
-            if (isLiveTicket) {
-                dispatch(
-                    updateTicketRequestStatus({
-                        initialRequestId,
-                        requestId: '',
-                        status: LiveTradingTicketStatus.PENDING,
-                        errorReason: '',
-                        ticket: ticketMarketAsSerializable(markets[0]),
-                    })
-                );
-            }
-
             let step = buyStep;
             let overAmount = swappedOverToReceive;
             if (swapToOver) {
@@ -1531,6 +1518,20 @@ const Ticket: React.FC<TicketProps> = ({
                     setIsBuying(false);
                     return;
                 }
+            }
+
+            const liveTicketRequestData: TicketRequest = {
+                initialRequestId: `initialRequestId${Date.now()}`,
+                requestId: '',
+                status: LiveTradingTicketStatus.PENDING,
+                errorReason: '',
+                ticket: ticketMarketAsSerializable(markets[0]),
+                buyInAmount: Number(buyInAmount),
+                payout: payout,
+                collateral: usedCollateralForBuy,
+            };
+            if (isLiveTicket) {
+                dispatch(updateTicketRequestStatus(liveTicketRequestData));
             }
 
             let tradeData: TradeData[] = [];
@@ -1710,16 +1711,14 @@ const Ticket: React.FC<TicketProps> = ({
                         if (!requestId) {
                             throw new Error('Request ID not found');
                         }
+                        liveTicketRequestData.requestId = requestId;
 
                         if (liveOrSgpTradingProcessorContract) {
                             if (isLiveTicket) {
                                 dispatch(
                                     updateTicketRequestStatus({
-                                        initialRequestId,
-                                        requestId,
+                                        ...liveTicketRequestData,
                                         status: LiveTradingTicketStatus.REQUESTED,
-                                        errorReason: '',
-                                        ticket: ticketMarketAsSerializable(markets[0]),
                                     })
                                 );
                             }
@@ -1738,7 +1737,7 @@ const Ticket: React.FC<TicketProps> = ({
                                 toastId,
                                 t(`market.toast-message.${isSgp ? 'fulfilling-sgp-trade' : 'fulfilling-live-trade'}`),
                                 isLiveTicket ? dispatch : undefined,
-                                markets[0]
+                                isLiveTicket ? liveTicketRequestData : undefined
                             );
 
                             if (isAdapterError) {
@@ -1747,11 +1746,9 @@ const Ticket: React.FC<TicketProps> = ({
                                 if (isLiveTicket) {
                                     dispatch(
                                         updateTicketRequestStatus({
-                                            initialRequestId,
-                                            requestId,
+                                            ...liveTicketRequestData,
                                             status: LiveTradingTicketStatus.ERROR,
                                             errorReason: t('markets.parlay.tx-not-received'),
-                                            ticket: ticketMarketAsSerializable(markets[0]),
                                         })
                                     );
                                 }
@@ -1761,11 +1758,8 @@ const Ticket: React.FC<TicketProps> = ({
                                 if (isLiveTicket) {
                                     dispatch(
                                         updateTicketRequestStatus({
-                                            initialRequestId,
-                                            requestId,
+                                            ...liveTicketRequestData,
                                             status: LiveTradingTicketStatus.SUCCESS,
-                                            errorReason: '',
-                                            ticket: ticketMarketAsSerializable(markets[0]),
                                         })
                                     );
                                 }
@@ -1846,6 +1840,16 @@ const Ticket: React.FC<TicketProps> = ({
                         refetchProofs(networkId, markets);
                     }
                     setIsBuying(false);
+                    refetchAfterBuy(walletAddress, networkId, isLiveTicket);
+                    if (isLiveTicket) {
+                        dispatch(
+                            updateTicketRequestStatus({
+                                ...liveTicketRequestData,
+                                status: LiveTradingTicketStatus.ERROR,
+                                errorReason: t('common.errors.unknown-error-try-again'),
+                            })
+                        );
+                    }
                     toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
                 }
             } catch (e) {
@@ -1854,11 +1858,9 @@ const Ticket: React.FC<TicketProps> = ({
                 if (isLiveTicket) {
                     dispatch(
                         updateTicketRequestStatus({
-                            initialRequestId,
-                            requestId: '',
+                            ...liveTicketRequestData,
                             status: LiveTradingTicketStatus.ERROR,
                             errorReason: t('common.errors.unknown-error-try-again'),
-                            ticket: ticketMarketAsSerializable(markets[0]),
                         })
                     );
                 }

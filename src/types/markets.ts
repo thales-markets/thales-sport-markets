@@ -226,6 +226,9 @@ export type TicketRequest = {
     status: LiveTradingTicketStatus;
     errorReason: string;
     ticket: SerializableTicketMarket;
+    buyInAmount: number;
+    payout: number;
+    collateral: Coins;
 };
 export type TicketRequestData = TicketRequest & {
     timestamp: number;
@@ -236,6 +239,9 @@ export type TicketMarketRequestData = {
     status: LiveTradingTicketStatus;
     errorReason: string;
     ticket: TicketMarket;
+    buyInAmount: number;
+    payout: number;
+    collateral: Coins;
     timestamp: number;
 };
 export type TicketRequestById = Record<string, TicketRequestData>;
