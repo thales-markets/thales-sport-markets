@@ -5,6 +5,7 @@ import { PLAYER_PROPS_SPECIAL_SPORTS } from 'constants/sports';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import LazyLoad, { forceCheck } from 'react-lazyload';
 import { useSelector } from 'react-redux';
 import { getMarketTypeFilter, getMarketTypeGroupFilter, getSelectedMarket } from 'redux/modules/market';
 import { FlexDivColumn, FlexDivRowCentered } from 'styles/common';
@@ -66,7 +67,12 @@ const GameList: React.FC<{ markets: SportMarket[]; language: string }> = ({ mark
     return (
         <>
             <PlayerPropsHeader
-                onClick={() => setHidemarkets(!hideMarkets)}
+                onClick={() => {
+                    setHidemarkets(!hideMarkets);
+                    setTimeout(() => {
+                        forceCheck();
+                    }, 1);
+                }}
                 marketSelected={!!selectedMarket}
                 collapsed={hideMarkets}
             >
@@ -121,38 +127,42 @@ const GameList: React.FC<{ markets: SportMarket[]; language: string }> = ({ mark
             </PlayerPropsHeader>
             {!hideMarkets &&
                 sortedMarkets.map((market: SportMarket, index: number) => (
-                    <MarketListCardV2
-                        language={language}
-                        market={market}
-                        key={index + 'list'}
-                        oddsTitlesHidden={
-                            !(
-                                index === 0 ||
-                                ((sortedMarkets[index - 1].childMarkets[0]?.typeId !== market.childMarkets[0]?.typeId ||
-                                    sortedMarkets[index - 1].childMarkets[1]?.typeId !==
-                                        market.childMarkets[1]?.typeId ||
-                                    sortedMarkets[index - 1].childMarkets[2]?.typeId !==
-                                        market.childMarkets[2]?.typeId) &&
-                                    PLAYER_PROPS_SPECIAL_SPORTS.includes(market.sport) &&
-                                    getSpecializedPropForMarket(sortedMarkets[index - 1]) !==
-                                        getSpecializedPropForMarket(market) &&
-                                    !marketTypeGroupFilter)
-                            ) || !!marketTypeFilter
-                        }
-                        floatingOddsTitles={
-                            (index === 0 ||
-                                ((sortedMarkets[index - 1].childMarkets[0]?.typeId !== market.childMarkets[0]?.typeId ||
-                                    sortedMarkets[index - 1].childMarkets[1]?.typeId !==
-                                        market.childMarkets[1]?.typeId ||
-                                    sortedMarkets[index - 1].childMarkets[2]?.typeId !==
-                                        market.childMarkets[2]?.typeId) &&
-                                    PLAYER_PROPS_SPECIAL_SPORTS.includes(market.sport) &&
-                                    getSpecializedPropForMarket(sortedMarkets[index - 1]) !==
-                                        getSpecializedPropForMarket(market) &&
-                                    !marketTypeGroupFilter)) &&
-                            !marketTypeFilter
-                        }
-                    />
+                    <LazyLoad height={100} key={index + 'list'} offset={800}>
+                        <MarketListCardV2
+                            language={language}
+                            market={market}
+                            key={index + 'list'}
+                            oddsTitlesHidden={
+                                !(
+                                    index === 0 ||
+                                    ((sortedMarkets[index - 1].childMarkets[0]?.typeId !==
+                                        market.childMarkets[0]?.typeId ||
+                                        sortedMarkets[index - 1].childMarkets[1]?.typeId !==
+                                            market.childMarkets[1]?.typeId ||
+                                        sortedMarkets[index - 1].childMarkets[2]?.typeId !==
+                                            market.childMarkets[2]?.typeId) &&
+                                        PLAYER_PROPS_SPECIAL_SPORTS.includes(market.sport) &&
+                                        getSpecializedPropForMarket(sortedMarkets[index - 1]) !==
+                                            getSpecializedPropForMarket(market) &&
+                                        !marketTypeGroupFilter)
+                                ) || !!marketTypeFilter
+                            }
+                            floatingOddsTitles={
+                                (index === 0 ||
+                                    ((sortedMarkets[index - 1].childMarkets[0]?.typeId !==
+                                        market.childMarkets[0]?.typeId ||
+                                        sortedMarkets[index - 1].childMarkets[1]?.typeId !==
+                                            market.childMarkets[1]?.typeId ||
+                                        sortedMarkets[index - 1].childMarkets[2]?.typeId !==
+                                            market.childMarkets[2]?.typeId) &&
+                                        PLAYER_PROPS_SPECIAL_SPORTS.includes(market.sport) &&
+                                        getSpecializedPropForMarket(sortedMarkets[index - 1]) !==
+                                            getSpecializedPropForMarket(market) &&
+                                        !marketTypeGroupFilter)) &&
+                                !marketTypeFilter
+                            }
+                        />
+                    </LazyLoad>
                 ))}
         </>
     );
