@@ -125,7 +125,9 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
                         <BalanceContainer>
                             <FieldHeader>
                                 Total Balance{' '}
-                                <Reload onClick={() => refetchUnifyBalance()} className="icon icon--revert" />
+                                <Tooltip overlay={t('get-started.universal-account.refresh')}>
+                                    <Reload onClick={() => refetchUnifyBalance()} className="icon icon--revert" />
+                                </Tooltip>
                             </FieldHeader>
 
                             <Balance>

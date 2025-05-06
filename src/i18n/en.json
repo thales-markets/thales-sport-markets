@@ -1155,7 +1155,8 @@
             "error": "Some error occurred while transfering funds.",
             "warning": "Ethereum has high deposit fees. We recommend using any other network when possible.",
             "evm-label": "Send ETH, USDC, USDT or BNB to this address",
-            "solana-label": "Send SOL to this address"
+            "solana-label": "Send SOL to this address",
+            "refresh": "Refresh your balance"
         }
     },
     "liquidity-pool": {
