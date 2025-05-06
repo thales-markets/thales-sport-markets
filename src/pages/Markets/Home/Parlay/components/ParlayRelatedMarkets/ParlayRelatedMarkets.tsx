@@ -246,32 +246,52 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
     const isTicketCreated = !!(data as Ticket)?.id;
     const isLiveTradingRequest = !!(data as LiveTradingRequest)?.user;
 
+    let market: SportMarket | TicketMarket;
+    let isLive = false;
+    let position = 0;
     let status = LiveTradingTicketStatus.PENDING;
+    let errorReason = '';
     let odds = 0;
     let collateral = '';
     let buyInAmount = 0;
     let payout = 0;
+    let timestamp = 0;
     if (isTicketCreated) {
         const ticket = data as Ticket;
+        market = ticket.sportMarkets[0];
+        isLive = ticket.isLive;
+        position = (market as TicketMarket).position;
         status = LiveTradingTicketStatus.SUCCESS;
+        errorReason = '';
         odds = ticket.sportMarkets[0].odd;
         collateral = ticket.collateral;
         buyInAmount = ticket.buyInAmount;
         payout = ticket.payout;
+        timestamp = ticket.timestamp;
     } else if (isLiveTradingRequest) {
         const requestedMarket = data as LiveTradingRequest;
+        market = liveTradingRequestAsSportMarket(requestedMarket, gamesInfo);
+        isLive = true;
+        position = requestedMarket.position;
         status = requestedMarket.status;
+        errorReason = requestedMarket.errorReason;
         odds = requestedMarket.expectedQuote;
         collateral = requestedMarket.collateral;
         buyInAmount = requestedMarket.buyInAmount;
         payout = requestedMarket.payout;
+        timestamp = requestedMarket.timestamp;
     } else {
         const requestedMarket = data as TicketMarketRequestData;
+        market = requestedMarket.ticket;
+        isLive = !!requestedMarket.ticket.live;
+        position = (market as TicketMarket).position;
         status = requestedMarket.status;
+        errorReason = requestedMarket.errorReason;
         odds = requestedMarket.ticket.odd;
         collateral = requestedMarket.collateral;
         buyInAmount = requestedMarket.buyInAmount;
         payout = requestedMarket.payout;
+        timestamp = requestedMarket.timestamp;
     }
 
     const isExpandable = [LiveTradingTicketStatus.SUCCESS, LiveTradingTicketStatus.ERROR].includes(status);
@@ -279,7 +299,31 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
     return (
         <>
             <TicketRow onClick={() => setIsExpanded(!isExpanded)} isClickable={isExpandable}>
-                <MarketInfo data={data} isExpandable={isExpandable} isExpanded={isExpanded} gamesInfo={gamesInfo} />
+                <TimeInfo>
+                    <TimeText>{formatDateWithTime(timestamp)}</TimeText>
+                </TimeInfo>
+                <Market>
+                    <MatchInfo>
+                        <MatchText>{getMatchLabel(market)}</MatchText>
+                    </MatchInfo>
+                    <MarketTypeInfo>
+                        <Text>{getTitleText(market)}</Text>
+                    </MarketTypeInfo>
+                    <PositionInfo>
+                        <PositionText>{getPositionTextV2(market, position, true)}</PositionText>
+                    </PositionInfo>
+                    {isLive && (
+                        <StatusInfo>
+                            <Text isLabel>{t('markets.parlay-related-markets.status-label')}:</Text>
+                            <Text>{t(`markets.parlay-related-markets.status.${status}`)}</Text>
+                            <Tooltip overlay={errorReason} marginLeft={5} iconFontSize={12} />
+                        </StatusInfo>
+                    )}
+                </Market>
+                <Icon
+                    color={isExpandable ? undefined : 'transparent'}
+                    className={`icon ${isExpanded ? 'icon--arrow-up' : 'icon--arrow-down'}`}
+                />
             </TicketRow>
             {isExpanded && (
                 <TicketDetailsRow>
@@ -297,77 +341,6 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
                     </PayoutInfo>
                 </TicketDetailsRow>
             )}
-        </>
-    );
-};
-
-const MarketInfo: React.FC<{
-    data: TicketMarketRequestData | LiveTradingRequest | Ticket;
-    isExpandable: boolean;
-    isExpanded?: boolean;
-    gamesInfo?: any;
-}> = ({ data, isExpandable, isExpanded, gamesInfo }) => {
-    const { t } = useTranslation();
-
-    const isLiveTradingRequest = !!(data as LiveTradingRequest)?.user;
-    const isTicketCreated = !!(data as Ticket)?.id;
-
-    const timestamp = isLiveTradingRequest
-        ? new Date((data as LiveTradingRequest).timestamp)
-        : isTicketCreated
-        ? (data as Ticket).timestamp
-        : (data as TicketMarketRequestData).timestamp;
-
-    const market: SportMarket | TicketMarket = isLiveTradingRequest
-        ? liveTradingRequestAsSportMarket(data as LiveTradingRequest, gamesInfo)
-        : isTicketCreated
-        ? (data as Ticket).sportMarkets[0]
-        : (data as TicketMarketRequestData).ticket;
-
-    const position = isLiveTradingRequest ? (data as LiveTradingRequest).position : (market as TicketMarket).position;
-    const isLive =
-        isLiveTradingRequest ||
-        (isTicketCreated ? (data as Ticket).isLive : !!(data as TicketMarketRequestData).ticket.live);
-
-    const status = isLiveTradingRequest
-        ? (data as LiveTradingRequest).status
-        : isTicketCreated
-        ? LiveTradingTicketStatus.SUCCESS
-        : (data as TicketMarketRequestData).status;
-
-    const errorReason = isLiveTradingRequest
-        ? (data as LiveTradingRequest).errorReason
-        : isTicketCreated
-        ? ''
-        : (data as TicketMarketRequestData).errorReason;
-
-    return (
-        <>
-            <TimeInfo>
-                <TimeText>{formatDateWithTime(timestamp)}</TimeText>
-            </TimeInfo>
-            <Market>
-                <MatchInfo>
-                    <MatchText>{getMatchLabel(market)}</MatchText>
-                </MatchInfo>
-                <MarketTypeInfo>
-                    <Text>{getTitleText(market)}</Text>
-                </MarketTypeInfo>
-                <PositionInfo>
-                    <PositionText>{getPositionTextV2(market, position, true)}</PositionText>
-                </PositionInfo>
-                {isLive && (
-                    <StatusInfo>
-                        <Text isLabel>{t('markets.parlay-related-markets.status-label')}:</Text>
-                        <Text>{t(`markets.parlay-related-markets.status.${status}`)}</Text>
-                        <Tooltip overlay={errorReason} marginLeft={5} iconFontSize={12} />
-                    </StatusInfo>
-                )}
-            </Market>
-            <Icon
-                color={isExpandable ? undefined : 'transparent'}
-                className={`icon ${isExpanded ? 'icon--arrow-up' : 'icon--arrow-down'}`}
-            />
         </>
     );
 };
