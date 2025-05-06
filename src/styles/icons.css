@@ -540,3 +540,7 @@
 .icon--over:before {
     content: '\0125';
 }
+
+.icon--sol::before {
+    content: '\00B9';
+}

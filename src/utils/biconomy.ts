@@ -1,10 +1,13 @@
 import { createSessionKeyManagerModule, DEFAULT_SESSION_KEY_MANAGER_MODULE } from '@biconomy/modules';
 import { PaymasterFeeQuote, PaymasterMode } from '@biconomy/paymaster';
+import { SUPPORTED_TOKEN_TYPE } from '@GDdark/universal-account';
 import { getPublicClient } from '@wagmi/core';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { addMonths } from 'date-fns';
+import { Network } from 'enums/network';
 import localforage from 'localforage';
 import { wagmiConfig } from 'pages/Root/wagmiConfig';
+import { coinParser } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { Address, Client, createWalletClient, encodeFunctionData, getContract, http, maxUint256 } from 'viem';
@@ -21,6 +24,9 @@ import { waitForTransactionViaSocket } from './listener';
 export const GAS_LIMIT = 1;
 const ERROR_SESSION_NOT_FOUND = 'Error: Session not found.';
 const USER_REJECTED_ERROR = 'user rejected the request';
+const UNIVERSAL_BALANCE_NOT_ENOUGH =
+    'Rest balance is not enough to cover the fee. Please reduce the amount and try again.';
+const UNIVERSAL_BALANCE_NOT_SUFFICIENT = 'Your balance is insufficient';
 
 export const sendBiconomyTransaction = async (params: {
     networkId: SupportedNetwork;
@@ -551,4 +557,75 @@ const validateTx = async (transactionHash: string | undefined, networkId: Suppor
     } else {
         throw new Error(`user op failed internally, check txHash: ${transactionHash}`);
     }
+};
+
+export const sendUniversalTranser = async (amount: string) => {
+    try {
+        const testAmount = Number(amount);
+        const encodedCall = encodeFunctionData({
+            abi: multipleCollateral.USDC.abi,
+            functionName: 'transfer',
+            args: [biconomyConnector.address, coinParser('' + testAmount, Network.OptimismMainnet, 'USDC')],
+        });
+
+        const transactionLocal = {
+            to: multipleCollateral.USDC.addresses[Network.OptimismMainnet],
+            data: encodedCall,
+        };
+
+        const transaction = await biconomyConnector.universalAccount?.createUniversalTransaction({
+            expectTokens: [{ type: SUPPORTED_TOKEN_TYPE.USDC, amount: testAmount + '' }],
+            chainId: Network.OptimismMainnet,
+            transactions: [transactionLocal],
+        });
+
+        const signature = await biconomyConnector.wallet?.signMessage(transaction.rootHash);
+        if (signature) {
+            const result = await biconomyConnector.universalAccount?.sendTransaction(transaction, signature);
+            return {
+                success: true,
+                hash: result.transactionId,
+            };
+        }
+    } catch (e: any) {
+        console.log(e);
+        if (e.message == UNIVERSAL_BALANCE_NOT_ENOUGH || e.message == UNIVERSAL_BALANCE_NOT_SUFFICIENT) {
+            return {
+                success: false,
+                message: UNIVERSAL_BALANCE_NOT_ENOUGH,
+            };
+        }
+        throw e;
+    }
+};
+
+export const validateMaxAmount = async (amount: number) => {
+    let RETRY_COUNT = 0;
+    let finalAmount = amount - 0.05;
+
+    while (RETRY_COUNT <= 30) {
+        try {
+            const encodedCall = encodeFunctionData({
+                abi: multipleCollateral.USDC.abi,
+                functionName: 'transfer',
+                args: [biconomyConnector.address, coinParser(finalAmount + '', Network.OptimismMainnet, 'USDC')],
+            });
+
+            const transactionLocal = {
+                to: multipleCollateral.USDC.addresses[Network.OptimismMainnet],
+                data: encodedCall,
+            };
+
+            await biconomyConnector.universalAccount?.createUniversalTransaction({
+                expectTokens: [{ type: SUPPORTED_TOKEN_TYPE.USDC, amount: finalAmount + '' }],
+                chainId: Network.OptimismMainnet,
+                transactions: [transactionLocal],
+            });
+            return finalAmount;
+        } catch (e: any) {
+            finalAmount = finalAmount - 0.1;
+            RETRY_COUNT++;
+        }
+    }
+    return 0;
 };

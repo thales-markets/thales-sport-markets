@@ -28,8 +28,8 @@ const WalletInfo: React.FC = ({}) => {
     const theme = useTheme();
     const networkId = useChainId();
     const { address, isConnected } = useAccount();
-    const smartAddres = useBiconomy();
-    const walletAddress = (isBiconomy ? smartAddres : address) || '';
+    const { smartAddress } = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const ticketPayment = useSelector(getTicketPayment);
 

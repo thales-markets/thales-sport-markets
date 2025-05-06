@@ -40,8 +40,8 @@ const ActivateAccount: React.FC<any> = () => {
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const client = useClient();
     const { address, isConnected } = useAccount();
-    const smartAddres = useBiconomy();
-    const walletAddress = (isBiconomy ? smartAddres : address) || '';
+    const { smartAddress } = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const queryParams: { freeBet?: string } = queryString.parse(location.search);
 
@@ -120,7 +120,7 @@ const ActivateAccount: React.FC<any> = () => {
 
                 localforage.getItem(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId]).then((retrievedMap: any) => {
                     if (retrievedMap) {
-                        const sessionData = retrievedMap.get(smartAddres) as any;
+                        const sessionData = retrievedMap.get(smartAddress) as any;
                         if (sessionData) {
                             setShowActivateAccount(false);
                         } else {
@@ -136,7 +136,7 @@ const ActivateAccount: React.FC<any> = () => {
                 setFundModalShown(false);
             }
         }
-    }, [totalBalanceValue, networkId, isConnected, isBiconomy, smartAddres, queryParams.freeBet]);
+    }, [totalBalanceValue, networkId, isConnected, isBiconomy, smartAddress, queryParams.freeBet]);
 
     return (
         <>
@@ -200,7 +200,7 @@ const ActivateAccount: React.FC<any> = () => {
                                         padding: '9px 20px',
                                         width: isSmallDevice ? '100%' : '100px',
                                         height: '30px',
-                                        zIndex: 1000,
+                                        zIndex: 100,
                                     }}
                                     onClick={() => setIsMinimized(false)}
                                 >

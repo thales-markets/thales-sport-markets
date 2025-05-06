@@ -39,7 +39,7 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
-    const smartAddress = useBiconomy();
+    const { smartAddress } = useBiconomy();
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const { disconnect } = useDisconnect();

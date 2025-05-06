@@ -1,0 +1,71 @@
+.chain-icon {
+    display: inline-block;
+    font-family: Chains !important;
+    vertical-align: middle;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.chain-icon--eth:before {
+    content: '\003E';
+}
+
+.chain-icon--bnb:before {
+    content: '\003A';
+}
+
+.chain-icon--con:before {
+    content: '\0032';
+}
+
+.chain-icon--arb:before {
+    content: '\0040';
+}
+
+.chain-icon--op:before {
+    content: '\0036';
+}
+
+.chain-icon--base:before {
+    content: '\0043';
+}
+
+.chain-icon--bera:before {
+    content: '\0037';
+}
+
+.chain-icon--linea:before {
+    content: '\003C';
+}
+
+.chain-icon--blast:before {
+    content: '\003D';
+}
+
+.chain-icon--sonic:before {
+    content: '\003F';
+}
+
+.chain-icon--mode:before {
+    content: '\0042';
+}
+
+.chain-icon--merlin:before {
+    content: '\0038';
+}
+
+.chain-icon--pol:before {
+    content: '\0041';
+}
+
+.chain-icon--avax:before {
+    content: '\003B';
+}
+
+.chain-icon--sol:before {
+    content: '\0039';
+}
+
+.chain-icon--manta:before {
+    content: '\004E';
+}

@@ -27,8 +27,8 @@ const Transactions: React.FC<TransactionsProps> = ({ currentRound, liquidityPool
 
     const networkId = useChainId();
     const { address } = useAccount();
-    const smartAddres = useBiconomy();
-    const walletAddress = (isBiconomy ? smartAddres : address) || '';
+    const { smartAddress } = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddress : address) || '';
     const [liquidityPoolUserTransactions, setLiquidityPoolUserTransactions] = useState<LiquidityPoolUserTransactions>(
         []
     );
