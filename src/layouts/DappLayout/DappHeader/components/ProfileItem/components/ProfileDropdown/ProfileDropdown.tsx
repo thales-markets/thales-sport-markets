@@ -1,14 +1,12 @@
-import FundModal from 'components/FundOvertimeAccountModal';
 import SPAAnchor from 'components/SPAAnchor';
 import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
 import { USD_SIGN } from 'constants/currency';
 import ROUTES from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { ProfileTab, ScreenSizeBreakpoint } from 'enums/ui';
-import WithdrawModal from 'pages/Profile/components/WithdrawModal';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -25,9 +23,15 @@ import { useAccount, useChainId, useClient, useDisconnect } from 'wagmi';
 
 type ProfileDropdownProps = {
     setShowDropdown: React.Dispatch<React.SetStateAction<boolean>>;
+    setShowDepositModal: React.Dispatch<React.SetStateAction<boolean>>;
+    setShowWithdrawModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ setShowDropdown }) => {
+const ProfileDropdown: React.FC<ProfileDropdownProps> = ({
+    setShowDropdown,
+    setShowDepositModal,
+    setShowWithdrawModal,
+}) => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
@@ -37,9 +41,6 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ setShowDropdown }) =>
     const { address, isConnected } = useAccount();
     const smartAddress = useBiconomy();
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
-
-    const [showFundModal, setShowFundModal] = useState<boolean>(false);
-    const [showWithdrawModal, setShowWithdrawModal] = useState<boolean>(false);
 
     const { disconnect } = useDisconnect();
 
@@ -114,7 +115,7 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ setShowDropdown }) =>
                 </FlexDivColumnStart>
                 <FlexDivCentered gap={14}>
                     <Button onClick={() => setShowWithdrawModal(true)}>withdraw</Button>
-                    <Button onClick={() => setShowFundModal(true)}>deposit</Button>
+                    <Button onClick={() => setShowDepositModal(true)}>deposit</Button>
                 </FlexDivCentered>
             </BalanceWrapper>
             <Wrapper>
@@ -168,8 +169,6 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ setShowDropdown }) =>
                 <LogoutIcon className="icon icon--wallet-disconnected" />
                 <LogoutText>{t('profile.dropdown.logout')}</LogoutText>
             </Container>
-            {showFundModal && <FundModal onClose={() => setShowFundModal(false)} />}
-            {showWithdrawModal && <WithdrawModal onClose={() => setShowWithdrawModal(false)} />}
         </Dropdown>
     );
 };
