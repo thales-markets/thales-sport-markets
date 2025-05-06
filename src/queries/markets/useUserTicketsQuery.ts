@@ -5,7 +5,7 @@ import { BATCH_SIZE, LATEST_LIVE_REQUESTS_SIZE, LIVE_REQUETS_BATCH_SIZE } from '
 import QUERY_KEYS from 'constants/queryKeys';
 import { secondsToMilliseconds } from 'date-fns';
 import { ContractType } from 'enums/contract';
-import { LiveTradingTicketStatus } from 'enums/markets';
+import { LiveTradingFinalStatus, LiveTradingTicketStatus } from 'enums/markets';
 import { orderBy } from 'lodash';
 import { bigNumberFormatter, coinFormatter, NetworkId } from 'thales-utils';
 import { LiveTradingRequest, Ticket, TicketsWithRequestsInfo } from 'types/markets';
@@ -189,16 +189,27 @@ export const useUserTicketsQuery = (
                                 const isAdapterFailed = !!adapterRequest && adapterRequest.allow === false;
                                 const isAdapterApproved = !!adapterRequest && adapterRequest.allow === true;
 
-                                const status = isFulfilled
-                                    ? LiveTradingTicketStatus.SUCCESS
-                                    : isAdapterFailed || Date.now() > maturityTimestamp
-                                    ? LiveTradingTicketStatus.ERROR
-                                    : isAdapterApproved
-                                    ? LiveTradingTicketStatus.APPROVED
-                                    : LiveTradingTicketStatus.REQUESTED;
+                                let status = LiveTradingTicketStatus.REQUESTED;
+                                let finalStatus = LiveTradingFinalStatus.IN_PROGRESS;
 
-                                const errorReason =
-                                    status === LiveTradingTicketStatus.ERROR ? adapterRequest.message : '';
+                                if (isFulfilled) {
+                                    status = LiveTradingTicketStatus.COMPLETED;
+                                    finalStatus = LiveTradingFinalStatus.SUCCESS;
+                                } else if (isAdapterFailed) {
+                                    status = LiveTradingTicketStatus.APPROVED;
+                                    finalStatus = LiveTradingFinalStatus.FAILED;
+                                } else if (Date.now() > maturityTimestamp) {
+                                    status = LiveTradingTicketStatus.FULFILLING;
+                                    finalStatus = LiveTradingFinalStatus.FAILED;
+                                } else if (isAdapterApproved) {
+                                    status = LiveTradingTicketStatus.FULFILLING;
+                                    finalStatus = LiveTradingFinalStatus.IN_PROGRESS;
+                                } else {
+                                    status = LiveTradingTicketStatus.APPROVED;
+                                    finalStatus = LiveTradingFinalStatus.IN_PROGRESS;
+                                }
+
+                                const errorReason = isAdapterFailed ? adapterRequest.message : '';
 
                                 const expectedQuote = bigNumberFormatter(request.expectedQuote);
                                 const collateral = getCollateralByAddress(request.collateral, networkConfig.networkId);
@@ -224,6 +235,7 @@ export const useUserTicketsQuery = (
                                     payout: buyInAmount / expectedQuote,
                                     collateral,
                                     status,
+                                    finalStatus,
                                     errorReason,
                                 };
 

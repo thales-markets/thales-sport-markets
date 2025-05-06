@@ -1,16 +1,16 @@
 import ParlayEmptyIcon from 'assets/images/parlay-empty.svg?react';
-import RadioButton from 'components/fields/RadioButton';
 import Scroll from 'components/Scroll';
 import SimpleLoader from 'components/SimpleLoader';
+import ToggleV2 from 'components/ToggleV2';
 import Tooltip from 'components/Tooltip';
 import { LATEST_LIVE_REQUESTS_SIZE } from 'constants/markets';
-import { secondsToMilliseconds } from 'date-fns';
-import { LiveTradingTicketStatus } from 'enums/markets';
+import { differenceInMinutes, secondsToMilliseconds } from 'date-fns';
+import { LiveTradingFinalStatus, LiveTradingTicketStatus } from 'enums/markets';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import useInterval from 'hooks/useInterval';
 import { orderBy } from 'lodash';
 import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
@@ -18,7 +18,14 @@ import { getTicket, getTicketRequestStatus, removeTicketRequestById } from 'redu
 import { getOddsType } from 'redux/modules/ui';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
-import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered, FlexDivStart } from 'styles/common';
+import {
+    FlexDivCentered,
+    FlexDivColumn,
+    FlexDivColumnCentered,
+    FlexDivRowCentered,
+    FlexDivSpaceBetween,
+    FlexDivStart,
+} from 'styles/common';
 import { formatCurrencyWithKey, formatDateWithTime } from 'thales-utils';
 import {
     LiveTradingRequest,
@@ -39,7 +46,6 @@ import {
 import { refetchUserTickets } from 'utils/queryConnector';
 import useBiconomy from 'utils/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
-import { Count, RadioButtonContainer, Title } from '../../ParlayV2';
 
 const ParlayRelatedMarkets: React.FC = () => {
     const { t } = useTranslation();
@@ -110,7 +116,7 @@ const ParlayRelatedMarkets: React.FC = () => {
                               // remove those which are present in created tickets
                               !liveTradingRequests.some(
                                   (request) =>
-                                      request.status === LiveTradingTicketStatus.SUCCESS &&
+                                      request.status === LiveTradingTicketStatus.COMPLETED &&
                                       request.requestId === requestId
                               )
                       )
@@ -126,7 +132,7 @@ const ParlayRelatedMarkets: React.FC = () => {
     const markets: (TicketMarketRequestData | LiveTradingRequest | Ticket)[] = useMemo(() => {
         const failedLiveTradingRequests = liveTradingRequests.filter(
             (request) =>
-                request.status !== LiveTradingTicketStatus.SUCCESS &&
+                request.status !== LiveTradingTicketStatus.COMPLETED &&
                 ticketRequestStatusById[request.requestId] === undefined // not in temp requests
         );
 
@@ -169,11 +175,11 @@ const ParlayRelatedMarkets: React.FC = () => {
 
     const isEmpty = useMemo(() => !markets.length, [markets]);
 
-    // Refresh pending live requests on every 5s if not in temp requests
+    // Refresh in-progress live requests on every 5s if not in temp requests
     useInterval(() => {
         const isPendingRequests = liveTradingRequests.some(
             (request) =>
-                ![LiveTradingTicketStatus.ERROR, LiveTradingTicketStatus.SUCCESS].includes(request.status) &&
+                request.finalStatus === LiveTradingFinalStatus.IN_PROGRESS &&
                 ticketRequestStatusById[request.requestId] === undefined
         );
 
@@ -185,29 +191,21 @@ const ParlayRelatedMarkets: React.FC = () => {
     return (
         <Container>
             <MarketsTypeContainer>
-                <RadioButtonContainer>
-                    <RadioButton
-                        checked={isLiveTypeSelected}
-                        value={'true'}
-                        onChange={() => setIsLiveTypeSelected(true)}
-                        label={t('markets.parlay-related-markets.type.live')}
-                    />
-                </RadioButtonContainer>
-                <RadioButtonContainer>
-                    <RadioButton
-                        checked={!isLiveTypeSelected}
-                        value={'false'}
-                        onChange={() => setIsLiveTypeSelected(false)}
-                        label={t('markets.parlay-related-markets.type.other')}
-                    />
-                </RadioButtonContainer>
+                <ToggleV2
+                    label={{
+                        firstLabel: t('markets.parlay-related-markets.type.live'),
+                        secondLabel: t('markets.parlay-related-markets.type.other'),
+                    }}
+                    active={!isLiveTypeSelected}
+                    handleClick={() => setIsLiveTypeSelected(!isLiveTypeSelected)}
+                />
+                <Title>
+                    {isLiveTypeSelected
+                        ? t('markets.parlay-related-markets.title-live')
+                        : t('markets.parlay-related-markets.title-other')}
+                </Title>
             </MarketsTypeContainer>
-            <Title>
-                {isLiveTypeSelected
-                    ? t('markets.parlay-related-markets.title-live')
-                    : t('markets.parlay-related-markets.title-other')}
-                <Count>{markets.length}</Count>
-            </Title>
+
             <MarketsContainer>
                 {userTicketsQuery.isLoading ? (
                     <LoaderContainer>
@@ -246,10 +244,11 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
     gamesInfo,
 }) => {
     const { t } = useTranslation();
+    const isMobile = useSelector(getIsMobile);
 
     const selectedOddsType = useSelector(getOddsType);
 
-    const [isExpanded, setIsExpanded] = useState(false);
+    const [isExpanded, setIsExpanded] = useState(true);
 
     const isTicketCreated = !!(data as Ticket)?.id;
     const isLiveTradingRequest = !!(data as LiveTradingRequest)?.user;
@@ -258,6 +257,7 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
     let isLive = false;
     let position = 0;
     let status = LiveTradingTicketStatus.PENDING;
+    let finalStatus = LiveTradingFinalStatus.IN_PROGRESS;
     let errorReason = '';
     let odds = 0;
     let collateral = '';
@@ -269,7 +269,8 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
         market = ticket.sportMarkets[0];
         isLive = ticket.isLive;
         position = (market as TicketMarket).position;
-        status = LiveTradingTicketStatus.SUCCESS;
+        status = LiveTradingTicketStatus.COMPLETED;
+        finalStatus = LiveTradingFinalStatus.SUCCESS;
         errorReason = '';
         odds = ticket.sportMarkets[0].odd;
         collateral = ticket.collateral;
@@ -282,6 +283,7 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
         isLive = true;
         position = requestedMarket.position;
         status = requestedMarket.status;
+        finalStatus = requestedMarket.finalStatus;
         errorReason = requestedMarket.errorReason;
         odds = requestedMarket.expectedQuote;
         collateral = requestedMarket.collateral;
@@ -294,6 +296,7 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
         isLive = !!requestedMarket.ticket.live;
         position = (market as TicketMarket).position;
         status = requestedMarket.status;
+        finalStatus = requestedMarket.finalStatus;
         errorReason = requestedMarket.errorReason;
         odds = requestedMarket.ticket.odd;
         collateral = requestedMarket.collateral;
@@ -302,54 +305,109 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
         timestamp = requestedMarket.timestamp;
     }
 
-    const isExpandable = [LiveTradingTicketStatus.SUCCESS, LiveTradingTicketStatus.ERROR].includes(status);
+    const ticketCreationStatus =
+        finalStatus === LiveTradingFinalStatus.SUCCESS
+            ? t('markets.parlay-related-markets.creation-status.success')
+            : finalStatus === LiveTradingFinalStatus.FAILED
+            ? t('markets.parlay-related-markets.creation-status.failed')
+            : t('markets.parlay-related-markets.creation-status.pending');
+
+    // collapse if older than 10 min
+    useEffect(() => {
+        if (differenceInMinutes(Date.now(), timestamp) > 10) {
+            setIsExpanded(false);
+        }
+    }, [finalStatus, timestamp]);
 
     return (
-        <>
-            <TicketRow onClick={() => setIsExpanded(!isExpanded)} isClickable={isExpandable}>
-                <TimeInfo>
-                    <TimeText>{formatDateWithTime(timestamp)}</TimeText>
-                </TimeInfo>
-                <Market>
-                    <MatchInfo>
-                        <MatchText>{getMatchLabel(market)}</MatchText>
-                    </MatchInfo>
+        <TicketColumn onClick={() => setIsExpanded(!isExpanded)}>
+            <Row>
+                <Info>
+                    <TimeInfo>
+                        <TimeText>{formatDateWithTime(timestamp)}</TimeText>
+                    </TimeInfo>
                     <MarketTypeInfo>
-                        <Text>{getTitleText(market)}</Text>
+                        <MarketTypeText>{getTitleText(market)}</MarketTypeText>
                     </MarketTypeInfo>
-                    <PositionInfo>
-                        <PositionText>{getPositionTextV2(market, position, true)}</PositionText>
-                    </PositionInfo>
-                    {isLive && (
-                        <StatusInfo>
-                            <Text isLabel>{t('markets.parlay-related-markets.status-label')}:</Text>
-                            <Text>{t(`markets.parlay-related-markets.status.${status}`)}</Text>
-                            <Tooltip overlay={errorReason} marginLeft={5} iconFontSize={12} />
-                        </StatusInfo>
-                    )}
-                </Market>
-                <Icon
-                    color={isExpandable ? undefined : 'transparent'}
-                    className={`icon ${isExpanded ? 'icon--arrow-up' : 'icon--arrow-down'}`}
-                />
-            </TicketRow>
+                </Info>
+                <TicketStatusInfo
+                    status={finalStatus}
+                    onClick={(e: any) => {
+                        if (isMobile && isLive && errorReason) {
+                            e.stopPropagation();
+                        }
+                    }}
+                >
+                    <Tooltip overlay={isLive ? errorReason : ''} marginLeft={5} iconFontSize={12}>
+                        <StatusText status={finalStatus}>{ticketCreationStatus}</StatusText>
+                    </Tooltip>
+                </TicketStatusInfo>
+            </Row>
+            <Row>
+                <Info>
+                    <Text>{getMatchLabel(market)}</Text>
+                </Info>
+            </Row>
+            <Row>
+                <Info>
+                    <PositionText>{getPositionTextV2(market, position, true)}</PositionText>
+                </Info>
+                <IconWrapper>
+                    <Icon className={`icon ${isExpanded ? 'icon--arrow-up' : 'icon--arrow-down'}`} />
+                </IconWrapper>
+            </Row>
             {isExpanded && (
-                <TicketDetailsRow>
-                    <OddsInfo>
-                        <PositionText isLabel>{t('markets.parlay-related-markets.total-quote')}:</PositionText>
-                        <PositionText>{formatMarketOdds(selectedOddsType, odds)}</PositionText>
-                    </OddsInfo>
-                    <PaidInfo>
-                        <Text isLabel>{t('markets.parlay-related-markets.paid')}:</Text>
-                        <Text>{formatCurrencyWithKey(collateral, buyInAmount)}</Text>
-                    </PaidInfo>
-                    <PayoutInfo>
-                        <PayoutText isLabel>{t('markets.parlay-related-markets.payout')}:</PayoutText>
-                        <PayoutText>{formatCurrencyWithKey(collateral, payout)}</PayoutText>
-                    </PayoutInfo>
-                </TicketDetailsRow>
+                <>
+                    {isLive && (
+                        <StatusProgress>
+                            <ProgressRow>
+                                <Circle className={status === LiveTradingTicketStatus.PENDING ? 'lastCompleted' : ''} />
+                                <Circle
+                                    className={status === LiveTradingTicketStatus.REQUESTED ? 'lastCompleted' : ''}
+                                />
+                                <Circle
+                                    className={status === LiveTradingTicketStatus.APPROVED ? 'lastCompleted' : ''}
+                                />
+                                <Circle
+                                    className={status === LiveTradingTicketStatus.FULFILLING ? 'lastCompleted' : ''}
+                                />
+                                <Circle
+                                    className={status === LiveTradingTicketStatus.COMPLETED ? 'lastCompleted' : ''}
+                                    finalStatus={finalStatus}
+                                />
+                            </ProgressRow>
+                            <StatusesRow>
+                                <StatusesText>{t('markets.parlay-related-markets.status.pending')}</StatusesText>
+                                <StatusesText>{t('markets.parlay-related-markets.status.requested')}</StatusesText>
+                                <StatusesText>{t('markets.parlay-related-markets.status.approved')}</StatusesText>
+                                <StatusesText>{t('markets.parlay-related-markets.status.fulfilling')}</StatusesText>
+                                <StatusesText>
+                                    {t(
+                                        `markets.parlay-related-markets.status.${
+                                            status === LiveTradingTicketStatus.COMPLETED ? 'success' : 'error'
+                                        }`
+                                    )}
+                                </StatusesText>
+                            </StatusesRow>
+                        </StatusProgress>
+                    )}
+                    <PaymentRow>
+                        <OddsInfo>
+                            <Label>{t('markets.parlay-related-markets.total-quote')}:</Label>
+                            <OddsText>{formatMarketOdds(selectedOddsType, odds)}</OddsText>
+                        </OddsInfo>
+                        <PaidInfo>
+                            <Label>{t('markets.parlay-related-markets.paid')}:</Label>
+                            <PaidText>{formatCurrencyWithKey(collateral, buyInAmount)}</PaidText>
+                        </PaidInfo>
+                        <PayoutInfo>
+                            <Label>{t('markets.parlay-related-markets.payout')}:</Label>
+                            <PayoutText>{formatCurrencyWithKey(collateral, payout)}</PayoutText>
+                        </PayoutInfo>
+                    </PaymentRow>
+                </>
             )}
-        </>
+        </TicketColumn>
     );
 };
 
@@ -365,15 +423,27 @@ const Container = styled(FlexDivColumn)`
     }
 `;
 
+const MarketsTypeContainer = styled(FlexDivSpaceBetween)`
+    padding-right: 12px;
+    margin-bottom: 10px;
+    z-index: 1;
+`;
+
 const MarketsContainer = styled(FlexDivColumn)`
     position: relative;
     height: 100%;
     min-height: 150px;
 `;
 
-const MarketsTypeContainer = styled(FlexDivCentered)`
-    gap: 50px;
-    z-index: 1;
+const Title = styled(FlexDivCentered)`
+    position: relative;
+    width: 100%;
+    margin-left: 10px;
+    color: ${(props) => props.theme.textColor.quaternary};
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 16px;
+    text-transform: uppercase;
 `;
 
 const RelatedMarkets = styled(FlexDivColumn)`
@@ -381,49 +451,108 @@ const RelatedMarkets = styled(FlexDivColumn)`
     margin-right: 12px;
 `;
 
-const RelatedMarket = styled.div`
-    background: ${(props) => props.theme.background.secondary + '80'}; // 50% opacity
-    border-radius: 5px;
-`;
-
-const Row = styled(FlexDivRowCentered)`
-    padding: 6px 8px;
-`;
-
-const TicketRow = styled(Row)<{ isClickable: boolean }>`
+const RelatedMarket = styled(FlexDivColumn)`
     background: ${(props) => props.theme.background.secondary};
     border-radius: 5px;
-    cursor: ${(props) => (props.isClickable ? 'pointer' : 'default')};
 `;
 
-const TicketDetailsRow = styled(Row)``;
-
-const Market = styled(FlexDivColumn)`
-    gap: 2px;
-    margin-right: 5px;
+const TicketColumn = styled(FlexDivColumn)`
+    gap: 3px;
+    padding: 8px;
+    cursor: pointer;
 `;
 
-const Info = styled(FlexDivStart)``;
+const Row = styled(FlexDivRowCentered)``;
+
+const Info = styled(FlexDivRowCentered)``;
 
 const TimeInfo = styled(Info)`
-    width: 39px;
+    height: 20px;
+    padding: 0 8px;
+    border-radius: 10px;
+    background: ${(props) => props.theme.background.quinary}66; // opacity 40%
 `;
-
-const MatchInfo = styled(Info)``;
 
 const MarketTypeInfo = styled(Info)`
     color: ${(props) => props.theme.textColor.quinary};
+    padding: 0 5px;
 `;
 
-const PositionInfo = styled(Info)``;
+const TicketStatusInfo = styled(Info)<{ status: LiveTradingFinalStatus }>`
+    height: 20px;
+    padding: 0 8px;
+    border-radius: 30px;
+    background: ${(props) =>
+        props.status === LiveTradingFinalStatus.SUCCESS
+            ? props.theme.status.success.background.primary
+            : props.status === LiveTradingFinalStatus.FAILED
+            ? props.theme.status.failed.background.primary
+            : props.theme.status.pending.background.primary};
+`;
 
-const StatusInfo = styled(Info)``;
+const IconWrapper = styled(FlexDivCentered)`
+    width: 21px;
+    height: 21px;
+    border-radius: 50%;
+    background: ${(props) => props.theme.textColor.primary}1a; // opacity 10%
+`;
 
-const Icon = styled.i<{ color?: string }>`
+const Icon = styled.i`
     display: flex;
     align-items: center;
     font-size: 10px;
-    ${(props) => props.color && `color: ${props.color};`}
+    margin-left: 2px;
+`;
+
+const StatusProgress = styled(FlexDivColumn)`
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid ${(props) => props.theme.borderColor.primary};
+`;
+
+const ProgressRow = styled(Row)`
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+
+    &:before,
+    .lastCompleted:after {
+        content: '';
+        width: 98%;
+        border: 1px solid ${(props) => props.theme.borderColor.quaternary};
+        position: absolute;
+        top: 7px;
+        z-index: -1;
+    }
+
+    .lastCompleted ~ div {
+        background: ${(props) => props.theme.background.tertiary};
+    }
+`;
+
+const Circle = styled.div<{ finalStatus?: LiveTradingFinalStatus }>`
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: ${(props) =>
+        props.finalStatus === LiveTradingFinalStatus.SUCCESS
+            ? props.theme.status.success.textColor.primary + ' !important'
+            : props.finalStatus === LiveTradingFinalStatus.FAILED
+            ? props.theme.status.failed.textColor.primary + ' !important'
+            : props.theme.background.quaternary};
+
+    &&:after {
+        border-color: ${(props) => props.theme.borderColor.primary};
+    }
+`;
+
+const StatusesRow = styled(Row)`
+    align-items: baseline;
+`;
+
+const PaymentRow = styled(Row)`
+    margin-top: 7px;
 `;
 
 const OddsInfo = styled(Info)`
@@ -432,34 +561,75 @@ const OddsInfo = styled(Info)`
 
 const PaidInfo = styled(Info)`
     flex-wrap: wrap;
+    margin: 0 5px;
 `;
 
 const PayoutInfo = styled(FlexDivStart)`
     flex-wrap: wrap;
 `;
 
-const Text = styled.span<{ isLabel?: boolean }>`
+const Label = styled.span`
     font-weight: 400;
-    font-size: 12px;
-    line-height: 14px;
-    ${(props) => props.isLabel && 'margin-right: 5px;'}
+    font-size: 10px;
+    line-height: 12px;
+    margin-right: 5px;
+    color: ${(props) => props.theme.textColor.quinary};
 `;
 
-const MatchText = styled(Text)`
-    font-weight: 600;
+const Text = styled.span`
+    font-weight: 500;
+    font-size: 11px;
+    line-height: 100%;
 `;
 
 const TimeText = styled(Text)`
+    font-weight: 400;
     font-size: 10px;
-    line-height: 12px;
+    text-wrap: nowrap;
 `;
 
-const PositionText = styled(Text)`
+const MarketTypeText = styled(Text)`
     color: ${(props) => props.theme.textColor.quaternary};
 `;
 
-const PayoutText = styled(Text)`
-    color: ${(props) => props.theme.status.win};
+const StatusText = styled(Text)<{ status: LiveTradingFinalStatus }>`
+    font-size: 11px;
+    font-weight: 600;
+    color: ${(props) =>
+        props.status === LiveTradingFinalStatus.SUCCESS
+            ? props.theme.status.success.textColor.primary
+            : props.status === LiveTradingFinalStatus.FAILED
+            ? props.theme.status.failed.textColor.primary
+            : props.theme.status.pending.textColor.primary};
+`;
+
+const PositionText = styled(Text)`
+    font-size: 16px;
+    color: ${(props) => props.theme.textColor.quaternary};
+`;
+
+const StatusesText = styled(Text)`
+    font-weight: 400;
+    font-size: 10px;
+    color: ${(props) => props.theme.textColor.quinary};
+    max-width: 60px;
+    &:last-child {
+        max-width: 40px;
+    }
+    &:nth-last-child(2) {
+        max-width: 50px;
+    }
+`;
+
+const OddsText = styled(Text)`
+    font-weight: 600;
+    font-size: 12px;
+`;
+
+const PaidText = styled(OddsText)``;
+
+const PayoutText = styled(OddsText)`
+    color: ${(props) => props.theme.textColor.quaternary};
 `;
 
 const Empty = styled(FlexDivColumnCentered)`

@@ -4,7 +4,7 @@ import { generalConfig } from 'config/general';
 import { getErrorToastOptions, getLoadingToastOptions } from 'config/toast';
 import { ZERO_ADDRESS } from 'constants/network';
 import { secondsToMilliseconds } from 'date-fns';
-import { LiveTradingTicketStatus } from 'enums/markets';
+import { LiveTradingFinalStatus, LiveTradingTicketStatus } from 'enums/markets';
 import { toast } from 'react-toastify';
 import { updateTicketRequestStatus } from 'redux/modules/ticket';
 import { TicketRequest, TradeData } from 'types/markets';
@@ -45,6 +45,7 @@ const checkFulfilledTx = async (
                         updateTicketRequestStatus({
                             ...liveTicketRequestData,
                             status: LiveTradingTicketStatus.APPROVED,
+                            finalStatus: LiveTradingFinalStatus.IN_PROGRESS,
                         })
                     );
                 isFulfilledAdapter = true;
@@ -55,7 +56,8 @@ const checkFulfilledTx = async (
                     dispatch(
                         updateTicketRequestStatus({
                             ...liveTicketRequestData,
-                            status: LiveTradingTicketStatus.ERROR,
+                            status: LiveTradingTicketStatus.APPROVED,
+                            finalStatus: LiveTradingFinalStatus.FAILED,
                             errorReason: adapterResponse.data.message,
                         })
                     );
@@ -106,6 +108,7 @@ export const processTransaction = async (
                     updateTicketRequestStatus({
                         ...liveTicketRequestData,
                         status: LiveTradingTicketStatus.FULFILLING,
+                        finalStatus: LiveTradingFinalStatus.IN_PROGRESS,
                     })
                 );
             toast.update(toastId, getLoadingToastOptions(toastMessage));

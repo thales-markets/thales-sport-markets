@@ -950,14 +950,18 @@
             "total-quote": "Total quote",
             "paid": "Paid",
             "payout": "Payout",
-            "status-label": "Status",
             "status": {
                 "pending": "Transaction pending",
                 "requested": "Live trade requested",
-                "approved": "Live trade request approved",
+                "approved": "Live trade approved",
                 "fulfilling": "Fulfilling live trade",
                 "error": "Ticket creation failed",
                 "success": "Ticket created"
+            },
+            "creation-status": {
+                "pending": "Pending",
+                "failed": "Failed",
+                "success": "Success"
             }
         },
         "zero-odds-tooltip": "Odds unavailable at the moment.",

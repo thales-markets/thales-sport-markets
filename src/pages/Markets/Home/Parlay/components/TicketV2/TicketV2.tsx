@@ -28,7 +28,7 @@ import { OVERDROP_LEVELS } from 'constants/overdrop';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { secondsToMilliseconds } from 'date-fns';
 import { ContractType } from 'enums/contract';
-import { LiveTradingTicketStatus, OddsType } from 'enums/markets';
+import { LiveTradingFinalStatus, LiveTradingTicketStatus, OddsType } from 'enums/markets';
 import { BuyTicketStep } from 'enums/tickets';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import useInterval from 'hooks/useInterval';
@@ -1524,6 +1524,7 @@ const Ticket: React.FC<TicketProps> = ({
                 initialRequestId: `initialRequestId${Date.now()}`,
                 requestId: '',
                 status: LiveTradingTicketStatus.PENDING,
+                finalStatus: LiveTradingFinalStatus.IN_PROGRESS,
                 errorReason: '',
                 ticket: ticketMarketAsSerializable(markets[0]),
                 buyInAmount: Number(buyInAmount),
@@ -1719,6 +1720,7 @@ const Ticket: React.FC<TicketProps> = ({
                                     updateTicketRequestStatus({
                                         ...liveTicketRequestData,
                                         status: LiveTradingTicketStatus.REQUESTED,
+                                        finalStatus: LiveTradingFinalStatus.IN_PROGRESS,
                                     })
                                 );
                             }
@@ -1747,7 +1749,8 @@ const Ticket: React.FC<TicketProps> = ({
                                     dispatch(
                                         updateTicketRequestStatus({
                                             ...liveTicketRequestData,
-                                            status: LiveTradingTicketStatus.ERROR,
+                                            status: LiveTradingTicketStatus.FULFILLING,
+                                            finalStatus: LiveTradingFinalStatus.FAILED,
                                             errorReason: t('markets.parlay.tx-not-received'),
                                         })
                                     );
@@ -1759,7 +1762,8 @@ const Ticket: React.FC<TicketProps> = ({
                                     dispatch(
                                         updateTicketRequestStatus({
                                             ...liveTicketRequestData,
-                                            status: LiveTradingTicketStatus.SUCCESS,
+                                            status: LiveTradingTicketStatus.COMPLETED,
+                                            finalStatus: LiveTradingFinalStatus.SUCCESS,
                                         })
                                     );
                                 }
@@ -1845,7 +1849,8 @@ const Ticket: React.FC<TicketProps> = ({
                         dispatch(
                             updateTicketRequestStatus({
                                 ...liveTicketRequestData,
-                                status: LiveTradingTicketStatus.ERROR,
+                                status: LiveTradingTicketStatus.REQUESTED,
+                                finalStatus: LiveTradingFinalStatus.FAILED,
                                 errorReason: t('common.errors.unknown-error-try-again'),
                             })
                         );
@@ -1859,7 +1864,7 @@ const Ticket: React.FC<TicketProps> = ({
                     dispatch(
                         updateTicketRequestStatus({
                             ...liveTicketRequestData,
-                            status: LiveTradingTicketStatus.ERROR,
+                            finalStatus: LiveTradingFinalStatus.FAILED,
                             errorReason: t('common.errors.unknown-error-try-again'),
                         })
                     );

@@ -199,6 +199,7 @@ const ticketSlice = createSlice({
                 initialRequestId: action.payload.initialRequestId,
                 requestId,
                 status: action.payload.status,
+                finalStatus: action.payload.finalStatus,
                 errorReason: action.payload.errorReason,
                 ticket: action.payload.ticket,
                 buyInAmount: action.payload.buyInAmount,

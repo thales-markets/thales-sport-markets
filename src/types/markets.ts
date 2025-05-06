@@ -1,4 +1,4 @@
-import { GameStatus, LiveTradingTicketStatus, StatusFilter } from 'enums/markets';
+import { GameStatus, LiveTradingFinalStatus, LiveTradingTicketStatus, StatusFilter } from 'enums/markets';
 import { League, MarketType, Sport } from 'overtime-utils';
 import { Coins } from 'thales-utils';
 import { Network } from '../enums/network';
@@ -159,6 +159,7 @@ export type LiveTradingRequest = {
     payout: number;
     collateral: Coins;
     status: LiveTradingTicketStatus;
+    finalStatus: LiveTradingFinalStatus;
     errorReason: string;
 };
 
@@ -224,6 +225,7 @@ export type TicketRequest = {
     initialRequestId: string;
     requestId: string;
     status: LiveTradingTicketStatus;
+    finalStatus: LiveTradingFinalStatus;
     errorReason: string;
     ticket: SerializableTicketMarket;
     buyInAmount: number;
@@ -233,16 +235,8 @@ export type TicketRequest = {
 export type TicketRequestData = TicketRequest & {
     timestamp: number;
 };
-export type TicketMarketRequestData = {
-    initialRequestId: string;
-    requestId: string;
-    status: LiveTradingTicketStatus;
-    errorReason: string;
+export type TicketMarketRequestData = Omit<TicketRequestData, 'ticket'> & {
     ticket: TicketMarket;
-    buyInAmount: number;
-    payout: number;
-    collateral: Coins;
-    timestamp: number;
 };
 export type TicketRequestById = Record<string, TicketRequestData>;
 
