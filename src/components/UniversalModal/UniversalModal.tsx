@@ -9,14 +9,14 @@ import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from 'constants/currency';
 import { LINKS } from 'constants/links';
 import { Network } from 'enums/network';
 import { ScreenSizeBreakpoint } from 'enums/ui';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivColumnCentered, FlexDivRow, FlexDivSpaceBetween, FlexDivStart } from 'styles/common';
 import { Coins, formatCurrencyWithKey, truncateAddress } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
-import { sendUniversalTranser } from 'utils/biconomy';
+import { sendUniversalTranser, validateMaxAmount } from 'utils/biconomy';
 import biconomyConnector from 'utils/biconomyWallet';
 import { SUPPORTED_NETWORKS_UNIVERSAL_DEPOSIT } from 'utils/particleWallet/utils';
 import { refetchBalances } from 'utils/queryConnector';
@@ -34,6 +34,7 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
     const theme: ThemeInterface = useTheme();
 
     const [amount, setAmount] = useState<string | number>('');
+    const [maxAmount, setMaxAmount] = useState(0);
 
     const handleCopy = (address: string) => {
         try {
@@ -50,6 +51,14 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
         Number(amount as any) <= 0 ||
         Number(amount as any) > universalBalance?.totalAmountInUSD;
 
+    useEffect(() => {
+        if (universalBalance?.totalAmountInUSD && universalBalance?.totalAmountInUSD > 0) {
+            validateMaxAmount(universalBalance.totalAmountInUSD).then((finalAmount) => {
+                setMaxAmount(finalAmount);
+            });
+        }
+    }, [universalBalance]);
+
     return (
         <Modal
             customStyle={{
@@ -61,6 +70,11 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
                 background: theme.background.secondary,
                 border: 'none',
                 padding: '0px !important',
+            }}
+            mobileStyle={{
+                container: {
+                    borderRadius: 0,
+                },
             }}
             title=""
             onClose={onClose}
@@ -165,7 +179,7 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
                             fontWeight="700"
                             color={theme.textColor.primary}
                             placeholder={t('liquidity-pool.deposit-amount-placeholder')}
-                            onMaxButton={() => setAmount(universalBalance?.totalAmountInUSD || 0)}
+                            onMaxButton={() => setAmount(maxAmount)}
                         />
                         <Button
                             backgroundColor={theme.overdrop.borderColor.tertiary}

@@ -598,3 +598,34 @@ export const sendUniversalTranser = async (amount: string) => {
         throw e;
     }
 };
+
+export const validateMaxAmount = async (amount: number) => {
+    let RETRY_COUNT = 0;
+    let finalAmount = amount - 0.05;
+
+    while (RETRY_COUNT <= 30) {
+        try {
+            const encodedCall = encodeFunctionData({
+                abi: multipleCollateral.USDC.abi,
+                functionName: 'transfer',
+                args: [biconomyConnector.address, coinParser(finalAmount + '', Network.OptimismMainnet, 'USDC')],
+            });
+
+            const transactionLocal = {
+                to: multipleCollateral.USDC.addresses[Network.OptimismMainnet],
+                data: encodedCall,
+            };
+
+            await biconomyConnector.universalAccount?.createUniversalTransaction({
+                expectTokens: [{ type: SUPPORTED_TOKEN_TYPE.USDC, amount: finalAmount + '' }],
+                chainId: Network.OptimismMainnet,
+                transactions: [transactionLocal],
+            });
+            return finalAmount;
+        } catch (e: any) {
+            finalAmount = finalAmount - 0.1;
+            RETRY_COUNT++;
+        }
+    }
+    return 0;
+};

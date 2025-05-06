@@ -23,6 +23,7 @@ import { truncateAddress } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import { getCollateralAddress, getCollateralIndex, getCollaterals } from 'utils/collaterals';
+import { isSmallDevice } from 'utils/device';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import { getOnRamperUrl } from 'utils/particleWallet/utils';
 import { navigateTo } from 'utils/routes';
@@ -107,6 +108,12 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
             containerStyle={{
                 background: theme.background.secondary,
                 border: 'none',
+            }}
+            mobileStyle={{
+                container: {
+                    borderRadius: 0,
+                    minHeight: '100vh',
+                },
             }}
             hideHeader
             title=""
@@ -217,6 +224,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                     <Tooltip
                         customIconStyling={{ color: theme.textColor.secondary }}
                         overlay={t('get-started.fund-account.tooltip-universal')}
+                        open={!isSmallDevice}
                     >
                         <ButtonLocal
                             onClick={() => {
@@ -231,6 +239,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                     <Tooltip
                         customIconStyling={{ color: theme.textColor.secondary }}
                         overlay={t('get-started.fund-account.tooltip-5')}
+                        open={!isSmallDevice}
                     >
                         <ButtonLocal
                             onClick={() => {
@@ -244,6 +253,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                     <Tooltip
                         customIconStyling={{ color: theme.textColor.secondary }}
                         overlay={t('get-started.fund-account.tooltip-4')}
+                        open={!isSmallDevice}
                     >
                         <ButtonLocal
                             disabled={totalBalanceValue === 0}
@@ -259,6 +269,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                     <Tooltip
                         customIconStyling={{ color: theme.textColor.secondary }}
                         overlay={t('get-started.fund-account.tooltip-3')}
+                        open={!isSmallDevice}
                     >
                         <ButtonLocal disabled>
                             <ButtonText>{t('get-started.fund-account.from-exchange')}</ButtonText>
