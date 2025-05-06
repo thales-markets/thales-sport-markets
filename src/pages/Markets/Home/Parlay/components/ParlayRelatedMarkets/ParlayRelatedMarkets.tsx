@@ -62,7 +62,7 @@ const ParlayRelatedMarkets: React.FC = () => {
 
     const walletAddress = (isBiconomy ? smartAddres : address) || '';
 
-    const userTicketsQuery = useUserTicketsQuery(walletAddress, { networkId, client }, isLiveTypeSelected, {
+    const userTicketsQuery = useUserTicketsQuery(walletAddress, { networkId, client }, true, {
         enabled: isConnected && ticket.length > 0,
     });
 
