@@ -66,6 +66,7 @@ const ParlayRelatedMarkets: React.FC = () => {
         enabled: isConnected && ticket.length > 0,
     });
 
+    // Created single tickets: live or other (non-live) related to selected game
     const createdSingleTickets: Ticket[] = useMemo(
         () =>
             userTicketsQuery.isSuccess && userTicketsQuery.data
@@ -89,6 +90,7 @@ const ParlayRelatedMarkets: React.FC = () => {
     );
 
     const prevLiveTradingRequests = useRef<LiveTradingRequest[]>([]);
+    // All live requests from contract
     const liveTradingRequests: LiveTradingRequest[] = useMemo(
         () =>
             isLiveTypeSelected && userTicketsQuery.isSuccess && userTicketsQuery.data
@@ -97,6 +99,8 @@ const ParlayRelatedMarkets: React.FC = () => {
         [userTicketsQuery.isSuccess, userTicketsQuery.data, isLiveTypeSelected]
     );
 
+    // Current live requests from UI (request ID could be missing if contract not reached)
+    // status is updated through redux and it follows toast messages
     const tempLiveTradingRequests: TicketMarketRequestData[] = useMemo(
         () =>
             isLiveTypeSelected
@@ -118,6 +122,7 @@ const ParlayRelatedMarkets: React.FC = () => {
         [ticketRequestStatusById, liveTradingRequests, isLiveTypeSelected]
     );
 
+    // Merged all tickets and requests, filtered and sorted
     const markets: (TicketMarketRequestData | LiveTradingRequest | Ticket)[] = useMemo(() => {
         const failedLiveTradingRequests = liveTradingRequests.filter(
             (request) =>
@@ -164,7 +169,7 @@ const ParlayRelatedMarkets: React.FC = () => {
 
     const isEmpty = useMemo(() => !markets.length, [markets]);
 
-    // Refresh pending requests on every 5s
+    // Refresh pending live requests on every 5s
     useInterval(() => {
         const isPendingRequests = liveTradingRequests.some(
             (market) =>
