@@ -123,7 +123,10 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
 
                     <BalanceWrapper>
                         <BalanceContainer>
-                            <FieldHeader>Total Balance</FieldHeader>
+                            <FieldHeader>
+                                Total Balance{' '}
+                                <Reload onClick={() => refetchUnifyBalance()} className="icon icon--revert" />
+                            </FieldHeader>
 
                             <Balance>
                                 {formatCurrencyWithKey(USD_SIGN, universalBalance?.totalAmountInUSD ?? 0, 2)}
@@ -274,12 +277,18 @@ const SupportedChains = styled(HeaderAddresses)`
     color: ${(props) => props.theme.textColor.secondary};
 `;
 
+const Reload = styled.i`
+    cursor: pointer;
+`;
+
 const FieldHeader = styled.p`
     font-size: 16px;
     font-weight: 500;
     line-height: 16px;
     color: ${(props) => props.theme.textColor.primary};
     white-space: pre;
+    display: flex;
+    align-items: center;
 `;
 
 const FieldLabel = styled(FieldHeader)`
