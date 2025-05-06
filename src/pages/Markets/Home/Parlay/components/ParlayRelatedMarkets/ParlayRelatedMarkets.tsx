@@ -169,12 +169,12 @@ const ParlayRelatedMarkets: React.FC = () => {
 
     const isEmpty = useMemo(() => !markets.length, [markets]);
 
-    // Refresh pending live requests on every 5s
+    // Refresh pending live requests on every 5s if not in temp requests
     useInterval(() => {
         const isPendingRequests = liveTradingRequests.some(
-            (market) =>
-                market.requestId &&
-                ![LiveTradingTicketStatus.ERROR, LiveTradingTicketStatus.SUCCESS].includes(market.status)
+            (request) =>
+                ![LiveTradingTicketStatus.ERROR, LiveTradingTicketStatus.SUCCESS].includes(request.status) &&
+                ticketRequestStatusById[request.requestId] === undefined
         );
 
         if (isPendingRequests) {
