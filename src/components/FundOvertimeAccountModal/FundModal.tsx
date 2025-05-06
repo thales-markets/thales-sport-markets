@@ -39,7 +39,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const { t } = useTranslation();
 
-    const { universalAddress } = useUniversalAccount();
+    const { universalAddress } = useUniversalAccount(); // added this hook here so we reduce the amount for loading universal data when users opens universal deposit
     console.log(universalAddress);
 
     const client = useClient();

@@ -2,6 +2,7 @@ import particleLogo from 'assets/images/particle_logo.svg?react';
 import Button from 'components/Button';
 import NumericInput from 'components/fields/NumericInput';
 import Modal from 'components/Modal';
+import SimpleLoader from 'components/SimpleLoader';
 import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from 'constants/currency';
@@ -43,7 +44,7 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
         }
     };
 
-    const isButtonDisable =
+    const isButtonDisabled =
         !universalBalance?.totalAmountInUSD ||
         universalBalance?.totalAmountInUSD === 0 ||
         Number(amount as any) <= 0 ||
@@ -64,135 +65,148 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
             title=""
             onClose={onClose}
         >
-            <Wrapper>
-                <FlexDivRow>
-                    <Title>{t('get-started.universal-account.title')}</Title>
-                </FlexDivRow>
-                <FlexDivSpaceBetween>
-                    <HeaderAddresses>{t('get-started.universal-account.address')}</HeaderAddresses>
-                    <SupportedChains>
-                        {t('get-started.universal-account.supported-chains')}
-                        <Tooltip
-                            overlay={
-                                <ChainContainer>
-                                    {SUPPORTED_NETWORKS_UNIVERSAL_DEPOSIT.map((chain, index) => {
-                                        return (
-                                            <Chain key={index}>
-                                                <ChainIcon className={`chain-icon chain-icon--${chain.iconName}`} />
-                                                {chain.name}
-                                            </Chain>
-                                        );
-                                    })}
-                                </ChainContainer>
-                            }
-                            overlayInnerStyle={{ maxWidth: 400 }}
-                            iconFontSize={14}
-                            marginLeft={3}
-                            iconColor={theme.textColor.secondary}
+            {universalAddress !== '' ? (
+                <Wrapper>
+                    <FlexDivRow>
+                        <Title>{t('get-started.universal-account.title')}</Title>
+                    </FlexDivRow>
+                    <FlexDivSpaceBetween>
+                        <HeaderAddresses>{t('get-started.universal-account.address')}</HeaderAddresses>
+                        <SupportedChains>
+                            {t('get-started.universal-account.supported-chains')}
+                            <Tooltip
+                                overlay={
+                                    <ChainContainer>
+                                        {SUPPORTED_NETWORKS_UNIVERSAL_DEPOSIT.map((chain, index) => {
+                                            return (
+                                                <Chain key={index}>
+                                                    <ChainIcon className={`chain-icon chain-icon--${chain.iconName}`} />
+                                                    {chain.name}
+                                                </Chain>
+                                            );
+                                        })}
+                                    </ChainContainer>
+                                }
+                                overlayInnerStyle={{ maxWidth: 400 }}
+                                iconFontSize={14}
+                                marginLeft={3}
+                                iconColor={theme.textColor.secondary}
+                            />
+                        </SupportedChains>
+                    </FlexDivSpaceBetween>
+
+                    <DarkBackgroundWrapper>
+                        <FieldLabel>{t('get-started.universal-account.evm-label')}</FieldLabel>
+                        <ChainWrapper>
+                            <Asset className="currency-icon currency-icon--eth" />
+                            <FieldHeader>{t('get-started.universal-account.evm')}</FieldHeader>
+                        </ChainWrapper>
+                        <AddressContainer>
+                            <Field onClick={() => handleCopy(universalAddress)}>
+                                {universalAddress} <CopyIcon className="icon icon--copy" />
+                            </Field>
+                        </AddressContainer>
+                    </DarkBackgroundWrapper>
+
+                    <DarkBackgroundWrapper>
+                        <FieldLabel>{t('get-started.universal-account.solana-label')}</FieldLabel>
+                        <ChainWrapper>
+                            <Asset className="currency-icon currency-icon--sol" />
+                            <FieldHeader>{t('get-started.universal-account.solana')}</FieldHeader>
+                        </ChainWrapper>
+                        <AddressContainer>
+                            <Field onClick={() => handleCopy(universalSolanaAddress)}>
+                                {universalSolanaAddress} <CopyIcon className="icon icon--copy" />
+                            </Field>
+                        </AddressContainer>
+                    </DarkBackgroundWrapper>
+
+                    <BalanceWrapper>
+                        <BalanceContainer>
+                            <FieldHeader>Total Balance</FieldHeader>
+
+                            <Balance>
+                                {formatCurrencyWithKey(USD_SIGN, universalBalance?.totalAmountInUSD ?? 0, 2)}
+                            </Balance>
+                        </BalanceContainer>
+                        {universalBalance?.assets
+                            .filter((data) => data.tokenType !== 'btc')
+                            .map((data) => (
+                                <AssetContainer key={data.tokenType}>
+                                    <AssetWrapper>
+                                        <Asset
+                                            className={
+                                                COLLATERAL_ICONS_CLASS_NAMES[data.tokenType.toUpperCase() as Coins]
+                                            }
+                                        />
+                                        {data.tokenType}
+                                    </AssetWrapper>
+                                    <Label>{formatCurrencyWithKey('', data.amount)}</Label>
+                                    <Label>{formatCurrencyWithKey(USD_SIGN, data.amountInUSD, 2)}</Label>
+                                </AssetContainer>
+                            ))}
+                    </BalanceWrapper>
+
+                    <ButtonContainer>
+                        <NumericInput
+                            value={amount}
+                            onChange={(_, value) => setAmount(value)}
+                            inputFontWeight="700"
+                            inputPadding="5px 10px"
+                            height="44px"
+                            inputFontSize="16px"
+                            background={theme.background.quinary}
+                            borderColor={theme.background.quinary}
+                            fontWeight="700"
+                            color={theme.textColor.primary}
+                            placeholder={t('liquidity-pool.deposit-amount-placeholder')}
+                            onMaxButton={() => setAmount(universalBalance?.totalAmountInUSD || 0)}
                         />
-                    </SupportedChains>
-                </FlexDivSpaceBetween>
-
-                <DarkBackgroundWrapper>
-                    <FieldLabel>{t('get-started.universal-account.evm-label')}</FieldLabel>
-                    <ChainWrapper>
-                        <Asset className="currency-icon currency-icon--eth" />
-                        <FieldHeader>{t('get-started.universal-account.evm')}</FieldHeader>
-                    </ChainWrapper>
-                    <AddressContainer>
-                        <Field onClick={() => handleCopy(universalAddress)}>
-                            {universalAddress} <CopyIcon className="icon icon--copy" />
-                        </Field>
-                    </AddressContainer>
-                </DarkBackgroundWrapper>
-
-                <DarkBackgroundWrapper>
-                    <FieldLabel>{t('get-started.universal-account.solana-label')}</FieldLabel>
-                    <ChainWrapper>
-                        <Asset className="currency-icon currency-icon--sol" />
-                        <FieldHeader>{t('get-started.universal-account.solana')}</FieldHeader>
-                    </ChainWrapper>
-                    <AddressContainer>
-                        <Field onClick={() => handleCopy(universalSolanaAddress)}>
-                            {universalSolanaAddress} <CopyIcon className="icon icon--copy" />
-                        </Field>
-                    </AddressContainer>
-                </DarkBackgroundWrapper>
-
-                <BalanceWrapper>
-                    <BalanceContainer>
-                        <FieldHeader>Total Balance</FieldHeader>
-
-                        <Balance>{formatCurrencyWithKey(USD_SIGN, universalBalance?.totalAmountInUSD ?? 0, 2)}</Balance>
-                    </BalanceContainer>
-                    {universalBalance?.assets
-                        .filter((data) => data.tokenType !== 'btc')
-                        .map((data) => (
-                            <AssetContainer key={data.tokenType}>
-                                <AssetWrapper>
-                                    <Asset
-                                        className={COLLATERAL_ICONS_CLASS_NAMES[data.tokenType.toUpperCase() as Coins]}
-                                    />
-                                    {data.tokenType}
-                                </AssetWrapper>
-                                <Label>{formatCurrencyWithKey('', data.amount)}</Label>
-                                <Label>{formatCurrencyWithKey(USD_SIGN, data.amountInUSD, 2)}</Label>
-                            </AssetContainer>
-                        ))}
-                </BalanceWrapper>
-
-                <ButtonContainer>
-                    <NumericInput
-                        value={amount}
-                        onChange={(_, value) => setAmount(value)}
-                        inputFontWeight="700"
-                        inputPadding="5px 10px"
-                        height="44px"
-                        inputFontSize="16px"
-                        background={theme.background.quinary}
-                        borderColor={theme.background.quinary}
-                        fontWeight="700"
-                        color={theme.textColor.primary}
-                        placeholder={t('liquidity-pool.deposit-amount-placeholder')}
-                        onMaxButton={() => setAmount(universalBalance?.totalAmountInUSD || 0)}
-                    />
-                    <Button
-                        backgroundColor={theme.overdrop.borderColor.tertiary}
-                        borderColor={theme.overdrop.borderColor.tertiary}
-                        textColor={theme.button.textColor.primary}
-                        height="44px"
-                        fontSize="16px"
-                        fontWeight="700"
-                        borderRadius="8px"
-                        additionalStyles={{ whiteSpace: 'pre', marginTop: 10 }}
-                        disabled={isButtonDisable}
-                        onClick={async () => {
-                            if (!isButtonDisable) {
-                                const id = toast.loading(t('get-started.universal-account.transfer-pending'));
-                                try {
-                                    const result = await sendUniversalTranser(amount as any);
-                                    if (result?.success) {
-                                        refetchBalances(biconomyConnector.address, Network.OptimismMainnet);
-                                        await refetchUnifyBalance();
+                        <Button
+                            backgroundColor={theme.overdrop.borderColor.tertiary}
+                            borderColor={theme.overdrop.borderColor.tertiary}
+                            textColor={theme.button.textColor.primary}
+                            height="44px"
+                            fontSize="16px"
+                            fontWeight="700"
+                            borderRadius="8px"
+                            additionalStyles={{ whiteSpace: 'pre', marginTop: 10 }}
+                            disabled={isButtonDisabled}
+                            onClick={async () => {
+                                if (!isButtonDisabled) {
+                                    const id = toast.loading(t('get-started.universal-account.transfer-pending'));
+                                    try {
+                                        const result = await sendUniversalTranser(amount as any);
+                                        if (result?.success) {
+                                            refetchBalances(biconomyConnector.address, Network.OptimismMainnet);
+                                            await refetchUnifyBalance();
+                                            toast.update(
+                                                id,
+                                                getSuccessToastOptions(t('get-started.universal-account.success'))
+                                            );
+                                        } else {
+                                            toast.update(id, getErrorToastOptions(result?.message));
+                                        }
+                                    } catch (e) {
                                         toast.update(
                                             id,
-                                            getSuccessToastOptions(t('get-started.universal-account.success'))
+                                            getErrorToastOptions(t('get-started.universal-account.error'))
                                         );
-                                    } else {
-                                        toast.update(id, getErrorToastOptions(result?.message));
+                                        console.log(e);
                                     }
-                                } catch (e) {
-                                    toast.update(id, getErrorToastOptions(t('get-started.universal-account.error')));
-                                    console.log(e);
                                 }
-                            }
-                        }}
-                    >
-                        Transfer to <OvertimeAcc className="icon icon--overtime" /> account
-                    </Button>
-                </ButtonContainer>
-                <ParticleLogo onClick={() => window.open(LINKS.Particle, '_blank')} />
-            </Wrapper>
+                            }}
+                        >
+                            Transfer to <OvertimeAcc className="icon icon--overtime" /> account
+                        </Button>
+                    </ButtonContainer>
+                    <ParticleLogo onClick={() => window.open(LINKS.Particle, '_blank')} />
+                </Wrapper>
+            ) : (
+                <Wrapper>
+                    <SimpleLoader />
+                </Wrapper>
+            )}
         </Modal>
     );
 };
@@ -201,8 +215,11 @@ const Wrapper = styled.div`
     flex-direction: column;
     display: flex;
     background: ${(props) => props.theme.background.secondary};
+    min-width: 300px;
+    min-height: 300px;
     @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         padding: 20px 15px 0 15px;
+        min-height: 100vh;
     }
     padding: 25px 30px 0 30px;
 `;
