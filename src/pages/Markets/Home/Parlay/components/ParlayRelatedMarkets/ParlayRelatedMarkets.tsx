@@ -125,7 +125,7 @@ const ParlayRelatedMarkets: React.FC = () => {
                 ticketRequestStatusById[request.requestId] === undefined // not in temp requests
         );
 
-        // Detect new liveTradingRequests and if there are new ones remove those pending from temp requests
+        // Detect new liveTradingRequests and if there are new ones remove those stuck at pending from temp requests
         let refreshedTempLiveTradingRequests = tempLiveTradingRequests;
         if (!prevLiveTradingRequests.current.length) {
             prevLiveTradingRequests.current = liveTradingRequests;
@@ -134,9 +134,12 @@ const ParlayRelatedMarkets: React.FC = () => {
                 (request) =>
                     !prevLiveTradingRequests.current.some((prevRequest) => prevRequest.requestId === request.requestId)
             ).length;
-            if (diffCount > 0) {
+            const isSomePending = tempLiveTradingRequests.some(
+                (request) => request.status === LiveTradingTicketStatus.PENDING
+            );
+            if (diffCount > 0 && isSomePending) {
                 let removedCount = 0;
-                refreshedTempLiveTradingRequests = refreshedTempLiveTradingRequests.filter((request) => {
+                refreshedTempLiveTradingRequests = tempLiveTradingRequests.filter((request) => {
                     const isPending = request.status === LiveTradingTicketStatus.PENDING;
                     if (isPending) {
                         removedCount++;
