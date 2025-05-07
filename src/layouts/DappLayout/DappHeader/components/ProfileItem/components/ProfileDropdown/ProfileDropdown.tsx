@@ -1,8 +1,8 @@
 import SPAAnchor from 'components/SPAAnchor';
+import ToggleWallet from 'components/ToggleWallet';
 import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
 import { USD_SIGN } from 'constants/currency';
 import ROUTES from 'constants/routes';
-import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { ProfileTab, ScreenSizeBreakpoint } from 'enums/ui';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
@@ -10,10 +10,10 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getIsBiconomy, setIsBiconomy, setWalletConnectModalVisibility } from 'redux/modules/wallet';
+import { getIsBiconomy, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumnStart } from 'styles/common';
-import { formatCurrencyWithSign, localStore, truncateAddress } from 'thales-utils';
+import { formatCurrencyWithSign, truncateAddress } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import { getCollaterals } from 'utils/collaterals';
@@ -87,26 +87,7 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({
 
     return (
         <Dropdown>
-            <ToggleContainer>
-                <ToggleWrapper
-                    active={isBiconomy}
-                    onClick={() => {
-                        dispatch(setIsBiconomy(true));
-                        localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, true);
-                    }}
-                >
-                    <Text>{t('profile.dropdown.account')}</Text>
-                </ToggleWrapper>
-                <ToggleWrapper
-                    active={!isBiconomy}
-                    onClick={() => {
-                        dispatch(setIsBiconomy(false));
-                        localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, false);
-                    }}
-                >
-                    <Text>{t('profile.dropdown.eoa')}</Text>
-                </ToggleWrapper>
-            </ToggleContainer>
+            <ToggleWallet />
             <Separator />
             <BalanceWrapper>
                 <FlexDivColumnStart gap={6}>
@@ -231,27 +212,6 @@ const Wrapper = styled.div`
     align-items: center;
     gap: 10px;
     width: 100%;
-`;
-
-const ToggleContainer = styled(Wrapper)`
-    padding: 8px;
-    background: ${(props) => props.theme.background.primary};
-    border-radius: 8px;
-`;
-const ToggleWrapper = styled.div<{ active?: boolean }>`
-    display: flex;
-    align-items: center;
-    flex: 1;
-    justify-content: center;
-
-    background: ${(props) => (!props.active ? '' : props.theme.background.quaternary)};
-    ${Text} {
-        color: ${(props) => (props.active ? props.theme.textColor.senary : props.theme.textColor.secondary)};
-    }
-    border-radius: 8px;
-    padding: 8px 12px;
-
-    cursor: pointer;
 `;
 
 const Label = styled(Text)`
