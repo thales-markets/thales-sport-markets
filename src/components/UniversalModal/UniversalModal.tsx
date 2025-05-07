@@ -28,6 +28,7 @@ type UniversalModal = {
 
 const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
     const { t } = useTranslation();
+    console.log('heh he');
 
     const { universalAddress, universalSolanaAddress, universalBalance, refetchUnifyBalance } = useUniversalAccount();
 
