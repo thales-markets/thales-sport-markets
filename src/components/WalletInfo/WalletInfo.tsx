@@ -1,3 +1,4 @@
+import FundModal from 'components/FundOvertimeAccountModal';
 import NetworkSwitcher from 'components/NetworkSwitcher';
 import OutsideClickHandler from 'components/OutsideClick';
 import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
@@ -5,6 +6,7 @@ import { COLLATERALS } from 'constants/currency';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import ProfileItem from 'layouts/DappLayout/DappHeader/components/ProfileItem';
 import ProfileDropdown from 'layouts/DappLayout/DappHeader/components/ProfileItem/components/ProfileDropdown';
+import WithdrawModal from 'pages/Profile/components/WithdrawModal';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -35,6 +37,9 @@ const WalletInfo: React.FC = ({}) => {
 
     const [isFreeBetInitialized, setIsFreeBetInitialized] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
+
+    const [showFundModal, setShowFundModal] = useState<boolean>(false);
+    const [showWithdrawModal, setShowWithdrawModal] = useState<boolean>(false);
 
     // Invalidate default selectedCollateralIndex
     useEffect(() => {
@@ -99,10 +104,18 @@ const WalletInfo: React.FC = ({}) => {
                             onClick={() => setShowDropdown(false)}
                         />
 
-                        {showDropdown && <ProfileDropdown setShowDropdown={setShowDropdown} />}
+                        {showDropdown && (
+                            <ProfileDropdown
+                                setShowDepositModal={setShowFundModal}
+                                setShowWithdrawModal={setShowWithdrawModal}
+                                setShowDropdown={setShowDropdown}
+                            />
+                        )}
                     </WalletWrapper>
                 </OutsideClickHandler>
             )}
+            {showFundModal && <FundModal onClose={() => setShowFundModal(false)} />}
+            {showWithdrawModal && <WithdrawModal onClose={() => setShowWithdrawModal(false)} />}
         </Container>
     ) : (
         <>

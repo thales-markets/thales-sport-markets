@@ -8,6 +8,7 @@ import Tooltip from 'components/Tooltip';
 import UniversalModal from 'components/UniversalModal';
 import { COLLATERAL_ICONS_CLASS_NAMES } from 'constants/currency';
 import ROUTES from 'constants/routes';
+import { Network } from 'enums/network';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import QRCodeModal from 'pages/AARelatedPages/Deposit/components/QRCodeModal';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
@@ -221,21 +222,23 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                 )}
 
                 <Container>
-                    <Tooltip
-                        customIconStyling={{ color: theme.textColor.secondary }}
-                        overlay={t('get-started.fund-account.tooltip-universal')}
-                        open={!isSmallDevice}
-                    >
-                        <ButtonLocal
-                            onClick={() => {
-                                setShowUniversalModal(true);
-                            }}
+                    {networkId === Network.OptimismMainnet && (
+                        <Tooltip
+                            customIconStyling={{ color: theme.textColor.secondary }}
+                            overlay={t('get-started.fund-account.tooltip-universal')}
+                            open={!isSmallDevice}
                         >
-                            <ButtonText>{t('get-started.fund-account.universal-deposit')}</ButtonText>
-                            <ParticleLogo src={particle} />
-                            <BetaTag>Beta</BetaTag>
-                        </ButtonLocal>
-                    </Tooltip>
+                            <ButtonLocal
+                                onClick={() => {
+                                    setShowUniversalModal(true);
+                                }}
+                            >
+                                <ButtonText>{t('get-started.fund-account.universal-deposit')}</ButtonText>
+                                <ParticleLogo src={particle} />
+                                <BetaTag>Beta</BetaTag>
+                            </ButtonLocal>
+                        </Tooltip>
+                    )}
                     <Tooltip
                         customIconStyling={{ color: theme.textColor.secondary }}
                         overlay={t('get-started.fund-account.tooltip-5')}

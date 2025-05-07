@@ -1,18 +1,17 @@
 import { useAuthCore } from '@particle-network/authkit';
 import ClaimFreeBetButton from 'components/ClaimFreeBetButton';
-import Toggle from 'components/Toggle';
+import ToggleWallet from 'components/ToggleWallet';
 import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
 import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from 'constants/currency';
-import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import useUsersStatsV2Query from 'queries/wallet/useUsersStatsV2Query';
 import React, { Fragment, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getIsBiconomy, setIsBiconomy } from 'redux/modules/wallet';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import {
     FlexDivColumn,
@@ -22,7 +21,7 @@ import {
     FlexDivSpaceBetween,
     FlexDivStart,
 } from 'styles/common';
-import { Coins, formatCurrencyWithSign, localStore, truncateAddress } from 'thales-utils';
+import { Coins, formatCurrencyWithSign, truncateAddress } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import { isStableCurrency, sortCollateralBalances } from 'utils/collaterals';
@@ -31,7 +30,6 @@ import { useAccount, useChainId, useClient } from 'wagmi';
 
 const UserStats: React.FC = () => {
     const { t } = useTranslation();
-    const dispatch = useDispatch();
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
     const networkId = useChainId();
@@ -127,22 +125,7 @@ const UserStats: React.FC = () => {
                 <FlexDivStart gap={8}>
                     <FlexDivColumnStart gap={10}>
                         <Section>
-                            <Text>{t('profile.dropdown.account')}</Text>
-
-                            <Toggle
-                                height="24px"
-                                active={!isBiconomy}
-                                handleClick={() => {
-                                    if (isBiconomy) {
-                                        dispatch(setIsBiconomy(false));
-                                        localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, false);
-                                    } else {
-                                        dispatch(setIsBiconomy(true));
-                                        localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, true);
-                                    }
-                                }}
-                            />
-                            <Text>{t('profile.dropdown.eoa')}</Text>
+                            <ToggleWallet />
                         </Section>
                         <Separator />
                         <Section>
@@ -327,6 +310,16 @@ const SubHeaderIcon = styled.i`
     text-transform: none;
 `;
 
+const Text = styled.span<{ active?: boolean }>`
+    position: relative;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 14px;
+    white-space: pre;
+    text-align: left;
+    color: ${(props) => (props.active ? props.theme.textColor.quaternary : props.theme.textColor.primary)};
+`;
+
 const SubHeaderWrapper = styled(FlexDivRow)`
     &::after,
     &:before {
@@ -365,16 +358,6 @@ const CopyIcon = styled.i<{ active?: boolean }>`
 const WalletIcon = styled.i<{ active?: boolean }>`
     font-size: 18px;
     width: 20px;
-    color: ${(props) => (props.active ? props.theme.textColor.quaternary : props.theme.textColor.primary)};
-`;
-
-const Text = styled.span<{ active?: boolean }>`
-    position: relative;
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 14px;
-    white-space: pre;
-    text-align: left;
     color: ${(props) => (props.active ? props.theme.textColor.quaternary : props.theme.textColor.primary)};
 `;
 
