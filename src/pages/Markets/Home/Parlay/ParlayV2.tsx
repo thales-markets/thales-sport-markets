@@ -78,7 +78,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     const isLiveFilterSelected = sportFilter == SportFilter.Live;
     const isBiconomy = useSelector(getIsBiconomy);
     const { address, isConnected } = useAccount();
-    const smartAddress = useBiconomy();
+    const { smartAddress } = useBiconomy();
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const [ticketMarkets, setTicketMarkets] = useState<TicketMarket[]>([]);

@@ -46,7 +46,7 @@ function useBiconomy() {
         }
     }, [dispatch, switchChain, networkId, disconnect, walletClient, isConnected, smartAddress]);
 
-    return smartAddress;
+    return { smartAddress };
 }
 
 export default useBiconomy;

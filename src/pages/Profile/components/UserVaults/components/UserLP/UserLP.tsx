@@ -31,8 +31,8 @@ const UserLP: React.FC<UserLPProps> = ({ lp }) => {
     const networkId = useChainId();
     const client = useClient();
     const { isConnected, address } = useAccount();
-    const smartAddres = useBiconomy();
-    const walletAddress = (isBiconomy ? smartAddres : address) || '';
+    const { smartAddress } = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const userLpQuery = useLiquidityPoolUserDataQuery(
         lp.address,
