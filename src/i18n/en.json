@@ -1112,6 +1112,7 @@
             "tooltip-2": "Deposit supported tokens to the address below. Make sure you select <span>{{ network }}</span> network when sending.",
             "tooltip-3": "Onramper integration, coming soon.",
             "tooltip-4": "Send funds from your wallet to your Overtime Account.",
+            "tooltip-universal": "Use this option to fund your Overtime Account from any network or chain with ETH, USDC, USDT, SOL or BNB",
             "tooltip-5": "Buy Crypto using your credit card or wire transfer",
             "powered-by": "Powered by <icon/>",
             "current-network": "Current network: ",
@@ -1124,7 +1125,8 @@
             "copy": "Copy",
             "qr": "QR",
             "wait-deposit": "Waiting for deposit...",
-            "claim-free-bet": "Claim a {{amount}} Free Bet."
+            "claim-free-bet": "Claim a {{amount}} Free Bet.",
+            "universal-deposit": "Universal deposit"
         },
         "withdraw": {
             "title": "Withdraw from <icon/> account",
@@ -1139,6 +1141,22 @@
             "activate-my-account": "Activate My Account",
             "activate-progress": "Activating...",
             "action": "Activate"
+        },
+        "universal-account": {
+            "title": "Universal deposit",
+            "address": "Your addresses",
+            "supported-chains": "Supported chains",
+            "evm": "EVM address",
+            "solana": "Solana address",
+            "subtitle": "Send supported crypto to the address below on supported chains",
+            "amount": "Transfer amount",
+            "transfer-pending": "Transfer to Overtime Account pending",
+            "success": "Transfed funds to Overtime Account successfully",
+            "error": "Some error occurred while transfering funds.",
+            "warning": "Ethereum has high deposit fees. We recommend using any other network when possible.",
+            "evm-label": "Send ETH, USDC, USDT or BNB to this address",
+            "solana-label": "Send SOL to this address",
+            "refresh": "Refresh your balance"
         }
     },
     "liquidity-pool": {

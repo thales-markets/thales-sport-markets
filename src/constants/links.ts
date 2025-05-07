@@ -26,4 +26,5 @@ export const LINKS = {
     OvertimeAccount: 'https://docs.overtime.io/about-overtime-sportsbook/overtime-account',
     UnstakingThales: 'https://www.overtime.io/token/staking',
     UnstakingLp: 'https://www.overtime.io/token/lp-staking',
+    Particle: 'https://particle.network/',
 };

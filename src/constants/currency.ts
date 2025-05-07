@@ -107,7 +107,7 @@ export const FREE_BET_COLLATERALS: Record<SupportedNetwork, Coins[]> = {
     ],
 };
 
-export const COLLATERAL_ICONS_CLASS_NAMES: Record<Coins, string> = {
+export const COLLATERAL_ICONS_CLASS_NAMES: Record<string, string> = {
     DAI: 'currency-icon currency-icon--dai',
     USDCe: 'currency-icon currency-icon--usdce',
     USDC: 'currency-icon currency-icon--usdc',
@@ -122,6 +122,9 @@ export const COLLATERAL_ICONS_CLASS_NAMES: Record<Coins, string> = {
     OVER: 'currency-icon currency-icon--over',
     cbBTC: 'currency-icon currency-icon--cbbtc',
     wBTC: 'currency-icon currency-icon--wbtc',
+    BTC: 'currency-icon currency-icon--wbtc',
+    BNB: 'currency-icon currency-icon--bnb',
+    SOL: 'currency-icon currency-icon--sol',
 };
 
 export const DEFAULT_MULTI_COLLATERAL_BALANCE = {

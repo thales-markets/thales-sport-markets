@@ -1,11 +1,14 @@
+import particle from 'assets/images/particle.png';
 import Button from 'components/Button';
 import ClaimFreeBetButton from 'components/ClaimFreeBetButton';
 import DepositFromWallet from 'components/DepositFromWallet';
 import Modal from 'components/Modal';
 import NetworkSwitcher from 'components/NetworkSwitcher';
 import Tooltip from 'components/Tooltip';
+import UniversalModal from 'components/UniversalModal';
 import { COLLATERAL_ICONS_CLASS_NAMES } from 'constants/currency';
 import ROUTES from 'constants/routes';
+import { Network } from 'enums/network';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import QRCodeModal from 'pages/AARelatedPages/Deposit/components/QRCodeModal';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
@@ -21,10 +24,12 @@ import { truncateAddress } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import { getCollateralAddress, getCollateralIndex, getCollaterals } from 'utils/collaterals';
+import { isSmallDevice } from 'utils/device';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import { getOnRamperUrl } from 'utils/particleWallet/utils';
 import { navigateTo } from 'utils/routes';
 import useBiconomy from 'utils/useBiconomy';
+import useUniversalAccount from 'utils/useUniversalAccount';
 import { useAccount, useChainId, useClient } from 'wagmi';
 
 type FundModalProps = {
@@ -36,16 +41,20 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const { t } = useTranslation();
 
+    const { universalAddress } = useUniversalAccount(); // added this hook here so we reduce the amount for loading universal data when users opens universal deposit
+    console.log(universalAddress);
+
     const client = useClient();
     const { address, isConnected } = useAccount();
 
     const theme = useTheme();
     const networkId = useChainId();
-    const smartAddres = useBiconomy();
-    const walletAddress = (isBiconomy ? smartAddres : address) || '';
+    const { smartAddress } = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const [showQRModal, setShowQRModal] = useState<boolean>(false);
     const [showDepositFromWallet, setShowDepositFromWallet] = useState<boolean>(false);
+    const [showUniversalModal, setShowUniversalModal] = useState<boolean>(false);
 
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(
         address as string,
@@ -100,6 +109,12 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
             containerStyle={{
                 background: theme.background.secondary,
                 border: 'none',
+            }}
+            mobileStyle={{
+                container: {
+                    borderRadius: 0,
+                    minHeight: '100vh',
+                },
             }}
             hideHeader
             title=""
@@ -207,9 +222,27 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                 )}
 
                 <Container>
+                    {networkId === Network.OptimismMainnet && (
+                        <Tooltip
+                            customIconStyling={{ color: theme.textColor.secondary }}
+                            overlay={t('get-started.fund-account.tooltip-universal')}
+                            open={!isSmallDevice}
+                        >
+                            <ButtonLocal
+                                onClick={() => {
+                                    setShowUniversalModal(true);
+                                }}
+                            >
+                                <ButtonText>{t('get-started.fund-account.universal-deposit')}</ButtonText>
+                                <ParticleLogo src={particle} />
+                                <BetaTag>Beta</BetaTag>
+                            </ButtonLocal>
+                        </Tooltip>
+                    )}
                     <Tooltip
                         customIconStyling={{ color: theme.textColor.secondary }}
                         overlay={t('get-started.fund-account.tooltip-5')}
+                        open={!isSmallDevice}
                     >
                         <ButtonLocal
                             onClick={() => {
@@ -223,6 +256,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                     <Tooltip
                         customIconStyling={{ color: theme.textColor.secondary }}
                         overlay={t('get-started.fund-account.tooltip-4')}
+                        open={!isSmallDevice}
                     >
                         <ButtonLocal
                             disabled={totalBalanceValue === 0}
@@ -234,9 +268,11 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                             <Icon className="icon icon--wallet-connected" />
                         </ButtonLocal>
                     </Tooltip>
+
                     <Tooltip
                         customIconStyling={{ color: theme.textColor.secondary }}
                         overlay={t('get-started.fund-account.tooltip-3')}
+                        open={!isSmallDevice}
                     >
                         <ButtonLocal disabled>
                             <ButtonText>{t('get-started.fund-account.from-exchange')}</ButtonText>
@@ -247,6 +283,13 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
             </Wrapper>
             {showQRModal && <QRCodeModal onClose={() => setShowQRModal(false)} walletAddress={walletAddress} />}
             {showDepositFromWallet && <DepositFromWallet onClose={() => setShowDepositFromWallet(false)} />}
+            {showUniversalModal && (
+                <UniversalModal
+                    onClose={() => {
+                        setShowUniversalModal(false);
+                    }}
+                />
+            )}
         </Modal>
     );
 };
@@ -413,6 +456,10 @@ const Icon = styled.i`
     font-size: 20px;
 `;
 
+const ParticleLogo = styled.img`
+    height: 24px;
+`;
+
 const CollateralText = styled.p`
     color: ${(props) => props.theme.textColor.primary};
     font-size: 14px;
@@ -457,6 +504,7 @@ const CloseIcon = styled.i.attrs({ className: 'icon icon--close' })`
 `;
 
 const ButtonLocal = styled(FlexDivCentered)<{ disabled?: boolean }>`
+    position: relative;
     border-radius: 8px;
     width: 100%;
     height: 42px;
@@ -490,11 +538,24 @@ const ButtonLocal = styled(FlexDivCentered)<{ disabled?: boolean }>`
             i {
                 color: ${props.theme.button.textColor.primary};
             }
+
+            span {
+             color: ${props.theme.button.textColor.primary};
+            }
     }
     `
             : ''}
 
     opacity: ${(props) => (props.disabled ? '0.5' : '1')};
+`;
+
+const BetaTag = styled.span`
+    position: absolute;
+    right: 10px;
+    top: 12px;
+    color: ${(props) => props.theme.textColor.primary};
+    text-transform: capitalize;
+    font-size: 14px;
 `;
 
 const Asset = styled.i<{ fontSize?: string }>`

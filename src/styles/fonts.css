@@ -47,3 +47,8 @@
     font-family: 'ThalesSidebarIcons';
     src: local('ThalesSidebarIcons'), url(../assets/fonts/ThalesSidebarIcons/ThalesSidebarIcons.ttf) format('truetype');
 }
+
+@font-face {
+    font-family: 'Chains';
+    src: local('Chains'), url(../assets/fonts/UniversalChains/chains.ttf) format('truetype');
+}

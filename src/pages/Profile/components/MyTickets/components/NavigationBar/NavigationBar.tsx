@@ -55,8 +55,8 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ selectedTab, setSelectedT
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
-    const smartAddres = useBiconomy();
-    const walletAddress = (isBiconomy ? smartAddres : address) || '';
+    const { smartAddress } = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const positionsCountQuery = usePositionCountV2Query(walletAddress, { networkId, client }, { enabled: isConnected });
 
