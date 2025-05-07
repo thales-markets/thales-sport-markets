@@ -559,13 +559,12 @@ const validateTx = async (transactionHash: string | undefined, networkId: Suppor
     }
 };
 
-export const sendUniversalTranser = async (amount: string) => {
+export const sendUniversalTransfer = async (amount: string) => {
     try {
-        const testAmount = Number(amount);
         const encodedCall = encodeFunctionData({
             abi: multipleCollateral.USDC.abi,
             functionName: 'transfer',
-            args: [biconomyConnector.address, coinParser('' + testAmount, Network.OptimismMainnet, 'USDC')],
+            args: [biconomyConnector.address, coinParser(amount, Network.OptimismMainnet, 'USDC')],
         });
 
         const transactionLocal = {
@@ -574,7 +573,7 @@ export const sendUniversalTranser = async (amount: string) => {
         };
 
         const transaction = await biconomyConnector.universalAccount?.createUniversalTransaction({
-            expectTokens: [{ type: SUPPORTED_TOKEN_TYPE.USDC, amount: testAmount + '' }],
+            expectTokens: [{ type: SUPPORTED_TOKEN_TYPE.USDC, amount }],
             chainId: Network.OptimismMainnet,
             transactions: [transactionLocal],
         });
@@ -608,7 +607,7 @@ export const validateMaxAmount = async (amount: number) => {
             const encodedCall = encodeFunctionData({
                 abi: multipleCollateral.USDC.abi,
                 functionName: 'transfer',
-                args: [biconomyConnector.address, coinParser(finalAmount + '', Network.OptimismMainnet, 'USDC')],
+                args: [biconomyConnector.address, coinParser(finalAmount.toString(), Network.OptimismMainnet, 'USDC')],
             });
 
             const transactionLocal = {
@@ -617,7 +616,7 @@ export const validateMaxAmount = async (amount: number) => {
             };
 
             await biconomyConnector.universalAccount?.createUniversalTransaction({
-                expectTokens: [{ type: SUPPORTED_TOKEN_TYPE.USDC, amount: finalAmount + '' }],
+                expectTokens: [{ type: SUPPORTED_TOKEN_TYPE.USDC, amount: finalAmount.toString() }],
                 chainId: Network.OptimismMainnet,
                 transactions: [transactionLocal],
             });

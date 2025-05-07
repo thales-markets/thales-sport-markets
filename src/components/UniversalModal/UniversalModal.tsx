@@ -16,7 +16,7 @@ import styled, { useTheme } from 'styled-components';
 import { FlexDivColumnCentered, FlexDivRow, FlexDivSpaceBetween, FlexDivStart } from 'styles/common';
 import { Coins, formatCurrencyWithKey, truncateAddress } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
-import { sendUniversalTranser, validateMaxAmount } from 'utils/biconomy';
+import { sendUniversalTransfer, validateMaxAmount } from 'utils/biconomy';
 import biconomyConnector from 'utils/biconomyWallet';
 import { SUPPORTED_NETWORKS_UNIVERSAL_DEPOSIT } from 'utils/particleWallet/utils';
 import { refetchBalances } from 'utils/queryConnector';
@@ -195,7 +195,7 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
                                 if (!isButtonDisabled) {
                                     const id = toast.loading(t('get-started.universal-account.transfer-pending'));
                                     try {
-                                        const result = await sendUniversalTranser(amount as any);
+                                        const result = await sendUniversalTransfer(amount as any);
                                         if (result?.success) {
                                             refetchBalances(biconomyConnector.address, Network.OptimismMainnet);
                                             await refetchUnifyBalance();
