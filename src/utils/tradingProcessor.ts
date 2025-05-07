@@ -39,28 +39,18 @@ const checkFulfilledTx = async (
 
         if (!!adapterResponse.data) {
             if (adapterResponse.data.allow) {
-                dispatch &&
-                    liveTicketRequestData &&
-                    dispatch(
-                        updateTicketRequestStatus({
-                            ...liveTicketRequestData,
-                            status: LiveTradingTicketStatus.APPROVED,
-                            finalStatus: LiveTradingFinalStatus.IN_PROGRESS,
-                        })
-                    );
+                if (dispatch && liveTicketRequestData) {
+                    liveTicketRequestData.status = LiveTradingTicketStatus.APPROVED;
+                    dispatch(updateTicketRequestStatus(liveTicketRequestData));
+                }
                 isFulfilledAdapter = true;
                 toast.update(toastId, getLoadingToastOptions(adapterResponse.data.message));
             } else {
-                dispatch &&
-                    liveTicketRequestData &&
-                    dispatch(
-                        updateTicketRequestStatus({
-                            ...liveTicketRequestData,
-                            status: LiveTradingTicketStatus.APPROVED,
-                            finalStatus: LiveTradingFinalStatus.FAILED,
-                            errorReason: adapterResponse.data.message,
-                        })
-                    );
+                if (dispatch && liveTicketRequestData) {
+                    liveTicketRequestData.finalStatus = LiveTradingFinalStatus.FAILED;
+                    liveTicketRequestData.errorReason = adapterResponse.data.message;
+                    dispatch(updateTicketRequestStatus(liveTicketRequestData));
+                }
                 toast.update(toastId, getErrorToastOptions(adapterResponse.data.message));
                 return { isFulfilledTx: false, isFulfilledAdapter, isAdapterError: true };
             }
@@ -102,15 +92,10 @@ export const processTransaction = async (
     ) {
         const isUpdateStatusReady = counter / UPDATE_STATUS_MESSAGE_PERIOD_SECONDS === DELAY_BETWEEN_CHECKS_SECONDS;
         if (isUpdateStatusReady && !isFulfilledTx && isFulfilledAdapter) {
-            dispatch &&
-                liveTicketRequestData &&
-                dispatch(
-                    updateTicketRequestStatus({
-                        ...liveTicketRequestData,
-                        status: LiveTradingTicketStatus.FULFILLING,
-                        finalStatus: LiveTradingFinalStatus.IN_PROGRESS,
-                    })
-                );
+            if (dispatch && liveTicketRequestData) {
+                liveTicketRequestData.status = LiveTradingTicketStatus.FULFILLING;
+                dispatch(updateTicketRequestStatus(liveTicketRequestData));
+            }
             toast.update(toastId, getLoadingToastOptions(toastMessage));
         }
 

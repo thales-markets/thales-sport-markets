@@ -260,13 +260,10 @@ export default {
     },
     icon: {
         background: {
-            primary: Colors.BLACK,
-            secondary: Colors.PURPLE,
+            primary: Colors.WHITE,
         },
         textColor: {
-            primary: Colors.PURPLE,
-            secondary: Colors.BLACK,
-            tertiary: Colors.WHITE,
+            primary: Colors.BLACK,
         },
     },
     slider: {

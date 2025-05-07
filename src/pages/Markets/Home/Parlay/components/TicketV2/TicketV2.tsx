@@ -1716,13 +1716,8 @@ const Ticket: React.FC<TicketProps> = ({
 
                         if (liveOrSgpTradingProcessorContract) {
                             if (isLiveTicket) {
-                                dispatch(
-                                    updateTicketRequestStatus({
-                                        ...liveTicketRequestData,
-                                        status: LiveTradingTicketStatus.REQUESTED,
-                                        finalStatus: LiveTradingFinalStatus.IN_PROGRESS,
-                                    })
-                                );
+                                liveTicketRequestData.status = LiveTradingTicketStatus.REQUESTED;
+                                dispatch(updateTicketRequestStatus(liveTicketRequestData));
                             }
                             toast.update(
                                 toastId,
@@ -1746,26 +1741,17 @@ const Ticket: React.FC<TicketProps> = ({
                                 setIsBuying(false);
                             } else if (!isFulfilledTx) {
                                 if (isLiveTicket) {
-                                    dispatch(
-                                        updateTicketRequestStatus({
-                                            ...liveTicketRequestData,
-                                            status: LiveTradingTicketStatus.FULFILLING,
-                                            finalStatus: LiveTradingFinalStatus.FAILED,
-                                            errorReason: t('markets.parlay.tx-not-received'),
-                                        })
-                                    );
+                                    liveTicketRequestData.finalStatus = LiveTradingFinalStatus.FAILED;
+                                    liveTicketRequestData.errorReason = t('markets.parlay.tx-not-received');
+                                    dispatch(updateTicketRequestStatus(liveTicketRequestData));
                                 }
                                 toast.update(toastId, getErrorToastOptions(t('markets.parlay.tx-not-received')));
                                 setIsBuying(false);
                             } else {
                                 if (isLiveTicket) {
-                                    dispatch(
-                                        updateTicketRequestStatus({
-                                            ...liveTicketRequestData,
-                                            status: LiveTradingTicketStatus.COMPLETED,
-                                            finalStatus: LiveTradingFinalStatus.SUCCESS,
-                                        })
-                                    );
+                                    liveTicketRequestData.status = LiveTradingTicketStatus.COMPLETED;
+                                    liveTicketRequestData.finalStatus = LiveTradingFinalStatus.SUCCESS;
+                                    dispatch(updateTicketRequestStatus(liveTicketRequestData));
                                 }
 
                                 const modalData = await getShareTicketModalData(
@@ -1846,14 +1832,9 @@ const Ticket: React.FC<TicketProps> = ({
                     setIsBuying(false);
                     refetchAfterBuy(walletAddress, networkId, isLiveTicket);
                     if (isLiveTicket) {
-                        dispatch(
-                            updateTicketRequestStatus({
-                                ...liveTicketRequestData,
-                                status: LiveTradingTicketStatus.REQUESTED,
-                                finalStatus: LiveTradingFinalStatus.FAILED,
-                                errorReason: t('common.errors.unknown-error-try-again'),
-                            })
-                        );
+                        liveTicketRequestData.finalStatus = LiveTradingFinalStatus.FAILED;
+                        liveTicketRequestData.errorReason = t('common.errors.unknown-error-try-again');
+                        dispatch(updateTicketRequestStatus(liveTicketRequestData));
                     }
                     toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
                 }
@@ -1861,13 +1842,9 @@ const Ticket: React.FC<TicketProps> = ({
                 setIsBuying(false);
                 refetchAfterBuy(walletAddress, networkId, isLiveTicket);
                 if (isLiveTicket) {
-                    dispatch(
-                        updateTicketRequestStatus({
-                            ...liveTicketRequestData,
-                            finalStatus: LiveTradingFinalStatus.FAILED,
-                            errorReason: t('common.errors.unknown-error-try-again'),
-                        })
-                    );
+                    liveTicketRequestData.finalStatus = LiveTradingFinalStatus.FAILED;
+                    liveTicketRequestData.errorReason = t('common.errors.unknown-error-try-again');
+                    dispatch(updateTicketRequestStatus(liveTicketRequestData));
                 }
                 toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
                 if (!isErrorExcluded(e as Error)) {

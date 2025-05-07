@@ -196,16 +196,16 @@ export const useUserTicketsQuery = (
                                     status = LiveTradingTicketStatus.COMPLETED;
                                     finalStatus = LiveTradingFinalStatus.SUCCESS;
                                 } else if (isAdapterFailed) {
-                                    status = LiveTradingTicketStatus.APPROVED;
+                                    status = LiveTradingTicketStatus.REQUESTED;
                                     finalStatus = LiveTradingFinalStatus.FAILED;
                                 } else if (Date.now() > maturityTimestamp) {
                                     status = LiveTradingTicketStatus.FULFILLING;
                                     finalStatus = LiveTradingFinalStatus.FAILED;
                                 } else if (isAdapterApproved) {
-                                    status = LiveTradingTicketStatus.FULFILLING;
+                                    status = LiveTradingTicketStatus.APPROVED;
                                     finalStatus = LiveTradingFinalStatus.IN_PROGRESS;
                                 } else {
-                                    status = LiveTradingTicketStatus.APPROVED;
+                                    status = LiveTradingTicketStatus.REQUESTED;
                                     finalStatus = LiveTradingFinalStatus.IN_PROGRESS;
                                 }
 

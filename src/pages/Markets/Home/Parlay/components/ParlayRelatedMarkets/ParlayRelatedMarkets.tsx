@@ -10,14 +10,14 @@ import { ScreenSizeBreakpoint } from 'enums/ui';
 import useInterval from 'hooks/useInterval';
 import { orderBy } from 'lodash';
 import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import { getTicket, getTicketRequestStatus, removeTicketRequestById } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsBiconomy } from 'redux/modules/wallet';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import {
     FlexDivCentered,
     FlexDivColumn,
@@ -35,6 +35,7 @@ import {
     TicketMarketRequestData,
     TicketsWithRequestsInfo,
 } from 'types/markets';
+import { ThemeInterface } from 'types/ui';
 import { formatMarketOdds } from 'utils/markets';
 import {
     getMatchLabel,
@@ -222,8 +223,8 @@ const ParlayRelatedMarkets: React.FC = () => {
                             {markets.map((relatedMarket: TicketMarketRequestData | LiveTradingRequest | Ticket, i) => {
                                 const key =
                                     (relatedMarket as Ticket)?.id ||
-                                    (relatedMarket as LiveTradingRequest)?.requestId ||
                                     (relatedMarket as TicketMarketRequestData)?.initialRequestId ||
+                                    (relatedMarket as LiveTradingRequest)?.requestId ||
                                     i;
                                 return (
                                     <RelatedMarket key={key}>
@@ -244,11 +245,10 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
     gamesInfo,
 }) => {
     const { t } = useTranslation();
+    const theme: ThemeInterface = useTheme();
     const isMobile = useSelector(getIsMobile);
 
     const selectedOddsType = useSelector(getOddsType);
-
-    const [isExpanded, setIsExpanded] = useState(true);
 
     const isTicketCreated = !!(data as Ticket)?.id;
     const isLiveTradingRequest = !!(data as LiveTradingRequest)?.user;
@@ -305,19 +305,14 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
         timestamp = requestedMarket.timestamp;
     }
 
+    const [isExpanded, setIsExpanded] = useState(differenceInMinutes(Date.now(), timestamp) < 10); // collapsed if older than 10 min
+
     const ticketCreationStatus =
         finalStatus === LiveTradingFinalStatus.SUCCESS
             ? t('markets.parlay-related-markets.creation-status.success')
             : finalStatus === LiveTradingFinalStatus.FAILED
             ? t('markets.parlay-related-markets.creation-status.failed')
             : t('markets.parlay-related-markets.creation-status.pending');
-
-    // collapse if older than 10 min
-    useEffect(() => {
-        if (differenceInMinutes(Date.now(), timestamp) > 10) {
-            setIsExpanded(false);
-        }
-    }, [finalStatus, timestamp]);
 
     return (
         <TicketColumn onClick={() => setIsExpanded(!isExpanded)}>
@@ -338,9 +333,13 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
                         }
                     }}
                 >
-                    <Tooltip overlay={isLive ? errorReason : ''} marginLeft={5} iconFontSize={12}>
-                        <StatusText status={finalStatus}>{ticketCreationStatus}</StatusText>
-                    </Tooltip>
+                    <StatusText status={finalStatus}>{ticketCreationStatus}</StatusText>
+                    <Tooltip
+                        overlay={isLive ? errorReason : ''}
+                        marginLeft={3}
+                        iconFontSize={12}
+                        iconColor={theme.status.failed.textColor.primary}
+                    />
                 </TicketStatusInfo>
             </Row>
             <Row>
@@ -361,19 +360,75 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
                     {isLive && (
                         <StatusProgress>
                             <ProgressRow>
-                                <Circle className={status === LiveTradingTicketStatus.PENDING ? 'lastCompleted' : ''} />
                                 <Circle
-                                    className={status === LiveTradingTicketStatus.REQUESTED ? 'lastCompleted' : ''}
+                                    isActive={status === LiveTradingTicketStatus.PENDING}
+                                    isAfterActive={false}
+                                    isFinished={finalStatus !== LiveTradingFinalStatus.IN_PROGRESS}
+                                />
+                                <ConnectionLine
+                                    index={0}
+                                    isProgressing={
+                                        status > LiveTradingTicketStatus.PENDING &&
+                                        finalStatus === LiveTradingFinalStatus.IN_PROGRESS
+                                    }
+                                    isCompleted={
+                                        status > LiveTradingTicketStatus.PENDING &&
+                                        finalStatus !== LiveTradingFinalStatus.IN_PROGRESS
+                                    }
                                 />
                                 <Circle
-                                    className={status === LiveTradingTicketStatus.APPROVED ? 'lastCompleted' : ''}
+                                    isActive={status === LiveTradingTicketStatus.REQUESTED}
+                                    isAfterActive={status < LiveTradingTicketStatus.REQUESTED}
+                                    isFinished={finalStatus !== LiveTradingFinalStatus.IN_PROGRESS}
+                                />
+                                <ConnectionLine
+                                    index={1}
+                                    isProgressing={
+                                        status > LiveTradingTicketStatus.REQUESTED &&
+                                        finalStatus === LiveTradingFinalStatus.IN_PROGRESS
+                                    }
+                                    isCompleted={
+                                        status > LiveTradingTicketStatus.REQUESTED &&
+                                        finalStatus !== LiveTradingFinalStatus.IN_PROGRESS
+                                    }
                                 />
                                 <Circle
-                                    className={status === LiveTradingTicketStatus.FULFILLING ? 'lastCompleted' : ''}
+                                    isActive={status === LiveTradingTicketStatus.APPROVED}
+                                    isAfterActive={status < LiveTradingTicketStatus.APPROVED}
+                                    isFinished={finalStatus !== LiveTradingFinalStatus.IN_PROGRESS}
+                                />
+                                <ConnectionLine
+                                    index={2}
+                                    isProgressing={
+                                        status > LiveTradingTicketStatus.APPROVED &&
+                                        finalStatus === LiveTradingFinalStatus.IN_PROGRESS
+                                    }
+                                    isCompleted={
+                                        status > LiveTradingTicketStatus.APPROVED &&
+                                        finalStatus !== LiveTradingFinalStatus.IN_PROGRESS
+                                    }
                                 />
                                 <Circle
-                                    className={status === LiveTradingTicketStatus.COMPLETED ? 'lastCompleted' : ''}
-                                    finalStatus={finalStatus}
+                                    isActive={status === LiveTradingTicketStatus.FULFILLING}
+                                    isAfterActive={status < LiveTradingTicketStatus.FULFILLING}
+                                    isFinished={finalStatus !== LiveTradingFinalStatus.IN_PROGRESS}
+                                />
+                                <ConnectionLine
+                                    index={3}
+                                    isProgressing={
+                                        status > LiveTradingTicketStatus.FULFILLING &&
+                                        finalStatus === LiveTradingFinalStatus.IN_PROGRESS
+                                    }
+                                    isCompleted={
+                                        status > LiveTradingTicketStatus.FULFILLING &&
+                                        finalStatus !== LiveTradingFinalStatus.IN_PROGRESS
+                                    }
+                                />
+                                <Circle
+                                    isActive={status === LiveTradingTicketStatus.COMPLETED}
+                                    isAfterActive={status < LiveTradingTicketStatus.COMPLETED}
+                                    isFinished={finalStatus !== LiveTradingFinalStatus.IN_PROGRESS}
+                                    isFailed={finalStatus === LiveTradingFinalStatus.FAILED}
                                 />
                             </ProgressRow>
                             <StatusesRow>
@@ -512,39 +567,55 @@ const StatusProgress = styled(FlexDivColumn)`
 
 const ProgressRow = styled(Row)`
     position: relative;
-    overflow: hidden;
-    z-index: 1;
-
-    &:before,
-    .lastCompleted:after {
-        content: '';
-        width: 98%;
-        border: 1px solid ${(props) => props.theme.borderColor.quaternary};
-        position: absolute;
-        top: 7px;
-        z-index: -1;
-    }
-
-    .lastCompleted ~ div {
-        background: ${(props) => props.theme.background.tertiary};
-    }
 `;
 
-const Circle = styled.div<{ finalStatus?: LiveTradingFinalStatus }>`
+const Circle = styled.div<{ isActive: boolean; isAfterActive: boolean; isFinished: boolean; isFailed?: boolean }>`
+    position: relative;
     display: inline-block;
     width: 16px;
     height: 16px;
     border-radius: 50%;
     background: ${(props) =>
-        props.finalStatus === LiveTradingFinalStatus.SUCCESS
-            ? props.theme.status.success.textColor.primary + ' !important'
-            : props.finalStatus === LiveTradingFinalStatus.FAILED
-            ? props.theme.status.failed.textColor.primary + ' !important'
+        props.isFailed
+            ? props.theme.status.failed.textColor.primary
+            : props.isAfterActive
+            ? props.theme.background.tertiary
             : props.theme.background.quaternary};
+    z-index: 2;
 
-    &&:after {
-        border-color: ${(props) => props.theme.borderColor.primary};
+    ${(props) => !props.isFinished && 'transition: background-color 0s ease-in 1s;'}
+    animation: ${(props) => (props.isActive && !props.isFinished ? 'pulsing' : '')} 1s linear 1s infinite;
+
+    @keyframes pulsing {
+        0% {
+            transform: scale(1);
+            opacity: 1;
+        }
+        50% {
+            transform: scale(1.2);
+            opacity: 1;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
     }
+`;
+
+const ConnectionLine = styled.div<{ index: number; isProgressing: boolean; isCompleted: boolean }>`
+    position: absolute;
+    width: 60px;
+    left: ${(props) => `calc(16px * ${props.index + 1} + 60px * ${props.index})`};
+    height: 2px;
+    z-index: 1;
+
+    background: ${(props) =>
+        props.isCompleted
+            ? props.theme.background.quaternary
+            : `linear-gradient(to right, ${props.theme.background.quaternary} 50%, ${props.theme.background.tertiary} 50%);`};
+    background-size: 200% 100%;
+    transition: all 1s ease-out;
+    background-position: ${(props) => (props.isProgressing ? 'left bottom' : 'right bottom')};
 `;
 
 const StatusesRow = styled(Row)`

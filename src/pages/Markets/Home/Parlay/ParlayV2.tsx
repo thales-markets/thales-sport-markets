@@ -571,7 +571,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                 )}
                 {hasTicketError && <ValidationModal onClose={onCloseValidationModal} />}
             </ParlayContainer>
-            {isSingleTicket && <ParlayRelatedMarkets />}
+            {isConnected && isSingleTicket && <ParlayRelatedMarkets />}
         </Container>
     );
 };
