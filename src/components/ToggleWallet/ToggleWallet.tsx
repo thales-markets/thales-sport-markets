@@ -46,7 +46,7 @@ const Text = styled.span<{ active?: boolean }>`
     position: relative;
     font-weight: 600;
     font-size: 12px;
-    color: ${(props) => (props.active ? props.theme.textColor.senary : props.theme.textColor.secondary)};
+
     line-height: 14px;
     white-space: pre;
     text-align: left;
@@ -65,6 +65,7 @@ const ToggleWrapper = styled.div<{ active?: boolean }>`
 
     background: ${(props) => (!props.active ? '' : props.theme.background.quaternary)};
     ${Text} {
+        color: ${(props) => (props.active ? props.theme.textColor.tertiary : props.theme.textColor.secondary)};
     }
     border-radius: 8px;
     padding: 8px 12px;
