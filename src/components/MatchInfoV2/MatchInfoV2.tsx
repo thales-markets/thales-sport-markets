@@ -117,6 +117,8 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
                         );
                 }
             } else {
+                document.getElementById('odd-change-down')?.classList.remove('descend');
+                document.getElementById('odd-change-up')?.classList.remove('rise');
                 firstClickMarket.current = market;
                 if (market.live) {
                     setOddsChanged && setOddsChanged(false);
