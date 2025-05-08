@@ -181,7 +181,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
                         setShareTicketModalData(shareTicketData);
                         setShowShareTicketModal(true);
                     }
-                    refetchAfterClaim(walletAddress, networkId, false);
+                    refetchAfterClaim(walletAddress, networkId);
                     refetchBalances(walletAddress, networkId);
                 }
             } catch (e) {

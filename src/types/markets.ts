@@ -143,26 +143,6 @@ export type LiveTradingProcessor = {
     maxAllowedExecutionDelay: number;
 };
 
-export type LiveTradingRequest = {
-    user: string;
-    requestId: string;
-    isFulfilled: boolean;
-    timestamp: number;
-    maturityTimestamp: number;
-    gameId: string;
-    leagueId: League;
-    typeId: MarketType;
-    line: number;
-    position: number;
-    buyInAmount: number;
-    expectedQuote: number;
-    payout: number;
-    collateral: Coins;
-    status: LiveTradingTicketStatus;
-    finalStatus: LiveTradingFinalStatus;
-    errorReason: string;
-};
-
 export type TradeData = {
     gameId: string;
     sportId: number;
@@ -215,8 +195,27 @@ export type Ticket = {
     systemBetData?: SystemBetData;
 };
 
-export type TicketsWithRequestsInfo = {
-    tickets: Ticket[];
+export type LiveTradingRequest = {
+    user: string;
+    requestId: string;
+    isFulfilled: boolean;
+    timestamp: number;
+    maturityTimestamp: number;
+    gameId: string;
+    leagueId: League;
+    typeId: MarketType;
+    line: number;
+    position: number;
+    buyInAmount: number;
+    expectedQuote: number;
+    payout: number;
+    collateral: Coins;
+    status: LiveTradingTicketStatus;
+    finalStatus: LiveTradingFinalStatus;
+    errorReason: string;
+};
+
+export type LiveTradingRequestsData = {
     liveRequests: LiveTradingRequest[];
     gamesInfo: any;
 };
@@ -238,7 +237,7 @@ export type TicketRequestData = TicketRequest & {
 export type TicketMarketRequestData = Omit<TicketRequestData, 'ticket'> & {
     ticket: TicketMarket;
 };
-export type TicketRequestById = Record<string, TicketRequestData>;
+export type TicketRequestsById = Record<string, TicketRequestData>;
 
 export type UserStats = {
     id: string;

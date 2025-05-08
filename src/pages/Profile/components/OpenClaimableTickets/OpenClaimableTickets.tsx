@@ -101,12 +101,11 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
     const userTicketsQuery = useUserTicketsQuery(
         isSearchTextWalletAddress ? searchText : walletAddress,
         { networkId, client },
-        false,
         { enabled: isSearchTextWalletAddress || isConnected }
     );
 
     const userTicketsByStatus = useMemo(() => {
-        let userTickets = userTicketsQuery.isSuccess && userTicketsQuery.data ? userTicketsQuery.data.tickets : [];
+        let userTickets = userTicketsQuery.isSuccess && userTicketsQuery.data ? userTicketsQuery.data : [];
         if (searchText && !isAddress(searchText)) {
             const normalizedSearch = getCaseAccentInsensitiveString(searchText);
             userTickets = userTickets.filter((ticket) =>
@@ -130,7 +129,7 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
             claimablePositionCount !== userTicketsByStatus.claimable.length ||
             openPositionCount !== userTicketsByStatus.open.length
         ) {
-            refetchAfterClaim(walletAddress, networkId, false);
+            refetchAfterClaim(walletAddress, networkId);
         }
     }, [claimablePositionCount, openPositionCount, userTicketsByStatus, walletAddress, networkId]);
 
@@ -197,7 +196,7 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
 
                     if (txReceipt.status === 'success') {
                         toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
-                        refetchAfterClaim(walletAddress, networkId, false);
+                        refetchAfterClaim(walletAddress, networkId);
                     }
                 } else {
                     if (multiCallContractWithSigner) {
@@ -221,7 +220,7 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
 
                         if (txReceipt.status === 'success') {
                             toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
-                            refetchAfterClaim(walletAddress, networkId, false);
+                            refetchAfterClaim(walletAddress, networkId);
                         }
                     }
                 }

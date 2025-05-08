@@ -9,12 +9,13 @@ import { LiveTradingFinalStatus, LiveTradingTicketStatus } from 'enums/markets';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import useInterval from 'hooks/useInterval';
 import { orderBy } from 'lodash';
+import { useLiveTradingProcessorDataQuery } from 'queries/markets/useLiveTradingProcessorDataQuery';
 import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
 import { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { getTicket, getTicketRequestStatus, removeTicketRequestById } from 'redux/modules/ticket';
+import { getTicket, getTicketRequests, removeTicketRequestById } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
@@ -27,14 +28,7 @@ import {
     FlexDivStart,
 } from 'styles/common';
 import { formatCurrencyWithKey, formatDateWithTime } from 'thales-utils';
-import {
-    LiveTradingRequest,
-    SportMarket,
-    Ticket,
-    TicketMarket,
-    TicketMarketRequestData,
-    TicketsWithRequestsInfo,
-} from 'types/markets';
+import { LiveTradingRequest, SportMarket, Ticket, TicketMarket, TicketMarketRequestData } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { formatMarketOdds } from 'utils/markets';
 import {
@@ -44,7 +38,7 @@ import {
     liveTradingRequestAsSportMarket,
     serializableTicketMarketAsTicketMarket,
 } from 'utils/marketsV2';
-import { refetchUserTickets } from 'utils/queryConnector';
+import { refetchUserLiveTradingData } from 'utils/queryConnector';
 import useBiconomy from 'utils/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
 
@@ -53,7 +47,7 @@ const ParlayRelatedMarkets: React.FC = () => {
     const dispatch = useDispatch();
 
     const ticket = useSelector(getTicket);
-    const ticketRequestStatusById = useSelector(getTicketRequestStatus);
+    const ticketRequestsById = useSelector(getTicketRequests);
     const isBiconomy = useSelector(getIsBiconomy);
     const isMobile = useSelector(getIsMobile);
 
@@ -69,41 +63,48 @@ const ParlayRelatedMarkets: React.FC = () => {
 
     const walletAddress = (isBiconomy ? smartAddres : address) || '';
 
-    const userTicketsQuery = useUserTicketsQuery(walletAddress, { networkId, client }, true, {
-        enabled: isConnected && ticket.length > 0,
-    });
+    const userTicketsQuery = useUserTicketsQuery(
+        walletAddress,
+        { networkId, client },
+        { enabled: isConnected && ticket.length > 0 && !isLiveTypeSelected }
+    );
 
-    // Created single tickets: live or other (non-live) related to selected game
+    const liveTradingProcessorDataQuery = useLiveTradingProcessorDataQuery(
+        walletAddress,
+        { networkId, client },
+        { enabled: isConnected && ticket.length > 0 && isLiveTypeSelected }
+    );
+
+    // Created non-live single tickets related to selected game
     const createdSingleTickets: Ticket[] = useMemo(
         () =>
             userTicketsQuery.isSuccess && userTicketsQuery.data
-                ? (userTicketsQuery.data as TicketsWithRequestsInfo).tickets.filter(
+                ? userTicketsQuery.data.filter(
                       (userTicket) =>
+                          !userTicket.isLive &&
                           userTicket.sportMarkets.length === 1 && // filter only single tickets
-                          (isLiveTypeSelected
-                              ? userTicket.isLive
-                              : !userTicket.isLive && userTicket.sportMarkets[0].gameId === ticket[0]?.gameId)
+                          userTicket.sportMarkets[0].gameId === ticket[0]?.gameId
                   )
                 : [],
-        [userTicketsQuery.isSuccess, userTicketsQuery.data, ticket, isLiveTypeSelected]
+        [userTicketsQuery.isSuccess, userTicketsQuery.data, ticket]
     );
 
     const gamesInfo = useMemo(
         () =>
-            userTicketsQuery.isSuccess && userTicketsQuery.data
-                ? (userTicketsQuery.data as TicketsWithRequestsInfo).gamesInfo
+            isLiveTypeSelected && liveTradingProcessorDataQuery.isSuccess && liveTradingProcessorDataQuery.data
+                ? liveTradingProcessorDataQuery.data.gamesInfo
                 : {},
-        [userTicketsQuery.isSuccess, userTicketsQuery.data]
+        [isLiveTypeSelected, liveTradingProcessorDataQuery.isSuccess, liveTradingProcessorDataQuery.data]
     );
 
     const prevLiveTradingRequests = useRef<LiveTradingRequest[]>([]);
     // All live requests from contract
     const liveTradingRequests: LiveTradingRequest[] = useMemo(
         () =>
-            isLiveTypeSelected && userTicketsQuery.isSuccess && userTicketsQuery.data
-                ? userTicketsQuery.data.liveRequests
+            isLiveTypeSelected && liveTradingProcessorDataQuery.isSuccess && liveTradingProcessorDataQuery.data
+                ? liveTradingProcessorDataQuery.data.liveRequests
                 : [],
-        [userTicketsQuery.isSuccess, userTicketsQuery.data, isLiveTypeSelected]
+        [isLiveTypeSelected, liveTradingProcessorDataQuery.isSuccess, liveTradingProcessorDataQuery.data]
     );
 
     // Current live requests from UI (request ID could be missing if contract not reached)
@@ -111,32 +112,18 @@ const ParlayRelatedMarkets: React.FC = () => {
     const tempLiveTradingRequests: TicketMarketRequestData[] = useMemo(
         () =>
             isLiveTypeSelected
-                ? Object.keys(ticketRequestStatusById)
-                      .filter(
-                          (requestId) =>
-                              // remove those which are present in created tickets
-                              !liveTradingRequests.some(
-                                  (request) =>
-                                      request.status === LiveTradingTicketStatus.COMPLETED &&
-                                      request.requestId === requestId
-                              )
-                      )
-                      .map((requestId) => ({
-                          ...ticketRequestStatusById[requestId],
-                          ticket: serializableTicketMarketAsTicketMarket(ticketRequestStatusById[requestId].ticket),
-                      }))
+                ? Object.keys(ticketRequestsById).map((requestId) => ({
+                      ...ticketRequestsById[requestId],
+                      ticket: serializableTicketMarketAsTicketMarket(ticketRequestsById[requestId].ticket),
+                  }))
                 : [],
-        [ticketRequestStatusById, liveTradingRequests, isLiveTypeSelected]
+        [isLiveTypeSelected, ticketRequestsById]
     );
+
+    const requestIdToInitialIdRef = useRef(new Map());
 
     // Merged all tickets and requests, filtered and sorted
     const markets: (TicketMarketRequestData | LiveTradingRequest | Ticket)[] = useMemo(() => {
-        const failedLiveTradingRequests = liveTradingRequests.filter(
-            (request) =>
-                request.status !== LiveTradingTicketStatus.COMPLETED &&
-                ticketRequestStatusById[request.requestId] === undefined // not in temp requests
-        );
-
         // Detect new liveTradingRequests and if there are new ones remove those stuck at pending from temp requests
         let refreshedTempLiveTradingRequests = tempLiveTradingRequests;
         if (!prevLiveTradingRequests.current.length) {
@@ -152,42 +139,53 @@ const ParlayRelatedMarkets: React.FC = () => {
             if (diffCount > 0 && isSomePending) {
                 let removedCount = 0;
                 refreshedTempLiveTradingRequests = tempLiveTradingRequests.filter((request) => {
+                    let isRequestForRemoval = false;
                     const isPending = request.status === LiveTradingTicketStatus.PENDING;
-                    if (isPending) {
+                    if (isPending && removedCount < diffCount) {
+                        isRequestForRemoval = true;
                         removedCount++;
-                    }
-                    const keepRequest = !isPending || removedCount > diffCount;
-                    if (!keepRequest) {
                         dispatch(removeTicketRequestById(request.initialRequestId));
+                        // prevent markets re-render as key is base on initialRequestId
+                        const requestIdForMap = orderBy(liveTradingRequests, ['timestamp'], ['desc'])[
+                            diffCount - removedCount
+                        ].requestId;
+                        requestIdToInitialIdRef.current.set(requestIdForMap, request.initialRequestId);
                     }
-                    return keepRequest;
+                    return !isRequestForRemoval;
                 });
             }
             prevLiveTradingRequests.current = liveTradingRequests;
         }
 
+        const filteredLiveTradingRequests = liveTradingRequests.filter(
+            (request) => ticketRequestsById[request.requestId] === undefined // not in temp requests
+        );
+
         const requestsAndTickets = [
             ...refreshedTempLiveTradingRequests,
-            ...failedLiveTradingRequests,
+            ...filteredLiveTradingRequests,
             ...createdSingleTickets,
         ];
         return orderBy(requestsAndTickets, ['timestamp'], ['desc']).slice(0, LATEST_LIVE_REQUESTS_SIZE);
-    }, [tempLiveTradingRequests, liveTradingRequests, createdSingleTickets, ticketRequestStatusById, dispatch]);
+    }, [tempLiveTradingRequests, liveTradingRequests, createdSingleTickets, ticketRequestsById, dispatch]);
+
+    // Refresh in-progress live requests on every 5s if not in temp requests and pending temp requests
+    useInterval(() => {
+        const isPendingRequests =
+            liveTradingRequests.some(
+                (request) =>
+                    request.finalStatus === LiveTradingFinalStatus.IN_PROGRESS &&
+                    ticketRequestsById[request.requestId] === undefined
+            ) || tempLiveTradingRequests.some((request) => request.status === LiveTradingTicketStatus.PENDING);
+
+        if (isPendingRequests) {
+            refetchUserLiveTradingData(walletAddress, networkId);
+        }
+    }, secondsToMilliseconds(5));
 
     const isEmpty = useMemo(() => !markets.length, [markets]);
 
-    // Refresh in-progress live requests on every 5s if not in temp requests
-    useInterval(() => {
-        const isPendingRequests = liveTradingRequests.some(
-            (request) =>
-                request.finalStatus === LiveTradingFinalStatus.IN_PROGRESS &&
-                ticketRequestStatusById[request.requestId] === undefined
-        );
-
-        if (isPendingRequests) {
-            refetchUserTickets(walletAddress, networkId, true);
-        }
-    }, secondsToMilliseconds(5));
+    const isLoading = isLiveTypeSelected ? liveTradingProcessorDataQuery.isLoading : userTicketsQuery.isLoading;
 
     return (
         <Container>
@@ -208,7 +206,7 @@ const ParlayRelatedMarkets: React.FC = () => {
             </MarketsTypeContainer>
 
             <MarketsContainer>
-                {userTicketsQuery.isLoading ? (
+                {isLoading ? (
                     <LoaderContainer>
                         <SimpleLoader />
                     </LoaderContainer>
@@ -220,12 +218,14 @@ const ParlayRelatedMarkets: React.FC = () => {
                 ) : (
                     <Scroll height={isMobile ? '467px' : '100%'}>
                         <RelatedMarkets>
-                            {markets.map((relatedMarket: TicketMarketRequestData | LiveTradingRequest | Ticket, i) => {
+                            {markets.map((relatedMarket: TicketMarketRequestData | LiveTradingRequest | Ticket) => {
                                 const key =
-                                    (relatedMarket as Ticket)?.id ||
                                     (relatedMarket as TicketMarketRequestData)?.initialRequestId ||
+                                    requestIdToInitialIdRef.current.get(
+                                        (relatedMarket as LiveTradingRequest)?.requestId
+                                    ) ||
                                     (relatedMarket as LiveTradingRequest)?.requestId ||
-                                    i;
+                                    (relatedMarket as Ticket)?.id;
                                 return (
                                     <RelatedMarket key={key}>
                                         <ExpandableRow data={relatedMarket} gamesInfo={gamesInfo} />
@@ -352,7 +352,7 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
                     <PositionText>{getPositionTextV2(market, position, true)}</PositionText>
                 </Info>
                 <IconWrapper>
-                    <Icon className={`icon ${isExpanded ? 'icon--arrow-up' : 'icon--arrow-down'}`} />
+                    <Icon className={`icon ${isExpanded ? 'icon--arrow-up' : 'icon--arrow-down'}`} isUp={isExpanded} />
                 </IconWrapper>
             </Row>
             {isExpanded && (
@@ -546,17 +546,18 @@ const TicketStatusInfo = styled(Info)<{ status: LiveTradingFinalStatus }>`
 `;
 
 const IconWrapper = styled(FlexDivCentered)`
-    width: 21px;
+    min-width: 21px;
     height: 21px;
     border-radius: 50%;
     background: ${(props) => props.theme.textColor.primary}1a; // opacity 10%
 `;
 
-const Icon = styled.i`
+const Icon = styled.i<{ isUp: boolean }>`
     display: flex;
     align-items: center;
     font-size: 10px;
     margin-left: 2px;
+    ${(props) => props.isUp && 'margin-bottom: 1px;'}
 `;
 
 const StatusProgress = styled(FlexDivColumn)`
@@ -676,6 +677,7 @@ const StatusText = styled(Text)<{ status: LiveTradingFinalStatus }>`
 
 const PositionText = styled(Text)`
     font-size: 16px;
+    line-height: 20px;
     color: ${(props) => props.theme.textColor.quaternary};
 `;
 

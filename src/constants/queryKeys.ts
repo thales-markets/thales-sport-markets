@@ -7,12 +7,7 @@ import { LiquidityPoolCollateral } from '../enums/liquidityPool';
 const QUERY_KEYS = {
     Ticket: (networkId: Network, ticketAddress: string) => ['gameTickets', networkId, ticketAddress],
     GameTickets: (networkId: Network, gameId: string) => ['gameTickets', networkId, gameId],
-    UserTickets: (networkId: Network, walletAddress: string, fetchLiveRequests: boolean) => [
-        'userTickets',
-        networkId,
-        walletAddress,
-        fetchLiveRequests,
-    ],
+    UserTickets: (networkId: Network, walletAddress: string) => ['userTickets', networkId, walletAddress],
     SportMarketsV2: (
         statusFilter: StatusFilter,
         networkId: Network,
@@ -65,6 +60,11 @@ const QUERY_KEYS = {
         lives,
     ],
     LiveTradingProcessor: (networkId: Network) => ['liveTradingProcessor', networkId],
+    LiveTradingProcessorData: (networkId: Network, walletAddress: string) => [
+        'liveTradingProcessorData',
+        networkId,
+        walletAddress,
+    ],
     PositionsCountV2: (walletAddress: string, networkId: Network) => ['positions', 'countV2', walletAddress, networkId],
     Wallet: {
         MultipleCollateral: (walletAddress: string, networkId: Network) => [

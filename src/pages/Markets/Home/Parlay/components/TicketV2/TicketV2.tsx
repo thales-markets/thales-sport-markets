@@ -132,7 +132,6 @@ import {
     refetchFreeBetBalance,
     refetchProofs,
     refetchTicketLiquidity,
-    refetchUserTickets,
 } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import { getSportsAMMV2QuoteMethod, getSportsAMMV2Transaction } from 'utils/sportsAmmV2';
@@ -1644,6 +1643,7 @@ const Ticket: React.FC<TicketProps> = ({
                 if (!txHash) {
                     // there are scenarios when waitForTransactionReceipt is failing because tx hash doesn't exist
                     const data = getLogData({
+                        walletAddress,
                         networkId,
                         isParticle,
                         isBiconomy,
@@ -1660,7 +1660,7 @@ const Ticket: React.FC<TicketProps> = ({
                         { componentStack: '' },
                         data
                     );
-                    refetchAfterBuy(walletAddress, networkId, isLiveTicket);
+                    refetchAfterBuy(walletAddress, networkId);
                     setIsBuying(false);
                     toast.update(toastId, getErrorToastOptions(t('markets.parlay.tx-not-received')));
                     return;
@@ -1671,7 +1671,6 @@ const Ticket: React.FC<TicketProps> = ({
                 });
 
                 if (isLiveTicket) {
-                    refetchUserTickets(walletAddress, networkId, true);
                     setIsBuying(false);
                 }
 
@@ -1780,10 +1779,10 @@ const Ticket: React.FC<TicketProps> = ({
                                 setIsBuying(false);
                                 setCollateralAmount('');
                             }
-                            refetchAfterBuy(walletAddress, networkId, isLiveTicket);
+                            refetchAfterBuy(walletAddress, networkId);
                         }
                     } else {
-                        refetchAfterBuy(walletAddress, networkId, isLiveTicket);
+                        refetchAfterBuy(walletAddress, networkId);
 
                         const systemBetData = isSystemBet
                             ? getSystemBetDataObject(
@@ -1830,25 +1829,15 @@ const Ticket: React.FC<TicketProps> = ({
                         refetchProofs(networkId, markets);
                     }
                     setIsBuying(false);
-                    refetchAfterBuy(walletAddress, networkId, isLiveTicket);
+                    refetchAfterBuy(walletAddress, networkId);
                     if (isLiveTicket) {
                         liveTicketRequestData.finalStatus = LiveTradingFinalStatus.FAILED;
                         liveTicketRequestData.errorReason = t('common.errors.unknown-error-try-again');
                         dispatch(updateTicketRequestStatus(liveTicketRequestData));
                     }
                     toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                }
-            } catch (e) {
-                setIsBuying(false);
-                refetchAfterBuy(walletAddress, networkId, isLiveTicket);
-                if (isLiveTicket) {
-                    liveTicketRequestData.finalStatus = LiveTradingFinalStatus.FAILED;
-                    liveTicketRequestData.errorReason = t('common.errors.unknown-error-try-again');
-                    dispatch(updateTicketRequestStatus(liveTicketRequestData));
-                }
-                toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                if (!isErrorExcluded(e as Error)) {
                     const data = getLogData({
+                        walletAddress,
                         networkId,
                         isParticle,
                         isBiconomy,
@@ -1860,7 +1849,35 @@ const Ticket: React.FC<TicketProps> = ({
                         buyInAmount,
                         usedCollateralForBuy,
                     });
-
+                    logErrorToDiscord(
+                        { message: `Transaction status is not success, but ${txReceipt.status}` } as Error,
+                        { componentStack: '' },
+                        data
+                    );
+                }
+            } catch (e) {
+                setIsBuying(false);
+                refetchAfterBuy(walletAddress, networkId);
+                if (isLiveTicket) {
+                    liveTicketRequestData.finalStatus = LiveTradingFinalStatus.FAILED;
+                    liveTicketRequestData.errorReason = t('common.errors.unknown-error-try-again');
+                    dispatch(updateTicketRequestStatus(liveTicketRequestData));
+                }
+                toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+                if (!isErrorExcluded(e as Error)) {
+                    const data = getLogData({
+                        walletAddress,
+                        networkId,
+                        isParticle,
+                        isBiconomy,
+                        isSgp,
+                        isLiveTicket,
+                        tradeData,
+                        swapToOver,
+                        overAmount,
+                        buyInAmount,
+                        usedCollateralForBuy,
+                    });
                     logErrorToDiscord(e as Error, { componentStack: '' }, data);
                 }
             }

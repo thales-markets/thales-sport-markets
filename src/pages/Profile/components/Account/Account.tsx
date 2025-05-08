@@ -72,11 +72,11 @@ const Account: React.FC = () => {
         }
     }, [exchangeRates, multipleCollateralBalances.data, networkId, balanceList]);
 
-    const userTicketsQuery = useUserTicketsQuery(walletAddress, { networkId, client }, false, { enabled: isConnected });
+    const userTicketsQuery = useUserTicketsQuery(walletAddress, { networkId, client }, { enabled: isConnected });
 
     const userTicketsByStatus = useMemo(() => {
         if (exchangeRates && userTicketsQuery.isSuccess) {
-            const userTickets = userTicketsQuery.data ? userTicketsQuery.data.tickets : [];
+            const userTickets = userTicketsQuery.data ? userTicketsQuery.data : [];
             let [tickets, potentialWin] = [0, 0];
 
             userTickets.forEach((ticket) => {

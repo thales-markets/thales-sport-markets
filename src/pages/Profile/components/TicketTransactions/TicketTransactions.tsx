@@ -24,7 +24,6 @@ const TicketTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
     const userTicketsQuery = useUserTicketsQuery(
         isSearchTextWalletAddress ? searchText : walletAddress,
         { networkId, client },
-        false,
         { enabled: isSearchTextWalletAddress || isConnected }
     );
 
@@ -32,7 +31,7 @@ const TicketTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
         let userTickets: Ticket[] = [];
 
         if (userTicketsQuery.data && userTicketsQuery.isSuccess) {
-            userTickets = userTicketsQuery.data.tickets || [];
+            userTickets = userTicketsQuery.data || [];
         }
 
         if (searchText && !isSearchTextWalletAddress) {

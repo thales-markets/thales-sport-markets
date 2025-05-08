@@ -3,9 +3,9 @@ import { ContractData } from 'types/viem';
 
 const liveTradingProcessorContract: ContractData = {
     addresses: {
-        [Network.OptimismMainnet]: '0x330c4c4Bcde91aDC17c0293A90dC05a046ce3FE4',
-        [Network.Arbitrum]: '0xa5567Cd13F3a0c71B4a85E3a0DdAbfeeCB409339',
-        [Network.Base]: '0x64598450396494faDd5ebaC9906CF5169a2B3e0a',
+        [Network.OptimismMainnet]: '0xA891AB016DCd40313fAcb449608d57fcabbfB63f',
+        [Network.Arbitrum]: '0x0b7B0731320e0f4e24eaA2DbF31ee7Ef323F9730',
+        [Network.Base]: '0x0c3bD9eae173Cb2c03126212B2398509D6FCC5E0',
         [Network.OptimismSepolia]: '0x495b29aEfEBB79F1c048b4e8818D25494A2089cb',
     },
     abi: [
