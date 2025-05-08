@@ -295,6 +295,7 @@ const Ticket: React.FC<TicketProps> = ({
         SYSTEM_BET_MINIMUM_DENOMINATOR
     );
     const [isTotalQuoteIncreased, setIsTotalQuoteIncreased] = useState(false);
+    const [isProofValid, setIsProofValid] = useState(true);
 
     const userMultipliersQuery = useUserMultipliersQuery(address as any, { enabled: isConnected });
 
@@ -940,6 +941,8 @@ const Ticket: React.FC<TicketProps> = ({
                                     : coinFormatter(parlayAmmQuote.buyInAmountInDefaultCollateral, networkId)
                             );
 
+                        setIsProofValid(true);
+
                         return {
                             ...parlayAmmQuote,
                             buyInAmountInDefaultCollateralNumber: coinFormatter(
@@ -957,6 +960,8 @@ const Ticket: React.FC<TicketProps> = ({
                             return { error: TicketErrorMessage.SAME_TEAM_IN_PARLAY };
                         }
                     } else if (e && e.toString().includes(TicketErrorMessage.PROOF_IS_NOT_VALID)) {
+                        setIsProofValid(false);
+                        console.log('Proof is not valid, refetching...');
                         refetchProofs(networkId, markets);
                     }
                     console.log(e);
@@ -965,27 +970,27 @@ const Ticket: React.FC<TicketProps> = ({
             }
         },
         [
-            client,
-            networkId,
             noProofs,
             isSystemBet,
             isValidSystemBet,
             isInvalidNumberOfCombination,
-            markets,
-            collateralHasLp,
-            isOver,
-            swapToOver,
-            isDefaultCollateral,
-            selectedCollateralCurrencyRate,
-            collateralAddress,
-            usedCollateralForBuy,
-            overCollateralAddress,
-            systemBetDenominator,
-            swappedOverToReceive,
-            buyInAmount,
-            isLiveTicket,
             isSgp,
             isInvalidSgpTotalQuote,
+            client,
+            networkId,
+            isLiveTicket,
+            collateralHasLp,
+            isDefaultCollateral,
+            swapToOver,
+            selectedCollateralCurrencyRate,
+            overCollateralAddress,
+            collateralAddress,
+            usedCollateralForBuy,
+            markets,
+            systemBetDenominator,
+            isOver,
+            swappedOverToReceive,
+            buyInAmount,
         ]
     );
 
@@ -2056,6 +2061,14 @@ const Ticket: React.FC<TicketProps> = ({
             );
         }
 
+        if (!isProofValid) {
+            return (
+                <Button disabled={true} onClick={() => {}} {...defaultButtonProps}>
+                    {t('markets.parlay.latest-odds-checking')}
+                </Button>
+            );
+        }
+
         return (
             <Button
                 disabled={submitDisabled || submitButtonDisabled}
@@ -2516,7 +2529,10 @@ const Ticket: React.FC<TicketProps> = ({
                 <RowSummary>
                     <RowContainer>
                         <SummaryLabel isBonus>
-                            {t('markets.parlay.swap-over')}
+                            <Trans
+                                i18nKey="markets.parlay.swap-over"
+                                components={{ logo: <LogoIcon className="currency-icon currency-icon--over" /> }}
+                            />
                             <Tooltip
                                 overlay={
                                     <Trans
@@ -2908,6 +2924,13 @@ const LoaderContainer = styled(FlexDivColumn)`
     position: relative;
     max-width: 30px;
     max-height: 30px;
+`;
+
+const LogoIcon = styled.i`
+    margin-top: -2px;
+    font-size: 14px;
+    line-height: 12px;
+    color: ${(props) => props.theme.status.win}!important;
 `;
 
 export default Ticket;
