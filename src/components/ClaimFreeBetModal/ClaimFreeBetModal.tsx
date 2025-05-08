@@ -41,8 +41,8 @@ const ClaimFreeBetModal: React.FC<ClaimFreeBetModalProps> = ({ freeBet, onClose 
 
     const { address } = useAccount();
 
-    const smartAddres = useBiconomy();
-    const walletAddress = (isBiconomy ? smartAddres : address) || '';
+    const { smartAddress } = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const onButtonClick = useCallback(async () => {
         if (freeBet.claimSuccess) {

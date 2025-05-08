@@ -83,3 +83,22 @@ export const getWalletLabel = (id: ParticalTypes | WalletConnections) => {
     const label = WALLETS_LABELS.find((item: any) => item.id == id)?.labelKey;
     return label ? label : '';
 };
+
+export const SUPPORTED_NETWORKS_UNIVERSAL_DEPOSIT = [
+    { chainId: 1, name: 'Ethereum', iconName: 'eth' },
+    { chainId: 101, name: 'Solana', iconName: 'sol' },
+    { chainId: 56, name: 'BNB Chain', iconName: 'bnb' },
+    { chainId: 42161, name: 'Arbitrum One', iconName: 'arb' },
+    { chainId: 10, name: 'Optimism (OP)', iconName: 'op' },
+    { chainId: 137, name: 'Polygon', iconName: 'pol' },
+    { chainId: 43114, name: 'Avalanche', iconName: 'avax' },
+    { chainId: 8453, name: 'Base', iconName: 'base' },
+    { chainId: 59144, name: 'Linea', iconName: 'linea' },
+    { chainId: 81457, name: 'Blast', iconName: 'blast' },
+    { chainId: 80094, name: 'Berachain', iconName: 'bera' },
+    { chainId: 169, name: 'Manta Pacific', iconName: 'manta' },
+    { chainId: 34443, name: 'Mode', iconName: 'mode' },
+    { chainId: 146, name: 'Sonic', iconName: 'sonic' },
+    { chainId: 1030, name: 'Conflux eSpace', iconName: 'con' },
+    { chainId: 4200, name: 'Merlin', iconName: 'merlin' },
+];

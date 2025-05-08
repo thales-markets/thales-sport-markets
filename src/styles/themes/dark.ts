@@ -20,6 +20,7 @@ export default {
         quinary: Colors.NAVY_BLUE_EXTRA_LIGHT,
         senary: Colors.BLACK,
         septenary: Colors.TORY_BLUE_LIGHT,
+        octonary: Colors.PARTICLE,
     },
     borderColor: {
         primary: Colors.NAVY_BLUE_LIGHT,

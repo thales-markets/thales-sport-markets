@@ -49,8 +49,8 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
     const walletClient = useWalletClient();
 
     const { address, isConnected } = useAccount();
-    const smartAddres = useBiconomy();
-    const walletAddress = (isBiconomy ? smartAddres : address) || '';
+    const { smartAddress } = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 

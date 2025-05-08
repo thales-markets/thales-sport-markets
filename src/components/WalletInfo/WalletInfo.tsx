@@ -1,9 +1,11 @@
+import FundModal from 'components/FundOvertimeAccountModal';
 import NetworkSwitcher from 'components/NetworkSwitcher';
 import OutsideClickHandler from 'components/OutsideClick';
 import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import ProfileItem from 'layouts/DappLayout/DappHeader/components/ProfileItem';
 import ProfileDropdown from 'layouts/DappLayout/DappHeader/components/ProfileItem/components/ProfileDropdown';
+import WithdrawModal from 'pages/Profile/components/WithdrawModal';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -25,11 +27,14 @@ const WalletInfo: React.FC = ({}) => {
     const theme = useTheme();
     const networkId = useChainId();
     const { address, isConnected } = useAccount();
-    const smartAddres = useBiconomy();
-    const walletAddress = (isBiconomy ? smartAddres : address) || '';
+    const { smartAddress } = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const [isFreeBetInitialized, setIsFreeBetInitialized] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
+
+    const [showFundModal, setShowFundModal] = useState<boolean>(false);
+    const [showWithdrawModal, setShowWithdrawModal] = useState<boolean>(false);
 
     // Refresh free bet on wallet and network change
     useEffect(() => {
@@ -81,10 +86,18 @@ const WalletInfo: React.FC = ({}) => {
                             onClick={() => setShowDropdown(false)}
                         />
 
-                        {showDropdown && <ProfileDropdown setShowDropdown={setShowDropdown} />}
+                        {showDropdown && (
+                            <ProfileDropdown
+                                setShowDepositModal={setShowFundModal}
+                                setShowWithdrawModal={setShowWithdrawModal}
+                                setShowDropdown={setShowDropdown}
+                            />
+                        )}
                     </WalletWrapper>
                 </OutsideClickHandler>
             )}
+            {showFundModal && <FundModal onClose={() => setShowFundModal(false)} />}
+            {showWithdrawModal && <WithdrawModal onClose={() => setShowWithdrawModal(false)} />}
         </Container>
     ) : (
         <>

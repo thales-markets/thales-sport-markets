@@ -23,7 +23,7 @@ export const formatMarketOdds = (oddsType: OddsType, odds: number | undefined) =
             if (decimal >= 2) {
                 return `+${formatCurrency((decimal - 1) * 100, 0)}`;
             } else {
-                return `-${formatCurrency(100 / (decimal - 1), 0)}`;
+                return decimal === 1 ? '-' : `-${formatCurrency(100 / (decimal - 1), 0)}`;
             }
         case OddsType.AMM:
         default:
