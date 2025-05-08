@@ -12,6 +12,7 @@ import { SupportedNetwork } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { Address, Client, createWalletClient, encodeFunctionData, getContract, http, maxUint256 } from 'viem';
 import { generatePrivateKey, privateKeyToAccount } from 'viem/accounts';
+import { waitForTransactionReceipt } from 'viem/actions';
 import biconomyConnector from './biconomyWallet';
 import { getContractAbi } from './contracts/abi';
 import liveTradingProcessorContract from './contracts/liveTradingProcessorContract';
@@ -549,8 +550,14 @@ export const getPaymasterData = async (
 
 const validateTx = async (transactionHash: string | undefined, networkId: SupportedNetwork) => {
     if (!transactionHash) throw new Error('waitForTxHash did not return transactionHash');
+    const client = getPublicClient(wagmiConfig, { chainId: networkId });
 
-    const txReceipt = await waitForTransactionViaSocket(transactionHash as any, networkId);
+    const txReceipt = await Promise.race([
+        waitForTransactionReceipt(client as Client, {
+            hash: transactionHash as any,
+        }),
+        waitForTransactionViaSocket(transactionHash as any, networkId),
+    ]);
 
     if (txReceipt.status === 'success') {
         return transactionHash;
