@@ -171,6 +171,11 @@ const Background = styled.section`
     background: ${(props) => props.theme.background.primary};
     color: ${(props) => props.theme.textColor.primary};
     position: relative;
+    @media (max-width: 950px) {
+        margin-top: 0;
+        max-height: calc(100vh);
+        overflow: scroll;
+    }
 `;
 
 const Wrapper = styled(FlexDivColumn)`
