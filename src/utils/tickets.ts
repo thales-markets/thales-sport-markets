@@ -590,6 +590,7 @@ export const isRegularTicketInvalid = (ticket: TicketPosition[], maxTicketSize: 
 };
 
 export const getLogData = (data: {
+    walletAddress: string;
     networkId: SupportedNetwork;
     isParticle: boolean;
     isBiconomy: boolean;
@@ -601,11 +602,10 @@ export const getLogData = (data: {
     buyInAmount: number | string;
     usedCollateralForBuy: Coins;
 }) =>
-    `BUY error for params:\nnetworkId=${data.networkId}\nisParticle=${data.isParticle}\nisBiconomy=${
-        data.isBiconomy
-    }\nisSgp=${data.isSgp}\nisLive=${data.isLiveTicket}\nliveOdds=${JSON.stringify(
-        data.tradeData[0]?.odds
-    )}\nlivePosition=${data.tradeData[0]?.position}\nbuyInAmount=${(data.swapToOver
-        ? data.overAmount
-        : data.buyInAmount
-    ).toString()}\ncollateral=${data.usedCollateralForBuy}\nisSwapToOver=${data.swapToOver}`;
+    `BUY error for params:\nwalletAddress=${data.walletAddress}\nnetworkId=${data.networkId}\nisParticle=${
+        data.isParticle
+    }\nisBiconomy=${data.isBiconomy}\nisSgp=${data.isSgp}\nisLive=${data.isLiveTicket}\nliveOdds=${JSON.stringify(
+        data.tradeData[0]?.odds[data.tradeData[0]?.position]
+    )}\nbuyInAmount=${(data.swapToOver ? data.overAmount : data.buyInAmount).toString()}\ncollateral=${
+        data.usedCollateralForBuy
+    }\nisSwapToOver=${data.swapToOver}`;

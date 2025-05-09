@@ -1,4 +1,4 @@
-import { GameStatus, StatusFilter } from 'enums/markets';
+import { GameStatus, LiveTradingFinalStatus, LiveTradingTicketStatus, StatusFilter } from 'enums/markets';
 import { League, MarketType, Sport } from 'overtime-utils';
 import { Coins } from 'thales-utils';
 import { Network } from '../enums/network';
@@ -95,6 +95,7 @@ type OmitRecursively<T, K extends PropertyKey> = Omit<{ [P in keyof T]: OmitDist
 
 // Omit all non-serializable values from SportMarket (maturityDate)
 export type SerializableSportMarket = OmitRecursively<SportMarket, 'maturityDate'>;
+export type SerializableTicketMarket = OmitRecursively<TicketMarket, 'maturityDate'>;
 
 export type SportMarkets = SportMarket[];
 
@@ -138,7 +139,7 @@ export type SportsAmmData = {
     maxAllowedSystemCombinations: number;
 };
 
-export type LiveTradingProcessorData = {
+export type LiveTradingProcessor = {
     maxAllowedExecutionDelay: number;
 };
 
@@ -193,6 +194,50 @@ export type Ticket = {
     isSystemBet: boolean;
     systemBetData?: SystemBetData;
 };
+
+export type LiveTradingRequest = {
+    user: string;
+    requestId: string;
+    isFulfilled: boolean;
+    timestamp: number;
+    maturityTimestamp: number;
+    gameId: string;
+    leagueId: League;
+    typeId: MarketType;
+    line: number;
+    position: number;
+    buyInAmount: number;
+    expectedQuote: number;
+    payout: number;
+    collateral: Coins;
+    status: LiveTradingTicketStatus;
+    finalStatus: LiveTradingFinalStatus;
+    errorReason: string;
+};
+
+export type LiveTradingRequestsData = {
+    liveRequests: LiveTradingRequest[];
+    gamesInfo: any;
+};
+
+export type TicketRequest = {
+    initialRequestId: string;
+    requestId: string;
+    status: LiveTradingTicketStatus;
+    finalStatus: LiveTradingFinalStatus;
+    errorReason: string;
+    ticket: SerializableTicketMarket;
+    buyInAmount: number;
+    payout: number;
+    collateral: Coins;
+};
+export type TicketRequestData = TicketRequest & {
+    timestamp: number;
+};
+export type TicketMarketRequestData = Omit<TicketRequestData, 'ticket'> & {
+    ticket: TicketMarket;
+};
+export type TicketRequestsById = Record<string, TicketRequestData>;
 
 export type UserStats = {
     id: string;

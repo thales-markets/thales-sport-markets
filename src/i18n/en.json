@@ -900,6 +900,7 @@
             "slippage": {
                 "slippage": "Slippage",
                 "label": "Accept trade if odds drop by:",
+                "any-odds-label": "Accept any odds",
                 "enter-value": "Enter value",
                 "invalid-value": "Invalid value"
             },
@@ -939,11 +940,30 @@
             "min-max-payout": "Min/max payout"
         },
         "parlay-related-markets": {
-            "title": "Your other singles on this game",
+            "type": {
+                "live": "Live",
+                "other": "Other"
+            },
+            "title-live": "Your recent live tickets",
+            "title-other": "Your other singles on this game",
             "empty": "No tickets",
             "total-quote": "Total quote",
             "paid": "Paid",
-            "payout": "Payout"
+            "payout": "Payout",
+            "status": {
+                "pending": "Transaction pending",
+                "requested": "Live trade requested",
+                "approved": "Live trade approved",
+                "fulfilling": "Fulfilling live trade",
+                "error": "Ticket creation failed",
+                "success": "Ticket created"
+            },
+            "creation-status": {
+                "pending": "Pending",
+                "failed": "Failed",
+                "success": "Success"
+            },
+            "unknown-error-message": "An unknown error occurred!"
         },
         "zero-odds-tooltip": "Odds unavailable at the moment.",
         "low-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",

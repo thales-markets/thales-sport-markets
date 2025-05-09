@@ -371,7 +371,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     const onCloseValidationModal = useCallback(() => dispatch(resetTicketError()), [dispatch]);
 
     const hasParlayMarkets = ticketMarkets.length > 0 || unavailableMarkets.length > 0;
-    const isSingleTicket = ticketMarkets.length === 1;
+    const isSingleTicket = ticketMarkets.length === 1 || unavailableMarkets.length === 1;
 
     const marketsList = useRef<HTMLDivElement>(null);
     const marketsListHeight = marketsList.current?.getBoundingClientRect().height;
@@ -571,7 +571,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                 )}
                 {hasTicketError && <ValidationModal onClose={onCloseValidationModal} />}
             </ParlayContainer>
-            {isSingleTicket && <ParlayRelatedMarkets />}
+            {isConnected && isSingleTicket && <ParlayRelatedMarkets />}
         </Container>
     );
 };
@@ -776,7 +776,7 @@ const StyledParlayEmptyIcon = styled(ParlayEmptyIcon)`
 
 const BetTypeContainer = styled(FlexDivSpaceBetween)``;
 
-const RadioButtonContainer = styled.div`
+export const RadioButtonContainer = styled.div`
     position: relative;
 
     label {
