@@ -62,8 +62,8 @@ const Slippage: React.FC<SlippageProps> = ({ fixed, defaultValue, onChangeHandle
                     checked={acceptAnyOdds}
                     onChange={(e: any) => {
                         setAcceptAnyOdds(!acceptAnyOdds);
-                        setSlippageEnabled(!e.target.checked);
-                        setSlippage(e.target.checked ? MAX_VALUE : DEFAULT_SLIPPAGE_PERCENTAGE);
+                        setSlippageEnabled(false);
+                        setSlippage(e.target.checked ? MAX_VALUE : MIN_VALUE);
                     }}
                 />
                 {t('markets.parlay.slippage.any-odds-label')}
@@ -74,6 +74,7 @@ const Slippage: React.FC<SlippageProps> = ({ fixed, defaultValue, onChangeHandle
                     value="slippage"
                     checked={slippageEnabled}
                     onChange={(e: any) => {
+                        setAcceptAnyOdds(false);
                         setSlippageEnabled(!slippageEnabled);
                         setSlippage(e.target.checked ? DEFAULT_SLIPPAGE_PERCENTAGE : MIN_VALUE);
                     }}
