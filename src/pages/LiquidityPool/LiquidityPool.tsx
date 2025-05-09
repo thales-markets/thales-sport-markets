@@ -105,8 +105,8 @@ const LiquidityPool: React.FC = () => {
     const walletClient = useWalletClient();
 
     const { address, isConnected } = useAccount();
-    const smartAddres = useBiconomy();
-    const walletAddress = (isBiconomy ? smartAddres : address) || '';
+    const { smartAddress } = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const [selectedCollateralIndex, setSelectedCollateralIndex] = useState<number>(0);
     const [amount, setAmount] = useState<number | string>('');

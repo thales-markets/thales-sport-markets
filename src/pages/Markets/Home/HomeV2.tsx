@@ -99,6 +99,7 @@ const Home: React.FC = () => {
 
     const [showBurger, setShowBurger] = useState<boolean>(false);
     const [playerPropsCountPerTag, setPlayerPropsCountPerTag] = useState<Record<string, number>>({});
+    const [playerPropsCountPerTournament, setPlayerPropsCountPerTournament] = useState<Record<string, number>>({});
     const [showActive, setShowActive] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_ACTIVE, true);
     const [showTicketMobileModal, setShowTicketMobileModal] = useState<boolean>(false);
     const [availableMarketTypes, setAvailableMarketTypes] = useState<MarketType[]>([]);
@@ -495,6 +496,7 @@ const Home: React.FC = () => {
 
         const openMarketsCountPerTag: any = {};
         const ppMarketsCountPerTag: any = {};
+        const ppMarketsCountPerTournament: any = {};
         Object.keys(groupedMarkets).forEach((key: string) => {
             const playerMarketMap = groupedMarkets[key].reduce(
                 (prev: Record<string, SportMarket>, curr: SportMarket) => {
@@ -529,8 +531,20 @@ const Home: React.FC = () => {
             } else {
                 openMarketsCountPerTag[key] = groupedMarkets[key].length;
                 ppMarketsCountPerTag[key] = Object.keys(playerMarketMap).map((key) => playerMarketMap[key]).length;
+                Object.keys(playerMarketMap)
+                    .map((key) => playerMarketMap[key])
+                    .forEach((market) => {
+                        if (market.tournamentName && SPORTS_BY_TOURNAMENTS.includes(market.sport)) {
+                            if (ppMarketsCountPerTournament[`${market.leagueId}-${market.tournamentName}`]) {
+                                ppMarketsCountPerTournament[`${market.leagueId}-${market.tournamentName}`] += 1;
+                            } else {
+                                ppMarketsCountPerTournament[`${market.leagueId}-${market.tournamentName}`] = 1;
+                            }
+                        }
+                    });
             }
         });
+        setPlayerPropsCountPerTournament(ppMarketsCountPerTournament);
         setPlayerPropsCountPerTag(ppMarketsCountPerTag);
         return openMarketsCountPerTag;
     }, [openSportMarkets]);
@@ -767,6 +781,7 @@ const Home: React.FC = () => {
                             liveMarketsCountPerTag={liveMarketsCountPerTag}
                             liveMarketsCountPerSport={liveMarketsCountPerSport}
                             playerPropsMarketsCountPerTag={playerPropsCountPerTag}
+                            playerPropsCountPerTournament={playerPropsCountPerTournament}
                             tournamentsByLeague={
                                 filterItem == SportFilter.Live ? liveTournamentsByLeague : openTournamentsByLeague
                             }

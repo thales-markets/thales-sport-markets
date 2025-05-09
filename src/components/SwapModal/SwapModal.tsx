@@ -52,8 +52,8 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
     const walletClient = useWalletClient();
 
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
-    const smartAddres = useBiconomy();
-    const walletAddress = (isBiconomy ? smartAddres : address) || '';
+    const { smartAddress } = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const [fromToken, setFromToken] = useState<Coins>(
         preSelectedToken ? getCollaterals(networkId)[preSelectedToken] : 'USDC'

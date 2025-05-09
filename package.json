@@ -4,6 +4,7 @@
     "private": true,
     "dependencies": {
         "@biconomy/account": "4.1.1",
+        "@GDdark/universal-account": "^1.0.9",
         "@particle-network/authkit": "^2.0.19",
         "@rainbow-me/rainbowkit": "^2.0.0",
         "@reduxjs/toolkit": "^1.7.2",
@@ -71,11 +72,13 @@
         "eslint-plugin-prettier": "^3.3.1",
         "eslint-plugin-react": "^7.28.0",
         "eslint-plugin-react-hooks": "^4.6.0",
+        "ethers": "6.13.5",
         "lint-staged": "^10.5.4",
         "prettier": "2.2.1",
         "vite": "^5.2.6",
         "vite-plugin-checker": "^0.7.0",
         "vite-plugin-eslint": "^1.8.1",
+        "vite-plugin-node-polyfills": "^0.23.0",
         "vite-plugin-svgr": "^4.2.0",
         "vite-tsconfig-paths": "^4.3.2"
     },

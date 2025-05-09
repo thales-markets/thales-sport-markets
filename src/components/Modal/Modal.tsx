@@ -92,6 +92,7 @@ const Modal: React.FC<ModalProps> = ({
 };
 
 const Container = styled.div<{ mobileStyle?: CSSProperties; containerStyle?: CSSProperties }>`
+    position: relative;
     border: 1px solid ${(props) => props.theme.borderColor.primary};
     background: ${(props) => props.theme.background.primary};
     padding: 25px 30px 35px 30px;
@@ -99,7 +100,6 @@ const Container = styled.div<{ mobileStyle?: CSSProperties; containerStyle?: CSS
     @media (max-width: 575px) {
         height: auto;
         border-radius: 10px;
-        overflow: auto;
         ${(props) =>
             props.mobileStyle ? convertCssToStyledProperties(props.mobileStyle) : 'padding: 20px 15px 30px 15px;'}
     }
@@ -125,13 +125,16 @@ const Title = styled(FlexDiv)`
 `;
 
 const CloseIcon = styled.i`
+    position: absolute;
+    right: 14px;
+    top: 10px;
     font-size: 16px;
     margin-top: 1px;
     cursor: pointer;
     &:before {
         font-family: OvertimeIconsV2 !important;
         content: '\\0031';
-        color: ${(props) => props.theme.textColor.primary};
+        color: ${(props) => props.theme.textColor.secondary};
     }
 `;
 

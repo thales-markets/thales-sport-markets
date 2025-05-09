@@ -28,8 +28,8 @@ const BadgeGroup: React.FC<BadgeGroupProps> = ({ loyaltyBoost, startIndex, endIn
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
     const { address, isConnected } = useAccount();
-    const smartAddres = useBiconomy();
-    const walletAddress = (isBiconomy ? smartAddres : address) || '';
+    const { smartAddress } = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const userDataQuery = useUserDataQuery(walletAddress, {
         enabled: isConnected,

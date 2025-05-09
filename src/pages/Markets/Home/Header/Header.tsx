@@ -6,7 +6,7 @@ import {
 import { SportFilter } from 'enums/markets';
 import { MarketTypeGroup } from 'enums/marketTypes';
 import { uniq } from 'lodash';
-import { isPlayerPropsMarket, MarketType } from 'overtime-utils';
+import { isPlayerPropsMarket, MarketType, Sport } from 'overtime-utils';
 import React, { useContext, useMemo } from 'react';
 import { publicApiType, ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import 'react-horizontal-scrolling-menu/dist/styles.css';
@@ -105,19 +105,31 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, allMarket
 
             return marketTypeGroups;
         } else {
-            const sport = allMarkets?.[0]?.sport || '';
+            const availableSports = allMarkets?.reduce((acc: string[], market: SportMarket) => {
+                if (!acc.includes(market.sport)) {
+                    acc.push(market.sport);
+                }
+                return acc;
+            }, []);
+
             let marketTypeGroups: any[] = [];
 
-            if (isPlayerPropsFilter) {
-                marketTypeGroups = Object.keys(MarketTypePlayerPropsGroupsBySport[sport] || {}).map(
-                    (key) => key as MarketTypeGroup
-                );
-                marketTypeGroups = marketTypeGroups.filter((group: MarketTypeGroup) => {
-                    const marketTypes = (MarketTypePlayerPropsGroupsBySport[sport] || {})[group];
-                    return marketTypes && availableMarketTypes
-                        ? marketTypes.some((marketType: MarketType) => availableMarketTypes.includes(marketType))
-                        : false;
+            if (isPlayerPropsFilter && ((availableSports?.length || 0) > 1 || marketTypeGroupFilter)) {
+                availableSports?.forEach((sport) => {
+                    const marketTypes = Object.keys(MarketTypePlayerPropsGroupsBySport[sport as Sport] || {}).map(
+                        (key) => key as MarketTypeGroup
+                    );
+                    const sportMarketTypeGroups = marketTypes.filter((group: MarketTypeGroup) => {
+                        const marketTypes = (MarketTypePlayerPropsGroupsBySport[sport as Sport] || {})[group];
+
+                        return marketTypes && availableMarketTypes
+                            ? marketTypes.some((marketType: MarketType) => availableMarketTypes.includes(marketType))
+                            : false;
+                    });
+                    marketTypeGroups = [...marketTypeGroups, ...sportMarketTypeGroups];
                 });
+
+                return marketTypeGroups;
             }
 
             return availableMarketTypes
@@ -129,7 +141,16 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, allMarket
                   ]
                 : [];
         }
-    }, [marketToCheck, market, availableMarketTypes, sportFilter, allMarkets, isPlayerPropsFilter, isMobile]);
+    }, [
+        marketToCheck,
+        market,
+        availableMarketTypes,
+        sportFilter,
+        allMarkets,
+        isPlayerPropsFilter,
+        isMobile,
+        marketTypeGroupFilter,
+    ]);
 
     return (
         <Container>

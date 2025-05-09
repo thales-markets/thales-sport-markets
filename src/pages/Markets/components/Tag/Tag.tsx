@@ -26,6 +26,7 @@ type TagProps = {
     liveMarketsCountPerTag: any;
     liveMarketsCountPerSport: any;
     playerPropsMarketsCountPerTag: any;
+    playerPropsCountPerTournament: any;
     showLive: boolean;
     sport: SportFilter;
     marketsCountPerTournament: any;
@@ -44,6 +45,7 @@ const Tag: React.FC<TagProps> = ({
     marketsCountPerTournament,
     tag,
     tournaments,
+    playerPropsCountPerTournament,
 }) => {
     const dispatch = useDispatch();
     const favouriteLeagues = useSelector(getFavouriteLeagues);
@@ -212,7 +214,9 @@ const Tag: React.FC<TagProps> = ({
                                 </TournamentLabelContainer>
                             </LeftContainer>
                             <TournamentCount isMobile={isMobile}>
-                                {marketsCountPerTournament[`${tag.id}-${tournament.name}`]}
+                                {isPlayerPropsTag
+                                    ? playerPropsCountPerTournament[`${tag.id}-${tournament.name}`]
+                                    : marketsCountPerTournament[`${tag.id}-${tournament.name}`]}
                             </TournamentCount>
                         </TagContainer>
                     );

@@ -2,15 +2,18 @@ import MatchLogosV2 from 'components/MatchLogosV2';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
 import { PLAYER_PROPS_SPECIAL_SPORTS } from 'constants/sports';
+import { SortType } from 'enums/markets';
+import { getLeagueLabel } from 'overtime-utils';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import LazyLoad, { forceCheck } from 'react-lazyload';
 import { useSelector } from 'react-redux';
-import { getMarketTypeFilter, getMarketTypeGroupFilter, getSelectedMarket } from 'redux/modules/market';
+import { getMarketTypeFilter, getMarketTypeGroupFilter, getSelectedMarket, getSortType } from 'redux/modules/market';
 import { FlexDivColumn, FlexDivRowCentered } from 'styles/common';
 import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarket } from 'types/markets';
+import { getLeagueFlagSource } from 'utils/images';
 import { getPlayerPropsMarketsOverviewLength, getSpecializedPropForMarket, getTeamNameV2 } from 'utils/marketsV2';
 import MarketListCardV2 from '../MarketListCard';
 import {
@@ -19,6 +22,7 @@ import {
     FireContainer,
     FireText,
     GameOfLabel,
+    LeagueFlag,
     MatchTeamsLabel,
     MatchTimeLabel,
     MatchTimeLabelContainer,
@@ -32,6 +36,7 @@ const GameList: React.FC<{ markets: SportMarket[]; language: string }> = ({ mark
     const selectedMarket = useSelector(getSelectedMarket);
     const marketTypeFilter = useSelector(getMarketTypeFilter);
     const marketTypeGroupFilter = useSelector(getMarketTypeGroupFilter);
+    const sortType = useSelector(getSortType);
 
     const parentMarket = { ...markets[0], isPlayerPropsMarket: false, isOneSideMarket: false };
 
@@ -78,6 +83,15 @@ const GameList: React.FC<{ markets: SportMarket[]; language: string }> = ({ mark
             >
                 <StickyContainer>
                     <FlexDivRowCentered gap={20}>
+                        {sortType == SortType.START_TIME && (
+                            <Tooltip overlay={getLeagueLabel(parentMarket.leagueId)}>
+                                <LeagueFlag
+                                    size={30}
+                                    alt={parentMarket.leagueId.toString()}
+                                    src={getLeagueFlagSource(parentMarket.leagueId)}
+                                />
+                            </Tooltip>
+                        )}
                         <MatchLogosV2
                             market={parentMarket}
                             width={!!selectedMarket ? '30px' : '45px'}
