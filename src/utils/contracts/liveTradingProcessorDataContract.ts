@@ -1,12 +1,11 @@
-import { TBD_ADDRESS } from 'constants/network';
 import { Network } from 'enums/network';
 import { ContractData } from 'types/viem';
 
 const liveTradingProcessorDataContract: ContractData = {
     addresses: {
-        [Network.OptimismMainnet]: TBD_ADDRESS,
-        [Network.Arbitrum]: TBD_ADDRESS,
-        [Network.Base]: TBD_ADDRESS,
+        [Network.OptimismMainnet]: '0x5DC5D8619DA3d8b1Cadc2D7d2B1AaaE05c524B85',
+        [Network.Arbitrum]: '0xb8bA5ad0FAA8463ea991505AC13a2f609E14dDff',
+        [Network.Base]: '0x803Be54873f954e0fB52492bb844BE0D24A2f262',
         [Network.OptimismSepolia]: '0xE7fB0a3Cb69dC503464147A6836df7E69023E09C',
     },
     abi: [
