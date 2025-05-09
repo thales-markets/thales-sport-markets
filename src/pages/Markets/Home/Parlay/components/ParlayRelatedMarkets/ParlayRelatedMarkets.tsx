@@ -124,8 +124,18 @@ const ParlayRelatedMarkets: React.FC = () => {
 
     // Merged all tickets and requests, filtered and sorted
     const markets: (TicketMarketRequestData | LiveTradingRequest | Ticket)[] = useMemo(() => {
+        let refreshedTempLiveTradingRequests = tempLiveTradingRequests.map((request) => {
+            // take error reason from adapter in case UI failed with some unknown error
+            const errorReason =
+                liveTradingRequests.find(
+                    (liveRequest) =>
+                        liveRequest.finalStatus === LiveTradingFinalStatus.FAILED &&
+                        request.finalStatus === LiveTradingFinalStatus.FAILED &&
+                        liveRequest.requestId === request.requestId
+                )?.errorReason || request.errorReason;
+            return { ...request, errorReason };
+        });
         // Detect new liveTradingRequests and if there are new ones remove those stuck at pending from temp requests
-        let refreshedTempLiveTradingRequests = tempLiveTradingRequests;
         if (!prevLiveTradingRequests.current.length) {
             prevLiveTradingRequests.current = liveTradingRequests;
         } else {
