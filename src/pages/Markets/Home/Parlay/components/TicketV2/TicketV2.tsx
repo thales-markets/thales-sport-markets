@@ -1832,7 +1832,7 @@ const Ticket: React.FC<TicketProps> = ({
                     refetchAfterBuy(walletAddress, networkId);
                     if (isLiveTicket) {
                         liveTicketRequestData.finalStatus = LiveTradingFinalStatus.FAILED;
-                        liveTicketRequestData.errorReason = t('common.errors.unknown-error-try-again');
+                        liveTicketRequestData.errorReason = t('markets.parlay-related-markets.unknown-error-message');
                         dispatch(updateTicketRequestStatus(liveTicketRequestData));
                     }
                     toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
@@ -1860,7 +1860,7 @@ const Ticket: React.FC<TicketProps> = ({
                 refetchAfterBuy(walletAddress, networkId);
                 if (isLiveTicket) {
                     liveTicketRequestData.finalStatus = LiveTradingFinalStatus.FAILED;
-                    liveTicketRequestData.errorReason = t('common.errors.unknown-error-try-again');
+                    liveTicketRequestData.errorReason = t('markets.parlay-related-markets.unknown-error-message');
                     dispatch(updateTicketRequestStatus(liveTicketRequestData));
                 }
                 toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));

@@ -962,7 +962,8 @@
                 "pending": "Pending",
                 "failed": "Failed",
                 "success": "Success"
-            }
+            },
+            "unknown-error-message": "An unknown error occurred!"
         },
         "zero-odds-tooltip": "Odds unavailable at the moment.",
         "low-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",
