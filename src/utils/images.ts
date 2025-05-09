@@ -349,6 +349,8 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
             return `/logos/Countries/wta.png`;
         case League.TENNIS_ATP_CHALLENGER:
             return `/logos/Countries/atp-challenger.jpg`;
+        case League.IIHF_WORLD_CHAMPIONSHIP:
+            return `/logos/Countries/iihf.png`;
         default:
             return `/logos/Countries/world.svg`;
     }
