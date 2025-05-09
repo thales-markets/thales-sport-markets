@@ -6,7 +6,6 @@ import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { Network } from 'enums/network';
 import { Theme } from 'enums/ui';
 import useLocalStorage from 'hooks/useLocalStorage';
-import useWidgetBotScript from 'hooks/useWidgetBotScript';
 import ModalWrapper from 'pages/Overdrop/components/ModalWrapper';
 import useGetFreeBetQuery from 'queries/freeBets/useGetFreeBetQuery';
 import queryString from 'query-string';
@@ -56,7 +55,7 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
 
     const [, setFreeBet] = useLocalStorage<any | undefined>(LOCAL_STORAGE_KEYS.FREE_BET_ID, undefined);
 
-    const [preventDiscordWidgetLoad, setPreventDiscordWidgetLoad] = useState(true);
+    const [, setPreventDiscordWidgetLoad] = useState(true);
 
     const freeBetQuery = useGetFreeBetQuery(freeBetModalParam || '', networkId, { enabled: !!freeBetModalParam });
 
@@ -140,7 +139,7 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
         checkMetamaskBrowser();
     }, []);
 
-    useWidgetBotScript(preventDiscordWidgetLoad);
+    // useWidgetBotScript(preventDiscordWidgetLoad);
 
     return (
         <Background>
