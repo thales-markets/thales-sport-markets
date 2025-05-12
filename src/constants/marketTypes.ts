@@ -694,8 +694,8 @@ export const MarketTypePlayerPropsGroupsBySport: Record<Sport, Partial<Record<Ma
         [MarketTypeGroup.INNINGS]: PERIOD_MARKET_TYPES,
         [MarketTypeGroup.PLAYER_BATTER]: [
             MarketType.PLAYER_PROPS_HOMERUNS,
-            MarketType.PLAYER_PROPS_HITS_RECORDED,
             MarketType.PLAYER_PROPS_BASES,
+            MarketType.PLAYER_PROPS_HITS_RECORDED,
             MarketType.PLAYER_PROPS_RBIS,
             MarketType.PLAYER_PROPS_HITS_RUNS_RBIS,
             MarketType.PLAYER_PROPS_RUNS,

@@ -114,7 +114,7 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, allMarket
 
             let marketTypeGroups: any[] = [];
 
-            if (isPlayerPropsFilter && ((availableSports?.length || 0) > 1 || marketTypeGroupFilter)) {
+            if (isPlayerPropsFilter) {
                 availableSports?.forEach((sport) => {
                     const marketTypes = Object.keys(MarketTypePlayerPropsGroupsBySport[sport as Sport] || {}).map(
                         (key) => key as MarketTypeGroup
@@ -129,7 +129,9 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, allMarket
                     marketTypeGroups = [...marketTypeGroups, ...sportMarketTypeGroups];
                 });
 
-                return marketTypeGroups;
+                if ((availableSports?.length || 0) > 1) {
+                    return marketTypeGroups;
+                }
             }
 
             return availableMarketTypes
@@ -141,16 +143,7 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, allMarket
                   ]
                 : [];
         }
-    }, [
-        marketToCheck,
-        market,
-        availableMarketTypes,
-        sportFilter,
-        allMarkets,
-        isPlayerPropsFilter,
-        isMobile,
-        marketTypeGroupFilter,
-    ]);
+    }, [marketToCheck, market, availableMarketTypes, sportFilter, allMarkets, isPlayerPropsFilter, isMobile]);
 
     return (
         <Container>
