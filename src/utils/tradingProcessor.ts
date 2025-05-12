@@ -6,7 +6,7 @@ import { ZERO_ADDRESS } from 'constants/network';
 import { secondsToMilliseconds } from 'date-fns';
 import { LiveTradingFinalStatus, LiveTradingTicketStatus } from 'enums/markets';
 import { toast } from 'react-toastify';
-import { updateTicketRequestStatus } from 'redux/modules/ticket';
+import { updateTicketRequests } from 'redux/modules/ticket';
 import { TicketRequest, TradeData } from 'types/markets';
 import { SupportedNetwork } from 'types/network';
 import { ViemContract } from 'types/viem';
@@ -27,8 +27,8 @@ const checkFulfilledTx = async (
     requestId: string,
     isFulfilledAdapterParam: boolean,
     toastId: string | number,
-    dispatch?: Dispatch<PayloadAction<TicketRequest>>,
-    liveTicketRequestData?: TicketRequest
+    dispatch?: Dispatch<PayloadAction<{ ticketRequest: TicketRequest; networkId: SupportedNetwork }>>,
+    liveTicketRequestData?: { ticketRequest: TicketRequest; networkId: SupportedNetwork }
 ) => {
     let isFulfilledAdapter = isFulfilledAdapterParam;
 
@@ -40,16 +40,16 @@ const checkFulfilledTx = async (
         if (!!adapterResponse.data) {
             if (adapterResponse.data.allow) {
                 if (dispatch && liveTicketRequestData) {
-                    liveTicketRequestData.status = LiveTradingTicketStatus.APPROVED;
-                    dispatch(updateTicketRequestStatus(liveTicketRequestData));
+                    liveTicketRequestData.ticketRequest.status = LiveTradingTicketStatus.APPROVED;
+                    dispatch(updateTicketRequests(liveTicketRequestData));
                 }
                 isFulfilledAdapter = true;
                 toast.update(toastId, getLoadingToastOptions(adapterResponse.data.message));
             } else {
                 if (dispatch && liveTicketRequestData) {
-                    liveTicketRequestData.finalStatus = LiveTradingFinalStatus.FAILED;
-                    liveTicketRequestData.errorReason = adapterResponse.data.message;
-                    dispatch(updateTicketRequestStatus(liveTicketRequestData));
+                    liveTicketRequestData.ticketRequest.finalStatus = LiveTradingFinalStatus.FAILED;
+                    liveTicketRequestData.ticketRequest.errorReason = adapterResponse.data.message;
+                    dispatch(updateTicketRequests(liveTicketRequestData));
                 }
                 toast.update(toastId, getErrorToastOptions(adapterResponse.data.message));
                 return { isFulfilledTx: false, isFulfilledAdapter, isAdapterError: true };
@@ -69,8 +69,8 @@ export const processTransaction = async (
     maxAllowedExecutionSec: number,
     toastId: string | number,
     toastMessage: string,
-    dispatch?: Dispatch<PayloadAction<TicketRequest>>,
-    liveTicketRequestData?: TicketRequest
+    dispatch?: Dispatch<PayloadAction<{ ticketRequest: TicketRequest; networkId: SupportedNetwork }>>,
+    liveTicketRequestData?: { ticketRequest: TicketRequest; networkId: SupportedNetwork }
 ) => {
     let counter = 0;
     const startTime = Date.now();
@@ -93,8 +93,8 @@ export const processTransaction = async (
         const isUpdateStatusReady = counter / UPDATE_STATUS_MESSAGE_PERIOD_SECONDS === DELAY_BETWEEN_CHECKS_SECONDS;
         if (isUpdateStatusReady && !isFulfilledTx && isFulfilledAdapter) {
             if (dispatch && liveTicketRequestData) {
-                liveTicketRequestData.status = LiveTradingTicketStatus.FULFILLING;
-                dispatch(updateTicketRequestStatus(liveTicketRequestData));
+                liveTicketRequestData.ticketRequest.status = LiveTradingTicketStatus.FULFILLING;
+                dispatch(updateTicketRequests(liveTicketRequestData));
             }
             toast.update(toastId, getLoadingToastOptions(toastMessage));
         }

@@ -14,6 +14,7 @@ import {
     TicketRequest,
     TicketRequestsById,
 } from 'types/markets';
+import { SupportedNetwork } from 'types/network';
 import { RootState, TicketSliceState } from 'types/redux';
 import { TicketError } from 'types/tickets';
 import {
@@ -29,11 +30,6 @@ const DEFAULT_MAX_TICKET_SIZE = 10;
 const getDefaultTicket = (): TicketPosition[] => {
     const lsParlay = localStore.get(LOCAL_STORAGE_KEYS.PARLAY);
     return lsParlay !== undefined ? (lsParlay as TicketPosition[]) : [];
-};
-
-const getDefaultTicketRequests = (): TicketRequestsById => {
-    const lsTicketRequests = localStore.get(LOCAL_STORAGE_KEYS.TICKET_REQUESTS);
-    return lsTicketRequests !== undefined ? (lsTicketRequests as TicketRequestsById) : {};
 };
 
 const getDefaultPayment = (): ParlayPayment => {
@@ -68,7 +64,7 @@ const getDefaultError = (): TicketError => {
 
 const initialState: TicketSliceState = {
     ticket: getDefaultTicket(),
-    ticketRequestsById: getDefaultTicketRequests(),
+    ticketRequestsById: {},
     payment: getDefaultPayment(),
     maxTicketSize: DEFAULT_MAX_TICKET_SIZE,
     liveBetSlippage: getDefaultLiveSlippage(),
@@ -199,24 +195,38 @@ const ticketSlice = createSlice({
         removeAll: (state) => {
             _removeAll(state);
         },
-        updateTicketRequestStatus: (state, action: PayloadAction<TicketRequest>) => {
-            let requestId = action.payload.requestId;
+        setTicketRequests: (
+            state,
+            action: PayloadAction<{ ticketRequests: TicketRequestsById; networkId: SupportedNetwork }>
+        ) => {
+            state.ticketRequestsById = action.payload.ticketRequests;
+            localStore.set(
+                `${LOCAL_STORAGE_KEYS.TICKET_REQUESTS}${action.payload.networkId}`,
+                state.ticketRequestsById
+            );
+        },
+        updateTicketRequests: (
+            state,
+            action: PayloadAction<{ ticketRequest: TicketRequest; networkId: SupportedNetwork }>
+        ) => {
+            const payloadTicketRequest = action.payload.ticketRequest;
+            let requestId = payloadTicketRequest.requestId;
             if (requestId) {
-                delete state.ticketRequestsById[action.payload.initialRequestId];
+                delete state.ticketRequestsById[payloadTicketRequest.initialRequestId];
             } else {
-                requestId = action.payload.initialRequestId;
+                requestId = payloadTicketRequest.initialRequestId;
             }
 
             state.ticketRequestsById[requestId] = {
-                initialRequestId: action.payload.initialRequestId,
+                initialRequestId: payloadTicketRequest.initialRequestId,
                 requestId,
-                status: action.payload.status,
-                finalStatus: action.payload.finalStatus,
-                errorReason: action.payload.errorReason,
-                ticket: action.payload.ticket,
-                buyInAmount: action.payload.buyInAmount,
-                payout: action.payload.payout,
-                collateral: action.payload.collateral,
+                status: payloadTicketRequest.status,
+                finalStatus: payloadTicketRequest.finalStatus,
+                errorReason: payloadTicketRequest.errorReason,
+                ticket: payloadTicketRequest.ticket,
+                buyInAmount: payloadTicketRequest.buyInAmount,
+                payout: payloadTicketRequest.payout,
+                collateral: payloadTicketRequest.collateral,
                 timestamp: !state.ticketRequestsById[requestId]?.timestamp
                     ? Date.now()
                     : state.ticketRequestsById[requestId].timestamp,
@@ -231,11 +241,17 @@ const ticketSlice = createSlice({
                     .map((request) => request.initialRequestId);
                 state.ticketRequestsById = omit(state.ticketRequestsById, deleteInitialRequestIds);
             }
-            localStore.set(LOCAL_STORAGE_KEYS.TICKET_REQUESTS, state.ticketRequestsById);
+            localStore.set(
+                `${LOCAL_STORAGE_KEYS.TICKET_REQUESTS}${action.payload.networkId}`,
+                state.ticketRequestsById
+            );
         },
-        removeTicketRequestById: (state, action: PayloadAction<string>) => {
-            delete state.ticketRequestsById[action.payload];
-            localStore.set(LOCAL_STORAGE_KEYS.TICKET_REQUESTS, state.ticketRequestsById);
+        removeTicketRequestById: (state, action: PayloadAction<{ requestId: string; networkId: SupportedNetwork }>) => {
+            delete state.ticketRequestsById[action.payload.requestId];
+            localStore.set(
+                `${LOCAL_STORAGE_KEYS.TICKET_REQUESTS}${action.payload.networkId}`,
+                state.ticketRequestsById
+            );
         },
         setLiveBetSlippage: (state, action: PayloadAction<number>) => {
             state.liveBetSlippage = action.payload;
@@ -291,7 +307,8 @@ export const {
     updateTicket,
     removeFromTicket,
     removeAll,
-    updateTicketRequestStatus,
+    setTicketRequests,
+    updateTicketRequests,
     removeTicketRequestById,
     setPaymentSelectedCollateralIndex,
     setPaymentAmountToBuy,

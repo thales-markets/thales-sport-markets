@@ -4,6 +4,7 @@ import SimpleLoader from 'components/SimpleLoader';
 import ToggleV2 from 'components/ToggleV2';
 import Tooltip from 'components/Tooltip';
 import { LATEST_LIVE_REQUESTS_SIZE } from 'constants/markets';
+import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { differenceInMinutes, secondsToMilliseconds } from 'date-fns';
 import { LiveTradingFinalStatus, LiveTradingTicketStatus } from 'enums/markets';
 import { ScreenSizeBreakpoint } from 'enums/ui';
@@ -11,11 +12,11 @@ import useInterval from 'hooks/useInterval';
 import { orderBy } from 'lodash';
 import { useLiveTradingProcessorDataQuery } from 'queries/markets/useLiveTradingProcessorDataQuery';
 import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { getTicket, getTicketRequests, removeTicketRequestById } from 'redux/modules/ticket';
+import { getTicket, getTicketRequests, removeTicketRequestById, setTicketRequests } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
@@ -27,8 +28,15 @@ import {
     FlexDivSpaceBetween,
     FlexDivStart,
 } from 'styles/common';
-import { formatCurrencyWithKey, formatDateWithTime } from 'thales-utils';
-import { LiveTradingRequest, SportMarket, Ticket, TicketMarket, TicketMarketRequestData } from 'types/markets';
+import { formatCurrencyWithKey, formatDateWithTime, localStore } from 'thales-utils';
+import {
+    LiveTradingRequest,
+    SportMarket,
+    Ticket,
+    TicketMarket,
+    TicketMarketRequestData,
+    TicketRequestsById,
+} from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { formatMarketOdds } from 'utils/markets';
 import {
@@ -154,7 +162,7 @@ const ParlayRelatedMarkets: React.FC = () => {
                     if (isPending && removedCount < diffCount) {
                         isRequestForRemoval = true;
                         removedCount++;
-                        dispatch(removeTicketRequestById(request.initialRequestId));
+                        dispatch(removeTicketRequestById({ requestId: request.initialRequestId, networkId }));
                         // prevent markets re-render as key is base on initialRequestId
                         const requestIdForMap = orderBy(liveTradingRequests, ['timestamp'], ['desc'])[
                             diffCount - removedCount
@@ -177,7 +185,16 @@ const ParlayRelatedMarkets: React.FC = () => {
             ...createdSingleTickets,
         ];
         return orderBy(requestsAndTickets, ['timestamp'], ['desc']).slice(0, LATEST_LIVE_REQUESTS_SIZE);
-    }, [tempLiveTradingRequests, liveTradingRequests, createdSingleTickets, ticketRequestsById, dispatch]);
+    }, [tempLiveTradingRequests, liveTradingRequests, createdSingleTickets, ticketRequestsById, dispatch, networkId]);
+
+    // initialize ticketRequestsById by network ID
+    useEffect(() => {
+        console.log('initialize ticketRequestsById');
+
+        const lsTicketRequests = localStore.get(`${LOCAL_STORAGE_KEYS.TICKET_REQUESTS}${networkId}`);
+        const ticketRequests = lsTicketRequests !== undefined ? (lsTicketRequests as TicketRequestsById) : {};
+        dispatch(setTicketRequests({ ticketRequests, networkId }));
+    }, [networkId, dispatch]);
 
     // Refresh in-progress live requests on every 5s if not in temp requests and pending temp requests
     useInterval(() => {

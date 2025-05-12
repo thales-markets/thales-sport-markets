@@ -65,7 +65,7 @@ import {
     setLiveBetSlippage,
     setPaymentAmountToBuy,
     setPaymentSelectedCollateralIndex,
-    updateTicketRequestStatus,
+    updateTicketRequests,
 } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsBiconomy, getIsConnectedViaParticle, setWalletConnectModalVisibility } from 'redux/modules/wallet';
@@ -88,6 +88,7 @@ import {
     roundNumberToDecimals,
 } from 'thales-utils';
 import { SportsAmmData, TicketMarket, TicketRequest, TradeData } from 'types/markets';
+import { SupportedNetwork } from 'types/network';
 import { OverdropMultiplier, OverdropUserData } from 'types/overdrop';
 import { RootState } from 'types/redux';
 import { SportsbookData } from 'types/sgp';
@@ -1519,19 +1520,22 @@ const Ticket: React.FC<TicketProps> = ({
                 }
             }
 
-            const liveTicketRequestData: TicketRequest = {
-                initialRequestId: `initialRequestId${Date.now()}`,
-                requestId: '',
-                status: LiveTradingTicketStatus.PENDING,
-                finalStatus: LiveTradingFinalStatus.IN_PROGRESS,
-                errorReason: '',
-                ticket: ticketMarketAsSerializable(markets[0]),
-                buyInAmount: Number(buyInAmount),
-                payout: payout,
-                collateral: usedCollateralForBuy,
+            const liveTicketRequestData: { ticketRequest: TicketRequest; networkId: SupportedNetwork } = {
+                ticketRequest: {
+                    initialRequestId: `initialRequestId${Date.now()}`,
+                    requestId: '',
+                    status: LiveTradingTicketStatus.PENDING,
+                    finalStatus: LiveTradingFinalStatus.IN_PROGRESS,
+                    errorReason: '',
+                    ticket: ticketMarketAsSerializable(markets[0]),
+                    buyInAmount: Number(buyInAmount),
+                    payout: payout,
+                    collateral: usedCollateralForBuy,
+                },
+                networkId,
             };
             if (isLiveTicket) {
-                dispatch(updateTicketRequestStatus(liveTicketRequestData));
+                dispatch(updateTicketRequests(liveTicketRequestData));
             }
 
             let tradeData: TradeData[] = [];
@@ -1711,12 +1715,12 @@ const Ticket: React.FC<TicketProps> = ({
                         if (!requestId) {
                             throw new Error('Request ID not found');
                         }
-                        liveTicketRequestData.requestId = requestId;
+                        liveTicketRequestData.ticketRequest.requestId = requestId;
 
                         if (liveOrSgpTradingProcessorContract) {
                             if (isLiveTicket) {
-                                liveTicketRequestData.status = LiveTradingTicketStatus.REQUESTED;
-                                dispatch(updateTicketRequestStatus(liveTicketRequestData));
+                                liveTicketRequestData.ticketRequest.status = LiveTradingTicketStatus.REQUESTED;
+                                dispatch(updateTicketRequests(liveTicketRequestData));
                             }
                             toast.update(
                                 toastId,
@@ -1740,17 +1744,19 @@ const Ticket: React.FC<TicketProps> = ({
                                 setIsBuying(false);
                             } else if (!isFulfilledTx) {
                                 if (isLiveTicket) {
-                                    liveTicketRequestData.finalStatus = LiveTradingFinalStatus.FAILED;
-                                    liveTicketRequestData.errorReason = t('markets.parlay.tx-not-received');
-                                    dispatch(updateTicketRequestStatus(liveTicketRequestData));
+                                    liveTicketRequestData.ticketRequest.finalStatus = LiveTradingFinalStatus.FAILED;
+                                    liveTicketRequestData.ticketRequest.errorReason = t(
+                                        'markets.parlay.tx-not-received'
+                                    );
+                                    dispatch(updateTicketRequests(liveTicketRequestData));
                                 }
                                 toast.update(toastId, getErrorToastOptions(t('markets.parlay.tx-not-received')));
                                 setIsBuying(false);
                             } else {
                                 if (isLiveTicket) {
-                                    liveTicketRequestData.status = LiveTradingTicketStatus.COMPLETED;
-                                    liveTicketRequestData.finalStatus = LiveTradingFinalStatus.SUCCESS;
-                                    dispatch(updateTicketRequestStatus(liveTicketRequestData));
+                                    liveTicketRequestData.ticketRequest.status = LiveTradingTicketStatus.COMPLETED;
+                                    liveTicketRequestData.ticketRequest.finalStatus = LiveTradingFinalStatus.SUCCESS;
+                                    dispatch(updateTicketRequests(liveTicketRequestData));
                                 }
 
                                 const modalData = await getShareTicketModalData(
@@ -1831,9 +1837,11 @@ const Ticket: React.FC<TicketProps> = ({
                     setIsBuying(false);
                     refetchAfterBuy(walletAddress, networkId);
                     if (isLiveTicket) {
-                        liveTicketRequestData.finalStatus = LiveTradingFinalStatus.FAILED;
-                        liveTicketRequestData.errorReason = t('markets.parlay-related-markets.unknown-error-message');
-                        dispatch(updateTicketRequestStatus(liveTicketRequestData));
+                        liveTicketRequestData.ticketRequest.finalStatus = LiveTradingFinalStatus.FAILED;
+                        liveTicketRequestData.ticketRequest.errorReason = t(
+                            'markets.parlay-related-markets.unknown-error-message'
+                        );
+                        dispatch(updateTicketRequests(liveTicketRequestData));
                     }
                     toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
                     const data = getLogData({
@@ -1859,9 +1867,11 @@ const Ticket: React.FC<TicketProps> = ({
                 setIsBuying(false);
                 refetchAfterBuy(walletAddress, networkId);
                 if (isLiveTicket) {
-                    liveTicketRequestData.finalStatus = LiveTradingFinalStatus.FAILED;
-                    liveTicketRequestData.errorReason = t('markets.parlay-related-markets.unknown-error-message');
-                    dispatch(updateTicketRequestStatus(liveTicketRequestData));
+                    liveTicketRequestData.ticketRequest.finalStatus = LiveTradingFinalStatus.FAILED;
+                    liveTicketRequestData.ticketRequest.errorReason = t(
+                        'markets.parlay-related-markets.unknown-error-message'
+                    );
+                    dispatch(updateTicketRequests(liveTicketRequestData));
                 }
                 toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
                 if (!isErrorExcluded(e as Error)) {
