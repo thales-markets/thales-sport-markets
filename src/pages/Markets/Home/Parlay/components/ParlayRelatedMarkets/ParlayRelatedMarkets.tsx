@@ -189,8 +189,6 @@ const ParlayRelatedMarkets: React.FC = () => {
 
     // initialize ticketRequestsById by network ID
     useEffect(() => {
-        console.log('initialize ticketRequestsById');
-
         const lsTicketRequests = localStore.get(`${LOCAL_STORAGE_KEYS.TICKET_REQUESTS}${networkId}`);
         const ticketRequests = lsTicketRequests !== undefined ? (lsTicketRequests as TicketRequestsById) : {};
         dispatch(setTicketRequests({ ticketRequests, networkId }));
