@@ -261,6 +261,7 @@
                 "handball": "Handball",
                 "waterpolo": "Water polo",
                 "cricket": "Cricket",
+                "darts": "Darts",
                 "boxing": "Boxing",
                 "golf": "Golf",
                 "soon": "More sports coming soon!",
@@ -802,7 +803,7 @@
             "swap-thales-tooltip": "<bold>Boost your winnings with THALES!</bold> With just a simple click, you can automatically swap to THALES and enjoy improved betting quotes instantly! Payout is in THALES.",
             "keep-selection-tooltip": "By default, the parlay builder is reset after successful submission. Tick this if you want to keep current context after submission.",
             "over-bonus-tooltip": "Users placing trades with OVER will get 2% extra payouts for each game they have in their ticket (already calculated in Total quote and Payout).",
-            "swap-over": "Use OVER for better odds",
+            "swap-over": "Use <logo />$OVER for better odds",
             "swap-over-tooltip": "<bold>Boost your winnings with OVER!</bold> With just a simple click, you can automatically swap to OVER and enjoy improved betting quotes instantly! Payout is in OVER.",
             "clear": "Clear all",
             "buy-in": "Buy-in",
@@ -936,7 +937,8 @@
             "buy-in-per-combination": "Buy-in per combination",
             "min-payout": "Min payout",
             "max-payout": "Max payout",
-            "min-max-payout": "Min/max payout"
+            "min-max-payout": "Min/max payout",
+            "latest-odds-checking": "Checking for latest odds..."
         },
         "parlay-related-markets": {
             "title": "Your other singles on this game",
