@@ -1746,11 +1746,11 @@ const Ticket: React.FC<TicketProps> = ({
                                 if (isLiveTicket) {
                                     liveTicketRequestData.ticketRequest.finalStatus = LiveTradingFinalStatus.FAILED;
                                     liveTicketRequestData.ticketRequest.errorReason = t(
-                                        'markets.parlay.tx-not-received'
+                                        'markets.parlay.tx-not-fulfilled'
                                     );
                                     dispatch(updateTicketRequests(liveTicketRequestData));
                                 }
-                                toast.update(toastId, getErrorToastOptions(t('markets.parlay.tx-not-received')));
+                                toast.update(toastId, getErrorToastOptions(t('markets.parlay.tx-not-fulfilled')));
                                 setIsBuying(false);
                             } else {
                                 if (isLiveTicket) {
