@@ -187,7 +187,7 @@ const ParlayRelatedMarkets: React.FC = () => {
         return orderBy(requestsAndTickets, ['timestamp'], ['desc']).slice(0, LATEST_LIVE_REQUESTS_SIZE);
     }, [tempLiveTradingRequests, liveTradingRequests, createdSingleTickets, ticketRequestsById, dispatch, networkId]);
 
-    // initialize ticketRequestsById by network ID
+    // initialize ticketRequests by network ID
     useEffect(() => {
         const lsTicketRequests = localStore.get(`${LOCAL_STORAGE_KEYS.TICKET_REQUESTS}${networkId}`);
         const ticketRequests = lsTicketRequests !== undefined ? (lsTicketRequests as TicketRequestsById) : {};
@@ -330,7 +330,7 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
         timestamp = requestedMarket.timestamp;
     }
 
-    const [isExpanded, setIsExpanded] = useState(differenceInMinutes(Date.now(), timestamp) < 10); // collapsed if older than 10 min
+    const [isExpanded, setIsExpanded] = useState(differenceInMinutes(Date.now(), timestamp) < 1); // collapsed if older than 1 min
 
     const ticketCreationStatus =
         finalStatus === LiveTradingFinalStatus.SUCCESS
