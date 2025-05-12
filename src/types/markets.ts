@@ -231,7 +231,7 @@ export type TicketRequest = {
     payout: number;
     collateral: Coins;
 };
-export type TicketRequestData = TicketRequest & {
+type TicketRequestData = TicketRequest & {
     timestamp: number;
 };
 export type TicketMarketRequestData = Omit<TicketRequestData, 'ticket'> & {

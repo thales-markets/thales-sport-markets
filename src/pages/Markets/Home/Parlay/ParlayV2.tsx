@@ -597,7 +597,7 @@ const ParlayContainer = styled(FlexDivColumn)`
     }
 `;
 
-export const Title = styled(FlexDivCentered)`
+const Title = styled(FlexDivCentered)`
     color: ${(props) => props.theme.textColor.septenary};
     font-weight: 600;
     font-size: 14px;
@@ -607,7 +607,7 @@ export const Title = styled(FlexDivCentered)`
     margin-bottom: 10px;
 `;
 
-export const Count = styled(FlexDivCentered)`
+const Count = styled(FlexDivCentered)`
     border-radius: 8px;
     min-width: 20px;
     color: ${(props) => props.theme.textColor.tertiary};
