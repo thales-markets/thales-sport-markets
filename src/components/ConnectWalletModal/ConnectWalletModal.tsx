@@ -2,6 +2,7 @@ import { useConnectModal } from '@rainbow-me/rainbowkit';
 import disclaimer from 'assets/docs/overtime-markets-disclaimer.pdf';
 import privacyPolicy from 'assets/docs/overtime-privacy-policy.pdf';
 import termsOfUse from 'assets/docs/overtime-terms-of-use.pdf';
+import BinanceWallet from 'assets/images/logins-icons/binance.svg?react';
 import Coinbase from 'assets/images/logins-icons/coinbase.svg?react';
 import Discord from 'assets/images/logins-icons/discord.svg?react';
 import Google from 'assets/images/logins-icons/google.svg?react';
@@ -430,6 +431,10 @@ const IconHolder = styled.div`
     }
 `;
 
+const BinanceIconHolder = styled(IconHolder)`
+    margin-right: 0;
+`;
+
 const DownIcon = styled.i`
     font-size: 14px;
     margin-left: 4px;
@@ -471,6 +476,13 @@ const getIcon = (socialId: ParticalTypes | WalletConnections): any => {
                 </IconHolder>
             );
 
+        case WalletConnections.BINANCE:
+            return (
+                <BinanceIconHolder>
+                    <BinanceIcon />
+                </BinanceIconHolder>
+            );
+
         case WalletConnections.COINBASE:
             return (
                 <IconHolder>
@@ -482,5 +494,10 @@ const getIcon = (socialId: ParticalTypes | WalletConnections): any => {
             return <IconHolder />;
     }
 };
+
+const BinanceIcon = styled(BinanceWallet)`
+    width: 40px;
+    height: 40px !important;
+`;
 
 export default ConnectWalletModal;
