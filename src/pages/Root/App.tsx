@@ -1,10 +1,8 @@
-import { isInBinance } from '@binance/w3w-utils';
 import { useConnect as useParticleConnect } from '@particle-network/authkit';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import Loader from 'components/Loader';
 import ROUTES from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { Network } from 'enums/network';
 import useInterval from 'hooks/useInterval';
 import DappLayout from 'layouts/DappLayout';
 import Theme from 'layouts/Theme';
@@ -63,14 +61,8 @@ const App = () => {
                 if (isNetworkSupported(chainId)) {
                     switchChain?.({ chainId: chainId as SupportedNetwork });
                 } else {
-                    if (isInBinance()) {
-                        if (!isNetworkSupported(chainId)) {
-                            switchChain?.({ chainId: Network.OptimismMainnet as SupportedNetwork });
-                        }
-                    } else {
-                        disconnect();
-                        dispatch(setWalletConnectModalVisibility({ visibility: true }));
-                    }
+                    disconnect();
+                    dispatch(setWalletConnectModalVisibility({ visibility: true }));
                 }
             }
         }

@@ -1,3 +1,4 @@
+import { isInBinance } from '@binance/w3w-utils';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import disclaimer from 'assets/docs/overtime-markets-disclaimer.pdf';
 import privacyPolicy from 'assets/docs/overtime-privacy-policy.pdf';
@@ -165,16 +166,29 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                             {SUPPORTED_WALLET_CONNECTORS_MODAL.map((item, index) => {
                                 const connector = getSpecificConnectorFromConnectorsArray(connectors, item);
                                 if (connector) {
-                                    return (
-                                        <Button
-                                            key={index}
-                                            onClick={() => handleConnect(connector)}
-                                            oneButtoninRow={true}
-                                        >
-                                            {<> {getIcon(item)}</>}
-                                            {t(getWalletLabel(item))}
-                                        </Button>
-                                    );
+                                    if (isInBinance() && connector.id === 'metamask') {
+                                        return (
+                                            <Button
+                                                key={index}
+                                                onClick={() => handleConnect(connector)}
+                                                oneButtoninRow={true}
+                                            >
+                                                {<> {getIcon(WalletConnections.BINANCE)}</>}
+                                                {t(getWalletLabel(WalletConnections.BINANCE))}
+                                            </Button>
+                                        );
+                                    } else {
+                                        return (
+                                            <Button
+                                                key={index}
+                                                onClick={() => handleConnect(connector)}
+                                                oneButtoninRow={true}
+                                            >
+                                                {<> {getIcon(item)}</>}
+                                                {t(getWalletLabel(item))}
+                                            </Button>
+                                        );
+                                    }
                                 }
                             })}
                         </SocialLoginWrapper>
