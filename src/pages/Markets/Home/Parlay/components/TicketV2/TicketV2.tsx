@@ -2065,6 +2065,7 @@ const Ticket: React.FC<TicketProps> = ({
             return (
                 <Button disabled={true} onClick={() => {}} {...defaultButtonProps}>
                     {t('markets.parlay.latest-odds-checking')}
+                    <DotsLoader />
                 </Button>
             );
         }
@@ -2931,6 +2932,21 @@ const LogoIcon = styled.i`
     font-size: 14px;
     line-height: 12px;
     color: ${(props) => props.theme.status.win}!important;
+`;
+
+const DotsLoader = styled.div`
+    width: 20px;
+    aspect-ratio: 4;
+    margin-top: 6px;
+    margin-left: 2px;
+    background: radial-gradient(circle closest-side, #000 50%, #0000) 0 / calc(100% / 3) 100% space;
+    clip-path: inset(0 100% 0 0);
+    animation: l1 1s steps(4) infinite;
+    @keyframes l1 {
+        to {
+            clip-path: inset(0 -34% 0 0);
+        }
+    }
 `;
 
 export default Ticket;
