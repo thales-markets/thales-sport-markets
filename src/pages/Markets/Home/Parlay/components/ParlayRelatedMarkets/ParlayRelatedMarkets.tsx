@@ -133,15 +133,14 @@ const ParlayRelatedMarkets: React.FC = () => {
     // Merged all tickets and requests, filtered and sorted
     const markets: (TicketMarketRequestData | LiveTradingRequest | Ticket)[] = useMemo(() => {
         let refreshedTempLiveTradingRequests = tempLiveTradingRequests.map((request) => {
-            // take error reason from adapter in case UI failed with some unknown error
-            const errorReason =
-                liveTradingRequests.find(
-                    (liveRequest) =>
-                        liveRequest.finalStatus === LiveTradingFinalStatus.FAILED &&
-                        request.finalStatus === LiveTradingFinalStatus.FAILED &&
-                        liveRequest.requestId === request.requestId
-                )?.errorReason || request.errorReason;
-            return { ...request, errorReason };
+            // take status and error reason from adapter in case UI failed with some unknown error
+            const failedLiveRequest = liveTradingRequests.find(
+                (liveRequest) =>
+                    liveRequest.finalStatus === LiveTradingFinalStatus.FAILED &&
+                    liveRequest.requestId === request.requestId
+            );
+
+            return { ...request, ...failedLiveRequest };
         });
         // Detect new liveTradingRequests and if there are new ones remove those stuck at pending from temp requests
         if (!prevLiveTradingRequests.current.length) {
@@ -464,7 +463,7 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
                                 <StatusesText>
                                     {t(
                                         `markets.parlay-related-markets.status.${
-                                            status === LiveTradingTicketStatus.COMPLETED ? 'success' : 'error'
+                                            finalStatus === LiveTradingFinalStatus.FAILED ? 'error' : 'success'
                                         }`
                                     )}
                                 </StatusesText>
@@ -642,6 +641,11 @@ const ConnectionLine = styled.div<{ index: number; isProgressing: boolean; isCom
     background-size: 200% 100%;
     transition: all 1s ease-out;
     background-position: ${(props) => (props.isProgressing ? 'left bottom' : 'right bottom')};
+
+    @media (max-width: ${ScreenSizeBreakpoint.LARGE}px) {
+        width: 50px;
+        left: ${(props) => `calc(16px * ${props.index + 1} + 50px * ${props.index})`};
+    }
 `;
 
 const StatusesRow = styled(Row)`
