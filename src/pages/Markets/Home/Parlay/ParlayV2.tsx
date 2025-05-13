@@ -589,7 +589,7 @@ const ParlayContainer = styled(FlexDivColumn)`
     flex: none;
     background: ${(props) => props.theme.background.quinary};
     border-radius: 7px;
-    @media (max-width: 1199px) {
+    @media (max-width: ${ScreenSizeBreakpoint.LARGE}px) {
         max-width: 320px;
     }
     @media (max-width: 950px) {
