@@ -165,8 +165,9 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                         <SocialLoginWrapper>
                             {SUPPORTED_WALLET_CONNECTORS_MODAL.map((item, index) => {
                                 const connector = getSpecificConnectorFromConnectorsArray(connectors, item);
+                                console.log(connector);
                                 if (connector) {
-                                    if (isInBinance() && connector.id === 'metamask') {
+                                    if (isInBinance() && connector.id === 'metaMask') {
                                         return (
                                             <Button
                                                 key={index}
