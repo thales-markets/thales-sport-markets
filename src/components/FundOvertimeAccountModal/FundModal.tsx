@@ -115,6 +115,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                     borderRadius: 0,
                     minHeight: '100vh',
                     padding: '25px 10px 35px 10px',
+                    overflow: 'scroll',
                 },
             }}
             hideHeader
