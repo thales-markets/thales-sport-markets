@@ -13,6 +13,8 @@ import { getCollateralByAddress } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import { convertFromBytes32 } from 'utils/formatters/string';
 
+const dataCache: LiveTradingRequestsData = { liveRequests: [], gamesInfo: {} };
+
 export const useLiveTradingProcessorDataQuery = (
     walletAddress: string,
     networkConfig: NetworkConfig,
@@ -56,6 +58,7 @@ export const useLiveTradingProcessorDataQuery = (
                         const adapterRequestsResponse = promisesResult[1];
 
                         data.gamesInfo = gamesInfoResponse.data;
+                        dataCache.gamesInfo = gamesInfoResponse.data;
                         adapterRequests = adapterRequestsResponse.data;
                     }
 
@@ -125,12 +128,14 @@ export const useLiveTradingProcessorDataQuery = (
 
                             data.liveRequests.push(liveTradingRequest);
                         });
+
+                    dataCache.liveRequests = data.liveRequests;
                 }
             } catch (e) {
-                console.log('E ', e);
+                console.log('Failed to fetch live trading data', e);
             }
 
-            return data;
+            return { ...dataCache, ...data };
         },
         ...options,
     });

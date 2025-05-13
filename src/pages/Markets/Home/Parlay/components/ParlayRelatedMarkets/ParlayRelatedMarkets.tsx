@@ -59,6 +59,7 @@ const ParlayRelatedMarkets: React.FC = () => {
     const { smartAddress } = useBiconomy();
 
     const isLiveFilterSelected = useMemo(() => sportFilter == SportFilter.Live, [sportFilter]);
+
     const [isSinglesExpanded, setIsSinglesExpanded] = useState(!isLiveFilterSelected);
 
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
@@ -236,7 +237,7 @@ const ParlayRelatedMarkets: React.FC = () => {
     const isOtherSinglesClickable = isLiveFilterSelected && !!createdSingleTickets.length;
 
     return (
-        <Container>
+        <Container isLiveView={isLiveFilterSelected}>
             <Section>
                 <MarketsHeader
                     isClickable={isOtherSinglesClickable}
@@ -247,10 +248,7 @@ const ParlayRelatedMarkets: React.FC = () => {
                         <Count>{createdSingleTickets.length}</Count>
                     </Title>
                     {isOtherSinglesClickable && (
-                        <Icon
-                            className={`icon ${isSinglesExpanded ? 'icon--arrow-up' : 'icon--arrow-down'}`}
-                            isUp={isSinglesExpanded}
-                        />
+                        <HeaderIcon className={`icon ${isSinglesExpanded ? 'icon--arrow-up' : 'icon--arrow-down'}`} />
                     )}
                 </MarketsHeader>
                 {isSinglesExpanded && (
@@ -378,47 +376,48 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
     return (
         <TicketColumn onClick={() => setIsExpanded(!isExpanded)}>
             <Row>
-                <Info>
-                    <TimeInfo>
-                        <TimeText>{formatDateWithTime(timestamp)}</TimeText>
-                    </TimeInfo>
-                    <MarketTypeInfo>
-                        <MarketTypeText>{getTitleText(market)}</MarketTypeText>
-                    </MarketTypeInfo>
-                </Info>
-                <TicketStatusInfo
-                    status={finalStatus}
-                    onClick={(e: any) => {
-                        if (isMobile && isLive && errorReason) {
-                            e.stopPropagation();
-                        }
-                    }}
-                >
-                    <StatusText status={finalStatus}>{ticketCreationStatus}</StatusText>
-                    <Tooltip
-                        overlay={isLive ? errorReason : ''}
-                        marginLeft={3}
-                        iconFontSize={12}
-                        iconColor={theme.status.failed.textColor.primary}
-                    />
-                </TicketStatusInfo>
-            </Row>
-            <Row>
-                <Info>
-                    <Text>{getMatchLabel(market)}</Text>
-                </Info>
-            </Row>
-            <Row>
-                <Info>
-                    <PositionText>{getPositionTextV2(market, position, true)}</PositionText>
-                </Info>
-                <IconWrapper>
-                    <Icon
-                        className={`icon ${isExpanded ? 'icon--arrow-up' : 'icon--arrow-down'}`}
-                        isUp={isExpanded}
-                        isManualAlignment
-                    />
-                </IconWrapper>
+                <TimeInfo>
+                    <TimeText>{formatDateWithTime(timestamp)}</TimeText>
+                </TimeInfo>
+                <FlexDivColumn>
+                    <Row>
+                        <MatchInfo>
+                            <Text>{getMatchLabel(market)}</Text>
+                        </MatchInfo>
+                        <TicketStatusInfo
+                            status={finalStatus}
+                            onClick={(e: any) => {
+                                if (isMobile && isLive && errorReason) {
+                                    e.stopPropagation();
+                                }
+                            }}
+                        >
+                            <StatusText status={finalStatus}>{ticketCreationStatus}</StatusText>
+                            <Tooltip
+                                overlay={isLive ? errorReason : ''}
+                                marginLeft={3}
+                                iconFontSize={12}
+                                iconColor={theme.status.failed.textColor.primary}
+                            />
+                        </TicketStatusInfo>
+                    </Row>
+                    <Row>
+                        <MarketTypeInfo>
+                            <MarketTypeText>{getTitleText(market)}</MarketTypeText>
+                        </MarketTypeInfo>
+                    </Row>
+                    <Row>
+                        <Info>
+                            <PositionText>{getPositionTextV2(market, position, true)}</PositionText>
+                        </Info>
+                        <IconWrapper>
+                            <Icon
+                                className={`icon ${isExpanded ? 'icon--arrow-up' : 'icon--arrow-down'}`}
+                                isUp={isExpanded}
+                            />
+                        </IconWrapper>
+                    </Row>
+                </FlexDivColumn>
             </Row>
             {isExpanded && (
                 <>
@@ -531,11 +530,11 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
     );
 };
 
-const Container = styled(FlexDivColumn)`
+const Container = styled(FlexDivColumn)<{ isLiveView: boolean }>`
     position: relative;
     max-width: ${MAIN_VIEW_RIGHT_CONTAINER_WIDTH_LARGE};
     height: 100%;
-    min-height: 270px;
+    min-height: ${(props) => (props.isLiveView ? '297px' : '269px')};
     padding: 12px;
     gap: 10px;
     background: ${(props) => props.theme.background.quinary};
@@ -602,15 +601,13 @@ const Row = styled(FlexDivRowCentered)``;
 const Info = styled(FlexDivRowCentered)``;
 
 const TimeInfo = styled(Info)`
-    height: 20px;
-    padding: 0 8px;
-    border-radius: 10px;
-    background: ${(props) => props.theme.background.quinary}66; // opacity 40%
+    max-width: 40px;
 `;
+
+const MatchInfo = styled(Info)``;
 
 const MarketTypeInfo = styled(Info)`
     color: ${(props) => props.theme.textColor.quinary};
-    padding: 0 5px;
 `;
 
 const TicketStatusInfo = styled(Info)<{ status: LiveTradingFinalStatus }>`
@@ -632,12 +629,18 @@ const IconWrapper = styled(FlexDivCentered)`
     background: ${(props) => props.theme.textColor.primary}1a; // opacity 10%
 `;
 
-const Icon = styled.i<{ isUp: boolean; isManualAlignment?: boolean }>`
+const HeaderIcon = styled.i`
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: ${(props) => props.theme.textColor.quaternary};
+`;
+const Icon = styled.i<{ isUp: boolean }>`
     display: flex;
     align-items: center;
     font-size: 10px;
-    ${(props) => props.isManualAlignment && 'margin-left: 1px;'}
-    ${(props) => props.isManualAlignment && (props.isUp ? 'margin-bottom: 1px;' : 'margin-top: 1px;')}
+    margin-left: 1px;
+    ${(props) => (props.isUp ? 'margin-bottom: 1px;' : 'margin-top: 1px;')}
 `;
 
 const StatusProgress = styled(FlexDivColumn)`
@@ -742,11 +745,11 @@ const Text = styled.span`
 const TimeText = styled(Text)`
     font-weight: 400;
     font-size: 10px;
-    text-wrap: nowrap;
+    line-height: 14px;
 `;
 
 const MarketTypeText = styled(Text)`
-    color: ${(props) => props.theme.textColor.quaternary};
+    color: ${(props) => props.theme.textColor.quinary};
 `;
 
 const StatusText = styled(Text)<{ status: LiveTradingFinalStatus }>`
@@ -761,8 +764,6 @@ const StatusText = styled(Text)<{ status: LiveTradingFinalStatus }>`
 `;
 
 const PositionText = styled(Text)`
-    font-size: 16px;
-    line-height: 20px;
     color: ${(props) => props.theme.textColor.quaternary};
 `;
 
