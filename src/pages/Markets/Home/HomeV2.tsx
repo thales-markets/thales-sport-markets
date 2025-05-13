@@ -889,6 +889,7 @@ const Home: React.FC = () => {
                                 boostedMarketsCount={boostedMarketsCount}
                                 liveMarketsCountPerSport={liveMarketsCountPerSport}
                                 showActive={showActive}
+                                isLoading={openSportMarketsQuery.isLoading}
                             />
                             {!marketsLoading &&
                                 finalMarkets.length > 0 &&
