@@ -87,8 +87,7 @@ import {
     getPrecision,
     roundNumberToDecimals,
 } from 'thales-utils';
-import { SportsAmmData, TicketMarket, TicketRequest, TradeData } from 'types/markets';
-import { SupportedNetwork } from 'types/network';
+import { SportsAmmData, TicketMarket, TicketRequestsUpdatePayload, TradeData } from 'types/markets';
 import { OverdropMultiplier, OverdropUserData } from 'types/overdrop';
 import { RootState } from 'types/redux';
 import { SportsbookData } from 'types/sgp';
@@ -1525,7 +1524,7 @@ const Ticket: React.FC<TicketProps> = ({
                 }
             }
 
-            const liveTicketRequestData: { ticketRequest: TicketRequest; networkId: SupportedNetwork } = {
+            const liveTicketRequestData: TicketRequestsUpdatePayload = {
                 ticketRequest: {
                     initialRequestId: `initialRequestId${Date.now()}`,
                     requestId: '',
@@ -1538,9 +1537,14 @@ const Ticket: React.FC<TicketProps> = ({
                     collateral: usedCollateralForBuy,
                 },
                 networkId,
+                walletAddress,
             };
             if (isLiveTicket) {
                 dispatch(updateTicketRequests(liveTicketRequestData));
+                setTimeout(
+                    () => setIsBuying(false), // enable multiple parallel buying for live tickets after 1s
+                    1000
+                );
             }
 
             let tradeData: TradeData[] = [];
@@ -1679,10 +1683,6 @@ const Ticket: React.FC<TicketProps> = ({
                     hash: txHash,
                 });
 
-                if (isLiveTicket) {
-                    setIsBuying(false);
-                }
-
                 if (txReceipt.status === 'success') {
                     PLAUSIBLE.trackEvent(
                         isLiveTicket
@@ -1762,25 +1762,25 @@ const Ticket: React.FC<TicketProps> = ({
                                     liveTicketRequestData.ticketRequest.status = LiveTradingTicketStatus.COMPLETED;
                                     liveTicketRequestData.ticketRequest.finalStatus = LiveTradingFinalStatus.SUCCESS;
                                     dispatch(updateTicketRequests(liveTicketRequestData));
-                                }
+                                } else {
+                                    const modalData = await getShareTicketModalData(
+                                        [...markets],
+                                        collateralHasLp ? usedCollateralForBuy : defaultCollateral,
+                                        shareTicketPaid,
+                                        0,
+                                        shareTicketOnClose,
+                                        true, // isModalForLive
+                                        isSgp,
+                                        isFreeBetActive,
+                                        undefined,
+                                        networkConfig,
+                                        walletAddress
+                                    );
 
-                                const modalData = await getShareTicketModalData(
-                                    [...markets],
-                                    collateralHasLp ? usedCollateralForBuy : defaultCollateral,
-                                    shareTicketPaid,
-                                    0,
-                                    shareTicketOnClose,
-                                    true, // isModalForLive
-                                    isSgp,
-                                    isFreeBetActive,
-                                    undefined,
-                                    networkConfig,
-                                    walletAddress
-                                );
-
-                                if (modalData) {
-                                    setShareTicketModalData(modalData);
-                                    setShowShareTicketModal(true);
+                                    if (modalData) {
+                                        setShareTicketModalData(modalData);
+                                        setShowShareTicketModal(true);
+                                    }
                                 }
 
                                 setBuyStep(BuyTicketStep.COMPLETED);

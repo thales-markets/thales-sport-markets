@@ -942,10 +942,6 @@
             "latest-odds-checking": "Checking for latest odds..."
         },
         "parlay-related-markets": {
-            "type": {
-                "live": "Live",
-                "other": "Other"
-            },
             "title-live": "Your recent live tickets",
             "title-other": "Your other singles on this game",
             "empty": "No tickets",

@@ -11,8 +11,8 @@ import {
     ParlayPayment,
     SerializableSportMarket,
     TicketPosition,
-    TicketRequest,
     TicketRequestsById,
+    TicketRequestsUpdatePayload,
 } from 'types/markets';
 import { SupportedNetwork } from 'types/network';
 import { RootState, TicketSliceState } from 'types/redux';
@@ -197,18 +197,19 @@ const ticketSlice = createSlice({
         },
         setTicketRequests: (
             state,
-            action: PayloadAction<{ ticketRequests: TicketRequestsById; networkId: SupportedNetwork }>
+            action: PayloadAction<{
+                ticketRequests: TicketRequestsById;
+                networkId: SupportedNetwork;
+                walletAddress: string;
+            }>
         ) => {
             state.ticketRequestsById = action.payload.ticketRequests;
             localStore.set(
-                `${LOCAL_STORAGE_KEYS.TICKET_REQUESTS}${action.payload.networkId}`,
+                `${LOCAL_STORAGE_KEYS.TICKET_REQUESTS}${action.payload.networkId}${action.payload.walletAddress}`,
                 state.ticketRequestsById
             );
         },
-        updateTicketRequests: (
-            state,
-            action: PayloadAction<{ ticketRequest: TicketRequest; networkId: SupportedNetwork }>
-        ) => {
+        updateTicketRequests: (state, action: PayloadAction<TicketRequestsUpdatePayload>) => {
             const payloadTicketRequest = action.payload.ticketRequest;
             let requestId = payloadTicketRequest.requestId;
             if (requestId) {
@@ -242,14 +243,17 @@ const ticketSlice = createSlice({
                 state.ticketRequestsById = omit(state.ticketRequestsById, deleteInitialRequestIds);
             }
             localStore.set(
-                `${LOCAL_STORAGE_KEYS.TICKET_REQUESTS}${action.payload.networkId}`,
+                `${LOCAL_STORAGE_KEYS.TICKET_REQUESTS}${action.payload.networkId}${action.payload.walletAddress}`,
                 state.ticketRequestsById
             );
         },
-        removeTicketRequestById: (state, action: PayloadAction<{ requestId: string; networkId: SupportedNetwork }>) => {
+        removeTicketRequestById: (
+            state,
+            action: PayloadAction<{ requestId: string; networkId: SupportedNetwork; walletAddress: string }>
+        ) => {
             delete state.ticketRequestsById[action.payload.requestId];
             localStore.set(
-                `${LOCAL_STORAGE_KEYS.TICKET_REQUESTS}${action.payload.networkId}`,
+                `${LOCAL_STORAGE_KEYS.TICKET_REQUESTS}${action.payload.networkId}${action.payload.walletAddress}`,
                 state.ticketRequestsById
             );
         },

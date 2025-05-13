@@ -2,6 +2,7 @@ import { GameStatus, LiveTradingFinalStatus, LiveTradingTicketStatus, StatusFilt
 import { League, MarketType, Sport } from 'overtime-utils';
 import { Coins } from 'thales-utils';
 import { Network } from '../enums/network';
+import { SupportedNetwork } from './network';
 
 export type TagInfo = {
     id: League;
@@ -220,7 +221,7 @@ export type LiveTradingRequestsData = {
     gamesInfo: any;
 };
 
-export type TicketRequest = {
+type TicketRequest = {
     initialRequestId: string;
     requestId: string;
     status: LiveTradingTicketStatus;
@@ -238,6 +239,12 @@ export type TicketMarketRequestData = Omit<TicketRequestData, 'ticket'> & {
     ticket: TicketMarket;
 };
 export type TicketRequestsById = Record<string, TicketRequestData>;
+
+export type TicketRequestsUpdatePayload = {
+    ticketRequest: TicketRequest;
+    networkId: SupportedNetwork;
+    walletAddress: string;
+};
 
 export type UserStats = {
     id: string;

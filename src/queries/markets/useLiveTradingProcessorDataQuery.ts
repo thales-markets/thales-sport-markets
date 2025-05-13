@@ -74,6 +74,7 @@ export const useLiveTradingProcessorDataQuery = (
 
                             let status = LiveTradingTicketStatus.REQUESTED;
                             let finalStatus = LiveTradingFinalStatus.IN_PROGRESS;
+                            let errorReason = '';
 
                             if (isFulfilled) {
                                 status = LiveTradingTicketStatus.COMPLETED;
@@ -81,9 +82,15 @@ export const useLiveTradingProcessorDataQuery = (
                             } else if (isAdapterFailed) {
                                 status = LiveTradingTicketStatus.REQUESTED;
                                 finalStatus = LiveTradingFinalStatus.FAILED;
+                                errorReason = adapterRequest.message;
                             } else if (Date.now() > maturityTimestamp) {
-                                status = LiveTradingTicketStatus.FULFILLING;
+                                status = isAdapterApproved
+                                    ? LiveTradingTicketStatus.FULFILLING
+                                    : LiveTradingTicketStatus.REQUESTED;
                                 finalStatus = LiveTradingFinalStatus.FAILED;
+                                errorReason = isAdapterApproved
+                                    ? 'Failed to fulfill the trade.'
+                                    : 'Failed to request the trade.';
                             } else if (isAdapterApproved) {
                                 status = LiveTradingTicketStatus.APPROVED;
                                 finalStatus = LiveTradingFinalStatus.IN_PROGRESS;
@@ -91,8 +98,6 @@ export const useLiveTradingProcessorDataQuery = (
                                 status = LiveTradingTicketStatus.REQUESTED;
                                 finalStatus = LiveTradingFinalStatus.IN_PROGRESS;
                             }
-
-                            const errorReason = isAdapterFailed ? adapterRequest.message : '';
 
                             const expectedQuote = bigNumberFormatter(request.expectedQuote);
                             const collateral = getCollateralByAddress(request.collateral, networkConfig.networkId);
