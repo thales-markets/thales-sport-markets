@@ -1,4 +1,5 @@
 import ParlayEmptyIcon from 'assets/images/parlay-empty.svg?react';
+import ShareTicketModalV2 from 'components/ShareTicketModalV2';
 import SimpleLoader from 'components/SimpleLoader';
 import Tooltip from 'components/Tooltip';
 import { LATEST_LIVE_REQUESTS_MATURITY_DAYS, LATEST_LIVE_REQUESTS_SIZE } from 'constants/markets';
@@ -21,22 +22,16 @@ import { getOddsType } from 'redux/modules/ui';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered, FlexDivStart } from 'styles/common';
-import { formatCurrencyWithKey, formatDateWithTime, localStore } from 'thales-utils';
-import {
-    LiveTradingRequest,
-    SportMarket,
-    Ticket,
-    TicketMarket,
-    TicketMarketRequestData,
-    TicketRequestsById,
-} from 'types/markets';
+import { Coins, formatCurrencyWithKey, formatDateWithTime, localStore } from 'thales-utils';
+import { LiveTradingRequest, Ticket, TicketMarket, TicketMarketRequestData, TicketRequestsById } from 'types/markets';
+import { ShareTicketModalProps } from 'types/tickets';
 import { ThemeInterface } from 'types/ui';
 import { formatMarketOdds } from 'utils/markets';
 import {
     getMatchLabel,
     getPositionTextV2,
     getTitleText,
-    liveTradingRequestAsSportMarket,
+    liveTradingRequestAsTicketMarket,
     serializableTicketMarketAsTicketMarket,
 } from 'utils/marketsV2';
 import { refetchUserLiveTradingData } from 'utils/queryConnector';
@@ -120,9 +115,10 @@ const ParlayRelatedMarkets: React.FC = () => {
                 }))
                 .filter(
                     (request: TicketMarketRequestData) =>
+                        // only in last 24h
                         differenceInDays(Date.now(), Number(request.timestamp)) < LATEST_LIVE_REQUESTS_MATURITY_DAYS
                 ),
-        [, ticketRequestsById]
+        [ticketRequestsById]
     );
 
     const requestIdToInitialIdRef = useRef(new Map());
@@ -130,10 +126,10 @@ const ParlayRelatedMarkets: React.FC = () => {
     // Merged UI and contract live requests, filtered and sorted
     const liveMarkets: (TicketMarketRequestData | LiveTradingRequest)[] = useMemo(() => {
         let refreshedTempLiveTradingRequests = tempLiveTradingRequests.map((request) => {
-            // take status and error reason from adapter in case UI failed with some unknown error
+            // take data from contract for completed trades
             const failedLiveRequest = liveTradingRequests.find(
                 (liveRequest) =>
-                    liveRequest.finalStatus === LiveTradingFinalStatus.FAILED &&
+                    liveRequest.finalStatus !== LiveTradingFinalStatus.IN_PROGRESS &&
                     liveRequest.requestId === request.requestId
             );
 
@@ -163,8 +159,9 @@ const ParlayRelatedMarkets: React.FC = () => {
                 let removedCount = 0;
                 refreshedTempLiveTradingRequests = refreshedTempLiveTradingRequests.filter((request) => {
                     let isRequestForRemoval = false;
-                    const isPending = request.status === LiveTradingTicketStatus.PENDING;
-                    if (isPending && removedCount < diffCount) {
+                    const isInitialPending =
+                        request.status === LiveTradingTicketStatus.PENDING && request.requestId.startsWith('initial');
+                    if (isInitialPending && removedCount < diffCount) {
                         isRequestForRemoval = true;
                         removedCount++;
                         dispatch(
@@ -183,7 +180,7 @@ const ParlayRelatedMarkets: React.FC = () => {
         }
 
         const filteredLiveTradingRequests = liveTradingRequests.filter(
-            (request) => ticketRequestsById[request.requestId] === undefined // not in temp requests
+            (request) => !ticketRequestsById[request.requestId] // not in temp requests
         );
 
         const requestsAndTickets = [...refreshedTempLiveTradingRequests, ...filteredLiveTradingRequests];
@@ -192,9 +189,11 @@ const ParlayRelatedMarkets: React.FC = () => {
 
     // initialize ticketRequests by network ID
     useEffect(() => {
-        const lsTicketRequests = localStore.get(`${LOCAL_STORAGE_KEYS.TICKET_REQUESTS}${networkId}${walletAddress}`);
+        const lsTicketRequests = localStore.get(`${LOCAL_STORAGE_KEYS.TICKET_REQUESTS}_${networkId}_${walletAddress}`);
         const ticketRequests = lsTicketRequests !== undefined ? (lsTicketRequests as TicketRequestsById) : {};
-        dispatch(setTicketRequests({ ticketRequests, networkId, walletAddress }));
+        if (Object.keys(ticketRequests).length > 0) {
+            dispatch(setTicketRequests({ ticketRequests, networkId, walletAddress }));
+        }
     }, [networkId, walletAddress, dispatch]);
 
     useEffect(() => {
@@ -206,8 +205,7 @@ const ParlayRelatedMarkets: React.FC = () => {
         const isPendingRequests =
             liveTradingRequests.some(
                 (request) =>
-                    request.finalStatus === LiveTradingFinalStatus.IN_PROGRESS &&
-                    ticketRequestsById[request.requestId] === undefined
+                    request.finalStatus === LiveTradingFinalStatus.IN_PROGRESS && !ticketRequestsById[request.requestId]
             ) || tempLiveTradingRequests.some((request) => request.status === LiveTradingTicketStatus.PENDING);
 
         if (isPendingRequests) {
@@ -310,7 +308,7 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
     const isTicketType = !!(data as Ticket)?.id;
     const isLiveTradingRequest = !!(data as LiveTradingRequest)?.user;
 
-    let market: SportMarket | TicketMarket;
+    let market: TicketMarket;
     let isLive = false;
     let position = 0;
     let status = LiveTradingTicketStatus.PENDING;
@@ -326,7 +324,7 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
         market = ticket.sportMarkets[0];
         isLive = ticket.isLive;
         position = (market as TicketMarket).position;
-        status = LiveTradingTicketStatus.COMPLETED;
+        status = LiveTradingTicketStatus.CREATED;
         finalStatus = LiveTradingFinalStatus.SUCCESS;
         errorReason = '';
         odds = ticket.sportMarkets[0].odd;
@@ -336,7 +334,7 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
         timestamp = ticket.timestamp;
     } else if (isLiveTradingRequest) {
         const requestedMarket = data as LiveTradingRequest;
-        market = liveTradingRequestAsSportMarket(requestedMarket, gamesInfo);
+        market = liveTradingRequestAsTicketMarket(requestedMarket, gamesInfo);
         isLive = true;
         position = requestedMarket.position;
         status = requestedMarket.status;
@@ -363,8 +361,32 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
     }
 
     const [isExpanded, setIsExpanded] = useState(
+        // collapsed if live requests older than 1 min
         !isTicketType && isLive && differenceInMinutes(Date.now(), timestamp) < 1
-    ); // collapsed if live requests older than 1 min
+    );
+    const [showShareTicketModal, setShowShareTicketModal] = useState(false);
+    const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps | undefined>(undefined);
+
+    const onTwitterIconClick = () => {
+        setShareTicketModalData(shareTicketData);
+        setShowShareTicketModal(true);
+    };
+
+    const shareTicketData: ShareTicketModalProps = {
+        markets: [market],
+        paid: buyInAmount,
+        payout: payout,
+        multiSingle: false,
+        onClose: () => {
+            setShowShareTicketModal ? setShowShareTicketModal(false) : null;
+        },
+        isTicketLost: false,
+        collateral: collateral as Coins,
+        isLive: isLive,
+        isSgp: false,
+        applyPayoutMultiplier: false,
+        isTicketOpen: true,
+    };
 
     const ticketCreationStatus =
         finalStatus === LiveTradingFinalStatus.SUCCESS
@@ -374,159 +396,151 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
             : t('markets.parlay-related-markets.creation-status.pending');
 
     return (
-        <TicketColumn onClick={() => setIsExpanded(!isExpanded)}>
-            <Row>
-                <TimeInfo>
-                    <TimeText>{formatDateWithTime(timestamp)}</TimeText>
-                </TimeInfo>
-                <FlexDivColumn>
-                    <Row>
-                        <MatchInfo>
-                            <Text>{getMatchLabel(market)}</Text>
-                        </MatchInfo>
-                        <TicketStatusInfo
-                            status={finalStatus}
-                            onClick={(e: any) => {
-                                if (isMobile && isLive && errorReason) {
-                                    e.stopPropagation();
-                                }
-                            }}
-                        >
-                            <StatusText status={finalStatus}>{ticketCreationStatus}</StatusText>
-                            <Tooltip
-                                overlay={isLive ? errorReason : ''}
-                                marginLeft={3}
-                                iconFontSize={12}
-                                iconColor={theme.status.failed.textColor.primary}
-                            />
-                        </TicketStatusInfo>
-                    </Row>
-                    <Row>
-                        <MarketTypeInfo>
-                            <MarketTypeText>{getTitleText(market)}</MarketTypeText>
-                        </MarketTypeInfo>
-                    </Row>
-                    <Row>
-                        <Info>
-                            <PositionText>{getPositionTextV2(market, position, true)}</PositionText>
-                        </Info>
-                        <IconWrapper>
-                            <Icon
-                                className={`icon ${isExpanded ? 'icon--arrow-up' : 'icon--arrow-down'}`}
-                                isUp={isExpanded}
-                            />
-                        </IconWrapper>
-                    </Row>
-                </FlexDivColumn>
-            </Row>
-            {isExpanded && (
-                <>
-                    {isLive && (
-                        <StatusProgress>
-                            <ProgressRow>
-                                <Circle
-                                    isActive={status === LiveTradingTicketStatus.PENDING}
-                                    isAfterActive={false}
-                                    isFinished={finalStatus !== LiveTradingFinalStatus.IN_PROGRESS}
-                                />
-                                <ConnectionLine
-                                    index={0}
-                                    isProgressing={
-                                        status > LiveTradingTicketStatus.PENDING &&
-                                        finalStatus === LiveTradingFinalStatus.IN_PROGRESS
+        <>
+            <TicketColumn onClick={() => setIsExpanded(!isExpanded)}>
+                <Row>
+                    <TimeInfo>
+                        <TimeText>{formatDateWithTime(timestamp)}</TimeText>
+                    </TimeInfo>
+                    <FlexDivColumn>
+                        <Row>
+                            <MatchInfo>
+                                <Text>{getMatchLabel(market)}</Text>
+                            </MatchInfo>
+                            <TicketStatusInfo
+                                status={finalStatus}
+                                onClick={(e: any) => {
+                                    if (isMobile && isLive && errorReason) {
+                                        e.stopPropagation();
                                     }
-                                    isCompleted={
-                                        status > LiveTradingTicketStatus.PENDING &&
-                                        finalStatus !== LiveTradingFinalStatus.IN_PROGRESS
-                                    }
+                                }}
+                            >
+                                <StatusText status={finalStatus}>{ticketCreationStatus}</StatusText>
+                                <Tooltip
+                                    overlay={isLive ? errorReason : ''}
+                                    marginLeft={3}
+                                    iconFontSize={12}
+                                    iconColor={theme.status.failed.textColor.primary}
                                 />
-                                <Circle
-                                    isActive={status === LiveTradingTicketStatus.REQUESTED}
-                                    isAfterActive={status < LiveTradingTicketStatus.REQUESTED}
-                                    isFinished={finalStatus !== LiveTradingFinalStatus.IN_PROGRESS}
-                                />
-                                <ConnectionLine
-                                    index={1}
-                                    isProgressing={
-                                        status > LiveTradingTicketStatus.REQUESTED &&
-                                        finalStatus === LiveTradingFinalStatus.IN_PROGRESS
-                                    }
-                                    isCompleted={
-                                        status > LiveTradingTicketStatus.REQUESTED &&
-                                        finalStatus !== LiveTradingFinalStatus.IN_PROGRESS
-                                    }
-                                />
-                                <Circle
-                                    isActive={status === LiveTradingTicketStatus.APPROVED}
-                                    isAfterActive={status < LiveTradingTicketStatus.APPROVED}
-                                    isFinished={finalStatus !== LiveTradingFinalStatus.IN_PROGRESS}
-                                />
-                                <ConnectionLine
-                                    index={2}
-                                    isProgressing={
-                                        status > LiveTradingTicketStatus.APPROVED &&
-                                        finalStatus === LiveTradingFinalStatus.IN_PROGRESS
-                                    }
-                                    isCompleted={
-                                        status > LiveTradingTicketStatus.APPROVED &&
-                                        finalStatus !== LiveTradingFinalStatus.IN_PROGRESS
-                                    }
-                                />
-                                <Circle
-                                    isActive={status === LiveTradingTicketStatus.FULFILLING}
-                                    isAfterActive={status < LiveTradingTicketStatus.FULFILLING}
-                                    isFinished={finalStatus !== LiveTradingFinalStatus.IN_PROGRESS}
-                                />
-                                <ConnectionLine
-                                    index={3}
-                                    isProgressing={
-                                        status > LiveTradingTicketStatus.FULFILLING &&
-                                        finalStatus === LiveTradingFinalStatus.IN_PROGRESS
-                                    }
-                                    isCompleted={
-                                        status > LiveTradingTicketStatus.FULFILLING &&
-                                        finalStatus !== LiveTradingFinalStatus.IN_PROGRESS
-                                    }
-                                />
-                                <Circle
-                                    isActive={status === LiveTradingTicketStatus.COMPLETED}
-                                    isAfterActive={status < LiveTradingTicketStatus.COMPLETED}
-                                    isFinished={finalStatus !== LiveTradingFinalStatus.IN_PROGRESS}
-                                    isFailed={finalStatus === LiveTradingFinalStatus.FAILED}
-                                />
-                            </ProgressRow>
-                            <StatusesRow>
-                                <StatusesText>{t('markets.parlay-related-markets.status.pending')}</StatusesText>
-                                <StatusesText>{t('markets.parlay-related-markets.status.requested')}</StatusesText>
-                                <StatusesText>{t('markets.parlay-related-markets.status.approved')}</StatusesText>
-                                <StatusesText>{t('markets.parlay-related-markets.status.fulfilling')}</StatusesText>
-                                <StatusesText>
-                                    {t(
-                                        `markets.parlay-related-markets.status.${
-                                            finalStatus === LiveTradingFinalStatus.FAILED ? 'error' : 'success'
-                                        }`
-                                    )}
-                                </StatusesText>
-                            </StatusesRow>
-                        </StatusProgress>
-                    )}
-                    <PaymentRow>
-                        <OddsInfo>
-                            <Label>{t('markets.parlay-related-markets.total-quote')}:</Label>
-                            <OddsText>{formatMarketOdds(selectedOddsType, odds)}</OddsText>
-                        </OddsInfo>
-                        <PaidInfo>
-                            <Label>{t('markets.parlay-related-markets.paid')}:</Label>
-                            <PaidText>{formatCurrencyWithKey(collateral, buyInAmount)}</PaidText>
-                        </PaidInfo>
-                        <PayoutInfo>
-                            <Label>{t('markets.parlay-related-markets.payout')}:</Label>
-                            <PayoutText>{formatCurrencyWithKey(collateral, payout)}</PayoutText>
-                        </PayoutInfo>
-                    </PaymentRow>
-                </>
+                            </TicketStatusInfo>
+                        </Row>
+                        <Row>
+                            <MarketTypeInfo>
+                                <MarketTypeText>{getTitleText(market)}</MarketTypeText>
+                            </MarketTypeInfo>
+                        </Row>
+                        <Row>
+                            <Info>
+                                <PositionText>{getPositionTextV2(market, position, true)}</PositionText>
+                            </Info>
+                            <FlexDivRowCentered>
+                                {status === LiveTradingTicketStatus.CREATED && (
+                                    <TwitterIcon
+                                        className="icon-homepage icon--x"
+                                        onClick={(e: any) => {
+                                            e.stopPropagation();
+                                            onTwitterIconClick();
+                                        }}
+                                    />
+                                )}
+                                <IconWrapper>
+                                    <Icon
+                                        className={`icon ${isExpanded ? 'icon--arrow-up' : 'icon--arrow-down'}`}
+                                        isUp={isExpanded}
+                                    />
+                                </IconWrapper>
+                            </FlexDivRowCentered>
+                        </Row>
+                    </FlexDivColumn>
+                </Row>
+                {isExpanded && (
+                    <>
+                        {isLive && (
+                            <StatusProgress>
+                                <ProgressRow>
+                                    <Circle
+                                        isActive={status === LiveTradingTicketStatus.PENDING}
+                                        isAfterActive={false}
+                                        isFinished={finalStatus !== LiveTradingFinalStatus.IN_PROGRESS}
+                                    />
+                                    <ConnectionLine
+                                        index={0}
+                                        isProgressing={
+                                            status > LiveTradingTicketStatus.PENDING &&
+                                            finalStatus === LiveTradingFinalStatus.IN_PROGRESS
+                                        }
+                                        isCompleted={
+                                            status > LiveTradingTicketStatus.PENDING &&
+                                            finalStatus !== LiveTradingFinalStatus.IN_PROGRESS
+                                        }
+                                    />
+                                    <Circle
+                                        isActive={status === LiveTradingTicketStatus.APPROVED}
+                                        isAfterActive={status < LiveTradingTicketStatus.APPROVED}
+                                        isFinished={finalStatus !== LiveTradingFinalStatus.IN_PROGRESS}
+                                    />
+                                    <ConnectionLine
+                                        index={1}
+                                        isProgressing={status === LiveTradingTicketStatus.CREATED}
+                                        isCompleted={
+                                            status > LiveTradingTicketStatus.APPROVED &&
+                                            finalStatus !== LiveTradingFinalStatus.IN_PROGRESS
+                                        }
+                                    />
+                                    <Circle
+                                        isActive={status === LiveTradingTicketStatus.CREATED}
+                                        isAfterActive={status < LiveTradingTicketStatus.CREATED}
+                                        isFinished={finalStatus !== LiveTradingFinalStatus.IN_PROGRESS}
+                                        isFailed={finalStatus === LiveTradingFinalStatus.FAILED}
+                                    />
+                                </ProgressRow>
+                                <StatusesRow>
+                                    <StatusesText>{t('markets.parlay-related-markets.status.pending')}</StatusesText>
+                                    <StatusesText>{t('markets.parlay-related-markets.status.approved')}</StatusesText>
+                                    <StatusesText>
+                                        {t(
+                                            `markets.parlay-related-markets.status.${
+                                                finalStatus === LiveTradingFinalStatus.FAILED ? 'error' : 'success'
+                                            }`
+                                        )}
+                                    </StatusesText>
+                                </StatusesRow>
+                            </StatusProgress>
+                        )}
+                        <PaymentRow>
+                            <OddsInfo>
+                                <Label>{t('markets.parlay-related-markets.total-quote')}:</Label>
+                                <OddsText>{formatMarketOdds(selectedOddsType, odds)}</OddsText>
+                            </OddsInfo>
+                            <PaidInfo>
+                                <Label>{t('markets.parlay-related-markets.paid')}:</Label>
+                                <PaidText>{formatCurrencyWithKey(collateral, buyInAmount)}</PaidText>
+                            </PaidInfo>
+                            <PayoutInfo>
+                                <Label>{t('markets.parlay-related-markets.payout')}:</Label>
+                                <PayoutText>{formatCurrencyWithKey(collateral, payout)}</PayoutText>
+                            </PayoutInfo>
+                        </PaymentRow>
+                    </>
+                )}
+            </TicketColumn>
+            {showShareTicketModal && shareTicketModalData && (
+                <ShareTicketModalV2
+                    markets={shareTicketModalData.markets}
+                    multiSingle={false}
+                    paid={shareTicketModalData.paid}
+                    payout={shareTicketModalData.payout}
+                    onClose={shareTicketModalData.onClose}
+                    isTicketLost={shareTicketModalData.isTicketLost}
+                    collateral={shareTicketModalData.collateral}
+                    isLive={shareTicketModalData.isLive}
+                    isSgp={shareTicketModalData.isSgp}
+                    applyPayoutMultiplier={shareTicketModalData.applyPayoutMultiplier}
+                    systemBetData={shareTicketModalData.systemBetData}
+                    isTicketOpen={shareTicketModalData.isTicketOpen}
+                />
             )}
-        </TicketColumn>
+        </>
     );
 };
 
@@ -643,8 +657,16 @@ const Icon = styled.i<{ isUp: boolean }>`
     ${(props) => (props.isUp ? 'margin-bottom: 1px;' : 'margin-top: 1px;')}
 `;
 
+const TwitterIcon = styled.i`
+    font-size: 14px;
+    font-weight: 400;
+    color: ${(props) => props.theme.textColor.septenary};
+    cursor: pointer;
+    margin: 0 10px;
+`;
+
 const StatusProgress = styled(FlexDivColumn)`
-    gap: 10px;
+    gap: 6px;
     padding: 10px 0;
     border-bottom: 1px solid ${(props) => props.theme.borderColor.primary};
 `;
@@ -667,8 +689,8 @@ const Circle = styled.div<{ isActive: boolean; isAfterActive: boolean; isFinishe
             : props.theme.background.quaternary};
     z-index: 2;
 
-    ${(props) => !props.isFinished && 'transition: background-color 0s ease-in 1s;'}
-    animation: ${(props) => (props.isActive && !props.isFinished ? 'pulsing' : '')} 1s linear 1s infinite;
+    transition: background-color 0s ease-in 1s;
+    ${(props) => props.isActive && !props.isFinished && 'animation: pulsing 1s linear 1s infinite;'}
 
     @keyframes pulsing {
         0% {
@@ -688,22 +710,20 @@ const Circle = styled.div<{ isActive: boolean; isAfterActive: boolean; isFinishe
 
 const ConnectionLine = styled.div<{ index: number; isProgressing: boolean; isCompleted: boolean }>`
     position: absolute;
-    width: 60px;
-    left: ${(props) => `calc(16px * ${props.index + 1} + 60px * ${props.index})`};
+    width: 136px;
+    left: ${(props) => `calc(16px * ${props.index + 1} + 136px * ${props.index})`};
     height: 2px;
     z-index: 1;
 
     background: ${(props) =>
-        props.isCompleted
-            ? props.theme.background.quaternary
-            : `linear-gradient(to right, ${props.theme.background.quaternary} 50%, ${props.theme.background.tertiary} 50%);`};
+        `linear-gradient(to right, ${props.theme.background.quaternary} 50%, ${props.theme.background.tertiary} 50%);`};
     background-size: 200% 100%;
     transition: all 1s ease-out;
-    background-position: ${(props) => (props.isProgressing ? 'left bottom' : 'right bottom')};
+    background-position: ${(props) => (props.isProgressing || props.isCompleted ? 'left bottom' : 'right bottom')};
 
     @media (max-width: ${ScreenSizeBreakpoint.LARGE}px) {
-        width: 50px;
-        left: ${(props) => `calc(16px * ${props.index + 1} + 50px * ${props.index})`};
+        width: 116px;
+        left: ${(props) => `calc(16px * ${props.index + 1} + 116px * ${props.index})`};
     }
 `;
 
@@ -771,13 +791,6 @@ const StatusesText = styled(Text)`
     font-weight: 400;
     font-size: 10px;
     color: ${(props) => props.theme.textColor.quinary};
-    max-width: 60px;
-    &:last-child {
-        max-width: 40px;
-    }
-    &:nth-last-child(2) {
-        max-width: 50px;
-    }
 `;
 
 const OddsText = styled(Text)`

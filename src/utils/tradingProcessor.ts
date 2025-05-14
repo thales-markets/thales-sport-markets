@@ -92,15 +92,6 @@ export const processTransaction = async (
     ) {
         const isUpdateStatusReady = counter / UPDATE_STATUS_MESSAGE_PERIOD_SECONDS === DELAY_BETWEEN_CHECKS_SECONDS;
         if (isUpdateStatusReady && !isFulfilledTx && isFulfilledAdapter) {
-            if (
-                dispatch &&
-                liveTicketRequestData &&
-                liveTicketRequestData.ticketRequest.status !== LiveTradingTicketStatus.FULFILLING
-            ) {
-                await delay(secondsToMilliseconds(DELAY_BETWEEN_CHECKS_SECONDS));
-                liveTicketRequestData.ticketRequest.status = LiveTradingTicketStatus.FULFILLING;
-                dispatch(updateTicketRequests(liveTicketRequestData));
-            }
             toast.update(toastId, getLoadingToastOptions(toastMessage));
         }
 

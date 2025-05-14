@@ -205,7 +205,7 @@ const ticketSlice = createSlice({
         ) => {
             state.ticketRequestsById = action.payload.ticketRequests;
             localStore.set(
-                `${LOCAL_STORAGE_KEYS.TICKET_REQUESTS}${action.payload.networkId}${action.payload.walletAddress}`,
+                `${LOCAL_STORAGE_KEYS.TICKET_REQUESTS}_${action.payload.networkId}_${action.payload.walletAddress}`,
                 state.ticketRequestsById
             );
         },
@@ -233,17 +233,13 @@ const ticketSlice = createSlice({
                     : state.ticketRequestsById[requestId].timestamp,
             };
             if (Object.keys(state.ticketRequestsById).length > LATEST_LIVE_REQUESTS_SIZE) {
-                const deleteInitialRequestIds = orderBy(
-                    Object.values(state.ticketRequestsById),
-                    ['timestamp'],
-                    ['desc']
-                )
+                const deleteRequestIds = orderBy(Object.values(state.ticketRequestsById), ['timestamp'], ['desc'])
                     .slice(LATEST_LIVE_REQUESTS_SIZE)
-                    .map((request) => request.initialRequestId);
-                state.ticketRequestsById = omit(state.ticketRequestsById, deleteInitialRequestIds);
+                    .map((request) => request.requestId);
+                state.ticketRequestsById = omit(state.ticketRequestsById, deleteRequestIds);
             }
             localStore.set(
-                `${LOCAL_STORAGE_KEYS.TICKET_REQUESTS}${action.payload.networkId}${action.payload.walletAddress}`,
+                `${LOCAL_STORAGE_KEYS.TICKET_REQUESTS}_${action.payload.networkId}_${action.payload.walletAddress}`,
                 state.ticketRequestsById
             );
         },
@@ -253,7 +249,7 @@ const ticketSlice = createSlice({
         ) => {
             delete state.ticketRequestsById[action.payload.requestId];
             localStore.set(
-                `${LOCAL_STORAGE_KEYS.TICKET_REQUESTS}${action.payload.networkId}${action.payload.walletAddress}`,
+                `${LOCAL_STORAGE_KEYS.TICKET_REQUESTS}_${action.payload.networkId}_${action.payload.walletAddress}`,
                 state.ticketRequestsById
             );
         },

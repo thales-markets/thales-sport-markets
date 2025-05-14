@@ -31,6 +31,8 @@ export const useLiveTradingProcessorDataQuery = (
                     networkConfig
                 );
 
+                // const sportsAMMDataContract = getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig);
+
                 if (liveTradingProcessorDataContract) {
                     const latestRequestsDataPerUser = await liveTradingProcessorDataContract.read.getLatestRequestsDataPerUser(
                         [walletAddress, LIVE_REQUETS_BATCH_SIZE, LATEST_LIVE_REQUESTS_SIZE]
@@ -75,21 +77,21 @@ export const useLiveTradingProcessorDataQuery = (
                             const isAdapterFailed = !!adapterRequest && adapterRequest.allow === false;
                             const isAdapterApproved = !!adapterRequest && adapterRequest.allow === true;
 
-                            let status = LiveTradingTicketStatus.REQUESTED;
+                            let status = LiveTradingTicketStatus.PENDING;
                             let finalStatus = LiveTradingFinalStatus.IN_PROGRESS;
                             let errorReason = '';
 
                             if (isFulfilled) {
-                                status = LiveTradingTicketStatus.COMPLETED;
+                                status = LiveTradingTicketStatus.CREATED;
                                 finalStatus = LiveTradingFinalStatus.SUCCESS;
                             } else if (isAdapterFailed) {
-                                status = LiveTradingTicketStatus.REQUESTED;
+                                status = LiveTradingTicketStatus.PENDING;
                                 finalStatus = LiveTradingFinalStatus.FAILED;
                                 errorReason = adapterRequest.message;
                             } else if (Date.now() > maturityTimestamp) {
                                 status = isAdapterApproved
-                                    ? LiveTradingTicketStatus.FULFILLING
-                                    : LiveTradingTicketStatus.REQUESTED;
+                                    ? LiveTradingTicketStatus.APPROVED
+                                    : LiveTradingTicketStatus.PENDING;
                                 finalStatus = LiveTradingFinalStatus.FAILED;
                                 errorReason = isAdapterApproved
                                     ? 'Failed to fulfill the trade.'
@@ -98,7 +100,7 @@ export const useLiveTradingProcessorDataQuery = (
                                 status = LiveTradingTicketStatus.APPROVED;
                                 finalStatus = LiveTradingFinalStatus.IN_PROGRESS;
                             } else {
-                                status = LiveTradingTicketStatus.REQUESTED;
+                                status = LiveTradingTicketStatus.PENDING;
                                 finalStatus = LiveTradingFinalStatus.IN_PROGRESS;
                             }
 
@@ -129,13 +131,33 @@ export const useLiveTradingProcessorDataQuery = (
                             data.liveRequests.push(liveTradingRequest);
                         });
 
+                    /*
+                    const promises = [];
+                    for (let i = 0; i < data.liveRequests.length; i++) {
+                        const request = data.liveRequests[i];
+                        if (request.isFulfilled && sportsAMMDataContract) {
+                            promises.push(sportsAMMDataContract.read.getTicketsData([[request.ticketId]]));
+                        }
+                    }
+                    if (promises.length > 0) {
+                        const ticketsData = await Promise.all(promises);
+                        data.liveRequests = data.liveRequests.map((request) => {
+                            let counter = 0;
+                            if (request.isFulfilled) {
+                                ticketsData[]
+                            }
+                        });
+                    }
+                    */
+
                     dataCache.liveRequests = data.liveRequests;
                 }
             } catch (e) {
                 console.log('Failed to fetch live trading data', e);
+                return dataCache;
             }
 
-            return { ...dataCache, ...data };
+            return data;
         },
         ...options,
     });

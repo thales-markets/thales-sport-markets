@@ -566,7 +566,7 @@ export const sportMarketAsTicketPosition = (market: SportMarket, position: numbe
         playerProps: market.playerProps,
     } as TicketPosition);
 
-export const liveTradingRequestAsSportMarket = (request: LiveTradingRequest, gamesInfo: any) => {
+export const liveTradingRequestAsTicketMarket = (request: LiveTradingRequest, gamesInfo: any) => {
     const leagueId = `${request.leagueId}`.startsWith('152')
         ? League.TENNIS_WTA
         : `${request.leagueId}`.startsWith('153')
@@ -622,7 +622,9 @@ export const liveTradingRequestAsSportMarket = (request: LiveTradingRequest, gam
         proof: [],
         childMarkets: [],
         winningPositions: [],
-    } as SportMarket;
+        position: request.position,
+        odd: request.expectedQuote,
+    } as TicketMarket;
 };
 
 export const sportMarketAsSerializable = (market: SportMarket): SerializableSportMarket => {

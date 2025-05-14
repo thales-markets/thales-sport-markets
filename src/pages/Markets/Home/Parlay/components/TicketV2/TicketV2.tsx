@@ -58,6 +58,7 @@ import {
     getLiveBetSlippage,
     getTicketPayment,
     removeAll,
+    removeTicketRequestById,
     resetTicketError,
     setIsFreeBetDisabledByUser,
     setIsSgp,
@@ -1720,13 +1721,12 @@ const Ticket: React.FC<TicketProps> = ({
                         if (!requestId) {
                             throw new Error('Request ID not found');
                         }
-                        liveTicketRequestData.ticketRequest.requestId = requestId;
+                        if (isLiveTicket) {
+                            liveTicketRequestData.ticketRequest.requestId = requestId;
+                            dispatch(updateTicketRequests(liveTicketRequestData));
+                        }
 
                         if (liveOrSgpTradingProcessorContract) {
-                            if (isLiveTicket) {
-                                liveTicketRequestData.ticketRequest.status = LiveTradingTicketStatus.REQUESTED;
-                                dispatch(updateTicketRequests(liveTicketRequestData));
-                            }
                             toast.update(
                                 toastId,
                                 getLoadingToastOptions(
@@ -1759,9 +1759,16 @@ const Ticket: React.FC<TicketProps> = ({
                                 setIsBuying(false);
                             } else {
                                 if (isLiveTicket) {
-                                    liveTicketRequestData.ticketRequest.status = LiveTradingTicketStatus.COMPLETED;
+                                    if (
+                                        liveTicketRequestData.ticketRequest.status !== LiveTradingTicketStatus.APPROVED
+                                    ) {
+                                        liveTicketRequestData.ticketRequest.status = LiveTradingTicketStatus.APPROVED;
+                                        dispatch(updateTicketRequests(liveTicketRequestData));
+                                    }
+                                    liveTicketRequestData.ticketRequest.status = LiveTradingTicketStatus.CREATED;
                                     liveTicketRequestData.ticketRequest.finalStatus = LiveTradingFinalStatus.SUCCESS;
-                                    dispatch(updateTicketRequests(liveTicketRequestData));
+                                    // delay status update for 1s for better animation
+                                    setTimeout(() => dispatch(updateTicketRequests(liveTicketRequestData)), 1000);
                                 } else {
                                     const modalData = await getShareTicketModalData(
                                         [...markets],
@@ -1841,13 +1848,6 @@ const Ticket: React.FC<TicketProps> = ({
                     }
                     setIsBuying(false);
                     refetchAfterBuy(walletAddress, networkId);
-                    if (isLiveTicket) {
-                        liveTicketRequestData.ticketRequest.finalStatus = LiveTradingFinalStatus.FAILED;
-                        liveTicketRequestData.ticketRequest.errorReason = t(
-                            'markets.parlay-related-markets.unknown-error-message'
-                        );
-                        dispatch(updateTicketRequests(liveTicketRequestData));
-                    }
                     toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
                     const data = getLogData({
                         walletAddress,
@@ -1871,14 +1871,22 @@ const Ticket: React.FC<TicketProps> = ({
             } catch (e) {
                 setIsBuying(false);
                 refetchAfterBuy(walletAddress, networkId);
-                if (isLiveTicket) {
-                    liveTicketRequestData.ticketRequest.finalStatus = LiveTradingFinalStatus.FAILED;
-                    liveTicketRequestData.ticketRequest.errorReason = t(
-                        'markets.parlay-related-markets.unknown-error-message'
-                    );
-                    dispatch(updateTicketRequests(liveTicketRequestData));
-                }
                 toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+                if (!liveTicketRequestData.ticketRequest.requestId) {
+                    // remove pending request with delay in case tx was sent just UI doesn't have info about request ID,
+                    // so it will be updated from contract
+                    setTimeout(
+                        () =>
+                            dispatch(
+                                removeTicketRequestById({
+                                    requestId: liveTicketRequestData.ticketRequest.initialRequestId,
+                                    networkId,
+                                    walletAddress,
+                                })
+                            ),
+                        2000
+                    );
+                }
                 if (!isErrorExcluded(e as Error)) {
                     const data = getLogData({
                         walletAddress,

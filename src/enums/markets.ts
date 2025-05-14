@@ -106,10 +106,8 @@ export enum TicketErrorCode {
 
 export enum LiveTradingTicketStatus {
     PENDING,
-    REQUESTED,
     APPROVED,
-    FULFILLING,
-    COMPLETED,
+    CREATED,
 }
 
 export enum LiveTradingFinalStatus {
