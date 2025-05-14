@@ -76,7 +76,8 @@
                 "apple": "Continue with Apple",
                 "browser-wallet": "Connect with Browser Wallet",
                 "coinbase": "Connect with Coinbase Wallet",
-                "wallet-connect": "WalletConnect"
+                "wallet-connect": "WalletConnect",
+                "binance-wallet": "Connect with Binance Wallet"
             }
         },
         "enable-wallet-access": {

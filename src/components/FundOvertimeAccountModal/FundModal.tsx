@@ -114,6 +114,8 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                 container: {
                     borderRadius: 0,
                     minHeight: '100vh',
+                    padding: '25px 10px 35px 10px',
+                    overflow: 'scroll',
                 },
             }}
             hideHeader
@@ -326,14 +328,20 @@ const Title = styled.h1`
     margin-bottom: 15px;
     text-transform: uppercase;
     white-space: pre;
-    @media (max-width: 512px) {
+
+    @media (max-width: ${ScreenSizeBreakpoint.EXTRA_SMALL}px) {
         font-size: 20px;
         white-space: pre;
         gap: 2px;
     }
-    @media (max-width: 412px) {
-        font-size: 18px;
-        line-height: 18px;
+
+    @media (max-width: ${ScreenSizeBreakpoint.XXS}px) {
+        font-size: 16px;
+        line-height: 16px;
+    }
+
+    @media (max-width: ${ScreenSizeBreakpoint.XXXS}px) {
+        flex-wrap: wrap;
     }
 `;
 
@@ -364,6 +372,10 @@ const ButtonText = styled.p`
     font-weight: 600;
     line-height: 16px;
     white-space: pre;
+
+    @media (max-width: ${ScreenSizeBreakpoint.XXXS}px) {
+        font-size: 14px;
+    }
 `;
 
 const FieldDesc = styled.p`
@@ -430,6 +442,11 @@ const Field = styled.div`
     @media (max-width: 575px) {
         font-size: 12px;
     }
+
+    @media (max-width: ${ScreenSizeBreakpoint.XXXS}px) {
+        font-size: 10px;
+        padding: 6px;
+    }
 `;
 
 const BlueField = styled(Field)`
@@ -448,6 +465,10 @@ const QRIcon = styled.i`
     cursor: pointer;
     @media (max-width: 575px) {
         font-size: 24px;
+    }
+
+    @media (max-width: ${ScreenSizeBreakpoint.XXXS}px) {
+        font-size: 20px;
     }
 `;
 
@@ -476,6 +497,17 @@ const CollateralsWrapper = styled(FlexDivCentered)`
     @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         gap: 10px;
     }
+
+    @media (max-width: ${ScreenSizeBreakpoint.EXTRA_SMALL}px) {
+        margin-bottom: 30px;
+    }
+
+    @media (max-width: ${ScreenSizeBreakpoint.XXXS}px) {
+        max-width: 190px;
+        margin: auto;
+        gap: 10px 20px;
+        margin-bottom: 30px;
+    }
 `;
 
 const CollateralWrapper = styled(FlexDivColumnCentered)`
@@ -503,14 +535,19 @@ const CloseIcon = styled.i.attrs({ className: 'icon icon--close' })`
     cursor: pointer;
 `;
 
-const ButtonLocal = styled(FlexDivCentered)<{ disabled?: boolean }>`
+const ButtonLocal = styled.button<{ disabled?: boolean }>`
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
     border-radius: 8px;
     width: 100%;
+
     height: 42px;
     border: 1px ${(props) => props.theme.borderColor.primary} solid;
     color: ${(props) => props.theme.textColor.primary};
     gap: 8px;
+    background: transparent;
 
     font-size: 14px;
     font-weight: 600;
