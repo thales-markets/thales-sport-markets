@@ -148,9 +148,9 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                                 if (connector) {
                                     return (
                                         <Button
+                                            disabled={isInBinance()}
                                             key={index}
-                                            onClick={() => handleParticleConnect(connector)}
-                                            oneButtoninRow={true}
+                                            onClick={() => !isInBinance() && handleParticleConnect(connector)}
                                         >
                                             {<> {getIcon(item)}</>}
                                             {t(getWalletLabel(item))}
@@ -168,11 +168,7 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                                 if (connector) {
                                     if (isInBinance() && connector.id === WalletConnections.METAMASK) {
                                         return (
-                                            <Button
-                                                key={index}
-                                                onClick={() => handleConnect(connector)}
-                                                oneButtoninRow={true}
-                                            >
+                                            <Button key={index} onClick={() => handleConnect(connector)}>
                                                 {<> {getIcon(WalletConnections.BINANCE)}</>}
                                                 {t(getWalletLabel(WalletConnections.BINANCE))}
                                             </Button>
@@ -180,9 +176,9 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                                     } else {
                                         return (
                                             <Button
+                                                disabled={isInBinance()}
                                                 key={index}
-                                                onClick={() => handleConnect(connector)}
-                                                oneButtoninRow={true}
+                                                onClick={() => !isInBinance() && handleConnect(connector)}
                                             >
                                                 {<> {getIcon(item)}</>}
                                                 {t(getWalletLabel(item))}
@@ -411,7 +407,7 @@ const ConnectWithLabel = styled.span`
     background: ${(props) => props.theme.background.secondary};
 `;
 
-const Button = styled(FlexDivCentered)<{ oneButtoninRow?: boolean; active?: boolean }>`
+const Button = styled(FlexDivCentered)<{ disabled?: boolean }>`
     border-radius: 8px;
     width: 100%;
     height: 50px;
@@ -419,12 +415,11 @@ const Button = styled(FlexDivCentered)<{ oneButtoninRow?: boolean; active?: bool
     color: ${(props) => props.theme.textColor.primary};
     font-size: 16px;
     font-weight: 500;
-    cursor: pointer;
+    opacity: ${(props) => (props.disabled ? 0.5 : 1)};
+    cursor: ${(props) => (props.disabled ? '' : 'pointer')};
     &:hover {
-        background-color: ${(props) => (props.oneButtoninRow ? props.theme.connectWalletModal.hover : '')};
-        color: ${(props) =>
-            props.oneButtoninRow ? props.theme.button.textColor.primary : props.theme.button.textColor.quaternary};
-        border: ${(props) => (props.oneButtoninRow ? 'none' : `1px ${props.theme.button.borderColor.secondary} solid`)};
+        background-color: ${(props) => (props.disabled ? '' : props.theme.connectWalletModal.hover)};
+        color: ${(props) => (props.disabled ? '' : props.theme.button.textColor.primary)};
     }
 `;
 
