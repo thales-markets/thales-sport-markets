@@ -31,7 +31,7 @@ export const useLiveTradingProcessorDataQuery = (
                     networkConfig
                 );
 
-                // const sportsAMMDataContract = getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig);
+                const sportsAMMDataContract = getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig);
 
                 if (liveTradingProcessorDataContract) {
                     const latestRequestsDataPerUser = await liveTradingProcessorDataContract.read.getLatestRequestsDataPerUser(
@@ -64,6 +64,7 @@ export const useLiveTradingProcessorDataQuery = (
                         adapterRequests = adapterRequestsResponse.data;
                     }
 
+                    const ticketIds: string[] = [];
                     latestRequestsDataPerUser
                         .filter((request: any) => Number(request.timestamp) !== 0)
                         .map((request: any) => {
@@ -82,6 +83,7 @@ export const useLiveTradingProcessorDataQuery = (
                             let errorReason = '';
 
                             if (isFulfilled) {
+                                ticketIds.push(request.ticketId);
                                 status = LiveTradingTicketStatus.CREATED;
                                 finalStatus = LiveTradingFinalStatus.SUCCESS;
                             } else if (isAdapterFailed) {
@@ -111,6 +113,7 @@ export const useLiveTradingProcessorDataQuery = (
                             const liveTradingRequest: LiveTradingRequest = {
                                 user: request.user,
                                 requestId: request.requestId,
+                                ticketId: request.ticketId,
                                 isFulfilled,
                                 timestamp,
                                 maturityTimestamp,
@@ -121,6 +124,7 @@ export const useLiveTradingProcessorDataQuery = (
                                 position: request.position,
                                 buyInAmount,
                                 expectedQuote,
+                                totalQuote: expectedQuote,
                                 payout: buyInAmount / expectedQuote,
                                 collateral,
                                 status,
@@ -131,24 +135,20 @@ export const useLiveTradingProcessorDataQuery = (
                             data.liveRequests.push(liveTradingRequest);
                         });
 
-                    /*
-                    const promises = [];
-                    for (let i = 0; i < data.liveRequests.length; i++) {
-                        const request = data.liveRequests[i];
-                        if (request.isFulfilled && sportsAMMDataContract) {
-                            promises.push(sportsAMMDataContract.read.getTicketsData([[request.ticketId]]));
-                        }
-                    }
-                    if (promises.length > 0) {
-                        const ticketsData = await Promise.all(promises);
+                    if (ticketIds.length > 0 && sportsAMMDataContract) {
+                        const ticketsData = await sportsAMMDataContract.read.getTicketsData([ticketIds]);
+                        const ticketsDataArray = [ticketsData].flat();
+                        let fulfilledCounter = 0;
                         data.liveRequests = data.liveRequests.map((request) => {
-                            let counter = 0;
+                            let totalQuote = request.expectedQuote;
                             if (request.isFulfilled) {
-                                ticketsData[]
+                                totalQuote = bigNumberFormatter(ticketsDataArray[fulfilledCounter].totalQuote);
+                                fulfilledCounter++;
                             }
+                            const payout = request.buyInAmount / totalQuote;
+                            return { ...request, totalQuote, payout };
                         });
                     }
-                    */
 
                     dataCache.liveRequests = data.liveRequests;
                 }

@@ -57,6 +57,7 @@ const liveTradingProcessorDataContract: ContractData = {
                     components: [
                         { internalType: 'address', name: 'user', type: 'address' },
                         { internalType: 'bytes32', name: 'requestId', type: 'bytes32' },
+                        { internalType: 'address', name: 'ticketId', type: 'address' },
                         { internalType: 'bool', name: 'isFulfilled', type: 'bool' },
                         { internalType: 'uint256', name: 'timestamp', type: 'uint256' },
                         { internalType: 'uint256', name: 'maturityTimestamp', type: 'uint256' },
@@ -90,6 +91,7 @@ const liveTradingProcessorDataContract: ContractData = {
                     components: [
                         { internalType: 'address', name: 'user', type: 'address' },
                         { internalType: 'bytes32', name: 'requestId', type: 'bytes32' },
+                        { internalType: 'address', name: 'ticketId', type: 'address' },
                         { internalType: 'bool', name: 'isFulfilled', type: 'bool' },
                         { internalType: 'uint256', name: 'timestamp', type: 'uint256' },
                         { internalType: 'uint256', name: 'maturityTimestamp', type: 'uint256' },

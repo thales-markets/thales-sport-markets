@@ -199,6 +199,7 @@ export type Ticket = {
 export type LiveTradingRequest = {
     user: string;
     requestId: string;
+    ticketId: string;
     isFulfilled: boolean;
     timestamp: number;
     maturityTimestamp: number;
@@ -209,6 +210,7 @@ export type LiveTradingRequest = {
     position: number;
     buyInAmount: number;
     expectedQuote: number;
+    totalQuote: number;
     payout: number;
     collateral: Coins;
     status: LiveTradingTicketStatus;
@@ -229,6 +231,7 @@ type TicketRequest = {
     errorReason: string;
     ticket: SerializableTicketMarket;
     buyInAmount: number;
+    totalQuote: number;
     payout: number;
     collateral: Coins;
 };

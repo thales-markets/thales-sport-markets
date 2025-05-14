@@ -127,21 +127,23 @@ const ParlayRelatedMarkets: React.FC = () => {
     const liveMarkets: (TicketMarketRequestData | LiveTradingRequest)[] = useMemo(() => {
         let refreshedTempLiveTradingRequests = tempLiveTradingRequests.map((request) => {
             // take data from contract for completed trades
-            const failedLiveRequest = liveTradingRequests.find(
+            const completedLiveRequest = liveTradingRequests.find(
                 (liveRequest) =>
                     liveRequest.finalStatus !== LiveTradingFinalStatus.IN_PROGRESS &&
                     liveRequest.requestId === request.requestId
             );
 
-            return failedLiveRequest
-                ? {
+            return completedLiveRequest
+                ? ({
                       ...request,
-                      requestId: failedLiveRequest.requestId,
-                      status: failedLiveRequest.status,
-                      finalStatus: failedLiveRequest.finalStatus,
-                      errorReason: failedLiveRequest.errorReason,
-                      timestamp: failedLiveRequest.timestamp,
-                  }
+                      totalQuote: completedLiveRequest.totalQuote,
+                      payout: completedLiveRequest.payout,
+                      requestId: completedLiveRequest.requestId,
+                      status: completedLiveRequest.status,
+                      finalStatus: completedLiveRequest.finalStatus,
+                      errorReason: completedLiveRequest.errorReason,
+                      timestamp: completedLiveRequest.timestamp,
+                  } as TicketMarketRequestData)
                 : request;
         });
         // Detect new liveTradingRequests and if there are new ones remove those stuck at pending from temp requests
@@ -235,7 +237,10 @@ const ParlayRelatedMarkets: React.FC = () => {
     const isOtherSinglesClickable = isLiveFilterSelected && !!createdSingleTickets.length;
 
     return (
-        <Container isLiveView={isLiveFilterSelected}>
+        <Container
+            isLiveView={isLiveFilterSelected}
+            isEmpty={isLiveFilterSelected ? !liveMarkets.length : !createdSingleTickets.length}
+        >
             <Section>
                 <MarketsHeader
                     isClickable={isOtherSinglesClickable}
@@ -340,7 +345,7 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
         status = requestedMarket.status;
         finalStatus = requestedMarket.finalStatus;
         errorReason = requestedMarket.errorReason;
-        odds = requestedMarket.expectedQuote;
+        odds = requestedMarket.totalQuote;
         collateral = requestedMarket.collateral;
         buyInAmount = requestedMarket.buyInAmount;
         payout = requestedMarket.payout;
@@ -353,7 +358,7 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
         status = requestedMarket.status;
         finalStatus = requestedMarket.finalStatus;
         errorReason = requestedMarket.errorReason;
-        odds = requestedMarket.ticket.odd;
+        odds = requestedMarket.totalQuote;
         collateral = requestedMarket.collateral;
         buyInAmount = requestedMarket.buyInAmount;
         payout = requestedMarket.payout;
@@ -544,11 +549,11 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
     );
 };
 
-const Container = styled(FlexDivColumn)<{ isLiveView: boolean }>`
+const Container = styled(FlexDivColumn)<{ isLiveView: boolean; isEmpty: boolean }>`
     position: relative;
     max-width: ${MAIN_VIEW_RIGHT_CONTAINER_WIDTH_LARGE};
     height: 100%;
-    min-height: ${(props) => (props.isLiveView ? '297px' : '269px')};
+    min-height: ${(props) => (props.isLiveView ? '292px' : props.isEmpty ? '259px' : '269px')};
     padding: 12px;
     gap: 10px;
     background: ${(props) => props.theme.background.quinary};
@@ -563,6 +568,7 @@ const Container = styled(FlexDivColumn)<{ isLiveView: boolean }>`
 
 const Section = styled(FlexDivColumn)`
     gap: 10px;
+    max-height: min-content;
 `;
 
 const MarketsHeader = styled(FlexDivCentered)<{ isClickable?: boolean }>`

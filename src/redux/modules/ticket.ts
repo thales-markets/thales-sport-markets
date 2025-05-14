@@ -226,6 +226,7 @@ const ticketSlice = createSlice({
                 errorReason: payloadTicketRequest.errorReason,
                 ticket: payloadTicketRequest.ticket,
                 buyInAmount: payloadTicketRequest.buyInAmount,
+                totalQuote: payloadTicketRequest.totalQuote,
                 payout: payloadTicketRequest.payout,
                 collateral: payloadTicketRequest.collateral,
                 timestamp: !state.ticketRequestsById[requestId]?.timestamp

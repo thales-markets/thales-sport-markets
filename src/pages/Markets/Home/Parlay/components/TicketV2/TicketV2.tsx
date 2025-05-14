@@ -1535,6 +1535,7 @@ const Ticket: React.FC<TicketProps> = ({
                     errorReason: '',
                     ticket: ticketMarketAsSerializable(markets[0]),
                     buyInAmount: Number(buyInAmount),
+                    totalQuote: totalQuote,
                     payout: payout,
                     collateral: usedCollateralForBuy,
                 },
