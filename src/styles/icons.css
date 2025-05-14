@@ -493,6 +493,10 @@
     content: '\0101';
 }
 
+.icon--darts::before {
+    content: '\0108';
+}
+
 .icon--lock:before {
     content: '\0121';
 }

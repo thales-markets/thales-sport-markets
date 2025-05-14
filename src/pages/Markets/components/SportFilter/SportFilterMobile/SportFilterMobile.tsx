@@ -21,6 +21,7 @@ type SportFilterMobileProps = {
     liveMarketsCountPerSport: Record<SportFilter, number>;
     boostedMarketsCount: number;
     showActive: boolean;
+    isLoading: boolean;
 };
 
 const LeftArrow: React.FC = () => {
@@ -58,6 +59,7 @@ const SportFilterMobile: React.FC<SportFilterMobileProps> = ({
     openMarketsCountPerSport,
     liveMarketsCountPerSport,
     boostedMarketsCount,
+    isLoading,
 }) => {
     const dispatch = useDispatch();
     const sportFilter = useSelector(getSportFilter);
@@ -82,6 +84,7 @@ const SportFilterMobile: React.FC<SportFilterMobileProps> = ({
                                     filterItem === SportFilter.Live &&
                                     liveMarketsCountPerSport[filterItem] > 0) ||
                                 !showActive ||
+                                isLoading ||
                                 filterItem === SportFilter.Favourites
                         )
                         .map((filterItem: any, index) => {

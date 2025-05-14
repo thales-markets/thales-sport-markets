@@ -9,7 +9,7 @@ export const SUPPORTED_PARTICAL_CONNECTORS_MODAL: ParticalTypes[] = [
 export const SUPPORTED_WALLET_CONNECTORS_MODAL: WalletConnections[] = [
     WalletConnections.METAMASK,
     WalletConnections.COINBASE,
-    WalletConnections.WALLET_CONNECT,
+    WalletConnections.BINANCE,
 ];
 
 export const WALLETS_LABELS: { id: ParticalTypes | WalletConnections; labelKey: string }[] = [
@@ -45,6 +45,10 @@ export const WALLETS_LABELS: { id: ParticalTypes | WalletConnections; labelKey: 
     {
         id: WalletConnections.WALLET_CONNECT,
         labelKey: 'common.wallet.particle-logins.wallet-connect',
+    },
+    {
+        id: WalletConnections.BINANCE,
+        labelKey: 'common.wallet.particle-logins.binance-wallet',
     },
 ];
 

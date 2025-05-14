@@ -517,24 +517,27 @@ export const getPaymasterData = async (
     value?: any
 ): Promise<PaymasterFeeQuote | undefined> => {
     if (biconomyConnector.wallet && contract) {
+        const encodedCall = encodeFunctionData({
+            abi: getContractAbi(contract, networkId),
+            functionName: methodName,
+            args: data ? data : ([] as any),
+        });
+
+        const transaction = {
+            to: contract.address,
+            data: encodedCall,
+            value,
+        };
         try {
-            biconomyConnector.wallet.setActiveValidationModule(biconomyConnector.wallet.defaultValidationModule);
-
-            const encodedCall = encodeFunctionData({
-                abi: getContractAbi(contract, networkId),
-                functionName: methodName,
-                args: data ? data : ([] as any),
-            });
-
-            const transaction = {
-                to: contract.address,
-                data: encodedCall,
-                value,
-            };
+            const sessionSigner = await getSessionSigner(networkId);
 
             const feeQuotesData = await biconomyConnector.wallet.getTokenFees(transaction, {
                 paymasterServiceData: {
                     mode: PaymasterMode.ERC20,
+                },
+                params: {
+                    sessionSigner: sessionSigner,
+                    sessionValidationModule: sessionValidationContract.addresses[networkId],
                 },
             });
 
@@ -543,7 +546,27 @@ export const getPaymasterData = async (
                 return quotes[0];
             }
         } catch (e) {
-            console.log(e);
+            if (e === ERROR_SESSION_NOT_FOUND) {
+                try {
+                    biconomyConnector.wallet.setActiveValidationModule(
+                        biconomyConnector.wallet.defaultValidationModule
+                    );
+                    const feeQuotesData = await biconomyConnector.wallet.getTokenFees(transaction, {
+                        paymasterServiceData: {
+                            mode: PaymasterMode.ERC20,
+                        },
+                    });
+
+                    const quotes = feeQuotesData.feeQuotes?.filter((feeQuote) => feeQuote.symbol === 'USDC');
+                    if (quotes) {
+                        return quotes[0];
+                    }
+                } catch (e) {
+                    console.log(e);
+                }
+            } else {
+                console.log(e);
+            }
         }
     }
 };

@@ -1,3 +1,4 @@
+import binanceWallet from '@binance/w3w-rainbow-connector-v2';
 import { connectorsForWallets } from '@rainbow-me/rainbowkit';
 import {
     braveWallet,
@@ -35,6 +36,7 @@ const wallets = [
     coinbaseWallet,
     rainbowWallet,
     imTokenWallet,
+    binanceWallet,
 ];
 
 const socialWallets = [
