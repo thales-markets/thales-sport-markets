@@ -7,13 +7,7 @@ import { WritableDraft } from 'immer/dist/internal';
 import { omit, orderBy } from 'lodash';
 import { isFuturesMarket, isPlayerPropsMarket } from 'overtime-utils';
 import { localStore } from 'thales-utils';
-import {
-    ParlayPayment,
-    SerializableSportMarket,
-    TicketPosition,
-    TicketRequestsById,
-    TicketRequestsUpdatePayload,
-} from 'types/markets';
+import { ParlayPayment, SerializableSportMarket, TicketPosition, TicketRequestsUpdatePayload } from 'types/markets';
 import { SupportedNetwork } from 'types/network';
 import { RootState, TicketSliceState } from 'types/redux';
 import { TicketError } from 'types/tickets';
@@ -195,20 +189,6 @@ const ticketSlice = createSlice({
         removeAll: (state) => {
             _removeAll(state);
         },
-        setTicketRequests: (
-            state,
-            action: PayloadAction<{
-                ticketRequests: TicketRequestsById;
-                networkId: SupportedNetwork;
-                walletAddress: string;
-            }>
-        ) => {
-            state.ticketRequestsById = action.payload.ticketRequests;
-            localStore.set(
-                `${LOCAL_STORAGE_KEYS.TICKET_REQUESTS}_${action.payload.networkId}_${action.payload.walletAddress}`,
-                state.ticketRequestsById
-            );
-        },
         updateTicketRequests: (state, action: PayloadAction<TicketRequestsUpdatePayload>) => {
             const payloadTicketRequest = action.payload.ticketRequest;
             let requestId = payloadTicketRequest.requestId;
@@ -308,7 +288,6 @@ export const {
     updateTicket,
     removeFromTicket,
     removeAll,
-    setTicketRequests,
     updateTicketRequests,
     removeTicketRequestById,
     setPaymentSelectedCollateralIndex,

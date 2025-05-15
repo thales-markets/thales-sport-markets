@@ -17,13 +17,13 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import { getSportFilter } from 'redux/modules/market';
-import { getTicket, getTicketRequests, setTicketRequests } from 'redux/modules/ticket';
+import { getTicket, getTicketRequests } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered, FlexDivStart } from 'styles/common';
-import { Coins, formatCurrencyWithKey, formatDateWithTime, localStore } from 'thales-utils';
-import { LiveTradingRequest, Ticket, TicketMarket, TicketMarketRequestData, TicketRequestsById } from 'types/markets';
+import { Coins, formatCurrencyWithKey, formatDateWithTime } from 'thales-utils';
+import { LiveTradingRequest, Ticket, TicketMarket, TicketMarketRequestData } from 'types/markets';
 import { ShareTicketModalProps } from 'types/tickets';
 import { ThemeInterface } from 'types/ui';
 import { formatMarketOdds } from 'utils/markets';
@@ -178,20 +178,16 @@ const ParlayRelatedMarkets: React.FC = () => {
         return orderBy(requestsAndTickets, ['timestamp'], ['desc']).slice(0, LATEST_LIVE_REQUESTS_SIZE);
     }, [tempLiveTradingRequests, liveTradingRequests, ticketRequestsById, dispatch, networkId, walletAddress]);
 
-    // initialize ticketRequests by network ID
+    // clear LS ticketRequests by network ID and wallet address
     useEffect(() => {
-        const lsTicketRequests = localStore.get(`${LOCAL_STORAGE_KEYS.TICKET_REQUESTS}_${networkId}_${walletAddress}`);
-        const ticketRequests = lsTicketRequests !== undefined ? (lsTicketRequests as TicketRequestsById) : {};
-        if (Object.keys(ticketRequests).length > 0) {
-            dispatch(setTicketRequests({ ticketRequests, networkId, walletAddress }));
-        }
+        window.localStorage.removeItem(`${LOCAL_STORAGE_KEYS.TICKET_REQUESTS}_${networkId}_${walletAddress}`);
     }, [networkId, walletAddress, dispatch]);
 
     useEffect(() => {
         setIsSinglesExpanded(!isLiveFilterSelected);
     }, [isLiveFilterSelected]);
 
-    // Refresh in-progress live requests on every 5s if not in temp requests and pending temp requests
+    // Refresh in-progress live requests on every 3s if not in temp requests and pending temp requests
     useInterval(() => {
         const isPendingRequests =
             liveTradingRequests.some(
@@ -202,7 +198,7 @@ const ParlayRelatedMarkets: React.FC = () => {
         if (isPendingRequests) {
             refetchUserLiveTradingData(walletAddress, networkId);
         }
-    }, secondsToMilliseconds(5));
+    }, secondsToMilliseconds(3));
 
     const getMarkets = (markets: (TicketMarketRequestData | LiveTradingRequest | Ticket)[]) => {
         return (

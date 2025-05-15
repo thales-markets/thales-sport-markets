@@ -12,6 +12,7 @@ import NumericInput from 'components/fields/NumericInput';
 import { getErrorToastOptions, getLoadingToastOptions, getSuccessToastOptions } from 'config/toast';
 import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
+import { USER_REJECTED_ERRORS } from 'constants/errors';
 import {
     APPROVAL_BUFFER,
     COINGECKO_SWAP_TO_OVER_QUOTE_SLIPPAGE,
@@ -1867,9 +1868,9 @@ const Ticket: React.FC<TicketProps> = ({
                 setIsBuying(false);
                 refetchAfterBuy(walletAddress, networkId);
                 toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                if (!liveTicketRequestData.ticketRequest.requestId) {
-                    // remove pending request with delay in case tx was sent, just UI doesn't have info about request ID,
-                    // so it will be updated from contract
+                if (isLiveTicket && !liveTicketRequestData.ticketRequest.requestId) {
+                    // Remove pending request with delay in case tx was sent (just UI doesn't have info about request ID),
+                    // so it will be updated from contract. If user rejected remove it immediately.
                     setTimeout(
                         () =>
                             dispatch(
@@ -1879,7 +1880,11 @@ const Ticket: React.FC<TicketProps> = ({
                                     walletAddress,
                                 })
                             ),
-                        2000
+                        USER_REJECTED_ERRORS.some((rejectedError) =>
+                            ((e as Error).message + ((e as Error).stack || '')).includes(rejectedError)
+                        )
+                            ? 0
+                            : 3000
                     );
                 }
                 if (!isErrorExcluded(e as Error)) {
