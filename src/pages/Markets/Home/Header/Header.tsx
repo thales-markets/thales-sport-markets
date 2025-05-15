@@ -17,6 +17,7 @@ import {
     getMarketTypeGroupFilter,
     getSelectedMarket,
     getSportFilter,
+    getTagFilter,
     setMarketTypeFilter,
     setMarketTypeGroupFilter,
 } from 'redux/modules/market';
@@ -28,6 +29,7 @@ type HeaderProps = {
     allMarkets?: SportMarket[];
     availableMarketTypes?: MarketType[];
     market?: SportMarket;
+    unfilteredPlayerPropsMarkets?: SportMarket[];
 };
 
 const LeftArrow: React.FC = () => {
@@ -61,7 +63,7 @@ const RightArrow: React.FC = () => {
     );
 };
 
-const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, allMarkets }) => {
+const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, unfilteredPlayerPropsMarkets, allMarkets }) => {
     const dispatch = useDispatch();
 
     const marketTypeFilter = useSelector(getMarketTypeFilter);
@@ -69,6 +71,7 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, allMarket
     const sportFilter = useSelector(getSportFilter);
     const selectedMarket = useSelector(getSelectedMarket);
     const isMobile = useSelector(getIsMobile);
+    const tagFilter = useSelector(getTagFilter);
 
     const isPlayerPropsFilter = useMemo(() => sportFilter == SportFilter.PlayerProps, [sportFilter]);
     const marketToCheck = useMemo(() => market || selectedMarket, [market, selectedMarket]);
@@ -105,32 +108,59 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, allMarket
 
             return marketTypeGroups;
         } else {
-            const availableSports = allMarkets?.reduce((acc: string[], market: SportMarket) => {
-                if (!acc.includes(market.sport)) {
-                    acc.push(market.sport);
-                }
-                return acc;
-            }, []);
-
             let marketTypeGroups: any[] = [];
 
             if (isPlayerPropsFilter) {
-                availableSports?.forEach((sport) => {
-                    const marketTypes = Object.keys(MarketTypePlayerPropsGroupsBySport[sport as Sport] || {}).map(
-                        (key) => key as MarketTypeGroup
+                if ((tagFilter?.length || 0) !== 1) {
+                    const allExistingSports = unfilteredPlayerPropsMarkets?.reduce(
+                        (acc: string[], market: SportMarket) => {
+                            if (!acc.includes(market.sport)) {
+                                acc.push(market.sport);
+                            }
+                            return acc;
+                        },
+                        []
                     );
-                    const sportMarketTypeGroups = marketTypes.filter((group: MarketTypeGroup) => {
-                        const marketTypes = (MarketTypePlayerPropsGroupsBySport[sport as Sport] || {})[group];
 
-                        return marketTypes && availableMarketTypes
-                            ? marketTypes.some((marketType: MarketType) => availableMarketTypes.includes(marketType))
-                            : false;
+                    allExistingSports?.forEach((sport) => {
+                        const marketTypes = Object.keys(MarketTypePlayerPropsGroupsBySport[sport as Sport] || {}).map(
+                            (key) => key as MarketTypeGroup
+                        );
+                        const sportMarketTypeGroups = marketTypes.filter((group: MarketTypeGroup) => {
+                            const marketTypes = (MarketTypePlayerPropsGroupsBySport[sport as Sport] || {})[group];
+
+                            return marketTypes && availableMarketTypes
+                                ? marketTypes.some((marketType: MarketType) =>
+                                      availableMarketTypes.includes(marketType)
+                                  )
+                                : false;
+                        });
+                        marketTypeGroups = [...marketTypeGroups, ...sportMarketTypeGroups];
                     });
-                    marketTypeGroups = [...marketTypeGroups, ...sportMarketTypeGroups];
-                });
-
-                if ((availableSports?.length || 0) > 1) {
                     return marketTypeGroups;
+                } else {
+                    const filteredSports = allMarkets?.reduce((acc: string[], market: SportMarket) => {
+                        if (!acc.includes(market.sport)) {
+                            acc.push(market.sport);
+                        }
+                        return acc;
+                    }, []);
+
+                    filteredSports?.forEach((sport) => {
+                        const marketTypes = Object.keys(MarketTypePlayerPropsGroupsBySport[sport as Sport] || {}).map(
+                            (key) => key as MarketTypeGroup
+                        );
+                        const sportMarketTypeGroups = marketTypes.filter((group: MarketTypeGroup) => {
+                            const marketTypes = (MarketTypePlayerPropsGroupsBySport[sport as Sport] || {})[group];
+
+                            return marketTypes && availableMarketTypes
+                                ? marketTypes.some((marketType: MarketType) =>
+                                      availableMarketTypes.includes(marketType)
+                                  )
+                                : false;
+                        });
+                        marketTypeGroups = [...marketTypeGroups, ...sportMarketTypeGroups];
+                    });
                 }
             }
 
@@ -143,7 +173,17 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, allMarket
                   ]
                 : [];
         }
-    }, [marketToCheck, market, availableMarketTypes, sportFilter, allMarkets, isPlayerPropsFilter, isMobile]);
+    }, [
+        marketToCheck,
+        market,
+        availableMarketTypes,
+        sportFilter,
+        isPlayerPropsFilter,
+        isMobile,
+        unfilteredPlayerPropsMarkets,
+        tagFilter,
+        allMarkets,
+    ]);
 
     return (
         <Container>

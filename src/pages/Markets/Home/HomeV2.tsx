@@ -103,6 +103,7 @@ const Home: React.FC = () => {
     const [showActive, setShowActive] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_ACTIVE, true);
     const [showTicketMobileModal, setShowTicketMobileModal] = useState<boolean>(false);
     const [availableMarketTypes, setAvailableMarketTypes] = useState<MarketType[]>([]);
+    const [unfilteredPlayerPropsMarkets, setUnfilteredPlayerPropsMarkets] = useState<SportMarket[]>([]);
 
     const tagsList: Tags = useMemo(
         () =>
@@ -343,6 +344,7 @@ const Home: React.FC = () => {
             );
 
             marketsToFilter = Object.keys(playerMarketMap).map((key) => playerMarketMap[key]);
+            setUnfilteredPlayerPropsMarkets(marketsToFilter);
         } else {
             marketsToFilter =
                 sportFilter === SportFilter.Live
@@ -876,6 +878,7 @@ const Home: React.FC = () => {
                                         allMarkets={finalMarkets}
                                         availableMarketTypes={availableMarketTypes}
                                         market={selectedMarketData}
+                                        unfilteredPlayerPropsMarkets={unfilteredPlayerPropsMarkets}
                                     />
                                 )}
                             <Filters isMainPageView />
@@ -920,6 +923,7 @@ const Home: React.FC = () => {
                                                 allMarkets={finalMarkets}
                                                 availableMarketTypes={availableMarketTypes}
                                                 market={selectedMarketData}
+                                                unfilteredPlayerPropsMarkets={unfilteredPlayerPropsMarkets}
                                             />
                                         )}
 
