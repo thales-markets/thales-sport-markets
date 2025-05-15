@@ -38,8 +38,12 @@
             "rows-per-page": "Rows per page:"
         },
         "filter": {
-            "date": {
-                "choose": "Choose date"
+            "tooltip": {
+                "standard-view": "Switch to standard view",
+                "column-view": "Switch to three column view",
+                "sorting": "Select games sorting",
+                "date": "Select date range",
+                "odds": "Select odds format"
             }
         },
         "wallet": {
