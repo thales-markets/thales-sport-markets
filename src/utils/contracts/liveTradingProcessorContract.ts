@@ -263,6 +263,13 @@ const liveTradingProcessorContract: ContractData = {
         },
         {
             inputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
+            name: 'requestIdToTicketId',
+            outputs: [{ internalType: 'address', name: '', type: 'address' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
             name: 'requestIdToTradeData',
             outputs: [
                 { internalType: 'string', name: '_gameId', type: 'string' },
