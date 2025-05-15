@@ -7,8 +7,8 @@ import { Address, Client, encodeFunctionData, getContract } from 'viem';
 import { getContractAbi } from '../../contracts/abi';
 import multipleCollateral from '../../contracts/multipleCollateralContract';
 import sessionValidationContract from '../../contracts/sessionValidationContract';
-import biconomyConnector from '../biconomyWallet';
 import { ERROR_SESSION_NOT_FOUND, USER_OP_FAILED, USER_REJECTED_ERROR } from '../constants/errors';
+import smartAccountConnector from '../smartAccountConnector';
 import { validateTx } from './listener';
 import { activateOvertimeAccount, getSessionSigner } from './session';
 
@@ -20,11 +20,11 @@ export const sendBiconomyTransaction = async (params: {
     collateralAddress: string;
     useSession?: boolean;
 }): Promise<any | undefined> => {
-    if (biconomyConnector.wallet) {
+    if (smartAccountConnector.biconomyAccount) {
         try {
             if (params.useSession) {
                 const sessionSigner = await getSessionSigner(params.networkId);
-                const { waitForTxHash, userOpHash } = await biconomyConnector.wallet.sendTransaction(
+                const { waitForTxHash, userOpHash } = await smartAccountConnector.biconomyAccount.sendTransaction(
                     params.transaction,
                     {
                         paymasterServiceData: {
@@ -44,8 +44,10 @@ export const sendBiconomyTransaction = async (params: {
 
                 return await validateTx(transactionHash, userOpHash, params.networkId);
             } else {
-                biconomyConnector.wallet.setActiveValidationModule(biconomyConnector.wallet.defaultValidationModule);
-                const { waitForTxHash, userOpHash } = await biconomyConnector.wallet.sendTransaction(
+                smartAccountConnector.biconomyAccount.setActiveValidationModule(
+                    smartAccountConnector.biconomyAccount.defaultValidationModule
+                );
+                const { waitForTxHash, userOpHash } = await smartAccountConnector.biconomyAccount.sendTransaction(
                     params.transaction,
                     {
                         paymasterServiceData: {
@@ -78,7 +80,7 @@ export const sendBiconomyTransaction = async (params: {
 
                     const sessionSigner = await getSessionSigner(params.networkId);
 
-                    const { waitForTxHash, userOpHash } = await biconomyConnector.wallet.sendTransaction(
+                    const { waitForTxHash, userOpHash } = await smartAccountConnector.biconomyAccount.sendTransaction(
                         params.transaction,
                         {
                             paymasterServiceData: {
@@ -97,7 +99,7 @@ export const sendBiconomyTransaction = async (params: {
                     const { transactionHash } = await waitForTxHash();
                     return await validateTx(transactionHash, userOpHash, params.networkId);
                 } else {
-                    const { waitForTxHash, userOpHash } = await biconomyConnector.wallet.sendTransaction(
+                    const { waitForTxHash, userOpHash } = await smartAccountConnector.biconomyAccount.sendTransaction(
                         params.transaction,
                         {
                             paymasterServiceData: {
@@ -125,7 +127,7 @@ export const executeBiconomyTransactionWithConfirmation = async (params: {
     data?: ReadonlyArray<any>;
     value?: any;
 }): Promise<any | undefined> => {
-    if (biconomyConnector.wallet && params.contract) {
+    if (smartAccountConnector.biconomyAccount && params.contract) {
         const encodedCall = encodeFunctionData({
             abi: params.contract.abi,
             functionName: params.methodName,
@@ -139,15 +141,20 @@ export const executeBiconomyTransactionWithConfirmation = async (params: {
         };
 
         try {
-            biconomyConnector.wallet.setActiveValidationModule(biconomyConnector.wallet.defaultValidationModule);
-            const { waitForTxHash, userOpHash } = await biconomyConnector.wallet.sendTransaction(transaction, {
-                paymasterServiceData: {
-                    mode: PaymasterMode.SPONSORED,
-                    webhookData: {
-                        networkId: params.networkId,
+            smartAccountConnector.biconomyAccount.setActiveValidationModule(
+                smartAccountConnector.biconomyAccount.defaultValidationModule
+            );
+            const { waitForTxHash, userOpHash } = await smartAccountConnector.biconomyAccount.sendTransaction(
+                transaction,
+                {
+                    paymasterServiceData: {
+                        mode: PaymasterMode.SPONSORED,
+                        webhookData: {
+                            networkId: params.networkId,
+                        },
                     },
-                },
-            });
+                }
+            );
 
             const { transactionHash } = await waitForTxHash();
             return await validateTx(transactionHash, userOpHash, params.networkId);
@@ -159,13 +166,18 @@ export const executeBiconomyTransactionWithConfirmation = async (params: {
                 throw e;
             }
             try {
-                biconomyConnector.wallet.setActiveValidationModule(biconomyConnector.wallet.defaultValidationModule);
-                const { waitForTxHash, userOpHash } = await biconomyConnector.wallet.sendTransaction(transaction, {
-                    paymasterServiceData: {
-                        mode: PaymasterMode.ERC20,
-                        preferredToken: params.collateralAddress,
-                    },
-                });
+                smartAccountConnector.biconomyAccount.setActiveValidationModule(
+                    smartAccountConnector.biconomyAccount.defaultValidationModule
+                );
+                const { waitForTxHash, userOpHash } = await smartAccountConnector.biconomyAccount.sendTransaction(
+                    transaction,
+                    {
+                        paymasterServiceData: {
+                            mode: PaymasterMode.ERC20,
+                            preferredToken: params.collateralAddress,
+                        },
+                    }
+                );
 
                 const { transactionHash } = await waitForTxHash();
                 return await validateTx(transactionHash, userOpHash, params.networkId);
@@ -194,7 +206,7 @@ export const executeBiconomyTransaction = async (params: {
     isEth?: boolean;
     buyInAmountParam?: bigint;
 }): Promise<any | undefined> => {
-    if (biconomyConnector.wallet && params.contract) {
+    if (smartAccountConnector.biconomyAccount && params.contract) {
         const encodedCall = encodeFunctionData({
             abi: getContractAbi(params.contract, params.networkId),
             functionName: params.methodName,
@@ -235,31 +247,37 @@ export const executeBiconomyTransaction = async (params: {
 
         try {
             if (params.isEth) {
-                const { waitForTxHash, userOpHash } = await biconomyConnector.wallet.sendTransaction(transactionArray, {
-                    paymasterServiceData: {
-                        mode: PaymasterMode.SPONSORED,
-                        webhookData: {
-                            networkId: params.networkId,
+                const { waitForTxHash, userOpHash } = await smartAccountConnector.biconomyAccount.sendTransaction(
+                    transactionArray,
+                    {
+                        paymasterServiceData: {
+                            mode: PaymasterMode.SPONSORED,
+                            webhookData: {
+                                networkId: params.networkId,
+                            },
                         },
-                    },
-                });
+                    }
+                );
                 const { transactionHash } = await waitForTxHash();
                 return await validateTx(transactionHash, userOpHash, params.networkId);
             } else {
                 const sessionSigner = await getSessionSigner(params.networkId);
 
-                const { waitForTxHash, userOpHash } = await biconomyConnector.wallet.sendTransaction(transactionArray, {
-                    paymasterServiceData: {
-                        mode: PaymasterMode.SPONSORED,
-                        webhookData: {
-                            networkId: params.networkId,
+                const { waitForTxHash, userOpHash } = await smartAccountConnector.biconomyAccount.sendTransaction(
+                    transactionArray,
+                    {
+                        paymasterServiceData: {
+                            mode: PaymasterMode.SPONSORED,
+                            webhookData: {
+                                networkId: params.networkId,
+                            },
                         },
-                    },
-                    params: {
-                        sessionSigner: sessionSigner,
-                        sessionValidationModule: sessionValidationContract.addresses[params.networkId],
-                    },
-                });
+                        params: {
+                            sessionSigner: sessionSigner,
+                            sessionValidationModule: sessionValidationContract.addresses[params.networkId],
+                        },
+                    }
+                );
                 const { transactionHash } = await waitForTxHash();
                 return await validateTx(transactionHash, userOpHash, params.networkId);
             }
@@ -282,7 +300,7 @@ export const executeBiconomyTransaction = async (params: {
                 const sessionSigner = await getSessionSigner(params.networkId);
 
                 try {
-                    const { waitForTxHash, userOpHash } = await biconomyConnector.wallet.sendTransaction(
+                    const { waitForTxHash, userOpHash } = await smartAccountConnector.biconomyAccount.sendTransaction(
                         transactionArray,
                         {
                             paymasterServiceData: {
@@ -305,16 +323,19 @@ export const executeBiconomyTransaction = async (params: {
                 }
             } else {
                 const sessionSigner = await getSessionSigner(params.networkId);
-                const { waitForTxHash, userOpHash } = await biconomyConnector.wallet.sendTransaction(transactionArray, {
-                    paymasterServiceData: {
-                        mode: PaymasterMode.ERC20,
-                        preferredToken: params.collateralAddress,
-                    },
-                    params: {
-                        sessionSigner: sessionSigner,
-                        sessionValidationModule: sessionValidationContract.addresses[params.networkId],
-                    },
-                });
+                const { waitForTxHash, userOpHash } = await smartAccountConnector.biconomyAccount.sendTransaction(
+                    transactionArray,
+                    {
+                        paymasterServiceData: {
+                            mode: PaymasterMode.ERC20,
+                            preferredToken: params.collateralAddress,
+                        },
+                        params: {
+                            sessionSigner: sessionSigner,
+                            sessionValidationModule: sessionValidationContract.addresses[params.networkId],
+                        },
+                    }
+                );
 
                 const { transactionHash } = await waitForTxHash();
 
@@ -331,7 +352,7 @@ export const getPaymasterData = async (
     data?: ReadonlyArray<any>,
     value?: any
 ): Promise<PaymasterFeeQuote | undefined> => {
-    if (biconomyConnector.wallet && contract) {
+    if (smartAccountConnector.biconomyAccount && contract) {
         const encodedCall = encodeFunctionData({
             abi: getContractAbi(contract, networkId),
             functionName: methodName,
@@ -346,7 +367,7 @@ export const getPaymasterData = async (
         try {
             const sessionSigner = await getSessionSigner(networkId);
 
-            const feeQuotesData = await biconomyConnector.wallet.getTokenFees(transaction, {
+            const feeQuotesData = await smartAccountConnector.biconomyAccount.getTokenFees(transaction, {
                 paymasterServiceData: {
                     mode: PaymasterMode.ERC20,
                 },
@@ -363,10 +384,10 @@ export const getPaymasterData = async (
         } catch (e) {
             if (e === ERROR_SESSION_NOT_FOUND) {
                 try {
-                    biconomyConnector.wallet.setActiveValidationModule(
-                        biconomyConnector.wallet.defaultValidationModule
+                    smartAccountConnector.biconomyAccount.setActiveValidationModule(
+                        smartAccountConnector.biconomyAccount.defaultValidationModule
                     );
-                    const feeQuotesData = await biconomyConnector.wallet.getTokenFees(transaction, {
+                    const feeQuotesData = await smartAccountConnector.biconomyAccount.getTokenFees(transaction, {
                         paymasterServiceData: {
                             mode: PaymasterMode.ERC20,
                         },

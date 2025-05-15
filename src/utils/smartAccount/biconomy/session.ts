@@ -8,17 +8,19 @@ import multipleCollateral from 'utils/contracts/multipleCollateralContract';
 import sessionValidationContract from 'utils/contracts/sessionValidationContract';
 import sgpTradingProcessorContract from 'utils/contracts/sgpTradingProcessorContract';
 import sportsAMMV2Contract from 'utils/contracts/sportsAMMV2Contract';
-import biconomyConnector from 'utils/smartAccount/biconomyWallet';
+import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
 import { Address, createWalletClient, encodeFunctionData, http, maxUint256 } from 'viem';
 import { generatePrivateKey, privateKeyToAccount } from 'viem/accounts';
 import { ERROR_SESSION_NOT_FOUND, USER_OP_FAILED, USER_REJECTED_ERROR } from '../constants/errors';
 import { validateTx } from './listener';
 
 export const activateOvertimeAccount = async (params: { networkId: SupportedNetwork; collateralAddress: string }) => {
-    if (biconomyConnector.wallet) {
-        biconomyConnector.wallet.setActiveValidationModule(biconomyConnector.wallet.defaultValidationModule);
+    if (smartAccountConnector.biconomyAccount) {
+        smartAccountConnector.biconomyAccount.setActiveValidationModule(
+            smartAccountConnector.biconomyAccount.defaultValidationModule
+        );
         try {
-            const { waitForTxHash, userOpHash } = await biconomyConnector.wallet.sendTransaction(
+            const { waitForTxHash, userOpHash } = await smartAccountConnector.biconomyAccount.sendTransaction(
                 [...(await getCreateSessionTxs(params.networkId)), ...getApprovalTxs(params.networkId)],
                 {
                     paymasterServiceData: {
@@ -42,7 +44,7 @@ export const activateOvertimeAccount = async (params: { networkId: SupportedNetw
                 if ((e as any).toString().toLowerCase().includes(USER_OP_FAILED)) {
                     throw e;
                 }
-                const { waitForTxHash, userOpHash } = await biconomyConnector.wallet.sendTransaction(
+                const { waitForTxHash, userOpHash } = await smartAccountConnector.biconomyAccount.sendTransaction(
                     [...(await getCreateSessionTxs(params.networkId)), ...getApprovalTxs(params.networkId)],
                     {
                         paymasterServiceData: {
@@ -61,7 +63,7 @@ export const activateOvertimeAccount = async (params: { networkId: SupportedNetw
                 );
 
                 const retrievedMap = storedMapString ?? new Map();
-                retrievedMap.delete(biconomyConnector.address);
+                retrievedMap.delete(smartAccountConnector.biconomyAddress);
                 await localforage.setItem(LOCAL_STORAGE_KEYS.SESSION_P_KEY[params.networkId], retrievedMap);
                 return null;
             }
@@ -75,11 +77,11 @@ export const getSessionSigner = async (networkId: SupportedNetwork) => {
         // generate sessionModule
         const sessionModule = await createSessionKeyManagerModule({
             moduleAddress: DEFAULT_SESSION_KEY_MANAGER_MODULE,
-            smartAccountAddress: biconomyConnector.address,
+            smartAccountAddress: smartAccountConnector.biconomyAddress,
         });
 
         const retrievedMap: any = await localforage.getItem(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId]);
-        const sessionData = retrievedMap.get(biconomyConnector.address) as any;
+        const sessionData = retrievedMap.get(smartAccountConnector.biconomyAddress) as any;
 
         sessionModule.merkleTree.resetTree();
         sessionModule.merkleTree.addLeaves(sessionData.leaves);
@@ -88,10 +90,10 @@ export const getSessionSigner = async (networkId: SupportedNetwork) => {
         const sessionSigner = createWalletClient({
             account: sessionAccount,
             chain: networkId as any,
-            transport: http(biconomyConnector.wallet?.rpcProvider.transport.url),
+            transport: http(smartAccountConnector.biconomyAccount?.rpcProvider.transport.url),
         });
 
-        biconomyConnector.wallet?.setActiveValidationModule(sessionModule);
+        smartAccountConnector.biconomyAccount?.setActiveValidationModule(sessionModule);
 
         return sessionSigner;
     } catch (e) {
@@ -100,29 +102,31 @@ export const getSessionSigner = async (networkId: SupportedNetwork) => {
 };
 
 const getCreateSessionTxs = async (networkId: SupportedNetwork) => {
-    if (biconomyConnector.wallet) {
+    if (smartAccountConnector.biconomyAccount) {
         const privateKey = generatePrivateKey();
         const sessionKeyEOA = privateKeyToAccount(privateKey);
 
         const sessionModule = await createSessionKeyManagerModule({
             moduleAddress: DEFAULT_SESSION_KEY_MANAGER_MODULE,
-            smartAccountAddress: biconomyConnector.address,
+            smartAccountAddress: smartAccountConnector.biconomyAddress,
         });
 
         const transactionArray = [];
 
         // enableModule session manager module
         try {
-            const enabled = await biconomyConnector.wallet.isModuleEnabled(DEFAULT_SESSION_KEY_MANAGER_MODULE);
+            const enabled = await smartAccountConnector.biconomyAccount.isModuleEnabled(
+                DEFAULT_SESSION_KEY_MANAGER_MODULE
+            );
             if (!enabled) {
-                const enableModuleTrx = await biconomyConnector.wallet.getEnableModuleData(
+                const enableModuleTrx = await smartAccountConnector.biconomyAccount.getEnableModuleData(
                     DEFAULT_SESSION_KEY_MANAGER_MODULE
                 );
 
                 transactionArray.push(enableModuleTrx);
             }
         } catch (e) {
-            const enableModuleTrx = await biconomyConnector.wallet.getEnableModuleData(
+            const enableModuleTrx = await smartAccountConnector.biconomyAccount.getEnableModuleData(
                 DEFAULT_SESSION_KEY_MANAGER_MODULE
             );
 
@@ -153,7 +157,7 @@ const getCreateSessionTxs = async (networkId: SupportedNetwork) => {
 
         const retrievedMap = storedMapString ?? new Map();
 
-        retrievedMap.set(biconomyConnector.address, {
+        retrievedMap.set(smartAccountConnector.biconomyAddress, {
             privateKey,
             validUntil: Math.floor(sixMonths.getTime() / 1000).toString(),
             leaves: sessionModule.merkleTree.getLeaves(),

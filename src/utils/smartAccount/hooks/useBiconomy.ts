@@ -2,7 +2,7 @@ import { createSmartAccountClient } from '@biconomy/account';
 import { LINKS } from 'constants/links';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import biconomyConnector from 'utils/smartAccount/biconomyWallet';
+import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
 import { useAccount, useChainId, useDisconnect, useSwitchChain, useWalletClient } from 'wagmi';
 
 // Hook for biconomy
@@ -30,11 +30,11 @@ function useBiconomy() {
                 console.log(smartAddressNew);
 
                 if (smartAddress === '') {
-                    biconomyConnector.setWallet(smartAccount, smartAddressNew);
+                    smartAccountConnector.setBiconomyAccount(smartAccount, smartAddressNew);
                     setSmartAddress(smartAddressNew);
                 } else {
                     if (smartAddress !== smartAddressNew) {
-                        biconomyConnector.setWallet(smartAccount, smartAddressNew);
+                        smartAccountConnector.setBiconomyAccount(smartAccount, smartAddressNew);
                         setSmartAddress(smartAddressNew);
                     }
                 }
@@ -42,7 +42,7 @@ function useBiconomy() {
 
             createSmartAccount();
         } else {
-            biconomyConnector.resetWallet();
+            smartAccountConnector.resetWallet();
             setSmartAddress('');
         }
     }, [dispatch, switchChain, networkId, disconnect, walletClient, isConnected, smartAddress]);

@@ -18,8 +18,8 @@ import { getContractInstance } from 'utils/contract';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import { refetchBalances } from 'utils/queryConnector';
 import { executeBiconomyTransactionWithConfirmation } from 'utils/smartAccount/biconomy/biconomy';
-import biconomyConnector from 'utils/smartAccount/biconomyWallet';
 import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
+import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
 import { Address, Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
@@ -70,8 +70,8 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
                     value: parsedAmount,
                 };
                 if (isBiconomy) {
-                    if (biconomyConnector && biconomyConnector.wallet) {
-                        const { wait } = await biconomyConnector.wallet.sendTransaction(transaction, {
+                    if (smartAccountConnector && smartAccountConnector.biconomyAccount) {
+                        const { wait } = await smartAccountConnector.biconomyAccount.sendTransaction(transaction, {
                             paymasterServiceData: {
                                 mode: PaymasterMode.SPONSORED,
                                 webhookData: {

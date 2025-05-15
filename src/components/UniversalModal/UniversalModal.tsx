@@ -18,8 +18,8 @@ import { Coins, formatCurrencyWithKey, truncateAddress } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
 import { SUPPORTED_NETWORKS_UNIVERSAL_DEPOSIT } from 'utils/particleWallet/utils';
 import { refetchBalances } from 'utils/queryConnector';
-import biconomyConnector from 'utils/smartAccount/biconomyWallet';
 import useUniversalAccount from 'utils/smartAccount/hooks/useUniversalAccount';
+import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
 import { sendUniversalTransfer, validateMaxAmount } from 'utils/smartAccount/universalAccount/universalAccount';
 
 type UniversalModal = {
@@ -197,7 +197,10 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
                                     try {
                                         const result = await sendUniversalTransfer(amount as any);
                                         if (result?.success) {
-                                            refetchBalances(biconomyConnector.address, Network.OptimismMainnet);
+                                            refetchBalances(
+                                                smartAccountConnector.biconomyAddress,
+                                                Network.OptimismMainnet
+                                            );
                                             await refetchUnifyBalance();
                                             toast.update(
                                                 id,

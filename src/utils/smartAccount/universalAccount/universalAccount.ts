@@ -2,7 +2,7 @@ import { SUPPORTED_TOKEN_TYPE } from '@GDdark/universal-account';
 import { Network } from 'enums/network';
 import { coinParser } from 'thales-utils';
 import multipleCollateral from 'utils/contracts/multipleCollateralContract';
-import biconomyConnector from 'utils/smartAccount/biconomyWallet';
+import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
 import { encodeFunctionData } from 'viem';
 import { UNIVERSAL_BALANCE_NOT_ENOUGH, UNIVERSAL_BALANCE_NOT_SUFFICIENT } from '../constants/errors';
 
@@ -11,7 +11,7 @@ export const sendUniversalTransfer = async (amount: string) => {
         const encodedCall = encodeFunctionData({
             abi: multipleCollateral.USDC.abi,
             functionName: 'transfer',
-            args: [biconomyConnector.address, coinParser(amount, Network.OptimismMainnet, 'USDC')],
+            args: [smartAccountConnector.biconomyAddress, coinParser(amount, Network.OptimismMainnet, 'USDC')],
         });
 
         const transactionLocal = {
@@ -19,15 +19,15 @@ export const sendUniversalTransfer = async (amount: string) => {
             data: encodedCall,
         };
 
-        const transaction = await biconomyConnector.universalAccount?.createUniversalTransaction({
+        const transaction = await smartAccountConnector.universalAccount?.createUniversalTransaction({
             expectTokens: [{ type: SUPPORTED_TOKEN_TYPE.USDC, amount }],
             chainId: Network.OptimismMainnet,
             transactions: [transactionLocal],
         });
 
-        const signature = await biconomyConnector.wallet?.signMessage(transaction.rootHash);
+        const signature = await smartAccountConnector.biconomyAccount?.signMessage(transaction.rootHash);
         if (signature) {
-            const result = await biconomyConnector.universalAccount?.sendTransaction(transaction, signature);
+            const result = await smartAccountConnector.universalAccount?.sendTransaction(transaction, signature);
             return {
                 success: true,
                 hash: result.transactionId,
@@ -54,7 +54,10 @@ export const validateMaxAmount = async (amount: number) => {
             const encodedCall = encodeFunctionData({
                 abi: multipleCollateral.USDC.abi,
                 functionName: 'transfer',
-                args: [biconomyConnector.address, coinParser(finalAmount.toString(), Network.OptimismMainnet, 'USDC')],
+                args: [
+                    smartAccountConnector.biconomyAddress,
+                    coinParser(finalAmount.toString(), Network.OptimismMainnet, 'USDC'),
+                ],
             });
 
             const transactionLocal = {
@@ -62,7 +65,7 @@ export const validateMaxAmount = async (amount: number) => {
                 data: encodedCall,
             };
 
-            await biconomyConnector.universalAccount?.createUniversalTransaction({
+            await smartAccountConnector.universalAccount?.createUniversalTransaction({
                 expectTokens: [{ type: SUPPORTED_TOKEN_TYPE.USDC, amount: finalAmount.toString() }],
                 chainId: Network.OptimismMainnet,
                 transactions: [transactionLocal],

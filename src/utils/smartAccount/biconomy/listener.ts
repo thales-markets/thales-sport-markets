@@ -2,7 +2,7 @@ import { getPublicClient } from '@wagmi/core';
 import { wagmiConfig } from 'pages/Root/wagmiConfig';
 import { SupportedNetwork } from 'types/network';
 import { waitForTransactionViaSocket } from 'utils/listener';
-import biconomyConnector from 'utils/smartAccount/biconomyWallet';
+import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
 import { delay } from 'utils/timer';
 import { Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
@@ -36,7 +36,7 @@ const validateUserOp = async (userOpHash: string) => {
     let userOp;
 
     while (RETRY_COUNT <= 30) {
-        userOp = await biconomyConnector.wallet?.bundler?.getUserOpStatus(userOpHash);
+        userOp = await smartAccountConnector.biconomyAccount?.bundler?.getUserOpStatus(userOpHash);
         console.log(userOp);
         if (userOp?.state !== 'SUBMITTED') {
             break;
