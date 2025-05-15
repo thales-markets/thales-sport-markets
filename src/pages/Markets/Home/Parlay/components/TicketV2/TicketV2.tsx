@@ -93,7 +93,6 @@ import { SportsbookData } from 'types/sgp';
 import { ShareTicketModalProps } from 'types/tickets';
 import { OverdropLevel, ThemeInterface } from 'types/ui';
 import { ViemContract } from 'types/viem';
-import { GAS_LIMIT, executeBiconomyTransaction, getPaymasterData, sendBiconomyTransaction } from 'utils/biconomy';
 import {
     convertFromStableToCollateral,
     getCollateral,
@@ -133,6 +132,12 @@ import {
     refetchTicketLiquidity,
 } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
+import {
+    GAS_LIMIT,
+    executeBiconomyTransaction,
+    getPaymasterData,
+    sendBiconomyTransaction,
+} from 'utils/smartAccount/biconomy/biconomy';
 import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { getSportsAMMV2QuoteMethod, getSportsAMMV2Transaction } from 'utils/sportsAmmV2';
 import {

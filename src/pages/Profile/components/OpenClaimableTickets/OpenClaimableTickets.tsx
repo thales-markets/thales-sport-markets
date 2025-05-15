@@ -15,11 +15,11 @@ import { getIsMobile } from 'redux/modules/app';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import { FlexDivCentered } from 'styles/common';
 import { RootState } from 'types/redux';
-import { sendBiconomyTransaction } from 'utils/biconomy';
 import { getCollateral, getCollaterals, getDefaultCollateral, isLpSupported } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import { getCaseAccentInsensitiveString } from 'utils/formatters/string';
 import { refetchAfterClaim } from 'utils/queryConnector';
+import { sendBiconomyTransaction } from 'utils/smartAccount/biconomy/biconomy';
 
 import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { Address, Client, encodeFunctionData, isAddress } from 'viem';

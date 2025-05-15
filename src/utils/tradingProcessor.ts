@@ -9,11 +9,11 @@ import { SupportedNetwork } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { delay } from 'utils/timer';
 import { decodeEventLog, DecodeEventLogParameters } from 'viem';
-import { executeBiconomyTransaction } from './biconomy';
 import freeBetHolder from './contracts/freeBetHolder';
 import liveTradingProcessorContract from './contracts/liveTradingProcessorContract';
 import sgpTradingProcessorContract from './contracts/sgpTradingProcessorContract';
 import { convertFromBytes32 } from './formatters/string';
+import { executeBiconomyTransaction } from './smartAccount/biconomy/biconomy';
 
 const DELAY_BETWEEN_CHECKS_SECONDS = 1; // 1s
 const UPDATE_STATUS_MESSAGE_PERIOD_SECONDS = 5 * DELAY_BETWEEN_CHECKS_SECONDS; // 5s - must be whole number multiplier of delay

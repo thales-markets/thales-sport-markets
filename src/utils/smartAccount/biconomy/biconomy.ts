@@ -4,13 +4,13 @@ import { wagmiConfig } from 'pages/Root/wagmiConfig';
 import { SupportedNetwork } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { Address, Client, encodeFunctionData, getContract } from 'viem';
-import biconomyConnector from './biconomyWallet';
-import { getContractAbi } from './contracts/abi';
-import multipleCollateral from './contracts/multipleCollateralContract';
-import sessionValidationContract from './contracts/sessionValidationContract';
-import { ERROR_SESSION_NOT_FOUND, USER_OP_FAILED, USER_REJECTED_ERROR } from './smartAccount/errors';
-import { validateTx } from './smartAccount/listener';
-import { activateOvertimeAccount, getSessionSigner } from './smartAccount/session';
+import { getContractAbi } from '../../contracts/abi';
+import multipleCollateral from '../../contracts/multipleCollateralContract';
+import sessionValidationContract from '../../contracts/sessionValidationContract';
+import biconomyConnector from '../biconomyWallet';
+import { ERROR_SESSION_NOT_FOUND, USER_OP_FAILED, USER_REJECTED_ERROR } from '../constants/errors';
+import { validateTx } from './listener';
+import { activateOvertimeAccount, getSessionSigner } from './session';
 
 export const GAS_LIMIT = 1;
 

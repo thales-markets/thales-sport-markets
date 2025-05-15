@@ -1,7 +1,7 @@
 import { IAssetsResponse, UniversalAccount } from '@GDdark/universal-account';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import biconomyConnector from 'utils/biconomyWallet';
+import biconomyConnector from 'utils/smartAccount/biconomyWallet';
 import { delay } from 'utils/timer';
 import { useAccount, useChainId, useDisconnect, useSwitchChain, useWalletClient } from 'wagmi';
 

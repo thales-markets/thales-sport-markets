@@ -1,12 +1,12 @@
 import { getPublicClient } from '@wagmi/core';
 import { wagmiConfig } from 'pages/Root/wagmiConfig';
 import { SupportedNetwork } from 'types/network';
-import biconomyConnector from 'utils/biconomyWallet';
 import { waitForTransactionViaSocket } from 'utils/listener';
+import biconomyConnector from 'utils/smartAccount/biconomyWallet';
 import { delay } from 'utils/timer';
 import { Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
-import { USER_OP_FAILED } from './errors';
+import { USER_OP_FAILED } from '../constants/errors';
 
 export const validateTx = async (
     transactionHash: string | undefined,

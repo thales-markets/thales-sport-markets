@@ -2,7 +2,7 @@ import { createSmartAccountClient } from '@biconomy/account';
 import { LINKS } from 'constants/links';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import biconomyConnector from 'utils/biconomyWallet';
+import biconomyConnector from 'utils/smartAccount/biconomyWallet';
 import { useAccount, useChainId, useDisconnect, useSwitchChain, useWalletClient } from 'wagmi';
 
 // Hook for biconomy
@@ -27,6 +27,7 @@ function useBiconomy() {
                     biconomyPaymasterApiKey: PAYMASTER_API_KEY,
                 });
                 const smartAddressNew = await smartAccount.getAccountAddress();
+                console.log(smartAddressNew);
 
                 if (smartAddress === '') {
                     biconomyConnector.setWallet(smartAccount, smartAddressNew);

@@ -3,15 +3,15 @@ import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { addMonths } from 'date-fns';
 import localforage from 'localforage';
 import { SupportedNetwork } from 'types/network';
-import biconomyConnector from 'utils/biconomyWallet';
 import liveTradingProcessorContract from 'utils/contracts/liveTradingProcessorContract';
 import multipleCollateral from 'utils/contracts/multipleCollateralContract';
 import sessionValidationContract from 'utils/contracts/sessionValidationContract';
 import sgpTradingProcessorContract from 'utils/contracts/sgpTradingProcessorContract';
 import sportsAMMV2Contract from 'utils/contracts/sportsAMMV2Contract';
+import biconomyConnector from 'utils/smartAccount/biconomyWallet';
 import { Address, createWalletClient, encodeFunctionData, http, maxUint256 } from 'viem';
 import { generatePrivateKey, privateKeyToAccount } from 'viem/accounts';
-import { ERROR_SESSION_NOT_FOUND, USER_OP_FAILED, USER_REJECTED_ERROR } from './errors';
+import { ERROR_SESSION_NOT_FOUND, USER_OP_FAILED, USER_REJECTED_ERROR } from '../constants/errors';
 import { validateTx } from './listener';
 
 export const activateOvertimeAccount = async (params: { networkId: SupportedNetwork; collateralAddress: string }) => {
@@ -66,6 +66,36 @@ export const activateOvertimeAccount = async (params: { networkId: SupportedNetw
                 return null;
             }
         }
+    }
+};
+
+export const getSessionSigner = async (networkId: SupportedNetwork) => {
+    try {
+        // try executing via Session module, if its not passing then enable session and execute with signing
+        // generate sessionModule
+        const sessionModule = await createSessionKeyManagerModule({
+            moduleAddress: DEFAULT_SESSION_KEY_MANAGER_MODULE,
+            smartAccountAddress: biconomyConnector.address,
+        });
+
+        const retrievedMap: any = await localforage.getItem(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId]);
+        const sessionData = retrievedMap.get(biconomyConnector.address) as any;
+
+        sessionModule.merkleTree.resetTree();
+        sessionModule.merkleTree.addLeaves(sessionData.leaves);
+
+        const sessionAccount = privateKeyToAccount(sessionData.privateKey);
+        const sessionSigner = createWalletClient({
+            account: sessionAccount,
+            chain: networkId as any,
+            transport: http(biconomyConnector.wallet?.rpcProvider.transport.url),
+        });
+
+        biconomyConnector.wallet?.setActiveValidationModule(sessionModule);
+
+        return sessionSigner;
+    } catch (e) {
+        throw ERROR_SESSION_NOT_FOUND;
     }
 };
 
@@ -177,34 +207,4 @@ const getApprovalTxs = (networkId: SupportedNetwork) => {
             );
         });
     return transactionArray;
-};
-
-export const getSessionSigner = async (networkId: SupportedNetwork) => {
-    try {
-        // try executing via Session module, if its not passing then enable session and execute with signing
-        // generate sessionModule
-        const sessionModule = await createSessionKeyManagerModule({
-            moduleAddress: DEFAULT_SESSION_KEY_MANAGER_MODULE,
-            smartAccountAddress: biconomyConnector.address,
-        });
-
-        const retrievedMap: any = await localforage.getItem(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId]);
-        const sessionData = retrievedMap.get(biconomyConnector.address) as any;
-
-        sessionModule.merkleTree.resetTree();
-        sessionModule.merkleTree.addLeaves(sessionData.leaves);
-
-        const sessionAccount = privateKeyToAccount(sessionData.privateKey);
-        const sessionSigner = createWalletClient({
-            account: sessionAccount,
-            chain: networkId as any,
-            transport: http(biconomyConnector.wallet?.rpcProvider.transport.url),
-        });
-
-        biconomyConnector.wallet?.setActiveValidationModule(sessionModule);
-
-        return sessionSigner;
-    } catch (e) {
-        throw ERROR_SESSION_NOT_FOUND;
-    }
 };

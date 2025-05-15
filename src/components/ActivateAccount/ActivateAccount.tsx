@@ -27,8 +27,8 @@ import {
 import { isSmallDevice } from 'utils/device';
 import { getFreeBetModalShown } from 'utils/freeBet';
 import { getFundModalShown, setFundModalShown } from 'utils/fundModal';
+import { activateOvertimeAccount } from 'utils/smartAccount/biconomy/session';
 import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
-import { activateOvertimeAccount } from 'utils/smartAccount/session';
 import { Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient } from 'wagmi';

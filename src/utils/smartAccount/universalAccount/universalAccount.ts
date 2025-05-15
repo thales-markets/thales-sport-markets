@@ -1,10 +1,10 @@
 import { SUPPORTED_TOKEN_TYPE } from '@GDdark/universal-account';
 import { Network } from 'enums/network';
 import { coinParser } from 'thales-utils';
-import biconomyConnector from 'utils/biconomyWallet';
 import multipleCollateral from 'utils/contracts/multipleCollateralContract';
+import biconomyConnector from 'utils/smartAccount/biconomyWallet';
 import { encodeFunctionData } from 'viem';
-import { UNIVERSAL_BALANCE_NOT_ENOUGH, UNIVERSAL_BALANCE_NOT_SUFFICIENT } from './errors';
+import { UNIVERSAL_BALANCE_NOT_ENOUGH, UNIVERSAL_BALANCE_NOT_SUFFICIENT } from '../constants/errors';
 
 export const sendUniversalTransfer = async (amount: string) => {
     try {

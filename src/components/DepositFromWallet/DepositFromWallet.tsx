@@ -17,10 +17,10 @@ import { FlexDivCentered, FlexDivColumnCentered, FlexDivRow } from 'styles/commo
 import { coinParser, formatCurrencyWithKey } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { ThemeInterface } from 'types/ui';
-import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateral, getCollateralIndex, getCollaterals } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import { getNetworkNameByNetworkId } from 'utils/network';
+import biconomyConnector from 'utils/smartAccount/biconomyWallet';
 import { Address, Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
