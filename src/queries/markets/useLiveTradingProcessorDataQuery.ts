@@ -154,7 +154,10 @@ export const useLiveTradingProcessorDataQuery = (
                 }
             } catch (e) {
                 console.log('Failed to fetch live trading data', e);
-                return dataCache;
+                return {
+                    ...dataCache,
+                    liveRequests: dataCache.liveRequests.filter((request) => request.user === walletAddress),
+                };
             }
 
             return data;

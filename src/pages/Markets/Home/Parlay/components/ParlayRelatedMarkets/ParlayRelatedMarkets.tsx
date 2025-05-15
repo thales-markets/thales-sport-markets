@@ -21,7 +21,7 @@ import { getTicket, getTicketRequests } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
-import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered, FlexDivStart } from 'styles/common';
+import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { Coins, formatCurrencyWithKey, formatDateWithTime } from 'thales-utils';
 import { LiveTradingRequest, Ticket, TicketMarket, TicketMarketRequestData } from 'types/markets';
 import { ShareTicketModalProps } from 'types/tickets';
@@ -57,6 +57,7 @@ const ParlayRelatedMarkets: React.FC = () => {
     const isLiveFilterSelected = useMemo(() => sportFilter == SportFilter.Live, [sportFilter]);
 
     const [isSinglesExpanded, setIsSinglesExpanded] = useState(!isLiveFilterSelected);
+    const [isRecentLiveExpanded, setIsRecentLiveExpanded] = useState(true);
 
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
@@ -218,25 +219,19 @@ const ParlayRelatedMarkets: React.FC = () => {
         );
     };
 
-    const isOtherSinglesClickable = isLiveFilterSelected && !!createdSingleTickets.length;
-
     return (
         <Container
+            isExpanded={isSinglesExpanded || (isLiveFilterSelected && isRecentLiveExpanded)}
             isLiveView={isLiveFilterSelected}
             isEmpty={isLiveFilterSelected ? !liveMarkets.length : !createdSingleTickets.length}
         >
             <Section>
-                <MarketsHeader
-                    isClickable={isOtherSinglesClickable}
-                    onClick={() => isOtherSinglesClickable && setIsSinglesExpanded(!isSinglesExpanded)}
-                >
+                <MarketsHeader onClick={() => setIsSinglesExpanded(!isSinglesExpanded)}>
                     <Title>
                         {t('markets.parlay-related-markets.title-other')}
                         <Count>{createdSingleTickets.length}</Count>
                     </Title>
-                    {isOtherSinglesClickable && (
-                        <HeaderIcon className={`icon ${isSinglesExpanded ? 'icon--arrow-up' : 'icon--arrow-down'}`} />
-                    )}
+                    <HeaderIcon className={`icon ${isSinglesExpanded ? 'icon--arrow-up' : 'icon--arrow-down'}`} />
                 </MarketsHeader>
                 {isSinglesExpanded && (
                     <MarketsContainer isLoading={userTicketsQuery.isLoading}>
@@ -244,7 +239,7 @@ const ParlayRelatedMarkets: React.FC = () => {
                             <LoaderContainer>
                                 <SimpleLoader />
                             </LoaderContainer>
-                        ) : !createdSingleTickets.length && !isLiveFilterSelected ? (
+                        ) : !createdSingleTickets.length ? (
                             <Empty>
                                 <StyledParlayEmptyIcon />
                                 <EmptyLabel>{t('markets.parlay-related-markets.empty')}</EmptyLabel>
@@ -258,26 +253,31 @@ const ParlayRelatedMarkets: React.FC = () => {
 
             {isLiveFilterSelected && (
                 <Section>
-                    <MarketsHeader>
+                    <MarketsHeader onClick={() => setIsRecentLiveExpanded(!isRecentLiveExpanded)}>
                         <Title>
                             {t('markets.parlay-related-markets.title-live')}
                             <Count>{liveMarkets.length}</Count>
                         </Title>
+                        <HeaderIcon
+                            className={`icon ${isRecentLiveExpanded ? 'icon--arrow-up' : 'icon--arrow-down'}`}
+                        />
                     </MarketsHeader>
-                    <MarketsContainer isLoading={liveTradingProcessorDataQuery.isLoading}>
-                        {liveTradingProcessorDataQuery.isLoading ? (
-                            <LoaderContainer>
-                                <SimpleLoader />
-                            </LoaderContainer>
-                        ) : !liveMarkets.length ? (
-                            <Empty>
-                                <StyledParlayEmptyIcon />
-                                <EmptyLabel>{t('markets.parlay-related-markets.empty')}</EmptyLabel>
-                            </Empty>
-                        ) : (
-                            getMarkets(liveMarkets)
-                        )}
-                    </MarketsContainer>
+                    {isRecentLiveExpanded && (
+                        <MarketsContainer isLoading={liveTradingProcessorDataQuery.isLoading}>
+                            {liveTradingProcessorDataQuery.isLoading ? (
+                                <LoaderContainer>
+                                    <SimpleLoader />
+                                </LoaderContainer>
+                            ) : !liveMarkets.length ? (
+                                <Empty>
+                                    <StyledParlayEmptyIcon />
+                                    <EmptyLabel>{t('markets.parlay-related-markets.empty')}</EmptyLabel>
+                                </Empty>
+                            ) : (
+                                getMarkets(liveMarkets)
+                            )}
+                        </MarketsContainer>
+                    )}
                 </Section>
             )}
         </Container>
@@ -370,6 +370,9 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
             }, 1000);
 
             return () => clearTimeout(timeoutId);
+        } else {
+            setStateStatus(status);
+            setStateFinalStatus(finalStatus);
         }
     }, [status, stateStatus, finalStatus, stateFinalStatus]);
 
@@ -407,61 +410,62 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
     return (
         <>
             <TicketColumn onClick={() => setIsExpanded(!isExpanded)}>
-                <Row>
-                    <TimeInfo>
-                        <TimeText>{formatDateWithTime(timestamp)}</TimeText>
-                    </TimeInfo>
-                    <FlexDivColumn>
-                        <Row>
-                            <MatchInfo>
-                                <Text>{getMatchLabel(market)}</Text>
-                            </MatchInfo>
-                            <TicketStatusInfo
-                                status={stateFinalStatus}
-                                onClick={(e: any) => {
-                                    if (isMobile && isLive && errorReason) {
+                <FlexDivColumn>
+                    <Row>
+                        <TimeInfo>
+                            <TimeText>{formatDateWithTime(timestamp)}</TimeText>
+                        </TimeInfo>
+                        <TicketStatusInfo
+                            status={stateFinalStatus}
+                            onClick={(e: any) => {
+                                if (isMobile && isLive && errorReason) {
+                                    e.stopPropagation();
+                                }
+                            }}
+                        >
+                            <StatusText status={stateFinalStatus}>{ticketCreationStatus}</StatusText>
+                            <Tooltip
+                                overlay={isLive ? errorReason : ''}
+                                marginLeft={3}
+                                iconFontSize={12}
+                                iconColor={theme.status.failed.textColor.primary}
+                            />
+                        </TicketStatusInfo>
+                    </Row>
+                    <Row>
+                        <MatchInfo>
+                            <MatchText>{getMatchLabel(market)}</MatchText>
+                        </MatchInfo>
+                    </Row>
+                    <Row>
+                        <MarketTypeInfo>
+                            <MarketTypeText>{getTitleText(market)}</MarketTypeText>
+                        </MarketTypeInfo>
+                    </Row>
+                    <Row>
+                        <Info>
+                            <PositionText>{getPositionTextV2(market, position, true)}</PositionText>
+                        </Info>
+                        <FlexDivRowCentered>
+                            {stateStatus === LiveTradingTicketStatus.CREATED && (
+                                <TwitterIcon
+                                    className="icon-homepage icon--x"
+                                    onClick={(e: any) => {
                                         e.stopPropagation();
-                                    }
-                                }}
-                            >
-                                <StatusText status={stateFinalStatus}>{ticketCreationStatus}</StatusText>
-                                <Tooltip
-                                    overlay={isLive ? errorReason : ''}
-                                    marginLeft={3}
-                                    iconFontSize={12}
-                                    iconColor={theme.status.failed.textColor.primary}
+                                        onTwitterIconClick();
+                                    }}
                                 />
-                            </TicketStatusInfo>
-                        </Row>
-                        <Row>
-                            <MarketTypeInfo>
-                                <MarketTypeText>{getTitleText(market)}</MarketTypeText>
-                            </MarketTypeInfo>
-                        </Row>
-                        <Row>
-                            <Info>
-                                <PositionText>{getPositionTextV2(market, position, true)}</PositionText>
-                            </Info>
-                            <FlexDivRowCentered>
-                                {stateStatus === LiveTradingTicketStatus.CREATED && (
-                                    <TwitterIcon
-                                        className="icon-homepage icon--x"
-                                        onClick={(e: any) => {
-                                            e.stopPropagation();
-                                            onTwitterIconClick();
-                                        }}
-                                    />
-                                )}
-                                <IconWrapper>
-                                    <Icon
-                                        className={`icon ${isExpanded ? 'icon--arrow-up' : 'icon--arrow-down'}`}
-                                        isUp={isExpanded}
-                                    />
-                                </IconWrapper>
-                            </FlexDivRowCentered>
-                        </Row>
-                    </FlexDivColumn>
-                </Row>
+                            )}
+                            <IconWrapper>
+                                <Icon
+                                    className={`icon ${isExpanded ? 'icon--arrow-up' : 'icon--arrow-down'}`}
+                                    isUp={isExpanded}
+                                />
+                            </IconWrapper>
+                        </FlexDivRowCentered>
+                    </Row>
+                </FlexDivColumn>
+
                 {isExpanded && (
                     <>
                         {isLive && (
@@ -553,11 +557,12 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
     );
 };
 
-const Container = styled(FlexDivColumn)<{ isLiveView: boolean; isEmpty: boolean }>`
+const Container = styled(FlexDivColumn)<{ isExpanded: boolean; isLiveView: boolean; isEmpty: boolean }>`
     position: relative;
     max-width: ${MAIN_VIEW_RIGHT_CONTAINER_WIDTH_LARGE};
     height: 100%;
-    min-height: ${(props) => (props.isLiveView ? '292px' : props.isEmpty ? '259px' : '269px')};
+    min-height: ${(props) =>
+        props.isExpanded ? (props.isLiveView ? '319px' : props.isEmpty ? '274px' : '269px') : 'unset'};
     padding: 12px;
     gap: 10px;
     background: ${(props) => props.theme.background.quinary};
@@ -576,9 +581,10 @@ const Section = styled(FlexDivColumn)`
     max-height: min-content;
 `;
 
-const MarketsHeader = styled(FlexDivCentered)<{ isClickable?: boolean }>`
+const MarketsHeader = styled(FlexDivCentered)`
+    gap: 10px;
     z-index: 1;
-    ${(props) => props.isClickable && 'cursor: pointer;'}
+    cursor: pointer;
 `;
 
 const MarketsContainer = styled(FlexDivColumn)<{ isLoading: boolean }>`
@@ -587,7 +593,7 @@ const MarketsContainer = styled(FlexDivColumn)<{ isLoading: boolean }>`
     ${(props) => props.isLoading && 'min-height: 216px;'}
 `;
 
-const Title = styled(FlexDivCentered)`
+const Title = styled(FlexDivRow)`
     position: relative;
     width: 100%;
     color: ${(props) => props.theme.textColor.quaternary};
@@ -625,9 +631,7 @@ const Row = styled(FlexDivRowCentered)``;
 
 const Info = styled(FlexDivRowCentered)``;
 
-const TimeInfo = styled(Info)`
-    max-width: 40px;
-`;
+const TimeInfo = styled(Info)``;
 
 const MatchInfo = styled(Info)``;
 
@@ -678,7 +682,7 @@ const TwitterIcon = styled.i`
 
 const StatusProgress = styled(FlexDivColumn)`
     gap: 6px;
-    padding: 10px 0;
+    padding: 5px 0 10px 0;
     border-bottom: 1px solid ${(props) => props.theme.borderColor.primary};
 `;
 
@@ -743,7 +747,7 @@ const StatusesRow = styled(Row)`
 `;
 
 const PaymentRow = styled(Row)`
-    margin-top: 7px;
+    margin-top: 5px;
 `;
 
 const OddsInfo = styled(Info)`
@@ -755,14 +759,14 @@ const PaidInfo = styled(Info)`
     margin: 0 5px;
 `;
 
-const PayoutInfo = styled(FlexDivStart)`
+const PayoutInfo = styled(Info)`
     flex-wrap: wrap;
 `;
 
 const Label = styled.span`
     font-weight: 400;
     font-size: 10px;
-    line-height: 12px;
+    line-height: 16px;
     margin-right: 5px;
     color: ${(props) => props.theme.textColor.quinary};
 `;
@@ -779,7 +783,12 @@ const TimeText = styled(Text)`
     line-height: 14px;
 `;
 
+const MatchText = styled(Text)`
+    line-height: 14px;
+`;
+
 const MarketTypeText = styled(Text)`
+    line-height: 14px;
     color: ${(props) => props.theme.textColor.quinary};
 `;
 

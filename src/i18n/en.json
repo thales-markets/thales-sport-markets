@@ -833,8 +833,9 @@
             "empty-description": "Add position, choose a market and make your selection.",
             "accept-odds-changes": "Accept odds changes",
             "odds-changed-description": "Odds changed. Accept changes in order to buy.",
-            "tx-not-received": "Unable to obtain transaction receipt. The trade might still get executed, check your profile for created tickets.",
+            "tx-not-received": "Unable to obtain transaction receipt. The trade might still get executed, check your created tickets.",
             "tx-not-fulfilled": "Failed to fulfill the trade.",
+            "tx-request-failed": "Failed to request the trade.",
             "tooltip": {
                 "regular": "Build your bet slip with singles, parlays or live bets.",
                 "system": "Create system bets that cover multiple combinations of selections. Even if some picks lose, you can still win.",
@@ -905,9 +906,10 @@
                 "parlay": "Ticket"
             },
             "slippage": {
-                "slippage": "Slippage",
-                "label": "Accept trade if odds drop by:",
+                "accept": "Accept odds change",
+                "label": "Accept trade if odds drop by",
                 "any-odds-label": "Accept any odds",
+                "any": "Any",
                 "enter-value": "Enter value",
                 "invalid-value": "Invalid value"
             },

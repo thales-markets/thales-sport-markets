@@ -78,7 +78,7 @@ const Slippage: React.FC<SlippageProps> = ({ fixed, defaultValue, onChangeHandle
                         setSlippage(e.target.checked ? DEFAULT_SLIPPAGE_PERCENTAGE : SLIPPAGE_MIN_VALUE);
                     }}
                 />
-                {t('markets.parlay.slippage.label')}
+                {t('markets.parlay.slippage.label')}:
                 {tooltip && (
                     <Tooltip
                         customIconStyling={{ marginLeft: '2px', marginTop: '1px' }}

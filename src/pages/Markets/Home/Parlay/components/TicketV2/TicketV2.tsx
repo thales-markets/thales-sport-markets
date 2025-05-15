@@ -1792,7 +1792,7 @@ const Ticket: React.FC<TicketProps> = ({
 
                                 toast.update(toastId, getSuccessToastOptions(t('market.toast-message.buy-success')));
                                 setIsBuying(false);
-                                setCollateralAmount('');
+                                !isLiveTicket && setCollateralAmount('');
                             }
                             refetchAfterBuy(walletAddress, networkId);
                         }
@@ -1846,6 +1846,11 @@ const Ticket: React.FC<TicketProps> = ({
                     setIsBuying(false);
                     refetchAfterBuy(walletAddress, networkId);
                     toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+                    if (isLiveTicket && !liveTicketRequestData.ticketRequest.requestId) {
+                        liveTicketRequestData.ticketRequest.finalStatus = LiveTradingFinalStatus.FAILED;
+                        liveTicketRequestData.ticketRequest.errorReason = t('markets.parlay.tx-request-failed');
+                        dispatch(updateTicketRequests(liveTicketRequestData));
+                    }
                     const data = getLogData({
                         walletAddress,
                         networkId,
@@ -2679,9 +2684,9 @@ const Ticket: React.FC<TicketProps> = ({
                             onOutsideClick={() => slippageDropdownOpen && setSlippageDropdownOpen(false)}
                         >
                             <SettingsWrapper onClick={() => setSlippageDropdownOpen(!slippageDropdownOpen)}>
-                                <SettingsLabel>{`${t('markets.parlay.slippage.slippage')}: ${
+                                <SettingsLabel>{`${t('markets.parlay.slippage.accept')}: ${
                                     liveBetSlippage === SLIPPAGE_MAX_VALUE
-                                        ? t('markets.parlay.slippage.any-odds-label')
+                                        ? t('markets.parlay.slippage.any')
                                         : liveBetSlippage + '%'
                                 }`}</SettingsLabel>
                                 <SettingsIcon className={`icon icon--settings`} />
@@ -2806,32 +2811,35 @@ const Ticket: React.FC<TicketProps> = ({
                 </>
             )}
             <HorizontalLine />
-            <RowSummary>
-                <RowContainer>
-                    <SummaryLabel>
-                        {t('markets.parlay.persist-games')}
-                        <Tooltip
-                            overlay={t('markets.parlay.tooltip.keep-selection')}
-                            iconFontSize={14}
-                            marginLeft={3}
-                        />
-                        :
-                    </SummaryLabel>
-                    <CheckboxContainer>
-                        <Checkbox
-                            disabled={false}
-                            checked={keepSelection}
-                            value={keepSelection.toString()}
-                            onChange={(e: any) => {
-                                setKeepSelection(e.target.checked || false);
-                                setKeepSelectionToStorage(e.target.checked || false);
-                            }}
-                        />
-                    </CheckboxContainer>
-                </RowContainer>
-            </RowSummary>
+            {!isLiveTicket && (
+                <RowSummary>
+                    <RowContainer>
+                        <SummaryLabel>
+                            {t('markets.parlay.persist-games')}
+                            <Tooltip
+                                overlay={t('markets.parlay.tooltip.keep-selection')}
+                                iconFontSize={14}
+                                marginLeft={3}
+                            />
+                            :
+                        </SummaryLabel>
+                        <CheckboxContainer>
+                            <Checkbox
+                                disabled={false}
+                                checked={keepSelection}
+                                value={keepSelection.toString()}
+                                onChange={(e: any) => {
+                                    setKeepSelection(e.target.checked || false);
+                                    setKeepSelectionToStorage(e.target.checked || false);
+                                }}
+                            />
+                        </CheckboxContainer>
+                    </RowContainer>
+                </RowSummary>
+            )}
             <OverdropRowSummary margin={overdropSummaryOpen ? '5px 0' : '5px 0 0 0'}>
                 <OverdropRowSummary
+                    margin="0"
                     isClickable={!isFreeBetActive}
                     onClick={() => {
                         if (!isFreeBetActive) {
