@@ -1,9 +1,9 @@
 import { IAssetsResponse, UniversalAccount } from '@GDdark/universal-account';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import biconomyConnector from 'utils/biconomyWallet';
+import { delay } from 'utils/timer';
 import { useAccount, useChainId, useDisconnect, useSwitchChain, useWalletClient } from 'wagmi';
-import biconomyConnector from './biconomyWallet';
-import { delay } from './timer';
 
 let universalAddressSingleton = '';
 let universalSolanaAddressSingleton = '';

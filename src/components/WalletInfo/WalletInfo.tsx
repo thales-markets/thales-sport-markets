@@ -18,7 +18,7 @@ import { FlexDivCentered } from 'styles/common';
 import { truncateAddress } from 'thales-utils';
 import { RootState } from 'types/redux';
 import { getDefaultCollateralIndexForNetworkId } from 'utils/network';
-import useBiconomy from 'utils/useBiconomy';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { useAccount, useChainId } from 'wagmi';
 
 const WalletInfo: React.FC = ({}) => {

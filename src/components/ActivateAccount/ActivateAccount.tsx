@@ -18,7 +18,6 @@ import { Coins } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
-import { activateOvertimeAccount } from 'utils/biconomy';
 import {
     getCollateralAddress,
     getCollateralIndex,
@@ -28,7 +27,8 @@ import {
 import { isSmallDevice } from 'utils/device';
 import { getFreeBetModalShown } from 'utils/freeBet';
 import { getFundModalShown, setFundModalShown } from 'utils/fundModal';
-import useBiconomy from 'utils/useBiconomy';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
+import { activateOvertimeAccount } from 'utils/smartAccount/session';
 import { Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient } from 'wagmi';

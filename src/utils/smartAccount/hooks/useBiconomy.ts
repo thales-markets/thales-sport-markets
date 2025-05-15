@@ -2,8 +2,8 @@ import { createSmartAccountClient } from '@biconomy/account';
 import { LINKS } from 'constants/links';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import biconomyConnector from 'utils/biconomyWallet';
 import { useAccount, useChainId, useDisconnect, useSwitchChain, useWalletClient } from 'wagmi';
-import biconomyConnector from './biconomyWallet';
 
 // Hook for biconomy
 function useBiconomy() {

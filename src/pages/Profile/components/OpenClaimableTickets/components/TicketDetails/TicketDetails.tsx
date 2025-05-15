@@ -27,8 +27,8 @@ import {
 import { getContractInstance } from 'utils/contract';
 import { getIsMultiCollateralSupported } from 'utils/network';
 import { refetchAfterClaim, refetchBalances } from 'utils/queryConnector';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { formatTicketOdds, getTicketMarketOdd } from 'utils/tickets';
-import useBiconomy from 'utils/useBiconomy';
 import { Address, Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';

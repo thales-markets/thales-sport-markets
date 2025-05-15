@@ -133,6 +133,7 @@ import {
     refetchTicketLiquidity,
 } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { getSportsAMMV2QuoteMethod, getSportsAMMV2Transaction } from 'utils/sportsAmmV2';
 import {
     PARASWAP_TRANSFER_PROXY,
@@ -152,7 +153,6 @@ import {
 import { delay } from 'utils/timer';
 import { getRequestId, getTradingProcessorTransaction, processTransaction } from 'utils/tradingProcessor';
 import { getKeepSelectionFromStorage, setKeepSelectionToStorage } from 'utils/ui';
-import useBiconomy from 'utils/useBiconomy';
 import { Address, Client, maxUint256, parseEther } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';

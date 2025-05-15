@@ -46,8 +46,8 @@ import { SportMarket, SportMarkets, TicketMarket, TicketPosition } from 'types/m
 import { SgpParams, SportsbookData } from 'types/sgp';
 import { isStableCurrency, sortCollateralBalances } from 'utils/collaterals';
 import { isSameMarket } from 'utils/marketsV2';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { isRegularTicketInvalid } from 'utils/tickets';
-import useBiconomy from 'utils/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import ParlayRelatedMarkets from './components/ParlayRelatedMarkets';
 import TicketV2 from './components/TicketV2';

@@ -16,7 +16,7 @@ import { formatCurrencyWithKey, formatDateWithTime } from 'thales-utils';
 import { Ticket } from 'types/markets';
 import { formatMarketOdds } from 'utils/markets';
 import { getPositionTextV2, getTitleText } from 'utils/marketsV2';
-import useBiconomy from 'utils/useBiconomy';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import { Count, Title } from '../../ParlayV2';
 

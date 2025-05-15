@@ -16,11 +16,11 @@ import styled, { useTheme } from 'styled-components';
 import { FlexDivColumnCentered, FlexDivRow, FlexDivSpaceBetween, FlexDivStart } from 'styles/common';
 import { Coins, formatCurrencyWithKey, truncateAddress } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
-import { sendUniversalTransfer, validateMaxAmount } from 'utils/biconomy';
 import biconomyConnector from 'utils/biconomyWallet';
 import { SUPPORTED_NETWORKS_UNIVERSAL_DEPOSIT } from 'utils/particleWallet/utils';
 import { refetchBalances } from 'utils/queryConnector';
-import useUniversalAccount from 'utils/useUniversalAccount';
+import useUniversalAccount from 'utils/smartAccount/hooks/useUniversalAccount';
+import { sendUniversalTransfer, validateMaxAmount } from 'utils/smartAccount/universalAccount';
 
 type UniversalModal = {
     onClose: () => void;

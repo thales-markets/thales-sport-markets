@@ -19,7 +19,7 @@ import { getCollateralIndex } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import { refetchBalances } from 'utils/queryConnector';
-import useBiconomy from 'utils/useBiconomy';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { Address, Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';

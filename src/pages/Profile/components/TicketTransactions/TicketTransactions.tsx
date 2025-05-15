@@ -5,7 +5,7 @@ import { getIsBiconomy } from 'redux/modules/wallet';
 import { Ticket } from 'types/markets';
 import { RootState } from 'types/redux';
 import { getCaseAccentInsensitiveString } from 'utils/formatters/string';
-import useBiconomy from 'utils/useBiconomy';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { isAddress } from 'viem';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import TicketTransactionsTable from '../../../Markets/Market/MarketDetailsV2/components/TicketTransactionsTable';

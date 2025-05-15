@@ -11,7 +11,7 @@ import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/comm
 import { Coins } from 'thales-utils';
 import { LiquidityPoolUserTransaction, LiquidityPoolUserTransactions } from 'types/liquidityPool';
 import { RootState } from 'types/redux';
-import useBiconomy from 'utils/useBiconomy';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { useAccount, useChainId } from 'wagmi';
 import UserTransactionsTable from '../UserTransactionsTable';
 
