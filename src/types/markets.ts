@@ -223,7 +223,7 @@ export type LiveTradingRequestsData = {
     gamesInfo: any;
 };
 
-type TicketRequest = {
+export type TicketRequest = {
     initialRequestId: string;
     requestId: string;
     status: LiveTradingTicketStatus;

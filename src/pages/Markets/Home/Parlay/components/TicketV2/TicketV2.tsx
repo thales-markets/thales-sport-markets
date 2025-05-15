@@ -1761,16 +1761,9 @@ const Ticket: React.FC<TicketProps> = ({
                                 setIsBuying(false);
                             } else {
                                 if (isLiveTicket) {
-                                    if (
-                                        liveTicketRequestData.ticketRequest.status !== LiveTradingTicketStatus.APPROVED
-                                    ) {
-                                        liveTicketRequestData.ticketRequest.status = LiveTradingTicketStatus.APPROVED;
-                                        dispatch(updateTicketRequests(liveTicketRequestData));
-                                    }
                                     liveTicketRequestData.ticketRequest.status = LiveTradingTicketStatus.CREATED;
                                     liveTicketRequestData.ticketRequest.finalStatus = LiveTradingFinalStatus.SUCCESS;
-                                    // delay status update for 1s for better animation
-                                    setTimeout(() => dispatch(updateTicketRequests(liveTicketRequestData)), 1000);
+                                    dispatch(updateTicketRequests(liveTicketRequestData));
                                 } else {
                                     const modalData = await getShareTicketModalData(
                                         [...markets],
@@ -1875,7 +1868,7 @@ const Ticket: React.FC<TicketProps> = ({
                 refetchAfterBuy(walletAddress, networkId);
                 toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
                 if (!liveTicketRequestData.ticketRequest.requestId) {
-                    // remove pending request with delay in case tx was sent just UI doesn't have info about request ID,
+                    // remove pending request with delay in case tx was sent, just UI doesn't have info about request ID,
                     // so it will be updated from contract
                     setTimeout(
                         () =>

@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import { getSportFilter } from 'redux/modules/market';
-import { getTicket, getTicketRequests, removeTicketRequestById, setTicketRequests } from 'redux/modules/ticket';
+import { getTicket, getTicketRequests, setTicketRequests } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
@@ -35,6 +35,7 @@ import {
     serializableTicketMarketAsTicketMarket,
 } from 'utils/marketsV2';
 import { refetchUserLiveTradingData } from 'utils/queryConnector';
+import { updateTempLiveRequests } from 'utils/tickets';
 import useBiconomy from 'utils/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
 
@@ -121,11 +122,9 @@ const ParlayRelatedMarkets: React.FC = () => {
         [ticketRequestsById]
     );
 
-    const requestIdToInitialIdRef = useRef(new Map());
-
     // Merged UI and contract live requests, filtered and sorted
     const liveMarkets: (TicketMarketRequestData | LiveTradingRequest)[] = useMemo(() => {
-        let refreshedTempLiveTradingRequests = tempLiveTradingRequests.map((request) => {
+        let updatedTempLiveTradingRequests = tempLiveTradingRequests.map((request) => {
             // take data from contract for completed trades
             const completedLiveRequest = liveTradingRequests.find(
                 (liveRequest) =>
@@ -146,37 +145,27 @@ const ParlayRelatedMarkets: React.FC = () => {
                   } as TicketMarketRequestData)
                 : request;
         });
-        // Detect new liveTradingRequests and if there are new ones remove those stuck at pending from temp requests
+        // Detect new liveTradingRequests and if there are new ones update those stuck at pending from temp requests
         if (!prevLiveTradingRequests.current.length) {
             prevLiveTradingRequests.current = liveTradingRequests;
         } else {
-            const diffCount = liveTradingRequests.filter(
+            const diffLiveRequets = liveTradingRequests.filter(
                 (request) =>
                     !prevLiveTradingRequests.current.some((prevRequest) => prevRequest.requestId === request.requestId)
-            ).length;
-            const isSomePending = refreshedTempLiveTradingRequests.some(
+            );
+            const diffCount = diffLiveRequets.length;
+            const isSomePending = updatedTempLiveTradingRequests.some(
                 (request) => request.status === LiveTradingTicketStatus.PENDING
             );
             if (diffCount > 0 && isSomePending) {
-                let removedCount = 0;
-                refreshedTempLiveTradingRequests = refreshedTempLiveTradingRequests.filter((request) => {
-                    let isRequestForRemoval = false;
-                    const isInitialPending =
-                        request.status === LiveTradingTicketStatus.PENDING && request.requestId.startsWith('initial');
-                    if (isInitialPending && removedCount < diffCount) {
-                        isRequestForRemoval = true;
-                        removedCount++;
-                        dispatch(
-                            removeTicketRequestById({ requestId: request.initialRequestId, networkId, walletAddress })
-                        );
-                        // prevent markets re-render as key is base on initialRequestId
-                        const requestIdForMap = orderBy(liveTradingRequests, ['timestamp'], ['desc'])[
-                            diffCount - removedCount
-                        ].requestId;
-                        requestIdToInitialIdRef.current.set(requestIdForMap, request.initialRequestId);
-                    }
-                    return !isRequestForRemoval;
-                });
+                updatedTempLiveTradingRequests = updateTempLiveRequests(
+                    updatedTempLiveTradingRequests,
+                    diffLiveRequets,
+                    diffCount,
+                    networkId,
+                    walletAddress,
+                    dispatch
+                );
             }
             prevLiveTradingRequests.current = liveTradingRequests;
         }
@@ -185,7 +174,7 @@ const ParlayRelatedMarkets: React.FC = () => {
             (request) => !ticketRequestsById[request.requestId] // not in temp requests
         );
 
-        const requestsAndTickets = [...refreshedTempLiveTradingRequests, ...filteredLiveTradingRequests];
+        const requestsAndTickets = [...updatedTempLiveTradingRequests, ...filteredLiveTradingRequests];
         return orderBy(requestsAndTickets, ['timestamp'], ['desc']).slice(0, LATEST_LIVE_REQUESTS_SIZE);
     }, [tempLiveTradingRequests, liveTradingRequests, ticketRequestsById, dispatch, networkId, walletAddress]);
 
@@ -221,7 +210,6 @@ const ParlayRelatedMarkets: React.FC = () => {
                 {markets.map((market) => {
                     const key =
                         (market as TicketMarketRequestData)?.initialRequestId ||
-                        requestIdToInitialIdRef.current.get((market as LiveTradingRequest)?.requestId) ||
                         (market as LiveTradingRequest)?.requestId ||
                         (market as Ticket)?.id;
                     return (
@@ -365,6 +353,8 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
         timestamp = requestedMarket.timestamp;
     }
 
+    const [stateStatus, setStateStatus] = useState(status);
+    const [stateFinalStatus, setStateFinalStatus] = useState(finalStatus);
     const [isExpanded, setIsExpanded] = useState(
         // collapsed if live requests older than 1 min
         !isTicketType && isLive && differenceInMinutes(Date.now(), timestamp) < 1
@@ -372,10 +362,30 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
     const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps | undefined>(undefined);
 
-    const onTwitterIconClick = () => {
-        setShareTicketModalData(shareTicketData);
-        setShowShareTicketModal(true);
-    };
+    // update state status incrementaly
+    useEffect(() => {
+        if (stateStatus === LiveTradingTicketStatus.PENDING && status === LiveTradingTicketStatus.CREATED) {
+            setStateStatus(LiveTradingTicketStatus.APPROVED);
+            setStateFinalStatus(LiveTradingFinalStatus.IN_PROGRESS);
+        } else if (stateStatus === LiveTradingTicketStatus.APPROVED && status === LiveTradingTicketStatus.CREATED) {
+            const timeoutId = setTimeout(() => {
+                setStateStatus(LiveTradingTicketStatus.CREATED);
+                setStateFinalStatus(LiveTradingFinalStatus.SUCCESS);
+            }, 1000);
+
+            return () => clearTimeout(timeoutId);
+        }
+    }, [status, stateStatus, finalStatus, stateFinalStatus]);
+
+    const ticketCreationStatus = useMemo(
+        () =>
+            stateFinalStatus === LiveTradingFinalStatus.SUCCESS
+                ? t('markets.parlay-related-markets.creation-status.success')
+                : stateFinalStatus === LiveTradingFinalStatus.FAILED
+                ? t('markets.parlay-related-markets.creation-status.failed')
+                : t('markets.parlay-related-markets.creation-status.pending'),
+        [stateFinalStatus, t]
+    );
 
     const shareTicketData: ShareTicketModalProps = {
         markets: [market],
@@ -393,12 +403,10 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
         isTicketOpen: true,
     };
 
-    const ticketCreationStatus =
-        finalStatus === LiveTradingFinalStatus.SUCCESS
-            ? t('markets.parlay-related-markets.creation-status.success')
-            : finalStatus === LiveTradingFinalStatus.FAILED
-            ? t('markets.parlay-related-markets.creation-status.failed')
-            : t('markets.parlay-related-markets.creation-status.pending');
+    const onTwitterIconClick = () => {
+        setShareTicketModalData(shareTicketData);
+        setShowShareTicketModal(true);
+    };
 
     return (
         <>
@@ -413,14 +421,14 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
                                 <Text>{getMatchLabel(market)}</Text>
                             </MatchInfo>
                             <TicketStatusInfo
-                                status={finalStatus}
+                                status={stateFinalStatus}
                                 onClick={(e: any) => {
                                     if (isMobile && isLive && errorReason) {
                                         e.stopPropagation();
                                     }
                                 }}
                             >
-                                <StatusText status={finalStatus}>{ticketCreationStatus}</StatusText>
+                                <StatusText status={stateFinalStatus}>{ticketCreationStatus}</StatusText>
                                 <Tooltip
                                     overlay={isLive ? errorReason : ''}
                                     marginLeft={3}
@@ -439,7 +447,7 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
                                 <PositionText>{getPositionTextV2(market, position, true)}</PositionText>
                             </Info>
                             <FlexDivRowCentered>
-                                {status === LiveTradingTicketStatus.CREATED && (
+                                {stateStatus === LiveTradingTicketStatus.CREATED && (
                                     <TwitterIcon
                                         className="icon-homepage icon--x"
                                         onClick={(e: any) => {
@@ -464,39 +472,39 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
                             <StatusProgress>
                                 <ProgressRow>
                                     <Circle
-                                        isActive={status === LiveTradingTicketStatus.PENDING}
+                                        isActive={stateStatus === LiveTradingTicketStatus.PENDING}
                                         isAfterActive={false}
-                                        isFinished={finalStatus !== LiveTradingFinalStatus.IN_PROGRESS}
+                                        isFinished={stateFinalStatus !== LiveTradingFinalStatus.IN_PROGRESS}
                                     />
                                     <ConnectionLine
                                         index={0}
                                         isProgressing={
-                                            status > LiveTradingTicketStatus.PENDING &&
-                                            finalStatus === LiveTradingFinalStatus.IN_PROGRESS
+                                            stateStatus > LiveTradingTicketStatus.PENDING &&
+                                            stateFinalStatus === LiveTradingFinalStatus.IN_PROGRESS
                                         }
                                         isCompleted={
-                                            status > LiveTradingTicketStatus.PENDING &&
-                                            finalStatus !== LiveTradingFinalStatus.IN_PROGRESS
+                                            stateStatus > LiveTradingTicketStatus.PENDING &&
+                                            stateFinalStatus !== LiveTradingFinalStatus.IN_PROGRESS
                                         }
                                     />
                                     <Circle
-                                        isActive={status === LiveTradingTicketStatus.APPROVED}
-                                        isAfterActive={status < LiveTradingTicketStatus.APPROVED}
-                                        isFinished={finalStatus !== LiveTradingFinalStatus.IN_PROGRESS}
+                                        isActive={stateStatus === LiveTradingTicketStatus.APPROVED}
+                                        isAfterActive={stateStatus < LiveTradingTicketStatus.APPROVED}
+                                        isFinished={stateFinalStatus !== LiveTradingFinalStatus.IN_PROGRESS}
                                     />
                                     <ConnectionLine
                                         index={1}
-                                        isProgressing={status === LiveTradingTicketStatus.CREATED}
+                                        isProgressing={stateStatus === LiveTradingTicketStatus.CREATED}
                                         isCompleted={
-                                            status > LiveTradingTicketStatus.APPROVED &&
-                                            finalStatus !== LiveTradingFinalStatus.IN_PROGRESS
+                                            stateStatus > LiveTradingTicketStatus.APPROVED &&
+                                            stateFinalStatus !== LiveTradingFinalStatus.IN_PROGRESS
                                         }
                                     />
                                     <Circle
-                                        isActive={status === LiveTradingTicketStatus.CREATED}
-                                        isAfterActive={status < LiveTradingTicketStatus.CREATED}
-                                        isFinished={finalStatus !== LiveTradingFinalStatus.IN_PROGRESS}
-                                        isFailed={finalStatus === LiveTradingFinalStatus.FAILED}
+                                        isActive={stateStatus === LiveTradingTicketStatus.CREATED}
+                                        isAfterActive={stateStatus < LiveTradingTicketStatus.CREATED}
+                                        isFinished={stateFinalStatus !== LiveTradingFinalStatus.IN_PROGRESS}
+                                        isFailed={stateFinalStatus === LiveTradingFinalStatus.FAILED}
                                     />
                                 </ProgressRow>
                                 <StatusesRow>
@@ -505,7 +513,7 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
                                     <StatusesText>
                                         {t(
                                             `markets.parlay-related-markets.status.${
-                                                finalStatus === LiveTradingFinalStatus.FAILED ? 'error' : 'success'
+                                                stateFinalStatus === LiveTradingFinalStatus.FAILED ? 'error' : 'success'
                                             }`
                                         )}
                                     </StatusesText>

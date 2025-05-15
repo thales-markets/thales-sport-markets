@@ -1,6 +1,7 @@
+import { Dispatch, PayloadAction } from '@reduxjs/toolkit';
 import { secondsToMilliseconds } from 'date-fns';
 import { ContractType } from 'enums/contract';
-import { OddsType } from 'enums/markets';
+import { LiveTradingTicketStatus, OddsType } from 'enums/markets';
 import { t } from 'i18next';
 import {
     getLeagueSport,
@@ -15,8 +16,21 @@ import {
     MarketType,
     MarketTypeMap,
 } from 'overtime-utils';
+import { updateTicketRequests } from 'redux/modules/ticket';
 import { bigNumberFormatter, coinFormatter, Coins, formatDateWithTime } from 'thales-utils';
-import { CombinedPosition, SystemBetData, Team, Ticket, TicketMarket, TicketPosition, TradeData } from 'types/markets';
+import {
+    CombinedPosition,
+    LiveTradingRequest,
+    SystemBetData,
+    Team,
+    Ticket,
+    TicketMarket,
+    TicketMarketRequestData,
+    TicketPosition,
+    TicketRequest,
+    TicketRequestsUpdatePayload,
+    TradeData,
+} from 'types/markets';
 import { NetworkConfig, SupportedNetwork } from 'types/network';
 import { ShareTicketModalProps } from 'types/tickets';
 import positionNamesMap from '../assets/json/positionNamesMap.json';
@@ -29,7 +43,7 @@ import { getContractInstance } from './contract';
 import freeBetHolder from './contracts/freeBetHolder';
 import stakingThalesBettingProxy from './contracts/stakingThalesBettingProxy';
 import { formatMarketOdds } from './markets';
-import { isPlayerPropsCombiningEnabled } from './marketsV2';
+import { isPlayerPropsCombiningEnabled, ticketMarketAsSerializable } from './marketsV2';
 
 export const mapTicket = (
     ticket: any,
@@ -587,6 +601,61 @@ export const isRegularTicketInvalid = (ticket: TicketPosition[], maxTicketSize: 
     }
 
     return false;
+};
+
+export const updateTempLiveRequests = (
+    tempLiveRequests: TicketMarketRequestData[],
+    newLiveTradingRequests: LiveTradingRequest[],
+    numOfUpdates: number,
+    networkId: SupportedNetwork,
+    walletAddress: string,
+    dispatch: Dispatch<PayloadAction<TicketRequestsUpdatePayload>>
+) => {
+    let updatedCount = 0;
+    return tempLiveRequests.map((tempRequest) => {
+        let ticketMarketRequest: TicketMarketRequestData = tempRequest;
+
+        const isInitialPending =
+            tempRequest.status === LiveTradingTicketStatus.PENDING && tempRequest.requestId.startsWith('initial');
+
+        if (isInitialPending && updatedCount < numOfUpdates) {
+            const receivedDiffLiveRequest = newLiveTradingRequests.find(
+                (liveRequest) =>
+                    liveRequest.gameId === tempRequest.ticket.gameId &&
+                    liveRequest.typeId === tempRequest.ticket.typeId &&
+                    liveRequest.line === tempRequest.ticket.line &&
+                    liveRequest.position === tempRequest.ticket.position &&
+                    liveRequest.expectedQuote === tempRequest.totalQuote &&
+                    liveRequest.buyInAmount === tempRequest.buyInAmount
+            );
+
+            if (receivedDiffLiveRequest) {
+                const ticketRequest: TicketRequest = {
+                    ...tempRequest,
+                    ticket: ticketMarketAsSerializable(tempRequest.ticket),
+                    requestId: receivedDiffLiveRequest.requestId,
+                    status: receivedDiffLiveRequest.status,
+                    finalStatus: receivedDiffLiveRequest.finalStatus,
+                    errorReason: receivedDiffLiveRequest.errorReason,
+                    totalQuote: receivedDiffLiveRequest.totalQuote,
+                    payout: receivedDiffLiveRequest.payout,
+                };
+                dispatch(updateTicketRequests({ ticketRequest, networkId, walletAddress }));
+                ticketMarketRequest = {
+                    ...tempRequest,
+                    requestId: receivedDiffLiveRequest.requestId,
+                    status: receivedDiffLiveRequest.status,
+                    finalStatus: receivedDiffLiveRequest.finalStatus,
+                    errorReason: receivedDiffLiveRequest.errorReason,
+                    totalQuote: receivedDiffLiveRequest.totalQuote,
+                    payout: receivedDiffLiveRequest.payout,
+                    timestamp: receivedDiffLiveRequest.timestamp,
+                };
+                updatedCount++;
+            }
+        }
+        return ticketMarketRequest;
+    });
 };
 
 export const getLogData = (data: {
