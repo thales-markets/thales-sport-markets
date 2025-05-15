@@ -29,6 +29,7 @@ const USER_REJECTED_ERROR = 'user rejected the request';
 const UNIVERSAL_BALANCE_NOT_ENOUGH =
     'Rest balance is not enough to cover the fee. Please reduce the amount and try again.';
 const UNIVERSAL_BALANCE_NOT_SUFFICIENT = 'Your balance is insufficient';
+const USER_OP_FAILED = 'UserOp failed internally';
 
 export const sendBiconomyTransaction = async (params: {
     networkId: SupportedNetwork;
@@ -78,6 +79,9 @@ export const sendBiconomyTransaction = async (params: {
         } catch (e) {
             if ((e as any).toString().toLowerCase().includes(USER_REJECTED_ERROR)) {
                 throw new Error('Transaction rejected by user.');
+            }
+            if ((e as any).toString().toLowerCase().includes(USER_OP_FAILED)) {
+                throw e;
             }
             try {
                 if (
@@ -167,6 +171,9 @@ export const executeBiconomyTransactionWithConfirmation = async (params: {
         } catch (e) {
             if ((e as any).toString().toLowerCase().includes(USER_REJECTED_ERROR)) {
                 throw new Error('Transaction rejected by user.');
+            }
+            if ((e as any).toString().toLowerCase().includes(USER_OP_FAILED)) {
+                throw e;
             }
             try {
                 biconomyConnector.wallet.setActiveValidationModule(biconomyConnector.wallet.defaultValidationModule);
@@ -273,13 +280,16 @@ export const executeBiconomyTransaction = async (params: {
                 const { transactionHash } = await waitForTxHash();
                 return await validateTx(transactionHash, userOpHash, params.networkId);
             }
-        } catch (error) {
-            if ((error as any).toString().toLowerCase().includes(USER_REJECTED_ERROR)) {
+        } catch (e) {
+            if ((e as any).toString().toLowerCase().includes(USER_REJECTED_ERROR)) {
                 throw new Error('Transaction rejected by user.');
             }
+            if ((e as any).toString().toLowerCase().includes(USER_OP_FAILED)) {
+                throw e;
+            }
             if (
-                (error && (error as any).message && (error as any).message.includes('SessionNotApproved')) ||
-                (error as any).toString() === ERROR_SESSION_NOT_FOUND
+                (e && (e as any).message && (e as any).message.includes('SessionNotApproved')) ||
+                (e as any).toString() === ERROR_SESSION_NOT_FOUND
             ) {
                 await activateOvertimeAccount({
                     networkId: params.networkId,
@@ -355,6 +365,9 @@ export const activateOvertimeAccount = async (params: { networkId: SupportedNetw
             try {
                 if ((e as any).toString().toLowerCase().includes(USER_REJECTED_ERROR)) {
                     throw new Error('Transaction rejected by user.');
+                }
+                if ((e as any).toString().toLowerCase().includes(USER_OP_FAILED)) {
+                    throw e;
                 }
                 const { waitForTxHash, userOpHash } = await biconomyConnector.wallet.sendTransaction(
                     [...(await getCreateSessionTxs(params.networkId)), ...getApprovalTxs(params.networkId)],
@@ -585,47 +598,6 @@ export const getPaymasterData = async (
     }
 };
 
-const validateTx = async (
-    transactionHash: string | undefined,
-    userOpHash: string | undefined,
-    networkId: SupportedNetwork
-) => {
-    if (!transactionHash) throw new Error('waitForTxHash did not return transactionHash');
-    if (!userOpHash) throw new Error('sendBiconomyTransaction did not return userOpHash');
-    const client = getPublicClient(wagmiConfig, { chainId: networkId });
-
-    const txReceipt = await Promise.race([
-        waitForTransactionReceipt(client as Client, {
-            hash: transactionHash as any,
-        }),
-        waitForTransactionViaSocket(transactionHash as any, networkId),
-    ]);
-
-    let RETRY_COUNT = 0;
-    let userOp;
-
-    while (RETRY_COUNT <= 30) {
-        userOp = await biconomyConnector.wallet?.bundler?.getUserOpStatus(userOpHash);
-        console.log(userOp);
-        if (userOp?.state !== 'SUBMITTED') {
-            break;
-        }
-        RETRY_COUNT++;
-        await delay(100);
-    }
-
-    if (
-        userOp &&
-        userOp.userOperationReceipt &&
-        userOp.userOperationReceipt.success === 'true' &&
-        txReceipt.status === 'success'
-    ) {
-        return transactionHash;
-    } else {
-        throw new Error(`user op failed internally, check txHash: ${transactionHash}`);
-    }
-};
-
 export const sendUniversalTransfer = async (amount: string) => {
     try {
         const encodedCall = encodeFunctionData({
@@ -694,4 +666,46 @@ export const validateMaxAmount = async (amount: number) => {
         }
     }
     return 0;
+};
+
+const validateTx = async (
+    transactionHash: string | undefined,
+    userOpHash: string | undefined,
+    networkId: SupportedNetwork
+) => {
+    if (!transactionHash) throw new Error('waitForTxHash did not return transactionHash');
+    if (!userOpHash) throw new Error('sendBiconomyTransaction did not return userOpHash');
+    const client = getPublicClient(wagmiConfig, { chainId: networkId });
+
+    const txReceipt = await Promise.race([
+        waitForTransactionReceipt(client as Client, {
+            hash: transactionHash as any,
+        }),
+        waitForTransactionViaSocket(transactionHash as any, networkId),
+    ]);
+
+    if ((await validateUserOp(userOpHash)) && txReceipt.status === 'success') {
+        return transactionHash;
+    } else {
+        throw new Error(`${USER_OP_FAILED}, check txHash: ${transactionHash}`);
+    }
+};
+
+const validateUserOp = async (userOpHash: string) => {
+    let RETRY_COUNT = 0;
+    let userOp;
+
+    while (RETRY_COUNT <= 30) {
+        userOp = await biconomyConnector.wallet?.bundler?.getUserOpStatus(userOpHash);
+        console.log(userOp);
+        if (userOp?.state !== 'SUBMITTED') {
+            break;
+        }
+        RETRY_COUNT++;
+        await delay(100);
+    }
+
+    if (userOp?.state === 'SUBMITTED' || userOp?.userOperationReceipt === undefined) return false;
+    if (userOp?.userOperationReceipt?.success === 'false') return false;
+    return true;
 };
