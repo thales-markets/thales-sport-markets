@@ -1,7 +1,7 @@
 import Tooltip from 'components/Tooltip';
 import Checkbox from 'components/fields/Checkbox';
 import NumericInput from 'components/fields/NumericInput';
-import { DEFAULT_SLIPPAGE_PERCENTAGE } from 'constants/markets';
+import { DEFAULT_SLIPPAGE_PERCENTAGE, SLIPPAGE_MAX_VALUE, SLIPPAGE_MIN_VALUE } from 'constants/markets';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled, { useTheme } from 'styled-components';
@@ -17,22 +17,21 @@ type SlippageProps = {
     tooltip?: string;
 };
 
-const MIN_VALUE = 0;
-const MAX_VALUE = 100;
-
 const isSlippageValid = (value: number, max?: number) => {
-    return value >= MIN_VALUE && value <= (max || MAX_VALUE);
+    return value >= SLIPPAGE_MIN_VALUE && value <= (max || SLIPPAGE_MAX_VALUE);
 };
 
 const Slippage: React.FC<SlippageProps> = ({ fixed, defaultValue, onChangeHandler, maxValue, tooltip }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
 
-    const [acceptAnyOdds, setAcceptAnyOdds] = useState(defaultValue === MAX_VALUE);
+    const [acceptAnyOdds, setAcceptAnyOdds] = useState(defaultValue === SLIPPAGE_MAX_VALUE);
     const [slippage, setSlippage] = useState<number | string>(defaultValue || '');
-    const [slippageEnabled, setSlippageEnabled] = useState<boolean>(![MIN_VALUE, MAX_VALUE].includes(defaultValue));
+    const [slippageEnabled, setSlippageEnabled] = useState<boolean>(
+        ![SLIPPAGE_MIN_VALUE, SLIPPAGE_MAX_VALUE].includes(defaultValue)
+    );
 
-    const max = maxValue || MAX_VALUE;
+    const max = maxValue || SLIPPAGE_MAX_VALUE;
 
     useEffect(() => {
         onChangeHandler && onChangeHandler(Number(slippage));
@@ -44,10 +43,10 @@ const Slippage: React.FC<SlippageProps> = ({ fixed, defaultValue, onChangeHandle
             return;
         }
 
-        if (numValue >= MIN_VALUE && numValue <= max) {
+        if (numValue >= SLIPPAGE_MIN_VALUE && numValue <= max) {
             setSlippage(value);
-        } else if (numValue < MIN_VALUE) {
-            setSlippage(MIN_VALUE);
+        } else if (numValue < SLIPPAGE_MIN_VALUE) {
+            setSlippage(SLIPPAGE_MIN_VALUE);
         } else if (numValue > max) {
             setSlippage(max);
         }
@@ -63,7 +62,7 @@ const Slippage: React.FC<SlippageProps> = ({ fixed, defaultValue, onChangeHandle
                     onChange={(e: any) => {
                         setAcceptAnyOdds(!acceptAnyOdds);
                         setSlippageEnabled(false);
-                        setSlippage(e.target.checked ? MAX_VALUE : MIN_VALUE);
+                        setSlippage(e.target.checked ? SLIPPAGE_MAX_VALUE : SLIPPAGE_MIN_VALUE);
                     }}
                 />
                 {t('markets.parlay.slippage.any-odds-label')}
@@ -76,7 +75,7 @@ const Slippage: React.FC<SlippageProps> = ({ fixed, defaultValue, onChangeHandle
                     onChange={(e: any) => {
                         setAcceptAnyOdds(false);
                         setSlippageEnabled(!slippageEnabled);
-                        setSlippage(e.target.checked ? DEFAULT_SLIPPAGE_PERCENTAGE : MIN_VALUE);
+                        setSlippage(e.target.checked ? DEFAULT_SLIPPAGE_PERCENTAGE : SLIPPAGE_MIN_VALUE);
                     }}
                 />
                 {t('markets.parlay.slippage.label')}

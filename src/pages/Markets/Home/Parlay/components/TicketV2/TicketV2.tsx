@@ -18,6 +18,7 @@ import {
     COINGECKO_SWAP_TO_OVER_QUOTE_SLIPPAGE,
     OVER_CONTRACT_RATE_KEY,
     SGP_BET_MINIMUM_MARKETS,
+    SLIPPAGE_MAX_VALUE,
     SLIPPAGE_PERCENTAGES,
     SWAP_APPROVAL_BUFFER,
     SYSTEM_BET_MAX_ALLOWED_SYSTEM_COMBINATIONS,
@@ -2678,7 +2679,11 @@ const Ticket: React.FC<TicketProps> = ({
                             onOutsideClick={() => slippageDropdownOpen && setSlippageDropdownOpen(false)}
                         >
                             <SettingsWrapper onClick={() => setSlippageDropdownOpen(!slippageDropdownOpen)}>
-                                <SettingsLabel>{t('markets.parlay.slippage.slippage')}</SettingsLabel>
+                                <SettingsLabel>{`${t('markets.parlay.slippage.slippage')}: ${
+                                    liveBetSlippage === SLIPPAGE_MAX_VALUE
+                                        ? t('markets.parlay.slippage.any-odds-label')
+                                        : liveBetSlippage + '%'
+                                }`}</SettingsLabel>
                                 <SettingsIcon className={`icon icon--settings`} />
                             </SettingsWrapper>
                             {slippageDropdownOpen && (
