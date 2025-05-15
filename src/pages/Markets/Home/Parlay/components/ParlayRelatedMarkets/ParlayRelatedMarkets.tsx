@@ -566,6 +566,7 @@ const Container = styled(FlexDivColumn)<{ isLiveView: boolean; isEmpty: boolean 
         max-width: ${MAIN_VIEW_RIGHT_CONTAINER_WIDTH_MEDIUM};
     }
     @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        max-width: 100%;
         min-height: 250px;
     }
 `;

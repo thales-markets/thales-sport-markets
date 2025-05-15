@@ -373,7 +373,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
 
     return (
         <ScrollWrapper>
-            <Scroll height={isMobile ? '467px' : '100%'}>
+            <Scroll height={'100%'} renderOnlyChildren={isMobile}>
                 <Container>
                     <ParlayContainer>
                         {hasParlayMarkets ? (
@@ -572,6 +572,9 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
 
 const ScrollWrapper = styled(FlexDivColumn)`
     width: calc(100% + 15px);
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        width: unset;
+    }
 `;
 
 const Container = styled(FlexDivColumn)`
