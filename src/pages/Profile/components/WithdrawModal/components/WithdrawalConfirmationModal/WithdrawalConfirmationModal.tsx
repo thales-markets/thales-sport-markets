@@ -47,8 +47,8 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
     const client = useClient();
 
     const { address } = useAccount();
-    const smartAddres = useBiconomy();
-    const walletAddress = (isBiconomy ? smartAddres : address) || '';
+    const { smartAddress } = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const networkName = useMemo(() => {
         return getNetworkNameByNetworkId(network);

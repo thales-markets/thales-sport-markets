@@ -89,8 +89,8 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
     const walletClient = useWalletClient();
 
     const { address } = useAccount();
-    const smartAddres = useBiconomy();
-    const walletAddress = (isBiconomy ? smartAddres : address) || '';
+    const { smartAddress } = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const [showDetails, setShowDetails] = useState<boolean>(showDetailsExplicit ?? false);
     const [isSubmitting, setIsSubmitting] = useState(false);

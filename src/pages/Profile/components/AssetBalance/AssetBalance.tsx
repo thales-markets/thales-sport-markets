@@ -7,6 +7,7 @@ import Toggle from 'components/Toggle';
 import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
 import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from 'constants/currency';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import useLocalStorage from 'hooks/useLocalStorage';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
@@ -31,7 +32,7 @@ const AssetBalance: React.FC = () => {
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
-    const smartAddres = useBiconomy();
+    const { smartAddress } = useBiconomy();
     const theme = useTheme();
     const [showThalesToOverMigrationModal, setShowThalesToOverMigrationModal] = useState<boolean>(false);
     const [showFundModal, setShowFundModal] = useState<boolean>(false);
@@ -44,7 +45,7 @@ const AssetBalance: React.FC = () => {
     const [showZeroBalance, setShowZeroBalance] = useLocalStorage(LOCAL_STORAGE_KEYS.SHOW_ZERO_BALANCE, true);
 
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(
-        smartAddres,
+        smartAddress,
         { networkId, client },
         {
             enabled: isConnected,
@@ -167,8 +168,8 @@ const AssetBalance: React.FC = () => {
                         <Asset className="icon icon--wallet-connected" />
                         {isBiconomy ? t('profile.dropdown.account') : t('profile.dropdown.eoa')}
                     </AssetWrapper>
-                    <AssetWrapper clickable onClick={() => handleCopy(isBiconomy ? smartAddres : (address as any))}>
-                        {truncateAddress(isBiconomy ? smartAddres : (address as any), 6, 4)}{' '}
+                    <AssetWrapper clickable onClick={() => handleCopy(isBiconomy ? smartAddress : (address as any))}>
+                        {truncateAddress(isBiconomy ? smartAddress : (address as any), 6, 4)}{' '}
                         <Asset className="icon icon--copy" />
                     </AssetWrapper>
                 </WalletContainer>
@@ -379,6 +380,9 @@ const TableHeader = styled(AlignedParagraph)`
     font-size: 20px;
     font-weight: 700;
     white-space: pre;
+    @media (max-width: ${ScreenSizeBreakpoint.XXXS}px) {
+        font-size: 16px;
+    }
 `;
 
 const TableHeader2 = styled(TableHeader)`
@@ -424,6 +428,9 @@ const AssetWrapper = styled(AlignedParagraph)<{ clickable?: boolean }>`
     justify-content: flex-start;
     cursor: ${(props) => (props.clickable ? 'pointer' : '')};
     gap: 8px;
+    @media (max-width: ${ScreenSizeBreakpoint.XXXS}px) {
+        font-size: 14px;
+    }
 `;
 
 const TableButton = styled(AlignedParagraph)<{ disabled?: boolean }>`
@@ -455,6 +462,9 @@ const Label = styled(AlignedParagraph)`
     font-size: 16px;
     font-weight: 500;
     white-space: pre;
+    @media (max-width: ${ScreenSizeBreakpoint.XXXS}px) {
+        font-size: 14px;
+    }
 `;
 
 const Asset = styled.i`

@@ -89,9 +89,10 @@ const DappHeader: React.FC = () => {
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
-    const smartAddres = useBiconomy();
+    const { smartAddress } = useBiconomy();
 
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+    const walletAddress = (isBiconomy ? smartAddress : address) || '';
     const marketSearch = useSelector(getMarketSearch);
     const stopPulsing = useSelector(getStopPulsing);
     const isMobile = useSelector(getIsMobile);
@@ -103,9 +104,6 @@ const DappHeader: React.FC = () => {
     const [navMenuVisibility, setNavMenuVisibility] = useState<boolean | null>(null);
     const [showSearchModal, setShowSearchModal] = useState<boolean>(false);
     const [showThalesToOverMigrationModal, setShowThalesToOverMigrationModal] = useState<boolean>(false);
-
-    const walletAddress = (isBiconomy ? smartAddres : address) || '';
-
     const whitelistedForUnblockQuery = useWhitelistedForUnblock(
         walletAddress,
         { networkId, client },

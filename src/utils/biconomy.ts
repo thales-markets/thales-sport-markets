@@ -1,14 +1,18 @@
 import { createSessionKeyManagerModule, DEFAULT_SESSION_KEY_MANAGER_MODULE } from '@biconomy/modules';
 import { PaymasterFeeQuote, PaymasterMode } from '@biconomy/paymaster';
+import { SUPPORTED_TOKEN_TYPE } from '@GDdark/universal-account';
 import { getPublicClient } from '@wagmi/core';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { addMonths } from 'date-fns';
+import { Network } from 'enums/network';
 import localforage from 'localforage';
 import { wagmiConfig } from 'pages/Root/wagmiConfig';
+import { coinParser } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { Address, Client, createWalletClient, encodeFunctionData, getContract, http, maxUint256 } from 'viem';
 import { generatePrivateKey, privateKeyToAccount } from 'viem/accounts';
+import { waitForTransactionReceipt } from 'viem/actions';
 import biconomyConnector from './biconomyWallet';
 import { getContractAbi } from './contracts/abi';
 import liveTradingProcessorContract from './contracts/liveTradingProcessorContract';
@@ -21,6 +25,9 @@ import { waitForTransactionViaSocket } from './listener';
 export const GAS_LIMIT = 1;
 const ERROR_SESSION_NOT_FOUND = 'Error: Session not found.';
 const USER_REJECTED_ERROR = 'user rejected the request';
+const UNIVERSAL_BALANCE_NOT_ENOUGH =
+    'Rest balance is not enough to cover the fee. Please reduce the amount and try again.';
+const UNIVERSAL_BALANCE_NOT_SUFFICIENT = 'Your balance is insufficient';
 
 export const sendBiconomyTransaction = async (params: {
     networkId: SupportedNetwork;
@@ -510,24 +517,27 @@ export const getPaymasterData = async (
     value?: any
 ): Promise<PaymasterFeeQuote | undefined> => {
     if (biconomyConnector.wallet && contract) {
+        const encodedCall = encodeFunctionData({
+            abi: getContractAbi(contract, networkId),
+            functionName: methodName,
+            args: data ? data : ([] as any),
+        });
+
+        const transaction = {
+            to: contract.address,
+            data: encodedCall,
+            value,
+        };
         try {
-            biconomyConnector.wallet.setActiveValidationModule(biconomyConnector.wallet.defaultValidationModule);
-
-            const encodedCall = encodeFunctionData({
-                abi: getContractAbi(contract, networkId),
-                functionName: methodName,
-                args: data ? data : ([] as any),
-            });
-
-            const transaction = {
-                to: contract.address,
-                data: encodedCall,
-                value,
-            };
+            const sessionSigner = await getSessionSigner(networkId);
 
             const feeQuotesData = await biconomyConnector.wallet.getTokenFees(transaction, {
                 paymasterServiceData: {
                     mode: PaymasterMode.ERC20,
+                },
+                params: {
+                    sessionSigner: sessionSigner,
+                    sessionValidationModule: sessionValidationContract.addresses[networkId],
                 },
             });
 
@@ -536,19 +546,115 @@ export const getPaymasterData = async (
                 return quotes[0];
             }
         } catch (e) {
-            console.log(e);
+            if (e === ERROR_SESSION_NOT_FOUND) {
+                try {
+                    biconomyConnector.wallet.setActiveValidationModule(
+                        biconomyConnector.wallet.defaultValidationModule
+                    );
+                    const feeQuotesData = await biconomyConnector.wallet.getTokenFees(transaction, {
+                        paymasterServiceData: {
+                            mode: PaymasterMode.ERC20,
+                        },
+                    });
+
+                    const quotes = feeQuotesData.feeQuotes?.filter((feeQuote) => feeQuote.symbol === 'USDC');
+                    if (quotes) {
+                        return quotes[0];
+                    }
+                } catch (e) {
+                    console.log(e);
+                }
+            } else {
+                console.log(e);
+            }
         }
     }
 };
 
 const validateTx = async (transactionHash: string | undefined, networkId: SupportedNetwork) => {
     if (!transactionHash) throw new Error('waitForTxHash did not return transactionHash');
+    const client = getPublicClient(wagmiConfig, { chainId: networkId });
 
-    const txReceipt = await waitForTransactionViaSocket(transactionHash as any, networkId);
+    const txReceipt = await Promise.race([
+        waitForTransactionReceipt(client as Client, {
+            hash: transactionHash as any,
+        }),
+        waitForTransactionViaSocket(transactionHash as any, networkId),
+    ]);
 
     if (txReceipt.status === 'success') {
         return transactionHash;
     } else {
         throw new Error(`user op failed internally, check txHash: ${transactionHash}`);
     }
+};
+
+export const sendUniversalTransfer = async (amount: string) => {
+    try {
+        const encodedCall = encodeFunctionData({
+            abi: multipleCollateral.USDC.abi,
+            functionName: 'transfer',
+            args: [biconomyConnector.address, coinParser(amount, Network.OptimismMainnet, 'USDC')],
+        });
+
+        const transactionLocal = {
+            to: multipleCollateral.USDC.addresses[Network.OptimismMainnet],
+            data: encodedCall,
+        };
+
+        const transaction = await biconomyConnector.universalAccount?.createUniversalTransaction({
+            expectTokens: [{ type: SUPPORTED_TOKEN_TYPE.USDC, amount }],
+            chainId: Network.OptimismMainnet,
+            transactions: [transactionLocal],
+        });
+
+        const signature = await biconomyConnector.wallet?.signMessage(transaction.rootHash);
+        if (signature) {
+            const result = await biconomyConnector.universalAccount?.sendTransaction(transaction, signature);
+            return {
+                success: true,
+                hash: result.transactionId,
+            };
+        }
+    } catch (e: any) {
+        console.log(e);
+        if (e.message == UNIVERSAL_BALANCE_NOT_ENOUGH || e.message == UNIVERSAL_BALANCE_NOT_SUFFICIENT) {
+            return {
+                success: false,
+                message: UNIVERSAL_BALANCE_NOT_ENOUGH,
+            };
+        }
+        throw e;
+    }
+};
+
+export const validateMaxAmount = async (amount: number) => {
+    let RETRY_COUNT = 0;
+    let finalAmount = amount - 0.05;
+
+    while (RETRY_COUNT <= 30) {
+        try {
+            const encodedCall = encodeFunctionData({
+                abi: multipleCollateral.USDC.abi,
+                functionName: 'transfer',
+                args: [biconomyConnector.address, coinParser(finalAmount.toString(), Network.OptimismMainnet, 'USDC')],
+            });
+
+            const transactionLocal = {
+                to: multipleCollateral.USDC.addresses[Network.OptimismMainnet],
+                data: encodedCall,
+            };
+
+            await biconomyConnector.universalAccount?.createUniversalTransaction({
+                expectTokens: [{ type: SUPPORTED_TOKEN_TYPE.USDC, amount: finalAmount.toString() }],
+                chainId: Network.OptimismMainnet,
+                transactions: [transactionLocal],
+            });
+            return finalAmount;
+        } catch (e: any) {
+            finalAmount = finalAmount - 0.1;
+            RETRY_COUNT++;
+        }
+    }
+    return 0;
 };

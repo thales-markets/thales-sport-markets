@@ -493,6 +493,10 @@
     content: '\0101';
 }
 
+.icon--darts::before {
+    content: '\0108';
+}
+
 .icon--lock:before {
     content: '\0121';
 }
@@ -539,4 +543,8 @@
 
 .icon--over:before {
     content: '\0125';
+}
+
+.icon--sol::before {
+    content: '\00B9';
 }

@@ -1,5 +1,6 @@
 import SwapModal from 'components/SwapModal';
 import { USD_SIGN } from 'constants/currency';
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
@@ -25,8 +26,8 @@ const Account: React.FC = () => {
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
-    const smartAddres = useBiconomy();
-    const walletAddress = (isBiconomy ? smartAddres : address) || '';
+    const { smartAddress } = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const [showSwapModal, setShowSwapModal] = useState<boolean>(false);
 
@@ -146,20 +147,20 @@ const Account: React.FC = () => {
             </Header>
 
             <Container>
-                <FlexDivStart gap={40}>
+                <OverWrapper gap={40}>
                     <FlexDivColumnStart gap={4}>
                         <Label2>
                             <OverIcon /> {t('profile.account-summary.over')}
                         </Label2>
                         <TokenDesc>{t('profile.account-summary.token')}</TokenDesc>
                     </FlexDivColumnStart>
-                    <FlexDivColumnStart gap={4}>
+                    <TokenBalanceWrapper gap={4}>
                         <TokenBalance>
                             {overBalance.balance === 0 ? `N/A` : formatCurrencyWithKey('', overBalance.balance, 2)}
                         </TokenBalance>
                         <Value2>{formatCurrencyWithSign(USD_SIGN, overBalance.value, 2)}</Value2>
-                    </FlexDivColumnStart>
-                </FlexDivStart>
+                    </TokenBalanceWrapper>
+                </OverWrapper>
                 <Button onClick={() => setShowSwapModal(true)}>{t('profile.account-summary.swap')}</Button>
             </Container>
 
@@ -196,6 +197,9 @@ const Label = styled(AlignedParagraph)`
     font-size: 14px;
     font-weight: 500;
     white-space: pre;
+    @media (max-width: ${ScreenSizeBreakpoint.XXXS}px) {
+        font-size: 12px;
+    }
 `;
 
 const Value = styled(AlignedParagraph)`
@@ -205,6 +209,9 @@ const Value = styled(AlignedParagraph)`
     white-space: pre;
     @media (max-width: 575px) {
         font-size: 20px;
+    }
+    @media (max-width: ${ScreenSizeBreakpoint.XXXS}px) {
+        font-size: 16px;
     }
 `;
 
@@ -281,6 +288,22 @@ const Button = styled(FlexDivCentered)<{ active?: boolean }>`
     @media (max-width: 575px) {
         font-size: 12px;
         padding: 3px 12px;
+    }
+    @media (max-width: ${ScreenSizeBreakpoint.XXXS}px) {
+        width: 100%;
+    }
+`;
+
+const OverWrapper = styled(FlexDivStart)`
+    @media (max-width: ${ScreenSizeBreakpoint.XXXS}px) {
+        justify-content: space-between;
+        width: 100%;
+    }
+`;
+
+const TokenBalanceWrapper = styled(FlexDivColumnStart)`
+    @media (max-width: ${ScreenSizeBreakpoint.XXXS}px) {
+        align-items: flex-end;
     }
 `;
 

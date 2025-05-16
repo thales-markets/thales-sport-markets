@@ -28,6 +28,7 @@ import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { secondsToMilliseconds } from 'date-fns';
 import { ContractType } from 'enums/contract';
 import { OddsType } from 'enums/markets';
+import { Network } from 'enums/network';
 import { BuyTicketStep } from 'enums/tickets';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import useInterval from 'hooks/useInterval';
@@ -246,8 +247,8 @@ const Ticket: React.FC<TicketProps> = ({
     const walletClient = useWalletClient();
 
     const { address, isConnected } = useAccount();
-    const smartAddres = useBiconomy();
-    const walletAddress = (isBiconomy ? smartAddres : address) || '';
+    const { smartAddress } = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const selectedOddsType = useSelector(getOddsType);
     const ticketPayment = useSelector(getTicketPayment);
@@ -295,6 +296,7 @@ const Ticket: React.FC<TicketProps> = ({
         SYSTEM_BET_MINIMUM_DENOMINATOR
     );
     const [isTotalQuoteIncreased, setIsTotalQuoteIncreased] = useState(false);
+    const [isProofValid, setIsProofValid] = useState(true);
 
     const userMultipliersQuery = useUserMultipliersQuery(address as any, { enabled: isConnected });
 
@@ -940,6 +942,8 @@ const Ticket: React.FC<TicketProps> = ({
                                     : coinFormatter(parlayAmmQuote.buyInAmountInDefaultCollateral, networkId)
                             );
 
+                        setIsProofValid(true);
+
                         return {
                             ...parlayAmmQuote,
                             buyInAmountInDefaultCollateralNumber: coinFormatter(
@@ -957,6 +961,8 @@ const Ticket: React.FC<TicketProps> = ({
                             return { error: TicketErrorMessage.SAME_TEAM_IN_PARLAY };
                         }
                     } else if (e && e.toString().includes(TicketErrorMessage.PROOF_IS_NOT_VALID)) {
+                        setIsProofValid(false);
+                        console.log('Proof is not valid, refetching...');
                         refetchProofs(networkId, markets);
                     }
                     console.log(e);
@@ -965,27 +971,27 @@ const Ticket: React.FC<TicketProps> = ({
             }
         },
         [
-            client,
-            networkId,
             noProofs,
             isSystemBet,
             isValidSystemBet,
             isInvalidNumberOfCombination,
-            markets,
-            collateralHasLp,
-            isOver,
-            swapToOver,
-            isDefaultCollateral,
-            selectedCollateralCurrencyRate,
-            collateralAddress,
-            usedCollateralForBuy,
-            overCollateralAddress,
-            systemBetDenominator,
-            swappedOverToReceive,
-            buyInAmount,
-            isLiveTicket,
             isSgp,
             isInvalidSgpTotalQuote,
+            client,
+            networkId,
+            isLiveTicket,
+            collateralHasLp,
+            isDefaultCollateral,
+            swapToOver,
+            selectedCollateralCurrencyRate,
+            overCollateralAddress,
+            collateralAddress,
+            usedCollateralForBuy,
+            markets,
+            systemBetDenominator,
+            isOver,
+            swappedOverToReceive,
+            buyInAmount,
         ]
     );
 
@@ -1900,7 +1906,7 @@ const Ticket: React.FC<TicketProps> = ({
             }
         };
 
-        if (isBiconomy) setGasValue();
+        if (isBiconomy && networkId === Network.Arbitrum) setGasValue();
     }, [
         isEth,
         buyInAmount,
@@ -2053,6 +2059,15 @@ const Ticket: React.FC<TicketProps> = ({
                         </Button>
                     </Tooltip>
                 </>
+            );
+        }
+
+        if (!isProofValid) {
+            return (
+                <Button disabled={true} onClick={() => {}} {...defaultButtonProps}>
+                    {t('markets.parlay.latest-odds-checking')}
+                    <DotsLoader />
+                </Button>
             );
         }
 
@@ -2516,7 +2531,10 @@ const Ticket: React.FC<TicketProps> = ({
                 <RowSummary>
                     <RowContainer>
                         <SummaryLabel isBonus>
-                            {t('markets.parlay.swap-over')}
+                            <Trans
+                                i18nKey="markets.parlay.swap-over"
+                                components={{ logo: <LogoIcon className="currency-icon currency-icon--over" /> }}
+                            />
                             <Tooltip
                                 overlay={
                                     <Trans
@@ -2908,6 +2926,28 @@ const LoaderContainer = styled(FlexDivColumn)`
     position: relative;
     max-width: 30px;
     max-height: 30px;
+`;
+
+const LogoIcon = styled.i`
+    margin-top: -2px;
+    font-size: 14px;
+    line-height: 12px;
+    color: ${(props) => props.theme.status.win}!important;
+`;
+
+const DotsLoader = styled.div`
+    width: 20px;
+    aspect-ratio: 4;
+    margin-top: 6px;
+    margin-left: 2px;
+    background: radial-gradient(circle closest-side, #000 50%, #0000) 0 / calc(100% / 3) 100% space;
+    clip-path: inset(0 100% 0 0);
+    animation: l1 1s steps(4) infinite;
+    @keyframes l1 {
+        to {
+            clip-path: inset(0 -34% 0 0);
+        }
+    }
 `;
 
 export default Ticket;

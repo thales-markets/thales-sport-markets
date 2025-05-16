@@ -49,8 +49,8 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
     const history = useHistory();
     const { address } = useAccount();
 
-    const smartAddres = useBiconomy();
-    const walletAddress = (isBiconomy ? smartAddres : address) || '';
+    const { smartAddress } = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const [freeBetModalParam, setFreeBetModalParam] = useState(queryParams.freeBet);
 

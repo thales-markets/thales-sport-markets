@@ -115,6 +115,7 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.ENGLAND_FA_CUP:
         case League.ENGLAND_SUPER_LEAGUE_WOMEN:
         case League.ENGLAND_SUPER_LEAGUE:
+        case League.ENGLAND_PREMIER_LEAGUE_DARTS:
             return `/logos/Countries/england.svg`;
         case League.LIGUE_ONE:
         case League.LIGUE_2:
@@ -349,6 +350,8 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
             return `/logos/Countries/wta.png`;
         case League.TENNIS_ATP_CHALLENGER:
             return `/logos/Countries/atp-challenger.jpg`;
+        case League.IIHF_WORLD_CHAMPIONSHIP:
+            return `/logos/Countries/iihf.png`;
         default:
             return `/logos/Countries/world.svg`;
     }

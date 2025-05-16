@@ -31,7 +31,7 @@ const ClaimFreeBetButton: React.FC<ClaimFreeBetButtonProps> = ({ pulsate, onClai
 
     const networkId = useChainId();
     const { address } = useAccount();
-    const smartAddress = useBiconomy();
+    const { smartAddress } = useBiconomy();
     const history = useHistory();
     const theme = useTheme();
     const walletAddress = (isBiconomy ? smartAddress : address) || '';

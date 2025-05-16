@@ -44,4 +44,5 @@ export enum ScreenSizeBreakpoint {
     SMALL = 767,
     EXTRA_SMALL = 512,
     XXS = 420,
+    XXXS = 360,
 }
