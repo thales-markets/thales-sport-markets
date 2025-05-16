@@ -119,7 +119,13 @@ import sportsAMMV2Contract from 'utils/contracts/sportsAMMV2Contract';
 import { isErrorExcluded, logErrorToDiscord } from 'utils/discord';
 import { convertFromBytes32 } from 'utils/formatters/string';
 import { formatMarketOdds, isOddsChangeAllowed } from 'utils/markets';
-import { getTradeData, ticketMarketAsSerializable } from 'utils/marketsV2';
+import {
+    getMatchLabel,
+    getPositionTextV2,
+    getTitleText,
+    getTradeData,
+    ticketMarketAsSerializable,
+} from 'utils/marketsV2';
 import { checkAllowance } from 'utils/network';
 import {
     formatPoints,
@@ -1680,7 +1686,7 @@ const Ticket: React.FC<TicketProps> = ({
                     );
                     refetchAfterBuy(walletAddress, networkId);
                     setIsBuying(false);
-                    toast.update(toastId, getErrorToastOptions(t('markets.parlay.tx-not-received')));
+                    toast.update(toastId, getErrorToastOptions(t('common.errors.tx-receipt-not-received')));
                     return;
                 }
 
@@ -1755,11 +1761,11 @@ const Ticket: React.FC<TicketProps> = ({
                                 if (isLiveTicket) {
                                     liveTicketRequestData.ticketRequest.finalStatus = LiveTradingFinalStatus.FAILED;
                                     liveTicketRequestData.ticketRequest.errorReason = t(
-                                        'markets.parlay.tx-not-fulfilled'
+                                        'common.errors.tx-not-fulfilled'
                                     );
                                     dispatch(updateTicketRequests(liveTicketRequestData));
                                 }
-                                toast.update(toastId, getErrorToastOptions(t('markets.parlay.tx-not-fulfilled')));
+                                toast.update(toastId, getErrorToastOptions(t('common.errors.tx-not-fulfilled')));
                                 setIsBuying(false);
                             } else {
                                 if (isLiveTicket) {
@@ -1790,13 +1796,25 @@ const Ticket: React.FC<TicketProps> = ({
                                 setBuyStep(BuyTicketStep.COMPLETED);
                                 setOpenBuyStepsModal(false);
 
-                                toast.update(toastId, getSuccessToastOptions(t('market.toast-message.buy-success')));
+                                toast.update(
+                                    toastId,
+                                    getSuccessToastOptions(
+                                        isLiveTicket
+                                            ? t('market.toast-message.buy-success-ticket', {
+                                                  ticket: `${getMatchLabel(markets[0])} (${getTitleText(
+                                                      markets[0]
+                                                  )} ${getPositionTextV2(markets[0], markets[0].position, true)})`,
+                                              })
+                                            : t('market.toast-message.buy-success')
+                                    )
+                                );
                                 setIsBuying(false);
                                 !isLiveTicket && setCollateralAmount('');
                             }
                             refetchAfterBuy(walletAddress, networkId);
                         }
                     } else {
+                        // regular/system bet (not SGP, not)
                         refetchAfterBuy(walletAddress, networkId);
 
                         const systemBetData = isSystemBet
@@ -1845,10 +1863,10 @@ const Ticket: React.FC<TicketProps> = ({
                     }
                     setIsBuying(false);
                     refetchAfterBuy(walletAddress, networkId);
-                    toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+                    toast.update(toastId, getErrorToastOptions(t('common.errors.tx-reverted')));
                     if (isLiveTicket && !liveTicketRequestData.ticketRequest.requestId) {
                         liveTicketRequestData.ticketRequest.finalStatus = LiveTradingFinalStatus.FAILED;
-                        liveTicketRequestData.ticketRequest.errorReason = t('markets.parlay.tx-request-failed');
+                        liveTicketRequestData.ticketRequest.errorReason = t('common.errors.tx-request-failed');
                         dispatch(updateTicketRequests(liveTicketRequestData));
                     }
                     const data = getLogData({

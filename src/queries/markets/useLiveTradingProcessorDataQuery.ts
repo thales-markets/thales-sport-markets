@@ -6,6 +6,7 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { secondsToMilliseconds } from 'date-fns';
 import { ContractType } from 'enums/contract';
 import { LiveTradingFinalStatus, LiveTradingTicketStatus } from 'enums/markets';
+import { t } from 'i18next';
 import { bigNumberFormatter, coinFormatter } from 'thales-utils';
 import { LiveTradingRequest, LiveTradingRequestsData } from 'types/markets';
 import { NetworkConfig } from 'types/network';
@@ -96,8 +97,8 @@ export const useLiveTradingProcessorDataQuery = (
                                     : LiveTradingTicketStatus.PENDING;
                                 finalStatus = LiveTradingFinalStatus.FAILED;
                                 errorReason = isAdapterApproved
-                                    ? 'Failed to fulfill the trade.'
-                                    : 'Failed to request the trade.';
+                                    ? t('common.errors.tx-not-fulfilled')
+                                    : t('common.errors.tx-request-failed');
                             } else if (isAdapterApproved) {
                                 status = LiveTradingTicketStatus.APPROVED;
                                 finalStatus = LiveTradingFinalStatus.IN_PROGRESS;
