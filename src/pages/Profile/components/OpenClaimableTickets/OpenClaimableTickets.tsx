@@ -291,11 +291,11 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
                                             top={-2}
                                         />
                                     </ClaimAllContainer>
-                                    {userTicketsByStatus.claimable.map((parlayMarket, index) => {
+                                    {userTicketsByStatus.claimable.map((parlayMarket) => {
                                         return (
                                             <TicketDetails
                                                 ticket={parlayMarket}
-                                                key={index}
+                                                key={parlayMarket.id}
                                                 claimCollateralIndex={claimCollateralIndex}
                                                 setClaimCollateralIndex={setClaimCollateralIndex}
                                             />
@@ -345,11 +345,11 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
                         <>
                             {userTicketsByStatus.open.length ? (
                                 <>
-                                    {userTicketsByStatus.open.map((parlayMarket, index) => {
+                                    {userTicketsByStatus.open.map((parlayMarket) => {
                                         return (
                                             <TicketDetails
                                                 ticket={parlayMarket}
-                                                key={index}
+                                                key={parlayMarket.id}
                                                 claimCollateralIndex={claimCollateralIndex}
                                                 setClaimCollateralIndex={setClaimCollateralIndex}
                                                 showDetailsExplicit={showDetails}
