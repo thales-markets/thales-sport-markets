@@ -1904,14 +1904,7 @@ const Ticket: React.FC<TicketProps> = ({
                     // Remove pending request with delay in case tx was sent (just UI doesn't have info about request ID),
                     // so it will be updated from contract. If user rejected remove it immediately.
                     setTimeout(
-                        () =>
-                            dispatch(
-                                removeTicketRequestById({
-                                    requestId: liveTicketRequestData.ticketRequest.initialRequestId,
-                                    networkId,
-                                    walletAddress,
-                                })
-                            ),
+                        () => dispatch(removeTicketRequestById(liveTicketRequestData.ticketRequest.initialRequestId)),
                         isUserRejected ? 0 : 3000
                     );
                 }

@@ -3,7 +3,6 @@ import ShareTicketModalV2 from 'components/ShareTicketModalV2';
 import SimpleLoader from 'components/SimpleLoader';
 import Tooltip from 'components/Tooltip';
 import { LATEST_LIVE_REQUESTS_MATURITY_DAYS, LATEST_LIVE_REQUESTS_SIZE } from 'constants/markets';
-import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { MAIN_VIEW_RIGHT_CONTAINER_WIDTH_LARGE, MAIN_VIEW_RIGHT_CONTAINER_WIDTH_MEDIUM } from 'constants/ui';
 import { differenceInDays, differenceInMinutes, secondsToMilliseconds } from 'date-fns';
 import { LiveTradingFinalStatus, LiveTradingTicketStatus, SportFilter } from 'enums/markets';
@@ -18,7 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import { getSportFilter } from 'redux/modules/market';
-import { getTicket, getTicketRequests } from 'redux/modules/ticket';
+import { getTicket, getTicketRequests, removeTicketRequests } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
@@ -215,9 +214,13 @@ const ParlayRelatedMarkets: React.FC = () => {
         maxAllowedCreationDelay,
     ]);
 
-    // clear LS ticketRequests by network ID and wallet address
+    // clear ticketRequests when changed network ID or wallet address
     useEffect(() => {
-        window.localStorage.removeItem(`${LOCAL_STORAGE_KEYS.TICKET_REQUESTS}_${networkId}_${walletAddress}`);
+        dispatch(removeTicketRequests());
+
+        return () => {
+            dispatch(removeTicketRequests());
+        };
     }, [networkId, walletAddress, dispatch]);
 
     useEffect(() => {
@@ -460,7 +463,9 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
     };
 
     const ticketContentRef = useRef<HTMLDivElement>(null);
-    const lineWidth = Math.ceil(((ticketContentRef.current?.clientWidth || 320) - 3 * 16) / 2); // 3 circles with 16px and 2 lines
+    const defaultTicketContentWidth = Number(MAIN_VIEW_RIGHT_CONTAINER_WIDTH_MEDIUM.replace('px', ''));
+    // 3 circles with 16px and 2 lines
+    const lineWidth = Math.ceil(((ticketContentRef.current?.clientWidth || defaultTicketContentWidth) - 3 * 16) / 2);
 
     return (
         <>

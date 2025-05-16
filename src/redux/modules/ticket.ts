@@ -8,7 +8,6 @@ import { omit, orderBy } from 'lodash';
 import { isFuturesMarket, isPlayerPropsMarket } from 'overtime-utils';
 import { localStore } from 'thales-utils';
 import { ParlayPayment, SerializableSportMarket, TicketPosition, TicketRequestsUpdatePayload } from 'types/markets';
-import { SupportedNetwork } from 'types/network';
 import { RootState, TicketSliceState } from 'types/redux';
 import { TicketError } from 'types/tickets';
 import {
@@ -219,20 +218,12 @@ const ticketSlice = createSlice({
                     .map((request) => request.requestId);
                 state.ticketRequestsById = omit(state.ticketRequestsById, deleteRequestIds);
             }
-            localStore.set(
-                `${LOCAL_STORAGE_KEYS.TICKET_REQUESTS}_${action.payload.networkId}_${action.payload.walletAddress}`,
-                state.ticketRequestsById
-            );
         },
-        removeTicketRequestById: (
-            state,
-            action: PayloadAction<{ requestId: string; networkId: SupportedNetwork; walletAddress: string }>
-        ) => {
-            delete state.ticketRequestsById[action.payload.requestId];
-            localStore.set(
-                `${LOCAL_STORAGE_KEYS.TICKET_REQUESTS}_${action.payload.networkId}_${action.payload.walletAddress}`,
-                state.ticketRequestsById
-            );
+        removeTicketRequestById: (state, action: PayloadAction<string>) => {
+            delete state.ticketRequestsById[action.payload];
+        },
+        removeTicketRequests: (state) => {
+            state.ticketRequestsById = {};
         },
         setLiveBetSlippage: (state, action: PayloadAction<number>) => {
             state.liveBetSlippage = action.payload;
@@ -290,6 +281,7 @@ export const {
     removeAll,
     updateTicketRequests,
     removeTicketRequestById,
+    removeTicketRequests,
     setPaymentSelectedCollateralIndex,
     setPaymentAmountToBuy,
     setMaxTicketSize,

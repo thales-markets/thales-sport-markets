@@ -14,7 +14,6 @@ export const LOCAL_STORAGE_KEYS = {
     STOP_PULSING: 'stopPulsing',
     FAVOURITE_LEAGUES: 'favouriteLeaguesV2',
     PARLAY: 'parlay',
-    TICKET_REQUESTS: 'ticketRequests',
     COMBINED_POSITIONS: 'combinedPositions',
     COLLATERAL_INDEX: 'collateralIndex',
     KEEP_SELECTION: 'keepSelection',
