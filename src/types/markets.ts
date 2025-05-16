@@ -195,7 +195,7 @@ export type Ticket = {
     systemBetData?: SystemBetData;
 };
 
-export type LiveTradingRequest = {
+export type LiveTradingRequestRaw = {
     user: string;
     requestId: string;
     ticketId: string;
@@ -217,10 +217,7 @@ export type LiveTradingRequest = {
     errorReason: string;
 };
 
-export type LiveTradingRequestsData = {
-    liveRequests: LiveTradingRequest[];
-    gamesInfo: any;
-};
+export type LiveTradingRequest = LiveTradingRequestRaw & { ticket: TicketMarket };
 
 export type TicketRequest = {
     initialRequestId: string;

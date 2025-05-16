@@ -31,7 +31,6 @@ import {
     getMatchLabel,
     getPositionTextV2,
     getTitleText,
-    liveTradingRequestAsTicketMarket,
     serializableTicketMarketAsTicketMarket,
 } from 'utils/marketsV2';
 import { refetchUserLiveTradingData } from 'utils/queryConnector';
@@ -99,20 +98,12 @@ const ParlayRelatedMarkets: React.FC = () => {
         [userTicketsQuery.isSuccess, userTicketsQuery.data, ticket]
     );
 
-    const gamesInfo = useMemo(
-        () =>
-            liveTradingProcessorDataQuery.isSuccess && liveTradingProcessorDataQuery.data
-                ? liveTradingProcessorDataQuery.data.gamesInfo
-                : {},
-        [liveTradingProcessorDataQuery.isSuccess, liveTradingProcessorDataQuery.data]
-    );
-
     const prevLiveTradingRequests = useRef<LiveTradingRequest[]>([]);
     // All live requests from contract
     const liveTradingRequests: LiveTradingRequest[] = useMemo(
         () =>
             liveTradingProcessorDataQuery.isSuccess && liveTradingProcessorDataQuery.data
-                ? liveTradingProcessorDataQuery.data.liveRequests.filter(
+                ? liveTradingProcessorDataQuery.data.filter(
                       (request) =>
                           differenceInDays(Date.now(), Number(request.timestamp)) < LATEST_LIVE_REQUESTS_MATURITY_DAYS
                   )
@@ -239,7 +230,7 @@ const ParlayRelatedMarkets: React.FC = () => {
                         (market as Ticket)?.id;
                     return (
                         <RelatedMarket key={key}>
-                            <ExpandableRow data={market} gamesInfo={gamesInfo} />
+                            <ExpandableRow data={market} />
                         </RelatedMarket>
                     );
                 })}
@@ -314,10 +305,7 @@ const ParlayRelatedMarkets: React.FC = () => {
 
 const ANIMATION_DURATION_SEC = 1;
 
-const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarketRequestData; gamesInfo: any }> = ({
-    data,
-    gamesInfo,
-}) => {
+const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarketRequestData }> = ({ data }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
     const isMobile = useSelector(getIsMobile);
@@ -353,7 +341,7 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
         timestamp = ticket.timestamp;
     } else if (isLiveTradingRequest) {
         const requestedMarket = data as LiveTradingRequest;
-        market = liveTradingRequestAsTicketMarket(requestedMarket, gamesInfo);
+        market = requestedMarket.ticket;
         isLive = true;
         position = requestedMarket.position;
         status = requestedMarket.status;

@@ -36,6 +36,7 @@ import {
 } from 'overtime-utils';
 import {
     LiveTradingRequest,
+    LiveTradingRequestRaw,
     SerializableSportMarket,
     SerializableTicketMarket,
     SportMarket,
@@ -566,7 +567,10 @@ export const sportMarketAsTicketPosition = (market: SportMarket, position: numbe
         playerProps: market.playerProps,
     } as TicketPosition);
 
-export const liveTradingRequestAsTicketMarket = (request: LiveTradingRequest, gamesInfo: any) => {
+export const addTicketMarketToLiveTradingRequest = (
+    request: LiveTradingRequestRaw,
+    gameInfo: any
+): LiveTradingRequest => {
     const leagueId = `${request.leagueId}`.startsWith('152')
         ? League.TENNIS_WTA
         : `${request.leagueId}`.startsWith('153')
@@ -579,8 +583,6 @@ export const liveTradingRequestAsTicketMarket = (request: LiveTradingRequest, ga
     const isPlayerProps = isPlayerPropsMarket(request.typeId);
     const type = MarketTypeMap[request.typeId];
 
-    const gameInfo = gamesInfo[request.gameId];
-
     const homeTeam = !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => team.isHome);
     const homeTeamName = homeTeam?.name ?? 'Home Team';
     const homeScoreByPeriod = homeTeam ? homeTeam.scoreByPeriod : [];
@@ -590,41 +592,44 @@ export const liveTradingRequestAsTicketMarket = (request: LiveTradingRequest, ga
     const awayScoreByPeriod = awayTeam ? awayTeam.scoreByPeriod : [];
 
     return {
-        gameId: request.gameId,
-        sport: getLeagueSport(leagueId),
-        leagueId: leagueId,
-        subLeagueId: request.leagueId,
-        leagueName: '',
-        typeId: request.typeId,
-        type: type ? type.key : '',
-        maturity: 0,
-        maturityDate: new Date(),
-        homeTeam: homeTeamName,
-        awayTeam: awayTeamName,
-        homeScoreByPeriod,
-        awayScoreByPeriod,
-        status: 0,
-        isOpen: true,
-        isResolved: false,
-        isCancelled: false,
-        isPaused: false,
-        isOneSideMarket: isOneSideMarket(leagueId, request.typeId),
-        line: request.line,
-        isPlayerPropsMarket: isPlayerProps,
-        isOneSidePlayerPropsMarket: isOneSidePlayerPropsMarket(request.typeId),
-        isYesNoPlayerPropsMarket: isYesNoPlayerPropsMarket(request.typeId),
-        playerProps: {
-            playerId: 0,
-            playerName: '',
-        },
-        combinedPositions: [],
-        odds: [],
-        proof: [],
-        childMarkets: [],
-        winningPositions: [],
-        position: request.position,
-        odd: request.expectedQuote,
-    } as TicketMarket;
+        ...request,
+        ticket: {
+            gameId: request.gameId,
+            sport: getLeagueSport(leagueId),
+            leagueId: leagueId,
+            subLeagueId: request.leagueId,
+            leagueName: '',
+            typeId: request.typeId,
+            type: type ? type.key : '',
+            maturity: 0,
+            maturityDate: new Date(),
+            homeTeam: homeTeamName,
+            awayTeam: awayTeamName,
+            homeScoreByPeriod,
+            awayScoreByPeriod,
+            status: 0,
+            isOpen: true,
+            isResolved: false,
+            isCancelled: false,
+            isPaused: false,
+            isOneSideMarket: isOneSideMarket(leagueId, request.typeId),
+            line: request.line,
+            isPlayerPropsMarket: isPlayerProps,
+            isOneSidePlayerPropsMarket: isOneSidePlayerPropsMarket(request.typeId),
+            isYesNoPlayerPropsMarket: isYesNoPlayerPropsMarket(request.typeId),
+            playerProps: {
+                playerId: 0,
+                playerName: '',
+            },
+            combinedPositions: [],
+            odds: [],
+            proof: [],
+            childMarkets: [],
+            winningPositions: [],
+            position: request.position,
+            odd: request.expectedQuote,
+        } as TicketMarket,
+    };
 };
 
 export const sportMarketAsSerializable = (market: SportMarket): SerializableSportMarket => {
