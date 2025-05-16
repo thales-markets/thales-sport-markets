@@ -320,7 +320,7 @@ const ParlayRelatedMarkets: React.FC = () => {
     );
 };
 
-const ANIMATION_DELAY_SEC = 1;
+const ANIMATION_DURATION_SEC = 1;
 
 const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarketRequestData; gamesInfo: any }> = ({
     data,
@@ -396,6 +396,7 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
     const [stateStatus, setStateStatus] = useState(status);
     const [stateFinalStatus, setStateFinalStatus] = useState(finalStatus);
     const [ticketCreationStatus, setTicketCreationStatus] = useState(creationStatus);
+    const [successStatusWithDelay, setSuccessStatusWithDelay] = useState(status === LiveTradingTicketStatus.CREATED);
     const [isExpanded, setIsExpanded] = useState(
         // collapsed if live requests older than 1 min
         !isTicketType && isLive && differenceInMinutes(Date.now(), timestamp) < 1
@@ -406,7 +407,7 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
     // update state status incrementaly for animation purpose
     useEffect(() => {
         const clearTimeouts = async (ids: NodeJS.Timeout[]) => {
-            const maxTimersDelay = secondsToMilliseconds(ANIMATION_DELAY_SEC * 2);
+            const maxTimersDelay = secondsToMilliseconds(ANIMATION_DURATION_SEC * 2);
             await delay(maxTimersDelay);
             ids.forEach((id) => clearTimeout(id));
         };
@@ -418,11 +419,12 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
             const stateStatusTimeoutId = setTimeout(() => {
                 setStateStatus(LiveTradingTicketStatus.CREATED);
                 setStateFinalStatus(LiveTradingFinalStatus.SUCCESS);
-            }, secondsToMilliseconds(ANIMATION_DELAY_SEC));
+            }, secondsToMilliseconds(ANIMATION_DURATION_SEC));
 
             const statusTextTimeoutId = setTimeout(() => {
                 setTicketCreationStatus(t('markets.parlay-related-markets.creation-status.success'));
-            }, secondsToMilliseconds(ANIMATION_DELAY_SEC * 2));
+                setSuccessStatusWithDelay(true);
+            }, secondsToMilliseconds(ANIMATION_DURATION_SEC * 2));
 
             return () => {
                 clearTimeouts([stateStatusTimeoutId, statusTextTimeoutId]);
@@ -524,6 +526,7 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
                                     <Circle
                                         isActive={stateStatus === LiveTradingTicketStatus.PENDING}
                                         isAfterActive={false}
+                                        isSuccess={successStatusWithDelay}
                                         isFinished={stateFinalStatus !== LiveTradingFinalStatus.IN_PROGRESS}
                                     />
                                     <ConnectionLine
@@ -536,10 +539,12 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
                                             stateStatus > LiveTradingTicketStatus.PENDING &&
                                             stateFinalStatus !== LiveTradingFinalStatus.IN_PROGRESS
                                         }
+                                        isSuccess={successStatusWithDelay}
                                     />
                                     <Circle
                                         isActive={stateStatus === LiveTradingTicketStatus.APPROVED}
                                         isAfterActive={stateStatus < LiveTradingTicketStatus.APPROVED}
+                                        isSuccess={successStatusWithDelay}
                                         isFinished={stateFinalStatus !== LiveTradingFinalStatus.IN_PROGRESS}
                                     />
                                     <ConnectionLine
@@ -549,11 +554,13 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
                                             stateStatus > LiveTradingTicketStatus.APPROVED &&
                                             stateFinalStatus !== LiveTradingFinalStatus.IN_PROGRESS
                                         }
+                                        isSuccess={successStatusWithDelay}
                                     />
                                     <Circle
                                         isActive={stateStatus === LiveTradingTicketStatus.CREATED}
                                         isAfterActive={stateStatus < LiveTradingTicketStatus.CREATED}
                                         isFinished={stateFinalStatus !== LiveTradingFinalStatus.IN_PROGRESS}
+                                        isSuccess={successStatusWithDelay}
                                         isFailed={stateFinalStatus === LiveTradingFinalStatus.FAILED}
                                     />
                                 </ProgressRow>
@@ -701,7 +708,7 @@ const TicketStatusInfo = styled(Info)<{ status: LiveTradingFinalStatus }>`
             : props.theme.status.pending.background.primary};
     ${(props) =>
         props.status === LiveTradingFinalStatus.SUCCESS &&
-        `transition: background-color 0s linear ${ANIMATION_DELAY_SEC}s;`}
+        `transition: background-color 0s linear ${ANIMATION_DURATION_SEC}s;`}
 `;
 
 const IconWrapper = styled(FlexDivCentered)`
@@ -743,7 +750,13 @@ const ProgressRow = styled(Row)`
     position: relative;
 `;
 
-const Circle = styled.div<{ isActive: boolean; isAfterActive: boolean; isFinished: boolean; isFailed?: boolean }>`
+const Circle = styled.div<{
+    isActive: boolean;
+    isAfterActive: boolean;
+    isFinished: boolean;
+    isSuccess: boolean;
+    isFailed?: boolean;
+}>`
     position: relative;
     display: inline-block;
     width: 16px;
@@ -754,14 +767,16 @@ const Circle = styled.div<{ isActive: boolean; isAfterActive: boolean; isFinishe
             ? props.theme.status.failed.textColor.primary
             : props.isAfterActive
             ? props.theme.background.tertiary
+            : props.isSuccess
+            ? props.theme.status.success.textColor.primary
             : props.theme.background.quaternary};
     z-index: 2;
 
-    transition: background-color 0s ease-in ${ANIMATION_DELAY_SEC}s;
+    transition: background-color 0s ease-in ${(props) => (props.isSuccess ? 0 : ANIMATION_DURATION_SEC)}s;
     ${(props) =>
         props.isActive &&
         !props.isFinished &&
-        `animation: pulsing ${ANIMATION_DELAY_SEC}s linear ${ANIMATION_DELAY_SEC}s infinite;`}
+        `animation: pulsing ${ANIMATION_DURATION_SEC}s linear ${ANIMATION_DURATION_SEC}s infinite;`}
 
     @keyframes pulsing {
         0% {
@@ -779,7 +794,7 @@ const Circle = styled.div<{ isActive: boolean; isAfterActive: boolean; isFinishe
     }
 `;
 
-const ConnectionLine = styled.div<{ index: number; isProgressing: boolean; isCompleted: boolean }>`
+const ConnectionLine = styled.div<{ index: number; isProgressing: boolean; isCompleted: boolean; isSuccess: boolean }>`
     position: absolute;
     width: 136px;
     left: ${(props) => `calc(16px * ${props.index + 1} + 136px * ${props.index})`};
@@ -787,9 +802,11 @@ const ConnectionLine = styled.div<{ index: number; isProgressing: boolean; isCom
     z-index: 1;
 
     background: ${(props) =>
-        `linear-gradient(to right, ${props.theme.background.quaternary} 50%, ${props.theme.background.tertiary} 50%);`};
+        `linear-gradient(to right, ${
+            props.isSuccess ? props.theme.status.success.textColor.primary : props.theme.background.quaternary
+        } 50%, ${props.theme.background.tertiary} 50%);`};
     background-size: 200% 100%;
-    transition: all ${ANIMATION_DELAY_SEC}s ease-out;
+    transition: all ${ANIMATION_DURATION_SEC}s ease-out;
     background-position: ${(props) => (props.isProgressing || props.isCompleted ? 'left bottom' : 'right bottom')};
 
     @media (max-width: ${ScreenSizeBreakpoint.LARGE}px) {
@@ -858,7 +875,7 @@ const StatusText = styled(Text)<{ status: LiveTradingFinalStatus }>`
             ? props.theme.status.failed.textColor.primary
             : props.theme.status.pending.textColor.primary};
     ${(props) =>
-        props.status === LiveTradingFinalStatus.SUCCESS && `transition: color 0s linear ${ANIMATION_DELAY_SEC}s;`}
+        props.status === LiveTradingFinalStatus.SUCCESS && `transition: color 0s linear ${ANIMATION_DURATION_SEC}s;`}
 `;
 
 const PositionText = styled(Text)`
