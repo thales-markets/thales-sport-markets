@@ -459,10 +459,13 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
         setShowShareTicketModal(true);
     };
 
+    const ticketContentRef = useRef<HTMLDivElement>(null);
+    const lineWidth = Math.ceil(((ticketContentRef.current?.clientWidth || 136) - 3 * 16) / 2); // 3 circles with 16px and 2 lines
+
     return (
         <>
             <TicketColumn onClick={() => setIsExpanded(!isExpanded)}>
-                <FlexDivColumn>
+                <FlexDivColumn ref={ticketContentRef}>
                     <Row>
                         <TimeInfo>
                             <TimeText>{formatDateWithTime(timestamp)}</TimeText>
@@ -526,11 +529,12 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
                                     <Circle
                                         isActive={stateStatus === LiveTradingTicketStatus.PENDING}
                                         isAfterActive={false}
-                                        isSuccess={successStatusWithDelay}
                                         isFinished={stateFinalStatus !== LiveTradingFinalStatus.IN_PROGRESS}
+                                        isSuccess={successStatusWithDelay}
                                     />
                                     <ConnectionLine
                                         index={0}
+                                        width={lineWidth}
                                         isProgressing={
                                             stateStatus > LiveTradingTicketStatus.PENDING &&
                                             stateFinalStatus === LiveTradingFinalStatus.IN_PROGRESS
@@ -544,11 +548,12 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
                                     <Circle
                                         isActive={stateStatus === LiveTradingTicketStatus.APPROVED}
                                         isAfterActive={stateStatus < LiveTradingTicketStatus.APPROVED}
-                                        isSuccess={successStatusWithDelay}
                                         isFinished={stateFinalStatus !== LiveTradingFinalStatus.IN_PROGRESS}
+                                        isSuccess={successStatusWithDelay}
                                     />
                                     <ConnectionLine
                                         index={1}
+                                        width={lineWidth}
                                         isProgressing={stateStatus === LiveTradingTicketStatus.CREATED}
                                         isCompleted={
                                             stateStatus > LiveTradingTicketStatus.APPROVED &&
@@ -794,10 +799,16 @@ const Circle = styled.div<{
     }
 `;
 
-const ConnectionLine = styled.div<{ index: number; isProgressing: boolean; isCompleted: boolean; isSuccess: boolean }>`
+const ConnectionLine = styled.div<{
+    index: number;
+    width: number;
+    isProgressing: boolean;
+    isCompleted: boolean;
+    isSuccess: boolean;
+}>`
     position: absolute;
-    width: 136px;
-    left: ${(props) => `calc(16px * ${props.index + 1} + 136px * ${props.index})`};
+    width: ${(props) => props.width}px;
+    left: ${(props) => `calc(16px * ${props.index + 1} + ${props.width}px * ${props.index})`};
     height: 2px;
     z-index: 1;
 
@@ -808,11 +819,6 @@ const ConnectionLine = styled.div<{ index: number; isProgressing: boolean; isCom
     background-size: 200% 100%;
     transition: all ${ANIMATION_DURATION_SEC}s ease-out;
     background-position: ${(props) => (props.isProgressing || props.isCompleted ? 'left bottom' : 'right bottom')};
-
-    @media (max-width: ${ScreenSizeBreakpoint.LARGE}px) {
-        width: 116px;
-        left: ${(props) => `calc(16px * ${props.index + 1} + 116px * ${props.index})`};
-    }
 `;
 
 const StatusesRow = styled(Row)`
