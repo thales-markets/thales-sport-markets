@@ -17,6 +17,7 @@ import PnL from 'pages/PnL';
 import Profile from 'pages/Profile';
 import Promotions from 'pages/Promotions/Home';
 import Promotion from 'pages/Promotions/Promotion';
+import Referral from 'pages/Referral';
 import ResolveBlocker from 'pages/ResolveBlocker';
 import SEO from 'pages/SEO/Home';
 import SeoArticle from 'pages/SEO/SeoArticle';
@@ -190,6 +191,13 @@ const App = () => {
                         <Suspense fallback={<Loader />}>
                             <DappLayout>
                                 <Overdrop />
+                            </DappLayout>
+                        </Suspense>
+                    </Route>
+                    <Route exact path={ROUTES.Referral}>
+                        <Suspense fallback={<Loader />}>
+                            <DappLayout>
+                                <Referral />
                             </DappLayout>
                         </Suspense>
                     </Route>

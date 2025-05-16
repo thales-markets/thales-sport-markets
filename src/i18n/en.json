@@ -168,7 +168,25 @@
         "yes": "YES",
         "no": "NO",
         "tennis-tooltip": "In case of a walkover, match will be treated as canceled. In case of retirement / disqualification during the match, it will be treated as a win for the player advancing to the next round",
-        "new": "new"
+        "new": "new",
+        "referral": {
+            "header-label": "Refer & earn",
+            "link-copied": "Referral link copied!",
+            "button": {
+                "label": "Refer and earn",
+                "disbled-tooltip": "Connect wallet to generate a referral link.",
+                "enabled-tooltip": "Invite people to trade on overtime to earn fees from each trade they make."
+            },
+            "id-exists": "Referral ID already exists",
+            "id-create-success": "Successfully set referral ID",
+            "modal": {
+                "title": "Referral ID",
+                "description": "Choose your Referral ID",
+                "submit-button": "Submit",
+                "copy-button": "Copy Referral link"
+            },
+            "your-referral-id": "Your Referral ID"
+        }
     },
     "footer": {
         "all-rights-reserved": "© {{year}} Overtime Sportsbook ALL RIGHTS RESERVED.",
@@ -1431,6 +1449,34 @@
         "tab": {
             "blocked-games": "Blocked games",
             "unblocked-games": "Unblocked games"
+        }
+    },
+    "referral": {
+        "generate-link": "Generate link",
+        "copy-link": "Copy link",
+        "trades": "Trades",
+        "total-volume": "Total volume",
+        "total-earned": "Total earned",
+        "total-trading-fees": "Total trading fees",
+        "affiliate-leaderboard-table": {
+            "address": "Referral ID",
+            "number-of-trades": "Trades",
+            "total-volume": "Total volume",
+            "first-transaction": "First transaction",
+            "total-earned": "Total earned",
+            "amount": "Amount",
+            "volume": "Volume",
+            "type": "Type",
+            "timestamp": "Date/Time"
+        },
+        "no-result": "There are no results for this table",
+        "earned": "Earned",
+        "header": "Create referral links",
+        "paragraph": "<bold>Overtime Referrals Program is an on-chain incentivized user acquisition and onboarding tool.</bold>The program allows anyone to <bold>generate a Referral Link</bold> and share it with users they are trying to onboard.<br /><br /> When sharing your personal Referral Link, you earn <bold>0.5% of all {{ collateralKey }} volume your referred users produce!</bold> There are no manual claims needed, the {{ collateralKey }} is auto-accruing in your wallet in form of simple {{ collateralKey }} transfers.",
+        "nav-items": {
+            "all-transactions": "All transactions",
+            "see-result-by-trader": "See result by trader",
+            "affiliate-leaderboard": "Affiliate Leaderboard"
         }
     }
 }

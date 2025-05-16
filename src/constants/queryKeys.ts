@@ -192,6 +192,15 @@ const QUERY_KEYS = {
         walletAddress,
         role,
     ],
+    ReferralTransaction: (walletAddress: string, networkId: Network) => [
+        'referralTransaction',
+        walletAddress,
+        networkId,
+    ],
+    ReferrerID: (walletAddress: string) => ['referrerId', walletAddress],
+    Referrers: (networkId: Network) => ['referrers', networkId],
+    ReferredTraders: (walletAddress: string, networkId: Network) => ['referredTraders', walletAddress, networkId],
+    ReferralOverview: (walletAddress: string, networkId: Network) => ['referralOverview', walletAddress, networkId],
 };
 
 export default QUERY_KEYS;
