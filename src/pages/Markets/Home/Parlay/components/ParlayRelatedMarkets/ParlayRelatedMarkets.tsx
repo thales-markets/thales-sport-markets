@@ -460,7 +460,7 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
     };
 
     const ticketContentRef = useRef<HTMLDivElement>(null);
-    const lineWidth = Math.ceil(((ticketContentRef.current?.clientWidth || 136) - 3 * 16) / 2); // 3 circles with 16px and 2 lines
+    const lineWidth = Math.ceil(((ticketContentRef.current?.clientWidth || 320) - 3 * 16) / 2); // 3 circles with 16px and 2 lines
 
     return (
         <>
