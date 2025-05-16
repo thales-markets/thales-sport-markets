@@ -177,7 +177,7 @@ export const DropdownContainer = styled.div`
 
 export const TimeFiltersDropdown = styled(DropdownContainer)`
     width: 90px;
-    left: 0;
+    right: 0;
 `;
 
 export const DropDown = styled(FlexDivColumn)`

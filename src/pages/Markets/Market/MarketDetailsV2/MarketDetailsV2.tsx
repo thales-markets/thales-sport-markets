@@ -5,7 +5,9 @@ import Toggle from 'components/Toggle';
 import { MarketTypeGroupsBySport } from 'constants/marketTypes';
 import { GameStatusKey } from 'constants/markets';
 import ROUTES from 'constants/routes';
+import { MAIN_VIEW_RIGHT_CONTAINER_WIDTH_LARGE, MAIN_VIEW_RIGHT_CONTAINER_WIDTH_MEDIUM } from 'constants/ui';
 import { GameStatus } from 'enums/markets';
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import { groupBy } from 'lodash';
 import { getLeaguePeriodType, getLeagueSport, isFuturesMarket, League, MarketType, Sport } from 'overtime-utils';
 import { ToggleContainer } from 'pages/LiquidityPool/styled-components';
@@ -371,11 +373,11 @@ const MainContainer = styled(FlexDivColumn)<{ isGameOpen: boolean }>`
 `;
 
 const SidebarContainer = styled(FlexDivColumn)`
-    min-width: 360px;
-    max-width: 360px;
-    @media (max-width: 1299px) {
-        max-width: 320px;
-        min-width: 320px;
+    min-width: ${MAIN_VIEW_RIGHT_CONTAINER_WIDTH_LARGE};
+    max-width: ${MAIN_VIEW_RIGHT_CONTAINER_WIDTH_LARGE};
+    @media (max-width: ${ScreenSizeBreakpoint.LARGE}px) {
+        max-width: ${MAIN_VIEW_RIGHT_CONTAINER_WIDTH_MEDIUM};
+        min-width: ${MAIN_VIEW_RIGHT_CONTAINER_WIDTH_MEDIUM};
     }
     @media (max-width: 950px) {
         display: none;

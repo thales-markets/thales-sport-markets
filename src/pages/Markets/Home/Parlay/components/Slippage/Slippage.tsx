@@ -1,6 +1,7 @@
 import Tooltip from 'components/Tooltip';
 import Checkbox from 'components/fields/Checkbox';
 import NumericInput from 'components/fields/NumericInput';
+import { DEFAULT_SLIPPAGE_PERCENTAGE, SLIPPAGE_MAX_VALUE, SLIPPAGE_MIN_VALUE } from 'constants/markets';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled, { useTheme } from 'styled-components';
@@ -16,21 +17,21 @@ type SlippageProps = {
     tooltip?: string;
 };
 
-const MIN_VALUE = 0;
-const MAX_VALUE = 100;
-
 const isSlippageValid = (value: number, max?: number) => {
-    return value >= MIN_VALUE && value <= (max || MAX_VALUE);
+    return value >= SLIPPAGE_MIN_VALUE && value <= (max || SLIPPAGE_MAX_VALUE);
 };
 
 const Slippage: React.FC<SlippageProps> = ({ fixed, defaultValue, onChangeHandler, maxValue, tooltip }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
 
+    const [acceptAnyOdds, setAcceptAnyOdds] = useState(defaultValue === SLIPPAGE_MAX_VALUE);
     const [slippage, setSlippage] = useState<number | string>(defaultValue || '');
-    const [slippageEnabled, setSlippageEnabled] = useState<boolean>(defaultValue !== 0);
+    const [slippageEnabled, setSlippageEnabled] = useState<boolean>(
+        ![SLIPPAGE_MIN_VALUE, SLIPPAGE_MAX_VALUE].includes(defaultValue)
+    );
 
-    const max = maxValue || MAX_VALUE;
+    const max = maxValue || SLIPPAGE_MAX_VALUE;
 
     useEffect(() => {
         onChangeHandler && onChangeHandler(Number(slippage));
@@ -42,10 +43,10 @@ const Slippage: React.FC<SlippageProps> = ({ fixed, defaultValue, onChangeHandle
             return;
         }
 
-        if (numValue >= 0 && numValue <= max) {
+        if (numValue >= SLIPPAGE_MIN_VALUE && numValue <= max) {
             setSlippage(value);
-        } else if (numValue < MIN_VALUE) {
-            setSlippage(MIN_VALUE);
+        } else if (numValue < SLIPPAGE_MIN_VALUE) {
+            setSlippage(SLIPPAGE_MIN_VALUE);
         } else if (numValue > max) {
             setSlippage(max);
         }
@@ -56,14 +57,28 @@ const Slippage: React.FC<SlippageProps> = ({ fixed, defaultValue, onChangeHandle
             <Text>
                 <Checkbox
                     className="small-checkbox"
+                    value="acceptAnyOdds"
+                    checked={acceptAnyOdds}
+                    onChange={(e: any) => {
+                        setAcceptAnyOdds(!acceptAnyOdds);
+                        setSlippageEnabled(false);
+                        setSlippage(e.target.checked ? SLIPPAGE_MAX_VALUE : SLIPPAGE_MIN_VALUE);
+                    }}
+                />
+                {t('markets.parlay.slippage.any-odds-label')}
+            </Text>
+            <Text>
+                <Checkbox
+                    className="small-checkbox"
                     value="slippage"
                     checked={slippageEnabled}
                     onChange={(e: any) => {
+                        setAcceptAnyOdds(false);
                         setSlippageEnabled(!slippageEnabled);
-                        setSlippage(e.target.checked ? 1 : 0);
+                        setSlippage(e.target.checked ? DEFAULT_SLIPPAGE_PERCENTAGE : SLIPPAGE_MIN_VALUE);
                     }}
                 />
-                {t('markets.parlay.slippage.label')}
+                {t('markets.parlay.slippage.label')}:
                 {tooltip && (
                     <Tooltip
                         customIconStyling={{ marginLeft: '2px', marginTop: '1px' }}
@@ -110,11 +125,12 @@ const Slippage: React.FC<SlippageProps> = ({ fixed, defaultValue, onChangeHandle
 
 const HEIGHT = '30px';
 
-const Container = styled(FlexDivColumnCentered)``;
+const Container = styled(FlexDivColumnCentered)`
+    gap: 10px;
+`;
 
 const Row = styled(FlexDivRowCentered)`
     width: 100%;
-    margin-top: 10px;
 `;
 
 const Value = styled(FlexDivColumnCentered)<{ isSelected: boolean; disabled?: boolean }>`

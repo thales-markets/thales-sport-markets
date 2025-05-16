@@ -66,7 +66,7 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
 
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
-    const isSearchTextWalletAddress = searchText && isAddress(searchText);
+    const isSearchTextWalletAddress = !!searchText && isAddress(searchText);
     const [claimCollateralIndex, setClaimCollateralIndex] = useState(0);
     const [openClaimable, setClaimableState] = useState<boolean>(true);
     const [showDetails, setShowDetails] = useState<boolean>(false);
@@ -291,11 +291,11 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
                                             top={-2}
                                         />
                                     </ClaimAllContainer>
-                                    {userTicketsByStatus.claimable.map((parlayMarket, index) => {
+                                    {userTicketsByStatus.claimable.map((parlayMarket) => {
                                         return (
                                             <TicketDetails
                                                 ticket={parlayMarket}
-                                                key={index}
+                                                key={parlayMarket.id}
                                                 claimCollateralIndex={claimCollateralIndex}
                                                 setClaimCollateralIndex={setClaimCollateralIndex}
                                             />
@@ -345,11 +345,11 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
                         <>
                             {userTicketsByStatus.open.length ? (
                                 <>
-                                    {userTicketsByStatus.open.map((parlayMarket, index) => {
+                                    {userTicketsByStatus.open.map((parlayMarket) => {
                                         return (
                                             <TicketDetails
                                                 ticket={parlayMarket}
-                                                key={index}
+                                                key={parlayMarket.id}
                                                 claimCollateralIndex={claimCollateralIndex}
                                                 setClaimCollateralIndex={setClaimCollateralIndex}
                                                 showDetailsExplicit={showDetails}

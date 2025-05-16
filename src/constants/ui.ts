@@ -107,3 +107,6 @@ export const PROMOTION_SANITIZE_PROPS = {
     ],
     ALLOWED_ATTR: ['href', 'target', 'style', 'src', 'alt'],
 };
+
+export const MAIN_VIEW_RIGHT_CONTAINER_WIDTH_LARGE = '360px';
+export const MAIN_VIEW_RIGHT_CONTAINER_WIDTH_MEDIUM = '320px';

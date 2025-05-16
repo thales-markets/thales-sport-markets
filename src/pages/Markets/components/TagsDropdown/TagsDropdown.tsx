@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { TagInfo, Tags, Tournament } from 'types/markets';
-import Tag from '../Tag/Tag';
+import Tag from '../Tag';
 
 const favouritesTag = {
     id: -1,
