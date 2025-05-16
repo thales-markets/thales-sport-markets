@@ -38,8 +38,12 @@
             "rows-per-page": "Rows per page:"
         },
         "filter": {
-            "date": {
-                "choose": "Choose date"
+            "tooltip": {
+                "standard-view": "Switch to standard view",
+                "column-view": "Switch to three column view",
+                "sorting": "Select games sorting",
+                "date": "Select date range",
+                "odds": "Select odds format"
             }
         },
         "wallet": {
@@ -829,7 +833,9 @@
             "empty-description": "Add position, choose a market and make your selection.",
             "accept-odds-changes": "Accept odds changes",
             "odds-changed-description": "Odds changed. Accept changes in order to buy.",
-            "tx-not-received": "Unable to obtain transaction receipt. The trade might still get executed, check your profile for created tickets.",
+            "tx-not-received": "Unable to obtain transaction receipt. The trade might still get executed, check your created tickets.",
+            "tx-not-fulfilled": "Failed to fulfill the trade.",
+            "tx-request-failed": "Failed to request the trade.",
             "tooltip": {
                 "regular": "Build your bet slip with singles, parlays or live bets.",
                 "system": "Create system bets that cover multiple combinations of selections. Even if some picks lose, you can still win.",
@@ -900,8 +906,10 @@
                 "parlay": "Ticket"
             },
             "slippage": {
-                "slippage": "Slippage",
-                "label": "Accept trade if odds drop by:",
+                "accept": "Accept odds change",
+                "label": "Accept trade if odds drop by",
+                "any-odds-label": "Accept any odds",
+                "any": "Any",
                 "enter-value": "Enter value",
                 "invalid-value": "Invalid value"
             },
@@ -942,11 +950,23 @@
             "latest-odds-checking": "Checking for latest odds"
         },
         "parlay-related-markets": {
-            "title": "Your other singles on this game",
+            "title-live": "Your recent live tickets",
+            "title-other": "Your other singles on this game",
             "empty": "No tickets",
             "total-quote": "Total quote",
             "paid": "Paid",
-            "payout": "Payout"
+            "payout": "Payout",
+            "status": {
+                "pending": "Transaction pending",
+                "approved": "Live trade approved",
+                "error": "Ticket creation failed",
+                "success": "Ticket created"
+            },
+            "creation-status": {
+                "pending": "Pending",
+                "failed": "Failed",
+                "success": "Success"
+            }
         },
         "zero-odds-tooltip": "Odds unavailable at the moment.",
         "low-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",

@@ -19,14 +19,12 @@ const TicketTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
     const { smartAddress } = useBiconomy();
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
-    const isSearchTextWalletAddress = searchText && isAddress(searchText);
+    const isSearchTextWalletAddress = !!searchText && isAddress(searchText);
 
     const userTicketsQuery = useUserTicketsQuery(
         isSearchTextWalletAddress ? searchText : walletAddress,
         { networkId, client },
-        {
-            enabled: isSearchTextWalletAddress || isConnected,
-        }
+        { enabled: isSearchTextWalletAddress || isConnected }
     );
 
     const userTickets: Ticket[] = useMemo(() => {

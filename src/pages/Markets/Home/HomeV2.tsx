@@ -10,6 +10,7 @@ import { MarketTypePlayerPropsGroupsBySport } from 'constants/marketTypes';
 import { SPORTS_BY_TOURNAMENTS } from 'constants/markets';
 import { RESET_STATE } from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import { MAIN_VIEW_RIGHT_CONTAINER_WIDTH_LARGE, MAIN_VIEW_RIGHT_CONTAINER_WIDTH_MEDIUM } from 'constants/ui';
 import { SportFilter, StatusFilter } from 'enums/markets';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import useLocalStorage from 'hooks/useLocalStorage';
@@ -1058,9 +1059,9 @@ const LeftSidebarContainer = styled(SidebarContainer)`
 `;
 
 const RightSidebarContainer = styled(SidebarContainer)`
-    max-width: 360px;
+    max-width: ${MAIN_VIEW_RIGHT_CONTAINER_WIDTH_LARGE};
     @media (max-width: ${ScreenSizeBreakpoint.LARGE}px) {
-        max-width: 320px;
+        max-width: ${MAIN_VIEW_RIGHT_CONTAINER_WIDTH_MEDIUM};
     }
 `;
 

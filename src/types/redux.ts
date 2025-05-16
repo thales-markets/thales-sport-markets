@@ -2,7 +2,7 @@ import { OddsType, SortType, SportFilter, StatusFilter } from 'enums/markets';
 import { MarketTypeGroup } from 'enums/marketTypes';
 import { Theme } from 'enums/ui';
 import { MarketType } from 'overtime-utils';
-import { ParlayPayment, Tags, TicketPosition } from './markets';
+import { ParlayPayment, Tags, TicketPosition, TicketRequestsById } from './markets';
 import { SelectedMarket } from './marketTypes';
 import { OverdropUIState } from './overdrop';
 import { TicketError } from './tickets';
@@ -27,6 +27,7 @@ export type MarketSliceState = {
 
 export type TicketSliceState = {
     ticket: TicketPosition[];
+    ticketRequestsById: TicketRequestsById;
     payment: ParlayPayment;
     maxTicketSize: number;
     liveBetSlippage: number;

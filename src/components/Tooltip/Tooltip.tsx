@@ -105,7 +105,7 @@ const InfoIcon = styled.i<{ iconFontSize?: number; marginLeft?: number; top?: nu
     position: relative;
     margin-left: ${(props) => props.marginLeft || 0}px;
     top: ${(props) => (props.top !== undefined ? props.top : -1)}px;
-    color: ${(props) => props.color || 'white'};
+    color: ${(props) => props.color || props.theme.icon.background.primary};
     text-transform: none;
     &:before {
         font-family: OvertimeIconsV2 !important;

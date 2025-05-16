@@ -67,7 +67,7 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
 
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
-    const isSearchTextWalletAddress = searchText && isAddress(searchText);
+    const isSearchTextWalletAddress = !!searchText && isAddress(searchText);
     const [claimCollateralIndex, setClaimCollateralIndex] = useState(0);
     const [openClaimable, setClaimableState] = useState<boolean>(true);
     const [showDetails, setShowDetails] = useState<boolean>(false);
