@@ -1891,7 +1891,15 @@ const Ticket: React.FC<TicketProps> = ({
             } catch (e) {
                 setIsBuying(false);
                 refetchAfterBuy(walletAddress, networkId);
-                toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+                const isUserRejected = USER_REJECTED_ERRORS.some((rejectedError) =>
+                    ((e as Error).message + ((e as Error).stack || '')).includes(rejectedError)
+                );
+                toast.update(
+                    toastId,
+                    getErrorToastOptions(
+                        isUserRejected ? t('common.errors.tx-canceled') : t('common.errors.unknown-error-try-again')
+                    )
+                );
                 if (isLiveTicket && !liveTicketRequestData.ticketRequest.requestId) {
                     // Remove pending request with delay in case tx was sent (just UI doesn't have info about request ID),
                     // so it will be updated from contract. If user rejected remove it immediately.
@@ -1904,11 +1912,7 @@ const Ticket: React.FC<TicketProps> = ({
                                     walletAddress,
                                 })
                             ),
-                        USER_REJECTED_ERRORS.some((rejectedError) =>
-                            ((e as Error).message + ((e as Error).stack || '')).includes(rejectedError)
-                        )
-                            ? 0
-                            : 3000
+                        isUserRejected ? 0 : 3000
                     );
                 }
                 if (!isErrorExcluded(e as Error)) {
