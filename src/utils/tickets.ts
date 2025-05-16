@@ -28,7 +28,6 @@ import {
     TicketMarketRequestData,
     TicketPosition,
     TicketRequest,
-    TicketRequestsUpdatePayload,
     TradeData,
 } from 'types/markets';
 import { NetworkConfig, SupportedNetwork } from 'types/network';
@@ -607,9 +606,7 @@ export const updateTempLiveRequests = (
     tempLiveRequests: TicketMarketRequestData[],
     newLiveTradingRequests: LiveTradingRequest[],
     numOfUpdates: number,
-    networkId: SupportedNetwork,
-    walletAddress: string,
-    dispatch: Dispatch<PayloadAction<TicketRequestsUpdatePayload>>
+    dispatch: Dispatch<PayloadAction<TicketRequest>>
 ) => {
     let updatedCount = 0;
     return tempLiveRequests.map((tempRequest) => {
@@ -640,7 +637,7 @@ export const updateTempLiveRequests = (
                     totalQuote: receivedDiffLiveRequest.totalQuote,
                     payout: receivedDiffLiveRequest.payout,
                 };
-                dispatch(updateTicketRequests({ ticketRequest, networkId, walletAddress }));
+                dispatch(updateTicketRequests(ticketRequest));
                 ticketMarketRequest = {
                     ...tempRequest,
                     requestId: receivedDiffLiveRequest.requestId,

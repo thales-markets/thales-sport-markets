@@ -189,8 +189,6 @@ const ParlayRelatedMarkets: React.FC = () => {
                     updatedTempLiveTradingRequests,
                     diffLiveRequets,
                     diffCount,
-                    networkId,
-                    walletAddress,
                     dispatch
                 );
             }
@@ -203,16 +201,7 @@ const ParlayRelatedMarkets: React.FC = () => {
 
         const requestsAndTickets = [...updatedTempLiveTradingRequests, ...filteredLiveTradingRequests];
         return orderBy(requestsAndTickets, ['timestamp'], ['desc']).slice(0, LATEST_LIVE_REQUESTS_SIZE);
-    }, [
-        tempLiveTradingRequests,
-        liveTradingRequests,
-        ticketRequestsById,
-        dispatch,
-        networkId,
-        walletAddress,
-        t,
-        maxAllowedCreationDelay,
-    ]);
+    }, [tempLiveTradingRequests, liveTradingRequests, ticketRequestsById, dispatch, t, maxAllowedCreationDelay]);
 
     // clear ticketRequests when changed network ID or wallet address
     useEffect(() => {

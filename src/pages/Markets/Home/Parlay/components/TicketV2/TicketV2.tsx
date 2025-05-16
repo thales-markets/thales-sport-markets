@@ -91,7 +91,7 @@ import {
     getPrecision,
     roundNumberToDecimals,
 } from 'thales-utils';
-import { SportsAmmData, TicketMarket, TicketRequestsUpdatePayload, TradeData } from 'types/markets';
+import { SportsAmmData, TicketMarket, TicketRequest, TradeData } from 'types/markets';
 import { OverdropMultiplier, OverdropUserData } from 'types/overdrop';
 import { RootState } from 'types/redux';
 import { SportsbookData } from 'types/sgp';
@@ -1534,21 +1534,17 @@ const Ticket: React.FC<TicketProps> = ({
                 }
             }
 
-            const liveTicketRequestData: TicketRequestsUpdatePayload = {
-                ticketRequest: {
-                    initialRequestId: `initialRequestId${Date.now()}`,
-                    requestId: '',
-                    status: LiveTradingTicketStatus.PENDING,
-                    finalStatus: LiveTradingFinalStatus.IN_PROGRESS,
-                    errorReason: '',
-                    ticket: ticketMarketAsSerializable(markets[0]),
-                    buyInAmount: Number(buyInAmount),
-                    totalQuote: totalQuote,
-                    payout: payout,
-                    collateral: usedCollateralForBuy,
-                },
-                networkId,
-                walletAddress,
+            const liveTicketRequestData: TicketRequest = {
+                initialRequestId: `initialRequestId${Date.now()}`,
+                requestId: '',
+                status: LiveTradingTicketStatus.PENDING,
+                finalStatus: LiveTradingFinalStatus.IN_PROGRESS,
+                errorReason: '',
+                ticket: ticketMarketAsSerializable(markets[0]),
+                buyInAmount: Number(buyInAmount),
+                totalQuote: totalQuote,
+                payout: payout,
+                collateral: usedCollateralForBuy,
             };
             if (isLiveTicket) {
                 dispatch(updateTicketRequests(liveTicketRequestData));
@@ -1732,7 +1728,7 @@ const Ticket: React.FC<TicketProps> = ({
                             throw new Error('Request ID not found');
                         }
                         if (isLiveTicket) {
-                            liveTicketRequestData.ticketRequest.requestId = requestId;
+                            liveTicketRequestData.requestId = requestId;
                             dispatch(updateTicketRequests(liveTicketRequestData));
                         }
 
@@ -1759,18 +1755,16 @@ const Ticket: React.FC<TicketProps> = ({
                                 setIsBuying(false);
                             } else if (!isFulfilledTx) {
                                 if (isLiveTicket) {
-                                    liveTicketRequestData.ticketRequest.finalStatus = LiveTradingFinalStatus.FAILED;
-                                    liveTicketRequestData.ticketRequest.errorReason = t(
-                                        'common.errors.tx-not-fulfilled'
-                                    );
+                                    liveTicketRequestData.finalStatus = LiveTradingFinalStatus.FAILED;
+                                    liveTicketRequestData.errorReason = t('common.errors.tx-not-fulfilled');
                                     dispatch(updateTicketRequests(liveTicketRequestData));
                                 }
                                 toast.update(toastId, getErrorToastOptions(t('common.errors.tx-not-fulfilled')));
                                 setIsBuying(false);
                             } else {
                                 if (isLiveTicket) {
-                                    liveTicketRequestData.ticketRequest.status = LiveTradingTicketStatus.CREATED;
-                                    liveTicketRequestData.ticketRequest.finalStatus = LiveTradingFinalStatus.SUCCESS;
+                                    liveTicketRequestData.status = LiveTradingTicketStatus.CREATED;
+                                    liveTicketRequestData.finalStatus = LiveTradingFinalStatus.SUCCESS;
                                     dispatch(updateTicketRequests(liveTicketRequestData));
                                 } else {
                                     const modalData = await getShareTicketModalData(
@@ -1864,9 +1858,9 @@ const Ticket: React.FC<TicketProps> = ({
                     setIsBuying(false);
                     refetchAfterBuy(walletAddress, networkId);
                     toast.update(toastId, getErrorToastOptions(t('common.errors.tx-reverted')));
-                    if (isLiveTicket && !liveTicketRequestData.ticketRequest.requestId) {
-                        liveTicketRequestData.ticketRequest.finalStatus = LiveTradingFinalStatus.FAILED;
-                        liveTicketRequestData.ticketRequest.errorReason = t('common.errors.tx-request-failed');
+                    if (isLiveTicket && !liveTicketRequestData.requestId) {
+                        liveTicketRequestData.finalStatus = LiveTradingFinalStatus.FAILED;
+                        liveTicketRequestData.errorReason = t('common.errors.tx-request-failed');
                         dispatch(updateTicketRequests(liveTicketRequestData));
                     }
                     const data = getLogData({
@@ -1900,11 +1894,11 @@ const Ticket: React.FC<TicketProps> = ({
                         isUserRejected ? t('common.errors.tx-canceled') : t('common.errors.unknown-error-try-again')
                     )
                 );
-                if (isLiveTicket && !liveTicketRequestData.ticketRequest.requestId) {
+                if (isLiveTicket && !liveTicketRequestData.requestId) {
                     // Remove pending request with delay in case tx was sent (just UI doesn't have info about request ID),
                     // so it will be updated from contract. If user rejected remove it immediately.
                     setTimeout(
-                        () => dispatch(removeTicketRequestById(liveTicketRequestData.ticketRequest.initialRequestId)),
+                        () => dispatch(removeTicketRequestById(liveTicketRequestData.initialRequestId)),
                         isUserRejected ? 0 : 3000
                     );
                 }
