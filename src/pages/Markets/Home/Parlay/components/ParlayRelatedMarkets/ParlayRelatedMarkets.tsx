@@ -10,7 +10,6 @@ import { ScreenSizeBreakpoint } from 'enums/ui';
 import useInterval from 'hooks/useInterval';
 import { orderBy } from 'lodash';
 import { useLiveTradingProcessorDataQuery } from 'queries/markets/useLiveTradingProcessorDataQuery';
-import useLiveTradingProcessorQuery from 'queries/markets/useLiveTradingProcessorQuery';
 import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -69,19 +68,6 @@ const ParlayRelatedMarkets: React.FC = () => {
         { enabled: isConnected && isLiveFilterSelected }
     );
 
-    const liveTradingProcessorQuery = useLiveTradingProcessorQuery(
-        { networkId, client },
-        { enabled: isConnected && isLiveFilterSelected }
-    );
-
-    const maxAllowedCreationDelay = useMemo(
-        () =>
-            liveTradingProcessorQuery.isSuccess && liveTradingProcessorQuery.data
-                ? secondsToMilliseconds(liveTradingProcessorQuery.data.maxAllowedExecutionDelay + 20)
-                : secondsToMilliseconds(60),
-        [liveTradingProcessorQuery.isSuccess, liveTradingProcessorQuery.data]
-    );
-
     // Created single tickets related to selected game
     const createdSingleTickets: Ticket[] = useMemo(
         () =>
@@ -138,18 +124,6 @@ const ParlayRelatedMarkets: React.FC = () => {
                     liveRequest.requestId === request.requestId
             );
 
-            const updatedRequest = request;
-            const maturityTimestamp = request.timestamp + maxAllowedCreationDelay;
-            // prevent stuck at pending status when ID not found on contract
-            if (
-                !completedLiveRequest &&
-                request.status === LiveTradingTicketStatus.PENDING &&
-                Date.now() > maturityTimestamp
-            ) {
-                updatedRequest.finalStatus = LiveTradingFinalStatus.FAILED;
-                updatedRequest.errorReason = t('common.errors.tx-request-failed');
-            }
-
             return completedLiveRequest
                 ? ({
                       ...request,
@@ -161,7 +135,7 @@ const ParlayRelatedMarkets: React.FC = () => {
                       errorReason: completedLiveRequest.errorReason,
                       timestamp: completedLiveRequest.timestamp,
                   } as TicketMarketRequestData)
-                : updatedRequest;
+                : request;
         });
         // Detect new liveTradingRequests and if there are new ones update those stuck at pending from temp requests
         if (!prevLiveTradingRequests.current.length) {
@@ -192,7 +166,7 @@ const ParlayRelatedMarkets: React.FC = () => {
 
         const requestsAndTickets = [...updatedTempLiveTradingRequests, ...filteredLiveTradingRequests];
         return orderBy(requestsAndTickets, ['timestamp'], ['desc']).slice(0, LATEST_LIVE_REQUESTS_SIZE);
-    }, [tempLiveTradingRequests, liveTradingRequests, ticketRequestsById, dispatch, t, maxAllowedCreationDelay]);
+    }, [tempLiveTradingRequests, liveTradingRequests, ticketRequestsById, dispatch]);
 
     // clear ticketRequests when changed network ID or wallet address
     useEffect(() => {
