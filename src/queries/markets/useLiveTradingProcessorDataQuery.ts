@@ -135,7 +135,7 @@ export const useLiveTradingProcessorDataQuery = (
 
                             const liveTradingRequest: LiveTradingRequest = addTicketMarketToLiveTradingRequest(
                                 liveTradingRequestRaw,
-                                gamesInfo[request.gameId]
+                                gamesInfo[gameId]
                             );
 
                             liveRequests.push(liveTradingRequest);
