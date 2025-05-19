@@ -241,10 +241,11 @@ export const getTicketMarketStatus = (market: TicketMarket) => {
                 : `${market.homeScore} - ${market.awayScore}`
             : '';
     }
-    if (market.maturityDate < new Date()) {
+    const maturityDate = market.apiMaturity || market.maturityDate;
+    if (maturityDate < new Date()) {
         return t('markets.market-card.pending');
     }
-    return formatDateWithTime(Number(market.maturityDate));
+    return formatDateWithTime(Number(maturityDate));
 };
 
 const getTicketQuote = (paid: number, payout: number) => 1 / (payout / paid);
