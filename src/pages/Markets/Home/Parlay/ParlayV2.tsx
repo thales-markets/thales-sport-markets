@@ -1,4 +1,5 @@
 import ParlayEmptyIcon from 'assets/images/parlay-empty.svg?react';
+import ClaimBetFromCode from 'components/ClaimBetFromCode';
 import ClaimFreeBetButton from 'components/ClaimFreeBetButton';
 import RadioButton from 'components/fields/RadioButton';
 import MatchInfoV2 from 'components/MatchInfoV2';
@@ -528,6 +529,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                         <EmptyLabel>{t('markets.parlay.empty-title')}</EmptyLabel>
                         <StyledParlayEmptyIcon />
                         <EmptyDesc>{t('markets.parlay.empty-description')}</EmptyDesc>
+                        <UseOverDiv>{t('markets.parlay.use-over')}</UseOverDiv>
                         {isFreeBetExists && (
                             <SectionWrapper>
                                 <SubHeaderWrapper>
@@ -566,7 +568,8 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                                     })}
                             </SectionWrapper>
                         )}
-                        {isConnected && <ClaimFreeBetButton styles={{ marginBottom: '-30px', marginTop: '20px' }} />}
+                        {isConnected && <ClaimFreeBetButton styles={{ marginTop: '20px' }} />}
+                        <ClaimBetFromCode />
                     </Empty>
                 )}
                 {hasTicketError && <ValidationModal onClose={onCloseValidationModal} />}
@@ -896,6 +899,17 @@ const CurrencyIcon = styled.i`
 const SectionWrapper = styled(FlexDivColumnCentered)`
     width: 100%;
     gap: 8px;
+`;
+
+const UseOverDiv = styled.div`
+    margin-top: 15px;
+    border-radius: 6px;
+    padding: 8px;
+    width: 100%;
+    text-align: center;
+    background: linear-gradient(90deg, #1f274d 0%, #3c498a 100%);
+    font-size: 14px;
+    color: ${(props) => props.theme.textColor.quaternary};
 `;
 
 export default Parlay;

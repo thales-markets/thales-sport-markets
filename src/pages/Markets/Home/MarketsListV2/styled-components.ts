@@ -50,9 +50,9 @@ export const GamesContainer = styled.div<{ hidden?: boolean }>`
     margin-bottom: 10px;
 `;
 
-export const LeagueFlag = styled.img`
-    width: 24px;
-    height: 24px;
+export const LeagueFlag = styled.img<{ size?: number }>`
+    width: ${(props) => (props.size ? props.size + 'px' : '24px')};
+    height: ${(props) => (props.size ? props.size + 'px' : '24px')};
     cursor: pointer;
 `;
 
