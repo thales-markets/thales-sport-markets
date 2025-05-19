@@ -47,8 +47,8 @@ export const getTeamImageSource = (team: string, league: League) => {
         ? `/logos/NBA/nba.webp`
         : league == League.EPL_FUTURES
         ? `/logos/EPL/epl.webp`
-        : league == League.ATP_FUTURES
-        ? `/logos/Countries/ao.webp`
+        : league == League.ATP_FUTURES || league == League.WTA_FUTURES
+        ? `/logos/Countries/roland-garros.webp`
         : league == League.NETHERLANDS_CUP
         ? `/logos/Eredivisie/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.NCAAB ||
@@ -285,7 +285,9 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.THAILAND_LEAGUE_1:
             return `/logos/Countries/thailand.svg`;
         case League.ATP_FUTURES:
-            return `/logos/Countries/atp.webp`;
+            return `/logos/Countries/atp.png`;
+        case League.WTA_FUTURES:
+            return `/logos/Countries/wta.png`;
         case League.FIBA_EUROBASKET_QUALIFIERS:
             return `/logos/Countries/eurobasket.png`;
         case League.FIBA_AMERICUP_QUALIFIERS:
