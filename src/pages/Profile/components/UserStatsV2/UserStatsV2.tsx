@@ -1,4 +1,5 @@
 import { useAuthCore } from '@particle-network/authkit';
+import ClaimBetFromCode from 'components/ClaimBetFromCode';
 import ClaimFreeBetButton from 'components/ClaimFreeBetButton';
 import ToggleWallet from 'components/ToggleWallet';
 import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
@@ -243,6 +244,8 @@ const UserStats: React.FC = () => {
                         })}
                 </SectionWrapper>
             )}
+            <SubHeaderWrapper />
+            <ClaimBetFromCode />
             <ClaimFreeBetButton pulsate />
         </Wrapper>
     );
