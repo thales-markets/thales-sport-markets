@@ -7,8 +7,6 @@ import {
     getSportFilter,
     getTagFilter,
     getTournamentFilter,
-    setMarketTypeFilter,
-    setMarketTypeGroupFilter,
     setSportFilter,
     setTournamentFilter,
 } from 'redux/modules/market';
@@ -28,6 +26,7 @@ type TagProps = {
     liveMarketsCountPerTag: any;
     liveMarketsCountPerSport: any;
     playerPropsMarketsCountPerTag: any;
+    playerPropsCountPerTournament: any;
     showLive: boolean;
     sport: SportFilter;
     marketsCountPerTournament: any;
@@ -46,6 +45,7 @@ const Tag: React.FC<TagProps> = ({
     marketsCountPerTournament,
     tag,
     tournaments,
+    playerPropsCountPerTournament,
 }) => {
     const dispatch = useDispatch();
     const favouriteLeagues = useSelector(getFavouriteLeagues);
@@ -86,7 +86,7 @@ const Tag: React.FC<TagProps> = ({
                                     setTagParam([tag].map((tagInfo) => tagInfo.label).toString());
                                     setIsOpen(true);
                                 } else {
-                                    if (isPlayerPropsTag || hasSelectedTournament) {
+                                    if (hasSelectedTournament) {
                                         return;
                                     }
                                     const newTagFilters = tagFilter.filter((tagInfo) => tagInfo.id != tag.id);
@@ -98,27 +98,17 @@ const Tag: React.FC<TagProps> = ({
 
                                 scrollMainToTop();
                             } else {
-                                if (isPlayerPropsTag) {
-                                    if (sportFilter !== sport) {
-                                        dispatch(setSportFilter(sport));
-                                    }
-                                    dispatch(setMarketTypeFilter(undefined));
-                                    dispatch(setMarketTypeGroupFilter(undefined));
+                                if (sportFilter !== sport) {
+                                    dispatch(setSportFilter(sport));
+                                    setSportParam(sport);
                                     setTagFilter([tag]);
-                                    setTagParam([tag.label].toString());
+                                    setTagParam([tag].map((tagInfo) => tagInfo.label).toString());
+                                    setIsOpen(true);
                                 } else {
-                                    if (sportFilter !== sport) {
-                                        dispatch(setSportFilter(sport));
-                                        setSportParam(sport);
-                                        setTagFilter([tag]);
-                                        setTagParam([tag].map((tagInfo) => tagInfo.label).toString());
-                                        setIsOpen(true);
-                                    } else {
-                                        dispatch(setSportFilter(sport));
-                                        setTagFilter([...tagFilter, tag]);
-                                        setTagParam([...tagFilter, tag].map((tagInfo) => tagInfo.label).toString());
-                                        setIsOpen(true);
-                                    }
+                                    dispatch(setSportFilter(sport));
+                                    setTagFilter([...tagFilter, tag]);
+                                    setTagParam([...tagFilter, tag].map((tagInfo) => tagInfo.label).toString());
+                                    setIsOpen(true);
                                 }
                                 scrollMainToTop();
                             }
@@ -224,7 +214,9 @@ const Tag: React.FC<TagProps> = ({
                                 </TournamentLabelContainer>
                             </LeftContainer>
                             <TournamentCount isMobile={isMobile}>
-                                {marketsCountPerTournament[`${tag.id}-${tournament.name}`]}
+                                {isPlayerPropsTag
+                                    ? playerPropsCountPerTournament[`${tag.id}-${tournament.name}`]
+                                    : marketsCountPerTournament[`${tag.id}-${tournament.name}`]}
                             </TournamentCount>
                         </TagContainer>
                     );

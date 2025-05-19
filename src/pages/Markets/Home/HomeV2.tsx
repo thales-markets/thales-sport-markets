@@ -16,15 +16,7 @@ import { ScreenSizeBreakpoint } from 'enums/ui';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
 import { groupBy, isEqual, orderBy, uniqWith } from 'lodash';
-import {
-    BOXING_LEAGUES,
-    League,
-    LeagueMap,
-    MarketType,
-    Sport,
-    getSportLeagueIds,
-    isBoxingLeague,
-} from 'overtime-utils';
+import { BOXING_LEAGUES, LeagueMap, MarketType, Sport, getSportLeagueIds, isBoxingLeague } from 'overtime-utils';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
@@ -60,7 +52,6 @@ import { addHoursToCurrentDate } from 'thales-utils';
 import { MarketsCache, SportMarket, SportMarkets, TagInfo, Tags, Tournament } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { getCaseAccentInsensitiveString } from 'utils/formatters/string';
-import { getDefaultPlayerPropsLeague } from 'utils/marketsV2';
 import { history } from 'utils/routes';
 import { getScrollMainContainerToTop } from 'utils/scroll';
 import useQueryParam from 'utils/useQueryParams';
@@ -109,9 +100,11 @@ const Home: React.FC = () => {
 
     const [showBurger, setShowBurger] = useState<boolean>(false);
     const [playerPropsCountPerTag, setPlayerPropsCountPerTag] = useState<Record<string, number>>({});
+    const [playerPropsCountPerTournament, setPlayerPropsCountPerTournament] = useState<Record<string, number>>({});
     const [showActive, setShowActive] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_ACTIVE, true);
     const [showTicketMobileModal, setShowTicketMobileModal] = useState<boolean>(false);
     const [availableMarketTypes, setAvailableMarketTypes] = useState<MarketType[]>([]);
+    const [unfilteredPlayerPropsMarkets, setUnfilteredPlayerPropsMarkets] = useState<SportMarket[]>([]);
 
     const tagsList: Tags = useMemo(
         () =>
@@ -183,11 +176,7 @@ const Home: React.FC = () => {
                 const filteredTags = availableTags.filter((tag) => tagParamsSplitted.includes(tag.label));
                 filteredTags.length > 0 ? dispatch(setTagFilter(filteredTags)) : dispatch(setTagFilter([]));
             } else {
-                if (sportFilter == SportFilter.PlayerProps) {
-                    setTagParam(LeagueMap[League.NBA].label);
-                } else {
-                    setTagParam(tagFilter.map((tag) => tag.label).toString());
-                }
+                setTagParam(tagFilter.map((tag) => tag.label).toString());
             }
 
             if (tournamentParam != '') {
@@ -223,12 +212,6 @@ const Home: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         []
     );
-
-    useEffect(() => {
-        if (sportFilter === SportFilter.PlayerProps) {
-            setTagParam(LeagueMap[getDefaultPlayerPropsLeague(playerPropsCountPerTag)].label);
-        }
-    }, [playerPropsCountPerTag, sportFilter, setTagParam]);
 
     const sportMarketsQuery = useSportsMarketsV2Query(statusFilter, false, { networkId }, undefined);
 
@@ -362,6 +345,7 @@ const Home: React.FC = () => {
             );
 
             marketsToFilter = Object.keys(playerMarketMap).map((key) => playerMarketMap[key]);
+            setUnfilteredPlayerPropsMarkets(marketsToFilter);
         } else {
             marketsToFilter =
                 sportFilter === SportFilter.Live
@@ -515,6 +499,7 @@ const Home: React.FC = () => {
 
         const openMarketsCountPerTag: any = {};
         const ppMarketsCountPerTag: any = {};
+        const ppMarketsCountPerTournament: any = {};
         Object.keys(groupedMarkets).forEach((key: string) => {
             const playerMarketMap = groupedMarkets[key].reduce(
                 (prev: Record<string, SportMarket>, curr: SportMarket) => {
@@ -549,8 +534,20 @@ const Home: React.FC = () => {
             } else {
                 openMarketsCountPerTag[key] = groupedMarkets[key].length;
                 ppMarketsCountPerTag[key] = Object.keys(playerMarketMap).map((key) => playerMarketMap[key]).length;
+                Object.keys(playerMarketMap)
+                    .map((key) => playerMarketMap[key])
+                    .forEach((market) => {
+                        if (market.tournamentName && SPORTS_BY_TOURNAMENTS.includes(market.sport)) {
+                            if (ppMarketsCountPerTournament[`${market.leagueId}-${market.tournamentName}`]) {
+                                ppMarketsCountPerTournament[`${market.leagueId}-${market.tournamentName}`] += 1;
+                            } else {
+                                ppMarketsCountPerTournament[`${market.leagueId}-${market.tournamentName}`] = 1;
+                            }
+                        }
+                    });
             }
         });
+        setPlayerPropsCountPerTournament(ppMarketsCountPerTournament);
         setPlayerPropsCountPerTag(ppMarketsCountPerTag);
         return openMarketsCountPerTag;
     }, [openSportMarkets]);
@@ -738,21 +735,11 @@ const Home: React.FC = () => {
                                     scrollMainToTop();
                                     dispatch(setSportFilter(filterItem));
                                     setSportParam(filterItem);
-                                    dispatch(
-                                        setTagFilter(
-                                            filterItem === SportFilter.PlayerProps
-                                                ? [LeagueMap[getDefaultPlayerPropsLeague(playerPropsCountPerTag)]]
-                                                : []
-                                        )
-                                    );
-                                    setTagParam(
-                                        filterItem === SportFilter.PlayerProps
-                                            ? LeagueMap[getDefaultPlayerPropsLeague(playerPropsCountPerTag)].label
-                                            : ''
-                                    );
+                                    dispatch(setTagFilter([]));
+                                    setTagParam('');
                                     dispatch(setTournamentFilter([]));
                                     setTournamentParam('');
-                                    if (filterItem === SportFilter.All || filterItem === SportFilter.PlayerProps) {
+                                    if (filterItem === SportFilter.All) {
                                         dispatch(setDatePeriodFilter(0));
                                         setDateParam('');
                                         setAvailableTags(tagsList);
@@ -781,13 +768,6 @@ const Home: React.FC = () => {
                                             setAvailableTags([]);
                                         }
                                     }
-                                } else {
-                                    if (filterItem !== SportFilter.PlayerProps) {
-                                        dispatch(setTagFilter([]));
-                                        setTagParam('');
-                                        dispatch(setTournamentFilter([]));
-                                        setTournamentParam('');
-                                    }
                                 }
                             }}
                             sport={filterItem}
@@ -804,6 +784,7 @@ const Home: React.FC = () => {
                             liveMarketsCountPerTag={liveMarketsCountPerTag}
                             liveMarketsCountPerSport={liveMarketsCountPerSport}
                             playerPropsMarketsCountPerTag={playerPropsCountPerTag}
+                            playerPropsCountPerTournament={playerPropsCountPerTournament}
                             tournamentsByLeague={
                                 filterItem == SportFilter.Live ? liveTournamentsByLeague : openTournamentsByLeague
                             }
@@ -899,6 +880,7 @@ const Home: React.FC = () => {
                                         allMarkets={finalMarkets}
                                         availableMarketTypes={availableMarketTypes}
                                         market={selectedMarketData}
+                                        unfilteredPlayerPropsMarkets={unfilteredPlayerPropsMarkets}
                                     />
                                 )}
                             <Filters isMainPageView />
@@ -943,6 +925,7 @@ const Home: React.FC = () => {
                                                 allMarkets={finalMarkets}
                                                 availableMarketTypes={availableMarketTypes}
                                                 market={selectedMarketData}
+                                                unfilteredPlayerPropsMarkets={unfilteredPlayerPropsMarkets}
                                             />
                                         )}
 
