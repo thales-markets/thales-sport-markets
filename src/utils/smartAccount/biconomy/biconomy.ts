@@ -1,5 +1,6 @@
 import { PaymasterFeeQuote, PaymasterMode } from '@biconomy/account';
 import { getPublicClient } from '@wagmi/core';
+import { USER_REJECTED_ERRORS } from 'constants/errors';
 import { wagmiConfig } from 'pages/Root/wagmiConfig';
 import { SupportedNetwork } from 'types/network';
 import { ViemContract } from 'types/viem';
@@ -7,7 +8,12 @@ import { Address, Client, encodeFunctionData, getContract } from 'viem';
 import { getContractAbi } from '../../contracts/abi';
 import multipleCollateral from '../../contracts/multipleCollateralContract';
 import sessionValidationContract from '../../contracts/sessionValidationContract';
-import { ERROR_SESSION_NOT_FOUND, USER_OP_FAILED, USER_REJECTED_ERROR } from '../constants/errors';
+import {
+    ACCOUNT_NONCE_FAILED,
+    ERROR_SESSION_NOT_FOUND,
+    USER_OP_FAILED,
+    USER_REJECTED_ERROR,
+} from '../constants/errors';
 import smartAccountConnector from '../smartAccountConnector';
 import { validateTx } from './listener';
 import { activateOvertimeAccount, getSessionSigner } from './session';
@@ -63,9 +69,13 @@ export const sendBiconomyTransaction = async (params: {
             }
         } catch (e) {
             if ((e as any).toString().toLowerCase().includes(USER_REJECTED_ERROR)) {
-                throw new Error('Transaction rejected by user.');
+                throw USER_REJECTED_ERRORS[0];
             }
             if ((e as any).toString().toLowerCase().includes(USER_OP_FAILED)) {
+                throw e;
+            }
+
+            if ((e as any).toString().toLowerCase().includes(ACCOUNT_NONCE_FAILED)) {
                 throw e;
             }
             try {
@@ -160,9 +170,13 @@ export const executeBiconomyTransactionWithConfirmation = async (params: {
             return await validateTx(transactionHash, userOpHash, params.networkId);
         } catch (e) {
             if ((e as any).toString().toLowerCase().includes(USER_REJECTED_ERROR)) {
-                throw new Error('Transaction rejected by user.');
+                throw USER_REJECTED_ERRORS[0];
             }
             if ((e as any).toString().toLowerCase().includes(USER_OP_FAILED)) {
+                throw e;
+            }
+
+            if ((e as any).toString().toLowerCase().includes(ACCOUNT_NONCE_FAILED)) {
                 throw e;
             }
             try {
@@ -283,9 +297,13 @@ export const executeBiconomyTransaction = async (params: {
             }
         } catch (e) {
             if ((e as any).toString().toLowerCase().includes(USER_REJECTED_ERROR)) {
-                throw new Error('Transaction rejected by user.');
+                throw USER_REJECTED_ERRORS[0];
             }
             if ((e as any).toString().toLowerCase().includes(USER_OP_FAILED)) {
+                throw e;
+            }
+
+            if ((e as any).toString().toLowerCase().includes(ACCOUNT_NONCE_FAILED)) {
                 throw e;
             }
             if (
