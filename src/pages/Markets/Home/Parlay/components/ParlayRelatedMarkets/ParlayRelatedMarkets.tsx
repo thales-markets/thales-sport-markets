@@ -3,7 +3,6 @@ import ShareTicketModalV2 from 'components/ShareTicketModalV2';
 import SimpleLoader from 'components/SimpleLoader';
 import Tooltip from 'components/Tooltip';
 import { LATEST_LIVE_REQUESTS_MATURITY_DAYS, LATEST_LIVE_REQUESTS_SIZE } from 'constants/markets';
-import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { MAIN_VIEW_RIGHT_CONTAINER_WIDTH_LARGE, MAIN_VIEW_RIGHT_CONTAINER_WIDTH_MEDIUM } from 'constants/ui';
 import { differenceInDays, differenceInMinutes, secondsToMilliseconds } from 'date-fns';
 import { LiveTradingFinalStatus, LiveTradingTicketStatus, SportFilter } from 'enums/markets';
@@ -17,7 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import { getSportFilter } from 'redux/modules/market';
-import { getTicket, getTicketRequests } from 'redux/modules/ticket';
+import { getTicket, getTicketRequests, removeTicketRequests } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
@@ -31,12 +30,12 @@ import {
     getMatchLabel,
     getPositionTextV2,
     getTitleText,
-    liveTradingRequestAsTicketMarket,
     serializableTicketMarketAsTicketMarket,
 } from 'utils/marketsV2';
 import { refetchUserLiveTradingData } from 'utils/queryConnector';
 import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { updateTempLiveRequests } from 'utils/tickets';
+import { delay } from 'utils/timer';
 import { useAccount, useChainId, useClient } from 'wagmi';
 
 const ParlayRelatedMarkets: React.FC = () => {
@@ -85,20 +84,12 @@ const ParlayRelatedMarkets: React.FC = () => {
         [userTicketsQuery.isSuccess, userTicketsQuery.data, ticket]
     );
 
-    const gamesInfo = useMemo(
-        () =>
-            liveTradingProcessorDataQuery.isSuccess && liveTradingProcessorDataQuery.data
-                ? liveTradingProcessorDataQuery.data.gamesInfo
-                : {},
-        [liveTradingProcessorDataQuery.isSuccess, liveTradingProcessorDataQuery.data]
-    );
-
     const prevLiveTradingRequests = useRef<LiveTradingRequest[]>([]);
     // All live requests from contract
     const liveTradingRequests: LiveTradingRequest[] = useMemo(
         () =>
             liveTradingProcessorDataQuery.isSuccess && liveTradingProcessorDataQuery.data
-                ? liveTradingProcessorDataQuery.data.liveRequests.filter(
+                ? liveTradingProcessorDataQuery.data.filter(
                       (request) =>
                           differenceInDays(Date.now(), Number(request.timestamp)) < LATEST_LIVE_REQUESTS_MATURITY_DAYS
                   )
@@ -163,8 +154,6 @@ const ParlayRelatedMarkets: React.FC = () => {
                     updatedTempLiveTradingRequests,
                     diffLiveRequets,
                     diffCount,
-                    networkId,
-                    walletAddress,
                     dispatch
                 );
             }
@@ -177,11 +166,15 @@ const ParlayRelatedMarkets: React.FC = () => {
 
         const requestsAndTickets = [...updatedTempLiveTradingRequests, ...filteredLiveTradingRequests];
         return orderBy(requestsAndTickets, ['timestamp'], ['desc']).slice(0, LATEST_LIVE_REQUESTS_SIZE);
-    }, [tempLiveTradingRequests, liveTradingRequests, ticketRequestsById, dispatch, networkId, walletAddress]);
+    }, [tempLiveTradingRequests, liveTradingRequests, ticketRequestsById, dispatch]);
 
-    // clear LS ticketRequests by network ID and wallet address
+    // clear ticketRequests when changed network ID or wallet address
     useEffect(() => {
-        window.localStorage.removeItem(`${LOCAL_STORAGE_KEYS.TICKET_REQUESTS}_${networkId}_${walletAddress}`);
+        dispatch(removeTicketRequests());
+
+        return () => {
+            dispatch(removeTicketRequests());
+        };
     }, [networkId, walletAddress, dispatch]);
 
     useEffect(() => {
@@ -211,7 +204,7 @@ const ParlayRelatedMarkets: React.FC = () => {
                         (market as Ticket)?.id;
                     return (
                         <RelatedMarket key={key}>
-                            <ExpandableRow data={market} gamesInfo={gamesInfo} />
+                            <ExpandableRow data={market} />
                         </RelatedMarket>
                     );
                 })}
@@ -284,10 +277,9 @@ const ParlayRelatedMarkets: React.FC = () => {
     );
 };
 
-const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarketRequestData; gamesInfo: any }> = ({
-    data,
-    gamesInfo,
-}) => {
+const ANIMATION_DURATION_SEC = 1;
+
+const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarketRequestData }> = ({ data }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
     const isMobile = useSelector(getIsMobile);
@@ -323,7 +315,7 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
         timestamp = ticket.timestamp;
     } else if (isLiveTradingRequest) {
         const requestedMarket = data as LiveTradingRequest;
-        market = liveTradingRequestAsTicketMarket(requestedMarket, gamesInfo);
+        market = requestedMarket.ticket;
         isLive = true;
         position = requestedMarket.position;
         status = requestedMarket.status;
@@ -348,9 +340,17 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
         payout = requestedMarket.payout;
         timestamp = requestedMarket.timestamp;
     }
+    const creationStatus =
+        finalStatus === LiveTradingFinalStatus.SUCCESS
+            ? t('markets.parlay-related-markets.creation-status.success')
+            : finalStatus === LiveTradingFinalStatus.FAILED
+            ? t('markets.parlay-related-markets.creation-status.failed')
+            : t('markets.parlay-related-markets.creation-status.pending');
 
     const [stateStatus, setStateStatus] = useState(status);
     const [stateFinalStatus, setStateFinalStatus] = useState(finalStatus);
+    const [ticketCreationStatus, setTicketCreationStatus] = useState(creationStatus);
+    const [successStatusWithDelay, setSuccessStatusWithDelay] = useState(status === LiveTradingTicketStatus.CREATED);
     const [isExpanded, setIsExpanded] = useState(
         // collapsed if live requests older than 1 min
         !isTicketType && isLive && differenceInMinutes(Date.now(), timestamp) < 1
@@ -358,33 +358,39 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
     const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps | undefined>(undefined);
 
-    // update state status incrementaly
+    // update state status incrementaly for animation purpose
     useEffect(() => {
+        const clearTimeouts = async (ids: NodeJS.Timeout[]) => {
+            const maxTimersDelay = secondsToMilliseconds(ANIMATION_DURATION_SEC * 2);
+            await delay(maxTimersDelay);
+            ids.forEach((id) => clearTimeout(id));
+        };
+
         if (stateStatus === LiveTradingTicketStatus.PENDING && status === LiveTradingTicketStatus.CREATED) {
             setStateStatus(LiveTradingTicketStatus.APPROVED);
             setStateFinalStatus(LiveTradingFinalStatus.IN_PROGRESS);
         } else if (stateStatus === LiveTradingTicketStatus.APPROVED && status === LiveTradingTicketStatus.CREATED) {
-            const timeoutId = setTimeout(() => {
+            const stateStatusTimeoutId = setTimeout(() => {
                 setStateStatus(LiveTradingTicketStatus.CREATED);
                 setStateFinalStatus(LiveTradingFinalStatus.SUCCESS);
-            }, 1000);
+            }, secondsToMilliseconds(ANIMATION_DURATION_SEC));
 
-            return () => clearTimeout(timeoutId);
+            const statusTextTimeoutId = setTimeout(() => {
+                setTicketCreationStatus(t('markets.parlay-related-markets.creation-status.success'));
+                setSuccessStatusWithDelay(true);
+            }, secondsToMilliseconds(ANIMATION_DURATION_SEC * 2));
+
+            return () => {
+                clearTimeouts([stateStatusTimeoutId, statusTextTimeoutId]);
+            };
         } else {
             setStateStatus(status);
             setStateFinalStatus(finalStatus);
+            if (finalStatus === LiveTradingFinalStatus.FAILED) {
+                setTicketCreationStatus(t('markets.parlay-related-markets.creation-status.failed'));
+            }
         }
-    }, [status, stateStatus, finalStatus, stateFinalStatus]);
-
-    const ticketCreationStatus = useMemo(
-        () =>
-            stateFinalStatus === LiveTradingFinalStatus.SUCCESS
-                ? t('markets.parlay-related-markets.creation-status.success')
-                : stateFinalStatus === LiveTradingFinalStatus.FAILED
-                ? t('markets.parlay-related-markets.creation-status.failed')
-                : t('markets.parlay-related-markets.creation-status.pending'),
-        [stateFinalStatus, t]
-    );
+    }, [status, stateStatus, finalStatus, stateFinalStatus, t]);
 
     const shareTicketData: ShareTicketModalProps = {
         markets: [market],
@@ -407,10 +413,15 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
         setShowShareTicketModal(true);
     };
 
+    const ticketContentRef = useRef<HTMLDivElement>(null);
+    const defaultTicketContentWidth = Number(MAIN_VIEW_RIGHT_CONTAINER_WIDTH_MEDIUM.replace('px', ''));
+    // 3 circles with 16px and 2 lines
+    const lineWidth = Math.ceil(((ticketContentRef.current?.clientWidth || defaultTicketContentWidth) - 3 * 16) / 2);
+
     return (
         <>
             <TicketColumn onClick={() => setIsExpanded(!isExpanded)}>
-                <FlexDivColumn>
+                <FlexDivColumn ref={ticketContentRef}>
                     <Row>
                         <TimeInfo>
                             <TimeText>{formatDateWithTime(timestamp)}</TimeText>
@@ -475,9 +486,11 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
                                         isActive={stateStatus === LiveTradingTicketStatus.PENDING}
                                         isAfterActive={false}
                                         isFinished={stateFinalStatus !== LiveTradingFinalStatus.IN_PROGRESS}
+                                        isSuccess={successStatusWithDelay}
                                     />
                                     <ConnectionLine
                                         index={0}
+                                        width={lineWidth}
                                         isProgressing={
                                             stateStatus > LiveTradingTicketStatus.PENDING &&
                                             stateFinalStatus === LiveTradingFinalStatus.IN_PROGRESS
@@ -486,24 +499,29 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
                                             stateStatus > LiveTradingTicketStatus.PENDING &&
                                             stateFinalStatus !== LiveTradingFinalStatus.IN_PROGRESS
                                         }
+                                        isSuccess={successStatusWithDelay}
                                     />
                                     <Circle
                                         isActive={stateStatus === LiveTradingTicketStatus.APPROVED}
                                         isAfterActive={stateStatus < LiveTradingTicketStatus.APPROVED}
                                         isFinished={stateFinalStatus !== LiveTradingFinalStatus.IN_PROGRESS}
+                                        isSuccess={successStatusWithDelay}
                                     />
                                     <ConnectionLine
                                         index={1}
+                                        width={lineWidth}
                                         isProgressing={stateStatus === LiveTradingTicketStatus.CREATED}
                                         isCompleted={
                                             stateStatus > LiveTradingTicketStatus.APPROVED &&
                                             stateFinalStatus !== LiveTradingFinalStatus.IN_PROGRESS
                                         }
+                                        isSuccess={successStatusWithDelay}
                                     />
                                     <Circle
                                         isActive={stateStatus === LiveTradingTicketStatus.CREATED}
                                         isAfterActive={stateStatus < LiveTradingTicketStatus.CREATED}
                                         isFinished={stateFinalStatus !== LiveTradingFinalStatus.IN_PROGRESS}
+                                        isSuccess={successStatusWithDelay}
                                         isFailed={stateFinalStatus === LiveTradingFinalStatus.FAILED}
                                     />
                                 </ProgressRow>
@@ -649,6 +667,9 @@ const TicketStatusInfo = styled(Info)<{ status: LiveTradingFinalStatus }>`
             : props.status === LiveTradingFinalStatus.FAILED
             ? props.theme.status.failed.background.primary
             : props.theme.status.pending.background.primary};
+    ${(props) =>
+        props.status === LiveTradingFinalStatus.SUCCESS &&
+        `transition: background-color 0s linear ${ANIMATION_DURATION_SEC}s;`}
 `;
 
 const IconWrapper = styled(FlexDivCentered)`
@@ -690,7 +711,13 @@ const ProgressRow = styled(Row)`
     position: relative;
 `;
 
-const Circle = styled.div<{ isActive: boolean; isAfterActive: boolean; isFinished: boolean; isFailed?: boolean }>`
+const Circle = styled.div<{
+    isActive: boolean;
+    isAfterActive: boolean;
+    isFinished: boolean;
+    isSuccess: boolean;
+    isFailed?: boolean;
+}>`
     position: relative;
     display: inline-block;
     width: 16px;
@@ -701,11 +728,16 @@ const Circle = styled.div<{ isActive: boolean; isAfterActive: boolean; isFinishe
             ? props.theme.status.failed.textColor.primary
             : props.isAfterActive
             ? props.theme.background.tertiary
+            : props.isSuccess
+            ? props.theme.status.success.textColor.primary
             : props.theme.background.quaternary};
     z-index: 2;
 
-    transition: background-color 0s ease-in 1s;
-    ${(props) => props.isActive && !props.isFinished && 'animation: pulsing 1s linear 1s infinite;'}
+    transition: background-color 0s ease-in ${(props) => (props.isSuccess ? 0 : ANIMATION_DURATION_SEC)}s;
+    ${(props) =>
+        props.isActive &&
+        !props.isFinished &&
+        `animation: pulsing ${ANIMATION_DURATION_SEC}s linear ${ANIMATION_DURATION_SEC}s infinite;`}
 
     @keyframes pulsing {
         0% {
@@ -723,23 +755,26 @@ const Circle = styled.div<{ isActive: boolean; isAfterActive: boolean; isFinishe
     }
 `;
 
-const ConnectionLine = styled.div<{ index: number; isProgressing: boolean; isCompleted: boolean }>`
+const ConnectionLine = styled.div<{
+    index: number;
+    width: number;
+    isProgressing: boolean;
+    isCompleted: boolean;
+    isSuccess: boolean;
+}>`
     position: absolute;
-    width: 136px;
-    left: ${(props) => `calc(16px * ${props.index + 1} + 136px * ${props.index})`};
+    width: ${(props) => props.width}px;
+    left: ${(props) => `calc(16px * ${props.index + 1} + ${props.width}px * ${props.index})`};
     height: 2px;
     z-index: 1;
 
     background: ${(props) =>
-        `linear-gradient(to right, ${props.theme.background.quaternary} 50%, ${props.theme.background.tertiary} 50%);`};
+        `linear-gradient(to right, ${
+            props.isSuccess ? props.theme.status.success.textColor.primary : props.theme.background.quaternary
+        } 50%, ${props.theme.background.tertiary} 50%);`};
     background-size: 200% 100%;
-    transition: all 1s ease-out;
+    transition: all ${ANIMATION_DURATION_SEC}s ease-out;
     background-position: ${(props) => (props.isProgressing || props.isCompleted ? 'left bottom' : 'right bottom')};
-
-    @media (max-width: ${ScreenSizeBreakpoint.LARGE}px) {
-        width: 116px;
-        left: ${(props) => `calc(16px * ${props.index + 1} + 116px * ${props.index})`};
-    }
 `;
 
 const StatusesRow = styled(Row)`
@@ -801,6 +836,8 @@ const StatusText = styled(Text)<{ status: LiveTradingFinalStatus }>`
             : props.status === LiveTradingFinalStatus.FAILED
             ? props.theme.status.failed.textColor.primary
             : props.theme.status.pending.textColor.primary};
+    ${(props) =>
+        props.status === LiveTradingFinalStatus.SUCCESS && `transition: color 0s linear ${ANIMATION_DURATION_SEC}s;`}
 `;
 
 const PositionText = styled(Text)`

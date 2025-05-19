@@ -6,24 +6,25 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { secondsToMilliseconds } from 'date-fns';
 import { ContractType } from 'enums/contract';
 import { LiveTradingFinalStatus, LiveTradingTicketStatus } from 'enums/markets';
+import { t } from 'i18next';
 import { bigNumberFormatter, coinFormatter } from 'thales-utils';
-import { LiveTradingRequest, LiveTradingRequestsData } from 'types/markets';
+import { LiveTradingRequest, LiveTradingRequestRaw } from 'types/markets';
 import { NetworkConfig } from 'types/network';
 import { getCollateralByAddress } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import { convertFromBytes32 } from 'utils/formatters/string';
-
-const dataCache: LiveTradingRequestsData = { liveRequests: [], gamesInfo: {} };
+import { addTicketMarketToLiveTradingRequest } from 'utils/marketsV2';
 
 export const useLiveTradingProcessorDataQuery = (
     walletAddress: string,
     networkConfig: NetworkConfig,
-    options?: Omit<UseQueryOptions<LiveTradingRequestsData>, 'queryKey' | 'queryFn'>
+    options?: Omit<UseQueryOptions<LiveTradingRequest[]>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<LiveTradingRequestsData>({
+    return useQuery<LiveTradingRequest[]>({
         queryKey: QUERY_KEYS.LiveTradingProcessorData(networkConfig.networkId, walletAddress),
         queryFn: async () => {
-            const data: LiveTradingRequestsData = { liveRequests: [], gamesInfo: {} };
+            let liveRequests: LiveTradingRequest[] = [];
+            let gamesInfo: any = {};
 
             try {
                 const liveTradingProcessorDataContract = getContractInstance(
@@ -59,8 +60,7 @@ export const useLiveTradingProcessorDataQuery = (
                         const gamesInfoResponse = promisesResult[0];
                         const adapterRequestsResponse = promisesResult[1];
 
-                        data.gamesInfo = gamesInfoResponse.data;
-                        dataCache.gamesInfo = gamesInfoResponse.data;
+                        gamesInfo = gamesInfoResponse.data;
                         adapterRequests = adapterRequestsResponse.data;
                     }
 
@@ -96,8 +96,8 @@ export const useLiveTradingProcessorDataQuery = (
                                     : LiveTradingTicketStatus.PENDING;
                                 finalStatus = LiveTradingFinalStatus.FAILED;
                                 errorReason = isAdapterApproved
-                                    ? 'Failed to fulfill the trade.'
-                                    : 'Failed to request the trade.';
+                                    ? t('common.errors.tx-not-fulfilled')
+                                    : t('common.errors.tx-request-failed');
                             } else if (isAdapterApproved) {
                                 status = LiveTradingTicketStatus.APPROVED;
                                 finalStatus = LiveTradingFinalStatus.IN_PROGRESS;
@@ -110,14 +110,15 @@ export const useLiveTradingProcessorDataQuery = (
                             const collateral = getCollateralByAddress(request.collateral, networkConfig.networkId);
                             const buyInAmount = coinFormatter(request.buyInAmount, networkConfig.networkId, collateral);
 
-                            const liveTradingRequest: LiveTradingRequest = {
+                            const gameId = convertFromBytes32(request.gameId);
+                            const liveTradingRequestRaw: LiveTradingRequestRaw = {
                                 user: request.user,
                                 requestId: request.requestId,
                                 ticketId: request.ticketId,
                                 isFulfilled,
                                 timestamp,
                                 maturityTimestamp,
-                                gameId: convertFromBytes32(request.gameId),
+                                gameId,
                                 leagueId: request.sportId,
                                 typeId: request.typeId,
                                 line: request.line / 100,
@@ -132,14 +133,19 @@ export const useLiveTradingProcessorDataQuery = (
                                 errorReason,
                             };
 
-                            data.liveRequests.push(liveTradingRequest);
+                            const liveTradingRequest: LiveTradingRequest = addTicketMarketToLiveTradingRequest(
+                                liveTradingRequestRaw,
+                                gamesInfo[gameId]
+                            );
+
+                            liveRequests.push(liveTradingRequest);
                         });
 
                     if (ticketIds.length > 0 && sportsAMMDataContract) {
                         const ticketsData = await sportsAMMDataContract.read.getTicketsData([ticketIds]);
                         const ticketsDataArray = [ticketsData].flat();
                         let fulfilledCounter = 0;
-                        data.liveRequests = data.liveRequests.map((request) => {
+                        liveRequests = liveRequests.map((request) => {
                             let totalQuote = request.expectedQuote;
                             if (request.isFulfilled) {
                                 totalQuote = bigNumberFormatter(ticketsDataArray[fulfilledCounter].totalQuote);
@@ -149,18 +155,12 @@ export const useLiveTradingProcessorDataQuery = (
                             return { ...request, totalQuote, payout };
                         });
                     }
-
-                    dataCache.liveRequests = data.liveRequests;
                 }
             } catch (e) {
                 console.log('Failed to fetch live trading data', e);
-                return {
-                    ...dataCache,
-                    liveRequests: dataCache.liveRequests.filter((request) => request.user === walletAddress),
-                };
             }
 
-            return data;
+            return liveRequests;
         },
         ...options,
     });
