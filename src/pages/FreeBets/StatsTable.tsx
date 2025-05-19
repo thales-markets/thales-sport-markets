@@ -20,7 +20,30 @@ const columns = [
     {
         header: <>ID</>,
         accessorKey: 'id',
-        cell: (cellProps: any) => <p>{cellProps.cell.getValue()}</p>,
+        cell: (cellProps: any) => {
+            const id = cellProps.row.original.id;
+            const claimed = !!cellProps.row.original.claimer;
+            return (
+                <p>
+                    {cellProps.cell.getValue()}
+                    {!claimed && (
+                        <CopyIcon
+                            onClick={() => {
+                                const toastId = toast.loading(t('free-bet.admin.copying'), {
+                                    autoClose: 1000,
+                                });
+                                navigator.clipboard.writeText(id);
+                                toast.update(toastId, {
+                                    ...getInfoToastOptions(t('free-bet.admin.copied') + ' ' + id),
+                                    autoClose: 1000,
+                                });
+                            }}
+                            className="icon icon--copy"
+                        />
+                    )}
+                </p>
+            );
+        },
         size: 320,
         enableSorting: true,
     },
@@ -176,11 +199,22 @@ const Container = styled.div`
     justify-content: center;
     width: 100%;
     margin-top: 100px;
+    @media (max-width: 767px) {
+        overflow-x: scroll;
+        display: block;
+        & > div > div > div {
+            overflow-x: hidden;
+            min-height: 20px;
+        }
+    }
 `;
 
 const TableContainer = styled.div`
     width: 90%;
     height: 100%;
+    @media (max-width: 767px) {
+        width: 1250px;
+    }
 `;
 
 export default StatsTable;
