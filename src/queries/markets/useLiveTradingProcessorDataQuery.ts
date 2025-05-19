@@ -38,15 +38,22 @@ export const useLiveTradingProcessorDataQuery = (
                     const latestRequestsDataPerUser = await liveTradingProcessorDataContract.read.getLatestRequestsDataPerUser(
                         [walletAddress, LIVE_REQUETS_BATCH_SIZE, LATEST_LIVE_REQUESTS_SIZE]
                     );
-
-                    const allRequestIds = latestRequestsDataPerUser
+                    const allRequestIds = [] as any;
+                    const allGameIds = [] as any;
+                    latestRequestsDataPerUser
                         .filter((request: any) => Number(request.timestamp) !== 0)
-                        .map((request: any) => request.requestId);
+                        .map((request: any) => {
+                            allRequestIds.push(request.requestId);
+                            allGameIds.push(convertFromBytes32(request.gameId));
+                        });
 
                     let adapterRequests = [];
                     if (allRequestIds.length > 0) {
                         const promisesResult = await Promise.all([
-                            axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, noCacheConfig),
+                            axios.get(
+                                `${generalConfig.API_URL}/overtime-v2/games-info?gameids=${allGameIds.join()}`,
+                                noCacheConfig
+                            ),
                             axios.get(
                                 `${generalConfig.API_URL}/overtime-v2/networks/${
                                     networkConfig.networkId
