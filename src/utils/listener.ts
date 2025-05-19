@@ -24,7 +24,6 @@ export const waitForTransactionViaSocket: (hash: string, networkId: SupportedNet
                             unsubscribe();
                         }
                     } catch (e) {
-                        console.log(e);
                         unsubscribe();
                     }
                 },
