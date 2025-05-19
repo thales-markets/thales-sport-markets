@@ -71,11 +71,10 @@ export const sendBiconomyTransaction = async (params: {
             if ((e as any).toString().toLowerCase().includes(USER_REJECTED_ERROR)) {
                 throw USER_REJECTED_ERRORS[0];
             }
-            if ((e as any).toString().toLowerCase().includes(USER_OP_FAILED)) {
-                throw e;
-            }
-
-            if ((e as any).toString().toLowerCase().includes(ACCOUNT_NONCE_FAILED)) {
+            if (
+                (e as any).toString().toLowerCase().includes(USER_OP_FAILED) ||
+                (e as any).toString().toLowerCase().includes(ACCOUNT_NONCE_FAILED)
+            ) {
                 throw e;
             }
             try {
@@ -172,11 +171,10 @@ export const executeBiconomyTransactionWithConfirmation = async (params: {
             if ((e as any).toString().toLowerCase().includes(USER_REJECTED_ERROR)) {
                 throw USER_REJECTED_ERRORS[0];
             }
-            if ((e as any).toString().toLowerCase().includes(USER_OP_FAILED)) {
-                throw e;
-            }
-
-            if ((e as any).toString().toLowerCase().includes(ACCOUNT_NONCE_FAILED)) {
+            if (
+                (e as any).toString().toLowerCase().includes(USER_OP_FAILED) ||
+                (e as any).toString().toLowerCase().includes(ACCOUNT_NONCE_FAILED)
+            ) {
                 throw e;
             }
             try {
@@ -299,13 +297,13 @@ export const executeBiconomyTransaction = async (params: {
             if ((e as any).toString().toLowerCase().includes(USER_REJECTED_ERROR)) {
                 throw USER_REJECTED_ERRORS[0];
             }
-            if ((e as any).toString().toLowerCase().includes(USER_OP_FAILED)) {
+            if (
+                (e as any).toString().toLowerCase().includes(USER_OP_FAILED) ||
+                (e as any).toString().toLowerCase().includes(ACCOUNT_NONCE_FAILED)
+            ) {
                 throw e;
             }
 
-            if ((e as any).toString().toLowerCase().includes(ACCOUNT_NONCE_FAILED)) {
-                throw e;
-            }
             if (
                 (e && (e as any).message && (e as any).message.includes('SessionNotApproved')) ||
                 (e as any).toString() === ERROR_SESSION_NOT_FOUND

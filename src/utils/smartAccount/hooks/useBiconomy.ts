@@ -27,7 +27,6 @@ function useBiconomy() {
                     biconomyPaymasterApiKey: PAYMASTER_API_KEY,
                 });
                 const smartAddressNew = await smartAccount.getAccountAddress();
-                console.log(smartAddressNew);
 
                 if (smartAddress === '') {
                     smartAccountConnector.setBiconomyAccount(smartAccount, smartAddressNew);
