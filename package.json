@@ -5,7 +5,7 @@
     "dependencies": {
         "@biconomy/account": "4.1.1",
         "@binance/w3w-rainbow-connector-v2": "^1.0.2",
-        "@GDdark/universal-account": "^1.0.9",
+        "@particle-network/universal-account-sdk": "^1.0.0-alpha.1",
         "@particle-network/authkit": "^2.0.19",
         "@rainbow-me/rainbowkit": "^2.0.0",
         "@reduxjs/toolkit": "^1.7.2",
