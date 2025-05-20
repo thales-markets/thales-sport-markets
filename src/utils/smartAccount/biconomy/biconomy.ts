@@ -69,7 +69,6 @@ export const sendBiconomyTransaction = async (params: {
                 return await validateTx(transactionHash, userOpHash, params.networkId);
             }
         } catch (e) {
-            console.log('ERROR happened: ', e);
             if ((e as any).toString().toLowerCase().includes(USER_REJECTED_ERROR)) {
                 throw USER_REJECTED_ERRORS[0];
             }
@@ -77,7 +76,6 @@ export const sendBiconomyTransaction = async (params: {
                 (e as any).toString().toLowerCase().includes(USER_OP_FAILED) ||
                 (e as any).toString().toLowerCase().includes(ACCOUNT_NONCE_FAILED)
             ) {
-                console.log('Dont retry');
                 throw e;
             }
             try {
@@ -111,7 +109,6 @@ export const sendBiconomyTransaction = async (params: {
                     const { transactionHash } = await waitForTxHash();
                     return await validateTx(transactionHash, userOpHash, params.networkId);
                 } else if ((e as any).toString().toLowerCase().includes(WEBHOOK_FAILED)) {
-                    console.log('Try executing with paymaster');
                     const { waitForTxHash, userOpHash } = await smartAccountConnector.biconomyAccount.sendTransaction(
                         params.transaction,
                         {
@@ -302,14 +299,12 @@ export const executeBiconomyTransaction = async (params: {
             }
         } catch (e) {
             if ((e as any).toString().toLowerCase().includes(USER_REJECTED_ERROR)) {
-                console.log('dont retry1');
                 throw USER_REJECTED_ERRORS[0];
             }
             if (
                 (e as any).toString().toLowerCase().includes(USER_OP_FAILED) ||
                 (e as any).toString().toLowerCase().includes(ACCOUNT_NONCE_FAILED)
             ) {
-                console.log('dont retry2');
                 throw e;
             }
 
@@ -347,7 +342,6 @@ export const executeBiconomyTransaction = async (params: {
                     console.log(e);
                 }
             } else if ((e as any).toString().toLowerCase().includes(WEBHOOK_FAILED)) {
-                console.log('RETRY with paymaster ERC20');
                 const sessionSigner = await getSessionSigner(params.networkId);
                 const { waitForTxHash, userOpHash } = await smartAccountConnector.biconomyAccount.sendTransaction(
                     transactionArray,
