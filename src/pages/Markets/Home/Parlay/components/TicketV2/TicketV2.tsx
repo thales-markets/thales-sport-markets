@@ -1554,8 +1554,8 @@ const Ticket: React.FC<TicketProps> = ({
             if (isLiveTicket) {
                 dispatch(updateTicketRequests(liveTicketRequestData));
                 setTimeout(
-                    () => setIsBuying(false), // enable multiple parallel buying for live tickets after 1s
-                    1000
+                    () => setIsBuying(false), // enable multiple parallel buying for live tickets after 2s
+                    2000
                 );
             }
 
