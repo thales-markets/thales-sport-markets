@@ -1,5 +1,5 @@
 import { BiconomySmartAccountV2 } from '@biconomy/account';
-import { UniversalAccount } from '@GDdark/universal-account';
+import { UniversalAccount } from '@particle-network/universal-account-sdk';
 
 type BiconomyConnector = {
     wallet: BiconomySmartAccountV2 | null;
