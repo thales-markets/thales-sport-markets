@@ -64,7 +64,7 @@ export const useGameTicketsQuery = (
                     const promisesResult = await Promise.all(promises);
                     const promisesLength = promises.length;
 
-                    const tickets = promisesResult.slice(0, promisesLength - 8).flat(1);
+                    const tickets = promisesResult.slice(0, promisesLength - 7).flat(1);
                     const gamesInfoResponse = promisesResult[promisesLength - 7];
                     const playersInfoResponse = promisesResult[promisesLength - 6];
                     const liveScoresResponse = promisesResult[promisesLength - 5];
@@ -125,8 +125,8 @@ export const useGameTicketsQuery = (
                                 ? exchangeRates[collateral] * ticket.buyInAmount
                                 : ticket.buyInAmount;
                             risk += convertAmount
-                                ? exchangeRates[collateral] * (ticket.payout - ticket.buyInAmount)
-                                : ticket.payout - ticket.buyInAmount;
+                                ? exchangeRates[collateral] * (ticket.payout - ticket.buyInAmount + ticket.fees)
+                                : ticket.payout - ticket.buyInAmount + ticket.fees;
                         }
 
                         volumePnlByPosition[position] = {
