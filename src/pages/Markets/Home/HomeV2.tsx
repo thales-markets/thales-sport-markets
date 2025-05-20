@@ -352,6 +352,8 @@ const Home: React.FC = () => {
                     : allMarkets[statusFilter] || allMarkets[StatusFilter.OPEN_MARKETS];
         }
 
+        console.log('marketsToFilter', marketsToFilter);
+
         const filteredMarkets = marketsToFilter.filter((market: SportMarket) => {
             if (marketSearch) {
                 const normalizedMarketSearch = getCaseAccentInsensitiveString(marketSearch);
@@ -374,6 +376,17 @@ const Home: React.FC = () => {
                     return false;
                 }
             }
+
+            console.log(
+                'tagFilter',
+                tagFilter,
+                tagFilter.find(
+                    (tag) =>
+                        tag.id === market.leagueId ||
+                        (tag.label === SportFilter.Favourites &&
+                            favouriteLeagues.find((tag) => tag.id === market.leagueId))
+                )
+            );
 
             if (tagFilter.length > 0) {
                 if (isBoxingLeague(market.leagueId)) {
@@ -412,7 +425,10 @@ const Home: React.FC = () => {
                     }
                 } else {
                     if (sportFilter != SportFilter.Favourites && sportFilter != SportFilter.Live) {
-                        if (((market.sport as unknown) as SportFilter) !== sportFilter) {
+                        if (
+                            ((market.sport as unknown) as SportFilter) !== sportFilter &&
+                            ((market.initialSport as unknown) as SportFilter) !== sportFilter
+                        ) {
                             return false;
                         }
                     } else {

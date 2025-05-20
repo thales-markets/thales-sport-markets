@@ -80,6 +80,8 @@ export const MarketTypesBySportFilter: Record<SportFilter, MarketType[]> = {
         MarketType.MOST_SIXES,
         MarketType.MOST_RUNS_OUTS,
     ],
+    [SportFilter.Motosport]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
+    [SportFilter.Golf]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.Darts]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.Politics]: [
         MarketType.WINNER,
