@@ -1,4 +1,4 @@
-import { SUPPORTED_TOKEN_TYPE } from '@GDdark/universal-account';
+import { SUPPORTED_TOKEN_TYPE } from '@particle-network/universal-account-sdk';
 import { Network } from 'enums/network';
 import { coinParser } from 'thales-utils';
 import multipleCollateral from 'utils/contracts/multipleCollateralContract';
