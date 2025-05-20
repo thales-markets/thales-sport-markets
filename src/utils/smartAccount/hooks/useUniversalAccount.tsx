@@ -1,4 +1,4 @@
-import { IAssetsResponse, UniversalAccount } from '@GDdark/universal-account';
+import { IAssetsResponse, UniversalAccount } from '@particle-network/universal-account-sdk';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
