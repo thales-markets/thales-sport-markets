@@ -1503,9 +1503,9 @@ const Ticket: React.FC<TicketProps> = ({
             (liveTradingProcessorContract && isLiveTicket) ||
             (sgpTradingProcessorContract && sportsAMMV2Contract && isSgp)
         ) {
+            const randomNumber = Math.floor(Math.random() * 100);
             setIsBuying(true);
             const toastId = toast.loading(t('market.toast-message.transaction-pending'));
-
             let step = buyStep;
             let overAmount = swappedOverToReceive;
             if (swapToOver) {
@@ -1627,6 +1627,7 @@ const Ticket: React.FC<TicketProps> = ({
                             }
                         }
                     } else {
+                        console.log('step2: ', randomNumber);
                         txHash = await getTradingProcessorTransaction(
                             isLiveTicket,
                             isSgp,
@@ -1643,6 +1644,7 @@ const Ticket: React.FC<TicketProps> = ({
                             networkId,
                             isEth
                         );
+                        console.log('step3: ', randomNumber, txHash);
                     }
                 } else {
                     txHash = await getSportsAMMV2Transaction(
@@ -1666,6 +1668,7 @@ const Ticket: React.FC<TicketProps> = ({
                 }
 
                 if (!txHash) {
+                    console.log('step4 tx hash not found: ', randomNumber);
                     // there are scenarios when waitForTransactionReceipt is failing because tx hash doesn't exist
                     const data = getLogData({
                         walletAddress,
@@ -1696,6 +1699,7 @@ const Ticket: React.FC<TicketProps> = ({
                 });
 
                 if (txReceipt.status === 'success') {
+                    console.log('step5 tx success: ', randomNumber);
                     PLAUSIBLE.trackEvent(
                         isLiveTicket
                             ? isFreeBetActive
@@ -1728,6 +1732,7 @@ const Ticket: React.FC<TicketProps> = ({
                             : Number(buyInAmount);
 
                     if (isLiveTicket || isSgp) {
+                        console.log('step6 tx success: ', randomNumber);
                         const requestId = getRequestId(txReceipt.logs, isFreeBetActive, isSgp);
                         if (!requestId) {
                             throw new Error('Request ID not found');
@@ -1860,6 +1865,7 @@ const Ticket: React.FC<TicketProps> = ({
                         console.log('refetchProofs');
                         refetchProofs(networkId, markets);
                     }
+                    console.log('step7 tx error: ', randomNumber);
                     setIsBuying(false);
                     refetchAfterBuy(walletAddress, networkId);
                     toast.update(toastId, getErrorToastOptions(t('common.errors.tx-reverted')));
@@ -1888,6 +1894,7 @@ const Ticket: React.FC<TicketProps> = ({
                     );
                 }
             } catch (e) {
+                console.log('catch error: ', randomNumber, e);
                 setIsBuying(false);
                 refetchAfterBuy(walletAddress, networkId);
                 const isUserRejected = USER_REJECTED_ERRORS.some((rejectedError) =>
