@@ -13,6 +13,7 @@ import {
     ERROR_SESSION_NOT_FOUND,
     USER_OP_FAILED,
     USER_REJECTED_ERROR,
+    WEBHOOK_FAILED,
 } from '../constants/errors';
 import smartAccountConnector from '../smartAccountConnector';
 import { validateTx } from './listener';
@@ -109,7 +110,7 @@ export const sendBiconomyTransaction = async (params: {
 
                     const { transactionHash } = await waitForTxHash();
                     return await validateTx(transactionHash, userOpHash, params.networkId);
-                } else {
+                } else if ((e as any).toString().toLowerCase().includes(WEBHOOK_FAILED)) {
                     console.log('Try executing with paymaster');
                     const { waitForTxHash, userOpHash } = await smartAccountConnector.biconomyAccount.sendTransaction(
                         params.transaction,
@@ -180,26 +181,29 @@ export const executeBiconomyTransactionWithConfirmation = async (params: {
             ) {
                 throw e;
             }
-            try {
-                smartAccountConnector.biconomyAccount.setActiveValidationModule(
-                    smartAccountConnector.biconomyAccount.defaultValidationModule
-                );
-                const { waitForTxHash, userOpHash } = await smartAccountConnector.biconomyAccount.sendTransaction(
-                    transaction,
-                    {
-                        paymasterServiceData: {
-                            mode: PaymasterMode.ERC20,
-                            preferredToken: params.collateralAddress,
-                        },
-                    }
-                );
+            if ((e as any).toString().toLowerCase().includes(WEBHOOK_FAILED)) {
+                try {
+                    smartAccountConnector.biconomyAccount.setActiveValidationModule(
+                        smartAccountConnector.biconomyAccount.defaultValidationModule
+                    );
+                    const { waitForTxHash, userOpHash } = await smartAccountConnector.biconomyAccount.sendTransaction(
+                        transaction,
+                        {
+                            paymasterServiceData: {
+                                mode: PaymasterMode.ERC20,
+                                preferredToken: params.collateralAddress,
+                            },
+                        }
+                    );
 
-                const { transactionHash } = await waitForTxHash();
-                return await validateTx(transactionHash, userOpHash, params.networkId);
-            } catch (e) {
+                    const { transactionHash } = await waitForTxHash();
+                    return await validateTx(transactionHash, userOpHash, params.networkId);
+                } catch (e) {
+                    console.log(e);
+                }
                 console.log(e);
             }
-            console.log(e);
+            throw e;
         }
     }
 };
@@ -297,7 +301,6 @@ export const executeBiconomyTransaction = async (params: {
                 return await validateTx(transactionHash, userOpHash, params.networkId);
             }
         } catch (e) {
-            console.log('ERROR happened: ', e);
             if ((e as any).toString().toLowerCase().includes(USER_REJECTED_ERROR)) {
                 console.log('dont retry1');
                 throw USER_REJECTED_ERRORS[0];
@@ -343,8 +346,8 @@ export const executeBiconomyTransaction = async (params: {
                 } catch (e) {
                     console.log(e);
                 }
-            } else {
-                console.log('retry with paymaster');
+            } else if ((e as any).toString().toLowerCase().includes(WEBHOOK_FAILED)) {
+                console.log('RETRY with paymaster ERC20');
                 const sessionSigner = await getSessionSigner(params.networkId);
                 const { waitForTxHash, userOpHash } = await smartAccountConnector.biconomyAccount.sendTransaction(
                     transactionArray,
@@ -364,6 +367,7 @@ export const executeBiconomyTransaction = async (params: {
 
                 return await validateTx(transactionHash, userOpHash, params.networkId);
             }
+            throw e;
         }
     }
 };

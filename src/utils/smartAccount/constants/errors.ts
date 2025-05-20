@@ -5,3 +5,4 @@ export const UNIVERSAL_BALANCE_NOT_ENOUGH =
 export const UNIVERSAL_BALANCE_NOT_SUFFICIENT = 'Your balance is insufficient';
 export const USER_OP_FAILED = 'userop failed internally';
 export const ACCOUNT_NONCE_FAILED = 'aa25 invalid account nonce';
+export const WEBHOOK_FAILED = 'webhook policy failed!';
