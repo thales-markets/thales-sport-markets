@@ -1561,8 +1561,8 @@ const Ticket: React.FC<TicketProps> = ({
                         }
 
                         setIsBuying(false);
-                    }, // enable multiple parallel buying for live tickets after 3s for biconomy
-                    isBiconomy ? 3000 : 0
+                    }, // enable multiple parallel buying for live tickets after 4s for biconomy
+                    isBiconomy ? 4000 : 0
                 );
             }
 
