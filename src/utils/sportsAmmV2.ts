@@ -99,7 +99,6 @@ export const getSportsAMMV2Transaction: any = async (
                     { value: BigInt(0), gas: finalEstimation }
                 );
             } else {
-                console.log('this should be executed');
                 return await executeBiconomyTransaction({
                     collateralAddress: collateralAddress as Address,
                     networkId,
