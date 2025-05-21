@@ -56,7 +56,6 @@ const checkFulfilledTx = async (
             }
         }
     }
-    console.log('requestID: ', requestId);
     const isFulfilledTx = await tradingContract?.read.requestIdToFulfillAllowed([requestId]);
 
     return { isFulfilledTx: !!isFulfilledTx, isFulfilledAdapter, isAdapterError: false };
