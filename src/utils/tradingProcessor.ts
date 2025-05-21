@@ -75,8 +75,6 @@ export const processTransaction = async (
     let counter = 0;
     const startTime = Date.now();
 
-    console.log('networkID: ', networkId);
-    console.log('tradingContract: ', tradingContract);
     let { isFulfilledTx, isFulfilledAdapter, isAdapterError } = await checkFulfilledTx(
         networkId,
         tradingContract,
