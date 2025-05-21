@@ -1552,6 +1552,7 @@ const Ticket: React.FC<TicketProps> = ({
             };
             if (isLiveTicket) {
                 dispatch(updateTicketRequests(liveTicketRequestData));
+
                 setTimeout(
                     () => {
                         if (swapToOver) {
@@ -1560,8 +1561,8 @@ const Ticket: React.FC<TicketProps> = ({
                         }
 
                         setIsBuying(false);
-                    }, // enable multiple parallel buying for live tickets after 2s
-                    2000
+                    }, // enable multiple parallel buying for live tickets after 3s for biconomy
+                    isBiconomy ? 3000 : 0
                 );
             }
 
