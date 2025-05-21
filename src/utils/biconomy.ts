@@ -1,6 +1,6 @@
 import { createSessionKeyManagerModule, DEFAULT_SESSION_KEY_MANAGER_MODULE } from '@biconomy/modules';
 import { PaymasterFeeQuote, PaymasterMode } from '@biconomy/paymaster';
-import { SUPPORTED_TOKEN_TYPE } from '@GDdark/universal-account';
+import { SUPPORTED_TOKEN_TYPE } from '@particle-network/universal-account-sdk';
 import { getPublicClient } from '@wagmi/core';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { addMonths } from 'date-fns';
