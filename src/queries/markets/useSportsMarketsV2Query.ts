@@ -8,6 +8,7 @@ import { orderBy } from 'lodash';
 import { League, LeagueMap } from 'overtime-utils';
 import { MarketsCache, TicketPosition } from 'types/markets';
 import { NetworkConfig } from 'types/network';
+import { getProtectedApiRoute } from 'utils/api';
 import { packMarket } from 'utils/marketsV2';
 
 const marketsCache: MarketsCache = {
@@ -52,13 +53,15 @@ const useSportsMarketsV2Query = (
                     statusFilter === StatusFilter.ONGOING_MARKETS || statusFilter === StatusFilter.RESOLVED_MARKETS;
                 const [marketsResponse, gamesInfoResponse, liveScoresResponse] = await Promise.all([
                     axios.get(
-                        `${generalConfig.API_URL}/overtime-v2/networks/${
-                            networkConfig.networkId
-                        }/markets/?status=${status}&ungroup=true&onlyBasicProperties=true&includeProofs=${includeProofs}${
-                            ticket ? '' : `&minMaturity=${minMaturity}`
-                        }${ticket ? `&gameIds=${gameIds}` : ''}${ticket ? `&typeIds=${typeIds}` : ''}${
-                            ticket ? `&playerIds=${playerIds}` : ''
-                        }${ticket ? `&lines=${lines}` : ''}`,
+                        getProtectedApiRoute(
+                            networkConfig.networkId,
+                            'markets',
+                            `status=${status}&ungroup=true&onlyBasicProperties=true&includeProofs=${includeProofs}${
+                                ticket ? '' : `&minMaturity=${minMaturity}`
+                            }${ticket ? `&gameIds=${gameIds}` : ''}${ticket ? `&typeIds=${typeIds}` : ''}${
+                                ticket ? `&playerIds=${playerIds}` : ''
+                            }${ticket ? `&lines=${lines}` : ''}`
+                        ),
                         noCacheConfig
                     ),
                     fetchGameInfo
