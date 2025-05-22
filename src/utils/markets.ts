@@ -35,7 +35,8 @@ const getIsDrawAvailable = (leagueId: number, marketType: MarketType) =>
     (getLeagueIsDrawAvailable(leagueId) ||
         getLeagueSport(leagueId) === Sport.BASEBALL ||
         getLeagueSport(leagueId) === Sport.CRICKET ||
-        getLeagueSport(leagueId) === Sport.HOCKEY) &&
+        getLeagueSport(leagueId) === Sport.HOCKEY ||
+        getLeagueSport(leagueId) === Sport.DARTS) &&
     isDrawAvailableMarket(marketType);
 
 export const getPositionOrder = (leagueId: number, marketType: MarketType, position: number) =>
