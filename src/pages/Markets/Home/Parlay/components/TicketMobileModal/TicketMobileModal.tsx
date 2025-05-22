@@ -124,10 +124,12 @@ const BackButtonContainer = styled.div`
     z-index: 11;
     i {
         font-size: 24px;
+        font-weight: 600;
     }
     span {
         font-size: 14px;
         text-transform: uppercase;
+        font-weight: 600;
     }
 `;
 
