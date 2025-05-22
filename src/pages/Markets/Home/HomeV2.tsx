@@ -413,7 +413,10 @@ const Home: React.FC = () => {
                     }
                 } else {
                     if (sportFilter != SportFilter.Favourites && sportFilter != SportFilter.Live) {
-                        if (((market.sport as unknown) as SportFilter) !== sportFilter) {
+                        if (
+                            ((market.sport as unknown) as SportFilter) !== sportFilter &&
+                            ((market.initialSport as unknown) as SportFilter) !== sportFilter
+                        ) {
                             return false;
                         }
                     } else {

@@ -40,6 +40,7 @@ export type SportMarketScore = {
 export type SportMarket = {
     gameId: string;
     sport: Sport;
+    initialSport?: Sport;
     leagueId: League;
     leagueName: string;
     subLeagueId: number;

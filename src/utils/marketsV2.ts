@@ -4,6 +4,7 @@ import { MarketTypeGroup } from 'enums/marketTypes';
 import { GameStatus, MarketStatus, Position } from 'enums/markets';
 import _ from 'lodash';
 import {
+    getLeagueInitialSport,
     getLeagueLabel,
     getLeaguePeriodType,
     getLeagueScoringType,
@@ -718,6 +719,7 @@ export const packMarket = (
         ...market,
         gameId: marketForGameData.gameId,
         sport: getLeagueSport(leagueId),
+        initialSport: getLeagueInitialSport(leagueId),
         leagueId: leagueId,
         leagueName: getLeagueLabel(leagueId),
         subLeagueId: marketForGameData.subLeagueId,

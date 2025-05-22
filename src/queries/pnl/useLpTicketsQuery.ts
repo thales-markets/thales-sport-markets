@@ -9,6 +9,7 @@ import { orderBy } from 'lodash';
 import { League } from 'overtime-utils';
 import { Ticket } from 'types/markets';
 import { NetworkConfig } from 'types/network';
+import { getProtectedApiRoute } from 'utils/api';
 import { getContractInstance } from 'utils/contract';
 import { getLpAddress, getRoundWithOffset, isLpAvailableForNetwork } from 'utils/liquidityPool';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
@@ -49,11 +50,19 @@ const useLpTicketsQuery = (
                     axios.get(`${generalConfig.API_URL}/overtime-v2/players-info`, noCacheConfig),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/live-scores`, noCacheConfig),
                     axios.get(
-                        `${generalConfig.API_URL}/overtime-v2/networks/${networkConfig.networkId}/markets/?status=open&ungroup=true&onlyBasicProperties=true`,
+                        getProtectedApiRoute(
+                            networkConfig.networkId,
+                            'markets',
+                            'status=open&ungroup=true&onlyBasicProperties=true'
+                        ),
                         noCacheConfig
                     ),
                     axios.get(
-                        `${generalConfig.API_URL}/overtime-v2/networks/${networkConfig.networkId}/markets/?status=ongoing&ungroup=true&onlyBasicProperties=true`,
+                        getProtectedApiRoute(
+                            networkConfig.networkId,
+                            'markets',
+                            'status=ongoing&ungroup=true&onlyBasicProperties=true'
+                        ),
                         noCacheConfig
                     ),
                 ]);
