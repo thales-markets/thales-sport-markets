@@ -1745,12 +1745,20 @@ const Ticket: React.FC<TicketProps> = ({
                         }
 
                         if (liveOrSgpTradingProcessorContract) {
-                            toast.update(
-                                toastId,
-                                getLoadingToastOptions(
-                                    t(`market.toast-message.${isSgp ? 'sgp-trade-requested' : 'live-trade-requested'}`)
-                                )
-                            );
+                            toast.update(toastId, {
+                                ...getLoadingToastOptions(
+                                    t(
+                                        `market.toast-message.${
+                                            isSgp ? 'sgp-trade-requested' : 'live-trade-requested'
+                                        }`,
+                                        {
+                                            ticket: `${getMatchLabel(markets[0])} (${getTitleText(
+                                                markets[0]
+                                            )} ${getPositionTextV2(markets[0], markets[0].position, true)})`,
+                                        }
+                                    )
+                                ),
+                            });
                             await delay(2000);
                             const { isFulfilledTx, isAdapterError } = await processTransaction(
                                 networkId,
