@@ -39,6 +39,10 @@ const TicketMobileModal: React.FC<TicketMobileModalProps> = ({ onClose, isOpen, 
                 <Scroll height="calc(100vh)">
                     <Parlay onSuccess={onClose} openMarkets={openMarkets} />
                 </Scroll>
+                <BackButtonContainer onClick={onClose}>
+                    <i className="icon-homepage icon--arrow-left" />
+                    <span>{t('market.back-to-markets')}</span>
+                </BackButtonContainer>
             </Container>
         </ReactModal>
     );
@@ -106,5 +110,25 @@ const getCustomModalStyles = (theme: ThemeInterface) => ({
         zIndex: '13',
     },
 });
+
+const BackButtonContainer = styled.div`
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 48px;
+    color: ${(props) => props.theme.textColor.primary};
+    background: ${(props) => props.theme.background.secondary};
+    z-index: 11;
+    i {
+        font-size: 24px;
+    }
+    span {
+        font-size: 14px;
+        text-transform: uppercase;
+    }
+`;
 
 export default TicketMobileModal;
