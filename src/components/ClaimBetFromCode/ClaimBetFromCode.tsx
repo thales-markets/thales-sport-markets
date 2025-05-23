@@ -8,7 +8,7 @@ import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumnNative } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
 import { claimFreeBet } from 'utils/freeBet';
-import useBiconomy from 'utils/useBiconomy';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { useAccount, useChainId, useSwitchChain } from 'wagmi';
 
 const ClaimBetFromCode: React.FC = () => {

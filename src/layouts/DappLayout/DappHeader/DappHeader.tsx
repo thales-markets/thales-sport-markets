@@ -27,7 +27,7 @@ import { FlexDivCentered } from 'styles/common';
 import { RootState } from 'types/redux';
 import { OverdropLevel, ThemeInterface } from 'types/ui';
 import { buildHref } from 'utils/routes';
-import useBiconomy from 'utils/useBiconomy';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import { ProfileIconWidget } from './components/ProfileItem/ProfileItem';
 import {

@@ -18,7 +18,7 @@ import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import { getCollaterals } from 'utils/collaterals';
 import { buildHref } from 'utils/routes';
-import useBiconomy from 'utils/useBiconomy';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { useAccount, useChainId, useClient, useDisconnect } from 'wagmi';
 
 type ProfileDropdownProps = {

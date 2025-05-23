@@ -1,9 +1,9 @@
 import { IAssetsResponse, UniversalAccount } from '@particle-network/universal-account-sdk';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
+import { delay } from 'utils/timer';
 import { useAccount, useChainId, useDisconnect, useSwitchChain, useWalletClient } from 'wagmi';
-import biconomyConnector from './biconomyWallet';
-import { delay } from './timer';
 
 let universalAddressSingleton = '';
 let universalSolanaAddressSingleton = '';
@@ -41,7 +41,7 @@ function useUniversalAccount() {
                     universalSolanaAddressSingleton = smartAccountOptions.solanaSmartAccountAddress ?? '';
                     universalBalanceSingleton = assets;
 
-                    biconomyConnector.setUniversalAccount(universalAccount);
+                    smartAccountConnector.setUniversalAccount(universalAccount);
                     initialized = true;
                     forceUpdate({}); // Trigger re-render
                 } else {
@@ -51,7 +51,7 @@ function useUniversalAccount() {
                         universalSolanaAddressSingleton = smartAccountOptions.solanaSmartAccountAddress ?? '';
                         universalBalanceSingleton = assets;
 
-                        biconomyConnector.setUniversalAccount(universalAccount);
+                        smartAccountConnector.setUniversalAccount(universalAccount);
                         initialized = true;
                         forceUpdate({}); // Trigger re-render
                     }
@@ -60,7 +60,7 @@ function useUniversalAccount() {
 
             createUniversalAccount();
         } else {
-            biconomyConnector.setUniversalAccount(null);
+            smartAccountConnector.setUniversalAccount(null);
             setSmartAddress('');
             if (initialized) {
                 universalAddressSingleton = '';

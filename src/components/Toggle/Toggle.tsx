@@ -9,7 +9,7 @@ type LabelProps = {
     lineHeight?: string;
 };
 
-type SwitchProps = {
+type ToggleProps = {
     active: boolean;
     disabled?: boolean;
     handleClick?: () => void;
@@ -29,7 +29,7 @@ type SwitchProps = {
     margin?: string;
 };
 
-type SwitchContainerProps = {
+type ToggleContainerProps = {
     disabled?: boolean;
     handleClick?: () => void;
     borderWidth?: string;
@@ -50,9 +50,9 @@ type CircleProps = {
     dotMargin?: string;
 };
 
-const defaultSwitchHeight = 28;
+const defaultToggleHeight = 28;
 
-const Toggle: React.FC<SwitchProps> = ({
+const Toggle: React.FC<ToggleProps> = ({
     active,
     disabled,
     handleClick,
@@ -78,7 +78,7 @@ const Toggle: React.FC<SwitchProps> = ({
                     {label.firstLabel}
                 </Label>
             )}
-            <SwitchContainer
+            <ToggleContainer
                 disabled={disabled}
                 borderWidth={borderWidth}
                 borderColor={borderColor}
@@ -97,7 +97,7 @@ const Toggle: React.FC<SwitchProps> = ({
                     dotBorder={dotBorder}
                     dotMargin={dotMargin}
                 />
-            </SwitchContainer>
+            </ToggleContainer>
             {label?.secondLabel && (
                 <Label fontSize={label?.fontSize} fontWeight={label?.fontWeight} lineHeight={label?.lineHeight}>
                     {label.secondLabel}
@@ -122,12 +122,12 @@ const Label = styled.span<{ fontSize?: string; fontWeight?: string; lineHeight?:
     font-size: ${(props) => (props.fontSize ? props.fontSize : '12px')};
     ${(props) => (props.fontWeight ? `font-weight: ${props.fontWeight};` : '')}
     ${(props) => (props.lineHeight ? `line-height: ${props.lineHeight};` : '')}
-    color: white;
+    color: ${(props) => props.theme.textColor.primary};
     margin-left: 5px;
     margin-right: 5px;
 `;
 
-const SwitchContainer = styled.div<SwitchContainerProps>`
+const ToggleContainer = styled.div<ToggleContainerProps>`
     display: flex;
     align-items: center;
     position: relative;
@@ -137,8 +137,8 @@ const SwitchContainer = styled.div<SwitchContainerProps>`
     border-color: ${(props: any) => (props.borderColor ? props.borderColor : props.theme.borderColor.primary)};
     border-radius: 30px;
     ${(props: any) => (props.background ? `background-color: ${props.background};` : '')}
-    width: ${(props: any) => (props.width ? props.width : defaultSwitchHeight * 2.18 + 'px')};
-    height: ${(props: any) => (props.height ? props.height : defaultSwitchHeight + 'px')};
+    width: ${(props: any) => (props.width ? props.width : defaultToggleHeight * 2.18 + 'px')};
+    height: ${(props: any) => (props.height ? props.height : defaultToggleHeight + 'px')};
     ${(props) => (props.shadow ? `box-shadow: ${props.theme.shadow.toggle};` : '')}
 `;
 
