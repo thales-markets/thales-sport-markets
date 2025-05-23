@@ -152,7 +152,7 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
                 {children}
                 <DappFooter />
             </Wrapper>
-            <ToastContainer theme={'colored'} />
+            <ToastContainer stacked theme={'colored'} />
             {freeBetFromServer && getFreeBetModalShown() && (
                 <ClaimFreeBetModal
                     onClose={() => {
