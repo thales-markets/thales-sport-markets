@@ -264,6 +264,7 @@ export const SettingsIconContainer = styled(FlexDivEnd)`
 `;
 
 export const SettingsWrapper = styled(FlexDiv)`
+    gap: 5px;
     cursor: pointer;
     color: ${(props) => props.theme.textColor.septenary};
     &:hover {
@@ -275,9 +276,9 @@ export const SettingsWrapper = styled(FlexDiv)`
 `;
 
 export const SettingsLabel = styled.span`
-    margin-right: 5px;
     font-size: 12px;
     font-weight: 600;
+    text-transform: uppercase;
 `;
 
 export const SettingsIcon = styled.i`

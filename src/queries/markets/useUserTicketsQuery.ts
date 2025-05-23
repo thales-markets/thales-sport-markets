@@ -11,7 +11,6 @@ import { NetworkConfig } from 'types/network';
 import { getContractInstance } from 'utils/contract';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
 import { isTestNetwork } from 'utils/network';
-
 import { mapTicket } from 'utils/tickets';
 
 export const useUserTicketsQuery = (

@@ -28,8 +28,9 @@ import { isSmallDevice } from 'utils/device';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import { getOnRamperUrl } from 'utils/particleWallet/utils';
 import { navigateTo } from 'utils/routes';
-import useBiconomy from 'utils/useBiconomy';
-import useUniversalAccount from 'utils/useUniversalAccount';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
+import useUniversalAccount from 'utils/smartAccount/hooks/useUniversalAccount';
+
 import { useAccount, useChainId, useClient } from 'wagmi';
 
 type FundModalProps = {

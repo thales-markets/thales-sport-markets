@@ -4,7 +4,7 @@ import { ViemContract } from 'types/viem';
 import { Address, Client, encodeFunctionData } from 'viem';
 import { estimateGas } from 'viem/actions';
 import { TradeData } from '../types/markets';
-import { executeBiconomyTransaction } from './biconomy';
+import { executeBiconomyTransaction } from './smartAccount/biconomy/biconomy';
 
 export const getSportsAMMV2Transaction: any = async (
     collateralAddress: string,
@@ -99,7 +99,6 @@ export const getSportsAMMV2Transaction: any = async (
                     { value: BigInt(0), gas: finalEstimation }
                 );
             } else {
-                console.log('this should be executed');
                 return await executeBiconomyTransaction({
                     collateralAddress: collateralAddress as Address,
                     networkId,
