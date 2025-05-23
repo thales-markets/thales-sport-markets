@@ -10,7 +10,7 @@ import { formatCurrencyWithKey, formatTxTimestamp } from 'thales-utils';
 import { LiquidityPoolUserTransactions } from 'types/liquidityPool';
 import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
-import useBiconomy from 'utils/useBiconomy';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
 
 const TransactionsTable: React.FC = () => {

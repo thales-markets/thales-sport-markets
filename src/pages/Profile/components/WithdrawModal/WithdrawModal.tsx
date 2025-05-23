@@ -17,9 +17,9 @@ import { formatCurrencyWithKey } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
-import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateral, getCollaterals } from 'utils/collaterals';
 import { getNetworkNameByNetworkId } from 'utils/network';
+import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
 import { isAddress } from 'viem';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import WithdrawalConfirmationModal from './components/WithdrawalConfirmationModal';
@@ -41,7 +41,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onClose, preSelectedToken
     const client = useClient();
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const { address, isConnected } = useAccount();
-    const walletAddress = (isBiconomy ? biconomyConnector.address : address) || '';
+    const walletAddress = (isBiconomy ? smartAccountConnector.biconomyAddress : address) || '';
 
     const [selectedToken, setSelectedToken] = useState<number>(preSelectedToken ?? 0);
     const [amount, setAmount] = useState<string | number>('');

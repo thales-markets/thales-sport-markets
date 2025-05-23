@@ -1,5 +1,7 @@
 import { TypeOptions, UpdateOptions } from 'react-toastify';
 
+const TOAST_FONT_SIZE = '14px';
+
 export const defaultToastOptions = {
     isLoading: false,
     autoClose: 4000,
@@ -8,6 +10,9 @@ export const defaultToastOptions = {
     draggable: true,
     closeOnClick: true,
     pauseOnFocusLoss: true,
+    style: {
+        fontSize: TOAST_FONT_SIZE,
+    },
 };
 
 export const getSuccessToastOptions = (message: string | React.ReactNode, options?: UpdateOptions) => {
@@ -40,6 +45,9 @@ export const getLoadingToastOptions = (message: string | React.ReactNode, option
         isLoading: true,
         render: message,
         type: 'default' as TypeOptions,
+        style: {
+            fontSize: TOAST_FONT_SIZE,
+        },
     };
 };
 

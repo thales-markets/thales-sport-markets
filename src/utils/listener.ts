@@ -17,9 +17,13 @@ export const waitForTransactionViaSocket: (hash: string, networkId: SupportedNet
 
             unsubscribe = ClientLocal.watchBlocks({
                 onBlock: async () => {
-                    const receipt = await ClientLocal.getTransactionReceipt({ hash: hash as any });
-                    if (receipt) {
-                        resolve(receipt);
+                    try {
+                        const receipt = await ClientLocal.getTransactionReceipt({ hash: hash as any });
+                        if (receipt) {
+                            resolve(receipt);
+                            unsubscribe();
+                        }
+                    } catch (e) {
                         unsubscribe();
                     }
                 },

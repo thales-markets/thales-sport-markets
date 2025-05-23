@@ -6,6 +6,11 @@ import { SupportedNetwork } from 'types/network';
 
 export const ODDS_TYPES = [OddsType.AMERICAN, OddsType.AMM, OddsType.DECIMAL];
 
+export const SLIPPAGE_MIN_VALUE = 0;
+export const SLIPPAGE_MAX_VALUE = 100;
+export const SLIPPAGE_PERCENTAGES = [1, 5, 10];
+export const DEFAULT_SLIPPAGE_PERCENTAGE = SLIPPAGE_PERCENTAGES[1];
+
 export const APPROVAL_BUFFER = 0.01;
 export const SWAP_APPROVAL_BUFFER = 0.03;
 
@@ -60,6 +65,10 @@ export const GameStatusKey: Record<GameStatus, string> = {
 };
 
 export const BATCH_SIZE = 10;
+
+export const LIVE_REQUETS_BATCH_SIZE = 1000;
+export const LATEST_LIVE_REQUESTS_SIZE = 10;
+export const LATEST_LIVE_REQUESTS_MATURITY_DAYS = 1;
 
 export const THALES_CONTRACT_RATE_KEY = 'THALES-CONTRACT';
 export const OVER_CONTRACT_RATE_KEY = 'OVER-CONTRACT';

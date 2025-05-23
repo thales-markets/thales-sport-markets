@@ -16,7 +16,6 @@ import { formatCurrencyWithKey, getEtherscanAddressLink, truncateAddress } from 
 import { Ticket } from 'types/markets';
 import { RootState } from 'types/redux';
 import { ShareTicketModalProps } from 'types/tickets';
-import { executeBiconomyTransaction } from 'utils/biconomy';
 import {
     getCollateral,
     getCollateralAddress,
@@ -27,8 +26,9 @@ import {
 import { getContractInstance } from 'utils/contract';
 import { getIsMultiCollateralSupported } from 'utils/network';
 import { refetchAfterClaim, refetchBalances } from 'utils/queryConnector';
+import { executeBiconomyTransaction } from 'utils/smartAccount/biconomy/biconomy';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { formatTicketOdds, getTicketMarketOdd } from 'utils/tickets';
-import useBiconomy from 'utils/useBiconomy';
 import { Address, Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
