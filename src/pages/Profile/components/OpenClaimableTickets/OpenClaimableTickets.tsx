@@ -4,6 +4,7 @@ import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { GAS_ESTIMATION_BUFFER_CLAIM_ALL } from 'constants/network';
 import { ContractType } from 'enums/contract';
+import { TicketAction } from 'enums/tickets';
 import { LoaderContainer } from 'pages/Markets/Home/HomeV2';
 import usePositionCountV2Query from 'queries/markets/usePositionCountV2Query';
 import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
@@ -157,8 +158,8 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
                     try {
                         const tx = encodeFunctionData({
                             abi: sportsAMMV2ContractWithSigner?.abi,
-                            functionName: 'exerciseTicket',
-                            args: [ticket.id],
+                            functionName: 'handleTicketResolving',
+                            args: [ticket.id, TicketAction.EXERCISE],
                         });
 
                         if (isBiconomy) {
