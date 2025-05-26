@@ -13,11 +13,16 @@ import { useSelector } from 'react-redux';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { CloseIcon, FlexDivCentered, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
-import { formatCurrencyWithKey } from 'thales-utils';
+import {
+    DEFAULT_CURRENCY_DECIMALS,
+    floorNumberToDecimals,
+    formatCurrencyWithKey,
+    LONG_CURRENCY_DECIMALS,
+} from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
-import { getCollateral, getCollaterals } from 'utils/collaterals';
+import { getCollateral, getCollaterals, isStableCurrency } from 'utils/collaterals';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
 import { isAddress } from 'viem';
@@ -70,6 +75,14 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onClose, preSelectedToken
     const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
     const exchangeRates: Rates | null =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
+
+    const isStableCollateral = isStableCurrency(getCollaterals(networkId)[selectedToken]);
+
+    const setMaxAmount = (value: number) => {
+        const decimals = isStableCollateral ? DEFAULT_CURRENCY_DECIMALS : LONG_CURRENCY_DECIMALS;
+
+        setAmount(floorNumberToDecimals(value, decimals));
+    };
 
     useEffect(() => {
         let walletValidation = false;
@@ -191,7 +204,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onClose, preSelectedToken
                                         getCollateral(networkId, selectedToken),
                                         paymentTokenBalance
                                     )}
-                                    onMaxButton={() => setAmount(paymentTokenBalance)}
+                                    onMaxButton={() => setMaxAmount(paymentTokenBalance)}
                                 />
                             </AmountToBuyContainer>
                         </InputContainer>
@@ -200,7 +213,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onClose, preSelectedToken
                 <ButtonContainer>
                     <Button
                         backgroundColor={theme.overdrop.borderColor.tertiary}
-                        disabled={!validation.amount}
+                        disabled={!validation.walletAddress || !validation.amount}
                         borderColor={theme.overdrop.borderColor.tertiary}
                         textColor={theme.button.textColor.primary}
                         height="44px"
