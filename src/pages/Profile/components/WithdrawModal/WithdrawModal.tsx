@@ -78,10 +78,10 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onClose, preSelectedToken
 
     const isStableCollateral = isStableCurrency(getCollaterals(networkId)[selectedToken]);
 
-    const setMaxAmount = (value: string | number) => {
+    const setMaxAmount = (value: number) => {
         const decimals = isStableCollateral ? DEFAULT_CURRENCY_DECIMALS : LONG_CURRENCY_DECIMALS;
 
-        setAmount(floorNumberToDecimals(Number(value), decimals));
+        setAmount(floorNumberToDecimals(value, decimals));
     };
 
     useEffect(() => {
