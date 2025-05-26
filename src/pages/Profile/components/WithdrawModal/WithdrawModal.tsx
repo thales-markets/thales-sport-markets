@@ -191,7 +191,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onClose, preSelectedToken
                                         getCollateral(networkId, selectedToken),
                                         paymentTokenBalance
                                     )}
-                                    onMaxButton={() => setAmount(paymentTokenBalance)}
+                                    onMaxButton={() => setAmount(paymentTokenBalance * 0.99999999)} // Avoid rounding issues with bigFormatter
                                 />
                             </AmountToBuyContainer>
                         </InputContainer>
@@ -200,7 +200,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onClose, preSelectedToken
                 <ButtonContainer>
                     <Button
                         backgroundColor={theme.overdrop.borderColor.tertiary}
-                        disabled={!validation.amount}
+                        disabled={!validation.walletAddress || !validation.amount}
                         borderColor={theme.overdrop.borderColor.tertiary}
                         textColor={theme.button.textColor.primary}
                         height="44px"
