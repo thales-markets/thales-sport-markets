@@ -39,6 +39,7 @@ const useLpTicketsQuery = (
                     liveScoresResponse,
                     openMarketsResponse,
                     ongoingMarketsResponse,
+                    pausedMarketsResponse,
                 ] = await Promise.all([
                     isLpAvailableForNetwork(networkConfig.networkId, lpCollateral)
                         ? liquidityPoolDataContract.read.getRoundTickets([
@@ -65,6 +66,14 @@ const useLpTicketsQuery = (
                         ),
                         noCacheConfig
                     ),
+                    axios.get(
+                        getProtectedApiRoute(
+                            networkConfig.networkId,
+                            'markets',
+                            'status=paused&ungroup=true&onlyBasicProperties=true'
+                        ),
+                        noCacheConfig
+                    ),
                 ]);
 
                 const tickets = Array.isArray(lpTickets) ? lpTickets : [lpTickets];
@@ -80,7 +89,11 @@ const useLpTicketsQuery = (
                 const promisesResult = await Promise.all(promises);
                 const ticketsData = promisesResult.flat(1);
 
-                const openOngoingMarkets = [...openMarketsResponse.data, ...ongoingMarketsResponse.data];
+                const openOngoingMarkets = [
+                    ...openMarketsResponse.data,
+                    ...ongoingMarketsResponse.data,
+                    ...pausedMarketsResponse.data,
+                ];
 
                 const mappedTickets: Ticket[] = ticketsData.map((ticket: any) =>
                     mapTicket(

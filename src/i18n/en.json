@@ -993,6 +993,7 @@
             "result-set-confirmation-message": "Result successfully set",
             "resolve-market-tooltip": "Resolve market",
             "cancel-ticket-tooltip": "Cancel ticket",
+            "resolving-instructions": "The instructions for resolving the market are on this <instructionsLink>link</instructionsLink>.",
             "validation": {
                 "unstaking-in-progress": "Unstaking in progress, you cannot stake",
                 "staking-paused": "Staking paused, please try later"
