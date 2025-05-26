@@ -3,8 +3,8 @@ import CollateralSelector from 'components/CollateralSelector';
 import ShareTicketModalV2 from 'components/ShareTicketModalV2';
 import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import { ZERO_ADDRESS } from 'constants/network';
 import { ContractType } from 'enums/contract';
+import { TicketAction } from 'enums/tickets';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -120,7 +120,6 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
     const ticketCollateralHasLp = isLpSupported(ticket.collateral);
     const isTicketCollateralDefaultCollateral = ticket.collateral === defaultCollateral;
     const isClaimCollateralDefaultCollateral = claimCollateral === defaultCollateral;
-    const isEth = claimCollateralAddress === ZERO_ADDRESS;
 
     const isClaimable = ticket.isClaimable;
 
@@ -149,26 +148,28 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
                                   collateralAddress: getCollateralAddress(networkId, 0),
                                   networkId,
                                   contract: sportsAMMV2ContractWithSigner,
-                                  methodName: 'exerciseTicket',
-                                  data: [ticketAddress],
+                                  methodName: 'handleTicketResolving',
+                                  data: [ticketAddress, TicketAction.EXERCISE],
                               })
                             : await executeBiconomyTransaction({
                                   collateralAddress: claimCollateralAddress as Address,
                                   networkId,
                                   contract: sportsAMMV2ContractWithSigner,
                                   methodName: 'exerciseTicketOffRamp',
-                                  data: [ticketAddress, claimCollateralAddress, isEth],
+                                  data: [ticketAddress, claimCollateralAddress],
                               });
                 } else {
                     hash =
                         isClaimCollateralDefaultCollateral ||
                         (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral) ||
                         ticket.isFreeBet
-                            ? await sportsAMMV2ContractWithSigner.write.exerciseTicket([ticketAddress])
+                            ? await sportsAMMV2ContractWithSigner.write.handleTicketResolving([
+                                  ticketAddress,
+                                  TicketAction.EXERCISE,
+                              ])
                             : await sportsAMMV2ContractWithSigner.write.exerciseTicketOffRamp([
                                   ticketAddress,
                                   claimCollateralAddress,
-                                  isEth,
                               ]);
                 }
                 const txReceipt = await waitForTransactionReceipt(client as Client, {
