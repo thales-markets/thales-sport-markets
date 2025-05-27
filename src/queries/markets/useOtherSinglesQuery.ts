@@ -94,15 +94,20 @@ export const useOtherSinglesQuery = (
 
                     const playersIds = tickets.map((ticket: any) => ticket.marketsData[0].playerId);
                     const gamesInfoResponse = promisesResult[promisesLength - 1];
-                    const playersInfoResponse = await axios.get(
-                        `${
-                            generalConfig.API_URL
-                        }/overtime-v2/players-info?${playersInfoQueryParam}&playerIds=${playersIds.join()}`,
-                        noCacheConfig
-                    );
+                    const playersInfoResponse =
+                        playersIds.length > 0
+                            ? (
+                                  await axios.get(
+                                      `${
+                                          generalConfig.API_URL
+                                      }/overtime-v2/players-info?${playersInfoQueryParam}&playerIds=${playersIds.join()}`,
+                                      noCacheConfig
+                                  )
+                              ).data
+                            : [];
 
                     const mappedTickets: Ticket[] = tickets.map((ticket: any) =>
-                        mapTicket(ticket, networkConfig.networkId, gamesInfoResponse.data, playersInfoResponse.data, [])
+                        mapTicket(ticket, networkConfig.networkId, gamesInfoResponse.data, playersInfoResponse, [])
                     );
 
                     userTickets = orderBy(updateTotalQuoteAndPayout(mappedTickets), ['timestamp'], ['desc']);
