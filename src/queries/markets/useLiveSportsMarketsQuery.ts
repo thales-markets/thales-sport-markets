@@ -30,20 +30,15 @@ const useLiveSportsMarketsQuery = (
                     .reduce((accumulator: SportMarkets, value) => accumulator.concat(value), [])
                     .map((game: SportMarket) => {
                         game.childMarkets = game.childMarkets.map((childMarket: any) => {
-                            return {
-                                ...childMarket,
-                                live: true, // TODO: remove this property from business logic on UI
-                                maturityDate: new Date(childMarket.maturityDate),
-                                odds: childMarket.odds.map((odd: any) => odd.normalizedImplied),
-                            };
+                            childMarket.live = true; // TODO: remove this property from business logic on UI
+                            childMarket.maturityDate = new Date(childMarket.maturityDate);
+                            childMarket.odds = childMarket.odds.map((odd: any) => odd.normalizedImplied);
+                            return childMarket;
                         });
-
-                        return {
-                            ...game,
-                            live: true, // TODO: remove this property from business logic on UI(we can leave this one for parent, but child markets shouldnt have live flag)
-                            maturityDate: new Date(game.maturityDate),
-                            odds: game.odds.map((odd: any) => odd.normalizedImplied),
-                        };
+                        game.live = true; // TODO: remove this property from business logic on UI(we can leave this one for parent, but child markets shouldnt have live flag)
+                        game.maturityDate = new Date(game.maturityDate);
+                        game.odds = game.odds.map((odd: any) => odd.normalizedImplied);
+                        return game;
                     });
                 marketsCache.live = marketsFlattened;
                 return { live: marketsFlattened };

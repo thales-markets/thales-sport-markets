@@ -80,19 +80,17 @@ const useSportsMarketsV2Query = (
                     .map((market: any) => {
                         const gameInfo = gamesInfo ? gamesInfo[market.gameId] : undefined;
                         const liveScore = liveScores ? liveScores[market.gameId] : undefined;
+                        const marketFinal = packMarket(market, gameInfo, liveScore, false);
 
-                        return {
-                            ...packMarket(market, gameInfo, liveScore, false),
-                            childMarkets: orderBy(
-                                market.childMarkets
-                                    .filter((childMarket: any) => market.status === childMarket.status)
-                                    .map((childMarket: any) =>
-                                        packMarket(childMarket, gameInfo, liveScore, false, market)
-                                    ),
-                                ['typeId'],
-                                ['asc']
-                            ),
-                        };
+                        marketFinal.childMarkets = orderBy(
+                            market.childMarkets
+                                .filter((childMarket: any) => market.status === childMarket.status)
+                                .map((childMarket: any) => packMarket(childMarket, gameInfo, liveScore, false, market)),
+                            ['typeId'],
+                            ['asc']
+                        );
+
+                        return marketFinal;
                     });
 
                 marketsCache[statusFilter] = mappedMarkets;

@@ -39,20 +39,19 @@ const useSportMarketQuery = (
                 const gameInfo = gameInfoResponse.data;
                 const liveScore = liveScoreResponse.data;
 
-                return {
-                    ...packMarket(market, gameInfo, liveScore, isLive),
-                    childMarkets: orderBy(
-                        market.childMarkets
-                            .filter(
-                                (childMarket: any) =>
-                                    (enableOnlyOpenChildMarkets && childMarket.status === MarketStatus.OPEN) ||
-                                    !enableOnlyOpenChildMarkets
-                            )
-                            .map((childMarket: any) => packMarket(childMarket, gameInfo, liveScore, isLive, market)),
-                        ['typeId'],
-                        ['asc']
-                    ),
-                };
+                const finalMarket = packMarket(market, gameInfo, liveScore, isLive);
+                finalMarket.childMarkets = orderBy(
+                    market.childMarkets
+                        .filter(
+                            (childMarket: any) =>
+                                (enableOnlyOpenChildMarkets && childMarket.status === MarketStatus.OPEN) ||
+                                !enableOnlyOpenChildMarkets
+                        )
+                        .map((childMarket: any) => packMarket(childMarket, gameInfo, liveScore, isLive, market)),
+                    ['typeId'],
+                    ['asc']
+                );
+                return finalMarket;
             } catch (e) {
                 console.log(e);
                 return undefined;
