@@ -74,21 +74,14 @@ export const useOtherSinglesQuery = (
                     }
 
                     promises.push(
-                        axios.get(`${generalConfig.API_URL}/overtime-v2/games-info/${gameId}`, noCacheConfig)
+                        axios.get(`${generalConfig.API_URL}/overtime-v2/games-info?gameIds=${gameId}`, noCacheConfig)
                     );
-                    promises.push(
-                        axios.get(
-                            `${generalConfig.API_URL}/overtime-v2/players-info?${playersInfoQueryParam}`,
-                            noCacheConfig
-                        )
-                    );
-                    promises.push(axios.get(`${generalConfig.API_URL}/overtime-v2/live-scores`, noCacheConfig));
 
                     const promisesResult = await Promise.all(promises);
                     const promisesLength = promises.length;
 
                     const tickets = promisesResult
-                        .slice(0, promisesLength - 3)
+                        .slice(0, promisesLength - 1)
                         .map((allData) => [
                             ...allData.ticketsData,
                             ...allData.freeBetsData,
@@ -99,21 +92,17 @@ export const useOtherSinglesQuery = (
                             return Number(ticket.numOfMarkets) === 1 && ticket.marketsData[0].gameId === gameId;
                         });
 
-                    const gamesInfoResponse = promisesResult[promisesLength - 3];
-                    const playersInfoResponse = promisesResult[promisesLength - 2];
-                    const liveScoresResponse = promisesResult[promisesLength - 1];
-
-                    const gameInfo = new Map();
-                    gameInfo.set(gameId, gamesInfoResponse.data);
+                    const playersIds = tickets.map((ticket: any) => ticket.marketsData[0].playerId);
+                    const gamesInfoResponse = promisesResult[promisesLength - 1];
+                    const playersInfoResponse = await axios.get(
+                        `${
+                            generalConfig.API_URL
+                        }/overtime-v2/players-info?${playersInfoQueryParam}&playerIds=${playersIds.join()}`,
+                        noCacheConfig
+                    );
 
                     const mappedTickets: Ticket[] = tickets.map((ticket: any) =>
-                        mapTicket(
-                            ticket,
-                            networkConfig.networkId,
-                            Object.fromEntries(gameInfo),
-                            playersInfoResponse.data,
-                            liveScoresResponse.data
-                        )
+                        mapTicket(ticket, networkConfig.networkId, gamesInfoResponse.data, playersInfoResponse.data, [])
                     );
 
                     userTickets = orderBy(updateTotalQuoteAndPayout(mappedTickets), ['timestamp'], ['desc']);
