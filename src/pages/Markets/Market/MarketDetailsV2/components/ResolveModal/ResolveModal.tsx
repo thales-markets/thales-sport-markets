@@ -3,10 +3,11 @@ import Button from 'components/Button';
 import Tooltip from 'components/Tooltip';
 import TextInput from 'components/fields/TextInput';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { LINKS } from 'constants/links';
 import { ContractType } from 'enums/contract';
 import { ResolveType } from 'enums/resultManagement';
 import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import { toast } from 'react-toastify';
 import { useTheme } from 'styled-components';
@@ -23,7 +24,9 @@ import {
     Container,
     defaultButtonProps,
     defaultCustomStyles,
+    Description,
     InputContainer,
+    InstructionsLink,
     Label,
     MarketDataContainer,
     Title,
@@ -196,6 +199,20 @@ const ResolveModal: React.FC<ResolveModalProps> = ({ ticketMarket: market, onClo
             <Container>
                 <CloseIcon className="icon icon--close" onClick={() => onClose()} />
                 <Title>{t('markets.resolve-modal.title')}</Title>
+                <Description>
+                    <Trans
+                        i18nKey="markets.resolve-modal.resolving-instructions"
+                        components={{
+                            instructionsLink: (
+                                <InstructionsLink
+                                    href={LINKS.ResolvingResultsInstructions}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                />
+                            ),
+                        }}
+                    />
+                </Description>
                 <MarketDataContainer>
                     <Label>{t('markets.resolve-modal.game')}:</Label>
                     <Value>{market.gameId}</Value>
