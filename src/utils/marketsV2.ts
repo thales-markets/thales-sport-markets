@@ -751,12 +751,12 @@ export const packMarket = (
             ...packedMarket,
             tournamentName:
                 gameInfo?.tournamentName || market?.tournamentName !== NOT_AVAILABLE ? market?.tournamentName : '',
-            tournamentRound: gameInfo?.tournamentRound,
             homeScore,
             awayScore,
             homeScoreByPeriod,
             awayScoreByPeriod,
             isGameFinished: gameInfo?.isGameFinished,
+            finishedTimestamp: gameInfo?.finishedTimestamp,
             gameStatus: gameInfo?.gameStatus,
             liveScore,
             live: isLive,
