@@ -188,9 +188,36 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
         [MarketTypeGroup.PLAYER_TURNOVERS]: [MarketType.PLAYER_PROPS_TURNOVERS],
         [MarketTypeGroup.PLAYER_BLOCKS]: [MarketType.PLAYER_PROPS_BLOCKS, MarketType.PLAYER_PROPS_STEALS_BLOCKS],
         [MarketTypeGroup.PLAYER_STEALS]: [MarketType.PLAYER_PROPS_STEALS, MarketType.PLAYER_PROPS_STEALS_BLOCKS],
-        [MarketTypeGroup.PLAYER_THRESS]: [MarketType.PLAYER_PROPS_3PTS_MADE],
+        [MarketTypeGroup.PLAYER_THRESS]: [MarketType.PLAYER_PROPS_3PTS_MADE, MarketType.PLAYER_PROPS_THREES_ATTEMPTED],
+        [MarketTypeGroup.PLAYER_TWO_POINTERS]: [
+            MarketType.PLAYER_PROPS_MADE_TWO_POINTERS,
+            MarketType.PLAYER_PROPS_TWO_POINTERS_ATTEMPTED,
+        ],
+        [MarketTypeGroup.PLAYER_FREE_THROWS]: [
+            MarketType.PLAYER_PROPS_FREE_THROWS_MADE,
+            MarketType.PLAYER_PROPS_FREE_THROWS_ATTEMPTED,
+        ],
+        [MarketTypeGroup.PLAYER_FIELD_GOALS]: [
+            MarketType.PLAYER_PROPS_FIELD_GOALS_MADE,
+            MarketType.PLAYER_PROPS_FIELD_GOALS_ATTEMPTED,
+        ],
         [MarketTypeGroup.PLAYER_DOUBLE_DOUBLE]: [MarketType.PLAYER_PROPS_DOUBLE_DOUBLE],
         [MarketTypeGroup.PLAYER_TRIPLE_DOUBLE]: [MarketType.PLAYER_PROPS_TRIPLE_DOUBLE],
+        [MarketTypeGroup.PLAYER_COMBOS]: [
+            MarketType.PLAYER_PROPS_DOUBLE_DOUBLE,
+            MarketType.PLAYER_PROPS_TRIPLE_DOUBLE,
+            MarketType.PLAYER_PROPS_POINTS_ASSISTS,
+            MarketType.PLAYER_PROPS_POINTS_REBOUNDS,
+            MarketType.PLAYER_PROPS_POINTS_REBOUNDS_ASSISTS,
+            MarketType.PLAYER_PROPS_REBOUNDS_ASSISTS,
+            MarketType.PLAYER_PROPS_STEALS_BLOCKS,
+        ],
+        [MarketTypeGroup.PLAYER_DEFENSE]: [
+            MarketType.PLAYER_PROPS_BLOCKS,
+            MarketType.PLAYER_PROPS_STEALS,
+            MarketType.PLAYER_PROPS_STEALS_BLOCKS,
+            MarketType.PLAYER_PROPS_TURNOVERS,
+        ],
     },
     [Sport.FIGHTING]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
