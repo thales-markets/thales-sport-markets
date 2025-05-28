@@ -11,7 +11,7 @@ import { OverdropUserData } from 'types/overdrop';
 import { RootState } from 'types/redux';
 import { OverdropLevel } from 'types/ui';
 import { getCurrentLevelByPoints } from 'utils/overdrop';
-import useBiconomy from 'utils/useBiconomy';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { useAccount } from 'wagmi';
 
 const LOYALTY_BOOST = ['5%', '10%', '15%', '20%', '25%'];

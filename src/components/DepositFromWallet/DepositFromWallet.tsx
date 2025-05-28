@@ -17,10 +17,10 @@ import { FlexDivCentered, FlexDivColumnCentered, FlexDivRow } from 'styles/commo
 import { coinParser, formatCurrencyWithKey } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { ThemeInterface } from 'types/ui';
-import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateral, getCollateralIndex, getCollaterals } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import { getNetworkNameByNetworkId } from 'utils/network';
+import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
 import { Address, Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
@@ -41,7 +41,7 @@ const DepositFromWallet: React.FC<DepositFromWalletProps> = ({ onClose, preSelec
     const walletClient = useWalletClient();
     const { address, isConnected } = useAccount();
 
-    const walletAddress = biconomyConnector?.address || '';
+    const walletAddress = smartAccountConnector?.biconomyAddress || '';
 
     const [selectedToken, setSelectedToken] = useState<number>(preSelectedToken ? preSelectedToken : 0);
     const [amount, setAmount] = useState<string | number>('');

@@ -5,7 +5,7 @@ import { getIsBiconomy } from 'redux/modules/wallet';
 import { Ticket } from 'types/markets';
 import { RootState } from 'types/redux';
 import { getCaseAccentInsensitiveString } from 'utils/formatters/string';
-import useBiconomy from 'utils/useBiconomy';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { isAddress } from 'viem';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import TicketTransactionsTable from '../../../Markets/Market/MarketDetailsV2/components/TicketTransactionsTable';
@@ -19,14 +19,12 @@ const TicketTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
     const { smartAddress } = useBiconomy();
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
-    const isSearchTextWalletAddress = searchText && isAddress(searchText);
+    const isSearchTextWalletAddress = !!searchText && isAddress(searchText);
 
     const userTicketsQuery = useUserTicketsQuery(
         isSearchTextWalletAddress ? searchText : walletAddress,
         { networkId, client },
-        {
-            enabled: isSearchTextWalletAddress || isConnected,
-        }
+        { enabled: isSearchTextWalletAddress || isConnected }
     );
 
     const userTickets: Ticket[] = useMemo(() => {

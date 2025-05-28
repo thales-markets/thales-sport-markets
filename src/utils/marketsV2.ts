@@ -4,6 +4,7 @@ import { MarketTypeGroup } from 'enums/marketTypes';
 import { GameStatus, MarketStatus, Position } from 'enums/markets';
 import _ from 'lodash';
 import {
+    getLeagueInitialSport,
     getLeagueLabel,
     getLeaguePeriodType,
     getLeagueScoringType,
@@ -35,7 +36,10 @@ import {
     Sport,
 } from 'overtime-utils';
 import {
+    LiveTradingRequest,
+    LiveTradingRequestRaw,
     SerializableSportMarket,
+    SerializableTicketMarket,
     SportMarket,
     Team,
     Ticket,
@@ -564,6 +568,71 @@ export const sportMarketAsTicketPosition = (market: SportMarket, position: numbe
         playerProps: market.playerProps,
     } as TicketPosition);
 
+export const addTicketMarketToLiveTradingRequest = (
+    request: LiveTradingRequestRaw,
+    gameInfo: any
+): LiveTradingRequest => {
+    const leagueId = `${request.leagueId}`.startsWith('152')
+        ? League.TENNIS_WTA
+        : `${request.leagueId}`.startsWith('153')
+        ? League.TENNIS_GS
+        : `${request.leagueId}`.startsWith('156')
+        ? League.TENNIS_MASTERS
+        : UFC_LEAGUE_IDS.includes(request.leagueId)
+        ? League.UFC
+        : Number(request.leagueId);
+    const isPlayerProps = isPlayerPropsMarket(request.typeId);
+    const type = MarketTypeMap[request.typeId];
+
+    const homeTeam = !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => team.isHome);
+    const homeTeamName = homeTeam?.name ?? 'Home Team';
+    const homeScoreByPeriod = homeTeam ? homeTeam.scoreByPeriod : [];
+
+    const awayTeam = !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => !team.isHome);
+    const awayTeamName = awayTeam?.name ?? 'Away Team';
+    const awayScoreByPeriod = awayTeam ? awayTeam.scoreByPeriod : [];
+
+    return {
+        ...request,
+        ticket: {
+            gameId: request.gameId,
+            sport: getLeagueSport(leagueId),
+            leagueId: leagueId,
+            subLeagueId: request.leagueId,
+            leagueName: '',
+            typeId: request.typeId,
+            type: type ? type.key : '',
+            maturity: 0,
+            maturityDate: new Date(),
+            homeTeam: homeTeamName,
+            awayTeam: awayTeamName,
+            homeScoreByPeriod,
+            awayScoreByPeriod,
+            status: 0,
+            isOpen: true,
+            isResolved: false,
+            isCancelled: false,
+            isPaused: false,
+            isOneSideMarket: isOneSideMarket(leagueId, request.typeId),
+            line: request.line,
+            isPlayerPropsMarket: isPlayerProps,
+            isOneSidePlayerPropsMarket: isOneSidePlayerPropsMarket(request.typeId),
+            isYesNoPlayerPropsMarket: isYesNoPlayerPropsMarket(request.typeId),
+            playerProps: {
+                playerId: 0,
+                playerName: '',
+            },
+            combinedPositions: [],
+            odds: [],
+            proof: [],
+            childMarkets: [],
+            winningPositions: [],
+            position: request.position,
+            odd: request.expectedQuote,
+        } as TicketMarket,
+    };
+};
+
 export const sportMarketAsSerializable = (market: SportMarket): SerializableSportMarket => {
     const serializableChildMarkets = market.childMarkets
         ? market.childMarkets.map((childMarket) => _.omit(childMarket, 'maturityDate'))
@@ -589,6 +658,33 @@ export const serializableSportMarketAsSportMarket = (market: SerializableSportMa
     } as SportMarket;
 
     return sportMarket;
+};
+
+export const ticketMarketAsSerializable = (market: TicketMarket): SerializableTicketMarket => {
+    const serializableChildMarkets = market.childMarkets
+        ? market.childMarkets.map((childMarket) => _.omit(childMarket, 'maturityDate'))
+        : market.childMarkets;
+    const serializableTicketMarket = {
+        ..._.omit(market, 'maturityDate'),
+        childMarkets: serializableChildMarkets,
+    };
+    return serializableTicketMarket;
+};
+
+export const serializableTicketMarketAsTicketMarket = (market: SerializableTicketMarket): TicketMarket => {
+    const childMarkets = market.childMarkets
+        ? market.childMarkets.map((childMarket) => ({
+              ...childMarket,
+              maturityDate: new Date(secondsToMilliseconds(childMarket.maturity)),
+          }))
+        : market.childMarkets;
+    const ticketMarket = {
+        ...market,
+        maturityDate: new Date(secondsToMilliseconds(market.maturity)),
+        childMarkets,
+    } as TicketMarket;
+
+    return ticketMarket;
 };
 
 export const packMarket = (
@@ -623,6 +719,7 @@ export const packMarket = (
         ...market,
         gameId: marketForGameData.gameId,
         sport: getLeagueSport(leagueId),
+        initialSport: getLeagueInitialSport(leagueId),
         leagueId: leagueId,
         leagueName: getLeagueLabel(leagueId),
         subLeagueId: marketForGameData.subLeagueId,
@@ -654,12 +751,12 @@ export const packMarket = (
             ...packedMarket,
             tournamentName:
                 gameInfo?.tournamentName || market?.tournamentName !== NOT_AVAILABLE ? market?.tournamentName : '',
-            tournamentRound: gameInfo?.tournamentRound,
             homeScore,
             awayScore,
             homeScoreByPeriod,
             awayScoreByPeriod,
             isGameFinished: gameInfo?.isGameFinished,
+            finishedTimestamp: gameInfo?.finishedTimestamp,
             gameStatus: gameInfo?.gameStatus,
             liveScore,
             live: isLive,

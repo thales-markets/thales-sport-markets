@@ -1,6 +1,7 @@
 import burger from 'assets/images/burger.svg';
 import OverdropButtonBackground from 'assets/images/overdrop/overdrop-button-background.webp';
 import overdrop from 'assets/images/overdrop/overdrop-nav.webp';
+import { MAIN_VIEW_RIGHT_CONTAINER_WIDTH_LARGE } from 'constants/ui';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivEnd, FlexDivRow, FlexDivRowCentered, FlexDivStart } from 'styles/common';
@@ -37,7 +38,7 @@ export const LeftContainer = styled(FlexDivRow)`
 `;
 
 export const MiddleContainer = styled(FlexDivRowCentered)`
-    width: calc(100% - 263px - 360px - 50px);
+    width: calc(100% - 263px - ${MAIN_VIEW_RIGHT_CONTAINER_WIDTH_LARGE} - 50px);
     justify-content: space-between;
     gap: 10px;
 
@@ -48,7 +49,7 @@ export const MiddleContainer = styled(FlexDivRowCentered)`
 
 export const RightContainer = styled(FlexDivRowCentered)`
     position: relative;
-    width: 360px;
+    width: ${MAIN_VIEW_RIGHT_CONTAINER_WIDTH_LARGE};
 `;
 
 export const MiddleContainerSectionLeft = styled(FlexDivStart)`

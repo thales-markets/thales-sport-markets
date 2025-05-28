@@ -22,10 +22,11 @@ import { CloseIcon, FlexDiv, FlexDivColumn, FlexDivRow } from 'styles/common';
 import { coinParser, Coins, formatCurrency, formatCurrencyWithKey } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
-import { sendBiconomyTransaction } from 'utils/biconomy';
 import { getCollateralAddress, getCollateralIndex, getCollaterals } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import { checkAllowance } from 'utils/network';
+import { sendBiconomyTransaction } from 'utils/smartAccount/biconomy/biconomy';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import {
     buildTxForApproveTradeWithRouter,
     buildTxForSwap,
@@ -35,7 +36,6 @@ import {
     sendTransaction,
 } from 'utils/swap';
 import { delay } from 'utils/timer';
-import useBiconomy from 'utils/useBiconomy';
 import { Address } from 'viem';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 

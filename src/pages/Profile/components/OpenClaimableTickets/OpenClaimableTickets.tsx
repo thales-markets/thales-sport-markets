@@ -4,6 +4,7 @@ import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { GAS_ESTIMATION_BUFFER_CLAIM_ALL } from 'constants/network';
 import { ContractType } from 'enums/contract';
+import { TicketAction } from 'enums/tickets';
 import { LoaderContainer } from 'pages/Markets/Home/HomeV2';
 import usePositionCountV2Query from 'queries/markets/usePositionCountV2Query';
 import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
@@ -15,12 +16,13 @@ import { getIsMobile } from 'redux/modules/app';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import { FlexDivCentered } from 'styles/common';
 import { RootState } from 'types/redux';
-import { sendBiconomyTransaction } from 'utils/biconomy';
 import { getCollateral, getCollaterals, getDefaultCollateral, isLpSupported } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import { getCaseAccentInsensitiveString } from 'utils/formatters/string';
 import { refetchAfterClaim } from 'utils/queryConnector';
-import useBiconomy from 'utils/useBiconomy';
+import { sendBiconomyTransaction } from 'utils/smartAccount/biconomy/biconomy';
+
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { Address, Client, encodeFunctionData, isAddress } from 'viem';
 import { estimateContractGas, waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
@@ -66,7 +68,7 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
 
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
-    const isSearchTextWalletAddress = searchText && isAddress(searchText);
+    const isSearchTextWalletAddress = !!searchText && isAddress(searchText);
     const [claimCollateralIndex, setClaimCollateralIndex] = useState(0);
     const [openClaimable, setClaimableState] = useState<boolean>(true);
     const [showDetails, setShowDetails] = useState<boolean>(false);
@@ -156,8 +158,8 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
                     try {
                         const tx = encodeFunctionData({
                             abi: sportsAMMV2ContractWithSigner?.abi,
-                            functionName: 'exerciseTicket',
-                            args: [ticket.id],
+                            functionName: 'handleTicketResolving',
+                            args: [ticket.id, TicketAction.EXERCISE],
                         });
 
                         if (isBiconomy) {
@@ -291,11 +293,11 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
                                             top={-2}
                                         />
                                     </ClaimAllContainer>
-                                    {userTicketsByStatus.claimable.map((parlayMarket, index) => {
+                                    {userTicketsByStatus.claimable.map((parlayMarket) => {
                                         return (
                                             <TicketDetails
                                                 ticket={parlayMarket}
-                                                key={index}
+                                                key={parlayMarket.id}
                                                 claimCollateralIndex={claimCollateralIndex}
                                                 setClaimCollateralIndex={setClaimCollateralIndex}
                                             />
@@ -345,11 +347,11 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
                         <>
                             {userTicketsByStatus.open.length ? (
                                 <>
-                                    {userTicketsByStatus.open.map((parlayMarket, index) => {
+                                    {userTicketsByStatus.open.map((parlayMarket) => {
                                         return (
                                             <TicketDetails
                                                 ticket={parlayMarket}
-                                                key={index}
+                                                key={parlayMarket.id}
                                                 claimCollateralIndex={claimCollateralIndex}
                                                 setClaimCollateralIndex={setClaimCollateralIndex}
                                                 showDetailsExplicit={showDetails}

@@ -28,7 +28,7 @@ import { getCollateral, getCollateralAddress, getCollateralIndex, getFreeBetColl
 import { getContractInstance } from 'utils/contract';
 import freeBetHolder from 'utils/contracts/freeBetHolder';
 import { checkAllowance, getDefaultCollateralIndexForNetworkId } from 'utils/network';
-import useBiconomy from 'utils/useBiconomy';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { Client, isAddress } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';

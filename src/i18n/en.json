@@ -38,8 +38,12 @@
             "rows-per-page": "Rows per page:"
         },
         "filter": {
-            "date": {
-                "choose": "Choose date"
+            "tooltip": {
+                "standard-view": "Switch to standard view",
+                "column-view": "Switch to three column view",
+                "sorting": "Select games sorting",
+                "date": "Select date range",
+                "odds": "Select odds format"
             }
         },
         "wallet": {
@@ -101,6 +105,11 @@
             "something-went-wrong": "Something went wrong!",
             "unknown-error-try-again": "An unknown error occurred after you submitted. Please try again.",
             "unknown-error-try-again-general": "An unknown error occurred. Please try again.",
+            "tx-canceled": "Transaction is canceled.",
+            "tx-reverted": "Transaction is reverted.",
+            "tx-receipt-not-received": "Unable to obtain transaction receipt. The trade might still get executed, check your created tickets.",
+            "tx-not-fulfilled": "Failed to fulfill the trade.",
+            "tx-request-failed": "Failed to request the trade.",
             "batch-transaction-single-failure": "A transaction was rejected or failed.",
             "insufficient-balance": "Insufficient balance",
             "enter-amount": "Enter amount",
@@ -206,7 +215,7 @@
             "swap-success": "Successfully swapped {{ currencyKey }}",
             "approve-success": "Successfully approved",
             "buy-success": "Successfully bought",
-            "sell-success": "Successfully sold",
+            "buy-success-ticket": "Successfully bought ticket: {{ ticket }}",
             "claim-winnings-success": "Winnings successfully claimed",
             "claim-refund-success": "Refund successfully claimed",
             "withdraw-success": "Successfuly withdrawn",
@@ -221,7 +230,7 @@
             "click-open-twitter": "Click here to open Twitter",
             "metamask-not-supported": "Metamask browser doesn't support image download! Please use another browser to share image",
             "ios-not-supported": "Sharing images not supported on iOS devices. If you want to share the image please use desktop version",
-            "live-trade-requested": "Live trade requested",
+            "live-trade-requested": "Live trade requested: {{ ticket }}",
             "sgp-trade-requested": "SGP trade requested",
             "fulfilling-live-trade": "Fulfilling live trade",
             "fulfilling-sgp-trade": "Fulfilling SGP trade"
@@ -235,7 +244,7 @@
                 "yourpositions": "Your positions",
                 "claim": "Claimable",
                 "history": "Your transactions",
-                "cancelledmarkets": "Cancelled",
+                "cancelledmarkets": "Canceled",
                 "pausedmarkets": "Paused",
                 "archivedmarkets": "Archived markets",
                 "tooltip": "Markets resolved more than 7 days ago"
@@ -529,7 +538,7 @@
             "started": "Started",
             "live": "Live",
             "time": "Time",
-            "canceled": "Cancelled",
+            "canceled": "Canceled",
             "pending-resolution": "Pending resolution",
             "claim": "Claim",
             "coming-soon": "Coming soon",
@@ -542,6 +551,7 @@
             "map": "Map",
             "quarter": "Quarter",
             "set": "Set",
+            "leg": "Leg",
             "inning": "Inning",
             "half": "Half",
             "round": "Round",
@@ -834,7 +844,6 @@
             "empty-description": "Add position, choose a market and make your selection.",
             "accept-odds-changes": "Accept odds changes",
             "odds-changed-description": "Odds changed. Accept changes in order to buy.",
-            "tx-not-received": "Unable to obtain transaction receipt. The trade might still get executed, check your profile for created tickets.",
             "tooltip": {
                 "regular": "Build your bet slip with singles, parlays or live bets.",
                 "system": "Create system bets that cover multiple combinations of selections. Even if some picks lose, you can still win.",
@@ -905,8 +914,10 @@
                 "parlay": "Ticket"
             },
             "slippage": {
-                "slippage": "Slippage",
-                "label": "Accept trade if odds drop by:",
+                "accept": "Accept odds change",
+                "label": "Accept trade if odds drop by",
+                "any-odds-label": "Accept any odds",
+                "any": "Any",
                 "enter-value": "Enter value",
                 "invalid-value": "Invalid value"
             },
@@ -947,11 +958,23 @@
             "latest-odds-checking": "Checking for latest odds"
         },
         "parlay-related-markets": {
-            "title": "Your other singles on this game",
+            "title-live": "Your recent live tickets",
+            "title-other": "Your other singles on this game",
             "empty": "No tickets",
             "total-quote": "Total quote",
             "paid": "Paid",
-            "payout": "Payout"
+            "payout": "Payout",
+            "status": {
+                "pending": "Transaction pending",
+                "approved": "Live trade approved",
+                "error": "Ticket creation failed",
+                "success": "Ticket created"
+            },
+            "creation-status": {
+                "pending": "Pending",
+                "failed": "Failed",
+                "success": "Success"
+            }
         },
         "zero-odds-tooltip": "Odds unavailable at the moment.",
         "low-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",
@@ -966,10 +989,11 @@
             "set-result-label": "Set result",
             "set-result-placeholder": "Enter result",
             "set-result-tooltip": "Set result for the markets with the provided gameId, typeId and playerId. If more than one result (e.g. double chance), enter the result comma-separated (e.g. 1,2). NOTE: For total and handicaps, the result should be multiplied by 100. (e.g. total sets is 5, enter 500)",
-            "cancel-confirmation-message": "Successfully cancelled",
+            "cancel-confirmation-message": "Successfully canceled",
             "result-set-confirmation-message": "Result successfully set",
             "resolve-market-tooltip": "Resolve market",
             "cancel-ticket-tooltip": "Cancel ticket",
+            "resolving-instructions": "The instructions for resolving the market are on this <instructionsLink>link</instructionsLink>.",
             "validation": {
                 "unstaking-in-progress": "Unstaking in progress, you cannot stake",
                 "staking-paused": "Staking paused, please try later"
@@ -1029,7 +1053,7 @@
         "confirmation-modal": {
             "title": "Withdrawal requested",
             "correct-address": "Make sure the address is correct and that it accepts {{ token }} on {{ network }}",
-            "withdrawal-transaction-warning": "Withdraw transactions can not be cancelled",
+            "withdrawal-transaction-warning": "Withdraw transactions can not be canceled",
             "withdrawal-fee": "Withdrawal fee",
             "address": "Address",
             "network": "Network",
@@ -1256,6 +1280,7 @@
             "only-pending-tickets": "Only pending tickets (singles)",
             "only-system-bets": "Only system bets",
             "only-unresolved": "Only unresolved ({{hours}} hours)",
+            "only-finished-unresolved": "Finished unresolved ({{minutes}} min)",
             "only-pp": "Only PP tickets",
             "only-open-tickets-short": "Only open",
             "only-live-tickets-short": "Only LIVE",

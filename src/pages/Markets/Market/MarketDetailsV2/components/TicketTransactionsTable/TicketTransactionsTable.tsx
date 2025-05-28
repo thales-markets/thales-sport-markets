@@ -5,6 +5,7 @@ import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { USD_SIGN } from 'constants/currency';
 import { ContractType } from 'enums/contract';
 import { RiskManagementRole } from 'enums/riskManagement';
+import { TicketAction } from 'enums/tickets';
 import useWhitelistedAddressQuery from 'queries/markets/useWhitelistedAddressQuery';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import React, { useMemo, useState } from 'react';
@@ -145,7 +146,10 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
         if (sportAmmContract) {
             const toastId = toast.loading(t('market.toast-message.transaction-pending'));
             try {
-                const txHash = await sportAmmContract?.write?.cancelTicket([ticketAddress]);
+                const txHash = await sportAmmContract?.write?.handleTicketResolving([
+                    ticketAddress,
+                    TicketAction.CANCEL,
+                ]);
 
                 const txReceipt = await waitForTransactionReceipt(client as Client, {
                     hash: txHash,

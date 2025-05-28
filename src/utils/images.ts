@@ -247,15 +247,16 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.UEFA_CONFERENCE_LEAGUE_QUALIFICATION:
         case League.UEFA_SUPER_CUP:
         case League.UEFA_CHAMPIONS_LEAGUE_FUTURES:
-        case League.EUROLEAGUE_FUTURES:
         case League.UEFA_CHAMPIONS_LEAGUE_WOMEN:
         case League.FIBA_CHAMPIONS_LEAGUE:
-        case League.EUROLEAGUE:
         case League.EUROCUP:
         case League.EHF_CHAMPIONS_LEAGUE:
         case League.EHF_CHAMPIONS_LEAGUE_WOMEN:
         case League.EHF_EUROPEAN_LEAGUE:
             return `/logos/Countries/europe.svg`;
+        case League.EUROLEAGUE:
+        case League.EUROLEAGUE_FUTURES:
+            return `/logos/leagueLogos/euroleague.webp`;
         case League.SUMMER_OLYMPICS_BASKETBALL:
         case League.SUMMER_OLYMPICS_BASKETBALL_WOMEN:
         case League.SUMMER_OLYMPICS_BASKETBALL_3X3:

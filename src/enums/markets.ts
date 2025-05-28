@@ -39,11 +39,11 @@ export enum SportFilter {
     Handball = 'Handball',
     Waterpolo = 'Waterpolo',
     Cricket = 'Cricket',
+    Motosport = 'Motosport',
+    Golf = 'Golf',
     Darts = 'Darts',
     Politics = 'Politics',
     Futures = 'Futures',
-    // Motosport = 'Motosport',
-    // Golf = 'Golf',
 }
 
 export enum OddsType {
@@ -103,4 +103,16 @@ export enum TicketErrorCode {
     SGP_DIFFERENT_GAME = 6,
     SGP_LEAGUE_DISABLED = 7,
     SGP_MAX_MARKETS = 8,
+}
+
+export enum LiveTradingTicketStatus {
+    PENDING,
+    APPROVED,
+    CREATED,
+}
+
+export enum LiveTradingFinalStatus {
+    IN_PROGRESS,
+    FAILED,
+    SUCCESS,
 }

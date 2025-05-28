@@ -9,6 +9,7 @@ import { orderBy } from 'lodash';
 import { League } from 'overtime-utils';
 import { Ticket } from 'types/markets';
 import { NetworkConfig } from 'types/network';
+import { getProtectedApiRoute } from 'utils/api';
 import { getContractInstance } from 'utils/contract';
 import { getLpAddress, getRoundWithOffset, isLpAvailableForNetwork } from 'utils/liquidityPool';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
@@ -38,6 +39,7 @@ const useLpTicketsQuery = (
                     liveScoresResponse,
                     openMarketsResponse,
                     ongoingMarketsResponse,
+                    pausedMarketsResponse,
                 ] = await Promise.all([
                     isLpAvailableForNetwork(networkConfig.networkId, lpCollateral)
                         ? liquidityPoolDataContract.read.getRoundTickets([
@@ -49,11 +51,27 @@ const useLpTicketsQuery = (
                     axios.get(`${generalConfig.API_URL}/overtime-v2/players-info`, noCacheConfig),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/live-scores`, noCacheConfig),
                     axios.get(
-                        `${generalConfig.API_URL}/overtime-v2/networks/${networkConfig.networkId}/markets/?status=open&ungroup=true&onlyBasicProperties=true`,
+                        getProtectedApiRoute(
+                            networkConfig.networkId,
+                            'markets',
+                            'status=open&ungroup=true&onlyBasicProperties=true'
+                        ),
                         noCacheConfig
                     ),
                     axios.get(
-                        `${generalConfig.API_URL}/overtime-v2/networks/${networkConfig.networkId}/markets/?status=ongoing&ungroup=true&onlyBasicProperties=true`,
+                        getProtectedApiRoute(
+                            networkConfig.networkId,
+                            'markets',
+                            'status=ongoing&ungroup=true&onlyBasicProperties=true'
+                        ),
+                        noCacheConfig
+                    ),
+                    axios.get(
+                        getProtectedApiRoute(
+                            networkConfig.networkId,
+                            'markets',
+                            'status=paused&ungroup=true&onlyBasicProperties=true'
+                        ),
                         noCacheConfig
                     ),
                 ]);
@@ -71,7 +89,11 @@ const useLpTicketsQuery = (
                 const promisesResult = await Promise.all(promises);
                 const ticketsData = promisesResult.flat(1);
 
-                const openOngoingMarkets = [...openMarketsResponse.data, ...ongoingMarketsResponse.data];
+                const openOngoingMarkets = [
+                    ...openMarketsResponse.data,
+                    ...ongoingMarketsResponse.data,
+                    ...pausedMarketsResponse.data,
+                ];
 
                 const mappedTickets: Ticket[] = ticketsData.map((ticket: any) =>
                     mapTicket(
