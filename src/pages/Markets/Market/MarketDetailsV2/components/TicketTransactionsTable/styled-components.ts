@@ -167,8 +167,14 @@ export const FreeBetIcon = styled.i`
     margin: 0 3px;
 `;
 
-export const SettingsIcon = styled.i`
+export const CancelIcon = styled.i`
     color: ${(props) => props.theme.error.textColor.primary};
+    font-size: 16px;
+    margin-left: 5px;
+`;
+
+export const MigrateIcon = styled.i`
+    color: ${(props) => props.theme.warning.textColor.primary};
     font-size: 16px;
     margin-left: 5px;
 `;

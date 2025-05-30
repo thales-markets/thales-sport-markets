@@ -32,8 +32,10 @@ import { formatTicketOdds, getTicketMarketOdd, tableSortByStatus } from 'utils/t
 import { Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
+import MigrateTicketModal from '../MigrateTicketModal';
 import TicketMarkets from '../TicketMarkets';
 import {
+    CancelIcon,
     ExpandedRowWrapper,
     ExternalLink,
     FirstExpandedSection,
@@ -41,10 +43,10 @@ import {
     LastExpandedSection,
     LiveSystemIndicatorContainer,
     LiveSystemLabel,
+    MigrateIcon,
     QuoteLabel,
     QuoteText,
     QuoteWrapper,
-    SettingsIcon,
     StatusIcon,
     StatusWrapper,
     TableText,
@@ -85,6 +87,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
 
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
     const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps | undefined>(undefined);
+    const [ticketForMigration, setTicketForMigration] = useState<Ticket | undefined>(undefined);
 
     const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
     const exchangeRates: Rates | undefined =
@@ -327,12 +330,22 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                         <>
                             {statusComponent}
                             <Tooltip overlay={t('markets.resolve-modal.cancel-ticket-tooltip')}>
-                                <SettingsIcon
+                                <CancelIcon
                                     className={`icon icon--wrong-full`}
                                     onClick={(e) => {
                                         e.preventDefault();
                                         e.stopPropagation();
                                         handleTicketCancel(cellProps.row.original.id);
+                                    }}
+                                />
+                            </Tooltip>
+                            <Tooltip overlay={t('markets.resolve-modal.migrate-ticket-tooltip')}>
+                                <MigrateIcon
+                                    className={`icon icon--exchange`}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        setTicketForMigration(cellProps.row.original);
                                     }}
                                 />
                             </Tooltip>
@@ -495,6 +508,9 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                 }}
                 expandAll={expandAll}
             ></Table>
+            {ticketForMigration && isWitelistedForResolve && (
+                <MigrateTicketModal ticket={ticketForMigration} onClose={() => setTicketForMigration(undefined)} />
+            )}
             {showShareTicketModal && shareTicketModalData && (
                 <ShareTicketModalV2
                     markets={shareTicketModalData.markets}
