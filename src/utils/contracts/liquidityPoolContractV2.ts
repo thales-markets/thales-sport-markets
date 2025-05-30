@@ -163,6 +163,16 @@ const ABI = [
     },
     {
         anonymous: false,
+        inputs: [
+            { indexed: false, internalType: 'address', name: 'ticket', type: 'address' },
+            { indexed: false, internalType: 'uint256', name: 'oldRound', type: 'uint256' },
+            { indexed: false, internalType: 'uint256', name: 'newRound', type: 'uint256' },
+        ],
+        name: 'TicketMigratedToNextRound',
+        type: 'event',
+    },
+    {
+        anonymous: false,
         inputs: [{ indexed: false, internalType: 'address', name: 'account', type: 'address' }],
         name: 'Unpaused',
         type: 'event',
@@ -331,6 +341,21 @@ const ABI = [
         type: 'function',
     },
     {
+        inputs: [
+            { internalType: 'address', name: '_ticket', type: 'address' },
+            { internalType: 'uint256', name: '_round', type: 'uint256' },
+            { internalType: 'uint256', name: '_startIndex', type: 'uint256' },
+            { internalType: 'uint256', name: '_endIndex', type: 'uint256' },
+        ],
+        name: 'getTicketIndexInTicketRound',
+        outputs: [
+            { internalType: 'uint256', name: 'index', type: 'uint256' },
+            { internalType: 'bool', name: 'found', type: 'bool' },
+        ],
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
         inputs: [{ internalType: 'address', name: '_ticket', type: 'address' }],
         name: 'getTicketPool',
         outputs: [{ internalType: 'address', name: 'roundPool', type: 'address' }],
@@ -348,6 +373,13 @@ const ABI = [
         inputs: [],
         name: 'getUsersCountInCurrentRound',
         outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        inputs: [],
+        name: 'hasDefaultRoundTicketsReadyToBeExercised',
+        outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
         stateMutability: 'view',
         type: 'function',
     },
@@ -415,6 +447,28 @@ const ABI = [
         name: 'maxAllowedUsers',
         outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
         stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        inputs: [
+            { internalType: 'address[]', name: '_tickets', type: 'address[]' },
+            { internalType: 'uint256', name: '_newRound', type: 'uint256' },
+            { internalType: 'uint256[]', name: '_ticketsIndexInRound', type: 'uint256[]' },
+        ],
+        name: 'migrateBatchOfTicketsToAnotherRound',
+        outputs: [],
+        stateMutability: 'nonpayable',
+        type: 'function',
+    },
+    {
+        inputs: [
+            { internalType: 'address', name: '_ticket', type: 'address' },
+            { internalType: 'uint256', name: '_newRound', type: 'uint256' },
+            { internalType: 'uint256', name: '_ticketIndexInRound', type: 'uint256' },
+        ],
+        name: 'migrateTicketToAnotherRound',
+        outputs: [],
+        stateMutability: 'nonpayable',
         type: 'function',
     },
     {
@@ -528,13 +582,6 @@ const ABI = [
         name: 'safeBoxImpact',
         outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
         stateMutability: 'view',
-        type: 'function',
-    },
-    {
-        inputs: [{ internalType: 'bytes32', name: '_collateralKey', type: 'bytes32' }],
-        name: 'setCollateralKey',
-        outputs: [],
-        stateMutability: 'nonpayable',
         type: 'function',
     },
     {
