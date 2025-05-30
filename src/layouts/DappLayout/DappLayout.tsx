@@ -76,6 +76,8 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
     }, [freeBetFromServer, setFreeBet]);
 
     useEffect(() => {
+        let timeoutId: ReturnType<typeof setTimeout> | null = null;
+
         if (freeBetModalParam && switchChain) {
             switchChain(
                 { chainId: Network.OptimismMainnet },
@@ -86,11 +88,16 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
                 }
             );
         }
-        setTimeout(async () => {
+
+        timeoutId = setTimeout(() => {
             if (queryParams.freeBet && freeBetFromServer && freeBetModalParam) {
                 setFreeBet({ ...freeBetFromServer, id: freeBetModalParam });
             }
         }, 2000);
+
+        return () => {
+            if (timeoutId) clearTimeout(timeoutId);
+        };
     }, [
         walletAddress,
         dispatch,

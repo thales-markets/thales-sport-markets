@@ -313,6 +313,8 @@ const Ticket: React.FC<TicketProps> = ({
     const [isTotalQuoteIncreased, setIsTotalQuoteIncreased] = useState(false);
     const [isProofValid, setIsProofValid] = useState(true);
 
+    const timeouts = useRef<ReturnType<typeof setTimeout>[]>([]);
+
     const userMultipliersQuery = useUserMultipliersQuery(address as any, { enabled: isConnected });
 
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
@@ -348,6 +350,9 @@ const Ticket: React.FC<TicketProps> = ({
     useEffect(() => {
         return () => {
             mountedRef.current = false;
+            // added eslint-disable to avoid exhaustive-deps warning (timeouts.current is not referring to a DOM node so its safe to ignore)
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+            timeouts.current.forEach((timeout) => clearTimeout(timeout));
         };
     }, []);
 
@@ -1553,7 +1558,7 @@ const Ticket: React.FC<TicketProps> = ({
             if (isLiveTicket) {
                 dispatch(updateTicketRequests(liveTicketRequestData));
 
-                setTimeout(
+                const timeoutId = setTimeout(
                     () => {
                         if (swapToOver) {
                             setOpenBuyStepsModal(false);
@@ -1564,6 +1569,7 @@ const Ticket: React.FC<TicketProps> = ({
                     }, // enable multiple parallel buying for live tickets after 4s for biconomy
                     isBiconomy ? 4000 : 0
                 );
+                timeouts.current.push(timeoutId);
             }
 
             let tradeData: TradeData[] = [];
@@ -1919,10 +1925,11 @@ const Ticket: React.FC<TicketProps> = ({
                 if (isLiveTicket && !liveTicketRequestData.requestId) {
                     // Remove pending request with delay in case tx was sent (just UI doesn't have info about request ID),
                     // so it will be updated from contract. If user rejected remove it immediately.
-                    setTimeout(
+                    const timeoutId = setTimeout(
                         () => dispatch(removeTicketRequestById(liveTicketRequestData.initialRequestId)),
                         isUserRejected ? 0 : 3000
                     );
+                    timeouts.current.push(timeoutId);
                 }
                 if (!isErrorExcluded(e as Error)) {
                     const data = getLogData({
