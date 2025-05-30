@@ -18,7 +18,6 @@ import { getContractInstance } from 'utils/contract';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import { refetchBalances } from 'utils/queryConnector';
 import { executeBiconomyTransactionWithConfirmation } from 'utils/smartAccount/biconomy/biconomy';
-import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
 import { Address, Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
@@ -47,7 +46,7 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
     const client = useClient();
 
     const { address } = useAccount();
-    const { smartAddress } = useBiconomy();
+    const smartAddress = smartAccountConnector.biconomyAddress;
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const networkName = useMemo(() => {

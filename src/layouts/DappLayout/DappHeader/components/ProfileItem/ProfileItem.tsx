@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import { truncateAddress } from 'thales-utils';
 import { RootState } from 'types/redux';
-import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
+import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import {
     ClaimableTicketsNotificationCount,
@@ -32,7 +32,7 @@ const ProfileItem: React.FC<ProfileItemProperties> = ({ color }) => {
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
     const { address } = useAccount();
-    const { smartAddress } = useBiconomy();
+    const smartAddress = smartAccountConnector.biconomyAddress;
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     return (
@@ -55,7 +55,7 @@ export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
-    const { smartAddress } = useBiconomy();
+    const smartAddress = smartAccountConnector.biconomyAddress;
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const positionsCountQuery = usePositionCountV2Query(walletAddress, { networkId, client }, { enabled: isConnected });

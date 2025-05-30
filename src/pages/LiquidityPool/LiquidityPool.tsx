@@ -36,7 +36,7 @@ import { getContractInstance } from 'utils/contract';
 import { checkAllowance } from 'utils/network';
 import { refetchLiquidityPoolData } from 'utils/queryConnector';
 import { executeBiconomyTransactionWithConfirmation } from 'utils/smartAccount/biconomy/biconomy';
-import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
+import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
 import { delay } from 'utils/timer';
 import { Client, parseUnits } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
@@ -105,7 +105,7 @@ const LiquidityPool: React.FC = () => {
     const walletClient = useWalletClient();
 
     const { address, isConnected } = useAccount();
-    const { smartAddress } = useBiconomy();
+    const smartAddress = smartAccountConnector.biconomyAddress;
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const [selectedCollateralIndex, setSelectedCollateralIndex] = useState<number>(0);

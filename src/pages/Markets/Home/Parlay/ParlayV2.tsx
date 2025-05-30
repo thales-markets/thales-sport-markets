@@ -48,7 +48,7 @@ import { SportMarket, SportMarkets, TicketMarket, TicketPosition } from 'types/m
 import { SgpParams, SportsbookData } from 'types/sgp';
 import { isStableCurrency, sortCollateralBalances } from 'utils/collaterals';
 import { isSameMarket } from 'utils/marketsV2';
-import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
+import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
 import { isRegularTicketInvalid } from 'utils/tickets';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import ParlayRelatedMarkets from './components/ParlayRelatedMarkets';
@@ -77,7 +77,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     const isLiveFilterSelected = sportFilter == SportFilter.Live;
     const isBiconomy = useSelector(getIsBiconomy);
     const { address, isConnected } = useAccount();
-    const { smartAddress } = useBiconomy();
+    const smartAddress = smartAccountConnector.biconomyAddress;
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const [ticketMarkets, setTicketMarkets] = useState<TicketMarket[]>([]);

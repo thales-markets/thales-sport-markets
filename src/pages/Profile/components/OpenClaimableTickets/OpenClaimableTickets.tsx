@@ -21,8 +21,8 @@ import { getContractInstance } from 'utils/contract';
 import { getCaseAccentInsensitiveString } from 'utils/formatters/string';
 import { refetchAfterClaim } from 'utils/queryConnector';
 import { sendBiconomyTransaction } from 'utils/smartAccount/biconomy/biconomy';
+import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
 
-import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { Address, Client, encodeFunctionData, isAddress } from 'viem';
 import { estimateContractGas, waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
@@ -63,7 +63,7 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
     const walletClient = useWalletClient();
 
     const { address, isConnected } = useAccount();
-    const { smartAddress } = useBiconomy();
+    const smartAddress = smartAccountConnector.biconomyAddress;
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const isMobile = useSelector((state: RootState) => getIsMobile(state));

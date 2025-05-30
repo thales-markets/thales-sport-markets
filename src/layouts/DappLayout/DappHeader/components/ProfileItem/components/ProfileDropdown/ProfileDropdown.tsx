@@ -18,7 +18,7 @@ import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import { getCollaterals } from 'utils/collaterals';
 import { buildHref } from 'utils/routes';
-import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
+import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
 import { useAccount, useChainId, useClient, useDisconnect } from 'wagmi';
 
 type ProfileDropdownProps = {
@@ -39,7 +39,7 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
-    const { smartAddress } = useBiconomy();
+    const smartAddress = smartAccountConnector.biconomyAddress;
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const { disconnect } = useDisconnect();

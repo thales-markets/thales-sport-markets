@@ -27,7 +27,7 @@ import { FlexDivCentered } from 'styles/common';
 import { RootState } from 'types/redux';
 import { OverdropLevel, ThemeInterface } from 'types/ui';
 import { buildHref } from 'utils/routes';
-import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
+import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import { ProfileIconWidget } from './components/ProfileItem/ProfileItem';
 import {
@@ -89,7 +89,7 @@ const DappHeader: React.FC = () => {
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
-    const { smartAddress } = useBiconomy();
+    const smartAddress = smartAccountConnector.biconomyAddress;
 
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const walletAddress = (isBiconomy ? smartAddress : address) || '';

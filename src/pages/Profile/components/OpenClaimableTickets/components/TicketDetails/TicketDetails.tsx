@@ -27,7 +27,7 @@ import { getContractInstance } from 'utils/contract';
 import { getIsMultiCollateralSupported } from 'utils/network';
 import { refetchAfterClaim, refetchBalances } from 'utils/queryConnector';
 import { executeBiconomyTransaction } from 'utils/smartAccount/biconomy/biconomy';
-import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
+import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
 import { formatTicketOdds, getTicketMarketOdd } from 'utils/tickets';
 import { Address, Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
@@ -89,7 +89,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
     const walletClient = useWalletClient();
 
     const { address } = useAccount();
-    const { smartAddress } = useBiconomy();
+    const smartAddress = smartAccountConnector.biconomyAddress;
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const [showDetails, setShowDetails] = useState<boolean>(showDetailsExplicit ?? false);

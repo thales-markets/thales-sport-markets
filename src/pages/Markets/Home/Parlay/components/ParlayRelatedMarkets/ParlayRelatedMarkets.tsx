@@ -33,7 +33,7 @@ import {
     serializableTicketMarketAsTicketMarket,
 } from 'utils/marketsV2';
 import { refetchUserLiveTradingData } from 'utils/queryConnector';
-import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
+import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
 import { updateTempLiveRequests } from 'utils/tickets';
 import { delay } from 'utils/timer';
 import { useAccount, useChainId, useClient } from 'wagmi';
@@ -51,7 +51,7 @@ const ParlayRelatedMarkets: React.FC = () => {
     const client = useClient();
 
     const { address, isConnected } = useAccount();
-    const { smartAddress } = useBiconomy();
+    const smartAddress = smartAccountConnector.biconomyAddress;
 
     const isLiveFilterSelected = useMemo(() => sportFilter == SportFilter.Live, [sportFilter]);
 

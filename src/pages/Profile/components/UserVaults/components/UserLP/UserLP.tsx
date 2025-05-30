@@ -13,7 +13,7 @@ import { LiquidityPool } from 'types/liquidityPool';
 import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
 import { buildHref } from 'utils/routes';
-import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
+import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
 import { useAccount, useChainId, useClient } from 'wagmi';
 
 type UserLPProps = {
@@ -31,7 +31,7 @@ const UserLP: React.FC<UserLPProps> = ({ lp }) => {
     const networkId = useChainId();
     const client = useClient();
     const { isConnected, address } = useAccount();
-    const { smartAddress } = useBiconomy();
+    const smartAddress = smartAccountConnector.biconomyAddress;
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const userLpQuery = useLiquidityPoolUserDataQuery(
