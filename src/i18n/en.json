@@ -993,6 +993,7 @@
             "result-set-confirmation-message": "Result successfully set",
             "resolve-market-tooltip": "Resolve market",
             "cancel-ticket-tooltip": "Cancel ticket",
+            "migrate-ticket-tooltip": "Migrate ticket",
             "resolving-instructions": "The instructions for resolving the market are on this <instructionsLink>link</instructionsLink>.",
             "validation": {
                 "unstaking-in-progress": "Unstaking in progress, you cannot stake",
@@ -1008,6 +1009,20 @@
                 "set-result-label": "Set result",
                 "set-result-tooltip": "This action will set result for the markets with the provided gameId, typeId and playerId"
             }
+        },
+        "migrate-ticket-modal": {
+            "title": "Migrate ticket",
+            "description": "Migrate ticket from the current LP round to the new round.",
+            "ticket-id": "Ticket ID",
+            "lp": "Liquidity pool",
+            "current-round": "Current round",
+            "new-round-label": "New round (0 for the next round)",
+            "new-round-placeholder": "Enter the new round",
+            "index-in-round-label": "Index of the ticket in the round (use 0 to perform automatic lookup)",
+            "index-in-round-placeholder": "Enter the ticket index in the round",
+            "migrate-ticket-label": "Migrate ticket",
+            "migrate-ticket-confirmation-message": "Ticket successfully migrated",
+            "not-found-validaton": "Ticket not found in the current round, please double check!"
         }
     },
     "deposit": {
