@@ -139,6 +139,14 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
         [MarketTypeGroup.HANDICAP]: SPREAD_MARKET_TYPES,
+        [MarketTypeGroup.GAME_PROPS]: [
+            MarketType.TOTAL_STEALS,
+            MarketType.TOTAL_BLOCKS,
+            MarketType.TOTAL_ASSISTS,
+            MarketType.TOTAL_MADE_THREES,
+            MarketType.TOTAL_MADE_THREES_HOME_TEAM,
+            MarketType.TOTAL_MADE_THREES_AWAY_TEAM,
+        ],
         [MarketTypeGroup.SGP]: [MarketType.WINNER_TOTAL],
         [MarketTypeGroup.QUARTERS]: [
             ...FIRST_PERIOD_MARKET_TYPES,
@@ -574,6 +582,14 @@ export const MarketTypePlayerPropsGroupsBySport: Record<Sport, Partial<Record<Ma
     [Sport.BASKETBALL]: {
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
         [MarketTypeGroup.HANDICAP]: SPREAD_MARKET_TYPES,
+        [MarketTypeGroup.GAME_PROPS]: [
+            MarketType.TOTAL_STEALS,
+            MarketType.TOTAL_BLOCKS,
+            MarketType.TOTAL_ASSISTS,
+            MarketType.TOTAL_MADE_THREES,
+            MarketType.TOTAL_MADE_THREES_HOME_TEAM,
+            MarketType.TOTAL_MADE_THREES_AWAY_TEAM,
+        ],
         [MarketTypeGroup.QUARTERS]: [
             ...FIRST_PERIOD_MARKET_TYPES,
             ...SECOND_PERIOD_MARKET_TYPES,
