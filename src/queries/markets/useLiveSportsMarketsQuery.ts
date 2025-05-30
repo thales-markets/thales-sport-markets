@@ -41,7 +41,7 @@ const useLiveSportsMarketsQuery = (
                         return game;
                     });
                 marketsCache.live = marketsFlattened;
-                return { live: marketsFlattened };
+                return marketsCache;
             } catch (e) {
                 console.log(e);
             }

@@ -95,7 +95,7 @@ const useSportsMarketsV2Query = (
 
                 marketsCache[statusFilter] = mappedMarkets;
 
-                return { ...marketsCache, [statusFilter]: mappedMarkets };
+                return marketsCache;
             } catch (e) {
                 console.log(e);
             }
