@@ -26,8 +26,23 @@ export const Title = styled.span`
     }
 `;
 
+export const Description = styled.span`
+    color: ${(props) => props.theme.textColor.primary};
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 17px;
+    text-align: left;
+    margin: 15px 0;
+    @media (max-width: 575px) {
+        font-size: 13px;
+        line-height: 14px;
+        margin: 5px 0;
+    }
+`;
+
 export const MarketDataContainer = styled(FlexDivColumn)`
     align-items: start;
+    width: 100%;
 `;
 
 const Text = styled.span`
@@ -107,3 +122,11 @@ export const defaultButtonProps = {
     width: '300px',
     margin: '10px 0 0 0',
 };
+
+export const InstructionsLink = styled.a`
+    cursor: pointer;
+    color: ${(props) => props.theme.link.textColor.primary};
+    &:hover {
+        text-decoration: underline;
+    }
+`;

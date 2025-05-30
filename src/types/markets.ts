@@ -76,8 +76,8 @@ export type SportMarket = {
     gameClock?: number;
     gamePeriod?: string;
     tournamentName?: string;
-    tournamentRound?: string;
     isGameFinished?: boolean;
+    finishedTimestamp?: number;
     gameStatus?: GameStatus;
     liveScore?: SportMarketScore;
     positionNames?: string[];
