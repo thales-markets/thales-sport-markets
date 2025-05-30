@@ -8,6 +8,12 @@ const QUERY_KEYS = {
     Ticket: (networkId: Network, ticketAddress: string) => ['gameTickets', networkId, ticketAddress],
     GameTickets: (networkId: Network, gameId: string) => ['gameTickets', networkId, gameId],
     UserTickets: (networkId: Network, walletAddress: string) => ['userTickets', networkId, walletAddress],
+    OtherSingles: (networkId: Network, walletAddress: string, gameId: string) => [
+        'otherSingles',
+        networkId,
+        walletAddress,
+        gameId,
+    ],
     SportMarketsV2: (
         statusFilter: StatusFilter,
         networkId: Network,

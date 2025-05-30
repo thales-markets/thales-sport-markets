@@ -1698,7 +1698,7 @@ const Ticket: React.FC<TicketProps> = ({
                         { componentStack: '' },
                         data
                     );
-                    refetchAfterBuy(walletAddress, networkId);
+                    refetchAfterBuy(walletAddress, networkId, tradeData.length === 1 ? tradeData[0].gameId : undefined);
                     setIsBuying(false);
                     toast.update(toastId, getErrorToastOptions(t('common.errors.tx-receipt-not-received')));
                     return;
@@ -1833,11 +1833,19 @@ const Ticket: React.FC<TicketProps> = ({
                                 setIsBuying(false);
                                 !isLiveTicket && setCollateralAmount('');
                             }
-                            refetchAfterBuy(walletAddress, networkId);
+                            refetchAfterBuy(
+                                walletAddress,
+                                networkId,
+                                tradeData.length === 1 ? tradeData[0].gameId : undefined
+                            );
                         }
                     } else {
                         // regular/system bet (not SGP, not)
-                        refetchAfterBuy(walletAddress, networkId);
+                        refetchAfterBuy(
+                            walletAddress,
+                            networkId,
+                            tradeData.length === 1 ? tradeData[0].gameId : undefined
+                        );
 
                         const systemBetData = isSystemBet
                             ? getSystemBetDataObject(
@@ -1884,7 +1892,7 @@ const Ticket: React.FC<TicketProps> = ({
                         refetchProofs(networkId, markets);
                     }
                     setIsBuying(false);
-                    refetchAfterBuy(walletAddress, networkId);
+                    refetchAfterBuy(walletAddress, networkId, tradeData.length === 1 ? tradeData[0].gameId : undefined);
                     toast.update(toastId, getErrorToastOptions(t('common.errors.tx-reverted')));
                     if (isLiveTicket && !liveTicketRequestData.requestId) {
                         liveTicketRequestData.finalStatus = LiveTradingFinalStatus.FAILED;
@@ -1912,7 +1920,7 @@ const Ticket: React.FC<TicketProps> = ({
                 }
             } catch (e) {
                 setIsBuying(false);
-                refetchAfterBuy(walletAddress, networkId);
+                refetchAfterBuy(walletAddress, networkId, tradeData.length === 1 ? tradeData[0].gameId : undefined);
                 const isUserRejected = USER_REJECTED_ERRORS.some((rejectedError) =>
                     ((e as Error).message + ((e as Error).stack || '')).includes(rejectedError)
                 );
