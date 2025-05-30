@@ -404,9 +404,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                             )}
                             <MatchInfoLabel>
                                 {!isColumnView && !isMarketSelected && !isMobile && !isPlayerPropsMarket && (
-                                    <>{`${market.tournamentName ? ` | ${market.tournamentName}` : ''}${
-                                        market.tournamentRound ? ` | ${market.tournamentRound}` : ''
-                                    }`}</>
+                                    <>{`${market.tournamentName ? ` | ${market.tournamentName}` : ''}`}</>
                                 )}
                                 {leagueTooltipKey && !isPlayerPropsMarket && (
                                     <Tooltip overlay={t(leagueTooltipKey)} iconFontSize={12} marginLeft={2} />
