@@ -2,6 +2,7 @@ import { StatusFilter } from 'enums/markets';
 import { Network } from 'enums/network';
 import { RiskManagementConfig, RiskManagementRole } from 'enums/riskManagement';
 import { League } from 'overtime-utils';
+import { Coins } from 'thales-utils';
 import { LiquidityPoolCollateral } from '../enums/liquidityPool';
 
 const QUERY_KEYS = {
@@ -168,6 +169,13 @@ const QUERY_KEYS = {
             'liquidityPool',
             'userTransactions',
             liquidityPoolAddress,
+            networkId,
+        ],
+        TicketData: (collateral: Coins, ticketAddress: string, networkId: Network) => [
+            'liquidityPool',
+            'ticketData',
+            collateral,
+            ticketAddress,
             networkId,
         ],
     },
