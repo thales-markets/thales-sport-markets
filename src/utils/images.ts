@@ -324,6 +324,8 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
             return `/logos/Countries/rocket-league.png`;
         case League.CALL_OF_DUTY:
             return `/logos/Countries/call-of-duty.png`;
+        case League.OVERWATCH:
+            return `/logos/Countries/overwatch.webp`;
         case League.FORMULA1_FUTURES:
             return `/logos/leagueLogos/f1.webp`;
         case League.PGA_FUTURES:

@@ -104,7 +104,6 @@
         "errors": {
             "something-went-wrong": "Something went wrong!",
             "unknown-error-try-again": "An unknown error occurred after you submitted. Please try again.",
-            "unknown-error-try-again-general": "An unknown error occurred. Please try again.",
             "tx-canceled": "Transaction is canceled.",
             "tx-reverted": "Transaction is reverted.",
             "tx-receipt-not-received": "Unable to obtain transaction receipt. The trade might still get executed, check your created tickets.",
