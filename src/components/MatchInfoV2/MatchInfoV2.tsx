@@ -86,6 +86,9 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
     }, [acceptOdds, market, setAcceptOdds]);
 
     useEffect(() => {
+        let timeoutUp: ReturnType<typeof setTimeout> | null = null;
+        let timeoutDown: ReturnType<typeof setTimeout> | null = null;
+
         if (showOddUpdates) {
             if (
                 isSameMarket(previousMarket.current, ticketMarketAsTicketPosition(market)) &&
@@ -95,14 +98,14 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
                     if (market.odd < previousMarket.current.odd) {
                         document.getElementById('odd-change-down')?.classList.remove('descend');
                         document.getElementById('odd-change-up')?.classList.remove('rise');
-                        setTimeout(() => {
+                        timeoutUp = setTimeout(() => {
                             document.getElementById('odd-change-up')?.classList.add('rise');
                         });
                     }
                     if (market.odd > previousMarket.current.odd) {
                         document.getElementById('odd-change-down')?.classList.remove('descend');
                         document.getElementById('odd-change-up')?.classList.remove('rise');
-                        setTimeout(() => {
+                        timeoutDown = setTimeout(() => {
                             document.getElementById('odd-change-down')?.classList.add('descend');
                         });
                     }
@@ -126,6 +129,11 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
             }
             previousMarket.current = market;
         }
+
+        return () => {
+            if (timeoutUp) clearTimeout(timeoutUp);
+            if (timeoutDown) clearTimeout(timeoutDown);
+        };
     }, [market, market.odd, liveBetSlippage, showOddUpdates, setOddsChanged]);
 
     const isLiveTicket = market.live || !!isLive;

@@ -92,6 +92,8 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
 
     const ref = useRef<HTMLDivElement>(null);
 
+    const timeouts = useRef<ReturnType<typeof setTimeout>[]>([]);
+
     const isOver = useMemo(() => isOverCurrency(collateral), [collateral]);
 
     const isNonStableCollateral = useMemo(() => !isStableCurrency(collateral), [collateral]);
@@ -128,6 +130,14 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
         checkMetamaskBrowser().catch((e) => console.log(e));
     }, [isMobile]);
 
+    useEffect(() => {
+        return () => {
+            // added eslint-disable to avoid exhaustive-deps warning (timeouts.current is not referring to a DOM node so its safe to ignore)
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+            timeouts.current.forEach((timeout) => clearTimeout(timeout));
+        };
+    }, []);
+
     // Download image mobile: clipboard.write is not supported by all browsers
     // Download image desktop: clipboard.write not supported/enabled in Firefox
     const useDownloadImage = isMobile || isFirefox();
@@ -156,19 +166,21 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                         link.href = base64Image;
                         link.download = PARLAY_IMAGE_NAME;
                         document.body.appendChild(link);
-                        setTimeout(
+                        const timeoutId = setTimeout(
                             () => {
                                 link.click();
                             },
                             isIos() ? IOS_DOWNLOAD_DELAY : 0 // fix for iOS
                         );
-                        setTimeout(
+                        timeouts.current.push(timeoutId);
+                        const timeoutIdRemoveLink = setTimeout(
                             () => {
                                 // Cleanup the DOM
                                 document.body.removeChild(link);
                             },
                             isIos() ? 3 * IOS_DOWNLOAD_DELAY : 0 // fix for iOS
                         );
+                        timeouts.current.push(timeoutIdRemoveLink);
                     } else {
                         // Save to clipboard
                         const b64Blob = (await fetch(base64Image)).blob();
@@ -244,9 +256,10 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                           );
 
                     if (!isMobile) {
-                        setTimeout(() => {
+                        const timeoutId = setTimeout(() => {
                             window.open(twitterLinkWithStatusMessage);
                         }, defaultToastOptions.autoClose);
+                        timeouts.current.push(timeoutId);
                     }
                 } catch (e) {
                     console.log(e);
@@ -272,10 +285,12 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
 
                 // If image creation is not postponed with timeout toaster is not displayed immediately, it is rendered in parallel with toPng() execution.
                 // Function toPng is causing UI to freez for couple of seconds and there is no notification message during that time, so it confuses user.
-                setTimeout(async () => {
+                const timeoutId = setTimeout(async () => {
                     await saveImageAndOpenTwitter(id, copyOnly);
                     setIsLoading(false);
                 }, 300);
+
+                timeouts.current.push(timeoutId);
             }
         }
     };

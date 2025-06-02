@@ -33,10 +33,18 @@ const FooterSidebarMobile: React.FC<FooterSidebarMobileProps> = ({ setParlayMobi
         const animate = () => {
             setPulse(true);
 
-            setTimeout(() => setPulse(false), secondsToMilliseconds(ticket.length === 1 ? 2 : ticket.length));
+            const timeoutId = setTimeout(() => {
+                setPulse(false);
+            }, secondsToMilliseconds(ticket.length === 1 ? 2 : ticket.length));
+
+            return timeoutId;
         };
 
-        animate();
+        const id = animate();
+
+        return () => {
+            clearTimeout(id);
+        };
     }, [ticket.length]);
 
     return (

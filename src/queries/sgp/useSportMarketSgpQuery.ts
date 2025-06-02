@@ -35,20 +35,19 @@ const useSportMarketSgpQuery = (
 
                 const market = marketResponse.data;
 
-                mappedMarket = {
-                    ...packMarket(market, undefined, undefined, false),
-                    sgpSportsbooks: orderBy(market.sgpSportsbooks),
-                    childMarkets: orderBy(
-                        market.childMarkets
-                            .filter((childMarket: any) => market.status === childMarket.status)
-                            .map((childMarket: any) => ({
-                                ...packMarket(childMarket, undefined, undefined, false, market),
-                                sgpSportsbooks: orderBy(childMarket.sgpSportsbooks),
-                            })),
-                        ['typeId'],
-                        ['asc']
-                    ),
-                };
+                mappedMarket = packMarket(market, undefined, undefined, false);
+                mappedMarket.sgpSportsbooks = orderBy(market.sgpSportsbooks);
+                mappedMarket.childMarkets = orderBy(
+                    market.childMarkets
+                        .filter((childMarket: any) => market.status === childMarket.status)
+                        .map((childMarket: any) => {
+                            childMarket = packMarket(childMarket, undefined, undefined, false, market);
+                            childMarket.sgpSportsbooks = orderBy(childMarket.sgpSportsbooks);
+                            return childMarket;
+                        }),
+                    ['typeId'],
+                    ['asc']
+                );
             } catch (e: any) {
                 console.error(e);
             }
