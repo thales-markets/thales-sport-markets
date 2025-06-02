@@ -1913,6 +1913,7 @@ const Ticket: React.FC<TicketProps> = ({
                     );
                 }
             } catch (e) {
+                console.log('Buy transaction maybe failed', e);
                 setIsBuying(false);
                 refetchAfterBuy(walletAddress, networkId, tradeData.length === 1 ? tradeData[0].gameId : undefined);
                 const isUserRejected = USER_REJECTED_ERRORS.some((rejectedError) =>
