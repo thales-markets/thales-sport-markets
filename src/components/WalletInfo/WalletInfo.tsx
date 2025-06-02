@@ -17,7 +17,7 @@ import { FlexDivCentered } from 'styles/common';
 import { truncateAddress } from 'thales-utils';
 import { RootState } from 'types/redux';
 import { getDefaultCollateralIndexForNetworkId } from 'utils/network';
-import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { useAccount, useChainId } from 'wagmi';
 
 const WalletInfo: React.FC = ({}) => {
@@ -27,7 +27,7 @@ const WalletInfo: React.FC = ({}) => {
     const theme = useTheme();
     const networkId = useChainId();
     const { address, isConnected } = useAccount();
-    const smartAddress = smartAccountConnector.biconomyAddress;
+    const { smartAddress } = useBiconomy();
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const [isFreeBetInitialized, setIsFreeBetInitialized] = useState(false);

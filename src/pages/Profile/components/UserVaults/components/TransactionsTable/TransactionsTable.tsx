@@ -10,7 +10,7 @@ import { formatCurrencyWithKey, formatTxTimestamp } from 'thales-utils';
 import { LiquidityPoolUserTransactions } from 'types/liquidityPool';
 import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
-import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
 
 const TransactionsTable: React.FC = () => {
@@ -22,7 +22,7 @@ const TransactionsTable: React.FC = () => {
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
-    const smartAddress = smartAccountConnector.biconomyAddress;
+    const { smartAddress } = useBiconomy();
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const txQuery = useProfileLiquidityPoolUserTransactions(

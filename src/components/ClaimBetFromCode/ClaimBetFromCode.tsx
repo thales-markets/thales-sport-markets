@@ -8,7 +8,7 @@ import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumnNative } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
 import { claimFreeBet } from 'utils/freeBet';
-import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { useAccount, useChainId, useSwitchChain } from 'wagmi';
 
 const ClaimBetFromCode: React.FC = () => {
@@ -22,7 +22,7 @@ const ClaimBetFromCode: React.FC = () => {
 
     const [freeBetCode, setFreeBetCode] = useState<string>('');
 
-    const smartAddress = smartAccountConnector.biconomyAddress;
+    const { smartAddress } = useBiconomy();
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     return (

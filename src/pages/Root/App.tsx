@@ -1,9 +1,7 @@
-import { createSmartAccountClient } from '@biconomy/account';
 import { isInBinance } from '@binance/w3w-utils';
 import { useConnect as useParticleConnect } from '@particle-network/authkit';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import Loader from 'components/Loader';
-import { LINKS } from 'constants/links';
 import { DEFAULT_NETWORK } from 'constants/network';
 import ROUTES from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
@@ -41,16 +39,7 @@ import { isNetworkSupported, isRouteAvailableForNetwork } from 'utils/network';
 import { getSpecificConnectorFromConnectorsArray } from 'utils/particleWallet/utils';
 import queryConnector from 'utils/queryConnector';
 import { history } from 'utils/routes';
-import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
-import {
-    useAccount,
-    useChainId,
-    useConnect,
-    useConnectors,
-    useDisconnect,
-    useSwitchChain,
-    useWalletClient,
-} from 'wagmi';
+import { useAccount, useChainId, useConnect, useConnectors, useDisconnect, useSwitchChain } from 'wagmi';
 
 const App = () => {
     const dispatch = useDispatch();
@@ -59,7 +48,6 @@ const App = () => {
     const { disconnect } = useDisconnect();
     const { connectionStatus, disconnect: particleDisconnect } = useParticleConnect();
     const { isConnected, connector } = useAccount();
-    const { data: walletClient } = useWalletClient();
     const connectors = useConnectors();
     const { connect } = useConnect();
     const isParticleConnected = useSelector(getIsConnectedViaParticle);
@@ -148,39 +136,6 @@ const App = () => {
             }
         };
     }, [dispatch]);
-
-    useEffect(() => {
-        console.log(walletClient, isConnected);
-        if (isConnected) {
-            if (walletClient) {
-                const bundlerUrl = `${LINKS.Biconomy.Bundler}${networkId}/${
-                    import.meta.env.VITE_APP_BICONOMY_BUNDLE_KEY
-                }`;
-
-                const createSmartAccount = async () => {
-                    const PAYMASTER_API_KEY = import.meta.env['VITE_APP_PAYMASTER_KEY_' + networkId];
-                    const smartAccount = await createSmartAccountClient({
-                        signer: walletClient,
-                        bundlerUrl: bundlerUrl,
-                        biconomyPaymasterApiKey: PAYMASTER_API_KEY,
-                    });
-                    const smartAddressNew = await smartAccount.getAccountAddress();
-
-                    if (smartAccountConnector.biconomyAddress === '') {
-                        smartAccountConnector.setBiconomyAccount(smartAccount, smartAddressNew);
-                    } else {
-                        if (smartAccountConnector.biconomyAddress !== smartAddressNew) {
-                            smartAccountConnector.setBiconomyAccount(smartAccount, smartAddressNew);
-                        }
-                    }
-                };
-
-                createSmartAccount();
-            }
-        } else {
-            smartAccountConnector.resetWallet();
-        }
-    }, [dispatch, switchChain, networkId, disconnect, walletClient, isConnected]);
 
     return (
         <Theme>

@@ -19,7 +19,7 @@ import { RootState } from 'types/redux';
 import { getCollateralByAddress } from 'utils/collaterals';
 import { claimFreeBet } from 'utils/freeBet';
 import { navigateTo } from 'utils/routes';
-import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { useAccount, useChainId, useClient, useSwitchChain } from 'wagmi';
 
 type ClaimFreeBetModalProps = {
@@ -41,7 +41,7 @@ const ClaimFreeBetModal: React.FC<ClaimFreeBetModalProps> = ({ freeBet, onClose 
 
     const { address } = useAccount();
 
-    const smartAddress = smartAccountConnector.biconomyAddress;
+    const { smartAddress } = useBiconomy();
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const onButtonClick = useCallback(async () => {

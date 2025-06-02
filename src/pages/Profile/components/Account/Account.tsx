@@ -15,7 +15,7 @@ import { formatCurrencyWithKey, formatCurrencyWithSign } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import { getCollaterals, mapMultiCollateralBalances } from 'utils/collaterals';
-import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import AssetBalance from '../AssetBalance';
 
@@ -26,7 +26,7 @@ const Account: React.FC = () => {
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
-    const smartAddress = smartAccountConnector.biconomyAddress;
+    const { smartAddress } = useBiconomy();
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const [showSwapModal, setShowSwapModal] = useState<boolean>(false);

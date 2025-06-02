@@ -28,9 +28,9 @@ import { isSmallDevice } from 'utils/device';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import { getOnRamperUrl } from 'utils/particleWallet/utils';
 import { navigateTo } from 'utils/routes';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import useUniversalAccount from 'utils/smartAccount/hooks/useUniversalAccount';
 
-import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
 import { useAccount, useChainId, useClient } from 'wagmi';
 
 type FundModalProps = {
@@ -50,7 +50,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
 
     const theme = useTheme();
     const networkId = useChainId();
-    const smartAddress = smartAccountConnector.biconomyAddress;
+    const { smartAddress } = useBiconomy();
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const [showQRModal, setShowQRModal] = useState<boolean>(false);

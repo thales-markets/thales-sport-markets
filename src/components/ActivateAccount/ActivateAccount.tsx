@@ -28,7 +28,7 @@ import { isSmallDevice } from 'utils/device';
 import { getFreeBetModalShown } from 'utils/freeBet';
 import { getFundModalShown, setFundModalShown } from 'utils/fundModal';
 import { activateOvertimeAccount } from 'utils/smartAccount/biconomy/session';
-import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient } from 'wagmi';
@@ -40,7 +40,7 @@ const ActivateAccount: React.FC<any> = () => {
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const client = useClient();
     const { address, isConnected } = useAccount();
-    const smartAddress = smartAccountConnector.biconomyAddress;
+    const { smartAddress } = useBiconomy();
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const queryParams: { freeBet?: string } = queryString.parse(location.search);

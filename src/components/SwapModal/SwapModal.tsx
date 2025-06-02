@@ -26,7 +26,7 @@ import { getCollateralAddress, getCollateralIndex, getCollaterals } from 'utils/
 import { getContractInstance } from 'utils/contract';
 import { checkAllowance } from 'utils/network';
 import { sendBiconomyTransaction } from 'utils/smartAccount/biconomy/biconomy';
-import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import {
     buildTxForApproveTradeWithRouter,
     buildTxForSwap,
@@ -52,7 +52,7 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
     const walletClient = useWalletClient();
 
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
-    const smartAddress = smartAccountConnector.biconomyAddress;
+    const { smartAddress } = useBiconomy();
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const [fromToken, setFromToken] = useState<Coins>(

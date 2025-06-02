@@ -22,7 +22,7 @@ import { Coins, formatCurrencyWithKey, truncateAddress } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import { getCollateralIndex, getCollaterals } from 'utils/collaterals';
-import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import WithdrawModal from '../WithdrawModal';
 
@@ -32,7 +32,7 @@ const AssetBalance: React.FC = () => {
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
-    const smartAddress = smartAccountConnector.biconomyAddress;
+    const { smartAddress } = useBiconomy();
     const theme = useTheme();
     const [showThalesToOverMigrationModal, setShowThalesToOverMigrationModal] = useState<boolean>(false);
     const [showFundModal, setShowFundModal] = useState<boolean>(false);

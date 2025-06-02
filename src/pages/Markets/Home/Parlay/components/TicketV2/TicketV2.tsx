@@ -149,7 +149,7 @@ import {
     getPaymasterData,
     sendBiconomyTransaction,
 } from 'utils/smartAccount/biconomy/biconomy';
-import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { getSportsAMMV2QuoteMethod, getSportsAMMV2Transaction } from 'utils/sportsAmmV2';
 import {
     PARASWAP_TRANSFER_PROXY,
@@ -261,7 +261,7 @@ const Ticket: React.FC<TicketProps> = ({
     const walletClient = useWalletClient();
 
     const { address, isConnected } = useAccount();
-    const smartAddress = smartAccountConnector.biconomyAddress;
+    const { smartAddress } = useBiconomy();
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const selectedOddsType = useSelector(getOddsType);
