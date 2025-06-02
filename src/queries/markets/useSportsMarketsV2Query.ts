@@ -19,6 +19,8 @@ const marketsCache: MarketsCache = {
     [StatusFilter.CANCELLED_MARKETS]: [],
 };
 
+console.log('load');
+
 const useSportsMarketsV2Query = (
     statusFilter: StatusFilter,
     includeProofs: boolean,
@@ -42,6 +44,7 @@ const useSportsMarketsV2Query = (
             lines
         ),
         queryFn: async () => {
+            console.log('mmarkets cache', JSON.stringify(marketsCache).length / 1024, 'kb');
             try {
                 const status = statusFilter.toLowerCase().split('market')[0];
                 const today = new Date();
@@ -65,7 +68,10 @@ const useSportsMarketsV2Query = (
                         noCacheConfig
                     ),
                     fetchGameInfo
-                        ? axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, noCacheConfig)
+                        ? axios.get(
+                              `${generalConfig.API_URL}/overtime-v2/games-info${ticket ? `?gameids=${gameIds}` : ''}`,
+                              noCacheConfig
+                          )
                         : undefined,
                     fetchLiveScore
                         ? axios.get(`${generalConfig.API_URL}/overtime-v2/live-scores`, noCacheConfig)
