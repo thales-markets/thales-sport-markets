@@ -19,8 +19,6 @@ const marketsCache: MarketsCache = {
     [StatusFilter.CANCELLED_MARKETS]: [],
 };
 
-console.log('load');
-
 const useSportsMarketsV2Query = (
     statusFilter: StatusFilter,
     includeProofs: boolean,
