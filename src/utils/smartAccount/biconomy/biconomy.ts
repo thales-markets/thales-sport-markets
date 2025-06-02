@@ -279,7 +279,7 @@ export const executeBiconomyTransaction = async (params: {
             } else {
                 const sessionSigner = await getSessionSigner(params.networkId);
 
-                const { waitForTxHash, userOpHash, wait } = await smartAccountConnector.biconomyAccount.sendTransaction(
+                const { waitForTxHash, userOpHash } = await smartAccountConnector.biconomyAccount.sendTransaction(
                     transactionArray,
                     {
                         paymasterServiceData: {
@@ -296,13 +296,6 @@ export const executeBiconomyTransaction = async (params: {
                 );
 
                 const { transactionHash } = await waitForTxHash();
-                const {
-                    receipt: { transactionHash: txhash1 },
-                    success,
-                } = await wait();
-
-                console.log('Transaction Hash:', transactionHash, txhash1, 'Success:', success);
-
                 return await validateTx(transactionHash, userOpHash, params.networkId);
             }
         } catch (e) {
