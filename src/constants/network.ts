@@ -102,4 +102,9 @@ export const RPC_LIST = {
             wss: `wss://optimism-sepolia.infura.io/ws/v3/${INFURA_PROJECT_ID}`,
         },
     },
+    DRPC: {
+        [NetworkId.Base]: {
+            http: `https://lb.drpc.org/ogrpc?network=base&dkey=AjhxsdhGNEmAnwOgwsM6EStFUfxEP7MR8JPzKiqCbUWs`,
+        },
+    },
 };
