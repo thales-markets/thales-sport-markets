@@ -107,6 +107,7 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.USA_MAJOR_LEAGUE_CRICKET:
         case League.MLB_FUTURES:
         case League.USA_OPEN_CUP:
+        case League.UFL:
             return `/logos/Countries/united-states-of-america.svg`;
         case League.EPL:
         case League.ENGLAND_CHAMPIONSHIP:
@@ -305,6 +306,7 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.KBO:
             return `/logos/Countries/south-korea.svg`;
         case League.CANADA_PREMIER_LEAGUE:
+        case League.CFL:
             return `/logos/Countries/canada.svg`;
         case League.SIX_NATIONS:
             return `/logos/Countries/six-nations.png`;
