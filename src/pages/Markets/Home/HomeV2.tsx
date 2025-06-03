@@ -255,7 +255,6 @@ const Home: React.FC = () => {
                 }
             });
 
-            console.log('openTournamentsByLeague', tournaments, marketsCountPerTournament);
             return {
                 openTournamentsByLeague: groupBy(
                     uniqWith(tournaments, isEqual) as any,
@@ -507,9 +506,8 @@ const Home: React.FC = () => {
         const openMarketsCountPerTag: any = {};
         const ppMarketsCountPerTag: any = {};
         const ppMarketsCountPerTournament: any = {};
-        console.log('groupedMarketsLength', groupedMarkets);
+
         Object.keys(groupedMarkets).forEach((key: string) => {
-            console.log('groupedMarkets', key, groupedMarkets[key]);
             const playerMarketMap = groupedMarkets[key].reduce(
                 (prev: Record<string, SportMarket>, curr: SportMarket) => {
                     const playerMap = { ...prev };

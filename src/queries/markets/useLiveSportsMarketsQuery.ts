@@ -45,7 +45,6 @@ const useLiveSportsMarketsQuery = (
                         };
                     });
                 marketsCache.live = marketsFlattened;
-                return { live: marketsFlattened };
             } catch (e) {
                 console.log(e);
             }
