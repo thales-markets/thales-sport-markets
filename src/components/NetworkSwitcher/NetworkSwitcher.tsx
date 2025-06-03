@@ -75,7 +75,6 @@ const NetworkSwitcher: React.FC<NetworkSwitcherProps> = ({ containerStyle, onCli
 
 const NetworkIconContainer = styled.div`
     position: relative;
-    z-index: 101;
 `;
 
 const NetworkIconWrapper = styled.div<{ isConnected: boolean; isMultiChain: boolean }>`

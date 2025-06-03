@@ -13,13 +13,13 @@ import { FlexDiv, FlexDivRow } from 'styles/common';
 import { coinParser, Coins, formatCurrencyWithKey } from 'thales-utils';
 import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
-import { executeBiconomyTransactionWithConfirmation } from 'utils/biconomy';
-import biconomyConnector from 'utils/biconomyWallet';
 import { getCollateralIndex } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import { refetchBalances } from 'utils/queryConnector';
-import useBiconomy from 'utils/useBiconomy';
+import { executeBiconomyTransactionWithConfirmation } from 'utils/smartAccount/biconomy/biconomy';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
+import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
 import { Address, Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
@@ -47,8 +47,8 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
     const client = useClient();
 
     const { address } = useAccount();
-    const smartAddres = useBiconomy();
-    const walletAddress = (isBiconomy ? smartAddres : address) || '';
+    const { smartAddress } = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const networkName = useMemo(() => {
         return getNetworkNameByNetworkId(network);
@@ -70,8 +70,8 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
                     value: parsedAmount,
                 };
                 if (isBiconomy) {
-                    if (biconomyConnector && biconomyConnector.wallet) {
-                        const { wait } = await biconomyConnector.wallet.sendTransaction(transaction, {
+                    if (smartAccountConnector && smartAccountConnector.biconomyAccount) {
+                        const { wait } = await smartAccountConnector.biconomyAccount.sendTransaction(transaction, {
                             paymasterServiceData: {
                                 mode: PaymasterMode.SPONSORED,
                                 webhookData: {

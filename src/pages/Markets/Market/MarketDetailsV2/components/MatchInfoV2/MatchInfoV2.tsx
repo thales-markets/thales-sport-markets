@@ -65,7 +65,9 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
     return (
         <>
             <Wrapper>
-                <LeagueInfo>{`${leagueSport} / ${leagueLabel}`}</LeagueInfo>
+                <LeagueInfo>{`${t(
+                    `market.filter-label.sport.${leagueSport.toLowerCase()}`
+                )} / ${leagueLabel}`}</LeagueInfo>
                 <Container>
                     <LeagueLogoContainer>
                         <LeagueLogo className={leagueLogo} />
@@ -118,11 +120,7 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
                                 <Tooltip overlay={t(leagueTooltipKey)} iconFontSize={14} marginLeft={2} />
                             )}
                         </MatchTime>
-                        <>
-                            {`${market.tournamentName ? `${market.tournamentName}` : ''}${
-                                market.tournamentRound ? ` | ${market.tournamentRound}` : ''
-                            }`}
-                        </>
+                        <>{`${market.tournamentName ? `${market.tournamentName}` : ''}`}</>
                     </MatchTimeContainer>
                 </Container>
                 {getTeamsNames(true)}

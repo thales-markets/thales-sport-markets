@@ -2,19 +2,20 @@ import Button from 'components/Button';
 import FreeBetFundModal from 'components/FreeBetFundModal';
 import OutsideClickHandler from 'components/OutsideClick';
 import SPAAnchor from 'components/SPAAnchor';
+import ROUTES from 'constants/routes';
 import {
     NAV_MENU_FIRST_SECTION,
     NAV_MENU_FOURTH_SECTION,
     NAV_MENU_SECOND_SECTION,
     NAV_MENU_THIRD_SECTION,
 } from 'constants/ui';
+import { ProfileTab } from 'enums/ui';
 import { ProfileIconWidget } from 'layouts/DappLayout/DappHeader/components/ProfileItem/ProfileItem';
 import useBlockedGamesQuery from 'queries/resolveBlocker/useBlockedGamesQuery';
 import useWhitelistedForUnblock from 'queries/resolveBlocker/useWhitelistedForUnblock';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
 import { getIsConnectedViaParticle, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
 import { RootState } from 'types/redux';
@@ -23,6 +24,7 @@ import { getNetworkIconClassNameByNetworkId, getNetworkNameByNetworkId } from 'u
 import { buildHref } from 'utils/routes';
 import { useAccount, useChainId, useClient, useDisconnect } from 'wagmi';
 import {
+    BlockedGamesNotificationCount,
     CloseIcon,
     Count,
     FooterContainer,
@@ -34,7 +36,6 @@ import {
     Network,
     NetworkIcon,
     NetworkName,
-    NotificationCount,
     Separator,
     Wrapper,
 } from './styled-components';
@@ -49,7 +50,6 @@ const PARTICLE_WALLET = 'https://wallet.particle.network/';
 
 const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, skipOutsideClickOnElement }) => {
     const { t } = useTranslation();
-    const location = useLocation();
     const dispatch = useDispatch();
     const theme: ThemeInterface = useTheme();
     const networkId = useChainId();
@@ -126,38 +126,37 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                 <ItemsContainer>
                     {NAV_MENU_FIRST_SECTION.map((item, index) => {
                         if (!item.supportedNetworks.includes(networkId)) return;
-                        if (item.name == 'profile' && !isConnected) return;
+                        if (item.name == 'account' && !isConnected) return;
                         if (item.name == 'resolve-blocker' && !isWitelistedForUnblock) return;
+
+                        const isProfileAccountTab = [
+                            `${ROUTES.Profile}`,
+                            `${ROUTES.Profile}?selected-tab=${ProfileTab.ACCOUNT}`,
+                        ].includes(`${location.pathname}${location.search}`);
+                        const isOtherProfileTab = location.pathname === ROUTES.Profile && !isProfileAccountTab;
+
+                        const isActive =
+                            `${location.pathname}${location.search}` === item.route ||
+                            (item.name === 'account' && isProfileAccountTab) ||
+                            (item.name === 'profile' && isOtherProfileTab);
+
                         return (
                             <SPAAnchor key={index} href={buildHref(item.route)}>
-                                <ItemContainer
-                                    key={index}
-                                    active={location.pathname === item.route}
-                                    onClick={() => setNavMenuVisibility(null)}
-                                >
+                                <ItemContainer key={index} active={isActive} onClick={() => setNavMenuVisibility(null)}>
                                     {isConnected && item.name == 'profile' ? (
                                         <ProfileIconWidget
-                                            top="-10px"
-                                            left="-10px"
                                             marginRight="10px"
                                             avatarSize={25}
-                                            color={
-                                                location.pathname === item.route
-                                                    ? theme.textColor.quaternary
-                                                    : theme.textColor.primary
-                                            }
+                                            color={isActive ? theme.textColor.quaternary : theme.textColor.primary}
                                         />
                                     ) : (
                                         <>
                                             {item.name == 'resolve-blocker' && blockedGamesCount > 0 && (
-                                                <NotificationCount>
+                                                <BlockedGamesNotificationCount>
                                                     <Count>{blockedGamesCount}</Count>
-                                                </NotificationCount>
+                                                </BlockedGamesNotificationCount>
                                             )}
-                                            <NavIcon
-                                                className={item.iconClass}
-                                                active={location.pathname === item.route}
-                                            />
+                                            <NavIcon className={item.iconClass} active={isActive} />
                                         </>
                                     )}
                                     <NavLabel>{t(item.i18label)}</NavLabel>

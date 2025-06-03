@@ -501,10 +501,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                                 )
                             )}
                             <MatchInfoLabel>
-                                {!isColumnView && !isMarketSelected && !isMobile && (
-                                    <>{`${market.tournamentName ? ` | ${market.tournamentName}` : ''}${
-                                        market.tournamentRound ? ` | ${market.tournamentRound}` : ''
-                                    }`}</>
+                                {!isColumnView && !isMarketSelected && !isMobile && !isPlayerPropsMarket && (
+                                    <>{`${market.tournamentName ? ` | ${market.tournamentName}` : ''}`}</>
                                 )}
                                 {leagueTooltipKey && !isPlayerPropsMarket && (
                                     <Tooltip overlay={t(leagueTooltipKey)} iconFontSize={12} marginLeft={2} />
@@ -669,12 +667,14 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                                             isColumnView={isColumnView}
                                         />
                                     )}
-                                    {marketsCount > 0 && (
-                                        <MarketsCountWrapper onClick={() => openSelectedMarket()}>
-                                            {`+${marketsCount}`}
-                                            {!isMobile && <Arrow className={'icon icon--arrow-down'} />}
-                                        </MarketsCountWrapper>
-                                    )}
+
+                                    <MarketsCountWrapper
+                                        hidden={marketsCount === 0}
+                                        onClick={() => openSelectedMarket()}
+                                    >
+                                        {`+${marketsCount}`}
+                                        {!isMobile && <Arrow className={'icon icon--arrow-down'} />}
+                                    </MarketsCountWrapper>
                                 </>
                             ) : isGameOpen ? (
                                 <>

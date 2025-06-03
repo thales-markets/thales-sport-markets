@@ -2,24 +2,48 @@ import axios from 'axios';
 import Button from 'components/Button';
 import Table from 'components/Table';
 import { generalConfig } from 'config/general';
-import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { getErrorToastOptions, getInfoToastOptions, getSuccessToastOptions } from 'config/toast';
 import { t } from 'i18next';
 import { orderBy } from 'lodash';
 import useGetIsWhitelistedQuery from 'queries/freeBets/useGetIsWhitelistedQuery';
 import { useCallback, useState } from 'react';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
-import { FlexDivCentered } from 'styles/common';
+import { FlexDivCentered, FlexDivColumnNative } from 'styles/common';
 import { formatTxTimestamp, NetworkId } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
 import { getCollateralByAddress } from 'utils/collaterals';
 import { useAccount, useChainId, useSignMessage } from 'wagmi';
+import { CopyIcon } from './FreeBets';
 
 const columns = [
     {
         header: <>ID</>,
         accessorKey: 'id',
-        cell: (cellProps: any) => <p>{cellProps.cell.getValue()}</p>,
+        cell: (cellProps: any) => {
+            const id = cellProps.row.original.id;
+            const claimed = !!cellProps.row.original.claimer;
+            return (
+                <p>
+                    {cellProps.cell.getValue()}
+                    {!claimed && (
+                        <CopyIcon
+                            onClick={() => {
+                                const toastId = toast.loading(t('free-bet.admin.copying'), {
+                                    autoClose: 1000,
+                                });
+                                navigator.clipboard.writeText(id);
+                                toast.update(toastId, {
+                                    ...getInfoToastOptions(t('free-bet.admin.copied') + ' ' + id),
+                                    autoClose: 1000,
+                                });
+                            }}
+                            className="icon icon--copy"
+                        />
+                    )}
+                </p>
+            );
+        },
         size: 320,
         enableSorting: true,
     },
@@ -39,7 +63,7 @@ const columns = [
                 {getCollateralByAddress(cellProps.row.original.collateral, cellProps.row.original.network)}
             </p>
         ),
-        size: 100,
+        size: 80,
         enableSorting: true,
     },
     {
@@ -56,7 +80,17 @@ const columns = [
     {
         header: <>Claimer</>,
         accessorKey: 'claimer',
-        cell: (cellProps: any) => <p>{cellProps.cell.getValue()}</p>,
+        cell: (cellProps: any) => {
+            const isSmartAccount = !!cellProps.row.original.EOA;
+            return isSmartAccount ? (
+                <FlexDivColumnNative gap={3}>
+                    <p>EOA: {cellProps.row.original.EOA}</p>
+                    <p>SA: {cellProps.cell.getValue()}</p>
+                </FlexDivColumnNative>
+            ) : (
+                <p>{cellProps.cell.getValue()}</p>
+            );
+        },
         size: 400,
         enableSorting: true,
     },
@@ -67,8 +101,31 @@ const columns = [
             const value = cellProps.cell.getValue().toString();
             return <p className={value}>{value}</p>;
         },
-        size: 50,
+        size: 80,
         enableSorting: true,
+    },
+    {
+        header: <></>,
+        accessorKey: 'id',
+        cell: (cellProps: any) => {
+            const id = cellProps.cell.getValue().toString();
+            return (
+                <CopyIcon
+                    onClick={() => {
+                        const toastId = toast.loading(t('free-bet.admin.copying'), {
+                            autoClose: 1000,
+                        });
+                        navigator.clipboard.writeText(`https://overtimemarkets.xyz/markets?freeBet=${id}`);
+                        toast.update(toastId, {
+                            ...getInfoToastOptions(t('free-bet.admin.copied') + ' ' + id),
+                            autoClose: 1000,
+                        });
+                    }}
+                    className="icon icon--copy"
+                />
+            );
+        },
+        size: 20,
     },
 ];
 
@@ -142,11 +199,22 @@ const Container = styled.div`
     justify-content: center;
     width: 100%;
     margin-top: 100px;
+    @media (max-width: 767px) {
+        overflow-x: scroll;
+        display: block;
+        & > div > div > div {
+            overflow-x: hidden;
+            min-height: 20px;
+        }
+    }
 `;
 
 const TableContainer = styled.div`
     width: 90%;
     height: 100%;
+    @media (max-width: 767px) {
+        width: 1250px;
+    }
 `;
 
 export default StatsTable;

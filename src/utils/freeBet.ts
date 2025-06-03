@@ -13,7 +13,8 @@ export const claimFreeBet = async (
     freeBet: string | undefined,
     networkId: Network,
     setFreeBet: (freeBet: FreeBet | undefined) => void,
-    history: any
+    history: any,
+    switchChain: (chainConfig: { chainId: Network.Arbitrum | Network.OptimismMainnet | Network.Base }) => void
 ) => {
     const toastId = toast.loading(t('market.toast-message.transaction-pending'));
 
@@ -42,8 +43,11 @@ export const claimFreeBet = async (
                         search: queryParams.toString(),
                     });
                 }
+                switchChain({ chainId: Network.OptimismMainnet });
                 refetchGetFreeBet(freeBet, networkId);
-                refetchFreeBetBalance(walletAddress, networkId);
+                setTimeout(() => {
+                    refetchFreeBetBalance(walletAddress, networkId);
+                }, 3000);
             } else {
                 toast.update(toastId, getErrorToastOptions(response.data));
             }

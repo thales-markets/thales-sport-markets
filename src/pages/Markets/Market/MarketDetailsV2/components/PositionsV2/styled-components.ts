@@ -26,14 +26,15 @@ export const Header = styled(FlexDivColumnCentered)<{
     alignHeader?: boolean;
     hidden?: boolean;
     float?: boolean;
+    isSticky?: boolean;
 }>`
     display: ${(props) => (props.hidden ? 'none' : 'flex')};
-    position: ${(props) => (props.float ? 'absolute' : 'relative')};
+    position: ${(props) => (props.float ? 'absolute' : props.isSticky ? 'sticky' : 'relative')};
     ${(props) => props.float && 'top: -35px; left: 50%; transform: translateX(-50%);'}
-    max-height: ${(props) => (props.isMainPageView && !props.isColumnView ? 'auto' : '25px')};
+    ${(props) => props.isSticky && `top: 0; background: ${props.theme.background.quinary}; z-index: 1;`}
+    ${(props) => (props.isMainPageView && !props.isColumnView ? '' : 'max-height: 25px;')}
     margin-bottom: ${(props) => (props.alignHeader ? '-19px' : '0')};
     flex: none;
-    ${(props) => props.isMainPageView && 'width: 90%'};
     @media (max-width: 950px) {
         ${(props) => props.float && 'top: -50px;'}
     }
@@ -91,10 +92,11 @@ export const Arrow = styled.i`
     font-size: 12px;
     color: ${(props) => props.theme.textColor.secondary};
     position: absolute;
-    top: 4px;
+    top: 0px;
     right: 0px;
     margin-right: 2px;
     cursor: pointer;
+    z-index: 3;
 `;
 
 export const Message = styled.span`

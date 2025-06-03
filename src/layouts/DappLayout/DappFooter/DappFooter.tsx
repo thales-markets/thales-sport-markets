@@ -1,6 +1,7 @@
 import termsOfUse from 'assets/docs/overtime-terms-of-use.pdf';
 import { LINKS } from 'constants/links';
 import ROUTES from 'constants/routes';
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import styled from 'styled-components';
@@ -12,14 +13,14 @@ const DappFooter: React.FC = () => {
     return (
         <>
             <Container>
-                <ThalesLink mobile={true} target="_blank" rel="noreferrer" href={LINKS.Thales}>
+                <ThalesLink mobile={true} target="_blank" rel="noreferrer" href={LINKS.Overtime}>
                     <LinkContent>
                         <LogoText>{t('footer.built-using')}</LogoText>
                         <LogoIcon className="icon icon--overtime" />
                     </LinkContent>
                 </ThalesLink>
                 <LinksContainer>
-                    <ThalesLink mobile={false} target="_blank" rel="noreferrer" href={LINKS.Thales}>
+                    <ThalesLink mobile={false} target="_blank" rel="noreferrer" href={LINKS.Overtime}>
                         <LinkContent>
                             <LogoText>{t('footer.built-using')}</LogoText>
                             <LogoIcon className="icon icon--overtime" />
@@ -111,8 +112,9 @@ const DisclaimerContainer = styled(FlexDivCentered)`
     line-height: 12px;
     color: ${(props) => props.theme.textColor.secondary};
     text-align: justify;
-    @media (max-width: 650px) {
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         margin-top: 30px;
+        margin-bottom: 60px;
     }
     @media (max-width: 400px) {
         margin-top: 50px;

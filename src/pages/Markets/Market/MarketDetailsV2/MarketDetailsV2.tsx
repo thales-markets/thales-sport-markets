@@ -5,7 +5,9 @@ import Toggle from 'components/Toggle';
 import { MarketTypeGroupsBySport } from 'constants/marketTypes';
 import { GameStatusKey } from 'constants/markets';
 import ROUTES from 'constants/routes';
+import { MAIN_VIEW_RIGHT_CONTAINER_WIDTH_LARGE, MAIN_VIEW_RIGHT_CONTAINER_WIDTH_MEDIUM } from 'constants/ui';
 import { GameStatus } from 'enums/markets';
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import { groupBy } from 'lodash';
 import { getLeaguePeriodType, getLeagueSport, isFuturesMarket, League, MarketType, Sport } from 'overtime-utils';
 import { ToggleContainer } from 'pages/LiquidityPool/styled-components';
@@ -96,6 +98,10 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     const liveScore = market.liveScore;
 
     const leagueSport = getLeagueSport(market.leagueId);
+
+    const isLiveScoreStatusHalfTime =
+        liveScore &&
+        (liveScore.gameStatus == GameStatus.RUNDOWN_HALF_TIME || liveScore.gameStatus == GameStatus.OPTICODDS_HALF);
 
     return (
         <RowContainer>
@@ -200,28 +206,36 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                                 )}
                                             </ResultLabel>
                                         )}
-                                        {showLiveInfo(liveScore.gameStatus, liveScore.period) && (
-                                            <PeriodsContainer>
-                                                {liveScore.gameStatus == GameStatus.RUNDOWN_HALF_TIME ||
-                                                liveScore.gameStatus == GameStatus.OPTICODDS_HALF ? (
-                                                    <InfoLabel>{t('markets.market-card.half-time')}</InfoLabel>
-                                                ) : (
-                                                    <>
-                                                        <InfoLabel>
-                                                            {` ${getOrdinalNumberLabel(Number(liveScore.period))} ${t(
-                                                                `markets.market-card.${getLeaguePeriodType(
-                                                                    market.leagueId
-                                                                )}`
-                                                            )}`}
-                                                        </InfoLabel>
-                                                        <InfoLabel className="red">
-                                                            {liveScore.displayClock?.replaceAll("'", '')}
-                                                            <InfoLabel className="blink">&prime;</InfoLabel>
-                                                        </InfoLabel>
-                                                    </>
-                                                )}
-                                            </PeriodsContainer>
-                                        )}
+                                        {showLiveInfo(liveScore.gameStatus, liveScore.period) &&
+                                            (isLiveScoreStatusHalfTime ||
+                                                !!liveScore.period ||
+                                                !!liveScore.displayClock) && (
+                                                <PeriodsContainer>
+                                                    {isLiveScoreStatusHalfTime ? (
+                                                        <InfoLabel>{t('markets.market-card.half-time')}</InfoLabel>
+                                                    ) : (
+                                                        <>
+                                                            {!!liveScore.period && (
+                                                                <InfoLabel>
+                                                                    {` ${getOrdinalNumberLabel(
+                                                                        Number(liveScore.period)
+                                                                    )} ${t(
+                                                                        `markets.market-card.${getLeaguePeriodType(
+                                                                            market.leagueId
+                                                                        )}`
+                                                                    )}`}
+                                                                </InfoLabel>
+                                                            )}
+                                                            {!!liveScore.displayClock && (
+                                                                <InfoLabel className="red">
+                                                                    {liveScore.displayClock?.replaceAll("'", '')}
+                                                                    <InfoLabel className="blink">&prime;</InfoLabel>
+                                                                </InfoLabel>
+                                                            )}
+                                                        </>
+                                                    )}
+                                                </PeriodsContainer>
+                                            )}
                                         {leagueSport !== Sport.SOCCER && leagueSport !== Sport.CRICKET && (
                                             <FlexDivRow>
                                                 {liveScore.homeScoreByPeriod.map((_, index) => {
@@ -359,11 +373,11 @@ const MainContainer = styled(FlexDivColumn)<{ isGameOpen: boolean }>`
 `;
 
 const SidebarContainer = styled(FlexDivColumn)`
-    min-width: 360px;
-    max-width: 360px;
-    @media (max-width: 1299px) {
-        max-width: 320px;
-        min-width: 320px;
+    min-width: ${MAIN_VIEW_RIGHT_CONTAINER_WIDTH_LARGE};
+    max-width: ${MAIN_VIEW_RIGHT_CONTAINER_WIDTH_LARGE};
+    @media (max-width: ${ScreenSizeBreakpoint.LARGE}px) {
+        max-width: ${MAIN_VIEW_RIGHT_CONTAINER_WIDTH_MEDIUM};
+        min-width: ${MAIN_VIEW_RIGHT_CONTAINER_WIDTH_MEDIUM};
     }
     @media (max-width: 950px) {
         display: none;

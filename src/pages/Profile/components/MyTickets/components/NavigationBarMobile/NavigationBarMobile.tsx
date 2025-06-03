@@ -1,22 +1,31 @@
 import { ProfileTab } from 'enums/ui';
-import useClaimablePositionCountV2Query from 'queries/markets/useClaimablePositionCountV2Query';
-import React from 'react';
+import usePositionCountV2Query from 'queries/markets/usePositionCountV2Query';
+import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import { RootState } from 'types/redux';
-import useBiconomy from 'utils/useBiconomy';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
-import { Count, Icon, Item, ItemLabel, ItemWrapper, NotificationCount, Wrapper } from './styled-components';
+import {
+    ClaimableTicketsNotificationCount,
+    Count,
+    Icon,
+    Item,
+    ItemLabel,
+    ItemWrapper,
+    OpenTicketsNotificationCount,
+    Wrapper,
+} from './styled-components';
 
 const navItems = [
     {
         id: ProfileTab.STATS,
-        icon: 'icon icon--logo',
+        icon: 'icon icon--profile3',
         name: 'Info',
     },
     {
         id: ProfileTab.ACCOUNT,
-        icon: 'icon icon--wallet2',
+        icon: 'icon icon--logo',
         name: 'Account',
     },
 
@@ -47,34 +56,45 @@ const NavigationBarMobile: React.FC<NavigationBarProps> = ({ selectedTab, setSel
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
-    const smartAddres = useBiconomy();
-    const walletAddress = (isBiconomy ? smartAddres : address) || '';
+    const { smartAddress } = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
-    const claimablePositionsCountQuery = useClaimablePositionCountV2Query(
-        walletAddress,
-        { networkId, client },
-        {
-            enabled: isConnected,
-        }
+    const positionsCountQuery = usePositionCountV2Query(walletAddress, { networkId, client }, { enabled: isConnected });
+
+    const claimablePositionCount = useMemo(
+        () => (positionsCountQuery.isSuccess && positionsCountQuery.data ? positionsCountQuery.data.claimable : 0),
+        [positionsCountQuery.isSuccess, positionsCountQuery.data]
     );
-    const claimablePositionCount =
-        claimablePositionsCountQuery.isSuccess && claimablePositionsCountQuery.data
-            ? claimablePositionsCountQuery.data
-            : null;
+    const openPositionCount = useMemo(
+        () => (positionsCountQuery.isSuccess && positionsCountQuery.data ? positionsCountQuery.data.open : 0),
+        [positionsCountQuery.isSuccess, positionsCountQuery.data]
+    );
 
     return (
         <Wrapper>
             {navItems.map((item, index) => {
-                const notificationsCount = item.id === ProfileTab.OPEN_CLAIMABLE ? claimablePositionCount : 0;
+                if (
+                    !isConnected &&
+                    (item.id === ProfileTab.ACCOUNT || item.id === ProfileTab.LP || item.id === ProfileTab.STATS)
+                )
+                    return;
+                const hasClaimableNotification =
+                    item.id === ProfileTab.OPEN_CLAIMABLE ? claimablePositionCount > 0 : false;
+                const hasOpenNotification = item.id === ProfileTab.OPEN_CLAIMABLE ? openPositionCount > 0 : false;
                 return (
                     <ItemWrapper key={index}>
-                        <Item key={index} onClick={() => setSelectedTab(item.id)}>
+                        <Item onClick={() => setSelectedTab(item.id)}>
                             <Icon selected={item.id == selectedTab} className={item.icon} />
                         </Item>
-                        {!!notificationsCount && (
-                            <NotificationCount key={'count' + index}>
-                                <Count>{notificationsCount}</Count>
-                            </NotificationCount>
+                        {hasClaimableNotification && (
+                            <ClaimableTicketsNotificationCount>
+                                <Count>{claimablePositionCount}</Count>
+                            </ClaimableTicketsNotificationCount>
+                        )}
+                        {hasOpenNotification && (
+                            <OpenTicketsNotificationCount>
+                                <Count>{openPositionCount}</Count>
+                            </OpenTicketsNotificationCount>
                         )}
                         <ItemLabel selected={item.id == selectedTab}>{item.name}</ItemLabel>
                     </ItemWrapper>

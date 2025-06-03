@@ -2,6 +2,7 @@ import Button from 'components/Button';
 import FundModal from 'components/FundOvertimeAccountModal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import localforage from 'localforage';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
@@ -13,10 +14,10 @@ import { toast } from 'react-toastify';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivRow } from 'styles/common';
-import { Coins, localStore } from 'thales-utils';
+import { Coins } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
-import { activateOvertimeAccount } from 'utils/biconomy';
+import { ThemeInterface } from 'types/ui';
 import {
     getCollateralAddress,
     getCollateralIndex,
@@ -26,7 +27,8 @@ import {
 import { isSmallDevice } from 'utils/device';
 import { getFreeBetModalShown } from 'utils/freeBet';
 import { getFundModalShown, setFundModalShown } from 'utils/fundModal';
-import useBiconomy from 'utils/useBiconomy';
+import { activateOvertimeAccount } from 'utils/smartAccount/biconomy/session';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient } from 'wagmi';
@@ -34,18 +36,19 @@ import { useAccount, useChainId, useClient } from 'wagmi';
 const ActivateAccount: React.FC<any> = () => {
     const networkId = useChainId();
     const { t } = useTranslation();
-    const theme = useTheme();
+    const theme: ThemeInterface = useTheme();
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const client = useClient();
     const { address, isConnected } = useAccount();
-    const smartAddres = useBiconomy();
-    const walletAddress = (isBiconomy ? smartAddres : address) || '';
+    const { smartAddress } = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const queryParams: { freeBet?: string } = queryString.parse(location.search);
 
-    const [showSuccessfulDepositModal, setShowSuccessfulDepositModal] = useState<boolean>(false);
-    const [isMinimizedModal, setIsMinimized] = useState<boolean>(false);
+    const [showActivateAccount, setShowActivateAccount] = useState<boolean>(false);
+    const [isMinimizedModal, setIsMinimized] = useState<boolean>(true);
     const [showFundModal, setShowFundModal] = useState<boolean>(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(
         walletAddress,
@@ -115,41 +118,40 @@ const ActivateAccount: React.FC<any> = () => {
             if (totalBalanceValue && totalBalanceValue?.total > 3) {
                 setShowFundModal(false);
 
-                const storedMapString: any = localStore.get(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId]);
-
-                if (storedMapString) {
-                    const retrievedMap = new Map(JSON.parse(storedMapString));
-                    const sessionData = retrievedMap.get(smartAddres) as any;
-                    if (sessionData) {
-                        setShowSuccessfulDepositModal(false);
+                localforage.getItem(LOCAL_STORAGE_KEYS.SESSION_P_KEY[networkId]).then((retrievedMap: any) => {
+                    if (retrievedMap) {
+                        const sessionData = retrievedMap.get(smartAddress) as any;
+                        if (sessionData) {
+                            setShowActivateAccount(false);
+                        } else {
+                            setShowActivateAccount(true);
+                        }
                     } else {
-                        setShowSuccessfulDepositModal(true);
+                        setShowActivateAccount(true);
                     }
-                } else {
-                    setShowSuccessfulDepositModal(true);
-                }
+                });
             } else if (getFundModalShown()) {
                 setShowFundModal(true);
-                setShowSuccessfulDepositModal(false);
+                setShowActivateAccount(false);
                 setFundModalShown(false);
             }
         }
-    }, [totalBalanceValue, networkId, isConnected, isBiconomy, smartAddres, queryParams.freeBet]);
+    }, [totalBalanceValue, networkId, isConnected, isBiconomy, smartAddress, queryParams.freeBet]);
 
     return (
         <>
-            {showSuccessfulDepositModal && (
+            {showActivateAccount && (
                 <Container show={!isMinimizedModal}>
                     <Wrapper show={!isMinimizedModal}>
                         {!isMinimizedModal ? (
                             <>
                                 <FlexDivRow>{<CloseIcon onClick={() => setIsMinimized(true)} />}</FlexDivRow>
                                 <LogoIcon className="icon icon--overtime" />
-                                <Header>{t('get-started.activate-account.deposit')}</Header>
                                 <SubTitle>{t('get-started.activate-account.activate')}</SubTitle>
                                 <Box>{t('get-started.activate-account.success')}</Box>
                                 <ActivateButton
                                     onClick={async () => {
+                                        setIsSubmitting(true);
                                         const toastId = toast.loading(t('market.toast-message.transaction-pending'));
                                         const txHash = await activateOvertimeAccount({
                                             networkId,
@@ -160,7 +162,7 @@ const ActivateAccount: React.FC<any> = () => {
                                         });
                                         if (txHash) {
                                             const txReceipt = await waitForTransactionReceipt(client as Client, {
-                                                hash: txHash,
+                                                hash: txHash as any,
                                             });
 
                                             if (txReceipt.status === 'success') {
@@ -168,7 +170,8 @@ const ActivateAccount: React.FC<any> = () => {
                                                     toastId,
                                                     getSuccessToastOptions(t('market.toast-message.approve-success'))
                                                 );
-                                                setShowSuccessfulDepositModal(false);
+                                                setShowActivateAccount(false);
+                                                setIsSubmitting(false);
                                                 return;
                                             }
                                         }
@@ -176,9 +179,12 @@ const ActivateAccount: React.FC<any> = () => {
                                             toastId,
                                             getErrorToastOptions(t('common.errors.unknown-error-try-again'))
                                         );
+                                        setIsSubmitting(false);
                                     }}
                                 >
-                                    {t('get-started.activate-account.activate-my-account')}
+                                    {isSubmitting
+                                        ? t('get-started.activate-account.activate-progress')
+                                        : t('get-started.activate-account.activate-my-account')}
                                 </ActivateButton>
                             </>
                         ) : (
@@ -194,7 +200,7 @@ const ActivateAccount: React.FC<any> = () => {
                                         padding: '9px 20px',
                                         width: isSmallDevice ? '100%' : '100px',
                                         height: '30px',
-                                        zIndex: 1000,
+                                        zIndex: 100,
                                     }}
                                     onClick={() => setIsMinimized(false)}
                                 >
@@ -215,12 +221,17 @@ const ActivateAccount: React.FC<any> = () => {
 };
 
 const Container = styled.div<{ show?: boolean }>`
+    position: relative;
+    width: 100px;
+    height: 30px;
+    margin-left: 5px;
+
     @media (max-width: 512px) {
         width: 100%;
-
+        height: unset;
+        margin-left: 0;
         z-index: ${(props) => (props.show ? 100 : 9)};
     }
-    width: 100px;
 `;
 
 const Wrapper = styled.div<{ show: boolean }>`
@@ -266,19 +277,6 @@ const Wrapper = styled.div<{ show: boolean }>`
     `}
 `;
 
-const Header = styled.h2`
-    color: ${(props) => props.theme.overdrop.textColor.quaternary};
-    text-align: center;
-    font-size: 24px;
-    line-height: 24px;
-    font-weight: 600;
-    margin-top: 13px;
-    margin-bottom: 10px;
-    @media (max-width: 575px) {
-        font-size: 20px;
-    }
-`;
-
 const SubTitle = styled.p`
     color: ${(props) => props.theme.overdrop.textColor.quaternary};
     text-align: center;
@@ -317,6 +315,7 @@ const ActivateButton = styled.div`
     height: 44px;
     padding: 14px;
     width: 100%;
+    user-select: none;
     cursor: pointer;
     text-transform: uppercase;
 `;

@@ -1,34 +1,36 @@
+import particle from 'assets/images/particle.png';
 import Button from 'components/Button';
+import ClaimFreeBetButton from 'components/ClaimFreeBetButton';
 import DepositFromWallet from 'components/DepositFromWallet';
 import Modal from 'components/Modal';
 import NetworkSwitcher from 'components/NetworkSwitcher';
 import Tooltip from 'components/Tooltip';
-import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
+import UniversalModal from 'components/UniversalModal';
 import { COLLATERAL_ICONS_CLASS_NAMES } from 'constants/currency';
-import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import useLocalStorage from 'hooks/useLocalStorage';
+import ROUTES from 'constants/routes';
+import { Network } from 'enums/network';
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import QRCodeModal from 'pages/AARelatedPages/Deposit/components/QRCodeModal';
-import useGetFreeBetQuery from 'queries/freeBets/useGetFreeBetQuery';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
-import queryString from 'query-string';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { truncateAddress } from 'thales-utils';
 import { Rates } from 'types/collateral';
-import { FreeBet } from 'types/freeBet';
 import { RootState } from 'types/redux';
-import { getCollateralAddress, getCollateralByAddress, getCollateralIndex, getCollaterals } from 'utils/collaterals';
-import { claimFreeBet } from 'utils/freeBet';
+import { getCollateralAddress, getCollateralIndex, getCollaterals } from 'utils/collaterals';
+import { isSmallDevice } from 'utils/device';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import { getOnRamperUrl } from 'utils/particleWallet/utils';
-import useBiconomy from 'utils/useBiconomy';
+import { navigateTo } from 'utils/routes';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
+import useUniversalAccount from 'utils/smartAccount/hooks/useUniversalAccount';
+
 import { useAccount, useChainId, useClient } from 'wagmi';
 
 type FundModalProps = {
@@ -36,25 +38,24 @@ type FundModalProps = {
 };
 
 const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
-    const [freeBet, setFreeBet] = useLocalStorage<FreeBet | undefined>(LOCAL_STORAGE_KEYS.FREE_BET_ID, undefined);
-    const history = useHistory();
-
-    const queryParams: { freeBet?: string } = queryString.parse(location.search);
-
-    const [freeBetId, setFreeBetId] = useState(freeBet?.id || queryParams.freeBet || '');
+    const [showLetsBetButton, setShowLetsBetButton] = useState(false);
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const { t } = useTranslation();
+
+    const { universalAddress } = useUniversalAccount(); // added this hook here so we reduce the amount for loading universal data when users opens universal deposit
+    console.log(universalAddress);
 
     const client = useClient();
     const { address, isConnected } = useAccount();
 
     const theme = useTheme();
     const networkId = useChainId();
-    const smartAddres = useBiconomy();
-    const walletAddress = (isBiconomy ? smartAddres : address) || '';
+    const { smartAddress } = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const [showQRModal, setShowQRModal] = useState<boolean>(false);
     const [showDepositFromWallet, setShowDepositFromWallet] = useState<boolean>(false);
+    const [showUniversalModal, setShowUniversalModal] = useState<boolean>(false);
 
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(
         address as string,
@@ -62,14 +63,6 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
         {
             enabled: isConnected,
         }
-    );
-
-    const freeBetQuery = useGetFreeBetQuery(freeBetId || '', networkId, { enabled: !!freeBetId });
-
-    const freeBetFromServer = useMemo(
-        () =>
-            freeBetQuery.isSuccess && freeBetQuery.data && freeBetId ? { ...freeBetQuery.data, id: freeBetId } : null,
-        [freeBetQuery.data, freeBetQuery.isSuccess, freeBetId]
     );
 
     const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
@@ -93,12 +86,11 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
     }, [exchangeRates, multipleCollateralBalances.data, networkId]);
 
     const handleCopy = () => {
-        const id = toast.loading(t('deposit.copying-address'));
         try {
             navigator.clipboard.writeText(walletAddress);
-            toast.update(id, getInfoToastOptions(t('deposit.copied') + ': ' + truncateAddress(walletAddress, 6, 4)));
+            toast.info(`${t('deposit.copied')}: ${truncateAddress(walletAddress, 6, 4)}`);
         } catch (e) {
-            toast.update(id, getErrorToastOptions('Error'));
+            toast.error('Error');
         }
     };
 
@@ -107,26 +99,6 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
     const onramperUrl = useMemo(() => {
         return getOnRamperUrl(apiKey, walletAddress, networkId);
     }, [walletAddress, networkId, apiKey]);
-
-    const onClaimFreeBet = useCallback(() => claimFreeBet(walletAddress, freeBetId, networkId, setFreeBet, history), [
-        walletAddress,
-        freeBetId,
-        setFreeBet,
-        history,
-        networkId,
-    ]);
-
-    const claimFreeBetButtonVisible =
-        !!freeBetFromServer &&
-        !freeBetFromServer?.claimSuccess &&
-        (!freeBetFromServer.claimAddress ||
-            freeBetFromServer.claimAddress.toLowerCase() === walletAddress.toLowerCase());
-
-    useEffect(() => {
-        if (queryParams.freeBet) {
-            setFreeBetId(queryParams.freeBet as string);
-        }
-    }, [freeBet, queryParams.freeBet]);
 
     return (
         <Modal
@@ -138,6 +110,14 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
             containerStyle={{
                 background: theme.background.secondary,
                 border: 'none',
+            }}
+            mobileStyle={{
+                container: {
+                    borderRadius: 0,
+                    minHeight: '100vh',
+                    padding: '25px 10px 35px 10px',
+                    overflow: 'scroll',
+                },
             }}
             hideHeader
             title=""
@@ -223,34 +203,49 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                         </ButtonsContainer>
                     </AddressContainer>
                 </WalletContainer>
-                {claimFreeBetButtonVisible && (
+                <ClaimFreeBetButton styles={{ marginTop: '14px' }} onClaim={() => setShowLetsBetButton(true)} />
+                {showLetsBetButton && (
                     <Container>
-                        <ClaimBetButton
-                            onClick={onClaimFreeBet}
-                            backgroundColor={theme.overdrop.borderColor.tertiary}
-                            borderColor={theme.overdrop.borderColor.tertiary}
-                            textColor={theme.button.textColor.primary}
+                        <Button
+                            onClick={() => {
+                                setShowLetsBetButton(false);
+                                navigateTo(ROUTES.Markets.Home);
+                            }}
+                            width="100%"
                             height="44px"
                             fontSize="16px"
-                            fontWeight="700"
+                            backgroundColor={theme.background.quaternary}
                             borderRadius="8px"
-                            className="pulse"
+                            borderColor={theme.borderColor.quaternary}
+                            textColor={theme.textColor.tertiary}
                         >
-                            {t('get-started.fund-account.claim-free-bet', {
-                                amount: `${freeBetFromServer?.betAmount} $${getCollateralByAddress(
-                                    freeBetFromServer.collateral,
-                                    networkId
-                                )}`,
-                            })}
-                            <HandsIcon className="icon icon--hands-coins" />
-                        </ClaimBetButton>
+                            {t('free-bet.claim-modal.lets-bet-button')}
+                        </Button>
                     </Container>
                 )}
 
                 <Container>
+                    {networkId === Network.OptimismMainnet && (
+                        <Tooltip
+                            customIconStyling={{ color: theme.textColor.secondary }}
+                            overlay={t('get-started.fund-account.tooltip-universal')}
+                            open={!isSmallDevice}
+                        >
+                            <ButtonLocal
+                                onClick={() => {
+                                    setShowUniversalModal(true);
+                                }}
+                            >
+                                <ButtonText>{t('get-started.fund-account.universal-deposit')}</ButtonText>
+                                <ParticleLogo src={particle} />
+                                <BetaTag>Beta</BetaTag>
+                            </ButtonLocal>
+                        </Tooltip>
+                    )}
                     <Tooltip
                         customIconStyling={{ color: theme.textColor.secondary }}
                         overlay={t('get-started.fund-account.tooltip-5')}
+                        open={!isSmallDevice}
                     >
                         <ButtonLocal
                             onClick={() => {
@@ -264,6 +259,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                     <Tooltip
                         customIconStyling={{ color: theme.textColor.secondary }}
                         overlay={t('get-started.fund-account.tooltip-4')}
+                        open={!isSmallDevice}
                     >
                         <ButtonLocal
                             disabled={totalBalanceValue === 0}
@@ -275,9 +271,11 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                             <Icon className="icon icon--wallet-connected" />
                         </ButtonLocal>
                     </Tooltip>
+
                     <Tooltip
                         customIconStyling={{ color: theme.textColor.secondary }}
                         overlay={t('get-started.fund-account.tooltip-3')}
+                        open={!isSmallDevice}
                     >
                         <ButtonLocal disabled>
                             <ButtonText>{t('get-started.fund-account.from-exchange')}</ButtonText>
@@ -288,6 +286,13 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
             </Wrapper>
             {showQRModal && <QRCodeModal onClose={() => setShowQRModal(false)} walletAddress={walletAddress} />}
             {showDepositFromWallet && <DepositFromWallet onClose={() => setShowDepositFromWallet(false)} />}
+            {showUniversalModal && (
+                <UniversalModal
+                    onClose={() => {
+                        setShowUniversalModal(false);
+                    }}
+                />
+            )}
         </Modal>
     );
 };
@@ -324,14 +329,20 @@ const Title = styled.h1`
     margin-bottom: 15px;
     text-transform: uppercase;
     white-space: pre;
-    @media (max-width: 512px) {
+
+    @media (max-width: ${ScreenSizeBreakpoint.EXTRA_SMALL}px) {
         font-size: 20px;
         white-space: pre;
         gap: 2px;
     }
-    @media (max-width: 412px) {
-        font-size: 18px;
-        line-height: 18px;
+
+    @media (max-width: ${ScreenSizeBreakpoint.XXS}px) {
+        font-size: 16px;
+        line-height: 16px;
+    }
+
+    @media (max-width: ${ScreenSizeBreakpoint.XXXS}px) {
+        flex-wrap: wrap;
     }
 `;
 
@@ -362,6 +373,10 @@ const ButtonText = styled.p`
     font-weight: 600;
     line-height: 16px;
     white-space: pre;
+
+    @media (max-width: ${ScreenSizeBreakpoint.XXXS}px) {
+        font-size: 14px;
+    }
 `;
 
 const FieldDesc = styled.p`
@@ -406,7 +421,6 @@ const AddressContainer = styled.div`
 const Container = styled(FlexDivCentered)`
     margin-top: 14px;
     gap: 14px;
-
     flex-direction: column;
     align-items: flex-start;
 `;
@@ -429,6 +443,11 @@ const Field = styled.div`
     @media (max-width: 575px) {
         font-size: 12px;
     }
+
+    @media (max-width: ${ScreenSizeBreakpoint.XXXS}px) {
+        font-size: 10px;
+        padding: 6px;
+    }
 `;
 
 const BlueField = styled(Field)`
@@ -448,6 +467,10 @@ const QRIcon = styled.i`
     @media (max-width: 575px) {
         font-size: 24px;
     }
+
+    @media (max-width: ${ScreenSizeBreakpoint.XXXS}px) {
+        font-size: 20px;
+    }
 `;
 
 const Icon = styled.i`
@@ -455,16 +478,37 @@ const Icon = styled.i`
     font-size: 20px;
 `;
 
+const ParticleLogo = styled.img`
+    height: 24px;
+`;
+
 const CollateralText = styled.p`
     color: ${(props) => props.theme.textColor.primary};
     font-size: 14px;
     font-weight: 800;
     letter-spacing: 0.42px;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        font-size: 10px;
+    }
 `;
 
 const CollateralsWrapper = styled(FlexDivCentered)`
     flex-wrap: wrap;
     margin-bottom: 60px;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        gap: 10px;
+    }
+
+    @media (max-width: ${ScreenSizeBreakpoint.EXTRA_SMALL}px) {
+        margin-bottom: 30px;
+    }
+
+    @media (max-width: ${ScreenSizeBreakpoint.XXXS}px) {
+        max-width: 190px;
+        margin: auto;
+        gap: 10px 20px;
+        margin-bottom: 30px;
+    }
 `;
 
 const CollateralWrapper = styled(FlexDivColumnCentered)`
@@ -492,39 +536,19 @@ const CloseIcon = styled.i.attrs({ className: 'icon icon--close' })`
     cursor: pointer;
 `;
 
-const HandsIcon = styled.i`
-    font-weight: 500;
-    margin-left: 5px;
-    font-size: 22px;
-    color: ${(props) => props.theme.textColor.tertiary};
-`;
-
-const ClaimBetButton = styled(Button)`
-    width: 100%;
-    &.pulse {
-        animation: pulsing 1.5s ease-in;
-        animation-iteration-count: infinite;
-        @keyframes pulsing {
-            0% {
-                box-shadow: 0 0 0 0px rgba(237, 185, 41, 0.6);
-            }
-            50% {
-                box-shadow: 0 0 0 0px rgba(237, 185, 41, 0.4);
-            }
-            100% {
-                box-shadow: 0 0 0 20px rgba(237, 185, 41, 0);
-            }
-        }
-    }
-`;
-
-const ButtonLocal = styled(FlexDivCentered)<{ disabled?: boolean }>`
+const ButtonLocal = styled.button<{ disabled?: boolean }>`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
     border-radius: 8px;
     width: 100%;
+
     height: 42px;
     border: 1px ${(props) => props.theme.borderColor.primary} solid;
     color: ${(props) => props.theme.textColor.primary};
     gap: 8px;
+    background: transparent;
 
     font-size: 14px;
     font-weight: 600;
@@ -552,6 +576,10 @@ const ButtonLocal = styled(FlexDivCentered)<{ disabled?: boolean }>`
             i {
                 color: ${props.theme.button.textColor.primary};
             }
+
+            span {
+             color: ${props.theme.button.textColor.primary};
+            }
     }
     `
             : ''}
@@ -559,10 +587,23 @@ const ButtonLocal = styled(FlexDivCentered)<{ disabled?: boolean }>`
     opacity: ${(props) => (props.disabled ? '0.5' : '1')};
 `;
 
+const BetaTag = styled.span`
+    position: absolute;
+    right: 10px;
+    top: 12px;
+    color: ${(props) => props.theme.textColor.primary};
+    text-transform: capitalize;
+    font-size: 14px;
+`;
+
 const Asset = styled.i<{ fontSize?: string }>`
     font-size: 40px;
     line-height: 40px;
     color: ${(props) => props.theme.textColor.secondary};
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        font-size: 24px;
+        line-height: 24px;
+    }
 `;
 
 export default FundModal;

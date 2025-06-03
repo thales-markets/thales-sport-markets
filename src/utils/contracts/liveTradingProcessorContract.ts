@@ -3,10 +3,10 @@ import { ContractData } from 'types/viem';
 
 const liveTradingProcessorContract: ContractData = {
     addresses: {
-        [Network.OptimismMainnet]: '0x330c4c4Bcde91aDC17c0293A90dC05a046ce3FE4',
-        [Network.Arbitrum]: '0xa5567Cd13F3a0c71B4a85E3a0DdAbfeeCB409339',
-        [Network.Base]: '0x64598450396494faDd5ebaC9906CF5169a2B3e0a',
-        [Network.OptimismSepolia]: '0x01546a60C30CaCAe105210381a11449F430489Cf',
+        [Network.OptimismMainnet]: '0xAeab38DA5530dDE6E8aF0Ab80B193aDf6bBD09bb',
+        [Network.Arbitrum]: '0x84BCFa2B138B351e177053bA0df21cbCaeCE58f7',
+        [Network.Base]: '0x6335697c970454e0bCc0F680E24BB03a35b266a9',
+        [Network.OptimismSepolia]: '0xf01554725ad81a5FD959a696642299fA341B67E7',
     },
     abi: [
         {
@@ -20,8 +20,19 @@ const liveTradingProcessorContract: ContractData = {
             stateMutability: 'nonpayable',
             type: 'constructor',
         },
+        {
+            inputs: [{ internalType: 'address', name: 'target', type: 'address' }],
+            name: 'AddressEmptyCode',
+            type: 'error',
+        },
+        {
+            inputs: [{ internalType: 'address', name: 'account', type: 'address' }],
+            name: 'AddressInsufficientBalance',
+            type: 'error',
+        },
         { inputs: [], name: 'EnforcedPause', type: 'error' },
         { inputs: [], name: 'ExpectedPause', type: 'error' },
+        { inputs: [], name: 'FailedInnerCall', type: 'error' },
         {
             inputs: [{ internalType: 'address', name: 'owner', type: 'address' }],
             name: 'OwnableInvalidOwner',
@@ -30,6 +41,11 @@ const liveTradingProcessorContract: ContractData = {
         {
             inputs: [{ internalType: 'address', name: 'account', type: 'address' }],
             name: 'OwnableUnauthorizedAccount',
+            type: 'error',
+        },
+        {
+            inputs: [{ internalType: 'address', name: 'token', type: 'address' }],
+            name: 'SafeERC20FailedOperation',
             type: 'error',
         },
         {
@@ -157,6 +173,31 @@ const liveTradingProcessorContract: ContractData = {
             type: 'function',
         },
         {
+            inputs: [{ internalType: 'bytes32', name: 'requestId', type: 'bytes32' }],
+            name: 'getTradeData',
+            outputs: [
+                {
+                    components: [
+                        { internalType: 'string', name: '_gameId', type: 'string' },
+                        { internalType: 'uint16', name: '_sportId', type: 'uint16' },
+                        { internalType: 'uint16', name: '_typeId', type: 'uint16' },
+                        { internalType: 'int24', name: '_line', type: 'int24' },
+                        { internalType: 'uint8', name: '_position', type: 'uint8' },
+                        { internalType: 'uint256', name: '_buyInAmount', type: 'uint256' },
+                        { internalType: 'uint256', name: '_expectedQuote', type: 'uint256' },
+                        { internalType: 'uint256', name: '_additionalSlippage', type: 'uint256' },
+                        { internalType: 'address', name: '_referrer', type: 'address' },
+                        { internalType: 'address', name: '_collateral', type: 'address' },
+                    ],
+                    internalType: 'struct ILiveTradingProcessor.LiveTradeData',
+                    name: '',
+                    type: 'tuple',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
             inputs: [],
             name: 'jobSpecId',
             outputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
@@ -216,6 +257,13 @@ const liveTradingProcessorContract: ContractData = {
         {
             inputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
             name: 'requestIdToRequester',
+            outputs: [{ internalType: 'address', name: '', type: 'address' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
+            name: 'requestIdToTicketId',
             outputs: [{ internalType: 'address', name: '', type: 'address' }],
             stateMutability: 'view',
             type: 'function',
@@ -328,6 +376,16 @@ const liveTradingProcessorContract: ContractData = {
         {
             inputs: [{ internalType: 'address', name: 'newOwner', type: 'address' }],
             name: 'transferOwnership',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                { internalType: 'address', name: 'collateral', type: 'address' },
+                { internalType: 'address', name: 'recipient', type: 'address' },
+            ],
+            name: 'withdrawCollateral',
             outputs: [],
             stateMutability: 'nonpayable',
             type: 'function',

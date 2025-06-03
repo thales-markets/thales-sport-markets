@@ -9,6 +9,7 @@ import { TBD_ADDRESS } from 'constants/network';
 import freeBetHolder from 'utils/contracts/freeBetHolder';
 import liquidityPoolDataContract from 'utils/contracts/liquidityPoolDataContractV2';
 import liveTradingProcessor from 'utils/contracts/liveTradingProcessorContract';
+import liveTradingProcessorData from 'utils/contracts/liveTradingProcessorDataContract';
 import multiCall from 'utils/contracts/multiCallContract';
 import multiCollateralOnOffRamp from 'utils/contracts/multiCollateralOnOffRampContract';
 import multiCollateral from 'utils/contracts/multipleCollateralContract';
@@ -21,7 +22,6 @@ import sportsAMMV2ResultManager from 'utils/contracts/sportsAMMV2ResultManagerCo
 import sportsAMMV2RiskManager from 'utils/contracts/sportsAMMV2RiskManagerContract';
 import stakingThalesBettingProxy from 'utils/contracts/stakingThalesBettingProxy';
 import liquidityPoolContractV2 from './contracts/liquidityPoolContractV2';
-import { marchMadnessContract } from './contracts/marchMadnessContract';
 import resolveBlockerContract from './contracts/resolveBlockerContract';
 import thalesContract from './contracts/thalesContract';
 import thalesToOverMigrationContract from './contracts/thalesToOverMigrationContract';
@@ -104,6 +104,8 @@ export const getContractInstance = (
             return getContractWithModifiedResponse(sportsAMMV2ResultManager, networkConfig);
         case ContractType.LIVE_TRADING_PROCESSOR:
             return getContractWithModifiedResponse(liveTradingProcessor, networkConfig);
+        case ContractType.LIVE_TRADING_PROCESSOR_DATA:
+            return getContractWithModifiedResponse(liveTradingProcessorData, networkConfig);
         case ContractType.SGP_TRADING_PROCESSOR:
             return getContractWithModifiedResponse(sgpTradingProcessor, networkConfig);
         case ContractType.FREE_BET_HOLDER:
@@ -119,8 +121,6 @@ export const getContractInstance = (
             return getContractWithModifiedResponse(liquidityPoolContractV2[lpCollateral], networkConfig);
         case ContractType.RESOLVE_BLOCKER:
             return getContractWithModifiedResponse(resolveBlockerContract, networkConfig);
-        case ContractType.MARCH_MADNESS:
-            return getContractWithModifiedResponse(marchMadnessContract, networkConfig);
         case ContractType.THALES_TO_OVER_MIGRATION:
             return getContractWithModifiedResponse(thalesToOverMigrationContract, networkConfig);
         case ContractType.THALES:

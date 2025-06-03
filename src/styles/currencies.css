@@ -54,6 +54,14 @@
     content: '\00B7';
 }
 
+.currency-icon--bnb::before {
+    content: '\00B8';
+}
+
+.currency-icon--sol::before {
+    content: '\00B9';
+}
+
 .currency-icon--susd::before {
     content: '\00F8';
 }

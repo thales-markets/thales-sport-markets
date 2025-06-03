@@ -257,6 +257,7 @@ const Positions: React.FC<PositionsProps> = ({
                 alignHeader={alignHeader && (!!positionText0 || !!positionText1) && isExpanded && !isMobile}
                 hidden={oddsTitlesHidden}
                 float={floatingOddsTitles}
+                isSticky={!floatingOddsTitles && !isPlayerPropsMarket && !isMainPageView}
             >
                 {((isMobile && !isMainPageView) || !isMobile || isPlayerPropsMarket) && (
                     <Title isExpanded={isExpanded} isMainPageView={isMainPageView} isColumnView={isColumnView}>
@@ -270,16 +271,17 @@ const Positions: React.FC<PositionsProps> = ({
                         )}
                     </Title>
                 )}
+                {!isMainPageView && (
+                    <Arrow
+                        className={isExpanded ? 'icon icon--arrow-up' : 'icon icon--arrow-down'}
+                        onClick={() => {
+                            setIsExpanded(!isExpanded);
+                            onAccordionClick && onAccordionClick();
+                        }}
+                    />
+                )}
             </Header>
-            {!isMainPageView && (
-                <Arrow
-                    className={isExpanded ? 'icon icon--arrow-up' : 'icon icon--arrow-down'}
-                    onClick={() => {
-                        setIsExpanded(!isExpanded);
-                        onAccordionClick && onAccordionClick();
-                    }}
-                />
-            )}
+
             {isExpanded && (
                 <ContentContianer>
                     {(positionText0 || positionText1) && !isMainPageView && (

@@ -1,30 +1,47 @@
 import SPAAnchor from 'components/SPAAnchor';
-import Toggle from 'components/Toggle';
+import ToggleWallet from 'components/ToggleWallet';
 import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
+import { USD_SIGN } from 'constants/currency';
 import ROUTES from 'constants/routes';
-import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import React from 'react';
+import { ProfileTab, ScreenSizeBreakpoint } from 'enums/ui';
+import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
+import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getIsBiconomy, setIsBiconomy, setWalletConnectModalVisibility } from 'redux/modules/wallet';
+import { getIsBiconomy, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import styled from 'styled-components';
-import { localStore, truncateAddress } from 'thales-utils';
+import { FlexDivCentered, FlexDivColumnStart } from 'styles/common';
+import { formatCurrencyWithSign, truncateAddress } from 'thales-utils';
+import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
+import { getCollaterals } from 'utils/collaterals';
 import { buildHref } from 'utils/routes';
-import useBiconomy from 'utils/useBiconomy';
-import { useAccount, useDisconnect } from 'wagmi';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
+import { useAccount, useChainId, useClient, useDisconnect } from 'wagmi';
 
 type ProfileDropdownProps = {
     setShowDropdown: React.Dispatch<React.SetStateAction<boolean>>;
+    setShowDepositModal: React.Dispatch<React.SetStateAction<boolean>>;
+    setShowWithdrawModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ setShowDropdown }) => {
+const ProfileDropdown: React.FC<ProfileDropdownProps> = ({
+    setShowDropdown,
+    setShowDepositModal,
+    setShowWithdrawModal,
+}) => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
-    const { address } = useAccount();
-    const smartAddress = useBiconomy();
+
+    const networkId = useChainId();
+    const client = useClient();
+    const { address, isConnected } = useAccount();
+    const { smartAddress } = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddress : address) || '';
+
     const { disconnect } = useDisconnect();
 
     const handleCopy = (address: string) => {
@@ -40,27 +57,48 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ setShowDropdown }) =>
         }
     };
 
+    const multipleCollateralBalances = useMultipleCollateralBalanceQuery(
+        walletAddress,
+        { networkId, client },
+        {
+            enabled: isConnected,
+        }
+    );
+
+    const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
+
+    const exchangeRates: Rates | null =
+        exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
+
+    const totalBalanceValue = useMemo(() => {
+        let total = 0;
+        try {
+            if (exchangeRates && multipleCollateralBalances.data) {
+                getCollaterals(networkId).forEach((token) => {
+                    total += multipleCollateralBalances.data[token] * (exchangeRates[token] ? exchangeRates[token] : 1);
+                });
+            }
+
+            return total ? formatCurrencyWithSign(USD_SIGN, total, 2) : '$0';
+        } catch (e) {
+            return '$0';
+        }
+    }, [exchangeRates, multipleCollateralBalances.data, networkId]);
+
     return (
         <Dropdown>
-            <Wrapper>
-                <Text>{t('profile.dropdown.account')}</Text>
-
-                <Toggle
-                    height="24px"
-                    active={!isBiconomy}
-                    handleClick={() => {
-                        if (isBiconomy) {
-                            dispatch(setIsBiconomy(false));
-                            localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, false);
-                        } else {
-                            dispatch(setIsBiconomy(true));
-                            localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, true);
-                        }
-                    }}
-                />
-                <Text>{t('profile.dropdown.eoa')}</Text>
-            </Wrapper>
+            <ToggleWallet />
             <Separator />
+            <BalanceWrapper>
+                <FlexDivColumnStart gap={6}>
+                    <Label>Balance</Label>
+                    <BalanceValue>{totalBalanceValue}</BalanceValue>
+                </FlexDivColumnStart>
+                <FlexDivCentered gap={14}>
+                    <Button onClick={() => setShowWithdrawModal(true)}>withdraw</Button>
+                    <Button onClick={() => setShowDepositModal(true)}>deposit</Button>
+                </FlexDivCentered>
+            </BalanceWrapper>
             <Wrapper>
                 <Container>
                     <WalletIcon active={isBiconomy} className="icon icon--wallet-connected" />
@@ -93,7 +131,10 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ setShowDropdown }) =>
 
             <Separator />
 
-            <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Profile)}>
+            <SPAAnchor
+                style={{ display: 'flex' }}
+                href={buildHref(`${ROUTES.Profile}?selected-tab=${ProfileTab.ACCOUNT}`)}
+            >
                 <Container clickable onClick={() => setShowDropdown(false)}>
                     <CopyIcon className="icon icon--logo" /> <Text>{t('profile.dropdown.profile')}</Text>
                 </Container>
@@ -106,8 +147,8 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ setShowDropdown }) =>
                     dispatch(setWalletConnectModalVisibility({ visibility: true }));
                 }}
             >
-                <WalletIcon className="icon icon--wallet-disconnected" />
-                <Text>{t('profile.dropdown.logout')}</Text>
+                <LogoutIcon className="icon icon--wallet-disconnected" />
+                <LogoutText>{t('profile.dropdown.logout')}</LogoutText>
             </Container>
         </Dropdown>
     );
@@ -123,16 +164,14 @@ const Dropdown = styled.div`
     flex-direction: column;
     border-radius: 8px;
     background-color: ${(props) => props.theme.background.secondary};
-    padding: 16px 26px;
+    padding: 16px;
     justify-content: center;
     align-items: flex-start;
     gap: 10px;
     font-weight: 400;
-    @media (max-width: 767px) {
+    min-width: 302px;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         border: 1px solid;
-    }
-
-    @media (max-width: 420px) {
         width: 100%;
     }
 `;
@@ -149,6 +188,10 @@ const WalletIcon = styled.i<{ active?: boolean }>`
     color: ${(props) => (props.active ? props.theme.textColor.quaternary : props.theme.textColor.primary)};
 `;
 
+const LogoutIcon = styled(WalletIcon)`
+    color: ${(props) => props.theme.error.textColor.primary} !important;
+`;
+
 const Text = styled.span<{ active?: boolean }>`
     position: relative;
     font-weight: 600;
@@ -159,12 +202,37 @@ const Text = styled.span<{ active?: boolean }>`
     color: ${(props) => (props.active ? props.theme.textColor.quaternary : props.theme.textColor.primary)};
 `;
 
+const LogoutText = styled(Text)`
+    color: ${(props) => props.theme.error.textColor.primary} !important;
+`;
+
 const Wrapper = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 10px;
     width: 100%;
+`;
+
+const Label = styled(Text)`
+    text-transform: uppercase;
+    color: ${(props) => props.theme.textColor.secondary};
+`;
+
+const BalanceWrapper = styled.div`
+    border-radius: 12px;
+    background: linear-gradient(90deg, #2a3466 0%, #131b3a 100%);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+`;
+
+const BalanceValue = styled.span`
+    text-transform: uppercase;
+    color: ${(props) => props.theme.textColor.primary};
+    font-size: 20px;
 `;
 
 const Container = styled.div<{ clickable?: boolean }>`
@@ -192,4 +260,27 @@ const Address = styled(Text)<{ active: boolean }>`
     color: ${(props) => (props.active ? props.theme.textColor.quaternary : props.theme.textColor.primary)};
 `;
 
+const Button = styled(FlexDivCentered)<{ active?: boolean }>`
+    border-radius: 8px;
+    width: 112px;
+    height: 31px;
+    border: 2px ${(props) => props.theme.borderColor.primary} solid;
+    color: ${(props) => props.theme.textColor.primary};
+
+    font-size: 12px;
+    font-weight: 600;
+
+    text-transform: uppercase;
+    cursor: pointer;
+    &:hover {
+        background-color: ${(props) => props.theme.connectWalletModal.hover};
+        color: ${(props) => props.theme.button.textColor.primary};
+        border: none;
+    }
+    white-space: pre;
+    padding: 3px 24px;
+    @media (max-width: 575px) {
+        padding: 3px 12px;
+    }
+`;
 export default ProfileDropdown;

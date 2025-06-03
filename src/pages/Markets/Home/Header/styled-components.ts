@@ -112,6 +112,9 @@ export const SortMenu = styled(FlexDivColumn)`
     border: 1px solid ${(props) => props.theme.dropDown.menu.borderColor.primary};
     background: ${(props) => props.theme.dropDown.menu.background.primary};
     z-index: 1000;
+    @media (max-width: 500px) {
+        left: 0;
+    }
 `;
 
 export const SortMenuItem = styled.div<{ isSelected: boolean }>`
@@ -174,6 +177,7 @@ export const DropdownContainer = styled.div`
 
 export const TimeFiltersDropdown = styled(DropdownContainer)`
     width: 90px;
+    right: 0;
 `;
 
 export const DropDown = styled(FlexDivColumn)`

@@ -12,4 +12,5 @@ export enum WalletConnections {
     INJECTED = 'injected',
     WALLET_CONNECT = 'walletConnect',
     COINBASE = 'coinbaseWalletSDK',
+    BINANCE = 'wallet.binance.com',
 }

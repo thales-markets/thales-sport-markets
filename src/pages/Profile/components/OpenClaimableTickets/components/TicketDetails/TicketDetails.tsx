@@ -3,9 +3,9 @@ import CollateralSelector from 'components/CollateralSelector';
 import ShareTicketModalV2 from 'components/ShareTicketModalV2';
 import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import { ZERO_ADDRESS } from 'constants/network';
 import { ContractType } from 'enums/contract';
-import React, { useMemo, useState } from 'react';
+import { TicketAction } from 'enums/tickets';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -16,7 +16,6 @@ import { formatCurrencyWithKey, getEtherscanAddressLink, truncateAddress } from 
 import { Ticket } from 'types/markets';
 import { RootState } from 'types/redux';
 import { ShareTicketModalProps } from 'types/tickets';
-import { executeBiconomyTransaction } from 'utils/biconomy';
 import {
     getCollateral,
     getCollateralAddress,
@@ -27,8 +26,9 @@ import {
 import { getContractInstance } from 'utils/contract';
 import { getIsMultiCollateralSupported } from 'utils/network';
 import { refetchAfterClaim, refetchBalances } from 'utils/queryConnector';
+import { executeBiconomyTransaction } from 'utils/smartAccount/biconomy/biconomy';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { formatTicketOdds, getTicketMarketOdd } from 'utils/tickets';
-import useBiconomy from 'utils/useBiconomy';
 import { Address, Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
@@ -69,9 +69,15 @@ type TicketDetailsProps = {
     ticket: Ticket;
     claimCollateralIndex: number;
     setClaimCollateralIndex: any;
+    showDetailsExplicit?: boolean;
 };
 
-const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIndex, setClaimCollateralIndex }) => {
+const TicketDetails: React.FC<TicketDetailsProps> = ({
+    ticket,
+    claimCollateralIndex,
+    setClaimCollateralIndex,
+    showDetailsExplicit,
+}) => {
     const { t } = useTranslation();
     const selectedOddsType = useSelector(getOddsType);
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -83,10 +89,10 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
     const walletClient = useWalletClient();
 
     const { address } = useAccount();
-    const smartAddres = useBiconomy();
-    const walletAddress = (isBiconomy ? smartAddres : address) || '';
+    const { smartAddress } = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
-    const [showDetails, setShowDetails] = useState<boolean>(false);
+    const [showDetails, setShowDetails] = useState<boolean>(showDetailsExplicit ?? false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
     const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps | undefined>(undefined);
@@ -114,9 +120,12 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
     const ticketCollateralHasLp = isLpSupported(ticket.collateral);
     const isTicketCollateralDefaultCollateral = ticket.collateral === defaultCollateral;
     const isClaimCollateralDefaultCollateral = claimCollateral === defaultCollateral;
-    const isEth = claimCollateralAddress === ZERO_ADDRESS;
 
     const isClaimable = ticket.isClaimable;
+
+    useEffect(() => {
+        if (showDetailsExplicit !== undefined) setShowDetails(showDetailsExplicit);
+    }, [showDetailsExplicit]);
 
     const claimTicket = async (ticketAddress: string) => {
         const id = toast.loading(t('market.toast-message.transaction-pending'));
@@ -139,26 +148,28 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
                                   collateralAddress: getCollateralAddress(networkId, 0),
                                   networkId,
                                   contract: sportsAMMV2ContractWithSigner,
-                                  methodName: 'exerciseTicket',
-                                  data: [ticketAddress],
+                                  methodName: 'handleTicketResolving',
+                                  data: [ticketAddress, TicketAction.EXERCISE],
                               })
                             : await executeBiconomyTransaction({
                                   collateralAddress: claimCollateralAddress as Address,
                                   networkId,
                                   contract: sportsAMMV2ContractWithSigner,
                                   methodName: 'exerciseTicketOffRamp',
-                                  data: [ticketAddress, claimCollateralAddress, isEth],
+                                  data: [ticketAddress, claimCollateralAddress],
                               });
                 } else {
                     hash =
                         isClaimCollateralDefaultCollateral ||
                         (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral) ||
                         ticket.isFreeBet
-                            ? await sportsAMMV2ContractWithSigner.write.exerciseTicket([ticketAddress])
+                            ? await sportsAMMV2ContractWithSigner.write.handleTicketResolving([
+                                  ticketAddress,
+                                  TicketAction.EXERCISE,
+                              ])
                             : await sportsAMMV2ContractWithSigner.write.exerciseTicketOffRamp([
                                   ticketAddress,
                                   claimCollateralAddress,
-                                  isEth,
                               ]);
                 }
                 const txReceipt = await waitForTransactionReceipt(client as Client, {

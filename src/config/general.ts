@@ -1,6 +1,6 @@
 export const generalConfig = {
-    API_URL: 'https://overtimemarketsv2.xyz',
-    OVERDROP_API_URL: 'https://overdrop.overtimemarketsv2.xyz',
+    API_URL: 'https://api.overtime.io',
+    OVERDROP_API_URL: 'https://overdrop.overtime.io',
     PYTH_API_URL: 'https://hermes.pyth.network/v2/updates/price/latest',
 };
 

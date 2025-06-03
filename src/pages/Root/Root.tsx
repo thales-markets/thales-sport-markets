@@ -2,7 +2,6 @@ import { AuthCoreContextProvider } from '@particle-network/authkit';
 import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { Buffer as buffer } from 'buffer';
 import UnexpectedError from 'components/UnexpectedError';
 import WalletDisclaimer from 'components/WalletDisclaimer';
 import { PLAUSIBLE } from 'constants/analytics';
@@ -26,7 +25,7 @@ import { WagmiProvider } from 'wagmi';
 import enTranslation from '../../i18n/en.json';
 import { wagmiConfig } from './wagmiConfig';
 
-window.Buffer = window.Buffer || buffer;
+// window.Buffer = window.Buffer || buffer; // Fix for Particle Wallets
 
 type RootProps = {
     store: Store;

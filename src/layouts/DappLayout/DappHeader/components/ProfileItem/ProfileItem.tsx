@@ -1,14 +1,17 @@
-import useClaimablePositionCountV2Query from 'queries/markets/useClaimablePositionCountV2Query';
-import React from 'react';
+import Tooltip from 'components/Tooltip';
+import { t } from 'i18next';
+import usePositionCountV2Query from 'queries/markets/usePositionCountV2Query';
+import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import { truncateAddress } from 'thales-utils';
 import { RootState } from 'types/redux';
-import useBiconomy from 'utils/useBiconomy';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import {
+    ClaimableTicketsNotificationCount,
     Count,
-    NotificationCount,
+    OpenTicketsNotificationCount,
     ProfileContainer,
     ProfileIcon,
     ProfileIconContainer,
@@ -29,8 +32,8 @@ const ProfileItem: React.FC<ProfileItemProperties> = ({ color }) => {
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
     const { address } = useAccount();
-    const smartAddres = useBiconomy();
-    const walletAddress = (isBiconomy ? smartAddres : address) || '';
+    const { smartAddress } = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     return (
         <ProfileContainer>
@@ -52,29 +55,35 @@ export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
-    const smartAddres = useBiconomy();
-    const walletAddress = (isBiconomy ? smartAddres : address) || '';
+    const { smartAddress } = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
-    const claimablePositionsCountQuery = useClaimablePositionCountV2Query(
-        walletAddress,
-        { networkId, client },
-        {
-            enabled: isConnected,
-        }
+    const positionsCountQuery = usePositionCountV2Query(walletAddress, { networkId, client }, { enabled: isConnected });
+
+    const claimablePositionCount = useMemo(
+        () => (positionsCountQuery.isSuccess && positionsCountQuery.data ? positionsCountQuery.data.claimable : 0),
+        [positionsCountQuery.isSuccess, positionsCountQuery.data]
     );
-    const claimablePositionCount =
-        claimablePositionsCountQuery.isSuccess && claimablePositionsCountQuery.data
-            ? claimablePositionsCountQuery.data
-            : null;
-
-    const notificationsCount = claimablePositionCount || 0;
+    const openPositionCount = useMemo(
+        () => (positionsCountQuery.isSuccess && positionsCountQuery.data ? positionsCountQuery.data.open : 0),
+        [positionsCountQuery.isSuccess, positionsCountQuery.data]
+    );
 
     return (
         <ProfileIconContainer marginRight={marginRight} margin={margin}>
-            {!!notificationsCount && (
-                <NotificationCount top={top} left={left}>
-                    <Count>{notificationsCount}</Count>
-                </NotificationCount>
+            {!!claimablePositionCount && (
+                <Tooltip open={true} overlay={t('profile.claimable-tickets')}>
+                    <ClaimableTicketsNotificationCount top={top} left={left}>
+                        <Count>{claimablePositionCount}</Count>
+                    </ClaimableTicketsNotificationCount>
+                </Tooltip>
+            )}
+            {!!openPositionCount && (
+                <Tooltip open={true} overlay={t('profile.open-tickets')}>
+                    <OpenTicketsNotificationCount>
+                        <Count>{openPositionCount}</Count>
+                    </OpenTicketsNotificationCount>
+                </Tooltip>
             )}
             <ProfileIcon avatarSize={avatarSize} iconColor={color} />
         </ProfileIconContainer>

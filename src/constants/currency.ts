@@ -73,42 +73,6 @@ export const COLLATERALS: Record<SupportedNetwork, Coins[]> = {
     ],
 };
 
-// TODO: remove after MM
-export const MARCH_MADNESS_COLLATERALS: Record<SupportedNetwork, Coins[]> = {
-    [Network.OptimismMainnet]: [
-        CRYPTO_CURRENCY_MAP.USDC as Coins,
-        CRYPTO_CURRENCY_MAP.USDCe as Coins,
-        CRYPTO_CURRENCY_MAP.DAI as Coins,
-        CRYPTO_CURRENCY_MAP.USDT as Coins,
-        CRYPTO_CURRENCY_MAP.OP as Coins,
-        CRYPTO_CURRENCY_MAP.WETH as Coins,
-        CRYPTO_CURRENCY_MAP.ETH as Coins,
-    ],
-    [Network.Arbitrum]: [
-        CRYPTO_CURRENCY_MAP.USDC as Coins,
-        CRYPTO_CURRENCY_MAP.USDCe as Coins,
-        CRYPTO_CURRENCY_MAP.DAI as Coins,
-        CRYPTO_CURRENCY_MAP.USDT as Coins,
-        CRYPTO_CURRENCY_MAP.ARB as Coins,
-        CRYPTO_CURRENCY_MAP.WETH as Coins,
-        CRYPTO_CURRENCY_MAP.ETH as Coins,
-    ],
-    [Network.Base]: [
-        CRYPTO_CURRENCY_MAP.USDC as Coins,
-        CRYPTO_CURRENCY_MAP.USDbC as Coins,
-        CRYPTO_CURRENCY_MAP.DAI as Coins,
-        CRYPTO_CURRENCY_MAP.USDT as Coins,
-        CRYPTO_CURRENCY_MAP.WETH as Coins,
-        CRYPTO_CURRENCY_MAP.ETH as Coins,
-    ],
-    [Network.OptimismSepolia]: [
-        CRYPTO_CURRENCY_MAP.USDC as Coins,
-        CRYPTO_CURRENCY_MAP.USDT as Coins,
-        CRYPTO_CURRENCY_MAP.WETH as Coins,
-        CRYPTO_CURRENCY_MAP.ETH as Coins,
-    ],
-};
-
 export const FREE_BET_COLLATERALS: Record<SupportedNetwork, Coins[]> = {
     [Network.OptimismMainnet]: [
         CRYPTO_CURRENCY_MAP.USDC as Coins,
@@ -143,7 +107,7 @@ export const FREE_BET_COLLATERALS: Record<SupportedNetwork, Coins[]> = {
     ],
 };
 
-export const COLLATERAL_ICONS_CLASS_NAMES: Record<Coins, string> = {
+export const COLLATERAL_ICONS_CLASS_NAMES: Record<string, string> = {
     DAI: 'currency-icon currency-icon--dai',
     USDCe: 'currency-icon currency-icon--usdce',
     USDC: 'currency-icon currency-icon--usdc',
@@ -158,6 +122,9 @@ export const COLLATERAL_ICONS_CLASS_NAMES: Record<Coins, string> = {
     OVER: 'currency-icon currency-icon--over',
     cbBTC: 'currency-icon currency-icon--cbbtc',
     wBTC: 'currency-icon currency-icon--wbtc',
+    BTC: 'currency-icon currency-icon--wbtc',
+    BNB: 'currency-icon currency-icon--bnb',
+    SOL: 'currency-icon currency-icon--sol',
 };
 
 export const DEFAULT_MULTI_COLLATERAL_BALANCE = {

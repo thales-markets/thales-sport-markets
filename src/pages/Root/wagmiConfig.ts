@@ -1,3 +1,4 @@
+import binanceWallet from '@binance/w3w-rainbow-connector-v2';
 import { connectorsForWallets } from '@rainbow-me/rainbowkit';
 import {
     braveWallet,
@@ -35,6 +36,7 @@ const wallets = [
     coinbaseWallet,
     rainbowWallet,
     imTokenWallet,
+    binanceWallet,
 ];
 
 const socialWallets = [
@@ -67,10 +69,10 @@ export const wagmiConfig = createConfig({
         }
     ),
     transports: {
-        [optimism.id]: fallback([http(RPC_LIST.INFURA[NetworkId.OptimismMainnet]), http()]),
-        [arbitrum.id]: fallback([http(RPC_LIST.INFURA[NetworkId.Arbitrum]), http()]),
-        [base.id]: fallback([http(RPC_LIST.INFURA[NetworkId.Base]), http()]),
-        [optimismSepolia.id]: fallback([http(RPC_LIST.INFURA[NetworkId.OptimismSepolia]), http()]),
+        [optimism.id]: fallback([http(RPC_LIST.INFURA[NetworkId.OptimismMainnet].http), http()]),
+        [arbitrum.id]: fallback([http(RPC_LIST.INFURA[NetworkId.Arbitrum].http), http()]),
+        [base.id]: fallback([http(RPC_LIST.INFURA[NetworkId.Base].http), http()]),
+        [optimismSepolia.id]: fallback([http(RPC_LIST.INFURA[NetworkId.OptimismSepolia].http), http()]),
     },
 });
 

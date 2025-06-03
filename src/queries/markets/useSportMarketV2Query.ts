@@ -7,6 +7,7 @@ import { MarketStatus } from 'enums/markets';
 import { orderBy } from 'lodash';
 import { SportMarket } from 'types/markets';
 import { NetworkConfig } from 'types/network';
+import { getProtectedApiRoute } from 'utils/api';
 import { packMarket } from 'utils/marketsV2';
 
 const useSportMarketQuery = (
@@ -23,9 +24,11 @@ const useSportMarketQuery = (
             try {
                 const [marketResponse, gameInfoResponse, liveScoreResponse] = await Promise.all([
                     axios.get(
-                        `${generalConfig.API_URL}/overtime-v2/networks/${networkConfig.networkId}/${
-                            isLive ? 'live-' : ''
-                        }markets/${marketAddress}?onlyBasicProperties=true`,
+                        getProtectedApiRoute(
+                            networkConfig.networkId,
+                            `${isLive ? 'live-' : ''}markets/${marketAddress}`,
+                            'onlyBasicProperties=true'
+                        ),
                         noCacheConfig
                     ),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/games-info/${marketAddress}`, noCacheConfig),

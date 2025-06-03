@@ -10,6 +10,7 @@ export default {
         quinary: Colors.NAVY_BLUE_DARK,
         senary: Colors.TORY_BLUE,
         septenary: Colors.PURPLE_LIGHT,
+        octonary: Colors.YELLOW,
     },
     textColor: {
         primary: Colors.WHITE,
@@ -19,6 +20,7 @@ export default {
         quinary: Colors.NAVY_BLUE_EXTRA_LIGHT,
         senary: Colors.BLACK,
         septenary: Colors.TORY_BLUE_LIGHT,
+        octonary: Colors.PARTICLE,
     },
     borderColor: {
         primary: Colors.NAVY_BLUE_LIGHT,
@@ -136,6 +138,7 @@ export default {
         navBar: '-64px 0px 38px 3px rgba(0,0,0,0.41)',
         toggle: `0px 0px 40px ${Colors.BLUE}`,
         notification: '0px 0px 20px rgba(63, 177, 213, 0.96)',
+        notificationOpen: '0px 0px 20px rgba(241, 186, 32, 0.96)',
         positionWinner: '0px 0px 15px -7px rgba(63,209,255,1)',
         winner: '0px 0px 33px -7px rgba(63,209,255,1)',
         errorNotification: '0px 0px 20px rgba(226, 106, 120, 0.96)',
@@ -153,6 +156,30 @@ export default {
         sold: Colors.NAVY_BLUE_LIGHT,
         comingSoon: Colors.ORANGE,
         finished: Colors.NAVY_BLUE_LIGHT,
+        pending: {
+            textColor: {
+                primary: Colors.BLUE,
+            },
+            background: {
+                primary: Colors.BLUE + '33', // opacity 20%
+            },
+        },
+        failed: {
+            textColor: {
+                primary: Colors.RED,
+            },
+            background: {
+                primary: Colors.RED + '33', // opacity 20%
+            },
+        },
+        success: {
+            textColor: {
+                primary: Colors.GREEN,
+            },
+            background: {
+                primary: Colors.GREEN + '33', // opacity 20%
+            },
+        },
     },
     promotion: {
         background: {
@@ -190,7 +217,7 @@ export default {
     },
     overdrop: {
         background: {
-            secondary: Colors.YELLOW_LIGHT,
+            secondary: Colors.YELLOW_OPACITY_60,
             tertiary: 'rgba(60, 73, 138, 0.15)',
             quaternary: Colors.METALIC_BLUE,
             quinary: Colors.NAVY_BLUE_EXTRA_DARK,
@@ -234,88 +261,15 @@ export default {
     },
     icon: {
         background: {
-            primary: Colors.BLACK,
-            secondary: Colors.PURPLE,
+            primary: Colors.WHITE,
         },
         textColor: {
-            primary: Colors.PURPLE,
-            secondary: Colors.BLACK,
-            tertiary: Colors.WHITE,
+            primary: Colors.BLACK,
         },
     },
     slider: {
         trackColor: Colors.GREEN,
         thumbColor: Colors.WHITE,
-    },
-    marchMadness: {
-        background: {
-            primary: Colors.MAIN_MARCH_MADNESS,
-            secondary: '',
-            tertiary: '',
-            quaternary: '',
-            quinary: '',
-            senary: '',
-        },
-        textColor: {
-            primary: Colors.GRAY_DARK,
-            secondary: '',
-            tertiary: '',
-            quaternary: '',
-            quinary: '',
-            senary: '',
-        },
-        borderColor: {
-            primary: '',
-            secondary: '',
-            tertiary: '',
-            quaternary: '',
-            quinary: '',
-            senary: '',
-        },
-        button: {
-            background: {
-                primary: Colors.MAIN_MARCH_MADNESS,
-                secondary: Colors.BLUE_GRADIENT_1,
-                tertiary: '',
-                quaternary: '',
-                quinary: '',
-                senary: Colors.GREEN,
-            },
-            textColor: {
-                primary: '',
-                secondary: Colors.WHITE,
-                tertiary: '',
-                quaternary: '',
-                quinary: '',
-            },
-            borderColor: {
-                primary: '',
-                secondary: '',
-                tertiary: '',
-            },
-        },
-        dropdown: {
-            textColor: { primary: Colors.GRAY_DARK },
-        },
-        link: {
-            textColor: {
-                primary: '',
-                secondary: '',
-            },
-        },
-        shadow: {
-            modal: '',
-            image: '',
-        },
-        status: {
-            notSelected: '',
-            win: '',
-            loss: '',
-            started: '',
-            wrong: '',
-            selected: '',
-            share: '',
-        },
     },
     tag: {
         background: {
@@ -323,6 +277,12 @@ export default {
         },
         textColor: {
             primary: Colors.WHITE,
+        },
+    },
+    toggle: {
+        label: {
+            primary: Colors.NAVY_BLUE_EXTRA_DARK,
+            secondary: Colors.WHITE,
         },
     },
 };

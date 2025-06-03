@@ -1,7 +1,7 @@
 import Checkbox from 'components/fields/Checkbox';
 import NumericInput from 'components/fields/NumericInput';
 import SelectInput from 'components/SelectInput';
-import { hoursToMilliseconds } from 'date-fns';
+import { hoursToMilliseconds, minutesToMilliseconds } from 'date-fns';
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 import { Network } from 'enums/network';
 import { ScreenSizeBreakpoint } from 'enums/ui';
@@ -23,7 +23,8 @@ import { getDefaultCollateral } from 'utils/collaterals';
 import { useChainId, useClient } from 'wagmi';
 import TicketTransactionsTable from '../../../Markets/Market/MarketDetailsV2/components/TicketTransactionsTable';
 
-const UNRESOLVED_PERIOD_IN_HOURS = 8;
+const UNRESOLVED_PERIOD_IN_HOURS = 6;
+const FINISHED_UNRESOLVED_PERIOD_IN_MINUTES = 20;
 
 type AllLpTicketsProps = {
     round: number;
@@ -44,6 +45,7 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
     const [showOnlyPendingTickets, setShowOnlyPendingTickets] = useState<boolean>(false);
     const [showOnlySystemBets, setShowOnlySystemBets] = useState<boolean>(false);
     const [showOnlyUnresolved, setShowOnlyUnresolved] = useState<boolean>(false);
+    const [showOnlyFinishedUnresolved, setShowOnlyFinishedUnresolved] = useState<boolean>(false);
     const [expandAll, setExpandAll] = useState<boolean>(false);
     const [minBuyInAmount, setMinBuyInAmount] = useState<number | string>('');
     const [minPayoutAmount, setMinPayoutAmount] = useState<number | string>('');
@@ -176,6 +178,18 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
                         ) &&
                         showOnlyUnresolved) ||
                         !showOnlyUnresolved) &&
+                    ((ticket.isOpen &&
+                        ticket.sportMarkets.some(
+                            (market) =>
+                                market.finishedTimestamp &&
+                                market.finishedTimestamp <
+                                    new Date().getTime() -
+                                        minutesToMilliseconds(FINISHED_UNRESOLVED_PERIOD_IN_MINUTES) &&
+                                !market.isResolved &&
+                                !market.isCancelled
+                        ) &&
+                        showOnlyFinishedUnresolved) ||
+                        !showOnlyFinishedUnresolved) &&
                     (getValueInUsd(ticket.collateral, ticket.buyInAmount) >= Number(minBuyInAmount) ||
                         !minBuyInAmount) &&
                     (getValueInUsd(ticket.collateral, ticket.payout) >= Number(minPayoutAmount) || !minPayoutAmount)
@@ -191,6 +205,8 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
         wethLpTicketsQuery.isSuccess,
         thalesLpTicketsQuery.data,
         thalesLpTicketsQuery.isSuccess,
+        overLpTicketsQuery.data,
+        overLpTicketsQuery.isSuccess,
         cbbtcLpTicketsQuery.data,
         cbbtcLpTicketsQuery.isSuccess,
         wbtcLpTicketsQuery.data,
@@ -198,14 +214,13 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
         exchangeRates,
         showOnlyOpenTickets,
         lp,
-        overLpTicketsQuery.data,
-        overLpTicketsQuery.isSuccess,
         lpOptions,
         showOnlyLiveTickets,
         showOnlySgpTickets,
         showOnlyPendingTickets,
         showOnlySystemBets,
         showOnlyUnresolved,
+        showOnlyFinishedUnresolved,
         minBuyInAmount,
         minPayoutAmount,
     ]);
@@ -266,35 +281,47 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
                     />
                 </CheckboxWrapper>
             </CheckboxContainer>
-            <InputContainer>
-                <InputLabel>{t(`liquidity-pool.user-transactions.min-buy-in`)}:</InputLabel>
-                <NumericInput
-                    value={minBuyInAmount}
-                    onChange={(e) => {
-                        setMinBuyInAmount(e.target.value);
-                    }}
-                    inputFontWeight="600"
-                    inputPadding="5px 10px"
-                    borderColor={theme.input.borderColor.tertiary}
-                    placeholder={t(`liquidity-pool.deposit-amount-placeholder`)}
-                    width="200px"
-                    containerWidth="200px"
-                    margin="0 30px 0 0"
-                />
-                <InputLabel>{t(`liquidity-pool.user-transactions.min-payout`)}:</InputLabel>
-                <NumericInput
-                    value={minPayoutAmount}
-                    onChange={(e) => {
-                        setMinPayoutAmount(e.target.value);
-                    }}
-                    inputFontWeight="600"
-                    inputPadding="5px 10px"
-                    borderColor={theme.input.borderColor.tertiary}
-                    placeholder={t(`liquidity-pool.deposit-amount-placeholder`)}
-                    width="200px"
-                    containerWidth="200px"
-                />
-            </InputContainer>
+            <CheckboxContainer>
+                <InputContainer>
+                    <InputLabel>{t(`liquidity-pool.user-transactions.min-buy-in`)}:</InputLabel>
+                    <NumericInput
+                        value={minBuyInAmount}
+                        onChange={(e) => {
+                            setMinBuyInAmount(e.target.value);
+                        }}
+                        inputFontWeight="600"
+                        inputPadding="5px 10px"
+                        borderColor={theme.input.borderColor.tertiary}
+                        placeholder={t(`liquidity-pool.deposit-amount-placeholder`)}
+                        width="200px"
+                        containerWidth="200px"
+                        margin="0 30px 0 0"
+                    />
+                    <InputLabel>{t(`liquidity-pool.user-transactions.min-payout`)}:</InputLabel>
+                    <NumericInput
+                        value={minPayoutAmount}
+                        onChange={(e) => {
+                            setMinPayoutAmount(e.target.value);
+                        }}
+                        inputFontWeight="600"
+                        inputPadding="5px 10px"
+                        borderColor={theme.input.borderColor.tertiary}
+                        placeholder={t(`liquidity-pool.deposit-amount-placeholder`)}
+                        width="200px"
+                        containerWidth="200px"
+                    />
+                </InputContainer>
+                <CheckboxWrapper>
+                    <Checkbox
+                        checked={showOnlyFinishedUnresolved}
+                        value={showOnlyFinishedUnresolved.toString()}
+                        onChange={(e: any) => setShowOnlyFinishedUnresolved(e.target.checked || false)}
+                        label={t(`liquidity-pool.user-transactions.only-finished-unresolved`, {
+                            minutes: FINISHED_UNRESOLVED_PERIOD_IN_MINUTES,
+                        })}
+                    />
+                </CheckboxWrapper>
+            </CheckboxContainer>
             <FlexDivSpaceBetween>
                 <ExpandAllContainer onClick={() => setExpandAll(!expandAll)}>
                     {expandAll
@@ -314,7 +341,12 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
             <TicketTransactionsTable
                 ticketTransactions={lpTickets}
                 isLoading={
-                    usdcLpTicketsQuery.isLoading || wethLpTicketsQuery.isLoading || thalesLpTicketsQuery.isLoading
+                    usdcLpTicketsQuery.isLoading ||
+                    wethLpTicketsQuery.isLoading ||
+                    thalesLpTicketsQuery.isLoading ||
+                    overLpTicketsQuery.isLoading ||
+                    cbbtcLpTicketsQuery.isLoading ||
+                    wbtcLpTicketsQuery.isLoading
                 }
                 tableHeight="auto"
                 ticketsPerPage={100}

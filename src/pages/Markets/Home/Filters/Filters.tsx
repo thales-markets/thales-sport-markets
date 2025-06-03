@@ -67,10 +67,16 @@ const Filters: React.FC<FiltersProps> = ({ hideSwitch, isMainPageView }) => {
 
     return (
         <FilterContainer>
-            {!hideSwitch && !selectedMarket && marketTypeFilter === undefined && (
+            {!isMobile && !hideSwitch && !selectedMarket && marketTypeFilter === undefined && (
                 <>
                     <SwitchContainer>
-                        <Tooltip overlay={isThreeWayView ? 'Switch to standard view' : 'Switch to three column view'}>
+                        <Tooltip
+                            overlay={
+                                isThreeWayView
+                                    ? t('common.filter.tooltip.standard-view')
+                                    : t('common.filter.tooltip.column-view')
+                            }
+                        >
                             <ThreeWayIcon
                                 onClick={() => {
                                     if (!selectedMarket && marketTypeFilter === undefined) {
@@ -89,7 +95,7 @@ const Filters: React.FC<FiltersProps> = ({ hideSwitch, isMainPageView }) => {
                 <>
                     <SortSelector>
                         <OutsideClickHandler onOutsideClick={() => setOpenSortMenu(false)}>
-                            <Tooltip overlay={isMobile ? '' : 'Select games sorting'}>
+                            <Tooltip overlay={isMobile ? '' : t('common.filter.tooltip.sorting')}>
                                 <SortIndicator
                                     className={'icon icon--sorting'}
                                     onClick={() => setOpenSortMenu(!openSortMenu)}
@@ -129,7 +135,7 @@ const Filters: React.FC<FiltersProps> = ({ hideSwitch, isMainPageView }) => {
                     }}
                 >
                     <SettingsWrapper>
-                        <Tooltip overlay={isMobile ? '' : 'Select date range'}>
+                        <Tooltip overlay={isMobile ? '' : t('common.filter.tooltip.date')}>
                             <FlexDivCentered gap={2}>
                                 <HeaderIcon
                                     iconColor={datePeriodFilter > 0 ? theme.textColor.quaternary : ''}
@@ -159,7 +165,7 @@ const Filters: React.FC<FiltersProps> = ({ hideSwitch, isMainPageView }) => {
                     }}
                 >
                     <SettingsWrapper>
-                        <Tooltip overlay={isMobile ? '' : 'Select odds format'}>
+                        <Tooltip overlay={isMobile ? '' : t('common.filter.tooltip.odds')}>
                             <FlexDivCentered gap={2}>
                                 <HeaderIcon className="icon icon--settings" />
                                 <Label>{t(`common.odds.${selectedOddsType}`)}</Label>

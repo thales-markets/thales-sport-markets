@@ -1,3 +1,4 @@
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import styled from 'styled-components';
 import { FlexDivRow } from 'styles/common';
 
@@ -20,7 +21,7 @@ export const ProfileIconContainer = styled.div<{ marginRight?: string; margin?: 
     display: flex;
     align-items: center;
     position: relative;
-    margin-right: ${(props) => props.marginRight || '5px'};
+    margin-right: ${(props) => props.marginRight || '6px'};
     margin: ${(props) => (props.margin ? props.margin : '')};
 `;
 
@@ -34,7 +35,7 @@ export const ProfileIcon = styled.i.attrs({ className: 'icon icon--profile2' })<
     cursor: pointer;
 `;
 
-export const NotificationCount = styled.div<{ top?: string; left?: string }>`
+export const ClaimableTicketsNotificationCount = styled.div<{ top?: string; left?: string }>`
     position: absolute;
     top: ${(props) => (props.top ? props.top : '-10px')};
     left: ${(props) => (props.left ? props.left : '-10px')};
@@ -43,15 +44,36 @@ export const NotificationCount = styled.div<{ top?: string; left?: string }>`
     align-items: center;
     text-align: center;
     justify-content: center;
-    height: 18px;
     width: 18px;
+    height: 18px;
+    cursor: pointer;
     background-color: ${(props) => props.theme.background.quaternary};
     box-shadow: ${(props) => props.theme.shadow.notification};
-    margin-right: 5px;
+
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        top: -6px;
+        left: -8px;
+        width: 14px;
+        height: 14px;
+    }
+`;
+
+export const OpenTicketsNotificationCount = styled(ClaimableTicketsNotificationCount)`
+    left: unset;
+    right: -10px;
+    background-color: ${(props) => props.theme.background.octonary};
+    box-shadow: ${(props) => props.theme.shadow.notificationOpen};
+
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        right: -8px;
+    }
 `;
 
 export const Count = styled.span`
     color: ${(props) => props.theme.button.textColor.primary};
     font-weight: 600;
     font-size: 13px;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        font-size: 10px;
+    }
 `;

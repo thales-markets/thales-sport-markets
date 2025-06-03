@@ -38,7 +38,7 @@ export const getRoundWithOffset = (
     lpCollateral: LiquidityPoolCollateral
 ) => {
     const collateralOffset = RoundOffsetMap[lpCollateral];
-    if (!collateralOffset) return round;
+    if (!collateralOffset || round === 1) return round;
 
     const roundWithOffset = round - collateralOffset[networkId];
     return roundWithOffset > 0 ? roundWithOffset : 0;

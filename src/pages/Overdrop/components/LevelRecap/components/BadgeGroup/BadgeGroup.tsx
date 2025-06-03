@@ -11,7 +11,7 @@ import { OverdropUserData } from 'types/overdrop';
 import { RootState } from 'types/redux';
 import { OverdropLevel } from 'types/ui';
 import { getCurrentLevelByPoints } from 'utils/overdrop';
-import useBiconomy from 'utils/useBiconomy';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { useAccount } from 'wagmi';
 
 const LOYALTY_BOOST = ['5%', '10%', '15%', '20%', '25%'];
@@ -28,8 +28,8 @@ const BadgeGroup: React.FC<BadgeGroupProps> = ({ loyaltyBoost, startIndex, endIn
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
     const { address, isConnected } = useAccount();
-    const smartAddres = useBiconomy();
-    const walletAddress = (isBiconomy ? smartAddres : address) || '';
+    const { smartAddress } = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const userDataQuery = useUserDataQuery(walletAddress, {
         enabled: isConnected,

@@ -1,9 +1,11 @@
+import { Dispatch, PayloadAction } from '@reduxjs/toolkit';
 import { secondsToMilliseconds } from 'date-fns';
 import { ContractType } from 'enums/contract';
-import { OddsType } from 'enums/markets';
+import { LiveTradingTicketStatus, OddsType } from 'enums/markets';
 import { t } from 'i18next';
 import {
     getLeagueSport,
+    getPeriodsForResultView,
     isContractResultView,
     isFuturesMarket,
     isOneSideMarket,
@@ -14,11 +16,22 @@ import {
     MarketType,
     MarketTypeMap,
 } from 'overtime-utils';
+import { updateTicketRequests } from 'redux/modules/ticket';
 import { bigNumberFormatter, coinFormatter, Coins, formatDateWithTime } from 'thales-utils';
-import { CombinedPosition, SystemBetData, Team, Ticket, TicketMarket, TicketPosition } from 'types/markets';
+import {
+    CombinedPosition,
+    LiveTradingRequest,
+    SystemBetData,
+    Team,
+    Ticket,
+    TicketMarket,
+    TicketMarketRequestData,
+    TicketPosition,
+    TicketRequest,
+    TradeData,
+} from 'types/markets';
 import { NetworkConfig, SupportedNetwork } from 'types/network';
 import { ShareTicketModalProps } from 'types/tickets';
-import futuresPositionNamesMap from '../assets/json/futuresPositionNamesMap.json';
 import positionNamesMap from '../assets/json/positionNamesMap.json';
 import { CRYPTO_CURRENCY_MAP } from '../constants/currency';
 import { BATCH_SIZE, OVER_ADDED_PAYOUT_PERCENTAGE } from '../constants/markets';
@@ -28,8 +41,8 @@ import { getCollateralByAddress, isOverCurrency } from './collaterals';
 import { getContractInstance } from './contract';
 import freeBetHolder from './contracts/freeBetHolder';
 import stakingThalesBettingProxy from './contracts/stakingThalesBettingProxy';
-import { formatMarketOdds, getPeriodsForResultView } from './markets';
-import { isPlayerPropsCombiningEnabled } from './marketsV2';
+import { formatMarketOdds } from './markets';
+import { isPlayerPropsCombiningEnabled, ticketMarketAsSerializable } from './marketsV2';
 
 export const mapTicket = (
     ticket: any,
@@ -129,8 +142,8 @@ export const mapTicket = (
                 const marketStatus = Number(marketResult.status);
 
                 const positionNames = isFuturesMarket(typeId)
-                    ? (futuresPositionNamesMap as any)[leagueId]
-                        ? (futuresPositionNamesMap as any)[leagueId][typeId]
+                    ? !!gameInfo
+                        ? gameInfo.positionNames
                         : undefined
                     : (positionNamesMap as any)[typeId];
 
@@ -189,6 +202,7 @@ export const mapTicket = (
                     childMarkets: [],
                     winningPositions: [],
                     isGameFinished: gameInfo?.isGameFinished,
+                    finishedTimestamp: gameInfo?.finishedTimestamp,
                     gameStatus: gameInfo?.gameStatus,
                     liveScore,
                     positionNames,
@@ -241,10 +255,11 @@ export const getTicketMarketStatus = (market: TicketMarket) => {
                 : `${market.homeScore} - ${market.awayScore}`
             : '';
     }
-    if (market.maturityDate < new Date()) {
+    const maturityDate = market.apiMaturity || market.maturityDate;
+    if (maturityDate < new Date()) {
         return t('markets.market-card.pending');
     }
-    return formatDateWithTime(Number(market.maturityDate));
+    return formatDateWithTime(Number(maturityDate));
 };
 
 const getTicketQuote = (paid: number, payout: number) => 1 / (payout / paid);
@@ -588,3 +603,77 @@ export const isRegularTicketInvalid = (ticket: TicketPosition[], maxTicketSize: 
 
     return false;
 };
+
+export const updateTempLiveRequests = (
+    tempLiveRequests: TicketMarketRequestData[],
+    newLiveTradingRequests: LiveTradingRequest[],
+    numOfUpdates: number,
+    dispatch: Dispatch<PayloadAction<TicketRequest>>
+) => {
+    let updatedCount = 0;
+    return tempLiveRequests.map((tempRequest) => {
+        let ticketMarketRequest: TicketMarketRequestData = tempRequest;
+
+        const isInitialPending =
+            tempRequest.status === LiveTradingTicketStatus.PENDING && tempRequest.requestId.startsWith('initial');
+
+        if (isInitialPending && updatedCount < numOfUpdates) {
+            const receivedDiffLiveRequest = newLiveTradingRequests.find(
+                (liveRequest) =>
+                    liveRequest.gameId === tempRequest.ticket.gameId &&
+                    liveRequest.typeId === tempRequest.ticket.typeId &&
+                    liveRequest.line === tempRequest.ticket.line &&
+                    liveRequest.position === tempRequest.ticket.position &&
+                    liveRequest.expectedQuote === tempRequest.totalQuote &&
+                    liveRequest.buyInAmount === tempRequest.buyInAmount
+            );
+
+            if (receivedDiffLiveRequest) {
+                const ticketRequest: TicketRequest = {
+                    ...tempRequest,
+                    ticket: ticketMarketAsSerializable(tempRequest.ticket),
+                    requestId: receivedDiffLiveRequest.requestId,
+                    status: receivedDiffLiveRequest.status,
+                    finalStatus: receivedDiffLiveRequest.finalStatus,
+                    errorReason: receivedDiffLiveRequest.errorReason,
+                    totalQuote: receivedDiffLiveRequest.totalQuote,
+                    payout: receivedDiffLiveRequest.payout,
+                };
+                dispatch(updateTicketRequests(ticketRequest));
+                ticketMarketRequest = {
+                    ...tempRequest,
+                    requestId: receivedDiffLiveRequest.requestId,
+                    status: receivedDiffLiveRequest.status,
+                    finalStatus: receivedDiffLiveRequest.finalStatus,
+                    errorReason: receivedDiffLiveRequest.errorReason,
+                    totalQuote: receivedDiffLiveRequest.totalQuote,
+                    payout: receivedDiffLiveRequest.payout,
+                    timestamp: receivedDiffLiveRequest.timestamp,
+                };
+                updatedCount++;
+            }
+        }
+        return ticketMarketRequest;
+    });
+};
+
+export const getLogData = (data: {
+    walletAddress: string;
+    networkId: SupportedNetwork;
+    isParticle: boolean;
+    isBiconomy: boolean;
+    isSgp: boolean;
+    isLiveTicket: boolean;
+    tradeData: TradeData[];
+    swapToOver: boolean;
+    overAmount: number;
+    buyInAmount: number | string;
+    usedCollateralForBuy: Coins;
+}) =>
+    `BUY error for params:\nwalletAddress=${data.walletAddress}\nnetworkId=${data.networkId}\nisParticle=${
+        data.isParticle
+    }\nisBiconomy=${data.isBiconomy}\nisSgp=${data.isSgp}\nisLive=${data.isLiveTicket}\nliveOdds=${JSON.stringify(
+        data.tradeData[0]?.odds[data.tradeData[0]?.position]
+    )}\nbuyInAmount=${(data.swapToOver ? data.overAmount : data.buyInAmount).toString()}\ncollateral=${
+        data.usedCollateralForBuy
+    }\nisSwapToOver=${data.swapToOver}`;

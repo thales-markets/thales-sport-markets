@@ -4,6 +4,7 @@ import path from 'path';
 import { ConfigEnv, Plugin, PluginOption, defineConfig, loadEnv } from 'vite';
 import checker from 'vite-plugin-checker';
 import eslint from 'vite-plugin-eslint';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import svgr from 'vite-plugin-svgr';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
@@ -26,8 +27,7 @@ const particleWasmPlugin: Plugin | undefined = {
     },
 };
 
-const plugins = (mode: string): PluginOption[] => {
-    console.log(mode);
+const plugins = (_mode: string): PluginOption[] => {
     return [
         react(),
         tsconfigPaths(),
@@ -43,6 +43,10 @@ const plugins = (mode: string): PluginOption[] => {
             useEslintrc: true,
         }),
         particleWasmPlugin,
+        nodePolyfills({
+            // Whether to polyfill `Buffer` (true by default)
+            include: ['buffer'],
+        }),
     ];
 };
 
@@ -93,7 +97,6 @@ export default defineConfig(({ mode }) => {
                         // TODO: Test biconomy and particle
                         biconomy: ['@biconomy/account'],
                         // particle: ['@particle-network/auth-core-modal'],
-                        googleTrans: ['@google-cloud/translate'],
                         tanstack: ['@tanstack/react-query', '@tanstack/react-table'],
                         recharts: ['recharts'],
                         scrollbars: ['react-custom-scrollbars-2', 'react-horizontal-scrolling-menu'],

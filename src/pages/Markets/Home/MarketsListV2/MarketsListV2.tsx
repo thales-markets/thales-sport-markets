@@ -1,4 +1,5 @@
 import IncentivizedLeague from 'components/IncentivizedLeague';
+import { SPORTS_BY_TOURNAMENTS } from 'constants/markets';
 import { SportFilter } from 'enums/markets';
 import { groupBy, orderBy } from 'lodash';
 import { getLeagueLabel, isOneSideMarket, MarketType } from 'overtime-utils';
@@ -20,6 +21,7 @@ import {
     LeagueName,
     StarIcon,
 } from './styled-components';
+import TournamentMarketsList from './TournamentMarketsList';
 
 type MarketsListProps = {
     markets: SportMarkets;
@@ -35,6 +37,7 @@ const MarketsList: React.FC<MarketsListProps> = ({ markets, league, language }) 
     const sportFilter = useSelector(getSportFilter);
 
     const isPlayerPropsSelected = useMemo(() => sportFilter === SportFilter.PlayerProps, [sportFilter]);
+    const isSportByTournamentSelected = useMemo(() => SPORTS_BY_TOURNAMENTS.includes(markets[0]?.sport), [markets]);
 
     const leagueName = league
         ? getLeagueLabel(league)
@@ -50,15 +53,14 @@ const MarketsList: React.FC<MarketsListProps> = ({ markets, league, language }) 
         [markets, isPlayerPropsSelected]
     );
 
-    const selectedLeagueId = useMemo(() => (isPlayerPropsSelected && !league ? markets[0].leagueId : league), [
-        league,
-        isPlayerPropsSelected,
-        markets,
-    ]);
+    const marketsMapByTournament: Record<string, SportMarket[]> | null = useMemo(
+        () => (isSportByTournamentSelected ? groupBy(markets, (market) => market.tournamentName) : null),
+        [isSportByTournamentSelected, markets]
+    );
 
     return (
         <>
-            {selectedLeagueId && (
+            {league && (
                 <LeagueCard isMarketSelected={isMarketSelected}>
                     <LeagueInfo
                         onClick={() => {
@@ -72,10 +74,7 @@ const MarketsList: React.FC<MarketsListProps> = ({ markets, league, language }) 
                             }, 1);
                         }}
                     >
-                        <LeagueFlag
-                            alt={selectedLeagueId.toString()}
-                            src={getLeagueFlagSource(Number(selectedLeagueId))}
-                        />
+                        <LeagueFlag alt={league.toString()} src={getLeagueFlagSource(Number(league))} />
                         <LeagueName>{leagueName}</LeagueName>
                         {hideLeague ? (
                             <ArrowIcon className={`icon icon--caret-right`} />
@@ -85,10 +84,10 @@ const MarketsList: React.FC<MarketsListProps> = ({ markets, league, language }) 
                     </LeagueInfo>
                     {!isMarketSelected && (
                         <>
-                            <IncentivizedLeague league={selectedLeagueId} />
+                            <IncentivizedLeague league={league} />
                             <StarIcon
                                 onClick={() => {
-                                    dispatch(setFavouriteLeague(selectedLeagueId));
+                                    dispatch(setFavouriteLeague(league));
                                 }}
                                 className={`icon icon--${isFavourite ? 'star-full selected' : 'favourites'} `}
                             />
@@ -104,6 +103,18 @@ const MarketsList: React.FC<MarketsListProps> = ({ markets, league, language }) 
                         </GamesContainer>
                     ))}
                 </>
+            ) : isSportByTournamentSelected && marketsMapByTournament && league ? (
+                <GamesContainer hidden={hideLeague && !!league}>
+                    {Object.keys(marketsMapByTournament).map((key) => (
+                        <TournamentMarketsList
+                            key={key}
+                            markets={marketsMapByTournament[key]}
+                            tournament={key}
+                            leagueId={league}
+                            language={language}
+                        />
+                    ))}
+                </GamesContainer>
             ) : (
                 <GamesContainer hidden={hideLeague && !!league}>
                     {sortedMarkets.map((market: SportMarket, index: number) => (

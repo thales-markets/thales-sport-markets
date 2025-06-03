@@ -1,3 +1,4 @@
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import React from 'react';
 import ReactModal from 'react-modal';
 import styled, { CSSProperties } from 'styled-components';
@@ -22,20 +23,8 @@ type ModalProps = {
 ReactModal.setAppElement('#root');
 
 const defaultCustomStyles = {
-    content: !isSmallDevice
+    content: isSmallDevice
         ? {
-              top: '50%',
-              left: '50%',
-              right: 'auto',
-              bottom: 'auto',
-              marginRight: '-48%',
-              transform: 'translate(-50%, -50%)',
-              padding: '0px',
-              background: 'transparent',
-              border: 'none',
-              overflow: 'auto',
-          }
-        : {
               top: '0',
               left: '0',
               right: 'auto',
@@ -43,6 +32,18 @@ const defaultCustomStyles = {
               marginRight: '0',
               transform: 'none',
               width: '100%',
+              padding: '0px',
+              background: 'transparent',
+              border: 'none',
+              overflow: 'auto',
+          }
+        : {
+              top: '50%',
+              left: '50%',
+              right: 'auto',
+              bottom: 'auto',
+              marginRight: '-48%',
+              transform: 'translate(-50%, -50%)',
               padding: '0px',
               background: 'transparent',
               border: 'none',
@@ -92,19 +93,20 @@ const Modal: React.FC<ModalProps> = ({
 };
 
 const Container = styled.div<{ mobileStyle?: CSSProperties; containerStyle?: CSSProperties }>`
+    position: relative;
     border: 1px solid ${(props) => props.theme.borderColor.primary};
     background: ${(props) => props.theme.background.primary};
     padding: 25px 30px 35px 30px;
     border-radius: 16px;
-    @media (max-width: 575px) {
+    height: fit-content;
+    max-height: 100vh;
+
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         height: auto;
         border-radius: 10px;
-        overflow: auto;
         ${(props) =>
             props.mobileStyle ? convertCssToStyledProperties(props.mobileStyle) : 'padding: 20px 15px 30px 15px;'}
     }
-    max-height: 100vh;
-    height: fit-content;
     ${(props) => (props.containerStyle ? convertCssToStyledProperties(props.containerStyle) : '')}
 `;
 
@@ -125,13 +127,16 @@ const Title = styled(FlexDiv)`
 `;
 
 const CloseIcon = styled.i`
+    position: absolute;
+    right: 14px;
+    top: 10px;
     font-size: 16px;
     margin-top: 1px;
     cursor: pointer;
     &:before {
         font-family: OvertimeIconsV2 !important;
         content: '\\0031';
-        color: ${(props) => props.theme.textColor.primary};
+        color: ${(props) => props.theme.textColor.secondary};
     }
 `;
 

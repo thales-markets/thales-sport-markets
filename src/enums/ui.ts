@@ -1,6 +1,5 @@
 export enum Theme {
     DARK,
-    MARCH_MADNESS,
 }
 
 export enum ProfileTab {
@@ -25,6 +24,12 @@ export enum PnlTab {
     TICKETS = 'tickets',
 }
 
+export enum LpStatsTab {
+    BY_LP = 'by-lp',
+    BY_LEAGUE = 'by-league',
+    BY_TYPE = 'by-type',
+}
+
 export enum OverdropTab {
     OVERDROP_HOME = 'overdrop-home',
     XP_CALCULATOR = 'xp-calculator',
@@ -38,4 +43,6 @@ export enum ScreenSizeBreakpoint {
     MEDIUM = 1024,
     SMALL = 767,
     EXTRA_SMALL = 512,
+    XXS = 420,
+    XXXS = 360,
 }

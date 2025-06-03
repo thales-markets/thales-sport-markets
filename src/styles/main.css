@@ -4,6 +4,7 @@
 */
 @import './fonts.css';
 @import './icons.css';
+@import './chains-icons.css';
 @import './homepage-icons.css';
 @import './currencies.css';
 @import './thales-sidebar-icons.css';
@@ -121,6 +122,7 @@ body {
         env(safe-area-inset-left, 0);
     overflow-x: hidden !important;
     padding-right: 0 !important;
+    --wcm-z-index: 9999; /* Z index for wallet connect modal opened through rainbowkit sign in */
 }
 ol,
 ul {

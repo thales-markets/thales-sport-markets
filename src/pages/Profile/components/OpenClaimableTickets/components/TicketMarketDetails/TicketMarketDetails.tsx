@@ -4,7 +4,14 @@ import { GameStatusKey } from 'constants/markets';
 import { GameStatus } from 'enums/markets';
 import i18n from 'i18n';
 import { t } from 'i18next';
-import { getLeaguePeriodType, getLeagueSport, isContractResultView, League, Sport } from 'overtime-utils';
+import {
+    getLeaguePeriodType,
+    getLeagueSport,
+    getPeriodsForResultView,
+    isContractResultView,
+    League,
+    Sport,
+} from 'overtime-utils';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
@@ -14,7 +21,7 @@ import { FlexDivCentered } from 'styles/common';
 import { formatDateWithTime } from 'thales-utils';
 import { SportMarket, SportMarketScore, TicketMarket } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
-import { formatMarketOdds, getPeriodsForResultView } from 'utils/markets';
+import { formatMarketOdds } from 'utils/markets';
 import {
     getMatchTeams,
     getPositionTextV2,
@@ -178,17 +185,21 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean; isS
                                 <TicketMarketStatus>{t('markets.market-card.half-time')}</TicketMarketStatus>
                             ) : (
                                 <MatchPeriodContainer>
-                                    <MatchPeriodLabel>{`${getOrdinalNumberLabel(Number(liveScore.period))}${
-                                        isMobile
-                                            ? ''
-                                            : ` ${t(`markets.market-card.${getLeaguePeriodType(market.leagueId)}`)}`
-                                    }`}</MatchPeriodLabel>
-                                    <FlexDivCentered>
-                                        <MatchPeriodLabel className="red">
-                                            {liveScore.displayClock?.replaceAll("'", '')}
-                                            <MatchPeriodLabel className="blink">&prime;</MatchPeriodLabel>
-                                        </MatchPeriodLabel>
-                                    </FlexDivCentered>
+                                    {!!liveScore.period && (
+                                        <MatchPeriodLabel>{`${getOrdinalNumberLabel(Number(liveScore.period))}${
+                                            isMobile
+                                                ? ''
+                                                : ` ${t(`markets.market-card.${getLeaguePeriodType(market.leagueId)}`)}`
+                                        }`}</MatchPeriodLabel>
+                                    )}
+                                    {!!liveScore.displayClock && (
+                                        <FlexDivCentered>
+                                            <MatchPeriodLabel className="red">
+                                                {liveScore.displayClock?.replaceAll("'", '')}
+                                                <MatchPeriodLabel className="blink">&prime;</MatchPeriodLabel>
+                                            </MatchPeriodLabel>
+                                        </FlexDivCentered>
+                                    )}
                                 </MatchPeriodContainer>
                             ))}
                         {getScoreComponent(liveScore)}

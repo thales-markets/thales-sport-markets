@@ -1,13 +1,15 @@
 import burger from 'assets/images/burger.svg';
 import OverdropButtonBackground from 'assets/images/overdrop/overdrop-button-background.webp';
 import overdrop from 'assets/images/overdrop/overdrop-nav.webp';
+import { MAIN_VIEW_RIGHT_CONTAINER_WIDTH_LARGE } from 'constants/ui';
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import styled from 'styled-components';
-import { FlexDiv, FlexDivEnd, FlexDivRow, FlexDivRowCentered, FlexDivStart } from 'styles/common';
+import { FlexDiv, FlexDivCentered, FlexDivEnd, FlexDivRow, FlexDivRowCentered, FlexDivStart } from 'styles/common';
 
 export const Container = styled(FlexDivRowCentered)`
     width: 100%;
 
-    @media (max-width: 767px) {
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         flex-direction: column;
     }
     @keyframes pulsing {
@@ -17,7 +19,7 @@ export const Container = styled(FlexDivRowCentered)`
         }
         50% {
             transform: scale(1.2);
-            @media (max-width: 767px) {
+            @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
                 transform: scale(1.1);
             }
 
@@ -31,19 +33,23 @@ export const Container = styled(FlexDivRowCentered)`
 `;
 
 export const LeftContainer = styled(FlexDivRow)`
-    width: 100%;
     width: 263px;
     justify-content: center;
 `;
 
 export const MiddleContainer = styled(FlexDivRowCentered)`
-    width: calc(100% - 263px - 360px - 50px);
+    width: calc(100% - 263px - ${MAIN_VIEW_RIGHT_CONTAINER_WIDTH_LARGE} - 50px);
     justify-content: space-between;
+    gap: 10px;
+
+    @media (max-width: ${ScreenSizeBreakpoint.LARGE}px) {
+        width: unset;
+    }
 `;
 
 export const RightContainer = styled(FlexDivRowCentered)`
     position: relative;
-    width: 360px;
+    width: ${MAIN_VIEW_RIGHT_CONTAINER_WIDTH_LARGE};
 `;
 
 export const MiddleContainerSectionLeft = styled(FlexDivStart)`
@@ -62,18 +68,23 @@ export const MenuIcon = styled.img.attrs({ src: burger })`
     }
 `;
 
+export const OverdropIconWrapper = styled.div`
+    height: 40px;
+    overflow: hidden;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        height: 34px;
+    }
+`;
+
 export const OverdropIcon = styled.img.attrs({ src: overdrop })`
     height: 75px;
     cursor: pointer;
-    margin-top: -27px;
-    margin-bottom: -27px;
-    @media (max-width: 576px) {
-        height: 70px;
-        margin-right: 0;
-    }
+    margin-top: -18px;
 
-    @media (max-width: 420px) {
-        height: 65px;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        height: 64px;
+        margin-right: 0;
+        margin-top: -15px;
     }
 `;
 
@@ -141,7 +152,7 @@ export const SearchContainer = styled.div`
     }
 `;
 
-export const NotificationCount = styled.div`
+const NotificationCount = styled.div`
     position: absolute;
     border-radius: 50%;
     bottom: -8px;
@@ -157,7 +168,6 @@ export const NotificationCount = styled.div`
 `;
 
 export const BlockedGamesNotificationCount = styled(NotificationCount)`
-    left: -5px;
     background-color: ${(props) => props.theme.error.textColor.primary};
     box-shadow: ${(props) => props.theme.shadow.errorNotification};
 `;
@@ -166,6 +176,10 @@ export const Count = styled.span`
     color: ${(props) => props.theme.button.textColor.primary};
     font-weight: 600;
     font-size: 12px;
+`;
+
+export const OverdropWrapper = styled(FlexDivCentered)`
+    height: 30px;
 `;
 
 export const OverdropButtonContainer = styled(FlexDiv)`
@@ -191,7 +205,7 @@ export const OverdropButtonContainer = styled(FlexDiv)`
         margin-left: 10px;
     }
 
-    @media (max-width: 767px) {
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         font-size: 8px;
         width: 120px;
         height: 30px;
@@ -203,7 +217,7 @@ export const SmallBadgeImage = styled.img`
     left: -25px;
     width: 50px;
     height: 50px;
-    @media (max-width: 767px) {
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         width: 30px;
         height: 30px;
         left: -10px;
@@ -217,4 +231,13 @@ export const CurrencyIcon = styled.i`
     line-height: 20px;
     margin: 0 4px;
     color: ${(props) => props.theme.button.textColor.primary};
+`;
+
+export const MobileButtonWrapper = styled(FlexDivRowCentered)<{ isFullWidth?: boolean }>`
+    ${(props) => props.isFullWidth && 'width: 100%;'}
+    min-height: 28px;
+    gap: 6px;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) and (min-width: ${ScreenSizeBreakpoint.XXS}px) {
+        width: unset;
+    }
 `;

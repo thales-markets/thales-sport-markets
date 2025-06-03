@@ -1,13 +1,15 @@
+import { isInBinance } from '@binance/w3w-utils';
 import { useConnect as useParticleConnect } from '@particle-network/authkit';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import Loader from 'components/Loader';
+import { DEFAULT_NETWORK } from 'constants/network';
 import ROUTES from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import useInterval from 'hooks/useInterval';
 import DappLayout from 'layouts/DappLayout';
 import Theme from 'layouts/Theme';
 import FreeBets from 'pages/FreeBets';
 import LiquidityPool from 'pages/LiquidityPool';
-import MarchMadness from 'pages/MarchMadness';
 import Markets from 'pages/Markets/Home';
 import Market from 'pages/Markets/Market';
 import Overdrop from 'pages/Overdrop';
@@ -37,46 +39,41 @@ import { isNetworkSupported, isRouteAvailableForNetwork } from 'utils/network';
 import { getSpecificConnectorFromConnectorsArray } from 'utils/particleWallet/utils';
 import queryConnector from 'utils/queryConnector';
 import { history } from 'utils/routes';
-import {
-    useAccount,
-    useChainId,
-    useConnect,
-    useConnectors,
-    useDisconnect,
-    useSwitchChain,
-    useWalletClient,
-} from 'wagmi';
+import { useAccount, useChainId, useConnect, useConnectors, useDisconnect, useSwitchChain } from 'wagmi';
 
 const App = () => {
     const dispatch = useDispatch();
     const networkId = useChainId();
-    const { data: walletClient } = useWalletClient();
     const { switchChain } = useSwitchChain();
     const { disconnect } = useDisconnect();
     const { connectionStatus, disconnect: particleDisconnect } = useParticleConnect();
-    const { isConnected } = useAccount();
+    const { isConnected, connector } = useAccount();
     const connectors = useConnectors();
     const { connect } = useConnect();
     const isParticleConnected = useSelector(getIsConnectedViaParticle);
 
     queryConnector.setQueryClient();
 
-    useEffect(() => {
-        if (window.ethereum && window.ethereum.on) {
-            window.ethereum.on('chainChanged', (chainIdParam: string) => {
-                const ethereumChainId = Number.isInteger(chainIdParam)
-                    ? Number(chainIdParam)
-                    : parseInt(chainIdParam, 16);
-
-                if (!isNetworkSupported(ethereumChainId)) {
-                    // when network changed from browser wallet disconnect wallet otherwise wallet is unusable (e.g. wallet options doesn't react)
-                    disconnect();
-                    dispatch(setWalletConnectModalVisibility({ visibility: true }));
+    // check if networks are inconsistent between connector and dApp
+    useInterval(async () => {
+        if (isConnected && connector && connector?.getChainId) {
+            const chainId = await connector.getChainId();
+            if (isInBinance()) {
+                if (!isNetworkSupported(chainId) && connector.switchChain) {
+                    await connector.switchChain({ chainId: DEFAULT_NETWORK.networkId });
                 }
-                switchChain({ chainId: ethereumChainId as SupportedNetwork });
-            });
+            } else {
+                if (chainId !== networkId) {
+                    if (isNetworkSupported(chainId)) {
+                        switchChain?.({ chainId: chainId as SupportedNetwork });
+                    } else {
+                        disconnect();
+                        dispatch(setWalletConnectModalVisibility({ visibility: true }));
+                    }
+                }
+            }
         }
-    }, [dispatch, switchChain, networkId, disconnect, walletClient]);
+    }, 1000);
 
     useEffect(() => {
         const isBiconomyLocalStorage = localStore.get(LOCAL_STORAGE_KEYS.USE_BICONOMY);
@@ -195,11 +192,6 @@ const App = () => {
                                 <Overdrop />
                             </DappLayout>
                         </Suspense>
-                    </Route>
-                    <Route exact path={ROUTES.MarchMadness}>
-                        <DappLayout>
-                            <MarchMadness />
-                        </DappLayout>
                     </Route>
                     {isRouteAvailableForNetwork(ROUTES.LiquidityPool, networkId) && (
                         <Route exact path={ROUTES.LiquidityPool}>

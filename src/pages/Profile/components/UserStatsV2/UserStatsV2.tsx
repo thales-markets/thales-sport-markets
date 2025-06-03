@@ -1,23 +1,19 @@
 import { useAuthCore } from '@particle-network/authkit';
-import Button from 'components/Button';
-import Toggle from 'components/Toggle';
+import ClaimBetFromCode from 'components/ClaimBetFromCode';
+import ClaimFreeBetButton from 'components/ClaimFreeBetButton';
+import ToggleWallet from 'components/ToggleWallet';
 import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
 import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from 'constants/currency';
-import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import useLocalStorage from 'hooks/useLocalStorage';
-import useGetFreeBetQuery from 'queries/freeBets/useGetFreeBetQuery';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import useUsersStatsV2Query from 'queries/wallet/useUsersStatsV2Query';
-import queryString from 'query-string';
-import React, { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { Fragment, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getIsBiconomy, setIsBiconomy } from 'redux/modules/wallet';
-import styled, { useTheme } from 'styled-components';
+import { getIsBiconomy } from 'redux/modules/wallet';
+import styled from 'styled-components';
 import {
     FlexDivColumn,
     FlexDivColumnCentered,
@@ -26,21 +22,16 @@ import {
     FlexDivSpaceBetween,
     FlexDivStart,
 } from 'styles/common';
-import { Coins, formatCurrencyWithSign, localStore, truncateAddress } from 'thales-utils';
+import { Coins, formatCurrencyWithSign, truncateAddress } from 'thales-utils';
 import { Rates } from 'types/collateral';
-import { FreeBet } from 'types/freeBet';
 import { RootState } from 'types/redux';
-import { getCollateralByAddress, isStableCurrency, sortCollateralBalances } from 'utils/collaterals';
-import { claimFreeBet } from 'utils/freeBet';
-import useBiconomy from 'utils/useBiconomy';
+import { isStableCurrency, sortCollateralBalances } from 'utils/collaterals';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
 
 const UserStats: React.FC = () => {
     const { t } = useTranslation();
-    const dispatch = useDispatch();
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
-
-    const queryParams: { freeBet?: string } = queryString.parse(location.search);
 
     const networkId = useChainId();
     const client = useClient();
@@ -48,13 +39,8 @@ const UserStats: React.FC = () => {
     const { userInfo } = useAuthCore();
 
     const { address, isConnected } = useAccount();
-    const smartAddress = useBiconomy();
-    const theme = useTheme();
+    const { smartAddress } = useBiconomy();
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
-
-    const [freeBet, setFreeBet] = useLocalStorage<FreeBet | undefined>(LOCAL_STORAGE_KEYS.FREE_BET_ID, undefined);
-
-    const history = useHistory();
 
     const userStatsQuery = useUsersStatsV2Query(walletAddress, { networkId, client }, { enabled: isConnected });
     const userStats = userStatsQuery.isSuccess && userStatsQuery.data ? userStatsQuery.data : undefined;
@@ -68,18 +54,6 @@ const UserStats: React.FC = () => {
     );
     const freeBetBalances =
         freeBetBalancesQuery.isSuccess && freeBetBalancesQuery.data ? freeBetBalancesQuery.data : undefined;
-
-    const [freeBetId, setFreeBetId] = useState(freeBet?.id || queryParams.freeBet || '');
-
-    const freeBetQuery = useGetFreeBetQuery(freeBetId || queryParams.freeBet || '', networkId, {
-        enabled: !!(freeBetId || queryParams.freeBet),
-    });
-
-    const freeBetFromServer = useMemo(
-        () =>
-            freeBetQuery.isSuccess && freeBetQuery.data && freeBetId ? { ...freeBetQuery.data, id: freeBetId } : null,
-        [freeBetQuery.data, freeBetQuery.isSuccess, freeBetId]
-    );
 
     const isFreeBetExists = freeBetBalances && !!Object.values(freeBetBalances).find((balance) => !!balance);
 
@@ -121,14 +95,6 @@ const UserStats: React.FC = () => {
         return sortedBalances;
     }, [exchangeRates, freeBetBalances, networkId]);
 
-    const onClaimFreeBet = useCallback(() => claimFreeBet(walletAddress, freeBetId, networkId, setFreeBet, history), [
-        walletAddress,
-        freeBetId,
-        setFreeBet,
-        history,
-        networkId,
-    ]);
-
     const userLoginInfo = useMemo(() => {
         if (userInfo && userInfo.thirdparty_user_info && userInfo.thirdparty_user_info.user_info) {
             return userInfo.thirdparty_user_info.user_info;
@@ -149,18 +115,6 @@ const UserStats: React.FC = () => {
         }
     };
 
-    const claimFreeBetButtonVisible =
-        !!freeBetFromServer &&
-        !freeBetFromServer?.claimSuccess &&
-        (!freeBetFromServer.claimAddress ||
-            freeBetFromServer.claimAddress.toLowerCase() === walletAddress.toLowerCase());
-
-    useEffect(() => {
-        if (queryParams.freeBet) {
-            setFreeBetId(queryParams.freeBet as string);
-        }
-    }, [freeBet, queryParams.freeBet]);
-
     return (
         <Wrapper>
             <SectionWrapper>
@@ -172,22 +126,7 @@ const UserStats: React.FC = () => {
                 <FlexDivStart gap={8}>
                     <FlexDivColumnStart gap={10}>
                         <Section>
-                            <Text>{t('profile.dropdown.account')}</Text>
-
-                            <Toggle
-                                height="24px"
-                                active={!isBiconomy}
-                                handleClick={() => {
-                                    if (isBiconomy) {
-                                        dispatch(setIsBiconomy(false));
-                                        localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, false);
-                                    } else {
-                                        dispatch(setIsBiconomy(true));
-                                        localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, true);
-                                    }
-                                }}
-                            />
-                            <Text>{t('profile.dropdown.eoa')}</Text>
+                            <ToggleWallet />
                         </Section>
                         <Separator />
                         <Section>
@@ -297,28 +236,9 @@ const UserStats: React.FC = () => {
                         })}
                 </SectionWrapper>
             )}
-            {claimFreeBetButtonVisible && (
-                <ClaimBetButton
-                    onClick={onClaimFreeBet}
-                    backgroundColor={theme.overdrop.borderColor.tertiary}
-                    borderColor={theme.overdrop.borderColor.tertiary}
-                    textColor={theme.button.textColor.primary}
-                    height="42px"
-                    fontSize="16px"
-                    fontWeight="700"
-                    borderRadius="8px"
-                    className="pulse"
-                    margin="10px 0 0 0 "
-                >
-                    {t('profile.account-summary.claim-free-bet', {
-                        amount: `${freeBetFromServer?.betAmount} $${getCollateralByAddress(
-                            freeBetFromServer.collateral,
-                            networkId
-                        )}`,
-                    })}
-                    <HandsIcon className="icon icon--hands-coins" />
-                </ClaimBetButton>
-            )}
+            <SubHeaderWrapper />
+            <ClaimBetFromCode />
+            <ClaimFreeBetButton pulsate />
         </Wrapper>
     );
 };
@@ -393,6 +313,16 @@ const SubHeaderIcon = styled.i`
     text-transform: none;
 `;
 
+const Text = styled.span<{ active?: boolean }>`
+    position: relative;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 14px;
+    white-space: pre;
+    text-align: left;
+    color: ${(props) => (props.active ? props.theme.textColor.quaternary : props.theme.textColor.primary)};
+`;
+
 const SubHeaderWrapper = styled(FlexDivRow)`
     &::after,
     &:before {
@@ -422,33 +352,6 @@ const SectionWrapper = styled(FlexDivColumnCentered)`
     gap: 8px;
 `;
 
-const HandsIcon = styled.i`
-    font-weight: 500;
-    margin-left: 5px;
-    font-size: 22px;
-    color: ${(props) => props.theme.textColor.tertiary};
-`;
-
-const ClaimBetButton = styled(Button)`
-    font-size: 15px;
-    padding: 3px 15px;
-    &.pulse {
-        animation: pulsing 1.5s ease-in;
-        animation-iteration-count: infinite;
-        @keyframes pulsing {
-            0% {
-                box-shadow: 0 0 0 0px rgba(237, 185, 41, 0.6);
-            }
-            50% {
-                box-shadow: 0 0 0 0px rgba(237, 185, 41, 0.4);
-            }
-            100% {
-                box-shadow: 0 0 0 20px rgba(237, 185, 41, 0);
-            }
-        }
-    }
-`;
-
 const CopyIcon = styled.i<{ active?: boolean }>`
     cursor: pointer;
     text-transform: lowercase;
@@ -458,16 +361,6 @@ const CopyIcon = styled.i<{ active?: boolean }>`
 const WalletIcon = styled.i<{ active?: boolean }>`
     font-size: 18px;
     width: 20px;
-    color: ${(props) => (props.active ? props.theme.textColor.quaternary : props.theme.textColor.primary)};
-`;
-
-const Text = styled.span<{ active?: boolean }>`
-    position: relative;
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 14px;
-    white-space: pre;
-    text-align: left;
     color: ${(props) => (props.active ? props.theme.textColor.quaternary : props.theme.textColor.primary)};
 `;
 

@@ -3,14 +3,20 @@ import { FlexDiv, FlexDivColumnCentered } from 'styles/common';
 
 export const LeagueCard = styled.div<{ isMarketSelected: boolean }>`
     display: flex;
-    position: relative;
+    position: sticky;
+    top: 0;
+    z-index: 2;
     flex-direction: row;
     padding: 0px 12px 10px 12px;
-    border-radius: 5px;
     align-items: center;
     background-color: ${(props) => props.theme.background.primary};
     justify-content: space-between;
     padding-right: ${(props) => (props.isMarketSelected ? '0px' : '40px')};
+`;
+
+export const TournamentCard = styled(LeagueCard)`
+    top: 34px;
+    padding: 0px 12px 5px 12px;
 `;
 
 export const LeagueInfo = styled.div`
@@ -30,6 +36,13 @@ export const LeagueInfo = styled.div`
     }
 `;
 
+export const TournamentInfo = styled(LeagueInfo)`
+    margin-left: 10px;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+`;
+
 export const GamesContainer = styled.div<{ hidden?: boolean }>`
     display: ${(props) => (props.hidden ? 'none' : 'flex')};
     flex-direction: column;
@@ -37,9 +50,9 @@ export const GamesContainer = styled.div<{ hidden?: boolean }>`
     margin-bottom: 10px;
 `;
 
-export const LeagueFlag = styled.img`
-    width: 24px;
-    height: 24px;
+export const LeagueFlag = styled.img<{ size?: number }>`
+    width: ${(props) => (props.size ? props.size + 'px' : '24px')};
+    height: ${(props) => (props.size ? props.size + 'px' : '24px')};
     cursor: pointer;
 `;
 

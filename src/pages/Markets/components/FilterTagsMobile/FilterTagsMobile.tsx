@@ -9,12 +9,14 @@ import {
     getSportFilter,
     getStatusFilter,
     getTagFilter,
+    getTournamentFilter,
     setDatePeriodFilter,
     setMarketSearch,
     setMarketTypeFilter,
     setSportFilter,
     setStatusFilter,
     setTagFilter,
+    setTournamentFilter,
 } from 'redux/modules/market';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivRowCentered } from 'styles/common';
@@ -29,12 +31,14 @@ const FilterTagsMobile: React.FC = () => {
     const statusFilter = useSelector(getStatusFilter);
     const sportFilter = useSelector(getSportFilter);
     const tagFilter = useSelector(getTagFilter);
+    const tournamentFilter = useSelector(getTournamentFilter);
     const marketTypeFilter = useSelector(getMarketTypeFilter);
     const [, setSportParam] = useQueryParam('sport', '');
     const [, setStatusParam] = useQueryParam('status', '');
     const [, setSearchParam] = useQueryParam('search', '');
     const [dateParam, setDateParam] = useQueryParam('date', '');
     const [, setTagParam] = useQueryParam('tag', '');
+    const [, setTournamentParam] = useQueryParam('tournament', '');
 
     const dateTagLabel = dateParam?.split('h')[0] + ' ' + t('common.time-remaining.hours');
     const hideContainer =
@@ -123,6 +127,33 @@ const FilterTagsMobile: React.FC = () => {
                                                 .map((tagInfo) => tagInfo.label)
                                                 .toString();
                                             setTagParam(newTagParam);
+                                        }
+                                    }}
+                                />
+                            </FilterTagLabel>
+                        </FilterTagContainer>
+                    );
+                })}
+
+            {tournamentFilter.length != 0 &&
+                tournamentFilter.map((tournament, index) => {
+                    return (
+                        <FilterTagContainer key={index}>
+                            <FilterTagLabel>
+                                {tournament}
+                                <ClearIcon
+                                    className="icon icon--close"
+                                    onClick={() => {
+                                        if (tournamentFilter.length == 1) {
+                                            dispatch(setTournamentFilter([]));
+                                            setTournamentParam('');
+                                        } else {
+                                            const newTournamentFilters = tournamentFilter.filter(
+                                                (filter) => filter != tournament
+                                            );
+                                            dispatch(setTournamentFilter(newTournamentFilters));
+                                            const newTournamentParam = newTournamentFilters.join(';');
+                                            setTournamentParam(newTournamentParam);
                                         }
                                     }}
                                 />

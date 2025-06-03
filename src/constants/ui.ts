@@ -1,14 +1,12 @@
 import { Network } from 'enums/network';
-import { Theme } from 'enums/ui';
+import { ProfileTab, Theme } from 'enums/ui';
 import darkTheme from 'styles/themes/dark';
-import marchMadnessTheme from 'styles/themes/marchMadness';
 import { NavMenuItem, ThemeInterface } from 'types/ui';
 import { LINKS } from './links';
 import ROUTES from './routes';
 
 export const ThemeMap: Record<Theme, ThemeInterface> = {
     [Theme.DARK]: darkTheme,
-    [Theme.MARCH_MADNESS]: marchMadnessTheme,
 };
 
 export const NAV_MENU_FIRST_SECTION: NavMenuItem[] = [
@@ -16,7 +14,7 @@ export const NAV_MENU_FIRST_SECTION: NavMenuItem[] = [
         i18label: 'markets.nav-menu.items.profile',
         iconClass: 'icon icon--profile2',
         name: 'profile',
-        route: `${ROUTES.Profile}?selected-tab=open-claimable`,
+        route: `${ROUTES.Profile}?selected-tab=${ProfileTab.OPEN_CLAIMABLE}`,
         supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.Base, Network.OptimismSepolia],
     },
     {
@@ -42,13 +40,6 @@ export const NAV_MENU_SECOND_SECTION: NavMenuItem[] = [
         name: 'markets',
         route: ROUTES.Markets.Home,
         supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.Base, Network.OptimismSepolia],
-    },
-    {
-        i18label: 'markets.nav-menu.labels.march-madness',
-        iconClass: 'icon icon--brackets',
-        name: 'march-madness',
-        route: ROUTES.MarchMadness,
-        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.OptimismSepolia],
     },
     {
         i18label: 'markets.nav-menu.items.liquidity-pool',
@@ -116,3 +107,6 @@ export const PROMOTION_SANITIZE_PROPS = {
     ],
     ALLOWED_ATTR: ['href', 'target', 'style', 'src', 'alt'],
 };
+
+export const MAIN_VIEW_RIGHT_CONTAINER_WIDTH_LARGE = '360px';
+export const MAIN_VIEW_RIGHT_CONTAINER_WIDTH_MEDIUM = '320px';

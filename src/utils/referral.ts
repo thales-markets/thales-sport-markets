@@ -1,7 +1,7 @@
-import Web3 from 'web3';
+import { isAddress } from 'viem';
 
 export const setReferralId = (referralId: string): void => {
-    if (!Web3.utils.isAddress(referralId)) {
+    if (!isAddress(referralId)) {
         return undefined;
     }
 
@@ -10,7 +10,5 @@ export const setReferralId = (referralId: string): void => {
 
 export const getReferralId = (): string | null => {
     const referralIdFromLocalStorage = localStorage.getItem('referralId');
-    return referralIdFromLocalStorage && Web3.utils.isAddress(referralIdFromLocalStorage)
-        ? referralIdFromLocalStorage
-        : null;
+    return referralIdFromLocalStorage && isAddress(referralIdFromLocalStorage) ? referralIdFromLocalStorage : null;
 };

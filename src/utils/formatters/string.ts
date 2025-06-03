@@ -9,5 +9,9 @@ export const convertFromBytes32 = (value: string) => {
     return result.replace(/\0/g, '');
 };
 
-export const truncateAddress = (address: string, first = 5, last = 5) =>
-    address ? `${address.slice(0, first)}...${address.slice(-last, address.length)}` : null;
+export const getCaseAccentInsensitiveString = (value: string) => {
+    return value
+        .normalize('NFD') // Normalize accented characters
+        .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
+        .toLowerCase(); // Case-insensitive
+};

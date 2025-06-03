@@ -1,19 +1,27 @@
 import ParlayEmptyIcon from 'assets/images/parlay-empty.svg?react';
+import ClaimBetFromCode from 'components/ClaimBetFromCode';
+import ClaimFreeBetButton from 'components/ClaimFreeBetButton';
 import RadioButton from 'components/fields/RadioButton';
 import MatchInfoV2 from 'components/MatchInfoV2';
 import MatchUnavailableInfo from 'components/MatchUnavailableInfo';
 import Scroll from 'components/Scroll';
 import Tooltip from 'components/Tooltip';
+import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from 'constants/currency';
+import { MAIN_VIEW_RIGHT_CONTAINER_WIDTH_LARGE, MAIN_VIEW_RIGHT_CONTAINER_WIDTH_MEDIUM } from 'constants/ui';
 import { secondsToMilliseconds } from 'date-fns';
 import { SportFilter, StatusFilter, TicketErrorCode } from 'enums/markets';
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import { isEqual } from 'lodash';
 import { League, LeagueMap } from 'overtime-utils';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsAmmDataQuery from 'queries/markets/useSportsAmmDataQuery';
 import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
+import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useSportsAmmRiskManagerQuery from 'queries/riskManagement/useSportsAmmRiskManagerQuery';
 import useSgpDataQuery from 'queries/sgp/useSgpDataQuery';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
+import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
+import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
@@ -31,13 +39,19 @@ import {
     setMaxTicketSize,
     setTicketError,
 } from 'redux/modules/ticket';
+import { getIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
-import { FlexDivCentered, FlexDivColumn, FlexDivSpaceBetween } from 'styles/common';
+import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivSpaceBetween } from 'styles/common';
+import { Coins, formatCurrencyWithSign } from 'thales-utils';
+import { Rates } from 'types/collateral';
 import { SportMarket, SportMarkets, TicketMarket, TicketPosition } from 'types/markets';
 import { SgpParams, SportsbookData } from 'types/sgp';
+import { isStableCurrency, sortCollateralBalances } from 'utils/collaterals';
 import { isSameMarket } from 'utils/marketsV2';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { isRegularTicketInvalid } from 'utils/tickets';
 import { useAccount, useChainId, useClient } from 'wagmi';
+import ParlayRelatedMarkets from './components/ParlayRelatedMarkets';
 import TicketV2 from './components/TicketV2';
 import ValidationModal from './components/ValidationModal';
 
@@ -46,9 +60,6 @@ type ParlayProps = {
     openMarkets?: SportMarkets;
 };
 
-const TICKET_MARKETS_LIST_MAX_HEIGHT = 565;
-const TICKET_MARKETS_LIST_MAX_HEIGHT_MOBILE = 325;
-
 const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -56,7 +67,6 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
 
     const networkId = useChainId();
     const client = useClient();
-    const { isConnected } = useAccount();
 
     const ticket = useSelector(getTicket);
     const maxTicketSize = useSelector(getMaxTicketSize);
@@ -65,6 +75,10 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     const hasTicketError = useSelector(getHasTicketError);
     const sportFilter = useSelector(getSportFilter);
     const isLiveFilterSelected = sportFilter == SportFilter.Live;
+    const isBiconomy = useSelector(getIsBiconomy);
+    const { address, isConnected } = useAccount();
+    const { smartAddress } = useBiconomy();
+    const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const [ticketMarkets, setTicketMarkets] = useState<TicketMarket[]>([]);
     const [unavailableMarkets, setUnavailableMarkets] = useState<TicketPosition[]>([]);
@@ -140,6 +154,56 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                 : true,
         [sportsAmmRiskManagerQuery.isSuccess, sportsAmmRiskManagerQuery.data]
     );
+
+    const freeBetBalancesQuery = useFreeBetCollateralBalanceQuery(
+        walletAddress,
+        { networkId, client },
+        {
+            enabled: isConnected,
+        }
+    );
+    const freeBetBalances =
+        freeBetBalancesQuery.isSuccess && freeBetBalancesQuery.data ? freeBetBalancesQuery.data : undefined;
+
+    const isFreeBetExists = freeBetBalances && !!Object.values(freeBetBalances).find((balance) => !!balance);
+
+    const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
+    const exchangeRates: Rates | null =
+        exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
+
+    const multiCollateralBalancesQuery = useMultipleCollateralBalanceQuery(
+        walletAddress,
+        { networkId, client },
+        {
+            enabled: isConnected,
+        }
+    );
+    const multiCollateralBalances =
+        multiCollateralBalancesQuery.isSuccess && multiCollateralBalancesQuery.data
+            ? multiCollateralBalancesQuery.data
+            : undefined;
+
+    const getUSDForCollateral = useCallback(
+        (collateral: Coins, freeBetBalance?: boolean) => {
+            if (freeBetBalance)
+                return (
+                    (freeBetBalances ? freeBetBalances[collateral] : 0) *
+                    (isStableCurrency(collateral as Coins) ? 1 : exchangeRates?.[collateral] || 0)
+                );
+            return (
+                (multiCollateralBalances ? multiCollateralBalances[collateral] : 0) *
+                (isStableCurrency(collateral as Coins) ? 1 : exchangeRates?.[collateral] || 0)
+            );
+        },
+
+        [freeBetBalances, exchangeRates, multiCollateralBalances]
+    );
+
+    const freeBetCollateralsSorted = useMemo(() => {
+        const sortedBalances = sortCollateralBalances(freeBetBalances, exchangeRates, networkId, 'desc');
+
+        return sortedBalances;
+    }, [exchangeRates, freeBetBalances, networkId]);
 
     useEffect(() => {
         if (sportsAmmDataQuery.isSuccess && sportsAmmDataQuery.data) {
@@ -306,187 +370,232 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     const onCloseValidationModal = useCallback(() => dispatch(resetTicketError()), [dispatch]);
 
     const hasParlayMarkets = ticketMarkets.length > 0 || unavailableMarkets.length > 0;
-
-    const marketsList = useRef<HTMLDivElement>(null);
-    const marketsListHeight = marketsList.current?.getBoundingClientRect().height;
-    const scrollHeight = Math.min(
-        isMobile ? TICKET_MARKETS_LIST_MAX_HEIGHT_MOBILE : TICKET_MARKETS_LIST_MAX_HEIGHT,
-        marketsListHeight || Number.MAX_VALUE
-    );
-    const isScrollVisible = !isMobile && (marketsListHeight || 0) > TICKET_MARKETS_LIST_MAX_HEIGHT;
+    const isSingleTicket = ticketMarkets.length === 1 || unavailableMarkets.length === 1;
 
     return (
-        <Container isMobile={isMobile} isWalletConnected={isConnected}>
-            {hasParlayMarkets ? (
-                <>
-                    {!isMobile && (
-                        <Title>
-                            {t('markets.parlay.ticket-slip')}
-                            <Count>{ticket.length}</Count>
-                        </Title>
-                    )}
-                    {!isLive && (
-                        <BetTypeContainer>
-                            <Tooltip overlay={t('markets.parlay.tooltip.regular')} mouseEnterDelay={0.3}>
-                                <RadioButtonContainer>
-                                    <RadioButton
-                                        checked={!isSystemBet && !isSgp}
-                                        value={'true'}
-                                        onChange={() => {
-                                            if (isSgp && ticket.length > 1) {
-                                                if (isRegularTicketInvalid(ticket, maxTicketSize)) {
-                                                    dispatch(removeAll());
-                                                }
-                                            }
-                                            dispatch(setIsSystemBet(false));
-                                            dispatch(setIsSgp(false));
-                                            // reset odds changes
-                                            setAcceptOdds(true);
-                                            setOddsChanged(false);
-                                        }}
-                                        label={t('markets.parlay.regular')}
-                                    />
-                                </RadioButtonContainer>
-                            </Tooltip>
-                            <Tooltip overlay={t('markets.parlay.tooltip.system')} mouseEnterDelay={0.3}>
-                                <RadioButtonContainer>
-                                    <RadioButton
-                                        checked={isSystemBet}
-                                        value={'false'}
-                                        onChange={() => {
-                                            if (isSgp && ticket.length > 1) {
-                                                if (isRegularTicketInvalid(ticket, maxTicketSize)) {
-                                                    dispatch(removeAll());
-                                                }
-                                            }
-                                            dispatch(setIsSystemBet(true));
-                                            dispatch(setIsSgp(false));
-                                            // reset odds changes
-                                            setAcceptOdds(true);
-                                            setOddsChanged(false);
-                                        }}
-                                        label={t('markets.parlay.system')}
-                                    />
-                                </RadioButtonContainer>
-                            </Tooltip>
-                            <Tooltip
-                                overlay={
-                                    isDifferentGamesCombined
-                                        ? t('markets.parlay.tooltip.sgp-different-game')
-                                        : isSgpSportDisabled
-                                        ? t('markets.parlay.tooltip.sgp-league-disabled', {
-                                              league: LeagueMap[ticket[0]?.leagueId as League]?.label,
-                                          })
-                                        : t('markets.parlay.tooltip.sgp')
-                                }
-                                mouseEnterDelay={0.3}
-                            >
-                                <RadioButtonContainer>
-                                    <BetaTag>beta</BetaTag>
-                                    <RadioButton
-                                        checked={isSgp}
-                                        disabled={isDifferentGamesCombined || isSgpSportDisabled}
-                                        value={'false'}
-                                        onChange={() => {
-                                            dispatch(setIsSystemBet(false));
-                                            dispatch(setIsSgp(true));
-                                            // reset odds changes
-                                            setAcceptOdds(true);
-                                            setOddsChanged(false);
-                                        }}
-                                        label={t('markets.parlay.sgp')}
-                                    />
-                                </RadioButtonContainer>
-                            </Tooltip>
-                        </BetTypeContainer>
-                    )}
-                    <OverBonusContainer>
-                        <OverBonus>{t('markets.parlay.over-bonus-info')}</OverBonus>
-                    </OverBonusContainer>
-                    <ScrollContainer>
-                        <Scroll height={`${scrollHeight}px`} renderOnlyChildren={!isScrollVisible}>
-                            <ListContainer ref={marketsList} isScrollVisible={isScrollVisible}>
-                                {ticketMarkets.length > 0 &&
-                                    ticketMarkets.map((market, index) => {
-                                        const outOfLiquidity = outOfLiquidityMarkets.includes(index);
-                                        return (
-                                            <RowMarket key={index} outOfLiquidity={outOfLiquidity}>
-                                                <MatchInfoV2
-                                                    market={market}
-                                                    showOddUpdates={!isSgp}
-                                                    setOddsChanged={setOddsChanged}
-                                                    acceptOdds={acceptOdds}
-                                                    setAcceptOdds={setAcceptOdds}
-                                                    isSgp={isSgp}
-                                                    applyPayoutMultiplier={true}
-                                                    useOverCollateral={useOverCollateral}
+        <ScrollWrapper>
+            <Scroll height={'100%'} renderOnlyChildren={isMobile}>
+                <Container>
+                    <ParlayContainer>
+                        {hasParlayMarkets ? (
+                            <>
+                                {!isMobile && (
+                                    <Title>
+                                        {t('markets.parlay.ticket-slip')}
+                                        <Count>{ticket.length}</Count>
+                                    </Title>
+                                )}
+                                {!isLive && (
+                                    <BetTypeContainer>
+                                        <Tooltip overlay={t('markets.parlay.tooltip.regular')} mouseEnterDelay={0.3}>
+                                            <RadioButtonContainer>
+                                                <RadioButton
+                                                    checked={!isSystemBet && !isSgp}
+                                                    value={'true'}
+                                                    onChange={() => {
+                                                        if (isSgp && ticket.length > 1) {
+                                                            if (isRegularTicketInvalid(ticket, maxTicketSize)) {
+                                                                dispatch(removeAll());
+                                                            }
+                                                        }
+                                                        dispatch(setIsSystemBet(false));
+                                                        dispatch(setIsSgp(false));
+                                                        // reset odds changes
+                                                        setAcceptOdds(true);
+                                                        setOddsChanged(false);
+                                                    }}
+                                                    label={t('markets.parlay.regular')}
                                                 />
-                                            </RowMarket>
-                                        );
-                                    })}
-                                {unavailableMarkets.length > 0 &&
-                                    unavailableMarkets.map((market, index) => {
-                                        return (
-                                            <RowMarket key={index} outOfLiquidity={false} notOpened={true}>
-                                                <MatchUnavailableInfo
-                                                    market={market}
-                                                    showOddUpdates
-                                                    acceptOdds={acceptOdds}
-                                                    setAcceptOdds={setAcceptOdds}
-                                                    applyPayoutMultiplier={true}
+                                            </RadioButtonContainer>
+                                        </Tooltip>
+                                        <Tooltip overlay={t('markets.parlay.tooltip.system')} mouseEnterDelay={0.3}>
+                                            <RadioButtonContainer>
+                                                <RadioButton
+                                                    checked={isSystemBet}
+                                                    value={'false'}
+                                                    onChange={() => {
+                                                        if (isSgp && ticket.length > 1) {
+                                                            if (isRegularTicketInvalid(ticket, maxTicketSize)) {
+                                                                dispatch(removeAll());
+                                                            }
+                                                        }
+                                                        dispatch(setIsSystemBet(true));
+                                                        dispatch(setIsSgp(false));
+                                                        // reset odds changes
+                                                        setAcceptOdds(true);
+                                                        setOddsChanged(false);
+                                                    }}
+                                                    label={t('markets.parlay.system')}
                                                 />
-                                            </RowMarket>
-                                        );
-                                    })}
-                            </ListContainer>
-                        </Scroll>
-                    </ScrollContainer>
-                    <TicketV2
-                        markets={ticketMarkets}
-                        setMarketsOutOfLiquidity={setOutOfLiquidityMarkets}
-                        oddsChanged={oddsChanged}
-                        setOddsChanged={setOddsChanged}
-                        acceptOddChanges={(changed: boolean) => {
-                            setAcceptOdds(true);
-                            setOddsChanged(changed);
-                        }}
-                        onSuccess={onSuccess}
-                        submitButtonDisabled={!!unavailableMarkets.length}
-                        setUseOverCollateral={setUseOverCollateral}
-                        sgpData={isSgp ? sportsbookData : undefined}
-                    />
-                </>
-            ) : (
-                <Empty>
-                    <EmptyLabel>{t('markets.parlay.empty-title')}</EmptyLabel>
-                    <StyledParlayEmptyIcon
-                        style={{
-                            marginTop: 10,
-                            marginBottom: 20,
-                            width: '100px',
-                            height: '100px',
-                        }}
-                    />
-                    <EmptyDesc>{t('markets.parlay.empty-description')}</EmptyDesc>
-                </Empty>
-            )}
-            {hasTicketError && <ValidationModal onClose={onCloseValidationModal} />}
-        </Container>
+                                            </RadioButtonContainer>
+                                        </Tooltip>
+                                        <Tooltip
+                                            overlay={
+                                                isDifferentGamesCombined
+                                                    ? t('markets.parlay.tooltip.sgp-different-game')
+                                                    : isSgpSportDisabled
+                                                    ? t('markets.parlay.tooltip.sgp-league-disabled', {
+                                                          league: LeagueMap[ticket[0]?.leagueId as League]?.label,
+                                                      })
+                                                    : t('markets.parlay.tooltip.sgp')
+                                            }
+                                            mouseEnterDelay={0.3}
+                                        >
+                                            <RadioButtonContainer>
+                                                <BetaTag>beta</BetaTag>
+                                                <RadioButton
+                                                    checked={isSgp}
+                                                    disabled={isDifferentGamesCombined || isSgpSportDisabled}
+                                                    value={'false'}
+                                                    onChange={() => {
+                                                        dispatch(setIsSystemBet(false));
+                                                        dispatch(setIsSgp(true));
+                                                        // reset odds changes
+                                                        setAcceptOdds(true);
+                                                        setOddsChanged(false);
+                                                    }}
+                                                    label={t('markets.parlay.sgp')}
+                                                />
+                                            </RadioButtonContainer>
+                                        </Tooltip>
+                                    </BetTypeContainer>
+                                )}
+                                <OverBonusContainer>
+                                    <OverBonus>{t('markets.parlay.over-bonus-info')}</OverBonus>
+                                </OverBonusContainer>
+                                <ListContainer>
+                                    {ticketMarkets.length > 0 &&
+                                        ticketMarkets.map((market, index) => {
+                                            const outOfLiquidity = outOfLiquidityMarkets.includes(index);
+                                            return (
+                                                <RowMarket key={index} outOfLiquidity={outOfLiquidity}>
+                                                    <MatchInfoV2
+                                                        market={market}
+                                                        showOddUpdates={!isSgp}
+                                                        setOddsChanged={setOddsChanged}
+                                                        acceptOdds={acceptOdds}
+                                                        setAcceptOdds={setAcceptOdds}
+                                                        isSgp={isSgp}
+                                                        applyPayoutMultiplier={true}
+                                                        useOverCollateral={useOverCollateral}
+                                                    />
+                                                </RowMarket>
+                                            );
+                                        })}
+                                    {unavailableMarkets.length > 0 &&
+                                        unavailableMarkets.map((market, index) => {
+                                            return (
+                                                <RowMarket key={index} outOfLiquidity={false} notOpened={true}>
+                                                    <MatchUnavailableInfo
+                                                        market={market}
+                                                        showOddUpdates
+                                                        acceptOdds={acceptOdds}
+                                                        setAcceptOdds={setAcceptOdds}
+                                                        applyPayoutMultiplier={true}
+                                                    />
+                                                </RowMarket>
+                                            );
+                                        })}
+                                </ListContainer>
+                                <TicketV2
+                                    markets={ticketMarkets}
+                                    setMarketsOutOfLiquidity={setOutOfLiquidityMarkets}
+                                    oddsChanged={oddsChanged}
+                                    setOddsChanged={setOddsChanged}
+                                    acceptOddChanges={(changed: boolean) => {
+                                        setAcceptOdds(true);
+                                        setOddsChanged(changed);
+                                    }}
+                                    onSuccess={onSuccess}
+                                    submitButtonDisabled={!!unavailableMarkets.length}
+                                    setUseOverCollateral={setUseOverCollateral}
+                                    sgpData={isSgp ? sportsbookData : undefined}
+                                />
+                            </>
+                        ) : (
+                            <Empty>
+                                <EmptyLabel>{t('markets.parlay.empty-title')}</EmptyLabel>
+                                <StyledParlayEmptyIcon />
+                                <EmptyDesc>{t('markets.parlay.empty-description')}</EmptyDesc>
+                                <UseOverDiv>{t('markets.parlay.use-over')}</UseOverDiv>
+                                {isFreeBetExists && (
+                                    <SectionWrapper>
+                                        <SubHeaderWrapper>
+                                            <SubHeader>
+                                                <SubHeaderIcon className="icon icon--gift" />
+                                                {t('profile.stats.free-bet')}
+                                            </SubHeader>
+                                        </SubHeaderWrapper>
+                                        {freeBetBalances &&
+                                            Object.keys(freeBetCollateralsSorted).map((currencyKey) => {
+                                                return freeBetBalances[currencyKey] ? (
+                                                    <Section key={`${currencyKey}-freebet`}>
+                                                        <SubLabel>
+                                                            <CurrencyIcon
+                                                                className={
+                                                                    COLLATERAL_ICONS_CLASS_NAMES[currencyKey as Coins]
+                                                                }
+                                                            />
+                                                            {currencyKey}
+                                                        </SubLabel>
+                                                        <SubValue>
+                                                            {formatCurrencyWithSign(
+                                                                null,
+                                                                freeBetBalances ? freeBetBalances[currencyKey] : 0
+                                                            )}
+                                                            {!exchangeRates?.[currencyKey] &&
+                                                            !isStableCurrency(currencyKey as Coins)
+                                                                ? '...'
+                                                                : ` (${formatCurrencyWithSign(
+                                                                      USD_SIGN,
+                                                                      getUSDForCollateral(currencyKey as Coins, true)
+                                                                  )})`}
+                                                        </SubValue>
+                                                    </Section>
+                                                ) : (
+                                                    <Fragment key={`${currencyKey}-freebet`} />
+                                                );
+                                            })}
+                                    </SectionWrapper>
+                                )}
+                                {isConnected && <ClaimFreeBetButton styles={{ marginTop: '20px' }} />}
+                                <ClaimBetFromCode />
+                            </Empty>
+                        )}
+                        {hasTicketError && <ValidationModal onClose={onCloseValidationModal} />}
+                    </ParlayContainer>
+                    {isConnected && (isLiveFilterSelected || isSingleTicket) && <ParlayRelatedMarkets />}
+                </Container>
+            </Scroll>
+        </ScrollWrapper>
     );
 };
 
-const Container = styled(FlexDivColumn)<{ isMobile: boolean; isWalletConnected?: boolean }>`
-    max-width: 360px;
+const ScrollWrapper = styled(FlexDivColumn)`
+    width: calc(100% + 15px);
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        width: unset;
+    }
+`;
+
+const Container = styled(FlexDivColumn)`
+    gap: 10px;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        padding-bottom: 40px;
+    }
+`;
+
+const ParlayContainer = styled(FlexDivColumn)`
+    max-width: ${MAIN_VIEW_RIGHT_CONTAINER_WIDTH_LARGE};
     padding: 12px;
     flex: none;
     background: ${(props) => props.theme.background.quinary};
     border-radius: 7px;
-    @media (max-width: 1199px) {
-        max-width: 320px;
+    @media (max-width: ${ScreenSizeBreakpoint.LARGE}px) {
+        max-width: ${MAIN_VIEW_RIGHT_CONTAINER_WIDTH_MEDIUM};
     }
     @media (max-width: 950px) {
         max-width: 100%;
-        padding-bottom: 40px;
     }
 `;
 
@@ -551,13 +660,7 @@ const OverBonus = styled.span`
     }
 `;
 
-const ScrollContainer = styled.div`
-    margin-bottom: 11px;
-`;
-
-const ListContainer = styled(FlexDivColumn)<{ isScrollVisible: boolean }>`
-    ${(props) => (props.isScrollVisible ? 'padding-right: 10px;' : '')}
-`;
+const ListContainer = styled(FlexDivColumn)``;
 
 const RowMarket = styled.div<{ outOfLiquidity: boolean; notOpened?: boolean }>`
     display: flex;
@@ -632,7 +735,7 @@ const RowMarket = styled.div<{ outOfLiquidity: boolean; notOpened?: boolean }>`
 
 const Empty = styled(FlexDivColumn)`
     align-items: center;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 `;
 
 const EmptyLabel = styled.span`
@@ -658,8 +761,8 @@ const EmptyDesc = styled.span`
 `;
 
 const StyledParlayEmptyIcon = styled(ParlayEmptyIcon)`
-    margin-top: 10;
-    margin-bottom: 20;
+    margin-top: 10px;
+    margin-bottom: 20px;
     width: 100px;
     height: 100px;
     path {
@@ -669,7 +772,7 @@ const StyledParlayEmptyIcon = styled(ParlayEmptyIcon)`
 
 const BetTypeContainer = styled(FlexDivSpaceBetween)``;
 
-const RadioButtonContainer = styled.div`
+export const RadioButtonContainer = styled.div`
     position: relative;
 
     label {
@@ -708,6 +811,98 @@ const BetaTag = styled.div`
     font-size: 10px;
     line-height: 10px;
     padding: 2px 4px;
+`;
+
+const Section = styled(FlexDivSpaceBetween)`
+    position: relative;
+    width: 100%;
+`;
+
+const AlignedParagraph = styled.p`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
+const Label = styled(AlignedParagraph)`
+    color: ${(props) => props.theme.textColor.primary};
+    font-size: 14px;
+    font-weight: 500;
+    white-space: pre;
+`;
+
+const SubLabel = styled(Label)`
+    font-weight: 400;
+    text-transform: none;
+`;
+
+const Value = styled(AlignedParagraph)`
+    color: ${(props) => props.theme.textColor.quaternary};
+    font-size: 14px;
+    line-height: 14px;
+    font-weight: 700;
+    white-space: pre;
+`;
+
+const SubValue = styled(Value)`
+    color: ${(props) => props.theme.textColor.quaternary};
+`;
+
+const SubHeaderIcon = styled.i`
+    font-size: 20px;
+    margin-right: 4px;
+    font-weight: 400;
+    text-transform: none;
+`;
+
+const SubHeaderWrapper = styled(FlexDivRow)`
+    &::after,
+    &:before {
+        display: inline-block;
+        content: '';
+        border-top: 2px solid ${(props) => props.theme.borderColor.senary};
+        width: 100%;
+        margin-top: 40px;
+        transform: translateY(-1rem);
+    }
+`;
+
+const Header = styled(FlexDivRow)`
+    font-weight: 600;
+    font-size: 14px;
+    color: ${(props) => props.theme.textColor.septenary};
+    text-transform: uppercase;
+    padding: 15px 0;
+    justify-content: center;
+    align-items: center;
+`;
+
+const SubHeader = styled(Header)`
+    width: 300px;
+`;
+
+const CurrencyIcon = styled.i`
+    font-size: 20px !important;
+    margin: 0 3px 3px 3px;
+    font-weight: 400 !important;
+    text-transform: none !important;
+    color: ${(props) => props.theme.textColor.quaternary};
+`;
+
+const SectionWrapper = styled(FlexDivColumnCentered)`
+    width: 100%;
+    gap: 8px;
+`;
+
+const UseOverDiv = styled.div`
+    margin-top: 15px;
+    border-radius: 6px;
+    padding: 8px;
+    width: 100%;
+    text-align: center;
+    background: linear-gradient(90deg, #1f274d 0%, #3c498a 100%);
+    font-size: 14px;
+    color: ${(props) => props.theme.textColor.quaternary};
 `;
 
 export default Parlay;

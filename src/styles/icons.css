@@ -9,6 +9,26 @@
     content: '\0022';
 }
 
+.icon--brackets::before {
+    content: '\0023';
+}
+
+.icon--thales-logo::before {
+    content: '\0026';
+}
+
+.icon--wrong-full::before {
+    content: '\0028';
+}
+
+.icon--correct-full::before {
+    content: '\0029';
+}
+
+.icon--aussierules:before {
+    content: '\002A';
+}
+
 .icon--politics:before {
     content: '\002E';
 }
@@ -297,22 +317,6 @@
     content: '\007E';
 }
 
-.icon--correct-full::before {
-    content: '\0080';
-}
-
-.icon--wrong-full::before {
-    content: '\0081';
-}
-
-.icon--thales-logo::before {
-    content: '\0083';
-}
-
-.icon--brackets::before {
-    content: '\0086';
-}
-
 .icon--op-rewards::before {
     content: '\00A9';
 }
@@ -493,6 +497,10 @@
     content: '\0101';
 }
 
+.icon--darts::before {
+    content: '\0108';
+}
+
 .icon--lock:before {
     content: '\0121';
 }
@@ -539,4 +547,8 @@
 
 .icon--over:before {
     content: '\0125';
+}
+
+.icon--sol::before {
+    content: '\00B9';
 }

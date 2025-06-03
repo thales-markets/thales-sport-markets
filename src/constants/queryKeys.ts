@@ -2,12 +2,19 @@ import { StatusFilter } from 'enums/markets';
 import { Network } from 'enums/network';
 import { RiskManagementRole } from 'enums/riskManagement';
 import { League } from 'overtime-utils';
+import { Coins } from 'thales-utils';
 import { LiquidityPoolCollateral } from '../enums/liquidityPool';
 
 const QUERY_KEYS = {
     Ticket: (networkId: Network, ticketAddress: string) => ['gameTickets', networkId, ticketAddress],
     GameTickets: (networkId: Network, gameId: string) => ['gameTickets', networkId, gameId],
     UserTickets: (networkId: Network, walletAddress: string) => ['userTickets', networkId, walletAddress],
+    OtherSingles: (networkId: Network, walletAddress: string, gameId: string) => [
+        'otherSingles',
+        networkId,
+        walletAddress,
+        gameId,
+    ],
     SportMarketsV2: (
         statusFilter: StatusFilter,
         networkId: Network,
@@ -59,8 +66,13 @@ const QUERY_KEYS = {
         positions,
         lives,
     ],
-    LiveTradingProcessorData: (networkId: Network) => ['liveTradingProcessorData', networkId],
-    ClaimableCountV2: (walletAddress: string, networkId: Network) => ['claimable', 'countV2', walletAddress, networkId],
+    LiveTradingProcessor: (networkId: Network) => ['liveTradingProcessor', networkId],
+    LiveTradingProcessorData: (networkId: Network, walletAddress: string) => [
+        'liveTradingProcessorData',
+        networkId,
+        walletAddress,
+    ],
+    PositionsCountV2: (walletAddress: string, networkId: Network) => ['positions', 'countV2', walletAddress, networkId],
     Wallet: {
         MultipleCollateral: (walletAddress: string, networkId: Network) => [
             'multipleCollateral',
@@ -80,6 +92,22 @@ const QUERY_KEYS = {
         LpStats: (round: number, leagueId: League, onlyPP: boolean, networkId: Network) => [
             'pnl',
             'lpStats',
+            round,
+            leagueId,
+            onlyPP,
+            networkId,
+        ],
+        LpPpStatsByType: (round: number, leagueId: League, onlyPP: boolean, networkId: Network) => [
+            'pnl',
+            'lpPpStatsByType',
+            round,
+            leagueId,
+            onlyPP,
+            networkId,
+        ],
+        LpPpStatsByLeague: (round: number, leagueId: League, onlyPP: boolean, networkId: Network) => [
+            'pnl',
+            'lpPpStatsByLeague',
             round,
             leagueId,
             onlyPP,
@@ -143,6 +171,13 @@ const QUERY_KEYS = {
             liquidityPoolAddress,
             networkId,
         ],
+        TicketData: (collateral: Coins, ticketAddress: string, networkId: Network) => [
+            'liquidityPool',
+            'ticketData',
+            collateral,
+            ticketAddress,
+            networkId,
+        ],
     },
     CheckPausedAMM: (networkId: Network) => ['checkPausedAMM', networkId],
     Rates: {
@@ -172,19 +207,6 @@ const QUERY_KEYS = {
         walletAddress,
         role,
     ],
-    MarchMadness: {
-        Data: (walletAddress: string, networkId: Network) => ['marchMadness', 'data', walletAddress, networkId],
-        Bracket: (tokenId: number, networkId: Network) => ['marchMadness', 'bracket', tokenId, networkId],
-        Stats: (networkId: Network) => ['marchMadness', 'stats', networkId],
-        Competition: {
-            LeaderboardByVolume: (networkId: Network) => ['marchMadness', 'leaderboardByVolume', networkId],
-            LeaderboardByNumberOfCorrectPredictions: (networkId: Network) => [
-                'marchMadness',
-                'leaderboardByCorrectPred',
-                networkId,
-            ],
-        },
-    },
 };
 
 export default QUERY_KEYS;
