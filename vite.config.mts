@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { ConfigEnv, Plugin, PluginOption, defineConfig, loadEnv } from 'vite';
 import checker from 'vite-plugin-checker';
+import viteCompression from 'vite-plugin-compression';
 import eslint from 'vite-plugin-eslint';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import svgr from 'vite-plugin-svgr';
@@ -29,6 +30,10 @@ const particleWasmPlugin: Plugin | undefined = {
 
 const plugins = (_mode: string): PluginOption[] => {
     return [
+        viteCompression({
+            algorithm: 'brotliCompress', // Use Brotli
+            ext: '.br',
+        }),
         react(),
         tsconfigPaths(),
         svgr(),
