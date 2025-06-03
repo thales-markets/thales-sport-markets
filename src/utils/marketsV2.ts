@@ -1,4 +1,4 @@
-import { LIVE_MARKET_STALE_PAUSED_MINUTES, NOT_AVAILABLE } from 'constants/markets';
+import { LIVE_MARKETS_STALE_PAUSED_MINUTES, NOT_AVAILABLE } from 'constants/markets';
 import { differenceInMinutes, secondsToMilliseconds } from 'date-fns';
 import { MarketTypeGroup } from 'enums/marketTypes';
 import { GameStatus, MarketStatus, Position } from 'enums/markets';
@@ -430,7 +430,7 @@ export const isSameMarket = (market: SportMarket | TicketPosition, ticketPositio
 export const isStalePausedMarket = (market: SportMarket) =>
     market.isPaused &&
     market.pausedAt &&
-    differenceInMinutes(Date.now(), market.pausedAt) >= LIVE_MARKET_STALE_PAUSED_MINUTES;
+    differenceInMinutes(Date.now(), market.pausedAt) >= LIVE_MARKETS_STALE_PAUSED_MINUTES;
 
 export const getTradeData = (markets: TicketMarket[]): TradeData[] =>
     markets.map((market) => {
