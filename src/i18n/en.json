@@ -287,7 +287,8 @@
             "mobile-tags": {
                 "search": "Search"
             },
-            "show-active": "Show only active sports"
+            "show-active": "Show only active sports",
+            "show-stale-paused": "Show stale paused live games"
         },
         "back-to-markets": "Back to markets",
         "back": "Back",

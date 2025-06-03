@@ -52,6 +52,7 @@ import { addHoursToCurrentDate } from 'thales-utils';
 import { MarketsCache, SportMarket, SportMarkets, TagInfo, Tags, Tournament } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { getCaseAccentInsensitiveString } from 'utils/formatters/string';
+import { isStalePausedMarket } from 'utils/marketsV2';
 import { history } from 'utils/routes';
 import { getScrollMainContainerToTop } from 'utils/scroll';
 import useQueryParam from 'utils/useQueryParams';
@@ -102,6 +103,10 @@ const Home: React.FC = () => {
     const [playerPropsCountPerTag, setPlayerPropsCountPerTag] = useState<Record<string, number>>({});
     const [playerPropsCountPerTournament, setPlayerPropsCountPerTournament] = useState<Record<string, number>>({});
     const [showActive, setShowActive] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_ACTIVE, true);
+    const [showStalePausedLive, setShowStalePausedLive] = useLocalStorage(
+        LOCAL_STORAGE_KEYS.FILTER_STALE_PAUSED_LIVE,
+        false
+    );
     const [showTicketMobileModal, setShowTicketMobileModal] = useState<boolean>(false);
     const [availableMarketTypes, setAvailableMarketTypes] = useState<MarketType[]>([]);
     const [unfilteredPlayerPropsMarkets, setUnfilteredPlayerPropsMarkets] = useState<SportMarket[]>([]);
@@ -132,6 +137,7 @@ const Home: React.FC = () => {
     const [tagParam, setTagParam] = useQueryParam('tag', '');
     const [selectedLanguage, setSelectedLanguage] = useQueryParam('lang', '');
     const [activeParam, setActiveParam] = useQueryParam('showActive', '');
+    const [stalePausedLiveParam, setStalePausedLiveParam] = useQueryParam('stalePausedLiveParam', '');
     const [tournamentParam, setTournamentParam] = useQueryParam('tournament', '');
 
     const calculateDate = (hours: number, endOfDay?: boolean) => {
@@ -207,6 +213,9 @@ const Home: React.FC = () => {
             }
 
             activeParam != '' ? setShowActive(activeParam === 'true') : setActiveParam(showActive.toString());
+            stalePausedLiveParam != ''
+                ? setShowStalePausedLive(stalePausedLiveParam === 'true')
+                : setStalePausedLiveParam(showStalePausedLive.toString());
         },
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -219,10 +228,12 @@ const Home: React.FC = () => {
 
     const liveSportMarkets = useMemo(() => {
         if (liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data) {
-            return liveSportMarketsQuery.data.live;
+            return liveSportMarketsQuery.data.live.filter(
+                (market) => showStalePausedLive || !isStalePausedMarket(market)
+            );
         }
         return undefined;
-    }, [liveSportMarketsQuery.data, liveSportMarketsQuery.isSuccess]);
+    }, [liveSportMarketsQuery.data, liveSportMarketsQuery.isSuccess, showStalePausedLive]);
 
     const gameMultipliersQuery = useGameMultipliersQuery();
 
@@ -309,7 +320,11 @@ const Home: React.FC = () => {
                   };
         const marketTypes = new Set<MarketType>();
         const allLiveMarkets =
-            liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data ? liveSportMarketsQuery.data.live : [];
+            liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data
+                ? liveSportMarketsQuery.data.live.filter(
+                      (market) => showStalePausedLive || !isStalePausedMarket(market)
+                  )
+                : [];
 
         const gameMultipliers =
             gameMultipliersQuery.isSuccess && gameMultipliersQuery.data ? gameMultipliersQuery.data : [];
@@ -486,6 +501,7 @@ const Home: React.FC = () => {
         showBurger,
         dispatch,
         tournamentFilter,
+        showStalePausedLive,
     ]);
 
     const marketsLoading =
@@ -586,7 +602,11 @@ const Home: React.FC = () => {
 
     const liveMarketsCountPerTag = useMemo(() => {
         const liveSportMarkets: SportMarkets =
-            liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data ? liveSportMarketsQuery.data.live : [];
+            liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data
+                ? liveSportMarketsQuery.data.live.filter(
+                      (market) => showStalePausedLive || !isStalePausedMarket(market)
+                  )
+                : [];
 
         const groupedMarkets = groupBy(liveSportMarkets, (market) => market.leagueId);
 
@@ -600,7 +620,7 @@ const Home: React.FC = () => {
         });
 
         return liveMarketsCountPerTag;
-    }, [liveSportMarketsQuery]);
+    }, [liveSportMarketsQuery, showStalePausedLive]);
 
     const boostedMarketsCount = useMemo(() => {
         const gameMultipliers =
@@ -634,7 +654,9 @@ const Home: React.FC = () => {
             if (selectedMarket.live) {
                 const liveMarkets: SportMarkets =
                     liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data
-                        ? liveSportMarketsQuery.data.live
+                        ? liveSportMarketsQuery.data.live.filter(
+                              (market) => showStalePausedLive || !isStalePausedMarket(market)
+                          )
                         : [];
                 return liveMarkets.find(
                     (market) => market.gameId.toLowerCase() === selectedMarket.gameId.toLowerCase()
@@ -657,6 +679,7 @@ const Home: React.FC = () => {
         liveSportMarketsQuery.data,
         liveSportMarketsQuery.isSuccess,
         selectedMarket,
+        showStalePausedLive,
     ]);
 
     const resetFilters = useCallback(() => {
@@ -681,7 +704,7 @@ const Home: React.FC = () => {
         }
     }, [location, resetFilters]);
 
-    const getShowActiveCheckbox = () => (
+    const getCheckboxFilters = () => (
         <CheckboxContainer isMobile={isMobile}>
             <Checkbox
                 checked={showActive}
@@ -712,6 +735,15 @@ const Home: React.FC = () => {
                     }
                 }}
                 label={t(`market.filter-label.show-active`)}
+            />
+            <Checkbox
+                checked={showStalePausedLive}
+                value={showStalePausedLive.toString()}
+                onChange={(e: any) => {
+                    setShowStalePausedLive(e.target.checked || false);
+                    setStalePausedLiveParam((e.target.checked || false).toString());
+                }}
+                label={t(`market.filter-label.show-stale-paused`)}
             />
         </CheckboxContainer>
     );
@@ -818,7 +850,7 @@ const Home: React.FC = () => {
                     <LogoContainer>
                         <Logo />
                     </LogoContainer>
-                    {getShowActiveCheckbox()}
+                    {getCheckboxFilters()}
                     <SportFiltersContainer>
                         {getSportFilters()}
                         {getStatusFilters()}
@@ -853,7 +885,7 @@ const Home: React.FC = () => {
                         }}
                         width={263}
                     />
-                    {getShowActiveCheckbox()}
+                    {getCheckboxFilters()}
                     <Scroll height="calc(100vh - 418px)">
                         <SportFiltersContainer>
                             {getStatusFilters()}
@@ -1161,7 +1193,8 @@ const additionalApplyFiltersButtonStyle: CSSProperties = {
     position: 'fixed',
 };
 
-const CheckboxContainer = styled.div<{ isMobile: boolean }>`
+const CheckboxContainer = styled(FlexDivColumn)<{ isMobile: boolean }>`
+    gap: 10px;
     margin-left: ${(props) => (props.isMobile ? '34px' : '5px')};
     margin-top: 15px;
     margin-bottom: 10px;

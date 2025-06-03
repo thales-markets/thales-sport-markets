@@ -9,6 +9,7 @@ export const LOCAL_STORAGE_KEYS = {
     FILTER_DATE_PERIOD: 'filterDatePeriod',
     FILTER_SPORT: 'filterSport',
     FILTER_ACTIVE: 'filterActive',
+    FILTER_STALE_PAUSED_LIVE: 'filterStalePausedLive',
     FILTER_TOURNAMENT: 'filterTournament',
     ODDS_TYPE: 'typeOdds',
     STOP_PULSING: 'stopPulsing',

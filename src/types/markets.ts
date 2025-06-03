@@ -83,6 +83,7 @@ export type SportMarket = {
     positionNames?: string[];
     errorMessage?: string;
     numberOfMarkets?: number;
+    pausedAt?: number;
     sgpSportsbooks?: string[];
 };
 
