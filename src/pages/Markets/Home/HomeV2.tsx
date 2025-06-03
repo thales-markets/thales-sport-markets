@@ -103,10 +103,6 @@ const Home: React.FC = () => {
     const [playerPropsCountPerTag, setPlayerPropsCountPerTag] = useState<Record<string, number>>({});
     const [playerPropsCountPerTournament, setPlayerPropsCountPerTournament] = useState<Record<string, number>>({});
     const [showActive, setShowActive] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_ACTIVE, true);
-    const [showStalePausedLive, setShowStalePausedLive] = useLocalStorage(
-        LOCAL_STORAGE_KEYS.FILTER_STALE_PAUSED_LIVE,
-        false
-    );
     const [showTicketMobileModal, setShowTicketMobileModal] = useState<boolean>(false);
     const [availableMarketTypes, setAvailableMarketTypes] = useState<MarketType[]>([]);
     const [unfilteredPlayerPropsMarkets, setUnfilteredPlayerPropsMarkets] = useState<SportMarket[]>([]);
@@ -137,8 +133,10 @@ const Home: React.FC = () => {
     const [tagParam, setTagParam] = useQueryParam('tag', '');
     const [selectedLanguage, setSelectedLanguage] = useQueryParam('lang', '');
     const [activeParam, setActiveParam] = useQueryParam('showActive', '');
-    const [stalePausedLiveParam, setStalePausedLiveParam] = useQueryParam('stalePausedLiveParam', '');
+    const [showStalePausedLiveParam] = useQueryParam('showStalePausedLiveParam', '');
     const [tournamentParam, setTournamentParam] = useQueryParam('tournament', '');
+
+    const showStalePausedLive = showStalePausedLiveParam === 'true';
 
     const calculateDate = (hours: number, endOfDay?: boolean) => {
         return addHoursToCurrentDate(hours, endOfDay).getTime();
@@ -213,9 +211,6 @@ const Home: React.FC = () => {
             }
 
             activeParam != '' ? setShowActive(activeParam === 'true') : setActiveParam(showActive.toString());
-            stalePausedLiveParam != ''
-                ? setShowStalePausedLive(stalePausedLiveParam === 'true')
-                : setStalePausedLiveParam(showStalePausedLive.toString());
         },
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -704,7 +699,7 @@ const Home: React.FC = () => {
         }
     }, [location, resetFilters]);
 
-    const getCheckboxFilters = () => (
+    const getShowActiveCheckbox = () => (
         <CheckboxContainer isMobile={isMobile}>
             <Checkbox
                 checked={showActive}
@@ -735,15 +730,6 @@ const Home: React.FC = () => {
                     }
                 }}
                 label={t(`market.filter-label.show-active`)}
-            />
-            <Checkbox
-                checked={showStalePausedLive}
-                value={showStalePausedLive.toString()}
-                onChange={(e: any) => {
-                    setShowStalePausedLive(e.target.checked || false);
-                    setStalePausedLiveParam((e.target.checked || false).toString());
-                }}
-                label={t(`market.filter-label.show-stale-paused`)}
             />
         </CheckboxContainer>
     );
@@ -850,7 +836,7 @@ const Home: React.FC = () => {
                     <LogoContainer>
                         <Logo />
                     </LogoContainer>
-                    {getCheckboxFilters()}
+                    {getShowActiveCheckbox()}
                     <SportFiltersContainer>
                         {getSportFilters()}
                         {getStatusFilters()}
@@ -885,8 +871,8 @@ const Home: React.FC = () => {
                         }}
                         width={263}
                     />
-                    {getCheckboxFilters()}
-                    <Scroll height="calc(100vh - 438px)">
+                    {getShowActiveCheckbox()}
+                    <Scroll height="calc(100vh - 418px)">
                         <SportFiltersContainer>
                             {getStatusFilters()}
                             {getSportFilters()}
@@ -1193,8 +1179,7 @@ const additionalApplyFiltersButtonStyle: CSSProperties = {
     position: 'fixed',
 };
 
-const CheckboxContainer = styled(FlexDivColumn)<{ isMobile: boolean }>`
-    gap: 5px;
+const CheckboxContainer = styled.div<{ isMobile: boolean }>`
     margin-left: ${(props) => (props.isMobile ? '34px' : '5px')};
     margin-top: 15px;
     margin-bottom: 10px;
