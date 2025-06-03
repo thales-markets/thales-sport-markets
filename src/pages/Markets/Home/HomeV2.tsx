@@ -1,4 +1,5 @@
 import Logo from 'assets/images/overtime-logo.svg?react';
+import BannerCarousel from 'components/BannerCarousel';
 import Button from 'components/Button';
 import Loader from 'components/Loader';
 import Scroll from 'components/Scroll';
@@ -859,6 +860,7 @@ const Home: React.FC = () => {
             <RowContainer>
                 {/* LEFT FILTERS */}
                 <LeftSidebarContainer>
+                    <BannerCarousel />
                     <Search
                         text={marketSearch}
                         handleChange={(value) => {

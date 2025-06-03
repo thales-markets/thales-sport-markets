@@ -96,7 +96,8 @@ export default defineConfig(({ mode }) => {
                         select: ['react-select'],
                         // TODO: Test biconomy and particle
                         biconomy: ['@biconomy/account'],
-                        // particle: ['@particle-network/auth-core-modal'],
+                        particleAuth: ['@particle-network/authkit'],
+                        particleUniversal: ['@particle-network/universal-account-sdk'],
                         tanstack: ['@tanstack/react-query', '@tanstack/react-table'],
                         recharts: ['recharts'],
                         scrollbars: ['react-custom-scrollbars-2', 'react-horizontal-scrolling-menu'],
