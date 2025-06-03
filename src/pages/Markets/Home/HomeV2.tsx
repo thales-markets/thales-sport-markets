@@ -886,7 +886,7 @@ const Home: React.FC = () => {
                         width={263}
                     />
                     {getCheckboxFilters()}
-                    <Scroll height="calc(100vh - 418px)">
+                    <Scroll height="calc(100vh - 438px)">
                         <SportFiltersContainer>
                             {getStatusFilters()}
                             {getSportFilters()}
@@ -1194,7 +1194,7 @@ const additionalApplyFiltersButtonStyle: CSSProperties = {
 };
 
 const CheckboxContainer = styled(FlexDivColumn)<{ isMobile: boolean }>`
-    gap: 10px;
+    gap: 5px;
     margin-left: ${(props) => (props.isMobile ? '34px' : '5px')};
     margin-top: 15px;
     margin-bottom: 10px;
