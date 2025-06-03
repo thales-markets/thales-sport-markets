@@ -11,14 +11,6 @@ import { NetworkConfig } from 'types/network';
 import { getProtectedApiRoute } from 'utils/api';
 import { packMarket } from 'utils/marketsV2';
 
-const marketsCache: MarketsCache = {
-    [StatusFilter.OPEN_MARKETS]: [],
-    [StatusFilter.ONGOING_MARKETS]: [],
-    [StatusFilter.RESOLVED_MARKETS]: [],
-    [StatusFilter.PAUSED_MARKETS]: [],
-    [StatusFilter.CANCELLED_MARKETS]: [],
-};
-
 const useSportsMarketsV2Query = (
     statusFilter: StatusFilter,
     includeProofs: boolean,
@@ -42,6 +34,13 @@ const useSportsMarketsV2Query = (
             lines
         ),
         queryFn: async () => {
+            const marketsCache: MarketsCache = {
+                [StatusFilter.OPEN_MARKETS]: [],
+                [StatusFilter.ONGOING_MARKETS]: [],
+                [StatusFilter.RESOLVED_MARKETS]: [],
+                [StatusFilter.PAUSED_MARKETS]: [],
+                [StatusFilter.CANCELLED_MARKETS]: [],
+            };
             try {
                 const status = statusFilter.toLowerCase().split('market')[0];
                 const today = new Date();

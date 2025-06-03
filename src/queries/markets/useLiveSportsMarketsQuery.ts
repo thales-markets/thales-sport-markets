@@ -7,9 +7,6 @@ import { SportMarket, SportMarkets } from 'types/markets';
 import { NetworkConfig } from 'types/network';
 import { getProtectedApiRoute } from 'utils/api';
 
-// without this every request is treated as new even though it has the same response
-const marketsCache = { live: [] as SportMarkets };
-
 const useLiveSportsMarketsQuery = (
     isLiveSelected: boolean,
     networkConfig: NetworkConfig,
@@ -18,6 +15,8 @@ const useLiveSportsMarketsQuery = (
     return useQuery<{ live: SportMarkets }>({
         queryKey: QUERY_KEYS.LiveSportMarkets(networkConfig.networkId),
         queryFn: async () => {
+            // without this every request is treated as new even though it has the same response
+            const marketsCache = { live: [] as SportMarkets };
             try {
                 const response = await axios.get<undefined, { data: { markets: SportMarkets } }>(
                     getProtectedApiRoute(networkConfig.networkId, 'live-markets'),
