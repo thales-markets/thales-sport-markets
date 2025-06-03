@@ -1,5 +1,4 @@
 import Logo from 'assets/images/overtime-logo.svg?react';
-import BannerCarousel from 'components/BannerCarousel';
 import Button from 'components/Button';
 import Loader from 'components/Loader';
 import Scroll from 'components/Scroll';
@@ -237,6 +236,7 @@ const Home: React.FC = () => {
 
     // open markets name and count per tournament
     const { openTournamentsByLeague, openMarketsCountPerTournament } = useMemo(() => {
+        const start = performance.now();
         if (lastValidOpenMarkets) {
             const tournaments: Tournament[] = [];
             const marketsCountPerTournament: any = {};
@@ -255,6 +255,9 @@ const Home: React.FC = () => {
                 }
             });
 
+            const end = performance.now();
+            console.log(`Computation openMarkets took ${end - start} ms`);
+
             return {
                 openTournamentsByLeague: groupBy(
                     uniqWith(tournaments, isEqual) as any,
@@ -263,11 +266,14 @@ const Home: React.FC = () => {
                 openMarketsCountPerTournament: marketsCountPerTournament,
             };
         }
+        const end = performance.now();
+        console.log(`Computation openMarkets took ${end - start} ms`);
         return { openTournamentsByLeague: {}, openMarketsCountPerTournament: {} };
     }, [lastValidOpenMarkets]);
 
     // live markets name and count per tournament
     const { liveTournamentsByLeague, liveMarketsCountPerTournament } = useMemo(() => {
+        const start = performance.now();
         if (lastValidLiveMarkets) {
             const tournaments: Tournament[] = [];
             const marketsCountPerTournament: any = {};
@@ -285,6 +291,9 @@ const Home: React.FC = () => {
                     }
                 }
             });
+
+            const end = performance.now();
+            console.log(`Computation live markets took ${end - start} ms`);
             return {
                 liveTournamentsByLeague: groupBy(
                     uniqWith(tournaments, isEqual) as any,
@@ -293,6 +302,8 @@ const Home: React.FC = () => {
                 liveMarketsCountPerTournament: marketsCountPerTournament,
             };
         }
+        const end = performance.now();
+        console.log(`Computation live markets took ${end - start} ms`);
         return { liveTournamentsByLeague: {}, liveMarketsCountPerTournament: {} };
     }, [lastValidLiveMarkets]);
 
@@ -848,7 +859,6 @@ const Home: React.FC = () => {
             <RowContainer>
                 {/* LEFT FILTERS */}
                 <LeftSidebarContainer>
-                    <BannerCarousel />
                     <Search
                         text={marketSearch}
                         handleChange={(value) => {
