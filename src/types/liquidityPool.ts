@@ -66,3 +66,9 @@ export type LiquidityPool = {
     address: string;
     collateral: Coins;
 };
+
+export type LiquidityPoolTicketData = {
+    round: number;
+    indexInRound: number;
+    foundInRound: boolean;
+};

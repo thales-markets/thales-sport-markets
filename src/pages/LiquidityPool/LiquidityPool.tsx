@@ -32,12 +32,12 @@ import { LiquidityPoolData, UserLiquidityPoolData } from 'types/liquidityPool';
 import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
 import { ViemContract } from 'types/viem';
-import { executeBiconomyTransactionWithConfirmation } from 'utils/biconomy';
 import { getContractInstance } from 'utils/contract';
 import { checkAllowance } from 'utils/network';
 import { refetchLiquidityPoolData } from 'utils/queryConnector';
+import { executeBiconomyTransactionWithConfirmation } from 'utils/smartAccount/biconomy/biconomy';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { delay } from 'utils/timer';
-import useBiconomy from 'utils/useBiconomy';
 import { Client, parseUnits } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
@@ -780,96 +780,102 @@ const LiquidityPool: React.FC = () => {
                         )}
                     </ContentContainer>
                     <ContentContainer>
-                        <ToggleContainer>
-                            <Toggle
-                                label={{
-                                    firstLabel: t(`liquidity-pool.tabs.${LiquidityPoolTab.DEPOSIT}`),
-                                    secondLabel: t(`liquidity-pool.tabs.${LiquidityPoolTab.WITHDRAW}`),
-                                    fontSize: '14px',
-                                }}
-                                active={selectedTab === LiquidityPoolTab.WITHDRAW}
-                                dotSize="14px"
-                                dotBackground={theme.background.secondary}
-                                dotBorder={`3px solid ${theme.borderColor.quaternary}`}
-                                handleClick={() => {
-                                    setSelectedTab(
-                                        selectedTab === LiquidityPoolTab.DEPOSIT
-                                            ? LiquidityPoolTab.WITHDRAW
-                                            : LiquidityPoolTab.DEPOSIT
-                                    );
-                                }}
-                            />
-                        </ToggleContainer>
+                        {paramCollateral !== LiquidityPoolCollateral.THALES && (
+                            <ToggleContainer>
+                                <Toggle
+                                    label={{
+                                        firstLabel: t(`liquidity-pool.tabs.${LiquidityPoolTab.DEPOSIT}`),
+                                        secondLabel: t(`liquidity-pool.tabs.${LiquidityPoolTab.WITHDRAW}`),
+                                        fontSize: '14px',
+                                    }}
+                                    active={selectedTab === LiquidityPoolTab.WITHDRAW}
+                                    dotSize="14px"
+                                    dotBackground={theme.background.secondary}
+                                    dotBorder={`3px solid ${theme.borderColor.quaternary}`}
+                                    handleClick={() => {
+                                        setSelectedTab(
+                                            selectedTab === LiquidityPoolTab.DEPOSIT
+                                                ? LiquidityPoolTab.WITHDRAW
+                                                : LiquidityPoolTab.DEPOSIT
+                                        );
+                                    }}
+                                />
+                            </ToggleContainer>
+                        )}
                         <InputButtonContainer>
-                            {selectedTab === LiquidityPoolTab.DEPOSIT && (
-                                <>
-                                    {isWithdrawalRequested && (
-                                        <WarningContentInfo>
-                                            <Trans i18nKey="liquidity-pool.deposit-withdrawal-warning" />
-                                        </WarningContentInfo>
-                                    )}
-                                    {isLiquidityPoolCapReached && (
-                                        <WarningContentInfo>
-                                            <Trans i18nKey="liquidity-pool.deposit-liquidity-pool-cap-reached-warning" />
-                                        </WarningContentInfo>
-                                    )}
-                                    {isMaximumAmountOfUsersReached && (
-                                        <WarningContentInfo>
-                                            <Trans i18nKey="liquidity-pool.deposit-max-amount-of-users-warning" />
-                                        </WarningContentInfo>
-                                    )}
-                                    <NumericInput
-                                        value={amount}
-                                        label="Deposit"
-                                        disabled={isDepositAmountInputDisabled}
-                                        onChange={(_, value) => setAmount(value)}
-                                        placeholder={t('liquidity-pool.deposit-amount-placeholder')}
-                                        currencyLabel={
-                                            paramCollateral === LiquidityPoolCollateral.WETH ? undefined : collateral
-                                        }
-                                        showValidation={
-                                            insufficientBalance || exceededLiquidityPoolCap || invalidAmount
-                                        }
-                                        validationMessage={t(
-                                            `${
-                                                insufficientBalance
-                                                    ? 'common.errors.insufficient-balance'
-                                                    : exceededLiquidityPoolCap
-                                                    ? 'liquidity-pool.deposit-liquidity-pool-cap-error'
-                                                    : 'liquidity-pool.deposit-min-amount-error'
-                                            }`,
-                                            {
-                                                amount: formatCurrencyWithKey(
-                                                    collateral,
-                                                    liquidityPoolData.minDepositAmount
-                                                ),
+                            {selectedTab === LiquidityPoolTab.DEPOSIT &&
+                                paramCollateral !== LiquidityPoolCollateral.THALES && (
+                                    <>
+                                        {isWithdrawalRequested && (
+                                            <WarningContentInfo>
+                                                <Trans i18nKey="liquidity-pool.deposit-withdrawal-warning" />
+                                            </WarningContentInfo>
+                                        )}
+                                        {isLiquidityPoolCapReached && (
+                                            <WarningContentInfo>
+                                                <Trans i18nKey="liquidity-pool.deposit-liquidity-pool-cap-reached-warning" />
+                                            </WarningContentInfo>
+                                        )}
+                                        {isMaximumAmountOfUsersReached && (
+                                            <WarningContentInfo>
+                                                <Trans i18nKey="liquidity-pool.deposit-max-amount-of-users-warning" />
+                                            </WarningContentInfo>
+                                        )}
+                                        <NumericInput
+                                            value={amount}
+                                            label="Deposit"
+                                            disabled={isDepositAmountInputDisabled}
+                                            onChange={(_, value) => setAmount(value)}
+                                            placeholder={t('liquidity-pool.deposit-amount-placeholder')}
+                                            currencyLabel={
+                                                paramCollateral === LiquidityPoolCollateral.WETH
+                                                    ? undefined
+                                                    : collateral
                                             }
-                                        )}
-                                        currencyComponent={
-                                            paramCollateral === LiquidityPoolCollateral.WETH ? (
-                                                <CollateralSelector
-                                                    collateralArray={WETH_COLLATERALS}
-                                                    selectedItem={selectedCollateralIndex}
-                                                    onChangeCollateral={(index: number) => {
-                                                        setSelectedCollateralIndex(index);
-                                                    }}
-                                                    isDetailedView
-                                                    preventPaymentCollateralChange
-                                                    collateralBalances={multipleCollateralBalanceQuery.data}
-                                                    exchangeRates={exchangeRates}
-                                                />
-                                            ) : undefined
-                                        }
-                                        validationPlacement="bottom"
-                                        balance={formatCurrencyWithKey(
-                                            ethSelected ? CRYPTO_CURRENCY_MAP.ETH : collateral,
-                                            paymentTokenBalance
-                                        )}
-                                    />
-                                    {getDepositSubmitButton()}
-                                </>
-                            )}
-                            {selectedTab === LiquidityPoolTab.WITHDRAW && (
+                                            showValidation={
+                                                insufficientBalance || exceededLiquidityPoolCap || invalidAmount
+                                            }
+                                            validationMessage={t(
+                                                `${
+                                                    insufficientBalance
+                                                        ? 'common.errors.insufficient-balance'
+                                                        : exceededLiquidityPoolCap
+                                                        ? 'liquidity-pool.deposit-liquidity-pool-cap-error'
+                                                        : 'liquidity-pool.deposit-min-amount-error'
+                                                }`,
+                                                {
+                                                    amount: formatCurrencyWithKey(
+                                                        collateral,
+                                                        liquidityPoolData.minDepositAmount
+                                                    ),
+                                                }
+                                            )}
+                                            currencyComponent={
+                                                paramCollateral === LiquidityPoolCollateral.WETH ? (
+                                                    <CollateralSelector
+                                                        collateralArray={WETH_COLLATERALS}
+                                                        selectedItem={selectedCollateralIndex}
+                                                        onChangeCollateral={(index: number) => {
+                                                            setSelectedCollateralIndex(index);
+                                                        }}
+                                                        isDetailedView
+                                                        preventPaymentCollateralChange
+                                                        collateralBalances={multipleCollateralBalanceQuery.data}
+                                                        exchangeRates={exchangeRates}
+                                                    />
+                                                ) : undefined
+                                            }
+                                            validationPlacement="bottom"
+                                            balance={formatCurrencyWithKey(
+                                                ethSelected ? CRYPTO_CURRENCY_MAP.ETH : collateral,
+                                                paymentTokenBalance
+                                            )}
+                                        />
+                                        {getDepositSubmitButton()}
+                                    </>
+                                )}
+                            {(selectedTab === LiquidityPoolTab.WITHDRAW ||
+                                paramCollateral === LiquidityPoolCollateral.THALES) && (
                                 <>
                                     {((liquidityPoolData && userLiquidityPoolData && !isWithdrawalRequested) ||
                                         !isConnected) && (

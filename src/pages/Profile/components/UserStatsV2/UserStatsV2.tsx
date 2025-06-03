@@ -1,4 +1,5 @@
 import { useAuthCore } from '@particle-network/authkit';
+import ClaimBetFromCode from 'components/ClaimBetFromCode';
 import ClaimFreeBetButton from 'components/ClaimFreeBetButton';
 import ToggleWallet from 'components/ToggleWallet';
 import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
@@ -25,7 +26,7 @@ import { Coins, formatCurrencyWithSign, truncateAddress } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import { isStableCurrency, sortCollateralBalances } from 'utils/collaterals';
-import useBiconomy from 'utils/useBiconomy';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
 
 const UserStats: React.FC = () => {
@@ -235,6 +236,8 @@ const UserStats: React.FC = () => {
                         })}
                 </SectionWrapper>
             )}
+            <SubHeaderWrapper />
+            <ClaimBetFromCode />
             <ClaimFreeBetButton pulsate />
         </Wrapper>
     );

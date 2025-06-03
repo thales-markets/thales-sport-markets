@@ -1,10 +1,11 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import axios from 'axios';
-import { generalConfig, noCacheConfig } from 'config/general';
+import { noCacheConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
 import { secondsToMilliseconds } from 'date-fns';
 import { SportMarket, SportMarkets } from 'types/markets';
 import { NetworkConfig } from 'types/network';
+import { getProtectedApiRoute } from 'utils/api';
 
 // without this every request is treated as new even though it has the same response
 const marketsCache = { live: [] as SportMarkets };
@@ -19,7 +20,7 @@ const useLiveSportsMarketsQuery = (
         queryFn: async () => {
             try {
                 const response = await axios.get<undefined, { data: { markets: SportMarkets } }>(
-                    `${generalConfig.API_URL}/overtime-v2/networks/${networkConfig.networkId}/live-markets`,
+                    getProtectedApiRoute(networkConfig.networkId, 'live-markets'),
                     noCacheConfig
                 );
 

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { TagInfo, Tags, Tournament } from 'types/markets';
-import Tag from '../Tag/Tag';
+import Tag from '../Tag';
 
 const favouritesTag = {
     id: -1,
@@ -25,6 +25,7 @@ type TagsDropdownProps = {
     sport: SportFilter;
     tournamentsByLeague: Record<number, Tournament[]>;
     marketsCountPerTournament: any;
+    playerPropsCountPerTournament: any;
 };
 
 const TagsDropdown: React.FC<TagsDropdownProps> = ({
@@ -40,6 +41,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
     sport,
     tournamentsByLeague,
     marketsCountPerTournament,
+    playerPropsCountPerTournament,
 }) => {
     const dispatch = useDispatch();
     const favouriteLeagues = useSelector(getFavouriteLeagues);
@@ -120,6 +122,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                     showLive={sport == SportFilter.Live}
                                     sport={sport}
                                     marketsCountPerTournament={marketsCountPerTournament}
+                                    playerPropsCountPerTournament={playerPropsCountPerTournament}
                                     tag={tag}
                                     tournaments={tournamentsByLeague[tag.id] || []}
                                 ></Tag>

@@ -35,7 +35,8 @@ const getIsDrawAvailable = (leagueId: number, marketType: MarketType) =>
     (getLeagueIsDrawAvailable(leagueId) ||
         getLeagueSport(leagueId) === Sport.BASEBALL ||
         getLeagueSport(leagueId) === Sport.CRICKET ||
-        getLeagueSport(leagueId) === Sport.HOCKEY) &&
+        getLeagueSport(leagueId) === Sport.HOCKEY ||
+        getLeagueSport(leagueId) === Sport.DARTS) &&
     isDrawAvailableMarket(marketType);
 
 export const getPositionOrder = (leagueId: number, marketType: MarketType, position: number) =>
@@ -60,12 +61,13 @@ export const getMarketTypeTooltipKey = (marketType: MarketType) => {
     return marketTypeInfo ? marketTypeInfo.tooltipKey : undefined;
 };
 
-export const isWithinSlippage = (originalOdd: number, newOdd: number, slippage: number): boolean => {
-    if (originalOdd === newOdd) {
+export const isOddsChangeAllowed = (originalOdd: number, newOdd: number, slippage: number): boolean => {
+    if (originalOdd >= newOdd) {
+        // new quote is better
         return true;
     }
     const allowedChange = (originalOdd * slippage) / 100;
-    return newOdd < originalOdd ? newOdd >= originalOdd - allowedChange : newOdd <= originalOdd + allowedChange;
+    return newOdd <= originalOdd + allowedChange;
 };
 
 export const getCountryFromTournament = (tournament: string, leagueId: League): string => {

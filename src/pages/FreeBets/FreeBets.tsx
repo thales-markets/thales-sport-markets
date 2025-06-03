@@ -271,6 +271,11 @@ const FreeBets: React.FC = () => {
 
 const GenerateContainer = styled(FlexDivColumnNative)`
     margin-top: 100px;
+    @media (max-width: 767px) {
+        width: 100%;
+        padding: 5px;
+        font-size: 14px;
+    }
 `;
 
 export const CopyIcon = styled.i`
@@ -278,7 +283,7 @@ export const CopyIcon = styled.i`
     cursor: pointer;
     font-weight: 400;
     color: ${(props) => props.theme.overdrop.textColor.primary};
-    @media (max-width: 575px) {
+    @media (max-width: 767px) {
         font-size: 20px;
     }
 `;
@@ -287,7 +292,7 @@ const Header = styled(FlexDivRow)`
     position: absolute;
     top: 100px;
     width: 100%;
-    @media (max-width: 950px) {
+    @media (max-width: 767px) {
         margin-bottom: 15px;
     }
 `;
@@ -301,6 +306,7 @@ const NavWrapper = styled(FlexDivRow)`
 `;
 
 const NavItemWrapper = styled(FlexDivRow)`
+    gap: 20px;
     width: 200px;
     position: relative;
     padding: 0 40px;

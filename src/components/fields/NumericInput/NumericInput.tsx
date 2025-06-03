@@ -41,6 +41,7 @@ type NumericInputProps = {
     background?: string;
     fontWeight?: string;
     color?: string;
+    preventAutoFocus?: boolean;
 };
 
 const INVALID_CHARS = ['-', '+', 'e'];
@@ -74,6 +75,7 @@ const NumericInput: React.FC<NumericInputProps> = ({
     enableCurrencyComponentOnly,
     borderColor,
     containerWidth,
+    preventAutoFocus,
     ...rest
 }) => {
     const { t } = useTranslation();
@@ -113,7 +115,7 @@ const NumericInput: React.FC<NumericInputProps> = ({
             )}
             <Tooltip overlay={showValidation ? validationMessage || '' : ''} isValidation={showValidation}>
                 <StyledInput
-                    autoFocus
+                    autoFocus={!preventAutoFocus}
                     readOnly={readonly}
                     {...rest}
                     value={value}

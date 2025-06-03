@@ -1,0 +1,139 @@
+import styled from 'styled-components';
+import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivSpaceBetween } from 'styles/common';
+
+export const Container = styled(FlexDivColumnCentered)`
+    border: 1px solid ${(props) => props.theme.borderColor.primary};
+    background: ${(props) => props.theme.background.primary};
+    border-radius: 15px;
+    align-items: center;
+    padding: 30px 40px 30px 40px;
+    @media (max-width: 950px) {
+        width: auto;
+        height: auto;
+    }
+`;
+
+export const Title = styled.span`
+    color: ${(props) => props.theme.textColor.primary};
+    font-size: 27px;
+    font-weight: 600;
+    line-height: 32px;
+    letter-spacing: 0.025em;
+    text-align: center;
+    @media (max-width: 575px) {
+        font-size: 18px;
+        margin-top: 0px;
+    }
+`;
+
+export const Description = styled.span`
+    color: ${(props) => props.theme.textColor.primary};
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 17px;
+    text-align: left;
+    margin: 15px 0;
+    @media (max-width: 575px) {
+        font-size: 13px;
+        line-height: 14px;
+        margin: 5px 0;
+    }
+`;
+
+export const MarketDataContainer = styled(FlexDivColumn)`
+    align-items: start;
+    width: 100%;
+`;
+
+const Text = styled.span`
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 13px;
+    letter-spacing: 0.025em;
+    text-align: center;
+    margin-top: 5px;
+    @media (max-width: 575px) {
+        font-size: 12px;
+        margin-top: 5px;
+    }
+`;
+
+export const Label = styled(Text)`
+    color: ${(props) => props.theme.textColor.primary};
+    margin-top: 15px;
+`;
+
+export const Value = styled(Text)`
+    color: ${(props) => props.theme.textColor.quaternary};
+`;
+
+export const InputContainer = styled.div`
+    position: relative;
+    width: 100%;
+    margin-top: 20px;
+    @media (max-width: 575px) {
+        margin-top: 10px;
+    }
+`;
+
+export const ButtonContainer = styled(FlexDivSpaceBetween)<{ isCancel: boolean }>`
+    gap: 10px;
+    width: 100%;
+    justify-content: ${(props) => (props.isCancel ? 'space-between' : 'center')};
+`;
+
+export const defaultCustomStyles = {
+    content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-48%',
+        transform: 'translate(-50%, -50%)',
+        padding: '0px',
+        background: 'transparent',
+        border: 'none',
+        overflow: 'none',
+    },
+    overlay: {
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        backdropFilter: 'blur(10px)',
+        zIndex: 202,
+    },
+};
+
+export const CloseIcon = styled.i`
+    font-size: 16px;
+    color: ${(props) => props.theme.textColor.secondary};
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    padding: 16px 18px;
+    cursor: pointer;
+    @media (max-width: 950px) {
+        right: 0px;
+        top: 0px;
+        font-size: 18px;
+        padding: 12px 10px 15px 15px;
+    }
+`;
+
+export const defaultButtonProps = {
+    width: '300px',
+    margin: '10px 0 0 0',
+};
+
+export const LoaderContainer = styled(FlexDivColumn)`
+    position: relative;
+    margin: 10px 0 8px 8px;
+`;
+
+export const NotFoundValidation = styled(FlexDivCentered)`
+    font-size: 13px;
+    font-weight: 600;
+    color: ${(props) => props.theme.warning.textColor.primary};
+    width: 100%;
+    border-radius: 5px;
+    text-align: center;
+    margin: 20px 0 0 0;
+`;

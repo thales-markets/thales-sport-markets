@@ -13,7 +13,7 @@ import { LiquidityPool } from 'types/liquidityPool';
 import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
 import { buildHref } from 'utils/routes';
-import useBiconomy from 'utils/useBiconomy';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
 
 type UserLPProps = {

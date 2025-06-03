@@ -58,15 +58,9 @@ const MarketsList: React.FC<MarketsListProps> = ({ markets, league, language }) 
         [isSportByTournamentSelected, markets]
     );
 
-    const selectedLeagueId = useMemo(() => (isPlayerPropsSelected && !league ? markets[0].leagueId : league), [
-        league,
-        isPlayerPropsSelected,
-        markets,
-    ]);
-
     return (
         <>
-            {selectedLeagueId && (
+            {league && (
                 <LeagueCard isMarketSelected={isMarketSelected}>
                     <LeagueInfo
                         onClick={() => {
@@ -80,10 +74,7 @@ const MarketsList: React.FC<MarketsListProps> = ({ markets, league, language }) 
                             }, 1);
                         }}
                     >
-                        <LeagueFlag
-                            alt={selectedLeagueId.toString()}
-                            src={getLeagueFlagSource(Number(selectedLeagueId))}
-                        />
+                        <LeagueFlag alt={league.toString()} src={getLeagueFlagSource(Number(league))} />
                         <LeagueName>{leagueName}</LeagueName>
                         {hideLeague ? (
                             <ArrowIcon className={`icon icon--caret-right`} />
@@ -93,10 +84,10 @@ const MarketsList: React.FC<MarketsListProps> = ({ markets, league, language }) 
                     </LeagueInfo>
                     {!isMarketSelected && (
                         <>
-                            <IncentivizedLeague league={selectedLeagueId} />
+                            <IncentivizedLeague league={league} />
                             <StarIcon
                                 onClick={() => {
-                                    dispatch(setFavouriteLeague(selectedLeagueId));
+                                    dispatch(setFavouriteLeague(league));
                                 }}
                                 className={`icon icon--${isFavourite ? 'star-full selected' : 'favourites'} `}
                             />
@@ -112,14 +103,14 @@ const MarketsList: React.FC<MarketsListProps> = ({ markets, league, language }) 
                         </GamesContainer>
                     ))}
                 </>
-            ) : isSportByTournamentSelected && marketsMapByTournament && selectedLeagueId ? (
+            ) : isSportByTournamentSelected && marketsMapByTournament && league ? (
                 <GamesContainer hidden={hideLeague && !!league}>
                     {Object.keys(marketsMapByTournament).map((key) => (
                         <TournamentMarketsList
                             key={key}
                             markets={marketsMapByTournament[key]}
                             tournament={key}
-                            leagueId={selectedLeagueId}
+                            leagueId={league}
                             language={language}
                         />
                     ))}

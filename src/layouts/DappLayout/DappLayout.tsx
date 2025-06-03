@@ -24,7 +24,7 @@ import { RootState } from 'types/redux';
 import { isMobile } from 'utils/device';
 import { getFreeBetModalShown, setFreeBetModalShown } from 'utils/freeBet';
 import { setReferralId } from 'utils/referral';
-import useBiconomy from 'utils/useBiconomy';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { useAccount, useChainId, useSwitchChain } from 'wagmi';
 import Banner from '../../components/Banner';
 import DappFooter from './DappFooter';

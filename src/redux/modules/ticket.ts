@@ -1,12 +1,13 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { SGP_BET_MAX_MARKETS } from 'constants/markets';
+import { DEFAULT_SLIPPAGE_PERCENTAGE, LATEST_LIVE_REQUESTS_SIZE, SGP_BET_MAX_MARKETS } from 'constants/markets';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { TicketErrorCode } from 'enums/markets';
 import { Network } from 'enums/network';
 import { WritableDraft } from 'immer/dist/internal';
+import { omit, orderBy } from 'lodash';
 import { isFuturesMarket, isPlayerPropsMarket } from 'overtime-utils';
 import { localStore } from 'thales-utils';
-import { ParlayPayment, SerializableSportMarket, TicketPosition } from 'types/markets';
+import { ParlayPayment, SerializableSportMarket, TicketPosition, TicketRequest } from 'types/markets';
 import { RootState, TicketSliceState } from 'types/redux';
 import { TicketError } from 'types/tickets';
 import {
@@ -25,13 +26,10 @@ const getDefaultTicket = (): TicketPosition[] => {
 };
 
 const getDefaultPayment = (): ParlayPayment => {
-    const lsSelectedCollateralIndex = localStore.get(
-        `${LOCAL_STORAGE_KEYS.COLLATERAL_INDEX}${Network.OptimismMainnet}`
-    );
     const lsForceCollateralChange = localStore.get(LOCAL_STORAGE_KEYS.COLLATERAL_CHANGED);
 
     return {
-        selectedCollateralIndex: lsSelectedCollateralIndex !== undefined ? (lsSelectedCollateralIndex as number) : 0,
+        selectedCollateralIndex: 0,
         amountToBuy: '',
         networkId: Network.OptimismMainnet,
         forceChangeCollateral: lsForceCollateralChange !== undefined ? (lsForceCollateralChange as boolean) : false,
@@ -40,7 +38,7 @@ const getDefaultPayment = (): ParlayPayment => {
 
 const getDefaultLiveSlippage = (): number => {
     const slippage = localStore.get<number>(LOCAL_STORAGE_KEYS.LIVE_BET_SLIPPAGE);
-    return slippage !== undefined ? slippage : 1;
+    return slippage !== undefined ? slippage : DEFAULT_SLIPPAGE_PERCENTAGE;
 };
 
 const getDefaultIsSystemBet = (): boolean => {
@@ -59,6 +57,7 @@ const getDefaultError = (): TicketError => {
 
 const initialState: TicketSliceState = {
     ticket: getDefaultTicket(),
+    ticketRequestsById: {},
     payment: getDefaultPayment(),
     maxTicketSize: DEFAULT_MAX_TICKET_SIZE,
     liveBetSlippage: getDefaultLiveSlippage(),
@@ -189,6 +188,43 @@ const ticketSlice = createSlice({
         removeAll: (state) => {
             _removeAll(state);
         },
+        updateTicketRequests: (state, action: PayloadAction<TicketRequest>) => {
+            const payloadTicketRequest = action.payload;
+            let requestId = payloadTicketRequest.requestId;
+            if (requestId) {
+                delete state.ticketRequestsById[payloadTicketRequest.initialRequestId];
+            } else {
+                requestId = payloadTicketRequest.initialRequestId;
+            }
+
+            state.ticketRequestsById[requestId] = {
+                initialRequestId: payloadTicketRequest.initialRequestId,
+                requestId,
+                status: payloadTicketRequest.status,
+                finalStatus: payloadTicketRequest.finalStatus,
+                errorReason: payloadTicketRequest.errorReason,
+                ticket: payloadTicketRequest.ticket,
+                buyInAmount: payloadTicketRequest.buyInAmount,
+                totalQuote: payloadTicketRequest.totalQuote,
+                payout: payloadTicketRequest.payout,
+                collateral: payloadTicketRequest.collateral,
+                timestamp: !state.ticketRequestsById[requestId]?.timestamp
+                    ? Date.now()
+                    : state.ticketRequestsById[requestId].timestamp,
+            };
+            if (Object.keys(state.ticketRequestsById).length > LATEST_LIVE_REQUESTS_SIZE) {
+                const deleteRequestIds = orderBy(Object.values(state.ticketRequestsById), ['timestamp'], ['desc'])
+                    .slice(LATEST_LIVE_REQUESTS_SIZE)
+                    .map((request) => request.requestId);
+                state.ticketRequestsById = omit(state.ticketRequestsById, deleteRequestIds);
+            }
+        },
+        removeTicketRequestById: (state, action: PayloadAction<string>) => {
+            delete state.ticketRequestsById[action.payload];
+        },
+        removeTicketRequests: (state) => {
+            state.ticketRequestsById = {};
+        },
         setLiveBetSlippage: (state, action: PayloadAction<number>) => {
             state.liveBetSlippage = action.payload;
             localStore.set(LOCAL_STORAGE_KEYS.LIVE_BET_SLIPPAGE, action.payload);
@@ -243,6 +279,9 @@ export const {
     updateTicket,
     removeFromTicket,
     removeAll,
+    updateTicketRequests,
+    removeTicketRequestById,
+    removeTicketRequests,
     setPaymentSelectedCollateralIndex,
     setPaymentAmountToBuy,
     setMaxTicketSize,
@@ -257,6 +296,7 @@ export const {
 const getTicketState = (state: RootState) => state[sliceName];
 export const getTicket = (state: RootState) => getTicketState(state).ticket;
 export const getMaxTicketSize = (state: RootState) => getTicketState(state).maxTicketSize;
+export const getTicketRequests = (state: RootState) => getTicketState(state).ticketRequestsById;
 export const getTicketPayment = (state: RootState) => getTicketState(state).payment;
 export const getLiveBetSlippage = (state: RootState) => getTicketState(state).liveBetSlippage;
 export const getIsFreeBetDisabledByUser = (state: RootState) => getTicketState(state).isFreeBetDisabledByUser;

@@ -27,4 +27,6 @@ export const LINKS = {
     UnstakingThales: 'https://www.overtime.io/token/staking',
     UnstakingLp: 'https://www.overtime.io/token/lp-staking',
     Particle: 'https://particle.network/',
+    ResolvingResultsInstructions:
+        'https://docs.google.com/document/d/1zLAwO5FQ2xgCTfu-cyXNieVIiTRcdNS-jysttvsDMm8/edit?tab=t.0#heading=h.hzo4pzm1siyl',
 };
