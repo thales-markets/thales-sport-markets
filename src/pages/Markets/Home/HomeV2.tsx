@@ -133,7 +133,7 @@ const Home: React.FC = () => {
     const [tagParam, setTagParam] = useQueryParam('tag', '');
     const [selectedLanguage, setSelectedLanguage] = useQueryParam('lang', '');
     const [activeParam, setActiveParam] = useQueryParam('showActive', '');
-    const [showStalePausedLiveParam] = useQueryParam('showStalePausedLiveParam', '');
+    const [showStalePausedLiveParam] = useQueryParam('showStalePausedLive', '');
     const [tournamentParam, setTournamentParam] = useQueryParam('tournament', '');
 
     const showStalePausedLive = showStalePausedLiveParam === 'true';
