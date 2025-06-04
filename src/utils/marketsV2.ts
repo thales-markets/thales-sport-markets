@@ -313,8 +313,7 @@ export const getTitleText = (market: SportMarket, useDescription?: boolean, shor
     }
 
     if (
-        (market.leagueId == League.SUMMER_OLYMPICS_VOLEYBALL ||
-            market.leagueId == League.SUMMER_OLYMPICS_VOLEYBALL_WOMEN) &&
+        sport === Sport.VOLLEYBALL &&
         (isTotalMarket(marketType) || isTotalOddEvenMarket(marketType) || isSpreadMarket(marketType))
     ) {
         sufix = `${sufix}${
