@@ -311,9 +311,22 @@ const Home: React.FC = () => {
         const marketTypes = new Set<MarketType>();
         const allLiveMarkets =
             liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data
-                ? liveSportMarketsQuery.data.live.filter(
-                      (market) => statusFilter === StatusFilter.PAUSED_MARKETS || !isStalePausedMarket(market)
-                  )
+                ? liveSportMarketsQuery.data.live.filter((market) => {
+                      let keepMarket = true;
+                      switch (statusFilter) {
+                          // for now all status filters for live are showing all markets which are not stale paused
+                          case StatusFilter.OPEN_MARKETS:
+                          case StatusFilter.ONGOING_MARKETS:
+                          case StatusFilter.RESOLVED_MARKETS:
+                          case StatusFilter.CANCELLED_MARKETS:
+                              keepMarket = !isStalePausedMarket(market);
+                              break;
+                          case StatusFilter.PAUSED_MARKETS:
+                              keepMarket = market.isPaused;
+                              break;
+                      }
+                      return keepMarket;
+                  })
                 : [];
 
         const gameMultipliers =
