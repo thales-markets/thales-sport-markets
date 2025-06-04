@@ -52,6 +52,7 @@ import { addHoursToCurrentDate } from 'thales-utils';
 import { MarketsCache, SportMarket, SportMarkets, TagInfo, Tags, Tournament } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { getCaseAccentInsensitiveString } from 'utils/formatters/string';
+import { isStalePausedMarket } from 'utils/marketsV2';
 import { history } from 'utils/routes';
 import { getScrollMainContainerToTop } from 'utils/scroll';
 import useQueryParam from 'utils/useQueryParams';
@@ -132,7 +133,10 @@ const Home: React.FC = () => {
     const [tagParam, setTagParam] = useQueryParam('tag', '');
     const [selectedLanguage, setSelectedLanguage] = useQueryParam('lang', '');
     const [activeParam, setActiveParam] = useQueryParam('showActive', '');
+    const [showStalePausedLiveParam] = useQueryParam('showStalePausedLive', '');
     const [tournamentParam, setTournamentParam] = useQueryParam('tournament', '');
+
+    const showStalePausedLive = showStalePausedLiveParam === 'true';
 
     const calculateDate = (hours: number, endOfDay?: boolean) => {
         return addHoursToCurrentDate(hours, endOfDay).getTime();
@@ -219,10 +223,12 @@ const Home: React.FC = () => {
 
     const liveSportMarkets = useMemo(() => {
         if (liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data) {
-            return liveSportMarketsQuery.data.live;
+            return liveSportMarketsQuery.data.live.filter(
+                (market) => showStalePausedLive || !isStalePausedMarket(market)
+            );
         }
         return undefined;
-    }, [liveSportMarketsQuery.data, liveSportMarketsQuery.isSuccess]);
+    }, [liveSportMarketsQuery.data, liveSportMarketsQuery.isSuccess, showStalePausedLive]);
 
     const gameMultipliersQuery = useGameMultipliersQuery();
 
@@ -309,7 +315,11 @@ const Home: React.FC = () => {
                   };
         const marketTypes = new Set<MarketType>();
         const allLiveMarkets =
-            liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data ? liveSportMarketsQuery.data.live : [];
+            liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data
+                ? liveSportMarketsQuery.data.live.filter(
+                      (market) => showStalePausedLive || !isStalePausedMarket(market)
+                  )
+                : [];
 
         const gameMultipliers =
             gameMultipliersQuery.isSuccess && gameMultipliersQuery.data ? gameMultipliersQuery.data : [];
@@ -486,6 +496,7 @@ const Home: React.FC = () => {
         showBurger,
         dispatch,
         tournamentFilter,
+        showStalePausedLive,
     ]);
 
     const marketsLoading =
@@ -586,7 +597,11 @@ const Home: React.FC = () => {
 
     const liveMarketsCountPerTag = useMemo(() => {
         const liveSportMarkets: SportMarkets =
-            liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data ? liveSportMarketsQuery.data.live : [];
+            liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data
+                ? liveSportMarketsQuery.data.live.filter(
+                      (market) => showStalePausedLive || !isStalePausedMarket(market)
+                  )
+                : [];
 
         const groupedMarkets = groupBy(liveSportMarkets, (market) => market.leagueId);
 
@@ -600,7 +615,7 @@ const Home: React.FC = () => {
         });
 
         return liveMarketsCountPerTag;
-    }, [liveSportMarketsQuery]);
+    }, [liveSportMarketsQuery, showStalePausedLive]);
 
     const boostedMarketsCount = useMemo(() => {
         const gameMultipliers =
@@ -634,7 +649,9 @@ const Home: React.FC = () => {
             if (selectedMarket.live) {
                 const liveMarkets: SportMarkets =
                     liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data
-                        ? liveSportMarketsQuery.data.live
+                        ? liveSportMarketsQuery.data.live.filter(
+                              (market) => showStalePausedLive || !isStalePausedMarket(market)
+                          )
                         : [];
                 return liveMarkets.find(
                     (market) => market.gameId.toLowerCase() === selectedMarket.gameId.toLowerCase()
@@ -657,6 +674,7 @@ const Home: React.FC = () => {
         liveSportMarketsQuery.data,
         liveSportMarketsQuery.isSuccess,
         selectedMarket,
+        showStalePausedLive,
     ]);
 
     const resetFilters = useCallback(() => {
