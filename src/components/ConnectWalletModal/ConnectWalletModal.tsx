@@ -392,7 +392,7 @@ const BoxForLabel = styled.div`
     padding: 0 130px;
     height: 1px;
     background: ${(props) => props.theme.textColor.secondary};
-    margin: 40px 0;
+    margin: 30px 0;
 `;
 
 const ConnectWithLabel = styled.span`
@@ -410,7 +410,7 @@ const ConnectWithLabel = styled.span`
 const Button = styled(FlexDivCentered)<{ disabled?: boolean }>`
     border-radius: 8px;
     width: 100%;
-    height: 50px;
+    height: 40px;
     border: 1px ${(props) => props.theme.borderColor.primary} solid;
     color: ${(props) => props.theme.textColor.primary};
     font-size: 16px;
@@ -465,6 +465,13 @@ const getIcon = (socialId: ParticalTypes | WalletConnections): any => {
             );
 
         case ParticalTypes.TWITTER:
+            return (
+                <IconHolder>
+                    <X />
+                </IconHolder>
+            );
+
+        case ParticalTypes.APPLE:
             return (
                 <IconHolder>
                     <X />
