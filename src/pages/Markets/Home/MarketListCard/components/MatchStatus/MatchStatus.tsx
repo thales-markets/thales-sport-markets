@@ -11,7 +11,7 @@ import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
 import { SportMarket, SportMarketScore } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
-import { showGameScore, showLiveInfo } from 'utils/marketsV2';
+import { isStalePausedMarket, showGameScore, showLiveInfo } from 'utils/marketsV2';
 import { getOrdinalNumberLabel } from 'utils/ui';
 
 type MatchStatusProps = {
@@ -101,7 +101,9 @@ const MatchStatus: React.FC<MatchStatusProps> = ({ market }) => {
             ) : isPendingResolution ? (
                 isGamePaused ? (
                     <Status color={theme.status.paused}>
-                        {t(`markets.market-card.live-trading-paused`)}
+                        {isStalePausedMarket(market)
+                            ? t(`markets.market-card.live-trading-stale-paused`)
+                            : t(`markets.market-card.live-trading-paused`)}
                         {liveMarketErrorMessage && <Tooltip overlay={liveMarketErrorMessage} marginLeft={5} top={0} />}
                     </Status>
                 ) : liveScore ? (
