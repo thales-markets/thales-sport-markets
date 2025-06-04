@@ -11,6 +11,7 @@ import Lottie from 'lottie-react';
 import {
     getLeagueLabel,
     getLeaguePeriodType,
+    getLeagueSport,
     getLeagueTooltipKey,
     isFuturesMarket,
     League,
@@ -159,10 +160,13 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
         const isGameLive = !!market.live;
         const isGamePaused = market.isPaused;
         const isFutures = isFuturesMarket(market.typeId);
+        const leagueSport = getLeagueSport(market.leagueId);
 
         const spreadMarket = useMemo(() => {
             const spreadMarkets = market.childMarkets.filter((childMarket) =>
-                childMarket.leagueId === League.US_ELECTION
+                leagueSport === Sport.VOLLEYBALL
+                    ? childMarket.typeId === MarketType.SPREAD2
+                    : childMarket.leagueId === League.US_ELECTION
                     ? childMarket.typeId === MarketType.US_ELECTION_POPULAR_VOTE_WINNER
                     : childMarket.typeId === MarketType.SPREAD
             );
@@ -184,11 +188,13 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
             }
 
             return mainSpreadMarket;
-        }, [market, riskManagementLeaguesWithTypes]);
+        }, [leagueSport, market, riskManagementLeaguesWithTypes.leagues, riskManagementLeaguesWithTypes.spreadTypes]);
 
         const totalMarket = useMemo(() => {
             const totalMarkets = market.childMarkets.filter((childMarket) =>
-                childMarket.leagueId === League.US_ELECTION
+                leagueSport === Sport.VOLLEYBALL
+                    ? childMarket.typeId === MarketType.TOTAL2
+                    : childMarket.leagueId === League.US_ELECTION
                     ? childMarket.typeId === MarketType.US_ELECTION_WINNING_PARTY
                     : childMarket.typeId === MarketType.TOTAL
             );
@@ -211,7 +217,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
             }
 
             return mainTotalMarket;
-        }, [market, riskManagementLeaguesWithTypes]);
+        }, [leagueSport, market, riskManagementLeaguesWithTypes.leagues, riskManagementLeaguesWithTypes.totalTypes]);
 
         const marketTypeFilterMarket = useMemo(() => {
             if (marketTypeFilter === undefined) return undefined;
