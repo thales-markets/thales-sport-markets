@@ -104,7 +104,6 @@
         "errors": {
             "something-went-wrong": "Something went wrong!",
             "unknown-error-try-again": "An unknown error occurred after you submitted. Please try again.",
-            "unknown-error-try-again-general": "An unknown error occurred. Please try again.",
             "tx-canceled": "Transaction is canceled.",
             "tx-reverted": "Transaction is reverted.",
             "tx-receipt-not-received": "Unable to obtain transaction receipt. The trade might still get executed, check your created tickets.",
@@ -551,6 +550,7 @@
             "map": "Map",
             "quarter": "Quarter",
             "set": "Set",
+            "leg": "Leg",
             "inning": "Inning",
             "half": "Half",
             "round": "Round",
@@ -992,6 +992,8 @@
             "result-set-confirmation-message": "Result successfully set",
             "resolve-market-tooltip": "Resolve market",
             "cancel-ticket-tooltip": "Cancel ticket",
+            "migrate-ticket-tooltip": "Migrate ticket",
+            "resolving-instructions": "The instructions for resolving the market are on this <instructionsLink>link</instructionsLink>.",
             "validation": {
                 "unstaking-in-progress": "Unstaking in progress, you cannot stake",
                 "staking-paused": "Staking paused, please try later"
@@ -1006,6 +1008,20 @@
                 "set-result-label": "Set result",
                 "set-result-tooltip": "This action will set result for the markets with the provided gameId, typeId and playerId"
             }
+        },
+        "migrate-ticket-modal": {
+            "title": "Migrate ticket",
+            "description": "Migrate ticket from the current LP round to the new round.",
+            "ticket-id": "Ticket ID",
+            "lp": "Liquidity pool",
+            "current-round": "Current round",
+            "new-round-label": "New round (0 for the next round)",
+            "new-round-placeholder": "Enter the new round",
+            "index-in-round-label": "Index of the ticket in the round (use 0 to perform automatic lookup)",
+            "index-in-round-placeholder": "Enter the ticket index in the round",
+            "migrate-ticket-label": "Migrate ticket",
+            "migrate-ticket-confirmation-message": "Ticket successfully migrated",
+            "not-found-validaton": "Ticket not found in the current round, please double check!"
         }
     },
     "deposit": {
@@ -1278,6 +1294,7 @@
             "only-pending-tickets": "Only pending tickets (singles)",
             "only-system-bets": "Only system bets",
             "only-unresolved": "Only unresolved ({{hours}} hours)",
+            "only-finished-unresolved": "Finished unresolved ({{minutes}} min)",
             "only-pp": "Only PP tickets",
             "only-open-tickets-short": "Only open",
             "only-live-tickets-short": "Only LIVE",

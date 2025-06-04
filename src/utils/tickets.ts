@@ -202,6 +202,7 @@ export const mapTicket = (
                     childMarkets: [],
                     winningPositions: [],
                     isGameFinished: gameInfo?.isGameFinished,
+                    finishedTimestamp: gameInfo?.finishedTimestamp,
                     gameStatus: gameInfo?.gameStatus,
                     liveScore,
                     positionNames,

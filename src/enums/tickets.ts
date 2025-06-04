@@ -12,3 +12,9 @@ export enum BuyTicketStep {
     BUY,
     COMPLETED,
 }
+
+export enum TicketAction {
+    EXERCISE,
+    CANCEL,
+    MARKLOST,
+}

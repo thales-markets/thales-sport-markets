@@ -106,6 +106,8 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.USA_AHL:
         case League.USA_MAJOR_LEAGUE_CRICKET:
         case League.MLB_FUTURES:
+        case League.USA_OPEN_CUP:
+        case League.UFL:
             return `/logos/Countries/united-states-of-america.svg`;
         case League.EPL:
         case League.ENGLAND_CHAMPIONSHIP:
@@ -304,6 +306,7 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.KBO:
             return `/logos/Countries/south-korea.svg`;
         case League.CANADA_PREMIER_LEAGUE:
+        case League.CFL:
             return `/logos/Countries/canada.svg`;
         case League.SIX_NATIONS:
             return `/logos/Countries/six-nations.png`;
@@ -323,6 +326,8 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
             return `/logos/Countries/rocket-league.png`;
         case League.CALL_OF_DUTY:
             return `/logos/Countries/call-of-duty.png`;
+        case League.OVERWATCH:
+            return `/logos/Countries/overwatch.webp`;
         case League.FORMULA1_FUTURES:
             return `/logos/leagueLogos/f1.webp`;
         case League.PGA_FUTURES:
@@ -355,6 +360,8 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
             return `/logos/Countries/atp-challenger.jpg`;
         case League.IIHF_WORLD_CHAMPIONSHIP:
             return `/logos/Countries/iihf.png`;
+        case League.FIFA_CLUB_WORLD_CUP:
+            return `/logos/Countries/fifa-club-world-cup.webp`;
         default:
             return `/logos/Countries/world.svg`;
     }
