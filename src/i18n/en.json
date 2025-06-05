@@ -571,6 +571,7 @@
             "loss": "Loss",
             "won": "Won",
             "live-trading-paused": "Live trading paused",
+            "live-trading-stale-paused": "Live trading stale paused",
             "not-available-for-trading": "Not available for trading",
             "bet-type": {
                 "winner": "Winner",

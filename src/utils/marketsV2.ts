@@ -1,5 +1,5 @@
-import { NOT_AVAILABLE } from 'constants/markets';
-import { secondsToMilliseconds } from 'date-fns';
+import { LIVE_MARKETS_STALE_PAUSED_MINUTES, NOT_AVAILABLE } from 'constants/markets';
+import { differenceInMinutes, secondsToMilliseconds } from 'date-fns';
 import { MarketTypeGroup } from 'enums/marketTypes';
 import { GameStatus, MarketStatus, Position } from 'enums/markets';
 import _ from 'lodash';
@@ -313,8 +313,7 @@ export const getTitleText = (market: SportMarket, useDescription?: boolean, shor
     }
 
     if (
-        (market.leagueId == League.SUMMER_OLYMPICS_VOLEYBALL ||
-            market.leagueId == League.SUMMER_OLYMPICS_VOLEYBALL_WOMEN) &&
+        sport === Sport.VOLLEYBALL &&
         (isTotalMarket(marketType) || isTotalOddEvenMarket(marketType) || isSpreadMarket(marketType))
     ) {
         sufix = `${sufix}${
@@ -426,6 +425,11 @@ export const isSameMarket = (market: SportMarket | TicketPosition, ticketPositio
     market.playerProps.playerId === ticketPosition.playerId &&
     market.line === ticketPosition.line &&
     (byType || areSameCombinedPositions(market, ticketPosition));
+
+export const isStalePausedMarket = (market: SportMarket) =>
+    market.isPaused &&
+    market.pausedAt &&
+    differenceInMinutes(Date.now(), market.pausedAt) >= LIVE_MARKETS_STALE_PAUSED_MINUTES;
 
 export const getTradeData = (markets: TicketMarket[]): TradeData[] =>
     markets.map((market) => {

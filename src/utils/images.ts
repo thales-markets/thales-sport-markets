@@ -128,6 +128,8 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.FRANCE_PREMIERE_LIGUE_WOMEN:
         case League.FRANCE_LNH_DIVISION_1:
         case League.FRANCE_CUP:
+        case League.FRANCE_LIGUE_A:
+        case League.FRANCE_LIGUE_A_WOMEN:
             return `/logos/Countries/france.svg`;
         case League.BUNDESLIGA:
         case League.BUNDESLIGA_2:
@@ -138,6 +140,8 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.GERMANY_DEL:
         case League.GERMANY_HBL:
         case League.GERMANY_CUP:
+        case League.GERMANY_1ST_BUNDESLIGA:
+        case League.GERMANY_1ST_BUNDESLIGA_WOMEN:
             return `/logos/Countries/germany.svg`;
         case League.LA_LIGA:
         case League.LA_LIGA_2:
@@ -155,9 +159,15 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.ITALY_SUPER_CUP:
         case League.ITALY_SERIE_A_WOMEN:
         case League.ITALY_CUP:
+        case League.ITALY_COPPA_ITALIA_A1_WOMEN:
+        case League.ITALY_COPPA_ITALIA_SUPERLEGA:
+        case League.ITALY_SERIE_A1_WOMEN:
+        case League.ITALY_SUPERLEGA:
             return `/logos/Countries/italy.svg`;
         case League.J1_LEAGUE:
         case League.NPB:
+        case League.JAPAN_SV_LEAGUE:
+        case League.JAPAN_SV_LEAGUE_WOMEN:
             return `/logos/Countries/japan.svg`;
         case League.IPL:
             return `/logos/Countries/india.svg`;
@@ -175,6 +185,8 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
             return `/logos/Countries/saudi-arabia.svg`;
         case League.BRAZIL_1:
         case League.BRAZIL_CUP:
+        case League.BRAZIL_SUPERLIGA:
+        case League.BRAZIL_SUPERLIGA_WOMEN:
             return `/logos/Countries/brazil.svg`;
         case League.LIGA_MX:
             return `/logos/Countries/mexico.svg`;
@@ -182,6 +194,8 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
             return `/logos/Countries/scotland.svg`;
         case League.BELGIUM_LEAGUE:
         case League.BELGIUM_SUPER_LEAGUE_WOMEN:
+        case League.BELGIUM_LIGA_HEREN:
+        case League.BELGIUM_LIGA_DAMES:
             return `/logos/Countries/belgium.svg`;
         case League.CZECH_LEAGUE:
         case League.CZECH_REPUBLIC_EXTRALIGA:
@@ -190,12 +204,18 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
             return `/logos/Countries/chile.svg`;
         case League.FINLAND_LEAGUE:
         case League.FINLAND_SM_LIIGA:
+        case League.FINLAND_MESTARUUSLIIGA:
+        case League.FINLAND_MESTARUUSLIIGA_WOMEN:
             return `/logos/Countries/finland.svg`;
         case League.ARGENTINA_PRIMERA:
+        case League.ARGENTINA_LIGA_ARGENTINA:
+        case League.ARGENTINA_LIGA_ARGENTINA_WOMEN:
             return `/logos/Countries/argentina.svg`;
         case League.RUSSIA_PREMIER:
         case League.RUSSIA_KHL:
         case League.RUSSIA_SUPER_LEAGUE:
+        case League.RUSSIA_SUPERLIGA:
+        case League.RUSSIA_SUPERLIGA_WOMEN:
             return `/logos/Countries/russia.svg`;
         case League.TURKEY_SUPER_LEAGUE:
             return `/logos/Countries/turkey.svg`;
@@ -223,12 +243,17 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
             return `/logos/Countries/switzerland.svg`;
         case League.AUSTRIA_BUNDESLIGA:
         case League.AUSTRIA_ICE_HOCKEY_LEAGUE:
+        case League.AUSTRIA_AVL:
+        case League.AUSTRIA_WVL:
             return `/logos/Countries/austria.svg`;
         case League.DENMARK_SUPER_LEAGUE:
+        case League.DENMARK_VOLLEYLIGAEN:
+        case League.DENMARK_VOLLEYLIGAEN_WOMEN:
             return `/logos/Countries/denmark.svg`;
         case League.POLAND_LEAGUE:
         case League.POLAND_SUPERLIGA:
         case League.POLAND_TT_ELITE_SERIES_MEN:
+        case League.POLAND_PLUSLIGA:
             return `/logos/Countries/poland.svg`;
         case League.SWEDEN_LEAGUE:
         case League.SWEDEN_SHL:
@@ -255,6 +280,10 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.EHF_CHAMPIONS_LEAGUE:
         case League.EHF_CHAMPIONS_LEAGUE_WOMEN:
         case League.EHF_EUROPEAN_LEAGUE:
+        case League.CEV_CHAMPIONS_LEAGUE:
+        case League.CEV_CHAMPIONS_LEAGUE_WOMEN:
+        case League.CEV_CUP:
+        case League.CEV_CUP_WOMEN:
             return `/logos/Countries/europe.svg`;
         case League.EUROLEAGUE:
         case League.EUROLEAGUE_FUTURES:
@@ -267,13 +296,13 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.SUMMER_OLYMPICS_SOCCER_WOMEN:
         case League.SUMMER_OLYMPICS_RUGBY:
         case League.SUMMER_OLYMPICS_RUGBY_WOMEN:
-        case League.SUMMER_OLYMPICS_VOLEYBALL:
-        case League.SUMMER_OLYMPICS_VOLEYBALL_WOMEN:
+        case League.SUMMER_OLYMPICS_VOLLEYBALL:
+        case League.SUMMER_OLYMPICS_VOLLEYBALL_WOMEN:
         case League.SUMMER_OLYMPICS_HANDBALL:
         case League.SUMMER_OLYMPICS_HANDBALL_WOMEN:
         case League.SUMMER_OLYMPICS_WATERPOLO:
-        case League.SUMMER_OLYMPICS_BEACH_VOLEYBALL:
-        case League.SUMMER_OLYMPICS_BEACH_VOLEYBALL_WOMEN:
+        case League.SUMMER_OLYMPICS_BEACH_VOLLEYBALL:
+        case League.SUMMER_OLYMPICS_BEACH_VOLLEYBALL_WOMEN:
         case League.SUMMER_OLYMPICS_HOCKEY:
         case League.SUMMER_OLYMPICS_HOCKEY_WOMEN:
         case League.SUMMER_OLYMPICS_TENNIS:
@@ -282,6 +311,8 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.COPA_LIBERTADORES:
             return '/logos/Countries/south-america.webp';
         case League.CHINA_CBA:
+        case League.CHINA_CVL:
+        case League.CHINA_CVL_WOMEN:
             return `/logos/Countries/china.svg`;
         case League.AFC_CHAMPIONS_LEAGUE:
             return `/logos/Countries/afc-champions-league.webp`;
@@ -304,6 +335,8 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.CPBL:
             return `/logos/Countries/taiwan.svg`;
         case League.KBO:
+        case League.SOUTH_KOREA_V_LEAGUE:
+        case League.SOUTH_KOREA_V_LEAGUE_WOMEN:
             return `/logos/Countries/south-korea.svg`;
         case League.CANADA_PREMIER_LEAGUE:
         case League.CFL:
@@ -346,11 +379,14 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
             return `/logos/Countries/hungary.svg`;
         case League.NORWAY_HB_1_DIVISJON:
         case League.NORWAY_ELITESERIEN:
+        case League.NORWAY_NVBF:
             return `/logos/Countries/norway.svg`;
         case League.ICELAND_URVALSDEILD:
             return `/logos/Countries/iceland.svg`;
         case League.CZECH_REPUBLIC_TT_CUP_MEN:
         case League.CZECH_REPUBLIC_TT_LIGA_PRO_MEN:
+        case League.CZECH_REPUBLIC_VEL:
+        case League.CZECH_REPUBLIC_VEL_WOMEN:
             return `/logos/Countries/czech-republic.svg`;
         case League.TENNIS_MASTERS:
             return `/logos/Countries/atp.png`;
@@ -362,6 +398,13 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
             return `/logos/Countries/iihf.png`;
         case League.FIFA_CLUB_WORLD_CUP:
             return `/logos/Countries/fifa-club-world-cup.webp`;
+        case League.PHILIPPINES_PVL_WOMEN:
+            return `/logos/Countries/philippines.svg`;
+        case League.IRAN_SUPER_LEAGUE:
+            return `/logos/Countries/iran.svg`;
+        case League.FIVB_NATIONS_LEAGUE:
+        case League.FIVB_NATIONS_LEAGUE_WOMEN:
+            return `/logos/Countries/volleyball-nations-league.webp`;
         default:
             return `/logos/Countries/world.svg`;
     }
