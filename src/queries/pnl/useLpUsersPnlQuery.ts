@@ -154,8 +154,10 @@ const useLpUsersPnlQuery = (
                     ['desc']
                 );
 
+                let collateral = '' as Coins;
                 const usersPnl: Record<string, LpUsersPnl> = {};
                 finalTickets.forEach((ticket) => {
+                    collateral = ticket.collateral;
                     if (usersPnl[ticket.account] === undefined) {
                         usersPnl[ticket.account] = {
                             account: ticket.account,
@@ -172,8 +174,6 @@ const useLpUsersPnlQuery = (
                 });
 
                 let lpUsersPnl = Object.values(usersPnl);
-
-                const collateral = lpCollateral.toUpperCase() as Coins;
                 const convertAmount = isLpSupported(collateral) && !isStableCurrency(collateral);
 
                 lpUsersPnl.forEach((pnl) => {
