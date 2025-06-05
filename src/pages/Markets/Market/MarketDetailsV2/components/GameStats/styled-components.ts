@@ -3,9 +3,9 @@ import styled from 'styled-components';
 export const Container = styled.div<{ isOnSelectedMarket?: boolean; isOpen: boolean }>`
     display: flex;
     flex-direction: column;
-    height: ${(props) => (props.isOnSelectedMarket && !props.isOpen ? '0px' : props.isOpen ? '200vh' : '')};
+    height: ${(props) => (props.isOnSelectedMarket && !props.isOpen ? '120px' : props.isOpen ? '200vh' : '')};
     margin: ${(props) =>
-        !props.isOnSelectedMarket ? '20px 0px' : props.isOpen ? '20px 5px 0px 5px' : '20px 5px 20px 5px'};
+        !props.isOnSelectedMarket ? '20px 0px' : props.isOpen ? '20px 5px 72px 5px' : '20px 5px 20px 5px'};
 `;
 
 export const Title = styled.span`

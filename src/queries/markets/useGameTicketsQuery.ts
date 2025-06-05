@@ -8,7 +8,7 @@ import { ContractType } from 'enums/contract';
 import { groupBy, orderBy } from 'lodash';
 import { bigNumberFormatter, Coins, parseBytes32String } from 'thales-utils';
 import { Rates } from 'types/collateral';
-import { Ticket } from 'types/markets';
+import { GameData, GameStats, MarketStats, PositionStats, Ticket } from 'types/markets';
 import { NetworkConfig } from 'types/network';
 import { ViemContract } from 'types/viem';
 import { isLpSupported, isStableCurrency } from 'utils/collaterals';
@@ -20,9 +20,9 @@ import { mapTicket } from 'utils/tickets';
 export const useGameTicketsQuery = (
     gameId: string,
     networkConfig: NetworkConfig,
-    options?: Omit<UseQueryOptions<Ticket[] | undefined>, 'queryKey' | 'queryFn'>
+    options?: Omit<UseQueryOptions<GameData | undefined>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<Ticket[] | undefined>({
+    return useQuery<GameData | undefined>({
         queryKey: QUERY_KEYS.GameTickets(networkConfig.networkId, gameId),
         queryFn: async () => {
             try {
@@ -98,52 +98,79 @@ export const useGameTicketsQuery = (
                         )
                     );
 
-                    const mappedTicketsByPosition = groupBy(
-                        mappedTickets,
-                        (ticket: any) => ticket.sportMarkets[0].positionNames[ticket.sportMarkets[0].position]
+                    const mappedTicketsByMarket = groupBy(
+                        mappedTickets.filter((ticket) => ticket.sportMarkets.length === 1),
+                        (ticket: any) =>
+                            `${ticket.sportMarkets[0].type}-${ticket.sportMarkets[0].line}-${ticket.sportMarkets[0].playerProps.playerId}`
                     );
 
-                    const volumePnlByPosition: any = {};
-                    let totalVolume = 0;
-                    Object.keys(mappedTicketsByPosition).forEach((position) => {
-                        let buyIn = 0;
-                        let risk = 0;
-                        let convertAmount = false;
-                        let collateral = '' as Coins;
+                    const gameStats: GameStats = {
+                        totalValume: 0,
+                        marketsStats: [],
+                    };
 
-                        const ticketsByPositions = mappedTicketsByPosition[position];
-
-                        for (let index = 0; index < ticketsByPositions.length; index++) {
-                            const ticket = ticketsByPositions[index];
-                            collateral = ticket.collateral === 'sTHALES' ? 'THALES' : ticket.collateral;
-                            convertAmount = isLpSupported(collateral) && !isStableCurrency(collateral);
-
-                            buyIn += convertAmount
-                                ? exchangeRates[collateral] * ticket.buyInAmount
-                                : ticket.buyInAmount;
-                            totalVolume += convertAmount
-                                ? exchangeRates[collateral] * ticket.buyInAmount
-                                : ticket.buyInAmount;
-                            risk += convertAmount
-                                ? exchangeRates[collateral] * (ticket.payout - ticket.buyInAmount + ticket.fees)
-                                : ticket.payout - ticket.buyInAmount + ticket.fees;
-                        }
-
-                        volumePnlByPosition[position] = {
-                            position,
-                            buyIn,
-                            risk,
+                    Object.keys(mappedTicketsByMarket).forEach((id: string) => {
+                        const mappedMarketTickets = mappedTicketsByMarket[id];
+                        const market = mappedMarketTickets[0].sportMarkets[0];
+                        const marketStats: MarketStats = {
+                            id,
+                            market,
+                            positionStats: [],
+                            totalBuyIn: 0,
                         };
+
+                        const mappedTicketsByPosition = groupBy(
+                            mappedMarketTickets,
+                            (ticket: any) => ticket.sportMarkets[0].position
+                        );
+
+                        Object.keys(mappedTicketsByPosition).forEach((position) => {
+                            let buyIn = 0;
+                            let risk = 0;
+                            let convertAmount = false;
+                            let collateral = '' as Coins;
+
+                            const ticketsByPosition = mappedTicketsByPosition[position];
+                            const positionMarket = ticketsByPosition[0].sportMarkets[0];
+
+                            for (let index = 0; index < ticketsByPosition.length; index++) {
+                                const ticket = ticketsByPosition[index];
+                                collateral = ticket.collateral === 'sTHALES' ? 'THALES' : ticket.collateral;
+                                convertAmount = isLpSupported(collateral) && !isStableCurrency(collateral);
+
+                                buyIn += convertAmount
+                                    ? exchangeRates[collateral] * ticket.buyInAmount
+                                    : ticket.buyInAmount;
+                                risk += convertAmount
+                                    ? exchangeRates[collateral] * (ticket.payout - ticket.buyInAmount + ticket.fees)
+                                    : ticket.payout - ticket.buyInAmount + ticket.fees;
+                            }
+
+                            const positionStats: PositionStats = {
+                                position: Number(position),
+                                buyIn,
+                                risk,
+                                pnlIfWin: 0,
+                                isWinning: !!positionMarket.isWinning,
+                                isResolved: !!positionMarket.isResolved,
+                            };
+
+                            marketStats.positionStats.push(positionStats);
+                            marketStats.totalBuyIn += buyIn;
+                        });
+
+                        marketStats.positionStats.forEach((stats) => {
+                            stats.pnlIfWin = marketStats.totalBuyIn - stats.buyIn - stats.risk;
+                        });
+
+                        gameStats.marketsStats.push(marketStats);
+                        gameStats.totalValume += marketStats.totalBuyIn;
                     });
 
-                    console.log('totalVolume', totalVolume);
-
-                    Object.keys(volumePnlByPosition).forEach((position) => {
-                        const volumePnl = volumePnlByPosition[position];
-                        console.log(`${position},${volumePnl.buyIn},${volumePnl.risk}`);
-                    });
-
-                    return orderBy(updateTotalQuoteAndPayout(mappedTickets), ['timestamp'], ['desc']);
+                    return {
+                        tickets: orderBy(updateTotalQuoteAndPayout(mappedTickets), ['timestamp'], ['desc']),
+                        gameStats,
+                    };
                 }
                 return undefined;
             } catch (e) {

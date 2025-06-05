@@ -275,3 +275,29 @@ export type Tournament = {
     leageueName: string;
     name: string;
 };
+
+export type PositionStats = {
+    position: number;
+    buyIn: number;
+    risk: number;
+    pnlIfWin: number;
+    isResolved: boolean;
+    isWinning: boolean;
+};
+
+export type MarketStats = {
+    id: string;
+    market: TicketMarket;
+    positionStats: PositionStats[];
+    totalBuyIn: number;
+};
+
+export type GameStats = {
+    totalValume: number;
+    marketsStats: MarketStats[];
+};
+
+export type GameData = {
+    tickets: Ticket[];
+    gameStats: GameStats;
+};

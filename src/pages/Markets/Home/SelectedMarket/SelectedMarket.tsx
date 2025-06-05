@@ -5,6 +5,7 @@ import { SportFilter } from 'enums/markets';
 import { t } from 'i18next';
 import { isEqual } from 'lodash';
 import { League } from 'overtime-utils';
+import GameStats from 'pages/Markets/Market/MarketDetailsV2/components/GameStats';
 import { Message } from 'pages/Markets/Market/MarketDetailsV2/components/PositionsV2/styled-components';
 import React, { memo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -87,7 +88,12 @@ const SelectedMarket: React.FC<{ market: SportMarket | undefined }> = memo(
                     !isMarketPaused ? (
                         <>
                             <SelectedMarketDetails market={market} />
-                            {isMobile && <TicketTransactions market={market} isOnSelectedMarket />}
+                            {isMobile && (
+                                <>
+                                    <TicketTransactions market={market} isOnSelectedMarket />
+                                    <GameStats market={market} isOnSelectedMarket />
+                                </>
+                            )}
                         </>
                     ) : (
                         <Message>{t(`markets.market-card.live-trading-paused`)}</Message>

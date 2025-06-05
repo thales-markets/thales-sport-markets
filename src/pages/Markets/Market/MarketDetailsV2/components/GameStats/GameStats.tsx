@@ -3,13 +3,10 @@ import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SportMarket } from 'types/markets';
 import { useChainId, useClient } from 'wagmi';
-import TicketTransactionsTable from '../TicketTransactionsTable';
+import GameStatsTable from '../GameStatsTable';
 import { Arrow, Container, Title } from './styled-components';
 
-const TicketTransactions: React.FC<{ market: SportMarket; isOnSelectedMarket?: boolean }> = ({
-    market,
-    isOnSelectedMarket,
-}) => {
+const GameStats: React.FC<{ market: SportMarket; isOnSelectedMarket?: boolean }> = ({ market, isOnSelectedMarket }) => {
     const { t } = useTranslation();
 
     const networkId = useChainId();
@@ -19,12 +16,12 @@ const TicketTransactions: React.FC<{ market: SportMarket; isOnSelectedMarket?: b
 
     const gameTicketsQuery = useGameTicketsQuery(market.gameId, { networkId, client });
 
-    const gameTickets = useMemo(() => {
+    const gameStats = useMemo(() => {
         if (gameTicketsQuery.data && gameTicketsQuery.isSuccess) {
-            return gameTicketsQuery.data.tickets || [];
+            return gameTicketsQuery.data.gameStats || undefined;
         }
 
-        return [];
+        return undefined;
     }, [gameTicketsQuery.data, gameTicketsQuery.isSuccess]);
 
     return (
@@ -34,14 +31,14 @@ const TicketTransactions: React.FC<{ market: SportMarket; isOnSelectedMarket?: b
                     isOnSelectedMarket && setOpenTable(!openTable);
                 }}
             >
-                {t('market.table.ticket-title')}
+                {t('markets.stats.title')}
                 {isOnSelectedMarket && (
                     <Arrow className={openTable ? 'icon icon--caret-down' : 'icon icon--caret-up'} />
                 )}
             </Title>
             {(openTable || !isOnSelectedMarket) && (
-                <TicketTransactionsTable
-                    ticketTransactions={gameTickets}
+                <GameStatsTable
+                    marketStats={gameStats?.marketsStats || []}
                     market={market}
                     tableHeight={isOnSelectedMarket ? 'calc(100% - 107px)' : 'auto'}
                     tableStyle={isOnSelectedMarket ? 'overflow-y: hidden; max-height: calc(100vh - 478px);' : undefined}
@@ -52,4 +49,4 @@ const TicketTransactions: React.FC<{ market: SportMarket; isOnSelectedMarket?: b
     );
 };
 
-export default TicketTransactions;
+export default GameStats;
