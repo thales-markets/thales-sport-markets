@@ -3,6 +3,7 @@ import { useConnectModal } from '@rainbow-me/rainbowkit';
 import disclaimer from 'assets/docs/overtime-markets-disclaimer.pdf';
 import privacyPolicy from 'assets/docs/overtime-privacy-policy.pdf';
 import termsOfUse from 'assets/docs/overtime-terms-of-use.pdf';
+import Apple from 'assets/images/logins-icons/apple.svg?react';
 import BinanceWallet from 'assets/images/logins-icons/binance.svg?react';
 import Coinbase from 'assets/images/logins-icons/coinbase.svg?react';
 import Discord from 'assets/images/logins-icons/discord.svg?react';
@@ -474,7 +475,7 @@ const getIcon = (socialId: ParticalTypes | WalletConnections): any => {
         case ParticalTypes.APPLE:
             return (
                 <IconHolder>
-                    <X />
+                    <Apple />
                 </IconHolder>
             );
 
