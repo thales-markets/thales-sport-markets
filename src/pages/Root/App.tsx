@@ -54,6 +54,8 @@ const App = () => {
 
     queryConnector.setQueryClient();
 
+    console.log(isInBinance(), 'isInBinance');
+
     // check if networks are inconsistent between connector and dApp
     useInterval(async () => {
         if (isConnected && connector && connector?.getChainId) {
