@@ -10,7 +10,7 @@ export const Container = styled.div<{ isOnSelectedMarket?: boolean; isOpen: bool
 
 export const Title = styled.span`
     display: block;
-    width: 100%;
+    margin: 0 5px;
     font-style: normal;
     font-weight: bold;
     font-size: 18px;
@@ -21,6 +21,10 @@ export const Title = styled.span`
     @media (max-width: 767px) {
         font-size: 14px;
     }
+`;
+
+export const Volume = styled(Title)`
+    color: ${(props) => props.theme.textColor.quaternary};
 `;
 
 export const Arrow = styled.i`
