@@ -552,8 +552,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                                                 ? marketTypeFilter
                                                 : market.typeId
                                         }
-                                        isGameOpen={isGameLive}
-                                        isGameLive={isGameLive}
+                                        isGameOpen
                                         isMainPageView
                                         isColumnView={isColumnView}
                                     />
