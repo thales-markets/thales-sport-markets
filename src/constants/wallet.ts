@@ -4,6 +4,7 @@ export const SUPPORTED_PARTICAL_CONNECTORS_MODAL: ParticalTypes[] = [
     ParticalTypes.GOOGLE,
     ParticalTypes.TWITTER,
     ParticalTypes.DISCORD,
+    ParticalTypes.APPLE,
 ];
 
 export const SUPPORTED_WALLET_CONNECTORS_MODAL: WalletConnections[] = [
