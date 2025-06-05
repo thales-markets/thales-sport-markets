@@ -1,4 +1,5 @@
 import { USD_SIGN } from 'constants/currency';
+import { SelectedMarketOpenedTable } from 'enums/ui';
 import { useGameTicketsQuery } from 'queries/markets/useGameTicketsQuery';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -9,7 +10,13 @@ import { useChainId, useClient } from 'wagmi';
 import GameStatsTable from '../GameStatsTable';
 import { Arrow, Container, Title, Volume } from './styled-components';
 
-const GameStats: React.FC<{ market: SportMarket; isOnSelectedMarket?: boolean }> = ({ market, isOnSelectedMarket }) => {
+type GameStatsProps = {
+    market: SportMarket;
+    isOnSelectedMarket?: boolean;
+    setOpenedTable?: (openedTable: SelectedMarketOpenedTable) => void;
+};
+
+const GameStats: React.FC<GameStatsProps> = ({ market, isOnSelectedMarket, setOpenedTable }) => {
     const { t } = useTranslation();
 
     const networkId = useChainId();
@@ -33,6 +40,10 @@ const GameStats: React.FC<{ market: SportMarket; isOnSelectedMarket?: boolean }>
                 <Title
                     onClick={() => {
                         isOnSelectedMarket && setOpenTable(!openTable);
+                        setOpenedTable &&
+                            setOpenedTable(
+                                openTable ? SelectedMarketOpenedTable.NONE : SelectedMarketOpenedTable.GAME_STATS
+                            );
                     }}
                 >
                     {t('markets.stats.title')}
@@ -50,8 +61,8 @@ const GameStats: React.FC<{ market: SportMarket; isOnSelectedMarket?: boolean }>
                 <GameStatsTable
                     marketStats={gameStats?.marketsStats || []}
                     market={market}
-                    tableHeight={isOnSelectedMarket ? '200px' : 'auto'}
-                    tableStyle={isOnSelectedMarket ? 'overflow-y: hidden; max-height: calc(100vh - 0px);' : undefined}
+                    tableHeight={isOnSelectedMarket ? 'calc(100% - 107px)' : 'auto'}
+                    tableStyle={isOnSelectedMarket ? 'overflow-y: hidden; max-height: calc(100vh - 478px);' : undefined}
                     isLoading={gameTicketsQuery.isLoading}
                 />
             )}
