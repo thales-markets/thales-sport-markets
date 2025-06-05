@@ -61,6 +61,7 @@ import { addHoursToCurrentDate } from 'thales-utils';
 import { MarketsCache, SportMarket, SportMarkets, TagInfo, Tags, Tournament } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { getCaseAccentInsensitiveString } from 'utils/formatters/string';
+import { isStalePausedMarket } from 'utils/marketsV2';
 import { history } from 'utils/routes';
 import { getScrollMainContainerToTop } from 'utils/scroll';
 import useQueryParam from 'utils/useQueryParams';
@@ -229,7 +230,7 @@ const Home: React.FC = () => {
 
     const liveSportMarkets = useMemo(() => {
         if (liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data) {
-            return liveSportMarketsQuery.data.live;
+            return liveSportMarketsQuery.data.live.filter((market) => !isStalePausedMarket(market));
         }
         return undefined;
     }, [liveSportMarketsQuery.data, liveSportMarketsQuery.isSuccess]);
@@ -320,7 +321,24 @@ const Home: React.FC = () => {
 
         const marketTypes = new Set<MarketType>();
         const allLiveMarkets =
-            liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data ? liveSportMarketsQuery.data.live : [];
+            liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data
+                ? liveSportMarketsQuery.data.live.filter((market) => {
+                      let keepMarket = true;
+                      switch (statusFilter) {
+                          // for now all status filters for live are showing all markets which are not stale paused
+                          case StatusFilter.OPEN_MARKETS:
+                          case StatusFilter.ONGOING_MARKETS:
+                          case StatusFilter.RESOLVED_MARKETS:
+                          case StatusFilter.CANCELLED_MARKETS:
+                              keepMarket = !isStalePausedMarket(market);
+                              break;
+                          case StatusFilter.PAUSED_MARKETS:
+                              keepMarket = market.isPaused;
+                              break;
+                      }
+                      return keepMarket;
+                  })
+                : [];
 
         const gameMultipliers =
             gameMultipliersQuery.isSuccess && gameMultipliersQuery.data ? gameMultipliersQuery.data : [];
@@ -613,7 +631,9 @@ const Home: React.FC = () => {
 
     const liveMarketsCountPerTag = useMemo(() => {
         const liveSportMarkets: SportMarkets =
-            liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data ? liveSportMarketsQuery.data.live : [];
+            liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data
+                ? liveSportMarketsQuery.data.live.filter((market) => !isStalePausedMarket(market))
+                : [];
 
         const groupedMarkets = groupBy(liveSportMarkets, (market) => market.leagueId);
 
