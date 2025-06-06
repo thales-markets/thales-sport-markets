@@ -2,11 +2,13 @@ import UsElectionHeader from 'assets/images/us-election.svg?react';
 import MatchLogosV2 from 'components/MatchLogosV2';
 import SimpleLoader from 'components/SimpleLoader';
 import { SportFilter } from 'enums/markets';
+import { SelectedMarketOpenedTable } from 'enums/ui';
 import { t } from 'i18next';
 import { isEqual } from 'lodash';
 import { League } from 'overtime-utils';
+import GameStats from 'pages/Markets/Market/MarketDetailsV2/components/GameStats';
 import { Message } from 'pages/Markets/Market/MarketDetailsV2/components/PositionsV2/styled-components';
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import { getSelectedMarket, getSportFilter, setSelectedMarket } from 'redux/modules/market';
@@ -25,6 +27,7 @@ const SelectedMarket: React.FC<{ market: SportMarket | undefined }> = memo(
         const isMobile = useSelector(getIsMobile);
         const sportFilter = useSelector(getSportFilter);
         const selectedMarket = useSelector(getSelectedMarket);
+        const [openedTable, setOpenedTable] = useState<SelectedMarketOpenedTable>(SelectedMarketOpenedTable.NONE);
 
         const isPlayerPropsFilter = sportFilter === SportFilter.PlayerProps;
 
@@ -87,7 +90,20 @@ const SelectedMarket: React.FC<{ market: SportMarket | undefined }> = memo(
                     !isMarketPaused ? (
                         <>
                             <SelectedMarketDetails market={market} />
-                            {isMobile && <TicketTransactions market={market} isOnSelectedMarket />}
+                            {isMobile && (
+                                <>
+                                    {openedTable !== SelectedMarketOpenedTable.GAME_STATS && (
+                                        <TicketTransactions
+                                            market={market}
+                                            isOnSelectedMarket
+                                            setOpenedTable={setOpenedTable}
+                                        />
+                                    )}
+                                    {openedTable !== SelectedMarketOpenedTable.TICKET_TRANSACTIONS && (
+                                        <GameStats market={market} isOnSelectedMarket setOpenedTable={setOpenedTable} />
+                                    )}
+                                </>
+                            )}
                         </>
                     ) : (
                         <Message>{t(`markets.market-card.live-trading-paused`)}</Message>
