@@ -337,6 +337,10 @@
     content: '\00C2';
 }
 
+.icon--referral:before {
+    content: '\00D2';
+}
+
 .icon--clear:before {
     content: '\00D4';
 }
@@ -547,4 +551,16 @@
 
 .icon--sol::before {
     content: '\00B9';
+}
+
+.icon--referral-activity::before {
+    content: '\00BB';
+}
+
+.icon--your-summary::before {
+    content: '\00BA';
+}
+
+.icon--affiliate-leaderboard::before {
+    content: '\00AD';
 }

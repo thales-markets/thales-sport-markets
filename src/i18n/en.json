@@ -808,7 +808,8 @@
                 "promotions": "Promotions",
                 "speed-markets": "Speed markets",
                 "digital-options": "Digital options",
-                "resources": "Resources"
+                "resources": "Resources",
+                "referral": "Referral"
             },
             "buttons": {
                 "switch": "Switch",
@@ -1515,12 +1516,134 @@
         },
         "no-result": "There are no results for this table",
         "earned": "Earned",
-        "header": "Create referral links",
         "paragraph": "<bold>Overtime Referrals Program is an on-chain incentivized user acquisition and onboarding tool.</bold>The program allows anyone to <bold>generate a Referral Link</bold> and share it with users they are trying to onboard.<br /><br /> When sharing your personal Referral Link, you earn <bold>0.5% of all {{ collateralKey }} volume your referred users produce!</bold> There are no manual claims needed, the {{ collateralKey }} is auto-accruing in your wallet in form of simple {{ collateralKey }} transfers.",
         "nav-items": {
             "all-transactions": "All transactions",
             "see-result-by-trader": "See result by trader",
             "affiliate-leaderboard": "Affiliate Leaderboard"
+        },
+        "header": {
+            "title": "Create Your Affiliate Link",
+            "subtitle": "Refer users and earn 20% of the XP they generate on bets. Share your unique link, track your rewards, and climb the leaderboard.",
+            "affiliate-id-label": "Your Affiliate ID",
+            "affiliate-id-placeholder": "Enter affiliate ID",
+            "create": "Create",
+            "update": "Update",
+            "copy": "Copy",
+            "stats-title": "Your Stats",
+            "stats": {
+                "referrals": "Referrals",
+                "xp-earned": "XP Earned",
+                "rank": "Rank",
+                "next-reward": "Next Reward",
+                "next-level-progress": "Next Level Progress"
+            }
+      },
+      "how-it-works": {
+        "title": "How the Affiliate Program Works",
+        "step1": {
+          "title": "Create Your Affiliate ID",
+          "description": "Get your unique affiliate link to share with friends, social media followers, or community members."
+        },
+        "step2": {
+          "title": "Share Your Link",
+          "description": "Promote your link across your networks. Each new user that signs up through your link is tracked."
+        },
+        "step3": {
+          "title": "Earn XP Rewards",
+          "description": "Receive 20% of the XP that your referred users earn from their bets. The more they bet, the more you earn!"
         }
+      },
+      "tabs": {
+          "affiliate": "Affiliate Leaderboard",
+          "summary": "Your Summary",
+          "activity": "Referral Activity"
+     },
+      "leaderboard": {
+        "time-filter": "This Month",
+        "your-position": "Your rank",
+        "progress-to-next": "Progress to next rank",
+        "table-headers": {
+          "rank": "Rank",
+          "user": "User",
+          "total-bets": "Total Bets",
+          "referrals": "Referrals",
+          "betVolume": "Bet Volume",
+          "xp": "XP",
+          "level": "Overtime League Level"
+        },
+        "updated": "Updated 3 minutes ago"
+      },
+      "activity": {
+        "table-headers": {
+          "user": "User",
+          "date-joined": "Date Joined",
+          "total-bets": "Total Bets",
+          "bet-volume": "Bet Volume",
+          "xp-generated": "XP Generated",
+          "xp-earned": "Your XP Earned"
+        }
+      },
+      "bets": {
+        "table-headers": {
+          "user": "User",
+          "timestamp": "Timestamp",
+          "scan-link": "Link",
+          "value": "Value",
+          "xp-generated": "XP Generated",
+          "xp-earned": "Your XP Earned"
+        }
+      },
+      "rewards": {
+        "title": "Referral Rewards",
+        "silver": {
+          "name": "Silver Affiliate",
+          "requirement": "Refer 10 active users",
+          "progress": "8/10"
+        },
+        "gold": {
+          "name": "Gold Affiliate",
+          "requirement": "Earn 5,000 XP from referrals",
+          "progress": "920/5,000"
+        }
+      },
+      "missions": {
+        "title": "Affiliate Missions",
+        "weekend-warrior": {
+          "name": "Weekend Warrior",
+          "reward": "+100 XP",
+          "requirement": "Refer 3 users who place bets this weekend",
+          "progress": "1/3"
+        },
+        "big-spender": {
+          "name": "Big Spender",
+          "reward": "+250 XP",
+          "requirement": "Refer a user who places a bet of $500 or more"
+        }
+      },
+      "faq": {
+        "title": "Frequently Asked Questions",
+        "subtitle": "Everything you need to know about the Overtime Affiliate Program. If you cant find the answer to your question, please contact our support team.",
+        "questions": [
+          "How does the Overtime Affiliate Program work?",
+          "How do I earn XP rewards and what are they worth?",
+          "Is there a limit to how many users I can refer?",
+          "How can I track my referrals and earnings?",
+          "Are there any restrictions on how I can promote my affiliate link?",
+          "How is the affiliate leaderboard ranking determined?",
+          "What are Affiliate Missions and how do they work?",
+          "Can I have multiple affiliate accounts?"
+        ],
+        "answers": [
+          "",
+          "",
+          "There is no limit to the number of users you can refer to Overtime. You can refer as many users as you want and earn rewards from all of their activity.\nHowever, we do monitor affiliate accounts for suspicious activity or violations of our terms of service. All referrals must be genuine users who are independently interested in using our platform.\nThe most successful affiliates typically have:\nA strong online presence or community\nAuthentic engagement with their audience\nValuable content related to crypto, betting, or trading\nA clear and honest communication style about the platform\nFocus on quality referrals who are likely to be active on the platform, as this will maximize your long-term rewards.",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ]
+      }
     }
 }

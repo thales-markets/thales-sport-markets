@@ -58,6 +58,13 @@ export const NAV_MENU_THIRD_SECTION: NavMenuItem[] = [
         route: ROUTES.Promotions.Home,
         supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.Base, Network.OptimismSepolia],
     },
+    {
+        i18label: 'markets.nav-menu.items.referral',
+        iconClass: 'icon icon--referral',
+        name: 'promotions',
+        route: ROUTES.Referral,
+        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.Base, Network.OptimismSepolia],
+    },
 ];
 
 export const NAV_MENU_FOURTH_SECTION: NavMenuItem[] = [
