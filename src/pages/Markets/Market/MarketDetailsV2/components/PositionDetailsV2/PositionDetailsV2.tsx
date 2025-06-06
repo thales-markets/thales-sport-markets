@@ -30,11 +30,21 @@ import { formatMarketOdds, getPositionOrder } from 'utils/markets';
 import {
     getMatchLabel,
     getPositionTextV2,
+    getSgpBuilderPositionsText,
     isSameMarket,
     sportMarketAsSerializable,
     sportMarketAsTicketPosition,
 } from 'utils/marketsV2';
-import { Container, Odd, Status, Text } from './styled-components';
+import {
+    Container,
+    Odd,
+    SgpPositionMark,
+    SgpPositionRow,
+    SgpPositionText,
+    SgpPositions,
+    Status,
+    Text,
+} from './styled-components';
 
 type PositionDetailsProps = {
     market: SportMarket;
@@ -111,13 +121,14 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
     const disabledPosition = isSgpBuilderMarket(market.typeId)
         ? !sgpTicketPositions.length
         : noOdd || (!isGameOpen && !isGameLive) || (!!isPositionBlocked && !isAddedToTicket);
-    const showOdd = (isGameOpen || isGameLive) && !isSgpBuilderMarket(market.typeId);
+    const showOdd = isGameOpen || isGameLive;
 
     const positionText = getPositionTextV2(
         market,
         position,
         isMainPageView && (market.typeId === MarketType.TOTAL || !!marketTypeFilter || isPlayerPropsMarket)
     );
+    const sgpPositionsText = getSgpBuilderPositionsText(sgpTicketPositions);
 
     const isFutures = isFuturesMarket(market.typeId);
     const isCorrectScore = isCorrectScoreMarket(market.typeId);
@@ -178,9 +189,22 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
                 }
             }}
         >
-            <Text isColumnView={isColumnView} maxWidth={isQuickSgpMarket ? '270px' : undefined}>
-                {positionText}
-            </Text>
+            {sgpTicketPositions.length ? (
+                <SgpPositions>
+                    {sgpPositionsText.map((position, i) => {
+                        return (
+                            <SgpPositionRow key={`sgpPositions-${i}`}>
+                                <SgpPositionMark isSelected={isAddedToTicket} />
+                                <SgpPositionText>{position}</SgpPositionText>
+                            </SgpPositionRow>
+                        );
+                    })}
+                </SgpPositions>
+            ) : (
+                <Text isColumnView={isColumnView} maxWidth={isQuickSgpMarket ? '270px' : undefined}>
+                    {positionText}
+                </Text>
+            )}
             {showOdd ? (
                 <Odd selected={isAddedToTicket} isMainPageView={isMainPageView}>
                     {isZeroOdd ? '-' : formatMarketOdds(selectedOddsType, odd)}

@@ -24,7 +24,6 @@ import {
     isPeriodMarket,
     isPlayerPropsMarket,
     isScoreMarket,
-    isSgpBuilderMarket,
     isSpreadMarket,
     isTotalExactMarket,
     isTotalMarket,
@@ -156,9 +155,6 @@ const getSimplePositionText = (
                 : text;
         return text;
     }
-    if (isSgpBuilderMarket(marketType) && positionNames && positionNames[position]) {
-        return positionNames[position];
-    }
     if (isTotalExactMarket(marketType) && positionNames && positionNames[position]) {
         const text =
             position < positionNames.length - 3
@@ -284,24 +280,51 @@ export const getPositionTextV2 = (market: SportMarket, position: number, extende
           );
 };
 
-export const getTitleText = (market: SportMarket, useDescription?: boolean, shortName?: boolean) => {
-    const marketType = market.typeId;
+export const getSgpBuilderPositionsText = (ticketPositions: TicketPosition[]) =>
+    ticketPositions.map((ticketPosition) => {
+        return `${getSimplePositionText(
+            ticketPosition.typeId,
+            ticketPosition.position,
+            ticketPosition.line,
+            ticketPosition.homeTeam,
+            ticketPosition.awayTeam,
+            ticketPosition.leagueId,
+            true
+        )} - ${getTitleTextV2(
+            ticketPosition.typeId,
+            ticketPosition.leagueId,
+            ticketPosition.homeTeam,
+            ticketPosition.awayTeam
+        )}`;
+    });
+
+export const getTitleText = (market: SportMarket, useDescription?: boolean, shortName?: boolean) =>
+    getTitleTextV2(market.typeId, market.leagueId, market.homeTeam, market.awayTeam, useDescription, shortName);
+
+export const getTitleTextV2 = (
+    marketType: MarketType,
+    leagueId: League,
+    homeTeam: string,
+    awayTeam: string,
+    useDescription?: boolean,
+    shortName?: boolean
+) => {
     if (marketType === MarketType.EMPTY) {
         return '';
     }
 
-    const sport = getLeagueSport(market.leagueId);
-    const scoringType = getLeagueScoringType(market.leagueId);
+    const sport = getLeagueSport(leagueId);
+    const scoringType = getLeagueScoringType(leagueId);
     const marketTypeDescription = getMarketTypeDescription(marketType);
     const marketTypeName =
         useDescription && marketTypeDescription
             ? marketTypeDescription
-            : market.leagueId === League.UEFA_SUPER_CUP && marketType === MarketType.WHO_WILL_QUALIFY
+            : leagueId === League.UEFA_SUPER_CUP && marketType === MarketType.WHO_WILL_QUALIFY
             ? 'To win the cup'
             : getMarketTypeName(marketType, shortName);
 
     let sufix = isPeriodMarket(marketType)
-        ? ` ${getLeaguePeriodType(market.leagueId)}`
+        ? ` ${getLeaguePeriodType(leagueId)}`
         : isPeriod2Market(marketType)
         ? sport === Sport.BASEBALL
             ? ' half (1st 5 innings)'
@@ -329,7 +352,7 @@ export const getTitleText = (market: SportMarket, useDescription?: boolean, shor
     }
 
     if (
-        market.leagueId == League.UFC &&
+        leagueId == League.UFC &&
         (isTotalMarket(marketType) || isTotalOddEvenMarket(marketType) || isSpreadMarket(marketType))
     ) {
         sufix = `${sufix}${
@@ -338,7 +361,7 @@ export const getTitleText = (market: SportMarket, useDescription?: boolean, shor
     }
 
     if (
-        market.leagueId == League.SUMMER_OLYMPICS_TABLE_TENNIS &&
+        leagueId == League.SUMMER_OLYMPICS_TABLE_TENNIS &&
         (isTotalMarket(marketType) || isTotalOddEvenMarket(marketType) || isSpreadMarket(marketType))
     ) {
         sufix = `${sufix}${
@@ -347,10 +370,10 @@ export const getTitleText = (market: SportMarket, useDescription?: boolean, shor
     }
 
     if (isHomeTeamMarket(marketType)) {
-        sufix = `${sufix}${isTotalExactMarket(marketType) ? ` ${scoringType}` : ''} (${market.homeTeam})`;
+        sufix = `${sufix}${isTotalExactMarket(marketType) ? ` ${scoringType}` : ''} (${homeTeam})`;
     }
     if (isAwayTeamMarket(marketType)) {
-        sufix = `${sufix}${isTotalExactMarket(marketType) ? ` ${scoringType}` : ''} (${market.awayTeam})`;
+        sufix = `${sufix}${isTotalExactMarket(marketType) ? ` ${scoringType}` : ''} (${awayTeam})`;
     }
     if (isScoreMarket(marketType)) {
         sufix = scoringType.length > 1 ? ` ${scoringType.slice(0, scoringType.length - 1)}` : scoringType;

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FlexDivRow } from 'styles/common';
+import { FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 
 export const Container = styled(FlexDivRow)<{
     disabled: boolean;
@@ -73,4 +73,40 @@ export const Status = styled(Text)`
         font-size: 11px;
         margin-top: 1px;
     }
+`;
+
+export const SgpPositions = styled(FlexDivColumn)`
+    gap: 2px;
+`;
+
+export const SgpPositionRow = styled(FlexDivRowCentered)`
+    position: relative;
+    padding: 2px 0;
+    :not(:last-child) {
+        :after {
+            content: '';
+            position: absolute;
+            top: 12px;
+            bottom: -6px;
+            left: 6px;
+            border-left: 1px dashed ${(props) => props.theme.textColor.quinary};
+        }
+    }
+`;
+
+export const SgpPositionMark = styled.span<{ isSelected: boolean }>`
+    position: absolute;
+    width: 13px;
+    height: 13px;
+    background-color: ${(props) =>
+        props.isSelected ? props.theme.background.quaternary : props.theme.background.secondary};
+    border: 1px solid ${(props) => props.theme.textColor.quinary};
+    border-radius: 50%;
+    flex-shrink: 0;
+    z-index: 1;
+`;
+
+export const SgpPositionText = styled(Text)`
+    margin-left: 20px;
+    white-space: break-spaces;
 `;

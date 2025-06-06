@@ -209,9 +209,8 @@ const Positions: React.FC<PositionsProps> = ({
     const sortedMarkets = useMemo(() => {
         if (isQuickSgpMarket) {
             let displaySgpMarkets = markets;
-            let maxQuickSgpMarkets = 4;
             if (filteredQuickSgpMarkets.length > 0) {
-                maxQuickSgpMarkets = 2;
+                const maxQuickSgpMarkets = 2; // TODO: check this
                 displaySgpMarkets = filteredQuickSgpMarkets.map((market) => ({
                     ...market,
                     odds: market.odds.slice(0, maxQuickSgpMarkets),
