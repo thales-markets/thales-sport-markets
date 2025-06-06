@@ -30,6 +30,7 @@ import { buildHref } from 'utils/routes';
 import { getOrdinalNumberLabel } from 'utils/ui';
 import useQueryParam from 'utils/useQueryParams';
 import Header from '../../Home/Header';
+import GameStats from './components/GameStats';
 import MatchInfoV2 from './components/MatchInfoV2';
 import PositionsV2 from './components/PositionsV2';
 import TicketTransactions from './components/TicketTransactions';
@@ -327,6 +328,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                     </PositionsContainer>
                 </>
                 <TicketTransactions market={market} />
+                <GameStats market={market} />
             </MainContainer>
             {isGameOpen && (
                 <SidebarContainer>
