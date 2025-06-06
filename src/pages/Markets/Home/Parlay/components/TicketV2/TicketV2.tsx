@@ -260,7 +260,7 @@ const Ticket: React.FC<TicketProps> = ({
     const client = useClient();
     const walletClient = useWalletClient();
 
-    const { address, isConnected } = useAccount();
+    const { address, isConnected, connector } = useAccount();
     const { smartAddress } = useBiconomy();
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
@@ -1715,6 +1715,8 @@ const Ticket: React.FC<TicketProps> = ({
                             props: {
                                 value: Number(buyInAmount),
                                 collateral: selectedCollateral,
+                                connector: connector?.id || '',
+                                address: walletAddress,
                                 networkId,
                             },
                         }
