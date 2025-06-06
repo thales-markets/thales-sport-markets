@@ -12,7 +12,7 @@ import { FlexDiv, FlexDivCentered, FlexDivColumn } from 'styles/common';
 import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
 import { buildReffererLink } from 'utils/routes';
-import useBiconomy from 'utils/useBiconomy';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { useAccount } from 'wagmi';
 
 const ReferralButton: React.FC = () => {

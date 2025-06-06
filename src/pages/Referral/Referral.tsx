@@ -11,7 +11,7 @@ import { getIsBiconomy } from 'redux/modules/wallet';
 import { formatCurrencyWithSign } from 'thales-utils';
 import { RootState } from 'types/redux';
 import { getDefaultCollateral } from 'utils/collaterals';
-import useBiconomy from 'utils/useBiconomy';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { useAccount, useChainId } from 'wagmi';
 import AffiliateLeaderboard from './components/AffiliateLeaderboard';
 import ReferralTransactionsTable from './components/ReferralTransactionsTable';

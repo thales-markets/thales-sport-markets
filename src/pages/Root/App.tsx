@@ -18,6 +18,7 @@ import Profile from 'pages/Profile';
 import Promotions from 'pages/Promotions/Home';
 import Promotion from 'pages/Promotions/Promotion';
 import Referral from 'pages/Referral';
+import ReferralV2 from 'pages/Referral/V2';
 import ResolveBlocker from 'pages/ResolveBlocker';
 import SEO from 'pages/SEO/Home';
 import SeoArticle from 'pages/SEO/SeoArticle';
@@ -198,6 +199,13 @@ const App = () => {
                         <Suspense fallback={<Loader />}>
                             <DappLayout>
                                 <Referral />
+                            </DappLayout>
+                        </Suspense>
+                    </Route>
+                    <Route exact path={ROUTES.ReferralV2}>
+                        <Suspense fallback={<Loader />}>
+                            <DappLayout>
+                                <ReferralV2 />
                             </DappLayout>
                         </Suspense>
                     </Route>

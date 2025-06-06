@@ -23,6 +23,7 @@ const ROUTES = {
     Ticket: '/tickets/:ticketAddress',
     Overdrop: '/overdrop',
     Referral: '/referral',
+    ReferralV2: '/referralV2',
     SEO: {
         Home: '/resources',
         SeoArticle: '/resources/:seoId',

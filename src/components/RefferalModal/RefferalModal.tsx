@@ -15,7 +15,7 @@ import { FlexDivCentered, FlexDivColumnCentered, FlexDivRowCentered } from 'styl
 import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
 import { buildReffererLink } from 'utils/routes';
-import useBiconomy from 'utils/useBiconomy';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { useAccount, useSignMessage } from 'wagmi';
 
 type RefferalModalProps = {
