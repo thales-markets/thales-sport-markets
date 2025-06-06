@@ -1,3 +1,4 @@
+import { isInBinance } from '@binance/w3w-utils';
 import ApprovalModal from 'components/ApprovalModal';
 import Button from 'components/Button';
 import CollateralSelector from 'components/CollateralSelector';
@@ -1721,7 +1722,7 @@ const Ticket: React.FC<TicketProps> = ({
                         }
                     );
 
-                    if (connector && connector.id === WalletConnections.BINANCE) {
+                    if (isInBinance() || (connector && connector.id === WalletConnections.BINANCE)) {
                         PLAUSIBLE.trackEvent(PLAUSIBLE_KEYS.binanceWalletBuy, {
                             props: {
                                 wallet: WalletConnections.BINANCE,
