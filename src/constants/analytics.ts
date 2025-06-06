@@ -17,4 +17,5 @@ export const PLAUSIBLE_KEYS = {
     submitReferralId: 'submit-referral-id',
     freeBetLive: 'free-bet-live',
     freeBetBuy: 'free-bet-buy',
+    binanceWalletBuy: 'binance-buy',
 };
