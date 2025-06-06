@@ -74,6 +74,7 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, unfiltere
     const tagFilter = useSelector(getTagFilter);
 
     const isPlayerPropsFilter = useMemo(() => sportFilter == SportFilter.PlayerProps, [sportFilter]);
+
     const marketToCheck = useMemo(() => market || selectedMarket, [market, selectedMarket]);
 
     const marketTypes = useMemo(() => {

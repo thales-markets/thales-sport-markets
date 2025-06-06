@@ -1,5 +1,5 @@
 import { GameStatus, LiveTradingFinalStatus, LiveTradingTicketStatus, StatusFilter } from 'enums/markets';
-import { League, MarketType, Sport } from 'overtime-utils';
+import { League, MarketType, SgpBuilder, Sport } from 'overtime-utils';
 import { Coins } from 'thales-utils';
 import { Network } from '../enums/network';
 
@@ -130,6 +130,11 @@ export type TicketMarket = SportMarket & {
     position: number;
     odd: number;
     isWinning?: boolean;
+};
+
+export type SgpTicket = {
+    sgpBuilder: SgpBuilder;
+    ticketPositions: TicketPosition[];
 };
 
 export type SportsAmmData = {
