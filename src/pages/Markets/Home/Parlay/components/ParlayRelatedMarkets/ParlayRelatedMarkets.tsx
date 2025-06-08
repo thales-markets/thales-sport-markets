@@ -10,7 +10,7 @@ import { ScreenSizeBreakpoint } from 'enums/ui';
 import useInterval from 'hooks/useInterval';
 import { orderBy } from 'lodash';
 import { useLiveTradingProcessorDataQuery } from 'queries/markets/useLiveTradingProcessorDataQuery';
-import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
+import { useOtherSinglesQuery } from 'queries/markets/useOtherSinglesQuery';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -60,7 +60,9 @@ const ParlayRelatedMarkets: React.FC = () => {
 
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
-    const userTicketsQuery = useUserTicketsQuery(walletAddress, { networkId, client }, { enabled: isConnected });
+    const userTicketsQuery = useOtherSinglesQuery(walletAddress, { networkId, client }, ticket[0]?.gameId, {
+        enabled: isConnected && ticket[0] !== undefined && ticket[0]?.gameId !== undefined,
+    });
 
     const liveTradingProcessorDataQuery = useLiveTradingProcessorDataQuery(
         walletAddress,

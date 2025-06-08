@@ -56,17 +56,18 @@ export const refetchAfterClaim = (walletAddress: string, networkId: Network) => 
     });
 };
 
-export const refetchAfterBuy = (walletAddress: string, networkId: Network) => {
+export const refetchAfterBuy = (walletAddress: string, networkId: Network, gameId?: string) => {
     queryConnector.queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.Wallet.MultipleCollateral(walletAddress, networkId),
     });
     queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PositionsCountV2(walletAddress, networkId) });
     queryConnector.queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.UserTickets(networkId, walletAddress),
-    });
-    queryConnector.queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.LiveTradingProcessorData(networkId, walletAddress),
     });
+    if (gameId)
+        queryConnector.queryClient.invalidateQueries({
+            queryKey: QUERY_KEYS.OtherSingles(networkId, walletAddress, gameId),
+        });
 };
 
 export const refetchUserLiveTradingData = (walletAddress: string, networkId: Network) => {

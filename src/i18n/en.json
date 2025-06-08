@@ -104,7 +104,6 @@
         "errors": {
             "something-went-wrong": "Something went wrong!",
             "unknown-error-try-again": "An unknown error occurred after you submitted. Please try again.",
-            "unknown-error-try-again-general": "An unknown error occurred. Please try again.",
             "tx-canceled": "Transaction is canceled.",
             "tx-reverted": "Transaction is reverted.",
             "tx-receipt-not-received": "Unable to obtain transaction receipt. The trade might still get executed, check your created tickets.",
@@ -572,6 +571,7 @@
             "loss": "Loss",
             "won": "Won",
             "live-trading-paused": "Live trading paused",
+            "live-trading-stale-paused": "Live trading stale paused",
             "not-available-for-trading": "Not available for trading",
             "bet-type": {
                 "winner": "Winner",
@@ -1023,6 +1023,15 @@
             "migrate-ticket-label": "Migrate ticket",
             "migrate-ticket-confirmation-message": "Ticket successfully migrated",
             "not-found-validaton": "Ticket not found in the current round, please double check!"
+        },
+        "stats": {
+            "title": "Market stats (singles)",
+            "market": "Market",
+            "volume": "Volume",
+            "risk": "Risk",
+            "pnl-if-win": "PnL if win",
+            "position": "Position",
+            "market-volume": "Market volume"
         }
     },
     "deposit": {

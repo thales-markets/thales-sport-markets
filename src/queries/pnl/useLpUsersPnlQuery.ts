@@ -8,7 +8,7 @@ import { ContractType } from 'enums/contract';
 import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 import { orderBy } from 'lodash';
 import { League } from 'overtime-utils';
-import { bigNumberFormatter, Coins, NetworkId, parseBytes32String } from 'thales-utils';
+import { bigNumberFormatter, Coins, parseBytes32String } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { LpUsersPnl, Ticket } from 'types/markets';
 import { NetworkConfig } from 'types/network';
@@ -18,7 +18,7 @@ import { getLpAddress, getRoundWithOffset, isLpAvailableForNetwork } from 'utils
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
 import { mapTicket } from 'utils/tickets';
 
-const STAKING_TICKETS_BATCH_SIZE = 500;
+const FREE_BET_TICKETS_BATCH_SIZE = 500;
 
 const useLpUsersPnlQuery = (
     lpCollateral: LiquidityPoolCollateral,
@@ -34,10 +34,7 @@ const useLpUsersPnlQuery = (
             const sportsAMMDataContract = getContractInstance(ContractType.SPORTS_AMM_DATA, networkConfig);
             const liquidityPoolDataContract = getContractInstance(ContractType.LIQUIDITY_POOL_DATA, networkConfig);
             const priceFeedContract = getContractInstance(ContractType.PRICE_FEED, networkConfig);
-            const stakingThalesBettingProxy = getContractInstance(
-                ContractType.STAKING_THALES_BETTING_PROXY,
-                networkConfig
-            );
+            const freeBetContract = getContractInstance(ContractType.FREE_BET_HOLDER, networkConfig);
 
             if (sportsAMMDataContract && liquidityPoolDataContract && priceFeedContract) {
                 const [
@@ -104,32 +101,28 @@ const useLpUsersPnlQuery = (
                     )
                 );
 
-                const stakingTickets =
-                    networkConfig.networkId === NetworkId.Base
-                        ? []
-                        : mappedTickets.filter(
-                              (ticket) =>
-                                  ticket.account.toLowerCase() === stakingThalesBettingProxy?.address.toLowerCase()
-                          );
+                const freeBetTickets = mappedTickets.filter(
+                    (ticket) => ticket.account.toLowerCase() === freeBetContract?.address.toLowerCase()
+                );
 
-                let stakingPromises = [];
-                const stakingTicketsData: any = [];
-                for (let i = 0; i < stakingTickets.length; i++) {
-                    stakingPromises.push(stakingThalesBettingProxy?.read.ticketToUser([stakingTickets[i].id]));
-                    if ((i + 1) % STAKING_TICKETS_BATCH_SIZE == 0 || i == stakingTickets.length - 1) {
-                        const stakingPromisesResult = await Promise.all(stakingPromises);
-                        stakingTicketsData.push(...stakingPromisesResult.flat(1));
-                        stakingPromises = [];
+                let freeBetPromises = [];
+                const freeBetTicketsData: any = [];
+                for (let i = 0; i < freeBetTickets.length; i++) {
+                    freeBetPromises.push(freeBetContract?.read.ticketToUser([freeBetTickets[i].id]));
+                    if ((i + 1) % FREE_BET_TICKETS_BATCH_SIZE == 0 || i == freeBetTickets.length - 1) {
+                        const stakingPromisesResult = await Promise.all(freeBetPromises);
+                        freeBetTicketsData.push(...stakingPromisesResult.flat(1));
+                        freeBetPromises = [];
                     }
                 }
 
-                const mappedTicketsWithStaking: Ticket[] = mappedTickets.map((ticket: any) => {
+                const mappedTicketsWithFreeBet: Ticket[] = mappedTickets.map((ticket: any) => {
                     let owner = ticket.account;
-                    const stakingUserIndex = stakingTickets.findIndex(
+                    const freeBetUserIndex = freeBetTickets.findIndex(
                         (stakingTicket) => ticket.id.toLowerCase() === stakingTicket.id.toLowerCase()
                     );
-                    if (stakingUserIndex > -1) {
-                        owner = stakingTicketsData[stakingUserIndex];
+                    if (freeBetUserIndex > -1) {
+                        owner = freeBetTicketsData[freeBetUserIndex];
                     }
 
                     return {
@@ -139,7 +132,7 @@ const useLpUsersPnlQuery = (
                 });
 
                 const finalTickets: Ticket[] = orderBy(
-                    updateTotalQuoteAndPayout(mappedTicketsWithStaking).filter(
+                    updateTotalQuoteAndPayout(mappedTicketsWithFreeBet).filter(
                         (ticket) =>
                             ((ticket.sportMarkets.length === 1 &&
                                 ticket.sportMarkets[0].leagueId === leagueId &&
@@ -154,8 +147,10 @@ const useLpUsersPnlQuery = (
                     ['desc']
                 );
 
+                let collateral = '' as Coins;
                 const usersPnl: Record<string, LpUsersPnl> = {};
                 finalTickets.forEach((ticket) => {
+                    collateral = ticket.collateral;
                     if (usersPnl[ticket.account] === undefined) {
                         usersPnl[ticket.account] = {
                             account: ticket.account,
@@ -166,14 +161,12 @@ const useLpUsersPnlQuery = (
                     if (ticket.isUserTheWinner && !ticket.isCancelled) {
                         usersPnl[ticket.account].pnl += ticket.payout - ticket.buyInAmount;
                     }
-                    if (ticket.isLost && !ticket.isCancelled) {
+                    if (ticket.isLost && !ticket.isCancelled && !ticket.isFreeBet) {
                         usersPnl[ticket.account].pnl -= ticket.buyInAmount;
                     }
                 });
 
                 let lpUsersPnl = Object.values(usersPnl);
-
-                const collateral = lpCollateral.toUpperCase() as Coins;
                 const convertAmount = isLpSupported(collateral) && !isStableCurrency(collateral);
 
                 lpUsersPnl.forEach((pnl) => {
