@@ -6,8 +6,6 @@ import { DEFAULT_NETWORK } from 'constants/network';
 import ROUTES from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import useInterval from 'hooks/useInterval';
-import DappLayout from 'layouts/DappLayout';
-import Theme from 'layouts/Theme';
 
 // import PnL from 'pages/PnL';
 import Profile from 'pages/Profile';
@@ -32,6 +30,8 @@ import queryConnector from 'utils/queryConnector';
 import { history } from 'utils/routes';
 import { useAccount, useChainId, useConnect, useConnectors, useDisconnect, useSwitchChain } from 'wagmi';
 
+const DappLayout = lazy(() => import(/* webpackChunkName: "DappLayout" */ 'layouts/DappLayout'));
+const Theme = lazy(() => import(/* webpackChunkName: "Theme" */ 'layouts/Theme'));
 const FreeBets = lazy(() => import(/* webpackChunkName: "FreeBets" */ 'pages/FreeBets'));
 const LiquidityPool = lazy(() => import(/* webpackChunkName: "LiquidityPool" */ 'pages/LiquidityPool'));
 const Markets = lazy(() => import(/* webpackChunkName: "Markets" */ 'pages/Markets/Home'));
