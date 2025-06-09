@@ -4,30 +4,6 @@
 }
 
 @font-face {
-    font-family: 'NunitoExtraBold';
-    src: local('NunitoExtraBold'), url(../assets/fonts/Nunito/Nunito-ExtraBold.ttf) format('truetype');
-}
-@font-face {
-    font-family: 'Atma';
-    src: local('Atma'), url(../assets/fonts/Atma/Atma-Regular.ttf) format('truetype');
-}
-
-@font-face {
-    font-family: 'AtmaBold';
-    src: local('AtmaBold'), url(../assets/fonts/Atma/Atma-Bold.ttf) format('truetype');
-}
-
-@font-face {
-    font-family: 'Oswald';
-    src: local('Oswald'), url(../assets/fonts/Oswald/Oswald-Regular.ttf) format('truetype');
-}
-
-@font-face {
-    font-family: 'OswaldBold';
-    src: local('OswaldBold'), url(../assets/fonts/Oswald/Oswald-Bold.ttf) format('truetype');
-}
-
-@font-face {
     font-family: 'HomepageIconsV2';
     src: local('HomepageIconsV2'), url(../assets/fonts/HomepageIconsV2/HomepageIconsV2.ttf) format('truetype');
 }
