@@ -399,10 +399,6 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                 sgpBuilder,
                 ticketPositions: getTicketPositionsFogSgpBuilder(sportMarket, sgpBuilder),
             }));
-            const hasAwayMarkets = sgpBuildersWithTicketPositions.some(
-                (sgpBuildersWithTicketPosition) =>
-                    sgpBuildersWithTicketPosition.sgpBuilder.typeId === MarketType.SGP_BUILDER_AWAY
-            );
 
             return (
                 <>
@@ -416,16 +412,6 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                         isColumnView={isColumnView}
                         sgpTickets={sgpBuildersWithTicketPositions}
                     />
-                    {isColumnView && !isMobile && hasAwayMarkets && (
-                        <PositionsV2
-                            markets={[sportMarket]}
-                            marketType={MarketType.SGP_BUILDER_AWAY}
-                            isGameOpen={isGameOpen}
-                            isMainPageView
-                            isColumnView={isColumnView}
-                            sgpTickets={sgpBuildersWithTicketPositions}
-                        />
-                    )}
                 </>
             );
         };

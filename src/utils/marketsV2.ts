@@ -283,7 +283,7 @@ export const getPositionTextV2 = (market: SportMarket, position: number, extende
 
 export const getSgpBuilderPositionsText = (ticketPositions: TicketPosition[]) =>
     ticketPositions.map((ticketPosition) => {
-        return `${getSimplePositionText(
+        const positionText = getSimplePositionText(
             ticketPosition.typeId,
             ticketPosition.position,
             ticketPosition.line,
@@ -291,12 +291,17 @@ export const getSgpBuilderPositionsText = (ticketPositions: TicketPosition[]) =>
             ticketPosition.awayTeam,
             ticketPosition.leagueId,
             true
-        )} - ${getTitleTextV2(
+        );
+        const lineText = getTitleTextV2(
             ticketPosition.typeId,
             ticketPosition.leagueId,
             ticketPosition.homeTeam,
             ticketPosition.awayTeam
-        )}`;
+        );
+        if (ticketPosition.isPlayerPropsMarket) {
+            return `${getMatchLabel(ticketPosition)} - ${lineText} ${positionText}`;
+        }
+        return `${positionText} - ${lineText}`;
     });
 
 export const getTitleText = (market: SportMarket, useDescription?: boolean, shortName?: boolean) =>

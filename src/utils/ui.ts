@@ -60,9 +60,10 @@ export const setKeepSelectionToStorage = (value: boolean) => {
 };
 
 export const getGridMinMaxPercentage = (market: SportMarket, isMobile: boolean): number => {
-    return isMobile && (isDoubleChanceMarket(market.typeId) || isCombinedPositionsMarket(market.typeId))
+    return (isMobile && (isDoubleChanceMarket(market.typeId) || isCombinedPositionsMarket(market.typeId))) ||
+        isSgpBuilderMarket(market.typeId)
         ? 100
-        : market.odds.length === 3 && !isSgpBuilderMarket(market.typeId)
+        : market.odds.length === 3
         ? 33
         : 50;
 };
