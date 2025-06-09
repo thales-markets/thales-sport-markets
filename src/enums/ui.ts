@@ -46,3 +46,9 @@ export enum ScreenSizeBreakpoint {
     XXS = 420,
     XXXS = 360,
 }
+
+export enum SelectedMarketOpenedTable {
+    NONE = 'none',
+    TICKET_TRANSACTIONS = 'ticket-transactions',
+    GAME_STATS = 'game-stats',
+}

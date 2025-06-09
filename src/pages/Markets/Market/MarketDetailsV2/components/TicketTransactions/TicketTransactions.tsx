@@ -1,3 +1,4 @@
+import { SelectedMarketOpenedTable } from 'enums/ui';
 import { useGameTicketsQuery } from 'queries/markets/useGameTicketsQuery';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -6,10 +7,13 @@ import { useChainId, useClient } from 'wagmi';
 import TicketTransactionsTable from '../TicketTransactionsTable';
 import { Arrow, Container, Title } from './styled-components';
 
-const ParlayTransactions: React.FC<{ market: SportMarket; isOnSelectedMarket?: boolean }> = ({
-    market,
-    isOnSelectedMarket,
-}) => {
+type TicketTransactionsProps = {
+    market: SportMarket;
+    isOnSelectedMarket?: boolean;
+    setOpenedTable?: (openedTable: SelectedMarketOpenedTable) => void;
+};
+
+const TicketTransactions: React.FC<TicketTransactionsProps> = ({ market, isOnSelectedMarket, setOpenedTable }) => {
     const { t } = useTranslation();
 
     const networkId = useChainId();
@@ -21,7 +25,7 @@ const ParlayTransactions: React.FC<{ market: SportMarket; isOnSelectedMarket?: b
 
     const gameTickets = useMemo(() => {
         if (gameTicketsQuery.data && gameTicketsQuery.isSuccess) {
-            return gameTicketsQuery.data || [];
+            return gameTicketsQuery.data.tickets || [];
         }
 
         return [];
@@ -32,6 +36,10 @@ const ParlayTransactions: React.FC<{ market: SportMarket; isOnSelectedMarket?: b
             <Title
                 onClick={() => {
                     isOnSelectedMarket && setOpenTable(!openTable);
+                    setOpenedTable &&
+                        setOpenedTable(
+                            openTable ? SelectedMarketOpenedTable.NONE : SelectedMarketOpenedTable.TICKET_TRANSACTIONS
+                        );
                 }}
             >
                 {t('market.table.ticket-title')}
@@ -52,4 +60,4 @@ const ParlayTransactions: React.FC<{ market: SportMarket; isOnSelectedMarket?: b
     );
 };
 
-export default ParlayTransactions;
+export default TicketTransactions;
