@@ -1727,7 +1727,7 @@ const Ticket: React.FC<TicketProps> = ({
                             props: {
                                 wallet: WalletConnections.BINANCE,
                                 address: walletAddress,
-                                eoa_ot: `${address} - ${smartAddress}`,
+                                eoaOT: `${address} - ${smartAddress}`,
                                 value: Number(buyInAmount),
                                 collateral: selectedCollateral,
                                 networkId,
