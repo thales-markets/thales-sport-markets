@@ -660,12 +660,13 @@ const OverBonus = styled.span`
     }
 `;
 
-const ListContainer = styled(FlexDivColumn)``;
+const ListContainer = styled(FlexDivColumn)`
+    margin-bottom: 8px;
+`;
 
 const RowMarket = styled.div<{ outOfLiquidity: boolean; notOpened?: boolean }>`
     display: flex;
     position: relative;
-    // height: 45px;
     align-items: center;
     text-align: center;
     padding: ${(props) => (props.outOfLiquidity ? '6px 8px' : '8px 10px')};
