@@ -8,20 +8,11 @@ import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import useInterval from 'hooks/useInterval';
 import DappLayout from 'layouts/DappLayout';
 import Theme from 'layouts/Theme';
-import FreeBets from 'pages/FreeBets';
-import LiquidityPool from 'pages/LiquidityPool';
-import Markets from 'pages/Markets/Home';
-import Market from 'pages/Markets/Market';
-import Overdrop from 'pages/Overdrop';
-import PnL from 'pages/PnL';
+
+// import PnL from 'pages/PnL';
 import Profile from 'pages/Profile';
-import Promotions from 'pages/Promotions/Home';
-import Promotion from 'pages/Promotions/Promotion';
-import ResolveBlocker from 'pages/ResolveBlocker';
-import SEO from 'pages/SEO/Home';
-import SeoArticle from 'pages/SEO/SeoArticle';
-import Ticket from 'pages/Ticket';
-import { Suspense, useEffect } from 'react';
+
+import { lazy, Suspense, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Route, Router, Switch } from 'react-router-dom';
 import { setMobileState } from 'redux/modules/app';
@@ -40,6 +31,20 @@ import { getSpecificConnectorFromConnectorsArray } from 'utils/particleWallet/ut
 import queryConnector from 'utils/queryConnector';
 import { history } from 'utils/routes';
 import { useAccount, useChainId, useConnect, useConnectors, useDisconnect, useSwitchChain } from 'wagmi';
+
+const FreeBets = lazy(() => import(/* webpackChunkName: "FreeBets" */ 'pages/FreeBets'));
+const LiquidityPool = lazy(() => import(/* webpackChunkName: "LiquidityPool" */ 'pages/LiquidityPool'));
+const Markets = lazy(() => import(/* webpackChunkName: "Markets" */ 'pages/Markets/Home'));
+const Market = lazy(() => import(/* webpackChunkName: "Market" */ 'pages/Markets/Market'));
+const Overdrop = lazy(() => import(/* webpackChunkName: "Overdrop" */ 'pages/Overdrop'));
+const PnL = lazy(() => import(/* webpackChunkName: "PnL" */ 'pages/PnL'));
+// const Profile = lazy(() => import(/* webpackChunkName: "Profile" */ 'pages/Profile'));
+const Promotions = lazy(() => import(/* webpackChunkName: "Promotions" */ 'pages/Promotions/Home'));
+const Promotion = lazy(() => import(/* webpackChunkName: "Promotion" */ 'pages/Promotions/Promotion'));
+const ResolveBlocker = lazy(() => import(/* webpackChunkName: "ResolveBlocker" */ 'pages/ResolveBlocker'));
+const SEO = lazy(() => import(/* webpackChunkName: "SEO" */ 'pages/SEO/Home'));
+const SeoArticle = lazy(() => import(/* webpackChunkName: "SeoArticle" */ 'pages/SEO/SeoArticle'));
+const Ticket = lazy(() => import(/* webpackChunkName: "Ticket" */ 'pages/Ticket'));
 
 const App = () => {
     const dispatch = useDispatch();
