@@ -2,7 +2,7 @@ import liveAnimationData from 'assets/lotties/live-markets-filter.json';
 import SPAAnchor from 'components/SPAAnchor';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
-import { FUTURES_MAIN_VIEW_DISPLAY_COUNT, MEDIUM_ODDS } from 'constants/markets';
+import { FUTURES_MAIN_VIEW_DISPLAY_COUNT, MEDIUM_ODDS, QUICK_SGP_MAIN_VIEW_DISPLAY_COUNT } from 'constants/markets';
 import { PLAYER_PROPS_SPECIAL_SPORTS } from 'constants/sports';
 import { SportFilter } from 'enums/markets';
 import { MarketTypeGroup } from 'enums/marketTypes';
@@ -14,7 +14,10 @@ import {
     getLeaguePeriodType,
     getLeagueSport,
     getLeagueTooltipKey,
+    isAwayTeamMarket,
     isFuturesMarket,
+    isHomeTeamMarket,
+    isSgpBuilderMarket,
     League,
     MarketType,
     PeriodType,
@@ -312,6 +315,27 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
         if (isFutures) {
             marketsCount += market.odds.filter((odd) => odd).length - FUTURES_MAIN_VIEW_DISPLAY_COUNT;
         }
+        if (isQuickSgpMarket) {
+            let minMainViewCount = QUICK_SGP_MAIN_VIEW_DISPLAY_COUNT;
+            let minColumnViewCount = 0;
+            const totalNumOfMarkets = market.childMarkets.reduce((acc, curr) => {
+                if (isSgpBuilderMarket(curr.typeId)) {
+                    const numOfMarkets = curr.odds.length;
+                    if (isHomeTeamMarket(curr.typeId)) {
+                        minMainViewCount = Math.min(minMainViewCount, numOfMarkets);
+                        minColumnViewCount++;
+                    }
+                    if (isAwayTeamMarket(curr.typeId)) {
+                        minColumnViewCount++;
+                    }
+                    minColumnViewCount = Math.min(minColumnViewCount, QUICK_SGP_MAIN_VIEW_DISPLAY_COUNT);
+                    return acc + numOfMarkets;
+                }
+                return acc;
+            }, 0);
+
+            marketsCount = totalNumOfMarkets - (isColumnView ? minColumnViewCount : minMainViewCount);
+        }
         marketsCount = marketsCount < 0 ? 0 : marketsCount;
 
         const leagueTooltipKey = getLeagueTooltipKey(market.leagueId);
@@ -375,23 +399,27 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                 sgpBuilder,
                 ticketPositions: getTicketPositionsFogSgpBuilder(sportMarket, sgpBuilder),
             }));
+            const hasAwayMarkets = sgpBuildersWithTicketPositions.some(
+                (sgpBuildersWithTicketPosition) =>
+                    sgpBuildersWithTicketPosition.sgpBuilder.typeId === MarketType.SGP_BUILDER_AWAY
+            );
 
             return (
                 <>
                     <PositionsV2
                         markets={marketTypeFilterMarket ? [marketTypeFilterMarket] : [sportMarket]}
                         marketType={
-                            marketTypeFilter && marketTypeFilterMarket ? marketTypeFilter : MarketType.SGP_BUILDER
+                            marketTypeFilter && marketTypeFilterMarket ? marketTypeFilter : MarketType.SGP_BUILDER_HOME
                         }
                         isGameOpen={isGameOpen}
                         isMainPageView
                         isColumnView={isColumnView}
                         sgpTickets={sgpBuildersWithTicketPositions}
                     />
-                    {isColumnView && !isMobile && (
+                    {isColumnView && !isMobile && hasAwayMarkets && (
                         <PositionsV2
                             markets={[sportMarket]}
-                            marketType={MarketType.SGP_BUILDER_1}
+                            marketType={MarketType.SGP_BUILDER_AWAY}
                             isGameOpen={isGameOpen}
                             isMainPageView
                             isColumnView={isColumnView}

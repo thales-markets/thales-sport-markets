@@ -24,6 +24,7 @@ import {
     isPeriodMarket,
     isPlayerPropsMarket,
     isScoreMarket,
+    isSgpBuilderMarket,
     isSpreadMarket,
     isTotalExactMarket,
     isTotalMarket,
@@ -321,6 +322,8 @@ export const getTitleTextV2 = (
             ? marketTypeDescription
             : leagueId === League.UEFA_SUPER_CUP && marketType === MarketType.WHO_WILL_QUALIFY
             ? 'To win the cup'
+            : isSgpBuilderMarket(marketType)
+            ? 'SGP'
             : getMarketTypeName(marketType, shortName);
 
     let sufix = isPeriodMarket(marketType)

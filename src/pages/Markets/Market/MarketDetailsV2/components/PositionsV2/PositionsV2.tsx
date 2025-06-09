@@ -1,4 +1,5 @@
 import Tooltip from 'components/Tooltip';
+import { QUICK_SGP_COLUMN_VIEW_DISPLAY_COUNT, QUICK_SGP_MAIN_VIEW_DISPLAY_COUNT } from 'constants/markets';
 import { secondsToMilliseconds } from 'date-fns';
 import { SportFilter } from 'enums/markets';
 import { RiskManagementConfig } from 'enums/riskManagement';
@@ -210,7 +211,9 @@ const Positions: React.FC<PositionsProps> = ({
         if (isQuickSgpMarket) {
             let displaySgpMarkets = markets;
             if (filteredQuickSgpMarkets.length > 0) {
-                const maxQuickSgpMarkets = 2; // TODO: check this
+                const maxQuickSgpMarkets = isColumnView
+                    ? QUICK_SGP_COLUMN_VIEW_DISPLAY_COUNT
+                    : QUICK_SGP_MAIN_VIEW_DISPLAY_COUNT;
                 displaySgpMarkets = filteredQuickSgpMarkets.map((market) => ({
                     ...market,
                     odds: market.odds.slice(0, maxQuickSgpMarkets),
@@ -221,7 +224,7 @@ const Positions: React.FC<PositionsProps> = ({
         } else {
             return orderBy(markets, ['line', 'odds'], ['asc', 'desc']);
         }
-    }, [markets, isQuickSgpMarket, filteredQuickSgpMarkets]);
+    }, [markets, isQuickSgpMarket, filteredQuickSgpMarkets, isColumnView]);
 
     const positionText0 = !filteredQuickSgpMarkets.length && markets[0] ? getSubtitleText(markets[0], 0) : undefined;
     const positionText1 = !filteredQuickSgpMarkets.length && markets[0] ? getSubtitleText(markets[0], 1) : undefined;
