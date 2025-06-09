@@ -9,6 +9,7 @@ import {
     isSgpBuilderMarket,
     isTotalExactMarket,
 } from 'overtime-utils';
+import useSgpDataQuery from 'queries/sgp/useSgpDataQuery';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -26,6 +27,7 @@ import {
 } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import { SgpTicket, SportMarket, TicketPosition } from 'types/markets';
+import { SgpParams } from 'types/sgp';
 import { formatMarketOdds, getPositionOrder } from 'utils/markets';
 import {
     getMatchLabel,
@@ -35,6 +37,7 @@ import {
     sportMarketAsSerializable,
     sportMarketAsTicketPosition,
 } from 'utils/marketsV2';
+import { useChainId } from 'wagmi';
 import {
     Container,
     Odd,
@@ -67,6 +70,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
+    const networkId = useChainId();
 
     const selectedOddsType = useSelector(getOddsType);
     const isMobile = useSelector(getIsMobile);
@@ -102,6 +106,23 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
     const addedToTicket = ticket.filter((position) => isSameMarket(market, position))[0];
     const isAddedToTicket = (addedToTicket && addedToTicket.position == position) || isSgpBuilderAddedToTicket;
 
+    const sgpParams: SgpParams =
+        sgpTicketPositions.length > 1
+            ? {
+                  gameId: sgpTicketPositions[0].gameId,
+                  positions: sgpTicketPositions.map((market) => market.position),
+                  typeIds: sgpTicketPositions.map((market) => market.typeId),
+                  lines: sgpTicketPositions.map((market) => market.line),
+                  playerIds: sgpTicketPositions.map((market) => market.playerProps.playerId),
+              }
+            : { gameId: '', positions: [], typeIds: [], lines: [], playerIds: [] };
+
+    const sgpDataQuery = useSgpDataQuery(
+        sgpParams,
+        { networkId },
+        { enabled: isSgpBuilderMarket(market.typeId) && isAddedToTicket }
+    );
+
     const isPlayerPropsMarket = useMemo(() => sportFilter === SportFilter.PlayerProps, [sportFilter]);
     const isQuickSgpMarket = useMemo(() => sportFilter === SportFilter.QuickSgp, [sportFilter]);
 
@@ -115,12 +136,18 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
     const isGamePaused = market.isPaused && !isGameResolved;
     const isGameOpen = !market.isResolved && !market.isCancelled && !market.isPaused && !isGameStarted;
 
-    const odd = market.odds[position];
+    const updatedSgpBuilderOdd =
+        isSgpBuilderMarket(market.typeId) && isAddedToTicket && sgpDataQuery.isSuccess && sgpDataQuery.data
+            ? sgpDataQuery.data.data.selectedSportsbook?.priceWithSpread || 0
+            : null;
+    const odd = updatedSgpBuilderOdd !== null ? updatedSgpBuilderOdd : market.odds[position];
+
     const isZeroOdd = !odd || odd == 0 || market.typeId === MarketType.EMPTY;
     const noOdd = isZeroOdd || odd > 0.97;
-    const disabledPosition = isSgpBuilderMarket(market.typeId)
-        ? !sgpTicketPositions.length
-        : noOdd || (!isGameOpen && !isGameLive) || (!!isPositionBlocked && !isAddedToTicket);
+    const disabledPosition =
+        noOdd ||
+        (!isGameOpen && !isGameLive) ||
+        (!isSgpBuilderMarket(market.typeId) && !!isPositionBlocked && !isAddedToTicket);
     const showOdd = isGameOpen || isGameLive;
 
     const positionText = getPositionTextV2(
@@ -140,7 +167,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
                 (isFutures || isCorrectScore || isTotalExactMarket(market.typeId))
             }
             disabled={disabledPosition}
-            selected={isAddedToTicket}
+            selected={isAddedToTicket && !disabledPosition}
             isWinner={isGameRegularlyResolved && market.winningPositions && market.winningPositions.includes(position)}
             order={getPositionOrder(market.leagueId, market.typeId, position)}
             isMainPageView={isMainPageView}
