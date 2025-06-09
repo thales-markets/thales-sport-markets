@@ -1024,6 +1024,15 @@
             "migrate-ticket-label": "Migrate ticket",
             "migrate-ticket-confirmation-message": "Ticket successfully migrated",
             "not-found-validaton": "Ticket not found in the current round, please double check!"
+        },
+        "stats": {
+            "title": "Market stats (singles)",
+            "market": "Market",
+            "volume": "Volume",
+            "risk": "Risk",
+            "pnl-if-win": "PnL if win",
+            "position": "Position",
+            "market-volume": "Market volume"
         }
     },
     "deposit": {

@@ -3,6 +3,7 @@ import { useConnectModal } from '@rainbow-me/rainbowkit';
 import disclaimer from 'assets/docs/overtime-markets-disclaimer.pdf';
 import privacyPolicy from 'assets/docs/overtime-privacy-policy.pdf';
 import termsOfUse from 'assets/docs/overtime-terms-of-use.pdf';
+import Apple from 'assets/images/logins-icons/apple.svg?react';
 import BinanceWallet from 'assets/images/logins-icons/binance.svg?react';
 import Coinbase from 'assets/images/logins-icons/coinbase.svg?react';
 import Discord from 'assets/images/logins-icons/discord.svg?react';
@@ -392,7 +393,7 @@ const BoxForLabel = styled.div`
     padding: 0 130px;
     height: 1px;
     background: ${(props) => props.theme.textColor.secondary};
-    margin: 40px 0;
+    margin: 30px 0;
 `;
 
 const ConnectWithLabel = styled.span`
@@ -410,7 +411,7 @@ const ConnectWithLabel = styled.span`
 const Button = styled(FlexDivCentered)<{ disabled?: boolean }>`
     border-radius: 8px;
     width: 100%;
-    height: 50px;
+    height: 40px;
     border: 1px ${(props) => props.theme.borderColor.primary} solid;
     color: ${(props) => props.theme.textColor.primary};
     font-size: 16px;
@@ -468,6 +469,13 @@ const getIcon = (socialId: ParticalTypes | WalletConnections): any => {
             return (
                 <IconHolder>
                     <X />
+                </IconHolder>
+            );
+
+        case ParticalTypes.APPLE:
+            return (
+                <IconHolder>
+                    <Apple />
                 </IconHolder>
             );
 
