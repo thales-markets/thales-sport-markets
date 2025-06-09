@@ -582,7 +582,7 @@ const Container = styled(FlexDivColumn)<{ isExpanded: boolean; isLiveView: boole
     max-width: ${MAIN_VIEW_RIGHT_CONTAINER_WIDTH_LARGE};
     height: 100%;
     min-height: ${(props) =>
-        props.isExpanded ? (props.isLiveView ? '319px' : props.isEmpty ? '274px' : '269px') : 'unset'};
+        props.isExpanded ? (props.isLiveView ? '311px' : props.isEmpty ? '266px' : '261px') : 'unset'};
     padding: 12px;
     gap: 10px;
     background: ${(props) => props.theme.background.quinary};
