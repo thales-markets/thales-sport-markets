@@ -4,6 +4,7 @@ export enum RiskManagementConfig {
     SPREADS = 'spreads',
     LEAGUES = 'leagues',
     SGP_BLOCKERS = 'sgpBlockers',
+    SGP_BUILDERS = 'sgpBuilders',
 }
 
 export enum RiskManagementRole {

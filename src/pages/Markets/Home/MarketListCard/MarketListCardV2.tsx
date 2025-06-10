@@ -112,7 +112,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
         );
 
         const riskManagementLeaguesQuery = useRiskManagementConfigQuery(
-            RiskManagementConfig.LEAGUES,
+            [RiskManagementConfig.LEAGUES],
             { networkId },
             { enabled: !!market.live }
         );
