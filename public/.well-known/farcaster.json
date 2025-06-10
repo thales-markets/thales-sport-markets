@@ -3,7 +3,7 @@
         "version": "1",
         "name": "Overtime Sportsbook Mini-App",
         "description": "Bet on sports directly via Farcaster!",
-        "iconUrl": "thales-sport-markets-git-farcaster-thales-market.vercel.app/logos/logo1024.png",
-        "homeUrl": "thales-sport-markets-git-farcaster-thales-market.vercel.app/"
+        "iconUrl": "https://thales-sport-markets-git-farcaster-thales-market.vercel.app/logos/logo1024.png",
+        "homeUrl": "https://thales-sport-markets-git-farcaster-thales-market.vercel.app/"
     }
 }
