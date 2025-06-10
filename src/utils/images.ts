@@ -218,6 +218,7 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.RUSSIA_SUPERLIGA_WOMEN:
             return `/logos/Countries/russia.svg`;
         case League.TURKEY_SUPER_LEAGUE:
+        case League.TURKEY_BSL:
             return `/logos/Countries/turkey.svg`;
         case League.SERBIA_SUPER_LEAGUE:
         case League.SERBIA_SUPERLIGA:
