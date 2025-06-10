@@ -1,4 +1,5 @@
 import { isInBinance } from '@binance/w3w-utils';
+import sdk from '@farcaster/frame-sdk';
 import { useConnect as useParticleConnect } from '@particle-network/authkit';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import Loader from 'components/Loader';
@@ -136,6 +137,34 @@ const App = () => {
             }
         };
     }, [dispatch]);
+
+    // Signal ready to the Warpcast frame environment (with retry)
+    useEffect(() => {
+        const attemptReady = (retryCount = 0) => {
+            try {
+                // Check if running in a frame context where sdk might exist
+                if (sdk?.actions?.ready) {
+                    sdk.actions.ready();
+                    console.log('Frame SDK ready signal sent');
+                } else {
+                    console.log('Not in frame context or SDK not available yet.');
+                    // Optional: Retry if SDK wasn't available immediately
+                    if (retryCount < 3) {
+                        // Limit retries
+                        setTimeout(() => attemptReady(retryCount + 1), 1000);
+                    }
+                }
+            } catch (error) {
+                console.error('Frame SDK actions.ready() error:', error);
+                // Optional: Retry on error
+                if (retryCount < 3) {
+                    // Limit retries
+                    setTimeout(() => attemptReady(retryCount + 1), 1000);
+                }
+            }
+        };
+        attemptReady(); // Initial attempt
+    }, []);
 
     return (
         <Theme>
