@@ -201,23 +201,22 @@ const Positions: React.FC<PositionsProps> = ({
 
     const filteredQuickSgpMarkets = useMemo(
         () =>
-            isQuickSgpMarket && markets[0].childMarkets
-                ? markets[0].childMarkets.filter((childMarket) => childMarket.typeId === marketType)
+            isQuickSgpMarket
+                ? markets[0].childMarkets
+                    ? markets[0].childMarkets.filter((childMarket) => childMarket.typeId === marketType)
+                    : markets.filter((market) => market.typeId === marketType)
                 : [],
         [isQuickSgpMarket, markets, marketType]
     );
 
     const sortedMarkets = useMemo(() => {
         if (isQuickSgpMarket) {
-            let displaySgpMarkets = markets;
-            if (filteredQuickSgpMarkets.length > 0) {
-                const maxQuickSgpMarkets = QUICK_SGP_MAIN_VIEW_DISPLAY_COUNT;
-                displaySgpMarkets = filteredQuickSgpMarkets.map((market) => ({
-                    ...market,
-                    odds: market.odds.slice(0, maxQuickSgpMarkets),
-                    positionNames: market.positionNames?.slice(0, maxQuickSgpMarkets),
-                }));
-            }
+            const maxQuickSgpMarkets = QUICK_SGP_MAIN_VIEW_DISPLAY_COUNT;
+            const displaySgpMarkets = filteredQuickSgpMarkets.map((market) => ({
+                ...market,
+                odds: market.odds.slice(0, maxQuickSgpMarkets),
+                positionNames: market.positionNames?.slice(0, maxQuickSgpMarkets),
+            }));
             return orderBy(displaySgpMarkets, ['line', 'odds'], ['asc', 'desc']);
         } else {
             return orderBy(markets, ['line', 'odds'], ['asc', 'desc']);

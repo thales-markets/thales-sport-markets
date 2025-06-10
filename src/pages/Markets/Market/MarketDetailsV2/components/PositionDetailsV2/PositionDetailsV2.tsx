@@ -172,7 +172,6 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
             order={getPositionOrder(market.leagueId, market.typeId, position)}
             isMainPageView={isMainPageView}
             isPlayerPropsMarket={isPlayerPropsMarket}
-            isSgpBuilderMarket={isSgpBuilderMarket(market.typeId)}
             onClick={() => {
                 if (disabledPosition) return;
                 if (isAddedToTicket) {
@@ -217,7 +216,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
                 }
             }}
         >
-            {sgpTicketPositions.length ? (
+            {!!sgpPositionsText.length ? (
                 <SgpPositions>
                     {sgpPositionsText.map((position, i) => {
                         return (

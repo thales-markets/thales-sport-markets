@@ -237,22 +237,20 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, unfiltere
                                 </MarketTypeButton>
                             );
                         }
-                        {
-                            return (
-                                <MarketTypeButton
-                                    onClick={() =>
-                                        marketTypeFilter === marketType
-                                            ? dispatch(setMarketTypeFilter(undefined))
-                                            : dispatch(setMarketTypeFilter(marketType as MarketType))
-                                    }
-                                    selected={marketTypeFilter === marketType}
-                                    key={`${marketType}${index}`}
-                                    itemID={`${marketType}`}
-                                >
-                                    {getMarketTypeName(marketType as MarketType)}
-                                </MarketTypeButton>
-                            );
-                        }
+                        return (
+                            <MarketTypeButton
+                                onClick={() =>
+                                    marketTypeFilter === marketType
+                                        ? dispatch(setMarketTypeFilter(undefined))
+                                        : dispatch(setMarketTypeFilter(marketType as MarketType))
+                                }
+                                selected={marketTypeFilter === marketType}
+                                key={`${marketType}${index}`}
+                                itemID={`${marketType}`}
+                            >
+                                {getMarketTypeName(marketType as MarketType)}
+                            </MarketTypeButton>
+                        );
                     })}
                 </ScrollMenu>
             </NoScrollbarContainer>

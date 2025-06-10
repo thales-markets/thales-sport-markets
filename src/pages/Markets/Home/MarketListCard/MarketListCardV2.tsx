@@ -300,7 +300,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
 
         const hideGame = isGameLive ? false : isGameOpen && !areOddsValid && !areChildMarketsOddsValid;
         const isColumnView =
-            marketTypeFilter === undefined &&
+            (marketTypeFilter === undefined || isQuickSgpMarket) &&
             isThreeWayView &&
             !isMarketSelected &&
             (isGameOpen || isGameLive) &&
@@ -429,18 +429,16 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
             }));
 
             return (
-                <>
-                    <PositionsV2
-                        markets={marketTypeFilterMarket ? [marketTypeFilterMarket] : [sportMarket]}
-                        marketType={
-                            marketTypeFilter && marketTypeFilterMarket ? marketTypeFilter : MarketType.SGP_BUILDER_HOME
-                        }
-                        isGameOpen={isGameOpen}
-                        isMainPageView
-                        isColumnView={isColumnView}
-                        sgpTickets={sgpBuildersWithTicketPositions}
-                    />
-                </>
+                <PositionsV2
+                    markets={marketTypeFilterMarket ? [marketTypeFilterMarket] : [sportMarket]}
+                    marketType={
+                        marketTypeFilter && marketTypeFilterMarket ? marketTypeFilter : MarketType.SGP_BUILDER_HOME
+                    }
+                    isGameOpen={isGameOpen}
+                    isMainPageView
+                    isColumnView={isColumnView}
+                    sgpTickets={sgpBuildersWithTicketPositions}
+                />
             );
         };
 

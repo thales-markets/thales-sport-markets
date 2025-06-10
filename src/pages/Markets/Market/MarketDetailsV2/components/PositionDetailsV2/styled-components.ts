@@ -9,7 +9,6 @@ export const Container = styled(FlexDivRow)<{
     order?: string;
     isMainPageView?: boolean;
     isPlayerPropsMarket?: boolean;
-    isSgpBuilderMarket?: boolean;
     hide: boolean;
 }>`
     display: ${(props) => (props.hide ? 'none' : 'flex')};
@@ -18,7 +17,7 @@ export const Container = styled(FlexDivRow)<{
     border-radius: 5px;
     padding: 0 8px;
     flex: 1 1 0;
-    min-height: ${(props) => (props.isSgpBuilderMarket ? 'unset' : '25px')};
+    min-height: 25px;
     font-weight: 600;
     font-size: 13px;
     line-height: 16px;

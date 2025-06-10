@@ -209,6 +209,10 @@ const getSimplePositionText = (
         return getUfcSpecificPositionText(marketType, position, homeTeam, awayTeam);
     }
 
+    if (isSgpBuilderMarket(marketType) && positionNames && positionNames[position]) {
+        return positionNames[position];
+    }
+
     return position === 0 ? '1' : position === 1 ? '2' : 'X';
 };
 
@@ -385,6 +389,10 @@ export const getTitleTextV2 = (
     }
     if (isScoreMarket(marketType)) {
         sufix = scoringType.length > 1 ? ` ${scoringType.slice(0, scoringType.length - 1)}` : scoringType;
+    }
+
+    if (isSgpBuilderMarket(marketType) && !isHomeTeamMarket(marketType) && !isAwayTeamMarket(marketType)) {
+        sufix = ' (mixed)';
     }
 
     return marketTypeName ? `${marketTypeName}${sufix}` : `${marketType}`;
