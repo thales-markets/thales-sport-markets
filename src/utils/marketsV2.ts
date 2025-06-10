@@ -808,10 +808,17 @@ export const packMarket = (
     return packedMarket;
 };
 
-export const getTicketPositionsFogSgpBuilder = (market: SportMarket, sgpBuilder: SgpBuilder): TicketPosition[] => {
+// TODO: move to utils as the same code is used on API for fetching SGP quotes
+export const getTicketPositionsFogSgpBuilder = (
+    market: SportMarket,
+    sgpBuilder: SgpBuilder,
+    homeTeamPlayerIds: number[],
+    awayTeamPlayerIds: number[]
+): TicketPosition[] => {
     let ticketPositions: TicketPosition[] = [];
 
     for (let i = 0; i < sgpBuilder.size; i++) {
+        const sgpTypeId = sgpBuilder.typeId;
         const typeId = sgpBuilder.combinedTypeIds[i];
         const playerIds = sgpBuilder.combinedPlayerIds[i];
         const line = sgpBuilder.combinedLines[i];
@@ -821,13 +828,23 @@ export const getTicketPositionsFogSgpBuilder = (market: SportMarket, sgpBuilder:
         const getDefaultCondition = (marketPlayerId: number, marketLine: number) =>
             (!playerIds.length || playerIds.includes(marketPlayerId)) && (line === null || marketLine === line);
 
-        const combinedChildMarketsByType = market.childMarkets.filter((childMarket) => childMarket.typeId === typeId);
+        const combinedChildMarkets = market.childMarkets.filter(
+            (childMarket) =>
+                childMarket.typeId === typeId &&
+                (!isPlayerPropsMarket(typeId) ||
+                    (isHomeTeamMarket(sgpTypeId)
+                        ? homeTeamPlayerIds.includes(childMarket.playerProps.playerId)
+                        : isAwayTeamMarket(sgpTypeId)
+                        ? awayTeamPlayerIds.includes(childMarket.playerProps.playerId)
+                        : true))
+        );
 
         let combinedChildMarket = undefined;
         switch (typeId) {
             case MarketType.PLAYER_PROPS_POINTS:
-                const maxLine = Math.max(...combinedChildMarketsByType.map((childMarket) => childMarket.line));
-                combinedChildMarket = combinedChildMarketsByType.find((childMarket) => {
+            case MarketType.PLAYER_PROPS_ASSISTS:
+                const maxLine = Math.max(...combinedChildMarkets.map((childMarket) => childMarket.line));
+                combinedChildMarket = combinedChildMarkets.find((childMarket) => {
                     const typeSpecifiedCondition = childMarket.line === maxLine;
                     return isDefaultCondition
                         ? getDefaultCondition(childMarket.playerProps.playerId, childMarket.line) ||
@@ -838,11 +855,9 @@ export const getTicketPositionsFogSgpBuilder = (market: SportMarket, sgpBuilder:
             case MarketType.PLAYER_PROPS_TRIPLE_DOUBLE:
             case MarketType.PLAYER_PROPS_DOUBLE_DOUBLE:
                 const maxOdds = Math.max(
-                    ...combinedChildMarketsByType.map((childMarket) =>
-                        position !== null ? childMarket.odds[position] : 0
-                    )
+                    ...combinedChildMarkets.map((childMarket) => (position !== null ? childMarket.odds[position] : 0))
                 );
-                combinedChildMarket = combinedChildMarketsByType.find((childMarket) => {
+                combinedChildMarket = combinedChildMarkets.find((childMarket) => {
                     const typeSpecifiedCondition = position !== null && childMarket.odds[position] === maxOdds;
                     return isDefaultCondition
                         ? getDefaultCondition(childMarket.playerProps.playerId, childMarket.line) ||
@@ -851,7 +866,7 @@ export const getTicketPositionsFogSgpBuilder = (market: SportMarket, sgpBuilder:
                 });
                 break;
             default:
-                combinedChildMarket = combinedChildMarketsByType.find((childMarket) =>
+                combinedChildMarket = combinedChildMarkets.find((childMarket) =>
                     getDefaultCondition(childMarket.playerProps.playerId, childMarket.line)
                 );
         }

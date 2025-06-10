@@ -25,6 +25,7 @@ import {
 } from 'overtime-utils';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
 import useRiskManagementConfigQuery from 'queries/riskManagement/useRiskManagementConfig';
+import useTeamPlayersInfoQuery from 'queries/teams/useTeamPlayersInfoQuery';
 import React, { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -40,7 +41,7 @@ import {
     setSelectedMarket,
 } from 'redux/modules/market';
 import { formatShortDateWithTime } from 'thales-utils';
-import { SportMarket } from 'types/markets';
+import { SportMarket, TeamPlayersData } from 'types/markets';
 import { RiskManagementLeaguesAndTypes, RiskManagementSgpBuilders } from 'types/riskManagement';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getLeagueFlagSource, getOnImageError, getOnPlayerImageError, getTeamImageSource } from 'utils/images';
@@ -158,6 +159,28 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                     ? (riskManagementSgpBuildersQuery.data as RiskManagementSgpBuilders).sgpBuilders
                     : [],
             [riskManagementSgpBuildersQuery.isSuccess, riskManagementSgpBuildersQuery.data]
+        );
+
+        const teamPlayersInfoQuery = useTeamPlayersInfoQuery({ networkId }, { enabled: isQuickSgpMarket });
+
+        const homeTeamPlayerIds = useMemo(
+            () =>
+                teamPlayersInfoQuery.isSuccess && teamPlayersInfoQuery.data
+                    ? ((teamPlayersInfoQuery.data as TeamPlayersData).get(market.homeTeam.toLowerCase()) || [])
+                          .filter((teamPlayer) => teamPlayer.playerId)
+                          .map((teamPlayer) => teamPlayer.playerId)
+                    : [],
+            [teamPlayersInfoQuery.isSuccess, teamPlayersInfoQuery.data, market]
+        );
+
+        const awayTeamPlayerIds = useMemo(
+            () =>
+                teamPlayersInfoQuery.isSuccess && teamPlayersInfoQuery.data
+                    ? ((teamPlayersInfoQuery.data as TeamPlayersData).get(market.awayTeam.toLowerCase()) || [])
+                          .filter((teamPlayer) => teamPlayer.playerId)
+                          .map((teamPlayer) => teamPlayer.playerId)
+                    : [],
+            [teamPlayersInfoQuery.isSuccess, teamPlayersInfoQuery.data, market]
         );
 
         useEffect(() => {
@@ -397,7 +420,12 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
         const getQuickSgpPositions = (sportMarket: SportMarket) => {
             const sgpBuildersWithTicketPositions = sgpBuilders.map((sgpBuilder) => ({
                 sgpBuilder,
-                ticketPositions: getTicketPositionsFogSgpBuilder(sportMarket, sgpBuilder),
+                ticketPositions: getTicketPositionsFogSgpBuilder(
+                    sportMarket,
+                    sgpBuilder,
+                    homeTeamPlayerIds,
+                    awayTeamPlayerIds
+                ),
             }));
 
             return (

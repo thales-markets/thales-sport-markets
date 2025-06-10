@@ -7,6 +7,7 @@ import { t } from 'i18next';
 import { groupBy } from 'lodash';
 import { isFuturesMarket, isSgpBuilderMarket, League, MarketType, PLAYER_PROPS_MARKET_TYPES } from 'overtime-utils';
 import useRiskManagementConfigQuery from 'queries/riskManagement/useRiskManagementConfig';
+import useTeamPlayersInfoQuery from 'queries/teams/useTeamPlayersInfoQuery';
 import React, { useMemo, useReducer } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
@@ -17,7 +18,7 @@ import {
     setMarketTypeGroupFilter,
 } from 'redux/modules/market';
 import { useTheme } from 'styled-components';
-import { SportMarket } from 'types/markets';
+import { SportMarket, TeamPlayersData } from 'types/markets';
 import { RiskManagementSgpBuilders } from 'types/riskManagement';
 import { getTicketPositionsFogSgpBuilder, isOddValid } from 'utils/marketsV2';
 import { useChainId } from 'wagmi';
@@ -51,6 +52,28 @@ const SelectedMarketDetails: React.FC<SelectedMarketDetailsProps> = ({ market })
                 ? (riskManagementSgpBuildersQuery.data as RiskManagementSgpBuilders).sgpBuilders
                 : [],
         [riskManagementSgpBuildersQuery.isSuccess, riskManagementSgpBuildersQuery.data]
+    );
+
+    const teamPlayersInfoQuery = useTeamPlayersInfoQuery({ networkId }, { enabled: sgpBuilders.length > 0 });
+
+    const homeTeamPlayerIds = useMemo(
+        () =>
+            teamPlayersInfoQuery.isSuccess && teamPlayersInfoQuery.data
+                ? ((teamPlayersInfoQuery.data as TeamPlayersData).get(market.homeTeam.toLowerCase()) || [])
+                      .filter((teamPlayer) => teamPlayer.playerId)
+                      .map((teamPlayer) => teamPlayer.playerId)
+                : [],
+        [teamPlayersInfoQuery.isSuccess, teamPlayersInfoQuery.data, market]
+    );
+
+    const awayTeamPlayerIds = useMemo(
+        () =>
+            teamPlayersInfoQuery.isSuccess && teamPlayersInfoQuery.data
+                ? ((teamPlayersInfoQuery.data as TeamPlayersData).get(market.awayTeam.toLowerCase()) || [])
+                      .filter((teamPlayer) => teamPlayer.playerId)
+                      .map((teamPlayer) => teamPlayer.playerId)
+                : [],
+        [teamPlayersInfoQuery.isSuccess, teamPlayersInfoQuery.data, market]
     );
 
     const playerName = useMemo(() => selectedMarket?.playerName, [selectedMarket?.playerName]);
@@ -142,7 +165,12 @@ const SelectedMarketDetails: React.FC<SelectedMarketDetailsProps> = ({ market })
                             const sgpBuildersWithTicketPositions = isSgpBuilderMarket(typeId)
                                 ? sgpBuilders.map((sgpBuilder) => ({
                                       sgpBuilder,
-                                      ticketPositions: getTicketPositionsFogSgpBuilder(market, sgpBuilder),
+                                      ticketPositions: getTicketPositionsFogSgpBuilder(
+                                          market,
+                                          sgpBuilder,
+                                          homeTeamPlayerIds,
+                                          awayTeamPlayerIds
+                                      ),
                                   }))
                                 : [];
                             return (

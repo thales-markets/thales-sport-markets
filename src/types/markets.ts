@@ -306,3 +306,7 @@ export type GameData = {
     tickets: Ticket[];
     gameStats: GameStats;
 };
+
+export type TeamPlayersData = Map<string, PlayersData[]>;
+
+export type PlayersData = { playerName: string; playerId: number };
