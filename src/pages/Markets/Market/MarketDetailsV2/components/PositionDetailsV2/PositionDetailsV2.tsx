@@ -172,6 +172,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
             order={getPositionOrder(market.leagueId, market.typeId, position)}
             isMainPageView={isMainPageView}
             isPlayerPropsMarket={isPlayerPropsMarket}
+            isQuickSgpMarket={isQuickSgpMarket}
             onClick={() => {
                 if (disabledPosition) return;
                 if (isAddedToTicket) {
