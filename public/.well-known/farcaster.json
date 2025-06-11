@@ -10,6 +10,7 @@
         "name": "Overtime Sportsbook Mini-Dapp",
         "description": "Bet on sports directly via Farcaster!",
         "iconUrl": "https://thales-sport-markets-git-farcaster-thales-market.vercel.app/logos/logo1024.png",
-        "homeUrl": "https://thales-sport-markets-git-farcaster-thales-market.vercel.app/"
+        "homeUrl": "https://thales-sport-markets-git-farcaster-thales-market.vercel.app/",
+        "requiredChains": ["eip155:10", "eip155:42161", "eip155:8453"]
     }
 }
