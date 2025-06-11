@@ -74,6 +74,7 @@ export const ContentRow = styled.div<{
     gridMinMaxPercentage: number;
     isColumnView?: boolean;
     isPlayerProps?: boolean;
+    isSgpBuilder?: boolean;
 }>`
     margin-top: ${(props) => (props.isPlayerProps ? '4px' : '0')};
     margin-bottom: ${(props) => (props.isColumnView ? '0' : props.isPlayerProps ? '4px' : '5px')};
@@ -83,7 +84,7 @@ export const ContentRow = styled.div<{
         props.isColumnView
             ? ''
             : `grid-template-columns: repeat(auto-fit, minmax(calc(${props.gridMinMaxPercentage}% - 5px), 1fr));`}
-    gap: 5px;
+    gap: ${(props) => (props.isSgpBuilder ? '10px' : '5px')};
     flex-direction: column;
     flex: 1;
 `;

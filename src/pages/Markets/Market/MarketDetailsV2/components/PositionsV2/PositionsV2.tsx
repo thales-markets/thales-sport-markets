@@ -7,6 +7,7 @@ import { intersection, orderBy } from 'lodash';
 import {
     getSgpMarketsCombinationAllowed,
     isFuturesMarket,
+    isSgpBuilderMarket,
     isTotalOrSpreadWithWholeLine,
     League,
     MarketType,
@@ -325,6 +326,7 @@ const Positions: React.FC<PositionsProps> = ({
                                         gridMinMaxPercentage={getGridMinMaxPercentage(market, isMobile)}
                                         isColumnView={isColumnView}
                                         isPlayerProps={!!isPlayerPropsMarket}
+                                        isSgpBuilder={isSgpBuilderMarket(market.typeId)}
                                     >
                                         {filteredOdds.map((oddsData, index) => {
                                             const position = isFutures
