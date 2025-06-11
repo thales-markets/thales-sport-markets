@@ -13,7 +13,6 @@ import {
     walletConnectWallet,
 } from '@rainbow-me/rainbowkit/wallets';
 import { RPC_LIST } from 'constants/network';
-import { farcasterRainbowWallet } from 'constants/wallet';
 import { NetworkId } from 'thales-utils';
 import { isMobile } from 'utils/device';
 import {
@@ -38,7 +37,6 @@ const wallets = [
     rainbowWallet,
     imTokenWallet,
     binanceWallet,
-    farcasterRainbowWallet,
 ];
 
 const socialWallets = [
