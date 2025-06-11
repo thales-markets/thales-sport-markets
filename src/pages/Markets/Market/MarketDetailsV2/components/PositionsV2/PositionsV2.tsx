@@ -18,7 +18,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { getSportFilter } from 'redux/modules/market';
+import { getIsMarketSelected, getSportFilter } from 'redux/modules/market';
 import { getIsSgp, getTicket } from 'redux/modules/ticket';
 import styled from 'styled-components';
 import { SgpTicket, SportMarket, TicketPosition } from 'types/markets';
@@ -77,6 +77,7 @@ const Positions: React.FC<PositionsProps> = ({
 
     const ticket = useSelector(getTicket);
     const isSgp = useSelector(getIsSgp);
+    const isMarketSelected = useSelector(getIsMarketSelected);
     const sportFilter = useSelector(getSportFilter);
     const isMobile = useSelector(getIsMobile);
 
@@ -211,7 +212,7 @@ const Positions: React.FC<PositionsProps> = ({
 
     const sortedMarkets = useMemo(() => {
         if (isQuickSgpMarket) {
-            const maxQuickSgpMarkets = QUICK_SGP_MAIN_VIEW_DISPLAY_COUNT;
+            const maxQuickSgpMarkets = isMarketSelected ? undefined : QUICK_SGP_MAIN_VIEW_DISPLAY_COUNT;
             const displaySgpMarkets = filteredQuickSgpMarkets.map((market) => ({
                 ...market,
                 odds: market.odds.slice(0, maxQuickSgpMarkets),
@@ -221,7 +222,7 @@ const Positions: React.FC<PositionsProps> = ({
         } else {
             return orderBy(markets, ['line', 'odds'], ['asc', 'desc']);
         }
-    }, [markets, isQuickSgpMarket, filteredQuickSgpMarkets]);
+    }, [markets, isQuickSgpMarket, filteredQuickSgpMarkets, isMarketSelected]);
 
     const positionText0 = !filteredQuickSgpMarkets.length && markets[0] ? getSubtitleText(markets[0], 0) : undefined;
     const positionText1 = !filteredQuickSgpMarkets.length && markets[0] ? getSubtitleText(markets[0], 1) : undefined;

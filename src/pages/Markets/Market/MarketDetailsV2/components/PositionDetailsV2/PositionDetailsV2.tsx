@@ -83,11 +83,14 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
         if (isSgpBuilderMarket(market.typeId) && !!sgpTickets?.length) {
             return sgpTickets.find(
                 (sgpTicket) =>
-                    sgpTicket.sgpBuilder.typeId === market.typeId && sgpTicket.sgpBuilder.positionIndex === position
+                    (!sgpTicket.sgpBuilder.sport || sgpTicket.sgpBuilder.sport === market.sport) &&
+                    (!sgpTicket.sgpBuilder.leagueId || sgpTicket.sgpBuilder.leagueId === market.leagueId) &&
+                    sgpTicket.sgpBuilder.typeId === market.typeId &&
+                    sgpTicket.sgpBuilder.positionIndex === position
             );
         }
         return undefined;
-    }, [market.typeId, position, sgpTickets]);
+    }, [market.sport, market.leagueId, market.typeId, position, sgpTickets]);
 
     const sgpTicketPositions = useMemo(() => (currentSgpTicket ? currentSgpTicket.ticketPositions : []), [
         currentSgpTicket,

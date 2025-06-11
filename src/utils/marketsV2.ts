@@ -826,11 +826,17 @@ export const getTicketPositionsFogSgpBuilder = (
     let ticketPositions: TicketPosition[] = [];
 
     for (let i = 0; i < sgpBuilder.size; i++) {
+        const sport = sgpBuilder.sport;
+        const leagueId = sgpBuilder.leagueId;
         const sgpTypeId = sgpBuilder.typeId;
         const typeId = sgpBuilder.combinedTypeIds[i];
         const playerIds = sgpBuilder.combinedPlayerIds[i];
         const line = sgpBuilder.combinedLines[i];
         const position = sgpBuilder.combinedPositions[i];
+
+        if (market.sport !== sport && market.leagueId !== leagueId) {
+            continue;
+        }
 
         const isDefaultCondition = playerIds.length > 0 || line !== null;
         const getDefaultCondition = (marketPlayerId: number, marketLine: number) =>
