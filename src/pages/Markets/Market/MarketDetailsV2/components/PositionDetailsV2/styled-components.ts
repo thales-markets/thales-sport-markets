@@ -101,6 +101,8 @@ export const SgpPositionMark = styled.span<{ isSelected: boolean }>`
     position: absolute;
     width: 13px;
     height: 13px;
+    top: 50%;
+    transform: translateY(-50%);
     background-color: ${(props) =>
         props.isSelected ? props.theme.background.quaternary : props.theme.background.secondary};
     border: 1px solid ${(props) => props.theme.textColor.quinary};
