@@ -84,7 +84,7 @@ const Positions: React.FC<PositionsProps> = ({
     const isSgpEnabled = useMemo(() => isSgp && ticket.length > 0, [isSgp, ticket.length]);
 
     const riskManagementSgpBlockersQuery = useRiskManagementConfigQuery(
-        RiskManagementConfig.SGP_BLOCKERS,
+        [RiskManagementConfig.SGP_BLOCKERS],
         { networkId },
         { enabled: isSgpEnabled }
     );
@@ -92,7 +92,7 @@ const Positions: React.FC<PositionsProps> = ({
     const sgpBlockers = useMemo(
         () =>
             riskManagementSgpBlockersQuery.isSuccess && riskManagementSgpBlockersQuery.data
-                ? (riskManagementSgpBlockersQuery.data as RiskManagementSgpBlockers)
+                ? (riskManagementSgpBlockersQuery.data as RiskManagementSgpBlockers).sgpBlockers
                 : [],
         [riskManagementSgpBlockersQuery.isSuccess, riskManagementSgpBlockersQuery.data]
     );

@@ -478,7 +478,7 @@
         "back": "Back",
         "send-free-bet": "Send free bet",
         "free-bet": {
-            "claim-btn": "Claim amount will be reduced by buy-in amount, which will transfer to your free bet balance."
+            "claim-btn": "Claim amount will be reduced by buy-in amount."
         },
         "free-bet-modal": {
             "title": "Send free bet",
