@@ -92,7 +92,7 @@ export const SgpPositionRow = styled(FlexDivRowCentered)`
             top: 12px;
             bottom: -6px;
             left: 6px;
-            border-left: 1px dashed ${(props) => props.theme.textColor.quinary};
+            border-left: 1px solid ${(props) => props.theme.textColor.quinary};
         }
     }
 `;
