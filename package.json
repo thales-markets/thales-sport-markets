@@ -4,7 +4,6 @@
     "private": true,
     "dependencies": {
         "@biconomy/account": "4.1.1",
-        "@binance/w3w-rainbow-connector-v2": "^1.0.2",
         "@farcaster/frame-sdk": "^0.0.56",
         "@farcaster/frame-wagmi-connector": "0.0.45",
         "@particle-network/authkit": "^2.0.19",

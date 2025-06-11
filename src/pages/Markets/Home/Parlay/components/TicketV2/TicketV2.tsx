@@ -1,4 +1,3 @@
-import { isInBinance } from '@binance/w3w-utils';
 import ApprovalModal from 'components/ApprovalModal';
 import Button from 'components/Button';
 import CollateralSelector from 'components/CollateralSelector';
@@ -99,7 +98,6 @@ import { SportsbookData } from 'types/sgp';
 import { ShareTicketModalProps } from 'types/tickets';
 import { OverdropLevel, ThemeInterface } from 'types/ui';
 import { ViemContract } from 'types/viem';
-import { WalletConnections } from 'types/wallet';
 import {
     convertFromStableToCollateral,
     getCollateral,
@@ -262,7 +260,7 @@ const Ticket: React.FC<TicketProps> = ({
     const client = useClient();
     const walletClient = useWalletClient();
 
-    const { address, isConnected, connector } = useAccount();
+    const { address, isConnected } = useAccount();
     const { smartAddress } = useBiconomy();
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
@@ -1721,20 +1719,6 @@ const Ticket: React.FC<TicketProps> = ({
                             },
                         }
                     );
-
-                    if (isInBinance() || (connector && connector.id === WalletConnections.BINANCE)) {
-                        PLAUSIBLE.trackEvent(PLAUSIBLE_KEYS.binanceWalletBuy, {
-                            props: {
-                                wallet: WalletConnections.BINANCE,
-                                address: walletAddress,
-                                eoaOT: `${address} - ${smartAddress}`,
-                                value: Number(buyInAmount),
-                                collateral: selectedCollateral,
-                                networkId,
-                                isBiconomy,
-                            },
-                        });
-                    }
 
                     const shareTicketOnClose = () => {
                         if (!keepSelection) dispatch(removeAll());
