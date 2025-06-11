@@ -156,7 +156,7 @@ const App = () => {
             }
         };
         attemptReady(); // Initial attempt
-    }, []);
+    }, [connect]);
 
     return (
         <Theme>
