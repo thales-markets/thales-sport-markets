@@ -12,7 +12,7 @@ import { secondsToMilliseconds } from 'date-fns';
 import { SportFilter, StatusFilter, TicketErrorCode } from 'enums/markets';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import { isEqual } from 'lodash';
-import { League, LeagueMap } from 'overtime-utils';
+import { League, LeagueMap, MarketType } from 'overtime-utils';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsAmmDataQuery from 'queries/markets/useSportsAmmDataQuery';
 import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
@@ -89,7 +89,9 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
 
     const isLive = useMemo(() => !!ticket[0]?.live, [ticket]);
 
-    const previousTicketOdds = useRef<{ position: number; odd: number; gameId: string; proof: string[] }[]>([]);
+    const previousTicketOdds = useRef<
+        { position: number; odd: number; gameId: string; proof: string[]; typeId: MarketType; line: number }[]
+    >([]);
 
     const sportsAmmDataQuery = useSportsAmmDataQuery({ networkId, client });
 
@@ -280,6 +282,8 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                 position: market.position,
                 gameId: market.gameId,
                 proof: [],
+                typeId: market.typeId,
+                line: market.line,
             }));
 
             if (!isEqual(previousTicketOdds.current, ticketOdds)) {
@@ -352,6 +356,8 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                 position: market.position,
                 gameId: market.gameId,
                 proof: market.proof,
+                typeId: market.typeId,
+                line: market.line,
             }));
 
             if (!isEqual(previousTicketOdds.current, ticketOdds)) {
