@@ -47,5 +47,14 @@
             ]
         }
     ],
-    "rewrites": [{ "source": "/(.*)", "destination": "/" }]
+    "rewrites": [
+        {
+            "source": "/public/(.*)",
+            "destination": "/public/$1"
+        },
+        {
+            "source": "/(.*)",
+            "destination": "/"
+        }
+    ]
 }
