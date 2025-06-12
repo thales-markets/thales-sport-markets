@@ -1,3 +1,4 @@
+import { isInBinance } from '@binance/w3w-utils';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import disclaimer from 'assets/docs/overtime-markets-disclaimer.pdf';
 import privacyPolicy from 'assets/docs/overtime-privacy-policy.pdf';
@@ -16,7 +17,7 @@ import SimpleLoader from 'components/SimpleLoader';
 import { LINKS } from 'constants/links';
 import { DEFAULT_NETWORK } from 'constants/network';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { SUPPORTED_WALLET_CONNECTORS_MODAL } from 'constants/wallet';
+import { SUPPORTED_PARTICAL_CONNECTORS_MODAL, SUPPORTED_WALLET_CONNECTORS_MODAL } from 'constants/wallet';
 import useLocalStorage from 'hooks/useLocalStorage';
 import React, { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
@@ -77,6 +78,15 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
 
     const [isConnecting, setIsConnecting] = useState(false);
 
+    const handleParticleConnect = (connector: Connector) => {
+        try {
+            connect({ connector });
+            onClose();
+        } catch (e) {
+            console.log('Error occurred');
+        }
+    };
+
     const handleConnect = async (connector: Connector) => {
         try {
             setIsConnecting(true);
@@ -134,15 +144,48 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                     </HeaderContainer>
                     <ButtonsContainer disabled={!termsAccepted}>
                         <SocialLoginWrapper>
-                            {SUPPORTED_WALLET_CONNECTORS_MODAL.map((item, index) => {
+                            {SUPPORTED_PARTICAL_CONNECTORS_MODAL.map((item, index) => {
                                 const connector = getSpecificConnectorFromConnectorsArray(connectors, item);
                                 if (connector) {
                                     return (
-                                        <Button key={index} onClick={() => handleConnect(connector)}>
+                                        <Button
+                                            disabled={isInBinance()}
+                                            key={index}
+                                            onClick={() => !isInBinance() && handleParticleConnect(connector)}
+                                        >
                                             {<> {getIcon(item)}</>}
                                             {t(getWalletLabel(item))}
                                         </Button>
                                     );
+                                }
+                            })}
+                        </SocialLoginWrapper>
+                        <BoxForLabel>
+                            <ConnectWithLabel>{t('common.wallet.or-connect-with')}</ConnectWithLabel>
+                        </BoxForLabel>
+                        <SocialLoginWrapper>
+                            {SUPPORTED_WALLET_CONNECTORS_MODAL.map((item, index) => {
+                                const connector = getSpecificConnectorFromConnectorsArray(connectors, item);
+                                if (connector) {
+                                    if (isInBinance() && connector.id === WalletConnections.METAMASK) {
+                                        return (
+                                            <Button key={index} onClick={() => handleConnect(connector)}>
+                                                {<> {getIcon(WalletConnections.BINANCE)}</>}
+                                                {t(getWalletLabel(WalletConnections.BINANCE))}
+                                            </Button>
+                                        );
+                                    } else {
+                                        return (
+                                            <Button
+                                                disabled={isInBinance()}
+                                                key={index}
+                                                onClick={() => !isInBinance() && handleConnect(connector)}
+                                            >
+                                                {<> {getIcon(item)}</>}
+                                                {t(getWalletLabel(item))}
+                                            </Button>
+                                        );
+                                    }
                                 }
                             })}
                         </SocialLoginWrapper>
@@ -341,6 +384,28 @@ const SocialLoginWrapper = styled(FlexDivCentered)`
     position: relative;
     flex-direction: column;
     gap: 10px;
+`;
+
+const BoxForLabel = styled.div`
+    position: relative;
+    display: block;
+    width: 100%;
+    padding: 0 130px;
+    height: 1px;
+    background: ${(props) => props.theme.textColor.secondary};
+    margin: 30px 0;
+`;
+
+const ConnectWithLabel = styled.span`
+    position: absolute;
+    top: -40px;
+    padding: 0 10px;
+    color: ${(props) => props.theme.textColor.secondary};
+    font-size: 14px;
+    font-weight: 400;
+    margin: 32px 0px;
+    text-align: center;
+    background: ${(props) => props.theme.background.secondary};
 `;
 
 const Button = styled(FlexDivCentered)<{ disabled?: boolean }>`
