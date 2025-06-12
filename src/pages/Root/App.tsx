@@ -1,6 +1,5 @@
 import { isInBinance } from '@binance/w3w-utils';
 import sdk from '@farcaster/frame-sdk';
-import farcasterFrame from '@farcaster/frame-wagmi-connector';
 import { useConnect as useParticleConnect } from '@particle-network/authkit';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import Loader from 'components/Loader';
@@ -41,6 +40,7 @@ import { isNetworkSupported, isRouteAvailableForNetwork } from 'utils/network';
 import { getSpecificConnectorFromConnectorsArray } from 'utils/particleWallet/utils';
 import queryConnector from 'utils/queryConnector';
 import { history } from 'utils/routes';
+import { delay } from 'utils/timer';
 import { useAccount, useChainId, useConnect, useConnectors, useDisconnect, useSwitchChain } from 'wagmi';
 
 const App = () => {
@@ -147,12 +147,11 @@ const App = () => {
                 // Check if running in a frame context where sdk might exist
                 if (sdk?.actions?.ready) {
                     await sdk.actions.ready();
-                    connect({
-                        connector: farcasterFrame(),
-                    });
                 }
             } catch (error) {
                 console.log('Error signaling ready:', error);
+                await delay(1000); // Retry after 1 second
+                attemptReady(); // Retry signaling ready
             }
         };
         attemptReady(); // Initial attempt
