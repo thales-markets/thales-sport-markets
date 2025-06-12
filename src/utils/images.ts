@@ -60,6 +60,8 @@ export const getTeamImageSource = (team: string, league: League) => {
         ? `/logos/NCAA/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.PGA_FUTURES
         ? `/logos/leagueLogos/pga.webp`
+        : league == League.FIFA_CLUB_WORLD_CUP_FUTURES
+        ? `/logos/Countries/fifa-club-world-cup.webp`
         : `/logos/${leagueLabel}/${team.trim().replaceAll(' ', '-').replaceAll('/', '-').toLowerCase()}.webp`;
 };
 
@@ -402,6 +404,7 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.IIHF_WORLD_CHAMPIONSHIP:
             return `/logos/Countries/iihf.png`;
         case League.FIFA_CLUB_WORLD_CUP:
+        case League.FIFA_CLUB_WORLD_CUP_FUTURES:
             return `/logos/Countries/fifa-club-world-cup.webp`;
         case League.PHILIPPINES_PVL_WOMEN:
             return `/logos/Countries/philippines.svg`;
