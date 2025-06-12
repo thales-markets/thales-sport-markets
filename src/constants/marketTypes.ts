@@ -127,6 +127,7 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
         [MarketTypeGroup.WINNER]: [...WINNER_MARKET_TYPES, ...DOUBLE_CHANCE_MARKET_TYPES, MarketType.HALFTIME_FULLTIME],
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
         [MarketTypeGroup.HANDICAP]: SPREAD_MARKET_TYPES,
+        [MarketTypeGroup.QUICK_SGP]: [...SGP_BUILDER_MARKET_TYPES],
         [MarketTypeGroup.DOUBLE_CHANCE]: DOUBLE_CHANCE_MARKET_TYPES,
         [MarketTypeGroup.DRAW_NO_BET]: DRAW_NO_BET_MARKET_TYPES,
         [MarketTypeGroup.BOTH_TEAMS_TO_SCORE]: BOTH_TEAMS_TO_SCORE_MARKET_TYPES,
@@ -248,6 +249,7 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
         [MarketTypeGroup.HANDICAP]: SPREAD_MARKET_TYPES,
+        [MarketTypeGroup.QUICK_SGP]: [...SGP_BUILDER_MARKET_TYPES],
         [MarketTypeGroup.SGP]: [MarketType.WINNER_TOTAL],
         [MarketTypeGroup.SETS]: [
             MarketType.TOTAL2,
@@ -275,6 +277,7 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
         [MarketTypeGroup.HANDICAP]: SPREAD_MARKET_TYPES,
+        [MarketTypeGroup.QUICK_SGP]: [...SGP_BUILDER_MARKET_TYPES],
         [MarketTypeGroup.SGP]: [MarketType.WINNER_TOTAL],
         [MarketTypeGroup.SETS]: [
             MarketType.TOTAL2,
@@ -302,6 +305,7 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
         [MarketTypeGroup.HANDICAP]: SPREAD_MARKET_TYPES,
+        [MarketTypeGroup.QUICK_SGP]: [...SGP_BUILDER_MARKET_TYPES],
         [MarketTypeGroup.SGP]: [MarketType.WINNER_TOTAL],
         [MarketTypeGroup.QUARTERS]: [
             ...FIRST_PERIOD_MARKET_TYPES,
@@ -369,6 +373,7 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
         [MarketTypeGroup.HANDICAP]: SPREAD_MARKET_TYPES,
+        [MarketTypeGroup.QUICK_SGP]: [...SGP_BUILDER_MARKET_TYPES],
         [MarketTypeGroup.SGP]: [MarketType.WINNER_TOTAL],
         [MarketTypeGroup.FIRST_INNING]: FIRST_PERIOD_MARKET_TYPES,
         [MarketTypeGroup.FIRST_FIVE_INNINGS]: FIRST_PERIOD_MARKET_TYPES2,
@@ -420,17 +425,20 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
         [MarketTypeGroup.HANDICAP]: SPREAD_MARKET_TYPES,
+        [MarketTypeGroup.QUICK_SGP]: [...SGP_BUILDER_MARKET_TYPES],
     },
     [Sport.RUGBY]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
         [MarketTypeGroup.HANDICAP]: SPREAD_MARKET_TYPES,
+        [MarketTypeGroup.QUICK_SGP]: [...SGP_BUILDER_MARKET_TYPES],
         [MarketTypeGroup.FIRST_HALF]: FIRST_PERIOD_MARKET_TYPES,
     },
     [Sport.AUSSIE_RULES]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
         [MarketTypeGroup.HANDICAP]: SPREAD_MARKET_TYPES,
+        [MarketTypeGroup.QUICK_SGP]: [...SGP_BUILDER_MARKET_TYPES],
         [MarketTypeGroup.SGP]: [MarketType.WINNER_TOTAL],
         [MarketTypeGroup.QUARTERS]: [
             ...FIRST_PERIOD_MARKET_TYPES,
@@ -498,6 +506,7 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
         [MarketTypeGroup.HANDICAP]: SPREAD_MARKET_TYPES,
+        [MarketTypeGroup.QUICK_SGP]: [...SGP_BUILDER_MARKET_TYPES],
         [MarketTypeGroup.SETS]: [
             MarketType.TOTAL2,
             MarketType.SPREAD2,
@@ -556,6 +565,7 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
         [MarketTypeGroup.HANDICAP]: SPREAD_MARKET_TYPES,
+        [MarketTypeGroup.QUICK_SGP]: [...SGP_BUILDER_MARKET_TYPES],
         [MarketTypeGroup.DOUBLE_CHANCE]: DOUBLE_CHANCE_MARKET_TYPES,
         [MarketTypeGroup.DRAW_NO_BET]: DRAW_NO_BET_MARKET_TYPES,
         [MarketTypeGroup.FIRST_HALF]: FIRST_PERIOD_MARKET_TYPES,
