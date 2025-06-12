@@ -125,6 +125,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                     liveMarketsCountPerSport={liveMarketsCountPerSport}
                                     playerPropsMarketsCountPerTag={playerPropsMarketsCountPerTag}
                                     showLive={sport == SportFilter.Live}
+                                    quickSgpMarketsCountPerTag={quickSgpMarketsCountPerTag}
                                     sport={sport}
                                     marketsCountPerTournament={marketsCountPerTournament}
                                     playerPropsCountPerTournament={playerPropsCountPerTournament}
