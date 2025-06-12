@@ -56,7 +56,7 @@ const App = () => {
 
     // check if networks are inconsistent between connector and dApp
     useInterval(async () => {
-        if (isConnected && connector && connector?.getChainId) {
+        if (isConnected && connector && connector?.getChainId && !(await sdk.isInMiniApp())) {
             const chainId = await connector.getChainId();
 
             if (chainId !== networkId) {
