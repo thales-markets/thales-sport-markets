@@ -1,7 +1,7 @@
 {
     "headers": [
         {
-            "source": "/public/(.*)",
+            "source": "/logos/(.*)",
             "headers": [
                 {
                     "key": "Cache-Control",
@@ -49,8 +49,8 @@
     ],
     "rewrites": [
         {
-            "source": "/public/(.*)",
-            "destination": "/public/$1"
+            "source": "/logos/(.*)",
+            "destination": "/logos/$1"
         },
         {
             "source": "/(.*)",
