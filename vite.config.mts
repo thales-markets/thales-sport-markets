@@ -103,6 +103,7 @@ export default defineConfig(({ mode }) => {
                         carousel: ['react-responsive-carousel'],
                         dompurify: ['dompurify'],
                         helmet: ['react-helmet'],
+                        farcaster: ['@farcaster/frame-sdk', '@farcaster/frame-wagmi-connector'],
                     },
                 },
             },

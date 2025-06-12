@@ -1,0 +1,16 @@
+{
+    "accountAssociation": {
+        "header": "eyJmaWQiOjExMDMwNTksInR5cGUiOiJjdXN0b2R5Iiwia2V5IjoiMHgzMTRERjNGMGNkZGYyRWYwN2RlYUU2MjljNzdCMUQ3MjcyNGJlYTIxIn0",
+        "payload": "eyJkb21haW4iOiJ0aGFsZXMtc3BvcnQtbWFya2V0cy1naXQtZmFyY2FzdGVyLXRoYWxlcy1tYXJrZXQudmVyY2VsLmFwcCJ9",
+        "signature": "MHg2MjdlYjg3NDAzNmIwNzMwYTc0MGI0NDJkZTFjMzMzNGRiMTM5NjBhZmM4MjBiMTVkNTcyYWYwMjAxOTE1NmRkMGM1ZDg3NWFjZmY0ZTNkMDYyMDU5NWI2YmM0M2VlYjY4NjE2NDU3YzcyYWFhYjE5MTYyZTJjZjUyMjBhZjYxNTFj"
+    },
+
+    "frame": {
+        "version": "1",
+        "name": "Overtime Sportsbook Mini-Dapp",
+        "description": "Bet on sports directly via Farcaster!",
+        "iconUrl": "https://thales-sport-markets-git-farcaster-thales-market.vercel.app/logos/logo1024.png",
+        "homeUrl": "https://thales-sport-markets-git-farcaster-thales-market.vercel.app/",
+        "requiredChains": ["eip155:10", "eip155:42161", "eip155:8453"]
+    }
+}
