@@ -49,10 +49,6 @@
     ],
     "rewrites": [
         {
-            "source": "/logos/(.*)",
-            "destination": "/logos/$1"
-        },
-        {
             "source": "/(.*)",
             "destination": "/"
         }
