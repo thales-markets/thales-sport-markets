@@ -845,6 +845,13 @@ export const getTicketPositionsFogSgpBuilder = (
         const combinedChildMarkets = market.childMarkets.filter(
             (childMarket) =>
                 childMarket.typeId === typeId &&
+                // exclude same players for the same type
+                !ticketPositions.some(
+                    (ticketPosition) =>
+                        ticketPosition.playerId === childMarket.playerProps.playerId &&
+                        ticketPosition.typeId === childMarket.typeId
+                ) &&
+                // only players from their teams
                 (!isPlayerPropsMarket(typeId) ||
                     (isHomeTeamMarket(sgpTypeId)
                         ? homeTeamPlayerIds.includes(childMarket.playerProps.playerId)
