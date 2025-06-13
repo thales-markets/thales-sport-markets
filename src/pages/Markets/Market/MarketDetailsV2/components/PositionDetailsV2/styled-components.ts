@@ -79,7 +79,7 @@ export const Status = styled(Text)`
 `;
 
 export const SgpPositions = styled(FlexDivColumn)`
-    gap: 2px;
+    padding: 3px 0;
 `;
 
 export const SgpPositionRow = styled(FlexDivRowCentered)`

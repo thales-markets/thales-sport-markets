@@ -204,14 +204,14 @@ const Positions: React.FC<PositionsProps> = ({
     const filteredQuickSgpMarkets = useMemo(() => {
         let quickSgpMarkets: SportMarket[] = [];
         if (isQuickSgpMarket) {
-            const marketsOrChildMarkets = markets[0].childMarkets ? markets[0].childMarkets : markets;
-            quickSgpMarkets = marketsOrChildMarkets.filter((market) => market.typeId === marketType);
+            const childMarkets = isMarketSelected ? markets : markets[0]?.childMarkets || markets;
+            quickSgpMarkets = childMarkets.filter((childMarket) => childMarket.typeId === marketType);
             if (!quickSgpMarkets.length) {
-                quickSgpMarkets = marketsOrChildMarkets.filter((market) => isSgpBuilderMarket(market.typeId));
+                quickSgpMarkets = childMarkets.filter((childMarket) => isSgpBuilderMarket(childMarket.typeId));
             }
         }
         return quickSgpMarkets;
-    }, [isQuickSgpMarket, markets, marketType]);
+    }, [isQuickSgpMarket, markets, marketType, isMarketSelected]);
 
     const sortedMarkets = useMemo(() => {
         if (isQuickSgpMarket) {
