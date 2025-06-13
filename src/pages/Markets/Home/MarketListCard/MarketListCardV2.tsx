@@ -2,9 +2,10 @@ import liveAnimationData from 'assets/lotties/live-markets-filter.json';
 import SPAAnchor from 'components/SPAAnchor';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
-import { FUTURES_MAIN_VIEW_DISPLAY_COUNT, MEDIUM_ODDS } from 'constants/markets';
+import { FUTURES_MAIN_VIEW_DISPLAY_COUNT, MEDIUM_ODDS, QUICK_SGP_MAIN_VIEW_DISPLAY_COUNT } from 'constants/markets';
 import { PLAYER_PROPS_SPECIAL_SPORTS } from 'constants/sports';
 import { SportFilter } from 'enums/markets';
+import { MarketTypeGroup } from 'enums/marketTypes';
 import { RiskManagementConfig } from 'enums/riskManagement';
 import _, { isEqual } from 'lodash';
 import Lottie from 'lottie-react';
@@ -13,7 +14,10 @@ import {
     getLeaguePeriodType,
     getLeagueSport,
     getLeagueTooltipKey,
+    isAwayTeamMarket,
     isFuturesMarket,
+    isHomeTeamMarket,
+    isSgpBuilderMarket,
     League,
     MarketType,
     PeriodType,
@@ -21,6 +25,7 @@ import {
 } from 'overtime-utils';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
 import useRiskManagementConfigQuery from 'queries/riskManagement/useRiskManagementConfig';
+import useTeamPlayersInfoQuery from 'queries/teams/useTeamPlayersInfoQuery';
 import React, { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -32,17 +37,19 @@ import {
     getMarketTypeGroupFilter,
     getSelectedMarket,
     getSportFilter,
+    setMarketTypeGroupFilter,
     setSelectedMarket,
 } from 'redux/modules/market';
 import { formatShortDateWithTime } from 'thales-utils';
-import { SportMarket } from 'types/markets';
-import { RiskManagementLeaguesAndTypes } from 'types/riskManagement';
+import { SportMarket, TeamPlayersData } from 'types/markets';
+import { RiskManagementLeaguesAndTypes, RiskManagementSgpBuilders } from 'types/riskManagement';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getLeagueFlagSource, getOnImageError, getOnPlayerImageError, getTeamImageSource } from 'utils/images';
 import {
     getMarketPlayerPropsMarketsForGroupFilter,
     getMarketPlayerPropsMarketsForProp,
     getMarketPlayerPropsMarketsForSport,
+    getTicketPositionsFogSgpBuilder,
     isOddValid,
 } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
@@ -103,6 +110,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
         const isMobile = useSelector(getIsMobile);
 
         const isPlayerPropsMarket = useMemo(() => sportFilter === SportFilter.PlayerProps, [sportFilter]);
+        const isQuickSgpMarket = useMemo(() => sportFilter === SportFilter.QuickSgp, [sportFilter]);
 
         const [homeLogoSrc, setHomeLogoSrc] = useState(
             getTeamImageSource(isPlayerPropsMarket ? market.playerProps.playerName : market.homeTeam, market.leagueId)
@@ -138,6 +146,42 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                 return { leagues: [], spreadTypes: [], totalTypes: [] };
             }
         }, [riskManagementLeaguesQuery.isSuccess, riskManagementLeaguesQuery.data, market.leagueId]);
+
+        const riskManagementSgpBuildersQuery = useRiskManagementConfigQuery(
+            [RiskManagementConfig.SGP_BUILDERS],
+            { networkId },
+            { enabled: isQuickSgpMarket }
+        );
+
+        const sgpBuilders = useMemo(
+            () =>
+                riskManagementSgpBuildersQuery.isSuccess && riskManagementSgpBuildersQuery.data
+                    ? (riskManagementSgpBuildersQuery.data as RiskManagementSgpBuilders).sgpBuilders
+                    : [],
+            [riskManagementSgpBuildersQuery.isSuccess, riskManagementSgpBuildersQuery.data]
+        );
+
+        const teamPlayersInfoQuery = useTeamPlayersInfoQuery({ networkId }, { enabled: isQuickSgpMarket });
+
+        const homeTeamPlayerIds = useMemo(
+            () =>
+                teamPlayersInfoQuery.isSuccess && teamPlayersInfoQuery.data
+                    ? ((teamPlayersInfoQuery.data as TeamPlayersData).get(market.homeTeam.toLowerCase()) || [])
+                          .filter((teamPlayer) => teamPlayer.playerId)
+                          .map((teamPlayer) => teamPlayer.playerId)
+                    : [],
+            [teamPlayersInfoQuery.isSuccess, teamPlayersInfoQuery.data, market]
+        );
+
+        const awayTeamPlayerIds = useMemo(
+            () =>
+                teamPlayersInfoQuery.isSuccess && teamPlayersInfoQuery.data
+                    ? ((teamPlayersInfoQuery.data as TeamPlayersData).get(market.awayTeam.toLowerCase()) || [])
+                          .filter((teamPlayer) => teamPlayer.playerId)
+                          .map((teamPlayer) => teamPlayer.playerId)
+                    : [],
+            [teamPlayersInfoQuery.isSuccess, teamPlayersInfoQuery.data, market]
+        );
 
         useEffect(() => {
             setHomeLogoSrc(
@@ -256,7 +300,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
 
         const hideGame = isGameLive ? false : isGameOpen && !areOddsValid && !areChildMarketsOddsValid;
         const isColumnView =
-            marketTypeFilter === undefined &&
+            (marketTypeFilter === undefined || isQuickSgpMarket) &&
             isThreeWayView &&
             !isMarketSelected &&
             (isGameOpen || isGameLive) &&
@@ -294,6 +338,27 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
         if (isFutures) {
             marketsCount += market.odds.filter((odd) => odd).length - FUTURES_MAIN_VIEW_DISPLAY_COUNT;
         }
+        if (isQuickSgpMarket) {
+            let minMainViewCount = QUICK_SGP_MAIN_VIEW_DISPLAY_COUNT;
+            let minColumnViewCount = 0;
+            const totalNumOfMarkets = market.childMarkets.reduce((acc, curr) => {
+                if (isSgpBuilderMarket(curr.typeId)) {
+                    const numOfMarkets = curr.odds.length;
+                    if (isHomeTeamMarket(curr.typeId)) {
+                        minMainViewCount = Math.min(minMainViewCount, numOfMarkets);
+                        minColumnViewCount++;
+                    }
+                    if (isAwayTeamMarket(curr.typeId)) {
+                        minColumnViewCount++;
+                    }
+                    minColumnViewCount = Math.min(minColumnViewCount, QUICK_SGP_MAIN_VIEW_DISPLAY_COUNT);
+                    return acc + numOfMarkets;
+                }
+                return acc;
+            }, 0);
+
+            marketsCount = totalNumOfMarkets - (isColumnView ? minColumnViewCount : minMainViewCount);
+        }
         marketsCount = marketsCount < 0 ? 0 : marketsCount;
 
         const leagueTooltipKey = getLeagueTooltipKey(market.leagueId);
@@ -310,6 +375,96 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
 
         const showHeaderTournamentName =
             market?.tournamentName && (isColumnView || isMarketSelected || isMobile) && !isPlayerPropsMarket;
+
+        const getPlayerPropsPositions = (playerPropsMarkets: SportMarket[]) => {
+            return (
+                <>
+                    <PositionsV2
+                        markets={[marketTypeFilterMarket ? marketTypeFilterMarket : playerPropsMarkets[0]]}
+                        marketType={marketTypeFilter && marketTypeFilterMarket ? marketTypeFilter : market.typeId}
+                        isGameOpen={isGameOpen}
+                        isMainPageView
+                        isColumnView={isColumnView}
+                        hidePlayerName
+                        oddsTitlesHidden={oddsTitlesHidden}
+                        floatingOddsTitles={floatingOddsTitles}
+                    />
+                    {isColumnView && !isMobile && playerPropsMarkets[1] && (
+                        <PositionsV2
+                            markets={[playerPropsMarkets[1]]}
+                            marketType={market.typeId}
+                            isGameOpen={isGameOpen}
+                            isMainPageView
+                            isColumnView={isColumnView}
+                            hidePlayerName
+                            oddsTitlesHidden={oddsTitlesHidden}
+                            floatingOddsTitles={floatingOddsTitles}
+                        />
+                    )}
+                    {isColumnView && !isMobile && playerPropsMarkets[2] && (
+                        <PositionsV2
+                            markets={[playerPropsMarkets[2]]}
+                            marketType={market.typeId}
+                            isGameOpen={isGameOpen}
+                            isMainPageView
+                            isColumnView={isColumnView}
+                            hidePlayerName
+                            oddsTitlesHidden={oddsTitlesHidden}
+                            floatingOddsTitles={floatingOddsTitles}
+                        />
+                    )}
+                </>
+            );
+        };
+
+        const getQuickSgpPositions = (sportMarket: SportMarket) => {
+            const sgpBuildersWithTicketPositions = sgpBuilders.map((sgpBuilder) => ({
+                sgpBuilder,
+                ticketPositions: getTicketPositionsFogSgpBuilder(
+                    sportMarket,
+                    sgpBuilder,
+                    homeTeamPlayerIds,
+                    awayTeamPlayerIds
+                ),
+            }));
+
+            return (
+                <PositionsV2
+                    markets={marketTypeFilterMarket ? [marketTypeFilterMarket] : [sportMarket]}
+                    marketType={
+                        marketTypeFilter && marketTypeFilterMarket ? marketTypeFilter : MarketType.SGP_BUILDER_HOME
+                    }
+                    isGameOpen={isGameOpen}
+                    isMainPageView
+                    isColumnView={isColumnView}
+                    sgpTickets={sgpBuildersWithTicketPositions}
+                />
+            );
+        };
+
+        const openSelectedMarket = () => {
+            if (isPlayerPropsMarket) {
+                dispatch(
+                    setSelectedMarket({
+                        gameId: market.gameId,
+                        sport: market.sport,
+                        live: market.live,
+                        playerName: market.playerProps.playerName,
+                    })
+                );
+            } else {
+                dispatch(
+                    setSelectedMarket({
+                        gameId: market.gameId,
+                        sport: market.sport,
+                        live: market.live,
+                    })
+                );
+                if (isQuickSgpMarket) {
+                    dispatch(setMarketTypeGroupFilter(MarketTypeGroup.QUICK_SGP));
+                }
+            }
+        };
 
         const getMainContainerContent = () => (
             <>
@@ -331,24 +486,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                         onClick={(event) => {
                             const isMobileLeagueFlagClick = isMobile && event.target === leagueFlagRef.current;
                             if (!isMobileLeagueFlagClick && (isGameOpen || isGameLive)) {
-                                if (isPlayerPropsMarket) {
-                                    dispatch(
-                                        setSelectedMarket({
-                                            gameId: market.gameId,
-                                            sport: market.sport,
-                                            live: market.live,
-                                            playerName: market.playerProps.playerName,
-                                        })
-                                    );
-                                } else {
-                                    dispatch(
-                                        setSelectedMarket({
-                                            gameId: market.gameId,
-                                            sport: market.sport,
-                                            live: market.live,
-                                        })
-                                    );
-                                }
+                                openSelectedMarket();
                             }
                         }}
                     >
@@ -574,28 +712,10 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                                             isColumnView={isColumnView}
                                         />
                                     )}
+
                                     <MarketsCountWrapper
                                         hidden={marketsCount === 0}
-                                        onClick={() => {
-                                            if (isPlayerPropsMarket) {
-                                                dispatch(
-                                                    setSelectedMarket({
-                                                        gameId: market.gameId,
-                                                        sport: market.sport,
-                                                        live: market.live,
-                                                        playerName: market.playerProps.playerName,
-                                                    })
-                                                );
-                                            } else {
-                                                dispatch(
-                                                    setSelectedMarket({
-                                                        gameId: market.gameId,
-                                                        sport: market.sport,
-                                                        live: market.live,
-                                                    })
-                                                );
-                                            }
-                                        }}
+                                        onClick={() => openSelectedMarket()}
                                     >
                                         {`+${marketsCount}`}
                                         {!isMobile && <Arrow className={'icon icon--arrow-down'} />}
@@ -604,50 +724,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                             ) : isGameOpen ? (
                                 <>
                                     {isPlayerPropsMarket && playerPropsMarkets ? (
-                                        <>
-                                            <PositionsV2
-                                                markets={[
-                                                    marketTypeFilterMarket
-                                                        ? marketTypeFilterMarket
-                                                        : playerPropsMarkets[0],
-                                                ]}
-                                                marketType={
-                                                    marketTypeFilter && marketTypeFilterMarket
-                                                        ? marketTypeFilter
-                                                        : market.typeId
-                                                }
-                                                isGameOpen={isGameOpen}
-                                                isMainPageView
-                                                isColumnView={isColumnView}
-                                                hidePlayerName
-                                                oddsTitlesHidden={oddsTitlesHidden}
-                                                floatingOddsTitles={floatingOddsTitles}
-                                            />
-                                            {isColumnView && !isMobile && playerPropsMarkets[1] && (
-                                                <PositionsV2
-                                                    markets={[playerPropsMarkets[1]]}
-                                                    marketType={market.typeId}
-                                                    isGameOpen={isGameOpen}
-                                                    isMainPageView
-                                                    isColumnView={isColumnView}
-                                                    hidePlayerName
-                                                    oddsTitlesHidden={oddsTitlesHidden}
-                                                    floatingOddsTitles={floatingOddsTitles}
-                                                />
-                                            )}
-                                            {isColumnView && !isMobile && playerPropsMarkets[2] && (
-                                                <PositionsV2
-                                                    markets={[playerPropsMarkets[2]]}
-                                                    marketType={market.typeId}
-                                                    isGameOpen={isGameOpen}
-                                                    isMainPageView
-                                                    isColumnView={isColumnView}
-                                                    hidePlayerName
-                                                    oddsTitlesHidden={oddsTitlesHidden}
-                                                    floatingOddsTitles={floatingOddsTitles}
-                                                />
-                                            )}
-                                        </>
+                                        getPlayerPropsPositions(playerPropsMarkets)
+                                    ) : isQuickSgpMarket ? (
+                                        getQuickSgpPositions(market)
                                     ) : (
                                         <>
                                             <PositionsV2
@@ -695,26 +774,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                                     <MarketsCountWrapper
                                         hidden={marketsCount === 0}
                                         isPlayerPropsMarket={isPlayerPropsMarket}
-                                        onClick={() => {
-                                            if (isPlayerPropsMarket) {
-                                                dispatch(
-                                                    setSelectedMarket({
-                                                        gameId: market.gameId,
-                                                        sport: market.sport,
-                                                        live: market.live,
-                                                        playerName: market.playerProps.playerName,
-                                                    })
-                                                );
-                                            } else {
-                                                dispatch(
-                                                    setSelectedMarket({
-                                                        gameId: market.gameId,
-                                                        sport: market.sport,
-                                                        live: market.live,
-                                                    })
-                                                );
-                                            }
-                                        }}
+                                        onClick={() => openSelectedMarket()}
                                     >
                                         {`+${marketsCount}`}
                                         {!isMobile && <Arrow className={'icon icon--arrow-down'} />}

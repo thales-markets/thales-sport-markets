@@ -1,10 +1,10 @@
 import OutsideClickHandler from 'components/OutsideClick';
 import Tooltip from 'components/Tooltip';
 import { ODDS_TYPES } from 'constants/markets';
-import { OddsType, SortType } from 'enums/markets';
+import { OddsType, SortType, SportFilter } from 'enums/markets';
 import { t } from 'i18next';
 import TimeFilters from 'layouts/DappLayout/DappHeader/components/TimeFilters';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import {
@@ -13,6 +13,7 @@ import {
     getMarketTypeFilter,
     getSelectedMarket,
     getSortType,
+    getSportFilter,
     setIsThreeWayView,
     setSortType,
 } from 'redux/modules/market';
@@ -39,11 +40,10 @@ import {
 } from '../Header/styled-components';
 
 type FiltersProps = {
-    hideSwitch?: boolean;
     isMainPageView?: boolean;
 };
 
-const Filters: React.FC<FiltersProps> = ({ hideSwitch, isMainPageView }) => {
+const Filters: React.FC<FiltersProps> = ({ isMainPageView }) => {
     const dispatch = useDispatch();
     const theme = useTheme();
     const selectedOddsType = useSelector(getOddsType);
@@ -52,11 +52,14 @@ const Filters: React.FC<FiltersProps> = ({ hideSwitch, isMainPageView }) => {
     const marketTypeFilter = useSelector(getMarketTypeFilter);
     const datePeriodFilter = useSelector(getDatePeriodFilter);
     const selectedMarket = useSelector(getSelectedMarket);
+    const sportFilter = useSelector(getSportFilter);
     const isMobile = useSelector(getIsMobile);
 
     const [openSortMenu, setOpenSortMenu] = useState(false);
     const [dropdownIsOpen, setDropdownIsOpen] = useState<boolean>(false);
     const [timeFiltersOpen, setTimeFiltersOpen] = useState<boolean>(false);
+
+    const isQuickSgpMarket = useMemo(() => sportFilter === SportFilter.QuickSgp, [sportFilter]);
 
     const setSelectedOddsType = useCallback(
         (oddsType: OddsType) => {
@@ -67,7 +70,7 @@ const Filters: React.FC<FiltersProps> = ({ hideSwitch, isMainPageView }) => {
 
     return (
         <FilterContainer>
-            {!isMobile && !hideSwitch && !selectedMarket && marketTypeFilter === undefined && (
+            {!isMobile && !isQuickSgpMarket && !selectedMarket && marketTypeFilter === undefined && (
                 <>
                     <SwitchContainer>
                         <Tooltip

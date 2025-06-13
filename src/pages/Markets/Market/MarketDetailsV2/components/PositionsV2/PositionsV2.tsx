@@ -1,4 +1,5 @@
 import Tooltip from 'components/Tooltip';
+import { QUICK_SGP_MAIN_VIEW_DISPLAY_COUNT } from 'constants/markets';
 import { secondsToMilliseconds } from 'date-fns';
 import { SportFilter } from 'enums/markets';
 import { RiskManagementConfig } from 'enums/riskManagement';
@@ -6,6 +7,7 @@ import { intersection, orderBy } from 'lodash';
 import {
     getSgpMarketsCombinationAllowed,
     isFuturesMarket,
+    isSgpBuilderMarket,
     isTotalOrSpreadWithWholeLine,
     League,
     MarketType,
@@ -17,10 +19,10 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { getSportFilter } from 'redux/modules/market';
+import { getIsMarketSelected, getSportFilter } from 'redux/modules/market';
 import { getIsSgp, getTicket } from 'redux/modules/ticket';
 import styled from 'styled-components';
-import { SportMarket, TicketPosition } from 'types/markets';
+import { SgpTicket, SportMarket, TicketPosition } from 'types/markets';
 import { RiskManagementSgpBlockers } from 'types/riskManagement';
 import { getMarketTypeTooltipKey } from 'utils/markets';
 import { getSubtitleText, getTitleText, isSameMarket, sportMarketAsTicketPosition } from 'utils/marketsV2';
@@ -52,6 +54,7 @@ type PositionsProps = {
     floatingOddsTitles?: boolean;
     width?: string;
     onAccordionClick?: () => void;
+    sgpTickets?: SgpTicket[];
 };
 
 const Positions: React.FC<PositionsProps> = ({
@@ -67,6 +70,7 @@ const Positions: React.FC<PositionsProps> = ({
     oddsTitlesHidden,
     floatingOddsTitles,
     width,
+    sgpTickets,
 }) => {
     const { t } = useTranslation();
 
@@ -74,10 +78,12 @@ const Positions: React.FC<PositionsProps> = ({
 
     const ticket = useSelector(getTicket);
     const isSgp = useSelector(getIsSgp);
+    const isMarketSelected = useSelector(getIsMarketSelected);
     const sportFilter = useSelector(getSportFilter);
     const isMobile = useSelector(getIsMobile);
 
     const isPlayerPropsMarket = useMemo(() => sportFilter === SportFilter.PlayerProps, [sportFilter]);
+    const isQuickSgpMarket = useMemo(() => sportFilter === SportFilter.QuickSgp, [sportFilter]);
 
     const [isExpanded, setIsExpanded] = useState<boolean>(true);
 
@@ -195,11 +201,39 @@ const Positions: React.FC<PositionsProps> = ({
 
     const showContainer = !isGameOpen || hasOdds || showInvalid;
 
-    const sortedMarkets = useMemo(() => orderBy(markets, ['line', 'odds'], ['asc', 'desc']), [markets]);
+    const filteredQuickSgpMarkets = useMemo(() => {
+        let quickSgpMarkets: SportMarket[] = [];
+        if (isQuickSgpMarket) {
+            const childMarkets = isMarketSelected ? markets : markets[0]?.childMarkets || markets;
+            quickSgpMarkets = childMarkets.filter((childMarket) => childMarket.typeId === marketType);
+            if (!quickSgpMarkets.length) {
+                quickSgpMarkets = childMarkets.filter((childMarket) => isSgpBuilderMarket(childMarket.typeId));
+            }
+        }
+        return quickSgpMarkets;
+    }, [isQuickSgpMarket, markets, marketType, isMarketSelected]);
 
-    const positionText0 = markets[0] ? getSubtitleText(markets[0], 0) : undefined;
-    const positionText1 = markets[0] ? getSubtitleText(markets[0], 1) : undefined;
-    const titleText = getTitleText(markets[0], !isPlayerPropsMarket, isPlayerPropsMarket);
+    const sortedMarkets = useMemo(() => {
+        if (isQuickSgpMarket) {
+            const maxQuickSgpMarkets = isMarketSelected ? undefined : QUICK_SGP_MAIN_VIEW_DISPLAY_COUNT;
+            const displaySgpMarkets = filteredQuickSgpMarkets.map((market) => ({
+                ...market,
+                odds: market.odds.slice(0, maxQuickSgpMarkets),
+                positionNames: market.positionNames?.slice(0, maxQuickSgpMarkets),
+            }));
+            return orderBy(displaySgpMarkets, ['line', 'odds'], ['asc', 'desc']);
+        } else {
+            return orderBy(markets, ['line', 'odds'], ['asc', 'desc']);
+        }
+    }, [markets, isQuickSgpMarket, filteredQuickSgpMarkets, isMarketSelected]);
+
+    const positionText0 = !filteredQuickSgpMarkets.length && markets[0] ? getSubtitleText(markets[0], 0) : undefined;
+    const positionText1 = !filteredQuickSgpMarkets.length && markets[0] ? getSubtitleText(markets[0], 1) : undefined;
+    const titleText = getTitleText(
+        !!filteredQuickSgpMarkets.length ? filteredQuickSgpMarkets[0] : markets[0],
+        !isPlayerPropsMarket,
+        isPlayerPropsMarket
+    );
 
     const tooltipKey = getMarketTypeTooltipKey(marketType);
 
@@ -294,6 +328,7 @@ const Positions: React.FC<PositionsProps> = ({
                                         gridMinMaxPercentage={getGridMinMaxPercentage(market, isMobile)}
                                         isColumnView={isColumnView}
                                         isPlayerProps={!!isPlayerPropsMarket}
+                                        isSgpBuilder={isSgpBuilderMarket(market.typeId)}
                                     >
                                         {filteredOdds.map((oddsData, index) => {
                                             const position = isFutures
@@ -313,6 +348,7 @@ const Positions: React.FC<PositionsProps> = ({
                                                     isColumnView={isColumnView}
                                                     displayPosition={index}
                                                     isPositionBlocked={oddsData.isBlocked}
+                                                    sgpTickets={sgpTickets}
                                                 />
                                             );
                                         })}

@@ -23,6 +23,7 @@ export enum SportFilter {
     Live = 'Live',
     Favourites = 'Favourites',
     PlayerProps = 'PlayerProps',
+    QuickSgp = 'QuickSgp',
     All = 'All',
     Soccer = 'Soccer',
     Football = 'Football',
