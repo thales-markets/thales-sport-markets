@@ -154,26 +154,6 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                     </HeaderContainer>
                     <ButtonsContainer disabled={!termsAccepted}>
                         <SocialLoginWrapper>
-                            {SUPPORTED_PARTICAL_CONNECTORS_MODAL.map((item, index) => {
-                                const connector = getSpecificConnectorFromConnectorsArray(connectors, item);
-                                if (connector) {
-                                    return (
-                                        <Button
-                                            disabled={isInBinance()}
-                                            key={index}
-                                            onClick={() => !isInBinance() && handleParticleConnect(connector)}
-                                        >
-                                            {<> {getIcon(item)}</>}
-                                            {t(getWalletLabel(item))}
-                                        </Button>
-                                    );
-                                }
-                            })}
-                        </SocialLoginWrapper>
-                        <BoxForLabel>
-                            <ConnectWithLabel>{t('common.wallet.or-connect-with')}</ConnectWithLabel>
-                        </BoxForLabel>
-                        <SocialLoginWrapper>
                             {isInFarcaster ? (
                                 <Button
                                     key={0}
@@ -190,31 +170,51 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                                     {t(getWalletLabel(WalletConnections.FARCASTER))}
                                 </Button>
                             ) : (
-                                SUPPORTED_WALLET_CONNECTORS_MODAL.map((item, index) => {
+                                SUPPORTED_PARTICAL_CONNECTORS_MODAL.map((item, index) => {
                                     const connector = getSpecificConnectorFromConnectorsArray(connectors, item);
                                     if (connector) {
-                                        if (isInBinance() && connector.id === WalletConnections.METAMASK) {
-                                            return (
-                                                <Button key={index} onClick={() => handleConnect(connector)}>
-                                                    {<> {getIcon(WalletConnections.BINANCE)}</>}
-                                                    {t(getWalletLabel(WalletConnections.BINANCE))}
-                                                </Button>
-                                            );
-                                        } else {
-                                            return (
-                                                <Button
-                                                    disabled={isInBinance()}
-                                                    key={index}
-                                                    onClick={() => !isInBinance() && handleConnect(connector)}
-                                                >
-                                                    {<> {getIcon(item)}</>}
-                                                    {t(getWalletLabel(item))}
-                                                </Button>
-                                            );
-                                        }
+                                        return (
+                                            <Button
+                                                disabled={isInBinance()}
+                                                key={index}
+                                                onClick={() => !isInBinance() && handleParticleConnect(connector)}
+                                            >
+                                                {<> {getIcon(item)}</>}
+                                                {t(getWalletLabel(item))}
+                                            </Button>
+                                        );
                                     }
                                 })
                             )}
+                        </SocialLoginWrapper>
+                        <BoxForLabel>
+                            <ConnectWithLabel>{t('common.wallet.or-connect-with')}</ConnectWithLabel>
+                        </BoxForLabel>
+                        <SocialLoginWrapper>
+                            {SUPPORTED_WALLET_CONNECTORS_MODAL.map((item, index) => {
+                                const connector = getSpecificConnectorFromConnectorsArray(connectors, item);
+                                if (connector) {
+                                    if (isInBinance() && connector.id === WalletConnections.METAMASK) {
+                                        return (
+                                            <Button key={index} onClick={() => handleConnect(connector)}>
+                                                {<> {getIcon(WalletConnections.BINANCE)}</>}
+                                                {t(getWalletLabel(WalletConnections.BINANCE))}
+                                            </Button>
+                                        );
+                                    } else {
+                                        return (
+                                            <Button
+                                                disabled={isInBinance()}
+                                                key={index}
+                                                onClick={() => !isInBinance() && handleConnect(connector)}
+                                            >
+                                                {<> {getIcon(item)}</>}
+                                                {t(getWalletLabel(item))}
+                                            </Button>
+                                        );
+                                    }
+                                }
+                            })}
                         </SocialLoginWrapper>
                         <WalletIconsWrapper>
                             <Subtitle
