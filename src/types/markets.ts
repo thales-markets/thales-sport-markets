@@ -22,7 +22,12 @@ type PlayerProps = {
     playerName: string;
 };
 
-export type CombinedPosition = { typeId: number; position: number; line: number };
+export type CombinedPosition = {
+    typeId: number;
+    position: number;
+    line: number;
+    playerProps?: PlayerProps;
+};
 
 type CombinedPositions = CombinedPosition[];
 

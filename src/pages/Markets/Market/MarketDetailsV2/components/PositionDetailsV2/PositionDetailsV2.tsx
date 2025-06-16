@@ -6,6 +6,8 @@ import {
     MarketType,
     isCorrectScoreMarket,
     isFuturesMarket,
+    isOneSideMarket,
+    isPlayerPropsMarket,
     isSgpBuilderMarket,
     isTotalExactMarket,
 } from 'overtime-utils';
@@ -93,9 +95,39 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
         return undefined;
     }, [sgpTickets, market.gameId, market.typeId, market.positionNames, position]);
 
-    const sgpTicketPositions = useMemo(() => (currentSgpTicket ? currentSgpTicket.ticketPositions : []), [
-        currentSgpTicket,
-    ]);
+    const sgpTicketPositions: TicketPosition[] = useMemo(
+        () =>
+            isSgpBuilderMarket(market.typeId) && market.combinedPositions.length >= position
+                ? market.combinedPositions[position].map((combinedPosition) => {
+                      const typeId = combinedPosition.typeId;
+                      const playerProps = combinedPosition.playerProps;
+
+                      return {
+                          gameId: market.gameId,
+                          leagueId: market.leagueId,
+                          typeId,
+                          playerId: playerProps?.playerId || 0,
+                          playerName: playerProps?.playerName || '',
+                          line: combinedPosition.line,
+                          position: combinedPosition.position,
+                          combinedPositions: market.combinedPositions,
+                          live: false,
+                          isOneSideMarket: isOneSideMarket(market.leagueId, typeId),
+                          isPlayerPropsMarket: isPlayerPropsMarket(typeId),
+                          homeTeam: market.homeTeam,
+                          awayTeam: market.awayTeam,
+                          playerProps,
+                      } as TicketPosition;
+                  })
+                : [],
+        [market, position]
+    );
+
+    // const sgpTicketPositions = useMemo(() => (currentSgpTicket ? currentSgpTicket.ticketPositions : []), [
+    //     currentSgpTicket,
+    // ]);
+
+    // console.log(ticketPositions.map((market) => market.playerProps));
 
     const isSgpBuilderAddedToTicket =
         isSgpBuilderMarket(market.typeId) &&
@@ -127,8 +159,8 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
         { enabled: isSgpBuilderMarket(market.typeId) && isAddedToTicket }
     );
 
-    const isPlayerPropsMarket = useMemo(() => sportFilter === SportFilter.PlayerProps, [sportFilter]);
-    const isQuickSgpMarket = useMemo(() => sportFilter === SportFilter.QuickSgp, [sportFilter]);
+    const isPlayerPropsFilter = useMemo(() => sportFilter === SportFilter.PlayerProps, [sportFilter]);
+    const isQuickSgpFilter = useMemo(() => sportFilter === SportFilter.QuickSgp, [sportFilter]);
 
     const isGameStarted = market.maturityDate < new Date();
     const isGameLive = !!market.live && isGameStarted;
@@ -157,7 +189,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
     const positionText = getPositionTextV2(
         market,
         position,
-        isMainPageView && (market.typeId === MarketType.TOTAL || !!marketTypeFilter || isPlayerPropsMarket)
+        isMainPageView && (market.typeId === MarketType.TOTAL || !!marketTypeFilter || isPlayerPropsFilter)
     );
     const sgpPositionsText = getSgpBuilderPositionsText(sgpTicketPositions);
 
@@ -175,8 +207,8 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
             isWinner={isGameRegularlyResolved && market.winningPositions && market.winningPositions.includes(position)}
             order={getPositionOrder(market.leagueId, market.typeId, position)}
             isMainPageView={isMainPageView}
-            isPlayerPropsMarket={isPlayerPropsMarket}
-            isQuickSgpMarket={isQuickSgpMarket}
+            isPlayerPropsMarket={isPlayerPropsFilter}
+            isQuickSgpMarket={isQuickSgpFilter}
             onClick={() => {
                 if (disabledPosition) return;
                 if (isAddedToTicket) {
@@ -233,7 +265,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
                     })}
                 </SgpPositions>
             ) : (
-                <Text isColumnView={isColumnView} maxWidth={isQuickSgpMarket ? '270px' : undefined}>
+                <Text isColumnView={isColumnView} maxWidth={isQuickSgpFilter ? '270px' : undefined}>
                     {positionText}
                 </Text>
             )}
