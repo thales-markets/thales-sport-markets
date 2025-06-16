@@ -81,7 +81,8 @@
                 "browser-wallet": "Connect with Browser Wallet",
                 "coinbase": "Connect with Coinbase Wallet",
                 "wallet-connect": "WalletConnect",
-                "binance-wallet": "Connect with Binance Wallet"
+                "binance-wallet": "Connect with Binance Wallet",
+                "farcaster-wallet": "Connect with Farcaster"
             }
         },
         "enable-wallet-access": {
