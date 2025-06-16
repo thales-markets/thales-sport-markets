@@ -886,6 +886,18 @@ export const getTicketPositionsFogSgpBuilder = (
                         : typeSpecifiedCondition;
                 });
                 break;
+            case MarketType.PLAYER_PROPS_DOUBLES:
+                const minOdds = Math.min(
+                    ...combinedChildMarkets.map((childMarket) => (position !== null ? childMarket.odds[position] : 0))
+                );
+                combinedChildMarket = combinedChildMarkets.find((childMarket) => {
+                    const typeSpecifiedCondition = position !== null && childMarket.odds[position] === minOdds;
+                    return isDefaultCondition
+                        ? getDefaultCondition(childMarket.playerProps.playerId, childMarket.line) ||
+                              typeSpecifiedCondition
+                        : typeSpecifiedCondition;
+                });
+                break;
             default:
                 combinedChildMarket = combinedChildMarkets.find((childMarket) =>
                     getDefaultCondition(childMarket.playerProps.playerId, childMarket.line)
