@@ -156,7 +156,7 @@ const useUsersStatsV2Query = (
                         lifetimeWins += 1;
                         pnl += payoutInUsd - buyInAmountInUsd;
                     }
-                    if (ticket.isLost && !ticket.isCancelled && !ticket.isFreeBet) {
+                    if (ticket.isLost && !ticket.isCancelled) {
                         pnl -= buyInAmountInUsd;
                     }
                 }
