@@ -79,6 +79,8 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
     const sportFilter = useSelector(getSportFilter);
     const isSgp = useSelector(getIsSgp);
 
+    const isQuickSgpMarket = useMemo(() => sportFilter === SportFilter.QuickSgp, [sportFilter]);
+
     const currentSgpTicket = useMemo(() => {
         if (isSgpBuilderMarket(market.typeId) && !!sgpTickets?.length) {
             return sgpTickets.find(
@@ -86,11 +88,11 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
                     sgpTicket.ticketPositions.length &&
                     sgpTicket.ticketPositions[0].gameId === market.gameId &&
                     sgpTicket.sgpBuilder.typeId === market.typeId &&
-                    sgpTicket.sgpBuilder.positionIndex === position
+                    (isQuickSgpMarket || sgpTicket.sgpBuilder.positionIndex === position)
             );
         }
         return undefined;
-    }, [market.gameId, market.typeId, position, sgpTickets]);
+    }, [market.gameId, market.typeId, position, sgpTickets, isQuickSgpMarket]);
 
     const sgpTicketPositions = useMemo(() => (currentSgpTicket ? currentSgpTicket.ticketPositions : []), [
         currentSgpTicket,
@@ -127,7 +129,6 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
     );
 
     const isPlayerPropsMarket = useMemo(() => sportFilter === SportFilter.PlayerProps, [sportFilter]);
-    const isQuickSgpMarket = useMemo(() => sportFilter === SportFilter.QuickSgp, [sportFilter]);
 
     const isGameStarted = market.maturityDate < new Date();
     const isGameLive = !!market.live && isGameStarted;
