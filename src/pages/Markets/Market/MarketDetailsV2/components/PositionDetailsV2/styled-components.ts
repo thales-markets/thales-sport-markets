@@ -111,7 +111,12 @@ export const SgpPositionMark = styled.span<{ isSelected: boolean }>`
     z-index: 1;
 `;
 
-export const SgpPositionText = styled(Text)`
+export const SgpPositionMainText = styled(Text)`
     margin-left: 20px;
     white-space: break-spaces;
+`;
+export const SgpPositionSubText = styled(Text)<{ isSelected: boolean }>`
+    margin-left: 5px;
+    white-space: break-spaces;
+    opacity: ${(props) => (props.isSelected ? 0.7 : 0.5)};
 `;

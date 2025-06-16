@@ -296,16 +296,22 @@ export const getSgpBuilderPositionsText = (ticketPositions: TicketPosition[]) =>
             ticketPosition.leagueId,
             true
         );
-        const lineText = getTitleTextV2(
+        const titleText = getTitleTextV2(
             ticketPosition.typeId,
             ticketPosition.leagueId,
             ticketPosition.homeTeam,
             ticketPosition.awayTeam
         );
+
+        let mainText = positionText;
+        let subText = titleText;
+
         if (ticketPosition.isPlayerPropsMarket) {
-            return `${getMatchLabel(ticketPosition)} - ${lineText} ${positionText}`;
+            mainText = getMatchLabel(ticketPosition);
+            subText = `${titleText} ${positionText}`;
         }
-        return `${positionText} - ${lineText}`;
+
+        return { mainText, subText };
     });
 
 export const getTitleText = (market: SportMarket, useDescription?: boolean, shortName?: boolean) =>
