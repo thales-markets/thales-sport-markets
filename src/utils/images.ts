@@ -21,6 +21,7 @@ export const getTeamImageSource = (team: string, league: League) => {
         ? `/logos/Countries/${team
               .trim()
               .replaceAll(' 7s', '')
+              .replaceAll(' U21', '')
               .replaceAll(' U23', '')
               .replaceAll(' 3x3', '')
               .replaceAll(' ', '-')
@@ -59,6 +60,8 @@ export const getTeamImageSource = (team: string, league: League) => {
         ? `/logos/NCAA/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.PGA_FUTURES
         ? `/logos/leagueLogos/pga.webp`
+        : league == League.FIFA_CLUB_WORLD_CUP_FUTURES
+        ? `/logos/Countries/fifa-club-world-cup.webp`
         : `/logos/${leagueLabel}/${team.trim().replaceAll(' ', '-').replaceAll('/', '-').toLowerCase()}.webp`;
 };
 
@@ -218,6 +221,7 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.RUSSIA_SUPERLIGA_WOMEN:
             return `/logos/Countries/russia.svg`;
         case League.TURKEY_SUPER_LEAGUE:
+        case League.TURKEY_BSL:
             return `/logos/Countries/turkey.svg`;
         case League.SERBIA_SUPER_LEAGUE:
         case League.SERBIA_SUPERLIGA:
@@ -284,6 +288,7 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.CEV_CHAMPIONS_LEAGUE_WOMEN:
         case League.CEV_CUP:
         case League.CEV_CUP_WOMEN:
+        case League.UEFA_EUROPEAN_CHAMPIONSHIP_WOMEN:
             return `/logos/Countries/europe.svg`;
         case League.EUROLEAGUE:
         case League.EUROLEAGUE_FUTURES:
@@ -399,6 +404,7 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.IIHF_WORLD_CHAMPIONSHIP:
             return `/logos/Countries/iihf.png`;
         case League.FIFA_CLUB_WORLD_CUP:
+        case League.FIFA_CLUB_WORLD_CUP_FUTURES:
             return `/logos/Countries/fifa-club-world-cup.webp`;
         case League.PHILIPPINES_PVL_WOMEN:
             return `/logos/Countries/philippines.svg`;
@@ -419,6 +425,10 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
             return `/logos/Countries/ufc.webp`;
         case League.PFL:
             return `/logos/Countries/pfl.webp`;
+        case League.UEFA_EUROPEAN_CHAMPIONSHIP_U21:
+            return `/logos/Countries/uefa-under21-championship.webp`;
+        case League.PDC_WORLD_CUP_OF_DARTS:
+            return `/logos/Countries/pdc.webp`;
         default:
             return `/logos/Countries/world.svg`;
     }

@@ -26,7 +26,7 @@
         "lodash": "^4.17.21",
         "lottie-react": "^2.3.1",
         "overtime-live-trading-utils": "^2.0.29",
-        "overtime-utils": "^0.0.73",
+        "overtime-utils": "^0.0.79",
         "plausible-tracker": "^0.3.8",
         "rc-tooltip": "^5.1.1",
         "react": "18.2.0",
