@@ -65,7 +65,7 @@ export const getSportsAMMV2Transaction: any = async (
                         collateralAddress,
                         systemBetDenominator,
                     ],
-                    { value: BigInt(0), gas: finalEstimation ?? BigInt(0) }
+                    isInFarcaster ? { value: BigInt(0) } : { value: BigInt(0), gas: finalEstimation }
                 );
             } else
                 return await executeBiconomyTransaction({
@@ -102,7 +102,7 @@ export const getSportsAMMV2Transaction: any = async (
 
                 return freeBetHolderContract.write.trade(
                     [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress, collateralAddress],
-                    { value: BigInt(0), gas: finalEstimation ?? BigInt(0) }
+                    isInFarcaster ? { value: BigInt(0) } : { value: BigInt(0), gas: finalEstimation }
                 );
             } else {
                 return await executeBiconomyTransaction({
@@ -161,7 +161,9 @@ export const getSportsAMMV2Transaction: any = async (
                     isEth,
                     systemBetDenominator,
                 ],
-                { value: isEth ? buyInAmount : BigInt(0), gas: finalEstimation ?? BigInt(0) }
+                isInFarcaster
+                    ? { value: isEth ? buyInAmount : BigInt(0) }
+                    : { value: isEth ? buyInAmount : BigInt(0), gas: finalEstimation }
             );
         } else {
             return await executeBiconomyTransaction({
@@ -218,7 +220,9 @@ export const getSportsAMMV2Transaction: any = async (
                     isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
                     isEth,
                 ],
-                { value: isEth ? buyInAmount : BigInt(0), gas: finalEstimation ?? BigInt(0) }
+                isInFarcaster
+                    ? { value: isEth ? buyInAmount : BigInt(0) }
+                    : { value: isEth ? buyInAmount : BigInt(0), gas: finalEstimation }
             );
         } else {
             return await executeBiconomyTransaction({
