@@ -201,7 +201,6 @@ const QUERY_KEYS = {
         networkId,
     ],
     RiskManagementConfig: (networkId: Network, configTypes: string) => ['riskManagementConfig', networkId, configTypes],
-    TeamPlayers: (networkId: Network) => ['teamPlayers', networkId],
     WhitelistedAddress: (networkId: Network, walletAddress: string, role: RiskManagementRole) => [
         'whitelistedAddress',
         networkId,

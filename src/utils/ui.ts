@@ -1,13 +1,7 @@
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { NAV_MENU } from 'constants/ui';
 import { t } from 'i18next';
-import {
-    getLeaguePeriodType,
-    isCombinedPositionsMarket,
-    isDoubleChanceMarket,
-    isSgpBuilderMarket,
-    PeriodType,
-} from 'overtime-utils';
+import { getLeaguePeriodType, isCombinedPositionsMarket, isDoubleChanceMarket, PeriodType } from 'overtime-utils';
 import { localStore } from 'thales-utils';
 import { NavMenuItem, PromotionCardStatus, PromotionStatus } from 'types/ui';
 import { SportMarket } from '../types/markets';
@@ -60,8 +54,7 @@ export const setKeepSelectionToStorage = (value: boolean) => {
 };
 
 export const getGridMinMaxPercentage = (market: SportMarket, isMobile: boolean): number => {
-    return (isMobile && (isDoubleChanceMarket(market.typeId) || isCombinedPositionsMarket(market.typeId))) ||
-        isSgpBuilderMarket(market.typeId)
+    return isMobile && (isDoubleChanceMarket(market.typeId) || isCombinedPositionsMarket(market.typeId))
         ? 100
         : market.odds.length === 3
         ? 33
