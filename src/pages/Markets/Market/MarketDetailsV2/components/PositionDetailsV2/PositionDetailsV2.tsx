@@ -224,11 +224,17 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
                         } else {
                             dispatch(updateTicket(ticketPosition));
                         }
-                        if (isMobile) {
-                            // TODO: temporary solution
-                            toast(`${getMatchLabel(market)} added to the ticket`, oddToastOptions);
-                        }
                     });
+
+                    if (isMobile) {
+                        const marketName = isSgpBuilderMarket(market.typeId)
+                            ? sgpPositionsText
+                                  .map((position) => `${position.mainText} (${position.subText})`)
+                                  .join(', ')
+                            : getMatchLabel(market);
+                        // TODO: temporary solution
+                        toast(`${marketName} added to the ticket`, oddToastOptions);
+                    }
                 }
             }}
         >
@@ -237,7 +243,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
                     {sgpPositionsText.map((position, i) => {
                         return (
                             <SgpPositionRow key={`sgpPositions-${i}`}>
-                                <SgpPositionMark isSelected={isAddedToTicket} />
+                                <SgpPositionMark isSelected={isAddedToTicket && !disabledPosition} />
                                 <SgpPositionMainText>
                                     {position.mainText}
                                     <SgpPositionSubText isSelected={isAddedToTicket && !disabledPosition}>
