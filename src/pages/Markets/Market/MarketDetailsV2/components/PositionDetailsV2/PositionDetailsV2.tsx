@@ -114,7 +114,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
         ticket.length === sgpTicketPositions.length &&
         ticket.every(
             (ticketPosition, i) =>
-                isSameMarket(sgpTicketPositions[i], ticketPosition) &&
+                isSameMarket(sgpTicketPositions[i], ticketPosition, true) &&
                 ticket[i].position === sgpTicketPositions[i].position
         );
 
