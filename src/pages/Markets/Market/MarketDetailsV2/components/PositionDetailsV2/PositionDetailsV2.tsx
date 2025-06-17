@@ -43,9 +43,10 @@ import { useChainId } from 'wagmi';
 import {
     Container,
     Odd,
+    SgpPositionMainText,
     SgpPositionMark,
     SgpPositionRow,
-    SgpPositionText,
+    SgpPositionSubText,
     SgpPositions,
     Status,
     Text,
@@ -259,7 +260,12 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
                         return (
                             <SgpPositionRow key={`sgpPositions-${i}`}>
                                 <SgpPositionMark isSelected={isAddedToTicket} />
-                                <SgpPositionText>{position}</SgpPositionText>
+                                <SgpPositionMainText>
+                                    {position.mainText}
+                                    <SgpPositionSubText isSelected={isAddedToTicket && !disabledPosition}>
+                                        {position.subText}
+                                    </SgpPositionSubText>
+                                </SgpPositionMainText>
                             </SgpPositionRow>
                         );
                     })}
