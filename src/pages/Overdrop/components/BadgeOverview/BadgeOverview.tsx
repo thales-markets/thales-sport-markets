@@ -1,30 +1,50 @@
+import Button from 'components/Button';
 import Progress from 'components/Progress';
+import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
-import { OVERDROP_LEVELS } from 'constants/overdrop';
+import { OVERDROP_LEVELS, OVERDROP_REWARDS_COLLATERALS } from 'constants/overdrop';
+import { ContractType } from 'enums/contract';
 import useOpAndArbPriceQuery from 'queries/overdrop/useOpAndArbPriceQuery';
 import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
-import React, { useEffect, useState } from 'react';
+import useUserRewardsQuery from 'queries/overdrop/useUserRewardsQuery';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useSwipeable } from 'react-swipeable';
+import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivRow } from 'styles/common';
 import { formatCurrencyWithKey, formatCurrencyWithSign } from 'thales-utils';
-import { OverdropUserData } from 'types/overdrop';
+import { OverdropUserData, UserRewards } from 'types/overdrop';
 import { RootState } from 'types/redux';
-import { formatPoints, getCurrentLevelByPoints, getNextOverRewardLevel, getProgressLevel } from 'utils/overdrop';
-import { useAccount } from 'wagmi';
+import { ThemeInterface } from 'types/ui';
+import { ViemContract } from 'types/viem';
+import { getContractInstance } from 'utils/contract';
+import {
+    areOverdropRewardsAvailableForNetwork,
+    formatPoints,
+    getCurrentLevelByPoints,
+    getNextOverRewardLevel,
+    getProgressLevel,
+} from 'utils/overdrop';
+import { Client } from 'viem';
+import { waitForTransactionReceipt } from 'viem/actions';
+import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 import SmallBadge from '../SmallBadge';
 
 const BadgeOverview: React.FC = () => {
     const { t } = useTranslation();
+    const theme: ThemeInterface = useTheme();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
-
+    const networkId = useChainId();
+    const client = useClient();
+    const walletClient = useWalletClient();
     const { address, isConnected } = useAccount();
 
     const [currentStep, setCurrentStep] = useState<number>(0);
     const [numberOfCards, setNumberOfCards] = useState<number>(isMobile ? 3 : 6);
+    const [isClaiming, setIsClaiming] = useState<boolean>(false);
 
     useEffect(() => {
         isMobile ? setNumberOfCards(4) : setNumberOfCards(6);
@@ -43,6 +63,26 @@ const BadgeOverview: React.FC = () => {
 
     const levelItem = userData ? getCurrentLevelByPoints(userData.points) : OVERDROP_LEVELS[0];
     const nextOverRewardLevel = getNextOverRewardLevel(userData?.points);
+
+    const areRewardsAvailable = useMemo(() => areOverdropRewardsAvailableForNetwork(networkId), [networkId]);
+
+    const userRewardsQuery = useUserRewardsQuery(
+        address as string,
+        { networkId, client },
+        {
+            enabled: isConnected && areRewardsAvailable,
+        }
+    );
+
+    const userRewards: UserRewards | undefined = useMemo(() => {
+        if (userRewardsQuery.data && userRewardsQuery.isSuccess) {
+            return userRewardsQuery.data;
+        }
+
+        return undefined;
+    }, [userRewardsQuery.data, userRewardsQuery.isSuccess]);
+
+    const isClaimButtonDisabled = isClaiming || userRewards?.hasClaimed;
 
     useEffect(() => {
         if (levelItem) {
@@ -76,6 +116,44 @@ const BadgeOverview: React.FC = () => {
         0,
         nextOverRewardLevel?.minimumPoints ?? OVERDROP_LEVELS[1].minimumPoints
     );
+
+    const claimRewards = async () => {
+        const overdropRewardsContractWithSigner = getContractInstance(ContractType.OVERDROP_REWARDS, {
+            client: walletClient.data,
+            networkId,
+        }) as ViemContract;
+
+        if (overdropRewardsContractWithSigner && userRewards) {
+            const toastId = toast.loading(t('market.toast-message.transaction-pending'));
+            try {
+                setIsClaiming(true);
+
+                const txHash = await overdropRewardsContractWithSigner.write.claimRewards([
+                    userRewards.rawAmount,
+                    userRewards.proof,
+                ]);
+
+                const txReceipt = await waitForTransactionReceipt(client as Client, {
+                    hash: txHash,
+                });
+                if (txReceipt.status === 'success') {
+                    toast.update(
+                        toastId,
+                        getSuccessToastOptions(
+                            t('overdrop.overdrop-home.claim-confirmation-message', {
+                                collateral: OVERDROP_REWARDS_COLLATERALS[networkId],
+                            })
+                        )
+                    );
+                    userRewardsQuery.refetch();
+                }
+            } catch (e) {
+                toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+                console.log(e);
+                setIsClaiming(false);
+            }
+        }
+    };
 
     return (
         <Wrapper>
@@ -125,6 +203,33 @@ const BadgeOverview: React.FC = () => {
                                 : 'N/A'}
                         </ValueSecondary>
                     </ValueWrapper>
+                    {areRewardsAvailable && (
+                        <>
+                            <Button
+                                backgroundColor={theme.button.textColor.tertiary}
+                                borderColor={theme.button.textColor.tertiary}
+                                height="24px"
+                                margin="5px 0px 5px 0px"
+                                padding="2px 15px"
+                                fontSize="14px"
+                                lineHeight="16px"
+                                onClick={claimRewards}
+                                disabled={isClaimButtonDisabled}
+                            >
+                                {t('overdrop.overdrop-home.claim-rewards', {
+                                    collateral: OVERDROP_REWARDS_COLLATERALS[networkId],
+                                })}
+                            </Button>
+                            {userRewards && userRewards.hasClaimed && (
+                                <ClaimedMessage>
+                                    {t('overdrop.overdrop-home.claimed-message', {
+                                        collateral: OVERDROP_REWARDS_COLLATERALS[networkId],
+                                    })}
+                                </ClaimedMessage>
+                            )}
+                        </>
+                    )}
+                    <Disclaimer>{t('overdrop.overdrop-home.claim-disclaimer')}</Disclaimer>
                 </ItemContainer>
                 {levelItem.level !== OVERDROP_LEVELS.length - 1 && (
                     <ItemContainer>
@@ -237,6 +342,15 @@ const ProgressContainer = styled(FlexDiv)`
 const Disclaimer = styled.p`
     font-size: 12px;
     font-style: italic;
+    margin-right: 10px;
+`;
+
+export const ClaimedMessage = styled.span`
+    font-size: 12px;
+    color: ${(props) => props.theme.warning.textColor.primary};
+    width: 100%;
+    margin-bottom: 5px;
+    text-align: left;
 `;
 
 export default BadgeOverview;

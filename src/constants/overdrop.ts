@@ -1,26 +1,6 @@
+import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
+import { Network } from 'enums/network';
 import { OverdropLevel } from 'types/ui';
-
-import Level1Small from '../assets/images/overdrop/smallBadges/1.webp';
-import Level10Small from '../assets/images/overdrop/smallBadges/10.webp';
-import Level11Small from '../assets/images/overdrop/smallBadges/11.webp';
-import Level12Small from '../assets/images/overdrop/smallBadges/12.webp';
-import Level13Small from '../assets/images/overdrop/smallBadges/13.webp';
-import Level14Small from '../assets/images/overdrop/smallBadges/14.webp';
-import Level15Small from '../assets/images/overdrop/smallBadges/15.webp';
-import Level16Small from '../assets/images/overdrop/smallBadges/16.webp';
-import Level17Small from '../assets/images/overdrop/smallBadges/17.webp';
-import Level18Small from '../assets/images/overdrop/smallBadges/18.webp';
-import Level19Small from '../assets/images/overdrop/smallBadges/19.webp';
-import Level2Small from '../assets/images/overdrop/smallBadges/2.webp';
-import Level20Small from '../assets/images/overdrop/smallBadges/20.webp';
-import Level3Small from '../assets/images/overdrop/smallBadges/3.webp';
-import Level4Small from '../assets/images/overdrop/smallBadges/4.webp';
-import Level5Small from '../assets/images/overdrop/smallBadges/5.webp';
-import Level6Small from '../assets/images/overdrop/smallBadges/6.webp';
-import Level7Small from '../assets/images/overdrop/smallBadges/7.webp';
-import Level8Small from '../assets/images/overdrop/smallBadges/8.webp';
-import Level9Small from '../assets/images/overdrop/smallBadges/9.webp';
-
 import Level1Large from '../assets/images/overdrop/largeBadges/1.webp';
 import Level10Large from '../assets/images/overdrop/largeBadges/10.webp';
 import Level11Large from '../assets/images/overdrop/largeBadges/11.webp';
@@ -41,6 +21,26 @@ import Level6Large from '../assets/images/overdrop/largeBadges/6.webp';
 import Level7Large from '../assets/images/overdrop/largeBadges/7.webp';
 import Level8Large from '../assets/images/overdrop/largeBadges/8.webp';
 import Level9Large from '../assets/images/overdrop/largeBadges/9.webp';
+import Level1Small from '../assets/images/overdrop/smallBadges/1.webp';
+import Level10Small from '../assets/images/overdrop/smallBadges/10.webp';
+import Level11Small from '../assets/images/overdrop/smallBadges/11.webp';
+import Level12Small from '../assets/images/overdrop/smallBadges/12.webp';
+import Level13Small from '../assets/images/overdrop/smallBadges/13.webp';
+import Level14Small from '../assets/images/overdrop/smallBadges/14.webp';
+import Level15Small from '../assets/images/overdrop/smallBadges/15.webp';
+import Level16Small from '../assets/images/overdrop/smallBadges/16.webp';
+import Level17Small from '../assets/images/overdrop/smallBadges/17.webp';
+import Level18Small from '../assets/images/overdrop/smallBadges/18.webp';
+import Level19Small from '../assets/images/overdrop/smallBadges/19.webp';
+import Level2Small from '../assets/images/overdrop/smallBadges/2.webp';
+import Level20Small from '../assets/images/overdrop/smallBadges/20.webp';
+import Level3Small from '../assets/images/overdrop/smallBadges/3.webp';
+import Level4Small from '../assets/images/overdrop/smallBadges/4.webp';
+import Level5Small from '../assets/images/overdrop/smallBadges/5.webp';
+import Level6Small from '../assets/images/overdrop/smallBadges/6.webp';
+import Level7Small from '../assets/images/overdrop/smallBadges/7.webp';
+import Level8Small from '../assets/images/overdrop/smallBadges/8.webp';
+import Level9Small from '../assets/images/overdrop/smallBadges/9.webp';
 import test from '../assets/images/overdrop/test.png';
 
 export const OVERDROP_LEVELS: OverdropLevel[] = [
@@ -221,3 +221,12 @@ export const OVERDROP_LEVELS: OverdropLevel[] = [
         largeBadge: Level20Large,
     },
 ];
+
+export const OVERDROP_REWARDS_NETWORKS = [Network.OptimismMainnet, Network.Arbitrum, Network.OptimismSepolia];
+
+export const OVERDROP_REWARDS_COLLATERALS = {
+    [Network.OptimismSepolia]: CRYPTO_CURRENCY_MAP.USDC,
+    [Network.OptimismMainnet]: CRYPTO_CURRENCY_MAP.OP,
+    [Network.Arbitrum]: CRYPTO_CURRENCY_MAP.ARB,
+    [Network.Base]: CRYPTO_CURRENCY_MAP.USDC,
+};

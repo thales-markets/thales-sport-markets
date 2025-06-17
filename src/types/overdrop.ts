@@ -47,3 +47,12 @@ export type OverdropUIState = {
     dailyMultiplier: number;
     currentLevel: number;
 };
+
+export type UserRewards = {
+    walletAddress: string;
+    amount: number;
+    rawAmount: string;
+    hasRewards: boolean;
+    hasClaimed: boolean;
+    proof: string[];
+};
