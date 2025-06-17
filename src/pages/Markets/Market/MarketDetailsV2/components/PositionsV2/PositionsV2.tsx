@@ -225,8 +225,14 @@ const Positions: React.FC<PositionsProps> = ({
         }
     }, [markets, isQuickSgpMarket, filteredQuickSgpMarkets, isMarketSelected]);
 
-    const positionText0 = !filteredQuickSgpMarkets.length && markets[0] ? getSubtitleText(markets[0], 0) : undefined;
-    const positionText1 = !filteredQuickSgpMarkets.length && markets[0] ? getSubtitleText(markets[0], 1) : undefined;
+    const positionText0 =
+        (!filteredQuickSgpMarkets.length || isMarketSelected) && markets[0]
+            ? getSubtitleText(markets[0], 0)
+            : undefined;
+    const positionText1 =
+        (!filteredQuickSgpMarkets.length || isMarketSelected) && markets[0]
+            ? getSubtitleText(markets[0], 1)
+            : undefined;
     const titleText = getTitleText(
         !!filteredQuickSgpMarkets.length ? filteredQuickSgpMarkets[0] : markets[0],
         !isPlayerPropsMarket,
