@@ -197,6 +197,7 @@ export const getSportsAMMV2Transaction: any = async (
             });
 
             finalEstimation = BigInt(Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER));
+            console.log('Final estimation:', finalEstimation);
 
             return sportsAMMV2Contract.write.trade(
                 [
