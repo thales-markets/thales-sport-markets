@@ -2,12 +2,9 @@ import Button from 'components/Button';
 import Scroll from 'components/Scroll';
 import { MarketTypeGroupsBySport } from 'constants/marketTypes';
 import { SportFilter } from 'enums/markets';
-import { RiskManagementConfig } from 'enums/riskManagement';
 import { t } from 'i18next';
 import { groupBy } from 'lodash';
-import { isFuturesMarket, isSgpBuilderMarket, League, MarketType, PLAYER_PROPS_MARKET_TYPES } from 'overtime-utils';
-import useRiskManagementConfigQuery from 'queries/riskManagement/useRiskManagementConfig';
-import useTeamPlayersInfoQuery from 'queries/teams/useTeamPlayersInfoQuery';
+import { isFuturesMarket, League, MarketType, PLAYER_PROPS_MARKET_TYPES } from 'overtime-utils';
 import React, { useMemo, useReducer } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
@@ -18,10 +15,8 @@ import {
     setMarketTypeGroupFilter,
 } from 'redux/modules/market';
 import { useTheme } from 'styled-components';
-import { SportMarket, TeamPlayersData } from 'types/markets';
-import { RiskManagementSgpBuilders } from 'types/riskManagement';
-import { getTicketPositionsFogSgpBuilder, isOddValid } from 'utils/marketsV2';
-import { useChainId } from 'wagmi';
+import { SportMarket } from 'types/markets';
+import { isOddValid } from 'utils/marketsV2';
 import { ThemeInterface } from '../../../../types/ui';
 import PositionsV2 from '../../Market/MarketDetailsV2/components/PositionsV2';
 import { NoMarketsContainer, NoMarketsLabel, Wrapper } from './styled-components';
@@ -33,7 +28,6 @@ type SelectedMarketDetailsProps = {
 const SelectedMarketDetails: React.FC<SelectedMarketDetailsProps> = ({ market }) => {
     const theme: ThemeInterface = useTheme();
     const dispatch = useDispatch();
-    const networkId = useChainId();
 
     const isGameStarted = market.maturityDate < new Date();
     const isGameOpen = market.isOpen && !isGameStarted;
@@ -41,40 +35,6 @@ const SelectedMarketDetails: React.FC<SelectedMarketDetailsProps> = ({ market })
     const isMobile = useSelector(getIsMobile);
     const sportFilter = useSelector(getSportFilter);
     const selectedMarket = useSelector(getSelectedMarket);
-
-    const riskManagementSgpBuildersQuery = useRiskManagementConfigQuery([RiskManagementConfig.SGP_BUILDERS], {
-        networkId,
-    });
-
-    const sgpBuilders = useMemo(
-        () =>
-            riskManagementSgpBuildersQuery.isSuccess && riskManagementSgpBuildersQuery.data
-                ? (riskManagementSgpBuildersQuery.data as RiskManagementSgpBuilders).sgpBuilders
-                : [],
-        [riskManagementSgpBuildersQuery.isSuccess, riskManagementSgpBuildersQuery.data]
-    );
-
-    const teamPlayersInfoQuery = useTeamPlayersInfoQuery({ networkId }, { enabled: sgpBuilders.length > 0 });
-
-    const homeTeamPlayerIds = useMemo(
-        () =>
-            teamPlayersInfoQuery.isSuccess && teamPlayersInfoQuery.data
-                ? ((teamPlayersInfoQuery.data as TeamPlayersData).get(market.homeTeam.toLowerCase()) || [])
-                      .filter((teamPlayer) => teamPlayer.playerId)
-                      .map((teamPlayer) => teamPlayer.playerId)
-                : [],
-        [teamPlayersInfoQuery.isSuccess, teamPlayersInfoQuery.data, market]
-    );
-
-    const awayTeamPlayerIds = useMemo(
-        () =>
-            teamPlayersInfoQuery.isSuccess && teamPlayersInfoQuery.data
-                ? ((teamPlayersInfoQuery.data as TeamPlayersData).get(market.awayTeam.toLowerCase()) || [])
-                      .filter((teamPlayer) => teamPlayer.playerId)
-                      .map((teamPlayer) => teamPlayer.playerId)
-                : [],
-        [teamPlayersInfoQuery.isSuccess, teamPlayersInfoQuery.data, market]
-    );
 
     const playerName = useMemo(() => selectedMarket?.playerName, [selectedMarket?.playerName]);
 
@@ -162,17 +122,7 @@ const SelectedMarketDetails: React.FC<SelectedMarketDetailsProps> = ({ market })
                         {Object.keys(groupedChildMarkets).map((key, index) => {
                             const typeId = Number(key);
                             const childMarkets = groupedChildMarkets[typeId];
-                            const sgpBuildersWithTicketPositions = isSgpBuilderMarket(typeId)
-                                ? sgpBuilders.map((sgpBuilder) => ({
-                                      sgpBuilder,
-                                      ticketPositions: getTicketPositionsFogSgpBuilder(
-                                          market,
-                                          sgpBuilder,
-                                          homeTeamPlayerIds,
-                                          awayTeamPlayerIds
-                                      ),
-                                  }))
-                                : [];
+
                             return (
                                 <PositionsV2
                                     key={index}
@@ -182,7 +132,6 @@ const SelectedMarketDetails: React.FC<SelectedMarketDetailsProps> = ({ market })
                                     onAccordionClick={refreshScroll}
                                     hidePlayerName={sportFilter === SportFilter.PlayerProps}
                                     alignHeader={sportFilter === SportFilter.PlayerProps}
-                                    sgpTickets={sgpBuildersWithTicketPositions}
                                 />
                             );
                         })}

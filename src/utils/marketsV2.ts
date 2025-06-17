@@ -35,7 +35,6 @@ import {
     League,
     MarketType,
     MarketTypeMap,
-    SgpBuilder,
     Sport,
 } from 'overtime-utils';
 import {
@@ -317,7 +316,7 @@ export const getSgpBuilderPositionsText = (ticketPositions: TicketPosition[]) =>
 export const getTitleText = (market: SportMarket, useDescription?: boolean, shortName?: boolean) =>
     getTitleTextV2(market.typeId, market.leagueId, market.homeTeam, market.awayTeam, useDescription, shortName);
 
-export const getTitleTextV2 = (
+const getTitleTextV2 = (
     marketType: MarketType,
     leagueId: League,
     homeTeam: string,
@@ -820,114 +819,6 @@ export const packMarket = (
     }
 
     return packedMarket;
-};
-
-// TODO: move to utils as the same code is used on API for fetching SGP quotes
-export const getTicketPositionsFogSgpBuilder = (
-    market: SportMarket,
-    sgpBuilder: SgpBuilder,
-    homeTeamPlayerIds: number[],
-    awayTeamPlayerIds: number[]
-): TicketPosition[] => {
-    let ticketPositions: TicketPosition[] = [];
-
-    for (let i = 0; i < sgpBuilder.size; i++) {
-        const sport = sgpBuilder.sport;
-        const leagueId = sgpBuilder.leagueId;
-        const sgpTypeId = sgpBuilder.typeId;
-        const typeId = sgpBuilder.combinedTypeIds[i];
-        const playerIds = sgpBuilder.combinedPlayerIds[i];
-        const line = sgpBuilder.combinedLines[i];
-        const position = sgpBuilder.combinedPositions[i];
-
-        if (market.sport !== sport && market.leagueId !== leagueId) {
-            continue;
-        }
-
-        const isDefaultCondition = playerIds.length > 0 || line !== null;
-        const getDefaultCondition = (marketPlayerId: number, marketLine: number) =>
-            (!playerIds.length || playerIds.includes(marketPlayerId)) && (line === null || marketLine === line);
-
-        const combinedChildMarkets = market.childMarkets.filter(
-            (childMarket) =>
-                childMarket.typeId === typeId &&
-                // exclude same players for the same type
-                !ticketPositions.some(
-                    (ticketPosition) =>
-                        ticketPosition.playerId === childMarket.playerProps.playerId &&
-                        ticketPosition.typeId === childMarket.typeId
-                ) &&
-                // only players from their teams
-                (!isPlayerPropsMarket(typeId) ||
-                    (isHomeTeamMarket(sgpTypeId)
-                        ? homeTeamPlayerIds.includes(childMarket.playerProps.playerId)
-                        : isAwayTeamMarket(sgpTypeId)
-                        ? awayTeamPlayerIds.includes(childMarket.playerProps.playerId)
-                        : true))
-        );
-
-        let combinedChildMarket = undefined;
-        switch (typeId) {
-            case MarketType.PLAYER_PROPS_POINTS:
-            case MarketType.PLAYER_PROPS_ASSISTS:
-                const maxLine = Math.max(...combinedChildMarkets.map((childMarket) => childMarket.line));
-                combinedChildMarket = combinedChildMarkets.find((childMarket) => {
-                    const typeSpecifiedCondition = childMarket.line === maxLine;
-                    return isDefaultCondition
-                        ? getDefaultCondition(childMarket.playerProps.playerId, childMarket.line) ||
-                              typeSpecifiedCondition
-                        : typeSpecifiedCondition;
-                });
-                break;
-            case MarketType.PLAYER_PROPS_TRIPLE_DOUBLE:
-            case MarketType.PLAYER_PROPS_DOUBLE_DOUBLE:
-            case MarketType.PLAYER_PROPS_DOUBLES:
-                const maxOdds = Math.max(
-                    ...combinedChildMarkets.map((childMarket) => (position !== null ? childMarket.odds[position] : 0))
-                );
-                combinedChildMarket = combinedChildMarkets.find((childMarket) => {
-                    const typeSpecifiedCondition = position !== null && childMarket.odds[position] === maxOdds;
-                    return isDefaultCondition
-                        ? getDefaultCondition(childMarket.playerProps.playerId, childMarket.line) ||
-                              typeSpecifiedCondition
-                        : typeSpecifiedCondition;
-                });
-                break;
-
-            default:
-                combinedChildMarket = combinedChildMarkets.find((childMarket) =>
-                    getDefaultCondition(childMarket.playerProps.playerId, childMarket.line)
-                );
-        }
-
-        const combinedMarket = typeId === MarketType.WINNER ? market : combinedChildMarket;
-
-        if (combinedMarket) {
-            const ticketPosition = {
-                gameId: combinedMarket.gameId,
-                leagueId: combinedMarket.leagueId,
-                typeId: combinedMarket.typeId,
-                playerId: combinedMarket.playerProps.playerId,
-                playerName: combinedMarket.playerProps.playerName,
-                line: combinedMarket.line,
-                position: position,
-                combinedPositions: combinedMarket.combinedPositions,
-                live: false,
-                isOneSideMarket: combinedMarket.isOneSideMarket,
-                isPlayerPropsMarket: combinedMarket.isPlayerPropsMarket,
-                homeTeam: combinedMarket.homeTeam,
-                awayTeam: combinedMarket.awayTeam,
-                playerProps: combinedMarket.playerProps,
-            } as TicketPosition;
-
-            ticketPositions.push(ticketPosition);
-        } else {
-            ticketPositions = [];
-            break;
-        }
-    }
-
-    return ticketPositions;
 };
 
 const getPlayerPropsEmptyMarkets = (market: SportMarket) => [

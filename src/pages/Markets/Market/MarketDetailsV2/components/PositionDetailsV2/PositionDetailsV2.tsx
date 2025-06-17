@@ -28,7 +28,7 @@ import {
     updateTicket,
 } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
-import { SgpTicket, SportMarket, TicketPosition } from 'types/markets';
+import { SportMarket, TicketPosition } from 'types/markets';
 import { SgpParams } from 'types/sgp';
 import { formatMarketOdds, getPositionOrder } from 'utils/markets';
 import {
@@ -59,7 +59,6 @@ type PositionDetailsProps = {
     isColumnView?: boolean;
     displayPosition: number;
     isPositionBlocked?: boolean;
-    sgpTickets?: SgpTicket[];
 };
 
 const PositionDetails: React.FC<PositionDetailsProps> = ({
@@ -69,7 +68,6 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
     isColumnView,
     displayPosition,
     isPositionBlocked,
-    sgpTickets,
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -81,20 +79,6 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
     const marketTypeFilter = useSelector(getMarketTypeFilter);
     const sportFilter = useSelector(getSportFilter);
     const isSgp = useSelector(getIsSgp);
-
-    const currentSgpTicket = useMemo(() => {
-        if (isSgpBuilderMarket(market.typeId) && !!sgpTickets?.length) {
-            return sgpTickets.find(
-                (sgpTicket) =>
-                    sgpTicket.ticketPositions.length &&
-                    sgpTicket.ticketPositions[0].gameId === market.gameId &&
-                    sgpTicket.sgpBuilder.typeId === market.typeId &&
-                    market.positionNames?.length &&
-                    sgpTicket.sgpBuilder.positionName === market.positionNames[position]
-            );
-        }
-        return undefined;
-    }, [sgpTickets, market.gameId, market.typeId, market.positionNames, position]);
 
     const sgpTicketPositions: TicketPosition[] = useMemo(
         () =>
@@ -124,12 +108,6 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
         [market, position]
     );
 
-    // const sgpTicketPositions = useMemo(() => (currentSgpTicket ? currentSgpTicket.ticketPositions : []), [
-    //     currentSgpTicket,
-    // ]);
-
-    // console.log(ticketPositions.map((market) => market.playerProps));
-
     const isSgpBuilderAddedToTicket =
         isSgpBuilderMarket(market.typeId) &&
         ticket.length > 0 &&
@@ -137,7 +115,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
         ticket.every(
             (ticketPosition, i) =>
                 isSameMarket(sgpTicketPositions[i], ticketPosition) &&
-                ticket[i].position === currentSgpTicket?.sgpBuilder.combinedPositions[i]
+                ticket[i].position === sgpTicketPositions[i].position
         );
 
     const addedToTicket = ticket.filter((position) => isSameMarket(market, position))[0];

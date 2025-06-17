@@ -25,7 +25,6 @@ import {
 } from 'overtime-utils';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
 import useRiskManagementConfigQuery from 'queries/riskManagement/useRiskManagementConfig';
-import useTeamPlayersInfoQuery from 'queries/teams/useTeamPlayersInfoQuery';
 import React, { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -41,15 +40,14 @@ import {
     setSelectedMarket,
 } from 'redux/modules/market';
 import { formatShortDateWithTime } from 'thales-utils';
-import { SportMarket, TeamPlayersData } from 'types/markets';
-import { RiskManagementLeaguesAndTypes, RiskManagementSgpBuilders } from 'types/riskManagement';
+import { SportMarket } from 'types/markets';
+import { RiskManagementLeaguesAndTypes } from 'types/riskManagement';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getLeagueFlagSource, getOnImageError, getOnPlayerImageError, getTeamImageSource } from 'utils/images';
 import {
     getMarketPlayerPropsMarketsForGroupFilter,
     getMarketPlayerPropsMarketsForProp,
     getMarketPlayerPropsMarketsForSport,
-    getTicketPositionsFogSgpBuilder,
     isOddValid,
 } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
@@ -146,42 +144,6 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                 return { leagues: [], spreadTypes: [], totalTypes: [] };
             }
         }, [riskManagementLeaguesQuery.isSuccess, riskManagementLeaguesQuery.data, market.leagueId]);
-
-        const riskManagementSgpBuildersQuery = useRiskManagementConfigQuery(
-            [RiskManagementConfig.SGP_BUILDERS],
-            { networkId },
-            { enabled: isQuickSgpMarket }
-        );
-
-        const sgpBuilders = useMemo(
-            () =>
-                riskManagementSgpBuildersQuery.isSuccess && riskManagementSgpBuildersQuery.data
-                    ? (riskManagementSgpBuildersQuery.data as RiskManagementSgpBuilders).sgpBuilders
-                    : [],
-            [riskManagementSgpBuildersQuery.isSuccess, riskManagementSgpBuildersQuery.data]
-        );
-
-        const teamPlayersInfoQuery = useTeamPlayersInfoQuery({ networkId }, { enabled: isQuickSgpMarket });
-
-        const homeTeamPlayerIds = useMemo(
-            () =>
-                teamPlayersInfoQuery.isSuccess && teamPlayersInfoQuery.data
-                    ? ((teamPlayersInfoQuery.data as TeamPlayersData).get(market.homeTeam.toLowerCase()) || [])
-                          .filter((teamPlayer) => teamPlayer.playerId)
-                          .map((teamPlayer) => teamPlayer.playerId)
-                    : [],
-            [teamPlayersInfoQuery.isSuccess, teamPlayersInfoQuery.data, market]
-        );
-
-        const awayTeamPlayerIds = useMemo(
-            () =>
-                teamPlayersInfoQuery.isSuccess && teamPlayersInfoQuery.data
-                    ? ((teamPlayersInfoQuery.data as TeamPlayersData).get(market.awayTeam.toLowerCase()) || [])
-                          .filter((teamPlayer) => teamPlayer.playerId)
-                          .map((teamPlayer) => teamPlayer.playerId)
-                    : [],
-            [teamPlayersInfoQuery.isSuccess, teamPlayersInfoQuery.data, market]
-        );
 
         useEffect(() => {
             setHomeLogoSrc(
@@ -418,16 +380,6 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
         };
 
         const getQuickSgpPositions = (sportMarket: SportMarket) => {
-            const sgpBuildersWithTicketPositions = sgpBuilders.map((sgpBuilder) => ({
-                sgpBuilder,
-                ticketPositions: getTicketPositionsFogSgpBuilder(
-                    sportMarket,
-                    sgpBuilder,
-                    homeTeamPlayerIds,
-                    awayTeamPlayerIds
-                ),
-            }));
-
             return (
                 <PositionsV2
                     markets={marketTypeFilterMarket ? [marketTypeFilterMarket] : [sportMarket]}
@@ -437,7 +389,6 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
                     isGameOpen={isGameOpen}
                     isMainPageView
                     isColumnView={isColumnView}
-                    sgpTickets={sgpBuildersWithTicketPositions}
                 />
             );
         };
