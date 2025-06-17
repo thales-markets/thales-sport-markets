@@ -45,6 +45,10 @@ export const getSportsAMMV2Transaction: any = async (
                 ],
             });
 
+            // Estimate gas only if not in Farcaster mini app
+            // and not using Account Abstraction
+            // as Farcaster mini app will handle gas estimation
+            // and Account Abstraction will use Biconomy for gas estimation
             if (!isAA) {
                 if (!isInFarcaster) {
                     const estimation = await estimateGas(client, {
@@ -55,6 +59,7 @@ export const getSportsAMMV2Transaction: any = async (
                     finalEstimation = BigInt(Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER));
                 }
 
+                // omit gas if in Farcaster mini app
                 return freeBetHolderContract.write.tradeSystemBet(
                     [
                         tradeData,
