@@ -260,7 +260,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({
                 </Text>
             )}
             {showOdd ? (
-                <Odd selected={isAddedToTicket} isMainPageView={isMainPageView}>
+                <Odd selected={isAddedToTicket && !disabledPosition} isMainPageView={isMainPageView}>
                     {isZeroOdd ? '-' : formatMarketOdds(selectedOddsType, odd)}
                     {isZeroOdd && (
                         <Tooltip overlay={<>{t('markets.zero-odds-tooltip')}</>} iconFontSize={13} marginLeft={3} />
