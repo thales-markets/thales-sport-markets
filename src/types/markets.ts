@@ -241,7 +241,7 @@ export type TicketRequest = {
 type TicketRequestData = TicketRequest & {
     timestamp: number;
 };
-export type TicketMarketRequestData = Omit<TicketRequestData, 'ticket'> & {
+export type TicketMarketRequestData = TicketRequestData & {
     ticket: TicketMarket;
 };
 export type TicketRequestsById = Record<string, TicketRequestData>;

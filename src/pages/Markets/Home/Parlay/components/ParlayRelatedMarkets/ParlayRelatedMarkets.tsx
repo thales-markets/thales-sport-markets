@@ -129,6 +129,7 @@ const ParlayRelatedMarkets: React.FC = () => {
             return completedLiveRequest
                 ? ({
                       ...request,
+                      ticket: { ...request.ticket, odd: completedLiveRequest.totalQuote },
                       totalQuote: completedLiveRequest.totalQuote,
                       payout: completedLiveRequest.payout,
                       requestId: completedLiveRequest.requestId,
