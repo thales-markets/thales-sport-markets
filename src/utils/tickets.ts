@@ -595,6 +595,8 @@ export const isRegularTicketInvalid = (ticket: TicketPosition[], maxTicketSize: 
                 });
                 return isSamePlayer;
             }
+        } else {
+            return true;
         }
     } else if (ticket.length > 0 && ticket.some((position) => isFuturesMarket(position.typeId))) {
         // futures

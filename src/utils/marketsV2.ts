@@ -2,7 +2,7 @@ import { LIVE_MARKETS_STALE_PAUSED_MINUTES, NOT_AVAILABLE } from 'constants/mark
 import { differenceInMinutes, secondsToMilliseconds } from 'date-fns';
 import { MarketTypeGroup } from 'enums/marketTypes';
 import { GameStatus, MarketStatus, Position } from 'enums/markets';
-import _ from 'lodash';
+import _, { orderBy } from 'lodash';
 import {
     getLeagueInitialSport,
     getLeagueLabel,
@@ -12,6 +12,7 @@ import {
     isAwayTeamMarket,
     isBothTeamsToScoreMarket,
     isCombinedPositionsMarket,
+    isCorrectScoreMarket,
     isDoubleChanceMarket,
     isFuturesMarket,
     isHomeTeamMarket,
@@ -23,6 +24,7 @@ import {
     isPeriodMarket,
     isPlayerPropsMarket,
     isScoreMarket,
+    isSgpBuilderMarket,
     isSpreadMarket,
     isTotalExactMarket,
     isTotalMarket,
@@ -136,7 +138,7 @@ const getSimplePositionText = (
             ? text.split(' ')[marketType === MarketType.US_ELECTION_WINNING_PARTY_NORTH_CAROLINA ? 2 : 1]
             : text;
     }
-    if (marketType === MarketType.CORRECT_SCORE && positionNames && positionNames[position]) {
+    if (isCorrectScoreMarket(marketType) && positionNames && positionNames[position]) {
         let text = (position < positionNames.length - 1
             ? positionNames[position].slice(positionNames[position].length - 3)
             : positionNames[position]
@@ -206,6 +208,10 @@ const getSimplePositionText = (
         return getUfcSpecificPositionText(marketType, position, homeTeam, awayTeam);
     }
 
+    if (isSgpBuilderMarket(marketType) && positionNames && positionNames[position]) {
+        return positionNames[position];
+    }
+
     return position === 0 ? '1' : position === 1 ? '2' : 'X';
 };
 
@@ -262,6 +268,7 @@ export const getPositionTextV2 = (market: SportMarket, position: number, extende
     if (market.typeId === MarketType.EMPTY) {
         return '-';
     }
+
     return isCombinedPositionsMarket(market.typeId)
         ? getCombinedPositionsText(market, position)
         : getSimplePositionText(
@@ -277,24 +284,64 @@ export const getPositionTextV2 = (market: SportMarket, position: number, extende
           );
 };
 
-export const getTitleText = (market: SportMarket, useDescription?: boolean, shortName?: boolean) => {
-    const marketType = market.typeId as MarketType;
+export const getSgpBuilderPositionsText = (ticketPositions: TicketPosition[]) =>
+    ticketPositions.map((ticketPosition) => {
+        const positionText = getSimplePositionText(
+            ticketPosition.typeId,
+            ticketPosition.position,
+            ticketPosition.line,
+            ticketPosition.homeTeam,
+            ticketPosition.awayTeam,
+            ticketPosition.leagueId,
+            true
+        );
+        const titleText = getTitleTextV2(
+            ticketPosition.typeId,
+            ticketPosition.leagueId,
+            ticketPosition.homeTeam,
+            ticketPosition.awayTeam
+        );
+
+        let mainText = positionText;
+        let subText = titleText;
+
+        if (ticketPosition.isPlayerPropsMarket) {
+            mainText = getMatchLabel(ticketPosition);
+            subText = `${titleText} ${positionText}`;
+        }
+
+        return { mainText, subText };
+    });
+
+export const getTitleText = (market: SportMarket, useDescription?: boolean, shortName?: boolean) =>
+    getTitleTextV2(market.typeId, market.leagueId, market.homeTeam, market.awayTeam, useDescription, shortName);
+
+const getTitleTextV2 = (
+    marketType: MarketType,
+    leagueId: League,
+    homeTeam: string,
+    awayTeam: string,
+    useDescription?: boolean,
+    shortName?: boolean
+) => {
     if (marketType === MarketType.EMPTY) {
         return '';
     }
 
-    const sport = getLeagueSport(market.leagueId);
-    const scoringType = getLeagueScoringType(market.leagueId);
+    const sport = getLeagueSport(leagueId);
+    const scoringType = getLeagueScoringType(leagueId);
     const marketTypeDescription = getMarketTypeDescription(marketType);
     const marketTypeName =
         useDescription && marketTypeDescription
             ? marketTypeDescription
-            : market.leagueId === League.UEFA_SUPER_CUP && marketType === MarketType.WHO_WILL_QUALIFY
+            : leagueId === League.UEFA_SUPER_CUP && marketType === MarketType.WHO_WILL_QUALIFY
             ? 'To win the cup'
+            : isSgpBuilderMarket(marketType)
+            ? 'SGP'
             : getMarketTypeName(marketType, shortName);
 
     let sufix = isPeriodMarket(marketType)
-        ? ` ${getLeaguePeriodType(market.leagueId)}`
+        ? ` ${getLeaguePeriodType(leagueId)}`
         : isPeriod2Market(marketType)
         ? sport === Sport.BASEBALL
             ? ' half (1st 5 innings)'
@@ -322,7 +369,7 @@ export const getTitleText = (market: SportMarket, useDescription?: boolean, shor
     }
 
     if (
-        market.leagueId == League.UFC &&
+        leagueId == League.UFC &&
         (isTotalMarket(marketType) || isTotalOddEvenMarket(marketType) || isSpreadMarket(marketType))
     ) {
         sufix = `${sufix}${
@@ -331,7 +378,7 @@ export const getTitleText = (market: SportMarket, useDescription?: boolean, shor
     }
 
     if (
-        market.leagueId == League.SUMMER_OLYMPICS_TABLE_TENNIS &&
+        leagueId == League.SUMMER_OLYMPICS_TABLE_TENNIS &&
         (isTotalMarket(marketType) || isTotalOddEvenMarket(marketType) || isSpreadMarket(marketType))
     ) {
         sufix = `${sufix}${
@@ -340,13 +387,17 @@ export const getTitleText = (market: SportMarket, useDescription?: boolean, shor
     }
 
     if (isHomeTeamMarket(marketType)) {
-        sufix = `${sufix}${isTotalExactMarket(marketType) ? ` ${scoringType}` : ''} (${market.homeTeam})`;
+        sufix = `${sufix}${isTotalExactMarket(marketType) ? ` ${scoringType}` : ''} (${homeTeam})`;
     }
     if (isAwayTeamMarket(marketType)) {
-        sufix = `${sufix}${isTotalExactMarket(marketType) ? ` ${scoringType}` : ''} (${market.awayTeam})`;
+        sufix = `${sufix}${isTotalExactMarket(marketType) ? ` ${scoringType}` : ''} (${awayTeam})`;
     }
     if (isScoreMarket(marketType)) {
         sufix = scoringType.length > 1 ? ` ${scoringType.slice(0, scoringType.length - 1)}` : scoringType;
+    }
+
+    if (isSgpBuilderMarket(marketType) && !isHomeTeamMarket(marketType) && !isAwayTeamMarket(marketType)) {
+        sufix = ' (mixed)';
     }
 
     return marketTypeName ? `${marketTypeName}${sufix}` : `${marketType}`;
@@ -878,4 +929,28 @@ export const getDefaultPlayerPropsLeague = (leagueCount: Record<number, number>)
         return League.NHL;
     }
     return League.NBA;
+};
+
+export const getSortedSgpBuilderMarkets = (markets: SportMarket[]) => {
+    let sortedMarkets: SportMarket[] = markets;
+    if (sortedMarkets.length && isSgpBuilderMarket(sortedMarkets[0].typeId)) {
+        sortedMarkets = sortedMarkets.map((market) => {
+            const sortedOdds = orderBy(market.odds, [], ['desc']);
+            const sorter = sortedOdds.map((sortedOdd) => market.odds.findIndex((odds) => odds === sortedOdd));
+            const sortedCombinedPositions = sorter
+                .map((sortedIndex) => market.combinedPositions[sortedIndex])
+                .filter((p) => p !== undefined);
+            const sortedPositionNames = sorter.map((sortedIndex) =>
+                market.positionNames ? market.positionNames[sortedIndex] : ''
+            );
+
+            return {
+                ...market,
+                odds: sortedOdds,
+                combinedPositions: sortedCombinedPositions,
+                positionNames: sortedPositionNames,
+            };
+        });
+    }
+    return sortedMarkets;
 };
