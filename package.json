@@ -5,6 +5,8 @@
     "dependencies": {
         "@biconomy/account": "4.1.1",
         "@binance/w3w-rainbow-connector-v2": "^1.0.2",
+        "@farcaster/frame-sdk": "0.0.63",
+        "@farcaster/frame-wagmi-connector": "0.0.52",
         "@particle-network/authkit": "^2.0.19",
         "@particle-network/universal-account-sdk": "^1.0.0-alpha.1",
         "@rainbow-me/rainbowkit": "^2.0.0",

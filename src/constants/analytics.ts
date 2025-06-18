@@ -13,4 +13,5 @@ export const PLAUSIBLE_KEYS = {
     depositLp: 'deposit-lp',
     freeBetLive: 'free-bet-live',
     binanceWalletBuy: 'binance-buy',
+    farcasterBuy: 'farcaster-buy',
 };

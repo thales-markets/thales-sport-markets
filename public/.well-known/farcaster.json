@@ -1,0 +1,10 @@
+{
+    "frame": {
+        "version": "1",
+        "name": "Overtime Sportsbook Mini-Dapp",
+        "description": "A fully onchain sportsbook now available on Farcaster. Just connect your EVM wallet and start betting in seconds.",
+        "iconUrl": "https://www.overtimemarkets.xyz/logos/logo1024.png",
+        "homeUrl": "https://www.overtimemarkets.xyz/",
+        "requiredChains": ["eip155:10", "eip155:42161", "eip155:8453"]
+    }
+}
