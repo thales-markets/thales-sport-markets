@@ -1377,6 +1377,7 @@
         "no-promotions": "Oops! It looks like there are no promotions available at the moment for given filter."
     },
     "overdrop": {
+        "new-season": "Season 2 starts soon, stay tuned!",
         "navigation-menu": {
             "home": "Overdrop home",
             "xp-calculation": "XP Details",
@@ -1403,7 +1404,8 @@
             "claim-rewards": "Claim {{collateral}} rewards",
             "claim-disclaimer": "*switch to the Optimism/Arbitrum network to claim OP/ARB rewards.",
             "claim-confirmation-message": "{{collateral}} rewards successfully claimed",
-            "claimed-message": "You already claimed {{collateral}} rewards."
+            "claimed-message": "You already claimed {{collateral}} rewards.",
+            "your-rewards": "Your rewards"
         },
         "leveling-tree": {
             "heading": "The overdrop farming league",

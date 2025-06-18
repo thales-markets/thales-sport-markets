@@ -174,7 +174,7 @@ const BadgeOverview: React.FC = () => {
             </BadgeWrapper>
             <DetailsWrapper>
                 <ItemContainer>
-                    <Label>{t('overdrop.overdrop-home.current-rewards')}</Label>
+                    <Label>{t('overdrop.overdrop-home.your-rewards')}</Label>
                     <ValueWrapper>
                         <Value>
                             {formatCurrencyWithKey(
@@ -203,7 +203,7 @@ const BadgeOverview: React.FC = () => {
                                 : 'N/A'}
                         </ValueSecondary>
                     </ValueWrapper>
-                    {areRewardsAvailable && (
+                    {areRewardsAvailable && userRewards && userRewards.hasRewards && (
                         <>
                             <Button
                                 backgroundColor={theme.button.textColor.tertiary}

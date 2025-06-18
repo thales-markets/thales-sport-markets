@@ -1,5 +1,6 @@
 import BannerCarousel from 'components/BannerCarousel';
 import { OverdropTab } from 'enums/ui';
+import { t } from 'i18next';
 import UserStatsV2 from 'pages/Profile/components/UserStatsV2';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -34,6 +35,7 @@ const Overdrop: React.FC = () => {
                 <BannerCarousel />
             </LeftSidebarContainer>
             <MainContainer>
+                <NewSeasonBanner>{t('overdrop.new-season')}</NewSeasonBanner>
                 <Navigation selectedTab={selectedTab} setSelectedTab={(tab: OverdropTab) => handleTabChange(tab)} />
                 {selectedTab == OverdropTab.OVERDROP_HOME && (
                     <OverdropHome setSelectedTab={(tab: OverdropTab) => handleTabChange(tab)} />
@@ -96,6 +98,24 @@ const MainContainer = styled(FlexDivColumn)`
     @media (max-width: 950px) {
         margin: 0;
         width: 100%;
+    }
+`;
+
+const NewSeasonBanner = styled(FlexDivColumn)`
+    flex: initial;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+    text-transform: uppercase;
+    border-radius: 8px;
+    background-color: ${(props) => props.theme.button.textColor.tertiary};
+    padding: 10px;
+    margin-bottom: 10px;
+    color: ${(props) => props.theme.button.textColor.primary};
+    @media (max-width: 950px) {
+        font-size: 12px;
+        border-radius: 5px;
+        padding: 8px;
     }
 `;
 
