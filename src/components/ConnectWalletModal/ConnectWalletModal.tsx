@@ -99,7 +99,6 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
     const handleConnect = async (connector: Connector) => {
         try {
             setIsConnecting(true);
-            console.log('Connecting to wallet', connector);
 
             await connector.connect();
 
