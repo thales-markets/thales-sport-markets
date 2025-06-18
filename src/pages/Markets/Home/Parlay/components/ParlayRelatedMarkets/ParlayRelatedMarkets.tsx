@@ -129,7 +129,6 @@ const ParlayRelatedMarkets: React.FC = () => {
             return completedLiveRequest
                 ? ({
                       ...request,
-                      ticket: { ...request.ticket, odd: completedLiveRequest.totalQuote },
                       totalQuote: completedLiveRequest.totalQuote,
                       payout: completedLiveRequest.payout,
                       requestId: completedLiveRequest.requestId,
@@ -319,6 +318,7 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
     } else if (isLiveTradingRequest) {
         const requestedMarket = data as LiveTradingRequest;
         market = requestedMarket.ticket;
+        market.odd = requestedMarket.totalQuote;
         isLive = true;
         position = requestedMarket.position;
         status = requestedMarket.status;
@@ -332,6 +332,7 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
     } else {
         const requestedMarket = data as TicketMarketRequestData;
         market = requestedMarket.ticket;
+        market.odd = requestedMarket.totalQuote;
         isLive = !!requestedMarket.ticket.live;
         position = (market as TicketMarket).position;
         status = requestedMarket.status;
