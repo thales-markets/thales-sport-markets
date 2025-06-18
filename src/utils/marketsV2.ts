@@ -2,7 +2,7 @@ import { LIVE_MARKETS_STALE_PAUSED_MINUTES, NOT_AVAILABLE } from 'constants/mark
 import { differenceInMinutes, secondsToMilliseconds } from 'date-fns';
 import { MarketTypeGroup } from 'enums/marketTypes';
 import { GameStatus, MarketStatus, Position } from 'enums/markets';
-import _ from 'lodash';
+import _, { orderBy } from 'lodash';
 import {
     getLeagueInitialSport,
     getLeagueLabel,
@@ -929,4 +929,28 @@ export const getDefaultPlayerPropsLeague = (leagueCount: Record<number, number>)
         return League.NHL;
     }
     return League.NBA;
+};
+
+export const getSortedSgpBuilderMarkets = (markets: SportMarket[]) => {
+    let sortedMarkets: SportMarket[] = markets;
+    if (sortedMarkets.length && isSgpBuilderMarket(sortedMarkets[0].typeId)) {
+        sortedMarkets = sortedMarkets.map((market) => {
+            const sortedOdds = orderBy(market.odds, [], ['desc']);
+            const sorter = sortedOdds.map((sortedOdd) => market.odds.findIndex((odds) => odds === sortedOdd));
+            const sortedCombinedPositions = sorter
+                .map((sortedIndex) => market.combinedPositions[sortedIndex])
+                .filter((p) => p !== undefined);
+            const sortedPositionNames = sorter.map((sortedIndex) =>
+                market.positionNames ? market.positionNames[sortedIndex] : ''
+            );
+
+            return {
+                ...market,
+                odds: sortedOdds,
+                combinedPositions: sortedCombinedPositions,
+                positionNames: sortedPositionNames,
+            };
+        });
+    }
+    return sortedMarkets;
 };

@@ -25,7 +25,13 @@ import styled from 'styled-components';
 import { SportMarket, TicketPosition } from 'types/markets';
 import { RiskManagementSgpBlockers } from 'types/riskManagement';
 import { getMarketTypeTooltipKey } from 'utils/markets';
-import { getSubtitleText, getTitleText, isSameMarket, sportMarketAsTicketPosition } from 'utils/marketsV2';
+import {
+    getSortedSgpBuilderMarkets,
+    getSubtitleText,
+    getTitleText,
+    isSameMarket,
+    sportMarketAsTicketPosition,
+} from 'utils/marketsV2';
 import { getGridMinMaxPercentage } from 'utils/ui';
 import { useChainId } from 'wagmi';
 import PositionDetailsV2 from '../PositionDetailsV2';
@@ -212,17 +218,20 @@ const Positions: React.FC<PositionsProps> = ({
     }, [isQuickSgpMarket, markets, marketType, isMarketSelected]);
 
     const sortedMarkets = useMemo(() => {
+        // sort SGP builder markets by odds
+        let displayMarkets: SportMarket[] = getSortedSgpBuilderMarkets(
+            isQuickSgpMarket ? filteredQuickSgpMarkets : markets
+        );
+        // show only first X number of SGP markets in Quick SGP view
         if (isQuickSgpMarket) {
             const maxQuickSgpMarkets = isMarketSelected ? undefined : QUICK_SGP_MAIN_VIEW_DISPLAY_COUNT;
-            const displaySgpMarkets = filteredQuickSgpMarkets.map((market) => ({
+            displayMarkets = displayMarkets.map((market) => ({
                 ...market,
                 odds: market.odds.slice(0, maxQuickSgpMarkets),
                 positionNames: market.positionNames?.slice(0, maxQuickSgpMarkets),
             }));
-            return orderBy(displaySgpMarkets, ['line', 'odds'], ['asc', 'desc']);
-        } else {
-            return orderBy(markets, ['line', 'odds'], ['asc', 'desc']);
         }
+        return orderBy(displayMarkets, ['line', 'odds'], ['asc', 'desc']);
     }, [markets, isQuickSgpMarket, filteredQuickSgpMarkets, isMarketSelected]);
 
     const positionText0 =
