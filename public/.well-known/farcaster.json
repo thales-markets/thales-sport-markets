@@ -1,9 +1,10 @@
 {
     "accountAssociation": {
-        "header": "eyJmaWQiOjExMDMwNTksInR5cGUiOiJjdXN0b2R5Iiwia2V5IjoiMHgzMTRERjNGMGNkZGYyRWYwN2RlYUU2MjljNzdCMUQ3MjcyNGJlYTIxIn0",
+        "header": "eyJmaWQiOjExMDMwNTksInR5cGUiOiJhdXRoIiwia2V5IjoiMHg1M0RCYjMyNWYyRDM4NUJhQUViRkE2RDQyZTU0MDhkMDNENWQ4RGViIn0",
         "payload": "eyJkb21haW4iOiJ0aGFsZXMtc3BvcnQtbWFya2V0cy1naXQtZmFyY2FzdGVyLXRoYWxlcy1tYXJrZXQudmVyY2VsLmFwcCJ9",
-        "signature": "MHg2MjdlYjg3NDAzNmIwNzMwYTc0MGI0NDJkZTFjMzMzNGRiMTM5NjBhZmM4MjBiMTVkNTcyYWYwMjAxOTE1NmRkMGM1ZDg3NWFjZmY0ZTNkMDYyMDU5NWI2YmM0M2VlYjY4NjE2NDU3YzcyYWFhYjE5MTYyZTJjZjUyMjBhZjYxNTFj"
+        "signature": "vdmmjUIcEHIw8HThia5B57c+f62guBzV1QDbb94F/axCh0FSsX7ks09C414GyPQjNV2ev7uEQJkNvR1LN+cgLRw="
     },
+
     "frame": {
         "version": "1",
         "name": "Overtime Sportsbook Mini-Dapp",
