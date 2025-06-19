@@ -429,6 +429,10 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
             return `/logos/Countries/uefa-under21-championship.webp`;
         case League.PDC_WORLD_CUP_OF_DARTS:
             return `/logos/Countries/pdc.webp`;
+        case League.BIG3:
+            return `/logos/Countries/big3.webp`;
+        case League.FIBA_EUROBASKET_WOMEN:
+            return `/logos/Countries/fiba-womens-eurobasket.webp`;
         default:
             return `/logos/Countries/world.svg`;
     }
