@@ -1,23 +1,25 @@
 import Button from 'components/Button';
 import Progress from 'components/Progress';
+import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { OVERDROP_LEVELS, OVERDROP_REWARDS_COLLATERALS } from 'constants/overdrop';
+import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { ContractType } from 'enums/contract';
 import useOpAndArbPriceQuery from 'queries/overdrop/useOpAndArbPriceQuery';
 import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
 import useUserRewardsQuery from 'queries/overdrop/useUserRewardsQuery';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useSwipeable } from 'react-swipeable';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
+import { getIsBiconomy, setIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
-import { FlexDiv, FlexDivColumn, FlexDivRow } from 'styles/common';
-import { formatCurrencyWithKey, formatCurrencyWithSign } from 'thales-utils';
+import { FlexDiv, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
+import { formatCurrencyWithKey, formatCurrencyWithSign, localStore } from 'thales-utils';
 import { OverdropUserData, UserRewards } from 'types/overdrop';
-import { RootState } from 'types/redux';
 import { ThemeInterface } from 'types/ui';
 import { ViemContract } from 'types/viem';
 import { getContractInstance } from 'utils/contract';
@@ -35,12 +37,14 @@ import SmallBadge from '../SmallBadge';
 
 const BadgeOverview: React.FC = () => {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
     const theme: ThemeInterface = useTheme();
-    const isMobile = useSelector((state: RootState) => getIsMobile(state));
+    const isMobile = useSelector(getIsMobile);
     const networkId = useChainId();
     const client = useClient();
     const walletClient = useWalletClient();
     const { address, isConnected } = useAccount();
+    const isBiconomy = useSelector(getIsBiconomy);
 
     const [currentStep, setCurrentStep] = useState<number>(0);
     const [numberOfCards, setNumberOfCards] = useState<number>(isMobile ? 3 : 6);
@@ -83,6 +87,7 @@ const BadgeOverview: React.FC = () => {
     }, [userRewardsQuery.data, userRewardsQuery.isSuccess]);
 
     const isClaimButtonDisabled = isClaiming || userRewards?.hasClaimed;
+    const switchToEoa = isBiconomy && !userRewards?.hasClaimed;
 
     useEffect(() => {
         if (levelItem) {
@@ -205,22 +210,40 @@ const BadgeOverview: React.FC = () => {
                     </ValueWrapper>
                     {areRewardsAvailable && userRewards && userRewards.hasRewards && (
                         <>
-                            <Button
-                                backgroundColor={theme.button.textColor.tertiary}
-                                borderColor={theme.button.textColor.tertiary}
-                                height="24px"
-                                margin="5px 0px 5px 0px"
-                                padding="2px 15px"
-                                fontSize="14px"
-                                lineHeight="16px"
-                                onClick={claimRewards}
-                                disabled={isClaimButtonDisabled}
-                            >
-                                {t('overdrop.overdrop-home.claim-rewards', {
-                                    collateral: OVERDROP_REWARDS_COLLATERALS[networkId],
-                                })}
-                            </Button>
-                            {userRewards && userRewards.hasClaimed && (
+                            <FlexDivRowCentered>
+                                <Button
+                                    backgroundColor={theme.button.textColor.tertiary}
+                                    borderColor={theme.button.textColor.tertiary}
+                                    height="24px"
+                                    margin="5px 0px 5px 0px"
+                                    padding="2px 15px"
+                                    fontSize="14px"
+                                    lineHeight="16px"
+                                    onClick={() => {
+                                        if (switchToEoa) {
+                                            dispatch(setIsBiconomy(false));
+                                            localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, false);
+                                        } else {
+                                            claimRewards();
+                                        }
+                                    }}
+                                    disabled={isClaimButtonDisabled}
+                                >
+                                    {switchToEoa
+                                        ? t('overdrop.overdrop-home.switch-to-eoa')
+                                        : t('overdrop.overdrop-home.claim-rewards', {
+                                              collateral: OVERDROP_REWARDS_COLLATERALS[networkId],
+                                          })}
+                                </Button>
+                                {switchToEoa && (
+                                    <Tooltip
+                                        overlay={t('overdrop.overdrop-home.claim-rewards-tooltip')}
+                                        marginLeft={5}
+                                        top={1}
+                                    />
+                                )}
+                            </FlexDivRowCentered>
+                            {userRewards.hasClaimed && (
                                 <ClaimedMessage>
                                     {t('overdrop.overdrop-home.claimed-message', {
                                         collateral: OVERDROP_REWARDS_COLLATERALS[networkId],

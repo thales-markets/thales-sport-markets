@@ -1405,7 +1405,9 @@
             "claim-disclaimer": "*switch to the Optimism/Arbitrum network to claim OP/ARB rewards.",
             "claim-confirmation-message": "{{collateral}} rewards successfully claimed",
             "claimed-message": "You already claimed {{collateral}} rewards.",
-            "your-rewards": "Your rewards"
+            "your-rewards": "Your rewards",
+            "switch-to-eoa": "Switch to EOA to claim",
+            "claim-rewards-tooltip": "You can claim your rewards only with an EOA wallet. Please switch to EOA to claim your rewards."
         },
         "leveling-tree": {
             "heading": "The overdrop farming league",
