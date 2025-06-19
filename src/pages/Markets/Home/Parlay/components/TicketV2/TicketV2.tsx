@@ -1,4 +1,5 @@
 import { isInBinance } from '@binance/w3w-utils';
+import sdk from '@farcaster/frame-sdk';
 import ApprovalModal from 'components/ApprovalModal';
 import Button from 'components/Button';
 import CollateralSelector from 'components/CollateralSelector';
@@ -1726,6 +1727,20 @@ const Ticket: React.FC<TicketProps> = ({
                         PLAUSIBLE.trackEvent(PLAUSIBLE_KEYS.binanceWalletBuy, {
                             props: {
                                 wallet: WalletConnections.BINANCE,
+                                address: walletAddress,
+                                eoaOT: `${address} - ${smartAddress}`,
+                                value: Number(buyInAmount),
+                                collateral: selectedCollateral,
+                                networkId,
+                                isBiconomy,
+                            },
+                        });
+                    }
+
+                    if (await sdk.isInMiniApp()) {
+                        PLAUSIBLE.trackEvent(PLAUSIBLE_KEYS.farcasterBuy, {
+                            props: {
+                                wallet: connector?.id || 'unknown',
                                 address: walletAddress,
                                 eoaOT: `${address} - ${smartAddress}`,
                                 value: Number(buyInAmount),
