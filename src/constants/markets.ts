@@ -7,7 +7,7 @@ import { SupportedNetwork } from 'types/network';
 export const ODDS_TYPES = [OddsType.AMERICAN, OddsType.AMM, OddsType.DECIMAL];
 
 export const SLIPPAGE_MIN_VALUE = 0;
-export const SLIPPAGE_MAX_VALUE = 100;
+export const SLIPPAGE_MAX_VALUE = 10000; // max possible ratio between implied odds (e.g. 0.99 / 0.01 = 100 * 100 %)
 export const SLIPPAGE_PERCENTAGES = [1, 5, 10];
 export const DEFAULT_SLIPPAGE_PERCENTAGE = SLIPPAGE_PERCENTAGES[1];
 
