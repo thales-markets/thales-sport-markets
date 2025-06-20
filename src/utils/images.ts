@@ -407,6 +407,7 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.FIFA_CLUB_WORLD_CUP_FUTURES:
             return `/logos/Countries/fifa-club-world-cup.webp`;
         case League.PHILIPPINES_PVL_WOMEN:
+        case League.PBA_PHILIPPINE_CUP:
             return `/logos/Countries/philippines.svg`;
         case League.IRAN_SUPER_LEAGUE:
             return `/logos/Countries/iran.svg`;
