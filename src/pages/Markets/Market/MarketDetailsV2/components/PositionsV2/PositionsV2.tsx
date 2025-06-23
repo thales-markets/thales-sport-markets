@@ -1,4 +1,5 @@
 import Tooltip from 'components/Tooltip';
+import { QUICK_SGP_MAIN_VIEW_DISPLAY_COUNT } from 'constants/markets';
 import { secondsToMilliseconds } from 'date-fns';
 import { SportFilter } from 'enums/markets';
 import { RiskManagementConfig } from 'enums/riskManagement';
@@ -6,6 +7,7 @@ import { intersection, orderBy } from 'lodash';
 import {
     getSgpMarketsCombinationAllowed,
     isFuturesMarket,
+    isSgpBuilderMarket,
     isTotalOrSpreadWithWholeLine,
     League,
     MarketType,
@@ -17,13 +19,19 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { getSportFilter } from 'redux/modules/market';
+import { getIsMarketSelected, getSportFilter } from 'redux/modules/market';
 import { getIsSgp, getTicket } from 'redux/modules/ticket';
 import styled from 'styled-components';
 import { SportMarket, TicketPosition } from 'types/markets';
 import { RiskManagementSgpBlockers } from 'types/riskManagement';
 import { getMarketTypeTooltipKey } from 'utils/markets';
-import { getSubtitleText, getTitleText, isSameMarket, sportMarketAsTicketPosition } from 'utils/marketsV2';
+import {
+    getSortedSgpBuilderMarkets,
+    getSubtitleText,
+    getTitleText,
+    isSameMarket,
+    sportMarketAsTicketPosition,
+} from 'utils/marketsV2';
 import { getGridMinMaxPercentage } from 'utils/ui';
 import { useChainId } from 'wagmi';
 import PositionDetailsV2 from '../PositionDetailsV2';
@@ -34,7 +42,6 @@ import {
     ContentRow,
     ContentWrapper,
     Header,
-    Message,
     SubTitle,
     SubTitleContainer,
     Title,
@@ -47,7 +54,6 @@ type PositionsProps = {
     isMainPageView?: boolean;
     isColumnView?: boolean;
     showInvalid?: boolean;
-    isGameLive?: boolean;
     hidePlayerName?: boolean;
     alignHeader?: boolean;
     oddsTitlesHidden?: boolean;
@@ -63,7 +69,6 @@ const Positions: React.FC<PositionsProps> = ({
     isMainPageView,
     isColumnView,
     showInvalid,
-    isGameLive,
     onAccordionClick,
     hidePlayerName,
     alignHeader,
@@ -77,17 +82,19 @@ const Positions: React.FC<PositionsProps> = ({
 
     const ticket = useSelector(getTicket);
     const isSgp = useSelector(getIsSgp);
+    const isMarketSelected = useSelector(getIsMarketSelected);
     const sportFilter = useSelector(getSportFilter);
     const isMobile = useSelector(getIsMobile);
 
     const isPlayerPropsMarket = useMemo(() => sportFilter === SportFilter.PlayerProps, [sportFilter]);
+    const isQuickSgpMarket = useMemo(() => sportFilter === SportFilter.QuickSgp, [sportFilter]);
 
     const [isExpanded, setIsExpanded] = useState<boolean>(true);
 
     const isSgpEnabled = useMemo(() => isSgp && ticket.length > 0, [isSgp, ticket.length]);
 
     const riskManagementSgpBlockersQuery = useRiskManagementConfigQuery(
-        RiskManagementConfig.SGP_BLOCKERS,
+        [RiskManagementConfig.SGP_BLOCKERS],
         { networkId },
         { enabled: isSgpEnabled }
     );
@@ -95,7 +102,7 @@ const Positions: React.FC<PositionsProps> = ({
     const sgpBlockers = useMemo(
         () =>
             riskManagementSgpBlockersQuery.isSuccess && riskManagementSgpBlockersQuery.data
-                ? (riskManagementSgpBlockersQuery.data as RiskManagementSgpBlockers)
+                ? (riskManagementSgpBlockersQuery.data as RiskManagementSgpBlockers).sgpBlockers
                 : [],
         [riskManagementSgpBlockersQuery.isSuccess, riskManagementSgpBlockersQuery.data]
     );
@@ -198,148 +205,173 @@ const Positions: React.FC<PositionsProps> = ({
 
     const showContainer = !isGameOpen || hasOdds || showInvalid;
 
-    const sortedMarkets = useMemo(() => orderBy(markets, ['line', 'odds'], ['asc', 'desc']), [markets]);
+    const filteredQuickSgpMarkets = useMemo(() => {
+        let quickSgpMarkets: SportMarket[] = [];
+        if (isQuickSgpMarket) {
+            const childMarkets = isMarketSelected ? markets : markets[0]?.childMarkets || markets;
+            quickSgpMarkets = childMarkets.filter((childMarket) => childMarket.typeId === marketType);
+            if (!quickSgpMarkets.length) {
+                quickSgpMarkets = childMarkets.filter((childMarket) => isSgpBuilderMarket(childMarket.typeId));
+            }
+        }
+        return quickSgpMarkets;
+    }, [isQuickSgpMarket, markets, marketType, isMarketSelected]);
 
-    const positionText0 = markets[0] ? getSubtitleText(markets[0], 0) : undefined;
-    const positionText1 = markets[0] ? getSubtitleText(markets[0], 1) : undefined;
-    const titleText = getTitleText(markets[0], !isPlayerPropsMarket, isPlayerPropsMarket);
+    const sortedMarkets = useMemo(() => {
+        // sort SGP builder markets by odds
+        let displayMarkets: SportMarket[] = getSortedSgpBuilderMarkets(
+            isQuickSgpMarket ? filteredQuickSgpMarkets : markets
+        );
+        // show only first X number of SGP markets in Quick SGP view
+        if (isQuickSgpMarket) {
+            const maxQuickSgpMarkets = isMarketSelected ? undefined : QUICK_SGP_MAIN_VIEW_DISPLAY_COUNT;
+            displayMarkets = displayMarkets.map((market) => ({
+                ...market,
+                odds: market.odds.slice(0, maxQuickSgpMarkets),
+                positionNames: market.positionNames?.slice(0, maxQuickSgpMarkets),
+            }));
+        }
+        return orderBy(displayMarkets, ['line', 'odds'], ['asc', 'desc']);
+    }, [markets, isQuickSgpMarket, filteredQuickSgpMarkets, isMarketSelected]);
+
+    const positionText0 =
+        (!filteredQuickSgpMarkets.length || isMarketSelected) && markets[0]
+            ? getSubtitleText(markets[0], 0)
+            : undefined;
+    const positionText1 =
+        (!filteredQuickSgpMarkets.length || isMarketSelected) && markets[0]
+            ? getSubtitleText(markets[0], 1)
+            : undefined;
+    const titleText = getTitleText(
+        !!filteredQuickSgpMarkets.length ? filteredQuickSgpMarkets[0] : markets[0],
+        !isPlayerPropsMarket,
+        isPlayerPropsMarket
+    );
 
     const tooltipKey = getMarketTypeTooltipKey(marketType);
 
-    const liveMarketErrorMessage =
-        markets[0].live && markets[0].errorMessage
-            ? // TODO: if we want to remove teams add .replace(` ${markets[0].homeTeam} - ${markets[0].awayTeam}`, '');
-              markets[0].errorMessage
-            : '';
-
-    return showContainer ? (
-        <Container
-            onClick={() => {
-                if (!isExpanded) {
-                    setIsExpanded(!isExpanded);
-                    onAccordionClick && onAccordionClick();
-                }
-            }}
-            isExpanded={isExpanded}
-            isMainPageView={isMainPageView}
-            width={width}
-        >
-            <Header
+    return (
+        showContainer && (
+            <Container
+                onClick={() => {
+                    if (!isExpanded) {
+                        setIsExpanded(!isExpanded);
+                        onAccordionClick && onAccordionClick();
+                    }
+                }}
+                isExpanded={isExpanded}
                 isMainPageView={isMainPageView}
-                isColumnView={isColumnView}
-                alignHeader={alignHeader && (!!positionText0 || !!positionText1) && isExpanded && !isMobile}
-                hidden={oddsTitlesHidden}
-                float={floatingOddsTitles}
-                isSticky={!floatingOddsTitles && !isPlayerPropsMarket && !isMainPageView}
+                width={width}
             >
-                {((isMobile && !isMainPageView) || !isMobile || isPlayerPropsMarket) && (
-                    <Title isExpanded={isExpanded} isMainPageView={isMainPageView} isColumnView={isColumnView}>
-                        {titleText}
-                        {tooltipKey && (
-                            <Tooltip
-                                overlay={<>{t(`markets.market-card.type-tooltip.${tooltipKey}`)}</>}
-                                iconFontSize={13}
-                                marginLeft={3}
-                            />
-                        )}
-                    </Title>
-                )}
-                {!isMainPageView && (
-                    <Arrow
-                        className={isExpanded ? 'icon icon--arrow-up' : 'icon icon--arrow-down'}
-                        onClick={() => {
-                            setIsExpanded(!isExpanded);
-                            onAccordionClick && onAccordionClick();
-                        }}
-                    />
-                )}
-            </Header>
-
-            {isExpanded && (
-                <ContentContianer>
-                    {(positionText0 || positionText1) && !isMainPageView && (
-                        <SubTitleContainer>
-                            {positionText0 && <SubTitle>{positionText0}</SubTitle>}
-                            {positionText1 && <SubTitle>{positionText1}</SubTitle>}
-                        </SubTitleContainer>
+                <Header
+                    isMainPageView={isMainPageView}
+                    isColumnView={isColumnView}
+                    alignHeader={alignHeader && (!!positionText0 || !!positionText1) && isExpanded && !isMobile}
+                    hidden={oddsTitlesHidden}
+                    float={floatingOddsTitles}
+                    isSticky={!floatingOddsTitles && !isPlayerPropsMarket && !isMainPageView}
+                >
+                    {((isMobile && !isMainPageView) || !isMobile || isPlayerPropsMarket) && (
+                        <Title isExpanded={isExpanded} isMainPageView={isMainPageView} isColumnView={isColumnView}>
+                            {titleText}
+                            {tooltipKey && (
+                                <Tooltip
+                                    overlay={<>{t(`markets.market-card.type-tooltip.${tooltipKey}`)}</>}
+                                    iconFontSize={13}
+                                    marginLeft={3}
+                                />
+                            )}
+                        </Title>
                     )}
-                    {sortedMarkets.map((market, index) => {
-                        const oddsInfo = market.odds.map((odd: number, index: number) => {
-                            const position = index;
-                            const isBlocked =
-                                isPositionBlockedBySgpCombination(market, position) ||
-                                isPositionUnsupportedBySgpType(market) ||
-                                isPositionUnsupportedBySgpSportsbooks(market, position);
+                    {!isMainPageView && (
+                        <Arrow
+                            className={isExpanded ? 'icon icon--arrow-up' : 'icon icon--arrow-down'}
+                            onClick={() => {
+                                setIsExpanded(!isExpanded);
+                                onAccordionClick && onAccordionClick();
+                            }}
+                        />
+                    )}
+                </Header>
 
-                            return {
-                                odd,
-                                position,
-                                positionName: market.positionNames ? market.positionNames[position] : '',
-                                isBlocked,
-                            };
-                        });
+                {isExpanded && (
+                    <ContentContianer>
+                        {(positionText0 || positionText1) && !isMainPageView && (
+                            <SubTitleContainer>
+                                {positionText0 && <SubTitle>{positionText0}</SubTitle>}
+                                {positionText1 && <SubTitle>{positionText1}</SubTitle>}
+                            </SubTitleContainer>
+                        )}
+                        {sortedMarkets.map((market, index) => {
+                            const oddsInfo = market.odds.map((odd: number, index: number) => {
+                                const position = index;
+                                const isBlocked =
+                                    isPositionBlockedBySgpCombination(market, position) ||
+                                    isPositionUnsupportedBySgpType(market) ||
+                                    isPositionUnsupportedBySgpSportsbooks(market, position);
 
-                        const sortedOddsInfo = orderBy(oddsInfo, ['odd', 'position'], ['desc', 'asc']);
-                        const isFutures = isFuturesMarket(market.typeId);
+                                return {
+                                    odd,
+                                    position,
+                                    positionName: market.positionNames ? market.positionNames[position] : '',
+                                    isBlocked,
+                                };
+                            });
 
-                        const oddsForDisplay = isFutures ? sortedOddsInfo : oddsInfo;
+                            const sortedOddsInfo = orderBy(oddsInfo, ['odd', 'position'], ['desc', 'asc']);
+                            const isFutures = isFuturesMarket(market.typeId);
 
-                        const filteredOdds =
-                            isMainPageView &&
-                            market.typeId === MarketType.WINNER &&
-                            market.leagueId === League.US_ELECTION
-                                ? oddsForDisplay.slice(0, 2)
-                                : oddsForDisplay;
+                            const oddsForDisplay = isFutures ? sortedOddsInfo : oddsInfo;
 
-                        return (
-                            <ContentWrapper key={index}>
-                                {market.isPlayerPropsMarket && !hidePlayerName && (
-                                    <PropsTextContainer>
-                                        <PropsText>{`${market.playerProps.playerName}`}</PropsText>
-                                    </PropsTextContainer>
-                                )}
-                                <ContentRow
-                                    gridMinMaxPercentage={getGridMinMaxPercentage(market, isMobile)}
-                                    isColumnView={isColumnView}
-                                    isPlayerProps={!!isPlayerPropsMarket}
-                                >
-                                    {filteredOdds.map((oddsData, index) => {
-                                        const position = isFutures
-                                            ? oddsInfo.findIndex(
-                                                  (oddInfo) =>
-                                                      market.positionNames &&
-                                                      oddInfo.positionName === filteredOdds[index].positionName
-                                              )
-                                            : index;
+                            const filteredOdds =
+                                isMainPageView &&
+                                market.typeId === MarketType.WINNER &&
+                                market.leagueId === League.US_ELECTION
+                                    ? oddsForDisplay.slice(0, 2)
+                                    : oddsForDisplay;
 
-                                        return (
-                                            <PositionDetailsV2
-                                                key={`${market.gameId}-${market.typeId}-${market.line}-${market.playerProps.playerId}-${position}`}
-                                                market={market}
-                                                position={position}
-                                                isMainPageView={isMainPageView}
-                                                isColumnView={isColumnView}
-                                                displayPosition={index}
-                                                isPositionBlocked={oddsData.isBlocked}
-                                            />
-                                        );
-                                    })}
-                                </ContentRow>
-                            </ContentWrapper>
-                        );
-                    })}
-                </ContentContianer>
-            )}
-        </Container>
-    ) : isGameLive ? (
-        <Container isExpanded={true} noOdds={true} width={width}>
-            <Message>
-                {t(`markets.market-card.live-trading-paused`)}
-                {liveMarketErrorMessage && <Tooltip overlay={liveMarketErrorMessage} marginLeft={5} top={0} />}
-            </Message>
-        </Container>
-    ) : (
-        <></>
+                            return (
+                                <ContentWrapper key={index}>
+                                    {market.isPlayerPropsMarket && !hidePlayerName && (
+                                        <PropsTextContainer>
+                                            <PropsText>{`${market.playerProps.playerName}`}</PropsText>
+                                        </PropsTextContainer>
+                                    )}
+                                    <ContentRow
+                                        gridMinMaxPercentage={getGridMinMaxPercentage(market, isMobile)}
+                                        isColumnView={isColumnView}
+                                        isPlayerProps={!!isPlayerPropsMarket}
+                                        isSgpBuilder={isSgpBuilderMarket(market.typeId)}
+                                    >
+                                        {filteredOdds.map((oddsData, index) => {
+                                            const position = isFutures
+                                                ? oddsInfo.findIndex(
+                                                      (oddInfo) =>
+                                                          market.positionNames &&
+                                                          oddInfo.positionName === filteredOdds[index].positionName
+                                                  )
+                                                : index;
+
+                                            return (
+                                                <PositionDetailsV2
+                                                    key={`${market.gameId}-${market.typeId}-${market.line}-${market.playerProps.playerId}-${position}`}
+                                                    market={market}
+                                                    position={position}
+                                                    isMainPageView={isMainPageView}
+                                                    isColumnView={isColumnView}
+                                                    displayPosition={index}
+                                                    isPositionBlocked={oddsData.isBlocked}
+                                                />
+                                            );
+                                        })}
+                                    </ContentRow>
+                                </ContentWrapper>
+                            );
+                        })}
+                    </ContentContianer>
+                )}
+            </Container>
+        )
     );
 };
 

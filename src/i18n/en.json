@@ -81,7 +81,8 @@
                 "browser-wallet": "Connect with Browser Wallet",
                 "coinbase": "Connect with Coinbase Wallet",
                 "wallet-connect": "WalletConnect",
-                "binance-wallet": "Connect with Binance Wallet"
+                "binance-wallet": "Connect with Binance Wallet",
+                "farcaster-wallet": "Connect with Farcaster"
             }
         },
         "enable-wallet-access": {
@@ -296,7 +297,8 @@
                 "tabletennis": "Table tennis",
                 "politics": "Politics",
                 "futures": "Futures",
-                "playerprops": "Player Props"
+                "playerprops": "Player Props",
+                "quicksgp": "Quick SGP"
             },
             "all": "All",
             "datepicker": {
@@ -496,7 +498,7 @@
         "back": "Back",
         "send-free-bet": "Send free bet",
         "free-bet": {
-            "claim-btn": "Claim amount will be reduced by buy-in amount, which will transfer to your free bet balance."
+            "claim-btn": "Claim amount will be reduced by buy-in amount."
         },
         "free-bet-modal": {
             "title": "Send free bet",
@@ -589,6 +591,7 @@
             "loss": "Loss",
             "won": "Won",
             "live-trading-paused": "Live trading paused",
+            "live-trading-stale-paused": "Live trading stale paused",
             "not-available-for-trading": "Not available for trading",
             "bet-type": {
                 "winner": "Winner",
@@ -1041,6 +1044,15 @@
             "migrate-ticket-label": "Migrate ticket",
             "migrate-ticket-confirmation-message": "Ticket successfully migrated",
             "not-found-validaton": "Ticket not found in the current round, please double check!"
+        },
+        "stats": {
+            "title": "Market stats (singles)",
+            "market": "Market",
+            "volume": "Volume",
+            "risk": "Risk",
+            "pnl-if-win": "PnL if win",
+            "position": "Position",
+            "market-volume": "Market volume"
         }
     },
     "deposit": {

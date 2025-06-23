@@ -147,8 +147,10 @@ const useLpUsersPnlQuery = (
                     ['desc']
                 );
 
+                let collateral = '' as Coins;
                 const usersPnl: Record<string, LpUsersPnl> = {};
                 finalTickets.forEach((ticket) => {
+                    collateral = ticket.collateral;
                     if (usersPnl[ticket.account] === undefined) {
                         usersPnl[ticket.account] = {
                             account: ticket.account,
@@ -159,14 +161,12 @@ const useLpUsersPnlQuery = (
                     if (ticket.isUserTheWinner && !ticket.isCancelled) {
                         usersPnl[ticket.account].pnl += ticket.payout - ticket.buyInAmount;
                     }
-                    if (ticket.isLost && !ticket.isCancelled && !ticket.isFreeBet) {
+                    if (ticket.isLost && !ticket.isCancelled) {
                         usersPnl[ticket.account].pnl -= ticket.buyInAmount;
                     }
                 });
 
                 let lpUsersPnl = Object.values(usersPnl);
-
-                const collateral = lpCollateral.toUpperCase() as Coins;
                 const convertAmount = isLpSupported(collateral) && !isStableCurrency(collateral);
 
                 lpUsersPnl.forEach((pnl) => {

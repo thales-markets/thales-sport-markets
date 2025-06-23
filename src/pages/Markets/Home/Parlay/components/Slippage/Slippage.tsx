@@ -106,7 +106,7 @@ const Slippage: React.FC<SlippageProps> = ({ fixed, defaultValue, onChangeHandle
                 )}
                 <NumericInput
                     disabled={!slippageEnabled}
-                    value={slippage}
+                    value={acceptAnyOdds ? SLIPPAGE_MIN_VALUE : slippage}
                     placeholder={t('markets.parlay.slippage.enter-value')}
                     onChange={(_, value) => onInputValueChange(value)}
                     currencyLabel="%"

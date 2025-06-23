@@ -7,7 +7,7 @@ import { SupportedNetwork } from 'types/network';
 export const ODDS_TYPES = [OddsType.AMERICAN, OddsType.AMM, OddsType.DECIMAL];
 
 export const SLIPPAGE_MIN_VALUE = 0;
-export const SLIPPAGE_MAX_VALUE = 100;
+export const SLIPPAGE_MAX_VALUE = 10000; // max possible ratio between implied odds (e.g. 0.99 / 0.01 = 100 * 100 %)
 export const SLIPPAGE_PERCENTAGES = [1, 5, 10];
 export const DEFAULT_SLIPPAGE_PERCENTAGE = SLIPPAGE_PERCENTAGES[1];
 
@@ -76,6 +76,10 @@ export const OVER_CONTRACT_RATE_KEY = 'OVER-CONTRACT';
 export const OVER_ADDED_PAYOUT_PERCENTAGE = 0.02;
 
 export const FUTURES_MAIN_VIEW_DISPLAY_COUNT = 2;
+
+export const QUICK_SGP_MAIN_VIEW_DISPLAY_COUNT = 1;
+
+export const LIVE_MARKETS_STALE_PAUSED_MINUTES = 5;
 
 export const SYSTEM_BET_MINIMUM_MARKETS = 3;
 export const SYSTEM_BET_MINIMUM_DENOMINATOR = 2;

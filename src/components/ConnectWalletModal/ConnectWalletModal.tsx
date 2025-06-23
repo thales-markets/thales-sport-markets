@@ -1,11 +1,14 @@
 import { isInBinance } from '@binance/w3w-utils';
+import sdk from '@farcaster/frame-sdk';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import disclaimer from 'assets/docs/overtime-markets-disclaimer.pdf';
 import privacyPolicy from 'assets/docs/overtime-privacy-policy.pdf';
 import termsOfUse from 'assets/docs/overtime-terms-of-use.pdf';
+import Apple from 'assets/images/logins-icons/apple.svg?react';
 import BinanceWallet from 'assets/images/logins-icons/binance.svg?react';
 import Coinbase from 'assets/images/logins-icons/coinbase.svg?react';
 import Discord from 'assets/images/logins-icons/discord.svg?react';
+import Farcaster from 'assets/images/logins-icons/farcaster.svg?react';
 import Google from 'assets/images/logins-icons/google.svg?react';
 import Metamask from 'assets/images/logins-icons/metamask.svg?react';
 import Rabby from 'assets/images/logins-icons/rabby.svg?react';
@@ -72,10 +75,17 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const { openConnectModal } = useConnectModal();
+    const [isInFarcaster, setIsInFarcaster] = useState(false);
 
     const [termsAccepted, setTerms] = useLocalStorage(LOCAL_STORAGE_KEYS.TERMS_AND_CONDITIONS, false);
 
     const [isConnecting, setIsConnecting] = useState(false);
+
+    useEffect(() => {
+        sdk.isInMiniApp().then((isInMiniApp) => {
+            setIsInFarcaster(isInMiniApp);
+        });
+    }, []);
 
     const handleParticleConnect = (connector: Connector) => {
         try {
@@ -143,21 +153,38 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                     </HeaderContainer>
                     <ButtonsContainer disabled={!termsAccepted}>
                         <SocialLoginWrapper>
-                            {SUPPORTED_PARTICAL_CONNECTORS_MODAL.map((item, index) => {
-                                const connector = getSpecificConnectorFromConnectorsArray(connectors, item);
-                                if (connector) {
-                                    return (
-                                        <Button
-                                            disabled={isInBinance()}
-                                            key={index}
-                                            onClick={() => !isInBinance() && handleParticleConnect(connector)}
-                                        >
-                                            {<> {getIcon(item)}</>}
-                                            {t(getWalletLabel(item))}
-                                        </Button>
-                                    );
-                                }
-                            })}
+                            {isInFarcaster ? (
+                                <Button
+                                    key={0}
+                                    onClick={() =>
+                                        handleConnect(
+                                            getSpecificConnectorFromConnectorsArray(
+                                                connectors,
+                                                WalletConnections.FARCASTER
+                                            ) as any
+                                        )
+                                    }
+                                >
+                                    {<> {getIcon(WalletConnections.FARCASTER)}</>}
+                                    {t(getWalletLabel(WalletConnections.FARCASTER))}
+                                </Button>
+                            ) : (
+                                SUPPORTED_PARTICAL_CONNECTORS_MODAL.map((item, index) => {
+                                    const connector = getSpecificConnectorFromConnectorsArray(connectors, item);
+                                    if (connector) {
+                                        return (
+                                            <Button
+                                                disabled={isInBinance()}
+                                                key={index}
+                                                onClick={() => !isInBinance() && handleParticleConnect(connector)}
+                                            >
+                                                {<> {getIcon(item)}</>}
+                                                {t(getWalletLabel(item))}
+                                            </Button>
+                                        );
+                                    }
+                                })
+                            )}
                         </SocialLoginWrapper>
                         <BoxForLabel>
                             <ConnectWithLabel>{t('common.wallet.or-connect-with')}</ConnectWithLabel>
@@ -392,7 +419,7 @@ const BoxForLabel = styled.div`
     padding: 0 130px;
     height: 1px;
     background: ${(props) => props.theme.textColor.secondary};
-    margin: 40px 0;
+    margin: 30px 0;
 `;
 
 const ConnectWithLabel = styled.span`
@@ -410,7 +437,7 @@ const ConnectWithLabel = styled.span`
 const Button = styled(FlexDivCentered)<{ disabled?: boolean }>`
     border-radius: 8px;
     width: 100%;
-    height: 50px;
+    height: 40px;
     border: 1px ${(props) => props.theme.borderColor.primary} solid;
     color: ${(props) => props.theme.textColor.primary};
     font-size: 16px;
@@ -471,6 +498,13 @@ const getIcon = (socialId: ParticalTypes | WalletConnections): any => {
                 </IconHolder>
             );
 
+        case ParticalTypes.APPLE:
+            return (
+                <IconHolder>
+                    <Apple />
+                </IconHolder>
+            );
+
         case WalletConnections.METAMASK:
             return (
                 <IconHolder>
@@ -496,6 +530,13 @@ const getIcon = (socialId: ParticalTypes | WalletConnections): any => {
             return (
                 <IconHolder>
                     <Coinbase />
+                </IconHolder>
+            );
+
+        case WalletConnections.FARCASTER:
+            return (
+                <IconHolder>
+                    <Farcaster />
                 </IconHolder>
             );
 

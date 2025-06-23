@@ -1,4 +1,5 @@
 import { isInBinance } from '@binance/w3w-utils';
+import sdk from '@farcaster/frame-sdk';
 import { useConnect as useParticleConnect } from '@particle-network/authkit';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import Loader from 'components/Loader';
@@ -40,6 +41,7 @@ import { isNetworkSupported, isRouteAvailableForNetwork } from 'utils/network';
 import { getSpecificConnectorFromConnectorsArray } from 'utils/particleWallet/utils';
 import queryConnector from 'utils/queryConnector';
 import { history } from 'utils/routes';
+import { delay } from 'utils/timer';
 import { useAccount, useChainId, useConnect, useConnectors, useDisconnect, useSwitchChain } from 'wagmi';
 
 const App = () => {
@@ -57,7 +59,7 @@ const App = () => {
 
     // check if networks are inconsistent between connector and dApp
     useInterval(async () => {
-        if (isConnected && connector && connector?.getChainId) {
+        if (isConnected && connector && connector?.getChainId && !(await sdk.isInMiniApp())) {
             const chainId = await connector.getChainId();
             if (isInBinance()) {
                 if (!isNetworkSupported(chainId) && connector.switchChain) {
@@ -90,6 +92,7 @@ const App = () => {
         }
     }, [dispatch]);
 
+    // useEffect only for Particle Wallet
     useEffect(() => {
         if (connectionStatus === 'connected') {
             connect({
@@ -137,6 +140,23 @@ const App = () => {
             }
         };
     }, [dispatch]);
+
+    // Signal ready to the Warpcast frame environment (with retry)
+    useEffect(() => {
+        const attemptReady = async () => {
+            try {
+                // Check if running in a frame context where sdk might exist
+                if (sdk?.actions?.ready) {
+                    await sdk.actions.ready();
+                }
+            } catch (error) {
+                console.log('Error signaling ready:', error);
+                await delay(1000); // Retry after 1 second
+                attemptReady(); // Retry signaling ready
+            }
+        };
+        attemptReady(); // Initial attempt
+    }, [connect]);
 
     return (
         <Theme>

@@ -11,8 +11,9 @@ import { MAIN_VIEW_RIGHT_CONTAINER_WIDTH_LARGE, MAIN_VIEW_RIGHT_CONTAINER_WIDTH_
 import { secondsToMilliseconds } from 'date-fns';
 import { SportFilter, StatusFilter, TicketErrorCode } from 'enums/markets';
 import { ScreenSizeBreakpoint } from 'enums/ui';
+import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import { isEqual } from 'lodash';
-import { League, LeagueMap } from 'overtime-utils';
+import { League, LeagueMap, MarketType } from 'overtime-utils';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsAmmDataQuery from 'queries/markets/useSportsAmmDataQuery';
 import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
@@ -89,7 +90,9 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
 
     const isLive = useMemo(() => !!ticket[0]?.live, [ticket]);
 
-    const previousTicketOdds = useRef<{ position: number; odd: number; gameId: string; proof: string[] }[]>([]);
+    const previousTicketOdds = useRef<
+        { position: number; odd: number; gameId: string; proof: string[]; typeId: MarketType; line: number }[]
+    >([]);
 
     const sportsAmmDataQuery = useSportsAmmDataQuery({ networkId, client });
 
@@ -211,7 +214,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
         }
     }, [dispatch, sportsAmmDataQuery.isSuccess, sportsAmmDataQuery.data]);
 
-    useEffect(() => {
+    useDebouncedEffect(() => {
         if (isSgp && sportsAmmRiskManagerQuery.data) {
             if (isSgpSportDisabled) {
                 const disabledLeagueName = LeagueMap[ticket[0].leagueId as League]?.label;
@@ -280,6 +283,8 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                 position: market.position,
                 gameId: market.gameId,
                 proof: [],
+                typeId: market.typeId,
+                line: market.line,
             }));
 
             if (!isEqual(previousTicketOdds.current, ticketOdds)) {
@@ -352,6 +357,8 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                 position: market.position,
                 gameId: market.gameId,
                 proof: market.proof,
+                typeId: market.typeId,
+                line: market.line,
             }));
 
             if (!isEqual(previousTicketOdds.current, ticketOdds)) {
@@ -660,12 +667,13 @@ const OverBonus = styled.span`
     }
 `;
 
-const ListContainer = styled(FlexDivColumn)``;
+const ListContainer = styled(FlexDivColumn)`
+    margin-bottom: 8px;
+`;
 
 const RowMarket = styled.div<{ outOfLiquidity: boolean; notOpened?: boolean }>`
     display: flex;
     position: relative;
-    // height: 45px;
     align-items: center;
     text-align: center;
     padding: ${(props) => (props.outOfLiquidity ? '6px 8px' : '8px 10px')};

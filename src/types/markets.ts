@@ -22,7 +22,12 @@ type PlayerProps = {
     playerName: string;
 };
 
-export type CombinedPosition = { typeId: number; position: number; line: number };
+export type CombinedPosition = {
+    typeId: number;
+    position: number;
+    line: number;
+    playerProps?: PlayerProps;
+};
 
 type CombinedPositions = CombinedPosition[];
 
@@ -83,6 +88,7 @@ export type SportMarket = {
     positionNames?: string[];
     errorMessage?: string;
     numberOfMarkets?: number;
+    pausedAt?: number;
     sgpSportsbooks?: string[];
 };
 
@@ -235,7 +241,7 @@ export type TicketRequest = {
 type TicketRequestData = TicketRequest & {
     timestamp: number;
 };
-export type TicketMarketRequestData = Omit<TicketRequestData, 'ticket'> & {
+export type TicketMarketRequestData = TicketRequestData & {
     ticket: TicketMarket;
 };
 export type TicketRequestsById = Record<string, TicketRequestData>;
@@ -273,4 +279,30 @@ export type Tournament = {
     leagueId: League;
     leageueName: string;
     name: string;
+};
+
+export type PositionStats = {
+    position: number;
+    buyIn: number;
+    risk: number;
+    pnlIfWin: number;
+    isResolved: boolean;
+    isWinning: boolean;
+};
+
+export type MarketStats = {
+    id: string;
+    market: TicketMarket;
+    positionStats: PositionStats[];
+    totalBuyIn: number;
+};
+
+export type GameStats = {
+    totalValume: number;
+    marketsStats: MarketStats[];
+};
+
+export type GameData = {
+    tickets: Ticket[];
+    gameStats: GameStats;
 };

@@ -16,7 +16,16 @@ import { ScreenSizeBreakpoint } from 'enums/ui';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
 import { groupBy, isEqual, orderBy, uniqWith } from 'lodash';
-import { BOXING_LEAGUES, LeagueMap, MarketType, Sport, getSportLeagueIds, isBoxingLeague } from 'overtime-utils';
+import {
+    BOXING_LEAGUES,
+    League,
+    LeagueMap,
+    MarketType,
+    Sport,
+    getSportLeagueIds,
+    isBoxingLeague,
+    isSgpBuilderMarket,
+} from 'overtime-utils';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
@@ -52,6 +61,7 @@ import { addHoursToCurrentDate } from 'thales-utils';
 import { MarketsCache, SportMarket, SportMarkets, TagInfo, Tags, Tournament } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { getCaseAccentInsensitiveString } from 'utils/formatters/string';
+import { isStalePausedMarket } from 'utils/marketsV2';
 import { history } from 'utils/routes';
 import { getScrollMainContainerToTop } from 'utils/scroll';
 import useQueryParam from 'utils/useQueryParams';
@@ -100,6 +110,7 @@ const Home: React.FC = () => {
 
     const [showBurger, setShowBurger] = useState<boolean>(false);
     const [playerPropsCountPerTag, setPlayerPropsCountPerTag] = useState<Record<string, number>>({});
+    const [quickSgpCountPerTag, setQuickSgpCountPerTag] = useState<Partial<Record<League, number>>>({});
     const [playerPropsCountPerTournament, setPlayerPropsCountPerTournament] = useState<Record<string, number>>({});
     const [showActive, setShowActive] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_ACTIVE, true);
     const [showTicketMobileModal, setShowTicketMobileModal] = useState<boolean>(false);
@@ -219,7 +230,7 @@ const Home: React.FC = () => {
 
     const liveSportMarkets = useMemo(() => {
         if (liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data) {
-            return liveSportMarketsQuery.data.live;
+            return liveSportMarketsQuery.data.live.filter((market) => !isStalePausedMarket(market));
         }
         return undefined;
     }, [liveSportMarketsQuery.data, liveSportMarketsQuery.isSuccess]);
@@ -307,9 +318,27 @@ const Home: React.FC = () => {
                       [StatusFilter.PAUSED_MARKETS]: [],
                       [StatusFilter.CANCELLED_MARKETS]: [],
                   };
+
         const marketTypes = new Set<MarketType>();
         const allLiveMarkets =
-            liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data ? liveSportMarketsQuery.data.live : [];
+            liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data
+                ? liveSportMarketsQuery.data.live.filter((market) => {
+                      let keepMarket = true;
+                      switch (statusFilter) {
+                          // for now all status filters for live are showing all markets which are not stale paused
+                          case StatusFilter.OPEN_MARKETS:
+                          case StatusFilter.ONGOING_MARKETS:
+                          case StatusFilter.RESOLVED_MARKETS:
+                          case StatusFilter.CANCELLED_MARKETS:
+                              keepMarket = !isStalePausedMarket(market);
+                              break;
+                          case StatusFilter.PAUSED_MARKETS:
+                              keepMarket = market.isPaused;
+                              break;
+                      }
+                      return keepMarket;
+                  })
+                : [];
 
         const gameMultipliers =
             gameMultipliersQuery.isSuccess && gameMultipliersQuery.data ? gameMultipliersQuery.data : [];
@@ -407,6 +436,10 @@ const Home: React.FC = () => {
                     if (!market.childMarkets.length) {
                         return false;
                     }
+                } else if (sportFilter === SportFilter.QuickSgp) {
+                    if (!market.childMarkets.some((childMarket) => isSgpBuilderMarket(childMarket.typeId))) {
+                        return false;
+                    }
                 } else if (sportFilter === SportFilter.Boosted) {
                     if (!gameMultipliers.find((multiplier) => multiplier.gameId === market.gameId)) {
                         return false;
@@ -502,8 +535,10 @@ const Home: React.FC = () => {
 
         const openMarketsCountPerTag: any = {};
         const ppMarketsCountPerTag: any = {};
+        const quickSgpMarketsCountPerTag: Partial<Record<League, number>> = {};
         const ppMarketsCountPerTournament: any = {};
         Object.keys(groupedMarkets).forEach((key: string) => {
+            let gameIdCounted = '';
             const playerMarketMap = groupedMarkets[key].reduce(
                 (prev: Record<string, SportMarket>, curr: SportMarket) => {
                     const playerMap = { ...prev };
@@ -522,6 +557,11 @@ const Home: React.FC = () => {
                                     childMarkets: [childMarket],
                                 };
                             }
+                        } else if (gameIdCounted !== childMarket.gameId && isSgpBuilderMarket(childMarket.typeId)) {
+                            const leagueId = Number(key) as League;
+                            const count = quickSgpMarketsCountPerTag[leagueId] || 0;
+                            quickSgpMarketsCountPerTag[leagueId] = count + 1;
+                            gameIdCounted = childMarket.gameId;
                         }
                     });
                     return playerMap;
@@ -552,6 +592,7 @@ const Home: React.FC = () => {
         });
         setPlayerPropsCountPerTournament(ppMarketsCountPerTournament);
         setPlayerPropsCountPerTag(ppMarketsCountPerTag);
+        setQuickSgpCountPerTag(quickSgpMarketsCountPerTag);
         return openMarketsCountPerTag;
     }, [openSportMarkets]);
 
@@ -575,6 +616,10 @@ const Home: React.FC = () => {
             (prev: number, curr: string) => prev + playerPropsCountPerTag[curr],
             0
         );
+        openMarketsCount[SportFilter.QuickSgp] = Object.keys(quickSgpCountPerTag).reduce(
+            (prev: number, curr: string) => prev + (quickSgpCountPerTag[Number(curr) as League] || 0),
+            0
+        );
         let favouriteCount = 0;
         favouriteLeagues.forEach((tag: TagInfo) => {
             favouriteCount += openMarketsCountPerTag[tag.id] || 0;
@@ -582,11 +627,13 @@ const Home: React.FC = () => {
         openMarketsCount[SportFilter.Favourites] = favouriteCount;
 
         return openMarketsCount;
-    }, [favouriteLeagues, openMarketsCountPerTag, playerPropsCountPerTag]);
+    }, [favouriteLeagues, openMarketsCountPerTag, playerPropsCountPerTag, quickSgpCountPerTag]);
 
     const liveMarketsCountPerTag = useMemo(() => {
         const liveSportMarkets: SportMarkets =
-            liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data ? liveSportMarketsQuery.data.live : [];
+            liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data
+                ? liveSportMarketsQuery.data.live.filter((market) => !isStalePausedMarket(market))
+                : [];
 
         const groupedMarkets = groupBy(liveSportMarkets, (market) => market.leagueId);
 
@@ -787,6 +834,7 @@ const Home: React.FC = () => {
                             liveMarketsCountPerTag={liveMarketsCountPerTag}
                             liveMarketsCountPerSport={liveMarketsCountPerSport}
                             playerPropsMarketsCountPerTag={playerPropsCountPerTag}
+                            quickSgpMarketsCountPerTag={quickSgpCountPerTag}
                             playerPropsCountPerTournament={playerPropsCountPerTournament}
                             tournamentsByLeague={
                                 filterItem == SportFilter.Live ? liveTournamentsByLeague : openTournamentsByLeague
