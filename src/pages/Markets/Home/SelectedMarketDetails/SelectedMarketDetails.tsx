@@ -21,13 +21,14 @@ import { ThemeInterface } from '../../../../types/ui';
 import PositionsV2 from '../../Market/MarketDetailsV2/components/PositionsV2';
 import { NoMarketsContainer, NoMarketsLabel, Wrapper } from './styled-components';
 
-type SelectedMarketProps = {
+type SelectedMarketDetailsProps = {
     market: SportMarket;
 };
 
-const SelectedMarket: React.FC<SelectedMarketProps> = ({ market }) => {
+const SelectedMarketDetails: React.FC<SelectedMarketDetailsProps> = ({ market }) => {
     const theme: ThemeInterface = useTheme();
     const dispatch = useDispatch();
+
     const isGameStarted = market.maturityDate < new Date();
     const isGameOpen = market.isOpen && !isGameStarted;
     const marketTypeGroupFilter = useSelector(getMarketTypeGroupFilter);
@@ -121,6 +122,7 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ market }) => {
                         {Object.keys(groupedChildMarkets).map((key, index) => {
                             const typeId = Number(key);
                             const childMarkets = groupedChildMarkets[typeId];
+
                             return (
                                 <PositionsV2
                                     key={index}
@@ -140,4 +142,4 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ market }) => {
     );
 };
 
-export default SelectedMarket;
+export default SelectedMarketDetails;

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FlexDivRow } from 'styles/common';
+import { FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 
 export const Container = styled(FlexDivRow)<{
     disabled: boolean;
@@ -9,6 +9,7 @@ export const Container = styled(FlexDivRow)<{
     order?: string;
     isMainPageView?: boolean;
     isPlayerPropsMarket?: boolean;
+    isQuickSgpMarket?: boolean;
     hide: boolean;
 }>`
     display: ${(props) => (props.hide ? 'none' : 'flex')};
@@ -34,20 +35,22 @@ export const Container = styled(FlexDivRow)<{
     }
     order: ${(props) => props.order || 'initial'};
     @media (max-width: 950px) {
-        flex-direction: ${(props) => (props.isMainPageView && !props.isPlayerPropsMarket ? 'column' : 'row')};
-        align-items: ${(props) => (props.isMainPageView ? 'flex-start' : 'center')};
+        flex-direction: ${(props) =>
+            props.isMainPageView && !props.isPlayerPropsMarket && !props.isQuickSgpMarket ? 'column' : 'row'};
+        align-items: ${(props) =>
+            props.isMainPageView && !props.isPlayerPropsMarket && !props.isQuickSgpMarket ? 'flex-start' : 'center'};
         padding: ${(props) => (props.isMainPageView ? '2px 5px' : '0 5px')};
     }
 `;
 
-export const Text = styled.span<{ isColumnView?: boolean }>`
+export const Text = styled.span<{ isColumnView?: boolean; maxWidth?: string }>`
     font-weight: 600;
     font-size: 12px;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
     width: 100%;
-    ${(props) => (props.isColumnView ? 'max-width: 200px;' : '')}
+    ${(props) => (props.maxWidth ? `max-width: ${props.maxWidth};` : props.isColumnView ? 'max-width: 200px;' : '')}
 `;
 
 export const Odd = styled.span<{
@@ -73,4 +76,47 @@ export const Status = styled(Text)`
         font-size: 11px;
         margin-top: 1px;
     }
+`;
+
+export const SgpPositions = styled(FlexDivColumn)`
+    padding: 3px 0;
+`;
+
+export const SgpPositionRow = styled(FlexDivRowCentered)`
+    position: relative;
+    padding: 2px 0;
+    :not(:last-child) {
+        :after {
+            content: '';
+            position: absolute;
+            top: 12px;
+            bottom: -6px;
+            left: 6px;
+            border-left: 1px solid ${(props) => props.theme.textColor.quinary};
+        }
+    }
+`;
+
+export const SgpPositionMark = styled.span<{ isSelected: boolean }>`
+    position: absolute;
+    width: 13px;
+    height: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: ${(props) =>
+        props.isSelected ? props.theme.background.quaternary : props.theme.background.secondary};
+    border: 1px solid ${(props) => props.theme.textColor.quinary};
+    border-radius: 50%;
+    flex-shrink: 0;
+    z-index: 1;
+`;
+
+export const SgpPositionMainText = styled(Text)`
+    margin-left: 20px;
+    white-space: break-spaces;
+`;
+export const SgpPositionSubText = styled(Text)<{ isSelected: boolean }>`
+    margin-left: 5px;
+    white-space: break-spaces;
+    opacity: ${(props) => (props.isSelected ? 0.7 : 0.5)};
 `;

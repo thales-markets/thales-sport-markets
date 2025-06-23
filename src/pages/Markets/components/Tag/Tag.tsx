@@ -1,5 +1,6 @@
 import { SportFilter } from 'enums/markets';
 import { ScreenSizeBreakpoint } from 'enums/ui';
+import { League } from 'overtime-utils';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
@@ -26,6 +27,7 @@ type TagProps = {
     liveMarketsCountPerTag: any;
     liveMarketsCountPerSport: any;
     playerPropsMarketsCountPerTag: any;
+    quickSgpMarketsCountPerTag: Partial<Record<League, number>>;
     playerPropsCountPerTournament: any;
     showLive: boolean;
     sport: SportFilter;
@@ -40,6 +42,7 @@ const Tag: React.FC<TagProps> = ({
     liveMarketsCountPerTag,
     liveMarketsCountPerSport,
     playerPropsMarketsCountPerTag,
+    quickSgpMarketsCountPerTag,
     showLive,
     sport,
     marketsCountPerTournament,
@@ -63,6 +66,7 @@ const Tag: React.FC<TagProps> = ({
     const tagFilterIds = tagFilter.map((tag) => tag.id);
 
     const isPlayerPropsTag = sport == SportFilter.PlayerProps;
+    const isQuickSgpTag = sport == SportFilter.QuickSgp;
 
     const isFavourite = !!favouriteLeagues.find((favourite: TagInfo) => favourite.id == tag.id);
     const label = tag.label;
@@ -138,6 +142,10 @@ const Tag: React.FC<TagProps> = ({
                 ) : isPlayerPropsTag ? (
                     !!playerPropsMarketsCountPerTag[tag.id] && (
                         <Count isMobile={isMobile}>{playerPropsMarketsCountPerTag[tag.id]}</Count>
+                    )
+                ) : isQuickSgpTag ? (
+                    !!quickSgpMarketsCountPerTag[tag.id] && (
+                        <Count isMobile={isMobile}>{quickSgpMarketsCountPerTag[tag.id]}</Count>
                     )
                 ) : (
                     !!openMarketsCountPerTag[tag.id] && (

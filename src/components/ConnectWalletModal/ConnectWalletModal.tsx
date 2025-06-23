@@ -1,4 +1,5 @@
 import { isInBinance } from '@binance/w3w-utils';
+import sdk from '@farcaster/frame-sdk';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import disclaimer from 'assets/docs/overtime-markets-disclaimer.pdf';
 import privacyPolicy from 'assets/docs/overtime-privacy-policy.pdf';
@@ -7,6 +8,7 @@ import Apple from 'assets/images/logins-icons/apple.svg?react';
 import BinanceWallet from 'assets/images/logins-icons/binance.svg?react';
 import Coinbase from 'assets/images/logins-icons/coinbase.svg?react';
 import Discord from 'assets/images/logins-icons/discord.svg?react';
+import Farcaster from 'assets/images/logins-icons/farcaster.svg?react';
 import Google from 'assets/images/logins-icons/google.svg?react';
 import Metamask from 'assets/images/logins-icons/metamask.svg?react';
 import Rabby from 'assets/images/logins-icons/rabby.svg?react';
@@ -73,10 +75,17 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const { openConnectModal } = useConnectModal();
+    const [isInFarcaster, setIsInFarcaster] = useState(false);
 
     const [termsAccepted, setTerms] = useLocalStorage(LOCAL_STORAGE_KEYS.TERMS_AND_CONDITIONS, false);
 
     const [isConnecting, setIsConnecting] = useState(false);
+
+    useEffect(() => {
+        sdk.isInMiniApp().then((isInMiniApp) => {
+            setIsInFarcaster(isInMiniApp);
+        });
+    }, []);
 
     const handleParticleConnect = (connector: Connector) => {
         try {
@@ -144,21 +153,38 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                     </HeaderContainer>
                     <ButtonsContainer disabled={!termsAccepted}>
                         <SocialLoginWrapper>
-                            {SUPPORTED_PARTICAL_CONNECTORS_MODAL.map((item, index) => {
-                                const connector = getSpecificConnectorFromConnectorsArray(connectors, item);
-                                if (connector) {
-                                    return (
-                                        <Button
-                                            disabled={isInBinance()}
-                                            key={index}
-                                            onClick={() => !isInBinance() && handleParticleConnect(connector)}
-                                        >
-                                            {<> {getIcon(item)}</>}
-                                            {t(getWalletLabel(item))}
-                                        </Button>
-                                    );
-                                }
-                            })}
+                            {isInFarcaster ? (
+                                <Button
+                                    key={0}
+                                    onClick={() =>
+                                        handleConnect(
+                                            getSpecificConnectorFromConnectorsArray(
+                                                connectors,
+                                                WalletConnections.FARCASTER
+                                            ) as any
+                                        )
+                                    }
+                                >
+                                    {<> {getIcon(WalletConnections.FARCASTER, isBiconomy)}</>}
+                                    {t(getWalletLabel(WalletConnections.FARCASTER))}
+                                </Button>
+                            ) : (
+                                SUPPORTED_PARTICAL_CONNECTORS_MODAL.map((item, index) => {
+                                    const connector = getSpecificConnectorFromConnectorsArray(connectors, item);
+                                    if (connector) {
+                                        return (
+                                            <Button
+                                                disabled={isInBinance()}
+                                                key={index}
+                                                onClick={() => !isInBinance() && handleParticleConnect(connector)}
+                                            >
+                                                {<> {getIcon(item, isBiconomy)}</>}
+                                                {t(getWalletLabel(item))}
+                                            </Button>
+                                        );
+                                    }
+                                })
+                            )}
                         </SocialLoginWrapper>
                         <BoxForLabel>
                             <ConnectWithLabel>{t('common.wallet.or-connect-with')}</ConnectWithLabel>
@@ -170,7 +196,7 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                                     if (isInBinance() && connector.id === WalletConnections.METAMASK) {
                                         return (
                                             <Button key={index} onClick={() => handleConnect(connector)}>
-                                                {<> {getIcon(WalletConnections.BINANCE)}</>}
+                                                {<> {getIcon(WalletConnections.BINANCE, isBiconomy)}</>}
                                                 {t(getWalletLabel(WalletConnections.BINANCE))}
                                             </Button>
                                         );
@@ -181,7 +207,7 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                                                 key={index}
                                                 onClick={() => !isInBinance() && handleConnect(connector)}
                                             >
-                                                {<> {getIcon(item)}</>}
+                                                {<> {getIcon(item, isBiconomy)}</>}
                                                 {t(getWalletLabel(item))}
                                             </Button>
                                         );
@@ -441,6 +467,21 @@ const IconHolder = styled.div`
     }
 `;
 
+const CoinbaseWalletDisclaimer = styled.span`
+    position: absolute;
+    bottom: 14px;
+    padding: 0 10px;
+    color: ${(props) => props.theme.textColor.secondary};
+    font-size: 12px;
+    font-weight: 400;
+    width: 240px;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 32px 0px;
+    text-align: center;
+    background: ${(props) => props.theme.background.secondary};
+`;
+
 const BinanceIconHolder = styled(IconHolder)`
     margin-right: 0;
 `;
@@ -450,7 +491,7 @@ const DownIcon = styled.i`
     margin-left: 4px;
 `;
 
-const getIcon = (socialId: ParticalTypes | WalletConnections): any => {
+const getIcon = (socialId: ParticalTypes | WalletConnections, isBiconomy: boolean): any => {
     switch (socialId) {
         case ParticalTypes.GOOGLE:
             return (
@@ -504,6 +545,16 @@ const getIcon = (socialId: ParticalTypes | WalletConnections): any => {
             return (
                 <IconHolder>
                     <Coinbase />
+                    {isBiconomy && (
+                        <CoinbaseWalletDisclaimer>Coinbase smart wallet not supported</CoinbaseWalletDisclaimer>
+                    )}
+                </IconHolder>
+            );
+
+        case WalletConnections.FARCASTER:
+            return (
+                <IconHolder>
+                    <Farcaster />
                 </IconHolder>
             );
 

@@ -407,6 +407,7 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.FIFA_CLUB_WORLD_CUP_FUTURES:
             return `/logos/Countries/fifa-club-world-cup.webp`;
         case League.PHILIPPINES_PVL_WOMEN:
+        case League.PBA_PHILIPPINE_CUP:
             return `/logos/Countries/philippines.svg`;
         case League.IRAN_SUPER_LEAGUE:
             return `/logos/Countries/iran.svg`;
@@ -429,6 +430,10 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
             return `/logos/Countries/uefa-under21-championship.webp`;
         case League.PDC_WORLD_CUP_OF_DARTS:
             return `/logos/Countries/pdc.webp`;
+        case League.BIG3:
+            return `/logos/Countries/big3.webp`;
+        case League.FIBA_EUROBASKET_WOMEN:
+            return `/logos/Countries/fiba-womens-eurobasket.webp`;
         default:
             return `/logos/Countries/world.svg`;
     }
