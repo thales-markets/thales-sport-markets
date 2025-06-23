@@ -65,11 +65,12 @@ const Referral: React.FC = () => {
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const { address } = useAccount();
-    const { smartAddress } = useBiconomy();
+    const { smartAddress, signMessage } = useBiconomy();
+
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
     const { signMessageAsync } = useSignMessage();
 
-    const reffererIDQuery = useGetReffererIdQuery(walletAddress || '');
+    const reffererIDQuery = useGetReffererIdQuery(address || '');
     const [reffererID, setReffererID] = useState('');
     const [savedReffererID, setSavedReffererID] = useState('');
 
@@ -111,9 +112,12 @@ const Referral: React.FC = () => {
     ];
 
     const onSubmit = useCallback(async () => {
-        const signature = await signMessageAsync({ message: reffererID });
+        const signature = isBiconomy
+            ? signMessage && (await signMessage(reffererID))
+            : await signMessageAsync({ message: reffererID });
+
         const response = await axios.post(`${generalConfig.API_URL}/update-refferer-id`, {
-            walletAddress,
+            walletAddress: address,
             reffererID,
             signature,
             previousReffererID: savedReffererID,
@@ -124,7 +128,7 @@ const Referral: React.FC = () => {
             setSavedReffererID(reffererID);
             toast(t('common.referral.id-create-success'), { type: 'success' });
         }
-    }, [reffererID, walletAddress, savedReffererID, t, signMessageAsync]);
+    }, [reffererID, address, savedReffererID, t, signMessageAsync, signMessage, isBiconomy]);
 
     const handleCopy = () => {
         if (!walletAddress) {
