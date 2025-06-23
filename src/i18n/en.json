@@ -1536,7 +1536,7 @@
         },
         "header": {
             "title": "Create Your Affiliate Link",
-            "subtitle": "Refer users and earn 20% of the XP they generate on bets. Share your unique link, track your rewards, and climb the leaderboard.",
+            "subtitle": "Refer users to Overtime and earn 20% of the XP they generate on bets. Spread your unique affiliate link, onboard new users to Overtime,  track your rewards, and climb the leaderboard.",
             "affiliate-id-label": "Your Affiliate ID",
             "affiliate-id-placeholder": "Enter affiliate ID",
             "create": "Create",
@@ -1544,9 +1544,9 @@
             "copy": "Copy",
             "stats-title": "Your Stats",
             "stats": {
-                "referrals": "Referrals",
+                "referrals": "Referred users",
                 "xp-earned": "XP Earned",
-                "rank": "Rank",
+                "rank": "Affiliate Rank",
                 "next-reward": "Next Reward",
                 "next-level-progress": "Next Level Progress"
             }
@@ -1555,11 +1555,11 @@
         "title": "How the Affiliate Program Works",
         "step1": {
           "title": "Create Your Affiliate ID",
-          "description": "Get your unique affiliate link to share with friends, social media followers, or community members."
+          "description": "Generate your unique affiliate link to share with potential new Overtime users."
         },
         "step2": {
           "title": "Share Your Link",
-          "description": "Promote your link across your networks. Each new user that signs up through your link is tracked."
+          "description": "Each new user that signs up using your link becomes connected to your account."
         },
         "step3": {
           "title": "Earn XP Rewards",
@@ -1568,8 +1568,8 @@
       },
       "tabs": {
           "affiliate": "Affiliate Leaderboard",
-          "summary": "Your Summary",
-          "activity": "Referral Activity"
+          "summary": "Referred Users Leaderboard",
+          "activity": "Referred Bets"
      },
       "leaderboard": {
         "time-filter": "This Month",
@@ -1577,33 +1577,33 @@
         "progress-to-next": "Progress to next rank",
         "table-headers": {
           "rank": "Rank",
-          "user": "User",
-          "total-bets": "Total Bets",
-          "referrals": "Referrals",
-          "betVolume": "Bet Volume",
-          "xp": "XP",
-          "level": "Overtime League Level"
+          "user": "Affiliate ID",
+          "total-bets": "Referred bets",
+          "referrals": "Referred Users",
+          "betVolume": "Referred Volume",
+          "xp": "Affiliate XP Earned",
+          "level": "Overdrop XP Level"
         },
         "updated": "Updated 3 minutes ago"
       },
       "activity": {
         "table-headers": {
-          "user": "User",
+          "user": "Referred User",
           "date-joined": "Date Joined",
           "total-bets": "Total Bets",
           "bet-volume": "Bet Volume",
-          "xp-generated": "XP Generated",
-          "xp-earned": "Your XP Earned"
+          "xp-generated": "User XP",
+          "xp-earned": "Affiliate XP"
         }
       },
       "bets": {
         "table-headers": {
-          "user": "User",
+          "user": "Referred User",
           "timestamp": "Timestamp",
-          "scan-link": "Link",
-          "value": "Value",
-          "xp-generated": "XP Generated",
-          "xp-earned": "Your XP Earned"
+          "scan-link": "Tx Link",
+          "value": "Bet Value",
+          "xp-generated": "User XP",
+          "xp-earned": "Affiliate XP"
         }
       },
       "rewards": {

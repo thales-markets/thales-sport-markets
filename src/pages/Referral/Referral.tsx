@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { generalConfig } from 'config/general';
-import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 import useAffiliateLeaderboardQuery from 'queries/overdrop/useAffiliateLeaderboardQuery';
 import useGetReffererIdQuery from 'queries/referral/useGetReffererIdQuery';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -21,6 +20,7 @@ import Summary from './components/Summary';
 import {
     AffiliateContainer,
     AffiliateInput,
+    AffiliateLinkLabel,
     CopyButton,
     CopyIcon,
     CreateButton,
@@ -77,7 +77,7 @@ const Referral: React.FC = () => {
     const [expandedFAQ, setExpandedFAQ] = useState<number | null>(2);
 
     useEffect(() => {
-        if (reffererIDQuery.isSuccess && reffererIDQuery.data) {
+        if (reffererIDQuery.isSuccess) {
             setReffererID(reffererIDQuery.data);
             setSavedReffererID(reffererIDQuery.data);
         }
@@ -121,7 +121,6 @@ const Referral: React.FC = () => {
         if (response.data.error) {
             toast(t('common.referral.id-exists'), { type: 'error' });
         } else {
-            PLAUSIBLE.trackEvent(PLAUSIBLE_KEYS.submitReferralId);
             setSavedReffererID(reffererID);
             toast(t('common.referral.id-create-success'), { type: 'success' });
         }
@@ -149,15 +148,11 @@ const Referral: React.FC = () => {
                     <AffiliateContainer>
                         <SectionLabel>{t('referral.header.affiliate-id-label')}</SectionLabel>
                         <InputRow>
+                            <AffiliateLinkLabel>{buildReffererLink(String(reffererID))}</AffiliateLinkLabel>
                             <AffiliateInput
-                                value={buildReffererLink(String(reffererID))}
+                                value={reffererID}
                                 onChange={(e) => {
-                                    const targetValue = e.target.value;
-                                    const value = targetValue.includes('=')
-                                        ? targetValue.substring(e.target.value.indexOf('=') + 1)
-                                        : '';
-
-                                    setReffererID(value);
+                                    setReffererID(e.target.value);
                                 }}
                                 placeholder={t('referral.header.affiliate-id-placeholder')}
                             />
@@ -248,17 +243,17 @@ const Referral: React.FC = () => {
             <LeaderboardSection>
                 <LeaderboardHeader>
                     <TabsContainer>
-                        <Tab active={yourPosition && selectedTab === 0} onClick={() => setSelectedTab(0)}>
+                        <Tab active={selectedTab === 0} onClick={() => setSelectedTab(0)}>
                             <span>{t('referral.tabs.affiliate')}</span>
                             {!isMobile && <i className={`icon icon--leaderboard`} />}
                         </Tab>
-                        {yourPosition && (
+                        {!!walletAddress && (
                             <Tab active={selectedTab === 1} onClick={() => setSelectedTab(1)}>
                                 <span>{t('referral.tabs.summary')}</span>
                                 {!isMobile && <i className={`icon icon--your-summary`} />}
                             </Tab>
                         )}
-                        {yourPosition && (
+                        {!!walletAddress && (
                             <Tab active={selectedTab === 2} onClick={() => setSelectedTab(2)}>
                                 <span>{t('referral.tabs.activity')}</span>
                                 {!isMobile && <i className={`icon icon--referral-activity`} />}

@@ -189,12 +189,21 @@ export const SectionLabel = styled.div`
     font-family: 'Outfit', sans-serif;
     font-size: 12px;
     color: #a0aec0;
-    width: 100px;
     height: 15px;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+`;
+
+export const AffiliateLinkLabel = styled.div`
+    top: -20px;
+    position: absolute;
+    font-family: 'Outfit', sans-serif;
+    font-size: 12px;
+    color: #a0aec0;
+    height: 15px;
 `;
 
 export const InputRow = styled(FlexDivRow)`
+    position: relative;
     gap: 8px;
     align-items: center;
     justify-content: left;

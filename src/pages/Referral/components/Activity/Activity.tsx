@@ -10,7 +10,7 @@ import { getIsBiconomy } from 'redux/modules/wallet';
 import { formatCurrency, getEtherscanTxLink, truncateAddress } from 'thales-utils';
 import { RootState } from 'types/redux';
 import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
-import { useAccount, useChainId } from 'wagmi';
+import { useAccount } from 'wagmi';
 
 const Activity: React.FC = () => {
     const { t } = useTranslation();
@@ -21,7 +21,6 @@ const Activity: React.FC = () => {
     const { address } = useAccount();
     const { smartAddress } = useBiconomy();
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
-    const networkId = useChainId();
 
     const activityQuery = useAffiliateActivityQuery(walletAddress);
     const activityData = activityQuery.data || [];
@@ -49,7 +48,12 @@ const Activity: React.FC = () => {
                             accessorKey: 'scanLink',
                             sortable: true,
                             cell: (cellProps: any) => (
-                                <SPAAnchor href={getEtherscanTxLink(networkId, cellProps.cell.getValue())}>
+                                <SPAAnchor
+                                    href={getEtherscanTxLink(
+                                        Number(cellProps.row.original.network),
+                                        cellProps.cell.getValue()
+                                    )}
+                                >
                                     <ExternalArrow className={'icon icon--arrow-external'} />
                                 </SPAAnchor>
                             ),

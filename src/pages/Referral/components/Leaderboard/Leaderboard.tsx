@@ -65,16 +65,19 @@ const Leaderboard: React.FC = () => {
                             accessorKey: 'owner',
                             sortable: true,
                             cell: (cellProps: any) => <>{truncateAddress(cellProps.cell.getValue(), 4, 4)}</>,
+                            size: 110,
                         },
                         {
                             header: <>{t('referral.leaderboard.table-headers.total-bets')}</>,
                             accessorKey: 'totalBets',
                             sortable: true,
+                            size: 150,
                         },
                         {
                             header: <>{t('referral.leaderboard.table-headers.referrals')}</>,
                             accessorKey: 'referrals',
                             sortable: true,
+                            size: 150,
                         },
                         {
                             header: <>{t('referral.leaderboard.table-headers.betVolume')}</>,
@@ -87,7 +90,7 @@ const Leaderboard: React.FC = () => {
                             header: <>{t('referral.leaderboard.table-headers.xp')}</>,
                             accessorKey: 'xp',
                             cell: (cellProps: any) => <UserXP>{formatCurrency(cellProps.cell.getValue(), 2)}</UserXP>,
-                            size: 50,
+                            size: 170,
                         },
                     ].concat(
                         isMobile
@@ -97,7 +100,7 @@ const Leaderboard: React.FC = () => {
                                       header: <>{t('referral.leaderboard.table-headers.level')}</>,
                                       accessorKey: 'level.levelName',
                                       cell: (cellProps: any) => <>{cellProps.cell.getValue()}</>,
-                                      size: 270,
+                                      size: 200,
                                   },
                               ]
                     ) as any
