@@ -165,7 +165,7 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                                         )
                                     }
                                 >
-                                    {<> {getIcon(WalletConnections.FARCASTER)}</>}
+                                    {<> {getIcon(WalletConnections.FARCASTER, isBiconomy)}</>}
                                     {t(getWalletLabel(WalletConnections.FARCASTER))}
                                 </Button>
                             ) : (
@@ -178,7 +178,7 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                                                 key={index}
                                                 onClick={() => !isInBinance() && handleParticleConnect(connector)}
                                             >
-                                                {<> {getIcon(item)}</>}
+                                                {<> {getIcon(item, isBiconomy)}</>}
                                                 {t(getWalletLabel(item))}
                                             </Button>
                                         );
@@ -196,7 +196,7 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                                     if (isInBinance() && connector.id === WalletConnections.METAMASK) {
                                         return (
                                             <Button key={index} onClick={() => handleConnect(connector)}>
-                                                {<> {getIcon(WalletConnections.BINANCE)}</>}
+                                                {<> {getIcon(WalletConnections.BINANCE, isBiconomy)}</>}
                                                 {t(getWalletLabel(WalletConnections.BINANCE))}
                                             </Button>
                                         );
@@ -207,7 +207,7 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                                                 key={index}
                                                 onClick={() => !isInBinance() && handleConnect(connector)}
                                             >
-                                                {<> {getIcon(item)}</>}
+                                                {<> {getIcon(item, isBiconomy)}</>}
                                                 {t(getWalletLabel(item))}
                                             </Button>
                                         );
@@ -467,6 +467,21 @@ const IconHolder = styled.div`
     }
 `;
 
+const CoinbaseWalletDisclaimer = styled.span`
+    position: absolute;
+    bottom: 14px;
+    padding: 0 10px;
+    color: ${(props) => props.theme.textColor.secondary};
+    font-size: 12px;
+    font-weight: 400;
+    width: 240px;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 32px 0px;
+    text-align: center;
+    background: ${(props) => props.theme.background.secondary};
+`;
+
 const BinanceIconHolder = styled(IconHolder)`
     margin-right: 0;
 `;
@@ -476,7 +491,7 @@ const DownIcon = styled.i`
     margin-left: 4px;
 `;
 
-const getIcon = (socialId: ParticalTypes | WalletConnections): any => {
+const getIcon = (socialId: ParticalTypes | WalletConnections, isBiconomy: boolean): any => {
     switch (socialId) {
         case ParticalTypes.GOOGLE:
             return (
@@ -530,6 +545,9 @@ const getIcon = (socialId: ParticalTypes | WalletConnections): any => {
             return (
                 <IconHolder>
                     <Coinbase />
+                    {isBiconomy && (
+                        <CoinbaseWalletDisclaimer>Coinbase smart wallet not supported</CoinbaseWalletDisclaimer>
+                    )}
                 </IconHolder>
             );
 
