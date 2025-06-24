@@ -9,6 +9,7 @@ const useGameMultipliersQuery = (options?: Omit<UseQueryOptions<any>, 'queryKey'
         queryKey: QUERY_KEYS.Overdrop.GameMultipliers(),
         queryFn: async () => {
             try {
+                return [];
                 const response = await axios.get(`${generalConfig.OVERDROP_API_URL}/game-multipliers`);
 
                 if (response?.status === 200 && response?.data) return response.data;
