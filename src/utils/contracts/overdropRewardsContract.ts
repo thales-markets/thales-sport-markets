@@ -7,7 +7,7 @@ const overdropRewardsContract: ContractData = {
         [Network.OptimismMainnet]: TBD_ADDRESS,
         [Network.Arbitrum]: TBD_ADDRESS,
         [Network.Base]: TBD_ADDRESS,
-        [Network.OptimismSepolia]: '0xc97B63eF4a10D6875A07530fD182ea9A7Fb1a9DA',
+        [Network.OptimismSepolia]: '0xa4505687368a044931C96dad55BEe2c3e4Ae2516',
     },
     abi: [
         {
@@ -20,8 +20,15 @@ const overdropRewardsContract: ContractData = {
             name: 'AddressInsufficientBalance',
             type: 'error',
         },
+        { inputs: [], name: 'AlreadyClaimed', type: 'error' },
+        { inputs: [], name: 'ClaimsDisabled', type: 'error' },
         { inputs: [], name: 'FailedInnerCall', type: 'error' },
+        { inputs: [], name: 'InvalidAmount', type: 'error' },
         { inputs: [], name: 'InvalidInitialization', type: 'error' },
+        { inputs: [], name: 'InvalidMerkleProof', type: 'error' },
+        { inputs: [], name: 'InvalidMerkleRoot', type: 'error' },
+        { inputs: [], name: 'InvalidRecipient', type: 'error' },
+        { inputs: [], name: 'InvalidSeason', type: 'error' },
         { inputs: [], name: 'NotInitializing', type: 'error' },
         {
             inputs: [{ internalType: 'address', name: 'token', type: 'address' }],
@@ -92,11 +99,8 @@ const overdropRewardsContract: ContractData = {
         },
         {
             anonymous: false,
-            inputs: [
-                { indexed: false, internalType: 'uint256', name: 'amount', type: 'uint256' },
-                { indexed: true, internalType: 'address', name: 'depositor', type: 'address' },
-            ],
-            name: 'RewardsDeposited',
+            inputs: [{ indexed: true, internalType: 'address', name: 'collateral', type: 'address' }],
+            name: 'RewardsCollateralUpdated',
             type: 'event',
         },
         { inputs: [], name: 'acceptOwnership', outputs: [], stateMutability: 'nonpayable', type: 'function' },
@@ -132,13 +136,6 @@ const overdropRewardsContract: ContractData = {
             type: 'function',
         },
         {
-            inputs: [{ internalType: 'bool', name: 'enabled', type: 'bool' }],
-            name: 'enableClaims',
-            outputs: [],
-            stateMutability: 'nonpayable',
-            type: 'function',
-        },
-        {
             inputs: [
                 { internalType: 'address', name: '', type: 'address' },
                 { internalType: 'uint256', name: '', type: 'uint256' },
@@ -150,17 +147,7 @@ const overdropRewardsContract: ContractData = {
         },
         {
             inputs: [{ internalType: 'address', name: 'account', type: 'address' }],
-            name: 'hasClaimedRewards',
-            outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [
-                { internalType: 'address', name: 'account', type: 'address' },
-                { internalType: 'uint256', name: 'season', type: 'uint256' },
-            ],
-            name: 'hasClaimedRewardsInSeason',
+            name: 'hasClaimedCurrentSeason',
             outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
             stateMutability: 'view',
             type: 'function',
@@ -220,10 +207,10 @@ const overdropRewardsContract: ContractData = {
             type: 'function',
         },
         {
-            inputs: [],
-            name: 'remainingRewards',
-            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-            stateMutability: 'view',
+            inputs: [{ internalType: 'bool', name: 'enabled', type: 'bool' }],
+            name: 'setClaimsEnabled',
+            outputs: [],
+            stateMutability: 'nonpayable',
             type: 'function',
         },
         {
@@ -248,7 +235,7 @@ const overdropRewardsContract: ContractData = {
             type: 'function',
         },
         {
-            inputs: [],
+            inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
             name: 'totalClaimed',
             outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
             stateMutability: 'view',

@@ -36,7 +36,7 @@ const useUserRewardsQuery = (
 
                 if (overdropRewardsContract) {
                     const [hasClaimed] = await Promise.all([
-                        overdropRewardsContract.read.hasClaimedRewards([walletAddress]),
+                        overdropRewardsContract.read.hasClaimedCurrentSeason([walletAddress]),
                     ]);
 
                     let amount = 0;
