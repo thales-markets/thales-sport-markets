@@ -4,21 +4,17 @@ import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import SPAAnchor from '../SPAAnchor';
 
-const IS_VISIBLE = true; // Set to true to show the banner
+const IS_VISIBLE = false; // Set to true to show the banner
 
 const Banner: React.FC = () => {
     return !IS_VISIBLE ? (
         <></>
     ) : (
-        <SPAAnchor
-            href={
-                'https://www.overtime.io/dao/thalescouncil.eth/0x53ff4a6fb029f820792a1d1fe4c8749e861c616e1c566d83062ad47968a0065a'
-            }
-        >
+        <SPAAnchor href={'https://overtime.io'}>
             <Container>
                 <Label>
                     <Trans
-                        i18nKey={'banner.elections-text'}
+                        i18nKey={'banner.migration-message'}
                         components={{
                             highlight: <HightlightLabel />,
                         }}
