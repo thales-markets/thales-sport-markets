@@ -18,7 +18,7 @@ import { getIsMobile } from 'redux/modules/app';
 import { getIsBiconomy, setIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
-import { formatCurrencyWithKey, formatCurrencyWithSign, localStore } from 'thales-utils';
+import { formatCurrency, formatCurrencyWithKey, formatCurrencyWithSign, localStore } from 'thales-utils';
 import { OverdropUserData, UserRewards } from 'types/overdrop';
 import { ThemeInterface } from 'types/ui';
 import { ViemContract } from 'types/viem';
@@ -34,6 +34,8 @@ import { Client } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 import SmallBadge from '../SmallBadge';
+
+const HIDE_FREE_BET_LEVEL = true;
 
 const BadgeOverview: React.FC = () => {
     const { t } = useTranslation();
@@ -232,6 +234,7 @@ const BadgeOverview: React.FC = () => {
                                     {switchToEoa
                                         ? t('overdrop.overdrop-home.switch-to-eoa')
                                         : t('overdrop.overdrop-home.claim-rewards', {
+                                              amount: formatCurrency(userRewards.amount),
                                               collateral: OVERDROP_REWARDS_COLLATERALS[networkId],
                                           })}
                                 </Button>
@@ -254,7 +257,7 @@ const BadgeOverview: React.FC = () => {
                     )}
                     <Disclaimer>{t('overdrop.overdrop-home.claim-disclaimer')}</Disclaimer>
                 </ItemContainer>
-                {levelItem.level !== OVERDROP_LEVELS.length - 1 && (
+                {levelItem.level !== OVERDROP_LEVELS.length - 1 && !HIDE_FREE_BET_LEVEL && (
                     <ItemContainer>
                         <Label>{t('overdrop.overdrop-home.next-over-rewards-at')}</Label>
                         <ValueWrapper>

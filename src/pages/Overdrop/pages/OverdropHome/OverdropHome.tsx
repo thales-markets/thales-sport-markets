@@ -1,7 +1,6 @@
 import { OverdropTab } from 'enums/ui';
 import BadgeOverview from 'pages/Overdrop/components/BadgeOverview';
 import DailyRecap from 'pages/Overdrop/components/DailyRecap';
-import OverdropBanner from 'pages/Overdrop/components/OverdropBanner';
 import XPOverview from 'pages/Overdrop/components/XPOverview';
 import React from 'react';
 import { useSelector } from 'react-redux';
@@ -19,7 +18,7 @@ const OverdropHome: React.FC<OverdropHomeProps> = ({ setSelectedTab }) => {
 
     return (
         <Wrapper>
-            <OverdropBanner />
+            {/* <OverdropBanner /> */}
             <XPOverview setSelectedTab={setSelectedTab} />
             <LevelDetailsWrapper isMobile={isMobile}>
                 <DailyRecap />
