@@ -10,6 +10,8 @@ import useInterval from 'hooks/useInterval';
 import DappLayout from 'layouts/DappLayout';
 import Theme from 'layouts/Theme';
 import FreeBets from 'pages/FreeBets';
+import Governance from 'pages/Governance';
+import { GovernanceProps } from 'pages/Governance/Governance';
 import LiquidityPool from 'pages/LiquidityPool';
 import Markets from 'pages/Markets/Home';
 import Market from 'pages/Markets/Market';
@@ -250,6 +252,18 @@ const App = () => {
                         exact
                         path={ROUTES.SEO.SeoArticle}
                         render={(routeProps) => <SeoArticle {...(routeProps as SeoArticleProps)} />}
+                    />
+
+                    <Route
+                        exact
+                        path={[ROUTES.DAO.Home, ROUTES.DAO.Space, ROUTES.DAO.Proposal]}
+                        render={(routeProps) => (
+                            <Suspense fallback={<Loader />}>
+                                <DappLayout>
+                                    <Governance {...(routeProps as GovernanceProps)} />
+                                </DappLayout>
+                            </Suspense>
+                        )}
                     />
                     <Route>
                         <Redirect to={ROUTES.Markets.Home} />

@@ -1,3 +1,4 @@
+import { SpaceKey } from 'enums/governance';
 import { StatusFilter } from 'enums/markets';
 import { Network } from 'enums/network';
 import { RiskManagementRole } from 'enums/riskManagement';
@@ -208,6 +209,25 @@ const QUERY_KEYS = {
         walletAddress,
         role,
     ],
+    Governance: {
+        Proposals: (spaceKey: SpaceKey, limit: number) => ['governance', 'proposals', spaceKey, limit],
+        Proposal: (spaceKey: SpaceKey, hash: string, walletAddress: string) => [
+            'governance',
+            'proposal',
+            spaceKey,
+            hash,
+            walletAddress,
+        ],
+        ThalesStakers: (filter: string) => ['governance', 'thalesStakers', filter],
+        VotingPower: (proposalId: string, snapshot: string, walletAddress: string) => [
+            'governance',
+            'votingPower',
+            proposalId,
+            snapshot,
+            walletAddress,
+        ],
+        CouncilNftOwners: () => ['governance', 'council'],
+    },
 };
 
 export default QUERY_KEYS;
