@@ -13,6 +13,7 @@ export enum MarketTypeGroup {
     SETS = 'Sets',
     GAMES = 'Games',
     SGP = 'SGP',
+    QUICK_SGP = 'Quick SGP',
     PLAYER_PROPS = 'All player props',
     GAME_PROPS = 'Game props',
     PLAYER_POINTS = 'Player points',

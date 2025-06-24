@@ -1,3 +1,4 @@
+import sdk from '@farcaster/frame-sdk';
 import { GAS_ESTIMATION_BUFFER, ZERO_ADDRESS } from 'constants/network';
 import { SupportedNetwork } from 'types/network';
 import { ViemContract } from 'types/viem';
@@ -26,6 +27,7 @@ export const getSportsAMMV2Transaction: any = async (
 ): Promise<any> => {
     let finalEstimation = null;
     const referralAddress = referral || ZERO_ADDRESS;
+    const isInFarcaster = await sdk.isInMiniApp();
 
     if (isFreeBet && freeBetHolderContract) {
         if (isSystemBet) {
@@ -43,14 +45,21 @@ export const getSportsAMMV2Transaction: any = async (
                 ],
             });
 
+            // Estimate gas only if not in Farcaster mini app
+            // and not using Account Abstraction
+            // as Farcaster mini app will handle gas estimation
+            // and Account Abstraction will use Biconomy for gas estimation
             if (!isAA) {
-                const estimation = await estimateGas(client, {
-                    to: freeBetHolderContract.address as Address,
-                    data: encodedData,
-                });
+                if (!isInFarcaster) {
+                    const estimation = await estimateGas(client, {
+                        to: freeBetHolderContract.address as Address,
+                        data: encodedData,
+                    });
 
-                finalEstimation = BigInt(Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER));
+                    finalEstimation = BigInt(Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER));
+                }
 
+                // omit gas if in Farcaster mini app
                 return freeBetHolderContract.write.tradeSystemBet(
                     [
                         tradeData,
@@ -61,7 +70,7 @@ export const getSportsAMMV2Transaction: any = async (
                         collateralAddress,
                         systemBetDenominator,
                     ],
-                    { value: BigInt(0), gas: finalEstimation }
+                    isInFarcaster ? { value: BigInt(0) } : { value: BigInt(0), gas: finalEstimation }
                 );
             } else
                 return await executeBiconomyTransaction({
@@ -87,16 +96,18 @@ export const getSportsAMMV2Transaction: any = async (
             });
 
             if (!isAA) {
-                const estimation = await estimateGas(client, {
-                    to: freeBetHolderContract.address as Address,
-                    data: encodedData,
-                });
+                if (!isInFarcaster) {
+                    const estimation = await estimateGas(client, {
+                        to: freeBetHolderContract.address as Address,
+                        data: encodedData,
+                    });
 
-                finalEstimation = BigInt(Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER));
+                    finalEstimation = BigInt(Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER));
+                }
 
                 return freeBetHolderContract.write.trade(
                     [tradeData, buyInAmount, expectedQuote, additionalSlippage, referralAddress, collateralAddress],
-                    { value: BigInt(0), gas: finalEstimation }
+                    isInFarcaster ? { value: BigInt(0) } : { value: BigInt(0), gas: finalEstimation }
                 );
             } else {
                 return await executeBiconomyTransaction({
@@ -134,13 +145,15 @@ export const getSportsAMMV2Transaction: any = async (
         });
 
         if (!isAA) {
-            const estimation = await estimateGas(client, {
-                to: sportsAMMV2Contract.address as Address,
-                data: encodedData,
-                value: isEth ? buyInAmount : BigInt(0),
-            });
+            if (!isInFarcaster) {
+                const estimation = await estimateGas(client, {
+                    to: sportsAMMV2Contract.address as Address,
+                    data: encodedData,
+                    value: isEth ? buyInAmount : BigInt(0),
+                });
 
-            finalEstimation = BigInt(Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER));
+                finalEstimation = BigInt(Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER));
+            }
 
             return sportsAMMV2Contract.write.tradeSystemBet(
                 [
@@ -153,7 +166,9 @@ export const getSportsAMMV2Transaction: any = async (
                     isEth,
                     systemBetDenominator,
                 ],
-                { value: isEth ? buyInAmount : BigInt(0), gas: finalEstimation }
+                isInFarcaster
+                    ? { value: isEth ? buyInAmount : BigInt(0) }
+                    : { value: isEth ? buyInAmount : BigInt(0), gas: finalEstimation }
             );
         } else {
             return await executeBiconomyTransaction({
@@ -190,13 +205,15 @@ export const getSportsAMMV2Transaction: any = async (
         });
 
         if (!isAA) {
-            const estimation = await estimateGas(client, {
-                to: sportsAMMV2Contract.address as Address,
-                data: encodedData,
-                value: isEth ? buyInAmount : BigInt(0),
-            });
+            if (!isInFarcaster) {
+                const estimation = await estimateGas(client, {
+                    to: sportsAMMV2Contract.address as Address,
+                    data: encodedData,
+                    value: isEth ? buyInAmount : BigInt(0),
+                });
 
-            finalEstimation = BigInt(Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER));
+                finalEstimation = BigInt(Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER));
+            }
 
             return sportsAMMV2Contract.write.trade(
                 [
@@ -208,7 +225,9 @@ export const getSportsAMMV2Transaction: any = async (
                     isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
                     isEth,
                 ],
-                { value: isEth ? buyInAmount : BigInt(0), gas: finalEstimation }
+                isInFarcaster
+                    ? { value: isEth ? buyInAmount : BigInt(0) }
+                    : { value: isEth ? buyInAmount : BigInt(0), gas: finalEstimation }
             );
         } else {
             return await executeBiconomyTransaction({

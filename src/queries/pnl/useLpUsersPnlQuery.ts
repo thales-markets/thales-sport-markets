@@ -161,7 +161,7 @@ const useLpUsersPnlQuery = (
                     if (ticket.isUserTheWinner && !ticket.isCancelled) {
                         usersPnl[ticket.account].pnl += ticket.payout - ticket.buyInAmount;
                     }
-                    if (ticket.isLost && !ticket.isCancelled && !ticket.isFreeBet) {
+                    if (ticket.isLost && !ticket.isCancelled) {
                         usersPnl[ticket.account].pnl -= ticket.buyInAmount;
                     }
                 });

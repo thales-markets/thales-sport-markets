@@ -1,5 +1,5 @@
 import { SportFilter } from 'enums/markets';
-import { getSportLeagueIds, LeagueMap, Sport } from 'overtime-utils';
+import { getSportLeagueIds, League, LeagueMap, Sport } from 'overtime-utils';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getFavouriteLeagues } from 'redux/modules/ui';
@@ -20,6 +20,7 @@ type TagsDropdownProps = {
     liveMarketsCountPerTag: any;
     liveMarketsCountPerSport: any;
     playerPropsMarketsCountPerTag: any;
+    quickSgpMarketsCountPerTag: Partial<Record<League, number>>;
     showActive: boolean;
     showLive: boolean;
     sport: SportFilter;
@@ -36,6 +37,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
     liveMarketsCountPerTag,
     liveMarketsCountPerSport,
     playerPropsMarketsCountPerTag,
+    quickSgpMarketsCountPerTag,
     showActive,
     showLive,
     sport,
@@ -48,6 +50,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
     const tagsPerSport = getSportLeagueIds((sport as unknown) as Sport);
 
     const isPlayerPropsTag = sport == SportFilter.PlayerProps;
+    const isQuickSgpTag = sport == SportFilter.QuickSgp;
     const isFavouritesTag = sport == SportFilter.Favourites;
     const isLiveTag = sport == SportFilter.Live;
 
@@ -61,6 +64,8 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                 return !!liveMarketsCountPerTag[tag.id] || tag.label === SportFilter.Favourites;
                             } else if (isPlayerPropsTag) {
                                 return !!playerPropsMarketsCountPerTag[tag.id];
+                            } else if (isQuickSgpTag) {
+                                return !!quickSgpMarketsCountPerTag[tag.id];
                             } else {
                                 if (!isFavouritesTag && !tagsPerSport.includes(tag.id)) {
                                     return false;
@@ -120,6 +125,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                     liveMarketsCountPerSport={liveMarketsCountPerSport}
                                     playerPropsMarketsCountPerTag={playerPropsMarketsCountPerTag}
                                     showLive={sport == SportFilter.Live}
+                                    quickSgpMarketsCountPerTag={quickSgpMarketsCountPerTag}
                                     sport={sport}
                                     marketsCountPerTournament={marketsCountPerTournament}
                                     playerPropsCountPerTournament={playerPropsCountPerTournament}
