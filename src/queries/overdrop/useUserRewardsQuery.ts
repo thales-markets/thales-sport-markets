@@ -28,7 +28,6 @@ const useUserRewardsQuery = (
         queryKey: QUERY_KEYS.Overdrop.UserRewards(networkConfig.networkId, walletAddress),
         queryFn: async () => {
             try {
-                console.log(`Fetching user rewards for ${walletAddress} on network ${networkConfig.networkId}`);
                 const overdropRewardsContract = getContractInstance(
                     ContractType.OVERDROP_REWARDS,
                     networkConfig
