@@ -4,7 +4,6 @@ import { FlexDivColumnCentered, FlexDivSpaceBetween } from 'styles/common';
 
 export const Container = styled(FlexDivColumnCentered)`
     padding: 10px 20px;
-    height: 160px;
     background: ${(props) => props.theme.background.quinary};
     border-radius: 8px;
 `;
@@ -14,10 +13,10 @@ export const WidgetWrapper = styled.div<{ isDoubleHeight?: boolean }>`
     width: 100%;
     height: 100%;
     grid-template-columns: repeat(2, 50%);
-    grid-template-rows: ${(props) => (props.isDoubleHeight ? '50% 50%' : '40% 60%;')};
+    grid-template-rows: 40% 60%;
     grid-template-areas: 'top top' 'bottom-left bottom-right';
     @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
-        grid-row-gap: 35px;
+        grid-template-rows: 20% 80%;
     }
 `;
 
@@ -30,6 +29,9 @@ export const WidgetHeader = styled.div<{ isTwoSided?: boolean; notFlex?: boolean
     display: ${(props) => (props.notFlex ? '' : 'flex')};
     justify-content: ${(props) => (props.isTwoSided ? 'space-between' : '')};
     align-items: center;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        padding: 10px 0 10px 0;
+    }
 `;
 
 export const TimeLeftLabel = styled.label`
@@ -63,7 +65,7 @@ export const InfoSection = styled.div<{
     grid-area: ${(props) => (props.side === 'left' ? 'bottom-left' : 'bottom-right')};
     height: 100%;
     width: 100%;
-    padding: ${(props) => (props.side === 'left' ? '30px 20px 5px 0px' : '30px 0px 5px 20px')};
+    padding: ${(props) => (props.side === 'left' ? '0px 20px 5px 0px' : '0px 0px 5px 20px')};
     padding-top: ${(props) => props.isMobile && '90px !important'};
     display: flex;
     flex-direction: ${(props) => (props.direction ? props.direction : 'column')};

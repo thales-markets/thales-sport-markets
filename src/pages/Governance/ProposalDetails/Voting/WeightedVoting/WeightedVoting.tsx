@@ -8,9 +8,7 @@ import { VoteConfirmation, VoteContainer } from 'pages/Governance/styled-compone
 import useProposalQuery from 'queries/governance/useProposalQuery';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import {
     FlexDiv,
@@ -21,7 +19,6 @@ import {
 } from 'styles/common';
 import { Proposal } from 'types/governance';
 import { refetchProposal } from 'utils/queryConnector';
-import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import voting from 'utils/voting';
 import { percentageOfTotal } from 'utils/voting/weighted';
 import { useAccount } from 'wagmi';
@@ -33,15 +30,12 @@ type WeightedVotingProps = {
 
 const WeightedVoting: React.FC<WeightedVotingProps> = ({ proposal, hasVotingRights }) => {
     const { t } = useTranslation();
-    const isBiconomy = useSelector(getIsBiconomy);
 
     const { address } = useAccount();
-    const { smartAddress } = useBiconomy();
-    const walletAddress = (isBiconomy ? smartAddress : address) || '';
+    const walletAddress = address || '';
 
     const [selectedChoices, setSelectedChoices] = useState<number[]>(new Array(proposal.choices.length + 1).fill(0));
     const [isVoting, setIsVoting] = useState<boolean>(false);
-    // const [modalInfo, setModalInfo] = useState({ isOpen: false, author: '', content: '' });
 
     const proposalResultsQuery = useProposalQuery(proposal.space.id, proposal.id, walletAddress);
     const proposalResults =
@@ -92,20 +86,6 @@ const WeightedVoting: React.FC<WeightedVotingProps> = ({ proposal, hasVotingRigh
 
             const hub = 'https://hub.snapshot.org';
             const client = new snapshot.Client712(hub);
-
-            // if (smartAccountConnector && smartAccountConnector.biconomyAccount) {
-            //     const test = await smartAccountConnector.biconomyAccount.signMessage(
-            //         JSON.stringify({
-            //             space: proposal.space.id,
-            //             proposal: proposal.id,
-            //             type: proposal.type as ProposalType,
-            //             choice: formattedChoices,
-            //             reason: '',
-            //             app: 'thales',
-            //         })
-            //     );
-            //     console.log('Biconomy Account Sign Message:', test);
-            // }
 
             // using Web3Provider instead of wagmi provider due to an error _signTypedData is not a function
             await client.vote(new Web3Provider(window.ethereum as any, 'any'), walletAddress, {

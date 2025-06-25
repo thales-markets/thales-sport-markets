@@ -12,17 +12,26 @@ const Banner: React.FC = () => {
     return !IS_VISIBLE ? (
         <></>
     ) : (
-        <Container onClick={() => setShowGovernanceModal(true)}>
-            <Label>
-                <Trans
-                    i18nKey={'banner.elections-text'}
-                    components={{
-                        highlight: <HightlightLabel />,
+        <>
+            <Container onClick={() => setShowGovernanceModal(true)}>
+                <Label>
+                    <Trans
+                        i18nKey={'banner.elections-text'}
+                        components={{
+                            highlight: <HightlightLabel />,
+                        }}
+                    />{' '}
+                </Label>
+            </Container>
+            {showGovernanceModal && (
+                <Governance
+                    onClose={() => {
+                        setShowGovernanceModal(false);
+                        console.log('testtt');
                     }}
-                />{' '}
-            </Label>
-            {showGovernanceModal && <Governance onClose={() => setShowGovernanceModal(false)} />}
-        </Container>
+                />
+            )}
+        </>
     );
 };
 

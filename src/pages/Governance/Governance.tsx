@@ -13,8 +13,6 @@ export type GovernanceProps = {
 const Governance: React.FC<GovernanceProps> = ({ onClose }) => {
     const [selectedProposal, setSelectedProposal] = useState<Proposal | undefined>(undefined);
 
-    // const isMobile = false;
-
     const fetchPreloadedProposal = useCallback(() => {
         const fetch = async () => {
             const { proposal }: { proposal: Proposal } = await request(
@@ -66,10 +64,9 @@ const Governance: React.FC<GovernanceProps> = ({ onClose }) => {
                 },
             }}
             containerStyle={{
-                // background: theme.background.secondary,
                 border: 'none',
             }}
-            title=""
+            title="Elections for Overtime Council"
             onClose={onClose}
         >
             <Container>
