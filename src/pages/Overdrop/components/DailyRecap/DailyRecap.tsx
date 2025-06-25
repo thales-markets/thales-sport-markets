@@ -97,6 +97,7 @@ const GradientBorder = styled.div`
     border-radius: 6px;
     background: ${(props) => props.theme.overdrop.borderColor.secondary};
     padding: 1px;
+    height: fit-content;
 `;
 
 const Wrapper = styled(FlexDivColumn)`

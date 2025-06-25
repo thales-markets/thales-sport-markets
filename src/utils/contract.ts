@@ -22,6 +22,7 @@ import sportsAMMV2ResultManager from 'utils/contracts/sportsAMMV2ResultManagerCo
 import sportsAMMV2RiskManager from 'utils/contracts/sportsAMMV2RiskManagerContract';
 import stakingThalesBettingProxy from 'utils/contracts/stakingThalesBettingProxy';
 import liquidityPoolContractV2 from './contracts/liquidityPoolContractV2';
+import overdropRewardsContract from './contracts/overdropRewardsContract';
 import resolveBlockerContract from './contracts/resolveBlockerContract';
 import thalesContract from './contracts/thalesContract';
 import thalesToOverMigrationContract from './contracts/thalesToOverMigrationContract';
@@ -125,6 +126,8 @@ export const getContractInstance = (
             return getContractWithModifiedResponse(thalesToOverMigrationContract, networkConfig);
         case ContractType.THALES:
             return getContractWithModifiedResponse(thalesContract, networkConfig);
+        case ContractType.OVERDROP_REWARDS:
+            return getContractWithModifiedResponse(overdropRewardsContract, networkConfig);
         default:
             return undefined;
     }
