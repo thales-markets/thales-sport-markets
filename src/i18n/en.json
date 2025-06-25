@@ -1379,7 +1379,8 @@
         "no-promotions": "Oops! It looks like there are no promotions available at the moment for given filter."
     },
     "overdrop": {
-        "new-season": "Season 2 starts soon, stay tuned!",
+        "season-2": "Season 2",
+        "new-season": " starts soon • Stay tuned for new rewards!",
         "navigation-menu": {
             "home": "Overdrop home",
             "xp-calculation": "XP Details",
