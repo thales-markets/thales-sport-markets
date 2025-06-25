@@ -193,6 +193,7 @@ const QUERY_KEYS = {
         UserXPHistory: (walletAddress: string) => ['userXPHistory', walletAddress],
         GameMultipliers: () => ['gameMultipliers'],
         Price: () => ['price'],
+        UserRewards: (networkId: Network, walletAddress: string) => ['userRewards', networkId, walletAddress],
     },
     FreeBet: (freeBetId: string, networkId: Network) => ['freeBet', freeBetId, networkId],
     IsWhitelistedForFreeBets: (walletAddress: string, networkId: Network) => [

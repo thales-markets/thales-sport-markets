@@ -1,5 +1,6 @@
 import { ONE_HUNDRED_K, ONE_MILLION } from 'constants/defaults';
-import { OVERDROP_LEVELS } from 'constants/overdrop';
+import { OVERDROP_LEVELS, OVERDROP_REWARDS_NETWORKS } from 'constants/overdrop';
+import { Network } from 'enums/network';
 import { MultiplierType } from 'enums/overdrop';
 import { OverdropIcon } from 'pages/Overdrop/components/styled-components';
 import { floorNumberToDecimals, formatCurrencyWithKey } from 'thales-utils';
@@ -113,3 +114,5 @@ export const getNextOverRewardLevel = (points?: number) => {
 
     return levelItemsWithVoucher[levelItemIndex] ? levelItemsWithVoucher[levelItemIndex] : undefined;
 };
+
+export const areOverdropRewardsAvailableForNetwork = (network: Network) => OVERDROP_REWARDS_NETWORKS.includes(network);

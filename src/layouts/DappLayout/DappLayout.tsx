@@ -7,7 +7,6 @@ import { Network } from 'enums/network';
 import { Theme } from 'enums/ui';
 import useLocalStorage from 'hooks/useLocalStorage';
 import useWidgetBotScript from 'hooks/useWidgetBotScript';
-import ModalWrapper from 'pages/Overdrop/components/ModalWrapper';
 import useGetFreeBetQuery from 'queries/freeBets/useGetFreeBetQuery';
 import queryString from 'query-string';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -144,7 +143,7 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
 
     return (
         <Background>
-            <ModalWrapper />
+            {/* <ModalWrapper /> */}
             <Banner />
             <Wrapper>
                 <MetaData />

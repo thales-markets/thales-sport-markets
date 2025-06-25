@@ -1379,6 +1379,8 @@
         "no-promotions": "Oops! It looks like there are no promotions available at the moment for given filter."
     },
     "overdrop": {
+        "season-2": "Season 2",
+        "new-season": " starts soon • Stay tuned for new rewards!",
         "navigation-menu": {
             "home": "Overdrop home",
             "xp-calculation": "XP Details",
@@ -1401,7 +1403,15 @@
             "current-rewards": "Current estimated rewards",
             "next-over-rewards-at": "Next OVER free bet rewards at",
             "rank": "Rank",
-            "disclaimer": "*Wallets suspected of gaming the system can be disqualified."
+            "disclaimer": "*Wallets suspected of gaming the system can be disqualified.",
+            "claim-rewards": "Claim {{collateral}}",
+            "claim-disclaimer": "Switch to the Optimism/Arbitrum network to claim OP/ARB rewards.",
+            "claim-confirmation-message": "{{collateral}} rewards successfully claimed",
+            "claimed-message": "You already claimed {{collateral}} rewards.",
+            "your-rewards": "Your rewards",
+            "switch-to-eoa": "Switch to EOA to claim",
+            "claim-rewards-tooltip": "You can claim your rewards only with an EOA wallet. Please switch to EOA to claim your rewards.",
+            "total-value": "Total value"
         },
         "leveling-tree": {
             "heading": "The overdrop farming league",

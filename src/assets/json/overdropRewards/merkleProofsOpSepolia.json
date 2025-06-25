@@ -1,0 +1,74 @@
+[
+    {
+        "address": "0xf1E099b51B37669d3bB9AB60B8F9C9D0156E2aF0",
+        "amount": "100000000",
+        "proof": [
+            "0xd4cca5e1ce1a71d1d1100ec0a01cb59fa21abf7d382e9c25f29b4ebc522cfbe2",
+            "0xaa5c196388fd08a2fe59c16c04ca0c8c5acf55ab89c21ad6a093638a4d0fd1a6",
+            "0xae5a6ba9bd893b2d4abc645fb157a1680850e9c9cb54054f10f8d0c2b5ea3203"
+        ]
+    },
+    {
+        "address": "0xE36Ea790bc9d7AB70C55260C66D52b1eca985f84",
+        "amount": "500000000",
+        "proof": [
+            "0xdb54e5278113acf42014c69c5da7a6d54f6d7e1787a0d1492219e3eef8eea85c",
+            "0xaa5c196388fd08a2fe59c16c04ca0c8c5acf55ab89c21ad6a093638a4d0fd1a6",
+            "0xae5a6ba9bd893b2d4abc645fb157a1680850e9c9cb54054f10f8d0c2b5ea3203"
+        ]
+    },
+    {
+        "address": "0x4447e6dDe7Fee030687A47F61AE208C359C57b7d",
+        "amount": "750000000",
+        "proof": [
+            "0x76b12e8f97451eb893e47f6d46d3543b6f181aadb2b0487183fc28de2e539ea1",
+            "0xdeba68ad281b281d21f55d707cf157c12b4da80dae362eb2f9d7d9715a5fdcc5",
+            "0xae5a6ba9bd893b2d4abc645fb157a1680850e9c9cb54054f10f8d0c2b5ea3203"
+        ]
+    },
+    {
+        "address": "0xAa32a69dCC7f0FB97312Ab9fC3a96326dDA124C4",
+        "amount": "300000000",
+        "proof": [
+            "0x44181c4d1082abea197e3f5bb1657c6302b1bdaffdc7c44d3268d648f9488d71",
+            "0xdeba68ad281b281d21f55d707cf157c12b4da80dae362eb2f9d7d9715a5fdcc5",
+            "0xae5a6ba9bd893b2d4abc645fb157a1680850e9c9cb54054f10f8d0c2b5ea3203"
+        ]
+    },
+    {
+        "address": "0xfB6916095ca1df60bB79Ce92cE3Ea74c37c5d359",
+        "amount": "125000000",
+        "proof": [
+            "0x0714926dc0f9888eba63a187bb12e4b01f000f6f9eaae9a4844ced29beb51792",
+            "0x373a60aefa4339962651146a6962a2f70d08fed891fd669524df705555e49d9c",
+            "0xa0cc84364cf611a9858597d67ac236b56596a0e8d3bc67f77fc5fd07c2c3cbc8"
+        ]
+    },
+    {
+        "address": "0xE21B80181304e3641424cdFb8376E73574ab4794",
+        "amount": "800000000",
+        "proof": [
+            "0x220dc83764c5782a09bafe2772d24799011df470aa1d02802e2389bd9632ac98",
+            "0x373a60aefa4339962651146a6962a2f70d08fed891fd669524df705555e49d9c",
+            "0xa0cc84364cf611a9858597d67ac236b56596a0e8d3bc67f77fc5fd07c2c3cbc8"
+        ]
+    },
+    {
+        "address": "0xd866b2332d4383C1Bf719732177e2D9109c99DBc",
+        "amount": "250000000",
+        "proof": [
+            "0xa3070b6e0cdcf5f6aeb7fc525c2695ab272180779cdd90e877f5d71cb75263d7",
+            "0x8173026aa02712fc930f31e37ea475317d56e1fdef321a46a4b6259705d0c0b4",
+            "0xa0cc84364cf611a9858597d67ac236b56596a0e8d3bc67f77fc5fd07c2c3cbc8"
+        ]
+    },
+    {
+        "address": "0x9f8e4ee788D9b00A3409584E18034aA7B736C396",
+        "amount": "100000000",
+        "proof": [
+            "0xfbc6634d7de375b1871db143db19dc46da80ae4dff3c9e28d61e1937380444cc",
+            "0x8173026aa02712fc930f31e37ea475317d56e1fdef321a46a4b6259705d0c0b4",
+            "0xa0cc84364cf611a9858597d67ac236b56596a0e8d3bc67f77fc5fd07c2c3cbc8"
+        ]
+    }
+]
