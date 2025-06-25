@@ -185,7 +185,7 @@ const BadgeOverview: React.FC = () => {
                 <ItemContainer>
                     <RewardsLabel>{t('overdrop.overdrop-home.your-rewards')}</RewardsLabel>
                     <TotalRewardsWrapper>
-                        <TotalLabel>Total value</TotalLabel>
+                        <TotalLabel>{t('overdrop.overdrop-home.total-value')}</TotalLabel>
                         <RewardValue>
                             {exchangeRates && userData
                                 ? `${formatCurrencyWithSign(

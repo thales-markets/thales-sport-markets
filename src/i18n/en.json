@@ -1410,7 +1410,8 @@
             "claimed-message": "You already claimed {{collateral}} rewards.",
             "your-rewards": "Your rewards",
             "switch-to-eoa": "Switch to EOA to claim",
-            "claim-rewards-tooltip": "You can claim your rewards only with an EOA wallet. Please switch to EOA to claim your rewards."
+            "claim-rewards-tooltip": "You can claim your rewards only with an EOA wallet. Please switch to EOA to claim your rewards.",
+            "total-value": "Total value"
         },
         "leveling-tree": {
             "heading": "The overdrop farming league",
