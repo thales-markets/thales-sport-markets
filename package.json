@@ -39,7 +39,7 @@
         "react-lazyload": "^3.2.1",
         "react-loader-spinner": "^5.1.4",
         "react-modal": "^3.14.4",
-        "react-qr-code": "^2.0.11",
+        "react-qr-code": "^2.0.16",
         "react-redux": "^7.2.2",
         "react-responsive-carousel": "^3.2.23",
         "react-router-dom": "^5.2.0",
