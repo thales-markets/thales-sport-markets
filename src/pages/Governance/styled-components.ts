@@ -8,12 +8,11 @@ export const Container = styled(FlexDivRow)`
     @media (max-width: 1200px) {
         flex-direction: column;
     }
-    margin-bottom: 50px;
 `;
 
-export const MainContentContainer = styled.div<{ isOverviewPage: boolean; isThalesStakersPage: boolean }>`
+export const MainContentContainer = styled.div`
     background: transparent;
-    width: ${(props) => (props.isThalesStakersPage ? '100%' : '66%')};
+    width: 100%;
     border-radius: 8px;
     height: 100%;
     @media (max-width: 1200px) {
@@ -25,12 +24,11 @@ export const MainContentContainer = styled.div<{ isOverviewPage: boolean; isThal
     }
 `;
 
-export const MainContentWrapper = styled.div<{ isOverviewPage: boolean }>`
+export const MainContentWrapper = styled.div`
     border-radius: 8px;
-    padding: ${(props) => (props.isOverviewPage ? '0px' : '12px 0px 30px 0px')};
     background: transparent;
     @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
-        background: ${(props) => (props.isOverviewPage ? 'transparent' : props.theme.background.primary)};
+        background: ${(props) => props.theme.background.primary};
         padding: 0px 0px 10px 0px;
         flex-direction: column-reverse;
     }

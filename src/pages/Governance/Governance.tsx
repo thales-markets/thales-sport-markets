@@ -1,24 +1,22 @@
-import { SNAPSHOT_GRAPHQL_URL } from 'constants/governance';
+import Modal from 'components/Modal';
+import { SNAPSHOT_GRAPHQL_URL, VOTING_COUNCIL_PROPOSAL_ID } from 'constants/governance';
 import request, { gql } from 'graphql-request';
 import { useCallback, useEffect, useState } from 'react';
-import { RouteComponentProps } from 'react-router-dom';
 import { Proposal } from 'types/governance';
 import ProposalDetails from './ProposalDetails';
 import { Container, MainContentContainer, MainContentWrapper } from './styled-components';
 
-export type GovernanceProps = RouteComponentProps<{
-    space: string;
-    id: string;
-}>;
+export type GovernanceProps = {
+    onClose: () => void;
+};
 
-const Governance: React.FC<GovernanceProps> = (props) => {
+const Governance: React.FC<GovernanceProps> = ({ onClose }) => {
     const [selectedProposal, setSelectedProposal] = useState<Proposal | undefined>(undefined);
 
     // const isMobile = false;
 
     const fetchPreloadedProposal = useCallback(() => {
         const fetch = async () => {
-            const { params } = props.match;
             const { proposal }: { proposal: Proposal } = await request(
                 SNAPSHOT_GRAPHQL_URL,
                 gql`
@@ -49,37 +47,39 @@ const Governance: React.FC<GovernanceProps> = (props) => {
                         }
                     }
                 `,
-                { id: params.id }
+                { id: VOTING_COUNCIL_PROPOSAL_ID }
             );
             setSelectedProposal(proposal);
         };
         fetch();
-    }, [props.match]);
+    }, []);
 
     useEffect(() => {
-        const { params } = props.match;
-
-        if (params && params.space) {
-            if (params.id) {
-                fetchPreloadedProposal();
-            } else {
-                setSelectedProposal(undefined);
-            }
-        } else {
-            setSelectedProposal(undefined);
-        }
-    }, [props.match, fetchPreloadedProposal]);
-
-    const isOverviewPage = !selectedProposal;
+        fetchPreloadedProposal();
+    }, [fetchPreloadedProposal]);
 
     return (
-        <Container id="proposal-details">
-            <MainContentContainer isOverviewPage={isOverviewPage} isThalesStakersPage={false}>
-                <MainContentWrapper isOverviewPage={isOverviewPage}>
-                    {selectedProposal && <ProposalDetails proposal={selectedProposal} />}
-                </MainContentWrapper>
-            </MainContentContainer>
-        </Container>
+        <Modal
+            customStyle={{
+                overlay: {
+                    zIndex: 1000,
+                },
+            }}
+            containerStyle={{
+                // background: theme.background.secondary,
+                border: 'none',
+            }}
+            title=""
+            onClose={onClose}
+        >
+            <Container>
+                <MainContentContainer>
+                    <MainContentWrapper>
+                        {selectedProposal && <ProposalDetails proposal={selectedProposal} />}
+                    </MainContentWrapper>
+                </MainContentContainer>
+            </Container>
+        </Modal>
     );
 };
 

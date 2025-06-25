@@ -1,7 +1,7 @@
 export const SNAPSHOT_GRAPHQL_URL = `https://hub.snapshot.org/graphql?apiKey=${process.env.REACT_APP_SNAPSHOT_API_KEY}`;
 export const SNAPSHOT_SCORE_URL = `https://score.snapshot.org/?apiKey=${process.env.REACT_APP_SNAPSHOT_API_KEY}`;
 
-export const VOTING_COUNCIL_PROPOSAL_ID = '0x53ff4a6fb029f820792a1d1fe4c8749e861c616e1c566d83062ad47968a0065a';
+export const VOTING_COUNCIL_PROPOSAL_ID = '0x34ab2c92431fe877985edd3bd525d23d6927029e30f3a7b759464b12e2980ec7';
 export const COUNCIL_PROPOSAL_ID = '0x34ab2c92431fe877985edd3bd525d23d6927029e30f3a7b759464b12e2980ec7';
 export const VOTING_ORACLE_COUNCIL_PROPOSAL_ID = '0xb94b357561a620ab38777f75aba7f6d14d21e019911c2c1ff5cd88e5f1b18eeb';
 export const FIRST_COUNCIL_ELECTIONS_ID = 'QmcKWQZYyj6Z7iaWpUR3unjNU5otchQsARSVjE4utYSyv3';
