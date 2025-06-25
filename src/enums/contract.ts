@@ -18,4 +18,5 @@ export enum ContractType {
     RESOLVE_BLOCKER = 'resolveBlockerContract',
     THALES_TO_OVER_MIGRATION = 'thalvesToOverMigrationContract',
     THALES = 'thalvesContract',
+    OVERDROP_REWARDS = 'overdropRewardsContract',
 }
