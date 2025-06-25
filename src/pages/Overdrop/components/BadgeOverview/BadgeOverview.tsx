@@ -154,6 +154,7 @@ const BadgeOverview: React.FC = () => {
                             })
                         )
                     );
+                    setIsClaiming(false);
                     userRewardsQuery.refetch();
                 }
             } catch (e) {
