@@ -1498,5 +1498,33 @@
             "blocked-games": "Blocked games",
             "unblocked-games": "Unblocked games"
         }
+    },
+    "governance": {
+        "proposal": {
+            "modal-title": "Elections for Overtime Council",
+            "status-label": "Status",
+            "author-label": "Author",
+            "proposal-label": "Proposal",
+            "voting-system-label": "Voting system",
+            "start-date-label": "Start date",
+            "end-date-label": "End date",
+            "snapshot-label": "Snapshot",
+            "details-label": "Details",
+            "description": "For more details about the elections, candidates, and results, visit the <a>Overtime DAO website</a>.",
+            "starts-in-label": "Starts in",
+            "ends-in-label": "Time left",
+            "vote-label": "Vote",
+            "submit-vote-label": "Submit your vote",
+            "voting-power-label": "Your voting power",
+            "vote-progress-label": "Voting in progress...",
+            "vote-confirmation-message": "Successfully voted",
+            "your-votes": "Your votes:",
+            "vote-confirmation": "Are you sure you want to vote",
+            "details": "Proposal details",
+            "type": {
+                "single-choice": "Single choice voting",
+                "weighted": "Weighted voting"
+            }
+        }
     }
 }
