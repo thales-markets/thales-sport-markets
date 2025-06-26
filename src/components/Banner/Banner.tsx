@@ -20,7 +20,7 @@ const Banner: React.FC = () => {
                         components={{
                             highlight: <HightlightLabel />,
                         }}
-                    />{' '}
+                    />
                 </Label>
             </Container>
             {showGovernanceModal && <Governance onClose={() => setShowGovernanceModal(false)} />}
