@@ -26,11 +26,6 @@ const ROUTES = {
         Home: '/resources',
         SeoArticle: '/resources/:seoId',
     },
-    DAO: {
-        Home: '/dao',
-        Space: '/dao/:space',
-        Proposal: '/dao/:space/:id',
-    },
 };
 
 export const PAGE_NAME_TO_META_DATA_KEYS: {

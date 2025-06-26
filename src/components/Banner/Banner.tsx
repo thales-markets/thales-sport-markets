@@ -4,7 +4,7 @@ import { Trans } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 
-const IS_VISIBLE = true; // Set to true to show the banner
+const IS_VISIBLE = false; // Set to true to show the banner
 
 const Banner: React.FC = () => {
     const [showGovernanceModal, setShowGovernanceModal] = useState<boolean>(false);

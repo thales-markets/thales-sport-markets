@@ -210,7 +210,6 @@ const QUERY_KEYS = {
         role,
     ],
     Governance: {
-        Proposals: (spaceKey: SpaceKey, limit: number) => ['governance', 'proposals', spaceKey, limit],
         Proposal: (spaceKey: SpaceKey, hash: string, walletAddress: string) => [
             'governance',
             'proposal',
@@ -218,7 +217,6 @@ const QUERY_KEYS = {
             hash,
             walletAddress,
         ],
-        ThalesStakers: (filter: string) => ['governance', 'thalesStakers', filter],
         VotingPower: (proposalId: string, snapshot: string, walletAddress: string) => [
             'governance',
             'votingPower',
@@ -226,7 +224,6 @@ const QUERY_KEYS = {
             snapshot,
             walletAddress,
         ],
-        CouncilNftOwners: () => ['governance', 'council'],
     },
 };
 
