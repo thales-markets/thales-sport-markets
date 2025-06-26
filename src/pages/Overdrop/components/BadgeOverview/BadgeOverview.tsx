@@ -1,3 +1,5 @@
+import ArbitrumLogo from 'assets/images/arb-logo.svg?react';
+import OptimsimLogo from 'assets/images/op-logo.svg?react';
 import Button from 'components/Button';
 import Progress from 'components/Progress';
 import Tooltip from 'components/Tooltip';
@@ -17,7 +19,7 @@ import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
 import { getIsBiconomy, setIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
-import { FlexDiv, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
+import { FlexDiv, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { formatCurrency, formatCurrencyWithKey, formatCurrencyWithSign, localStore } from 'thales-utils';
 import { OverdropUserData, UserRewards } from 'types/overdrop';
 import { ThemeInterface } from 'types/ui';
@@ -152,6 +154,7 @@ const BadgeOverview: React.FC = () => {
                             })
                         )
                     );
+                    setIsClaiming(false);
                     userRewardsQuery.refetch();
                 }
             } catch (e) {
@@ -179,48 +182,60 @@ const BadgeOverview: React.FC = () => {
                 })}
                 <Arrow className={'icon-homepage icon--arrow-right'} onClick={() => handleOnNext()} />
             </BadgeWrapper>
-            <DetailsWrapper>
+            <RewardsWrapper>
                 <ItemContainer>
-                    <Label>{t('overdrop.overdrop-home.your-rewards')}</Label>
-                    <ValueWrapper>
-                        <Value>
-                            {formatCurrencyWithKey(
-                                CRYPTO_CURRENCY_MAP.OP,
-                                userData?.rewards?.op ? userData.rewards.op : 0
-                            )}
-                        </Value>
-                        <Icon className="icon icon--op" />
-                        <ValueSecondary>
+                    <RewardsLabel>{t('overdrop.overdrop-home.your-rewards')}</RewardsLabel>
+                    <TotalRewardsWrapper>
+                        <TotalLabel>{t('overdrop.overdrop-home.total-value')}</TotalLabel>
+                        <RewardValue>
                             {exchangeRates && userData
-                                ? `= ${formatCurrencyWithSign('$', exchangeRates.op * userData.rewards.op, 2)}`
+                                ? `${formatCurrencyWithSign(
+                                      '$',
+                                      exchangeRates.op * userData.rewards.op + exchangeRates.arb * userData.rewards.arb,
+                                      2
+                                  )}`
                                 : 'N/A'}
-                        </ValueSecondary>
-                    </ValueWrapper>
-                    <ValueWrapper>
-                        <Value>
-                            {formatCurrencyWithKey(
-                                CRYPTO_CURRENCY_MAP.ARB,
-                                userData?.rewards?.arb ? userData.rewards.arb : 0
-                            )}
-                        </Value>
-                        <Icon className="icon icon--arb" />
-                        <ValueSecondary>
-                            {exchangeRates && userData
-                                ? `= ${formatCurrencyWithSign('$', exchangeRates.arb * userData.rewards.arb, 2)}`
-                                : 'N/A'}
-                        </ValueSecondary>
-                    </ValueWrapper>
+                        </RewardValue>
+                    </TotalRewardsWrapper>
+                </ItemContainer>
+                <OpArbRewardsWrapper>
+                    <OptimsimLogo />
+                    <RewardValue>
+                        {formatCurrencyWithKey(CRYPTO_CURRENCY_MAP.OP, userData?.rewards?.op ? userData.rewards.op : 0)}
+                    </RewardValue>
+                    <RewardSubValue>
+                        {exchangeRates && userData
+                            ? `≈ ${formatCurrencyWithSign('$', exchangeRates.op * userData.rewards.op, 2)}`
+                            : 'N/A'}
+                    </RewardSubValue>
+                </OpArbRewardsWrapper>
+                <OpArbRewardsWrapper>
+                    <ArbitrumLogo />
+                    <RewardValue>
+                        {formatCurrencyWithKey(
+                            CRYPTO_CURRENCY_MAP.ARB,
+                            userData?.rewards?.arb ? userData.rewards.arb : 0
+                        )}
+                    </RewardValue>
+                    <RewardSubValue>
+                        {exchangeRates && userData
+                            ? `≈ ${formatCurrencyWithSign('$', exchangeRates.arb * userData.rewards.arb, 2)}`
+                            : 'N/A'}
+                    </RewardSubValue>
+                </OpArbRewardsWrapper>
+                <ClaimContainer>
                     {areRewardsAvailable && userRewards && userRewards.hasRewards && (
                         <>
-                            <FlexDivRowCentered>
+                            <ButtonContainer>
                                 <Button
                                     backgroundColor={theme.button.textColor.tertiary}
                                     borderColor={theme.button.textColor.tertiary}
                                     height="24px"
-                                    margin="5px 0px 5px 0px"
-                                    padding="2px 15px"
-                                    fontSize="14px"
-                                    lineHeight="16px"
+                                    margin="0px 0px 5px 0px"
+                                    padding={switchToEoa ? '2px 10px' : '2px 15px'}
+                                    fontSize={switchToEoa ? '10px' : '13px'}
+                                    lineHeight={switchToEoa ? '10px' : '16px'}
+                                    width="100%"
                                     onClick={() => {
                                         if (switchToEoa) {
                                             dispatch(setIsBiconomy(false));
@@ -242,10 +257,9 @@ const BadgeOverview: React.FC = () => {
                                     <Tooltip
                                         overlay={t('overdrop.overdrop-home.claim-rewards-tooltip')}
                                         marginLeft={5}
-                                        top={1}
                                     />
                                 )}
-                            </FlexDivRowCentered>
+                            </ButtonContainer>
                             {userRewards.hasClaimed && (
                                 <ClaimedMessage>
                                     {t('overdrop.overdrop-home.claimed-message', {
@@ -256,7 +270,9 @@ const BadgeOverview: React.FC = () => {
                         </>
                     )}
                     <Disclaimer>{t('overdrop.overdrop-home.claim-disclaimer')}</Disclaimer>
-                </ItemContainer>
+                </ClaimContainer>
+            </RewardsWrapper>
+            <DetailsWrapper>
                 {levelItem.level !== OVERDROP_LEVELS.length - 1 && !HIDE_FREE_BET_LEVEL && (
                     <ItemContainer>
                         <Label>{t('overdrop.overdrop-home.next-over-rewards-at')}</Label>
@@ -309,8 +325,6 @@ const BadgeWrapper = styled(FlexDivRow)`
 
 const DetailsWrapper = styled(FlexDivRow)`
     width: 100%;
-    margin-top: 20px;
-    margin-left: 10px;
     @media (max-width: 767px) {
         flex-direction: column;
         margin-left: 0px;
@@ -318,15 +332,77 @@ const DetailsWrapper = styled(FlexDivRow)`
     }
 `;
 
+const RewardsWrapper = styled(FlexDivRow)`
+    margin-top: 20px;
+    border: 1px solid ${(props) => props.theme.overdrop.textColor.primary};
+    background: ${(props) => props.theme.overdrop.background.active};
+    padding: 20px;
+    border-radius: 8px;
+    width: 100%;
+    gap: 15px;
+    @media (max-width: 767px) {
+        padding: 5px 15px 15px 15px;
+        flex-direction: column;
+        gap: 10px;
+    }
+`;
+
+const TotalRewardsWrapper = styled(FlexDivColumnCentered)`
+    padding: 10px;
+    border: 1px solid ${(props) => props.theme.overdrop.textColor.primary};
+    background: ${(props) => props.theme.overdrop.background.quinary};
+    border-radius: 6px;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+`;
+
+const OpArbRewardsWrapper = styled(FlexDivColumnCentered)`
+    padding: 5px 5px;
+    border: 1px solid ${(props) => props.theme.borderColor.primary};
+    border-radius: 6px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+`;
+
+const RewardSubValue = styled.span`
+    color: ${(props) => props.theme.textColor.quinary};
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 100%;
+`;
+
+const TotalLabel = styled.span`
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0.45px;
+    margin-bottom: 7px;
+`;
+
+const RewardValue = styled.span`
+    color: ${(props) => props.theme.overdrop.textColor.primary};
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 100%;
+`;
+
 const ItemContainer = styled(FlexDivColumn)`
     max-width: 50%;
-    align-items: flex-start;
-    justify-content: flex-start;
+    align-items: center;
+    justify-content: center;
     gap: 4px;
     @media (max-width: 767px) {
         min-width: 100%;
         margin-top: 10px;
     }
+    text-align: center;
+`;
+
+const ClaimContainer = styled(ItemContainer)`
+    justify-content: space-around;
 `;
 
 const ValueWrapper = styled(FlexDivRow)``;
@@ -341,7 +417,14 @@ const Label = styled.span`
     white-space: pre;
 `;
 
-const Value = styled(Label)``;
+const RewardsLabel = styled(Label)`
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 16px;
+    letter-spacing: 0.3px;
+    color: ${(props) => props.theme.textColor.quaternary};
+`;
 
 const ValueSecondary = styled(Label)`
     font-weight: 600;
@@ -354,29 +437,27 @@ const Arrow = styled.i`
     cursor: pointer;
 `;
 
-const Icon = styled.i`
-    font-size: 15px;
-    font-weight: 300;
-    margin: 0 3px;
-    color: ${(props) => props.theme.textColor.primary};
-`;
-
 const ProgressContainer = styled(FlexDiv)`
     min-width: 100%;
 `;
 
 const Disclaimer = styled.p`
-    font-size: 12px;
-    font-style: italic;
-    margin-right: 10px;
+    font-size: 9px;
+    font-weight: 400;
+    line-height: 10px;
 `;
 
-export const ClaimedMessage = styled.span`
-    font-size: 12px;
+const ClaimedMessage = styled.span`
+    font-size: 10px;
     color: ${(props) => props.theme.warning.textColor.primary};
     width: 100%;
     margin-bottom: 5px;
-    text-align: left;
+    text-align: center;
+`;
+
+const ButtonContainer = styled(FlexDivRow)`
+    width: 100%;
+    align-items: center;
 `;
 
 export default BadgeOverview;

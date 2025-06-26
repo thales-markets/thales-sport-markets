@@ -79,7 +79,7 @@ const WeightedVoting: React.FC<WeightedVotingProps> = ({ proposal, hasVotingRigh
     }
 
     const handleVote = async () => {
-        const id = toast.loading(t('common.progress'));
+        const id = toast.loading(t(`governance.proposal.vote-progress-label`));
         setIsVoting(true);
         try {
             const formattedChoices = { ...selectedChoices };
@@ -101,6 +101,7 @@ const WeightedVoting: React.FC<WeightedVotingProps> = ({ proposal, hasVotingRigh
             refetchProposal(proposal.space.id, proposal.id, walletAddress);
             toast.update(id, getSuccessToastOptions(t('governance.proposal.vote-confirmation-message')));
             setIsVoting(false);
+            setVotesChanged(false);
         } catch (e) {
             console.log(e);
             toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));

@@ -274,7 +274,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = memo(
             : selectedMarket?.gameId == market.gameId;
 
         let marketsCount = market.childMarkets.length;
-        if (isColumnView || isGameLive) {
+        if (isColumnView) {
             if (spreadMarket) {
                 marketsCount -= 1;
             }

@@ -300,6 +300,7 @@ export const SlippageDropdownContainer = styled.div`
 `;
 
 export const OverdropRowSummary = styled(RowSummary)<{ margin?: string; isClickable?: boolean }>`
+    display: none;
     width: 100%;
     position: relative;
     margin: ${(props) => props.margin || 'inherit'};

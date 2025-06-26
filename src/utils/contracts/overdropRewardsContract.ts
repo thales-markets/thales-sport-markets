@@ -4,8 +4,8 @@ import { ContractData } from 'types/viem';
 
 const overdropRewardsContract: ContractData = {
     addresses: {
-        [Network.OptimismMainnet]: TBD_ADDRESS,
-        [Network.Arbitrum]: TBD_ADDRESS,
+        [Network.OptimismMainnet]: '0x74f6742e62c65Bf5d3D15477cBA1db78C8769CB5',
+        [Network.Arbitrum]: '0x563c5bc1686E1284d58e3af13d60305eE8B8d3E7',
         [Network.Base]: TBD_ADDRESS,
         [Network.OptimismSepolia]: '0xa4505687368a044931C96dad55BEe2c3e4Ae2516',
     },
