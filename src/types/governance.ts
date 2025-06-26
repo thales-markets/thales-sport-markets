@@ -68,17 +68,3 @@ export type ProposalResults = {
     results: any;
     start: number;
 };
-
-export type Staker = {
-    id: string;
-    timestamp: number;
-    stakedAmount: number;
-    escrowedAmount: number;
-    totalStakedAmount: number;
-    unstakingAmount: number;
-    ensName: string | null;
-};
-
-export type Stakers = Staker[];
-
-export type EnsNames = Record<string, string | null>;

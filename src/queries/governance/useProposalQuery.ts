@@ -1,12 +1,6 @@
 import snapshot from '@snapshot-labs/snapshot.js';
 import { UseQueryOptions, useQuery } from '@tanstack/react-query';
-import {
-    BLOCK_ARBITRUM,
-    BLOCK_OPTIMISM,
-    SNAPSHOT_GRAPHQL_URL,
-    SNAPSHOT_SCORE_URL,
-    VOTING_COUNCIL_PROPOSAL_ID,
-} from 'constants/governance';
+import { SNAPSHOT_GRAPHQL_URL, SNAPSHOT_SCORE_URL } from 'constants/governance';
 import QUERY_KEYS from 'constants/queryKeys';
 import { SpaceKey, StatusEnum } from 'enums/governance';
 import request, { gql } from 'graphql-request';
@@ -110,14 +104,6 @@ const useProposalQuery = (
                     finalScores[key][vote.voter] = vote.vp_by_strategy[key];
                 });
             });
-
-            if (proposal.id === VOTING_COUNCIL_PROPOSAL_ID && proposal.state !== StatusEnum.Closed) {
-                proposal.strategies[0].params = {
-                    ...proposal.strategies[0].params,
-                    blockOptimism: BLOCK_OPTIMISM,
-                    blockArbitrum: BLOCK_ARBITRUM,
-                };
-            }
 
             const scores =
                 proposal.state === StatusEnum.Closed

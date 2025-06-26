@@ -1498,41 +1498,8 @@
         }
     },
     "governance": {
-        "nav": {
-            "oips": "Oips",
-            "elections": "Elections",
-            "thales-stakers": "Thales stakers"
-        },
-        "title": "Governance",
-        "you": "You",
-        "voted": "Voted",
-        "not-voted": "Not voted",
-        "search": "Search OIPs",
-        "tabs": {
-            "thalesgov": {
-                "eth": "OIPs"
-            },
-            "thalescouncil": {
-                "eth": "Elections"
-            },
-            "thales-stakers": "Thales stakers"
-        },
-        "back-to-proposals": "Back to proposals overview",
-        "status": {
-            "all": "all",
-            "pending": "draft",
-            "active": "voting",
-            "closed": "closed"
-        },
-        "sidebar": {
-            "title": {
-                "results": "Results",
-                "history": "Council member votes",
-                "council-members": "Current council members"
-            },
-            "tip-condition": "({{approvalVotes}} of {{totalVotes}} votes needed for approval)"
-        },
         "proposal": {
+            "modal-title": "Elections for Overtime Council",
             "status-label": "Status",
             "author-label": "Author",
             "proposal-label": "Proposal",
@@ -1541,66 +1508,21 @@
             "end-date-label": "End date",
             "snapshot-label": "Snapshot",
             "details-label": "Details",
+            "description": "For more details about the elections, candidates, and results, visit the <a>Overtime DAO website</a>.",
             "starts-in-label": "Starts in",
             "ends-in-label": "Time left",
-            "final-result-label": "Final result",
-            "no-proposals-found": "No proposals found",
-            "view-all-proposals": "View all proposals",
             "vote-label": "Vote",
             "submit-vote-label": "Submit your vote",
-            "vote-note": "{{approvalVotes}} of {{totalVotes}} votes needed for approval",
             "voting-power-label": "Your voting power",
             "vote-progress-label": "Voting in progress...",
             "vote-confirmation-message": "Successfully voted",
+            "your-votes": "Your votes:",
             "vote-confirmation": "Are you sure you want to vote",
-            "see-pitch": "See this pitch",
             "details": "Proposal details",
-            "pitch-by": "Pitch by",
-            "final-result": {
-                "yes": "Passed",
-                "no": "Declined",
-                "for": "Passed",
-                "against": "Declined"
-            },
             "type": {
                 "single-choice": "Single choice voting",
                 "weighted": "Weighted voting"
-            },
-            "voted-in-label": "Voted in",
-            "not-voted-in-label": "Not voted in",
-            "voting-label": "Voting",
-            "votes": "{{votes}} Votes",
-            "for": "FOR",
-            "against": "AGAINST",
-            "yes-votes": "{{votes}} YES votes",
-            "no-votes": "{{votes}} NO votes",
-            "for-votes": "{{votes}} FOR votes",
-            "against-votes": "{{votes}} AGAINST votes",
-            "not-voted": "{{votes}} not voted",
-            "voting-approval-status": {
-                "passed": "Passed",
-                "not-passed": "Not passed",
-                "in-progress": "In progress"
             }
-        },
-        "no-votes": "No votes on this proposal",
-        "view-more": "View more",
-        "stakers": {
-            "staker-col": "Staker",
-            "total-staked-col": "Total staked amount",
-            "tooltip-staked-directly": "staked directly",
-            "tooltip-escrowed-amount": "escrowed amount",
-            "no-stakers-found": "No stakers found",
-            "number-of-stakers": "Total number of stakers",
-            "search-wallet": "Search wallet address",
-            "percentage-of-staked-supply-col": "% of staked supply",
-            "percentage-of-circulating-supply-col": "% of circ. supply"
-        },
-        "stakers-filter": {
-            "all": "all",
-            "optimism": "optimism",
-            "arbitrum": "arbitrum",
-            "base": "base"
         }
     }
 }

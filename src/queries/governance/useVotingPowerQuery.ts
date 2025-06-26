@@ -1,8 +1,7 @@
 import snapshot from '@snapshot-labs/snapshot.js';
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { BLOCK_ARBITRUM, BLOCK_OPTIMISM, SNAPSHOT_SCORE_URL, VOTING_COUNCIL_PROPOSAL_ID } from 'constants/governance';
+import { SNAPSHOT_SCORE_URL } from 'constants/governance';
 import QUERY_KEYS from 'constants/queryKeys';
-import { StatusEnum } from 'enums/governance';
 import { Proposal } from 'types/governance';
 
 const useVotingPowerQuery = (
@@ -13,14 +12,6 @@ const useVotingPowerQuery = (
     return useQuery<number>({
         queryKey: QUERY_KEYS.Governance.VotingPower(proposal.id, proposal.snapshot, walletAddress),
         queryFn: async () => {
-            if (proposal.id === VOTING_COUNCIL_PROPOSAL_ID && proposal.state !== StatusEnum.Closed) {
-                proposal.strategies[0].params = {
-                    ...proposal.strategies[0].params,
-                    blockOptimism: BLOCK_OPTIMISM,
-                    blockArbitrum: BLOCK_ARBITRUM,
-                };
-            }
-
             const scores = await snapshot.utils.getScores(
                 proposal.space.id,
                 proposal.strategies,

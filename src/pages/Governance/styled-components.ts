@@ -1,13 +1,13 @@
 import { ScreenSizeBreakpoint } from 'enums/ui';
-import { PieChart } from 'recharts';
 import styled from 'styled-components';
-import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
+import { FlexDiv, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 
 export const Container = styled(FlexDivRow)`
     width: 100%;
     min-width: 767px;
-    @media (max-width: 1200px) {
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         flex-direction: column;
+        min-width: auto;
     }
 `;
 
@@ -34,16 +34,8 @@ export const MainContentWrapper = styled.div`
         flex-direction: column-reverse;
     }
 `;
-
-export const Votes = styled.div`
-    color: ${(props) => props.theme.textColor.primary};
-    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
-        font-size: 12px;
-    }
-`;
-
-export const LoaderContainer = styled(FlexDivColumn)<{ height?: number }>`
-    min-height: ${(props) => (props.height ? props.height : 400)}px;
+export const LoaderContainer = styled(FlexDivColumn)`
+    min-height: 400px;
     background: transparent;
     justify-content: space-evenly;
     position: relative;
@@ -51,13 +43,6 @@ export const LoaderContainer = styled(FlexDivColumn)<{ height?: number }>`
     margin-top: 10px;
     margin-bottom: 10px;
     color: ${(props) => props.theme.textColor.secondary};
-`;
-
-export const Blockie = styled.img`
-    width: 20px;
-    height: 20px;
-    border-radius: 8px;
-    margin-right: 6px;
 `;
 
 export const StyledLink = styled.a`
@@ -81,39 +66,6 @@ export const VoteConfirmation = styled(FlexDiv)`
     color: ${(props) => props.theme.textColor.primary};
     padding: 0 10px;
     justify-content: center;
-`;
-
-export const ViewMore = styled(FlexDivCentered)<{ padding?: string }>`
-    padding: ${(props) => (props.padding ? props.padding : '10px')};
-    font-weight: normal;
-    font-size: 16px;
-    line-height: 36px;
-    color: ${(props) => props.theme.link.textColor.secondary};
-    &:hover {
-        cursor: pointer;
-        text-decoration: underline;
-    }
-`;
-
-export const VotesCount = styled(FlexDivColumnCentered)`
-    font-weight: 500;
-    font-size: 18px;
-    line-height: 22px;
-    color: ${(props) => props.theme.button.textColor.primary};
-    margin-bottom: 12px;
-    text-align: center;
-    background: ${(props) => props.theme.background.secondary};
-    border-radius: 9999px;
-    height: 30px;
-    min-width: 30px;
-    padding: 8px;
-    margin-left: 8px;
-`;
-
-export const StyledPieChart = styled(PieChart)`
-    display: flex;
-    justify-self: center;
-    align-self: flex-end;
 `;
 
 export const InfoText = styled.label<{ color?: string }>`

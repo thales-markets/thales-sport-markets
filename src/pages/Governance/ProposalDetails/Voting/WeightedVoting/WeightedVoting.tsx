@@ -36,6 +36,7 @@ const WeightedVoting: React.FC<WeightedVotingProps> = ({ proposal, hasVotingRigh
 
     const [selectedChoices, setSelectedChoices] = useState<number[]>(new Array(proposal.choices.length + 1).fill(0));
     const [isVoting, setIsVoting] = useState<boolean>(false);
+    const [votesChanged, setVotesChanged] = useState<boolean>(false);
 
     const proposalResultsQuery = useProposalQuery(proposal.space.id, proposal.id, walletAddress);
     const proposalResults =
@@ -47,16 +48,16 @@ const WeightedVoting: React.FC<WeightedVotingProps> = ({ proposal, hasVotingRigh
     ]);
 
     useEffect(() => {
+        setSelectedChoices(new Array(proposal.choices.length + 1).fill(0));
+    }, [walletAddress, proposal.choices.length]);
+
+    useEffect(() => {
         if (myVote) {
             setSelectedChoices([0, ...Object.values(myVote.choice as Record<number, number>)]);
         } else {
             setSelectedChoices(new Array(proposal.choices.length + 1).fill(0));
         }
     }, [myVote, proposal.choices.length]);
-
-    useEffect(() => {
-        setSelectedChoices(new Array(proposal.choices.length + 1).fill(0));
-    }, [walletAddress, proposal.choices.length]);
 
     function addVote(i: number, selectedChoices: number[]) {
         selectedChoices[i] = selectedChoices[i] ? (selectedChoices[i] += 1) : 1;
@@ -134,6 +135,7 @@ const WeightedVoting: React.FC<WeightedVotingProps> = ({ proposal, hasVotingRigh
                                                 const newSelectedChoices = [...selectedChoices];
                                                 removeVote(i + 1, newSelectedChoices);
                                                 setSelectedChoices(newSelectedChoices);
+                                                setVotesChanged(true);
                                             }
                                         }}
                                     >
@@ -155,6 +157,7 @@ const WeightedVoting: React.FC<WeightedVotingProps> = ({ proposal, hasVotingRigh
                                                 newSelectedChoices[i + 1] = parsedInt;
                                             }
                                             setSelectedChoices(newSelectedChoices);
+                                            setVotesChanged(true);
                                         }}
                                         onFocus={(e) => e.target.select()}
                                     />
@@ -165,6 +168,7 @@ const WeightedVoting: React.FC<WeightedVotingProps> = ({ proposal, hasVotingRigh
                                                 const newSelectedChoices = [...selectedChoices];
                                                 addVote(i + 1, newSelectedChoices);
                                                 setSelectedChoices(newSelectedChoices);
+                                                setVotesChanged(true);
                                             }
                                         }}
                                     >
@@ -178,13 +182,18 @@ const WeightedVoting: React.FC<WeightedVotingProps> = ({ proposal, hasVotingRigh
                 })}
                 {isOptionSelected && hasVotingRights && (
                     <VoteConfirmation>
-                        {t(`governance.proposal.vote-confirmation`) + ' ' + formattedChoiceString + '?'}
+                        {(votesChanged
+                            ? t(`governance.proposal.vote-confirmation`)
+                            : t(`governance.proposal.your-votes`)) +
+                            ' ' +
+                            formattedChoiceString +
+                            (votesChanged ? '?' : '.')}
                     </VoteConfirmation>
                 )}
             </VoteContainer>
             <FlexDivCentered>
                 <Button
-                    disabled={!isOptionSelected || isVoting || !hasVotingRights}
+                    disabled={!isOptionSelected || isVoting || !hasVotingRights || !votesChanged}
                     onClick={handleVote}
                     margin="20px 0"
                 >

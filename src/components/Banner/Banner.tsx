@@ -23,14 +23,7 @@ const Banner: React.FC = () => {
                     />{' '}
                 </Label>
             </Container>
-            {showGovernanceModal && (
-                <Governance
-                    onClose={() => {
-                        setShowGovernanceModal(false);
-                        console.log('testtt');
-                    }}
-                />
-            )}
+            {showGovernanceModal && <Governance onClose={() => setShowGovernanceModal(false)} />}
         </>
     );
 };

@@ -15,7 +15,6 @@ import {
 } from 'thales-utils';
 import { Proposal } from 'types/governance';
 import { getProposalUrl } from 'utils/governance';
-import { Icon } from '../styled-components';
 import {
     Container,
     FlexDivFullWidthSpaceBetween,
@@ -44,7 +43,6 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = ({ proposal }) => {
                 <WidgetWrapper>
                     <WidgetHeader isTwoSided={true}>
                         <FlexDiv>
-                            <Icon className="icon icon--proposal" />
                             <TitleLabel>{t(`governance.proposal.details`)}</TitleLabel>
                         </FlexDiv>
                         {!closed && !isMobile && (
@@ -115,7 +113,6 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = ({ proposal }) => {
                 <WidgetWrapper>
                     <WidgetHeader isTwoSided={true}>
                         <FlexDiv>
-                            <Icon className="icon icon--proposal" />
                             <TitleLabel>{t(`governance.proposal.details`)}</TitleLabel>
                         </FlexDiv>
                         {!closed && (

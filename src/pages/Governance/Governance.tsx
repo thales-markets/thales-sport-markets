@@ -1,12 +1,14 @@
 import Modal from 'components/Modal';
+import SimpleLoader from 'components/SimpleLoader';
 import { SNAPSHOT_GRAPHQL_URL, VOTING_COUNCIL_PROPOSAL_ID } from 'constants/governance';
 import request, { gql } from 'graphql-request';
+import { t } from 'i18next';
 import { useCallback, useEffect, useState } from 'react';
 import { Proposal } from 'types/governance';
 import ProposalDetails from './ProposalDetails';
-import { Container, MainContentContainer, MainContentWrapper } from './styled-components';
+import { Container, LoaderContainer, MainContentContainer, MainContentWrapper } from './styled-components';
 
-export type GovernanceProps = {
+type GovernanceProps = {
     onClose: () => void;
 };
 
@@ -58,21 +60,22 @@ const Governance: React.FC<GovernanceProps> = ({ onClose }) => {
 
     return (
         <Modal
-            customStyle={{
-                overlay: {
-                    zIndex: 1000,
-                },
-            }}
             containerStyle={{
                 border: 'none',
             }}
-            title="Elections for Overtime Council"
+            title={t(`governance.proposal.modal-title`)}
             onClose={onClose}
         >
             <Container>
                 <MainContentContainer>
                     <MainContentWrapper>
-                        {selectedProposal && <ProposalDetails proposal={selectedProposal} />}
+                        {selectedProposal ? (
+                            <ProposalDetails proposal={selectedProposal} />
+                        ) : (
+                            <LoaderContainer>
+                                <SimpleLoader />
+                            </LoaderContainer>
+                        )}
                     </MainContentWrapper>
                 </MainContentContainer>
             </Container>
