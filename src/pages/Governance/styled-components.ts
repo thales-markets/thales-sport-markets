@@ -4,10 +4,16 @@ import { FlexDiv, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'style
 
 export const Container = styled(FlexDivRow)`
     width: 100%;
-    min-width: 767px;
+    min-width: 900px;
+    max-width: 900px;
+    @media (max-width: ${ScreenSizeBreakpoint.MEDIUM}px) {
+        min-width: 720px;
+        max-width: 720px;
+    }
     @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         flex-direction: column;
         min-width: auto;
+        max-width: auto;
     }
 `;
 

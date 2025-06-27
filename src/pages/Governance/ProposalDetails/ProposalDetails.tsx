@@ -5,12 +5,10 @@ import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { getIsBiconomy } from 'redux/modules/wallet';
 import { FlexDivRow } from 'styles/common';
 import { formatCurrencyWithKey } from 'thales-utils';
 import { Proposal } from 'types/governance';
 import { getOvertimeDapProposalUrl } from 'utils/governance';
-import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { useAccount } from 'wagmi';
 import ProposalHeader from './ProposalHeader';
 import WeightedVoting from './Voting/WeightedVoting';
@@ -23,11 +21,9 @@ type ProposalDetailsProps = {
 const ProposalDetails: React.FC<ProposalDetailsProps> = ({ proposal }) => {
     const { t } = useTranslation();
     const isMobile = useSelector(getIsMobile);
-    const isBiconomy = useSelector(getIsBiconomy);
 
     const { address, isConnected } = useAccount();
-    const { smartAddress } = useBiconomy();
-    const walletAddress = (isBiconomy ? smartAddress : address) || '';
+    const walletAddress = address || '';
 
     const votingPowerQuery = useVotingPowerQuery(proposal, walletAddress, {
         enabled: isConnected,
