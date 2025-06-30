@@ -95,9 +95,7 @@ export const refetchLiquidityPoolData = (walletAddress: string, networkId: Netwo
 export const refetchTicketLiquidity = (
     networkId: Network,
     isSystemBet: boolean,
-    systemBetDenominator: number,
     isSgp: boolean,
-    totalQuote: number,
     markets: TicketMarket[]
 ) => {
     const gameIds = markets.map((market) => market.gameId).join(',');
@@ -111,9 +109,7 @@ export const refetchTicketLiquidity = (
         queryKey: QUERY_KEYS.TicketLiquidity(
             networkId,
             isSystemBet,
-            systemBetDenominator,
             isSgp,
-            totalQuote,
             gameIds,
             typeIds,
             playerIds,

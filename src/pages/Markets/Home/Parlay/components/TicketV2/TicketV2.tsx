@@ -1910,7 +1910,7 @@ const Ticket: React.FC<TicketProps> = ({
                         setIsFreeBetInitialized(false);
                     }
 
-                    refetchTicketLiquidity(networkId, isSystemBet, systemBetDenominator, isSgp, totalQuote, markets);
+                    refetchTicketLiquidity(networkId, isSystemBet, isSgp, markets);
                 } else {
                     if (isSgp) {
                         console.log('refetchProofs');
