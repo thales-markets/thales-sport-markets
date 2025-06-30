@@ -1208,7 +1208,7 @@ const Ticket: React.FC<TicketProps> = ({
 
         if (
             (Number(buyInAmount) && finalQuotes.some((quote) => quote === 0)) ||
-            (buyInAmountInDefaultCollateral && ticketLiquidity && buyInAmountInDefaultCollateral > ticketLiquidity)
+            (buyInAmountInDefaultCollateral && buyInAmountInDefaultCollateral > Number(ticketLiquidity))
         ) {
             setTooltipTextBuyInAmount(t('markets.parlay.validation.availability'));
         } else if (
