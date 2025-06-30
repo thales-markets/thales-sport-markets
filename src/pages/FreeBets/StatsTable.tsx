@@ -97,13 +97,6 @@ const StatsTable: React.FC = () => {
             enableSorting: true,
         },
         {
-            header: <>Date created</>,
-            accessorKey: 'timestamp',
-            cell: (cellProps: any) => <p>{formatTxTimestamp(cellProps.cell.getValue())}</p>,
-            size: 200,
-            enableSorting: true,
-        },
-        {
             header: <>Bet</>,
             accessorKey: 'betAmount',
             cell: (cellProps: any) => (
@@ -113,6 +106,13 @@ const StatsTable: React.FC = () => {
                 </p>
             ),
             size: 80,
+            enableSorting: true,
+        },
+        {
+            header: <>Date created</>,
+            accessorKey: 'timestamp',
+            cell: (cellProps: any) => <p>{formatTxTimestamp(cellProps.cell.getValue())}</p>,
+            size: 200,
             enableSorting: true,
         },
         {
@@ -243,7 +243,8 @@ const Container = styled.div`
     width: 100%;
     margin-top: 100px;
     @media (max-width: 767px) {
-        overflow-x: scroll;
+        overflow-x: auto;
+        min-height: 200px;
         display: block;
         & > div > div > div {
             overflow-x: hidden;
