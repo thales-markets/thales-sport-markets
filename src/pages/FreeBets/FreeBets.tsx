@@ -295,6 +295,7 @@ const Header = styled(FlexDivRow)`
     width: 100%;
     @media (max-width: 767px) {
         margin-bottom: 15px;
+        top: 150px;
     }
 `;
 
