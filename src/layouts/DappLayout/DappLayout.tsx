@@ -3,6 +3,7 @@ import ClaimFreeBetModal from 'components/ClaimFreeBetModal';
 import MetaData from 'components/MetaData';
 import { generalConfig } from 'config/general';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import { NAV_MENU_WIDTH, SPEED_MARKETS_DEFAULT_RIGHT } from 'constants/ui';
 import { Network } from 'enums/network';
 import { Theme } from 'enums/ui';
 import useLocalStorage from 'hooks/useLocalStorage';
@@ -150,6 +151,7 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
                 <DappHeader />
                 {children}
                 <DappFooter />
+                <SpeedMarkets className="speed-markets" />
             </Wrapper>
             <ToastContainer stacked theme={'colored'} />
             {freeBetFromServer && getFreeBetModalShown() && (
@@ -186,6 +188,38 @@ const Wrapper = styled(FlexDivColumn)`
     }
     @media (max-width: 767px) {
         padding: 0px 3px;
+    }
+`;
+
+const SpeedMarkets = styled.div`
+    position: fixed;
+    width: 56px;
+    height: 56px;
+    bottom: 20px;
+    right: ${SPEED_MARKETS_DEFAULT_RIGHT}px;
+    background: yellow;
+    border-radius: 50%;
+    cursor: pointer;
+
+    @keyframes move-left {
+        0% {
+            visibility: none;
+            right: ${SPEED_MARKETS_DEFAULT_RIGHT}px;
+        }
+        100% {
+            visibility: visible;
+            right: ${SPEED_MARKETS_DEFAULT_RIGHT + NAV_MENU_WIDTH}px;
+        }
+    }
+    @keyframes move-right {
+        0% {
+            visibility: visible;
+            right: ${SPEED_MARKETS_DEFAULT_RIGHT + NAV_MENU_WIDTH}px;
+        }
+        100% {
+            visibility: none;
+            right: ${SPEED_MARKETS_DEFAULT_RIGHT}px;
+        }
     }
 `;
 

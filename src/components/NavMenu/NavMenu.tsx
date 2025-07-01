@@ -4,11 +4,15 @@ import OutsideClickHandler from 'components/OutsideClick';
 import SPAAnchor from 'components/SPAAnchor';
 import ROUTES from 'constants/routes';
 import {
+    DISCORD_DEFAULT_RIGHT,
     NAV_MENU_FIRST_SECTION,
     NAV_MENU_FOURTH_SECTION,
     NAV_MENU_SECOND_SECTION,
     NAV_MENU_THIRD_SECTION,
+    NAV_MENU_WIDTH,
+    SPEED_MARKETS_DEFAULT_RIGHT,
 } from 'constants/ui';
+import { secondsToMilliseconds } from 'date-fns';
 import { ProfileTab } from 'enums/ui';
 import { ProfileIconWidget } from 'layouts/DappLayout/DappHeader/components/ProfileItem/ProfileItem';
 import useBlockedGamesQuery from 'queries/resolveBlocker/useBlockedGamesQuery';
@@ -31,14 +35,14 @@ import {
     HeaderContainer,
     ItemContainer,
     ItemsContainer,
+    keyFrameMoveLeft,
+    keyFrameMoveRight,
     NavIcon,
     NavLabel,
     Network,
     NetworkIcon,
     NetworkName,
     Separator,
-    widgetBotAnimationMoveLeft,
-    widgetBotAnimationMoveRight,
     Wrapper,
 } from './styled-components';
 
@@ -91,22 +95,52 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
         [blockedGamesQuery.data, blockedGamesQuery.isSuccess, isWitelistedForUnblock]
     );
 
+    // Discord Widget bot and Speed markets: move with nav menu
     useEffect(() => {
-        // Discord Widget bot: move with nav menu
         const crate = (window as any).crate;
-        const moveLeftCss = `&:not(.open) .button { right: 275px; ${widgetBotAnimationMoveLeft} animation: move-left 0.3s linear; }`;
-        const moveRightCss = `&:not(.open) .button { right: 20px; ${widgetBotAnimationMoveRight} animation: move-right 0.3s linear; }`;
+
+        const animationDurationSec = 0.3;
+
+        const widgetBotRightEnd = DISCORD_DEFAULT_RIGHT + NAV_MENU_WIDTH;
+
+        const moveLeftCss = `&:not(.open) .button { right: ${widgetBotRightEnd}px; ${keyFrameMoveLeft(
+            DISCORD_DEFAULT_RIGHT,
+            widgetBotRightEnd
+        )} animation: move-left ${animationDurationSec}s linear; }`;
+
+        const moveRightCss = `&:not(.open) .button { right: ${DISCORD_DEFAULT_RIGHT}px; ${keyFrameMoveRight(
+            widgetBotRightEnd,
+            DISCORD_DEFAULT_RIGHT
+        )} animation: move-right ${animationDurationSec}s linear; }`;
+
+        const disabledMoveRightCss = moveRightCss.replace('move-right', 'disabled-move-right');
+
         if (crate) {
             if (visibility) {
                 crate.options.css = moveLeftCss + crate.options.css;
             } else {
                 crate.options.css = moveRightCss + crate.options.css.replace(moveLeftCss, '');
+                setTimeout(() => {
+                    crate.options.css = crate.options.css.replace(moveRightCss, disabledMoveRightCss);
+                }, secondsToMilliseconds(animationDurationSec));
             }
+        }
+
+        const speedMarkets = document.getElementsByClassName('speed-markets').item(0) as HTMLDivElement;
+        if (visibility) {
+            speedMarkets.style.right = `${SPEED_MARKETS_DEFAULT_RIGHT + NAV_MENU_WIDTH}px`;
+            speedMarkets.style.animation = `move-left ${animationDurationSec}s linear`;
+        } else {
+            speedMarkets.style.right = `${SPEED_MARKETS_DEFAULT_RIGHT}px`;
+            speedMarkets.style.animation = `move-right ${animationDurationSec}s linear`;
         }
 
         return () => {
             if (crate) {
-                crate.options.css = crate.options.css.replace(moveLeftCss, '').replace(moveRightCss, '');
+                crate.options.css = crate.options.css
+                    .replace(moveLeftCss, '')
+                    .replace(moveRightCss, '')
+                    .replace(disabledMoveRightCss, '');
             }
         };
     }, [visibility]);

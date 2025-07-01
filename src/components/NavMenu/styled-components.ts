@@ -1,27 +1,28 @@
+import { NAV_MENU_WIDTH } from 'constants/ui';
 import styled, { css, keyframes } from 'styled-components';
 import { FlexDivColumnNative, FlexDivRow } from 'styles/common';
 
-export const widgetBotAnimationMoveLeft = `
+export const keyFrameMoveLeft = (rightStart: number, rightEnd: number) => `
     @keyframes move-left {
             0% {
                 visibility: none;
-                right: 20px;
+                right: ${rightStart}px;
             }
             100% {
                 visibility: visible;
-                right: 275px;
+                right: ${rightEnd}px;
             }
     }
 `;
-export const widgetBotAnimationMoveRight = `
+export const keyFrameMoveRight = (rightStart: number, rightEnd: number) => `
     @keyframes move-right {
             0% {
                 visibility: visible;
-                right: 275px;
+                right: ${rightStart}px;
             }
             100% {
                 visibility: none;
-                right: 20px;
+                right: ${rightEnd}px;
             }
     }
 `;
@@ -66,7 +67,7 @@ const animationClose = css`
 export const Wrapper = styled.div<{ show?: boolean | null }>`
     display: flex;
     flex-direction: column;
-    width: 255px;
+    width: ${NAV_MENU_WIDTH}px;
     height: 100%;
     position: fixed;
     top: 0;
