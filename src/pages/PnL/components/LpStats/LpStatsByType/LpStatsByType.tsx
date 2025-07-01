@@ -21,8 +21,6 @@ const LpStats: React.FC<LpStatsProps> = ({ round, leagueId, onlyPP }) => {
     const lpStatsQuery = useLpPpStatsByTypeQuery(round, leagueId, onlyPP, { networkId, client });
     const lpStats = lpStatsQuery.isSuccess && lpStatsQuery.data ? lpStatsQuery.data : {};
 
-    console.log('lpStats', lpStats);
-
     return (
         <Wrapper>
             <SectionWrapper>

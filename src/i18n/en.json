@@ -1379,6 +1379,8 @@
         "no-promotions": "Oops! It looks like there are no promotions available at the moment for given filter."
     },
     "overdrop": {
+        "season-2": "Season 2",
+        "new-season": " starts soon • Stay tuned for new rewards!",
         "navigation-menu": {
             "home": "Overdrop home",
             "xp-calculation": "XP Details",
@@ -1401,7 +1403,15 @@
             "current-rewards": "Current estimated rewards",
             "next-over-rewards-at": "Next OVER free bet rewards at",
             "rank": "Rank",
-            "disclaimer": "*Wallets suspected of gaming the system can be disqualified."
+            "disclaimer": "*Wallets suspected of gaming the system can be disqualified.",
+            "claim-rewards": "Claim {{collateral}}",
+            "claim-disclaimer": "Switch to the Optimism/Arbitrum network to claim OP/ARB rewards.",
+            "claim-confirmation-message": "{{collateral}} rewards successfully claimed",
+            "claimed-message": "You already claimed {{collateral}} rewards.",
+            "your-rewards": "Your rewards",
+            "switch-to-eoa": "Switch to EOA to claim",
+            "claim-rewards-tooltip": "You can claim your rewards only with an EOA wallet. Please switch to EOA to claim your rewards.",
+            "total-value": "Total value"
         },
         "leveling-tree": {
             "heading": "The overdrop farming league",
@@ -1487,6 +1497,34 @@
         "tab": {
             "blocked-games": "Blocked games",
             "unblocked-games": "Unblocked games"
+        }
+    },
+    "governance": {
+        "proposal": {
+            "modal-title": "Elections for Overtime Council",
+            "status-label": "Status",
+            "author-label": "Author",
+            "proposal-label": "Proposal",
+            "voting-system-label": "Voting system",
+            "start-date-label": "Start date",
+            "end-date-label": "End date",
+            "snapshot-label": "Snapshot",
+            "details-label": "Details",
+            "description": "For more details about the elections, candidates, and results, visit the <a>Overtime DAO website</a>.",
+            "starts-in-label": "Starts in",
+            "ends-in-label": "Time left",
+            "vote-label": "Vote",
+            "submit-vote-label": "Submit your vote",
+            "voting-power-label": "Your voting power",
+            "vote-progress-label": "Voting in progress...",
+            "vote-confirmation-message": "Successfully voted",
+            "your-votes": "Your votes:",
+            "vote-confirmation": "Are you sure you want to vote",
+            "details": "Proposal details",
+            "type": {
+                "single-choice": "Single choice voting",
+                "weighted": "Weighted voting"
+            }
         }
     }
 }

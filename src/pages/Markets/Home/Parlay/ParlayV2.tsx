@@ -11,6 +11,7 @@ import { MAIN_VIEW_RIGHT_CONTAINER_WIDTH_LARGE, MAIN_VIEW_RIGHT_CONTAINER_WIDTH_
 import { secondsToMilliseconds } from 'date-fns';
 import { SportFilter, StatusFilter, TicketErrorCode } from 'enums/markets';
 import { ScreenSizeBreakpoint } from 'enums/ui';
+import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import { isEqual } from 'lodash';
 import { League, LeagueMap, MarketType } from 'overtime-utils';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
@@ -213,7 +214,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
         }
     }, [dispatch, sportsAmmDataQuery.isSuccess, sportsAmmDataQuery.data]);
 
-    useEffect(() => {
+    useDebouncedEffect(() => {
         if (isSgp && sportsAmmRiskManagerQuery.data) {
             if (isSgpSportDisabled) {
                 const disabledLeagueName = LeagueMap[ticket[0].leagueId as League]?.label;

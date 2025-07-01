@@ -1,27 +1,30 @@
-import React from 'react';
+import Governance from 'pages/Governance';
+import React, { useState } from 'react';
 import { Trans } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
-import SPAAnchor from '../SPAAnchor';
 
-const IS_VISIBLE = false; // Set to true to show the banner
+const IS_VISIBLE = true; // Set to true to show the banner
 
 const Banner: React.FC = () => {
+    const [showGovernanceModal, setShowGovernanceModal] = useState<boolean>(false);
+
     return !IS_VISIBLE ? (
         <></>
     ) : (
-        <SPAAnchor href={'https://overtime.io'}>
-            <Container>
+        <>
+            <Container onClick={() => setShowGovernanceModal(true)}>
                 <Label>
                     <Trans
-                        i18nKey={'banner.migration-message'}
+                        i18nKey={'banner.elections-text'}
                         components={{
                             highlight: <HightlightLabel />,
                         }}
                     />
                 </Label>
             </Container>
-        </SPAAnchor>
+            {showGovernanceModal && <Governance onClose={() => setShowGovernanceModal(false)} />}
+        </>
     );
 };
 

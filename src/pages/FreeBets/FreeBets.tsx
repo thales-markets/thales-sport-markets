@@ -279,6 +279,7 @@ const GenerateContainer = styled(FlexDivColumnNative)`
 `;
 
 export const CopyIcon = styled.i`
+    margin-left: 5px;
     font-size: 24px;
     cursor: pointer;
     font-weight: 400;
@@ -294,6 +295,7 @@ const Header = styled(FlexDivRow)`
     width: 100%;
     @media (max-width: 767px) {
         margin-bottom: 15px;
+        top: 150px;
     }
 `;
 
