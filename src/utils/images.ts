@@ -330,10 +330,12 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.FIBA_EUROBASKET_QUALIFIERS:
             return `/logos/Countries/eurobasket.png`;
         case League.FIBA_AMERICUP_QUALIFIERS:
+        case League.FIBA_AMERICUP_WOMEN:
             return `/logos/Countries/americup.png`;
         case League.FIBA_ASIA_CUP_QUALIFIERS:
             return `/logos/Countries/asia-cup.png`;
         case League.FIBA_WORLD_CUP_QUALIFIERS:
+        case League.FIBA_WORLD_CUP_U19:
             return `/logos/Countries/fiba-world-cup.png`;
         case League.FIBA_AFRO_BASKET_QUALIFIERS:
             return `/logos/Countries/afrobasket.jpg`;
