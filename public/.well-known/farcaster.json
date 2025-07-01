@@ -10,6 +10,13 @@
         "description": "A fully onchain sportsbook now available on Farcaster. Just connect your EVM wallet and start betting in seconds.",
         "iconUrl": "https://www.overtimemarkets.xyz/logos/logo1024.png",
         "homeUrl": "https://www.overtimemarkets.xyz",
-        "requiredChains": ["eip155:10", "eip155:42161", "eip155:8453"]
+        "requiredChains": ["eip155:10", "eip155:42161", "eip155:8453"],
+        "primaryCategory": "finance",
+        "ogTitle": "Overtime Sportsbook | The best decentralized crypto sportsbook",
+        "ogDescription": "Fully onchain sportsbook - just connect and start betting. Use various cryptocurrencies seamlessly and hassle free. Offers everything traditional sportsbooks do and more. Earn crypto airdrops, free bets and other rewards. Deposit funds in the liquidity pool and become the house.",
+        "ogImageUrl": "https://thales-sport-markets.vercel.app/embed.png",
+        "subtitle": "Fully onchain sportsbook",
+        "tagline": "Fully onchain sportsbook",
+        "heroImageUrl": "https://thales-sport-markets.vercel.app/embed.png"
     }
 }
