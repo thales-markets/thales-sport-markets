@@ -18,14 +18,14 @@ const useWidgetBotScript = (preventWidgetLoad: boolean) => {
                 notifications: false,
                 indicator: false,
                 css: `
-                @media (max-width: 950px) {
-                    &:not(.open) .button {
-                        margin-bottom: 70px;
-                        width: 45px;
-                        height: 45px;
+                    @media (max-width: 950px) {
+                        &:not(.open) .button {
+                            margin-bottom: 70px;
+                            width: 45px;
+                            height: 45px;
+                        }
                     }
-                }
-              `,
+                `,
             });
         };
 

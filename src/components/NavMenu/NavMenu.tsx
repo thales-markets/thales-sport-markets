@@ -37,6 +37,8 @@ import {
     NetworkIcon,
     NetworkName,
     Separator,
+    widgetBotAnimationMoveLeft,
+    widgetBotAnimationMoveRight,
     Wrapper,
 } from './styled-components';
 
@@ -88,21 +90,23 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                 : 0,
         [blockedGamesQuery.data, blockedGamesQuery.isSuccess, isWitelistedForUnblock]
     );
+
     useEffect(() => {
         // Discord Widget bot: move with nav menu
         const crate = (window as any).crate;
-        const moveRightCss = '&:not(.open) .button { right: 275px; }';
+        const moveLeftCss = `&:not(.open) .button { right: 275px; ${widgetBotAnimationMoveLeft} animation: move-left 0.3s linear; }`;
+        const moveRightCss = `&:not(.open) .button { right: 20px; ${widgetBotAnimationMoveRight} animation: move-right 0.3s linear; }`;
         if (crate) {
             if (visibility) {
-                crate.options.css = moveRightCss + crate.options.css;
+                crate.options.css = moveLeftCss + crate.options.css;
             } else {
-                crate.options.css = crate.options.css.replace(moveRightCss, '');
+                crate.options.css = moveRightCss + crate.options.css.replace(moveLeftCss, '');
             }
         }
 
         return () => {
             if (crate) {
-                crate.options.css = crate.options.css.replace(moveRightCss, '');
+                crate.options.css = crate.options.css.replace(moveLeftCss, '').replace(moveRightCss, '');
             }
         };
     }, [visibility]);

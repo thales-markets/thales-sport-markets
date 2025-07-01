@@ -1,6 +1,31 @@
 import styled, { css, keyframes } from 'styled-components';
 import { FlexDivColumnNative, FlexDivRow } from 'styles/common';
 
+export const widgetBotAnimationMoveLeft = `
+    @keyframes move-left {
+            0% {
+                visibility: none;
+                right: 20px;
+            }
+            100% {
+                visibility: visible;
+                right: 275px;
+            }
+    }
+`;
+export const widgetBotAnimationMoveRight = `
+    @keyframes move-right {
+            0% {
+                visibility: visible;
+                right: 275px;
+            }
+            100% {
+                visibility: none;
+                right: 20px;
+            }
+    }
+`;
+
 const WrapperAnimation = (props: any) => keyframes`
     0% {
         visibility: none;
