@@ -864,18 +864,20 @@ export const getMarketPlayerPropsMarketsForSport = (market: SportMarket) => {
     }
 };
 
-export const getSpecializedPropForMarket = (market: SportMarket) =>
-    Number(
+export const getSpecializedPropForMarket = (market: SportMarket) => {
+    const specializedProp = Number(
         Object.keys(PLAYER_PROPS_MARKETS_PER_PROP_MAP).find((key) => {
             return market.childMarkets.some((childMarket) => childMarket.typeId === Number(key));
         })
     );
+    return isNaN(specializedProp) ? undefined : specializedProp;
+};
 
 export const getMarketPlayerPropsMarketsForProp = (market: SportMarket) => {
     const specializedPropMarketType: MarketType | undefined = getSpecializedPropForMarket(market);
 
     const marketTypesForProp =
-        !isNaN(specializedPropMarketType) && PLAYER_PROPS_MARKETS_PER_PROP_MAP[specializedPropMarketType];
+        specializedPropMarketType && PLAYER_PROPS_MARKETS_PER_PROP_MAP[specializedPropMarketType];
 
     if (marketTypesForProp) {
         return marketTypesForProp.map(
