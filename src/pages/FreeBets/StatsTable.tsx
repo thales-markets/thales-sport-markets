@@ -16,7 +16,6 @@ import { formatTxTimestamp, NetworkId } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
 import { getCollateralByAddress } from 'utils/collaterals';
 import { useAccount, useChainId, useSignMessage } from 'wagmi';
-import { CopyIcon } from './FreeBets';
 
 const StatsTable: React.FC = () => {
     const walletAddress = useAccount()?.address || '';
@@ -267,6 +266,17 @@ const QRIcon = styled.i`
     font-size: 24px;
     color: white;
     cursor: pointer;
+`;
+
+export const CopyIcon = styled.i`
+    margin-left: 5px;
+    font-size: 24px;
+    cursor: pointer;
+    font-weight: 400;
+    color: ${(props) => props.theme.overdrop.textColor.primary};
+    @media (max-width: 767px) {
+        font-size: 20px;
+    }
 `;
 
 export default StatsTable;
