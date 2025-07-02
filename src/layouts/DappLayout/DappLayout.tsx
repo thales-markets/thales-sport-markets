@@ -9,7 +9,7 @@ import { Network } from 'enums/network';
 import { Theme } from 'enums/ui';
 import useLocalStorage from 'hooks/useLocalStorage';
 import useWidgetBotScript from 'hooks/useWidgetBotScript';
-import SpeedMarketsWidget from 'pages/SpeedMarkets/components';
+import SpeedMarketsWidget from 'pages/SpeedMarkets/components/SpeedMarketsWidget';
 import useGetFreeBetQuery from 'queries/freeBets/useGetFreeBetQuery';
 import queryString from 'query-string';
 import React, { useEffect, useMemo, useState } from 'react';

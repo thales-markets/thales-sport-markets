@@ -16,7 +16,7 @@ const SpeedMarketsWidget: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                 </Header>
                 <CloseIcon className="icon icon--close" onClick={() => onClose()} />
             </HeaderRow>
-            <Chart></Chart>
+            <ChartWrapper></ChartWrapper>
             <Trading></Trading>
             <Footer>
                 <div>Trade</div>
@@ -58,7 +58,7 @@ const CloseIcon = styled.i`
     cursor: pointer;
 `;
 
-const Chart = styled.div`
+const ChartWrapper = styled.div`
     height: 180px;
 `;
 
