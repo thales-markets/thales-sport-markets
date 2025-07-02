@@ -9,6 +9,7 @@
         "@farcaster/frame-wagmi-connector": "0.0.52",
         "@particle-network/authkit": "^2.0.19",
         "@particle-network/universal-account-sdk": "^1.0.0-alpha.1",
+        "lightweight-charts": "^4.1.2",
         "@rainbow-me/rainbowkit": "^2.0.0",
         "@reduxjs/toolkit": "^1.7.2",
         "@snapshot-labs/snapshot.js": "^0.13.0",
