@@ -13,27 +13,31 @@ import { Rates } from 'types/collateral';
 import { convertFromStableToCollateral, getCollateral, isOverCurrency, isStableCurrency } from 'utils/collaterals';
 import { useChainId } from 'wagmi';
 
-const AMOUNTS = [3, 10, 50, 100, 500];
-
 type SuggestedAmountProps = {
+    amounts: number[];
     collateralIndex: number;
     changeAmount: (value: number | string) => void;
     exchangeRates: Rates | null;
     insertedAmount: number | string;
     minAmount?: number;
+    buttonHeight?: string;
+    buttonColor?: string;
 };
 
 const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
+    amounts,
     collateralIndex,
     changeAmount,
     exchangeRates,
     insertedAmount,
     minAmount,
+    buttonHeight,
+    buttonColor,
 }) => {
     const networkId = useChainId();
 
     const [amountIndexClickedTimesMap, setAmountIndexClickedTimesMap] = useState(
-        new Map(AMOUNTS.map((_, i) => [i, 0]))
+        new Map(amounts.map((_, i) => [i, 0]))
     );
     const [isAmountClicked, setIsAmountClicked] = useState(false);
 
@@ -83,7 +87,7 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
 
     return (
         <Container>
-            {AMOUNTS.map((amount, index) => {
+            {amounts.map((amount, index) => {
                 const convertedAmount = convertFromStable(amount);
                 const buyAmount = minAmount && index === 0 && minAmount > convertedAmount ? minAmount : convertedAmount;
 
@@ -102,6 +106,8 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
                         key={`amount-${index}`}
                         active={isActive}
                         onClick={() => onAmountClickHandler(index, buyAmount)}
+                        height={buttonHeight}
+                        buttonColor={buttonColor}
                     >
                         {`${isCurrentAmountClicked ? '+' : ''} ${formatCurrencyWithKey(USD_SIGN, amount, 1, true)}`}
                     </AmountContainer>
@@ -119,7 +125,7 @@ const Container = styled(FlexDiv)`
     gap: 13px;
 `;
 
-const AmountContainer = styled(FlexDiv)<{ active?: boolean }>`
+const AmountContainer = styled(FlexDiv)<{ active?: boolean; height?: string; buttonColor?: string }>`
     align-items: center;
     justify-content: center;
     font-size: 13px;
@@ -128,10 +134,13 @@ const AmountContainer = styled(FlexDiv)<{ active?: boolean }>`
     border-radius: 5px;
     color: ${(props) => (props.active ? props.theme.button.textColor.quinary : props.theme.button.textColor.secondary)};
     background-color: ${(props) =>
-        props.active ? props.theme.button.background.quaternary : props.theme.button.background.senary};
+        props.active
+            ? props.theme.button.background.quaternary
+            : props.buttonColor || props.theme.button.background.senary};
     cursor: pointer;
-    height: 25px;
+    height: ${(props) => props.height || '25px'};
     width: 100%;
+    user-select: none;
 `;
 
 export default SuggestedAmount;
