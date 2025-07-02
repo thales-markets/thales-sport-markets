@@ -6,7 +6,8 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivRowCentered } from 'styles/common';
 import { buildHref } from 'utils/routes';
-import Trading from '../Trading';
+import SpeedPositions from '../SpeedPositions';
+import SpeedTrading from '../SpeedTrading';
 
 const SpeedMarketsWidget: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     const [activeMenuItem, setActiveMenuItem] = useState(WidgetMenuItems.TRADING);
@@ -22,8 +23,8 @@ const SpeedMarketsWidget: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                 <CloseIcon className="icon icon--close" onClick={() => onClose()} />
             </HeaderRow>
             <Content>
-                {activeMenuItem === WidgetMenuItems.TRADING && <Trading />}
-                {activeMenuItem === WidgetMenuItems.POSITIONS && <></>}
+                {activeMenuItem === WidgetMenuItems.TRADING && <SpeedTrading />}
+                {activeMenuItem === WidgetMenuItems.POSITIONS && <SpeedPositions />}
                 {activeMenuItem === WidgetMenuItems.SETTINGS && <></>}
             </Content>
             <FooterMenu>

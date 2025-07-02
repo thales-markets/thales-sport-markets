@@ -1,10 +1,10 @@
 import styled from 'styled-components';
-import TradingChart from '../TradingChart';
+import SpeedTradingChart from '../SpeedTradingChart';
 
-const Trading: React.FC = () => {
+const SpeedTrading: React.FC = () => {
     return (
         <ChartWrapper>
-            <TradingChart />
+            <SpeedTradingChart />
         </ChartWrapper>
     );
 };
@@ -13,4 +13,4 @@ const ChartWrapper = styled.div`
     height: 180px;
 `;
 
-export default Trading;
+export default SpeedTrading;
