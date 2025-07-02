@@ -296,6 +296,12 @@ export default {
         button: {
             background: {
                 primary: Colors.NAVY_BLUE,
+                active: Colors.BLUE,
+                inactive: Colors.LIBERTY_BLUE,
+            },
+            textColor: {
+                active: Colors.NAVY_BLUE_DARK,
+                inactive: Colors.TORY_BLUE,
             },
         },
     },

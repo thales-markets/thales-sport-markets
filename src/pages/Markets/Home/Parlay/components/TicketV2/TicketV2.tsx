@@ -2630,6 +2630,7 @@ const Ticket: React.FC<TicketProps> = ({
                         ? ceilNumberToDecimals(minBuyInAmount / swapQuote, getPrecision(minBuyInAmount / swapQuote))
                         : undefined
                 }
+                margin="8px 0px"
             />
             {freeBetBalanceExists && (
                 <RowSummary>

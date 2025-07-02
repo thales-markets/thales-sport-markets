@@ -3,6 +3,7 @@ import { LINKS } from 'constants/links';
 import { SPEED_MARKETS_DEFAULT_RIGHT } from 'constants/ui';
 import { WidgetMenuItems } from 'enums/speedMarkets';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivRowCentered } from 'styles/common';
 import { buildHref } from 'utils/routes';
@@ -10,6 +11,8 @@ import SpeedPositions from '../SpeedPositions';
 import SpeedTrading from '../SpeedTrading';
 
 const SpeedMarketsWidget: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+    const { t } = useTranslation();
+
     const [activeMenuItem, setActiveMenuItem] = useState(WidgetMenuItems.TRADING);
 
     return (
@@ -33,21 +36,21 @@ const SpeedMarketsWidget: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                     onClick={() => setActiveMenuItem(WidgetMenuItems.TRADING)}
                 >
                     <FooterMenuIcon className="icon icon--stats" />
-                    <FooterMenuItemLabel>Trade</FooterMenuItemLabel>
+                    <FooterMenuItemLabel>{t('speed-markets.menu-items-label.trade')}</FooterMenuItemLabel>
                 </FooterMenuItem>
                 <FooterMenuItem
                     isActive={activeMenuItem === WidgetMenuItems.POSITIONS}
                     onClick={() => setActiveMenuItem(WidgetMenuItems.POSITIONS)}
                 >
                     <FooterMenuIcon className="icon icon--history" />
-                    <FooterMenuItemLabel>Positions</FooterMenuItemLabel>
+                    <FooterMenuItemLabel>{t('speed-markets.menu-items-label.positions')}</FooterMenuItemLabel>
                 </FooterMenuItem>
                 <FooterMenuItem
                     isActive={activeMenuItem === WidgetMenuItems.SETTINGS}
                     onClick={() => setActiveMenuItem(WidgetMenuItems.SETTINGS)}
                 >
                     <FooterMenuIcon className="speedmarkets-icon speedmarkets-icon--gear" />
-                    <FooterMenuItemLabel>Settings</FooterMenuItemLabel>
+                    <FooterMenuItemLabel>{t('speed-markets.menu-items-label.settings')}</FooterMenuItemLabel>
                 </FooterMenuItem>
             </FooterMenu>
         </Container>

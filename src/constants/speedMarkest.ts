@@ -1,0 +1,3 @@
+import { CRYPTO_CURRENCY_MAP } from './currency';
+
+export const SUPPORTED_ASSETS = [CRYPTO_CURRENCY_MAP.BTC, CRYPTO_CURRENCY_MAP.ETH];

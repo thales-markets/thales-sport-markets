@@ -118,4 +118,5 @@ export const Colors = {
     // Speed markets
     DARK_KNIGHT: '#161A36',
     BLUE_ESTATE: '#3b4887',
+    LIBERTY_BLUE: '#10152E',
 };

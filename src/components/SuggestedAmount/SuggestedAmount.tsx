@@ -22,6 +22,7 @@ type SuggestedAmountProps = {
     minAmount?: number;
     buttonHeight?: string;
     buttonColor?: string;
+    margin?: string;
 };
 
 const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
@@ -33,6 +34,7 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
     minAmount,
     buttonHeight,
     buttonColor,
+    margin,
 }) => {
     const networkId = useChainId();
 
@@ -86,7 +88,7 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
     const isAnyAmountClicked = Array.from(amountIndexClickedTimesMap.values()).some((n) => n > 0);
 
     return (
-        <Container>
+        <Container $margin={margin}>
             {amounts.map((amount, index) => {
                 const convertedAmount = convertFromStable(amount);
                 const buyAmount = minAmount && index === 0 && minAmount > convertedAmount ? minAmount : convertedAmount;
@@ -117,11 +119,11 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
     );
 };
 
-const Container = styled(FlexDiv)`
+const Container = styled(FlexDiv)<{ $margin?: string }>`
     align-items: center;
     flex-direction: row;
     justify-content: space-between;
-    margin: 8px 0px;
+    ${(props) => (props.$margin ? `margin: ${props.$margin};` : '')}
     gap: 13px;
 `;
 
