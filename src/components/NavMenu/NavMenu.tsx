@@ -124,15 +124,15 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                     crate.options.css = crate.options.css.replace(moveRightCss, disabledMoveRightCss);
                 }, secondsToMilliseconds(animationDurationSec));
             }
-        }
-
-        const speedMarkets = document.getElementsByClassName('speed-markets').item(0) as HTMLDivElement;
-        if (visibility) {
-            speedMarkets.style.right = `${SPEED_MARKETS_DEFAULT_RIGHT + NAV_MENU_WIDTH}px`;
-            speedMarkets.style.animation = `move-left ${animationDurationSec}s linear`;
-        } else {
-            speedMarkets.style.right = `${SPEED_MARKETS_DEFAULT_RIGHT}px`;
-            speedMarkets.style.animation = `move-right ${animationDurationSec}s linear`;
+            // speed markets button
+            const speedMarkets = document.getElementsByClassName('speed-markets').item(0) as HTMLDivElement;
+            if (visibility) {
+                speedMarkets.style.right = `${SPEED_MARKETS_DEFAULT_RIGHT + NAV_MENU_WIDTH}px`;
+                speedMarkets.style.animation = `move-left ${animationDurationSec}s linear`;
+            } else {
+                speedMarkets.style.right = `${SPEED_MARKETS_DEFAULT_RIGHT}px`;
+                speedMarkets.style.animation = `move-right ${animationDurationSec}s linear`;
+            }
         }
 
         return () => {

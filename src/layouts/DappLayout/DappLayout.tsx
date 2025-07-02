@@ -1,3 +1,4 @@
+import SpeedMarketsButtonAnimated from 'assets/images/speed-markets/speed-markets-animated.svg';
 import axios from 'axios';
 import ClaimFreeBetModal from 'components/ClaimFreeBetModal';
 import MetaData from 'components/MetaData';
@@ -8,6 +9,7 @@ import { Network } from 'enums/network';
 import { Theme } from 'enums/ui';
 import useLocalStorage from 'hooks/useLocalStorage';
 import useWidgetBotScript from 'hooks/useWidgetBotScript';
+import SpeedMarketsWidget from 'pages/SpeedMarkets/components';
 import useGetFreeBetQuery from 'queries/freeBets/useGetFreeBetQuery';
 import queryString from 'query-string';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -53,6 +55,7 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const [freeBetModalParam, setFreeBetModalParam] = useState(queryParams.freeBet);
+    const [speedMarketsWidgetOpen, setSpeedMarketsWidgetOpen] = useState(false);
 
     const [, setFreeBet] = useLocalStorage<any | undefined>(LOCAL_STORAGE_KEYS.FREE_BET_ID, undefined);
 
@@ -151,7 +154,12 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
                 <DappHeader />
                 {children}
                 <DappFooter />
-                <SpeedMarkets className="speed-markets" />
+                <SpeedMarkets
+                    className="speed-markets"
+                    isOpen={speedMarketsWidgetOpen}
+                    onClick={() => setSpeedMarketsWidgetOpen(!speedMarketsWidgetOpen)}
+                />
+                {speedMarketsWidgetOpen && <SpeedMarketsWidget onClose={() => setSpeedMarketsWidgetOpen(false)} />}
             </Wrapper>
             <ToastContainer stacked theme={'colored'} />
             {freeBetFromServer && getFreeBetModalShown() && (
@@ -191,16 +199,31 @@ const Wrapper = styled(FlexDivColumn)`
     }
 `;
 
-const SpeedMarkets = styled.div`
+const SpeedMarkets = styled.div<{ isOpen: boolean }>`
     position: fixed;
-    width: 56px;
-    height: 56px;
-    bottom: 20px;
+    width: 76px;
+    height: 76px;
+    bottom: 10px;
     right: ${SPEED_MARKETS_DEFAULT_RIGHT}px;
-    background: yellow;
+    background-image: ${(props) => (props.isOpen ? 'none' : `url(${SpeedMarketsButtonAnimated})`)};
+    background-position: center;
     border-radius: 50%;
     cursor: pointer;
+    z-index: 100000;
 
+    animation: 0.3s ease 0s 1 normal none running load-animation;
+    @keyframes load-animation {
+        0% {
+            transform: scale(0.1);
+            opacity: 0;
+        }
+        100% {
+            transform: initial;
+            opacity: 1;
+        }
+    }
+
+    // for Navigation menu
     @keyframes move-left {
         0% {
             visibility: none;

@@ -285,4 +285,8 @@ export default {
             secondary: Colors.WHITE,
         },
     },
+    speedMarkets: {
+        background: { primary: Colors.DARK_KNIGHT },
+        borderColor: { primary: Colors.BLUE_ESTATE },
+    },
 };

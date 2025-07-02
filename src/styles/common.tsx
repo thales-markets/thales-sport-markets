@@ -114,4 +114,8 @@ export const Colors = {
     OVERDROP_GREEN: '#82EB9F',
     GOLD: '#E9B008',
     PARTICLE: '#d745ff',
+
+    // Speed markets
+    DARK_KNIGHT: '#161A36',
+    BLUE_ESTATE: '#3b4887',
 };
