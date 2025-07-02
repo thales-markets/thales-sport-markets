@@ -1,11 +1,19 @@
 import styled from 'styled-components';
+import SelectAsset from '../SelectAsset';
+import SelectBuyin from '../SelectBuyin';
+import SelectPosition from '../SelectPosition';
 import SpeedTradingChart from '../SpeedTradingChart';
 
 const SpeedTrading: React.FC = () => {
     return (
-        <ChartWrapper>
-            <SpeedTradingChart />
-        </ChartWrapper>
+        <>
+            <ChartWrapper>
+                <SpeedTradingChart />
+            </ChartWrapper>
+            <SelectAsset />
+            <SelectBuyin />
+            <SelectPosition />
+        </>
     );
 };
 
