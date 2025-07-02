@@ -4,6 +4,7 @@ import { SPEED_MARKETS_DEFAULT_RIGHT } from 'constants/ui';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivRowCentered } from 'styles/common';
 import { buildHref } from 'utils/routes';
+import TradingChart from '../TradingChart';
 
 const SpeedMarketsWidget: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     return (
@@ -16,7 +17,9 @@ const SpeedMarketsWidget: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                 </Header>
                 <CloseIcon className="icon icon--close" onClick={() => onClose()} />
             </HeaderRow>
-            <ChartWrapper></ChartWrapper>
+            <ChartWrapper>
+                <TradingChart />
+            </ChartWrapper>
             <Trading></Trading>
             <Footer>
                 <div>Trade</div>
