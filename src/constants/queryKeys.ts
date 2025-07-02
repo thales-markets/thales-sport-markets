@@ -39,6 +39,16 @@ const QUERY_KEYS = {
         networkId,
         isLive,
     ],
+    Prices: {
+        PythCandlestickData: (asset: string, dateRange: number, resolution: string) => [
+            'asset',
+            'dateRange',
+            'resolution',
+            asset,
+            dateRange,
+            resolution,
+        ],
+    },
     SportsAmmData: (networkId: Network) => ['sportsAmmData', networkId],
     SportsAmmRiskManager: (networkId: Network, league: League) => ['sportsAmmRiskManager', networkId, league],
     TicketLiquidity: (

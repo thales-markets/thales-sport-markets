@@ -12,7 +12,7 @@ const SpeedTrading: React.FC = () => {
     return (
         <>
             <ChartWrapper>
-                <SpeedTradingChart />
+                <SpeedTradingChart selectedAsset={selectedAsset} />
             </ChartWrapper>
             <SelectAsset selectedAsset={selectedAsset} onAssetClick={(asset: string) => setSelectedAsset(asset)} />
             <SelectBuyin />

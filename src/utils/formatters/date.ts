@@ -1,4 +1,4 @@
-import { Duration, format, secondsToMilliseconds } from 'date-fns';
+import { Duration, format, millisecondsToSeconds, secondsToMilliseconds } from 'date-fns';
 
 export const formattedDuration = (
     duration: Duration,
@@ -74,3 +74,18 @@ export const formattedDurationFull = (
 export const formatTimestampForPromotionDate = (timestamp: number) => {
     return format(new Date(secondsToMilliseconds(timestamp)), 'd MMM Y');
 };
+
+export function timeToLocal(originalTime: number) {
+    const d = new Date(secondsToMilliseconds(originalTime));
+    return millisecondsToSeconds(
+        Date.UTC(
+            d.getFullYear(),
+            d.getMonth(),
+            d.getDate(),
+            d.getHours(),
+            d.getMinutes(),
+            d.getSeconds(),
+            d.getMilliseconds()
+        )
+    );
+}

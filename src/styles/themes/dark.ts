@@ -198,6 +198,10 @@ export default {
     },
     chart: {
         primary: Colors.PURPLE,
+        candleUp: Colors.GREEN,
+        candleDown: Colors.RED,
+        labels: Colors.GRAY_LIGHT,
+        priceLine: Colors.PURPLE,
     },
     connectWalletModal: {
         secondaryText: Colors.WHITE,
@@ -303,6 +307,10 @@ export default {
                 active: Colors.NAVY_BLUE_DARK,
                 inactive: Colors.TORY_BLUE,
             },
+        },
+        price: {
+            up: Colors.GREEN,
+            down: Colors.RED,
         },
     },
 };
