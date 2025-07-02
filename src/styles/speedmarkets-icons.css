@@ -1,0 +1,11 @@
+.speedmarkets-icon {
+    display: inline-block;
+    font-family: SpeedMarketsIcons !important;
+    vertical-align: middle;
+    font-size: 32px;
+    color: #ffffff;
+}
+
+.speedmarkets-icon--speed-full-logo:before {
+    content: '\003F';
+}

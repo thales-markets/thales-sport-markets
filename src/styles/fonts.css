@@ -38,6 +38,11 @@
 }
 
 @font-face {
+    font-family: 'SpeedMarketsIcons';
+    src: local('SpeedMarketsIcons'), url(../assets/fonts/SpeedMarketsIcons/SpeedMarketsIcons.ttf) format('truetype');
+}
+
+@font-face {
     font-family: 'Inter';
     src: local('Inter'), url(../assets/fonts/Inter/Inter-VariableFont_slntwght.ttf) format('truetype');
     font-weight: 100 900;

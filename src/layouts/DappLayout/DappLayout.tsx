@@ -154,7 +154,7 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
                 <DappHeader />
                 {children}
                 <DappFooter />
-                <SpeedMarkets
+                <SpeedMarketsButton
                     className="speed-markets"
                     isOpen={speedMarketsWidgetOpen}
                     onClick={() => setSpeedMarketsWidgetOpen(!speedMarketsWidgetOpen)}
@@ -199,7 +199,7 @@ const Wrapper = styled(FlexDivColumn)`
     }
 `;
 
-const SpeedMarkets = styled.div<{ isOpen: boolean }>`
+const SpeedMarketsButton = styled.div<{ isOpen: boolean }>`
     position: fixed;
     width: 76px;
     height: 76px;
