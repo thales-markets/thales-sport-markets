@@ -3,9 +3,23 @@
     font-family: SpeedMarketsIcons !important;
     vertical-align: middle;
     font-size: 32px;
-    color: #ffffff;
 }
 
-.speedmarkets-icon--speed-full-logo:before {
+.speedmarkets-logo-icon {
+    display: inline-block;
+    font-family: SpeedMarketsLogoIcons !important;
+    vertical-align: middle;
+    font-size: 32px;
+}
+
+/* speedmarkets-logo-icon */
+
+.speedmarkets-logo-icon--speed-full-logo:before {
     content: '\003F';
+}
+
+/* speedmarkets-icon */
+
+.speedmarkets-icon--gear:before {
+    content: '\0033';
 }

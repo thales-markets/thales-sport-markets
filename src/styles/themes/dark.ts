@@ -288,5 +288,6 @@ export default {
     speedMarkets: {
         background: { primary: Colors.DARK_KNIGHT },
         borderColor: { primary: Colors.BLUE_ESTATE },
+        textColor: { primary: Colors.WHITE, active: Colors.BLUE, inactive: Colors.NAVY_BLUE_LIGHT },
     },
 };

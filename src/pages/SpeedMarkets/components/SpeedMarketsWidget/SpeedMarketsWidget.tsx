@@ -1,31 +1,54 @@
 import SPAAnchor from 'components/SPAAnchor';
 import { LINKS } from 'constants/links';
 import { SPEED_MARKETS_DEFAULT_RIGHT } from 'constants/ui';
+import { WidgetMenuItems } from 'enums/speedMarkets';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivRowCentered } from 'styles/common';
 import { buildHref } from 'utils/routes';
-import TradingChart from '../TradingChart';
+import Trading from '../Trading';
 
 const SpeedMarketsWidget: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+    const [activeMenuItem, setActiveMenuItem] = useState(WidgetMenuItems.TRADING);
+
     return (
         <Container>
             <HeaderRow>
                 <Header>
                     <SPAAnchor href={buildHref(LINKS.SpeedMarkets)}>
-                        <LogoIcon className="speedmarkets-icon speedmarkets-icon--speed-full-logo" />
+                        <LogoIcon className="speedmarkets-logo-icon speedmarkets-logo-icon--speed-full-logo" />
                     </SPAAnchor>
                 </Header>
                 <CloseIcon className="icon icon--close" onClick={() => onClose()} />
             </HeaderRow>
-            <ChartWrapper>
-                <TradingChart />
-            </ChartWrapper>
-            <Trading></Trading>
-            <Footer>
-                <div>Trade</div>
-                <div>Positions</div>
-                <div>Settings</div>
-            </Footer>
+            <Content>
+                {activeMenuItem === WidgetMenuItems.TRADING && <Trading />}
+                {activeMenuItem === WidgetMenuItems.POSITIONS && <></>}
+                {activeMenuItem === WidgetMenuItems.SETTINGS && <></>}
+            </Content>
+            <FooterMenu>
+                <FooterMenuItem
+                    isActive={activeMenuItem === WidgetMenuItems.TRADING}
+                    onClick={() => setActiveMenuItem(WidgetMenuItems.TRADING)}
+                >
+                    <FooterMenuIcon className="icon icon--stats" />
+                    <FooterMenuItemLabel>Trade</FooterMenuItemLabel>
+                </FooterMenuItem>
+                <FooterMenuItem
+                    isActive={activeMenuItem === WidgetMenuItems.POSITIONS}
+                    onClick={() => setActiveMenuItem(WidgetMenuItems.POSITIONS)}
+                >
+                    <FooterMenuIcon className="icon icon--history" />
+                    <FooterMenuItemLabel>Positions</FooterMenuItemLabel>
+                </FooterMenuItem>
+                <FooterMenuItem
+                    isActive={activeMenuItem === WidgetMenuItems.SETTINGS}
+                    onClick={() => setActiveMenuItem(WidgetMenuItems.SETTINGS)}
+                >
+                    <FooterMenuIcon className="speedmarkets-icon speedmarkets-icon--gear" />
+                    <FooterMenuItemLabel>Settings</FooterMenuItemLabel>
+                </FooterMenuItem>
+            </FooterMenu>
         </Container>
     );
 };
@@ -61,18 +84,32 @@ const CloseIcon = styled.i`
     cursor: pointer;
 `;
 
-const ChartWrapper = styled.div`
-    height: 180px;
-`;
-
-const Trading = styled(FlexDivColumn)`
+const Content = styled(FlexDivColumn)`
     gap: 10px;
     height: 100%;
 `;
 
-const Footer = styled(FlexDivCentered)`
+const FooterMenu = styled(FlexDivCentered)`
     gap: 30px;
     height: 60px;
+`;
+
+const FooterMenuItem = styled.div<{ isActive: boolean }>`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    color: ${(props) =>
+        props.isActive ? props.theme.speedMarkets.textColor.active : props.theme.speedMarkets.textColor.inactive};
+    cursor: pointer;
+`;
+const FooterMenuIcon = styled.i`
+    font-size: 18px;
+`;
+const FooterMenuItemLabel = styled.span`
+    font-size: 11px;
+    font-weight: 600;
+    line-height: normal;
 `;
 
 export default SpeedMarketsWidget;
