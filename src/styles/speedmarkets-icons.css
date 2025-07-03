@@ -18,6 +18,14 @@
     content: '\003F';
 }
 
+.speedmarkets-logo-icon--btc-logo:before {
+    content: '\0046';
+}
+
+.speedmarkets-logo-icon--eth-logo:before {
+    content: '\0047';
+}
+
 /* speedmarkets-icon */
 
 .speedmarkets-icon--gear:before {
