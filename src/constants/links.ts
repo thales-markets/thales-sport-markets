@@ -29,6 +29,7 @@ export const LINKS = {
     Particle: 'https://particle.network/',
     Pyth: {
         Benchmarks: 'https://pyth.network/benchmarks',
+        BenchmarksPrice: 'https://benchmarks.pyth.network/v1/updates/price/',
         BenchmarksTradingViewHistory: 'https://benchmarks.pyth.network/v1/shims/tradingview/history',
     },
     ResolvingResultsInstructions:

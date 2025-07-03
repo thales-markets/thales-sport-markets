@@ -13,6 +13,13 @@
         "sell-side": "SELL",
         "submit": "Submit",
         "enter-amount": "Enter amount",
+        "buy": {
+            "label": "Execute trade",
+            "progress-label": "Buying in progress...",
+            "wrap-eth": "Wrap ETH and buy",
+            "wrap-eth-progress": "Wrap and buy in progress...",
+            "confirmation-message": "Successfully bought - market created"
+        },
         "days-of-week": {
             "mon": "mon",
             "tue": "tue",
@@ -1531,6 +1538,20 @@
             "trade": "Trade",
             "positions": "Positions",
             "settings": "Settings"
+        },
+        "amm-trading": {
+            "asset-price": "If {{asset}} price is",
+            "choose-direction": "choose direction",
+            "choose-time": "choose duration",
+            "based-amount": "based on amount",
+            "you-win": "you win",
+            "at-least": "at least",
+            "max-buy": "Max buy"
+        },
+        "errors": {
+            "min-buyin": "Minimal buy-in is {{minAmount}}",
+            "max-buyin": "Maximal buy-in is {{maxAmount}}",
+            "out-of-liquidity-direction": "Out of liquidity for direction"
         }
     }
 }

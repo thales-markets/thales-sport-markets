@@ -17,6 +17,7 @@ type NumericInputProps = {
     onChange: (e: ChangeEvent<HTMLInputElement>, value: string) => void;
     showValidation?: boolean;
     validationMessage?: string;
+    validationZIndex?: number;
     currencyComponent?: any;
     readonly?: boolean;
     inputType?: 'text' | 'number';
@@ -34,7 +35,6 @@ type NumericInputProps = {
     width?: string;
     height?: string;
     enableCurrencyComponentOnly?: boolean;
-    validationPlacement?: string;
     borderColor?: string;
     containerWidth?: string;
     validationTooltipZIndex?: number;
@@ -56,6 +56,7 @@ const NumericInput: React.FC<NumericInputProps> = ({
     onChange,
     showValidation,
     validationMessage,
+    validationZIndex,
     currencyComponent,
     readonly,
     inputType,
@@ -113,7 +114,11 @@ const NumericInput: React.FC<NumericInputProps> = ({
                     <InfoText>{info}</InfoText>
                 </InfoWrapper>
             )}
-            <Tooltip overlay={showValidation ? validationMessage || '' : ''} isValidation={showValidation}>
+            <Tooltip
+                overlay={showValidation ? validationMessage || '' : ''}
+                isValidation={showValidation}
+                zIndex={validationZIndex}
+            >
                 <StyledInput
                     autoFocus={!preventAutoFocus}
                     readOnly={readonly}

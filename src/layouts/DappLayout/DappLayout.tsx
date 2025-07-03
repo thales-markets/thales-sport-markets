@@ -4,7 +4,7 @@ import ClaimFreeBetModal from 'components/ClaimFreeBetModal';
 import MetaData from 'components/MetaData';
 import { generalConfig } from 'config/general';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { NAV_MENU_WIDTH, SPEED_MARKETS_DEFAULT_RIGHT } from 'constants/ui';
+import { NAV_MENU_WIDTH, SPEED_MARKETS_WIDGET_DEFAULT_RIGHT } from 'constants/ui';
 import { Network } from 'enums/network';
 import { Theme } from 'enums/ui';
 import useLocalStorage from 'hooks/useLocalStorage';
@@ -204,7 +204,7 @@ const SpeedMarketsButton = styled.div<{ isOpen: boolean }>`
     width: 76px;
     height: 76px;
     bottom: 10px;
-    right: ${SPEED_MARKETS_DEFAULT_RIGHT}px;
+    right: ${SPEED_MARKETS_WIDGET_DEFAULT_RIGHT}px;
     background-image: ${(props) => (props.isOpen ? 'none' : `url(${SpeedMarketsButtonAnimated})`)};
     background-position: center;
     border-radius: 50%;
@@ -227,21 +227,21 @@ const SpeedMarketsButton = styled.div<{ isOpen: boolean }>`
     @keyframes move-left {
         0% {
             visibility: none;
-            right: ${SPEED_MARKETS_DEFAULT_RIGHT}px;
+            right: ${SPEED_MARKETS_WIDGET_DEFAULT_RIGHT}px;
         }
         100% {
             visibility: visible;
-            right: ${SPEED_MARKETS_DEFAULT_RIGHT + NAV_MENU_WIDTH}px;
+            right: ${SPEED_MARKETS_WIDGET_DEFAULT_RIGHT + NAV_MENU_WIDTH}px;
         }
     }
     @keyframes move-right {
         0% {
             visibility: visible;
-            right: ${SPEED_MARKETS_DEFAULT_RIGHT + NAV_MENU_WIDTH}px;
+            right: ${SPEED_MARKETS_WIDGET_DEFAULT_RIGHT + NAV_MENU_WIDTH}px;
         }
         100% {
             visibility: none;
-            right: ${SPEED_MARKETS_DEFAULT_RIGHT}px;
+            right: ${SPEED_MARKETS_WIDGET_DEFAULT_RIGHT}px;
         }
     }
 `;

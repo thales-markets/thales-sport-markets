@@ -119,4 +119,6 @@ export const Colors = {
     DARK_KNIGHT: '#161A36',
     BLUE_ESTATE: '#3b4887',
     LIBERTY_BLUE: '#10152E',
+    HONEYCOMB: '#DCA212',
+    GOLDENROD: '#F9CB15',
 };

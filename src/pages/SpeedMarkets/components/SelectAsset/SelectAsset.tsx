@@ -36,7 +36,7 @@ const Container = styled.div`
     height: 45px;
     padding: 3px;
     background: ${(props) => props.theme.speedMarkets.button.background.inactive};
-    border-radius: 6px;
+    border-radius: 5px;
 `;
 
 const Text = styled.span<{ active?: boolean }>`

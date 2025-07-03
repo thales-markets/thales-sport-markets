@@ -143,4 +143,28 @@ export const refetchProposal = (spaceKey: SpaceKey, hash: string, walletAddress:
     });
 };
 
+export const refetchSpeedMarketsLimits = (networkId: Network, walletAddress?: string) => {
+    queryConnector.queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.SpeedMarkets.SpeedMarketsLimits(networkId, walletAddress),
+    });
+};
+
+export const refetchUserSpeedMarkets = (networkId: Network, walletAddress: string) => {
+    queryConnector.queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.SpeedMarkets.UserSpeedMarkets(networkId, walletAddress),
+    });
+};
+
+export const refetchUserResolvedSpeedMarkets = (networkId: Network, walletAddress: string) => {
+    queryConnector.queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.SpeedMarkets.ResolvedSpeedMarkets(networkId, walletAddress),
+    });
+};
+
+export const refetchActiveSpeedMarkets = (networkId: Network) => {
+    queryConnector.queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.SpeedMarkets.ActiveSpeedMarkets(networkId),
+    });
+};
+
 export default queryConnector;

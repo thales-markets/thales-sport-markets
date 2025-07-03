@@ -188,7 +188,6 @@ const Wrapper = styled.div`
     position: relative;
     width: 100%;
     height: 100%;
-    margin-top: 15px;
 `;
 
 const ChartContainer = styled.div``;

@@ -1,8 +1,14 @@
 import { SpeedPositions } from 'enums/speedMarkets';
 
+export type SelectedPosition = SpeedPositions.UP | SpeedPositions.DOWN | undefined;
+
 export type Risk = { current: number; max: number };
 export type RiskPerAsset = { currency: string; current: number; max: number };
 export type RiskPerAssetAndPosition = RiskPerAsset & { position: SpeedPositions };
+
+export type AmmSpeedMarketsCreatorParams = {
+    maxCreationDelay: number;
+};
 
 export type AmmSpeedMarketsLimits = {
     maxBuyinAmount: number;
@@ -19,4 +25,20 @@ export type AmmSpeedMarketsLimits = {
     maxSkewImpact: number;
     safeBoxImpact: number;
     whitelistedAddress: boolean;
+};
+
+export type UserPosition = {
+    user: string;
+    market: string;
+    currencyKey: string;
+    side: SpeedPositions;
+    strikePrice: number;
+    maturityDate: number;
+    paid: number;
+    payout: number;
+    currentPrice: number;
+    finalPrice: number;
+    isClaimable: boolean;
+    isResolved: boolean;
+    createdAt: number;
 };

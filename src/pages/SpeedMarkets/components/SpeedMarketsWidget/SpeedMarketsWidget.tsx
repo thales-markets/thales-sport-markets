@@ -1,6 +1,6 @@
 import SPAAnchor from 'components/SPAAnchor';
 import { LINKS } from 'constants/links';
-import { SPEED_MARKETS_DEFAULT_RIGHT } from 'constants/ui';
+import { SPEED_MARKETS_WIDGET_DEFAULT_RIGHT, SPEED_MARKETS_WIDGET_Z_INDEX } from 'constants/ui';
 import { WidgetMenuItems } from 'enums/speedMarkets';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -60,17 +60,19 @@ const SpeedMarketsWidget: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 const Container = styled(FlexDivColumn)`
     position: fixed;
     bottom: 20px;
-    right: ${SPEED_MARKETS_DEFAULT_RIGHT}px;
+    right: ${SPEED_MARKETS_WIDGET_DEFAULT_RIGHT}px;
     width: 360px;
     height: 620px;
-    padding: 13px 11px;
+    padding: 11px;
     background: ${(props) => props.theme.speedMarkets.background.primary};
     border: 1px solid ${(props) => props.theme.speedMarkets.borderColor.primary};
     border-radius: 15px;
-    z-index: 3000000000; // discord has 2147483000
+    z-index: ${SPEED_MARKETS_WIDGET_Z_INDEX};
 `;
 
-const HeaderRow = styled(FlexDivRowCentered)``;
+const HeaderRow = styled(FlexDivRowCentered)`
+    margin-bottom: 5px;
+`;
 const Header = styled.div`
     width: 100%;
 `;
@@ -95,7 +97,7 @@ const Content = styled(FlexDivColumn)`
 
 const FooterMenu = styled(FlexDivCentered)`
     gap: 30px;
-    height: 60px;
+    margin-top: 16px;
 `;
 
 const FooterMenuItem = styled.div<{ isActive: boolean }>`

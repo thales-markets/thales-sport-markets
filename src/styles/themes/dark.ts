@@ -300,10 +300,12 @@ export default {
         button: {
             background: {
                 primary: Colors.NAVY_BLUE,
+                secondary: `linear-gradient(90deg, ${Colors.HONEYCOMB} 0%, ${Colors.GOLDENROD} 100%)`,
                 active: Colors.BLUE,
                 inactive: Colors.LIBERTY_BLUE,
             },
             textColor: {
+                primary: Colors.WHITE,
                 active: Colors.NAVY_BLUE_DARK,
                 inactive: Colors.TORY_BLUE,
             },
@@ -311,6 +313,16 @@ export default {
         price: {
             up: Colors.GREEN,
             down: Colors.RED,
+        },
+        position: {
+            up: {
+                default: Colors.BLUE,
+                selected: Colors.NAVY_BLUE_DARK,
+            },
+            down: {
+                default: Colors.RED,
+                selected: Colors.NAVY_BLUE_DARK,
+            },
         },
     },
 };

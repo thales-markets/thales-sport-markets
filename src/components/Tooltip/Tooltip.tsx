@@ -21,6 +21,7 @@ type TooltipProps = {
     isWarning?: boolean;
     open?: boolean;
     showArrow?: boolean;
+    zIndex?: number;
 };
 
 const Tooltip: React.FC<TooltipProps> = ({
@@ -39,6 +40,7 @@ const Tooltip: React.FC<TooltipProps> = ({
     isWarning,
     open,
     showArrow,
+    zIndex,
 }) => {
     const theme: ThemeInterface = useTheme();
 
@@ -70,6 +72,7 @@ const Tooltip: React.FC<TooltipProps> = ({
             showArrow={showArrow}
             arrowContent={<ValidationArrow isWarning={!!isWarning} placement={placement || 'top'} />}
             align={placement === 'bottom' ? { offset: [-2, -2] } : undefined}
+            zIndex={zIndex}
         >
             <div ref={validationChildRef}>{children}</div>
         </ReactTooltip>

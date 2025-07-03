@@ -4,13 +4,13 @@ import OutsideClickHandler from 'components/OutsideClick';
 import SPAAnchor from 'components/SPAAnchor';
 import ROUTES from 'constants/routes';
 import {
-    DISCORD_DEFAULT_RIGHT,
+    DISCORD_WIDGET_DEFAULT_RIGHT,
     NAV_MENU_FIRST_SECTION,
     NAV_MENU_FOURTH_SECTION,
     NAV_MENU_SECOND_SECTION,
     NAV_MENU_THIRD_SECTION,
     NAV_MENU_WIDTH,
-    SPEED_MARKETS_DEFAULT_RIGHT,
+    SPEED_MARKETS_WIDGET_DEFAULT_RIGHT,
 } from 'constants/ui';
 import { secondsToMilliseconds } from 'date-fns';
 import { ProfileTab } from 'enums/ui';
@@ -101,16 +101,16 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
 
         const animationDurationSec = 0.3;
 
-        const widgetBotRightEnd = DISCORD_DEFAULT_RIGHT + NAV_MENU_WIDTH;
+        const widgetBotRightEnd = DISCORD_WIDGET_DEFAULT_RIGHT + NAV_MENU_WIDTH;
 
         const moveLeftCss = `&:not(.open) .button { right: ${widgetBotRightEnd}px; ${keyFrameMoveLeft(
-            DISCORD_DEFAULT_RIGHT,
+            DISCORD_WIDGET_DEFAULT_RIGHT,
             widgetBotRightEnd
         )} animation: move-left ${animationDurationSec}s linear; }`;
 
-        const moveRightCss = `&:not(.open) .button { right: ${DISCORD_DEFAULT_RIGHT}px; ${keyFrameMoveRight(
+        const moveRightCss = `&:not(.open) .button { right: ${DISCORD_WIDGET_DEFAULT_RIGHT}px; ${keyFrameMoveRight(
             widgetBotRightEnd,
-            DISCORD_DEFAULT_RIGHT
+            DISCORD_WIDGET_DEFAULT_RIGHT
         )} animation: move-right ${animationDurationSec}s linear; }`;
 
         const disabledMoveRightCss = moveRightCss.replace('move-right', 'disabled-move-right');
@@ -127,10 +127,10 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
             // speed markets button
             const speedMarkets = document.getElementsByClassName('speed-markets').item(0) as HTMLDivElement;
             if (visibility) {
-                speedMarkets.style.right = `${SPEED_MARKETS_DEFAULT_RIGHT + NAV_MENU_WIDTH}px`;
+                speedMarkets.style.right = `${SPEED_MARKETS_WIDGET_DEFAULT_RIGHT + NAV_MENU_WIDTH}px`;
                 speedMarkets.style.animation = `move-left ${animationDurationSec}s linear`;
             } else {
-                speedMarkets.style.right = `${SPEED_MARKETS_DEFAULT_RIGHT}px`;
+                speedMarkets.style.right = `${SPEED_MARKETS_WIDGET_DEFAULT_RIGHT}px`;
                 speedMarkets.style.animation = `move-right ${animationDurationSec}s linear`;
             }
         }

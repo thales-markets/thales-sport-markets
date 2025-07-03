@@ -1,8 +1,11 @@
 import CollateralSelector from 'components/CollateralSelector';
 import NumericInput from 'components/fields/NumericInput';
 import SuggestedAmount from 'components/SuggestedAmount';
+import { USD_SIGN } from 'constants/currency';
 import { BICONOMY_MAX_FEE_PERCENTAGE } from 'constants/speedMarkets';
+import { SPEED_MARKETS_WIDGET_Z_INDEX } from 'constants/ui';
 import { SpeedPositions } from 'enums/speedMarkets';
+import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
@@ -13,7 +16,7 @@ import { getTicketPayment } from 'redux/modules/ticket';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv } from 'styles/common';
-import { truncToDecimals } from 'thales-utils';
+import { formatCurrencyWithKey, formatCurrencyWithSign, getPrecision, truncToDecimals } from 'thales-utils';
 import { AmmSpeedMarketsLimits } from 'types/speedMarkets';
 import { ThemeInterface } from 'types/ui';
 import {
@@ -21,6 +24,7 @@ import {
     convertFromStableToCollateral,
     getCollateral,
     getCollaterals,
+    getDefaultCollateral,
     isStableCurrency,
 } from 'utils/collaterals';
 import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
@@ -32,18 +36,22 @@ type SelectBuyinProps = {
     selectedAsset: string;
     buyinAmount: number | string;
     setBuyinAmount: Dispatch<SetStateAction<string | number>>;
+    buyinGasFee: number;
     ammSpeedMarketsLimits: AmmSpeedMarketsLimits | null;
     isAllowing: boolean;
     isBuying: boolean;
+    setHasError: Dispatch<boolean>;
 };
 
 const SelectBuyin: React.FC<SelectBuyinProps> = ({
     selectedAsset,
     buyinAmount,
     setBuyinAmount,
+    buyinGasFee,
     ammSpeedMarketsLimits,
     isAllowing,
     isBuying,
+    setHasError,
 }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
@@ -59,11 +67,14 @@ const SelectBuyin: React.FC<SelectBuyinProps> = ({
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const [isFreeBetActive, setIsFreeBetActive] = useState(false);
+    const [errorMessageKey, setErrorMessageKey] = useState('');
 
     const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
         networkId,
         selectedCollateralIndex,
     ]);
+    const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
+    const isDefaultCollateral = selectedCollateral === defaultCollateral;
 
     const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
     const exchangeRates = exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
@@ -113,6 +124,9 @@ const SelectBuyin: React.FC<SelectBuyinProps> = ({
         selectedCollateral,
     ]);
 
+    const minBuyinAmount = useMemo(() => ammSpeedMarketsLimits?.minBuyinAmount || 0, [
+        ammSpeedMarketsLimits?.minBuyinAmount,
+    ]);
     const maxBuyinAmount = useMemo(() => ammSpeedMarketsLimits?.maxBuyinAmount || 0, [
         ammSpeedMarketsLimits?.maxBuyinAmount,
     ]);
@@ -131,6 +145,44 @@ const SelectBuyin: React.FC<SelectBuyinProps> = ({
         },
         [selectedCollateral, exchangeRates, networkId]
     );
+
+    // Input field validations
+    useDebouncedEffect(() => {
+        let errorMessageKey = '';
+
+        if (buyinAmount !== '') {
+            const buyinAmountWithGas = isBiconomy ? Number(buyinAmount) + buyinGasFee : Number(buyinAmount);
+            if ((isConnected && buyinAmountWithGas > paymentTokenBalance) || paymentTokenBalance === 0) {
+                errorMessageKey = 'common.errors.insufficient-balance-wallet';
+            }
+        }
+        if (buyinAmount !== '') {
+            const convertedBuyinAmount = convertToStable(Number(buyinAmount));
+
+            if (convertedBuyinAmount < minBuyinAmount) {
+                errorMessageKey = 'speed-markets.errors.min-buyin';
+            } else if (convertedBuyinAmount > maxBuyinAmount) {
+                errorMessageKey = 'speed-markets.errors.max-buyin';
+            }
+        }
+
+        if (errorMessageKey) {
+            setHasError(true);
+        } else {
+            setHasError(false);
+        }
+        setErrorMessageKey(errorMessageKey);
+    }, [
+        minBuyinAmount,
+        maxBuyinAmount,
+        buyinAmount,
+        paymentTokenBalance,
+        isConnected,
+        convertToStable,
+        networkId,
+        setHasError,
+        buyinGasFee,
+    ]);
 
     const onMaxClick = () => {
         const maxWalletAmount = isConnected
@@ -181,10 +233,20 @@ const SelectBuyin: React.FC<SelectBuyinProps> = ({
                     <NumericInput
                         value={buyinAmount}
                         onChange={(e) => setBuyinAmount(e.target.value)}
-                        showValidation={
-                            inputRefVisible && false /* TODO: !!tooltipTextBuyInAmount && !openApprovalModal */
-                        }
-                        validationMessage={'' /* TODO: tooltipTextBuyInAmount */}
+                        showValidation={inputRefVisible && !!errorMessageKey}
+                        validationMessage={t(errorMessageKey, {
+                            currencyKey: selectedCollateral,
+                            minAmount: `${formatCurrencyWithKey(
+                                selectedCollateral,
+                                convertFromStable(minBuyinAmount),
+                                getPrecision(convertFromStable(minBuyinAmount))
+                            )}${isDefaultCollateral ? '' : ` (${formatCurrencyWithSign(USD_SIGN, minBuyinAmount)})`}`,
+                            maxAmount: `${formatCurrencyWithKey(
+                                selectedCollateral,
+                                convertFromStable(maxBuyinAmount),
+                                getPrecision(convertFromStable(maxBuyinAmount))
+                            )}${isDefaultCollateral ? '' : ` (${formatCurrencyWithSign(USD_SIGN, maxBuyinAmount)})`}`,
+                        })}
                         disabled={isAllowing || isBuying}
                         placeholder={t('common.enter-amount')}
                         currencyComponent={
@@ -206,6 +268,7 @@ const SelectBuyin: React.FC<SelectBuyinProps> = ({
                         inputPadding="5px 10px"
                         borderColor={theme.input.borderColor.tertiary}
                         margin="0"
+                        validationZIndex={SPEED_MARKETS_WIDGET_Z_INDEX}
                     />
                 </AmountToBuyContainer>
             </InputContainer>

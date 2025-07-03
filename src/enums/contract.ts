@@ -20,4 +20,6 @@ export enum ContractType {
     THALES = 'thalvesContract',
     OVERDROP_REWARDS = 'overdropRewardsContract',
     SPEED_MARKETS_DATA = 'speedMarketsDataContract',
+    SPEED_MARKETS_AMM_CREATOR = 'speedMarketsAMMCreatorContract',
+    SPEED_MARKETS_AMM = 'speedMarketsAMMContract',
 }

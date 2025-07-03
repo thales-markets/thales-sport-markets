@@ -31,3 +31,7 @@
 .speedmarkets-icon--gear:before {
     content: '\0033';
 }
+
+.speedmarkets-icon--arrow:before {
+    content: '\005C';
+}
