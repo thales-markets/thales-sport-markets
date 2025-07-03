@@ -2680,7 +2680,7 @@ const Ticket: React.FC<TicketProps> = ({
                         inputPadding="5px 10px"
                         borderColor={theme.input.borderColor.tertiary}
                         disabled={isAllowing || isBuying}
-                        placeholder={t('liquidity-pool.deposit-amount-placeholder')}
+                        placeholder={t('common.enter-amount')}
                         currencyComponent={
                             <CollateralSelector
                                 collateralArray={getCollaterals(networkId)}

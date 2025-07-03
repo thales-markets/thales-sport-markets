@@ -826,7 +826,7 @@ const LiquidityPool: React.FC = () => {
                                             label="Deposit"
                                             disabled={isDepositAmountInputDisabled}
                                             onChange={(_, value) => setAmount(value)}
-                                            placeholder={t('liquidity-pool.deposit-amount-placeholder')}
+                                            placeholder={t('common.enter-amount')}
                                             currencyLabel={
                                                 paramCollateral === LiquidityPoolCollateral.WETH
                                                     ? undefined
