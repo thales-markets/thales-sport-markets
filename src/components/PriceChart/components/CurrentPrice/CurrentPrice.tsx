@@ -49,6 +49,11 @@ const CurrentPrice: React.FC<CurrentPriceProps> = ({ asset, currentPrice, isPric
 };
 
 const Container = styled.div`
+    position: absolute;
+    bottom: 20px;
+    z-index: 10;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -79,7 +84,7 @@ const Icon = styled.i<{ $isUp?: boolean }>`
 
 const Price = styled.span<{ $isUp?: boolean }>`
     font-weight: 700;
-    font-size: 22px;
+    font-size: 18px;
     line-height: 100%;
     color: ${(props) =>
         props.$isUp !== undefined

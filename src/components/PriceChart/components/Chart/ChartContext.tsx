@@ -52,6 +52,12 @@ export const ChartComponent: React.FC<ChartProps> = ({ data, asset }) => {
                 timeVisible: true,
                 fixLeftEdge: true,
                 barSpacing: 10,
+                borderVisible: false,
+                ticksVisible: false,
+                visible: false,
+            },
+            rightPriceScale: {
+                borderVisible: false,
             },
         });
         setChart(chart);

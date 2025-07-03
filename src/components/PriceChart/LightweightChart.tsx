@@ -17,6 +17,7 @@ import { Risk, RiskPerAsset, RiskPerAssetAndPosition } from 'types/speedMarkets'
 import { ThemeInterface } from 'types/ui';
 import { useChainId, useClient } from 'wagmi';
 import { ChartComponent } from './components/Chart/ChartContext';
+import CurrentPrice from './components/CurrentPrice';
 
 const now = new Date();
 
@@ -52,6 +53,7 @@ const LightweightChart: React.FC<LightweightChartProps> = ({
     position,
     selectedDate,
     explicitCurrentPrice,
+    prevExplicitPrice,
     deltaTimeSec,
     chainedRisk,
     risksPerAsset,
@@ -124,6 +126,8 @@ const LightweightChart: React.FC<LightweightChartProps> = ({
         ? formatCurrencyWithSign(USD_SIGN, riskPerDirectionDown.max - riskPerDirectionDown.current)
         : 0;
 
+    const isPriceUp = (explicitCurrentPrice || 0) > (prevExplicitPrice || 0);
+
     return (
         <Wrapper>
             <FlexDivSpaceBetween>
@@ -172,6 +176,8 @@ const LightweightChart: React.FC<LightweightChartProps> = ({
                             />
                         )}
                     </ChartContainer>
+
+                    <CurrentPrice asset={asset} currentPrice={currentPrice} isPriceUp={isPriceUp} />
 
                     <PythIconWrap>
                         <a target="_blank" rel="noreferrer" href={LINKS.Pyth.Benchmarks}>
