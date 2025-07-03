@@ -42,6 +42,7 @@ import queryConnector from 'utils/queryConnector';
 import { history } from 'utils/routes';
 import { delay } from 'utils/timer';
 import { useAccount, useChainId, useConnect, useConnectors, useDisconnect, useSwitchChain } from 'wagmi';
+import { useMiniKit } from '@coinbase/onchainkit/minikit';
 
 const App = () => {
     const dispatch = useDispatch();
@@ -53,6 +54,14 @@ const App = () => {
     const connectors = useConnectors();
     const { connect } = useConnect();
     const isParticleConnected = useSelector(getIsConnectedViaParticle);
+    const { setFrameReady, isFrameReady } = useMiniKit();
+
+    // The setFrameReady() function is called when your mini-app is ready to be shown
+    useEffect(() => {
+        if (!isFrameReady) {
+            setFrameReady();
+        }
+    }, [setFrameReady, isFrameReady]);
 
     queryConnector.setQueryClient();
 

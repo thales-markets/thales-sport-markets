@@ -24,7 +24,7 @@ import { arbitrum, base, optimism, optimismSepolia } from 'viem/chains';
 import { WagmiProvider } from 'wagmi';
 import enTranslation from '../../i18n/en.json';
 import { wagmiConfig } from './wagmiConfig';
-
+import { MiniKitProvider } from '@coinbase/onchainkit/minikit';
 // window.Buffer = window.Buffer || buffer; // Fix for Particle Wallets
 
 type RootProps = {
@@ -85,32 +85,34 @@ const Root: React.FC<RootProps> = ({ store }) => {
         <ErrorBoundary fallbackRender={fallbackRender} onError={onErrorHandler}>
             <QueryClientProvider client={queryConnector.queryClient}>
                 <Provider store={store}>
-                    <AuthCoreContextProvider
-                        options={{
-                            projectId: import.meta.env.VITE_APP_PARTICLE_PROJECT_ID,
-                            clientKey: import.meta.env.VITE_APP_PARTICLE_CLIENT_KEY,
-                            appId: import.meta.env.VITE_APP_PARTICLE_API_ID,
-                            language: 'en',
-                            wallet: {
-                                visible: false,
-                            },
-                            chains: [optimism, arbitrum, base, optimismSepolia],
-                            themeType: 'dark',
-                            customStyle: PARTICLE_STYLE,
-                        }}
-                    >
-                        <WagmiProvider config={wagmiConfig}>
-                            <RainbowKitProvider
-                                theme={rainbowCustomTheme}
-                                appInfo={{
-                                    appName: 'OvertimeMarkets',
-                                    disclaimer: WalletDisclaimer,
-                                }}
-                            >
-                                <App />
-                            </RainbowKitProvider>
-                        </WagmiProvider>
-                    </AuthCoreContextProvider>
+                    <MiniKitProvider chain={base}>
+                        <AuthCoreContextProvider
+                            options={{
+                                projectId: import.meta.env.VITE_APP_PARTICLE_PROJECT_ID,
+                                clientKey: import.meta.env.VITE_APP_PARTICLE_CLIENT_KEY,
+                                appId: import.meta.env.VITE_APP_PARTICLE_API_ID,
+                                language: 'en',
+                                wallet: {
+                                    visible: false,
+                                },
+                                chains: [optimism, arbitrum, base, optimismSepolia],
+                                themeType: 'dark',
+                                customStyle: PARTICLE_STYLE,
+                            }}
+                        >
+                            <WagmiProvider config={wagmiConfig}>
+                                <RainbowKitProvider
+                                    theme={rainbowCustomTheme}
+                                    appInfo={{
+                                        appName: 'OvertimeMarkets',
+                                        disclaimer: WalletDisclaimer,
+                                    }}
+                                >
+                                    <App />
+                                </RainbowKitProvider>
+                            </WagmiProvider>
+                        </AuthCoreContextProvider>
+                    </MiniKitProvider>
                 </Provider>
             </QueryClientProvider>
         </ErrorBoundary>
