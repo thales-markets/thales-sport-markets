@@ -1,32 +1,28 @@
 import TooltipInfo from 'components/Tooltip';
 import { USD_SIGN } from 'constants/currency';
 import { LINKS } from 'constants/links';
-import { Positions } from 'enums/market';
+import { SpeedPositions } from 'enums/speedMarkets';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 
+import SimpleLoader from 'components/SimpleLoader';
+import { subDays } from 'date-fns';
 import usePythCandlestickQuery from 'queries/prices/usePythCandlestickQuery';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivSpaceBetween } from 'styles/common';
 import { formatCurrencyWithSign } from 'thales-utils';
-
+import { Risk, RiskPerAsset, RiskPerAssetAndPosition } from 'types/speedMarkets';
 import { ThemeInterface } from 'types/ui';
-
-import SimpleLoader from 'components/SimpleLoader';
-import { subDays } from 'date-fns';
-import { useTheme } from 'styled-components';
 import { useChainId, useClient } from 'wagmi';
 import { ChartComponent } from './components/Chart/ChartContext';
-
-import { Risk, RiskPerAsset, RiskPerAssetAndPosition } from 'types/market';
 
 const now = new Date();
 
 type LightweightChartProps = {
     asset: string;
-    position?: Positions | undefined;
+    position?: SpeedPositions | undefined;
     selectedPrice?: number;
     selectedDate?: number;
     explicitCurrentPrice?: number;
@@ -116,13 +112,13 @@ const LightweightChart: React.FC<LightweightChartProps> = ({
     const liquidity = risk ? formatCurrencyWithSign(USD_SIGN, risk.max - risk.current) : 0;
 
     const riskPerDirectionUp = risksPerAssetAndDirection?.filter(
-        (risk) => risk.currency === asset && risk.position === Positions.UP
+        (risk) => risk.currency === asset && risk.position === SpeedPositions.UP
     )[0];
     const liquidityPerUp = riskPerDirectionUp
         ? formatCurrencyWithSign(USD_SIGN, riskPerDirectionUp.max - riskPerDirectionUp.current)
         : 0;
     const riskPerDirectionDown = risksPerAssetAndDirection?.filter(
-        (risk) => risk.currency === asset && risk.position === Positions.DOWN
+        (risk) => risk.currency === asset && risk.position === SpeedPositions.DOWN
     )[0];
     const liquidityPerDown = riskPerDirectionDown
         ? formatCurrencyWithSign(USD_SIGN, riskPerDirectionDown.max - riskPerDirectionDown.current)

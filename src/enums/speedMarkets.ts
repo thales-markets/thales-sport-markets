@@ -3,3 +3,8 @@ export enum WidgetMenuItems {
     POSITIONS = 'Positions',
     SETTINGS = 'Settings',
 }
+
+export enum SpeedPositions {
+    UP = 'UP',
+    DOWN = 'DOWN',
+}

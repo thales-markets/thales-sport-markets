@@ -9,18 +9,18 @@ type SelectAssetProps = {
 const SelectAsset: React.FC<SelectAssetProps> = ({ selectedAsset, onAssetClick }) => {
     return (
         <Container>
-            <TextWrapper
+            <Asset
                 isActive={selectedAsset === CRYPTO_CURRENCY_MAP.BTC}
                 onClick={() => onAssetClick(CRYPTO_CURRENCY_MAP.BTC)}
             >
                 <Text>{CRYPTO_CURRENCY_MAP.BTC}</Text>
-            </TextWrapper>
-            <TextWrapper
+            </Asset>
+            <Asset
                 isActive={selectedAsset === CRYPTO_CURRENCY_MAP.ETH}
                 onClick={() => onAssetClick(CRYPTO_CURRENCY_MAP.ETH)}
             >
                 <Text>{CRYPTO_CURRENCY_MAP.ETH}</Text>
-            </TextWrapper>
+            </Asset>
         </Container>
     );
 };
@@ -39,14 +39,12 @@ const Container = styled.div`
 
 const Text = styled.span<{ active?: boolean }>`
     position: relative;
-    font-weight: 600;
-    font-size: 12px;
-    line-height: 14px;
-    white-space: pre;
-    text-align: left;
+    font-weight: 800;
+    font-size: 14px;
+    text-align: center;
 `;
 
-const TextWrapper = styled.div<{ isActive: boolean }>`
+const Asset = styled.div<{ isActive: boolean }>`
     display: flex;
     align-items: center;
     flex: 1;

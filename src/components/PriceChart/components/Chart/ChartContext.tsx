@@ -1,5 +1,5 @@
 import { ChartContext } from 'constants/chart';
-import { Positions } from 'enums/market';
+import { SpeedPositions } from 'enums/speedMarkets';
 import { ColorType, IChartApi, createChart } from 'lightweight-charts';
 import React, { useEffect, useRef, useState } from 'react';
 import styled, { useTheme } from 'styled-components';
@@ -13,7 +13,7 @@ type ChartContextProps = {
 
 type ChartProps = {
     data: any;
-    position: Positions | undefined;
+    position: SpeedPositions | undefined;
     asset: string;
     selectedPrice?: number;
     selectedDate?: number;
