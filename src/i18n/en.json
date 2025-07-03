@@ -12,6 +12,7 @@
         "wrap-eth-tooltip": "Your ETH is first wrapped into WETH and then passed to the contract",
         "sell-side": "SELL",
         "submit": "Submit",
+        "enter-amount": "Enter amount",
         "days-of-week": {
             "mon": "mon",
             "tue": "tue",

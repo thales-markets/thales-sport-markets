@@ -24,6 +24,7 @@ import stakingThalesBettingProxy from 'utils/contracts/stakingThalesBettingProxy
 import liquidityPoolContractV2 from './contracts/liquidityPoolContractV2';
 import overdropRewardsContract from './contracts/overdropRewardsContract';
 import resolveBlockerContract from './contracts/resolveBlockerContract';
+import speedMarketsDataContract from './contracts/speedMarketsAMMDataContract';
 import thalesContract from './contracts/thalesContract';
 import thalesToOverMigrationContract from './contracts/thalesToOverMigrationContract';
 
@@ -128,6 +129,8 @@ export const getContractInstance = (
             return getContractWithModifiedResponse(thalesContract, networkConfig);
         case ContractType.OVERDROP_REWARDS:
             return getContractWithModifiedResponse(overdropRewardsContract, networkConfig);
+        case ContractType.SPEED_MARKETS_DATA:
+            return getContractWithModifiedResponse(speedMarketsDataContract, networkConfig);
         default:
             return undefined;
     }

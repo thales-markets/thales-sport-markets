@@ -105,6 +105,10 @@ export const sortCollateralBalances = (
     return newObject;
 };
 
+export const convertCollateralToStable = (srcCollateral: Coins, amount: number, rate: number) => {
+    return isStableCurrency(srcCollateral) ? amount : amount * rate;
+};
+
 export const convertFromStableToCollateral = (
     dstCollateral: Coins,
     amount: number,

@@ -220,6 +220,13 @@ const QUERY_KEYS = {
             walletAddress,
         ],
     },
+    SpeedMarkets: {
+        SpeedMarketsLimits: (networkId: Network, walletAddress?: string) => [
+            'speedMarketsLimits',
+            networkId,
+            walletAddress,
+        ],
+    },
 };
 
 export default QUERY_KEYS;
