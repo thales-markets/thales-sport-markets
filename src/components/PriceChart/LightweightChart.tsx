@@ -13,7 +13,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivSpaceBetween } from 'styles/common';
 import { formatCurrencyWithSign } from 'thales-utils';
-import { Risk, RiskPerAsset, RiskPerAssetAndPosition } from 'types/speedMarkets';
+import { RiskPerAsset, RiskPerAssetAndPosition } from 'types/speedMarkets';
 import { ThemeInterface } from 'types/ui';
 import { useChainId, useClient } from 'wagmi';
 import { ChartComponent } from './components/Chart/ChartContext';
@@ -28,11 +28,9 @@ type LightweightChartProps = {
     selectedDate?: number;
     explicitCurrentPrice?: number;
     prevExplicitPrice?: number;
-    chainedRisk?: Risk;
     risksPerAsset?: RiskPerAsset[];
     deltaTimeSec?: number;
     risksPerAssetAndDirection?: RiskPerAssetAndPosition[];
-    hideChart?: boolean;
     hideLiquidity?: boolean;
 };
 
@@ -55,10 +53,8 @@ const LightweightChart: React.FC<LightweightChartProps> = ({
     explicitCurrentPrice,
     prevExplicitPrice,
     deltaTimeSec,
-    chainedRisk,
     risksPerAsset,
     risksPerAssetAndDirection,
-    hideChart,
     hideLiquidity,
 }) => {
     const { t } = useTranslation();
@@ -108,9 +104,7 @@ const LightweightChart: React.FC<LightweightChartProps> = ({
         setCurrentDeltaTimeSec(deltaTimeSec);
     }, [deltaTimeSec, currentDeltaTimeSec]);
 
-    const risk = chainedRisk
-        ? chainedRisk
-        : risksPerAsset?.filter((riskPerAsset) => riskPerAsset.currency === asset)[0];
+    const risk = risksPerAsset?.filter((riskPerAsset) => riskPerAsset.currency === asset)[0];
     const liquidity = risk ? formatCurrencyWithSign(USD_SIGN, risk.max - risk.current) : 0;
 
     const riskPerDirectionUp = risksPerAssetAndDirection?.filter(
@@ -140,11 +134,7 @@ const LightweightChart: React.FC<LightweightChartProps> = ({
                         <TooltipInfo
                             overlay={
                                 <Trans
-                                    i18nKey={
-                                        chainedRisk
-                                            ? 'speed-markets.chained.tooltips.liquidity'
-                                            : 'speed-markets.tooltips.liquidity'
-                                    }
+                                    i18nKey={'speed-markets.tooltips.liquidity'}
                                     components={{
                                         br: <br />,
                                     }}
@@ -160,32 +150,28 @@ const LightweightChart: React.FC<LightweightChartProps> = ({
                     </FlexDiv>
                 )}
             </FlexDivSpaceBetween>
-            {!hideChart && (
-                <>
-                    <ChartContainer>
-                        {pythQuery.isLoading ? (
-                            <SimpleLoader />
-                        ) : (
-                            <ChartComponent
-                                resolution={dateRange.resolution}
-                                data={candleData}
-                                position={position}
-                                asset={asset}
-                                selectedPrice={selectedPrice}
-                                selectedDate={selectedDate}
-                            />
-                        )}
-                    </ChartContainer>
+            <ChartContainer>
+                {pythQuery.isLoading ? (
+                    <SimpleLoader />
+                ) : (
+                    <ChartComponent
+                        resolution={dateRange.resolution}
+                        data={candleData}
+                        position={position}
+                        asset={asset}
+                        selectedPrice={selectedPrice}
+                        selectedDate={selectedDate}
+                    />
+                )}
+            </ChartContainer>
 
-                    <CurrentPrice asset={asset} currentPrice={currentPrice} isPriceUp={isPriceUp} />
+            <CurrentPrice asset={asset} currentPrice={currentPrice} isPriceUp={isPriceUp} />
 
-                    <PythIconWrap>
-                        <a target="_blank" rel="noreferrer" href={LINKS.Pyth.Benchmarks}>
-                            <i className="icon icon--pyth" />
-                        </a>
-                    </PythIconWrap>
-                </>
-            )}
+            <PythIconWrap>
+                <a target="_blank" rel="noreferrer" href={LINKS.Pyth.Benchmarks}>
+                    <i className="icon icon--pyth" />
+                </a>
+            </PythIconWrap>
         </Wrapper>
     );
 };
