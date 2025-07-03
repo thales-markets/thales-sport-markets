@@ -24,6 +24,7 @@ import stakingThalesBettingProxy from 'utils/contracts/stakingThalesBettingProxy
 import liquidityPoolContractV2 from './contracts/liquidityPoolContractV2';
 import overdropRewardsContract from './contracts/overdropRewardsContract';
 import resolveBlockerContract from './contracts/resolveBlockerContract';
+import speedMarketsAMMContract from './contracts/speedMarkets/speedMarketsAMMContract';
 import speedMarketsAMMCreatorContract from './contracts/speedMarkets/speedMarketsAMMCreatorContract';
 import speedMarketsDataContract from './contracts/speedMarkets/speedMarketsAMMDataContract';
 import thalesContract from './contracts/thalesContract';
@@ -134,6 +135,8 @@ export const getContractInstance = (
             return getContractWithModifiedResponse(speedMarketsDataContract, networkConfig);
         case ContractType.SPEED_MARKETS_AMM_CREATOR:
             return getContractWithModifiedResponse(speedMarketsAMMCreatorContract, networkConfig);
+        case ContractType.SPEED_MARKETS_AMM:
+            return getContractWithModifiedResponse(speedMarketsAMMContract, networkConfig);
         default:
             return undefined;
     }
