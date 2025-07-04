@@ -16,7 +16,7 @@ const CurrentPrice: React.FC<CurrentPriceProps> = ({ asset, currentPrice, isPric
 
     return (
         <Container>
-            <Icon className={`currency-icon currency-icon--${asset.toLowerCase()}`} />
+            <Icon className={`speedmarkets-logo-icon speedmarkets-logo-icon--${asset.toLowerCase()}-logo`} />
             <AnimatedPrice key={currentPrice}>
                 {currentPriceFormatted.split('').map((letter: string, index) => {
                     if (isNaN(parseInt(letter))) {
@@ -50,7 +50,7 @@ const CurrentPrice: React.FC<CurrentPriceProps> = ({ asset, currentPrice, isPric
 
 const Container = styled.div`
     position: absolute;
-    bottom: 20px;
+    bottom: 2px;
     z-index: 10;
     left: 50%;
     transform: translateX(-50%);
