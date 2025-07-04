@@ -2,6 +2,7 @@ import { SpeedPositions } from 'enums/speedMarkets';
 import { CRYPTO_CURRENCY_MAP } from './currency';
 
 export const SUPPORTED_ASSETS = [CRYPTO_CURRENCY_MAP.BTC, CRYPTO_CURRENCY_MAP.ETH];
+export const DELTA_TIMES_MINUTES = [3, 5];
 
 export const POSITIONS_TO_SIDE_MAP: Record<SpeedPositions, number> = {
     UP: 0,

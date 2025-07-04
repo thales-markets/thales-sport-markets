@@ -38,8 +38,6 @@ type SelectBuyinProps = {
     setBuyinAmount: Dispatch<SetStateAction<string | number>>;
     buyinGasFee: number;
     ammSpeedMarketsLimits: AmmSpeedMarketsLimits | null;
-    isAllowing: boolean;
-    isBuying: boolean;
     setHasError: Dispatch<boolean>;
 };
 
@@ -49,8 +47,6 @@ const SelectBuyin: React.FC<SelectBuyinProps> = ({
     setBuyinAmount,
     buyinGasFee,
     ammSpeedMarketsLimits,
-    isAllowing,
-    isBuying,
     setHasError,
 }) => {
     const { t } = useTranslation();
@@ -247,7 +243,6 @@ const SelectBuyin: React.FC<SelectBuyinProps> = ({
                                 getPrecision(convertFromStable(maxBuyinAmount))
                             )}${isDefaultCollateral ? '' : ` (${formatCurrencyWithSign(USD_SIGN, maxBuyinAmount)})`}`,
                         })}
-                        disabled={isAllowing || isBuying}
                         placeholder={t('common.enter-amount')}
                         currencyComponent={
                             <CollateralSelector

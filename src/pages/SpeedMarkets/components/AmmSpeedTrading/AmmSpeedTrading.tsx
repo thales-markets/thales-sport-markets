@@ -90,8 +90,6 @@ type AmmSpeedTradingProps = {
         skew: { [SpeedPositions.UP]: number; [SpeedPositions.DOWN]: number };
     }>;
     setBuyinGasFee: Dispatch<number>;
-    setIsAllowingBuy: Dispatch<boolean>;
-    setIsBuying: Dispatch<boolean>;
     resetData: Dispatch<void>;
     hasError: boolean;
 };
@@ -104,8 +102,6 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
     ammSpeedMarketsLimits,
     setProfitAndSkewPerPosition,
     setBuyinGasFee,
-    setIsAllowingBuy,
-    setIsBuying,
     resetData,
     hasError,
 }) => {
@@ -341,7 +337,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
 
         const collateralContractWithSigner = getContractInstance(
             ContractType.MULTICOLLATERAL,
-            { client: walletClient.data, networkId },
+            { client, networkId },
             collateralIndex
         );
 
@@ -414,7 +410,6 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
         const id = toast.loading(t('speed-markets.progress'));
         try {
             setIsAllowing(true);
-            setIsAllowingBuy(true);
             let hash;
             if (isBiconomy) {
                 hash = await executeBiconomyTransaction({
@@ -434,18 +429,15 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
             if (txReceipt.status === 'success') {
                 toast.update(id, getSuccessToastOptions(t(`market.toast-message.approve-success`)));
                 setIsAllowing(false);
-                setIsAllowingBuy(false);
             } else {
                 toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
                 setIsAllowing(false);
-                setIsAllowingBuy(false);
                 setOpenApprovalModal(false);
             }
         } catch (e) {
             console.log(e);
             toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
             setIsAllowing(false);
-            setIsAllowingBuy(false);
             setOpenApprovalModal(false);
         }
     };
@@ -457,21 +449,19 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
             setPaidAmount(0);
             setSubmittedStrikePrice(0);
             setIsSubmitting(false);
-            setIsBuying(false);
 
             refetchUserSpeedMarkets(networkId, userAddress);
             refetchActiveSpeedMarkets(networkId);
             refetchSpeedMarketsLimits(networkId);
             refetchBalances(userAddress, networkId);
         },
-        [networkId, resetData, t, userAddress, setIsBuying]
+        [networkId, resetData, t, userAddress]
     );
 
     const handleSubmit = async () => {
         if (!isBiconomy && isButtonDisabled) return;
 
         setIsSubmitting(true);
-        setIsBuying(true);
         const id = toast.loading(t('speed-markets.progress'));
 
         const speedMarketsCreatorContractWithSigner = getContractInstance(ContractType.SPEED_MARKETS_AMM_CREATOR, {
@@ -592,7 +582,6 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
                     toast.update(id, getErrorToastOptions(t('speed-markets.errors.buy-failed')));
                     setSubmittedStrikePrice(0);
                     setIsSubmitting(false);
-                    setIsBuying(false);
                 }
 
                 PLAUSIBLE.trackEvent(PLAUSIBLE_KEYS.speedMarketsBuy, {
@@ -608,7 +597,6 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
                 toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
                 setSubmittedStrikePrice(0);
                 setIsSubmitting(false);
-                setIsBuying(false);
             }
         } catch (e) {
             console.log(e);
@@ -616,7 +604,6 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
             toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
             setSubmittedStrikePrice(0);
             setIsSubmitting(false);
-            setIsBuying(false);
         }
         unwatch();
     };

@@ -14,6 +14,7 @@
         "submit": "Submit",
         "enter-amount": "Enter amount",
         "liquidity": "Liquidity",
+        "trades": "Trades",
         "days-of-week": {
             "mon": "mon",
             "tue": "tue",

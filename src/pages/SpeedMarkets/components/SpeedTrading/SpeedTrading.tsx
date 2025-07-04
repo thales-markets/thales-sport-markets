@@ -12,18 +12,13 @@ import SelectBuyin from '../SelectBuyin';
 import SelectPosition from '../SelectPosition';
 import SpeedTradingChart from '../SpeedTradingChart';
 
-const DEFAULT_DELTA_TIME_SEC = 180; // TODO
-
-const SpeedTrading: React.FC = () => {
+const SpeedTrading: React.FC<{ deltaTimeSec: number }> = ({ deltaTimeSec }) => {
     const networkId = useChainId();
     const client = useClient();
     const { isConnected } = useAccount();
 
-    const [deltaTimeSec, setDeltaTimeSec] = useState(DEFAULT_DELTA_TIME_SEC);
     const [selectedAsset, setSelectedAsset] = useState(SUPPORTED_ASSETS[0]);
     const [buyinAmount, setBuyinAmount] = useState<number | string>('');
-    const [isAllowing, setIsAllowing] = useState(false);
-    const [isBuying, setIsBuying] = useState(false);
     const [selectedPosition, setSelectedPosition] = useState<SelectedPosition>(undefined);
     const [profitAndSkewPerPosition, setProfitAndSkewPerPosition] = useState({
         profit: { [SpeedPositions.UP]: 0, [SpeedPositions.DOWN]: 0 },
@@ -40,7 +35,6 @@ const SpeedTrading: React.FC = () => {
 
     const resetData = useCallback(() => {
         setSelectedPosition(undefined);
-        setDeltaTimeSec(DEFAULT_DELTA_TIME_SEC);
         setBuyinAmount('');
     }, []);
 
@@ -71,8 +65,6 @@ const SpeedTrading: React.FC = () => {
                 setBuyinAmount={setBuyinAmount}
                 buyinGasFee={buyinGasFee}
                 ammSpeedMarketsLimits={ammSpeedMarketsLimitsData}
-                isAllowing={isAllowing}
-                isBuying={isBuying}
                 setHasError={setHasError}
             />
             <SelectPosition
@@ -89,8 +81,6 @@ const SpeedTrading: React.FC = () => {
                 ammSpeedMarketsLimits={ammSpeedMarketsLimitsData}
                 setProfitAndSkewPerPosition={setProfitAndSkewPerPosition}
                 setBuyinGasFee={setBuyinGasFee}
-                setIsAllowingBuy={setIsAllowing}
-                setIsBuying={setIsBuying}
                 resetData={resetData}
                 hasError={hasError}
             />
