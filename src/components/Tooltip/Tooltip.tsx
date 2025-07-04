@@ -85,6 +85,7 @@ const Tooltip: React.FC<TooltipProps> = ({
             showArrow={showArrow}
             mouseEnterDelay={mouseEnterDelay}
             mouseLeaveDelay={0}
+            zIndex={zIndex}
         >
             {children ? (
                 children

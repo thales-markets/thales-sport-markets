@@ -5,6 +5,7 @@ import { SpeedPositions } from 'enums/speedMarkets';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 
 import SimpleLoader from 'components/SimpleLoader';
+import { SPEED_MARKETS_WIDGET_Z_INDEX } from 'constants/ui';
 import { subDays } from 'date-fns';
 import usePythCandlestickQuery from 'queries/prices/usePythCandlestickQuery';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
@@ -146,6 +147,7 @@ const LightweightChart: React.FC<LightweightChartProps> = ({
                                 />
                             }
                             customIconStyling={{ color: theme.speedMarkets.price.up }}
+                            zIndex={SPEED_MARKETS_WIDGET_Z_INDEX}
                         />
                     </FlexDiv>
                 )}

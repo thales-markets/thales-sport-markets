@@ -140,7 +140,7 @@ export const resolveAllSpeedPositions = async (
 
     const priceConnection = getPriceConnection(networkConfig.networkId);
 
-    const id = toast.loading(i18n.t('common.progress'));
+    const id = toast.loading(i18n.t('speed-markets.progress'));
 
     const speedMarketsAMMContractWithSigner = getContract({
         abi: getContractAbi(speedMarketsAMMContract, networkConfig.networkId),
@@ -243,6 +243,6 @@ export const resolveAllSpeedPositions = async (
             toast.update(id, getErrorToastOptions(i18n.t('common.errors.unknown-error-try-again')));
         }
     } else {
-        toast.update(id, getInfoToastOptions(i18n.t('speed-markets.overview.no-resolve-positions')));
+        toast.update(id, getInfoToastOptions(i18n.t('speed-markets.user-positions.no-resolve-positions')));
     }
 };

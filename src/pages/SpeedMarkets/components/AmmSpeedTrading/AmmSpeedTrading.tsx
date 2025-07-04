@@ -411,7 +411,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
 
         const addressToApprove = speedMarketsAMMContract.addresses[networkId];
 
-        const id = toast.loading(t('common.progress'));
+        const id = toast.loading(t('speed-markets.progress'));
         try {
             setIsAllowing(true);
             setIsAllowingBuy(true);
@@ -432,7 +432,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
                 hash,
             });
             if (txReceipt.status === 'success') {
-                toast.update(id, getSuccessToastOptions(t(`common.transaction.successful`)));
+                toast.update(id, getSuccessToastOptions(t(`market.toast-message.approve-success`)));
                 setIsAllowing(false);
                 setIsAllowingBuy(false);
             } else {
@@ -452,7 +452,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
 
     const onMarketCreated = useCallback(
         (toastIdParam: string | number) => {
-            toast.update(toastIdParam, getSuccessToastOptions(t('common.buy.confirmation-message')));
+            toast.update(toastIdParam, getSuccessToastOptions(t('speed-markets.buy.confirmation-message')));
             resetData();
             setPaidAmount(0);
             setSubmittedStrikePrice(0);
@@ -472,7 +472,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
 
         setIsSubmitting(true);
         setIsBuying(true);
-        const id = toast.loading(t('common.progress'));
+        const id = toast.loading(t('speed-markets.progress'));
 
         const speedMarketsCreatorContractWithSigner = getContractInstance(ContractType.SPEED_MARKETS_AMM_CREATOR, {
             networkId,
@@ -589,7 +589,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
                     checkDelay += checkDelay;
                 }
                 if (!isMarketCreated) {
-                    toast.update(id, getErrorToastOptions(t('common.errors.buy-failed')));
+                    toast.update(id, getErrorToastOptions(t('speed-markets.errors.buy-failed')));
                     setSubmittedStrikePrice(0);
                     setIsSubmitting(false);
                     setIsBuying(false);
@@ -663,7 +663,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
         if (outOfLiquidity) {
             return (
                 <Button disabled {...getDefaultButtonProps(theme)}>
-                    {t('common.errors.out-of-liquidity')}
+                    {t('speed-markets.errors.out-of-liquidity')}
                 </Button>
             );
         }
@@ -693,11 +693,11 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
             <Button disabled={isButtonDisabled} onClick={handleSubmit} {...getDefaultButtonProps(theme)}>
                 {isSubmitting
                     ? isEth && !isBiconomy
-                        ? t('common.buy.wrap-eth-progress')
-                        : t('common.buy.progress-label')
+                        ? t('speed-markets.buy.wrap-eth-progress')
+                        : t('speed-markets.buy.progress-label')
                     : isEth && !isBiconomy
-                    ? t('common.buy.wrap-eth')
-                    : t('common.buy.label')}
+                    ? t('speed-markets.buy.wrap-eth')
+                    : t('speed-markets.buy.label')}
             </Button>
         );
     };

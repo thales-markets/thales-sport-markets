@@ -13,13 +13,7 @@
         "sell-side": "SELL",
         "submit": "Submit",
         "enter-amount": "Enter amount",
-        "buy": {
-            "label": "Execute trade",
-            "progress-label": "Buying in progress...",
-            "wrap-eth": "Wrap ETH and buy",
-            "wrap-eth-progress": "Wrap and buy in progress...",
-            "confirmation-message": "Successfully bought - market created"
-        },
+        "liquidity": "Liquidity",
         "days-of-week": {
             "mon": "mon",
             "tue": "tue",
@@ -1534,10 +1528,18 @@
         }
     },
     "speed-markets": {
+        "progress": "Please wait...",
         "menu-items-label": {
             "trade": "Trade",
             "positions": "Positions",
             "settings": "Settings"
+        },
+        "buy": {
+            "label": "Execute trade",
+            "progress-label": "Execution in progress...",
+            "wrap-eth": "Wrap ETH and execute trade",
+            "wrap-eth-progress": "Wrap and execute in progress...",
+            "confirmation-message": "Successfully executed - position created"
         },
         "amm-trading": {
             "asset-price": "If {{asset}} price is",
@@ -1548,10 +1550,58 @@
             "at-least": "at least",
             "max-buy": "Max buy"
         },
+        "user-positions": {
+            "open": "Open positions",
+            "your-positions": "Your open positions",
+            "no-positions": "Your {{status}} positions will be visible here",
+            "status-open": "open",
+            "status-claimable": "claimable",
+            "created": "Created",
+            "end-time": "End time",
+            "asset": "Asset",
+            "direction": "Direction",
+            "price": "Price",
+            "current-price": "Current price",
+            "final-price": "Final price",
+            "status": "Status",
+            "paid": "Paid",
+            "payout": "Payout",
+            "claim-in": "Claim in",
+            "claim-win": "Claim win",
+            "claim-win-progress": "Claiming win",
+            "result-in": "Result in",
+            "next-result-in": "Next result in",
+            "approve-swap-tooltip": "To get payout in {{currencyKey}}, you need to approve swap from {{defaultCurrency}} to {{currencyKey}}.",
+            "claim-all": "Claim all wins",
+            "claim-all-progress": "Claiming all wins",
+            "claim-all-in": "Claim all in",
+            "claim-all-win-in": "Claim all winnings in",
+            "confirmation-message": "Position(s) successfully claimed",
+            "waiting-price": "Waiting for price",
+            "no-resolve-positions": "No positions for this section with price",
+            "errors": {
+                "price-stale": "Can't resolve position with stale price"
+            }
+        },
+        "tooltips": {
+            "current-price": "Current price as reported by Pyth oracles.",
+            "liquidity": "Current available liquidity for this Asset: {{liquidityPerAsset}}<br><br>Total available for Buy-In per direction<br>Available for UP: {{liquidityPerUp}}<br>Available for DOWN: {{liquidityPerDown}}",
+            "payout-conversion": "Win amount can be slightly different due to conversion rate at execution time",
+            "final-price-missing": "Oracle price snapshot for this position timestamp is still being processed. Even if contract input is delayed by the Pyth oracles, the price snapshot will be true to the moment of position expiration",
+            "bonus-unknown": "This direction offers bonus return. Exact bonus depends on selected Duration.",
+            "bonus-info": "Bonus return for {{bonusDirection}} is +{{bonusPerc}}",
+            "slippage": "Your trade will revert if the live price changes more than this percentage from your chosen Strike Price during trade execution.",
+            "eth-to-weth": "Your ETH will be wrapped to WETH before executing the trade."
+        },
         "errors": {
             "min-buyin": "Minimal buy-in is {{minAmount}}",
             "max-buyin": "Maximal buy-in is {{maxAmount}}",
-            "out-of-liquidity-direction": "Out of liquidity for direction"
+            "out-of-liquidity-direction": "Out of liquidity for direction",
+            "out-of-liquidity": "Out of liquidity",
+            "invalid-amount-max": "The amount cannot be higher than {{max}}",
+            "something-went-wrong": "Something went wrong!",
+            "unexpected": "Please help us about this issue by writing to help-and-questions",
+            "buy-failed": "Failed to create position or creation event not received! Please check your open positions."
         }
     }
 }
