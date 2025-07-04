@@ -28,8 +28,16 @@
 
 /* speedmarkets-icon */
 
+.speedmarkets-icon--indicator-down:before {
+    content: '\0021';
+}
+
 .speedmarkets-icon--gear:before {
     content: '\0033';
+}
+
+.speedmarkets-icon--clock:before {
+    content: '\003C';
 }
 
 .speedmarkets-icon--arrow:before {

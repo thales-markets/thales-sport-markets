@@ -1,4 +1,3 @@
-import SelectInput from 'components/SelectInput';
 import SPAAnchor from 'components/SPAAnchor';
 import { LINKS } from 'constants/links';
 import { DELTA_TIMES_MINUTES } from 'constants/speedMarkets';
@@ -8,32 +7,32 @@ import { WidgetMenuItems } from 'enums/speedMarkets';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { FlexDivCentered, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
+import { FlexDivCentered, FlexDivColumn, FlexDivRowCentered } from 'styles/common';
 import { buildHref } from 'utils/routes';
-import { useAccount } from 'wagmi';
+import { useAccount, useChainId } from 'wagmi';
+import SelectTime from '../SelectTime';
 import SpeedPositions from '../SpeedPositions';
 import SpeedTrading from '../SpeedTrading';
 
 const SpeedMarketsWidget: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     const { t } = useTranslation();
 
+    const networkId = useChainId();
     const { isConnected } = useAccount();
 
     const [activeMenuItem, setActiveMenuItem] = useState(WidgetMenuItems.TRADING);
     const [deltaTimeSec, setDeltaTimeSec] = useState(minutesToSeconds(DELTA_TIMES_MINUTES[0]));
 
-    // Reset inputs
+    // Reset delta time
     useEffect(() => {
         if (!isConnected) {
             setDeltaTimeSec(minutesToSeconds(DELTA_TIMES_MINUTES[0]));
         }
     }, [isConnected]);
 
-    const delatTimesLabels = DELTA_TIMES_MINUTES.map((deltaTime) =>
-        `${deltaTime} ${deltaTime === 1 ? t('common.time-remaining.minute') : t('common.time-remaining.minutes')} ${t(
-            'common.trades'
-        )}`.toUpperCase()
-    );
+    useEffect(() => {
+        setDeltaTimeSec(minutesToSeconds(DELTA_TIMES_MINUTES[0]));
+    }, [networkId]);
 
     return (
         <Container>
@@ -42,20 +41,7 @@ const SpeedMarketsWidget: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                     <SPAAnchor href={buildHref(LINKS.SpeedMarkets)}>
                         <LogoIcon className="speedmarkets-logo-icon speedmarkets-logo-icon--speed-full-logo" />
                     </SPAAnchor>
-                    <SelectInput
-                        options={DELTA_TIMES_MINUTES.map((deltaTime, i) => ({
-                            value: deltaTime,
-                            label: delatTimesLabels[i],
-                        }))}
-                        handleChange={(value: any) => setDeltaTimeSec(minutesToSeconds(Number(value)))}
-                        width={168}
-                        style={{
-                            menuStyle: { marginTop: 0, zIndex: SPEED_MARKETS_WIDGET_Z_INDEX },
-                            controlStyle: { fontSize: '12px' },
-                            indicatorSeparatorStyle: { display: 'none' },
-                            dropdownIndicatorStyle: { padding: '8px 10px 8px 0' },
-                        }}
-                    />
+                    <SelectTime deltaTimeSec={deltaTimeSec} setDeltaTimeSec={setDeltaTimeSec} />
                 </Header>
                 <CloseIcon className="icon icon--close" onClick={() => onClose()} />
             </HeaderRow>
@@ -108,7 +94,7 @@ const HeaderRow = styled(FlexDivRowCentered)`
     gap: 8px;
     margin-bottom: 5px;
 `;
-const Header = styled(FlexDivRow)`
+const Header = styled(FlexDivRowCentered)`
     width: 100%;
 `;
 

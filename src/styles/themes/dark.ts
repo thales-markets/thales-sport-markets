@@ -310,6 +310,12 @@ export default {
                 inactive: Colors.TORY_BLUE,
             },
         },
+        dropDown: {
+            background: { primary: Colors.COLD_HEIGHTS + '1A' }, // opacity: 10%
+            borderColor: { primary: Colors.COLD_HEIGHTS + '4D' }, // opacity: 30%
+            textColor: { primary: Colors.BLUE },
+            indicatorColor: { primary: Colors.BLUE },
+        },
         price: {
             up: Colors.GREEN,
             down: Colors.RED,

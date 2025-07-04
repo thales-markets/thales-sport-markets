@@ -121,4 +121,5 @@ export const Colors = {
     LIBERTY_BLUE: '#10152E',
     HONEYCOMB: '#DCA212',
     GOLDENROD: '#F9CB15',
+    COLD_HEIGHTS: '#22D3EE',
 };
