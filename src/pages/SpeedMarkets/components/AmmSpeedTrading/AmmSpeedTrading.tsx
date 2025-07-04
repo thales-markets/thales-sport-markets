@@ -5,6 +5,7 @@ import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
+import { USER_REJECTED_ERRORS } from 'constants/errors';
 import { APPROVAL_BUFFER } from 'constants/markets';
 import { ZERO_ADDRESS } from 'constants/network';
 import { PYTH_CURRENCY_DECIMALS } from 'constants/pyth';
@@ -601,7 +602,15 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
         } catch (e) {
             console.log(e);
             await delay(800);
-            toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+            const isUserRejected = USER_REJECTED_ERRORS.some((rejectedError) =>
+                ((e as Error).message + ((e as Error).stack || '')).includes(rejectedError)
+            );
+            toast.update(
+                id,
+                getErrorToastOptions(
+                    isUserRejected ? t('common.errors.tx-canceled') : t('common.errors.unknown-error-try-again')
+                )
+            );
             setSubmittedStrikePrice(0);
             setIsSubmitting(false);
         }
