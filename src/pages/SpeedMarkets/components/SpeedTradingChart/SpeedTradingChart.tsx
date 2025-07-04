@@ -68,6 +68,7 @@ const SpeedTradingChart: React.FC<SpeedTradingChartProps> = ({
             prevExplicitPrice={prevPrice.current}
             risksPerAsset={ammSpeedMarketsLimitsData?.risksPerAsset}
             risksPerAssetAndDirection={ammSpeedMarketsLimitsData?.risksPerAssetAndDirection}
+            hideLiquidity
         />
     );
 };
