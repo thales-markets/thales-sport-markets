@@ -65,12 +65,6 @@ const SelectTime: React.FC<SelectTimeProps> = ({ deltaTimeSec, setDeltaTimeSec }
             }}
             style={{
                 containerStyle: { height: '26px', zIndex: SPEED_MARKETS_WIDGET_Z_INDEX },
-                menuStyle: {
-                    marginTop: 2,
-                    fontSize: '12px',
-                    backgroundColor: theme.speedMarkets.dropDown.background.primary,
-                    borderColor: theme.speedMarkets.dropDown.borderColor.primary,
-                },
                 controlStyle: {
                     minHeight: 'unset',
                     borderRadius: '9999px',
@@ -83,6 +77,13 @@ const SelectTime: React.FC<SelectTimeProps> = ({ deltaTimeSec, setDeltaTimeSec }
                     color: theme.speedMarkets.dropDown.textColor.primary,
                 },
                 dropdownIndicatorStyle: { padding: '0 10px 2px 0' },
+                menuStyle: {
+                    marginTop: 2,
+                    fontSize: '12px',
+                    backgroundColor: theme.speedMarkets.dropDown.background.primary,
+                    borderColor: theme.speedMarkets.dropDown.borderColor.primary,
+                },
+                optionStyle: { padding: '7px 12px', borderRadius: '5px' },
             }}
         />
     );

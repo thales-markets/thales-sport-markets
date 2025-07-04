@@ -311,8 +311,8 @@ export default {
             },
         },
         dropDown: {
-            background: { primary: Colors.COLD_HEIGHTS + '1A' }, // opacity: 10%
-            borderColor: { primary: Colors.COLD_HEIGHTS + '4D' }, // opacity: 30%
+            background: { primary: Colors.NATO_BLUE },
+            borderColor: { primary: Colors.CORSAIR },
             textColor: { primary: Colors.BLUE },
             indicatorColor: { primary: Colors.BLUE },
         },
