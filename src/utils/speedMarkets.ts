@@ -172,7 +172,7 @@ export const resolveAllSpeedPositions = async (
 
             const priceFeedUpdate = await priceConnection.getPriceUpdatesAtTimestamp(
                 millisecondsToSeconds(position.maturityDate),
-                [getPriceId(networkConfig.networkId, position.currencyKey)]
+                [getPriceId(networkConfig.networkId, position.asset)]
             );
 
             const priceUpdateData = priceFeedUpdate.binary.data.map((vaa: string) => '0x' + vaa);

@@ -40,6 +40,7 @@ const QUERY_KEYS = {
         isLive,
     ],
     Prices: {
+        PythPrices: (priceId: string, publishTime: number) => ['prices', 'pythPrices', priceId, publishTime],
         PythCandlestickData: (asset: string, dateRange: number, resolution: string) => [
             'asset',
             'dateRange',

@@ -30,7 +30,7 @@ export type AmmSpeedMarketsLimits = {
 export type UserPosition = {
     user: string;
     market: string;
-    currencyKey: string;
+    asset: string;
     side: SpeedPositions;
     strikePrice: number;
     maturityDate: number;

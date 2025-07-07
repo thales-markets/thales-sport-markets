@@ -1,4 +1,5 @@
 import SPAAnchor from 'components/SPAAnchor';
+import Tooltip from 'components/Tooltip';
 import { LINKS } from 'constants/links';
 import { DEFAULT_PRICE_SLIPPAGES_PERCENTAGE, DELTA_TIMES_MINUTES } from 'constants/speedMarkets';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
@@ -13,6 +14,7 @@ import { FlexDivCentered, FlexDivColumn, FlexDivRowCentered } from 'styles/commo
 import { localStore } from 'thales-utils';
 import { buildHref } from 'utils/routes';
 import { useAccount, useChainId } from 'wagmi';
+import NotificationsCount from '../NotificationsCount';
 import SelectTime from '../SelectTime';
 import SpeedPositions from '../SpeedPositions';
 import SpeedSettings from '../SpeedSettings';
@@ -76,6 +78,24 @@ const SpeedMarketsWidget: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                     isActive={activeMenuItem === WidgetMenuItems.POSITIONS}
                     onClick={() => setActiveMenuItem(WidgetMenuItems.POSITIONS)}
                 >
+                    <Tooltip
+                        open={true}
+                        overlay={t('speed-markets.tooltips.claimable-positions')}
+                        zIndex={SPEED_MARKETS_WIDGET_Z_INDEX}
+                    >
+                        <ClaimablePositionsNotification>
+                            <NotificationsCount isClaimable />
+                        </ClaimablePositionsNotification>
+                    </Tooltip>
+                    <Tooltip
+                        open={true}
+                        overlay={t('speed-markets.tooltips.open-positions')}
+                        zIndex={SPEED_MARKETS_WIDGET_Z_INDEX}
+                    >
+                        <OpenPositionsNotification>
+                            <NotificationsCount isClaimable={false} />
+                        </OpenPositionsNotification>
+                    </Tooltip>
                     <FooterMenuIcon className="icon icon--history" />
                     <FooterMenuItemLabel>{t('speed-markets.menu-items-label.positions')}</FooterMenuItemLabel>
                 </FooterMenuItem>
@@ -132,10 +152,11 @@ const Content = styled(FlexDivColumn)`
 
 const FooterMenu = styled(FlexDivCentered)`
     gap: 30px;
-    margin-top: 16px;
+    margin-top: 20px;
 `;
 
 const FooterMenuItem = styled.div<{ isActive: boolean }>`
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -151,6 +172,27 @@ const FooterMenuItemLabel = styled.span`
     font-size: 11px;
     font-weight: 600;
     line-height: normal;
+`;
+
+const ClaimablePositionsNotification = styled.div`
+    position: absolute;
+    top: -10px;
+    left: 2px;
+    background-color: ${(props) => props.theme.background.quaternary};
+    box-shadow: ${(props) => props.theme.shadow.notificationOpen};
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+`;
+const OpenPositionsNotification = styled(ClaimablePositionsNotification)`
+    left: unset;
+    right: 2px;
+    background-color: ${(props) => props.theme.background.octonary};
 `;
 
 export default SpeedMarketsWidget;
