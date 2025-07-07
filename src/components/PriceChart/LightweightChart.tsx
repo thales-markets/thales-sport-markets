@@ -207,11 +207,11 @@ const Value = styled(Label)`
 const PythIconWrap = styled.div`
     position: absolute;
     right: 20px;
-    bottom: 0px;
+    bottom: 2px;
     z-index: 10;
     i {
-        font-size: 26px;
-        line-height: 26px;
+        font-size: 20px;
+        line-height: 20px;
         color: ${(props) => props.theme.textColor.primary};
     }
 `;
