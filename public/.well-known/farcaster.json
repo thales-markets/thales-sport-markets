@@ -15,9 +15,17 @@
         "primaryCategory": "finance",
         "ogTitle": "Overtime Sportsbook",
         "ogDescription": "A fully onchain sportsbook now available on Farcaster.",
-        "ogImageUrl": "https://www.overtimemarkets.xyz//embed.png",
+        "ogImageUrl": "https://www.overtimemarkets.xyz/embed.png",
         "subtitle": "Fully onchain sportsbook",
         "tagline": "Fully onchain sportsbook",
-        "heroImageUrl": "https://www.overtimemarkets.xyz//embed.png"
+        "heroImageUrl": "https://www.overtimemarkets.xyz/hero-image.png",
+        "splashBackgroundColor": "#161A36",
+        "splashImageUrl": "https://www.overtimemarkets.xyz/splash.png",
+        "screenshotUrls": [
+            "https://www.overtimemarkets.xyz/screenshoturl1.png",
+            "https://www.overtimemarkets.xyz/screenshoturl2.png",
+            "https://www.overtimemarkets.xyz/screenshoturl3.png"
+        ],
+        "tags": ["sportsbook", "betting", "sports", "predictions"]
     }
 }
