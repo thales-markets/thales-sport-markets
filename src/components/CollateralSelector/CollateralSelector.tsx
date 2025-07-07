@@ -28,6 +28,7 @@ type CollateralSelectorProps = {
     collateralBalances?: any;
     exchangeRates?: Rates | null;
     dropDownWidth?: string;
+    dropDownMaxHeight?: string;
     showCollateralImg?: boolean;
     stretch?: boolean;
     showNetworkName?: boolean;
@@ -51,6 +52,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
     collateralBalances,
     exchangeRates,
     dropDownWidth,
+    dropDownMaxHeight,
     showCollateralImg,
     stretch,
     showNetworkName,
@@ -130,6 +132,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                               borderColor={borderColor}
                               background={background}
                               width={dropDownWidth}
+                              maxHeight={dropDownMaxHeight}
                               top={topPosition}
                               onClick={() => setOpen(!open)}
                           >
@@ -300,6 +303,7 @@ const DetailedDropdown = styled(FlexDivColumnCentered)<{
     background?: string;
     top?: string;
     borderColor?: string;
+    maxHeight?: string;
 }>`
     position: absolute;
     top: ${(props) => (props.top ? props.top : '34px')};
@@ -310,6 +314,13 @@ const DetailedDropdown = styled(FlexDivColumnCentered)<{
     background: ${(props) => (props.background ? props.background : props.theme.input.background.tertiary)};
     z-index: 100;
     border: 2px solid ${(props) => props.borderColor || props.theme.input.borderColor.tertiary};
+    ${(props) =>
+        props.maxHeight &&
+        `
+            justify-content: unset;
+            max-height: ${props.maxHeight};
+            overflow-y: scroll;
+        `}
 `;
 
 const CollateralOption = styled.div`

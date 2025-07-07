@@ -255,6 +255,7 @@ const SelectBuyin: React.FC<SelectBuyinProps> = ({
                                 }
                                 exchangeRates={exchangeRates}
                                 dropDownWidth={inputRef.current?.getBoundingClientRect().width + 'px'}
+                                dropDownMaxHeight={getCollaterals(networkId).length > 6 ? '220px' : undefined}
                             />
                         }
                         balance={'' /* TODO: formatCurrencyWithKey(selectedCollateral, paymentTokenBalance) */}
