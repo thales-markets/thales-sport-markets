@@ -3,7 +3,6 @@ import { SpeedPositions } from 'enums/speedMarkets';
 import useAmmSpeedMarketsLimitsQuery from 'queries/speedMarkets/useAmmSpeedMarketsLimitsQuery';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
-import { FlexDivCentered } from 'styles/common';
 import { SelectedPosition } from 'types/speedMarkets';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import AmmSpeedTrading from '../AmmSpeedTrading';
@@ -12,7 +11,12 @@ import SelectBuyin from '../SelectBuyin';
 import SelectPosition from '../SelectPosition';
 import SpeedTradingChart from '../SpeedTradingChart';
 
-const SpeedTrading: React.FC<{ deltaTimeSec: number }> = ({ deltaTimeSec }) => {
+type SpeedTradingProps = {
+    deltaTimeSec: number;
+    priceSlippage: number;
+};
+
+const SpeedTrading: React.FC<SpeedTradingProps> = ({ deltaTimeSec, priceSlippage }) => {
     const networkId = useChainId();
     const client = useClient();
     const { isConnected } = useAccount();
@@ -72,12 +76,12 @@ const SpeedTrading: React.FC<{ deltaTimeSec: number }> = ({ deltaTimeSec }) => {
                 setSelectedPosition={setSelectedPosition}
                 profitAndSkewPerPosition={profitAndSkewPerPosition}
             />
-            <TradingDetails>TODO: some trading details</TradingDetails>
             <AmmSpeedTrading
                 selectedAsset={selectedAsset}
                 selectedPosition={selectedPosition}
                 deltaTimeSec={deltaTimeSec}
                 enteredBuyinAmount={Number(buyinAmount)}
+                priceSlippage={priceSlippage}
                 ammSpeedMarketsLimits={ammSpeedMarketsLimitsData}
                 setProfitAndSkewPerPosition={setProfitAndSkewPerPosition}
                 setBuyinGasFee={setBuyinGasFee}
@@ -90,11 +94,6 @@ const SpeedTrading: React.FC<{ deltaTimeSec: number }> = ({ deltaTimeSec }) => {
 
 const ChartWrapper = styled.div`
     min-height: 200px;
-`;
-
-const TradingDetails = styled(FlexDivCentered)`
-    height: 100%;
-    font-size: 13px;
 `;
 
 export default SpeedTrading;

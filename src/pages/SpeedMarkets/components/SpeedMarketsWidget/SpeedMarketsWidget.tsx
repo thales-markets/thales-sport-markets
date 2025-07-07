@@ -1,6 +1,7 @@
 import SPAAnchor from 'components/SPAAnchor';
 import { LINKS } from 'constants/links';
-import { DELTA_TIMES_MINUTES } from 'constants/speedMarkets';
+import { DEFAULT_PRICE_SLIPPAGES_PERCENTAGE, DELTA_TIMES_MINUTES } from 'constants/speedMarkets';
+import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { SPEED_MARKETS_WIDGET_DEFAULT_RIGHT, SPEED_MARKETS_WIDGET_Z_INDEX } from 'constants/ui';
 import { minutesToSeconds } from 'date-fns';
 import { WidgetMenuItems } from 'enums/speedMarkets';
@@ -8,10 +9,12 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivRowCentered } from 'styles/common';
+import { localStore } from 'thales-utils';
 import { buildHref } from 'utils/routes';
 import { useAccount, useChainId } from 'wagmi';
 import SelectTime from '../SelectTime';
 import SpeedPositions from '../SpeedPositions';
+import SpeedSettings from '../SpeedSettings';
 import SpeedTrading from '../SpeedTrading';
 
 const SpeedMarketsWidget: React.FC<{ onClose: () => void }> = ({ onClose }) => {
@@ -20,8 +23,11 @@ const SpeedMarketsWidget: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     const networkId = useChainId();
     const { isConnected } = useAccount();
 
+    const lsPriceSlippage: number | undefined = localStore.get(LOCAL_STORAGE_KEYS.SPEED_PRICE_SLIPPAGE);
+
     const [activeMenuItem, setActiveMenuItem] = useState(WidgetMenuItems.TRADING);
     const [deltaTimeSec, setDeltaTimeSec] = useState(minutesToSeconds(DELTA_TIMES_MINUTES[0]));
+    const [priceSlippage, setPriceSlippage] = useState(lsPriceSlippage || DEFAULT_PRICE_SLIPPAGES_PERCENTAGE[0]);
 
     // Reset delta time
     useEffect(() => {
@@ -46,9 +52,11 @@ const SpeedMarketsWidget: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                 <CloseIcon className="icon icon--close" onClick={() => onClose()} />
             </HeaderRow>
             <Content>
-                {activeMenuItem === WidgetMenuItems.TRADING && <SpeedTrading deltaTimeSec={deltaTimeSec} />}
+                {activeMenuItem === WidgetMenuItems.TRADING && (
+                    <SpeedTrading deltaTimeSec={deltaTimeSec} priceSlippage={priceSlippage} />
+                )}
                 {activeMenuItem === WidgetMenuItems.POSITIONS && <SpeedPositions />}
-                {activeMenuItem === WidgetMenuItems.SETTINGS && <></>}
+                {activeMenuItem === WidgetMenuItems.SETTINGS && <SpeedSettings setPriceSlippage={setPriceSlippage} />}
             </Content>
             <FooterMenu>
                 <FooterMenuItem

@@ -9,12 +9,7 @@ import { USER_REJECTED_ERRORS } from 'constants/errors';
 import { APPROVAL_BUFFER } from 'constants/markets';
 import { ZERO_ADDRESS } from 'constants/network';
 import { PYTH_CURRENCY_DECIMALS } from 'constants/pyth';
-import {
-    DEFAULT_MAX_CREATOR_DELAY_TIME_SEC,
-    DEFAULT_PRICE_SLIPPAGES_PERCENTAGE,
-    POSITIONS_TO_SIDE_MAP,
-    SPEED_MARKETS_QUOTE,
-} from 'constants/speedMarkets';
+import { DEFAULT_MAX_CREATOR_DELAY_TIME_SEC, POSITIONS_TO_SIDE_MAP, SPEED_MARKETS_QUOTE } from 'constants/speedMarkets';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { secondsToMilliseconds } from 'date-fns';
 import { ContractType } from 'enums/contract';
@@ -30,7 +25,7 @@ import { toast } from 'react-toastify';
 import { getTicketPayment } from 'redux/modules/ticket';
 import { getIsBiconomy, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
-import { FlexDivColumn, FlexDivRow } from 'styles/common';
+import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 import {
     bigNumberFormatter,
     ceilNumberToDecimals,
@@ -85,6 +80,7 @@ type AmmSpeedTradingProps = {
     selectedPosition: SelectedPosition;
     deltaTimeSec: number;
     enteredBuyinAmount: number;
+    priceSlippage: number;
     ammSpeedMarketsLimits: AmmSpeedMarketsLimits | null;
     setProfitAndSkewPerPosition: Dispatch<{
         profit: { [SpeedPositions.UP]: number; [SpeedPositions.DOWN]: number };
@@ -100,6 +96,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
     selectedPosition,
     deltaTimeSec,
     enteredBuyinAmount,
+    priceSlippage,
     ammSpeedMarketsLimits,
     setProfitAndSkewPerPosition,
     setBuyinGasFee,
@@ -121,12 +118,9 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
     const { smartAddress } = useBiconomy();
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
-    const lsPriceSlippage: number | undefined = localStore.get(LOCAL_STORAGE_KEYS.SPEED_PRICE_SLIPPAGE);
-
     const [buyinAmount, setBuyinAmount] = useState(0);
     const [paidAmount, setPaidAmount] = useState(enteredBuyinAmount);
     const [submittedStrikePrice, setSubmittedStrikePrice] = useState(0);
-    const [priceSlippage, setPriceSlippage] = useState(lsPriceSlippage || DEFAULT_PRICE_SLIPPAGES_PERCENTAGE[0]);
     const [isAllowing, setIsAllowing] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [outOfLiquidity, setOutOfLiquidity] = useState(false);
@@ -134,9 +128,6 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
     const [hasAllowance, setAllowance] = useState(false);
     const [openApprovalModal, setOpenApprovalModal] = useState(false);
     const [gasFee, setGasFee] = useState(0);
-    // TODO:
-    submittedStrikePrice;
-    setPriceSlippage;
 
     const isPositionSelected = selectedPosition !== undefined;
 
@@ -762,6 +753,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
 
     return (
         <Container>
+            <TradingDetails>{`TODO: some trading details (submitted strike price: ${submittedStrikePrice})`}</TradingDetails>
             <ButtonWrapper>
                 {getSubmitButton()}
                 {gasFee > 0 && !isButtonDisabled && (
@@ -791,8 +783,13 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
     );
 };
 
-const Container = styled(FlexDivRow)`
+const Container = styled(FlexDivColumn)`
     position: relative;
+`;
+
+const TradingDetails = styled(FlexDivCentered)`
+    height: 100%;
+    font-size: 13px;
 `;
 
 const CollateralText = styled.span`
