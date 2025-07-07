@@ -1604,6 +1604,10 @@
             "something-went-wrong": "Something went wrong!",
             "unexpected": "Please help us about this issue by writing to help-and-questions",
             "buy-failed": "Failed to create position or creation event not received! Please check your open positions."
+        },
+        "settings": {
+            "slippage-tolerance": "Slippage tolerance",
+            "slippage-tolerance-description": "Maximum price difference you're willing to accept"
         }
     }
 }

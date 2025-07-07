@@ -7,6 +7,7 @@ import liveTradingProcessorContract from 'utils/contracts/liveTradingProcessorCo
 import multipleCollateral from 'utils/contracts/multipleCollateralContract';
 import sessionValidationContract from 'utils/contracts/sessionValidationContract';
 import sgpTradingProcessorContract from 'utils/contracts/sgpTradingProcessorContract';
+import speedMarketsAMMContract from 'utils/contracts/speedMarkets/speedMarketsAMMContract';
 import sportsAMMV2Contract from 'utils/contracts/sportsAMMV2Contract';
 import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
 import { Address, createWalletClient, encodeFunctionData, http, maxUint256 } from 'viem';
@@ -195,6 +196,12 @@ const getApprovalTxs = (networkId: SupportedNetwork) => {
                 args: [sgpTradingProcessorContract.addresses[networkId], maxUint256],
             });
 
+            const enableSpeedMarkets = encodeFunctionData({
+                abi: value.abi,
+                functionName: 'approve',
+                args: [speedMarketsAMMContract.addresses[networkId], maxUint256],
+            });
+
             transactionArray.push(
                 {
                     to: value.addresses[networkId],
@@ -207,6 +214,10 @@ const getApprovalTxs = (networkId: SupportedNetwork) => {
                 {
                     to: value.addresses[networkId],
                     data: eanbleSGP,
+                },
+                {
+                    to: value.addresses[networkId],
+                    data: enableSpeedMarkets,
                 }
             );
         });
