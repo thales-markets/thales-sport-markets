@@ -171,7 +171,7 @@ const LightweightChart: React.FC<LightweightChartProps> = ({
 
             <PythIconWrap>
                 <a target="_blank" rel="noreferrer" href={LINKS.Pyth.Benchmarks}>
-                    <i className="icon icon--pyth" />
+                    <i className="speedmarkets-icon speedmarkets-icon--pyth" />
                 </a>
             </PythIconWrap>
         </Wrapper>
@@ -206,14 +206,13 @@ const Value = styled(Label)`
 
 const PythIconWrap = styled.div`
     position: absolute;
-    height: 20px;
     right: 20px;
-    bottom: 35px;
-    z-index: 1;
+    bottom: 0px;
+    z-index: 10;
     i {
-        font-size: 40px;
-        line-height: 10px;
-        color: ${(props) => props.theme.textColor.quinary};
+        font-size: 26px;
+        line-height: 26px;
+        color: ${(props) => props.theme.textColor.primary};
     }
 `;
 

@@ -43,3 +43,7 @@
 .speedmarkets-icon--arrow:before {
     content: '\005C';
 }
+
+.speedmarkets-icon--pyth:before {
+    content: '\00AE';
+}

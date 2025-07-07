@@ -35,6 +35,7 @@ export const ChartComponent: React.FC<ChartProps> = ({ data, asset }) => {
                 background: { type: ColorType.Solid, color: theme.speedMarkets.background.primary },
                 textColor: theme.chart.labels,
                 fontFamily: theme.fontFamily.primary,
+                attributionLogo: false,
             },
             height: 160,
             grid: {

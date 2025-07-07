@@ -10,13 +10,12 @@ type CurrentPriceProps = {
     isPriceUp?: boolean;
 };
 
-const CurrentPrice: React.FC<CurrentPriceProps> = ({ asset, currentPrice, isPriceUp }) => {
+const CurrentPrice: React.FC<CurrentPriceProps> = ({ currentPrice, isPriceUp }) => {
     const currentPriceFormatted = formatCurrencyWithSign(USD_SIGN, currentPrice || 0);
     const skipIndexes: number[] = [];
 
     return (
         <Container>
-            <Icon className={`speedmarkets-logo-icon speedmarkets-logo-icon--${asset.toLowerCase()}-logo`} />
             <AnimatedPrice key={currentPrice}>
                 {currentPriceFormatted.split('').map((letter: string, index) => {
                     if (isNaN(parseInt(letter))) {
