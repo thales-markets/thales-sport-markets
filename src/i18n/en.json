@@ -1549,7 +1549,8 @@
             "based-amount": "based on amount",
             "you-win": "you win",
             "at-least": "at least",
-            "max-buy": "Max buy"
+            "max-buy": "Max buy",
+            "estimate-gas": "Estimated transaction cost"
         },
         "user-positions": {
             "open": "Open positions",

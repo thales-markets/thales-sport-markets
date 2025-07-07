@@ -11,6 +11,7 @@ import { ZERO_ADDRESS } from 'constants/network';
 import { PYTH_CURRENCY_DECIMALS } from 'constants/pyth';
 import { DEFAULT_MAX_CREATOR_DELAY_TIME_SEC, POSITIONS_TO_SIDE_MAP, SPEED_MARKETS_QUOTE } from 'constants/speedMarkets';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import { SPEED_MARKETS_WIDGET_Z_INDEX } from 'constants/ui';
 import { secondsToMilliseconds } from 'date-fns';
 import { ContractType } from 'enums/contract';
 import { SpeedPositions } from 'enums/speedMarkets';
@@ -32,6 +33,7 @@ import {
     coinParser,
     Coins,
     COLLATERAL_DECIMALS,
+    countDecimals,
     DEFAULT_CURRENCY_DECIMALS,
     formatCurrencyWithSign,
     localStore,
@@ -656,23 +658,28 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
         }
         if (!hasAllowance) {
             return (
-                <>
-                    <Button
-                        disabled={isAllowing}
-                        onClick={() => setOpenApprovalModal(true)}
-                        {...getDefaultButtonProps(theme)}
-                    >
-                        {isAllowing
-                            ? t('common.enable-wallet-access.approve-progress')
-                            : t('common.enable-wallet-access.approve')}
-                        <CollateralText>
-                            &nbsp;
-                            {isEth ? CRYPTO_CURRENCY_MAP.WETH : selectedCollateral}
-                        </CollateralText>
-                        {isEth && !isMobile && <Tooltip overlay={t('speed-markets.tooltips.eth-to-weth')} />}
-                        {isAllowing ? '...' : ''}
-                    </Button>
-                </>
+                <Button
+                    disabled={isAllowing}
+                    onClick={() => setOpenApprovalModal(true)}
+                    {...getDefaultButtonProps(theme)}
+                >
+                    {isAllowing
+                        ? t('common.enable-wallet-access.approve-progress')
+                        : t('common.enable-wallet-access.approve')}
+                    <CollateralText>
+                        &nbsp;
+                        {isEth ? CRYPTO_CURRENCY_MAP.WETH : selectedCollateral}
+                    </CollateralText>
+                    {isEth && !isMobile() && (
+                        <Tooltip
+                            overlay={t('speed-markets.tooltips.eth-to-weth')}
+                            customIconStyling={{ color: theme.speedMarkets.button.textColor.active }}
+                            marginLeft={4}
+                            zIndex={SPEED_MARKETS_WIDGET_Z_INDEX}
+                        />
+                    )}
+                    {isAllowing ? '...' : ''}
+                </Button>
             );
         }
 
@@ -753,13 +760,19 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
 
     return (
         <Container>
-            <TradingDetails>{`TODO: some trading details (submitted strike price: ${submittedStrikePrice})`}</TradingDetails>
+            <TradingDetails>{`TODO: some trading details: submitted strike price: ${submittedStrikePrice}, price slippage: ${roundNumberToDecimals(
+                priceSlippage * 100,
+                countDecimals(priceSlippage) - 2
+            )}%`}</TradingDetails>
             <ButtonWrapper>
                 {getSubmitButton()}
                 {gasFee > 0 && !isButtonDisabled && (
-                    <Tooltip overlay={t('speed-markets.estimate-gas')}>
+                    <Tooltip
+                        overlay={t('speed-markets.amm-trading.estimate-gas')}
+                        zIndex={SPEED_MARKETS_WIDGET_Z_INDEX}
+                    >
                         <GasText $isStrikeThrough={networkId === NetworkId.Base}>
-                            <GasIcon className={`network-icon network-icon--gas`} />
+                            <GasIcon className={`speedmarkets-logo-icon speedmarkets-logo-icon--gas`} />
                             {formatCurrencyWithSign(USD_SIGN, gasFee, 2)}
                         </GasText>
                     </Tooltip>
@@ -801,18 +814,20 @@ const ButtonWrapper = styled(FlexDivColumn)`
 `;
 
 const GasIcon = styled.i`
-    font-size: 20px;
-    color: ${(props) => props.theme.textColor.primary};
+    font-size: 18px;
+    line-height: 100%;
+    color: ${(props) => props.theme.speedMarkets.button.textColor.active};
     margin-right: 2px;
 `;
 
 const GasText = styled.span<{ $isStrikeThrough?: boolean }>`
     display: flex;
-    font-size: 18px;
-    color: ${(props) => props.theme.textColor.primary};
     position: absolute;
     right: 16px;
-    bottom: 10px;
+    bottom: 6px;
+    font-size: 15px;
+    line-height: 18px;
+    color: ${(props) => props.theme.speedMarkets.button.textColor.active};
     text-decoration: ${(props) => (props.$isStrikeThrough ? 'line-through' : '')};
 `;
 
