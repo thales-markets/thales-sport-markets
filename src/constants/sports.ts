@@ -78,6 +78,7 @@ export const LEAGUES_SORT_PRIORITY = [
     League.LIGUE_ONE,
     League.LIGUE_ONE_FUTURES,
     League.NBA,
+    League.NBA_SUMMER_LEAGUE,
     League.NBA_FUTURES,
     League.EUROLEAGUE,
     League.EUROLEAGUE_FUTURES,
