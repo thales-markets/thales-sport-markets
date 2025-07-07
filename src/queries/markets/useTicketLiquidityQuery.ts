@@ -21,9 +21,7 @@ const useTicketLiquidityQuery = (
         queryKey: QUERY_KEYS.TicketLiquidity(
             networkConfig.networkId,
             isSystemBet,
-            systemBetDenominator,
             isSgp,
-            sgpQuote,
             markets.map((market) => market.gameId).join(','),
             markets.map((market) => market.typeId).join(','),
             markets.map((market) => market.playerProps.playerId).join(','),

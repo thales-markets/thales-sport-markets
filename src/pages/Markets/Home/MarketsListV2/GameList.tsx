@@ -54,18 +54,27 @@ const GameList: React.FC<{ markets: SportMarket[]; language: string }> = ({ mark
         return [...markets].sort((a, b) => {
             const aSpecialProp = getSpecializedPropForMarket(a);
             const bSpecialProp = getSpecializedPropForMarket(b);
+
             const aLength = aSpecialProp ? 3 : getPlayerPropsMarketsOverviewLength(a);
             const bLength = bSpecialProp ? 3 : getPlayerPropsMarketsOverviewLength(b);
 
-            return aLength > bLength
-                ? -1
-                : aLength < bLength
-                ? 1
-                : aSpecialProp === bSpecialProp
-                ? 0
-                : a.childMarkets[0].typeId === b.childMarkets[0].typeId
-                ? 0
-                : 1;
+            if (aLength !== bLength) {
+                return bLength - aLength;
+            }
+
+            if (aSpecialProp !== bSpecialProp) {
+                return aSpecialProp ? -1 : 1;
+            }
+
+            for (let i = 0; i < 3; i++) {
+                const aType = a.childMarkets?.[i]?.typeId;
+                const bType = b.childMarkets?.[i]?.typeId;
+                if (aType !== bType) {
+                    return aType < bType ? -1 : 1;
+                }
+            }
+
+            return 0;
         });
     }, [markets]);
 
@@ -147,6 +156,7 @@ const GameList: React.FC<{ markets: SportMarket[]; language: string }> = ({ mark
                             market={market}
                             key={index + 'list'}
                             oddsTitlesHidden={
+                                !!marketTypeFilter ||
                                 !(
                                     index === 0 ||
                                     ((sortedMarkets[index - 1].childMarkets[0]?.typeId !==
@@ -154,26 +164,26 @@ const GameList: React.FC<{ markets: SportMarket[]; language: string }> = ({ mark
                                         sortedMarkets[index - 1].childMarkets[1]?.typeId !==
                                             market.childMarkets[1]?.typeId ||
                                         sortedMarkets[index - 1].childMarkets[2]?.typeId !==
-                                            market.childMarkets[2]?.typeId) &&
-                                        PLAYER_PROPS_SPECIAL_SPORTS.includes(market.sport) &&
-                                        getSpecializedPropForMarket(sortedMarkets[index - 1]) !==
-                                            getSpecializedPropForMarket(market) &&
+                                            market.childMarkets[2]?.typeId ||
+                                        (PLAYER_PROPS_SPECIAL_SPORTS.includes(market.sport) &&
+                                            getSpecializedPropForMarket(sortedMarkets[index - 1]) !==
+                                                getSpecializedPropForMarket(market))) &&
                                         !marketTypeGroupFilter)
-                                ) || !!marketTypeFilter
+                                )
                             }
                             floatingOddsTitles={
+                                !marketTypeFilter &&
                                 (index === 0 ||
                                     ((sortedMarkets[index - 1].childMarkets[0]?.typeId !==
                                         market.childMarkets[0]?.typeId ||
                                         sortedMarkets[index - 1].childMarkets[1]?.typeId !==
                                             market.childMarkets[1]?.typeId ||
                                         sortedMarkets[index - 1].childMarkets[2]?.typeId !==
-                                            market.childMarkets[2]?.typeId) &&
-                                        PLAYER_PROPS_SPECIAL_SPORTS.includes(market.sport) &&
-                                        getSpecializedPropForMarket(sortedMarkets[index - 1]) !==
-                                            getSpecializedPropForMarket(market) &&
-                                        !marketTypeGroupFilter)) &&
-                                !marketTypeFilter
+                                            market.childMarkets[2]?.typeId ||
+                                        (PLAYER_PROPS_SPECIAL_SPORTS.includes(market.sport) &&
+                                            getSpecializedPropForMarket(sortedMarkets[index - 1]) !==
+                                                getSpecializedPropForMarket(market))) &&
+                                        !marketTypeGroupFilter))
                             }
                         />
                     </LazyLoad>

@@ -40,6 +40,8 @@ export const getTeamImageSource = (team: string, league: League) => {
         ? `/logos/Primeira Liga/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.BRAZIL_CUP
         ? `/logos/Brazil-Serie-A/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : league == League.NBA_SUMMER_LEAGUE
+        ? `/logos/NBA/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.US_ELECTION
         ? `/logos/Countries/united-states-of-america.svg`
         : league == League.NFL_FUTURES
@@ -94,6 +96,7 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.NFL:
         case League.MLB:
         case League.NBA:
+        case League.NBA_SUMMER_LEAGUE:
         case League.NCAAB:
         case League.NHL:
         case League.WNBA:
@@ -330,10 +333,12 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.FIBA_EUROBASKET_QUALIFIERS:
             return `/logos/Countries/eurobasket.png`;
         case League.FIBA_AMERICUP_QUALIFIERS:
+        case League.FIBA_AMERICUP_WOMEN:
             return `/logos/Countries/americup.png`;
         case League.FIBA_ASIA_CUP_QUALIFIERS:
             return `/logos/Countries/asia-cup.png`;
         case League.FIBA_WORLD_CUP_QUALIFIERS:
+        case League.FIBA_WORLD_CUP_U19:
             return `/logos/Countries/fiba-world-cup.png`;
         case League.FIBA_AFRO_BASKET_QUALIFIERS:
             return `/logos/Countries/afrobasket.jpg`;

@@ -1208,7 +1208,7 @@ const Ticket: React.FC<TicketProps> = ({
 
         if (
             (Number(buyInAmount) && finalQuotes.some((quote) => quote === 0)) ||
-            (buyInAmountInDefaultCollateral && ticketLiquidity && buyInAmountInDefaultCollateral > ticketLiquidity)
+            (buyInAmountInDefaultCollateral && buyInAmountInDefaultCollateral > Number(ticketLiquidity))
         ) {
             setTooltipTextBuyInAmount(t('markets.parlay.validation.availability'));
         } else if (
@@ -1910,7 +1910,7 @@ const Ticket: React.FC<TicketProps> = ({
                         setIsFreeBetInitialized(false);
                     }
 
-                    refetchTicketLiquidity(networkId, isSystemBet, systemBetDenominator, isSgp, totalQuote, markets);
+                    refetchTicketLiquidity(networkId, isSystemBet, isSgp, markets);
                 } else {
                     if (isSgp) {
                         console.log('refetchProofs');

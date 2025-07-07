@@ -1,5 +1,6 @@
 import { QueryClient } from '@tanstack/react-query';
 import QUERY_KEYS from 'constants/queryKeys';
+import { SpaceKey } from 'enums/governance';
 import { StatusFilter } from 'enums/markets';
 import { Network } from 'enums/network';
 import { TicketMarket } from 'types/markets';
@@ -94,9 +95,7 @@ export const refetchLiquidityPoolData = (walletAddress: string, networkId: Netwo
 export const refetchTicketLiquidity = (
     networkId: Network,
     isSystemBet: boolean,
-    systemBetDenominator: number,
     isSgp: boolean,
-    totalQuote: number,
     markets: TicketMarket[]
 ) => {
     const gameIds = markets.map((market) => market.gameId).join(',');
@@ -110,9 +109,7 @@ export const refetchTicketLiquidity = (
         queryKey: QUERY_KEYS.TicketLiquidity(
             networkId,
             isSystemBet,
-            systemBetDenominator,
             isSgp,
-            totalQuote,
             gameIds,
             typeIds,
             playerIds,
@@ -138,6 +135,12 @@ export const refetchResolveBlocker = (networkId: Network) => {
 
 export const refetchGetFreeBet = (freeBetId: string, networkId: Network) => {
     queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.FreeBet(freeBetId, networkId) });
+};
+
+export const refetchProposal = (spaceKey: SpaceKey, hash: string, walletAddress: string) => {
+    queryConnector.queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.Governance.Proposal(spaceKey, hash, walletAddress),
+    });
 };
 
 export default queryConnector;
