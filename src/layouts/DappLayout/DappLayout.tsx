@@ -205,7 +205,7 @@ const SpeedMarketsButton = styled.div<{ isOpen: boolean }>`
     height: 76px;
     bottom: 10px;
     right: ${SPEED_MARKETS_WIDGET_DEFAULT_RIGHT}px;
-    background-image: ${(props) => (props.isOpen ? 'none' : `url(${SpeedMarketsButtonAnimated})`)};
+    background-image: ${(props) => (props.isOpen ? 'none' : `url("${SpeedMarketsButtonAnimated}")`)};
     background-position: center;
     border-radius: 50%;
     cursor: pointer;
