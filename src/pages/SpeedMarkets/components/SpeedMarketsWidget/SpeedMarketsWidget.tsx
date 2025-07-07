@@ -5,6 +5,7 @@ import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { SPEED_MARKETS_WIDGET_DEFAULT_RIGHT, SPEED_MARKETS_WIDGET_Z_INDEX } from 'constants/ui';
 import { minutesToSeconds } from 'date-fns';
 import { WidgetMenuItems } from 'enums/speedMarkets';
+import useLocalStorage from 'hooks/useLocalStorage';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
@@ -27,7 +28,10 @@ const SpeedMarketsWidget: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 
     const [activeMenuItem, setActiveMenuItem] = useState(WidgetMenuItems.TRADING);
     const [deltaTimeSec, setDeltaTimeSec] = useState(minutesToSeconds(DELTA_TIMES_MINUTES[0]));
-    const [priceSlippage, setPriceSlippage] = useState(lsPriceSlippage || DEFAULT_PRICE_SLIPPAGES_PERCENTAGE[0]);
+    const [priceSlippage, setPriceSlippage] = useLocalStorage<number>(
+        LOCAL_STORAGE_KEYS.SPEED_PRICE_SLIPPAGE,
+        lsPriceSlippage || DEFAULT_PRICE_SLIPPAGES_PERCENTAGE[0]
+    );
 
     // Reset delta time
     useEffect(() => {
@@ -56,7 +60,9 @@ const SpeedMarketsWidget: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                     <SpeedTrading deltaTimeSec={deltaTimeSec} priceSlippage={priceSlippage} />
                 )}
                 {activeMenuItem === WidgetMenuItems.POSITIONS && <SpeedPositions />}
-                {activeMenuItem === WidgetMenuItems.SETTINGS && <SpeedSettings setPriceSlippage={setPriceSlippage} />}
+                {activeMenuItem === WidgetMenuItems.SETTINGS && (
+                    <SpeedSettings priceSlippage={priceSlippage} setPriceSlippage={setPriceSlippage} />
+                )}
             </Content>
             <FooterMenu>
                 <FooterMenuItem

@@ -17,12 +17,13 @@ type SuggestedAmountProps = {
     amounts: number[];
     collateralIndex: number;
     changeAmount: (value: number | string) => void;
-    exchangeRates: Rates | null;
+    exchangeRates?: Rates | null;
     insertedAmount: number | string;
     minAmount?: number;
     buttonHeight?: string;
     buttonColor?: string;
     margin?: string;
+    amountSymbol?: string;
 };
 
 const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
@@ -35,6 +36,7 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
     buttonHeight,
     buttonColor,
     margin,
+    amountSymbol,
 }) => {
     const networkId = useChainId();
 
@@ -111,7 +113,9 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
                         height={buttonHeight}
                         buttonColor={buttonColor}
                     >
-                        {`${isCurrentAmountClicked ? '+' : ''} ${formatCurrencyWithKey(USD_SIGN, amount, 1, true)}`}
+                        {`${isCurrentAmountClicked ? '+' : ''} ${
+                            amountSymbol ? amount + amountSymbol : formatCurrencyWithKey(USD_SIGN, amount, 1, true)
+                        }`}
                     </AmountContainer>
                 );
             })}
