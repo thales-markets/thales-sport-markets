@@ -26,6 +26,10 @@
     content: '\0047';
 }
 
+.speedmarkets-logo-icon--gas:before {
+    content: '\006D';
+}
+
 /* speedmarkets-icon */
 
 .speedmarkets-icon--indicator-down:before {
