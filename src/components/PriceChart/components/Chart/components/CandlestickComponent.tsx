@@ -1,5 +1,5 @@
 import { ChartContext } from 'constants/chart';
-import { ISeriesApi } from 'lightweight-charts';
+import { ISeriesApi, LineStyle } from 'lightweight-charts';
 import { useContext, useEffect, useState } from 'react';
 import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
@@ -18,6 +18,7 @@ export const CandlestickComponent: React.FC<{ data: any; asset: string }> = ({ d
             wickUpColor: theme.chart.candleUp,
             wickDownColor: theme.chart.candleDown,
             priceLineColor: theme.chart.priceLine,
+            priceLineStyle: LineStyle.Solid,
             priceLineWidth: 1,
             borderColor: 'transparent',
             lastValueVisible: true,

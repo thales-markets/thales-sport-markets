@@ -32,7 +32,7 @@ export const ChartComponent: React.FC<ChartProps> = ({ data, asset }) => {
     useEffect(() => {
         const chart = createChart(chartContainerRef.current ?? '', {
             layout: {
-                background: { type: ColorType.Solid, color: theme.background.primary },
+                background: { type: ColorType.Solid, color: theme.speedMarkets.background.primary },
                 textColor: theme.chart.labels,
                 fontFamily: theme.fontFamily.primary,
             },

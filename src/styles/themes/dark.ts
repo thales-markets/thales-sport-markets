@@ -201,7 +201,7 @@ export default {
         candleUp: Colors.GREEN,
         candleDown: Colors.RED,
         labels: Colors.GRAY_LIGHT,
-        priceLine: Colors.PURPLE,
+        priceLine: Colors.WHITE,
     },
     connectWalletModal: {
         secondaryText: Colors.WHITE,
