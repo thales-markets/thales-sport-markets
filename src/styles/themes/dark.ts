@@ -202,6 +202,11 @@ export default {
         candleDown: Colors.RED,
         labels: Colors.GRAY_LIGHT,
         priceLine: Colors.WHITE,
+        multiPositions: Colors.PURPLE,
+        area: {
+            start: '#5AB5D900', // TODO: check with Igor
+            end: '#5AB5D936', // TODO: check with Igor
+        },
     },
     connectWalletModal: {
         secondaryText: Colors.WHITE,

@@ -4,7 +4,9 @@ import { ColorType, IChartApi, createChart } from 'lightweight-charts';
 import React, { useEffect, useRef, useState } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
+import { AreaSeriesComponent } from './components/AreaSerierComponent';
 import { CandlestickComponent } from './components/CandlestickComponent';
+import { UserPositionAreaSeries } from './components/UserSeriesComponent';
 
 type ChartContextProps = {
     children: React.ReactNode;
@@ -24,10 +26,11 @@ const ChartProvider: React.FC<ChartContextProps> = ({ children, chart }) => (
     <ChartContext.Provider value={chart}>{children}</ChartContext.Provider>
 );
 
-export const ChartComponent: React.FC<ChartProps> = ({ data, asset }) => {
+export const ChartComponent: React.FC<ChartProps> = ({ data, asset, position, selectedPrice, selectedDate }) => {
     const theme: ThemeInterface = useTheme();
     const chartContainerRef = useRef<HTMLDivElement>(null);
     const [chart, setChart] = useState<IChartApi | undefined>();
+    const [displayPositions] = useState(true);
 
     useEffect(() => {
         const chart = createChart(chartContainerRef.current ?? '', {
@@ -72,7 +75,16 @@ export const ChartComponent: React.FC<ChartProps> = ({ data, asset }) => {
             <Chart ref={chartContainerRef}>
                 {chart && (
                     <ChartProvider chart={chart}>
+                        <AreaSeriesComponent
+                            asset={asset}
+                            data={data}
+                            position={position}
+                            selectedPrice={selectedPrice}
+                            selectedDate={selectedDate}
+                        />
                         <CandlestickComponent data={data} asset={asset} />
+
+                        {displayPositions && <UserPositionAreaSeries candlestickData={data} asset={asset} />}
                     </ChartProvider>
                 )}
             </Chart>
