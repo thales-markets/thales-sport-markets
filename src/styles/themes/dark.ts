@@ -198,14 +198,14 @@ export default {
     },
     chart: {
         primary: Colors.PURPLE,
-        candleUp: Colors.GREEN,
-        candleDown: Colors.RED,
+        candleUp: Colors.UP_CANDLE,
+        candleDown: Colors.DOWN_CANDLE,
         labels: Colors.GRAY_LIGHT,
         priceLine: Colors.WHITE,
         multiPositions: Colors.PURPLE,
         area: {
-            start: '#5AB5D900', // TODO: check with Igor
-            end: '#5AB5D936', // TODO: check with Igor
+            start: Colors.CHART_AREA_START, // TODO: check with Igor
+            end: Colors.CHART_AREA_END, // TODO: check with Igor
         },
     },
     connectWalletModal: {

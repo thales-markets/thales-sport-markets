@@ -123,4 +123,9 @@ export const Colors = {
     GOLDENROD: '#F9CB15',
     CORSAIR: '#1A526D',
     NATO_BLUE: '#172D48',
+    UP_CANDLE: '#8AF6A8',
+    DOWN_CANDLE: '#E14545',
+
+    CHART_AREA_START: '#5ab5d966', // TODO: check with Igor
+    CHART_AREA_END: '#5ab5d900', // TODO: check with Igor
 };
