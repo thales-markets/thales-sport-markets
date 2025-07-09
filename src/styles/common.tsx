@@ -49,6 +49,11 @@ export const FlexDivColumnStart = styled(FlexDivColumn)`
     align-items: flex-start;
 `;
 
+export const FlexDivColumnEnd = styled(FlexDivColumn)`
+    justify-content: center;
+    align-items: flex-end;
+`;
+
 export const BoldContent = styled.span`
     font-weight: 600;
 `;
@@ -123,8 +128,10 @@ export const Colors = {
     GOLDENROD: '#F9CB15',
     CORSAIR: '#1A526D',
     NATO_BLUE: '#172D48',
+    KONKIKYO_BLUE: '#1B2141',
     UP_CANDLE: '#8AF6A8',
     DOWN_CANDLE: '#E14545',
+    FRESH_LAVENDER: '#8B92B8',
 
     CHART_AREA_START: '#5ab5d966', // TODO: check with Igor
     CHART_AREA_END: '#5ab5d900', // TODO: check with Igor

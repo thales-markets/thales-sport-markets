@@ -81,6 +81,7 @@ const Position = styled(FlexDivRow)`
 
 const PositionIcon = styled.i<{ isUp?: boolean }>`
     font-size: 14px;
+    line-height: 20px;
     rotate: ${(props) => (props.isUp ? '-90deg' : '90deg')};
 `;
 
@@ -99,12 +100,10 @@ const PositionButton = styled(FlexDivColumnCentered)<{ isSelected: boolean; isUp
     ${PositionIcon} {
         color: ${(props) =>
             props.isSelected
-                ? props.isUp
-                    ? props.theme.speedMarkets.position.up.selected
-                    : props.theme.speedMarkets.position.down.selected
+                ? props.theme.speedMarkets.position.selected
                 : props.isUp
-                ? props.theme.speedMarkets.position.up.default
-                : props.theme.speedMarkets.position.down.default};
+                ? props.theme.speedMarkets.position.up
+                : props.theme.speedMarkets.position.down};
     }
     border-radius: 12px;
     cursor: pointer;

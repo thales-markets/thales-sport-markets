@@ -760,10 +760,20 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
 
     return (
         <Container>
-            <TradingDetails>{`TODO: some trading details: submitted strike price: ${submittedStrikePrice}, price slippage: ${roundNumberToDecimals(
-                priceSlippage * 100,
-                countDecimals(priceSlippage) - 2
-            )}%`}</TradingDetails>
+            <TradingDetails>
+                <span>
+                    {`TODO: some trading details: submitted strike price: ${submittedStrikePrice}, price slippage: ${roundNumberToDecimals(
+                        priceSlippage * 100,
+                        countDecimals(priceSlippage) - 2
+                    )}%`}
+                    <Tooltip
+                        overlay={t('speed-markets.tooltips.slippage')}
+                        marginLeft={2}
+                        iconFontSize={14}
+                        zIndex={SPEED_MARKETS_WIDGET_Z_INDEX}
+                    />
+                </span>
+            </TradingDetails>
             <ButtonWrapper>
                 {getSubmitButton()}
                 {gasFee > 0 && !isButtonDisabled && (

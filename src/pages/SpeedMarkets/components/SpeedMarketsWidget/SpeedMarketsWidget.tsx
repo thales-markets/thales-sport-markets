@@ -11,7 +11,6 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivRowCentered } from 'styles/common';
-import { localStore } from 'thales-utils';
 import { buildHref } from 'utils/routes';
 import { useAccount, useChainId } from 'wagmi';
 import NotificationsCount from '../NotificationsCount';
@@ -26,13 +25,11 @@ const SpeedMarketsWidget: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     const networkId = useChainId();
     const { isConnected } = useAccount();
 
-    const lsPriceSlippage: number | undefined = localStore.get(LOCAL_STORAGE_KEYS.SPEED_PRICE_SLIPPAGE);
-
     const [activeMenuItem, setActiveMenuItem] = useState(WidgetMenuItems.TRADING);
     const [deltaTimeSec, setDeltaTimeSec] = useState(minutesToSeconds(DELTA_TIMES_MINUTES[0]));
-    const [priceSlippage, setPriceSlippage] = useLocalStorage<number>(
+    const [priceSlippage, setPriceSlippage] = useLocalStorage(
         LOCAL_STORAGE_KEYS.SPEED_PRICE_SLIPPAGE,
-        lsPriceSlippage || DEFAULT_PRICE_SLIPPAGES_PERCENTAGE[0]
+        DEFAULT_PRICE_SLIPPAGES_PERCENTAGE[1]
     );
 
     // Reset delta time
@@ -79,7 +76,7 @@ const SpeedMarketsWidget: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                     onClick={() => setActiveMenuItem(WidgetMenuItems.POSITIONS)}
                 >
                     <Tooltip
-                        open={true}
+                        open
                         overlay={t('speed-markets.tooltips.claimable-positions')}
                         zIndex={SPEED_MARKETS_WIDGET_Z_INDEX}
                     >
@@ -88,8 +85,8 @@ const SpeedMarketsWidget: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                         </ClaimablePositionsNotification>
                     </Tooltip>
                     <Tooltip
-                        open={true}
-                        overlay={t('speed-markets.tooltips.open-positions')}
+                        open
+                        overlay={t('speed-markets.tooltips.pending-positions')}
                         zIndex={SPEED_MARKETS_WIDGET_Z_INDEX}
                     >
                         <OpenPositionsNotification>

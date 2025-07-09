@@ -5,7 +5,9 @@ import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import {
     ceilNumberToDecimals,
+    countDecimals,
     DEFAULT_CURRENCY_DECIMALS,
+    floorNumberToDecimals,
     formatCurrencyWithKey,
     LONG_CURRENCY_DECIMALS,
 } from 'thales-utils';
@@ -83,7 +85,8 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
         setAmountIndexClickedTimesMap(updatedMap);
 
         const decimals = isStableCurrency(collateral) ? DEFAULT_CURRENCY_DECIMALS : LONG_CURRENCY_DECIMALS;
-        const changedAmount = ceilNumberToDecimals(increasedAmountClicks * buyAmount, decimals);
+        const increasedAmount = floorNumberToDecimals(increasedAmountClicks * buyAmount, countDecimals(buyAmount));
+        const changedAmount = ceilNumberToDecimals(increasedAmount, decimals);
         changeAmount(changedAmount);
     };
 

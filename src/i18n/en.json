@@ -1581,6 +1581,11 @@
             "confirmation-message": "Position(s) successfully claimed",
             "waiting-price": "Waiting for price",
             "no-resolve-positions": "No positions for this section with price",
+            "filters": {
+                "pending": "Pending",
+                "claimable": "Claimable",
+                "all": "All"
+            },
             "errors": {
                 "price-stale": "Can't resolve position with stale price"
             }
@@ -1594,7 +1599,7 @@
             "bonus-info": "Bonus return for {{bonusDirection}} is +{{bonusPerc}}",
             "slippage": "Your trade will revert if the live price changes more than this percentage from your chosen Strike Price during trade execution.",
             "eth-to-weth": "Your ETH will be wrapped to WETH before executing the trade.",
-            "open-positions": "Open positions",
+            "pending-positions": "Pending positions",
             "claimable-positions": "Claimable positions"
         },
         "errors": {

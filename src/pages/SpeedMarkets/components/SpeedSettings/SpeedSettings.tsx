@@ -1,48 +1,50 @@
 import NumericInput from 'components/fields/NumericInput';
 import SuggestedAmount from 'components/SuggestedAmount';
-import { Dispatch, useState } from 'react';
+import { DEFAULT_PRICE_SLIPPAGES_PERCENTAGE } from 'constants/speedMarkets';
+import { Dispatch } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivSpaceBetween } from 'styles/common';
+import { floorNumberToDecimals } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
 
-const SLIPPAGE_AMOUNTS = [0.1, 0.5, 1, 2];
-
-const SpeedSettings: React.FC<{ setPriceSlippage: Dispatch<number>; priceSlippage: number }> = ({
-    setPriceSlippage,
+const SpeedSettings: React.FC<{ priceSlippage: number; setPriceSlippage: Dispatch<number> }> = ({
     priceSlippage,
+    setPriceSlippage,
 }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
 
-    const [slippageSetting, setSlippageSetting] = useState<number | string>(priceSlippage * 100);
+    const priceSlippagePercentage = floorNumberToDecimals(priceSlippage * 100, 2);
 
     return (
         <>
             <SettingContainer>
                 <SlippageToleranceContainer>
                     <div>{t('speed-markets.settings.slippage-tolerance')}</div>
-                    <span>{priceSlippage * 100}%</span>
+                    <span>{priceSlippagePercentage}%</span>
                 </SlippageToleranceContainer>
                 <Description>{t('speed-markets.settings.slippage-tolerance-description')}</Description>
             </SettingContainer>
             <SuggestedAmount
-                amounts={SLIPPAGE_AMOUNTS}
-                insertedAmount={slippageSetting}
+                amounts={DEFAULT_PRICE_SLIPPAGES_PERCENTAGE.map((percentage) => percentage * 100)}
+                insertedAmount={priceSlippagePercentage}
                 collateralIndex={0}
                 changeAmount={(value) => {
                     setPriceSlippage(Number(value) / 100);
-                    setSlippageSetting(Number(value));
                 }}
                 buttonHeight="32px"
                 buttonColor={theme.speedMarkets.button.background.primary}
                 amountSymbol="%"
             />
             <NumericInput
-                value={slippageSetting}
+                value={priceSlippagePercentage}
                 onChange={(e) => {
-                    setPriceSlippage(Number(e.target.value) / 100);
-                    setSlippageSetting(e.target.value);
+                    const targetValue = Math.max(
+                        floorNumberToDecimals(Number(e.target.value)) / 100,
+                        DEFAULT_PRICE_SLIPPAGES_PERCENTAGE[0]
+                    );
+                    setPriceSlippage(targetValue);
                 }}
                 borderColor={theme.input.borderColor.tertiary}
                 currencyLabel="%"
@@ -52,25 +54,21 @@ const SpeedSettings: React.FC<{ setPriceSlippage: Dispatch<number>; priceSlippag
 };
 
 const SettingContainer = styled.div`
-    margin: 20px;
+    margin-top: 20px;
 `;
 
 const SlippageToleranceContainer = styled(FlexDivSpaceBetween)`
-    font-family: Inter;
     font-size: 14px;
-    font-style: normal;
     font-weight: 500;
     line-height: 20px;
     span {
-        color: #ffb600;
+        color: ${(props) => props.theme.speedMarkets.textColor.tertiary};
     }
 `;
 
 const Description = styled.div`
-    font-family: Inter;
-    color: #8b92b8;
+    color: ${(props) => props.theme.speedMarkets.textColor.secondary};
     font-size: 12px;
-    font-style: normal;
     font-weight: 400;
     line-height: 20px;
     margin-top: 10px;

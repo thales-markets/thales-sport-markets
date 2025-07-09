@@ -93,3 +93,5 @@ export const NOT_AVAILABLE = 'N/A';
 export const SPORTS_BY_TOURNAMENTS = [Sport.TENNIS, Sport.ESPORTS];
 
 export const COUNTRY_BASED_TOURNAMENTS = [Sport.TENNIS];
+
+export const MARKET_DURATION_IN_DAYS = 90;

@@ -299,6 +299,8 @@ export default {
         borderColor: { primary: Colors.BLUE_ESTATE },
         textColor: {
             primary: Colors.WHITE,
+            secondary: Colors.FRESH_LAVENDER,
+            tertiary: Colors.YELLOW,
             active: Colors.BLUE,
             inactive: Colors.NAVY_BLUE_LIGHT,
         },
@@ -326,13 +328,11 @@ export default {
             down: Colors.RED,
         },
         position: {
-            up: {
-                default: Colors.BLUE,
-                selected: Colors.NAVY_BLUE_DARK,
-            },
-            down: {
-                default: Colors.RED,
-                selected: Colors.NAVY_BLUE_DARK,
+            selected: Colors.NAVY_BLUE_DARK,
+            up: Colors.BLUE,
+            down: Colors.RED,
+            card: {
+                background: { primary: Colors.KONKIKYO_BLUE },
             },
         },
     },
