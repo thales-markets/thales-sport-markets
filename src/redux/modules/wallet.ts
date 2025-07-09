@@ -25,7 +25,7 @@ const walletDetailsSlice = createSlice({
             state.isBiconomy = action.payload;
         },
         setIsSmartAccountDisabled: (state, action: PayloadAction<boolean>) => {
-            state.isBiconomy = action.payload;
+            state.isSmartAccountDisabled = action.payload;
         },
         updateParticleState: (state, action: PayloadAction<{ connectedViaParticle: boolean }>) => {
             state.connectedViaParticle = action.payload.connectedViaParticle;

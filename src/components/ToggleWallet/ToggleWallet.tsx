@@ -1,26 +1,41 @@
+import Tooltip from 'components/Tooltip';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { t } from 'i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { getIsBiconomy, setIsBiconomy } from 'redux/modules/wallet';
-import styled from 'styled-components';
+import { getIsBiconomy, getIsSmartAccountDisabled, setIsBiconomy } from 'redux/modules/wallet';
+import styled, { useTheme } from 'styled-components';
 import { localStore } from 'thales-utils';
-import { RootState } from 'types/redux';
 
 const ToggleWallet = () => {
     const dispatch = useDispatch();
-    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+    const isBiconomy = useSelector(getIsBiconomy);
+    const isSmartAccountDisabled = useSelector(getIsSmartAccountDisabled);
+    const theme = useTheme();
 
     return (
         <ToggleContainer>
-            <ToggleWrapper
-                active={isBiconomy}
-                onClick={() => {
-                    dispatch(setIsBiconomy(true));
-                    localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, true);
-                }}
-            >
-                <Text>{t('profile.dropdown.account')}</Text>
-            </ToggleWrapper>
+            {isSmartAccountDisabled ? (
+                <ToggleWrapper disabled={true} active={isBiconomy}>
+                    <Text>{t('profile.dropdown.account')}</Text>
+                    <Tooltip
+                        iconColor={theme.error.textColor.primary}
+                        overlay={t('profile.dropdown.smart-account-disabled')}
+                        iconFontSize={14}
+                        marginLeft={3}
+                    />
+                </ToggleWrapper>
+            ) : (
+                <ToggleWrapper
+                    active={isBiconomy}
+                    onClick={() => {
+                        dispatch(setIsBiconomy(true));
+                        localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, true);
+                    }}
+                >
+                    <Text>{t('profile.dropdown.account')}</Text>
+                </ToggleWrapper>
+            )}
+
             <ToggleWrapper
                 active={!isBiconomy}
                 onClick={() => {
@@ -57,7 +72,7 @@ const ToggleContainer = styled(Wrapper)`
     background: ${(props) => props.theme.background.primary};
     border-radius: 8px;
 `;
-const ToggleWrapper = styled.div<{ active?: boolean }>`
+const ToggleWrapper = styled.div<{ active?: boolean; disabled?: boolean }>`
     display: flex;
     align-items: center;
     flex: 1;
@@ -69,6 +84,7 @@ const ToggleWrapper = styled.div<{ active?: boolean }>`
     }
     border-radius: 8px;
     padding: 8px 12px;
+    opacity: ${(props) => (props.disabled ? 0.5 : 1)};
 
     cursor: pointer;
 `;
