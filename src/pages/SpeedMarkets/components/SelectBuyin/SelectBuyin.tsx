@@ -258,7 +258,6 @@ const SelectBuyin: React.FC<SelectBuyinProps> = ({
                                 dropDownMaxHeight={getCollaterals(networkId).length > 6 ? '220px' : undefined}
                             />
                         }
-                        balance={'' /* TODO: formatCurrencyWithKey(selectedCollateral, paymentTokenBalance) */}
                         onMaxButton={onMaxClick}
                         inputFontWeight="600"
                         inputPadding="5px 10px"
@@ -277,7 +276,6 @@ const InputContainer = styled(FlexDiv)``;
 const AmountToBuyContainer = styled.div`
     position: relative;
     width: 100%;
-    // margin-top: 21px; // use if balance is displayed
 `;
 
 export default SelectBuyin;
