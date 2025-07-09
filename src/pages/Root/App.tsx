@@ -6,6 +6,7 @@ import Loader from 'components/Loader';
 import { DEFAULT_NETWORK } from 'constants/network';
 import ROUTES from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import { Network } from 'enums/network';
 import useInterval from 'hooks/useInterval';
 import DappLayout from 'layouts/DappLayout';
 import Theme from 'layouts/Theme';
@@ -147,6 +148,7 @@ const App = () => {
                 // Check if running in a frame context where sdk might exist
                 if (sdk?.actions?.ready) {
                     await sdk.actions.ready();
+                    switchChain?.({ chainId: Network.Base as SupportedNetwork });
                 }
             } catch (error) {
                 console.log('Error signaling ready:', error);
@@ -155,7 +157,7 @@ const App = () => {
             }
         };
         attemptReady(); // Initial attempt
-    }, [connect]);
+    }, [connect, switchChain]);
 
     return (
         <Theme>
