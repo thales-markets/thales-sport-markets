@@ -377,7 +377,7 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.RAINBOW_SIX_SIEGE:
             return `/logos/Countries/rainbow-six-siege.png`;
         case League.MOBILE_LEGENDS:
-            return `/logos/Countries/mobile-legends.webp`;
+            return `/logos/Countries/mobile-legends.png`;
         case League.FORMULA1_FUTURES:
             return `/logos/leagueLogos/f1.webp`;
         case League.PGA_FUTURES:
