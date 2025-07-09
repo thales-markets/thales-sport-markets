@@ -20,6 +20,7 @@ import { LINKS } from 'constants/links';
 import { DEFAULT_NETWORK } from 'constants/network';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { SUPPORTED_PARTICAL_CONNECTORS_MODAL, SUPPORTED_WALLET_CONNECTORS_MODAL } from 'constants/wallet';
+import { Network } from 'enums/network';
 import useLocalStorage from 'hooks/useLocalStorage';
 import React, { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
@@ -104,7 +105,7 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
 
             const walletChainId = await connector.getChainId();
             if (!isNetworkSupported(walletChainId) && connector.switchChain) {
-                await connector.switchChain({ chainId: DEFAULT_NETWORK.networkId });
+                await connector.switchChain({ chainId: isInFarcaster ? Network.Base : DEFAULT_NETWORK.networkId });
             }
 
             connect({ connector });

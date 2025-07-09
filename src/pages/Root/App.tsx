@@ -67,6 +67,8 @@ const App = () => {
                 }
             } else {
                 if (chainId !== networkId) {
+                    console.log('chainId mismatch', { chainId, networkId });
+                    // If the chainId is not supported, disconnect and show the
                     if (isNetworkSupported(chainId)) {
                         switchChain?.({ chainId: chainId as SupportedNetwork });
                     } else {
