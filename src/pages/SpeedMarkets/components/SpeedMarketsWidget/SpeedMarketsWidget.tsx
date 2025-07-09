@@ -1,5 +1,4 @@
 import SPAAnchor from 'components/SPAAnchor';
-import Tooltip from 'components/Tooltip';
 import { LINKS } from 'constants/links';
 import { DEFAULT_PRICE_SLIPPAGES_PERCENTAGE, DELTA_TIMES_MINUTES } from 'constants/speedMarkets';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
@@ -75,24 +74,8 @@ const SpeedMarketsWidget: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                     isActive={activeMenuItem === WidgetMenuItems.POSITIONS}
                     onClick={() => setActiveMenuItem(WidgetMenuItems.POSITIONS)}
                 >
-                    <Tooltip
-                        open
-                        overlay={t('speed-markets.tooltips.claimable-positions')}
-                        zIndex={SPEED_MARKETS_WIDGET_Z_INDEX}
-                    >
-                        <ClaimablePositionsNotification>
-                            <NotificationsCount isClaimable />
-                        </ClaimablePositionsNotification>
-                    </Tooltip>
-                    <Tooltip
-                        open
-                        overlay={t('speed-markets.tooltips.pending-positions')}
-                        zIndex={SPEED_MARKETS_WIDGET_Z_INDEX}
-                    >
-                        <OpenPositionsNotification>
-                            <NotificationsCount isClaimable={false} />
-                        </OpenPositionsNotification>
-                    </Tooltip>
+                    <NotificationsCount isClaimable />
+                    <NotificationsCount isClaimable={false} />
                     <FooterMenuIcon className="icon icon--history" />
                     <FooterMenuItemLabel>{t('speed-markets.menu-items-label.positions')}</FooterMenuItemLabel>
                 </FooterMenuItem>
@@ -169,27 +152,6 @@ const FooterMenuItemLabel = styled.span`
     font-size: 11px;
     font-weight: 600;
     line-height: normal;
-`;
-
-const ClaimablePositionsNotification = styled.div`
-    position: absolute;
-    top: -10px;
-    left: 2px;
-    background-color: ${(props) => props.theme.background.quaternary};
-    box-shadow: ${(props) => props.theme.shadow.notificationOpen};
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
-`;
-const OpenPositionsNotification = styled(ClaimablePositionsNotification)`
-    left: unset;
-    right: 2px;
-    background-color: ${(props) => props.theme.background.octonary};
 `;
 
 export default SpeedMarketsWidget;

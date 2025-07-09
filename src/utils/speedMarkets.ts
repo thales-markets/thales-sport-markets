@@ -6,7 +6,7 @@ import { millisecondsToSeconds, secondsToMinutes } from 'date-fns';
 import { SpeedPositions } from 'enums/speedMarkets';
 import i18n from 'i18n';
 import { toast } from 'react-toastify';
-import { NetworkConfig } from 'types/network';
+import { NetworkConfig, SupportedNetwork } from 'types/network';
 import { UserPosition } from 'types/speedMarkets';
 import { ViemContract } from 'types/viem';
 import { getPriceConnection, getPriceId, priceParser } from 'utils/pyth';
@@ -14,9 +14,11 @@ import { refetchActiveSpeedMarkets, refetchUserSpeedMarkets } from 'utils/queryC
 import { delay } from 'utils/timer';
 import { Address, Client, getContract } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
+import { getDefaultCollateral } from './collaterals';
 import { getContractAbi } from './contracts/abi';
 import speedMarketsAMMContract from './contracts/speedMarkets/speedMarketsAMMContract';
 import { executeBiconomyTransaction } from './smartAccount/biconomy/biconomy';
+import smartAccountConnector from './smartAccount/smartAccountConnector';
 
 export const getTransactionForSpeedAMM = async (
     creatorContractWithSigner: any,
@@ -35,12 +37,11 @@ export const getTransactionForSpeedAMM = async (
     let txHash;
 
     if (isBiconomy) {
-        // TODO:
-        const biconomyChainId = 10; // biconomyConnector.wallet?.biconomySmartAccountConfig.chainId as SupportedNetwork;
+        const biconomyChainId = smartAccountConnector.biconomyAccount?.biconomySmartAccountConfig
+            .chainId as SupportedNetwork;
 
         txHash = await executeBiconomyTransaction({
-            // collateralAddress: collateralAddress || erc20Contract.addresses[biconomyChainId],
-            collateralAddress: collateralAddress as Address,
+            collateralAddress: (collateralAddress || getDefaultCollateral(biconomyChainId)) as Address,
             networkId: biconomyChainId,
             contract: creatorContractWithSigner,
             methodName: 'addPendingSpeedMarket',
@@ -226,7 +227,7 @@ export const resolveAllSpeedPositions = async (
                 await delay(2000);
 
                 const walletAddress = isBiconomy
-                    ? '' // TODO: biconomyConnector.address
+                    ? smartAccountConnector.biconomyAddress
                     : (networkConfig.client as Client)?.account?.address;
                 if (walletAddress) {
                     refetchUserSpeedMarkets(networkConfig.networkId, walletAddress);

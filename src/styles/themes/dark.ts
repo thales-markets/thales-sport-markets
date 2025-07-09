@@ -204,8 +204,8 @@ export default {
         priceLine: Colors.WHITE,
         multiPositions: Colors.PURPLE,
         area: {
-            start: Colors.CHART_AREA_START, // TODO: check with Igor
-            end: Colors.CHART_AREA_END, // TODO: check with Igor
+            start: Colors.CHART_AREA_START,
+            end: Colors.CHART_AREA_END,
         },
     },
     connectWalletModal: {

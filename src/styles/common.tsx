@@ -133,6 +133,6 @@ export const Colors = {
     DOWN_CANDLE: '#E14545',
     FRESH_LAVENDER: '#8B92B8',
 
-    CHART_AREA_START: '#5ab5d966', // TODO: check with Igor
-    CHART_AREA_END: '#5ab5d900', // TODO: check with Igor
+    CHART_AREA_START: '#5ab5d966',
+    CHART_AREA_END: '#5ab5d900',
 };

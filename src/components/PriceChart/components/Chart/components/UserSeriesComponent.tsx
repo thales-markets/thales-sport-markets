@@ -44,7 +44,7 @@ export const UserPositionAreaSeries: React.FC<{
             }> = [];
 
             userActiveSpeedMarketsDataQuery.data
-                .filter((position: any) => position.currencyKey === asset)
+                .filter((position) => position.asset === asset)
                 .map((position) => {
                     const lastCandleTime = candlestickData[candlestickData.length - 1].time;
                     const deltaTime = candlestickData[1].time - candlestickData[0].time;

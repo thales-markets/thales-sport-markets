@@ -13,6 +13,8 @@ import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
 import { UserPosition } from 'types/speedMarkets';
 import { getPriceId } from 'utils/pyth';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
+import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
 import { isUserWinner } from 'utils/speedMarkets';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import SpeedPositionCard from '../SpeedPositionCard';
@@ -22,17 +24,16 @@ const SpeedPositions: React.FC = () => {
 
     const networkId = useChainId();
     const client = useClient();
-    const { address: walletAddress, isConnected } = useAccount();
-
+    const { address, isConnected } = useAccount();
+    const { smartAddress } = useBiconomy();
     const isBiconomy = useSelector(getIsBiconomy);
+    const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const [selectedFilter, setSelectedFilter] = useState(PositionsFilter.PENDING);
 
-    const userResolvedSpeedMarketsDataQuery = useUserResolvedSpeedMarketsQuery(
-        { networkId, client },
-        isBiconomy ? '' /* TODO: biconomyConnector.address */ : walletAddress || '',
-        { enabled: isConnected }
-    );
+    const userResolvedSpeedMarketsDataQuery = useUserResolvedSpeedMarketsQuery({ networkId, client }, walletAddress, {
+        enabled: isConnected,
+    });
 
     const userResolvedSpeedMarketsData = useMemo(
         () =>
@@ -44,7 +45,7 @@ const SpeedPositions: React.FC = () => {
 
     const userActiveSpeedMarketsDataQuery = useUserActiveSpeedMarketsDataQuery(
         { networkId, client },
-        isBiconomy ? '' /* TODO: biconomyConnector.address */ : walletAddress || '',
+        isBiconomy ? smartAccountConnector.biconomyAddress : walletAddress || '',
         { enabled: isConnected }
     );
 
@@ -106,12 +107,12 @@ const SpeedPositions: React.FC = () => {
                             onClick={() => setSelectedFilter(positionFilter)}
                         >
                             {t(`speed-markets.user-positions.filters.${positionFilter}`)}
-                            {positionFilter === PositionsFilter.PENDING && (
+                            {positionFilter === PositionsFilter.PENDING && !!pendingUserSpeedMarkets.length && (
                                 <PendingPositionsCount isSelected={selectedFilter === PositionsFilter.PENDING}>
                                     {pendingUserSpeedMarkets.length}
                                 </PendingPositionsCount>
                             )}
-                            {positionFilter === PositionsFilter.CLAIMABLE && (
+                            {positionFilter === PositionsFilter.CLAIMABLE && !!claimableUserSpeedMarkets.length && (
                                 <ClaimablePositionsCount isSelected={selectedFilter === PositionsFilter.CLAIMABLE}>
                                     {claimableUserSpeedMarkets.length}
                                 </ClaimablePositionsCount>

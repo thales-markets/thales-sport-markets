@@ -311,9 +311,6 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
         }
     }, [ammSpeedMarketsLimits, selectedAsset, convertToStable, paidAmount, selectedPosition]);
 
-    // TODO
-    const userAddress = isBiconomy ? '' /*biconomyConnector.address*/ : (walletAddress as string);
-
     // Check allowance
     useDebouncedEffect(() => {
         if (!collateralAddress) {
@@ -354,7 +351,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
                     const allowance: boolean = await checkAllowance(
                         parsedAmount,
                         collateralContractWithSigner,
-                        userAddress,
+                        walletAddress,
                         addressToApprove
                     );
 
@@ -444,12 +441,12 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
             setSubmittedStrikePrice(0);
             setIsSubmitting(false);
 
-            refetchUserSpeedMarkets(networkId, userAddress);
+            refetchUserSpeedMarkets(networkId, walletAddress);
             refetchActiveSpeedMarkets(networkId);
             refetchSpeedMarketsLimits(networkId);
-            refetchBalances(userAddress, networkId);
+            refetchBalances(walletAddress, networkId);
         },
-        [networkId, resetData, t, userAddress]
+        [networkId, resetData, t, walletAddress]
     );
 
     const handleSubmit = async () => {
@@ -469,7 +466,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
         }) as ViemContract;
 
         const numOfActiveUserMarketsBefore = Number(
-            (await speedMarketsAMMContractWithClient.read.getLengths([userAddress]))[2]
+            (await speedMarketsAMMContractWithClient.read.getLengths([walletAddress]))[2]
         );
 
         const publicClient = getPublicClient(wagmiConfig, { chainId: networkId });
@@ -479,7 +476,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
             address: speedMarketsAMMContract.addresses[networkId],
             abi: getContractAbi(speedMarketsAMMContract, networkId),
             eventName: 'MarketCreatedWithFees',
-            args: { ['_user']: userAddress },
+            args: { ['_user']: walletAddress },
             onLogs: () => {
                 isMarketCreated = true;
                 onMarketCreated(id);
@@ -561,7 +558,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
                     await delay(checkDelay);
 
                     const numOfActiveUserMarketsAfter = Number(
-                        (await speedMarketsAMMContractWithClient.read.getLengths([userAddress]))[2]
+                        (await speedMarketsAMMContractWithClient.read.getLengths([walletAddress]))[2]
                     );
 
                     if (!isMarketCreated && numOfActiveUserMarketsAfter - numOfActiveUserMarketsBefore > 0) {
