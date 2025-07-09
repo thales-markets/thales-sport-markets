@@ -1,5 +1,6 @@
 import { createSmartAccountClient } from '@biconomy/account';
 import { LINKS } from 'constants/links';
+import { RPC_LIST } from 'constants/network';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
@@ -25,6 +26,7 @@ function useBiconomy() {
                     signer: walletClient,
                     bundlerUrl: bundlerUrl,
                     biconomyPaymasterApiKey: PAYMASTER_API_KEY,
+                    rpcUrl: RPC_LIST.INFURA[networkId].http,
                 });
                 const smartAddressNew = await smartAccount.getAccountAddress();
 
