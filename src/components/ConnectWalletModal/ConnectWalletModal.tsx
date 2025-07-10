@@ -104,9 +104,13 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
             await connector.connect();
 
             const walletChainId = await connector.getChainId();
-            if (!isNetworkSupported(walletChainId) && connector.switchChain) {
-                console.log('Switching chain to default network', isInFarcaster);
-                await connector.switchChain({ chainId: isInFarcaster ? Network.Base : DEFAULT_NETWORK.networkId });
+
+            if (isInFarcaster && connector.switchChain) {
+                await connector.switchChain({ chainId: Network.Base });
+            } else {
+                if (!isNetworkSupported(walletChainId) && connector.switchChain) {
+                    await connector.switchChain({ chainId: DEFAULT_NETWORK.networkId });
+                }
             }
 
             connect({ connector });
