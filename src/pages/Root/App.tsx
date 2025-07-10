@@ -150,7 +150,8 @@ const App = () => {
                 // Check if running in a frame context where sdk might exist
                 if (sdk?.actions?.ready) {
                     await sdk.actions.ready();
-                    if (await sdk.isInMiniApp()) switchChain?.({ chainId: Network.Base as SupportedNetwork });
+                    if ((await sdk.isInMiniApp()) && !isNetworkSupported(networkId))
+                        switchChain?.({ chainId: Network.Base as SupportedNetwork });
                 }
             } catch (error) {
                 console.log('Error signaling ready:', error);
@@ -159,7 +160,7 @@ const App = () => {
             }
         };
         attemptReady(); // Initial attempt
-    }, [connect, switchChain]);
+    }, [connect, switchChain, networkId]);
 
     return (
         <Theme>
