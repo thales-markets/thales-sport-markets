@@ -2,6 +2,7 @@ import Tooltip from 'components/Tooltip';
 import { USD_SIGN } from 'constants/currency';
 import { SPEED_MARKETS_WIDGET_Z_INDEX } from 'constants/ui';
 import { SpeedPositions } from 'enums/speedMarkets';
+import { Dispatch } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
@@ -9,13 +10,22 @@ import { formatCurrencyWithSign } from 'thales-utils';
 import { UserPosition } from 'types/speedMarkets';
 import { formatShortDateWithFullTime } from 'utils/formatters/date';
 import { isUserWinner, isUserWinning } from 'utils/speedMarkets';
+import ClaimAction from '../ClaimAction';
 import SpeedTimeRemaining from '../SpeedTimeRemaining';
 
 type SpeedPositionCardProps = {
     position: UserPosition;
+    claimCollateralIndex: number;
+    isSubmittingBatch?: boolean;
+    setIsActionInProgress?: Dispatch<boolean>;
 };
 
-const SpeedPositionCard: React.FC<SpeedPositionCardProps> = ({ position }) => {
+const SpeedPositionCard: React.FC<SpeedPositionCardProps> = ({
+    position,
+    claimCollateralIndex,
+    isSubmittingBatch,
+    setIsActionInProgress,
+}) => {
     const { t } = useTranslation();
 
     const isMatured = position.maturityDate < Date.now();
@@ -38,16 +48,24 @@ const SpeedPositionCard: React.FC<SpeedPositionCardProps> = ({ position }) => {
                 {!isMatured ? (
                     // pending
                     <Status isWon={isUserCurrentlyWinning}>
-                        {isUserCurrentlyWinning ? 'winning...' : 'losing...'}
+                        {isUserCurrentlyWinning
+                            ? t('speed-markets.user-positions.status.winning')
+                            : t('speed-markets.user-positions.status.loosing')}
+                        {'...'}
                     </Status>
                 ) : position.isClaimable ? (
-                    <></>
+                    <ClaimAction
+                        positions={[position]}
+                        claimCollateralIndex={claimCollateralIndex}
+                        isSubmittingBatch={isSubmittingBatch}
+                        setIsActionInProgress={setIsActionInProgress}
+                    />
                 ) : hasFinalPrice ? (
                     // history
                     <Status isWon={isUserWon}>
                         {isUserWon
-                            ? t('speed-markets.user-positions.status-won')
-                            : t('speed-markets.user-positions.status-loss')}
+                            ? t('speed-markets.user-positions.status.won')
+                            : t('speed-markets.user-positions.status.loss')}
                     </Status>
                 ) : (
                     // price is missing - pending
@@ -89,7 +107,7 @@ const SpeedPositionCard: React.FC<SpeedPositionCardProps> = ({ position }) => {
                     ) : (
                         <>
                             <PlayIcon className="speedmarkets-icon speedmarkets-icon--indicator-down" />
-                            <SpeedTimeRemaining end={position.maturityDate} showFullCounter showSecondsCounter />
+                            <SpeedTimeRemaining end={position.maturityDate} showFullCounter />
                         </>
                     )}
                 </Time>
@@ -109,11 +127,11 @@ const SpeedPositionCard: React.FC<SpeedPositionCardProps> = ({ position }) => {
 };
 
 const Container = styled(FlexDivColumn)`
-    min-height: 100px;
-    max-height: 100px;
+    min-height: 102px;
+    max-height: 102px;
     border-radius: 16px;
     background: ${(props) => props.theme.speedMarkets.position.card.background.primary};
-    padding: 10px 20px;
+    padding: 10px 15px;
     justify-content: space-between;
 `;
 

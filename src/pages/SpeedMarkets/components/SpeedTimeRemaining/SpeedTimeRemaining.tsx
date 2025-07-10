@@ -5,24 +5,18 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { ThemeInterface } from 'types/ui';
-import { formattedDurationFullV2, formattedDurationV2 } from 'utils/formatters/date';
+import { DEFAULT_DATETIME_TRANSLATION_MAP, formattedDuration, formattedDurationFullV2 } from 'utils/formatters/date';
 
 type SpeedTimeRemainingProps = {
     end: Date | number;
     showFullCounter?: boolean;
-    showSecondsCounter?: boolean;
     children?: React.ReactNode;
 };
 
 const ONE_SECOND_IN_MS = 1000;
 const SHOW_WEEKS_THRESHOLD = 4;
 
-const SpeedTimeRemaining: React.FC<SpeedTimeRemainingProps> = ({
-    end,
-    showFullCounter,
-    showSecondsCounter,
-    children,
-}) => {
+const SpeedTimeRemaining: React.FC<SpeedTimeRemainingProps> = ({ end, showFullCounter, children }) => {
     const { t } = useTranslation();
 
     const now = Date.now();
@@ -70,8 +64,8 @@ const SpeedTimeRemaining: React.FC<SpeedTimeRemainingProps> = ({
                 {showRemainingInWeeks
                     ? `${weeksDiff} ${t('common.time-remaining.weeks')}`
                     : showFullCounter
-                    ? formattedDurationFullV2(duration, undefined, undefined, showSecondsCounter)
-                    : formattedDurationV2(duration)}
+                    ? formattedDurationFullV2(duration, ':', undefined)
+                    : formattedDuration(duration, DEFAULT_DATETIME_TRANSLATION_MAP)}
             </Time>
         </>
     );
@@ -95,7 +89,6 @@ const Time = styled.span<{
     duration: Duration;
 }>`
     display: inline-block;
-    ${(props) => (props.duration.minutes === 0 ? 'min-width: 23px;' : '')}
     color: ${(props) => getColor(props.duration, props.theme)};
     font-size: 12px;
     font-weight: 400;

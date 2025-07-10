@@ -1,3 +1,4 @@
+import CollateralSelector from 'components/CollateralSelector';
 import Scroll from 'components/Scroll';
 import SimpleLoader from 'components/SimpleLoader';
 import { MARKET_DURATION_IN_DAYS } from 'constants/markets';
@@ -14,11 +15,14 @@ import { getIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
 import { UserPosition } from 'types/speedMarkets';
+import { getCollaterals, getDefaultCollateral, isLpSupported } from 'utils/collaterals';
+import { getIsMultiCollateralSupported } from 'utils/network';
 import { getPriceId } from 'utils/pyth';
 import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
 import { isUserWinner } from 'utils/speedMarkets';
 import { useAccount, useChainId, useClient } from 'wagmi';
+import ClaimAction from '../ClaimAction';
 import SpeedPositionCard from '../SpeedPositionCard';
 
 const SpeedPositions: React.FC = () => {
@@ -32,6 +36,19 @@ const SpeedPositions: React.FC = () => {
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const [selectedFilter, setSelectedFilter] = useState(PositionsFilter.PENDING);
+    const [claimCollateralIndex, setClaimCollateralIndex] = useState(0);
+    const [isSubmittingBatch, setIsSubmittingBatch] = useState(false);
+    const [isActionInProgress, setIsActionInProgress] = useState(false);
+
+    const isMultiCollateralSupported = getIsMultiCollateralSupported(networkId);
+
+    const claimCollateralArray = useMemo(
+        () =>
+            getCollaterals(networkId).filter(
+                (collateral) => !isLpSupported(collateral) || collateral === getDefaultCollateral(networkId)
+            ),
+        [networkId]
+    );
 
     const userResolvedSpeedMarketsDataQuery = useUserResolvedSpeedMarketsQuery({ networkId, client }, walletAddress, {
         enabled: isConnected,
@@ -139,6 +156,26 @@ const SpeedPositions: React.FC = () => {
                     );
                 })}
             </Filters>
+            {selectedFilter === PositionsFilter.CLAIMABLE && (
+                // TODO
+                <FlexDivRow style={{ width: '100%', minHeight: '25px' }}>
+                    <ClaimAction
+                        positions={positions}
+                        claimCollateralIndex={claimCollateralIndex}
+                        isSubmittingBatch={isSubmittingBatch}
+                        setIsActionInProgress={setIsSubmittingBatch}
+                    />
+                    {isMultiCollateralSupported && (
+                        <CollateralSelector
+                            collateralArray={claimCollateralArray}
+                            selectedItem={claimCollateralIndex}
+                            onChangeCollateral={setClaimCollateralIndex}
+                            preventPaymentCollateralChange
+                            disabled={isSubmittingBatch || isActionInProgress}
+                        />
+                    )}
+                </FlexDivRow>
+            )}
             {selectedFilter === PositionsFilter.HISTORY && (
                 <HistoryInfo>
                     {t('speed-markets.user-positions.history-limit', { days: MARKET_DURATION_IN_DAYS })}
@@ -149,9 +186,17 @@ const SpeedPositions: React.FC = () => {
                     {isLoading ? (
                         <SimpleLoader />
                     ) : !!positions.length ? (
-                        positions.map((position, i) => <SpeedPositionCard key={`position-${i}`} position={position} />)
+                        positions.map((position, i) => (
+                            <SpeedPositionCard
+                                key={`position-${i}`}
+                                position={position}
+                                claimCollateralIndex={claimCollateralIndex}
+                                isSubmittingBatch={isSubmittingBatch}
+                                setIsActionInProgress={setIsActionInProgress}
+                            />
+                        ))
                     ) : (
-                        <NoPositions>NO POSITIONS</NoPositions>
+                        <NoPositions>{t('speed-markets.user-positions.no-positions')}</NoPositions>
                     )}
                 </Positions>
             </Scroll>
@@ -224,6 +269,7 @@ const NoPositions = styled(FlexDivCentered)`
     font-size: 18px;
     font-weight: 600;
     line-height: 100%;
+    text-transform: uppercase;
 `;
 
 export default SpeedPositions;
