@@ -437,6 +437,7 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
             MarketType.PLAYER_PROPS_1ST_3_MAPS_KILLS,
         ],
         [MarketTypeGroup.ASSISTS_PROPS]: [
+            MarketType.PLAYER_PROPS_ASSISTS,
             MarketType.PLAYER_PROPS_1ST_MAP_ASSISTS,
             MarketType.PLAYER_PROPS_2ND_MAP_ASSISTS,
             MarketType.PLAYER_PROPS_3RD_MAP_ASSISTS,
