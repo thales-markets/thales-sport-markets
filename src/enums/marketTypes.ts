@@ -91,8 +91,8 @@ export enum MarketTypeGroup {
     PLAYER_5TH_MAP_HEADSHOTS = '5th Map Player Headshots',
     PLAYER_1ST_2_MAPS_HEADSHOTS = '1st 2 Maps Player Headshots',
     PLAYER_1ST_3_MAPS_HEADSHOTS = '1st 3 Maps Player Headshots',
-    PLAYER_KILLS = 'Kill props',
-    PLAYER_ASSISTS = 'Assist props',
-    PLAYER_DEATHS = 'Death props',
-    PLAYER_HEADSHOTS = 'Headshot props',
+    KILLS_PROPS = 'Kill props',
+    ASSISTS_PROPS = 'Assist props',
+    DEATHS_PROPS = 'Death props',
+    HEADSHOTS_PROPS = 'Headshot props',
 }

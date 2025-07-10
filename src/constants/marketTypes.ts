@@ -426,7 +426,7 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
         [MarketTypeGroup.HANDICAP]: SPREAD_MARKET_TYPES,
         [MarketTypeGroup.QUICK_SGP]: [...SGP_BUILDER_MARKET_TYPES],
-        [MarketTypeGroup.PLAYER_KILLS]: [
+        [MarketTypeGroup.KILLS_PROPS]: [
             MarketType.PLAYER_PROPS_KILLS,
             MarketType.PLAYER_PROPS_1ST_MAP_KILLS,
             MarketType.PLAYER_PROPS_2ND_MAP_KILLS,
@@ -436,7 +436,7 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
             MarketType.PLAYER_PROPS_1ST_2_MAPS_KILLS,
             MarketType.PLAYER_PROPS_1ST_3_MAPS_KILLS,
         ],
-        [MarketTypeGroup.PLAYER_ASSISTS]: [
+        [MarketTypeGroup.ASSISTS_PROPS]: [
             MarketType.PLAYER_PROPS_1ST_MAP_ASSISTS,
             MarketType.PLAYER_PROPS_2ND_MAP_ASSISTS,
             MarketType.PLAYER_PROPS_3RD_MAP_ASSISTS,
@@ -445,7 +445,7 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
             MarketType.PLAYER_PROPS_1ST_2_MAPS_ASSISTS,
             MarketType.PLAYER_PROPS_1ST_3_MAPS_ASSISTS,
         ],
-        [MarketTypeGroup.PLAYER_DEATHS]: [
+        [MarketTypeGroup.DEATHS_PROPS]: [
             MarketType.PLAYER_PROPS_DEATHS,
             MarketType.PLAYER_PROPS_1ST_MAP_DEATHS,
             MarketType.PLAYER_PROPS_2ND_MAP_DEATHS,
@@ -455,7 +455,7 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
             MarketType.PLAYER_PROPS_1ST_2_MAPS_DEATHS,
             MarketType.PLAYER_PROPS_1ST_3_MAPS_DEATHS,
         ],
-        [MarketTypeGroup.PLAYER_HEADSHOTS]: [
+        [MarketTypeGroup.HEADSHOTS_PROPS]: [
             MarketType.PLAYER_PROPS_HEADSHOTS,
             MarketType.PLAYER_PROPS_1ST_MAP_HEADSHOTS,
             MarketType.PLAYER_PROPS_2ND_MAP_HEADSHOTS,
