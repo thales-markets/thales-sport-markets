@@ -103,7 +103,7 @@ const App = () => {
                 dispatch(setIsSmartAccountDisabled(false));
             }
         });
-    }, [address, dispatch]);
+    }, [address, dispatch, networkId]);
 
     // useEffect only for Particle Wallet
     useEffect(() => {
