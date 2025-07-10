@@ -128,6 +128,10 @@ export const isUserWinner = (position: SpeedPositions, strikePrice: number, fina
           (position === SpeedPositions.DOWN && finalPrice < strikePrice)
         : undefined;
 
+export const isUserWinning = (position: SpeedPositions, strikePrice: number, finalPrice: number) =>
+    (position === SpeedPositions.UP && finalPrice > strikePrice) ||
+    (position === SpeedPositions.DOWN && finalPrice < strikePrice);
+
 export const resolveAllSpeedPositions = async (
     positions: UserPosition[],
     isAdmin: boolean,

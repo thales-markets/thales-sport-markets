@@ -8,7 +8,8 @@ import { FlexDivCentered, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from '
 import { formatCurrencyWithSign } from 'thales-utils';
 import { UserPosition } from 'types/speedMarkets';
 import { formatShortDateWithFullTime } from 'utils/formatters/date';
-import { isUserWinner } from 'utils/speedMarkets';
+import { isUserWinner, isUserWinning } from 'utils/speedMarkets';
+import SpeedTimeRemaining from '../SpeedTimeRemaining';
 
 type SpeedPositionCardProps = {
     position: UserPosition;
@@ -20,6 +21,7 @@ const SpeedPositionCard: React.FC<SpeedPositionCardProps> = ({ position }) => {
     const isMatured = position.maturityDate < Date.now();
     const hasFinalPrice = position.finalPrice > 0;
     const isUserWon = !!isUserWinner(position.side, position.strikePrice, position.finalPrice);
+    const isUserCurrentlyWinning = isUserWinning(position.side, position.strikePrice, position.currentPrice);
 
     return (
         <Container>
@@ -33,18 +35,25 @@ const SpeedPositionCard: React.FC<SpeedPositionCardProps> = ({ position }) => {
                         <PositionText>{position.side}</PositionText>
                     </Position>
                 </AssetPosition>
-                {position.isClaimable ? (
+                {!isMatured ? (
+                    // pending
+                    <Status isWon={isUserCurrentlyWinning}>
+                        {isUserCurrentlyWinning ? 'winning...' : 'losing...'}
+                    </Status>
+                ) : position.isClaimable ? (
                     <></>
+                ) : hasFinalPrice ? (
+                    // history
+                    <Status isWon={isUserWon}>
+                        {isUserWon
+                            ? t('speed-markets.user-positions.status-won')
+                            : t('speed-markets.user-positions.status-loss')}
+                    </Status>
                 ) : (
-                    isMatured &&
-                    hasFinalPrice && (
-                        // history
-                        <Status isWon={isUserWon}>
-                            {isUserWon
-                                ? t('speed-markets.user-positions.status-won')
-                                : t('speed-markets.user-positions.status-loss')}
-                        </Status>
-                    )
+                    // price is missing - pending
+                    <Status isWon={false} isUnknown>
+                        {t('speed-markets.user-positions.waiting-price')}
+                    </Status>
                 )}
             </FlexDivRowCentered>
             <FlexDivRowCentered>
@@ -74,11 +83,26 @@ const SpeedPositionCard: React.FC<SpeedPositionCardProps> = ({ position }) => {
             </FlexDivRowCentered>
             <FlexDivRowCentered>
                 <Time>{formatShortDateWithFullTime(position.createdAt)}</Time>
-                <Time>{formatShortDateWithFullTime(position.maturityDate)}</Time>
+                <Time>
+                    {isMatured ? (
+                        formatShortDateWithFullTime(position.maturityDate)
+                    ) : (
+                        <>
+                            <PlayIcon className="speedmarkets-icon speedmarkets-icon--indicator-down" />
+                            <SpeedTimeRemaining end={position.maturityDate} showFullCounter showSecondsCounter />
+                        </>
+                    )}
+                </Time>
             </FlexDivRowCentered>
             <FlexDivRowCentered>
-                <Paid>{`Paid: ${formatCurrencyWithSign(USD_SIGN, position.paid)}`}</Paid>
-                <Payout>{`Payout: ${formatCurrencyWithSign(USD_SIGN, position.payout)}`}</Payout>
+                <Paid>{`${t('speed-markets.user-positions.labels.paid')}: ${formatCurrencyWithSign(
+                    USD_SIGN,
+                    position.paid
+                )}`}</Paid>
+                <Payout>{`${t('speed-markets.user-positions.labels.payout')}: ${formatCurrencyWithSign(
+                    USD_SIGN,
+                    position.payout
+                )}`}</Payout>
             </FlexDivRowCentered>
         </Container>
     );
@@ -122,8 +146,13 @@ const Position = styled(FlexDivCentered)<{ isUp: boolean }>`
     }
 `;
 
-const Status = styled.span<{ isWon: boolean }>`
-    color: ${(props) => (props.isWon ? props.theme.status.win : props.theme.status.loss)};
+const Status = styled.span<{ isWon: boolean; isUnknown?: boolean }>`
+    color: ${(props) =>
+        props.isUnknown
+            ? props.theme.speedMarkets.textColor.primary
+            : props.isWon
+            ? props.theme.status.win
+            : props.theme.status.loss};
     font-size: 14px;
     line-height: 20px;
     font-weight: 500;
@@ -144,5 +173,13 @@ const Time = styled(Text)``;
 const Paid = styled(Text)``;
 
 const Payout = styled(Text)``;
+
+const PlayIcon = styled.i`
+    rotate: -90deg;
+    color: ${(props) => props.theme.speedMarkets.position.card.icon.primary};
+    font-size: 12px;
+    line-height: 12px;
+    margin-right: 5px;
+`;
 
 export default SpeedPositionCard;

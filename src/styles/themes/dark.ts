@@ -334,6 +334,7 @@ export default {
             card: {
                 background: { primary: Colors.KONKIKYO_BLUE },
                 textColor: { primary: Colors.FRESH_LAVENDER },
+                icon: { primary: Colors.MILD_MENTHOL },
             },
         },
     },
