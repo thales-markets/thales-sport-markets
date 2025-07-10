@@ -40,6 +40,8 @@ export const getTeamImageSource = (team: string, league: League) => {
         ? `/logos/Primeira Liga/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.BRAZIL_CUP
         ? `/logos/Brazil-Serie-A/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : league == League.NBA_SUMMER_LEAGUE
+        ? `/logos/NBA/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.US_ELECTION
         ? `/logos/Countries/united-states-of-america.svg`
         : league == League.NFL_FUTURES
@@ -94,6 +96,7 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.NFL:
         case League.MLB:
         case League.NBA:
+        case League.NBA_SUMMER_LEAGUE:
         case League.NCAAB:
         case League.NHL:
         case League.WNBA:
@@ -363,12 +366,18 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
             return `/logos/Countries/valorant.png`;
         case League.STARCRAFT:
             return `/logos/Countries/starcraft.png`;
+        case League.STARCRAFT_2:
+            return `/logos/Countries/starcraft.png`;
         case League.ROCKET_LEAGUE:
             return `/logos/Countries/rocket-league.png`;
         case League.CALL_OF_DUTY:
             return `/logos/Countries/call-of-duty.png`;
         case League.OVERWATCH:
             return `/logos/Countries/overwatch.webp`;
+        case League.RAINBOW_SIX_SIEGE:
+            return `/logos/Countries/rainbow-six-siege.png`;
+        case League.MOBILE_LEGENDS:
+            return `/logos/Countries/mobile-legends.png`;
         case League.FORMULA1_FUTURES:
             return `/logos/leagueLogos/f1.webp`;
         case League.PGA_FUTURES:

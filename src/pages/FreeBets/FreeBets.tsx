@@ -28,7 +28,7 @@ import { ThemeInterface } from 'types/ui';
 import { getFreeBetCollaterals, isStableCurrency } from 'utils/collaterals';
 import { useAccount, useChainId, useClient, useSignMessage } from 'wagmi';
 import multipleCollateral from '../../utils/contracts/multipleCollateralContract';
-import StatsTable from './StatsTable';
+import StatsTable, { CopyIcon } from './StatsTable';
 
 const FUND_WALLET_ADDRESS = '0x23Ea88E828188377DCB4663ff2FE419B1fC71F88';
 
@@ -275,17 +275,6 @@ const GenerateContainer = styled(FlexDivColumnNative)`
         width: 100%;
         padding: 5px;
         font-size: 14px;
-    }
-`;
-
-export const CopyIcon = styled.i`
-    margin-left: 5px;
-    font-size: 24px;
-    cursor: pointer;
-    font-weight: 400;
-    color: ${(props) => props.theme.overdrop.textColor.primary};
-    @media (max-width: 767px) {
-        font-size: 20px;
     }
 `;
 
