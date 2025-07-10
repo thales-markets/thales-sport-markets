@@ -1,5 +1,5 @@
 import { ChartContext } from 'constants/chart';
-import { millisecondsToSeconds } from 'date-fns';
+import { differenceInMinutes, millisecondsToSeconds } from 'date-fns';
 import { SpeedPositions } from 'enums/speedMarkets';
 import { ISeriesApi } from 'lightweight-charts';
 import useUserActiveSpeedMarketsDataQuery from 'queries/speedMarkets/useUserActiveSpeedMarketsDataQuery';
@@ -11,6 +11,8 @@ import { ThemeInterface } from 'types/ui';
 import { timeToLocal } from 'utils/formatters/date';
 import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
 import { useAccount, useChainId, useClient } from 'wagmi';
+
+const LIMIT_FOR_POSITIONS_IN_MINUTES = 10; // 10 minutes
 
 export const UserPositionAreaSeries: React.FC<{
     asset: string;
@@ -44,7 +46,16 @@ export const UserPositionAreaSeries: React.FC<{
             }> = [];
 
             userActiveSpeedMarketsDataQuery.data
-                .filter((position) => position.asset === asset)
+                .filter((position) => {
+                    const diffInMinutes = differenceInMinutes(new Date(), new Date(position.maturityDate));
+                    if (
+                        position.asset !== asset ||
+                        (diffInMinutes < 0 && Math.abs(diffInMinutes) > LIMIT_FOR_POSITIONS_IN_MINUTES)
+                    ) {
+                        return false; // Exclude positions that are more than 60 minutes in the future
+                    }
+                    return true;
+                })
                 .map((position) => {
                     const lastCandleTime = candlestickData[candlestickData.length - 1].time;
                     const deltaTime = candlestickData[1].time - candlestickData[0].time;
