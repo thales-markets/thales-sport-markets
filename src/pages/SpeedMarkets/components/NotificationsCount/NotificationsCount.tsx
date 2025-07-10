@@ -74,7 +74,11 @@ const NotificationsCount: React.FC<{ isClaimable: boolean }> = ({ isClaimable })
 
     const notificationsCount = isClaimable ? claimableUserSpeedMarkets.length : pendingUserSpeedMarketsCount;
 
-    return notificationsCount > 0 ? (
+    const isLoading =
+        userActiveSpeedMarketsDataQuery.isLoading ||
+        pythPricesQueries.some((pythPriceQuery) => pythPriceQuery.isLoading);
+
+    return !isLoading && notificationsCount > 0 ? (
         <Tooltip
             overlay={
                 isClaimable
@@ -99,7 +103,8 @@ const Notification = styled.div<{ isClaimable: boolean }>`
     ${(props) => (!props.isClaimable ? 'right: 2px;' : '')}
     background-color: ${(props) =>
         props.isClaimable ? props.theme.background.quaternary : props.theme.background.octonary};
-    box-shadow: ${(props) => props.theme.shadow.notificationOpen};
+    box-shadow: ${(props) =>
+        props.isClaimable ? props.theme.shadow.notification : props.theme.shadow.notificationOpen};
     border-radius: 50%;
     display: flex;
     align-items: center;

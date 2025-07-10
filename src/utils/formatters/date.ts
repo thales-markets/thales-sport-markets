@@ -89,3 +89,5 @@ export function timeToLocal(originalTime: number) {
         )
     );
 }
+
+export const formatShortDateWithFullTime = (date: Date | number) => format(date, 'd MMM yyyy HH:mm:ss');

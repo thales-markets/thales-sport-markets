@@ -1,8 +1,11 @@
+import Tooltip from 'components/Tooltip';
 import { USD_SIGN } from 'constants/currency';
-import { ScreenSizeBreakpoint } from 'enums/ui';
+import { SPEED_MARKETS_WIDGET_Z_INDEX } from 'constants/ui';
 import React from 'react';
-import styled, { css } from 'styled-components';
+import { useTranslation } from 'react-i18next';
+import styled, { css, useTheme } from 'styled-components';
 import { formatCurrencyWithSign } from 'thales-utils';
+import { ThemeInterface } from 'types/ui';
 
 type CurrentPriceProps = {
     asset: string;
@@ -11,6 +14,9 @@ type CurrentPriceProps = {
 };
 
 const CurrentPrice: React.FC<CurrentPriceProps> = ({ currentPrice, isPriceUp }) => {
+    const { t } = useTranslation();
+    const theme: ThemeInterface = useTheme();
+
     const currentPriceFormatted = formatCurrencyWithSign(USD_SIGN, currentPrice || 0);
     const skipIndexes: number[] = [];
 
@@ -42,7 +48,15 @@ const CurrentPrice: React.FC<CurrentPriceProps> = ({ currentPrice, isPriceUp }) 
                     }
                 })}
             </AnimatedPrice>
-            <Icon className="icon icon--arrow" $isUp={isPriceUp} />
+            <Icon className="speedmarkets-icon speedmarkets-icon--arrow" $isUp={isPriceUp} />
+            <Tooltip
+                overlay={t('speed-markets.tooltips.current-price')}
+                customIconStyling={{
+                    color: isPriceUp ? theme.speedMarkets.price.up : theme.speedMarkets.price.down,
+                }}
+                iconFontSize={14}
+                zIndex={SPEED_MARKETS_WIDGET_Z_INDEX}
+            />
         </Container>
     );
 };
@@ -56,10 +70,7 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: 8px;
-    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
-        gap: 5px;
-    }
+    gap: 5px;
 `;
 
 const AnimatedPrice = styled.div`
@@ -68,17 +79,14 @@ const AnimatedPrice = styled.div`
 `;
 
 const Icon = styled.i<{ $isUp?: boolean }>`
-    font-size: ${(props) => (props.$isUp !== undefined ? '22' : '28')}px;
+    font-size: 14px;
+    line-height: 100%;
     ${(props) =>
         props.$isUp !== undefined
             ? `color: ${props.$isUp ? props.theme.speedMarkets.price.up : props.theme.speedMarkets.price.down};`
             : ''}
     ${(props) =>
         props.$isUp !== undefined ? (props.$isUp ? 'transform: rotate(-90deg);' : 'transform: rotate(90deg);') : ''}
-    
-    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
-        font-size: ${(props) => (props.$isUp !== undefined ? '18' : '22')}px;
-    }
 `;
 
 const Price = styled.span<{ $isUp?: boolean }>`
@@ -91,13 +99,6 @@ const Price = styled.span<{ $isUp?: boolean }>`
                 ? props.theme.speedMarkets.price.up
                 : props.theme.speedMarkets.price.down
             : props.theme.textColor.primary};
-
-    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
-        font-size: 18px;
-    }
-    @media (max-width: ${ScreenSizeBreakpoint.EXTRA_SMALL}px) {
-        font-size: 16px;
-    }
 `;
 
 const getPriceAnimation = (priceLength: number, skipIndexes: number[]) => {

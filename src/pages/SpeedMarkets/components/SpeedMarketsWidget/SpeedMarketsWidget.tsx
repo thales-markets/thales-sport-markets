@@ -5,6 +5,7 @@ import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { SPEED_MARKETS_WIDGET_DEFAULT_RIGHT, SPEED_MARKETS_WIDGET_Z_INDEX } from 'constants/ui';
 import { minutesToSeconds } from 'date-fns';
 import { WidgetMenuItems } from 'enums/speedMarkets';
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import useLocalStorage from 'hooks/useLocalStorage';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -49,7 +50,9 @@ const SpeedMarketsWidget: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                     <SPAAnchor href={buildHref(LINKS.SpeedMarkets)}>
                         <LogoIcon className="speedmarkets-logo-icon speedmarkets-logo-icon--speed-full-logo" />
                     </SPAAnchor>
-                    <SelectTime deltaTimeSec={deltaTimeSec} setDeltaTimeSec={setDeltaTimeSec} />
+                    {activeMenuItem === WidgetMenuItems.TRADING && (
+                        <SelectTime deltaTimeSec={deltaTimeSec} setDeltaTimeSec={setDeltaTimeSec} />
+                    )}
                 </Header>
                 <CloseIcon className="icon icon--close" onClick={() => onClose()} />
             </HeaderRow>
@@ -102,6 +105,8 @@ const Container = styled(FlexDivColumn)`
     border: 1px solid ${(props) => props.theme.speedMarkets.borderColor.primary};
     border-radius: 15px;
     z-index: ${SPEED_MARKETS_WIDGET_Z_INDEX};
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+    }
 `;
 
 const HeaderRow = styled(FlexDivRowCentered)`

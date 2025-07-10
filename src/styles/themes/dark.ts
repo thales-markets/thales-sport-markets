@@ -198,8 +198,8 @@ export default {
     },
     chart: {
         primary: Colors.PURPLE,
-        candleUp: Colors.UP_CANDLE,
-        candleDown: Colors.DOWN_CANDLE,
+        candleUp: Colors.MILD_MENTHOL,
+        candleDown: Colors.VERMILION_CINNABAR,
         labels: Colors.GRAY_LIGHT,
         priceLine: Colors.WHITE,
         multiPositions: Colors.PURPLE,
@@ -324,8 +324,8 @@ export default {
             indicatorColor: { primary: Colors.BLUE },
         },
         price: {
-            up: Colors.GREEN,
-            down: Colors.RED,
+            up: Colors.MILD_MENTHOL,
+            down: Colors.VERMILION_CINNABAR,
         },
         position: {
             selected: Colors.NAVY_BLUE_DARK,
@@ -333,6 +333,7 @@ export default {
             down: Colors.RED,
             card: {
                 background: { primary: Colors.KONKIKYO_BLUE },
+                textColor: { primary: Colors.FRESH_LAVENDER },
             },
         },
     },
