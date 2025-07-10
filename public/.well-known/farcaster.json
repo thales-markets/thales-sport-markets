@@ -1,22 +1,31 @@
 {
     "accountAssociation": {
-        "header": "eyJmaWQiOjMyNDQ4OSwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweGUyMTBDMEJEOTM0OTI2ODM1NjU1QkYyYTJDOTM3MDhmNUQzNDlCRUMifQ",
-        "payload": "eyJkb21haW4iOiJvdmVydGltZW1hcmtldHMueHl6In0",
-        "signature": "MHhiYmM0ZmUyOTU3NDYwMWVmNjk0NWI5ZTk4YWY4YzY4YzQ2NzVhNzgxMGIxY2ZjYzYxNGU1MjQ1NDRlZjkyYWNkMjgxMDkzNDJhMzJlYWRlYWNkMjY5NGEzMjM4MzEwM2E1MGZhNGQxMTU0YTQ5MTk1N2UwNGYxZDA4MTk1NWI0ZjFi"
+        "header": "eyJmaWQiOjMyNDQ4OSwidHlwZSI6ImF1dGgiLCJrZXkiOiIweDE1ZGY0Q2JCODMxMDI4NjVFNzY1QTNiM2Y5RERGZEI0RDc5Nzg4QTgifQ",
+        "payload": "eyJkb21haW4iOiJ3d3cub3ZlcnRpbWVtYXJrZXRzLnh5eiJ9",
+        "signature": "Ab6ni0dHLTcyuBS52asPDYxv8uX8wPEluqZILQabG3EIZgbdIvY83V0R1oPd/e0Y4KiwZe0t09vFEeQNRP3IfRs="
     },
     "frame": {
         "version": "1",
         "name": "Overtime Sportsbook Mini-Dapp",
         "description": "A fully onchain sportsbook now available on Farcaster. Just connect your EVM wallet and start betting in seconds.",
         "iconUrl": "https://www.overtimemarkets.xyz/logos/logo1024.png",
+        "imageUrl": "https://www.overtimemarkets.xyz/embed.png",
         "homeUrl": "https://www.overtimemarkets.xyz",
         "requiredChains": ["eip155:10", "eip155:42161", "eip155:8453"],
         "primaryCategory": "finance",
         "ogTitle": "Overtime Sportsbook",
         "ogDescription": "A fully onchain sportsbook now available on Farcaster.",
-        "ogImageUrl": "https://thales-sport-markets.vercel.app/embed.png",
+        "ogImageUrl": "https://www.overtimemarkets.xyz/embed.png",
         "subtitle": "Fully onchain sportsbook",
         "tagline": "Fully onchain sportsbook",
-        "heroImageUrl": "https://thales-sport-markets.vercel.app/embed.png"
+        "heroImageUrl": "https://www.overtimemarkets.xyz/hero-image.png",
+        "splashBackgroundColor": "#161A36",
+        "splashImageUrl": "https://www.overtimemarkets.xyz/splash.png",
+        "screenshotUrls": [
+            "https://www.overtimemarkets.xyz/screenshoturl1.png",
+            "https://www.overtimemarkets.xyz/screenshoturl2.png",
+            "https://www.overtimemarkets.xyz/screenshoturl3.png"
+        ],
+        "tags": ["sportsbook", "betting", "sports", "predictions"]
     }
 }
