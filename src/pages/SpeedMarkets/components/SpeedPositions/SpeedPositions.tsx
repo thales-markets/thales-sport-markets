@@ -7,7 +7,7 @@ import { orderBy } from 'lodash';
 import usePythPriceQueries from 'queries/prices/usePythPriceQueries';
 import useUserActiveSpeedMarketsDataQuery from 'queries/speedMarkets/useUserActiveSpeedMarketsDataQuery';
 import useUserResolvedSpeedMarketsQuery from 'queries/speedMarkets/useUserResolvedSpeedMarketsQuery';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsBiconomy } from 'redux/modules/wallet';
@@ -100,32 +100,29 @@ const SpeedPositions: React.FC = () => {
         pythPricesQueries.some((pythPriceQuery) => pythPriceQuery.isLoading) ||
         (selectedFilter === PositionsFilter.HISTORY && userResolvedSpeedMarketsDataQuery.isLoading);
 
+    // select position filter which has positions on first render
+    const isFirstRender = useRef(true);
     useEffect(() => {
-        if (selectedFilter === PositionsFilter.PENDING && !pendingUserSpeedMarkets.length) {
-            if (claimableUserSpeedMarkets.length > 0) {
+        if (isFirstRender.current) {
+            // only on first render
+            if (pendingUserSpeedMarkets.length > 0) {
+                setSelectedFilter(PositionsFilter.PENDING);
+            } else if (claimableUserSpeedMarkets.length > 0) {
                 setSelectedFilter(PositionsFilter.CLAIMABLE);
-            } else {
-                setSelectedFilter(PositionsFilter.HISTORY);
             }
+            isFirstRender.current = false;
         }
-    }, [selectedFilter, pendingUserSpeedMarkets, claimableUserSpeedMarkets]);
+    }, [pendingUserSpeedMarkets, claimableUserSpeedMarkets]);
 
     return (
         <Container>
             <Filters>
                 {Object.values(PositionsFilter).map((positionFilter, i) => {
-                    const isDisabled =
-                        positionFilter === PositionsFilter.PENDING
-                            ? !pendingUserSpeedMarkets.length
-                            : positionFilter === PositionsFilter.CLAIMABLE
-                            ? !claimableUserSpeedMarkets.length
-                            : false;
                     return (
                         <FilterButton
                             key={`filter-${i}`}
                             isActive={positionFilter === selectedFilter}
-                            isDisabled={isDisabled}
-                            onClick={() => !isDisabled && setSelectedFilter(positionFilter)}
+                            onClick={() => setSelectedFilter(positionFilter)}
                         >
                             {t(`speed-markets.user-positions.filters.${positionFilter}`)}
                             {positionFilter === PositionsFilter.PENDING && !!pendingUserSpeedMarkets.length && (
@@ -170,7 +167,7 @@ const Filters = styled(FlexDivRow)`
     gap: 7px;
 `;
 
-const FilterButton = styled(FlexDivCentered)<{ isActive: boolean; isDisabled: boolean }>`
+const FilterButton = styled(FlexDivCentered)<{ isActive: boolean; isDisabled?: boolean }>`
     width: 100%;
     height: 31px;
     gap: 5px;
