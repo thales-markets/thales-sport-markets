@@ -96,7 +96,7 @@
             "approve-progress-label": "Approving <currency>{{currencyKey}}</currency>...",
             "approve-all-label": "Approve all",
             "custom-amount-label": "Approve amount of",
-            "approve-swap": "Approve swap to {{currencyKey}}"
+            "approve-swap": "Approve swap"
         },
         "unsupported-network": {
             "title": "Oops! You are on the wrong network!",
@@ -143,6 +143,7 @@
             "minute": "minute",
             "seconds": "seconds",
             "second": "second",
+            "months-short": "mo",
             "days-short": "d",
             "hours-short": "h",
             "minutes-short": "m",
@@ -1555,22 +1556,15 @@
         "user-positions": {
             "open": "Open positions",
             "your-positions": "Your open positions",
-            "no-positions": "Your {{status}} positions will be visible here",
-            "status-open": "open",
-            "status-claimable": "claimable",
             "created": "Created",
             "end-time": "End time",
             "asset": "Asset",
             "direction": "Direction",
-            "price": "Price",
             "current-price": "Current price",
             "final-price": "Final price",
-            "status": "Status",
-            "paid": "Paid",
-            "payout": "Payout",
             "claim-in": "Claim in",
-            "claim-win": "Claim win",
-            "claim-win-progress": "Claiming win",
+            "claim-win": "Claim",
+            "claim-win-progress": "Claiming",
             "result-in": "Result in",
             "next-result-in": "Next result in",
             "approve-swap-tooltip": "To get payout in {{currencyKey}}, you need to approve swap from {{defaultCurrency}} to {{currencyKey}}.",
@@ -1581,14 +1575,33 @@
             "confirmation-message": "Position(s) successfully claimed",
             "waiting-price": "Waiting for price",
             "no-resolve-positions": "No positions for this section with price",
+            "no-positions": "No positions",
+            "history-limit": "* Showing only markets with expiry date not older than {{days}} days.",
             "filters": {
                 "pending": "Pending",
                 "claimable": "Claimable",
-                "all": "All"
+                "history": "History"
+            },
+            "labels": {
+                "entry": "Entry",
+                "end": "End",
+                "price": "Price",
+                "paid": "Paid",
+                "payout": "Payout"
+            },
+            "status": {
+                "won": "Won",
+                "loss": "Loss",
+                "winning": "Winning",
+                "loosing": "Loosing"
             },
             "errors": {
                 "price-stale": "Can't resolve position with stale price"
             }
+        },
+        "settings": {
+            "slippage-tolerance": "Slippage tolerance",
+            "slippage-tolerance-description": "Maximum price difference you're willing to accept"
         },
         "tooltips": {
             "current-price": "Current price as reported by Pyth oracles.",
@@ -1611,10 +1624,6 @@
             "something-went-wrong": "Something went wrong!",
             "unexpected": "Please help us about this issue by writing to help-and-questions",
             "buy-failed": "Failed to create position or creation event not received! Please check your open positions."
-        },
-        "settings": {
-            "slippage-tolerance": "Slippage tolerance",
-            "slippage-tolerance-description": "Maximum price difference you're willing to accept"
         }
     }
 }

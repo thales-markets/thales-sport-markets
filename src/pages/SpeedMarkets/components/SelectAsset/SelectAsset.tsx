@@ -13,14 +13,14 @@ const SelectAsset: React.FC<SelectAssetProps> = ({ selectedAsset, onAssetClick }
                 isActive={selectedAsset === CRYPTO_CURRENCY_MAP.BTC}
                 onClick={() => onAssetClick(CRYPTO_CURRENCY_MAP.BTC)}
             >
-                <LogoIcon className="speedmarkets-logo-icon speedmarkets-logo-icon--btc-logo" />
+                <AssetIcon className="speedmarkets-logo-icon speedmarkets-logo-icon--btc-logo" />
                 <Text>{CRYPTO_CURRENCY_MAP.BTC}</Text>
             </AssetButton>
             <AssetButton
                 isActive={selectedAsset === CRYPTO_CURRENCY_MAP.ETH}
                 onClick={() => onAssetClick(CRYPTO_CURRENCY_MAP.ETH)}
             >
-                <LogoIcon className="speedmarkets-logo-icon speedmarkets-logo-icon--eth-logo" />
+                <AssetIcon className="speedmarkets-logo-icon speedmarkets-logo-icon--eth-logo" />
                 <Text>{CRYPTO_CURRENCY_MAP.ETH}</Text>
             </AssetButton>
         </Container>
@@ -46,7 +46,7 @@ const Text = styled.span<{ active?: boolean }>`
     text-align: center;
 `;
 
-const LogoIcon = styled.i`
+const AssetIcon = styled.i`
     font-size: 19px;
 `;
 
@@ -58,7 +58,7 @@ const AssetButton = styled.div<{ isActive: boolean }>`
     height: 38px;
     gap: 3px;
     ${(props) => (props.isActive ? `background: ${props.theme.speedMarkets.button.background.active};` : '')}
-    ${Text}, ${LogoIcon} {
+    ${Text}, ${AssetIcon} {
         color: ${(props) =>
             props.isActive
                 ? props.theme.speedMarkets.button.textColor.active

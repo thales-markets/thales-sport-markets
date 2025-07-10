@@ -20,7 +20,7 @@ import { wagmiConfig } from 'pages/Root/wagmiConfig';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useAmmSpeedMarketsCreatorQuery from 'queries/speedMarkets/useAmmSpeedMarketsCreatorQuery';
 import React, { Dispatch, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getTicketPayment } from 'redux/modules/ticket';
@@ -326,7 +326,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
                 : selectedCollateral
         );
 
-        const collateralContractWithSigner = getContractInstance(
+        const collateralContract = getContractInstance(
             ContractType.MULTICOLLATERAL,
             { client, networkId },
             collateralIndex
@@ -350,7 +350,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
 
                     const allowance: boolean = await checkAllowance(
                         parsedAmount,
-                        collateralContractWithSigner,
+                        collateralContract,
                         walletAddress,
                         addressToApprove
                     );
@@ -660,13 +660,19 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
                     onClick={() => setOpenApprovalModal(true)}
                     {...getDefaultButtonProps(theme)}
                 >
-                    {isAllowing
-                        ? t('common.enable-wallet-access.approve-progress')
-                        : t('common.enable-wallet-access.approve')}
-                    <CollateralText>
-                        &nbsp;
-                        {isEth ? CRYPTO_CURRENCY_MAP.WETH : selectedCollateral}
-                    </CollateralText>
+                    {isAllowing ? (
+                        <Trans
+                            i18nKey="common.enable-wallet-access.approve-progress-label"
+                            values={{ currencyKey: isEth ? CRYPTO_CURRENCY_MAP.WETH : selectedCollateral }}
+                            components={{ currency: <CollateralText /> }}
+                        />
+                    ) : (
+                        <Trans
+                            i18nKey="common.enable-wallet-access.approve-label"
+                            values={{ currencyKey: isEth ? CRYPTO_CURRENCY_MAP.WETH : selectedCollateral }}
+                            components={{ currency: <CollateralText /> }}
+                        />
+                    )}
                     {isEth && !isMobile() && (
                         <Tooltip
                             overlay={t('speed-markets.tooltips.eth-to-weth')}
@@ -814,6 +820,7 @@ const TradingDetails = styled(FlexDivCentered)`
 
 const CollateralText = styled.span`
     text-transform: none;
+    margin-left: 5px;
 `;
 
 const ButtonWrapper = styled(FlexDivColumn)`

@@ -7,7 +7,7 @@ export enum WidgetMenuItems {
 export enum PositionsFilter {
     PENDING = 'pending',
     CLAIMABLE = 'claimable',
-    ALL = 'all',
+    HISTORY = 'history',
 }
 
 export enum SpeedPositions {

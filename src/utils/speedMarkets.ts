@@ -3,6 +3,7 @@ import { getErrorToastOptions, getInfoToastOptions, getSuccessToastOptions } fro
 import { ZERO_ADDRESS } from 'constants/network';
 import { PYTH_CONTRACT_ADDRESS } from 'constants/pyth';
 import { millisecondsToSeconds, secondsToMinutes } from 'date-fns';
+import { ContractType } from 'enums/contract';
 import { SpeedPositions } from 'enums/speedMarkets';
 import i18n from 'i18n';
 import { toast } from 'react-toastify';
@@ -15,8 +16,7 @@ import { delay } from 'utils/timer';
 import { Address, Client, getContract } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { getDefaultCollateral } from './collaterals';
-import { getContractAbi } from './contracts/abi';
-import speedMarketsAMMContract from './contracts/speedMarkets/speedMarketsAMMContract';
+import { getContractInstance } from './contract';
 import { executeBiconomyTransaction } from './smartAccount/biconomy/biconomy';
 import smartAccountConnector from './smartAccount/smartAccountConnector';
 
@@ -128,6 +128,10 @@ export const isUserWinner = (position: SpeedPositions, strikePrice: number, fina
           (position === SpeedPositions.DOWN && finalPrice < strikePrice)
         : undefined;
 
+export const isUserWinning = (position: SpeedPositions, strikePrice: number, finalPrice: number) =>
+    (position === SpeedPositions.UP && finalPrice > strikePrice) ||
+    (position === SpeedPositions.DOWN && finalPrice < strikePrice);
+
 export const resolveAllSpeedPositions = async (
     positions: UserPosition[],
     isAdmin: boolean,
@@ -143,9 +147,8 @@ export const resolveAllSpeedPositions = async (
 
     const id = toast.loading(i18n.t('speed-markets.progress'));
 
-    const speedMarketsAMMContractWithSigner = getContract({
-        abi: getContractAbi(speedMarketsAMMContract, networkConfig.networkId),
-        address: speedMarketsAMMContract.addresses[networkConfig.networkId],
+    const speedMarketsAMMContractWithSigner = getContractInstance(ContractType.SPEED_MARKETS_AMM, {
+        networkId: networkConfig.networkId,
         client: networkConfig.client,
     }) as ViemContract;
 

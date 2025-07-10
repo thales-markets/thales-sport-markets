@@ -1,12 +1,10 @@
+import SimpleLoader from 'components/SimpleLoader';
 import TooltipInfo from 'components/Tooltip';
 import { USD_SIGN } from 'constants/currency';
 import { LINKS } from 'constants/links';
-import { SpeedPositions } from 'enums/speedMarkets';
-import { ScreenSizeBreakpoint } from 'enums/ui';
-
-import SimpleLoader from 'components/SimpleLoader';
 import { SPEED_MARKETS_WIDGET_Z_INDEX } from 'constants/ui';
 import { subDays } from 'date-fns';
+import { SpeedPositions } from 'enums/speedMarkets';
 import usePythCandlestickQuery from 'queries/prices/usePythCandlestickQuery';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
@@ -192,12 +190,6 @@ const Label = styled.span<{ margin?: string }>`
     line-height: 100%;
     color: ${(props) => props.theme.textColor.primary};
     ${(props) => (props.margin ? `margin: ${props.margin};` : '')};
-    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
-        font-size: 18px;
-    }
-    @media (max-width: ${ScreenSizeBreakpoint.EXTRA_SMALL}px) {
-        font-size: 16px;
-    }
 `;
 
 const Value = styled(Label)`
@@ -211,7 +203,7 @@ const PythIconWrap = styled.div`
     z-index: 10;
     i {
         font-size: 40px;
-        line-height: 20px;
+        line-height: 18px;
         color: ${(props) => props.theme.textColor.primary};
         overflow: hidden;
     }
