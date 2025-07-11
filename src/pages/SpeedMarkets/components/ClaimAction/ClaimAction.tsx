@@ -51,6 +51,7 @@ type ClaimActionProps = {
     positions: UserPosition[];
     claimCollateralIndex: number;
     isDisabled?: boolean;
+    isActionInProgress?: boolean;
     setIsActionInProgress?: Dispatch<boolean>;
 };
 
@@ -58,6 +59,7 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
     positions,
     claimCollateralIndex,
     isDisabled,
+    isActionInProgress,
     setIsActionInProgress,
 }) => {
     const { t } = useTranslation();
@@ -162,6 +164,8 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
         isDefaultCollateral,
         client,
         claimCollateral,
+        isDisabled,
+        isActionInProgress,
     ]);
 
     const handleAllowance = async (approveAmount: bigint) => {
@@ -364,11 +368,17 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
                                 isSubmitting
                                     ? t(
                                           `speed-markets.user-positions.${
-                                              isSinglePosition ? 'claim-win-progress' : 'claim-all-progress'
+                                              isSinglePosition ? 'claim-progress' : 'claim-all-progress'
                                           }`
                                       )
-                                    : t(`speed-markets.user-positions.${isSinglePosition ? 'claim-win' : 'claim-all'}`)
-                            } ${formatCurrencyWithSign(USD_SIGN, payout, 2)}`
+                                    : t(
+                                          `speed-markets.user-positions.${
+                                              isSinglePosition
+                                                  ? `claim${isDefaultCollateral ? '' : '-in'}`
+                                                  : `claim-all${isDefaultCollateral ? '' : '-in'}`
+                                          }`
+                                      )
+                            } ${isDefaultCollateral ? formatCurrencyWithSign(USD_SIGN, payout, 2) : claimCollateral}`
                         ) : isAllowing ? (
                             <Trans
                                 i18nKey="common.enable-wallet-access.approve-progress-label"
@@ -395,40 +405,8 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
     );
 };
 
-export const Container = styled(FlexDivCentered)`
+const Container = styled(FlexDivCentered)`
     white-space: pre;
-`;
-
-export const ResultsContainer = styled(FlexDivCentered)`
-    gap: 4px;
-    font-weight: 800;
-    font-size: 13px;
-    line-height: 100%;
-    white-space: nowrap;
-    min-width: 174px;
-`;
-
-export const TimeIcon = styled.i`
-    font-weight: normal;
-    margin-right: 5px;
-    margin-bottom: 1px;
-`;
-
-export const Label = styled.span`
-    padding-right: 5px;
-`;
-
-export const Value = styled.span<{ $color?: string; $isUpperCase?: boolean }>`
-    color: ${(props) => props.$color || props.theme.textColor.secondary};
-    ${(props) => (props.$isUpperCase ? 'text-transform: uppercase;' : '')}
-    font-weight: 700;
-    line-height: 100%;
-`;
-
-export const CollateralSelectorContainer = styled(FlexDivCentered)`
-    line-height: 15px;
-    padding-right: 2px;
-    text-transform: none;
 `;
 
 const CollateralText = styled.span`

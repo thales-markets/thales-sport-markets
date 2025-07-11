@@ -17,6 +17,7 @@ type SpeedPositionCardProps = {
     position: UserPosition;
     claimCollateralIndex: number;
     isSubmittingBatch?: boolean;
+    isActionInProgress?: boolean;
     setIsActionInProgress?: Dispatch<boolean>;
 };
 
@@ -24,6 +25,7 @@ const SpeedPositionCard: React.FC<SpeedPositionCardProps> = ({
     position,
     claimCollateralIndex,
     isSubmittingBatch,
+    isActionInProgress,
     setIsActionInProgress,
 }) => {
     const { t } = useTranslation();
@@ -59,6 +61,7 @@ const SpeedPositionCard: React.FC<SpeedPositionCardProps> = ({
                             positions={[position]}
                             claimCollateralIndex={claimCollateralIndex}
                             isDisabled={isSubmittingBatch}
+                            isActionInProgress={isActionInProgress}
                             setIsActionInProgress={setIsActionInProgress}
                         />
                     </ClaimWrapper>
@@ -119,10 +122,9 @@ const SpeedPositionCard: React.FC<SpeedPositionCardProps> = ({
                     USD_SIGN,
                     position.paid
                 )}`}</Paid>
-                <Payout>{`${t('speed-markets.user-positions.labels.payout')}: ${formatCurrencyWithSign(
-                    USD_SIGN,
-                    position.payout
-                )}`}</Payout>
+                <Payout isClaimable={position.isClaimable}>{`${t(
+                    'speed-markets.user-positions.labels.payout'
+                )}: ${formatCurrencyWithSign(USD_SIGN, position.payout)}`}</Payout>
             </FlexDivRowCentered>
         </Container>
     );
@@ -196,7 +198,9 @@ const Time = styled(Text)``;
 
 const Paid = styled(Text)``;
 
-const Payout = styled(Text)``;
+const Payout = styled(Text)<{ isClaimable: boolean }>`
+    ${(props) => (props.isClaimable ? `color: ${props.theme.status.win};` : '')};
+`;
 
 const PlayIcon = styled.i`
     rotate: -90deg;

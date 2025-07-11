@@ -163,6 +163,7 @@ const SpeedPositions: React.FC = () => {
                             positions={positions}
                             claimCollateralIndex={claimCollateralIndex}
                             isDisabled={isSubmittingBatch || isActionInProgress}
+                            isActionInProgress={isActionInProgress}
                             setIsActionInProgress={setIsSubmittingBatch}
                         />
                     </ClaimAllWrapper>
@@ -197,6 +198,7 @@ const SpeedPositions: React.FC = () => {
                                 position={position}
                                 claimCollateralIndex={claimCollateralIndex}
                                 isSubmittingBatch={isSubmittingBatch}
+                                isActionInProgress={isActionInProgress}
                                 setIsActionInProgress={setIsActionInProgress}
                             />
                         ))
