@@ -150,7 +150,6 @@ const App = () => {
                     await sdk.actions.ready();
                     const lastSelectedNetwork = localStore.get(LOCAL_STORAGE_KEYS.LAST_SELECTED_NETWORK);
                     if ((await sdk.isInMiniApp()) && !lastSelectedNetwork) {
-                        console.log('Switching chain to default network', networkId);
                         switchChain?.({ chainId: Network.Base as SupportedNetwork });
                     }
                 }
