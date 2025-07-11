@@ -10,7 +10,7 @@
         "description": "A fully onchain sportsbook now available on Farcaster. Just connect your EVM wallet and start betting in seconds.",
         "iconUrl": "https://www.overtimemarkets.xyz/logos/logo1024.png",
         "imageUrl": "https://www.overtimemarkets.xyz/embed.png",
-        "homeUrl": "https://thales-sport-markets-git-default-network-b-129e7b-thales-market.vercel.app",
+        "homeUrl": "https://www.overtimemarkets.xyz",
         "requiredChains": ["eip155:10", "eip155:42161", "eip155:8453"],
         "primaryCategory": "finance",
         "ogTitle": "Overtime Sportsbook",
