@@ -67,8 +67,6 @@ const App = () => {
                 }
             } else {
                 if (chainId !== networkId) {
-                    console.log('chainId mismatch', { chainId, networkId });
-                    // If the chainId is not supported, disconnect and show the
                     if (isNetworkSupported(chainId)) {
                         switchChain?.({ chainId: chainId as SupportedNetwork });
                     } else {
@@ -150,7 +148,8 @@ const App = () => {
                 // Check if running in a frame context where sdk might exist
                 if (sdk?.actions?.ready) {
                     await sdk.actions.ready();
-                    if ((await sdk.isInMiniApp()) && !isNetworkSupported(networkId)) {
+                    const lastSelectedNetwork = localStore.get(LOCAL_STORAGE_KEYS.LAST_SELECTED_NETWORK);
+                    if ((await sdk.isInMiniApp()) && !lastSelectedNetwork) {
                         console.log('Switching chain to default network', networkId);
                         switchChain?.({ chainId: Network.Base as SupportedNetwork });
                     }
