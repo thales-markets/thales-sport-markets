@@ -30,6 +30,7 @@ import { getOnRamperUrl } from 'utils/particleWallet/utils';
 import { navigateTo } from 'utils/routes';
 import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import useUniversalAccount from 'utils/smartAccount/hooks/useUniversalAccount';
+import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
 
 import { useAccount, useChainId, useClient } from 'wagmi';
 
@@ -125,6 +126,9 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
             onClose={onClose}
         >
             <Wrapper>
+                <button onClick={async () => await smartAccountConnector.biconomyAccount?.signMessage('hello')}>
+                    Verify smart account
+                </button>
                 <NetworkWrapper>
                     <NetworkHeader>{t('get-started.fund-account.current-network')}</NetworkHeader>
                     <NetworkSwitcherWrapper>
