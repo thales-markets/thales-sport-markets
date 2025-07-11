@@ -187,7 +187,12 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                           </DetailedDropdown>
                       )
                     : open && (
-                          <Dropdown borderColor={borderColor} width={dropDownWidth} onClick={() => setOpen(!open)}>
+                          <Dropdown
+                              top={topPosition}
+                              borderColor={borderColor}
+                              width={dropDownWidth}
+                              onClick={() => setOpen(!open)}
+                          >
                               {collateralArray.map((collateral, index) => {
                                   return (
                                       <CollateralOption
@@ -285,8 +290,9 @@ const SelectedCollateral = styled(FlexDivRowCentered)<{ disabled: boolean; stret
     width: ${(props) => (props.stretch ? '100%' : '')}; ;
 `;
 
-const Dropdown = styled(FlexDivColumnCentered)<{ width?: string; borderColor?: string }>`
+const Dropdown = styled(FlexDivColumnCentered)<{ top?: string; width?: string; borderColor?: string }>`
     position: absolute;
+    ${(props) => (props.top ? `top: ${props.top};` : '')}
     margin-top: 6px;
     margin-left: -16px;
     width: ${(props) => (props.width ? props.width : '71px')};

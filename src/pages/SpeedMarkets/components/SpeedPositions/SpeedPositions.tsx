@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
-import { FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
+import { FlexDivCentered, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { UserPosition } from 'types/speedMarkets';
 import { getCollaterals, getDefaultCollateral, isLpSupported } from 'utils/collaterals';
 import { getIsMultiCollateralSupported } from 'utils/network';
@@ -157,24 +157,29 @@ const SpeedPositions: React.FC = () => {
                 })}
             </Filters>
             {selectedFilter === PositionsFilter.CLAIMABLE && (
-                // TODO
-                <FlexDivRow style={{ width: '100%', minHeight: '25px' }}>
-                    <ClaimAction
-                        positions={positions}
-                        claimCollateralIndex={claimCollateralIndex}
-                        isSubmittingBatch={isSubmittingBatch}
-                        setIsActionInProgress={setIsSubmittingBatch}
-                    />
-                    {isMultiCollateralSupported && (
-                        <CollateralSelector
-                            collateralArray={claimCollateralArray}
-                            selectedItem={claimCollateralIndex}
-                            onChangeCollateral={setClaimCollateralIndex}
-                            preventPaymentCollateralChange
-                            disabled={isSubmittingBatch || isActionInProgress}
+                <ClaimAllRow>
+                    <ClaimAllWrapper>
+                        <ClaimAction
+                            positions={positions}
+                            claimCollateralIndex={claimCollateralIndex}
+                            isDisabled={isSubmittingBatch || isActionInProgress}
+                            setIsActionInProgress={setIsSubmittingBatch}
                         />
+                    </ClaimAllWrapper>
+                    {isMultiCollateralSupported && (
+                        <FlexDivRowCentered>
+                            <ClaimInLabel>{t('speed-markets.user-positions.claim-in')}:</ClaimInLabel>
+                            <CollateralSelector
+                                collateralArray={claimCollateralArray}
+                                selectedItem={claimCollateralIndex}
+                                onChangeCollateral={setClaimCollateralIndex}
+                                preventPaymentCollateralChange
+                                disabled={isSubmittingBatch || isActionInProgress}
+                                topPosition="20px"
+                            />
+                        </FlexDivRowCentered>
                     )}
-                </FlexDivRow>
+                </ClaimAllRow>
             )}
             {selectedFilter === PositionsFilter.HISTORY && (
                 <HistoryInfo>
@@ -257,6 +262,24 @@ const PendingPositionsCount = styled(FlexDivCentered)<{ isSelected: boolean }>`
 const ClaimablePositionsCount = styled(PendingPositionsCount)`
     background-color: ${(props) =>
         props.isSelected ? props.theme.speedMarkets.button.textColor.active : props.theme.background.quaternary};
+`;
+
+const ClaimAllRow = styled(FlexDivRow)`
+    position: relative;
+    gap: 5px;
+`;
+
+const ClaimAllWrapper = styled.div`
+    width: 100%;
+`;
+
+const ClaimInLabel = styled.span`
+    color: ${(props) => props.theme.status.win};
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 100%;
+    margin-right: 3px;
+    white-space: nowrap;
 `;
 
 const HistoryInfo = styled.span`

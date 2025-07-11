@@ -54,12 +54,14 @@ const SpeedPositionCard: React.FC<SpeedPositionCardProps> = ({
                         {'...'}
                     </Status>
                 ) : position.isClaimable ? (
-                    <ClaimAction
-                        positions={[position]}
-                        claimCollateralIndex={claimCollateralIndex}
-                        isSubmittingBatch={isSubmittingBatch}
-                        setIsActionInProgress={setIsActionInProgress}
-                    />
+                    <ClaimWrapper>
+                        <ClaimAction
+                            positions={[position]}
+                            claimCollateralIndex={claimCollateralIndex}
+                            isDisabled={isSubmittingBatch}
+                            setIsActionInProgress={setIsActionInProgress}
+                        />
+                    </ClaimWrapper>
                 ) : hasFinalPrice ? (
                     // history
                     <Status isWon={isUserWon}>
@@ -133,6 +135,10 @@ const Container = styled(FlexDivColumn)`
     background: ${(props) => props.theme.speedMarkets.position.card.background.primary};
     padding: 10px 15px;
     justify-content: space-between;
+`;
+
+const ClaimWrapper = styled.div`
+    width: 50%;
 `;
 
 const AssetPosition = styled(FlexDivRow)`

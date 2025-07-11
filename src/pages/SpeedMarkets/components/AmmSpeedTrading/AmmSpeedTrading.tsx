@@ -60,6 +60,7 @@ import { getContractAbi } from 'utils/contracts/abi';
 import multipleCollateral from 'utils/contracts/multipleCollateralContract';
 import speedMarketsAMMContract from 'utils/contracts/speedMarkets/speedMarketsAMMContract';
 import { isMobile } from 'utils/device';
+import { isErrorExcluded } from 'utils/discord';
 import { checkAllowance } from 'utils/network';
 import { getPriceConnection, getPriceId, priceParser } from 'utils/pyth';
 import {
@@ -421,7 +422,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
                 toast.update(id, getSuccessToastOptions(t(`market.toast-message.approve-success`)));
                 setIsAllowing(false);
             } else {
-                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+                toast.update(id, getErrorToastOptions(t('common.errors.tx-reverted')));
                 setIsAllowing(false);
                 setOpenApprovalModal(false);
             }
@@ -583,14 +584,12 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
                     },
                 });
             } else {
-                console.log('Transaction status', txReceipt.status);
                 await delay(800);
-                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+                toast.update(id, getErrorToastOptions(t('common.errors.tx-reverted')));
                 setSubmittedStrikePrice(0);
                 setIsSubmitting(false);
             }
         } catch (e) {
-            console.log(e);
             await delay(800);
             const isUserRejected = USER_REJECTED_ERRORS.some((rejectedError) =>
                 ((e as Error).message + ((e as Error).stack || '')).includes(rejectedError)
@@ -603,6 +602,9 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
             );
             setSubmittedStrikePrice(0);
             setIsSubmitting(false);
+            if (!isErrorExcluded(e as Error)) {
+                console.log(e);
+            }
         }
         unwatch();
     };

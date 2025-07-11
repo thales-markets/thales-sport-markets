@@ -4,12 +4,14 @@ import Button from 'components/Button/Button';
 import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { USD_SIGN } from 'constants/currency';
+import { USER_REJECTED_ERRORS } from 'constants/errors';
 import { SWAP_APPROVAL_BUFFER } from 'constants/markets';
 import { ZERO_ADDRESS } from 'constants/network';
 import { PYTH_CONTRACT_ADDRESS } from 'constants/pyth';
 import { SPEED_MARKETS_WIDGET_Z_INDEX } from 'constants/ui';
 import { differenceInSeconds, millisecondsToSeconds, secondsToMilliseconds } from 'date-fns';
 import { ContractType } from 'enums/contract';
+import { sumBy } from 'lodash';
 import useAmmSpeedMarketsLimitsQuery from 'queries/speedMarkets/useAmmSpeedMarketsLimitsQuery';
 import React, { Dispatch, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
@@ -33,11 +35,13 @@ import {
 import { getContractInstance } from 'utils/contract';
 import multipleCollateral from 'utils/contracts/multipleCollateralContract';
 import speedMarketsAMMContract from 'utils/contracts/speedMarkets/speedMarketsAMMContract';
+import { isErrorExcluded } from 'utils/discord';
 import { checkAllowance } from 'utils/network';
 import { getPriceConnection, getPriceId } from 'utils/pyth';
 import { refetchBalances, refetchUserResolvedSpeedMarkets, refetchUserSpeedMarkets } from 'utils/queryConnector';
 import { executeBiconomyTransaction } from 'utils/smartAccount/biconomy/biconomy';
 import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
+import { resolveAllSpeedPositions } from 'utils/speedMarkets';
 import { delay } from 'utils/timer';
 import { Client, getContract } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
@@ -46,14 +50,14 @@ import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 type ClaimActionProps = {
     positions: UserPosition[];
     claimCollateralIndex: number;
-    isSubmittingBatch?: boolean;
+    isDisabled?: boolean;
     setIsActionInProgress?: Dispatch<boolean>;
 };
 
 const ClaimAction: React.FC<ClaimActionProps> = ({
     positions,
     claimCollateralIndex,
-    isSubmittingBatch,
+    isDisabled,
     setIsActionInProgress,
 }) => {
     const { t } = useTranslation();
@@ -78,9 +82,13 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
         return ammSpeedMarketsLimitsQuery.isSuccess ? ammSpeedMarketsLimitsQuery.data : null;
     }, [ammSpeedMarketsLimitsQuery]);
 
-    const isSinglePosition = positions.length === 1;
-    isSinglePosition;
-    const position = positions[0];
+    const isSinglePosition = useMemo(() => positions.length === 1, [positions.length]);
+    const position = useMemo(() => positions[0], [positions]);
+    const payout = useMemo(() => (isSinglePosition ? position.payout : sumBy(positions, 'payout')), [
+        isSinglePosition,
+        position.payout,
+        positions,
+    ]);
 
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
     const claimCollateralArray = useMemo(
@@ -110,10 +118,6 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
         }
     }, [isAllowing, isSubmitting, setIsActionInProgress]);
 
-    useEffect(() => {
-        isSubmittingBatch && setIsSubmitting(isSubmittingBatch);
-    }, [isSubmittingBatch]);
-
     // check allowance
     useEffect(() => {
         if (isDefaultCollateral) {
@@ -131,7 +135,7 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
 
         const getAllowance = async () => {
             try {
-                const parsedAmount = coinParser(position.payout.toString(), networkId);
+                const parsedAmount = coinParser(payout.toString(), networkId);
                 const allowance = await checkAllowance(
                     parsedAmount,
                     collateralContract,
@@ -148,7 +152,7 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
             getAllowance();
         }
     }, [
-        position.payout,
+        payout,
         networkId,
         walletAddress,
         isBiconomy,
@@ -195,10 +199,20 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
                 setIsAllowing(false);
             }
         } catch (e) {
-            console.log(e);
-            toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+            const isUserRejected = USER_REJECTED_ERRORS.some((rejectedError) =>
+                ((e as Error).message + ((e as Error).stack || '')).includes(rejectedError)
+            );
+            toast.update(
+                id,
+                getErrorToastOptions(
+                    isUserRejected ? t('common.errors.tx-canceled') : t('common.errors.unknown-error-try-again')
+                )
+            );
             setIsAllowing(false);
             setOpenApprovalModal(false);
+            if (!isErrorExcluded(e as Error)) {
+                console.log(e);
+            }
         }
     };
 
@@ -286,13 +300,37 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
                 refetchBalances(walletAddress, networkId);
             } else {
                 await delay(800);
-                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+                toast.update(id, getErrorToastOptions(t('common.errors.tx-reverted')));
             }
         } catch (e) {
-            console.log(e);
             await delay(800);
-            toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+            const isUserRejected = USER_REJECTED_ERRORS.some((rejectedError) =>
+                ((e as Error).message + ((e as Error).stack || '')).includes(rejectedError)
+            );
+            toast.update(
+                id,
+                getErrorToastOptions(
+                    isUserRejected ? t('common.errors.tx-canceled') : t('common.errors.unknown-error-try-again')
+                )
+            );
+            if (!isErrorExcluded(e as Error)) {
+                console.log(e);
+            }
         }
+        setIsSubmitting(false);
+    };
+
+    const handleResolveAll = async () => {
+        setIsSubmitting(true);
+
+        await resolveAllSpeedPositions(
+            positions,
+            false,
+            { networkId, client: walletClient.data },
+            isBiconomy,
+            claimCollateralAddress
+        );
+
         setIsSubmitting(false);
     };
 
@@ -308,20 +346,29 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
                     zIndex={SPEED_MARKETS_WIDGET_Z_INDEX}
                 >
                     <Button
+                        disabled={isSubmitting || isAllowing || isDisabled}
+                        onClick={() =>
+                            hasAllowance || isDefaultCollateral
+                                ? isSinglePosition
+                                    ? handleResolve()
+                                    : handleResolveAll()
+                                : setOpenApprovalModal(true)
+                        }
                         width="100%"
                         height="25px"
                         fontSize="14px"
-                        disabled={isSubmitting || isAllowing}
-                        onClick={() =>
-                            hasAllowance || isDefaultCollateral ? handleResolve() : setOpenApprovalModal(true)
-                        }
+                        padding="3px 10px"
                     >
                         {hasAllowance || isDefaultCollateral ? (
                             `${
                                 isSubmitting
-                                    ? t('speed-markets.user-positions.claim-win-progress')
-                                    : t('speed-markets.user-positions.claim-win')
-                            } ${formatCurrencyWithSign(USD_SIGN, position.payout, 2)}`
+                                    ? t(
+                                          `speed-markets.user-positions.${
+                                              isSinglePosition ? 'claim-win-progress' : 'claim-all-progress'
+                                          }`
+                                      )
+                                    : t(`speed-markets.user-positions.${isSinglePosition ? 'claim-win' : 'claim-all'}`)
+                            } ${formatCurrencyWithSign(USD_SIGN, payout, 2)}`
                         ) : isAllowing ? (
                             <Trans
                                 i18nKey="common.enable-wallet-access.approve-progress-label"
@@ -337,7 +384,7 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
             {openApprovalModal && (
                 <ApprovalModal
                     // add three percent to approval amount to take into account price changes
-                    defaultAmount={roundNumberToDecimals((1 + SWAP_APPROVAL_BUFFER) * position.payout)}
+                    defaultAmount={roundNumberToDecimals((1 + SWAP_APPROVAL_BUFFER) * payout)}
                     tokenSymbol={defaultCollateral}
                     isAllowing={isAllowing}
                     onSubmit={handleAllowance}
@@ -349,7 +396,6 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
 };
 
 export const Container = styled(FlexDivCentered)`
-    width: 50%;
     white-space: pre;
 `;
 

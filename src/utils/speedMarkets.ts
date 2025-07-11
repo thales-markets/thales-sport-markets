@@ -1,5 +1,6 @@
 import PythInterfaceAbi from '@pythnetwork/pyth-sdk-solidity/abis/IPyth.json';
 import { getErrorToastOptions, getInfoToastOptions, getSuccessToastOptions } from 'config/toast';
+import { USER_REJECTED_ERRORS } from 'constants/errors';
 import { ZERO_ADDRESS } from 'constants/network';
 import { PYTH_CONTRACT_ADDRESS } from 'constants/pyth';
 import { millisecondsToSeconds, secondsToMinutes } from 'date-fns';
@@ -15,8 +16,9 @@ import { refetchActiveSpeedMarkets, refetchUserSpeedMarkets } from 'utils/queryC
 import { delay } from 'utils/timer';
 import { Address, Client, getContract } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
-import { getDefaultCollateral } from './collaterals';
+import { getCollateralByAddress, getDefaultCollateral } from './collaterals';
 import { getContractInstance } from './contract';
+import { isErrorExcluded } from './discord';
 import { executeBiconomyTransaction } from './smartAccount/biconomy/biconomy';
 import smartAccountConnector from './smartAccount/smartAccountConnector';
 
@@ -143,6 +145,12 @@ export const resolveAllSpeedPositions = async (
         return;
     }
 
+    const isEth = collateralAddress === ZERO_ADDRESS;
+    const isDefaultCollateral =
+        !collateralAddress ||
+        getCollateralByAddress(collateralAddress, networkConfig.networkId) ===
+            getDefaultCollateral(networkConfig.networkId);
+
     const priceConnection = getPriceConnection(networkConfig.networkId);
 
     const id = toast.loading(i18n.t('speed-markets.progress'));
@@ -202,12 +210,20 @@ export const resolveAllSpeedPositions = async (
                           methodName: 'resolveMarketManuallyBatch',
                           data: [marketsToResolve, manualFinalPrices],
                       })
-                    : await executeBiconomyTransaction({
+                    : isDefaultCollateral
+                    ? await executeBiconomyTransaction({
                           collateralAddress: collateralAddress as Address,
                           networkId: networkConfig.networkId,
                           contract: speedMarketsAMMContractWithSigner,
                           methodName: 'resolveMarketsBatch',
                           data: [marketsToResolve, priceUpdateDataArray],
+                      })
+                    : await executeBiconomyTransaction({
+                          collateralAddress: collateralAddress as Address,
+                          networkId: networkConfig.networkId,
+                          contract: speedMarketsAMMContractWithSigner,
+                          methodName: 'resolveMarketsBatchOffRamp',
+                          data: [marketsToResolve, priceUpdateDataArray, collateralAddress, isEth],
                       });
             } else {
                 hash = isAdmin
@@ -215,11 +231,14 @@ export const resolveAllSpeedPositions = async (
                           marketsToResolve,
                           manualFinalPrices,
                       ])
-                    : await speedMarketsAMMContractWithSigner.write.resolveMarketsBatch(
+                    : isDefaultCollateral
+                    ? await speedMarketsAMMContractWithSigner.write.resolveMarketsBatch(
                           [marketsToResolve, priceUpdateDataArray],
-                          {
-                              value: totalUpdateFee,
-                          }
+                          { value: totalUpdateFee }
+                      )
+                    : await speedMarketsAMMContractWithSigner.write.resolveMarketsBatchOffRamp(
+                          [marketsToResolve, priceUpdateDataArray, collateralAddress, isEth],
+                          { value: totalUpdateFee }
                       );
             }
 
@@ -237,14 +256,25 @@ export const resolveAllSpeedPositions = async (
                 }
                 refetchActiveSpeedMarkets(networkConfig.networkId);
             } else {
-                console.log('Transaction status', txReceipt.status);
                 await delay(800);
-                toast.update(id, getErrorToastOptions(i18n.t('common.errors.unknown-error-try-again')));
+                toast.update(id, getErrorToastOptions(i18n.t('common.errors.tx-reverted')));
             }
         } catch (e) {
-            console.log(e);
             await delay(800);
-            toast.update(id, getErrorToastOptions(i18n.t('common.errors.unknown-error-try-again')));
+            const isUserRejected = USER_REJECTED_ERRORS.some((rejectedError) =>
+                ((e as Error).message + ((e as Error).stack || '')).includes(rejectedError)
+            );
+            toast.update(
+                id,
+                getErrorToastOptions(
+                    isUserRejected
+                        ? i18n.t('common.errors.tx-canceled')
+                        : i18n.t('common.errors.unknown-error-try-again')
+                )
+            );
+            if (!isErrorExcluded(e as Error)) {
+                console.log(e);
+            }
         }
     } else {
         toast.update(id, getInfoToastOptions(i18n.t('speed-markets.user-positions.no-resolve-positions')));
