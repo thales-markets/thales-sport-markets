@@ -15,7 +15,7 @@ import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getIsBiconomy } from 'redux/modules/wallet';
+import { getIsBiconomy, getIsSmartAccountDisabled } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivEnd } from 'styles/common';
 import { Coins, formatCurrencyWithKey, truncateAddress } from 'thales-utils';
@@ -29,6 +29,7 @@ import WithdrawModal from '../WithdrawModal';
 const AssetBalance: React.FC = () => {
     const { t } = useTranslation();
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+    const isSmartAccountDisabled = useSelector(getIsSmartAccountDisabled);
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
@@ -263,18 +264,19 @@ const AssetBalance: React.FC = () => {
                                           <ConvertIcon />
                                       </Convert>
                                   )}
-
-                                  <Transfer
-                                      disabled={assetData.balance == 0}
-                                      onClick={() => {
-                                          if (assetData.balance > 0) {
-                                              setConvertToken(getCollateralIndex(networkId, assetData.asset));
-                                              setShowDepositFromWallet(true);
-                                          }
-                                      }}
-                                  >
-                                      {t('profile.asset-balance.transfer')}
-                                  </Transfer>
+                                  {!isSmartAccountDisabled && (
+                                      <Transfer
+                                          disabled={assetData.balance == 0}
+                                          onClick={() => {
+                                              if (assetData.balance > 0) {
+                                                  setConvertToken(getCollateralIndex(networkId, assetData.asset));
+                                                  setShowDepositFromWallet(true);
+                                              }
+                                          }}
+                                      >
+                                          {t('profile.asset-balance.transfer')}
+                                      </Transfer>
+                                  )}
                               </AssetContainer>
                           );
                       })}
@@ -339,18 +341,19 @@ const AssetBalance: React.FC = () => {
                                 </AssetWrapper>
                                 <Label>{formatCurrencyWithKey('', assetData.balance)}</Label>
                                 <Label>{formatCurrencyWithKey(USD_SIGN, assetData.value, 2)}</Label>
-
-                                <Transfer
-                                    disabled={assetData.balance == 0}
-                                    onClick={() => {
-                                        if (assetData.balance > 0) {
-                                            setConvertToken(getCollateralIndex(networkId, assetData.asset));
-                                            setShowDepositFromWallet(true);
-                                        }
-                                    }}
-                                >
-                                    {t('profile.asset-balance.transfer')}
-                                </Transfer>
+                                {!isSmartAccountDisabled && (
+                                    <Transfer
+                                        disabled={assetData.balance == 0}
+                                        onClick={() => {
+                                            if (assetData.balance > 0) {
+                                                setConvertToken(getCollateralIndex(networkId, assetData.asset));
+                                                setShowDepositFromWallet(true);
+                                            }
+                                        }}
+                                    >
+                                        {t('profile.asset-balance.transfer')}
+                                    </Transfer>
+                                )}
                             </AssetContainer>
                         );
                     })}

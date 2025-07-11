@@ -335,7 +335,8 @@
             "account": "Overtime Account",
             "eoa": "EOA Wallet",
             "logout": "Log Out",
-            "profile": "Account"
+            "profile": "Account",
+            "smart-account-disabled": "Overtime Account cannot be used with a smart wallet."
         },
         "account-summary": {
             "title": "Account Summary",

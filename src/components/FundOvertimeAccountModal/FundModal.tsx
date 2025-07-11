@@ -17,7 +17,7 @@ import React, { useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getIsBiconomy } from 'redux/modules/wallet';
+import { getIsBiconomy, getIsSmartAccountDisabled } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { truncateAddress } from 'thales-utils';
@@ -30,6 +30,7 @@ import { getOnRamperUrl } from 'utils/particleWallet/utils';
 import { navigateTo } from 'utils/routes';
 import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import useUniversalAccount from 'utils/smartAccount/hooks/useUniversalAccount';
+import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
 
 import { useAccount, useChainId, useClient } from 'wagmi';
 
@@ -40,6 +41,7 @@ type FundModalProps = {
 const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
     const [showLetsBetButton, setShowLetsBetButton] = useState(false);
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+    const isSmartAccountDisabled = useSelector(getIsSmartAccountDisabled);
     const { t } = useTranslation();
 
     const { universalAddress } = useUniversalAccount(); // added this hook here so we reduce the amount for loading universal data when users opens universal deposit
@@ -71,6 +73,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
     const totalBalanceValue = useMemo(() => {
+        smartAccountConnector.biconomyAccount?.isAccountDeployed().then((data) => console.log(data));
         let total = 0;
         try {
             if (exchangeRates && multipleCollateralBalances.data) {
@@ -124,6 +127,30 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
             onClose={onClose}
         >
             <Wrapper>
+                <button
+                    onClick={async () => {
+                        try {
+                            if (smartAccountConnector.biconomyAccount) {
+                                const userOp = await smartAccountConnector.biconomyAccount.buildUserOp([
+                                    {
+                                        to: smartAccountConnector.biconomyAddress,
+                                        value: 0n,
+                                        data: '0x',
+                                    },
+                                ]);
+                                console.log('userOp:', userOp);
+
+                                const { wait } = await smartAccountConnector.biconomyAccount.sendUserOp(userOp);
+                                const { receipt } = await wait();
+                                console.log('receipt:', receipt);
+                            }
+                        } catch (e) {
+                            console.log('error verifying smart account:', e);
+                        }
+                    }}
+                >
+                    Verify smart account
+                </button>
                 <NetworkWrapper>
                     <NetworkHeader>{t('get-started.fund-account.current-network')}</NetworkHeader>
                     <NetworkSwitcherWrapper>
@@ -225,7 +252,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                 )}
 
                 <Container>
-                    {networkId === Network.OptimismMainnet && (
+                    {networkId === Network.OptimismMainnet && !isSmartAccountDisabled && (
                         <Tooltip
                             customIconStyling={{ color: theme.textColor.secondary }}
                             overlay={t('get-started.fund-account.tooltip-universal')}
@@ -256,21 +283,23 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                             <Icon className="icon icon--card" />
                         </ButtonLocal>
                     </Tooltip>
-                    <Tooltip
-                        customIconStyling={{ color: theme.textColor.secondary }}
-                        overlay={t('get-started.fund-account.tooltip-4')}
-                        open={!isSmallDevice}
-                    >
-                        <ButtonLocal
-                            disabled={totalBalanceValue === 0}
-                            onClick={() => {
-                                totalBalanceValue > 0 && setShowDepositFromWallet(!showDepositFromWallet);
-                            }}
+                    {!isSmartAccountDisabled && (
+                        <Tooltip
+                            customIconStyling={{ color: theme.textColor.secondary }}
+                            overlay={t('get-started.fund-account.tooltip-4')}
+                            open={!isSmallDevice}
                         >
-                            <ButtonText>{t('get-started.fund-account.from-wallet')}</ButtonText>
-                            <Icon className="icon icon--wallet-connected" />
-                        </ButtonLocal>
-                    </Tooltip>
+                            <ButtonLocal
+                                disabled={totalBalanceValue === 0}
+                                onClick={() => {
+                                    totalBalanceValue > 0 && setShowDepositFromWallet(!showDepositFromWallet);
+                                }}
+                            >
+                                <ButtonText>{t('get-started.fund-account.from-wallet')}</ButtonText>
+                                <Icon className="icon icon--wallet-connected" />
+                            </ButtonLocal>
+                        </Tooltip>
+                    )}
 
                     <Tooltip
                         customIconStyling={{ color: theme.textColor.secondary }}

@@ -6,6 +6,7 @@ import { RootState, WalletSliceState } from 'types/redux';
 const sliceName = 'wallet';
 
 const initialState: WalletSliceState = {
+    isSmartAccountDisabled: false,
     isBiconomy: localStore.get(LOCAL_STORAGE_KEYS.USE_BICONOMY) ?? true,
     connectedViaParticle: false,
     walletConnectModal: {
@@ -23,6 +24,9 @@ const walletDetailsSlice = createSlice({
         setIsBiconomy: (state, action: PayloadAction<boolean>) => {
             state.isBiconomy = action.payload;
         },
+        setIsSmartAccountDisabled: (state, action: PayloadAction<boolean>) => {
+            state.isSmartAccountDisabled = action.payload;
+        },
         updateParticleState: (state, action: PayloadAction<{ connectedViaParticle: boolean }>) => {
             state.connectedViaParticle = action.payload.connectedViaParticle;
         },
@@ -34,7 +38,13 @@ export const getIsBiconomy = (state: RootState) => getWalletState(state).isBicon
 export const getIsConnectedViaParticle = (state: RootState) => getWalletState(state).connectedViaParticle;
 export const getWalletConnectModalVisibility = (state: RootState) =>
     getWalletState(state).walletConnectModal.visibility;
+export const getIsSmartAccountDisabled = (state: RootState) => getWalletState(state).isSmartAccountDisabled;
 
-export const { setWalletConnectModalVisibility, setIsBiconomy, updateParticleState } = walletDetailsSlice.actions;
+export const {
+    setWalletConnectModalVisibility,
+    setIsBiconomy,
+    updateParticleState,
+    setIsSmartAccountDisabled,
+} = walletDetailsSlice.actions;
 
 export default walletDetailsSlice.reducer;

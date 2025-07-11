@@ -47,6 +47,7 @@ export type UISliceState = {
 };
 
 export type WalletSliceState = {
+    isSmartAccountDisabled: boolean;
     isBiconomy: boolean;
     connectedViaParticle: boolean;
     walletConnectModal: {
