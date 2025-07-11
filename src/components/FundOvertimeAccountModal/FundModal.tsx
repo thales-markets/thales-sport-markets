@@ -73,6 +73,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
     const totalBalanceValue = useMemo(() => {
+        smartAccountConnector.biconomyAccount?.isAccountDeployed().then((data) => console.log(data));
         let total = 0;
         try {
             if (exchangeRates && multipleCollateralBalances.data) {
@@ -126,7 +127,28 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
             onClose={onClose}
         >
             <Wrapper>
-                <button onClick={async () => await smartAccountConnector.biconomyAccount?.signMessage('hello')}>
+                <button
+                    onClick={async () => {
+                        try {
+                            if (smartAccountConnector.biconomyAccount) {
+                                const userOp = await smartAccountConnector.biconomyAccount.buildUserOp([
+                                    {
+                                        to: smartAccountConnector.biconomyAddress,
+                                        value: 0n,
+                                        data: '0x',
+                                    },
+                                ]);
+                                console.log('userOp:', userOp);
+
+                                const { wait } = await smartAccountConnector.biconomyAccount.sendUserOp(userOp);
+                                const { receipt } = await wait();
+                                console.log('receipt:', receipt);
+                            }
+                        } catch (e) {
+                            console.log('error verifying smart account:', e);
+                        }
+                    }}
+                >
                     Verify smart account
                 </button>
                 <NetworkWrapper>
