@@ -8,18 +8,19 @@ import Tooltip from 'components/Tooltip';
 import UniversalModal from 'components/UniversalModal';
 import { COLLATERAL_ICONS_CLASS_NAMES } from 'constants/currency';
 import ROUTES from 'constants/routes';
+import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { Network } from 'enums/network';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import QRCodeModal from 'pages/AARelatedPages/Deposit/components/QRCodeModal';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getIsBiconomy, getIsSmartAccountDisabled } from 'redux/modules/wallet';
+import { getIsBiconomy, getIsSmartAccountDisabled, setIsSmartAccountDisabled } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
-import { FlexDivCentered, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
+import { FlexDivCentered, FlexDivColumnCentered, FlexDivRow, FlexDivStart } from 'styles/common';
 import { truncateAddress } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
@@ -28,6 +29,7 @@ import { isSmallDevice } from 'utils/device';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import { getOnRamperUrl } from 'utils/particleWallet/utils';
 import { navigateTo } from 'utils/routes';
+import { verifyOvertimeAccount } from 'utils/smartAccount/biconomy/biconomy';
 import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import useUniversalAccount from 'utils/smartAccount/hooks/useUniversalAccount';
 import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
@@ -42,6 +44,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
     const [showLetsBetButton, setShowLetsBetButton] = useState(false);
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
     const isSmartAccountDisabled = useSelector(getIsSmartAccountDisabled);
+    const dispatch = useDispatch();
     const { t } = useTranslation();
 
     const { universalAddress } = useUniversalAccount(); // added this hook here so we reduce the amount for loading universal data when users opens universal deposit
@@ -58,6 +61,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
     const [showQRModal, setShowQRModal] = useState<boolean>(false);
     const [showDepositFromWallet, setShowDepositFromWallet] = useState<boolean>(false);
     const [showUniversalModal, setShowUniversalModal] = useState<boolean>(false);
+    const [showVerificationButton, setShowVerificationButton] = useState<boolean>(false);
 
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(
         address as string,
@@ -73,7 +77,6 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
     const totalBalanceValue = useMemo(() => {
-        smartAccountConnector.biconomyAccount?.isAccountDeployed().then((data) => console.log(data));
         let total = 0;
         try {
             if (exchangeRates && multipleCollateralBalances.data) {
@@ -103,6 +106,37 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
         return getOnRamperUrl(apiKey, walletAddress, networkId);
     }, [walletAddress, networkId, apiKey]);
 
+    useEffect(() => {
+        if (isBiconomy) {
+            const verifiedOvertimeAccounts = new Set(
+                localStorage.getItem(LOCAL_STORAGE_KEYS.VERIFIED_OVERTIME_ACCOUNTS) || []
+            );
+            const invalidOvertimeAccounts = new Set(
+                localStorage.getItem(LOCAL_STORAGE_KEYS.INVALID_OVERTIME_ACCOUNTS) || []
+            );
+            if (invalidOvertimeAccounts.has(smartAddress)) {
+                dispatch(setIsSmartAccountDisabled(true));
+                setShowVerificationButton(false);
+                return;
+            }
+            if (verifiedOvertimeAccounts.has(smartAddress)) {
+                dispatch(setIsSmartAccountDisabled(false));
+                setShowVerificationButton(false);
+                return;
+            }
+
+            smartAccountConnector.biconomyAccount?.isAccountDeployed().then((isDeployed) => {
+                if (isDeployed) {
+                    setShowVerificationButton(false);
+                    verifiedOvertimeAccounts.add(smartAddress);
+                } else {
+                    setShowVerificationButton(true);
+                }
+            });
+            console.log(verifiedOvertimeAccounts, invalidOvertimeAccounts);
+        }
+    }, [isBiconomy, dispatch, smartAddress, isSmartAccountDisabled]);
+
     return (
         <Modal
             customStyle={{
@@ -127,30 +161,43 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
             onClose={onClose}
         >
             <Wrapper>
-                <button
-                    onClick={async () => {
-                        try {
-                            if (smartAccountConnector.biconomyAccount) {
-                                const userOp = await smartAccountConnector.biconomyAccount.buildUserOp([
-                                    {
-                                        to: smartAccountConnector.biconomyAddress,
-                                        value: 0n,
-                                        data: '0x',
-                                    },
-                                ]);
-                                console.log('userOp:', userOp);
+                {showVerificationButton && (
+                    <FlexDivStart>
+                        <Button
+                            onClick={async () => {
+                                const isValidConfig = await verifyOvertimeAccount();
+                                if (isValidConfig) {
+                                    const verifiedOvertimeAccounts = new Set(
+                                        localStorage.getItem(LOCAL_STORAGE_KEYS.VERIFIED_OVERTIME_ACCOUNTS) || []
+                                    );
+                                    verifiedOvertimeAccounts.add(smartAddress);
+                                    localStorage.setItem(
+                                        LOCAL_STORAGE_KEYS.VERIFIED_OVERTIME_ACCOUNTS,
+                                        JSON.stringify(Array.from(verifiedOvertimeAccounts))
+                                    );
+                                } else {
+                                    const invalidOvertimeAccounts = new Set(
+                                        localStorage.getItem(LOCAL_STORAGE_KEYS.INVALID_OVERTIME_ACCOUNTS) || []
+                                    );
+                                    invalidOvertimeAccounts.add(smartAddress);
+                                    dispatch(setIsSmartAccountDisabled(true));
+                                    localStorage.setItem(
+                                        LOCAL_STORAGE_KEYS.INVALID_OVERTIME_ACCOUNTS,
+                                        JSON.stringify(Array.from(invalidOvertimeAccounts))
+                                    );
+                                }
+                            }}
+                        >
+                            Verify smart account
+                        </Button>
+                        {true ? (
+                            <VerifyIcon verified className="icon icon--correct-full" />
+                        ) : (
+                            <VerifyIcon className="icon icon--wrong-full" />
+                        )}
+                    </FlexDivStart>
+                )}
 
-                                const { wait } = await smartAccountConnector.biconomyAccount.sendUserOp(userOp);
-                                const { receipt } = await wait();
-                                console.log('receipt:', receipt);
-                            }
-                        } catch (e) {
-                            console.log('error verifying smart account:', e);
-                        }
-                    }}
-                >
-                    Verify smart account
-                </button>
                 <NetworkWrapper>
                     <NetworkHeader>{t('get-started.fund-account.current-network')}</NetworkHeader>
                     <NetworkSwitcherWrapper>
@@ -505,6 +552,10 @@ const QRIcon = styled.i`
 const Icon = styled.i`
     font-weight: 400;
     font-size: 20px;
+`;
+
+const VerifyIcon = styled(Icon)<{ verified?: boolean }>`
+    color: ${(props) => (props.verified ? props.theme.success.textColor.primary : props.theme.error.textColor.primary)};
 `;
 
 const ParticleLogo = styled.img`

@@ -11,6 +11,7 @@ import sessionValidationContract from '../../contracts/sessionValidationContract
 import {
     ACCOUNT_NONCE_FAILED,
     ERROR_SESSION_NOT_FOUND,
+    INVALID_SIGNATURE_LENGTH,
     USER_OP_FAILED,
     USER_REJECTED_ERROR,
     WEBHOOK_FAILED,
@@ -439,5 +440,30 @@ export async function isSmartContract(address: any) {
         return code != undefined;
     } catch (error) {
         return false;
+    }
+}
+
+export async function verifyOvertimeAccount() {
+    try {
+        if (smartAccountConnector.biconomyAccount) {
+            const userOp = await smartAccountConnector.biconomyAccount.buildUserOp([
+                {
+                    to: smartAccountConnector.biconomyAddress,
+                    value: 0n,
+                    data: '0x',
+                },
+            ]);
+
+            const { wait } = await smartAccountConnector.biconomyAccount.sendUserOp(userOp);
+            const { receipt } = await wait();
+            console.log('Overtime account verified', receipt);
+        }
+        return true;
+    } catch (e) {
+        if ((e as any).toString().toLowerCase().includes(INVALID_SIGNATURE_LENGTH)) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }
