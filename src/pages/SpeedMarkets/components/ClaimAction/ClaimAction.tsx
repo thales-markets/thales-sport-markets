@@ -249,7 +249,7 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
                     ammSpeedMarketsLimitsData.maxPriceDelayForResolvingSec
             ) {
                 await delay(800);
-                toast.update(id, getErrorToastOptions(t('speed-markets.user-positions.errors.price-stale')));
+                toast.update(id, getErrorToastOptions(t('speed-markets.errors.price-stale')));
                 setIsSubmitting(false);
                 return;
             }
@@ -343,7 +343,7 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
             <Container>
                 <Tooltip
                     open={!hasAllowance && !isDefaultCollateral}
-                    overlay={t('speed-markets.user-positions.approve-swap-tooltip', {
+                    overlay={t('speed-markets.tooltips.approve-swap-tooltip', {
                         currencyKey: claimCollateral,
                         defaultCurrency: defaultCollateral,
                     })}

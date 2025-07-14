@@ -1544,30 +1544,14 @@
             "confirmation-message": "Successfully executed - position created"
         },
         "amm-trading": {
-            "asset-price": "If {{asset}} price is",
             "choose-direction": "choose direction",
             "choose-time": "choose duration",
-            "based-amount": "based on amount",
-            "you-win": "you win",
-            "at-least": "at least",
-            "max-buy": "Max buy",
             "estimate-gas": "Estimated transaction cost"
         },
         "user-positions": {
-            "open": "Open positions",
-            "your-positions": "Your open positions",
-            "created": "Created",
-            "end-time": "End time",
-            "asset": "Asset",
-            "direction": "Direction",
-            "current-price": "Current price",
-            "final-price": "Final price",
             "claim": "Claim",
             "claim-progress": "Claiming",
             "claim-in": "Claim in",
-            "result-in": "Result in",
-            "next-result-in": "Next result in",
-            "approve-swap-tooltip": "To get payout in {{currencyKey}}, you need to approve swap from {{defaultCurrency}} to {{currencyKey}}.",
             "claim-all": "Claim all",
             "claim-all-progress": "Claiming all",
             "claim-all-in": "Claim all in",
@@ -1593,9 +1577,6 @@
                 "loss": "Loss",
                 "winning": "Winning",
                 "loosing": "Loosing"
-            },
-            "errors": {
-                "price-stale": "Can't resolve position with stale price"
             }
         },
         "settings": {
@@ -1603,12 +1584,11 @@
             "slippage-tolerance-description": "Maximum price difference you're willing to accept"
         },
         "tooltips": {
+            "approve-swap-tooltip": "To get payout in {{currencyKey}}, you need to approve swap from {{defaultCurrency}} to {{currencyKey}}.",
             "current-price": "Current price as reported by Pyth oracles.",
             "liquidity": "Current available liquidity for this Asset: {{liquidityPerAsset}}<br><br>Total available for Buy-In per direction<br>Available for UP: {{liquidityPerUp}}<br>Available for DOWN: {{liquidityPerDown}}",
             "payout-conversion": "Win amount can be slightly different due to conversion rate at execution time",
             "final-price-missing": "Oracle price snapshot for this position timestamp is still being processed. Even if contract input is delayed by the Pyth oracles, the price snapshot will be true to the moment of position expiration",
-            "bonus-unknown": "This direction offers bonus return. Exact bonus depends on selected Duration.",
-            "bonus-info": "Bonus return for {{bonusDirection}} is +{{bonusPerc}}",
             "slippage": "Your trade will revert if the live price changes more than this percentage from your chosen Strike Price during trade execution.",
             "eth-to-weth": "Your ETH will be wrapped to WETH before executing the trade.",
             "pending-positions": "Pending positions",
@@ -1619,10 +1599,8 @@
             "max-buyin": "Maximal buy-in is {{maxAmount}}",
             "out-of-liquidity-direction": "Out of liquidity for direction",
             "out-of-liquidity": "Out of liquidity",
-            "invalid-amount-max": "The amount cannot be higher than {{max}}",
-            "something-went-wrong": "Something went wrong!",
-            "unexpected": "Please help us about this issue by writing to help-and-questions",
-            "buy-failed": "Failed to create position or creation event not received! Please check your open positions."
+            "buy-failed": "Failed to create position or creation event not received! Please check your open positions.",
+            "price-stale": "Can't resolve position with stale price"
         }
     }
 }
