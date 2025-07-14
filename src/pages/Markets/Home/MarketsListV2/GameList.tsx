@@ -1,7 +1,7 @@
 import MatchLogosV2 from 'components/MatchLogosV2';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
-import { PLAYER_PROPS_SPECIAL_SPORTS } from 'constants/sports';
+import { PLAYER_PROPS_MARKETS_PER_SPORT_MAP, PLAYER_PROPS_SPECIAL_SPORTS } from 'constants/sports';
 import { SortType } from 'enums/markets';
 import { getLeagueLabel } from 'overtime-utils';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
@@ -159,30 +159,32 @@ const GameList: React.FC<{ markets: SportMarket[]; language: string }> = ({ mark
                                 !!marketTypeFilter ||
                                 !(
                                     index === 0 ||
-                                    ((sortedMarkets[index - 1].childMarkets[0]?.typeId !==
-                                        market.childMarkets[0]?.typeId ||
-                                        sortedMarkets[index - 1].childMarkets[1]?.typeId !==
-                                            market.childMarkets[1]?.typeId ||
-                                        sortedMarkets[index - 1].childMarkets[2]?.typeId !==
-                                            market.childMarkets[2]?.typeId ||
-                                        (PLAYER_PROPS_SPECIAL_SPORTS.includes(market.sport) &&
-                                            getSpecializedPropForMarket(sortedMarkets[index - 1]) !==
-                                                getSpecializedPropForMarket(market))) &&
+                                    (!PLAYER_PROPS_MARKETS_PER_SPORT_MAP[market.sport].length &&
+                                        (sortedMarkets[index - 1].childMarkets[0]?.typeId !==
+                                            market.childMarkets[0]?.typeId ||
+                                            sortedMarkets[index - 1].childMarkets[1]?.typeId !==
+                                                market.childMarkets[1]?.typeId ||
+                                            sortedMarkets[index - 1].childMarkets[2]?.typeId !==
+                                                market.childMarkets[2]?.typeId ||
+                                            (PLAYER_PROPS_SPECIAL_SPORTS.includes(market.sport) &&
+                                                getSpecializedPropForMarket(sortedMarkets[index - 1]) !==
+                                                    getSpecializedPropForMarket(market))) &&
                                         !marketTypeGroupFilter)
                                 )
                             }
                             floatingOddsTitles={
                                 !marketTypeFilter &&
                                 (index === 0 ||
-                                    ((sortedMarkets[index - 1].childMarkets[0]?.typeId !==
-                                        market.childMarkets[0]?.typeId ||
-                                        sortedMarkets[index - 1].childMarkets[1]?.typeId !==
-                                            market.childMarkets[1]?.typeId ||
-                                        sortedMarkets[index - 1].childMarkets[2]?.typeId !==
-                                            market.childMarkets[2]?.typeId ||
-                                        (PLAYER_PROPS_SPECIAL_SPORTS.includes(market.sport) &&
-                                            getSpecializedPropForMarket(sortedMarkets[index - 1]) !==
-                                                getSpecializedPropForMarket(market))) &&
+                                    (!PLAYER_PROPS_MARKETS_PER_SPORT_MAP[market.sport].length &&
+                                        (sortedMarkets[index - 1].childMarkets[0]?.typeId !==
+                                            market.childMarkets[0]?.typeId ||
+                                            sortedMarkets[index - 1].childMarkets[1]?.typeId !==
+                                                market.childMarkets[1]?.typeId ||
+                                            sortedMarkets[index - 1].childMarkets[2]?.typeId !==
+                                                market.childMarkets[2]?.typeId ||
+                                            (PLAYER_PROPS_SPECIAL_SPORTS.includes(market.sport) &&
+                                                getSpecializedPropForMarket(sortedMarkets[index - 1]) !==
+                                                    getSpecializedPropForMarket(market))) &&
                                         !marketTypeGroupFilter))
                             }
                         />
