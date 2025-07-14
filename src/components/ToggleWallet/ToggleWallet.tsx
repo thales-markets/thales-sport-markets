@@ -1,16 +1,43 @@
 import Tooltip from 'components/Tooltip';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { t } from 'i18next';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getIsBiconomy, getIsSmartAccountDisabled, setIsBiconomy } from 'redux/modules/wallet';
+import {
+    getIsBiconomy,
+    getIsSmartAccountDisabled,
+    setIsBiconomy,
+    setIsSmartAccountDisabled,
+} from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { localStore } from 'thales-utils';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 
 const ToggleWallet = () => {
     const dispatch = useDispatch();
     const isBiconomy = useSelector(getIsBiconomy);
     const isSmartAccountDisabled = useSelector(getIsSmartAccountDisabled);
     const theme = useTheme();
+    const { smartAddress } = useBiconomy();
+
+    useEffect(() => {
+        const verifiedOvertimeAccounts = new Set(
+            JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEYS.VERIFIED_OVERTIME_ACCOUNTS) || '[]')
+        );
+        const invalidOvertimeAccounts = new Set(
+            JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEYS.INVALID_OVERTIME_ACCOUNTS) || '[]')
+        );
+        if (invalidOvertimeAccounts.has(smartAddress)) {
+            dispatch(setIsSmartAccountDisabled(true));
+            dispatch(setIsBiconomy(false));
+            localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, false);
+            return;
+        }
+        if (verifiedOvertimeAccounts.has(smartAddress)) {
+            dispatch(setIsSmartAccountDisabled(false));
+            return;
+        }
+    }, [dispatch, smartAddress]);
 
     return (
         <ToggleContainer>

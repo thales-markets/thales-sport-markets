@@ -1,4 +1,5 @@
 import particle from 'assets/images/particle.png';
+import VerifySvg from 'assets/images/svgs/verify.svg?react';
 import Button from 'components/Button';
 import ClaimFreeBetButton from 'components/ClaimFreeBetButton';
 import DepositFromWallet from 'components/DepositFromWallet';
@@ -6,6 +7,7 @@ import Modal from 'components/Modal';
 import NetworkSwitcher from 'components/NetworkSwitcher';
 import Tooltip from 'components/Tooltip';
 import UniversalModal from 'components/UniversalModal';
+import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { COLLATERAL_ICONS_CLASS_NAMES } from 'constants/currency';
 import ROUTES from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
@@ -18,7 +20,12 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getIsBiconomy, getIsSmartAccountDisabled, setIsSmartAccountDisabled } from 'redux/modules/wallet';
+import {
+    getIsBiconomy,
+    getIsSmartAccountDisabled,
+    setIsBiconomy,
+    setIsSmartAccountDisabled,
+} from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered, FlexDivRow, FlexDivStart } from 'styles/common';
 import { truncateAddress } from 'thales-utils';
@@ -33,7 +40,6 @@ import { verifyOvertimeAccount } from 'utils/smartAccount/biconomy/biconomy';
 import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import useUniversalAccount from 'utils/smartAccount/hooks/useUniversalAccount';
 import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
-
 import { useAccount, useChainId, useClient } from 'wagmi';
 
 type FundModalProps = {
@@ -109,13 +115,15 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
     useEffect(() => {
         if (isBiconomy) {
             const verifiedOvertimeAccounts = new Set(
-                localStorage.getItem(LOCAL_STORAGE_KEYS.VERIFIED_OVERTIME_ACCOUNTS) || []
+                JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEYS.VERIFIED_OVERTIME_ACCOUNTS) || '[]')
             );
             const invalidOvertimeAccounts = new Set(
-                localStorage.getItem(LOCAL_STORAGE_KEYS.INVALID_OVERTIME_ACCOUNTS) || []
+                JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEYS.INVALID_OVERTIME_ACCOUNTS) || '[]')
             );
             if (invalidOvertimeAccounts.has(smartAddress)) {
                 dispatch(setIsSmartAccountDisabled(true));
+                dispatch(setIsBiconomy(false));
+                localStorage.setItem(LOCAL_STORAGE_KEYS.USE_BICONOMY, 'false');
                 setShowVerificationButton(false);
                 return;
             }
@@ -129,6 +137,10 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                 if (isDeployed) {
                     setShowVerificationButton(false);
                     verifiedOvertimeAccounts.add(smartAddress);
+                    localStorage.setItem(
+                        LOCAL_STORAGE_KEYS.VERIFIED_OVERTIME_ACCOUNTS,
+                        JSON.stringify(Array.from(verifiedOvertimeAccounts))
+                    );
                 } else {
                     setShowVerificationButton(true);
                 }
@@ -163,38 +175,50 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
             <Wrapper>
                 {showVerificationButton && (
                     <FlexDivStart>
-                        <Button
+                        <VerifyButton
                             onClick={async () => {
+                                const id = toast.loading(t('get-started.fund-account.verifying-account'));
                                 const isValidConfig = await verifyOvertimeAccount();
                                 if (isValidConfig) {
                                     const verifiedOvertimeAccounts = new Set(
-                                        localStorage.getItem(LOCAL_STORAGE_KEYS.VERIFIED_OVERTIME_ACCOUNTS) || []
+                                        JSON.parse(
+                                            localStorage.getItem(LOCAL_STORAGE_KEYS.VERIFIED_OVERTIME_ACCOUNTS) || '[]'
+                                        )
                                     );
                                     verifiedOvertimeAccounts.add(smartAddress);
                                     localStorage.setItem(
                                         LOCAL_STORAGE_KEYS.VERIFIED_OVERTIME_ACCOUNTS,
                                         JSON.stringify(Array.from(verifiedOvertimeAccounts))
                                     );
+                                    toast.update(
+                                        id,
+                                        getSuccessToastOptions(t('get-started.fund-account.verifying-account-success'))
+                                    );
                                 } else {
                                     const invalidOvertimeAccounts = new Set(
-                                        localStorage.getItem(LOCAL_STORAGE_KEYS.INVALID_OVERTIME_ACCOUNTS) || []
+                                        JSON.parse(
+                                            localStorage.getItem(LOCAL_STORAGE_KEYS.INVALID_OVERTIME_ACCOUNTS) || '[]'
+                                        )
                                     );
                                     invalidOvertimeAccounts.add(smartAddress);
                                     dispatch(setIsSmartAccountDisabled(true));
+                                    dispatch(setIsBiconomy(false));
+                                    localStorage.setItem(LOCAL_STORAGE_KEYS.USE_BICONOMY, 'false');
                                     localStorage.setItem(
                                         LOCAL_STORAGE_KEYS.INVALID_OVERTIME_ACCOUNTS,
                                         JSON.stringify(Array.from(invalidOvertimeAccounts))
                                     );
+                                    toast.update(
+                                        id,
+                                        getErrorToastOptions(t('get-started.fund-account.verifying-account-error'))
+                                    );
                                 }
                             }}
                         >
-                            Verify smart account
-                        </Button>
-                        {true ? (
-                            <VerifyIcon verified className="icon icon--correct-full" />
-                        ) : (
-                            <VerifyIcon className="icon icon--wrong-full" />
-                        )}
+                            <VerifySvg />
+                            {t('get-started.fund-account.verify-account')}
+                            <Arrow className="icon icon--arrow-down" />
+                        </VerifyButton>
                     </FlexDivStart>
                 )}
 
@@ -554,10 +578,6 @@ const Icon = styled.i`
     font-size: 20px;
 `;
 
-const VerifyIcon = styled(Icon)<{ verified?: boolean }>`
-    color: ${(props) => (props.verified ? props.theme.success.textColor.primary : props.theme.error.textColor.primary)};
-`;
-
 const ParticleLogo = styled.img`
     height: 24px;
 `;
@@ -684,6 +704,47 @@ const Asset = styled.i<{ fontSize?: string }>`
         font-size: 24px;
         line-height: 24px;
     }
+`;
+
+const VerifyButton = styled.button`
+    position: relative;
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    color: #000000;
+    padding: 14px 20px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.25);
+    width: 100%;
+    margin-top: 20px;
+
+    letter-spacing: 0.025em;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    &:hover {
+        box-shadow: 0 6px 20px rgba(251, 191, 36, 0.35);
+    }
+
+    svg {
+        width: 24px;
+        height: 24px;
+        margin-right: 10px;
+    }
+`;
+
+const Arrow = styled.i.attrs({ className: 'icon icon--arrow-down' })`
+    position: absolute;
+    right: 20px;
+    top: 18px;
+    transform: rotate(270deg);
+    font-size: 16px;
+    text-transform: lowercase;
 `;
 
 export default FundModal;
