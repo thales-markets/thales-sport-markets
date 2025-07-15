@@ -113,6 +113,9 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.USA_MAJOR_LEAGUE_CRICKET:
         case League.MLB_FUTURES:
         case League.USA_OPEN_CUP:
+        case League.USA_MLB_ALL_STAR:
+        case League.USA_NATIONAL_LACROSSE_LEAGUE:
+        case League.USA_PREMIER_LACROSSE_LEAGUE:
         case League.UFL:
             return `/logos/Countries/united-states-of-america.svg`;
         case League.EPL:
