@@ -16,7 +16,13 @@ import { getTicketPayment } from 'redux/modules/ticket';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv } from 'styles/common';
-import { formatCurrencyWithKey, formatCurrencyWithSign, getPrecision, truncToDecimals } from 'thales-utils';
+import {
+    DEFAULT_CURRENCY_DECIMALS,
+    formatCurrencyWithKey,
+    formatCurrencyWithSign,
+    LONG_CURRENCY_DECIMALS,
+    truncToDecimals,
+} from 'thales-utils';
 import { AmmSpeedMarketsLimits } from 'types/speedMarkets';
 import { ThemeInterface } from 'types/ui';
 import {
@@ -153,11 +159,9 @@ const SelectBuyin: React.FC<SelectBuyinProps> = ({
             }
         }
         if (buyinAmount !== '') {
-            const convertedBuyinAmount = convertToStable(Number(buyinAmount));
-
-            if (convertedBuyinAmount < minBuyinAmount) {
+            if (Number(buyinAmount) < convertFromStable(minBuyinAmount)) {
                 errorMessageKey = 'speed-markets.errors.min-buyin';
-            } else if (convertedBuyinAmount > maxBuyinAmount) {
+            } else if (Number(buyinAmount) > convertFromStable(maxBuyinAmount)) {
                 errorMessageKey = 'speed-markets.errors.max-buyin';
             }
         }
@@ -235,12 +239,16 @@ const SelectBuyin: React.FC<SelectBuyinProps> = ({
                             minAmount: `${formatCurrencyWithKey(
                                 selectedCollateral,
                                 convertFromStable(minBuyinAmount),
-                                getPrecision(convertFromStable(minBuyinAmount))
+                                isStableCurrency(selectedCollateral)
+                                    ? DEFAULT_CURRENCY_DECIMALS
+                                    : LONG_CURRENCY_DECIMALS
                             )}${isDefaultCollateral ? '' : ` (${formatCurrencyWithSign(USD_SIGN, minBuyinAmount)})`}`,
                             maxAmount: `${formatCurrencyWithKey(
                                 selectedCollateral,
                                 convertFromStable(maxBuyinAmount),
-                                getPrecision(convertFromStable(maxBuyinAmount))
+                                isStableCurrency(selectedCollateral)
+                                    ? DEFAULT_CURRENCY_DECIMALS
+                                    : LONG_CURRENCY_DECIMALS
                             )}${isDefaultCollateral ? '' : ` (${formatCurrencyWithSign(USD_SIGN, maxBuyinAmount)})`}`,
                         })}
                         placeholder={t('common.enter-amount')}
