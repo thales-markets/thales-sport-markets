@@ -43,6 +43,7 @@ export enum SportFilter {
     Motosport = 'Motosport',
     Golf = 'Golf',
     Darts = 'Darts',
+    Lacrosse = 'Lacrosse',
     Politics = 'Politics',
     Futures = 'Futures',
 }
