@@ -23,6 +23,7 @@ import React, { Dispatch, useCallback, useEffect, useMemo, useRef, useState } fr
 import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { getIsMobile } from 'redux/modules/app';
 import { getTicketPayment } from 'redux/modules/ticket';
 import { getIsBiconomy, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
@@ -59,7 +60,6 @@ import { getContractInstance } from 'utils/contract';
 import { getContractAbi } from 'utils/contracts/abi';
 import multipleCollateral from 'utils/contracts/multipleCollateralContract';
 import speedMarketsAMMContract from 'utils/contracts/speedMarkets/speedMarketsAMMContract';
-import { isMobile } from 'utils/device';
 import { isErrorExcluded } from 'utils/discord';
 import { checkAllowance } from 'utils/network';
 import { getPriceConnection, getPriceId, priceParser } from 'utils/pyth';
@@ -110,6 +110,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
     const dispatch = useDispatch();
     const theme: ThemeInterface = useTheme();
 
+    const isMobile = useSelector(getIsMobile);
     const isBiconomy = useSelector(getIsBiconomy);
     const ticketPayment = useSelector(getTicketPayment);
     const selectedCollateralIndex = ticketPayment.selectedCollateralIndex;
@@ -657,34 +658,36 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
         }
         if (!hasAllowance) {
             return (
-                <Button
-                    disabled={isAllowing}
-                    onClick={() => setOpenApprovalModal(true)}
-                    {...getDefaultButtonProps(theme)}
-                >
-                    {isAllowing ? (
-                        <Trans
-                            i18nKey="common.enable-wallet-access.approve-progress-label"
-                            values={{ currencyKey: isEth ? CRYPTO_CURRENCY_MAP.WETH : selectedCollateral }}
-                            components={{ currency: <CollateralText /> }}
-                        />
-                    ) : (
-                        <Trans
-                            i18nKey="common.enable-wallet-access.approve-label"
-                            values={{ currencyKey: isEth ? CRYPTO_CURRENCY_MAP.WETH : selectedCollateral }}
-                            components={{ currency: <CollateralText /> }}
-                        />
-                    )}
-                    {isEth && !isMobile() && (
-                        <Tooltip
-                            overlay={t('speed-markets.tooltips.eth-to-weth')}
-                            customIconStyling={{ color: theme.speedMarkets.button.textColor.active }}
-                            marginLeft={4}
-                            zIndex={SPEED_MARKETS_WIDGET_Z_INDEX}
-                        />
-                    )}
-                    {isAllowing ? '...' : ''}
-                </Button>
+                <>
+                    {isEth && isMobile && <InfoText>{t('speed-markets.tooltips.eth-to-weth')}</InfoText>}
+                    <Button
+                        disabled={isAllowing}
+                        onClick={() => setOpenApprovalModal(true)}
+                        {...getDefaultButtonProps(theme)}
+                    >
+                        {isAllowing ? (
+                            <Trans
+                                i18nKey="common.enable-wallet-access.approve-progress-label"
+                                values={{ currencyKey: isEth ? CRYPTO_CURRENCY_MAP.WETH : selectedCollateral }}
+                                components={{ currency: <CollateralText /> }}
+                            />
+                        ) : (
+                            <Trans
+                                i18nKey="common.enable-wallet-access.approve-label"
+                                values={{ currencyKey: isEth ? CRYPTO_CURRENCY_MAP.WETH : selectedCollateral }}
+                                components={{ currency: <CollateralText /> }}
+                            />
+                        )}
+                        {isEth && !isMobile && (
+                            <Tooltip
+                                overlay={t('speed-markets.tooltips.eth-to-weth')}
+                                customIconStyling={{ color: theme.speedMarkets.button.textColor.active }}
+                                marginLeft={4}
+                                zIndex={SPEED_MARKETS_WIDGET_Z_INDEX}
+                            />
+                        )}
+                    </Button>
+                </>
             );
         }
 
@@ -834,6 +837,14 @@ const GasIcon = styled.i`
     line-height: 100%;
     color: ${(props) => props.theme.speedMarkets.button.textColor.active};
     margin-right: 2px;
+`;
+
+const InfoText = styled.span`
+    font-weight: 400;
+    font-size: 13px;
+    letter-spacing: 0.13px;
+    color: ${(props) => props.theme.speedMarkets.textColor.primary};
+    padding: 5px 10px;
 `;
 
 const GasText = styled.span<{ $isStrikeThrough?: boolean }>`

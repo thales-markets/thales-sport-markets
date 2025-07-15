@@ -106,6 +106,12 @@ const Container = styled(FlexDivColumn)`
     border-radius: 15px;
     z-index: ${SPEED_MARKETS_WIDGET_Z_INDEX};
     @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        width: 100%;
+        height: 100%;
+        right: 0;
+        bottom: 0;
+        border-radius: 0;
+        border: unset;
     }
 `;
 

@@ -4,9 +4,9 @@ import ClaimFreeBetModal from 'components/ClaimFreeBetModal';
 import MetaData from 'components/MetaData';
 import { generalConfig } from 'config/general';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { NAV_MENU_WIDTH, SPEED_MARKETS_WIDGET_DEFAULT_RIGHT } from 'constants/ui';
+import { NAV_MENU_WIDTH, SPEED_MARKETS_WIDGET_DEFAULT_RIGHT, SPEED_MARKETS_WIDGET_Z_INDEX } from 'constants/ui';
 import { Network } from 'enums/network';
-import { Theme } from 'enums/ui';
+import { ScreenSizeBreakpoint, Theme } from 'enums/ui';
 import useLocalStorage from 'hooks/useLocalStorage';
 import useWidgetBotScript from 'hooks/useWidgetBotScript';
 import SpeedMarketsWidget from 'pages/SpeedMarkets/components/SpeedMarketsWidget';
@@ -194,7 +194,7 @@ const Wrapper = styled(FlexDivColumn)`
     @media (max-width: 1499px) {
         padding: 10px 10px;
     }
-    @media (max-width: 767px) {
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         padding: 0px 3px;
     }
 `;
@@ -209,7 +209,15 @@ const SpeedMarketsButton = styled.div<{ isOpen: boolean }>`
     background-position: center;
     border-radius: 50%;
     cursor: pointer;
-    z-index: 100000;
+    z-index: ${SPEED_MARKETS_WIDGET_Z_INDEX};
+
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        width: 55px;
+        height: 55px;
+        right: -3px;
+        bottom: 117px;
+        background-size: 65px;
+    }
 
     animation: 0.3s ease 0s 1 normal none running load-animation;
     @keyframes load-animation {
