@@ -89,6 +89,7 @@ export const LEAGUES_SORT_PRIORITY = [
     League.NHL_FUTURES,
     League.MLB,
     League.MLB_FUTURES,
+    League.USA_MLB_ALL_STAR,
     League.EREDIVISIE,
     League.PRIMEIRA_LIGA,
     League.BELGIUM_LEAGUE,
