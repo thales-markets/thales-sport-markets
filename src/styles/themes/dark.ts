@@ -337,5 +337,6 @@ export default {
                 icon: { primary: Colors.MILD_MENTHOL },
             },
         },
+        shadow: { primary: Colors.THE_RAINBOW_FISH },
     },
 };

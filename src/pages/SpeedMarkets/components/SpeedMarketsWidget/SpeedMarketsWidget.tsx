@@ -104,6 +104,7 @@ const Container = styled(FlexDivColumn)`
     background: ${(props) => props.theme.speedMarkets.background.primary};
     border: 1px solid ${(props) => props.theme.speedMarkets.borderColor.primary};
     border-radius: 15px;
+    box-shadow: 0px -17px 10px 4px ${(props) => props.theme.speedMarkets.shadow.primary};
     z-index: ${SPEED_MARKETS_WIDGET_Z_INDEX};
     @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         width: 100%;

@@ -21,6 +21,7 @@ type ApprovalModalProps = {
     onSubmit: (approveAmount: bigint) => void;
     onClose: () => void;
     collateralArray?: Coins[];
+    customStyle?: ReactModal.Styles;
 };
 
 const ApprovalModal: React.FC<ApprovalModalProps> = ({
@@ -31,6 +32,7 @@ const ApprovalModal: React.FC<ApprovalModalProps> = ({
     onSubmit,
     onClose,
     collateralArray,
+    customStyle,
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -99,7 +101,7 @@ const ApprovalModal: React.FC<ApprovalModalProps> = ({
             title={t('common.enable-wallet-access.approve-label-text', { currencyKey: tokenSymbol })}
             onClose={onClose}
             shouldCloseOnOverlayClick={false}
-            customStyle={{ overlay: { zIndex: 2000 } }}
+            customStyle={{ overlay: { zIndex: customStyle?.overlay?.zIndex || 2000 } }}
         >
             <Container>
                 <CheckboxContainer>

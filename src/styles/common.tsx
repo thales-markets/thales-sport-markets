@@ -132,6 +132,7 @@ export const Colors = {
     MILD_MENTHOL: '#8AF6A8',
     VERMILION_CINNABAR: '#E14545',
     FRESH_LAVENDER: '#8B92B8',
+    THE_RAINBOW_FISH: '#101426e6',
 
     CHART_AREA_START: '#5ab5d966',
     CHART_AREA_END: '#5ab5d900',

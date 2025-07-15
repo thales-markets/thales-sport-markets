@@ -659,7 +659,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
         if (!hasAllowance) {
             return (
                 <>
-                    {isEth && isMobile && <InfoText>{t('speed-markets.tooltips.eth-to-weth')}</InfoText>}
+                    {isEth && isMobile && <ConversionInfo>{t('speed-markets.tooltips.eth-to-weth')}</ConversionInfo>}
                     <Button
                         disabled={isAllowing}
                         onClick={() => setOpenApprovalModal(true)}
@@ -808,6 +808,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
                     isAllowing={isAllowing}
                     onSubmit={handleAllowance}
                     onClose={() => setOpenApprovalModal(false)}
+                    customStyle={{ overlay: { zIndex: SPEED_MARKETS_WIDGET_Z_INDEX } }}
                 />
             )}
         </Container>
@@ -839,12 +840,12 @@ const GasIcon = styled.i`
     margin-right: 2px;
 `;
 
-const InfoText = styled.span`
+const ConversionInfo = styled.span`
     font-weight: 400;
-    font-size: 13px;
+    font-size: 12px;
     letter-spacing: 0.13px;
     color: ${(props) => props.theme.speedMarkets.textColor.primary};
-    padding: 5px 10px;
+    padding: 5px 0px;
 `;
 
 const GasText = styled.span<{ $isStrikeThrough?: boolean }>`
