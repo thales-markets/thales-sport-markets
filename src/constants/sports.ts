@@ -39,6 +39,7 @@ export const PLAYER_PROPS_MARKETS_PER_SPORT_MAP: Record<Sport, MarketType[]> = {
     [Sport.WATERPOLO]: [],
     [Sport.CRICKET]: [MarketType.PLAYER_PROPS_RUNS, MarketType.PLAYER_PROPS_FOURS, MarketType.PLAYER_PROPS_SIXES],
     [Sport.DARTS]: [],
+    [Sport.LACROSSE]: [],
     [Sport.MOTOSPORT]: [],
     [Sport.GOLF]: [],
     [Sport.POLITICS]: [],
