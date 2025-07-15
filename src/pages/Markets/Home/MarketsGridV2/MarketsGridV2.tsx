@@ -290,6 +290,7 @@ const groupBySortedMarketsKeys = (marketsKeys: number[], usePriority: boolean) =
         ...waterpoloKeys,
         ...cricketKeys,
         ...dartsKeys,
+        ...lacrosseKeys,
         ...motosportKeys,
         ...golfKeys,
         ...politicsKeys,
