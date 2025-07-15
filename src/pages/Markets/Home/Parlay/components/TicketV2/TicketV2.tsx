@@ -1721,6 +1721,7 @@ const Ticket: React.FC<TicketProps> = ({
                                 value: Number(buyInAmount),
                                 collateral: selectedCollateral,
                                 networkId,
+                                wallet: connector?.id || 'unknown',
                             },
                         }
                     );
@@ -1728,7 +1729,7 @@ const Ticket: React.FC<TicketProps> = ({
                     if (isInBinance() || (connector && connector.id === WalletConnections.BINANCE)) {
                         PLAUSIBLE.trackEvent(PLAUSIBLE_KEYS.binanceWalletBuy, {
                             props: {
-                                wallet: WalletConnections.BINANCE,
+                                wallet: connector?.id || 'unknown',
                                 address: walletAddress,
                                 eoaOT: `${address} - ${smartAddress}`,
                                 value: Number(buyInAmount),

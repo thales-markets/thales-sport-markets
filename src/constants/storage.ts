@@ -38,4 +38,5 @@ export const LOCAL_STORAGE_KEYS = {
     TERMS_AND_CONDITIONS: 'terms&Conditions',
     SHOW_ZERO_BALANCE: 'showZeroBalance',
     SPEED_PRICE_SLIPPAGE: 'speedPriceSlippage',
+    LAST_SELECTED_NETWORK: 'lastSelectedNetwork',
 };

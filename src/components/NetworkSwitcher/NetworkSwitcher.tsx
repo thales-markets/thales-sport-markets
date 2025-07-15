@@ -57,6 +57,7 @@ const NetworkSwitcher: React.FC<NetworkSwitcherProps> = ({ containerStyle, onCli
                                     onClick={async () => {
                                         setDropDownOpen(false);
                                         switchChain?.({ chainId: network.id as SupportedNetwork });
+                                        localStorage.setItem('lastSelectedNetwork', network.id.toString());
                                     }}
                                 >
                                     <NetworkIcon isConnected={true} className={network.iconClassName} />

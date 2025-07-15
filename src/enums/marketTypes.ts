@@ -60,4 +60,8 @@ export enum MarketTypeGroup {
     WINNING_PARTY_STATE = 'Winning party (states)',
     CORNERS = 'Corners',
     CARDS = 'Cards',
+    KILLS_PROPS = 'Kill props',
+    ASSISTS_PROPS = 'Assist props',
+    DEATHS_PROPS = 'Death props',
+    HEADSHOTS_PROPS = 'Headshot props',
 }

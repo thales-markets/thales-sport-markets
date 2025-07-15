@@ -30,6 +30,7 @@ export const Header = styled(FlexDivColumnCentered)<{
 }>`
     display: ${(props) => (props.hidden ? 'none' : 'flex')};
     position: ${(props) => (props.float ? 'absolute' : props.isSticky ? 'sticky' : 'relative')};
+    width: 100%;
     ${(props) => props.float && 'top: -35px; left: 50%; transform: translateX(-50%);'}
     ${(props) => props.isSticky && `top: 0; background: ${props.theme.background.quinary}; z-index: 1;`}
     ${(props) => (props.isMainPageView && !props.isColumnView ? '' : 'max-height: 25px;')}
