@@ -208,6 +208,7 @@ const PlayIcon = styled.i`
     font-size: 12px;
     line-height: 12px;
     margin-right: 5px;
+    margin-bottom: 2px;
 `;
 
 export default SpeedPositionCard;
