@@ -189,7 +189,7 @@ const SelectBuyin: React.FC<SelectBuyinProps> = ({
             ? Number(
                   truncToDecimals(
                       isBiconomy ? paymentTokenBalance * (1 - BICONOMY_MAX_FEE_PERCENTAGE) : paymentTokenBalance,
-                      isStableCurrency(selectedCollateral) ? 2 : 18
+                      isStableCurrency(selectedCollateral) ? DEFAULT_CURRENCY_DECIMALS : LONG_CURRENCY_DECIMALS
                   )
               )
             : Number.POSITIVE_INFINITY;
