@@ -156,7 +156,7 @@ const SpeedPositions: React.FC = () => {
                     );
                 })}
             </Filters>
-            {selectedFilter === PositionsFilter.CLAIMABLE && (
+            {selectedFilter === PositionsFilter.CLAIMABLE && !!positions.length && (
                 <ClaimAllRow>
                     <ClaimAllWrapper>
                         <ClaimAction
