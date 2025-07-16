@@ -212,6 +212,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                                         id,
                                         getErrorToastOptions(t('get-started.fund-account.verifying-account-error'))
                                     );
+                                    onClose();
                                 }
                             }}
                         >
@@ -323,7 +324,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                 )}
 
                 <Container>
-                    {networkId === Network.OptimismMainnet && !isSmartAccountDisabled && (
+                    {networkId === Network.OptimismMainnet && !isSmartAccountDisabled && !showVerificationButton && (
                         <Tooltip
                             customIconStyling={{ color: theme.textColor.secondary }}
                             overlay={t('get-started.fund-account.tooltip-universal')}
@@ -354,7 +355,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                             <Icon className="icon icon--card" />
                         </ButtonLocal>
                     </Tooltip>
-                    {!isSmartAccountDisabled && (
+                    {!isSmartAccountDisabled && !showVerificationButton && (
                         <Tooltip
                             customIconStyling={{ color: theme.textColor.secondary }}
                             overlay={t('get-started.fund-account.tooltip-4')}
