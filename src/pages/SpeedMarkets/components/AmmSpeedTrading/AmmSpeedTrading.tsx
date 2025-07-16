@@ -248,11 +248,13 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
         const totalFeeUp = getTotalFee(SpeedPositions.UP);
         const totalFeeDown = getTotalFee(SpeedPositions.DOWN);
 
+        const bonusPerCollateral = ammSpeedMarketsLimits?.bonusPerCollateral[selectedCollateral] || 0;
+        const payoutWithBonus = SPEED_MARKETS_QUOTE * (1 + bonusPerCollateral);
         return {
-            [SpeedPositions.UP]: totalFeeUp ? SPEED_MARKETS_QUOTE / (1 + totalFeeUp) : 0,
-            [SpeedPositions.DOWN]: totalFeeDown ? SPEED_MARKETS_QUOTE / (1 + totalFeeDown) : 0,
+            [SpeedPositions.UP]: totalFeeUp ? payoutWithBonus / (1 + totalFeeUp) : 0,
+            [SpeedPositions.DOWN]: totalFeeDown ? payoutWithBonus / (1 + totalFeeDown) : 0,
         };
-    }, [getTotalFee]);
+    }, [getTotalFee, selectedCollateral, ammSpeedMarketsLimits]);
 
     // Used for canceling asynchronous tasks
     const mountedRef = useRef(true);
