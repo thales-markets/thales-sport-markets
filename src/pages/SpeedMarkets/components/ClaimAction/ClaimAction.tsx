@@ -259,10 +259,10 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
 
             const isEth = collateralAddress === ZERO_ADDRESS;
 
-            const speedMarketsAMMContractWithSigner = getContractInstance(ContractType.SPEED_MARKETS_AMM, {
-                networkId,
-                client: walletClient.data,
-            }) as ViemContract;
+            const speedMarketsAMMResolverContractWithSigner = getContractInstance(
+                ContractType.SPEED_MARKETS_AMM_RESOLVER,
+                { networkId, client: walletClient.data }
+            ) as ViemContract;
 
             let hash;
             if (isBiconomy) {
@@ -270,14 +270,14 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
                     ? await executeBiconomyTransaction({
                           collateralAddress,
                           networkId,
-                          contract: speedMarketsAMMContractWithSigner,
+                          contract: speedMarketsAMMResolverContractWithSigner,
                           methodName: 'resolveMarket',
                           data: [position.market, priceUpdateData],
                       })
                     : await executeBiconomyTransaction({
                           collateralAddress,
                           networkId,
-                          contract: speedMarketsAMMContractWithSigner,
+                          contract: speedMarketsAMMResolverContractWithSigner,
                           methodName: 'resolveMarketWithOfframp',
                           data: [position.market, priceUpdateData, collateralAddress, isEth],
                           value: undefined,
@@ -285,10 +285,13 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
                       });
             } else {
                 hash = isDefaultCollateral
-                    ? await speedMarketsAMMContractWithSigner.write.resolveMarket([position.market, priceUpdateData], {
-                          value: updateFee,
-                      })
-                    : await speedMarketsAMMContractWithSigner.write.resolveMarketWithOfframp(
+                    ? await speedMarketsAMMResolverContractWithSigner.write.resolveMarket(
+                          [position.market, priceUpdateData],
+                          {
+                              value: updateFee,
+                          }
+                      )
+                    : await speedMarketsAMMResolverContractWithSigner.write.resolveMarketWithOfframp(
                           [position.market, priceUpdateData, collateralAddress, isEth],
                           { value: updateFee }
                       );

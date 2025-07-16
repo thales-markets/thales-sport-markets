@@ -27,6 +27,7 @@ import resolveBlockerContract from './contracts/resolveBlockerContract';
 import speedMarketsAMMContract from './contracts/speedMarkets/speedMarketsAMMContract';
 import speedMarketsAMMCreatorContract from './contracts/speedMarkets/speedMarketsAMMCreatorContract';
 import speedMarketsDataContract from './contracts/speedMarkets/speedMarketsAMMDataContract';
+import speedMarketsAMMResolverContract from './contracts/speedMarkets/speedMarketsAMMResolverContract';
 import thalesContract from './contracts/thalesContract';
 import thalesToOverMigrationContract from './contracts/thalesToOverMigrationContract';
 
@@ -137,6 +138,8 @@ export const getContractInstance = (
             return getContractWithModifiedResponse(speedMarketsAMMCreatorContract, networkConfig);
         case ContractType.SPEED_MARKETS_AMM:
             return getContractWithModifiedResponse(speedMarketsAMMContract, networkConfig);
+        case ContractType.SPEED_MARKETS_AMM_RESOLVER:
+            return getContractWithModifiedResponse(speedMarketsAMMResolverContract, networkConfig);
         default:
             return undefined;
     }

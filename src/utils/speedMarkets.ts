@@ -155,7 +155,7 @@ export const resolveAllSpeedPositions = async (
 
     const id = toast.loading(i18n.t('speed-markets.progress'));
 
-    const speedMarketsAMMContractWithSigner = getContractInstance(ContractType.SPEED_MARKETS_AMM, {
+    const speedMarketsAMMResolverContractWithSigner = getContractInstance(ContractType.SPEED_MARKETS_AMM_RESOLVER, {
         networkId: networkConfig.networkId,
         client: networkConfig.client,
     }) as ViemContract;
@@ -206,7 +206,7 @@ export const resolveAllSpeedPositions = async (
                     ? await executeBiconomyTransaction({
                           collateralAddress: collateralAddress as Address,
                           networkId: networkConfig.networkId,
-                          contract: speedMarketsAMMContractWithSigner,
+                          contract: speedMarketsAMMResolverContractWithSigner,
                           methodName: 'resolveMarketManuallyBatch',
                           data: [marketsToResolve, manualFinalPrices],
                       })
@@ -214,29 +214,29 @@ export const resolveAllSpeedPositions = async (
                     ? await executeBiconomyTransaction({
                           collateralAddress: collateralAddress as Address,
                           networkId: networkConfig.networkId,
-                          contract: speedMarketsAMMContractWithSigner,
+                          contract: speedMarketsAMMResolverContractWithSigner,
                           methodName: 'resolveMarketsBatch',
                           data: [marketsToResolve, priceUpdateDataArray],
                       })
                     : await executeBiconomyTransaction({
                           collateralAddress: collateralAddress as Address,
                           networkId: networkConfig.networkId,
-                          contract: speedMarketsAMMContractWithSigner,
+                          contract: speedMarketsAMMResolverContractWithSigner,
                           methodName: 'resolveMarketsBatchOffRamp',
                           data: [marketsToResolve, priceUpdateDataArray, collateralAddress, isEth],
                       });
             } else {
                 hash = isAdmin
-                    ? await speedMarketsAMMContractWithSigner.write.resolveMarketManuallyBatch([
+                    ? await speedMarketsAMMResolverContractWithSigner.write.resolveMarketManuallyBatch([
                           marketsToResolve,
                           manualFinalPrices,
                       ])
                     : isDefaultCollateral
-                    ? await speedMarketsAMMContractWithSigner.write.resolveMarketsBatch(
+                    ? await speedMarketsAMMResolverContractWithSigner.write.resolveMarketsBatch(
                           [marketsToResolve, priceUpdateDataArray],
                           { value: totalUpdateFee }
                       )
-                    : await speedMarketsAMMContractWithSigner.write.resolveMarketsBatchOffRamp(
+                    : await speedMarketsAMMResolverContractWithSigner.write.resolveMarketsBatchOffRamp(
                           [marketsToResolve, priceUpdateDataArray, collateralAddress, isEth],
                           { value: totalUpdateFee }
                       );
