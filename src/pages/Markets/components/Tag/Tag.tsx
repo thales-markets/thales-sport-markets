@@ -163,72 +163,78 @@ const Tag: React.FC<TagProps> = ({
                 />
             </TagContainer>
             {isOpen &&
-                tournaments.map((tournament) => {
-                    const tournamentCountry = getCountryFromTournament(tournament.name, tag.id);
+                tournaments
+                    .filter((tournament) => {
+                        return !!(isPlayerPropsTag
+                            ? playerPropsCountPerTournament[`${tag.id}-${tournament.name}`]
+                            : marketsCountPerTournament[`${tag.id}-${tournament.name}`]);
+                    })
+                    .map((tournament) => {
+                        const tournamentCountry = getCountryFromTournament(tournament.name, tag.id);
 
-                    return (
-                        <TagContainer key={tournament.name} isMobile={isMobile}>
-                            <LeftContainer>
-                                <TournamentLabelContainer
-                                    className={`${
-                                        tournamentFilter.includes(tournament.name) &&
-                                        tagFilterIds.includes(tournament.leagueId)
-                                            ? 'selected'
-                                            : ''
-                                    }`}
-                                    onClick={() => {
-                                        if (sportFilter !== sport) {
-                                            dispatch(setSportFilter(sport));
-                                            setSportParam(sport);
-                                            setTagFilter([tag]);
-                                            setTagParam([tag].map((tagInfo) => tagInfo.label).toString());
-                                            dispatch(setTournamentFilter([tournament.name]));
-                                            setTournamentParam(tournament.name);
-                                        } else {
-                                            if (!tagFilterIds.includes(tag.id)) {
+                        return (
+                            <TagContainer key={tournament.name} isMobile={isMobile}>
+                                <LeftContainer>
+                                    <TournamentLabelContainer
+                                        className={`${
+                                            tournamentFilter.includes(tournament.name) &&
+                                            tagFilterIds.includes(tournament.leagueId)
+                                                ? 'selected'
+                                                : ''
+                                        }`}
+                                        onClick={() => {
+                                            if (sportFilter !== sport) {
+                                                dispatch(setSportFilter(sport));
+                                                setSportParam(sport);
                                                 setTagFilter([tag]);
                                                 setTagParam([tag].map((tagInfo) => tagInfo.label).toString());
                                                 dispatch(setTournamentFilter([tournament.name]));
                                                 setTournamentParam(tournament.name);
                                             } else {
-                                                if (tournamentFilter.includes(tournament.name)) {
-                                                    const newTournamentFilters = tournamentFilter.filter(
-                                                        (filter) => filter != tournament.name
-                                                    );
-                                                    dispatch(setTournamentFilter(newTournamentFilters));
-                                                    const newTournamentParam = newTournamentFilters.join(';');
-                                                    setTournamentParam(newTournamentParam);
-                                                } else {
+                                                if (!tagFilterIds.includes(tag.id)) {
                                                     setTagFilter([tag]);
                                                     setTagParam([tag].map((tagInfo) => tagInfo.label).toString());
-                                                    dispatch(
-                                                        setTournamentFilter([...tournamentFilter, tournament.name])
-                                                    );
-                                                    setTournamentParam(
-                                                        [...tournamentFilter, tournament.name].join(';')
-                                                    );
+                                                    dispatch(setTournamentFilter([tournament.name]));
+                                                    setTournamentParam(tournament.name);
+                                                } else {
+                                                    if (tournamentFilter.includes(tournament.name)) {
+                                                        const newTournamentFilters = tournamentFilter.filter(
+                                                            (filter) => filter != tournament.name
+                                                        );
+                                                        dispatch(setTournamentFilter(newTournamentFilters));
+                                                        const newTournamentParam = newTournamentFilters.join(';');
+                                                        setTournamentParam(newTournamentParam);
+                                                    } else {
+                                                        setTagFilter([tag]);
+                                                        setTagParam([tag].map((tagInfo) => tagInfo.label).toString());
+                                                        dispatch(
+                                                            setTournamentFilter([...tournamentFilter, tournament.name])
+                                                        );
+                                                        setTournamentParam(
+                                                            [...tournamentFilter, tournament.name].join(';')
+                                                        );
+                                                    }
                                                 }
                                             }
-                                        }
 
-                                        scrollMainToTop();
-                                    }}
-                                >
-                                    <LeagueFlag
-                                        alt={tournamentCountry}
-                                        src={getLeagueFlagSource(tag.id, tournamentCountry)}
-                                    />
-                                    <Label isMobile={isMobile}>{tournament.name}</Label>
-                                </TournamentLabelContainer>
-                            </LeftContainer>
-                            <TournamentCount isMobile={isMobile}>
-                                {isPlayerPropsTag
-                                    ? playerPropsCountPerTournament[`${tag.id}-${tournament.name}`]
-                                    : marketsCountPerTournament[`${tag.id}-${tournament.name}`]}
-                            </TournamentCount>
-                        </TagContainer>
-                    );
-                })}
+                                            scrollMainToTop();
+                                        }}
+                                    >
+                                        <LeagueFlag
+                                            alt={tournamentCountry}
+                                            src={getLeagueFlagSource(tag.id, tournamentCountry)}
+                                        />
+                                        <Label isMobile={isMobile}>{tournament.name}</Label>
+                                    </TournamentLabelContainer>
+                                </LeftContainer>
+                                <TournamentCount isMobile={isMobile}>
+                                    {isPlayerPropsTag
+                                        ? playerPropsCountPerTournament[`${tag.id}-${tournament.name}`]
+                                        : marketsCountPerTournament[`${tag.id}-${tournament.name}`]}
+                                </TournamentCount>
+                            </TagContainer>
+                        );
+                    })}
         </>
     );
 };
