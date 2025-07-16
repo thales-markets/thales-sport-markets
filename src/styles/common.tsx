@@ -49,11 +49,6 @@ export const FlexDivColumnStart = styled(FlexDivColumn)`
     align-items: flex-start;
 `;
 
-export const FlexDivColumnEnd = styled(FlexDivColumn)`
-    justify-content: center;
-    align-items: flex-end;
-`;
-
 export const BoldContent = styled.span`
     font-weight: 600;
 `;
