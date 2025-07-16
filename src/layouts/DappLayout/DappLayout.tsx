@@ -4,7 +4,7 @@ import ClaimFreeBetModal from 'components/ClaimFreeBetModal';
 import MetaData from 'components/MetaData';
 import { generalConfig } from 'config/general';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { NAV_MENU_WIDTH, SPEED_MARKETS_WIDGET_DEFAULT_RIGHT, SPEED_MARKETS_WIDGET_Z_INDEX } from 'constants/ui';
+import { NAV_MENU_WIDTH, SPEED_MARKETS_WIDGET_DEFAULT_RIGHT } from 'constants/ui';
 import { Network } from 'enums/network';
 import { ScreenSizeBreakpoint, Theme } from 'enums/ui';
 import useLocalStorage from 'hooks/useLocalStorage';
@@ -209,7 +209,7 @@ const SpeedMarketsButton = styled.div<{ isOpen: boolean }>`
     background-position: center;
     border-radius: 50%;
     cursor: pointer;
-    z-index: ${SPEED_MARKETS_WIDGET_Z_INDEX};
+    z-index: 100000;
 
     @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         width: 55px;

@@ -133,11 +133,16 @@ const useAmmSpeedMarketsLimitsQuery = (
                     networkConfig
                 ) as ViemContract;
 
-                // For now get bonus only for OVER, later it can be moved to Data contract to get for array of collaterals
+                // For now get bonus only for OVER/THALES, later it can be moved to Data contract to get for array of collaterals
                 const overAddress = multipleCollateral.OVER.addresses[networkConfig.networkId];
                 if (overAddress !== TBD_ADDRESS) {
                     const overBonus = await speedMarketsAmmContract.read.bonusPerCollateral([overAddress]);
                     ammSpeedMarketsLimits.bonusPerCollateral.OVER = bigNumberFormatter(overBonus);
+                }
+                const thalesAddress = multipleCollateral.THALES.addresses[networkConfig.networkId];
+                if (thalesAddress !== TBD_ADDRESS) {
+                    const thalesBonus = await speedMarketsAmmContract.read.bonusPerCollateral([thalesAddress]);
+                    ammSpeedMarketsLimits.bonusPerCollateral.THALES = bigNumberFormatter(thalesBonus);
                 }
             } catch (e) {
                 console.log(e);
