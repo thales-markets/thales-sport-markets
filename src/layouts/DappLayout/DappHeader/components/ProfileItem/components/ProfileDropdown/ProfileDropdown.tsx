@@ -10,7 +10,7 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getIsBiconomy, setWalletConnectModalVisibility } from 'redux/modules/wallet';
+import { getIsBiconomy, getIsSmartAccountDisabled, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumnStart } from 'styles/common';
 import { formatCurrencyWithSign, truncateAddress } from 'thales-utils';
@@ -35,7 +35,7 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({
     const dispatch = useDispatch();
     const { t } = useTranslation();
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
-
+    const isSmartAccountDisabled = useSelector(getIsSmartAccountDisabled);
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
@@ -99,20 +99,22 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({
                     <Button onClick={() => setShowDepositModal(true)}>deposit</Button>
                 </FlexDivCentered>
             </BalanceWrapper>
-            <Wrapper>
-                <Container>
-                    <WalletIcon active={isBiconomy} className="icon icon--wallet-connected" />
-                    <Text active={isBiconomy}>{t('profile.dropdown.account')}</Text>
-                </Container>
-                <Container
-                    onClick={() => {
-                        handleCopy(smartAddress);
-                    }}
-                >
-                    <Address active={isBiconomy}>{truncateAddress(smartAddress, 6, 4)}</Address>
-                    <CopyIcon active={isBiconomy} className="icon icon--copy" />
-                </Container>
-            </Wrapper>
+            {!isSmartAccountDisabled && (
+                <Wrapper>
+                    <Container>
+                        <WalletIcon active={isBiconomy} className="icon icon--wallet-connected" />
+                        <Text active={isBiconomy}>{t('profile.dropdown.account')}</Text>
+                    </Container>
+                    <Container
+                        onClick={() => {
+                            handleCopy(smartAddress);
+                        }}
+                    >
+                        <Address active={isBiconomy}>{truncateAddress(smartAddress, 6, 4)}</Address>
+                        <CopyIcon active={isBiconomy} className="icon icon--copy" />
+                    </Container>
+                </Wrapper>
+            )}
 
             <Wrapper>
                 <Container>
