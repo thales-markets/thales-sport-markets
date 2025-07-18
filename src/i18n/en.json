@@ -290,6 +290,7 @@
                 "waterpolo": "Water polo",
                 "cricket": "Cricket",
                 "darts": "Darts",
+                "lacrosse": "Lacrosse",
                 "boxing": "Boxing",
                 "golf": "Golf",
                 "soon": "More sports coming soon!",
@@ -353,7 +354,8 @@
             "account": "Overtime Account",
             "eoa": "EOA Wallet",
             "logout": "Log Out",
-            "profile": "Account"
+            "profile": "Account",
+            "smart-account-disabled": "Overtime Account cannot be used with a smart wallet."
         },
         "account-summary": {
             "title": "Account Summary",
@@ -1203,7 +1205,11 @@
             "qr": "QR",
             "wait-deposit": "Waiting for deposit...",
             "claim-free-bet": "Claim a {{amount}} Free Bet.",
-            "universal-deposit": "Universal deposit"
+            "universal-deposit": "Universal deposit",
+            "verify-account": "Verify your account",
+            "verifying-account": "Verifying your account",
+            "verifying-account-success": "Your account is verified",
+            "verifying-account-error": "Smart wallets are not compatible with Overtime Account. Switching to EOA wallet"
         },
         "withdraw": {
             "title": "Withdraw from <icon/> account",
@@ -1398,6 +1404,8 @@
         "no-promotions": "Oops! It looks like there are no promotions available at the moment for given filter."
     },
     "overdrop": {
+        "season-2": "Season 2",
+        "new-season": " starts soon • Stay tuned for new rewards!",
         "navigation-menu": {
             "home": "Overdrop home",
             "xp-calculation": "XP Details",
@@ -1420,7 +1428,15 @@
             "current-rewards": "Current estimated rewards",
             "next-over-rewards-at": "Next OVER free bet rewards at",
             "rank": "Rank",
-            "disclaimer": "*Wallets suspected of gaming the system can be disqualified."
+            "disclaimer": "*Wallets suspected of gaming the system can be disqualified.",
+            "claim-rewards": "Claim {{collateral}}",
+            "claim-disclaimer": "Switch to the Optimism/Arbitrum network to claim OP/ARB rewards.",
+            "claim-confirmation-message": "{{collateral}} rewards successfully claimed",
+            "claimed-message": "You already claimed {{collateral}} rewards.",
+            "your-rewards": "Your rewards",
+            "switch-to-eoa": "Switch to EOA to claim",
+            "claim-rewards-tooltip": "You can claim your rewards only with an EOA wallet. Please switch to EOA to claim your rewards.",
+            "total-value": "Total value"
         },
         "leveling-tree": {
             "heading": "The overdrop farming league",
@@ -1550,112 +1566,140 @@
                 "next-reward": "Next Reward",
                 "next-level-progress": "Next Level Progress"
             }
-      },
-      "how-it-works": {
-        "title": "How the Affiliate Program Works",
-        "step1": {
-          "title": "Create Your Affiliate ID",
-          "description": "Generate your unique affiliate link to share with potential new Overtime users."
         },
-        "step2": {
-          "title": "Share Your Link",
-          "description": "Each new user that signs up using your link becomes connected to your account."
+        "how-it-works": {
+            "title": "How the Affiliate Program Works",
+            "step1": {
+                "title": "Create Your Affiliate ID",
+                "description": "Generate your unique affiliate link to share with potential new Overtime users."
+            },
+            "step2": {
+                "title": "Share Your Link",
+                "description": "Each new user that signs up using your link becomes connected to your account."
+            },
+            "step3": {
+                "title": "Earn XP Rewards",
+                "description": "Receive 20% of the XP that your referred users earn from their bets. The more they bet, the more you earn!"
+            }
         },
-        "step3": {
-          "title": "Earn XP Rewards",
-          "description": "Receive 20% of the XP that your referred users earn from their bets. The more they bet, the more you earn!"
-        }
-      },
-      "tabs": {
-          "affiliate": "Affiliate Leaderboard",
-          "summary": "Referred Users Leaderboard",
-          "activity": "Referred Bets"
-     },
-      "leaderboard": {
-        "time-filter": "This Month",
-        "your-position": "Your rank",
-        "progress-to-next": "Progress to next rank",
-        "table-headers": {
-          "rank": "Rank",
-          "user": "Affiliate ID",
-          "total-bets": "Referred bets",
-          "referrals": "Referred Users",
-          "betVolume": "Referred Volume",
-          "xp": "Affiliate XP Earned",
-          "level": "Overdrop XP Level"
+        "tabs": {
+            "affiliate": "Affiliate Leaderboard",
+            "summary": "Referred Users Leaderboard",
+            "activity": "Referred Bets"
         },
-        "updated": "Updated 3 minutes ago"
-      },
-      "activity": {
-        "table-headers": {
-          "user": "Referred User",
-          "date-joined": "Date Joined",
-          "total-bets": "Total Bets",
-          "bet-volume": "Bet Volume",
-          "xp-generated": "User XP",
-          "xp-earned": "Affiliate XP"
-        }
-      },
-      "bets": {
-        "table-headers": {
-          "user": "Referred User",
-          "timestamp": "Timestamp",
-          "scan-link": "Tx Link",
-          "value": "Bet Value",
-          "xp-generated": "User XP",
-          "xp-earned": "Affiliate XP"
-        }
-      },
-      "rewards": {
-        "title": "Referral Rewards",
-        "silver": {
-          "name": "Silver Affiliate",
-          "requirement": "Refer 10 active users",
-          "progress": "8/10"
+        "leaderboard": {
+            "time-filter": "This Month",
+            "your-position": "Your rank",
+            "progress-to-next": "Progress to next rank",
+            "table-headers": {
+                "rank": "Rank",
+                "user": "Affiliate ID",
+                "total-bets": "Referred bets",
+                "referrals": "Referred Users",
+                "betVolume": "Referred Volume",
+                "xp": "Affiliate XP Earned",
+                "level": "Overdrop XP Level"
+            },
+            "updated": "Updated 3 minutes ago"
         },
-        "gold": {
-          "name": "Gold Affiliate",
-          "requirement": "Earn 5,000 XP from referrals",
-          "progress": "920/5,000"
-        }
-      },
-      "missions": {
-        "title": "Affiliate Missions",
-        "weekend-warrior": {
-          "name": "Weekend Warrior",
-          "reward": "+100 XP",
-          "requirement": "Refer 3 users who place bets this weekend",
-          "progress": "1/3"
+        "activity": {
+            "table-headers": {
+                "user": "Referred User",
+                "date-joined": "Date Joined",
+                "total-bets": "Total Bets",
+                "bet-volume": "Bet Volume",
+                "xp-generated": "User XP",
+                "xp-earned": "Affiliate XP"
+            }
         },
-        "big-spender": {
-          "name": "Big Spender",
-          "reward": "+250 XP",
-          "requirement": "Refer a user who places a bet of $500 or more"
+        "bets": {
+            "table-headers": {
+                "user": "Referred User",
+                "timestamp": "Timestamp",
+                "scan-link": "Tx Link",
+                "value": "Bet Value",
+                "xp-generated": "User XP",
+                "xp-earned": "Affiliate XP"
+            }
+        },
+        "rewards": {
+            "title": "Referral Rewards",
+            "silver": {
+                "name": "Silver Affiliate",
+                "requirement": "Refer 10 active users",
+                "progress": "8/10"
+            },
+            "gold": {
+                "name": "Gold Affiliate",
+                "requirement": "Earn 5,000 XP from referrals",
+                "progress": "920/5,000"
+            }
+        },
+        "missions": {
+            "title": "Affiliate Missions",
+            "weekend-warrior": {
+                "name": "Weekend Warrior",
+                "reward": "+100 XP",
+                "requirement": "Refer 3 users who place bets this weekend",
+                "progress": "1/3"
+            },
+            "big-spender": {
+                "name": "Big Spender",
+                "reward": "+250 XP",
+                "requirement": "Refer a user who places a bet of $500 or more"
+            }
+        },
+        "faq": {
+            "title": "Frequently Asked Questions",
+            "subtitle": "Everything you need to know about the Overtime Affiliate Program. If you cant find the answer to your question, please contact our support team.",
+            "questions": [
+                "How does the Overtime Affiliate Program work?",
+                "How do I earn XP rewards and what are they worth?",
+                "Is there a limit to how many users I can refer?",
+                "How can I track my referrals and earnings?",
+                "Are there any restrictions on how I can promote my affiliate link?",
+                "How is the affiliate leaderboard ranking determined?",
+                "What are Affiliate Missions and how do they work?",
+                "Can I have multiple affiliate accounts?"
+            ],
+            "answers": [
+                "",
+                "",
+                "There is no limit to the number of users you can refer to Overtime. You can refer as many users as you want and earn rewards from all of their activity.\nHowever, we do monitor affiliate accounts for suspicious activity or violations of our terms of service. All referrals must be genuine users who are independently interested in using our platform.\nThe most successful affiliates typically have:\nA strong online presence or community\nAuthentic engagement with their audience\nValuable content related to crypto, betting, or trading\nA clear and honest communication style about the platform\nFocus on quality referrals who are likely to be active on the platform, as this will maximize your long-term rewards.",
+                "",
+                "",
+                "",
+                "",
+                ""
+            ]
         }
-      },
-      "faq": {
-        "title": "Frequently Asked Questions",
-        "subtitle": "Everything you need to know about the Overtime Affiliate Program. If you cant find the answer to your question, please contact our support team.",
-        "questions": [
-          "How does the Overtime Affiliate Program work?",
-          "How do I earn XP rewards and what are they worth?",
-          "Is there a limit to how many users I can refer?",
-          "How can I track my referrals and earnings?",
-          "Are there any restrictions on how I can promote my affiliate link?",
-          "How is the affiliate leaderboard ranking determined?",
-          "What are Affiliate Missions and how do they work?",
-          "Can I have multiple affiliate accounts?"
-        ],
-        "answers": [
-          "",
-          "",
-          "There is no limit to the number of users you can refer to Overtime. You can refer as many users as you want and earn rewards from all of their activity.\nHowever, we do monitor affiliate accounts for suspicious activity or violations of our terms of service. All referrals must be genuine users who are independently interested in using our platform.\nThe most successful affiliates typically have:\nA strong online presence or community\nAuthentic engagement with their audience\nValuable content related to crypto, betting, or trading\nA clear and honest communication style about the platform\nFocus on quality referrals who are likely to be active on the platform, as this will maximize your long-term rewards.",
-          "",
-          "",
-          "",
-          "",
-          ""
-        ]
-      }
+    },
+    "governance": {
+        "proposal": {
+            "modal-title": "Elections for Overtime Council",
+            "status-label": "Status",
+            "author-label": "Author",
+            "proposal-label": "Proposal",
+            "voting-system-label": "Voting system",
+            "start-date-label": "Start date",
+            "end-date-label": "End date",
+            "snapshot-label": "Snapshot",
+            "details-label": "Details",
+            "description": "For more details about the elections, candidates, and results, visit the <a>Overtime DAO website</a>.",
+            "starts-in-label": "Starts in",
+            "ends-in-label": "Time left",
+            "vote-label": "Vote",
+            "submit-vote-label": "Submit your vote",
+            "voting-power-label": "Your voting power",
+            "vote-progress-label": "Voting in progress...",
+            "vote-confirmation-message": "Successfully voted",
+            "your-votes": "Your votes:",
+            "vote-confirmation": "Are you sure you want to vote",
+            "details": "Proposal details",
+            "type": {
+                "single-choice": "Single choice voting",
+                "weighted": "Weighted voting"
+            }
+        }
     }
 }

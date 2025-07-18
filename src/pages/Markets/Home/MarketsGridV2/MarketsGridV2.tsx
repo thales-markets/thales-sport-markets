@@ -182,6 +182,7 @@ const groupBySortedMarketsKeys = (marketsKeys: number[], usePriority: boolean) =
     const waterpoloKeys: number[] = [];
     const cricketKeys: number[] = [];
     const dartsKeys: number[] = [];
+    const lacrosseKeys: number[] = [];
     const motosportKeys: number[] = [];
     const golfKeys: number[] = [];
     const politicsKeys: number[] = [];
@@ -247,6 +248,9 @@ const groupBySortedMarketsKeys = (marketsKeys: number[], usePriority: boolean) =
             if (leagueSport === Sport.DARTS) {
                 dartsKeys.push(tag);
             }
+            if (leagueSport === Sport.LACROSSE) {
+                lacrosseKeys.push(tag);
+            }
             if (leagueSport === Sport.FIGHTING) {
                 fightingKeys.push(tag);
             }
@@ -286,6 +290,7 @@ const groupBySortedMarketsKeys = (marketsKeys: number[], usePriority: boolean) =
         ...waterpoloKeys,
         ...cricketKeys,
         ...dartsKeys,
+        ...lacrosseKeys,
         ...motosportKeys,
         ...golfKeys,
         ...politicsKeys,

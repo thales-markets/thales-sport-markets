@@ -40,6 +40,8 @@ export const getTeamImageSource = (team: string, league: League) => {
         ? `/logos/Primeira Liga/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.BRAZIL_CUP
         ? `/logos/Brazil-Serie-A/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : league == League.NBA_SUMMER_LEAGUE
+        ? `/logos/NBA/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.US_ELECTION
         ? `/logos/Countries/united-states-of-america.svg`
         : league == League.NFL_FUTURES
@@ -94,6 +96,7 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.NFL:
         case League.MLB:
         case League.NBA:
+        case League.NBA_SUMMER_LEAGUE:
         case League.NCAAB:
         case League.NHL:
         case League.WNBA:
@@ -110,6 +113,9 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.USA_MAJOR_LEAGUE_CRICKET:
         case League.MLB_FUTURES:
         case League.USA_OPEN_CUP:
+        case League.USA_MLB_ALL_STAR:
+        case League.USA_NATIONAL_LACROSSE_LEAGUE:
+        case League.USA_PREMIER_LACROSSE_LEAGUE:
         case League.UFL:
             return `/logos/Countries/united-states-of-america.svg`;
         case League.EPL:
@@ -330,10 +336,12 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.FIBA_EUROBASKET_QUALIFIERS:
             return `/logos/Countries/eurobasket.png`;
         case League.FIBA_AMERICUP_QUALIFIERS:
+        case League.FIBA_AMERICUP_WOMEN:
             return `/logos/Countries/americup.png`;
         case League.FIBA_ASIA_CUP_QUALIFIERS:
             return `/logos/Countries/asia-cup.png`;
         case League.FIBA_WORLD_CUP_QUALIFIERS:
+        case League.FIBA_WORLD_CUP_U19:
             return `/logos/Countries/fiba-world-cup.png`;
         case League.FIBA_AFRO_BASKET_QUALIFIERS:
             return `/logos/Countries/afrobasket.jpg`;
@@ -361,12 +369,18 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
             return `/logos/Countries/valorant.png`;
         case League.STARCRAFT:
             return `/logos/Countries/starcraft.png`;
+        case League.STARCRAFT_2:
+            return `/logos/Countries/starcraft.png`;
         case League.ROCKET_LEAGUE:
             return `/logos/Countries/rocket-league.png`;
         case League.CALL_OF_DUTY:
             return `/logos/Countries/call-of-duty.png`;
         case League.OVERWATCH:
             return `/logos/Countries/overwatch.webp`;
+        case League.RAINBOW_SIX_SIEGE:
+            return `/logos/Countries/rainbow-six-siege.png`;
+        case League.MOBILE_LEGENDS:
+            return `/logos/Countries/mobile-legends.png`;
         case League.FORMULA1_FUTURES:
             return `/logos/leagueLogos/f1.webp`;
         case League.PGA_FUTURES:

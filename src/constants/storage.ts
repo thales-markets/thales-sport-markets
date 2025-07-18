@@ -37,4 +37,7 @@ export const LOCAL_STORAGE_KEYS = {
     FREE_BET_ID: 'freeBetId',
     TERMS_AND_CONDITIONS: 'terms&Conditions',
     SHOW_ZERO_BALANCE: 'showZeroBalance',
+    LAST_SELECTED_NETWORK: 'lastSelectedNetwork',
+    VERIFIED_OVERTIME_ACCOUNTS: 'verifiedOvertimeAccount',
+    INVALID_OVERTIME_ACCOUNTS: 'invalidOvertimeAccount',
 };

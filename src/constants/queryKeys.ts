@@ -1,3 +1,4 @@
+import { SpaceKey } from 'enums/governance';
 import { StatusFilter } from 'enums/markets';
 import { Network } from 'enums/network';
 import { RiskManagementRole } from 'enums/riskManagement';
@@ -43,29 +44,14 @@ const QUERY_KEYS = {
     TicketLiquidity: (
         networkId: Network,
         isSystemBet: boolean,
-        systemBetDenominator: number,
         isSgp: boolean,
-        sgpQuote: number,
         gameIds: string,
         typeIds: string,
         playerIds: string,
         lines: string,
         positions: string,
         lives: string
-    ) => [
-        'ticketLiquidity',
-        networkId,
-        isSystemBet,
-        systemBetDenominator,
-        isSgp,
-        sgpQuote,
-        gameIds,
-        typeIds,
-        playerIds,
-        lines,
-        positions,
-        lives,
-    ],
+    ) => ['ticketLiquidity', networkId, isSystemBet, isSgp, gameIds, typeIds, playerIds, lines, positions, lives],
     LiveTradingProcessor: (networkId: Network) => ['liveTradingProcessor', networkId],
     LiveTradingProcessorData: (networkId: Network, walletAddress: string) => [
         'liveTradingProcessorData',
@@ -196,6 +182,7 @@ const QUERY_KEYS = {
         AffiliateLeaderboard: () => ['affiliateLeaderboard'],
         AffiliateActivity: (walletAddress: string) => ['affiliateActivity', walletAddress],
         AffiliateSummary: (walletAddress: string) => ['affiliateActivity', walletAddress],
+        UserRewards: (networkId: Network, walletAddress: string) => ['userRewards', networkId, walletAddress],
     },
     FreeBet: (freeBetId: string, networkId: Network) => ['freeBet', freeBetId, networkId],
     IsWhitelistedForFreeBets: (walletAddress: string, networkId: Network) => [
@@ -219,6 +206,22 @@ const QUERY_KEYS = {
     Referrers: (networkId: Network) => ['referrers', networkId],
     ReferredTraders: (walletAddress: string, networkId: Network) => ['referredTraders', walletAddress, networkId],
     ReferralOverview: (walletAddress: string, networkId: Network) => ['referralOverview', walletAddress, networkId],
+    Governance: {
+        Proposal: (spaceKey: SpaceKey, hash: string, walletAddress: string) => [
+            'governance',
+            'proposal',
+            spaceKey,
+            hash,
+            walletAddress,
+        ],
+        VotingPower: (proposalId: string, snapshot: string, walletAddress: string) => [
+            'governance',
+            'votingPower',
+            proposalId,
+            snapshot,
+            walletAddress,
+        ],
+    },
 };
 
 export default QUERY_KEYS;

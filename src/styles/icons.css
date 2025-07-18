@@ -345,6 +345,10 @@
     content: '\00D2';
 }
 
+.icon--lacrosse:before {
+    content: '\00C4';
+}
+
 .icon--clear:before {
     content: '\00D4';
 }

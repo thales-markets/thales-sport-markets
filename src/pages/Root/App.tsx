@@ -6,6 +6,7 @@ import Loader from 'components/Loader';
 import { DEFAULT_NETWORK } from 'constants/network';
 import ROUTES from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import { Network } from 'enums/network';
 import useInterval from 'hooks/useInterval';
 import DappLayout from 'layouts/DappLayout';
 import Theme from 'layouts/Theme';
@@ -30,6 +31,7 @@ import { setMobileState } from 'redux/modules/app';
 import {
     getIsConnectedViaParticle,
     setIsBiconomy,
+    setIsSmartAccountDisabled,
     setWalletConnectModalVisibility,
     updateParticleState,
 } from 'redux/modules/wallet';
@@ -41,6 +43,7 @@ import { isNetworkSupported, isRouteAvailableForNetwork } from 'utils/network';
 import { getSpecificConnectorFromConnectorsArray } from 'utils/particleWallet/utils';
 import queryConnector from 'utils/queryConnector';
 import { history } from 'utils/routes';
+import { isSmartContract } from 'utils/smartAccount/biconomy/biconomy';
 import { delay } from 'utils/timer';
 import { useAccount, useChainId, useConnect, useConnectors, useDisconnect, useSwitchChain } from 'wagmi';
 
@@ -50,7 +53,7 @@ const App = () => {
     const { switchChain } = useSwitchChain();
     const { disconnect } = useDisconnect();
     const { connectionStatus, disconnect: particleDisconnect } = useParticleConnect();
-    const { isConnected, connector } = useAccount();
+    const { isConnected, connector, address } = useAccount();
     const connectors = useConnectors();
     const { connect } = useConnect();
     const isParticleConnected = useSelector(getIsConnectedViaParticle);
@@ -91,6 +94,18 @@ const App = () => {
             }
         }
     }, [dispatch]);
+
+    useEffect(() => {
+        isSmartContract(address).then((isSmart: any) => {
+            if (isSmart) {
+                dispatch(setIsSmartAccountDisabled(true));
+                dispatch(setIsBiconomy(false));
+                localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, false);
+            } else {
+                dispatch(setIsSmartAccountDisabled(false));
+            }
+        });
+    }, [address, dispatch, networkId]);
 
     // useEffect only for Particle Wallet
     useEffect(() => {
@@ -148,6 +163,10 @@ const App = () => {
                 // Check if running in a frame context where sdk might exist
                 if (sdk?.actions?.ready) {
                     await sdk.actions.ready();
+                    const lastSelectedNetwork = localStore.get(LOCAL_STORAGE_KEYS.LAST_SELECTED_NETWORK);
+                    if ((await sdk.isInMiniApp()) && !lastSelectedNetwork) {
+                        switchChain?.({ chainId: Network.Base as SupportedNetwork });
+                    }
                 }
             } catch (error) {
                 console.log('Error signaling ready:', error);
@@ -156,7 +175,7 @@ const App = () => {
             }
         };
         attemptReady(); // Initial attempt
-    }, [connect]);
+    }, [connect, switchChain, networkId]);
 
     return (
         <Theme>
