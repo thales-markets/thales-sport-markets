@@ -1557,7 +1557,6 @@
             "claim-all-progress": "Claiming all",
             "claim-all-in": "Claim all in",
             "confirmation-message": "Position(s) successfully claimed",
-            "waiting-price": "Waiting for price",
             "no-resolve-positions": "No positions for this section with price",
             "no-positions": "No positions",
             "history-limit": "* Showing only markets with expiry date not older than {{days}} days.",
@@ -1576,8 +1575,9 @@
             "status": {
                 "won": "Won",
                 "loss": "Loss",
-                "winning": "Winning",
-                "loosing": "Loosing"
+                "winning": "Winning...",
+                "loosing": "Loosing...",
+                "waiting-price": "Waiting for price..."
             }
         },
         "settings": {

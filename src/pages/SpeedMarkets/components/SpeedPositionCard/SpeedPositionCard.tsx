@@ -4,10 +4,11 @@ import { SPEED_MARKETS_WIDGET_Z_INDEX } from 'constants/ui';
 import { SpeedPositions } from 'enums/speedMarkets';
 import { Dispatch } from 'react';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { formatCurrencyWithSign } from 'thales-utils';
 import { UserPosition } from 'types/speedMarkets';
+import { ThemeInterface } from 'types/ui';
 import { formatShortDateWithFullTime } from 'utils/formatters/date';
 import { isUserWinner, isUserWinning } from 'utils/speedMarkets';
 import ClaimAction from '../ClaimAction';
@@ -29,6 +30,7 @@ const SpeedPositionCard: React.FC<SpeedPositionCardProps> = ({
     setIsActionInProgress,
 }) => {
     const { t } = useTranslation();
+    const theme: ThemeInterface = useTheme();
 
     const isMatured = position.maturityDate < Date.now();
     const hasFinalPrice = position.finalPrice > 0;
@@ -53,7 +55,6 @@ const SpeedPositionCard: React.FC<SpeedPositionCardProps> = ({
                         {isUserCurrentlyWinning
                             ? t('speed-markets.user-positions.status.winning')
                             : t('speed-markets.user-positions.status.loosing')}
-                        {'...'}
                     </Status>
                 ) : position.isClaimable ? (
                     <ClaimWrapper>
@@ -75,7 +76,7 @@ const SpeedPositionCard: React.FC<SpeedPositionCardProps> = ({
                 ) : (
                     // price is missing - pending
                     <Status isWon={false} isUnknown>
-                        {t('speed-markets.user-positions.waiting-price')}
+                        {t('speed-markets.user-positions.status.waiting-price')}
                     </Status>
                 )}
             </FlexDivRowCentered>
@@ -98,6 +99,7 @@ const SpeedPositionCard: React.FC<SpeedPositionCardProps> = ({
                         <Tooltip
                             overlay={t('speed-markets.tooltips.final-price-missing')}
                             iconFontSize={14}
+                            iconColor={theme.speedMarkets.position.card.textColor.primary}
                             marginLeft={4}
                             zIndex={SPEED_MARKETS_WIDGET_Z_INDEX}
                         />
