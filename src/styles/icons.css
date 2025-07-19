@@ -557,6 +557,14 @@
     content: '\0125';
 }
 
+.icon--wheel:before {
+    content: '\0126';
+}
+
+.icon--social:before {
+    content: '\0127';
+}
+
 .icon--sol::before {
     content: '\00B9';
 }

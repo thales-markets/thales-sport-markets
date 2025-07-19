@@ -223,6 +223,7 @@ export default {
             quinary: Colors.NAVY_BLUE_EXTRA_DARK,
             senary: Colors.LIGHTNING_YELLOW,
             septenary: Colors.METALIC_YELLOW,
+            octonary: Colors.OVERDROP_BLUE,
             active: Colors.NAVY_BLUE_DARK,
             progressBar: Colors.YELLOW,
         },
@@ -234,6 +235,7 @@ export default {
             quinary: Colors.TORY_BLUE_LIGHT,
             senary: Colors.OVERDROP_GREEN,
             septenary: Colors.METALIC_YELLOW,
+            octonary: Colors.REFERALL_YELLOW,
             inactive: Colors.NAVY_BLUE_LIGHT,
         },
         borderColor: {
