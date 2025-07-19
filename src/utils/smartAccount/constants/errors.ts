@@ -7,3 +7,4 @@ export const USER_OP_FAILED = 'userop failed internally';
 export const ACCOUNT_NONCE_FAILED = 'aa25 invalid account nonce';
 export const WEBHOOK_FAILED = 'webhook policy failed!';
 export const INVALID_SIGNATURE_LENGTH = 'invalid signature length';
+export const TRUST_WALLET_ACTIVATE_BEFORE_SIGNING = 'activate smart wallet account before sign.';
