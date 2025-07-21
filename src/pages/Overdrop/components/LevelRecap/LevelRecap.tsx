@@ -16,21 +16,21 @@ const LevelRecap: React.FC = () => {
                 <Disclaimer>{t('overdrop.leveling-tree.payout-disclaimer')}</Disclaimer>
             </HeadingWrapper>
             <BadgeContainer>
-                <BadgeGroup loyaltyBoost={0} startIndex={1} endIndex={6} />
+                <BadgeGroup startIndex={1} endIndex={6} />
             </BadgeContainer>
             <BadgeContainer>
-                <BadgeGroup loyaltyBoost={1} startIndex={6} endIndex={11} />
+                <BadgeGroup startIndex={6} endIndex={11} />
             </BadgeContainer>
             <BadgeContainer>
-                <BadgeGroup loyaltyBoost={2} startIndex={11} endIndex={16} />
+                <BadgeGroup startIndex={11} endIndex={16} />
             </BadgeContainer>
 
             <LastRowWrapper>
                 <LastContainer>
-                    <BadgeGroup loyaltyBoost={3} startIndex={16} endIndex={20} />
+                    <BadgeGroup startIndex={16} endIndex={20} />
                 </LastContainer>
                 <LastContainer>
-                    <BadgeGroup loyaltyBoost={4} startIndex={20} endIndex={21} />
+                    <BadgeGroup startIndex={20} endIndex={21} />
                 </LastContainer>
             </LastRowWrapper>
         </Wrapper>
@@ -47,6 +47,7 @@ const Wrapper = styled(FlexDivColumn)`
 
 const BadgeContainer = styled.div`
     width: 100%;
+    padding: 0 20px;
 `;
 
 const LastContainer = styled.div`

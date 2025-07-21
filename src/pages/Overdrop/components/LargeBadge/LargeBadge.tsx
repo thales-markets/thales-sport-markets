@@ -31,16 +31,17 @@ const LargeBadge: React.FC<LargeBadgeProps> = ({
 
     return (
         <Wrapper active={reached} highlight={highlight}>
+            <LevelName active={reached}>{levelName}</LevelName>
             <BadgeImage active={reached} src={levelItem ? levelItem.largeBadge : ''} />
             {!reached && (
                 <LockWrapper>
                     <Icon className="icon icon--lock" />
                 </LockWrapper>
             )}
+
             <XPLabel active={reached}>{formatPoints(requiredPointsForLevel)}</XPLabel>
             <LevelLabel active={reached}>{t('overdrop.overdrop-home.level')}</LevelLabel>
             <Level active={reached}>{level}</Level>
-            <LevelName active={reached}>{levelName}</LevelName>
             {!!voucherAmount && (
                 <OverAmount>
                     <VoucherAmount>
@@ -53,31 +54,25 @@ const LargeBadge: React.FC<LargeBadgeProps> = ({
 };
 
 const Wrapper = styled(FlexDivColumn)<{ active?: boolean; highlight?: boolean }>`
-    min-width: 122px;
     margin-top: 40px;
     margin-bottom: ${(props) => (props.highlight ? '50px' : '')};
-    border: 3px solid transparent;
-    border-radius: 6px;
-    background: linear-gradient(
-                ${(props) => (props.active ? props.theme.overdrop.background.active : props.theme.background.quinary)} 0
-                    0
-            )
-            padding-box,
-        linear-gradient(40deg, rgba(92, 68, 44, 1) 0%, rgba(23, 25, 42, 1) 50%, rgba(92, 68, 44, 1) 100%) border-box;
+
+    max-width: 125px;
+    height: 306px;
+    padding: 10px;
+    border-radius: 14px;
+    border: 2px solid #2c345e;
+
+    background: #1b2141;
     align-items: center;
     position: relative;
-    padding: 70px 0px 10px 0px;
-    flex: 1 0 18%;
-    @media (max-width: 767px) {
-        min-width: 90px;
-    }
 `;
 
 const BadgeImage = styled.img<{ active?: boolean }>`
     position: absolute;
-    top: -40px;
-    width: 100px;
-    height: 100px;
+    top: 40px;
+    width: 140px;
+    height: 140px;
     opacity: ${(props) => (props.active ? '1' : '0.4')};
     /* @media (max-width: 767px) {
         width: 50px;
@@ -89,9 +84,9 @@ const LockWrapper = styled(FlexDivColumn)`
     position: absolute;
     align-items: center;
     justify-content: center;
-    width: 74px;
-    height: 74px;
-    top: -30px;
+    width: 100px;
+    height: 100px;
+    top: 50px;
     background-color: ${(props) => props.theme.overdrop.badge.background.secondary};
     border: 3px solid ${(props) => props.theme.overdrop.borderColor.primary};
     border-radius: 50%;
@@ -104,7 +99,7 @@ const Icon = styled.i`
 `;
 
 const XPLabel = styled.span<{ active?: boolean }>`
-    font-size: 13.5px;
+    font-size: 16px;
     font-weight: 700;
     margin: 3px;
     text-transform: uppercase;
@@ -112,20 +107,35 @@ const XPLabel = styled.span<{ active?: boolean }>`
 `;
 
 const LevelLabel = styled(XPLabel)<{ active?: boolean }>`
+    color: ${(props) => (props.active ? '#fbce0f' : props.theme.overdrop.textColor.inactive)};
+    font-size: 16.444px;
+    font-style: normal;
     font-weight: 300;
+    line-height: normal;
+    letter-spacing: 0.576px;
     text-transform: uppercase;
-    color: ${(props) =>
-        props.active ? props.theme.overdrop.textColor.primary : props.theme.overdrop.textColor.inactive};
 `;
 
 const Level = styled(LevelLabel)`
+    color: ${(props) => (props.active ? '#fbce0f' : props.theme.overdrop.textColor.inactive)};
+    font-size: 38.489px;
+    font-style: normal;
     font-weight: 800;
-    font-size: 25.038px;
+    line-height: 80%; /* 30.791px */
+    letter-spacing: 3.464px;
+    text-transform: uppercase;
 `;
 
 const LevelName = styled(XPLabel)`
+    color: ${(props) => (props.active ? props.theme.textColor.primary : props.theme.overdrop.textColor.inactive)};
+
+    font-size: 14px;
+    font-style: normal;
     font-weight: 600;
-    font-size: 11px;
+    line-height: normal;
+
+    text-transform: uppercase;
+    margin-bottom: 165px;
 `;
 
 const OverAmount = styled(FlexDiv)`
