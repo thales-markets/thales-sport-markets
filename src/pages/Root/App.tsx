@@ -37,6 +37,7 @@ import {
 import { localStore } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
 import { SeoArticleProps } from 'types/ui';
+import { WalletConnections } from 'types/wallet';
 import { isMobile } from 'utils/device';
 import { isNetworkSupported, isRouteAvailableForNetwork } from 'utils/network';
 import { getSpecificConnectorFromConnectorsArray } from 'utils/particleWallet/utils';
@@ -95,16 +96,21 @@ const App = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        isSmartContract(address).then((isSmart: any) => {
-            if (isSmart) {
-                dispatch(setIsSmartAccountDisabled(true));
-                dispatch(setIsBiconomy(false));
-                localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, false);
-            } else {
-                dispatch(setIsSmartAccountDisabled(false));
-            }
-        });
-    }, [address, dispatch, networkId]);
+        if (
+            connector &&
+            (connector.id === WalletConnections.TRUST_WALLET || connector.id === WalletConnections.COINBASE)
+        ) {
+            isSmartContract(address).then((isSmart: any) => {
+                if (isSmart) {
+                    dispatch(setIsSmartAccountDisabled(true));
+                    dispatch(setIsBiconomy(false));
+                    localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, false);
+                } else {
+                    dispatch(setIsSmartAccountDisabled(false));
+                }
+            });
+        }
+    }, [address, dispatch, networkId, connector]);
 
     // useEffect only for Particle Wallet
     useEffect(() => {
