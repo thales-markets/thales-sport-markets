@@ -36,7 +36,7 @@ import {
 import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
 
-const BUYIN_AMOUNTS = [5, 10, 50, 100, 500];
+const BUYIN_AMOUNTS = [3, 10, 50, 100, 500];
 
 type SelectBuyinProps = {
     selectedAsset: string;

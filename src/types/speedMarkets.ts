@@ -37,6 +37,8 @@ export type UserPosition = {
     maturityDate: number;
     paid: number;
     payout: number;
+    collateralAddress: string;
+    isDefaultCollateral: boolean;
     currentPrice: number;
     finalPrice: number;
     isClaimable: boolean;

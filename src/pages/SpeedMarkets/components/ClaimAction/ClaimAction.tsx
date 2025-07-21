@@ -27,13 +27,12 @@ import { ViemContract } from 'types/viem';
 import {
     getCollateral,
     getCollateralAddress,
+    getCollateralByAddress,
     getCollateralIndex,
-    getCollaterals,
     getDefaultCollateral,
-    isLpSupported,
+    getSpeedOfframpCollaterals,
 } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
-import multipleCollateral from 'utils/contracts/multipleCollateralContract';
 import speedMarketsAMMContract from 'utils/contracts/speedMarkets/speedMarketsAMMContract';
 import { isErrorExcluded } from 'utils/discord';
 import { checkAllowance } from 'utils/network';
@@ -43,7 +42,7 @@ import { executeBiconomyTransaction } from 'utils/smartAccount/biconomy/biconomy
 import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { resolveAllSpeedPositions } from 'utils/speedMarkets';
 import { delay } from 'utils/timer';
-import { Client, getContract } from 'viem';
+import { Address, Client, getContract } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 
@@ -84,22 +83,8 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
         return ammSpeedMarketsLimitsQuery.isSuccess ? ammSpeedMarketsLimitsQuery.data : null;
     }, [ammSpeedMarketsLimitsQuery]);
 
-    const isSinglePosition = useMemo(() => positions.length === 1, [positions.length]);
-    const position = useMemo(() => positions[0], [positions]);
-    const payout = useMemo(() => (isSinglePosition ? position.payout : sumBy(positions, 'payout')), [
-        isSinglePosition,
-        position.payout,
-        positions,
-    ]);
-
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
-    const claimCollateralArray = useMemo(
-        () =>
-            getCollaterals(networkId).filter(
-                (collateral) => !isLpSupported(collateral) || collateral === defaultCollateral
-            ),
-        [networkId, defaultCollateral]
-    );
+    const claimCollateralArray = useMemo(() => getSpeedOfframpCollaterals(networkId), [networkId]);
     const claimCollateral = useMemo(() => getCollateral(networkId, claimCollateralIndex, claimCollateralArray), [
         claimCollateralArray,
         networkId,
@@ -109,9 +94,30 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
         () => getCollateralAddress(networkId, claimCollateralIndex, claimCollateralArray),
         [networkId, claimCollateralIndex, claimCollateralArray]
     );
+    const isClaimDefaultCollateral = claimCollateral === defaultCollateral;
 
-    const isDefaultCollateral = claimCollateral === defaultCollateral;
-    const collateralAddress = multipleCollateral[claimCollateral].addresses[networkId];
+    const isSinglePosition = useMemo(() => positions.length === 1, [positions.length]);
+    const position = useMemo(() => positions[0], [positions]);
+
+    const isAllPositionsInSameCollateral =
+        positions.every((marketData) => marketData.isDefaultCollateral) ||
+        positions.every((marketData) => !marketData.isDefaultCollateral);
+    const claimablePositions = isAllPositionsInSameCollateral
+        ? positions
+        : positions.filter((marketData) => marketData.isDefaultCollateral);
+    const nativeCollateralAddress = positions.find((marketData) => !marketData.isDefaultCollateral)?.collateralAddress;
+    const nativeCollateral =
+        isAllPositionsInSameCollateral && nativeCollateralAddress
+            ? getCollateralByAddress(nativeCollateralAddress, networkId)
+            : null;
+
+    const payout = useMemo(() => (isSinglePosition ? position.payout : sumBy(claimablePositions, 'payout')), [
+        isSinglePosition,
+        position.payout,
+        claimablePositions,
+    ]);
+
+    const isButtonDisabled = isSubmitting || isAllowing || isDisabled;
 
     // Update action in progress status
     useEffect(() => {
@@ -122,20 +128,16 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
 
     // check allowance
     useEffect(() => {
-        if (isDefaultCollateral) {
-            return;
-        }
-
-        const collateralIndex = getCollateralIndex(networkId, claimCollateral);
-        const collateralContract = getContractInstance(
-            ContractType.MULTICOLLATERAL,
-            { client, networkId },
-            collateralIndex
-        );
-
-        const addressToApprove = speedMarketsAMMContract.addresses[networkId];
-
         const getAllowance = async () => {
+            const collateralIndex = getCollateralIndex(networkId, defaultCollateral);
+            const collateralContract = getContractInstance(
+                ContractType.MULTICOLLATERAL,
+                { client, networkId },
+                collateralIndex
+            );
+
+            const addressToApprove = speedMarketsAMMContract.addresses[networkId];
+
             try {
                 const parsedAmount = coinParser(payout.toString(), networkId);
                 const allowance = await checkAllowance(
@@ -151,7 +153,7 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
         };
 
         if (isConnected) {
-            getAllowance();
+            isClaimDefaultCollateral || nativeCollateral ? setAllowance(true) : getAllowance();
         }
     }, [
         payout,
@@ -161,15 +163,16 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
         isConnected,
         hasAllowance,
         isAllowing,
-        isDefaultCollateral,
+        isClaimDefaultCollateral,
+        nativeCollateral,
         client,
-        claimCollateral,
+        defaultCollateral,
         isDisabled,
         isActionInProgress,
     ]);
 
     const handleAllowance = async (approveAmount: bigint) => {
-        const collateralIndex = getCollateralIndex(networkId, claimCollateral);
+        const collateralIndex = getCollateralIndex(networkId, defaultCollateral);
         const collateralContractWithSigner = getContractInstance(
             ContractType.MULTICOLLATERAL,
             { client: walletClient.data, networkId },
@@ -257,7 +260,9 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
             const priceUpdateData = priceFeedUpdate.binary.data.map((vaa: string) => '0x' + vaa);
             const updateFee = await pythContract.read.getUpdateFee([priceUpdateData]);
 
-            const isEth = collateralAddress === ZERO_ADDRESS;
+            const isEth = claimCollateralAddress === ZERO_ADDRESS;
+            const isOfframp = !isClaimDefaultCollateral && !nativeCollateralAddress;
+            const collateralAddress = positions[0].collateralAddress as Address;
 
             const speedMarketsAMMResolverContractWithSigner = getContractInstance(
                 ContractType.SPEED_MARKETS_AMM_RESOLVER,
@@ -266,15 +271,8 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
 
             let hash;
             if (isBiconomy) {
-                hash = isDefaultCollateral
+                hash = isOfframp
                     ? await executeBiconomyTransaction({
-                          collateralAddress,
-                          networkId,
-                          contract: speedMarketsAMMResolverContractWithSigner,
-                          methodName: 'resolveMarket',
-                          data: [position.market, priceUpdateData],
-                      })
-                    : await executeBiconomyTransaction({
                           collateralAddress,
                           networkId,
                           contract: speedMarketsAMMResolverContractWithSigner,
@@ -282,17 +280,22 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
                           data: [position.market, priceUpdateData, collateralAddress, isEth],
                           value: undefined,
                           isEth,
+                      })
+                    : await executeBiconomyTransaction({
+                          collateralAddress,
+                          networkId,
+                          contract: speedMarketsAMMResolverContractWithSigner,
+                          methodName: 'resolveMarket',
+                          data: [position.market, priceUpdateData],
                       });
             } else {
-                hash = isDefaultCollateral
-                    ? await speedMarketsAMMResolverContractWithSigner.write.resolveMarket(
-                          [position.market, priceUpdateData],
-                          {
-                              value: updateFee,
-                          }
-                      )
-                    : await speedMarketsAMMResolverContractWithSigner.write.resolveMarketWithOfframp(
+                hash = isOfframp
+                    ? await speedMarketsAMMResolverContractWithSigner.write.resolveMarketWithOfframp(
                           [position.market, priceUpdateData, collateralAddress, isEth],
+                          { value: updateFee }
+                      )
+                    : await speedMarketsAMMResolverContractWithSigner.write.resolveMarket(
+                          [position.market, priceUpdateData],
                           { value: updateFee }
                       );
             }
@@ -330,12 +333,14 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
     const handleResolveAll = async () => {
         setIsSubmitting(true);
 
+        const collateralAddress = positions[0].collateralAddress as Address;
+
         await resolveAllSpeedPositions(
-            positions,
+            claimablePositions,
             false,
             { networkId, client: walletClient.data },
             isBiconomy,
-            claimCollateralAddress
+            collateralAddress
         );
 
         setIsSubmitting(false);
@@ -345,7 +350,7 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
         <>
             <Container>
                 <Tooltip
-                    open={!hasAllowance && !isDefaultCollateral}
+                    open={!hasAllowance}
                     overlay={t('speed-markets.tooltips.approve-swap-tooltip', {
                         currencyKey: claimCollateral,
                         defaultCurrency: defaultCollateral,
@@ -353,9 +358,9 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
                     zIndex={SPEED_MARKETS_WIDGET_Z_INDEX}
                 >
                     <Button
-                        disabled={isSubmitting || isAllowing || isDisabled}
+                        disabled={isButtonDisabled}
                         onClick={() =>
-                            hasAllowance || isDefaultCollateral
+                            hasAllowance
                                 ? isSinglePosition
                                     ? handleResolve()
                                     : handleResolveAll()
@@ -366,7 +371,7 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
                         fontSize="14px"
                         padding="3px 10px"
                     >
-                        {hasAllowance || isDefaultCollateral ? (
+                        {hasAllowance ? (
                             `${
                                 isSubmitting
                                     ? t(
@@ -377,11 +382,19 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
                                     : t(
                                           `speed-markets.user-positions.${
                                               isSinglePosition
-                                                  ? `claim${isDefaultCollateral ? '' : '-in'}`
-                                                  : `claim-all${isDefaultCollateral ? '' : '-in'}`
+                                                  ? `claim${isClaimDefaultCollateral && !nativeCollateral ? '' : '-in'}`
+                                                  : `claim-all${
+                                                        isClaimDefaultCollateral && !nativeCollateral ? '' : '-in'
+                                                    }`
                                           }`
                                       )
-                            } ${isDefaultCollateral ? formatCurrencyWithSign(USD_SIGN, payout, 2) : claimCollateral}`
+                            } ${
+                                nativeCollateral
+                                    ? nativeCollateral
+                                    : isClaimDefaultCollateral
+                                    ? formatCurrencyWithSign(USD_SIGN, payout, 2)
+                                    : claimCollateral
+                            }`
                         ) : isAllowing ? (
                             <Trans
                                 i18nKey="common.enable-wallet-access.approve-progress-label"
@@ -402,6 +415,7 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
                     isAllowing={isAllowing}
                     onSubmit={handleAllowance}
                     onClose={() => setOpenApprovalModal(false)}
+                    customStyle={{ overlay: { zIndex: SPEED_MARKETS_WIDGET_Z_INDEX } }}
                 />
             )}
         </>

@@ -1,13 +1,14 @@
 import { UseQueryOptions, useQuery } from '@tanstack/react-query';
 import { PYTH_CURRENCY_DECIMALS, SUPPORTED_ASSETS } from 'constants/pyth';
 import QUERY_KEYS from 'constants/queryKeys';
-import { SIDE_TO_POSITION_MAP, SPEED_MARKETS_QUOTE } from 'constants/speedMarkets';
+import { SIDE_TO_POSITION_MAP } from 'constants/speedMarkets';
 import { hoursToMilliseconds, secondsToMilliseconds } from 'date-fns';
 import { ContractType } from 'enums/contract';
 import { bigNumberFormatter, coinFormatter, parseBytes32String } from 'thales-utils';
 import { NetworkConfig } from 'types/network';
 import { UserPosition } from 'types/speedMarkets';
 import { ViemContract } from 'types/viem';
+import { getCollateralByAddress } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import { getCurrentPrices, getPriceConnection, getPriceId } from 'utils/pyth';
 import { getFeesFromHistory } from 'utils/speedMarkets';
@@ -65,7 +66,7 @@ const useUserActiveSpeedMarketsDataQuery = (
 
                     const currencyKey = parseBytes32String(marketData.asset);
                     const side = SIDE_TO_POSITION_MAP[marketData.direction];
-                    const payout = coinFormatter(marketData.buyinAmount, networkConfig.networkId) * SPEED_MARKETS_QUOTE;
+                    const collateral = getCollateralByAddress(marketData.collateral, networkConfig.networkId);
 
                     const maturityDate = secondsToMilliseconds(Number(marketData.strikeTime));
                     const createdAt =
@@ -89,8 +90,10 @@ const useUserActiveSpeedMarketsDataQuery = (
                         side,
                         strikePrice: bigNumberFormatter(marketData.strikePrice, PYTH_CURRENCY_DECIMALS),
                         maturityDate,
-                        paid: coinFormatter(marketData.buyinAmount, networkConfig.networkId) * (1 + fees),
-                        payout: payout,
+                        paid: coinFormatter(marketData.buyinAmount, networkConfig.networkId, collateral) * (1 + fees),
+                        payout: coinFormatter(marketData.payout, networkConfig.networkId, collateral),
+                        collateralAddress: marketData.collateral,
+                        isDefaultCollateral: marketData.isDefaultCollateral,
                         currentPrice: prices[currencyKey],
                         finalPrice: 0,
                         isClaimable: false,

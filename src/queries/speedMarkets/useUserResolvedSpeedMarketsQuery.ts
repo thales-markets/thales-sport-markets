@@ -6,7 +6,6 @@ import {
     MAX_NUMBER_OF_SPEED_MARKETS_TO_FETCH,
     MIN_MATURITY,
     SIDE_TO_POSITION_MAP,
-    SPEED_MARKETS_QUOTE,
 } from 'constants/speedMarkets';
 import { hoursToMilliseconds, secondsToMilliseconds } from 'date-fns';
 import { ContractType } from 'enums/contract';
@@ -14,6 +13,7 @@ import { bigNumberFormatter, coinFormatter, parseBytes32String } from 'thales-ut
 import { NetworkConfig } from 'types/network';
 import { UserPosition } from 'types/speedMarkets';
 import { ViemContract } from 'types/viem';
+import { getCollateralByAddress } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import { getFeesFromHistory } from 'utils/speedMarkets';
 
@@ -85,10 +85,15 @@ const useUserResolvedSpeedMarketsQuery = (
                             : getFeesFromHistory(createdAt).safeBoxImpact;
                     const fees = lpFee + safeBoxImpact;
 
-                    const marketBuyinAmount = coinFormatter(marketData.buyinAmount, networkConfig.networkId);
+                    const collateral = getCollateralByAddress(marketData.collateral, networkConfig.networkId);
+                    const marketBuyinAmount = coinFormatter(
+                        marketData.buyinAmount,
+                        networkConfig.networkId,
+                        collateral
+                    );
 
                     const paid = marketBuyinAmount * (1 + fees);
-                    const payout = marketBuyinAmount * SPEED_MARKETS_QUOTE;
+                    const payout = coinFormatter(marketData.payout, networkConfig.networkId, collateral);
 
                     const userData: UserPosition = {
                         user: marketData.user,
@@ -99,6 +104,8 @@ const useUserResolvedSpeedMarketsQuery = (
                         maturityDate: secondsToMilliseconds(Number(marketData.strikeTime)),
                         paid,
                         payout,
+                        collateralAddress: marketData.collateral,
+                        isDefaultCollateral: marketData.isDefaultCollateral,
                         currentPrice: 0,
                         finalPrice: bigNumberFormatter(marketData.finalPrice, PYTH_CURRENCY_DECIMALS),
                         isClaimable: false,

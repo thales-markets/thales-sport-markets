@@ -108,6 +108,17 @@ export const FREE_BET_COLLATERALS: Record<SupportedNetwork, Coins[]> = {
     ],
 };
 
+export const SPEED_OFFRAMP_UNSUPPORTED_COLLATERALS: Record<SupportedNetwork, Coins[]> = {
+    [Network.OptimismMainnet]: [CRYPTO_CURRENCY_MAP.OVER as Coins],
+    [Network.Arbitrum]: [CRYPTO_CURRENCY_MAP.OVER as Coins, CRYPTO_CURRENCY_MAP.wBTC as Coins],
+    [Network.Base]: [CRYPTO_CURRENCY_MAP.OVER as Coins, CRYPTO_CURRENCY_MAP.cbBTC as Coins],
+    [Network.OptimismSepolia]: [
+        CRYPTO_CURRENCY_MAP.WETH as Coins,
+        CRYPTO_CURRENCY_MAP.ETH as Coins,
+        CRYPTO_CURRENCY_MAP.THALES as Coins,
+    ],
+};
+
 export const COLLATERAL_ICONS_CLASS_NAMES: Record<string, string> = {
     DAI: 'currency-icon currency-icon--dai',
     USDCe: 'currency-icon currency-icon--usdce',

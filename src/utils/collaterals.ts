@@ -1,4 +1,10 @@
-import { COLLATERALS, CRYPTO_CURRENCY_MAP, FREE_BET_COLLATERALS, STABLE_COINS } from 'constants/currency';
+import {
+    COLLATERALS,
+    CRYPTO_CURRENCY_MAP,
+    FREE_BET_COLLATERALS,
+    SPEED_OFFRAMP_UNSUPPORTED_COLLATERALS,
+    STABLE_COINS,
+} from 'constants/currency';
 import { ALTCOIN_CONVERSION_BUFFER_PERCENTAGE } from 'constants/markets';
 import _ from 'lodash';
 import {
@@ -30,17 +36,19 @@ export const getCollateralAddress = (networkId: SupportedNetwork, index: number,
     multipleCollateral[getCollateral(networkId, index, collaterals)]?.addresses[networkId];
 
 export const getCollateralByAddress = (collateralAddress: string, networkId: number) => {
-    let collateral = getDefaultCollateral(networkId);
-    Object.keys(multipleCollateral).forEach((collateralKey: string) => {
-        Object.values(multipleCollateral[collateralKey as Coins].addresses).forEach((address: string) => {
-            if (collateralAddress.toLowerCase() === address.toLowerCase()) {
-                collateral = collateralKey as Coins;
-            }
-        });
-    });
+    const collateral = Object.keys(multipleCollateral).find((collateralKey: string) =>
+        Object.values(multipleCollateral[collateralKey as Coins].addresses).some(
+            (address: string) => collateralAddress.toLowerCase() === address.toLowerCase()
+        )
+    );
 
-    return collateral;
+    return collateral ? (collateral as Coins) : getDefaultCollateral(networkId);
 };
+
+export const getSpeedOfframpCollaterals = (networkId: SupportedNetwork) =>
+    getCollaterals(networkId).filter(
+        (collateral) => !SPEED_OFFRAMP_UNSUPPORTED_COLLATERALS[networkId].includes(collateral)
+    );
 
 export const isStableCurrency = (currencyKey: Coins) => {
     return STABLE_COINS.includes(currencyKey);

@@ -1556,6 +1556,7 @@
             "claim-all": "Claim all",
             "claim-all-progress": "Claiming all",
             "claim-all-in": "Claim all in",
+            "claim-only-in": "Only in <currency>{{currencyKey}}</currency>",
             "confirmation-message": "Position(s) successfully claimed",
             "no-resolve-positions": "No positions for this section with price",
             "no-positions": "No positions",

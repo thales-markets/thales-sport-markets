@@ -15,7 +15,7 @@ import { getIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { UserPosition } from 'types/speedMarkets';
-import { getCollaterals, getDefaultCollateral, isLpSupported } from 'utils/collaterals';
+import { getSpeedOfframpCollaterals } from 'utils/collaterals';
 import { getIsMultiCollateralSupported } from 'utils/network';
 import { getPriceId } from 'utils/pyth';
 import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
@@ -41,14 +41,6 @@ const SpeedPositions: React.FC = () => {
     const [isActionInProgress, setIsActionInProgress] = useState(false);
 
     const isMultiCollateralSupported = getIsMultiCollateralSupported(networkId);
-
-    const claimCollateralArray = useMemo(
-        () =>
-            getCollaterals(networkId).filter(
-                (collateral) => !isLpSupported(collateral) || collateral === getDefaultCollateral(networkId)
-            ),
-        [networkId]
-    );
 
     const userResolvedSpeedMarketsDataQuery = useUserResolvedSpeedMarketsQuery({ networkId, client }, walletAddress, {
         enabled: isConnected,
@@ -171,7 +163,7 @@ const SpeedPositions: React.FC = () => {
                         <FlexDivRowCentered>
                             <ClaimInLabel>{t('speed-markets.user-positions.claim-in')}:</ClaimInLabel>
                             <CollateralSelector
-                                collateralArray={claimCollateralArray}
+                                collateralArray={getSpeedOfframpCollaterals(networkId)}
                                 selectedItem={claimCollateralIndex}
                                 onChangeCollateral={setClaimCollateralIndex}
                                 preventPaymentCollateralChange
