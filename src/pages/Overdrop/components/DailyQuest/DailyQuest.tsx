@@ -1,6 +1,7 @@
 import Button from 'components/Button';
+import WheelOfFortune from 'components/WheelOfFortune';
 import { ScreenSizeBreakpoint } from 'enums/ui';
-import React from 'react';
+import React, { useState } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered, FlexDivSpaceBetween } from 'styles/common';
 
@@ -30,6 +31,8 @@ const DAILY_QUESTS = [
 
 const DailyQuest: React.FC = () => {
     const theme = useTheme();
+
+    const [showSpinTheWheel, setShowSpinTheWheel] = useState(false);
     return (
         <Container>
             {DAILY_QUESTS.map((quest, index) => (
@@ -79,10 +82,12 @@ const DailyQuest: React.FC = () => {
                     fontSize="12px"
                     lineHeight="12px"
                     additionalStyles={{ textTransform: 'capitalize' }}
+                    onClick={() => setShowSpinTheWheel(!showSpinTheWheel)}
                 >
                     Spin
                 </Button>
             </DailyQuestItem>
+            {showSpinTheWheel && <WheelOfFortune />}
         </Container>
     );
 };
