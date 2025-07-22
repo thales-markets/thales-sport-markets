@@ -3,7 +3,7 @@ import { CRYPTO_CURRENCY_MAP } from './currency';
 import { MARKET_DURATION_IN_DAYS } from './markets';
 
 export const SUPPORTED_ASSETS = [CRYPTO_CURRENCY_MAP.BTC, CRYPTO_CURRENCY_MAP.ETH];
-export const DELTA_TIMES_MINUTES = [3, 5];
+export const DELTA_TIMES_MINUTES = [2, 3, 4, 5];
 
 export const POSITIONS_TO_SIDE_MAP: Record<SpeedPositions, number> = {
     UP: 0,
