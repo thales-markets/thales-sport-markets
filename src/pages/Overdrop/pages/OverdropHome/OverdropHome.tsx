@@ -22,16 +22,16 @@ const OverdropHome: React.FC<OverdropHomeProps> = ({ setSelectedTab }) => {
             <DailyQuest />
             <XPOverview setSelectedTab={setSelectedTab} />
             <LevelDetailsWrapper isMobile={isMobile}>
-                <DailyRecap />
                 <BadgeOverview />
+                <DailyRecap />
             </LevelDetailsWrapper>
         </Wrapper>
     );
 };
 
 const LevelDetailsWrapper = styled(FlexDivRow)<{ isMobile: boolean }>`
-    margin-top: ${(props) => (props.isMobile ? '16px' : '40px')};
-    flex-direction: ${(props) => (props.isMobile ? 'column' : 'row')};
+    margin-top: ${(props) => (props.isMobile ? '16px' : '20px')};
+    flex-direction: column;
     gap: 10px;
     justify-content: center;
 `;

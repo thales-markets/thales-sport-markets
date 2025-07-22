@@ -1,10 +1,9 @@
-import OverAmountImage from 'assets/images/overdrop/over_voucher.png';
-import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
+import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { FlexDiv, FlexDivColumn } from 'styles/common';
+import { FlexDiv, FlexDivColumn, FlexDivColumnCentered } from 'styles/common';
 import { formatCurrencyWithKey } from 'thales-utils';
 import { formatPoints } from 'utils/overdrop';
 
@@ -43,11 +42,12 @@ const LargeBadge: React.FC<LargeBadgeProps> = ({
             <LevelLabel active={reached}>{t('overdrop.overdrop-home.level')}</LevelLabel>
             <Level active={reached}>{level}</Level>
             {!!voucherAmount && (
-                <OverAmount>
+                <Voucher>
+                    <FreeBetBadge>Free bet</FreeBetBadge>
                     <VoucherAmount>
-                        {formatCurrencyWithKey(CRYPTO_CURRENCY_MAP.OVER, voucherAmount, 1, true)}
+                        {formatCurrencyWithKey(USD_SIGN + CRYPTO_CURRENCY_MAP.OVER, voucherAmount, 1, true)}
                     </VoucherAmount>
-                </OverAmount>
+                </Voucher>
             )}
         </Wrapper>
     );
@@ -63,7 +63,8 @@ const Wrapper = styled(FlexDivColumn)<{ active?: boolean; highlight?: boolean }>
     border-radius: 14px;
     border: 2px solid #2c345e;
 
-    background: #1b2141;
+    background: ${(props) =>
+        props.active ? props.theme.overdrop.badge.background.primary : props.theme.overdrop.badge.background.secondary};
     align-items: center;
     position: relative;
 `;
@@ -138,28 +139,39 @@ const LevelName = styled(XPLabel)`
     margin-bottom: 165px;
 `;
 
-const OverAmount = styled(FlexDiv)`
+const Voucher = styled(FlexDivColumnCentered)`
     position: absolute;
-    bottom: -25px;
-    background-image: url(${OverAmountImage});
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 50px;
-    background-size: contain;
-    background-position: center;
-    justify-content: center;
+    bottom: -58px;
+    gap: 6px;
+`;
+
+const FreeBetBadge = styled(FlexDiv)`
     align-items: center;
-    padding-right: 10px;
+    justify-content: center;
+
+    border-radius: 20px;
+    border: 1px solid rgba(104, 124, 220, 0.3);
+    background: ${(props) => props.theme.overdrop.badge.background.primary};
+    height: 22px;
+    padding: 3px 9px 5px 13px;
+
+    white-space: nowrap;
+    color: #687cdc;
+
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
 `;
 
 const VoucherAmount = styled.span`
     width: 100px;
-    margin-left: 30px;
-    padding-top: 3px;
+
     text-align: center;
-    font-size: 10px;
+    font-size: 12px;
+    line-height: 20px;
     white-space: pre;
-    font-weight: 800;
+    font-weight: 700;
     color: ${(props) => props.theme.overdrop.badge.textColor.primary};
 `;
 
