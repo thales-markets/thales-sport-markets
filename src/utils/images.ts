@@ -207,6 +207,7 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.BELGIUM_LIGA_DAMES:
             return `/logos/Countries/belgium.svg`;
         case League.CZECH_LEAGUE:
+        case League.CZECH_REPUBLIC_FIRST_LEAGUE:
         case League.CZECH_REPUBLIC_EXTRALIGA:
             return `/logos/Countries/czech-republic.svg`;
         case League.CHILE_PRIMERA_DIVISION:
