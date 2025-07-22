@@ -4,13 +4,15 @@ import { USER_REJECTED_ERRORS } from 'constants/errors';
 import { wagmiConfig } from 'pages/Root/wagmiConfig';
 import { SupportedNetwork } from 'types/network';
 import { ViemContract } from 'types/viem';
-import { Address, Client, encodeFunctionData, getContract } from 'viem';
+import { Address, Client, encodeFunctionData, getAddress, getContract } from 'viem';
 import { getContractAbi } from '../../contracts/abi';
 import multipleCollateral from '../../contracts/multipleCollateralContract';
 import sessionValidationContract from '../../contracts/sessionValidationContract';
 import {
     ACCOUNT_NONCE_FAILED,
     ERROR_SESSION_NOT_FOUND,
+    INVALID_SIGNATURE_LENGTH,
+    TRUST_WALLET_ACTIVATE_BEFORE_SIGNING,
     USER_OP_FAILED,
     USER_REJECTED_ERROR,
     WEBHOOK_FAILED,
@@ -427,3 +429,50 @@ export const getPaymasterData = async (
         }
     }
 };
+
+export async function isSmartContract(address: any) {
+    try {
+        const normalizedAddress = getAddress(address);
+
+        const client = getPublicClient(wagmiConfig);
+        const code = await client.getCode({ address: normalizedAddress });
+
+        // If code is empty, it's an EOA; otherwise, it's a smart contract
+        return code != undefined;
+    } catch (error) {
+        return false;
+    }
+}
+
+export async function verifyOvertimeAccount() {
+    try {
+        if (smartAccountConnector.biconomyAccount) {
+            const userOp = await smartAccountConnector.biconomyAccount.buildUserOp([
+                {
+                    to: smartAccountConnector.biconomyAddress,
+                    value: 0n,
+                    data: '0x',
+                },
+            ]);
+
+            const { wait } = await smartAccountConnector.biconomyAccount.sendUserOp(userOp);
+            const { receipt } = await wait();
+            console.log('Overtime account verified', receipt);
+        }
+        return { success: true };
+    } catch (e) {
+        console.log('Error verifying Overtime account:', e);
+        if (
+            (e as any).toString().toLowerCase().includes(INVALID_SIGNATURE_LENGTH) ||
+            ((e as any).details &&
+                (e as any).details.toString().toLowerCase().includes(TRUST_WALLET_ACTIVATE_BEFORE_SIGNING))
+        ) {
+            return { success: false };
+        } else {
+            if ((e as any).toString().toLowerCase().includes(USER_REJECTED_ERROR)) {
+                return { success: false, rejected: true };
+            }
+        }
+        return { success: true };
+    }
+}

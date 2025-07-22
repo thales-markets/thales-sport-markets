@@ -39,4 +39,6 @@ export const LOCAL_STORAGE_KEYS = {
     SHOW_ZERO_BALANCE: 'showZeroBalance',
     SPEED_PRICE_SLIPPAGE: 'speedPriceSlippage',
     LAST_SELECTED_NETWORK: 'lastSelectedNetwork',
+    VERIFIED_OVERTIME_ACCOUNTS: 'verifiedOvertimeAccount',
+    INVALID_OVERTIME_ACCOUNTS: 'invalidOvertimeAccount',
 };
