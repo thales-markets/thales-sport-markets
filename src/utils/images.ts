@@ -239,6 +239,7 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.INDIA_SUPER_LEAGUE:
             return `/logos/Countries/india.svg`;
         case League.CHINA_SUPER_LEAGUE:
+        case League.CHINA_FA_CUP:
             return `/logos/Countries/china.svg`;
         case League.AUSTRALIA_A_LEAGUE:
         case League.AUSTRALIA_NBL:
@@ -390,12 +391,16 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.NORTH_MACEDONIA_SUPER_LIGA:
             return `/logos/Countries/north-macedonia.svg`;
         case League.CROATIA_HB_PREMIJER_LIGA:
+        case League.CROATIA_1_HNL:
             return `/logos/Countries/croatia.svg`;
         case League.SLOVAKIA_HB_EXTRALIGA:
+        case League.SLOVAKIA_SUPERLIGA:
             return `/logos/Countries/slovakia.svg`;
         case League.SLOVENIA_1_LIGA:
+        case League.SLOVENIA_PRVALIGA:
             return `/logos/Countries/slovenia.svg`;
         case League.HUNGARY_HNB_I:
+        case League.HUNGARY_NB_I:
             return `/logos/Countries/hungary.svg`;
         case League.NORWAY_HB_1_DIVISJON:
         case League.NORWAY_ELITESERIEN:
@@ -448,6 +453,16 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
             return `/logos/Countries/big3.webp`;
         case League.FIBA_EUROBASKET_WOMEN:
             return `/logos/Countries/fiba-womens-eurobasket.webp`;
+        case League.BULGARIA_PARVA_LIGA:
+            return `/logos/Countries/bulgaria.svg`;
+        case League.IRELAND_PREMIER_LEAGUE:
+            return `/logos/Countries/ireland.svg`;
+        case League.LATVIA_VIRSLIGA:
+            return `/logos/Countries/latvia.svg`;
+        case League.LITHUANIA_A_LYGA:
+            return `/logos/Countries/lithuania.svg`;
+        case League.ROMANIA_LIGA_I:
+            return `/logos/Countries/romania.svg`;
         default:
             return `/logos/Countries/world.svg`;
     }
