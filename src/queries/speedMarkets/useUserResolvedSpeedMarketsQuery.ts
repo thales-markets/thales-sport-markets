@@ -45,11 +45,14 @@ const useUserResolvedSpeedMarketsQuery = (
                     MAX_NUMBER_OF_SPEED_MARKETS_TO_FETCH
                 );
                 const index = Number(ammParams.numMaturedMarketsPerUser) - pageSize;
-                const resolvedMarkets = await speedMarketsAMMContract.read.maturedMarketsPerUser([
+                const resolvedMarketsPerUser = await speedMarketsAMMContract.read.maturedMarketsPerUser([
                     index,
                     pageSize,
                     walletAddress,
                 ]);
+                const resolvedMarkets = Array.isArray(resolvedMarketsPerUser)
+                    ? resolvedMarketsPerUser
+                    : [resolvedMarketsPerUser];
 
                 const promises = [];
                 for (let i = 0; i < Math.ceil(resolvedMarkets.length / BATCH_NUMBER_OF_SPEED_MARKETS); i++) {

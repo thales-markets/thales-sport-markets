@@ -36,14 +36,20 @@ const useUserActiveSpeedMarketsDataQuery = (
 
                 const ammParams = await speedMarketsDataContract.read.getSpeedMarketsAMMParameters([walletAddress]);
 
-                const activeMarkets = await speedMarketsAMMContract.read.activeMarketsPerUser([
+                const activeMarketsPerUser = await speedMarketsAMMContract.read.activeMarketsPerUser([
                     0,
                     ammParams.numActiveMarketsPerUser,
                     walletAddress,
                 ]);
-                const marketsDataArray = activeMarkets.length
+                const activeMarkets = Array.isArray(activeMarketsPerUser)
+                    ? activeMarketsPerUser
+                    : [activeMarketsPerUser];
+
+                const marketsData = activeMarkets.length
                     ? await speedMarketsDataContract.read.getMarketsData([activeMarkets])
                     : [];
+                const marketsDataArray = Array.isArray(marketsData) ? marketsData : [marketsData];
+
                 const userActiveMarkets = marketsDataArray.map((marketData: any, index: number) => ({
                     ...marketData,
                     market: activeMarkets[index],
