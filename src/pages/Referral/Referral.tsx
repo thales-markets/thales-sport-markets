@@ -152,13 +152,16 @@ const Referral: React.FC = () => {
                     <AffiliateContainer>
                         <SectionLabel>{t('referral.header.affiliate-id-label')}</SectionLabel>
                         <InputRow>
-                            <AffiliateLinkLabel>{buildReffererLink(String(reffererID))}</AffiliateLinkLabel>
+                            <AffiliateLinkLabel>
+                                {buildReffererLink(reffererID ? String(reffererID) : '')}
+                            </AffiliateLinkLabel>
                             <AffiliateInput
                                 value={reffererID}
                                 onChange={(e) => {
                                     setReffererID(e.target.value);
                                 }}
                                 placeholder={t('referral.header.affiliate-id-placeholder')}
+                                disabled={!walletAddress}
                             />
                             <CreateButton
                                 hoverColor={'#ffb600'}
