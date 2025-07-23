@@ -2,6 +2,7 @@ import CollateralSelector from 'components/CollateralSelector';
 import NumericInput from 'components/fields/NumericInput';
 import SuggestedAmount from 'components/SuggestedAmount';
 import { USD_SIGN } from 'constants/currency';
+import { OVER_CONTRACT_RATE_KEY } from 'constants/markets';
 import { BICONOMY_MAX_FEE_PERCENTAGE } from 'constants/speedMarkets';
 import { SPEED_MARKETS_WIDGET_Z_INDEX } from 'constants/ui';
 import { SpeedPositions } from 'enums/speedMarkets';
@@ -31,6 +32,7 @@ import {
     getCollateral,
     getCollaterals,
     getDefaultCollateral,
+    isOverCurrency,
     isStableCurrency,
 } from 'utils/collaterals';
 import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
@@ -144,7 +146,8 @@ const SelectBuyin: React.FC<SelectBuyinProps> = ({
     );
     const convertFromStable = useCallback(
         (value: number) => {
-            const rate = exchangeRates?.[selectedCollateral] || 0;
+            const rate =
+                exchangeRates?.[isOverCurrency(selectedCollateral) ? OVER_CONTRACT_RATE_KEY : selectedCollateral] || 0;
             return convertFromStableToCollateral(selectedCollateral, value, rate, networkId);
         },
         [selectedCollateral, exchangeRates, networkId]
@@ -268,6 +271,7 @@ const SelectBuyin: React.FC<SelectBuyinProps> = ({
                                 dropDownMaxHeight={getCollaterals(networkId).length > 6 ? '220px' : undefined}
                             />
                         }
+                        balance={formatCurrencyWithKey(selectedCollateral, paymentTokenBalance)}
                         onMaxButton={onMaxClick}
                         inputFontWeight="600"
                         inputPadding="5px 10px"
@@ -286,6 +290,7 @@ const InputContainer = styled(FlexDiv)``;
 const AmountToBuyContainer = styled.div`
     position: relative;
     width: 100%;
+    margin-top: 21px;
 `;
 
 export default SelectBuyin;
