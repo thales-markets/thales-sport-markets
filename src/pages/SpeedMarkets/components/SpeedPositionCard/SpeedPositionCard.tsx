@@ -6,11 +6,13 @@ import { Dispatch } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
-import { formatCurrencyWithSign } from 'thales-utils';
+import { formatCurrencyWithKey, formatCurrencyWithSign } from 'thales-utils';
 import { UserPosition } from 'types/speedMarkets';
 import { ThemeInterface } from 'types/ui';
+import { getCollateralByAddress, isOverCurrency } from 'utils/collaterals';
 import { formatShortDateWithFullTime } from 'utils/formatters/date';
 import { isUserWinner, isUserWinning } from 'utils/speedMarkets';
+import { useChainId } from 'wagmi';
 import ClaimAction from '../ClaimAction';
 import SpeedTimeRemaining from '../SpeedTimeRemaining';
 
@@ -32,10 +34,14 @@ const SpeedPositionCard: React.FC<SpeedPositionCardProps> = ({
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
 
+    const networkId = useChainId();
+
     const isMatured = position.maturityDate < Date.now();
     const hasFinalPrice = position.finalPrice > 0;
     const isUserWon = !!isUserWinner(position.side, position.strikePrice, position.finalPrice);
     const isUserCurrentlyWinning = isUserWinning(position.side, position.strikePrice, position.currentPrice);
+    const collateralByAddress = getCollateralByAddress(position.collateralAddress, networkId);
+    const collateral = `${isOverCurrency(collateralByAddress) ? '$' : ''}${collateralByAddress}`;
 
     return (
         <Container>
@@ -120,13 +126,16 @@ const SpeedPositionCard: React.FC<SpeedPositionCardProps> = ({
                 </Time>
             </FlexDivRowCentered>
             <FlexDivRowCentered>
-                <Paid>{`${t('speed-markets.user-positions.labels.paid')}: ${formatCurrencyWithSign(
-                    USD_SIGN,
-                    position.paid
-                )}`}</Paid>
-                <Payout isClaimable={position.isClaimable}>{`${t(
-                    'speed-markets.user-positions.labels.payout'
-                )}: ${formatCurrencyWithSign(USD_SIGN, position.payout)}`}</Payout>
+                <Paid>{`${t('speed-markets.user-positions.labels.paid')}: ${
+                    position.isDefaultCollateral
+                        ? formatCurrencyWithSign(USD_SIGN, position.paid)
+                        : formatCurrencyWithKey(collateral, position.paid)
+                }`}</Paid>
+                <Payout isClaimable={position.isClaimable}>{`${t('speed-markets.user-positions.labels.payout')}: ${
+                    position.isDefaultCollateral
+                        ? formatCurrencyWithSign(USD_SIGN, position.payout)
+                        : formatCurrencyWithKey(collateral, position.payout)
+                }`}</Payout>
             </FlexDivRowCentered>
         </Container>
     );

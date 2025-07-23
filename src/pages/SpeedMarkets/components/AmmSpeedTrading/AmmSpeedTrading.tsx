@@ -54,6 +54,7 @@ import {
     getCollateral,
     getCollateralIndex,
     getDefaultCollateral,
+    isOverCurrency,
     isStableCurrency,
 } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
@@ -152,6 +153,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
         selectedCollateralIndex,
     ]);
     const isDefaultCollateral = selectedCollateral === defaultCollateral;
+    const isOver = isOverCurrency(selectedCollateral);
     const isEth = selectedCollateral === CRYPTO_CURRENCY_MAP.ETH;
     const collateralAddress = isEth
         ? multipleCollateral.WETH.addresses[networkId]
@@ -265,12 +267,12 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
     }, []);
 
     useEffect(() => {
-        if (isDefaultCollateral) {
+        if (isDefaultCollateral || isOver) {
             setBuyinAmount(paidAmount / (1 + totalFee));
         } else {
             setBuyinAmount(paidAmount);
         }
-    }, [paidAmount, totalFee, isDefaultCollateral]);
+    }, [paidAmount, totalFee, isDefaultCollateral, isOver]);
 
     useEffect(() => {
         if (enteredBuyinAmount > 0) {
