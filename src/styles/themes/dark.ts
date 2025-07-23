@@ -242,14 +242,15 @@ export default {
             primary: Colors.JONQUIL,
             secondary: `linear-gradient(160deg, #4e5fb1, #dba111)`,
             tertiary: Colors.GOLD,
+            quaternary: Colors.TORY_BLUE,
         },
         badge: {
             background: {
-                primary: Colors.JONQUIL,
-                secondary: 'rgb(21, 27, 54, 0.3)',
+                primary: Colors.OVERDROP_BLUE,
+                secondary: Colors.OVERDROP_DISABLED_BADGE,
             },
             textColor: {
-                primary: Colors.SMOKEY_TOPAZ,
+                primary: Colors.WHITE,
             },
         },
         button: {
