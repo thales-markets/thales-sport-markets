@@ -65,7 +65,7 @@ const WheelOfFortune: React.FC = () => {
                         ...item,
                         option: `${item.amount} ${item.type} 🔒`,
                         style: {
-                            backgroundColor: '#7a683a',
+                            backgroundColor: '#564929',
                             fontFamily: 'Arial',
                             fontSize: 16,
                             fontWeight: 500,
