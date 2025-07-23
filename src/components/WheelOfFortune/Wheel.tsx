@@ -55,8 +55,8 @@ const WheelOfFortune: React.FC = () => {
             const result = [];
 
             while (withBonus.length || withoutBonus.length) {
-                if (withoutBonus.length) result.push(withoutBonus.shift());
                 if (withBonus.length) result.push(withBonus.shift());
+                if (withoutBonus.length) result.push(withoutBonus.shift());
             }
 
             return result.map((item: any) => {

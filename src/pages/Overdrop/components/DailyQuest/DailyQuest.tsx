@@ -3,7 +3,7 @@ import WheelOfFortune from 'components/WheelOfFortune';
 import { getDayOfYear } from 'date-fns';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered, FlexDivSpaceBetween } from 'styles/common';
 import { OverdropUserData } from 'types/overdrop';
@@ -48,10 +48,9 @@ const DailyQuest: React.FC = () => {
     const userData: OverdropUserData | undefined =
         userDataQuery?.isSuccess && userDataQuery?.data ? userDataQuery.data : undefined;
 
-    useEffect(() => {
+    const isSpinTheWheelCompleted = useMemo(() => {
         if (userData) {
             const today = getDayOfYear(new Date());
-
             if (userData.lastTradeOvertime) {
                 const lastTradeDay = getDayOfYear(new Date(userData.lastTradeOvertime));
                 if (today === lastTradeDay) {
@@ -82,12 +81,7 @@ const DailyQuest: React.FC = () => {
             } else {
                 DAILY_QUESTS[2].completed = false;
             }
-        }
-    }, [userData]);
 
-    const isSpinTheWheelCompleted = useMemo(() => {
-        if (userData) {
-            const today = getDayOfYear(new Date());
             if (userData.wheel && userData.wheel.lastSpinTime) {
                 return getDayOfYear(new Date(userData.wheel.lastSpinTime)) === today;
             }
