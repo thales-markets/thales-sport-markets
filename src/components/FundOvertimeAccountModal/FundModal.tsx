@@ -1,4 +1,5 @@
 import particle from 'assets/images/particle.png';
+import VerifySvg from 'assets/images/svgs/verify.svg?react';
 import Button from 'components/Button';
 import ClaimFreeBetButton from 'components/ClaimFreeBetButton';
 import DepositFromWallet from 'components/DepositFromWallet';
@@ -6,20 +7,27 @@ import Modal from 'components/Modal';
 import NetworkSwitcher from 'components/NetworkSwitcher';
 import Tooltip from 'components/Tooltip';
 import UniversalModal from 'components/UniversalModal';
+import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { COLLATERAL_ICONS_CLASS_NAMES } from 'constants/currency';
 import ROUTES from 'constants/routes';
+import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { Network } from 'enums/network';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import QRCodeModal from 'pages/AARelatedPages/Deposit/components/QRCodeModal';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getIsBiconomy } from 'redux/modules/wallet';
+import {
+    getIsBiconomy,
+    getIsSmartAccountDisabled,
+    setIsBiconomy,
+    setIsSmartAccountDisabled,
+} from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
-import { FlexDivCentered, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
+import { FlexDivCentered, FlexDivColumnCentered, FlexDivRow, FlexDivStart } from 'styles/common';
 import { truncateAddress } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
@@ -28,9 +36,10 @@ import { isSmallDevice } from 'utils/device';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import { getOnRamperUrl } from 'utils/particleWallet/utils';
 import { navigateTo } from 'utils/routes';
+import { verifyOvertimeAccount } from 'utils/smartAccount/biconomy/biconomy';
 import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import useUniversalAccount from 'utils/smartAccount/hooks/useUniversalAccount';
-
+import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
 import { useAccount, useChainId, useClient } from 'wagmi';
 
 type FundModalProps = {
@@ -40,6 +49,8 @@ type FundModalProps = {
 const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
     const [showLetsBetButton, setShowLetsBetButton] = useState(false);
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
+    const isSmartAccountDisabled = useSelector(getIsSmartAccountDisabled);
+    const dispatch = useDispatch();
     const { t } = useTranslation();
 
     const { universalAddress } = useUniversalAccount(); // added this hook here so we reduce the amount for loading universal data when users opens universal deposit
@@ -56,6 +67,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
     const [showQRModal, setShowQRModal] = useState<boolean>(false);
     const [showDepositFromWallet, setShowDepositFromWallet] = useState<boolean>(false);
     const [showUniversalModal, setShowUniversalModal] = useState<boolean>(false);
+    const [showVerificationButton, setShowVerificationButton] = useState<boolean>(false);
 
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(
         address as string,
@@ -100,6 +112,42 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
         return getOnRamperUrl(apiKey, walletAddress, networkId);
     }, [walletAddress, networkId, apiKey]);
 
+    useEffect(() => {
+        if (isBiconomy && smartAddress) {
+            const verifiedOvertimeAccounts = new Set(
+                JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEYS.VERIFIED_OVERTIME_ACCOUNTS) || '[]')
+            );
+            const invalidOvertimeAccounts = new Set(
+                JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEYS.INVALID_OVERTIME_ACCOUNTS) || '[]')
+            );
+            if (invalidOvertimeAccounts.has(smartAddress)) {
+                dispatch(setIsSmartAccountDisabled(true));
+                dispatch(setIsBiconomy(false));
+                localStorage.setItem(LOCAL_STORAGE_KEYS.USE_BICONOMY, 'false');
+                setShowVerificationButton(false);
+                return;
+            }
+            if (verifiedOvertimeAccounts.has(smartAddress)) {
+                dispatch(setIsSmartAccountDisabled(false));
+                setShowVerificationButton(false);
+                return;
+            }
+
+            smartAccountConnector.biconomyAccount?.isAccountDeployed().then((isDeployed) => {
+                if (isDeployed) {
+                    setShowVerificationButton(false);
+                    verifiedOvertimeAccounts.add(smartAddress);
+                    localStorage.setItem(
+                        LOCAL_STORAGE_KEYS.VERIFIED_OVERTIME_ACCOUNTS,
+                        JSON.stringify(Array.from(verifiedOvertimeAccounts))
+                    );
+                } else {
+                    setShowVerificationButton(true);
+                }
+            });
+        }
+    }, [isBiconomy, dispatch, smartAddress, isSmartAccountDisabled]);
+
     return (
         <Modal
             customStyle={{
@@ -124,6 +172,62 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
             onClose={onClose}
         >
             <Wrapper>
+                {showVerificationButton && (
+                    <FlexDivStart>
+                        <VerifyButton
+                            onClick={async () => {
+                                const id = toast.loading(t('get-started.fund-account.verifying-account'));
+                                const isValidConfig = await verifyOvertimeAccount();
+                                if (isValidConfig.success) {
+                                    const verifiedOvertimeAccounts = new Set(
+                                        JSON.parse(
+                                            localStorage.getItem(LOCAL_STORAGE_KEYS.VERIFIED_OVERTIME_ACCOUNTS) || '[]'
+                                        )
+                                    );
+                                    verifiedOvertimeAccounts.add(smartAddress);
+                                    localStorage.setItem(
+                                        LOCAL_STORAGE_KEYS.VERIFIED_OVERTIME_ACCOUNTS,
+                                        JSON.stringify(Array.from(verifiedOvertimeAccounts))
+                                    );
+                                    setShowVerificationButton(false);
+                                    toast.update(
+                                        id,
+                                        getSuccessToastOptions(t('get-started.fund-account.verifying-account-success'))
+                                    );
+                                } else {
+                                    if (isValidConfig.rejected) {
+                                        toast.update(id, getErrorToastOptions(t('common.errors.user-rejected-tx')));
+                                    } else {
+                                        const invalidOvertimeAccounts = new Set(
+                                            JSON.parse(
+                                                localStorage.getItem(LOCAL_STORAGE_KEYS.INVALID_OVERTIME_ACCOUNTS) ||
+                                                    '[]'
+                                            )
+                                        );
+                                        invalidOvertimeAccounts.add(smartAddress);
+                                        dispatch(setIsSmartAccountDisabled(true));
+                                        dispatch(setIsBiconomy(false));
+                                        localStorage.setItem(LOCAL_STORAGE_KEYS.USE_BICONOMY, 'false');
+                                        localStorage.setItem(
+                                            LOCAL_STORAGE_KEYS.INVALID_OVERTIME_ACCOUNTS,
+                                            JSON.stringify(Array.from(invalidOvertimeAccounts))
+                                        );
+                                        toast.update(
+                                            id,
+                                            getErrorToastOptions(t('get-started.fund-account.verifying-account-error'))
+                                        );
+                                        onClose();
+                                    }
+                                }
+                            }}
+                        >
+                            <VerifySvg />
+                            {t('get-started.fund-account.verify-account')}
+                            <Arrow className="icon icon--arrow-down" />
+                        </VerifyButton>
+                    </FlexDivStart>
+                )}
+
                 <NetworkWrapper>
                     <NetworkHeader>{t('get-started.fund-account.current-network')}</NetworkHeader>
                     <NetworkSwitcherWrapper>
@@ -225,7 +329,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                 )}
 
                 <Container>
-                    {networkId === Network.OptimismMainnet && (
+                    {networkId === Network.OptimismMainnet && !isSmartAccountDisabled && !showVerificationButton && (
                         <Tooltip
                             customIconStyling={{ color: theme.textColor.secondary }}
                             overlay={t('get-started.fund-account.tooltip-universal')}
@@ -256,21 +360,23 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                             <Icon className="icon icon--card" />
                         </ButtonLocal>
                     </Tooltip>
-                    <Tooltip
-                        customIconStyling={{ color: theme.textColor.secondary }}
-                        overlay={t('get-started.fund-account.tooltip-4')}
-                        open={!isSmallDevice}
-                    >
-                        <ButtonLocal
-                            disabled={totalBalanceValue === 0}
-                            onClick={() => {
-                                totalBalanceValue > 0 && setShowDepositFromWallet(!showDepositFromWallet);
-                            }}
+                    {!isSmartAccountDisabled && !showVerificationButton && (
+                        <Tooltip
+                            customIconStyling={{ color: theme.textColor.secondary }}
+                            overlay={t('get-started.fund-account.tooltip-4')}
+                            open={!isSmallDevice}
                         >
-                            <ButtonText>{t('get-started.fund-account.from-wallet')}</ButtonText>
-                            <Icon className="icon icon--wallet-connected" />
-                        </ButtonLocal>
-                    </Tooltip>
+                            <ButtonLocal
+                                disabled={totalBalanceValue === 0}
+                                onClick={() => {
+                                    totalBalanceValue > 0 && setShowDepositFromWallet(!showDepositFromWallet);
+                                }}
+                            >
+                                <ButtonText>{t('get-started.fund-account.from-wallet')}</ButtonText>
+                                <Icon className="icon icon--wallet-connected" />
+                            </ButtonLocal>
+                        </Tooltip>
+                    )}
 
                     <Tooltip
                         customIconStyling={{ color: theme.textColor.secondary }}
@@ -604,6 +710,47 @@ const Asset = styled.i<{ fontSize?: string }>`
         font-size: 24px;
         line-height: 24px;
     }
+`;
+
+const VerifyButton = styled.button`
+    position: relative;
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    color: #000000;
+    padding: 14px 20px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.25);
+    width: 100%;
+    margin-top: 20px;
+
+    letter-spacing: 0.025em;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    &:hover {
+        box-shadow: 0 6px 20px rgba(251, 191, 36, 0.35);
+    }
+
+    svg {
+        width: 24px;
+        height: 24px;
+        margin-right: 10px;
+    }
+`;
+
+const Arrow = styled.i.attrs({ className: 'icon icon--arrow-down' })`
+    position: absolute;
+    right: 20px;
+    top: 18px;
+    transform: rotate(270deg);
+    font-size: 16px;
+    text-transform: lowercase;
 `;
 
 export default FundModal;
