@@ -103,9 +103,11 @@ const SelectBuyin: React.FC<SelectBuyinProps> = ({
         : false;
 
     // Set free bet if user has free bet balance
+    // TODO:
     useEffect(() => {
         if (freeBetBalanceExists) {
-            setIsFreeBetActive(true);
+            // setIsFreeBetActive(true);
+            setIsFreeBetActive(false);
         }
     }, [freeBetBalanceExists]);
 
