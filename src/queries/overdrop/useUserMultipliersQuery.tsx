@@ -2,7 +2,6 @@ import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import axios from 'axios';
 import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
-import { OverdropIcon } from 'layouts/DappLayout/DappHeader/styled-components';
 import { OverdropMultiplier } from 'types/overdrop';
 
 const useUserMultipliersQuery = (
@@ -40,10 +39,16 @@ const useUserMultipliersQuery = (
                         icon: <>0</>,
                     },
                     {
-                        name: 'twitterMultiplier',
-                        label: 'Twitter share',
+                        name: 'dailyQuestMultiplier',
+                        label: 'Daily quest',
                         multiplier: 0,
-                        icon: <OverdropIcon className="icon icon--x-twitter" />,
+                        icon: <>0</>,
+                    },
+                    {
+                        name: 'wheelMultiplier',
+                        label: 'Spin the Wheel',
+                        multiplier: 0,
+                        icon: <>0</>,
                     },
                 ];
             }

@@ -28,6 +28,12 @@ export const getMultiplierLabel = (multiplier: OverdropMultiplier) => {
     if (multiplier.name === 'loyaltyMultiplier') {
         return 'Loyalty';
     }
+    if (multiplier.name === 'dailyQuestMultiplier') {
+        return 'Daily quest';
+    }
+    if (multiplier.name === 'wheelMultiplier') {
+        return 'Spin the wheel';
+    }
     return '';
 };
 
@@ -43,6 +49,13 @@ export const getTooltipKey = (multiplier: OverdropMultiplier) => {
     }
     if (multiplier.name === 'loyaltyMultiplier') {
         return 'loyalty-boost';
+    }
+
+    if (multiplier.name === 'dailyQuestMultiplier') {
+        return 'daily-quest';
+    }
+    if (multiplier.name === 'wheelMultiplier') {
+        return 'spin-the-wheel-boost';
     }
     return '';
 };
