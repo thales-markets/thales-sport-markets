@@ -2,107 +2,121 @@ import pointer from 'assets/images/svgs/pointer.svg';
 import axios from 'axios';
 import Button from 'components/Button';
 import { generalConfig } from 'config/general';
-import React, { useState } from 'react';
+import useDailyQuestOptions from 'queries/overdrop/useDailyQuestOptions';
+import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
+import React, { useMemo, useState } from 'react';
 import { Wheel } from 'react-custom-roulette';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivSpaceBetween } from 'styles/common';
+import { OverdropUserData } from 'types/overdrop';
+import { hasUserDoneDailyQuests } from 'utils/overdrop';
+import { refetchUserOverdrop } from 'utils/queryConnector';
 import { useAccount } from 'wagmi';
-
-const OPTIONS = [
-    {
-        option: '20% XP BOOST for 24h',
-    },
-
-    {
-        option: '30% XP BOOST for 24h',
-    },
-
-    {
-        option: '50% XP BOOST for 24h',
-    },
-];
-
-const MORE_OPTIONS = [
-    {
-        option: '100 OVERDROP XP ',
-    },
-
-    {
-        option: '200 OVERDROP XP ',
-    },
-
-    {
-        option: '500 OVERDROP XP ',
-    },
-];
-
-const data = [...OPTIONS, ...MORE_OPTIONS].map((item, index) => ({
-    ...item,
-    style: {
-        backgroundColor: index % 2 === 0 ? '#DBA111' : '#03DAE5',
-        fontFamily: 'Arial',
-        fontSize: 16,
-        fontWeight: 500,
-    },
-}));
 
 const WheelOfFortune: React.FC = () => {
     const [mustSpin, setMustSpin] = useState(false);
     const [prizeNumber, setPrizeNumber] = useState(0);
-    const { address } = useAccount();
+    const { address, isConnected } = useAccount();
     const theme = useTheme();
 
+    const userDataQuery = useUserDataQuery(address as string, {
+        enabled: isConnected,
+    });
+
+    const spinTheWheelOptionsQuery = useDailyQuestOptions();
+
+    const spinTheWheelOptions = spinTheWheelOptionsQuery?.isSuccess ? spinTheWheelOptionsQuery.data : undefined;
+
+    const userData: OverdropUserData | undefined =
+        userDataQuery?.isSuccess && userDataQuery?.data ? userDataQuery.data : undefined;
+
     const handleSpinClick = async () => {
-        setMustSpin(true);
         try {
             const request = await axios.get(`${generalConfig.OVERDROP_API_URL}/spin-the-wheel/${address}`);
+            setMustSpin(true);
             if (request) {
                 const response = request.data;
-                const index = data.findIndex(
-                    (item) => item.option.includes(response.type) && item.option.includes(response.amount.toString())
-                );
-                if (index !== -1) {
-                    setPrizeNumber(index);
-                } else {
-                    console.error('Prize not found in data');
-                }
+                const result = data?.findIndex((item) => item.id === response.id) ?? 0;
+                setPrizeNumber(result);
             }
         } catch (error) {
             console.log('Error spinning the wheel:', error);
         }
-
-        setPrizeNumber(0);
     };
+
+    const data = useMemo(() => {
+        if (userData && spinTheWheelOptions) {
+            const isDailyQuestDone = hasUserDoneDailyQuests(userData);
+
+            // Separate by bonus true/false (default to false if missing)
+            const withBonus = spinTheWheelOptions.filter((item) => item.bonus === true);
+            const withoutBonus = spinTheWheelOptions.filter((item) => item.bonus !== true);
+
+            const result = [];
+
+            while (withBonus.length || withoutBonus.length) {
+                if (withoutBonus.length) result.push(withoutBonus.shift());
+                if (withBonus.length) result.push(withBonus.shift());
+            }
+
+            return result.map((item: any) => {
+                if (!isDailyQuestDone && item.bonus) {
+                    return {
+                        ...item,
+                        option: `${item.amount} ${item.type} 🔒`,
+                        style: {
+                            backgroundColor: '#7a683a',
+                            fontFamily: 'Arial',
+                            fontSize: 16,
+                            fontWeight: 500,
+                        },
+                    };
+                }
+                return {
+                    ...item,
+                    option: `${item.amount} ${item.type}`,
+                    style: {
+                        backgroundColor: item.bonus ? '#DBA111' : '#03DAE5',
+                        fontFamily: 'Arial',
+                        fontSize: 16,
+                        fontWeight: 500,
+                    },
+                };
+            });
+        }
+    }, [userData, spinTheWheelOptions]);
+
     return (
         <Wrapper>
-            <Wheel
-                mustStartSpinning={mustSpin}
-                prizeNumber={prizeNumber}
-                data={data}
-                outerBorderColor={theme.textColor.tertiary}
-                outerBorderWidth={4}
-                innerBorderWidth={10}
-                innerBorderColor={theme.textColor.tertiary}
-                radiusLineColor={theme.textColor.tertiary}
-                radiusLineWidth={6}
-                textColors={[theme.textColor.tertiary]}
-                spinDuration={0.4}
-                textDistance={55}
-                fontWeight={600}
-                startingOptionIndex={1}
-                onStopSpinning={() => {
-                    setMustSpin(false);
-                    console.log('hi');
-                }}
-                pointerProps={{
-                    style: {
-                        transform: `rotate(45deg)`,
-                        width: 70,
-                        height: 70,
-                    },
-                    src: pointer,
-                }}
-            />
+            {data && (
+                <Wheel
+                    mustStartSpinning={mustSpin}
+                    prizeNumber={prizeNumber}
+                    data={data}
+                    outerBorderColor={theme.textColor.tertiary}
+                    outerBorderWidth={4}
+                    innerBorderWidth={10}
+                    innerBorderColor={theme.textColor.tertiary}
+                    radiusLineColor={theme.textColor.tertiary}
+                    radiusLineWidth={6}
+                    textColors={[theme.textColor.tertiary]}
+                    textDistance={55}
+                    fontWeight={600}
+                    onStopSpinning={() => {
+                        setMustSpin(false);
+                        refetchUserOverdrop(address as any);
+                    }}
+                    pointerProps={{
+                        style: {
+                            transform: `rotate(45deg)`,
+                            width: 70,
+                            height: 70,
+                        },
+                        src: pointer,
+                    }}
+                />
+            )}
+
             <Footer>
                 <FlexDivSpaceBetween>
                     <div>

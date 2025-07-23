@@ -10,8 +10,8 @@ export type OverdropMultiplier = {
 };
 
 export enum RewardType {
-    XP_BOOST = 'XP BOOST',
-    OVERDROP_XP = 'OVERDROP XP',
+    XP_BOOST = 'XP_BOOST',
+    OVERDROP_XP = 'OVERDROP_XP',
 }
 
 export type Reward = {
@@ -71,4 +71,13 @@ export type UserRewards = {
     hasRewards: boolean;
     hasClaimed: boolean;
     proof: string[];
+};
+
+export type SpinThewheelOption = {
+    id: number;
+    min: number;
+    max: number;
+    type: RewardType;
+    amount: number;
+    bonus?: boolean;
 };

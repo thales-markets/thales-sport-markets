@@ -92,6 +92,12 @@ export const refetchLiquidityPoolData = (walletAddress: string, networkId: Netwo
     });
 };
 
+export const refetchUserOverdrop = (walletAddress: string) => {
+    queryConnector.queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.Overdrop.UserData(walletAddress),
+    });
+};
+
 export const refetchTicketLiquidity = (
     networkId: Network,
     isSystemBet: boolean,

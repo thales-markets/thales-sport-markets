@@ -176,6 +176,7 @@ const QUERY_KEYS = {
         Leaderboard: () => ['leaderboard'],
         UserMultipliers: (walletAddress: string) => ['userMultipliers', walletAddress],
         UserData: (walletAddress: string) => ['userData', walletAddress],
+        SpinTheWheel: () => ['spinTheWheel'],
         UserXPHistory: (walletAddress: string) => ['userXPHistory', walletAddress],
         GameMultipliers: () => ['gameMultipliers'],
         Price: () => ['price'],
