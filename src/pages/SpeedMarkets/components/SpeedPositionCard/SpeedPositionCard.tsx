@@ -1,7 +1,9 @@
 import Tooltip from 'components/Tooltip';
 import { USD_SIGN } from 'constants/currency';
 import { SPEED_MARKETS_WIDGET_Z_INDEX } from 'constants/ui';
+import { millisecondsToSeconds, secondsToMilliseconds } from 'date-fns';
 import { SpeedPositions } from 'enums/speedMarkets';
+import useInterval from 'hooks/useInterval';
 import { Dispatch } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled, { useTheme } from 'styled-components';
@@ -11,6 +13,8 @@ import { UserPosition } from 'types/speedMarkets';
 import { ThemeInterface } from 'types/ui';
 import { getCollateralByAddress, isOverCurrency } from 'utils/collaterals';
 import { formatShortDateWithFullTime } from 'utils/formatters/date';
+import { getPriceId } from 'utils/pyth';
+import { refetchPythPrice } from 'utils/queryConnector';
 import { isUserWinner, isUserWinning } from 'utils/speedMarkets';
 import { useChainId } from 'wagmi';
 import ClaimAction from '../ClaimAction';
@@ -42,6 +46,14 @@ const SpeedPositionCard: React.FC<SpeedPositionCardProps> = ({
     const isUserCurrentlyWinning = isUserWinning(position.side, position.strikePrice, position.currentPrice);
     const collateralByAddress = getCollateralByAddress(position.collateralAddress, networkId);
     const collateral = `${isOverCurrency(collateralByAddress) ? '$' : ''}${collateralByAddress}`;
+
+    // refetch Pyth price when position becomes matured and final price is missing
+    useInterval(() => {
+        // when becomes matured
+        if (Date.now() > position.maturityDate && position.finalPrice === 0) {
+            refetchPythPrice(getPriceId(networkId, position.asset), millisecondsToSeconds(position.maturityDate));
+        }
+    }, secondsToMilliseconds(1));
 
     return (
         <Container>

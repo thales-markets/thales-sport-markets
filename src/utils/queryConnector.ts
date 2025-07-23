@@ -167,4 +167,8 @@ export const refetchActiveSpeedMarkets = (networkId: Network) => {
     });
 };
 
+export const refetchPythPrice = (priceId: string, publishTime: number) => {
+    queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.Prices.PythPrices(priceId, publishTime) });
+};
+
 export default queryConnector;
