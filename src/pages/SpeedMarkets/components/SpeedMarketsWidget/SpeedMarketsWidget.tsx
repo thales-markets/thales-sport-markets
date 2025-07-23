@@ -138,7 +138,7 @@ const CloseIcon = styled.i`
 `;
 
 const Content = styled(FlexDivColumn)`
-    gap: 8px;
+    gap: 10px;
     height: 100%;
 `;
 

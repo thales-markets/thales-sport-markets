@@ -93,7 +93,7 @@ const SpeedTrading: React.FC<SpeedTradingProps> = ({ deltaTimeSec, priceSlippage
 };
 
 const ChartWrapper = styled.div`
-    min-height: 200px;
+    min-height: 180px;
 `;
 
 export default SpeedTrading;
