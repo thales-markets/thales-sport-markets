@@ -67,10 +67,10 @@ export const COLLATERALS: Record<SupportedNetwork, Coins[]> = {
     ],
     [Network.OptimismSepolia]: [
         CRYPTO_CURRENCY_MAP.USDC as Coins,
+        CRYPTO_CURRENCY_MAP.OVER as Coins,
         CRYPTO_CURRENCY_MAP.USDT as Coins,
         CRYPTO_CURRENCY_MAP.WETH as Coins,
         CRYPTO_CURRENCY_MAP.ETH as Coins,
-        CRYPTO_CURRENCY_MAP.THALES as Coins,
     ],
 };
 
@@ -113,9 +113,9 @@ export const SPEED_OFFRAMP_UNSUPPORTED_COLLATERALS: Record<SupportedNetwork, Coi
     [Network.Arbitrum]: [CRYPTO_CURRENCY_MAP.OVER as Coins, CRYPTO_CURRENCY_MAP.wBTC as Coins],
     [Network.Base]: [CRYPTO_CURRENCY_MAP.OVER as Coins, CRYPTO_CURRENCY_MAP.cbBTC as Coins],
     [Network.OptimismSepolia]: [
+        CRYPTO_CURRENCY_MAP.OVER as Coins,
         CRYPTO_CURRENCY_MAP.WETH as Coins,
         CRYPTO_CURRENCY_MAP.ETH as Coins,
-        CRYPTO_CURRENCY_MAP.THALES as Coins,
     ],
 };
 

@@ -36,13 +36,16 @@ export const getCollateralAddress = (networkId: SupportedNetwork, index: number,
     multipleCollateral[getCollateral(networkId, index, collaterals)]?.addresses[networkId];
 
 export const getCollateralByAddress = (collateralAddress: string, networkId: number) => {
-    const collateral = Object.keys(multipleCollateral).find((collateralKey: string) =>
-        Object.values(multipleCollateral[collateralKey as Coins].addresses).some(
-            (address: string) => collateralAddress.toLowerCase() === address.toLowerCase()
-        )
-    );
+    let collateral = getDefaultCollateral(networkId);
+    Object.keys(multipleCollateral).forEach((collateralKey: string) => {
+        Object.values(multipleCollateral[collateralKey as Coins].addresses).forEach((address: string) => {
+            if (collateralAddress.toLowerCase() === address.toLowerCase()) {
+                collateral = collateralKey as Coins;
+            }
+        });
+    });
 
-    return collateral ? (collateral as Coins) : getDefaultCollateral(networkId);
+    return collateral;
 };
 
 export const getSpeedOfframpCollaterals = (networkId: SupportedNetwork) =>
