@@ -1,21 +1,24 @@
 import pointer from 'assets/images/svgs/pointer.svg';
+import axios from 'axios';
 import Button from 'components/Button';
+import { generalConfig } from 'config/general';
 import React, { useState } from 'react';
 import { Wheel } from 'react-custom-roulette';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivSpaceBetween } from 'styles/common';
+import { useAccount } from 'wagmi';
 
 const OPTIONS = [
     {
-        option: '20% XP boost for 24h',
+        option: '20% XP BOOST for 24h',
     },
 
     {
-        option: '30% XP boost for 24h',
+        option: '30% XP BOOST for 24h',
     },
 
     {
-        option: '50% XP boost for 24h',
+        option: '50% XP BOOST for 24h',
     },
 ];
 
@@ -46,12 +49,29 @@ const data = [...OPTIONS, ...MORE_OPTIONS].map((item, index) => ({
 const WheelOfFortune: React.FC = () => {
     const [mustSpin, setMustSpin] = useState(false);
     const [prizeNumber, setPrizeNumber] = useState(0);
+    const { address } = useAccount();
     const theme = useTheme();
 
-    const handleSpinClick = () => {
+    const handleSpinClick = async () => {
         setMustSpin(true);
-        const newPrizeNumber = Math.floor(Math.random() * data.length);
-        setPrizeNumber(newPrizeNumber);
+        try {
+            const request = await axios.get(`${generalConfig.OVERDROP_API_URL}/spin-the-wheel/${address}`);
+            if (request) {
+                const response = request.data;
+                const index = data.findIndex(
+                    (item) => item.option.includes(response.type) && item.option.includes(response.amount.toString())
+                );
+                if (index !== -1) {
+                    setPrizeNumber(index);
+                } else {
+                    console.error('Prize not found in data');
+                }
+            }
+        } catch (error) {
+            console.log('Error spinning the wheel:', error);
+        }
+
+        setPrizeNumber(0);
     };
     return (
         <Wrapper>
@@ -66,6 +86,7 @@ const WheelOfFortune: React.FC = () => {
                 radiusLineColor={theme.textColor.tertiary}
                 radiusLineWidth={6}
                 textColors={[theme.textColor.tertiary]}
+                spinDuration={0.4}
                 textDistance={55}
                 fontWeight={600}
                 startingOptionIndex={1}

@@ -9,6 +9,16 @@ export type OverdropMultiplier = {
     tooltip?: string;
 };
 
+export enum RewardType {
+    XP_BOOST = 'XP BOOST',
+    OVERDROP_XP = 'OVERDROP XP',
+}
+
+export type Reward = {
+    type: RewardType;
+    amount: number;
+};
+
 export type OverdropUserData = {
     address: string;
     points: number;
@@ -18,7 +28,13 @@ export type OverdropUserData = {
         arb: number;
     };
     rank: number;
-    lastTwitterActivity: number;
+    lastTwitterActivity?: number;
+    lastTradeOvertime?: number;
+    lastTradeSpeed?: number;
+    wheel?: {
+        lastSpinTime?: number;
+        reward?: Reward;
+    };
 };
 
 export type OverdropXPHistory = {

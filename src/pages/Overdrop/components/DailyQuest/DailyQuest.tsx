@@ -1,9 +1,13 @@
 import Button from 'components/Button';
 import WheelOfFortune from 'components/WheelOfFortune';
+import { getDayOfYear } from 'date-fns';
 import { ScreenSizeBreakpoint } from 'enums/ui';
-import React, { useState } from 'react';
+import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
+import React, { useEffect, useMemo, useState } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered, FlexDivSpaceBetween } from 'styles/common';
+import { OverdropUserData } from 'types/overdrop';
+import { useAccount } from 'wagmi';
 
 const DAILY_QUESTS = [
     {
@@ -12,6 +16,7 @@ const DAILY_QUESTS = [
         description: 'Make any bet on Overtime platform',
         buttonText: 'Start',
         onClick: () => console.log('Overtime Bet Started'),
+        completed: false,
     },
     {
         icon: 'sidebar-icon sidebar-icon--speed-markets',
@@ -19,6 +24,7 @@ const DAILY_QUESTS = [
         description: 'Complete 1 speed market position',
         buttonText: 'Start',
         onClick: () => console.log('Speed Market Bet Started'),
+        completed: false,
     },
     {
         icon: 'icon icon--social',
@@ -26,6 +32,7 @@ const DAILY_QUESTS = [
         description: 'Post with your affiliate link',
         buttonText: 'Send',
         onClick: () => console.log('Social link Bet Started'),
+        completed: false,
     },
 ];
 
@@ -33,10 +40,65 @@ const DailyQuest: React.FC = () => {
     const theme = useTheme();
 
     const [showSpinTheWheel, setShowSpinTheWheel] = useState(false);
+    const { address, isConnected } = useAccount();
+    const userDataQuery = useUserDataQuery(address as string, {
+        enabled: isConnected,
+    });
+
+    const userData: OverdropUserData | undefined =
+        userDataQuery?.isSuccess && userDataQuery?.data ? userDataQuery.data : undefined;
+
+    useEffect(() => {
+        if (userData) {
+            const today = getDayOfYear(new Date());
+
+            if (userData.lastTradeOvertime) {
+                const lastTradeDay = getDayOfYear(new Date(userData.lastTradeOvertime));
+                if (today === lastTradeDay) {
+                    DAILY_QUESTS[0].completed = true;
+                } else {
+                    DAILY_QUESTS[0].completed = false;
+                }
+            } else {
+                DAILY_QUESTS[0].completed = false;
+            }
+            if (userData.lastTradeSpeed) {
+                const lastSpeedTradeDay = getDayOfYear(new Date(userData.lastTradeSpeed));
+                if (today === lastSpeedTradeDay) {
+                    DAILY_QUESTS[1].completed = true;
+                } else {
+                    DAILY_QUESTS[1].completed = false;
+                }
+            } else {
+                DAILY_QUESTS[1].completed = false;
+            }
+            if (userData.lastTwitterActivity) {
+                const lastTwitterDay = getDayOfYear(new Date(userData.lastTwitterActivity));
+                if (today === lastTwitterDay) {
+                    DAILY_QUESTS[2].completed = true;
+                } else {
+                    DAILY_QUESTS[2].completed = false;
+                }
+            } else {
+                DAILY_QUESTS[2].completed = false;
+            }
+        }
+    }, [userData]);
+
+    const isSpinTheWheelCompleted = useMemo(() => {
+        if (userData) {
+            const today = getDayOfYear(new Date());
+            if (userData.wheel && userData.wheel.lastSpinTime) {
+                return getDayOfYear(new Date(userData.wheel.lastSpinTime)) === today;
+            }
+        }
+        return false;
+    }, [userData]);
+
     return (
         <Container>
             {DAILY_QUESTS.map((quest, index) => (
-                <DailyQuestItem key={index}>
+                <DailyQuestItem completed={quest.completed} key={index}>
                     <FlexDivCentered>
                         <Icon className={quest.icon} />
                         <HeaderWrapper>
@@ -44,24 +106,30 @@ const DailyQuest: React.FC = () => {
                             <Description>{quest.description}</Description>
                         </HeaderWrapper>
                     </FlexDivCentered>
-
-                    <Button
-                        borderRadius="8px"
-                        textColor={theme.textColor.quaternary}
-                        borderColor={theme.borderColor.quaternary}
-                        backgroundColor="transparent"
-                        width="62px"
-                        height="30px"
-                        fontSize="12px"
-                        lineHeight="12px"
-                        additionalStyles={{ textTransform: 'capitalize' }}
-                        onClick={quest.onClick}
-                    >
-                        {quest.buttonText}
-                    </Button>
+                    {quest.completed ? (
+                        <FlexDivCentered gap={4}>
+                            <FinishedText>Finished</FinishedText>
+                            <FinishedIcon />
+                        </FlexDivCentered>
+                    ) : (
+                        <Button
+                            borderRadius="8px"
+                            textColor={theme.textColor.quaternary}
+                            borderColor={theme.borderColor.quaternary}
+                            backgroundColor="transparent"
+                            width="62px"
+                            height="30px"
+                            fontSize="12px"
+                            lineHeight="12px"
+                            additionalStyles={{ textTransform: 'capitalize' }}
+                            onClick={quest.onClick}
+                        >
+                            {quest.buttonText}
+                        </Button>
+                    )}
                 </DailyQuestItem>
             ))}
-            <DailyQuestItem completed>
+            <DailyQuestItem completed={isSpinTheWheelCompleted}>
                 <FlexDivCentered>
                     <Icon className={'icon icon--wheel'} />
                     <HeaderWrapper>
@@ -71,21 +139,30 @@ const DailyQuest: React.FC = () => {
                         </BadgeWrapper>
                     </HeaderWrapper>
                 </FlexDivCentered>
-                <SpinTheWheelText>Complete daily quests to unlock bonus rewards</SpinTheWheelText>
-                <Button
-                    borderRadius="8px"
-                    textColor={theme.textColor.quaternary}
-                    borderColor={theme.borderColor.quaternary}
-                    backgroundColor="transparent"
-                    width="62px"
-                    height="30px"
-                    fontSize="12px"
-                    lineHeight="12px"
-                    additionalStyles={{ textTransform: 'capitalize' }}
-                    onClick={() => setShowSpinTheWheel(!showSpinTheWheel)}
-                >
-                    Spin
-                </Button>
+                {isSpinTheWheelCompleted ? (
+                    <FlexDivCentered gap={4}>
+                        <FinishedText>{`${userData?.wheel?.reward?.amount} ${userData?.wheel?.reward?.type}`}</FinishedText>
+                        <FinishedIcon />
+                    </FlexDivCentered>
+                ) : (
+                    <>
+                        <SpinTheWheelText>Complete daily quests to unlock bonus rewards</SpinTheWheelText>
+                        <Button
+                            borderRadius="8px"
+                            textColor={theme.textColor.quaternary}
+                            borderColor={theme.borderColor.quaternary}
+                            backgroundColor="transparent"
+                            width="62px"
+                            height="30px"
+                            fontSize="12px"
+                            lineHeight="12px"
+                            additionalStyles={{ textTransform: 'capitalize' }}
+                            onClick={() => setShowSpinTheWheel(!showSpinTheWheel)}
+                        >
+                            Spin
+                        </Button>
+                    </>
+                )}
             </DailyQuestItem>
             {showSpinTheWheel && <WheelOfFortune />}
         </Container>
@@ -180,4 +257,15 @@ const Badge2 = styled(Badge1)`
 
 const BadgeWrapper = styled(FlexDivCentered)`
     gap: 4px;
+`;
+
+const FinishedText = styled.p`
+    color: #8af6a8;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: normal;
+`;
+
+const FinishedIcon = styled.i.attrs({ className: 'icon icon--resolvedmarkets' })`
+    color: #8af6a8;
 `;

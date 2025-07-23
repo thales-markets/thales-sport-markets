@@ -9,8 +9,12 @@ const useUserDataQuery = (walletAddress: string, options?: Omit<UseQueryOptions<
         queryKey: QUERY_KEYS.Overdrop.UserData(walletAddress),
         queryFn: async () => {
             try {
-                const response = await axios.get(`${generalConfig.OVERDROP_API_URL}/user/${walletAddress}`);
-
+                const response = await axios.get(`${generalConfig.OVERDROP_API_URL}/user/${walletAddress}`, {
+                    params: {
+                        season: 2,
+                        miniSeason: 1,
+                    },
+                });
                 if (response?.status === 200 && response?.data) return response.data;
                 return;
             } catch (e) {
