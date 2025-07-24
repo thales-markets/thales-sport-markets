@@ -146,10 +146,11 @@ export const resolveAllSpeedPositions = async (
     }
 
     const isEth = collateralAddress === ZERO_ADDRESS;
-    const isDefaultCollateral =
+    const isDefaultResolveCollateral =
         !collateralAddress ||
         getCollateralByAddress(collateralAddress, networkConfig.networkId) ===
             getDefaultCollateral(networkConfig.networkId);
+    const isOfframp = !isDefaultResolveCollateral && positions[0].isDefaultCollateral;
 
     const priceConnection = getPriceConnection(networkConfig.networkId);
 
@@ -210,20 +211,20 @@ export const resolveAllSpeedPositions = async (
                           methodName: 'resolveMarketManuallyBatch',
                           data: [marketsToResolve, manualFinalPrices],
                       })
-                    : isDefaultCollateral
+                    : isOfframp
                     ? await executeBiconomyTransaction({
-                          collateralAddress: collateralAddress as Address,
-                          networkId: networkConfig.networkId,
-                          contract: speedMarketsAMMResolverContractWithSigner,
-                          methodName: 'resolveMarketsBatch',
-                          data: [marketsToResolve, priceUpdateDataArray],
-                      })
-                    : await executeBiconomyTransaction({
                           collateralAddress: collateralAddress as Address,
                           networkId: networkConfig.networkId,
                           contract: speedMarketsAMMResolverContractWithSigner,
                           methodName: 'resolveMarketsBatchOffRamp',
                           data: [marketsToResolve, priceUpdateDataArray, collateralAddress, isEth],
+                      })
+                    : await executeBiconomyTransaction({
+                          collateralAddress: collateralAddress as Address,
+                          networkId: networkConfig.networkId,
+                          contract: speedMarketsAMMResolverContractWithSigner,
+                          methodName: 'resolveMarketsBatch',
+                          data: [marketsToResolve, priceUpdateDataArray],
                       });
             } else {
                 hash = isAdmin
@@ -231,13 +232,13 @@ export const resolveAllSpeedPositions = async (
                           marketsToResolve,
                           manualFinalPrices,
                       ])
-                    : isDefaultCollateral
-                    ? await speedMarketsAMMResolverContractWithSigner.write.resolveMarketsBatch(
-                          [marketsToResolve, priceUpdateDataArray],
+                    : isOfframp
+                    ? await speedMarketsAMMResolverContractWithSigner.write.resolveMarketsBatchOffRamp(
+                          [marketsToResolve, priceUpdateDataArray, collateralAddress, isEth],
                           { value: totalUpdateFee }
                       )
-                    : await speedMarketsAMMResolverContractWithSigner.write.resolveMarketsBatchOffRamp(
-                          [marketsToResolve, priceUpdateDataArray, collateralAddress, isEth],
+                    : await speedMarketsAMMResolverContractWithSigner.write.resolveMarketsBatch(
+                          [marketsToResolve, priceUpdateDataArray],
                           { value: totalUpdateFee }
                       );
             }
