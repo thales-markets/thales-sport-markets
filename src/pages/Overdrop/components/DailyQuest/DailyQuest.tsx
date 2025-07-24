@@ -178,7 +178,7 @@ const DailyQuest: React.FC = () => {
                     )}
                 </DailyQuestItem>
             ))}
-            <DailyQuestItem completed={isSpinTheWheelCompleted}>
+            <WheelItem completed={isSpinTheWheelCompleted}>
                 <FlexDivCentered>
                     <Icon className={'icon icon--wheel'} />
                     <HeaderWrapper>
@@ -196,6 +196,7 @@ const DailyQuest: React.FC = () => {
                 ) : (
                     <>
                         <SpinTheWheelText>Complete daily quests to unlock bonus rewards</SpinTheWheelText>
+
                         <Button
                             borderRadius="8px"
                             textColor={theme.textColor.quaternary}
@@ -212,7 +213,7 @@ const DailyQuest: React.FC = () => {
                         </Button>
                     </>
                 )}
-            </DailyQuestItem>
+            </WheelItem>
             {showSpinTheWheel && <WheelOfFortune />}
         </Container>
     );
@@ -235,6 +236,7 @@ const Container = styled.div`
 `;
 
 const DailyQuestItem = styled(FlexDivSpaceBetween)<{ completed?: boolean; social?: boolean }>`
+    position: relative;
     height: 76px;
     border-radius: 8px;
     padding: 18px 22px;
@@ -253,6 +255,12 @@ const DailyQuestItem = styled(FlexDivSpaceBetween)<{ completed?: boolean; social
         gap: 10px;
 
        `}
+    }
+`;
+
+const WheelItem = styled(DailyQuestItem)`
+    @media (max-width: ${ScreenSizeBreakpoint.EXTRA_SMALL}px) {
+        height: 84px;
     }
 `;
 
@@ -288,6 +296,10 @@ const SpinTheWheelText = styled.p`
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+    @media (max-width: ${ScreenSizeBreakpoint.EXTRA_SMALL}px) {
+        position: absolute;
+        top: 64px;
+    }
 `;
 
 const Badge1 = styled.div`

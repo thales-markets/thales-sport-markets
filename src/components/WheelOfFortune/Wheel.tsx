@@ -2,6 +2,7 @@ import pointer from 'assets/images/svgs/pointer.svg';
 import axios from 'axios';
 import Button from 'components/Button';
 import { generalConfig } from 'config/general';
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import useDailyQuestOptions from 'queries/overdrop/useDailyQuestOptions';
 import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
 import React, { useMemo, useState } from 'react';
@@ -123,10 +124,6 @@ const WheelOfFortune: React.FC = () => {
                         <Text>Daily Spin the Wheel</Text>
                         <Description>Spin once every 24 hours • Guaranteed rewards</Description>
                     </div>
-                    <div>
-                        <Description>Next spin in:</Description>
-                        <Time>00:00:00</Time>
-                    </div>
                 </FlexDivSpaceBetween>
                 <Button
                     width="100%"
@@ -162,6 +159,9 @@ const Footer = styled.div`
     width: 100%;
     background: #151b36;
     margin-top: -60px;
+    @media (max-width: ${ScreenSizeBreakpoint.EXTRA_SMALL}px) {
+        margin-top: 0;
+    }
 `;
 
 const Text = styled.p`
@@ -183,15 +183,15 @@ const Description = styled.p`
     line-height: 20px; /* 142.857% */
 `;
 
-const Time = styled.p`
-    color: #3fffff;
+// const Time = styled.p`
+//     color: #3fffff;
 
-    text-align: right;
-    font-family: Inter;
-    font-size: 21px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 32px;
-`;
+//     text-align: right;
+//     font-family: Inter;
+//     font-size: 21px;
+//     font-style: normal;
+//     font-weight: 700;
+//     line-height: 32px;
+// `;
 
 export default WheelOfFortune;
