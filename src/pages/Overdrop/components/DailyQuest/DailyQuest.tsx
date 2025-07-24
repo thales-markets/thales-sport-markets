@@ -1,12 +1,23 @@
+import axios from 'axios';
 import Button from 'components/Button';
+import TextInput from 'components/fields/TextInput';
 import WheelOfFortune from 'components/WheelOfFortune';
+import { generalConfig } from 'config/general';
+import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import ROUTES from 'constants/routes';
 import { getDayOfYear } from 'date-fns';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { getIsMobile } from 'redux/modules/app';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered, FlexDivSpaceBetween } from 'styles/common';
 import { OverdropUserData } from 'types/overdrop';
+import { refetchUserOverdrop } from 'utils/queryConnector';
+import { navigateTo } from 'utils/routes';
 import { useAccount } from 'wagmi';
 
 const DAILY_QUESTS = [
@@ -15,7 +26,7 @@ const DAILY_QUESTS = [
         title: 'Place Overtime Bet',
         description: 'Make any bet on Overtime platform',
         buttonText: 'Start',
-        onClick: () => console.log('Overtime Bet Started'),
+        onClick: () => navigateTo(ROUTES.Markets.Home),
         completed: false,
     },
     {
@@ -33,20 +44,45 @@ const DAILY_QUESTS = [
         buttonText: 'Send',
         onClick: () => console.log('Social link Bet Started'),
         completed: false,
+        social: true,
     },
 ];
 
 const DailyQuest: React.FC = () => {
     const theme = useTheme();
-
+    const { t } = useTranslation();
     const [showSpinTheWheel, setShowSpinTheWheel] = useState(false);
     const { address, isConnected } = useAccount();
+    const [tweetUrl, setTweetUrl] = useState('');
+    const isMobile = useSelector(getIsMobile);
+
     const userDataQuery = useUserDataQuery(address as string, {
         enabled: isConnected,
     });
-
     const userData: OverdropUserData | undefined =
         userDataQuery?.isSuccess && userDataQuery?.data ? userDataQuery.data : undefined;
+
+    const postTweet = useCallback(async () => {
+        if (address) {
+            const toastTwitter = toast.loading(t('markets.parlay.share-ticket.verifying-tweet'));
+            try {
+                const response = await axios.post(`${generalConfig.OVERDROP_API_URL}/user-twitter`, {
+                    address,
+                    tweetUrl,
+                });
+
+                if (response.data.success) {
+                    toast.update(toastTwitter, getSuccessToastOptions(response.data.status));
+                    refetchUserOverdrop(address);
+                } else {
+                    toast.update(toastTwitter, getErrorToastOptions(response.data.error));
+                }
+            } catch (e) {
+                console.log(e);
+                toast.update(toastTwitter, getErrorToastOptions(t('markets.parlay.share-ticket.network-error')));
+            }
+        }
+    }, [address, tweetUrl, t]);
 
     const isSpinTheWheelCompleted = useMemo(() => {
         if (userData) {
@@ -89,10 +125,12 @@ const DailyQuest: React.FC = () => {
         return false;
     }, [userData]);
 
+    const isSocialUrlValid = tweetUrl.startsWith('https://x.com/') || tweetUrl.startsWith('https://twitter.com/');
+
     return (
         <Container>
             {DAILY_QUESTS.map((quest, index) => (
-                <DailyQuestItem completed={quest.completed} key={index}>
+                <DailyQuestItem social={quest.social} completed={quest.completed} key={index}>
                     <FlexDivCentered>
                         <Icon className={quest.icon} />
                         <HeaderWrapper>
@@ -100,26 +138,43 @@ const DailyQuest: React.FC = () => {
                             <Description>{quest.description}</Description>
                         </HeaderWrapper>
                     </FlexDivCentered>
+
                     {quest.completed ? (
                         <FlexDivCentered gap={4}>
                             <FinishedText>Finished</FinishedText>
                             <FinishedIcon />
                         </FlexDivCentered>
                     ) : (
-                        <Button
-                            borderRadius="8px"
-                            textColor={theme.textColor.quaternary}
-                            borderColor={theme.borderColor.quaternary}
-                            backgroundColor="transparent"
-                            width="62px"
-                            height="30px"
-                            fontSize="12px"
-                            lineHeight="12px"
-                            additionalStyles={{ textTransform: 'capitalize' }}
-                            onClick={quest.onClick}
-                        >
-                            {quest.buttonText}
-                        </Button>
+                        <ActionWrapper full={quest.social} gap={10}>
+                            {quest.social && (
+                                <TextInput
+                                    width={isMobile ? '100%' : '350px'}
+                                    height="30px"
+                                    disabled={quest.completed}
+                                    borderColor="transparent"
+                                    placeholder="Place your tweet or cast url here"
+                                    value={tweetUrl}
+                                    inputFontSize={'12px'}
+                                    onChange={(e: any) => setTweetUrl(e.target.value)}
+                                    margin={'0px'}
+                                />
+                            )}
+                            <Button
+                                borderRadius="8px"
+                                textColor={theme.textColor.quaternary}
+                                borderColor={theme.borderColor.quaternary}
+                                disabled={quest.social ? !isSocialUrlValid : false}
+                                backgroundColor="transparent"
+                                width="62px"
+                                height="30px"
+                                fontSize="12px"
+                                lineHeight="12px"
+                                additionalStyles={{ textTransform: 'capitalize' }}
+                                onClick={quest.social ? postTweet : quest.onClick}
+                            >
+                                {quest.buttonText}
+                            </Button>
+                        </ActionWrapper>
                     )}
                 </DailyQuestItem>
             ))}
@@ -179,7 +234,7 @@ const Container = styled.div`
     margin-bottom: 20px;
 `;
 
-const DailyQuestItem = styled(FlexDivSpaceBetween)<{ completed?: boolean }>`
+const DailyQuestItem = styled(FlexDivSpaceBetween)<{ completed?: boolean; social?: boolean }>`
     height: 76px;
     border-radius: 8px;
     padding: 18px 22px;
@@ -187,6 +242,18 @@ const DailyQuestItem = styled(FlexDivSpaceBetween)<{ completed?: boolean }>`
     background: ${(props) => props.theme.overdrop.background.octonary};
     border: ${(props) =>
         props.completed ? ' 2px solid #8AF6A8' : `2px solid ${props.theme.overdrop.background.octonary}`};
+    @media (max-width: ${ScreenSizeBreakpoint.EXTRA_SMALL}px) {
+        ${(props) =>
+            props.social &&
+            `
+        flex-direction: column;
+        align-items: flex-start;
+        height: auto;
+        width: 100%;
+        gap: 10px;
+
+       `}
+    }
 `;
 
 const Icon = styled.i`
@@ -262,4 +329,10 @@ const FinishedText = styled.p`
 
 const FinishedIcon = styled.i.attrs({ className: 'icon icon--resolvedmarkets' })`
     color: #8af6a8;
+`;
+
+const ActionWrapper = styled(FlexDivCentered)<{ full?: boolean }>`
+    @media (max-width: ${ScreenSizeBreakpoint.EXTRA_SMALL}px) {
+        width: ${(props) => (props.full ? '100%' : '')};
+    }
 `;
