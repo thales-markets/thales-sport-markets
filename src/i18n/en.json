@@ -150,6 +150,9 @@
             "seconds-short": "s"
         },
         "or": "or",
+        "above": "above",
+        "below": "below",
+        "current-price": "current price",
         "dapp": "dapp",
         "launch-dapp": "launch dapp",
         "cancel": "Cancel",
@@ -1552,7 +1555,9 @@
         "amm-trading": {
             "choose-direction": "choose direction",
             "choose-time": "choose duration",
-            "estimate-gas": "Estimated transaction cost"
+            "estimate-gas": "Estimated transaction cost",
+            "trading-details-default": "Build your position above to see your win.",
+            "trading-details": "If {{asset}} price is {{position}} {{strikePrice}} ({{slippage}}%<tooltip />) in {{duration}}, you win {{payout}}."
         },
         "user-positions": {
             "claim": "Claim",
@@ -1561,7 +1566,6 @@
             "claim-all": "Claim all",
             "claim-all-progress": "Claiming all",
             "claim-all-in": "Claim all in",
-            "claim-only-in": "Only in <currency>{{currencyKey}}</currency>",
             "confirmation-message": "Position(s) successfully claimed",
             "no-resolve-positions": "No positions for this section with price",
             "no-positions": "No positions",

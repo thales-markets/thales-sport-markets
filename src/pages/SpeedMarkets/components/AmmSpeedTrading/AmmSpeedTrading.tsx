@@ -34,7 +34,6 @@ import {
     coinParser,
     Coins,
     COLLATERAL_DECIMALS,
-    countDecimals,
     DEFAULT_CURRENCY_DECIMALS,
     formatCurrencyWithSign,
     localStore,
@@ -78,6 +77,7 @@ import { delay } from 'utils/timer';
 import { Client, parseUnits, stringToHex } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
+import TradingDetails from '../TradingDetails';
 
 type AmmSpeedTradingProps = {
     selectedAsset: string;
@@ -772,20 +772,18 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
 
     return (
         <Container>
-            <TradingDetails>
-                <span>
-                    {`TODO: some trading details: submitted strike price: ${submittedStrikePrice}, price slippage: ${roundNumberToDecimals(
-                        priceSlippage * 100,
-                        countDecimals(priceSlippage) - 2
-                    )}%`}
-                    <Tooltip
-                        overlay={t('speed-markets.tooltips.slippage')}
-                        marginLeft={2}
-                        iconFontSize={14}
-                        zIndex={SPEED_MARKETS_WIDGET_Z_INDEX}
-                    />
-                </span>
-            </TradingDetails>
+            <TradingDetailsWrapper>
+                <TradingDetails
+                    selectedAsset={selectedAsset}
+                    selectedPosition={selectedPosition}
+                    strikePrice={submittedStrikePrice}
+                    priceSlippage={priceSlippage}
+                    deltaTimeSec={deltaTimeSec}
+                    paidAmount={paidAmount}
+                    profitPerPosition={profitPerPosition}
+                    selectedCollateral={selectedCollateral}
+                />
+            </TradingDetailsWrapper>
             <ButtonWrapper>
                 {getSubmitButton()}
                 {gasFee > 0 && !isButtonDisabled && (
@@ -823,9 +821,8 @@ const Container = styled(FlexDivColumn)`
     position: relative;
 `;
 
-const TradingDetails = styled(FlexDivCentered)`
+const TradingDetailsWrapper = styled(FlexDivCentered)`
     height: 100%;
-    font-size: 13px;
 `;
 
 const CollateralText = styled.span`
