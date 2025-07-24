@@ -336,7 +336,7 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
     const handleResolveAll = async () => {
         setIsSubmitting(true);
 
-        const collateralAddress = positions[0].collateralAddress as Address;
+        const collateralAddress = claimablePositions[0].collateralAddress as Address;
 
         await resolveAllSpeedPositions(
             claimablePositions,
