@@ -11,6 +11,7 @@ import useUserResolvedSpeedMarketsQuery from 'queries/speedMarkets/useUserResolv
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { getIsMobile } from 'redux/modules/app';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
@@ -28,11 +29,13 @@ import SpeedPositionCard from '../SpeedPositionCard';
 const SpeedPositions: React.FC = () => {
     const { t } = useTranslation();
 
+    const isBiconomy = useSelector(getIsBiconomy);
+    const isMobile = useSelector(getIsMobile);
+
     const networkId = useChainId();
     const client = useClient();
     const { address, isConnected } = useAccount();
     const { smartAddress } = useBiconomy();
-    const isBiconomy = useSelector(getIsBiconomy);
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const [selectedFilter, setSelectedFilter] = useState(PositionsFilter.PENDING);
@@ -104,6 +107,10 @@ const SpeedPositions: React.FC = () => {
             ? orderBy(claimableUserSpeedMarkets, ['maturityDate'], ['desc'])
             : orderBy(historyUserSpeedMarkets, ['createdAt'], ['desc']);
 
+    const isAllPositionsInSameCollateral =
+        positions.every((marketData) => marketData.isDefaultCollateral) ||
+        positions.every((marketData) => !marketData.isDefaultCollateral);
+
     const isLoading =
         userActiveSpeedMarketsDataQuery.isLoading ||
         pythPricesQueries.some((pythPriceQuery) => pythPriceQuery.isLoading) ||
@@ -149,35 +156,41 @@ const SpeedPositions: React.FC = () => {
                 })}
             </Filters>
             {selectedFilter === PositionsFilter.CLAIMABLE && !!positions.length && (
-                <ClaimAllRow>
-                    <ClaimAllWrapper>
-                        <ClaimAction
-                            positions={positions}
-                            claimCollateralIndex={claimCollateralIndex}
-                            isDisabled={isSubmittingBatch || isActionInProgress}
-                            isActionInProgress={isActionInProgress}
-                            setIsActionInProgress={setIsSubmittingBatch}
-                        />
-                    </ClaimAllWrapper>
-                    {isMultiCollateralSupported && (
-                        <FlexDivRowCentered>
-                            <ClaimInLabel>{t('speed-markets.user-positions.claim-in')}:</ClaimInLabel>
-                            <CollateralSelector
-                                collateralArray={getSpeedOfframpCollaterals(networkId)}
-                                selectedItem={claimCollateralIndex}
-                                onChangeCollateral={setClaimCollateralIndex}
-                                preventPaymentCollateralChange
-                                disabled={isSubmittingBatch || isActionInProgress}
-                                topPosition="20px"
+                <>
+                    <ClaimAllRow>
+                        <ClaimAllWrapper>
+                            <ClaimAction
+                                positions={positions}
+                                claimCollateralIndex={claimCollateralIndex}
+                                isDisabled={isSubmittingBatch || isActionInProgress}
+                                isActionInProgress={isActionInProgress}
+                                setIsActionInProgress={setIsSubmittingBatch}
+                                isClaimAll
                             />
-                        </FlexDivRowCentered>
-                    )}
-                </ClaimAllRow>
+                        </ClaimAllWrapper>
+                        {isMultiCollateralSupported && (
+                            <FlexDivRowCentered>
+                                <ClaimInLabel>{t('speed-markets.user-positions.claim-in')}:</ClaimInLabel>
+                                <CollateralSelector
+                                    collateralArray={getSpeedOfframpCollaterals(networkId)}
+                                    selectedItem={claimCollateralIndex}
+                                    onChangeCollateral={setClaimCollateralIndex}
+                                    preventPaymentCollateralChange
+                                    disabled={isSubmittingBatch || isActionInProgress}
+                                    topPosition="20px"
+                                />
+                            </FlexDivRowCentered>
+                        )}
+                    </ClaimAllRow>
+                    <FlexDivRow>
+                        {isMobile && !isAllPositionsInSameCollateral && (
+                            <Info>{`* ${t('speed-markets.tooltips.claim-all-except-over')}`}</Info>
+                        )}
+                    </FlexDivRow>
+                </>
             )}
             {selectedFilter === PositionsFilter.HISTORY && (
-                <HistoryInfo>
-                    {t('speed-markets.user-positions.history-limit', { days: MARKET_DURATION_IN_DAYS })}
-                </HistoryInfo>
+                <Info>{t('speed-markets.user-positions.history-limit', { days: MARKET_DURATION_IN_DAYS })}</Info>
             )}
             <Scroll width="calc(100% + 10px)" height="100%">
                 <Positions>
@@ -276,7 +289,7 @@ const ClaimInLabel = styled.span`
     white-space: nowrap;
 `;
 
-const HistoryInfo = styled.span`
+const Info = styled.span`
     font-size: 11px;
     line-height: 110%;
 `;

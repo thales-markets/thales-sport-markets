@@ -17,6 +17,7 @@ import React, { Dispatch, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { getIsMobile } from 'redux/modules/app';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivCentered } from 'styles/common';
@@ -52,6 +53,7 @@ type ClaimActionProps = {
     isDisabled?: boolean;
     isActionInProgress?: boolean;
     setIsActionInProgress?: Dispatch<boolean>;
+    isClaimAll?: boolean;
 };
 
 const ClaimAction: React.FC<ClaimActionProps> = ({
@@ -60,10 +62,12 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
     isDisabled,
     isActionInProgress,
     setIsActionInProgress,
+    isClaimAll,
 }) => {
     const { t } = useTranslation();
 
     const isBiconomy = useSelector(getIsBiconomy);
+    const isMobile = useSelector(getIsMobile);
 
     const networkId = useChainId() as SupportedNetwork;
     const client = useClient();
@@ -96,7 +100,6 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
     );
     const isClaimDefaultCollateral = claimCollateral === defaultCollateral;
 
-    const isSinglePosition = useMemo(() => positions.length === 1, [positions.length]);
     const position = useMemo(() => positions[0], [positions]);
 
     const isAllPositionsInSameCollateral =
@@ -111,8 +114,8 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
             ? getCollateralByAddress(nativeCollateralAddress, networkId)
             : null;
 
-    const payout = useMemo(() => (isSinglePosition ? position.payout : sumBy(claimablePositions, 'payout')), [
-        isSinglePosition,
+    const payout = useMemo(() => (isClaimAll ? sumBy(claimablePositions, 'payout') : position.payout), [
+        isClaimAll,
         position.payout,
         claimablePositions,
     ]);
@@ -350,20 +353,24 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
         <>
             <Container>
                 <Tooltip
-                    open={!hasAllowance}
-                    overlay={t('speed-markets.tooltips.approve-swap-tooltip', {
-                        currencyKey: claimCollateral,
-                        defaultCurrency: defaultCollateral,
-                    })}
+                    open={!hasAllowance || (!isMobile && !isAllPositionsInSameCollateral)}
+                    overlay={
+                        !hasAllowance
+                            ? t('speed-markets.tooltips.approve-swap-tooltip', {
+                                  currencyKey: claimCollateral,
+                                  defaultCurrency: defaultCollateral,
+                              })
+                            : t('speed-markets.tooltips.claim-all-except-over')
+                    }
                     zIndex={SPEED_MARKETS_WIDGET_Z_INDEX}
                 >
                     <Button
                         disabled={isButtonDisabled}
                         onClick={() =>
                             hasAllowance
-                                ? isSinglePosition
-                                    ? handleResolve()
-                                    : handleResolveAll()
+                                ? isClaimAll
+                                    ? handleResolveAll()
+                                    : handleResolve()
                                 : setOpenApprovalModal(true)
                         }
                         width="100%"
@@ -376,16 +383,16 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
                                 isSubmitting
                                     ? t(
                                           `speed-markets.user-positions.${
-                                              isSinglePosition ? 'claim-progress' : 'claim-all-progress'
+                                              isClaimAll ? 'claim-all-progress' : 'claim-progress'
                                           }`
                                       )
                                     : t(
                                           `speed-markets.user-positions.${
-                                              isSinglePosition
-                                                  ? `claim${isClaimDefaultCollateral && !nativeCollateral ? '' : '-in'}`
-                                                  : `claim-all${
+                                              isClaimAll
+                                                  ? `claim-all${
                                                         isClaimDefaultCollateral && !nativeCollateral ? '' : '-in'
                                                     }`
+                                                  : `claim${isClaimDefaultCollateral && !nativeCollateral ? '' : '-in'}`
                                           }`
                                       )
                             } ${

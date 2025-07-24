@@ -1599,7 +1599,8 @@
             "slippage": "Your trade will revert if the live price changes more than this percentage from your chosen Strike Price during trade execution.",
             "eth-to-weth": "Your ETH will be wrapped to WETH before executing the trade.",
             "pending-positions": "Pending positions",
-            "claimable-positions": "Claimable positions"
+            "claimable-positions": "Claimable positions",
+            "claim-all-except-over": "Claim all positions except those with $OVER collateral"
         },
         "errors": {
             "min-buyin": "Minimal buy-in is {{minAmount}}",
