@@ -9,6 +9,8 @@ import { ScreenSizeBreakpoint } from 'enums/ui';
 import useLocalStorage from 'hooks/useLocalStorage';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { getWalletConnectModalVisibility } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivRowCentered } from 'styles/common';
 import { buildHref } from 'utils/routes';
@@ -21,6 +23,8 @@ import SpeedTrading from '../SpeedTrading';
 
 const SpeedMarketsWidget: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     const { t } = useTranslation();
+
+    const isConnectWalletModalVisibile = useSelector(getWalletConnectModalVisibility);
 
     const networkId = useChainId();
     const { isConnected } = useAccount();
@@ -44,7 +48,7 @@ const SpeedMarketsWidget: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     }, [networkId]);
 
     return (
-        <Container>
+        <Container isHidden={!isConnected && isConnectWalletModalVisibile}>
             <HeaderRow>
                 <Header>
                     <SPAAnchor href={buildHref(LINKS.SpeedMarkets)}>
@@ -94,7 +98,8 @@ const SpeedMarketsWidget: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     );
 };
 
-const Container = styled(FlexDivColumn)`
+const Container = styled(FlexDivColumn)<{ isHidden: boolean }>`
+    ${(props) => (props.isHidden ? 'display: none;' : '')};
     position: fixed;
     bottom: 20px;
     right: ${SPEED_MARKETS_WIDGET_DEFAULT_RIGHT}px;
