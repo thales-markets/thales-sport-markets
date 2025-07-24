@@ -20,7 +20,7 @@ const useWidgetBotScript = (preventWidgetLoad: boolean, setSpeedMarketsWidgetOpe
         script.async = true;
         script.defer = true;
         script.onload = () => {
-            const crate = new (window as any).Crate({
+            new (window as any).Crate({
                 server: '906484044915687464',
                 channel: '983394762520412160',
                 notifications: false,
@@ -48,21 +48,6 @@ const useWidgetBotScript = (preventWidgetLoad: boolean, setSpeedMarketsWidgetOpe
                     }
                 });
             }
-
-            // TODO: check when discord is working
-            crate.on('open', () => {
-                console.log('✅ WidgetBot has been opened!');
-                // Your custom logic here
-            });
-
-            crate.on('close', () => {
-                console.log('❎ WidgetBot has been closed!');
-            });
-
-            // Optional: catch all events
-            crate.on('*', (event: string, data: any) => {
-                console.log(`[WidgetBot Event] ${event}`, data);
-            });
         };
 
         document.body.appendChild(script);

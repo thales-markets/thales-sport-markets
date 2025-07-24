@@ -278,6 +278,7 @@ const SelectBuyin: React.FC<SelectBuyinProps> = ({
                         borderColor={theme.input.borderColor.tertiary}
                         margin="0"
                         validationZIndex={SPEED_MARKETS_WIDGET_Z_INDEX}
+                        preventAutoFocus
                     />
                 </AmountToBuyContainer>
             </InputContainer>
