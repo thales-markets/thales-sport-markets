@@ -117,7 +117,6 @@ const Slippage: React.FC<SlippageProps> = ({ fixed, defaultValue, onChangeHandle
                     inputFontSize="13px"
                     width="70px"
                     borderColor={theme.input.borderColor.tertiary}
-                    preventAutoFocus
                 />
             </Row>
         </Container>

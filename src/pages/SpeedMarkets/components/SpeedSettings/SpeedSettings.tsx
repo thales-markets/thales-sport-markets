@@ -48,6 +48,7 @@ const SpeedSettings: React.FC<{ priceSlippage: number; setPriceSlippage: Dispatc
                 }}
                 borderColor={theme.input.borderColor.tertiary}
                 currencyLabel="%"
+                preventAutoFocus
             />
         </>
     );
