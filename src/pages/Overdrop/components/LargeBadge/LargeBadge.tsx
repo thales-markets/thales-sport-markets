@@ -87,7 +87,7 @@ const LockWrapper = styled(FlexDivColumn)`
     justify-content: center;
     width: 100px;
     height: 100px;
-    top: 50px;
+    top: 60px;
     background-color: ${(props) => props.theme.overdrop.badge.background.secondary};
     border: 3px solid ${(props) => props.theme.overdrop.borderColor.primary};
     border-radius: 50%;
