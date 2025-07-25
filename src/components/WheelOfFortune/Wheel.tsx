@@ -89,34 +89,36 @@ const WheelOfFortune: React.FC = () => {
 
     return (
         <Wrapper>
-            {data && (
-                <Wheel
-                    mustStartSpinning={mustSpin}
-                    prizeNumber={prizeNumber}
-                    data={data}
-                    outerBorderColor={theme.textColor.tertiary}
-                    outerBorderWidth={4}
-                    innerBorderWidth={10}
-                    innerBorderColor={theme.textColor.tertiary}
-                    radiusLineColor={theme.textColor.tertiary}
-                    radiusLineWidth={6}
-                    textColors={[theme.textColor.tertiary]}
-                    textDistance={55}
-                    fontWeight={600}
-                    onStopSpinning={() => {
-                        setMustSpin(false);
-                        refetchUserOverdrop(address as any);
-                    }}
-                    pointerProps={{
-                        style: {
-                            transform: `rotate(45deg)`,
-                            width: 70,
-                            height: 70,
-                        },
-                        src: pointer,
-                    }}
-                />
-            )}
+            <WheelWrapper>
+                {data && (
+                    <Wheel
+                        mustStartSpinning={mustSpin}
+                        prizeNumber={prizeNumber}
+                        data={data}
+                        outerBorderColor={theme.textColor.tertiary}
+                        outerBorderWidth={4}
+                        innerBorderWidth={10}
+                        innerBorderColor={theme.textColor.tertiary}
+                        radiusLineColor={theme.textColor.tertiary}
+                        radiusLineWidth={6}
+                        textColors={[theme.textColor.tertiary]}
+                        textDistance={55}
+                        fontWeight={600}
+                        onStopSpinning={() => {
+                            setMustSpin(false);
+                            refetchUserOverdrop(address as any);
+                        }}
+                        pointerProps={{
+                            style: {
+                                transform: `rotate(45deg)`,
+                                width: 70,
+                                height: 70,
+                            },
+                            src: pointer,
+                        }}
+                    />
+                )}
+            </WheelWrapper>
 
             <Footer>
                 <FlexDivSpaceBetween>
@@ -149,6 +151,13 @@ const Wrapper = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+`;
+
+const WheelWrapper = styled.div`
+    height: 445px;
+    @media (max-width: ${ScreenSizeBreakpoint.EXTRA_SMALL}px) {
+        height: auto;
+    }
 `;
 
 const Footer = styled.div`

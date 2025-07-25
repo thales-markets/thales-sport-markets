@@ -129,6 +129,10 @@ const DailyQuest: React.FC = () => {
 
     return (
         <Container>
+            <FlexDivSpaceBetween>
+                <HeaderTitle>Daily Quest</HeaderTitle>
+                <Reward>200XP + 10% Boost</Reward>
+            </FlexDivSpaceBetween>
             {DAILY_QUESTS.map((quest, index) => (
                 <DailyQuestItem social={quest.social} completed={quest.completed} key={index}>
                     <FlexDivCentered>
@@ -233,6 +237,21 @@ const Container = styled.div`
         padding: 10px 12px;
     }
     margin-bottom: 20px;
+`;
+
+const HeaderTitle = styled.h3`
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 28px; /* 155.556% */
+`;
+
+const Reward = styled.p`
+    color: ${(props) => props.theme.textColor.quaternary};
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 28px; /* 140% */
 `;
 
 const DailyQuestItem = styled(FlexDivSpaceBetween)<{ completed?: boolean; social?: boolean }>`
