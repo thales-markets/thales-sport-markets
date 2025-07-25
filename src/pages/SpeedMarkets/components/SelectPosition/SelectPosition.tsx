@@ -1,9 +1,11 @@
 import { SpeedPositions } from 'enums/speedMarkets';
 import { Dispatch, SetStateAction } from 'react';
+import { useSelector } from 'react-redux';
+import { getOddsType } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { FlexDivColumnCentered, FlexDivRow } from 'styles/common';
-import { truncToDecimals } from 'thales-utils';
 import { SelectedPosition } from 'types/speedMarkets';
+import { formatMarketOdds } from 'utils/markets';
 
 type SelectPositionProps = {
     selectedPosition: SelectedPosition;
@@ -19,6 +21,15 @@ const SelectPosition: React.FC<SelectPositionProps> = ({
     setSelectedPosition,
     profitAndSkewPerPosition,
 }) => {
+    const selectedOddsType = useSelector(getOddsType);
+
+    const impliedOddsUp = profitAndSkewPerPosition.profit[SpeedPositions.UP]
+        ? 1 / profitAndSkewPerPosition.profit[SpeedPositions.UP]
+        : 0;
+    const impliedOddsDown = profitAndSkewPerPosition.profit[SpeedPositions.DOWN]
+        ? 1 / profitAndSkewPerPosition.profit[SpeedPositions.DOWN]
+        : 0;
+
     return (
         <Container>
             <PositionButton
@@ -32,11 +43,7 @@ const SelectPosition: React.FC<SelectPositionProps> = ({
                     <Text>{SpeedPositions.UP}</Text>
                     <PositionIcon isUp className="speedmarkets-icon speedmarkets-icon--arrow" />
                 </Position>
-                <QuoteText>
-                    {profitAndSkewPerPosition.profit[SpeedPositions.UP]
-                        ? `${truncToDecimals(profitAndSkewPerPosition.profit[SpeedPositions.UP])}x`
-                        : '-'}
-                </QuoteText>
+                <QuoteText>{impliedOddsUp ? `${formatMarketOdds(selectedOddsType, impliedOddsUp)}x` : '-'}</QuoteText>
             </PositionButton>
             <PositionButton
                 isSelected={selectedPosition === SpeedPositions.DOWN}
@@ -49,9 +56,7 @@ const SelectPosition: React.FC<SelectPositionProps> = ({
                     <PositionIcon className="speedmarkets-icon speedmarkets-icon--arrow" />
                 </Position>
                 <QuoteText>
-                    {profitAndSkewPerPosition.profit[SpeedPositions.DOWN]
-                        ? `${truncToDecimals(profitAndSkewPerPosition.profit[SpeedPositions.DOWN])}x`
-                        : '-'}
+                    {impliedOddsDown ? `${formatMarketOdds(selectedOddsType, impliedOddsDown)}x` : '-'}
                 </QuoteText>
             </PositionButton>
         </Container>
