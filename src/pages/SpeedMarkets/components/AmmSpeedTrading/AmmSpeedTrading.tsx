@@ -251,10 +251,10 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
         const totalFeeDown = getTotalFee(SpeedPositions.DOWN);
 
         const bonusPerCollateral = ammSpeedMarketsLimits?.bonusPerCollateral[selectedCollateral] || 0;
-        const payoutWithBonus = SPEED_MARKETS_QUOTE * (1 + bonusPerCollateral);
+        const quoteWithBonus = SPEED_MARKETS_QUOTE * (1 + bonusPerCollateral);
         return {
-            [SpeedPositions.UP]: totalFeeUp ? payoutWithBonus / (1 + totalFeeUp) : 0,
-            [SpeedPositions.DOWN]: totalFeeDown ? payoutWithBonus / (1 + totalFeeDown) : 0,
+            [SpeedPositions.UP]: totalFeeUp ? quoteWithBonus / (1 + totalFeeUp) : 0,
+            [SpeedPositions.DOWN]: totalFeeDown ? quoteWithBonus / (1 + totalFeeDown) : 0,
         };
     }, [getTotalFee, selectedCollateral, ammSpeedMarketsLimits]);
 

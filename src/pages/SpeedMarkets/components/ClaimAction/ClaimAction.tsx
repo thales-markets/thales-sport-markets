@@ -172,6 +172,7 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
         defaultCollateral,
         isDisabled,
         isActionInProgress,
+        walletClient.data,
     ]);
 
     const handleAllowance = async (approveAmount: bigint) => {
@@ -379,23 +380,17 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
                         padding="3px 10px"
                     >
                         {hasAllowance ? (
-                            `${
-                                isSubmitting
-                                    ? t(
-                                          `speed-markets.user-positions.${
-                                              isClaimAll ? 'claim-all-progress' : 'claim-progress'
+                            `${t(
+                                `speed-markets.user-positions.${
+                                    isClaimAll
+                                        ? `claim-all${isClaimDefaultCollateral && !nativeCollateral ? '' : '-in'}${
+                                              isSubmitting ? '-progress' : ''
                                           }`
-                                      )
-                                    : t(
-                                          `speed-markets.user-positions.${
-                                              isClaimAll
-                                                  ? `claim-all${
-                                                        isClaimDefaultCollateral && !nativeCollateral ? '' : '-in'
-                                                    }`
-                                                  : `claim${isClaimDefaultCollateral && !nativeCollateral ? '' : '-in'}`
+                                        : `claim${isClaimDefaultCollateral && !nativeCollateral ? '' : '-in'}${
+                                              isSubmitting ? '-progress' : ''
                                           }`
-                                      )
-                            } ${
+                                }`
+                            )} ${
                                 nativeCollateral
                                     ? nativeCollateral
                                     : isClaimDefaultCollateral

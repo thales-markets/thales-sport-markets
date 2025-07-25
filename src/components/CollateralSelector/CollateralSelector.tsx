@@ -39,6 +39,7 @@ type CollateralSelectorProps = {
     borderColor?: string;
     hideZeroBalance?: boolean;
     displayTokenBalance?: boolean;
+    hideDropDownIcon?: boolean;
 };
 
 const CollateralSelector: React.FC<CollateralSelectorProps> = ({
@@ -63,6 +64,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
     borderColor,
     hideZeroBalance,
     displayTokenBalance,
+    hideDropDownIcon,
 }) => {
     const dispatch = useDispatch();
 
@@ -120,11 +122,13 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                                       )})`)}
                         </TextCollateral>
                     </TextCollateralWrapper>
-                    <Arrow
-                        color={color}
-                        className={open ? `icon icon--caret-up` : `icon icon--caret-down`}
-                        isDetailedView={isDetailedView}
-                    />
+                    {!hideDropDownIcon && (
+                        <Arrow
+                            color={color}
+                            className={open ? `icon icon--caret-up` : `icon icon--caret-down`}
+                            isDetailedView={isDetailedView}
+                        />
+                    )}
                 </SelectedCollateral>
                 {isDetailedView
                     ? open && (

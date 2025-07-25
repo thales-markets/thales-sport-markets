@@ -1,6 +1,7 @@
 import CollateralSelector from 'components/CollateralSelector';
 import Scroll from 'components/Scroll';
 import SimpleLoader from 'components/SimpleLoader';
+import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { MARKET_DURATION_IN_DAYS } from 'constants/markets';
 import { millisecondsToSeconds } from 'date-fns';
 import { PositionsFilter } from 'enums/speedMarkets';
@@ -15,6 +16,7 @@ import { getIsMobile } from 'redux/modules/app';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
+import { Coins } from 'thales-utils';
 import { UserPosition } from 'types/speedMarkets';
 import { getSpeedOfframpCollaterals } from 'utils/collaterals';
 import { getIsMultiCollateralSupported } from 'utils/network';
@@ -110,6 +112,7 @@ const SpeedPositions: React.FC = () => {
     const isAllPositionsInSameCollateral =
         positions.every((marketData) => marketData.isDefaultCollateral) ||
         positions.every((marketData) => !marketData.isDefaultCollateral);
+    const isClaimInOver = isAllPositionsInSameCollateral && !!positions.length && !positions[0].isDefaultCollateral;
 
     const isLoading =
         userActiveSpeedMarketsDataQuery.isLoading ||
@@ -172,11 +175,16 @@ const SpeedPositions: React.FC = () => {
                             <FlexDivRowCentered>
                                 <ClaimInLabel>{t('speed-markets.user-positions.claim-in')}:</ClaimInLabel>
                                 <CollateralSelector
-                                    collateralArray={getSpeedOfframpCollaterals(networkId)}
-                                    selectedItem={claimCollateralIndex}
+                                    collateralArray={
+                                        isClaimInOver
+                                            ? [CRYPTO_CURRENCY_MAP.OVER as Coins]
+                                            : getSpeedOfframpCollaterals(networkId)
+                                    }
+                                    selectedItem={isClaimInOver ? 0 : claimCollateralIndex}
                                     onChangeCollateral={setClaimCollateralIndex}
                                     preventPaymentCollateralChange
                                     disabled={isSubmittingBatch || isActionInProgress}
+                                    hideDropDownIcon={isClaimInOver}
                                     topPosition="20px"
                                 />
                             </FlexDivRowCentered>
