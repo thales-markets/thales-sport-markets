@@ -44,6 +44,7 @@ const SpeedPositions: React.FC = () => {
     const [claimCollateralIndex, setClaimCollateralIndex] = useState(0);
     const [isSubmittingBatch, setIsSubmittingBatch] = useState(false);
     const [isActionInProgress, setIsActionInProgress] = useState(false);
+    const [isLoadedOnce, setIsLoadedOnce] = useState(false);
 
     const isMultiCollateralSupported = getIsMultiCollateralSupported(networkId);
 
@@ -115,9 +116,19 @@ const SpeedPositions: React.FC = () => {
     const isClaimInOver = isAllPositionsInSameCollateral && !!positions.length && !positions[0].isDefaultCollateral;
 
     const isLoading =
-        userActiveSpeedMarketsDataQuery.isLoading ||
-        pythPricesQueries.some((pythPriceQuery) => pythPriceQuery.isLoading) ||
+        (!isLoadedOnce &&
+            (userActiveSpeedMarketsDataQuery.isLoading ||
+                pythPricesQueries.some((pythPriceQuery) => pythPriceQuery.isLoading))) ||
         (selectedFilter === PositionsFilter.HISTORY && userResolvedSpeedMarketsDataQuery.isLoading);
+
+    // show loader only for the first loading
+    const prevIsLoading = useRef(isLoading);
+    useEffect(() => {
+        if (prevIsLoading.current && !isLoading) {
+            setIsLoadedOnce(true);
+        }
+        prevIsLoading.current = isLoading;
+    }, [isLoading]);
 
     // select position filter which has positions on first render
     const isFirstRender = useRef(true);
@@ -144,16 +155,20 @@ const SpeedPositions: React.FC = () => {
                             onClick={() => setSelectedFilter(positionFilter)}
                         >
                             {t(`speed-markets.user-positions.filters.${positionFilter}`)}
-                            {positionFilter === PositionsFilter.PENDING && !!pendingUserSpeedMarkets.length && (
-                                <PendingPositionsCount isSelected={selectedFilter === PositionsFilter.PENDING}>
-                                    {pendingUserSpeedMarkets.length}
-                                </PendingPositionsCount>
-                            )}
-                            {positionFilter === PositionsFilter.CLAIMABLE && !!claimableUserSpeedMarkets.length && (
-                                <ClaimablePositionsCount isSelected={selectedFilter === PositionsFilter.CLAIMABLE}>
-                                    {claimableUserSpeedMarkets.length}
-                                </ClaimablePositionsCount>
-                            )}
+                            {positionFilter === PositionsFilter.PENDING &&
+                                !!pendingUserSpeedMarkets.length &&
+                                !isLoading && (
+                                    <PendingPositionsCount isSelected={selectedFilter === PositionsFilter.PENDING}>
+                                        {pendingUserSpeedMarkets.length}
+                                    </PendingPositionsCount>
+                                )}
+                            {positionFilter === PositionsFilter.CLAIMABLE &&
+                                !!claimableUserSpeedMarkets.length &&
+                                !isLoading && (
+                                    <ClaimablePositionsCount isSelected={selectedFilter === PositionsFilter.CLAIMABLE}>
+                                        {claimableUserSpeedMarkets.length}
+                                    </ClaimablePositionsCount>
+                                )}
                         </FilterButton>
                     );
                 })}
