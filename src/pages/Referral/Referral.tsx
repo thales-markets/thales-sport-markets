@@ -75,7 +75,7 @@ const Referral: React.FC = () => {
     const [savedReffererID, setSavedReffererID] = useState('');
 
     const [selectedTab, setSelectedTab] = useState(0);
-    const [expandedFAQ, setExpandedFAQ] = useState<number | null>(2);
+    const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
 
     useEffect(() => {
         if (reffererIDQuery.isSuccess) {
@@ -95,21 +95,6 @@ const Referral: React.FC = () => {
         const position = leaderboard.find((item) => item.owner.toLowerCase() === walletAddress.toLowerCase());
         return position ? position : null;
     }, [leaderboard, walletAddress]);
-
-    const mockFAQs = [
-        { question: 'How does the Overtime Affiliate Program work?', answer: '' },
-        { question: 'How do I earn XP rewards and what are they worth?', answer: '' },
-        {
-            question: 'Is there a limit to how many users I can refer?',
-            answer:
-                'There is no limit to the number of users you can refer to Overtime. You can refer as many users as you want and earn rewards from all of their activity.\nHowever, we do monitor affiliate accounts for suspicious activity or violations of our terms of service. All referrals must be genuine users who are independently interested in using our platform.\nThe most successful affiliates typically have:\nA strong online presence or community\nAuthentic engagement with their audience\nValuable content related to crypto, betting, or trading\nA clear and honest communication style about the platform\nFocus on quality referrals who are likely to be active on the platform, as this will maximize your long-term rewards.',
-        },
-        { question: 'How can I track my referrals and earnings?', answer: '' },
-        { question: 'Are there any restrictions on how I can promote my affiliate link?', answer: '' },
-        { question: 'How is the affiliate leaderboard ranking determined?', answer: '' },
-        { question: 'What are Affiliate Missions and how do they work?', answer: '' },
-        { question: 'Can I have multiple affiliate accounts?', answer: '' },
-    ];
 
     const onSubmit = useCallback(async () => {
         const signature = isBiconomy
@@ -147,7 +132,11 @@ const Referral: React.FC = () => {
             <HeaderSection>
                 <MainSection>
                     <MainTitle>{t('referral.header.title')}</MainTitle>
-                    <MainSubtitle>{t('referral.header.subtitle')}</MainSubtitle>
+                    <MainSubtitle>
+                        {t('referral.header.subtitle')}
+                        <br />
+                        {t('referral.header.subtitle-2')}
+                    </MainSubtitle>
 
                     <AffiliateContainer>
                         <SectionLabel>{t('referral.header.affiliate-id-label')}</SectionLabel>
@@ -373,7 +362,7 @@ const Referral: React.FC = () => {
                 <FAQTitle>{t('referral.faq.title')}</FAQTitle>
                 <FAQSubtitle>{t('referral.faq.subtitle')}</FAQSubtitle>
 
-                {mockFAQs.map((faq, index) => (
+                {Array.from({ length: 4 }).map((_, index) => (
                     <FAQItem key={index} expanded={expandedFAQ === index}>
                         <FAQQuestion onClick={() => setExpandedFAQ(expandedFAQ === index ? null : index)}>
                             {t(`referral.faq.questions.${index}`)}
@@ -383,9 +372,7 @@ const Referral: React.FC = () => {
                                 />
                             </FAQIcon>
                         </FAQQuestion>
-                        {expandedFAQ === index && faq.answer && (
-                            <FAQAnswer>{t(`referral.faq.answers.${index}`)}</FAQAnswer>
-                        )}
+                        {expandedFAQ === index && <FAQAnswer>{t(`referral.faq.answers.${index}`)}</FAQAnswer>}
                     </FAQItem>
                 ))}
             </FAQSection>

@@ -9,13 +9,16 @@ import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import { formatCurrency, formatCurrencyWithSign, truncateAddress } from 'thales-utils';
 import { RootState } from 'types/redux';
-import { getCurrentLevelByPoints } from 'utils/overdrop';
+import { getCurrentLevelByPoints, getCurrentSeasonAndMiniSeason } from 'utils/overdrop';
 
 const Leaderboard: React.FC = () => {
     const { t } = useTranslation();
     const noResultsMessage = t('referral.no-result');
-
-    const overdropLeaderboardQuery = useOverdropLeaderboardQuery(1, 1); // TODO
+    const currentSeasonAndMiniSeason = getCurrentSeasonAndMiniSeason();
+    const overdropLeaderboardQuery = useOverdropLeaderboardQuery(
+        currentSeasonAndMiniSeason.season,
+        currentSeasonAndMiniSeason.miniSeason
+    );
 
     const overdropLeaderboard = useMemo(
         () =>

@@ -113,6 +113,7 @@ export const SearchFieldContainer = styled(FlexDivEnd)`
         color: rgb(78, 95, 177);
     }
     @media (max-width: 767px) {
+        padding-top: 0 !important;
         & > div {
             padding-top: 0 !important;
         }
@@ -134,6 +135,9 @@ export const MonthsContainer = styled(FlexDivRow)<{ visible?: boolean }>`
     padding: ${(props) => (props.visible ? '10px' : '0')};
     background: ${(props) => props.theme.overdrop.background.active};
     gap: 10px;
+    @media (max-width: 767px) {
+        overflow: auto;
+    }
 `;
 
 export const MonthsInnerContainer = styled(FlexDivRow)`
@@ -142,6 +146,9 @@ export const MonthsInnerContainer = styled(FlexDivRow)`
     padding: 10px 20px;
     border-radius: 12px;
     text-transform: uppercase;
+    @media (max-width: 767px) {
+        padding-top: 0 !important;
+    }
 `;
 
 export const MonthButton = styled.span<{ disabled?: boolean; selected?: boolean }>`
@@ -167,6 +174,10 @@ export const DropdownButton = styled(FlexDivSpaceBetween)`
     border-radius: 5px;
     width: 250px;
     cursor: pointer;
+    @media (max-width: 767px) {
+        width: 49%;
+        padding-top: 0 !important;
+    }
 `;
 
 export const DropdownContainer = styled.div`

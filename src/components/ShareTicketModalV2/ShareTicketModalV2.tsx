@@ -10,6 +10,7 @@ import { secondsToMilliseconds } from 'date-fns';
 import { toPng } from 'html-to-image';
 import { t } from 'i18next';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
+import useGetReffererIdQuery from 'queries/referral/useGetReffererIdQuery';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ReactModal from 'react-modal';
 import { useSelector } from 'react-redux';
@@ -89,6 +90,15 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
     const [isMetamaskBrowser, setIsMetamaskBrowser] = useState(false);
     const [tweetUrl, setTweetUrl] = useState('');
     const [convertToStableValue, setConvertToStableValue] = useState<boolean>(false);
+
+    const reffererIDQuery = useGetReffererIdQuery(walletAddress || '');
+    const [reffererID, setReffererID] = useState('');
+
+    useEffect(() => {
+        if (reffererIDQuery.isSuccess) {
+            setReffererID(reffererIDQuery.data);
+        }
+    }, [reffererIDQuery.isSuccess, reffererIDQuery.data]);
 
     const ref = useRef<HTMLDivElement>(null);
 
@@ -203,6 +213,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                                   Math.floor(Math.random() * OVER_COLLATERAL_TWITTER_MESSAGES_TEXT.length)
                               ]
                             : TWITTER_MESSAGES_TEXT[Math.floor(Math.random() * TWITTER_MESSAGES_TEXT.length)]) +
+                        `${reffererID ? '?referrerId=' + reffererID : ''}` +
                         (useDownloadImage ? TWITTER_MESSAGE_UPLOAD : TWITTER_MESSAGE_PASTE);
 
                     // Mobile requires user action in order to open new window, it can't open in async call, so adding <a>
@@ -255,7 +266,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                 }
             }
         },
-        [isLoading, isMobile, isOver, useDownloadImage]
+        [isLoading, isMobile, isOver, useDownloadImage, reffererID]
     );
 
     const onTwitterShareClick = (copyOnly?: boolean) => {
