@@ -1,5 +1,5 @@
 import { ONE_HUNDRED_K, ONE_MILLION } from 'constants/defaults';
-import { OVERDROP_LEVELS, OVERDROP_REWARDS_NETWORKS } from 'constants/overdrop';
+import { OVERDROP_LEVELS, OVERDROP_REWARDS_NETWORKS, SEASON_2 } from 'constants/overdrop';
 import { getDayOfYear } from 'date-fns';
 import { Network } from 'enums/network';
 import { MultiplierType } from 'enums/overdrop';
@@ -144,4 +144,14 @@ export const hasUserDoneDailyQuests = (userData: OverdropUserData | undefined) =
     const lastTwitterActivityDay = getDayOfYear(new Date(userData.lastTwitterActivity));
 
     return today === lastTradeOvertimeDay && today === lastTradeSpeedDay && today === lastTwitterActivityDay;
+};
+
+export const getCurrentSeasonAndMiniSeason = () => {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth() + 1; // getMonth() returns 0-11
+
+    const current = SEASON_2.find((episode) => episode.month === month && episode.year === year);
+
+    return { season: 2, miniSeason: current ? SEASON_2.indexOf(current) + 1 : 1 };
 };
