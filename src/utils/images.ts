@@ -15,7 +15,7 @@ export const getTeamImageSource = (team: string, league: League) => {
               .replaceAll(' ', '-')
               .toLowerCase()}.svg`
         : league == League.ATP_FUTURES || league == League.WTA_FUTURES
-        ? `/logos/Countries/wimbledon.webp`
+        ? `/logos/leagueLogos/us-open.webp`
         : league == League.NCAAB ||
           league == League.NCAAF ||
           league == League.NCAAW ||
