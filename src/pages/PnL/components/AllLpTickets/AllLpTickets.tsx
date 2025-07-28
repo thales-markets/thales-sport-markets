@@ -292,7 +292,7 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
                         inputFontWeight="600"
                         inputPadding="5px 10px"
                         borderColor={theme.input.borderColor.tertiary}
-                        placeholder={t(`liquidity-pool.deposit-amount-placeholder`)}
+                        placeholder={t(`common.enter-amount`)}
                         width="200px"
                         containerWidth="200px"
                         margin="0 30px 0 0"
@@ -306,7 +306,7 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
                         inputFontWeight="600"
                         inputPadding="5px 10px"
                         borderColor={theme.input.borderColor.tertiary}
-                        placeholder={t(`liquidity-pool.deposit-amount-placeholder`)}
+                        placeholder={t(`common.enter-amount`)}
                         width="200px"
                         containerWidth="200px"
                     />

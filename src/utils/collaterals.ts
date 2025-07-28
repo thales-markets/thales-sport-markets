@@ -1,4 +1,10 @@
-import { COLLATERALS, CRYPTO_CURRENCY_MAP, FREE_BET_COLLATERALS, STABLE_COINS } from 'constants/currency';
+import {
+    COLLATERALS,
+    CRYPTO_CURRENCY_MAP,
+    FREE_BET_COLLATERALS,
+    SPEED_OFFRAMP_UNSUPPORTED_COLLATERALS,
+    STABLE_COINS,
+} from 'constants/currency';
 import { ALTCOIN_CONVERSION_BUFFER_PERCENTAGE } from 'constants/markets';
 import _ from 'lodash';
 import {
@@ -41,6 +47,11 @@ export const getCollateralByAddress = (collateralAddress: string, networkId: num
 
     return collateral;
 };
+
+export const getSpeedOfframpCollaterals = (networkId: SupportedNetwork) =>
+    getCollaterals(networkId).filter(
+        (collateral) => !SPEED_OFFRAMP_UNSUPPORTED_COLLATERALS[networkId].includes(collateral)
+    );
 
 export const isStableCurrency = (currencyKey: Coins) => {
     return STABLE_COINS.includes(currencyKey);
@@ -103,6 +114,10 @@ export const sortCollateralBalances = (
         newObject[item.collateralKey] = item.balance;
     });
     return newObject;
+};
+
+export const convertCollateralToStable = (srcCollateral: Coins, amount: number, rate: number) => {
+    return isStableCurrency(srcCollateral) ? amount : amount * rate;
 };
 
 export const convertFromStableToCollateral = (

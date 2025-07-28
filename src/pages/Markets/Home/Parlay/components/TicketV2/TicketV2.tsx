@@ -7,6 +7,7 @@ import OutsideClickHandler from 'components/OutsideClick';
 import SelectInput from 'components/SelectInput';
 import ShareTicketModalV2 from 'components/ShareTicketModalV2';
 import SimpleLoader from 'components/SimpleLoader';
+import SuggestedAmount from 'components/SuggestedAmount';
 import Toggle from 'components/Toggle';
 import Tooltip from 'components/Tooltip';
 import Checkbox from 'components/fields/Checkbox';
@@ -176,7 +177,6 @@ import { Address, Client, maxUint256, parseEther } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 import BuyStepsModal from '../BuyStepsModal';
-import SuggestedAmount from '../SuggestedAmount';
 import {
     AmountToBuyContainer,
     Arrow,
@@ -234,6 +234,8 @@ const TicketErrorMessage = {
     SAME_TEAM_IN_PARLAY: 'SameTeamOnParlay',
     PROOF_IS_NOT_VALID: 'Proof is not valid',
 };
+
+const BUYIN_AMOUNTS = [3, 10, 50, 100, 500];
 
 const Ticket: React.FC<TicketProps> = ({
     markets,
@@ -2630,6 +2632,7 @@ const Ticket: React.FC<TicketProps> = ({
                 )}
             </RowSummary>
             <SuggestedAmount
+                amounts={BUYIN_AMOUNTS}
                 insertedAmount={buyInAmount}
                 exchangeRates={exchangeRates}
                 collateralIndex={selectedCollateralIndex}
@@ -2639,6 +2642,7 @@ const Ticket: React.FC<TicketProps> = ({
                         ? ceilNumberToDecimals(minBuyInAmount / swapQuote, getPrecision(minBuyInAmount / swapQuote))
                         : undefined
                 }
+                margin="8px 0px"
             />
             {freeBetBalanceExists && (
                 <RowSummary>
@@ -2688,7 +2692,7 @@ const Ticket: React.FC<TicketProps> = ({
                         inputPadding="5px 10px"
                         borderColor={theme.input.borderColor.tertiary}
                         disabled={isAllowing || isBuying}
-                        placeholder={t('liquidity-pool.deposit-amount-placeholder')}
+                        placeholder={t('common.enter-amount')}
                         currencyComponent={
                             <CollateralSelector
                                 collateralArray={getCollaterals(networkId)}

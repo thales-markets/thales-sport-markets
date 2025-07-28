@@ -12,6 +12,9 @@
         "wrap-eth-tooltip": "Your ETH is first wrapped into WETH and then passed to the contract",
         "sell-side": "SELL",
         "submit": "Submit",
+        "enter-amount": "Enter amount",
+        "liquidity": "Liquidity",
+        "trades": "Trades",
         "days-of-week": {
             "mon": "mon",
             "tue": "tue",
@@ -93,7 +96,7 @@
             "approve-progress-label": "Approving <currency>{{currencyKey}}</currency>...",
             "approve-all-label": "Approve all",
             "custom-amount-label": "Approve amount of",
-            "approve-swap": "Approve swap to {{currencyKey}}"
+            "approve-swap": "Approve swap"
         },
         "unsupported-network": {
             "title": "Oops! You are on the wrong network!",
@@ -140,12 +143,16 @@
             "minute": "minute",
             "seconds": "seconds",
             "second": "second",
+            "months-short": "mo",
             "days-short": "d",
             "hours-short": "h",
             "minutes-short": "m",
             "seconds-short": "s"
         },
         "or": "or",
+        "above": "above",
+        "below": "below",
+        "current-price": "current price",
         "dapp": "dapp",
         "launch-dapp": "launch dapp",
         "cancel": "Cancel",
@@ -506,7 +513,6 @@
             "title": "Send free bet",
             "enter-wallet-address": "Enter wallet address",
             "enter-wallet-addresses": "Enter wallet addresses",
-            "enter-amount": "Enter amount",
             "enter-amount-per-user": "Enter amount per user",
             "approve-success": "Successfully approved",
             "transaction-pending": "Transaction pending",
@@ -1264,7 +1270,6 @@
         "full-withdrawal-request-label": "Withdrawal request: {{amount}}<tooltip />",
         "partial-withdrawal-request-label": "Withdrawal request: {{percentage}} of the balance ({{amount}}<tooltip />)",
         "estimated-amount-tooltip": "This is an estimated amount. The actual amount will be calculated upon closing the current round based on the round PnL.",
-        "deposit-amount-placeholder": "Enter amount",
         "available-to-withdraw-label": "Available to withdraw: <bold>{{amount}}</bold>",
         "nothing-to-withdraw-label": "Nothing to withdraw.",
         "withdrawal-message": "You can request a full/partial withdrawal and your funds will be sent to you automatically at the end of the round when the round closes.",
@@ -1706,6 +1711,85 @@
                 "single-choice": "Single choice voting",
                 "weighted": "Weighted voting"
             }
+        }
+    },
+    "speed-markets": {
+        "progress": "Please wait...",
+        "menu-items-label": {
+            "trade": "Trade",
+            "positions": "Positions",
+            "settings": "Settings"
+        },
+        "buy": {
+            "label": "Execute trade",
+            "progress-label": "Execution in progress...",
+            "wrap-eth": "Wrap ETH and execute trade",
+            "wrap-eth-progress": "Wrap and execute in progress...",
+            "confirmation-message": "Successfully executed - position created"
+        },
+        "amm-trading": {
+            "choose-direction": "choose direction",
+            "choose-time": "choose duration",
+            "estimate-gas": "Estimated transaction cost",
+            "trading-details-default": "Build your position above to see your win.",
+            "trading-details": "If {{asset}} price is {{position}} {{strikePrice}} ({{slippage}}%<tooltip />) in {{duration}}, you win {{payout}}."
+        },
+        "user-positions": {
+            "claim": "Claim",
+            "claim-progress": "Claiming",
+            "claim-in": "Claim in",
+            "claim-in-progress": "Claiming in",
+            "claim-all": "Claim all",
+            "claim-all-progress": "Claiming all",
+            "claim-all-in": "Claim all in",
+            "claim-all-in-progress": "Claiming all in",
+            "confirmation-message": "Position(s) successfully claimed",
+            "no-resolve-positions": "No positions for this section with price",
+            "no-positions": "No positions",
+            "history-limit": "* Showing only markets with expiry date not older than {{days}} days.",
+            "filters": {
+                "pending": "Pending",
+                "claimable": "Claimable",
+                "history": "History"
+            },
+            "labels": {
+                "entry": "Entry",
+                "end": "End",
+                "price": "Price",
+                "paid": "Paid",
+                "payout": "Payout"
+            },
+            "status": {
+                "won": "Won",
+                "loss": "Loss",
+                "winning": "Winning...",
+                "loosing": "Loosing...",
+                "waiting-price": "Waiting for price..."
+            }
+        },
+        "settings": {
+            "slippage-tolerance": "Slippage tolerance",
+            "slippage-tolerance-description": "Maximum price difference you're willing to accept"
+        },
+        "tooltips": {
+            "approve-swap-tooltip": "To get payout in {{currencyKey}}, you need to approve swap from {{defaultCurrency}} to {{currencyKey}}.",
+            "current-price": "Current price as reported by Pyth oracles.",
+            "liquidity": "Current available liquidity for this Asset: {{liquidityPerAsset}}<br><br>Total available for Buy-In per direction<br>Available for UP: {{liquidityPerUp}}<br>Available for DOWN: {{liquidityPerDown}}",
+            "payout-conversion": "Win amount can be slightly different due to conversion rate at execution time",
+            "final-price-missing": "Oracle price snapshot for this position timestamp is still being processed. Even if contract input is delayed by the Pyth oracles, the price snapshot will be true to the moment of position expiration",
+            "slippage": "Your trade will revert if the live price changes more than this percentage from your chosen Strike Price during trade execution.",
+            "eth-to-weth": "Your ETH will be wrapped to WETH before executing the trade.",
+            "pending-positions": "Pending positions",
+            "claimable-positions": "Claimable positions",
+            "claim-all-except-over": "Claim all positions except those with $OVER collateral"
+        },
+        "errors": {
+            "min-buyin": "Minimal buy-in is {{minAmount}}",
+            "max-buyin": "Maximal buy-in is {{maxAmount}}",
+            "out-of-liquidity-direction": "Out of liquidity for direction",
+            "out-of-liquidity": "Out of liquidity",
+            "buy-failed": "Failed to create position or creation event not received! Please check your open positions.",
+            "price-stale": "Can't resolve position with stale price"
         }
     }
 }

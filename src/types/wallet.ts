@@ -14,4 +14,5 @@ export enum WalletConnections {
     COINBASE = 'coinbaseWalletSDK',
     BINANCE = 'wallet.binance.com',
     FARCASTER = 'farcaster',
+    TRUST_WALLET = 'trust',
 }

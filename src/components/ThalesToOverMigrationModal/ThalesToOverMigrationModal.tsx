@@ -293,7 +293,6 @@ const ThalesToOverMigrationModal: React.FC<ThalesToOverMigrationModalProps> = ({
                         validationMessage={t('common.errors.insufficient-balance-wallet', {
                             currencyKey: CRYPTO_CURRENCY_MAP.THALES,
                         })}
-                        validationPlacement="bottom"
                         balance={formatCurrencyWithKey(CRYPTO_CURRENCY_MAP.THALES, thalesBalance)}
                         onMaxButton={onMaxClick}
                         inputFontWeight="700"

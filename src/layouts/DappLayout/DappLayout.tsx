@@ -1,12 +1,15 @@
+import SpeedMarketsButtonAnimated from 'assets/images/speed-markets/speed-markets-animated.svg';
 import axios from 'axios';
 import ClaimFreeBetModal from 'components/ClaimFreeBetModal';
 import MetaData from 'components/MetaData';
 import { generalConfig } from 'config/general';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import { NAV_MENU_WIDTH, SPEED_MARKETS_WIDGET_DEFAULT_RIGHT } from 'constants/ui';
 import { Network } from 'enums/network';
-import { Theme } from 'enums/ui';
+import { ScreenSizeBreakpoint, Theme } from 'enums/ui';
 import useLocalStorage from 'hooks/useLocalStorage';
 import useWidgetBotScript from 'hooks/useWidgetBotScript';
+import SpeedMarketsWidget from 'pages/SpeedMarkets/components/SpeedMarketsWidget';
 import useGetFreeBetQuery from 'queries/freeBets/useGetFreeBetQuery';
 import queryString from 'query-string';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -52,6 +55,7 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const [freeBetModalParam, setFreeBetModalParam] = useState(queryParams.freeBet);
+    const [speedMarketsWidgetOpen, setSpeedMarketsWidgetOpen] = useState(false);
 
     const [, setFreeBet] = useLocalStorage<any | undefined>(LOCAL_STORAGE_KEYS.FREE_BET_ID, undefined);
 
@@ -139,7 +143,7 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
         checkMetamaskBrowser();
     }, []);
 
-    useWidgetBotScript(preventDiscordWidgetLoad);
+    useWidgetBotScript(preventDiscordWidgetLoad, setSpeedMarketsWidgetOpen);
 
     return (
         <Background>
@@ -150,6 +154,12 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
                 <DappHeader />
                 {children}
                 <DappFooter />
+                <SpeedMarketsButton
+                    className="speed-markets"
+                    isOpen={speedMarketsWidgetOpen}
+                    onClick={() => setSpeedMarketsWidgetOpen(!speedMarketsWidgetOpen)}
+                />
+                {speedMarketsWidgetOpen && <SpeedMarketsWidget onClose={() => setSpeedMarketsWidgetOpen(false)} />}
             </Wrapper>
             <ToastContainer stacked theme={'colored'} />
             {freeBetFromServer && getFreeBetModalShown() && (
@@ -184,8 +194,63 @@ const Wrapper = styled(FlexDivColumn)`
     @media (max-width: 1499px) {
         padding: 10px 10px;
     }
-    @media (max-width: 767px) {
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         padding: 0px 3px;
+    }
+`;
+
+const SpeedMarketsButton = styled.div<{ isOpen: boolean }>`
+    position: fixed;
+    width: 76px;
+    height: 76px;
+    bottom: 10px;
+    right: ${SPEED_MARKETS_WIDGET_DEFAULT_RIGHT}px;
+    background-image: ${(props) => (props.isOpen ? 'none' : `url("${SpeedMarketsButtonAnimated}")`)};
+    background-position: center;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 100000;
+
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        width: 55px;
+        height: 55px;
+        right: -3px;
+        bottom: 117px;
+        background-size: 65px;
+    }
+
+    animation: 0.3s ease 0s 1 normal none running load-animation;
+    @keyframes load-animation {
+        0% {
+            transform: scale(0.1);
+            opacity: 0;
+        }
+        100% {
+            transform: initial;
+            opacity: 1;
+        }
+    }
+
+    // for Navigation menu
+    @keyframes move-left {
+        0% {
+            visibility: none;
+            right: ${SPEED_MARKETS_WIDGET_DEFAULT_RIGHT}px;
+        }
+        100% {
+            visibility: visible;
+            right: ${SPEED_MARKETS_WIDGET_DEFAULT_RIGHT + NAV_MENU_WIDTH}px;
+        }
+    }
+    @keyframes move-right {
+        0% {
+            visibility: visible;
+            right: ${SPEED_MARKETS_WIDGET_DEFAULT_RIGHT + NAV_MENU_WIDTH}px;
+        }
+        100% {
+            visibility: none;
+            right: ${SPEED_MARKETS_WIDGET_DEFAULT_RIGHT}px;
+        }
     }
 `;
 

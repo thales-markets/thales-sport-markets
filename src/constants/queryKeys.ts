@@ -39,6 +39,17 @@ const QUERY_KEYS = {
         networkId,
         isLive,
     ],
+    Prices: {
+        PythPrices: (priceId: string, publishTime: number) => ['prices', 'pythPrices', priceId, publishTime],
+        PythCandlestickData: (asset: string, dateRange: number, resolution: string) => [
+            'asset',
+            'dateRange',
+            'resolution',
+            asset,
+            dateRange,
+            resolution,
+        ],
+    },
     SportsAmmData: (networkId: Network) => ['sportsAmmData', networkId],
     SportsAmmRiskManager: (networkId: Network, league: League) => ['sportsAmmRiskManager', networkId, league],
     TicketLiquidity: (
@@ -220,6 +231,21 @@ const QUERY_KEYS = {
             'votingPower',
             proposalId,
             snapshot,
+            walletAddress,
+        ],
+    },
+    SpeedMarkets: {
+        SpeedMarketsCreator: (networkId: Network) => ['speedMarketsCreator', networkId],
+        SpeedMarketsLimits: (networkId: Network, walletAddress?: string) => [
+            'speedMarketsLimits',
+            networkId,
+            walletAddress,
+        ],
+        UserSpeedMarkets: (networkId: Network, walletAddress: string) => ['userSpeedMarkets', networkId, walletAddress],
+        ActiveSpeedMarkets: (networkId: Network) => ['activeSpeedMarkets', networkId],
+        ResolvedSpeedMarkets: (networkId: Network, walletAddress: string) => [
+            'userResolvedSpeedMarkets',
+            networkId,
             walletAddress,
         ],
     },

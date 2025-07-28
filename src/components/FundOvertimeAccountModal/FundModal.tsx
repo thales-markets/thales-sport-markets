@@ -113,7 +113,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
     }, [walletAddress, networkId, apiKey]);
 
     useEffect(() => {
-        if (isBiconomy) {
+        if (isBiconomy && smartAddress) {
             const verifiedOvertimeAccounts = new Set(
                 JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEYS.VERIFIED_OVERTIME_ACCOUNTS) || '[]')
             );
@@ -145,7 +145,6 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                     setShowVerificationButton(true);
                 }
             });
-            console.log(verifiedOvertimeAccounts, invalidOvertimeAccounts);
         }
     }, [isBiconomy, dispatch, smartAddress, isSmartAccountDisabled]);
 
@@ -179,7 +178,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                             onClick={async () => {
                                 const id = toast.loading(t('get-started.fund-account.verifying-account'));
                                 const isValidConfig = await verifyOvertimeAccount();
-                                if (isValidConfig) {
+                                if (isValidConfig.success) {
                                     const verifiedOvertimeAccounts = new Set(
                                         JSON.parse(
                                             localStorage.getItem(LOCAL_STORAGE_KEYS.VERIFIED_OVERTIME_ACCOUNTS) || '[]'
@@ -190,29 +189,35 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                                         LOCAL_STORAGE_KEYS.VERIFIED_OVERTIME_ACCOUNTS,
                                         JSON.stringify(Array.from(verifiedOvertimeAccounts))
                                     );
+                                    setShowVerificationButton(false);
                                     toast.update(
                                         id,
                                         getSuccessToastOptions(t('get-started.fund-account.verifying-account-success'))
                                     );
                                 } else {
-                                    const invalidOvertimeAccounts = new Set(
-                                        JSON.parse(
-                                            localStorage.getItem(LOCAL_STORAGE_KEYS.INVALID_OVERTIME_ACCOUNTS) || '[]'
-                                        )
-                                    );
-                                    invalidOvertimeAccounts.add(smartAddress);
-                                    dispatch(setIsSmartAccountDisabled(true));
-                                    dispatch(setIsBiconomy(false));
-                                    localStorage.setItem(LOCAL_STORAGE_KEYS.USE_BICONOMY, 'false');
-                                    localStorage.setItem(
-                                        LOCAL_STORAGE_KEYS.INVALID_OVERTIME_ACCOUNTS,
-                                        JSON.stringify(Array.from(invalidOvertimeAccounts))
-                                    );
-                                    toast.update(
-                                        id,
-                                        getErrorToastOptions(t('get-started.fund-account.verifying-account-error'))
-                                    );
-                                    onClose();
+                                    if (isValidConfig.rejected) {
+                                        toast.update(id, getErrorToastOptions(t('common.errors.user-rejected-tx')));
+                                    } else {
+                                        const invalidOvertimeAccounts = new Set(
+                                            JSON.parse(
+                                                localStorage.getItem(LOCAL_STORAGE_KEYS.INVALID_OVERTIME_ACCOUNTS) ||
+                                                    '[]'
+                                            )
+                                        );
+                                        invalidOvertimeAccounts.add(smartAddress);
+                                        dispatch(setIsSmartAccountDisabled(true));
+                                        dispatch(setIsBiconomy(false));
+                                        localStorage.setItem(LOCAL_STORAGE_KEYS.USE_BICONOMY, 'false');
+                                        localStorage.setItem(
+                                            LOCAL_STORAGE_KEYS.INVALID_OVERTIME_ACCOUNTS,
+                                            JSON.stringify(Array.from(invalidOvertimeAccounts))
+                                        );
+                                        toast.update(
+                                            id,
+                                            getErrorToastOptions(t('get-started.fund-account.verifying-account-error'))
+                                        );
+                                        onClose();
+                                    }
                                 }
                             }}
                         >

@@ -198,6 +198,15 @@ export default {
     },
     chart: {
         primary: Colors.PURPLE,
+        candleUp: Colors.MILD_MENTHOL,
+        candleDown: Colors.VERMILION_CINNABAR,
+        labels: Colors.GRAY_LIGHT,
+        priceLine: Colors.WHITE,
+        multiPositions: Colors.PURPLE,
+        area: {
+            start: Colors.CHART_AREA_START,
+            end: Colors.CHART_AREA_END,
+        },
     },
     connectWalletModal: {
         secondaryText: Colors.WHITE,
@@ -287,5 +296,50 @@ export default {
             primary: Colors.NAVY_BLUE_EXTRA_DARK,
             secondary: Colors.WHITE,
         },
+    },
+    speedMarkets: {
+        background: { primary: Colors.DARK_KNIGHT },
+        borderColor: { primary: Colors.BLUE_ESTATE },
+        textColor: {
+            primary: Colors.WHITE,
+            secondary: Colors.FRESH_LAVENDER,
+            tertiary: Colors.YELLOW,
+            active: Colors.BLUE,
+            inactive: Colors.NAVY_BLUE_LIGHT,
+        },
+        button: {
+            background: {
+                primary: Colors.NAVY_BLUE,
+                secondary: `linear-gradient(90deg, ${Colors.HONEYCOMB} 0%, ${Colors.GOLDENROD} 100%)`,
+                active: Colors.BLUE,
+                inactive: Colors.LIBERTY_BLUE,
+            },
+            textColor: {
+                primary: Colors.WHITE,
+                active: Colors.NAVY_BLUE_DARK,
+                inactive: Colors.TORY_BLUE,
+            },
+        },
+        dropDown: {
+            background: { primary: Colors.NATO_BLUE },
+            borderColor: { primary: Colors.CORSAIR },
+            textColor: { primary: Colors.BLUE },
+            indicatorColor: { primary: Colors.BLUE },
+        },
+        price: {
+            up: Colors.MILD_MENTHOL,
+            down: Colors.VERMILION_CINNABAR,
+        },
+        position: {
+            selected: Colors.NAVY_BLUE_DARK,
+            up: Colors.BLUE,
+            down: Colors.RED,
+            card: {
+                background: { primary: Colors.KONKIKYO_BLUE },
+                textColor: { primary: Colors.FRESH_LAVENDER },
+                icon: { primary: Colors.MILD_MENTHOL },
+            },
+        },
+        shadow: { primary: Colors.THE_RAINBOW_FISH },
     },
 };

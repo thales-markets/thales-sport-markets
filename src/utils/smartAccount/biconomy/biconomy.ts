@@ -12,6 +12,7 @@ import {
     ACCOUNT_NONCE_FAILED,
     ERROR_SESSION_NOT_FOUND,
     INVALID_SIGNATURE_LENGTH,
+    TRUST_WALLET_ACTIVATE_BEFORE_SIGNING,
     USER_OP_FAILED,
     USER_REJECTED_ERROR,
     WEBHOOK_FAILED,
@@ -458,12 +459,20 @@ export async function verifyOvertimeAccount() {
             const { receipt } = await wait();
             console.log('Overtime account verified', receipt);
         }
-        return true;
+        return { success: true };
     } catch (e) {
-        if ((e as any).toString().toLowerCase().includes(INVALID_SIGNATURE_LENGTH)) {
-            return false;
+        console.log('Error verifying Overtime account:', e);
+        if (
+            (e as any).toString().toLowerCase().includes(INVALID_SIGNATURE_LENGTH) ||
+            ((e as any).details &&
+                (e as any).details.toString().toLowerCase().includes(TRUST_WALLET_ACTIVATE_BEFORE_SIGNING))
+        ) {
+            return { success: false };
         } else {
-            return true;
+            if ((e as any).toString().toLowerCase().includes(USER_REJECTED_ERROR)) {
+                return { success: false, rejected: true };
+            }
         }
+        return { success: true };
     }
 }
