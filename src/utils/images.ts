@@ -61,22 +61,6 @@ export const getTeamImageSource = (team: string, league: League) => {
               .replaceAll(' 3x3', '')
               .replaceAll(' ', '-')
               .toLowerCase()}.svg`
-        : league == League.ENGLAND_FA_CUP
-        ? `/logos/EPL/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : league == League.FRANCE_CUP || league == League.FRANCE_SUPER_CUP
-        ? `/logos/Ligue 1/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : league == League.SPAIN_CUP || league == League.SPAIN_SUPER_CUP
-        ? `/logos/La Liga/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : league == League.ITALY_CUP || league == League.ITALY_SUPER_CUP
-        ? `/logos/Serie A/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : league == League.GERMANY_CUP || league == League.GERMANY_SUPER_CUP
-        ? `/logos/Bundesliga/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : league == League.PORTUGAL_LEAGUE_CUP || league == League.PORTUGAL_CUP
-        ? `/logos/Primeira Liga/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : league == League.BRAZIL_CUP
-        ? `/logos/Brazil-Serie-A/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : league == League.NBA_SUMMER_LEAGUE
-        ? `/logos/NBA/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.US_ELECTION
         ? `/logos/Countries/united-states-of-america.svg`
         : league == League.NFL_FUTURES
@@ -87,8 +71,6 @@ export const getTeamImageSource = (team: string, league: League) => {
         ? `/logos/EPL/epl.webp`
         : league == League.ATP_FUTURES || league == League.WTA_FUTURES
         ? `/logos/Countries/wimbledon.webp`
-        : league == League.NETHERLANDS_CUP
-        ? `/logos/Eredivisie/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.NCAAB ||
           league == League.NCAAB_FUTURES ||
           league == League.NCAAF ||
