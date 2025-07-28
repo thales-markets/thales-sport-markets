@@ -153,7 +153,7 @@ const Leaderboard: React.FC = () => {
                             </>
                         ) : (
                             <>
-                                <div>{formatCurrency(data.rewards.eth)} ETH</div>
+                                <div>{formatCurrency(data.rewards.eth, 4)} ETH</div>
                             </>
                         )}
                     </StickyCell>
@@ -244,7 +244,7 @@ const Leaderboard: React.FC = () => {
                             </>
                         ) : (
                             <>
-                                <div>{formatCurrency(cellProps.cell.getValue().eth)} ETH</div>
+                                <div>{formatCurrency(cellProps.cell.getValue().eth, 4)} ETH</div>
                             </>
                         )}
                     </>

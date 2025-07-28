@@ -1563,7 +1563,8 @@
         },
         "header": {
             "title": "Create Your Affiliate Link",
-            "subtitle": "Refer users to Overtime and earn 20% of the XP they generate on bets. Spread your unique affiliate link, onboard new users to Overtime,  track your rewards, and climb the leaderboard.",
+            "subtitle": "Refer users to Overtime and earn 20% of the XP they generate on bets.",
+            "subtitle-2": "Spread your unique affiliate link, onboard new users to Overtime, track your ETH and Free Bet rewards, and climb the leaderboard.",
             "affiliate-id-label": "Your Affiliate ID",
             "affiliate-id-placeholder": "Enter affiliate ID",
             "create": "Create",
@@ -1665,23 +1666,15 @@
             "subtitle": "Everything you need to know about the Overtime Affiliate Program. If you cant find the answer to your question, please contact our support team.",
             "questions": [
                 "How does the Overtime Affiliate Program work?",
-                "How do I earn XP rewards and what are they worth?",
-                "Is there a limit to how many users I can refer?",
-                "How can I track my referrals and earnings?",
-                "Are there any restrictions on how I can promote my affiliate link?",
-                "How is the affiliate leaderboard ranking determined?",
-                "What are Affiliate Missions and how do they work?",
-                "Can I have multiple affiliate accounts?"
+                "What do I get from earning XP from my referrers?",
+                "Are there any limitations when sharing my ref link?",
+                "How can I track the performance of my unique affiliate link and its referrers?"
             ],
             "answers": [
-                "",
-                "",
-                "There is no limit to the number of users you can refer to Overtime. You can refer as many users as you want and earn rewards from all of their activity.\nHowever, we do monitor affiliate accounts for suspicious activity or violations of our terms of service. All referrals must be genuine users who are independently interested in using our platform.\nThe most successful affiliates typically have:\nA strong online presence or community\nAuthentic engagement with their audience\nValuable content related to crypto, betting, or trading\nA clear and honest communication style about the platform\nFocus on quality referrals who are likely to be active on the platform, as this will maximize your long-term rewards.",
-                "",
-                "",
-                "",
-                "",
-                ""
+                "Overtime Affiliate Program is an onchain incentivized user acquisition and onboarding tool. This program allows you to generate your own unique Referral Link and share it with potential new users that you’d like to introduce to Overtime. If someone starts using Overtime from your unique Referral Link, then you get 12.5% of their trading fees paid directly in your wallet and 20% of XP they generate for Overdrop League Season 2, allowing you to passively earn ETH rewards and Free Bets.",
+                "These XP rewards are a part of Overdrop League Season 2, which has monthly ETH rewards based on your total XP and occasional Free Bet reward on specific XP level ups! Learn more about Overdrop and XP system here.",
+                "There are absolutely no limitations on your unique ref link or the rewards you get from them. You can share it to as many people as you can, and get as much rewards as you can from their respective volume.",
+                "You can track all your referrers and their respective activity on “Referred Users Leaderboard” and “Referred Bets” sections of this page."
             ]
         }
     },
