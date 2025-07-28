@@ -820,7 +820,8 @@
                 "speed-markets": "Speed markets",
                 "digital-options": "Digital options",
                 "resources": "Resources",
-                "referral": "Referral"
+                "referral": "Referral",
+                "migrate": "Migrate"
             },
             "buttons": {
                 "switch": "Switch",

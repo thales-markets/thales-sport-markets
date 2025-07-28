@@ -2,6 +2,7 @@ import Button from 'components/Button';
 import FreeBetFundModal from 'components/FreeBetFundModal';
 import OutsideClickHandler from 'components/OutsideClick';
 import SPAAnchor from 'components/SPAAnchor';
+import { MIGRATE_MODAL_OPENED } from 'constants/events';
 import ROUTES from 'constants/routes';
 import {
     DISCORD_WIDGET_DEFAULT_RIGHT,
@@ -18,7 +19,7 @@ import { ProfileIconWidget } from 'layouts/DappLayout/DappHeader/components/Prof
 import useBlockedGamesQuery from 'queries/resolveBlocker/useBlockedGamesQuery';
 import useWhitelistedForUnblock from 'queries/resolveBlocker/useWhitelistedForUnblock';
 import React, { useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsConnectedViaParticle, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
@@ -31,6 +32,7 @@ import {
     BlockedGamesNotificationCount,
     CloseIcon,
     Count,
+    CurrencyIcon,
     FooterContainer,
     HeaderContainer,
     ItemContainer,
@@ -255,6 +257,32 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                             </SPAAnchor>
                         );
                     })}
+                    {isConnected && (
+                        <>
+                            <Separator />
+                            <ItemContainer
+                                onClick={() => {
+                                    setNavMenuVisibility(null);
+                                    dispatchEvent(new Event(MIGRATE_MODAL_OPENED));
+                                }}
+                            >
+                                <NavIcon className="icon icon--triple-arrow" />
+                                <NavLabel>
+                                    <Trans
+                                        i18nKey="profile.migration-modal.title"
+                                        components={{
+                                            thalesIcon: (
+                                                <CurrencyIcon className="currency-icon currency-icon--thales" />
+                                            ),
+                                            overtimeIcon: (
+                                                <CurrencyIcon className="currency-icon currency-icon--over" />
+                                            ),
+                                        }}
+                                    />
+                                </NavLabel>
+                            </ItemContainer>
+                        </>
+                    )}
                 </ItemsContainer>
                 <FooterContainer>
                     {isConnected && (

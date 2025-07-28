@@ -185,3 +185,12 @@ export const Count = styled.span`
     font-weight: 600;
     font-size: 13px;
 `;
+
+export const CurrencyIcon = styled.i`
+    text-transform: none;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 20px;
+    margin: 0 4px;
+    color: ${(props) => props.theme.button.textColor.secondary};
+`;

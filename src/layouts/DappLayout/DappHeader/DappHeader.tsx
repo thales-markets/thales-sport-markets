@@ -6,7 +6,6 @@ import NavMenu from 'components/NavMenu';
 import NavMenuMobile from 'components/NavMenuMobile';
 import SPAAnchor from 'components/SPAAnchor';
 import Search from 'components/Search';
-import ThalesToOverMigrationModal from 'components/ThalesToOverMigrationModal';
 import WalletInfo from 'components/WalletInfo';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
 import ROUTES from 'constants/routes';
@@ -15,7 +14,7 @@ import useInterval from 'hooks/useInterval';
 import useBlockedGamesQuery from 'queries/resolveBlocker/useBlockedGamesQuery';
 import useWhitelistedForUnblock from 'queries/resolveBlocker/useWhitelistedForUnblock';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
@@ -34,7 +33,6 @@ import {
     BlockedGamesNotificationCount,
     Container,
     Count,
-    CurrencyIcon,
     IconWrapper,
     LeftContainer,
     LogoContainer,
@@ -103,7 +101,6 @@ const DappHeader: React.FC = () => {
     const [currentPulsingCount, setCurrentPulsingCount] = useState<number>(0);
     const [navMenuVisibility, setNavMenuVisibility] = useState<boolean | null>(null);
     const [showSearchModal, setShowSearchModal] = useState<boolean>(false);
-    const [showThalesToOverMigrationModal, setShowThalesToOverMigrationModal] = useState<boolean>(false);
     const whitelistedForUnblockQuery = useWhitelistedForUnblock(
         walletAddress,
         { networkId, client },
@@ -173,28 +170,6 @@ const DappHeader: React.FC = () => {
                                     )}
                                 </SPAAnchor>
                             </OverdropWrapper>
-                            {isConnected && (
-                                <Button
-                                    onClick={() => setShowThalesToOverMigrationModal(true)}
-                                    backgroundColor={theme.button.textColor.quaternary}
-                                    borderColor={theme.button.textColor.quaternary}
-                                    fontSize="14px"
-                                    height="30px"
-                                    padding="2px 10px"
-                                >
-                                    <Trans
-                                        i18nKey="profile.migration-modal.title"
-                                        components={{
-                                            thalesIcon: (
-                                                <CurrencyIcon className="currency-icon currency-icon--thales" />
-                                            ),
-                                            overtimeIcon: (
-                                                <CurrencyIcon className="currency-icon currency-icon--over" />
-                                            ),
-                                        }}
-                                    />
-                                </Button>
-                            )}
                         </MiddleContainerSectionLeft>
                         {isConnected && (
                             <MiddleContainerSectionRight>
@@ -326,9 +301,6 @@ const DappHeader: React.FC = () => {
                     </MobileButtonWrapper>
                     {isBiconomy && <ActivateAccount />}
                 </>
-            )}
-            {showThalesToOverMigrationModal && (
-                <ThalesToOverMigrationModal onClose={() => setShowThalesToOverMigrationModal(false)} />
             )}
             {connectWalletModalVisibility && (
                 <ConnectWalletModal

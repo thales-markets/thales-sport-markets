@@ -18,7 +18,7 @@ const Leaderboard: React.FC = () => {
     const overdropLeaderboardQuery = useOverdropLeaderboardQuery(
         currentSeasonAndMiniSeason.season,
         currentSeasonAndMiniSeason.miniSeason
-    ); // TODO
+    );
 
     const overdropLeaderboard = useMemo(
         () =>
