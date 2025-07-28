@@ -10,9 +10,10 @@ import { ScreenSizeBreakpoint } from 'enums/ui';
 import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
+import { setSpeedMarketsWidgetOpen } from 'redux/modules/ui';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered, FlexDivSpaceBetween } from 'styles/common';
 import { OverdropUserData } from 'types/overdrop';
@@ -26,7 +27,6 @@ const DAILY_QUESTS = [
         title: 'Place Overtime Bet',
         description: 'Make any bet on Overtime platform',
         buttonText: 'Start',
-        onClick: () => navigateTo(ROUTES.Markets.Home),
         completed: false,
     },
     {
@@ -34,15 +34,14 @@ const DAILY_QUESTS = [
         title: 'Speed Market Trade',
         description: 'Complete 1 speed market position',
         buttonText: 'Start',
-        onClick: () => console.log('Speed Market Bet Started'),
         completed: false,
+        speed: true,
     },
     {
         icon: 'icon icon--social',
         title: 'Share on Social',
         description: 'Post with your affiliate link',
         buttonText: 'Send',
-        onClick: () => console.log('Social link Bet Started'),
         completed: false,
         social: true,
     },
@@ -55,6 +54,7 @@ const DailyQuest: React.FC = () => {
     const { address, isConnected } = useAccount();
     const [tweetUrl, setTweetUrl] = useState('');
     const isMobile = useSelector(getIsMobile);
+    const dispatch = useDispatch();
 
     const userDataQuery = useUserDataQuery(address as string, {
         enabled: isConnected,
@@ -174,7 +174,13 @@ const DailyQuest: React.FC = () => {
                                 fontSize="12px"
                                 lineHeight="12px"
                                 additionalStyles={{ textTransform: 'capitalize' }}
-                                onClick={quest.social ? postTweet : quest.onClick}
+                                onClick={
+                                    quest.social
+                                        ? postTweet
+                                        : quest.speed
+                                        ? () => dispatch(setSpeedMarketsWidgetOpen(true))
+                                        : () => navigateTo(ROUTES.Markets.Home)
+                                }
                             >
                                 {quest.buttonText}
                             </Button>

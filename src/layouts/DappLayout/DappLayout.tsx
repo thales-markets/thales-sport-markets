@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { setTheme } from 'redux/modules/ui';
+import { getSpeedMarketsWidgetOpen, setSpeedMarketsWidgetOpen, setTheme } from 'redux/modules/ui';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
@@ -55,7 +55,8 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const [freeBetModalParam, setFreeBetModalParam] = useState(queryParams.freeBet);
-    const [speedMarketsWidgetOpen, setSpeedMarketsWidgetOpen] = useState(false);
+
+    const speedMarketsWidgetOpen = useSelector(getSpeedMarketsWidgetOpen);
 
     const [, setFreeBet] = useLocalStorage<any | undefined>(LOCAL_STORAGE_KEYS.FREE_BET_ID, undefined);
 
@@ -157,9 +158,11 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
                 <SpeedMarketsButton
                     className="speed-markets"
                     isOpen={speedMarketsWidgetOpen}
-                    onClick={() => setSpeedMarketsWidgetOpen(!speedMarketsWidgetOpen)}
+                    onClick={() => dispatch(setSpeedMarketsWidgetOpen(!speedMarketsWidgetOpen))}
                 />
-                {speedMarketsWidgetOpen && <SpeedMarketsWidget onClose={() => setSpeedMarketsWidgetOpen(false)} />}
+                {speedMarketsWidgetOpen && (
+                    <SpeedMarketsWidget onClose={() => dispatch(setSpeedMarketsWidgetOpen(false))} />
+                )}
             </Wrapper>
             <ToastContainer stacked theme={'colored'} />
             {freeBetFromServer && getFreeBetModalShown() && (

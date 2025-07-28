@@ -50,6 +50,7 @@ const initialState: UISliceState = {
     favouriteLeagues: getDefaultFavouriteLeagues(),
     overdropState: getDefaultOverdropState(),
     overdropPreventMultipliersModal: getDefaultValueForPreventOverdropModals(),
+    speedMarketsWidgetOpen: false,
 };
 
 const uiSlice = createSlice({
@@ -117,6 +118,9 @@ const uiSlice = createSlice({
             state.overdropPreventMultipliersModal = action.payload.preventFlag;
             localStore.set(LOCAL_STORAGE_KEYS.OVERDROP_PREVENT_DAILY_MODAL, action.payload.preventFlag);
         },
+        setSpeedMarketsWidgetOpen: (state, action: PayloadAction<boolean>) => {
+            state.speedMarketsWidgetOpen = action.payload;
+        },
     },
 });
 
@@ -128,6 +132,7 @@ export const {
     setOverdropState,
     setDefaultOverdropState,
     setPreventOverdropModalValue,
+    setSpeedMarketsWidgetOpen,
 } = uiSlice.actions;
 
 const getUIState = (state: RootState) => state[sliceName];
@@ -137,5 +142,6 @@ export const getStopPulsing = (state: RootState) => getUIState(state).stopPulsin
 export const getFavouriteLeagues = (state: RootState) => getUIState(state).favouriteLeagues;
 export const getOverdropUIState = (state: RootState) => getUIState(state).overdropState;
 export const getOverdropPreventShowingModal = (state: RootState) => getUIState(state).overdropPreventMultipliersModal;
+export const getSpeedMarketsWidgetOpen = (state: RootState) => getUIState(state).speedMarketsWidgetOpen;
 
 export default uiSlice.reducer;
