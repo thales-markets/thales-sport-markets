@@ -1,14 +1,49 @@
-import { getLeagueLabel, isInternationalLeague, League, LeagueMap } from 'overtime-utils';
+import { getLeagueLabel, getLeagueSport, isInternationalLeague, League, LeagueMap, Sport } from 'overtime-utils';
 import { fixOneSideMarketCompetitorName } from './formatters/string';
 
 export const getTeamImageSource = (team: string, league: League) => {
     const leagueLabel = getLeagueLabel(league);
-    return league == League.TENNIS_WTA ||
-        league == League.TENNIS_GS ||
-        league == League.TENNIS_MASTERS ||
-        league == League.SUMMER_OLYMPICS_TENNIS ||
-        league == League.TENNIS_ATP_CHALLENGER
+    const leagueSport = getLeagueSport(league);
+    return leagueSport == Sport.TENNIS
         ? `/logos/Tennis/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : leagueSport == Sport.GOLF
+        ? `/logos/Golf/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : leagueSport == Sport.AUSSIE_RULES
+        ? `/logos/AussieRules/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : leagueSport == Sport.WATERPOLO
+        ? `/logos/Waterpolo/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : leagueSport == Sport.MOTOSPORT
+        ? `/logos/Motorsport/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : leagueSport == Sport.DARTS
+        ? `/logos/Darts/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : leagueSport == Sport.LACROSSE
+        ? `/logos/Lacrosse/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : leagueSport == Sport.TABLE_TENNIS
+        ? `/logos/TableTennis/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : leagueSport == Sport.RUGBY
+        ? `/logos/Rugby/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : leagueSport == Sport.FOOTBALL
+        ? `/logos/Football/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : leagueSport == Sport.FIGHTING
+        ? `/logos/Fighting/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : leagueSport == Sport.CRICKET
+        ? `/logos/Cricket/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : leagueSport == Sport.VOLLEYBALL
+        ? `/logos/Volleyball/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : leagueSport == Sport.HANDBALL
+        ? `/logos/Handball/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : leagueSport == Sport.FUTURES
+        ? `/logos/Futures/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : leagueSport == Sport.HOCKEY
+        ? `/logos/Hockey/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : leagueSport == Sport.BASEBALL
+        ? `/logos/Baseball/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : leagueSport == Sport.BASKETBALL
+        ? `/logos/Basketball/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : leagueSport == Sport.SOCCER
+        ? `/logos/Soccer/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : leagueSport == Sport.ESPORTS
+        ? `/logos/Esports/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.FORMULA1 || league == League.MOTOGP
         ? `/logos/${leagueLabel}/${fixOneSideMarketCompetitorName(team).replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.GOLF_H2H
