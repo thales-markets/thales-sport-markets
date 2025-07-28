@@ -2,9 +2,7 @@ import SpeedMarketsButtonAnimated from 'assets/images/speed-markets/speed-market
 import axios from 'axios';
 import ClaimFreeBetModal from 'components/ClaimFreeBetModal';
 import MetaData from 'components/MetaData';
-import ThalesToOverMigrationModal from 'components/ThalesToOverMigrationModal';
 import { generalConfig } from 'config/general';
-import { MIGRATE_MODAL_OPENED } from 'constants/events';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { NAV_MENU_WIDTH, SPEED_MARKETS_WIDGET_DEFAULT_RIGHT } from 'constants/ui';
 import { Network } from 'enums/network';
@@ -19,7 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { setTheme } from 'redux/modules/ui';
+import { getSpeedMarketsWidgetOpen, setSpeedMarketsWidgetOpen, setTheme } from 'redux/modules/ui';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
@@ -57,8 +55,7 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const [freeBetModalParam, setFreeBetModalParam] = useState(queryParams.freeBet);
-    const [speedMarketsWidgetOpen, setSpeedMarketsWidgetOpen] = useState(false);
-    const [showThalesToOverMigrationModal, setShowThalesToOverMigrationModal] = useState<boolean>(false);
+    const speedMarketsWidgetOpen = useSelector(getSpeedMarketsWidgetOpen);
 
     const [, setFreeBet] = useLocalStorage<any | undefined>(LOCAL_STORAGE_KEYS.FREE_BET_ID, undefined);
 
@@ -148,18 +145,6 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
 
     useWidgetBotScript(preventDiscordWidgetLoad, setSpeedMarketsWidgetOpen);
 
-    useEffect(() => {
-        const handleEvent = () => {
-            setShowThalesToOverMigrationModal(true);
-        };
-
-        window.addEventListener(MIGRATE_MODAL_OPENED, handleEvent);
-
-        return () => {
-            window.removeEventListener(MIGRATE_MODAL_OPENED, handleEvent);
-        };
-    }, []);
-
     return (
         <Background>
             {/* <ModalWrapper /> */}
@@ -187,9 +172,6 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
                     }}
                     freeBet={freeBetFromServer}
                 />
-            )}
-            {showThalesToOverMigrationModal && (
-                <ThalesToOverMigrationModal onClose={() => setShowThalesToOverMigrationModal(false)} />
             )}
         </Background>
     );
