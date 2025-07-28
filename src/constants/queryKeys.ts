@@ -173,7 +173,7 @@ const QUERY_KEYS = {
     Promotions: (branchName: string) => [branchName, 'promotions'],
     SeoArticles: (branchName: string) => ['seoArticles', branchName],
     Overdrop: {
-        Leaderboard: () => ['leaderboard'],
+        Leaderboard: (season: number, miniSeason: number) => ['leaderboard', season, miniSeason],
         UserMultipliers: (walletAddress: string) => ['userMultipliers', walletAddress],
         UserData: (walletAddress: string) => ['userData', walletAddress],
         SpinTheWheel: () => ['spinTheWheel'],

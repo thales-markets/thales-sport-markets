@@ -26,6 +26,7 @@ export type OverdropUserData = {
     rewards: {
         op: number;
         arb: number;
+        eth: number;
     };
     rank: number;
     lastTwitterActivity?: number;

@@ -15,7 +15,7 @@ const Leaderboard: React.FC = () => {
     const { t } = useTranslation();
     const noResultsMessage = t('referral.no-result');
 
-    const overdropLeaderboardQuery = useOverdropLeaderboardQuery();
+    const overdropLeaderboardQuery = useOverdropLeaderboardQuery(1, 1); // TODO
 
     const overdropLeaderboard = useMemo(
         () =>

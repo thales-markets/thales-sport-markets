@@ -128,3 +128,52 @@ export const OVERDROP_REWARDS_COLLATERALS = {
     [Network.Arbitrum]: CRYPTO_CURRENCY_MAP.ARB,
     [Network.Base]: CRYPTO_CURRENCY_MAP.USDC,
 };
+
+export const OVERDROP_SEASONS = [1, 2];
+export const SEASON_2: { month: number; year: number }[] = [
+    {
+        // TODO: remove july
+        month: 7,
+        year: 2025,
+    },
+    {
+        month: 8,
+        year: 2025,
+    },
+    {
+        month: 9,
+        year: 2025,
+    },
+    {
+        month: 10,
+        year: 2025,
+    },
+    {
+        month: 11,
+        year: 2025,
+    },
+    {
+        month: 12,
+        year: 2025,
+    },
+    {
+        month: 1,
+        year: 2026,
+    },
+    {
+        month: 2,
+        year: 2026,
+    },
+    {
+        month: 3,
+        year: 2026,
+    },
+    {
+        month: 4,
+        year: 2026,
+    },
+    {
+        month: 5,
+        year: 2026,
+    },
+];
