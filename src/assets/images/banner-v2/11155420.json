@@ -2,5 +2,9 @@
     {
         "image": "banner_futures_new.png",
         "url": "https://www.overtimemarkets.xyz/markets?status=OpenMarkets&sport=Futures"
+    },
+    {
+        "image": "overdrop.gif",
+        "url": "https://www.overtimemarkets.xyz/overdrop"
     }
 ]
