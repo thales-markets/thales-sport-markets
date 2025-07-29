@@ -10,8 +10,8 @@ export type OverdropMultiplier = {
 };
 
 export enum RewardType {
-    XP_BOOST = 'XP_BOOST',
-    OVERDROP_XP = 'OVERDROP_XP',
+    XP_BOOST = 'XP BOOST',
+    OVERDROP_XP = 'OVERDROP XP',
 }
 
 export type Reward = {

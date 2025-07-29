@@ -2,6 +2,7 @@ import { OverdropTab } from 'enums/ui';
 import BadgeOverview from 'pages/Overdrop/components/BadgeOverview';
 import DailyQuest from 'pages/Overdrop/components/DailyQuest';
 import DailyRecap from 'pages/Overdrop/components/DailyRecap';
+import EstimateRewards from 'pages/Overdrop/components/EstimateRewards';
 import XPOverview from 'pages/Overdrop/components/XPOverview';
 import React from 'react';
 import { useSelector } from 'react-redux';
@@ -23,6 +24,7 @@ const OverdropHome: React.FC<OverdropHomeProps> = ({ setSelectedTab }) => {
             <XPOverview setSelectedTab={setSelectedTab} />
             <LevelDetailsWrapper isMobile={isMobile}>
                 <BadgeOverview />
+                <EstimateRewards />
                 <DailyRecap />
             </LevelDetailsWrapper>
         </Wrapper>
