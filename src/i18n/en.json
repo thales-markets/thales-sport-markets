@@ -1317,6 +1317,7 @@
             "only-pending-tickets": "Only pending tickets (singles)",
             "only-system-bets": "Only system bets",
             "only-unresolved": "Only unresolved ({{hours}} hours)",
+            "only-unresolved-default": "Only unresolved default round ({{hours}} hours)",
             "only-finished-unresolved": "Finished unresolved ({{minutes}} min)",
             "only-pp": "Only PP tickets",
             "only-open-tickets-short": "Only open",

@@ -30,9 +30,10 @@ type AllLpTicketsProps = {
     round: number;
     leagueId: League;
     onlyPP: boolean;
+    setRound: (round: number) => void;
 };
 
-const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) => {
+const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP, setRound }) => {
     const networkId = useChainId();
     const client = useClient();
     const theme: ThemeInterface = useTheme();
@@ -45,6 +46,7 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
     const [showOnlyPendingTickets, setShowOnlyPendingTickets] = useState<boolean>(false);
     const [showOnlySystemBets, setShowOnlySystemBets] = useState<boolean>(false);
     const [showOnlyUnresolved, setShowOnlyUnresolved] = useState<boolean>(false);
+    const [showOnlyUnresolvedDefault, setShowOnlyUnresolvedDefault] = useState<boolean>(false);
     const [showOnlyFinishedUnresolved, setShowOnlyFinishedUnresolved] = useState<boolean>(false);
     const [expandAll, setExpandAll] = useState<boolean>(false);
     const [minBuyInAmount, setMinBuyInAmount] = useState<number | string>('');
@@ -192,7 +194,18 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
                         !showOnlyFinishedUnresolved) &&
                     (getValueInUsd(ticket.collateral, ticket.buyInAmount) >= Number(minBuyInAmount) ||
                         !minBuyInAmount) &&
-                    (getValueInUsd(ticket.collateral, ticket.payout) >= Number(minPayoutAmount) || !minPayoutAmount)
+                    (getValueInUsd(ticket.collateral, ticket.payout) >= Number(minPayoutAmount) || !minPayoutAmount) &&
+                    ((ticket.isOpen &&
+                        ticket.sportMarkets.some(
+                            (market) =>
+                                market.apiMaturity &&
+                                market.apiMaturity <
+                                    new Date().getTime() - hoursToMilliseconds(UNRESOLVED_PERIOD_IN_HOURS) &&
+                                !market.isResolved &&
+                                !market.isCancelled
+                        ) &&
+                        showOnlyUnresolvedDefault) ||
+                        !showOnlyUnresolvedDefault)
             ),
             ['timestamp'],
             ['desc']
@@ -223,6 +236,7 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
         showOnlyFinishedUnresolved,
         minBuyInAmount,
         minPayoutAmount,
+        showOnlyUnresolvedDefault,
     ]);
 
     return (
@@ -296,6 +310,7 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
                         width="200px"
                         containerWidth="200px"
                         margin="0 30px 0 0"
+                        preventAutoFocus={true}
                     />
                     <InputLabel>{t(`liquidity-pool.user-transactions.min-payout`)}:</InputLabel>
                     <NumericInput
@@ -309,6 +324,7 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
                         placeholder={t(`common.enter-amount`)}
                         width="200px"
                         containerWidth="200px"
+                        preventAutoFocus={true}
                     />
                 </InputContainer>
                 <CheckboxWrapper>
@@ -318,6 +334,23 @@ const AllLpTickets: React.FC<AllLpTicketsProps> = ({ round, leagueId, onlyPP }) 
                         onChange={(e: any) => setShowOnlyFinishedUnresolved(e.target.checked || false)}
                         label={t(`liquidity-pool.user-transactions.only-finished-unresolved`, {
                             minutes: FINISHED_UNRESOLVED_PERIOD_IN_MINUTES,
+                        })}
+                    />
+                </CheckboxWrapper>
+            </CheckboxContainer>
+            <CheckboxContainer>
+                <CheckboxWrapper>
+                    <Checkbox
+                        checked={showOnlyUnresolvedDefault}
+                        value={showOnlyUnresolvedDefault.toString()}
+                        onChange={(e: any) => {
+                            if (e.target.checked) {
+                                setRound(1);
+                            }
+                            setShowOnlyUnresolvedDefault(e.target.checked || false);
+                        }}
+                        label={t(`liquidity-pool.user-transactions.only-unresolved-default`, {
+                            hours: UNRESOLVED_PERIOD_IN_HOURS,
                         })}
                     />
                 </CheckboxWrapper>

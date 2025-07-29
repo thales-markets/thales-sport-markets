@@ -2,13 +2,14 @@ import BannerCarousel from 'components/BannerCarousel';
 import SPAAnchor from 'components/SPAAnchor';
 import ROUTES from 'constants/routes';
 import { ProfileTab } from 'enums/ui';
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
 import { buildHref } from 'utils/routes';
+import useQueryParam from 'utils/useQueryParams';
 import { useAccount } from 'wagmi';
 import SearchField from '../../components/SearchField';
 import UserVaults from '../../components/UserVaults';
@@ -27,7 +28,7 @@ type MyTicketsProps = {
 const MyTickets: React.FC<MyTicketsProps> = ({ selectedTab, setSelectedTab }) => {
     const { t } = useTranslation();
     const isMobile = useSelector(getIsMobile);
-    const [searchText, setSearchText] = useState<string>('');
+    const [searchText, setSearchText] = useQueryParam('wallet', '');
     const { isConnected } = useAccount();
 
     return (
