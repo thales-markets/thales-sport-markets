@@ -13,6 +13,7 @@
         "sell-side": "SELL",
         "submit": "Submit",
         "enter-amount": "Enter amount",
+        "buy-in": "Buy-in",
         "liquidity": "Liquidity",
         "trades": "Trades",
         "days-of-week": {

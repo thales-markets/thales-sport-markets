@@ -272,6 +272,8 @@ const SelectBuyin: React.FC<SelectBuyinProps> = ({
                             />
                         }
                         balance={formatCurrencyWithKey(selectedCollateral, paymentTokenBalance)}
+                        label={t('common.buy-in')}
+                        labelColor={theme.input.textColor.secondary}
                         onMaxButton={onMaxClick}
                         inputFontWeight="600"
                         inputPadding="5px 10px"
@@ -291,7 +293,6 @@ const InputContainer = styled(FlexDiv)``;
 const AmountToBuyContainer = styled.div`
     position: relative;
     width: 100%;
-    margin-top: 21px;
 `;
 
 export default SelectBuyin;
