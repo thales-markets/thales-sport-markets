@@ -772,6 +772,9 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
 
     return (
         <Container>
+            <OverdropRowSummary>
+                <OverdropText>{'TODO: Overdrop info'}</OverdropText>
+            </OverdropRowSummary>
             <TradingDetailsWrapper>
                 <TradingDetails
                     selectedAsset={selectedAsset}
@@ -819,6 +822,14 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
 
 const Container = styled(FlexDivColumn)`
     position: relative;
+`;
+
+const OverdropRowSummary = styled(FlexDivCentered)``;
+
+const OverdropText = styled.span`
+    text-align: center;
+    font-size: 14px;
+    line-height: 16px;
 `;
 
 const TradingDetailsWrapper = styled(FlexDivCentered)`
