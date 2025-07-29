@@ -1,6 +1,24 @@
 {
     "headers": [
         {
+            "source": "/logos/(.*)",
+            "headers": [
+                {
+                    "key": "Cache-Control",
+                    "value": "public, max-age=86400, immutable"
+                }
+            ]
+        },
+        {
+            "source": "/assets/(.*)",
+            "headers": [
+                {
+                    "key": "Cache-Control",
+                    "value": "public, max-age=86400, immutable"
+                }
+            ]
+        },
+        {
             "source": "/(.*)",
             "headers": [
                 {
