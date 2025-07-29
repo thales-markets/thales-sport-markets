@@ -1,4 +1,5 @@
 import { OVERDROP_LEVELS } from 'constants/overdrop';
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
@@ -97,7 +98,7 @@ const Badge = styled.img<{ active?: boolean }>`
     height: 80px;
     margin: 5px 0px;
     opacity: ${(props) => (props.active ? '1' : '0.2')};
-    @media (max-width: 400px) {
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         width: 70px;
         height: 70px;
     }
@@ -113,9 +114,11 @@ const DisabledLevelWrapper = styled(FlexDivColumnCentered)`
     border: 3px solid ${(props) => props.theme.overdrop.borderColor.primary};
     border-radius: 50%;
     text-align: center;
-    @media (max-width: 400px) {
-        width: 66px;
-        height: 66px;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        width: 60px;
+        height: 60px;
+        top: 20px;
+        left: 6px;
     }
 `;
 

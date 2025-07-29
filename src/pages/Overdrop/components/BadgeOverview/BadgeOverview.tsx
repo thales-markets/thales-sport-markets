@@ -77,17 +77,37 @@ const BadgeOverview: React.FC = () => {
     return (
         <Wrapper>
             <BadgeWrapper {...handlers}>
-                {OVERDROP_LEVELS.slice(1, OVERDROP_LEVELS.length).map((item, index) => {
-                    return (
-                        <SmallBadge
-                            key={index}
-                            level={item.level}
-                            requiredPointsForLevel={item.minimumPoints}
-                            levelName={item.levelName}
-                            reached={levelItem ? item.level <= levelItem.level : false}
-                        />
-                    );
-                })}
+                {isMobile ? (
+                    <>
+                        <Arrow className={'icon-homepage icon--arrow-left'} onClick={() => handleOnPrevious()} />
+                        {OVERDROP_LEVELS.slice(currentStep, currentStep + numberOfCards).map((item, index) => {
+                            return (
+                                <SmallBadge
+                                    key={index}
+                                    level={item.level}
+                                    requiredPointsForLevel={item.minimumPoints}
+                                    levelName={item.levelName}
+                                    reached={levelItem ? item.level <= levelItem.level : false}
+                                />
+                            );
+                        })}
+                        <Arrow className={'icon-homepage icon--arrow-right'} onClick={() => handleOnNext()} />
+                    </>
+                ) : (
+                    <>
+                        {OVERDROP_LEVELS.slice(1, OVERDROP_LEVELS.length).map((item, index) => {
+                            return (
+                                <SmallBadge
+                                    key={index}
+                                    level={item.level}
+                                    requiredPointsForLevel={item.minimumPoints}
+                                    levelName={item.levelName}
+                                    reached={levelItem ? item.level <= levelItem.level : false}
+                                />
+                            );
+                        })}
+                    </>
+                )}
             </BadgeWrapper>
 
             <DetailsWrapper>
@@ -188,6 +208,12 @@ const Disclaimer = styled.p`
     font-size: 9px;
     font-weight: 400;
     line-height: 10px;
+`;
+
+const Arrow = styled.i`
+    color: ${(props) => props.theme.button.background.senary};
+    font-size: 18px;
+    cursor: pointer;
 `;
 
 export default BadgeOverview;
