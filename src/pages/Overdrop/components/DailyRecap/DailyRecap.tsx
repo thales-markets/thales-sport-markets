@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
 
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import { getMultiplierValueFromQuery } from 'utils/overdrop';
 import { useAccount } from 'wagmi';
 import LevelCircles from '../LevelCircles';
@@ -60,9 +61,9 @@ const Wrapper = styled(FlexDivCentered)`
     height: 52px;
     background: ${(props) => props.theme.overdrop.background.active};
     border-radius: 6px;
-    @media (max-width: 767px) {
-        flex-direction: row;
-        flex-wrap: wrap;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        flex-direction: column;
+        height: auto;
     }
 `;
 
@@ -70,12 +71,23 @@ const ItemContainer = styled(FlexDivColumnCentered)`
     justify-content: center;
     text-align: center;
     gap: 2px;
-    @media (max-width: 767px) {
-        min-width: 200px;
-    }
+
     &:nth-child(2) {
         border-right: 2px solid ${(props) => props.theme.overdrop.borderColor.quaternary};
         border-left: 2px solid ${(props) => props.theme.overdrop.borderColor.quaternary};
+    }
+
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        min-width: 200px;
+        width: 100%;
+        padding: 10px;
+        border: none;
+        &:nth-child(2) {
+            border-right: none;
+            border-left: none;
+            border-top: 2px solid ${(props) => props.theme.overdrop.borderColor.quaternary};
+            border-bottom: 2px solid ${(props) => props.theme.overdrop.borderColor.quaternary};
+        }
     }
 `;
 
@@ -98,6 +110,9 @@ const Value = styled.span`
 const ValueWrapper = styled(FlexDivCentered)`
     gap: 8px;
     height: 23px;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        height: auto;
+    }
 `;
 
 export default DailyRecap;

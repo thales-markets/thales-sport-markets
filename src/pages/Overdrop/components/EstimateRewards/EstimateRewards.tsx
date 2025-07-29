@@ -1,5 +1,6 @@
 import ETHIcon from 'assets/currencies/ETH.svg';
 import { USD_SIGN } from 'constants/currency';
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import useOverdropLeaderboardQuery from 'queries/overdrop/useOverdropLeaderboardQuery';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import React, { useMemo } from 'react';
@@ -64,9 +65,10 @@ const Wrapper = styled(FlexDivCentered)`
     background: ${(props) => props.theme.overdrop.background.active};
     padding: 10px;
     border-radius: 6px;
-    @media (max-width: 767px) {
-        flex-direction: row;
-        flex-wrap: wrap;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        flex-direction: column;
+        height: auto;
+        padding: 10px 0;
     }
 `;
 
@@ -93,6 +95,16 @@ const RewardsWrapper = styled.div`
     align-items: center;
     margin-left: 10px;
     padding-left: 30px;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        flex-direction: column;
+        height: auto;
+        border-top: 2px solid ${(props) => props.theme.overdrop.borderColor.quaternary};
+        border-left: none;
+        padding: 0;
+        margin: 0;
+        margin-top: 10px;
+        padding-top: 10px;
+    }
 `;
 
 const Rewards = styled.p`
