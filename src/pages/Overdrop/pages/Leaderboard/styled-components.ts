@@ -94,7 +94,7 @@ export const SearchFieldContainer = styled(FlexDivEnd)`
     padding: 4px 0;
     background: ${(props) => props.theme.overdrop.background.quinary};
     flex: 1;
-    div {
+    & > div {
         width: 100%;
     }
     input {
