@@ -9,10 +9,12 @@ import React, { useMemo, useState } from 'react';
 import { Wheel } from 'react-custom-roulette';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivSpaceBetween } from 'styles/common';
-import { OverdropUserData } from 'types/overdrop';
+import { OverdropUserData, RewardType } from 'types/overdrop';
 import { hasUserDoneDailyQuests } from 'utils/overdrop';
 import { refetchUserOverdrop } from 'utils/queryConnector';
 import { useAccount } from 'wagmi';
+
+const IMG_FOLDER = 'src/assets/images/overdrop/wheel/';
 
 const WheelOfFortune: React.FC = () => {
     const [mustSpin, setMustSpin] = useState(false);
@@ -48,6 +50,7 @@ const WheelOfFortune: React.FC = () => {
     const data = useMemo(() => {
         if (userData && spinTheWheelOptions) {
             const isDailyQuestDone = hasUserDoneDailyQuests(userData);
+            console.log('spinTheWheelOptions: ', spinTheWheelOptions);
 
             // Separate by bonus true/false (default to false if missing)
             const withBonus = spinTheWheelOptions.filter((item) => item.bonus === true);
@@ -61,15 +64,22 @@ const WheelOfFortune: React.FC = () => {
             }
 
             return result.map((item: any) => {
+                const uri = `${IMG_FOLDER}${item.type === RewardType.XP_BOOST ? 'boost' : 'xp'}${item.amount}.png`;
+                console.log(uri);
                 if (!isDailyQuestDone && item.bonus) {
                     return {
                         ...item,
                         option: `${item.amount} ${item.type} 🔒`,
                         style: {
-                            backgroundColor: '#564929',
+                            backgroundColor: '#2A355D',
                             fontFamily: 'Arial',
                             fontSize: 16,
                             fontWeight: 500,
+                        },
+                        image: {
+                            uri,
+
+                            offsetY: 100,
                         },
                     };
                 }
@@ -81,6 +91,10 @@ const WheelOfFortune: React.FC = () => {
                         fontFamily: 'Arial',
                         fontSize: 16,
                         fontWeight: 500,
+                    },
+                    image: {
+                        offsetY: 100,
+                        uri,
                     },
                 };
             });
