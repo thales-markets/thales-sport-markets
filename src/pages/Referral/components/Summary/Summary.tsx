@@ -6,23 +6,17 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { getIsBiconomy } from 'redux/modules/wallet';
 import { formatCurrency, formatCurrencyWithSign, truncateAddress } from 'thales-utils';
 import { RootState } from 'types/redux';
-import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { useAccount } from 'wagmi';
 
 const Summary: React.FC = () => {
     const { t } = useTranslation();
     const noResultsMessage = t('referral.no-result');
 
-    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
-
     const { address } = useAccount();
-    const { smartAddress } = useBiconomy();
-    const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
-    const activityQuery = useAffiliateSummaryQuery(walletAddress);
+    const activityQuery = useAffiliateSummaryQuery(address || '');
     const activityData = activityQuery.data || [];
 
     const isMobile = useSelector((state: RootState) => getIsMobile(state));

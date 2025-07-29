@@ -6,23 +6,17 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { getIsBiconomy } from 'redux/modules/wallet';
 import { formatCurrency, getEtherscanTxLink, truncateAddress } from 'thales-utils';
 import { RootState } from 'types/redux';
-import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { useAccount } from 'wagmi';
 
 const Activity: React.FC = () => {
     const { t } = useTranslation();
     const noResultsMessage = t('referral.no-result');
 
-    const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
-
     const { address } = useAccount();
-    const { smartAddress } = useBiconomy();
-    const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
-    const activityQuery = useAffiliateActivityQuery(walletAddress);
+    const activityQuery = useAffiliateActivityQuery(address || '');
     const activityData = activityQuery.data || [];
 
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -42,6 +36,23 @@ const Activity: React.FC = () => {
                             header: <>{t('referral.bets.table-headers.timestamp')}</>,
                             accessorKey: 'timestamp',
                             sortable: true,
+                            cell: (cellProps: any) => {
+                                const timestamp = cellProps.cell.getValue();
+                                const date = new Date(timestamp); // This auto-converts to local time
+
+                                return date
+                                    .toLocaleString('en-US', {
+                                        month: 'short',
+                                        day: '2-digit',
+                                        year: 'numeric',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        second: '2-digit',
+                                        hour12: false, // 24-hour format
+                                    })
+                                    .replace(',', '');
+                                return <>{date}</>;
+                            },
                         },
                         {
                             header: <>{t('referral.bets.table-headers.scan-link')}</>,
