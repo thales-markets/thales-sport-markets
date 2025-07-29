@@ -28,11 +28,61 @@ const leagueOptions = [
         value: 2,
         label: 'NFL',
     },
+    {
+        value: 3,
+        label: 'MLB',
+    },
+    {
+        value: 4,
+        label: 'CS2',
+    },
+    {
+        value: 5,
+        label: 'DOTA2',
+    },
+    {
+        value: 6,
+        label: 'LOL',
+    },
+    {
+        value: 7,
+        label: 'VALORANT',
+    },
+    {
+        value: 8,
+        label: 'ATP',
+    },
+    {
+        value: 9,
+        label: 'WTA',
+    },
+    {
+        value: 10,
+        label: 'UFC',
+    },
+    {
+        value: 11,
+        label: 'WNBA',
+    },
+    {
+        value: 12,
+        label: 'NHL',
+    },
 ];
 
 const leagueOptionsMap: Record<number, League> = {
     1: League.NBA,
     2: League.NFL,
+    3: League.MLB,
+    4: League.CSGO,
+    5: League.DOTA2,
+    6: League.LOL,
+    7: League.VALORANT,
+    8: League.TENNIS_MASTERS,
+    9: League.TENNIS_WTA,
+    10: League.UFC,
+    11: League.WNBA,
+    12: League.NHL,
 };
 
 type StatsProps = {
@@ -48,7 +98,10 @@ const Stats: React.FC<StatsProps> = ({ selectedTab, setSelectedTab, currentRound
     const [showOnlyPP, setShowOnlyPP] = useState<boolean>(false);
 
     useEffect(() => {
-        setRound(currentRound);
+        if (round !== 1) {
+            setRound(currentRound);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentRound]);
 
     const rounds: Array<{ value: number; label: string }> = [];
@@ -179,7 +232,12 @@ const Stats: React.FC<StatsProps> = ({ selectedTab, setSelectedTab, currentRound
                     />
                 )}
                 {selectedTab == PnlTab.TICKETS && (
-                    <AllLpTickets round={round} leagueId={leagueOptionsMap[league]} onlyPP={showOnlyPP} />
+                    <AllLpTickets
+                        round={round}
+                        leagueId={leagueOptionsMap[league]}
+                        onlyPP={showOnlyPP}
+                        setRound={setRound}
+                    />
                 )}
             </MainContainer>
         </RowContainer>
