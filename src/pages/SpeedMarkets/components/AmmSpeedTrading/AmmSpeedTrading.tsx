@@ -772,9 +772,11 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
 
     return (
         <Container>
-            <OverdropRowSummary>
-                <OverdropText>{'TODO: Overdrop info'}</OverdropText>
-            </OverdropRowSummary>
+            {false && (
+                <OverdropRowSummary>
+                    <OverdropText>{'TODO: Overdrop info'}</OverdropText>
+                </OverdropRowSummary>
+            )}
             <TradingDetailsWrapper>
                 <TradingDetails
                     selectedAsset={selectedAsset}

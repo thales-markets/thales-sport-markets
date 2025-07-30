@@ -330,7 +330,7 @@ export default {
         position: {
             selected: Colors.NAVY_BLUE_DARK,
             up: Colors.BLUE,
-            down: Colors.RED,
+            down: Colors.YELLOW,
             card: {
                 background: { primary: Colors.KONKIKYO_BLUE },
                 textColor: { primary: Colors.FRESH_LAVENDER },
