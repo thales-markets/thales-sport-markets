@@ -632,17 +632,17 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
                 </Button>
             );
         }
-        if (!isPaidAmountEntered) {
-            return (
-                <Button disabled {...getDefaultButtonProps(theme)}>
-                    {t('common.enter-amount')}
-                </Button>
-            );
-        }
         if (!isPositionSelected) {
             return (
                 <Button disabled {...getDefaultButtonProps(theme)}>
                     {t('speed-markets.amm-trading.choose-direction')}
+                </Button>
+            );
+        }
+        if (!isPaidAmountEntered) {
+            return (
+                <Button disabled {...getDefaultButtonProps(theme)}>
+                    {t('common.enter-amount')}
                 </Button>
             );
         }
