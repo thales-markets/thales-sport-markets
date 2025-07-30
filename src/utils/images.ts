@@ -143,10 +143,12 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.EREDIVISIE:
         case League.NETHERLANDS_CUP:
         case League.NETHERLANDS_EREDIVISIE_WOMEN:
+        case League.NETHERLANDS_SUPER_CUP:
             return `/logos/Countries/netherlands.svg`;
         case League.PRIMEIRA_LIGA:
         case League.PORTUGAL_LEAGUE_CUP:
         case League.PORTUGAL_CUP:
+        case League.PORTUGAL_SUPER_CUP:
             return `/logos/Countries/portugal.svg`;
         case League.T20_BLAST:
             return `/logos/Countries/united-kingdom.svg`;
@@ -181,6 +183,7 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.ARGENTINA_PRIMERA:
         case League.ARGENTINA_LIGA_ARGENTINA:
         case League.ARGENTINA_LIGA_ARGENTINA_WOMEN:
+        case League.ARGENTINA_COPA_ARGENTINA:
             return `/logos/Countries/argentina.svg`;
         case League.RUSSIA_PREMIER:
         case League.RUSSIA_KHL:
@@ -218,6 +221,7 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
             return `/logos/Countries/australia.svg`;
         case League.SWITZERLAND_SUPER_LEAGUE:
         case League.SWITZETLAND_NATIONAL_LEAGUE:
+        case League.SWITZERLAND_CHALLENGE_LEAGUE:
             return `/logos/Countries/switzerland.svg`;
         case League.AUSTRIA_BUNDESLIGA:
         case League.AUSTRIA_ICE_HOCKEY_LEAGUE:
@@ -227,6 +231,7 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.DENMARK_SUPER_LEAGUE:
         case League.DENMARK_VOLLEYLIGAEN:
         case League.DENMARK_VOLLEYLIGAEN_WOMEN:
+        case League.DENMARK_1ST_DIVISION:
             return `/logos/Countries/denmark.svg`;
         case League.POLAND_LEAGUE:
         case League.POLAND_SUPERLIGA:
@@ -236,6 +241,7 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.SWEDEN_LEAGUE:
         case League.SWEDEN_SHL:
         case League.SWEDEN_HANDBOLLSLIGAN:
+        case League.SWEDEN_SUPERETTAN:
             return `/logos/Countries/sweden.svg`;
         case League.COLOMBIA_PRIMERA_A:
             return `/logos/Countries/colombia.svg`;
@@ -276,6 +282,7 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.NORWAY_HB_1_DIVISJON:
         case League.NORWAY_ELITESERIEN:
         case League.NORWAY_NVBF:
+        case League.NORWAY_1_DIVISJON:
             return `/logos/Countries/norway.svg`;
         case League.ICELAND_URVALSDEILD:
         case League.ICELAND_BESTA_DEILD_KARLA:
