@@ -15,7 +15,7 @@ import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
 import { setSpeedMarketsWidgetOpen } from 'redux/modules/ui';
 import styled, { useTheme } from 'styled-components';
-import { FlexDivCentered, FlexDivColumnCentered, FlexDivSpaceBetween } from 'styles/common';
+import { FlexDiv, FlexDivCentered, FlexDivColumnCentered, FlexDivSpaceBetween } from 'styles/common';
 import { OverdropUserData } from 'types/overdrop';
 import { refetchUserOverdrop } from 'utils/queryConnector';
 import { navigateTo } from 'utils/routes';
@@ -25,22 +25,22 @@ const DAILY_QUESTS = [
     {
         icon: 'icon icon--logo',
         title: 'Place Overtime Bet',
-        description: 'Make any bet on Overtime platform',
+        description: 'Place any bet on Overtime',
         buttonText: 'Start',
         completed: false,
     },
     {
         icon: 'sidebar-icon sidebar-icon--speed-markets',
         title: 'Speed Market Trade',
-        description: 'Complete 1 speed market position',
+        description: 'Place a Speed Markets trade',
         buttonText: 'Start',
         completed: false,
         speed: true,
     },
     {
         icon: 'icon icon--social',
-        title: 'Share on Social',
-        description: 'Post with your affiliate link',
+        title: 'Post about @overtime_io on socials',
+        description: 'Make a post that mentions @overtime_io on X.com',
         buttonText: 'Send',
         completed: false,
         social: true,
@@ -131,8 +131,12 @@ const DailyQuest: React.FC = () => {
         <Container>
             <FlexDivSpaceBetween>
                 <HeaderTitle>Daily Quest</HeaderTitle>
-                <Reward>200XP + 10% Boost</Reward>
+                <Reward>Earn 200XP + 10% XP Boost</Reward>
             </FlexDivSpaceBetween>
+            <Explainer>
+                Complete your Daily Quest tasks every day to earn 200 XP, 10% XP Boost for the day and to upgrade your
+                next Daily Spin the Wheel with extra options!
+            </Explainer>
             {DAILY_QUESTS.map((quest, index) => (
                 <DailyQuestItem social={quest.social} completed={quest.completed} key={index}>
                     <FlexDivCentered>
@@ -205,7 +209,7 @@ const DailyQuest: React.FC = () => {
                     </FlexDivCentered>
                 ) : (
                     <>
-                        <SpinTheWheelText>Complete daily quests to unlock bonus rewards</SpinTheWheelText>
+                        <SpinTheWheelText>Complete Daily Quest to upgrade your SPIN!</SpinTheWheelText>
 
                         <Button
                             borderRadius="8px"
@@ -250,6 +254,11 @@ const HeaderTitle = styled.h3`
     font-style: normal;
     font-weight: 500;
     line-height: 28px; /* 155.556% */
+`;
+
+const Explainer = styled(FlexDiv)`
+    font-size: 14px;
+    line-height: 18px;
 `;
 
 const Reward = styled.p`

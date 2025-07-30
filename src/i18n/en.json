@@ -962,6 +962,7 @@
                 "bonus-applied": "Boost applied",
                 "total-xp-boost": "Total XP Boost",
                 "total-xp-earned": "Total XP Earned",
+                "how-it-works": "How Overdrop season 2 works",
                 "tooltip": {
                     "daily-boost": "The more days in a row you bet, the higher your XP boost. Increase +5% for each day up to maximum of +35%. If you miss one day, this boost resets to 0%",
                     "weekly-boost": "The more weeks in a row you bet, the higher your XP boost. Increase +5% for each week up to maximum of +20%. If you miss one week, this boost resets to 0%",
@@ -972,6 +973,9 @@
                     "promo-boost": "Certain sports games carry additional XP boosts.",
                     "daily-quest": "Completing daily quest gives you 10% boost",
                     "spin-the-wheel-boost": "You can earn xp boost daily by spining the wheel",
+                    "how-it-works-1": "Overdrop League Season 2 allows users to earn XP on Overtime by placing bets, which earns you monthly pro-rata ETH rewards and Free Bets on XP Level Ups. The higher the buy-in and odds of the bet, the more XP the bet earns. Users can also gain significant XP boosts through various achievements and selected bet types that can speed up their XP progress.",
+                    "how-it-works-2": "Season 2 of Overdrop will run as a series of monthly episodes until June 2026. After the monthly episode of Overdrop ends, all users with XP for that month will be rewarded their share of 4 ETH proportionally. You can take a look at your estimated rewards of the current month at any point on the leaderboard page. Your XP balance resets to 0 after the end of each month.",
+                    "how-it-works-3": "Additionally, users will be able to reach XP levels that carry special Free Bet rewards and loyalty XP boost for the next months! You can read more about XP levels here.",
                     "base-xp": "The base XP is calculated via the following formula:\n\nBase XP = Buy In Amount * (2 - Normalized Odds). \n\nThis means that your bet accrues more base XP the higher your buy-in and the higher your bet odds are."
                 }
             },
@@ -1418,7 +1422,7 @@
         "new-season": " starts soon • Stay tuned for new rewards!",
         "navigation-menu": {
             "home": "Overdrop home",
-            "xp-calculation": "XP Details",
+            "xp-calculation": "Overdrop Details",
             "leveling-tree": "Leveling tree",
             "leaderboard": "Leaderboard"
         },
@@ -1451,7 +1455,7 @@
         "leveling-tree": {
             "heading": "The overdrop farming league",
             "explainer": {
-                "xp-explained": "XP Explained",
+                "xp-explained": "XP Breakdown",
                 "xp-explained-content": "<bold>Overdrop</bold> is a season-long league where users accrue XP on Overtime by placing bets. The higher the buy-in and odds of the bet, the more XP the bet earns. Users can also <bold>gain additional XP boosts</bold> through various achievements that can speed up their XP progress. \n\nThe league will run <bold>until June 2025</bold> and it will have rewards for all participants <bold>in the form of airdrops, free bets and many more!</bold> \n\nAfter the Overdrop League ends in June 2025, all users with accrued XP will be rewarded their share of <highlight>100,000 OP</highlight> and <highlight>200,000 ARB</highlight> tokens proportionally. You can take a look at your estimated rewards at any point on the leaderboard page. \n\nAdditionally, users will be able to reach <bold>XP levels</bold> that carry special rewards! You can read more about <bold>XP levels</bold> here.",
                 "base-xp-accrual": "Base XP",
                 "base-xp-content": "The base calculation for how much XP your bet gains you is calculated via the following formula: \n\n <highlight>Base XP = Buy In Amount * (2 - Normalized Odds )</highlight> \n\n - <bold>Buy In Amount:</bold> the amount of $ that you placed as a Buy In on the respective bet.\n\n - <bold>Normalized Odds:</bold> Odds of your bet shown in the format of Normalized Probability between 0 and 1. For example, Decimal Odds of 1.60 is 0.625 in  Normalized Odds format.\n\nThis means that your bet accrues more base XP the higher your buy-in and the higher your bet odds are.",
@@ -1459,18 +1463,22 @@
                 "xp-boost-content": "There are several ways to further boost the amount of your XP accrual per bet by having boosts from <bold>daily bet streaks, weekly bet streaks, amount of games in parlay, using OVER token as collateral,  flexing your bets on twitter and reaching XP levels for loyalty boosts!</bold>",
                 "daily-bonus": "Daily streak boost",
                 "weekly-boost": "Weekly streak boost",
-                "weekly-boost-content": "The conditions for the weekly streak boost to be activated for the ongoing week is to have any betting volume between Monday 00:00UTC and Sunday 23:59UTC for the ongoing week. The more weeks in a row this condition is met, the higher the <bold>Weekly Streak Boost</bold> on your baseline XP accrual!\n\n<bold>Weekly Streak Boost</bold> is applied to all bets made while the boost is active.\n\nIf you break your streak and miss out to drive volume one day, your <bold>Weekly Streak Boost</bold> is reset to +0%.",
+                "weekly-boost-content": "The conditions for the weekly streak boost to be activated for the ongoing week is to have any betting volume between Monday 00:00UTC and Sunday 23:59UTC for the ongoing week. The more weeks in a row this condition is met, the higher the <bold>Weekly Streak Boost</bold> on your baseline XP accrual!\n\n<bold>Weekly Streak Boost</bold> is applied to all bets made while the boost is active.\n\nIf you break your streak and miss out to drive volume one day, your <bold>Weekly Streak Boost</bold> is reset to +0%.\n\nWeekly Streak Boost does not reset with the monthly episode, but is <bold> rolled over to the next month.</bold>",
                 "parlay-xp": "PARLAY BOOST",
-                "parlay-content": "Depending on how many individual games are within your parlay, you will get an additional boost on your XP accrual for that parlay! The number of games on a parlay for system bets equals the minimal number of games that need to hit.",
+                "parlay-content": "Depending on how many individual games are within your parlay, you will get an additional boost on your XP accrual for that parlay!",
                 "positions-over": "OVER BOOST",
                 "days": "days",
-                "days-content": "The conditions for the daily streak boost to be activated for the ongoing day is to have any betting volume between 00:00UTC and 23:59UTC for the ongoing day. The more days in a row this condition is met, the higher the <bold>Daily Streak Boost</bold> on your baseline XP accrual ! \n\n<bold>Daily Streak Boost</bold> is applied to all bets made while the boost is active. \n\nIf you break your streak and miss out to drive volume one day, <bold>your Daily Streak Boost is reset to +0%.</bold>",
+                "days-content": "The conditions for the daily streak boost to be activated for the ongoing day is to have any betting volume between 00:00UTC and 23:59UTC for the ongoing day. The more days in a row this condition is met, the higher the <bold>Daily Streak Boost</bold> on your baseline XP accrual ! \n\n<bold>Daily Streak Boost</bold> is applied to all bets made while the boost is active. \n\nIf you break your streak and miss out to drive volume one day, <bold>your Daily Streak Boost is reset to +0%.</bold> \n\nDaily Streak Boost does not reset with the monthly episode, but is <bold> rolled over to the next month.</bold>",
                 "games-in-parlay": "games in parlay",
                 "position-over-content": "All bets executed with  <bold>OVER</bold> as collateral will have <bold>+10% boost</bold> on baseline XP accrual for that specific bet!",
                 "twitter-share-bonus": "twitter share boost",
                 "twitter-content": "If you share your Overtime bet on Twitter in the form of a <bold>Flex Card</bold>, you will activate a <bold>3 day long Twitter Flex Boost of +10%.</bold>  This specific boost is valid for all trades executed within those 72 hours. <bold>After the 72 hours</bold> have elapsed, the boost expires and you can activate it again by sharing a new flex card on Twitter under the same conditions.",
-                "loyalty-boost": "Loyalty boost",
-                "loyalty-boost-content": "The Loyalty XP Boost gives you up to 25% permanent boost on all your general XP accrual, depending on your level. Starting at 5% boost on Level 1, you gain another +5% increase on reaching every fifth level. You reach max Loyalty XP boost of 25% when you reach Level 20 (GOAT) with having accrued 5,000,000 XP points. You can see the XP levels breakdown on the LEVELING TREE page."
+                "loyalty-boost": "Loyalty XP Boost",
+                "loyalty-boost-content": "The Loyalty XP Boost gives you up to 30% boost on all your general XP accrual, depending on what level you finished the previous three months. Each final monthly level you reach carries a certain loyalty XP boost for the next month. Starting at 1% XP boost if you finish the month at Level 1, each subsequent level increases the boost by +1%. Your current total Loyalty XP boost equals the sum of Loyalty XP Boost earned from the previous three months.",
+                "daily-quest": "Daily quest",
+                "daily-quest-content": "Completing the Daily Quest tasks each day, awards you +10% XP boost and a fixed reward of +200 XP. Tasks of the Daily Quest are: \n\n - Make a bet on Overtime \n - Place one Speed Markets trade \n - Post a tweet on X.com mentioning @overtime_io and submit its link in the Daily Quest input field",
+                "spin-the-wheel": "Spin the Wheel",
+                "spin-the-wheel-content": "Each day you will be able to Spin The Wheel for a chance to win a Daily XP Boost of +20%, +30% or as high as +50%. If you completed the Daily Quest before spinning the wheel, your Spin The Wheel rewards get upgraded to: +20% XP Boost +100 XP; +30% XP Boost +200 XP or 50% XP Boost + 500 XP."
             },
             "payout-disclaimer": "*won Free Bets are airdropped each Friday."
         },
