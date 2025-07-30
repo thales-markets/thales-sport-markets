@@ -975,7 +975,7 @@
                     "spin-the-wheel-boost": "You can earn xp boost daily by spining the wheel",
                     "how-it-works-1": "Overdrop League Season 2 allows users to earn XP on Overtime by placing bets, which earns you monthly pro-rata ETH rewards and Free Bets on XP Level Ups. The higher the buy-in and odds of the bet, the more XP the bet earns. Users can also gain significant XP boosts through various achievements and selected bet types that can speed up their XP progress.",
                     "how-it-works-2": "Season 2 of Overdrop will run as a series of monthly episodes until June 2026. After the monthly episode of Overdrop ends, all users with XP for that month will be rewarded their share of 4 ETH proportionally. You can take a look at your estimated rewards of the current month at any point on the leaderboard page. Your XP balance resets to 0 after the end of each month.",
-                    "how-it-works-3": "Additionally, users will be able to reach XP levels that carry special Free Bet rewards and loyalty XP boost for the next months! You can read more about XP levels here.",
+                    "how-it-works-3": "Additionally, users will be able to reach XP levels that carry special Free Bet rewards and loyalty XP boost for the next months! You can read more about XP levels <anchor>here</anchor>.",
                     "base-xp": "The base XP is calculated via the following formula:\n\nBase XP = Buy In Amount * (2 - Normalized Odds). \n\nThis means that your bet accrues more base XP the higher your buy-in and the higher your bet odds are."
                 }
             },
