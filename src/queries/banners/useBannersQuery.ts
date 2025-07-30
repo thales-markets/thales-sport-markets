@@ -1,9 +1,7 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import overdropGif from 'assets/images/banner-v2/overdrop.gif';
 import axios from 'axios';
 import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
-import ROUTES from 'constants/routes';
 import { NetworkConfig } from 'types/network';
 
 export type Banner = {
@@ -25,7 +23,6 @@ export const useBannersQuery = (
                     url: banner.url,
                     image: `${generalConfig.API_URL}/banners-v2/image/${banner.image}`,
                 }));
-                mappedData.push({ url: ROUTES.Overdrop, image: overdropGif }); // todo: remove when merging to dev
                 return mappedData;
             } catch (e) {
                 console.log('error', e);
