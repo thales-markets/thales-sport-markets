@@ -205,11 +205,11 @@ const SpeedPositions: React.FC = () => {
                             </FlexDivRowCentered>
                         )}
                     </ClaimAllRow>
-                    <FlexDivRow>
-                        {isMobile && !isAllPositionsInSameCollateral && (
+                    {isMobile && !isAllPositionsInSameCollateral && (
+                        <FlexDivRow>
                             <Info>{`* ${t('speed-markets.tooltips.claim-all-except-over')}`}</Info>
-                        )}
-                    </FlexDivRow>
+                        </FlexDivRow>
+                    )}
                 </>
             )}
             {selectedFilter === PositionsFilter.HISTORY && (

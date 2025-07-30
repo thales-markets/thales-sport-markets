@@ -8,11 +8,11 @@ export const FieldContainer = styled(FlexDivColumn)<{ margin?: string; width?: s
     width: ${(props) => props.width || '100%'};
 `;
 
-export const FieldLabel = styled.label`
+export const FieldLabel = styled.label<{ $color?: string }>`
     font-weight: normal;
     font-size: 13px;
     line-height: 15px;
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.$color || props.theme.textColor.primary};
     margin-bottom: 6px;
     text-transform: uppercase;
 `;

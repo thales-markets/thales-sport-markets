@@ -41,6 +41,7 @@ type NumericInputProps = {
     background?: string;
     fontWeight?: string;
     color?: string;
+    labelColor?: string;
     preventAutoFocus?: boolean;
 };
 
@@ -98,7 +99,7 @@ const NumericInput: React.FC<NumericInputProps> = ({
     return (
         <FieldContainer margin={margin} width={containerWidth}>
             {label && (
-                <FieldLabel>
+                <FieldLabel $color={rest.labelColor}>
                     {label}
                     {tooltip && <Tooltip overlay={tooltip} />}:
                 </FieldLabel>
