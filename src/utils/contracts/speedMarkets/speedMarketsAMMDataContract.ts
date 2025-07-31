@@ -1,11 +1,11 @@
 import { NetworkId } from 'thales-utils';
+import { ContractData } from 'types/viem';
 
-const speedMarketsDataContract = {
+const speedMarketsDataContract: ContractData = {
     addresses: {
         [NetworkId.OptimismMainnet]: '0x467e14ac025499d60c417D7F00A7D9E83293F43c',
         [NetworkId.Arbitrum]: '0xbbE161Bf57799104eFd6524133e305BBcB7C07EA',
         [NetworkId.Base]: '0xD6155E7C948458D6Ab58f9D63E1566493b9304C1',
-        [NetworkId.PolygonMainnet]: '0xA30200A8eD9655d7096814D0cC1f76639aa42AED',
         [NetworkId.OptimismSepolia]: '0xc5614017CC2d336a0B3EcC2C4A795FeeF063dbbc',
     },
     abi: [
