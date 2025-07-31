@@ -14,7 +14,7 @@ import { hasUserDoneDailyQuests } from 'utils/overdrop';
 import { refetchUserOverdrop } from 'utils/queryConnector';
 import { useAccount } from 'wagmi';
 
-const IMG_FOLDER = 'src/assets/images/overdrop/wheel/';
+const IMG_FOLDER = 'assets/';
 
 const WheelOfFortune: React.FC = () => {
     const [mustSpin, setMustSpin] = useState(false);
