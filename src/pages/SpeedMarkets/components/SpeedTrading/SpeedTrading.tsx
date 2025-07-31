@@ -63,6 +63,11 @@ const SpeedTrading: React.FC<SpeedTradingProps> = ({ deltaTimeSec, priceSlippage
                 />
             </ChartWrapper>
             <SelectAsset selectedAsset={selectedAsset} onAssetClick={(asset: string) => setSelectedAsset(asset)} />
+            <SelectPosition
+                selectedPosition={selectedPosition}
+                setSelectedPosition={setSelectedPosition}
+                profitAndSkewPerPosition={profitAndSkewPerPosition}
+            />
             <SelectBuyin
                 selectedAsset={selectedAsset}
                 buyinAmount={buyinAmount}
@@ -70,11 +75,6 @@ const SpeedTrading: React.FC<SpeedTradingProps> = ({ deltaTimeSec, priceSlippage
                 buyinGasFee={buyinGasFee}
                 ammSpeedMarketsLimits={ammSpeedMarketsLimitsData}
                 setHasError={setHasError}
-            />
-            <SelectPosition
-                selectedPosition={selectedPosition}
-                setSelectedPosition={setSelectedPosition}
-                profitAndSkewPerPosition={profitAndSkewPerPosition}
             />
             <AmmSpeedTrading
                 selectedAsset={selectedAsset}

@@ -72,7 +72,7 @@ const SpeedPositionCard: React.FC<SpeedPositionCardProps> = ({
                     <Status isWon={isUserCurrentlyWinning}>
                         {isUserCurrentlyWinning
                             ? t('speed-markets.user-positions.status.winning')
-                            : t('speed-markets.user-positions.status.loosing')}
+                            : t('speed-markets.user-positions.status.losing')}
                     </Status>
                 ) : position.isClaimable ? (
                     <ClaimWrapper>

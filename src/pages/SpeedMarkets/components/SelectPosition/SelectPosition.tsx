@@ -2,7 +2,7 @@ import { SpeedPositions } from 'enums/speedMarkets';
 import { Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
 import { FlexDivColumnCentered, FlexDivRow } from 'styles/common';
-import { truncToDecimals } from 'thales-utils';
+import { roundNumberToDecimals } from 'thales-utils';
 import { SelectedPosition } from 'types/speedMarkets';
 
 type SelectPositionProps = {
@@ -34,7 +34,7 @@ const SelectPosition: React.FC<SelectPositionProps> = ({
                 </Position>
                 <QuoteText>
                     {profitAndSkewPerPosition.profit[SpeedPositions.UP]
-                        ? `${truncToDecimals(profitAndSkewPerPosition.profit[SpeedPositions.UP])}x`
+                        ? `${roundNumberToDecimals(profitAndSkewPerPosition.profit[SpeedPositions.UP])}x`
                         : '-'}
                 </QuoteText>
             </PositionButton>
@@ -50,7 +50,7 @@ const SelectPosition: React.FC<SelectPositionProps> = ({
                 </Position>
                 <QuoteText>
                     {profitAndSkewPerPosition.profit[SpeedPositions.DOWN]
-                        ? `${truncToDecimals(profitAndSkewPerPosition.profit[SpeedPositions.DOWN])}x`
+                        ? `${roundNumberToDecimals(profitAndSkewPerPosition.profit[SpeedPositions.DOWN])}x`
                         : '-'}
                 </QuoteText>
             </PositionButton>
