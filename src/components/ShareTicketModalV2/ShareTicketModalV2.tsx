@@ -205,16 +205,26 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                         );
                         return;
                     }
-
-                    const twitterLinkWithStatusMessage =
-                        LINKS.TwitterTweetStatus +
-                        (isOver
-                            ? OVER_COLLATERAL_TWITTER_MESSAGES_TEXT[
-                                  Math.floor(Math.random() * OVER_COLLATERAL_TWITTER_MESSAGES_TEXT.length)
-                              ]
-                            : TWITTER_MESSAGES_TEXT[Math.floor(Math.random() * TWITTER_MESSAGES_TEXT.length)]) +
-                        `${reffererID ? '?referrerId=' + reffererID : ''}` +
-                        (useDownloadImage ? TWITTER_MESSAGE_UPLOAD : TWITTER_MESSAGE_PASTE);
+                    let twitterLinkWithStatusMessage = '';
+                    const aiResponse = await axios.get(`${generalConfig.OVERDROP_API_URL}/generate-social-content`);
+                    if (aiResponse.data) {
+                        twitterLinkWithStatusMessage =
+                            LINKS.TwitterTweetStatus +
+                            aiResponse.data +
+                            LINKS.OvertimeMarkets +
+                            `${reffererID ? '?referrerId=' + reffererID : ''}` +
+                            (useDownloadImage ? TWITTER_MESSAGE_UPLOAD : TWITTER_MESSAGE_PASTE);
+                    } else {
+                        twitterLinkWithStatusMessage =
+                            LINKS.TwitterTweetStatus +
+                            (isOver
+                                ? OVER_COLLATERAL_TWITTER_MESSAGES_TEXT[
+                                      Math.floor(Math.random() * OVER_COLLATERAL_TWITTER_MESSAGES_TEXT.length)
+                                  ]
+                                : TWITTER_MESSAGES_TEXT[Math.floor(Math.random() * TWITTER_MESSAGES_TEXT.length)]) +
+                            `${reffererID ? '?referrerId=' + reffererID : ''}` +
+                            (useDownloadImage ? TWITTER_MESSAGE_UPLOAD : TWITTER_MESSAGE_PASTE);
+                    }
 
                     // Mobile requires user action in order to open new window, it can't open in async call, so adding <a>
                     isMobile
