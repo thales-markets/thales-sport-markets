@@ -15,8 +15,9 @@ export enum RewardType {
 }
 
 export type Reward = {
-    type: RewardType;
-    amount: number;
+    id: number;
+    boostAmount: number;
+    xpAmount: number;
 };
 
 export type OverdropUserData = {

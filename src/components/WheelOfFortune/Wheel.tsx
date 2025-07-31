@@ -9,7 +9,7 @@ import React, { useMemo, useState } from 'react';
 import { Wheel } from 'react-custom-roulette';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivSpaceBetween } from 'styles/common';
-import { OverdropUserData, RewardType } from 'types/overdrop';
+import { OverdropUserData, SpinThewheelOption } from 'types/overdrop';
 import { hasUserDoneDailyQuests } from 'utils/overdrop';
 import { refetchUserOverdrop } from 'utils/queryConnector';
 import { useAccount } from 'wagmi';
@@ -50,44 +50,23 @@ const WheelOfFortune: React.FC = () => {
     const data = useMemo(() => {
         if (userData && spinTheWheelOptions) {
             const isDailyQuestDone = hasUserDoneDailyQuests(userData);
-            console.log('spinTheWheelOptions: ', spinTheWheelOptions);
 
-            // Separate by bonus true/false (default to false if missing)
-            const withBonus = spinTheWheelOptions.filter((item) => item.bonus === true);
-            const withoutBonus = spinTheWheelOptions.filter((item) => item.bonus !== true);
+            const moreOptions: SpinThewheelOption[] = [];
 
-            const result = [];
-
-            while (withBonus.length || withoutBonus.length) {
-                if (withBonus.length) result.push(withBonus.shift());
-                if (withoutBonus.length) result.push(withoutBonus.shift());
-            }
-
-            return result.map((item: any) => {
-                const uri = `${IMG_FOLDER}${item.type === RewardType.XP_BOOST ? 'boost' : 'xp'}${item.amount}.png`;
-                console.log(uri);
-                if (!isDailyQuestDone && item.bonus) {
-                    return {
-                        ...item,
-                        option: `${item.amount} ${item.type} 🔒`,
-                        style: {
-                            backgroundColor: '#2A355D',
-                            fontFamily: 'Arial',
-                            fontSize: 16,
-                            fontWeight: 500,
-                        },
-                        image: {
-                            uri,
-
-                            offsetY: 100,
-                        },
-                    };
+            spinTheWheelOptions.map((item) => {
+                const numberOfOptions = Math.round((item.max - item.min) * 10);
+                for (let index = 0; index < numberOfOptions; index++) {
+                    moreOptions.push(item);
                 }
+            });
+
+            return moreOptions.map((item: any, index: number) => {
+                const uri = `${IMG_FOLDER}${isDailyQuestDone ? Number(item.id) + 3 : item.id}.png`;
+                console.log(uri);
                 return {
                     ...item,
-                    option: `${item.amount} ${item.type}`,
                     style: {
-                        backgroundColor: item.bonus ? '#DBA111' : '#03DAE5',
+                        backgroundColor: index % 2 ? '#DBA111' : '#03DAE5',
                         fontFamily: 'Arial',
                         fontSize: 16,
                         fontWeight: 500,
@@ -110,11 +89,11 @@ const WheelOfFortune: React.FC = () => {
                         prizeNumber={prizeNumber}
                         data={data}
                         outerBorderColor={theme.textColor.tertiary}
-                        outerBorderWidth={4}
+                        outerBorderWidth={2}
                         innerBorderWidth={10}
                         innerBorderColor={theme.textColor.tertiary}
                         radiusLineColor={theme.textColor.tertiary}
-                        radiusLineWidth={6}
+                        radiusLineWidth={2}
                         textColors={[theme.textColor.tertiary]}
                         textDistance={55}
                         fontWeight={600}

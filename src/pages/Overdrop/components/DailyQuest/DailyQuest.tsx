@@ -84,7 +84,7 @@ const DailyQuest: React.FC = () => {
         }
     }, [address, tweetUrl, t]);
 
-    const isSpinTheWheelCompleted = useMemo(() => {
+    useMemo(() => {
         if (userData) {
             const today = getDayOfYear(new Date());
             if (userData.lastTradeOvertime) {
@@ -117,6 +117,12 @@ const DailyQuest: React.FC = () => {
             } else {
                 DAILY_QUESTS[2].completed = false;
             }
+        }
+    }, [userData]);
+
+    const isSpinTheWheelCompleted = useMemo(() => {
+        if (userData) {
+            const today = getDayOfYear(new Date());
 
             if (userData.wheel && userData.wheel.lastSpinTime) {
                 return getDayOfYear(new Date(userData.wheel.lastSpinTime)) === today;
@@ -124,6 +130,17 @@ const DailyQuest: React.FC = () => {
         }
         return false;
     }, [userData]);
+
+    const spintTheWheelRewardText = useMemo(() => {
+        if (userData && isSpinTheWheelCompleted) {
+            if (userData.wheel?.reward?.xpAmount) {
+                return `${userData.wheel?.reward?.boostAmount}% XP Boost + ${userData.wheel?.reward?.xpAmount}XP`;
+            } else {
+                return `${userData.wheel?.reward?.boostAmount}% XP Boost`;
+            }
+        }
+        return false;
+    }, [isSpinTheWheelCompleted, userData]);
 
     const isSocialUrlValid = tweetUrl.startsWith('https://x.com/') || tweetUrl.startsWith('https://twitter.com/');
 
@@ -204,7 +221,7 @@ const DailyQuest: React.FC = () => {
                 </FlexDivCentered>
                 {isSpinTheWheelCompleted ? (
                     <FlexDivCentered gap={4}>
-                        <FinishedText>{`${userData?.wheel?.reward?.amount} ${userData?.wheel?.reward?.type}`}</FinishedText>
+                        <FinishedText>{spintTheWheelRewardText}</FinishedText>
                         <FinishedIcon />
                     </FlexDivCentered>
                 ) : (
