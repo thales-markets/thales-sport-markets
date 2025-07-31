@@ -6,7 +6,7 @@ import { SpinThewheelOption } from 'types/overdrop';
 
 const useDailyQuestOptions = (options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
     return useQuery<SpinThewheelOption[]>({
-        queryKey: QUERY_KEYS.Overdrop.SpinTheWheel(),
+        queryKey: QUERY_KEYS.Overdrop.DailyQuestOptions(),
         queryFn: async () => {
             try {
                 const response = await axios.get(`${generalConfig.OVERDROP_API_URL}/wheel-rewards`);
