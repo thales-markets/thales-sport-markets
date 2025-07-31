@@ -1,13 +1,12 @@
 import { NetworkId } from 'thales-utils';
-import { Address } from 'viem';
 
 const speedMarketsAMMCreatorContract = {
     addresses: {
-        [NetworkId.OptimismMainnet]: '0xd26EC8c2b9ae45F6753271183f95A1cE69D0E671' as Address,
-        [NetworkId.OptimismSepolia]: '0xE114677AaBf957d5EeE55f73C6b93fdEDfC849C3' as Address,
-        [NetworkId.PolygonMainnet]: '0xfC7105DA51017F2D990B9Fe68db343ae38060c3b' as Address,
-        [NetworkId.Arbitrum]: '0x905D1732F7639a402B1E0Ffcc2CeD2270Fc16812' as Address,
-        [NetworkId.Base]: '0x6B5FE966Ea9B05d8E628E772B0b745734D069983' as Address,
+        [NetworkId.OptimismMainnet]: '0xd26EC8c2b9ae45F6753271183f95A1cE69D0E671',
+        [NetworkId.Arbitrum]: '0x905D1732F7639a402B1E0Ffcc2CeD2270Fc16812',
+        [NetworkId.Base]: '0x6B5FE966Ea9B05d8E628E772B0b745734D069983',
+        [NetworkId.PolygonMainnet]: '0xfC7105DA51017F2D990B9Fe68db343ae38060c3b',
+        [NetworkId.OptimismSepolia]: '0xE114677AaBf957d5EeE55f73C6b93fdEDfC849C3',
     },
     abi: [
         {

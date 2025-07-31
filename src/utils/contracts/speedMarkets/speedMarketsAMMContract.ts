@@ -1,13 +1,12 @@
 import { NetworkId } from 'thales-utils';
-import { Address } from 'viem';
 
 const speedMarketsAMMContract = {
     addresses: {
-        [NetworkId.OptimismMainnet]: '0xE16B8a01490835EC1e76bAbbB3Cadd8921b32001' as Address,
-        [NetworkId.OptimismSepolia]: '0xc3DF62752CeF27Cd449A196421e54d22C7BFadfa' as Address,
-        [NetworkId.PolygonMainnet]: '0x4B1aED25f1877E1E9fBECBd77EeE95BB1679c361' as Address,
-        [NetworkId.Arbitrum]: '0x02D0123a89Ae6ef27419d5EBb158d1ED4Cf24FA3' as Address,
-        [NetworkId.Base]: '0x85b827d133FEDC36B844b20f4a198dA583B25BAA' as Address,
+        [NetworkId.OptimismMainnet]: '0xE16B8a01490835EC1e76bAbbB3Cadd8921b32001',
+        [NetworkId.Arbitrum]: '0x02D0123a89Ae6ef27419d5EBb158d1ED4Cf24FA3',
+        [NetworkId.Base]: '0x85b827d133FEDC36B844b20f4a198dA583B25BAA',
+        [NetworkId.PolygonMainnet]: '0x4B1aED25f1877E1E9fBECBd77EeE95BB1679c361',
+        [NetworkId.OptimismSepolia]: '0xc3DF62752CeF27Cd449A196421e54d22C7BFadfa',
     },
     abi: [
         { inputs: [], name: 'AssetNotSupported', type: 'error' },
