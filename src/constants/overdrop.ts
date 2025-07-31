@@ -22,6 +22,21 @@ import Level7Small from '../assets/images/overdrop/smallBadges/7.webp';
 import Level8Small from '../assets/images/overdrop/smallBadges/8.webp';
 import Level9Small from '../assets/images/overdrop/smallBadges/9.webp';
 import test from '../assets/images/overdrop/test.png';
+import overdrop0 from '../assets/images/overdrop/wheel/0.png';
+import overdrop1 from '../assets/images/overdrop/wheel/1.png';
+import overdrop2 from '../assets/images/overdrop/wheel/2.png';
+import overdrop3 from '../assets/images/overdrop/wheel/3.png';
+import overdrop4 from '../assets/images/overdrop/wheel/4.png';
+import overdrop5 from '../assets/images/overdrop/wheel/5.png';
+
+export const OVERDROP_WHEEL_IMAGES = {
+    0: overdrop0,
+    1: overdrop1,
+    2: overdrop2,
+    3: overdrop3,
+    4: overdrop4,
+    5: overdrop5,
+};
 
 export const OVERDROP_LEVELS: OverdropLevel[] = [
     {
