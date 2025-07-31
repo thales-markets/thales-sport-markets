@@ -2,6 +2,7 @@ import pointer from 'assets/images/svgs/pointer.svg';
 import axios from 'axios';
 import Button from 'components/Button';
 import { generalConfig } from 'config/general';
+import { OVERDROP_WHEEL_IMAGES } from 'constants/overdrop';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import useDailyQuestOptions from 'queries/overdrop/useDailyQuestOptions';
 import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
@@ -13,8 +14,6 @@ import { OverdropUserData, SpinThewheelOption } from 'types/overdrop';
 import { hasUserDoneDailyQuests } from 'utils/overdrop';
 import { refetchUserOverdrop } from 'utils/queryConnector';
 import { useAccount } from 'wagmi';
-
-const IMG_FOLDER = 'assets/';
 
 const WheelOfFortune: React.FC = () => {
     const [mustSpin, setMustSpin] = useState(false);
@@ -61,8 +60,8 @@ const WheelOfFortune: React.FC = () => {
             });
 
             return moreOptions.map((item: any, index: number) => {
-                const uri = `${IMG_FOLDER}${isDailyQuestDone ? Number(item.id) + 3 : item.id}.png`;
-                console.log(uri);
+                const uri = OVERDROP_WHEEL_IMAGES[isDailyQuestDone ? Number(item.id) + 3 : item.id];
+
                 return {
                     ...item,
                     style: {

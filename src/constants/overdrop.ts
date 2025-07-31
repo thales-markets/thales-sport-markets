@@ -29,7 +29,7 @@ import overdrop3 from '../assets/images/overdrop/wheel/3.png';
 import overdrop4 from '../assets/images/overdrop/wheel/4.png';
 import overdrop5 from '../assets/images/overdrop/wheel/5.png';
 
-export const OVERDROP_WHEEL_IMAGES = {
+export const OVERDROP_WHEEL_IMAGES: Record<number, string> = {
     0: overdrop0,
     1: overdrop1,
     2: overdrop2,
