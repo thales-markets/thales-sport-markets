@@ -10,9 +10,12 @@ import {
     countDecimals,
     formatCurrencyWithKey,
     formatCurrencyWithSign,
+    LONG_CURRENCY_DECIMALS,
     roundNumberToDecimals,
+    SHORT_CURRENCY_DECIMALS,
 } from 'thales-utils';
-import { isOverCurrency } from 'utils/collaterals';
+import { getDefaultCollateral, isLpSupported, isStableCurrency } from 'utils/collaterals';
+import { useChainId } from 'wagmi';
 
 type TradingDetailsProps = {
     selectedAsset: string;
@@ -20,8 +23,7 @@ type TradingDetailsProps = {
     strikePrice: number;
     priceSlippage: number;
     deltaTimeSec: number;
-    paidAmount: number;
-    profitPerPosition: Record<SpeedPositions, number>;
+    payout: number;
     selectedCollateral: Coins;
 };
 
@@ -31,14 +33,17 @@ const TradingDetails: React.FC<TradingDetailsProps> = ({
     strikePrice,
     priceSlippage,
     deltaTimeSec,
-    paidAmount,
-    profitPerPosition,
+    payout,
     selectedCollateral,
 }) => {
     const { t } = useTranslation();
-    const isOver = isOverCurrency(selectedCollateral);
 
-    const isDefaultText = !paidAmount || !selectedPosition;
+    const networkId = useChainId();
+
+    const isDefaultCollateral = selectedCollateral === getDefaultCollateral(networkId);
+    const collateralHasLp = isLpSupported(selectedCollateral, true);
+
+    const isDefaultText = !payout;
 
     return (
         <TradingDetailsText>
@@ -63,25 +68,36 @@ const TradingDetails: React.FC<TradingDetailsProps> = ({
                             ? t('common.time-remaining.minute')
                             : t('common.time-remaining.minutes')
                     }`,
-                    payout:
-                        selectedPosition && paidAmount
-                            ? isOver
-                                ? formatCurrencyWithKey(
-                                      `$${selectedCollateral}`,
-                                      profitPerPosition[selectedPosition] * paidAmount,
-                                      2
-                                  )
-                                : formatCurrencyWithSign(USD_SIGN, profitPerPosition[selectedPosition] * paidAmount, 2)
-                            : '',
+                    payout: payout
+                        ? isDefaultCollateral || !collateralHasLp
+                            ? formatCurrencyWithSign(USD_SIGN, payout)
+                            : formatCurrencyWithKey(
+                                  `$${selectedCollateral}`,
+                                  payout,
+                                  isStableCurrency(selectedCollateral)
+                                      ? SHORT_CURRENCY_DECIMALS
+                                      : LONG_CURRENCY_DECIMALS
+                              )
+                        : '',
                 }}
                 components={{
-                    tooltip: (
+                    slippageTooltip: (
                         <Tooltip
                             overlay={t('speed-markets.tooltips.slippage')}
                             marginLeft={2}
                             iconFontSize={14}
                             zIndex={SPEED_MARKETS_WIDGET_Z_INDEX}
                         />
+                    ),
+                    payotuTooltip: !collateralHasLp ? (
+                        <Tooltip
+                            overlay={t('speed-markets.tooltips.payout-conversion')}
+                            marginLeft={2}
+                            iconFontSize={14}
+                            zIndex={SPEED_MARKETS_WIDGET_Z_INDEX}
+                        />
+                    ) : (
+                        <></>
                     ),
                 }}
             />

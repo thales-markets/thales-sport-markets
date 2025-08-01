@@ -1,10 +1,10 @@
 import CollateralSelector from 'components/CollateralSelector';
 import Scroll from 'components/Scroll';
 import SimpleLoader from 'components/SimpleLoader';
-import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { MARKET_DURATION_IN_DAYS } from 'constants/markets';
 import { millisecondsToSeconds } from 'date-fns';
 import { PositionsFilter } from 'enums/speedMarkets';
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import { orderBy } from 'lodash';
 import usePythPriceQueries from 'queries/prices/usePythPriceQueries';
 import useUserActiveSpeedMarketsDataQuery from 'queries/speedMarkets/useUserActiveSpeedMarketsDataQuery';
@@ -16,9 +16,8 @@ import { getIsMobile } from 'redux/modules/app';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
-import { Coins } from 'thales-utils';
 import { UserPosition } from 'types/speedMarkets';
-import { getSpeedOfframpCollaterals } from 'utils/collaterals';
+import { getCollateralByAddress, getSpeedNativeCollateralsText, getSpeedOfframpCollaterals } from 'utils/collaterals';
 import { getIsMultiCollateralSupported } from 'utils/network';
 import { getPriceId } from 'utils/pyth';
 import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
@@ -112,8 +111,22 @@ const SpeedPositions: React.FC = () => {
 
     const isAllPositionsInSameCollateral =
         positions.every((marketData) => marketData.isDefaultCollateral) ||
-        positions.every((marketData) => !marketData.isDefaultCollateral);
-    const isClaimInOver = isAllPositionsInSameCollateral && !!positions.length && !positions[0].isDefaultCollateral;
+        positions.every(
+            (marketData) =>
+                !marketData.isDefaultCollateral &&
+                !!positions.length &&
+                positions[0].collateralAddress === marketData.collateralAddress
+        );
+
+    const hasPositionsDefaultCollateral = positions.some((marketData) => marketData.isDefaultCollateral);
+
+    const nativeCollateralAddress = positions.find(
+        (marketData) => !hasPositionsDefaultCollateral && !marketData.isDefaultCollateral
+    )?.collateralAddress;
+
+    const nativeCollateral = nativeCollateralAddress
+        ? getCollateralByAddress(nativeCollateralAddress, networkId)
+        : null;
 
     const isLoading =
         (!isLoadedOnce &&
@@ -191,15 +204,13 @@ const SpeedPositions: React.FC = () => {
                                 <ClaimInLabel>{t('speed-markets.user-positions.claim-in')}:</ClaimInLabel>
                                 <CollateralSelector
                                     collateralArray={
-                                        isClaimInOver
-                                            ? [CRYPTO_CURRENCY_MAP.OVER as Coins]
-                                            : getSpeedOfframpCollaterals(networkId)
+                                        nativeCollateral ? [nativeCollateral] : getSpeedOfframpCollaterals(networkId)
                                     }
-                                    selectedItem={isClaimInOver ? 0 : claimCollateralIndex}
+                                    selectedItem={nativeCollateral ? 0 : claimCollateralIndex}
                                     onChangeCollateral={setClaimCollateralIndex}
                                     preventPaymentCollateralChange
                                     disabled={isSubmittingBatch || isActionInProgress}
-                                    hideDropDownIcon={isClaimInOver}
+                                    hideDropDownIcon={!!nativeCollateral}
                                     topPosition="20px"
                                 />
                             </FlexDivRowCentered>
@@ -207,7 +218,9 @@ const SpeedPositions: React.FC = () => {
                     </ClaimAllRow>
                     {isMobile && !isAllPositionsInSameCollateral && (
                         <FlexDivRow>
-                            <Info>{`* ${t('speed-markets.tooltips.claim-all-except-over')}`}</Info>
+                            <Info>{`* ${t('speed-markets.tooltips.claim-all-except-native', {
+                                collaterals: getSpeedNativeCollateralsText(networkId, nativeCollateral),
+                            })}`}</Info>
                         </FlexDivRow>
                     )}
                 </>
@@ -310,6 +323,9 @@ const ClaimInLabel = styled.span`
     line-height: 100%;
     margin-right: 3px;
     white-space: nowrap;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        font-size: 10px;
+    }
 `;
 
 const Info = styled.span`

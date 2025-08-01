@@ -2,10 +2,11 @@ import {
     COLLATERALS,
     CRYPTO_CURRENCY_MAP,
     FREE_BET_COLLATERALS,
-    SPEED_OFFRAMP_UNSUPPORTED_COLLATERALS,
+    SPEED_NATIVE_COLLATERALS,
     STABLE_COINS,
 } from 'constants/currency';
 import { ALTCOIN_CONVERSION_BUFFER_PERCENTAGE } from 'constants/markets';
+import { t } from 'i18next';
 import _ from 'lodash';
 import {
     COLLATERAL_DECIMALS,
@@ -50,7 +51,7 @@ export const getCollateralByAddress = (collateralAddress: string, networkId: num
 
 export const getSpeedOfframpCollaterals = (networkId: SupportedNetwork) =>
     getCollaterals(networkId).filter(
-        (collateral) => !SPEED_OFFRAMP_UNSUPPORTED_COLLATERALS[networkId].includes(collateral)
+        (collateral) => !isLpSupported(collateral, true) || collateral === getDefaultCollateral(networkId)
     );
 
 export const isStableCurrency = (currencyKey: Coins) => {
@@ -61,17 +62,29 @@ export const isOverCurrency = (currencyKey: Coins) => {
     return currencyKey === CRYPTO_CURRENCY_MAP.OVER;
 };
 
-export const isLpSupported = (currencyKey: Coins) => {
-    return (
-        currencyKey === CRYPTO_CURRENCY_MAP.USDC ||
-        currencyKey === CRYPTO_CURRENCY_MAP.WETH ||
-        currencyKey === CRYPTO_CURRENCY_MAP.ETH ||
-        currencyKey === CRYPTO_CURRENCY_MAP.cbBTC ||
-        currencyKey === CRYPTO_CURRENCY_MAP.wBTC ||
-        currencyKey === CRYPTO_CURRENCY_MAP.THALES ||
-        currencyKey === CRYPTO_CURRENCY_MAP.sTHALES ||
-        isOverCurrency(currencyKey)
-    );
+export const isLpSupported = (currencyKey: Coins, isSpeedMarkets = false) => {
+    return isSpeedMarkets
+        ? currencyKey === CRYPTO_CURRENCY_MAP.USDC ||
+              currencyKey === CRYPTO_CURRENCY_MAP.cbBTC ||
+              currencyKey === CRYPTO_CURRENCY_MAP.wBTC ||
+              currencyKey === CRYPTO_CURRENCY_MAP.OVER
+        : currencyKey === CRYPTO_CURRENCY_MAP.USDC ||
+              currencyKey === CRYPTO_CURRENCY_MAP.WETH ||
+              currencyKey === CRYPTO_CURRENCY_MAP.ETH ||
+              currencyKey === CRYPTO_CURRENCY_MAP.cbBTC ||
+              currencyKey === CRYPTO_CURRENCY_MAP.wBTC ||
+              currencyKey === CRYPTO_CURRENCY_MAP.THALES ||
+              currencyKey === CRYPTO_CURRENCY_MAP.sTHALES ||
+              isOverCurrency(currencyKey);
+};
+
+export const getSpeedNativeCollateralsText = (networkId: SupportedNetwork, excludeCollateral: Coins | null) => {
+    const collaterals = SPEED_NATIVE_COLLATERALS[networkId]
+        .filter((collateral) => collateral !== excludeCollateral)
+        .map((collateral) => (isOverCurrency(collateral) ? `$${collateral}` : collateral));
+    return collaterals.length > 1
+        ? `${collaterals.slice(0, -1).join(', ')} ${t('common.and')} ${collaterals.slice(-1)}`
+        : collaterals[0];
 };
 
 export const mapMultiCollateralBalances = (

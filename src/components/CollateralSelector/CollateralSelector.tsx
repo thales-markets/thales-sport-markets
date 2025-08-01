@@ -177,7 +177,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                                                   <TextCollateral color={color} fontWeight="600" isDetailedView={true}>
                                                       {!exchangeRates?.[collateral.name] &&
                                                       !isStableCurrency(collateral.name as Coins)
-                                                          ? '...'
+                                                          ? ' ($...)'
                                                           : ` (${formatCurrencyWithSign(
                                                                 USD_SIGN,
                                                                 getUSDForCollateral(collateral.name as Coins)

@@ -151,6 +151,7 @@
             "seconds-short": "s"
         },
         "or": "or",
+        "and": "and",
         "above": "above",
         "below": "below",
         "current-price": "current price",
@@ -1559,7 +1560,7 @@
             "choose-time": "choose duration",
             "estimate-gas": "Estimated transaction cost",
             "trading-details-default": "Build your position above to see your win.",
-            "trading-details": "If {{asset}} price is {{position}} {{strikePrice}} ({{slippage}}%<tooltip />) in {{duration}}, you win {{payout}}."
+            "trading-details": "If {{asset}} price is {{position}} {{strikePrice}} ({{slippage}}%<slippageTooltip />) in {{duration}}, you win {{payout}}<payotuTooltip />."
         },
         "user-positions": {
             "claim": "Claim",
@@ -1602,13 +1603,13 @@
             "approve-swap-tooltip": "To get payout in {{currencyKey}}, you need to approve swap from {{defaultCurrency}} to {{currencyKey}}.",
             "current-price": "Current price as reported by Pyth oracles.",
             "liquidity": "Current available liquidity for this Asset: {{liquidityPerAsset}}<br><br>Total available for Buy-In per direction<br>Available for UP: {{liquidityPerUp}}<br>Available for DOWN: {{liquidityPerDown}}",
-            "payout-conversion": "Win amount can be slightly different due to conversion rate at execution time",
+            "payout-conversion": "Win amount can be slightly different due to conversion rate at execution time.",
             "final-price-missing": "Oracle price snapshot for this position timestamp is still being processed. Even if contract input is delayed by the Pyth oracles, the price snapshot will be true to the moment of position expiration",
             "slippage": "Your trade will revert if the live price changes more than this percentage from your chosen Strike Price during trade execution.",
             "eth-to-weth": "Your ETH will be wrapped to WETH before executing the trade.",
             "pending-positions": "Pending positions",
             "claimable-positions": "Claimable positions",
-            "claim-all-except-over": "Claim all positions except those with $OVER collateral"
+            "claim-all-except-native": "Claim all positions except those with {{collaterals}} collateral(s)."
         },
         "errors": {
             "min-buyin": "Minimal buy-in is {{minAmount}}",

@@ -53,7 +53,7 @@ import {
     getCollateral,
     getCollateralIndex,
     getDefaultCollateral,
-    isOverCurrency,
+    isLpSupported,
     isStableCurrency,
 } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
@@ -152,8 +152,8 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
         networkId,
         selectedCollateralIndex,
     ]);
+    const collateralHasLp = isLpSupported(selectedCollateral, true);
     const isDefaultCollateral = selectedCollateral === defaultCollateral;
-    const isOver = isOverCurrency(selectedCollateral);
     const isEth = selectedCollateral === CRYPTO_CURRENCY_MAP.ETH;
     const collateralAddress = isEth
         ? multipleCollateral.WETH.addresses[networkId]
@@ -266,13 +266,14 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
         };
     }, []);
 
+    // set buyin without fees if it is native collateral
     useEffect(() => {
-        if (isDefaultCollateral || isOver) {
+        if (collateralHasLp) {
             setBuyinAmount(paidAmount / (1 + totalFee));
         } else {
             setBuyinAmount(paidAmount);
         }
-    }, [paidAmount, totalFee, isDefaultCollateral, isOver]);
+    }, [paidAmount, totalFee, collateralHasLp]);
 
     useEffect(() => {
         if (enteredBuyinAmount > 0) {
@@ -784,8 +785,13 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
                     strikePrice={submittedStrikePrice}
                     priceSlippage={priceSlippage}
                     deltaTimeSec={deltaTimeSec}
-                    paidAmount={paidAmount}
-                    profitPerPosition={profitPerPosition}
+                    payout={
+                        selectedPosition
+                            ? isDefaultCollateral || !collateralHasLp
+                                ? convertToStable(profitPerPosition[selectedPosition] * paidAmount)
+                                : profitPerPosition[selectedPosition] * paidAmount
+                            : 0
+                    }
                     selectedCollateral={selectedCollateral}
                 />
             </TradingDetailsWrapper>

@@ -158,7 +158,7 @@ const Container = styled(FlexDivColumn)`
     max-height: 102px;
     border-radius: 16px;
     background: ${(props) => props.theme.speedMarkets.position.card.background.primary};
-    padding: 10px 15px;
+    padding: 10px 12px;
     justify-content: space-between;
 `;
 
