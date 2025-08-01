@@ -5,12 +5,19 @@ import SPAAnchor from 'components/SPAAnchor';
 import WheelOfFortune from 'components/WheelOfFortune';
 import ROUTES from 'constants/routes';
 import { getDayOfYear } from 'date-fns';
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
 import React, { useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setSpeedMarketsWidgetOpen } from 'redux/modules/ui';
 import styled, { useTheme } from 'styled-components';
-import { FlexDivCentered, FlexDivColumnStart, FlexDivSpaceBetween, FlexDivStart } from 'styles/common';
+import {
+    FlexDivCentered,
+    FlexDivColumnStart,
+    FlexDivRowCentered,
+    FlexDivSpaceBetween,
+    FlexDivStart,
+} from 'styles/common';
 import { OverdropUserData } from 'types/overdrop';
 import { buildHref, navigateTo } from 'utils/routes';
 import { useAccount } from 'wagmi';
@@ -75,12 +82,12 @@ const OverdropHeader: React.FC = () => {
         return false;
     }, [userData]);
 
-    const widthInPercentage = useMemo(() => {
+    const completedQuest = useMemo(() => {
         let result = 0;
         if (isOTTradeCompleted) result++;
         if (isSpeedTradeCompleted) result++;
         if (isSocialQuestDone) result++;
-        return (result * 100) / 3;
+        return result;
     }, [isOTTradeCompleted, isSpeedTradeCompleted, isSocialQuestDone]);
 
     const spintTheWheelRewardText = useMemo(() => {
@@ -102,16 +109,17 @@ const OverdropHeader: React.FC = () => {
                     <Title>Overdrop League</Title>
                 </FirstSection>
             </SPAAnchor>
+            <FlexDivRowCentered gap={8}>
+                <img src={dailyQuest} />
+                <QuestTitle>Daily Quest</QuestTitle>
+                <FlexDivCentered gap={4}>
+                    <Dot completed={isOTTradeCompleted} />
+                    <Dot completed={isSpeedTradeCompleted} />
+                    <Dot completed={isSocialQuestDone} />
+                </FlexDivCentered>
+                <Arrow className="icon icon--arrow-down" onClick={() => setIsDropdownOpen(!isDropdownOpen)} />
+            </FlexDivRowCentered>
 
-            <img src={dailyQuest} />
-            <QuestTitle>Daily Quest</QuestTitle>
-            <FlexDivCentered gap={4}>
-                <Dot completed={isOTTradeCompleted} />
-                <Dot completed={isSpeedTradeCompleted} />
-                <Dot completed={isSocialQuestDone} />
-                <Dot completed={isSpinTheWheelCompleted} />
-            </FlexDivCentered>
-            <Arrow className="icon icon--arrow-down" onClick={() => setIsDropdownOpen(!isDropdownOpen)} />
             {isDropdownOpen && (
                 <DropdownWrapper>
                     <DropdownHeader>
@@ -121,7 +129,6 @@ const OverdropHeader: React.FC = () => {
                                 <Dot completed={isOTTradeCompleted} />
                                 <Dot completed={isSpeedTradeCompleted} />
                                 <Dot completed={isSocialQuestDone} />
-                                <Dot completed={isSpinTheWheelCompleted} />
                             </FlexDivCentered>
                         </FlexDivStart>
                         <BadgeLabel>200XP</BadgeLabel>
@@ -190,8 +197,11 @@ const OverdropHeader: React.FC = () => {
                         </ItemFirstSection>
                     </ItemWrapper>
                     <ProgressBar>
-                        <Completed width={widthInPercentage} />
+                        <Completed width={(completedQuest * 100) / 3} />
                     </ProgressBar>
+                    <SpinTheWheelInfo completed={completedQuest === 3}>
+                        {completedQuest === 3 ? 'Completed' : `Complete ${3 - completedQuest} more → Spin bonus`}
+                    </SpinTheWheelInfo>
                     <ItemWrapper completed={isSpinTheWheelCompleted}>
                         <ItemFirstSection gap={4}>
                             <Icon className="icon icon--wheel" />
@@ -236,6 +246,10 @@ const Wrapper = styled(FlexDivStart)`
     height: 32px;
     gap: 8px;
     position: relative;
+    @media (max-width: ${ScreenSizeBreakpoint.EXTRA_SMALL}px) {
+        margin-bottom: 10px;
+        margin-left: 10px;
+    }
 `;
 
 const FirstSection = styled(FlexDivStart)`
@@ -368,4 +382,15 @@ const CheckmarkIcon = styled.i`
 const WheelReward = styled.p`
     color: ${(props) => props.theme.textColor.quaternary};
     font-size: 12px;
+`;
+
+const SpinTheWheelInfo = styled.p<{ completed?: boolean }>`
+    color: ${(props) => (props.completed ? props.theme.textColor.quaternary : props.theme.background.tertiary)};
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px; /* 133.333% */
+    margin: 0 10px;
+    margin-top: -4px;
+    margin-left: 12px;
 `;
