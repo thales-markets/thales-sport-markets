@@ -275,6 +275,7 @@ const DappHeader: React.FC = () => {
                             </ReactModal>
                         </SearchIconContainer>
                     </WrapperMobile>
+                    {isConnected && <OverdropHeader />}
                     <MobileButtonWrapper isFullWidth={isConnected}>
                         {!isConnected && (
                             <Button
