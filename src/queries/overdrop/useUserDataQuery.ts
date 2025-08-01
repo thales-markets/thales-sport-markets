@@ -3,6 +3,7 @@ import axios from 'axios';
 import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
 import { OverdropUserData } from 'types/overdrop';
+import { getCurrentSeasonAndMiniSeason } from 'utils/overdrop';
 
 const useUserDataQuery = (walletAddress: string, options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
     return useQuery<OverdropUserData>({
@@ -11,8 +12,7 @@ const useUserDataQuery = (walletAddress: string, options?: Omit<UseQueryOptions<
             try {
                 const response = await axios.get(`${generalConfig.OVERDROP_API_URL}/user/${walletAddress}`, {
                     params: {
-                        season: 2,
-                        miniSeason: 1,
+                        ...getCurrentSeasonAndMiniSeason(),
                     },
                 });
                 if (response?.status === 200 && response?.data) return response.data;

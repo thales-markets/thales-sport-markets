@@ -14,7 +14,7 @@ import { useTheme } from 'styled-components';
 import { FlexDivCentered } from 'styles/common';
 import { formatCurrency, getEtherscanAddressLink, truncateAddress } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
-import { getCurrentLevelByPoints } from 'utils/overdrop';
+import { getCurrentLevelByPoints, getCurrentSeasonAndMiniSeason } from 'utils/overdrop';
 import { useAccount, useChainId } from 'wagmi';
 import {
     AddressContainer,
@@ -38,6 +38,8 @@ import {
     tableRowStyle,
 } from './styled-components';
 
+const CURRENT_SEASON = getCurrentSeasonAndMiniSeason();
+
 const Leaderboard: React.FC = () => {
     const isMobile = useSelector(getIsMobile);
 
@@ -47,8 +49,8 @@ const Leaderboard: React.FC = () => {
     const theme: ThemeInterface = useTheme();
 
     const [searchText, setSearchText] = useState<string>('');
-    const [selectedSeason, setSelectedSeason] = useState<number>(1);
-    const [selectedMiniSeason, setSelectedMiniSeason] = useState<number>(0);
+    const [selectedSeason, setSelectedSeason] = useState<number>(CURRENT_SEASON.season);
+    const [selectedMiniSeason, setSelectedMiniSeason] = useState<number>(CURRENT_SEASON.miniSeason - 1);
     const [selectSeasonOpen, setSelectSeasonOpen] = useState<boolean>(false);
 
     const leaderboardQuery = useOverdropLeaderboardQuery(selectedSeason, selectedMiniSeason + 1);
