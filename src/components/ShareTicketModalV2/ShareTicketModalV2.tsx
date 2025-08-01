@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Button from 'components/Button';
-import { Input } from 'components/fields/common';
+import { Input, TextAreaInput } from 'components/fields/common';
 import Toggle from 'components/Toggle';
 import { generalConfig } from 'config/general';
 import { defaultToastOptions, getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
@@ -90,6 +90,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
     const [isMetamaskBrowser, setIsMetamaskBrowser] = useState(false);
     const [tweetUrl, setTweetUrl] = useState('');
     const [convertToStableValue, setConvertToStableValue] = useState<boolean>(false);
+    const [aiContent, setAiContent] = useState<string>('');
 
     const reffererIDQuery = useGetReffererIdQuery(walletAddress || '');
     const [reffererID, setReffererID] = useState('');
@@ -206,11 +207,11 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                         return;
                     }
                     let twitterLinkWithStatusMessage = '';
-                    const aiResponse = await axios.get(`${generalConfig.OVERDROP_API_URL}/generate-social-content`);
-                    if (aiResponse.data) {
+
+                    if (aiContent) {
                         twitterLinkWithStatusMessage =
                             LINKS.TwitterTweetStatus +
-                            aiResponse.data +
+                            aiContent +
                             LINKS.OvertimeMarkets +
                             `${reffererID ? '?referrerId=' + reffererID : ''}` +
                             (useDownloadImage ? TWITTER_MESSAGE_UPLOAD : TWITTER_MESSAGE_PASTE);
@@ -276,7 +277,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                 }
             }
         },
-        [isLoading, isMobile, isOver, useDownloadImage, reffererID]
+        [isLoading, isMobile, isOver, useDownloadImage, reffererID, aiContent]
     );
 
     const onTwitterShareClick = (copyOnly?: boolean) => {
@@ -413,6 +414,30 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                     </SwitchWrapper>
                 )}
                 <ShareWrapper toggleVisible={isNonStableCollateral}>
+                    <AreaWrapper>
+                        <Area
+                            hasContent={!!aiContent}
+                            onChange={(e) => {
+                                setAiContent(e.target.value);
+                            }}
+                            value={aiContent}
+                        />
+                        <GenerateButton
+                            onClick={async () => {
+                                const aiResponse = await axios.get(
+                                    `${generalConfig.OVERDROP_API_URL}/generate-social-content`
+                                );
+                                console.log(aiResponse);
+                                if (aiResponse.data) {
+                                    console.log('set');
+                                    setAiContent(aiResponse.data);
+                                }
+                            }}
+                            height="16px"
+                        >
+                            Generate
+                        </GenerateButton>
+                    </AreaWrapper>
                     <Label>{t('markets.parlay.share-ticket.submit-url')}</Label>
                     <Input
                         height="32px"
@@ -544,6 +569,32 @@ const Label = styled.span`
     letter-spacing: 0.025em;
     text-transform: uppercase;
     color: ${(props) => props.theme.textColor.quaternary};
+`;
+
+const AreaWrapper = styled.div`
+    position: relative;
+    width: 100%;
+`;
+
+const Area = styled(TextAreaInput)<{ hasContent?: boolean }>`
+    ${(props) => props.hasContent && 'padding-top: 30px !important;'}
+    field-sizing: content;
+    ${(props) => (props.hasContent ? 'height: auto;' : 'height: 34px;')}
+    ${(props) => props.hasContent && 'padding-bottom: 10px !important;'}
+`;
+
+const GenerateButton = styled(Button)`
+    position: absolute;
+    height: 16px;
+    top: 8px;
+    left: 10px;
+    padding: 8px;
+    text-transform: none;
+    background-color: ${(props) => props.theme.textColor.quaternary};
+    border-color: ${(props) => props.theme.textColor.quaternary};
+    :hover {
+        background-color: ${(props) => props.theme.textColor.quaternary};
+    }
 `;
 
 export default React.memo(ShareTicketModal);
