@@ -15,7 +15,7 @@
         "enter-amount": "Enter amount",
         "buy-in": "Buy-in",
         "liquidity": "Liquidity",
-        "trades": "Trades",
+        "trade": "Trade",
         "days-of-week": {
             "mon": "mon",
             "tue": "tue",

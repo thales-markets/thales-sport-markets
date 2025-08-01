@@ -6,7 +6,7 @@ import { Dispatch } from 'react';
 import { useTranslation } from 'react-i18next';
 import { components } from 'react-select';
 import styled, { useTheme } from 'styled-components';
-import { FlexDivRowCentered } from 'styles/common';
+import { FlexDivCentered } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
 
 type SelectTimeProps = {
@@ -18,10 +18,10 @@ const SingleValue = (props: any) => {
     return (
         components.SingleValue && (
             <components.SingleValue {...props}>
-                <FlexDivRowCentered>
+                <FlexDivCentered>
                     <TimeIcon className="speedmarkets-icon speedmarkets-icon--clock" />
                     <SingleValueText>{props.data.label}</SingleValueText>
-                </FlexDivRowCentered>
+                </FlexDivCentered>
             </components.SingleValue>
         )
     );
@@ -43,7 +43,7 @@ const SelectTime: React.FC<SelectTimeProps> = ({ deltaTimeSec, setDeltaTimeSec }
 
     const deltaTimesLabels = DELTA_TIMES_MINUTES.map((deltaTime) =>
         `${deltaTime} ${deltaTime === 1 ? t('common.time-remaining.minute') : t('common.time-remaining.minutes')} ${t(
-            'common.trades'
+            'common.trade'
         )}`.toUpperCase()
     );
 
