@@ -1,3 +1,4 @@
+import AIIcon from 'assets/images/svgs/ai-icon.svg?react';
 import axios from 'axios';
 import Button from 'components/Button';
 import { Input, TextAreaInput } from 'components/fields/common';
@@ -421,7 +422,9 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                                 setAiContent(e.target.value);
                             }}
                             value={aiContent}
+                            placeholder={'Tweet content...'}
                         />
+                        <StyledAIIcon />
                         <GenerateButton
                             onClick={async () => {
                                 const aiResponse = await axios.get(
@@ -579,13 +582,14 @@ const Area = styled(TextAreaInput)<{ hasContent?: boolean }>`
     field-sizing: content;
     ${(props) => (props.hasContent ? 'height: auto;' : 'height: 34px;')}
     ${(props) => props.hasContent && 'padding-bottom: 10px !important;'}
+    ${(props) => !props.hasContent && 'padding-left: 130px !important;'}
 `;
 
 const GenerateButton = styled(Button)`
     position: absolute;
     height: 16px;
     top: 8px;
-    left: 10px;
+    left: 37px;
     padding: 8px;
     text-transform: none;
     background-color: ${(props) => props.theme.textColor.quaternary};
@@ -593,6 +597,12 @@ const GenerateButton = styled(Button)`
     :hover {
         background-color: ${(props) => props.theme.textColor.quaternary};
     }
+`;
+
+const StyledAIIcon = styled(AIIcon)`
+    position: absolute;
+    top: 6px;
+    left: 10px;
 `;
 
 export default React.memo(ShareTicketModal);

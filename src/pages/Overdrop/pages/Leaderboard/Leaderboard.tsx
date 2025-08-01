@@ -38,8 +38,6 @@ import {
     tableRowStyle,
 } from './styled-components';
 
-const CURRENT_SEASON = getCurrentSeasonAndMiniSeason();
-
 const Leaderboard: React.FC = () => {
     const isMobile = useSelector(getIsMobile);
 
@@ -48,9 +46,11 @@ const Leaderboard: React.FC = () => {
 
     const theme: ThemeInterface = useTheme();
 
+    const currentSeason = getCurrentSeasonAndMiniSeason();
+
     const [searchText, setSearchText] = useState<string>('');
-    const [selectedSeason, setSelectedSeason] = useState<number>(CURRENT_SEASON.season);
-    const [selectedMiniSeason, setSelectedMiniSeason] = useState<number>(CURRENT_SEASON.miniSeason - 1);
+    const [selectedSeason, setSelectedSeason] = useState<number>(currentSeason.season);
+    const [selectedMiniSeason, setSelectedMiniSeason] = useState<number>(currentSeason.miniSeason - 1);
     const [selectSeasonOpen, setSelectSeasonOpen] = useState<boolean>(false);
 
     const leaderboardQuery = useOverdropLeaderboardQuery(selectedSeason, selectedMiniSeason + 1);
