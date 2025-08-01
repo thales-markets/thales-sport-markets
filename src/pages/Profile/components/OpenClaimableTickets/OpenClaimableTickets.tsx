@@ -22,6 +22,7 @@ import { getCaseAccentInsensitiveString } from 'utils/formatters/string';
 import { refetchAfterClaim } from 'utils/queryConnector';
 import { sendBiconomyTransaction } from 'utils/smartAccount/biconomy/biconomy';
 
+import { MARKET_DURATION_IN_DAYS } from 'constants/markets';
 import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { Address, Client, encodeFunctionData, isAddress } from 'viem';
 import { estimateContractGas, waitForTransactionReceipt } from 'viem/actions';
@@ -237,7 +238,7 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
         }
     };
 
-    const marketDuration = Math.floor(90);
+    const marketDuration = Math.floor(MARKET_DURATION_IN_DAYS);
 
     return (
         <Container>

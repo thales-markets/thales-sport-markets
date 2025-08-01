@@ -19,4 +19,8 @@ export enum ContractType {
     THALES_TO_OVER_MIGRATION = 'thalvesToOverMigrationContract',
     THALES = 'thalvesContract',
     OVERDROP_REWARDS = 'overdropRewardsContract',
+    SPEED_MARKETS_DATA = 'speedMarketsDataContract',
+    SPEED_MARKETS_AMM_CREATOR = 'speedMarketsAMMCreatorContract',
+    SPEED_MARKETS_AMM = 'speedMarketsAMMContract',
+    SPEED_MARKETS_AMM_RESOLVER = 'speedMarketsAMMResolverContract',
 }

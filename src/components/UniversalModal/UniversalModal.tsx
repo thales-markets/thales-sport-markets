@@ -178,7 +178,7 @@ const UniversalModal: React.FC<UniversalModal> = ({ onClose }) => {
                             borderColor={theme.background.quinary}
                             fontWeight="700"
                             color={theme.textColor.primary}
-                            placeholder={t('liquidity-pool.deposit-amount-placeholder')}
+                            placeholder={t('common.enter-amount')}
                             onMaxButton={() => setAmount(maxAmount)}
                         />
                         <Button

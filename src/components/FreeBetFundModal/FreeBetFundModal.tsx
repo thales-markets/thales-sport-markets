@@ -410,9 +410,7 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
                             setAmount(e.target.value);
                         }}
                         label={
-                            isFundBatch
-                                ? t('profile.free-bet-modal.enter-amount-per-user')
-                                : t('profile.free-bet-modal.enter-amount')
+                            isFundBatch ? t('profile.free-bet-modal.enter-amount-per-user') : t('common.enter-amount')
                         }
                         showValidation={inputRefVisible && validationMessage !== ''}
                         validationMessage={validationMessage}
@@ -422,7 +420,7 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
                         margin="20px 0px 0px 0px"
                         borderColor={theme.input.borderColor.tertiary}
                         disabled={inProgress}
-                        placeholder={t('profile.free-bet-modal.enter-amount')}
+                        placeholder={t('common.enter-amount')}
                         currencyComponent={
                             <CollateralSelector
                                 collateralArray={getFreeBetCollaterals(networkId)}

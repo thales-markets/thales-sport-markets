@@ -180,7 +180,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onClose, preSelectedToken
                                     fontWeight="700"
                                     color={theme.textColor.primary}
                                     label={t('get-started.withdraw.withdraw-amount')}
-                                    placeholder={t('liquidity-pool.deposit-amount-placeholder')}
+                                    placeholder={t('common.enter-amount')}
                                     currencyComponent={
                                         <CollateralSelector
                                             borderColor="none"

@@ -387,7 +387,7 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
                         fontWeight="700"
                         color={theme.textColor.primary}
                         width="100%"
-                        placeholder={t('liquidity-pool.deposit-amount-placeholder')}
+                        placeholder={t('common.enter-amount')}
                         currencyComponent={
                             <CollateralSelector
                                 borderColor="none"

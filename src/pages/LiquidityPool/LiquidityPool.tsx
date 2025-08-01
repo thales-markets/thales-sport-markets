@@ -826,7 +826,7 @@ const LiquidityPool: React.FC = () => {
                                             label="Deposit"
                                             disabled={isDepositAmountInputDisabled}
                                             onChange={(_, value) => setAmount(value)}
-                                            placeholder={t('liquidity-pool.deposit-amount-placeholder')}
+                                            placeholder={t('common.enter-amount')}
                                             currencyLabel={
                                                 paramCollateral === LiquidityPoolCollateral.WETH
                                                     ? undefined
@@ -865,7 +865,6 @@ const LiquidityPool: React.FC = () => {
                                                     />
                                                 ) : undefined
                                             }
-                                            validationPlacement="bottom"
                                             balance={formatCurrencyWithKey(
                                                 ethSelected ? CRYPTO_CURRENCY_MAP.ETH : collateral,
                                                 paymentTokenBalance
@@ -964,7 +963,6 @@ const LiquidityPool: React.FC = () => {
                                                                                 { min: 10, max: 90 }
                                                                             ) as string
                                                                         }
-                                                                        validationPlacement="bottom"
                                                                     />
                                                                     <SliderContainer>
                                                                         <Slider
