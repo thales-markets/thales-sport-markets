@@ -427,9 +427,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                                 const aiResponse = await axios.get(
                                     `${generalConfig.OVERDROP_API_URL}/generate-social-content`
                                 );
-                                console.log(aiResponse);
                                 if (aiResponse.data) {
-                                    console.log('set');
                                     setAiContent(aiResponse.data);
                                 }
                             }}
